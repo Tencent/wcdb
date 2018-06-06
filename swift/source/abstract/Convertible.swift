@@ -91,6 +91,11 @@ extension ColumnConvertible {
         return ColumnDef(with: self, and: columnType)
     }
 
+    public func `in`<T>(table: T) -> Column
+        where T : RawRepresentable, T.RawValue == String {
+        return self.in(table: table.rawValue)
+    }
+
     public func `in`(table: String) -> Column {
         return asColumn().in(table: table)
     }

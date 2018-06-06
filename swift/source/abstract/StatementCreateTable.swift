@@ -28,6 +28,13 @@ public final class StatementCreateTable: Statement {
     public init() {}
 
     @discardableResult
+    public func create<T>(table: T, ifNotExists: Bool = true,
+                          as statementSelect: StatementSelect) -> StatementCreateTable
+        where T : RawRepresentable, T.RawValue == String {
+            return self.create(table: table.rawValue, ifNotExists: ifNotExists, as: statementSelect)
+    }
+
+    @discardableResult
     public func create(table: String, ifNotExists: Bool = true,
                        as statementSelect: StatementSelect) -> StatementCreateTable {
         description.append("CREATE TABLE ")
@@ -44,6 +51,15 @@ public final class StatementCreateTable: Statement {
                        with columnDefs: ColumnDef...,
                        and tableConstraints: [TableConstraint]? = nil) -> StatementCreateTable {
         return self.create(table: table, ifNotExists: ifNotExists, with: columnDefs, and: tableConstraints)
+    }
+
+    @discardableResult
+    public func create<T>(table: T,
+                       ifNotExists: Bool = true,
+                       with columnDefs: ColumnDef...,
+        and tableConstraints: [TableConstraint]? = nil) -> StatementCreateTable
+        where T : RawRepresentable, T.RawValue == String {
+        return self.create(table: table.rawValue, ifNotExists: ifNotExists, with: columnDefs, and: tableConstraints)
     }
 
     @discardableResult

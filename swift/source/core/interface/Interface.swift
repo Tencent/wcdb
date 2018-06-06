@@ -25,7 +25,7 @@ public protocol InsertInterface: class {
 
     /// Execute inserting with `TableEncodable` object on specific(or all) properties
     ///
-    /// Note that it will run embedded transaction while objects.count>1.  
+    /// Note that it will run embedded transaction while objects.count>1.
     /// The embedded transaction means that it will run a transaction if it's not in other transaction,
     /// otherwise it will be executed within the existing transaction.
     ///
@@ -36,12 +36,45 @@ public protocol InsertInterface: class {
     /// - Throws: `Error`
     func insert<Object: TableEncodable>(
         objects: Object...,
+        on propertyConvertibleList: [PropertyConvertible]?,
+        intoTable table: String) throws
+    
+    /// Execute inserting with `TableEncodable` object on specific(or all) properties
+    ///
+    /// Note that it will run embedded transaction while objects.count>1.
+    /// The embedded transaction means that it will run a transaction if it's not in other transaction,
+    /// otherwise it will be executed within the existing transaction.
+    ///
+    /// - Parameters:
+    ///   - objects: Table encodable object
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - table: Table name
+    /// - Throws: `Error`
+    func insert<Object, T>(
+        objects: Object...,
+        on propertyConvertibleList: [PropertyConvertible]?,
+        intoTable table: T) throws
+        where Object : TableEncodable, T : RawRepresentable, T.RawValue == String
+
+    /// Execute inserting with `TableEncodable` object on specific(or all) properties
+    ///
+    /// Note that it will run embedded transaction while objects.count>1.
+    /// The embedded transaction means that it will run a transaction if it's not in other transaction,
+    /// otherwise it will be executed within the existing transaction.
+    ///
+    /// - Parameters:
+    ///   - objects: Table encodable object
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - table: Table name
+    /// - Throws: `Error`
+    func insert<Object: TableEncodable>(
+        objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]?,
         intoTable table: String) throws
 
     /// Execute inserting with `TableEncodable` object on specific(or all) properties
     ///
-    /// Note that it will run embedded transaction while objects.count>1.  
+    /// Note that it will run embedded transaction while objects.count>1.
     /// The embedded transaction means that it will run a transaction if it's not in other transaction,
     /// otherwise it will be executed within the existing transaction.
     ///
@@ -50,15 +83,16 @@ public protocol InsertInterface: class {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     ///   - table: Table name
     /// - Throws: `Error`
-    func insert<Object: TableEncodable>(
+    func insert<Object, T>(
         objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]?,
-        intoTable table: String) throws
+        intoTable table: T) throws
+        where Object : TableEncodable, T : RawRepresentable, T.RawValue == String
 
-    /// Execute inserting or replacing with `TableEncodable` object on specific(or all) properties.  
+    /// Execute inserting or replacing with `TableEncodable` object on specific(or all) properties.
     /// It will replace the original row while they have same primary key or row id.
     ///
-    /// Note that it will run embedded transaction while objects.count>1.  
+    /// Note that it will run embedded transaction while objects.count>1.
     /// The embedded transaction means that it will run a transaction if it's not in other transaction,
     /// otherwise it will be executed within the existing transaction.
     ///
@@ -72,10 +106,28 @@ public protocol InsertInterface: class {
         on propertyConvertibleList: [PropertyConvertible]?,
         intoTable table: String) throws
 
-    /// Execute inserting or replacing with `TableEncodable` object on specific(or all) properties.  
+    /// Execute inserting or replacing with `TableEncodable` object on specific(or all) properties.
     /// It will replace the original row while they have same primary key or row id.
     ///
-    /// Note that it will run embedded transaction while objects.count>1.  
+    /// Note that it will run embedded transaction while objects.count>1.
+    /// The embedded transaction means that it will run a transaction if it's not in other transaction,
+    /// otherwise it will be executed within the existing transaction.
+    ///
+    /// - Parameters:
+    ///   - objects: Table encodable object
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - table: Table name
+    /// - Throws: `Error`
+    func insertOrReplace<Object, T>(
+        objects: Object...,
+        on propertyConvertibleList: [PropertyConvertible]?,
+        intoTable table: T) throws
+        where Object : TableEncodable, T : RawRepresentable, T.RawValue == String
+
+    /// Execute inserting or replacing with `TableEncodable` object on specific(or all) properties.
+    /// It will replace the original row while they have same primary key or row id.
+    ///
+    /// Note that it will run embedded transaction while objects.count>1.
     /// The embedded transaction means that it will run a transaction if it's not in other transaction,
     /// otherwise it will be executed within the existing transaction.
     ///
@@ -88,9 +140,36 @@ public protocol InsertInterface: class {
         objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]?,
         intoTable table: String) throws
+
+    /// Execute inserting or replacing with `TableEncodable` object on specific(or all) properties.
+    /// It will replace the original row while they have same primary key or row id.
+    ///
+    /// Note that it will run embedded transaction while objects.count>1.
+    /// The embedded transaction means that it will run a transaction if it's not in other transaction,
+    /// otherwise it will be executed within the existing transaction.
+    ///
+    /// - Parameters:
+    ///   - objects: Table encodable object
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - table: Table name
+    /// - Throws: `Error`
+    func insertOrReplace<Object, T>(
+        objects: [Object],
+        on propertyConvertibleList: [PropertyConvertible]?,
+        intoTable table: T) throws
+        where Object : TableEncodable, T : RawRepresentable, T.RawValue == String
+    
 }
 
 extension InsertInterface where Self: Core {
+    public func insert<Object, T>(
+        objects: [Object],
+        on propertyConvertibleList: [PropertyConvertible]? = nil,
+        intoTable table: T) throws
+        where Object : TableEncodable, T : RawRepresentable, T.RawValue == String {
+            return try insert(objects: objects, on: propertyConvertibleList, intoTable: table.rawValue)
+    }
+
     public func insert<Object: TableEncodable>(
         objects: [Object],
         on propertyConvertibleList: [PropertyConvertible]? = nil,
@@ -106,6 +185,14 @@ extension InsertInterface where Self: Core {
         let insert = try Insert(with: self, named: table, on: propertyConvertibleList, isReplace: true)
         return try insert.execute(with: objects)
     }
+    
+    public func insertOrReplace<Object, T>(
+        objects: [Object],
+        on propertyConvertibleList: [PropertyConvertible]? = nil,
+        intoTable table: T) throws
+        where Object : TableEncodable, T : RawRepresentable, T.RawValue == String {
+            return try insertOrReplace(objects: objects, on: propertyConvertibleList, intoTable: table.rawValue)
+    }
 
     public func insert<Object: TableEncodable>(
         objects: Object...,
@@ -114,18 +201,34 @@ extension InsertInterface where Self: Core {
         return try insert(objects: objects, on: propertyConvertibleList, intoTable: table)
     }
 
+    public func insert<Object, T>(
+        objects: Object...,
+        on propertyConvertibleList: [PropertyConvertible]? = nil,
+        intoTable table: T) throws
+        where Object : TableEncodable, T : RawRepresentable, T.RawValue == String {
+            return try insert(objects: objects, on: propertyConvertibleList, intoTable: table.rawValue)
+    }
+
     public func insertOrReplace<Object: TableEncodable>(
         objects: Object...,
         on propertyConvertibleList: [PropertyConvertible]? = nil,
         intoTable table: String) throws {
         return try insertOrReplace(objects: objects, on: propertyConvertibleList, intoTable: table)
     }
+
+    public func insertOrReplace<Object, T>(
+        objects: Object...,
+        on propertyConvertibleList: [PropertyConvertible]? = nil,
+        intoTable table: T) throws
+        where Object : TableEncodable, T : RawRepresentable, T.RawValue == String {
+        return try insertOrReplace(objects: objects, on: propertyConvertibleList, intoTable: table.rawValue)
+    }
 }
 
 /// Convenient interface for updating
 public protocol UpdateInterface: class {
 
-    /// Execute updating with `TableEncodable` object on specific(or all) properties. 
+    /// Execute updating with `TableEncodable` object on specific(or all) properties.
     ///
     /// - Parameters:
     ///   - table: Table name
@@ -145,7 +248,28 @@ public protocol UpdateInterface: class {
         limit: Limit?,
         offset: Offset?) throws
 
-    /// Execute updating with `TableEncodable` object on specific(or all) properties. 
+    /// Execute updating with `TableEncodable` object on specific(or all) properties.
+    ///
+    /// - Parameters:
+    ///   - table: Table name
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - object: Table encodable object
+    ///   - condition: Expression convertible
+    ///   - orderList: Order convertible list
+    ///   - limit: Expression convertible
+    ///   - offset: Expression convertible
+    /// - Throws: `Error`
+    func update<Object, T>(
+        table: T,
+        on propertyConvertibleList: PropertyConvertible...,
+        with object: Object,
+        where condition: Condition?,
+        orderBy orderList: [OrderBy]?,
+        limit: Limit?,
+        offset: Offset?) throws
+        where Object : TableEncodable, T : RawRepresentable, T.RawValue == String
+
+    /// Execute updating with `TableEncodable` object on specific(or all) properties.
     ///
     /// - Parameters:
     ///   - table: Table name
@@ -165,7 +289,28 @@ public protocol UpdateInterface: class {
         limit: Limit?,
         offset: Offset?) throws
 
-    /// Execute updating with row on specific(or all) properties. 
+    /// Execute updating with `TableEncodable` object on specific(or all) properties.
+    ///
+    /// - Parameters:
+    ///   - table: Table name
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - object: Table encodable object
+    ///   - condition: Expression convertible
+    ///   - orderList: Order convertible list
+    ///   - limit: Expression convertible
+    ///   - offset: Expression convertible
+    /// - Throws: `Error`
+    func update<Object, T>(
+        table: T,
+        on propertyConvertibleList: [PropertyConvertible],
+        with object: Object,
+        where condition: Condition?,
+        orderBy orderList: [OrderBy]?,
+        limit: Limit?,
+        offset: Offset?) throws
+        where Object : TableEncodable, T : RawRepresentable, T.RawValue == String
+
+    /// Execute updating with row on specific(or all) properties.
     ///
     /// - Parameters:
     ///   - table: Table name
@@ -184,7 +329,27 @@ public protocol UpdateInterface: class {
                 limit: Limit?,
                 offset: Offset?) throws
 
-    /// Execute updating with row on specific(or all) properties. 
+    /// Execute updating with row on specific(or all) properties.
+    ///
+    /// - Parameters:
+    ///   - table: Table name
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - object: Table encodable object
+    ///   - condition: Expression convertible
+    ///   - orderList: Order convertible list
+    ///   - limit: Expression convertible
+    ///   - offset: Expression convertible
+    /// - Throws: `Error`
+    func update<T>(table: T,
+                   on propertyConvertibleList: PropertyConvertible...,
+                   with row: [ColumnEncodableBase],
+                   where condition: Condition?,
+                   orderBy orderList: [OrderBy]?,
+                   limit: Limit?,
+                   offset: Offset?) throws
+                   where T : RawRepresentable, T.RawValue == String
+
+    /// Execute updating with row on specific(or all) properties.
     ///
     /// - Parameters:
     ///   - table: Table name
@@ -202,6 +367,26 @@ public protocol UpdateInterface: class {
                 orderBy orderList: [OrderBy]?,
                 limit: Limit?,
                 offset: Offset?) throws
+
+    /// Execute updating with row on specific(or all) properties.
+    ///
+    /// - Parameters:
+    ///   - table: Table name
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - object: Table encodable object
+    ///   - condition: Expression convertible
+    ///   - orderList: Order convertible list
+    ///   - limit: Expression convertible
+    ///   - offset: Expression convertible
+    /// - Throws: `Error`
+    func update<T>(table: T,
+                on propertyConvertibleList: [PropertyConvertible],
+                with row: [ColumnEncodableBase],
+                where condition: Condition?,
+                orderBy orderList: [OrderBy]?,
+                limit: Limit?,
+                offset: Offset?) throws
+                where T : RawRepresentable, T.RawValue == String
 }
 
 extension UpdateInterface where Self: Core {
@@ -230,6 +415,18 @@ extension UpdateInterface where Self: Core {
         return try update.execute(with: object)
     }
 
+    public func update<Object, T>(
+        table: T,
+        on propertyConvertibleList: [PropertyConvertible],
+        with object: Object,
+        where condition: Condition? = nil,
+        orderBy orderList: [OrderBy]? = nil,
+        limit: Limit? = nil,
+        offset: Offset? = nil) throws
+        where Object : TableEncodable, T : RawRepresentable, T.RawValue == String {
+        return try update(table: table.rawValue, on: propertyConvertibleList, with: object, where: condition, orderBy: orderList, limit: limit, offset: offset)
+    }
+
     public func update<Object: TableEncodable>(
         table: String,
         on propertyConvertibleList: PropertyConvertible...,
@@ -239,6 +436,24 @@ extension UpdateInterface where Self: Core {
         limit: Limit? = nil,
         offset: Offset? = nil) throws {
         return try update(table: table,
+                          on: propertyConvertibleList,
+                          with: object,
+                          where: condition,
+                          orderBy: orderList,
+                          limit: limit,
+                          offset: offset)
+    }
+
+    public func update<Object, T>(
+        table: T,
+        on propertyConvertibleList: PropertyConvertible...,
+        with object: Object,
+        where condition: Condition? = nil,
+        orderBy orderList: [OrderBy]? = nil,
+        limit: Limit? = nil,
+        offset: Offset? = nil) throws
+        where Object : TableEncodable, T : RawRepresentable, T.RawValue == String {
+        return try update(table: table.rawValue,
                           on: propertyConvertibleList,
                           with: object,
                           where: condition,
@@ -263,6 +478,34 @@ extension UpdateInterface where Self: Core {
                           offset: offset)
     }
 
+    public func update<T>(table: T,
+                          on propertyConvertibleList: PropertyConvertible...,
+                          with row: [ColumnEncodableBase],
+                          where condition: Condition? = nil,
+                          orderBy orderList: [OrderBy]? = nil,
+                          limit: Limit? = nil,
+                          offset: Offset? = nil) throws
+                          where T : RawRepresentable, T.RawValue == String {
+        return try update(table: table.rawValue,
+                          on: propertyConvertibleList,
+                          with: row,
+                          where: condition,
+                          orderBy: orderList,
+                          limit: limit,
+                          offset: offset)
+    }
+
+    public func update<T>(table: T,
+                          on propertyConvertibleList: [PropertyConvertible],
+                          with row: [ColumnEncodableBase],
+                          where condition: Condition? = nil,
+                          orderBy orderList: [OrderBy]? = nil,
+                          limit: Limit? = nil,
+                          offset: Offset? = nil) throws
+                          where T : RawRepresentable, T.RawValue == String {
+            return try update(table: table.rawValue, on: propertyConvertibleList, with: row, where: condition, orderBy: orderList, limit: limit, offset: offset)
+        
+    }
     public func update(table: String,
                        on propertyConvertibleList: [PropertyConvertible],
                        with row: [ColumnEncodable],
@@ -291,7 +534,7 @@ extension UpdateInterface where Self: Core {
 /// Convenient interface for deleting
 public protocol DeleteInterface: class {
 
-    /// Execute deleting 
+    /// Execute deleting
     ///
     /// - Parameters:
     ///   - table: Table name
@@ -305,9 +548,34 @@ public protocol DeleteInterface: class {
                 orderBy orderList: [OrderBy]?,
                 limit: Limit?,
                 offset: Offset?) throws
+
+    /// Execute deleting
+    ///
+    /// - Parameters:
+    ///   - table: Table name
+    ///   - condition: Expression convertible
+    ///   - orderList: Order convertible list
+    ///   - limit: Expression convertible
+    ///   - offset: Expression convertible
+    /// - Throws: `Error`
+    func delete<T>(fromTable table: T,
+                   where condition: Condition?,
+                   orderBy orderList: [OrderBy]?,
+                   limit: Limit?,
+                   offset: Offset?) throws
+                   where T : RawRepresentable, T.RawValue == String
 }
 
 extension DeleteInterface where Self: Core {
+    public func delete<T>(fromTable table: T,
+                          where condition: Condition? = nil,
+                          orderBy orderList: [OrderBy]? = nil,
+                          limit: Limit? = nil,
+                          offset: Offset? = nil) throws
+                          where T : RawRepresentable, T.RawValue == String {
+            return try delete(fromTable: table.rawValue, where: condition, orderBy: orderList, limit: limit, offset: offset)
+    }
+
     public func delete(fromTable table: String,
                        where condition: Condition? = nil,
                        orderBy orderList: [OrderBy]? = nil,
@@ -363,12 +631,50 @@ public protocol RowSelectInterface: class {
     ///   - offset: Expression convertible
     /// - Returns: `FundamentalRowXColumn`
     /// - Throws: `Error`
+    func getRows<T>(on columnResultConvertibleList: [ColumnResultConvertible],
+                    fromTable table: T,
+                    where condition: Condition?,
+                    orderBy orderList: [OrderBy]?,
+                    limit: Limit?,
+                    offset: Offset?) throws -> FundamentalRowXColumn
+                    where T : RawRepresentable, T.RawValue == String
+
+    /// Get rows by specific selecting
+    ///
+    /// - Parameters:
+    ///   - columnResultConvertibleList: WINQ column result list
+    ///   - table: Table name
+    ///   - condition: Expression convertible
+    ///   - orderList: Order convertible list
+    ///   - limit: Expression convertible
+    ///   - offset: Expression convertible
+    /// - Returns: `FundamentalRowXColumn`
+    /// - Throws: `Error`
     func getRows(on columnResultConvertibleList: ColumnResultConvertible...,
                  fromTable table: String,
                  where condition: Condition?,
                  orderBy orderList: [OrderBy]?,
                  limit: Limit?,
                  offset: Offset?) throws -> FundamentalRowXColumn
+
+    /// Get rows by specific selecting
+    ///
+    /// - Parameters:
+    ///   - columnResultConvertibleList: WINQ column result list
+    ///   - table: Table name
+    ///   - condition: Expression convertible
+    ///   - orderList: Order convertible list
+    ///   - limit: Expression convertible
+    ///   - offset: Expression convertible
+    /// - Returns: `FundamentalRowXColumn`
+    /// - Throws: `Error`
+    func getRows<T>(on columnResultConvertibleList: ColumnResultConvertible...,
+                    fromTable table: T,
+                    where condition: Condition?,
+                    orderBy orderList: [OrderBy]?,
+                    limit: Limit?,
+                    offset: Offset?) throws -> FundamentalRowXColumn
+                    where T : RawRepresentable, T.RawValue == String
 
     /// Get row by specific selecting
     ///
@@ -396,11 +702,45 @@ public protocol RowSelectInterface: class {
     ///   - offset: Expression convertible
     /// - Returns: `FundamentalRow`
     /// - Throws: `Error`
+    func getRow<T>(on columnResultConvertibleList: ColumnResultConvertible...,
+                   fromTable table: T,
+                   where condition: Condition?,
+                   orderBy orderList: [OrderBy]?,
+                   offset: Offset?) throws -> FundamentalRow
+                   where T : RawRepresentable, T.RawValue == String
+
+    /// Get row by specific selecting
+    ///
+    /// - Parameters:
+    ///   - columnResultConvertibleList: WINQ column result list
+    ///   - table: Table name
+    ///   - condition: Expression convertible
+    ///   - orderList: Order convertible list
+    ///   - offset: Expression convertible
+    /// - Returns: `FundamentalRow`
+    /// - Throws: `Error`
     func getRow(on columnResultConvertibleList: [ColumnResultConvertible],
                 fromTable table: String,
                 where condition: Condition?,
                 orderBy orderList: [OrderBy]?,
                 offset: Offset?) throws -> FundamentalRow
+
+    /// Get row by specific selecting
+    ///
+    /// - Parameters:
+    ///   - columnResultConvertibleList: WINQ column result list
+    ///   - table: Table name
+    ///   - condition: Expression convertible
+    ///   - orderList: Order convertible list
+    ///   - offset: Expression convertible
+    /// - Returns: `FundamentalRow`
+    /// - Throws: `Error`
+    func getRow<T>(on columnResultConvertibleList: [ColumnResultConvertible],
+                   fromTable table: T,
+                   where condition: Condition?,
+                   orderBy orderList: [OrderBy]?,
+                   offset: Offset?) throws -> FundamentalRow
+                   where T : RawRepresentable, T.RawValue == String
 
     /// Get column by specific selecting
     ///
@@ -420,6 +760,25 @@ public protocol RowSelectInterface: class {
                    limit: Limit?,
                    offset: Offset?) throws -> FundamentalColumn
 
+    /// Get column by specific selecting
+    ///
+    /// - Parameters:
+    ///   - columnResultConvertible: WINQ column result
+    ///   - table: Table name
+    ///   - condition: Expression convertible
+    ///   - orderList: Order convertible list
+    ///   - limit: Expression convertible
+    ///   - offset: Expression convertible
+    /// - Returns: `FundamentalColumn`
+    /// - Throws: `Error`
+    func getColumn<T>(on result: ColumnResultConvertible,
+                      fromTable table: T,
+                      where condition: Condition?,
+                      orderBy orderList: [OrderBy]?,
+                      limit: Limit?,
+                      offset: Offset?) throws -> FundamentalColumn
+                      where T : RawRepresentable, T.RawValue == String
+
     /// Get distinct column by specific selecting
     ///
     /// - Parameters:
@@ -437,7 +796,25 @@ public protocol RowSelectInterface: class {
                            orderBy orderList: [OrderBy]?,
                            limit: Limit?,
                            offset: Offset?) throws -> FundamentalColumn
-
+    
+    /// Get distinct column by specific selecting
+    ///
+    /// - Parameters:
+    ///   - columnResultConvertible: WINQ column result
+    ///   - table: Table name
+    ///   - condition: Expression convertible
+    ///   - orderList: Order convertible list
+    ///   - limit: Expression convertible
+    ///   - offset: Expression convertible
+    /// - Returns: `FundamentalColumn`
+    /// - Throws: `Error`
+    func getDistinctColumn<T>(on result: ColumnResultConvertible,
+                              fromTable table: T,
+                              where condition: Condition?,
+                              orderBy orderList: [OrderBy]?,
+                              limit: Limit?,
+                              offset: Offset?) throws -> FundamentalColumn
+                              where T : RawRepresentable, T.RawValue == String
     /// Get value by specific selecting
     ///
     /// - Parameters:
@@ -455,6 +832,24 @@ public protocol RowSelectInterface: class {
                   limit: Limit?,
                   offset: Offset?) throws -> FundamentalValue
 
+    /// Get value by specific selecting
+    ///
+    /// - Parameters:
+    ///   - columnResultConvertible: WINQ column result
+    ///   - table: Table name
+    ///   - condition: Expression convertible
+    ///   - orderList: Order convertible list
+    ///   - offset: Expression convertible
+    /// - Returns: `FundamentalValue`
+    /// - Throws: `Error`
+    func getValue<T>(on result: ColumnResultConvertible,
+                     fromTable table: T,
+                     where condition: Condition?,
+                     orderBy orderList: [OrderBy]?,
+                     limit: Limit?,
+                     offset: Offset?) throws -> FundamentalValue
+                     where T : RawRepresentable, T.RawValue == String
+
     /// Get distinct value by specific selecting
     ///
     /// - Parameters:
@@ -471,9 +866,37 @@ public protocol RowSelectInterface: class {
                           orderBy orderList: [OrderBy]?,
                           limit: Limit?,
                           offset: Offset?) throws -> FundamentalValue
+
+    /// Get distinct value by specific selecting
+    ///
+    /// - Parameters:
+    ///   - columnResultConvertible: WINQ column result
+    ///   - table: Table name
+    ///   - condition: Expression convertible
+    ///   - orderList: Order convertible list
+    ///   - offset: Expression convertible
+    /// - Returns: `FundamentalValue`
+    /// - Throws: `Error`
+    func getDistinctValue<T>(on result: ColumnResultConvertible,
+                             fromTable table: T,
+                             where condition: Condition?,
+                             orderBy orderList: [OrderBy]?,
+                             limit: Limit?,
+                             offset: Offset?) throws -> FundamentalValue
+                             where T : RawRepresentable, T.RawValue == String
 }
 
 extension RowSelectInterface where Self: Core {
+    public func getRows<T>(on columnResultConvertibleList: [ColumnResultConvertible],
+                           fromTable table: T,
+                           where condition: Condition? = nil,
+                           orderBy orderList: [OrderBy]? = nil,
+                           limit: Limit? = nil,
+                           offset: Offset? = nil) throws -> FundamentalRowXColumn
+                           where T : RawRepresentable, T.RawValue == String {
+        return try getRows(on: columnResultConvertibleList, fromTable: table.rawValue, where: condition, orderBy: orderList, limit: limit, offset: offset)
+    }
+
     public func getRows(on columnResultConvertibleList: [ColumnResultConvertible],
                         fromTable table: String,
                         where condition: Condition? = nil,
@@ -515,6 +938,22 @@ extension RowSelectInterface where Self: Core {
             offset: offset)
     }
 
+    public func getRows<T>(on columnResultConvertibleList: ColumnResultConvertible...,
+                           fromTable table: T,
+                           where condition: Condition? = nil,
+                           orderBy orderList: [OrderBy]? = nil,
+                           limit: Limit? = nil,
+                           offset: Offset? = nil) throws -> FundamentalRowXColumn
+                           where T : RawRepresentable, T.RawValue == String {
+        return try getRows(
+            on: columnResultConvertibleList.isEmpty ? [Column.any] : columnResultConvertibleList,
+            fromTable: table.rawValue,
+            where: condition,
+            orderBy: orderList,
+            limit: limit,
+            offset: offset)
+    }
+
     public func getRow(on columnResultConvertibleList: ColumnResultConvertible...,
                        fromTable table: String,
                        where condition: Condition? = nil,
@@ -523,6 +962,20 @@ extension RowSelectInterface where Self: Core {
         return try getRow(
             on: columnResultConvertibleList.isEmpty ? [Column.all] : columnResultConvertibleList,
             fromTable: table,
+            where: condition,
+            orderBy: orderList,
+            offset: offset)
+    }
+
+    public func getRow<T>(on columnResultConvertibleList: ColumnResultConvertible...,
+                          fromTable table: T,
+                          where condition: Condition? = nil,
+                          orderBy orderList: [OrderBy]? = nil,
+                          offset: Offset? = nil) throws -> FundamentalRow
+                          where T : RawRepresentable, T.RawValue == String {
+        return try getRow(
+            on: columnResultConvertibleList.isEmpty ? [Column.any] : columnResultConvertibleList,
+            fromTable: table.rawValue,
             where: condition,
             orderBy: orderList,
             offset: offset)
@@ -539,6 +992,25 @@ extension RowSelectInterface where Self: Core {
                            orderBy: orderList,
                            limit: 1,
                            offset: offset).first ?? []
+    }
+
+    public func getRow<T>(on columnResultConvertibleList: [ColumnResultConvertible],
+                          fromTable table: T,
+                          where condition: Condition? = nil,
+                          orderBy orderList: [OrderBy]? = nil,
+                          offset: Offset? = nil) throws -> FundamentalRow
+                          where T : RawRepresentable, T.RawValue == String {
+        return try getRow(on: columnResultConvertibleList, fromTable: table.rawValue, where: condition, orderBy: orderList, offset: offset)
+    }
+
+    public func getColumn<T>(on result: ColumnResultConvertible,
+                             fromTable table: T,
+                             where condition: Condition? = nil,
+                             orderBy orderList: [OrderBy]? = nil,
+                             limit: Limit? = nil,
+                             offset: Offset? = nil) throws -> FundamentalColumn
+                             where T : RawRepresentable, T.RawValue == String {
+          return try getColumn(on: result, fromTable: table.rawValue, where: condition, orderBy: orderList, limit: limit, offset: offset)
     }
 
     public func getColumn(on result: ColumnResultConvertible,
@@ -564,6 +1036,16 @@ extension RowSelectInterface where Self: Core {
         return try rowSelect.allValues()
     }
 
+    public func getDistinctColumn<T>(on result: ColumnResultConvertible,
+                                     fromTable table: T,
+                                     where condition: Condition? = nil,
+                                     orderBy orderList: [OrderBy]? = nil,
+                                     limit: Limit? = nil,
+                                     offset: Offset? = nil) throws -> FundamentalColumn
+                                     where T : RawRepresentable, T.RawValue == String {
+        return try getDistinctColumn(on: result, fromTable: table.rawValue, where: condition, orderBy: orderList, limit: limit, offset: offset)
+    }
+
     public func getDistinctColumn(on result: ColumnResultConvertible,
                                   fromTable table: String,
                                   where condition: Condition? = nil,
@@ -587,6 +1069,16 @@ extension RowSelectInterface where Self: Core {
         return try rowSelect.allValues()
     }
 
+    public func getValue<T>(on result: ColumnResultConvertible,
+                            fromTable table: T,
+                            where condition: Condition? = nil,
+                            orderBy orderList: [OrderBy]? = nil,
+                            limit: Limit? = nil,
+                            offset: Offset? = nil) throws -> FundamentalValue
+        where T : RawRepresentable, T.RawValue == String {
+            return try getValue(on: result, fromTable: table.rawValue, where: condition, orderBy: orderList, limit: limit, offset: offset)
+    }
+
     public func getValue(on result: ColumnResultConvertible,
                          fromTable table: String,
                          where condition: Condition? = nil,
@@ -599,6 +1091,16 @@ extension RowSelectInterface where Self: Core {
                             orderBy: orderList,
                             limit: 1,
                             offset: offset).first?.first) ?? FundamentalValue(nil)
+    }
+
+    public func getDistinctValue<T>(on result: ColumnResultConvertible,
+                                    fromTable table: T,
+                                    where condition: Condition? = nil,
+                                    orderBy orderList: [OrderBy]? = nil,
+                                    limit: Limit? = nil,
+                                    offset: Offset? = nil) throws -> FundamentalValue
+        where T : RawRepresentable, T.RawValue == String {
+            return try getDistinctValue(on: result, fromTable: table.rawValue, where: condition, orderBy: orderList, limit: limit, offset: offset)
     }
 
     public func getDistinctValue(on result: ColumnResultConvertible,
@@ -645,6 +1147,26 @@ public protocol SelectInterface: class {
     ///   - offset: Expression convertible
     /// - Returns: Table decodable objects
     /// - Throws: `Error`
+    func getObjects<Object, T>(
+        on propertyConvertibleList: [PropertyConvertible],
+        fromTable table: T,
+        where condition: Condition?,
+        orderBy orderList: [OrderBy]?,
+        limit: Limit?,
+        offset: Offset?) throws -> [Object]
+        where Object : TableDecodable, T : RawRepresentable, T.RawValue == String
+
+    /// Get objects on specific(or all) properties
+    ///
+    /// - Parameters:
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - table: Table name
+    ///   - condition: Expression convertible
+    ///   - orderList: Order convertible list
+    ///   - limit: Expression convertible
+    ///   - offset: Expression convertible
+    /// - Returns: Table decodable objects
+    /// - Throws: `Error`
     func getObjects<Object: TableDecodable>(
         on propertyConvertibleList: PropertyConvertible...,
         fromTable table: String,
@@ -652,6 +1174,26 @@ public protocol SelectInterface: class {
         orderBy orderList: [OrderBy]?,
         limit: Limit?,
         offset: Offset?) throws -> [Object]
+
+    /// Get objects on specific(or all) properties
+    ///
+    /// - Parameters:
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - table: Table name
+    ///   - condition: Expression convertible
+    ///   - orderList: Order convertible list
+    ///   - limit: Expression convertible
+    ///   - offset: Expression convertible
+    /// - Returns: Table decodable objects
+    /// - Throws: `Error`
+    func getObjects<Object, T>(
+        on propertyConvertibleList: PropertyConvertible...,
+        fromTable table: T,
+        where condition: Condition?,
+        orderBy orderList: [OrderBy]?,
+        limit: Limit?,
+        offset: Offset?) throws -> [Object]
+        where Object : TableDecodable, T : RawRepresentable, T.RawValue == String
 
     /// Get object on specific(or all) properties
     ///
@@ -677,6 +1219,24 @@ public protocol SelectInterface: class {
     ///   - table: Table name
     ///   - condition: Expression convertible
     ///   - orderList: Order convertible list
+    ///   - offset: Expression convertible
+    /// - Returns: Table decodable objects
+    /// - Throws: `Error`
+    func getObject<Object, T>(
+        on propertyConvertibleList: [PropertyConvertible],
+        fromTable table: T,
+        where condition: Condition?,
+        orderBy orderList: [OrderBy]?,
+        offset: Offset?) throws -> Object?
+        where Object : TableDecodable, T : RawRepresentable, T.RawValue == String
+
+    /// Get object on specific(or all) properties
+    ///
+    /// - Parameters:
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - table: Table name
+    ///   - condition: Expression convertible
+    ///   - orderList: Order convertible list
     ///   - condition: Expression convertible
     /// - Returns: Table decodable objects
     /// - Throws: `Error`
@@ -686,9 +1246,38 @@ public protocol SelectInterface: class {
         where condition: Condition?,
         orderBy orderList: [OrderBy]?,
         offset: Offset?) throws -> Object?
+
+    /// Get object on specific(or all) properties
+    ///
+    /// - Parameters:
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - table: Table name
+    ///   - condition: Expression convertible
+    ///   - orderList: Order convertible list
+    ///   - condition: Expression convertible
+    /// - Returns: Table decodable objects
+    /// - Throws: `Error`
+    func getObject<Object, T>(
+        on propertyConvertibleList: PropertyConvertible...,
+        fromTable table: T,
+        where condition: Condition?,
+        orderBy orderList: [OrderBy]?,
+        offset: Offset?) throws -> Object?
+        where Object : TableDecodable, T : RawRepresentable, T.RawValue == String
 }
 
 extension SelectInterface where Self: Core {
+    public func getObjects<Object, T>(
+        on propertyConvertibleList: [PropertyConvertible],
+        fromTable table: T,
+        where condition: Condition? = nil,
+        orderBy orderList: [OrderBy]? = nil,
+        limit: Limit? = nil,
+        offset: Offset? = nil) throws -> [Object]
+        where Object : TableDecodable, T : RawRepresentable, T.RawValue == String {
+            return try getObjects(on: propertyConvertibleList, fromTable: table.rawValue, where: condition, orderBy: orderList, limit: limit, offset: offset)
+    }
+
     public func getObjects<Object: TableDecodable>(
         on propertyConvertibleList: [PropertyConvertible],
         fromTable table: String,
@@ -728,6 +1317,32 @@ extension SelectInterface where Self: Core {
                               offset: offset)
     }
 
+    public func getObjects<Object, T>(
+        on propertyConvertibleList: PropertyConvertible...,
+        fromTable table: T,
+        where condition: Condition? = nil,
+        orderBy orderList: [OrderBy]? = nil,
+        limit: Limit? = nil,
+        offset: Offset? = nil) throws -> [Object]
+        where Object : TableDecodable, T : RawRepresentable, T.RawValue == String {
+        return try getObjects(on: propertyConvertibleList.isEmpty ? Object.Properties.all : propertyConvertibleList,
+                              fromTable: table.rawValue,
+                              where: condition,
+                              orderBy: orderList,
+                              limit: limit,
+                              offset: offset)
+    }
+
+    public func getObject<Object, T>(
+        on propertyConvertibleList: [PropertyConvertible],
+        fromTable table: T,
+        where condition: Condition? = nil,
+        orderBy orderList: [OrderBy]? = nil,
+        offset: Offset? = nil) throws -> Object?
+        where Object : TableDecodable, T : RawRepresentable, T.RawValue == String {
+            return try getObject(on: propertyConvertibleList, fromTable: table.rawValue, where: condition, orderBy: orderList, offset: offset)
+    }
+
     public func getObject<Object: TableDecodable>(
         on propertyConvertibleList: [PropertyConvertible],
         fromTable table: String,
@@ -754,6 +1369,20 @@ extension SelectInterface where Self: Core {
                              orderBy: orderList,
                              offset: offset)
     }
+
+    public func getObject<Object, T>(
+        on propertyConvertibleList: PropertyConvertible...,
+        fromTable table: T,
+        where condition: Condition? = nil,
+        orderBy orderList: [OrderBy]? = nil,
+        offset: Offset? = nil) throws -> Object?
+        where Object : TableDecodable, T : RawRepresentable, T.RawValue == String {
+        return try getObject(on: propertyConvertibleList.isEmpty ? Object.Properties.all : propertyConvertibleList,
+                             fromTable: table.rawValue,
+                             where: condition,
+                             orderBy: orderList,
+                             offset: offset)
+    }
 }
 
 /// Convenient interface for table related operation
@@ -761,13 +1390,13 @@ public protocol TableInterface: class {
     /// Create table, related indexes and constraints with specific type
     ///
     /// Note that it will create defined indexes automatically.
-    /// The name of index is `"\(tableName)\(indexSubfixName)"` while `indexSubfixName` is defined by `IndexBinding`. 
+    /// The name of index is `"\(tableName)\(indexSubfixName)"` while `indexSubfixName` is defined by `IndexBinding`.
     /// BUT, it will not drop the undefined indexes. You should drop it manually.
     ///
     /// Note that it will add the newly defined column automatically.
     /// AND, it will skip the undefined column. It can be very developer-friendly while upgrading your database column.
     ///
-    /// Note that it will run embedded transaction  
+    /// Note that it will run embedded transaction
     /// The embedded transaction means that it will run a transaction if it's not in other transaction,
     /// otherwise it will be executed within the existing transaction.
     ///
@@ -776,10 +1405,29 @@ public protocol TableInterface: class {
     ///   - rootType: Type of table encodable object
     /// - Throws: `Error`
     func create<Root: TableDecodable>(table name: String, of rootType: Root.Type) throws
+    
+    /// Create table, related indexes and constraints with specific type
+    ///
+    /// Note that it will create defined indexes automatically.
+    /// The name of index is `"\(tableName)\(indexSubfixName)"` while `indexSubfixName` is defined by `IndexBinding`.
+    /// BUT, it will not drop the undefined indexes. You should drop it manually.
+    ///
+    /// Note that it will add the newly defined column automatically.
+    /// AND, it will skip the undefined column. It can be very developer-friendly while upgrading your database column.
+    ///
+    /// Note that it will run embedded transaction
+    /// The embedded transaction means that it will run a transaction if it's not in other transaction,
+    /// otherwise it will be executed within the existing transaction.
+    ///
+    /// - Parameters:
+    ///   - name: Table name.
+    ///   - rootType: Type of table encodable object
+    /// - Throws: `Error`
+    func create<Root, T>(table name: T, of rootType: Root.Type) throws where Root : TableDecodable, T : RawRepresentable, T.RawValue == String
 
     /// Create virtual table and constraints with specific type
     ///
-    /// Note that it will run embedded transaction  
+    /// Note that it will run embedded transaction
     /// The embedded transaction means that it will run a transaction if it's not in other transaction,
     /// otherwise it will be executed within the existing transaction.
     ///
@@ -789,6 +1437,18 @@ public protocol TableInterface: class {
     /// - Throws: `Error`
     func create<Root: TableDecodable>(virtualTable name: String, of rootType: Root.Type) throws
 
+    /// Create virtual table and constraints with specific type
+    ///
+    /// Note that it will run embedded transaction
+    /// The embedded transaction means that it will run a transaction if it's not in other transaction,
+    /// otherwise it will be executed within the existing transaction.
+    ///
+    /// - Parameters:
+    ///   - name: Table name.
+    ///   - rootType: Type of table encodable object
+    /// - Throws: `Error`
+    func create<Root, T>(virtualTable name: T, of rootType: Root.Type) throws where Root : TableDecodable, T : RawRepresentable, T.RawValue == String
+
     /// Create table manually
     ///
     /// - Parameters:
@@ -797,6 +1457,15 @@ public protocol TableInterface: class {
     ///   - constraintList: WINQ constraint list.
     /// - Throws: `Error`
     func create(table name: String, with columnDefList: [ColumnDef], and constraintList: [TableConstraint]?) throws
+    
+    /// Create table manually
+    ///
+    /// - Parameters:
+    ///   - name: Table name
+    ///   - columnDefList: WINQ column definition list
+    ///   - constraintList: WINQ constraint list.
+    /// - Throws: `Error`
+    func create<T>(table name: T, with columnDefList: [ColumnDef], and constraintList: [TableConstraint]?) throws where T : RawRepresentable, T.RawValue == String
 
     /// Create table manually
     ///
@@ -807,6 +1476,15 @@ public protocol TableInterface: class {
     /// - Throws: `Error`
     func create(table name: String, with columnDefList: ColumnDef..., and constraintList: [TableConstraint]?) throws
 
+    /// Create table manually
+    ///
+    /// - Parameters:
+    ///   - name: Table name
+    ///   - columnDefList: WINQ column definition list
+    ///   - constraintList: WINQ constraint list.
+    /// - Throws: `Error`
+    func create<T>(table name: T, with columnDefList: ColumnDef..., and constraintList: [TableConstraint]?) throws where T : RawRepresentable, T.RawValue == String
+
     /// Create new column
     ///
     /// - Parameters:
@@ -815,11 +1493,25 @@ public protocol TableInterface: class {
     /// - Throws: `Error`
     func addColumn(with columnDef: ColumnDef, forTable table: String) throws
 
+    /// Create new column
+    ///
+    /// - Parameters:
+    ///   - columnDef: WINQ column definition
+    ///   - table: Table name
+    /// - Throws: `Error`
+    func addColumn<T>(with columnDef: ColumnDef, forTable table: T) throws where T : RawRepresentable, T.RawValue == String
+
     /// Drop table
     ///
     /// - Parameter name: Table name
     /// - Throws: `Erro`
     func drop(table name: String) throws
+
+    /// Drop table
+    ///
+    /// - Parameter name: Table name
+    /// - Throws: `Erro`
+    func drop<T>(table name: T) throws where T : RawRepresentable, T.RawValue == String
 
     /// Create index manually
     ///
@@ -831,6 +1523,18 @@ public protocol TableInterface: class {
     func create(index name: String,
                 with columnIndexConvertibleList: [ColumnIndexConvertible],
                 forTable table: String) throws
+    
+    /// Create index manually
+    ///
+    /// - Parameters:
+    ///   - name: Index name
+    ///   - columnIndexConvertibleList: WINQ column index list
+    ///   - table: Table name
+    /// - Throws: `Error`
+    func create<T>(index name: String,
+                   with columnIndexConvertibleList: [ColumnIndexConvertible],
+                   forTable table: T) throws
+                   where T : RawRepresentable, T.RawValue == String
 
     /// Create index manually
     ///
@@ -843,6 +1547,18 @@ public protocol TableInterface: class {
                 with columnIndexConvertibleList: ColumnIndexConvertible...,
                 forTable table: String) throws
 
+    /// Create index manually
+    ///
+    /// - Parameters:
+    ///   - name: Index name
+    ///   - columnIndexConvertibleList: WINQ column index list
+    ///   - table: Table name
+    /// - Throws: `Error`
+    func create<T>(index name: String,
+                   with columnIndexConvertibleList: ColumnIndexConvertible...,
+                   forTable table: T) throws
+                   where T : RawRepresentable, T.RawValue == String
+
     /// Drop index
     ///
     /// - Parameter name: Index name
@@ -851,6 +1567,13 @@ public protocol TableInterface: class {
 }
 
 extension TableInterface where Self: Core {
+    public func create<Root, T>(
+        table name: T,
+        of rootType: Root.Type) throws
+        where Root : TableDecodable, T : RawRepresentable, T.RawValue == String {
+            return try create(table: name.rawValue, of: rootType)
+    }
+
     public func create<Root: TableDecodable>(
         table name: String,
         of rootType: Root.Type) throws {
@@ -887,6 +1610,11 @@ extension TableInterface where Self: Core {
         })
     }
 
+    public func create<Root, T>(virtualTable name: T, of rootType: Root.Type) throws
+        where Root : TableDecodable, T : RawRepresentable, T.RawValue == String {
+            return try create(virtualTable: name.rawValue, of: rootType)
+    }
+
     public func create<Root: TableDecodable>(virtualTable name: String, of rootType: Root.Type) throws {
         try run(transaction: {
             try exec(rootType.CodingKeys.objectRelationalMapping.generateCreateVirtualTableStatement(named: name))
@@ -899,18 +1627,49 @@ extension TableInterface where Self: Core {
         try create(table: name, with: columnDefList, and: constraintList)
     }
 
+    public func create<T>(table name: T,
+                       with columnDefList: ColumnDef...,
+        and constraintList: [TableConstraint]? = nil) throws
+        where T : RawRepresentable, T.RawValue == String {
+        try create(table: name.rawValue, with: columnDefList, and: constraintList)
+    }
+
+    public func create<T>(table name: T,
+                          with columnDefList: [ColumnDef],
+                          and constraintList: [TableConstraint]? = nil) throws
+                        where T : RawRepresentable, T.RawValue == String {
+            return try create(table: name.rawValue, with: columnDefList, and: constraintList)
+    }
+
     public func create(table name: String,
                        with columnDefList: [ColumnDef],
                        and constraintList: [TableConstraint]? = nil) throws {
         try exec(StatementCreateTable().create(table: name, with: columnDefList, and: constraintList))
     }
 
+    public func addColumn<T>(with columnDef: ColumnDef, forTable table: T) throws
+        where T : RawRepresentable, T.RawValue == String {
+        try addColumn(with: columnDef, forTable: table.rawValue)
+    }
+
     public func addColumn(with columnDef: ColumnDef, forTable table: String) throws {
         try exec(StatementAlterTable().alter(table: table).addColumn(with: columnDef))
     }
 
+    public func drop<T>(table name: T) throws
+        where T : RawRepresentable, T.RawValue == String {
+            try drop(table: name.rawValue)
+    }
+
     public func drop(table name: String) throws {
         try exec(StatementDropTable().drop(table: name))
+    }
+
+    public func create<T>(index name: String,
+                          with columnIndexConvertibleList: ColumnIndexConvertible...,
+                          forTable table: T) throws
+                          where T : RawRepresentable, T.RawValue == String {
+            try create(index: name, with: columnIndexConvertibleList, forTable: table.rawValue)
     }
 
     public func create(index name: String,
@@ -923,6 +1682,13 @@ extension TableInterface where Self: Core {
                        with columnIndexConvertibleList: [ColumnIndexConvertible],
                        forTable table: String) throws {
         try exec(StatementCreateIndex().create(index: name).on(table: table, indexesBy: columnIndexConvertibleList))
+    }
+
+    public func create<T>(index name: String,
+                          with columnIndexConvertibleList: [ColumnIndexConvertible],
+                          forTable table: T) throws
+                          where T : RawRepresentable, T.RawValue == String {
+        try create(index: name, with: columnIndexConvertibleList, forTable: table.rawValue)
     }
 
     public func drop(index name: String) throws {

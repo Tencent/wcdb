@@ -50,9 +50,21 @@ public final class StatementSelect: Statement {
     }
 
     @discardableResult
+    public func from<T>(_ tableOrSubqueryConvertibleList: T...) -> StatementSelect
+        where T : RawRepresentable, T.RawValue == String {
+            return from(tableOrSubqueryConvertibleList.flatMap{ Optional($0.rawValue) })
+    }
+
+    @discardableResult
     public func from(_ tableOrSubqueryConvertibleList: [TableOrSubqueryConvertible]) -> StatementSelect {
         description.append(" FROM \(tableOrSubqueryConvertibleList.joined())")
         return self
+    }
+
+    @discardableResult
+    public func from<T>(_ tableOrSubqueryConvertibleList: [T]) -> StatementSelect
+        where T : RawRepresentable, T.RawValue == String {
+        return from(tableOrSubqueryConvertibleList.flatMap{ Optional($0.rawValue) })
     }
 
     @discardableResult

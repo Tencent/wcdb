@@ -28,6 +28,12 @@ public final class StatementDelete: Statement {
     public init() {}
 
     @discardableResult
+    public func delete<T>(fromTable table: T) -> StatementDelete
+        where T : RawRepresentable, T.RawValue == String {
+            return self.delete(fromTable: table.rawValue)
+    }
+
+    @discardableResult
     public func delete(fromTable table: String) -> StatementDelete {
         description.append("DELETE FROM \(table)")
         return self

@@ -62,7 +62,7 @@ public class Core: CoreRepresentable {
         fatalError("It should not be called. If you think it's a bug, please report an issue to us.")
     }
 
-    /// Prepare a specific sql.  
+    /// Prepare a specific sql.
     /// Note that you can use this interface to prepare a SQL that is not contained in the WCDB interface layer
     ///
     /// - Parameter statement: WINQ statement
@@ -70,6 +70,11 @@ public class Core: CoreRepresentable {
     /// - Throws: `Error`
     public func prepare(_ statement: Statement) throws -> CoreStatement {
         return CoreStatement(with: self, and: try prepare(statement))
+    }
+
+    public func isTableExists<T>(_ table: T) throws -> Bool
+        where T : RawRepresentable, T.RawValue == String {
+        return try isTableExists(table.rawValue)
     }
 
     public func isTableExists(_ table: String) throws -> Bool {
@@ -105,7 +110,7 @@ public class Core: CoreRepresentable {
 
     /// Run a transaction in closure
     ///
-    ///     try database.run(transaction: { () throws -> Void in 
+    ///     try database.run(transaction: { () throws -> Void in
     ///         try database.insert(objects: objects, intoTable: table)
     ///     })
     ///
@@ -124,7 +129,7 @@ public class Core: CoreRepresentable {
 
     /// Run a controllable transaction in closure
     ///
-    ///     try database.run(controllableTransaction: { () throws -> Bool in 
+    ///     try database.run(controllableTransaction: { () throws -> Bool in
     ///         try database.insert(objects: objects, intoTable: table)
     ///         return true // return true to commit transaction and return false to rollback transaction.
     ///     })
