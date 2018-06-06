@@ -10,6 +10,12 @@ It's a bug fixed version. Since Swift 4.1.x contains [bugs](https://github.com/T
 
 FYI, a refactor is needed to fit the new conditional conformance design of Swift 4.2. We will finish it in next version.
 
+#### Android
+
+* Use C++14 and libc++_static runtime on JNI routines.
+* Fix "no implementation found" log on libwcdb.so initialization.
+* Fix ProGuard rules when importing from AAR package.
+
 ## v1.0.6
 
 #### iOS/macOS
