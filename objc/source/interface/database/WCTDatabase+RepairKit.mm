@@ -55,4 +55,9 @@
     }
 }
 
+- (BOOL)removeFactory
+{
+    return _database->removeFactory();
+}
+
 @end

@@ -318,6 +318,15 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
     return factoryRetriever.work();
 }
 
+bool Database::removeFactory()
+{
+    if (FileManager::shared()->removeDirectory(getFactoryDirectory())) {
+        return true;
+    }
+    assignWithSharedThreadedError();
+    return false;
+}
+
 #pragma mark - Handle
 ThreadLocal<Database::ThreadedHandles> &Database::threadedHandles()
 {

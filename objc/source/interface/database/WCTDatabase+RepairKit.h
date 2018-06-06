@@ -35,6 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (double)retrieve:(WCTRetrieveProgressUpdateBlock)onProgressUpdate;
 
+- (BOOL)removeFactory;
+
 @end
 
 NS_ASSUME_NONNULL_END
