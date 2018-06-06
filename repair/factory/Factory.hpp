@@ -52,7 +52,7 @@ public:
 public:
     FactoryDepositor depositor() const;
     FactoryRestorer restorer() const;
-    FactoryBackup Backup() const;
+    FactoryBackup backup() const;
     FactoryMeta meta;
 
 #pragma mark - Helper

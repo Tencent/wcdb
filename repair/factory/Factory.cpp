@@ -83,7 +83,7 @@ FactoryRestorer Factory::restorer() const
     return FactoryRestorer(*this);
 }
 
-FactoryBackup Factory::Backup() const
+FactoryBackup Factory::backup() const
 {
     return FactoryBackup(*this);
 }
