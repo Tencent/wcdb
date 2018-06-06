@@ -24,6 +24,7 @@ import android.database.Cursor;
 
 import com.tencent.wcdb.DatabaseUtils;
 import com.tencent.wcdb.database.SQLiteDatabase;
+import com.tencent.wcdb.database.SQLiteGlobal;
 
 import org.junit.After;
 import org.junit.Before;
@@ -34,7 +35,7 @@ public class WCDBSingleThreadedTest extends SingleThreadedTest {
     @Override
     @Before
     public void doBefore() {
-        SQLiteDatabase.loadLib();
+        SQLiteGlobal.loadLib();
         super.doBefore();
     }
 
