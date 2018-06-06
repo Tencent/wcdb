@@ -37,7 +37,7 @@ namespace WCDB {
 
 class HandlePool;
 
-class HandlePoolThreadedErrorProne : protected ThreadedErrorProne {
+class HandlePoolRelated : protected ThreadedErrorProne {
 public:
     ThreadedErrors *getThreadedErrors() override;
 
@@ -123,7 +123,7 @@ protected:
     ThreadedErrors *getThreadedErrors() override;
 
 private:
-    friend ThreadedErrors *HandlePoolThreadedErrorProne::getThreadedErrors();
+    friend ThreadedErrors *HandlePoolRelated::getThreadedErrors();
     ThreadedErrors m_errors;
 
 #pragma mark - Attachment

@@ -46,9 +46,9 @@ bool Backup::work()
     return isError();
 }
 
-void Backup::filter(const Filter &shouldTableDeconstructed)
+void Backup::filter(const Filter &tableShouldBeBackedUp)
 {
-    m_filter = shouldTableDeconstructed;
+    m_filter = tableShouldBeBackedUp;
 }
 
 bool Backup::filter(const std::string &tableName)

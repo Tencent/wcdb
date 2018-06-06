@@ -282,22 +282,40 @@ const std::string &Database::getFactoryDirectory() const
     return m_pool->attachment.factory.directory;
 }
 
-bool Database::backup(const BackupFilter &shouldTableBeBackedup)
+void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
 {
-    //TODO
+    m_pool->attachment.factory.filter(tableShouldBeBackedup);
+}
+
+bool Database::backup()
+{
+    Repair::FactoryBackup factoryBackup = m_pool->attachment.factory.backup();
+    if (factoryBackup.work()) {
+        return true;
+    }
+    assignWithSharedThreadedError();
     return false;
 }
 
 bool Database::deposit()
 {
-    //TODO
+    Repair::FactoryDepositor factoryDepositor =
+        m_pool->attachment.factory.depositor();
+    if (factoryDepositor.work()) {
+        return true;
+    }
+    assignWithSharedThreadedError();
     return false;
 }
 
-bool Database::retrieve()
+double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
 {
-    //TODO
-    return false;
+    Repair::FactoryRetriever factoryRetriever =
+        m_pool->attachment.factory.retriever();
+    std::shared_ptr<Repair::Assembler> assembler(new Repair::SQLiteAssembler);
+    factoryRetriever.setAssembler(assembler);
+    factoryRetriever.setProgressCallback(onProgressUpdate);
+    return factoryRetriever.work();
 }
 
 #pragma mark - Handle
@@ -394,7 +412,6 @@ void Database::releaseThreadedHandle() const
 }
 
 #pragma mark - Transaction
-
 bool Database::beginTransaction()
 {
     RecyclableHandle recyclableHandle = getHandle();
@@ -495,7 +512,7 @@ bool Database::isInThreadedTransaction() const
            threadedHandle->end();
 }
 
-#pragma mark - HandlePoolThreadedErrorProne
+#pragma mark - HandlePool Related
 HandlePool *Database::getHandlePool()
 {
     return m_pool.getHandlePool();

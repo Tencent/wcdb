@@ -22,7 +22,7 @@
 #include <WCDB/Data.hpp>
 #include <WCDB/Factory.hpp>
 #include <WCDB/FactoryBackup.hpp>
-#include <WCDB/FactoryRestorer.hpp>
+#include <WCDB/FactoryRetriever.hpp>
 #include <WCDB/FileHandle.hpp>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/FullCrawler.hpp>
@@ -35,17 +35,17 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Backup
-FactoryRestorer::Backup::Backup(const FactoryRestorer &restorer)
-    : FactoryBackup(restorer.factory), m_restorer(restorer)
+FactoryRetriever::Backup::Backup(FactoryRetriever &retriever)
+    : FactoryBackup(retriever.getFactory()), m_retriever(retriever)
 {
 }
 
-bool FactoryRestorer::Backup::work(const Filter &shouldTableDeconstructed)
+bool FactoryRetriever::Backup::work()
 {
-    return doWork(shouldTableDeconstructed, m_restorer.database);
+    return doWork(m_retriever.database);
 }
 
-FactoryRestorer::FactoryRestorer(const Factory &factory)
+FactoryRetriever::FactoryRetriever(Factory &factory)
     : FactoryRelated(factory)
     , databaseFileName(Path::getFileName(factory.database))
     , database(
@@ -54,13 +54,8 @@ FactoryRestorer::FactoryRestorer(const Factory &factory)
 {
 }
 
-void FactoryRestorer::filter(const Filter &filter)
-{
-    m_filter = filter;
-}
-
 #pragma mark - Restorer
-bool FactoryRestorer::work()
+double FactoryRetriever::work()
 {
     WCTInnerAssert(m_assembler->getPath().empty());
 
@@ -68,70 +63,71 @@ bool FactoryRestorer::work()
     bool succeed;
 
     //1. Remove the old restore db
-    std::string restoreDirectory = factory.getRestoreDirectory();
+    std::string restoreDirectory = getFactory().getRestoreDirectory();
     if (!fileManager->removeItem(restoreDirectory)) {
         tryUpgradeErrorWithThreadedError();
-        return false;
+        return -1;
     }
     if (!fileManager->createDirectoryWithIntermediateDirectories(
-            factory.getRestoreDirectory())) {
-        return false;
+            getFactory().getRestoreDirectory())) {
+        return -1;
     }
 
     //1.5 calculate weights to deal with the progress and score
     std::list<std::string> workshopDirectories;
-    std::tie(succeed, workshopDirectories) = factory.getWorkshopDirectories();
+    std::tie(succeed, workshopDirectories) =
+        getFactory().getWorkshopDirectories();
     if (!succeed) {
         tryUpgradeErrorWithThreadedError();
     }
 
     if (!calculateWeights(workshopDirectories)) {
-        return false;
+        return -1;
     }
 
     //2. Restore from current db. It must be succeed without even non-critical errors.
-    if (!restore(factory.database) ||
+    if (!restore(getFactory().database) ||
         m_criticalError.code() != Error::Code::OK) {
-        return false;
+        return -1;
     }
 
     //3. Restore from all depositor db. It should be succeed without critical errors.
     for (const auto &workshopDirectory : workshopDirectories) {
         if (!restore(Path::addComponent(workshopDirectory, databaseFileName))) {
-            return false;
+            return -1;
         }
     }
 
     //4. Do a Backup on restore db.
-    FactoryRestorer::Backup Backup(*this);
-    if (!Backup.work(m_filter)) {
+    FactoryRetriever::Backup Backup(*this);
+    if (!Backup.work()) {
         tryUpgradeErrorWithThreadedError();
-        return false;
+        return -1;
     }
 
     //5. Archive current db and use restore db
-    FactoryDepositor depositor(factory);
+    FactoryDepositor depositor(getFactory());
     if (!depositor.work()) {
-        return false;
+        return -1;
     }
-    std::string baseDirectory = Path::getBaseName(factory.database);
+    std::string baseDirectory = Path::getBaseName(getFactory().database);
     succeed = FileManager::shared()->moveItems(
         Factory::associatedPathsForDatabase(database), baseDirectory);
     if (!succeed) {
-        return false;
+        return -1;
     }
 
     //6. Remove all depositor dbs.
     if (m_criticalError.code() == Error::Code::OK) {
-        FileManager::shared()->removeItem(factory.directory);
+        FileManager::shared()->removeItem(getFactory().directory);
     }
 
     finishProgress();
 
-    return true;
+    return m_score;
 }
 
-bool FactoryRestorer::restore(const std::string &database)
+bool FactoryRetriever::restore(const std::string &database)
 {
     WCTInnerAssert(m_assembler != nullptr);
 
@@ -213,7 +209,7 @@ bool FactoryRestorer::restore(const std::string &database)
 }
 
 #pragma mark - Assembler
-void FactoryRestorer::setAssembler(const std::shared_ptr<Assembler> &assembler)
+void FactoryRetriever::setAssembler(const std::shared_ptr<Assembler> &assembler)
 {
     WCTInnerAssert(m_assembler->getPath().empty());
     m_assembler = assembler;
@@ -221,18 +217,13 @@ void FactoryRestorer::setAssembler(const std::shared_ptr<Assembler> &assembler)
 }
 
 #pragma mark - Score and Progress
-double FactoryRestorer::getScore() const
-{
-    return m_score;
-}
-
-bool FactoryRestorer::calculateWeights(
+bool FactoryRetriever::calculateWeights(
     const std::list<std::string> &workshopDirectories)
 {
     size_t totalSize = 0;
 
     //Origin database
-    if (!calculateWeight(factory.database, totalSize)) {
+    if (!calculateWeight(getFactory().database, totalSize)) {
         return false;
     }
 
@@ -252,8 +243,8 @@ bool FactoryRestorer::calculateWeights(
     return true;
 }
 
-bool FactoryRestorer::calculateWeight(const std::string &database,
-                                      size_t &totalSize)
+bool FactoryRetriever::calculateWeight(const std::string &database,
+                                       size_t &totalSize)
 {
     bool succeed;
     size_t fileSize;
@@ -267,13 +258,14 @@ bool FactoryRestorer::calculateWeight(const std::string &database,
     return true;
 }
 
-void FactoryRestorer::updateProgress(const std::string &database,
-                                     double increment)
+void FactoryRetriever::updateProgress(const std::string &database,
+                                      double increment)
 {
     increaseProgress(m_weights[database] * increment);
 }
 
-void FactoryRestorer::updateScore(const std::string &database, double increment)
+void FactoryRetriever::updateScore(const std::string &database,
+                                   double increment)
 {
     m_score += increment * m_weights[database];
 }

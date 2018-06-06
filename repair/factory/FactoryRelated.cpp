@@ -18,14 +18,26 @@
  * limitations under the License.
  */
 
+#include <WCDB/Factory.hpp>
 #include <WCDB/FactoryRelated.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-FactoryRelated::FactoryRelated(const Factory &factory_) : factory(factory_)
+FactoryRelated::FactoryRelated(Factory &factory_)
+    : factory(factory_), m_mutex(factory.m_mutex)
 {
+}
+
+Factory &FactoryRelated::getFactory()
+{
+    return factory;
+}
+
+std::mutex &FactoryRelated::getMutex()
+{
+    return m_mutex;
 }
 
 } //namespace Repair

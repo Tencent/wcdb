@@ -24,7 +24,7 @@
 #include <WCDB/FactoryBackup.hpp>
 #include <WCDB/FactoryDepositor.hpp>
 #include <WCDB/FactoryMeta.hpp>
-#include <WCDB/FactoryRestorer.hpp>
+#include <WCDB/FactoryRetriever.hpp>
 #include <future>
 #include <list>
 #include <string>
@@ -48,12 +48,21 @@ public:
     std::pair<bool, std::list<std::string>> getWorkshopDirectories() const;
     std::pair<bool, std::string> generateWorkshopDiectory() const;
 
-#pragma - Factory Derived
+#pragma - Factory Related
 public:
-    FactoryDepositor depositor() const;
-    FactoryRestorer restorer() const;
-    FactoryBackup backup() const;
+    friend class FactoryRelated;
+    FactoryDepositor depositor();
+    FactoryRetriever retriever();
+    FactoryBackup backup();
     FactoryMeta meta;
+
+    typedef Backup::Filter Filter;
+    void filter(const Filter &tableShouldBeBackedUp);
+    Filter getFilter() const;
+
+protected:
+    Filter m_filter;
+    std::mutex m_mutex;
 
 #pragma mark - Helper
 public:

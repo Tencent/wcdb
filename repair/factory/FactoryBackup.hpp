@@ -30,14 +30,13 @@ namespace Repair {
 
 class FactoryBackup : public FactoryRelated {
 public:
-    FactoryBackup(const Factory &factory);
+    FactoryBackup(Factory &factory);
     using Filter = Backup::Filter;
 
-    bool work(const Filter &shouldTableDeconstructed);
+    bool work();
 
 protected:
-    bool doWork(const Filter &shouldTableDeconstructed,
-                const std::string &path);
+    bool doWork(const std::string &path);
 };
 
 } //namespace Repair

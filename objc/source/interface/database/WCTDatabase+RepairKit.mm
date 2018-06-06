@@ -23,6 +23,17 @@
 
 @implementation WCTDatabase (RepairKit)
 
+- (void)filterBackup:(WCTBackupFilterBlock)tableShouldBeBackedUp
+{
+    if (tableShouldBeBackedUp) {
+        _database->filterBackup([tableShouldBeBackedUp](const std::string &tableName) -> bool {
+            return tableShouldBeBackedUp([NSString stringWithCppString:tableName]);
+        });
+    } else {
+        _database->filterBackup(nullptr);
+    }
+}
+
 - (BOOL)deposit
 {
     return _database->deposit();
@@ -30,23 +41,18 @@
 
 - (BOOL)backup
 {
-    return _database->backup(nullptr);
+    return _database->backup();
 }
 
-- (BOOL)backup:(WCTBackupFilterBlock)shouldTableBeBackedUp
+- (double)retrieve:(WCTRetrieveProgressUpdateBlock)onProgressUpdate
 {
-    WCDB::Database::BackupFilter filter = nullptr;
-    if (shouldTableBeBackedUp) {
-        filter = [shouldTableBeBackedUp](const std::string &tableName) -> bool {
-            return shouldTableBeBackedUp([NSString stringWithCppString:tableName]);
-        };
+    if (onProgressUpdate) {
+        return _database->retrieve([onProgressUpdate](double percentage, double increment) {
+            onProgressUpdate(percentage, increment);
+        });
+    } else {
+        return _database->retrieve(nullptr);
     }
-    return _database->backup(filter);
-}
-
-- (BOOL)retrieve
-{
-    return _database->retrieve();
 }
 
 @end

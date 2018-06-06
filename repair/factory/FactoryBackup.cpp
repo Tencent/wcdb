@@ -27,20 +27,19 @@ namespace WCDB {
 
 namespace Repair {
 
-FactoryBackup::FactoryBackup(const Factory &factory) : FactoryRelated(factory)
+FactoryBackup::FactoryBackup(Factory &factory) : FactoryRelated(factory)
 {
 }
 
-bool FactoryBackup::work(const Filter &shouldTableDeconstructed)
+bool FactoryBackup::work()
 {
-    return doWork(shouldTableDeconstructed, factory.database);
+    return doWork(getFactory().database);
 }
 
-bool FactoryBackup::doWork(const Filter &shouldTableDeconstructed,
-                           const std::string &path)
+bool FactoryBackup::doWork(const std::string &path)
 {
     Backup Backup(path);
-    Backup.filter(shouldTableDeconstructed);
+    Backup.filter(getFactory().getFilter());
     if (!Backup.work()) {
         return false;
     }

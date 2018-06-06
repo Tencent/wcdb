@@ -32,7 +32,7 @@ namespace Repair {
 //Thread safe
 class FactoryMeta : public FactoryRelated {
 public:
-    FactoryMeta(const Factory &factory);
+    FactoryMeta(Factory &factory);
     FactoryMeta(FactoryMeta &&factoryMaterials);
     bool work();
 
@@ -43,7 +43,6 @@ protected:
     std::future<bool> m_done;
     std::map<std::string, int64_t> m_sequences;
     Error m_error;
-    std::mutex m_mutex;
 };
 
 } //namespace Repair

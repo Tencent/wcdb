@@ -29,7 +29,7 @@
 
 namespace WCDB {
 
-class Database : protected HandlePoolThreadedErrorProne {
+class Database : protected HandlePoolRelated {
 #pragma mark - Initializer
 public:
     using Tag = HandlePool::Tag;
@@ -100,10 +100,13 @@ public:
     std::string getLastMaterialPath() const;
     const std::string &getFactoryDirectory() const;
 
-    typedef std::function<bool(const std::string &)> BackupFilter;
-    bool backup(const BackupFilter &shouldTableBeBackedup);
+    typedef Repair::FactoryBackup::Filter BackupFilter;
+    void filterBackup(const BackupFilter &tableShouldBeBackedup);
+    bool backup();
     bool deposit();
-    bool retrieve();
+    typedef Repair::FactoryRetriever::ProgressUpdateCallback
+        RetrieveProgressCallback;
+    double retrieve(const RetrieveProgressCallback &onProgressUpdate);
 
 #pragma mark - Handle
 public:
@@ -136,7 +139,7 @@ public:
 
     bool isInThreadedTransaction() const;
 
-#pragma mark - HandlePoolThreadedErrorProne
+#pragma mark - HandlePoolRelated
 protected:
     HandlePool *getHandlePool() override;
     void assignWithSharedThreadedError();

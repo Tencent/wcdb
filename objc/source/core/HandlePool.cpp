@@ -297,7 +297,7 @@ ThreadedErrors *HandlePool::getThreadedErrors()
     return &m_errors;
 }
 
-ThreadedErrors *HandlePoolThreadedErrorProne::getThreadedErrors()
+ThreadedErrors *HandlePoolRelated::getThreadedErrors()
 {
     return getHandlePool()->getThreadedErrors();
 }

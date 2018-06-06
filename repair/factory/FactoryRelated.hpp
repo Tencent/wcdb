@@ -21,6 +21,8 @@
 #ifndef FactoryRelated_hpp
 #define FactoryRelated_hpp
 
+#include <mutex>
+
 namespace WCDB {
 
 namespace Repair {
@@ -29,9 +31,15 @@ class Factory;
 
 class FactoryRelated {
 public:
-    FactoryRelated(const Factory &factory);
+    FactoryRelated(Factory &factory);
 
-    const Factory &factory;
+protected:
+    Factory &getFactory();
+    std::mutex &getMutex();
+
+private:
+    Factory &factory;
+    std::mutex &m_mutex;
 };
 
 } //namespace Repair

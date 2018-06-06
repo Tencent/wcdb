@@ -21,18 +21,19 @@
 #import <WCDB/WCTDatabase.h>
 
 typedef BOOL (^WCTBackupFilterBlock)(NSString *_Nonnull);
+typedef BOOL (^WCTRetrieveProgressUpdateBlock)(double, double);
 
 @interface WCTDatabase (RepairKit)
 
 NS_ASSUME_NONNULL_BEGIN
 
+- (void)filterBackup:(WCTBackupFilterBlock)tableShouldBeBackedUp;
+
 - (BOOL)deposit;
 
 - (BOOL)backup;
 
-- (BOOL)backup:(WCTBackupFilterBlock)shouldTableBeBackedUp;
-
-- (BOOL)retrieve;
+- (double)retrieve:(WCTRetrieveProgressUpdateBlock)onProgressUpdate;
 
 @end
 

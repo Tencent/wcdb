@@ -72,18 +72,29 @@ std::pair<bool, std::string> Factory::generateWorkshopDiectory() const
     return {true, Path::addComponent(directory, oss.str())};
 }
 
-#pragma mark - Factory Derived
-FactoryDepositor Factory::depositor() const
+#pragma mark - Factory Related
+void Factory::filter(const Filter &tableShouldBeBackedUp)
+{
+    std::lock_guard<std::mutex> lockGuard(m_mutex);
+    m_filter = tableShouldBeBackedUp;
+}
+
+Factory::Filter Factory::getFilter() const
+{
+    return m_filter;
+}
+
+FactoryDepositor Factory::depositor()
 {
     return FactoryDepositor(*this);
 }
 
-FactoryRestorer Factory::restorer() const
+FactoryRetriever Factory::retriever()
 {
-    return FactoryRestorer(*this);
+    return FactoryRetriever(*this);
 }
 
-FactoryBackup Factory::backup() const
+FactoryBackup Factory::backup()
 {
     return FactoryBackup(*this);
 }

@@ -56,7 +56,7 @@ protected:
 #pragma mark - Filter
 public:
     typedef std::function<bool(const std::string &)> Filter;
-    void filter(const Filter &shouldTableDeconstructed);
+    void filter(const Filter &tableShouldBeBackedUp);
 
 protected:
     bool filter(const std::string &tableName);

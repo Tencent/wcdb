@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef FactoryRestorer_hpp
-#define FactoryRestorer_hpp
+#ifndef FactoryRetriever_hpp
+#define FactoryRetriever_hpp
 
 #include <WCDB/Assembler.hpp>
 #include <WCDB/CriticalErrorOnly.hpp>
@@ -31,35 +31,29 @@ namespace WCDB {
 
 namespace Repair {
 
-class FactoryRestorer : public FactoryRelated,
-                        public CriticalErrorOnly,
-                        public Progress {
+class FactoryRetriever : public FactoryRelated,
+                         public CriticalErrorOnly,
+                         public Progress {
 #pragma mark - Backup
 public:
     class Backup : public FactoryBackup {
     public:
-        Backup(const FactoryRestorer &restorer);
+        Backup(FactoryRetriever &retriever);
 
-        bool work(const Filter &shouldTableDeconstructed);
+        bool work();
 
     protected:
-        const FactoryRestorer &m_restorer;
+        const FactoryRetriever &m_retriever;
     };
-
-    typedef Backup::Filter Filter;
-    void filter(const Filter &filter);
-
-protected:
-    Filter m_filter;
 
 #pragma mark - Restorer
 public:
-    FactoryRestorer(const Factory &factory);
+    FactoryRetriever(Factory &factory);
 
     const std::string database;
 
 public:
-    bool work();
+    double work();
 
 protected:
     bool restore(const std::string &database);
@@ -73,9 +67,6 @@ protected:
     std::shared_ptr<Assembler> m_assembler;
 
 #pragma mark - Evaluation and Progress
-public:
-    double getScore() const;
-
 protected:
     bool calculateWeights(const std::list<std::string> &workshopDirectories);
     bool calculateWeight(const std::string &database, size_t &totalSize);
@@ -90,4 +81,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* FactoryRestorer_hpp */
+#endif /* FactoryRetriever_hpp */

@@ -28,21 +28,21 @@ namespace WCDB {
 
 namespace Repair {
 
-FactoryMeta::FactoryMeta(const Factory &factory)
+FactoryMeta::FactoryMeta(Factory &factory)
     : FactoryRelated(factory)
     , m_done(std::async([this]() -> bool { return doWork(); }))
 {
 }
 
 FactoryMeta::FactoryMeta(FactoryMeta &&factoryMaterials)
-    : FactoryRelated(factoryMaterials.factory)
+    : FactoryRelated(factoryMaterials.getFactory())
     , m_done(std::move(factoryMaterials.m_done))
 {
 }
 
 bool FactoryMeta::work()
 {
-    std::lock_guard<std::mutex> lockGuard(m_mutex);
+    std::lock_guard<std::mutex> lockGuard(getMutex());
     bool succeed = m_done.share().get();
     if (!succeed) {
         //retry
@@ -53,10 +53,11 @@ bool FactoryMeta::work()
 
 bool FactoryMeta::doWork()
 {
-    const std::string databaseName = Path::getFileName(factory.database);
+    const std::string databaseName = Path::getFileName(getFactory().database);
     bool succeed;
     std::list<std::string> workshopDirectories;
-    std::tie(succeed, workshopDirectories) = factory.getWorkshopDirectories();
+    std::tie(succeed, workshopDirectories) =
+        getFactory().getWorkshopDirectories();
     if (!succeed) {
         return false;
     }
