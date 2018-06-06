@@ -158,12 +158,12 @@ void Error::Infos::set(const std::string &key, const std::string &value)
     m_strings[key] = value;
 }
 
-const std::map<std::string, int64_t> Error::Infos::getIntInfos() const
+const std::map<std::string, int64_t> &Error::Infos::getIntInfos() const
 {
     return m_ints;
 }
 
-const std::map<std::string, std::string> Error::Infos::getStringInfos() const
+const std::map<std::string, std::string> &Error::Infos::getStringInfos() const
 {
     return m_strings;
 }

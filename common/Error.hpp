@@ -184,8 +184,8 @@ public:
         void set(const std::string &key, int64_t value);
         void set(const std::string &key, const std::string &value);
 
-        const std::map<std::string, int64_t> getIntInfos() const;
-        const std::map<std::string, std::string> getStringInfos() const;
+        const std::map<std::string, int64_t> &getIntInfos() const;
+        const std::map<std::string, std::string> &getStringInfos() const;
 
         void clear();
 
