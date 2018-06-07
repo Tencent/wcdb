@@ -64,8 +64,6 @@
     //Then
     XCTAssertTrue(([_database.paths isEqualToObjects:expectedPaths
                                       withComparator:^BOOL(NSString *lhs, NSString *rhs) {
-                                        NSLog(@"lhs: %@", lhs);
-                                        NSLog(@"rhs: %@", rhs);
                                         return [lhs isEqualToString:rhs];
                                       }]));
 }
