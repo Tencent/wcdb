@@ -259,8 +259,8 @@ std::string Database::getBackupPath() const
 
 std::list<std::string> Database::getPaths() const
 {
-    return {getPath(), getWALPath(), getBackupPath(), getSHMPath(),
-            getJournalPath()};
+    return {getPath(), getWALPath(), getBackupPath(), getJournalPath(),
+            getSHMPath()};
 }
 
 #pragma mark - Repair Kit

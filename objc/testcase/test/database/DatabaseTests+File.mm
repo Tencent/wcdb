@@ -51,10 +51,12 @@
 {
     //Give
     NSString *path = self.recommendedPath;
-    NSArray<NSString *> *expectedPaths = @[ path, [path stringByAppendingString:@"-wal"], [path stringByAppendingString:@"-shm"], [path stringByAppendingString:@"-journal"], [path stringByAppendingString:@"-backup"] ];
+    NSArray<NSString *> *expectedPaths = @[ path, [path stringByAppendingString:@"-wal"], [path stringByAppendingString:@"-backup"], [path stringByAppendingString:@"-journal"], [path stringByAppendingString:@"-shm"] ];
     //Then
     XCTAssertTrue(([_database.paths isEqualToObjects:expectedPaths
                                       withComparator:^BOOL(NSString *lhs, NSString *rhs) {
+                                        NSLog(@"lhs: %@", lhs);
+                                        NSLog(@"rhs: %@", rhs);
                                         return [lhs isEqualToString:rhs];
                                       }]));
 }
