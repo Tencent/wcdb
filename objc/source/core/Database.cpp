@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/Core.h>
 #include <WCDB/Error.hpp>
 #include <WCDB/FileManager.hpp>
@@ -267,6 +268,17 @@ std::list<std::string> Database::getPaths() const
 }
 
 #pragma mark - Repair Kit
+void Database::setCorruptionReaction(CorruptionReaction reaction)
+{
+    m_pool->attachment.corruption.setReaction(reaction);
+}
+
+void Database::setExtraNotificationWhenCorrupted(
+    const CorruptionNotification &notification)
+{
+    m_pool->attachment.corruption.setExtraNotification(notification);
+}
+
 std::string Database::getFirstMaterialPath() const
 {
     return Repair::Factory::firstMaterialPathForDatabase(getPath());

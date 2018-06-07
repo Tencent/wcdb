@@ -21,7 +21,6 @@
 #ifndef LangCommon_hpp
 #define LangCommon_hpp
 
-#include <WCDB/Assertion.hpp>
 #include <list>
 
 #include <WCDB/CopyOnWriteLazyDescribable.hpp>
@@ -114,7 +113,6 @@ protected:
             } else {
                 comma = true;
             }
-            LangRemedialAssert(!element.empty());
             description.append(element.description().get());
         }
         return description;

@@ -21,6 +21,7 @@
 #ifndef Attachment_hpp
 #define Attachment_hpp
 
+#include <WCDB/Corruption.hpp>
 #include <WCDB/Factory.hpp>
 
 namespace WCDB {
@@ -31,7 +32,9 @@ class Attachment {
 public:
     Attachment(const HandlePool *handlePool);
 
+    const HandlePool *handlePool;
     Repair::Factory factory;
+    Corruption corruption;
 };
 
 } //namespace WCDB

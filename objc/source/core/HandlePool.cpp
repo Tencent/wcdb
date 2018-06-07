@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/Core.h>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Path.hpp>
@@ -197,7 +198,7 @@ std::shared_ptr<Handle> HandlePool::generateHandle()
 
 std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
 {
-    WCTInnerAssert(m_sharedLock.level() != SharedLock::Level::None);
+    WCTInnerAssert(m_sharedLock.level() > SharedLock::Level::None);
     std::shared_ptr<ConfiguredHandle> configuredHandle = m_handles.popBack();
     if (!configuredHandle) {
         return nullptr;
@@ -214,7 +215,7 @@ std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
 
 std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
 {
-    WCTInnerAssert(m_sharedLock.level() != SharedLock::Level::None);
+    WCTInnerAssert(m_sharedLock.level() > SharedLock::Level::None);
     if (m_aliveHandleCount >= HandlePool::maxConcurrency()) {
         setThreadedError(
             Error(Error::Code::Exceed,
@@ -252,7 +253,7 @@ void HandlePool::flowBackConfiguredHandle(
     const std::shared_ptr<ConfiguredHandle> &configuredHandle)
 {
     WCTInnerAssert(configuredHandle != nullptr);
-    WCTInnerAssert(m_sharedLock.level() != SharedLock::Level::None);
+    WCTInnerAssert(m_sharedLock.level() > SharedLock::Level::None);
     if (!m_handles.pushBack(configuredHandle)) {
         --m_aliveHandleCount;
     }
@@ -279,7 +280,7 @@ void HandlePool::setThreadedError(Error &&error)
         error.infos.set("Tag", getTag());
     }
     error.infos.set("Path", path);
-    Reporter::shared()->report(error);
+    Notifier::shared()->notify(error);
     ThreadedErrorProne::setThreadedError(std::move(error));
 }
 

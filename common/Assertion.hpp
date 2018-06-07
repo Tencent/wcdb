@@ -21,13 +21,13 @@
 #ifndef Assertion_hpp
 #define Assertion_hpp
 
-#include <WCDB/Reporter.hpp>
+#include <WCDB/Notifier.hpp>
 
 #ifdef DEBUG
 
 #define WCTRemedialAssert(cond, message, remedial)                             \
     if (!(cond)) {                                                             \
-        WCDB::Reporter::fatal((message), __FILE__, __LINE__);                  \
+        WCDB::Notifier::fatal((message), __FILE__, __LINE__);                  \
         remedial                                                               \
     }
 
@@ -39,7 +39,7 @@
 
 #define WCTRemedialAssert(cond, message, remedial)                             \
     if (!(cond)) {                                                             \
-        WCDB::Reporter::error((message), __FILE__, __LINE__);                  \
+        WCDB::Notifier::error((message), __FILE__, __LINE__);                  \
         remedial                                                               \
     }
 
@@ -57,6 +57,6 @@
 #define WCTInnerFatalError() WCTInnerAssert(false);
 
 #define WCTWarning(message)                                                    \
-    WCDB::Reporter::warning((message), __FILE__, __LINE__)
+    WCDB::Notifier::warning((message), __FILE__, __LINE__)
 
 #endif /* Assertion_hpp */

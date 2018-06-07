@@ -20,12 +20,23 @@
 
 #import <WCDB/WCTDatabase.h>
 
-typedef BOOL (^WCTBackupFilterBlock)(NSString *_Nonnull);
+NS_ASSUME_NONNULL_BEGIN
+
+typedef BOOL (^WCTBackupFilterBlock)(NSString *);
 typedef BOOL (^WCTRetrieveProgressUpdateBlock)(double, double);
+typedef void (^WCTCorruptionNotificationBlock)(WCTDatabase *);
+
+typedef NS_ENUM(NSInteger, WCTCorruptionReaction) {
+    WCTCorruptionReactionIgnore = -1,
+    WCTCorruptionReactionRemove = 0,
+    WCTCorruptionReactionDeposit = 1,
+};
 
 @interface WCTDatabase (RepairKit)
 
-NS_ASSUME_NONNULL_BEGIN
+- (void)setCorruptionReaction:(WCTCorruptionReaction)reaction;
+
+- (void)setExtraCorruptionNotification:(WCTCorruptionNotificationBlock)onCorruptionReacted;
 
 - (void)filterBackup:(WCTBackupFilterBlock)tableShouldBeBackedUp;
 

@@ -34,12 +34,7 @@ public:
     FactoryRelated(Factory &factory);
 
 protected:
-    Factory &getFactory();
-    std::mutex &getMutex();
-
-private:
     Factory &factory;
-    std::mutex &m_mutex;
 };
 
 } //namespace Repair

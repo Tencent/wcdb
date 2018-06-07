@@ -25,19 +25,8 @@ namespace WCDB {
 
 namespace Repair {
 
-FactoryRelated::FactoryRelated(Factory &factory_)
-    : factory(factory_), m_mutex(factory.m_mutex)
+FactoryRelated::FactoryRelated(Factory &factory_) : factory(factory_)
 {
-}
-
-Factory &FactoryRelated::getFactory()
-{
-    return factory;
-}
-
-std::mutex &FactoryRelated::getMutex()
-{
-    return m_mutex;
 }
 
 } //namespace Repair

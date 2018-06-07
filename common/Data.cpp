@@ -20,6 +20,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Data.hpp>
+#include <WCDB/Notifier.hpp>
 
 namespace WCDB {
 

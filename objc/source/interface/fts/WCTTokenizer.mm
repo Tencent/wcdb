@@ -19,6 +19,7 @@
  */
 
 #import <CoreFoundation/CoreFoundation.h>
+#import <WCDB/Assertion.hpp>
 #import <WCDB/Interface.h>
 #import <WCDB/NSString+CppString.h>
 #import <WCDB/Tokenizer.hpp>

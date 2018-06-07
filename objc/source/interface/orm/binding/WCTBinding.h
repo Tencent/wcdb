@@ -70,6 +70,8 @@ public:
 
     static WCTColumnNamed getColumnGenerator();
 
+    void checkSafeCall(Class cls) const;
+
 protected:
     WCTBinding(Class cls);
 

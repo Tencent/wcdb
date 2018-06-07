@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import <WCDB/Assertion.hpp>
 #import <WCDB/WCDB.h>
 
 namespace WCDB {

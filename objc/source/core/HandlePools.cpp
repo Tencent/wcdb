@@ -18,7 +18,9 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/Core.h>
+#include <WCDB/CorruptionNotifier.hpp>
 #include <WCDB/FileManager.hpp>
 
 namespace WCDB {
@@ -31,8 +33,8 @@ HandlePools *HandlePools::defaultPools()
 
 HandlePools::HandlePools()
 {
-    //init
-    SQLiteGlobal::shared();
+    SQLiteGlobal::shared()->boot();
+    CorruptionNotifier::shared()->boot();
 }
 
 RecyclableHandlePool HandlePools::getPool(const std::string &path,

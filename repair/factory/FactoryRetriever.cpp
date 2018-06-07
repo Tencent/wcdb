@@ -36,7 +36,7 @@ namespace Repair {
 
 #pragma mark - Backup
 FactoryRetriever::Backup::Backup(FactoryRetriever &retriever)
-    : FactoryBackup(retriever.getFactory()), m_retriever(retriever)
+    : FactoryBackup(retriever.factory), m_retriever(retriever)
 {
 }
 
@@ -63,20 +63,19 @@ double FactoryRetriever::work()
     bool succeed;
 
     //1. Remove the old restore db
-    std::string restoreDirectory = getFactory().getRestoreDirectory();
+    std::string restoreDirectory = factory.getRestoreDirectory();
     if (!fileManager->removeItem(restoreDirectory)) {
         tryUpgradeErrorWithThreadedError();
         return -1;
     }
     if (!fileManager->createDirectoryWithIntermediateDirectories(
-            getFactory().getRestoreDirectory())) {
+            factory.getRestoreDirectory())) {
         return -1;
     }
 
     //1.5 calculate weights to deal with the progress and score
     std::list<std::string> workshopDirectories;
-    std::tie(succeed, workshopDirectories) =
-        getFactory().getWorkshopDirectories();
+    std::tie(succeed, workshopDirectories) = factory.getWorkshopDirectories();
     if (!succeed) {
         tryUpgradeErrorWithThreadedError();
     }
@@ -86,7 +85,7 @@ double FactoryRetriever::work()
     }
 
     //2. Restore from current db. It must be succeed without even non-critical errors.
-    if (!restore(getFactory().database) ||
+    if (!restore(factory.database) ||
         m_criticalError.code() != Error::Code::OK) {
         return -1;
     }
@@ -106,11 +105,11 @@ double FactoryRetriever::work()
     }
 
     //5. Archive current db and use restore db
-    FactoryDepositor depositor(getFactory());
+    FactoryDepositor depositor(factory);
     if (!depositor.work()) {
         return -1;
     }
-    std::string baseDirectory = Path::getBaseName(getFactory().database);
+    std::string baseDirectory = Path::getBaseName(factory.database);
     succeed = FileManager::shared()->moveItems(
         Factory::associatedPathsForDatabase(database), baseDirectory);
     if (!succeed) {
@@ -119,7 +118,7 @@ double FactoryRetriever::work()
 
     //6. Remove all depositor dbs.
     if (m_criticalError.code() == Error::Code::OK) {
-        FileManager::shared()->removeItem(getFactory().directory);
+        FileManager::shared()->removeItem(factory.directory);
     }
 
     finishProgress();
@@ -187,14 +186,14 @@ bool FactoryRetriever::restore(const std::string &database)
         warning.setCode(Error::Code::Corrupt, "Repair");
         warning.infos.set("Path", materialPath);
         warning.message = "Material is corrupted";
-        Reporter::shared()->report(std::move(warning));
+        Notifier::shared()->notify(std::move(warning));
     } else {
         Error warning;
         warning.level = Error::Level::Warning;
         warning.setCode(Error::Code::NotFound, "Repair");
         warning.infos.set("Path", database);
         warning.message = "Material not found";
-        Reporter::shared()->report(std::move(warning));
+        Notifier::shared()->notify(std::move(warning));
     }
     FullCrawler fullCrawler(database);
     fullCrawler.setAssembler(m_assembler);
@@ -223,7 +222,7 @@ bool FactoryRetriever::calculateWeights(
     size_t totalSize = 0;
 
     //Origin database
-    if (!calculateWeight(getFactory().database, totalSize)) {
+    if (!calculateWeight(factory.database, totalSize)) {
         return false;
     }
 

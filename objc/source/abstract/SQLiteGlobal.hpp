@@ -31,6 +31,8 @@ class SQLiteGlobal {
 public:
     static SQLiteGlobal *shared();
 
+    void boot();
+
     void hookVFSDidFileCreated(
         const std::function<void(const char *)> &didFileCreated);
 

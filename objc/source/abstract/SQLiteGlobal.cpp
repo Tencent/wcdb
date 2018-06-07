@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Abstract.h>
+#include <WCDB/Notifier.hpp>
 #include <WCDB/String.hpp>
 #include <fcntl.h>
 #include <sqlcipher/sqlite3.h>
@@ -32,6 +33,10 @@ SQLiteGlobal *SQLiteGlobal::shared()
 }
 
 SQLiteGlobal::SQLiteGlobal()
+{
+}
+
+void SQLiteGlobal::boot()
 {
     sqlite3_config(SQLITE_CONFIG_LOG, SQLiteGlobal::log, nullptr);
     sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
@@ -77,7 +82,7 @@ void SQLiteGlobal::log(void *userInfo, int code, const char *message)
     }
     error.setSQLiteCode(code);
     error.message = message ? message : String::empty();
-    Reporter::shared()->report(error);
+    Notifier::shared()->notify(error);
 }
 
 } //namespace WCDB

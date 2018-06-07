@@ -21,7 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Data.hpp>
 #include <WCDB/FileHandle.hpp>
-#include <WCDB/Reporter.hpp>
+#include <WCDB/Notifier.hpp>
 #include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -133,7 +133,7 @@ void FileHandle::setThreadedError()
     error.setSystemCode(errno, Error::Code::IOError);
     error.message = strerror(errno);
     error.infos.set("Path", path);
-    Reporter::shared()->report(error);
+    Notifier::shared()->notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
 }
 

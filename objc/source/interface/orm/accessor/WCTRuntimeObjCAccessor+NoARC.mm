@@ -21,6 +21,7 @@
 #import <WCDB/Assertion.hpp>
 #import <WCDB/Error.hpp>
 #import <WCDB/NSString+CppString.h>
+#import <WCDB/Notifier.hpp>
 #import <WCDB/WCTRuntimeObjCAccessor.h>
 
 #if __has_feature(objc_arc)

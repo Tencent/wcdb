@@ -60,7 +60,7 @@
                 }
                 error.infos.set("Path", path);
                 error.infos.set("ExtCode", nsError.code);
-                WCDB::Reporter::shared()->report(error);
+                WCDB::Notifier::shared()->notify(error);
                 WCDB::ThreadedErrors::shared()->setThreadedError(std::move(error));
             }
         });

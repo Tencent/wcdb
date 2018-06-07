@@ -18,36 +18,49 @@
  * limitations under the License.
  */
 
-#ifndef FactoryMeta_hpp
-#define FactoryMeta_hpp
+#ifndef Corruption_hpp
+#define Corruption_hpp
 
-#include <WCDB/FactoryRelated.hpp>
-#include <future>
-#include <mutex>
+#include <functional>
+#include <string>
 
 namespace WCDB {
 
-namespace Repair {
+class Database;
 
-//Thread safe
-class FactoryMeta : public FactoryRelated {
+class Corruption {
 public:
-    FactoryMeta(Factory &factory);
-    FactoryMeta(FactoryMeta &&factoryMaterials);
+    Corruption(const std::string &associatedPath);
 
-    Error work();
+    const std::string associatedPath;
 
-    const std::map<std::string, int64_t> &getSequences();
+#pragma mark - Reaction
+public:
+    enum Reaction {
+        Ignore = -1,
+        Remove = 0,
+        Deposit = 1,
+    };
+    void setReaction(Reaction reaction);
 
 protected:
-    Error doWork();
-    std::mutex m_mutex;
-    std::future<Error> m_done;
-    std::map<std::string, int64_t> m_sequences;
-};
+    Reaction m_reaction;
 
-} //namespace Repair
+#pragma mark - Notification
+public:
+    typedef std::function<void(std::shared_ptr<Database> &)> Notification;
+    void setExtraNotification(const Notification &notification);
+
+protected:
+    friend class CorruptionNotifier;
+    void notify();
+    bool markAsCorrupted();
+
+private:
+    std::atomic<bool> m_corrupted;
+    Notification m_notification;
+};
 
 } //namespace WCDB
 
-#endif /* FactoryMeta_hpp */
+#endif /* Corruption_hpp */

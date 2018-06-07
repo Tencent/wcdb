@@ -45,7 +45,7 @@ void Material::markAsCorrupt()
     Error error;
     error.setCode(Error::Code::Corrupt, "Repair");
     error.message = "Material is corrupted";
-    Reporter::shared()->report(error);
+    Notifier::shared()->notify(error);
     setThreadedError(std::move(error));
 }
 
@@ -312,7 +312,7 @@ bool Material::deserialize(const std::string &path)
                 error.setCode(Error::Code::IOError, "Repair");
                 error.message = "Short read";
                 error.infos.set("Path", path);
-                Reporter::shared()->report(error);
+                Notifier::shared()->notify(error);
                 setThreadedError(std::move(error));
             }
             break;
@@ -342,7 +342,7 @@ bool Material::serialize(const std::string &path) const
             error.setCode(Error::Code::IOError, "Repair");
             error.message = "Short write";
             error.infos.set("Path", path);
-            Reporter::shared()->report(error);
+            Notifier::shared()->notify(error);
             setThreadedError(std::move(error));
         }
         return false;

@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import <WCDB/Assertion.hpp>
 #import <WCDB/Error.hpp>
 #import <WCDB/Interface.h>
 #import <WCDB/WCTCore+Private.h>

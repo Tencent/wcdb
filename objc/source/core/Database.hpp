@@ -96,6 +96,12 @@ public:
 
 #pragma mark - Repair Kit
 public:
+    typedef Corruption::Notification CorruptionNotification;
+    typedef Corruption::Reaction CorruptionReaction;
+    void setCorruptionReaction(CorruptionReaction reaction);
+    void setExtraNotificationWhenCorrupted(
+        const CorruptionNotification &notification);
+
     std::string getFirstMaterialPath() const;
     std::string getLastMaterialPath() const;
     const std::string &getFactoryDirectory() const;

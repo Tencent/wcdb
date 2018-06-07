@@ -33,13 +33,13 @@ FactoryBackup::FactoryBackup(Factory &factory) : FactoryRelated(factory)
 
 bool FactoryBackup::work()
 {
-    return doWork(getFactory().database);
+    return doWork(factory.database);
 }
 
 bool FactoryBackup::doWork(const std::string &path)
 {
     Backup Backup(path);
-    Backup.filter(getFactory().getFilter());
+    Backup.filter(factory.getFilter());
     if (!Backup.work()) {
         return false;
     }

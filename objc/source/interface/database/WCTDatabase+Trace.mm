@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import <WCDB/Assertion.hpp>
 #import <WCDB/Interface.h>
 #import <WCDB/WCTError+Private.h>
 
@@ -25,14 +26,21 @@
 
 + (void)globalTraceError:(WCTErrorTraceBlock)block
 {
-    WCDB::Reporter::Callback callback = nullptr;
+    [self globalTraceError:block tracerNamed:@"WCDB"];
+}
+
++ (void)globalTraceError:(nullable WCTErrorTraceBlock)block
+             tracerNamed:(NSString *)name
+{
+    WCTRemedialAssert(name != nil, "Tracer name can't be nil.", return;);
+    WCDB::Notifier::Callback callback = nullptr;
     if (block) {
         callback = [block](const WCDB::Error &error) {
             WCTError *nsError = [[WCTError alloc] initWithError:error];
             block(nsError);
         };
     }
-    WCDB::Reporter::shared()->setCallback(callback);
+    WCDB::Notifier::shared()->setNotification(name.cppString, callback);
 }
 
 + (void)globalTracePerformance:(WCTPerformanceTraceBlock)trace
@@ -60,13 +68,6 @@
         };
     }
     static_cast<WCDB::TraceConfig *>(WCDB::TraceConfig::config().get())->setSQLTrace(callback);
-}
-
-+ (WCTErrorTraceBlock)defaultErrorTracer
-{
-    return ^(WCTError *error) {
-      WCDB::Reporter::logger((WCDB::Error::Level) error.level, error.description.cppString);
-    };
 }
 
 @end

@@ -19,8 +19,8 @@
  */
 
 #include <WCDB/FileManager.hpp>
+#include <WCDB/Notifier.hpp>
 #include <WCDB/Path.hpp>
-#include <WCDB/Reporter.hpp>
 #include <WCDB/String.hpp>
 #include <dirent.h>
 #include <errno.h>
@@ -335,7 +335,7 @@ void FileManager::setThreadedError(const std::string &path)
     error.setSystemCode(errno, Error::Code::IOError);
     error.message = strerror(errno);
     error.infos.set("Path", path);
-    Reporter::shared()->report(error);
+    Notifier::shared()->notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
 }
 
@@ -344,7 +344,7 @@ void FileManager::setThreadedError(Error::Code codeIfUnresolved)
     Error error;
     error.setSystemCode(errno, codeIfUnresolved);
     error.message = strerror(errno);
-    Reporter::shared()->report(error);
+    Notifier::shared()->notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
 }
 

@@ -157,7 +157,7 @@ void Pager::markAsError(Error::Code code)
     Error error;
     error.setCode(code, "Repair");
     error.infos.set("Path", m_fileHandle.path);
-    Reporter::shared()->report(error);
+    Notifier::shared()->notify(error);
     setThreadedError(std::move(error));
 }
 

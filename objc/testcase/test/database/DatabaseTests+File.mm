@@ -162,7 +162,7 @@
     //Then
     NSUInteger filesSize = [_database getFilesSize];
     XCTAssertEqual(filesSize, expectedFilesSize);
-    [WCTDatabase globalTraceError:[WCTDatabase defaultErrorTracer]];
+    [WCTDatabase globalTraceError:nil];
     XCTAssertTrue(tested);
 }
 

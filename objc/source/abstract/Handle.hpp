@@ -21,6 +21,7 @@
 #ifndef Handle_hpp
 #define Handle_hpp
 
+#include <WCDB/Error.hpp>
 #include <WCDB/HandleStatement.hpp>
 #include <WCDB/Tracer.hpp>
 #include <WCDB/WINQ.h>

@@ -18,26 +18,30 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Core.h>
+#ifndef CorruptionNotifier_hpp
+#define CorruptionNotifier_hpp
+
+#include <WCDB/Lock.hpp>
+#include <mutex>
+#include <set>
 
 namespace WCDB {
 
-RecyclableHandlePool::RecyclableHandlePool(
-    const std::shared_ptr<HandlePool> &value,
-    const Super::OnRecycled &onRecycled)
-    : Super(value, onRecycled)
-{
-}
+class CorruptionNotifier {
+public:
+    static CorruptionNotifier *shared();
 
-RecyclableHandlePool::RecyclableHandlePool(const std::nullptr_t &)
-    : Super(nullptr)
-{
-}
+    void boot();
 
-HandlePool *RecyclableHandlePool::getHandlePool() const
-{
-    return m_value.get();
-}
+protected:
+    std::mutex m_mutex;
+    std::condition_variable m_cond;
+    std::set<std::string> m_paths;
+
+    void addPath(const std::string &path);
+    void loop();
+};
 
 } //namespace WCDB
+
+#endif /* CorruptionNotifier_hpp */

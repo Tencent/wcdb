@@ -36,7 +36,7 @@ FactoryMeta::FactoryMeta(Factory &factory)
 }
 
 FactoryMeta::FactoryMeta(FactoryMeta &&factoryMaterials)
-    : FactoryRelated(factoryMaterials.getFactory())
+    : FactoryRelated(factoryMaterials.factory)
     , m_done(std::move(factoryMaterials.m_done))
 {
     WCTInnerAssert(m_done.wait_for(std::chrono::seconds(0)) ==
@@ -45,7 +45,7 @@ FactoryMeta::FactoryMeta(FactoryMeta &&factoryMaterials)
 
 Error FactoryMeta::work()
 {
-    std::lock_guard<std::mutex> lockGuard(getMutex());
+    std::lock_guard<std::mutex> lockGuard(m_mutex);
     Error error = m_done.share().get();
     if (!error.isOK()) {
         //retry
@@ -56,12 +56,11 @@ Error FactoryMeta::work()
 
 Error FactoryMeta::doWork()
 {
-    std::lock_guard<std::mutex> lockGuard(getMutex());
-    const std::string databaseName = Path::getFileName(getFactory().database);
+    std::lock_guard<std::mutex> lockGuard(m_mutex);
+    const std::string databaseName = Path::getFileName(factory.database);
     bool succeed;
     std::list<std::string> workshopDirectories;
-    std::tie(succeed, workshopDirectories) =
-        getFactory().getWorkshopDirectories();
+    std::tie(succeed, workshopDirectories) = factory.getWorkshopDirectories();
     if (!succeed) {
         return std::move(ThreadedErrors::shared()->moveThreadedError());
     }

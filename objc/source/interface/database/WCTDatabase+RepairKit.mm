@@ -18,10 +18,32 @@
  * limitations under the License.
  */
 
+#import <WCDB/Assertion.hpp>
 #import <WCDB/Interface.h>
 #import <WCDB/WCTCore+Private.h>
 
 @implementation WCTDatabase (RepairKit)
+
+static_assert((int) WCTCorruptionReactionIgnore == (int) WCDB::Database::CorruptionReaction::Ignore, "");
+static_assert((int) WCTCorruptionReactionRemove == (int) WCDB::Database::CorruptionReaction::Remove, "");
+static_assert((int) WCTCorruptionReactionDeposit == (int) WCDB::Database::CorruptionReaction::Deposit, "");
+
+- (void)setCorruptionReaction:(WCTCorruptionReaction)reaction
+{
+    //TODO if reaction is deposit, start auto backup
+    _database->setCorruptionReaction((WCDB::Database::CorruptionReaction) reaction);
+}
+
+- (void)setExtraCorruptionNotification:(WCTCorruptionNotificationBlock)onCorruptionReacted
+{
+    WCDB::Database::CorruptionNotification notification = nullptr;
+    if (onCorruptionReacted) {
+        notification = [onCorruptionReacted](std::shared_ptr<WCDB::Database> &database) {
+            onCorruptionReacted([[WCTDatabase alloc] initWithDatabase:database]);
+        };
+    }
+    _database->setExtraNotificationWhenCorrupted(notification);
+}
 
 - (void)filterBackup:(WCTBackupFilterBlock)tableShouldBeBackedUp
 {

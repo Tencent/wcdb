@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/CheckpointConfig.hpp>
 #include <WCDB/Database.hpp>
 #include <WCDB/Dispatch.hpp>

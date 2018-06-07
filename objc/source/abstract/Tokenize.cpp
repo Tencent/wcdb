@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Abstract.h>
+#include <WCDB/Assertion.hpp>
 #include <WCDB/Error.hpp>
 
 namespace WCDB {

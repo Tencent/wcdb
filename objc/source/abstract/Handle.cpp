@@ -19,7 +19,9 @@
  */
 
 #include <WCDB/Abstract.h>
+#include <WCDB/Assertion.hpp>
 #include <WCDB/Macro.hpp>
+#include <WCDB/Notifier.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/RepairKit.h>
 #include <sqlcipher/sqlite3.h>
@@ -478,8 +480,9 @@ void Handle::setError(int rc, const std::string &sql)
     if (message) {
         m_error.message = message;
     }
+    m_error.infos.set("Path", path);
     m_error.infos.set("SQL", sql);
-    Reporter::shared()->report(m_error);
+    Notifier::shared()->notify(m_error);
 }
 
 } //namespace WCDB

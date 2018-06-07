@@ -19,11 +19,15 @@
  */
 
 #include <WCDB/Attachment.hpp>
+#include <WCDB/Database.hpp>
 #include <WCDB/HandlePool.hpp>
 
 namespace WCDB {
 
-Attachment::Attachment(const HandlePool *handlePool) : factory(handlePool->path)
+Attachment::Attachment(const HandlePool *handlePool_)
+    : handlePool(handlePool_)
+    , factory(handlePool->path)
+    , corruption(handlePool->path)
 {
 }
 

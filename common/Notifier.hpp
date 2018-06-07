@@ -22,29 +22,38 @@
 #define Reporter_hpp
 
 #include <WCDB/Error.hpp>
+#include <WCDB/Lock.hpp>
 
 namespace WCDB {
 
-class Reporter {
+class Notifier {
 public:
     typedef std::function<void(const Error &)> Callback;
-    static Reporter *shared();
+    typedef std::function<void(const std::string &)> CorruptionCallback;
+    static Notifier *shared();
 
-    void report(const Error &error);
-    void setCallback(const Callback &callback);
+    void notify(const Error &error) const;
 
-    static void defaultCallback(const Error &error);
-    static void logger(const Error::Level &level,
-                       const std::string &description);
+    void setNotification(const std::string &name, const Callback &callback);
+    void setCorruptionNotification(const CorruptionCallback &callback);
+
+    static void logger(const Error &error);
 
 protected:
-    Reporter();
-    Callback m_callback;
+    Notifier();
+    mutable SharedLock m_lock;
+
+    void onNotified(const Error &error) const;
+    void onCorrupted(const std::string &path) const;
+
+    CorruptionCallback m_corruptionCallback;
+    std::map<std::string, Callback> m_callbacks;
 
 public:
     static void fatal(const std::string &message, const char *file, int line);
     static void error(const std::string &message, const char *file, int line);
     static void warning(const std::string &message, const char *file, int line);
+    static void warning(const std::string &message);
 
 protected:
     static void error(Error::Level level,

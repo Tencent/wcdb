@@ -32,8 +32,7 @@ bool FactoryDepositor::work()
     FileManager *fileManager = FileManager::shared();
     bool succeed;
     std::string workshopDirectory;
-    std::tie(succeed, workshopDirectory) =
-        getFactory().generateWorkshopDiectory();
+    std::tie(succeed, workshopDirectory) = factory.generateWorkshopDiectory();
     if (!succeed) {
         return false;
     }
@@ -41,7 +40,7 @@ bool FactoryDepositor::work()
     if (!fileManager->createDirectoryWithIntermediateDirectories(
             workshopDirectory) ||
         !fileManager->moveItems(
-            Factory::associatedPathsForDatabase(getFactory().database),
+            Factory::associatedPathsForDatabase(factory.database),
             workshopDirectory)) {
         return false;
     }
