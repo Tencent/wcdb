@@ -116,14 +116,14 @@ bool HandlePool::blockadeUntilDone(const BlockadeCallback &onBlockaded)
 
 void HandlePool::unblockade()
 {
-    WCTAssert(m_sharedLock.isLocked(),
+    WCTAssert(isBlockaded(),
               "Unblockade should not be called without blockaded.");
     m_sharedLock.unlock();
 }
 
 bool HandlePool::isBlockaded() const
 {
-    return m_sharedLock.isLocked();
+    return m_sharedLock.level() == SharedLock::Level::Write;
 }
 
 void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
@@ -197,10 +197,7 @@ std::shared_ptr<Handle> HandlePool::generateHandle()
 
 std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
 {
-#ifdef DEBUG
-    WCTInnerAssert(m_sharedLock.debug_isSharedLocked() ||
-                   m_sharedLock.isLocked());
-#endif
+    WCTInnerAssert(m_sharedLock.level() != SharedLock::Level::None);
     std::shared_ptr<ConfiguredHandle> configuredHandle = m_handles.popBack();
     if (!configuredHandle) {
         return nullptr;
@@ -217,10 +214,7 @@ std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
 
 std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
 {
-#ifdef DEBUG
-    WCTInnerAssert(m_sharedLock.debug_isSharedLocked() ||
-                   m_sharedLock.isLocked());
-#endif
+    WCTInnerAssert(m_sharedLock.level() != SharedLock::Level::None);
     if (m_aliveHandleCount >= HandlePool::maxConcurrency()) {
         setThreadedError(
             Error(Error::Code::Exceed,
@@ -258,10 +252,7 @@ void HandlePool::flowBackConfiguredHandle(
     const std::shared_ptr<ConfiguredHandle> &configuredHandle)
 {
     WCTInnerAssert(configuredHandle != nullptr);
-#ifdef DEBUG
-    WCTInnerAssert(m_sharedLock.debug_isSharedLocked() ||
-                   m_sharedLock.isLocked());
-#endif
+    WCTInnerAssert(m_sharedLock.level() != SharedLock::Level::None);
     if (!m_handles.pushBack(configuredHandle)) {
         --m_aliveHandleCount;
     }

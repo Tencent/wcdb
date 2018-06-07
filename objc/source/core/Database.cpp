@@ -261,8 +261,8 @@ std::list<std::string> Database::getPaths() const
         getFirstMaterialPath(),
         getLastMaterialPath(),
         getFactoryDirectory(),
-        getSHMPath(),
         getJournalPath(),
+        getSHMPath(),
     };
 }
 

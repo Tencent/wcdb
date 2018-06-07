@@ -21,13 +21,9 @@
 #ifndef Lock_hpp
 #define Lock_hpp
 
-#include <atomic>
-#include <shared_mutex>
-#include <thread>
-#ifdef DEBUG
 #include <WCDB/ThreadLocal.hpp>
-#include <map>
-#endif
+#include <atomic>
+#include <thread>
 
 #pragma GCC visibility push(hidden)
 
@@ -63,33 +59,31 @@ std::shared_timed_mutex is available since C++14, iOS 10.0, macOS 10.12
 class SharedLock : public Lock {
 public:
     SharedLock();
+    ~SharedLock();
+
     void lock() override;
     void unlock() override;
 
     void lockShared();
     void unlockShared();
 
-    bool isLocked() const;
+    enum Level {
+        None = 0,
+        Read = 1,
+        Write = 2,
+    };
+    Level level() const;
 
 protected:
-    bool isThreadedLocked() const;
     mutable std::mutex m_mutex;
-    std::condition_variable m_cond;
-    int m_reader;
-    int m_writer;
-    int m_pending;
-    std::thread::id m_lockingThread;
-
-#ifdef DEBUG
-public:
-    bool debug_isSharedLocked() const;
-
-protected:
-    mutable ThreadLocal<std::map<std::thread::id, int>>
-        debug_m_lockingSharedThread;
-    void debug_threadedLockShared();
-    void debug_threadedUnlockShared();
-#endif
+    std::condition_variable m_readersCond;
+    std::condition_variable m_writersCond;
+    int m_readers;
+    int m_writers;
+    int m_pendingReaders;
+    int m_pendingWriters;
+    std::thread::id m_locking;
+    ThreadLocal<int> m_threadedReaders;
 };
 
 //TODO make shared lock scalable

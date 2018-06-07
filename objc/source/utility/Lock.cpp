@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/Lock.hpp>
 
 namespace WCDB {
@@ -42,103 +43,101 @@ void SpinLock::unlock()
 }
 
 SharedLock::SharedLock()
-    : m_reader(0), m_writer(0), m_pending(0), m_lockingThread(std::thread::id())
+    : m_readers(0)
+    , m_writers(0)
+    , m_pendingReaders(0)
+    , m_pendingWriters(0)
+    , m_locking(std::thread::id())
+    , m_threadedReaders(0)
 {
 }
 
 void SharedLock::lockShared()
 {
-    std::unique_lock<decltype(m_mutex)> lock(m_mutex);
-    if (!isThreadedLocked()) {
-        while (m_writer > 0 || m_pending > 0) {
-            m_cond.wait(lock);
-        }
+    std::unique_lock<std::mutex> lockGuard(m_mutex);
+    if (m_writers > 0 ? m_locking != std::this_thread::get_id()
+                      : m_pendingWriters > 0) {
+        WCTInnerAssert(*m_threadedReaders.get() == 0);
+        ++m_pendingReaders;
+        do {
+            m_readersCond.wait(lockGuard);
+        } while (m_writers > 0 || m_pendingWriters > 0);
+        --m_pendingReaders;
     }
-#ifdef DEBUG
-    debug_threadedLockShared();
-#endif
-    ++m_reader;
+    ++m_readers;
+    ++*m_threadedReaders.get();
 }
 
 void SharedLock::unlockShared()
 {
-    std::unique_lock<decltype(m_mutex)> lock(m_mutex);
-#ifdef DEBUG
-    debug_threadedUnlockShared();
-#endif
-    if (--m_reader == 0 && !isThreadedLocked()) {
-        m_cond.notify_all();
+    std::unique_lock<std::mutex> lockGuard(m_mutex);
+    WCTInnerAssert(m_readers > 0);
+    WCTInnerAssert(*m_threadedReaders.get() > 0);
+    WCTInnerAssert(m_writers == 0 || (m_readers == *m_threadedReaders.get() &&
+                                      m_locking == std::this_thread::get_id()));
+    --m_readers;
+    --*m_threadedReaders.get();
+    if (m_readers == 0) {
+        WCTInnerAssert(*m_threadedReaders.get() == 0);
+        if (m_writers == 0 && m_pendingWriters > 0) {
+            m_writersCond.notify_one();
+        }
     }
 }
 
 void SharedLock::lock()
 {
-    std::unique_lock<decltype(m_mutex)> lock(m_mutex);
-    if (!isThreadedLocked()) {
-        ++m_pending;
-        while (m_writer > 0 || m_reader > 0) {
-            m_cond.wait(lock);
-        }
-        --m_pending;
-        m_lockingThread = std::this_thread::get_id();
+    std::unique_lock<std::mutex> lockGuard(m_mutex);
+    WCTInnerAssert(*m_threadedReaders.get() ==
+                   0); //Upgrade lock is not supported yet.
+    if ((m_readers > 0 || m_writers > 0) &&
+        m_locking != std::this_thread::get_id()) {
+        ++m_pendingWriters;
+        do {
+            m_writersCond.wait(lockGuard);
+        } while (m_readers > 0 || m_writers > 0);
+        --m_pendingWriters;
     }
-    ++m_writer;
+    ++m_writers;
+    m_locking = std::this_thread::get_id();
 }
 
 void SharedLock::unlock()
 {
-    std::unique_lock<decltype(m_mutex)> lock(m_mutex);
-    if (--m_writer == 0) {
-        m_lockingThread = std::thread::id();
-        m_cond.notify_all();
+    std::unique_lock<std::mutex> lockGuard(m_mutex);
+    WCTInnerAssert(*m_threadedReaders.get() ==
+                   0); //Upgrade lock is not supported yet.
+    if (--m_writers == 0) {
+        m_locking = std::thread::id();
+        if (m_pendingWriters > 0) {
+            m_writersCond.notify_one();
+        } else if (m_pendingReaders > 0) {
+            m_readersCond.notify_all();
+        }
     }
 }
 
-bool SharedLock::isLocked() const
+SharedLock::Level SharedLock::level() const
 {
-    std::unique_lock<decltype(m_mutex)> lock(m_mutex);
-    return m_writer > 0;
-}
-
-bool SharedLock::isThreadedLocked() const
-{
-    return m_lockingThread == std::this_thread::get_id();
-}
-
-#ifdef DEBUG
-bool SharedLock::debug_isSharedLocked() const
-{
-    std::unique_lock<decltype(m_mutex)> lock(m_mutex);
-    std::map<std::thread::id, int> *lockingSharedThread =
-        debug_m_lockingSharedThread.get();
-    return lockingSharedThread->find(std::this_thread::get_id()) !=
-           lockingSharedThread->end();
-}
-
-void SharedLock::debug_threadedLockShared()
-{
-    std::map<std::thread::id, int> *lockingSharedThread =
-        debug_m_lockingSharedThread.get();
-    std::thread::id current = std::this_thread::get_id();
-    auto iter = lockingSharedThread->find(current);
-    if (iter == lockingSharedThread->end()) {
-        iter = lockingSharedThread->insert({current, 0}).first;
+    std::lock_guard<std::mutex> lockGuard(m_mutex);
+    if (m_writers > 0) {
+        return Level::Write;
+    } else if (m_readers > 0) {
+        return Level::Read;
     }
-    ++iter->second;
+    return Level::None;
 }
 
-void SharedLock::debug_threadedUnlockShared()
+SharedLock::~SharedLock()
 {
-    std::map<std::thread::id, int> *lockingSharedThread =
-        debug_m_lockingSharedThread.get();
-    std::thread::id current = std::this_thread::get_id();
-    auto iter = lockingSharedThread->find(current);
-    assert(iter != lockingSharedThread->end());
-    if (--iter->second == 0) {
-        lockingSharedThread->erase(iter);
-    }
+    WCTRemedialAssert(m_readers == 0 && m_writers == 0 &&
+                          m_pendingWriters == 0 && m_pendingWriters == 0 &&
+                          m_pendingReaders == 0,
+                      "Unpaired shared lock",
+                      while (m_writers > 0) {
+                          unlock();
+                      } while (m_readers > 0) { unlockShared(); })
 }
-#endif
 
 LockGuard::LockGuard(Lock &lock) : m_lock(lock)
 {

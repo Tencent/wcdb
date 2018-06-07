@@ -80,10 +80,8 @@ bool MigrationSetting::isSameDatabaseMigration() const
 const std::map<std::string, std::pair<std::string, int>> &
 MigrationSetting::getSchemasForAttaching() const
 {
-//TODO refactor
-#ifdef DEBUG
-    WCTInnerAssert(m_lock.debug_isSharedLocked());
-#endif
+    //TODO refactor
+    WCTInnerAssert(m_lock.level() >= SharedLock::Level::Read);
     return m_schemas;
 }
 
@@ -129,9 +127,7 @@ bool MigrationSetting::markAsMigrated(const std::string &table)
 const std::shared_ptr<MigrationInfo> &
 MigrationSetting::pickUpForMigration() const
 {
-#ifdef DEBUG
-    WCTInnerAssert(m_lock.debug_isSharedLocked());
-#endif
+    WCTInnerAssert(m_lock.level() >= SharedLock::Level::Read);
     WCTInnerAssert(!m_infos.empty());
     //TODO cross table migration first
     return m_infos.begin()->second;
