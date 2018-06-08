@@ -18,38 +18,19 @@
  * limitations under the License.
  */
 
-#ifndef ErrorProne_hpp
-#define ErrorProne_hpp
-
-#include <WCDB/Error.hpp>
-#include <WCDB/ThreadedErrors.hpp>
+#ifndef SharedThreadedErrorProne_hpp
+#define SharedThreadedErrorProne_hpp
 
 namespace WCDB {
 
-class ErrorProne {
-public:
-    const Error &getError() const;
+class Error;
 
+class SharedThreadedErrorProne {
 protected:
-    void assignWithSharedThreadedError();
-    void setError(const Error &error);
-    void setError(Error &&error);
-
-    Error m_error;
-};
-
-class ThreadedErrorProne {
-public:
-    const Error &getThreadedError();
-
-protected:
-    void setThreadedError(const Error &error);
-    void setThreadedError(Error &&error);
-    void assignWithSharedThreadedError();
-
-    ThreadedErrors m_threadedError;
+    static void setThreadedError(const Error &error);
+    static void setThreadedError(Error &&error);
 };
 
 } //namespace WCDB
 
-#endif /* ErrorProne_hpp */
+#endif /* SharedThreadedErrorProne_hpp */

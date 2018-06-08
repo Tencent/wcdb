@@ -22,6 +22,7 @@
 #define SQLiteAssembler_hpp
 
 #include <WCDB/Assembler.hpp>
+#include <WCDB/ErrorProne.hpp>
 #include <list>
 
 namespace WCDB {

@@ -102,7 +102,8 @@ double FactoryRetriever::work()
     //4. Do a Backup on restore db.
     FactoryRetriever::Backup backup(*this);
     if (!backup.work()) {
-        tryUpgradeError(backup.getError()) return -1;
+        tryUpgradeError(backup.getError());
+        return -1;
     }
 
     //5. Archive current db and use restore db

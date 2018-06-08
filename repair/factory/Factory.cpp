@@ -63,7 +63,8 @@ std::pair<bool, std::string> Factory::generateWorkshopDiectory() const
     auto t = std::time(nullptr);
     struct tm tm;
     if (!localtime_r(&t, &tm)) {
-        setThreadedError(Error::Code::Exceed);
+        //TODO
+        //        setThreadedError(Error::Code::Exceed);
         return {false, String::empty()};
     }
     std::ostringstream oss;

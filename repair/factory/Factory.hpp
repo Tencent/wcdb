@@ -36,7 +36,7 @@ namespace Repair {
 class Assembler;
 
 //Thread safe
-class Factory : public SharedThreadedErrorProne {
+class Factory {
 #pragma mark - Factory
 public:
     Factory(const std::string &database);

@@ -18,45 +18,19 @@
  * limitations under the License.
  */
 
-#ifndef FileHandle_hpp
-#define FileHandle_hpp
-
 #include <WCDB/SharedThreadedErrorProne.hpp>
-#include <stdio.h>
+#include <WCDB/ThreadedErrors.hpp>
 
 namespace WCDB {
 
-class FileHandle : public SharedThreadedErrorProne {
-#pragma mark - Initialize
-public:
-    FileHandle(const std::string &path);
-    FileHandle(FileHandle &&);
-    FileHandle() = delete;
-    FileHandle(const FileHandle &) = delete;
-    FileHandle &operator=(const FileHandle &) = delete;
+void SharedThreadedErrorProne::setThreadedError(const Error &error)
+{
+    ThreadedErrors::shared()->setThreadedError(error);
+}
 
-    const std::string path;
-
-protected:
-    int m_fd;
-
-#pragma mark - Basic
-public:
-    enum Mode {
-        ReadWrite,
-        ReadOnly,
-    };
-    bool open(Mode mode);
-    void close();
-    ssize_t size();
-    ssize_t read(unsigned char *buffer, off_t offset, size_t size);
-    ssize_t write(unsigned char *buffer, off_t offset, size_t size);
-
-#pragma mark - Error
-protected:
-    void setThreadedError();
-};
+void SharedThreadedErrorProne::setThreadedError(Error &&error)
+{
+    ThreadedErrors::shared()->setThreadedError(std::move(error));
+}
 
 } //namespace WCDB
-
-#endif /* FileHandle_hpp */

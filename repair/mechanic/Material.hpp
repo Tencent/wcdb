@@ -21,7 +21,7 @@
 #ifndef Material_hpp
 #define Material_hpp
 
-#include <WCDB/ErrorProne.hpp>
+#include <WCDB/SharedThreadedErrorProne.hpp>
 #include <list>
 #include <map>
 #include <stdlib.h>

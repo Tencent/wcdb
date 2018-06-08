@@ -21,7 +21,7 @@
 #ifndef Data_hpp
 #define Data_hpp
 
-#include <WCDB/ErrorProne.hpp>
+#include <WCDB/SharedThreadedErrorProne.hpp>
 #include <memory>
 #include <stdio.h>
 #include <vector>
