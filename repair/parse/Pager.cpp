@@ -31,7 +31,12 @@ namespace Repair {
 #pragma mark - Initialize
 
 Pager::Pager(const std::string &path)
-    : m_fileHandle(path), m_pageSize(-1), m_reservedBytes(-1), m_pageCount(0)
+    : m_fileHandle(path)
+    , m_pageSize(-1)
+    , m_reservedBytes(-1)
+    , m_pageCount(0)
+    , m_wal(*this)
+    , m_walSanity(false)
 {
 }
 
@@ -91,6 +96,12 @@ bool Pager::initialize()
         markAsCorrupted();
         return false;
     }
+
+    m_walSanity = m_wal.initialize();
+    if (!m_walSanity) {
+        //TODO handle wal corruption
+        return false;
+    }
     return true;
 }
 
@@ -118,6 +129,9 @@ int Pager::getReservedBytes() const
 Data Pager::acquirePageData(int number)
 {
     WCTInnerAssert(number > 0);
+    if (m_walSanity && m_wal.containsPage(number)) {
+        return m_wal.acquirePageData(number);
+    }
     return acquireData((number - 1) * m_pageSize, m_pageSize);
 }
 

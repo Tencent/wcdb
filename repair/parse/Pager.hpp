@@ -24,6 +24,7 @@
 #include <WCDB/Error.hpp>
 #include <WCDB/FileHandle.hpp>
 #include <WCDB/ThreadedErrorProne.hpp>
+#include <WCDB/Wal.hpp>
 
 namespace WCDB {
 
@@ -60,6 +61,11 @@ protected:
     int m_pageSize;
     int m_reservedBytes;
     int m_pageCount;
+
+#pragma mark - Wal
+protected:
+    Wal m_wal;
+    bool m_walSanity;
 
 #pragma mark - Error
 public:

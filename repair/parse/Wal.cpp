@@ -53,13 +53,14 @@ bool Wal::initialize()
         return succeed;
     }
 
-    Data data = acquireData(0, 32);
+    Data data = acquireData(0, headerSize);
     if (data.empty()) {
         return false;
     }
     Deserialization deserialization(data);
     uint32_t magic = deserialization.advance4BytesUInt();
     if (magic != 0x377f0682 && magic != 0x377f0683) {
+        markAsCorrupted();
         return false;
     }
     m_isBigEndian = magic & 0x00000001;
@@ -71,7 +72,7 @@ bool Wal::initialize()
 
     int frameno = 0;
     const int frameSize = getFrameSize();
-    for (off_t offset = 32; offset + frameSize <= fileSize;
+    for (off_t offset = headerSize; offset + frameSize <= fileSize;
          offset += frameSize) {
         Frame frame(++frameno, *this);
         if (!frame.initialize()) {
@@ -91,14 +92,14 @@ bool Wal::containsPage(int pageno) const
 Data Wal::acquirePageData(int pageno)
 {
     WCTInnerAssert(containsPage(pageno));
-    return acquireData(32 + getFrameSize() * m_framePages[pageno] +
+    return acquireData(headerSize + getFrameSize() * m_framePages[pageno] +
                            Frame::headerSize,
                        getPageSize());
 }
 
 Data Wal::acquireFrameData(int frameno)
 {
-    return acquireData(32 + getFrameSize() * frameno, getFrameSize());
+    return acquireData(headerSize + getFrameSize() * frameno, getFrameSize());
 }
 
 void Wal::markAsCorrupted()
