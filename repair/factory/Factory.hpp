@@ -46,7 +46,7 @@ public:
 
     std::string getRestoreDirectory() const;
     std::pair<bool, std::list<std::string>> getWorkshopDirectories() const;
-    std::pair<bool, std::string> generateWorkshopDiectory() const;
+    std::pair<bool, std::string> getUniqueWorkshopDiectory() const;
 
 #pragma - Factory Related
 public:
@@ -62,7 +62,7 @@ public:
 
 protected:
     Filter m_filter;
-    std::mutex m_mutex;
+    mutable std::mutex m_mutex;
 
 #pragma mark - Helper
 public:

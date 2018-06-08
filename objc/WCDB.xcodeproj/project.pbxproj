@@ -146,6 +146,10 @@
 		23567D7620CA9200005F1C35 /* SharedThreadedErrorProne.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23567D7220CA91FF005F1C35 /* SharedThreadedErrorProne.cpp */; };
 		23567D7720CA9200005F1C35 /* SharedThreadedErrorProne.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567D7420CA91FF005F1C35 /* SharedThreadedErrorProne.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23567D7820CA9200005F1C35 /* SharedThreadedErrorProne.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567D7420CA91FF005F1C35 /* SharedThreadedErrorProne.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23567D7B20CA93C5005F1C35 /* Time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23567D7920CA93C5005F1C35 /* Time.cpp */; };
+		23567D7C20CA93C5005F1C35 /* Time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23567D7920CA93C5005F1C35 /* Time.cpp */; };
+		23567D7D20CA93C5005F1C35 /* Time.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567D7A20CA93C5005F1C35 /* Time.hpp */; };
+		23567D7E20CA93C5005F1C35 /* Time.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567D7A20CA93C5005F1C35 /* Time.hpp */; };
 		23577F731F74F4D000D31C05 /* Tokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23577F701F74F4CF00D31C05 /* Tokenizer.hpp */; };
 		23577F741F74F4D000D31C05 /* Tokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23577F721F74F4D000D31C05 /* Tokenizer.cpp */; };
 		23577F791F74F4E800D31C05 /* WCTTokenizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 23577F771F74F4E800D31C05 /* WCTTokenizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1188,6 +1192,8 @@
 		23567D5820CA823C005F1C35 /* PagerRelated.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PagerRelated.hpp; sourceTree = "<group>"; };
 		23567D7220CA91FF005F1C35 /* SharedThreadedErrorProne.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SharedThreadedErrorProne.cpp; sourceTree = "<group>"; };
 		23567D7420CA91FF005F1C35 /* SharedThreadedErrorProne.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SharedThreadedErrorProne.hpp; sourceTree = "<group>"; };
+		23567D7920CA93C5005F1C35 /* Time.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Time.cpp; sourceTree = "<group>"; };
+		23567D7A20CA93C5005F1C35 /* Time.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Time.hpp; sourceTree = "<group>"; };
 		23577F701F74F4CF00D31C05 /* Tokenizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Tokenizer.hpp; sourceTree = "<group>"; };
 		23577F721F74F4D000D31C05 /* Tokenizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tokenizer.cpp; sourceTree = "<group>"; };
 		23577F771F74F4E800D31C05 /* WCTTokenizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTTokenizer.h; sourceTree = "<group>"; };
@@ -1972,6 +1978,8 @@
 				23775B3320AD666900E21AB0 /* Notifier.hpp */,
 				23775BCB20AD72BC00E21AB0 /* Data.cpp */,
 				23775BCC20AD72BC00E21AB0 /* Data.hpp */,
+				23567D7920CA93C5005F1C35 /* Time.cpp */,
+				23567D7A20CA93C5005F1C35 /* Time.hpp */,
 			);
 			name = common;
 			path = ../../common;
@@ -2678,6 +2686,7 @@
 				234DBCF72064DD0C000E31E8 /* WCTUnsafeHandle+Private.h in Headers */,
 				2349F73D1EA0D6680021EFA7 /* WCTDatabase.h in Headers */,
 				239776FA202AF2E3000A681C /* TimedQueue.hpp in Headers */,
+				23567D7D20CA93C5005F1C35 /* Time.hpp in Headers */,
 				2374C9942090A393000F046F /* WCTDatabase+Trace.h in Headers */,
 				23B9E67520AE733B00CF1683 /* FileManager.hpp in Headers */,
 				234EF46E2015CFDE00B81929 /* NSObject+Convertible.h in Headers */,
@@ -2958,6 +2967,7 @@
 				23F5BDE920887FD3000CCD37 /* WCTUnsafeHandle+Private.h in Headers */,
 				23F5BDEA20887FD3000CCD37 /* WCTDatabase.h in Headers */,
 				23F5BDEB20887FD3000CCD37 /* TimedQueue.hpp in Headers */,
+				23567D7E20CA93C5005F1C35 /* Time.hpp in Headers */,
 				2374C9952090A393000F046F /* WCTDatabase+Trace.h in Headers */,
 				23B9E67620AE733B00CF1683 /* FileManager.hpp in Headers */,
 				23F5BDEC20887FD3000CCD37 /* NSObject+Convertible.h in Headers */,
@@ -3268,6 +3278,7 @@
 				234DBCF42064DD0C000E31E8 /* WCTDatabase+Handle.mm in Sources */,
 				239775A6202AECD3000A681C /* LangUpdateSTMT.cpp in Sources */,
 				23F670EB209428CE00DB2E28 /* Schema.cpp in Sources */,
+				23567D7B20CA93C5005F1C35 /* Time.cpp in Sources */,
 				23A870E6204F82AE00273A98 /* MigrationDatabase.cpp in Sources */,
 				23F70FB220A055C700CCE3CD /* TraceConfig.cpp in Sources */,
 				2349F7391EA0D6680021EFA7 /* WCTTable+Convenient.mm in Sources */,
@@ -3502,6 +3513,7 @@
 				23F5BCC220887FD3000CCD37 /* WCTDatabase+Handle.mm in Sources */,
 				23F5BCC320887FD3000CCD37 /* LangUpdateSTMT.cpp in Sources */,
 				23F670EC209428CE00DB2E28 /* Schema.cpp in Sources */,
+				23567D7C20CA93C5005F1C35 /* Time.cpp in Sources */,
 				23F5BCC420887FD3000CCD37 /* MigrationDatabase.cpp in Sources */,
 				23F70FB320A055C700CCE3CD /* TraceConfig.cpp in Sources */,
 				23F5BCC520887FD3000CCD37 /* WCTTable+Convenient.mm in Sources */,

@@ -18,37 +18,28 @@
  * limitations under the License.
  */
 
-#include <WCDB/Factory.hpp>
-#include <WCDB/FactoryDepositor.hpp>
-#include <WCDB/FileManager.hpp>
-#include <WCDB/Path.hpp>
+#include <WCDB/Error.hpp>
+#include <WCDB/String.hpp>
+#include <WCDB/Time.hpp>
+#include <iomanip>
+#include <sstream>
 
 namespace WCDB {
 
-namespace Repair {
-
-bool FactoryDepositor::work()
+Time::Time() : m_time(std::time(nullptr))
 {
-    FileManager *fileManager = FileManager::shared();
-    bool succeed;
-    std::string workshopDirectory;
-    std::tie(succeed, workshopDirectory) = factory.getUniqueWorkshopDiectory();
-    if (!succeed) {
-        assignWithSharedThreadedError();
-        return false;
-    }
-
-    if (!fileManager->createDirectoryWithIntermediateDirectories(
-            workshopDirectory) ||
-        !fileManager->moveItems(
-            Factory::associatedPathsForDatabase(factory.database),
-            workshopDirectory)) {
-        assignWithSharedThreadedError();
-        return false;
-    }
-    return true;
 }
 
-} //namespace Repair
+std::pair<bool, std::string> Time::stringify() const
+{
+    struct tm tm;
+    if (!localtime_r(&m_time, &tm)) {
+        setThreadedError(Error::Code::Exceed);
+        return {false, String::empty()};
+    }
+    std::ostringstream oss;
+    oss << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S");
+    return {true, oss.str()};
+}
 
 } //namespace WCDB

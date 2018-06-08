@@ -25,8 +25,7 @@
 #include <WCDB/Material.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/String.hpp>
-#include <WCDB/ThreadedErrors.hpp>
-#include <iomanip>
+#include <WCDB/Time.hpp>
 
 namespace WCDB {
 
@@ -58,19 +57,33 @@ std::pair<bool, std::list<std::string>> Factory::getWorkshopDirectories() const
     return {false, {}};
 }
 
-std::pair<bool, std::string> Factory::generateWorkshopDiectory() const
+std::pair<bool, std::string> Factory::getUniqueWorkshopDiectory() const
 {
-    auto t = std::time(nullptr);
-    struct tm tm;
-    if (!localtime_r(&t, &tm)) {
-        //TODO
-        //        setThreadedError(Error::Code::Exceed);
+    bool succeed;
+    std::string time;
+    std::tie(succeed, time) = Time().stringify();
+    if (!succeed) {
         return {false, String::empty()};
     }
-    std::ostringstream oss;
-    oss << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S_");
-    oss << rand();
-    return {true, Path::addComponent(directory, oss.str())};
+    FileManager *fileManager = FileManager::shared();
+    std::string path;
+    do {
+        std::ostringstream oss;
+        oss << time << "_" << rand();
+        path = Path::addComponent(directory, oss.str());
+
+        bool exists = false;
+        bool isDirectory = false;
+        std::tie(succeed, exists, isDirectory) = fileManager->itemExists(path);
+        if (!succeed) {
+            return {false, String::empty()};
+        }
+        if (!exists) {
+            break;
+        }
+    } while (true);
+    WCTInnerAssert(!path.empty());
+    return {true, path};
 }
 
 #pragma mark - Factory Related
@@ -82,6 +95,7 @@ void Factory::filter(const Filter &tableShouldBeBackedUp)
 
 Factory::Filter Factory::getFilter() const
 {
+    std::lock_guard<std::mutex> lockGuard(m_mutex);
     return m_filter;
 }
 
@@ -192,10 +206,13 @@ Factory::pickMaterialForOverwriting(const std::string &database)
     //Otherwise, return the one that does not exist.
     FileManager *fileManager = FileManager::shared();
     std::string firstMaterialPath = firstMaterialPathForDatabase(database);
-    bool succeed, firstMaterialExists, lastMaterialExists;
-    std::tie(succeed, firstMaterialExists) =
-        fileManager->fileExists(firstMaterialPath);
-    if (!firstMaterialExists) {
+    bool succeed, isDirectory, firstMaterialExists, lastMaterialExists;
+    std::tie(succeed, firstMaterialExists, isDirectory) =
+        fileManager->itemExists(firstMaterialPath);
+    if (isDirectory) {
+        fileManager->removeItem(firstMaterialPath);
+    }
+    if (!firstMaterialExists || isDirectory) {
         if (succeed) {
             return {true, firstMaterialPath};
         }
@@ -203,9 +220,12 @@ Factory::pickMaterialForOverwriting(const std::string &database)
     }
 
     std::string lastMaterialPath = lastMaterialPathForDatabase(database);
-    std::tie(succeed, lastMaterialExists) =
-        fileManager->fileExists(lastMaterialPath);
-    if (!lastMaterialExists) {
+    std::tie(succeed, lastMaterialExists, isDirectory) =
+        fileManager->itemExists(lastMaterialPath);
+    if (isDirectory) {
+        fileManager->removeItem(lastMaterialPath);
+    }
+    if (!lastMaterialExists || isDirectory) {
         if (succeed) {
             return {true, lastMaterialPath};
         }
