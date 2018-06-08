@@ -65,11 +65,12 @@ double FactoryRetriever::work()
     //1. Remove the old restore db
     std::string restoreDirectory = factory.getRestoreDirectory();
     if (!fileManager->removeItem(restoreDirectory)) {
-        tryUpgradeErrorWithThreadedError();
+        tryUpgradeErrorWithSharedThreadedError();
         return -1;
     }
     if (!fileManager->createDirectoryWithIntermediateDirectories(
             factory.getRestoreDirectory())) {
+        tryUpgradeErrorWithSharedThreadedError();
         return -1;
     }
 
@@ -77,7 +78,8 @@ double FactoryRetriever::work()
     std::list<std::string> workshopDirectories;
     std::tie(succeed, workshopDirectories) = factory.getWorkshopDirectories();
     if (!succeed) {
-        tryUpgradeErrorWithThreadedError();
+        tryUpgradeErrorWithSharedThreadedError();
+        return -1;
     }
 
     if (!calculateWeights(workshopDirectories)) {
@@ -98,21 +100,22 @@ double FactoryRetriever::work()
     }
 
     //4. Do a Backup on restore db.
-    FactoryRetriever::Backup Backup(*this);
-    if (!Backup.work()) {
-        tryUpgradeErrorWithThreadedError();
-        return -1;
+    FactoryRetriever::Backup backup(*this);
+    if (!backup.work()) {
+        tryUpgradeError(backup.getError()) return -1;
     }
 
     //5. Archive current db and use restore db
     FactoryDepositor depositor(factory);
     if (!depositor.work()) {
+        tryUpgradeError(depositor.getError());
         return -1;
     }
     std::string baseDirectory = Path::getBaseName(factory.database);
     succeed = FileManager::shared()->moveItems(
         Factory::associatedPathsForDatabase(database), baseDirectory);
     if (!succeed) {
+        tryUpgradeErrorWithSharedThreadedError();
         return -1;
     }
 
@@ -135,7 +138,7 @@ bool FactoryRetriever::restore(const std::string &database)
     std::tie(succeed, materialPath) =
         Factory::pickMaterialForRestoring(database);
     if (!succeed) {
-        tryUpgradeErrorWithThreadedError();
+        tryUpgradeErrorWithSharedThreadedError();
         return false;
     }
 
@@ -144,24 +147,24 @@ bool FactoryRetriever::restore(const std::string &database)
         std::tie(succeed, fileSize) =
             FileManager::shared()->getFileSize(materialPath);
         if (!succeed) {
-            tryUpgradeErrorWithThreadedError();
+            tryUpgradeErrorWithSharedThreadedError();
             return false;
         }
 
         Data materialData(fileSize);
         if (materialData.empty()) {
-            tryUpgradeErrorWithThreadedError();
+            tryUpgradeErrorWithSharedThreadedError();
             return false;
         }
 
         FileHandle fileHandle(materialPath);
         if (!fileHandle.open(FileHandle::Mode::ReadOnly)) {
-            tryUpgradeErrorWithThreadedError();
+            tryUpgradeErrorWithSharedThreadedError();
             return false;
         }
         ssize_t read = fileHandle.read(materialData.buffer(), 0, fileSize);
         if (read < 0) {
-            tryUpgradeErrorWithThreadedError();
+            tryUpgradeErrorWithSharedThreadedError();
             return false;
         }
         Material material;
@@ -178,7 +181,7 @@ bool FactoryRetriever::restore(const std::string &database)
             return mechanic.isCriticalErrorFatal();
         } else if (ThreadedErrors::shared()->getThreadedError().code() !=
                    Error::Code::Corrupt) {
-            tryUpgradeErrorWithThreadedError();
+            tryUpgradeErrorWithSharedThreadedError();
             return false;
         }
         Error warning;
@@ -250,6 +253,7 @@ bool FactoryRetriever::calculateWeight(const std::string &database,
     std::tie(succeed, fileSize) = FileManager::shared()->getItemsSize(
         Factory::databasePathsForDatabase(database));
     if (!succeed) {
+        tryUpgradeErrorWithSharedThreadedError();
         return false;
     }
     totalSize += fileSize;

@@ -28,7 +28,7 @@ namespace WCDB {
 
 namespace Repair {
 
-class FactoryBackup : public FactoryRelated {
+class FactoryBackup : public FactoryRelated, public ErrorProne {
 public:
     FactoryBackup(Factory &factory);
     using Filter = Backup::Filter;

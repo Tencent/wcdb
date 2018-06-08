@@ -301,7 +301,7 @@ bool Database::backup()
     if (factoryBackup.work()) {
         return true;
     }
-    assignWithSharedThreadedError();
+    setThreadedError(factoryBackup.getError());
     return false;
 }
 
@@ -312,7 +312,7 @@ bool Database::deposit()
     if (factoryDepositor.work()) {
         return true;
     }
-    assignWithSharedThreadedError();
+    setThreadedError(factoryDepositor.getError());
     return false;
 }
 

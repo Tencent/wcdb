@@ -34,6 +34,7 @@ bool FactoryDepositor::work()
     std::string workshopDirectory;
     std::tie(succeed, workshopDirectory) = factory.generateWorkshopDiectory();
     if (!succeed) {
+        assignWithSharedThreadedError();
         return false;
     }
 
@@ -42,6 +43,7 @@ bool FactoryDepositor::work()
         !fileManager->moveItems(
             Factory::associatedPathsForDatabase(factory.database),
             workshopDirectory)) {
+        assignWithSharedThreadedError();
         return false;
     }
     return true;

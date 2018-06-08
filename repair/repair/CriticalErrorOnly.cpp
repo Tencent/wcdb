@@ -64,7 +64,7 @@ void CriticalErrorOnly::tryUpgradeError(Error &&newError)
     }
 }
 
-void CriticalErrorOnly::tryUpgradeErrorWithThreadedError()
+void CriticalErrorOnly::tryUpgradeErrorWithSharedThreadedError()
 {
     tryUpgradeError(std::move(ThreadedErrors::shared()->moveThreadedError()));
 }

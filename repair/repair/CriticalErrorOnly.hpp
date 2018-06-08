@@ -36,7 +36,7 @@ protected:
     static int criticalLevel(const Error &error);
     void tryUpgradeError(const Error &newError);
     void tryUpgradeError(Error &&newError);
-    void tryUpgradeErrorWithThreadedError();
+    void tryUpgradeErrorWithSharedThreadedError();
     Error m_criticalError;
 };
 

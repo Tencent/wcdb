@@ -38,20 +38,22 @@ bool FactoryBackup::work()
 
 bool FactoryBackup::doWork(const std::string &path)
 {
-    Backup Backup(path);
-    Backup.filter(factory.getFilter());
-    if (!Backup.work()) {
+    Backup backup(path);
+    backup.filter(factory.getFilter());
+    if (!backup.work()) {
+        setError(backup.getError());
         return false;
     }
 
     bool succeed;
     std::string materialPath;
     std::tie(succeed, materialPath) = Factory::pickMaterialForOverwriting(path);
-    if (!succeed) {
-        return false;
+    if (succeed && backup.getMaterial().serialize(materialPath)) {
+        return true;
     }
 
-    return Backup.getMaterial().serialize(materialPath);
+    assignWithSharedThreadedError();
+    return false;
 }
 
 } //namespace Repair
