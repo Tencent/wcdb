@@ -64,15 +64,4 @@ void ThreadedErrorProne::assignWithSharedThreadedError()
     setThreadedError(std::move(ThreadedErrors::shared()->moveThreadedError()));
 }
 
-#pragma mark - SharedThreadedErrorProne
-void SharedThreadedErrorProne::setThreadedError(const Error &error)
-{
-    ThreadedErrors::shared()->setThreadedError(error);
-}
-
-void SharedThreadedErrorProne::setThreadedError(Error &&error)
-{
-    ThreadedErrors::shared()->setThreadedError(std::move(error));
-}
-
 } //namespace WCDB
