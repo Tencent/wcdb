@@ -323,7 +323,8 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
     std::shared_ptr<Repair::Assembler> assembler(new Repair::SQLiteAssembler);
     factoryRetriever.setAssembler(assembler);
     factoryRetriever.setProgressCallback(onProgressUpdate);
-    return factoryRetriever.work();
+    factoryRetriever.work();
+    setThreadedError(factoryRetriever.getCriticalError());
 }
 
 bool Database::removeFactory()
