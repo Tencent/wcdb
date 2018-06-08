@@ -24,8 +24,8 @@
 #include <WCDB/Assembler.hpp>
 #include <WCDB/Crawlable.hpp>
 #include <WCDB/CriticalErrorOnly.hpp>
+#include <WCDB/ErrorProne.hpp>
 #include <WCDB/Progress.hpp>
-#include <WCDB/ThreadedErrorProne.hpp>
 
 namespace WCDB {
 

@@ -468,11 +468,6 @@ void Handle::tracePerformance(const PerformanceTraceCallback &trace)
 }
 
 #pragma mark - Error
-const Error &Handle::getError() const
-{
-    return m_error;
-}
-
 void Handle::setError(int rc, const std::string &sql)
 {
     m_error.setSQLiteCode(rc, getExtendedErrorCode());
@@ -480,8 +475,10 @@ void Handle::setError(int rc, const std::string &sql)
     if (message) {
         m_error.message = message;
     }
-    m_error.infos.set("Path", path);
     m_error.infos.set("SQL", sql);
+    if (!sql.empty()) {
+        m_error.infos.set("SQL", sql);
+    }
     Notifier::shared()->notify(m_error);
 }
 

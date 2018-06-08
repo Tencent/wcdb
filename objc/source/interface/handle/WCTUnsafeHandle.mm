@@ -78,7 +78,7 @@
         if (_recyclableHandle != nullptr) {
             _handle = _recyclableHandle.getHandle();
         } else {
-            _nonHandleError = [[WCTError alloc] initWithError:_database->getError()];
+            _nonHandleError = [[WCTError alloc] initWithError:_database->getThreadedError()];
         }
     }
 }

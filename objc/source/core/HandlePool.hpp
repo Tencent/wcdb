@@ -25,25 +25,15 @@
 #include <WCDB/Attachment.hpp>
 #include <WCDB/ConcurrentList.hpp>
 #include <WCDB/Config.hpp>
+#include <WCDB/ErrorProne.hpp>
 #include <WCDB/Factory.hpp>
 #include <WCDB/Lock.hpp>
 #include <WCDB/RecyclableHandle.hpp>
-#include <WCDB/ThreadedErrorProne.hpp>
 #include <WCDB/ThreadedErrors.hpp>
 
 #pragma GCC visibility push(hidden)
 
 namespace WCDB {
-
-class HandlePool;
-
-class HandlePoolRelated : protected ThreadedErrorProne {
-public:
-    ThreadedErrors *getThreadedErrors() override;
-
-protected:
-    virtual HandlePool *getHandlePool() = 0;
-};
 
 class HandlePool : private ThreadedErrorProne {
 #pragma mark - Initialize
@@ -66,10 +56,6 @@ public:
 
 protected:
     std::atomic<Tag> m_tag;
-
-#pragma mark - Error
-public:
-    const Error &getError();
 
 #pragma mark - Config
 public:
@@ -116,15 +102,8 @@ protected:
     static int hardwareConcurrency();
     static int maxConcurrency();
 
-#pragma mark - ThreadedErrorProne
-protected:
-    void setThreadedError(const Error &error);
-    void setThreadedError(Error &&error);
-    ThreadedErrors *getThreadedErrors() override;
-
-private:
-    friend ThreadedErrors *HandlePoolRelated::getThreadedErrors();
-    ThreadedErrors m_errors;
+#pragma mark - HandlePoolHolder
+    friend class HandlePoolHolder;
 
 #pragma mark - Attachment
 public:

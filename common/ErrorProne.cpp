@@ -18,26 +18,53 @@
  * limitations under the License.
  */
 
-#include <WCDB/ThreadedErrorProne.hpp>
-#include <WCDB/ThreadedErrors.hpp>
+#include <WCDB/ErrorProne.hpp>
 
 namespace WCDB {
 
+#pragma mark - ErrorProne
+const Error &ErrorProne::getError() const
+{
+    return m_error;
+}
+
+void ErrorProne::assignWithSharedThreadedError()
+{
+    setError(std::move(ThreadedErrors::shared()->moveThreadedError()));
+}
+
+void ErrorProne::setError(const Error &error)
+{
+    m_error = error;
+}
+
+void ErrorProne::setError(Error &&error)
+{
+    m_error = std::move(error);
+}
+
+#pragma mark - ThreadedErrorProne
 void ThreadedErrorProne::setThreadedError(const Error &error)
 {
-    getThreadedErrors()->setThreadedError(error);
+    m_threadedError.setThreadedError(error);
 }
 
 void ThreadedErrorProne::setThreadedError(Error &&error)
 {
-    getThreadedErrors()->setThreadedError(std::move(error));
+    m_threadedError.setThreadedError(std::move(error));
 }
 
 const Error &ThreadedErrorProne::getThreadedError()
 {
-    return getThreadedErrors()->getThreadedError();
+    return m_threadedError.getThreadedError();
 }
 
+void ThreadedErrorProne::assignWithSharedThreadedError()
+{
+    setThreadedError(std::move(ThreadedErrors::shared()->moveThreadedError()));
+}
+
+#pragma mark - SharedThreadedErrorProne
 void SharedThreadedErrorProne::setThreadedError(const Error &error)
 {
     ThreadedErrors::shared()->setThreadedError(error);

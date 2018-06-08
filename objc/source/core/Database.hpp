@@ -22,14 +22,14 @@
 #define Database_hpp
 
 #include <WCDB/Abstract.h>
-#include <WCDB/RecyclableHandlePool.hpp>
+#include <WCDB/HandlePoolHolder.hpp>
 #include <WCDB/ThreadLocal.hpp>
 
 #pragma GCC visibility push(hidden)
 
 namespace WCDB {
 
-class Database : protected HandlePoolRelated {
+class Database : public HandlePoolHolder {
 #pragma mark - Initializer
 public:
     using Tag = HandlePool::Tag;
@@ -47,7 +47,6 @@ protected:
     Database(const RecyclableHandlePool &recyclableHandlePool);
 
     bool isValid() const;
-    RecyclableHandlePool m_pool;
 
 #pragma mark - Basic
 public:
@@ -63,8 +62,6 @@ public:
     void close(const ClosedCallback &onClosed);
     void unblockade();
     bool isBlockaded();
-
-    const Error &getError();
 
     static void closeAllDatabases();
 
@@ -145,11 +142,6 @@ public:
     bool runNestedTransaction(const TransactionCallback &transaction);
 
     bool isInThreadedTransaction() const;
-
-#pragma mark - HandlePoolRelated
-protected:
-    HandlePool *getHandlePool() override;
-    void assignWithSharedThreadedError();
 };
 
 } //namespace WCDB

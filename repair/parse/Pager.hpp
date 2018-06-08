@@ -22,8 +22,8 @@
 #define Pager_hpp
 
 #include <WCDB/Error.hpp>
+#include <WCDB/ErrorProne.hpp>
 #include <WCDB/FileHandle.hpp>
-#include <WCDB/ThreadedErrorProne.hpp>
 #include <WCDB/Wal.hpp>
 
 namespace WCDB {

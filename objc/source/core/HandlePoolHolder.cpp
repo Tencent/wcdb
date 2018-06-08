@@ -18,25 +18,39 @@
  * limitations under the License.
  */
 
-#ifndef FactoryDepositor_hpp
-#define FactoryDepositor_hpp
-
-#include <WCDB/ErrorProne.hpp>
-#include <WCDB/FactoryRelated.hpp>
+#include <WCDB/HandlePoolHolder.hpp>
+#include <WCDB/HandlePools.hpp>
 
 namespace WCDB {
 
-namespace Repair {
+HandlePoolHolder::HandlePoolHolder(const RecyclableHandlePool &pool)
+    : m_pool(pool)
+{
+}
 
-class FactoryDepositor : public FactoryRelated,
-                         public SharedThreadedErrorProne {
-public:
-    using FactoryRelated::FactoryRelated;
-    bool work();
-};
+const Error &HandlePoolHolder::getThreadedError()
+{
+    return m_pool->getThreadedError();
+}
 
-} //namespace Repair
+void HandlePoolHolder::setThreadedError(const Error &error)
+{
+    m_pool->setThreadedError(error);
+}
+
+void HandlePoolHolder::setThreadedError(Error &&error)
+{
+    m_pool->setThreadedError(std::move(error));
+}
+
+void HandlePoolHolder::assignWithSharedThreadedError()
+{
+    m_pool->assignWithSharedThreadedError();
+}
+
+HandlePool *HandlePoolHolder::getHandlePool() const
+{
+    return m_pool.getHandlePool();
+}
 
 } //namespace WCDB
-
-#endif /* FactoryDepositor_hpp */
