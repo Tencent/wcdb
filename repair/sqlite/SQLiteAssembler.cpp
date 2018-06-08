@@ -22,7 +22,6 @@
 #include <WCDB/Cell.hpp>
 #include <WCDB/SQLiteAssembler.hpp>
 #include <WCDB/String.hpp>
-#include <WCDB/ThreadedErrors.hpp>
 #include <sqlite3.h>
 #include <sstream>
 
@@ -77,7 +76,7 @@ bool SQLiteAssembler::assembleTable(const std::string &tableName,
     }
     int rc = onTableAssembled(tableName);
     if (rc != SQLITE_OK) {
-        setThreadedError(rc);
+        setError(rc);
         return false;
     }
     auto pair = getAssembleSQL(tableName);
@@ -120,6 +119,11 @@ bool SQLiteAssembler::assembleCell(const Cell &cell)
     }
     sqlite3_reset((sqlite3_stmt *) m_stmt);
     return true;
+}
+
+const Error &SQLiteAssembler::getError() const
+{
+    return ErrorProne::getError();
 }
 
 #pragma mark - Helper
@@ -208,13 +212,8 @@ bool SQLiteAssembler::lazyCommitOrRollbackTransaction(bool commit)
     return true;
 }
 
-const Error &SQLiteAssembler::getError() const
-{
-    return ThreadedErrors::shared()->getThreadedError();
-}
-
 #pragma mark - Error
-void SQLiteAssembler::setThreadedError(int rc)
+void SQLiteAssembler::setError(int rc)
 {
     Error error;
     error.setSQLiteCode(rc, sqlite3_extended_errcode((sqlite3 *) m_handle));
@@ -224,10 +223,10 @@ void SQLiteAssembler::setThreadedError(int rc)
     }
     error.infos.set("Path", m_path);
     Notifier::shared()->notify(error);
-    SharedThreadedErrorProne::setThreadedError(std::move(error));
+    ErrorProne::setError(std::move(error));
 }
 
-void SQLiteAssembler::setThreadedError(int rc, const std::string &sql)
+void SQLiteAssembler::setError(int rc, const std::string &sql)
 {
     Error error;
     error.setSQLiteCode(rc, sqlite3_extended_errcode((sqlite3 *) m_handle));
@@ -238,7 +237,7 @@ void SQLiteAssembler::setThreadedError(int rc, const std::string &sql)
     error.infos.set("SQL", sql);
     error.infos.set("Path", m_path);
     Notifier::shared()->notify(error);
-    SharedThreadedErrorProne::setThreadedError(std::move(error));
+    ErrorProne::setError(std::move(error));
 }
 
 #pragma mark - SQLite Handle
@@ -247,13 +246,13 @@ bool SQLiteAssembler::open()
     if (!m_handle) {
         int rc = sqlite3_open(m_path.c_str(), (sqlite3 **) &m_handle);
         if (rc != SQLITE_OK) {
-            setThreadedError(rc);
+            setError(rc);
             return false;
         }
         rc = sqlite3_exec((sqlite3 *) m_handle, "PRAGMA journal_mode=delete",
                           nullptr, nullptr, nullptr);
         if (rc != SQLITE_OK) {
-            setThreadedError(rc);
+            setError(rc);
             close();
             return false;
         }
@@ -284,7 +283,7 @@ bool SQLiteAssembler::execute(const char *sql, bool ignoreError)
         return true;
     }
     if (!ignoreError) {
-        setThreadedError(rc, sql);
+        setError(rc, sql);
     }
     return false;
 }
@@ -300,7 +299,7 @@ bool SQLiteAssembler::prepare(const char *sql)
     if (rc == SQLITE_OK) {
         return true;
     }
-    setThreadedError(rc, sql);
+    setError(rc, sql);
     return false;
 }
 
@@ -321,9 +320,9 @@ bool SQLiteAssembler::step(bool &done)
     };
     const char *sql = sqlite3_sql((sqlite3_stmt *) m_stmt);
     if (sql) {
-        setThreadedError(rc, sql);
+        setError(rc, sql);
     } else {
-        setThreadedError(rc);
+        setError(rc);
     }
     return false;
 }

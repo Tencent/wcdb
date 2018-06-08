@@ -39,7 +39,6 @@ class MasterCrawlerDelegate {
 protected:
     friend class MasterCrawler;
 
-    virtual Pager &getMasterPager() = 0;
     virtual void onMasterPageCrawled(const Page &page);
     virtual void onMasterCellCrawled(const Master *master) = 0;
     virtual void onMasterCrawlerError() = 0;
@@ -48,7 +47,7 @@ protected:
 class MasterCrawler : public Crawlable {
 #pragma mark - Initialize
 public:
-    MasterCrawler();
+    MasterCrawler(Pager &pager);
 
 #pragma mark - Master
 public:
@@ -59,7 +58,6 @@ protected:
 
 #pragma mark - Crawlable
 protected:
-    Pager &getPager() override;
     void onCellCrawled(const Cell &cell) override;
     bool willCrawlPage(const Page &page, int height) override;
     void onCrawlerError() override;

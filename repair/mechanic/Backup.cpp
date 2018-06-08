@@ -29,7 +29,7 @@ namespace Repair {
 
 #pragma mark - Initialize
 Backup::Backup(const std::string &path)
-    : Crawlable(), m_pager(path), m_height(-1)
+    : m_pager(path), Crawlable(m_pager), m_height(-1), m_masterCrawler(m_pager)
 {
 }
 
@@ -43,7 +43,12 @@ bool Backup::work()
     m_material.info.reservedBytes = m_pager.getReservedBytes();
 
     m_masterCrawler.work(this);
-    return isError();
+    return getError().isOK();
+}
+
+const Error &Backup::getError() const
+{
+    return m_pager.getError();
 }
 
 void Backup::filter(const Filter &tableShouldBeBackedUp)
@@ -107,11 +112,6 @@ bool Backup::willCrawlPage(const Page &page, int height)
     return false;
 }
 
-Pager &Backup::getPager()
-{
-    return m_pager;
-}
-
 void Backup::onCrawlerError()
 {
     m_masterCrawler.stop();
@@ -125,7 +125,7 @@ void Backup::onMasterCellCrawled(const Master *master)
         return;
     }
     if (master->tableName == SequenceCrawler::name()) {
-        SequenceCrawler().work(master->rootpage, this);
+        SequenceCrawler(m_pager).work(master->rootpage, this);
     } else if (filter(master->tableName)) {
         m_height = -1;
         if (!crawl(master->rootpage)) {
@@ -143,11 +143,6 @@ void Backup::onMasterCrawlerError()
     markAsError();
 }
 
-Pager &Backup::getMasterPager()
-{
-    return m_pager;
-}
-
 #pragma mark - SequenceCrawlerDelegate
 void Backup::onSequenceCellCrawled(const Sequence &sequence)
 {
@@ -156,11 +151,6 @@ void Backup::onSequenceCellCrawled(const Sequence &sequence)
         //the columns in sqlite_sequence are not unique.
         content.sequence = std::max(content.sequence, sequence.seq);
     }
-}
-
-Pager &Backup::getSequencePager()
-{
-    return m_pager;
 }
 
 void Backup::onSequenceCrawlerError()

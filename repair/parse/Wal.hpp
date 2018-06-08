@@ -23,15 +23,14 @@
 
 #include <WCDB/Data.hpp>
 #include <WCDB/FileHandle.hpp>
+#include <WCDB/PagerRelated.hpp>
 #include <map>
 
 namespace WCDB {
 
 namespace Repair {
 
-class Pager;
-
-class Wal {
+class Wal : public PagerRelated {
 #pragma mark - Initialize
 public:
     Wal(Pager &pager);
@@ -43,7 +42,6 @@ public:
 
 protected:
     FileHandle m_fileHandle;
-    Pager &m_pager;
 
 #pragma mark - Page
 public:
@@ -70,10 +68,6 @@ protected:
 public:
     int getFrameSize() const;
     Data acquireFrameData(int frameno);
-
-#pragma mark - Error
-public:
-    void markAsCorrupted();
 };
 
 } //namespace Repair

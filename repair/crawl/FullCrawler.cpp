@@ -53,7 +53,7 @@ void FullCrawler::work()
     }
 
     markAsAssembling();
-    MasterCrawler().work(this);
+    MasterCrawler(m_pager).work(this);
     markAsAssembled();
 }
 
@@ -73,11 +73,6 @@ bool FullCrawler::willCrawlPage(const Page &, int)
 }
 
 #pragma mark - MasterCrawlerDelegate
-Pager &FullCrawler::getMasterPager()
-{
-    return m_pager;
-}
-
 void FullCrawler::onMasterPageCrawled(const Page &page)
 {
     increaseProgress(getPageWeight());

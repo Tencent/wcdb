@@ -31,7 +31,7 @@ namespace WCDB {
 namespace Repair {
 
 Wal::Wal(Pager &pager)
-    : m_pager(pager)
+    : PagerRelated(pager)
     , m_fileHandle(Path::addExtention(pager.getPath(), "-wal"))
     , m_salt({0, 0})
     , m_checksum({0, 0})
@@ -74,7 +74,7 @@ bool Wal::initialize()
     const int frameSize = getFrameSize();
     for (off_t offset = headerSize; offset + frameSize <= fileSize;
          offset += frameSize) {
-        Frame frame(++frameno, *this);
+        Frame frame(++frameno, *this, m_pager);
         if (!frame.initialize()) {
             break;
         }
@@ -102,18 +102,15 @@ Data Wal::acquireFrameData(int frameno)
     return acquireData(headerSize + getFrameSize() * frameno, getFrameSize());
 }
 
-void Wal::markAsCorrupted()
-{
-    m_pager.markAsCorrupted();
-}
-
 Data Wal::acquireData(off_t offset, size_t size)
 {
     if (!m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
+        assignWithSharedThreadedError();
         return Data::emptyData();
     }
     Data data(size);
     if (data.empty()) {
+        assignWithSharedThreadedError();
         return data;
     }
     ssize_t read = m_fileHandle.read(data.buffer(), offset, size);
@@ -121,6 +118,8 @@ Data Wal::acquireData(off_t offset, size_t size)
         if (read >= 0) {
             //short read
             markAsCorrupted();
+        } else {
+            assignWithSharedThreadedError();
         }
         return Data::emptyData();
     }

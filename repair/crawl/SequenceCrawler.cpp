@@ -27,7 +27,8 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialize
-SequenceCrawler::SequenceCrawler() : Crawlable(), m_delegate(nullptr)
+SequenceCrawler::SequenceCrawler(Pager &pager)
+    : Crawlable(pager), m_delegate(nullptr)
 {
 }
 
@@ -70,11 +71,6 @@ void SequenceCrawler::onCrawlerError()
 {
     m_delegate->onSequenceCrawlerError();
     stop();
-}
-
-Pager &SequenceCrawler::getPager()
-{
-    return m_delegate->getSequencePager();
 }
 
 } //namespace Repair

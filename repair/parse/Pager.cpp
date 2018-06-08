@@ -29,7 +29,6 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialize
-
 Pager::Pager(const std::string &path)
     : m_fileHandle(path)
     , m_pageSize(-1)
@@ -61,6 +60,7 @@ bool Pager::initialize()
     size_t fileSize;
     std::tie(succeed, fileSize) = FileManager::shared()->getFileSize(getPath());
     if (!succeed) {
+        assignWithSharedThreadedError();
         return false;
     }
     m_pageCount = (int) ((fileSize + m_pageSize - 1) / m_pageSize);
@@ -71,6 +71,7 @@ bool Pager::initialize()
     if (m_pageSize == -1 || m_reservedBytes == -1) {
         Data data = acquireData(0, 100);
         if (data.empty()) {
+            assignWithSharedThreadedError();
             return false;
         }
         if (memcmp(data.buffer(), "SQLite format 3\000", 16) != 0) {
@@ -138,10 +139,12 @@ Data Pager::acquirePageData(int number)
 Data Pager::acquireData(off_t offset, size_t size)
 {
     if (!m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
+        assignWithSharedThreadedError();
         return Data::emptyData();
     }
     Data data(size);
     if (data.empty()) {
+        assignWithSharedThreadedError();
         return data;
     }
     ssize_t read = m_fileHandle.read(data.buffer(), offset, size);
@@ -149,6 +152,8 @@ Data Pager::acquireData(off_t offset, size_t size)
         if (read >= 0) {
             //short read
             markAsCorrupted();
+        } else {
+            assignWithSharedThreadedError();
         }
         return Data::emptyData();
     }
@@ -172,7 +177,7 @@ void Pager::markAsError(Error::Code code)
     error.setCode(code, "Repair");
     error.infos.set("Path", m_fileHandle.path);
     Notifier::shared()->notify(error);
-    setThreadedError(std::move(error));
+    setError(std::move(error));
 }
 
 } //namespace Repair

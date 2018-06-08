@@ -32,7 +32,7 @@ class Data;
 
 namespace Repair {
 
-class Pager : public SharedThreadedErrorProne {
+class Pager : public ErrorProne {
 #pragma mark - Initialize
 public:
     Pager(const std::string &path);
@@ -46,6 +46,7 @@ public:
 
 protected:
     FileHandle m_fileHandle;
+    friend class PagerRelated;
 
 #pragma mark - Page
 public:

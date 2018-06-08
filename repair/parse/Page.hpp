@@ -22,6 +22,7 @@
 #define Page_hpp
 
 #include <WCDB/Data.hpp>
+#include <WCDB/PagerRelated.hpp>
 #include <WCDB/Serialization.hpp>
 
 namespace WCDB {
@@ -29,9 +30,8 @@ namespace WCDB {
 namespace Repair {
 
 class Cell;
-class Pager;
 
-class Page {
+class Page : public PagerRelated {
 #pragma mark - Initialize
 public:
     Page(int number, Pager &pager);
@@ -52,10 +52,8 @@ public:
     Type getType() const;
 
     const Data &getData() const;
-    Pager &getPager();
 
 protected:
-    Pager &m_pager;
     Type m_type;
     Deserialization m_deserialization;
     Data m_data;
@@ -73,7 +71,6 @@ public:
     int getMinLocal() const;
 
 #pragma mark - Common
-public:
 protected:
     int getOffsetOfHeader() const;
     int getOffsetOfCellPointer() const;

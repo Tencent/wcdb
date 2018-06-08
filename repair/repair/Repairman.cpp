@@ -28,9 +28,9 @@ namespace Repair {
 
 #pragma mark - Initialize
 Repairman::Repairman(const std::string &path)
-    : Crawlable()
+    : m_pager(path)
+    , Crawlable(m_pager)
     , Progress()
-    , m_pager(path)
     , m_assembler(nullptr)
     , m_milestone(5000)
     , m_mile(0)
@@ -39,12 +39,6 @@ Repairman::Repairman(const std::string &path)
     , m_cellWeight(0)
     , m_score(0)
 {
-}
-
-#pragma mark - Crawlable
-Pager &Repairman::getPager()
-{
-    return m_pager;
 }
 
 #pragma mark - Assemble
@@ -118,7 +112,7 @@ void Repairman::onCrawlerError()
 
 void Repairman::tryUpgradeCrawlerError()
 {
-    Error error = std::move(ThreadedErrors::shared()->moveThreadedError());
+    Error error = m_pager.getError();
     if (error.code() == Error::Code::Corrupt ||
         error.code() == Error::Code::NotADatabase) {
         error.level = Error::Level::Warning;

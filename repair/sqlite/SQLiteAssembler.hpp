@@ -28,7 +28,7 @@ namespace WCDB {
 
 namespace Repair {
 
-class SQLiteAssembler : public Assembler, public SharedThreadedErrorProne {
+class SQLiteAssembler : public Assembler, public ErrorProne {
 #pragma mark - Initialize
 public:
     SQLiteAssembler();
@@ -72,8 +72,8 @@ private:
 
 #pragma mark - Error
 protected:
-    void setThreadedError(int rc);
-    void setThreadedError(int rc, const std::string &sql);
+    void setError(int rc);
+    void setError(int rc, const std::string &sql);
 
 #pragma mark - SQLite Handle
 protected:

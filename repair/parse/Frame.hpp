@@ -22,6 +22,7 @@
 #define Frame_hpp
 
 #include <WCDB/Data.hpp>
+#include <WCDB/PagerRelated.hpp>
 #include <utility>
 
 namespace WCDB {
@@ -30,9 +31,9 @@ namespace Repair {
 
 class Wal;
 
-class Frame {
+class Frame : public PagerRelated {
 public:
-    Frame(int frameno, Wal &wal);
+    Frame(int frameno, Wal &wal, Pager &pager);
 
     static constexpr const int headerSize = 24;
     const int frameno;

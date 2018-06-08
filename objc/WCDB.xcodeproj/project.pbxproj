@@ -138,6 +138,10 @@
 		23567D4E20CA7E15005F1C35 /* HandlePoolHolder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567D4B20CA7E15005F1C35 /* HandlePoolHolder.hpp */; };
 		23567D4F20CA7E15005F1C35 /* HandlePoolHolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23567D4C20CA7E15005F1C35 /* HandlePoolHolder.cpp */; };
 		23567D5020CA7E15005F1C35 /* HandlePoolHolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23567D4C20CA7E15005F1C35 /* HandlePoolHolder.cpp */; };
+		23567D5920CA823C005F1C35 /* PagerRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23567D5720CA823C005F1C35 /* PagerRelated.cpp */; };
+		23567D5A20CA823C005F1C35 /* PagerRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23567D5720CA823C005F1C35 /* PagerRelated.cpp */; };
+		23567D5B20CA823C005F1C35 /* PagerRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567D5820CA823C005F1C35 /* PagerRelated.hpp */; };
+		23567D5C20CA823C005F1C35 /* PagerRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567D5820CA823C005F1C35 /* PagerRelated.hpp */; };
 		23577F731F74F4D000D31C05 /* Tokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23577F701F74F4CF00D31C05 /* Tokenizer.hpp */; };
 		23577F741F74F4D000D31C05 /* Tokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23577F721F74F4D000D31C05 /* Tokenizer.cpp */; };
 		23577F791F74F4E800D31C05 /* WCTTokenizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 23577F771F74F4E800D31C05 /* WCTTokenizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1176,6 +1180,8 @@
 		23567D4620CA7DBC005F1C35 /* ErrorProne.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ErrorProne.cpp; sourceTree = "<group>"; };
 		23567D4B20CA7E15005F1C35 /* HandlePoolHolder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HandlePoolHolder.hpp; sourceTree = "<group>"; };
 		23567D4C20CA7E15005F1C35 /* HandlePoolHolder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HandlePoolHolder.cpp; sourceTree = "<group>"; };
+		23567D5720CA823C005F1C35 /* PagerRelated.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PagerRelated.cpp; sourceTree = "<group>"; };
+		23567D5820CA823C005F1C35 /* PagerRelated.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PagerRelated.hpp; sourceTree = "<group>"; };
 		23577F701F74F4CF00D31C05 /* Tokenizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Tokenizer.hpp; sourceTree = "<group>"; };
 		23577F721F74F4D000D31C05 /* Tokenizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tokenizer.cpp; sourceTree = "<group>"; };
 		23577F771F74F4E800D31C05 /* WCTTokenizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTTokenizer.h; sourceTree = "<group>"; };
@@ -2026,6 +2032,8 @@
 				23775B4820AD666900E21AB0 /* Page.hpp */,
 				23775B4920AD666900E21AB0 /* Pager.cpp */,
 				23775B4A20AD666900E21AB0 /* Pager.hpp */,
+				23567D5720CA823C005F1C35 /* PagerRelated.cpp */,
+				23567D5820CA823C005F1C35 /* PagerRelated.hpp */,
 				23EB91DC20CA1EBE00ECF668 /* Wal.cpp */,
 				23EB91DD20CA1EBE00ECF668 /* Wal.hpp */,
 				23567CF820CA3889005F1C35 /* Frame.cpp */,
@@ -2600,6 +2608,7 @@
 				2349F73B1EA0D6680021EFA7 /* WCTCore.h in Headers */,
 				2349F7291EA0D6680021EFA7 /* WCTRowSelect.h in Headers */,
 				2349F7201EA0D6680021EFA7 /* WCTDelete.h in Headers */,
+				23567D5B20CA823C005F1C35 /* PagerRelated.hpp in Headers */,
 				2349F75F1EA0D6680021EFA7 /* WCTColumnBinding.h in Headers */,
 				2349F75D1EA0D6680021EFA7 /* WCTBinding.h in Headers */,
 				2349F7361EA0D6680021EFA7 /* WCTDatabase+Convenient.h in Headers */,
@@ -2878,6 +2887,7 @@
 				23F5BDB320887FD3000CCD37 /* WCTCore.h in Headers */,
 				23F5BDB420887FD3000CCD37 /* WCTRowSelect.h in Headers */,
 				23F5BDB520887FD3000CCD37 /* WCTDelete.h in Headers */,
+				23567D5C20CA823C005F1C35 /* PagerRelated.hpp in Headers */,
 				23F5BDB620887FD3000CCD37 /* WCTColumnBinding.h in Headers */,
 				23F5BDB720887FD3000CCD37 /* WCTBinding.h in Headers */,
 				23F5BDB820887FD3000CCD37 /* WCTDatabase+Convenient.h in Headers */,
@@ -3211,6 +3221,7 @@
 				2349F7491EA0D6680021EFA7 /* WCTDatabase+File.mm in Sources */,
 				23977513202AECD3000A681C /* StatementAttach.cpp in Sources */,
 				23977571202AECD3000A681C /* LangDropInternalSTMT.cpp in Sources */,
+				23567D5920CA823C005F1C35 /* PagerRelated.cpp in Sources */,
 				23B9E67720AE733B00CF1683 /* FileManager.cpp in Sources */,
 				2397754B202AECD3000A681C /* LangAlterTableSTMT.cpp in Sources */,
 				23977569202AECD3000A681C /* LangCTETableName.cpp in Sources */,
@@ -3443,6 +3454,7 @@
 				23F5BCA020887FD3000CCD37 /* WCTDatabase+File.mm in Sources */,
 				23F5BCA120887FD3000CCD37 /* StatementAttach.cpp in Sources */,
 				23F5BCA220887FD3000CCD37 /* LangDropInternalSTMT.cpp in Sources */,
+				23567D5A20CA823C005F1C35 /* PagerRelated.cpp in Sources */,
 				23B9E67820AE733B00CF1683 /* FileManager.cpp in Sources */,
 				23F5BCA320887FD3000CCD37 /* LangAlterTableSTMT.cpp in Sources */,
 				23F5BCA420887FD3000CCD37 /* LangCTETableName.cpp in Sources */,

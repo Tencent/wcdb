@@ -39,7 +39,6 @@ public:
 #pragma mark - Crawlable
 protected:
     void onCrawlerError() override;
-    Pager &getPager() override;
     Pager m_pager;
 
 #pragma mark - Critical Error

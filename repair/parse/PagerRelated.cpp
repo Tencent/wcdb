@@ -18,59 +18,32 @@
  * limitations under the License.
  */
 
-#ifndef Crawlable_hpp
-#define Crawlable_hpp
-
 #include <WCDB/Pager.hpp>
-#include <set>
+#include <WCDB/PagerRelated.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-class Cell;
-class Page;
-class Pager;
+PagerRelated::PagerRelated(Pager &pager) : m_pager(pager)
+{
+}
 
-class Crawlable {
-#pragma mark - Initialize
-public:
-    Crawlable(Pager &pager);
+void PagerRelated::setError(Error &&error)
+{
+    m_pager.setError(std::move(error));
+}
 
-private:
-    Pager &m_associatedPager;
+void PagerRelated::assignWithSharedThreadedError()
+{
+    m_pager.assignWithSharedThreadedError();
+}
 
-#pragma mark - Stoppable
-public:
-    void stop();
-
-protected:
-    bool m_stop;
-
-#pragma mark - Error
-public:
-    const Error &getCrawlError() const;
-
-protected:
-    void markAsCorrupted();
-    void markAsError();
-
-#pragma mark - Crawlable
-protected:
-    bool crawl(int rootpageno);
-
-    virtual void onCellCrawled(const Cell &cell);
-    //return false to skip current page
-    virtual bool willCrawlPage(const Page &page, int height);
-    virtual void onCrawlerError();
-
-private:
-    void
-    safeCrawl(int rootpageno, std::set<int> &crawledInteriorPages, int height);
-};
+void PagerRelated::markAsCorrupted()
+{
+    m_pager.markAsCorrupted();
+}
 
 } //namespace Repair
 
 } //namespace WCDB
-
-#endif /* Crawlable_hpp */

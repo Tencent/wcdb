@@ -30,7 +30,8 @@ void MasterCrawlerDelegate::onMasterPageCrawled(const Page &page)
 {
 }
 
-MasterCrawler::MasterCrawler() : Crawlable(), m_delegate(nullptr)
+MasterCrawler::MasterCrawler(Pager &pager)
+    : Crawlable(pager), m_delegate(nullptr)
 {
 }
 
@@ -81,11 +82,6 @@ bool MasterCrawler::willCrawlPage(const Page &page, int)
 void MasterCrawler::onCrawlerError()
 {
     m_delegate->onMasterCrawlerError();
-}
-
-Pager &MasterCrawler::getPager()
-{
-    return m_delegate->getMasterPager();
 }
 
 } //namespace Repair

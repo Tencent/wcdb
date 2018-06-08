@@ -22,6 +22,7 @@
 #define Cell_hpp
 
 #include <WCDB/Data.hpp>
+#include <WCDB/PagerRelated.hpp>
 #include <WCDB/Serialization.hpp>
 
 namespace WCDB {
@@ -30,9 +31,9 @@ namespace Repair {
 
 class Page;
 
-class Cell {
+class Cell : public PagerRelated {
 public:
-    Cell(int pointer, Page &page);
+    Cell(int pointer, Page &page, Pager &pager);
 
     bool initialize();
 

@@ -30,7 +30,7 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialize
-Page::Page(int number_, Pager &pager) : number(number_), m_pager(pager)
+Page::Page(int number_, Pager &pager) : PagerRelated(pager), number(number_)
 {
 }
 
@@ -86,7 +86,7 @@ bool Page::initialize()
     m_cellCount = m_deserialization.advance2BytesInt();
     if (m_cellCount < 0 ||
         m_cellCount * 2 + getOffsetOfCellPointer() > m_pager.getPageSize()) {
-        m_pager.markAsCorrupted();
+        markAsCorrupted();
         return false;
     }
     return true;
@@ -95,11 +95,6 @@ bool Page::initialize()
 const Data &Page::getData() const
 {
     return m_data;
-}
-
-Pager &Page::getPager()
-{
-    return m_pager;
 }
 
 Page::Type Page::getType() const
@@ -130,7 +125,7 @@ Cell Page::getCell(int index)
 {
     WCTInnerAssert(index < getCellCount());
     WCTInnerAssert(m_type == Type::LeafTable);
-    return Cell(getCellPointer(index), *this);
+    return Cell(getCellPointer(index), *this, m_pager);
 }
 
 int Page::getCellCount() const

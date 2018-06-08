@@ -45,6 +45,8 @@ protected:
 public:
     bool work();
 
+    const Error &getError() const;
+
     const Material &getMaterial() const;
 
 protected:
@@ -67,13 +69,11 @@ protected:
     void onCellCrawled(const Cell &cell) override;
     bool willCrawlPage(const Page &page, int height) override;
     void onCrawlerError() override;
-    Pager &getPager() override;
 
 #pragma mark - MasterCrawlerDelegate
 protected:
     void onMasterCellCrawled(const Master *master) override;
     void onMasterCrawlerError() override;
-    Pager &getMasterPager() override;
 
     MasterCrawler m_masterCrawler;
 
@@ -81,7 +81,6 @@ protected:
 protected:
     void onSequenceCellCrawled(const Sequence &sequence) override;
     void onSequenceCrawlerError() override;
-    Pager &getSequencePager() override;
 };
 
 } //namespace Repair
