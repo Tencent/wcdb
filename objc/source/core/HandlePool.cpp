@@ -265,31 +265,4 @@ bool HandlePool::willConfigurateHandle(Handle *handle)
     return true;
 }
 
-#pragma mark - ThreadedErrorProne
-void HandlePool::setThreadedError(const Error &error)
-{
-    Error threadedError = error;
-    setThreadedError(std::move(threadedError));
-}
-
-void HandlePool::setThreadedError(Error &&error)
-{
-    if (getTag() != Handle::invalidTag) {
-        error.infos.set("Tag", getTag());
-    }
-    error.infos.set("Path", path);
-    Reporter::shared()->report(error);
-    ThreadedErrorProne::setThreadedError(std::move(error));
-}
-
-ThreadedErrors *HandlePool::getThreadedErrors()
-{
-    return &m_errors;
-}
-
-ThreadedErrors *HandlePoolThreadedErrorProne::getThreadedErrors()
-{
-    return getHandlePool()->getThreadedErrors();
-}
-
 } //namespace WCDB

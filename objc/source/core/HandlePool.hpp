@@ -24,24 +24,14 @@
 #include <WCDB/Abstract.h>
 #include <WCDB/ConcurrentList.hpp>
 #include <WCDB/Config.hpp>
+#include <WCDB/ErrorProne.hpp>
 #include <WCDB/Lock.hpp>
 #include <WCDB/RecyclableHandle.hpp>
-#include <WCDB/ThreadedErrorProne.hpp>
 #include <WCDB/ThreadedErrors.hpp>
 
 #pragma GCC visibility push(hidden)
 
 namespace WCDB {
-
-class HandlePool;
-
-class HandlePoolThreadedErrorProne : protected ThreadedErrorProne {
-public:
-    ThreadedErrors *getThreadedErrors() override;
-
-protected:
-    virtual HandlePool *getHandlePool() = 0;
-};
 
 class HandlePool : private ThreadedErrorProne {
 #pragma mark - Initialize
@@ -114,15 +104,9 @@ protected:
     static int hardwareConcurrency();
     static int maxConcurrency();
 
-#pragma mark - ThreadedErrorProne
-protected:
-    void setThreadedError(const Error &error);
-    void setThreadedError(Error &&error);
-    ThreadedErrors *getThreadedErrors() override;
-
+#pragma mark - HandlePoolHolder
 private:
-    friend ThreadedErrors *HandlePoolThreadedErrorProne::getThreadedErrors();
-    ThreadedErrors m_errors;
+    friend class HandlePoolHolder;
 };
 
 } //namespace WCDB

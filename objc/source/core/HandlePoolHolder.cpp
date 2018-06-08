@@ -18,29 +18,39 @@
  * limitations under the License.
  */
 
-#ifndef ThreadedErrorProne_hpp
-#define ThreadedErrorProne_hpp
+#include <WCDB/HandlePoolHolder.hpp>
+#include <WCDB/HandlePools.hpp>
 
 namespace WCDB {
 
-class Error;
-class ThreadedErrors;
+HandlePoolHolder::HandlePoolHolder(const RecyclableHandlePool &pool)
+    : m_pool(pool)
+{
+}
 
-class ThreadedErrorProne {
-public:
-    void setThreadedError(const Error &error);
-    void setThreadedError(Error &&error);
-    const Error &getThreadedError();
+const Error &HandlePoolHolder::getThreadedError()
+{
+    return m_pool->getThreadedError();
+}
 
-protected:
-    virtual ThreadedErrors *getThreadedErrors() = 0;
-};
+void HandlePoolHolder::setThreadedError(const Error &error)
+{
+    m_pool->setThreadedError(error);
+}
 
-class SharedThreadedErrorProne : protected ThreadedErrorProne {
-protected:
-    ThreadedErrors *getThreadedErrors() override;
-};
+void HandlePoolHolder::setThreadedError(Error &&error)
+{
+    m_pool->setThreadedError(std::move(error));
+}
+
+void HandlePoolHolder::assignWithSharedThreadedError()
+{
+    m_pool->assignWithSharedThreadedError();
+}
+
+HandlePool *HandlePoolHolder::getHandlePool() const
+{
+    return m_pool.getHandlePool();
+}
 
 } //namespace WCDB
-
-#endif /* ThreadedErrorProne_hpp */

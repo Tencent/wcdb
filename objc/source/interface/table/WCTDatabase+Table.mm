@@ -41,7 +41,7 @@
         if (result.first) {
             *error = nil;
         } else {
-            *error = [[WCTError alloc] initWithError:_database->getError()];
+            *error = [[WCTError alloc] initWithError:_database->getThreadedError()];
         }
     }
     return result.second;

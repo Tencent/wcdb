@@ -21,6 +21,7 @@
 #ifndef Handle_hpp
 #define Handle_hpp
 
+#include <WCDB/ErrorProne.hpp>
 #include <WCDB/HandleStatement.hpp>
 #include <WCDB/Tracer.hpp>
 #include <WCDB/WINQ.h>
@@ -34,7 +35,7 @@
 
 namespace WCDB {
 
-class Handle {
+class Handle : public ErrorProne {
 #pragma mark - Initialize
 public:
     static std::shared_ptr<Handle> handleWithPath(const std::string &path);
@@ -189,12 +190,10 @@ public:
 
 #pragma mark - Error
 public:
-    const Error &getError() const;
     friend void HandleStatement::setError(int rc, const std::string &sql);
 
 protected:
     void setError(int rc, const std::string &sql = "");
-    Error m_error;
 };
 
 } //namespace WCDB

@@ -22,7 +22,7 @@
 #define FileManager_hpp
 
 #include <WCDB/Error.hpp>
-#include <WCDB/ThreadedErrorProne.hpp>
+#include <WCDB/ErrorProne.hpp>
 #include <list>
 #include <string>
 
@@ -64,7 +64,7 @@ public:
 
 #pragma mark - Error
 protected:
-    void setThreadedError(const std::string &path);
+    static void setThreadedError(const std::string &path);
 };
 
 } //namespace WCDB

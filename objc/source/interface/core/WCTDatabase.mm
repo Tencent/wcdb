@@ -133,7 +133,7 @@
 
 - (WCTError *)error
 {
-    return [[WCTError alloc] initWithError:_database->getError()];
+    return [[WCTError alloc] initWithError:_database->getThreadedError()];
 }
 
 @end

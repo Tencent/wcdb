@@ -526,11 +526,6 @@ bool Handle::recoverFromPath(const std::string &corruptedDBPath,
 }
 
 #pragma mark - Error
-const Error &Handle::getError() const
-{
-    return m_error;
-}
-
 void Handle::setError(int rc, const std::string &sql)
 {
     m_error.setSQLiteCode(rc, getExtendedErrorCode());

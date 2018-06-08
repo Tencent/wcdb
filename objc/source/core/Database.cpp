@@ -64,65 +64,60 @@ std::shared_ptr<Database> Database::databaseWithPath(const std::string &path)
     return nullptr;
 }
 
-Database::Database(const RecyclableHandlePool &pool) : m_pool(pool)
+Database::Database(const RecyclableHandlePool &pool) : HandlePoolHolder(pool)
 {
 }
 
 bool Database::isValid() const
 {
-    return m_pool != nullptr;
+    return getHandlePool() != nullptr;
 }
 
 #pragma mark - Basic
 
 void Database::setTag(const Tag &tag)
 {
-    m_pool->setTag(tag);
+    getHandlePool()->setTag(tag);
 }
 
 Database::Tag Database::getTag() const
 {
-    return m_pool->getTag();
+    return getHandlePool()->getTag();
 }
 
 bool Database::canOpen()
 {
-    return m_pool->canFlowOut();
+    return getHandlePool()->canFlowOut();
 }
 
 void Database::close(const ClosedCallback &onClosed)
 {
-    m_pool->drain(onClosed);
+    getHandlePool()->drain(onClosed);
 }
 
 void Database::blockade()
 {
-    m_pool->blockade();
+    getHandlePool()->blockade();
 }
 
 bool Database::blockadeUntilDone(const BlockadeCallback &onBlockaded)
 {
-    return m_pool->blockadeUntilDone(onBlockaded);
+    return getHandlePool()->blockadeUntilDone(onBlockaded);
 }
 
 bool Database::isBlockaded()
 {
-    return m_pool->isBlockaded();
+    return getHandlePool()->isBlockaded();
 }
 
 void Database::unblockade()
 {
-    m_pool->unblockade();
+    getHandlePool()->unblockade();
 }
 
 bool Database::isOpened() const
 {
-    return !m_pool->isDrained();
-}
-
-const Error &Database::getError()
-{
-    return getThreadedError();
+    return !getHandlePool()->isDrained();
 }
 
 void Database::closeAllDatabases()
@@ -133,7 +128,7 @@ void Database::closeAllDatabases()
 #pragma mark - Memory
 void Database::purge()
 {
-    m_pool->purgeFreeHandles();
+    getHandlePool()->purgeFreeHandles();
 }
 
 void Database::purgeAllDatabases()
@@ -144,22 +139,22 @@ void Database::purgeAllDatabases()
 #pragma mark - Config
 void Database::setConfig(const std::shared_ptr<Config> &config)
 {
-    m_pool->setConfig(config);
+    getHandlePool()->setConfig(config);
 }
 
 void Database::removeConfig(const std::string &name)
 {
-    m_pool->removeConfig(name);
+    getHandlePool()->removeConfig(name);
 }
 
 void Database::setCipher(const NoCopyData &cipher, int pageSize)
 {
-    m_pool->setConfig(CipherConfig::configWithKey(cipher, pageSize));
+    getHandlePool()->setConfig(CipherConfig::configWithKey(cipher, pageSize));
 }
 
 void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
 {
-    m_pool->setConfig(TokenizeConfig::configWithName(tokenizeNames));
+    getHandlePool()->setConfig(TokenizeConfig::configWithName(tokenizeNames));
 }
 
 #pragma mark - File
@@ -234,7 +229,7 @@ bool Database::moveFilesToDirectoryWithExtraFiles(
 
 const std::string &Database::getPath() const
 {
-    return m_pool->path;
+    return getHandlePool()->path;
 }
 
 std::string Database::getSHMPath() const
@@ -307,7 +302,7 @@ RecyclableHandle Database::getHandle()
 {
     RecyclableHandle recyclableHandle = flowOutThreadedHandle();
     if (recyclableHandle == nullptr) {
-        recyclableHandle = m_pool->flowOut();
+        recyclableHandle = getHandlePool()->flowOut();
     }
     return recyclableHandle;
 }
@@ -315,7 +310,7 @@ RecyclableHandle Database::getHandle()
 RecyclableHandle Database::flowOutThreadedHandle()
 {
     ThreadedHandles *threadedHandle = Database::threadedHandles().get();
-    const auto iter = threadedHandle->find(m_pool.getHandlePool());
+    const auto iter = threadedHandle->find(getHandlePool());
     if (iter != threadedHandle->end()) {
         return iter->second.first;
     }
@@ -366,12 +361,12 @@ void Database::retainThreadedHandle(
 {
     std::unordered_map<const HandlePool *, std::pair<RecyclableHandle, int>>
         *threadHandles = Database::threadedHandles().get();
-    auto iter = threadHandles->find(m_pool.getHandlePool());
+    auto iter = threadHandles->find(getHandlePool());
     WCTInnerAssert(iter == threadHandles->end() ||
                    recyclableHandle.getHandle() ==
                        iter->second.first.getHandle());
     if (iter == threadHandles->end()) {
-        threadHandles->insert({m_pool.getHandlePool(), {recyclableHandle, 1}});
+        threadHandles->insert({getHandlePool(), {recyclableHandle, 1}});
     } else {
         ++iter->second.second;
     }
@@ -381,7 +376,7 @@ void Database::releaseThreadedHandle() const
 {
     std::unordered_map<const HandlePool *, std::pair<RecyclableHandle, int>>
         *threadHandles = Database::threadedHandles().get();
-    auto iter = threadHandles->find(m_pool.getHandlePool());
+    auto iter = threadHandles->find(getHandlePool());
     WCTInnerAssert(iter != threadHandles->end());
     if (--iter->second.second == 0) {
         threadHandles->erase(iter);
@@ -389,7 +384,6 @@ void Database::releaseThreadedHandle() const
 }
 
 #pragma mark - Transaction
-
 bool Database::beginTransaction()
 {
     RecyclableHandle recyclableHandle = getHandle();
@@ -486,19 +480,7 @@ bool Database::runNestedTransaction(const TransactionCallback &transaction)
 bool Database::isInThreadedTransaction() const
 {
     ThreadedHandles *threadedHandle = Database::threadedHandles().get();
-    return threadedHandle->find(m_pool.getHandlePool()) !=
-           threadedHandle->end();
-}
-
-#pragma mark - HandlePoolThreadedErrorProne
-HandlePool *Database::getHandlePool()
-{
-    return m_pool.getHandlePool();
-}
-
-void Database::assignWithSharedThreadedError()
-{
-    setThreadedError(std::move(ThreadedErrors::shared()->moveThreadedError()));
+    return threadedHandle->find(getHandlePool()) != threadedHandle->end();
 }
 
 } //namespace WCDB
