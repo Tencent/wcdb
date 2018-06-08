@@ -99,8 +99,8 @@ bool Pager::initialize()
     }
 
     m_walSanity = m_wal.initialize();
-    if (!m_walSanity) {
-        //TODO handle wal corruption
+    if (!m_walSanity && !m_error.isCorruption()) {
+        //If wal is corrupted, just ignore it.
         return false;
     }
     return true;
