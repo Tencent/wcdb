@@ -533,7 +533,9 @@ void Handle::setError(int rc, const std::string &sql)
     if (message) {
         m_error.message = message;
     }
-    m_error.infos.set("SQL", sql);
+    if (!sql.empty()) {
+        m_error.infos.set("SQL", sql);
+    }
     Reporter::shared()->report(m_error);
 }
 
