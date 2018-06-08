@@ -57,12 +57,6 @@ HandlePool::Tag HandlePool::getTag() const
     return m_tag.load();
 }
 
-#pragma mark - Error
-const Error &HandlePool::getError()
-{
-    return getThreadedError();
-}
-
 #pragma mark - Config
 void HandlePool::setConfig(const std::shared_ptr<Config> &config)
 {

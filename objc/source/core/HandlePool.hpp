@@ -55,10 +55,6 @@ public:
 protected:
     std::atomic<Tag> m_tag;
 
-#pragma mark - Error
-public:
-    const Error &getError();
-
 #pragma mark - Config
 public:
     void setConfig(const std::shared_ptr<Config> &config);
