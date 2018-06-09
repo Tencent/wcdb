@@ -47,6 +47,7 @@ public:
     std::string getRestoreDirectory() const;
     std::pair<bool, std::list<std::string>> getWorkshopDirectories() const;
     std::pair<bool, std::string> getUniqueWorkshopDiectory() const;
+    bool canRetrieve() const;
 
 #pragma - Factory Related
 public:

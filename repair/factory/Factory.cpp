@@ -86,6 +86,28 @@ std::pair<bool, std::string> Factory::getUniqueWorkshopDiectory() const
     return {true, path};
 }
 
+bool Factory::canRetrieve() const
+{
+    bool result = false;
+    std::string databaseName = Path::getFileName(database);
+    FileManager::shared()->enumerateDirectory(
+        directory,
+        [&result, &databaseName](const std::string &subpath,
+                                 bool isDirectory) -> bool {
+            if (isDirectory) {
+                bool succeed, exists;
+                std::tie(succeed, exists) = FileManager::shared()->fileExists(
+                    Path::addComponent(subpath, databaseName));
+                if (exists) {
+                    result = true;
+                    return false;
+                }
+            }
+            return true;
+        });
+    return result;
+}
+
 #pragma mark - Factory Related
 void Factory::filter(const Filter &tableShouldBeBackedUp)
 {

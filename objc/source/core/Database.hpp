@@ -110,6 +110,7 @@ public:
     typedef Repair::FactoryRetriever::ProgressUpdateCallback
         RetrieveProgressCallback;
     double retrieve(const RetrieveProgressCallback &onProgressUpdate);
+    bool canRetrieve() const;
     bool removeFactory();
 
 #pragma mark - Handle

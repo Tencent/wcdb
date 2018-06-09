@@ -48,6 +48,8 @@ typedef NS_ENUM(NSInteger, WCTCorruptionReaction) {
 
 - (BOOL)removeFactory;
 
+- (BOOL)canRetrieve;
+
 @end
 
 NS_ASSUME_NONNULL_END
