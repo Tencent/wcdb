@@ -45,9 +45,18 @@ void Mechanic::setMaterial(Material &&material)
 #pragma mark - Mechanic
 void Mechanic::work()
 {
-    Repairman::work();
-    if (!m_pager.isInited()) {
+    if (!m_pager.initialize()) {
+        tryUpgradeCrawlerError();
         return;
+    }
+    Wal wal(m_pager);
+    wal.setMaxFrame(m_material.info.walFrame);
+    if (wal.initialize()) {
+        if (wal.getSalt() == m_material.info.walSalt) {
+            m_pager.setWal(std::move(wal));
+        }
+    } else {
+        tryUpgradeCrawlerError();
     }
 
     m_pager.setPageSize(m_material.info.pageSize);

@@ -41,20 +41,6 @@ Repairman::Repairman(const std::string &path)
 {
 }
 
-void Repairman::work()
-{
-    if (!m_pager.initialize()) {
-        tryUpgradeCrawlerError();
-        return;
-    }
-    Wal wal(m_pager);
-    if (wal.initialize()) {
-        m_pager.setWal(std::move(wal));
-    } else {
-        tryUpgradeCrawlerError();
-    }
-}
-
 #pragma mark - Assemble
 void Repairman::setAssembler(const std::shared_ptr<Assembler> &assembler)
 {

@@ -55,8 +55,7 @@ public:
         uint32_t pageSize;
         uint32_t reservedBytes;
 
-        uint32_t walSalt1;
-        uint32_t walSalt2;
+        std::pair<uint32_t, uint32_t> walSalt;
         uint32_t walFrame;
     };
 

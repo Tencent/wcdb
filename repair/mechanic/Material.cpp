@@ -81,8 +81,8 @@ bool Material::deserialize(const Data &data)
         }
         info.pageSize = deserialization.advance4BytesUInt();
         info.reservedBytes = deserialization.advance4BytesUInt();
-        info.walSalt1 = deserialization.advance4BytesUInt();
-        info.walSalt2 = deserialization.advance4BytesUInt();
+        info.walSalt.first = deserialization.advance4BytesUInt();
+        info.walSalt.second = deserialization.advance4BytesUInt();
         info.walFrame = deserialization.advance4BytesUInt();
     }
 
@@ -183,8 +183,8 @@ Data Material::serialize() const
         }
         serialization.put4BytesUInt(info.pageSize);
         serialization.put4BytesUInt(info.reservedBytes);
-        serialization.put4BytesUInt(info.walSalt1);
-        serialization.put4BytesUInt(info.walSalt2);
+        serialization.put4BytesUInt(info.walSalt.first);
+        serialization.put4BytesUInt(info.walSalt.second);
         serialization.put4BytesUInt(info.walFrame);
     }
 

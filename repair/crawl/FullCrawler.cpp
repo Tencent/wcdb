@@ -35,9 +35,15 @@ FullCrawler::FullCrawler(const std::string &source) : Repairman(source)
 #pragma mark - Repair
 void FullCrawler::work()
 {
-    Repairman::work();
-    if (!m_pager.isInited()) {
+    if (!m_pager.initialize()) {
+        tryUpgradeCrawlerError();
         return;
+    }
+    Wal wal(m_pager);
+    if (wal.initialize()) {
+        m_pager.setWal(std::move(wal));
+    } else {
+        tryUpgradeCrawlerError();
     }
 
     //calculate score

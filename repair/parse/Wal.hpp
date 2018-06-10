@@ -53,12 +53,14 @@ protected:
 
 #pragma mark - Wal
 public:
+    void setMaxFrame(int maxFrame);
     bool isBigEndian() const;
     const std::pair<uint32_t, uint32_t> &getSalt() const;
     int getPageSize() const;
     const std::pair<uint32_t, uint32_t> &getChecksum() const;
 
 protected:
+    int m_maxFrame;
     bool m_isBigEndian;
     std::pair<uint32_t, uint32_t> m_salt;
     std::pair<uint32_t, uint32_t> m_checksum;

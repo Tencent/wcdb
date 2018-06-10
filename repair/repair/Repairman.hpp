@@ -36,8 +36,6 @@ class Repairman : public Crawlable, public CriticalErrorOnly, public Progress {
 public:
     Repairman(const std::string &path);
 
-    void work();
-
 #pragma mark - Crawlable
 protected:
     void onCrawlerError() override;

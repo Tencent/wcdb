@@ -36,7 +36,14 @@ Wal::Wal(Pager &pager)
     , m_salt({0, 0})
     , m_checksum({0, 0})
     , m_isBigEndian(false)
+    , m_maxFrame(std::numeric_limits<int>::max())
 {
+}
+
+void Wal::setMaxFrame(int maxFrame)
+{
+    WCTInnerAssert(!isInited());
+    m_maxFrame = maxFrame;
 }
 
 const std::string &Wal::getPath() const
@@ -147,7 +154,8 @@ bool Wal::doInitialize()
 
     int frameno = 0;
     const int frameSize = getFrameSize();
-    for (off_t offset = headerSize; offset + frameSize <= fileSize;
+    for (off_t offset = headerSize;
+         offset + frameSize <= fileSize && frameno < m_maxFrame;
          offset += frameSize) {
         Frame frame(++frameno, *this, m_pager);
         if (!frame.initialize()) {
