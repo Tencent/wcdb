@@ -46,6 +46,8 @@ bool Backup::work()
 
     m_material.info.pageSize = m_pager.getPageSize();
     m_material.info.reservedBytes = m_pager.getReservedBytes();
+    m_material.info.walSalt = wal.getSalt();
+    m_material.info.walFrame = wal.getFrameCount();
 
     m_masterCrawler.work(this);
     return getError().isOK();
