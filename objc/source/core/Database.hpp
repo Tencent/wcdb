@@ -105,7 +105,7 @@ public:
 
     typedef Repair::FactoryBackup::Filter BackupFilter;
     void filterBackup(const BackupFilter &tableShouldBeBackedup);
-    bool backup();
+    bool backup(int maxWalFrame = std::numeric_limits<int>::max());
     bool deposit();
     typedef Repair::FactoryRetriever::ProgressUpdateCallback
         RetrieveProgressCallback;

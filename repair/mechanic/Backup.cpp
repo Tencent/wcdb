@@ -33,12 +33,13 @@ Backup::Backup(const std::string &path)
 {
 }
 
-bool Backup::work()
+bool Backup::work(int maxWalFrame)
 {
     if (!m_pager.initialize()) {
         return false;
     }
     Wal wal(m_pager);
+    wal.setMaxFrame(maxWalFrame);
     if (!wal.initialize()) {
         return false;
     }

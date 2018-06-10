@@ -294,11 +294,11 @@ void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
     getHandlePool()->attachment.factory.filter(tableShouldBeBackedup);
 }
 
-bool Database::backup()
+bool Database::backup(int maxWalFrame)
 {
     Repair::FactoryBackup factoryBackup =
         getHandlePool()->attachment.factory.backup();
-    if (factoryBackup.work()) {
+    if (factoryBackup.work(maxWalFrame)) {
         return true;
     }
     setThreadedError(factoryBackup.getError());

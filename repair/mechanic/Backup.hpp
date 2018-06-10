@@ -43,7 +43,7 @@ protected:
 
 #pragma mark - Backup
 public:
-    bool work();
+    bool work(int maxWalFrame = std::numeric_limits<int>::max());
 
     const Error &getError() const;
 

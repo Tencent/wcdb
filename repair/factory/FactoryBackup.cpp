@@ -31,16 +31,16 @@ FactoryBackup::FactoryBackup(Factory &factory) : FactoryRelated(factory)
 {
 }
 
-bool FactoryBackup::work()
+bool FactoryBackup::work(int maxWalFrame)
 {
-    return doWork(factory.database);
+    return doWork(factory.database, maxWalFrame);
 }
 
-bool FactoryBackup::doWork(const std::string &path)
+bool FactoryBackup::doWork(const std::string &path, int maxWalFrame)
 {
     Backup backup(path);
     backup.filter(factory.getFilter());
-    if (!backup.work()) {
+    if (!backup.work(maxWalFrame)) {
         setError(backup.getError());
         return false;
     }

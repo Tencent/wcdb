@@ -33,10 +33,11 @@ public:
     FactoryBackup(Factory &factory);
     using Filter = Backup::Filter;
 
-    bool work();
+    bool work(int maxWalFrame = std::numeric_limits<int>::max());
 
 protected:
-    bool doWork(const std::string &path);
+    bool doWork(const std::string &path,
+                int maxWalFrame = std::numeric_limits<int>::max());
 };
 
 } //namespace Repair
