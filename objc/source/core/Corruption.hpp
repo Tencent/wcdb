@@ -48,8 +48,8 @@ protected:
 
 #pragma mark - Notification
 public:
-    typedef std::function<void(std::shared_ptr<Database> &)> Notification;
-    void setExtraNotification(const Notification &notification);
+    typedef std::function<void(std::shared_ptr<Database> &)> ExtraReaction;
+    void setExtraReaction(const ExtraReaction &extraReaction);
 
 protected:
     friend class CorruptionNotifier;
@@ -58,7 +58,7 @@ protected:
 
 private:
     std::atomic<bool> m_corrupted;
-    Notification m_notification;
+    ExtraReaction m_extraReaction;
 };
 
 } //namespace WCDB

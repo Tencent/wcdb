@@ -268,10 +268,10 @@ void Database::setCorruptionReaction(CorruptionReaction reaction)
     getHandlePool()->attachment.corruption.setReaction(reaction);
 }
 
-void Database::setExtraNotificationWhenCorrupted(
-    const CorruptionNotification &notification)
+void Database::setExtraReactionWhenCorrupted(
+    const CorruptionExtraReaction &extraReaction)
 {
-    getHandlePool()->attachment.corruption.setExtraNotification(notification);
+    getHandlePool()->attachment.corruption.setExtraReaction(extraReaction);
 }
 
 std::string Database::getFirstMaterialPath() const

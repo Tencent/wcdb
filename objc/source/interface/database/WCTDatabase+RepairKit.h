@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef BOOL (^WCTBackupFilterBlock)(NSString *);
 typedef BOOL (^WCTRetrieveProgressUpdateBlock)(double, double);
-typedef void (^WCTCorruptionNotificationBlock)(WCTDatabase *);
+typedef void (^WCTCorruptionExtraReactionBlock)(WCTDatabase *);
 
 typedef NS_ENUM(NSInteger, WCTCorruptionReaction) {
     WCTCorruptionReactionIgnore = -1,
@@ -36,7 +36,7 @@ typedef NS_ENUM(NSInteger, WCTCorruptionReaction) {
 
 - (void)setCorruptionReaction:(WCTCorruptionReaction)reaction;
 
-- (void)setExtraCorruptionNotification:(WCTCorruptionNotificationBlock)onCorruptionReacted;
+- (void)setExtraReactionWhenCorrupted:(WCTCorruptionExtraReactionBlock)onCorrupted;
 
 - (void)filterBackup:(WCTBackupFilterBlock)tableShouldBeBackedUp;
 

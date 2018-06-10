@@ -34,15 +34,15 @@ static_assert((int) WCTCorruptionReactionDeposit == (int) WCDB::Database::Corrup
     _database->setCorruptionReaction((WCDB::Database::CorruptionReaction) reaction);
 }
 
-- (void)setExtraCorruptionNotification:(WCTCorruptionNotificationBlock)onCorruptionReacted
+- (void)setExtraReactionWhenCorrupted:(WCTCorruptionExtraReactionBlock)onCorrupted
 {
-    WCDB::Database::CorruptionNotification notification = nullptr;
-    if (onCorruptionReacted) {
-        notification = [onCorruptionReacted](std::shared_ptr<WCDB::Database> &database) {
-            onCorruptionReacted([[WCTDatabase alloc] initWithDatabase:database]);
+    WCDB::Database::CorruptionExtraReaction extraReaction = nullptr;
+    if (onCorrupted) {
+        extraReaction = [onCorrupted](std::shared_ptr<WCDB::Database> &database) {
+            onCorrupted([[WCTDatabase alloc] initWithDatabase:database]);
         };
     }
-    _database->setExtraNotificationWhenCorrupted(notification);
+    _database->setExtraReactionWhenCorrupted(extraReaction);
 }
 
 - (void)filterBackup:(WCTBackupFilterBlock)tableShouldBeBackedUp

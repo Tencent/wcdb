@@ -37,9 +37,9 @@ void Corruption::setReaction(Reaction reaction)
 }
 
 #pragma mark - Notification
-void Corruption::setExtraNotification(const Notification &notification)
+void Corruption::setExtraReaction(const ExtraReaction &extraReaction)
 {
-    m_notification = notification;
+    m_extraReaction = extraReaction;
 }
 
 void Corruption::notify()
@@ -56,19 +56,19 @@ void Corruption::notify()
     WCTInnerAssert(database != nullptr);
     database->blockade();
     database->close(nullptr);
-    bool notify = true;
+    bool doExtraReaction = true;
     switch (m_reaction) {
         case Reaction::Remove:
-            notify = database->removeFiles();
+            doExtraReaction = database->removeFiles();
             break;
         case Reaction::Deposit:
-            notify = database->deposit();
+            doExtraReaction = database->deposit();
             break;
         default:
             break;
     }
-    if (notify && m_notification) {
-        m_notification(database);
+    if (doExtraReaction && m_extraReaction) {
+        m_extraReaction(database);
     }
     database->unblockade();
     m_corrupted.store(false);
