@@ -23,6 +23,7 @@
 
 #include <WCDB/Data.hpp>
 #include <WCDB/FileHandle.hpp>
+#include <WCDB/Initializeable.hpp>
 #include <WCDB/PagerRelated.hpp>
 #include <map>
 
@@ -30,15 +31,13 @@ namespace WCDB {
 
 namespace Repair {
 
-class Wal : public PagerRelated {
+class Wal : public PagerRelated, public Initializeable {
 #pragma mark - Initialize
 public:
     Wal(Pager &pager);
 
     const std::string &getPath() const;
     static constexpr const int headerSize = 32;
-
-    bool initialize();
 
 protected:
     FileHandle m_fileHandle;
@@ -68,6 +67,10 @@ protected:
 public:
     int getFrameSize() const;
     Data acquireFrameData(int frameno);
+
+#pragma mark - Initializeable
+protected:
+    bool doInitialize() override;
 };
 
 } //namespace Repair

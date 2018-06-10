@@ -22,6 +22,7 @@
 #define Cell_hpp
 
 #include <WCDB/Data.hpp>
+#include <WCDB/Initializeable.hpp>
 #include <WCDB/PagerRelated.hpp>
 #include <WCDB/Serialization.hpp>
 
@@ -31,11 +32,9 @@ namespace Repair {
 
 class Page;
 
-class Cell : public PagerRelated {
+class Cell : public PagerRelated, public Initializeable {
 public:
     Cell(int pointer, Page &page, Pager &pager);
-
-    bool initialize();
 
     const Page &getPage() const;
 
@@ -69,6 +68,10 @@ protected:
     Data m_payload;
     //serial type -> offset of value
     std::vector<std::pair<int, int>> m_columns;
+
+#pragma mark - Initializeable
+protected:
+    bool doInitialize() override;
 };
 
 } //namespace Repair

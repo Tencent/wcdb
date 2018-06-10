@@ -35,45 +35,15 @@ Frame::Frame(int frameno_, Wal &wal, Pager &pager)
 {
 }
 
-bool Frame::initialize()
-{
-    Data data = m_wal.acquireFrameData(frameno);
-    if (data.empty()) {
-        return false;
-    }
-    Deserialization deserialization(data);
-
-    m_pageno = (int) deserialization.advance4BytesUInt();
-    deserialization.advance(4);
-    std::pair<uint32_t, uint32_t> salt;
-    salt.first = deserialization.advance4BytesUInt();
-    salt.second = deserialization.advance4BytesUInt();
-    if (salt != m_wal.getSalt()) {
-        markAsCorrupted();
-        return false;
-    }
-
-    std::pair<uint32_t, uint32_t> checksum;
-    checksum.first = deserialization.advance4BytesUInt();
-    checksum.second = deserialization.advance4BytesUInt();
-
-    m_checksum = calculateChecksum(data.subdata(0, 8), m_checksum);
-    m_checksum = calculateChecksum(
-        data.subdata(headerSize, m_wal.getPageSize()), m_checksum);
-    if (m_checksum == checksum) {
-        return true;
-    }
-    markAsCorrupted();
-    return false;
-}
-
 int Frame::getPageNumber() const
 {
+    WCTInnerAssert(isInited());
     return m_pageno;
 }
 
 const std::pair<uint32_t, uint32_t> &Frame::getChecksum() const
 {
+    WCTInnerAssert(isInited());
     return m_checksum;
 }
 
@@ -107,6 +77,39 @@ Frame::calculateChecksum(const Data &data,
     }
 
     return result;
+}
+
+#pragma mark - Initializeable
+bool Frame::doInitialize()
+{
+    Data data = m_wal.acquireFrameData(frameno);
+    if (data.empty()) {
+        return false;
+    }
+    Deserialization deserialization(data);
+
+    m_pageno = (int) deserialization.advance4BytesUInt();
+    deserialization.advance(4);
+    std::pair<uint32_t, uint32_t> salt;
+    salt.first = deserialization.advance4BytesUInt();
+    salt.second = deserialization.advance4BytesUInt();
+    if (salt != m_wal.getSalt()) {
+        markAsCorrupted();
+        return false;
+    }
+
+    std::pair<uint32_t, uint32_t> checksum;
+    checksum.first = deserialization.advance4BytesUInt();
+    checksum.second = deserialization.advance4BytesUInt();
+
+    m_checksum = calculateChecksum(data.subdata(0, 8), m_checksum);
+    m_checksum = calculateChecksum(
+        data.subdata(headerSize, m_wal.getPageSize()), m_checksum);
+    if (m_checksum == checksum) {
+        return true;
+    }
+    markAsCorrupted();
+    return false;
 }
 
 } //namespace Repair

@@ -24,6 +24,7 @@
 #include <WCDB/Error.hpp>
 #include <WCDB/ErrorProne.hpp>
 #include <WCDB/FileHandle.hpp>
+#include <WCDB/Initializeable.hpp>
 #include <WCDB/Wal.hpp>
 
 namespace WCDB {
@@ -32,15 +33,13 @@ class Data;
 
 namespace Repair {
 
-class Pager : public ErrorProne {
+class Pager : public ErrorProne, public Initializeable {
 #pragma mark - Initialize
 public:
     Pager(const std::string &path);
 
     void setPageSize(int pageSize);
     void setReservedBytes(int reservedBytes);
-
-    bool initialize();
 
     const std::string &getPath() const;
 
@@ -75,6 +74,10 @@ public:
 protected:
     void markAsNotADatabase();
     void markAsError(Error::Code code);
+
+#pragma mark - Initializeable
+protected:
+    bool doInitialize() override;
 };
 
 } //namespace Repair

@@ -44,7 +44,82 @@ const std::string &Wal::getPath() const
     return m_fileHandle.path;
 }
 
-bool Wal::initialize()
+bool Wal::containsPage(int pageno) const
+{
+    WCTInnerAssert(isInited());
+    return m_framePages.find(pageno) != m_framePages.end();
+}
+
+Data Wal::acquirePageData(int pageno)
+{
+    WCTInnerAssert(isInited());
+    WCTInnerAssert(containsPage(pageno));
+    return acquireData(headerSize + getFrameSize() * m_framePages[pageno] +
+                           Frame::headerSize,
+                       getPageSize());
+}
+
+Data Wal::acquireFrameData(int frameno)
+{
+    WCTInnerAssert(isInited());
+    return acquireData(headerSize + getFrameSize() * frameno, getFrameSize());
+}
+
+Data Wal::acquireData(off_t offset, size_t size)
+{
+    WCTInnerAssert(isInited());
+    if (!m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
+        assignWithSharedThreadedError();
+        return Data::emptyData();
+    }
+    Data data(size);
+    if (data.empty()) {
+        assignWithSharedThreadedError();
+        return data;
+    }
+    ssize_t read = m_fileHandle.read(data.buffer(), offset, size);
+    if (read != size) {
+        if (read >= 0) {
+            //short read
+            markAsCorrupted();
+        } else {
+            assignWithSharedThreadedError();
+        }
+        return Data::emptyData();
+    }
+    return data;
+}
+
+int Wal::getPageSize() const
+{
+    return m_pager.getPageSize();
+}
+
+int Wal::getFrameSize() const
+{
+    return Frame::headerSize + getPageSize();
+}
+
+bool Wal::isBigEndian() const
+{
+    WCTInnerAssert(isInited());
+    return m_isBigEndian;
+}
+
+const std::pair<uint32_t, uint32_t> &Wal::getChecksum() const
+{
+    WCTInnerAssert(isInited());
+    return m_checksum;
+}
+
+const std::pair<uint32_t, uint32_t> &Wal::getSalt() const
+{
+    WCTInnerAssert(isInited());
+    return m_salt;
+}
+
+#pragma mark - Initializeable
+bool Wal::doInitialize()
 {
     bool succeed;
     size_t fileSize;
@@ -82,73 +157,6 @@ bool Wal::initialize()
         m_checksum = frame.getChecksum();
     }
     return true;
-}
-
-bool Wal::containsPage(int pageno) const
-{
-    return m_framePages.find(pageno) != m_framePages.end();
-}
-
-Data Wal::acquirePageData(int pageno)
-{
-    WCTInnerAssert(containsPage(pageno));
-    return acquireData(headerSize + getFrameSize() * m_framePages[pageno] +
-                           Frame::headerSize,
-                       getPageSize());
-}
-
-Data Wal::acquireFrameData(int frameno)
-{
-    return acquireData(headerSize + getFrameSize() * frameno, getFrameSize());
-}
-
-Data Wal::acquireData(off_t offset, size_t size)
-{
-    if (!m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
-        assignWithSharedThreadedError();
-        return Data::emptyData();
-    }
-    Data data(size);
-    if (data.empty()) {
-        assignWithSharedThreadedError();
-        return data;
-    }
-    ssize_t read = m_fileHandle.read(data.buffer(), offset, size);
-    if (read != size) {
-        if (read >= 0) {
-            //short read
-            markAsCorrupted();
-        } else {
-            assignWithSharedThreadedError();
-        }
-        return Data::emptyData();
-    }
-    return data;
-}
-
-int Wal::getPageSize() const
-{
-    return m_pager.getPageSize();
-}
-
-int Wal::getFrameSize() const
-{
-    return Frame::headerSize + getPageSize();
-}
-
-bool Wal::isBigEndian() const
-{
-    return m_isBigEndian;
-}
-
-const std::pair<uint32_t, uint32_t> &Wal::getChecksum() const
-{
-    return m_checksum;
-}
-
-const std::pair<uint32_t, uint32_t> &Wal::getSalt() const
-{
-    return m_salt;
 }
 
 } //namespace Repair

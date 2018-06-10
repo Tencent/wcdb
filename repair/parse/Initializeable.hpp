@@ -18,46 +18,33 @@
  * limitations under the License.
  */
 
-#ifndef Frame_hpp
-#define Frame_hpp
-
-#include <WCDB/Data.hpp>
-#include <WCDB/Initializeable.hpp>
-#include <WCDB/PagerRelated.hpp>
-#include <utility>
+#ifndef Initializeable_hpp
+#define Initializeable_hpp
 
 namespace WCDB {
 
 namespace Repair {
 
-class Wal;
-
-class Frame : public PagerRelated, public Initializeable {
+class Initializeable {
 public:
-    Frame(int frameno, Wal &wal, Pager &pager);
-
-    static constexpr const int headerSize = 24;
-    const int frameno;
-
-    int getPageNumber() const;
-    const std::pair<uint32_t, uint32_t> &getChecksum() const;
+    Initializeable();
+    bool initialize();
+    bool isInited() const;
 
 protected:
-    std::pair<uint32_t, uint32_t> m_checksum;
-    Wal &m_wal;
-    int m_pageno;
+    virtual bool doInitialize() = 0;
 
-    std::pair<uint32_t, uint32_t>
-    calculateChecksum(const Data &data,
-                      const std::pair<uint32_t, uint32_t> &checksum);
-
-#pragma mark - Initializeable
-protected:
-    bool doInitialize() override;
+private:
+    enum State {
+        None,
+        Failed,
+        Inited,
+    };
+    State m_state;
 };
 
 } //namespace Repair
 
 } //namespace WCDB
 
-#endif /* Frame_hpp */
+#endif /* Initializeable_hpp */

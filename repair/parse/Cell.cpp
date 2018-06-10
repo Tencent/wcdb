@@ -34,7 +34,139 @@ Cell::Cell(int pointer, Page &page, Pager &pager)
 {
 }
 
-bool Cell::initialize()
+const Page &Cell::getPage() const
+{
+    return m_page;
+}
+
+int Cell::getLengthOfSerialType(int serialType)
+{
+    WCTInnerAssert(isSerialTypeSanity(serialType));
+    static int s_lengthsOfSerialType[10] = {
+        0, //Null
+        1, //8-bit integer
+        2, //16-bit integer
+        3, //24-bit integer
+        4, //32-bit integer
+        6, //48-bit integer
+        8, //64-bit integer
+        8, //IEEE 754-2008 64-bit floating point number
+        0, //0
+        0, //1
+    };
+    if (serialType <= 10) {
+        return s_lengthsOfSerialType[serialType];
+    }
+    return (serialType - 12 - serialType % 2) / 2;
+}
+
+int Cell::isSerialTypeSanity(int serialType)
+{
+    return serialType > 0 && serialType != 10 && serialType != 11;
+}
+
+int64_t Cell::getRowID() const
+{
+    WCTInnerAssert(isInited());
+    return m_rowid;
+}
+
+int Cell::getCount() const
+{
+    WCTInnerAssert(isInited());
+    return (int) m_columns.size();
+}
+
+Cell::Type Cell::getValueType(int index) const
+{
+    WCTInnerAssert(isInited());
+    WCTInnerAssert(index < m_columns.size());
+    int serialType = m_columns[index].first;
+    if (serialType == 0) {
+        return Type::Null;
+    } else if (serialType == 7) {
+        //IEEE 754-2008 64-bit floating point number
+        return Type::Real;
+    } else if (serialType <= 10) {
+        // 1. 8-bit integer
+        // 2. 16-bit integer
+        // 3. 24-bit integer
+        // 4. 32-bit integer
+        // 5. 48-bit integer
+        // 6. 64-bit integer
+        // 8. false
+        // 9. true
+        return Type::Integer;
+    } else {
+        return serialType % 2 ? Type::Text : Type::BLOB;
+    }
+}
+
+int64_t Cell::integerValue(int index) const
+{
+    WCTInnerAssert(isInited());
+    WCTInnerAssert(index < m_columns.size());
+    WCTInnerAssert(getValueType(index) == Type::Integer);
+    const auto &cell = m_columns[index];
+    switch (getLengthOfSerialType(cell.first)) {
+        case 1:
+            return m_deserialization.get1ByteInt(cell.second);
+        case 2:
+            return m_deserialization.get2BytesInt(cell.second);
+        case 3:
+            return m_deserialization.get3BytesInt(cell.second);
+        case 4:
+            return m_deserialization.get4BytesInt(cell.second);
+        case 6:
+            return m_deserialization.get6BytesInt(cell.second);
+        case 8:
+            return m_deserialization.get8BytesInt(cell.second);
+    }
+    WCTInnerFatalError();
+    return 0;
+}
+
+double Cell::doubleValue(int index) const
+{
+    WCTInnerAssert(isInited());
+    WCTInnerAssert(index < m_columns.size());
+    WCTInnerAssert(getValueType(index) == Type::Real);
+    const auto &cell = m_columns[index];
+    return m_deserialization.get8BytesDouble(cell.second);
+}
+
+std::pair<int, const char *> Cell::textValue(int index) const
+{
+    WCTInnerAssert(isInited());
+    WCTInnerAssert(index < m_columns.size());
+    WCTInnerAssert(getValueType(index) == Type::Text);
+    const auto &cell = m_columns[index];
+    return {getLengthOfSerialType(cell.first),
+            reinterpret_cast<const char *>(m_payload.buffer() + cell.second)};
+}
+
+std::string Cell::stringValue(int index) const
+{
+    WCTInnerAssert(isInited());
+    WCTInnerAssert(index < m_columns.size());
+    WCTInnerAssert(getValueType(index) == Type::Text);
+    const auto &cell = m_columns[index];
+    return m_deserialization.getZeroTerminatedString(cell.second);
+}
+
+std::pair<int, const unsigned char *> Cell::blobValue(int index) const
+{
+    WCTInnerAssert(isInited());
+    WCTInnerAssert(index < m_columns.size());
+    WCTInnerAssert(getValueType(index) == Type::BLOB);
+    const auto &cell = m_columns[index];
+    return {getLengthOfSerialType(cell.first),
+            reinterpret_cast<const unsigned char *>(m_payload.buffer() +
+                                                    cell.second)};
+}
+
+#pragma mark - Initializeable
+bool Cell::doInitialize()
 {
     Deserialization deserialization(m_page.getData());
     //parse payload size
@@ -156,129 +288,6 @@ bool Cell::initialize()
         return false;
     }
     return true;
-}
-
-const Page &Cell::getPage() const
-{
-    return m_page;
-}
-
-int Cell::getLengthOfSerialType(int serialType)
-{
-    WCTInnerAssert(isSerialTypeSanity(serialType));
-    static int s_lengthsOfSerialType[10] = {
-        0, //Null
-        1, //8-bit integer
-        2, //16-bit integer
-        3, //24-bit integer
-        4, //32-bit integer
-        6, //48-bit integer
-        8, //64-bit integer
-        8, //IEEE 754-2008 64-bit floating point number
-        0, //0
-        0, //1
-    };
-    if (serialType <= 10) {
-        return s_lengthsOfSerialType[serialType];
-    }
-    return (serialType - 12 - serialType % 2) / 2;
-}
-
-int Cell::isSerialTypeSanity(int serialType)
-{
-    return serialType > 0 && serialType != 10 && serialType != 11;
-}
-
-int64_t Cell::getRowID() const
-{
-    return m_rowid;
-}
-
-int Cell::getCount() const
-{
-    return (int) m_columns.size();
-}
-
-Cell::Type Cell::getValueType(int index) const
-{
-    WCTInnerAssert(index < m_columns.size());
-    int serialType = m_columns[index].first;
-    if (serialType == 0) {
-        return Type::Null;
-    } else if (serialType == 7) {
-        //IEEE 754-2008 64-bit floating point number
-        return Type::Real;
-    } else if (serialType <= 10) {
-        // 1. 8-bit integer
-        // 2. 16-bit integer
-        // 3. 24-bit integer
-        // 4. 32-bit integer
-        // 5. 48-bit integer
-        // 6. 64-bit integer
-        // 8. false
-        // 9. true
-        return Type::Integer;
-    } else {
-        return serialType % 2 ? Type::Text : Type::BLOB;
-    }
-}
-
-int64_t Cell::integerValue(int index) const
-{
-    WCTInnerAssert(index < m_columns.size());
-    WCTInnerAssert(getValueType(index) == Type::Integer);
-    const auto &cell = m_columns[index];
-    switch (getLengthOfSerialType(cell.first)) {
-        case 1:
-            return m_deserialization.get1ByteInt(cell.second);
-        case 2:
-            return m_deserialization.get2BytesInt(cell.second);
-        case 3:
-            return m_deserialization.get3BytesInt(cell.second);
-        case 4:
-            return m_deserialization.get4BytesInt(cell.second);
-        case 6:
-            return m_deserialization.get6BytesInt(cell.second);
-        case 8:
-            return m_deserialization.get8BytesInt(cell.second);
-    }
-    WCTInnerFatalError();
-    return 0;
-}
-
-double Cell::doubleValue(int index) const
-{
-    WCTInnerAssert(index < m_columns.size());
-    WCTInnerAssert(getValueType(index) == Type::Real);
-    const auto &cell = m_columns[index];
-    return m_deserialization.get8BytesDouble(cell.second);
-}
-
-std::pair<int, const char *> Cell::textValue(int index) const
-{
-    WCTInnerAssert(index < m_columns.size());
-    WCTInnerAssert(getValueType(index) == Type::Text);
-    const auto &cell = m_columns[index];
-    return {getLengthOfSerialType(cell.first),
-            reinterpret_cast<const char *>(m_payload.buffer() + cell.second)};
-}
-
-std::string Cell::stringValue(int index) const
-{
-    WCTInnerAssert(index < m_columns.size());
-    WCTInnerAssert(getValueType(index) == Type::Text);
-    const auto &cell = m_columns[index];
-    return m_deserialization.getZeroTerminatedString(cell.second);
-}
-
-std::pair<int, const unsigned char *> Cell::blobValue(int index) const
-{
-    WCTInnerAssert(index < m_columns.size());
-    WCTInnerAssert(getValueType(index) == Type::BLOB);
-    const auto &cell = m_columns[index];
-    return {getLengthOfSerialType(cell.first),
-            reinterpret_cast<const unsigned char *>(m_payload.buffer() +
-                                                    cell.second)};
 }
 
 } //namespace Repair

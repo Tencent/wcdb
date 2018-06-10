@@ -22,6 +22,7 @@
 #define Page_hpp
 
 #include <WCDB/Data.hpp>
+#include <WCDB/Initializeable.hpp>
 #include <WCDB/PagerRelated.hpp>
 #include <WCDB/Serialization.hpp>
 
@@ -31,7 +32,7 @@ namespace Repair {
 
 class Cell;
 
-class Page : public PagerRelated {
+class Page : public PagerRelated, public Initializeable {
 #pragma mark - Initialize
 public:
     Page(int number, Pager &pager);
@@ -45,8 +46,6 @@ public:
         LeafIndex = 10,
         LeafTable = 13,
     };
-
-    bool initialize();
 
     std::pair<bool, Type> acquireType();
     Type getType() const;
@@ -78,6 +77,9 @@ protected:
     bool hasRightMostPageNo() const;
 
     int m_cellCount;
+#pragma mark - Initializeable
+protected:
+    bool doInitialize() override;
 };
 
 } //namespace Repair

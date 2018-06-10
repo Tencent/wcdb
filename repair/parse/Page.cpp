@@ -60,7 +60,93 @@ std::pair<bool, Page::Type> Page::acquireType()
     }
 }
 
-bool Page::initialize()
+const Data &Page::getData() const
+{
+    WCTInnerAssert(isInited());
+    return m_data;
+}
+
+Page::Type Page::getType() const
+{
+    WCTInnerAssert(isInited());
+    return m_type;
+}
+
+#pragma mark - Interior Table
+std::pair<bool, int> Page::getSubPageno(int index) const
+{
+    WCTInnerAssert(isInited());
+    WCTInnerAssert(index < getSubPageCount());
+    WCTInnerAssert(m_type == Type::InteriorTable);
+    int offset = index < m_cellCount ? getCellPointer(index) : 8;
+    if (!m_deserialization.isEnough(offset, 4)) {
+        return {false, -1};
+    }
+    return {true, m_deserialization.get4BytesInt(offset)};
+}
+
+int Page::getSubPageCount() const
+{
+    WCTInnerAssert(isInited());
+    WCTInnerAssert(m_type == Type::InteriorTable);
+    return m_cellCount + hasRightMostPageNo();
+}
+
+#pragma mark - Leaf Table
+Cell Page::getCell(int index)
+{
+    WCTInnerAssert(isInited());
+    WCTInnerAssert(index < getCellCount());
+    WCTInnerAssert(m_type == Type::LeafTable);
+    return Cell(getCellPointer(index), *this, m_pager);
+}
+
+int Page::getCellCount() const
+{
+    WCTInnerAssert(isInited());
+    WCTInnerAssert(m_type == Type::LeafTable);
+    return m_cellCount;
+}
+
+int Page::getMaxLocal() const
+{
+    WCTInnerAssert(m_type == Type::LeafTable);
+    return m_pager.getUsableSize() - 35;
+}
+
+int Page::getMinLocal() const
+{
+    WCTInnerAssert(m_type == Type::LeafTable);
+    return (m_pager.getUsableSize() - 12) * 32 / 255 - 23;
+}
+
+#pragma mark - Common
+int Page::getOffsetOfCellPointer() const
+{
+    return m_type == Type::InteriorTable ? 12 : 8;
+}
+
+int Page::getCellPointer(int cellIndex) const
+{
+    WCTInnerAssert(isInited());
+    WCTInnerAssert(m_deserialization.isEnough(
+        getOffsetOfHeader() + getOffsetOfCellPointer() + cellIndex * 2, 2));
+    return m_deserialization.get2BytesInt(
+        getOffsetOfHeader() + getOffsetOfCellPointer() + cellIndex * 2);
+}
+
+bool Page::hasRightMostPageNo() const
+{
+    return m_type == Type::InteriorTable;
+}
+
+int Page::getOffsetOfHeader() const
+{
+    return number == 1 ? 100 : 0;
+}
+
+#pragma mark - Initializeable
+bool Page::doInitialize()
 {
     m_data = m_pager.acquirePageData(number);
     if (m_data.empty()) {
@@ -90,84 +176,6 @@ bool Page::initialize()
         return false;
     }
     return true;
-}
-
-const Data &Page::getData() const
-{
-    return m_data;
-}
-
-Page::Type Page::getType() const
-{
-    return m_type;
-}
-
-#pragma mark - Interior Table
-std::pair<bool, int> Page::getSubPageno(int index) const
-{
-    WCTInnerAssert(index < getSubPageCount());
-    WCTInnerAssert(m_type == Type::InteriorTable);
-    int offset = index < m_cellCount ? getCellPointer(index) : 8;
-    if (!m_deserialization.isEnough(offset, 4)) {
-        return {false, -1};
-    }
-    return {true, m_deserialization.get4BytesInt(offset)};
-}
-
-int Page::getSubPageCount() const
-{
-    WCTInnerAssert(m_type == Type::InteriorTable);
-    return m_cellCount + hasRightMostPageNo();
-}
-
-#pragma mark - Leaf Table
-Cell Page::getCell(int index)
-{
-    WCTInnerAssert(index < getCellCount());
-    WCTInnerAssert(m_type == Type::LeafTable);
-    return Cell(getCellPointer(index), *this, m_pager);
-}
-
-int Page::getCellCount() const
-{
-    WCTInnerAssert(m_type == Type::LeafTable);
-    return m_cellCount;
-}
-
-int Page::getMaxLocal() const
-{
-    WCTInnerAssert(m_type == Type::LeafTable);
-    return m_pager.getUsableSize() - 35;
-}
-
-int Page::getMinLocal() const
-{
-    WCTInnerAssert(m_type == Type::LeafTable);
-    return (m_pager.getUsableSize() - 12) * 32 / 255 - 23;
-}
-
-#pragma mark - Common
-int Page::getOffsetOfCellPointer() const
-{
-    return m_type == Type::InteriorTable ? 12 : 8;
-}
-
-int Page::getCellPointer(int cellIndex) const
-{
-    WCTInnerAssert(m_deserialization.isEnough(
-        getOffsetOfHeader() + getOffsetOfCellPointer() + cellIndex * 2, 2));
-    return m_deserialization.get2BytesInt(
-        getOffsetOfHeader() + getOffsetOfCellPointer() + cellIndex * 2);
-}
-
-bool Page::hasRightMostPageNo() const
-{
-    return m_type == Type::InteriorTable;
-}
-
-int Page::getOffsetOfHeader() const
-{
-    return number == 1 ? 100 : 0;
 }
 
 } //namespace Repair

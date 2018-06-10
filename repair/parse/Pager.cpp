@@ -41,11 +41,13 @@ Pager::Pager(const std::string &path)
 
 void Pager::setPageSize(int pageSize)
 {
+    WCTInnerAssert(!isInited());
     m_pageSize = pageSize;
 }
 
 void Pager::setReservedBytes(int reservedBytes)
 {
+    WCTInnerAssert(!isInited());
     m_reservedBytes = reservedBytes;
 }
 
@@ -54,7 +56,88 @@ const std::string &Pager::getPath() const
     return m_fileHandle.path;
 }
 
-bool Pager::initialize()
+#pragma mark - Page
+int Pager::getPageCount() const
+{
+    WCTInnerAssert(isInited());
+    return m_pageCount;
+}
+
+int Pager::getUsableSize() const
+{
+    WCTInnerAssert(isInited());
+    return m_pageSize - m_reservedBytes;
+}
+
+int Pager::getPageSize() const
+{
+    WCTInnerAssert(isInited());
+    return m_pageSize;
+}
+
+int Pager::getReservedBytes() const
+{
+    WCTInnerAssert(isInited());
+    return m_reservedBytes;
+}
+
+Data Pager::acquirePageData(int number)
+{
+    WCTInnerAssert(isInited());
+    WCTInnerAssert(number > 0);
+    if (m_walSanity && m_wal.containsPage(number)) {
+        return m_wal.acquirePageData(number);
+    }
+    return acquireData((number - 1) * m_pageSize, m_pageSize);
+}
+
+Data Pager::acquireData(off_t offset, size_t size)
+{
+    WCTInnerAssert(isInited());
+    if (!m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
+        assignWithSharedThreadedError();
+        return Data::emptyData();
+    }
+    Data data(size);
+    if (data.empty()) {
+        assignWithSharedThreadedError();
+        return data;
+    }
+    ssize_t read = m_fileHandle.read(data.buffer(), offset, size);
+    if (read != size) {
+        if (read >= 0) {
+            //short read
+            markAsCorrupted();
+        } else {
+            assignWithSharedThreadedError();
+        }
+        return Data::emptyData();
+    }
+    return data;
+}
+
+#pragma mark - Error
+void Pager::markAsCorrupted()
+{
+    markAsError(Error::Code::Corrupt);
+}
+
+void Pager::markAsNotADatabase()
+{
+    markAsError(Error::Code::NotADatabase);
+}
+
+void Pager::markAsError(Error::Code code)
+{
+    Error error;
+    error.setCode(code, "Repair");
+    error.infos.set("Path", m_fileHandle.path);
+    Notifier::shared()->notify(error);
+    setError(std::move(error));
+}
+
+#pragma mark - Initializeable
+bool Pager::doInitialize()
 {
     bool succeed;
     size_t fileSize;
@@ -104,80 +187,6 @@ bool Pager::initialize()
         return false;
     }
     return true;
-}
-
-#pragma mark - Page
-int Pager::getPageCount() const
-{
-    return m_pageCount;
-}
-
-int Pager::getUsableSize() const
-{
-    return m_pageSize - m_reservedBytes;
-}
-
-int Pager::getPageSize() const
-{
-    return m_pageSize;
-}
-
-int Pager::getReservedBytes() const
-{
-    return m_reservedBytes;
-}
-
-Data Pager::acquirePageData(int number)
-{
-    WCTInnerAssert(number > 0);
-    if (m_walSanity && m_wal.containsPage(number)) {
-        return m_wal.acquirePageData(number);
-    }
-    return acquireData((number - 1) * m_pageSize, m_pageSize);
-}
-
-Data Pager::acquireData(off_t offset, size_t size)
-{
-    if (!m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
-        assignWithSharedThreadedError();
-        return Data::emptyData();
-    }
-    Data data(size);
-    if (data.empty()) {
-        assignWithSharedThreadedError();
-        return data;
-    }
-    ssize_t read = m_fileHandle.read(data.buffer(), offset, size);
-    if (read != size) {
-        if (read >= 0) {
-            //short read
-            markAsCorrupted();
-        } else {
-            assignWithSharedThreadedError();
-        }
-        return Data::emptyData();
-    }
-    return data;
-}
-
-#pragma mark - Error
-void Pager::markAsCorrupted()
-{
-    markAsError(Error::Code::Corrupt);
-}
-
-void Pager::markAsNotADatabase()
-{
-    markAsError(Error::Code::NotADatabase);
-}
-
-void Pager::markAsError(Error::Code code)
-{
-    Error error;
-    error.setCode(code, "Repair");
-    error.infos.set("Path", m_fileHandle.path);
-    Notifier::shared()->notify(error);
-    setError(std::move(error));
 }
 
 } //namespace Repair
