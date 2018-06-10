@@ -38,6 +38,11 @@ bool Backup::work()
     if (!m_pager.initialize()) {
         return false;
     }
+    Wal wal(m_pager);
+    if (!wal.initialize()) {
+        return false;
+    }
+    m_pager.setWal(std::move(wal));
 
     m_material.info.pageSize = m_pager.getPageSize();
     m_material.info.reservedBytes = m_pager.getReservedBytes();

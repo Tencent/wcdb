@@ -35,7 +35,6 @@ Pager::Pager(const std::string &path)
     , m_reservedBytes(-1)
     , m_pageCount(0)
     , m_wal(*this)
-    , m_walSanity(false)
 {
 }
 
@@ -85,7 +84,7 @@ Data Pager::acquirePageData(int number)
 {
     WCTInnerAssert(isInited());
     WCTInnerAssert(number > 0);
-    if (m_walSanity && m_wal.containsPage(number)) {
+    if (m_wal.isInited() && m_wal.containsPage(number)) {
         return m_wal.acquirePageData(number);
     }
     return acquireData((number - 1) * m_pageSize, m_pageSize);
@@ -114,6 +113,13 @@ Data Pager::acquireData(off_t offset, size_t size)
         return Data::emptyData();
     }
     return data;
+}
+
+#pragma mark - Wal
+void Pager::setWal(Wal &&wal)
+{
+    WCTInnerAssert(wal.isInited());
+    m_wal = std::move(wal);
 }
 
 #pragma mark - Error
@@ -178,12 +184,6 @@ bool Pager::doInitialize()
     if (((m_pageSize - 1) & m_pageSize) != 0 || m_pageSize < 512 ||
         m_reservedBytes < 0 || m_reservedBytes > 255) {
         markAsCorrupted();
-        return false;
-    }
-
-    m_walSanity = m_wal.initialize();
-    if (!m_walSanity && !m_error.isCorruption()) {
-        //If wal is corrupted, just ignore it.
         return false;
     }
     return true;

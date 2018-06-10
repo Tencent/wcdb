@@ -38,6 +38,14 @@ FileHandle::FileHandle(FileHandle &&other)
     other.m_fd = -1;
 }
 
+FileHandle &FileHandle::operator=(FileHandle &&other)
+{
+    WCTInnerAssert(path == other.path);
+    m_fd = std::move(other.m_fd);
+    other.m_fd = -1;
+    return *this;
+}
+
 bool FileHandle::open(Mode mode)
 {
     if (m_fd == -1) {

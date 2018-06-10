@@ -63,9 +63,11 @@ protected:
     int m_pageCount;
 
 #pragma mark - Wal
+public:
+    void setWal(Wal &&wal);
+
 protected:
     Wal m_wal;
-    bool m_walSanity;
 
 #pragma mark - Error
 public:

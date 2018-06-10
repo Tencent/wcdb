@@ -35,6 +35,11 @@ FullCrawler::FullCrawler(const std::string &source) : Repairman(source)
 #pragma mark - Repair
 void FullCrawler::work()
 {
+    Repairman::work();
+    if (!m_pager.isInited()) {
+        return;
+    }
+
     //calculate score
     int leafTablePageCount = 0;
     for (int i = 0; i < m_pager.getPageCount(); ++i) {
@@ -46,11 +51,6 @@ void FullCrawler::work()
         }
     }
     setPageWeight((double) leafTablePageCount / m_pager.getPageCount());
-
-    if (!m_pager.initialize()) {
-        markAsError();
-        return;
-    }
 
     markAsAssembling();
     MasterCrawler(m_pager).work(this);

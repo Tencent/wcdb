@@ -32,6 +32,8 @@ class Pager;
 class PagerRelated {
 public:
     PagerRelated(Pager &pager);
+    PagerRelated(PagerRelated &&);
+    PagerRelated &operator=(PagerRelated &&);
 
 protected:
     void markAsCorrupted();

@@ -29,6 +29,16 @@ PagerRelated::PagerRelated(Pager &pager) : m_pager(pager)
 {
 }
 
+PagerRelated::PagerRelated(PagerRelated &&other) : m_pager(other.m_pager)
+{
+}
+
+PagerRelated &PagerRelated::operator=(PagerRelated &&other)
+{
+    m_pager = std::move(other.m_pager);
+    return *this;
+}
+
 void PagerRelated::setError(Error &&error)
 {
     m_pager.setError(std::move(error));

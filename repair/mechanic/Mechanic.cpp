@@ -45,8 +45,8 @@ void Mechanic::setMaterial(Material &&material)
 #pragma mark - Mechanic
 void Mechanic::work()
 {
-    if (!m_pager.initialize()) {
-        tryUpgradeCrawlerError();
+    Repairman::work();
+    if (!m_pager.isInited()) {
         return;
     }
 
