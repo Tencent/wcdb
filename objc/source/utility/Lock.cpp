@@ -23,11 +23,11 @@
 
 namespace WCDB {
 
-Lock::Lock()
+Lockable::Lockable()
 {
 }
 
-SpinLock::SpinLock() : Lock()
+SpinLock::SpinLock() : Lockable()
 {
 }
 
@@ -139,7 +139,7 @@ SharedLock::~SharedLock()
                       } while (m_readers > 0) { unlockShared(); })
 }
 
-LockGuard::LockGuard(Lock &lock) : m_lock(lock)
+LockGuard::LockGuard(Lockable &lock) : m_lock(lock)
 {
     m_lock.lock();
 }

@@ -48,7 +48,7 @@
     handle->rollbackTransaction();
 }
 
-- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction
+- (BOOL)runTransaction:(WCDB_NO_ESCAPE WCTTransactionBlock)inTransaction
 {
     WCDB::Handle *handle = [self getOrGenerateHandle];
     if (!handle) {
@@ -84,7 +84,7 @@
     return handle->rollbackNestedTransaction();
 }
 
-- (BOOL)runNestedTransaction:(WCTTransactionBlock)inTransaction
+- (BOOL)runNestedTransaction:(WCDB_NO_ESCAPE WCTTransactionBlock)inTransaction
 {
     WCDB::Handle *handle = [self getOrGenerateHandle];
     if (!handle) {

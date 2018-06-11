@@ -167,7 +167,11 @@ WCTPropertyList::operator std::list<WCDB::Column>() const
 
 WCTPropertyList::operator std::list<WCDB::Expression>() const
 {
-    return std::list<WCDB::Expression>(begin(), end());
+    std::list<WCDB::Expression> expressions;
+    for (const auto &property : *this) {
+        expressions.push_back(property.operator WCDB::Expression());
+    }
+    return expressions;
 }
 
 WCTPropertyList::operator std::list<WCDB::ResultColumn>() const

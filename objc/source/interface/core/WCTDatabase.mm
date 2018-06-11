@@ -100,7 +100,7 @@
     _database->close(nullptr);
 }
 
-- (void)close:(WCTCloseBlock)onClosed
+- (void)close:(WCDB_NO_ESCAPE WCTCloseBlock)onClosed
 {
     std::function<void(void)> callback = nullptr;
     if (onClosed) {
@@ -121,7 +121,7 @@
     _database->blockade();
 }
 
-- (bool)blockadeUntilDone:(WCTBlockadeBlock)onBlockaded
+- (bool)blockadeUntilDone:(WCDB_NO_ESCAPE WCTBlockadeBlock)onBlockaded
 {
     return _database->blockadeUntilDone([onBlockaded, self](WCDB::Handle *handle) {
         onBlockaded([[WCTHandle alloc] initWithDatabase:_database andHandle:handle]);

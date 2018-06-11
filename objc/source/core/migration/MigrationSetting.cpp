@@ -81,7 +81,6 @@ bool MigrationSetting::isSameDatabaseMigration() const
 const std::map<std::string, std::pair<std::string, int>> &
 MigrationSetting::getSchemasForAttaching() const
 {
-    //TODO refactor
     WCTInnerAssert(m_lock.level() >= SharedLock::Level::Read);
     return m_schemas;
 }
@@ -89,7 +88,6 @@ MigrationSetting::getSchemasForAttaching() const
 const std::map<std::string, std::shared_ptr<MigrationInfo>> &
 MigrationSetting::getInfos() const
 {
-    //TODO refactor
     return m_infos;
 }
 
@@ -130,8 +128,19 @@ MigrationSetting::pickUpForMigration() const
 {
     WCTInnerAssert(m_lock.level() >= SharedLock::Level::Read);
     WCTInnerAssert(!m_infos.empty());
-    //TODO cross table migration first
-    return m_infos.begin()->second;
+    const std::shared_ptr<MigrationInfo> *toMigrate = nullptr;
+    if (!m_schemas.empty()) {
+        toMigrate = &m_infos.begin()->second;
+    } else {
+        //cross table migration first
+        for (const auto &element : m_infos) {
+            if (!element.second->schema.empty()) {
+                toMigrate = &element.second;
+            }
+        }
+    }
+    WCTInnerAssert(toMigrate != nullptr);
+    return *toMigrate;
 }
 
 void MigrationSetting::setTableMigratedCallback(
