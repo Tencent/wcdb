@@ -166,7 +166,7 @@ bool Database::removeFiles()
     close([&result, this]() {
         std::list<std::string> paths = getPaths();
         paths.reverse();
-        result = FileManager::shared()->removeFiles(paths);
+        result = FileManager::shared()->removeItems(paths);
         if (!result) {
             assignWithSharedThreadedError();
         }
@@ -193,7 +193,7 @@ bool Database::moveFiles(const std::string &directory)
     close([&result, &directory, this]() {
         std::list<std::string> paths = getPaths();
         paths.reverse();
-        result = FileManager::shared()->moveFiles(paths, directory);
+        result = FileManager::shared()->moveItems(paths, directory);
         if (!result) {
             assignWithSharedThreadedError();
         }
@@ -210,7 +210,7 @@ bool Database::moveFilesToDirectoryWithExtraFiles(
         std::list<std::string> dbPaths = getPaths();
         dbPaths.reverse();
         paths.insert(paths.end(), dbPaths.begin(), dbPaths.end());
-        result = FileManager::shared()->moveFiles(paths, directory);
+        result = FileManager::shared()->moveItems(paths, directory);
         if (!result) {
             assignWithSharedThreadedError();
         }
@@ -296,24 +296,31 @@ bool Database::backup(int maxWalFrame)
 
 bool Database::deposit()
 {
-    Repair::FactoryDepositor factoryDepositor =
-        getHandlePool()->attachment.factory.depositor();
-    if (factoryDepositor.work()) {
-        return true;
-    }
-    setThreadedError(factoryDepositor.getError());
-    return false;
+    bool result = false;
+    close([&result, this]() {
+        Repair::FactoryDepositor factoryDepositor =
+            getHandlePool()->attachment.factory.depositor();
+        result = factoryDepositor.work();
+        if (!result) {
+            setThreadedError(factoryDepositor.getError());
+        }
+    });
+    return result;
 }
 
 double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
 {
-    Repair::FactoryRetriever factoryRetriever =
-        getHandlePool()->attachment.factory.retriever();
-    std::shared_ptr<Repair::Assembler> assembler(new Repair::SQLiteAssembler);
-    factoryRetriever.setAssembler(assembler);
-    factoryRetriever.setProgressCallback(onProgressUpdate);
-    double score = factoryRetriever.work();
-    setThreadedError(factoryRetriever.getCriticalError());
+    double score = 0;
+    close([&score, &onProgressUpdate, this]() {
+        Repair::FactoryRetriever factoryRetriever =
+            getHandlePool()->attachment.factory.retriever();
+        std::shared_ptr<Repair::Assembler> assembler(
+            new Repair::SQLiteAssembler);
+        factoryRetriever.setAssembler(assembler);
+        factoryRetriever.setProgressCallback(onProgressUpdate);
+        score = factoryRetriever.work();
+        setThreadedError(factoryRetriever.getCriticalError());
+    });
     return score;
 }
 
