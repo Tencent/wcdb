@@ -29,17 +29,16 @@
 
 namespace WCDB {
 
-class Lock {
+class Lockable {
 public:
-    Lock();
-    Lock(const Lock &) = delete;
-    Lock &operator=(const Lock &) = delete;
+    Lockable();
+    Lockable(const Lockable &) = delete;
+    Lockable &operator=(const Lockable &) = delete;
     virtual void lock() = 0;
     virtual void unlock() = 0;
 };
 
-//TODO using mutex for single core CPU device
-class SpinLock : public Lock {
+class SpinLock : public Lockable {
 public:
     SpinLock();
 
@@ -54,7 +53,7 @@ protected:
  * std::shared_mutex is available since C++17, iOS 10.0, macOS 10.12    
  * std::shared_timed_mutex is available since C++14, iOS 10.0, macOS 10.12
  */
-class SharedLock : public Lock {
+class SharedLock : public Lockable {
 public:
     SharedLock();
     ~SharedLock();
@@ -84,7 +83,6 @@ protected:
     ThreadLocal<int> m_threadedReaders;
 };
 
-//TODO make shared lock scalable
 class SharedLockGuard {
 public:
     SharedLockGuard(SharedLock &lock);
@@ -100,7 +98,7 @@ protected:
 
 class LockGuard {
 public:
-    LockGuard(Lock &lock);
+    LockGuard(Lockable &lock);
     ~LockGuard();
 
     LockGuard() = delete;
@@ -108,7 +106,7 @@ public:
     LockGuard &operator=(const LockGuard &) = delete;
 
 protected:
-    Lock &m_lock;
+    Lockable &m_lock;
 };
 
 } //namespace WCDB
