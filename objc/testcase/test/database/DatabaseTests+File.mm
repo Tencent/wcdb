@@ -70,7 +70,10 @@
     }
     //When
     [_database close:^{
-      XCTAssertTrue([_database removeFiles]);
+      //also tests recursive close
+      [_database close:^{
+        XCTAssertTrue([_database removeFiles]);
+      }];
     }];
     //Then
     for (NSString *path in _database.paths) {

@@ -160,18 +160,16 @@ void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
 #pragma mark - File
 bool Database::removeFiles()
 {
-    WCTRemedialAssert(
-        isBlockaded() && !isOpened(),
-        "Removing files on an opened database may cause undefined results.",
-        return false;);
-    FileManager *fileManager = FileManager::shared();
-    std::list<std::string> paths = getPaths();
-    paths.reverse();
-    if (fileManager->removeFiles(paths)) {
-        return true;
-    }
-    assignWithSharedThreadedError();
-    return false;
+    bool result = false;
+    close([&result, this]() {
+        std::list<std::string> paths = getPaths();
+        paths.reverse();
+        result = FileManager::shared()->removeFiles(paths);
+        if (!result) {
+            assignWithSharedThreadedError();
+        }
+    });
+    return result;
 }
 
 std::pair<bool, size_t> Database::getFilesSize()
@@ -190,41 +188,33 @@ std::pair<bool, size_t> Database::getFilesSize()
 
 bool Database::moveFiles(const std::string &directory)
 {
-    if (isBlockaded() && !isOpened()) {
-        FileManager *fileManager = FileManager::shared();
+    bool result = false;
+    close([&result, &directory, this]() {
         std::list<std::string> paths = getPaths();
         paths.reverse();
-        if (fileManager->moveFiles(paths, directory)) {
-            return true;
+        result = FileManager::shared()->moveFiles(paths, directory);
+        if (!result) {
+            assignWithSharedThreadedError();
         }
-        assignWithSharedThreadedError();
-    } else {
-        setThreadedError(Error(Error::Code::Misuse, "Moving files on an opened "
-                                                    "database may cause a "
-                                                    "corrupted database."));
-    }
-    return false;
+    });
+    return result;
 }
 
 bool Database::moveFilesToDirectoryWithExtraFiles(
     const std::string &directory, const std::list<std::string> &extraFiles)
 {
-    if (isBlockaded() && !isOpened()) {
+    bool result = false;
+    close([&result, &directory, &extraFiles, this]() {
         std::list<std::string> paths = extraFiles;
         std::list<std::string> dbPaths = getPaths();
         dbPaths.reverse();
         paths.insert(paths.end(), dbPaths.begin(), dbPaths.end());
-        FileManager *fileManager = FileManager::shared();
-        if (fileManager->moveFiles(paths, directory)) {
-            return true;
+        result = FileManager::shared()->moveFiles(paths, directory);
+        if (!result) {
+            assignWithSharedThreadedError();
         }
-        assignWithSharedThreadedError();
-    } else {
-        setThreadedError(Error(Error::Code::Misuse, "Moving files on an opened "
-                                                    "database may cause a "
-                                                    "corrupted database."));
-    }
-    return false;
+    });
+    return result;
 }
 
 const std::string &Database::getPath() const
