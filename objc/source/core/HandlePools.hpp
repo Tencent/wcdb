@@ -49,6 +49,8 @@ public:
 protected:
     HandlePools();
 
+    void flowBackHandlePool(const std::string &path);
+
     std::shared_ptr<HandlePool> generate(const std::string &path);
 
     RecyclableHandlePool getExistingPool(

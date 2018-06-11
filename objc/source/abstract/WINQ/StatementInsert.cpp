@@ -157,13 +157,4 @@ bool StatementInsert::isReplace() const
     return lang.type == Lang::InsertSTMT::Type::InsertOrReplace;
 }
 
-#ifdef DEBUG
-const Lang::CopyOnWriteLazyLangList<Lang::Column> &
-StatementInsert::getSpecifiedColumns() const
-{
-    const Lang::InsertSTMT &lang = getCOWLang().get<Lang::InsertSTMT>();
-    return lang.columns;
-}
-#endif
-
 } // namespace WCDB

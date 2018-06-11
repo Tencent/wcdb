@@ -168,9 +168,9 @@ RecyclableHandle HandlePool::flowOut()
         configuredHandle = generateConfiguredHandle();
     }
     if (configuredHandle) {
-        return RecyclableHandle(configuredHandle, [configuredHandle, this]() {
-            flowBack(configuredHandle);
-        });
+        return RecyclableHandle(
+            configuredHandle,
+            std::bind(&HandlePool::flowBack, this, configuredHandle));
     }
     m_sharedLock.unlockShared();
     return nullptr;
@@ -195,7 +195,9 @@ std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
     if (!configuredHandle) {
         return nullptr;
     }
-    willConfigurateHandle(configuredHandle.get()->getHandle());
+    if (configuredHandle->getHandle()->getTag() != getTag()) {
+        configuredHandle->getHandle()->setTag(getTag());
+    }
     std::shared_ptr<const Configs> configs = m_configs;
     if (!configuredHandle->configured(configs) &&
         !configuredHandle->configure(configs)) {
@@ -227,7 +229,8 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
         FileManager::shared()->createDirectoryWithIntermediateDirectories(
             Path::getBaseName(path));
     }
-    willConfigurateHandle(handle);
+    handle->setTag(getTag());
+
     if (!handle->open()) {
         setThreadedError(handle->getError());
         return nullptr;
@@ -249,14 +252,6 @@ void HandlePool::flowBackConfiguredHandle(
     if (!m_handles.pushBack(configuredHandle)) {
         --m_aliveHandleCount;
     }
-}
-
-bool HandlePool::willConfigurateHandle(Handle *handle)
-{
-    if (handle->getTag() != getTag()) {
-        handle->setTag(getTag());
-    }
-    return true;
 }
 
 } //namespace WCDB

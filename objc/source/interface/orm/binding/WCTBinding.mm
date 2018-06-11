@@ -176,18 +176,14 @@ const WCTPropertyList &WCTBinding::getAllProperties() const
 const WCTProperty &WCTBinding::getProperty(const std::string &propertyName) const
 {
     auto iter = m_mappedProperties.find(propertyName);
-#ifdef DEBUG
     WCTInnerAssert(iter != m_mappedProperties.end());
-#endif
     return *iter->second;
 }
 
 void WCTBinding::addColumnBinding(const std::string &columnName,
                                   const WCTColumnBinding &columnBinding)
 {
-#ifdef DEBUG
     WCTInnerAssert(m_columnBindings.find(columnName) == m_columnBindings.end());
-#endif
     auto iter = m_columnBindings.insert({columnName, columnBinding}).first;
     m_properties.push_back(iter->second);
     auto listIter = m_properties.end();

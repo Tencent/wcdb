@@ -46,6 +46,10 @@ public:
 protected:
     MigrationDatabase(const RecyclableHandlePool &pool);
 
+    static std::shared_ptr<HandlePool>
+    generateHandlePool(const std::string &path,
+                       const std::list<std::shared_ptr<MigrationInfo>> &infos);
+
 #pragma mark - Migration
 public:
     bool stepMigration(bool &done);

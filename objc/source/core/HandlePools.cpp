@@ -100,17 +100,22 @@ RecyclableHandlePool HandlePools::getExistingPool(
     }
     ++iter->second.second;
     const std::string path = iter->second.first->path;
-    return RecyclableHandlePool(iter->second.first, [path, this]() {
-        std::lock_guard<std::mutex> lockGuard(m_mutex);
-        const auto &iter = m_pools.find(path);
-        if (iter == m_pools.end()) {
-            //drop it
-            return;
-        }
-        if (--iter->second.second == 0) {
-            m_pools.erase(iter);
-        }
-    });
+    return RecyclableHandlePool(
+        iter->second.first,
+        std::bind(&HandlePools::flowBackHandlePool, this, path));
+}
+
+void HandlePools::flowBackHandlePool(const std::string &path)
+{
+    std::lock_guard<std::mutex> lockGuard(m_mutex);
+    const auto &iter = m_pools.find(path);
+    if (iter == m_pools.end()) {
+        //drop it
+        return;
+    }
+    if (--iter->second.second == 0) {
+        m_pools.erase(iter);
+    }
 }
 
 void HandlePools::purge()
