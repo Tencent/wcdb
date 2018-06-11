@@ -329,7 +329,7 @@ bool Database::canRetrieve() const
     return getHandlePool()->attachment.factory.canRetrieve();
 }
 
-bool Database::removeFactory()
+bool Database::removeDeposit()
 {
     if (FileManager::shared()->removeDirectory(getFactoryDirectory())) {
         return true;

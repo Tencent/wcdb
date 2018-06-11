@@ -111,7 +111,7 @@ public:
         RetrieveProgressCallback;
     double retrieve(const RetrieveProgressCallback &onProgressUpdate);
     bool canRetrieve() const;
-    bool removeFactory();
+    bool removeDeposit();
 
 #pragma mark - Handle
 public:

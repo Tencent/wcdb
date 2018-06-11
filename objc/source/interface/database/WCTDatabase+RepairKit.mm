@@ -77,9 +77,9 @@ static_assert((int) WCTCorruptionReactionDeposit == (int) WCDB::Database::Corrup
     }
 }
 
-- (BOOL)removeFactory
+- (BOOL)removeDeposit
 {
-    return _database->removeFactory();
+    return _database->removeDeposit();
 }
 
 - (BOOL)canRetrieve
