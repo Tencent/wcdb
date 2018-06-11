@@ -39,7 +39,7 @@
     _database->rollbackTransaction();
 }
 
-- (BOOL)runTransaction:(WCTTransactionBlock)inTransaction
+- (BOOL)runTransaction:(WCDB_NO_ESCAPE WCTTransactionBlock)inTransaction
 {
     return _database->runTransaction([&inTransaction, self](WCDB::Handle *handle) -> bool {
         @autoreleasepool {
@@ -66,7 +66,7 @@
     return _database->rollbackNestedTransaction();
 }
 
-- (BOOL)runNestedTransaction:(WCTTransactionBlock)inTransaction
+- (BOOL)runNestedTransaction:(WCDB_NO_ESCAPE WCTTransactionBlock)inTransaction
 {
     return _database->runNestedTransaction([&inTransaction, self](WCDB::Handle *handle) -> bool {
         @autoreleasepool {
