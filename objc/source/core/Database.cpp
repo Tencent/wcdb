@@ -162,19 +162,16 @@ void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
 #pragma mark - File
 bool Database::removeFiles()
 {
-    if (isBlockaded() && !isOpened()) {
+    bool result = false;
+    close([&result, this]() {
         std::list<std::string> paths = getPaths();
         paths.reverse();
-        if (FileManager::shared()->removeItems(paths)) {
-            return true;
+        result = FileManager::shared()->removeFiles(paths);
+        if (!result) {
+            assignWithSharedThreadedError();
         }
-        assignWithSharedThreadedError();
-    } else {
-        setThreadedError(Error(Error::Code::Misuse, "Removing files on an "
-                                                    "opened database may cause "
-                                                    "undefined results."));
-    }
-    return false;
+    });
+    return result;
 }
 
 std::pair<bool, size_t> Database::getFilesSize()
@@ -192,41 +189,33 @@ std::pair<bool, size_t> Database::getFilesSize()
 
 bool Database::moveFiles(const std::string &directory)
 {
-    if (isBlockaded() && !isOpened()) {
-        FileManager *fileManager = FileManager::shared();
+    bool result = false;
+    close([&result, &directory, this]() {
         std::list<std::string> paths = getPaths();
         paths.reverse();
-        if (fileManager->moveItems(paths, directory)) {
-            return true;
+        result = FileManager::shared()->moveFiles(paths, directory);
+        if (!result) {
+            assignWithSharedThreadedError();
         }
-        assignWithSharedThreadedError();
-    } else {
-        setThreadedError(Error(Error::Code::Misuse,
-                               "Moving files on an opened "
-                               "database may cause undefined results."));
-    }
-    return false;
+    });
+    return result;
 }
 
 bool Database::moveFilesToDirectoryWithExtraFiles(
     const std::string &directory, const std::list<std::string> &extraFiles)
 {
-    if (isBlockaded() && !isOpened()) {
+    bool result = false;
+    close([&result, &directory, &extraFiles, this]() {
         std::list<std::string> paths = extraFiles;
         std::list<std::string> dbPaths = getPaths();
         dbPaths.reverse();
         paths.insert(paths.end(), dbPaths.begin(), dbPaths.end());
-        FileManager *fileManager = FileManager::shared();
-        if (fileManager->moveItems(paths, directory)) {
-            return true;
+        result = FileManager::shared()->moveFiles(paths, directory);
+        if (!result) {
+            assignWithSharedThreadedError();
         }
-        assignWithSharedThreadedError();
-    } else {
-        setThreadedError(Error(Error::Code::Misuse,
-                               "Moving files on an opened "
-                               "database may may cause undefined results."));
-    }
-    return false;
+    });
+    return result;
 }
 
 const std::string &Database::getPath() const
