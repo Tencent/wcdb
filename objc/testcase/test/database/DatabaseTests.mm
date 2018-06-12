@@ -145,7 +145,6 @@
 
 - (void)test_remove_and_recreated
 {
-    //TODO add FSEvent to fix it
     NSString *tableName = NSStringFromSelector(_cmd);
     XCTAssertTrue([_database createTableAndIndexes:tableName withClass:TestCaseObject.class]);
     XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:_database.path]);
@@ -156,6 +155,19 @@
     _database = [[WCTDatabase alloc] initWithPath:_database.path];
     XCTAssertTrue([_database createTableAndIndexes:tableName withClass:TestCaseObject.class]);
     XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:_database.path]);
+}
+
+- (void)test_close
+{
+    NSString *tableName = NSStringFromSelector(_cmd);
+    XCTAssertTrue([_database createTableAndIndexes:tableName withClass:TestCaseObject.class]);
+    XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:_database.path]);
+    XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:[_database.path stringByAppendingString:@"-wal"]]);
+
+    [_database close];
+
+    XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:_database.path]);
+    XCTAssertFalse([[NSFileManager defaultManager] fileExistsAtPath:[_database.path stringByAppendingPathExtension:@"-wal"]]);
 }
 
 @end
