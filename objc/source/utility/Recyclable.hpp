@@ -40,6 +40,13 @@ public:
         retain();
     }
 
+    Recyclable(Recyclable &&other)
+        : m_value(std::move(other.m_value))
+        , m_onRecycled(std::move(other.m_onRecycled))
+        , m_reference(std::move(other.m_reference))
+    {
+    }
+
     Recyclable(const Recyclable &other)
         : m_value(other.m_value)
         , m_onRecycled(other.m_onRecycled)
@@ -55,6 +62,16 @@ public:
         m_value = other.m_value;
         m_onRecycled = other.m_onRecycled;
         m_reference = other.m_reference;
+        return *this;
+    }
+
+    Recyclable &operator=(Recyclable &&other)
+    {
+        other.retain();
+        release();
+        m_value = std::move(other.m_value);
+        m_onRecycled = std::move(other.m_onRecycled);
+        m_reference = std::move(other.m_reference);
         return *this;
     }
 
