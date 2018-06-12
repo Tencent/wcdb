@@ -82,7 +82,8 @@ public:
     bool isInTransaction();
 
     typedef std::function<void(Handle *, int, void *)> CommittedCallback;
-    void setCommittedHook(const CommittedCallback &onCommitted, void *info);
+    void setNotificationWhenCommitted(const CommittedCallback &onCommitted,
+                                      void *info);
 
 protected:
     typedef struct {

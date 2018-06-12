@@ -43,7 +43,7 @@ bool CheckpointConfig::invoke(Handle *handle) const
                                       CheckpointConfig::config().get())));
     });
 
-    handle->setCommittedHook(
+    handle->setNotificationWhenCommitted(
         std::bind(
             &CheckpointConfig::onCommited,
             static_cast<CheckpointConfig *>(CheckpointConfig::config().get()),
@@ -66,6 +66,12 @@ void CheckpointConfig::loopQueue()
 
 void CheckpointConfig::onTimed(const std::string &path, const int &pages) const
 {
+    static std::atomic<bool> s_exit(false);
+    atexit([]() { s_exit.store(true); });
+    if (s_exit.load()) {
+        return;
+    }
+
     std::shared_ptr<Database> database =
         Database::databaseWithExistingPath(path);
     if (database == nullptr || !database->isOpened()) {
