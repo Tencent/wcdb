@@ -32,11 +32,10 @@ CorruptionNotifier *CorruptionNotifier::shared()
     return s_corruptionNotifer;
 }
 
-void CorruptionNotifier::boot()
+CorruptionNotifier::CorruptionNotifier()
 {
-    Notifier::shared()->setCorruptionNotification([](const std::string &path) {
-        CorruptionNotifier::shared()->addPath(path);
-    });
+    Notifier::shared()->setCorruptionNotification(
+        std::bind(&CorruptionNotifier::addPath, this, std::placeholders::_1));
 }
 
 void CorruptionNotifier::addPath(const std::string &path)

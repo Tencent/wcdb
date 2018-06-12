@@ -34,10 +34,6 @@ SQLiteGlobal *SQLiteGlobal::shared()
 
 SQLiteGlobal::SQLiteGlobal()
 {
-}
-
-void SQLiteGlobal::boot()
-{
     sqlite3_config(SQLITE_CONFIG_LOG, SQLiteGlobal::log, nullptr);
     sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
     sqlite3_config(SQLITE_CONFIG_MEMSTATUS, false);
@@ -48,10 +44,10 @@ void SQLiteGlobal::boot()
     vfs->xSetSystemCall(vfs, "open", (void (*)(void)) SQLiteGlobal::vfsOpen);
 }
 
-void SQLiteGlobal::hookVFSDidFileCreated(
-    const std::function<void(const char *)> &didFileCreated)
+void SQLiteGlobal::setNotificationWhenFileCreated(
+    const std::function<void(const char *)> &onFileCreated)
 {
-    m_didFileCreated = didFileCreated;
+    m_onFileCreated = onFileCreated;
 }
 
 int SQLiteGlobal::vfsOpen(const char *zFile, int flags, int mode)
@@ -59,8 +55,8 @@ int SQLiteGlobal::vfsOpen(const char *zFile, int flags, int mode)
     int fd = open(zFile, flags, mode);
     if (fd != -1 && (flags & O_CREAT)) {
         SQLiteGlobal *global = SQLiteGlobal::shared();
-        if (global->m_didFileCreated != nullptr) {
-            global->m_didFileCreated(zFile);
+        if (global->m_onFileCreated != nullptr) {
+            global->m_onFileCreated(zFile);
         }
     }
     return fd;

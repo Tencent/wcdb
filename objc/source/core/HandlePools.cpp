@@ -33,8 +33,8 @@ HandlePools *HandlePools::defaultPools()
 
 HandlePools::HandlePools()
 {
-    SQLiteGlobal::shared()->boot();
-    CorruptionNotifier::shared()->boot();
+    SQLiteGlobal::shared();
+    CorruptionNotifier::shared();
 }
 
 RecyclableHandlePool HandlePools::getPool(const std::string &path,

@@ -19,6 +19,7 @@
  */
 
 #import <WCDB/Interface.h>
+#import <WCDB/Notifier.hpp>
 #import <WCDB/ThreadedErrors.hpp>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTError+Private.h>
@@ -32,7 +33,7 @@
     if (self == [WCTDatabase self]) {
         [WCTTokenizer enroll];
 #if TARGET_OS_IPHONE
-        WCDB::SQLiteGlobal::shared()->hookVFSDidFileCreated([](const char *path) {
+        WCDB::SQLiteGlobal::shared()->setNotificationWhenFileCreated([](const char *path) {
             if (!path) {
                 return;
             }
@@ -56,7 +57,7 @@
                 if (nsError.description.length > 0) {
                     error.message = nsError.description.cppString;
                 } else {
-                    error.message = WCDB::Error::CodeName(WCDB::Error::Code::IOError);
+                    error.message = WCDB::Error::codeName(WCDB::Error::Code::IOError);
                 }
                 error.infos.set("Path", path);
                 error.infos.set("ExtCode", nsError.code);

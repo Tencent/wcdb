@@ -77,7 +77,7 @@ void FileHandle::close()
 ssize_t FileHandle::size()
 {
     WCTInnerAssert(m_fd != -1);
-    return lseek(m_fd, 0, SEEK_END);
+    return (ssize_t) lseek(m_fd, 0, SEEK_END);
 }
 
 ssize_t FileHandle::read(unsigned char *buffer, off_t offset, size_t size)

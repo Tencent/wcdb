@@ -87,11 +87,11 @@ public:
 
 protected:
     typedef struct {
-        CommittedCallback onCommitted;
+        CommittedCallback notification;
         void *info;
         Handle *handle;
-    } CommittedHookInfo;
-    CommittedHookInfo m_committedHookInfo;
+    } CommittedInfo;
+    CommittedInfo m_committedInfo;
 
 #pragma mark - Statement
 public:

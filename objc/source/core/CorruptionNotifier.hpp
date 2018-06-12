@@ -34,6 +34,8 @@ public:
     void boot();
 
 protected:
+    CorruptionNotifier();
+
     std::mutex m_mutex;
     std::condition_variable m_cond;
     std::set<std::string> m_paths;

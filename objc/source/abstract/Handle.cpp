@@ -128,20 +128,22 @@ const char *Handle::getErrorMessage()
 void Handle::setNotificationWhenCommitted(const CommittedCallback &onCommitted,
                                           void *info)
 {
-    m_committedHookInfo.onCommitted = onCommitted;
-    m_committedHookInfo.info = info;
-    m_committedHookInfo.handle = this;
-    if (m_committedHookInfo.onCommitted) {
+    m_committedInfo.notification = onCommitted;
+    if (m_committedInfo.notification) {
+        m_committedInfo.info = info;
+        m_committedInfo.handle = this;
         sqlite3_wal_hook(
             (sqlite3 *) m_handle,
             [](void *p, sqlite3 *, const char *, int pages) -> int {
-                CommittedHookInfo *committedHookInfo = (CommittedHookInfo *) p;
-                committedHookInfo->onCommitted(committedHookInfo->handle, pages,
-                                               committedHookInfo->info);
+                CommittedInfo *committedInfo = (CommittedInfo *) p;
+                committedInfo->notification(committedInfo->handle, pages,
+                                            committedInfo->info);
                 return SQLITE_OK;
             },
-            &m_committedHookInfo);
+            &m_committedInfo);
     } else {
+        m_committedInfo.info = nullptr;
+        m_committedInfo.handle = nullptr;
         sqlite3_wal_hook((sqlite3 *) m_handle, nullptr, nullptr);
     }
 }
