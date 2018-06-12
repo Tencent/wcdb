@@ -31,7 +31,7 @@
 {
     [WCTTokenizer enroll];
 #if TARGET_OS_IPHONE
-    WCDB::SQLiteGlobal::shared()->hookVFSDidFileCreated([](const char *path) {
+    WCDB::SQLiteGlobal::shared()->setNotificationWhenFileCreated([](const char *path) {
         if (!path) {
             return;
         }

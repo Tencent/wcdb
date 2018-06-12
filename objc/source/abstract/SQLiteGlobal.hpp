@@ -31,8 +31,8 @@ class SQLiteGlobal {
 public:
     static SQLiteGlobal *shared();
 
-    void hookVFSDidFileCreated(
-        const std::function<void(const char *)> &didFileCreated);
+    void setNotificationWhenFileCreated(
+        const std::function<void(const char *)> &onFileCreated);
 
 protected:
     SQLiteGlobal();
@@ -42,7 +42,7 @@ protected:
     static int vfsOpen(const char *zFile, int flags, int mode);
     static void log(void *userInfo, int code, const char *message);
 
-    std::function<void(const char *)> m_didFileCreated;
+    std::function<void(const char *)> m_onFileCreated;
 };
 
 } //namespace WCDB
