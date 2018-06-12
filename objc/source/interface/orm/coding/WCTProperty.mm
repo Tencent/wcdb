@@ -188,21 +188,3 @@ WCTPropertyList::operator std::list<WCDB::IndexedColumn>() const
 {
     return std::list<WCDB::IndexedColumn>(begin(), end());
 }
-
-#ifdef DEBUG
-bool WCTPropertyList::debug_checkSameClass(Class expected) const
-{
-    if (empty()) {
-        return true;
-    }
-    if (expected == nil) {
-        expected = front().getColumnBinding().getClass();
-    }
-    for (const auto &property : *this) {
-        if (expected != property.getColumnBinding().getClass()) {
-            return false;
-        }
-    }
-    return true;
-}
-#endif

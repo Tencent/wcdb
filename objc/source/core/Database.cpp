@@ -50,16 +50,18 @@ Database::databaseWithExistingPath(const std::string &path)
     return nullptr;
 }
 
+std::shared_ptr<HandlePool>
+Database::generateHandlePool(const std::string &path)
+{
+    return std::shared_ptr<HandlePool>(
+        new HandlePool(path, Configs::default_()));
+}
+
 std::shared_ptr<Database> Database::databaseWithPath(const std::string &path)
 {
-    static const HandlePools::Generator *s_generator =
-        new HandlePools::Generator(
-            [](const std::string &path) -> std::shared_ptr<HandlePool> {
-                return std::shared_ptr<HandlePool>(
-                    new HandlePool(path, Configs::default_()));
-            });
     std::shared_ptr<Database> database(
-        new Database(HandlePools::defaultPools()->getPool(path, *s_generator)));
+        new Database(HandlePools::defaultPools()->getPool(
+            path, Database::generateHandlePool)));
     if (database && database->isValid()) {
         return database;
     }

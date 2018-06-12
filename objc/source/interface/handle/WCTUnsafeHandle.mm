@@ -345,9 +345,6 @@
     if (!object) {
         return nil;
     }
-#ifdef DEBUG
-    WCTAssert(properties.debug_checkSameClass(cls), "WCTSelect expects all properties with same class.");
-#endif
     int index = 0;
     for (const WCTProperty &property : properties) {
         [self extractValueAtIndex:index

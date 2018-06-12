@@ -222,9 +222,7 @@ bool MigrationHandle::migrateWithRowID(
     const std::shared_ptr<MigrationInfo> &info,
     const Lang::InsertSTMT::Type &onConflict)
 {
-#ifdef DEBUG
     WCTInnerAssert(info != nullptr && isInTransaction());
-#endif
     if (!m_extraHandleStatement1.isPrepared() ||
         m_associatedConflictType != onConflict) {
         if (!Handle::prepare(

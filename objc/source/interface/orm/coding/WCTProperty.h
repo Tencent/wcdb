@@ -77,8 +77,4 @@ public:
     operator std::list<WCDB::ResultColumn>() const;
     operator std::list<WCDB::OrderingTerm>() const;
     operator std::list<WCDB::IndexedColumn>() const;
-
-#ifdef DEBUG
-    bool debug_checkSameClass(Class expected = nil) const;
-#endif
 };

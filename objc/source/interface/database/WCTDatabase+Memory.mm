@@ -39,17 +39,6 @@
                                     usingBlock:^(NSNotification *) {
                                       WCDB::Database::purgeAllDatabases();
                                     }];
-
-#ifdef DEBUG
-    static id s_observer_will_terminate __attribute__((unused)) =
-        [notificationCenter addObserverForName:
-                                UIApplicationWillTerminateNotification
-                                        object:nil
-                                         queue:nil
-                                    usingBlock:^(NSNotification *) {
-                                      WCDB::Database::closeAllDatabases();
-                                    }];
-#endif
 }
 #endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
 

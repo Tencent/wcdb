@@ -40,12 +40,12 @@ class ThreadLocal {
 public:
     ThreadLocal() : m_defaultValue(nullptr)
     {
-        pthread_key_create(&m_key, [](void *value) { delete (T *) value; });
+        pthread_key_create(&m_key, ThreadLocal::destructor);
     }
 
     ThreadLocal(const T &defaultValue) : m_defaultValue(new T(defaultValue))
     {
-        pthread_key_create(&m_key, [](void *value) { delete (T *) value; });
+        pthread_key_create(&m_key, ThreadLocal::destructor);
     }
 
     T *get()
@@ -74,6 +74,8 @@ public:
 protected:
     pthread_key_t m_key;
     T *m_defaultValue;
+
+    static void destructor(void *value) { delete (T *) value; }
 };
 
 } //namespace WCDB

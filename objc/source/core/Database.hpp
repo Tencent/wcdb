@@ -128,6 +128,9 @@ protected:
     void retainThreadedHandle(const RecyclableHandle &recyclableHandle) const;
     void releaseThreadedHandle() const;
 
+    static std::shared_ptr<HandlePool>
+    generateHandlePool(const std::string &path);
+
 #pragma mark - Transaction
 public:
     using TransactionCallback = Handle::TransactionCallback;

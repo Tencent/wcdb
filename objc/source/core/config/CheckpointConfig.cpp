@@ -37,42 +37,46 @@ bool CheckpointConfig::invoke(Handle *handle) const
 {
     static std::once_flag s_once;
     std::call_once(s_once, []() {
-        Dispatch::async("com.Tencent.WCDB.Checkpoint", []() {
-            CheckpointConfig *config = static_cast<CheckpointConfig *>(
-                CheckpointConfig::config().get());
-            if (config) {
-                config->loopQueue();
-            }
-        });
+        Dispatch::async("com.Tencent.WCDB.Checkpoint",
+                        std::bind(&CheckpointConfig::loopQueue,
+                                  static_cast<CheckpointConfig *>(
+                                      CheckpointConfig::config().get())));
     });
 
     handle->setCommittedHook(
-        [](Handle *handle, int pages, void *) {
-            CheckpointConfig *config = static_cast<CheckpointConfig *>(
-                CheckpointConfig::config().get());
-            if (config) {
-                config->reQueue(handle->path, pages);
-            }
-        },
+        std::bind(
+            &CheckpointConfig::onCommited,
+            static_cast<CheckpointConfig *>(CheckpointConfig::config().get()),
+            std::placeholders::_1, std::placeholders::_2,
+            std::placeholders::_3),
         nullptr);
     return true;
 }
 
+void CheckpointConfig::onCommited(Handle *handle, int pages, void *)
+{
+    reQueue(handle->path, pages);
+}
+
 void CheckpointConfig::loopQueue()
 {
-    m_timedQueue.loop([this](const std::string &path, const int &pages) {
-        std::shared_ptr<Database> database =
-            Database::databaseWithExistingPath(path);
-        if (database == nullptr || !database->isOpened()) {
-            return;
-        }
-        bool result = database->execute(m_checkpointPassive);
-        if (result && pages > 1000) {
-            //Passive checkpoint can write WAL data back to database file as much as possible without blocking the db. After this, Truncate checkpoint will write the rest WAL data back to db file and truncate it into zero byte file.
-            //As a result, checkpoint process will not block the database too long.
-            database->execute(m_checkpointTruncate);
-        }
-    });
+    m_timedQueue.loop(std::bind(&CheckpointConfig::onTimed, this,
+                                std::placeholders::_1, std::placeholders::_2));
+}
+
+void CheckpointConfig::onTimed(const std::string &path, const int &pages) const
+{
+    std::shared_ptr<Database> database =
+        Database::databaseWithExistingPath(path);
+    if (database == nullptr || !database->isOpened()) {
+        return;
+    }
+    bool result = database->execute(m_checkpointPassive);
+    if (result && pages > 1000) {
+        //Passive checkpoint can write WAL data back to database file as much as possible without blocking the db. After this, Truncate checkpoint will write the rest WAL data back to db file and truncate it into zero byte file.
+        //As a result, checkpoint process will not block the database too long.
+        database->execute(m_checkpointTruncate);
+    }
 }
 
 void CheckpointConfig::reQueue(const std::string &path, int pages)
