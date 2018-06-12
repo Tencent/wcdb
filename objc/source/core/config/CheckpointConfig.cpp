@@ -67,7 +67,7 @@ void CheckpointConfig::onTimed(const std::string &path, const int &pages) const
 {
     static std::atomic<bool> s_exit(false);
     atexit([]() { s_exit.store(true); });
-    if (!s_exit.load()) {
+    if (s_exit.load()) {
         return;
     }
 
