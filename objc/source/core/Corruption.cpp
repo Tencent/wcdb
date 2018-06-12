@@ -47,10 +47,15 @@ void Corruption::notify()
     if (!m_corrupted.load()) {
         return;
     }
-    std::ostringstream stream;
-    stream << "Reaction : " << m_reaction << ", will handle corruption of "
-           << associatedPath;
-    Notifier::shared()->warning(stream.str());
+    {
+        Error error;
+        error.level = Error::Level::Info;
+        error.setCode(Error::Code::Notice);
+        error.message = "Corruption will be handled.";
+        error.infos.set("Reaction", m_reaction);
+        error.infos.set("Path", associatedPath);
+        Notifier::shared()->notify(error);
+    }
 
     auto database = Database::databaseWithExistingPath(associatedPath);
     WCTInnerAssert(database != nullptr);

@@ -41,6 +41,7 @@ void Notifier::logger(const Error &error)
             break;
         case Error::Level::Warning:
         case Error::Level::Error:
+        case Error::Level::Info:
             std::cout << error.getDescription() << std::endl;
             break;
         case Error::Level::Fatal:
@@ -117,15 +118,6 @@ void Notifier::error(const std::string &message, const char *file, int line)
 void Notifier::warning(const std::string &message, const char *file, int line)
 {
     error(Error::Level::Warning, message, file, line);
-}
-
-void Notifier::warning(const std::string &message)
-{
-    Error error;
-    error.setCode(Error::Code::Warning);
-    error.level = Error::Level::Warning;
-    error.message = message;
-    Notifier::shared()->notify(error);
 }
 
 void Notifier::error(Error::Level level,

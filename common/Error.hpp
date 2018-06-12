@@ -36,7 +36,8 @@ public:
         Debug = 2,
         Warning = 3,
         Error = 4,
-        Fatal = 5,
+        Info = 5,
+        Fatal = 6,
     };
     Level level;
     static constexpr const char *levelName(const Level &level)
@@ -50,6 +51,8 @@ public:
                 return "WARNING";
             case Level::Error:
                 return "ERROR";
+            case Level::Info:
+                return "Info";
             case Level::Fatal:
                 return "FATAL";
         }

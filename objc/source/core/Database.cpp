@@ -191,8 +191,13 @@ bool Database::removeFiles()
 std::pair<bool, size_t> Database::getFilesSize()
 {
     if (!isBlockaded() || isOpened()) {
-        WCTWarning("Getting files size on an opened database may get "
-                   "incorrect results.");
+        Error error;
+        error.setCode(Error::Code::Misuse);
+        error.level = Error::Level::Warning;
+        error.message = "Getting files size on an opened database may get "
+                        "incorrect results.";
+        error.infos.set("Path", getPath());
+        Notifier::shared()->notify(error);
     }
     auto pair = FileManager::shared()->getItemsSize(getPaths());
     if (!pair.first) {

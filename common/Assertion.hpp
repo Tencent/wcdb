@@ -56,7 +56,4 @@
 
 #define WCTInnerFatalError() WCTInnerAssert(false);
 
-#define WCTWarning(message)                                                    \
-    WCDB::Notifier::warning((message), __FILE__, __LINE__)
-
 #endif /* Assertion_hpp */

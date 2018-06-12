@@ -254,8 +254,9 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
         Error error;
         error.setCode(Error::Code::Exceed);
         error.message =
-            "The concurrency of database exceeds the maxximum allowed.";
+            "The concurrency of database exceeds the maximum allowed.";
         error.infos.set("MaxConcurrency", HandlePool::maxConcurrency());
+        Notifier::shared()->notify(error);
         setThreadedError(std::move(error));
         return nullptr;
     }

@@ -28,7 +28,8 @@ typedef NS_ENUM(NSUInteger, WCTErrorLevel) {
     WCTErrorLevelDebug = 2,
     WCTErrorLevelWarning = 3,
     WCTErrorLevelError = 4,
-    WCTErrorLevelFatal = 5,
+    WCTErrorLevelInfo = 5,
+    WCTErrorLevelFatal = 6,
 };
 
 typedef int32_t WCTTag;

@@ -53,7 +53,6 @@ public:
     static void fatal(const std::string &message, const char *file, int line);
     static void error(const std::string &message, const char *file, int line);
     static void warning(const std::string &message, const char *file, int line);
-    static void warning(const std::string &message);
 
 protected:
     static void error(Error::Level level,

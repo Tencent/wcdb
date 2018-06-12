@@ -560,8 +560,13 @@
             }
         }
         for (const std::string &columnName : columnNames) {
-            NSString *warning = [NSString stringWithFormat:@"Skip column named [%s] for table [%@]", columnName.c_str(), tableName];
-            WCTWarning(warning.cppString);
+            WCDB::Error error;
+            error.setCode(WCDB::Error::Code::Notice);
+            error.level = WCDB::Error::Level::Info;
+            error.message = "Skip column";
+            error.infos.set("Table", tableName.cppString);
+            error.infos.set("Column", columnName);
+            WCDB::Notifier::shared()->notify(error);
         }
         //Add new column
         for (const WCTColumnBinding *columnBinding : columnBindingsToAdded) {
