@@ -130,7 +130,8 @@ const char *Handle::getErrorMessage()
     return sqlite3_errmsg((sqlite3 *) m_handle);
 }
 
-void Handle::setCommittedHook(const CommittedCallback &onCommitted, void *info)
+void Handle::setNotificationWhenCommitted(const CommittedCallback &onCommitted,
+                                          void *info)
 {
     m_committedHookInfo.onCommitted = onCommitted;
     m_committedHookInfo.info = info;

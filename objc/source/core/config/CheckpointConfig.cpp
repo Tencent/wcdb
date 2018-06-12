@@ -42,7 +42,7 @@ bool CheckpointConfig::invoke(Handle *handle) const
                                       CheckpointConfig::config().get())));
     });
 
-    handle->setCommittedHook(
+    handle->setNotificationWhenCommitted(
         std::bind(
             &CheckpointConfig::onCommited,
             static_cast<CheckpointConfig *>(CheckpointConfig::config().get()),
