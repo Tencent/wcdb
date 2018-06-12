@@ -18,17 +18,28 @@
  * limitations under the License.
  */
 
-#include <WCDB/Attachment.hpp>
-#include <WCDB/Database.hpp>
-#include <WCDB/HandlePool.hpp>
+#ifndef HandlePoolRelated_hpp
+#define HandlePoolRelated_hpp
+
+#include <WCDB/Error.hpp>
 
 namespace WCDB {
 
-Attachment::Attachment(HandlePool *handlePool_)
-    : HandlePoolRelated(handlePool_)
-    , factory(m_pool->path)
-    , corruption(m_pool->path)
-{
-}
+class HandlePool;
+
+class HandlePoolRelated {
+public:
+    HandlePoolRelated(HandlePool *pool);
+    const Error &getThreadedError();
+
+protected:
+    void setThreadedError(const Error &error);
+    void setThreadedError(Error &&error);
+    void assignWithSharedThreadedError();
+
+    HandlePool *m_pool;
+};
 
 } //namespace WCDB
+
+#endif /* HandlePoolRelated_hpp */

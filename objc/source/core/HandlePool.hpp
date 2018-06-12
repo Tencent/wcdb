@@ -102,8 +102,8 @@ protected:
     static int hardwareConcurrency();
     static int maxConcurrency();
 
-#pragma mark - HandlePoolHolder
-    friend class HandlePoolHolder;
+#pragma mark - HandlePoolRelated
+    friend class HandlePoolRelated;
 
 #pragma mark - Attachment
 public:

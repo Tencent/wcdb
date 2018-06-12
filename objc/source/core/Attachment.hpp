@@ -23,16 +23,14 @@
 
 #include <WCDB/Corruption.hpp>
 #include <WCDB/Factory.hpp>
+#include <WCDB/HandlePoolRelated.hpp>
 
 namespace WCDB {
 
-class HandlePool;
-
-class Attachment {
+class Attachment : public HandlePoolRelated {
 public:
-    Attachment(const HandlePool *handlePool);
+    Attachment(HandlePool *handlePool);
 
-    const HandlePool *handlePool;
     Repair::Factory factory;
     Corruption corruption;
 };

@@ -72,54 +72,54 @@ Database::Database(const RecyclableHandlePool &pool) : HandlePoolHolder(pool)
 
 bool Database::isValid() const
 {
-    return getHandlePool() != nullptr;
+    return m_pool != nullptr;
 }
 
 #pragma mark - Basic
 
 void Database::setTag(const Tag &tag)
 {
-    getHandlePool()->setTag(tag);
+    m_pool->setTag(tag);
 }
 
 Database::Tag Database::getTag() const
 {
-    return getHandlePool()->getTag();
+    return m_pool->getTag();
 }
 
 bool Database::canOpen()
 {
-    return getHandlePool()->canFlowOut();
+    return m_pool->canFlowOut();
 }
 
 void Database::close(const ClosedCallback &onClosed)
 {
-    getHandlePool()->drain(onClosed);
+    m_pool->drain(onClosed);
 }
 
 void Database::blockade()
 {
-    getHandlePool()->blockade();
+    m_pool->blockade();
 }
 
 bool Database::blockadeUntilDone(const BlockadeCallback &onBlockaded)
 {
-    return getHandlePool()->blockadeUntilDone(onBlockaded);
+    return m_pool->blockadeUntilDone(onBlockaded);
 }
 
 bool Database::isBlockaded()
 {
-    return getHandlePool()->isBlockaded();
+    return m_pool->isBlockaded();
 }
 
 void Database::unblockade()
 {
-    getHandlePool()->unblockade();
+    m_pool->unblockade();
 }
 
 bool Database::isOpened() const
 {
-    return !getHandlePool()->isDrained();
+    return !m_pool->isDrained();
 }
 
 void Database::closeAllDatabases()
@@ -130,7 +130,7 @@ void Database::closeAllDatabases()
 #pragma mark - Memory
 void Database::purge()
 {
-    getHandlePool()->purgeFreeHandles();
+    m_pool->purgeFreeHandles();
 }
 
 void Database::purgeAllDatabases()
@@ -141,22 +141,22 @@ void Database::purgeAllDatabases()
 #pragma mark - Config
 void Database::setConfig(const std::shared_ptr<Config> &config)
 {
-    getHandlePool()->setConfig(config);
+    m_pool->setConfig(config);
 }
 
 void Database::removeConfig(const std::string &name)
 {
-    getHandlePool()->removeConfig(name);
+    m_pool->removeConfig(name);
 }
 
 void Database::setCipher(const Data &cipher, int pageSize)
 {
-    getHandlePool()->setConfig(CipherConfig::configWithKey(cipher, pageSize));
+    m_pool->setConfig(CipherConfig::configWithKey(cipher, pageSize));
 }
 
 void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
 {
-    getHandlePool()->setConfig(TokenizeConfig::configWithName(tokenizeNames));
+    m_pool->setConfig(TokenizeConfig::configWithName(tokenizeNames));
 }
 
 #pragma mark - File
@@ -220,7 +220,7 @@ bool Database::moveFilesToDirectoryWithExtraFiles(
 
 const std::string &Database::getPath() const
 {
-    return getHandlePool()->path;
+    return m_pool->path;
 }
 
 std::string Database::getSHMPath() const
@@ -254,13 +254,13 @@ std::list<std::string> Database::getPaths() const
 #pragma mark - Repair Kit
 void Database::setCorruptionReaction(CorruptionReaction reaction)
 {
-    getHandlePool()->attachment.corruption.setReaction(reaction);
+    m_pool->attachment.corruption.setReaction(reaction);
 }
 
 void Database::setExtraReactionWhenCorrupted(
     const CorruptionExtraReaction &extraReaction)
 {
-    getHandlePool()->attachment.corruption.setExtraReaction(extraReaction);
+    m_pool->attachment.corruption.setExtraReaction(extraReaction);
 }
 
 std::string Database::getFirstMaterialPath() const
@@ -275,18 +275,17 @@ std::string Database::getLastMaterialPath() const
 
 const std::string &Database::getFactoryDirectory() const
 {
-    return getHandlePool()->attachment.factory.directory;
+    return m_pool->attachment.factory.directory;
 }
 
 void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
 {
-    getHandlePool()->attachment.factory.filter(tableShouldBeBackedup);
+    m_pool->attachment.factory.filter(tableShouldBeBackedup);
 }
 
 bool Database::backup(int maxWalFrame)
 {
-    Repair::FactoryBackup factoryBackup =
-        getHandlePool()->attachment.factory.backup();
+    Repair::FactoryBackup factoryBackup = m_pool->attachment.factory.backup();
     if (factoryBackup.work(maxWalFrame)) {
         return true;
     }
@@ -299,7 +298,7 @@ bool Database::deposit()
     bool result = false;
     close([&result, this]() {
         Repair::FactoryDepositor factoryDepositor =
-            getHandlePool()->attachment.factory.depositor();
+            m_pool->attachment.factory.depositor();
         result = factoryDepositor.work();
         if (!result) {
             setThreadedError(factoryDepositor.getError());
@@ -313,7 +312,7 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
     double score = 0;
     close([&score, &onProgressUpdate, this]() {
         Repair::FactoryRetriever factoryRetriever =
-            getHandlePool()->attachment.factory.retriever();
+            m_pool->attachment.factory.retriever();
         std::shared_ptr<Repair::Assembler> assembler(
             new Repair::SQLiteAssembler);
         factoryRetriever.setAssembler(assembler);
@@ -326,7 +325,7 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
 
 bool Database::canRetrieve() const
 {
-    return getHandlePool()->attachment.factory.canRetrieve();
+    return m_pool->attachment.factory.canRetrieve();
 }
 
 bool Database::removeDeposit()
@@ -350,7 +349,7 @@ RecyclableHandle Database::getHandle()
 {
     RecyclableHandle recyclableHandle = flowOutThreadedHandle();
     if (recyclableHandle == nullptr) {
-        recyclableHandle = getHandlePool()->flowOut();
+        recyclableHandle = m_pool->flowOut();
     }
     return recyclableHandle;
 }
@@ -358,7 +357,7 @@ RecyclableHandle Database::getHandle()
 RecyclableHandle Database::flowOutThreadedHandle()
 {
     ThreadedHandles *threadedHandle = Database::threadedHandles().get();
-    const auto iter = threadedHandle->find(getHandlePool());
+    const auto iter = threadedHandle->find(m_pool);
     if (iter != threadedHandle->end()) {
         return iter->second.first;
     }
@@ -409,12 +408,12 @@ void Database::retainThreadedHandle(
 {
     std::map<const HandlePool *, std::pair<RecyclableHandle, int>>
         *threadHandles = Database::threadedHandles().get();
-    auto iter = threadHandles->find(getHandlePool());
+    auto iter = threadHandles->find(m_pool);
     WCTInnerAssert(iter == threadHandles->end() ||
                    recyclableHandle.getHandle() ==
                        iter->second.first.getHandle());
     if (iter == threadHandles->end()) {
-        threadHandles->insert({getHandlePool(), {recyclableHandle, 1}});
+        threadHandles->insert({m_pool, {recyclableHandle, 1}});
     } else {
         ++iter->second.second;
     }
@@ -424,7 +423,7 @@ void Database::releaseThreadedHandle() const
 {
     std::map<const HandlePool *, std::pair<RecyclableHandle, int>>
         *threadHandles = Database::threadedHandles().get();
-    auto iter = threadHandles->find(getHandlePool());
+    auto iter = threadHandles->find(m_pool);
     WCTInnerAssert(iter != threadHandles->end());
     if (--iter->second.second == 0) {
         threadHandles->erase(iter);
@@ -528,7 +527,7 @@ bool Database::runNestedTransaction(const TransactionCallback &transaction)
 bool Database::isInThreadedTransaction() const
 {
     ThreadedHandles *threadedHandle = Database::threadedHandles().get();
-    return threadedHandle->find(getHandlePool()) != threadedHandle->end();
+    return threadedHandle->find(m_pool) != threadedHandle->end();
 }
 
 } //namespace WCDB
