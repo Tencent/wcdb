@@ -101,6 +101,9 @@ bool MigrationDatabase::stepMigration(bool &done)
     WCTAssert(!isInThreadedTransaction(),
               "Migration can't run in a transaction.");
     done = false;
+    if (interruptIfDeposited()) {
+        return false;
+    }
     MigrationSetting *setting = m_migrationPool->getMigrationSetting();
     std::shared_ptr<MigrationInfo> info;
     bool migratedEve = false;
@@ -203,6 +206,9 @@ bool MigrationDatabase::stepMigration(bool &done)
 
 void MigrationDatabase::asyncMigration(const SteppedCallback &callback)
 {
+    if (interruptIfDeposited()) {
+        return;
+    }
     std::string name("com.Tencent.WCDB.Migration.");
     name.append(std::to_string(getTag()));
     std::string path = getPath();
@@ -246,6 +252,20 @@ void MigrationDatabase::asyncMigration(double interval, int retryTimes)
 MigrationSetting *MigrationDatabase::getMigrationSetting()
 {
     return m_migrationPool->getMigrationSetting();
+}
+
+bool MigrationDatabase::interruptIfDeposited()
+{
+    if (canRetrieve()) {
+        Error error;
+        error.setCode(Error::Code::Interrupt);
+        error.message = "Migration stepping should be run after retrieved.";
+        error.infos.set("Path", getPath());
+        Notifier::shared()->notify(error);
+        setThreadedError(std::move(error));
+        return true;
+    }
+    return false;
 }
 
 } //namespace WCDB

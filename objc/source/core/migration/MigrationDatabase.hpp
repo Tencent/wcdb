@@ -29,7 +29,6 @@
 
 namespace WCDB {
 
-//TODO disable migration while materials exist
 class MigrationDatabase : public Database {
 public:
 #pragma mark - Initializer
@@ -68,6 +67,8 @@ public:
 
 protected:
     MigrationHandlePool *m_migrationPool;
+
+    bool interruptIfDeposited();
 };
 
 } //namespace WCDB
