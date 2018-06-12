@@ -49,7 +49,7 @@ public:
 protected:
     HandlePools();
 
-    void flowBackHandlePool(const std::string &path);
+    void flowBackHandlePool(const std::shared_ptr<HandlePool> &handlePool);
 
     std::shared_ptr<HandlePool> generate(const std::string &path);
 

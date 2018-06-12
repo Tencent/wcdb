@@ -31,7 +31,6 @@ namespace Repair {
 class FactoryBackup : public FactoryRelated, public ErrorProne {
 public:
     FactoryBackup(Factory &factory);
-    using Filter = Backup::Filter;
 
     bool work(int maxWalFrame = std::numeric_limits<int>::max());
 

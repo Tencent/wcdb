@@ -103,7 +103,7 @@ public:
     std::string getLastMaterialPath() const;
     const std::string &getFactoryDirectory() const;
 
-    typedef Repair::FactoryBackup::Filter BackupFilter;
+    typedef Repair::Factory::Filter BackupFilter;
     void filterBackup(const BackupFilter &tableShouldBeBackedup);
     bool backup(int maxWalFrame = std::numeric_limits<int>::max());
     bool deposit();
@@ -133,7 +133,7 @@ protected:
 
     static std::shared_ptr<HandlePool>
     generateHandlePool(const std::string &path);
-    static bool handleWillGenerate(const HandlePool &handlePool);
+    static bool initializeHandlePool(const HandlePool &handlePool);
 
 #pragma mark - Transaction
 public:

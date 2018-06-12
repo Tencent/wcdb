@@ -18,36 +18,36 @@
  * limitations under the License.
  */
 
-#ifndef FactoryMeta_hpp
-#define FactoryMeta_hpp
+#ifndef FactoryRenewer_hpp
+#define FactoryRenewer_hpp
 
+#include <WCDB/Assembler.hpp>
+#include <WCDB/ErrorProne.hpp>
 #include <WCDB/FactoryRelated.hpp>
-#include <future>
-#include <mutex>
 
 namespace WCDB {
 
 namespace Repair {
 
-//Thread safe
-class FactoryMeta : public FactoryRelated {
+class FactoryRenewer : public FactoryRelated, public ErrorProne {
 public:
-    FactoryMeta(Factory &factory);
-    FactoryMeta(FactoryMeta &&factoryMaterials);
+    FactoryRenewer(Factory &factory);
+    const std::string database;
+    const std::string directory;
 
-    Error work();
+    bool prepare();
+    bool work();
 
-    const std::map<std::string, int64_t> &getSequences();
+#pragma mark - Assembler
+public:
+    void setAssembler(const std::shared_ptr<Assembler> &assembler);
 
 protected:
-    Error doWork();
-    std::mutex m_mutex;
-    std::future<Error> m_done;
-    std::map<std::string, int64_t> m_sequences;
+    std::shared_ptr<Assembler> m_assembler;
 };
 
 } //namespace Repair
 
 } //namespace WCDB
 
-#endif /* FactoryMeta_hpp */
+#endif /* FactoryRenewer_hpp */

@@ -61,6 +61,8 @@ std::shared_ptr<HandlePool> MigrationDatabase::generateHandlePool(
             static_cast<MigrationHandlePool *>(pool.get());
         migrationHandlePool->setConfig(MigrationConfig::configWithSetting(
             migrationHandlePool->getMigrationSetting()));
+        migrationHandlePool->setInitializeNotification(
+            Database::initializeHandlePool);
     }
     return pool;
 }

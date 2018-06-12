@@ -54,6 +54,8 @@ public:
                        const std::string &sql,
                        int64_t sequence) override;
     bool assembleCell(const Cell &cell) override;
+    bool
+    assembleSequences(const std::map<std::string, int64_t> &sequences) override;
 
     const Error &getError() const override;
 

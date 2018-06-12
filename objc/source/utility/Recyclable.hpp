@@ -30,7 +30,7 @@ namespace WCDB {
 template <typename T>
 class Recyclable {
 public:
-    typedef std::function<void(void)> OnRecycled;
+    typedef std::function<void(const T &)> OnRecycled;
 
     Recyclable(const T &value, const Recyclable::OnRecycled &onRecycled)
         : m_value(value)
@@ -118,7 +118,7 @@ protected:
                 delete m_reference;
                 m_reference = nullptr;
                 if (m_onRecycled) {
-                    m_onRecycled();
+                    m_onRecycled(m_value);
                     m_onRecycled = nullptr;
                 }
             }

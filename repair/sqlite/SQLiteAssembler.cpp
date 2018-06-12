@@ -29,7 +29,7 @@ namespace WCDB {
 
 namespace Repair {
 
-#pragma mark - Initialze
+#pragma mark - Initialize
 SQLiteAssembler::SQLiteAssembler()
     : Assembler(), m_transaction(false), m_onTableAssembled(nullptr)
 {
@@ -119,6 +119,47 @@ bool SQLiteAssembler::assembleCell(const Cell &cell)
     }
     sqlite3_reset((sqlite3_stmt *) m_stmt);
     return true;
+}
+
+bool SQLiteAssembler::assembleSequences(
+    const std::map<std::string, int64_t> &sequences)
+{
+    if (!lazyBeginTransaction()) {
+        return false;
+    }
+    bool commit = false;
+    do {
+        if (!execute("CREATE TABLE IF NOT EXISTS WCDBAssemblerTemp(i INTEGER "
+                     "PRIMARY KEY AUTOINCREMENT")) {
+            break;
+        }
+        if (!prepare("INSERT INTO sqlite_sequence(name, seq) VALUES(?1, ?2)")) {
+            break;
+        }
+        bool failed = false;
+        for (const auto &element : sequences) {
+            if (element.second <= 0) {
+                continue;
+            }
+            sqlite3_bind_text((sqlite3_stmt *) m_stmt, 1, element.first.c_str(),
+                              -1, SQLITE_STATIC);
+            sqlite3_bind_int64((sqlite3_stmt *) m_stmt, 2, element.second);
+            if (!step()) {
+                failed = true;
+                break;
+            }
+            sqlite3_reset((sqlite3_stmt *) m_stmt);
+        }
+        if (failed) {
+            break;
+        }
+        if (!execute("DROP TABLE IF EXISTS WCDBAssemblerTemp")) {
+            break;
+        }
+        commit = true;
+    } while (false);
+    finalize();
+    return lazyCommitOrRollbackTransaction(commit);
 }
 
 const Error &SQLiteAssembler::getError() const

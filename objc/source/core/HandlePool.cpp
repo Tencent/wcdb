@@ -37,6 +37,8 @@ HandlePool::HandlePool(const std::string &thePath,
     , m_handles(HandlePool::hardwareConcurrency())
     , m_aliveHandleCount(0)
     , attachment(this)
+    , m_inited(false)
+    , m_onInitializing(nullptr)
 {
 }
 
@@ -45,6 +47,32 @@ HandlePool::~HandlePool()
     //wait until all handles back.
     blockade();
     unblockade();
+}
+
+void HandlePool::setInitializeNotification(
+    const WCDB::HandlePool::InitializeNotificationCallback &onInitializing)
+{
+    LockGuard lockGuard(m_sharedLock);
+    m_onInitializing = onInitializing;
+}
+
+bool HandlePool::initialize()
+{
+    if (!m_inited.load()) {
+        WCTInnerAssert(m_aliveHandleCount.load() == 0);
+        blockade();
+        if (!FileManager::shared()->createDirectoryWithIntermediateDirectories(
+                Path::getBaseName(path))) {
+            assignWithSharedThreadedError();
+            return false;
+        }
+        if (m_onInitializing && !m_onInitializing(*this)) {
+            return false;
+        }
+        m_inited.store(true);
+        unblockade();
+    }
+    return true;
 }
 
 #pragma mark - Basic
@@ -94,6 +122,9 @@ void HandlePool::blockade()
 
 bool HandlePool::blockadeUntilDone(const BlockadeCallback &onBlockaded)
 {
+    if (!initialize()) {
+        return false;
+    }
     LockGuard lockGuard(m_sharedLock);
     std::shared_ptr<ConfiguredHandle> configuredHandle =
         flowOutConfiguredHandle();
@@ -141,13 +172,6 @@ void HandlePool::purgeFreeHandles()
     m_aliveHandleCount -= size;
 }
 
-void HandlePool::setNotificationWhenFirstHandleWillGenerate(
-    const FirstHandleWillGenerateCallback &firstHandleWillGenerate)
-{
-    LockGuard lockGuard(m_sharedLock);
-    m_firstHandleWillGenerate = firstHandleWillGenerate;
-}
-
 bool HandlePool::isDrained()
 {
     return m_aliveHandleCount == 0;
@@ -155,6 +179,9 @@ bool HandlePool::isDrained()
 
 bool HandlePool::canFlowOut()
 {
+    if (!initialize()) {
+        return false;
+    }
     SharedLockGuard lockGuard(m_sharedLock);
     std::shared_ptr<ConfiguredHandle> configuredHandle =
         flowOutConfiguredHandle();
@@ -170,18 +197,21 @@ bool HandlePool::canFlowOut()
 
 RecyclableHandle HandlePool::flowOut()
 {
-    m_sharedLock.lockShared();
+    if (!initialize()) {
+        return nullptr;
+    }
+    SharedLockGuard lockGuard(m_sharedLock);
     std::shared_ptr<ConfiguredHandle> configuredHandle =
         flowOutConfiguredHandle();
     if (!configuredHandle) {
         configuredHandle = generateConfiguredHandle();
     }
     if (configuredHandle) {
+        m_sharedLock.lockShared();
         return RecyclableHandle(
             configuredHandle,
-            std::bind(&HandlePool::flowBack, this, configuredHandle));
+            std::bind(&HandlePool::flowBack, this, std::placeholders::_1));
     }
-    m_sharedLock.unlockShared();
     return nullptr;
 }
 
@@ -218,22 +248,16 @@ std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
 
 std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
 {
+    WCTInnerAssert(m_inited.load());
     WCTInnerAssert(m_sharedLock.level() > SharedLock::Level::None);
-    if (m_aliveHandleCount >= HandlePool::maxConcurrency()) {
-        setThreadedError(
-            Error(Error::Code::Exceed,
-                  "The concurrency of database exceeds the maxximum allowed: " +
-                      std::to_string(HandlePool::maxConcurrency())));
+    if (m_aliveHandleCount.load() >= HandlePool::maxConcurrency()) {
+        Error error;
+        error.setCode(Error::Code::Exceed);
+        error.message =
+            "The concurrency of database exceeds the maxximum allowed.";
+        error.infos.set("MaxConcurrency", HandlePool::maxConcurrency());
+        setThreadedError(std::move(error));
         return nullptr;
-    } else if (m_aliveHandleCount == 0) {
-        if (!FileManager::shared()->createDirectoryWithIntermediateDirectories(
-                Path::getBaseName(path))) {
-            assignWithSharedThreadedError();
-            return nullptr;
-        }
-        if (m_firstHandleWillGenerate) {
-            m_firstHandleWillGenerate(*this);
-        }
     }
 
     std::shared_ptr<Handle> handle = generateHandle();

@@ -47,7 +47,7 @@ bool FactoryRetriever::Backup::work()
 
 FactoryRetriever::FactoryRetriever(Factory &factory)
     : FactoryRelated(factory)
-    , databaseFileName(Path::getFileName(factory.database))
+    , databaseFileName(factory.getDatabaseName())
     , database(
           Path::addComponent(factory.getRestoreDirectory(), databaseFileName))
     , m_score(0)

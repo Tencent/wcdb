@@ -56,13 +56,12 @@ Database::generateHandlePool(const std::string &path)
     std::shared_ptr<HandlePool> handlePool(
         new HandlePool(path, Configs::default_()));
     if (handlePool) {
-        handlePool->setNotificationWhenFirstHandleWillGenerate(
-            Database::handleWillGenerate);
+        handlePool->setInitializeNotification(Database::initializeHandlePool);
     }
     return handlePool;
 }
 
-bool Database::handleWillGenerate(const HandlePool &handlePool)
+bool Database::initializeHandlePool(const HandlePool &handlePool)
 {
     std::shared_ptr<Database> database =
         Database::databaseWithExistingPath(handlePool.path);
@@ -300,11 +299,11 @@ void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
 
 bool Database::backup(int maxWalFrame)
 {
-    Repair::FactoryBackup factoryBackup = m_pool->attachment.factory.backup();
-    if (factoryBackup.work(maxWalFrame)) {
+    Repair::FactoryBackup backup = m_pool->attachment.factory.backup();
+    if (backup.work(maxWalFrame)) {
         return true;
     }
-    setThreadedError(factoryBackup.getError());
+    setThreadedError(backup.getError());
     return false;
 }
 
@@ -312,12 +311,25 @@ bool Database::deposit()
 {
     bool result = false;
     close([&result, this]() {
-        Repair::FactoryDepositor factoryDepositor =
-            m_pool->attachment.factory.depositor();
-        result = factoryDepositor.work();
-        if (!result) {
-            setThreadedError(factoryDepositor.getError());
+        std::shared_ptr<Repair::Assembler> assembler(
+            new Repair::SQLiteAssembler);
+        Repair::FactoryRenewer renewer = m_pool->attachment.factory.renewer();
+        renewer.setAssembler(assembler);
+        if (!renewer.prepare()) {
+            setThreadedError(renewer.getError());
+            return;
         }
+        Repair::FactoryDepositor depositor =
+            m_pool->attachment.factory.depositor();
+        if (!depositor.work()) {
+            setThreadedError(depositor.getError());
+            return;
+        }
+        if (!renewer.work()) {
+            setThreadedError(renewer.getError());
+            return;
+        }
+        result = true;
     });
     return result;
 }
@@ -326,14 +338,14 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
 {
     double score = 0;
     close([&score, &onProgressUpdate, this]() {
-        Repair::FactoryRetriever factoryRetriever =
+        Repair::FactoryRetriever retriever =
             m_pool->attachment.factory.retriever();
         std::shared_ptr<Repair::Assembler> assembler(
             new Repair::SQLiteAssembler);
-        factoryRetriever.setAssembler(assembler);
-        factoryRetriever.setProgressCallback(onProgressUpdate);
-        score = factoryRetriever.work();
-        setThreadedError(factoryRetriever.getCriticalError());
+        retriever.setAssembler(assembler);
+        retriever.setProgressCallback(onProgressUpdate);
+        score = retriever.work();
+        setThreadedError(retriever.getCriticalError());
     });
     return score;
 }
@@ -354,6 +366,13 @@ bool Database::removeDeposit()
 
 bool Database::retrieveRenewed()
 {
+    WCTInnerAssert(isBlockaded());
+    WCTInnerAssert(!isOpened());
+    Repair::FactoryRenewer renewer = m_pool->attachment.factory.renewer();
+    if (renewer.work()) {
+        return true;
+    }
+    setThreadedError(renewer.getError());
     return false;
 }
 

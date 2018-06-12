@@ -101,20 +101,22 @@ RecyclableHandlePool HandlePools::getExistingPool(
     }
     ++iter->second.second;
     const std::string path = iter->second.first->path;
-    return RecyclableHandlePool(
-        iter->second.first,
-        std::bind(&HandlePools::flowBackHandlePool, this, path));
+    return RecyclableHandlePool(iter->second.first,
+                                std::bind(&HandlePools::flowBackHandlePool,
+                                          this, std::placeholders::_1));
 }
 
-void HandlePools::flowBackHandlePool(const std::string &path)
+void HandlePools::flowBackHandlePool(
+    const std::shared_ptr<HandlePool> &handlePool)
 {
     std::lock_guard<std::mutex> lockGuard(m_mutex);
-    const auto &iter = m_pools.find(path);
+    const auto &iter = m_pools.find(handlePool->path);
     if (iter == m_pools.end()) {
         //drop it
         return;
     }
-    if (--iter->second.second == 0) {
+    if (iter->second.first.get() == handlePool.get() &&
+        --iter->second.second == 0) {
         m_pools.erase(iter);
     }
 }

@@ -23,7 +23,7 @@
 
 #include <WCDB/FactoryBackup.hpp>
 #include <WCDB/FactoryDepositor.hpp>
-#include <WCDB/FactoryMeta.hpp>
+#include <WCDB/FactoryRenewer.hpp>
 #include <WCDB/FactoryRetriever.hpp>
 #include <future>
 #include <list>
@@ -35,7 +35,6 @@ namespace Repair {
 
 class Assembler;
 
-//Thread safe
 class Factory {
 #pragma mark - Factory
 public:
@@ -45,6 +44,8 @@ public:
     const std::string directory;
 
     std::string getRestoreDirectory() const;
+    std::string getRenewDirectory() const;
+    std::string getDatabaseName() const;
     std::pair<bool, std::list<std::string>> getWorkshopDirectories() const;
     std::pair<bool, std::string> getUniqueWorkshopDiectory() const;
     bool canRetrieve() const;
@@ -55,7 +56,7 @@ public:
     FactoryDepositor depositor();
     FactoryRetriever retriever();
     FactoryBackup backup();
-    FactoryMeta meta;
+    FactoryRenewer renewer();
 
     typedef Backup::Filter Filter;
     void filter(const Filter &tableShouldBeBackedUp);

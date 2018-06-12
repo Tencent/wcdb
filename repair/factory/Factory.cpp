@@ -33,9 +33,7 @@ namespace Repair {
 
 #pragma mark - Factory
 Factory::Factory(const std::string &database_)
-    : database(database_)
-    , directory(Path::addExtention(database_, ".factory"))
-    , meta(*this)
+    : database(database_), directory(Path::addExtention(database_, ".factory"))
 {
 }
 
@@ -43,11 +41,13 @@ std::pair<bool, std::list<std::string>> Factory::getWorkshopDirectories() const
 {
     std::list<std::string> workshopDirectories;
     std::string restoreDirectory = getRestoreDirectory();
+    std::string renewDirectory = getRenewDirectory();
     if (FileManager::shared()->enumerateDirectory(
             directory,
-            [&workshopDirectories, &restoreDirectory](
+            [&workshopDirectories, &restoreDirectory, &renewDirectory](
                 const std::string &path, bool isDirectory) -> bool {
-                if (isDirectory && path != restoreDirectory) {
+                if (isDirectory && path != restoreDirectory &&
+                    path != renewDirectory) {
                     workshopDirectories.push_back(path);
                 }
                 return true;
@@ -89,7 +89,7 @@ std::pair<bool, std::string> Factory::getUniqueWorkshopDiectory() const
 bool Factory::canRetrieve() const
 {
     bool result = false;
-    std::string databaseName = Path::getFileName(database);
+    std::string databaseName = getDatabaseName();
     FileManager::shared()->enumerateDirectory(
         directory,
         [&result, &databaseName](const std::string &subpath,
@@ -136,6 +136,11 @@ FactoryBackup Factory::backup()
     return FactoryBackup(*this);
 }
 
+FactoryRenewer Factory::renewer()
+{
+    return FactoryRenewer(*this);
+}
+
 #pragma mark - Helper
 std::string Factory::firstMaterialPathForDatabase(const std::string &database)
 {
@@ -150,6 +155,16 @@ std::string Factory::lastMaterialPathForDatabase(const std::string &database)
 std::string Factory::getRestoreDirectory() const
 {
     return Path::addComponent(directory, "restore");
+}
+
+std::string Factory::getRenewDirectory() const
+{
+    return Path::addComponent(directory, "renew");
+}
+
+std::string Factory::getDatabaseName() const
+{
+    return Path::getFileName(database);
 }
 
 std::list<std::string>
