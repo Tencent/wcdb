@@ -53,8 +53,21 @@ Database::databaseWithExistingPath(const std::string &path)
 std::shared_ptr<HandlePool>
 Database::generateHandlePool(const std::string &path)
 {
-    return std::shared_ptr<HandlePool>(
+    std::shared_ptr<HandlePool> handlePool(
         new HandlePool(path, Configs::default_()));
+    if (handlePool) {
+        handlePool->setNotificationWhenFirstHandleWillGenerate(
+            Database::handleWillGenerate);
+    }
+    return handlePool;
+}
+
+bool Database::handleWillGenerate(const HandlePool &handlePool)
+{
+    std::shared_ptr<Database> database =
+        Database::databaseWithExistingPath(handlePool.path);
+    WCTInnerAssert(database != nullptr);
+    return database->retrieveRenewed();
 }
 
 std::shared_ptr<Database> Database::databaseWithPath(const std::string &path)
@@ -336,6 +349,11 @@ bool Database::removeDeposit()
         return true;
     }
     assignWithSharedThreadedError();
+    return false;
+}
+
+bool Database::retrieveRenewed()
+{
     return false;
 }
 

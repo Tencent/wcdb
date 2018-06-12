@@ -141,6 +141,13 @@ void HandlePool::purgeFreeHandles()
     m_aliveHandleCount -= size;
 }
 
+void HandlePool::setNotificationWhenFirstHandleWillGenerate(
+    const FirstHandleWillGenerateCallback &firstHandleWillGenerate)
+{
+    LockGuard lockGuard(m_sharedLock);
+    m_firstHandleWillGenerate = firstHandleWillGenerate;
+}
+
 bool HandlePool::isDrained()
 {
     return m_aliveHandleCount == 0;
@@ -218,23 +225,32 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
                   "The concurrency of database exceeds the maxximum allowed: " +
                       std::to_string(HandlePool::maxConcurrency())));
         return nullptr;
+    } else if (m_aliveHandleCount == 0) {
+        if (!FileManager::shared()->createDirectoryWithIntermediateDirectories(
+                Path::getBaseName(path))) {
+            assignWithSharedThreadedError();
+            return nullptr;
+        }
+        if (m_firstHandleWillGenerate) {
+            m_firstHandleWillGenerate(*this);
+        }
     }
-    std::shared_ptr<ConfiguredHandle> configuredHandle =
-        ConfiguredHandle::configuredHandle(generateHandle());
-    if (!configuredHandle) {
+
+    std::shared_ptr<Handle> handle = generateHandle();
+    if (!handle) {
         setThreadedError(Error(Error::Code::NoMemory));
         return nullptr;
     }
-    Handle *handle = configuredHandle->getHandle();
-
-    if (m_aliveHandleCount == 0) {
-        FileManager::shared()->createDirectoryWithIntermediateDirectories(
-            Path::getBaseName(path));
-    }
     handle->setTag(getTag());
-
     if (!handle->open()) {
         setThreadedError(handle->getError());
+        return nullptr;
+    }
+
+    std::shared_ptr<ConfiguredHandle> configuredHandle =
+        ConfiguredHandle::configuredHandle(handle);
+    if (!configuredHandle) {
+        setThreadedError(Error(Error::Code::NoMemory));
         return nullptr;
     }
     std::shared_ptr<const Configs> configs = m_configs;

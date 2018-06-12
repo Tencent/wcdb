@@ -113,6 +113,9 @@ public:
     bool canRetrieve() const;
     bool removeDeposit();
 
+protected:
+    bool retrieveRenewed();
+
 #pragma mark - Handle
 public:
     RecyclableHandle getHandle();
@@ -130,6 +133,7 @@ protected:
 
     static std::shared_ptr<HandlePool>
     generateHandlePool(const std::string &path);
+    static bool handleWillGenerate(const HandlePool &handlePool);
 
 #pragma mark - Transaction
 public:

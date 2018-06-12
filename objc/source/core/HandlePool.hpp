@@ -85,6 +85,11 @@ public:
 
     void purgeFreeHandles();
 
+    typedef std::function<bool(const HandlePool &)>
+        FirstHandleWillGenerateCallback;
+    void setNotificationWhenFirstHandleWillGenerate(
+        const FirstHandleWillGenerateCallback &firstHandleWillGenerate);
+
 protected:
     std::shared_ptr<ConfiguredHandle> generateConfiguredHandle();
     std::shared_ptr<ConfiguredHandle> flowOutConfiguredHandle();
@@ -100,6 +105,7 @@ protected:
     std::atomic<int> m_aliveHandleCount;
     static int hardwareConcurrency();
     static int maxConcurrency();
+    FirstHandleWillGenerateCallback m_firstHandleWillGenerate;
 
 #pragma mark - HandlePoolRelated
     friend class HandlePoolRelated;
