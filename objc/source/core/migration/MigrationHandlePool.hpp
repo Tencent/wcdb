@@ -40,7 +40,6 @@ protected:
     MigrationHandlePool(const std::string &path,
                         const std::shared_ptr<const Configs> &configs,
                         const std::list<std::shared_ptr<MigrationInfo>> &infos);
-    void initialize();
 
 #ifdef DEBUG
 public:

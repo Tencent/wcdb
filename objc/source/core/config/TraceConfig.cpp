@@ -23,63 +23,30 @@
 
 namespace WCDB {
 
-std::shared_ptr<Config> TraceConfig::config()
+TraceConfig::TraceConfig()
+    : Config(), m_performanceTrace(nullptr), m_sqlTrace(nullptr)
 {
-    static std::shared_ptr<Config> *s_config =
-        new std::shared_ptr<Config>(new TraceConfig());
-    return *s_config;
 }
 
 void TraceConfig::setPerformanceTrace(
     const Handle::PerformanceTraceCallback &trace)
 {
-    if (trace) {
-        std::shared_ptr<Handle::PerformanceTraceCallback> newTrace(
-            new Handle::PerformanceTraceCallback(trace));
-        if (newTrace) {
-            m_performanceTrace = newTrace;
-        }
-    } else {
-        m_performanceTrace = nullptr;
-    }
+    LockGuard lockGuard(m_lock);
+    m_performanceTrace = trace;
 }
 
 void TraceConfig::setSQLTrace(const Handle::SQLTraceCallback &trace)
 {
-    if (trace) {
-        std::shared_ptr<Handle::SQLTraceCallback> newTrace(
-            new Handle::SQLTraceCallback(trace));
-        if (newTrace) {
-            m_sqlTrace = newTrace;
-        }
-    } else {
-        m_sqlTrace = nullptr;
-    }
+    LockGuard lockGuard(m_lock);
+    m_sqlTrace = trace;
 }
 
 bool TraceConfig::invoke(Handle *handle) const
 {
-    {
-        std::shared_ptr<Handle::PerformanceTraceCallback> trace =
-            m_performanceTrace;
-        if (trace) {
-            handle->tracePerformance(*trace.get());
-        }
-    }
-    {
-        std::shared_ptr<Handle::SQLTraceCallback> trace = m_sqlTrace;
-        if (trace) {
-            handle->traceSQL(*trace.get());
-        }
-    }
+    SharedLockGuard lockGuard(m_lock);
+    handle->tracePerformance(m_performanceTrace);
+    handle->traceSQL(m_sqlTrace);
     return true;
-}
-
-TraceConfig::TraceConfig()
-    : Config("trace", TraceConfig::order)
-    , m_performanceTrace(nullptr)
-    , m_sqlTrace(nullptr)
-{
 }
 
 } //namespace WCDB

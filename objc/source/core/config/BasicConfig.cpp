@@ -24,15 +24,8 @@
 
 namespace WCDB {
 
-std::shared_ptr<Config> BasicConfig::config()
-{
-    static std::shared_ptr<Config> *s_config =
-        new std::shared_ptr<Config>(new BasicConfig());
-    return *s_config;
-}
-
 BasicConfig::BasicConfig()
-    : Config("basic", BasicConfig::order)
+    : Config()
     , m_getJournalMode(StatementPragma().pragma(Pragma::journalMode()))
     , m_getLockingMode(StatementPragma().pragma(Pragma::lockingMode()))
     , m_setFullFSync(StatementPragma().pragma(Pragma::fullfsync()).to(true))

@@ -51,19 +51,19 @@ typedef BOOL (^WCTConfigBlock)(WCTHandle *_Nonnull);
  
  [database setConfig:^BOOL(std::shared_ptr<WCDB::Handle> &handle, WCDB::Error& error) {
  return handle->execute(WCDB::StatementPragma().pragma(WCDB::Pragma::SecureDelete, YES));
- } forName:@"demo" withOrder:1];
+ } forName:@"demo" withPriority:1];
  
  @param config config
  @param name The Identifier for this config
- @param order The smaller number is called first
+ @param priority The smaller number is called first
  */
 - (void)setConfig:(nullable WCTConfigBlock)config
           forName:(NSString *)name
-        withOrder:(int)order;
+     withPriority:(int)priority;
 
 /**
- @brief This interface is equivalent to [database setConfig:config forName:name withOrder:INT_MAX];
- @see setConfig:forName:withOrder:
+ @brief This interface is equivalent to [database setConfig:config forName:name withPriority:INT_MAX];
+ @see setConfig:forName:withPriority:
  @param config config
  @param name The Identifier for this config
  */

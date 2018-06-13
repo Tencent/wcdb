@@ -30,18 +30,10 @@ namespace WCDB {
 
 class MigrationConfig : public Config {
 public:
-    static std::shared_ptr<Config> configWithSetting(MigrationSetting *setting);
-    static constexpr const int order = INT_MIN + 4;
-
-    static const std::string name();
-
+    MigrationConfig(MigrationSetting *setting);
     bool invoke(Handle *handle) const override;
 
 protected:
-    MigrationConfig(MigrationSetting *setting);
-    MigrationConfig(const MigrationConfig &) = delete;
-    MigrationConfig &operator=(const MigrationConfig &) = delete;
-
     MigrationSetting *m_setting;
 
     bool doAttachSchema(Handle *handle) const;

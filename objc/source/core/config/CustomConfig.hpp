@@ -31,17 +31,12 @@ class CustomConfig : public Config {
 public:
     using Invocation = std::function<bool(Handle *)>;
 
-    static std::shared_ptr<Config> config(const Invocation &invocation,
-                                          const std::string &name,
-                                          int order = 0);
-
-    CustomConfig(const Invocation &invocation,
-                 const std::string &name,
-                 int order = 0);
+    CustomConfig(const Invocation &invocation);
 
     bool invoke(Handle *handle) const override;
 
-    Invocation invocation;
+protected:
+    Invocation m_invocation;
 };
 
 } //namespace WCDB

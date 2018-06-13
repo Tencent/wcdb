@@ -22,14 +22,11 @@
 
 namespace WCDB {
 
-std::shared_ptr<Config>
-TokenizeConfig::configWithName(const std::list<std::string> &names)
-{
-    return std::shared_ptr<Config>(new TokenizeConfig(names));
-}
-
 TokenizeConfig::TokenizeConfig(const std::list<std::string> &names)
-    : Config("tokenize", TokenizeConfig::order), m_names(names)
+    : Config()
+    , m_names(names)
+    , m_fts3Tokenizer(StatementSelect().select(Expression::function(
+          "fts3_tokenizer", {BindParameter(1), BindParameter(2)})))
 {
 }
 
@@ -39,10 +36,7 @@ bool TokenizeConfig::invoke(Handle *handle) const
         const Data &data = FTS::Modules::shared()->getAddress(name);
 
         //Setup Tokenize
-        const StatementSelect s_fts3Tokenizer =
-            StatementSelect().select(Expression::function(
-                "fts3_tokenizer", {BindParameter(1), BindParameter(2)}));
-        if (handle->prepare(s_fts3Tokenizer)) {
+        if (handle->prepare(m_fts3Tokenizer)) {
             handle->bindText(name.c_str(), 1);
             handle->bindBLOB(data, 2);
             bool result = handle->step();

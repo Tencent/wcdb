@@ -107,19 +107,19 @@
       return step == 1;
     }
                 forName:@"step1"
-              withOrder:10];
+           withPriority:10];
     [database setConfig:^BOOL(WCTHandle *handle) {
       ++step;
       return step == 2;
     }
                 forName:@"step2"
-              withOrder:10];
+           withPriority:10];
     [database setConfig:^BOOL(WCTHandle *handle) {
       ++step;
       return step == 3;
     }
                 forName:@"step3"
-              withOrder:20];
+           withPriority:20];
     XCTAssertTrue([database canOpen]);
     XCTAssertEqual(step, 3);
 }
@@ -150,18 +150,18 @@
       return step == 2;
     }
                 forName:@"step1"
-              withOrder:20];
+           withPriority:20];
     [database setConfig:^BOOL(WCTHandle *handle) {
       return NO;
     }
                 forName:@"step2"
-              withOrder:30];
+           withPriority:30];
     [database setConfig:^BOOL(WCTHandle *handle) {
       ++step;
       return step == 1;
     }
                 forName:@"step2"
-              withOrder:10];
+           withPriority:10];
     XCTAssertTrue([database canOpen]);
     XCTAssertEqual(step, 2);
 }

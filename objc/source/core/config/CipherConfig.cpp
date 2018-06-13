@@ -23,21 +23,8 @@
 
 namespace WCDB {
 
-std::shared_ptr<Config> CipherConfig::configWithKey(const Data &cipher,
-                                                    int pageSize)
-{
-    std::shared_ptr<Config> config(new CipherConfig(cipher, pageSize));
-    if (config && static_cast<CipherConfig *>(config.get())->getKey().size() ==
-                      cipher.size()) {
-        return config;
-    }
-    return nullptr;
-}
-
 CipherConfig::CipherConfig(const Data &cipher, int pageSize)
-    : Config("cipher", CipherConfig::order)
-    , m_key(cipher.copy())
-    , m_pageSize(pageSize)
+    : Config(), m_key(cipher.copy()), m_pageSize(pageSize)
 {
 }
 

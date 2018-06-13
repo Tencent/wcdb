@@ -18,30 +18,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/BasicConfig.hpp>
-#include <WCDB/CheckpointConfig.hpp>
-#include <WCDB/CipherConfig.hpp>
 #include <WCDB/MigrationConfig.hpp>
-#include <WCDB/TokenizeConfig.hpp>
-#include <WCDB/TraceConfig.hpp>
 
 namespace WCDB {
-
-static_assert((int) MigrationConfig::order > (int) TraceConfig::order, "");
-static_assert((int) MigrationConfig::order > (int) BasicConfig::order, "");
-static_assert((int) MigrationConfig::order > (int) CipherConfig::order, "");
-static_assert((int) MigrationConfig::order > (int) TokenizeConfig::order, "");
-
-std::shared_ptr<Config>
-MigrationConfig::configWithSetting(MigrationSetting *setting)
-{
-    return std::shared_ptr<Config>(new MigrationConfig(setting));
-}
-
-const std::string MigrationConfig::name()
-{
-    return "migration";
-}
 
 bool MigrationConfig::invoke(Handle *handle) const
 {
@@ -152,8 +131,7 @@ bool MigrationConfig::doCreateView(WCDB::Handle *handle,
 }
 
 MigrationConfig::MigrationConfig(MigrationSetting *setting)
-    : Config(MigrationConfig::name(), MigrationConfig::order)
-    , m_setting(setting)
+    : Config(), m_setting(setting)
 {
 }
 

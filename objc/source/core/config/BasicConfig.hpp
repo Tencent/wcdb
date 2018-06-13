@@ -29,17 +29,10 @@ namespace WCDB {
 
 class BasicConfig : public Config {
 public:
-    static std::shared_ptr<Config> config();
-
-    static constexpr const int order = INT_MIN + 2;
-
+    BasicConfig();
     bool invoke(Handle *handle) const override;
 
 protected:
-    BasicConfig();
-    BasicConfig(const BasicConfig &) = delete;
-    BasicConfig &operator=(const BasicConfig &) = delete;
-
     const StatementPragma m_getJournalMode;
     const StatementPragma m_getLockingMode;
     const StatementPragma m_setSynchronousNormal;

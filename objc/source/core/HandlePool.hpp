@@ -69,7 +69,11 @@ protected:
 
 #pragma mark - Config
 public:
-    void setConfig(const std::shared_ptr<Config> &config);
+    void setConfig(const std::shared_ptr<Config> &config,
+                   const std::string &name,
+                   int priority);
+    void setConfig(const std::shared_ptr<Config> &config,
+                   const std::string &name);
     void removeConfig(const std::string &name);
 
 protected:

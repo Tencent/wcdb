@@ -18,27 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef TokenizeConfig_hpp
-#define TokenizeConfig_hpp
-
-#include <WCDB/Config.hpp>
-
-#pragma GCC visibility push(hidden)
+#include <WCDB/MigrationConfigs.hpp>
 
 namespace WCDB {
 
-class TokenizeConfig : public Config {
-public:
-    TokenizeConfig(const std::list<std::string> &names);
-    bool invoke(Handle *handle) const override;
-
-protected:
-    const StatementSelect m_fts3Tokenizer;
-    const std::list<std::string> m_names;
-};
-
 } //namespace WCDB
-
-#pragma GCC visibility pop
-
-#endif /* TokenizeConfig_hpp */

@@ -30,12 +30,7 @@ namespace WCDB {
 
 class Config {
 public:
-    Config(const std::string &name, int order); //Small numbers in front
-
     virtual bool invoke(Handle *handle) const = 0;
-
-    const std::string name;
-    const int order;
 };
 
 } //namespace WCDB
