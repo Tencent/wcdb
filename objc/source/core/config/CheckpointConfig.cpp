@@ -43,17 +43,14 @@ bool CheckpointConfig::invoke(Handle *handle) const
                                       CheckpointConfig::config().get())));
     });
 
-    handle->setNotificationWhenCommitted(
-        std::bind(
-            &CheckpointConfig::onCommited,
-            static_cast<CheckpointConfig *>(CheckpointConfig::config().get()),
-            std::placeholders::_1, std::placeholders::_2,
-            std::placeholders::_3),
-        nullptr);
+    handle->setNotificationWhenCommitted(std::bind(
+        &CheckpointConfig::onCommited,
+        static_cast<CheckpointConfig *>(CheckpointConfig::config().get()),
+        std::placeholders::_1, std::placeholders::_2));
     return true;
 }
 
-void CheckpointConfig::onCommited(Handle *handle, int pages, void *)
+void CheckpointConfig::onCommited(Handle *handle, int pages)
 {
     reQueue(handle->path, pages);
 }

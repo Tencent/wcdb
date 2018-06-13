@@ -47,7 +47,7 @@ protected:
     void reQueue(const std::string &path, int pages);
     void blockedStopQueue();
 
-    void onCommited(Handle *handle, int pages, void *);
+    void onCommited(Handle *handle, int pages);
     void onTimed(const std::string &path, const int &pages) const;
 
     const StatementPragma m_checkpointPassive;
