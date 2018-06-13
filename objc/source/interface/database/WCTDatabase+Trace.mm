@@ -56,7 +56,7 @@
             trace(tag, array, (NSUInteger) cost);
         };
     }
-    static_cast<WCDB::TraceConfig *>(WCDB::Configs::trace().get())->setPerformanceTrace(callback);
+    static_cast<WCDB::TraceConfig *>(WCDB::TraceConfig::shared().get())->setPerformanceTrace(callback);
 }
 
 + (void)globalTraceSQL:(WCTSQLTraceBlock)trace
@@ -67,7 +67,7 @@
             trace([NSString stringWithCppString:sql]);
         };
     }
-    static_cast<WCDB::TraceConfig *>(WCDB::Configs::trace().get())->setSQLTrace(callback);
+    static_cast<WCDB::TraceConfig *>(WCDB::TraceConfig::shared().get())->setSQLTrace(callback);
 }
 
 @end

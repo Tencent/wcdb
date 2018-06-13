@@ -24,7 +24,7 @@
 namespace WCDB {
 
 CipherConfig::CipherConfig(const Data &cipher, int pageSize)
-    : Config(), m_key(cipher.copy()), m_pageSize(pageSize)
+    : Config(CipherConfig::name), m_key(cipher.copy()), m_pageSize(pageSize)
 {
 }
 
@@ -33,7 +33,7 @@ const Data &CipherConfig::getKey() const
     return m_key;
 }
 
-bool CipherConfig::invoke(Handle *handle) const
+bool CipherConfig::invoke(Handle *handle)
 {
     return handle->setCipherKey(m_key) &&
            handle->execute(StatementPragma()

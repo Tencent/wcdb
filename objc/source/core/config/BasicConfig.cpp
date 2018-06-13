@@ -24,8 +24,15 @@
 
 namespace WCDB {
 
+const std::shared_ptr<Config> &BasicConfig::shared()
+{
+    static const std::shared_ptr<Config> *s_shared =
+        new std::shared_ptr<Config>(new BasicConfig);
+    return *s_shared;
+}
+
 BasicConfig::BasicConfig()
-    : Config()
+    : Config(BasicConfig::name)
     , m_getJournalMode(StatementPragma().pragma(Pragma::journalMode()))
     , m_getLockingMode(StatementPragma().pragma(Pragma::lockingMode()))
     , m_setFullFSync(StatementPragma().pragma(Pragma::fullfsync()).to(true))
@@ -38,7 +45,7 @@ BasicConfig::BasicConfig()
 {
 }
 
-bool BasicConfig::invoke(Handle *handle) const
+bool BasicConfig::invoke(Handle *handle)
 {
     do {
         if (handle->isReadonly()) {

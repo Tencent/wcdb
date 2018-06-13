@@ -30,8 +30,12 @@ namespace WCDB {
 
 class TraceConfig : public Config {
 public:
+    static const std::shared_ptr<Config> &shared();
+
     TraceConfig();
-    bool invoke(Handle *handle) const override;
+    bool invoke(Handle *handle) override;
+
+    static constexpr const char *name = "WCDBTrace";
 
     void setPerformanceTrace(const Handle::PerformanceTraceCallback &trace);
     void setSQLTrace(const Handle::SQLTraceCallback &trace);

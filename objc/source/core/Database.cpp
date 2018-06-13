@@ -153,17 +153,9 @@ void Database::purgeAllDatabases()
 }
 
 #pragma mark - Config
-void Database::setConfig(const std::shared_ptr<Config> &config,
-                         const std::string &name,
-                         int priority)
+void Database::setConfig(const std::shared_ptr<Config> &config, int priority)
 {
-    m_pool->setConfig(config, name, priority);
-}
-
-void Database::setConfig(const std::shared_ptr<Config> &config,
-                         const std::string &name)
-{
-    m_pool->setConfig(config, name);
+    m_pool->setConfig(config, priority);
 }
 
 void Database::removeConfig(const std::string &name)
@@ -174,15 +166,15 @@ void Database::removeConfig(const std::string &name)
 void Database::setCipher(const Data &cipher, int pageSize)
 {
     m_pool->setConfig(
-        std::shared_ptr<Config>(new CipherConfig(cipher, pageSize)), "cipher",
-        Configs::Priority::Cipher);
+        std::shared_ptr<Config>(new CipherConfig(cipher, pageSize)),
+        Configs::Priority::Highest);
 }
 
 void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
 {
     m_pool->setConfig(
-        std::shared_ptr<Config>(new TokenizeConfig(tokenizeNames)), "cipher",
-        Configs::Priority::Tokenize);
+        std::shared_ptr<Config>(new TokenizeConfig(tokenizeNames)),
+        Configs::Priority::Higher);
 }
 
 #pragma mark - File
@@ -289,10 +281,10 @@ void Database::setCorruptionReaction(CorruptionReaction newReaction)
     CorruptionReaction oldReaction = corruption.getReaction();
     if (oldReaction != CorruptionReaction::Deposit &&
         newReaction == CorruptionReaction::Deposit) {
-        setConfig(Configs::backup(), "backup", Configs::Priority::Backup);
+        setConfig(BackupConfig::shared(), Configs::Priority::Low);
     } else if (oldReaction == CorruptionReaction::Deposit &&
                newReaction != CorruptionReaction::Deposit) {
-        removeConfig("backup");
+        removeConfig(BackupConfig::name);
     }
     corruption.setReaction(newReaction);
 }

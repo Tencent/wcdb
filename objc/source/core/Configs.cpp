@@ -19,50 +19,36 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/BackupConfig.hpp>
 #include <WCDB/BasicConfig.hpp>
 #include <WCDB/CheckpointConfig.hpp>
-#include <WCDB/CipherConfig.hpp>
 #include <WCDB/Configs.hpp>
-#include <WCDB/TokenizeConfig.hpp>
 #include <WCDB/TraceConfig.hpp>
 
 namespace WCDB {
 
 #pragma mark - Configs
-std::shared_ptr<const Configs> Configs::default_()
+std::shared_ptr<Configs> Configs::default_()
 {
-    static std::shared_ptr<const Configs> *s_configs =
-        new std::shared_ptr<const Configs>(new Configs({
-            Element(Configs::trace(), "trace", Priority::Trace),
-            Element(Configs::basic(), "basic", Priority::Basic),
-            Element(Configs::checkpoint(), "checkpoint", Priority::Checkpoint),
+    static std::shared_ptr<Configs> *s_configs =
+        new std::shared_ptr<Configs>(new Configs({
+            Element(TraceConfig::shared(), Priority::Highest),
+            Element(BasicConfig::shared(), Priority::Higher),
+            Element(CheckpointConfig::shared(), Priority::Low),
         }));
     return *s_configs;
 }
 
-std::shared_ptr<const Configs>
+std::shared_ptr<Configs>
 Configs::configsBySettingConfig(const std::shared_ptr<Config> &config,
-                                const std::string &name,
                                 int priority) const
 {
     WCTInnerAssert(config != nullptr);
     std::shared_ptr<Configs> configs(new Configs(m_elements));
-    configs->setElement(Element(config, name, priority));
+    configs->setElement(Element(config, priority));
     return configs;
 }
 
-std::shared_ptr<const Configs>
-Configs::configsBySettingConfig(const std::shared_ptr<Config> &config,
-                                const std::string &name) const
-{
-    WCTInnerAssert(config != nullptr);
-    std::shared_ptr<Configs> configs(new Configs(m_elements));
-    configs->setElement(Element(config, name, 0));
-    return configs;
-}
-
-std::shared_ptr<const Configs>
+std::shared_ptr<Configs>
 Configs::configsByRemovingConfig(const std::string &name) const
 {
     std::shared_ptr<Configs> configs(new Configs(m_elements));
@@ -70,7 +56,7 @@ Configs::configsByRemovingConfig(const std::string &name) const
     return configs;
 }
 
-bool Configs::invoke(Handle *handle) const
+bool Configs::invoke(Handle *handle)
 {
     for (const auto &element : m_elements) {
         if (!element.config->invoke(handle)) {
@@ -80,16 +66,14 @@ bool Configs::invoke(Handle *handle) const
     return true;
 }
 
-bool Configs::equal(const std::shared_ptr<const Configs> &configs) const
+bool Configs::equal(const std::shared_ptr<Configs> &configs) const
 {
     return this == configs.get();
 }
 
 #pragma mark - Element
-Configs::Element::Element(const std::shared_ptr<Config> &config_,
-                          const std::string &name_,
-                          int priority_)
-    : config(config_), name(name_), priority(priority_)
+Configs::Element::Element(const std::shared_ptr<Config> &config_, int priority_)
+    : config(config_), priority(priority_)
 {
 }
 
@@ -104,7 +88,7 @@ void Configs::setElement(const Element &element)
 {
     std::list<Element>::iterator iter;
     for (iter = m_elements.begin(); iter != m_elements.end(); ++iter) {
-        if (iter->name == element.name) {
+        if (iter->config->name == element.config->name) {
             m_elements.erase(iter);
             break;
         }
@@ -120,40 +104,11 @@ void Configs::setElement(const Element &element)
 void Configs::removeElement(const std::string &name)
 {
     for (auto iter = m_elements.begin(); iter != m_elements.end(); ++iter) {
-        if (iter->name == name) {
+        if (iter->config->name == name) {
             m_elements.erase(iter);
             return;
         }
     }
-}
-
-#pragma mark - Config
-std::shared_ptr<Config> Configs::basic()
-{
-    static const std::shared_ptr<Config> *s_basic =
-        new std::shared_ptr<Config>(new BasicConfig);
-    return *s_basic;
-}
-
-std::shared_ptr<Config> Configs::trace()
-{
-    static const std::shared_ptr<Config> *s_trace =
-        new std::shared_ptr<Config>(new TraceConfig);
-    return *s_trace;
-}
-
-std::shared_ptr<Config> Configs::checkpoint()
-{
-    static const std::shared_ptr<Config> *s_checkpoint =
-        new std::shared_ptr<Config>(new CheckpointConfig);
-    return *s_checkpoint;
-}
-
-std::shared_ptr<Config> Configs::backup()
-{
-    static const std::shared_ptr<Config> *s_backup =
-        new std::shared_ptr<Config>(new BackupConfig);
-    return *s_backup;
 }
 
 } //namespace WCDB

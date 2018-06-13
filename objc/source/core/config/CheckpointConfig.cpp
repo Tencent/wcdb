@@ -26,53 +26,53 @@
 
 namespace WCDB {
 
-bool CheckpointConfig::invoke(Handle *handle) const
+const std::shared_ptr<Config> &CheckpointConfig::shared()
 {
-    handle->setNotificationWhenCommitted([](Handle *handle, int pages) {
-        Shared::shared()->reQueue(handle->path, pages);
-    });
-    return true;
+    static const std::shared_ptr<Config> *s_shared =
+        new std::shared_ptr<Config>(new CheckpointConfig);
+    return *s_shared;
 }
 
-#pragma mark - Shared
-CheckpointConfig::Shared *CheckpointConfig::Shared::shared()
-{
-    static CheckpointConfig::Shared *s_shared = new CheckpointConfig::Shared;
-    return s_shared;
-}
-
-CheckpointConfig::Shared::Shared()
-    : m_timedQueue(2)
+CheckpointConfig::CheckpointConfig()
+    : Config(CheckpointConfig::name)
+    , m_timedQueue(2)
     , m_checkpointTruncate(
           StatementPragma().pragma(Pragma::walCheckpoint()).to("TRUNCATE"))
     , m_checkpointPassive(
           StatementPragma().pragma(Pragma::walCheckpoint()).to("PASSIVE"))
 {
     Dispatch::async("com.Tencent.WCDB.Checkpoint",
-                    std::bind(&Shared::loop, this));
+                    std::bind(&CheckpointConfig::loop, this));
 }
 
-CheckpointConfig::Shared::~Shared()
+CheckpointConfig::~CheckpointConfig()
 {
     m_timedQueue.stop();
     m_timedQueue.waitUntilDone();
 }
 
-void CheckpointConfig::Shared::reQueue(const std::string &path, int pages)
+bool CheckpointConfig::invoke(Handle *handle)
+{
+    handle->setNotificationWhenCommitted(
+        std::bind(&CheckpointConfig::onCommitted, this, std::placeholders::_1,
+                  std::placeholders::_2));
+    return true;
+}
+
+void CheckpointConfig::onCommitted(Handle *handle, int pages)
 {
     if (pages > 100) {
-        m_timedQueue.reQueue(path, pages);
+        m_timedQueue.reQueue(handle->path, pages);
     }
 }
 
-void CheckpointConfig::Shared::loop()
+void CheckpointConfig::loop()
 {
-    m_timedQueue.loop(std::bind(&Shared::onTimed, this, std::placeholders::_1,
-                                std::placeholders::_2));
+    m_timedQueue.loop(std::bind(&CheckpointConfig::onTimed, this,
+                                std::placeholders::_1, std::placeholders::_2));
 }
 
-void CheckpointConfig::Shared::onTimed(const std::string &path,
-                                       const int &pages) const
+void CheckpointConfig::onTimed(const std::string &path, const int &pages) const
 {
     static std::atomic<bool> s_exit(false);
     atexit([]() { s_exit.store(true); });

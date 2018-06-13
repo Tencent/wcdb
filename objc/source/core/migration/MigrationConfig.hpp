@@ -31,7 +31,9 @@ namespace WCDB {
 class MigrationConfig : public Config {
 public:
     MigrationConfig(MigrationSetting *setting);
-    bool invoke(Handle *handle) const override;
+    bool invoke(Handle *handle) override;
+
+    static constexpr const char *name = "WCDBMigration";
 
 protected:
     MigrationSetting *m_setting;

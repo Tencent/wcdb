@@ -27,7 +27,12 @@ namespace WCDB {
 
 class BackupConfig : public Config {
 public:
-    bool invoke(Handle *handle) const override;
+    static const std::shared_ptr<Config> &shared();
+
+    BackupConfig();
+    bool invoke(Handle *handle) override;
+
+    static constexpr const char *name = "WCDBBackup";
 };
 
 } //namespace WCDB

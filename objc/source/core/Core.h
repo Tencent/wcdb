@@ -23,6 +23,7 @@
 
 #include <WCDB/Abstract.h>
 
+#include <WCDB/BackupConfig.hpp>
 #include <WCDB/BasicConfig.hpp>
 #include <WCDB/CheckpointConfig.hpp>
 #include <WCDB/CipherConfig.hpp>

@@ -18,23 +18,12 @@
  * limitations under the License.
  */
 
-#ifndef MigrationConfigs_hpp
-#define MigrationConfigs_hpp
-
-#include <WCDB/Configs.hpp>
+#include <WCDB/Config.hpp>
 
 namespace WCDB {
 
-class MigrationConfigs : public Configs {
-#pragma mark - Config
-public:
-    static constexpr const char *name = "migration";
-
-    enum Priority {
-        Migration = Configs::Priority::End,
-    };
-};
+Config::Config(const std::string &name_) : name(name_)
+{
+}
 
 } //namespace WCDB
-
-#endif /* MigrationConfigs_hpp */

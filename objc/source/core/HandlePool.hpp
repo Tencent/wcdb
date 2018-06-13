@@ -43,7 +43,7 @@ public:
     HandlePool &operator=(const HandlePool &) = delete;
 
     HandlePool(const std::string &path,
-               const std::shared_ptr<const Configs> &configs);
+               const std::shared_ptr<Configs> &configs);
 
     virtual ~HandlePool();
 
@@ -70,14 +70,11 @@ protected:
 #pragma mark - Config
 public:
     void setConfig(const std::shared_ptr<Config> &config,
-                   const std::string &name,
-                   int priority);
-    void setConfig(const std::shared_ptr<Config> &config,
-                   const std::string &name);
+                   int priority = Configs::Priority::Default);
     void removeConfig(const std::string &name);
 
 protected:
-    std::shared_ptr<const Configs> m_configs;
+    std::shared_ptr<Configs> m_configs;
 
 #pragma mark - Handle
 public:

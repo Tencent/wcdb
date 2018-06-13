@@ -24,7 +24,18 @@
 
 namespace WCDB {
 
-bool BackupConfig::invoke(Handle *handle) const
+const std::shared_ptr<Config> &BackupConfig::shared()
+{
+    static const std::shared_ptr<Config> *s_shared =
+        new std::shared_ptr<Config>(new BackupConfig);
+    return *s_shared;
+}
+
+BackupConfig::BackupConfig() : Config(BackupConfig::name)
+{
+}
+
+bool BackupConfig::invoke(Handle *handle)
 {
     handle->setNotificationWhenCheckpoint(
         [](Handle *handle, int frame) -> bool {
