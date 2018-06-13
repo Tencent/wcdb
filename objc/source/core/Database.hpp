@@ -72,7 +72,11 @@ public:
 
 #pragma mark - Config
 public:
-    void setConfig(const std::shared_ptr<Config> &config);
+    void setConfig(const std::shared_ptr<Config> &config,
+                   const std::string &name,
+                   int priority);
+    void setConfig(const std::shared_ptr<Config> &config,
+                   const std::string &name);
     void removeConfig(const std::string &name);
     void setCipher(const NoCopyData &cipher, int pageSize = 4096);
     void setTokenizes(const std::list<std::string> &tokenizeNames);

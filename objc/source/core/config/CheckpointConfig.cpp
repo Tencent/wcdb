@@ -25,42 +25,53 @@
 
 namespace WCDB {
 
-std::shared_ptr<Config> CheckpointConfig::config()
-{
-    static std::shared_ptr<Config> *s_config =
-        new std::shared_ptr<Config>(new CheckpointConfig());
-    return *s_config;
-}
-
 bool CheckpointConfig::invoke(Handle *handle) const
 {
-    static std::once_flag s_once;
-    std::call_once(s_once, []() {
-        Dispatch::async("com.Tencent.WCDB.Checkpoint",
-                        std::bind(&CheckpointConfig::loopQueue,
-                                  static_cast<CheckpointConfig *>(
-                                      CheckpointConfig::config().get())));
+    handle->setNotificationWhenCommitted([](Handle *handle, int pages) {
+        Shared::shared()->reQueue(handle->path, pages);
     });
-
-    handle->setNotificationWhenCommitted(std::bind(
-        &CheckpointConfig::onCommited,
-        static_cast<CheckpointConfig *>(CheckpointConfig::config().get()),
-        std::placeholders::_1, std::placeholders::_2));
     return true;
 }
 
-void CheckpointConfig::onCommited(Handle *handle, int pages)
+#pragma mark - Shared
+CheckpointConfig::Shared *CheckpointConfig::Shared::shared()
 {
-    reQueue(handle->path, pages);
+    static CheckpointConfig::Shared *s_shared = new CheckpointConfig::Shared;
+    return s_shared;
 }
 
-void CheckpointConfig::loopQueue()
+CheckpointConfig::Shared::Shared()
+    : m_timedQueue(2)
+    , m_checkpointTruncate(
+          StatementPragma().pragma(Pragma::walCheckpoint()).to("TRUNCATE"))
+    , m_checkpointPassive(
+          StatementPragma().pragma(Pragma::walCheckpoint()).to("PASSIVE"))
 {
-    m_timedQueue.loop(std::bind(&CheckpointConfig::onTimed, this,
-                                std::placeholders::_1, std::placeholders::_2));
+    Dispatch::async("com.Tencent.WCDB.Checkpoint",
+                    std::bind(&Shared::loop, this));
 }
 
-void CheckpointConfig::onTimed(const std::string &path, const int &pages) const
+CheckpointConfig::Shared::~Shared()
+{
+    m_timedQueue.stop();
+    m_timedQueue.waitUntilDone();
+}
+
+void CheckpointConfig::Shared::reQueue(const std::string &path, int pages)
+{
+    if (pages > 100) {
+        m_timedQueue.reQueue(path, pages);
+    }
+}
+
+void CheckpointConfig::Shared::loop()
+{
+    m_timedQueue.loop(std::bind(&Shared::onTimed, this, std::placeholders::_1,
+                                std::placeholders::_2));
+}
+
+void CheckpointConfig::Shared::onTimed(const std::string &path,
+                                       const int &pages) const
 {
     static std::atomic<bool> s_exit(false);
     atexit([]() { s_exit.store(true); });
@@ -79,34 +90,6 @@ void CheckpointConfig::onTimed(const std::string &path, const int &pages) const
         //As a result, checkpoint process will not block the database too long.
         database->execute(m_checkpointTruncate);
     }
-}
-
-void CheckpointConfig::reQueue(const std::string &path, int pages)
-{
-    if (pages > 100) {
-        m_timedQueue.reQueue(path, pages);
-    }
-}
-
-void CheckpointConfig::blockedStopQueue()
-{
-    m_timedQueue.stop();
-    m_timedQueue.waitUntilDone();
-}
-
-CheckpointConfig::CheckpointConfig()
-    : Config("checkpoint", CheckpointConfig::order)
-    , m_timedQueue(2)
-    , m_checkpointTruncate(
-          StatementPragma().pragma(Pragma::walCheckpoint()).to("TRUNCATE"))
-    , m_checkpointPassive(
-          StatementPragma().pragma(Pragma::walCheckpoint()).to("PASSIVE"))
-{
-}
-
-CheckpointConfig::~CheckpointConfig()
-{
-    blockedStopQueue();
 }
 
 } //namespace WCDB

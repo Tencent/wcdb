@@ -39,7 +39,7 @@
 
 - (void)setConfig:(WCTConfigBlock)nsInvocation
           forName:(NSString *)name
-        withOrder:(int)order
+     withPriority:(int)priority
 {
     WCTRemedialAssert(name, "Config name can't be null.", return;);
     WCTRemedialAssert(nsInvocation, "Use [removeConfigForName:] instead.", return;);
@@ -49,7 +49,7 @@
         [unsafeHandle finalizeDatabase];
         return result;
     };
-    _database->setConfig(WCDB::CustomConfig::config(invocation, name.cppString, order));
+    _database->setConfig(std::shared_ptr<WCDB::Config>(new WCDB::CustomConfig(invocation)), name.cppString, priority);
 }
 
 - (void)setConfig:(WCTConfigBlock)nsInvocation
@@ -63,7 +63,7 @@
         [unsafeHandle finalizeDatabase];
         return result;
     };
-    _database->setConfig(WCDB::CustomConfig::config(invocation, name.cppString));
+    _database->setConfig(std::shared_ptr<WCDB::Config>(new WCDB::CustomConfig(invocation)), name.cppString);
 }
 
 - (void)removeConfigForName:(NSString *)name

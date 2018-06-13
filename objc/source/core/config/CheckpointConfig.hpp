@@ -30,28 +30,28 @@ namespace WCDB {
 
 class CheckpointConfig : public Config {
 public:
-    static std::shared_ptr<Config> config();
-    static constexpr const int order = 1;
-    ~CheckpointConfig();
-
     bool invoke(Handle *handle) const override;
 
+#pragma mark - Shared
 protected:
-    CheckpointConfig();
-    CheckpointConfig(const CheckpointConfig &) = delete;
-    CheckpointConfig &operator=(const CheckpointConfig &) = delete;
+    class Shared {
+    public:
+        static Shared *shared();
+        ~Shared();
 
-    TimedQueue<std::string, const int> m_timedQueue;
+        void reQueue(const std::string &path, int pages);
 
-    void loopQueue();
-    void reQueue(const std::string &path, int pages);
-    void blockedStopQueue();
+    protected:
+        Shared();
 
-    void onCommited(Handle *handle, int pages);
-    void onTimed(const std::string &path, const int &pages) const;
+        void loop();
+        void onTimed(const std::string &path, const int &pages) const;
 
-    const StatementPragma m_checkpointPassive;
-    const StatementPragma m_checkpointTruncate;
+        const StatementPragma m_checkpointPassive;
+        const StatementPragma m_checkpointTruncate;
+        TimedQueue<std::string, const int> m_timedQueue;
+        std::once_flag m_once;
+    };
 };
 
 } //namespace WCDB

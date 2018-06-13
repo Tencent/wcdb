@@ -22,85 +22,124 @@
 
 namespace WCDB {
 
+#pragma mark - Configs
 std::shared_ptr<const Configs> Configs::default_()
 {
     static std::shared_ptr<const Configs> *s_configs =
-        new std::shared_ptr<const Configs>(
-            new Configs({TraceConfig::config(), BasicConfig::config(),
-                         CheckpointConfig::config()}));
+        new std::shared_ptr<const Configs>(new Configs({
+            Element(Configs::trace(), "trace", Priority::Trace),
+            Element(Configs::basic(), "basic", Priority::Basic),
+            Element(Configs::checkpoint(), "checkpoint", Priority::Checkpoint),
+        }));
     return *s_configs;
 }
 
 std::shared_ptr<const Configs>
-Configs::configs(const std::list<std::shared_ptr<Config>> &configs)
+Configs::configsBySettingConfig(const std::shared_ptr<Config> &config,
+                                const std::string &name,
+                                int priority) const
 {
-    return std::shared_ptr<const Configs>(new Configs(configs));
-}
-
-Configs::Configs(const std::list<std::shared_ptr<Config>> &configs)
-{
-    for (const auto &config : configs) {
-        setConfig(config);
-    }
+    WCTInnerAssert(config != nullptr);
+    std::shared_ptr<Configs> configs(new Configs(m_elements));
+    configs->setElement(Element(config, name, priority));
+    return configs;
 }
 
 std::shared_ptr<const Configs>
-Configs::configsBySettingConfig(const std::shared_ptr<Config> &newConfig) const
+Configs::configsBySettingConfig(const std::shared_ptr<Config> &config,
+                                const std::string &name) const
 {
-    std::shared_ptr<Configs> configs(new Configs(m_configs));
-    configs->setConfig(newConfig);
+    WCTInnerAssert(config != nullptr);
+    std::shared_ptr<Configs> configs(new Configs(m_elements));
+    configs->setElement(Element(config, name, 0));
     return configs;
 }
 
 std::shared_ptr<const Configs>
 Configs::configsByRemovingConfig(const std::string &name) const
 {
-    std::shared_ptr<Configs> configs(new Configs(m_configs));
-    configs->removeConfig(name);
+    std::shared_ptr<Configs> configs(new Configs(m_elements));
+    configs->removeElement(name);
     return configs;
 }
 
 bool Configs::invoke(Handle *handle) const
 {
-    for (const auto &config : m_configs) {
-        if (!config->invoke(handle)) {
+    for (const auto &element : m_elements) {
+        if (!element.config->invoke(handle)) {
             return false;
         }
     }
     return true;
 }
 
-void Configs::setConfig(const std::shared_ptr<Config> &config)
+bool Configs::equal(const std::shared_ptr<const Configs> &configs) const
 {
-    WCTInnerAssert(config != nullptr);
-    std::list<std::shared_ptr<Config>>::iterator iter;
-    for (iter = m_configs.begin(); iter != m_configs.end(); ++iter) {
-        if (iter->get()->name == config->name) {
-            m_configs.erase(iter);
-            break;
-        }
-    }
-    for (iter = m_configs.begin(); iter != m_configs.end(); ++iter) {
-        if (config->order < iter->get()->order) {
-            break;
-        }
-    }
-    m_configs.insert(iter, config);
+    return this == configs.get();
 }
 
-void Configs::removeConfig(const std::string &name)
+#pragma mark - Element
+Configs::Element::Element(const std::shared_ptr<Config> &config_,
+                          const std::string &name_,
+                          int priority_)
+    : config(config_), name(name_), priority(priority_)
 {
-    for (auto iter = m_configs.begin(); iter != m_configs.end(); ++iter) {
-        if (iter->get()->name == name) {
-            m_configs.erase(iter);
+}
+
+Configs::Configs(const std::list<Element> &elements)
+{
+    for (const auto &element : elements) {
+        setElement(element);
+    }
+}
+
+void Configs::setElement(const Element &element)
+{
+    std::list<Element>::iterator iter;
+    for (iter = m_elements.begin(); iter != m_elements.end(); ++iter) {
+        if (iter->name == element.name) {
+            m_elements.erase(iter);
+            break;
+        }
+    }
+    for (iter = m_elements.begin(); iter != m_elements.end(); ++iter) {
+        if (element.priority < iter->priority) {
+            break;
+        }
+    }
+    m_elements.insert(iter, element);
+}
+
+void Configs::removeElement(const std::string &name)
+{
+    for (auto iter = m_elements.begin(); iter != m_elements.end(); ++iter) {
+        if (iter->name == name) {
+            m_elements.erase(iter);
             return;
         }
     }
 }
 
-bool Configs::equal(const std::shared_ptr<const Configs> &configs) const
+#pragma mark - Config
+std::shared_ptr<Config> Configs::basic()
 {
-    return this == configs.get();
+    static const std::shared_ptr<Config> *s_basic =
+        new std::shared_ptr<Config>(new BasicConfig);
+    return *s_basic;
+}
+
+std::shared_ptr<Config> Configs::trace()
+{
+    static const std::shared_ptr<Config> *s_trace =
+        new std::shared_ptr<Config>(new TraceConfig);
+    return *s_trace;
+}
+
+std::shared_ptr<Config> Configs::checkpoint()
+{
+    static const std::shared_ptr<Config> *s_checkpoint =
+        new std::shared_ptr<Config>(new CheckpointConfig);
+    return *s_checkpoint;
 }
 
 } //namespace WCDB

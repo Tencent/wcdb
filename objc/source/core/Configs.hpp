@@ -33,14 +33,17 @@
 namespace WCDB {
 
 class Configs {
+#pragma mark - Configs
 public:
     static std::shared_ptr<const Configs> default_();
 
-    static std::shared_ptr<const Configs>
-    configs(const std::list<std::shared_ptr<Config>> &configs);
-
     std::shared_ptr<const Configs>
-    configsBySettingConfig(const std::shared_ptr<Config> &newConfig) const;
+    configsBySettingConfig(const std::shared_ptr<Config> &config,
+                           const std::string &name,
+                           int priority) const;
+    std::shared_ptr<const Configs>
+    configsBySettingConfig(const std::shared_ptr<Config> &config,
+                           const std::string &name) const;
     std::shared_ptr<const Configs>
     configsByRemovingConfig(const std::string &names) const;
 
@@ -48,12 +51,39 @@ public:
 
     bool equal(const std::shared_ptr<const Configs> &configs) const;
 
-public:
-    Configs(const std::list<std::shared_ptr<Config>> &configs);
-    std::list<std::shared_ptr<Config>> m_configs;
+#pragma mark - Element
+protected:
+    struct Element {
+        Element(const std::shared_ptr<Config> &config,
+                const std::string &name,
+                int priority);
+        std::shared_ptr<Config> config;
+        std::string name;
+        int priority;
+    };
+    typedef struct Element Element;
+    Configs(const std::list<Element> &elements);
 
-    void setConfig(const std::shared_ptr<Config> &config);
-    void removeConfig(const std::string &name);
+    void setElement(const Element &element);
+    void removeElement(const std::string &name);
+
+    std::list<Element> m_elements;
+
+#pragma mark - Config
+public:
+    enum Priority {
+        //TODO
+        Trace,
+        Cipher,
+        Basic,
+        Tokenize,
+        Checkpoint,
+        End,
+    };
+
+    static std::shared_ptr<Config> basic();
+    static std::shared_ptr<Config> trace();
+    static std::shared_ptr<Config> checkpoint();
 };
 
 #pragma GCC visibility pop

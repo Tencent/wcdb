@@ -509,11 +509,14 @@ void Handle::traceSQL(const SQLTraceCallback &trace)
 
 void Handle::tracePerformance(const PerformanceTraceCallback &trace)
 {
-    m_tracer.tracePerformance(
-        m_handle,
-        [this, trace](const Tracer::Footprints &footprints, int64_t cost) {
+    Tracer::PerformanceTraceCallback callback = nullptr;
+    if (trace) {
+        callback = [this, trace](const Tracer::Footprints &footprints,
+                                 int64_t cost) {
             trace(getTag(), footprints, cost);
-        });
+        };
+    }
+    m_tracer.tracePerformance(m_handle, callback);
 }
 
 #pragma mark - Repair Kit

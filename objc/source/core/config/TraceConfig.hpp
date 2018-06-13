@@ -22,6 +22,7 @@
 #define TraceConfig_hpp
 
 #include <WCDB/Config.hpp>
+#include <WCDB/Lock.hpp>
 
 #pragma GCC visibility push(hidden)
 
@@ -29,21 +30,16 @@ namespace WCDB {
 
 class TraceConfig : public Config {
 public:
-    static std::shared_ptr<Config> config();
-    static constexpr const int order = INT_MIN;
-
+    TraceConfig();
     bool invoke(Handle *handle) const override;
 
     void setPerformanceTrace(const Handle::PerformanceTraceCallback &trace);
     void setSQLTrace(const Handle::SQLTraceCallback &trace);
 
 protected:
-    TraceConfig();
-    TraceConfig(const TraceConfig &) = delete;
-    TraceConfig &operator=(const TraceConfig &) = delete;
-
-    std::shared_ptr<Handle::PerformanceTraceCallback> m_performanceTrace;
-    std::shared_ptr<Handle::SQLTraceCallback> m_sqlTrace;
+    Handle::PerformanceTraceCallback m_performanceTrace;
+    Handle::SQLTraceCallback m_sqlTrace;
+    mutable SharedLock m_lock;
 };
 
 } //namespace WCDB

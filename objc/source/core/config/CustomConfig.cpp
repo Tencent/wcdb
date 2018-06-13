@@ -22,23 +22,15 @@
 
 namespace WCDB {
 
-std::shared_ptr<Config> CustomConfig::config(const Invocation &invocation,
-                                             const std::string &name,
-                                             int order)
+CustomConfig::CustomConfig(const Invocation &invocation)
+    : Config(), m_invocation(invocation)
 {
-    return std::shared_ptr<Config>(new CustomConfig(invocation, name, order));
-}
-
-CustomConfig::CustomConfig(const Invocation &theInvocation,
-                           const std::string &theName,
-                           int theOrder)
-    : Config(theName, theOrder), invocation(theInvocation)
-{
+    WCTAssert(invocation != nullptr, "Invocation should not be null.");
 }
 
 bool CustomConfig::invoke(Handle *handle) const
 {
-    return invocation ? invocation(handle) : true;
+    return m_invocation(handle);
 }
 
 } //namespace WCDB

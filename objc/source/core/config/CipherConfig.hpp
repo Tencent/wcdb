@@ -29,18 +29,10 @@ namespace WCDB {
 
 class CipherConfig : public Config {
 public:
-    static std::shared_ptr<Config> configWithKey(const NoCopyData &cipher,
-                                                 int pageSize);
-    static constexpr const int order = INT_MIN + 1;
-
+    CipherConfig(const NoCopyData &cipher, int pageSize);
     bool invoke(Handle *handle) const override;
 
 protected:
-    CipherConfig(const NoCopyData &cipher, int pageSize);
-    CipherConfig() = delete;
-    CipherConfig(const CipherConfig &) = delete;
-    CipherConfig &operator=(const CipherConfig &) = delete;
-
     std::vector<unsigned char> m_keys;
     int m_pageSize;
 };

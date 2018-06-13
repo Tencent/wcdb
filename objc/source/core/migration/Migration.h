@@ -22,6 +22,7 @@
 #define Migration_h
 
 #include <WCDB/MigrationConfig.hpp>
+#include <WCDB/MigrationConfigs.hpp>
 #include <WCDB/MigrationDatabase.hpp>
 #include <WCDB/MigrationHandle.hpp>
 #include <WCDB/MigrationHandlePool.hpp>
