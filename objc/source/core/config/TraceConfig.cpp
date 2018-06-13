@@ -22,8 +22,17 @@
 
 namespace WCDB {
 
+const std::shared_ptr<Config> &TraceConfig::shared()
+{
+    static const std::shared_ptr<Config> *s_shared =
+        new std::shared_ptr<Config>(new TraceConfig);
+    return *s_shared;
+}
+
 TraceConfig::TraceConfig()
-    : Config(), m_performanceTrace(nullptr), m_sqlTrace(nullptr)
+    : Config(TraceConfig::name)
+    , m_performanceTrace(nullptr)
+    , m_sqlTrace(nullptr)
 {
 }
 
@@ -40,7 +49,7 @@ void TraceConfig::setSQLTrace(const Handle::SQLTraceCallback &trace)
     m_sqlTrace = trace;
 }
 
-bool TraceConfig::invoke(Handle *handle) const
+bool TraceConfig::invoke(Handle *handle)
 {
     SharedLockGuard lockGuard(m_lock);
     handle->tracePerformance(m_performanceTrace);

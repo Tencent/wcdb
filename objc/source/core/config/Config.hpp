@@ -22,7 +22,6 @@
 #define Config_hpp
 
 #include <WCDB/Abstract.h>
-#include <functional>
 
 #pragma GCC visibility push(hidden)
 
@@ -30,7 +29,10 @@ namespace WCDB {
 
 class Config {
 public:
-    virtual bool invoke(Handle *handle) const = 0;
+    Config(const std::string &name);
+    virtual bool invoke(Handle *handle) = 0;
+
+    std::string name;
 };
 
 } //namespace WCDB

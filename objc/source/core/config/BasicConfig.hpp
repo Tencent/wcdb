@@ -29,8 +29,12 @@ namespace WCDB {
 
 class BasicConfig : public Config {
 public:
+    static const std::shared_ptr<Config> &shared();
+
     BasicConfig();
-    bool invoke(Handle *handle) const override;
+    bool invoke(Handle *handle) override;
+
+    static constexpr const char *name = "WCDBBasic";
 
 protected:
     const StatementPragma m_getJournalMode;

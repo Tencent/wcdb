@@ -22,6 +22,10 @@
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTUnsafeHandle+Private.h>
 
+static_assert((int) WCTConfigPriorityHigh == (int) WCDB::Configs::Priority::High, "");
+static_assert((int) WCTConfigPriorityDefault == (int) WCDB::Configs::Priority::Default, "");
+static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, "");
+
 @implementation WCTDatabase (Config)
 
 - (void)setCipherKey:(NSData *)cipherKey
@@ -49,7 +53,7 @@
         [unsafeHandle finalizeDatabase];
         return result;
     };
-    _database->setConfig(std::shared_ptr<WCDB::Config>(new WCDB::CustomConfig(invocation)), name.cppString, priority);
+    _database->setConfig(std::shared_ptr<WCDB::Config>(new WCDB::CustomConfig(name.cppString, invocation)), priority);
 }
 
 - (void)setConfig:(WCTConfigBlock)nsInvocation
@@ -63,7 +67,7 @@
         [unsafeHandle finalizeDatabase];
         return result;
     };
-    _database->setConfig(std::shared_ptr<WCDB::Config>(new WCDB::CustomConfig(invocation)), name.cppString);
+    _database->setConfig(std::shared_ptr<WCDB::Config>(new WCDB::CustomConfig(name.cppString, invocation)));
 }
 
 - (void)removeConfigForName:(NSString *)name

@@ -22,7 +22,12 @@
 
 namespace WCDB {
 
-bool MigrationConfig::invoke(Handle *handle) const
+MigrationConfig::MigrationConfig(MigrationSetting *setting)
+    : Config(MigrationConfig::name), m_setting(setting)
+{
+}
+
+bool MigrationConfig::invoke(Handle *handle)
 {
     bool schemaChanged = false;
     if (!doAttachSchema(handle) || !doCreateView(handle, schemaChanged)) {
@@ -128,11 +133,6 @@ bool MigrationConfig::doCreateView(WCDB::Handle *handle,
         }
     }
     return true;
-}
-
-MigrationConfig::MigrationConfig(MigrationSetting *setting)
-    : Config(), m_setting(setting)
-{
 }
 
 } //namespace WCDB

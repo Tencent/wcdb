@@ -60,8 +60,7 @@ std::shared_ptr<HandlePool> MigrationDatabase::generateHandlePool(
             static_cast<MigrationHandlePool *>(pool.get());
         std::shared_ptr<Config> config(
             new MigrationConfig(migrationHandlePool->getMigrationSetting()));
-        migrationHandlePool->setConfig(config, MigrationConfigs::name,
-                                       MigrationConfigs::Priority::Migration);
+        migrationHandlePool->setConfig(config, Configs::Priority::Higher);
     }
     return pool;
 }
@@ -194,8 +193,7 @@ bool MigrationDatabase::stepMigration(bool &done)
         if (setting->markAsMigrated(info->targetTable)) {
             //schema changed
             setConfig(std::shared_ptr<Config>(new MigrationConfig(setting)),
-                      MigrationConfigs::name,
-                      MigrationConfigs::Priority::Migration);
+                      Configs::Priority::Higher);
         }
         done = setting->isMigrated();
     }

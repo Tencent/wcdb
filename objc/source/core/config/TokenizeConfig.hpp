@@ -30,7 +30,9 @@ namespace WCDB {
 class TokenizeConfig : public Config {
 public:
     TokenizeConfig(const std::list<std::string> &names);
-    bool invoke(Handle *handle) const override;
+    bool invoke(Handle *handle) override;
+
+    static constexpr const char *name = "WCDBTokenize";
 
 protected:
     const StatementSelect m_fts3Tokenizer;

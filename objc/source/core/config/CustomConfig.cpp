@@ -22,13 +22,14 @@
 
 namespace WCDB {
 
-CustomConfig::CustomConfig(const Invocation &invocation)
-    : Config(), m_invocation(invocation)
+CustomConfig::CustomConfig(const std::string &name,
+                           const Invocation &invocation)
+    : Config(name), m_invocation(invocation)
 {
     WCTAssert(invocation != nullptr, "Invocation should not be null.");
 }
 
-bool CustomConfig::invoke(Handle *handle) const
+bool CustomConfig::invoke(Handle *handle)
 {
     return m_invocation(handle);
 }

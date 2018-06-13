@@ -139,17 +139,9 @@ void Database::purgeAllDatabases()
 }
 
 #pragma mark - Config
-void Database::setConfig(const std::shared_ptr<Config> &config,
-                         const std::string &name,
-                         int priority)
+void Database::setConfig(const std::shared_ptr<Config> &config, int priority)
 {
-    getHandlePool()->setConfig(config, name, priority);
-}
-
-void Database::setConfig(const std::shared_ptr<Config> &config,
-                         const std::string &name)
-{
-    getHandlePool()->setConfig(config, name);
+    getHandlePool()->setConfig(config, priority);
 }
 
 void Database::removeConfig(const std::string &name)
@@ -160,15 +152,15 @@ void Database::removeConfig(const std::string &name)
 void Database::setCipher(const NoCopyData &cipher, int pageSize)
 {
     getHandlePool()->setConfig(
-        std::shared_ptr<Config>(new CipherConfig(cipher, pageSize)), "cipher",
-        Configs::Priority::Cipher);
+        std::shared_ptr<Config>(new CipherConfig(cipher, pageSize)),
+        Configs::Priority::Highest);
 }
 
 void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
 {
     getHandlePool()->setConfig(
-        std::shared_ptr<Config>(new TokenizeConfig(tokenizeNames)), "cipher",
-        Configs::Priority::Tokenize);
+        std::shared_ptr<Config>(new TokenizeConfig(tokenizeNames)),
+        Configs::Priority::Higher);
 }
 
 #pragma mark - File

@@ -22,6 +22,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSInteger, WCTConfigPriority) {
+    WCTConfigPriorityHigh = -100,
+    WCTConfigPriorityDefault = 0,
+    WCTConfigPriorityLow = 100,
+};
+
 /**
  Configuration
  */

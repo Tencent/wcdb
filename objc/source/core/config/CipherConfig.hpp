@@ -30,7 +30,9 @@ namespace WCDB {
 class CipherConfig : public Config {
 public:
     CipherConfig(const NoCopyData &cipher, int pageSize);
-    bool invoke(Handle *handle) const override;
+    bool invoke(Handle *handle) override;
+
+    static constexpr const char *name = "WCDBCipher";
 
 protected:
     std::vector<unsigned char> m_keys;

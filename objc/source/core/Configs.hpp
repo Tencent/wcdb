@@ -35,30 +35,31 @@ namespace WCDB {
 class Configs {
 #pragma mark - Configs
 public:
-    static std::shared_ptr<const Configs> default_();
+    enum Priority {
+        Highest = std::numeric_limits<int>::min(),
+        Higher = std::numeric_limits<int>::min() - 1,
+        High = -100,
+        Default = 0,
+        Low = 100,
+    };
 
-    std::shared_ptr<const Configs>
+    static std::shared_ptr<Configs> default_();
+
+    std::shared_ptr<Configs>
     configsBySettingConfig(const std::shared_ptr<Config> &config,
-                           const std::string &name,
-                           int priority) const;
-    std::shared_ptr<const Configs>
-    configsBySettingConfig(const std::shared_ptr<Config> &config,
-                           const std::string &name) const;
-    std::shared_ptr<const Configs>
+                           int priority = Priority::Default) const;
+    std::shared_ptr<Configs>
     configsByRemovingConfig(const std::string &names) const;
 
-    bool invoke(Handle *handle) const;
+    bool invoke(Handle *handle);
 
-    bool equal(const std::shared_ptr<const Configs> &configs) const;
+    bool equal(const std::shared_ptr<Configs> &configs) const;
 
 #pragma mark - Element
 protected:
     struct Element {
-        Element(const std::shared_ptr<Config> &config,
-                const std::string &name,
-                int priority);
+        Element(const std::shared_ptr<Config> &config, int priority);
         std::shared_ptr<Config> config;
-        std::string name;
         int priority;
     };
     typedef struct Element Element;
@@ -68,22 +69,6 @@ protected:
     void removeElement(const std::string &name);
 
     std::list<Element> m_elements;
-
-#pragma mark - Config
-public:
-    enum Priority {
-        Begin = -100,
-        Trace,
-        Cipher,
-        Basic,
-        Tokenize,
-        Checkpoint,
-        End,
-    };
-
-    static std::shared_ptr<Config> basic();
-    static std::shared_ptr<Config> trace();
-    static std::shared_ptr<Config> checkpoint();
 };
 
 #pragma GCC visibility pop

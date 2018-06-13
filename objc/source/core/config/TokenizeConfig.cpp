@@ -23,14 +23,14 @@
 namespace WCDB {
 
 TokenizeConfig::TokenizeConfig(const std::list<std::string> &names)
-    : Config()
+    : Config(TokenizeConfig::name)
     , m_names(names)
     , m_fts3Tokenizer(StatementSelect().select(Expression::function(
           "fts3_tokenizer", {BindParameter(1), BindParameter(2)})))
 {
 }
 
-bool TokenizeConfig::invoke(Handle *handle) const
+bool TokenizeConfig::invoke(Handle *handle)
 {
     for (const std::string &name : m_names) {
         const unsigned char *address = FTS::Modules::shared()->getAddress(name);

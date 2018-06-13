@@ -24,7 +24,7 @@ namespace WCDB {
 #pragma mark - Initialize
 std::shared_ptr<HandlePool> MigrationHandlePool::pool(
     const std::string &path,
-    const std::shared_ptr<const Configs> &configs,
+    const std::shared_ptr<Configs> &configs,
     const std::list<std::shared_ptr<MigrationInfo>> &infos)
 {
     return std::shared_ptr<HandlePool>(
@@ -33,7 +33,7 @@ std::shared_ptr<HandlePool> MigrationHandlePool::pool(
 
 MigrationHandlePool::MigrationHandlePool(
     const std::string &path,
-    const std::shared_ptr<const Configs> &configs,
+    const std::shared_ptr<Configs> &configs,
     const std::list<std::shared_ptr<MigrationInfo>> &infos)
     : HandlePool(path, configs), m_setting(this, infos)
 {

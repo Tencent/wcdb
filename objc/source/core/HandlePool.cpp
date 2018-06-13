@@ -29,7 +29,7 @@ namespace WCDB {
 
 #pragma mark - Initialize
 HandlePool::HandlePool(const std::string &thePath,
-                       const std::shared_ptr<const Configs> &configs)
+                       const std::shared_ptr<Configs> &configs)
     : path(thePath)
     , m_tag(Handle::invalidTag)
     , m_configs(configs)
@@ -57,17 +57,9 @@ HandlePool::Tag HandlePool::getTag() const
 }
 
 #pragma mark - Config
-void HandlePool::setConfig(const std::shared_ptr<Config> &config,
-                           const std::string &name,
-                           int priority)
+void HandlePool::setConfig(const std::shared_ptr<Config> &config, int priority)
 {
-    m_configs = m_configs->configsBySettingConfig(config, name, priority);
-}
-
-void HandlePool::setConfig(const std::shared_ptr<Config> &config,
-                           const std::string &name)
-{
-    m_configs = m_configs->configsBySettingConfig(config, name);
+    m_configs = m_configs->configsBySettingConfig(config, priority);
 }
 
 void HandlePool::removeConfig(const std::string &name)
@@ -205,7 +197,7 @@ std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
     if (configuredHandle->getHandle()->getTag() != getTag()) {
         configuredHandle->getHandle()->setTag(getTag());
     }
-    std::shared_ptr<const Configs> configs = m_configs;
+    std::shared_ptr<Configs> configs = m_configs;
     if (!configuredHandle->configured(configs) &&
         !configuredHandle->configure(configs)) {
         setThreadedError(configuredHandle->getHandle()->getError());
@@ -242,7 +234,7 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
         setThreadedError(handle->getError());
         return nullptr;
     }
-    std::shared_ptr<const Configs> configs = m_configs;
+    std::shared_ptr<Configs> configs = m_configs;
     if (!configuredHandle->configure(configs)) {
         setThreadedError(handle->getError());
         return nullptr;
