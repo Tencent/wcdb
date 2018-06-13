@@ -27,29 +27,20 @@ std::shared_ptr<HandlePool> MigrationHandlePool::pool(
     const std::shared_ptr<const Configs> &configs,
     const std::list<std::shared_ptr<MigrationInfo>> &infos)
 {
-    std::shared_ptr<HandlePool> pool(
+    return std::shared_ptr<HandlePool>(
         new MigrationHandlePool(path, configs, infos));
-    if (pool) {
-        static_cast<MigrationHandlePool *>(pool.get())->initialize();
-    }
-    return pool;
 }
 
 MigrationHandlePool::MigrationHandlePool(
     const std::string &path,
     const std::shared_ptr<const Configs> &configs,
     const std::list<std::shared_ptr<MigrationInfo>> &infos)
-    : HandlePool(path, configs), m_setting(infos)
-{
-}
-
-void MigrationHandlePool::initialize()
+    : HandlePool(path, configs), m_setting(this, infos)
 {
 #ifdef DEBUG
     debug_m_migratingThreadId = std::thread::id();
     WCTInnerAssert(debug_checkSettingLegal());
 #endif
-    m_setting.associate(this);
 }
 
 #ifdef DEBUG

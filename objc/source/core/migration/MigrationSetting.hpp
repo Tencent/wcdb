@@ -36,15 +36,14 @@ class MigrationSetting {
 public:
     typedef std::function<void(const MigrationInfo *)> TableMigratedCallback;
 
-    MigrationSetting(const std::list<std::shared_ptr<MigrationInfo>> &infos);
+    MigrationSetting(MigrationHandlePool *m_pool,
+                     const std::list<std::shared_ptr<MigrationInfo>> &infos);
 
 protected:
     MigrationSetting() = delete;
     MigrationSetting(const MigrationSetting &) = delete;
     MigrationSetting &operator=(const MigrationSetting &) = delete;
 
-    friend class MigrationHandlePool;
-    void associate(MigrationHandlePool *pool);
     MigrationHandlePool *m_pool;
 
 #pragma mark - Basic
