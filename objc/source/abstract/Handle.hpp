@@ -42,6 +42,7 @@ public:
     Handle() = delete;
     Handle(const Handle &) = delete;
     Handle &operator=(const Handle &) = delete;
+    virtual ~Handle();
 
 protected:
     Handle(const std::string &path);
@@ -81,15 +82,31 @@ public:
     bool isReadonly();
     bool isInTransaction();
 
+#pragma mark - Notification
+public:
     typedef std::function<void(Handle *, int)> CommittedCallback;
     void setNotificationWhenCommitted(const CommittedCallback &onCommitted);
 
+    typedef std::function<bool(Handle *, int)> CheckpointCallback;
+    void
+    setNotificationWhenCheckpoint(const CheckpointCallback &willCheckpoint);
+
 protected:
-    typedef struct {
+    struct CommittedInfo {
+        CommittedInfo();
         CommittedCallback notification;
         Handle *handle;
-    } CommittedInfo;
+    };
+    typedef struct CommittedInfo CommittedInfo;
     CommittedInfo m_committedInfo;
+
+    struct CheckpointInfo {
+        CheckpointInfo();
+        CheckpointCallback notification;
+        Handle *handle;
+    };
+    typedef struct CheckpointInfo CheckpointInfo;
+    CheckpointInfo m_checkpointInfo;
 
 #pragma mark - Statement
 public:
