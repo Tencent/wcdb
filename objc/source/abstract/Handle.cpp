@@ -38,6 +38,17 @@ Handle::Handle(const std::string &path_)
     m_error.infos.set("Path", path);
 }
 
+Handle::~Handle()
+{
+    if (m_handle) {
+        //disable checkpoint when deconstructing.
+        sqlite3_wal_checkpoint_handler(
+            (sqlite3 *) m_handle,
+            [](void *, int) -> int { return SQLITE_ABORT; }, nullptr);
+        close();
+    }
+}
+
 #pragma mark - Path
 std::string Handle::getSHMSubfix()
 {
@@ -84,18 +95,23 @@ Handle::Tag Handle::getTag() const
 
 bool Handle::open()
 {
-    int rc = sqlite3_open(path.c_str(), (sqlite3 **) &m_handle);
-    if (rc == SQLITE_OK) {
-        return true;
+    if (!m_handle) {
+        int rc = sqlite3_open(path.c_str(), (sqlite3 **) &m_handle);
+        if (rc != SQLITE_OK) {
+            setError(rc);
+            return false;
+        }
     }
-    setError(rc);
-    return false;
+    return true;
 }
 
 void Handle::close()
 {
     finalize();
-    sqlite3_close_v2((sqlite3 *) m_handle);
+    if (m_handle) {
+        sqlite3_close_v2((sqlite3 *) m_handle);
+        m_handle = nullptr;
+    }
 }
 
 bool Handle::execute(const Statement &statement)
@@ -130,25 +146,6 @@ const char *Handle::getErrorMessage()
     return sqlite3_errmsg((sqlite3 *) m_handle);
 }
 
-void Handle::setNotificationWhenCommitted(const CommittedCallback &onCommitted)
-{
-    m_committedInfo.notification = onCommitted;
-    if (m_committedInfo.notification) {
-        m_committedInfo.handle = this;
-        sqlite3_wal_hook(
-            (sqlite3 *) m_handle,
-            [](void *p, sqlite3 *, const char *, int pages) -> int {
-                CommittedInfo *committedInfo = (CommittedInfo *) p;
-                committedInfo->notification(committedInfo->handle, pages);
-                return SQLITE_OK;
-            },
-            &m_committedInfo);
-    } else {
-        m_committedInfo.handle = nullptr;
-        sqlite3_wal_hook((sqlite3 *) m_handle, nullptr, nullptr);
-    }
-}
-
 int Handle::getChanges()
 {
     return sqlite3_changes((sqlite3 *) m_handle);
@@ -162,6 +159,57 @@ bool Handle::isReadonly()
 bool Handle::isInTransaction()
 {
     return sqlite3_get_autocommit((sqlite3 *) m_handle) == 0;
+}
+
+#pragma mark - Notification
+Handle::CommittedInfo::CommittedInfo() : notification(nullptr), handle(nullptr)
+{
+}
+
+void Handle::setNotificationWhenCommitted(const CommittedCallback &onCommitted)
+{
+    m_committedInfo.notification = onCommitted;
+    if (m_committedInfo.notification) {
+        m_committedInfo.handle = this;
+        sqlite3_wal_hook(
+            (sqlite3 *) m_handle,
+            [](void *p, sqlite3 *, const char *, int pages) -> int {
+                CommittedInfo *committedInfo =
+                    reinterpret_cast<CommittedInfo *>(p);
+                committedInfo->notification(committedInfo->handle, pages);
+                return SQLITE_OK;
+            },
+            &m_committedInfo);
+    } else {
+        m_committedInfo.handle = nullptr;
+        sqlite3_wal_hook((sqlite3 *) m_handle, nullptr, nullptr);
+    }
+}
+
+Handle::CheckpointInfo::CheckpointInfo()
+    : notification(nullptr), handle(nullptr)
+{
+}
+
+void Handle::setNotificationWhenCheckpoint(
+    const WCDB::Handle::CheckpointCallback &willCheckpoint)
+{
+    m_checkpointInfo.notification = willCheckpoint;
+    if (m_checkpointInfo.notification) {
+        sqlite3_wal_checkpoint_handler(
+            (sqlite3 *) m_handle,
+            [](void *p, int f) -> int {
+                CheckpointInfo *checkpointInfo =
+                    reinterpret_cast<CheckpointInfo *>(p);
+                if (checkpointInfo->notification(checkpointInfo->handle, f)) {
+                    return SQLITE_OK;
+                }
+                return SQLITE_ABORT;
+            },
+            &m_checkpointInfo);
+    } else {
+        sqlite3_wal_checkpoint_handler((sqlite3 *) m_handle, nullptr, nullptr);
+    }
 }
 
 #pragma mark - Statement

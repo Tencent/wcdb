@@ -41,8 +41,7 @@ HandlePool::HandlePool(const std::string &thePath,
 HandlePool::~HandlePool()
 {
     //wait until all handles back.
-    blockade();
-    unblockade();
+    drain(nullptr);
 }
 
 #pragma mark - Basic
