@@ -130,24 +130,20 @@ const char *Handle::getErrorMessage()
     return sqlite3_errmsg((sqlite3 *) m_handle);
 }
 
-void Handle::setNotificationWhenCommitted(const CommittedCallback &onCommitted,
-                                          void *info)
+void Handle::setNotificationWhenCommitted(const CommittedCallback &onCommitted)
 {
     m_committedInfo.notification = onCommitted;
     if (m_committedInfo.notification) {
-        m_committedInfo.info = info;
         m_committedInfo.handle = this;
         sqlite3_wal_hook(
             (sqlite3 *) m_handle,
             [](void *p, sqlite3 *, const char *, int pages) -> int {
                 CommittedInfo *committedInfo = (CommittedInfo *) p;
-                committedInfo->notification(committedInfo->handle, pages,
-                                            committedInfo->info);
+                committedInfo->notification(committedInfo->handle, pages);
                 return SQLITE_OK;
             },
             &m_committedInfo);
     } else {
-        m_committedInfo.info = nullptr;
         m_committedInfo.handle = nullptr;
         sqlite3_wal_hook((sqlite3 *) m_handle, nullptr, nullptr);
     }

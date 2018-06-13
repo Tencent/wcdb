@@ -82,14 +82,12 @@ public:
     bool isReadonly();
     bool isInTransaction();
 
-    typedef std::function<void(Handle *, int, void *)> CommittedCallback;
-    void setNotificationWhenCommitted(const CommittedCallback &onCommitted,
-                                      void *info);
+    typedef std::function<void(Handle *, int)> CommittedCallback;
+    void setNotificationWhenCommitted(const CommittedCallback &onCommitted);
 
 protected:
     typedef struct {
         CommittedCallback notification;
-        void *info;
         Handle *handle;
     } CommittedInfo;
     CommittedInfo m_committedInfo;
