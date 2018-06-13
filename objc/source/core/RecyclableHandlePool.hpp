@@ -36,6 +36,9 @@ public:
                          const Super::OnRecycled &onRecycled);
     RecyclableHandlePool(const std::nullptr_t &);
 
+    bool operator==(const std::nullptr_t &) const;
+    bool operator!=(const std::nullptr_t &) const;
+
     constexpr HandlePool *operator->() const { return m_value.get(); }
     HandlePool *getHandlePool() const;
 };

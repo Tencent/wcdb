@@ -45,6 +45,7 @@ public:
         , m_onRecycled(std::move(other.m_onRecycled))
         , m_reference(std::move(other.m_reference))
     {
+        other.m_reference = new std::atomic<int>(0);
     }
 
     Recyclable(const Recyclable &other)
@@ -67,33 +68,11 @@ public:
 
     Recyclable &operator=(Recyclable &&other)
     {
-        other.retain();
         release();
         m_value = std::move(other.m_value);
         m_onRecycled = std::move(other.m_onRecycled);
         m_reference = std::move(other.m_reference);
-        return *this;
-    }
-
-    Recyclable(
-        const std::nullptr_t &,
-        typename std::enable_if<
-            std::is_convertible<std::nullptr_t, T>::value>::type * = nullptr)
-        : m_value(nullptr)
-        , m_onRecycled(nullptr)
-        , m_reference(new std::atomic<int>(0))
-    {
-        retain();
-    }
-
-    typename std::enable_if<std::is_convertible<std::nullptr_t, T>::value,
-                            Recyclable &>::type
-    operator=(const std::nullptr_t &)
-    {
-        release();
-        m_value = nullptr;
-        m_reference = nullptr;
-        m_onRecycled = nullptr;
+        other.m_reference = new std::atomic<int>(0);
         return *this;
     }
 
@@ -102,26 +81,7 @@ public:
     constexpr T &operator->() const { return m_value; }
     const T &get() const { return m_value; }
 
-    typename std::enable_if<std::is_convertible<std::nullptr_t, T>::value,
-                            bool>::type
-    operator!=(const std::nullptr_t &) const
-    {
-        return m_value != nullptr;
-    }
-
-    typename std::enable_if<std::is_convertible<std::nullptr_t, T>::value,
-                            bool>::type
-    operator==(const std::nullptr_t &) const
-    {
-        return m_value == nullptr;
-    }
-
 protected:
-    Recyclable() //invalid
-        : m_reference(new std::atomic<int>(0))
-    {
-    }
-
     void retain() const
     {
         if (m_reference) {

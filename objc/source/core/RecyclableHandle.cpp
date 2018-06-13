@@ -31,17 +31,28 @@ RecyclableHandle::RecyclableHandle(
 }
 
 RecyclableHandle::RecyclableHandle(const std::nullptr_t &)
-    : Super(nullptr), m_handle(nullptr)
+    : Super(nullptr, nullptr), m_handle(nullptr)
 {
 }
 
-RecyclableHandle::RecyclableHandle() : Super(nullptr), m_handle(nullptr)
+RecyclableHandle::RecyclableHandle()
+    : Super(nullptr, nullptr), m_handle(nullptr)
 {
 }
 
 Handle *RecyclableHandle::getHandle() const
 {
     return m_handle;
+}
+
+bool RecyclableHandle::operator==(const std::nullptr_t &) const
+{
+    return m_value == nullptr;
+}
+
+bool RecyclableHandle::operator!=(const std::nullptr_t &) const
+{
+    return m_value != nullptr;
 }
 
 } //namespace WCDB

@@ -40,6 +40,9 @@ public:
     constexpr Handle *operator->() const { return m_handle; }
     Handle *getHandle() const;
 
+    bool operator==(const std::nullptr_t &) const;
+    bool operator!=(const std::nullptr_t &) const;
+
 protected:
     Handle *m_handle;
 };

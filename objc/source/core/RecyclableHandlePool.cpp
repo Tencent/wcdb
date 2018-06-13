@@ -31,13 +31,23 @@ RecyclableHandlePool::RecyclableHandlePool(
 }
 
 RecyclableHandlePool::RecyclableHandlePool(const std::nullptr_t &)
-    : Super(nullptr)
+    : Super(nullptr, nullptr)
 {
 }
 
 HandlePool *RecyclableHandlePool::getHandlePool() const
 {
     return m_value.get();
+}
+
+bool RecyclableHandlePool::operator==(const std::nullptr_t &) const
+{
+    return m_value == nullptr;
+}
+
+bool RecyclableHandlePool::operator!=(const std::nullptr_t &) const
+{
+    return m_value != nullptr;
 }
 
 } //namespace WCDB
