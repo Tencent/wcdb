@@ -42,6 +42,7 @@ public:
         Deposit = 1,
     };
     void setReaction(Reaction reaction);
+    Reaction getReaction() const;
 
 protected:
     Reaction m_reaction;

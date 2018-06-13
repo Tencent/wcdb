@@ -36,6 +36,11 @@ void Corruption::setReaction(Reaction reaction)
     m_reaction = reaction;
 }
 
+Corruption::Reaction Corruption::getReaction() const
+{
+    return m_reaction;
+}
+
 #pragma mark - Notification
 void Corruption::setExtraReaction(const ExtraReaction &extraReaction)
 {

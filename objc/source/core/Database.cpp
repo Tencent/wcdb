@@ -283,9 +283,18 @@ std::list<std::string> Database::getPaths() const
 }
 
 #pragma mark - Repair Kit
-void Database::setCorruptionReaction(CorruptionReaction reaction)
+void Database::setCorruptionReaction(CorruptionReaction newReaction)
 {
-    m_pool->attachment.corruption.setReaction(reaction);
+    Corruption &corruption = m_pool->attachment.corruption;
+    CorruptionReaction oldReaction = corruption.getReaction();
+    if (oldReaction != CorruptionReaction::Deposit &&
+        newReaction == CorruptionReaction::Deposit) {
+        setConfig(Configs::backup(), "backup", Configs::Priority::Backup);
+    } else if (oldReaction == CorruptionReaction::Deposit &&
+               newReaction != CorruptionReaction::Deposit) {
+        removeConfig("backup");
+    }
+    corruption.setReaction(newReaction);
 }
 
 void Database::setExtraReactionWhenCorrupted(

@@ -19,7 +19,13 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/BackupConfig.hpp>
+#include <WCDB/BasicConfig.hpp>
+#include <WCDB/CheckpointConfig.hpp>
+#include <WCDB/CipherConfig.hpp>
 #include <WCDB/Configs.hpp>
+#include <WCDB/TokenizeConfig.hpp>
+#include <WCDB/TraceConfig.hpp>
 
 namespace WCDB {
 
@@ -141,6 +147,13 @@ std::shared_ptr<Config> Configs::checkpoint()
     static const std::shared_ptr<Config> *s_checkpoint =
         new std::shared_ptr<Config>(new CheckpointConfig);
     return *s_checkpoint;
+}
+
+std::shared_ptr<Config> Configs::backup()
+{
+    static const std::shared_ptr<Config> *s_backup =
+        new std::shared_ptr<Config>(new BackupConfig);
+    return *s_backup;
 }
 
 } //namespace WCDB

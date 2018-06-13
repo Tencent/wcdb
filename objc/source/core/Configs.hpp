@@ -21,12 +21,7 @@
 #ifndef Configs_hpp
 #define Configs_hpp
 
-#include <WCDB/BasicConfig.hpp>
-#include <WCDB/CheckpointConfig.hpp>
-#include <WCDB/CipherConfig.hpp>
 #include <WCDB/Config.hpp>
-#include <WCDB/TokenizeConfig.hpp>
-#include <WCDB/TraceConfig.hpp>
 
 #pragma GCC visibility push(hidden)
 
@@ -77,6 +72,7 @@ public:
         Cipher,
         Basic,
         Tokenize,
+        Backup,
         Checkpoint,
         End,
     };
@@ -84,6 +80,7 @@ public:
     static std::shared_ptr<Config> basic();
     static std::shared_ptr<Config> trace();
     static std::shared_ptr<Config> checkpoint();
+    static std::shared_ptr<Config> backup();
 };
 
 #pragma GCC visibility pop
