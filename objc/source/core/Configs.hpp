@@ -72,7 +72,7 @@ protected:
 #pragma mark - Config
 public:
     enum Priority {
-        //TODO
+        Begin = -100,
         Trace,
         Cipher,
         Basic,
