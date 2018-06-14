@@ -45,7 +45,8 @@ HandlePool::HandlePool(const std::string &thePath,
 HandlePool::~HandlePool()
 {
     //wait until all handles back.
-    drain(nullptr);
+    blockade();
+    unblockade();
 }
 
 void HandlePool::setInitializeNotification(

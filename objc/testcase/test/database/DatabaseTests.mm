@@ -170,4 +170,21 @@
     XCTAssertFalse([[NSFileManager defaultManager] fileExistsAtPath:[_database.path stringByAppendingPathExtension:@"-wal"]]);
 }
 
+- (void)test_dealloc
+{
+    NSString *cmdName = NSStringFromSelector(_cmd);
+    NSString *path = [NSString stringWithFormat:@"%@-%@", self.recommendedPath, cmdName];
+    @autoreleasepool {
+        WCTDatabase *database = [[WCTDatabase alloc] initWithPath:path];
+        XCTAssertTrue([database createTableAndIndexes:cmdName withClass:TestCaseObject.class]);
+        XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:database.path]);
+        XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:[database.path stringByAppendingString:@"-wal"]]);
+    }
+
+    WCTDatabase *database = [[WCTDatabase alloc] initWithPath:path];
+    XCTAssertFalse([database isOpened]);
+    XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:database.path]);
+    XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:[database.path stringByAppendingString:@"-wal"]]);
+}
+
 @end
