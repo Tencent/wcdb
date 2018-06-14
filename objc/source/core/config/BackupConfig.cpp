@@ -38,11 +38,27 @@ BackupConfig::BackupConfig() : Config(BackupConfig::name)
 bool BackupConfig::invoke(Handle *handle)
 {
     handle->setNotificationWhenCheckpoint(
-        [](Handle *handle, int frame) -> bool {
+        [](Handle *handle, int frames) -> bool {
             std::shared_ptr<Database> database =
                 Database::databaseWithExistingPath(handle->path);
             WCTInnerAssert(database != nullptr);
-            return database->backup(frame);
+            if (database->backup(frames)) {
+                return true;
+            }
+            if (frames > 10000) {
+                Error error;
+                error.level = Error::Level::Warning;
+                error.setCode(Error::Code::Exceed);
+                error.message =
+                    "Number of frames exceeds, mandatory checkpoint, and "
+                    "delete all backups." error.infos.set("Path", handle->path);
+                error.infos.set("Frames", frames);
+                Notifier::shared()->notify(error);
+
+                database->removeMaterials();
+                return true;
+            }
+            return false;
         });
     return true;
 }

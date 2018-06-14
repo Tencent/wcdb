@@ -382,6 +382,16 @@ bool Database::removeDeposit()
     return false;
 }
 
+bool Database::removeMaterials()
+{
+    if (FileManager::shared()->removeItems(
+            {getFirstMaterialPath(), getLastMaterialPath()})) {
+        return true;
+    }
+    assignWithSharedThreadedError();
+    return false;
+}
+
 bool Database::retrieveRenewed()
 {
     WCTInnerAssert(isBlockaded());

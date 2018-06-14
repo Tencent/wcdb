@@ -113,6 +113,7 @@ public:
     double retrieve(const RetrieveProgressCallback &onProgressUpdate);
     bool canRetrieve() const;
     bool removeDeposit();
+    bool removeMaterials();
 
 protected:
     bool retrieveRenewed();
