@@ -37,6 +37,8 @@ public:
     bool invoke(Handle *handle) override;
 
     static constexpr const char *name = "WCDBCheckpoint";
+    static constexpr const int framesForPassive = 100;
+    static constexpr const int framesForFull = 1000;
 
 protected:
     void onTimed(const std::string &path, const int &pages) const;

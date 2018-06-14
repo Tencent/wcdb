@@ -26,6 +26,10 @@
 
 namespace WCDB {
 
+static_assert(CheckpointConfig::framesForPassive <
+                  CheckpointConfig::framesForFull,
+              "");
+
 const std::shared_ptr<Config> &CheckpointConfig::shared()
 {
     static const std::shared_ptr<Config> *s_shared =
@@ -59,10 +63,10 @@ bool CheckpointConfig::invoke(Handle *handle)
     return true;
 }
 
-void CheckpointConfig::onCommitted(Handle *handle, int pages)
+void CheckpointConfig::onCommitted(Handle *handle, int frames)
 {
-    if (pages > 100) {
-        m_timedQueue.reQueue(handle->path, pages);
+    if (frames > framesForPassive) {
+        m_timedQueue.reQueue(handle->path, frames);
     }
 }
 
@@ -72,7 +76,7 @@ void CheckpointConfig::loop()
                                 std::placeholders::_1, std::placeholders::_2));
 }
 
-void CheckpointConfig::onTimed(const std::string &path, const int &pages) const
+void CheckpointConfig::onTimed(const std::string &path, const int &frames) const
 {
     static std::atomic<bool> s_exit(false);
     atexit([]() { s_exit.store(true); });
@@ -85,10 +89,9 @@ void CheckpointConfig::onTimed(const std::string &path, const int &pages) const
     if (database == nullptr || !database->isOpened()) {
         return;
     }
-    bool result = database->execute(m_checkpointPassive);
-    if (result && pages > 1000) {
-        //Passive checkpoint can write WAL data back to database file as much as possible without blocking the db. After this, Truncate checkpoint will write the rest WAL data back to db file and truncate it into zero byte file.
-        //As a result, checkpoint process will not block the database too long.
+    if (frames < framesForFull) {
+        database->execute(m_checkpointPassive);
+    } else {
         database->execute(m_checkpointTruncate);
     }
 }
