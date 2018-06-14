@@ -88,7 +88,7 @@ double FactoryRetriever::work()
 
     //2. Restore from current db. It must be succeed without even non-critical errors.
     if (!restore(factory.database) ||
-        m_criticalError.code() != Error::Code::OK) {
+        getCriticalLevel() != CriticalLevel::None) {
         return -1;
     }
 
@@ -121,7 +121,7 @@ double FactoryRetriever::work()
     }
 
     //6. Remove all depositor dbs.
-    if (m_criticalError.code() == Error::Code::OK) {
+    if (getCriticalLevel() < CriticalLevel::Fatal) {
         FileManager::shared()->removeItem(factory.directory);
     }
 
@@ -179,7 +179,7 @@ bool FactoryRetriever::restore(const std::string &database)
             mechanic.work();
             updateScore(database, mechanic.getScore());
             tryUpgradeError(mechanic.getCriticalError());
-            return mechanic.isCriticalErrorFatal();
+            return mechanic.getCriticalLevel() >= CriticalLevel::Fatal;
         } else if (ThreadedErrors::shared()->getThreadedError().code() !=
                    Error::Code::Corrupt) {
             tryUpgradeErrorWithSharedThreadedError();
@@ -208,7 +208,7 @@ bool FactoryRetriever::restore(const std::string &database)
     fullCrawler.work();
     updateScore(database, fullCrawler.getScore());
     tryUpgradeError(fullCrawler.getCriticalError());
-    return fullCrawler.isCriticalErrorFatal();
+    return fullCrawler.getCriticalLevel() >= CriticalLevel::Fatal;
 }
 
 #pragma mark - Assembler
