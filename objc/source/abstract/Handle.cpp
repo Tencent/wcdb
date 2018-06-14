@@ -173,10 +173,10 @@ void Handle::setNotificationWhenCommitted(const CommittedCallback &onCommitted)
         m_committedInfo.handle = this;
         sqlite3_wal_hook(
             (sqlite3 *) m_handle,
-            [](void *p, sqlite3 *, const char *, int pages) -> int {
+            [](void *p, sqlite3 *, const char *, int frames) -> int {
                 CommittedInfo *committedInfo =
                     reinterpret_cast<CommittedInfo *>(p);
-                committedInfo->notification(committedInfo->handle, pages);
+                committedInfo->notification(committedInfo->handle, frames);
                 return SQLITE_OK;
             },
             &m_committedInfo);
@@ -198,10 +198,11 @@ void Handle::setNotificationWhenCheckpoint(
     if (m_checkpointInfo.notification) {
         sqlite3_wal_checkpoint_handler(
             (sqlite3 *) m_handle,
-            [](void *p, int f) -> int {
+            [](void *p, int frames) -> int {
                 CheckpointInfo *checkpointInfo =
                     reinterpret_cast<CheckpointInfo *>(p);
-                if (checkpointInfo->notification(checkpointInfo->handle, f)) {
+                if (checkpointInfo->notification(checkpointInfo->handle,
+                                                 frames)) {
                     return SQLITE_OK;
                 }
                 return SQLITE_ABORT;
