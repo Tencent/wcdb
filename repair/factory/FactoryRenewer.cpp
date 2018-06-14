@@ -109,28 +109,27 @@ bool FactoryRenewer::prepare()
     for (const auto &workshopDirectory : workshopDirectories) {
         std::string databaseForAcquisition =
             Path::addComponent(workshopDirectory, databaseName);
-        std::string material;
-        std::tie(succeed, material) =
+        std::string materialPath;
+        std::tie(succeed, materialPath) =
             Factory::pickMaterialForRestoring(database);
         if (!succeed) {
             assignWithSharedThreadedError();
             return false;
         }
-        if (material.empty()) {
+        if (materialPath.empty()) {
             continue;
         }
-        std::map<std::string, int64_t> sequences;
-        std::tie(succeed, sequences) = Material::acquireMetas(material);
-        if (!succeed) {
+        Material material;
+        if (!material.deserialize(materialPath)) {
             assignWithSharedThreadedError();
             return false;
         }
-        for (const auto &element : sequences) {
+        for (const auto &element : material.contents) {
             auto iter = resolvedSequences.find(element.first);
             if (iter != resolvedSequences.end()) {
-                iter->second = std::max(iter->second, element.second);
+                iter->second = std::max(iter->second, element.second.sequence);
             } else {
-                resolvedSequences[element.first] = element.second;
+                resolvedSequences[element.first] = element.second.sequence;
             }
         }
     }

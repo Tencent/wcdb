@@ -41,6 +41,7 @@ class Material : public Serializable, public Deserializable {
 #pragma mark - Serializable
 public:
     bool serialize(Serialization &serialization) const override;
+    using Serializable::serialize;
 
 protected:
     static bool serializeBLOB(Serialization &serialization, const Data &data);
@@ -49,6 +50,7 @@ protected:
 #pragma mark - Deserializable
 public:
     bool deserialize(Deserialization &deserialization) override;
+    using Deserializable::deserialize;
 
 protected:
     static std::pair<bool, Data>
@@ -66,10 +68,8 @@ public:
 public:
     class Info : public Serializable, public Deserializable {
     public:
-        static constexpr const int size =
-            sizeof(int64_t) + sizeof(uint32_t) * 5;
+        static constexpr const int size = sizeof(uint32_t) * 5;
         Info();
-        int64_t moment;
         uint32_t pageSize;
         uint32_t reservedBytes;
         std::pair<uint32_t, uint32_t> walSalt;

@@ -184,10 +184,10 @@ void Material::markAsCorrupt()
 }
 
 #pragma mark - Info
-static_assert(Material::Info::size == 28, "");
+static_assert(Material::Info::size == 20, "");
 
 Material::Info::Info()
-    : moment(0), pageSize(0), walFrame(0), walSalt({0, 0}), reservedBytes(0)
+    : pageSize(0), walFrame(0), walSalt({0, 0}), reservedBytes(0)
 {
 }
 
@@ -197,7 +197,6 @@ bool Material::Info::serialize(Serialization &serialization) const
     if (!serialization.resizeToFit(Info::size)) {
         return false;
     }
-    serialization.put8BytesInt(moment);
     serialization.put4BytesUInt(pageSize);
     serialization.put4BytesUInt(reservedBytes);
     serialization.put4BytesUInt(walSalt.first);
@@ -212,7 +211,6 @@ bool Material::Info::deserialize(Deserialization &deserialization)
     if (!deserialization.isEnough(Info::size)) {
         return false;
     }
-    moment = deserialization.advance8BytesInt();
     pageSize = deserialization.advance4BytesUInt();
     reservedBytes = deserialization.advance4BytesUInt();
     walSalt.first = deserialization.advance4BytesUInt();
