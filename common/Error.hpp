@@ -36,7 +36,7 @@ public:
         Debug = 2,
         Warning = 3,
         Error = 4,
-        Info = 5,
+        Notice = 5,
         Fatal = 6,
     };
     Level level;
@@ -51,8 +51,8 @@ public:
                 return "WARNING";
             case Level::Error:
                 return "ERROR";
-            case Level::Info:
-                return "Info";
+            case Level::Notice:
+                return "Notice";
             case Level::Fatal:
                 return "FATAL";
         }

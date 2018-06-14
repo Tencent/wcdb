@@ -54,7 +54,7 @@ void Corruption::notify()
     }
     {
         Error error;
-        error.level = Error::Level::Info;
+        error.level = Error::Level::Notice;
         error.setCode(Error::Code::Notice);
         error.message = "Corruption will be handled.";
         error.infos.set("Reaction", m_reaction);

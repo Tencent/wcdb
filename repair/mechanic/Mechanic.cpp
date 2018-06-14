@@ -58,6 +58,17 @@ void Mechanic::work()
     if (wal.initialize()) {
         if (wal.getSalt() == m_material.info.walSalt) {
             m_pager.setWal(std::move(wal));
+        } else {
+            Error error;
+            error.level = Error::Level::Notice;
+            Error::Code code =
+                wal.getSalt().first == 0 && wal.getSalt().second == 0
+                    ? Error::Code::NotFound
+                    : Error::Code::Mismatch;
+            error.setCode(code, "Repair");
+            error.message = "Skip WAL.";
+            error.infos.set("Path", wal.getPath());
+            Notifier::shared()->notify(error);
         }
     } else {
         tryUpgradeCrawlerError();
@@ -67,7 +78,7 @@ void Mechanic::work()
     for (const auto &element : m_material.contents) {
         pageCount += element.second.pagenos.size();
     }
-    setPageWeight((double) 1.0 / pageCount);
+    setPageWeight(pageCount > 0 ? (double) 1.0 / pageCount : 0);
 
     markAsAssembling();
     for (const auto &element : m_material.contents) {

@@ -41,7 +41,7 @@ void Notifier::logger(const Error &error)
             break;
         case Error::Level::Warning:
         case Error::Level::Error:
-        case Error::Level::Info:
+        case Error::Level::Notice:
             std::cout << error.getDescription() << std::endl;
             break;
         case Error::Level::Fatal:

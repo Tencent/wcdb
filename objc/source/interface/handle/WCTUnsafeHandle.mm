@@ -561,8 +561,8 @@
         }
         for (const std::string &columnName : columnNames) {
             WCDB::Error error;
-            error.setCode(WCDB::Error::Code::Notice);
-            error.level = WCDB::Error::Level::Info;
+            error.setCode(WCDB::Error::Code::Mismatch);
+            error.level = WCDB::Error::Level::Notice;
             error.message = "Skip column";
             error.infos.set("Table", tableName.cppString);
             error.infos.set("Column", columnName);

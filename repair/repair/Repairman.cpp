@@ -113,7 +113,7 @@ void Repairman::onCrawlerError()
 void Repairman::tryUpgradeCrawlerError()
 {
     Error error = m_pager.getError();
-    if (error.isCorruption()) {
+    if (error.code() == Error::Code::Corrupt) {
         error.level = Error::Level::Warning;
     }
     tryUpgradeError(std::move(error));
@@ -137,7 +137,8 @@ void Repairman::markCellAsCounted()
 
 void Repairman::markCellCount(int cellCount)
 {
-    m_cellWeight = (double) 1.0 / cellCount * m_pageWeight;
+    double temp = cellCount * m_pageWeight;
+    m_cellWeight = temp > 0 ? (double) 1.0 / temp : 0;
 }
 
 void Repairman::setPageWeight(double pageWeight)
