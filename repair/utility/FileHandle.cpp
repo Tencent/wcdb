@@ -56,8 +56,8 @@ bool FileHandle::open(Mode mode)
     if (m_fd == -1) {
         int flag;
         switch (mode) {
-            case Mode::ReadWrite:
-                flag = O_RDWR;
+            case Mode::OverWrite:
+                flag = O_CREAT | O_WRONLY | O_TRUNC;
                 break;
             case Mode::ReadOnly:
                 flag = O_RDONLY;

@@ -45,7 +45,7 @@ protected:
 #pragma mark - Basic
 public:
     enum Mode {
-        ReadWrite,
+        OverWrite,
         ReadOnly,
     };
     bool open(Mode mode);
