@@ -38,10 +38,6 @@ class Serialization;
 class Deserialization;
 
 class Material : public Serializable, public Deserializable {
-#pragma mark - Material
-public:
-    Material();
-
 #pragma mark - Serializable
 public:
     bool serialize(Serialization &serialization) const override;

@@ -28,12 +28,6 @@ namespace WCDB {
 
 namespace Repair {
 
-#pragma mark - Material
-Material::Material()
-{
-    memset(&info, 0, sizeof(info));
-}
-
 #pragma mark - Serialization
 bool Material::serialize(Serialization &serialization) const
 {
