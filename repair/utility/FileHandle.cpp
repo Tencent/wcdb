@@ -38,6 +38,11 @@ FileHandle::FileHandle(FileHandle &&other)
     other.m_fd = -1;
 }
 
+FileHandle::~FileHandle()
+{
+    WCTRemedialAssert(m_fd == -1, "Unpaired call", close(););
+}
+
 FileHandle &FileHandle::operator=(FileHandle &&other)
 {
     WCTInnerAssert(path == other.path);

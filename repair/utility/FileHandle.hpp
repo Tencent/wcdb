@@ -31,6 +31,7 @@ class FileHandle : public SharedThreadedErrorProne {
 public:
     FileHandle(const std::string &path);
     FileHandle(FileHandle &&);
+    ~FileHandle();
     FileHandle &operator=(FileHandle &&);
     FileHandle() = delete;
     FileHandle(const FileHandle &) = delete;
