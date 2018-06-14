@@ -35,8 +35,8 @@ public:
         Ignore = 1,
         Debug = 2,
         Warning = 3,
-        Error = 4,
-        Notice = 5,
+        Notice = 4,
+        Error = 5,
         Fatal = 6,
     };
     Level level;

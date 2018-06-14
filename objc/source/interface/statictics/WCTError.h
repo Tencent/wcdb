@@ -27,8 +27,8 @@ typedef NS_ENUM(NSUInteger, WCTErrorLevel) {
     WCTErrorLevelIgnore = 1,
     WCTErrorLevelDebug = 2,
     WCTErrorLevelWarning = 3,
-    WCTErrorLevelError = 4,
-    WCTErrorLevelNotice = 5,
+    WCTErrorLevelNotice = 4,
+    WCTErrorLevelError = 5,
     WCTErrorLevelFatal = 6,
 };
 
