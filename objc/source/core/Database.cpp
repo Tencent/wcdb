@@ -375,7 +375,7 @@ bool Database::canRetrieve() const
 
 bool Database::removeDeposit()
 {
-    if (FileManager::shared()->removeDirectory(getFactoryDirectory())) {
+    if (FileManager::shared()->removeItem(getFactoryDirectory())) {
         return true;
     }
     assignWithSharedThreadedError();

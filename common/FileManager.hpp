@@ -48,14 +48,16 @@ public:
     std::pair<bool, size_t> getFileSize(const std::string &file);
     bool createHardLink(const std::string &from, const std::string &to);
     bool removeHardLink(const std::string &path);
-    bool removeFile(const std::string &file);
-    bool removeDirectory(const std::string &directory);
     bool createDirectory(const std::string &path);
     std::pair<bool, time_t> getFileModifiedTime(const std::string &path);
 
     bool enumerateDirectory(
         const std::string &directory,
         const std::function<bool(const std::string &, bool)> &enumeration);
+
+protected:
+    bool removeFile(const std::string &file);
+    bool removeDirectory(const std::string &directory);
 
 #pragma mark - Combination
 public:
