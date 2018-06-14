@@ -50,7 +50,8 @@ void Mechanic::work()
 
     if (!m_pager.initialize()) {
         //Actually, the initialization of pager always succeed if material is not corrupted.
-        tryUpgradeCrawlerError();
+        setCriticalError(m_pager.getError());
+        markAsFailed();
         return;
     }
     Wal wal(m_pager);
@@ -82,7 +83,7 @@ void Mechanic::work()
 
     markAsAssembling();
     for (const auto &element : m_material.contents) {
-        if (isCriticalErrorFatal()) {
+        if (getCriticalLevel() >= CriticalLevel::Fatal) {
             break;
         }
         if (!assembleTable(element.first, element.second.sql,
@@ -101,7 +102,7 @@ void Mechanic::work()
 #pragma mark - Crawlable
 void Mechanic::onCellCrawled(const Cell &cell)
 {
-    if (isCriticalErrorFatal()) {
+    if (getCriticalLevel() >= CriticalLevel::Fatal) {
         return;
     }
     assembleCell(cell);
@@ -110,7 +111,7 @@ void Mechanic::onCellCrawled(const Cell &cell)
 bool Mechanic::willCrawlPage(const Page &page, int)
 {
     increaseProgress(getPageWeight());
-    if (isCriticalErrorFatal()) {
+    if (getCriticalLevel() >= CriticalLevel::Fatal) {
         return false;
     }
     if (page.getType() == Page::Type::LeafTable) {

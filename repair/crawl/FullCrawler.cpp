@@ -36,7 +36,8 @@ FullCrawler::FullCrawler(const std::string &source) : Repairman(source)
 void FullCrawler::work()
 {
     if (!m_pager.initialize()) {
-        tryUpgradeCrawlerError();
+        setCriticalError(m_pager.getError());
+        markAsFailed();
         return;
     }
     Wal wal(m_pager);
@@ -66,7 +67,7 @@ void FullCrawler::work()
 #pragma mark - Crawlable
 void FullCrawler::onCellCrawled(const Cell &cell)
 {
-    if (isCriticalErrorFatal()) {
+    if (getCriticalLevel() >= CriticalLevel::Fatal) {
         return;
     }
     assembleCell(cell);
@@ -82,7 +83,7 @@ bool FullCrawler::willCrawlPage(const Page &, int)
 void FullCrawler::onMasterPageCrawled(const Page &page)
 {
     increaseProgress(getPageWeight());
-    if (isCriticalErrorFatal()) {
+    if (getCriticalLevel() >= CriticalLevel::Fatal) {
         return;
     }
     if (page.getType() == Page::Type::LeafTable) {
@@ -92,7 +93,7 @@ void FullCrawler::onMasterPageCrawled(const Page &page)
 
 void FullCrawler::onMasterCellCrawled(const Master *master)
 {
-    if (isCriticalErrorFatal()) {
+    if (getCriticalLevel() >= CriticalLevel::Fatal) {
         return;
     }
     markCellAsCounted();
