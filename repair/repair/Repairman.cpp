@@ -105,9 +105,16 @@ void Repairman::assembleCell(const Cell &cell)
     }
 }
 
+#pragma mark - Crawlable
 void Repairman::onCrawlerError()
 {
     tryUpgradeCrawlerError();
+}
+
+#pragma mark - Critical Error
+void Repairman::markAsFailed()
+{
+    finishProgress();
 }
 
 void Repairman::tryUpgradeCrawlerError()

@@ -43,6 +43,7 @@ protected:
 
 #pragma mark - Critical Error
 protected:
+    void markAsFailed();
     void tryUpgrateAssemblerError();
     void tryUpgradeCrawlerError();
 
