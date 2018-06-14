@@ -45,7 +45,11 @@ void Mechanic::setMaterial(Material &&material)
 #pragma mark - Mechanic
 void Mechanic::work()
 {
+    m_pager.setPageSize(m_material.info.pageSize);
+    m_pager.setReservedBytes(m_material.info.reservedBytes);
+
     if (!m_pager.initialize()) {
+        //Actually, the initialization of pager always succeed if material is not corrupted.
         tryUpgradeCrawlerError();
         return;
     }
@@ -58,9 +62,6 @@ void Mechanic::work()
     } else {
         tryUpgradeCrawlerError();
     }
-
-    m_pager.setPageSize(m_material.info.pageSize);
-    m_pager.setReservedBytes(m_material.info.reservedBytes);
 
     int pageCount = 0;
     for (const auto &element : m_material.contents) {
