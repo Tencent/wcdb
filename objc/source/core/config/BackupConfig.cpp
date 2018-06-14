@@ -20,9 +20,14 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/BackupConfig.hpp>
+#include <WCDB/CheckpointConfig.hpp>
 #include <WCDB/Database.hpp>
 
 namespace WCDB {
+
+static_assert(BackupConfig::framesForMandatoryCheckpoint >
+                  CheckpointConfig::framesForFull,
+              "");
 
 const std::shared_ptr<Config> &BackupConfig::shared()
 {
@@ -45,7 +50,7 @@ bool BackupConfig::invoke(Handle *handle)
             if (database->backup(frames)) {
                 return true;
             }
-            if (frames > 10000) {
+            if (frames > framesForMandatoryCheckpoint) {
                 Error error;
                 error.level = Error::Level::Warning;
                 error.setCode(Error::Code::Exceed);

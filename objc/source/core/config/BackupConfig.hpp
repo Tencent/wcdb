@@ -33,6 +33,7 @@ public:
     bool invoke(Handle *handle) override;
 
     static constexpr const char *name = "WCDBBackup";
+    static constexpr const int framesForMandatoryCheckpoint = 10000;
 };
 
 } //namespace WCDB
