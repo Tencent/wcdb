@@ -565,6 +565,23 @@ Data Serialization::finalize()
     return m_data.subdata((size_t) m_cursor);
 }
 
+#pragma mark - Deserializable
+bool Deserializable::deserialize(const Data &data)
+{
+    Deserialization deserialization(data);
+    return deserialize(deserialization);
+}
+
+#pragma mark - Serializable
+Data Serializable::serialize() const
+{
+    Serialization serialization;
+    if (serialize(serialization)) {
+        return serialization.finalize();
+    }
+    return Data::emptyData();
+}
+
 } //namespace Repair
 
 } //namespace WCDB

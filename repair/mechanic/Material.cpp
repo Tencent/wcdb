@@ -21,7 +21,6 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Compression.hpp>
 #include <WCDB/Data.hpp>
-#include <WCDB/FileHandle.hpp>
 #include <WCDB/Material.hpp>
 #include <WCDB/Serialization.hpp>
 
@@ -29,187 +28,44 @@ namespace WCDB {
 
 namespace Repair {
 
-#pragma mark - Initialization
+#pragma mark - Material
 Material::Material()
 {
     memset(&info, 0, sizeof(info));
 }
 
-Material::Content::Content() : sequence(0)
-{
-}
-
 #pragma mark - Serialization
-void Material::markAsCorrupt()
+bool Material::serialize(Serialization &serialization) const
 {
-    Error error;
-    error.setCode(Error::Code::Corrupt, "Repair");
-    error.message = "Material is corrupted";
-    Notifier::shared()->notify(error);
-    setThreadedError(std::move(error));
-}
-
-bool Material::deserialize(const Data &data)
-{
-    Deserialization deserialization(data);
-
     //Header
-    {
-        if (!isHeaderSanity(deserialization)) {
-            return false;
-        }
-    }
-
-    Deserialization metasDecoder;
-    Deserialization contentsDecoder;
-
-    //Metas
-    {
-        auto intermediate = deserializeBLOB(deserialization);
-        if (!intermediate.first) {
-            markAsCorrupt();
-            return false;
-        }
-        metasDecoder.reset(intermediate.second);
-    }
-
-    //Info
-    {
-        if (!deserialization.isEnough(sizeof(info))) {
-            markAsCorrupt();
-            return false;
-        }
-        info.pageSize = deserialization.advance4BytesUInt();
-        info.reservedBytes = deserialization.advance4BytesUInt();
-        info.walSalt.first = deserialization.advance4BytesUInt();
-        info.walSalt.second = deserialization.advance4BytesUInt();
-        info.walFrame = deserialization.advance4BytesUInt();
-    }
-
-    //Contents
-    {
-        auto intermediate = deserializeBLOB(deserialization);
-        if (!intermediate.first) {
-            markAsCorrupt();
-            return false;
-        }
-        contentsDecoder.reset(intermediate.second);
-    }
-
-    Content content;
-    size_t lengthOfVarint;
-    uint64_t varint;
-    while (!metasDecoder.ended() || !contentsDecoder.ended()) {
-        std::string tableName = metasDecoder.advanceZeroTerminatedString();
-        if (tableName.empty()) {
-            markAsCorrupt();
-            return false;
-        }
-
-        std::tie(lengthOfVarint, varint) = metasDecoder.advanceVarint();
-        if (lengthOfVarint == 0) {
-            markAsCorrupt();
-            return false;
-        }
-        content.sequence = (int64_t) varint;
-
-        std::string sql = contentsDecoder.advanceZeroTerminatedString();
-        if (sql.empty()) {
-            markAsCorrupt();
-            return false;
-        }
-        content.sql = std::move(sql);
-
-        uint32_t pageCount;
-        if (!contentsDecoder.isEnough(sizeof(pageCount))) {
-            markAsCorrupt();
-            return false;
-        }
-        pageCount = contentsDecoder.advance4BytesUInt();
-        std::vector<uint32_t> pagenos;
-        pagenos.reserve(pageCount);
-        for (uint32_t i = 0; i < pageCount; ++i) {
-            std::tie(lengthOfVarint, varint) = contentsDecoder.advanceVarint();
-            if (lengthOfVarint == 0) {
-                markAsCorrupt();
-                return false;
-            }
-            pagenos.push_back((uint32_t) varint);
-        }
-        content.pagenos = std::move(pagenos);
-
-        contents[std::move(tableName)] = std::move(content);
-    }
-
-    if (!metasDecoder.ended() && !contentsDecoder.ended()) {
-        markAsCorrupt();
+    if (!serialization.resizeToFit(Material::headerSize)) {
         return false;
     }
-    return true;
-}
-
-Data Material::serialize() const
-{
-    Serialization serialization;
-
-    //Header
-    {
-        if (!serialization.resizeToFit(Material::headerSize)) {
-            return Data::emptyData();
-        }
-        serialization.put4BytesUInt(magic);
-        serialization.put4BytesUInt(version);
-    }
-
-    //Metas
-    {
-        Data encoded;
-        Serialization encoder;
-        for (const auto &element : contents) {
-            if (!encoder.putZeroTerminatedString(element.first) ||
-                !encoder.putVarint(element.second.sequence)) {
-                return Data::emptyData();
-            }
-        }
-        if (!serializeBLOB(serialization, encoder.finalize())) {
-            return Data::emptyData();
-        }
-    }
+    serialization.put4BytesUInt(magic);
+    serialization.put4BytesUInt(version);
 
     //Info
-    {
-        if (!serialization.resizeToFit(sizeof(info))) {
-            return Data::emptyData();
-        }
-        serialization.put4BytesUInt(info.pageSize);
-        serialization.put4BytesUInt(info.reservedBytes);
-        serialization.put4BytesUInt(info.walSalt.first);
-        serialization.put4BytesUInt(info.walSalt.second);
-        serialization.put4BytesUInt(info.walFrame);
+    if (!info.serialize(serialization)) {
+        return false;
     }
 
     //Contents
-    {
-        Data encoded;
-        Serialization encoder;
-        for (const auto &element : contents) {
-            if (!encoder.putZeroTerminatedString(element.second.sql) ||
-                !encoder.put4BytesUInt(
-                    (uint32_t) element.second.pagenos.size())) {
-                return Data::emptyData();
-            }
-            for (const auto pageno : element.second.pagenos) {
-                if (!encoder.putVarint(pageno)) {
-                    return Data::emptyData();
-                }
-            }
+    Data encoded;
+    Serialization encoder;
+    for (const auto &element : contents) {
+        if (element.first.empty()) {
+            markAsEmpty();
+            return false;
         }
-        if (!serializeBLOB(serialization, encoder.finalize())) {
-            return Data::emptyData();
+        if (!element.second.serialize(encoder)) {
+            return false;
         }
     }
+    if (!serializeBLOB(serialization, encoder.finalize())) {
+        return false;
+    }
 
-    return serialization.finalize();
+    return true;
 }
 
 bool Material::serializeBLOB(Serialization &serialization, const Data &data)
@@ -234,6 +90,62 @@ bool Material::serializeBLOB(Serialization &serialization, const Data &data)
     return true;
 }
 
+void Material::markAsEmpty()
+{
+    Error error;
+    error.setCode(Error::Code::Empty, "Repair");
+    error.message = "Element of material is empty.";
+    Notifier::shared()->notify(error);
+    setThreadedError(std::move(error));
+}
+
+#pragma mark - Deserialization
+bool Material::deserialize(Deserialization &deserialization)
+{
+    //Header
+    if (!deserialization.isEnough(Material::headerSize)) {
+        markAsCorrupt();
+        return false;
+    }
+    uint32_t magic = deserialization.advance4BytesUInt();
+    uint32_t version = deserialization.advance4BytesUInt();
+    if (magic != Material::magic || version != 0x01000000) {
+        markAsCorrupt();
+        return false;
+    }
+
+    //Info
+    if (!info.deserialize(deserialization)) {
+        markAsCorrupt();
+        return false;
+    }
+
+    bool succeed;
+    Data decompressed;
+    std::tie(succeed, decompressed) = deserializeBLOB(deserialization);
+    if (!succeed) {
+        return false;
+    }
+
+    Deserialization decoder(decompressed);
+    while (!decoder.ended()) {
+        std::string tableName = decoder.advanceZeroTerminatedString();
+        if (tableName.empty()) {
+            markAsCorrupt();
+            return false;
+        }
+
+        Content content;
+        if (!content.deserialize(deserialization)) {
+            return false;
+        }
+
+        contents[std::move(tableName)] = std::move(content);
+    }
+
+    return true;
+}
+
 std::pair<bool, Data>
 Material::deserializeBLOB(Deserialization &deserialization)
 {
@@ -244,12 +156,6 @@ Material::deserializeBLOB(Deserialization &deserialization)
     }
     checksum = deserialization.advance4BytesUInt();
     size = deserialization.advance4BytesUInt();
-    return deserializeUnwrappedBLOB(deserialization, checksum, size);
-}
-
-std::pair<bool, Data> Material::deserializeUnwrappedBLOB(
-    Deserialization &deserialization, uint32_t checksum, uint32_t size)
-{
     if (size == 0) {
         if (checksum != 0) {
             markAsCorrupt();
@@ -274,162 +180,114 @@ std::pair<bool, Data> Material::deserializeUnwrappedBLOB(
     return {true, decompressed};
 }
 
-bool Material::isHeaderSanity(Deserialization &deserialization)
+void Material::markAsCorrupt()
 {
-    if (!deserialization.isEnough(Material::headerSize)) {
-        markAsCorrupt();
+    Error error;
+    error.setCode(Error::Code::Corrupt, "Repair");
+    error.message = "Material is corrupted";
+    Notifier::shared()->notify(error);
+    setThreadedError(std::move(error));
+}
+
+#pragma mark - Info
+static_assert(Material::Info::size == 28, "");
+
+Material::Info::Info()
+    : moment(0), pageSize(0), walFrame(0), walSalt({0, 0}), reservedBytes(0)
+{
+}
+
+#pragma mark - Serialization
+bool Material::Info::serialize(Serialization &serialization) const
+{
+    if (!serialization.resizeToFit(Info::size)) {
         return false;
     }
-    uint32_t magic = deserialization.advance4BytesUInt();
-    uint32_t version = deserialization.advance4BytesUInt();
-    if (magic != Material::magic || version != 0x01000000) {
-        markAsCorrupt();
+    serialization.put8BytesInt(moment);
+    serialization.put4BytesUInt(pageSize);
+    serialization.put4BytesUInt(reservedBytes);
+    serialization.put4BytesUInt(walSalt.first);
+    serialization.put4BytesUInt(walSalt.second);
+    serialization.put4BytesUInt(walFrame);
+    return true;
+}
+
+#pragma mark - Deserialization
+bool Material::Info::deserialize(Deserialization &deserialization)
+{
+    if (!deserialization.isEnough(Info::size)) {
         return false;
+    }
+    moment = deserialization.advance8BytesInt();
+    pageSize = deserialization.advance4BytesUInt();
+    reservedBytes = deserialization.advance4BytesUInt();
+    walSalt.first = deserialization.advance4BytesUInt();
+    walSalt.second = deserialization.advance4BytesUInt();
+    walFrame = deserialization.advance4BytesUInt();
+    return true;
+}
+
+#pragma mark - Content
+Material::Content::Content() : sequence(0)
+{
+}
+
+#pragma mark - Serialization
+bool Material::Content::serialize(Serialization &serialization) const
+{
+    if (sql.empty() || pagenos.empty()) {
+        markAsEmpty();
+        return false;
+    }
+    if (!serialization.putVarint(sequence) ||
+        !serialization.putZeroTerminatedString(sql) ||
+        !serialization.put4BytesUInt((uint32_t) pagenos.size())) {
+        return false;
+    }
+    for (const auto pageno : pagenos) {
+        if (!serialization.putVarint(pageno)) {
+            return false;
+        }
     }
     return true;
 }
 
-bool Material::deserialize(const std::string &path)
+#pragma mark - Deserialization
+bool Material::Content::deserialize(Deserialization &deserialization)
 {
-    FileHandle fileHandle(path);
-    if (!fileHandle.open(FileHandle::Mode::ReadOnly)) {
+    size_t lengthOfVarint;
+    uint64_t varint;
+    std::tie(lengthOfVarint, varint) = deserialization.advanceVarint();
+    if (lengthOfVarint == 0) {
+        Material::markAsCorrupt();
         return false;
     }
-    bool succeed = false;
-    do {
-        ssize_t size = fileHandle.size();
-        if (size == -1) {
-            break;
-        }
-        Data data(size);
-        if (data.empty()) {
-            break;
-        }
-        ssize_t read = fileHandle.read(data.buffer(), 0, size);
-        if (read != size) {
-            if (read >= 0) {
-                Error error;
-                error.setCode(Error::Code::IOError, "Repair");
-                error.message = "Short read";
-                error.infos.set("Path", path);
-                Notifier::shared()->notify(error);
-                setThreadedError(std::move(error));
-            }
-            break;
-        }
-        succeed = deserialize(data);
-    } while (false);
-    fileHandle.close();
-    return succeed;
-}
+    sequence = (int64_t) varint;
 
-bool Material::serialize(const std::string &path) const
-{
-    Data data = serialize();
-    if (data.empty()) {
+    sql = deserialization.advanceZeroTerminatedString();
+    if (sql.empty()) {
+        Material::markAsCorrupt();
         return false;
     }
-    //TODO cipher
-    FileHandle fileHandle(path);
-    if (!fileHandle.open(FileHandle::Mode::ReadWrite)) {
+
+    if (!deserialization.isEnough(sizeof(uint32_t))) {
+        Material::markAsCorrupt();
         return false;
     }
-    ssize_t wrote = fileHandle.write(data.buffer(), 0, data.size());
-    fileHandle.close();
-    if (wrote != data.size()) {
-        if (wrote >= 0) {
-            Error error;
-            error.setCode(Error::Code::IOError, "Repair");
-            error.message = "Short write";
-            error.infos.set("Path", path);
-            Notifier::shared()->notify(error);
-            setThreadedError(std::move(error));
+    uint32_t pageCount = deserialization.advance4BytesUInt();
+    pagenos.clear();
+    pagenos.reserve(pageCount);
+    for (uint32_t i = 0; i < pageCount; ++i) {
+        std::tie(lengthOfVarint, varint) = deserialization.advanceVarint();
+        if (lengthOfVarint == 0) {
+            Material::markAsCorrupt();
+            return false;
         }
-        return false;
+        pagenos.push_back((uint32_t) varint);
     }
     return true;
 }
 
-std::pair<bool, std::map<std::string, int64_t>>
-Material::acquireMetas(const std::string &path)
-{
-    FileHandle fileHandle(path);
-    if (!fileHandle.open(FileHandle::Mode::ReadOnly)) {
-        return {false, {}};
-    }
-    uint32_t size;
-    uint32_t checksum;
-    constexpr const size_t fixedLength =
-        headerSize + sizeof(size) + sizeof(checksum);
-    //Header + Meta Header
-    {
-        Data header = Data(fixedLength);
-        if (header.empty()) {
-            return {false, {}};
-        }
-        ssize_t read = fileHandle.read(header.buffer(), 0, fixedLength);
-        if (read != fixedLength) {
-            if (read >= 0) {
-                markAsCorrupt();
-            }
-            return {false, {}};
-        }
-        Deserialization deserialization(header);
-        if (!isHeaderSanity(deserialization)) {
-            return {false, {}};
-        }
-        size = deserialization.advance4BytesUInt();
-        checksum = deserialization.advance4BytesUInt();
-    }
-    //Metas
-    Data compressed(size);
-    {
-        if (compressed.empty()) {
-            return {false, {}};
-        }
-        ssize_t read = fileHandle.read(compressed.buffer(), fixedLength, size);
-        if (read != size) {
-            if (read >= 0) {
-                markAsCorrupt();
-            }
-            return {false, {}};
-        }
-    }
-
-    Data decompressed;
-    {
-        Deserialization deserialization(compressed);
-        bool result;
-        std::tie(result, decompressed) =
-            deserializeUnwrappedBLOB(deserialization, checksum, size);
-        if (!result) {
-            return {false, {}};
-        }
-    }
-
-    std::map<std::string, int64_t> sequences;
-    {
-        Deserialization decoder(decompressed);
-        size_t lengthOfSequence;
-        int64_t sequence;
-        std::string tableName;
-        while (!decoder.ended()) {
-            tableName = decoder.advanceZeroTerminatedString();
-            if (tableName.empty()) {
-                markAsCorrupt();
-                return {false, {}};
-            }
-            std::tie(lengthOfSequence, sequence) = decoder.advanceVarint();
-            if (lengthOfSequence == 0) {
-                markAsCorrupt();
-                return {false, {}};
-            }
-            sequences[std::move(tableName)] = sequence;
-        }
-    }
-    return {true, sequences};
-}
-
-} // namespace WCDB
+} // namespace Repair
 
 } //namespace WCDB

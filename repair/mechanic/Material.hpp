@@ -21,7 +21,7 @@
 #ifndef Material_hpp
 #define Material_hpp
 
-#include <WCDB/SharedThreadedErrorProne.hpp>
+#include <WCDB/Serialization.hpp>
 #include <list>
 #include <map>
 #include <stdlib.h>
@@ -37,10 +37,27 @@ namespace Repair {
 class Serialization;
 class Deserialization;
 
-class Material : protected SharedThreadedErrorProne {
-#pragma mark - Initialiazation
+class Material : public Serializable, public Deserializable {
+#pragma mark - Material
 public:
     Material();
+
+#pragma mark - Serializable
+public:
+    bool serialize(Serialization &serialization) const override;
+
+protected:
+    static bool serializeBLOB(Serialization &serialization, const Data &data);
+    static void markAsEmpty();
+
+#pragma mark - Deserializable
+public:
+    bool deserialize(Deserialization &deserialization) override;
+
+protected:
+    static std::pair<bool, Data>
+    deserializeBLOB(Deserialization &deserialization);
+    static void markAsCorrupt();
 
 #pragma mark - Header
 public:
@@ -49,46 +66,45 @@ public:
     static constexpr const int headerSize =
         sizeof(magic) + sizeof(version); //magic + version
 
-#pragma mark - Content
+#pragma mark - Info
 public:
-    struct Info {
+    class Info : public Serializable, public Deserializable {
+    public:
+        static constexpr const int size =
+            sizeof(int64_t) + sizeof(uint32_t) * 5;
+        Info();
+        int64_t moment;
         uint32_t pageSize;
         uint32_t reservedBytes;
-
         std::pair<uint32_t, uint32_t> walSalt;
         uint32_t walFrame;
+#pragma mark - Serializable
+    public:
+        bool serialize(Serialization &serialization) const override;
+#pragma mark - Deserializable
+    public:
+        bool deserialize(Deserialization &deserialization) override;
     };
 
     Info info;
 
-    class Content {
+#pragma mark - Content
+public:
+    class Content : public Serializable, public Deserializable {
     public:
         Content();
         std::string sql;
         int64_t sequence;
         std::vector<uint32_t> pagenos;
+#pragma mark - Serializable
+    public:
+        bool serialize(Serialization &serialization) const override;
+#pragma mark - Deserializable
+    public:
+        bool deserialize(Deserialization &deserialization) override;
     };
+
     std::map<std::string, Content> contents;
-
-#pragma mark - Serialization
-public:
-    bool deserialize(const Data &data);
-    Data serialize() const;
-
-    bool deserialize(const std::string &path);
-    bool serialize(const std::string &path) const;
-
-    static std::pair<bool, std::map<std::string, int64_t>>
-    acquireMetas(const std::string &path);
-
-protected:
-    static bool serializeBLOB(Serialization &serialization, const Data &data);
-    static std::pair<bool, Data>
-    deserializeBLOB(Deserialization &deserialization);
-    static std::pair<bool, Data> deserializeUnwrappedBLOB(
-        Deserialization &deserialization, uint32_t checksum, uint32_t size);
-    static bool isHeaderSanity(Deserialization &deserialization);
-    static void markAsCorrupt();
 };
 
 } //namespace Repair

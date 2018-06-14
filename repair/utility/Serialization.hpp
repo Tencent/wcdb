@@ -108,6 +108,20 @@ public:
     size_t putVarint(uint64_t value);
 };
 
+#pragma mark - Deserializable
+class Deserializable : protected SharedThreadedErrorProne {
+public:
+    bool deserialize(const Data &data);
+    virtual bool deserialize(Deserialization &deserialization) = 0;
+};
+
+#pragma mark - Serializable
+class Serializable : protected SharedThreadedErrorProne {
+public:
+    Data serialize() const;
+    virtual bool serialize(Serialization &serialization) const = 0;
+};
+
 } //namespace Repair
 
 } //namespace WCDB
