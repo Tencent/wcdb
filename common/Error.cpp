@@ -112,6 +112,9 @@ void Error::setSystemCode(int systemCode, Code codeIfUnresolved)
         case EAUTH:
             code = Code::Authorization;
             break;
+        case ENOENT:
+            code = Code::NotFound;
+            break;
         default:
             code = codeIfUnresolved;
             break;
