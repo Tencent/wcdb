@@ -57,6 +57,7 @@ bool SQLiteAssembler::markAsAssembling()
 
 void SQLiteAssembler::markAsAssembled()
 {
+    lazyCommitOrRollbackTransaction();
     finalize();
     close();
 }
