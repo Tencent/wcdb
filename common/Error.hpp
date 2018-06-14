@@ -52,7 +52,7 @@ public:
             case Level::Error:
                 return "ERROR";
             case Level::Notice:
-                return "Notice";
+                return "NOTICE";
             case Level::Fatal:
                 return "FATAL";
         }
