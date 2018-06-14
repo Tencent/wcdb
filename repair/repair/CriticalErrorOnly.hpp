@@ -29,15 +29,28 @@ namespace Repair {
 
 class CriticalErrorOnly {
 public:
+    CriticalErrorOnly();
+    enum CriticalLevel {
+        MostFatal = std::numeric_limits<int>::max(),
+        Fatal = 1,
+        NotFatal = std::numeric_limits<int>::min() + 1,
+        None = std::numeric_limits<int>::min(),
+    };
     const Error &getCriticalError() const;
-    bool isCriticalErrorFatal() const;
+    int getCriticalLevel() const;
 
 protected:
     static int criticalLevel(const Error &error);
     void tryUpgradeError(const Error &newError);
     void tryUpgradeError(Error &&newError);
     void tryUpgradeErrorWithSharedThreadedError();
+    void setCriticalError(const Error &error);
+    void setCriticalError(Error &&error);
+    void setCriticalErrorWIthSharedThreadedError();
+
+private:
     Error m_criticalError;
+    int m_criticalLevel;
 };
 
 } //namespace Repair

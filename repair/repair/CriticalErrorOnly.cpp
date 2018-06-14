@@ -25,6 +25,10 @@ namespace WCDB {
 
 namespace Repair {
 
+CriticalErrorOnly::CriticalErrorOnly() : m_criticalLevel(CriticalLevel::None)
+{
+}
+
 const Error &CriticalErrorOnly::getCriticalError() const
 {
     return m_criticalError;
@@ -32,35 +36,41 @@ const Error &CriticalErrorOnly::getCriticalError() const
 
 int CriticalErrorOnly::criticalLevel(const Error &error)
 {
+    if (error.level < Error::Level::Error) {
+        return -1;
+    }
     switch (error.code()) {
         case Error::Code::Full:
-            return std::numeric_limits<int>::max();
+            return CriticalLevel::Fatal + 3;
         case Error::Code::Corrupt:
         case Error::Code::NotADatabase:
-            if (error.level == Error::Level::Warning) {
-                return -1;
-            }
-            return std::numeric_limits<int>::max() - 1;
+            return CriticalLevel::Fatal + 2;
         case Error::Code::IOError:
-            return std::numeric_limits<int>::max() - 2;
+            return CriticalLevel::Fatal + 1;
+        case Error::Code::NoMemory:
+            return CriticalLevel::Fatal;
         case Error::Code::OK:
-            return std::numeric_limits<int>::min();
+            return CriticalLevel::None;
         default:
-            return 0;
+            return CriticalLevel::NotFatal;
     }
 }
 
 void CriticalErrorOnly::tryUpgradeError(const Error &newError)
 {
-    if (criticalLevel(newError) > criticalLevel(m_criticalError)) {
+    int newCriticalLevel = criticalLevel(newError);
+    if (newCriticalLevel > m_criticalLevel) {
         m_criticalError = newError;
+        m_criticalLevel = newCriticalLevel;
     }
 }
 
 void CriticalErrorOnly::tryUpgradeError(Error &&newError)
 {
-    if (criticalLevel(newError) > criticalLevel(m_criticalError)) {
-        m_criticalError = std::move(newError);
+    int newCriticalLevel = criticalLevel(newError);
+    if (newCriticalLevel > m_criticalLevel) {
+        m_criticalError = newError;
+        m_criticalLevel = std::move(newCriticalLevel);
     }
 }
 
@@ -69,9 +79,27 @@ void CriticalErrorOnly::tryUpgradeErrorWithSharedThreadedError()
     tryUpgradeError(std::move(ThreadedErrors::shared()->moveThreadedError()));
 }
 
-bool CriticalErrorOnly::isCriticalErrorFatal() const
+int CriticalErrorOnly::getCriticalLevel() const
 {
-    return criticalLevel(m_criticalError) > 0;
+    return m_criticalLevel;
+}
+
+void CriticalErrorOnly::setCriticalError(const Error &error)
+{
+    m_criticalError = error;
+    m_criticalLevel = CriticalLevel::MostFatal;
+}
+
+void CriticalErrorOnly::setCriticalError(Error &&error)
+{
+    m_criticalError = std::move(error);
+    m_criticalLevel = CriticalLevel::MostFatal;
+}
+
+void CriticalErrorOnly::setCriticalErrorWIthSharedThreadedError()
+{
+    m_criticalError = std::move(ThreadedErrors::shared()->moveThreadedError());
+    m_criticalLevel = CriticalLevel::MostFatal;
 }
 
 } //namespace Repair
