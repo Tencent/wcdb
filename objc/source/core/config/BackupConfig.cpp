@@ -51,7 +51,8 @@ bool BackupConfig::invoke(Handle *handle)
                 error.setCode(Error::Code::Exceed);
                 error.message =
                     "Number of frames exceeds, mandatory checkpoint, and "
-                    "delete all backups." error.infos.set("Path", handle->path);
+                    "delete all backups.";
+                error.infos.set("Path", handle->path);
                 error.infos.set("Frames", frames);
                 Notifier::shared()->notify(error);
 
