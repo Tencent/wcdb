@@ -112,6 +112,7 @@ public:
 class Deserializable : protected SharedThreadedErrorProne {
 public:
     bool deserialize(const Data &data);
+    bool deserialize(const std::string &path);
     virtual bool deserialize(Deserialization &deserialization) = 0;
 };
 
@@ -119,6 +120,7 @@ public:
 class Serializable : protected SharedThreadedErrorProne {
 public:
     Data serialize() const;
+    bool serialize(const std::string &path) const;
     virtual bool serialize(Serialization &serialization) const = 0;
 };
 

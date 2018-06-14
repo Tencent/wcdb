@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/FileHandle.hpp>
 #include <WCDB/Serialization.hpp>
 #include <WCDB/String.hpp>
 
@@ -572,6 +573,37 @@ bool Deserializable::deserialize(const Data &data)
     return deserialize(deserialization);
 }
 
+bool Deserializable::deserialize(const std::string &path)
+{
+    FileHandle fileHandle(path);
+    if (!fileHandle.open(FileHandle::Mode::ReadOnly)) {
+        return false;
+    }
+    bool succeed = false;
+    do {
+        ssize_t size = fileHandle.size();
+        if (size < 0) {
+            break;
+        }
+        Data data(size);
+        ssize_t read = fileHandle.read(data.buffer(), 0, size);
+        if (read != size) {
+            if (read >= 0) {
+                Error error;
+                error.setCode(Error::Code::IOError);
+                error.message = "Short read.";
+                error.infos.set("Path", path);
+                Notifier::shared()->notify(error);
+                setThreadedError(std::move(error));
+            }
+            break;
+        }
+        succeed = deserialize(data);
+    } while (false);
+    fileHandle.close();
+    return succeed;
+}
+
 #pragma mark - Serializable
 Data Serializable::serialize() const
 {
@@ -580,6 +612,36 @@ Data Serializable::serialize() const
         return serialization.finalize();
     }
     return Data::emptyData();
+}
+
+bool Serializable::serialize(const std::string &path) const
+{
+    Data data = serialize();
+    if (data.empty()) {
+        return false;
+    }
+    FileHandle fileHandle(path);
+    if (!fileHandle.open(FileHandle::Mode::OverWrite)) {
+        return false;
+    }
+    bool succeed = false;
+    do {
+        ssize_t wrote = fileHandle.write(data.buffer(), 0, data.size());
+        if (wrote != data.size()) {
+            if (wrote >= 0) {
+                Error error;
+                error.setCode(Error::Code::IOError);
+                error.message = "Short write.";
+                error.infos.set("Path", path);
+                Notifier::shared()->notify(error);
+                setThreadedError(std::move(error));
+            }
+            break;
+        }
+        succeed = true;
+    } while (false);
+    fileHandle.close();
+    return succeed;
 }
 
 } //namespace Repair
