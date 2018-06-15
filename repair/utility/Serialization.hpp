@@ -45,6 +45,26 @@ protected:
     Data m_data;
 };
 
+class Serialization : public SerializeIteration {
+#pragma mark - Serialization
+public:
+    Serialization();
+
+    Data finalize();
+    bool resizeToFit(size_t size);
+
+protected:
+    void expand(off_t newTail);
+    unsigned char *pointee();
+
+#pragma mark - Put
+public:
+    bool putZeroTerminatedString(const std::string &value);
+    bool putBLOB(const Data &data);
+    bool put4BytesUInt(uint32_t value);
+    size_t putVarint(uint64_t value);
+};
+
 class Deserialization : public SerializeIteration {
 #pragma mark - Deserialization
 public:
@@ -55,6 +75,9 @@ public:
 
     static constexpr const int slot_2_0 = 0x001fc07f;
     static constexpr const int slot_4_2_0 = 0xf01fc07f;
+
+protected:
+    const unsigned char *pointee() const;
 
 #pragma mark - Advance
 public:
@@ -87,25 +110,12 @@ public:
     uint32_t get4BytesUInt(off_t offset) const;
 };
 
-//Simple Serialization. Ones should make sure that the size of input data is greater the size of the serialized data.
-class Serialization : public SerializeIteration {
-#pragma mark - Serialization
+#pragma mark - Serializable
+class Serializable : protected SharedThreadedErrorProne {
 public:
-    Serialization();
-
-    Data finalize();
-    bool resizeToFit(size_t size);
-
-protected:
-    void expand(off_t newTail);
-    unsigned char *pointee();
-
-#pragma mark - Put
-public:
-    bool putZeroTerminatedString(const std::string &value);
-    bool putBLOB(const Data &data);
-    bool put4BytesUInt(uint32_t value);
-    size_t putVarint(uint64_t value);
+    Data serialize() const;
+    bool serialize(const std::string &path) const;
+    virtual bool serialize(Serialization &serialization) const = 0;
 };
 
 #pragma mark - Deserializable
@@ -114,14 +124,6 @@ public:
     bool deserialize(const Data &data);
     bool deserialize(const std::string &path);
     virtual bool deserialize(Deserialization &deserialization) = 0;
-};
-
-#pragma mark - Serializable
-class Serializable : protected SharedThreadedErrorProne {
-public:
-    Data serialize() const;
-    bool serialize(const std::string &path) const;
-    virtual bool serialize(Serialization &serialization) const = 0;
 };
 
 } //namespace Repair

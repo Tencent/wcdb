@@ -66,6 +66,118 @@ bool SerializeIteration::ended() const
     return m_cursor == m_tail;
 }
 
+#pragma mark - Serialization
+Serialization::Serialization() : SerializeIteration()
+{
+}
+
+bool Serialization::resizeToFit(size_t size)
+{
+    if (m_cursor + size < m_data.size()) {
+        return m_data.resize(
+            std::max((size_t) m_cursor + size, m_data.size() * 2));
+    }
+    return true;
+}
+
+unsigned char *Serialization::pointee()
+{
+    return m_data.buffer() + m_cursor;
+}
+
+#pragma mark - Put
+bool Serialization::putZeroTerminatedString(const std::string &value)
+{
+    size_t size = value.length() + 1;
+    if (!resizeToFit(size)) {
+        return false;
+    }
+    memcpy(pointee(), value.data(), size);
+    expand(m_cursor + size);
+    advance(size);
+    return true;
+}
+
+bool Serialization::putBLOB(const Data &data)
+{
+    if (!resizeToFit(data.size())) {
+        return false;
+    }
+    memcpy(pointee(), data.buffer(), data.size());
+    expand(m_cursor + data.size());
+    advance(data.size());
+    return true;
+}
+
+bool Serialization::put4BytesUInt(uint32_t value)
+{
+    if (!resizeToFit(4)) {
+        return false;
+    }
+    unsigned char *p = pointee();
+    p[0] = (uint8_t)(value >> 24);
+    p[1] = (uint8_t)(value >> 16);
+    p[2] = (uint8_t)(value >> 8);
+    p[3] = (uint8_t) value;
+    expand(m_cursor + sizeof(uint32_t));
+    advance(sizeof(uint32_t));
+    return true;
+}
+
+size_t Serialization::putVarint(uint64_t value)
+{
+    if (!resizeToFit(9)) {
+        return 0;
+    }
+    unsigned char *p = pointee();
+    int length = 0;
+    if (value <= 0x7f) {
+        p[0] = value & 0x7f;
+        length = 1;
+    } else if (value <= 0x3fff) {
+        p[0] = ((value >> 7) & 0x7f) | 0x80;
+        p[1] = value & 0x7f;
+        length = 2;
+    } else {
+        int i, j, n;
+        uint8_t buf[10];
+        if (value & (((uint64_t) 0xff000000) << 32)) {
+            p[8] = (uint8_t) value;
+            value >>= 8;
+            for (i = 7; i >= 0; i--) {
+                p[i] = (uint8_t)((value & 0x7f) | 0x80);
+                value >>= 7;
+            }
+            length = 9;
+        } else {
+            n = 0;
+            do {
+                buf[n++] = (uint8_t)((value & 0x7f) | 0x80);
+                value >>= 7;
+            } while (value != 0);
+            buf[0] &= 0x7f;
+            WCTInnerAssert(n <= 9);
+            for (i = 0, j = n - 1; j >= 0; j--, i++) {
+                p[i] = buf[j];
+            }
+            length = n;
+        }
+    }
+    expand(m_cursor + length);
+    advance(length);
+    return length;
+}
+
+void Serialization::expand(off_t newTail)
+{
+    m_tail = std::max(m_tail, newTail);
+}
+
+Data Serialization::finalize()
+{
+    return m_data.subdata((size_t) m_cursor);
+}
+
 #pragma mark - Deserialization
 static_assert(Deserialization::slot_2_0 == ((0x7f << 14) | (0x7f)), "");
 static_assert(Deserialization::slot_4_2_0 ==
@@ -77,6 +189,11 @@ void Deserialization::reset(const Data &data)
     m_data = data;
     m_cursor = 0;
     m_tail = m_data.size();
+}
+
+const unsigned char *Deserialization::pointee() const
+{
+    return m_data.buffer() + m_cursor;
 }
 
 #pragma mark - Advance
@@ -173,10 +290,10 @@ uint32_t Deserialization::advance4BytesUInt()
 std::string Deserialization::getZeroTerminatedString(off_t offset) const
 {
     size_t size = 0;
+    const unsigned char *p = pointee();
     while (offset + size <= m_tail) {
-        if (m_data.buffer()[offset + size] == '\0') {
-            return std::string(
-                reinterpret_cast<const char *>(m_data.buffer() + offset), size);
+        if (p[size] == '\0') {
+            return std::string(reinterpret_cast<const char *>(p), size);
         }
         ++size;
     }
@@ -188,7 +305,7 @@ const unsigned char *Deserialization::getBLOB(off_t offset, size_t size)
     if (!isEnough(offset, size)) {
         return nullptr;
     }
-    return m_data.buffer() + offset;
+    return pointee();
 }
 
 const char *Deserialization::getCString(off_t offset, size_t size)
@@ -196,7 +313,7 @@ const char *Deserialization::getCString(off_t offset, size_t size)
     if (!isEnough(offset, size)) {
         return nullptr;
     }
-    return reinterpret_cast<const char *>(m_data.buffer() + offset);
+    return reinterpret_cast<const char *>(pointee());
 }
 
 std::pair<size_t, uint64_t> Deserialization::getVarint(off_t offset) const
@@ -204,7 +321,7 @@ std::pair<size_t, uint64_t> Deserialization::getVarint(off_t offset) const
     if (!isEnough(offset, 1)) {
         return {0, 0};
     }
-    const unsigned char *p = m_data.buffer() + offset;
+    const unsigned char *p = pointee();
 
     uint32_t a = *p;
     /* a: p0 (unmasked) */
@@ -280,7 +397,7 @@ std::pair<size_t, uint64_t> Deserialization::getVarint(off_t offset) const
     /* a: p0<<28 | p2<<14 | p4 (unmasked) */
     if (!(a & 0x80)) {
         /* we can skip these cause they were (effectively) done above
-         ** while calculating s */
+             ** while calculating s */
         /* a &= (0x7f<<28)|(0x7f<<14)|(0x7f); */
         /* b &= (0x7f<<14)|(0x7f); */
         b = b << 7;
@@ -394,9 +511,8 @@ int32_t Deserialization::get4BytesInt(off_t offset) const
     if (!isEnough(offset, 4)) {
         return 0;
     }
-    const unsigned char *buffer = m_data.buffer();
-    return (16777216 * (int8_t)(buffer[0]) | (buffer[1] << 16) |
-            (buffer[2] << 8) | buffer[3]);
+    const unsigned char *p = pointee();
+    return (16777216 * (int8_t)(p[0]) | (p[1] << 16) | (p[2] << 8) | p[3]);
 }
 
 int32_t Deserialization::get3BytesInt(off_t offset) const
@@ -404,8 +520,8 @@ int32_t Deserialization::get3BytesInt(off_t offset) const
     if (!isEnough(offset, 3)) {
         return 0;
     }
-    const unsigned char *buffer = m_data.buffer();
-    return (65536 * (int8_t)(buffer[0]) | (buffer[1] << 8) | buffer[2]);
+    const unsigned char *p = pointee();
+    return (65536 * (int8_t)(p[0]) | (p[1] << 8) | p[2]);
 }
 
 int32_t Deserialization::get2BytesInt(off_t offset) const
@@ -413,8 +529,8 @@ int32_t Deserialization::get2BytesInt(off_t offset) const
     if (!isEnough(offset, 2)) {
         return 0;
     }
-    const unsigned char *buffer = m_data.buffer();
-    return (256 * (int8_t)(buffer[0]) | buffer[1]);
+    const unsigned char *p = pointee();
+    return (256 * (int8_t)(p[0]) | p[1]);
 }
 
 int32_t Deserialization::get1ByteInt(off_t offset) const
@@ -422,8 +538,7 @@ int32_t Deserialization::get1ByteInt(off_t offset) const
     if (!isEnough(offset, 1)) {
         return 0;
     }
-    const unsigned char *buffer = m_data.buffer();
-    return (int8_t) buffer[0];
+    return (int8_t) pointee()[0];
 }
 
 double Deserialization::get8BytesDouble(off_t offset) const
@@ -444,164 +559,13 @@ uint32_t Deserialization::get4BytesUInt(off_t offset) const
     if (!isEnough(offset, 4)) {
         return 0;
     }
-    const unsigned char *buffer = m_data.buffer();
-    return (((uint32_t) buffer[0] << 24) | (buffer[1] << 16) |
-            (buffer[2] << 8) | buffer[3]);
+    const unsigned char *p = pointee();
+    return (((uint32_t) p[0] << 24) | (p[1] << 16) | (p[2] << 8) | p[3]);
 }
 
 const Data &Deserialization::getData() const
 {
     return m_data;
-}
-
-#pragma mark - Serialization
-Serialization::Serialization() : SerializeIteration()
-{
-}
-
-bool Serialization::resizeToFit(size_t size)
-{
-    if (m_cursor + size < m_data.size()) {
-        return m_data.resize(
-            std::max((size_t) m_cursor + size, m_data.size() * 2));
-    }
-    return true;
-}
-
-unsigned char *Serialization::pointee()
-{
-    return m_data.buffer() + m_cursor;
-}
-
-#pragma mark - Put
-bool Serialization::putZeroTerminatedString(const std::string &value)
-{
-    size_t size = value.length() + 1;
-    if (!resizeToFit(size)) {
-        return false;
-    }
-    memcpy(pointee(), value.data(), size);
-    expand(m_cursor + size);
-    advance(size);
-    return true;
-}
-
-bool Serialization::putBLOB(const Data &data)
-{
-    if (!resizeToFit(data.size())) {
-        return false;
-    }
-    memcpy(pointee(), data.buffer(), data.size());
-    expand(m_cursor + data.size());
-    advance(data.size());
-    return true;
-}
-
-bool Serialization::put4BytesUInt(uint32_t value)
-{
-    if (!resizeToFit(4)) {
-        return false;
-    }
-    unsigned char *p = pointee();
-    p[0] = (uint8_t)(value >> 24);
-    p[1] = (uint8_t)(value >> 16);
-    p[2] = (uint8_t)(value >> 8);
-    p[3] = (uint8_t) value;
-    expand(m_cursor + sizeof(uint32_t));
-    advance(sizeof(uint32_t));
-    return true;
-}
-
-size_t Serialization::putVarint(uint64_t value)
-{
-    if (!resizeToFit(9)) {
-        return 0;
-    }
-    unsigned char *p = pointee();
-    int length = 0;
-    if (value <= 0x7f) {
-        p[0] = value & 0x7f;
-        length = 1;
-    } else if (value <= 0x3fff) {
-        p[0] = ((value >> 7) & 0x7f) | 0x80;
-        p[1] = value & 0x7f;
-        length = 2;
-    } else {
-        int i, j, n;
-        uint8_t buf[10];
-        if (value & (((uint64_t) 0xff000000) << 32)) {
-            p[8] = (uint8_t) value;
-            value >>= 8;
-            for (i = 7; i >= 0; i--) {
-                p[i] = (uint8_t)((value & 0x7f) | 0x80);
-                value >>= 7;
-            }
-            length = 9;
-        } else {
-            n = 0;
-            do {
-                buf[n++] = (uint8_t)((value & 0x7f) | 0x80);
-                value >>= 7;
-            } while (value != 0);
-            buf[0] &= 0x7f;
-            WCTInnerAssert(n <= 9);
-            for (i = 0, j = n - 1; j >= 0; j--, i++) {
-                p[i] = buf[j];
-            }
-            length = n;
-        }
-    }
-    expand(m_cursor + length);
-    advance(length);
-    return length;
-}
-
-void Serialization::expand(off_t newTail)
-{
-    m_tail = std::max(m_tail, newTail);
-}
-
-Data Serialization::finalize()
-{
-    return m_data.subdata((size_t) m_cursor);
-}
-
-#pragma mark - Deserializable
-bool Deserializable::deserialize(const Data &data)
-{
-    Deserialization deserialization(data);
-    return deserialize(deserialization);
-}
-
-bool Deserializable::deserialize(const std::string &path)
-{
-    FileHandle fileHandle(path);
-    if (!fileHandle.open(FileHandle::Mode::ReadOnly)) {
-        return false;
-    }
-    bool succeed = false;
-    do {
-        ssize_t size = fileHandle.size();
-        if (size < 0) {
-            break;
-        }
-        Data data(size);
-        ssize_t read = fileHandle.read(data.buffer(), 0, size);
-        if (read != size) {
-            if (read >= 0) {
-                Error error;
-                error.setCode(Error::Code::IOError);
-                error.message = "Short read.";
-                error.infos.set("Path", path);
-                Notifier::shared()->notify(error);
-                setThreadedError(std::move(error));
-            }
-            break;
-        }
-        succeed = deserialize(data);
-    } while (false);
-    fileHandle.close();
-    return succeed;
 }
 
 #pragma mark - Serializable
@@ -639,6 +603,44 @@ bool Serializable::serialize(const std::string &path) const
             break;
         }
         succeed = true;
+    } while (false);
+    fileHandle.close();
+    return succeed;
+}
+
+#pragma mark - Deserializable
+bool Deserializable::deserialize(const Data &data)
+{
+    Deserialization deserialization(data);
+    return deserialize(deserialization);
+}
+
+bool Deserializable::deserialize(const std::string &path)
+{
+    FileHandle fileHandle(path);
+    if (!fileHandle.open(FileHandle::Mode::ReadOnly)) {
+        return false;
+    }
+    bool succeed = false;
+    do {
+        ssize_t size = fileHandle.size();
+        if (size < 0) {
+            break;
+        }
+        Data data(size);
+        ssize_t read = fileHandle.read(data.buffer(), 0, size);
+        if (read != size) {
+            if (read >= 0) {
+                Error error;
+                error.setCode(Error::Code::IOError);
+                error.message = "Short read.";
+                error.infos.set("Path", path);
+                Notifier::shared()->notify(error);
+                setThreadedError(std::move(error));
+            }
+            break;
+        }
+        succeed = deserialize(data);
     } while (false);
     fileHandle.close();
     return succeed;
