@@ -64,4 +64,21 @@
     }
 }
 
+- (void)test_empty_backup
+{
+    NSString *emptyDatabasePath = [NSString stringWithFormat:@"%@.empty", _database.path];
+    WCTDatabase *database = [[WCTDatabase alloc] initWithPath:emptyDatabasePath];
+    XCTAssertFalse([database backup]);
+}
+
+- (void)test_empty_wal
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *walPath = [NSString stringWithFormat:@"%@-wal", _database.path];
+    XCTAssertTrue([[fileManager attributesOfItemAtPath:walPath error:nil] fileSize] > 0);
+    XCTAssertTrue([_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
+    XCTAssertTrue([[fileManager attributesOfItemAtPath:walPath error:nil] fileSize] == 0);
+    XCTAssertTrue([_database backup]);
+}
+
 @end
