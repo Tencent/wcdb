@@ -60,11 +60,10 @@ bool FileHandle::open(Mode mode)
 {
     WCTInnerAssert(mode != Mode::None);
     WCTRemedialAssert(!isOpened(), "File already is opened", return true;);
-    int flag = 0;
     switch (mode) {
         case Mode::OverWrite:
             m_fd = ::open(path.c_str(), O_CREAT | O_WRONLY | O_TRUNC,
-                          S_IRWXU | S_IRGRP | S_IROTH);
+                          S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH); //0x0644
             break;
         case Mode::ReadOnly:
             m_fd = ::open(path.c_str(), O_RDONLY);
@@ -72,7 +71,6 @@ bool FileHandle::open(Mode mode)
         default:
             return false;
     }
-    m_fd = ::open(path.c_str(), flag);
     if (m_fd == -1) {
         setThreadedError();
         return false;
