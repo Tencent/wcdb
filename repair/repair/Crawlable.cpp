@@ -69,6 +69,7 @@ void Crawlable::safeCrawl(int rootpageno,
                           int height)
 {
     if (rootpageno > m_associatedPager.getPageCount()) {
+        markAsCorrupted();
         return;
     }
     Page rootpage(rootpageno, &m_associatedPager);
@@ -114,6 +115,7 @@ void Crawlable::safeCrawl(int rootpageno,
             }
             break;
         default:
+            markAsCorrupted();
             break;
     }
 }
