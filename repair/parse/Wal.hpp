@@ -59,7 +59,6 @@ public:
     bool isNativeChecksum() const;
     const std::pair<uint32_t, uint32_t> &getSalt() const;
     int getPageSize() const;
-    const std::pair<uint32_t, uint32_t> &getChecksum() const;
 
 protected:
     int m_maxFrame;

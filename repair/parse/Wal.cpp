@@ -34,7 +34,6 @@ Wal::Wal(Pager *pager)
     : PagerRelated(pager)
     , m_fileHandle(Path::addExtention(m_pager->getPath(), "-wal"))
     , m_salt({0, 0})
-    , m_checksum({0, 0})
     , m_isNativeChecksum(false)
     , m_maxFrame(std::numeric_limits<int>::max())
     , m_frames(0)
@@ -68,7 +67,8 @@ Data Wal::acquirePageData(int pageno)
 {
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(containsPage(pageno));
-    return acquireData(headerSize + getFrameSize() * m_framePages[pageno] +
+    return acquireData(headerSize +
+                           getFrameSize() * (m_framePages[pageno] - 1) +
                            Frame::headerSize,
                        getPageSize());
 }
@@ -119,12 +119,6 @@ bool Wal::isNativeChecksum() const
 {
     WCTInnerAssert(isInitializing() || isInitialized());
     return m_isNativeChecksum;
-}
-
-const std::pair<uint32_t, uint32_t> &Wal::getChecksum() const
-{
-    WCTInnerAssert(isInitializing());
-    return m_checksum;
 }
 
 const std::pair<uint32_t, uint32_t> &Wal::getSalt() const
@@ -185,21 +179,22 @@ bool Wal::doInitialize()
     deserialization.seek(16);
     m_salt.first = deserialization.advance4BytesUInt();
     m_salt.second = deserialization.advance4BytesUInt();
-    m_checksum.first = deserialization.advance4BytesUInt();
-    m_checksum.second = deserialization.advance4BytesUInt();
+    std::pair<uint32_t, uint32_t> checksum;
+    checksum.first = deserialization.advance4BytesUInt();
+    checksum.second = deserialization.advance4BytesUInt();
 
     int frameno = 0;
     const int frameSize = getFrameSize();
     for (off_t offset = headerSize;
          offset + frameSize <= fileSize && frameno < m_maxFrame;
          offset += frameSize) {
-        Frame frame(++frameno, this);
+        Frame frame(++frameno, this, checksum);
         if (!frame.initialize()) {
             break;
         }
         m_frames = frameno;
         m_framePages[frame.getPageNumber()] = frameno;
-        m_checksum = frame.getChecksum();
+        checksum = frame.getChecksum();
     }
     return true;
 }

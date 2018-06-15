@@ -27,8 +27,10 @@ namespace WCDB {
 
 namespace Repair {
 
-Frame::Frame(int frameno_, Wal *wal)
-    : WalRelated(wal), frameno(frameno_), m_checksum(wal->getChecksum())
+Frame::Frame(int frameno_,
+             Wal *wal,
+             const std::pair<uint32_t, uint32_t> &checksum)
+    : WalRelated(wal), frameno(frameno_), m_checksum(checksum)
 {
     WCTInnerAssert(m_wal != nullptr);
 }

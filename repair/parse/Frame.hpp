@@ -34,7 +34,7 @@ class Wal;
 
 class Frame : public WalRelated, public Initializeable {
 public:
-    Frame(int frameno, Wal *wal);
+    Frame(int frameno, Wal *wal, const std::pair<uint32_t, uint32_t> &checksum);
 
     static constexpr const int headerSize = 24;
     const int frameno;
