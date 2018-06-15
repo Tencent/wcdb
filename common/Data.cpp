@@ -154,7 +154,7 @@ Data Data::emptyData()
 
 bool Data::empty() const
 {
-    return m_size > 0;
+    return m_size == 0;
 }
 
 unsigned char *Data::emptyBuffer()
