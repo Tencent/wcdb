@@ -55,7 +55,7 @@ protected:
 public:
     void setMaxFrame(int maxFrame);
     int getFrameCount() const;
-    bool isBigEndian() const;
+    bool isNativeChecksum() const;
     const std::pair<uint32_t, uint32_t> &getSalt() const;
     int getPageSize() const;
     const std::pair<uint32_t, uint32_t> &getChecksum() const;
@@ -63,7 +63,7 @@ public:
 protected:
     int m_maxFrame;
     int m_frames;
-    bool m_isBigEndian;
+    bool m_isNativeChecksum;
     std::pair<uint32_t, uint32_t> m_salt;
     std::pair<uint32_t, uint32_t> m_checksum;
 

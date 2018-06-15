@@ -92,7 +92,7 @@ Data Pager::acquirePageData(int number)
 
 Data Pager::acquireData(off_t offset, size_t size)
 {
-    WCTInnerAssert(isInitialized());
+    WCTInnerAssert(isInitializing() || isInitialized());
     if (!m_fileHandle.isOpened() &&
         !m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
         assignWithSharedThreadedError();
@@ -153,8 +153,7 @@ bool Pager::doInitialize()
         assignWithSharedThreadedError();
         return false;
     }
-    m_pageCount = (int) ((fileSize + m_pageSize - 1) / m_pageSize);
-    if (m_pageCount == 0) {
+    if (fileSize == 0) {
         return true;
     }
 
@@ -187,6 +186,8 @@ bool Pager::doInitialize()
         markAsCorrupted();
         return false;
     }
+
+    m_pageCount = (int) ((fileSize + m_pageSize - 1) / m_pageSize);
     return true;
 }
 

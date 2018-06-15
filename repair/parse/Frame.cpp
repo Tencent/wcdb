@@ -55,13 +55,13 @@ Frame::calculateChecksum(const Data &data,
     WCTInnerAssert(data.size() >= 8);
     WCTInnerAssert((data.size() & 0x00000007) == 0);
 
-    uint32_t const *iter = reinterpret_cast<uint32_t const *>(data.buffer());
+    const uint32_t *iter = reinterpret_cast<const uint32_t *>(data.buffer());
     const uint32_t *end =
-        reinterpret_cast<uint32_t const *>(data.buffer() + data.size());
+        reinterpret_cast<const uint32_t *>(data.buffer() + data.size());
 
     std::pair<uint32_t, uint32_t> result = checksum;
 
-    if (m_wal->isBigEndian()) {
+    if (m_wal->isNativeChecksum()) {
         do {
             result.first += *iter++ + result.second;
             result.second += *iter++ + result.first;

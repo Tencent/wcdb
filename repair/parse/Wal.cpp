@@ -35,7 +35,7 @@ Wal::Wal(Pager *pager)
     , m_fileHandle(Path::addExtention(m_pager->getPath(), "-wal"))
     , m_salt({0, 0})
     , m_checksum({0, 0})
-    , m_isBigEndian(false)
+    , m_isNativeChecksum(false)
     , m_maxFrame(std::numeric_limits<int>::max())
     , m_frames(0)
 {
@@ -76,7 +76,8 @@ Data Wal::acquirePageData(int pageno)
 Data Wal::acquireFrameData(int frameno)
 {
     WCTInnerAssert(isInitializing());
-    return acquireData(headerSize + getFrameSize() * frameno, getFrameSize());
+    return acquireData(headerSize + getFrameSize() * (frameno - 1),
+                       getFrameSize());
 }
 
 Data Wal::acquireData(off_t offset, size_t size)
@@ -114,10 +115,10 @@ int Wal::getFrameSize() const
     return Frame::headerSize + getPageSize();
 }
 
-bool Wal::isBigEndian() const
+bool Wal::isNativeChecksum() const
 {
     WCTInnerAssert(isInitializing() || isInitialized());
-    return m_isBigEndian;
+    return m_isNativeChecksum;
 }
 
 const std::pair<uint32_t, uint32_t> &Wal::getChecksum() const
@@ -133,8 +134,21 @@ const std::pair<uint32_t, uint32_t> &Wal::getSalt() const
 }
 
 #pragma mark - Initializeable
+#if (defined(i386) || defined(__i386__) || defined(_M_IX86) ||                 \
+     defined(__x86_64) || defined(__x86_64__) || defined(_M_X64) ||            \
+     defined(_M_AMD64) || defined(_M_ARM) || defined(__x86) ||                 \
+     defined(__arm__)) &&                                                      \
+    !defined(SQLITE_RUNTIME_BYTEORDER)
+#define SQLITE_BIGENDIAN 0
+#endif
+#if (defined(sparc) || defined(__ppc__)) && !defined(SQLITE_RUNTIME_BYTEORDER)
+#define SQLITE_BIGENDIAN 1
+#endif
+
 bool Wal::doInitialize()
 {
+    WCTInnerAssert(m_pager->isInitialized());
+
     bool succeed;
     size_t fileSize;
     std::tie(succeed, fileSize) = FileManager::shared()->getFileSize(getPath());
@@ -152,7 +166,7 @@ bool Wal::doInitialize()
         markAsCorrupted();
         return false;
     }
-    m_isBigEndian = magic & 0x00000001;
+    m_isNativeChecksum = (magic & 0x00000001) == SQLITE_BIGENDIAN;
     deserialization.seek(16);
     m_salt.first = deserialization.advance4BytesUInt();
     m_salt.second = deserialization.advance4BytesUInt();

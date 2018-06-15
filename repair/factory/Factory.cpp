@@ -220,7 +220,7 @@ Factory::materialForSerializingForDatabase(const std::string &database)
             break;
         }
         if (lastMaterialModifiedTime == 0) {
-            materialPath = std::move(firstMaterialPath);
+            materialPath = std::move(lastMaterialPath);
             break;
         }
 
