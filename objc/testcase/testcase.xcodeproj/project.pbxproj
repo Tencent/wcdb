@@ -10,6 +10,11 @@
 		2313B6D020A2F2F00067C211 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2313B6CF20A2F2F00067C211 /* main.m */; };
 		2313B6D720A2F6CD0067C211 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; };
 		2313B6D820A2F6CD0067C211 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2324D16F20D2470200834A82 /* Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B58200F577400E0CECE /* Convenience.m */; };
+		2324D17120D2470200834A82 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
+		2324D17220D2470200834A82 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5098209D5B3D00C78CC8 /* TestCaseObject.mm */; };
+		2324D17420D2470200834A82 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; };
+		2324D18120D247A000834A82 /* RepairTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2324D18020D247A000834A82 /* RepairTestCase.mm */; };
 		233861E4207B076D004CAC6F /* DatabaseTests+Transaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233861E3207B076D004CAC6F /* DatabaseTests+Transaction.mm */; };
 		233861E7207B1916004CAC6F /* TableTests+Transaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233861E6207B1916004CAC6F /* TableTests+Transaction.mm */; };
 		233861E9207B191E004CAC6F /* HandleTests+Transaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233861E8207B191E004CAC6F /* HandleTests+Transaction.mm */; };
@@ -97,6 +102,9 @@
 		234DBD8A2064EB6C000E31E8 /* WINQTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD572064EB6C000E31E8 /* WINQTestCase.mm */; };
 		234DBD8B2064EB6C000E31E8 /* WithClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD582064EB6C000E31E8 /* WithClauseTests.mm */; };
 		234DBD9120651FF4000E31E8 /* DatabaseTests+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD9020651FF4000E31E8 /* DatabaseTests+Convenient.mm */; };
+		23593B7620D369BD0058B416 /* RepairTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2324D18020D247A000834A82 /* RepairTestCase.mm */; };
+		23593B7920D369DD0058B416 /* RepairTests+Backup.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23593B7820D369DD0058B416 /* RepairTests+Backup.mm */; };
+		23593B7A20D369DD0058B416 /* RepairTests+Backup.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23593B7820D369DD0058B416 /* RepairTests+Backup.mm */; };
 		235F5D442079BCAB00B440CA /* MigrationTests+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D432079BCAB00B440CA /* MigrationTests+Convenient.mm */; };
 		235F5D552079F92D00B440CA /* MigrationTests+SameDatabase+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D542079F92D00B440CA /* MigrationTests+SameDatabase+Convenient.mm */; };
 		235F5D57207A22F000B440CA /* MigrationTests+Innocent+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D56207A22F000B440CA /* MigrationTests+Innocent+Convenient.mm */; };
@@ -107,7 +115,6 @@
 		237B4D072068F7F200AB79CA /* TableTests+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D062068F7F200AB79CA /* TableTests+Convenient.mm */; };
 		237B4D0A2068F7FA00AB79CA /* HandleTests+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D092068F7FA00AB79CA /* HandleTests+Convenient.mm */; };
 		237B4D2B20691E4600AB79CA /* DatabaseTests+File.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D2A20691E4600AB79CA /* DatabaseTests+File.mm */; };
-		237B4D2D20691E4E00AB79CA /* DatabaseTests+RepairKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D2C20691E4E00AB79CA /* DatabaseTests+RepairKit.mm */; };
 		237B4D2F20691E5700AB79CA /* DatabaseTests+Config.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D2E20691E5700AB79CA /* DatabaseTests+Config.mm */; };
 		237B4D3120691E5D00AB79CA /* DatabaseTests+Memory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D3020691E5D00AB79CA /* DatabaseTests+Memory.mm */; };
 		23885F7B208640A80085FA1E /* DatabaseTests+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23885F7A208640A80085FA1E /* DatabaseTests+FTS.mm */; };
@@ -256,7 +263,6 @@
 		23BA6BE7208CE28C005CAFB7 /* RowSelects.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FEC489206B9646001E7A3B /* RowSelects.mm */; };
 		23BA6BE8208CE28C005CAFB7 /* MultiSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FEC48B206B964E001E7A3B /* MultiSelectTests.mm */; };
 		23BA6BE9208CE290005CAFB7 /* DatabaseTests+File.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D2A20691E4600AB79CA /* DatabaseTests+File.mm */; };
-		23BA6BEA208CE290005CAFB7 /* DatabaseTests+RepairKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D2C20691E4E00AB79CA /* DatabaseTests+RepairKit.mm */; };
 		23BA6BEB208CE290005CAFB7 /* DatabaseTests+Config.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D2E20691E5700AB79CA /* DatabaseTests+Config.mm */; };
 		23BA6BEC208CE290005CAFB7 /* DatabaseTests+Memory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D3020691E5D00AB79CA /* DatabaseTests+Memory.mm */; };
 		23BA6BED208CE290005CAFB7 /* DatabaseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386276207B918F004CAC6F /* DatabaseTests.mm */; };
@@ -360,6 +366,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 239326601E836D7300D677CC;
 			remoteInfo = WCDB;
+		};
+		2324D16720D2470200834A82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 239326601E836D7300D677CC;
+			remoteInfo = WCDB;
+		};
+		2324D16920D2470200834A82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23698A4320045EF100C0291C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2313B6BD20A2F2EE0067C211;
+			remoteInfo = TestHost;
 		};
 		2349ED9A20A31BC800763F30 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -549,6 +569,9 @@
 		2313B6BE20A2F2EE0067C211 /* TestHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2313B6CE20A2F2F00067C211 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2313B6CF20A2F2F00067C211 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		2324D17920D2470200834A82 /* Repair Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Repair Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2324D17F20D247A000834A82 /* RepairTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RepairTestCase.h; sourceTree = "<group>"; };
+		2324D18020D247A000834A82 /* RepairTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RepairTestCase.mm; sourceTree = "<group>"; };
 		233861E3207B076D004CAC6F /* DatabaseTests+Transaction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "DatabaseTests+Transaction.mm"; sourceTree = "<group>"; };
 		233861E6207B1916004CAC6F /* TableTests+Transaction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "TableTests+Transaction.mm"; sourceTree = "<group>"; };
 		233861E8207B191E004CAC6F /* HandleTests+Transaction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "HandleTests+Transaction.mm"; sourceTree = "<group>"; };
@@ -684,6 +707,7 @@
 		234DBD572064EB6C000E31E8 /* WINQTestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WINQTestCase.mm; sourceTree = "<group>"; };
 		234DBD582064EB6C000E31E8 /* WithClauseTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WithClauseTests.mm; sourceTree = "<group>"; };
 		234DBD9020651FF4000E31E8 /* DatabaseTests+Convenient.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "DatabaseTests+Convenient.mm"; sourceTree = "<group>"; };
+		23593B7820D369DD0058B416 /* RepairTests+Backup.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "RepairTests+Backup.mm"; sourceTree = "<group>"; };
 		235F5D432079BCAB00B440CA /* MigrationTests+Convenient.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "MigrationTests+Convenient.mm"; sourceTree = "<group>"; };
 		235F5D542079F92D00B440CA /* MigrationTests+SameDatabase+Convenient.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "MigrationTests+SameDatabase+Convenient.mm"; sourceTree = "<group>"; };
 		235F5D56207A22F000B440CA /* MigrationTests+Innocent+Convenient.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "MigrationTests+Innocent+Convenient.mm"; sourceTree = "<group>"; };
@@ -698,7 +722,6 @@
 		237B4D062068F7F200AB79CA /* TableTests+Convenient.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "TableTests+Convenient.mm"; sourceTree = "<group>"; };
 		237B4D092068F7FA00AB79CA /* HandleTests+Convenient.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "HandleTests+Convenient.mm"; sourceTree = "<group>"; };
 		237B4D2A20691E4600AB79CA /* DatabaseTests+File.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "DatabaseTests+File.mm"; sourceTree = "<group>"; };
-		237B4D2C20691E4E00AB79CA /* DatabaseTests+RepairKit.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "DatabaseTests+RepairKit.mm"; sourceTree = "<group>"; };
 		237B4D2E20691E5700AB79CA /* DatabaseTests+Config.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "DatabaseTests+Config.mm"; sourceTree = "<group>"; };
 		237B4D3020691E5D00AB79CA /* DatabaseTests+Memory.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "DatabaseTests+Memory.mm"; sourceTree = "<group>"; };
 		23885F7A208640A80085FA1E /* DatabaseTests+FTS.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "DatabaseTests+FTS.mm"; sourceTree = "<group>"; };
@@ -776,6 +799,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				2313B6D720A2F6CD0067C211 /* WCDB.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2324D17320D2470200834A82 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2324D17420D2470200834A82 /* WCDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -885,6 +916,16 @@
 				2313B6CF20A2F2F00067C211 /* main.m */,
 			);
 			path = TestHost;
+			sourceTree = "<group>";
+		};
+		2324D17C20D2473700834A82 /* repair */ = {
+			isa = PBXGroup;
+			children = (
+				2324D17F20D247A000834A82 /* RepairTestCase.h */,
+				2324D18020D247A000834A82 /* RepairTestCase.mm */,
+				23593B7820D369DD0058B416 /* RepairTests+Backup.mm */,
+			);
+			path = repair;
 			sourceTree = "<group>";
 		};
 		233861FA207B48DE004CAC6F /* index */ = {
@@ -1110,6 +1151,7 @@
 				23BA6B74208CE140005CAFB7 /* Convenient Tests.xctest */,
 				23BA6B86208CE142005CAFB7 /* WINQ Tests.xctest */,
 				2313B6BE20A2F2EE0067C211 /* TestHost.app */,
+				2324D17920D2470200834A82 /* Repair Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1117,6 +1159,7 @@
 		23698A7620045F4300C0291C /* test */ = {
 			isa = PBXGroup;
 			children = (
+				2324D17C20D2473700834A82 /* repair */,
 				238B5094209D5B3C00C78CC8 /* common */,
 				23CB20EA206DD6CE000EFB02 /* fts */,
 				23CB20EE206DD6CE000EFB02 /* migration */,
@@ -1178,7 +1221,6 @@
 			isa = PBXGroup;
 			children = (
 				237B4D2A20691E4600AB79CA /* DatabaseTests+File.mm */,
-				237B4D2C20691E4E00AB79CA /* DatabaseTests+RepairKit.mm */,
 				237B4D2E20691E5700AB79CA /* DatabaseTests+Config.mm */,
 				237B4D3020691E5D00AB79CA /* DatabaseTests+Memory.mm */,
 				23386276207B918F004CAC6F /* DatabaseTests.mm */,
@@ -1344,6 +1386,25 @@
 			productName = TestHost;
 			productReference = 2313B6BE20A2F2EE0067C211 /* TestHost.app */;
 			productType = "com.apple.product-type.application";
+		};
+		2324D16520D2470200834A82 /* Repair Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2324D17620D2470200834A82 /* Build configuration list for PBXNativeTarget "Repair Tests" */;
+			buildPhases = (
+				2324D16A20D2470200834A82 /* Sources */,
+				2324D17320D2470200834A82 /* Frameworks */,
+				2324D17520D2470200834A82 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2324D16620D2470200834A82 /* PBXTargetDependency */,
+				2324D16820D2470200834A82 /* PBXTargetDependency */,
+			);
+			name = "Repair Tests";
+			productName = testcaseTests;
+			productReference = 2324D17920D2470200834A82 /* Repair Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		23698A6220045EF100C0291C /* Coverage Tests */ = {
 			isa = PBXNativeTarget;
@@ -1655,6 +1716,9 @@
 			);
 			projectRoot = "";
 			targets = (
+				23698A6220045EF100C0291C /* Coverage Tests */,
+				23698B3C20047E1A00C0291C /* Benchmark */,
+				2313B6BD20A2F2EE0067C211 /* TestHost */,
 				23BA6937208CE0AC005CAFB7 /* FTS Tests */,
 				23BA6AE6208CE12D005CAFB7 /* Migration Tests */,
 				23BA6AF8208CE132005CAFB7 /* ORM Tests */,
@@ -1665,9 +1729,7 @@
 				23BA6B52208CE13F005CAFB7 /* Database Tests */,
 				23BA6B64208CE140005CAFB7 /* Convenient Tests */,
 				23BA6B76208CE142005CAFB7 /* WINQ Tests */,
-				23698B3C20047E1A00C0291C /* Benchmark */,
-				23698A6220045EF100C0291C /* Coverage Tests */,
-				2313B6BD20A2F2EE0067C211 /* TestHost */,
+				2324D16520D2470200834A82 /* Repair Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -1691,6 +1753,13 @@
 
 /* Begin PBXResourcesBuildPhase section */
 		2313B6BC20A2F2EE0067C211 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2324D17520D2470200834A82 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1792,11 +1861,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2324D16A20D2470200834A82 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2324D16F20D2470200834A82 /* Convenience.m in Sources */,
+				2324D17120D2470200834A82 /* TestCase.mm in Sources */,
+				2324D18120D247A000834A82 /* RepairTestCase.mm in Sources */,
+				23593B7A20D369DD0058B416 /* RepairTests+Backup.mm in Sources */,
+				2324D17220D2470200834A82 /* TestCaseObject.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		23698A5F20045EF100C0291C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				234DBD712064EB6C000E31E8 /* StatementBeginTests.mm in Sources */,
+				23593B7620D369BD0058B416 /* RepairTestCase.mm in Sources */,
 				23386252207B596B004CAC6F /* ORMUniqueIndex.mm in Sources */,
 				234DBD8B2064EB6C000E31E8 /* WithClauseTests.mm in Sources */,
 				234DBD5E2064EB6C000E31E8 /* ConflictClauseTests.mm in Sources */,
@@ -1895,9 +1977,9 @@
 				2338623A207B5391004CAC6F /* ORMTableConstraintMultiPrimary.mm in Sources */,
 				23D507EA208060CB0015E1C9 /* MultipleMigrationTests.mm in Sources */,
 				23386216207B4ED6004CAC6F /* ORMColumnConstraintPrimary.mm in Sources */,
+				23593B7920D369DD0058B416 /* RepairTests+Backup.mm in Sources */,
 				234DBD8A2064EB6C000E31E8 /* WINQTestCase.mm in Sources */,
 				23FEC488206B9640001E7A3B /* SelectTests.mm in Sources */,
-				237B4D2D20691E4E00AB79CA /* DatabaseTests+RepairKit.mm in Sources */,
 				234DBD7F2064EB6C000E31E8 /* StatementPragmaTests.mm in Sources */,
 				238B50CB209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */,
 				234DBD762064EB6C000E31E8 /* StatementCreateViewTests.mm in Sources */,
@@ -2097,7 +2179,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23BA6BEA208CE290005CAFB7 /* DatabaseTests+RepairKit.mm in Sources */,
 				238B50B2209D5B3D00C78CC8 /* TestCaseObject.mm in Sources */,
 				238B50C8209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */,
 				23BA6B59208CE13F005CAFB7 /* Convenience.m in Sources */,
@@ -2208,6 +2289,16 @@
 			isa = PBXTargetDependency;
 			name = WCDB;
 			targetProxy = 2313B6D920A2F6CD0067C211 /* PBXContainerItemProxy */;
+		};
+		2324D16620D2470200834A82 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = WCDB;
+			targetProxy = 2324D16720D2470200834A82 /* PBXContainerItemProxy */;
+		};
+		2324D16820D2470200834A82 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2313B6BD20A2F2EE0067C211 /* TestHost */;
+			targetProxy = 2324D16920D2470200834A82 /* PBXContainerItemProxy */;
 		};
 		2349ED9B20A31BC800763F30 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2361,6 +2452,24 @@
 			};
 			name = Release;
 		};
+		2324D17720D2470200834A82 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		2324D17820D2470200834A82 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		23698A6A20045EF100C0291C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2427,6 +2536,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
@@ -2510,6 +2620,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
@@ -2535,7 +2646,6 @@
 		23698A7020045EF100C0291C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = macosx;
@@ -2547,7 +2657,6 @@
 		23698A7120045EF100C0291C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = macosx;
@@ -2559,7 +2668,6 @@
 		23698B6820047E1A00C0291C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2569,7 +2677,6 @@
 		23698B6920047E1A00C0291C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2579,7 +2686,6 @@
 		23BA69BB208CE0AC005CAFB7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2589,7 +2695,6 @@
 		23BA69BC208CE0AC005CAFB7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2599,7 +2704,6 @@
 		23BA6AF4208CE12D005CAFB7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2609,7 +2713,6 @@
 		23BA6AF5208CE12D005CAFB7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2619,7 +2722,6 @@
 		23BA6B06208CE132005CAFB7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2629,7 +2731,6 @@
 		23BA6B07208CE132005CAFB7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2639,7 +2740,6 @@
 		23BA6B18208CE139005CAFB7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2649,7 +2749,6 @@
 		23BA6B19208CE139005CAFB7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2659,7 +2758,6 @@
 		23BA6B2A208CE13A005CAFB7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2669,7 +2767,6 @@
 		23BA6B2B208CE13A005CAFB7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2679,7 +2776,6 @@
 		23BA6B3C208CE13C005CAFB7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2689,7 +2785,6 @@
 		23BA6B3D208CE13C005CAFB7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2699,7 +2794,6 @@
 		23BA6B4E208CE13E005CAFB7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2709,7 +2803,6 @@
 		23BA6B4F208CE13E005CAFB7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2719,7 +2812,6 @@
 		23BA6B60208CE13F005CAFB7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2729,7 +2821,6 @@
 		23BA6B61208CE13F005CAFB7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2739,7 +2830,6 @@
 		23BA6B72208CE140005CAFB7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2749,7 +2839,6 @@
 		23BA6B73208CE140005CAFB7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2759,7 +2848,6 @@
 		23BA6B84208CE142005CAFB7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2769,7 +2857,6 @@
 		23BA6B85208CE142005CAFB7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2784,6 +2871,15 @@
 			buildConfigurations = (
 				2313B6D220A2F2F00067C211 /* Debug */,
 				2313B6D320A2F2F00067C211 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2324D17620D2470200834A82 /* Build configuration list for PBXNativeTarget "Repair Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2324D17720D2470200834A82 /* Debug */,
+				2324D17820D2470200834A82 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
