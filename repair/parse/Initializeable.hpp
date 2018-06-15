@@ -29,16 +29,18 @@ class Initializeable {
 public:
     Initializeable();
     bool initialize();
-    bool isInited() const;
+    bool isInitialized() const;
+    bool isInitializing() const;
 
 protected:
     virtual bool doInitialize() = 0;
 
 private:
     enum State {
-        None,
-        Failed,
-        Inited,
+        Failed = -1,
+        None = 0,
+        Initializing = 1,
+        Initialized = 2,
     };
     State m_state;
 };

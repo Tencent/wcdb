@@ -40,7 +40,7 @@ void FullCrawler::work()
         markAsFailed();
         return;
     }
-    Wal wal(m_pager);
+    Wal wal(&m_pager);
     if (wal.initialize()) {
         m_pager.setWal(std::move(wal));
     } else {
@@ -50,7 +50,7 @@ void FullCrawler::work()
     //calculate score
     int leafTablePageCount = 0;
     for (int i = 0; i < m_pager.getPageCount(); ++i) {
-        Page page(i, m_pager);
+        Page page(i, &m_pager);
         auto pair = page.acquireType();
         if (!pair.first // treat as leaf table
             || pair.second == Page::Type::LeafTable) {

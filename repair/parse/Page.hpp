@@ -35,7 +35,7 @@ class Cell;
 class Page : public PagerRelated, public Initializeable {
 #pragma mark - Initialize
 public:
-    Page(int number, Pager &pager);
+    Page(int number, Pager *pager);
 
     const int number;
 

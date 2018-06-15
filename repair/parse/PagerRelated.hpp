@@ -31,7 +31,7 @@ class Pager;
 
 class PagerRelated {
 public:
-    PagerRelated(Pager &pager);
+    PagerRelated(Pager *pager);
     PagerRelated(PagerRelated &&);
     PagerRelated &operator=(PagerRelated &&);
 
@@ -40,7 +40,7 @@ protected:
     void setError(Error &&error);
     void assignWithSharedThreadedError();
 
-    Pager &m_pager;
+    Pager *m_pager;
 };
 
 } //namespace Repair

@@ -34,7 +34,7 @@ namespace Repair {
 class Wal : public PagerRelated, public Initializeable {
 #pragma mark - Initialize
 public:
-    Wal(Pager &pager);
+    Wal(Pager *pager);
 
     const std::string &getPath() const;
     static constexpr const int headerSize = 32;

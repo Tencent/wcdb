@@ -34,9 +34,7 @@ class Page;
 
 class Cell : public PagerRelated, public Initializeable {
 public:
-    Cell(int pointer, Page &page, Pager &pager);
-
-    const Page &getPage() const;
+    Cell(int pointer, Page *page, Pager *pager);
 
     enum Type {
         Null = 0,
@@ -59,7 +57,7 @@ protected:
     static int getLengthOfSerialType(int serialType);
     static int isSerialTypeSanity(int serialType);
 
-    Page &m_page;
+    Page *m_page;
 
     int64_t m_rowid;
     int m_pointer;

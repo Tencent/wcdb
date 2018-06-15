@@ -38,7 +38,7 @@ bool Backup::work(int maxWalFrame)
     if (!m_pager.initialize()) {
         return false;
     }
-    Wal wal(m_pager);
+    Wal wal(&m_pager);
     wal.setMaxFrame(maxWalFrame);
     if (!wal.initialize()) {
         return false;

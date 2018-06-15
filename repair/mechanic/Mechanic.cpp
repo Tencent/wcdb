@@ -54,7 +54,7 @@ void Mechanic::work()
         markAsFailed();
         return;
     }
-    Wal wal(m_pager);
+    Wal wal(&m_pager);
     wal.setMaxFrame(m_material.info.walFrame);
     if (wal.initialize()) {
         if (wal.getSalt() == m_material.info.walSalt) {

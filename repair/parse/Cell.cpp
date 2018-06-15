@@ -29,14 +29,10 @@ namespace WCDB {
 
 namespace Repair {
 
-Cell::Cell(int pointer, Page &page, Pager &pager)
+Cell::Cell(int pointer, Page *page, Pager *pager)
     : PagerRelated(pager), m_pointer(pointer), m_rowid(0), m_page(page)
 {
-}
-
-const Page &Cell::getPage() const
-{
-    return m_page;
+    WCTInnerAssert(m_page != nullptr);
 }
 
 int Cell::getLengthOfSerialType(int serialType)
@@ -67,19 +63,19 @@ int Cell::isSerialTypeSanity(int serialType)
 
 int64_t Cell::getRowID() const
 {
-    WCTInnerAssert(isInited());
+    WCTInnerAssert(isInitialized());
     return m_rowid;
 }
 
 int Cell::getCount() const
 {
-    WCTInnerAssert(isInited());
+    WCTInnerAssert(isInitialized());
     return (int) m_columns.size();
 }
 
 Cell::Type Cell::getValueType(int index) const
 {
-    WCTInnerAssert(isInited());
+    WCTInnerAssert(isInitialized());
     WCTInnerAssert(index < m_columns.size());
     int serialType = m_columns[index].first;
     if (serialType == 0) {
@@ -104,7 +100,7 @@ Cell::Type Cell::getValueType(int index) const
 
 int64_t Cell::integerValue(int index) const
 {
-    WCTInnerAssert(isInited());
+    WCTInnerAssert(isInitialized());
     WCTInnerAssert(index < m_columns.size());
     WCTInnerAssert(getValueType(index) == Type::Integer);
     const auto &cell = m_columns[index];
@@ -128,7 +124,7 @@ int64_t Cell::integerValue(int index) const
 
 double Cell::doubleValue(int index) const
 {
-    WCTInnerAssert(isInited());
+    WCTInnerAssert(isInitialized());
     WCTInnerAssert(index < m_columns.size());
     WCTInnerAssert(getValueType(index) == Type::Real);
     const auto &cell = m_columns[index];
@@ -137,7 +133,7 @@ double Cell::doubleValue(int index) const
 
 std::pair<int, const char *> Cell::textValue(int index) const
 {
-    WCTInnerAssert(isInited());
+    WCTInnerAssert(isInitialized());
     WCTInnerAssert(index < m_columns.size());
     WCTInnerAssert(getValueType(index) == Type::Text);
     const auto &cell = m_columns[index];
@@ -147,7 +143,7 @@ std::pair<int, const char *> Cell::textValue(int index) const
 
 std::string Cell::stringValue(int index) const
 {
-    WCTInnerAssert(isInited());
+    WCTInnerAssert(isInitialized());
     WCTInnerAssert(index < m_columns.size());
     WCTInnerAssert(getValueType(index) == Type::Text);
     const auto &cell = m_columns[index];
@@ -156,7 +152,7 @@ std::string Cell::stringValue(int index) const
 
 std::pair<int, const unsigned char *> Cell::blobValue(int index) const
 {
-    WCTInnerAssert(isInited());
+    WCTInnerAssert(isInitialized());
     WCTInnerAssert(index < m_columns.size());
     WCTInnerAssert(getValueType(index) == Type::BLOB);
     const auto &cell = m_columns[index];
@@ -168,7 +164,7 @@ std::pair<int, const unsigned char *> Cell::blobValue(int index) const
 #pragma mark - Initializeable
 bool Cell::doInitialize()
 {
-    Deserialization deserialization(m_page.getData());
+    Deserialization deserialization(m_page->getData());
     //parse payload size
     deserialization.seek(m_pointer);
     int lengthOfPayloadSize, payloadSize;
@@ -189,20 +185,20 @@ bool Cell::doInitialize()
     }
     //parse local
     int localPayloadSize =
-        m_page.getMinLocal() +
-        (payloadSize - m_page.getMinLocal()) % (m_pager.getUsableSize() - 4);
-    if (localPayloadSize > m_page.getMaxLocal()) {
-        localPayloadSize = m_page.getMinLocal();
+        m_page->getMinLocal() +
+        (payloadSize - m_page->getMinLocal()) % (m_pager->getUsableSize() - 4);
+    if (localPayloadSize > m_page->getMaxLocal()) {
+        localPayloadSize = m_page->getMinLocal();
     }
     //parse payload
     int offsetOfPayload = m_pointer + lengthOfPayloadSize + lengthOfRowid;
-    if (offsetOfPayload + localPayloadSize > m_pager.getPageSize()) {
+    if (offsetOfPayload + localPayloadSize > m_pager->getPageSize()) {
         markAsCorrupted();
         return false;
     }
     if (localPayloadSize < payloadSize) {
         //append overflow pages
-        WCTInnerAssert(m_page.getData().size() >=
+        WCTInnerAssert(m_page->getData().size() >=
                        offsetOfPayload + localPayloadSize + 4);
         deserialization.seek(offsetOfPayload + localPayloadSize);
         int overflowPageno = deserialization.advance4BytesInt();
@@ -213,7 +209,7 @@ bool Cell::doInitialize()
         }
         //fill payload with local data
         WCTInnerAssert(localPayloadSize <= m_payload.size());
-        memcpy(m_payload.buffer(), m_page.getData().buffer() + offsetOfPayload,
+        memcpy(m_payload.buffer(), m_page->getData().buffer() + offsetOfPayload,
                localPayloadSize);
 
         int cursorOfPayload = localPayloadSize;
@@ -221,19 +217,19 @@ bool Cell::doInitialize()
         while (overflowPageno > 0 && cursorOfPayload < payloadSize) {
             if (overflowPagenos.find(overflowPageno) !=
                     overflowPagenos.end() // redunant overflow page found
-                || overflowPageno > m_pager.getPageCount() // pageno exceeds
+                || overflowPageno > m_pager->getPageCount() // pageno exceeds
                 ) {
-                m_pager.markAsCorrupted();
+                m_pager->markAsCorrupted();
                 return false;
             }
             overflowPagenos.insert(overflowPageno);
             //fill payload with overflow data
-            Data overflow = m_pager.acquirePageData(overflowPageno);
+            Data overflow = m_pager->acquirePageData(overflowPageno);
             if (overflow.empty()) {
                 return false;
             }
             int overflowSize = std::min(payloadSize - cursorOfPayload,
-                                        m_pager.getUsableSize() - 4);
+                                        m_pager->getUsableSize() - 4);
             WCTInnerAssert(cursorOfPayload + overflowSize <= m_payload.size());
             memcpy(m_payload.buffer() + cursorOfPayload, overflow.buffer() + 4,
                    overflowSize);
@@ -249,7 +245,8 @@ bool Cell::doInitialize()
         }
     } else {
         //non-overflow
-        m_payload = m_page.getData().subdata(offsetOfPayload, localPayloadSize);
+        m_payload =
+            m_page->getData().subdata(offsetOfPayload, localPayloadSize);
     }
     m_deserialization.reset(m_payload);
     //parse value offsets

@@ -30,9 +30,9 @@ namespace WCDB {
 
 namespace Repair {
 
-Wal::Wal(Pager &pager)
+Wal::Wal(Pager *pager)
     : PagerRelated(pager)
-    , m_fileHandle(Path::addExtention(pager.getPath(), "-wal"))
+    , m_fileHandle(Path::addExtention(m_pager->getPath(), "-wal"))
     , m_salt({0, 0})
     , m_checksum({0, 0})
     , m_isBigEndian(false)
@@ -43,13 +43,13 @@ Wal::Wal(Pager &pager)
 
 void Wal::setMaxFrame(int maxFrame)
 {
-    WCTInnerAssert(!isInited());
+    WCTInnerAssert(!isInitialized());
     m_maxFrame = maxFrame;
 }
 
 int Wal::getFrameCount() const
 {
-    WCTInnerAssert(isInited());
+    WCTInnerAssert(isInitialized());
     return m_frames;
 }
 
@@ -60,13 +60,13 @@ const std::string &Wal::getPath() const
 
 bool Wal::containsPage(int pageno) const
 {
-    WCTInnerAssert(isInited());
+    WCTInnerAssert(isInitialized());
     return m_framePages.find(pageno) != m_framePages.end();
 }
 
 Data Wal::acquirePageData(int pageno)
 {
-    WCTInnerAssert(isInited());
+    WCTInnerAssert(isInitialized());
     WCTInnerAssert(containsPage(pageno));
     return acquireData(headerSize + getFrameSize() * m_framePages[pageno] +
                            Frame::headerSize,
@@ -75,14 +75,14 @@ Data Wal::acquirePageData(int pageno)
 
 Data Wal::acquireFrameData(int frameno)
 {
-    WCTInnerAssert(isInited());
+    WCTInnerAssert(isInitializing());
     return acquireData(headerSize + getFrameSize() * frameno, getFrameSize());
 }
 
 Data Wal::acquireData(off_t offset, size_t size)
 {
-    WCTInnerAssert(isInited());
-    if (!m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
+    if (!m_fileHandle.isOpened() &&
+        !m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
         assignWithSharedThreadedError();
         return Data::emptyData();
     }
@@ -106,7 +106,7 @@ Data Wal::acquireData(off_t offset, size_t size)
 
 int Wal::getPageSize() const
 {
-    return m_pager.getPageSize();
+    return m_pager->getPageSize();
 }
 
 int Wal::getFrameSize() const
@@ -116,19 +116,19 @@ int Wal::getFrameSize() const
 
 bool Wal::isBigEndian() const
 {
-    WCTInnerAssert(isInited());
+    WCTInnerAssert(isInitializing() || isInitialized());
     return m_isBigEndian;
 }
 
 const std::pair<uint32_t, uint32_t> &Wal::getChecksum() const
 {
-    WCTInnerAssert(isInited());
+    WCTInnerAssert(isInitializing());
     return m_checksum;
 }
 
 const std::pair<uint32_t, uint32_t> &Wal::getSalt() const
 {
-    WCTInnerAssert(isInited());
+    WCTInnerAssert(isInitializing() || isInitialized());
     return m_salt;
 }
 
@@ -164,7 +164,7 @@ bool Wal::doInitialize()
     for (off_t offset = headerSize;
          offset + frameSize <= fileSize && frameno < m_maxFrame;
          offset += frameSize) {
-        Frame frame(++frameno, *this, m_pager);
+        Frame frame(++frameno, this, m_pager);
         if (!frame.initialize()) {
             break;
         }

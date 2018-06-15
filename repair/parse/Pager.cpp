@@ -34,19 +34,19 @@ Pager::Pager(const std::string &path)
     , m_pageSize(-1)
     , m_reservedBytes(-1)
     , m_pageCount(0)
-    , m_wal(*this)
+    , m_wal(this)
 {
 }
 
 void Pager::setPageSize(int pageSize)
 {
-    WCTInnerAssert(!isInited());
+    WCTInnerAssert(!isInitialized());
     m_pageSize = pageSize;
 }
 
 void Pager::setReservedBytes(int reservedBytes)
 {
-    WCTInnerAssert(!isInited());
+    WCTInnerAssert(!isInitialized());
     m_reservedBytes = reservedBytes;
 }
 
@@ -58,33 +58,33 @@ const std::string &Pager::getPath() const
 #pragma mark - Page
 int Pager::getPageCount() const
 {
-    WCTInnerAssert(isInited());
+    WCTInnerAssert(isInitialized());
     return m_pageCount;
 }
 
 int Pager::getUsableSize() const
 {
-    WCTInnerAssert(isInited());
+    WCTInnerAssert(isInitialized());
     return m_pageSize - m_reservedBytes;
 }
 
 int Pager::getPageSize() const
 {
-    WCTInnerAssert(isInited());
+    WCTInnerAssert(isInitialized());
     return m_pageSize;
 }
 
 int Pager::getReservedBytes() const
 {
-    WCTInnerAssert(isInited());
+    WCTInnerAssert(isInitialized());
     return m_reservedBytes;
 }
 
 Data Pager::acquirePageData(int number)
 {
-    WCTInnerAssert(isInited());
+    WCTInnerAssert(isInitialized());
     WCTInnerAssert(number > 0);
-    if (m_wal.isInited() && m_wal.containsPage(number)) {
+    if (m_wal.isInitialized() && m_wal.containsPage(number)) {
         return m_wal.acquirePageData(number);
     }
     return acquireData((number - 1) * m_pageSize, m_pageSize);
@@ -92,8 +92,9 @@ Data Pager::acquirePageData(int number)
 
 Data Pager::acquireData(off_t offset, size_t size)
 {
-    WCTInnerAssert(isInited());
-    if (!m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
+    WCTInnerAssert(isInitialized());
+    if (!m_fileHandle.isOpened() &&
+        !m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
         assignWithSharedThreadedError();
         return Data::emptyData();
     }
@@ -118,7 +119,7 @@ Data Pager::acquireData(off_t offset, size_t size)
 #pragma mark - Wal
 void Pager::setWal(Wal &&wal)
 {
-    WCTInnerAssert(wal.isInited());
+    WCTInnerAssert(wal.isInitialized());
     m_wal = std::move(wal);
 }
 

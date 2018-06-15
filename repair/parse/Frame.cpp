@@ -27,23 +27,24 @@ namespace WCDB {
 
 namespace Repair {
 
-Frame::Frame(int frameno_, Wal &wal, Pager &pager)
+Frame::Frame(int frameno_, Wal *wal, Pager *pager)
     : PagerRelated(pager)
     , frameno(frameno_)
     , m_wal(wal)
-    , m_checksum(wal.getChecksum())
+    , m_checksum(wal->getChecksum())
 {
+    WCTInnerAssert(m_wal != nullptr);
 }
 
 int Frame::getPageNumber() const
 {
-    WCTInnerAssert(isInited());
+    WCTInnerAssert(isInitialized());
     return m_pageno;
 }
 
 const std::pair<uint32_t, uint32_t> &Frame::getChecksum() const
 {
-    WCTInnerAssert(isInited());
+    WCTInnerAssert(isInitialized());
     return m_checksum;
 }
 
@@ -60,7 +61,7 @@ Frame::calculateChecksum(const Data &data,
 
     std::pair<uint32_t, uint32_t> result = checksum;
 
-    if (m_wal.isBigEndian()) {
+    if (m_wal->isBigEndian()) {
         do {
             result.first += *iter++ + result.second;
             result.second += *iter++ + result.first;
@@ -82,7 +83,7 @@ Frame::calculateChecksum(const Data &data,
 #pragma mark - Initializeable
 bool Frame::doInitialize()
 {
-    Data data = m_wal.acquireFrameData(frameno);
+    Data data = m_wal->acquireFrameData(frameno);
     if (data.empty()) {
         return false;
     }
@@ -93,7 +94,7 @@ bool Frame::doInitialize()
     std::pair<uint32_t, uint32_t> salt;
     salt.first = deserialization.advance4BytesUInt();
     salt.second = deserialization.advance4BytesUInt();
-    if (salt != m_wal.getSalt()) {
+    if (salt != m_wal->getSalt()) {
         markAsCorrupted();
         return false;
     }
@@ -104,7 +105,7 @@ bool Frame::doInitialize()
 
     m_checksum = calculateChecksum(data.subdata(0, 8), m_checksum);
     m_checksum = calculateChecksum(
-        data.subdata(headerSize, m_wal.getPageSize()), m_checksum);
+        data.subdata(headerSize, m_wal->getPageSize()), m_checksum);
     if (m_checksum == checksum) {
         return true;
     }

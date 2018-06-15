@@ -34,7 +34,7 @@ class Wal;
 
 class Frame : public PagerRelated, public Initializeable {
 public:
-    Frame(int frameno, Wal &wal, Pager &pager);
+    Frame(int frameno, Wal *wal, Pager *pager);
 
     static constexpr const int headerSize = 24;
     const int frameno;
@@ -44,7 +44,7 @@ public:
 
 protected:
     std::pair<uint32_t, uint32_t> m_checksum;
-    Wal &m_wal;
+    Wal *m_wal;
     int m_pageno;
 
     std::pair<uint32_t, uint32_t>

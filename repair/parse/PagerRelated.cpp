@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/Pager.hpp>
 #include <WCDB/PagerRelated.hpp>
 
@@ -25,8 +26,9 @@ namespace WCDB {
 
 namespace Repair {
 
-PagerRelated::PagerRelated(Pager &pager) : m_pager(pager)
+PagerRelated::PagerRelated(Pager *pager) : m_pager(pager)
 {
+    WCTInnerAssert(m_pager != nullptr);
 }
 
 PagerRelated::PagerRelated(PagerRelated &&other) : m_pager(other.m_pager)
@@ -35,23 +37,23 @@ PagerRelated::PagerRelated(PagerRelated &&other) : m_pager(other.m_pager)
 
 PagerRelated &PagerRelated::operator=(PagerRelated &&other)
 {
-    m_pager = std::move(other.m_pager);
+    m_pager = other.m_pager;
     return *this;
 }
 
 void PagerRelated::setError(Error &&error)
 {
-    m_pager.setError(std::move(error));
+    m_pager->setError(std::move(error));
 }
 
 void PagerRelated::assignWithSharedThreadedError()
 {
-    m_pager.assignWithSharedThreadedError();
+    m_pager->assignWithSharedThreadedError();
 }
 
 void PagerRelated::markAsCorrupted()
 {
-    m_pager.markAsCorrupted();
+    m_pager->markAsCorrupted();
 }
 
 } //namespace Repair

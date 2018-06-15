@@ -28,17 +28,23 @@ Initializeable::Initializeable() : m_state(State::None)
 {
 }
 
-bool Initializeable::isInited() const
+bool Initializeable::isInitialized() const
 {
-    return m_state == State::Inited;
+    return m_state == State::Initialized;
+}
+
+bool Initializeable::isInitializing() const
+{
+    return m_state == State::Initializing;
 }
 
 bool Initializeable::initialize()
 {
     if (m_state == State::None) {
-        m_state = doInitialize() ? State::Inited : State::Failed;
+        m_state = State::Initializing;
+        m_state = doInitialize() ? State::Initialized : State::Failed;
     }
-    return m_state == State::Inited;
+    return m_state == State::Initialized;
 }
 
 } //namespace Repair

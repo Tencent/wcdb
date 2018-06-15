@@ -68,7 +68,7 @@ void Crawlable::safeCrawl(int rootpageno,
                           std::set<int> &crawledInteriorPages,
                           int height)
 {
-    Page rootpage(rootpageno, m_associatedPager);
+    Page rootpage(rootpageno, &m_associatedPager);
     if (!rootpage.initialize()) {
         markAsError();
         return;
