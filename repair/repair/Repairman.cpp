@@ -29,6 +29,7 @@ namespace Repair {
 #pragma mark - Initialize
 Repairman::Repairman(const std::string &path)
     : m_pager(path)
+    , m_wal(&m_pager)
     , Crawlable(m_pager)
     , Progress()
     , m_assembler(nullptr)
@@ -117,18 +118,18 @@ void Repairman::markAsFailed()
     finishProgress();
 }
 
-void Repairman::tryUpgradeCrawlerError()
+int Repairman::tryUpgradeCrawlerError()
 {
     Error error = m_pager.getError();
     if (error.code() == Error::Code::Corrupt) {
         error.level = Error::Level::Warning;
     }
-    tryUpgradeError(std::move(error));
+    return tryUpgradeError(std::move(error));
 }
 
-void Repairman::tryUpgrateAssemblerError()
+int Repairman::tryUpgrateAssemblerError()
 {
-    tryUpgradeError(m_assembler->getError());
+    return tryUpgradeError(m_assembler->getError());
 }
 
 #pragma mark - Evaluation

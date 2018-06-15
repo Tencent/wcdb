@@ -64,17 +64,17 @@ protected:
 
 #pragma mark - Wal
 public:
-    void setWal(Wal &&wal);
+    void setWal(Wal *wal);
+    const Wal *getWal() const;
 
 protected:
-    Wal m_wal;
+    Wal *m_wal;
 
 #pragma mark - Error
 public:
     void markAsCorrupted();
 
 protected:
-    void markAsNotADatabase();
     void markAsError(Error::Code code);
 
 #pragma mark - Initializeable

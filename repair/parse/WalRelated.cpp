@@ -20,40 +20,40 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Pager.hpp>
-#include <WCDB/PagerRelated.hpp>
+#include <WCDB/WalRelated.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-PagerRelated::PagerRelated(Pager *pager) : m_pager(pager)
+WalRelated::WalRelated(Wal *wal) : m_wal(wal)
 {
-    WCTInnerAssert(m_pager != nullptr);
+    WCTInnerAssert(m_wal != nullptr);
 }
 
-PagerRelated::PagerRelated(PagerRelated &&other) : m_pager(other.m_pager)
+WalRelated::WalRelated(WalRelated &&other) : m_wal(other.m_wal)
 {
 }
 
-PagerRelated &PagerRelated::operator=(PagerRelated &&other)
+WalRelated &WalRelated::operator=(WalRelated &&other)
 {
-    m_pager = other.m_pager;
+    m_wal = other.m_wal;
     return *this;
 }
 
-void PagerRelated::setError(Error &&error)
+void WalRelated::setError(Error &&error)
 {
-    m_pager->setError(std::move(error));
+    m_wal->setError(std::move(error));
 }
 
-void PagerRelated::assignWithSharedThreadedError()
+void WalRelated::assignWithSharedThreadedError()
 {
-    m_pager->assignWithSharedThreadedError();
+    m_wal->assignWithSharedThreadedError();
 }
 
-void PagerRelated::markPagerAsCorrupted()
+void WalRelated::markWalAsCorrupted()
 {
-    m_pager->markAsCorrupted();
+    m_wal->markAsCorrupted();
 }
 
 } //namespace Repair

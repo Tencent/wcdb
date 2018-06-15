@@ -56,27 +56,30 @@ int CriticalErrorOnly::criticalLevel(const Error &error)
     }
 }
 
-void CriticalErrorOnly::tryUpgradeError(const Error &newError)
+int CriticalErrorOnly::tryUpgradeError(const Error &newError)
 {
     int newCriticalLevel = criticalLevel(newError);
     if (newCriticalLevel > m_criticalLevel) {
         m_criticalError = newError;
         m_criticalLevel = newCriticalLevel;
     }
+    return m_criticalLevel;
 }
 
-void CriticalErrorOnly::tryUpgradeError(Error &&newError)
+int CriticalErrorOnly::tryUpgradeError(Error &&newError)
 {
     int newCriticalLevel = criticalLevel(newError);
     if (newCriticalLevel > m_criticalLevel) {
         m_criticalError = newError;
         m_criticalLevel = std::move(newCriticalLevel);
     }
+    return m_criticalLevel;
 }
 
-void CriticalErrorOnly::tryUpgradeErrorWithSharedThreadedError()
+int CriticalErrorOnly::tryUpgradeErrorWithSharedThreadedError()
 {
-    tryUpgradeError(std::move(ThreadedErrors::shared()->moveThreadedError()));
+    return tryUpgradeError(
+        std::move(ThreadedErrors::shared()->moveThreadedError()));
 }
 
 int CriticalErrorOnly::getCriticalLevel() const

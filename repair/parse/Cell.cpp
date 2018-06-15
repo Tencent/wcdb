@@ -171,7 +171,7 @@ bool Cell::doInitialize()
     std::tie(lengthOfPayloadSize, payloadSize) =
         deserialization.advanceVarint();
     if (lengthOfPayloadSize == 0) {
-        markAsCorrupted();
+        markPagerAsCorrupted();
         return false;
     }
     //parse rowid
@@ -180,7 +180,7 @@ bool Cell::doInitialize()
     std::tie(lengthOfRowid, m_rowid) = deserialization.advanceVarint();
     ;
     if (lengthOfRowid == 0) {
-        markAsCorrupted();
+        markPagerAsCorrupted();
         return false;
     }
     //parse local
@@ -193,7 +193,7 @@ bool Cell::doInitialize()
     //parse payload
     int offsetOfPayload = m_pointer + lengthOfPayloadSize + lengthOfRowid;
     if (offsetOfPayload + localPayloadSize > m_pager->getPageSize()) {
-        markAsCorrupted();
+        markPagerAsCorrupted();
         return false;
     }
     if (localPayloadSize < payloadSize) {
@@ -240,7 +240,7 @@ bool Cell::doInitialize()
             overflowPageno = overflowDeserialization.advance4BytesInt();
         }
         if (overflowPageno != 0 || cursorOfPayload != payloadSize) {
-            markAsCorrupted();
+            markPagerAsCorrupted();
             return false;
         }
     } else {
@@ -254,7 +254,7 @@ bool Cell::doInitialize()
     std::tie(lengthOfOffsetOfValues, offsetOfValues) =
         m_deserialization.advanceVarint();
     if (lengthOfOffsetOfValues == 0) {
-        markAsCorrupted();
+        markPagerAsCorrupted();
         return false;
     }
 
@@ -272,7 +272,7 @@ bool Cell::doInitialize()
         std::tie(lengthOfSerialType, serialType) =
             m_deserialization.advanceVarint();
         if (lengthOfSerialType == 0 || !isSerialTypeSanity(serialType)) {
-            markAsCorrupted();
+            markPagerAsCorrupted();
             return false;
         }
         cursorOfSerialTypes += lengthOfSerialType;
@@ -281,7 +281,7 @@ bool Cell::doInitialize()
     }
     if (cursorOfSerialTypes != endOfSerialTypes ||
         cursorOfValues != endOfValues) {
-        markAsCorrupted();
+        markPagerAsCorrupted();
         return false;
     }
     return true;

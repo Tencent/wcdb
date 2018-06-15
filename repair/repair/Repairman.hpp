@@ -40,12 +40,13 @@ public:
 protected:
     void onCrawlerError() override;
     Pager m_pager;
+    Wal m_wal;
 
 #pragma mark - Critical Error
 protected:
     void markAsFailed();
-    void tryUpgrateAssemblerError();
-    void tryUpgradeCrawlerError();
+    int tryUpgrateAssemblerError();
+    int tryUpgradeCrawlerError();
 
 #pragma mark - Assembler
 public:

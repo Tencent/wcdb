@@ -36,7 +36,7 @@ public:
     PagerRelated &operator=(PagerRelated &&);
 
 protected:
-    void markAsCorrupted();
+    void markPagerAsCorrupted();
     void setError(Error &&error);
     void assignWithSharedThreadedError();
 

@@ -68,6 +68,9 @@ void Crawlable::safeCrawl(int rootpageno,
                           std::set<int> &crawledInteriorPages,
                           int height)
 {
+    if (rootpageno > m_associatedPager.getPageCount()) {
+        return;
+    }
     Page rootpage(rootpageno, &m_associatedPager);
     if (!rootpage.initialize()) {
         markAsError();

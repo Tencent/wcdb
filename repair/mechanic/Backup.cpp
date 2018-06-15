@@ -21,6 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Backup.hpp>
 #include <WCDB/Cell.hpp>
+#include <WCDB/FileManager.hpp>
 #include <WCDB/Page.hpp>
 
 namespace WCDB {
@@ -29,7 +30,11 @@ namespace Repair {
 
 #pragma mark - Initialize
 Backup::Backup(const std::string &path)
-    : m_pager(path), Crawlable(m_pager), m_height(-1), m_masterCrawler(m_pager)
+    : m_pager(path)
+    , m_wal(&m_pager)
+    , Crawlable(m_pager)
+    , m_height(-1)
+    , m_masterCrawler(m_pager)
 {
 }
 
@@ -38,17 +43,23 @@ bool Backup::work(int maxWalFrame)
     if (!m_pager.initialize()) {
         return false;
     }
-    Wal wal(&m_pager);
-    wal.setMaxFrame(maxWalFrame);
-    if (!wal.initialize()) {
-        return false;
+
+    m_wal.setMaxFrame(maxWalFrame);
+    if (m_wal.initialize()) {
+        m_pager.setWal(&m_wal);
+    } else {
+        if (m_pager.getError().code() != Error::Code::NotFound &&
+            m_pager.getError().code() != Error::Code::Empty) {
+            return false;
+        }
     }
-    m_pager.setWal(std::move(wal));
 
     m_material.info.pageSize = m_pager.getPageSize();
     m_material.info.reservedBytes = m_pager.getReservedBytes();
-    m_material.info.walSalt = wal.getSalt();
-    m_material.info.walFrame = wal.getFrameCount();
+    if (m_pager.getWal()) {
+        m_material.info.walSalt = m_pager.getWal()->getSalt();
+        m_material.info.walFrame = m_pager.getWal()->getFrameCount();
+    }
 
     m_masterCrawler.work(this);
     return getError().isOK();

@@ -54,25 +54,25 @@ void Mechanic::work()
         markAsFailed();
         return;
     }
-    Wal wal(&m_pager);
-    wal.setMaxFrame(m_material.info.walFrame);
-    if (wal.initialize()) {
-        if (wal.getSalt() == m_material.info.walSalt) {
-            m_pager.setWal(std::move(wal));
+    m_wal.setMaxFrame(m_material.info.walFrame);
+    if (m_wal.initialize()) {
+        if (m_wal.getSalt() == m_material.info.walSalt) {
+            m_pager.setWal(&m_wal);
         } else {
             Error error;
             error.level = Error::Level::Notice;
-            Error::Code code =
-                wal.getSalt().first == 0 && wal.getSalt().second == 0
-                    ? Error::Code::NotFound
-                    : Error::Code::Mismatch;
-            error.setCode(code, "Repair");
-            error.message = "Skip WAL.";
-            error.infos.set("Path", wal.getPath());
+            error.setCode(Error::Code::Mismatch, "Repair");
+            error.message = "Skip WAL of non-match salt.";
+            error.infos.set("Path", m_wal.getPath());
             Notifier::shared()->notify(error);
         }
     } else {
-        tryUpgradeCrawlerError();
+        if (m_pager.getError().code() != Error::Code::NotFound &&
+            m_pager.getError().code() != Error::Code::Empty &&
+            tryUpgradeCrawlerError() >= CriticalLevel::Fatal) {
+            markAsFailed();
+            return;
+        }
     }
 
     int pageCount = 0;

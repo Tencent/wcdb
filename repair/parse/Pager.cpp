@@ -34,7 +34,7 @@ Pager::Pager(const std::string &path)
     , m_pageSize(-1)
     , m_reservedBytes(-1)
     , m_pageCount(0)
-    , m_wal(this)
+    , m_wal(nullptr)
 {
 }
 
@@ -84,8 +84,8 @@ Data Pager::acquirePageData(int number)
 {
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(number > 0);
-    if (m_wal.isInitialized() && m_wal.containsPage(number)) {
-        return m_wal.acquirePageData(number);
+    if (m_wal && m_wal->containsPage(number)) {
+        return m_wal->acquirePageData(number);
     }
     return acquireData((number - 1) * m_pageSize, m_pageSize);
 }
@@ -117,21 +117,22 @@ Data Pager::acquireData(off_t offset, size_t size)
 }
 
 #pragma mark - Wal
-void Pager::setWal(Wal &&wal)
+void Pager::setWal(Wal *wal)
 {
-    WCTInnerAssert(wal.isInitialized());
-    m_wal = std::move(wal);
+    WCTInnerAssert(wal != nullptr);
+    WCTInnerAssert(wal->isInitialized());
+    m_wal = wal;
+}
+
+const Wal *Pager::getWal() const
+{
+    return m_wal;
 }
 
 #pragma mark - Error
 void Pager::markAsCorrupted()
 {
     markAsError(Error::Code::Corrupt);
-}
-
-void Pager::markAsNotADatabase()
-{
-    markAsError(Error::Code::NotADatabase);
 }
 
 void Pager::markAsError(Error::Code code)
@@ -146,15 +147,26 @@ void Pager::markAsError(Error::Code code)
 #pragma mark - Initializeable
 bool Pager::doInitialize()
 {
-    bool succeed;
-    size_t fileSize;
-    std::tie(succeed, fileSize) = FileManager::shared()->getFileSize(getPath());
-    if (!succeed) {
-        assignWithSharedThreadedError();
+    FileManager *fileManager = FileManager::shared();
+    bool succeed, exists;
+    std::tie(succeed, exists) = fileManager->fileExists(getPath());
+    if (!exists) {
+        if (succeed) {
+            markAsError(Error::Code::NotFound);
+        } else {
+            assignWithSharedThreadedError();
+        }
         return false;
     }
+    size_t fileSize;
+    std::tie(succeed, fileSize) = fileManager->getFileSize(getPath());
     if (fileSize == 0) {
-        return true;
+        if (succeed) {
+            markAsError(Error::Code::Empty);
+        } else {
+            assignWithSharedThreadedError();
+        }
+        return false;
     }
 
     if (m_pageSize == -1 || m_reservedBytes == -1) {
@@ -164,7 +176,7 @@ bool Pager::doInitialize()
             return false;
         }
         if (memcmp(data.buffer(), "SQLite format 3\000", 16) != 0) {
-            markAsNotADatabase();
+            markAsError(Error::Code::NotADatabase);
             return false;
         }
         Deserialization deserialization(data);

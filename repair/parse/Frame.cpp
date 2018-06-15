@@ -27,11 +27,8 @@ namespace WCDB {
 
 namespace Repair {
 
-Frame::Frame(int frameno_, Wal *wal, Pager *pager)
-    : PagerRelated(pager)
-    , frameno(frameno_)
-    , m_wal(wal)
-    , m_checksum(wal->getChecksum())
+Frame::Frame(int frameno_, Wal *wal)
+    : WalRelated(wal), frameno(frameno_), m_checksum(wal->getChecksum())
 {
     WCTInnerAssert(m_wal != nullptr);
 }
@@ -95,7 +92,7 @@ bool Frame::doInitialize()
     salt.first = deserialization.advance4BytesUInt();
     salt.second = deserialization.advance4BytesUInt();
     if (salt != m_wal->getSalt()) {
-        markAsCorrupted();
+        markWalAsCorrupted();
         return false;
     }
 
@@ -109,7 +106,7 @@ bool Frame::doInitialize()
     if (m_checksum == checksum) {
         return true;
     }
-    markAsCorrupted();
+    markWalAsCorrupted();
     return false;
 }
 

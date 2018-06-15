@@ -18,44 +18,33 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Pager.hpp>
-#include <WCDB/PagerRelated.hpp>
+#ifndef WalRelated_hpp
+#define WalRelated_hpp
+
+#include <WCDB/Error.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-PagerRelated::PagerRelated(Pager *pager) : m_pager(pager)
-{
-    WCTInnerAssert(m_pager != nullptr);
-}
+class Wal;
 
-PagerRelated::PagerRelated(PagerRelated &&other) : m_pager(other.m_pager)
-{
-}
+class WalRelated {
+public:
+    WalRelated(Wal *wal);
+    WalRelated(WalRelated &&);
+    WalRelated &operator=(WalRelated &&);
 
-PagerRelated &PagerRelated::operator=(PagerRelated &&other)
-{
-    m_pager = other.m_pager;
-    return *this;
-}
+protected:
+    void markWalAsCorrupted();
+    void setError(Error &&error);
+    void assignWithSharedThreadedError();
 
-void PagerRelated::setError(Error &&error)
-{
-    m_pager->setError(std::move(error));
-}
-
-void PagerRelated::assignWithSharedThreadedError()
-{
-    m_pager->assignWithSharedThreadedError();
-}
-
-void PagerRelated::markPagerAsCorrupted()
-{
-    m_pager->markAsCorrupted();
-}
+    Wal *m_wal;
+};
 
 } //namespace Repair
 
 } //namespace WCDB
+
+#endif /* WalRelated_hpp */

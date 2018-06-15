@@ -23,7 +23,7 @@
 
 #include <WCDB/Data.hpp>
 #include <WCDB/Initializeable.hpp>
-#include <WCDB/PagerRelated.hpp>
+#include <WCDB/WalRelated.hpp>
 #include <utility>
 
 namespace WCDB {
@@ -32,9 +32,9 @@ namespace Repair {
 
 class Wal;
 
-class Frame : public PagerRelated, public Initializeable {
+class Frame : public WalRelated, public Initializeable {
 public:
-    Frame(int frameno, Wal *wal, Pager *pager);
+    Frame(int frameno, Wal *wal);
 
     static constexpr const int headerSize = 24;
     const int frameno;
@@ -44,7 +44,6 @@ public:
 
 protected:
     std::pair<uint32_t, uint32_t> m_checksum;
-    Wal *m_wal;
     int m_pageno;
 
     std::pair<uint32_t, uint32_t>

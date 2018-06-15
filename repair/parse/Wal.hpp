@@ -41,6 +41,7 @@ public:
 
 protected:
     FileHandle m_fileHandle;
+    friend class WalRelated;
 
 #pragma mark - Page
 public:
@@ -75,6 +76,11 @@ public:
 #pragma mark - Initializeable
 protected:
     bool doInitialize() override;
+
+#pragma mark - Error
+protected:
+    void markAsCorrupted();
+    void markAsError(Error::Code code);
 };
 
 } //namespace Repair

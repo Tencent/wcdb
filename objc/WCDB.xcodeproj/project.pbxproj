@@ -156,6 +156,10 @@
 		23577F741F74F4D000D31C05 /* Tokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23577F721F74F4D000D31C05 /* Tokenizer.cpp */; };
 		23577F791F74F4E800D31C05 /* WCTTokenizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 23577F771F74F4E800D31C05 /* WCTTokenizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23577F7A1F74F4E800D31C05 /* WCTTokenizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23577F781F74F4E800D31C05 /* WCTTokenizer.mm */; };
+		23593B7D20D3ADF80058B416 /* WalRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23593B7B20D3ADF80058B416 /* WalRelated.cpp */; };
+		23593B7E20D3ADF80058B416 /* WalRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23593B7B20D3ADF80058B416 /* WalRelated.cpp */; };
+		23593B7F20D3ADF80058B416 /* WalRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23593B7C20D3ADF80058B416 /* WalRelated.hpp */; };
+		23593B8020D3ADF80058B416 /* WalRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23593B7C20D3ADF80058B416 /* WalRelated.hpp */; };
 		235F5D5A207A377E00B440CA /* WCTTable+Transaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 235F5D58207A377E00B440CA /* WCTTable+Transaction.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		235F5D5B207A377E00B440CA /* WCTTable+Transaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D59207A377E00B440CA /* WCTTable+Transaction.mm */; };
 		2361C4402063872100A9966A /* Tracer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2361C43E2063872100A9966A /* Tracer.cpp */; };
@@ -1211,6 +1215,8 @@
 		23577F721F74F4D000D31C05 /* Tokenizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tokenizer.cpp; sourceTree = "<group>"; };
 		23577F771F74F4E800D31C05 /* WCTTokenizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTTokenizer.h; sourceTree = "<group>"; };
 		23577F781F74F4E800D31C05 /* WCTTokenizer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTTokenizer.mm; sourceTree = "<group>"; };
+		23593B7B20D3ADF80058B416 /* WalRelated.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WalRelated.cpp; sourceTree = "<group>"; };
+		23593B7C20D3ADF80058B416 /* WalRelated.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WalRelated.hpp; sourceTree = "<group>"; };
 		235F5D58207A377E00B440CA /* WCTTable+Transaction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTTable+Transaction.h"; sourceTree = "<group>"; };
 		235F5D59207A377E00B440CA /* WCTTable+Transaction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTTable+Transaction.mm"; sourceTree = "<group>"; };
 		2361C43E2063872100A9966A /* Tracer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Tracer.cpp; sourceTree = "<group>"; };
@@ -2072,6 +2078,8 @@
 				23567D5820CA823C005F1C35 /* PagerRelated.hpp */,
 				23EB91DC20CA1EBE00ECF668 /* Wal.cpp */,
 				23EB91DD20CA1EBE00ECF668 /* Wal.hpp */,
+				23593B7B20D3ADF80058B416 /* WalRelated.cpp */,
+				23593B7C20D3ADF80058B416 /* WalRelated.hpp */,
 				23567CF820CA3889005F1C35 /* Frame.cpp */,
 				23567CF920CA3889005F1C35 /* Frame.hpp */,
 				23AF4E1C20CD04E20050033C /* Initializeable.cpp */,
@@ -2532,6 +2540,7 @@
 				234DBD092064DE23000E31E8 /* WCTTransaction.h in Headers */,
 				2397753E202AECD3000A681C /* StatementUpdate.hpp in Headers */,
 				23977540202AECD3000A681C /* StatementVacuum.hpp in Headers */,
+				23593B7F20D3ADF80058B416 /* WalRelated.hpp in Headers */,
 				23977542202AECD3000A681C /* TableConstraint.hpp in Headers */,
 				23977544202AECD3000A681C /* TableOrSubquery.hpp in Headers */,
 				23977547202AECD3000A681C /* WithClause.hpp in Headers */,
@@ -2816,6 +2825,7 @@
 				23F5BD4920887FD3000CCD37 /* WCTTransaction.h in Headers */,
 				23F5BD4B20887FD3000CCD37 /* StatementUpdate.hpp in Headers */,
 				23F5BD4C20887FD3000CCD37 /* StatementVacuum.hpp in Headers */,
+				23593B8020D3ADF80058B416 /* WalRelated.hpp in Headers */,
 				23F5BD4D20887FD3000CCD37 /* TableConstraint.hpp in Headers */,
 				23F5BD4E20887FD3000CCD37 /* TableOrSubquery.hpp in Headers */,
 				23F5BD5120887FD3000CCD37 /* WithClause.hpp in Headers */,
@@ -3224,6 +3234,7 @@
 				234DBCF62064DD0C000E31E8 /* WCTHandle.mm in Sources */,
 				23577F741F74F4D000D31C05 /* Tokenizer.cpp in Sources */,
 				2349F75C1EA0D6680021EFA7 /* WCTRuntimeObjCAccessor+NoARC.mm in Sources */,
+				23593B7D20D3ADF80058B416 /* WalRelated.cpp in Sources */,
 				23F70FC420A0618100CCE3CD /* Configs.cpp in Sources */,
 				23775BAA20AD666900E21AB0 /* FileHandle.cpp in Sources */,
 				23775BCD20AD72BC00E21AB0 /* Data.cpp in Sources */,
@@ -3462,6 +3473,7 @@
 				23F5BC7B20887FD3000CCD37 /* WCTHandle.mm in Sources */,
 				23F5BC7C20887FD3000CCD37 /* Tokenizer.cpp in Sources */,
 				23F5BC7D20887FD3000CCD37 /* WCTRuntimeObjCAccessor+NoARC.mm in Sources */,
+				23593B7E20D3ADF80058B416 /* WalRelated.cpp in Sources */,
 				23F70FC520A0618100CCE3CD /* Configs.cpp in Sources */,
 				23775BAB20AD666900E21AB0 /* FileHandle.cpp in Sources */,
 				23775BCE20AD72BC00E21AB0 /* Data.cpp in Sources */,

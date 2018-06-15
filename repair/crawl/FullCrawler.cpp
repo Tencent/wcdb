@@ -40,11 +40,15 @@ void FullCrawler::work()
         markAsFailed();
         return;
     }
-    Wal wal(&m_pager);
-    if (wal.initialize()) {
-        m_pager.setWal(std::move(wal));
+    if (m_wal.initialize()) {
+        m_pager.setWal(&m_wal);
     } else {
-        tryUpgradeCrawlerError();
+        if (m_pager.getError().code() != Error::Code::Empty &&
+            m_pager.getError().code() != Error::Code::NotFound &&
+            tryUpgradeCrawlerError() >= CriticalLevel::Fatal) {
+            markAsFailed();
+            return;
+        }
     }
 
     //calculate score

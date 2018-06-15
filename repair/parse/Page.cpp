@@ -172,7 +172,7 @@ bool Page::doInitialize()
     m_cellCount = m_deserialization.advance2BytesInt();
     if (m_cellCount < 0 ||
         m_cellCount * 2 + getOffsetOfCellPointer() > m_pager->getPageSize()) {
-        markAsCorrupted();
+        markPagerAsCorrupted();
         return false;
     }
     return true;

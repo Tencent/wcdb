@@ -33,7 +33,7 @@ public:
     enum CriticalLevel {
         MostFatal = std::numeric_limits<int>::max(),
         Fatal = 1,
-        NotFatal = std::numeric_limits<int>::min() + 1,
+        NotFatal = 0,
         None = std::numeric_limits<int>::min(),
     };
     const Error &getCriticalError() const;
@@ -41,9 +41,9 @@ public:
 
 protected:
     static int criticalLevel(const Error &error);
-    void tryUpgradeError(const Error &newError);
-    void tryUpgradeError(Error &&newError);
-    void tryUpgradeErrorWithSharedThreadedError();
+    int tryUpgradeError(const Error &newError);
+    int tryUpgradeError(Error &&newError);
+    int tryUpgradeErrorWithSharedThreadedError();
     void setCriticalError(const Error &error);
     void setCriticalError(Error &&error);
     void setCriticalErrorWIthSharedThreadedError();
