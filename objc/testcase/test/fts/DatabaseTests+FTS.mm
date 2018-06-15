@@ -64,9 +64,7 @@
 {
     XCTAssertTrue([_database dropTable:_tableName]);
 
-    [_database close:^{
-      XCTAssertTrue([_database removeFiles]);
-    }];
+    XCTAssertTrue([_database removeFiles]);
 
     _database = nil;
 

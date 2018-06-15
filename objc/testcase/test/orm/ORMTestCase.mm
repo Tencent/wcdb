@@ -50,9 +50,7 @@
 
     [WCTDatabase globalTraceSQL:nil];
 
-    [_database close:^{
-      XCTAssertTrue([_database removeFiles]);
-    }];
+    XCTAssertTrue([_database removeFiles]);
 
     _database = nil;
 
