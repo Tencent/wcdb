@@ -198,7 +198,7 @@ FileManager::getFileModifiedTime(const std::string &path)
 std::pair<bool, size_t> FileManager::getItemSize(const std::string &path)
 {
     struct stat temp;
-    if (lstat(path.c_str(), &temp) == 0) {
+    if (stat(path.c_str(), &temp) == 0) {
         if (temp.st_mode & S_IFDIR) {
             return getDirectorySize(path);
         }
@@ -242,7 +242,7 @@ FileManager::getItemsSize(const std::list<std::string> &paths)
 bool FileManager::removeItem(const std::string &path)
 {
     struct stat temp;
-    if (lstat(path.c_str(), &temp) == 0) {
+    if (stat(path.c_str(), &temp) == 0) {
         if (temp.st_mode & S_IFDIR) {
             return removeDirectory(path);
         }
