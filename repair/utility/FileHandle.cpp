@@ -28,19 +28,24 @@
 
 namespace WCDB {
 
-FileHandle::FileHandle(const std::string &path_) : path(path_), m_fd(-1)
+FileHandle::FileHandle(const std::string &path_)
+    : path(path_), m_fd(-1), m_mode(Mode::None)
 {
 }
 
 FileHandle::FileHandle(FileHandle &&other)
-    : path(std::move(other.path)), m_fd(std::move(other.m_fd))
+    : path(std::move(other.path))
+    , m_fd(std::move(other.m_fd))
+    , m_mode(std::move(other.m_mode))
 {
     other.m_fd = -1;
+    other.m_mode = Mode::None;
 }
 
 FileHandle::~FileHandle()
 {
-    WCTRemedialAssert(m_fd == -1, "Unpaired call", close(););
+    WCTRemedialAssert(!isOpened() || m_mode != Mode::OverWrite,
+                      "Close should be call manually to sync file.", close(););
 }
 
 FileHandle &FileHandle::operator=(FileHandle &&other)
@@ -53,26 +58,36 @@ FileHandle &FileHandle::operator=(FileHandle &&other)
 
 bool FileHandle::open(Mode mode)
 {
-    if (m_fd == -1) {
-        int flag;
-        switch (mode) {
-            case Mode::OverWrite:
-                flag = O_CREAT | O_WRONLY | O_TRUNC;
-                break;
-            case Mode::ReadOnly:
-                flag = O_RDONLY;
-                break;
-        }
-        m_fd = ::open(path.c_str(), flag);
-        if (m_fd == -1) {
-            setThreadedError();
-        }
+    WCTInnerAssert(mode != Mode::None);
+    WCTRemedialAssert(!isOpened(), "File already is opened", return true;);
+    int flag = 0;
+    switch (mode) {
+        case Mode::OverWrite:
+            m_fd = ::open(path.c_str(), O_CREAT | O_WRONLY | O_TRUNC,
+                          S_IRWXU | S_IRGRP | S_IROTH);
+            break;
+        case Mode::ReadOnly:
+            m_fd = ::open(path.c_str(), O_RDONLY);
+            break;
+        default:
+            return false;
     }
+    m_fd = ::open(path.c_str(), flag);
+    if (m_fd == -1) {
+        setThreadedError();
+        return false;
+    }
+    return true;
+}
+
+bool FileHandle::isOpened() const
+{
     return m_fd != -1;
 }
 
 void FileHandle::close()
 {
+    WCTInnerAssert(isOpened());
     if (m_fd != -1) {
         ::close(m_fd);
         m_fd = -1;

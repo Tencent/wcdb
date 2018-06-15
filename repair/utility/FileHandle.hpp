@@ -45,14 +45,19 @@ protected:
 #pragma mark - Basic
 public:
     enum Mode {
+        None = 0,
         OverWrite,
         ReadOnly,
     };
     bool open(Mode mode);
+    bool isOpened() const;
     void close();
     ssize_t size();
     ssize_t read(unsigned char *buffer, off_t offset, size_t size);
     ssize_t write(unsigned char *buffer, off_t offset, size_t size);
+
+protected:
+    Mode m_mode;
 
 #pragma mark - Error
 protected:
