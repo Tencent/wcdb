@@ -207,7 +207,7 @@ std::string Error::getDescription() const
         } else {
             comma = true;
         }
-        stream << ", " << info.first << ": " << info.second;
+        stream << info.first << ": " << info.second;
     }
     return stream.str();
 }
