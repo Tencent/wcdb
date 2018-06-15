@@ -34,18 +34,6 @@ namespace Repair {
 class FactoryRetriever : public FactoryRelated,
                          public CriticalErrorOnly,
                          public Progress {
-#pragma mark - Backup
-public:
-    class Backup : public FactoryBackup {
-    public:
-        Backup(FactoryRetriever &retriever);
-
-        bool work();
-
-    protected:
-        const FactoryRetriever &m_retriever;
-    };
-
 #pragma mark - Restorer
 public:
     FactoryRetriever(Factory &factory);

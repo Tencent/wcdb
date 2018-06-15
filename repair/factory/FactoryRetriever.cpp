@@ -34,17 +34,6 @@ namespace WCDB {
 
 namespace Repair {
 
-#pragma mark - Backup
-FactoryRetriever::Backup::Backup(FactoryRetriever &retriever)
-    : FactoryBackup(retriever.factory), m_retriever(retriever)
-{
-}
-
-bool FactoryRetriever::Backup::work()
-{
-    return doWork(m_retriever.database);
-}
-
 FactoryRetriever::FactoryRetriever(Factory &factory)
     : FactoryRelated(factory)
     , databaseFileName(factory.getDatabaseName())
@@ -100,8 +89,8 @@ double FactoryRetriever::work()
     }
 
     //4. Do a Backup on restore db.
-    FactoryRetriever::Backup backup(*this);
-    if (!backup.work()) {
+    FactoryBackup backup(factory);
+    if (!backup.work(database)) {
         tryUpgradeError(backup.getError());
         return -1;
     }
@@ -137,7 +126,7 @@ bool FactoryRetriever::restore(const std::string &database)
     std::string materialPath;
     bool succeed;
     std::tie(succeed, materialPath) =
-        Factory::pickMaterialForRestoring(database);
+        Factory::materialForDeserializingForDatabase(database);
     if (!succeed) {
         tryUpgradeErrorWithSharedThreadedError();
         return false;

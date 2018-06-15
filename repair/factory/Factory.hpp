@@ -76,10 +76,15 @@ public:
     static std::string
     firstMaterialPathForDatabase(const std::string &database);
     static std::string lastMaterialPathForDatabase(const std::string &database);
+
     static std::pair<bool, std::string>
-    pickMaterialForRestoring(const std::string &database);
+    materialForSerializingForDatabase(const std::string &database);
     static std::pair<bool, std::string>
-    pickMaterialForOverwriting(const std::string &database);
+    materialForDeserializingForDatabase(const std::string &database);
+
+protected:
+    static std::pair<bool, time_t>
+    getModifiedTimeOr0IfNotExists(const std::string &path);
 };
 
 } //namespace Repair

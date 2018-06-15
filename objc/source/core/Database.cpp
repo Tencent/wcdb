@@ -318,7 +318,7 @@ void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
 bool Database::backup(int maxWalFrame)
 {
     Repair::FactoryBackup backup = m_pool->attachment.factory.backup();
-    if (backup.work(maxWalFrame)) {
+    if (backup.work(getPath(), maxWalFrame)) {
         return true;
     }
     setThreadedError(backup.getError());

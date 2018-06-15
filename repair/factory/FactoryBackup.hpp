@@ -30,13 +30,9 @@ namespace Repair {
 
 class FactoryBackup : public FactoryRelated, public ErrorProne {
 public:
-    FactoryBackup(Factory &factory);
-
-    bool work(int maxWalFrame = std::numeric_limits<int>::max());
-
-protected:
-    bool doWork(const std::string &path,
-                int maxWalFrame = std::numeric_limits<int>::max());
+    using FactoryRelated::FactoryRelated;
+    bool work(const std::string &database,
+              int maxWalFrame = std::numeric_limits<int>::max());
 };
 
 } //namespace Repair

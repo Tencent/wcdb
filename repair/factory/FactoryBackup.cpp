@@ -27,18 +27,9 @@ namespace WCDB {
 
 namespace Repair {
 
-FactoryBackup::FactoryBackup(Factory &factory) : FactoryRelated(factory)
+bool FactoryBackup::work(const std::string &database, int maxWalFrame)
 {
-}
-
-bool FactoryBackup::work(int maxWalFrame)
-{
-    return doWork(factory.database, maxWalFrame);
-}
-
-bool FactoryBackup::doWork(const std::string &path, int maxWalFrame)
-{
-    Backup backup(path);
+    Backup backup(database);
     backup.filter(factory.getFilter());
     if (!backup.work(maxWalFrame)) {
         setError(backup.getError());
@@ -47,7 +38,8 @@ bool FactoryBackup::doWork(const std::string &path, int maxWalFrame)
 
     bool succeed;
     std::string materialPath;
-    std::tie(succeed, materialPath) = Factory::pickMaterialForOverwriting(path);
+    std::tie(succeed, materialPath) =
+        Factory::materialForSerializingForDatabase(database);
     if (succeed && backup.getMaterial().serialize(materialPath)) {
         return true;
     }

@@ -111,7 +111,7 @@ bool FactoryRenewer::prepare()
             Path::addComponent(workshopDirectory, databaseName);
         std::string materialPath;
         std::tie(succeed, materialPath) =
-            Factory::pickMaterialForRestoring(database);
+            Factory::materialForDeserializingForDatabase(database);
         if (!succeed) {
             assignWithSharedThreadedError();
             return false;
@@ -140,7 +140,7 @@ bool FactoryRenewer::prepare()
     }
 
     FactoryBackup backup(factory);
-    if (!backup.work()) {
+    if (!backup.work(database)) {
         setError(backup.getError());
         return false;
     }
