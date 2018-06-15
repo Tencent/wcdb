@@ -192,22 +192,11 @@ std::string Error::getDescription() const
     }
     stream << "]";
 
-    bool comma = false;
     for (const auto &info : infos.getIntInfos()) {
-        if (comma) {
-            stream << ", ";
-        } else {
-            comma = true;
-        }
-        stream << info.first << ": " << info.second;
+        stream << ", " << info.first << ": " << info.second;
     }
     for (const auto &info : infos.getStringInfos()) {
-        if (comma) {
-            stream << ", ";
-        } else {
-            comma = true;
-        }
-        stream << info.first << ": " << info.second;
+        stream << ", " << info.first << ": " << info.second;
     }
     return stream.str();
 }

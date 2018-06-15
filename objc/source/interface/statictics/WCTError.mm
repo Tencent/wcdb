@@ -92,14 +92,8 @@ WCTErrorKey const WCTErrorKeySource = @"Source";
         return nil;
     }
     NSMutableString *description = [[NSMutableString alloc] initWithFormat:@"[%s: %ld, %@]", WCDB::Error::levelName((WCDB::Error::Level) self.level), (long) self.code, self.message];
-    __block BOOL comma = NO;
     [self.userInfo enumerateKeysAndObjectsUsingBlock:^(NSErrorUserInfoKey key, id obj, BOOL *) {
-      if (comma) {
-          [description appendString:@", "];
-      } else {
-          comma = true;
-      }
-      [description appendFormat:@"%@: %@", key, obj];
+      [description appendFormat:@", %@: %@", key, obj];
     }];
     return description;
 }
