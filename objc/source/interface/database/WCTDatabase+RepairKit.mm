@@ -30,8 +30,12 @@ static_assert((int) WCTCorruptionReactionDeposit == (int) WCDB::Database::Corrup
 
 - (void)setCorruptionReaction:(WCTCorruptionReaction)reaction
 {
-    //TODO if reaction is deposit, start auto backup
     _database->setCorruptionReaction((WCDB::Database::CorruptionReaction) reaction);
+}
+
+- (WCTCorruptionReaction)corruptionReaction
+{
+    return (WCTCorruptionReaction) _database->getCorruptionReaction();
 }
 
 - (void)setExtraReactionWhenCorrupted:(WCTCorruptionExtraReactionBlock)onCorrupted

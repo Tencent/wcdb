@@ -289,6 +289,11 @@ void Database::setCorruptionReaction(CorruptionReaction newReaction)
     corruption.setReaction(newReaction);
 }
 
+Database::CorruptionReaction Database::getCorruptionReaction() const
+{
+    return m_pool->attachment.corruption.getReaction();
+}
+
 void Database::setExtraReactionWhenCorrupted(
     const CorruptionExtraReaction &extraReaction)
 {
