@@ -275,7 +275,7 @@ std::list<std::string> Database::getPaths() const
 }
 
 #pragma mark - Repair Kit
-void Database::setCorruptionReaction(CorruptionReaction newReaction)
+void Database::setReactionWhenCorrupted(CorruptionReaction newReaction)
 {
     Corruption &corruption = m_pool->attachment.corruption;
     CorruptionReaction oldReaction = corruption.getReaction();
@@ -289,7 +289,7 @@ void Database::setCorruptionReaction(CorruptionReaction newReaction)
     corruption.setReaction(newReaction);
 }
 
-Database::CorruptionReaction Database::getCorruptionReaction() const
+Database::CorruptionReaction Database::getReactionWhenCorrupted() const
 {
     return m_pool->attachment.corruption.getReaction();
 }

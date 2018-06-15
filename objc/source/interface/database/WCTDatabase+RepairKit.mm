@@ -28,14 +28,14 @@ static_assert((int) WCTCorruptionReactionIgnore == (int) WCDB::Database::Corrupt
 static_assert((int) WCTCorruptionReactionRemove == (int) WCDB::Database::CorruptionReaction::Remove, "");
 static_assert((int) WCTCorruptionReactionDeposit == (int) WCDB::Database::CorruptionReaction::Deposit, "");
 
-- (void)setCorruptionReaction:(WCTCorruptionReaction)reaction
+- (void)setReactionWhenCorrupted:(WCTCorruptionReaction)reaction
 {
-    _database->setCorruptionReaction((WCDB::Database::CorruptionReaction) reaction);
+    _database->setReactionWhenCorrupted((WCDB::Database::CorruptionReaction) reaction);
 }
 
-- (WCTCorruptionReaction)corruptionReaction
+- (WCTCorruptionReaction)reactionWhenCorrupted
 {
-    return (WCTCorruptionReaction) _database->getCorruptionReaction();
+    return (WCTCorruptionReaction) _database->getReactionWhenCorrupted();
 }
 
 - (void)setExtraReactionWhenCorrupted:(WCTCorruptionExtraReactionBlock)onCorrupted

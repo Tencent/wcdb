@@ -34,7 +34,7 @@ typedef NS_ENUM(NSInteger, WCTCorruptionReaction) {
 
 @interface WCTDatabase (RepairKit)
 
-@property(nonatomic, assign) WCTCorruptionReaction corruptionReaction;
+@property(nonatomic, assign) WCTCorruptionReaction reactionWhenCorrupted;
 
 - (void)setExtraReactionWhenCorrupted:(WCTCorruptionExtraReactionBlock)onCorrupted;
 

@@ -96,8 +96,8 @@ public:
 public:
     typedef Corruption::ExtraReaction CorruptionExtraReaction;
     typedef Corruption::Reaction CorruptionReaction;
-    void setCorruptionReaction(CorruptionReaction reaction);
-    CorruptionReaction getCorruptionReaction() const;
+    void setReactionWhenCorrupted(CorruptionReaction reaction);
+    CorruptionReaction getReactionWhenCorrupted() const;
     void
     setExtraReactionWhenCorrupted(const CorruptionExtraReaction &notification);
 
