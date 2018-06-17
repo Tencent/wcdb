@@ -58,7 +58,7 @@ std::tuple<bool, bool, bool> FileManager::itemExists(const std::string &path)
 std::pair<bool, size_t> FileManager::getFileSize(const std::string &path)
 {
     struct stat temp;
-    if (lstat(path.c_str(), &temp) == 0) {
+    if (stat(path.c_str(), &temp) == 0) {
         return {true, (size_t) temp.st_size};
     } else if (errno == ENOENT) {
         return {true, 0};
