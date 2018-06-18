@@ -67,12 +67,11 @@ void Mechanic::work()
             Notifier::shared()->notify(error);
         }
     } else {
-        if (m_pager.getError().code() != Error::Code::NotFound &&
-            m_pager.getError().code() != Error::Code::Empty &&
-            tryUpgradeCrawlerError() >= CriticalLevel::Fatal) {
+        if (tryUpgradeCrawlerError() >= CriticalLevel::Fatal) {
             markAsFailed();
             return;
         }
+        //typically wal not exists or empty
     }
 
     int pageCount = 0;

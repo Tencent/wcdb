@@ -148,7 +148,7 @@ bool Wal::doInitialize()
     std::tie(succeed, exists) = fileManager->fileExists(getPath());
     if (!exists) {
         if (succeed) {
-            markAsError(Error::Code::NotFound);
+            markAsWarning(Error::Code::NotFound);
         } else {
             assignWithSharedThreadedError();
         }
@@ -158,7 +158,7 @@ bool Wal::doInitialize()
     std::tie(succeed, fileSize) = fileManager->getFileSize(getPath());
     if (fileSize == 0) {
         if (succeed) {
-            markAsError(Error::Code::Empty);
+            markAsWarning(Error::Code::Empty);
         } else {
             assignWithSharedThreadedError();
         }
@@ -208,6 +208,16 @@ void Wal::markAsCorrupted()
 void Wal::markAsError(Error::Code code)
 {
     Error error;
+    error.setCode(code, "Repair");
+    error.infos.set("Path", m_fileHandle.path);
+    Notifier::shared()->notify(error);
+    setError(std::move(error));
+}
+
+void Wal::markAsWarning(Error::Code code)
+{
+    Error error;
+    error.level = Error::Level::Warning;
     error.setCode(code, "Repair");
     error.infos.set("Path", m_fileHandle.path);
     Notifier::shared()->notify(error);

@@ -48,10 +48,10 @@ bool Backup::work(int maxWalFrame)
     if (m_wal.initialize()) {
         m_pager.setWal(&m_wal);
     } else {
-        if (m_pager.getError().code() != Error::Code::NotFound &&
-            m_pager.getError().code() != Error::Code::Empty) {
+        if (m_pager.getError().level == Error::Level::Error) {
             return false;
         }
+        //typically wal not exists or empty
     }
 
     m_material.info.pageSize = m_pager.getPageSize();
