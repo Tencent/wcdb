@@ -20,6 +20,7 @@
 
 #import <WCDB/Assertion.hpp>
 #import <WCDB/Interface.h>
+#import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTError+Private.h>
 
 @implementation WCTDatabase (Trace)
@@ -45,29 +46,56 @@
 
 + (void)globalTracePerformance:(WCTPerformanceTraceBlock)trace
 {
-    WCDB::Handle::PerformanceTraceCallback callback = nullptr;
+    WCDB::Handle::PerformanceNotification callback = nullptr;
     if (trace) {
-        callback = [trace](WCDB::Database::Tag tag, const WCDB::Tracer::Footprints &footprints, const int64_t &cost) {
+        callback = [trace](const WCDB::HandleNotification::Footprints &footprints, const int64_t &cost) {
             NSMutableArray<WCTPerformanceFootprint *> *array = [[NSMutableArray<WCTPerformanceFootprint *> alloc] init];
             for (const auto &footprint : footprints) {
                 NSString *sql = [NSString stringWithCppString:footprint.sql];
                 [array addObject:[[WCTPerformanceFootprint alloc] initWithSQL:sql andFrequency:footprint.frequency]];
             }
-            trace(tag, array, (NSUInteger) cost);
+            trace(array, (NSUInteger) cost);
         };
     }
-    static_cast<WCDB::TraceConfig *>(WCDB::TraceConfig::shared().get())->setPerformanceTrace(callback);
+    static_cast<WCDB::SharedPerformanceTraceConfig *>(WCDB::SharedPerformanceTraceConfig::shared().get())->setPerformanceTrace(callback);
 }
 
 + (void)globalTraceSQL:(WCTSQLTraceBlock)trace
 {
-    WCDB::Handle::SQLTraceCallback callback = nullptr;
+    WCDB::Handle::SQLNotification callback = nullptr;
     if (trace) {
         callback = [trace](const std::string &sql) {
             trace([NSString stringWithCppString:sql]);
         };
     }
-    static_cast<WCDB::TraceConfig *>(WCDB::TraceConfig::shared().get())->setSQLTrace(callback);
+    static_cast<WCDB::SharedSQLTraceConfig *>(WCDB::SharedSQLTraceConfig::shared().get())->setSQLTrace(callback);
+}
+
+- (void)tracePerformance:(WCTPerformanceTraceBlock)trace
+{
+    WCDB::Handle::PerformanceNotification callback = nullptr;
+    if (trace) {
+        callback = [trace](const WCDB::HandleNotification::Footprints &footprints, const int64_t &cost) {
+            NSMutableArray<WCTPerformanceFootprint *> *array = [[NSMutableArray<WCTPerformanceFootprint *> alloc] init];
+            for (const auto &footprint : footprints) {
+                NSString *sql = [NSString stringWithCppString:footprint.sql];
+                [array addObject:[[WCTPerformanceFootprint alloc] initWithSQL:sql andFrequency:footprint.frequency]];
+            }
+            trace(array, (NSUInteger) cost);
+        };
+    }
+    _database->setPerformanceTrace(callback);
+}
+
+- (void)traceSQL:(WCTSQLTraceBlock)trace
+{
+    WCDB::Handle::SQLNotification callback = nullptr;
+    if (trace) {
+        callback = [trace](const std::string &sql) {
+            trace([NSString stringWithCppString:sql]);
+        };
+    }
+    _database->setSQLTrace(callback);
 }
 
 @end

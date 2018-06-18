@@ -19,43 +19,40 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/TraceConfig.hpp>
+#include <WCDB/SQLTraceConfig.hpp>
 
 namespace WCDB {
 
-const std::shared_ptr<Config> &TraceConfig::shared()
+SQLTraceConfig::SQLTraceConfig(const std::string &name,
+                               const Handle::SQLNotification &trace)
+    : Config(name), m_sqlTrace(trace)
+{
+}
+
+bool SQLTraceConfig::invoke(Handle *handle)
+{
+    handle->setNotificationWhenSQLTraced(name, m_sqlTrace);
+    return true;
+}
+
+const std::shared_ptr<Config> &SharedSQLTraceConfig::shared()
 {
     static const std::shared_ptr<Config> *s_shared =
-        new std::shared_ptr<Config>(new TraceConfig);
+        new std::shared_ptr<Config>(
+            new SharedSQLTraceConfig("WCDBGlobalSQLTrace", nullptr));
     return *s_shared;
 }
 
-TraceConfig::TraceConfig()
-    : Config(TraceConfig::name)
-    , m_performanceTrace(nullptr)
-    , m_sqlTrace(nullptr)
-{
-}
-
-void TraceConfig::setPerformanceTrace(
-    const Handle::PerformanceTraceCallback &trace)
-{
-    LockGuard lockGuard(m_lock);
-    m_performanceTrace = trace;
-}
-
-void TraceConfig::setSQLTrace(const Handle::SQLTraceCallback &trace)
+void SharedSQLTraceConfig::setSQLTrace(const Handle::SQLNotification &trace)
 {
     LockGuard lockGuard(m_lock);
     m_sqlTrace = trace;
 }
 
-bool TraceConfig::invoke(Handle *handle)
+bool SharedSQLTraceConfig::invoke(Handle *handle)
 {
     SharedLockGuard lockGuard(m_lock);
-    handle->tracePerformance(m_performanceTrace);
-    handle->traceSQL(m_sqlTrace);
-    return true;
+    return SQLTraceConfig::invoke(handle);
 }
 
 } //namespace WCDB

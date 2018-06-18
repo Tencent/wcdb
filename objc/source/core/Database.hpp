@@ -78,6 +78,13 @@ public:
     void setCipher(const Data &cipher, int pageSize = 4096);
     void setTokenizes(const std::list<std::string> &tokenizeNames);
 
+    typedef Handle::SQLNotification SQLNotification;
+    void setSQLTrace(const SQLNotification &onSQLTraced);
+
+    typedef Handle::PerformanceNotification PerformanceNotification;
+    void
+    setPerformanceTrace(const PerformanceNotification &onPerformanceTraced);
+
 #pragma mark - File
 public:
     const std::string &getPath() const;

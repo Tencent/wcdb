@@ -112,6 +112,8 @@
 		235F5D5F207A388100B440CA /* DatabaseTests+Table.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D5E207A388100B440CA /* DatabaseTests+Table.mm */; };
 		23698A8D2004613600C0291C /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
 		23698B5E20047E1A00C0291C /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
+		236A46AF20D7526E001816AF /* DatabaseTests+Trace.mm in Sources */ = {isa = PBXBuildFile; fileRef = 236A46AE20D7526E001816AF /* DatabaseTests+Trace.mm */; };
+		236A46B020D7526E001816AF /* DatabaseTests+Trace.mm in Sources */ = {isa = PBXBuildFile; fileRef = 236A46AE20D7526E001816AF /* DatabaseTests+Trace.mm */; };
 		237B4D072068F7F200AB79CA /* TableTests+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D062068F7F200AB79CA /* TableTests+Convenient.mm */; };
 		237B4D0A2068F7FA00AB79CA /* HandleTests+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D092068F7FA00AB79CA /* HandleTests+Convenient.mm */; };
 		237B4D2B20691E4600AB79CA /* DatabaseTests+File.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D2A20691E4600AB79CA /* DatabaseTests+File.mm */; };
@@ -719,6 +721,7 @@
 		23698A8E2004619800C0291C /* TestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestCase.h; sourceTree = "<group>"; };
 		23698AAF20046BE600C0291C /* Assert.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Assert.h; sourceTree = "<group>"; };
 		23698B6A20047E1A00C0291C /* Benchmark.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Benchmark.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		236A46AE20D7526E001816AF /* DatabaseTests+Trace.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "DatabaseTests+Trace.mm"; sourceTree = "<group>"; };
 		237B4D062068F7F200AB79CA /* TableTests+Convenient.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "TableTests+Convenient.mm"; sourceTree = "<group>"; };
 		237B4D092068F7FA00AB79CA /* HandleTests+Convenient.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "HandleTests+Convenient.mm"; sourceTree = "<group>"; };
 		237B4D2A20691E4600AB79CA /* DatabaseTests+File.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "DatabaseTests+File.mm"; sourceTree = "<group>"; };
@@ -1224,6 +1227,7 @@
 				237B4D2E20691E5700AB79CA /* DatabaseTests+Config.mm */,
 				237B4D3020691E5D00AB79CA /* DatabaseTests+Memory.mm */,
 				23386276207B918F004CAC6F /* DatabaseTests.mm */,
+				236A46AE20D7526E001816AF /* DatabaseTests+Trace.mm */,
 			);
 			path = database;
 			sourceTree = "<group>";
@@ -1914,6 +1918,7 @@
 				23386232207B4F18004CAC6F /* ORMColumnConstraintNotNull.mm in Sources */,
 				23A3AF26206CDC0A00D05634 /* TableTests+ChainCall.mm in Sources */,
 				234DBD6A2064EB6C000E31E8 /* QualifiedTableNameTests.mm in Sources */,
+				236A46B020D7526E001816AF /* DatabaseTests+Trace.mm in Sources */,
 				234DBD812064EB6C000E31E8 /* StatementReleaseTests.mm in Sources */,
 				234DBD5A2064EB6C000E31E8 /* ColumnConstraintTests.mm in Sources */,
 				234DBD6D2064EB6C000E31E8 /* SelectCoreTests.mm in Sources */,
@@ -2184,6 +2189,7 @@
 				23BA6B59208CE13F005CAFB7 /* Convenience.m in Sources */,
 				238B50A7209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */,
 				23BA6BEC208CE290005CAFB7 /* DatabaseTests+Memory.mm in Sources */,
+				236A46AF20D7526E001816AF /* DatabaseTests+Trace.mm in Sources */,
 				23BA6B5A208CE13F005CAFB7 /* TestCase.mm in Sources */,
 				23BA6BE9208CE290005CAFB7 /* DatabaseTests+File.mm in Sources */,
 				238B50BD209D5B3D00C78CC8 /* TestCaseVirtualObject.mm in Sources */,

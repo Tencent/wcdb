@@ -162,8 +162,22 @@
 		23593B8020D3ADF80058B416 /* WalRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23593B7C20D3ADF80058B416 /* WalRelated.hpp */; };
 		235F5D5A207A377E00B440CA /* WCTTable+Transaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 235F5D58207A377E00B440CA /* WCTTable+Transaction.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		235F5D5B207A377E00B440CA /* WCTTable+Transaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D59207A377E00B440CA /* WCTTable+Transaction.mm */; };
-		2361C4402063872100A9966A /* Tracer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2361C43E2063872100A9966A /* Tracer.cpp */; };
-		2361C4412063872100A9966A /* Tracer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2361C43F2063872100A9966A /* Tracer.hpp */; };
+		2360A5F720D78F1B00E4A311 /* HandleRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2360A5F320D78F1B00E4A311 /* HandleRelated.cpp */; };
+		2360A5F820D78F1B00E4A311 /* HandleRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2360A5F320D78F1B00E4A311 /* HandleRelated.cpp */; };
+		2360A5F920D78F1B00E4A311 /* HandleNotification.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2360A5F420D78F1B00E4A311 /* HandleNotification.cpp */; };
+		2360A5FA20D78F1B00E4A311 /* HandleNotification.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2360A5F420D78F1B00E4A311 /* HandleNotification.cpp */; };
+		2360A5FB20D78F1B00E4A311 /* HandleNotification.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2360A5F520D78F1B00E4A311 /* HandleNotification.hpp */; };
+		2360A5FC20D78F1B00E4A311 /* HandleNotification.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2360A5F520D78F1B00E4A311 /* HandleNotification.hpp */; };
+		2360A5FD20D78F1B00E4A311 /* HandleRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2360A5F620D78F1B00E4A311 /* HandleRelated.hpp */; };
+		2360A5FE20D78F1B00E4A311 /* HandleRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2360A5F620D78F1B00E4A311 /* HandleRelated.hpp */; };
+		2360A60320D78F2C00E4A311 /* SQLTraceConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2360A5FF20D78F2B00E4A311 /* SQLTraceConfig.cpp */; };
+		2360A60420D78F2C00E4A311 /* SQLTraceConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2360A5FF20D78F2B00E4A311 /* SQLTraceConfig.cpp */; };
+		2360A60520D78F2C00E4A311 /* SQLTraceConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2360A60020D78F2B00E4A311 /* SQLTraceConfig.hpp */; };
+		2360A60620D78F2C00E4A311 /* SQLTraceConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2360A60020D78F2B00E4A311 /* SQLTraceConfig.hpp */; };
+		2360A60720D78F2C00E4A311 /* PerformanceTraceConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2360A60120D78F2B00E4A311 /* PerformanceTraceConfig.cpp */; };
+		2360A60820D78F2C00E4A311 /* PerformanceTraceConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2360A60120D78F2B00E4A311 /* PerformanceTraceConfig.cpp */; };
+		2360A60920D78F2C00E4A311 /* PerformanceTraceConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2360A60220D78F2B00E4A311 /* PerformanceTraceConfig.hpp */; };
+		2360A60A20D78F2C00E4A311 /* PerformanceTraceConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2360A60220D78F2B00E4A311 /* PerformanceTraceConfig.hpp */; };
 		236814EE20C5640200BDF4D3 /* Attachment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 236814EC20C5640200BDF4D3 /* Attachment.cpp */; };
 		236814EF20C5640200BDF4D3 /* Attachment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 236814EC20C5640200BDF4D3 /* Attachment.cpp */; };
 		236814F020C5640200BDF4D3 /* Attachment.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 236814ED20C5640200BDF4D3 /* Attachment.hpp */; };
@@ -626,7 +640,6 @@
 		23F5BC5420887FD3000CCD37 /* StatementDetach.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397745F202AECD3000A681C /* StatementDetach.cpp */; };
 		23F5BC5520887FD3000CCD37 /* ConfiguredHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B0071A2047ED4800045245 /* ConfiguredHandle.cpp */; };
 		23F5BC5620887FD3000CCD37 /* StatementAnalyze.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397744B202AECD3000A681C /* StatementAnalyze.cpp */; };
-		23F5BC5720887FD3000CCD37 /* Tracer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2361C43E2063872100A9966A /* Tracer.cpp */; };
 		23F5BC5820887FD3000CCD37 /* LangSelectSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774DB202AECD3000A681C /* LangSelectSTMT.cpp */; };
 		23F5BC5920887FD3000CCD37 /* StatementBegin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397744F202AECD3000A681C /* StatementBegin.cpp */; };
 		23F5BC5A20887FD3000CCD37 /* RecyclableHandlePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D96B952050E53600DB5E93 /* RecyclableHandlePool.cpp */; };
@@ -898,7 +911,6 @@
 		23F5BD8620887FD3000CCD37 /* WCTUnsafeHandle.h in Headers */ = {isa = PBXBuildFile; fileRef = 234DBCF12064DD0B000E31E8 /* WCTUnsafeHandle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F5BD8720887FD3000CCD37 /* WCTConvenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 23FEC461206B3032001E7A3B /* WCTConvenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F5BD8820887FD3000CCD37 /* Column.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23000F18203EDFDC00ED8008 /* Column.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		23F5BD8A20887FD3000CCD37 /* Tracer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2361C43F2063872100A9966A /* Tracer.hpp */; };
 		23F5BD8B20887FD3000CCD37 /* WCTHandle.h in Headers */ = {isa = PBXBuildFile; fileRef = 234DBCEE2064DD0B000E31E8 /* WCTHandle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F5BD8C20887FD3000CCD37 /* LangQualifiedTableName.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774CC202AECD3000A681C /* LangQualifiedTableName.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F5BD8D20887FD3000CCD37 /* WCTRedirectable.h in Headers */ = {isa = PBXBuildFile; fileRef = 234591F120440A0200DC7D34 /* WCTRedirectable.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1019,10 +1031,6 @@
 		23F70FAD20A055C300CCE3CD /* CipherConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F70FAA20A055C300CCE3CD /* CipherConfig.cpp */; };
 		23F70FAE20A055C300CCE3CD /* CipherConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FAB20A055C300CCE3CD /* CipherConfig.hpp */; };
 		23F70FAF20A055C300CCE3CD /* CipherConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FAB20A055C300CCE3CD /* CipherConfig.hpp */; };
-		23F70FB220A055C700CCE3CD /* TraceConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F70FB020A055C700CCE3CD /* TraceConfig.cpp */; };
-		23F70FB320A055C700CCE3CD /* TraceConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F70FB020A055C700CCE3CD /* TraceConfig.cpp */; };
-		23F70FB420A055C700CCE3CD /* TraceConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FB120A055C700CCE3CD /* TraceConfig.hpp */; };
-		23F70FB520A055C700CCE3CD /* TraceConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FB120A055C700CCE3CD /* TraceConfig.hpp */; };
 		23F70FB820A055CF00CCE3CD /* CheckpointConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F70FB620A055CF00CCE3CD /* CheckpointConfig.cpp */; };
 		23F70FB920A055CF00CCE3CD /* CheckpointConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F70FB620A055CF00CCE3CD /* CheckpointConfig.cpp */; };
 		23F70FBA20A055CF00CCE3CD /* CheckpointConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FB720A055CF00CCE3CD /* CheckpointConfig.hpp */; };
@@ -1219,8 +1227,14 @@
 		23593B7C20D3ADF80058B416 /* WalRelated.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WalRelated.hpp; sourceTree = "<group>"; };
 		235F5D58207A377E00B440CA /* WCTTable+Transaction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTTable+Transaction.h"; sourceTree = "<group>"; };
 		235F5D59207A377E00B440CA /* WCTTable+Transaction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTTable+Transaction.mm"; sourceTree = "<group>"; };
-		2361C43E2063872100A9966A /* Tracer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Tracer.cpp; sourceTree = "<group>"; };
-		2361C43F2063872100A9966A /* Tracer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Tracer.hpp; sourceTree = "<group>"; };
+		2360A5F320D78F1B00E4A311 /* HandleRelated.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HandleRelated.cpp; sourceTree = "<group>"; };
+		2360A5F420D78F1B00E4A311 /* HandleNotification.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HandleNotification.cpp; sourceTree = "<group>"; };
+		2360A5F520D78F1B00E4A311 /* HandleNotification.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HandleNotification.hpp; sourceTree = "<group>"; };
+		2360A5F620D78F1B00E4A311 /* HandleRelated.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HandleRelated.hpp; sourceTree = "<group>"; };
+		2360A5FF20D78F2B00E4A311 /* SQLTraceConfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SQLTraceConfig.cpp; sourceTree = "<group>"; };
+		2360A60020D78F2B00E4A311 /* SQLTraceConfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SQLTraceConfig.hpp; sourceTree = "<group>"; };
+		2360A60120D78F2B00E4A311 /* PerformanceTraceConfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PerformanceTraceConfig.cpp; sourceTree = "<group>"; };
+		2360A60220D78F2B00E4A311 /* PerformanceTraceConfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PerformanceTraceConfig.hpp; sourceTree = "<group>"; };
 		236814EC20C5640200BDF4D3 /* Attachment.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Attachment.cpp; sourceTree = "<group>"; };
 		236814ED20C5640200BDF4D3 /* Attachment.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Attachment.hpp; sourceTree = "<group>"; };
 		236CCC0D20C7DBE100C44E14 /* CorruptionNotifier.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CorruptionNotifier.cpp; sourceTree = "<group>"; };
@@ -1594,8 +1608,6 @@
 		23F70FA520A055BD00CCE3CD /* BasicConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BasicConfig.hpp; sourceTree = "<group>"; };
 		23F70FAA20A055C300CCE3CD /* CipherConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CipherConfig.cpp; sourceTree = "<group>"; };
 		23F70FAB20A055C300CCE3CD /* CipherConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CipherConfig.hpp; sourceTree = "<group>"; };
-		23F70FB020A055C700CCE3CD /* TraceConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TraceConfig.cpp; sourceTree = "<group>"; };
-		23F70FB120A055C700CCE3CD /* TraceConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TraceConfig.hpp; sourceTree = "<group>"; };
 		23F70FB620A055CF00CCE3CD /* CheckpointConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CheckpointConfig.cpp; sourceTree = "<group>"; };
 		23F70FB720A055CF00CCE3CD /* CheckpointConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CheckpointConfig.hpp; sourceTree = "<group>"; };
 		23F70FBC20A055D400CCE3CD /* TokenizeConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TokenizeConfig.cpp; sourceTree = "<group>"; };
@@ -1686,8 +1698,10 @@
 				23DC3078202B0066000F7895 /* Tokenize.hpp */,
 				23DC306D202AFF8B000F7895 /* Handle.cpp */,
 				23DC306E202AFF8B000F7895 /* Handle.hpp */,
-				2361C43E2063872100A9966A /* Tracer.cpp */,
-				2361C43F2063872100A9966A /* Tracer.hpp */,
+				2360A5F420D78F1B00E4A311 /* HandleNotification.cpp */,
+				2360A5F520D78F1B00E4A311 /* HandleNotification.hpp */,
+				2360A5F320D78F1B00E4A311 /* HandleRelated.cpp */,
+				2360A5F620D78F1B00E4A311 /* HandleRelated.hpp */,
 				2370980820590CA700E768B4 /* HandleStatement.cpp */,
 				2370980920590CA700E768B4 /* HandleStatement.hpp */,
 				23BFE2FE207C602800A4BD81 /* SQLiteGlobal.cpp */,
@@ -2444,8 +2458,10 @@
 				23F70FA520A055BD00CCE3CD /* BasicConfig.hpp */,
 				23F70FAA20A055C300CCE3CD /* CipherConfig.cpp */,
 				23F70FAB20A055C300CCE3CD /* CipherConfig.hpp */,
-				23F70FB020A055C700CCE3CD /* TraceConfig.cpp */,
-				23F70FB120A055C700CCE3CD /* TraceConfig.hpp */,
+				2360A60120D78F2B00E4A311 /* PerformanceTraceConfig.cpp */,
+				2360A60220D78F2B00E4A311 /* PerformanceTraceConfig.hpp */,
+				2360A5FF20D78F2B00E4A311 /* SQLTraceConfig.cpp */,
+				2360A60020D78F2B00E4A311 /* SQLTraceConfig.hpp */,
 				23F70FB620A055CF00CCE3CD /* CheckpointConfig.cpp */,
 				23F70FB720A055CF00CCE3CD /* CheckpointConfig.hpp */,
 				23F70FBC20A055D400CCE3CD /* TokenizeConfig.cpp */,
@@ -2492,6 +2508,7 @@
 				23977501202AECD3000A681C /* ModuleArgument.hpp in Headers */,
 				23977503202AECD3000A681C /* OrderingTerm.hpp in Headers */,
 				23977505202AECD3000A681C /* Pragma.hpp in Headers */,
+				2360A5FB20D78F1B00E4A311 /* HandleNotification.hpp in Headers */,
 				23B35CCB20C0261A00425033 /* String.hpp in Headers */,
 				23DD773220D13E8E00E9B451 /* BackupConfig.hpp in Headers */,
 				23036A43205F9CAC00ADF01A /* WCTMigrationInfo+Private.h in Headers */,
@@ -2551,6 +2568,7 @@
 				23977552202AECD3000A681C /* LangBeginSTMT.hpp in Headers */,
 				23977554202AECD3000A681C /* LangBindParameter.hpp in Headers */,
 				23D0C36520C14ACC0001BFAE /* FactoryRelated.hpp in Headers */,
+				2360A60920D78F2C00E4A311 /* PerformanceTraceConfig.hpp in Headers */,
 				23EABBE6206D08EC00241F3B /* WCTHandle+Table.h in Headers */,
 				23977556202AECD3000A681C /* LangColumnConstraint.hpp in Headers */,
 				239776E0202AF2E3000A681C /* CopyOnWriteLazyDescribable.hpp in Headers */,
@@ -2574,6 +2592,7 @@
 				23D07CEC20BE873E0043F4D4 /* SequenceCrawler.hpp in Headers */,
 				236814F020C5640200BDF4D3 /* Attachment.hpp in Headers */,
 				2397756C202AECD3000A681C /* LangDeleteSTMT.hpp in Headers */,
+				2360A60520D78F2C00E4A311 /* SQLTraceConfig.hpp in Headers */,
 				23775BCF20AD72BC00E21AB0 /* Data.hpp in Headers */,
 				23775B6020AD666900E21AB0 /* Assertion.hpp in Headers */,
 				2397756E202AECD3000A681C /* LangDetachSTMT.hpp in Headers */,
@@ -2604,6 +2623,7 @@
 				239776F0202AF2E3000A681C /* ThreadLocal.hpp in Headers */,
 				23E1FD86206C9649006C6C8E /* NSString+WCTColumnCoding.h in Headers */,
 				2397758F202AECD3000A681C /* LangPragmaSTMT.hpp in Headers */,
+				2360A5FD20D78F1B00E4A311 /* HandleRelated.hpp in Headers */,
 				23F70F7B209FF0EC00CCE3CD /* WCTValue.h in Headers */,
 				23F70FBA20A055CF00CCE3CD /* CheckpointConfig.hpp in Headers */,
 				234DBCF82064DD0C000E31E8 /* WCTUnsafeHandle.h in Headers */,
@@ -2611,7 +2631,6 @@
 				23FEC463206B3032001E7A3B /* WCTConvenient.h in Headers */,
 				23000F1B203EDFDC00ED8008 /* Column.hpp in Headers */,
 				23B35C7620BFE39500425033 /* Path.hpp in Headers */,
-				2361C4412063872100A9966A /* Tracer.hpp in Headers */,
 				234DBCF52064DD0C000E31E8 /* WCTHandle.h in Headers */,
 				23977591202AECD3000A681C /* LangQualifiedTableName.hpp in Headers */,
 				234591F320440A0200DC7D34 /* WCTRedirectable.h in Headers */,
@@ -2672,7 +2691,6 @@
 				23577F731F74F4D000D31C05 /* Tokenizer.hpp in Headers */,
 				23F670ED209428CE00DB2E28 /* Schema.hpp in Headers */,
 				2349F78E1EA0D6680021EFA7 /* WCDB.h in Headers */,
-				23F70FB420A055C700CCE3CD /* TraceConfig.hpp in Headers */,
 				2349F7271EA0D6680021EFA7 /* WCTMultiSelect.h in Headers */,
 				2301DA63203F016200C3B52A /* Convertible.hpp in Headers */,
 				23DC307A202B0066000F7895 /* Tokenize.hpp in Headers */,
@@ -2777,6 +2795,7 @@
 				23F5BD2120887FD3000CCD37 /* ModuleArgument.hpp in Headers */,
 				23F5BD2220887FD3000CCD37 /* OrderingTerm.hpp in Headers */,
 				23F5BD2320887FD3000CCD37 /* Pragma.hpp in Headers */,
+				2360A5FC20D78F1B00E4A311 /* HandleNotification.hpp in Headers */,
 				23B35CCC20C0261A00425033 /* String.hpp in Headers */,
 				23DD773320D13E8E00E9B451 /* BackupConfig.hpp in Headers */,
 				23F5BD2420887FD3000CCD37 /* WCTMigrationInfo+Private.h in Headers */,
@@ -2836,6 +2855,7 @@
 				23F5BD5620887FD3000CCD37 /* LangBeginSTMT.hpp in Headers */,
 				23F5BD5720887FD3000CCD37 /* LangBindParameter.hpp in Headers */,
 				23D0C36620C14ACC0001BFAE /* FactoryRelated.hpp in Headers */,
+				2360A60A20D78F2C00E4A311 /* PerformanceTraceConfig.hpp in Headers */,
 				23F5BD5820887FD3000CCD37 /* WCTHandle+Table.h in Headers */,
 				23F5BD5920887FD3000CCD37 /* LangColumnConstraint.hpp in Headers */,
 				23F5BD5A20887FD3000CCD37 /* CopyOnWriteLazyDescribable.hpp in Headers */,
@@ -2859,6 +2879,7 @@
 				23D07CED20BE873E0043F4D4 /* SequenceCrawler.hpp in Headers */,
 				236814F120C5640200BDF4D3 /* Attachment.hpp in Headers */,
 				23F5BD6B20887FD3000CCD37 /* LangDeleteSTMT.hpp in Headers */,
+				2360A60620D78F2C00E4A311 /* SQLTraceConfig.hpp in Headers */,
 				23775BD020AD72BC00E21AB0 /* Data.hpp in Headers */,
 				23775B6120AD666900E21AB0 /* Assertion.hpp in Headers */,
 				23F5BD6C20887FD3000CCD37 /* LangDetachSTMT.hpp in Headers */,
@@ -2889,6 +2910,7 @@
 				23F5BD8320887FD3000CCD37 /* ThreadLocal.hpp in Headers */,
 				23F5BD8420887FD3000CCD37 /* NSString+WCTColumnCoding.h in Headers */,
 				23F5BD8520887FD3000CCD37 /* LangPragmaSTMT.hpp in Headers */,
+				2360A5FE20D78F1B00E4A311 /* HandleRelated.hpp in Headers */,
 				23F70F7C209FF0EC00CCE3CD /* WCTValue.h in Headers */,
 				23F70FBB20A055CF00CCE3CD /* CheckpointConfig.hpp in Headers */,
 				23F5BD8620887FD3000CCD37 /* WCTUnsafeHandle.h in Headers */,
@@ -2896,7 +2918,6 @@
 				23F5BD8720887FD3000CCD37 /* WCTConvenient.h in Headers */,
 				23F5BD8820887FD3000CCD37 /* Column.hpp in Headers */,
 				23B35C7720BFE39500425033 /* Path.hpp in Headers */,
-				23F5BD8A20887FD3000CCD37 /* Tracer.hpp in Headers */,
 				23F5BD8B20887FD3000CCD37 /* WCTHandle.h in Headers */,
 				23F5BD8C20887FD3000CCD37 /* LangQualifiedTableName.hpp in Headers */,
 				23F5BD8D20887FD3000CCD37 /* WCTRedirectable.h in Headers */,
@@ -2957,7 +2978,6 @@
 				23F5BDBE20887FD3000CCD37 /* Tokenizer.hpp in Headers */,
 				23F670EE209428CE00DB2E28 /* Schema.hpp in Headers */,
 				23F5BDC020887FD3000CCD37 /* WCDB.h in Headers */,
-				23F70FB520A055C700CCE3CD /* TraceConfig.hpp in Headers */,
 				23F5BDC120887FD3000CCD37 /* WCTMultiSelect.h in Headers */,
 				23F5BDC320887FD3000CCD37 /* Convertible.hpp in Headers */,
 				23F5BDC420887FD3000CCD37 /* Tokenize.hpp in Headers */,
@@ -3179,6 +3199,7 @@
 				23977557202AECD3000A681C /* LangColumnDef.cpp in Sources */,
 				23775B7620AD666900E21AB0 /* Backup.cpp in Sources */,
 				236CCC0F20C7DBE100C44E14 /* CorruptionNotifier.cpp in Sources */,
+				2360A60320D78F2C00E4A311 /* SQLTraceConfig.cpp in Sources */,
 				23D0C35120C149D80001BFAE /* Factory.cpp in Sources */,
 				23A8CD5520C8E40500A45C54 /* Corruption.cpp in Sources */,
 				234DBD042064DE04000E31E8 /* WCTDatabase+Transaction.mm in Sources */,
@@ -3193,7 +3214,6 @@
 				23B0071C2047ED4800045245 /* ConfiguredHandle.cpp in Sources */,
 				23775B6620AD666900E21AB0 /* Notifier.cpp in Sources */,
 				23977511202AECD3000A681C /* StatementAnalyze.cpp in Sources */,
-				2361C4402063872100A9966A /* Tracer.cpp in Sources */,
 				23D07CEA20BE873E0043F4D4 /* SequenceCrawler.cpp in Sources */,
 				239775A0202AECD3000A681C /* LangSelectSTMT.cpp in Sources */,
 				23977515202AECD3000A681C /* StatementBegin.cpp in Sources */,
@@ -3207,6 +3227,7 @@
 				23F340DB204D32C3007DB8AB /* WCTTable.mm in Sources */,
 				2349F7071EA0D6680021EFA7 /* RecyclableHandle.cpp in Sources */,
 				23775B6A20AD666900E21AB0 /* FullCrawler.cpp in Sources */,
+				2360A5F920D78F1B00E4A311 /* HandleNotification.cpp in Sources */,
 				239776DA202AF2E3000A681C /* CopyOnWriteString.cpp in Sources */,
 				23977539202AECD3000A681C /* StatementSavepoint.cpp in Sources */,
 				23BFE306207CA62E00A4BD81 /* NSNull+WCTColumnCoding.mm in Sources */,
@@ -3326,7 +3347,6 @@
 				23F670EB209428CE00DB2E28 /* Schema.cpp in Sources */,
 				23567D7B20CA93C5005F1C35 /* Time.cpp in Sources */,
 				23A870E6204F82AE00273A98 /* MigrationDatabase.cpp in Sources */,
-				23F70FB220A055C700CCE3CD /* TraceConfig.cpp in Sources */,
 				2349F7391EA0D6680021EFA7 /* WCTTable+Convenient.mm in Sources */,
 				23977519202AECD3000A681C /* StatementCreateIndex.cpp in Sources */,
 				23775B6E20AD666900E21AB0 /* DeprecatedBackup.cpp in Sources */,
@@ -3350,6 +3370,7 @@
 				232DCE0A207F81FD00AC2CD0 /* Lock.cpp in Sources */,
 				23567CFA20CA3889005F1C35 /* Frame.cpp in Sources */,
 				23B35C7820BFE39500425033 /* Path.cpp in Sources */,
+				2360A60720D78F2C00E4A311 /* PerformanceTraceConfig.cpp in Sources */,
 				239774E7202AECD3000A681C /* BindParameter.cpp in Sources */,
 				23036A3C205F9A4700ADF01A /* WCTMigrationDatabase.mm in Sources */,
 				23977506202AECD3000A681C /* QualifiedTableName.cpp in Sources */,
@@ -3374,6 +3395,7 @@
 				23775B9620AD666900E21AB0 /* Crawlable.cpp in Sources */,
 				2397756F202AECD3000A681C /* LangDropIndexSTMT.cpp in Sources */,
 				23D0C31420C125570001BFAE /* Assembler.cpp in Sources */,
+				2360A5F720D78F1B00E4A311 /* HandleRelated.cpp in Sources */,
 				236814EE20C5640200BDF4D3 /* Attachment.cpp in Sources */,
 				234D391D20833BC2005FD3CF /* MigrationTamperer.cpp in Sources */,
 				23F70FD020A0649800CCE3CD /* MigrationConfig.cpp in Sources */,
@@ -3418,6 +3440,7 @@
 				23F5BC4C20887FD3000CCD37 /* LangColumnDef.cpp in Sources */,
 				23775B7720AD666900E21AB0 /* Backup.cpp in Sources */,
 				236CCC1020C7DBE100C44E14 /* CorruptionNotifier.cpp in Sources */,
+				2360A60420D78F2C00E4A311 /* SQLTraceConfig.cpp in Sources */,
 				23D0C35220C149D80001BFAE /* Factory.cpp in Sources */,
 				23A8CD5620C8E40500A45C54 /* Corruption.cpp in Sources */,
 				23F5BC4E20887FD3000CCD37 /* WCTDatabase+Transaction.mm in Sources */,
@@ -3432,7 +3455,6 @@
 				23F5BC5520887FD3000CCD37 /* ConfiguredHandle.cpp in Sources */,
 				23775B6720AD666900E21AB0 /* Notifier.cpp in Sources */,
 				23F5BC5620887FD3000CCD37 /* StatementAnalyze.cpp in Sources */,
-				23F5BC5720887FD3000CCD37 /* Tracer.cpp in Sources */,
 				23D07CEB20BE873E0043F4D4 /* SequenceCrawler.cpp in Sources */,
 				23F5BC5820887FD3000CCD37 /* LangSelectSTMT.cpp in Sources */,
 				23F5BC5920887FD3000CCD37 /* StatementBegin.cpp in Sources */,
@@ -3446,6 +3468,7 @@
 				23F5BC5E20887FD3000CCD37 /* WCTTable.mm in Sources */,
 				23F5BC5F20887FD3000CCD37 /* RecyclableHandle.cpp in Sources */,
 				23775B6B20AD666900E21AB0 /* FullCrawler.cpp in Sources */,
+				2360A5FA20D78F1B00E4A311 /* HandleNotification.cpp in Sources */,
 				23F5BC6020887FD3000CCD37 /* CopyOnWriteString.cpp in Sources */,
 				23F5BC6120887FD3000CCD37 /* StatementSavepoint.cpp in Sources */,
 				23F5BC6220887FD3000CCD37 /* NSNull+WCTColumnCoding.mm in Sources */,
@@ -3565,7 +3588,6 @@
 				23F670EC209428CE00DB2E28 /* Schema.cpp in Sources */,
 				23567D7C20CA93C5005F1C35 /* Time.cpp in Sources */,
 				23F5BCC420887FD3000CCD37 /* MigrationDatabase.cpp in Sources */,
-				23F70FB320A055C700CCE3CD /* TraceConfig.cpp in Sources */,
 				23F5BCC520887FD3000CCD37 /* WCTTable+Convenient.mm in Sources */,
 				23F5BCC720887FD3000CCD37 /* StatementCreateIndex.cpp in Sources */,
 				23775B6F20AD666900E21AB0 /* DeprecatedBackup.cpp in Sources */,
@@ -3589,6 +3611,7 @@
 				23F5BCD820887FD3000CCD37 /* Lock.cpp in Sources */,
 				23567CFB20CA3889005F1C35 /* Frame.cpp in Sources */,
 				23B35C7920BFE39500425033 /* Path.cpp in Sources */,
+				2360A60820D78F2C00E4A311 /* PerformanceTraceConfig.cpp in Sources */,
 				23F5BCD920887FD3000CCD37 /* BindParameter.cpp in Sources */,
 				23F5BCDB20887FD3000CCD37 /* WCTMigrationDatabase.mm in Sources */,
 				23F5BCDC20887FD3000CCD37 /* QualifiedTableName.cpp in Sources */,
@@ -3613,6 +3636,7 @@
 				23775B9720AD666900E21AB0 /* Crawlable.cpp in Sources */,
 				23F5BCEB20887FD3000CCD37 /* LangDropIndexSTMT.cpp in Sources */,
 				23D0C31520C125570001BFAE /* Assembler.cpp in Sources */,
+				2360A5F820D78F1B00E4A311 /* HandleRelated.cpp in Sources */,
 				236814EF20C5640200BDF4D3 /* Attachment.cpp in Sources */,
 				23F5BCEC20887FD3000CCD37 /* MigrationTamperer.cpp in Sources */,
 				23F70FD120A0649800CCE3CD /* MigrationConfig.cpp in Sources */,

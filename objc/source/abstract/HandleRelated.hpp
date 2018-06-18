@@ -18,29 +18,25 @@
  * limitations under the License.
  */
 
-#ifndef Core_h
-#define Core_h
+#ifndef HandleRelated_hpp
+#define HandleRelated_hpp
 
-#include <WCDB/Abstract.h>
+#include <string>
 
-#include <WCDB/BackupConfig.hpp>
-#include <WCDB/BasicConfig.hpp>
-#include <WCDB/CheckpointConfig.hpp>
-#include <WCDB/CipherConfig.hpp>
-#include <WCDB/Config.hpp>
-#include <WCDB/Configs.hpp>
-#include <WCDB/ConfiguredHandle.hpp>
-#include <WCDB/CustomConfig.hpp>
-#include <WCDB/Database.hpp>
-#include <WCDB/HandlePool.hpp>
-#include <WCDB/HandlePools.hpp>
-#include <WCDB/PerformanceTraceConfig.hpp>
-#include <WCDB/RecyclableHandle.hpp>
-#include <WCDB/RecyclableHandlePool.hpp>
-#include <WCDB/SQLTraceConfig.hpp>
-#include <WCDB/TokenizeConfig.hpp>
-#include <WCDB/Tokenizer.hpp>
+namespace WCDB {
 
-#include <WCDB/Migration.h>
+class Handle;
 
-#endif /* Core_h */
+class HandleRelated {
+public:
+    HandleRelated(Handle *handle);
+
+protected:
+    void *getRawHandle();
+    void setError(int rc, const std::string &sql = "");
+    Handle *m_handle;
+};
+
+} //namespace WCDB
+
+#endif /* HandleRelated_hpp */

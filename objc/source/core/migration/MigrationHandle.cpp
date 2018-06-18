@@ -37,6 +37,9 @@ MigrationHandle::MigrationHandle(const std::string &path,
     , m_setting(setting)
     , m_unlockShared(false)
     , m_tamperer(setting.getInfos())
+    , m_extraHandleStatement1(this)
+    , m_extraHandleStatement2(this)
+    , m_tamperedHandleStatement(this)
 {
 }
 
@@ -111,8 +114,7 @@ bool MigrationHandle::prepare(const Statement &statement)
         return false;
     }
     if (source.getStatementType() != Statement::Type::Insert &&
-        !Handle::prepare(m_tamperer.getTamperedStatement(),
-                         m_tamperedHandleStatement)) {
+        !m_tamperedHandleStatement.prepare(m_tamperer.getTamperedStatement())) {
         m_handleStatement.finalize();
         return false;
     }
@@ -139,8 +141,7 @@ bool MigrationHandle::step(bool &done)
                 return commitOrRollbackNestedTransaction();
             }
         } else {
-            if (Handle::step(done) &&
-                Handle::step(m_tamperedHandleStatement, done)) {
+            if (Handle::step(done) && m_tamperedHandleStatement.step(done)) {
                 return commitOrRollbackNestedTransaction();
             }
         }
@@ -152,7 +153,9 @@ bool MigrationHandle::step(bool &done)
 void MigrationHandle::reset()
 {
     Handle::reset();
-    m_tamperedHandleStatement.reset();
+    if (m_tamperedHandleStatement.isPrepared()) {
+        m_tamperedHandleStatement.reset();
+    }
 }
 
 void MigrationHandle::bindInteger32(const Integer32 &value, int index)
@@ -225,15 +228,16 @@ bool MigrationHandle::migrateWithRowID(
     WCTInnerAssert(info != nullptr && isInTransaction());
     if (!m_extraHandleStatement1.isPrepared() ||
         m_associatedConflictType != onConflict) {
-        if (!Handle::prepare(
-                info->getStatementForTamperingConflictType(onConflict),
-                m_extraHandleStatement1)) {
+        m_extraHandleStatement1.finalize();
+        if (!m_extraHandleStatement1.prepare(
+                info->getStatementForTamperingConflictType(onConflict))) {
             return false;
         }
     }
     if (!m_extraHandleStatement2.isPrepared()) {
-        if (!Handle::prepare(info->getStatementForDeletingMigratedRow(),
-                             m_extraHandleStatement2)) {
+        m_extraHandleStatement2.finalize();
+        if (!m_extraHandleStatement2.prepare(
+                info->getStatementForDeletingMigratedRow())) {
             m_extraHandleStatement1.finalize();
             return false;
         }
@@ -252,7 +256,7 @@ bool MigrationHandle::_migrateWithRowID(const long long &rowid,
 {
     handleStatement.bindInteger64(rowid, 1);
     bool done = false;
-    bool result = Handle::step(handleStatement, done);
+    bool result = handleStatement.step(done);
     handleStatement.reset();
     return result;
 }
