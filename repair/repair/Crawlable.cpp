@@ -30,7 +30,8 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialize
-Crawlable::Crawlable(Pager &pager) : m_associatedPager(pager), m_stop(false)
+Crawlable::Crawlable(Pager &pager)
+    : m_associatedPager(pager), m_stop(false), m_isCrawling(false)
 {
 }
 
@@ -58,9 +59,12 @@ void Crawlable::markAsError()
 
 bool Crawlable::crawl(int rootpageno)
 {
-    std::set<int> crawledInteriorPages;
+    WCTInnerAssert(!m_isCrawling);
+    m_isCrawling = true;
     m_stop = false;
+    std::set<int> crawledInteriorPages;
     safeCrawl(rootpageno, crawledInteriorPages, 1);
+    m_isCrawling = false;
     return m_associatedPager.getError().isOK();
 }
 
