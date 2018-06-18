@@ -152,7 +152,9 @@ bool MigrationHandle::step(bool &done)
 void MigrationHandle::reset()
 {
     Handle::reset();
-    m_tamperedHandleStatement.reset();
+    if (m_tamperedHandleStatement.isPrepared()) {
+        m_tamperedHandleStatement.reset();
+    }
 }
 
 void MigrationHandle::bindInteger32(const Integer32 &value, int index)
@@ -225,12 +227,14 @@ bool MigrationHandle::migrateWithRowID(
     WCTInnerAssert(info != nullptr && isInTransaction());
     if (!m_extraHandleStatement1.isPrepared() ||
         m_associatedConflictType != onConflict) {
+        m_extraHandleStatement1.finalize();
         if (!m_extraHandleStatement1.prepare(
                 info->getStatementForTamperingConflictType(onConflict))) {
             return false;
         }
     }
     if (!m_extraHandleStatement2.isPrepared()) {
+        m_extraHandleStatement2.finalize();
         if (!m_extraHandleStatement2.prepare(
                 info->getStatementForDeletingMigratedRow())) {
             m_extraHandleStatement1.finalize();
