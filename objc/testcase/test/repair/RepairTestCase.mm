@@ -31,12 +31,12 @@
     _tableName1 = [self.className stringByAppendingString:@"_1"];
     _preInsertedObjects1 = [TestCaseObject objectsWithCount:1000];
     XCTAssertTrue([_database createTableAndIndexes:_tableName1 withClass:TestCaseObject.class]);
-    //    XCTAssertTrue([_database insertObjects:_preInsertedObjects1 intoTable:_tableName1]);
-    //
-    //    _tableName2 = [self.className stringByAppendingString:@"_2"];
-    //    _preInsertedObjects2 = [TestCaseObject objectsWithCount:1000];
-    //    XCTAssertTrue([_database createTableAndIndexes:_tableName2 withClass:TestCaseObject.class]);
-    //    XCTAssertTrue([_database insertObjects:_preInsertedObjects2 intoTable:_tableName2]);
+    XCTAssertTrue([_database insertObjects:_preInsertedObjects1 intoTable:_tableName1]);
+
+    _tableName2 = [self.className stringByAppendingString:@"_2"];
+    _preInsertedObjects2 = [TestCaseObject objectsWithCount:1000];
+    XCTAssertTrue([_database createTableAndIndexes:_tableName2 withClass:TestCaseObject.class]);
+    XCTAssertTrue([_database insertObjects:_preInsertedObjects2 intoTable:_tableName2]);
 }
 
 - (void)tearDown
