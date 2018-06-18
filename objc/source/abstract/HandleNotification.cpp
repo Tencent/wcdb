@@ -39,7 +39,7 @@ int HandleNotification::onTraced(unsigned int flag, void *P, void *X)
             sqlite3_int64 *cost = (sqlite3_int64 *) X;
             sqlite3 *db = sqlite3_db_handle(stmt);
             onPerformanceTraced(sql ? sql : String::empty(), *cost,
-                                sqlite3_get_autocommit(db));
+                                !sqlite3_get_autocommit(db));
         } break;
         default:
             break;
@@ -90,7 +90,8 @@ void HandleNotification::onSQLTraced(const std::string &sql)
 }
 
 #pragma mark - Performance
-HandleNotification::Footprint::Footprint(const std::string &sql) : frequency(0)
+HandleNotification::Footprint::Footprint(const std::string &sql_)
+    : sql(sql_), frequency(1)
 {
 }
 
@@ -110,7 +111,7 @@ void HandleNotification::onPerformanceTraced(const std::string &sql,
                                              bool isInTransaction)
 {
     if (!m_footprints.empty()) {
-        auto &footprint = m_footprints.front();
+        auto &footprint = m_footprints.back();
         if (footprint.sql == sql) {
             ++footprint.frequency;
             return;

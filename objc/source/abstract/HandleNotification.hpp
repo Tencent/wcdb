@@ -22,6 +22,7 @@
 #define HandleNotification_hpp
 
 #include <WCDB/HandleRelated.hpp>
+#include <list>
 
 namespace WCDB {
 
