@@ -33,7 +33,7 @@ bool HandleStatement::prepare(const Statement &statement)
     WCTInnerAssert(m_stmt == nullptr);
     m_statement = statement;
     const std::string &sql = m_statement.getDescription();
-    int rc = sqlite3_prepare_v2((sqlite3 *) m_handle, sql.c_str(), -1,
+    int rc = sqlite3_prepare_v2((sqlite3 *) getRawHandle(), sql.c_str(), -1,
                                 (sqlite3_stmt **) &m_stmt, nullptr);
     if (rc == SQLITE_OK) {
         return true;
