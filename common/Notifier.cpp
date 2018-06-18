@@ -31,26 +31,23 @@ Notifier *Notifier::shared()
 
 void Notifier::logger(const Error &error)
 {
-    std::ostringstream stream;
-    switch (error.level) {
-        case Error::Level::Ignore:
-            break;
-        case Error::Level::Debug:
-#ifdef DEBUG
-            stream << error.getDescription() << std::endl;
+    bool log = error.level != Error::Level::Ignore
+#ifndef DEBUG
+               && error.level != Error::Level::Debug
 #endif
-            break;
-        case Error::Level::Warning:
-        case Error::Level::Error:
-        case Error::Level::Notice:
-            stream << error.getDescription() << std::endl;
-            break;
-        case Error::Level::Fatal:
-            stream << error.getDescription() << std::endl;
-            abort();
-            break;
+        ;
+
+    bool interrupt = error.level == Error::Level::Fatal;
+
+    if (log) {
+        std::ostringstream stream;
+        stream << error.getDescription() << std::endl;
+        std::cout << stream.str();
     }
-    std::cout << stream.str();
+
+    if (interrupt) {
+        abort();
+    }
 }
 
 Notifier::Notifier()
