@@ -33,7 +33,12 @@ std::shared_ptr<Handle> Handle::handleWithPath(const std::string &path)
 }
 
 Handle::Handle(const std::string &path_)
-    : m_handle(nullptr), path(path_), m_nestedLevel(0), m_tag(invalidTag)
+    : m_handle(nullptr)
+    , m_handleStatement(this)
+    , m_notification(this)
+    , path(path_)
+    , m_nestedLevel(0)
+    , m_tag(invalidTag)
 {
     m_error.infos.set("Path", path);
 }
@@ -161,77 +166,10 @@ bool Handle::isInTransaction()
     return sqlite3_get_autocommit((sqlite3 *) m_handle) == 0;
 }
 
-#pragma mark - Notification
-Handle::CommittedInfo::CommittedInfo() : notification(nullptr), handle(nullptr)
-{
-}
-
-void Handle::setNotificationWhenCommitted(const CommittedCallback &onCommitted)
-{
-    m_committedInfo.notification = onCommitted;
-    if (m_committedInfo.notification) {
-        m_committedInfo.handle = this;
-        sqlite3_wal_hook(
-            (sqlite3 *) m_handle,
-            [](void *p, sqlite3 *, const char *, int frames) -> int {
-                CommittedInfo *committedInfo =
-                    reinterpret_cast<CommittedInfo *>(p);
-                committedInfo->notification(committedInfo->handle, frames);
-                return SQLITE_OK;
-            },
-            &m_committedInfo);
-    } else {
-        m_committedInfo.handle = nullptr;
-        sqlite3_wal_hook((sqlite3 *) m_handle, nullptr, nullptr);
-    }
-}
-
-Handle::CheckpointInfo::CheckpointInfo()
-    : notification(nullptr), handle(nullptr)
-{
-}
-
-void Handle::setNotificationWhenCheckpoint(
-    const WCDB::Handle::CheckpointCallback &willCheckpoint)
-{
-    m_checkpointInfo.notification = willCheckpoint;
-    if (m_checkpointInfo.notification) {
-        sqlite3_wal_checkpoint_handler(
-            (sqlite3 *) m_handle,
-            [](void *p, int frames) -> int {
-                CheckpointInfo *checkpointInfo =
-                    reinterpret_cast<CheckpointInfo *>(p);
-                if (checkpointInfo->notification(checkpointInfo->handle,
-                                                 frames)) {
-                    return SQLITE_OK;
-                }
-                return SQLITE_ABORT;
-            },
-            &m_checkpointInfo);
-    } else {
-        sqlite3_wal_checkpoint_handler((sqlite3 *) m_handle, nullptr, nullptr);
-    }
-}
-
 #pragma mark - Statement
 bool Handle::prepare(const Statement &statement)
 {
-    return prepare(statement, m_handleStatement);
-}
-
-bool Handle::prepare(const Statement &statement,
-                     HandleStatement &handleStatement)
-{
-    sqlite3_stmt *stmt;
-    int rc = sqlite3_prepare_v2((sqlite3 *) m_handle,
-                                statement.getDescription().c_str(), -1,
-                                (sqlite3_stmt **) &stmt, nullptr);
-    if (rc == SQLITE_OK) {
-        handleStatement.setup(this, statement, stmt);
-        return true;
-    }
-    setError(rc, statement.getDescription());
-    return false;
+    return m_handleStatement.prepare(statement);
 }
 
 void Handle::reset()
@@ -241,18 +179,13 @@ void Handle::reset()
 
 bool Handle::step(bool &done)
 {
-    return step(m_handleStatement, done);
+    return m_handleStatement.step(done);
 }
 
 bool Handle::step()
 {
     bool unused;
     return step(unused);
-}
-
-bool Handle::step(HandleStatement &handleStatement, bool &done)
-{
-    return handleStatement.step(done);
 }
 
 int Handle::getColumnCount()
@@ -355,10 +288,10 @@ std::pair<bool, bool> Handle::tableExists(const TableOrSubquery &table)
 {
     StatementSelect statementSelect =
         StatementSelect().select(1).from(table).limit(0);
-    m_error.level = Error::Level::Ignore;
+    ignoreError(true);
     bool unused;
     bool result = Handle::prepare(statementSelect) && Handle::step(unused);
-    m_error.level = Error::Level::Error;
+    ignoreError(false);
     finalize();
     return {result || getResultCode() == SQLITE_ERROR, result};
 }
@@ -502,22 +435,29 @@ bool Handle::setCipherKey(const void *data, int size)
     return false;
 }
 
-#pragma mark - Trace
-void Handle::traceSQL(const SQLTraceCallback &trace)
+#pragma mark - Notification
+void Handle::setNotificationWhenSQLTraced(const std::string &name,
+                                          const SQLNotification &onTraced)
 {
-    m_tracer.traceSQL(m_handle, trace);
+    m_notification.setNotificationWhenSQLTraced(name, onTraced);
 }
 
-void Handle::tracePerformance(const PerformanceTraceCallback &trace)
+void Handle::setNotificationWhenPerformanceTraced(
+    const std::string &name, const PerformanceNotification &onTraced)
 {
-    Tracer::PerformanceTraceCallback callback = nullptr;
-    if (trace) {
-        callback = [this, trace](const Tracer::Footprints &footprints,
-                                 int64_t cost) {
-            trace(getTag(), footprints, cost);
-        };
-    }
-    m_tracer.tracePerformance(m_handle, callback);
+    m_notification.setNotificationWhenPerformanceTraced(name, onTraced);
+}
+
+void Handle::setNotificationWhenCommitted(
+    const CommittedNotification &onCommitted)
+{
+    m_notification.setNotificationWhenCommitted(onCommitted);
+}
+
+void Handle::setNotificationWhenCheckpoint(
+    const WCDB::Handle::CheckpointNotification &willCheckpoint)
+{
+    m_notification.setNotificationWhenCheckpoint(willCheckpoint);
 }
 
 #pragma mark - Repair Kit
@@ -588,6 +528,15 @@ void Handle::setError(int rc, const std::string &sql)
         m_error.infos.set("SQL", sql);
     }
     Reporter::shared()->report(m_error);
+}
+
+void Handle::ignoreError(bool ignore)
+{
+    if (ignore) {
+        m_error.level = Error::Level::Ignore;
+    } else {
+        m_error.level = Error::Level::Error;
+    }
 }
 
 } //namespace WCDB

@@ -22,8 +22,8 @@
 #define Handle_hpp
 
 #include <WCDB/ErrorProne.hpp>
+#include <WCDB/HandleNotification.hpp>
 #include <WCDB/HandleStatement.hpp>
-#include <WCDB/Tracer.hpp>
 #include <WCDB/WINQ.h>
 #include <array>
 #include <memory>
@@ -45,6 +45,7 @@ public:
     virtual ~Handle();
 
 protected:
+    friend class HandleRelated;
     Handle(const std::string &path);
     void *m_handle;
 
@@ -82,32 +83,6 @@ public:
     int getChanges();
     bool isReadonly();
     bool isInTransaction();
-
-#pragma mark - Notification
-public:
-    typedef std::function<void(Handle *, int)> CommittedCallback;
-    void setNotificationWhenCommitted(const CommittedCallback &onCommitted);
-
-    typedef std::function<bool(Handle *, int)> CheckpointCallback;
-    void
-    setNotificationWhenCheckpoint(const CheckpointCallback &willCheckpoint);
-
-protected:
-    struct CommittedInfo {
-        CommittedInfo();
-        CommittedCallback notification;
-        Handle *handle;
-    };
-    typedef struct CommittedInfo CommittedInfo;
-    CommittedInfo m_committedInfo;
-
-    struct CheckpointInfo {
-        CheckpointInfo();
-        CheckpointCallback notification;
-        Handle *handle;
-    };
-    typedef struct CheckpointInfo CheckpointInfo;
-    CheckpointInfo m_checkpointInfo;
 
 #pragma mark - Statement
 public:
@@ -149,8 +124,6 @@ public:
 
 protected:
     HandleStatement m_handleStatement;
-    bool prepare(const Statement &statement, HandleStatement &handleStatement);
-    bool step(HandleStatement &handleStatement, bool &done);
 
 #pragma mark - Convenient
 public:
@@ -183,18 +156,25 @@ protected:
 public:
     bool setCipherKey(const void *data, int size);
 
-#pragma mark - Trace
+#pragma mark - Notification
 public:
-    typedef std::function<void(
-        Tag, const Tracer::Footprints &, const int64_t &)>
-        PerformanceTraceCallback;
-    void tracePerformance(const PerformanceTraceCallback &trace);
+    typedef HandleNotification::PerformanceNotification PerformanceNotification;
+    void setNotificationWhenPerformanceTraced(
+        const std::string &name, const PerformanceNotification &onTraced);
 
-    using SQLTraceCallback = Tracer::SQLTraceCallback;
-    void traceSQL(const SQLTraceCallback &trace);
+    typedef HandleNotification::SQLNotification SQLNotification;
+    void setNotificationWhenSQLTraced(const std::string &name,
+                                      const SQLNotification &onTraced);
+
+    typedef HandleNotification::CommittedNotification CommittedNotification;
+    void setNotificationWhenCommitted(const CommittedNotification &onCommitted);
+
+    typedef HandleNotification::CheckpointNotification CheckpointNotification;
+    void
+    setNotificationWhenCheckpoint(const CheckpointNotification &willCheckpoint);
 
 protected:
-    Tracer m_tracer;
+    HandleNotification m_notification;
 
 #pragma mark - Repair Kit
 public:
@@ -205,11 +185,9 @@ public:
                          const NoCopyData &databaseCipher);
 
 #pragma mark - Error
-public:
-    friend void HandleStatement::setError(int rc, const std::string &sql);
-
 protected:
     void setError(int rc, const std::string &sql = "");
+    void ignoreError(bool ignore = true);
 };
 
 } //namespace WCDB

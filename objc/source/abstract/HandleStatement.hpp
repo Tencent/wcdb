@@ -21,19 +21,18 @@
 #ifndef HandleStatement_hpp
 #define HandleStatement_hpp
 
+#include <WCDB/HandleRelated.hpp>
 #include <WCDB/WINQ.h>
 
 #pragma GCC visibility push(hidden)
 
 namespace WCDB {
 
-class Handle;
-
-class HandleStatement {
+class HandleStatement : public HandleRelated {
 public:
-    HandleStatement();
+    HandleStatement(Handle *handle);
 
-    void setup(Handle *handle, const Statement &statement, void *stmt);
+    bool prepare(const Statement &statement);
 
     bool step(bool &done);
     bool step();
@@ -70,15 +69,7 @@ public:
     bool isReadonly();
     bool isPrepared();
 
-    const char *getSQL();
-
-    const Statement &getStatement();
-
 protected:
-    friend class Handle;
-    void setError(int rc, const std::string &sql);
-    Handle *m_handle;
-
     Statement m_statement;
     void *m_stmt;
 };

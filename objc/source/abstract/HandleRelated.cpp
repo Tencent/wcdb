@@ -18,34 +18,25 @@
  * limitations under the License.
  */
 
-#ifndef TraceConfig_hpp
-#define TraceConfig_hpp
-
-#include <WCDB/Config.hpp>
-#include <WCDB/Lock.hpp>
-
-#pragma GCC visibility push(hidden)
+#include <WCDB/Assertion.hpp>
+#include <WCDB/Handle.hpp>
+#include <WCDB/HandleRelated.hpp>
 
 namespace WCDB {
 
-class TraceConfig : public Config {
-public:
-    static const std::shared_ptr<Config> &shared();
+HandleRelated::HandleRelated(Handle *handle) : m_handle(handle)
+{
+    WCTInnerAssert(m_handle != nullptr);
+}
 
-    TraceConfig(const std::string &name);
-    bool invoke(Handle *handle) override;
+void HandleRelated::setError(int rc, const std::string &sql)
+{
+    m_handle->setError(rc, sql);
+}
 
-    void setPerformanceTrace(const Handle::PerformanceNotification &trace);
-    void setSQLTrace(const Handle::SQLNotification &trace);
-
-protected:
-    Handle::PerformanceNotification m_performanceTrace;
-    Handle::SQLNotification m_sqlTrace;
-    mutable SharedLock m_lock;
-};
+void *HandleRelated::getRawHandle()
+{
+    return m_handle->m_handle;
+}
 
 } //namespace WCDB
-
-#pragma GCC visibility pop
-
-#endif /* TraceConfig_hpp */

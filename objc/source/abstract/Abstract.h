@@ -26,9 +26,9 @@
 #include <WCDB/WINQ.h>
 
 #include <WCDB/Handle.hpp>
+#include <WCDB/HandleNotification.hpp>
 #include <WCDB/HandleStatement.hpp>
 #include <WCDB/SQLiteGlobal.hpp>
 #include <WCDB/Tokenize.hpp>
-#include <WCDB/Tracer.hpp>
 
 #endif /* Abstract_h */
