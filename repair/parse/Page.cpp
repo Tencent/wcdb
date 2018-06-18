@@ -43,11 +43,11 @@ std::pair<bool, Page::Type> Page::acquireType()
             return {false, Type::Unknown};
         }
         Deserialization deserialization(data);
-        WCTInnerAssert(deserialization.isEnough(1));
+        WCTInnerAssert(deserialization.canAdvance(1));
         type = deserialization.advance1ByteInt();
     } else {
-        m_deserialization.seek(0);
-        type = m_deserialization.advance1ByteInt();
+        WCTInnerAssert(m_deserialization.isEnough(1));
+        type = m_deserialization.get1ByteInt(0);
     }
     switch (type) {
         case (int) Type::InteriorIndex:
@@ -78,8 +78,8 @@ std::pair<bool, int> Page::getSubPageno(int index) const
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(index < getSubPageCount());
     WCTInnerAssert(m_type == Type::InteriorTable);
-    int offset = index < m_cellCount ? getCellPointer(index) : 8;
-    if (!m_deserialization.isEnough(offset, 4)) {
+    int offset = index < m_cellPointers.size() ? m_cellPointers[index] : 8;
+    if (!m_deserialization.isEnough(offset + 4)) {
         return {false, -1};
     }
     return {true, m_deserialization.get4BytesInt(offset)};
@@ -89,7 +89,7 @@ int Page::getSubPageCount() const
 {
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(m_type == Type::InteriorTable);
-    return m_cellCount + hasRightMostPageNo();
+    return (int) m_cellPointers.size() + hasRightMostPageNo();
 }
 
 #pragma mark - Leaf Table
@@ -98,14 +98,14 @@ Cell Page::getCell(int index)
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(index < getCellCount());
     WCTInnerAssert(m_type == Type::LeafTable);
-    return Cell(getCellPointer(index), this, m_pager);
+    return Cell(m_cellPointers[index], this, m_pager);
 }
 
 int Page::getCellCount() const
 {
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(m_type == Type::LeafTable);
-    return m_cellCount;
+    return (int) m_cellPointers.size();
 }
 
 int Page::getMaxLocal() const
@@ -124,15 +124,6 @@ int Page::getMinLocal() const
 int Page::getOffsetOfCellPointer() const
 {
     return m_type == Type::InteriorTable ? 12 : 8;
-}
-
-int Page::getCellPointer(int cellIndex) const
-{
-    WCTInnerAssert(isInitialized());
-    WCTInnerAssert(m_deserialization.isEnough(
-        getOffsetOfHeader() + getOffsetOfCellPointer() + cellIndex * 2, 2));
-    return m_deserialization.get2BytesInt(
-        getOffsetOfHeader() + getOffsetOfCellPointer() + cellIndex * 2);
 }
 
 bool Page::hasRightMostPageNo() const
@@ -154,7 +145,7 @@ bool Page::doInitialize()
     }
     m_deserialization.reset(m_data);
     m_deserialization.seek(getOffsetOfHeader());
-    WCTInnerAssert(m_deserialization.isEnough(1));
+    WCTInnerAssert(m_deserialization.canAdvance(1));
     int type = m_deserialization.advance1ByteInt();
     switch (type) {
         case (int) Type::InteriorIndex:
@@ -167,13 +158,26 @@ bool Page::doInitialize()
             m_type = Type::Unknown;
             break;
     }
+    WCTInnerAssert(m_deserialization.canAdvance(4));
     m_deserialization.advance(2);
-    WCTInnerAssert(m_deserialization.isEnough(2));
-    m_cellCount = m_deserialization.advance2BytesInt();
-    if (m_cellCount < 0 ||
-        m_cellCount * 2 + getOffsetOfCellPointer() > m_pager->getPageSize()) {
+    int cellCount = m_deserialization.advance2BytesInt();
+    if (cellCount < 0 ||
+        cellCount * 2 + getOffsetOfCellPointer() > m_pager->getPageSize()) {
         markPagerAsCorrupted();
         return false;
+    }
+    for (int i = 0; i < cellCount; ++i) {
+        int offset = getOffsetOfHeader() + getOffsetOfCellPointer() + i * 2;
+        if (!m_deserialization.isEnough(offset + 2)) {
+            markPagerAsCorrupted();
+            return false;
+        }
+        int cellPointer = m_deserialization.get2BytesInt(offset);
+        if (cellPointer > m_pager->getPageSize()) {
+            markPagerAsCorrupted();
+            return false;
+        }
+        m_cellPointers.push_back(cellPointer);
     }
     return true;
 }

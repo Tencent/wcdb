@@ -183,13 +183,13 @@ bool Pager::doInitialize()
         //parse page size
         if (m_pageSize == -1) {
             deserialization.seek(16);
-            WCTInnerAssert(deserialization.isEnough(2));
+            WCTInnerAssert(deserialization.canAdvance(2));
             m_pageSize = deserialization.advance2BytesInt();
         }
         //parse reserved bytes
         if (m_reservedBytes == -1) {
             deserialization.seek(20);
-            WCTInnerAssert(deserialization.isEnough(1));
+            WCTInnerAssert(deserialization.canAdvance(1));
             m_reservedBytes = deserialization.advance1ByteInt();
         }
     }

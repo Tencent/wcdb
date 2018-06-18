@@ -104,7 +104,9 @@ int64_t Cell::integerValue(int index) const
     WCTInnerAssert(index < m_columns.size());
     WCTInnerAssert(getValueType(index) == Type::Integer);
     const auto &cell = m_columns[index];
-    switch (getLengthOfSerialType(cell.first)) {
+    int length = getLengthOfSerialType(cell.first);
+    WCTInnerAssert(m_deserialization.isEnough(cell.second + length));
+    switch (length) {
         case 1:
             return m_deserialization.get1ByteInt(cell.second);
         case 2:
@@ -128,6 +130,7 @@ double Cell::doubleValue(int index) const
     WCTInnerAssert(index < m_columns.size());
     WCTInnerAssert(getValueType(index) == Type::Real);
     const auto &cell = m_columns[index];
+    WCTInnerAssert(m_deserialization.isEnough(cell.second + 8));
     return m_deserialization.get8BytesDouble(cell.second);
 }
 
@@ -147,7 +150,9 @@ std::string Cell::stringValue(int index) const
     WCTInnerAssert(index < m_columns.size());
     WCTInnerAssert(getValueType(index) == Type::Text);
     const auto &cell = m_columns[index];
-    return m_deserialization.getZeroTerminatedString(cell.second);
+    int length = getLengthOfSerialType(cell.first);
+    WCTInnerAssert(m_deserialization.isEnough(cell.second + length));
+    return m_deserialization.getString(cell.second, length);
 }
 
 std::pair<int, const unsigned char *> Cell::blobValue(int index) const
@@ -156,9 +161,9 @@ std::pair<int, const unsigned char *> Cell::blobValue(int index) const
     WCTInnerAssert(index < m_columns.size());
     WCTInnerAssert(getValueType(index) == Type::BLOB);
     const auto &cell = m_columns[index];
-    return {getLengthOfSerialType(cell.first),
-            reinterpret_cast<const unsigned char *>(m_payload.buffer() +
-                                                    cell.second)};
+    int size = getLengthOfSerialType(cell.first);
+    WCTInnerAssert(m_deserialization.isEnough(cell.second + size));
+    return {size, m_deserialization.getBLOB(cell.second, size)};
 }
 
 #pragma mark - Initializeable
@@ -175,10 +180,8 @@ bool Cell::doInitialize()
         return false;
     }
     //parse rowid
-    deserialization.seek(m_pointer + payloadSize);
     int lengthOfRowid;
     std::tie(lengthOfRowid, m_rowid) = deserialization.advanceVarint();
-    ;
     if (lengthOfRowid == 0) {
         markPagerAsCorrupted();
         return false;
@@ -190,17 +193,19 @@ bool Cell::doInitialize()
     if (localPayloadSize > m_page->getMaxLocal()) {
         localPayloadSize = m_page->getMinLocal();
     }
-    //parse payload
-    int offsetOfPayload = m_pointer + lengthOfPayloadSize + lengthOfRowid;
-    if (offsetOfPayload + localPayloadSize > m_pager->getPageSize()) {
+    if (!deserialization.canAdvance(localPayloadSize)) {
         markPagerAsCorrupted();
         return false;
     }
+    //parse payload
+    int offsetOfPayload = m_pointer + lengthOfPayloadSize + lengthOfRowid;
     if (localPayloadSize < payloadSize) {
         //append overflow pages
-        WCTInnerAssert(m_page->getData().size() >=
-                       offsetOfPayload + localPayloadSize + 4);
         deserialization.seek(offsetOfPayload + localPayloadSize);
+        if (!deserialization.canAdvance(4)) {
+            markPagerAsCorrupted();
+            return false;
+        }
         int overflowPageno = deserialization.advance4BytesInt();
         m_payload = Data(payloadSize);
         if (m_payload.empty()) {
@@ -208,7 +213,6 @@ bool Cell::doInitialize()
             return false;
         }
         //fill payload with local data
-        WCTInnerAssert(localPayloadSize <= m_payload.size());
         memcpy(m_payload.buffer(), m_page->getData().buffer() + offsetOfPayload,
                localPayloadSize);
 
@@ -236,7 +240,7 @@ bool Cell::doInitialize()
             cursorOfPayload += overflowSize;
             //next overflow page
             Deserialization overflowDeserialization(overflow);
-            WCTInnerAssert(overflowDeserialization.isEnough(4));
+            WCTInnerAssert(overflowDeserialization.canAdvance(4));
             overflowPageno = overflowDeserialization.advance4BytesInt();
         }
         if (overflowPageno != 0 || cursorOfPayload != payloadSize) {
@@ -263,8 +267,6 @@ bool Cell::doInitialize()
     const int endOfValues = payloadSize;
     const int endOfSerialTypes = offsetOfValues;
 
-    m_columns.push_back({cursorOfSerialTypes, cursorOfValues});
-
     while (cursorOfSerialTypes < endOfSerialTypes &&
            cursorOfValues < endOfValues) {
         int lengthOfSerialType, serialType;
@@ -276,8 +278,8 @@ bool Cell::doInitialize()
             return false;
         }
         cursorOfSerialTypes += lengthOfSerialType;
+        m_columns.push_back({serialType, cursorOfValues});
         cursorOfValues += getLengthOfSerialType(serialType);
-        m_columns.push_back({cursorOfSerialTypes, cursorOfValues});
     }
     if (cursorOfSerialTypes != endOfSerialTypes ||
         cursorOfValues != endOfValues) {

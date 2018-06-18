@@ -35,12 +35,17 @@ public:
 
     void seek(off_t position);
     void advance(off_t offset);
+    bool canAdvance(size_t size) const;
     bool isEnough(size_t size) const;
-    bool isEnough(off_t offset, size_t size) const;
     bool ended() const;
 
 protected:
-    off_t m_tail;
+    unsigned char *pointee();
+    const unsigned char *pointee() const;
+    unsigned char *base();
+    const unsigned char *base() const;
+    size_t capacity() const;
+
     off_t m_cursor;
     Data m_data;
 };
@@ -51,11 +56,8 @@ public:
     Serialization();
 
     Data finalize();
-    bool resizeToFit(size_t size);
-
-protected:
-    void expand(off_t newTail);
-    unsigned char *pointee();
+    bool resize(size_t size);
+    bool expand(size_t expand);
 
 #pragma mark - Put
 public:
@@ -76,15 +78,15 @@ public:
     static constexpr const int slot_2_0 = 0x001fc07f;
     static constexpr const int slot_4_2_0 = 0xf01fc07f;
 
-protected:
-    const unsigned char *pointee() const;
-
 #pragma mark - Advance
 public:
-    std::string advanceZeroTerminatedString();
-    const unsigned char *advanceBLOB(size_t size);
-    const char *advanceCString(size_t size);
+    //return nullptr to indicate failure
+    std::pair<const char *, size_t> advanceZeroTerminatedCString();
+    //return 0 size to indicate failure
     std::pair<size_t, uint64_t> advanceVarint();
+
+    // For the following types with specified size, `canAdvance` should be called first.
+    const unsigned char *advanceBLOB(size_t size);
     int64_t advance8BytesInt();
     int64_t advance6BytesInt();
     int32_t advance4BytesInt();
@@ -96,10 +98,15 @@ public:
 
 #pragma mark - Get
 public:
-    std::string getZeroTerminatedString(off_t offset) const;
-    const unsigned char *getBLOB(off_t offset, size_t size);
-    const char *getCString(off_t offset, size_t size);
+    //return nullptr to indicate failure
+    std::pair<const char *, size_t>
+    getZeroTerminatedCString(off_t offset) const;
+    //return 0 size to indicate failure
     std::pair<size_t, uint64_t> getVarint(off_t offset) const;
+
+    // For the following types with specified size, `isEnough` should be called first.
+    const unsigned char *getBLOB(off_t offset, size_t size) const;
+    std::string getString(off_t offset, size_t size) const;
     int64_t get8BytesInt(off_t offset) const;
     int64_t get6BytesInt(off_t offset) const;
     int32_t get4BytesInt(off_t offset) const;

@@ -32,7 +32,7 @@ namespace Repair {
 bool Material::serialize(Serialization &serialization) const
 {
     //Header
-    if (!serialization.resizeToFit(Material::headerSize)) {
+    if (!serialization.expand(Material::headerSize)) {
         return false;
     }
     serialization.put4BytesUInt(magic);
@@ -73,7 +73,7 @@ bool Material::serializeBLOB(Serialization &serialization, const Data &data)
     }
     uint32_t size = (uint32_t) compressed.size();
     uint32_t checksum = compressed.empty() ? 0 : hash(compressed);
-    if (!serialization.resizeToFit(sizeof(checksum) + sizeof(size) + size)) {
+    if (!serialization.expand(sizeof(checksum) + sizeof(size) + size)) {
         return false;
     }
     serialization.put4BytesUInt(size);
@@ -97,7 +97,7 @@ void Material::markAsEmpty()
 bool Material::deserialize(Deserialization &deserialization)
 {
     //Header
-    if (!deserialization.isEnough(Material::headerSize)) {
+    if (!deserialization.canAdvance(Material::headerSize)) {
         markAsCorrupt();
         return false;
     }
@@ -123,11 +123,13 @@ bool Material::deserialize(Deserialization &deserialization)
 
     Deserialization decoder(decompressed);
     while (!decoder.ended()) {
-        std::string tableName = decoder.advanceZeroTerminatedString();
-        if (tableName.empty()) {
+        auto intermediate = decoder.advanceZeroTerminatedCString();
+        if (!intermediate.first || intermediate.second == 0) {
             markAsCorrupt();
             return false;
         }
+        std::string tableName =
+            std::string(intermediate.first, intermediate.second);
 
         Content content;
         if (!content.deserialize(deserialization)) {
@@ -145,7 +147,7 @@ Material::deserializeBLOB(Deserialization &deserialization)
 {
     uint32_t checksum = 0;
     uint32_t size = 0;
-    if (!deserialization.isEnough(sizeof(checksum) + sizeof(size))) {
+    if (!deserialization.canAdvance(sizeof(checksum) + sizeof(size))) {
         return {false, Data::emptyData()};
     }
     checksum = deserialization.advance4BytesUInt();
@@ -157,11 +159,11 @@ Material::deserializeBLOB(Deserialization &deserialization)
         }
         return {true, Data::emptyData()};
     }
-    const unsigned char *blob = deserialization.advanceBLOB(size);
-    if (blob == nullptr) {
+    if (!deserialization.canAdvance(size)) {
         markAsCorrupt();
         return {false, Data::emptyData()};
     }
+    const unsigned char *blob = deserialization.advanceBLOB(size);
     Data compressed = Data::immutableNoCopyData(blob, size);
     if (checksum != hash(compressed)) {
         markAsCorrupt();
@@ -194,7 +196,7 @@ Material::Info::Info()
 #pragma mark - Serialization
 bool Material::Info::serialize(Serialization &serialization) const
 {
-    if (!serialization.resizeToFit(Info::size)) {
+    if (!serialization.expand(Info::size)) {
         return false;
     }
     serialization.put4BytesUInt(pageSize);
@@ -208,7 +210,7 @@ bool Material::Info::serialize(Serialization &serialization) const
 #pragma mark - Deserialization
 bool Material::Info::deserialize(Deserialization &deserialization)
 {
-    if (!deserialization.isEnough(Info::size)) {
+    if (!deserialization.canAdvance(Info::size)) {
         return false;
     }
     pageSize = deserialization.advance4BytesUInt();
@@ -256,13 +258,14 @@ bool Material::Content::deserialize(Deserialization &deserialization)
     }
     sequence = (int64_t) varint;
 
-    sql = deserialization.advanceZeroTerminatedString();
-    if (sql.empty()) {
+    auto intermediate = deserialization.advanceZeroTerminatedCString();
+    if (!intermediate.first || intermediate.second == 0) {
         Material::markAsCorrupt();
         return false;
     }
+    sql = std::string(intermediate.first, intermediate.second);
 
-    if (!deserialization.isEnough(sizeof(uint32_t))) {
+    if (!deserialization.canAdvance(sizeof(uint32_t))) {
         Material::markAsCorrupt();
         return false;
     }

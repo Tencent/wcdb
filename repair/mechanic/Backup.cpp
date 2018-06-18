@@ -62,7 +62,7 @@ bool Backup::work(int maxWalFrame)
     }
 
     m_masterCrawler.work(this);
-    return getError().isOK();
+    return getError().isOK() || getError().level < Error::Level::Error;
 }
 
 const Error &Backup::getError() const

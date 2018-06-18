@@ -73,10 +73,9 @@ public:
 protected:
     int getOffsetOfHeader() const;
     int getOffsetOfCellPointer() const;
-    int getCellPointer(int cellIndex) const;
     bool hasRightMostPageNo() const;
 
-    int m_cellCount;
+    std::vector<int> m_cellPointers;
 #pragma mark - Initializeable
 protected:
     bool doInitialize() override;
