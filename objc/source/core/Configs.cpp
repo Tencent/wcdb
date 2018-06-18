@@ -21,7 +21,8 @@
 #include <WCDB/BasicConfig.hpp>
 #include <WCDB/CheckpointConfig.hpp>
 #include <WCDB/Configs.hpp>
-#include <WCDB/TraceConfig.hpp>
+#include <WCDB/PerformanceTraceConfig.hpp>
+#include <WCDB/SQLTraceConfig.hpp>
 
 namespace WCDB {
 
@@ -30,7 +31,8 @@ std::shared_ptr<Configs> Configs::default_()
 {
     static std::shared_ptr<Configs> *s_configs =
         new std::shared_ptr<Configs>(new Configs({
-            Element(TraceConfig::shared(), Priority::Highest),
+            Element(SharedSQLTraceConfig::shared(), Priority::Highest),
+            Element(SharedPerformanceTraceConfig::shared(), Priority::Highest),
             Element(BasicConfig::shared(), Priority::Higher),
             Element(CheckpointConfig::shared(), Priority::Low),
         }));

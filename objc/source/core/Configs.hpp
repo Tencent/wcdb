@@ -21,12 +21,7 @@
 #ifndef Configs_hpp
 #define Configs_hpp
 
-#include <WCDB/BasicConfig.hpp>
-#include <WCDB/CheckpointConfig.hpp>
-#include <WCDB/CipherConfig.hpp>
 #include <WCDB/Config.hpp>
-#include <WCDB/TokenizeConfig.hpp>
-#include <WCDB/TraceConfig.hpp>
 
 #pragma GCC visibility push(hidden)
 

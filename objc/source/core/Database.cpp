@@ -163,6 +163,22 @@ void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
         Configs::Priority::Higher);
 }
 
+void Database::setSQLTrace(const SQLNotification &onSQLTraced)
+{
+    getHandlePool()->setConfig(std::shared_ptr<Config>(new SQLTraceConfig(
+                                   "WCDBSQLTrace", onSQLTraced)),
+                               Configs::Priority::Highest);
+}
+
+void Database::setPerformanceTrace(
+    const PerformanceNotification &onPerformanceTraced)
+{
+    getHandlePool()->setConfig(
+        std::shared_ptr<Config>(new PerformanceTraceConfig(
+            "WCDBPerformanceTrace", onPerformanceTraced)),
+        Configs::Priority::Highest);
+}
+
 #pragma mark - File
 bool Database::removeFiles()
 {

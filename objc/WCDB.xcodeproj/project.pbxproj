@@ -156,6 +156,14 @@
 		236A469F20D6BFBC001816AF /* HandleNotification.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 236A469C20D6BFBC001816AF /* HandleNotification.cpp */; };
 		236A46A020D6BFBC001816AF /* HandleNotification.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 236A469D20D6BFBC001816AF /* HandleNotification.hpp */; };
 		236A46A120D6BFBC001816AF /* HandleNotification.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 236A469D20D6BFBC001816AF /* HandleNotification.hpp */; };
+		236A46A420D74E40001816AF /* SQLTraceConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 236A46A220D74E40001816AF /* SQLTraceConfig.cpp */; };
+		236A46A520D74E40001816AF /* SQLTraceConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 236A46A220D74E40001816AF /* SQLTraceConfig.cpp */; };
+		236A46A620D74E40001816AF /* SQLTraceConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 236A46A320D74E40001816AF /* SQLTraceConfig.hpp */; };
+		236A46A720D74E40001816AF /* SQLTraceConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 236A46A320D74E40001816AF /* SQLTraceConfig.hpp */; };
+		236A46AA20D74E48001816AF /* PerformanceTraceConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 236A46A820D74E48001816AF /* PerformanceTraceConfig.cpp */; };
+		236A46AB20D74E48001816AF /* PerformanceTraceConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 236A46A820D74E48001816AF /* PerformanceTraceConfig.cpp */; };
+		236A46AC20D74E48001816AF /* PerformanceTraceConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 236A46A920D74E48001816AF /* PerformanceTraceConfig.hpp */; };
+		236A46AD20D74E48001816AF /* PerformanceTraceConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 236A46A920D74E48001816AF /* PerformanceTraceConfig.hpp */; };
 		236DB4B81F209D100091FC79 /* WCTMaster+WCTTableCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 236DB4B61F209D100091FC79 /* WCTMaster+WCTTableCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		237098062059028C00E768B4 /* Statement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237098052059028C00E768B4 /* Statement.cpp */; };
 		2370980A20590CA700E768B4 /* HandleStatement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2370980820590CA700E768B4 /* HandleStatement.cpp */; };
@@ -883,10 +891,6 @@
 		23F70FAD20A055C300CCE3CD /* CipherConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F70FAA20A055C300CCE3CD /* CipherConfig.cpp */; };
 		23F70FAE20A055C300CCE3CD /* CipherConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FAB20A055C300CCE3CD /* CipherConfig.hpp */; };
 		23F70FAF20A055C300CCE3CD /* CipherConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FAB20A055C300CCE3CD /* CipherConfig.hpp */; };
-		23F70FB220A055C700CCE3CD /* TraceConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F70FB020A055C700CCE3CD /* TraceConfig.cpp */; };
-		23F70FB320A055C700CCE3CD /* TraceConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F70FB020A055C700CCE3CD /* TraceConfig.cpp */; };
-		23F70FB420A055C700CCE3CD /* TraceConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FB120A055C700CCE3CD /* TraceConfig.hpp */; };
-		23F70FB520A055C700CCE3CD /* TraceConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FB120A055C700CCE3CD /* TraceConfig.hpp */; };
 		23F70FB820A055CF00CCE3CD /* CheckpointConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F70FB620A055CF00CCE3CD /* CheckpointConfig.cpp */; };
 		23F70FB920A055CF00CCE3CD /* CheckpointConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F70FB620A055CF00CCE3CD /* CheckpointConfig.cpp */; };
 		23F70FBA20A055CF00CCE3CD /* CheckpointConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FB720A055CF00CCE3CD /* CheckpointConfig.hpp */; };
@@ -1109,6 +1113,10 @@
 		236A469620D6B386001816AF /* HandleRelated.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HandleRelated.hpp; sourceTree = "<group>"; };
 		236A469C20D6BFBC001816AF /* HandleNotification.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HandleNotification.cpp; sourceTree = "<group>"; };
 		236A469D20D6BFBC001816AF /* HandleNotification.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HandleNotification.hpp; sourceTree = "<group>"; };
+		236A46A220D74E40001816AF /* SQLTraceConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SQLTraceConfig.cpp; sourceTree = "<group>"; };
+		236A46A320D74E40001816AF /* SQLTraceConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SQLTraceConfig.hpp; sourceTree = "<group>"; };
+		236A46A820D74E48001816AF /* PerformanceTraceConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PerformanceTraceConfig.cpp; sourceTree = "<group>"; };
+		236A46A920D74E48001816AF /* PerformanceTraceConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PerformanceTraceConfig.hpp; sourceTree = "<group>"; };
 		236DB4B61F209D100091FC79 /* WCTMaster+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTMaster+WCTTableCoding.h"; sourceTree = "<group>"; };
 		237098052059028C00E768B4 /* Statement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Statement.cpp; sourceTree = "<group>"; };
 		2370980820590CA700E768B4 /* HandleStatement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HandleStatement.cpp; sourceTree = "<group>"; };
@@ -1418,8 +1426,6 @@
 		23F70FA520A055BD00CCE3CD /* BasicConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BasicConfig.hpp; sourceTree = "<group>"; };
 		23F70FAA20A055C300CCE3CD /* CipherConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CipherConfig.cpp; sourceTree = "<group>"; };
 		23F70FAB20A055C300CCE3CD /* CipherConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CipherConfig.hpp; sourceTree = "<group>"; };
-		23F70FB020A055C700CCE3CD /* TraceConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TraceConfig.cpp; sourceTree = "<group>"; };
-		23F70FB120A055C700CCE3CD /* TraceConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TraceConfig.hpp; sourceTree = "<group>"; };
 		23F70FB620A055CF00CCE3CD /* CheckpointConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CheckpointConfig.cpp; sourceTree = "<group>"; };
 		23F70FB720A055CF00CCE3CD /* CheckpointConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CheckpointConfig.hpp; sourceTree = "<group>"; };
 		23F70FBC20A055D400CCE3CD /* TokenizeConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TokenizeConfig.cpp; sourceTree = "<group>"; };
@@ -2131,8 +2137,10 @@
 				23F70FA520A055BD00CCE3CD /* BasicConfig.hpp */,
 				23F70FAA20A055C300CCE3CD /* CipherConfig.cpp */,
 				23F70FAB20A055C300CCE3CD /* CipherConfig.hpp */,
-				23F70FB020A055C700CCE3CD /* TraceConfig.cpp */,
-				23F70FB120A055C700CCE3CD /* TraceConfig.hpp */,
+				236A46A220D74E40001816AF /* SQLTraceConfig.cpp */,
+				236A46A320D74E40001816AF /* SQLTraceConfig.hpp */,
+				236A46A820D74E48001816AF /* PerformanceTraceConfig.cpp */,
+				236A46A920D74E48001816AF /* PerformanceTraceConfig.hpp */,
 				23F70FB620A055CF00CCE3CD /* CheckpointConfig.cpp */,
 				23F70FB720A055CF00CCE3CD /* CheckpointConfig.hpp */,
 				23F70FBC20A055D400CCE3CD /* TokenizeConfig.cpp */,
@@ -2202,6 +2210,7 @@
 				23977528202AECD3000A681C /* StatementDropIndex.hpp in Headers */,
 				23F70FD820A07CEC00CCE3CD /* CustomConfig.hpp in Headers */,
 				2397752A202AECD3000A681C /* StatementDropTable.hpp in Headers */,
+				236A46AC20D74E48001816AF /* PerformanceTraceConfig.hpp in Headers */,
 				23F70F9620A03E5200CCE3CD /* WCTValue+Private.h in Headers */,
 				2397752C202AECD3000A681C /* StatementDropTrigger.hpp in Headers */,
 				239776EE202AF2E3000A681C /* FileManager.hpp in Headers */,
@@ -2243,6 +2252,7 @@
 				23977564202AECD3000A681C /* LangCreateTriggerSTMT.hpp in Headers */,
 				236A46A020D6BFBC001816AF /* HandleNotification.hpp in Headers */,
 				23977566202AECD3000A681C /* LangCreateViewSTMT.hpp in Headers */,
+				236A46A620D74E40001816AF /* SQLTraceConfig.hpp in Headers */,
 				23977568202AECD3000A681C /* LangCreateVirtualTableSTMT.hpp in Headers */,
 				2397756A202AECD3000A681C /* LangCTETableName.hpp in Headers */,
 				2397756C202AECD3000A681C /* LangDeleteSTMT.hpp in Headers */,
@@ -2338,7 +2348,6 @@
 				239776EC202AF2E3000A681C /* Path.hpp in Headers */,
 				23F670ED209428CE00DB2E28 /* Schema.hpp in Headers */,
 				2349F78E1EA0D6680021EFA7 /* WCDB.h in Headers */,
-				23F70FB420A055C700CCE3CD /* TraceConfig.hpp in Headers */,
 				2349F7271EA0D6680021EFA7 /* WCTMultiSelect.h in Headers */,
 				2301DA63203F016200C3B52A /* Convertible.hpp in Headers */,
 				23DC307A202B0066000F7895 /* Tokenize.hpp in Headers */,
@@ -2452,6 +2461,7 @@
 				23F5BD3C20887FD3000CCD37 /* StatementDropIndex.hpp in Headers */,
 				23F70FD920A07CEC00CCE3CD /* CustomConfig.hpp in Headers */,
 				23F5BD3D20887FD3000CCD37 /* StatementDropTable.hpp in Headers */,
+				236A46AD20D74E48001816AF /* PerformanceTraceConfig.hpp in Headers */,
 				23F70F9720A03E5200CCE3CD /* WCTValue+Private.h in Headers */,
 				23F5BD3E20887FD3000CCD37 /* StatementDropTrigger.hpp in Headers */,
 				23F5BD3F20887FD3000CCD37 /* FileManager.hpp in Headers */,
@@ -2493,6 +2503,7 @@
 				23F5BD6720887FD3000CCD37 /* LangCreateTriggerSTMT.hpp in Headers */,
 				236A46A120D6BFBC001816AF /* HandleNotification.hpp in Headers */,
 				23F5BD6820887FD3000CCD37 /* LangCreateViewSTMT.hpp in Headers */,
+				236A46A720D74E40001816AF /* SQLTraceConfig.hpp in Headers */,
 				23F5BD6920887FD3000CCD37 /* LangCreateVirtualTableSTMT.hpp in Headers */,
 				23F5BD6A20887FD3000CCD37 /* LangCTETableName.hpp in Headers */,
 				23F5BD6B20887FD3000CCD37 /* LangDeleteSTMT.hpp in Headers */,
@@ -2588,7 +2599,6 @@
 				23F5BDBF20887FD3000CCD37 /* Path.hpp in Headers */,
 				23F670EE209428CE00DB2E28 /* Schema.hpp in Headers */,
 				23F5BDC020887FD3000CCD37 /* WCDB.h in Headers */,
-				23F70FB520A055C700CCE3CD /* TraceConfig.hpp in Headers */,
 				23F5BDC120887FD3000CCD37 /* WCTMultiSelect.h in Headers */,
 				23F5BDC320887FD3000CCD37 /* Convertible.hpp in Headers */,
 				23F5BDC420887FD3000CCD37 /* Tokenize.hpp in Headers */,
@@ -2851,6 +2861,7 @@
 				2349F72A1EA0D6680021EFA7 /* WCTRowSelect.mm in Sources */,
 				239776EA202AF2E3000A681C /* CopyOnWriteData.cpp in Sources */,
 				239774ED202AECD3000A681C /* CommonTableExpression.cpp in Sources */,
+				236A46AA20D74E48001816AF /* PerformanceTraceConfig.cpp in Sources */,
 				2397753D202AECD3000A681C /* StatementUpdate.cpp in Sources */,
 				2397757D202AECD3000A681C /* LangIndexedColumn.cpp in Sources */,
 				2397753F202AECD3000A681C /* StatementVacuum.cpp in Sources */,
@@ -2922,6 +2933,7 @@
 				23977587202AECD3000A681C /* LangLiteralValue.cpp in Sources */,
 				2349F70E1EA0D6680021EFA7 /* NSData+WCTColumnCoding.mm in Sources */,
 				236A469E20D6BFBC001816AF /* HandleNotification.cpp in Sources */,
+				236A46A420D74E40001816AF /* SQLTraceConfig.cpp in Sources */,
 				23977592202AECD3000A681C /* LangRaiseFunction.cpp in Sources */,
 				2370980A20590CA700E768B4 /* HandleStatement.cpp in Sources */,
 				2349F75E1EA0D6680021EFA7 /* WCTBinding.mm in Sources */,
@@ -2936,7 +2948,6 @@
 				239775A6202AECD3000A681C /* LangUpdateSTMT.cpp in Sources */,
 				23F670EB209428CE00DB2E28 /* Schema.cpp in Sources */,
 				23A870E6204F82AE00273A98 /* MigrationDatabase.cpp in Sources */,
-				23F70FB220A055C700CCE3CD /* TraceConfig.cpp in Sources */,
 				2349F7391EA0D6680021EFA7 /* WCTTable+Convenient.mm in Sources */,
 				23A2C19A204647590026D3C5 /* NoCopyData.cpp in Sources */,
 				23977519202AECD3000A681C /* StatementCreateIndex.cpp in Sources */,
@@ -3056,6 +3067,7 @@
 				23F5BC7120887FD3000CCD37 /* WCTRowSelect.mm in Sources */,
 				23F5BC7220887FD3000CCD37 /* CopyOnWriteData.cpp in Sources */,
 				23F5BC7320887FD3000CCD37 /* CommonTableExpression.cpp in Sources */,
+				236A46AB20D74E48001816AF /* PerformanceTraceConfig.cpp in Sources */,
 				23F5BC7420887FD3000CCD37 /* StatementUpdate.cpp in Sources */,
 				23F5BC7620887FD3000CCD37 /* LangIndexedColumn.cpp in Sources */,
 				23F5BC7820887FD3000CCD37 /* StatementVacuum.cpp in Sources */,
@@ -3127,6 +3139,7 @@
 				23F5BCB720887FD3000CCD37 /* LangLiteralValue.cpp in Sources */,
 				23F5BCB820887FD3000CCD37 /* NSData+WCTColumnCoding.mm in Sources */,
 				236A469F20D6BFBC001816AF /* HandleNotification.cpp in Sources */,
+				236A46A520D74E40001816AF /* SQLTraceConfig.cpp in Sources */,
 				23F5BCB920887FD3000CCD37 /* LangRaiseFunction.cpp in Sources */,
 				23F5BCBA20887FD3000CCD37 /* HandleStatement.cpp in Sources */,
 				23F5BCBB20887FD3000CCD37 /* WCTBinding.mm in Sources */,
@@ -3141,7 +3154,6 @@
 				23F5BCC320887FD3000CCD37 /* LangUpdateSTMT.cpp in Sources */,
 				23F670EC209428CE00DB2E28 /* Schema.cpp in Sources */,
 				23F5BCC420887FD3000CCD37 /* MigrationDatabase.cpp in Sources */,
-				23F70FB320A055C700CCE3CD /* TraceConfig.cpp in Sources */,
 				23F5BCC520887FD3000CCD37 /* WCTTable+Convenient.mm in Sources */,
 				23F5BCC620887FD3000CCD37 /* NoCopyData.cpp in Sources */,
 				23F5BCC720887FD3000CCD37 /* StatementCreateIndex.cpp in Sources */,

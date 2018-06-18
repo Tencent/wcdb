@@ -33,11 +33,12 @@
 #include <WCDB/Database.hpp>
 #include <WCDB/HandlePool.hpp>
 #include <WCDB/HandlePools.hpp>
+#include <WCDB/PerformanceTraceConfig.hpp>
 #include <WCDB/RecyclableHandle.hpp>
 #include <WCDB/RecyclableHandlePool.hpp>
+#include <WCDB/SQLTraceConfig.hpp>
 #include <WCDB/TokenizeConfig.hpp>
 #include <WCDB/Tokenizer.hpp>
-#include <WCDB/TraceConfig.hpp>
 
 #include <WCDB/Migration.h>
 

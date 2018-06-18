@@ -91,6 +91,10 @@ typedef void (^WCTSQLTraceBlock)(NSString *);
  */
 + (void)globalTraceSQL:(nullable WCTSQLTraceBlock)trace;
 
+- (void)traceSQL:(nullable WCTSQLTraceBlock)trace;
+
+- (void)tracePerformance:(nullable WCTPerformanceTraceBlock)trace;
+
 + (WCTErrorTraceBlock)defaultErrorTracer;
 
 @end
