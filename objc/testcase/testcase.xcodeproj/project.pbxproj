@@ -10,6 +10,8 @@
 		2313B6D020A2F2F00067C211 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2313B6CF20A2F2F00067C211 /* main.m */; };
 		2313B6D720A2F6CD0067C211 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; };
 		2313B6D820A2F6CD0067C211 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		23191EC020D7D62400495B65 /* RepairTests+Deposit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23191EBF20D7D62400495B65 /* RepairTests+Deposit.mm */; };
+		23191EC120D7D62400495B65 /* RepairTests+Deposit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23191EBF20D7D62400495B65 /* RepairTests+Deposit.mm */; };
 		2324D16F20D2470200834A82 /* Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B58200F577400E0CECE /* Convenience.m */; };
 		2324D17120D2470200834A82 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
 		2324D17220D2470200834A82 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5098209D5B3D00C78CC8 /* TestCaseObject.mm */; };
@@ -571,6 +573,7 @@
 		2313B6BE20A2F2EE0067C211 /* TestHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2313B6CE20A2F2F00067C211 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2313B6CF20A2F2F00067C211 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		23191EBF20D7D62400495B65 /* RepairTests+Deposit.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "RepairTests+Deposit.mm"; sourceTree = "<group>"; };
 		2324D17920D2470200834A82 /* Repair Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Repair Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2324D17F20D247A000834A82 /* RepairTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RepairTestCase.h; sourceTree = "<group>"; };
 		2324D18020D247A000834A82 /* RepairTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RepairTestCase.mm; sourceTree = "<group>"; };
@@ -927,6 +930,7 @@
 				2324D17F20D247A000834A82 /* RepairTestCase.h */,
 				2324D18020D247A000834A82 /* RepairTestCase.mm */,
 				23593B7820D369DD0058B416 /* RepairTests+Backup.mm */,
+				23191EBF20D7D62400495B65 /* RepairTests+Deposit.mm */,
 			);
 			path = repair;
 			sourceTree = "<group>";
@@ -1870,6 +1874,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2324D16F20D2470200834A82 /* Convenience.m in Sources */,
+				23191EC120D7D62400495B65 /* RepairTests+Deposit.mm in Sources */,
 				2324D17120D2470200834A82 /* TestCase.mm in Sources */,
 				2324D18120D247A000834A82 /* RepairTestCase.mm in Sources */,
 				23593B7A20D369DD0058B416 /* RepairTests+Backup.mm in Sources */,
@@ -1922,6 +1927,7 @@
 				234DBD812064EB6C000E31E8 /* StatementReleaseTests.mm in Sources */,
 				234DBD5A2064EB6C000E31E8 /* ColumnConstraintTests.mm in Sources */,
 				234DBD6D2064EB6C000E31E8 /* SelectCoreTests.mm in Sources */,
+				23191EC020D7D62400495B65 /* RepairTests+Deposit.mm in Sources */,
 				234DBD5C2064EB6C000E31E8 /* ColumnTypeTests.mm in Sources */,
 				23CB2104206DDBAE000EFB02 /* MigrationTests+SameDatabase.mm in Sources */,
 				238B50AA209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */,
