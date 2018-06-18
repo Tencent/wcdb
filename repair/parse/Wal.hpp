@@ -42,14 +42,16 @@ public:
 protected:
     FileHandle m_fileHandle;
     friend class WalRelated;
+    Data acquireData(off_t offset, size_t size);
 
 #pragma mark - Page
 public:
     bool containsPage(int pageno) const;
     Data acquirePageData(int pageno);
-    Data acquireData(off_t offset, size_t size);
+    int getMaxPageno() const;
 
 protected:
+    // pageno -> frameno
     std::map<int, int> m_framePages;
 
 #pragma mark - Wal

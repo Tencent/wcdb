@@ -88,10 +88,16 @@ bool Frame::doInitialize()
     }
     Deserialization deserialization(data);
 
+    WCTInnerAssert(deserialization.canAdvance(4));
     m_pageno = (int) deserialization.advance4BytesUInt();
+
+    WCTInnerAssert(deserialization.canAdvance(4));
     deserialization.advance(4);
+
     std::pair<uint32_t, uint32_t> salt;
+    WCTInnerAssert(deserialization.canAdvance(4));
     salt.first = deserialization.advance4BytesUInt();
+    WCTInnerAssert(deserialization.canAdvance(4));
     salt.second = deserialization.advance4BytesUInt();
     if (salt != m_wal->getSalt()) {
         markWalAsCorrupted();

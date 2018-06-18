@@ -59,7 +59,7 @@ const std::string &Pager::getPath() const
 int Pager::getPageCount() const
 {
     WCTInnerAssert(isInitialized());
-    return m_pageCount;
+    return m_wal ? std::max(m_wal->getMaxPageno(), m_pageCount) : m_pageCount;
 }
 
 int Pager::getUsableSize() const

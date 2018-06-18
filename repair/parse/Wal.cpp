@@ -30,6 +30,7 @@ namespace WCDB {
 
 namespace Repair {
 
+#pragma mark - Initialize
 Wal::Wal(Pager *pager)
     : PagerRelated(pager)
     , m_fileHandle(Path::addExtention(m_pager->getPath(), "-wal"))
@@ -40,44 +41,9 @@ Wal::Wal(Pager *pager)
 {
 }
 
-void Wal::setMaxFrame(int maxFrame)
-{
-    WCTInnerAssert(!isInitialized());
-    m_maxFrame = maxFrame;
-}
-
-int Wal::getFrameCount() const
-{
-    WCTInnerAssert(isInitialized());
-    return m_frames;
-}
-
 const std::string &Wal::getPath() const
 {
     return m_fileHandle.path;
-}
-
-bool Wal::containsPage(int pageno) const
-{
-    WCTInnerAssert(isInitialized());
-    return m_framePages.find(pageno) != m_framePages.end();
-}
-
-Data Wal::acquirePageData(int pageno)
-{
-    WCTInnerAssert(isInitialized());
-    WCTInnerAssert(containsPage(pageno));
-    return acquireData(headerSize +
-                           getFrameSize() * (m_framePages[pageno] - 1) +
-                           Frame::headerSize,
-                       getPageSize());
-}
-
-Data Wal::acquireFrameData(int frameno)
-{
-    WCTInnerAssert(isInitializing());
-    return acquireData(headerSize + getFrameSize() * (frameno - 1),
-                       getFrameSize());
 }
 
 Data Wal::acquireData(off_t offset, size_t size)
@@ -103,6 +69,51 @@ Data Wal::acquireData(off_t offset, size_t size)
         return Data::emptyData();
     }
     return data;
+}
+
+#pragma mark - Page
+bool Wal::containsPage(int pageno) const
+{
+    WCTInnerAssert(isInitialized());
+    return m_framePages.find(pageno) != m_framePages.end();
+}
+
+Data Wal::acquirePageData(int pageno)
+{
+    WCTInnerAssert(isInitialized());
+    WCTInnerAssert(containsPage(pageno));
+    return acquireData(headerSize +
+                           getFrameSize() * (m_framePages[pageno] - 1) +
+                           Frame::headerSize,
+                       getPageSize());
+}
+
+int Wal::getMaxPageno() const
+{
+    if (m_framePages.empty()) {
+        return 0;
+    }
+    return m_framePages.rbegin()->first;
+}
+
+#pragma mark - Wal
+Data Wal::acquireFrameData(int frameno)
+{
+    WCTInnerAssert(isInitializing());
+    return acquireData(headerSize + getFrameSize() * (frameno - 1),
+                       getFrameSize());
+}
+
+void Wal::setMaxFrame(int maxFrame)
+{
+    WCTInnerAssert(!isInitialized());
+    m_maxFrame = maxFrame;
+}
+
+int Wal::getFrameCount() const
+{
+    WCTInnerAssert(isInitialized());
+    return m_frames;
 }
 
 int Wal::getPageSize() const

@@ -157,6 +157,9 @@ bool Serialization::put4BytesUInt(uint32_t value)
 
 size_t Serialization::putVarint(uint64_t value)
 {
+    if (!expand(9)) {
+        return 0;
+    }
     unsigned char *p = pointee();
     int length = 0;
     if (value <= 0x7f) {
@@ -190,9 +193,6 @@ size_t Serialization::putVarint(uint64_t value)
             }
             length = n;
         }
-    }
-    if (!expand(length)) {
-        return 0;
     }
     advance(length);
     return length;
@@ -551,7 +551,7 @@ double Deserialization::get8BytesDouble(off_t offset) const
 uint32_t Deserialization::get4BytesUInt(off_t offset) const
 {
     WCTInnerAssert(isEnough(offset + 4));
-    const unsigned char *p = base();
+    const unsigned char *p = base() + offset;
     return (((uint32_t) p[0] << 24) | (p[1] << 16) | (p[2] << 8) | p[3]);
 }
 
