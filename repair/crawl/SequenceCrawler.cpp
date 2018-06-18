@@ -50,12 +50,12 @@ std::string SequenceCrawler::name()
 #pragma mark - Crawlable
 void SequenceCrawler::onCellCrawled(const Cell &cell)
 {
-    if (cell.getValueType(1) != Cell::Type::Text ||
-        cell.getValueType(2) != Cell::Type::Integer) {
+    if (cell.getValueType(0) != Cell::Type::Text ||
+        cell.getValueType(1) != Cell::Type::Integer) {
         markAsCorrupted();
         return;
     }
-    std::string name = cell.stringValue(1);
+    std::string name = cell.stringValue(0);
     if (name.empty()) {
         markAsCorrupted();
         return;
@@ -63,7 +63,7 @@ void SequenceCrawler::onCellCrawled(const Cell &cell)
 
     Sequence sequence;
     sequence.name = std::move(name);
-    sequence.seq = cell.integerValue(2);
+    sequence.seq = cell.integerValue(1);
     m_delegate->onSequenceCellCrawled(sequence);
 }
 
