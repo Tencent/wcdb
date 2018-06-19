@@ -162,7 +162,7 @@ bool FactoryRenewer::prepare()
 
 void FactoryRenewer::setAssembler(const std::shared_ptr<Assembler> &assembler)
 {
-    WCTInnerAssert(m_assembler->getPath().empty());
+    WCTInnerAssert(assembler->getPath().empty());
     m_assembler = assembler;
 }
 
