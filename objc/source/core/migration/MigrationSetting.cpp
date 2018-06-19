@@ -127,14 +127,16 @@ MigrationSetting::pickUpForMigration() const
     WCTInnerAssert(!m_infos.empty());
     const std::shared_ptr<MigrationInfo> *toMigrate = nullptr;
     if (!m_schemas.empty()) {
-        toMigrate = &m_infos.begin()->second;
-    } else {
         //cross table migration first
         for (const auto &element : m_infos) {
             if (!element.second->schema.empty()) {
                 toMigrate = &element.second;
+                break;
             }
         }
+    }
+    if (toMigrate == nullptr) {
+        toMigrate = &m_infos.begin()->second;
     }
     WCTInnerAssert(toMigrate != nullptr);
     return *toMigrate;
