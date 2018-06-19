@@ -37,7 +37,7 @@ std::string addExtention(const std::string &base, const std::string &extention)
 std::string addComponent(const std::string &base, const std::string &component)
 {
     std::string newPath = base;
-    if (newPath[newPath.size() - 1] != '/') {
+    if (newPath.empty() || newPath[newPath.size() - 1] != '/') {
         newPath.append("/");
     }
     newPath.append(component);
