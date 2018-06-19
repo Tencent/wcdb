@@ -76,7 +76,6 @@ bool FactoryRenewer::work()
 bool FactoryRenewer::prepare()
 {
     WCTInnerAssert(m_assembler != nullptr);
-    WCTInnerAssert(m_assembler->getPath().empty());
 
     // 1. get directories for acquisition
     bool succeed;
@@ -163,6 +162,7 @@ bool FactoryRenewer::prepare()
 
 void FactoryRenewer::setAssembler(const std::shared_ptr<Assembler> &assembler)
 {
+    WCTInnerAssert(m_assembler->getPath().empty());
     m_assembler = assembler;
 }
 
