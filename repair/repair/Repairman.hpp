@@ -40,7 +40,6 @@ public:
 protected:
     void onCrawlerError() override;
     Pager m_pager;
-    Wal m_wal;
 
 #pragma mark - Critical Error
 protected:

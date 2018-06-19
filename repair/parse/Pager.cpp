@@ -34,7 +34,8 @@ Pager::Pager(const std::string &path)
     , m_pageSize(-1)
     , m_reservedBytes(-1)
     , m_pageCount(0)
-    , m_wal(nullptr)
+    , m_wal(this)
+    , m_disposeWal(false)
 {
 }
 
@@ -59,7 +60,8 @@ const std::string &Pager::getPath() const
 int Pager::getPageCount() const
 {
     WCTInnerAssert(isInitialized());
-    return m_wal ? std::max(m_wal->getMaxPageno(), m_pageCount) : m_pageCount;
+    return m_disposeWal ? m_pageCount
+                        : std::max(m_wal->getMaxPageno(), m_pageCount);
 }
 
 int Pager::getUsableSize() const
@@ -84,7 +86,7 @@ Data Pager::acquirePageData(int number)
 {
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(number > 0);
-    if (m_wal && m_wal->containsPage(number)) {
+    if (!m_disposeWal && m_wal->containsPage(number)) {
         return m_wal->acquirePageData(number);
     }
     return acquireData((number - 1) * m_pageSize, m_pageSize);
@@ -117,16 +119,20 @@ Data Pager::acquireData(off_t offset, size_t size)
 }
 
 #pragma mark - Wal
-void Pager::setWal(Wal *wal)
+void Pager::setMaxWalFrame(int maxWalFrame)
 {
-    WCTInnerAssert(wal != nullptr);
-    WCTInnerAssert(wal->isInitialized());
-    m_wal = wal;
+    m_wal.setMaxFrame(maxWalFrame);
 }
 
-const Wal *Pager::getWal() const
+const std::pair<uint32_t, uint32_t> Pager::getWalSalt() const
 {
-    return m_wal;
+    WCTInnerAssert(!m_disposeWal);
+    return m_wal.getSalt();
+}
+
+int Pager::getWalFrameCount() const
+{
+    return m_wal.getFrameCount();
 }
 
 #pragma mark - Error
@@ -148,16 +154,7 @@ void Pager::markAsError(Error::Code code)
 bool Pager::doInitialize()
 {
     FileManager *fileManager = FileManager::shared();
-    bool succeed, exists;
-    std::tie(succeed, exists) = fileManager->fileExists(getPath());
-    if (!exists) {
-        if (succeed) {
-            markAsError(Error::Code::NotFound);
-        } else {
-            assignWithSharedThreadedError();
-        }
-        return false;
-    }
+    bool succeed;
     size_t fileSize;
     std::tie(succeed, fileSize) = fileManager->getFileSize(getPath());
     if (fileSize == 0) {
@@ -200,7 +197,29 @@ bool Pager::doInitialize()
     }
 
     m_pageCount = (int) ((fileSize + m_pageSize - 1) / m_pageSize);
+
+    std::tie(succeed, fileSize) = fileManager->getFileSize(m_wal.getPath());
+    if (!succeed) {
+        assignWithSharedThreadedError();
+        return false;
+    }
+    if (fileSize == 0) {
+        disposeWal();
+    } else {
+        return m_wal.initialize();
+    }
     return true;
+}
+
+#pragma mark - Dispose
+bool Pager::isWalDisposed() const
+{
+    return m_disposeWal;
+}
+
+void Pager::disposeWal()
+{
+    m_disposeWal = true;
 }
 
 } //namespace Repair

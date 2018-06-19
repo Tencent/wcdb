@@ -155,21 +155,12 @@ bool Wal::doInitialize()
     WCTInnerAssert(m_pager->isInitialized());
 
     FileManager *fileManager = FileManager::shared();
-    bool succeed, exists;
-    std::tie(succeed, exists) = fileManager->fileExists(getPath());
-    if (!exists) {
-        if (succeed) {
-            markAsWarning(Error::Code::NotFound);
-        } else {
-            assignWithSharedThreadedError();
-        }
-        return false;
-    }
+    bool succeed;
     size_t fileSize;
     std::tie(succeed, fileSize) = fileManager->getFileSize(getPath());
     if (fileSize == 0) {
         if (succeed) {
-            markAsWarning(Error::Code::Empty);
+            markAsError(Error::Code::Empty);
         } else {
             assignWithSharedThreadedError();
         }
@@ -219,16 +210,6 @@ void Wal::markAsCorrupted()
 void Wal::markAsError(Error::Code code)
 {
     Error error;
-    error.setCode(code, "Repair");
-    error.infos.set("Path", m_fileHandle.path);
-    Notifier::shared()->notify(error);
-    setError(std::move(error));
-}
-
-void Wal::markAsWarning(Error::Code code)
-{
-    Error error;
-    error.level = Error::Level::Warning;
     error.setCode(code, "Repair");
     error.infos.set("Path", m_fileHandle.path);
     Notifier::shared()->notify(error);

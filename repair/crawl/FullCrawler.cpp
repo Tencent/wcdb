@@ -43,11 +43,8 @@ void FullCrawler::work()
     if (m_wal.initialize()) {
         m_pager.setWal(&m_wal);
     } else {
-        if (tryUpgradeCrawlerError() >= CriticalLevel::Fatal) {
-            markAsFailed();
-            return;
-        }
-        //typically wal not exists or empty
+        setCriticalError(m_pager.getError());
+        return;
     }
 
     //calculate score

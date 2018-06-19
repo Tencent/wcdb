@@ -64,11 +64,12 @@ protected:
 
 #pragma mark - Wal
 public:
-    void setWal(Wal *wal);
-    const Wal *getWal() const;
+    int getWalFrameCount() const;
+    void setMaxWalFrame(int maxWalFrame);
+    const std::pair<uint32_t, uint32_t> getWalSalt() const;
 
 protected:
-    Wal *m_wal;
+    Wal m_wal;
 
 #pragma mark - Error
 public:
@@ -80,6 +81,14 @@ protected:
 #pragma mark - Initializeable
 protected:
     bool doInitialize() override;
+
+#pragma mark - Dispose
+public:
+    bool isWalDisposed() const;
+    void disposeWal();
+
+protected:
+    bool m_disposeWal;
 };
 
 } //namespace Repair

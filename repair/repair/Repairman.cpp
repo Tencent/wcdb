@@ -29,7 +29,6 @@ namespace Repair {
 #pragma mark - Initialize
 Repairman::Repairman(const std::string &path)
     : m_pager(path)
-    , m_wal(&m_pager)
     , Crawlable(m_pager)
     , Progress()
     , m_assembler(nullptr)

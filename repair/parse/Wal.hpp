@@ -82,7 +82,6 @@ protected:
 protected:
     void markAsCorrupted();
     void markAsError(Error::Code code);
-    void markAsWarning(Error::Code code);
 };
 
 } //namespace Repair

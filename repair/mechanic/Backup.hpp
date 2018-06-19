@@ -40,7 +40,6 @@ public:
 
 protected:
     Pager m_pager;
-    Wal m_wal;
 
 #pragma mark - Backup
 public:

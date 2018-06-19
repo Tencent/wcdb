@@ -45,6 +45,7 @@ void Mechanic::setMaterial(Material &&material)
 #pragma mark - Mechanic
 void Mechanic::work()
 {
+    m_pager.setMaxWalFrame(m_material.info.walFrame);
     m_pager.setPageSize(m_material.info.pageSize);
     m_pager.setReservedBytes(m_material.info.reservedBytes);
 
@@ -54,24 +55,20 @@ void Mechanic::work()
         markAsFailed();
         return;
     }
-    m_wal.setMaxFrame(m_material.info.walFrame);
-    if (m_wal.initialize()) {
-        if (m_wal.getSalt() == m_material.info.walSalt) {
-            m_pager.setWal(&m_wal);
-        } else {
-            Error error;
-            error.level = Error::Level::Notice;
-            error.setCode(Error::Code::Mismatch, "Repair");
-            error.message = "Skip WAL of non-match salt.";
-            error.infos.set("Path", m_wal.getPath());
-            Notifier::shared()->notify(error);
+
+    if (!m_pager.isWalDisposed()) {
+        if (m_pager.getWalSalt() != m_material.info.walSalt) {
+            m_pager.disposeWal();
         }
-    } else {
-        if (tryUpgradeCrawlerError() >= CriticalLevel::Fatal) {
-            markAsFailed();
-            return;
-        }
-        //typically wal not exists or empty
+    }
+
+    if (m_pager.isWalDisposed()) {
+        Error error;
+        error.level = Error::Level::Notice;
+        error.setCode(Error::Code::Mismatch, "Repair");
+        error.message = "Skip WAL of non-match salt.";
+        error.infos.set("Path", m_pager.getPath());
+        Notifier::shared()->notify(error);
     }
 
     int pageCount = 0;

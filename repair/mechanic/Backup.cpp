@@ -40,29 +40,20 @@ Backup::Backup(const std::string &path)
 
 bool Backup::work(int maxWalFrame)
 {
+    m_pager.setMaxWalFrame(maxWalFrame);
     if (!m_pager.initialize()) {
         return false;
     }
 
-    m_wal.setMaxFrame(maxWalFrame);
-    if (m_wal.initialize()) {
-        m_pager.setWal(&m_wal);
-    } else {
-        if (m_pager.getError().level == Error::Level::Error) {
-            return false;
-        }
-        //typically wal not exists or empty
-    }
-
     m_material.info.pageSize = m_pager.getPageSize();
     m_material.info.reservedBytes = m_pager.getReservedBytes();
-    if (m_pager.getWal()) {
-        m_material.info.walSalt = m_pager.getWal()->getSalt();
-        m_material.info.walFrame = m_pager.getWal()->getFrameCount();
+    if (!m_pager.isWalDisposed()) {
+        m_material.info.walSalt = m_pager.getWalSalt();
+        m_material.info.walFrame = m_pager.getWalFrameCount();
     }
 
     m_masterCrawler.work(this);
-    return getError().isOK() || getError().level < Error::Level::Error;
+    return getError().isOK();
 }
 
 const Error &Backup::getError() const
@@ -117,7 +108,7 @@ bool Backup::willCrawlPage(const Page &page, int height)
                 for (int i = 0; i < page.getSubPageCount(); ++i) {
                     auto pair = page.getSubPageno(i);
                     if (!pair.first) {
-                        m_pager.markAsCorrupted();
+                        markAsCorrupted();
                         break;
                     }
                     m_pagenos.push_back(page.number);
@@ -148,6 +139,11 @@ void Backup::onMasterCellCrawled(const Master *master)
     } else if (filter(master->tableName)) {
         m_height = -1;
         if (!crawl(master->rootpage)) {
+            return;
+        }
+
+        if (m_pagenos.empty() || master->sql.empty()) {
+            markAsCorrupted();
             return;
         }
 
