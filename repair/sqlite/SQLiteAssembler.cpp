@@ -102,14 +102,14 @@ bool SQLiteAssembler::assembleCell(const Cell &cell)
             case Cell::Text: {
                 auto pair = cell.textValue(i);
                 sqlite3_bind_text((sqlite3_stmt *) m_stmt, bindIndex,
-                                  pair.second, pair.first, SQLITE_TRANSIENT);
+                                  pair.second, pair.first, SQLITE_STATIC);
                 break;
             }
             case Cell::BLOB: {
                 const Data data = cell.blobValue(i);
                 sqlite3_bind_blob((sqlite3_stmt *) m_stmt, bindIndex,
                                   data.buffer(), (int) data.size(),
-                                  SQLITE_TRANSIENT);
+                                  SQLITE_STATIC);
                 break;
             }
             case Cell::Real:
