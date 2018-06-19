@@ -60,19 +60,19 @@ const std::string &Pager::getPath() const
 int Pager::getPageCount() const
 {
     WCTInnerAssert(isInitialized());
-    return m_disposeWal ? m_pageCount
-                        : std::max(m_wal.getMaxPageno(), m_pageCount);
+    return isWalDisposed() ? m_pageCount
+                           : std::max(m_wal.getMaxPageno(), m_pageCount);
 }
 
 int Pager::getUsableSize() const
 {
-    WCTInnerAssert(isInitialized());
+    WCTInnerAssert(isInitialized() || isInitializing());
     return m_pageSize - m_reservedBytes;
 }
 
 int Pager::getPageSize() const
 {
-    WCTInnerAssert(isInitialized());
+    WCTInnerAssert(isInitialized() || isInitializing());
     return m_pageSize;
 }
 

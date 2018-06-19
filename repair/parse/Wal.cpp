@@ -152,7 +152,7 @@ const std::pair<uint32_t, uint32_t> &Wal::getSalt() const
 
 bool Wal::doInitialize()
 {
-    WCTInnerAssert(m_pager->isInitialized());
+    WCTInnerAssert(m_pager->isInitialized() || m_pager->isInitializing());
 
     FileManager *fileManager = FileManager::shared();
     bool succeed;
