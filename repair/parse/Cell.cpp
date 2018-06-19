@@ -155,7 +155,7 @@ std::string Cell::stringValue(int index) const
     return m_deserialization.getString(cell.second, length);
 }
 
-std::pair<int, const unsigned char *> Cell::blobValue(int index) const
+const Data Cell::blobValue(int index) const
 {
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(index < m_columns.size());
@@ -163,7 +163,7 @@ std::pair<int, const unsigned char *> Cell::blobValue(int index) const
     const auto &cell = m_columns[index];
     int size = getLengthOfSerialType(cell.first);
     WCTInnerAssert(m_deserialization.isEnough(cell.second + size));
-    return {size, m_deserialization.getBLOB(cell.second, size)};
+    return m_deserialization.getData(cell.second, size);
 }
 
 #pragma mark - Initializeable

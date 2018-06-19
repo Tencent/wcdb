@@ -106,9 +106,10 @@ bool SQLiteAssembler::assembleCell(const Cell &cell)
                 break;
             }
             case Cell::BLOB: {
-                auto pair = cell.blobValue(i);
+                const Data data = cell.blobValue(i);
                 sqlite3_bind_blob((sqlite3_stmt *) m_stmt, bindIndex,
-                                  pair.second, pair.first, SQLITE_TRANSIENT);
+                                  data.buffer(), (int) data.size(),
+                                  SQLITE_TRANSIENT);
                 break;
             }
             case Cell::Real:

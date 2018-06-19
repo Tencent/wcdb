@@ -120,24 +120,49 @@ bool Serialization::expand(size_t expand)
 }
 
 #pragma mark - Put
-bool Serialization::putZeroTerminatedString(const std::string &value)
+bool Serialization::putSizedString(const std::string &string)
 {
-    size_t size = value.length() + 1;
-    if (!expand(size)) {
-        return false;
+    off_t cursor = m_cursor;
+    bool succeed = false;
+    do {
+        size_t size = string.size();
+        size_t lengthOfSize = putVarint(size);
+        if (lengthOfSize == 0) {
+            break;
+        }
+        if (!expand(size)) {
+            break;
+        }
+        memcpy(pointee(), string.data(), size);
+        succeed = true;
+        advance(size);
+    } while (false);
+    if (!succeed) {
+        seek(cursor);
     }
-    memcpy(pointee(), value.data(), size);
-    advance(size);
     return true;
 }
 
-bool Serialization::putBLOB(const Data &data)
+bool Serialization::putSizedData(const Data &data)
 {
-    if (!expand(data.size())) {
-        return false;
+    off_t cursor = m_cursor;
+    bool succeed = false;
+    do {
+        size_t size = data.size();
+        size_t lengthOfSize = putVarint(size);
+        if (lengthOfSize == 0) {
+            break;
+        }
+        if (!expand(size)) {
+            break;
+        }
+        memcpy(pointee(), data.buffer(), size);
+        succeed = true;
+        advance(size);
+    } while (false);
+    if (!succeed) {
+        seek(cursor);
     }
-    memcpy(pointee(), data.buffer(), data.size());
-    advance(data.size());
     return true;
 }
 
@@ -216,20 +241,22 @@ void Deserialization::reset(const Data &data)
 }
 
 #pragma mark - Advance
-std::pair<const char *, size_t> Deserialization::advanceZeroTerminatedCString()
+std::pair<size_t, std::string> Deserialization::advanceSizedString()
 {
-    auto pair = getZeroTerminatedCString(m_cursor);
-    if (pair.first) {
-        advance(pair.second);
+    auto pair = getSizedString(m_cursor);
+    if (pair.first > 0) {
+        advance(pair.first);
     }
     return pair;
 }
 
-const unsigned char *Deserialization::advanceBLOB(size_t size)
+std::pair<size_t, const Data> Deserialization::advanceSizedData()
 {
-    const unsigned char *blob = getBLOB(m_cursor, size);
-    advance(size);
-    return blob;
+    auto pair = getSizedData(m_cursor);
+    if (pair.first > 0) {
+        advance(pair.first);
+    }
+    return pair;
 }
 
 std::pair<size_t, uint64_t> Deserialization::advanceVarint()
@@ -297,18 +324,27 @@ uint32_t Deserialization::advance4BytesUInt()
     return value;
 }
 
-std::pair<const char *, size_t>
-Deserialization::getZeroTerminatedCString(off_t offset) const
+std::pair<size_t, std::string>
+Deserialization::getSizedString(off_t offset) const
 {
-    const unsigned char *iter = base() + offset;
-    size_t size = 0;
-    while (isEnough(offset + size)) {
-        if (*(iter + size) == '\0') {
-            return {reinterpret_cast<const char *>(iter), size};
-        }
-        ++size;
+    size_t lengthOfSize;
+    uint64_t size;
+    std::tie(lengthOfSize, size) = getVarint(offset);
+    if (lengthOfSize == 0 || !isEnough(offset + lengthOfSize + size)) {
+        return {0, String::empty()};
     }
-    return {nullptr, size};
+    return {lengthOfSize + size, getString(offset + lengthOfSize, size)};
+}
+
+std::pair<size_t, const Data> Deserialization::getSizedData(off_t offset) const
+{
+    size_t lengthOfSize;
+    uint64_t size;
+    std::tie(lengthOfSize, size) = getVarint(offset);
+    if (lengthOfSize == 0 || !isEnough(offset + lengthOfSize + size)) {
+        return {0, Data::emptyData()};
+    }
+    return {lengthOfSize + size, getData(offset + lengthOfSize, size)};
 }
 
 std::pair<size_t, uint64_t> Deserialization::getVarint(off_t offset) const
@@ -481,18 +517,18 @@ std::pair<size_t, uint64_t> Deserialization::getVarint(off_t offset) const
     return {9, ((uint64_t) s) << 32 | a};
 }
 
-const unsigned char *Deserialization::getBLOB(off_t offset, size_t size) const
-{
-    WCTInnerAssert(size != 0);
-    WCTInnerAssert(isEnough(offset + size));
-    return base() + offset;
-}
-
 std::string Deserialization::getString(off_t offset, size_t size) const
 {
-    WCTInnerAssert(size != 0);
+    WCTInnerAssert(size > 0);
     WCTInnerAssert(isEnough(offset + size));
     return std::string(reinterpret_cast<const char *>(base() + offset), size);
+}
+
+const Data Deserialization::getData(off_t offset, size_t size) const
+{
+    WCTInnerAssert(size > 0);
+    WCTInnerAssert(isEnough(offset + size));
+    return Data::immutableNoCopyData(base() + offset, size);
 }
 
 int64_t Deserialization::get8BytesInt(off_t offset) const

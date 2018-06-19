@@ -61,8 +61,8 @@ public:
 
 #pragma mark - Put
 public:
-    bool putZeroTerminatedString(const std::string &value);
-    bool putBLOB(const Data &data);
+    bool putSizedString(const std::string &string);
+    bool putSizedData(const Data &data);
     bool put4BytesUInt(uint32_t value);
     size_t putVarint(uint64_t value);
 };
@@ -80,13 +80,12 @@ public:
 
 #pragma mark - Advance
 public:
-    //return nullptr to indicate failure
-    std::pair<const char *, size_t> advanceZeroTerminatedCString();
     //return 0 size to indicate failure
+    std::pair<size_t, std::string> advanceSizedString();
+    std::pair<size_t, const Data> advanceSizedData();
     std::pair<size_t, uint64_t> advanceVarint();
 
     // For the following types with specified size, `canAdvance` should be called first.
-    const unsigned char *advanceBLOB(size_t size);
     int64_t advance8BytesInt();
     int64_t advance6BytesInt();
     int32_t advance4BytesInt();
@@ -98,15 +97,14 @@ public:
 
 #pragma mark - Get
 public:
-    //return nullptr to indicate failure
-    std::pair<const char *, size_t>
-    getZeroTerminatedCString(off_t offset) const;
     //return 0 size to indicate failure
+    std::pair<size_t, std::string> getSizedString(off_t offset) const;
+    std::pair<size_t, const Data> getSizedData(off_t offset) const;
     std::pair<size_t, uint64_t> getVarint(off_t offset) const;
 
     // For the following types with specified size, `isEnough` should be called first.
-    const unsigned char *getBLOB(off_t offset, size_t size) const;
     std::string getString(off_t offset, size_t size) const;
+    const Data getData(off_t offset, size_t size) const;
     int64_t get8BytesInt(off_t offset) const;
     int64_t get6BytesInt(off_t offset) const;
     int32_t get4BytesInt(off_t offset) const;

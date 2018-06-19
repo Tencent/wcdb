@@ -51,18 +51,15 @@ bool Material::serialize(Serialization &serialization) const
             markAsEmpty();
             return false;
         }
-        if (!element.second.serialize(encoder)) {
+        if (!encoder.putSizedString(element.first) ||
+            !element.second.serialize(encoder)) {
             return false;
         }
     }
-    if (!serializeBLOB(serialization, encoder.finalize())) {
-        return false;
-    }
-
-    return true;
+    return serializeData(serialization, encoder.finalize());
 }
 
-bool Material::serializeBLOB(Serialization &serialization, const Data &data)
+bool Material::serializeData(Serialization &serialization, const Data &data)
 {
     Data compressed;
     if (!data.empty()) {
@@ -71,17 +68,9 @@ bool Material::serializeBLOB(Serialization &serialization, const Data &data)
             return false;
         }
     }
-    uint32_t size = (uint32_t) compressed.size();
-    uint32_t checksum = compressed.empty() ? 0 : hash(compressed);
-    if (!serialization.expand(sizeof(checksum) + sizeof(size) + size)) {
-        return false;
-    }
-    serialization.put4BytesUInt(size);
-    serialization.put4BytesUInt(checksum);
-    if (!compressed.empty()) {
-        serialization.putBLOB(compressed);
-    }
-    return true;
+    uint32_t checksum = data.empty() ? 0 : hash(data);
+    return serialization.put4BytesUInt(checksum) &&
+           serialization.putSizedData(compressed);
 }
 
 void Material::markAsEmpty()
@@ -116,23 +105,23 @@ bool Material::deserialize(Deserialization &deserialization)
 
     bool succeed;
     Data decompressed;
-    std::tie(succeed, decompressed) = deserializeBLOB(deserialization);
+    std::tie(succeed, decompressed) = deserializeData(deserialization);
     if (!succeed) {
         return false;
     }
 
     Deserialization decoder(decompressed);
     while (!decoder.ended()) {
-        auto intermediate = decoder.advanceZeroTerminatedCString();
-        if (!intermediate.first || intermediate.second == 0) {
+        size_t lengthOfSizedString;
+        std::string tableName;
+        std::tie(lengthOfSizedString, tableName) = decoder.advanceSizedString();
+        if (lengthOfSizedString == 0 || tableName.empty()) {
             markAsCorrupt();
             return false;
         }
-        std::string tableName =
-            std::string(intermediate.first, intermediate.second);
 
         Content content;
-        if (!content.deserialize(deserialization)) {
+        if (!content.deserialize(decoder)) {
             return false;
         }
 
@@ -143,37 +132,33 @@ bool Material::deserialize(Deserialization &deserialization)
 }
 
 std::pair<bool, Data>
-Material::deserializeBLOB(Deserialization &deserialization)
+Material::deserializeData(Deserialization &deserialization)
 {
-    uint32_t checksum = 0;
-    uint32_t size = 0;
-    if (!deserialization.canAdvance(sizeof(checksum) + sizeof(size))) {
-        return {false, Data::emptyData()};
-    }
-    checksum = deserialization.advance4BytesUInt();
-    size = deserialization.advance4BytesUInt();
-    if (size == 0) {
-        if (checksum != 0) {
+    bool succeed = false;
+    Data data;
+    do {
+        if (!deserialization.canAdvance(sizeof(uint32_t))) {
             markAsCorrupt();
-            return {false, Data::emptyData()};
+            break;
         }
-        return {true, Data::emptyData()};
-    }
-    if (!deserialization.canAdvance(size)) {
-        markAsCorrupt();
-        return {false, Data::emptyData()};
-    }
-    const unsigned char *blob = deserialization.advanceBLOB(size);
-    Data compressed = Data::immutableNoCopyData(blob, size);
-    if (checksum != hash(compressed)) {
-        markAsCorrupt();
-        return {false, Data::emptyData()};
-    }
-    Data decompressed = decompress(compressed);
-    if (decompressed.empty()) {
-        return {false, Data::emptyData()};
-    }
-    return {true, decompressed};
+        uint32_t checksum = deserialization.advance4BytesUInt();
+        auto intermediate = deserialization.advanceSizedData();
+        if (intermediate.first == 0) {
+            markAsCorrupt();
+            break;
+        }
+        if (!intermediate.second.empty()) {
+            data = decompress(intermediate.second);
+            if (data.empty() || checksum != hash(data)) {
+                markAsCorrupt();
+                break;
+            }
+        } else if (checksum != 0) {
+            markAsCorrupt();
+            break;
+        }
+    } while (false);
+    return {succeed, succeed ? data : Data::emptyData()};
 }
 
 void Material::markAsCorrupt()
@@ -234,7 +219,7 @@ bool Material::Content::serialize(Serialization &serialization) const
         return false;
     }
     if (!serialization.putVarint(sequence) ||
-        !serialization.putZeroTerminatedString(sql) ||
+        !serialization.putSizedString(sql) ||
         !serialization.put4BytesUInt((uint32_t) pagenos.size())) {
         return false;
     }
@@ -258,18 +243,22 @@ bool Material::Content::deserialize(Deserialization &deserialization)
     }
     sequence = (int64_t) varint;
 
-    auto intermediate = deserialization.advanceZeroTerminatedCString();
-    if (!intermediate.first || intermediate.second == 0) {
+    size_t lengthOfSizedString;
+    std::tie(lengthOfSizedString, sql) = deserialization.advanceSizedString();
+    if (lengthOfSizedString == 0 || sql.empty()) {
         Material::markAsCorrupt();
         return false;
     }
-    sql = std::string(intermediate.first, intermediate.second);
 
     if (!deserialization.canAdvance(sizeof(uint32_t))) {
         Material::markAsCorrupt();
         return false;
     }
     uint32_t pageCount = deserialization.advance4BytesUInt();
+    if (pageCount == 0) {
+        markAsCorrupt();
+        return false;
+    }
     pagenos.clear();
     pagenos.reserve(pageCount);
     for (uint32_t i = 0; i < pageCount; ++i) {

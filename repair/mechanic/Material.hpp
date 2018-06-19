@@ -44,7 +44,7 @@ public:
     using Serializable::serialize;
 
 protected:
-    static bool serializeBLOB(Serialization &serialization, const Data &data);
+    static bool serializeData(Serialization &serialization, const Data &data);
     static void markAsEmpty();
 
 #pragma mark - Deserializable
@@ -54,7 +54,7 @@ public:
 
 protected:
     static std::pair<bool, Data>
-    deserializeBLOB(Deserialization &deserialization);
+    deserializeData(Deserialization &deserialization);
     static void markAsCorrupt();
 
 #pragma mark - Header

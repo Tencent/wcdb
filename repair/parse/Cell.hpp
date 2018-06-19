@@ -51,7 +51,7 @@ public:
     double doubleValue(int index) const;
     std::pair<int, const char *> textValue(int index) const;
     std::string stringValue(int index) const;
-    std::pair<int, const unsigned char *> blobValue(int index) const;
+    const Data blobValue(int index) const;
 
 protected:
     static int getLengthOfSerialType(int serialType);
