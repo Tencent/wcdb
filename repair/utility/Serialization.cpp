@@ -306,6 +306,7 @@ Deserialization::getZeroTerminatedCString(off_t offset) const
         if (*(iter + size) == '\0') {
             return {reinterpret_cast<const char *>(iter), size};
         }
+        ++size;
     }
     return {nullptr, size};
 }
