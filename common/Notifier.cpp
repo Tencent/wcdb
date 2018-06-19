@@ -37,15 +37,31 @@ void Notifier::logger(const Error &error)
 #endif
         ;
 
-    bool interrupt = error.level == Error::Level::Fatal;
-
     if (log) {
         std::ostringstream stream;
-        stream << error.getDescription() << std::endl;
+        stream << "[" << Error::levelName(error.level) << ": ";
+        stream << (int) error.code();
+        if (!error.message.empty()) {
+            stream << ", " << error.message;
+        }
+        stream << "]";
+
+        for (const auto &info : error.infos.getIntInfos()) {
+            stream << ", " << info.first << ": " << info.second;
+        }
+        for (const auto &info : error.infos.getStringInfos()) {
+            stream << ", " << info.first << ": " << info.second;
+        }
+        stream << std::endl;
         std::cout << stream.str();
+#ifdef DEBUG
+        if (error.level >= Error::Level::Error) {
+            std::cout << "Set breakpoint in Notifier::logger to debug.\n";
+        }
+#endif
     }
 
-    if (interrupt) {
+    if (error.level == Error::Level::Fatal) {
         abort();
     }
 }

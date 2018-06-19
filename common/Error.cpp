@@ -177,26 +177,4 @@ void Error::Infos::clear()
     m_strings.clear();
 }
 
-std::string Error::getDescription() const
-{
-    if (m_code == Code::OK) {
-        return String::empty();
-    }
-    std::ostringstream stream;
-    stream << "[" << Error::levelName(level) << ": ";
-    stream << (int) m_code;
-    if (!message.empty()) {
-        stream << ", " << message;
-    }
-    stream << "]";
-
-    for (const auto &info : infos.getIntInfos()) {
-        stream << ", " << info.first << ": " << info.second;
-    }
-    for (const auto &info : infos.getStringInfos()) {
-        stream << ", " << info.first << ": " << info.second;
-    }
-    return stream.str();
-}
-
 } //namespace WCDB

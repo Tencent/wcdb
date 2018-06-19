@@ -49,10 +49,10 @@ public:
                 return "DEBUG";
             case Level::Warning:
                 return "WARNING";
-            case Level::Error:
-                return "ERROR";
             case Level::Notice:
                 return "NOTICE";
+            case Level::Error:
+                return "ERROR";
             case Level::Fatal:
                 return "FATAL";
         }
@@ -197,10 +197,6 @@ public:
         std::map<std::string, std::string> m_strings;
     };
     Infos infos;
-
-#pragma mark - Description
-public:
-    std::string getDescription() const;
 };
 
 } //namespace WCDB
