@@ -138,7 +138,6 @@ MigrationSetting::pickUpForMigration() const
     if (toMigrate == nullptr) {
         toMigrate = &m_infos.begin()->second;
     }
-    WCTInnerAssert(toMigrate != nullptr);
     return *toMigrate;
 }
 
