@@ -28,6 +28,8 @@
 
 - (void)test_renew
 {
+    XCTAssertTrue([_database backup]);
+
     NSArray<WCTSequence *> *sequences = [_database getObjectsOfClass:WCTSequence.class fromTable:WCTSequence.tableName orderBy:WCTSequence.name];
     XCTAssertGreaterThan(sequences.count, 0);
     for (WCTSequence *sequence in sequences) {
