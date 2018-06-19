@@ -78,7 +78,7 @@ bool FactoryRenewer::prepare()
     std::map<std::string, int64_t> resolvedSequences;
 
     // 1. acquire sequences of database
-    if (!resolveSequencesForDatabase(resolvedSequences, database)) {
+    if (!resolveSequencesForDatabase(resolvedSequences, factory.database)) {
         return false;
     }
 
@@ -123,20 +123,21 @@ bool FactoryRenewer::prepare()
 
     // 6. force backup assembled database
     FactoryBackup backup(factory);
-    if (!backup.work(database)) {
+    if (!backup.work(tempDatabase)) {
         setError(backup.getError());
         return false;
     }
 
     // 7. move the assembled database to renew directory and wait for renew.
-    std::list<std::string> toRemove =
-        Factory::associatedPathsForDatabase(database);
-    toRemove.reverse();
+    if (!fileManager->removeItem(directory) ||
+        !fileManager->createDirectoryWithIntermediateDirectories(directory)) {
+        assignWithSharedThreadedError();
+        return false;
+    }
     std::list<std::string> toMove =
         Factory::associatedPathsForDatabase(tempDatabase);
     toMove.reverse();
-    if (!fileManager->removeItems(toRemove) ||
-        !fileManager->moveItems(toMove, directory)) {
+    if (!fileManager->moveItems(toMove, directory)) {
         assignWithSharedThreadedError();
         return false;
     }

@@ -32,8 +32,8 @@ namespace Repair {
 class FactoryRenewer : public FactoryRelated, public ErrorProne {
 public:
     FactoryRenewer(Factory &factory);
-    const std::string database;
     const std::string directory;
+    const std::string database;
 
     bool prepare();
     bool work();

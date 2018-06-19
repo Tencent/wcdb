@@ -262,9 +262,9 @@ Factory::materialForDeserializingForDatabase(const std::string &database)
 
         if (firstMaterialModifiedTime != 0 || lastMaterialModifiedTime != 0) {
             if (firstMaterialModifiedTime > lastMaterialModifiedTime) {
-                materialPath = std::move(firstMaterialModifiedTime);
+                materialPath = std::move(firstMaterialPath);
             } else {
-                materialPath = std::move(lastMaterialModifiedTime);
+                materialPath = std::move(lastMaterialPath);
             }
         }
     } while (false);
