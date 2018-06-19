@@ -133,32 +133,8 @@ bool FactoryRetriever::restore(const std::string &database)
     }
 
     if (!materialPath.empty()) {
-        size_t fileSize;
-        std::tie(succeed, fileSize) =
-            FileManager::shared()->getFileSize(materialPath);
-        if (!succeed) {
-            tryUpgradeErrorWithSharedThreadedError();
-            return false;
-        }
-
-        Data materialData(fileSize);
-        if (materialData.empty()) {
-            tryUpgradeErrorWithSharedThreadedError();
-            return false;
-        }
-
-        FileHandle fileHandle(materialPath);
-        if (!fileHandle.open(FileHandle::Mode::ReadOnly)) {
-            tryUpgradeErrorWithSharedThreadedError();
-            return false;
-        }
-        ssize_t read = fileHandle.read(materialData.buffer(), 0, fileSize);
-        if (read < 0) {
-            tryUpgradeErrorWithSharedThreadedError();
-            return false;
-        }
         Material material;
-        if (material.deserialize(materialData)) {
+        if (material.deserialize(materialPath)) {
             Mechanic mechanic(database);
             mechanic.setAssembler(m_assembler);
             mechanic.setProgressCallback(
