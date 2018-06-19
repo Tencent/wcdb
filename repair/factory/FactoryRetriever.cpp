@@ -203,7 +203,7 @@ bool FactoryRetriever::restore(const std::string &database)
 #pragma mark - Assembler
 void FactoryRetriever::setAssembler(const std::shared_ptr<Assembler> &assembler)
 {
-    WCTInnerAssert(m_assembler->getPath().empty());
+    WCTInnerAssert(assembler->getPath().empty());
     m_assembler = assembler;
     m_assembler->setPath(database);
 }
