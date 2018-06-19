@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/Progress.hpp>
 
 namespace WCDB {
@@ -42,6 +43,7 @@ void Progress::finishProgress()
 void Progress::updateProgress(double progress)
 {
     double increment = m_progress - progress;
+    WCTInnerAssert(increment > 0);
     if (increment > 0) {
         m_progress = progress;
         if (m_onProgressUpdate) {

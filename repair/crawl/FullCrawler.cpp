@@ -37,13 +37,6 @@ void FullCrawler::work()
 {
     if (!m_pager.initialize()) {
         setCriticalError(m_pager.getError());
-        markAsFailed();
-        return;
-    }
-    if (m_wal.initialize()) {
-        m_pager.setWal(&m_wal);
-    } else {
-        setCriticalError(m_pager.getError());
         return;
     }
 

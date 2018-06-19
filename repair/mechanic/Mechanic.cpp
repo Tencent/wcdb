@@ -52,23 +52,19 @@ void Mechanic::work()
     if (!m_pager.initialize()) {
         //Actually, the initialization of pager always succeed if material is not corrupted.
         setCriticalError(m_pager.getError());
-        markAsFailed();
         return;
     }
 
     if (!m_pager.isWalDisposed()) {
         if (m_pager.getWalSalt() != m_material.info.walSalt) {
             m_pager.disposeWal();
+            Error error;
+            error.level = Error::Level::Notice;
+            error.setCode(Error::Code::Mismatch, "Repair");
+            error.message = "Skip WAL of non-match salt.";
+            error.infos.set("Path", m_pager.getPath());
+            Notifier::shared()->notify(error);
         }
-    }
-
-    if (m_pager.isWalDisposed()) {
-        Error error;
-        error.level = Error::Level::Notice;
-        error.setCode(Error::Code::Mismatch, "Repair");
-        error.message = "Skip WAL of non-match salt.";
-        error.infos.set("Path", m_pager.getPath());
-        Notifier::shared()->notify(error);
     }
 
     int pageCount = 0;

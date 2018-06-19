@@ -43,9 +43,10 @@ protected:
 
 #pragma mark - Critical Error
 protected:
-    void markAsFailed();
     int tryUpgrateAssemblerError();
     int tryUpgradeCrawlerError();
+
+    void onErrorCritical() override;
 
 #pragma mark - Assembler
 public:

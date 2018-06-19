@@ -62,6 +62,9 @@ int CriticalErrorOnly::tryUpgradeError(const Error &newError)
     if (newCriticalLevel > m_criticalLevel) {
         m_criticalError = newError;
         m_criticalLevel = newCriticalLevel;
+        if (m_criticalLevel >= CriticalLevel::Fatal) {
+            onErrorCritical();
+        }
     }
     return m_criticalLevel;
 }
@@ -72,6 +75,9 @@ int CriticalErrorOnly::tryUpgradeError(Error &&newError)
     if (newCriticalLevel > m_criticalLevel) {
         m_criticalError = newError;
         m_criticalLevel = std::move(newCriticalLevel);
+        if (m_criticalLevel >= CriticalLevel::Fatal) {
+            onErrorCritical();
+        }
     }
     return m_criticalLevel;
 }
@@ -91,18 +97,25 @@ void CriticalErrorOnly::setCriticalError(const Error &error)
 {
     m_criticalError = error;
     m_criticalLevel = CriticalLevel::MostFatal;
+    onErrorCritical();
 }
 
 void CriticalErrorOnly::setCriticalError(Error &&error)
 {
     m_criticalError = std::move(error);
     m_criticalLevel = CriticalLevel::MostFatal;
+    onErrorCritical();
 }
 
 void CriticalErrorOnly::setCriticalErrorWIthSharedThreadedError()
 {
     m_criticalError = std::move(ThreadedErrors::shared()->moveThreadedError());
     m_criticalLevel = CriticalLevel::MostFatal;
+    onErrorCritical();
+}
+
+void CriticalErrorOnly::onErrorCritical()
+{
 }
 
 } //namespace Repair

@@ -61,7 +61,7 @@ int Pager::getPageCount() const
 {
     WCTInnerAssert(isInitialized());
     return m_disposeWal ? m_pageCount
-                        : std::max(m_wal->getMaxPageno(), m_pageCount);
+                        : std::max(m_wal.getMaxPageno(), m_pageCount);
 }
 
 int Pager::getUsableSize() const
@@ -86,8 +86,8 @@ Data Pager::acquirePageData(int number)
 {
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(number > 0);
-    if (!m_disposeWal && m_wal->containsPage(number)) {
-        return m_wal->acquirePageData(number);
+    if (!isWalDisposed() && m_wal.containsPage(number)) {
+        return m_wal.acquirePageData(number);
     }
     return acquireData((number - 1) * m_pageSize, m_pageSize);
 }

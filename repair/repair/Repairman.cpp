@@ -112,11 +112,6 @@ void Repairman::onCrawlerError()
 }
 
 #pragma mark - Critical Error
-void Repairman::markAsFailed()
-{
-    finishProgress();
-}
-
 int Repairman::tryUpgradeCrawlerError()
 {
     Error error = m_pager.getError();
@@ -129,6 +124,11 @@ int Repairman::tryUpgradeCrawlerError()
 int Repairman::tryUpgrateAssemblerError()
 {
     return tryUpgradeError(m_assembler->getError());
+}
+
+void Repairman::onErrorCritical()
+{
+    finishProgress();
 }
 
 #pragma mark - Evaluation

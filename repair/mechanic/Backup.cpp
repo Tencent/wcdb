@@ -30,11 +30,7 @@ namespace Repair {
 
 #pragma mark - Initialize
 Backup::Backup(const std::string &path)
-    : m_pager(path)
-    , m_wal(&m_pager)
-    , Crawlable(m_pager)
-    , m_height(-1)
-    , m_masterCrawler(m_pager)
+    : m_pager(path), Crawlable(m_pager), m_height(-1), m_masterCrawler(m_pager)
 {
 }
 

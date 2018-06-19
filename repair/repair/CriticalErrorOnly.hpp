@@ -48,6 +48,8 @@ protected:
     void setCriticalError(Error &&error);
     void setCriticalErrorWIthSharedThreadedError();
 
+    virtual void onErrorCritical();
+
 private:
     Error m_criticalError;
     int m_criticalLevel;
