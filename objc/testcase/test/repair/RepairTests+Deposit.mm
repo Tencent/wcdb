@@ -28,7 +28,26 @@
 
 - (void)test_renew
 {
-    
+    NSArray<WCTSequence *> *sequences = [_database getObjectsOfClass:WCTSequence.class fromTable:WCTSequence.tableName orderBy:WCTSequence.name];
+    XCTAssertGreaterThan(sequences.count, 0);
+    for (WCTSequence *sequence in sequences) {
+        XCTAssertGreaterThan(sequence.seq, 0);
+    }
+
+    XCTAssertTrue([_database deposit]);
+
+    WCTError *error;
+    XCTAssertFalse([_database tableExists:_tableName1 withError:&error]);
+    XCTAssertNil(error);
+    XCTAssertFalse([_database tableExists:_tableName2 withError:&error]);
+    XCTAssertNil(error);
+
+    NSArray<WCTSequence *> *sequencesAfterDeposited = [_database getObjectsOfClass:WCTSequence.class fromTable:WCTSequence.tableName orderBy:WCTSequence.name];
+    XCTAssertEqual(sequencesAfterDeposited.count, sequences.count);
+    XCTAssertTrue([sequences isEqualToObjects:sequencesAfterDeposited
+                               withComparator:^BOOL(WCTSequence *lhs, WCTSequence *rhs) {
+                                 return lhs.seq == rhs.seq;
+                               }]);
 }
 
 @end
