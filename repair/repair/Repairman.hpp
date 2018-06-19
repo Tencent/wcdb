@@ -54,7 +54,7 @@ public:
 
 protected:
     bool markAsAssembling();
-    void markAsAssembled();
+    bool markAsAssembled();
 
     bool assembleTable(const std::string &tableName,
                        const std::string &sql,

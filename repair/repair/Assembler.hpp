@@ -42,7 +42,7 @@ protected:
 
 public:
     virtual bool markAsAssembling() = 0;
-    virtual void markAsAssembled() = 0;
+    virtual bool markAsAssembled() = 0;
 
     virtual bool markAsMilestone() = 0;
     virtual bool assembleTable(const std::string &tableName,

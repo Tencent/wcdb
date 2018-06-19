@@ -46,7 +46,7 @@ protected:
 #pragma mark - Assembler
 public:
     bool markAsAssembling() override;
-    void markAsAssembled() override;
+    bool markAsAssembled() override;
 
     bool markAsMilestone() override;
 

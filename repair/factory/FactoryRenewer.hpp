@@ -38,6 +38,12 @@ public:
     bool prepare();
     bool work();
 
+protected:
+    bool resolveSequencesForDatabase(
+        std::map<std::string, int64_t> &resolvedSequences,
+        const std::string &databaseForAcquisition);
+    bool assembleSequences(const std::map<std::string, int64_t> &sequences);
+
 #pragma mark - Assembler
 public:
     void setAssembler(const std::shared_ptr<Assembler> &assembler);

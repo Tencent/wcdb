@@ -73,7 +73,9 @@ void Mechanic::work()
     }
     setPageWeight(pageCount > 0 ? (double) 1.0 / pageCount : 0);
 
-    markAsAssembling();
+    if (!markAsAssembling()) {
+        return;
+    }
     for (const auto &element : m_material.contents) {
         if (getCriticalLevel() >= CriticalLevel::Fatal) {
             break;

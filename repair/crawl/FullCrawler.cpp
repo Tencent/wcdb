@@ -52,7 +52,9 @@ void FullCrawler::work()
     }
     setPageWeight((double) leafTablePageCount / m_pager.getPageCount());
 
-    markAsAssembling();
+    if (!markAsAssembling()) {
+        return;
+    }
     MasterCrawler(m_pager).work(this);
     markAsAssembled();
 }

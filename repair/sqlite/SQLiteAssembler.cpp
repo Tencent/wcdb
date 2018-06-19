@@ -31,7 +31,11 @@ namespace Repair {
 
 #pragma mark - Initialize
 SQLiteAssembler::SQLiteAssembler()
-    : Assembler(), m_transaction(false), m_onTableAssembled(nullptr)
+    : Assembler()
+    , m_transaction(false)
+    , m_onTableAssembled(nullptr)
+    , m_handle(nullptr)
+    , m_stmt(nullptr)
 {
 }
 
@@ -55,11 +59,12 @@ bool SQLiteAssembler::markAsAssembling()
     return open();
 }
 
-void SQLiteAssembler::markAsAssembled()
+bool SQLiteAssembler::markAsAssembled()
 {
-    lazyCommitOrRollbackTransaction();
+    bool result = lazyCommitOrRollbackTransaction();
     finalize();
     close();
+    return result;
 }
 
 bool SQLiteAssembler::markAsMilestone()
@@ -131,7 +136,7 @@ bool SQLiteAssembler::assembleSequences(
     bool commit = false;
     do {
         if (!execute("CREATE TABLE IF NOT EXISTS WCDBAssemblerTemp(i INTEGER "
-                     "PRIMARY KEY AUTOINCREMENT")) {
+                     "PRIMARY KEY AUTOINCREMENT)")) {
             break;
         }
         if (!prepare("INSERT INTO sqlite_sequence(name, seq) VALUES(?1, ?2)")) {
@@ -235,7 +240,7 @@ bool SQLiteAssembler::lazyBeginTransaction()
     if (m_transaction) {
         return true;
     }
-    if (execute("BEGIN IMMEDIATED")) {
+    if (execute("BEGIN IMMEDIATE")) {
         m_transaction = true;
         return true;
     }

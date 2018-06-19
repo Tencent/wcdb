@@ -57,11 +57,16 @@ bool Repairman::markAsAssembling()
     return false;
 }
 
-void Repairman::markAsAssembled()
+bool Repairman::markAsAssembled()
 {
+    bool result = true;
     markAsMilestone();
-    m_assembler->markAsAssembled();
+    if (!m_assembler->markAsAssembled()) {
+        result = false;
+        tryUpgrateAssemblerError();
+    }
     finishProgress();
+    return result;
 }
 
 void Repairman::markAsMilestone()
