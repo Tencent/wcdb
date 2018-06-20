@@ -28,6 +28,8 @@
 
 - (void)test_deposit
 {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+
     NSString *tableName = self.className;
     int count = 100;
     XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
@@ -47,12 +49,21 @@
         XCTAssertEqual(sequences[0].seq, count - 1);
     }
 
-    //Deposit
     XCTAssertTrue([_database isOpened]);
+    XCTAssertTrue([fileManager fileExistsAtPath:[_database.path stringByAppendingString:@"-wal"]]);
+
+    //Deposit
     XCTAssertTrue([_database deposit]);
-    XCTAssertFalse([_database isOpened]);
-    
+
     //After
+    XCTAssertFalse([_database isOpened]);
+    //Check wal still exists
+    NSString *factory = [_database.path stringByAppendingString:@".factory"];
+    NSArray<NSString *> *subdir = [fileManager contentsOfDirectoryAtPath:factory error:nil];
+    XCTAssertEqual(subdir.count, 1);
+    NSString *wal = [[[factory stringByAppendingPathComponent:subdir[0]] stringByAppendingPathComponent:_database.path.lastPathComponent] stringByAppendingString:@"-wal"];
+    XCTAssertTrue([fileManager fileExistsAtPath:wal]);
+
     {
         XCTAssertTrue([_database tableExists:tableName]);
 
