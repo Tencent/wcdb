@@ -51,7 +51,7 @@
     XCTAssertTrue([_database isOpened]);
     XCTAssertTrue([_database deposit]);
     XCTAssertFalse([_database isOpened]);
-
+    
     //After
     {
         XCTAssertTrue([_database tableExists:tableName]);
@@ -110,13 +110,11 @@
     int count2 = 234;
     NSString *tableName2 = [self.className stringByAppendingString:@"_2"];
     XCTAssertEqual([self insertObjectsOfCount:count2 intoTable:tableName2].count, count2);
-    XCTAssertTrue([_database backup]);
     XCTAssertTrue([_database deposit]);
 
     int count3 = 345;
     NSString *tableName3 = [self.className stringByAppendingString:@"_3"];
     XCTAssertEqual([self insertObjectsOfCount:count3 intoTable:tableName3].count, count3);
-    XCTAssertTrue([_database backup]);
     XCTAssertTrue([_database deposit]);
 
     // After
