@@ -100,4 +100,34 @@
     XCTAssertTrue([_database backup]);
 }
 
+- (void)test_filter
+{
+    int count = 100;
+
+    NSString *tableName1 = [self.className stringByAppendingString:@"_1"];
+    XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName1].count, count);
+
+    NSString *tableName2 = [self.className stringByAppendingString:@"_2"];
+    XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName2].count, count);
+
+    [_database filterBackup:^BOOL(NSString *tableName) {
+      if ([tableName isEqualToString:tableName1]) {
+          return YES;
+      }
+      return NO;
+    }];
+
+    XCTAssertTrue([_database backup]);
+    XCTAssertTrue([_database deposit]);
+
+    NSArray<WCTSequence *> *sequences = [_database getObjectsOfClass:WCTSequence.class fromTable:WCTSequence.tableName orderBy:WCTSequence.name];
+    XCTAssertEqual(sequences.count, 1);
+    XCTAssertEqual(sequences[0].seq, count - 1);
+    XCTAssertTrue([sequences[0].name isEqualToString:tableName1]);
+
+    XCTAssertTrue([_database tableExists:tableName1]);
+    WCTError *error;
+    XCTAssertFalse([_database tableExists:tableName2 withError:&error]);
+}
+
 @end
