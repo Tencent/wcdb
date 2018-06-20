@@ -104,7 +104,7 @@ bool Backup::willCrawlPage(const Page &page, int height)
                 for (int i = 0; i < page.getSubPageCount(); ++i) {
                     auto pair = page.getSubPageno(i);
                     if (!pair.first) {
-                        markAsCorrupted();
+                        markAsCorrupted(page.number, "SubPageno");
                         break;
                     }
                     m_pagenos.push_back(page.number);
@@ -135,11 +135,6 @@ void Backup::onMasterCellCrawled(const Master *master)
     } else if (filter(master->tableName)) {
         m_height = -1;
         if (!crawl(master->rootpage)) {
-            return;
-        }
-
-        if (m_pagenos.empty() || master->sql.empty()) {
-            markAsCorrupted();
             return;
         }
 

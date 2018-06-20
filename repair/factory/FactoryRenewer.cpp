@@ -211,6 +211,8 @@ bool FactoryRenewer::resolveInfosForDatabase(
                 error.setCode(Error::Code::Mismatch, "Repair");
                 error.message = "Different sqls is found in materials.";
                 error.infos.set("Path", materialPath);
+                error.infos.set("SQL1", element.second.sql);
+                error.infos.set("SQL2", iter->second.sql);
                 Notifier::shared()->notify(error);
             }
         }

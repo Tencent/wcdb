@@ -163,18 +163,18 @@ bool Page::doInitialize()
     int cellCount = m_deserialization.advance2BytesInt();
     if (cellCount < 0 ||
         cellCount * 2 + getOffsetOfCellPointer() > m_pager->getPageSize()) {
-        markPagerAsCorrupted();
+        markPagerAsCorrupted(number, "CellCount");
         return false;
     }
     for (int i = 0; i < cellCount; ++i) {
         int offset = getOffsetOfHeader() + getOffsetOfCellPointer() + i * 2;
         if (!m_deserialization.isEnough(offset + 2)) {
-            markPagerAsCorrupted();
+            markPagerAsCorrupted(number, "CellPointer");
             return false;
         }
         int cellPointer = m_deserialization.get2BytesInt(offset);
         if (cellPointer > m_pager->getPageSize()) {
-            markPagerAsCorrupted();
+            markPagerAsCorrupted(number, "CellPointer");
             return false;
         }
         m_cellPointers.push_back(cellPointer);

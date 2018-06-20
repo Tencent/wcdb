@@ -149,18 +149,12 @@ bool FactoryRetriever::restore(const std::string &database)
             tryUpgradeErrorWithSharedThreadedError();
             return false;
         }
-        Error warning;
-        warning.level = Error::Level::Warning;
-        warning.setCode(Error::Code::Corrupt, "Repair");
-        warning.infos.set("Path", materialPath);
-        warning.message = "Material is corrupted";
-        Notifier::shared()->notify(std::move(warning));
     } else {
         Error warning;
         warning.level = Error::Level::Warning;
         warning.setCode(Error::Code::NotFound, "Repair");
         warning.infos.set("Path", database);
-        warning.message = "Material not found";
+        warning.message = "Material is not found";
         Notifier::shared()->notify(std::move(warning));
     }
     FullCrawler fullCrawler(database);

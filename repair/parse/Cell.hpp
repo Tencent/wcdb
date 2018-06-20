@@ -36,6 +36,8 @@ class Cell : public PagerRelated, public Initializeable {
 public:
     Cell(int pointer, Page *page, Pager *pager);
 
+    const Page &getPage() const;
+
     enum Type {
         Null = 0,
         Integer = 1,

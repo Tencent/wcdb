@@ -20,6 +20,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Cell.hpp>
+#include <WCDB/Page.hpp>
 #include <WCDB/SequenceCrawler.hpp>
 
 namespace WCDB {
@@ -52,12 +53,12 @@ void SequenceCrawler::onCellCrawled(const Cell &cell)
 {
     if (cell.getValueType(0) != Cell::Type::Text ||
         cell.getValueType(1) != Cell::Type::Integer) {
-        markAsCorrupted();
+        markAsCorrupted(cell.getPage().number, "CellType");
         return;
     }
     std::string name = cell.stringValue(0);
     if (name.empty()) {
-        markAsCorrupted();
+        markAsCorrupted(cell.getPage().number, "CellValue");
         return;
     }
 

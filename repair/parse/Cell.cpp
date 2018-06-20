@@ -35,6 +35,11 @@ Cell::Cell(int pointer, Page *page, Pager *pager)
     WCTInnerAssert(m_page != nullptr);
 }
 
+const Page &Cell::getPage() const
+{
+    return *m_page;
+}
+
 int Cell::getLengthOfSerialType(int serialType)
 {
     WCTInnerAssert(isSerialTypeSanity(serialType));
@@ -176,14 +181,14 @@ bool Cell::doInitialize()
     std::tie(lengthOfPayloadSize, payloadSize) =
         deserialization.advanceVarint();
     if (lengthOfPayloadSize == 0) {
-        markPagerAsCorrupted();
+        markPagerAsCorrupted(m_page->number, "PayloadSize");
         return false;
     }
     //parse rowid
     int lengthOfRowid;
     std::tie(lengthOfRowid, m_rowid) = deserialization.advanceVarint();
     if (lengthOfRowid == 0) {
-        markPagerAsCorrupted();
+        markPagerAsCorrupted(m_page->number, "Rowid");
         return false;
     }
     //parse local
@@ -194,7 +199,7 @@ bool Cell::doInitialize()
         localPayloadSize = m_page->getMinLocal();
     }
     if (!deserialization.canAdvance(localPayloadSize)) {
-        markPagerAsCorrupted();
+        markPagerAsCorrupted(m_page->number, "LocalPayloadSize");
         return false;
     }
     //parse payload
@@ -203,7 +208,7 @@ bool Cell::doInitialize()
         //append overflow pages
         deserialization.seek(offsetOfPayload + localPayloadSize);
         if (!deserialization.canAdvance(4)) {
-            markPagerAsCorrupted();
+            markPagerAsCorrupted(m_page->number, "OverflowPageno");
             return false;
         }
         int overflowPageno = deserialization.advance4BytesInt();
@@ -223,7 +228,7 @@ bool Cell::doInitialize()
                     overflowPagenos.end() // redunant overflow page found
                 || overflowPageno > m_pager->getPageCount() // pageno exceeds
                 ) {
-                m_pager->markAsCorrupted();
+                m_pager->markAsCorrupted(m_page->number, "OverflowPage");
                 return false;
             }
             overflowPagenos.insert(overflowPageno);
@@ -244,7 +249,7 @@ bool Cell::doInitialize()
             overflowPageno = overflowDeserialization.advance4BytesInt();
         }
         if (overflowPageno != 0 || cursorOfPayload != payloadSize) {
-            markPagerAsCorrupted();
+            markPagerAsCorrupted(m_page->number, "OverflowPage");
             return false;
         }
     } else {
@@ -258,7 +263,7 @@ bool Cell::doInitialize()
     std::tie(lengthOfOffsetOfValues, offsetOfValues) =
         m_deserialization.advanceVarint();
     if (lengthOfOffsetOfValues == 0) {
-        markPagerAsCorrupted();
+        markPagerAsCorrupted(m_page->number, "CellValueOffset");
         return false;
     }
 
@@ -274,7 +279,7 @@ bool Cell::doInitialize()
         std::tie(lengthOfSerialType, serialType) =
             m_deserialization.advanceVarint();
         if (lengthOfSerialType == 0 || !isSerialTypeSanity(serialType)) {
-            markPagerAsCorrupted();
+            markPagerAsCorrupted(m_page->number, "SerialType");
             return false;
         }
         cursorOfSerialTypes += lengthOfSerialType;
@@ -283,7 +288,7 @@ bool Cell::doInitialize()
     }
     if (cursorOfSerialTypes != endOfSerialTypes ||
         cursorOfValues != endOfValues) {
-        markPagerAsCorrupted();
+        markPagerAsCorrupted(m_page->number, "Payload");
         return false;
     }
     return true;

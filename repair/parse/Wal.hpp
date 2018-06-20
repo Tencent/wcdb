@@ -80,7 +80,7 @@ protected:
 
 #pragma mark - Error
 protected:
-    void markAsCorrupted();
+    void markAsCorrupted(int frame, const std::string &element);
     void markAsError(Error::Code code);
 };
 

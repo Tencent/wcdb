@@ -21,6 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Cell.hpp>
 #include <WCDB/MasterCrawler.hpp>
+#include <WCDB/Page.hpp>
 
 namespace WCDB {
 
@@ -50,14 +51,14 @@ void MasterCrawler::onCellCrawled(const Cell &cell)
         cell.getValueType(2) != Cell::Type::Text ||
         cell.getValueType(3) != Cell::Type::Integer ||
         cell.getValueType(4) != Cell::Type::Text) {
-        markAsCorrupted();
+        markAsCorrupted(cell.getPage().number, "CellType");
         return;
     }
     std::string name = cell.stringValue(1);
     std::string tblName = cell.stringValue(2);
     std::string sql = cell.stringValue(4);
     if (tblName.empty() || sql.empty() || name.empty()) {
-        markAsCorrupted();
+        markAsCorrupted(cell.getPage().number, "CellValue");
         return;
     }
 

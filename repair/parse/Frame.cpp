@@ -100,7 +100,7 @@ bool Frame::doInitialize()
     WCTInnerAssert(deserialization.canAdvance(4));
     salt.second = deserialization.advance4BytesUInt();
     if (salt != m_wal->getSalt()) {
-        markWalAsCorrupted();
+        markWalAsCorrupted(frameno, "Salt");
         return false;
     }
 
@@ -114,7 +114,7 @@ bool Frame::doInitialize()
     if (m_checksum == checksum) {
         return true;
     }
-    markWalAsCorrupted();
+    markWalAsCorrupted(frameno, "Checksum");
     return false;
 }
 

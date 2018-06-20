@@ -48,7 +48,7 @@ bool Material::serialize(Serialization &serialization) const
     Serialization encoder;
     for (const auto &element : contents) {
         if (element.first.empty()) {
-            markAsEmpty();
+            markAsEmpty("TableName");
             return false;
         }
         if (!encoder.putSizedString(element.first) ||
@@ -73,11 +73,12 @@ bool Material::serializeData(Serialization &serialization, const Data &data)
            serialization.putSizedData(compressed);
 }
 
-void Material::markAsEmpty()
+void Material::markAsEmpty(const std::string &element)
 {
     Error error;
     error.setCode(Error::Code::Empty, "Repair");
     error.message = "Element of material is empty.";
+    error.infos.set("Element", element);
     Notifier::shared()->notify(error);
     setThreadedError(std::move(error));
 }
@@ -87,19 +88,22 @@ bool Material::deserialize(Deserialization &deserialization)
 {
     //Header
     if (!deserialization.canAdvance(Material::headerSize)) {
-        markAsCorrupt();
+        markAsCorrupt("Header");
         return false;
     }
     uint32_t magic = deserialization.advance4BytesUInt();
     uint32_t version = deserialization.advance4BytesUInt();
-    if (magic != Material::magic || version != 0x01000000) {
-        markAsCorrupt();
+    if (magic != Material::magic) {
+        markAsCorrupt("Magic");
+        return false;
+    }
+    if (version != 0x01000000) {
+        markAsCorrupt("Version");
         return false;
     }
 
     //Info
     if (!info.deserialize(deserialization)) {
-        markAsCorrupt();
         return false;
     }
 
@@ -116,7 +120,7 @@ bool Material::deserialize(Deserialization &deserialization)
         std::string tableName;
         std::tie(lengthOfSizedString, tableName) = decoder.advanceSizedString();
         if (lengthOfSizedString == 0 || tableName.empty()) {
-            markAsCorrupt();
+            markAsCorrupt("TableName");
             return false;
         }
 
@@ -138,23 +142,26 @@ Material::deserializeData(Deserialization &deserialization)
     Data data;
     do {
         if (!deserialization.canAdvance(sizeof(uint32_t))) {
-            markAsCorrupt();
+            markAsCorrupt("Checksum");
             break;
         }
         uint32_t checksum = deserialization.advance4BytesUInt();
         auto intermediate = deserialization.advanceSizedData();
         if (intermediate.first == 0) {
-            markAsCorrupt();
+            markAsCorrupt("Content");
             break;
         }
         if (!intermediate.second.empty()) {
             data = decompress(intermediate.second);
-            if (data.empty() || checksum != hash(data)) {
-                markAsCorrupt();
+            if (data.empty()) {
+                break;
+            }
+            if (checksum != hash(data)) {
+                markAsCorrupt("Checksum");
                 break;
             }
         } else if (checksum != 0) {
-            markAsCorrupt();
+            markAsCorrupt("Checksum");
             break;
         }
         succeed = true;
@@ -162,11 +169,12 @@ Material::deserializeData(Deserialization &deserialization)
     return {succeed, succeed ? data : Data::emptyData()};
 }
 
-void Material::markAsCorrupt()
+void Material::markAsCorrupt(const std::string &element)
 {
     Error error;
     error.setCode(Error::Code::Corrupt, "Repair");
     error.message = "Material is corrupted";
+    error.infos.set("Element", element);
     Notifier::shared()->notify(error);
     setThreadedError(std::move(error));
 }
@@ -197,6 +205,7 @@ bool Material::Info::serialize(Serialization &serialization) const
 bool Material::Info::deserialize(Deserialization &deserialization)
 {
     if (!deserialization.canAdvance(Info::size)) {
+        markAsCorrupt("Info");
         return false;
     }
     pageSize = deserialization.advance4BytesUInt();
@@ -215,8 +224,12 @@ Material::Content::Content() : sequence(0)
 #pragma mark - Serialization
 bool Material::Content::serialize(Serialization &serialization) const
 {
-    if (sql.empty() || pagenos.empty()) {
-        markAsEmpty();
+    if (sql.empty()) {
+        markAsEmpty("SQL");
+        return false;
+    }
+    if (pagenos.empty()) {
+        markAsEmpty("Pagenos");
         return false;
     }
     if (!serialization.putVarint(sequence) ||
@@ -239,7 +252,7 @@ bool Material::Content::deserialize(Deserialization &deserialization)
     uint64_t varint;
     std::tie(lengthOfVarint, varint) = deserialization.advanceVarint();
     if (lengthOfVarint == 0) {
-        Material::markAsCorrupt();
+        Material::markAsCorrupt("Sequence");
         return false;
     }
     sequence = (int64_t) varint;
@@ -247,17 +260,17 @@ bool Material::Content::deserialize(Deserialization &deserialization)
     size_t lengthOfSizedString;
     std::tie(lengthOfSizedString, sql) = deserialization.advanceSizedString();
     if (lengthOfSizedString == 0 || sql.empty()) {
-        Material::markAsCorrupt();
+        Material::markAsCorrupt("SQL");
         return false;
     }
 
     if (!deserialization.canAdvance(sizeof(uint32_t))) {
-        Material::markAsCorrupt();
+        Material::markAsCorrupt("PageCount");
         return false;
     }
     uint32_t pageCount = deserialization.advance4BytesUInt();
     if (pageCount == 0) {
-        markAsCorrupt();
+        markAsCorrupt("PageCount");
         return false;
     }
     pagenos.clear();
@@ -265,7 +278,7 @@ bool Material::Content::deserialize(Deserialization &deserialization)
     for (uint32_t i = 0; i < pageCount; ++i) {
         std::tie(lengthOfVarint, varint) = deserialization.advanceVarint();
         if (lengthOfVarint == 0) {
-            Material::markAsCorrupt();
+            Material::markAsCorrupt("Pageno");
             return false;
         }
         pagenos.push_back((uint32_t) varint);

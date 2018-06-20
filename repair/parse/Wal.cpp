@@ -62,7 +62,8 @@ Data Wal::acquireData(off_t offset, size_t size)
     if (read != size) {
         if (read >= 0) {
             //short read
-            markAsCorrupted();
+            markAsCorrupted((int) ((offset - headerSize) / getFrameSize() + 1),
+                            "ShortRead");
         } else {
             assignWithSharedThreadedError();
         }
@@ -174,7 +175,7 @@ bool Wal::doInitialize()
     Deserialization deserialization(data);
     uint32_t magic = deserialization.advance4BytesUInt();
     if (magic != 0x377f0682 && magic != 0x377f0683) {
-        markAsCorrupted();
+        markAsCorrupted(0, "Magic");
         return false;
     }
     m_isNativeChecksum = (magic & 0x00000001) == SQLITE_BIGENDIAN;
@@ -202,16 +203,22 @@ bool Wal::doInitialize()
 }
 
 #pragma mark - Error
-void Wal::markAsCorrupted()
+void Wal::markAsCorrupted(int frame, const std::string &element)
 {
-    markAsError(Error::Code::Corrupt);
+    Error error;
+    error.setCode(Error::Code::Corrupt, "Repair");
+    error.infos.set("Path", getPath());
+    error.infos.set("Element", element);
+    error.infos.set("Frame", frame);
+    Notifier::shared()->notify(error);
+    setError(std::move(error));
 }
 
 void Wal::markAsError(Error::Code code)
 {
     Error error;
     error.setCode(code, "Repair");
-    error.infos.set("Path", m_fileHandle.path);
+    error.infos.set("Path", getPath());
     Notifier::shared()->notify(error);
     setError(std::move(error));
 }

@@ -45,7 +45,7 @@ public:
 
 protected:
     static bool serializeData(Serialization &serialization, const Data &data);
-    static void markAsEmpty();
+    static void markAsEmpty(const std::string &element);
 
 #pragma mark - Deserializable
 public:
@@ -55,7 +55,7 @@ public:
 protected:
     static std::pair<bool, Data>
     deserializeData(Deserialization &deserialization);
-    static void markAsCorrupt();
+    static void markAsCorrupt(const std::string &element);
 
 #pragma mark - Header
 public:

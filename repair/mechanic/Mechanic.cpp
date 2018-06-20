@@ -68,6 +68,10 @@ void Mechanic::work()
             error.setCode(Error::Code::Mismatch, "Repair");
             error.message = "Skip WAL of non-match salt.";
             error.infos.set("Path", m_pager.getPath());
+            error.infos.set("ParsedSalt1", m_pager.getWalSalt().first);
+            error.infos.set("ParsedSalt2", m_pager.getWalSalt().second);
+            error.infos.set("MaterialSalt1", m_material.info.walSalt.first);
+            error.infos.set("MaterialSalt2", m_material.info.walSalt.second);
             Notifier::shared()->notify(error);
         }
     }
@@ -117,7 +121,7 @@ bool Mechanic::willCrawlPage(const Page &page, int)
         markCellCount(page.getCellCount());
         return true;
     }
-    markAsCorrupted();
+    markAsCorrupted(page.number, "PageType");
     return false;
 }
 

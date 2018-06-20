@@ -46,9 +46,9 @@ const Error &Crawlable::getCrawlError() const
     return m_associatedPager.getError();
 }
 
-void Crawlable::markAsCorrupted()
+void Crawlable::markAsCorrupted(int page, const std::string &element)
 {
-    m_associatedPager.markAsCorrupted();
+    m_associatedPager.markAsCorrupted(page, element);
     markAsError();
 }
 
@@ -73,7 +73,7 @@ void Crawlable::safeCrawl(int rootpageno,
                           int height)
 {
     if (rootpageno > m_associatedPager.getPageCount()) {
-        markAsCorrupted();
+        markAsCorrupted(rootpageno, "Pageno");
         return;
     }
     Page rootpage(rootpageno, &m_associatedPager);
@@ -89,7 +89,7 @@ void Crawlable::safeCrawl(int rootpageno,
             if (crawledInteriorPages.find(rootpageno) !=
                 crawledInteriorPages.end()) {
                 //avoid dead loop
-                markAsCorrupted();
+                markAsCorrupted(rootpageno, "Pageno");
                 return;
             }
             crawledInteriorPages.insert(rootpageno);
@@ -101,7 +101,7 @@ void Crawlable::safeCrawl(int rootpageno,
                 if (pair.first) {
                     safeCrawl(pair.second, crawledInteriorPages, height + 1);
                 } else {
-                    markAsCorrupted();
+                    markAsCorrupted(rootpageno, "SubPageno");
                 }
             }
             break;
@@ -119,7 +119,7 @@ void Crawlable::safeCrawl(int rootpageno,
             }
             break;
         default:
-            markAsCorrupted();
+            markAsCorrupted(rootpageno, "PageType");
             break;
     }
 }

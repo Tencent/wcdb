@@ -109,7 +109,7 @@ Data Pager::acquireData(off_t offset, size_t size)
     if (read != size) {
         if (read >= 0) {
             //short read
-            markAsCorrupted();
+            markAsCorrupted((int) (offset / m_pageSize + 1), "ShortRead");
         } else {
             assignWithSharedThreadedError();
         }
@@ -137,16 +137,22 @@ int Pager::getWalFrameCount() const
 }
 
 #pragma mark - Error
-void Pager::markAsCorrupted()
+void Pager::markAsCorrupted(int page, const std::string &element)
 {
-    markAsError(Error::Code::Corrupt);
+    Error error;
+    error.setCode(Error::Code::Corrupt, "Repair");
+    error.infos.set("Path", getPath());
+    error.infos.set("Element", element);
+    error.infos.set("Page", page);
+    Notifier::shared()->notify(error);
+    setError(std::move(error));
 }
 
 void Pager::markAsError(Error::Code code)
 {
     Error error;
     error.setCode(code, "Repair");
-    error.infos.set("Path", m_fileHandle.path);
+    error.infos.set("Path", getPath());
     Notifier::shared()->notify(error);
     setError(std::move(error));
 }
@@ -191,9 +197,12 @@ bool Pager::doInitialize()
             m_reservedBytes = deserialization.advance1ByteInt();
         }
     }
-    if (((m_pageSize - 1) & m_pageSize) != 0 || m_pageSize < 512 ||
-        m_reservedBytes < 0 || m_reservedBytes > 255) {
-        markAsCorrupted();
+    if (((m_pageSize - 1) & m_pageSize) != 0 || m_pageSize < 512) {
+        markAsCorrupted(1, "PageSize");
+        return false;
+    }
+    if (m_reservedBytes < 0 || m_reservedBytes > 255) {
+        markAsCorrupted(1, "ReversedBytes");
         return false;
     }
 
