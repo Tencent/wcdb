@@ -37,7 +37,7 @@ Page::Page(int number_, Pager *pager) : PagerRelated(pager), number(number_)
 std::pair<bool, Page::Type> Page::acquireType()
 {
     int type = 0;
-    if (!m_deserialization.getData().empty()) {
+    if (m_deserialization.getData().empty()) {
         Data data = m_pager->acquireData(getOffsetOfHeader(), 1);
         if (data.empty()) {
             return {false, Type::Unknown};
