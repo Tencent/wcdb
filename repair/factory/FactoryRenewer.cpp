@@ -139,11 +139,19 @@ bool FactoryRenewer::prepare()
         return false;
     }
 
-    // 6. force backup assembled database
-    FactoryBackup backup(factory);
-    if (!backup.work(tempDatabase)) {
-        setError(backup.getError());
+    // 6. force backup assembled database if exists
+    size_t fileSize;
+    std::tie(succeed, fileSize) = fileManager->getFileSize(tempDatabase);
+    if (!succeed) {
+        assignWithSharedThreadedError();
         return false;
+    }
+    if (fileSize > 0) {
+        FactoryBackup backup(factory);
+        if (!backup.work(tempDatabase)) {
+            setError(backup.getError());
+            return false;
+        }
     }
 
     // 7. move the assembled database to renew directory and wait for renew.
