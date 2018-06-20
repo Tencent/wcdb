@@ -33,18 +33,18 @@ namespace Repair {
 SQLiteAssembler::SQLiteAssembler()
     : Assembler()
     , m_transaction(false)
-    , m_onTableAssembled(nullptr)
+    //    , m_onTableAssembled(nullptr)
     , m_handle(nullptr)
     , m_cellSTMT(nullptr)
     , m_sequenceSTMT(nullptr)
 {
 }
 
-void SQLiteAssembler::setNotificationWhenTableAssembled(
-    const TableAssembledCallback &onTableAssembled)
-{
-    m_onTableAssembled = onTableAssembled;
-}
+//void SQLiteAssembler::setNotificationWhenTableAssembled(
+//    const TableAssembledCallback &onTableAssembled)
+//{
+//    m_onTableAssembled = onTableAssembled;
+//}
 
 bool SQLiteAssembler::onTableAssembled(const std::string &tableName)
 {
