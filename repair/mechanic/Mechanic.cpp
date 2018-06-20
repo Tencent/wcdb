@@ -45,6 +45,11 @@ void Mechanic::setMaterial(Material &&material)
 #pragma mark - Mechanic
 void Mechanic::work()
 {
+    if (isEmptyDatabase()) {
+        finishProgress();
+        return;
+    }
+
     m_pager.setMaxWalFrame(m_material.info.walFrame);
     m_pager.setPageSize(m_material.info.pageSize);
     m_pager.setReservedBytes(m_material.info.reservedBytes);

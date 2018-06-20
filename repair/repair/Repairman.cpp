@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/FileManager.hpp>
 #include <WCDB/Repairman.hpp>
 #include <WCDB/ThreadedErrors.hpp>
 
@@ -39,6 +40,25 @@ Repairman::Repairman(const std::string &path)
     , m_cellWeight(0)
     , m_score(0)
 {
+}
+
+const std::string &Repairman::getPath() const
+{
+    return m_pager.getPath();
+}
+
+bool Repairman::isEmptyDatabase()
+{
+    bool succeed;
+    size_t fileSize;
+    std::tie(succeed, fileSize) = FileManager::shared()->getFileSize(getPath());
+    if (fileSize == 0) {
+        if (!succeed) {
+            setCriticalErrorWIthSharedThreadedError();
+        }
+        return true;
+    }
+    return false;
 }
 
 #pragma mark - Assemble

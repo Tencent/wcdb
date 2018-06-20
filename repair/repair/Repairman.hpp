@@ -36,6 +36,11 @@ class Repairman : public Crawlable, public CriticalErrorOnly, public Progress {
 public:
     Repairman(const std::string &path);
 
+    const std::string &getPath() const;
+
+protected:
+    bool isEmptyDatabase();
+
 #pragma mark - Crawlable
 protected:
     void onCrawlerError() override;

@@ -35,6 +35,11 @@ FullCrawler::FullCrawler(const std::string &source) : Repairman(source)
 #pragma mark - Repair
 void FullCrawler::work()
 {
+    if (isEmptyDatabase()) {
+        finishProgress();
+        return;
+    }
+
     if (!m_pager.initialize()) {
         setCriticalError(m_pager.getError());
         return;
