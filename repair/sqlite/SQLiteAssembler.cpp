@@ -48,17 +48,17 @@ void SQLiteAssembler::setNotificationWhenTableAssembled(
 
 bool SQLiteAssembler::onTableAssembled(const std::string &tableName)
 {
-    int rc = SQLITE_OK;
-    if (m_onTableAssembled) {
-        rc = m_onTableAssembled(tableName, m_handle);
-    }
-    if (rc == SQLITE_OK) {
-        m_table = tableName;
-        finalize(&m_cellSTMT);
-        return true;
-    }
-    setError(rc);
-    return false;
+    //    int rc = SQLITE_OK;
+    //    if (m_onTableAssembled) {
+    //        rc = m_onTableAssembled(tableName, m_handle);
+    //    }
+    //    if (rc == SQLITE_OK) {
+    m_table = tableName;
+    finalize(&m_cellSTMT);
+    return true;
+    //    }
+    //    setError(rc);
+    //    return false;
 }
 
 #pragma mark - Assemble

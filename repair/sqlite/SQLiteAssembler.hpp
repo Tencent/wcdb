@@ -34,14 +34,15 @@ class SQLiteAssembler : public Assembler, public ErrorProne {
 public:
     SQLiteAssembler();
 
-    typedef std::function<int(const std::string &, void *)>
-        TableAssembledCallback;
-    void setNotificationWhenTableAssembled(
-        const TableAssembledCallback &onTableAssembled);
+    //TODO: add interface for table assembled notification OR backup all table associated sqls
+    //    typedef std::function<int(const std::string &, void *)>
+    //        TableAssembledCallback;
+    //    void setNotificationWhenTableAssembled(
+    //        const TableAssembledCallback &onTableAssembled);
 
 protected:
     bool onTableAssembled(const std::string &tableName);
-    TableAssembledCallback m_onTableAssembled;
+//    TableAssembledCallback m_onTableAssembled;
 
 #pragma mark - Assembler
 public:
