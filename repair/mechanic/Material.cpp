@@ -157,6 +157,7 @@ Material::deserializeData(Deserialization &deserialization)
             markAsCorrupt();
             break;
         }
+        succeed = true;
     } while (false);
     return {succeed, succeed ? data : Data::emptyData()};
 }

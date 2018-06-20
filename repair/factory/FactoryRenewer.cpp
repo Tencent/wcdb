@@ -54,55 +54,35 @@ bool FactoryRenewer::work()
         return false;
     }
     if (exists) {
-        fileManager->removeItem(directory);
         Error error;
         error.level = Error::Level::Warning;
         error.setCode(Error::Code::Misuse, "Repair");
         error.message = "Database already exists when renewing";
         error.infos.set("Path", database);
         Notifier::shared()->notify(error);
+        fileManager->removeItem(directory);
         return true;
+    }
+    if (!fileManager->removeItems(
+            Factory::associatedPathsForDatabase(factory.database))) {
+        assignWithSharedThreadedError();
+        return false;
     }
 
     std::list<std::string> toMove =
         Factory::associatedPathsForDatabase(database);
-    if (!fileManager->moveItems(toMove, factory.directory)) {
+    toMove.reverse();
+    if (!fileManager->moveItems(toMove, Path::getBaseName(factory.database))) {
         assignWithSharedThreadedError();
         return false;
     }
+    fileManager->removeItem(directory);
     return true;
 }
 
 bool FactoryRenewer::prepare()
 {
-    std::map<std::string, int64_t> resolvedSequences;
-
-    // 1. acquire sequences of database
-    if (!resolveSequencesForDatabase(resolvedSequences, factory.database)) {
-        return false;
-    }
-
-    // 2. get deposited directories for acquisition
-    bool succeed;
-    std::list<std::string> workshopDirectories;
-    std::tie(succeed, workshopDirectories) = factory.getWorkshopDirectories();
-    if (!succeed) {
-        assignWithSharedThreadedError();
-        return succeed;
-    }
-
-    // 3. acquire sequences of materials
-    const std::string databaseName = Path::getFileName(factory.database);
-    for (const auto &workshopDirectory : workshopDirectories) {
-        std::string databaseForAcquisition =
-            Path::addComponent(workshopDirectory, databaseName);
-        if (!resolveSequencesForDatabase(resolvedSequences,
-                                         databaseForAcquisition)) {
-            return false;
-        }
-    }
-
-    // 4. create temp directory for acquisition
+    // 1. create temp directory for acquisition
     std::string tempDirectory = Path::addComponent(directory, "temp");
     std::string tempDatabase =
         Path::addComponent(tempDirectory, factory.getDatabaseName());
@@ -116,8 +96,46 @@ bool FactoryRenewer::prepare()
         return false;
     }
 
-    // 5. assemble sequences
-    if (!assembleSequences(resolvedSequences)) {
+    // 2. get deposited directories for acquisition
+    bool succeed;
+    std::list<std::string> workshopDirectories;
+    std::tie(succeed, workshopDirectories) = factory.getWorkshopDirectories();
+    if (!succeed) {
+        assignWithSharedThreadedError();
+        return false;
+    }
+
+    // 3. resolve infos
+    std::map<std::string, Info> infos;
+    if (!resolveInfosForDatabase(infos, factory.database)) {
+        return false;
+    }
+    const std::string databaseName = Path::getFileName(factory.database);
+    for (const auto &workshopDirectory : workshopDirectories) {
+        std::string databaseForAcquisition =
+            Path::addComponent(workshopDirectory, databaseName);
+        if (!resolveInfosForDatabase(infos, databaseForAcquisition)) {
+            return false;
+        }
+    }
+
+    // 4. assemble infos
+    if (!m_assembler->markAsAssembling()) {
+        setError(m_assembler->getError());
+        return false;
+    }
+    for (const auto &element : infos) {
+        if (!m_assembler->assembleTable(element.first, element.second.sql,
+                                        element.second.sequence)) {
+            succeed = false;
+            setError(m_assembler->getError());
+            break;
+        }
+    }
+    if (!m_assembler->markAsAssembled()) {
+        if (!succeed) {
+            setError(m_assembler->getError());
+        }
         return false;
     }
 
@@ -129,8 +147,10 @@ bool FactoryRenewer::prepare()
     }
 
     // 7. move the assembled database to renew directory and wait for renew.
-    if (!fileManager->removeItem(directory) ||
-        !fileManager->createDirectoryWithIntermediateDirectories(directory)) {
+    std::list<std::string> toRemove =
+        Factory::associatedPathsForDatabase(database);
+    toRemove.reverse();
+    if (!fileManager->removeItems(toRemove)) {
         assignWithSharedThreadedError();
         return false;
     }
@@ -141,12 +161,12 @@ bool FactoryRenewer::prepare()
         assignWithSharedThreadedError();
         return false;
     }
-
+    fileManager->removeItem(tempDirectory);
     return true;
 }
 
-bool FactoryRenewer::resolveSequencesForDatabase(
-    std::map<std::string, int64_t> &resolvedSequences,
+bool FactoryRenewer::resolveInfosForDatabase(
+    std::map<std::string, Info> &infos,
     const std::string &databaseForAcquisition)
 {
     bool succeed;
@@ -158,6 +178,12 @@ bool FactoryRenewer::resolveSequencesForDatabase(
         return false;
     }
     if (materialPath.empty()) {
+        Error error;
+        error.level = Error::Level::Warning;
+        error.setCode(Error::Code::NotFound, "Repair");
+        error.message = "Material is not found when renewing.";
+        error.infos.set("Path", databaseForAcquisition);
+        Notifier::shared()->notify(error);
         return true;
     }
     Material material;
@@ -165,41 +191,30 @@ bool FactoryRenewer::resolveSequencesForDatabase(
         assignWithSharedThreadedError();
         return false;
     }
-    for (const auto &element : material.contents) {
-        auto iter = resolvedSequences.find(element.first);
-        if (iter != resolvedSequences.end()) {
-            iter->second = std::max(iter->second, element.second.sequence);
+    for (auto &element : material.contents) {
+        auto iter = infos.find(element.first);
+        if (iter == infos.end()) {
+            iter = infos.insert({std::move(element.first), Info()}).first;
+            iter->second.sql = std::move(element.second.sql);
         } else {
-            resolvedSequences[element.first] = element.second.sequence;
+            if (iter->second.sql != element.second.sql) {
+                Error error;
+                error.level = Error::Level::Warning;
+                error.setCode(Error::Code::Mismatch, "Repair");
+                error.message = "Different sqls is found in materials.";
+                error.infos.set("Path", materialPath);
+                Notifier::shared()->notify(error);
+            }
+        }
+        if (element.second.sequence > iter->second.sequence) {
+            iter->second.sequence = element.second.sequence;
         }
     }
     return true;
 }
 
-bool FactoryRenewer::assembleSequences(
-    const std::map<std::string, int64_t> &sequences)
+FactoryRenewer::Info::Info() : sequence(0)
 {
-    WCTInnerAssert(m_assembler != nullptr);
-    WCTInnerAssert(!m_assembler->getPath().empty());
-
-    bool succeed = false;
-    bool assembling = false;
-    do {
-        if (!m_assembler->markAsAssembling()) {
-            break;
-        }
-        assembling = true;
-        succeed = m_assembler->assembleSequences(sequences);
-    } while (false);
-    if (!succeed) {
-        setError(m_assembler->getError());
-    }
-    if (assembling) {
-        if (!m_assembler->markAsAssembled() && succeed) {
-            setError(m_assembler->getError());
-        }
-    }
-    return succeed;
 }
 
 void FactoryRenewer::setAssembler(const std::shared_ptr<Assembler> &assembler)

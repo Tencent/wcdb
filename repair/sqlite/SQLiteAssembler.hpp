@@ -36,11 +36,11 @@ public:
 
     typedef std::function<int(const std::string &, void *)>
         TableAssembledCallback;
-    void
-    setCallbackOnTableAssembled(const TableAssembledCallback &onTableAssembled);
+    void setNotificationWhenTableAssembled(
+        const TableAssembledCallback &onTableAssembled);
 
 protected:
-    int onTableAssembled(const std::string &tableName);
+    bool onTableAssembled(const std::string &tableName);
     TableAssembledCallback m_onTableAssembled;
 
 #pragma mark - Assembler
@@ -54,18 +54,29 @@ public:
                        const std::string &sql,
                        int64_t sequence) override;
     bool assembleCell(const Cell &cell) override;
-    bool
-    assembleSequences(const std::map<std::string, int64_t> &sequences) override;
 
     const Error &getError() const override;
 
-#pragma mark - Helper
 protected:
+    std::string m_assembling;
+
+#pragma mark - Cell
+protected:
+    bool lazyPrepareCell();
     std::pair<bool, std::string> getAssembleSQL(const std::string &tableName);
     std::pair<bool, std::list<std::string>>
     getColumnNames(const std::string &tableName);
-    bool assemblerSequence(const std::string &tableName, int64_t sequence);
 
+    std::string m_table;
+    void *m_cellSTMT;
+
+#pragma mark - Sequence
+protected:
+    bool assembleSequence(const std::string &tableName, int64_t sequence);
+
+    void *m_sequenceSTMT;
+
+#pragma mark - Transaction
 protected:
     bool lazyBeginTransaction();
     bool lazyCommitOrRollbackTransaction(bool commit = true);
@@ -90,14 +101,11 @@ protected:
 
 #pragma mark - SQLite STMT
 protected:
-    bool prepare(const char *sql);
-    bool step();
-    bool step(bool &done);
+    void *prepare(const char *sql);
+    bool step(void *stmt);
+    bool step(void *stmt, bool &done);
 
-    bool isPrepared() const;
-    void finalize();
-
-    void *m_stmt;
+    void finalize(void **stmt);
 };
 
 } //namespace Repair

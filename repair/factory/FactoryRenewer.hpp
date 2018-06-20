@@ -39,10 +39,15 @@ public:
     bool work();
 
 protected:
-    bool resolveSequencesForDatabase(
-        std::map<std::string, int64_t> &resolvedSequences,
-        const std::string &databaseForAcquisition);
-    bool assembleSequences(const std::map<std::string, int64_t> &sequences);
+    struct Info {
+        Info();
+        std::string sql;
+        int64_t sequence;
+    };
+    typedef struct Info Info;
+
+    bool resolveInfosForDatabase(std::map<std::string, Info> &infos,
+                                 const std::string &databaseForAcquisition);
 
 #pragma mark - Assembler
 public:
