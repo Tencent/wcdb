@@ -35,10 +35,8 @@ Repairman::Repairman(const std::string &path)
     , m_assembler(nullptr)
     , m_milestone(5000)
     , m_mile(0)
-    , m_scorePool(0)
     , m_pageWeight(0)
     , m_cellWeight(0)
-    , m_score(0)
 {
 }
 
@@ -92,11 +90,10 @@ bool Repairman::markAsAssembled()
 void Repairman::markAsMilestone()
 {
     if (m_assembler->markAsMilestone()) {
-        m_score += m_scorePool;
+        markFractionalScoreCounted();
     } else {
         tryUpgrateAssemblerError();
     }
-    m_scorePool = 0;
     m_mile = 0;
 }
 
@@ -157,14 +154,9 @@ void Repairman::onErrorCritical()
 }
 
 #pragma mark - Evaluation
-double Repairman::getScore() const
-{
-    return m_score;
-}
-
 void Repairman::markCellAsCounted()
 {
-    m_scorePool += m_cellWeight;
+    increaseScore(m_cellWeight);
 }
 
 void Repairman::markCellCount(int cellCount)

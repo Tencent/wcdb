@@ -26,6 +26,7 @@
 #include <WCDB/FactoryBackup.hpp>
 #include <WCDB/FactoryRelated.hpp>
 #include <WCDB/Progress.hpp>
+#include <WCDB/Scoreable.hpp>
 
 namespace WCDB {
 
@@ -33,7 +34,8 @@ namespace Repair {
 
 class FactoryRetriever : public FactoryRelated,
                          public CriticalErrorOnly,
-                         public Progress {
+                         public Progress,
+                         public Scoreable {
 #pragma mark - Restorer
 public:
     FactoryRetriever(Factory &factory);
@@ -62,7 +64,6 @@ protected:
 
     std::map<std::string, double> m_weights;
     void updateScore(const std::string &database, double increment);
-    double m_score;
 };
 
 } //namespace Repair

@@ -194,6 +194,10 @@
 		2374C9952090A393000F046F /* WCTDatabase+Trace.h in Headers */ = {isa = PBXBuildFile; fileRef = 2374C9922090A393000F046F /* WCTDatabase+Trace.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2374C9962090A393000F046F /* WCTDatabase+Trace.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2374C9932090A393000F046F /* WCTDatabase+Trace.mm */; };
 		2374C9972090A393000F046F /* WCTDatabase+Trace.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2374C9932090A393000F046F /* WCTDatabase+Trace.mm */; };
+		2376CB1B20DA5D3B00A68DB5 /* Scoreable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2376CB1920DA5D3B00A68DB5 /* Scoreable.cpp */; };
+		2376CB1C20DA5D3B00A68DB5 /* Scoreable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2376CB1920DA5D3B00A68DB5 /* Scoreable.cpp */; };
+		2376CB1D20DA5D3B00A68DB5 /* Scoreable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2376CB1A20DA5D3B00A68DB5 /* Scoreable.hpp */; };
+		2376CB1E20DA5D3B00A68DB5 /* Scoreable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2376CB1A20DA5D3B00A68DB5 /* Scoreable.hpp */; };
 		23775B6020AD666900E21AB0 /* Assertion.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B2F20AD666900E21AB0 /* Assertion.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23775B6120AD666900E21AB0 /* Assertion.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B2F20AD666900E21AB0 /* Assertion.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23775B6220AD666900E21AB0 /* Error.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B3020AD666900E21AB0 /* Error.cpp */; };
@@ -1245,6 +1249,8 @@
 		2370980920590CA700E768B4 /* HandleStatement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HandleStatement.hpp; sourceTree = "<group>"; };
 		2374C9922090A393000F046F /* WCTDatabase+Trace.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Trace.h"; sourceTree = "<group>"; };
 		2374C9932090A393000F046F /* WCTDatabase+Trace.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Trace.mm"; sourceTree = "<group>"; };
+		2376CB1920DA5D3B00A68DB5 /* Scoreable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scoreable.cpp; sourceTree = "<group>"; };
+		2376CB1A20DA5D3B00A68DB5 /* Scoreable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Scoreable.hpp; sourceTree = "<group>"; };
 		23775B2F20AD666900E21AB0 /* Assertion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Assertion.hpp; sourceTree = "<group>"; };
 		23775B3020AD666900E21AB0 /* Error.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Error.cpp; sourceTree = "<group>"; };
 		23775B3120AD666900E21AB0 /* Error.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Error.hpp; sourceTree = "<group>"; };
@@ -2115,6 +2121,8 @@
 				23EE0EB120B838E100C95998 /* Repairman.hpp */,
 				23A6D4BD20BFD7F9004F2DAA /* Progress.cpp */,
 				23A6D4BE20BFD7F9004F2DAA /* Progress.hpp */,
+				2376CB1920DA5D3B00A68DB5 /* Scoreable.cpp */,
+				2376CB1A20DA5D3B00A68DB5 /* Scoreable.hpp */,
 			);
 			path = repair;
 			sourceTree = "<group>";
@@ -2596,6 +2604,7 @@
 				23775BCF20AD72BC00E21AB0 /* Data.hpp in Headers */,
 				23775B6020AD666900E21AB0 /* Assertion.hpp in Headers */,
 				2397756E202AECD3000A681C /* LangDetachSTMT.hpp in Headers */,
+				2376CB1D20DA5D3B00A68DB5 /* Scoreable.hpp in Headers */,
 				23977570202AECD3000A681C /* LangDropIndexSTMT.hpp in Headers */,
 				23977572202AECD3000A681C /* LangDropInternalSTMT.hpp in Headers */,
 				23977574202AECD3000A681C /* LangDropTableSTMT.hpp in Headers */,
@@ -2883,6 +2892,7 @@
 				23775BD020AD72BC00E21AB0 /* Data.hpp in Headers */,
 				23775B6120AD666900E21AB0 /* Assertion.hpp in Headers */,
 				23F5BD6C20887FD3000CCD37 /* LangDetachSTMT.hpp in Headers */,
+				2376CB1E20DA5D3B00A68DB5 /* Scoreable.hpp in Headers */,
 				23F5BD6D20887FD3000CCD37 /* LangDropIndexSTMT.hpp in Headers */,
 				23F5BD6E20887FD3000CCD37 /* LangDropInternalSTMT.hpp in Headers */,
 				23F5BD6F20887FD3000CCD37 /* LangDropTableSTMT.hpp in Headers */,
@@ -3195,6 +3205,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23977565202AECD3000A681C /* LangCreateViewSTMT.cpp in Sources */,
+				2376CB1B20DA5D3B00A68DB5 /* Scoreable.cpp in Sources */,
 				2397751F202AECD3000A681C /* StatementCreateView.cpp in Sources */,
 				23977557202AECD3000A681C /* LangColumnDef.cpp in Sources */,
 				23775B7620AD666900E21AB0 /* Backup.cpp in Sources */,
@@ -3436,6 +3447,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F5BC4A20887FD3000CCD37 /* LangCreateViewSTMT.cpp in Sources */,
+				2376CB1C20DA5D3B00A68DB5 /* Scoreable.cpp in Sources */,
 				23F5BC4B20887FD3000CCD37 /* StatementCreateView.cpp in Sources */,
 				23F5BC4C20887FD3000CCD37 /* LangColumnDef.cpp in Sources */,
 				23775B7720AD666900E21AB0 /* Backup.cpp in Sources */,

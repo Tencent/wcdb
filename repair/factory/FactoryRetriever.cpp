@@ -39,7 +39,6 @@ FactoryRetriever::FactoryRetriever(Factory &factory_)
     , databaseFileName(factory.getDatabaseName())
     , database(Path::addComponent(factory.getRestoreDirectory(),
                                   factory.getDatabaseName()))
-    , m_score(0)
 {
 }
 
@@ -116,7 +115,7 @@ double FactoryRetriever::work()
 
     finishProgress();
 
-    return m_score;
+    return getScore();
 }
 
 bool FactoryRetriever::restore(const std::string &database)
@@ -236,7 +235,7 @@ void FactoryRetriever::updateProgress(const std::string &database,
 void FactoryRetriever::updateScore(const std::string &database,
                                    double increment)
 {
-    m_score += increment * m_weights[database];
+    increaseScore(increment * m_weights[database]);
 }
 
 } //namespace Repair

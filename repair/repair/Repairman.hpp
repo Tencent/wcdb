@@ -26,12 +26,16 @@
 #include <WCDB/CriticalErrorOnly.hpp>
 #include <WCDB/ErrorProne.hpp>
 #include <WCDB/Progress.hpp>
+#include <WCDB/Scoreable.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-class Repairman : public Crawlable, public CriticalErrorOnly, public Progress {
+class Repairman : public Crawlable,
+                  public CriticalErrorOnly,
+                  public Progress,
+                  public FractionalScoreable {
 #pragma mark - Initialize
 public:
     Repairman(const std::string &path);
@@ -76,9 +80,6 @@ private:
     std::shared_ptr<Assembler> m_assembler;
 
 #pragma mark - Evaluation
-public:
-    double getScore() const;
-
 protected:
     void setPageWeight(double pageWeight);
     double getPageWeight() const;
@@ -86,10 +87,8 @@ protected:
     void markCellAsCounted();
 
 private:
-    double m_scorePool;
     double m_pageWeight;
     double m_cellWeight;
-    double m_score;
 };
 
 } //namespace Repair
