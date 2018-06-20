@@ -135,18 +135,4 @@ void HandlePools::purge()
     }
 }
 
-void HandlePools::drain()
-{
-    std::list<std::shared_ptr<HandlePool>> handlePools;
-    {
-        std::lock_guard<std::mutex> lockGuard(m_mutex);
-        for (const auto &iter : m_pools) {
-            handlePools.push_back(iter.second.first);
-        }
-    }
-    for (const auto &handlePool : handlePools) {
-        handlePool->drain(nullptr);
-    }
-}
-
 } //namespace WCDB

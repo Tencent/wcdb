@@ -152,12 +152,15 @@ bool HandlePool::isBlockaded() const
     return m_sharedLock.level() == SharedLock::Level::Write;
 }
 
-void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
+void HandlePool::drain(const HandlePool::DrainedCallback &onDrained,
+                       bool forceClose)
 {
     LockGuard lockGuard(m_sharedLock);
     ConcurrentList<ConfiguredHandle>::ElementType handle;
     while ((handle = m_handles.popBack())) {
-        handle->getHandle()->close();
+        if (forceClose) {
+            handle->getHandle()->close();
+        }
         --m_aliveHandleCount;
     }
     if (onDrained) {

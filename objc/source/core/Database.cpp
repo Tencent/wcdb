@@ -108,7 +108,7 @@ bool Database::canOpen()
 
 void Database::close(const ClosedCallback &onClosed)
 {
-    m_pool->drain(onClosed);
+    m_pool->drain(onClosed, true);
 }
 
 void Database::blockade()
@@ -134,11 +134,6 @@ void Database::unblockade()
 bool Database::isOpened() const
 {
     return !m_pool->isDrained();
-}
-
-void Database::closeAllDatabases()
-{
-    HandlePools::defaultPools()->drain();
 }
 
 #pragma mark - Memory
@@ -196,14 +191,16 @@ void Database::setPerformanceTrace(
 bool Database::removeFiles()
 {
     bool result = false;
-    close([&result, this]() {
-        std::list<std::string> paths = getPaths();
-        paths.reverse();
-        result = FileManager::shared()->removeItems(paths);
-        if (!result) {
-            assignWithSharedThreadedError();
-        }
-    });
+    m_pool->drain(
+        [&result, this]() {
+            std::list<std::string> paths = getPaths();
+            paths.reverse();
+            result = FileManager::shared()->removeItems(paths);
+            if (!result) {
+                assignWithSharedThreadedError();
+            }
+        },
+        false);
     return result;
 }
 
@@ -228,14 +225,16 @@ std::pair<bool, size_t> Database::getFilesSize()
 bool Database::moveFiles(const std::string &directory)
 {
     bool result = false;
-    close([&result, &directory, this]() {
-        std::list<std::string> paths = getPaths();
-        paths.reverse();
-        result = FileManager::shared()->moveItems(paths, directory);
-        if (!result) {
-            assignWithSharedThreadedError();
-        }
-    });
+    m_pool->drain(
+        [&result, &directory, this]() {
+            std::list<std::string> paths = getPaths();
+            paths.reverse();
+            result = FileManager::shared()->moveItems(paths, directory);
+            if (!result) {
+                assignWithSharedThreadedError();
+            }
+        },
+        false);
     return result;
 }
 
@@ -243,16 +242,18 @@ bool Database::moveFilesToDirectoryWithExtraFiles(
     const std::string &directory, const std::list<std::string> &extraFiles)
 {
     bool result = false;
-    close([&result, &directory, &extraFiles, this]() {
-        std::list<std::string> paths = extraFiles;
-        std::list<std::string> dbPaths = getPaths();
-        dbPaths.reverse();
-        paths.insert(paths.end(), dbPaths.begin(), dbPaths.end());
-        result = FileManager::shared()->moveItems(paths, directory);
-        if (!result) {
-            assignWithSharedThreadedError();
-        }
-    });
+    m_pool->drain(
+        [&result, &directory, &extraFiles, this]() {
+            std::list<std::string> paths = extraFiles;
+            std::list<std::string> dbPaths = getPaths();
+            dbPaths.reverse();
+            paths.insert(paths.end(), dbPaths.begin(), dbPaths.end());
+            result = FileManager::shared()->moveItems(paths, directory);
+            if (!result) {
+                assignWithSharedThreadedError();
+            }
+        },
+        false);
     return result;
 }
 
@@ -348,43 +349,48 @@ bool Database::backup(int maxWalFrame)
 bool Database::deposit()
 {
     bool result = false;
-    close([&result, this]() {
-        std::shared_ptr<Repair::Assembler> assembler(
-            new Repair::SQLiteAssembler);
-        Repair::FactoryRenewer renewer = m_pool->attachment.factory.renewer();
-        renewer.setAssembler(assembler);
-        if (!renewer.prepare()) {
-            setThreadedError(renewer.getError());
-            return;
-        }
-        Repair::FactoryDepositor depositor =
-            m_pool->attachment.factory.depositor();
-        if (!depositor.work()) {
-            setThreadedError(depositor.getError());
-            return;
-        }
-        if (!renewer.work()) {
-            setThreadedError(renewer.getError());
-            return;
-        }
-        result = true;
-    });
+    m_pool->drain(
+        [&result, this]() {
+            std::shared_ptr<Repair::Assembler> assembler(
+                new Repair::SQLiteAssembler);
+            Repair::FactoryRenewer renewer =
+                m_pool->attachment.factory.renewer();
+            renewer.setAssembler(assembler);
+            if (!renewer.prepare()) {
+                setThreadedError(renewer.getError());
+                return;
+            }
+            Repair::FactoryDepositor depositor =
+                m_pool->attachment.factory.depositor();
+            if (!depositor.work()) {
+                setThreadedError(depositor.getError());
+                return;
+            }
+            if (!renewer.work()) {
+                setThreadedError(renewer.getError());
+                return;
+            }
+            result = true;
+        },
+        false);
     return result;
 }
 
 double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
 {
     double score = 0;
-    close([&score, &onProgressUpdate, this]() {
-        Repair::FactoryRetriever retriever =
-            m_pool->attachment.factory.retriever();
-        std::shared_ptr<Repair::Assembler> assembler(
-            new Repair::SQLiteAssembler);
-        retriever.setAssembler(assembler);
-        retriever.setProgressCallback(onProgressUpdate);
-        score = retriever.work();
-        setThreadedError(retriever.getCriticalError());
-    });
+    m_pool->drain(
+        [&score, &onProgressUpdate, this]() {
+            Repair::FactoryRetriever retriever =
+                m_pool->attachment.factory.retriever();
+            std::shared_ptr<Repair::Assembler> assembler(
+                new Repair::SQLiteAssembler);
+            retriever.setAssembler(assembler);
+            retriever.setProgressCallback(onProgressUpdate);
+            score = retriever.work();
+            setThreadedError(retriever.getCriticalError());
+        },
+        false);
     return score;
 }
 

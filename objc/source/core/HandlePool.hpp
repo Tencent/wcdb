@@ -91,7 +91,7 @@ public:
     void unblockade();
 
     typedef std::function<void(void)> DrainedCallback;
-    void drain(const HandlePool::DrainedCallback &onDrained);
+    void drain(const HandlePool::DrainedCallback &onDrained, bool forceClose);
     bool isDrained();
 
     void purgeFreeHandles();

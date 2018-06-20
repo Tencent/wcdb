@@ -63,8 +63,6 @@ public:
     void unblockade();
     bool isBlockaded();
 
-    static void closeAllDatabases();
-
 #pragma mark - Memory
 public:
     void purge();

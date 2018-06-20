@@ -44,8 +44,6 @@ public:
 
     void purge();
 
-    void drain();
-
 protected:
     HandlePools();
 
