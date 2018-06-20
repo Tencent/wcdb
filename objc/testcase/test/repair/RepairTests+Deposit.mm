@@ -64,7 +64,7 @@
     NSString *wal = [[[factory stringByAppendingPathComponent:subdir[0]] stringByAppendingPathComponent:_database.path.lastPathComponent] stringByAppendingString:@"-wal"];
     XCTAssertTrue([fileManager fileExistsAtPath:wal]);
 
-    //Check if already backuped
+    //Check if already backedup
     NSString *material = [_database.path stringByAppendingString:@"-first.material"];
     XCTAssertTrue([fileManager fileExistsAtPath:material]);
 
