@@ -25,12 +25,8 @@
 @interface RepairTestCase : TestCase {
 @protected
     WCTDatabase *_database;
-
-    NSArray<TestCaseObject *> *_preInsertedObjects1;
-    NSString *_tableName1;
-
-    NSArray<TestCaseObject *> *_preInsertedObjects2;
-    NSString *_tableName2;
 }
+
+- (NSArray<TestCaseObject *> *)insertObjectsOfCount:(int)count intoTable:(NSString *)tableName;
 
 @end

@@ -28,6 +28,10 @@
 
 - (void)test_dual_backup
 {
+    NSString *tableName = self.className;
+    int count = 1000;
+    XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
+
     NSString *firstBackup = [NSString stringWithFormat:@"%@-first.material", _database.path];
     NSString *lastBackup = [NSString stringWithFormat:@"%@-last.material", _database.path];
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -66,13 +70,28 @@
 
 - (void)test_empty_backup
 {
-    NSString *emptyDatabasePath = [NSString stringWithFormat:@"%@.empty", _database.path];
-    WCTDatabase *database = [[WCTDatabase alloc] initWithPath:emptyDatabasePath];
-    XCTAssertFalse([database backup]);
+    XCTAssertFalse([_database backup]);
+}
+
+- (void)test_wal
+{
+    NSString *tableName = self.className;
+    int count = 100;
+    XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
+
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *walPath = [NSString stringWithFormat:@"%@-wal", _database.path];
+    XCTAssertTrue([[fileManager attributesOfItemAtPath:walPath error:nil] fileSize] > 0);
+
+    XCTAssertTrue([_database backup]);
 }
 
 - (void)test_empty_wal
 {
+    NSString *tableName = self.className;
+    int count = 100;
+    XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
+
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *walPath = [NSString stringWithFormat:@"%@-wal", _database.path];
     XCTAssertTrue([[fileManager attributesOfItemAtPath:walPath error:nil] fileSize] > 0);
