@@ -124,14 +124,15 @@ void Pager::setMaxWalFrame(int maxWalFrame)
     m_wal.setMaxFrame(maxWalFrame);
 }
 
-const std::pair<uint32_t, uint32_t> Pager::getWalSalt() const
+const std::pair<uint32_t, uint32_t> &Pager::getWalSalt() const
 {
-    WCTInnerAssert(!m_disposeWal);
+    WCTInnerAssert(!isWalDisposed());
     return m_wal.getSalt();
 }
 
 int Pager::getWalFrameCount() const
 {
+    WCTInnerAssert(!isWalDisposed());
     return m_wal.getFrameCount();
 }
 

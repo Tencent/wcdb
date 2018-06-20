@@ -66,7 +66,7 @@ protected:
 public:
     int getWalFrameCount() const;
     void setMaxWalFrame(int maxWalFrame);
-    const std::pair<uint32_t, uint32_t> getWalSalt() const;
+    const std::pair<uint32_t, uint32_t> &getWalSalt() const;
 
 protected:
     Wal m_wal;
