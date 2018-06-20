@@ -48,7 +48,9 @@
     }
 
     //Deposit
+    XCTAssertTrue([_database isOpened]);
     XCTAssertTrue([_database deposit]);
+    XCTAssertFalse([_database isOpened]);
 
     //After
     {
