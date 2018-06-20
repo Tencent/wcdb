@@ -46,7 +46,7 @@ FactoryRetriever::FactoryRetriever(Factory &factory_)
 #pragma mark - Restorer
 double FactoryRetriever::work()
 {
-    WCTInnerAssert(m_assembler->getPath().empty());
+    WCTInnerAssert(m_assembler != nullptr);
 
     FileManager *fileManager = FileManager::shared();
     bool succeed;
