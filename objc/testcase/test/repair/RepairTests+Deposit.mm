@@ -38,11 +38,17 @@
 
     XCTAssertTrue([_database deposit]);
 
-    WCTError *error;
-    XCTAssertFalse([_database tableExists:_tableName1 withError:&error]);
-    XCTAssertNil(error);
-    XCTAssertFalse([_database tableExists:_tableName2 withError:&error]);
-    XCTAssertNil(error);
+    WCTValue *value;
+
+    XCTAssertTrue([_database tableExists:_tableName1]);
+    value = [_database getValueOnResult:TestCaseObject.allResults.count() fromTable:_tableName1];
+    XCTAssertNotNil(value);
+    XCTAssertEqual(value.numberValue.intValue, 0);
+
+    XCTAssertTrue([_database tableExists:_tableName2]);
+    value = [_database getValueOnResult:TestCaseObject.allResults.count() fromTable:_tableName2];
+    XCTAssertNotNil(value);
+    XCTAssertEqual(value.numberValue.intValue, 0);
 
     NSArray<WCTSequence *> *sequencesAfterDeposited = [_database getObjectsOfClass:WCTSequence.class fromTable:WCTSequence.tableName orderBy:WCTSequence.name];
     XCTAssertEqual(sequencesAfterDeposited.count, sequences.count);
