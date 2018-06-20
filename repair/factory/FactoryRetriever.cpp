@@ -173,7 +173,7 @@ bool FactoryRetriever::restore(const std::string &database)
     fullCrawler.work();
     updateScore(database, fullCrawler.getScore());
     tryUpgradeError(fullCrawler.getCriticalError());
-    return fullCrawler.getCriticalLevel() >= CriticalLevel::Fatal;
+    return fullCrawler.getCriticalLevel() < CriticalLevel::Fatal;
 }
 
 #pragma mark - Assembler
