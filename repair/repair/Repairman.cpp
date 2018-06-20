@@ -168,8 +168,7 @@ void Repairman::markCellAsCounted()
 
 void Repairman::markCellCount(int cellCount)
 {
-    double temp = cellCount * m_pageWeight;
-    m_cellWeight = temp > 0 ? (double) 1.0 / temp : 0;
+    m_cellWeight = cellCount > 0 ? (double) m_pageWeight / cellCount : 0;
 }
 
 void Repairman::setPageWeight(double pageWeight)
