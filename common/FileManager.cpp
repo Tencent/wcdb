@@ -171,6 +171,11 @@ bool FileManager::removeDirectory(const std::string &directory)
         }
     }
     closedir(dir);
+
+    if (remove(directory.c_str()) != 0) {
+        setThreadedError(directory);
+        return false;
+    }
     return true;
 }
 
