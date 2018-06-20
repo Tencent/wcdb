@@ -57,9 +57,6 @@ public:
 
     const Error &getError() const override;
 
-protected:
-    std::string m_assembling;
-
 #pragma mark - Cell
 protected:
     bool lazyPrepareCell();
