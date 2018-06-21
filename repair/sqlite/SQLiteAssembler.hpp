@@ -75,7 +75,12 @@ protected:
                           int64_t sequence) override;
     bool markAsSequenceAssembled();
 
-    void *m_sequenceSTMT;
+    std::pair<bool, bool> updateSequence(const std::string &tableName,
+                                         int64_t sequence);
+    bool insertSequence(const std::string &tableName, int64_t sequence);
+
+    void *m_insertSequenceSTMT;
+    void *m_updateSequenceSTMT;
 
 #pragma mark - Transaction
 protected:
