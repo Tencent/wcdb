@@ -114,10 +114,9 @@ void Repairman::towardMilestone(int mile)
 }
 
 bool Repairman::assembleTable(const std::string &tableName,
-                              const std::string &sql,
-                              int64_t sequence)
+                              const std::string &sql)
 {
-    if (m_assembler->assembleTable(tableName, sql, sequence)) {
+    if (m_assembler->assembleTable(tableName, sql)) {
         towardMilestone(100);
         return true;
     }
@@ -133,6 +132,16 @@ void Repairman::assembleCell(const Cell &cell)
         markCellAsCounted(cell);
         towardMilestone(1);
     }
+}
+
+bool Repairman::assembleSequence(const std::string &tableName, int64_t sequence)
+{
+    if (!m_assembler->assembleSequence(tableName, sequence)) {
+        towardMilestone(1);
+        return true;
+    }
+    tryUpgrateAssemblerError();
+    return false;
 }
 
 #pragma mark - Crawlable

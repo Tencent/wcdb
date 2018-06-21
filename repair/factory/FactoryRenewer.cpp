@@ -125,8 +125,9 @@ bool FactoryRenewer::prepare()
         return false;
     }
     for (const auto &element : infos) {
-        if (!m_assembler->assembleTable(element.first, element.second.sql,
-                                        element.second.sequence)) {
+        if (!m_assembler->assembleTable(element.first, element.second.sql) ||
+            m_assembler->assembleSequence(element.first,
+                                          element.second.sequence)) {
             succeed = false;
             setError(m_assembler->getError());
             break;

@@ -23,6 +23,8 @@
 #include <WCDB/FullCrawler.hpp>
 #include <WCDB/Master.hpp>
 #include <WCDB/Page.hpp>
+#include <WCDB/Sequence.hpp>
+#include <WCDB/SequenceCrawler.hpp>
 
 namespace WCDB {
 
@@ -96,7 +98,9 @@ void FullCrawler::onMasterCellCrawled(const Cell &cell, const Master *master)
         //skip index/view/trigger
         return;
     }
-    if (Master::isReservedTableName(master->tableName)) {
+    if (master->tableName == Sequence::tableName()) {
+        SequenceCrawler(m_pager).work(master->rootpage, this);
+    } else if (Master::isReservedTableName(master->tableName)) {
         Error error;
         error.level = Error::Level::Notice;
         error.setCode(Error::Code::Notice, "Repair");
@@ -104,13 +108,31 @@ void FullCrawler::onMasterCellCrawled(const Cell &cell, const Master *master)
         error.infos.set("Table", master->tableName);
         Notifier::shared()->notify(error);
         return;
-    }
-    if (assembleTable(master->tableName, master->sql, 0)) {
+    } else if (assembleTable(master->tableName, master->sql)) {
         crawl(master->rootpage);
     }
 }
 
 void FullCrawler::onMasterCrawlerError()
+{
+    tryUpgradeCrawlerError();
+}
+
+#pragma mark - SequenceCrawlerDelegate
+void FullCrawler::onSequencePageCrawled(const Page &page)
+{
+    increaseProgress(getPageWeight());
+}
+
+void FullCrawler::onSequenceCellCrawled(const Cell &cell,
+                                        const Sequence &sequence)
+{
+    if (assembleSequence(sequence.name, sequence.seq)) {
+        markCellAsCounted(cell);
+    }
+}
+
+void FullCrawler::onSequenceCrawlerError()
 {
     tryUpgradeCrawlerError();
 }

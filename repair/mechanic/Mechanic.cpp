@@ -80,6 +80,7 @@ void Mechanic::work()
     for (const auto &element : m_material.contents) {
         pageCount += element.second.pagenos.size();
     }
+    //TODO resolve with disposed wal frames
     setPageWeight(pageCount > 0 ? (double) 1.0 / pageCount : 0);
 
     if (!markAsAssembling()) {
@@ -89,8 +90,8 @@ void Mechanic::work()
         if (getCriticalLevel() >= CriticalLevel::Fatal) {
             break;
         }
-        if (!assembleTable(element.first, element.second.sql,
-                           element.second.sequence)) {
+        if (!assembleTable(element.first, element.second.sql) ||
+            !assembleSequence(element.first, element.second.sequence)) {
             continue;
         }
         for (const auto &pageno : element.second.pagenos) {

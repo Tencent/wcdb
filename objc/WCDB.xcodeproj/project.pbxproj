@@ -485,6 +485,10 @@
 		23AD52D720DB4A3C00664B62 /* Master.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52D420DB4A3C00664B62 /* Master.cpp */; };
 		23AD52D820DB4A3C00664B62 /* Master.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AD52D520DB4A3C00664B62 /* Master.hpp */; };
 		23AD52D920DB4A3C00664B62 /* Master.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AD52D520DB4A3C00664B62 /* Master.hpp */; };
+		23AD52DD20DB56D200664B62 /* Sequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52DB20DB56D200664B62 /* Sequence.cpp */; };
+		23AD52DE20DB56D200664B62 /* Sequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52DB20DB56D200664B62 /* Sequence.cpp */; };
+		23AD52DF20DB56D200664B62 /* Sequence.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AD52DC20DB56D200664B62 /* Sequence.hpp */; };
+		23AD52E020DB56D200664B62 /* Sequence.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AD52DC20DB56D200664B62 /* Sequence.hpp */; };
 		23AF4E1E20CD04E20050033C /* Initializeable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AF4E1C20CD04E20050033C /* Initializeable.cpp */; };
 		23AF4E1F20CD04E20050033C /* Initializeable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AF4E1C20CD04E20050033C /* Initializeable.cpp */; };
 		23AF4E2020CD04E20050033C /* Initializeable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AF4E1D20CD04E20050033C /* Initializeable.hpp */; };
@@ -1507,6 +1511,8 @@
 		23A8CD5420C8E40500A45C54 /* Corruption.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Corruption.hpp; sourceTree = "<group>"; };
 		23AD52D420DB4A3C00664B62 /* Master.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Master.cpp; sourceTree = "<group>"; };
 		23AD52D520DB4A3C00664B62 /* Master.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Master.hpp; sourceTree = "<group>"; };
+		23AD52DB20DB56D200664B62 /* Sequence.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sequence.cpp; sourceTree = "<group>"; };
+		23AD52DC20DB56D200664B62 /* Sequence.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Sequence.hpp; sourceTree = "<group>"; };
 		23AF4E1C20CD04E20050033C /* Initializeable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Initializeable.cpp; sourceTree = "<group>"; };
 		23AF4E1D20CD04E20050033C /* Initializeable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Initializeable.hpp; sourceTree = "<group>"; };
 		23AFC8992093540F00074AF6 /* LangCommon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LangCommon.cpp; sourceTree = "<group>"; };
@@ -2131,6 +2137,8 @@
 				2376CB1A20DA5D3B00A68DB5 /* Scoreable.hpp */,
 				23AD52D420DB4A3C00664B62 /* Master.cpp */,
 				23AD52D520DB4A3C00664B62 /* Master.hpp */,
+				23AD52DB20DB56D200664B62 /* Sequence.cpp */,
+				23AD52DC20DB56D200664B62 /* Sequence.hpp */,
 			);
 			path = repair;
 			sourceTree = "<group>";
@@ -2516,6 +2524,7 @@
 				239774F5202AECD3000A681C /* Expression.hpp in Headers */,
 				239774F7202AECD3000A681C /* ForeignKeyClause.hpp in Headers */,
 				23D96BA02050E9A500DB5E93 /* MigrationHandlePool.hpp in Headers */,
+				23AD52DF20DB56D200664B62 /* Sequence.hpp in Headers */,
 				239774F9202AECD3000A681C /* IndexedColumn.hpp in Headers */,
 				23B9E69420AE7D5000CF1683 /* Serialization.hpp in Headers */,
 				239774FB202AECD3000A681C /* JoinClause.hpp in Headers */,
@@ -2805,6 +2814,7 @@
 				23F5BD1820887FD3000CCD37 /* Expression.hpp in Headers */,
 				23F5BD1920887FD3000CCD37 /* ForeignKeyClause.hpp in Headers */,
 				23F5BD1A20887FD3000CCD37 /* MigrationHandlePool.hpp in Headers */,
+				23AD52E020DB56D200664B62 /* Sequence.hpp in Headers */,
 				23F5BD1C20887FD3000CCD37 /* IndexedColumn.hpp in Headers */,
 				23B9E69520AE7D5000CF1683 /* Serialization.hpp in Headers */,
 				23F5BD1D20887FD3000CCD37 /* JoinClause.hpp in Headers */,
@@ -3253,6 +3263,7 @@
 				23977539202AECD3000A681C /* StatementSavepoint.cpp in Sources */,
 				23BFE306207CA62E00A4BD81 /* NSNull+WCTColumnCoding.mm in Sources */,
 				23977596202AECD3000A681C /* LangReleaseSTMT.cpp in Sources */,
+				23AD52DD20DB56D200664B62 /* Sequence.cpp in Sources */,
 				239774EB202AECD3000A681C /* ColumnDef.cpp in Sources */,
 				2397752B202AECD3000A681C /* StatementDropTrigger.cpp in Sources */,
 				23977541202AECD3000A681C /* TableConstraint.cpp in Sources */,
@@ -3496,6 +3507,7 @@
 				23F5BC6120887FD3000CCD37 /* StatementSavepoint.cpp in Sources */,
 				23F5BC6220887FD3000CCD37 /* NSNull+WCTColumnCoding.mm in Sources */,
 				23F5BC6320887FD3000CCD37 /* LangReleaseSTMT.cpp in Sources */,
+				23AD52DE20DB56D200664B62 /* Sequence.cpp in Sources */,
 				23F5BC6420887FD3000CCD37 /* ColumnDef.cpp in Sources */,
 				23F5BC6520887FD3000CCD37 /* StatementDropTrigger.cpp in Sources */,
 				23F5BC6620887FD3000CCD37 /* TableConstraint.cpp in Sources */,

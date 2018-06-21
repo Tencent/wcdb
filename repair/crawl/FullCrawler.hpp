@@ -25,13 +25,16 @@
 #include <WCDB/Crawlable.hpp>
 #include <WCDB/MasterCrawler.hpp>
 #include <WCDB/Repairman.hpp>
+#include <WCDB/SequenceCrawler.hpp>
 #include <map>
 
 namespace WCDB {
 
 namespace Repair {
 
-class FullCrawler : public Repairman, public MasterCrawlerDelegate {
+class FullCrawler : public Repairman,
+                    public MasterCrawlerDelegate,
+                    public SequenceCrawlerDelegate {
 #pragma mark - Initialize
 public:
     FullCrawler(const std::string &source);
@@ -50,6 +53,13 @@ protected:
     void onMasterPageCrawled(const Page &page) override;
     void onMasterCellCrawled(const Cell &cell, const Master *master) override;
     void onMasterCrawlerError() override;
+
+#pragma mark - SequenceCrawlerDelegate
+protected:
+    void onSequencePageCrawled(const Page &page) override;
+    void onSequenceCellCrawled(const Cell &cell,
+                               const Sequence &sequence) override;
+    void onSequenceCrawlerError() override;
 };
 
 } //namespace Repair

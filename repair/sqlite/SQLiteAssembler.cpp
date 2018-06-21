@@ -69,10 +69,12 @@ bool SQLiteAssembler::markAsAssembling()
 
 bool SQLiteAssembler::markAsAssembled()
 {
+    markAsSequenceAssembled();
     m_table.clear();
     finalize(&m_sequenceSTMT);
     finalize(&m_cellSTMT);
-    bool result = lazyCommitOrRollbackTransaction();
+    bool result = markAsSequenceAssembled();
+    result = lazyCommitOrRollbackTransaction() && result;
     close();
     return result;
 }
@@ -83,11 +85,9 @@ bool SQLiteAssembler::markAsMilestone()
 }
 
 bool SQLiteAssembler::assembleTable(const std::string &tableName,
-                                    const std::string &sql,
-                                    int64_t sequence)
+                                    const std::string &sql)
 {
-    return execute(sql.c_str()) && assembleSequence(tableName, sequence) &&
-           onTableAssembled(tableName);
+    return execute(sql.c_str()) && onTableAssembled(tableName);
 }
 
 bool SQLiteAssembler::assembleCell(const Cell &cell)
@@ -200,6 +200,17 @@ SQLiteAssembler::getColumnNames(const std::string &tableName)
 }
 
 #pragma mark - Sequence
+bool SQLiteAssembler::markAsSequenceAssembling()
+{
+    return execute("CREATE TABLE IF NOT EXISTS dummy_sqlite_sequence(i INTEGER "
+                   "PRIMARY KEY AUTOINCREMENT)");
+}
+
+bool SQLiteAssembler::markAsSequenceAssembled()
+{
+    return execute("DROP TABLE IF EXISTS dummy_sqlite_sequence");
+}
+
 bool SQLiteAssembler::assembleSequence(const std::string &tableName,
                                        int64_t sequence)
 {
@@ -207,6 +218,9 @@ bool SQLiteAssembler::assembleSequence(const std::string &tableName,
         return true;
     }
     if (m_sequenceSTMT == nullptr) {
+        if (!markAsSequenceAssembling()) {
+            return false;
+        }
         m_sequenceSTMT =
             prepare("INSERT INTO sqlite_sequence(name, seq) VALUES(?1, ?2)");
         if (m_sequenceSTMT == nullptr) {

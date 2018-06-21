@@ -52,8 +52,7 @@ public:
     bool markAsMilestone() override;
 
     bool assembleTable(const std::string &tableName,
-                       const std::string &sql,
-                       int64_t sequence) override;
+                       const std::string &sql) override;
     bool assembleCell(const Cell &cell) override;
 
     const Error &getError() const override;
@@ -70,7 +69,10 @@ protected:
 
 #pragma mark - Sequence
 protected:
-    bool assembleSequence(const std::string &tableName, int64_t sequence);
+    bool markAsSequenceAssembling();
+    bool assembleSequence(const std::string &tableName,
+                          int64_t sequence) override;
+    bool markAsSequenceAssembled();
 
     void *m_sequenceSTMT;
 

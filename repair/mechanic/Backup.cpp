@@ -24,6 +24,7 @@
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Master.hpp>
 #include <WCDB/Page.hpp>
+#include <WCDB/Sequence.hpp>
 
 namespace WCDB {
 
@@ -136,10 +137,10 @@ void Backup::onCrawlerError()
 void Backup::onMasterCellCrawled(const Cell &cell, const Master *master)
 {
     if (master == nullptr) {
-        //skip index/view/trigger and filted table
+        //skip index/view/trigger
         return;
     }
-    if (master->tableName == SequenceCrawler::name()) {
+    if (master->tableName == Sequence::tableName()) {
         SequenceCrawler(m_pager).work(master->rootpage, this);
     } else if (!filter(master->tableName)) {
         m_height = -1;
@@ -159,7 +160,7 @@ void Backup::onMasterCrawlerError()
 }
 
 #pragma mark - SequenceCrawlerDelegate
-void Backup::onSequenceCellCrawled(const Sequence &sequence)
+void Backup::onSequenceCellCrawled(const Cell &cell, const Sequence &sequence)
 {
     if (!filter(sequence.name)) {
         Material::Content &content = getOrCreateContent(sequence.name);

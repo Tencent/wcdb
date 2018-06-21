@@ -21,11 +21,16 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Cell.hpp>
 #include <WCDB/Page.hpp>
+#include <WCDB/Sequence.hpp>
 #include <WCDB/SequenceCrawler.hpp>
 
 namespace WCDB {
 
 namespace Repair {
+
+void SequenceCrawlerDelegate::onSequencePageCrawled(const Page &page)
+{
+}
 
 #pragma mark - Initialize
 SequenceCrawler::SequenceCrawler(Pager &pager)
@@ -41,11 +46,6 @@ bool SequenceCrawler::work(int rootpage, SequenceCrawlerDelegate *delegate)
     bool result = crawl(rootpage);
     m_delegate = nullptr;
     return result;
-}
-
-std::string SequenceCrawler::name()
-{
-    return "sqlite_sequence";
 }
 
 #pragma mark - Crawlable
@@ -65,13 +65,19 @@ void SequenceCrawler::onCellCrawled(const Cell &cell)
     Sequence sequence;
     sequence.name = std::move(name);
     sequence.seq = cell.integerValue(1);
-    m_delegate->onSequenceCellCrawled(sequence);
+    m_delegate->onSequenceCellCrawled(cell, sequence);
 }
 
 void SequenceCrawler::onCrawlerError()
 {
     m_delegate->onSequenceCrawlerError();
     stop();
+}
+
+bool SequenceCrawler::willCrawlPage(const Page &page, int height)
+{
+    m_delegate->onSequencePageCrawled(page);
+    return true;
 }
 
 } //namespace Repair

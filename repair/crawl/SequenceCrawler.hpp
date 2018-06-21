@@ -27,18 +27,16 @@ namespace WCDB {
 
 namespace Repair {
 
-struct Sequence {
-    std::string name;
-    int64_t seq;
-};
-
+class Sequence;
 class SequenceCrawler;
 
 class SequenceCrawlerDelegate {
 protected:
     friend class SequenceCrawler;
 
-    virtual void onSequenceCellCrawled(const Sequence &sequence) = 0;
+    virtual void onSequencePageCrawled(const Page &page);
+    virtual void onSequenceCellCrawled(const Cell &cell,
+                                       const Sequence &sequence) = 0;
     virtual void onSequenceCrawlerError() = 0;
 };
 
@@ -49,7 +47,6 @@ public:
 
 #pragma mark - Sequence
 public:
-    static std::string name();
     bool work(int rootpage, SequenceCrawlerDelegate *delegate);
 
 protected:
@@ -59,6 +56,7 @@ protected:
 protected:
     void onCellCrawled(const Cell &cell) override;
     void onCrawlerError() override;
+    bool willCrawlPage(const Page &page, int height) override;
 };
 
 } //namespace Repair

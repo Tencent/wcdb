@@ -65,10 +65,9 @@ protected:
     bool markAsAssembling();
     bool markAsAssembled();
 
-    bool assembleTable(const std::string &tableName,
-                       const std::string &sql,
-                       int64_t sequence);
+    bool assembleTable(const std::string &tableName, const std::string &sql);
     void assembleCell(const Cell &cell);
+    bool assembleSequence(const std::string &tableName, int64_t sequence);
 
 protected:
     void towardMilestone(int mile);

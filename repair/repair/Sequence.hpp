@@ -18,44 +18,25 @@
  * limitations under the License.
  */
 
-#ifndef Assembler_hpp
-#define Assembler_hpp
+#ifndef Sequence_hpp
+#define Sequence_hpp
 
-#include <map>
 #include <string>
 
 namespace WCDB {
 
-class Error;
-
 namespace Repair {
 
-class Cell;
+struct Sequence {
+    Sequence();
+    static std::string tableName();
 
-class Assembler {
-public:
-    void setPath(const std::string &path);
-    const std::string &getPath() const;
-
-protected:
-    std::string m_path;
-
-public:
-    virtual bool markAsAssembling() = 0;
-    virtual bool markAsAssembled() = 0;
-
-    virtual bool markAsMilestone() = 0;
-    virtual bool assembleTable(const std::string &tableName,
-                               const std::string &sql) = 0;
-    virtual bool assembleSequence(const std::string &tableName,
-                                  int64_t sequence) = 0;
-    virtual bool assembleCell(const Cell &cell) = 0;
-
-    virtual const Error &getError() const = 0;
+    std::string name;
+    int64_t seq;
 };
 
 } //namespace Repair
 
 } //namespace WCDB
 
-#endif /* Assembler_hpp */
+#endif /* Sequence_hpp */
