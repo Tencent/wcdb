@@ -35,7 +35,7 @@ Repairman::Repairman(const std::string &path)
     , Crawlable(m_pager)
     , Progress()
     , m_assembler(nullptr)
-    , m_milestone(5000)
+    , m_milestone(1000)
     , m_mile(0)
     , m_pageWeight(0)
 {
@@ -100,6 +100,7 @@ void Repairman::markAsMilestone()
     if (m_assembler->markAsMilestone()) {
         markFractionalScoreCounted();
     } else {
+        markFractionalScoreDropped();
         tryUpgrateAssemblerError();
     }
     m_mile = 0;
@@ -136,7 +137,7 @@ void Repairman::assembleCell(const Cell &cell)
 
 bool Repairman::assembleSequence(const std::string &tableName, int64_t sequence)
 {
-    if (!m_assembler->assembleSequence(tableName, sequence)) {
+    if (m_assembler->assembleSequence(tableName, sequence)) {
         towardMilestone(1);
         return true;
     }

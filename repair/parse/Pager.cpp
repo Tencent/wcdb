@@ -84,12 +84,18 @@ int Pager::getReservedBytes() const
 
 Data Pager::acquirePageData(int number)
 {
+    return acquirePageData(number, 0, m_pageSize);
+}
+
+Data Pager::acquirePageData(int number, off_t offset, size_t size)
+{
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(number > 0);
+    WCTInnerAssert(offset + size <= m_pageSize);
     if (!isWalDisposed() && m_wal.containsPage(number)) {
-        return m_wal.acquirePageData(number);
+        return m_wal.acquirePageData(number, offset, size);
     }
-    return acquireData((number - 1) * m_pageSize, m_pageSize);
+    return acquireData((number - 1) * m_pageSize + offset, size);
 }
 
 Data Pager::acquireData(off_t offset, size_t size)

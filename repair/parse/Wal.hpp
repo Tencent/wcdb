@@ -48,6 +48,7 @@ protected:
 public:
     bool containsPage(int pageno) const;
     Data acquirePageData(int pageno);
+    Data acquirePageData(int pageno, off_t offset, size_t size);
     int getMaxPageno() const;
 
 protected:

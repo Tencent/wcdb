@@ -50,7 +50,7 @@ void FullCrawler::work()
 
     //calculate score
     int leafTablePageCount = 0;
-    for (int i = 0; i < m_pager.getPageCount(); ++i) {
+    for (int i = 1; i <= m_pager.getPageCount(); ++i) {
         Page page(i, &m_pager);
         auto pair = page.acquireType();
         if (!pair.first // treat as leaf table
@@ -58,7 +58,7 @@ void FullCrawler::work()
             ++leafTablePageCount;
         }
     }
-    setPageWeight((double) leafTablePageCount / m_pager.getPageCount());
+    setPageWeight((double) 1.0 / leafTablePageCount);
 
     if (!markAsAssembling()) {
         return;

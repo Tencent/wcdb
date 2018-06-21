@@ -81,12 +81,18 @@ bool Wal::containsPage(int pageno) const
 
 Data Wal::acquirePageData(int pageno)
 {
+    return acquirePageData(pageno, 0, getPageSize());
+}
+
+Data Wal::acquirePageData(int pageno, off_t offset, size_t size)
+{
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(containsPage(pageno));
+    WCTInnerAssert(offset + size <= getPageSize());
     return acquireData(headerSize +
                            getFrameSize() * (m_framePages[pageno] - 1) +
-                           Frame::headerSize,
-                       getPageSize());
+                           Frame::headerSize + offset,
+                       size);
 }
 
 int Wal::getMaxPageno() const

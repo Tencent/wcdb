@@ -38,7 +38,7 @@ std::pair<bool, Page::Type> Page::acquireType()
 {
     int type = 0;
     if (m_deserialization.getData().empty()) {
-        Data data = m_pager->acquireData(getOffsetOfHeader(), 1);
+        Data data = m_pager->acquirePageData(number, getOffsetOfHeader(), 1);
         if (data.empty()) {
             return {false, Type::Unknown};
         }
@@ -47,6 +47,7 @@ std::pair<bool, Page::Type> Page::acquireType()
         type = deserialization.advance1ByteInt();
     } else {
         WCTInnerAssert(m_deserialization.isEnough(1));
+        m_deserialization.seek(getOffsetOfHeader());
         type = m_deserialization.get1ByteInt(0);
     }
     switch (type) {
