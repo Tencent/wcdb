@@ -23,17 +23,17 @@
 
 #include <WCDB/Assembler.hpp>
 #include <WCDB/Crawlable.hpp>
-#include <WCDB/CriticalErrorOnly.hpp>
 #include <WCDB/ErrorProne.hpp>
 #include <WCDB/Progress.hpp>
 #include <WCDB/Scoreable.hpp>
+#include <WCDB/UpgradeableErrorProne.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
 class Repairman : public Crawlable,
-                  public CriticalErrorOnly,
+                  public UpgradeableErrorProne,
                   public Progress,
                   public SegmentedScoreable {
 #pragma mark - Initialize
@@ -50,7 +50,7 @@ protected:
     void onCrawlerError() override;
     Pager m_pager;
 
-#pragma mark - Critical Error
+#pragma mark - Error
 protected:
     int tryUpgrateAssemblerError();
     int tryUpgradeCrawlerError();
@@ -63,17 +63,17 @@ public:
 
 protected:
     bool markAsAssembling();
-    bool markAsAssembled();
+    void markAsAssembled();
 
     bool assembleTable(const std::string &tableName, const std::string &sql);
-    void assembleCell(const Cell &cell);
+    bool assembleCell(const Cell &cell);
     bool assembleSequence(const std::string &tableName, int64_t sequence);
 
 protected:
-    void towardMilestone(int mile);
+    bool towardMilestone(int mile);
 
 private:
-    void markAsMilestone();
+    bool markAsMilestone();
     int m_milestone;
     int m_mile;
     std::shared_ptr<Assembler> m_assembler;

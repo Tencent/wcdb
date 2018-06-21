@@ -388,10 +388,8 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
             retriever.setAssembler(assembler);
             retriever.setProgressCallback(onProgressUpdate);
             bool result = retriever.work();
-            if (!result) {
-                setThreadedError(retriever.getCriticalError());
-            }
-            score = retriever.getScore().value();
+            setThreadedError(retriever.getError());
+            score = result ? retriever.getScore().value() : -1;
         },
         false);
     return score;

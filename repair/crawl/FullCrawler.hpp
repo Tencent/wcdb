@@ -41,12 +41,16 @@ public:
 
 #pragma mark - Repair
 public:
-    void work();
+    bool work();
 
 #pragma mark - Crawlable
 protected:
     void onCellCrawled(const Cell &cell) override;
     bool willCrawlPage(const Page &, int) override;
+
+#pragma mark - Error
+protected:
+    void onErrorCritical() override;
 
 #pragma mark - MasterCrawlerDelegate
 protected:
@@ -54,12 +58,16 @@ protected:
     void onMasterCellCrawled(const Cell &cell, const Master *master) override;
     void onMasterCrawlerError() override;
 
+    MasterCrawler m_masterCrawler;
+
 #pragma mark - SequenceCrawlerDelegate
 protected:
     void onSequencePageCrawled(const Page &page) override;
     void onSequenceCellCrawled(const Cell &cell,
                                const Sequence &sequence) override;
     void onSequenceCrawlerError() override;
+
+    SequenceCrawler m_sequenceCrawler;
 };
 
 } //namespace Repair

@@ -22,18 +22,18 @@
 #define FactoryRetriever_hpp
 
 #include <WCDB/Assembler.hpp>
-#include <WCDB/CriticalErrorOnly.hpp>
 #include <WCDB/FactoryBackup.hpp>
 #include <WCDB/FactoryRelated.hpp>
 #include <WCDB/Progress.hpp>
 #include <WCDB/Scoreable.hpp>
+#include <WCDB/UpgradeableErrorProne.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
 class FactoryRetriever : public FactoryRelated,
-                         public CriticalErrorOnly,
+                         public UpgradeableErrorProne,
                          public Progress,
                          public Scoreable {
 #pragma mark - Restorer
@@ -64,6 +64,10 @@ protected:
 
     std::map<std::string, Fraction> m_weights;
     void increaseScore(const std::string &database, const Fraction &increment);
+
+#pragma mark - Error
+protected:
+    void onErrorCritical() override;
 };
 
 } //namespace Repair

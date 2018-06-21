@@ -53,12 +53,12 @@ bool FactoryRetriever::work()
     //1. Remove the old restore db
     std::string restoreDirectory = factory.getRestoreDirectory();
     if (!fileManager->removeItem(restoreDirectory)) {
-        tryUpgradeErrorWithSharedThreadedError();
+        setCriticalErrorWithSharedThreadedError();
         return false;
     }
     if (!fileManager->createDirectoryWithIntermediateDirectories(
             factory.getRestoreDirectory())) {
-        tryUpgradeErrorWithSharedThreadedError();
+        setCriticalErrorWithSharedThreadedError();
         return false;
     }
 
@@ -66,7 +66,7 @@ bool FactoryRetriever::work()
     std::list<std::string> workshopDirectories;
     std::tie(succeed, workshopDirectories) = factory.getWorkshopDirectories();
     if (!succeed) {
-        tryUpgradeErrorWithSharedThreadedError();
+        setCriticalErrorWithSharedThreadedError();
         return false;
     }
 
@@ -75,8 +75,7 @@ bool FactoryRetriever::work()
     }
 
     //2. Restore from current db. It must be succeed without even non-critical errors.
-    if (!restore(factory.database) ||
-        getCriticalLevel() != CriticalLevel::None) {
+    if (!restore(factory.database) || getErrorSeverity() != Severity::None) {
         return false;
     }
 
@@ -90,26 +89,26 @@ bool FactoryRetriever::work()
     //4. Do a Backup on restore db.
     FactoryBackup backup(factory);
     if (!backup.work(database)) {
-        tryUpgradeError(backup.getError());
+        setCriticalError(backup.getError());
         return false;
     }
 
     //5. Archive current db and use restore db
     FactoryDepositor depositor(factory);
     if (!depositor.work()) {
-        tryUpgradeError(depositor.getError());
+        setCriticalError(depositor.getError());
         return false;
     }
     std::string baseDirectory = Path::getBaseName(factory.database);
     succeed = FileManager::shared()->moveItems(
         Factory::associatedPathsForDatabase(database), baseDirectory);
     if (!succeed) {
-        tryUpgradeErrorWithSharedThreadedError();
+        setCriticalErrorWithSharedThreadedError();
         return false;
     }
 
-    //6. Remove all depositor dbs.
-    if (getCriticalLevel() < CriticalLevel::Fatal) {
+    //6. Remove all deposited dbs if error is ignorable.
+    if (isErrorIgnorable()) {
         FileManager::shared()->removeItem(factory.directory);
     }
 
@@ -127,7 +126,7 @@ bool FactoryRetriever::restore(const std::string &database)
     std::tie(succeed, materialPath) =
         Factory::materialForDeserializingForDatabase(database);
     if (!succeed) {
-        tryUpgradeErrorWithSharedThreadedError();
+        setCriticalErrorWithSharedThreadedError();
         return false;
     }
 
@@ -136,17 +135,23 @@ bool FactoryRetriever::restore(const std::string &database)
         if (material.deserialize(materialPath)) {
             Mechanic mechanic(database);
             mechanic.setAssembler(m_assembler);
+            mechanic.setMaterial(&material);
             mechanic.setProgressCallback(
                 [&database, this](double progress, double increment) {
                     increaseProgress(database, increment);
                 });
-            mechanic.work();
+            bool result = mechanic.work();
+            tryUpgradeError(mechanic.getError());
+            if (!result) {
+                WCTInnerAssert(isErrorCritial());
+                return false;
+            }
             increaseScore(database, mechanic.getScore());
-            tryUpgradeError(mechanic.getCriticalError());
-            return mechanic.getCriticalLevel() >= CriticalLevel::Fatal;
+            return true;
         } else if (ThreadedErrors::shared()->getThreadedError().code() !=
                    Error::Code::Corrupt) {
-            tryUpgradeErrorWithSharedThreadedError();
+            //TODO use old material to restore while page hash can be verified.
+            setCriticalErrorWithSharedThreadedError();
             return false;
         }
     } else {
@@ -163,10 +168,14 @@ bool FactoryRetriever::restore(const std::string &database)
         [&database, this](double progress, double increment) {
             increaseProgress(database, increment);
         });
-    fullCrawler.work();
+    bool result = fullCrawler.work();
+    tryUpgradeError(fullCrawler.getError());
+    if (!result) {
+        WCTInnerAssert(isErrorCritial());
+        return false;
+    }
     increaseScore(database, fullCrawler.getScore());
-    tryUpgradeError(fullCrawler.getCriticalError());
-    return fullCrawler.getCriticalLevel() < CriticalLevel::Fatal;
+    return true;
 }
 
 #pragma mark - Assembler
@@ -212,7 +221,7 @@ bool FactoryRetriever::calculateWeight(const std::string &database,
     std::tie(succeed, fileSize) = FileManager::shared()->getItemsSize(
         Factory::databasePathsForDatabase(database));
     if (!succeed) {
-        tryUpgradeErrorWithSharedThreadedError();
+        setCriticalErrorWithSharedThreadedError();
         return false;
     }
     totalSize += fileSize;
@@ -230,6 +239,12 @@ void FactoryRetriever::increaseScore(const std::string &database,
                                      const Fraction &increment)
 {
     Scoreable::increaseScore(increment * m_weights[database]);
+}
+
+#pragma mark - Error
+void FactoryRetriever::onErrorCritical()
+{
+    finishProgress();
 }
 
 } //namespace Repair

@@ -78,60 +78,63 @@ bool Repairman::markAsAssembling()
     if (m_assembler->markAsAssembling()) {
         return true;
     }
+    setCriticalError(m_assembler->getError());
+    return false;
+}
+
+void Repairman::markAsAssembled()
+{
+    markAsMilestone();
+    if (m_assembler->markAsAssembled()) {
+        finishProgress();
+    } else {
+        setCriticalError(m_assembler->getError());
+    }
+}
+
+bool Repairman::markAsMilestone()
+{
+    m_mile = 0;
+    if (m_assembler->markAsMilestone()) {
+        markSegmentedScoreCounted();
+        return true;
+    }
+    markSegmentedScoreDropped();
     tryUpgrateAssemblerError();
     return false;
 }
 
-bool Repairman::markAsAssembled()
-{
-    bool result = true;
-    markAsMilestone();
-    if (!m_assembler->markAsAssembled()) {
-        result = false;
-        tryUpgrateAssemblerError();
-    }
-    finishProgress();
-    return result;
-}
-
-void Repairman::markAsMilestone()
-{
-    if (m_assembler->markAsMilestone()) {
-        markSegmentedScoreCounted();
-    } else {
-        markSegmentedScoreDropped();
-        tryUpgrateAssemblerError();
-    }
-    m_mile = 0;
-}
-
-void Repairman::towardMilestone(int mile)
+bool Repairman::towardMilestone(int mile)
 {
     m_mile += mile;
     if (m_mile > m_milestone) {
-        markAsMilestone();
+        return markAsMilestone();
     }
+    return true;
 }
 
 bool Repairman::assembleTable(const std::string &tableName,
                               const std::string &sql)
 {
     if (m_assembler->assembleTable(tableName, sql)) {
-        towardMilestone(100);
+        if (markAsMilestone()) {
+            return true;
+        }
+    } else {
+        tryUpgrateAssemblerError();
+    }
+    return false;
+}
+
+bool Repairman::assembleCell(const Cell &cell)
+{
+    if (m_assembler->assembleCell(cell)) {
+        markCellAsCounted(cell);
+        towardMilestone(1);
         return true;
     }
     tryUpgrateAssemblerError();
     return false;
-}
-
-void Repairman::assembleCell(const Cell &cell)
-{
-    if (!m_assembler->assembleCell(cell)) {
-        tryUpgrateAssemblerError();
-    } else {
-        markCellAsCounted(cell);
-        towardMilestone(1);
-    }
 }
 
 bool Repairman::assembleSequence(const std::string &tableName, int64_t sequence)
@@ -150,7 +153,7 @@ void Repairman::onCrawlerError()
     tryUpgradeCrawlerError();
 }
 
-#pragma mark - Critical Error
+#pragma mark - Error
 int Repairman::tryUpgradeCrawlerError()
 {
     Error error = m_pager.getError();
@@ -167,7 +170,7 @@ int Repairman::tryUpgrateAssemblerError()
 
 void Repairman::onErrorCritical()
 {
-    finishProgress();
+    stop();
 }
 
 #pragma mark - Evaluation

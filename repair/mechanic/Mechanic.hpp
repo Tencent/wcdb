@@ -39,15 +39,14 @@ public:
 
 #pragma mark - Mechanic
 public:
-    void work();
+    bool work();
 
 #pragma mark - Material
 public:
-    void setMaterial(const Material &material);
-    void setMaterial(Material &&material);
+    void setMaterial(Material *material);
 
 protected:
-    Material m_material;
+    Material *m_material;
 
 #pragma mark - Crawlable
 protected:

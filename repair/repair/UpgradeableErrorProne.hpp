@@ -18,45 +18,50 @@
  * limitations under the License.
  */
 
-#ifndef CriticalErrorOnly_hpp
-#define CriticalErrorOnly_hpp
+#ifndef UpgradeableErrorProne_hpp
+#define UpgradeableErrorProne_hpp
 
-#include <WCDB/Error.hpp>
+#include <WCDB/ErrorProne.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-class CriticalErrorOnly {
+class UpgradeableErrorProne : private ErrorProne {
 public:
-    CriticalErrorOnly();
-    enum CriticalLevel {
-        MostFatal = std::numeric_limits<int>::max(),
-        Fatal = 1,
-        NotFatal = 0,
+    UpgradeableErrorProne();
+    enum Severity {
+        MostCritical = std::numeric_limits<int>::max(),
+        Critical = 1,
+        Normal = 0,
         None = std::numeric_limits<int>::min(),
     };
-    const Error &getCriticalError() const;
-    int getCriticalLevel() const;
+
+    using ErrorProne::getError;
+    int getErrorSeverity() const;
+    bool isErrorCritial() const;
+    bool isErrorIgnorable() const;
 
 protected:
-    static int criticalLevel(const Error &error);
+    static int errorSeverity(const Error &error);
+
     int tryUpgradeError(const Error &newError);
     int tryUpgradeError(Error &&newError);
     int tryUpgradeErrorWithSharedThreadedError();
+
     void setCriticalError(const Error &error);
     void setCriticalError(Error &&error);
     void setCriticalErrorWithSharedThreadedError();
 
-    virtual void onErrorCritical();
+    virtual void onErrorCritical() = 0;
 
 private:
-    Error m_criticalError;
-    int m_criticalLevel;
+    void setSeverity(int severity);
+    int m_severity;
 };
 
 } //namespace Repair
 
 } //namespace WCDB
 
-#endif /* CriticalErrorOnly_hpp */
+#endif /* UpgradeableErrorProne_hpp */

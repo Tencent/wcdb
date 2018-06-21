@@ -31,21 +31,22 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialize
-FullCrawler::FullCrawler(const std::string &source) : Repairman(source)
+FullCrawler::FullCrawler(const std::string &source)
+    : Repairman(source), m_sequenceCrawler(m_pager), m_masterCrawler(m_pager)
 {
 }
 
 #pragma mark - Repair
-void FullCrawler::work()
+bool FullCrawler::work()
 {
     if (isEmptyDatabase()) {
         finishProgress();
-        return;
+        return true;
     }
 
     if (!m_pager.initialize()) {
         setCriticalError(m_pager.getError());
-        return;
+        return false;
     }
 
     //calculate score
@@ -60,17 +61,18 @@ void FullCrawler::work()
     }
     setPageWeight(leafTablePageCount > 0 ? Fraction(1, leafTablePageCount) : 0);
 
-    if (!markAsAssembling()) {
-        return;
+    if (markAsAssembling()) {
+        m_masterCrawler.work(this);
     }
-    MasterCrawler(m_pager).work(this);
     markAsAssembled();
+
+    return !isErrorCritial();
 }
 
 #pragma mark - Crawlable
 void FullCrawler::onCellCrawled(const Cell &cell)
 {
-    if (getCriticalLevel() >= CriticalLevel::Fatal) {
+    if (isErrorCritial()) {
         return;
     }
     assembleCell(cell);
@@ -78,8 +80,19 @@ void FullCrawler::onCellCrawled(const Cell &cell)
 
 bool FullCrawler::willCrawlPage(const Page &page, int)
 {
+    if (isErrorCritial()) {
+        return false;
+    }
     increaseProgress(getPageWeight().value());
     return true;
+}
+
+#pragma mark - Error
+void FullCrawler::onErrorCritical()
+{
+    m_masterCrawler.stop();
+    m_sequenceCrawler.stop();
+    Repairman::onErrorCritical();
 }
 
 #pragma mark - MasterCrawlerDelegate
@@ -90,7 +103,7 @@ void FullCrawler::onMasterPageCrawled(const Page &page)
 
 void FullCrawler::onMasterCellCrawled(const Cell &cell, const Master *master)
 {
-    if (getCriticalLevel() >= CriticalLevel::Fatal) {
+    if (isErrorCritial()) {
         return;
     }
     markCellAsCounted(cell);
@@ -99,7 +112,7 @@ void FullCrawler::onMasterCellCrawled(const Cell &cell, const Master *master)
         return;
     }
     if (master->tableName == Sequence::tableName()) {
-        SequenceCrawler(m_pager).work(master->rootpage, this);
+        m_sequenceCrawler.work(master->rootpage, this);
     } else if (Master::isReservedTableName(master->tableName)) {
         Error error;
         error.level = Error::Level::Notice;
@@ -121,12 +134,18 @@ void FullCrawler::onMasterCrawlerError()
 #pragma mark - SequenceCrawlerDelegate
 void FullCrawler::onSequencePageCrawled(const Page &page)
 {
+    if (isErrorCritial()) {
+        return;
+    }
     increaseProgress(getPageWeight().value());
 }
 
 void FullCrawler::onSequenceCellCrawled(const Cell &cell,
                                         const Sequence &sequence)
 {
+    if (isErrorCritial()) {
+        return;
+    }
     if (assembleSequence(sequence.name, sequence.seq)) {
         markCellAsCounted(cell);
     }
