@@ -20,6 +20,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Cell.hpp>
+#include <WCDB/Master.hpp>
 #include <WCDB/MasterCrawler.hpp>
 #include <WCDB/Page.hpp>
 

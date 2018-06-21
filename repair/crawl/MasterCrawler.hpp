@@ -27,12 +27,7 @@ namespace WCDB {
 
 namespace Repair {
 
-struct Master {
-    std::string tableName;
-    std::string sql;
-    int rootpage;
-};
-
+class Master;
 class MasterCrawler;
 
 class MasterCrawlerDelegate {

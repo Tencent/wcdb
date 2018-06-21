@@ -481,6 +481,10 @@
 		23A8CD5620C8E40500A45C54 /* Corruption.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A8CD5320C8E40500A45C54 /* Corruption.cpp */; };
 		23A8CD5720C8E40500A45C54 /* Corruption.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A8CD5420C8E40500A45C54 /* Corruption.hpp */; };
 		23A8CD5820C8E40500A45C54 /* Corruption.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A8CD5420C8E40500A45C54 /* Corruption.hpp */; };
+		23AD52D620DB4A3C00664B62 /* Master.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52D420DB4A3C00664B62 /* Master.cpp */; };
+		23AD52D720DB4A3C00664B62 /* Master.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52D420DB4A3C00664B62 /* Master.cpp */; };
+		23AD52D820DB4A3C00664B62 /* Master.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AD52D520DB4A3C00664B62 /* Master.hpp */; };
+		23AD52D920DB4A3C00664B62 /* Master.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AD52D520DB4A3C00664B62 /* Master.hpp */; };
 		23AF4E1E20CD04E20050033C /* Initializeable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AF4E1C20CD04E20050033C /* Initializeable.cpp */; };
 		23AF4E1F20CD04E20050033C /* Initializeable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AF4E1C20CD04E20050033C /* Initializeable.cpp */; };
 		23AF4E2020CD04E20050033C /* Initializeable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AF4E1D20CD04E20050033C /* Initializeable.hpp */; };
@@ -1501,6 +1505,8 @@
 		23A870E5204F82AE00273A98 /* MigrationDatabase.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MigrationDatabase.hpp; sourceTree = "<group>"; };
 		23A8CD5320C8E40500A45C54 /* Corruption.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Corruption.cpp; sourceTree = "<group>"; };
 		23A8CD5420C8E40500A45C54 /* Corruption.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Corruption.hpp; sourceTree = "<group>"; };
+		23AD52D420DB4A3C00664B62 /* Master.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Master.cpp; sourceTree = "<group>"; };
+		23AD52D520DB4A3C00664B62 /* Master.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Master.hpp; sourceTree = "<group>"; };
 		23AF4E1C20CD04E20050033C /* Initializeable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Initializeable.cpp; sourceTree = "<group>"; };
 		23AF4E1D20CD04E20050033C /* Initializeable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Initializeable.hpp; sourceTree = "<group>"; };
 		23AFC8992093540F00074AF6 /* LangCommon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LangCommon.cpp; sourceTree = "<group>"; };
@@ -2123,6 +2129,8 @@
 				23A6D4BE20BFD7F9004F2DAA /* Progress.hpp */,
 				2376CB1920DA5D3B00A68DB5 /* Scoreable.cpp */,
 				2376CB1A20DA5D3B00A68DB5 /* Scoreable.hpp */,
+				23AD52D420DB4A3C00664B62 /* Master.cpp */,
+				23AD52D520DB4A3C00664B62 /* Master.hpp */,
 			);
 			path = repair;
 			sourceTree = "<group>";
@@ -2651,6 +2659,7 @@
 				23F70FD220A0649800CCE3CD /* MigrationConfig.hpp in Headers */,
 				23775B7820AD666900E21AB0 /* Backup.hpp in Headers */,
 				23977597202AECD3000A681C /* LangReleaseSTMT.hpp in Headers */,
+				23AD52D820DB4A3C00664B62 /* Master.hpp in Headers */,
 				23A870E7204F82AE00273A98 /* MigrationDatabase.hpp in Headers */,
 				23977599202AECD3000A681C /* LangResultColumn.hpp in Headers */,
 				2397759B202AECD3000A681C /* LangRollbackSTMT.hpp in Headers */,
@@ -2939,6 +2948,7 @@
 				23F70FD320A0649800CCE3CD /* MigrationConfig.hpp in Headers */,
 				23775B7920AD666900E21AB0 /* Backup.hpp in Headers */,
 				23F5BD9220887FD3000CCD37 /* LangReleaseSTMT.hpp in Headers */,
+				23AD52D920DB4A3C00664B62 /* Master.hpp in Headers */,
 				23F5BD9320887FD3000CCD37 /* MigrationDatabase.hpp in Headers */,
 				23F5BD9520887FD3000CCD37 /* LangResultColumn.hpp in Headers */,
 				23F5BD9620887FD3000CCD37 /* LangRollbackSTMT.hpp in Headers */,
@@ -3375,6 +3385,7 @@
 				23775B8A20AD666900E21AB0 /* Pager.cpp in Sources */,
 				239775A2202AECD3000A681C /* LangTableConstraint.cpp in Sources */,
 				2397759A202AECD3000A681C /* LangRollbackSTMT.cpp in Sources */,
+				23AD52D620DB4A3C00664B62 /* Master.cpp in Sources */,
 				23775B6220AD666900E21AB0 /* Error.cpp in Sources */,
 				2397755A202AECD3000A681C /* LangCommitSTMT.cpp in Sources */,
 				23775B8220AD666900E21AB0 /* Cell.cpp in Sources */,
@@ -3617,6 +3628,7 @@
 				23775B8B20AD666900E21AB0 /* Pager.cpp in Sources */,
 				23F5BCD420887FD3000CCD37 /* LangTableConstraint.cpp in Sources */,
 				23F5BCD520887FD3000CCD37 /* LangRollbackSTMT.cpp in Sources */,
+				23AD52D720DB4A3C00664B62 /* Master.cpp in Sources */,
 				23775B6320AD666900E21AB0 /* Error.cpp in Sources */,
 				23F5BCD620887FD3000CCD37 /* LangCommitSTMT.cpp in Sources */,
 				23775B8320AD666900E21AB0 /* Cell.cpp in Sources */,

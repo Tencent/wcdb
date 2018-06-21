@@ -22,6 +22,7 @@
 #include <WCDB/Backup.hpp>
 #include <WCDB/Cell.hpp>
 #include <WCDB/FileManager.hpp>
+#include <WCDB/Master.hpp>
 #include <WCDB/Page.hpp>
 
 namespace WCDB {
@@ -64,10 +65,18 @@ void Backup::filter(const Filter &tableShouldBeBackedUp)
 
 bool Backup::filter(const std::string &tableName)
 {
-    if (!m_filter) {
+    if (Master::isReservedTableName(tableName)) {
+        Error error;
+        error.level = Error::Level::Notice;
+        error.setCode(Error::Code::Notice, "Repair");
+        error.message = "Filter reserved table when backup.";
+        error.infos.set("Table", tableName);
+        Notifier::shared()->notify(error);
         return true;
+    } else if (m_filter) {
+        return m_filter(tableName);
     }
-    return m_filter(tableName);
+    return false;
 }
 
 const Material &Backup::getMaterial() const
@@ -132,7 +141,7 @@ void Backup::onMasterCellCrawled(const Cell &cell, const Master *master)
     }
     if (master->tableName == SequenceCrawler::name()) {
         SequenceCrawler(m_pager).work(master->rootpage, this);
-    } else if (filter(master->tableName)) {
+    } else if (!filter(master->tableName)) {
         m_height = -1;
         if (!crawl(master->rootpage)) {
             return;
@@ -152,7 +161,7 @@ void Backup::onMasterCrawlerError()
 #pragma mark - SequenceCrawlerDelegate
 void Backup::onSequenceCellCrawled(const Sequence &sequence)
 {
-    if (filter(sequence.name)) {
+    if (!filter(sequence.name)) {
         Material::Content &content = getOrCreateContent(sequence.name);
         //the columns in sqlite_sequence are not unique.
         content.sequence = std::max(content.sequence, sequence.seq);

@@ -112,9 +112,9 @@
 
     [_database filterBackup:^BOOL(NSString *tableName) {
       if ([tableName isEqualToString:tableName1]) {
-          return YES;
+          return NO;
       }
-      return NO;
+      return YES;
     }];
 
     XCTAssertTrue([_database backup]);

@@ -21,6 +21,7 @@
 #include <WCDB/Assembler.hpp>
 #include <WCDB/Assertion.hpp>
 #include <WCDB/FullCrawler.hpp>
+#include <WCDB/Master.hpp>
 #include <WCDB/Page.hpp>
 
 namespace WCDB {
@@ -93,6 +94,15 @@ void FullCrawler::onMasterCellCrawled(const Cell &cell, const Master *master)
     markCellAsCounted(cell);
     if (master == nullptr) {
         //skip index/view/trigger
+        return;
+    }
+    if (Master::isReservedTableName(master->tableName)) {
+        Error error;
+        error.level = Error::Level::Notice;
+        error.setCode(Error::Code::Notice, "Repair");
+        error.message = "Filter reserved table when retrieving.";
+        error.infos.set("Table", master->tableName);
+        Notifier::shared()->notify(error);
         return;
     }
     if (assembleTable(master->tableName, master->sql, 0)) {
