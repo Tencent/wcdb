@@ -20,6 +20,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Scoreable.hpp>
+#include <cmath>
 
 namespace WCDB {
 
@@ -31,7 +32,7 @@ Scoreable::Scoreable() : m_score(0)
 
 double Scoreable::getScore() const
 {
-    return m_score;
+    return round(m_score * 10000) / 10000;
 }
 
 void Scoreable::increaseScore(double increment)
