@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import "FileBomber.h"
 #import "RepairTestCase.h"
 
 @interface RepairTests_Retrieve : RepairTestCase

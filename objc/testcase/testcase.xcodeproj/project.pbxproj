@@ -177,6 +177,9 @@
 		23A3AF26206CDC0A00D05634 /* TableTests+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3AF25206CDC0A00D05634 /* TableTests+ChainCall.mm */; };
 		23AA166B2098C46F0013912B /* TestCaseConflictObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23AA16682098C46F0013912B /* TestCaseConflictObject.mm */; };
 		23AA166C2098C46F0013912B /* TestCaseConflictObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23AA16682098C46F0013912B /* TestCaseConflictObject.mm */; };
+		23AD52F820DBCDB000664B62 /* FileBomber.m in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52F720DBCDB000664B62 /* FileBomber.m */; };
+		23AD52F920DBCDB000664B62 /* FileBomber.m in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52F720DBCDB000664B62 /* FileBomber.m */; };
+		23AD52FA20DBCDB000664B62 /* FileBomber.m in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52F720DBCDB000664B62 /* FileBomber.m */; };
 		23BA6AD3208CE0DE005CAFB7 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; };
 		23BA6AE3208CE101005CAFB7 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
 		23BA6AE4208CE101005CAFB7 /* Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B58200F577400E0CECE /* Convenience.m */; };
@@ -761,6 +764,8 @@
 		23AA16682098C46F0013912B /* TestCaseConflictObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCaseConflictObject.mm; sourceTree = "<group>"; };
 		23AA16692098C46F0013912B /* TestCaseConflictObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestCaseConflictObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		23AA166A2098C46F0013912B /* TestCaseConflictObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestCaseConflictObject.h; sourceTree = "<group>"; };
+		23AD52F620DBCDB000664B62 /* FileBomber.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileBomber.h; sourceTree = "<group>"; };
+		23AD52F720DBCDB000664B62 /* FileBomber.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FileBomber.m; sourceTree = "<group>"; };
 		23BA69BD208CE0AC005CAFB7 /* FTS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FTS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23BA6AF6208CE12D005CAFB7 /* Migration Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Migration Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23BA6B08208CE132005CAFB7 /* ORM Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ORM Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1224,6 +1229,8 @@
 				23698AAF20046BE600C0291C /* Assert.h */,
 				23E58B57200F577400E0CECE /* Convenience.h */,
 				23E58B58200F577400E0CECE /* Convenience.m */,
+				23AD52F620DBCDB000664B62 /* FileBomber.h */,
+				23AD52F720DBCDB000664B62 /* FileBomber.m */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -1883,6 +1890,7 @@
 				2324D17120D2470200834A82 /* TestCase.mm in Sources */,
 				2324D18120D247A000834A82 /* RepairTestCase.mm in Sources */,
 				23593B7A20D369DD0058B416 /* RepairTests+Backup.mm in Sources */,
+				23AD52FA20DBCDB000664B62 /* FileBomber.m in Sources */,
 				2324D17220D2470200834A82 /* TestCaseObject.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1933,6 +1941,7 @@
 				234DBD812064EB6C000E31E8 /* StatementReleaseTests.mm in Sources */,
 				234DBD5A2064EB6C000E31E8 /* ColumnConstraintTests.mm in Sources */,
 				234DBD6D2064EB6C000E31E8 /* SelectCoreTests.mm in Sources */,
+				23AD52F820DBCDB000664B62 /* FileBomber.m in Sources */,
 				23191EC020D7D62400495B65 /* RepairTests+Deposit.mm in Sources */,
 				234DBD5C2064EB6C000E31E8 /* ColumnTypeTests.mm in Sources */,
 				23CB2104206DDBAE000EFB02 /* MigrationTests+SameDatabase.mm in Sources */,
@@ -2037,6 +2046,7 @@
 				23E8283D209F48BB00807001 /* RepairBenchmark.mm in Sources */,
 				23E82836209EBB2D00807001 /* CipherBenchmark.mm in Sources */,
 				238B50D8209D5CDB00C78CC8 /* Benchmark.mm in Sources */,
+				23AD52F920DBCDB000664B62 /* FileBomber.m in Sources */,
 				23E82839209F3BD900807001 /* InitializationBenchmark.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
