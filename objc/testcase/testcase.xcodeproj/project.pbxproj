@@ -329,6 +329,8 @@
 		23CB2104206DDBAE000EFB02 /* MigrationTests+SameDatabase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23CB2103206DDBAE000EFB02 /* MigrationTests+SameDatabase.mm */; };
 		23CB2106206DDBB7000EFB02 /* MigrationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23CB2105206DDBB7000EFB02 /* MigrationTests.mm */; };
 		23CB210B206DDBCE000EFB02 /* MigrationTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23CB210A206DDBCE000EFB02 /* MigrationTestCase.mm */; };
+		23CFE85F20DA455B00D112B8 /* RepairTests+Retrieve.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23CFE85E20DA455B00D112B8 /* RepairTests+Retrieve.mm */; };
+		23CFE86020DA455B00D112B8 /* RepairTests+Retrieve.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23CFE85E20DA455B00D112B8 /* RepairTests+Retrieve.mm */; };
 		23D507E720805E220015E1C9 /* MultipleMigrationTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23D507E620805E220015E1C9 /* MultipleMigrationTestCase.mm */; };
 		23D507EA208060CB0015E1C9 /* MultipleMigrationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23D507E9208060CB0015E1C9 /* MultipleMigrationTests.mm */; };
 		23D507EC2080611B0015E1C9 /* MultipleMigrationTestCase+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23D507EB2080611B0015E1C9 /* MultipleMigrationTestCase+Convenient.mm */; };
@@ -777,6 +779,7 @@
 		23CB2105206DDBB7000EFB02 /* MigrationTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MigrationTests.mm; sourceTree = "<group>"; };
 		23CB2109206DDBCE000EFB02 /* MigrationTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MigrationTestCase.h; sourceTree = "<group>"; };
 		23CB210A206DDBCE000EFB02 /* MigrationTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MigrationTestCase.mm; sourceTree = "<group>"; };
+		23CFE85E20DA455B00D112B8 /* RepairTests+Retrieve.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "RepairTests+Retrieve.mm"; sourceTree = "<group>"; };
 		23D507E520805E220015E1C9 /* MultipleMigrationTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MultipleMigrationTestCase.h; sourceTree = "<group>"; };
 		23D507E620805E220015E1C9 /* MultipleMigrationTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MultipleMigrationTestCase.mm; sourceTree = "<group>"; };
 		23D507E9208060CB0015E1C9 /* MultipleMigrationTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MultipleMigrationTests.mm; sourceTree = "<group>"; };
@@ -931,6 +934,7 @@
 				2324D18020D247A000834A82 /* RepairTestCase.mm */,
 				23593B7820D369DD0058B416 /* RepairTests+Backup.mm */,
 				23191EBF20D7D62400495B65 /* RepairTests+Deposit.mm */,
+				23CFE85E20DA455B00D112B8 /* RepairTests+Retrieve.mm */,
 			);
 			path = repair;
 			sourceTree = "<group>";
@@ -1874,6 +1878,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2324D16F20D2470200834A82 /* Convenience.m in Sources */,
+				23CFE86020DA455B00D112B8 /* RepairTests+Retrieve.mm in Sources */,
 				23191EC120D7D62400495B65 /* RepairTests+Deposit.mm in Sources */,
 				2324D17120D2470200834A82 /* TestCase.mm in Sources */,
 				2324D18120D247A000834A82 /* RepairTestCase.mm in Sources */,
@@ -1895,6 +1900,7 @@
 				234DBD752064EB6C000E31E8 /* StatementCreateTriggerTests.mm in Sources */,
 				234DBD592064EB6C000E31E8 /* BindParameterTests.mm in Sources */,
 				2338621A207B4EE0004CAC6F /* ORMColumnConstraintPrimaryAsc.mm in Sources */,
+				23CFE85F20DA455B00D112B8 /* RepairTests+Retrieve.mm in Sources */,
 				234DBD7E2064EB6C000E31E8 /* StatementInsertTests.mm in Sources */,
 				234DBD5F2064EB6C000E31E8 /* ConvertibleTests.mm in Sources */,
 				2338626A207B6C53004CAC6F /* ORMVirtualTableModuleFTS3.mm in Sources */,
