@@ -37,6 +37,7 @@ SQLiteAssembler::SQLiteAssembler()
     , m_handle(nullptr)
     , m_cellSTMT(nullptr)
     , m_sequenceSTMT(nullptr)
+    , m_primary(-1)
 {
 }
 
@@ -121,7 +122,12 @@ bool SQLiteAssembler::assembleCell(const Cell &cell)
                                     cell.doubleValue(i));
                 break;
             case Cell::Null:
-                sqlite3_bind_null((sqlite3_stmt *) m_cellSTMT, bindIndex);
+                if (i == m_primary) {
+                    sqlite3_bind_int64((sqlite3_stmt *) m_cellSTMT, bindIndex,
+                                       cell.getRowID());
+                } else {
+                    sqlite3_bind_null((sqlite3_stmt *) m_cellSTMT, bindIndex);
+                }
                 break;
         }
     }
@@ -187,13 +193,23 @@ SQLiteAssembler::getColumnNames(const std::string &tableName)
     }
     bool done;
     std::list<std::string> columns;
+    int primary = -1;
+    int maxpk = 0;
     while (step(stmt, done) && !done) {
         const char *column = reinterpret_cast<const char *>(
             sqlite3_column_text((sqlite3_stmt *) stmt, 1));
         columns.push_back(column ? column : String::empty());
+
+        //check if and only if single column is primary key
+        int pk = sqlite3_column_int((sqlite3_stmt *) stmt, 5);
+        maxpk = std::max(pk, maxpk);
+        if (pk == 1) {
+            primary = (int) columns.size() - 1;
+        }
     }
     finalize(&stmt);
     if (done) {
+        m_primary = maxpk == 1 ? primary : -1;
         return {true, columns};
     }
     return {false, {}};

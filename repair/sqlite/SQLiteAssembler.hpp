@@ -65,6 +65,7 @@ protected:
     getColumnNames(const std::string &tableName);
 
     std::string m_table;
+    int m_primary;
     void *m_cellSTMT;
 
 #pragma mark - Sequence
