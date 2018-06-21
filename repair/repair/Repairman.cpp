@@ -19,7 +19,9 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/Cell.hpp>
 #include <WCDB/FileManager.hpp>
+#include <WCDB/Page.hpp>
 #include <WCDB/Repairman.hpp>
 #include <WCDB/ThreadedErrors.hpp>
 
@@ -36,7 +38,6 @@ Repairman::Repairman(const std::string &path)
     , m_milestone(5000)
     , m_mile(0)
     , m_pageWeight(0)
-    , m_cellWeight(0)
 {
 }
 
@@ -129,7 +130,7 @@ void Repairman::assembleCell(const Cell &cell)
     if (!m_assembler->assembleCell(cell)) {
         tryUpgrateAssemblerError();
     } else {
-        markCellAsCounted();
+        markCellAsCounted(cell);
         towardMilestone(1);
     }
 }
@@ -161,14 +162,13 @@ void Repairman::onErrorCritical()
 }
 
 #pragma mark - Evaluation
-void Repairman::markCellAsCounted()
+void Repairman::markCellAsCounted(const Cell &cell)
 {
-    increaseScore(m_cellWeight);
-}
-
-void Repairman::markCellCount(int cellCount)
-{
-    m_cellWeight = cellCount > 0 ? (double) m_pageWeight / cellCount : 0;
+    int cellCount = cell.getPage().getCellCount();
+    WCTInnerAssert(cellCount != 0);
+    if (cellCount > 0) {
+        increaseScore((double) m_pageWeight / cellCount);
+    }
 }
 
 void Repairman::setPageWeight(double pageWeight)

@@ -40,7 +40,8 @@ protected:
     friend class MasterCrawler;
 
     virtual void onMasterPageCrawled(const Page &page);
-    virtual void onMasterCellCrawled(const Master *master) = 0;
+    virtual void onMasterCellCrawled(const Cell &cell,
+                                     const Master *master) = 0;
     virtual void onMasterCrawlerError() = 0;
 };
 

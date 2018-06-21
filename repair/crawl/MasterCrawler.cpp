@@ -64,14 +64,14 @@ void MasterCrawler::onCellCrawled(const Cell &cell)
 
     if (name != tblName) {
         //skip index/view/trigger
-        m_delegate->onMasterCellCrawled(nullptr);
+        m_delegate->onMasterCellCrawled(cell, nullptr);
         return;
     }
     Master master;
     master.rootpage = (int) cell.integerValue(3);
     master.tableName = std::move(name);
     master.sql = std::move(sql);
-    m_delegate->onMasterCellCrawled(&master);
+    m_delegate->onMasterCellCrawled(cell, &master);
 }
 
 bool MasterCrawler::willCrawlPage(const Page &page, int)

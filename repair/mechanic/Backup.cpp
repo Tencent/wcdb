@@ -124,7 +124,7 @@ void Backup::onCrawlerError()
 }
 
 #pragma mark - MasterCrawlerDelegate
-void Backup::onMasterCellCrawled(const Master *master)
+void Backup::onMasterCellCrawled(const Cell &cell, const Master *master)
 {
     if (master == nullptr) {
         //skip index/view/trigger and filted table

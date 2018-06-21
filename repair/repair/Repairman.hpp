@@ -83,12 +83,10 @@ private:
 protected:
     void setPageWeight(double pageWeight);
     double getPageWeight() const;
-    void markCellCount(int cellCount);
-    void markCellAsCounted();
+    void markCellAsCounted(const Cell &cell);
 
 private:
     double m_pageWeight;
-    double m_cellWeight;
 };
 
 } //namespace Repair

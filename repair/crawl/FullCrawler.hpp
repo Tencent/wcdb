@@ -48,7 +48,7 @@ protected:
 #pragma mark - MasterCrawlerDelegate
 protected:
     void onMasterPageCrawled(const Page &page) override;
-    void onMasterCellCrawled(const Master *master) override;
+    void onMasterCellCrawled(const Cell &cell, const Master *master) override;
     void onMasterCrawlerError() override;
 };
 

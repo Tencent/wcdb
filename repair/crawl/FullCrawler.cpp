@@ -73,7 +73,7 @@ void FullCrawler::onCellCrawled(const Cell &cell)
     assembleCell(cell);
 }
 
-bool FullCrawler::willCrawlPage(const Page &, int)
+bool FullCrawler::willCrawlPage(const Page &page, int)
 {
     increaseProgress(getPageWeight());
     return true;
@@ -83,20 +83,14 @@ bool FullCrawler::willCrawlPage(const Page &, int)
 void FullCrawler::onMasterPageCrawled(const Page &page)
 {
     increaseProgress(getPageWeight());
-    if (getCriticalLevel() >= CriticalLevel::Fatal) {
-        return;
-    }
-    if (page.getType() == Page::Type::LeafTable) {
-        markCellCount(page.getCellCount());
-    }
 }
 
-void FullCrawler::onMasterCellCrawled(const Master *master)
+void FullCrawler::onMasterCellCrawled(const Cell &cell, const Master *master)
 {
     if (getCriticalLevel() >= CriticalLevel::Fatal) {
         return;
     }
-    markCellAsCounted();
+    markCellAsCounted(cell);
     if (master == nullptr) {
         //skip index/view/trigger
         return;
