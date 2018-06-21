@@ -70,6 +70,11 @@ void FractionalScoreable::markFractionalScoreCounted()
     }
 }
 
+void FractionalScoreable::markFractionalScoreDropped()
+{
+    m_fractionalScore = 0;
+}
+
 void FractionalScoreable::increaseScore(double increment)
 {
     WCTInnerAssert(increment >= 0);

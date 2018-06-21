@@ -47,6 +47,7 @@ public:
 
 protected:
     void markFractionalScoreCounted();
+    void markFractionalScoreDropped();
     void increaseScore(double increment);
     void updateScore(double score);
 
