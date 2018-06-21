@@ -38,7 +38,7 @@
 
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *walPath = [NSString stringWithFormat:@"%@-wal", _database.path];
-    XCTAssertTrue([[fileManager attributesOfItemAtPath:walPath error:nil] fileSize] > 0);
+    XCTAssertGreaterThan([[fileManager attributesOfItemAtPath:walPath error:nil] fileSize], 0);
 
     XCTAssertTrue([_database deposit]);
 
@@ -54,10 +54,56 @@
 
 - (void)test_retrieve_without_deposit
 {
+    NSString *tableName = self.className;
+    int count = 100;
+    NSArray<TestCaseObject *> *objects = [self insertObjectsOfCount:count intoTable:tableName];
+    XCTAssertEqual(objects.count, count);
+    NSArray<WCTSequence *> *sequences = [_database getObjectsOfClass:WCTSequence.class fromTable:WCTSequence.tableName];
+    XCTAssertEqual(sequences.count, 1);
+    XCTAssertEqual(sequences[0].seq, count - 1);
+
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *walPath = [NSString stringWithFormat:@"%@-wal", _database.path];
+    XCTAssertGreaterThan([[fileManager attributesOfItemAtPath:walPath error:nil] fileSize], 0);
+
+    XCTAssertEqual([_database retrieve:nil], 1.0);
+
+    NSArray<TestCaseObject *> *retrieved = [_database getObjectsOfClass:TestCaseObject.class fromTable:tableName orderBy:TestCaseObject.variable1];
+    XCTAssertTrue([retrieved isEqualToTestCaseObjects:objects]);
+
+    NSArray<WCTSequence *> *retrievedSequences = [_database getObjectsOfClass:WCTSequence.class fromTable:WCTSequence.tableName];
+    XCTAssertEqual(retrievedSequences.count, 1);
+    XCTAssertEqual(retrievedSequences[0].seq, count - 1);
 }
 
 - (void)test_retrieve_without_wal
 {
+    NSString *tableName = self.className;
+    int count = 100;
+    NSArray<TestCaseObject *> *objects = [self insertObjectsOfCount:count intoTable:tableName];
+    XCTAssertEqual(objects.count, count);
+    NSArray<WCTSequence *> *sequences = [_database getObjectsOfClass:WCTSequence.class fromTable:WCTSequence.tableName];
+    XCTAssertEqual(sequences.count, 1);
+    XCTAssertEqual(sequences[0].seq, count - 1);
+
+    XCTAssertTrue([_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
+
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *walPath = [NSString stringWithFormat:@"%@-wal", _database.path];
+    NSError *error;
+    XCTAssertEqual([[fileManager attributesOfItemAtPath:walPath error:&error] fileSize], 0);
+    XCTAssertNil(error);
+
+    XCTAssertTrue([_database deposit]);
+
+    XCTAssertEqual([_database retrieve:nil], 1.0);
+
+    NSArray<TestCaseObject *> *retrieved = [_database getObjectsOfClass:TestCaseObject.class fromTable:tableName orderBy:TestCaseObject.variable1];
+    XCTAssertTrue([retrieved isEqualToTestCaseObjects:objects]);
+
+    NSArray<WCTSequence *> *retrievedSequences = [_database getObjectsOfClass:WCTSequence.class fromTable:WCTSequence.tableName];
+    XCTAssertEqual(retrievedSequences.count, 1);
+    XCTAssertEqual(retrievedSequences[0].seq, count - 1);
 }
 
 - (void)test_retrieve_corrupted
