@@ -107,7 +107,7 @@ void CriticalErrorOnly::setCriticalError(Error &&error)
     onErrorCritical();
 }
 
-void CriticalErrorOnly::setCriticalErrorWIthSharedThreadedError()
+void CriticalErrorOnly::setCriticalErrorWithSharedThreadedError()
 {
     m_criticalError = std::move(ThreadedErrors::shared()->moveThreadedError());
     m_criticalLevel = CriticalLevel::MostFatal;

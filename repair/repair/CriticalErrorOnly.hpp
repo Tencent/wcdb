@@ -46,7 +46,7 @@ protected:
     int tryUpgradeErrorWithSharedThreadedError();
     void setCriticalError(const Error &error);
     void setCriticalError(Error &&error);
-    void setCriticalErrorWIthSharedThreadedError();
+    void setCriticalErrorWithSharedThreadedError();
 
     virtual void onErrorCritical();
 

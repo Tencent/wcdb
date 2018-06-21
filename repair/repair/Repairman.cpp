@@ -59,7 +59,7 @@ bool Repairman::isEmptyDatabase()
             error.infos.set("Path", getPath());
             Notifier::shared()->notify(error);
         } else {
-            setCriticalErrorWIthSharedThreadedError();
+            setCriticalErrorWithSharedThreadedError();
         }
         return true;
     }
