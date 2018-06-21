@@ -37,7 +37,6 @@ Repairman::Repairman(const std::string &path)
     , m_assembler(nullptr)
     , m_milestone(1000)
     , m_mile(0)
-    , m_pageWeight(0)
 {
 }
 
@@ -98,9 +97,9 @@ bool Repairman::markAsAssembled()
 void Repairman::markAsMilestone()
 {
     if (m_assembler->markAsMilestone()) {
-        markFractionalScoreCounted();
+        markSegmentedScoreCounted();
     } else {
-        markFractionalScoreDropped();
+        markSegmentedScoreDropped();
         tryUpgrateAssemblerError();
     }
     m_mile = 0;
@@ -177,16 +176,18 @@ void Repairman::markCellAsCounted(const Cell &cell)
     int cellCount = cell.getPage().getCellCount();
     WCTInnerAssert(cellCount != 0);
     if (cellCount > 0) {
-        increaseScore((double) m_pageWeight / cellCount);
+        Fraction cellWeight(1, cellCount);
+        increaseScore(m_pageWeight * cellWeight);
     }
 }
 
-void Repairman::setPageWeight(double pageWeight)
+void Repairman::setPageWeight(const Fraction &pageWeight)
 {
+    WCTInnerAssert(m_pageWeight.value() == 0);
     m_pageWeight = pageWeight;
 }
 
-double Repairman::getPageWeight() const
+const Fraction &Repairman::getPageWeight() const
 {
     return m_pageWeight;
 }

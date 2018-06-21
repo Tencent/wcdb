@@ -43,7 +43,7 @@ FactoryRetriever::FactoryRetriever(Factory &factory_)
 }
 
 #pragma mark - Restorer
-double FactoryRetriever::work()
+bool FactoryRetriever::work()
 {
     WCTInnerAssert(m_assembler != nullptr);
 
@@ -54,12 +54,12 @@ double FactoryRetriever::work()
     std::string restoreDirectory = factory.getRestoreDirectory();
     if (!fileManager->removeItem(restoreDirectory)) {
         tryUpgradeErrorWithSharedThreadedError();
-        return -1;
+        return false;
     }
     if (!fileManager->createDirectoryWithIntermediateDirectories(
             factory.getRestoreDirectory())) {
         tryUpgradeErrorWithSharedThreadedError();
-        return -1;
+        return false;
     }
 
     //1.5 calculate weights to deal with the progress and score
@@ -67,23 +67,23 @@ double FactoryRetriever::work()
     std::tie(succeed, workshopDirectories) = factory.getWorkshopDirectories();
     if (!succeed) {
         tryUpgradeErrorWithSharedThreadedError();
-        return -1;
+        return false;
     }
 
     if (!calculateWeights(workshopDirectories)) {
-        return -1;
+        return false;
     }
 
     //2. Restore from current db. It must be succeed without even non-critical errors.
     if (!restore(factory.database) ||
         getCriticalLevel() != CriticalLevel::None) {
-        return -1;
+        return false;
     }
 
     //3. Restore from all depositor db. It should be succeed without critical errors.
     for (const auto &workshopDirectory : workshopDirectories) {
         if (!restore(Path::addComponent(workshopDirectory, databaseFileName))) {
-            return -1;
+            return false;
         }
     }
 
@@ -91,21 +91,21 @@ double FactoryRetriever::work()
     FactoryBackup backup(factory);
     if (!backup.work(database)) {
         tryUpgradeError(backup.getError());
-        return -1;
+        return false;
     }
 
     //5. Archive current db and use restore db
     FactoryDepositor depositor(factory);
     if (!depositor.work()) {
         tryUpgradeError(depositor.getError());
-        return -1;
+        return false;
     }
     std::string baseDirectory = Path::getBaseName(factory.database);
     succeed = FileManager::shared()->moveItems(
         Factory::associatedPathsForDatabase(database), baseDirectory);
     if (!succeed) {
         tryUpgradeErrorWithSharedThreadedError();
-        return -1;
+        return false;
     }
 
     //6. Remove all depositor dbs.
@@ -115,7 +115,7 @@ double FactoryRetriever::work()
 
     finishProgress();
 
-    return getScore();
+    return true;
 }
 
 bool FactoryRetriever::restore(const std::string &database)
@@ -138,10 +138,10 @@ bool FactoryRetriever::restore(const std::string &database)
             mechanic.setAssembler(m_assembler);
             mechanic.setProgressCallback(
                 [&database, this](double progress, double increment) {
-                    updateProgress(database, increment);
+                    increaseProgress(database, increment);
                 });
             mechanic.work();
-            updateScore(database, mechanic.getScore());
+            increaseScore(database, mechanic.getScore());
             tryUpgradeError(mechanic.getCriticalError());
             return mechanic.getCriticalLevel() >= CriticalLevel::Fatal;
         } else if (ThreadedErrors::shared()->getThreadedError().code() !=
@@ -161,10 +161,10 @@ bool FactoryRetriever::restore(const std::string &database)
     fullCrawler.setAssembler(m_assembler);
     fullCrawler.setProgressCallback(
         [&database, this](double progress, double increment) {
-            updateProgress(database, increment);
+            increaseProgress(database, increment);
         });
     fullCrawler.work();
-    updateScore(database, fullCrawler.getScore());
+    increaseScore(database, fullCrawler.getScore());
     tryUpgradeError(fullCrawler.getCriticalError());
     return fullCrawler.getCriticalLevel() < CriticalLevel::Fatal;
 }
@@ -199,7 +199,7 @@ bool FactoryRetriever::calculateWeights(
 
     //Resolve to percentage
     for (auto &element : m_weights) {
-        element.second = element.second / totalSize;
+        element.second = element.second / (int) totalSize;
     }
     return true;
 }
@@ -216,20 +216,20 @@ bool FactoryRetriever::calculateWeight(const std::string &database,
         return false;
     }
     totalSize += fileSize;
-    m_weights[database] = fileSize;
+    m_weights[database] = (int) fileSize;
     return true;
 }
 
-void FactoryRetriever::updateProgress(const std::string &database,
-                                      double increment)
+void FactoryRetriever::increaseProgress(const std::string &database,
+                                        double increment)
 {
-    increaseProgress(m_weights[database] * increment);
+    Progress::increaseProgress(m_weights[database].value() * increment);
 }
 
-void FactoryRetriever::updateScore(const std::string &database,
-                                   double increment)
+void FactoryRetriever::increaseScore(const std::string &database,
+                                     const Fraction &increment)
 {
-    increaseScore(increment * m_weights[database]);
+    Scoreable::increaseScore(increment * m_weights[database]);
 }
 
 } //namespace Repair

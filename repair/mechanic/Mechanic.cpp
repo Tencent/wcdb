@@ -81,7 +81,8 @@ void Mechanic::work()
         pageCount += element.second.pagenos.size();
     }
     //TODO resolve with disposed wal frames
-    setPageWeight(pageCount > 0 ? (double) 1.0 / pageCount : 0);
+    WCTInnerAssert(pageCount > 0);
+    setPageWeight(pageCount > 0 ? Fraction(1, pageCount) : 0);
 
     if (!markAsAssembling()) {
         return;
@@ -114,7 +115,7 @@ void Mechanic::onCellCrawled(const Cell &cell)
 
 bool Mechanic::willCrawlPage(const Page &page, int)
 {
-    increaseProgress(getPageWeight());
+    increaseProgress(getPageWeight().value());
     if (getCriticalLevel() >= CriticalLevel::Fatal) {
         return false;
     }

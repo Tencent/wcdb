@@ -21,41 +21,36 @@
 #ifndef Scoreable_hpp
 #define Scoreable_hpp
 
+#include <WCDB/Fraction.hpp>
+
 namespace WCDB {
 
 namespace Repair {
 
 class Scoreable {
 public:
-    Scoreable();
-
-    double getScore() const;
+    const Fraction &getScore() const;
 
 protected:
-    void increaseScore(double increment);
-    void updateScore(double score);
+    void increaseScore(const Fraction &fraction);
 
 private:
-    double m_score;
+    Fraction m_score;
 };
 
-class FractionalScoreable : public Scoreable {
+class SegmentedScoreable : public Scoreable {
 public:
-    FractionalScoreable();
-
-    double getScore() const;
+    const Fraction &getScore() const;
 
 protected:
-    void markFractionalScoreCounted();
-    void markFractionalScoreDropped();
-    void increaseScore(double increment);
-    void updateScore(double score);
+    void markSegmentedScoreCounted();
+    void markSegmentedScoreDropped();
+    void increaseScore(const Fraction &fraction);
 
 private:
     using Scoreable::increaseScore;
-    using Scoreable::updateScore;
     using Scoreable::getScore;
-    double m_fractionalScore;
+    Fraction m_segmentedScore;
 };
 
 } //namespace Repair

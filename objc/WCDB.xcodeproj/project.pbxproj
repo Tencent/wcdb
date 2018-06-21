@@ -489,6 +489,10 @@
 		23AD52DE20DB56D200664B62 /* Sequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52DB20DB56D200664B62 /* Sequence.cpp */; };
 		23AD52DF20DB56D200664B62 /* Sequence.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AD52DC20DB56D200664B62 /* Sequence.hpp */; };
 		23AD52E020DB56D200664B62 /* Sequence.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AD52DC20DB56D200664B62 /* Sequence.hpp */; };
+		23AD52E620DB852B00664B62 /* Fraction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52E420DB852B00664B62 /* Fraction.cpp */; };
+		23AD52E720DB852B00664B62 /* Fraction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52E420DB852B00664B62 /* Fraction.cpp */; };
+		23AD52E820DB852B00664B62 /* Fraction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AD52E520DB852B00664B62 /* Fraction.hpp */; };
+		23AD52E920DB852B00664B62 /* Fraction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AD52E520DB852B00664B62 /* Fraction.hpp */; };
 		23AF4E1E20CD04E20050033C /* Initializeable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AF4E1C20CD04E20050033C /* Initializeable.cpp */; };
 		23AF4E1F20CD04E20050033C /* Initializeable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AF4E1C20CD04E20050033C /* Initializeable.cpp */; };
 		23AF4E2020CD04E20050033C /* Initializeable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AF4E1D20CD04E20050033C /* Initializeable.hpp */; };
@@ -1513,6 +1517,8 @@
 		23AD52D520DB4A3C00664B62 /* Master.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Master.hpp; sourceTree = "<group>"; };
 		23AD52DB20DB56D200664B62 /* Sequence.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sequence.cpp; sourceTree = "<group>"; };
 		23AD52DC20DB56D200664B62 /* Sequence.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Sequence.hpp; sourceTree = "<group>"; };
+		23AD52E420DB852B00664B62 /* Fraction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Fraction.cpp; sourceTree = "<group>"; };
+		23AD52E520DB852B00664B62 /* Fraction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Fraction.hpp; sourceTree = "<group>"; };
 		23AF4E1C20CD04E20050033C /* Initializeable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Initializeable.cpp; sourceTree = "<group>"; };
 		23AF4E1D20CD04E20050033C /* Initializeable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Initializeable.hpp; sourceTree = "<group>"; };
 		23AFC8992093540F00074AF6 /* LangCommon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LangCommon.cpp; sourceTree = "<group>"; };
@@ -2152,6 +2158,8 @@
 				23B9E69120AE7D5000CF1683 /* Serialization.hpp */,
 				23B673B720B013F1002D0DE0 /* Compression.cpp */,
 				23B673B820B013F1002D0DE0 /* Compression.hpp */,
+				23AD52E420DB852B00664B62 /* Fraction.cpp */,
+				23AD52E520DB852B00664B62 /* Fraction.hpp */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -2677,6 +2685,7 @@
 				239775A1202AECD3000A681C /* LangSelectSTMT.hpp in Headers */,
 				239775A3202AECD3000A681C /* LangTableConstraint.hpp in Headers */,
 				239775A5202AECD3000A681C /* LangTableOrSubquery.hpp in Headers */,
+				23AD52E820DB852B00664B62 /* Fraction.hpp in Headers */,
 				239775A7202AECD3000A681C /* LangUpdateSTMT.hpp in Headers */,
 				23D07CE620BE87360043F4D4 /* MasterCrawler.hpp in Headers */,
 				23F70FA220A055B400CCE3CD /* Config.hpp in Headers */,
@@ -2967,6 +2976,7 @@
 				23F5BD9920887FD3000CCD37 /* LangSelectSTMT.hpp in Headers */,
 				23F5BD9A20887FD3000CCD37 /* LangTableConstraint.hpp in Headers */,
 				23F5BD9B20887FD3000CCD37 /* LangTableOrSubquery.hpp in Headers */,
+				23AD52E920DB852B00664B62 /* Fraction.hpp in Headers */,
 				23F5BD9C20887FD3000CCD37 /* LangUpdateSTMT.hpp in Headers */,
 				23D07CE720BE87360043F4D4 /* MasterCrawler.hpp in Headers */,
 				23F70FA320A055B400CCE3CD /* Config.hpp in Headers */,
@@ -3245,6 +3255,7 @@
 				23B0071C2047ED4800045245 /* ConfiguredHandle.cpp in Sources */,
 				23775B6620AD666900E21AB0 /* Notifier.cpp in Sources */,
 				23977511202AECD3000A681C /* StatementAnalyze.cpp in Sources */,
+				23AD52E620DB852B00664B62 /* Fraction.cpp in Sources */,
 				23D07CEA20BE873E0043F4D4 /* SequenceCrawler.cpp in Sources */,
 				239775A0202AECD3000A681C /* LangSelectSTMT.cpp in Sources */,
 				23977515202AECD3000A681C /* StatementBegin.cpp in Sources */,
@@ -3489,6 +3500,7 @@
 				23F5BC5520887FD3000CCD37 /* ConfiguredHandle.cpp in Sources */,
 				23775B6720AD666900E21AB0 /* Notifier.cpp in Sources */,
 				23F5BC5620887FD3000CCD37 /* StatementAnalyze.cpp in Sources */,
+				23AD52E720DB852B00664B62 /* Fraction.cpp in Sources */,
 				23D07CEB20BE873E0043F4D4 /* SequenceCrawler.cpp in Sources */,
 				23F5BC5820887FD3000CCD37 /* LangSelectSTMT.cpp in Sources */,
 				23F5BC5920887FD3000CCD37 /* StatementBegin.cpp in Sources */,

@@ -35,7 +35,7 @@ namespace Repair {
 class Repairman : public Crawlable,
                   public CriticalErrorOnly,
                   public Progress,
-                  public FractionalScoreable {
+                  public SegmentedScoreable {
 #pragma mark - Initialize
 public:
     Repairman(const std::string &path);
@@ -80,12 +80,12 @@ private:
 
 #pragma mark - Evaluation
 protected:
-    void setPageWeight(double pageWeight);
-    double getPageWeight() const;
+    void setPageWeight(const Fraction &pageWeight);
+    const Fraction &getPageWeight() const;
     void markCellAsCounted(const Cell &cell);
 
 private:
-    double m_pageWeight;
+    Fraction m_pageWeight;
 };
 
 } //namespace Repair

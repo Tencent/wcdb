@@ -43,7 +43,7 @@ public:
     const std::string database;
 
 public:
-    double work();
+    bool work();
 
 protected:
     bool restore(const std::string &database);
@@ -60,10 +60,10 @@ protected:
 protected:
     bool calculateWeights(const std::list<std::string> &workshopDirectories);
     bool calculateWeight(const std::string &database, size_t &totalSize);
-    void updateProgress(const std::string &database, double increment);
+    void increaseProgress(const std::string &database, double increment);
 
-    std::map<std::string, double> m_weights;
-    void updateScore(const std::string &database, double increment);
+    std::map<std::string, Fraction> m_weights;
+    void increaseScore(const std::string &database, const Fraction &increment);
 };
 
 } //namespace Repair

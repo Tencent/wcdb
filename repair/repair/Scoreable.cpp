@@ -26,70 +26,41 @@ namespace WCDB {
 
 namespace Repair {
 
-Scoreable::Scoreable() : m_score(0)
+const Fraction &Scoreable::getScore() const
 {
+    return m_score;
 }
 
-double Scoreable::getScore() const
+void Scoreable::increaseScore(const Fraction &increment)
 {
-    return round(m_score * 10000) / 10000;
-}
-
-void Scoreable::increaseScore(double increment)
-{
-    WCTInnerAssert(increment >= 0);
-    if (increment > 0) {
-        updateScore(m_score + increment);
+    m_score += increment;
+    WCTInnerAssert(m_score.value() <= 1.0);
+    if (m_score.value() > 1.0) {
+        m_score = 1;
     }
 }
 
-void Scoreable::updateScore(double score)
+const Fraction &SegmentedScoreable::getScore() const
 {
-    WCTInnerAssert(score >= m_score);
-    WCTInnerAssert(score <= 1.0);
-    if (score > m_score) {
-        m_score = std::min(score, 1.0);
-    }
-}
-
-FractionalScoreable::FractionalScoreable() : Scoreable(), m_fractionalScore(0)
-{
-}
-
-double FractionalScoreable::getScore() const
-{
-    WCTInnerAssert(m_fractionalScore == 0);
+    WCTInnerAssert(m_segmentedScore.value() == 0);
     return Scoreable::getScore();
 }
 
-void FractionalScoreable::markFractionalScoreCounted()
+void SegmentedScoreable::markSegmentedScoreCounted()
 {
-    if (m_fractionalScore > 0) {
-        Scoreable::increaseScore(m_fractionalScore);
-        m_fractionalScore = 0;
-    }
+    Scoreable::increaseScore(m_segmentedScore);
+    m_segmentedScore = 0;
 }
 
-void FractionalScoreable::markFractionalScoreDropped()
+void SegmentedScoreable::markSegmentedScoreDropped()
 {
-    m_fractionalScore = 0;
+    m_segmentedScore = 0;
 }
 
-void FractionalScoreable::increaseScore(double increment)
+void SegmentedScoreable::increaseScore(const Fraction &increment)
 {
-    WCTInnerAssert(increment >= 0);
-    if (increment > 0) {
-        updateScore(m_fractionalScore + increment);
-    }
-}
-
-void FractionalScoreable::updateScore(double score)
-{
-    WCTInnerAssert(score >= m_fractionalScore);
-    WCTInnerAssert(score + Scoreable::getScore() <= 1.0);
-    if (score > m_fractionalScore) {
-        m_fractionalScore = std::min(score, 1.0 - Scoreable::getScore());
-    }
+    m_segmentedScore += increment;
+    WCTInnerAssert((Scoreable::getScore() + m_segmentedScore).value() <= 1.0);
 }
 
 } //namespace Repair

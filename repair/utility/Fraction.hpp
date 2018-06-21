@@ -18,46 +18,37 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Progress.hpp>
+#ifndef Fraction_hpp
+#define Fraction_hpp
 
 namespace WCDB {
 
 namespace Repair {
 
-Progress::Progress() : m_progress(0), m_onProgressUpdate(nullptr)
-{
-}
+class Fraction {
+public:
+    Fraction();
+    Fraction(int numerator, int denominator);
+    Fraction(int value);
 
-void Progress::increaseProgress(double increment)
-{
-    double progress = m_progress + increment;
-    updateProgress(progress > 0.9999 ? 0.9999 : progress);
-}
+    Fraction operator+(const Fraction &operand) const;
+    Fraction operator*(const Fraction &operand) const;
+    Fraction operator/(const Fraction &operand) const;
+    Fraction &operator+=(const Fraction &fraction);
 
-void Progress::finishProgress()
-{
-    updateProgress(1);
-}
+    double value() const;
 
-void Progress::updateProgress(double progress)
-{
-    double increment = progress - m_progress;
-    WCTInnerAssert(increment >= 0);
-    if (increment > 0) {
-        m_progress = progress;
-        if (m_onProgressUpdate) {
-            m_onProgressUpdate(m_progress, increment);
-        }
-    }
-}
+protected:
+    void reduce();
+    int euclidean(int a, int b);
 
-void Progress::setProgressCallback(
-    const ProgressUpdateCallback &onProgressUpdated)
-{
-    m_onProgressUpdate = onProgressUpdated;
-}
+private:
+    int m_numerator;
+    int m_denominator;
+};
 
 } //namespace Repair
 
 } //namespace WCDB
+
+#endif /* Fraction_hpp */

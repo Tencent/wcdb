@@ -58,7 +58,7 @@ void FullCrawler::work()
             ++leafTablePageCount;
         }
     }
-    setPageWeight((double) 1.0 / leafTablePageCount);
+    setPageWeight(leafTablePageCount > 0 ? Fraction(1, leafTablePageCount) : 0);
 
     if (!markAsAssembling()) {
         return;
@@ -78,14 +78,14 @@ void FullCrawler::onCellCrawled(const Cell &cell)
 
 bool FullCrawler::willCrawlPage(const Page &page, int)
 {
-    increaseProgress(getPageWeight());
+    increaseProgress(getPageWeight().value());
     return true;
 }
 
 #pragma mark - MasterCrawlerDelegate
 void FullCrawler::onMasterPageCrawled(const Page &page)
 {
-    increaseProgress(getPageWeight());
+    increaseProgress(getPageWeight().value());
 }
 
 void FullCrawler::onMasterCellCrawled(const Cell &cell, const Master *master)
@@ -121,7 +121,7 @@ void FullCrawler::onMasterCrawlerError()
 #pragma mark - SequenceCrawlerDelegate
 void FullCrawler::onSequencePageCrawled(const Page &page)
 {
-    increaseProgress(getPageWeight());
+    increaseProgress(getPageWeight().value());
 }
 
 void FullCrawler::onSequenceCellCrawled(const Cell &cell,

@@ -387,8 +387,11 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
                 new Repair::SQLiteAssembler);
             retriever.setAssembler(assembler);
             retriever.setProgressCallback(onProgressUpdate);
-            score = retriever.work();
-            setThreadedError(retriever.getCriticalError());
+            bool result = retriever.work();
+            if (!result) {
+                setThreadedError(retriever.getCriticalError());
+            }
+            score = retriever.getScore().value();
         },
         false);
     return score;
