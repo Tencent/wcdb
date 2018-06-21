@@ -63,7 +63,7 @@ int Cell::getLengthOfSerialType(int serialType)
 
 int Cell::isSerialTypeSanity(int serialType)
 {
-    return serialType > 0 && serialType != 10 && serialType != 11;
+    return serialType >= 0 && serialType != 10 && serialType != 11;
 }
 
 int64_t Cell::getRowID() const
