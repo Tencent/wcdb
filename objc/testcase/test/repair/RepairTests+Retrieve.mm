@@ -44,7 +44,12 @@
 
     XCTAssertTrue([_database deposit]);
 
+    NSString *factoryPath = [_database.path stringByAppendingString:@".factory"];
+    XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:factoryPath]);
+
     XCTAssertEqual([_database retrieve:nil], 1.0);
+
+    XCTAssertFalse([[NSFileManager defaultManager] fileExistsAtPath:factoryPath]);
 
     NSArray<TestCaseObject *> *retrieved = [_database getObjectsOfClass:TestCaseObject.class fromTable:tableName orderBy:TestCaseObject.variable1];
     XCTAssertTrue([retrieved isEqualToTestCaseObjects:objects]);
@@ -132,34 +137,18 @@
     XCTAssertEqual(objectsBefore.count, count);
 
     XCTAssertTrue([_database backup]);
-
-    NSArray<TestCaseObject *> *objectsAfter = [self insertObjectsOfCount:1 intoTable:tableName];
-    XCTAssertEqual(objectsAfter.count, 1);
-
-    XCTAssertLessThan([_database retrieve:nil], 1.0);
-
-    NSArray<TestCaseObject *> *retrieved = [_database getObjectsOfClass:TestCaseObject.class fromTable:tableName orderBy:TestCaseObject.variable1];
-    XCTAssertTrue([retrieved isEqualToTestCaseObjects:objectsBefore]);
-}
-
-- (void)test_retrieve_checkpoint_after_backup
-{
-    NSString *tableName = self.className;
-    int count = 100;
-    NSArray<TestCaseObject *> *objectsBefore = [self insertObjectsOfCount:count intoTable:tableName];
-    XCTAssertEqual(objectsBefore.count, count);
-
-    XCTAssertTrue([_database backup]);
     XCTAssertTrue([_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
 
     NSArray<TestCaseObject *> *objectsAfter = [self insertObjectsOfCount:1 intoTable:tableName];
     XCTAssertEqual(objectsAfter.count, 1);
 
+    DatabaseBomber *databaseBomber = [[DatabaseBomber alloc] initWithPath:_database.path];
+    XCTAssertTrue([databaseBomber attackRootPage]);
+
     XCTAssertLessThan([_database retrieve:nil], 1.0);
 
     NSArray<TestCaseObject *> *retrieved = [_database getObjectsOfClass:TestCaseObject.class fromTable:tableName orderBy:TestCaseObject.variable1];
     XCTAssertTrue([retrieved isEqualToTestCaseObjects:objectsBefore]);
-    XCTAssertFalse([retrieved isEqualToTestCaseObjects:objectsAfter]);
 }
 
 - (void)test_retrieve_corrupted_with_backup
