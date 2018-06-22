@@ -82,6 +82,9 @@ bool FactoryRenewer::work()
 
 bool FactoryRenewer::prepare()
 {
+    WCTInnerAssert(m_assembler != nullptr);
+    WCTInnerAssert(m_assembler->getPath().empty());
+
     // 1. create temp directory for acquisition
     std::string tempDirectory = Path::addComponent(directory, "temp");
     std::string tempDatabase =
@@ -229,12 +232,6 @@ bool FactoryRenewer::resolveInfosForDatabase(
 
 FactoryRenewer::Info::Info() : sequence(0)
 {
-}
-
-void FactoryRenewer::setAssembler(const std::shared_ptr<Assembler> &assembler)
-{
-    WCTInnerAssert(assembler->getPath().empty());
-    m_assembler = assembler;
 }
 
 } //namespace Repair

@@ -29,7 +29,9 @@ namespace WCDB {
 
 namespace Repair {
 
-class FactoryRenewer : public FactoryRelated, public ErrorProne {
+class FactoryRenewer : public FactoryRelated,
+                       public ErrorProne,
+                       public AssemblerHolder {
 public:
     FactoryRenewer(Factory &factory);
     const std::string directory;
@@ -48,13 +50,6 @@ protected:
 
     bool resolveInfosForDatabase(std::map<std::string, Info> &infos,
                                  const std::string &databaseForAcquisition);
-
-#pragma mark - Assembler
-public:
-    void setAssembler(const std::shared_ptr<Assembler> &assembler);
-
-protected:
-    std::shared_ptr<Assembler> m_assembler;
 };
 
 } //namespace Repair

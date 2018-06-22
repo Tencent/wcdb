@@ -54,6 +54,14 @@ public:
     virtual const Error &getError() const = 0;
 };
 
+class AssemblerHolder {
+public:
+    void setAssembler(const std::shared_ptr<Assembler> &assembler);
+
+protected:
+    std::shared_ptr<Assembler> m_assembler;
+};
+
 } //namespace Repair
 
 } //namespace WCDB

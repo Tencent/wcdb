@@ -35,7 +35,8 @@ namespace Repair {
 class Repairman : public Crawlable,
                   public UpgradeableErrorProne,
                   public Progress,
-                  public SegmentedScoreable {
+                  public SegmentedScoreable,
+                  public AssemblerHolder {
 #pragma mark - Initialize
 public:
     Repairman(const std::string &path);
@@ -58,9 +59,6 @@ protected:
     void onErrorCritical() override;
 
 #pragma mark - Assembler
-public:
-    void setAssembler(const std::shared_ptr<Assembler> &assembler);
-
 protected:
     bool markAsAssembling();
     void markAsAssembled();
@@ -76,7 +74,6 @@ private:
     bool markAsMilestone();
     int m_milestone;
     int m_mile;
-    std::shared_ptr<Assembler> m_assembler;
 
 #pragma mark - Evaluation
 protected:

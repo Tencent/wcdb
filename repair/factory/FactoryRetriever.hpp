@@ -35,7 +35,8 @@ namespace Repair {
 class FactoryRetriever : public FactoryRelated,
                          public UpgradeableErrorProne,
                          public Progress,
-                         public Scoreable {
+                         public Scoreable,
+                         public AssemblerHolder {
 #pragma mark - Retriever
 public:
     FactoryRetriever(Factory &factory);
@@ -50,13 +51,6 @@ protected:
     void summaryReport();
     bool restore(const std::string &database);
     const std::string databaseFileName;
-
-#pragma mark - Assembler
-public:
-    void setAssembler(const std::shared_ptr<Assembler> &assembler);
-
-protected:
-    std::shared_ptr<Assembler> m_assembler;
 
 #pragma mark - Evaluation and Progress
 protected:

@@ -36,6 +36,11 @@ const std::string &Assembler::getPath() const
     return m_path;
 }
 
+void AssemblerHolder::setAssembler(const std::shared_ptr<Assembler> &assembler)
+{
+    m_assembler = assembler;
+}
+
 } //namespace Repair
 
 } //namespace WCDB

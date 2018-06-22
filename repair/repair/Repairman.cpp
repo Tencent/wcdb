@@ -34,7 +34,6 @@ Repairman::Repairman(const std::string &path)
     : m_pager(path)
     , Crawlable(m_pager)
     , Progress()
-    , m_assembler(nullptr)
     , m_milestone(1000)
     , m_mile(0)
 {
@@ -64,12 +63,6 @@ bool Repairman::isEmptyDatabase()
         return true;
     }
     return false;
-}
-
-#pragma mark - Assemble
-void Repairman::setAssembler(const std::shared_ptr<Assembler> &assembler)
-{
-    m_assembler = assembler;
 }
 
 bool Repairman::markAsAssembling()

@@ -46,6 +46,8 @@ FactoryRetriever::FactoryRetriever(Factory &factory_)
 bool FactoryRetriever::work()
 {
     WCTInnerAssert(m_assembler != nullptr);
+    WCTInnerAssert(m_assembler->getPath().empty());
+    m_assembler->setPath(database);
 
     FileManager *fileManager = FileManager::shared();
     bool succeed;
@@ -218,14 +220,6 @@ void FactoryRetriever::summaryReport()
     error.infos.set("Path", database);
     error.infos.set("Score", getScore().value() * 10000);
     Notifier::shared()->notify(error);
-}
-
-#pragma mark - Assembler
-void FactoryRetriever::setAssembler(const std::shared_ptr<Assembler> &assembler)
-{
-    WCTInnerAssert(assembler->getPath().empty());
-    m_assembler = assembler;
-    m_assembler->setPath(database);
 }
 
 #pragma mark - Score and Progress
