@@ -29,4 +29,6 @@
 
 - (NSArray<TestCaseObject *> *)insertObjectsOfCount:(int)count intoTable:(NSString *)tableName;
 
+- (NSArray<TestCaseObject *> *)insertObjectsOfCount:(int)count from:(int)offset intoTable:(NSString *)tableName;
+
 @end

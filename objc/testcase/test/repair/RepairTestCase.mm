@@ -31,8 +31,13 @@
 
 - (NSArray<TestCaseObject *> *)insertObjectsOfCount:(int)count intoTable:(NSString *)tableName
 {
-    NSArray<TestCaseObject *> *objects = [TestCaseObject objectsWithCount:count];
-    if ([_database createTableAndIndexes:tableName withClass:TestCaseObject.class] && [_database insertObjects:objects intoTable:tableName]) {
+    return [self insertObjectsOfCount:count from:0 intoTable:tableName];
+}
+
+- (NSArray<TestCaseObject *> *)insertObjectsOfCount:(int)count from:(int)offset intoTable:(NSString *)tableName
+{
+    NSArray<TestCaseObject *> *objects = [TestCaseObject objectsWithCount:count from:offset];
+    if ([_database createTableAndIndexes:tableName withClass:TestCaseObject.class] && [_database insertOrReplaceObjects:objects intoTable:tableName]) {
         return objects;
     }
     return nil;

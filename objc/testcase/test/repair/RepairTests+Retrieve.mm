@@ -27,6 +27,7 @@
 
 @implementation RepairTests_Retrieve
 
+#pragma mark - Without Backup
 - (void)test_retrieve
 {
     NSString *tableName = self.className;
@@ -77,7 +78,13 @@
     XCTAssertEqual(retrievedSequences[0].seq, count - 1);
 }
 
-- (void)test_retrieve_without_wal
+- (void)test_retrieve_corrupted
+{
+    //TODO
+}
+
+#pragma mark - With Backup
+- (void)test_retrieve_with_backup
 {
     NSString *tableName = self.className;
     int count = 100;
@@ -87,15 +94,7 @@
     XCTAssertEqual(sequences.count, 1);
     XCTAssertEqual(sequences[0].seq, count - 1);
 
-    XCTAssertTrue([_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
-
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *walPath = [NSString stringWithFormat:@"%@-wal", _database.path];
-    NSError *error;
-    XCTAssertEqual([[fileManager attributesOfItemAtPath:walPath error:&error] fileSize], 0);
-    XCTAssertNil(error);
-
-    XCTAssertTrue([_database deposit]);
+    XCTAssertTrue([_database backup]);
 
     XCTAssertEqual([_database retrieve:nil], 1.0);
 
@@ -107,8 +106,42 @@
     XCTAssertEqual(retrievedSequences[0].seq, count - 1);
 }
 
-- (void)test_retrieve_corrupted
+- (void)test_retrieve_inserted_after_backup
 {
+    NSString *tableName = self.className;
+    int count = 100;
+    NSArray<TestCaseObject *> *objectsBefore = [self insertObjectsOfCount:count intoTable:tableName];
+    XCTAssertEqual(objectsBefore.count, count);
+
+    XCTAssertTrue([_database backup]);
+
+    NSArray<TestCaseObject *> *objectsAfter = [self insertObjectsOfCount:1 intoTable:tableName];
+    XCTAssertEqual(objectsAfter.count, 1);
+
+    XCTAssertLessThan([_database retrieve:nil], 1.0);
+
+    NSArray<TestCaseObject *> *retrieved = [_database getObjectsOfClass:TestCaseObject.class fromTable:tableName orderBy:TestCaseObject.variable1];
+    XCTAssertTrue([retrieved isEqualToTestCaseObjects:objectsBefore]);
+}
+
+- (void)test_retrieve_checkpoint_after_backup
+{
+    NSString *tableName = self.className;
+    int count = 100;
+    NSArray<TestCaseObject *> *objectsBefore = [self insertObjectsOfCount:count intoTable:tableName];
+    XCTAssertEqual(objectsBefore.count, count);
+
+    XCTAssertTrue([_database backup]);
+    XCTAssertTrue([_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
+
+    NSArray<TestCaseObject *> *objectsAfter = [self insertObjectsOfCount:1 intoTable:tableName];
+    XCTAssertEqual(objectsAfter.count, 1);
+
+    XCTAssertLessThan([_database retrieve:nil], 1.0);
+
+    NSArray<TestCaseObject *> *retrieved = [_database getObjectsOfClass:TestCaseObject.class fromTable:tableName orderBy:TestCaseObject.variable1];
+    XCTAssertTrue([retrieved isEqualToTestCaseObjects:objectsBefore]);
+    XCTAssertFalse([retrieved isEqualToTestCaseObjects:objectsAfter]);
 }
 
 - (void)test_retrieve_corrupted_with_backup
