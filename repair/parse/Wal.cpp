@@ -210,6 +210,14 @@ bool Wal::doInitialize()
             if (!succeed || pageType == Page::Type::LeafTable ||
                 pageType == Page::Type::Unknown) {
                 m_disposedPages.insert(frame.getPageNumber());
+                Error error;
+                error.level = Error::Level::Notice;
+                error.setCode(Error::Code::Notice, "Repair");
+                error.message = "Dispose wal frame that is not backed up.";
+                error.infos.set("Frame", frameno);
+                error.infos.set("Page", frame.getPageNumber());
+                error.infos.set("Path", getPath());
+                Notifier::shared()->notify(error);
             }
         }
         checksum = frame.getChecksum();

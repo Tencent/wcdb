@@ -65,8 +65,8 @@ bool Mechanic::work()
             error.setCode(Error::Code::Notice, "Repair");
             error.message = "Dispose WAL of non-match salt.";
             error.infos.set("Path", m_pager.getPath());
-            error.infos.set("ParsedSalt1", m_pager.getWalSalt().first);
-            error.infos.set("ParsedSalt2", m_pager.getWalSalt().second);
+            error.infos.set("WalSalt1", m_pager.getWalSalt().first);
+            error.infos.set("WalSalt2", m_pager.getWalSalt().second);
             error.infos.set("MaterialSalt1", m_material->info.walSalt.first);
             error.infos.set("MaterialSalt2", m_material->info.walSalt.second);
             Notifier::shared()->notify(error);
