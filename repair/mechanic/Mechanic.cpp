@@ -57,13 +57,13 @@ bool Mechanic::work()
         return false;
     }
 
-    if (!m_pager.isWalDisposed()) {
+    if (m_pager.getWalFrameCount() > 0) {
         if (m_pager.getWalSalt() != m_material->info.walSalt) {
             m_pager.disposeWal();
             Error error;
             error.level = Error::Level::Notice;
-            error.setCode(Error::Code::Mismatch, "Repair");
-            error.message = "Skip WAL of non-match salt.";
+            error.setCode(Error::Code::Notice, "Repair");
+            error.message = "Dispose WAL of non-match salt.";
             error.infos.set("Path", m_pager.getPath());
             error.infos.set("ParsedSalt1", m_pager.getWalSalt().first);
             error.infos.set("ParsedSalt2", m_pager.getWalSalt().second);
@@ -77,9 +77,10 @@ bool Mechanic::work()
     for (const auto &element : m_material->contents) {
         pageCount += element.second.pagenos.size();
     }
-    //TODO resolve with disposed wal frames
     WCTInnerAssert(pageCount > 0);
-    setPageWeight(pageCount > 0 ? Fraction(1, pageCount) : 0);
+    setPageWeight(pageCount > 0
+                      ? Fraction(1, pageCount + m_pager.getDisposedWalPage())
+                      : 0);
 
     if (markAsAssembling()) {
         for (const auto &element : m_material->contents) {

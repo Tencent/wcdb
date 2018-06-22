@@ -67,6 +67,8 @@ protected:
 public:
     int getWalFrameCount() const;
     void setMaxWalFrame(int maxWalFrame);
+    int getDisposedWalPage() const;
+    void disposeWal();
     const std::pair<uint32_t, uint32_t> &getWalSalt() const;
 
 protected:
@@ -82,14 +84,6 @@ protected:
 #pragma mark - Initializeable
 protected:
     bool doInitialize() override;
-
-#pragma mark - Dispose
-public:
-    bool isWalDisposed() const;
-    void disposeWal();
-
-protected:
-    bool m_disposeWal;
 };
 
 } //namespace Repair

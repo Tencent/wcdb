@@ -166,12 +166,10 @@ bool Wal::doInitialize()
     size_t fileSize;
     std::tie(succeed, fileSize) = fileManager->getFileSize(getPath());
     if (fileSize == 0) {
-        if (succeed) {
-            markAsError(Error::Code::Empty);
-        } else {
+        if (!succeed) {
             assignWithSharedThreadedError();
         }
-        return false;
+        return succeed;
     }
 
     Data data = acquireData(0, headerSize);
@@ -192,17 +190,28 @@ bool Wal::doInitialize()
     checksum.first = deserialization.advance4BytesUInt();
     checksum.second = deserialization.advance4BytesUInt();
 
-    int frameno = 0;
     const int frameSize = getFrameSize();
-    for (off_t offset = headerSize;
-         offset + frameSize <= fileSize && frameno < m_maxFrame;
-         offset += frameSize) {
-        Frame frame(++frameno, this, checksum);
+    const int framesSize = (int) fileSize - headerSize;
+    const int frameCountInFile = framesSize / frameSize;
+    for (int frameno = 1; frameno <= frameCountInFile; ++frameno) {
+        Frame frame(frameno, this, checksum);
         if (!frame.initialize()) {
+            //If frame can't be inited, it means that it' already corrupted or only a reused frame.
+            //If it's the latter one, it doesn't mean disposed.
             break;
         }
-        m_frames = frameno;
-        m_framePages[frame.getPageNumber()] = frameno;
+        if (frameno <= m_maxFrame) {
+            m_frames = frameno;
+            m_framePages[frame.getPageNumber()] = frameno;
+        } else {
+            bool succeed;
+            Page::Type pageType;
+            std::tie(succeed, pageType) = frame.getPageType();
+            if (!succeed || pageType == Page::Type::LeafTable ||
+                pageType == Page::Type::Unknown) {
+                m_disposedPages.insert(frame.getPageNumber());
+            }
+        }
         checksum = frame.getChecksum();
     }
     return true;
@@ -227,6 +236,23 @@ void Wal::markAsError(Error::Code code)
     error.infos.set("Path", getPath());
     Notifier::shared()->notify(error);
     setError(std::move(error));
+}
+
+#pragma mark - Dispose
+int Wal::getDisposedPage() const
+{
+    WCTInnerAssert(isInitialized());
+    return (int) m_disposedPages.size();
+}
+
+void Wal::dispose()
+{
+    WCTInnerAssert(isInitialized());
+    for (const auto &element : m_framePages) {
+        m_disposedPages.insert(element.first);
+    }
+    m_framePages.clear();
+    m_frames = 0;
 }
 
 } //namespace Repair

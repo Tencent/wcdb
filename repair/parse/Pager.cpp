@@ -35,7 +35,6 @@ Pager::Pager(const std::string &path)
     , m_reservedBytes(-1)
     , m_pageCount(0)
     , m_wal(this)
-    , m_disposeWal(false)
 {
 }
 
@@ -60,8 +59,7 @@ const std::string &Pager::getPath() const
 int Pager::getPageCount() const
 {
     WCTInnerAssert(isInitialized());
-    return isWalDisposed() ? m_pageCount
-                           : std::max(m_wal.getMaxPageno(), m_pageCount);
+    return std::max(m_wal.getMaxPageno(), m_pageCount);
 }
 
 int Pager::getUsableSize() const
@@ -92,7 +90,7 @@ Data Pager::acquirePageData(int number, off_t offset, size_t size)
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(number > 0);
     WCTInnerAssert(offset + size <= m_pageSize);
-    if (!isWalDisposed() && m_wal.containsPage(number)) {
+    if (m_wal.containsPage(number)) {
         return m_wal.acquirePageData(number, offset, size);
     }
     return acquireData((number - 1) * m_pageSize + offset, size);
@@ -130,15 +128,24 @@ void Pager::setMaxWalFrame(int maxWalFrame)
     m_wal.setMaxFrame(maxWalFrame);
 }
 
+int Pager::getDisposedWalPage() const
+{
+    return m_wal.getDisposedPage();
+}
+
+void Pager::disposeWal()
+{
+    m_wal.dispose();
+}
+
 const std::pair<uint32_t, uint32_t> &Pager::getWalSalt() const
 {
-    WCTInnerAssert(!isWalDisposed());
+    WCTInnerAssert(m_wal.getFrameCount() > 0);
     return m_wal.getSalt();
 }
 
 int Pager::getWalFrameCount() const
 {
-    WCTInnerAssert(!isWalDisposed());
     return m_wal.getFrameCount();
 }
 
@@ -214,28 +221,7 @@ bool Pager::doInitialize()
 
     m_pageCount = (int) ((fileSize + m_pageSize - 1) / m_pageSize);
 
-    std::tie(succeed, fileSize) = fileManager->getFileSize(m_wal.getPath());
-    if (!succeed) {
-        assignWithSharedThreadedError();
-        return false;
-    }
-    if (fileSize == 0) {
-        disposeWal();
-    } else {
-        return m_wal.initialize();
-    }
-    return true;
-}
-
-#pragma mark - Dispose
-bool Pager::isWalDisposed() const
-{
-    return m_disposeWal;
-}
-
-void Pager::disposeWal()
-{
-    m_disposeWal = true;
+    return m_wal.initialize();
 }
 
 } //namespace Repair

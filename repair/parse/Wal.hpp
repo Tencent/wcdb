@@ -26,6 +26,7 @@
 #include <WCDB/Initializeable.hpp>
 #include <WCDB/PagerRelated.hpp>
 #include <map>
+#include <set>
 
 namespace WCDB {
 
@@ -68,7 +69,6 @@ protected:
     int m_frames;
     bool m_isNativeChecksum;
     std::pair<uint32_t, uint32_t> m_salt;
-    std::pair<uint32_t, uint32_t> m_checksum;
 
 #pragma mark - Frame
 public:
@@ -83,6 +83,14 @@ protected:
 protected:
     void markAsCorrupted(int frame, const std::string &element);
     void markAsError(Error::Code code);
+
+#pragma mark - Dispose
+public:
+    int getDisposedPage() const;
+    void dispose();
+
+protected:
+    std::set<int> m_disposedPages;
 };
 
 } //namespace Repair

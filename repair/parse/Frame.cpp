@@ -47,6 +47,14 @@ const std::pair<uint32_t, uint32_t> &Frame::getChecksum() const
     return m_checksum;
 }
 
+std::pair<bool, Page::Type> Frame::getPageType() const
+{
+    WCTInnerAssert(isInitialized());
+    Data pageData = m_data.subdata(headerSize, m_wal->getPageSize());
+    Page page = Page(getPageNumber(), m_pager, pageData);
+    return page.acquireType();
+}
+
 std::pair<uint32_t, uint32_t>
 Frame::calculateChecksum(const Data &data,
                          const std::pair<uint32_t, uint32_t> &checksum)
@@ -82,11 +90,13 @@ Frame::calculateChecksum(const Data &data,
 #pragma mark - Initializeable
 bool Frame::doInitialize()
 {
-    Data data = m_wal->acquireFrameData(frameno);
-    if (data.empty()) {
-        return false;
+    if (m_data.empty()) {
+        m_data = m_wal->acquireFrameData(frameno);
+        if (m_data.empty()) {
+            return false;
+        }
     }
-    Deserialization deserialization(data);
+    Deserialization deserialization(m_data);
 
     WCTInnerAssert(deserialization.canAdvance(4));
     m_pageno = (int) deserialization.advance4BytesUInt();
@@ -108,14 +118,14 @@ bool Frame::doInitialize()
     checksum.first = deserialization.advance4BytesUInt();
     checksum.second = deserialization.advance4BytesUInt();
 
-    m_checksum = calculateChecksum(data.subdata(0, 8), m_checksum);
-    m_checksum = calculateChecksum(
-        data.subdata(headerSize, m_wal->getPageSize()), m_checksum);
-    if (m_checksum == checksum) {
-        return true;
+    Data pageData = m_data.subdata(headerSize, m_wal->getPageSize());
+    m_checksum = calculateChecksum(m_data.subdata(0, 8), m_checksum);
+    m_checksum = calculateChecksum(pageData, m_checksum);
+    if (m_checksum != checksum) {
+        markWalAsCorrupted(frameno, "Checksum");
+        return false;
     }
-    markWalAsCorrupted(frameno, "Checksum");
-    return false;
+    return true;
 }
 
 } //namespace Repair

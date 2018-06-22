@@ -23,6 +23,7 @@
 
 #include <WCDB/Data.hpp>
 #include <WCDB/Initializeable.hpp>
+#include <WCDB/Page.hpp>
 #include <WCDB/WalRelated.hpp>
 #include <utility>
 
@@ -40,11 +41,13 @@ public:
     const int frameno;
 
     int getPageNumber() const;
+    std::pair<bool, Page::Type> getPageType() const;
     const std::pair<uint32_t, uint32_t> &getChecksum() const;
 
 protected:
     std::pair<uint32_t, uint32_t> m_checksum;
     int m_pageno;
+    Data m_data;
 
     std::pair<uint32_t, uint32_t>
     calculateChecksum(const Data &data,

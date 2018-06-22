@@ -36,6 +36,7 @@ class Page : public PagerRelated, public Initializeable {
 #pragma mark - Initialize
 public:
     Page(int number, Pager *pager);
+    Page(int number, Pager *pager, const Data &data);
 
     const int number;
 

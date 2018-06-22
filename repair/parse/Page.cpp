@@ -34,6 +34,14 @@ Page::Page(int number_, Pager *pager) : PagerRelated(pager), number(number_)
 {
 }
 
+Page::Page(int number_, Pager *pager, const Data &data)
+    : PagerRelated(pager)
+    , number(number_)
+    , m_data(data)
+    , m_deserialization(data)
+{
+}
+
 std::pair<bool, Page::Type> Page::acquireType()
 {
     int type = 0;
@@ -140,11 +148,13 @@ int Page::getOffsetOfHeader() const
 #pragma mark - Initializeable
 bool Page::doInitialize()
 {
-    m_data = m_pager->acquirePageData(number);
     if (m_data.empty()) {
-        return false;
+        m_data = m_pager->acquirePageData(number);
+        if (m_data.empty()) {
+            return false;
+        }
+        m_deserialization.reset(m_data);
     }
-    m_deserialization.reset(m_data);
     m_deserialization.seek(getOffsetOfHeader());
     WCTInnerAssert(m_deserialization.canAdvance(1));
     int type = m_deserialization.advance1ByteInt();

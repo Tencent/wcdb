@@ -28,6 +28,7 @@ namespace WCDB {
 namespace Repair {
 
 class Wal;
+class Pager;
 
 class WalRelated {
 public:
@@ -41,6 +42,7 @@ protected:
     void assignWithSharedThreadedError();
 
     Wal *m_wal;
+    Pager *m_pager;
 };
 
 } //namespace Repair

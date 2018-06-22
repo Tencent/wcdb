@@ -45,7 +45,7 @@ bool Backup::work(int maxWalFrame)
 
     m_material.info.pageSize = m_pager.getPageSize();
     m_material.info.reservedBytes = m_pager.getReservedBytes();
-    if (!m_pager.isWalDisposed()) {
+    if (m_pager.getWalFrameCount() > 0) {
         m_material.info.walSalt = m_pager.getWalSalt();
         m_material.info.walFrame = m_pager.getWalFrameCount();
     }
