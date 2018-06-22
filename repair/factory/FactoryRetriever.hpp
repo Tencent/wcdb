@@ -46,7 +46,8 @@ public:
     bool work();
 
 protected:
-    void report(double score, const std::string &path, bool material = false);
+    void report(const Fraction &score, const std::string &path, bool material);
+    void summaryReport();
     bool restore(const std::string &database);
     const std::string databaseFileName;
 

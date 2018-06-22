@@ -86,7 +86,7 @@ bool FactoryRetriever::work()
         }
     }
 
-    report(getScore().value(), database);
+    summaryReport();
 
     //4. Do a Backup on restore db.
     FactoryBackup backup(factory);
@@ -149,7 +149,7 @@ bool FactoryRetriever::restore(const std::string &database)
                 return false;
             }
             increaseScore(database, mechanic.getScore());
-            report(mechanic.getScore().value(), database, true);
+            report(mechanic.getScore(), database, true);
             return true;
         } else if (ThreadedErrors::shared()->getThreadedError().code() !=
                    Error::Code::Corrupt) {
@@ -178,11 +178,11 @@ bool FactoryRetriever::restore(const std::string &database)
         return false;
     }
     increaseScore(database, fullCrawler.getScore());
-    report(fullCrawler.getScore().value(), database);
+    report(fullCrawler.getScore(), database, false);
     return true;
 }
 
-void FactoryRetriever::report(double score,
+void FactoryRetriever::report(const Fraction &score,
                               const std::string &path,
                               bool material)
 {
@@ -191,10 +191,20 @@ void FactoryRetriever::report(double score,
     error.level = Error::Level::Notice;
     error.message = "Retriever Report.";
     error.infos.set("Path", path);
-    error.infos.set("Score", score * 10000);
-    if (material) {
-        error.infos.set("Material", material);
-    }
+    error.infos.set("Score", score.value() * 10000);
+    error.infos.set("Material", material);
+    error.infos.set("Weight", m_weights[path].value() * 10000);
+    Notifier::shared()->notify(error);
+}
+
+void FactoryRetriever::summaryReport()
+{
+    Error error;
+    error.setCode(Error::Code::Notice, "Repair");
+    error.level = Error::Level::Notice;
+    error.message = "Retriever Summary Report.";
+    error.infos.set("Path", database);
+    error.infos.set("Score", getScore().value() * 10000);
     Notifier::shared()->notify(error);
 }
 
