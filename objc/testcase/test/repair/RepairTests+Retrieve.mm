@@ -80,7 +80,25 @@
 
 - (void)test_retrieve_corrupted
 {
-    //TODO
+    NSString *tableName = self.className;
+    int count = 100;
+    NSArray<TestCaseObject *> *objects = [self insertObjectsOfCount:count intoTable:tableName];
+    XCTAssertEqual(objects.count, count);
+    NSArray<WCTSequence *> *sequences = [_database getObjectsOfClass:WCTSequence.class fromTable:WCTSequence.tableName];
+    XCTAssertEqual(sequences.count, 1);
+    XCTAssertEqual(sequences[0].seq, count - 1);
+
+    XCTAssertTrue([_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
+
+    DatabaseBomber *bomber = [[DatabaseBomber alloc] initWithPath:_database.path];
+    XCTAssertTrue([bomber attackRootPage]);
+
+    XCTAssertTrue([_database deposit]);
+
+    XCTAssertEqual([_database retrieve:nil], -1);
+
+    NSArray<TestCaseObject *> *retrieved = [_database getObjectsOfClass:TestCaseObject.class fromTable:tableName orderBy:TestCaseObject.variable1];
+    XCTAssertNil(retrieved);
 }
 
 #pragma mark - With Backup
@@ -146,10 +164,61 @@
 
 - (void)test_retrieve_corrupted_with_backup
 {
+    NSString *tableName = self.className;
+    int count = 100;
+    NSArray<TestCaseObject *> *objects = [self insertObjectsOfCount:count intoTable:tableName];
+    XCTAssertEqual(objects.count, count);
+    NSArray<WCTSequence *> *sequences = [_database getObjectsOfClass:WCTSequence.class fromTable:WCTSequence.tableName];
+    XCTAssertEqual(sequences.count, 1);
+    XCTAssertEqual(sequences[0].seq, count - 1);
+
+    XCTAssertTrue([_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
+
+    XCTAssertTrue([_database backup]);
+
+    DatabaseBomber *bomber = [[DatabaseBomber alloc] initWithPath:_database.path];
+    XCTAssertTrue([bomber attackRootPage]);
+
+    XCTAssertTrue([_database deposit]);
+
+    XCTAssertEqual([_database retrieve:nil], 1.0);
+
+    NSArray<TestCaseObject *> *retrieved = [_database getObjectsOfClass:TestCaseObject.class fromTable:tableName orderBy:TestCaseObject.variable1];
+    XCTAssertTrue([retrieved isEqualToTestCaseObjects:objects]);
+
+    NSArray<WCTSequence *> *retrievedSequences = [_database getObjectsOfClass:WCTSequence.class fromTable:WCTSequence.tableName];
+    XCTAssertEqual(retrievedSequences.count, 1);
+    XCTAssertEqual(retrievedSequences[0].seq, count - 1);
 }
 
 - (void)test_retrieve_corrupted_with_corrupted_backup
 {
+    NSString *tableName = self.className;
+    int count = 100;
+    NSArray<TestCaseObject *> *objects = [self insertObjectsOfCount:count intoTable:tableName];
+    XCTAssertEqual(objects.count, count);
+    NSArray<WCTSequence *> *sequences = [_database getObjectsOfClass:WCTSequence.class fromTable:WCTSequence.tableName];
+    XCTAssertEqual(sequences.count, 1);
+    XCTAssertEqual(sequences[0].seq, count - 1);
+
+    XCTAssertTrue([_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
+
+    XCTAssertTrue([_database backup]);
+
+    DatabaseBomber *databaseBomber = [[DatabaseBomber alloc] initWithPath:_database.path];
+    XCTAssertTrue([databaseBomber attackRootPage]);
+
+    NSString *backupPath = [_database.path stringByAppendingString:@"-first.material"];
+    XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:backupPath]);
+    FileBomber *fileBomber = [[FileBomber alloc] initWithPath:backupPath];
+    XCTAssertTrue([fileBomber randomAttack]);
+
+    XCTAssertTrue([_database deposit]);
+
+    XCTAssertLessThan([_database retrieve:nil], 1.0);
+
+    NSArray<TestCaseObject *> *retrieved = [_database getObjectsOfClass:TestCaseObject.class fromTable:tableName orderBy:TestCaseObject.variable1];
+    XCTAssertNil(retrieved);
 }
 
 @end
