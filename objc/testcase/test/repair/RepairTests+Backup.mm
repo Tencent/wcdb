@@ -128,6 +128,20 @@
     XCTAssertTrue([_database tableExists:tableName1]);
     WCTError *error;
     XCTAssertFalse([_database tableExists:tableName2 withError:&error]);
+    XCTAssertNil(error);
+}
+
+- (void)test_filter_all
+{
+    int count = 100;
+    NSString *tableName = self.className;
+    XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
+
+    [_database filterBackup:^BOOL(NSString *tableName) {
+      return YES;
+    }];
+
+    XCTAssertFalse([_database backup]);
 }
 
 @end
