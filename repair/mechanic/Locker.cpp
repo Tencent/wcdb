@@ -24,16 +24,6 @@ namespace WCDB {
 
 namespace Repair {
 
-void Locker::setPath(const std::string &path)
-{
-    m_path = path;
-}
-
-const std::string &Locker::getPath() const
-{
-    return m_path;
-}
-
 void LockerHolder::setLocker(const std::shared_ptr<Locker> &locker)
 {
     m_locker = locker;

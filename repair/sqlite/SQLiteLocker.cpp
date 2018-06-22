@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/SQLiteLocker.hpp>
+#include <sqlite3.h>
 
 namespace WCDB {
 
@@ -26,17 +27,36 @@ namespace Repair {
 
 bool SQLiteLocker::acquireReadLock()
 {
-    return false;
+    if (!open()) {
+        return false;
+    }
+    if (!lazyBeginTransaction()) {
+        return false;
+    }
+    //execute read sql to acquire read lock
+    return execute("SELECT 1 FROM sqlite_master LIMIT 0");
 }
 
 bool SQLiteLocker::releaseReadLock()
 {
-    return false;
+    lazyCommitOrRollbackTransaction(false);
+    close();
+    return true;
 }
 
 const Error &SQLiteLocker::getError() const
 {
     return ErrorProne::getError();
+}
+
+void SQLiteLocker::setPath(const std::string &path)
+{
+    SQLiteBase::setPath(path);
+}
+
+const std::string &SQLiteLocker::getPath() const
+{
+    return SQLiteBase::getPath();
 }
 
 } //namespace Repair

@@ -21,15 +21,18 @@
 #ifndef SQLiteLocker_hpp
 #define SQLiteLocker_hpp
 
-#include <WCDB/ErrorProne.hpp>
 #include <WCDB/Locker.hpp>
+#include <WCDB/SQLiteBase.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-class SQLiteLocker : public Locker, public ErrorProne {
+class SQLiteLocker : public Locker, public SQLiteBase {
 public:
+    void setPath(const std::string &path) override;
+    const std::string &getPath() const override;
+
     bool acquireReadLock() override;
     bool releaseReadLock() override;
     const Error &getError() const override;

@@ -26,16 +26,6 @@ namespace WCDB {
 
 namespace Repair {
 
-void Assembler::setPath(const std::string &path)
-{
-    m_path = path;
-}
-
-const std::string &Assembler::getPath() const
-{
-    return m_path;
-}
-
 void AssemblerHolder::setAssembler(const std::shared_ptr<Assembler> &assembler)
 {
     m_assembler = assembler;

@@ -22,14 +22,14 @@
 #define SQLiteAssembler_hpp
 
 #include <WCDB/Assembler.hpp>
-#include <WCDB/ErrorProne.hpp>
+#include <WCDB/SQLiteBase.hpp>
 #include <list>
 
 namespace WCDB {
 
 namespace Repair {
 
-class SQLiteAssembler : public Assembler, public ErrorProne {
+class SQLiteAssembler : public Assembler, public SQLiteBase {
 #pragma mark - Initialize
 public:
     SQLiteAssembler();
@@ -46,6 +46,9 @@ protected:
 
 #pragma mark - Assembler
 public:
+    void setPath(const std::string &path) override;
+    const std::string &getPath() const override;
+
     bool markAsAssembling() override;
     bool markAsAssembled() override;
 
@@ -82,36 +85,9 @@ protected:
     void *m_insertSequenceSTMT;
     void *m_updateSequenceSTMT;
 
-#pragma mark - Transaction
+#pragma mark - SQLite Base
 protected:
-    bool lazyBeginTransaction();
-    bool lazyCommitOrRollbackTransaction(bool commit = true);
-
-private:
-    bool m_transaction;
-
-#pragma mark - Error
-protected:
-    bool isErrorIgnorable(int rc);
-    void setError(int rc, const char *sql = nullptr);
-
-#pragma mark - SQLite Handle
-protected:
-    bool open();
-    bool isOpened() const;
     void close();
-
-    bool execute(const char *sql, bool ignoreError = false);
-
-    void *m_handle;
-
-#pragma mark - SQLite STMT
-protected:
-    void *prepare(const char *sql);
-    bool step(void *stmt);
-    bool step(void *stmt, bool &done);
-
-    void finalize(void **stmt);
 };
 
 } //namespace Repair

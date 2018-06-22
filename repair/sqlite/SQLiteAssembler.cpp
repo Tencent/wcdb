@@ -31,14 +31,11 @@ namespace Repair {
 
 #pragma mark - Initialize
 SQLiteAssembler::SQLiteAssembler()
-    : Assembler()
-    , m_transaction(false)
-    //    , m_onTableAssembled(nullptr)
-    , m_handle(nullptr)
-    , m_cellSTMT(nullptr)
+    : m_cellSTMT(nullptr)
     , m_insertSequenceSTMT(nullptr)
     , m_updateSequenceSTMT(nullptr)
     , m_primary(-1)
+//    , m_onTableAssembled(nullptr)
 {
 }
 
@@ -64,6 +61,16 @@ bool SQLiteAssembler::onTableAssembled(const std::string &tableName)
 }
 
 #pragma mark - Assemble
+void SQLiteAssembler::setPath(const std::string &path)
+{
+    SQLiteBase::setPath(path);
+}
+
+const std::string &SQLiteAssembler::getPath() const
+{
+    return SQLiteBase::getPath();
+}
+
 bool SQLiteAssembler::markAsAssembling()
 {
     return open();
@@ -306,142 +313,13 @@ bool SQLiteAssembler::assembleSequence(const std::string &tableName,
     return insertSequence(tableName, sequence);
 }
 
-#pragma mark - Transaction
-bool SQLiteAssembler::lazyBeginTransaction()
-{
-    if (m_transaction) {
-        return true;
-    }
-    if (execute("BEGIN IMMEDIATE")) {
-        m_transaction = true;
-        return true;
-    }
-    return false;
-}
-
-bool SQLiteAssembler::lazyCommitOrRollbackTransaction(bool commit)
-{
-    if (m_transaction) {
-        m_transaction = false;
-        if (!commit || !execute("COMMIT")) {
-            execute("ROLLBACK", true); //ignore error
-            return false;
-        }
-    }
-    return true;
-}
-
-#pragma mark - Error
-void SQLiteAssembler::setError(int rc, const char *sql)
-{
-    Error error;
-    error.setSQLiteCode(rc, sqlite3_extended_errcode((sqlite3 *) m_handle));
-    const char *message = sqlite3_errmsg((sqlite3 *) m_handle);
-    if (message) {
-        error.message = message;
-    }
-    if (sql) {
-        error.infos.set("SQL", sql);
-    }
-    error.infos.set("Path", m_path);
-    Notifier::shared()->notify(error);
-    ErrorProne::setError(std::move(error));
-}
-
-#pragma mark - SQLite Handle
-bool SQLiteAssembler::open()
-{
-    if (!m_handle) {
-        int rc = sqlite3_open(m_path.c_str(), (sqlite3 **) &m_handle);
-        if (rc != SQLITE_OK) {
-            setError(rc);
-            return false;
-        }
-        rc = sqlite3_exec((sqlite3 *) m_handle, "PRAGMA journal_mode=delete",
-                          nullptr, nullptr, nullptr);
-        if (rc != SQLITE_OK) {
-            setError(rc);
-            close();
-            return false;
-        }
-    }
-    return true;
-}
-
-bool SQLiteAssembler::isOpened() const
-{
-    return m_handle != nullptr;
-}
-
+#pragma mark - SQLite Base
 void SQLiteAssembler::close()
 {
     WCTInnerAssert(m_insertSequenceSTMT == nullptr);
     WCTInnerAssert(m_updateSequenceSTMT == nullptr);
     WCTInnerAssert(m_cellSTMT == nullptr);
-    if (m_handle) {
-        sqlite3_close((sqlite3 *) m_handle);
-        m_handle = nullptr;
-    }
-}
-
-bool SQLiteAssembler::execute(const char *sql, bool ignoreError)
-{
-    WCTInnerAssert(isOpened());
-    WCTInnerAssert(sql != nullptr);
-    int rc = sqlite3_exec((sqlite3 *) m_handle, sql, nullptr, nullptr, nullptr);
-    if (rc == SQLITE_OK) {
-        return true;
-    }
-    if (!ignoreError) {
-        setError(rc, sql);
-    }
-    return false;
-}
-
-#pragma mark - SQLite STMT
-void *SQLiteAssembler::prepare(const char *sql)
-{
-    WCTInnerAssert(isOpened());
-    WCTInnerAssert(sql != nullptr);
-    sqlite3_stmt *stmt;
-    int rc = sqlite3_prepare_v2((sqlite3 *) m_handle, sql, -1, &stmt, nullptr);
-    if (rc == SQLITE_OK) {
-        return stmt;
-    }
-    setError(rc, sql);
-    return nullptr;
-}
-
-bool SQLiteAssembler::step(void *stmt)
-{
-    bool unused;
-    return step(stmt, unused);
-}
-
-bool SQLiteAssembler::step(void *stmt, bool &done)
-{
-    WCTInnerAssert(isOpened());
-    WCTInnerAssert(stmt != nullptr);
-    int rc = sqlite3_step((sqlite3_stmt *) stmt);
-    done = rc == SQLITE_DONE;
-    if (rc == SQLITE_OK || rc == SQLITE_DONE || rc == SQLITE_ROW) {
-        return true;
-    };
-    const char *sql = sqlite3_sql((sqlite3_stmt *) stmt);
-    if (sql) {
-        setError(rc, sql);
-    } else {
-        setError(rc);
-    }
-    return false;
-}
-
-void SQLiteAssembler::finalize(void **stmt)
-{
-    if (*stmt != nullptr) {
-        sqlite3_finalize((sqlite3_stmt *) *stmt);
-        *stmt = nullptr;
-    }
+    SQLiteBase::close();
 }
 
 } //namespace Repair

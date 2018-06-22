@@ -560,6 +560,10 @@
 		23C7559420DCF90F00031A93 /* SQLiteLocker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C7559020DCF90F00031A93 /* SQLiteLocker.hpp */; };
 		23C7559620DCFA0B00031A93 /* Locker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C7559520DCFA0B00031A93 /* Locker.cpp */; };
 		23C7559720DCFA0B00031A93 /* Locker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C7559520DCFA0B00031A93 /* Locker.cpp */; };
+		23C7559A20DD17B100031A93 /* SQLiteBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C7559820DD17B100031A93 /* SQLiteBase.cpp */; };
+		23C7559B20DD17B100031A93 /* SQLiteBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C7559820DD17B100031A93 /* SQLiteBase.cpp */; };
+		23C7559C20DD17B100031A93 /* SQLiteBase.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C7559920DD17B100031A93 /* SQLiteBase.hpp */; };
+		23C7559D20DD17B100031A93 /* SQLiteBase.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C7559920DD17B100031A93 /* SQLiteBase.hpp */; };
 		23D07CE420BE87360043F4D4 /* MasterCrawler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D07CE220BE87360043F4D4 /* MasterCrawler.cpp */; };
 		23D07CE520BE87360043F4D4 /* MasterCrawler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D07CE220BE87360043F4D4 /* MasterCrawler.cpp */; };
 		23D07CE620BE87360043F4D4 /* MasterCrawler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D07CE320BE87360043F4D4 /* MasterCrawler.hpp */; };
@@ -1571,6 +1575,8 @@
 		23C7558F20DCF90F00031A93 /* SQLiteLocker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SQLiteLocker.cpp; sourceTree = "<group>"; };
 		23C7559020DCF90F00031A93 /* SQLiteLocker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SQLiteLocker.hpp; sourceTree = "<group>"; };
 		23C7559520DCFA0B00031A93 /* Locker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Locker.cpp; sourceTree = "<group>"; };
+		23C7559820DD17B100031A93 /* SQLiteBase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SQLiteBase.cpp; sourceTree = "<group>"; };
+		23C7559920DD17B100031A93 /* SQLiteBase.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SQLiteBase.hpp; sourceTree = "<group>"; };
 		23D07CE220BE87360043F4D4 /* MasterCrawler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MasterCrawler.cpp; sourceTree = "<group>"; };
 		23D07CE320BE87360043F4D4 /* MasterCrawler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MasterCrawler.hpp; sourceTree = "<group>"; };
 		23D07CE820BE873E0043F4D4 /* SequenceCrawler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SequenceCrawler.cpp; sourceTree = "<group>"; };
@@ -2474,6 +2480,8 @@
 				23D0C30D20C125420001BFAE /* SQLiteAssembler.hpp */,
 				23C7558F20DCF90F00031A93 /* SQLiteLocker.cpp */,
 				23C7559020DCF90F00031A93 /* SQLiteLocker.hpp */,
+				23C7559820DD17B100031A93 /* SQLiteBase.cpp */,
+				23C7559920DD17B100031A93 /* SQLiteBase.hpp */,
 			);
 			path = sqlite;
 			sourceTree = "<group>";
@@ -2777,6 +2785,7 @@
 				2349F76B1EA0D6680021EFA7 /* WCTPropertyMacro.h in Headers */,
 				2349F76F1EA0D6680021EFA7 /* WCTORM.h in Headers */,
 				23775B6820AD666900E21AB0 /* Notifier.hpp in Headers */,
+				23C7559C20DD17B100031A93 /* SQLiteBase.hpp in Headers */,
 				2349F7481EA0D6680021EFA7 /* WCTDatabase+File.h in Headers */,
 				23E1FD79206C962E006C6C8E /* NSObject+WCTColumnCoding.h in Headers */,
 				23B8F56F2043FD1E00EC571D /* Redirectable.hpp in Headers */,
@@ -3070,6 +3079,7 @@
 				23F5BDDB20887FD3000CCD37 /* WCTPropertyMacro.h in Headers */,
 				23F5BDDC20887FD3000CCD37 /* WCTORM.h in Headers */,
 				23775B6920AD666900E21AB0 /* Notifier.hpp in Headers */,
+				23C7559D20DD17B100031A93 /* SQLiteBase.hpp in Headers */,
 				23F5BDDD20887FD3000CCD37 /* WCTDatabase+File.h in Headers */,
 				23F5BDDE20887FD3000CCD37 /* NSObject+WCTColumnCoding.h in Headers */,
 				23F5BDDF20887FD3000CCD37 /* Redirectable.hpp in Headers */,
@@ -3459,6 +3469,7 @@
 				23977537202AECD3000A681C /* StatementRollback.cpp in Sources */,
 				23775B7A20AD666900E21AB0 /* Material.cpp in Sources */,
 				23775B9620AD666900E21AB0 /* Crawlable.cpp in Sources */,
+				23C7559A20DD17B100031A93 /* SQLiteBase.cpp in Sources */,
 				2397756F202AECD3000A681C /* LangDropIndexSTMT.cpp in Sources */,
 				23D0C31420C125570001BFAE /* Assembler.cpp in Sources */,
 				2360A5F720D78F1B00E4A311 /* HandleRelated.cpp in Sources */,
@@ -3706,6 +3717,7 @@
 				23F5BCEA20887FD3000CCD37 /* StatementRollback.cpp in Sources */,
 				23775B7B20AD666900E21AB0 /* Material.cpp in Sources */,
 				23775B9720AD666900E21AB0 /* Crawlable.cpp in Sources */,
+				23C7559B20DD17B100031A93 /* SQLiteBase.cpp in Sources */,
 				23F5BCEB20887FD3000CCD37 /* LangDropIndexSTMT.cpp in Sources */,
 				23D0C31520C125570001BFAE /* Assembler.cpp in Sources */,
 				2360A5F820D78F1B00E4A311 /* HandleRelated.cpp in Sources */,
