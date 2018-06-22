@@ -41,6 +41,7 @@ public:
         Remove = 0,
         Deposit = 1,
     };
+    static const char *reactionName(Reaction reaction);
     void setReaction(Reaction reaction);
     Reaction getReaction() const;
 
@@ -51,6 +52,8 @@ protected:
 public:
     typedef std::function<void(std::shared_ptr<Database> &)> ExtraReaction;
     void setExtraReaction(const ExtraReaction &extraReaction);
+    void markAsHandling();
+    void markAsHandled();
 
 protected:
     friend class CorruptionNotifier;
@@ -58,6 +61,7 @@ protected:
     bool markAsCorrupted();
 
 private:
+    std::atomic<bool> m_handling;
     std::atomic<bool> m_corrupted;
     ExtraReaction m_extraReaction;
 };

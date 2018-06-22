@@ -351,26 +351,30 @@ bool Database::deposit()
     bool result = false;
     m_pool->drain(
         [&result, this]() {
+            m_pool->attachment.corruption.markAsHandling();
             std::shared_ptr<Repair::Assembler> assembler(
                 new Repair::SQLiteAssembler);
             Repair::FactoryRenewer renewer =
                 m_pool->attachment.factory.renewer();
             renewer.setAssembler(assembler);
-            if (!renewer.prepare()) {
-                setThreadedError(renewer.getError());
-                return;
-            }
-            Repair::FactoryDepositor depositor =
-                m_pool->attachment.factory.depositor();
-            if (!depositor.work()) {
-                setThreadedError(depositor.getError());
-                return;
-            }
-            if (!renewer.work()) {
-                setThreadedError(renewer.getError());
-                return;
-            }
-            result = true;
+            do {
+                if (!renewer.prepare()) {
+                    setThreadedError(renewer.getError());
+                    break;
+                }
+                Repair::FactoryDepositor depositor =
+                    m_pool->attachment.factory.depositor();
+                if (!depositor.work()) {
+                    setThreadedError(depositor.getError());
+                    break;
+                }
+                if (!renewer.work()) {
+                    setThreadedError(renewer.getError());
+                    break;
+                }
+                result = true;
+            } while (false);
+            m_pool->attachment.corruption.markAsHandled();
         },
         false);
     return result;
@@ -381,6 +385,7 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
     double score = 0;
     m_pool->drain(
         [&score, &onProgressUpdate, this]() {
+            m_pool->attachment.corruption.markAsHandling();
             Repair::FactoryRetriever retriever =
                 m_pool->attachment.factory.retriever();
             std::shared_ptr<Repair::Assembler> assembler(
@@ -390,6 +395,7 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
             bool result = retriever.work();
             setThreadedError(retriever.getError());
             score = result ? retriever.getScore().value() : -1;
+            m_pool->attachment.corruption.markAsHandled();
         },
         false);
     return score;

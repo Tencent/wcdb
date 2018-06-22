@@ -26,7 +26,10 @@
 namespace WCDB {
 
 Corruption::Corruption(const std::string &associatedPath_)
-    : associatedPath(associatedPath_), m_reaction(Reaction::Remove)
+    : associatedPath(associatedPath_)
+    , m_reaction(Reaction::Remove)
+    , m_handling(false)
+    , m_corrupted(false)
 {
 }
 
@@ -47,6 +50,18 @@ void Corruption::setExtraReaction(const ExtraReaction &extraReaction)
     m_extraReaction = extraReaction;
 }
 
+const char *Corruption::reactionName(Reaction reaction)
+{
+    switch (reaction) {
+        case Ignore:
+            return "Ignore";
+        case Deposit:
+            return "Deposit";
+        case Remove:
+            return "Remove";
+    }
+}
+
 void Corruption::notify()
 {
     if (!m_corrupted.load()) {
@@ -57,7 +72,7 @@ void Corruption::notify()
         error.level = Error::Level::Notice;
         error.setCode(Error::Code::Notice);
         error.message = "Corruption will be handled.";
-        error.infos.set("Reaction", m_reaction);
+        error.infos.set("Reaction", reactionName(m_reaction));
         error.infos.set("Path", associatedPath);
         Notifier::shared()->notify(error);
     }
@@ -86,7 +101,21 @@ void Corruption::notify()
 
 bool Corruption::markAsCorrupted()
 {
+    if (m_handling.load()) {
+        return false;
+    }
     return !m_corrupted.exchange(true);
+}
+
+void Corruption::markAsHandling()
+{
+    m_handling.store(true);
+    m_corrupted.store(false);
+}
+
+void Corruption::markAsHandled()
+{
+    m_handling.store(false);
 }
 
 } //namespace WCDB
