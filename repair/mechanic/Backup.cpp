@@ -36,29 +36,61 @@ Backup::Backup(const std::string &path)
 {
 }
 
+#pragma mark - Backup
 bool Backup::work(int maxWalFrame)
 {
-    m_pager.setMaxWalFrame(maxWalFrame);
-    if (!m_pager.initialize()) {
+    WCTInnerAssert(m_locker != nullptr);
+    WCTInnerAssert(m_locker->getPath().empty());
+    m_locker->setPath(m_pager.getPath());
+
+    if (!m_locker->acquireReadLock()) {
+        setError(m_locker->getError());
         return false;
     }
 
-    m_material.info.pageSize = m_pager.getPageSize();
-    m_material.info.reservedBytes = m_pager.getReservedBytes();
-    if (m_pager.getWalFrameCount() > 0) {
-        m_material.info.walSalt = m_pager.getWalSalt();
-        m_material.info.walFrame = m_pager.getWalFrameCount();
+    bool succeed = false;
+    do {
+        m_pager.setMaxWalFrame(maxWalFrame);
+        if (!m_pager.initialize()) {
+            break;
+        }
+        m_material.info.pageSize = m_pager.getPageSize();
+        m_material.info.reservedBytes = m_pager.getReservedBytes();
+        if (m_pager.getWalFrameCount() > 0) {
+            m_material.info.walSalt = m_pager.getWalSalt();
+            m_material.info.walFrame = m_pager.getWalFrameCount();
+        }
+        succeed = m_masterCrawler.work(this);
+    } while (false);
+    if (!succeed) {
+        setError(m_pager.getError());
     }
 
-    m_masterCrawler.work(this);
-    return getError().isOK();
+    if (!m_locker->releaseReadLock()) {
+        if (succeed) {
+            setError(m_locker->getError());
+            succeed = false;
+        }
+    }
+    return succeed;
 }
 
-const Error &Backup::getError() const
+const Material &Backup::getMaterial() const
 {
-    return m_pager.getError();
+    return m_material;
 }
 
+Material::Content &Backup::getOrCreateContent(const std::string &tableName)
+{
+    auto &contents = m_material.contents;
+    auto iter = contents.find(tableName);
+    if (iter == contents.end()) {
+        iter = contents.insert({tableName, Material::Content()}).first;
+    }
+    return iter->second;
+}
+
+#pragma mark - Filter
 void Backup::filter(const Filter &tableShouldBeBackedUp)
 {
     m_filter = tableShouldBeBackedUp;
@@ -78,21 +110,6 @@ bool Backup::filter(const std::string &tableName)
         return m_filter(tableName);
     }
     return false;
-}
-
-const Material &Backup::getMaterial() const
-{
-    return m_material;
-}
-
-Material::Content &Backup::getOrCreateContent(const std::string &tableName)
-{
-    auto &contents = m_material.contents;
-    auto iter = contents.find(tableName);
-    if (iter == contents.end()) {
-        iter = contents.insert({tableName, Material::Content()}).first;
-    }
-    return iter->second;
 }
 
 #pragma mark - Crawlable

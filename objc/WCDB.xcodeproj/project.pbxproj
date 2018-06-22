@@ -552,6 +552,14 @@
 		23C43BB1208720CA00AB186D /* ColumnType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C43BB0208720CA00AB186D /* ColumnType.cpp */; };
 		23C5ABAD207DA9C100BEF3C6 /* MigrationInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C5ABAB207DA9C100BEF3C6 /* MigrationInfo.cpp */; };
 		23C5ABAE207DA9C100BEF3C6 /* MigrationInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C5ABAC207DA9C100BEF3C6 /* MigrationInfo.hpp */; };
+		23C7558C20DCF8A700031A93 /* Locker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C7558920DCF8A700031A93 /* Locker.hpp */; };
+		23C7558D20DCF8A700031A93 /* Locker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C7558920DCF8A700031A93 /* Locker.hpp */; };
+		23C7559120DCF90F00031A93 /* SQLiteLocker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C7558F20DCF90F00031A93 /* SQLiteLocker.cpp */; };
+		23C7559220DCF90F00031A93 /* SQLiteLocker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C7558F20DCF90F00031A93 /* SQLiteLocker.cpp */; };
+		23C7559320DCF90F00031A93 /* SQLiteLocker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C7559020DCF90F00031A93 /* SQLiteLocker.hpp */; };
+		23C7559420DCF90F00031A93 /* SQLiteLocker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C7559020DCF90F00031A93 /* SQLiteLocker.hpp */; };
+		23C7559620DCFA0B00031A93 /* Locker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C7559520DCFA0B00031A93 /* Locker.cpp */; };
+		23C7559720DCFA0B00031A93 /* Locker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C7559520DCFA0B00031A93 /* Locker.cpp */; };
 		23D07CE420BE87360043F4D4 /* MasterCrawler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D07CE220BE87360043F4D4 /* MasterCrawler.cpp */; };
 		23D07CE520BE87360043F4D4 /* MasterCrawler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D07CE220BE87360043F4D4 /* MasterCrawler.cpp */; };
 		23D07CE620BE87360043F4D4 /* MasterCrawler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D07CE320BE87360043F4D4 /* MasterCrawler.hpp */; };
@@ -1559,6 +1567,10 @@
 		23C43BCC2087435800AB186D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		23C5ABAB207DA9C100BEF3C6 /* MigrationInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationInfo.cpp; sourceTree = "<group>"; };
 		23C5ABAC207DA9C100BEF3C6 /* MigrationInfo.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrationInfo.hpp; sourceTree = "<group>"; };
+		23C7558920DCF8A700031A93 /* Locker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Locker.hpp; sourceTree = "<group>"; };
+		23C7558F20DCF90F00031A93 /* SQLiteLocker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SQLiteLocker.cpp; sourceTree = "<group>"; };
+		23C7559020DCF90F00031A93 /* SQLiteLocker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SQLiteLocker.hpp; sourceTree = "<group>"; };
+		23C7559520DCFA0B00031A93 /* Locker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Locker.cpp; sourceTree = "<group>"; };
 		23D07CE220BE87360043F4D4 /* MasterCrawler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MasterCrawler.cpp; sourceTree = "<group>"; };
 		23D07CE320BE87360043F4D4 /* MasterCrawler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MasterCrawler.hpp; sourceTree = "<group>"; };
 		23D07CE820BE873E0043F4D4 /* SequenceCrawler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SequenceCrawler.cpp; sourceTree = "<group>"; };
@@ -2099,6 +2111,8 @@
 				23775B4120AD666900E21AB0 /* Material.hpp */,
 				23775B4220AD666900E21AB0 /* Mechanic.cpp */,
 				23775B4320AD666900E21AB0 /* Mechanic.hpp */,
+				23C7559520DCFA0B00031A93 /* Locker.cpp */,
+				23C7558920DCF8A700031A93 /* Locker.hpp */,
 			);
 			path = mechanic;
 			sourceTree = "<group>";
@@ -2458,6 +2472,8 @@
 			children = (
 				23D0C30C20C125420001BFAE /* SQLiteAssembler.cpp */,
 				23D0C30D20C125420001BFAE /* SQLiteAssembler.hpp */,
+				23C7558F20DCF90F00031A93 /* SQLiteLocker.cpp */,
+				23C7559020DCF90F00031A93 /* SQLiteLocker.hpp */,
 			);
 			path = sqlite;
 			sourceTree = "<group>";
@@ -2704,6 +2720,7 @@
 				2349F7651EA0D6680021EFA7 /* WCTCoding.h in Headers */,
 				23E732651F209FFF00AA1614 /* WCTSequence+WCTTableCoding.h in Headers */,
 				2349F7231EA0D6680021EFA7 /* WCTInsert.h in Headers */,
+				23C7558C20DCF8A700031A93 /* Locker.hpp in Headers */,
 				23D4DA4A2085A99000AE6D90 /* ColumnType.hpp in Headers */,
 				2349F76D1EA0D6680021EFA7 /* WCTIndexMacro.h in Headers */,
 				236DB4B81F209D100091FC79 /* WCTMaster+WCTTableCoding.h in Headers */,
@@ -2742,6 +2759,7 @@
 				2370980B20590CA700E768B4 /* HandleStatement.hpp in Headers */,
 				236CCC1120C7DBE100C44E14 /* CorruptionNotifier.hpp in Headers */,
 				23BBE2A8204955CE00C4CBB6 /* WCTCommon.h in Headers */,
+				23C7559320DCF90F00031A93 /* SQLiteLocker.hpp in Headers */,
 				2349F74B1EA0D6680021EFA7 /* WCTDatabase+RepairKit.h in Headers */,
 				23D96B982050E53600DB5E93 /* RecyclableHandlePool.hpp in Headers */,
 				23977704202AF2E3000A681C /* ConcurrentList.hpp in Headers */,
@@ -2995,6 +3013,7 @@
 				23F5BDA920887FD3000CCD37 /* WCTCoding.h in Headers */,
 				23F5BDAA20887FD3000CCD37 /* WCTSequence+WCTTableCoding.h in Headers */,
 				23F5BDAB20887FD3000CCD37 /* WCTInsert.h in Headers */,
+				23C7558D20DCF8A700031A93 /* Locker.hpp in Headers */,
 				23F5BDAC20887FD3000CCD37 /* ColumnType.hpp in Headers */,
 				23F5BDAD20887FD3000CCD37 /* WCTIndexMacro.h in Headers */,
 				23F5BDAE20887FD3000CCD37 /* WCTMaster+WCTTableCoding.h in Headers */,
@@ -3033,6 +3052,7 @@
 				23F5BDCA20887FD3000CCD37 /* HandleStatement.hpp in Headers */,
 				236CCC1220C7DBE100C44E14 /* CorruptionNotifier.hpp in Headers */,
 				23F5BDCB20887FD3000CCD37 /* WCTCommon.h in Headers */,
+				23C7559420DCF90F00031A93 /* SQLiteLocker.hpp in Headers */,
 				23F5BDCC20887FD3000CCD37 /* WCTDatabase+RepairKit.h in Headers */,
 				23F5BDCD20887FD3000CCD37 /* RecyclableHandlePool.hpp in Headers */,
 				23F5BDCE20887FD3000CCD37 /* ConcurrentList.hpp in Headers */,
@@ -3260,6 +3280,7 @@
 				239775A0202AECD3000A681C /* LangSelectSTMT.cpp in Sources */,
 				23977515202AECD3000A681C /* StatementBegin.cpp in Sources */,
 				23D96B972050E53600DB5E93 /* RecyclableHandlePool.cpp in Sources */,
+				23C7559120DCF90F00031A93 /* SQLiteLocker.cpp in Sources */,
 				23AF4E1E20CD04E20050033C /* Initializeable.cpp in Sources */,
 				2349F70F1EA0D6680021EFA7 /* NSDate+WCTColumnCoding.mm in Sources */,
 				23977581202AECD3000A681C /* LangJoinClause.cpp in Sources */,
@@ -3324,6 +3345,7 @@
 				2397755F202AECD3000A681C /* LangCreateIndexSTMT.cpp in Sources */,
 				239774F4202AECD3000A681C /* Expression.cpp in Sources */,
 				2397756D202AECD3000A681C /* LangDetachSTMT.cpp in Sources */,
+				23C7559620DCFA0B00031A93 /* Locker.cpp in Sources */,
 				23977563202AECD3000A681C /* LangCreateTriggerSTMT.cpp in Sources */,
 				23B35CCD20C0261A00425033 /* String.cpp in Sources */,
 				2397758C202AECD3000A681C /* LangOrderingTerm.cpp in Sources */,
@@ -3505,6 +3527,7 @@
 				23F5BC5820887FD3000CCD37 /* LangSelectSTMT.cpp in Sources */,
 				23F5BC5920887FD3000CCD37 /* StatementBegin.cpp in Sources */,
 				23F5BC5A20887FD3000CCD37 /* RecyclableHandlePool.cpp in Sources */,
+				23C7559220DCF90F00031A93 /* SQLiteLocker.cpp in Sources */,
 				23AF4E1F20CD04E20050033C /* Initializeable.cpp in Sources */,
 				23F5BC5B20887FD3000CCD37 /* NSDate+WCTColumnCoding.mm in Sources */,
 				23F5BC5C20887FD3000CCD37 /* LangJoinClause.cpp in Sources */,
@@ -3569,6 +3592,7 @@
 				23F5BC8C20887FD3000CCD37 /* LangCreateIndexSTMT.cpp in Sources */,
 				23F5BC8D20887FD3000CCD37 /* Expression.cpp in Sources */,
 				23F5BC8E20887FD3000CCD37 /* LangDetachSTMT.cpp in Sources */,
+				23C7559720DCFA0B00031A93 /* Locker.cpp in Sources */,
 				23F5BC8F20887FD3000CCD37 /* LangCreateTriggerSTMT.cpp in Sources */,
 				23B35CCE20C0261A00425033 /* String.cpp in Sources */,
 				23F5BC9020887FD3000CCD37 /* LangOrderingTerm.cpp in Sources */,

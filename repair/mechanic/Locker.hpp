@@ -18,27 +18,41 @@
  * limitations under the License.
  */
 
-#ifndef FactoryBackup_hpp
-#define FactoryBackup_hpp
+#ifndef Locker_hpp
+#define Locker_hpp
 
-#include <WCDB/Backup.hpp>
-#include <WCDB/FactoryRelated.hpp>
+#include <string>
 
 namespace WCDB {
 
+class Error;
+
 namespace Repair {
 
-class FactoryBackup : public FactoryRelated,
-                      public ErrorProne,
-                      public LockerHolder {
+class Locker {
 public:
-    using FactoryRelated::FactoryRelated;
-    bool work(const std::string &database,
-              int maxWalFrame = std::numeric_limits<int>::max());
+    void setPath(const std::string &path);
+    const std::string &getPath() const;
+
+protected:
+    std::string m_path;
+
+public:
+    virtual bool acquireReadLock() = 0;
+    virtual bool releaseReadLock() = 0;
+    virtual const Error &getError() const = 0;
+};
+
+class LockerHolder {
+public:
+    void setLocker(const std::shared_ptr<Locker> &locker);
+
+protected:
+    std::shared_ptr<Locker> m_locker;
 };
 
 } //namespace Repair
 
 } //namespace WCDB
 
-#endif /* FactoryBackup_hpp */
+#endif /* Locker_hpp */

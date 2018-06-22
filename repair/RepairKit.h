@@ -26,5 +26,6 @@
 #include <WCDB/Material.hpp>
 #include <WCDB/Mechanic.hpp>
 #include <WCDB/SQLiteAssembler.hpp>
+#include <WCDB/SQLiteLocker.hpp>
 
 #endif /* RepairKit_h */

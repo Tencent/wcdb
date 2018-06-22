@@ -18,27 +18,27 @@
  * limitations under the License.
  */
 
-#ifndef FactoryBackup_hpp
-#define FactoryBackup_hpp
-
-#include <WCDB/Backup.hpp>
-#include <WCDB/FactoryRelated.hpp>
+#include <WCDB/SQLiteLocker.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-class FactoryBackup : public FactoryRelated,
-                      public ErrorProne,
-                      public LockerHolder {
-public:
-    using FactoryRelated::FactoryRelated;
-    bool work(const std::string &database,
-              int maxWalFrame = std::numeric_limits<int>::max());
-};
+bool SQLiteLocker::acquireReadLock()
+{
+    return false;
+}
+
+bool SQLiteLocker::releaseReadLock()
+{
+    return false;
+}
+
+const Error &SQLiteLocker::getError() const
+{
+    return ErrorProne::getError();
+}
 
 } //namespace Repair
 
 } //namespace WCDB
-
-#endif /* FactoryBackup_hpp */

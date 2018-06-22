@@ -21,6 +21,7 @@
 #ifndef Backup_hpp
 #define Backup_hpp
 
+#include <WCDB/Locker.hpp>
 #include <WCDB/MasterCrawler.hpp>
 #include <WCDB/Material.hpp>
 #include <WCDB/SequenceCrawler.hpp>
@@ -33,7 +34,9 @@ namespace Repair {
 
 class Backup : public Crawlable,
                public MasterCrawlerDelegate,
-               public SequenceCrawlerDelegate {
+               public SequenceCrawlerDelegate,
+               public LockerHolder,
+               public ErrorProne {
 #pragma mark - Initialize
 public:
     Backup(const std::string &path);
@@ -44,8 +47,6 @@ protected:
 #pragma mark - Backup
 public:
     bool work(int maxWalFrame = std::numeric_limits<int>::max());
-
-    const Error &getError() const;
 
     const Material &getMaterial() const;
 
