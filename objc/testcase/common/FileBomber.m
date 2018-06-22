@@ -58,6 +58,7 @@
         return NO;
     }
     NSData *weapon = [self armed:(int) range.length];
+    [_fileHandle seekToFileOffset:range.location];
     [_fileHandle writeData:weapon];
     return YES;
 }
