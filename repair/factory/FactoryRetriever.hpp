@@ -46,6 +46,7 @@ public:
     bool work();
 
 protected:
+    void report(double score, const std::string &path, bool material = false);
     bool restore(const std::string &database);
     const std::string databaseFileName;
 

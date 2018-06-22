@@ -86,6 +86,8 @@ bool FactoryRetriever::work()
         }
     }
 
+    report(getScore().value(), database);
+
     //4. Do a Backup on restore db.
     FactoryBackup backup(factory);
     if (!backup.work(database)) {
@@ -147,6 +149,7 @@ bool FactoryRetriever::restore(const std::string &database)
                 return false;
             }
             increaseScore(database, mechanic.getScore());
+            report(mechanic.getScore().value(), database, true);
             return true;
         } else if (ThreadedErrors::shared()->getThreadedError().code() !=
                    Error::Code::Corrupt) {
@@ -175,7 +178,24 @@ bool FactoryRetriever::restore(const std::string &database)
         return false;
     }
     increaseScore(database, fullCrawler.getScore());
+    report(fullCrawler.getScore().value(), database);
     return true;
+}
+
+void FactoryRetriever::report(double score,
+                              const std::string &path,
+                              bool material)
+{
+    Error error;
+    error.setCode(Error::Code::Notice, "Repair");
+    error.level = Error::Level::Notice;
+    error.message = "Retriever Report.";
+    error.infos.set("Path", path);
+    error.infos.set("Score", score * 10000);
+    if (material) {
+        error.infos.set("Material", material);
+    }
+    Notifier::shared()->notify(error);
 }
 
 #pragma mark - Assembler
