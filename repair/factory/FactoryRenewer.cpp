@@ -197,7 +197,10 @@ bool FactoryRenewer::resolveInfosForDatabase(
     }
     Material material;
     if (!material.deserialize(materialPath)) {
-        assignWithSharedThreadedError();
+        if (ThreadedErrors::shared()->getThreadedError().code() ==
+            Error::Code::Corrupt) {
+            return true;
+        }
         return false;
     }
     for (auto &element : material.contents) {
