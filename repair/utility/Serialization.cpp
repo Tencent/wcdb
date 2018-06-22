@@ -526,7 +526,6 @@ std::string Deserialization::getString(off_t offset, size_t size) const
 
 const Data Deserialization::getData(off_t offset, size_t size) const
 {
-    WCTInnerAssert(size > 0);
     WCTInnerAssert(isEnough(offset + size));
     return Data::immutableNoCopyData(base() + offset, size);
 }
