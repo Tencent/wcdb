@@ -225,18 +225,20 @@ bool SQLiteAssembler::markAsSequenceAssembling()
         }
     }
 
-    WCTInnerAssert(m_updateSequenceSTMT == nullptr);
-    m_updateSequenceSTMT =
-        prepare("UPDATE sqlite_sequence SET seq = ?1 WHERE name = ?2");
     if (m_updateSequenceSTMT == nullptr) {
-        return false;
+        m_updateSequenceSTMT =
+            prepare("UPDATE sqlite_sequence SET seq = ?1 WHERE name = ?2");
+        if (m_updateSequenceSTMT == nullptr) {
+            return false;
+        }
     }
 
-    WCTInnerAssert(m_insertSequenceSTMT == nullptr);
-    m_insertSequenceSTMT =
-        prepare("INSERT INTO sqlite_sequence(name, seq) VALUES(?1, ?2)");
     if (m_insertSequenceSTMT == nullptr) {
-        return false;
+        m_insertSequenceSTMT =
+            prepare("INSERT INTO sqlite_sequence(name, seq) VALUES(?1, ?2)");
+        if (m_insertSequenceSTMT == nullptr) {
+            return false;
+        }
     }
 
     return true;
