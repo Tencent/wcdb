@@ -44,6 +44,10 @@ bool Material::serialize(Serialization &serialization) const
     }
 
     //Contents
+    if (contents.empty()) {
+        markAsEmpty("Content");
+        return false;
+    }
     Data encoded;
     Serialization encoder;
     for (const auto &element : contents) {
@@ -114,6 +118,7 @@ bool Material::deserialize(Deserialization &deserialization)
         return false;
     }
 
+    int pages = 0;
     Deserialization decoder(decompressed);
     while (!decoder.ended()) {
         size_t lengthOfSizedString;
@@ -129,9 +134,13 @@ bool Material::deserialize(Deserialization &deserialization)
             return false;
         }
 
+        pages += content.pagenos.size();
         contents[std::move(tableName)] = std::move(content);
     }
-
+    if (pages == 0) {
+        markAsCorrupt("Pageno");
+        return false;
+    }
     return true;
 }
 
