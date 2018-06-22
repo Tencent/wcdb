@@ -87,7 +87,12 @@ bool SQLiteAssembler::markAsMilestone()
 bool SQLiteAssembler::assembleTable(const std::string &tableName,
                                     const std::string &sql)
 {
-    return execute(sql.c_str()) && onTableAssembled(tableName);
+    if (!execute(sql.c_str())) {
+        if (m_error.code() != Error::Code::Error) {
+            return false;
+        }
+    }
+    return onTableAssembled(tableName);
 }
 
 bool SQLiteAssembler::assembleCell(const Cell &cell)
@@ -131,7 +136,9 @@ bool SQLiteAssembler::assembleCell(const Cell &cell)
         }
     }
     if (!step(m_cellSTMT)) {
-        return false;
+        if (m_error.code() != Error::Code::Constraint) {
+            return false;
+        }
     }
     sqlite3_reset((sqlite3_stmt *) m_cellSTMT);
     return true;
@@ -325,7 +332,7 @@ bool SQLiteAssembler::lazyCommitOrRollbackTransaction(bool commit)
 }
 
 #pragma mark - Error
-void SQLiteAssembler::setError(int rc)
+void SQLiteAssembler::setError(int rc, const char *sql)
 {
     Error error;
     error.setSQLiteCode(rc, sqlite3_extended_errcode((sqlite3 *) m_handle));
@@ -333,20 +340,9 @@ void SQLiteAssembler::setError(int rc)
     if (message) {
         error.message = message;
     }
-    error.infos.set("Path", m_path);
-    Notifier::shared()->notify(error);
-    ErrorProne::setError(std::move(error));
-}
-
-void SQLiteAssembler::setError(int rc, const std::string &sql)
-{
-    Error error;
-    error.setSQLiteCode(rc, sqlite3_extended_errcode((sqlite3 *) m_handle));
-    const char *message = sqlite3_errmsg((sqlite3 *) m_handle);
-    if (message) {
-        error.message = message;
+    if (sql) {
+        error.infos.set("SQL", sql);
     }
-    error.infos.set("SQL", sql);
     error.infos.set("Path", m_path);
     Notifier::shared()->notify(error);
     ErrorProne::setError(std::move(error));

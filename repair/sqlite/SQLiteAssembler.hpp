@@ -92,8 +92,8 @@ private:
 
 #pragma mark - Error
 protected:
-    void setError(int rc);
-    void setError(int rc, const std::string &sql);
+    bool isErrorIgnorable(int rc);
+    void setError(int rc, const char *sql = nullptr);
 
 #pragma mark - SQLite Handle
 protected:
