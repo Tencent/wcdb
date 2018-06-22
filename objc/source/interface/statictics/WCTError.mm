@@ -76,7 +76,7 @@ WCTErrorKey const WCTErrorKeySource = @"Source";
 
 - (NSInteger)integerForKey:(WCTErrorKey)key
 {
-    id value = [self.userInfo objectForKey:WCTErrorKeyTag];
+    id value = [self.userInfo objectForKey:key];
     if (value && [value isKindOfClass:NSNumber.class]) {
         return ((NSNumber *) value).integerValue;
     }
