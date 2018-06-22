@@ -36,7 +36,8 @@ class FactoryRetriever : public FactoryRelated,
                          public UpgradeableErrorProne,
                          public Progress,
                          public Scoreable,
-                         public AssemblerHolder {
+                         public AssemblerHolder,
+                         public LockerHolder {
 #pragma mark - Retriever
 public:
     FactoryRetriever(Factory &factory);

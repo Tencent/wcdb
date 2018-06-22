@@ -31,7 +31,8 @@ namespace Repair {
 
 class FactoryRenewer : public FactoryRelated,
                        public ErrorProne,
-                       public AssemblerHolder {
+                       public AssemblerHolder,
+                       public LockerHolder {
 public:
     FactoryRenewer(Factory &factory);
     const std::string directory;

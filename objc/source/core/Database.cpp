@@ -354,11 +354,13 @@ bool Database::deposit()
     m_pool->drain(
         [&result, this]() {
             m_pool->attachment.corruption.markAsHandling();
-            std::shared_ptr<Repair::Assembler> assembler(
-                new Repair::SQLiteAssembler);
             Repair::FactoryRenewer renewer =
                 m_pool->attachment.factory.renewer();
+            std::shared_ptr<Repair::Assembler> assembler(
+                new Repair::SQLiteAssembler);
             renewer.setAssembler(assembler);
+            std::shared_ptr<Repair::Locker> locker(new Repair::SQLiteLocker);
+            renewer.setLocker(locker);
             do {
                 if (!renewer.prepare()) {
                     setThreadedError(renewer.getError());
@@ -393,6 +395,8 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
             std::shared_ptr<Repair::Assembler> assembler(
                 new Repair::SQLiteAssembler);
             retriever.setAssembler(assembler);
+            std::shared_ptr<Repair::Locker> locker(new Repair::SQLiteLocker);
+            retriever.setLocker(locker);
             retriever.setProgressCallback(onProgressUpdate);
             bool result = retriever.work();
             setThreadedError(retriever.getError());
