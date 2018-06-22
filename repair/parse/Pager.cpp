@@ -140,7 +140,6 @@ void Pager::disposeWal()
 
 const std::pair<uint32_t, uint32_t> &Pager::getWalSalt() const
 {
-    WCTInnerAssert(m_wal.getFrameCount() > 0);
     return m_wal.getSalt();
 }
 
