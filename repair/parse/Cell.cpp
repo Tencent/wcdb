@@ -109,24 +109,40 @@ int64_t Cell::integerValue(int index) const
     WCTInnerAssert(index < m_columns.size());
     WCTInnerAssert(getValueType(index) == Type::Integer);
     const auto &cell = m_columns[index];
-    int length = getLengthOfSerialType(cell.first);
-    WCTInnerAssert(m_deserialization.isEnough(cell.second + length));
-    switch (length) {
-        case 1:
-            return m_deserialization.get1ByteInt(cell.second);
-        case 2:
-            return m_deserialization.get2BytesInt(cell.second);
-        case 3:
-            return m_deserialization.get3BytesInt(cell.second);
-        case 4:
-            return m_deserialization.get4BytesInt(cell.second);
-        case 6:
-            return m_deserialization.get6BytesInt(cell.second);
-        case 8:
-            return m_deserialization.get8BytesInt(cell.second);
+    int serialType = cell.first;
+    int64_t value = 0;
+    if (serialType == 8) {
+        return false;
+    } else if (serialType == 9) {
+        return true;
+    } else {
+        int length = getLengthOfSerialType(serialType);
+        WCTInnerAssert(m_deserialization.isEnough(cell.second + length));
+        switch (length) {
+            case 1:
+                value = m_deserialization.get1ByteInt(cell.second);
+                break;
+            case 2:
+                value = m_deserialization.get2BytesInt(cell.second);
+                break;
+            case 3:
+                value = m_deserialization.get3BytesInt(cell.second);
+                break;
+            case 4:
+                value = m_deserialization.get4BytesInt(cell.second);
+                break;
+            case 6:
+                value = m_deserialization.get6BytesInt(cell.second);
+                break;
+            case 8:
+                value = m_deserialization.get8BytesInt(cell.second);
+                break;
+            default:
+                WCTInnerFatalError();
+                break;
+        }
     }
-    WCTInnerFatalError();
-    return 0;
+    return value;
 }
 
 double Cell::doubleValue(int index) const
