@@ -121,6 +121,7 @@ bool Mechanic::willCrawlPage(const Page &page, int)
         return false;
     }
     if (page.getType() == Page::Type::LeafTable) {
+        markPageAsCounted(page);
         return true;
     }
     markAsCorrupted(page.number, "PageType");

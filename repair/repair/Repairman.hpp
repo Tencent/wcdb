@@ -83,6 +83,7 @@ protected:
     void setPageWeight(const Fraction &pageWeight);
     const Fraction &getPageWeight() const;
     void markCellAsCounted(const Cell &cell);
+    void markPageAsCounted(const Page &page);
 
 private:
     Fraction m_pageWeight;

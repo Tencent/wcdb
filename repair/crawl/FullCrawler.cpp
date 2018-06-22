@@ -83,6 +83,7 @@ bool FullCrawler::willCrawlPage(const Page &page, int)
     if (isErrorCritial()) {
         return false;
     }
+    markPageAsCounted(page);
     increaseProgress(getPageWeight().value());
     return true;
 }
@@ -99,6 +100,7 @@ void FullCrawler::onErrorCritical()
 void FullCrawler::onMasterPageCrawled(const Page &page)
 {
     increaseProgress(getPageWeight().value());
+    markPageAsCounted(page);
 }
 
 void FullCrawler::onMasterCellCrawled(const Cell &cell, const Master *master)
@@ -138,6 +140,7 @@ void FullCrawler::onSequencePageCrawled(const Page &page)
         return;
     }
     increaseProgress(getPageWeight().value());
+    markPageAsCounted(page);
 }
 
 void FullCrawler::onSequenceCellCrawled(const Cell &cell,

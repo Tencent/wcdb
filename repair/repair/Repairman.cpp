@@ -184,6 +184,13 @@ void Repairman::markCellAsCounted(const Cell &cell)
     }
 }
 
+void Repairman::markPageAsCounted(const Page &page)
+{
+    if (page.getCellCount() == 0) {
+        increaseScore(m_pageWeight);
+    }
+}
+
 void Repairman::setPageWeight(const Fraction &pageWeight)
 {
     WCTInnerAssert(m_pageWeight.value() == 0);
