@@ -36,6 +36,8 @@ public:
     Fraction operator/(const Fraction &operand) const;
     Fraction &operator+=(const Fraction &fraction);
 
+    bool operator<(const Fraction &operand) const;
+
     double value() const;
 
 protected:

@@ -39,7 +39,6 @@ SerializeIteration::SerializeIteration(const Data &data)
 
 void SerializeIteration::seek(off_t position)
 {
-    WCTInnerAssert(!m_data.empty());
     if (position < 0) {
         m_cursor =
             std::min((off_t) capacity(), (off_t) capacity() + position + 1);
@@ -55,49 +54,41 @@ void SerializeIteration::advance(off_t offset)
 
 bool SerializeIteration::isEnough(size_t size) const
 {
-    WCTInnerAssert(!m_data.empty());
     return size <= capacity();
 }
 
 bool SerializeIteration::canAdvance(size_t size) const
 {
-    WCTInnerAssert(!m_data.empty());
     return m_cursor + size <= capacity();
 }
 
 bool SerializeIteration::ended() const
 {
-    WCTInnerAssert(!m_data.empty());
     return m_cursor == capacity();
 }
 
 unsigned char *SerializeIteration::pointee()
 {
-    WCTInnerAssert(!m_data.empty());
     return m_data.buffer() + m_cursor;
 }
 
 const unsigned char *SerializeIteration::pointee() const
 {
-    WCTInnerAssert(!m_data.empty());
     return m_data.buffer() + m_cursor;
 }
 
 unsigned char *SerializeIteration::base()
 {
-    WCTInnerAssert(!m_data.empty());
     return m_data.buffer();
 }
 
 const unsigned char *SerializeIteration::base() const
 {
-    WCTInnerAssert(!m_data.empty());
     return m_data.buffer();
 }
 
 size_t SerializeIteration::capacity() const
 {
-    WCTInnerAssert(!m_data.empty());
     return m_data.size();
 }
 

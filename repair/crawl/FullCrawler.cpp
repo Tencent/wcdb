@@ -45,8 +45,13 @@ bool FullCrawler::work()
     }
 
     if (!m_pager.initialize()) {
-        setCriticalError(m_pager.getError());
-        return false;
+        if (m_pager.getError().isCorruption()) {
+            tryUpgradeCrawlerError();
+            return true;
+        } else {
+            setCriticalError(m_pager.getError());
+            return false;
+        }
     }
 
     //calculate score

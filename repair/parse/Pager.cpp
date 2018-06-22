@@ -220,7 +220,13 @@ bool Pager::doInitialize()
 
     m_pageCount = (int) ((fileSize + m_pageSize - 1) / m_pageSize);
 
-    return m_wal.initialize();
+    if (!m_wal.initialize()) {
+        if (!m_error.isCorruption()) {
+            return false;
+        }
+        disposeWal();
+    }
+    return true;
 }
 
 } //namespace Repair

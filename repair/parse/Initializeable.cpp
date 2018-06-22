@@ -38,6 +38,11 @@ bool Initializeable::isInitializing() const
     return m_state == State::Initializing;
 }
 
+bool Initializeable::isInitializeFalied() const
+{
+    return m_state == State::Failed;
+}
+
 bool Initializeable::initialize()
 {
     if (m_state == State::None) {

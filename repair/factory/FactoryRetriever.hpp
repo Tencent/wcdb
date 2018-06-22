@@ -36,7 +36,7 @@ class FactoryRetriever : public FactoryRelated,
                          public UpgradeableErrorProne,
                          public Progress,
                          public Scoreable {
-#pragma mark - Restorer
+#pragma mark - Retriever
 public:
     FactoryRetriever(Factory &factory);
 

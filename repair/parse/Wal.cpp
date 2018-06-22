@@ -255,7 +255,7 @@ int Wal::getDisposedPage() const
 
 void Wal::dispose()
 {
-    WCTInnerAssert(isInitialized());
+    WCTInnerAssert(isInitialized() || isInitializeFalied());
     for (const auto &element : m_framePages) {
         m_disposedPages.insert(element.first);
     }

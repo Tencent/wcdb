@@ -98,6 +98,12 @@ Fraction Fraction::operator/(const Fraction &operand) const
     return result;
 }
 
+bool Fraction::operator<(const Fraction &operand) const
+{
+    return (m_numerator * operand.m_denominator) <
+           (operand.m_numerator * m_denominator);
+}
+
 double Fraction::value() const
 {
     return (double) m_numerator / m_denominator;

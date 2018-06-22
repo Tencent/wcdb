@@ -53,8 +53,13 @@ bool Mechanic::work()
 
     if (!m_pager.initialize()) {
         //Actually, the initialization of pager always succeed if material is not corrupted.
-        setCriticalError(m_pager.getError());
-        return false;
+        if (m_pager.getError().isCorruption()) {
+            tryUpgradeCrawlerError();
+            return true;
+        } else {
+            setCriticalError(m_pager.getError());
+            return false;
+        }
     }
 
     if (m_pager.getWalFrameCount() > 0) {

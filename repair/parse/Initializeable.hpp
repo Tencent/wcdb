@@ -31,6 +31,7 @@ public:
     bool initialize();
     bool isInitialized() const;
     bool isInitializing() const;
+    bool isInitializeFalied() const;
 
 protected:
     virtual bool doInitialize() = 0;

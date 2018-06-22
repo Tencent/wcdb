@@ -42,7 +42,7 @@ FactoryRetriever::FactoryRetriever(Factory &factory_)
 {
 }
 
-#pragma mark - Restorer
+#pragma mark - Retriever
 bool FactoryRetriever::work()
 {
     WCTInnerAssert(m_assembler != nullptr);
@@ -75,7 +75,7 @@ bool FactoryRetriever::work()
     }
 
     //2. Restore from current db. It must be succeed without even non-critical errors.
-    if (!restore(factory.database) || getErrorSeverity() != Severity::None) {
+    if (!restore(factory.database) || getErrorSeverity() >= Severity::Normal) {
         return false;
     }
 
@@ -132,6 +132,8 @@ bool FactoryRetriever::restore(const std::string &database)
         return false;
     }
 
+    bool useMaterial = false;
+    Fraction score;
     if (!materialPath.empty()) {
         Material material;
         if (material.deserialize(materialPath)) {
@@ -140,17 +142,19 @@ bool FactoryRetriever::restore(const std::string &database)
             mechanic.setMaterial(&material);
             mechanic.setProgressCallback(
                 [&database, this](double progress, double increment) {
-                    increaseProgress(database, increment);
+                    increaseProgress(database, increment * 0.5);
                 });
+            useMaterial = true;
             bool result = mechanic.work();
-            tryUpgradeError(mechanic.getError());
             if (!result) {
                 WCTInnerAssert(isErrorCritial());
+                setCriticalError(mechanic.getError());
                 return false;
+            } else {
+                tryUpgradeError(mechanic.getError());
             }
-            increaseScore(database, mechanic.getScore());
+            score = mechanic.getScore();
             report(mechanic.getScore(), database, true);
-            return true;
         } else if (ThreadedErrors::shared()->getThreadedError().code() !=
                    Error::Code::Corrupt) {
             //TODO use old material to restore while page hash can be verified.
@@ -165,20 +169,28 @@ bool FactoryRetriever::restore(const std::string &database)
         warning.message = "Material is not found";
         Notifier::shared()->notify(std::move(warning));
     }
+
     FullCrawler fullCrawler(database);
     fullCrawler.setAssembler(m_assembler);
     fullCrawler.setProgressCallback(
-        [&database, this](double progress, double increment) {
+        [&database, this, useMaterial](double progress, double increment) {
+            if (useMaterial) {
+                increment *= 0.5;
+            }
             increaseProgress(database, increment);
         });
     bool result = fullCrawler.work();
-    tryUpgradeError(fullCrawler.getError());
-    if (!result) {
+    if (result) {
+        report(fullCrawler.getScore(), database, false);
+        score = std::max(score, fullCrawler.getScore());
+    } else if (!useMaterial) {
         WCTInnerAssert(isErrorCritial());
+        setCriticalError(fullCrawler.getError());
         return false;
     }
-    increaseScore(database, fullCrawler.getScore());
-    report(fullCrawler.getScore(), database, false);
+    tryUpgradeError(fullCrawler.getError());
+
+    increaseScore(database, score);
     return true;
 }
 
