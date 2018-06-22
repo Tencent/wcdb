@@ -21,10 +21,11 @@
 #ifndef RepairKit_h
 #define RepairKit_h
 
-#include <WCDB/Backup.hpp>
-#include <WCDB/FullCrawler.hpp>
-#include <WCDB/Material.hpp>
-#include <WCDB/Mechanic.hpp>
+#include <WCDB/Factory.hpp>
+#include <WCDB/FactoryBackup.hpp>
+#include <WCDB/FactoryDepositor.hpp>
+#include <WCDB/FactoryRenewer.hpp>
+#include <WCDB/FactoryRetriever.hpp>
 #include <WCDB/SQLiteAssembler.hpp>
 #include <WCDB/SQLiteLocker.hpp>
 
