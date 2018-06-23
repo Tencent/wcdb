@@ -156,7 +156,7 @@
     NSString *backupPath = [_database.path stringByAppendingString:@"-first.material"];
     XCTAssertFalse([fileManager fileExistsAtPath:backupPath]);
 
-    [_database close];
+    XCTAssertTrue([_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
 
     XCTAssertTrue([fileManager fileExistsAtPath:backupPath]);
 }
