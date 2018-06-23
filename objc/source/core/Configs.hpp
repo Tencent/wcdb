@@ -32,7 +32,7 @@ class Configs {
 public:
     enum Priority {
         Highest = std::numeric_limits<int>::min(),
-        Higher = std::numeric_limits<int>::min() - 1,
+        Higher = std::numeric_limits<int>::min() + 1,
         High = -100,
         Default = 0,
         Low = 100,
