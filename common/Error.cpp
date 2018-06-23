@@ -119,6 +119,10 @@ void Error::setSystemCode(int systemCode, Code codeIfUnresolved)
             code = codeIfUnresolved;
             break;
     }
+    const char *errorMessage = strerror(systemCode);
+    if (errorMessage) {
+        message = errorMessage;
+    }
     setCode(code, "System");
     infos.set("ExtCode", systemCode);
 }
