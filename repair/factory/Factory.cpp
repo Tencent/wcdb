@@ -60,17 +60,19 @@ std::pair<bool, std::list<std::string>> Factory::getWorkshopDirectories() const
 std::pair<bool, std::string> Factory::getUniqueWorkshopDiectory() const
 {
     bool succeed;
-    std::string time;
-    std::tie(succeed, time) = Time().stringify();
-    if (!succeed) {
-        return {false, String::empty()};
-    }
     FileManager *fileManager = FileManager::shared();
     std::string path;
     do {
-        std::ostringstream oss;
-        oss << time << "_" << rand();
-        path = Path::addComponent(directory, oss.str());
+        Time time;
+        if (!time.now()) {
+            return {false, String::empty()};
+        }
+        std::string fileName;
+        std::tie(succeed, fileName) = time.stringify();
+        if (!succeed) {
+            return {false, String::empty()};
+        }
+        path = Path::addComponent(directory, fileName);
 
         bool exists = false;
         bool isDirectory = false;

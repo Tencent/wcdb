@@ -26,19 +26,33 @@
 
 namespace WCDB {
 
-Time::Time() : m_time(std::time(nullptr))
+Time::Time() : m_sec(0), m_nsec(0)
 {
+}
+
+bool Time::now()
+{
+    struct timespec ts;
+    if (clock_gettime(CLOCK_REALTIME, &ts) != 0) {
+        Error error;
+        error.setSystemCode(errno, Error::Code::Error);
+        setThreadedError(std::move(error));
+        return false;
+    }
+    m_sec = ts.tv_sec;
+    m_nsec = ts.tv_nsec;
+    return true;
 }
 
 std::pair<bool, std::string> Time::stringify() const
 {
     struct tm tm;
-    if (!localtime_r(&m_time, &tm)) {
+    if (!localtime_r(&m_sec, &tm)) {
         setThreadedError(Error::Code::Exceed);
         return {false, String::empty()};
     }
     std::ostringstream oss;
-    oss << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S");
+    oss << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S") << "." << m_nsec;
     return {true, oss.str()};
 }
 

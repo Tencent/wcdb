@@ -22,6 +22,7 @@
 #define Time_hpp
 
 #include <WCDB/SharedThreadedErrorProne.hpp>
+#include <ctime>
 #include <string>
 
 namespace WCDB {
@@ -30,10 +31,13 @@ class Time : public SharedThreadedErrorProne {
 public:
     Time();
 
+    bool now();
+
     std::pair<bool, std::string> stringify() const;
 
 protected:
-    long m_time;
+    long m_sec;
+    long m_nsec;
 };
 
 } //namespace WCDB
