@@ -109,6 +109,7 @@ void Handle::close()
 {
     finalize();
     if (m_handle) {
+        //TODO disable checkpoint when exiting
         sqlite3_close_v2((sqlite3 *) m_handle);
         m_handle = nullptr;
     }
