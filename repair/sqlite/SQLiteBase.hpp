@@ -63,6 +63,7 @@ protected:
 #pragma mark - Transaction
 protected:
     bool lazyBeginTransaction();
+    bool lazyBeginTransactionImmediate();
     bool lazyCommitOrRollbackTransaction(bool commit = true);
     bool isInTransaction();
 };

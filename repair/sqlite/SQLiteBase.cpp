@@ -48,8 +48,15 @@ bool SQLiteBase::lazyBeginTransaction()
     if (isInTransaction()) {
         return true;
     }
+    return execute("BEGIN");
+}
+
+bool SQLiteBase::lazyBeginTransactionImmediate()
+{
+    if (isInTransaction()) {
+        return true;
+    }
     return execute("BEGIN IMMEDIATE");
-    ;
 }
 
 bool SQLiteBase::lazyCommitOrRollbackTransaction(bool commit)

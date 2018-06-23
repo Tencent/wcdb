@@ -88,7 +88,7 @@ bool SQLiteAssembler::markAsAssembled()
 
 bool SQLiteAssembler::markAsMilestone()
 {
-    return lazyCommitOrRollbackTransaction() && lazyBeginTransaction();
+    return lazyCommitOrRollbackTransaction() && lazyBeginTransactionImmediate();
 }
 
 bool SQLiteAssembler::assembleTable(const std::string &tableName,
