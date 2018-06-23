@@ -46,6 +46,7 @@
 - (void)tearDown
 {
     XCTAssertTrue([_database removeFiles]);
+    _database = nil;
 
     [super tearDown];
 }
