@@ -36,6 +36,8 @@ CorruptionNotifier::CorruptionNotifier()
 {
     Notifier::shared()->setCorruptionNotification(
         std::bind(&CorruptionNotifier::addPath, this, std::placeholders::_1));
+    Dispatch::async("com.Tencent.WCDB.CorruptionNotifier",
+                    std::bind(&CorruptionNotifier::loop, this));
 }
 
 void CorruptionNotifier::addPath(const std::string &path)
@@ -52,8 +54,6 @@ void CorruptionNotifier::addPath(const std::string &path)
             m_cond.notify_all();
         }
     }
-    Dispatch::async("com.Tencent.WCDB.CorruptionNotifier",
-                    []() { CorruptionNotifier::shared()->loop(); });
 }
 
 void CorruptionNotifier::loop()
