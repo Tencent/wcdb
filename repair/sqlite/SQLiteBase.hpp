@@ -64,9 +64,7 @@ protected:
 protected:
     bool lazyBeginTransaction();
     bool lazyCommitOrRollbackTransaction(bool commit = true);
-
-private:
-    bool m_transaction;
+    bool isInTransaction();
 };
 
 } //namespace Repair

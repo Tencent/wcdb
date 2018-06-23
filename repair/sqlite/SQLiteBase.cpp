@@ -28,7 +28,7 @@ namespace WCDB {
 
 namespace Repair {
 
-SQLiteBase::SQLiteBase() : m_handle(nullptr), m_transaction(false)
+SQLiteBase::SQLiteBase() : m_handle(nullptr)
 {
 }
 
@@ -45,26 +45,27 @@ const std::string &SQLiteBase::getPath() const
 #pragma mark - Transaction
 bool SQLiteBase::lazyBeginTransaction()
 {
-    if (m_transaction) {
+    if (isInTransaction()) {
         return true;
     }
-    if (execute("BEGIN IMMEDIATE")) {
-        m_transaction = true;
-        return true;
-    }
-    return false;
+    return execute("BEGIN IMMEDIATE");
+    ;
 }
 
 bool SQLiteBase::lazyCommitOrRollbackTransaction(bool commit)
 {
-    if (m_transaction) {
-        m_transaction = false;
+    if (isInTransaction()) {
         if (!commit || !execute("COMMIT")) {
             execute("ROLLBACK", true); //ignore error
             return false;
         }
     }
     return true;
+}
+
+bool SQLiteBase::isInTransaction()
+{
+    return sqlite3_get_autocommit((sqlite3 *) m_handle) == 0;
 }
 
 #pragma mark - Error
