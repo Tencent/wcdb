@@ -27,7 +27,7 @@ namespace WCDB {
 
 Corruption::Corruption(const std::string &associatedPath_)
     : associatedPath(associatedPath_)
-    , m_reaction(Reaction::Remove)
+    , m_reaction(Reaction::Custom)
     , m_handling(false)
     , m_corrupted(false)
 {
