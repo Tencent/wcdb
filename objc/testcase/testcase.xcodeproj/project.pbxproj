@@ -327,6 +327,8 @@
 		23BA6C21208CE299005CAFB7 /* UnexpectedTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD552064EB6C000E31E8 /* UnexpectedTests.mm */; };
 		23BA6C22208CE299005CAFB7 /* WINQTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD572064EB6C000E31E8 /* WINQTestCase.mm */; };
 		23BA6C23208CE299005CAFB7 /* WithClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD582064EB6C000E31E8 /* WithClauseTests.mm */; };
+		23BBE3AD20DE19730046A543 /* RepairTests+CorruptionReaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BBE3AC20DE19730046A543 /* RepairTests+CorruptionReaction.mm */; };
+		23BBE3AE20DE19730046A543 /* RepairTests+CorruptionReaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BBE3AC20DE19730046A543 /* RepairTests+CorruptionReaction.mm */; };
 		23C5C6142089DBF700C828AE /* ORMInheritedTestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23C5C6132089DBF700C828AE /* ORMInheritedTestCaseObject.mm */; };
 		23C5C61C2089DCD200C828AE /* ORMTests+Inherited.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23C5C61B2089DCD200C828AE /* ORMTests+Inherited.mm */; };
 		23CB2104206DDBAE000EFB02 /* MigrationTests+SameDatabase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23CB2103206DDBAE000EFB02 /* MigrationTests+SameDatabase.mm */; };
@@ -776,6 +778,7 @@
 		23BA6B62208CE13F005CAFB7 /* Database Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Database Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23BA6B74208CE140005CAFB7 /* Convenient Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Convenient Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23BA6B86208CE142005CAFB7 /* WINQ Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "WINQ Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		23BBE3AC20DE19730046A543 /* RepairTests+CorruptionReaction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "RepairTests+CorruptionReaction.mm"; sourceTree = "<group>"; };
 		23C5C6112089DBF700C828AE /* ORMInheritedTestCaseObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ORMInheritedTestCaseObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		23C5C6122089DBF700C828AE /* ORMInheritedTestCaseObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORMInheritedTestCaseObject.h; sourceTree = "<group>"; };
 		23C5C6132089DBF700C828AE /* ORMInheritedTestCaseObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ORMInheritedTestCaseObject.mm; sourceTree = "<group>"; };
@@ -940,6 +943,7 @@
 				23593B7820D369DD0058B416 /* RepairTests+Backup.mm */,
 				23191EBF20D7D62400495B65 /* RepairTests+Deposit.mm */,
 				23CFE85E20DA455B00D112B8 /* RepairTests+Retrieve.mm */,
+				23BBE3AC20DE19730046A543 /* RepairTests+CorruptionReaction.mm */,
 			);
 			path = repair;
 			sourceTree = "<group>";
@@ -1887,6 +1891,7 @@
 				2324D16F20D2470200834A82 /* Convenience.m in Sources */,
 				23CFE86020DA455B00D112B8 /* RepairTests+Retrieve.mm in Sources */,
 				23191EC120D7D62400495B65 /* RepairTests+Deposit.mm in Sources */,
+				23BBE3AE20DE19730046A543 /* RepairTests+CorruptionReaction.mm in Sources */,
 				2324D17120D2470200834A82 /* TestCase.mm in Sources */,
 				2324D18120D247A000834A82 /* RepairTestCase.mm in Sources */,
 				23593B7A20D369DD0058B416 /* RepairTests+Backup.mm in Sources */,
@@ -1933,6 +1938,7 @@
 				23A3AF24206CDBF900D05634 /* UnsafeHandleTests+ChainCall.mm in Sources */,
 				23E58B59200F577400E0CECE /* Convenience.m in Sources */,
 				23CB2106206DDBB7000EFB02 /* MigrationTests.mm in Sources */,
+				23BBE3AD20DE19730046A543 /* RepairTests+CorruptionReaction.mm in Sources */,
 				235F5D552079F92D00B440CA /* MigrationTests+SameDatabase+Convenient.mm in Sources */,
 				23386232207B4F18004CAC6F /* ORMColumnConstraintNotNull.mm in Sources */,
 				23A3AF26206CDC0A00D05634 /* TableTests+ChainCall.mm in Sources */,
