@@ -36,6 +36,8 @@ typedef NS_ENUM(NSInteger, WCTCorruptionReaction) {
 
 @property(nonatomic, assign) WCTCorruptionReaction reactionWhenCorrupted;
 
+- (void)setAutoBackup:(BOOL)flag;
+
 - (void)setExtraReactionWhenCorrupted:(WCTCorruptionExtraReactionBlock)onCorrupted;
 
 - (void)filterBackup:(WCTBackupFilterBlock)tableShouldBeBackedUp;

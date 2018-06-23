@@ -144,4 +144,21 @@
     XCTAssertFalse([_database backup]);
 }
 
+- (void)test_auto_backup
+{
+    _database.autoBackup = YES;
+
+    int count = 100;
+    NSString *tableName = self.className;
+    XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
+
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *backupPath = [_database.path stringByAppendingString:@"-first.material"];
+    XCTAssertFalse([fileManager fileExistsAtPath:backupPath]);
+
+    [_database close];
+
+    XCTAssertTrue([fileManager fileExistsAtPath:backupPath]);
+}
+
 @end

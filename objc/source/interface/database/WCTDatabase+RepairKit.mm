@@ -65,6 +65,11 @@ static_assert((int) WCTCorruptionReactionDeposit == (int) WCDB::Database::Corrup
     return _database->deposit();
 }
 
+- (void)setAutoBackup:(BOOL)flag
+{
+    _database->autoBackup(flag);
+}
+
 - (BOOL)backup
 {
     return _database->backup();

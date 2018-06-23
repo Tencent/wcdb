@@ -42,31 +42,41 @@ BackupConfig::BackupConfig() : Config(BackupConfig::name)
 
 bool BackupConfig::invoke(Handle *handle)
 {
-    handle->setNotificationWhenCheckpoint(
-        [](Handle *handle, int frames) -> bool {
-            std::shared_ptr<Database> database =
-                Database::databaseWithExistingPath(handle->path);
-            WCTInnerAssert(database != nullptr);
-            if (database->backup(frames)) {
-                return true;
-            }
-            if (frames > framesForMandatoryCheckpoint) {
-                Error error;
-                error.level = Error::Level::Warning;
-                error.setCode(Error::Code::Exceed);
-                error.message =
-                    "Number of frames exceeds, mandatory checkpoint, and "
-                    "delete all backups.";
-                error.infos.set("Path", handle->path);
-                error.infos.set("Frames", frames);
-                Notifier::shared()->notify(error);
+    if (!handle->beginTransaction()) {
+        return false;
+    }
+    bool result =
+        handle->setNotificationWhenCheckpoint(BackupConfig::willCheckpoint);
+    if (result) {
+        result = handle->commitOrRollbackTransaction();
+    } else {
+        handle->rollbackTransaction();
+    }
+    return result;
+}
 
-                database->removeMaterials();
-                return true;
-            }
-            return false;
-        });
-    return true;
+bool BackupConfig::willCheckpoint(Handle *handle, int frames)
+{
+    std::shared_ptr<Database> database =
+        Database::databaseWithExistingPath(handle->path);
+    WCTInnerAssert(database != nullptr);
+    if (database->backup(frames)) {
+        return true;
+    }
+    if (frames > framesForMandatoryCheckpoint) {
+        Error error;
+        error.level = Error::Level::Warning;
+        error.setCode(Error::Code::Exceed);
+        error.message = "Number of frames exceeds, mandatory checkpoint, and "
+                        "delete all backups.";
+        error.infos.set("Path", handle->path);
+        error.infos.set("Frames", frames);
+        Notifier::shared()->notify(error);
+
+        database->removeMaterials();
+        return true;
+    }
+    return false;
 }
 
 } //namespace WCDB

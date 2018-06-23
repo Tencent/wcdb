@@ -452,10 +452,10 @@ void Handle::setNotificationWhenCommitted(
     m_notification.setNotificationWhenCommitted(onCommitted);
 }
 
-void Handle::setNotificationWhenCheckpoint(
+bool Handle::setNotificationWhenCheckpoint(
     const WCDB::Handle::CheckpointNotification &willCheckpoint)
 {
-    m_notification.setNotificationWhenCheckpoint(willCheckpoint);
+    return m_notification.setNotificationWhenCheckpoint(willCheckpoint);
 }
 
 #pragma mark - Error

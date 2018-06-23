@@ -81,7 +81,7 @@ protected:
 #pragma mark - Checkpoint
 public:
     typedef std::function<bool(Handle *, int)> CheckpointNotification;
-    void
+    bool
     setNotificationWhenCheckpoint(const CheckpointNotification &willCheckpoint);
 
 protected:

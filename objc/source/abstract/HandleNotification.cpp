@@ -158,12 +158,13 @@ void HandleNotification::onCommitted(int frames)
 }
 
 #pragma mark - Checkpoint
-void HandleNotification::setNotificationWhenCheckpoint(
+bool HandleNotification::setNotificationWhenCheckpoint(
     const CheckpointNotification &willCheckpoint)
 {
     m_checkpointNotification = willCheckpoint;
+    int rc = SQLITE_OK;
     if (m_checkpointNotification) {
-        sqlite3_wal_checkpoint_handler(
+        rc = sqlite3_wal_checkpoint_handler(
             (sqlite3 *) getRawHandle(),
             [](void *p, int frames) -> int {
                 HandleNotification *notification =
@@ -175,9 +176,14 @@ void HandleNotification::setNotificationWhenCheckpoint(
             },
             this);
     } else {
-        sqlite3_wal_checkpoint_handler((sqlite3 *) getRawHandle(), nullptr,
-                                       nullptr);
+        rc = sqlite3_wal_checkpoint_handler((sqlite3 *) getRawHandle(), nullptr,
+                                            nullptr);
     }
+    if (rc == SQLITE_OK) {
+        return true;
+    }
+    setError(rc);
+    return false;
 }
 
 bool HandleNotification::willCheckpoint(int frames)

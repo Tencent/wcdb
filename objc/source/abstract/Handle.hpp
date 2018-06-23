@@ -169,7 +169,7 @@ public:
     void setNotificationWhenCommitted(const CommittedNotification &onCommitted);
 
     typedef HandleNotification::CheckpointNotification CheckpointNotification;
-    void
+    bool
     setNotificationWhenCheckpoint(const CheckpointNotification &willCheckpoint);
 
 protected:

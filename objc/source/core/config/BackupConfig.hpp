@@ -34,6 +34,9 @@ public:
 
     static constexpr const char *name = "WCDBBackup";
     static constexpr const int framesForMandatoryCheckpoint = 10000;
+
+protected:
+    static bool willCheckpoint(Handle *handle, int frames);
 };
 
 } //namespace WCDB

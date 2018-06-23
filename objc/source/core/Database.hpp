@@ -111,6 +111,7 @@ public:
     const std::string &getFactoryDirectory() const;
 
     typedef Repair::Factory::Filter BackupFilter;
+    void autoBackup(bool flag = true);
     void filterBackup(const BackupFilter &tableShouldBeBackedup);
     bool backup(int maxWalFrame = std::numeric_limits<int>::max());
     bool deposit();

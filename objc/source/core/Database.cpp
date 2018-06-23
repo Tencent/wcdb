@@ -297,18 +297,9 @@ std::list<std::string> Database::getPaths() const
 }
 
 #pragma mark - Repair Kit
-void Database::setReactionWhenCorrupted(CorruptionReaction newReaction)
+void Database::setReactionWhenCorrupted(CorruptionReaction reaction)
 {
-    Corruption &corruption = m_pool->attachment.corruption;
-    CorruptionReaction oldReaction = corruption.getReaction();
-    if (oldReaction != CorruptionReaction::Deposit &&
-        newReaction == CorruptionReaction::Deposit) {
-        setConfig(BackupConfig::shared(), Configs::Priority::Low);
-    } else if (oldReaction == CorruptionReaction::Deposit &&
-               newReaction != CorruptionReaction::Deposit) {
-        removeConfig(BackupConfig::name);
-    }
-    corruption.setReaction(newReaction);
+    m_pool->attachment.corruption.setReaction(reaction);
 }
 
 Database::CorruptionReaction Database::getReactionWhenCorrupted() const
@@ -335,6 +326,15 @@ std::string Database::getLastMaterialPath() const
 const std::string &Database::getFactoryDirectory() const
 {
     return m_pool->attachment.factory.directory;
+}
+
+void Database::autoBackup(bool flag)
+{
+    if (flag) {
+        setConfig(BackupConfig::shared(), Configs::Priority::Low);
+    } else {
+        removeConfig(BackupConfig::name);
+    }
 }
 
 void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
