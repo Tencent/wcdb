@@ -65,27 +65,22 @@ std::pair<bool, std::string> Factory::getUniqueWorkshopDiectory() const
     do {
         Time time;
         if (!time.now()) {
-            return {false, String::empty()};
+            break;
         }
         std::string fileName;
         std::tie(succeed, fileName) = time.stringify();
         if (!succeed) {
-            return {false, String::empty()};
+            break;
         }
         path = Path::addComponent(directory, fileName);
 
         bool exists = false;
-        bool isDirectory = false;
-        std::tie(succeed, exists, isDirectory) = fileManager->itemExists(path);
-        if (!succeed) {
-            return {false, String::empty()};
+        std::tie(succeed, exists) = fileManager->directoryExists(path);
+        if (exists) {
+            succeed = false;
         }
-        if (!exists) {
-            break;
-        }
-    } while (true);
-    WCTInnerAssert(!path.empty());
-    return {true, path};
+    } while (false); //try repeatly
+    return {succeed, succeed ? path : String::empty()};
 }
 
 bool Factory::canRetrieve() const
@@ -278,16 +273,11 @@ std::pair<bool, Time>
 Factory::getModifiedTimeOr0IfNotExists(const std::string &path)
 {
     FileManager *fileManager = FileManager::shared();
-    bool succeed, exists, isDirectory;
-
+    bool succeed, exists;
     Time modifiedTime;
     do {
-        std::tie(succeed, exists, isDirectory) = fileManager->itemExists(path);
+        std::tie(succeed, exists) = fileManager->fileExists(path);
         if (!succeed || !exists) {
-            break;
-        }
-        if (isDirectory && !fileManager->removeItem(path)) {
-            succeed = false;
             break;
         }
         std::tie(succeed, modifiedTime) =
