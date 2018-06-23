@@ -161,4 +161,61 @@
     XCTAssertTrue([fileManager fileExistsAtPath:backupPath]);
 }
 
+- (void)test_backup_fail
+{
+    int count = 100;
+    NSString *tableName = self.className;
+    XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
+
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *firstBackupPath = [_database.path stringByAppendingString:@"-first.material"];
+    NSString *lastBackupPath = [_database.path stringByAppendingString:@"-last.material"];
+    XCTAssertTrue([fileManager createDirectoryAtPath:firstBackupPath withIntermediateDirectories:YES attributes:nil error:nil]);
+    XCTAssertTrue([fileManager createDirectoryAtPath:lastBackupPath withIntermediateDirectories:YES attributes:nil error:nil]);
+
+    XCTAssertFalse([_database backup]);
+}
+
+- (void)test_checkpoint_failed_with_backup
+{
+    _database.autoBackup = YES;
+
+    int count = 100;
+    NSString *tableName = self.className;
+    XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
+
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *firstBackupPath = [_database.path stringByAppendingString:@"-first.material"];
+    NSString *lastBackupPath = [_database.path stringByAppendingString:@"-last.material"];
+    XCTAssertTrue([fileManager createDirectoryAtPath:firstBackupPath withIntermediateDirectories:YES attributes:nil error:nil]);
+    XCTAssertTrue([fileManager createDirectoryAtPath:lastBackupPath withIntermediateDirectories:YES attributes:nil error:nil]);
+
+    XCTAssertFalse([_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
+}
+
+- (void)test_mandatory_checkpoint_cover_backup_with_super_large_wal
+{
+    _database.autoBackup = YES;
+
+    int count = 100;
+    NSString *tableName = self.className;
+    XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
+
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *firstBackupPath = [_database.path stringByAppendingString:@"-first.material"];
+    NSString *lastBackupPath = [_database.path stringByAppendingString:@"-last.material"];
+
+    XCTAssertTrue([_database backup]);
+    XCTAssertTrue([fileManager fileExistsAtPath:firstBackupPath]);
+    XCTAssertTrue([fileManager createDirectoryAtPath:lastBackupPath withIntermediateDirectories:YES attributes:nil error:nil]);
+
+    for (int i = 0; i < 10001; ++i) {
+        XCTAssertTrue([self insertObjectsOfCount:1 from:i intoTable:tableName]);
+    }
+
+    XCTAssertTrue([_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
+    XCTAssertFalse([fileManager fileExistsAtPath:firstBackupPath]);
+    XCTAssertFalse([fileManager fileExistsAtPath:lastBackupPath]);
+}
+
 @end
