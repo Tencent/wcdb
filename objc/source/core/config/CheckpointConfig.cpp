@@ -78,10 +78,9 @@ void CheckpointConfig::loop()
 
 void CheckpointConfig::onTimed(const std::string &path, const int &frames) const
 {
-    //TODO
-    static std::atomic<bool> s_exit(false);
-    atexit([]() { s_exit.store(true); });
-    if (s_exit.load()) {
+    static std::atomic<bool> *s_exit = new std::atomic<bool>(false);
+    atexit([]() { s_exit->store(true); });
+    if (s_exit->load()) {
         return;
     }
 
