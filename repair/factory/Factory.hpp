@@ -25,6 +25,7 @@
 #include <WCDB/FactoryDepositor.hpp>
 #include <WCDB/FactoryRenewer.hpp>
 #include <WCDB/FactoryRetriever.hpp>
+#include <WCDB/Time.hpp>
 #include <future>
 #include <list>
 #include <string>
@@ -83,7 +84,7 @@ public:
     materialForDeserializingForDatabase(const std::string &database);
 
 protected:
-    static std::pair<bool, time_t>
+    static std::pair<bool, Time>
     getModifiedTimeOr0IfNotExists(const std::string &path);
 };
 

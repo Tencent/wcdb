@@ -188,15 +188,15 @@ bool FileManager::createDirectory(const std::string &path)
     return false;
 }
 
-std::pair<bool, time_t>
-FileManager::getFileModifiedTime(const std::string &path)
+std::pair<bool, Time> FileManager::getFileModifiedTime(const std::string &path)
 {
     struct stat result;
     if (stat(path.c_str(), &result) == 0) {
-        return {true, result.st_mtime};
+        return {true,
+                Time(result.st_mtimespec.tv_sec, result.st_mtimespec.tv_nsec)};
     }
     setThreadedError(path);
-    return {false, 0};
+    return {false, Time()};
 }
 
 #pragma mark - Combination

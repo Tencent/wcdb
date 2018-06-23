@@ -30,6 +30,10 @@ Time::Time() : m_sec(0), m_nsec(0)
 {
 }
 
+Time::Time(long sec, long nsec) : m_sec(sec), m_nsec(nsec)
+{
+}
+
 bool Time::now()
 {
     struct timespec ts;
@@ -44,6 +48,11 @@ bool Time::now()
     return true;
 }
 
+bool Time::empty() const
+{
+    return m_sec == 0 && m_nsec == 0;
+}
+
 std::pair<bool, std::string> Time::stringify() const
 {
     struct tm tm;
@@ -54,6 +63,14 @@ std::pair<bool, std::string> Time::stringify() const
     std::ostringstream oss;
     oss << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S") << "." << m_nsec;
     return {true, oss.str()};
+}
+
+bool Time::operator>(const Time &operand) const
+{
+    if (m_sec != operand.m_sec) {
+        return m_sec > operand.m_sec;
+    }
+    return m_nsec > operand.m_nsec;
 }
 
 } //namespace WCDB

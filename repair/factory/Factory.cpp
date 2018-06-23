@@ -203,13 +203,13 @@ Factory::materialForSerializingForDatabase(const std::string &database)
     do {
         std::string firstMaterialPath =
             Factory::firstMaterialPathForDatabase(database);
-        time_t firstMaterialModifiedTime, lastMaterialModifiedTime;
+        Time firstMaterialModifiedTime, lastMaterialModifiedTime;
         std::tie(succeed, firstMaterialModifiedTime) =
             getModifiedTimeOr0IfNotExists(firstMaterialPath);
         if (!succeed) {
             break;
         }
-        if (firstMaterialModifiedTime == 0) {
+        if (firstMaterialModifiedTime.empty()) {
             materialPath = std::move(firstMaterialPath);
             break;
         }
@@ -221,7 +221,7 @@ Factory::materialForSerializingForDatabase(const std::string &database)
         if (!succeed) {
             break;
         }
-        if (lastMaterialModifiedTime == 0) {
+        if (lastMaterialModifiedTime.empty()) {
             materialPath = std::move(lastMaterialPath);
             break;
         }
@@ -247,7 +247,7 @@ Factory::materialForDeserializingForDatabase(const std::string &database)
     do {
         std::string firstMaterialPath =
             Factory::firstMaterialPathForDatabase(database);
-        time_t firstMaterialModifiedTime, lastMaterialModifiedTime;
+        Time firstMaterialModifiedTime, lastMaterialModifiedTime;
         std::tie(succeed, firstMaterialModifiedTime) =
             getModifiedTimeOr0IfNotExists(firstMaterialPath);
         if (!succeed) {
@@ -262,7 +262,8 @@ Factory::materialForDeserializingForDatabase(const std::string &database)
             break;
         }
 
-        if (firstMaterialModifiedTime != 0 || lastMaterialModifiedTime != 0) {
+        if (!firstMaterialModifiedTime.empty() ||
+            !lastMaterialModifiedTime.empty()) {
             if (firstMaterialModifiedTime > lastMaterialModifiedTime) {
                 materialPath = std::move(firstMaterialPath);
             } else {
@@ -273,19 +274,20 @@ Factory::materialForDeserializingForDatabase(const std::string &database)
     return {succeed, std::move(materialPath)};
 }
 
-std::pair<bool, time_t>
+std::pair<bool, Time>
 Factory::getModifiedTimeOr0IfNotExists(const std::string &path)
 {
     FileManager *fileManager = FileManager::shared();
     bool succeed, exists, isDirectory;
 
-    time_t modifiedTime = 0;
+    Time modifiedTime;
     do {
         std::tie(succeed, exists, isDirectory) = fileManager->itemExists(path);
         if (!succeed || !exists) {
             break;
         }
         if (isDirectory && !fileManager->removeItem(path)) {
+            succeed = false;
             break;
         }
         std::tie(succeed, modifiedTime) =

@@ -23,6 +23,7 @@
 
 #include <WCDB/Error.hpp>
 #include <WCDB/SharedThreadedErrorProne.hpp>
+#include <WCDB/Time.hpp>
 #include <functional>
 #include <list>
 #include <string>
@@ -49,7 +50,7 @@ public:
     bool createHardLink(const std::string &from, const std::string &to);
     bool removeHardLink(const std::string &path);
     bool createDirectory(const std::string &path);
-    std::pair<bool, time_t> getFileModifiedTime(const std::string &path);
+    std::pair<bool, Time> getFileModifiedTime(const std::string &path);
 
     bool enumerateDirectory(
         const std::string &directory,
