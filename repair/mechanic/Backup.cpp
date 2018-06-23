@@ -105,11 +105,11 @@ bool Backup::filter(const std::string &tableName)
         error.message = "Filter reserved table when backup.";
         error.infos.set("Table", tableName);
         Notifier::shared()->notify(error);
-        return true;
+        return false;
     } else if (m_filter) {
         return m_filter(tableName);
     }
-    return false;
+    return true;
 }
 
 #pragma mark - Crawlable
@@ -159,7 +159,7 @@ void Backup::onMasterCellCrawled(const Cell &cell, const Master *master)
     }
     if (master->tableName == Sequence::tableName()) {
         SequenceCrawler(m_pager).work(master->rootpage, this);
-    } else if (!filter(master->tableName)) {
+    } else if (filter(master->tableName)) {
         m_height = -1;
         if (!crawl(master->rootpage)) {
             return;
@@ -179,7 +179,7 @@ void Backup::onMasterCrawlerError()
 #pragma mark - SequenceCrawlerDelegate
 void Backup::onSequenceCellCrawled(const Cell &cell, const Sequence &sequence)
 {
-    if (!filter(sequence.name)) {
+    if (filter(sequence.name)) {
         Material::Content &content = getOrCreateContent(sequence.name);
         //the columns in sqlite_sequence are not unique.
         content.sequence = std::max(content.sequence, sequence.seq);
