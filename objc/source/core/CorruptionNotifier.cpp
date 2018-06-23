@@ -40,8 +40,6 @@ CorruptionNotifier::CorruptionNotifier()
 
 void CorruptionNotifier::addPath(const std::string &path)
 {
-    Dispatch::async("com.Tencent.WCDB.CorruptionNotifier",
-                    []() { CorruptionNotifier::shared()->loop(); });
     auto pool = HandlePools::defaultPools()->getExistingPool(path);
     if (pool == nullptr) {
         return;
@@ -54,6 +52,8 @@ void CorruptionNotifier::addPath(const std::string &path)
             m_cond.notify_all();
         }
     }
+    Dispatch::async("com.Tencent.WCDB.CorruptionNotifier",
+                    []() { CorruptionNotifier::shared()->loop(); });
 }
 
 void CorruptionNotifier::loop()

@@ -199,6 +199,17 @@ std::pair<bool, Time> FileManager::getFileModifiedTime(const std::string &path)
     return {false, Time()};
 }
 
+std::pair<bool, Time> FileManager::getFileCreatedTime(const std::string &path)
+{
+    struct stat result;
+    if (stat(path.c_str(), &result) == 0) {
+        return {true,
+                Time(result.st_ctimespec.tv_sec, result.st_ctimespec.tv_nsec)};
+    }
+    setThreadedError(path);
+    return {false, Time()};
+}
+
 #pragma mark - Combination
 std::pair<bool, size_t> FileManager::getItemSize(const std::string &path)
 {

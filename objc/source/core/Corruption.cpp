@@ -21,7 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Corruption.hpp>
 #include <WCDB/Database.hpp>
-#include <sstream>
+#include <WCDB/FileManager.hpp>
 
 namespace WCDB {
 
@@ -53,8 +53,8 @@ void Corruption::setExtraReaction(const ExtraReaction &extraReaction)
 const char *Corruption::reactionName(Reaction reaction)
 {
     switch (reaction) {
-        case Ignore:
-            return "Ignore";
+        case Custom:
+            return "Custom";
         case Deposit:
             return "Deposit";
         case Remove:
@@ -67,6 +67,8 @@ void Corruption::notify()
     if (!m_corrupted.load()) {
         return;
     }
+    WCTInnerAssert(!m_identifier.empty());
+
     {
         Error error;
         error.level = Error::Level::Notice;
@@ -74,27 +76,50 @@ void Corruption::notify()
         error.message = "Corruption will be handled.";
         error.infos.set("Reaction", reactionName(m_reaction));
         error.infos.set("Path", associatedPath);
+        error.infos.set("ExtraReaction", m_extraReaction != nullptr);
         Notifier::shared()->notify(error);
     }
 
     auto database = Database::databaseWithExistingPath(associatedPath);
     WCTInnerAssert(database != nullptr);
     database->blockade();
-    database->close(nullptr);
-    bool doExtraReaction = true;
-    switch (m_reaction) {
-        case Reaction::Remove:
-            doExtraReaction = database->removeFiles();
+    do {
+        bool succeed;
+        Time identifier;
+        std::tie(succeed, identifier) =
+            FileManager::shared()->getFileCreatedTime(associatedPath);
+        if (!succeed || identifier != m_identifier) {
+            Error error;
+            error.level = Error::Level::Warning;
+            error.setCode(Error::Code::Warning, "Repair");
+            error.message =
+                "Skip corruption handling due to mismatch identifier.";
+            error.infos.set("OldSec", m_identifier.sec());
+            error.infos.set("OldNSec", m_identifier.nsec());
+            error.infos.set("NewSec", identifier.sec());
+            error.infos.set("NewNSec", identifier.nsec());
+            Notifier::shared()->notify(error);
             break;
-        case Reaction::Deposit:
-            doExtraReaction = database->deposit();
-            break;
-        default:
-            break;
-    }
-    if (doExtraReaction && m_extraReaction) {
-        m_extraReaction(database);
-    }
+        }
+
+        database->close(nullptr);
+        bool doExtraReaction = true;
+        switch (m_reaction) {
+            case Reaction::Remove:
+                doExtraReaction = database->removeFiles();
+                break;
+            case Reaction::Deposit:
+                doExtraReaction = database->deposit();
+                break;
+            default:
+                break;
+        }
+        if (doExtraReaction && m_extraReaction) {
+            m_extraReaction(database);
+        }
+
+    } while (false);
+
     database->unblockade();
     m_corrupted.store(false);
 }
@@ -104,6 +129,17 @@ bool Corruption::markAsCorrupted()
     if (m_handling.load()) {
         return false;
     }
+    if (m_corrupted.load()) {
+        return false;
+    }
+    bool succeed;
+    Time identifier;
+    std::tie(succeed, identifier) =
+        FileManager::shared()->getFileCreatedTime(associatedPath);
+    if (!succeed) {
+        return false;
+    }
+    m_identifier = identifier;
     return !m_corrupted.exchange(true);
 }
 

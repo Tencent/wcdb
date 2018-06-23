@@ -31,7 +31,12 @@ public:
     Time();
     Time(long sec, long nsec);
 
+    long sec() const;
+    long nsec() const;
+
     bool operator>(const Time &operand) const;
+    bool operator==(const Time &operand) const;
+    bool operator!=(const Time &operand) const;
 
     bool now();
     bool empty() const;

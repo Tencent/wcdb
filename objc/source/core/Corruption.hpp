@@ -21,6 +21,7 @@
 #ifndef Corruption_hpp
 #define Corruption_hpp
 
+#include <WCDB/Time.hpp>
 #include <functional>
 #include <string>
 
@@ -37,9 +38,9 @@ public:
 #pragma mark - Reaction
 public:
     enum Reaction {
-        Ignore = -1,
-        Remove = 0,
-        Deposit = 1,
+        Custom = 0,
+        Remove = 1,
+        Deposit = 2,
     };
     static const char *reactionName(Reaction reaction);
     void setReaction(Reaction reaction);
@@ -63,6 +64,7 @@ protected:
 private:
     std::atomic<bool> m_handling;
     std::atomic<bool> m_corrupted;
+    Time m_identifier;
     ExtraReaction m_extraReaction;
 };
 

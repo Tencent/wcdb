@@ -27,9 +27,9 @@ typedef BOOL (^WCTRetrieveProgressUpdateBlock)(double, double);
 typedef void (^WCTCorruptionExtraReactionBlock)(WCTDatabase *);
 
 typedef NS_ENUM(NSInteger, WCTCorruptionReaction) {
-    WCTCorruptionReactionIgnore = -1,
-    WCTCorruptionReactionRemove = 0,
-    WCTCorruptionReactionDeposit = 1,
+    WCTCorruptionReactionCustom = 0,
+    WCTCorruptionReactionRemove = 1,
+    WCTCorruptionReactionDeposit = 2,
 };
 
 @interface WCTDatabase (RepairKit)

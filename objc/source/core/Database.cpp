@@ -193,12 +193,14 @@ bool Database::removeFiles()
     bool result = false;
     m_pool->drain(
         [&result, this]() {
+            m_pool->attachment.corruption.markAsHandling();
             std::list<std::string> paths = getPaths();
             paths.reverse();
             result = FileManager::shared()->removeItems(paths);
             if (!result) {
                 assignWithSharedThreadedError();
             }
+            m_pool->attachment.corruption.markAsHandled();
         },
         false);
     return result;
@@ -227,12 +229,14 @@ bool Database::moveFiles(const std::string &directory)
     bool result = false;
     m_pool->drain(
         [&result, &directory, this]() {
+            m_pool->attachment.corruption.markAsHandling();
             std::list<std::string> paths = getPaths();
             paths.reverse();
             result = FileManager::shared()->moveItems(paths, directory);
             if (!result) {
                 assignWithSharedThreadedError();
             }
+            m_pool->attachment.corruption.markAsHandled();
         },
         false);
     return result;
@@ -244,6 +248,7 @@ bool Database::moveFilesToDirectoryWithExtraFiles(
     bool result = false;
     m_pool->drain(
         [&result, &directory, &extraFiles, this]() {
+            m_pool->attachment.corruption.markAsHandling();
             std::list<std::string> paths = extraFiles;
             std::list<std::string> dbPaths = getPaths();
             dbPaths.reverse();
@@ -252,6 +257,7 @@ bool Database::moveFilesToDirectoryWithExtraFiles(
             if (!result) {
                 assignWithSharedThreadedError();
             }
+            m_pool->attachment.corruption.markAsHandled();
         },
         false);
     return result;

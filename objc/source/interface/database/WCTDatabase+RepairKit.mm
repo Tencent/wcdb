@@ -24,7 +24,7 @@
 
 @implementation WCTDatabase (RepairKit)
 
-static_assert((int) WCTCorruptionReactionIgnore == (int) WCDB::Database::CorruptionReaction::Ignore, "");
+static_assert((int) WCTCorruptionReactionCustom == (int) WCDB::Database::CorruptionReaction::Custom, "");
 static_assert((int) WCTCorruptionReactionRemove == (int) WCDB::Database::CorruptionReaction::Remove, "");
 static_assert((int) WCTCorruptionReactionDeposit == (int) WCDB::Database::CorruptionReaction::Deposit, "");
 

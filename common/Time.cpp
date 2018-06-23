@@ -34,6 +34,16 @@ Time::Time(long sec, long nsec) : m_sec(sec), m_nsec(nsec)
 {
 }
 
+long Time::sec() const
+{
+    return m_sec;
+}
+
+long Time::nsec() const
+{
+    return m_nsec;
+}
+
 bool Time::now()
 {
     struct timespec ts;
@@ -63,6 +73,16 @@ std::pair<bool, std::string> Time::stringify() const
     std::ostringstream oss;
     oss << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S") << "." << m_nsec;
     return {true, oss.str()};
+}
+
+bool Time::operator==(const Time &operand) const
+{
+    return m_nsec == operand.m_nsec && m_sec == operand.m_sec;
+}
+
+bool Time::operator!=(const Time &operand) const
+{
+    return m_sec != operand.m_sec && m_nsec != operand.m_nsec;
 }
 
 bool Time::operator>(const Time &operand) const
