@@ -19,8 +19,8 @@
  */
 
 #import "TestCase.h"
-#import "TestCaseObject+WCTTableCoding.h"
-#import "TestCaseObject.h"
+
+@class TestCaseObject;
 
 @interface RepairTestCase : TestCase {
 @protected

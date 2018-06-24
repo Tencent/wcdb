@@ -19,6 +19,7 @@
  */
 
 #import "RepairTestCase.h"
+#import "TestCaseCommon.h"
 
 @interface RepairTests_Deposit : RepairTestCase
 

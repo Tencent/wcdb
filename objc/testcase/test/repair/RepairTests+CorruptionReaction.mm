@@ -20,6 +20,7 @@
 
 #import "FileBomber.h"
 #import "RepairTestCase.h"
+#import "TestCaseCommon.h"
 
 @interface RepairTests_CorruptionReaction : RepairTestCase
 

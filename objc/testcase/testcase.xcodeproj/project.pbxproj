@@ -112,6 +112,8 @@
 		235F5D57207A22F000B440CA /* MigrationTests+Innocent+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D56207A22F000B440CA /* MigrationTests+Innocent+Convenient.mm */; };
 		235F5D5D207A387B00B440CA /* HandleTests+Table.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D5C207A387B00B440CA /* HandleTests+Table.mm */; };
 		235F5D5F207A388100B440CA /* DatabaseTests+Table.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D5E207A388100B440CA /* DatabaseTests+Table.mm */; };
+		2367267A20DFD5B600A1E7E3 /* FileBomber.m in Sources */ = {isa = PBXBuildFile; fileRef = 2367267920DFD5B600A1E7E3 /* FileBomber.m */; };
+		2367267B20DFD5B600A1E7E3 /* FileBomber.m in Sources */ = {isa = PBXBuildFile; fileRef = 2367267920DFD5B600A1E7E3 /* FileBomber.m */; };
 		23698A8D2004613600C0291C /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
 		23698B5E20047E1A00C0291C /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
 		236A46AF20D7526E001816AF /* DatabaseTests+Trace.mm in Sources */ = {isa = PBXBuildFile; fileRef = 236A46AE20D7526E001816AF /* DatabaseTests+Trace.mm */; };
@@ -177,9 +179,6 @@
 		23A3AF26206CDC0A00D05634 /* TableTests+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3AF25206CDC0A00D05634 /* TableTests+ChainCall.mm */; };
 		23AA166B2098C46F0013912B /* TestCaseConflictObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23AA16682098C46F0013912B /* TestCaseConflictObject.mm */; };
 		23AA166C2098C46F0013912B /* TestCaseConflictObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23AA16682098C46F0013912B /* TestCaseConflictObject.mm */; };
-		23AD52F820DBCDB000664B62 /* FileBomber.m in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52F720DBCDB000664B62 /* FileBomber.m */; };
-		23AD52F920DBCDB000664B62 /* FileBomber.m in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52F720DBCDB000664B62 /* FileBomber.m */; };
-		23AD52FA20DBCDB000664B62 /* FileBomber.m in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52F720DBCDB000664B62 /* FileBomber.m */; };
 		23BA6AD3208CE0DE005CAFB7 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; };
 		23BA6AE3208CE101005CAFB7 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
 		23BA6AE4208CE101005CAFB7 /* Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B58200F577400E0CECE /* Convenience.m */; };
@@ -725,6 +724,8 @@
 		235F5D56207A22F000B440CA /* MigrationTests+Innocent+Convenient.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "MigrationTests+Innocent+Convenient.mm"; sourceTree = "<group>"; };
 		235F5D5C207A387B00B440CA /* HandleTests+Table.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "HandleTests+Table.mm"; sourceTree = "<group>"; };
 		235F5D5E207A388100B440CA /* DatabaseTests+Table.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "DatabaseTests+Table.mm"; sourceTree = "<group>"; };
+		2367267820DFD5B500A1E7E3 /* FileBomber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileBomber.h; sourceTree = "<group>"; };
+		2367267920DFD5B600A1E7E3 /* FileBomber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileBomber.m; sourceTree = "<group>"; };
 		23698A6320045EF100C0291C /* Coverage Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Coverage Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23698A7820045F4A00C0291C /* WCDB.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = WCDB.xcodeproj; path = ../WCDB.xcodeproj; sourceTree = "<group>"; };
 		23698A8C2004613600C0291C /* TestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCase.mm; sourceTree = "<group>"; };
@@ -766,8 +767,6 @@
 		23AA16682098C46F0013912B /* TestCaseConflictObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCaseConflictObject.mm; sourceTree = "<group>"; };
 		23AA16692098C46F0013912B /* TestCaseConflictObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestCaseConflictObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		23AA166A2098C46F0013912B /* TestCaseConflictObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestCaseConflictObject.h; sourceTree = "<group>"; };
-		23AD52F620DBCDB000664B62 /* FileBomber.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileBomber.h; sourceTree = "<group>"; };
-		23AD52F720DBCDB000664B62 /* FileBomber.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FileBomber.m; sourceTree = "<group>"; };
 		23BA69BD208CE0AC005CAFB7 /* FTS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FTS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23BA6AF6208CE12D005CAFB7 /* Migration Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Migration Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23BA6B08208CE132005CAFB7 /* ORM Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ORM Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -944,6 +943,8 @@
 				23191EBF20D7D62400495B65 /* RepairTests+Deposit.mm */,
 				23CFE85E20DA455B00D112B8 /* RepairTests+Retrieve.mm */,
 				23BBE3AC20DE19730046A543 /* RepairTests+CorruptionReaction.mm */,
+				2367267820DFD5B500A1E7E3 /* FileBomber.h */,
+				2367267920DFD5B600A1E7E3 /* FileBomber.m */,
 			);
 			path = repair;
 			sourceTree = "<group>";
@@ -1233,8 +1234,6 @@
 				23698AAF20046BE600C0291C /* Assert.h */,
 				23E58B57200F577400E0CECE /* Convenience.h */,
 				23E58B58200F577400E0CECE /* Convenience.m */,
-				23AD52F620DBCDB000664B62 /* FileBomber.h */,
-				23AD52F720DBCDB000664B62 /* FileBomber.m */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -1892,10 +1891,10 @@
 				23CFE86020DA455B00D112B8 /* RepairTests+Retrieve.mm in Sources */,
 				23191EC120D7D62400495B65 /* RepairTests+Deposit.mm in Sources */,
 				23BBE3AE20DE19730046A543 /* RepairTests+CorruptionReaction.mm in Sources */,
+				2367267B20DFD5B600A1E7E3 /* FileBomber.m in Sources */,
 				2324D17120D2470200834A82 /* TestCase.mm in Sources */,
 				2324D18120D247A000834A82 /* RepairTestCase.mm in Sources */,
 				23593B7A20D369DD0058B416 /* RepairTests+Backup.mm in Sources */,
-				23AD52FA20DBCDB000664B62 /* FileBomber.m in Sources */,
 				2324D17220D2470200834A82 /* TestCaseObject.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1947,7 +1946,6 @@
 				234DBD812064EB6C000E31E8 /* StatementReleaseTests.mm in Sources */,
 				234DBD5A2064EB6C000E31E8 /* ColumnConstraintTests.mm in Sources */,
 				234DBD6D2064EB6C000E31E8 /* SelectCoreTests.mm in Sources */,
-				23AD52F820DBCDB000664B62 /* FileBomber.m in Sources */,
 				23191EC020D7D62400495B65 /* RepairTests+Deposit.mm in Sources */,
 				234DBD5C2064EB6C000E31E8 /* ColumnTypeTests.mm in Sources */,
 				23CB2104206DDBAE000EFB02 /* MigrationTests+SameDatabase.mm in Sources */,
@@ -2009,6 +2007,7 @@
 				2338623A207B5391004CAC6F /* ORMTableConstraintMultiPrimary.mm in Sources */,
 				23D507EA208060CB0015E1C9 /* MultipleMigrationTests.mm in Sources */,
 				23386216207B4ED6004CAC6F /* ORMColumnConstraintPrimary.mm in Sources */,
+				2367267A20DFD5B600A1E7E3 /* FileBomber.m in Sources */,
 				23593B7920D369DD0058B416 /* RepairTests+Backup.mm in Sources */,
 				234DBD8A2064EB6C000E31E8 /* WINQTestCase.mm in Sources */,
 				23FEC488206B9640001E7A3B /* SelectTests.mm in Sources */,
@@ -2052,7 +2051,6 @@
 				23E8283D209F48BB00807001 /* RepairBenchmark.mm in Sources */,
 				23E82836209EBB2D00807001 /* CipherBenchmark.mm in Sources */,
 				238B50D8209D5CDB00C78CC8 /* Benchmark.mm in Sources */,
-				23AD52F920DBCDB000664B62 /* FileBomber.m in Sources */,
 				23E82839209F3BD900807001 /* InitializationBenchmark.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
