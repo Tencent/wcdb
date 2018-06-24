@@ -114,6 +114,8 @@
 		235F5D5F207A388100B440CA /* DatabaseTests+Table.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D5E207A388100B440CA /* DatabaseTests+Table.mm */; };
 		2367267A20DFD5B600A1E7E3 /* FileBomber.m in Sources */ = {isa = PBXBuildFile; fileRef = 2367267920DFD5B600A1E7E3 /* FileBomber.m */; };
 		2367267B20DFD5B600A1E7E3 /* FileBomber.m in Sources */ = {isa = PBXBuildFile; fileRef = 2367267920DFD5B600A1E7E3 /* FileBomber.m */; };
+		2367267F20DFD70300A1E7E3 /* RepairTestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2367267C20DFD70300A1E7E3 /* RepairTestCaseObject.mm */; };
+		2367268020DFD70300A1E7E3 /* RepairTestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2367267C20DFD70300A1E7E3 /* RepairTestCaseObject.mm */; };
 		23698A8D2004613600C0291C /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
 		23698B5E20047E1A00C0291C /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
 		236A46AF20D7526E001816AF /* DatabaseTests+Trace.mm in Sources */ = {isa = PBXBuildFile; fileRef = 236A46AE20D7526E001816AF /* DatabaseTests+Trace.mm */; };
@@ -726,6 +728,9 @@
 		235F5D5E207A388100B440CA /* DatabaseTests+Table.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "DatabaseTests+Table.mm"; sourceTree = "<group>"; };
 		2367267820DFD5B500A1E7E3 /* FileBomber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileBomber.h; sourceTree = "<group>"; };
 		2367267920DFD5B600A1E7E3 /* FileBomber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileBomber.m; sourceTree = "<group>"; };
+		2367267C20DFD70300A1E7E3 /* RepairTestCaseObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RepairTestCaseObject.mm; sourceTree = "<group>"; };
+		2367267D20DFD70300A1E7E3 /* RepairTestCaseObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RepairTestCaseObject+WCTTableCoding.h"; sourceTree = "<group>"; };
+		2367267E20DFD70300A1E7E3 /* RepairTestCaseObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RepairTestCaseObject.h; sourceTree = "<group>"; };
 		23698A6320045EF100C0291C /* Coverage Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Coverage Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23698A7820045F4A00C0291C /* WCDB.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = WCDB.xcodeproj; path = ../WCDB.xcodeproj; sourceTree = "<group>"; };
 		23698A8C2004613600C0291C /* TestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCase.mm; sourceTree = "<group>"; };
@@ -945,6 +950,9 @@
 				23BBE3AC20DE19730046A543 /* RepairTests+CorruptionReaction.mm */,
 				2367267820DFD5B500A1E7E3 /* FileBomber.h */,
 				2367267920DFD5B600A1E7E3 /* FileBomber.m */,
+				2367267C20DFD70300A1E7E3 /* RepairTestCaseObject.mm */,
+				2367267D20DFD70300A1E7E3 /* RepairTestCaseObject+WCTTableCoding.h */,
+				2367267E20DFD70300A1E7E3 /* RepairTestCaseObject.h */,
 			);
 			path = repair;
 			sourceTree = "<group>";
@@ -1894,6 +1902,7 @@
 				2367267B20DFD5B600A1E7E3 /* FileBomber.m in Sources */,
 				2324D17120D2470200834A82 /* TestCase.mm in Sources */,
 				2324D18120D247A000834A82 /* RepairTestCase.mm in Sources */,
+				2367268020DFD70300A1E7E3 /* RepairTestCaseObject.mm in Sources */,
 				23593B7A20D369DD0058B416 /* RepairTests+Backup.mm in Sources */,
 				2324D17220D2470200834A82 /* TestCaseObject.mm in Sources */,
 			);
@@ -1916,6 +1925,7 @@
 				234DBD7E2064EB6C000E31E8 /* StatementInsertTests.mm in Sources */,
 				234DBD5F2064EB6C000E31E8 /* ConvertibleTests.mm in Sources */,
 				2338626A207B6C53004CAC6F /* ORMVirtualTableModuleFTS3.mm in Sources */,
+				2367267F20DFD70300A1E7E3 /* RepairTestCaseObject.mm in Sources */,
 				23386256207B5E1E004CAC6F /* ORMColumnCoding.mm in Sources */,
 				23EABBE2206D07C200241F3B /* HandleTests.mm in Sources */,
 				234DBD742064EB6C000E31E8 /* StatementCreateTableTests.mm in Sources */,

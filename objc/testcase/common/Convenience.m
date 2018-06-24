@@ -98,7 +98,8 @@
 
 + (NSData *)randomData
 {
-    return [self randomDataWithLength:256];
+    int length = [NSNumber randomUInt8];
+    return [self randomDataWithLength:length];
 }
 
 + (NSData *)randomDataWithLength:(NSUInteger)length
@@ -127,7 +128,7 @@
 
 + (NSString *)randomString
 {
-    int length = rand() % 256;
+    int length = [NSNumber randomUInt8];
     static const char alphanum[] =
         "0123456789"
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -143,12 +144,56 @@
 
 @implementation NSNumber (Random)
 
+static_assert(sizeof(rand()) == sizeof(int32_t), "");
+
 + (NSNumber *)randomNumber
 {
-    if (rand() % 2) {
-        return [NSNumber numberWithLongLong:rand()];
+    if ([NSNumber randomBool]) {
+        return [NSNumber numberWithLongLong:[NSNumber randomInt64]];
     }
-    return [NSNumber numberWithDouble:rand() / (double) (RAND_MAX)];
+    return [NSNumber numberWithDouble:[NSNumber randomDouble]];
+}
+
++ (int8_t)randomInt8
+{
+    return [self randomInt32];
+}
+
++ (int16_t)randomInt16
+{
+    return [self randomInt32];
+}
+
++ (int32_t)randomInt32
+{
+    return rand();
+}
+
++ (int64_t)randomInt64
+{
+    int64_t value = rand();
+    value = (value << 32) | rand();
+    return value;
+}
+
++ (unsigned int)randomUInt
+{
+    return (unsigned int) [NSNumber randomInt64];
+}
+
++ (uint8_t)randomUInt8
+{
+    return [NSNumber randomInt64];
+}
+
++ (double)randomDouble
+{
+    return rand() / (double) (RAND_MAX) *DBL_MAX;
+}
+
++ (BOOL)randomBool
+{
+    return rand() % 2;
 }
 
 @end

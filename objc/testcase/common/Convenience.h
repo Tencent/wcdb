@@ -54,4 +54,12 @@
 #pragma mark - NSNumber
 @interface NSNumber (Random)
 + (NSNumber *)randomNumber;
++ (int8_t)randomInt8;
++ (int16_t)randomInt16;
++ (int32_t)randomInt32;
++ (int64_t)randomInt64;
++ (unsigned int)randomUInt;
++ (uint8_t)randomUInt8;
++ (double)randomDouble;
++ (BOOL)randomBool;
 @end
