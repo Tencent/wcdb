@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2308F6B820E0D38E001CD9C3 /* RepairTestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2308F6B620E0D38E001CD9C3 /* RepairTestCaseObject.mm */; };
+		2308F6B920E0D38E001CD9C3 /* RepairTestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2308F6B620E0D38E001CD9C3 /* RepairTestCaseObject.mm */; };
+		2308F6BA20E0D38E001CD9C3 /* RepairTestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2308F6B620E0D38E001CD9C3 /* RepairTestCaseObject.mm */; };
 		2313B6D020A2F2F00067C211 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2313B6CF20A2F2F00067C211 /* main.m */; };
 		2313B6D720A2F6CD0067C211 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; };
 		2313B6D820A2F6CD0067C211 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -114,8 +117,6 @@
 		235F5D5F207A388100B440CA /* DatabaseTests+Table.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D5E207A388100B440CA /* DatabaseTests+Table.mm */; };
 		2367267A20DFD5B600A1E7E3 /* FileBomber.m in Sources */ = {isa = PBXBuildFile; fileRef = 2367267920DFD5B600A1E7E3 /* FileBomber.m */; };
 		2367267B20DFD5B600A1E7E3 /* FileBomber.m in Sources */ = {isa = PBXBuildFile; fileRef = 2367267920DFD5B600A1E7E3 /* FileBomber.m */; };
-		2367267F20DFD70300A1E7E3 /* RepairTestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2367267C20DFD70300A1E7E3 /* RepairTestCaseObject.mm */; };
-		2367268020DFD70300A1E7E3 /* RepairTestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2367267C20DFD70300A1E7E3 /* RepairTestCaseObject.mm */; };
 		23698A8D2004613600C0291C /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
 		23698B5E20047E1A00C0291C /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
 		236A46AF20D7526E001816AF /* DatabaseTests+Trace.mm in Sources */ = {isa = PBXBuildFile; fileRef = 236A46AE20D7526E001816AF /* DatabaseTests+Trace.mm */; };
@@ -580,6 +581,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2308F6B520E0D38E001CD9C3 /* RepairTestCaseObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepairTestCaseObject.h; sourceTree = "<group>"; };
+		2308F6B620E0D38E001CD9C3 /* RepairTestCaseObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RepairTestCaseObject.mm; sourceTree = "<group>"; };
+		2308F6B720E0D38E001CD9C3 /* RepairTestCaseObject+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RepairTestCaseObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		2313B6BE20A2F2EE0067C211 /* TestHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2313B6CE20A2F2F00067C211 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2313B6CF20A2F2F00067C211 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -730,9 +734,6 @@
 		235F5D5E207A388100B440CA /* DatabaseTests+Table.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "DatabaseTests+Table.mm"; sourceTree = "<group>"; };
 		2367267820DFD5B500A1E7E3 /* FileBomber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileBomber.h; sourceTree = "<group>"; };
 		2367267920DFD5B600A1E7E3 /* FileBomber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileBomber.m; sourceTree = "<group>"; };
-		2367267C20DFD70300A1E7E3 /* RepairTestCaseObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RepairTestCaseObject.mm; sourceTree = "<group>"; };
-		2367267D20DFD70300A1E7E3 /* RepairTestCaseObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RepairTestCaseObject+WCTTableCoding.h"; sourceTree = "<group>"; };
-		2367267E20DFD70300A1E7E3 /* RepairTestCaseObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RepairTestCaseObject.h; sourceTree = "<group>"; };
 		23698A6320045EF100C0291C /* Coverage Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Coverage Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23698A7820045F4A00C0291C /* WCDB.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = WCDB.xcodeproj; path = ../WCDB.xcodeproj; sourceTree = "<group>"; };
 		23698A8C2004613600C0291C /* TestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCase.mm; sourceTree = "<group>"; };
@@ -954,9 +955,6 @@
 				23B13A7020E086F600B26927 /* RepairTests+Robust.mm */,
 				2367267820DFD5B500A1E7E3 /* FileBomber.h */,
 				2367267920DFD5B600A1E7E3 /* FileBomber.m */,
-				2367267C20DFD70300A1E7E3 /* RepairTestCaseObject.mm */,
-				2367267D20DFD70300A1E7E3 /* RepairTestCaseObject+WCTTableCoding.h */,
-				2367267E20DFD70300A1E7E3 /* RepairTestCaseObject.h */,
 			);
 			path = repair;
 			sourceTree = "<group>";
@@ -1241,6 +1239,9 @@
 		23698A8B2004612A00C0291C /* common */ = {
 			isa = PBXGroup;
 			children = (
+				2308F6B520E0D38E001CD9C3 /* RepairTestCaseObject.h */,
+				2308F6B620E0D38E001CD9C3 /* RepairTestCaseObject.mm */,
+				2308F6B720E0D38E001CD9C3 /* RepairTestCaseObject+WCTTableCoding.h */,
 				23698A8E2004619800C0291C /* TestCase.h */,
 				23698A8C2004613600C0291C /* TestCase.mm */,
 				23698AAF20046BE600C0291C /* Assert.h */,
@@ -1901,13 +1902,13 @@
 			files = (
 				2324D16F20D2470200834A82 /* Convenience.m in Sources */,
 				23CFE86020DA455B00D112B8 /* RepairTests+Retrieve.mm in Sources */,
+				2308F6BA20E0D38E001CD9C3 /* RepairTestCaseObject.mm in Sources */,
 				23191EC120D7D62400495B65 /* RepairTests+Deposit.mm in Sources */,
 				23BBE3AE20DE19730046A543 /* RepairTests+CorruptionReaction.mm in Sources */,
 				2367267B20DFD5B600A1E7E3 /* FileBomber.m in Sources */,
 				23B13A7220E086F600B26927 /* RepairTests+Robust.mm in Sources */,
 				2324D17120D2470200834A82 /* TestCase.mm in Sources */,
 				2324D18120D247A000834A82 /* RepairTestCase.mm in Sources */,
-				2367268020DFD70300A1E7E3 /* RepairTestCaseObject.mm in Sources */,
 				23593B7A20D369DD0058B416 /* RepairTests+Backup.mm in Sources */,
 				2324D17220D2470200834A82 /* TestCaseObject.mm in Sources */,
 			);
@@ -1930,7 +1931,6 @@
 				234DBD7E2064EB6C000E31E8 /* StatementInsertTests.mm in Sources */,
 				234DBD5F2064EB6C000E31E8 /* ConvertibleTests.mm in Sources */,
 				2338626A207B6C53004CAC6F /* ORMVirtualTableModuleFTS3.mm in Sources */,
-				2367267F20DFD70300A1E7E3 /* RepairTestCaseObject.mm in Sources */,
 				23386256207B5E1E004CAC6F /* ORMColumnCoding.mm in Sources */,
 				23EABBE2206D07C200241F3B /* HandleTests.mm in Sources */,
 				234DBD742064EB6C000E31E8 /* StatementCreateTableTests.mm in Sources */,
@@ -2045,6 +2045,7 @@
 				234DBD672064EB6C000E31E8 /* ModuleArgumentTests.mm in Sources */,
 				234DBD792064EB6C000E31E8 /* StatementDetachTests.mm in Sources */,
 				238B50C0209D5B3D00C78CC8 /* TestCaseVirtualObject.mm in Sources */,
+				2308F6B820E0D38E001CD9C3 /* RepairTestCaseObject.mm in Sources */,
 				234DBD6F2064EB6C000E31E8 /* StatementAnalyzeTests.mm in Sources */,
 				23386236207B4F1F004CAC6F /* ORMColumnConstraintUnique.mm in Sources */,
 				23FEC482206B961C001E7A3B /* InsertTests.mm in Sources */,
@@ -2058,6 +2059,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23E8283B209F3EB100807001 /* MultithreadBenchmark.mm in Sources */,
+				2308F6B920E0D38E001CD9C3 /* RepairTestCaseObject.mm in Sources */,
 				238B50DD209D60F200C78CC8 /* BaselineBenchmark.mm in Sources */,
 				238B50D9209D5CDB00C78CC8 /* Config.m in Sources */,
 				23E8283F209F48C600807001 /* MigrationBenchmark.mm in Sources */,

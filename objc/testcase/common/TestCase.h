@@ -48,4 +48,6 @@
 
 @property(readonly) NSString *className;
 
+@property(class, readonly) NSString *cachedDirectory;
+
 @end

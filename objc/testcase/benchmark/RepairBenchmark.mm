@@ -34,7 +34,7 @@
 - (void)setUp
 {
     [super setUp];
-    _cachedDatabase = [[WCTDatabase alloc] initWithPath:[self.recommendedPath stringByAppendingString:@".cached"]];
+    _cachedDatabase = [[WCTDatabase alloc] initWithPath:[self.class.cachedDirectory stringByAppendingPathComponent:self.className]];
     XCTAssertTrue([self lazyPrepareCachedDatabase:self.config.databaseSize]);
 }
 
@@ -51,7 +51,7 @@
         if (![_cachedDatabase runTransaction:^BOOL(WCTHandle *_Nonnull) {
               NSArray<RepairTestCaseObject *> *objects = [RepairTestCaseObject randomObjects];
               NSString *tableName = [NSString stringWithFormat:@"t_%@", [NSString randomString]];
-              return [self.database createTableAndIndexes:tableName withClass:RepairTestCaseObject.class] && [self.database insertObjects:objects intoTable:tableName];
+              return [_cachedDatabase createTableAndIndexes:tableName withClass:RepairTestCaseObject.class] && [_cachedDatabase insertOrReplaceObjects:objects intoTable:tableName];
             }] ||
             ![_cachedDatabase execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]) {
             return NO;
@@ -63,6 +63,34 @@
 //Note that since backup will be run concurrently and in the background thread, test is not for the best performance but for a tolerable performance.
 - (void)test_backup
 {
+    __block BOOL result;
+    NSString *firstBackupPath = [_cachedDatabase.path stringByAppendingString:@"-first.material"];
+    NSString *lastBackupPath = [_cachedDatabase.path stringByAppendingString:@"-last.material"];
+    [self measure:^{
+      result = [_cachedDatabase backup];
+    }
+        setUp:^{
+          if ([self.fileManager fileExistsAtPath:firstBackupPath]) {
+              XCTAssertTrue([self.fileManager removeItemAtPath:firstBackupPath error:nil]);
+          }
+          if ([self.fileManager fileExistsAtPath:lastBackupPath]) {
+              XCTAssertTrue([self.fileManager removeItemAtPath:lastBackupPath error:nil]);
+          }
+        }
+        tearDown:^{
+          if ([self.fileManager fileExistsAtPath:firstBackupPath]) {
+              XCTAssertTrue([self.fileManager removeItemAtPath:firstBackupPath error:nil]);
+          }
+          if ([self.fileManager fileExistsAtPath:lastBackupPath]) {
+              XCTAssertTrue([self.fileManager removeItemAtPath:lastBackupPath error:nil]);
+          }
+        }
+        checkCorrectness:^{
+          XCTAssertTrue(result);
+          XCTAssertGreaterThan([self.fileManager attributesOfItemAtPath:firstBackupPath error:nil].fileSize, self.config.databaseSize * 0.0001);
+          XCTAssertLessThan([self.fileManager attributesOfItemAtPath:firstBackupPath error:nil].fileSize, self.config.databaseSize * 0.01);
+          XCTAssertFalse([self.fileManager fileExistsAtPath:lastBackupPath]);
+        }];
 }
 
 //Note that since repair will usually be run in background thread with blocked UI, test is not for the best performance but for a tolerable performance.

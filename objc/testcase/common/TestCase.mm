@@ -39,7 +39,8 @@
 
 + (NSString *)baseDirectory
 {
-    return [NSTemporaryDirectory() stringByAppendingPathComponent:TestCase.className];
+    NSString *name = [NSString stringWithFormat:@"WCDB_%@", TestCase.className];
+    return [NSTemporaryDirectory() stringByAppendingPathComponent:name];
 }
 
 - (NSString *)recommendedDirectory
@@ -56,6 +57,11 @@
 - (WCTTag)recommendedTag
 {
     return (int) self.recommendedPath.hash;
+}
+
++ (NSString *)cachedDirectory
+{
+    return [self.baseDirectory stringByAppendingPathComponent:@"cached"];
 }
 
 - (NSFileManager *)fileManager
