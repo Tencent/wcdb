@@ -19,6 +19,7 @@
  */
 
 #import "RepairTestCase.h"
+#import "FileBomber.h"
 #import "TestCaseCommon.h"
 
 @implementation RepairTestCase
@@ -50,6 +51,13 @@
     _database = nil;
 
     [super tearDown];
+}
+
+- (BOOL)corrupt
+{
+    [_database close];
+    DatabaseBomber *bomber = [[DatabaseBomber alloc] initWithPath:_database.path];
+    return [bomber attackRootPage];
 }
 
 @end

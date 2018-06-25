@@ -18,7 +18,6 @@
  * limitations under the License.
  */
 
-#import "FileBomber.h"
 #import "RepairTestCase.h"
 #import "TestCaseCommon.h"
 
@@ -27,13 +26,6 @@
 @end
 
 @implementation RepairTests_CorruptionReaction
-
-- (BOOL)corrupt
-{
-    [_database close];
-    DatabaseBomber *bomber = [[DatabaseBomber alloc] initWithPath:_database.path];
-    return [bomber attackRootPage];
-}
 
 - (void)triggerCorruptionNotifier
 {
