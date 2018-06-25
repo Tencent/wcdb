@@ -19,13 +19,46 @@
  */
 
 #import "BenchmarkCommon.h"
+#import "RepairTestCase.h"
+#import "RepairTestCaseObject+WCTTableCoding.h"
+#import "RepairTestCaseObject.h"
 
-//TODO
 @interface RepairBenchmark : Benchmark
 
 @end
 
-@implementation RepairBenchmark
+@implementation RepairBenchmark {
+    WCTDatabase *_cachedDatabase;
+}
+
+- (void)setUp
+{
+    [super setUp];
+    _cachedDatabase = [[WCTDatabase alloc] initWithPath:[self.recommendedPath stringByAppendingString:@".cached"]];
+    XCTAssertTrue([self lazyPrepareCachedDatabase:self.config.databaseSize]);
+}
+
+- (BOOL)isDatabaseLargeEnough:(unsigned long long)fileSize
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSDictionary<NSFileAttributeKey, id> *attributes = [fileManager attributesOfItemAtPath:_cachedDatabase.path error:nil];
+    return attributes.fileSize > fileSize;
+}
+
+- (BOOL)lazyPrepareCachedDatabase:(unsigned long long)fileSize
+{
+    while (![self isDatabaseLargeEnough:fileSize]) {
+        if (![_cachedDatabase runTransaction:^BOOL(WCTHandle *_Nonnull) {
+              NSArray<RepairTestCaseObject *> *objects = [RepairTestCaseObject randomObjects];
+              NSString *tableName = [NSString stringWithFormat:@"t_%@", [NSString randomString]];
+              return [self.database createTableAndIndexes:tableName withClass:RepairTestCaseObject.class] && [self.database insertObjects:objects intoTable:tableName];
+            }] ||
+            ![_cachedDatabase execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]) {
+            return NO;
+        }
+    }
+    return YES;
+}
 
 //Note that since backup will be run concurrently and in the background thread, test is not for the best performance but for a tolerable performance.
 - (void)test_backup

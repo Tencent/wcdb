@@ -38,6 +38,7 @@
     _config.readCount = 100;
     _config.writeCount = 100;
     _config.tableCount = 50;
+    _config.databaseSize = 500 * 1024 * 1024; //500MB
 }
 
 - (void)tearDown
@@ -48,9 +49,7 @@
 
 - (void)tearDownDatabase
 {
-    [self.database close:^{
-      XCTAssertTrue([self.database removeFiles]);
-    }];
+    XCTAssertTrue([self.database removeFiles]);
     [self.database finalizeDatabase];
     _database = nil;
 }
