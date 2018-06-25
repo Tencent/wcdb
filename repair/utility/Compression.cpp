@@ -29,7 +29,7 @@ namespace WCDB {
 
 namespace Repair {
 
-static void setThreadedError(int zCode, const char *msg)
+static void setThreadedError(int zCode, const char *msg, int64_t size)
 {
     Error error;
     Error::Code code;
@@ -53,6 +53,7 @@ static void setThreadedError(int zCode, const char *msg)
         error.message = msg;
     }
     error.infos.set("ExtCode", zCode);
+    error.infos.set("Size", size);
     Notifier::shared()->notify(error);
     ThreadedErrors::shared()->setThreadedError(std::move(error));
 }
@@ -70,7 +71,7 @@ Data compress(const Data &source)
 
     int ret = deflateInit(&zs, Z_BEST_COMPRESSION);
     if (ret != Z_OK) {
-        setThreadedError(ret, zs.msg);
+        setThreadedError(ret, zs.msg, source.size());
         goto WCDB_Repair_Compress_End;
     }
 
@@ -92,14 +93,13 @@ Data compress(const Data &source)
 
     if (ret != Z_STREAM_END) {
         total = 0;
-        setThreadedError(ret, zs.msg);
+        setThreadedError(ret, zs.msg, source.size());
         goto WCDB_Repair_Compress_End;
     }
 
 WCDB_Repair_Compress_End:
     deflateEnd(&zs);
     return total > 0 ? destination.subdata(total) : Data::emptyData();
-    ;
 }
 
 Data decompress(const Data &source)
@@ -114,7 +114,7 @@ Data decompress(const Data &source)
 
     int ret = inflateInit(&zs);
     if (ret != Z_OK) {
-        setThreadedError(ret, zs.msg);
+        setThreadedError(ret, zs.msg, source.size());
         goto WCDB_Repair_Decompress_End;
     }
 
@@ -136,7 +136,7 @@ Data decompress(const Data &source)
 
     if (ret != Z_STREAM_END) {
         total = 0;
-        setThreadedError(ret, zs.msg);
+        setThreadedError(ret, zs.msg, source.size());
         goto WCDB_Repair_Decompress_End;
     }
 
