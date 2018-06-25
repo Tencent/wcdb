@@ -34,6 +34,7 @@
     if (self = [super init]) {
         _attackType = FileBomberAttackTypeZero;
         _fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:path];
+        _fileSize = (int) [_fileHandle seekToEndOfFile];
     }
     return self;
 }
@@ -41,11 +42,6 @@
 - (NSData *)armed:(int)size
 {
     return [[NSMutableData alloc] initWithLength:size];
-}
-
-- (int)fileSize
-{
-    return (int) [_fileHandle seekToEndOfFile];
 }
 
 - (BOOL)attack:(NSRange)range
@@ -80,6 +76,7 @@
 
 @implementation DatabaseBomber {
     FileBomber *_walFileBomber;
+    NSMutableSet *_attacked;
 }
 
 - (instancetype)initWithPath:(NSString *)path
@@ -87,19 +84,20 @@
     if (self = [super initWithPath:path]) {
         _walFileBomber = [[FileBomber alloc] initWithPath:[path stringByAppendingString:@"-wal"]];
         _pageSize = getpagesize();
+        _attacked = [[NSMutableSet alloc] init];
+        _pageCount = (int) (self.fileSize / _pageSize) + ((self.fileSize % _pageSize) > 0);
     }
     return self;
 }
 
-- (int)pageCount
+- (BOOL)isPageAttacked:(int)pageno
 {
-    unsigned long long fileSize = self.fileSize;
-    return fileSize / _pageSize + (fileSize % _pageSize) > 0;
+    return [_attacked containsObject:@(pageno)];
 }
 
 - (NSRange)pageRange:(int)pageno
 {
-    return NSMakeRange((pageno - 1) * _pageSize, _pageSize);
+    return NSMakeRange((pageno - 1) * self.pageSize, self.pageSize);
 }
 
 - (BOOL)attackRootPage
@@ -109,18 +107,28 @@
 
 - (BOOL)attackPage:(int)pageno
 {
-    return [self attack:[self pageRange:pageno]];
+    if ([self isPageAttacked:pageno]) {
+        return NO;
+    }
+    BOOL result = [self attack:[self pageRange:pageno]];
+    if (result) {
+        [_attacked addObject:@(pageno)];
+    }
+    return result;
 }
 
 - (BOOL)randomAttackPage
 {
-    int pageno = (arc4random() % self.pageCount) + 1;
+    int pageno;
+    do {
+        pageno = (arc4random() % self.pageCount) + 1;
+    } while ([self isPageAttacked:pageno]);
     return [self attackPage:pageno];
 }
 
 - (int)walFrameSize
 {
-    return _pageSize + 24;
+    return self.pageSize + 24;
 }
 
 - (int)walFrameCount

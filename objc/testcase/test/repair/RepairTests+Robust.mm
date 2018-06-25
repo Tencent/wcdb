@@ -106,4 +106,86 @@
     }
 }
 
+- (double)carpetBombingPage
+{
+    if (![_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]) {
+        return 0;
+    }
+    DatabaseBomber *bomber = [[DatabaseBomber alloc] initWithPath:_database.path];
+    int attackTimes = 0;
+    double attackRatio = 0;
+    do {
+        if (![bomber randomAttackPage]) {
+            return 0;
+        }
+        attackRatio = (double) ++attackTimes / bomber.pageCount;
+    } while (attackRatio < 0.1);
+    return attackRatio;
+}
+
+- (void)test_robust_with_page_carpet_bombing
+{
+    NSDictionary<NSString *, NSArray<RepairTestCaseObject *> *> *tableObjects = [self insertRandomObjectsWithRandomTables];
+    XCTAssertGreaterThan(tableObjects.count, 0);
+
+    XCTAssertTrue([_database backup]);
+
+    double attackRatio = [self carpetBombingPage];
+    XCTAssertGreaterThan(attackRatio, 0);
+
+    double score = [_database retrieve:nil];
+    XCTAssertGreaterThanOrEqual(score, 0);
+
+    int retrieved = 0;
+    int total = 0;
+    for (NSString *tableName in tableObjects.allKeys) {
+        NSArray<RepairTestCaseObject *> *objects = tableObjects[tableName];
+        total += objects.count;
+
+        NSMutableDictionary<NSNumber *, RepairTestCaseObject *> *expected = [[NSMutableDictionary<NSNumber *, RepairTestCaseObject *> alloc] initWithCapacity:objects.count];
+        for (RepairTestCaseObject *object in objects) {
+            expected[@(object.int64Value)] = object;
+        }
+
+        NSArray<RepairTestCaseObject *> *retrievedObjects = [_database getObjectsOfClass:RepairTestCaseObject.class fromTable:tableName orderBy:RepairTestCaseObject.int64Value];
+        for (RepairTestCaseObject *retrievedObject in retrievedObjects) {
+            RepairTestCaseObject *expectedObject = expected[@(retrievedObject.int64Value)];
+            if (expectedObject && [expectedObject isEqualToRepairTestCaseObject:retrievedObject]) {
+                ++retrieved;
+            }
+        }
+    }
+
+    NSLog(@"Carpet Bombing Retrieving Result: Attack Ratio %f, Retrieve Score %f, retrieved %f", attackRatio, score, (double) retrieved / total);
+}
+
+- (BOOL)carpetBombing
+{
+    if (![_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]) {
+        return NO;
+    }
+    FileBomber *bomber = [[FileBomber alloc] initWithPath:_database.path];
+    int attackTimes = [NSNumber randomUInt8];
+    for (int i = 0; i < attackTimes; ++i) {
+        if (![bomber randomAttack]) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
+//This test is for the robusty with messy data
+- (void)test_robust_with_carpet_bombing
+{
+    NSDictionary<NSString *, NSArray<RepairTestCaseObject *> *> *tableObjects = [self insertRandomObjectsWithRandomTables];
+    XCTAssertGreaterThan(tableObjects.count, 0);
+
+    XCTAssertTrue([_database backup]);
+
+    XCTAssertTrue([self carpetBombing]);
+
+    double score = [_database retrieve:nil];
+    XCTAssertGreaterThanOrEqual(score, 0);
+}
+
 @end
