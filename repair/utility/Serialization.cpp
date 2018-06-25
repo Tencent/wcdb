@@ -107,7 +107,7 @@ bool Serialization::resize(size_t size)
 
 bool Serialization::expand(size_t expand)
 {
-    return resize(m_cursor + expand);
+    return resize((size_t) m_cursor + expand);
 }
 
 #pragma mark - Put
@@ -321,10 +321,12 @@ Deserialization::getSizedString(off_t offset) const
     size_t lengthOfSize;
     uint64_t size;
     std::tie(lengthOfSize, size) = getVarint(offset);
-    if (lengthOfSize == 0 || !isEnough(offset + lengthOfSize + size)) {
+    if (lengthOfSize == 0 ||
+        !isEnough((size_t) offset + lengthOfSize + (size_t) size)) {
         return {0, String::empty()};
     }
-    return {lengthOfSize + size, getString(offset + lengthOfSize, size)};
+    return {lengthOfSize + size,
+            getString((size_t) offset + lengthOfSize, (size_t) size)};
 }
 
 std::pair<size_t, const Data> Deserialization::getSizedData(off_t offset) const
@@ -332,15 +334,17 @@ std::pair<size_t, const Data> Deserialization::getSizedData(off_t offset) const
     size_t lengthOfSize;
     uint64_t size;
     std::tie(lengthOfSize, size) = getVarint(offset);
-    if (lengthOfSize == 0 || !isEnough(offset + lengthOfSize + size)) {
+    if (lengthOfSize == 0 ||
+        !isEnough((size_t) offset + lengthOfSize + (size_t) size)) {
         return {0, Data::emptyData()};
     }
-    return {lengthOfSize + size, getData(offset + lengthOfSize, size)};
+    return {lengthOfSize + size,
+            getData((size_t) offset + lengthOfSize, (size_t) size)};
 }
 
 std::pair<size_t, uint64_t> Deserialization::getVarint(off_t offset) const
 {
-    if (!isEnough(offset + 1)) {
+    if (!isEnough((size_t) offset + 1)) {
         return {0, 0};
     }
     const unsigned char *p = base() + offset;
@@ -351,7 +355,7 @@ std::pair<size_t, uint64_t> Deserialization::getVarint(off_t offset) const
         return {1, a};
     }
 
-    if (!isEnough(offset + 2)) {
+    if (!isEnough((size_t) offset + 2)) {
         return {0, 0};
     }
     ++p;
@@ -367,7 +371,7 @@ std::pair<size_t, uint64_t> Deserialization::getVarint(off_t offset) const
 
     /* Verify that constants are precomputed correctly */
 
-    if (!isEnough(offset + 3)) {
+    if (!isEnough((size_t) offset + 3)) {
         return {0, 0};
     }
     ++p;
@@ -385,7 +389,7 @@ std::pair<size_t, uint64_t> Deserialization::getVarint(off_t offset) const
     /* CSE1 from below */
 
     a &= slot_2_0;
-    if (!isEnough(offset + 4)) {
+    if (!isEnough((size_t) offset + 4)) {
         return {0, 0};
     }
     ++p;
@@ -410,7 +414,7 @@ std::pair<size_t, uint64_t> Deserialization::getVarint(off_t offset) const
     uint64_t s = a;
     /* s: p0<<14 | p2 (masked) */
 
-    if (!isEnough(offset + 5)) {
+    if (!isEnough((size_t) offset + 5)) {
         return {0, 0};
     }
     ++p;
@@ -433,7 +437,7 @@ std::pair<size_t, uint64_t> Deserialization::getVarint(off_t offset) const
     s |= b;
     /* s: p0<<21 | p1<<14 | p2<<7 | p3 (masked) */
 
-    if (!isEnough(offset + 6)) {
+    if (!isEnough((size_t) offset + 6)) {
         return {0, 0};
     }
     ++p;
@@ -450,7 +454,7 @@ std::pair<size_t, uint64_t> Deserialization::getVarint(off_t offset) const
         return {6, ((uint64_t) s) << 32 | a};
     }
 
-    if (!isEnough(offset + 7)) {
+    if (!isEnough((size_t) offset + 7)) {
         return {0, 0};
     }
     ++p;
@@ -468,7 +472,7 @@ std::pair<size_t, uint64_t> Deserialization::getVarint(off_t offset) const
 
     /* CSE2 from below */
     a &= slot_2_0;
-    if (!isEnough(offset + 8)) {
+    if (!isEnough((size_t) offset + 8)) {
         return {0, 0};
     }
     ++p;
@@ -485,7 +489,7 @@ std::pair<size_t, uint64_t> Deserialization::getVarint(off_t offset) const
         return {8, ((uint64_t) s) << 32 | a};
     }
 
-    if (!isEnough(offset + 9)) {
+    if (!isEnough((size_t) offset + 9)) {
         return {0, 0};
     }
     ++p;
