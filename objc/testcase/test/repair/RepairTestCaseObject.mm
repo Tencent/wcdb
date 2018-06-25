@@ -56,7 +56,11 @@ WCDB_INDEX(RepairTestCaseObject, "_index3", doubleValue)
     object.int64Value = [NSNumber randomInt64];
     object.doubleValue = [NSNumber randomDouble];
     object.stringValue = [NSString randomString];
-    object.dataValue = [NSData randomData];
+    if ([NSNumber randomBool]) {
+        object.dataValue = [NSData randomDataWithLength:4096];
+    } else {
+        object.dataValue = [NSData randomDataWithLength:100];
+    }
     object.nullValue = nil;
     return object;
 }
@@ -108,35 +112,43 @@ WCDB_INDEX(RepairTestCaseObject, "_index3", doubleValue)
 
 + (NSArray<RepairTestCaseObject *> *)randomObjects
 {
-    int count = [NSNumber randomUInt8];
-    if (count < 3) {
-        count += 3;
-    }
+    int count = 0;
+    do {
+        count = [NSNumber randomUInt8];
+    } while (count <= 3);
     return [self randomObjects:count];
 }
 
 + (NSArray<RepairTestCaseObject *> *)randomObjects:(int)count
 {
     XCTAssertGreaterThan(count, 3);
-    NSMutableArray<RepairTestCaseObject *> *objects = [[NSMutableArray<RepairTestCaseObject *> alloc] initWithCapacity:count];
+
+    NSMutableDictionary<NSNumber *, RepairTestCaseObject *> *objects = [[NSMutableDictionary<NSNumber *, RepairTestCaseObject *> alloc] initWithCapacity:count];
     int maxPos, minPos, zeroPos;
     do {
         maxPos = [NSNumber randomUInt] % count;
         minPos = [NSNumber randomUInt] % count;
         zeroPos = [NSNumber randomUInt] % count;
     } while (maxPos == minPos || minPos == zeroPos || zeroPos == maxPos);
+    RepairTestCaseObject *maxObject = [self maxObject];
+    RepairTestCaseObject *minObject = [self minObject];
+    RepairTestCaseObject *zeroObject = [self zeroObject];
     for (int i = 0; i < count; ++i) {
+        RepairTestCaseObject *object;
         if (i == maxPos) {
-            [objects addObject:[self maxObject]];
+            object = maxObject;
         } else if (i == minPos) {
-            [objects addObject:[self minObject]];
+            object = minObject;
         } else if (i == zeroPos) {
-            [objects addObject:[self zeroObject]];
+            object = zeroObject;
         } else {
-            [objects addObject:[self randomObject]];
+            do {
+                object = [self randomObject];
+            } while (object.int64Value == maxObject.int64Value || object.int64Value == minObject.int64Value || object.int64Value == zeroObject.int64Value || [objects objectForKey:@(object.int64Value)] != nil);
         }
+        [objects setObject:object forKey:@(object.int64Value)];
     }
-    return objects;
+    return objects.allValues;
 }
 
 - (BOOL)isEqualToRepairTestCaseObject:(RepairTestCaseObject *)object
