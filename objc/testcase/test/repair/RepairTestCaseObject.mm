@@ -156,16 +156,16 @@ WCDB_INDEX(RepairTestCaseObject, "_index3", doubleValue)
     if (self.boolValue != object.boolValue) {
         return NO;
     }
-    if (self.int8Value != object.boolValue) {
+    if (self.int8Value != object.int8Value) {
         return NO;
     }
-    if (self.int16Value != object.boolValue) {
+    if (self.int16Value != object.int16Value) {
         return NO;
     }
-    if (self.int32Value != object.boolValue) {
+    if (self.int32Value != object.int32Value) {
         return NO;
     }
-    if (self.int64Value != object.boolValue) {
+    if (self.int64Value != object.int64Value) {
         return NO;
     }
     if (self.doubleValue != object.doubleValue) {
