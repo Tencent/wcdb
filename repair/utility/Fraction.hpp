@@ -40,6 +40,9 @@ public:
 
     double value() const;
 
+    int numberator() const;
+    int denominator() const;
+
 protected:
     void reduce();
     int euclidean(int a, int b);

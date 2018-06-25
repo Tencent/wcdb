@@ -55,16 +55,16 @@ void Fraction::reduce()
 
 Fraction Fraction::operator+(const Fraction &operand) const
 {
-    int numerator, denumberator;
+    int numerator, denominator;
     if (m_denominator == operand.m_denominator) {
         numerator = m_numerator + operand.m_numerator;
-        denumberator = m_denominator;
+        denominator = m_denominator;
     } else {
         numerator = (m_numerator * operand.m_denominator) +
                     (operand.m_numerator * m_denominator);
-        denumberator = m_denominator * operand.m_denominator;
+        denominator = m_denominator * operand.m_denominator;
     }
-    Fraction result(numerator, denumberator);
+    Fraction result(numerator, denominator);
     result.reduce();
     return result;
 }
@@ -107,6 +107,16 @@ bool Fraction::operator<(const Fraction &operand) const
 double Fraction::value() const
 {
     return (double) m_numerator / m_denominator;
+}
+
+int Fraction::numberator() const
+{
+    return m_numerator;
+}
+
+int Fraction::denominator() const
+{
+    return m_denominator;
 }
 
 } //namespace Repair
