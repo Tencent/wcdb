@@ -129,7 +129,7 @@ Data decompress(const Data &source)
         zs.next_out = reinterpret_cast<Bytef *>(destination.buffer() + offset);
         zs.avail_out = step;
 
-        ret = inflate(&zs, Z_FINISH);
+        ret = inflate(&zs, Z_NO_FLUSH);
         offset += step;
         total = zs.total_out;
     } while (ret == Z_OK);
