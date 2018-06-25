@@ -35,7 +35,6 @@
 {
     [super setUp];
     _cachedDatabase = [[WCTDatabase alloc] initWithPath:[self.class.cachedDirectory stringByAppendingPathComponent:self.className]];
-    XCTAssertTrue([self lazyPrepareCachedDatabase:self.config.databaseSize]);
 }
 
 - (BOOL)isDatabaseLargeEnough:(unsigned long long)fileSize
@@ -70,12 +69,7 @@
       result = [_cachedDatabase backup];
     }
         setUp:^{
-          if ([self.fileManager fileExistsAtPath:firstBackupPath]) {
-              XCTAssertTrue([self.fileManager removeItemAtPath:firstBackupPath error:nil]);
-          }
-          if ([self.fileManager fileExistsAtPath:lastBackupPath]) {
-              XCTAssertTrue([self.fileManager removeItemAtPath:lastBackupPath error:nil]);
-          }
+          XCTAssertTrue([self lazyPrepareCachedDatabase:self.config.databaseSize]);
         }
         tearDown:^{
           if ([self.fileManager fileExistsAtPath:firstBackupPath]) {
