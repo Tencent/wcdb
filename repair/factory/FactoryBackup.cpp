@@ -18,7 +18,6 @@
  * limitations under the License.
  */
 
-#include <WCDB/Compression.hpp>
 #include <WCDB/Data.hpp>
 #include <WCDB/Factory.hpp>
 #include <WCDB/FactoryBackup.hpp>

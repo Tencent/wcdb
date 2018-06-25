@@ -74,6 +74,7 @@ public:
 #pragma mark - Basic
 public:
     size_t size() const;
+    uint32_t hash() const;
 
     //Nota that buffer will never be null.
     const unsigned char *buffer() const;

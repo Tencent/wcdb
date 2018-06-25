@@ -19,7 +19,6 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/Compression.hpp>
 #include <WCDB/Data.hpp>
 #include <WCDB/Material.hpp>
 #include <WCDB/Serialization.hpp>
@@ -65,16 +64,9 @@ bool Material::serialize(Serialization &serialization) const
 
 bool Material::serializeData(Serialization &serialization, const Data &data)
 {
-    Data compressed;
-    if (!data.empty()) {
-        compressed = compress(data);
-        if (compressed.empty()) {
-            return false;
-        }
-    }
-    uint32_t checksum = data.empty() ? 0 : hash(data);
+    uint32_t checksum = data.empty() ? 0 : data.hash();
     return serialization.put4BytesUInt(checksum) &&
-           serialization.putSizedData(compressed);
+           serialization.putSizedData(data);
 }
 
 void Material::markAsEmpty(const std::string &element)
@@ -161,11 +153,8 @@ Material::deserializeData(Deserialization &deserialization)
             break;
         }
         if (!intermediate.second.empty()) {
-            data = decompress(intermediate.second);
-            if (data.empty()) {
-                break;
-            }
-            if (checksum != hash(data)) {
+            data = intermediate.second;
+            if (checksum != data.hash()) {
                 markAsCorrupt("Checksum");
                 break;
             }

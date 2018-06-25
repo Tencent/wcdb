@@ -21,6 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Data.hpp>
 #include <WCDB/Notifier.hpp>
+#include <zlib.h>
 
 namespace WCDB {
 
@@ -177,6 +178,11 @@ const unsigned char *Data::buffer() const
 unsigned char *Data::buffer()
 {
     return m_buffer ? m_buffer : emptyBuffer();
+}
+
+uint32_t Data::hash() const
+{
+    return (uint32_t) crc32(0, buffer(), (uint32_t) size());
 }
 
 } //namespace WCDB
