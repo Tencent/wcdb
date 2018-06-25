@@ -29,33 +29,36 @@ Fraction::Fraction() : m_numerator(0), m_denominator(1)
 {
 }
 
-Fraction::Fraction(int value) : m_numerator(value), m_denominator(1)
+Fraction::Fraction(int64_t value) : m_numerator(value), m_denominator(1)
 {
 }
 
-Fraction::Fraction(int numerator, int denominator)
+Fraction::Fraction(int64_t numerator, int64_t denominator)
     : m_numerator(numerator), m_denominator(denominator)
 {
     WCTAssert(denominator != 0, "Denominator can't be 0.");
 }
 
-int Fraction::euclidean(int a, int b)
+int64_t Fraction::euclidean(int64_t a, int64_t b)
 {
     return b == 0 ? a : euclidean(b, a % b);
 }
 
 void Fraction::reduce()
 {
-    int gcd = euclidean(m_numerator, m_denominator);
+    int64_t numerator = m_numerator;
+    int64_t denominator = m_denominator;
+    int64_t gcd = euclidean(m_numerator, m_denominator);
     if (gcd > 1) {
         m_numerator /= gcd;
         m_denominator /= gcd;
     }
+    //    printf("%lld/%lld reduce to %lld/%lld\n", numerator, denominator, m_numerator, m_denominator);
 }
 
 Fraction Fraction::operator+(const Fraction &operand) const
 {
-    int numerator, denominator;
+    int64_t numerator, denominator;
     if (m_denominator == operand.m_denominator) {
         numerator = m_numerator + operand.m_numerator;
         denominator = m_denominator;
@@ -64,6 +67,7 @@ Fraction Fraction::operator+(const Fraction &operand) const
                     (operand.m_numerator * m_denominator);
         denominator = m_denominator * operand.m_denominator;
     }
+    //    printf("%lld/%lld + %lld/%lld = %lld/%lld\n", m_numerator, m_denominator, operand.m_numerator, operand.m_denominator, numerator, denominator);
     Fraction result(numerator, denominator);
     result.reduce();
     return result;
@@ -73,12 +77,15 @@ Fraction Fraction::operator*(const Fraction &operand) const
 {
     Fraction result(m_numerator * operand.m_numerator,
                     m_denominator * operand.m_denominator);
+    //    printf("%lld/%lld * %lld/%lld = %lld/%lld\n", m_numerator, m_denominator, operand.m_numerator, operand.m_denominator, result.m_numerator, result.m_denominator);
     result.reduce();
     return result;
 }
 
 Fraction &Fraction::operator+=(const Fraction &operand)
 {
+    int64_t numerator = m_numerator;
+    int64_t denominator = m_denominator;
     if (m_denominator == operand.m_denominator) {
         m_numerator += operand.m_numerator;
     } else {
@@ -86,6 +93,7 @@ Fraction &Fraction::operator+=(const Fraction &operand)
                       (operand.m_numerator * m_denominator);
         m_denominator *= operand.m_denominator;
     }
+    //    printf("%lld/%lld + %lld/%lld = %lld/%lld\n", numerator, denominator, operand.m_numerator, operand.m_denominator, m_numerator, m_denominator);
     reduce();
     return *this;
 }
@@ -94,6 +102,7 @@ Fraction Fraction::operator/(const Fraction &operand) const
 {
     Fraction result(m_numerator * operand.m_denominator,
                     m_denominator * operand.m_numerator);
+    //    printf("%lld/%lld / %lld/%lld = %lld/%lld\n", m_numerator, m_denominator, operand.m_numerator, operand.m_denominator, result.m_numerator, result.m_denominator);
     result.reduce();
     return result;
 }
@@ -109,12 +118,12 @@ double Fraction::value() const
     return (double) m_numerator / m_denominator;
 }
 
-int Fraction::numberator() const
+int64_t Fraction::numberator() const
 {
     return m_numerator;
 }
 
-int Fraction::denominator() const
+int64_t Fraction::denominator() const
 {
     return m_denominator;
 }

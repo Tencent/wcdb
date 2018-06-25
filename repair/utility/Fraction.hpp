@@ -28,8 +28,8 @@ namespace Repair {
 class Fraction {
 public:
     Fraction();
-    Fraction(int numerator, int denominator);
-    Fraction(int value);
+    Fraction(int64_t numerator, int64_t denominator);
+    Fraction(int64_t value);
 
     Fraction operator+(const Fraction &operand) const;
     Fraction operator*(const Fraction &operand) const;
@@ -40,16 +40,16 @@ public:
 
     double value() const;
 
-    int numberator() const;
-    int denominator() const;
+    int64_t numberator() const;
+    int64_t denominator() const;
 
 protected:
     void reduce();
-    int euclidean(int a, int b);
+    int64_t euclidean(int64_t a, int64_t b);
 
 private:
-    int m_numerator;
-    int m_denominator;
+    int64_t m_numerator;
+    int64_t m_denominator;
 };
 
 } //namespace Repair
