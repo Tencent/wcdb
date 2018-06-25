@@ -145,17 +145,15 @@ const std::pair<uint32_t, uint32_t> &Wal::getSalt() const
     return m_salt;
 }
 
-#pragma mark - Initializeable
-#if (defined(i386) || defined(__i386__) || defined(_M_IX86) ||                 \
-     defined(__x86_64) || defined(__x86_64__) || defined(_M_X64) ||            \
-     defined(_M_AMD64) || defined(_M_ARM) || defined(__x86) ||                 \
-     defined(__arm__)) &&                                                      \
-    !defined(SQLITE_RUNTIME_BYTEORDER)
-#define SQLITE_BIGENDIAN 0
-#endif
-#if (defined(sparc) || defined(__ppc__)) && !defined(SQLITE_RUNTIME_BYTEORDER)
-#define SQLITE_BIGENDIAN 1
-#endif
+bool Wal::isBigEndian()
+{
+    static bool s_isBigEndian = []() -> bool {
+        short int n = 0x1;
+        char *p = (char *) &n;
+        return p[0] != 1;
+    }();
+    return s_isBigEndian;
+}
 
 bool Wal::doInitialize()
 {
@@ -182,7 +180,7 @@ bool Wal::doInitialize()
         markAsCorrupted(0, "Magic");
         return false;
     }
-    m_isNativeChecksum = (magic & 0x00000001) == SQLITE_BIGENDIAN;
+    m_isNativeChecksum = (magic & 0x00000001) == isBigEndian();
     deserialization.seek(16);
     m_salt.first = deserialization.advance4BytesUInt();
     m_salt.second = deserialization.advance4BytesUInt();

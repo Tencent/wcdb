@@ -78,6 +78,7 @@ public:
 #pragma mark - Initializeable
 protected:
     bool doInitialize() override;
+    static bool isBigEndian();
 
 #pragma mark - Error
 protected:
