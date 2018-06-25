@@ -181,6 +181,8 @@
 		23A3AF26206CDC0A00D05634 /* TableTests+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3AF25206CDC0A00D05634 /* TableTests+ChainCall.mm */; };
 		23AA166B2098C46F0013912B /* TestCaseConflictObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23AA16682098C46F0013912B /* TestCaseConflictObject.mm */; };
 		23AA166C2098C46F0013912B /* TestCaseConflictObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23AA16682098C46F0013912B /* TestCaseConflictObject.mm */; };
+		23B13A7120E086F600B26927 /* RepairTests+Robust.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23B13A7020E086F600B26927 /* RepairTests+Robust.mm */; };
+		23B13A7220E086F600B26927 /* RepairTests+Robust.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23B13A7020E086F600B26927 /* RepairTests+Robust.mm */; };
 		23BA6AD3208CE0DE005CAFB7 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; };
 		23BA6AE3208CE101005CAFB7 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
 		23BA6AE4208CE101005CAFB7 /* Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B58200F577400E0CECE /* Convenience.m */; };
@@ -772,6 +774,7 @@
 		23AA16682098C46F0013912B /* TestCaseConflictObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCaseConflictObject.mm; sourceTree = "<group>"; };
 		23AA16692098C46F0013912B /* TestCaseConflictObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestCaseConflictObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		23AA166A2098C46F0013912B /* TestCaseConflictObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestCaseConflictObject.h; sourceTree = "<group>"; };
+		23B13A7020E086F600B26927 /* RepairTests+Robust.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "RepairTests+Robust.mm"; sourceTree = "<group>"; };
 		23BA69BD208CE0AC005CAFB7 /* FTS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FTS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23BA6AF6208CE12D005CAFB7 /* Migration Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Migration Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23BA6B08208CE132005CAFB7 /* ORM Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ORM Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -948,6 +951,7 @@
 				23191EBF20D7D62400495B65 /* RepairTests+Deposit.mm */,
 				23CFE85E20DA455B00D112B8 /* RepairTests+Retrieve.mm */,
 				23BBE3AC20DE19730046A543 /* RepairTests+CorruptionReaction.mm */,
+				23B13A7020E086F600B26927 /* RepairTests+Robust.mm */,
 				2367267820DFD5B500A1E7E3 /* FileBomber.h */,
 				2367267920DFD5B600A1E7E3 /* FileBomber.m */,
 				2367267C20DFD70300A1E7E3 /* RepairTestCaseObject.mm */,
@@ -1900,6 +1904,7 @@
 				23191EC120D7D62400495B65 /* RepairTests+Deposit.mm in Sources */,
 				23BBE3AE20DE19730046A543 /* RepairTests+CorruptionReaction.mm in Sources */,
 				2367267B20DFD5B600A1E7E3 /* FileBomber.m in Sources */,
+				23B13A7220E086F600B26927 /* RepairTests+Robust.mm in Sources */,
 				2324D17120D2470200834A82 /* TestCase.mm in Sources */,
 				2324D18120D247A000834A82 /* RepairTestCase.mm in Sources */,
 				2367268020DFD70300A1E7E3 /* RepairTestCaseObject.mm in Sources */,
@@ -1961,6 +1966,7 @@
 				23CB2104206DDBAE000EFB02 /* MigrationTests+SameDatabase.mm in Sources */,
 				238B50AA209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */,
 				233861E4207B076D004CAC6F /* DatabaseTests+Transaction.mm in Sources */,
+				23B13A7120E086F600B26927 /* RepairTests+Robust.mm in Sources */,
 				234DBD7A2064EB6C000E31E8 /* StatementDropIndexTests.mm in Sources */,
 				23386222207B4EEF004CAC6F /* ORMColumnConstraintPrimaryAutoIncrement.mm in Sources */,
 				234DBD652064EB6C000E31E8 /* JoinConstraintTests.mm in Sources */,
