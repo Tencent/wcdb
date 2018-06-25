@@ -46,8 +46,6 @@ int64_t Fraction::euclidean(int64_t a, int64_t b)
 
 void Fraction::reduce()
 {
-    int64_t numerator = m_numerator;
-    int64_t denominator = m_denominator;
     int64_t gcd = euclidean(m_numerator, m_denominator);
     if (gcd > 1) {
         m_numerator /= gcd;
@@ -84,8 +82,6 @@ Fraction Fraction::operator*(const Fraction &operand) const
 
 Fraction &Fraction::operator+=(const Fraction &operand)
 {
-    int64_t numerator = m_numerator;
-    int64_t denominator = m_denominator;
     if (m_denominator == operand.m_denominator) {
         m_numerator += operand.m_numerator;
     } else {
