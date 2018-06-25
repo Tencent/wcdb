@@ -19,6 +19,7 @@
  */
 
 #import "FileBomber.h"
+#import "Convenience.h"
 
 @implementation FileBomber {
     NSFileHandle *_fileHandle;
@@ -41,7 +42,13 @@
 
 - (NSData *)armed:(int)size
 {
-    return [[NSMutableData alloc] initWithLength:size];
+    NSData *data;
+    if (self.attackType == FileBomberAttackTypeRandom) {
+        data = [NSData randomDataWithLength:size];
+    } else {
+        data = [[NSMutableData alloc] initWithLength:size];
+    }
+    return data;
 }
 
 - (BOOL)attack:(NSRange)range

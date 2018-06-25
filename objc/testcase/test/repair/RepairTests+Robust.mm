@@ -115,6 +115,11 @@
     int attackTimes = 0;
     double attackRatio = 0;
     do {
+        if ([NSNumber randomBool]) {
+            bomber.attackType = FileBomberAttackTypeZero;
+        } else {
+            bomber.attackType = FileBomberAttackTypeRandom;
+        }
         if (![bomber randomAttackPage]) {
             return 0;
         }
