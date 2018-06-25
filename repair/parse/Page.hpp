@@ -60,8 +60,11 @@ protected:
 
 #pragma mark - Interior Table
 public:
-    std::pair<bool, int> getSubPageno(int index) const;
+    int getSubPageno(int index) const;
     int getSubPageCount() const;
+
+protected:
+    std::vector<int> m_subPagenos;
 
 #pragma mark - Leaf Table
 public:

@@ -110,7 +110,6 @@ bool Frame::doInitialize()
     WCTInnerAssert(deserialization.canAdvance(4));
     salt.second = deserialization.advance4BytesUInt();
     if (salt != m_wal->getSalt()) {
-        markWalAsCorrupted(frameno, "Salt");
         return false;
     }
 

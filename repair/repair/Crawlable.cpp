@@ -97,12 +97,8 @@ void Crawlable::safeCrawl(int rootpageno,
                 if (m_stop) {
                     break;
                 }
-                auto pair = rootpage.getSubPageno(i);
-                if (pair.first) {
-                    safeCrawl(pair.second, crawledInteriorPages, height + 1);
-                } else {
-                    markAsCorrupted(rootpageno, "SubPageno");
-                }
+                int pageno = rootpage.getSubPageno(i);
+                safeCrawl(pageno, crawledInteriorPages, height + 1);
             }
             break;
         case Page::Type::LeafTable:

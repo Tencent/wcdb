@@ -288,8 +288,7 @@ bool Cell::doInitialize()
     const int endOfValues = payloadSize;
     const int endOfSerialTypes = offsetOfValues;
 
-    while (cursorOfSerialTypes < endOfSerialTypes &&
-           cursorOfValues < endOfValues) {
+    while (cursorOfSerialTypes < endOfSerialTypes) {
         int lengthOfSerialType, serialType;
         m_deserialization.seek(cursorOfSerialTypes);
         std::tie(lengthOfSerialType, serialType) =
@@ -301,6 +300,10 @@ bool Cell::doInitialize()
         cursorOfSerialTypes += lengthOfSerialType;
         m_columns.push_back({serialType, cursorOfValues});
         cursorOfValues += getLengthOfSerialType(serialType);
+        if (cursorOfValues > endOfValues) {
+            markPagerAsCorrupted(m_page->number, "Payload");
+            return false;
+        }
     }
     if (cursorOfSerialTypes != endOfSerialTypes ||
         cursorOfValues != endOfValues) {

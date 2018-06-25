@@ -129,12 +129,8 @@ bool Backup::willCrawlPage(const Page &page, int height)
             if (m_height > 0 && height == m_height - 1) {
                 //avoid iterating the leaf table
                 for (int i = 0; i < page.getSubPageCount(); ++i) {
-                    auto pair = page.getSubPageno(i);
-                    if (!pair.first) {
-                        markAsCorrupted(page.number, "SubPageno");
-                        break;
-                    }
-                    m_pagenos.push_back(page.number);
+                    int pageno = page.getSubPageno(i);
+                    m_pagenos.push_back(pageno);
                 }
                 return false;
             }

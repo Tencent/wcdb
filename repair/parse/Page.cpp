@@ -82,23 +82,19 @@ Page::Type Page::getType() const
 }
 
 #pragma mark - Interior Table
-std::pair<bool, int> Page::getSubPageno(int index) const
+int Page::getSubPageno(int index) const
 {
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(index < getSubPageCount());
     WCTInnerAssert(m_type == Type::InteriorTable);
-    int offset = index < m_cellPointers.size() ? m_cellPointers[index] : 8;
-    if (!m_deserialization.isEnough(offset + 4)) {
-        return {false, -1};
-    }
-    return {true, m_deserialization.get4BytesInt(offset)};
+    return m_subPagenos[index];
 }
 
 int Page::getSubPageCount() const
 {
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(m_type == Type::InteriorTable);
-    return (int) m_cellPointers.size() + hasRightMostPageNo();
+    return (int) m_subPagenos.size();
 }
 
 #pragma mark - Leaf Table
@@ -189,6 +185,23 @@ bool Page::doInitialize()
             return false;
         }
         m_cellPointers.push_back(cellPointer);
+    }
+    if (m_type == Type::InteriorTable) {
+        int subPageCount = (int) m_cellPointers.size() + hasRightMostPageNo();
+        for (int i = 0; i < subPageCount; ++i) {
+            int offset = i < m_cellPointers.size() ? m_cellPointers[i]
+                                                   : 8 + getOffsetOfHeader();
+            if (!m_deserialization.isEnough(offset + 4)) {
+                markPagerAsCorrupted(number, "SubPageno");
+                return false;
+            }
+            int pageno = m_deserialization.get4BytesInt(offset);
+            if (pageno > m_pager->getPageCount()) {
+                markPagerAsCorrupted(number, "SubPageno");
+                return false;
+            }
+            m_subPagenos.push_back(pageno);
+        }
     }
     return true;
 }
