@@ -100,7 +100,8 @@ Data Pager::acquireData(off_t offset, size_t size)
 {
     WCTInnerAssert(isInitializing() || isInitialized());
     if (!m_fileHandle.isOpened() &&
-        !m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
+        !m_fileHandle.open(FileHandle::Mode::ReadOnly |
+                           FileHandle::Mode::Mmap)) {
         assignWithSharedThreadedError();
         return Data::emptyData();
     }

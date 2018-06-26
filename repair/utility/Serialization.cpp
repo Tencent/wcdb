@@ -626,7 +626,7 @@ bool Deserializable::deserialize(const Data &data)
 bool Deserializable::deserialize(const std::string &path)
 {
     FileHandle fileHandle(path);
-    if (!fileHandle.open(FileHandle::Mode::ReadOnly)) {
+    if (!fileHandle.open(FileHandle::Mode::ReadOnly | FileHandle::Mode::Mmap)) {
         return false;
     }
     bool succeed = false;

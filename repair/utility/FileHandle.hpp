@@ -43,14 +43,23 @@ public:
 protected:
     int m_fd;
 
+#pragma mark - Mmap
+public:
+    bool remap();
+
+protected:
+    bool unmap();
+    Data m_mmap;
+
 #pragma mark - Basic
 public:
     enum Mode {
         None = 0,
-        OverWrite,
-        ReadOnly,
+        OverWrite = 1,
+        ReadOnly = 2,
+        Mmap = 1 << 8,
     };
-    bool open(Mode mode);
+    bool open(int mode);
     bool isOpened() const;
     void close();
     ssize_t size();
@@ -58,10 +67,11 @@ public:
     bool write(off_t offset, const Data &data);
 
 protected:
-    Mode m_mode;
+    int m_mode;
 
 #pragma mark - Error
 protected:
+    void markAsMisuse(const char *message);
     void setThreadedError();
 };
 
