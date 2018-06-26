@@ -30,6 +30,7 @@ public class WCDBOpenHelperFactory implements SupportSQLiteOpenHelper.Factory {
     private byte[] mPassphrase;
     private SQLiteCipherSpec mCipherSpec;
     private boolean mWALMode;
+    private boolean mAsyncCheckpoint;
 
     public WCDBOpenHelperFactory passphrase(byte[] value) {
         mPassphrase = value;
@@ -46,11 +47,17 @@ public class WCDBOpenHelperFactory implements SupportSQLiteOpenHelper.Factory {
         return this;
     }
 
+    public WCDBOpenHelperFactory asyncCheckpointEnabled(boolean acp) {
+        mAsyncCheckpoint = acp;
+        return this;
+    }
+
     @Override
     public SupportSQLiteOpenHelper create(SupportSQLiteOpenHelper.Configuration configuration) {
-        WCDBOpenHelper result =  new WCDBOpenHelper(configuration.context, configuration.name,
+        WCDBOpenHelper result = new WCDBOpenHelper(configuration.context, configuration.name,
                 mPassphrase, mCipherSpec, configuration.callback);
         result.setWriteAheadLoggingEnabled(mWALMode);
+        result.setAsyncCheckpointEnabled(mAsyncCheckpoint);
         return result;
     }
 }

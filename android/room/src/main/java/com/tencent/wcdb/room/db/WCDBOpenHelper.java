@@ -49,6 +49,10 @@ class WCDBOpenHelper implements SupportSQLiteOpenHelper {
         mDelegate.setWriteAheadLoggingEnabled(enabled);
     }
 
+    void setAsyncCheckpointEnabled(boolean enabled) {
+        mDelegate.mAsyncCheckpoint = enabled;
+    }
+
     @Override
     public SupportSQLiteDatabase getWritableDatabase() {
         return mDelegate.getWritableSupportDatabase();
@@ -73,6 +77,8 @@ class WCDBOpenHelper implements SupportSQLiteOpenHelper {
         final WCDBDatabase[] mDbRef;
         final Callback mCallback;
 
+        boolean mAsyncCheckpoint;
+
         OpenHelper(Context context, String name, final WCDBDatabase[] dbRef,
                    byte[] passphrase, SQLiteCipherSpec cipherSpec,
                    final Callback callback) {
@@ -88,6 +94,7 @@ class WCDBOpenHelper implements SupportSQLiteOpenHelper {
                     });
             mCallback = callback;
             mDbRef = dbRef;
+            mAsyncCheckpoint = false;
         }
 
         SupportSQLiteDatabase getWritableSupportDatabase() {
@@ -121,6 +128,7 @@ class WCDBOpenHelper implements SupportSQLiteOpenHelper {
 
         @Override
         public void onConfigure(SQLiteDatabase db) {
+            db.setAsyncCheckpointEnabled(mAsyncCheckpoint);
             mCallback.onConfigure(getWrappedDb(db));
         }
 

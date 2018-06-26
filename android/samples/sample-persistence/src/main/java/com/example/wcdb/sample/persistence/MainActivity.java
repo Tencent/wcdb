@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
                     .passphrase("passphrase".getBytes())
                     .cipherSpec(sCipherSpec)
                     .writeAheadLoggingEnabled(true)
+                    .asyncCheckpointEnabled(true)
                 )
                 .build();
 
