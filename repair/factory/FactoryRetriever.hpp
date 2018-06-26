@@ -26,6 +26,7 @@
 #include <WCDB/FactoryRelated.hpp>
 #include <WCDB/Progress.hpp>
 #include <WCDB/Scoreable.hpp>
+#include <WCDB/Time.hpp>
 #include <WCDB/UpgradeableErrorProne.hpp>
 
 namespace WCDB {
@@ -48,7 +49,9 @@ public:
     bool work();
 
 protected:
-    void report(const Fraction &score, const std::string &path, bool material);
+    void report(const Fraction &score,
+                const std::string &path,
+                Time material = Time());
     void summaryReport();
     bool restore(const std::string &database);
     const std::string databaseFileName;
@@ -57,7 +60,10 @@ protected:
 protected:
     bool calculateWeights(const std::list<std::string> &workshopDirectories);
     bool calculateWeight(const std::string &database, size_t &totalSize);
-    void increaseProgress(const std::string &database, double increment);
+    void increaseProgress(const std::string &database,
+                          bool useMaterial,
+                          double progress,
+                          double increment);
 
     std::map<std::string, Fraction> m_weights;
     void increaseScore(const std::string &database, const Fraction &increment);

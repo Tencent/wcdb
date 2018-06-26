@@ -139,10 +139,17 @@ bool FactoryRetriever::restore(const std::string &database)
     Fraction score;
     if (!materialPaths.empty()) {
         Material material;
-        bool succeed = false;
+        Time materialTime;
+        std::string path;
         for (const auto &materialPath : materialPaths) {
-            succeed = material.deserialize(materialPath);
-            if (succeed) {
+            useMaterial = material.deserialize(materialPath);
+            if (useMaterial) {
+                std::tie(succeed, materialTime) =
+                    FileManager::shared()->getFileModifiedTime(materialPath);
+                if (!succeed) {
+                    setCriticalErrorWithSharedThreadedError();
+                    return false;
+                }
                 break;
             }
             if (!ThreadedErrors::shared()->getThreadedError().isCorruption()) {
@@ -150,15 +157,13 @@ bool FactoryRetriever::restore(const std::string &database)
                 return false;
             }
         }
-        if (succeed) {
+        if (useMaterial) {
             Mechanic mechanic(database);
             mechanic.setAssembler(m_assembler);
             mechanic.setMaterial(&material);
             mechanic.setProgressCallback(
-                [&database, this](double progress, double increment) {
-                    increaseProgress(database, increment * 0.5);
-                });
-            useMaterial = true;
+                std::bind(&FactoryRetriever::increaseProgress, this, database,
+                          true, std::placeholders::_1, std::placeholders::_2));
             bool result = mechanic.work();
             if (!result) {
                 WCTInnerAssert(isErrorCritial());
@@ -168,7 +173,7 @@ bool FactoryRetriever::restore(const std::string &database)
                 tryUpgradeError(mechanic.getError());
             }
             score = mechanic.getScore();
-            report(mechanic.getScore(), database, true);
+            report(mechanic.getScore(), database, materialTime);
         }
     } else {
         Error warning;
@@ -182,15 +187,10 @@ bool FactoryRetriever::restore(const std::string &database)
     FullCrawler fullCrawler(database);
     fullCrawler.setAssembler(m_assembler);
     fullCrawler.setProgressCallback(
-        [&database, this, useMaterial](double progress, double increment) {
-            if (useMaterial) {
-                increment *= 0.5;
-            }
-            increaseProgress(database, increment);
-        });
-    bool result = fullCrawler.work();
-    if (result) {
-        report(fullCrawler.getScore(), database, false);
+        std::bind(&FactoryRetriever::increaseProgress, this, database,
+                  useMaterial, std::placeholders::_1, std::placeholders::_2));
+    if (fullCrawler.work()) {
+        report(fullCrawler.getScore(), database);
         score = std::max(score, fullCrawler.getScore());
     } else if (!useMaterial) {
         WCTInnerAssert(isErrorCritial());
@@ -205,7 +205,7 @@ bool FactoryRetriever::restore(const std::string &database)
 
 void FactoryRetriever::report(const Fraction &score,
                               const std::string &path,
-                              bool material)
+                              Time material)
 {
     Error error;
     error.setCode(Error::Code::Notice, "Repair");
@@ -213,7 +213,9 @@ void FactoryRetriever::report(const Fraction &score,
     error.message = "Retriever Report.";
     error.infos.set("Path", path);
     error.infos.set("Score", score.value() * 10000);
-    error.infos.set("Material", material);
+    if (!material.empty()) {
+        error.infos.set("Material", material.stringify());
+    }
     error.infos.set("Weight", m_weights[path].value() * 10000);
     Notifier::shared()->notify(error);
 }
@@ -273,8 +275,13 @@ bool FactoryRetriever::calculateWeight(const std::string &database,
 }
 
 void FactoryRetriever::increaseProgress(const std::string &database,
+                                        bool useMaterial,
+                                        double progress,
                                         double increment)
 {
+    if (useMaterial) {
+        increment *= 0.5;
+    }
     Progress::increaseProgress(m_weights[database].value() * increment);
 }
 
