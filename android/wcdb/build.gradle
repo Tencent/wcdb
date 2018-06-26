@@ -83,7 +83,6 @@ android.libraryVariants.all { variant ->
         description "Generates Javadoc for ${varName}."
         source = variant.javaCompile.source
         ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
-        classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
 
         title = null
 
@@ -97,6 +96,13 @@ android.libraryVariants.all { variant ->
             addStringOption('hdf project.name', 'WCDB for Android')
             //addStringOption('federate Android', 'http://d.android.com/reference')
             //addStringOption('federationxml Android', rootProject.file('gradle/android-10.xml').path)
+        }
+
+        exclude "**/BuildConfig.java"
+        exclude "**/R.java"
+
+        doFirst {
+            classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
         }
 
         dependsOn "generate${cvarName}Sources"
