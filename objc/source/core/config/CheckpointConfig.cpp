@@ -39,7 +39,6 @@ const std::shared_ptr<Config> &CheckpointConfig::shared()
 
 CheckpointConfig::CheckpointConfig()
     : Config(CheckpointConfig::name)
-    , m_timedQueue(2)
     , m_checkpointTruncate(
           StatementPragma().pragma(Pragma::walCheckpoint()).to("TRUNCATE"))
     , m_checkpointPassive(
@@ -58,15 +57,15 @@ CheckpointConfig::~CheckpointConfig()
 bool CheckpointConfig::invoke(Handle *handle)
 {
     handle->setNotificationWhenCommitted(
-        std::bind(&CheckpointConfig::onCommitted, this, std::placeholders::_1,
-                  std::placeholders::_2));
+        "checkpoint", std::bind(&CheckpointConfig::onCommitted, this,
+                                std::placeholders::_1, std::placeholders::_2));
     return true;
 }
 
 void CheckpointConfig::onCommitted(Handle *handle, int frames)
 {
     if (frames > framesForPassive) {
-        m_timedQueue.reQueue(handle->path, frames);
+        m_timedQueue.reQueue(handle->path, 2.0, frames);
     }
 }
 

@@ -37,14 +37,11 @@ namespace WCDB {
 template <typename Key, typename Info>
 class TimedQueue {
 public:
-    TimedQueue(double delay)
-        : m_delay(std::chrono::microseconds((long long) (delay * 1000000)))
-        , m_stop(false)
-        , m_running(false){};
+    TimedQueue() : m_stop(false), m_running(false){};
 
     typedef std::function<void(const Key &, const Info &)> ExpiredCallback;
 
-    void reQueue(const Key &key, const Info &info)
+    void reQueue(const Key &key, double delay, const Info &info)
     {
         bool notify = false;
         {
@@ -62,8 +59,11 @@ public:
             }
 
             //delay
-            Element element(key, std::chrono::steady_clock::now() + m_delay,
-                            info);
+            Element element(
+                key,
+                std::chrono::steady_clock::now() +
+                    std::chrono::microseconds((long long) (delay * 1000000)),
+                info);
             m_list.push_back(std::move(element));
             auto last = m_list.end();
             std::advance(last, -1);
@@ -138,7 +138,6 @@ protected:
     List m_list;
     std::condition_variable m_cond;
     std::mutex m_mutex;
-    std::chrono::microseconds m_delay;
     bool m_stop;
     std::atomic<bool> m_running;
 };
