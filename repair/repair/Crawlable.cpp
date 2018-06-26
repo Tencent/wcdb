@@ -72,10 +72,6 @@ void Crawlable::safeCrawl(int rootpageno,
                           std::set<int> &crawledInteriorPages,
                           int height)
 {
-    if (rootpageno > m_associatedPager.getPageCount()) {
-        markAsCorrupted(rootpageno, "Pageno");
-        return;
-    }
     Page rootpage(rootpageno, &m_associatedPager);
     if (!rootpage.initialize()) {
         markAsError();

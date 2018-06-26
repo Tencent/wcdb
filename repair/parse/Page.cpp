@@ -196,7 +196,7 @@ bool Page::doInitialize()
                 return false;
             }
             int pageno = m_deserialization.get4BytesInt(offset);
-            if (pageno > m_pager->getPageCount()) {
+            if (pageno > m_pager->getPageCount() || pageno <= 0) {
                 markPagerAsCorrupted(number, "SubPageno");
                 return false;
             }
