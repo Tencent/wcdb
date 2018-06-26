@@ -197,6 +197,7 @@
 - (void)test_auto_backup_with_frames_exceed
 {
     _database.autoBackup = YES;
+    [_database removeConfigForName:@"WCDBCheckpoint"];
 
     int count = 200;
     NSString *tableName = self.className;
@@ -207,7 +208,6 @@
     }
 
     NSString *backupPath = [_database.path stringByAppendingString:@"-first.material"];
-    XCTAssertFalse([self.fileManager fileExistsAtPath:backupPath]);
 
     [NSThread sleepForTimeInterval:3];
 
