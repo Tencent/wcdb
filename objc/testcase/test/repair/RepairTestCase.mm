@@ -53,7 +53,7 @@
     [super tearDown];
 }
 
-- (BOOL)corrupt:(BOOL)close
+- (BOOL)corruptWithClose:(BOOL)close
 {
     if (close) {
         [_database close];

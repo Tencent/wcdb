@@ -104,7 +104,7 @@
 
     XCTAssertTrue([_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
 
-    XCTAssertTrue([self corrupt:NO]);
+    XCTAssertTrue([self corruptWithClose:NO]);
 
     XCTAssertTrue([_database deposit]);
 
@@ -150,7 +150,7 @@
     NSArray<TestCaseObject *> *objectsAfter = [self insertObjectsOfCount:1 intoTable:tableName];
     XCTAssertEqual(objectsAfter.count, 1);
 
-    XCTAssertTrue([self corrupt:NO]);
+    XCTAssertTrue([self corruptWithClose:NO]);
 
     XCTAssertLessThan([_database retrieve:nil], 1.0);
 
@@ -172,7 +172,7 @@
 
     XCTAssertTrue([_database backup]);
 
-    XCTAssertTrue([self corrupt:NO]);
+    XCTAssertTrue([self corruptWithClose:NO]);
 
     XCTAssertTrue([_database deposit]);
 
@@ -200,12 +200,12 @@
 
     XCTAssertTrue([_database backup]);
 
-    XCTAssertTrue([self corrupt:NO]);
+    XCTAssertTrue([self corruptWithClose:YES]);
 
     NSString *backupPath = [_database.path stringByAppendingString:@"-first.material"];
     XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:backupPath]);
     FileBomber *fileBomber = [[FileBomber alloc] initWithPath:backupPath];
-    XCTAssertTrue([fileBomber randomAttack]);
+    XCTAssertTrue([fileBomber attack:NSMakeRange(0, 10)]);
 
     XCTAssertTrue([_database deposit]);
 
@@ -233,7 +233,7 @@
 
     XCTAssertTrue([_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
 
-    [self corrupt:YES];
+    [self corruptWithClose:YES];
 
     double score = [_database retrieve:nil];
     XCTAssertEqual(score, 0);

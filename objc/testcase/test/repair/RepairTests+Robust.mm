@@ -83,7 +83,7 @@
     XCTAssertGreaterThan(tableObjects.count, 0);
 
     XCTAssertTrue([_database backup]);
-    XCTAssertTrue([self corrupt:YES]);
+    XCTAssertTrue([self corruptWithClose:YES]);
     XCTAssertEqual([_database retrieve:nil], 1.0);
 
     for (NSString *tableName in tableObjects.allKeys) {
@@ -106,7 +106,7 @@
     }
 }
 
-- (double)carpetBombingPage
+- (double)carpetBombingPage:(double)ratio
 {
     if (![_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]) {
         return 0;
@@ -124,7 +124,7 @@
             return 0;
         }
         attackRatio = (double) ++attackTimes / bomber.pageCount;
-    } while (attackRatio < 0.1);
+    } while (attackRatio < ratio);
     return attackRatio;
 }
 
@@ -135,8 +135,9 @@
 
     XCTAssertTrue([_database backup]);
 
-    double attackRatio = [self carpetBombingPage];
-    XCTAssertGreaterThan(attackRatio, 0);
+    double ratio = 0.1;
+    double attackRatio = [self carpetBombingPage:ratio];
+    XCTAssertGreaterThan(attackRatio, ratio);
 
     double score = [_database retrieve:nil];
     XCTAssertGreaterThanOrEqual(score, 0);
@@ -161,7 +162,13 @@
         }
     }
 
-    NSLog(@"Carpet Bombing Retrieving Result: Attack Ratio %f, Retrieve Score %f, retrieved %f", attackRatio, score, (double) retrieved / total);
+    double retrievedScore = (double) retrieved / total;
+    XCTAssertGreaterThanOrEqual(score, 1.0 - ratio * 2);
+    XCTAssertLessThanOrEqual(score, 1.0 - ratio);
+    XCTAssertGreaterThanOrEqual(retrievedScore, 1.0 - ratio * 2);
+    XCTAssertLessThanOrEqual(retrievedScore, 1.0 - ratio);
+
+    NSLog(@"Carpet Bombing Retrieving Result: Attack Ratio %f, Retrieve Score %f, retrieved %f", attackRatio, score, retrievedScore);
 }
 
 - (BOOL)carpetBombing

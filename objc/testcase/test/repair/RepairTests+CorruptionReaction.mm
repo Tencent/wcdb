@@ -47,7 +47,7 @@
       [locker unlock];
     }];
 
-    XCTAssertTrue([self corrupt:YES]);
+    XCTAssertTrue([self corruptWithClose:YES]);
     [self triggerCorruptionNotifier];
 
     [NSThread sleepForTimeInterval:3];
@@ -65,7 +65,7 @@
 
     _database.reactionWhenCorrupted = WCTCorruptionReactionRemove;
 
-    XCTAssertTrue([self corrupt:YES]);
+    XCTAssertTrue([self corruptWithClose:YES]);
     [self triggerCorruptionNotifier];
 
     [NSThread sleepForTimeInterval:3];
@@ -82,7 +82,7 @@
     _database.reactionWhenCorrupted = WCTCorruptionReactionDeposit;
 
     XCTAssertTrue([_database backup]);
-    XCTAssertTrue([self corrupt:YES]);
+    XCTAssertTrue([self corruptWithClose:YES]);
     [self triggerCorruptionNotifier];
 
     [NSThread sleepForTimeInterval:3];
