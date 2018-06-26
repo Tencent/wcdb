@@ -22,6 +22,7 @@
 #include <WCDB/BackupConfig.hpp>
 #include <WCDB/CheckpointConfig.hpp>
 #include <WCDB/Database.hpp>
+#include <WCDB/Dispatch.hpp>
 
 namespace WCDB {
 
@@ -38,6 +39,8 @@ const std::shared_ptr<Config> &BackupConfig::shared()
 
 BackupConfig::BackupConfig() : Config(BackupConfig::name)
 {
+    Dispatch::async("com.Tencent.WCDB.Backup",
+                    std::bind(&BackupConfig::loop, this));
 }
 
 BackupConfig::~BackupConfig()
@@ -63,6 +66,31 @@ bool BackupConfig::invoke(Handle *handle)
     return result;
 }
 
+void BackupConfig::loop()
+{
+    m_timedQueue.loop(std::bind(&BackupConfig::onTimed, this,
+                                std::placeholders::_1, std::placeholders::_2));
+}
+
+void BackupConfig::onTimed(const std::string &path, const int &frames)
+{
+    static std::atomic<bool> *s_exit = new std::atomic<bool>(false);
+    atexit([]() { s_exit->store(true); });
+    if (s_exit->load()) {
+        return;
+    }
+
+    //TODO resolve with re-created database.
+    std::shared_ptr<Database> database =
+        Database::databaseWithExistingPath(path);
+    if (database == nullptr || !database->isOpened()) {
+        return;
+    }
+    database->backup();
+    LockGuard lockGuard(m_lock);
+    m_backedUp[path] = frames;
+}
+
 void BackupConfig::onCommitted(Handle *handle, int frames)
 {
     int backedUp = 0;
@@ -70,7 +98,7 @@ void BackupConfig::onCommitted(Handle *handle, int frames)
         SharedLockGuard lockGuard(m_lock);
         backedUp = m_backedUp[handle->path];
     }
-    if (frames > backedUp + framesIntervalForAutoBackup) {
+    if (frames > backedUp + framesIntervalForAutoBackup || frames < backedUp) {
         m_timedQueue.reQueue(handle->path, 0, frames);
     }
 }
@@ -80,19 +108,12 @@ bool BackupConfig::willCheckpoint(Handle *handle, int frames)
     std::shared_ptr<Database> database =
         Database::databaseWithExistingPath(handle->path);
     WCTInnerAssert(database != nullptr);
-    m_timedQueue.reQueue(handle->path, 60.0, 0);
     if (database->backup(frames)) {
+        m_timedQueue.reQueue(handle->path, 60.0, frames);
         return true;
     }
     if (frames > framesForMandatoryCheckpoint) {
-        Error error;
-        error.level = Error::Level::Warning;
-        error.setCode(Error::Code::Exceed);
-        error.message = "Number of frames exceeds, mandatory checkpoint.";
-        error.infos.set("Path", handle->path);
-        error.infos.set("Frames", frames);
-        Notifier::shared()->notify(error);
-        m_timedQueue.reQueue(handle->path, 10.0, 0);
+        m_timedQueue.reQueue(handle->path, 10.0, frames);
         return true;
     }
     return false;

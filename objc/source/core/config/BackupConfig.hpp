@@ -37,10 +37,12 @@ public:
 
     static constexpr const char *name = "WCDBBackup";
     static constexpr const int framesForMandatoryCheckpoint = 10000;
-    static constexpr const int framesIntervalForAutoBackup = 100;
+    static constexpr const int framesIntervalForAutoBackup = 200;
 
 protected:
     TimedQueue<std::string, int> m_timedQueue;
+    void loop();
+    void onTimed(const std::string &path, const int &frames);
 
     SharedLock m_lock;
     std::map<std::string, int> m_backedUp;
