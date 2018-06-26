@@ -196,6 +196,11 @@ Factory::materialForSerializingForDatabase(const std::string &database)
     std::string materialPath;
 
     do {
+        Time time;
+        if (!time.now()) {
+            break;
+        }
+
         std::string firstMaterialPath =
             Factory::firstMaterialPathForDatabase(database);
         Time firstMaterialModifiedTime, lastMaterialModifiedTime;
@@ -204,7 +209,8 @@ Factory::materialForSerializingForDatabase(const std::string &database)
         if (!succeed) {
             break;
         }
-        if (firstMaterialModifiedTime.empty()) {
+        if (firstMaterialModifiedTime.empty() ||
+            firstMaterialModifiedTime == time) {
             materialPath = std::move(firstMaterialPath);
             break;
         }
@@ -216,7 +222,8 @@ Factory::materialForSerializingForDatabase(const std::string &database)
         if (!succeed) {
             break;
         }
-        if (lastMaterialModifiedTime.empty()) {
+        if (lastMaterialModifiedTime.empty() ||
+            lastMaterialModifiedTime == time) {
             materialPath = std::move(lastMaterialPath);
             break;
         }
@@ -230,43 +237,49 @@ Factory::materialForSerializingForDatabase(const std::string &database)
     return {succeed, std::move(materialPath)};
 }
 
-std::pair<bool, std::string>
-Factory::materialForDeserializingForDatabase(const std::string &database)
+std::pair<bool, std::list<std::string>>
+Factory::materialsForDeserializingForDatabase(const std::string &database)
 {
     //If all materials exist, return the new one.
     //If all materials do not exist, return empty.
     //Otherwise, return the existing one.
     bool succeed;
-    std::string materialPath;
+    std::list<std::string> materialPaths;
 
     do {
         std::string firstMaterialPath =
             Factory::firstMaterialPathForDatabase(database);
+        std::string lastMaterialPath =
+            Factory::lastMaterialPathForDatabase(database);
         Time firstMaterialModifiedTime, lastMaterialModifiedTime;
+
         std::tie(succeed, firstMaterialModifiedTime) =
             getModifiedTimeOr0IfNotExists(firstMaterialPath);
         if (!succeed) {
             break;
         }
-
-        std::string lastMaterialPath =
-            Factory::lastMaterialPathForDatabase(database);
         std::tie(succeed, lastMaterialModifiedTime) =
             getModifiedTimeOr0IfNotExists(lastMaterialPath);
         if (!succeed) {
             break;
         }
 
-        if (!firstMaterialModifiedTime.empty() ||
-            !lastMaterialModifiedTime.empty()) {
-            if (firstMaterialModifiedTime > lastMaterialModifiedTime) {
-                materialPath = std::move(firstMaterialPath);
-            } else {
-                materialPath = std::move(lastMaterialPath);
-            }
+        if (!firstMaterialModifiedTime.empty()) {
+            materialPaths.push_back(firstMaterialPath);
+        }
+
+        if (!lastMaterialModifiedTime.empty()) {
+            materialPaths.push_back(lastMaterialPath);
+        }
+
+        if (firstMaterialModifiedTime < lastMaterialModifiedTime) {
+            materialPaths.reverse();
         }
     } while (false);
-    return {succeed, std::move(materialPath)};
+    if (!succeed) {
+        materialPaths.clear();
+    }
+    return {succeed, std::move(materialPaths)};
 }
 
 std::pair<bool, Time>

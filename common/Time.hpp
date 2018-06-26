@@ -35,6 +35,7 @@ public:
     long nsec() const;
 
     bool operator>(const Time &operand) const;
+    bool operator<(const Time &operand) const;
     bool operator==(const Time &operand) const;
     bool operator!=(const Time &operand) const;
 

@@ -43,10 +43,10 @@ public:
 
 #pragma mark - Material
 public:
-    void setMaterial(Material *material);
+    void setMaterial(const Material *material);
 
 protected:
-    Material *m_material;
+    const Material *m_material;
     uint32_t m_checksum;
 
 #pragma mark - Crawlable

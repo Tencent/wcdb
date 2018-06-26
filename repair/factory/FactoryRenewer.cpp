@@ -183,14 +183,14 @@ bool FactoryRenewer::resolveInfosForDatabase(
     const std::string &databaseForAcquisition)
 {
     bool succeed;
-    std::string materialPath;
-    std::tie(succeed, materialPath) =
-        Factory::materialForDeserializingForDatabase(databaseForAcquisition);
+    std::list<std::string> materialPaths;
+    std::tie(succeed, materialPaths) =
+        Factory::materialsForDeserializingForDatabase(databaseForAcquisition);
     if (!succeed) {
         assignWithSharedThreadedError();
         return false;
     }
-    if (materialPath.empty()) {
+    if (materialPaths.empty()) {
         Error error;
         error.level = Error::Level::Warning;
         error.setCode(Error::Code::NotFound, "Repair");
@@ -200,34 +200,43 @@ bool FactoryRenewer::resolveInfosForDatabase(
         return true;
     }
     Material material;
-    if (!material.deserialize(materialPath)) {
-        if (ThreadedErrors::shared()->getThreadedError().code() ==
-            Error::Code::Corrupt) {
-            return true;
+    for (const auto &materialPath : materialPaths) {
+        succeed = material.deserialize(materialPath);
+        if (!succeed) {
+            if (ThreadedErrors::shared()->getThreadedError().isCorruption()) {
+                continue;
+            }
+            break;
         }
-        return false;
-    }
-    for (auto &element : material.contents) {
-        auto iter = infos.find(element.first);
-        if (iter == infos.end()) {
-            iter = infos.insert({std::move(element.first), Info()}).first;
-            iter->second.sql = std::move(element.second.sql);
-        } else {
-            if (iter->second.sql != element.second.sql) {
-                Error error;
-                error.level = Error::Level::Warning;
-                error.setCode(Error::Code::Mismatch, "Repair");
-                error.message = "Different sqls is found in materials.";
-                error.infos.set("Path", materialPath);
-                error.infos.set("SQL1", element.second.sql);
-                error.infos.set("SQL2", iter->second.sql);
-                Notifier::shared()->notify(error);
+        for (auto &element : material.contents) {
+            auto iter = infos.find(element.first);
+            if (iter == infos.end()) {
+                iter = infos.insert({std::move(element.first), Info()}).first;
+                iter->second.sql = std::move(element.second.sql);
+            } else {
+                if (iter->second.sql != element.second.sql) {
+                    Error error;
+                    error.level = Error::Level::Notice;
+                    error.setCode(Error::Code::Mismatch, "Repair");
+                    error.message = "Different sqls is found in materials.";
+                    error.infos.set("Path", materialPath);
+                    error.infos.set("SQL1", element.second.sql);
+                    error.infos.set("SQL2", iter->second.sql);
+                    Notifier::shared()->notify(error);
+                }
+            }
+            if (element.second.sequence > iter->second.sequence) {
+                iter->second.sequence = element.second.sequence;
             }
         }
-        if (element.second.sequence > iter->second.sequence) {
-            iter->second.sequence = element.second.sequence;
-        }
+        return true;
     }
+    Error error;
+    error.level = Error::Level::Notice;
+    error.setCode(Error::Code::Notice, "Repair");
+    error.message = "All materials is corrupted when renewing.";
+    error.infos.set("Path", databaseForAcquisition);
+    Notifier::shared()->notify(error);
     return true;
 }
 

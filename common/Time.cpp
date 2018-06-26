@@ -93,4 +93,12 @@ bool Time::operator>(const Time &operand) const
     return m_nsec > operand.m_nsec;
 }
 
+bool Time::operator<(const Time &operand) const
+{
+    if (m_sec != operand.m_sec) {
+        return m_sec < operand.m_sec;
+    }
+    return m_nsec < operand.m_nsec;
+}
+
 } //namespace WCDB

@@ -80,8 +80,8 @@ public:
 
     static std::pair<bool, std::string>
     materialForSerializingForDatabase(const std::string &database);
-    static std::pair<bool, std::string>
-    materialForDeserializingForDatabase(const std::string &database);
+    static std::pair<bool, std::list<std::string>>
+    materialsForDeserializingForDatabase(const std::string &database);
 
 protected:
     static std::pair<bool, Time>

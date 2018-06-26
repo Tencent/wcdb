@@ -151,7 +151,7 @@ int Repairman::tryUpgradeCrawlerError()
 {
     Error error = m_pager.getError();
     if (error.isCorruption()) {
-        error.level = Error::Level::Warning;
+        error.level = Error::Level::Notice;
     }
     return tryUpgradeError(std::move(error));
 }

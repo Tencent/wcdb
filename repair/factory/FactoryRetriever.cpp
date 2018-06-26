@@ -126,10 +126,10 @@ bool FactoryRetriever::restore(const std::string &database)
 {
     WCTInnerAssert(m_assembler != nullptr);
 
-    std::string materialPath;
+    std::list<std::string> materialPaths;
     bool succeed;
-    std::tie(succeed, materialPath) =
-        Factory::materialForDeserializingForDatabase(database);
+    std::tie(succeed, materialPaths) =
+        Factory::materialsForDeserializingForDatabase(database);
     if (!succeed) {
         setCriticalErrorWithSharedThreadedError();
         return false;
@@ -137,9 +137,20 @@ bool FactoryRetriever::restore(const std::string &database)
 
     bool useMaterial = false;
     Fraction score;
-    if (!materialPath.empty()) {
+    if (!materialPaths.empty()) {
         Material material;
-        if (material.deserialize(materialPath)) {
+        bool succeed = false;
+        for (const auto &materialPath : materialPaths) {
+            succeed = material.deserialize(materialPath);
+            if (succeed) {
+                break;
+            }
+            if (!ThreadedErrors::shared()->getThreadedError().isCorruption()) {
+                setCriticalErrorWithSharedThreadedError();
+                return false;
+            }
+        }
+        if (succeed) {
             Mechanic mechanic(database);
             mechanic.setAssembler(m_assembler);
             mechanic.setMaterial(&material);
@@ -158,11 +169,6 @@ bool FactoryRetriever::restore(const std::string &database)
             }
             score = mechanic.getScore();
             report(mechanic.getScore(), database, true);
-        } else if (ThreadedErrors::shared()->getThreadedError().code() !=
-                   Error::Code::Corrupt) {
-            //TODO use old material to restore while page hash can be verified.
-            setCriticalErrorWithSharedThreadedError();
-            return false;
         }
     } else {
         Error warning;

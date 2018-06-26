@@ -32,7 +32,7 @@ Mechanic::Mechanic(const std::string &path) : Repairman(path), m_checksum(0)
 }
 
 #pragma mark - Material
-void Mechanic::setMaterial(Material *material)
+void Mechanic::setMaterial(const Material *material)
 {
     m_material = material;
 }
