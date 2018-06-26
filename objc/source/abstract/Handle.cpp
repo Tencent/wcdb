@@ -447,9 +447,9 @@ void Handle::setNotificationWhenPerformanceTraced(
 }
 
 void Handle::setNotificationWhenCommitted(
-    const CommittedNotification &onCommitted)
+    const std::string &name, const CommittedNotification &onCommitted)
 {
-    m_notification.setNotificationWhenCommitted(onCommitted);
+    m_notification.setNotificationWhenCommitted(name, onCommitted);
 }
 
 bool Handle::setNotificationWhenCheckpoint(

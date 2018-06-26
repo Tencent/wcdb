@@ -133,10 +133,14 @@ void HandleNotification::onPerformanceTraced(const std::string &sql,
 
 #pragma mark - Committed
 void HandleNotification::setNotificationWhenCommitted(
-    const CommittedNotification &onCommitted)
+    const std::string &name, const CommittedNotification &onCommitted)
 {
-    m_commitedNotification = onCommitted;
-    if (m_commitedNotification) {
+    if (onCommitted) {
+        m_commitedNotifications[name] = onCommitted;
+    } else {
+        m_commitedNotifications.erase(name);
+    }
+    if (!m_commitedNotifications.empty()) {
         sqlite3_wal_hook(
             (sqlite3 *) getRawHandle(),
             [](void *p, sqlite3 *, const char *, int frames) -> int {
@@ -153,8 +157,10 @@ void HandleNotification::setNotificationWhenCommitted(
 
 void HandleNotification::onCommitted(int frames)
 {
-    WCTInnerAssert(m_commitedNotification != nullptr);
-    m_commitedNotification(m_handle, frames);
+    WCTInnerAssert(!m_commitedNotifications.empty());
+    for (const auto &element : m_commitedNotifications) {
+        element.second(m_handle, frames);
+    }
 }
 
 #pragma mark - Checkpoint

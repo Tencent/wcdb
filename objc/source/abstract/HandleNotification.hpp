@@ -72,11 +72,12 @@ protected:
 #pragma mark - Committed
 public:
     typedef std::function<void(Handle *, int)> CommittedNotification;
-    void setNotificationWhenCommitted(const CommittedNotification &onCommitted);
+    void setNotificationWhenCommitted(const std::string &name,
+                                      const CommittedNotification &onCommitted);
 
 protected:
     void onCommitted(int frames);
-    CommittedNotification m_commitedNotification;
+    std::map<std::string, CommittedNotification> m_commitedNotifications;
 
 #pragma mark - Checkpoint
 public:

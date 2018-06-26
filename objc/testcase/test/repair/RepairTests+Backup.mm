@@ -145,7 +145,7 @@
     XCTAssertFalse([_database backup]);
 }
 
-- (void)test_auto_backup
+- (void)test_auto_backup_with_checkpoint
 {
     _database.autoBackup = YES;
 
@@ -194,6 +194,26 @@
     XCTAssertFalse([_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
 }
 
+- (void)test_auto_backup_with_frames_exceed
+{
+    _database.autoBackup = YES;
+
+    int count = 200;
+    NSString *tableName = self.className;
+    NSArray<TestCaseObject *> *objects = [TestCaseObject objectsWithCount:count from:0];
+    XCTAssertTrue([_database createTableAndIndexes:tableName withClass:TestCaseObject.class]);
+    for (TestCaseObject *object in objects) {
+        XCTAssertTrue([_database insertObject:object intoTable:tableName]);
+    }
+
+    NSString *backupPath = [_database.path stringByAppendingString:@"-first.material"];
+    XCTAssertFalse([self.fileManager fileExistsAtPath:backupPath]);
+
+    [NSThread sleepForTimeInterval:3];
+
+    XCTAssertTrue([self.fileManager fileExistsAtPath:backupPath]);
+}
+
 - (void)test_mandatory_checkpoint_cover_backup_with_super_large_wal
 {
     _database.autoBackup = YES;
@@ -206,8 +226,7 @@
     NSString *firstBackupPath = [_database.path stringByAppendingString:@"-first.material"];
     NSString *lastBackupPath = [_database.path stringByAppendingString:@"-last.material"];
 
-    XCTAssertTrue([_database backup]);
-    XCTAssertTrue([fileManager fileExistsAtPath:firstBackupPath]);
+    XCTAssertTrue([fileManager createDirectoryAtPath:firstBackupPath withIntermediateDirectories:YES attributes:nil error:nil]);
     XCTAssertTrue([fileManager createDirectoryAtPath:lastBackupPath withIntermediateDirectories:YES attributes:nil error:nil]);
 
     for (int i = 0; i < 10001; ++i) {
@@ -215,8 +234,9 @@
     }
 
     XCTAssertTrue([_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
-    XCTAssertFalse([fileManager fileExistsAtPath:firstBackupPath]);
-    XCTAssertFalse([fileManager fileExistsAtPath:lastBackupPath]);
+
+    NSString *walPath = [_database.path stringByAppendingString:@"-wal"];
+    XCTAssertEqual([fileManager attributesOfItemAtPath:walPath error:nil].fileSize, 0);
 }
 
 @end

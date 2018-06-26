@@ -22,6 +22,8 @@
 #define BackupConfig_hpp
 
 #include <WCDB/Config.hpp>
+#include <WCDB/Lock.hpp>
+#include <WCDB/TimedQueue.hpp>
 
 namespace WCDB {
 
@@ -30,13 +32,21 @@ public:
     static const std::shared_ptr<Config> &shared();
 
     BackupConfig();
+    ~BackupConfig();
     bool invoke(Handle *handle) override;
 
     static constexpr const char *name = "WCDBBackup";
     static constexpr const int framesForMandatoryCheckpoint = 10000;
+    static constexpr const int framesIntervalForAutoBackup = 100;
 
 protected:
-    static bool willCheckpoint(Handle *handle, int frames);
+    TimedQueue<std::string, int> m_timedQueue;
+
+    SharedLock m_lock;
+    std::map<std::string, int> m_backedUp;
+
+    void onCommitted(Handle *handle, int frames);
+    bool willCheckpoint(Handle *handle, int frames);
 };
 
 } //namespace WCDB

@@ -40,15 +40,39 @@ BackupConfig::BackupConfig() : Config(BackupConfig::name)
 {
 }
 
+BackupConfig::~BackupConfig()
+{
+    m_timedQueue.stop();
+    m_timedQueue.waitUntilDone();
+}
+
 bool BackupConfig::invoke(Handle *handle)
 {
     if (!handle->beginTransaction()) {
         return false;
     }
-    bool result =
-        handle->setNotificationWhenCheckpoint(BackupConfig::willCheckpoint);
+    bool result = handle->setNotificationWhenCheckpoint(
+        std::bind(&BackupConfig::willCheckpoint, this, std::placeholders::_1,
+                  std::placeholders::_2));
     handle->rollbackTransaction();
+    if (result) {
+        handle->setNotificationWhenCommitted(
+            "backup", std::bind(&BackupConfig::onCommitted, this,
+                                std::placeholders::_1, std::placeholders::_2));
+    }
     return result;
+}
+
+void BackupConfig::onCommitted(Handle *handle, int frames)
+{
+    int backedUp = 0;
+    {
+        SharedLockGuard lockGuard(m_lock);
+        backedUp = m_backedUp[handle->path];
+    }
+    if (frames > backedUp + framesIntervalForAutoBackup) {
+        m_timedQueue.reQueue(handle->path, 0, frames);
+    }
 }
 
 bool BackupConfig::willCheckpoint(Handle *handle, int frames)
@@ -56,6 +80,7 @@ bool BackupConfig::willCheckpoint(Handle *handle, int frames)
     std::shared_ptr<Database> database =
         Database::databaseWithExistingPath(handle->path);
     WCTInnerAssert(database != nullptr);
+    m_timedQueue.reQueue(handle->path, 60.0, 0);
     if (database->backup(frames)) {
         return true;
     }
@@ -63,13 +88,11 @@ bool BackupConfig::willCheckpoint(Handle *handle, int frames)
         Error error;
         error.level = Error::Level::Warning;
         error.setCode(Error::Code::Exceed);
-        error.message = "Number of frames exceeds, mandatory checkpoint, and "
-                        "delete all backups.";
+        error.message = "Number of frames exceeds, mandatory checkpoint.";
         error.infos.set("Path", handle->path);
         error.infos.set("Frames", frames);
         Notifier::shared()->notify(error);
-
-        database->removeMaterials();
+        m_timedQueue.reQueue(handle->path, 10.0, 0);
         return true;
     }
     return false;

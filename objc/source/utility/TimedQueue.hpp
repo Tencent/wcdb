@@ -50,24 +50,24 @@ public:
                 return;
             }
 
-            notify = m_list.empty();
+            Time expired =
+                std::chrono::steady_clock::now() +
+                std::chrono::microseconds((long long) (delay * 1000000));
 
             auto iter = m_map.find(key);
             if (iter != m_map.end()) {
-                m_list.erase(iter->second);
-                m_map.erase(iter);
+                iter->second.expired = expired;
+                iter->second.info = info;
+                notify = true;
+            } else {
+                Element element(key, expired, info);
+                m_map.insert({key, std::move(element)});
+                std::pair<Key, Element> min = *std::min_element(
+                    m_map.begin(), m_map.end(), &TimedQueue::compare);
+                if (min.first == key) {
+                    notify = true;
+                }
             }
-
-            //delay
-            Element element(
-                key,
-                std::chrono::steady_clock::now() +
-                    std::chrono::microseconds((long long) (delay * 1000000)),
-                info);
-            m_list.push_back(std::move(element));
-            auto last = m_list.end();
-            std::advance(last, -1);
-            m_map[key] = last;
         }
         if (notify) {
             m_cond.notify_one();
@@ -78,7 +78,6 @@ public:
     {
         {
             std::lock_guard<std::mutex> lockGuard(m_mutex);
-            m_list.clear();
             m_map.clear();
             m_stop = true;
         }
@@ -99,21 +98,20 @@ public:
             if (m_stop) {
                 break;
             }
-            if (m_list.empty()) {
+            if (m_map.empty()) {
                 m_cond.wait(lockGuard);
                 continue;
             }
-            Element &element = m_list.front();
+            std::pair<Key, Element> min = *std::min_element(
+                m_map.begin(), m_map.end(), &TimedQueue::compare);
             Time now = std::chrono::steady_clock::now();
-            if (now < element.expired) {
-                m_cond.wait_for(lockGuard, element.expired - now);
+            if (now < min.second.expired) {
+                m_cond.wait_for(lockGuard, min.second.expired - now);
                 continue;
             }
-            Element expired = std::move(element);
-            m_list.pop_front();
-            m_map.erase(expired.key);
+            m_map.erase(min.first);
             lockGuard.unlock();
-            onElementExpired(expired.key, expired.info);
+            onElementExpired(min.first, min.second.info);
             lockGuard.lock();
         }
         m_running.store(false);
@@ -131,11 +129,15 @@ protected:
         Info info;
     };
     typedef struct Element Element;
-    //TODO refactor
-    using List = std::list<Element>;
-    using Map = std::map<Key, typename List::iterator>;
+    typedef std::map<Key, Element> Map;
+
+    static bool compare(const std::pair<Key, Element> &lhs,
+                        const std::pair<Key, Element> &rhs)
+    {
+        return lhs.second.expired < rhs.second.expired;
+    }
+
     Map m_map;
-    List m_list;
     std::condition_variable m_cond;
     std::mutex m_mutex;
     bool m_stop;

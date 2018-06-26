@@ -48,7 +48,7 @@ protected:
 
     const StatementPragma m_checkpointPassive;
     const StatementPragma m_checkpointTruncate;
-    mutable TimedQueue<std::string, const int> m_timedQueue;
+    mutable TimedQueue<std::string, int> m_timedQueue;
     std::once_flag m_once;
 };
 

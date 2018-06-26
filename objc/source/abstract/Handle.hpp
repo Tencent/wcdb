@@ -166,7 +166,8 @@ public:
                                       const SQLNotification &onTraced);
 
     typedef HandleNotification::CommittedNotification CommittedNotification;
-    void setNotificationWhenCommitted(const CommittedNotification &onCommitted);
+    void setNotificationWhenCommitted(const std::string &name,
+                                      const CommittedNotification &onCommitted);
 
     typedef HandleNotification::CheckpointNotification CheckpointNotification;
     bool
