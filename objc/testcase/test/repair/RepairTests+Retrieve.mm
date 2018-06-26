@@ -104,8 +104,7 @@
 
     XCTAssertTrue([_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
 
-    DatabaseBomber *bomber = [[DatabaseBomber alloc] initWithPath:_database.path];
-    XCTAssertTrue([bomber attackRootPage]);
+    XCTAssertTrue([self corrupt:NO]);
 
     XCTAssertTrue([_database deposit]);
 
@@ -151,8 +150,7 @@
     NSArray<TestCaseObject *> *objectsAfter = [self insertObjectsOfCount:1 intoTable:tableName];
     XCTAssertEqual(objectsAfter.count, 1);
 
-    DatabaseBomber *databaseBomber = [[DatabaseBomber alloc] initWithPath:_database.path];
-    XCTAssertTrue([databaseBomber attackRootPage]);
+    XCTAssertTrue([self corrupt:NO]);
 
     XCTAssertLessThan([_database retrieve:nil], 1.0);
 
@@ -174,8 +172,7 @@
 
     XCTAssertTrue([_database backup]);
 
-    DatabaseBomber *bomber = [[DatabaseBomber alloc] initWithPath:_database.path];
-    XCTAssertTrue([bomber attackRootPage]);
+    XCTAssertTrue([self corrupt:NO]);
 
     XCTAssertTrue([_database deposit]);
 
@@ -203,8 +200,7 @@
 
     XCTAssertTrue([_database backup]);
 
-    DatabaseBomber *databaseBomber = [[DatabaseBomber alloc] initWithPath:_database.path];
-    XCTAssertTrue([databaseBomber attackRootPage]);
+    XCTAssertTrue([self corrupt:NO]);
 
     NSString *backupPath = [_database.path stringByAppendingString:@"-first.material"];
     XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:backupPath]);
@@ -217,6 +213,30 @@
 
     NSArray<TestCaseObject *> *retrieved = [_database getObjectsOfClass:TestCaseObject.class fromTable:tableName orderBy:TestCaseObject.variable1];
     XCTAssertNil(retrieved);
+}
+
+- (void)test_retrieve_avoid_dirty_data
+{
+    NSString *tableName = self.className;
+    int count = 100;
+    NSArray<TestCaseObject *> *objects;
+
+    objects = [self insertObjectsOfCount:count intoTable:tableName];
+    XCTAssertEqual(objects.count, count);
+
+    XCTAssertTrue([_database backup]);
+
+    XCTAssertTrue([_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
+
+    objects = [self insertObjectsOfCount:count intoTable:tableName];
+    XCTAssertEqual(objects.count, count);
+
+    XCTAssertTrue([_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
+
+    [self corrupt:YES];
+
+    double score = [_database retrieve:nil];
+    XCTAssertEqual(score, 0);
 }
 
 @end

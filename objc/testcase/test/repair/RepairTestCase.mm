@@ -53,9 +53,11 @@
     [super tearDown];
 }
 
-- (BOOL)corrupt
+- (BOOL)corrupt:(BOOL)close
 {
-    [_database close];
+    if (close) {
+        [_database close];
+    }
     DatabaseBomber *bomber = [[DatabaseBomber alloc] initWithPath:_database.path];
     return [bomber attackRootPage];
 }
