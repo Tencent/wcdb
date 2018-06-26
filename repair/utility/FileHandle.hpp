@@ -21,6 +21,7 @@
 #ifndef FileHandle_hpp
 #define FileHandle_hpp
 
+#include <WCDB/Data.hpp>
 #include <WCDB/SharedThreadedErrorProne.hpp>
 #include <stdio.h>
 
@@ -53,8 +54,8 @@ public:
     bool isOpened() const;
     void close();
     ssize_t size();
-    ssize_t read(unsigned char *buffer, off_t offset, size_t size);
-    ssize_t write(unsigned char *buffer, off_t offset, size_t size);
+    Data read(off_t offset, size_t size);
+    bool write(off_t offset, const Data &data);
 
 protected:
     Mode m_mode;

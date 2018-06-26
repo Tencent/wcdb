@@ -19,7 +19,6 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/Data.hpp>
 #include <WCDB/FileHandle.hpp>
 #include <WCDB/Notifier.hpp>
 #include <errno.h>
@@ -98,11 +97,16 @@ ssize_t FileHandle::size()
     return (ssize_t) lseek(m_fd, 0, SEEK_END);
 }
 
-ssize_t FileHandle::read(unsigned char *buffer, off_t offset, size_t size)
+Data FileHandle::read(off_t offset, size_t size)
 {
     WCTInnerAssert(m_fd != -1);
+    Data data(size);
+    if (data.empty()) {
+        return Data::emptyData();
+    }
     ssize_t got;
     size_t prior = 0;
+    unsigned char *buffer = data.buffer();
     do {
         got = pread(m_fd, buffer, size, offset);
         if (got == size) {
@@ -123,14 +127,25 @@ ssize_t FileHandle::read(unsigned char *buffer, off_t offset, size_t size)
             buffer = got + buffer;
         }
     } while (got > 0);
-    return got + prior;
+    if (got + prior == size) {
+        return data;
+    }
+    Error error;
+    error.setSystemCode(EIO, Error::Code::IOError);
+    error.message = "Short read.";
+    error.infos.set("Path", path);
+    Notifier::shared()->notify(error);
+    SharedThreadedErrorProne::setThreadedError(std::move(error));
+    return data.subdata(got + prior);
 }
 
-ssize_t FileHandle::write(unsigned char *buffer, off_t offset, size_t size)
+bool FileHandle::write(off_t offset, const Data &data)
 {
     WCTInnerAssert(m_fd != -1);
     ssize_t wrote;
     ssize_t prior = 0;
+    size_t size = data.size();
+    const unsigned char *buffer = data.buffer();
     do {
         wrote = pwrite(m_fd, buffer, size, offset);
         if (wrote == size) {
@@ -150,7 +165,16 @@ ssize_t FileHandle::write(unsigned char *buffer, off_t offset, size_t size)
             buffer = wrote + buffer;
         }
     } while (wrote > 0);
-    return wrote + prior;
+    if (wrote + prior == size) {
+        return true;
+    }
+    Error error;
+    error.setSystemCode(EIO, Error::Code::IOError);
+    error.message = "Short write.";
+    error.infos.set("Path", path);
+    Notifier::shared()->notify(error);
+    SharedThreadedErrorProne::setThreadedError(std::move(error));
+    return false;
 }
 
 void FileHandle::setThreadedError()

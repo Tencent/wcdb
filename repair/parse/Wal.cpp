@@ -53,14 +53,9 @@ Data Wal::acquireData(off_t offset, size_t size)
         assignWithSharedThreadedError();
         return Data::emptyData();
     }
-    Data data(size);
-    if (data.empty()) {
-        assignWithSharedThreadedError();
-        return data;
-    }
-    ssize_t read = m_fileHandle.read(data.buffer(), offset, size);
-    if (read != size) {
-        if (read >= 0) {
+    Data data = m_fileHandle.read(offset, size);
+    if (data.size() != size) {
+        if (data.size() > 0) {
             //short read
             markAsCorrupted((int) ((offset - headerSize) / getFrameSize() + 1),
                             "ShortRead");

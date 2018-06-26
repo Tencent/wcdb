@@ -611,22 +611,7 @@ bool Serializable::serialize(const std::string &path) const
     if (!fileHandle.open(FileHandle::Mode::OverWrite)) {
         return false;
     }
-    bool succeed = false;
-    do {
-        ssize_t wrote = fileHandle.write(data.buffer(), 0, data.size());
-        if (wrote != data.size()) {
-            if (wrote >= 0) {
-                Error error;
-                error.setCode(Error::Code::IOError);
-                error.message = "Short write.";
-                error.infos.set("Path", path);
-                Notifier::shared()->notify(error);
-                setThreadedError(std::move(error));
-            }
-            break;
-        }
-        succeed = true;
-    } while (false);
+    bool succeed = fileHandle.write(0, data);
     fileHandle.close();
     return succeed;
 }
@@ -650,17 +635,8 @@ bool Deserializable::deserialize(const std::string &path)
         if (size < 0) {
             break;
         }
-        Data data(size);
-        ssize_t read = fileHandle.read(data.buffer(), 0, size);
-        if (read != size) {
-            if (read >= 0) {
-                Error error;
-                error.setCode(Error::Code::IOError);
-                error.message = "Short read.";
-                error.infos.set("Path", path);
-                Notifier::shared()->notify(error);
-                setThreadedError(std::move(error));
-            }
+        Data data = fileHandle.read(0, size);
+        if (data.size() != size) {
             break;
         }
         succeed = deserialize(data);
