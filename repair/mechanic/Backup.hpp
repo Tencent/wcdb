@@ -53,8 +53,7 @@ public:
 protected:
     Material m_material;
     Material::Content &getOrCreateContent(const std::string &tableName);
-    int m_height;
-    std::vector<uint32_t> m_pagenos;
+    std::map<uint32_t, uint32_t> m_verifiedPagenos;
 
 #pragma mark - Filter
 public:

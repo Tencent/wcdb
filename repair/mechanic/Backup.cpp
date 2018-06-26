@@ -32,7 +32,7 @@ namespace Repair {
 
 #pragma mark - Initialize
 Backup::Backup(const std::string &path)
-    : m_pager(path), Crawlable(m_pager), m_height(-1), m_masterCrawler(m_pager)
+    : m_pager(path), Crawlable(m_pager), m_masterCrawler(m_pager)
 {
 }
 
@@ -121,19 +121,16 @@ void Backup::onCellCrawled(const Cell &cell)
 bool Backup::willCrawlPage(const Page &page, int height)
 {
     switch (page.getType()) {
-        case Page::Type::LeafTable:
-            m_height = height;
-            m_pagenos.push_back(page.number);
-            return false;
-        case Page::Type::InteriorTable:
-            if (m_height > 0 && height == m_height - 1) {
-                //avoid iterating the leaf table
-                for (int i = 0; i < page.getSubPageCount(); ++i) {
-                    int pageno = page.getSubPageno(i);
-                    m_pagenos.push_back(pageno);
-                }
-                return false;
+        case Page::Type::LeafTable: {
+            auto iter = m_verifiedPagenos.find(page.number);
+            if (iter != m_verifiedPagenos.end()) {
+                markAsCorrupted(page.number, "PageNumber");
+            } else {
+                m_verifiedPagenos[page.number] = page.getData().hash();
             }
+            return false;
+        }
+        case Page::Type::InteriorTable:
             return true;
         default:
             break;
@@ -156,13 +153,12 @@ void Backup::onMasterCellCrawled(const Cell &cell, const Master *master)
     if (master->tableName == Sequence::tableName()) {
         SequenceCrawler(m_pager).work(master->rootpage, this);
     } else if (filter(master->tableName)) {
-        m_height = -1;
         if (!crawl(master->rootpage)) {
             return;
         }
 
         Material::Content &content = getOrCreateContent(master->tableName);
-        content.pagenos = std::move(m_pagenos);
+        content.verifiedPagenos = std::move(m_verifiedPagenos);
         content.sql = std::move(master->sql);
     }
 }

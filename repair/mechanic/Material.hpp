@@ -91,7 +91,7 @@ public:
         Content();
         std::string sql;
         int64_t sequence;
-        std::vector<uint32_t> pagenos;
+        std::map<uint32_t, uint32_t> verifiedPagenos;
 #pragma mark - Serializable
     public:
         bool serialize(Serialization &serialization) const override;

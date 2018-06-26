@@ -27,7 +27,7 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialize
-Mechanic::Mechanic(const std::string &path) : Repairman(path)
+Mechanic::Mechanic(const std::string &path) : Repairman(path), m_checksum(0)
 {
 }
 
@@ -80,7 +80,7 @@ bool Mechanic::work()
 
     int pageCount = 0;
     for (const auto &element : m_material->contents) {
-        pageCount += element.second.pagenos.size();
+        pageCount += element.second.verifiedPagenos.size();
     }
     WCTInnerAssert(pageCount > 0);
     setPageWeight(pageCount > 0
@@ -96,11 +96,12 @@ bool Mechanic::work()
                 !assembleSequence(element.first, element.second.sequence)) {
                 continue;
             }
-            for (const auto &pageno : element.second.pagenos) {
+            for (const auto &element : element.second.verifiedPagenos) {
                 if (isErrorCritial()) {
                     break;
                 }
-                if (!crawl(pageno)) {
+                m_checksum = element.second;
+                if (!crawl(element.first)) {
                     tryUpgradeCrawlerError();
                 }
             }
@@ -125,12 +126,16 @@ bool Mechanic::willCrawlPage(const Page &page, int)
     if (isErrorCritial()) {
         return false;
     }
-    if (page.getType() == Page::Type::LeafTable) {
-        markPageAsCounted(page);
-        return true;
+    if (page.getType() != Page::Type::LeafTable) {
+        markAsCorrupted(page.number, "PageType");
+        return false;
     }
-    markAsCorrupted(page.number, "PageType");
-    return false;
+    if (page.getData().hash() != m_checksum) {
+        markAsCorrupted(page.number, "PageData");
+        return false;
+    }
+    markPageAsCounted(page);
+    return true;
 }
 
 } //namespace Repair

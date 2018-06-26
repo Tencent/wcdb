@@ -47,6 +47,7 @@ public:
 
 protected:
     Material *m_material;
+    uint32_t m_checksum;
 
 #pragma mark - Crawlable
 protected:
