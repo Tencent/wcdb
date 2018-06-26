@@ -101,4 +101,14 @@ bool Time::operator<(const Time &operand) const
     return m_nsec < operand.m_nsec;
 }
 
+long Time::second() const
+{
+    return m_sec;
+}
+
+long Time::nanosecond() const
+{
+    return m_nsec;
+}
+
 } //namespace WCDB

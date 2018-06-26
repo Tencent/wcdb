@@ -210,7 +210,7 @@ Factory::materialForSerializingForDatabase(const std::string &database)
             break;
         }
         if (firstMaterialModifiedTime.empty() ||
-            firstMaterialModifiedTime == time) {
+            firstMaterialModifiedTime.second() == time.second()) {
             materialPath = std::move(firstMaterialPath);
             break;
         }
@@ -223,7 +223,7 @@ Factory::materialForSerializingForDatabase(const std::string &database)
             break;
         }
         if (lastMaterialModifiedTime.empty() ||
-            lastMaterialModifiedTime == time) {
+            lastMaterialModifiedTime.second() == time.second()) {
             materialPath = std::move(lastMaterialPath);
             break;
         }

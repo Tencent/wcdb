@@ -44,6 +44,9 @@ public:
 
     std::pair<bool, std::string> stringify() const;
 
+    long second() const;
+    long nanosecond() const;
+
 protected:
     long m_sec;
     long m_nsec;
