@@ -75,6 +75,9 @@ std::string Time::stringify() const
     size_t nanoseconds =
         std::chrono::duration_cast<std::chrono::nanoseconds>(time_since_epoch())
             .count();
+    while (nanoseconds != 0 && nanoseconds % 10 == 0) {
+        nanoseconds /= 10;
+    }
     std::ostringstream stream;
     stream << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S") << "." << nanoseconds;
     return stream.str();
