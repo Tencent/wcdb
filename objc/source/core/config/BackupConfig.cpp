@@ -47,11 +47,7 @@ bool BackupConfig::invoke(Handle *handle)
     }
     bool result =
         handle->setNotificationWhenCheckpoint(BackupConfig::willCheckpoint);
-    if (result) {
-        result = handle->commitOrRollbackTransaction();
-    } else {
-        handle->rollbackTransaction();
-    }
+    handle->rollbackTransaction();
     return result;
 }
 
