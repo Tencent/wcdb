@@ -18,97 +18,66 @@
  * limitations under the License.
  */
 
-#include <WCDB/Error.hpp>
+#include <WCDB/Notifier.hpp>
 #include <WCDB/String.hpp>
+#include <WCDB/ThreadedErrors.hpp>
 #include <WCDB/Time.hpp>
 #include <iomanip>
 #include <sstream>
 
 namespace WCDB {
 
-Time::Time() : m_sec(0), m_nsec(0)
+Time::Time(const Super &super) : Super(super)
 {
 }
 
-Time::Time(long sec, long nsec) : m_sec(sec), m_nsec(nsec)
+Time::Time(Super &&super) : Super(std::move(super))
 {
 }
 
-long Time::sec() const
+Time::Time(const struct timespec &ts)
+    : Super(std::chrono::system_clock::time_point{
+          std::chrono::duration_cast<std::chrono::system_clock::duration>(
+              std::chrono::seconds{ts.tv_sec} +
+              std::chrono::nanoseconds{ts.tv_nsec})})
 {
-    return m_sec;
 }
 
-long Time::nsec() const
+Time Time::now()
 {
-    return m_nsec;
+    return std::chrono::system_clock::now();
 }
 
-bool Time::now()
+std::time_t Time::seconds() const
 {
-    struct timespec ts;
-    if (clock_gettime(CLOCK_REALTIME, &ts) != 0) {
-        Error error;
-        error.setSystemCode(errno, Error::Code::Error);
-        setThreadedError(std::move(error));
-        return false;
-    }
-    m_sec = ts.tv_sec;
-    m_nsec = ts.tv_nsec;
-    return true;
+    return std::chrono::duration_cast<std::chrono::seconds>(time_since_epoch())
+        .count();
 }
 
 bool Time::empty() const
 {
-    return m_sec == 0 && m_nsec == 0;
+    return time_since_epoch().count() == 0;
 }
 
-std::pair<bool, std::string> Time::stringify() const
+std::string Time::stringify() const
 {
+    std::time_t seconds =
+        std::chrono::duration_cast<std::chrono::seconds>(time_since_epoch())
+            .count();
     struct tm tm;
-    if (!localtime_r(&m_sec, &tm)) {
-        setThreadedError(Error::Code::Exceed);
-        return {false, String::empty()};
+    if (!localtime_r(&seconds, &tm)) {
+        Error error;
+        error.setSystemCode(errno, Error::Code::Error);
+        Notifier::shared()->notify(error);
+        setThreadedError(std::move(error));
+        return String::empty();
     }
-    std::ostringstream oss;
-    oss << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S") << "." << m_nsec;
-    return {true, oss.str()};
-}
-
-bool Time::operator==(const Time &operand) const
-{
-    return m_nsec == operand.m_nsec && m_sec == operand.m_sec;
-}
-
-bool Time::operator!=(const Time &operand) const
-{
-    return m_sec != operand.m_sec && m_nsec != operand.m_nsec;
-}
-
-bool Time::operator>(const Time &operand) const
-{
-    if (m_sec != operand.m_sec) {
-        return m_sec > operand.m_sec;
-    }
-    return m_nsec > operand.m_nsec;
-}
-
-bool Time::operator<(const Time &operand) const
-{
-    if (m_sec != operand.m_sec) {
-        return m_sec < operand.m_sec;
-    }
-    return m_nsec < operand.m_nsec;
-}
-
-long Time::second() const
-{
-    return m_sec;
-}
-
-long Time::nanosecond() const
-{
-    return m_nsec;
+    size_t nanoseconds =
+        std::chrono::duration_cast<std::chrono::nanoseconds>(time_since_epoch())
+            .count();
+    std::ostringstream stream;
+    stream << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S") << "." << nanoseconds;
+    return stream.str();
 }
 
 } //namespace WCDB

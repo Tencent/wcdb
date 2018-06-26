@@ -21,6 +21,7 @@
 #ifndef TimedQueue_hpp
 #define TimedQueue_hpp
 
+#include <WCDB/Time.hpp>
 #include <chrono>
 #include <condition_variable>
 #include <list>
@@ -50,7 +51,7 @@ public:
                 return;
             }
 
-            Time expired =
+            SteadyClock expired =
                 std::chrono::steady_clock::now() +
                 std::chrono::microseconds((long long) (delay * 1000000));
 
@@ -104,7 +105,7 @@ public:
             }
             std::pair<Key, Element> min = *std::min_element(
                 m_map.begin(), m_map.end(), &TimedQueue::compare);
-            Time now = std::chrono::steady_clock::now();
+            SteadyClock now = std::chrono::steady_clock::now();
             if (now < min.second.expired) {
                 m_cond.wait_for(lockGuard, min.second.expired - now);
                 continue;
@@ -118,14 +119,13 @@ public:
     }
 
 protected:
-    using Time = std::chrono::steady_clock::time_point;
     struct Element {
-        Element(const Key &key_, const Time &expired_, const Info &info_)
+        Element(const Key &key_, const SteadyClock &expired_, const Info &info_)
             : key(key_), expired(expired_), info(info_)
         {
         }
         Key key;
-        Time expired;
+        SteadyClock expired;
         Info info;
     };
     typedef struct Element Element;

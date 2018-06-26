@@ -59,17 +59,13 @@ std::pair<bool, std::list<std::string>> Factory::getWorkshopDirectories() const
 
 std::pair<bool, std::string> Factory::getUniqueWorkshopDiectory() const
 {
-    bool succeed;
+    bool succeed = false;
     FileManager *fileManager = FileManager::shared();
     std::string path;
     do {
-        Time time;
-        if (!time.now()) {
-            break;
-        }
-        std::string fileName;
-        std::tie(succeed, fileName) = time.stringify();
-        if (!succeed) {
+        Time time = Time::now();
+        std::string fileName = time.stringify();
+        if (fileName.empty()) {
             break;
         }
         path = Path::addComponent(directory, fileName);
@@ -196,10 +192,7 @@ Factory::materialForSerializingForDatabase(const std::string &database)
     std::string materialPath;
 
     do {
-        Time time;
-        if (!time.now()) {
-            break;
-        }
+        Time time = Time::now();
 
         std::string firstMaterialPath =
             Factory::firstMaterialPathForDatabase(database);
@@ -210,7 +203,7 @@ Factory::materialForSerializingForDatabase(const std::string &database)
             break;
         }
         if (firstMaterialModifiedTime.empty() ||
-            firstMaterialModifiedTime.second() == time.second()) {
+            firstMaterialModifiedTime.seconds() == time.seconds()) {
             materialPath = std::move(firstMaterialPath);
             break;
         }
@@ -223,7 +216,7 @@ Factory::materialForSerializingForDatabase(const std::string &database)
             break;
         }
         if (lastMaterialModifiedTime.empty() ||
-            lastMaterialModifiedTime.second() == time.second()) {
+            lastMaterialModifiedTime.seconds() == time.seconds()) {
             materialPath = std::move(lastMaterialPath);
             break;
         }

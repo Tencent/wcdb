@@ -192,19 +192,17 @@ std::pair<bool, Time> FileManager::getFileModifiedTime(const std::string &path)
 {
     struct stat result;
     if (stat(path.c_str(), &result) == 0) {
-        return {true,
-                Time(result.st_mtimespec.tv_sec, result.st_mtimespec.tv_nsec)};
+        return {true, Time(result.st_mtimespec)};
     }
     setThreadedError(path);
-    return {false, Time()};
+    return {false, {}};
 }
 
 std::pair<bool, Time> FileManager::getFileCreatedTime(const std::string &path)
 {
     struct stat result;
     if (stat(path.c_str(), &result) == 0) {
-        return {true,
-                Time(result.st_ctimespec.tv_sec, result.st_ctimespec.tv_nsec)};
+        return {true, Time(result.st_ctimespec)};
     }
     setThreadedError(path);
     return {false, Time()};

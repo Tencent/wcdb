@@ -22,35 +22,28 @@
 #define Time_hpp
 
 #include <WCDB/SharedThreadedErrorProne.hpp>
+#include <chrono>
 #include <string>
 
 namespace WCDB {
 
-class Time : public SharedThreadedErrorProne {
+class Time : public std::chrono::system_clock::time_point,
+             public SharedThreadedErrorProne {
 public:
-    Time();
-    Time(long sec, long nsec);
+    using Super = std::chrono::system_clock::time_point;
+    using Super::time_point;
+    Time(const Super &super);
+    Time(Super &&super);
+    Time(const struct timespec &ts);
 
-    long sec() const;
-    long nsec() const;
+    static Time now();
 
-    bool operator>(const Time &operand) const;
-    bool operator<(const Time &operand) const;
-    bool operator==(const Time &operand) const;
-    bool operator!=(const Time &operand) const;
-
-    bool now();
+    std::time_t seconds() const;
     bool empty() const;
-
-    std::pair<bool, std::string> stringify() const;
-
-    long second() const;
-    long nanosecond() const;
-
-protected:
-    long m_sec;
-    long m_nsec;
+    std::string stringify() const;
 };
+
+typedef std::chrono::steady_clock::time_point SteadyClock;
 
 } //namespace WCDB
 

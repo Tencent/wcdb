@@ -94,10 +94,8 @@ void Corruption::notify()
             error.setCode(Error::Code::Warning, "Repair");
             error.message =
                 "Skip corruption handling due to mismatch identifier.";
-            error.infos.set("OldSec", m_identifier.sec());
-            error.infos.set("OldNSec", m_identifier.nsec());
-            error.infos.set("NewSec", identifier.sec());
-            error.infos.set("NewNSec", identifier.nsec());
+            error.infos.set("Old", m_identifier.stringify());
+            error.infos.set("New", identifier.stringify());
             Notifier::shared()->notify(error);
             break;
         }
