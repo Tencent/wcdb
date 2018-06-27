@@ -102,4 +102,31 @@
         }];
 }
 
+- (void)test_create_index
+{
+    NSString *tableName = [self getTableNameWithIndex:0];
+    __block BOOL result = NO;
+    NSString *indexName = [tableName stringByAppendingString:@"_index"];
+
+    [self measure:^{
+      result = [self.database execute:WCDB::StatementCreateIndex().createIndex(indexName.UTF8String).on(tableName.UTF8String).indexedBy(BenchmarkObject.value)];
+    }
+        setUp:^{
+          result = NO;
+          [self setUpDatabase];
+          [self setUpWithPreCreateTable:1];
+          [self setUpWithPreCreateObject:self.config.writeCount];
+          [self setUpWithPreInsertObjects:self.objects intoTable:tableName];
+
+          [self tearDownDatabaseCache];
+          [self setUpDatabaseCache];
+        }
+        tearDown:^{
+          [self tearDownDatabase];
+        }
+        checkCorrectness:^{
+          XCTAssertTrue(result);
+        }];
+}
+
 @end
