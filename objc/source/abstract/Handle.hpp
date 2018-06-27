@@ -171,7 +171,8 @@ public:
 
     typedef HandleNotification::CheckpointNotification CheckpointNotification;
     bool
-    setNotificationWhenCheckpoint(const CheckpointNotification &willCheckpoint);
+    setNotificationWhenCheckpoint(const std::string &name,
+                                  const CheckpointNotification &willCheckpoint);
 
 protected:
     HandleNotification m_notification;

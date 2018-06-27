@@ -39,6 +39,7 @@ public:
     static Time now();
 
     std::time_t seconds() const;
+    std::time_t nanoseconds() const;
     bool empty() const;
     std::string stringify() const;
 };

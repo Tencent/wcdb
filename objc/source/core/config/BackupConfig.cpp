@@ -55,8 +55,8 @@ bool BackupConfig::invoke(Handle *handle)
         return false;
     }
     bool result = handle->setNotificationWhenCheckpoint(
-        std::bind(&BackupConfig::willCheckpoint, this, std::placeholders::_1,
-                  std::placeholders::_2));
+        "backup", std::bind(&BackupConfig::willCheckpoint, this,
+                            std::placeholders::_1, std::placeholders::_2));
     handle->rollbackTransaction();
     if (result) {
         handle->setNotificationWhenCommitted(
@@ -80,7 +80,6 @@ void BackupConfig::onTimed(const std::string &path, const int &frames)
         return;
     }
 
-    //TODO resolve with re-created database.
     std::shared_ptr<Database> database =
         Database::databaseWithExistingPath(path);
     if (database == nullptr || !database->isOpened()) {

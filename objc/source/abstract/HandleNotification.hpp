@@ -26,14 +26,17 @@
 
 namespace WCDB {
 
-#pragma mark - Trace
 class HandleNotification : public HandleRelated {
 public:
     using HandleRelated::HandleRelated;
 
+    void purge();
+
+#pragma mark - Trace
 protected:
-    int onTraced(unsigned int flag, void *P, void *X);
-    void setupTrace();
+    bool isTraceNotificationSet() const;
+    void dispatchTraceNotification(unsigned int flag, void *P, void *X);
+    void setupTraceNotification();
 
 #pragma mark - SQL
 public:
@@ -42,7 +45,7 @@ public:
                                       const SQLNotification &onTraced);
 
 protected:
-    void onSQLTraced(const std::string &sql);
+    void dispatchSQLTraceNotification(const std::string &sql);
     std::map<std::string, SQLNotification> m_sqlNotifications;
 
 #pragma mark - Performance
@@ -61,9 +64,9 @@ public:
         const std::string &name, const PerformanceNotification &onTraced);
 
 protected:
-    void onPerformanceTraced(const std::string &sql,
-                             const int64_t &cost,
-                             bool isInTransaction);
+    void dispatchPerformanceTraceNotification(const std::string &sql,
+                                              const int64_t &cost,
+                                              bool isInTransaction);
 
     Footprints m_footprints;
     int64_t m_cost;
@@ -76,18 +79,25 @@ public:
                                       const CommittedNotification &onCommitted);
 
 protected:
-    void onCommitted(int frames);
+    bool isCommittedNotificationSet() const;
+    void setupCommittedNotification();
+
+    void dispatchCommittedNotification(int frames);
     std::map<std::string, CommittedNotification> m_commitedNotifications;
 
 #pragma mark - Checkpoint
 public:
     typedef std::function<bool(Handle *, int)> CheckpointNotification;
     bool
-    setNotificationWhenCheckpoint(const CheckpointNotification &willCheckpoint);
+    setNotificationWhenCheckpoint(const std::string &name,
+                                  const CheckpointNotification &willCheckpoint,
+                                  bool ignorable = false);
 
 protected:
-    bool willCheckpoint(int frames);
-    CheckpointNotification m_checkpointNotification;
+    bool isCheckpointNotificationSet() const;
+    bool setupCheckpointNotification(bool ignorable = false);
+    bool dispatchCheckpointNotification(int frames);
+    std::map<std::string, CheckpointNotification> m_checkpointNotifications;
 };
 
 } //namespace WCDB

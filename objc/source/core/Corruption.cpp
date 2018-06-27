@@ -25,12 +25,17 @@
 
 namespace WCDB {
 
-Corruption::Corruption(const std::string &associatedPath_)
-    : associatedPath(associatedPath_)
+Corruption::Corruption(HandlePool *pool)
+    : HandlePoolRelated(pool)
     , m_reaction(Reaction::Custom)
-    , m_handling(false)
-    , m_corrupted(false)
+    , m_handling(0)
+    , m_corruptedIdentifier(0)
 {
+}
+
+const std::string &Corruption::getPath() const
+{
+    return m_pool->path;
 }
 
 #pragma mark - Reaction
@@ -64,38 +69,34 @@ const char *Corruption::reactionName(Reaction reaction)
 
 void Corruption::notify()
 {
-    if (!m_corrupted.load()) {
+    if (m_corruptedIdentifier.load() == 0 || m_handling.load() > 0) {
         return;
     }
-    WCTInnerAssert(!m_identifier.empty());
-
     {
         Error error;
         error.level = Error::Level::Notice;
         error.setCode(Error::Code::Notice);
         error.message = "Corruption will be handled.";
         error.infos.set("Reaction", reactionName(m_reaction));
-        error.infos.set("Path", associatedPath);
+        error.infos.set("Path", getPath());
         error.infos.set("ExtraReaction", m_extraReaction != nullptr);
         Notifier::shared()->notify(error);
     }
 
-    auto database = Database::databaseWithExistingPath(associatedPath);
+    auto database = Database::databaseWithExistingPath(getPath());
     WCTInnerAssert(database != nullptr);
     database->blockade();
+    markAsHandling();
     do {
-        bool succeed;
-        Time identifier;
-        std::tie(succeed, identifier) =
-            FileManager::shared()->getFileCreatedTime(associatedPath);
-        if (!succeed || identifier != m_identifier) {
+        uint32_t identifier = m_pool->getIdentifier();
+        if (identifier != m_corruptedIdentifier.load()) {
             Error error;
             error.level = Error::Level::Warning;
             error.setCode(Error::Code::Warning, "Repair");
             error.message =
                 "Skip corruption handling due to mismatch identifier.";
-            error.infos.set("Old", m_identifier.stringify());
-            error.infos.set("New", identifier.stringify());
+            error.infos.set("Old", m_corruptedIdentifier.load());
+            error.infos.set("New", identifier);
             Notifier::shared()->notify(error);
             break;
         }
@@ -118,38 +119,33 @@ void Corruption::notify()
 
     } while (false);
 
+    markAsHandled();
     database->unblockade();
-    m_corrupted.store(false);
 }
 
 bool Corruption::markAsCorrupted()
 {
-    if (m_handling.load()) {
+    if (m_handling.load() > 0 || m_corruptedIdentifier.load() != 0) {
         return false;
     }
-    if (m_corrupted.load()) {
+    uint32_t identifier = m_pool->getIdentifier();
+    if (identifier == 0) {
         return false;
     }
-    bool succeed;
-    Time identifier;
-    std::tie(succeed, identifier) =
-        FileManager::shared()->getFileCreatedTime(associatedPath);
-    if (!succeed) {
-        return false;
-    }
-    m_identifier = identifier;
-    return !m_corrupted.exchange(true);
+    return m_corruptedIdentifier.exchange(identifier) == 0;
 }
 
 void Corruption::markAsHandling()
 {
-    m_handling.store(true);
-    m_corrupted.store(false);
+    ++m_handling;
 }
 
 void Corruption::markAsHandled()
 {
-    m_handling.store(false);
+    if (--m_handling == 0) {
+        m_corruptedIdentifier.store(0);
+    }
+    WCTInnerAssert(m_handling.load() >= 0);
 }
 
 } //namespace WCDB

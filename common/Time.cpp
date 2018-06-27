@@ -54,6 +54,13 @@ std::time_t Time::seconds() const
         .count();
 }
 
+std::time_t Time::nanoseconds() const
+{
+    return std::chrono::duration_cast<std::chrono::nanoseconds>(
+               time_since_epoch())
+        .count();
+}
+
 bool Time::empty() const
 {
     return time_since_epoch().count() == 0;

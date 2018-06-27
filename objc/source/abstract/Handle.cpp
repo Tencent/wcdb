@@ -47,13 +47,7 @@ Handle::Handle(const std::string &path_)
 
 Handle::~Handle()
 {
-    if (m_handle) {
-        //disable checkpoint when deconstructing.
-        sqlite3_wal_checkpoint_handler(
-            (sqlite3 *) m_handle,
-            [](void *, int) -> int { return SQLITE_ABORT; }, nullptr);
-        close();
-    }
+    close();
 }
 
 #pragma mark - Path
@@ -109,6 +103,10 @@ void Handle::close()
 {
     finalize();
     if (m_handle) {
+        m_notification.purge();
+        //disable checkpoint when closing. If ones need a checkpoint, they should do it manually.
+        m_notification.setNotificationWhenCheckpoint(
+            "close", [](Handle *, int) -> bool { return false; }, true);
         sqlite3_close_v2((sqlite3 *) m_handle);
         m_handle = nullptr;
     }
@@ -453,20 +451,24 @@ void Handle::setNotificationWhenCommitted(
 }
 
 bool Handle::setNotificationWhenCheckpoint(
+    const std::string &name,
     const WCDB::Handle::CheckpointNotification &willCheckpoint)
 {
-    return m_notification.setNotificationWhenCheckpoint(willCheckpoint);
+    return m_notification.setNotificationWhenCheckpoint(name, willCheckpoint);
 }
 
 #pragma mark - Error
 void Handle::setError(int rc, const std::string &sql)
 {
-    m_error.setSQLiteCode(rc, getExtendedErrorCode());
+    if (rc != SQLITE_MISUSE) {
+        m_error.setSQLiteCode(rc, getExtendedErrorCode());
+    } else {
+        m_error.setSQLiteCode(rc);
+    }
     const char *message = getErrorMessage();
     if (message) {
         m_error.message = message;
     }
-    m_error.infos.set("SQL", sql);
     if (!sql.empty()) {
         m_error.infos.set("SQL", sql);
     }

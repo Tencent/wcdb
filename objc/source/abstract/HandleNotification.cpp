@@ -25,30 +25,57 @@
 
 namespace WCDB {
 
+void HandleNotification::purge()
+{
+    bool set = isTraceNotificationSet();
+    m_sqlNotifications.clear();
+    m_performanceNotifications.clear();
+    if (set) {
+        setupTraceNotification();
+    }
+    set = isCommittedNotificationSet();
+    m_commitedNotifications.clear();
+    if (set) {
+        setupCommittedNotification();
+    }
+    set = isCheckpointNotificationSet();
+    m_checkpointNotifications.clear();
+    if (set) {
+        setupCheckpointNotification();
+    }
+}
+
 #pragma mark - Trace
-int HandleNotification::onTraced(unsigned int flag, void *P, void *X)
+bool HandleNotification::isTraceNotificationSet() const
+{
+    return !m_sqlNotifications.empty() || !m_performanceNotifications.empty();
+}
+
+void HandleNotification::dispatchTraceNotification(unsigned int flag,
+                                                   void *P,
+                                                   void *X)
 {
     sqlite3_stmt *stmt = (sqlite3_stmt *) P;
     const char *sql = sqlite3_sql(stmt);
     switch (flag) {
         case SQLITE_TRACE_STMT: {
             if (sql) {
-                onSQLTraced(sql);
+                dispatchSQLTraceNotification(sql);
             }
         } break;
         case SQLITE_TRACE_PROFILE: {
             sqlite3_int64 *cost = (sqlite3_int64 *) X;
             sqlite3 *db = sqlite3_db_handle(stmt);
-            onPerformanceTraced(sql ? sql : String::empty(), *cost,
-                                !sqlite3_get_autocommit(db));
+            dispatchPerformanceTraceNotification(sql ? sql : String::empty(),
+                                                 *cost,
+                                                 !sqlite3_get_autocommit(db));
         } break;
         default:
             break;
     }
-    return SQLITE_OK;
 }
 
-void HandleNotification::setupTrace()
+void HandleNotification::setupTraceNotification()
 {
     unsigned flag = 0;
     if (!m_sqlNotifications.empty()) {
@@ -62,7 +89,8 @@ void HandleNotification::setupTrace()
                          [](unsigned int T, void *C, void *P, void *X) {
                              HandleNotification *notification =
                                  reinterpret_cast<HandleNotification *>(C);
-                             return notification->onTraced(T, P, X);
+                             notification->dispatchTraceNotification(T, P, X);
+                             return SQLITE_OK;
                          },
                          this);
     } else {
@@ -74,15 +102,19 @@ void HandleNotification::setupTrace()
 void HandleNotification::setNotificationWhenSQLTraced(
     const std::string &name, const SQLNotification &onTraced)
 {
+    bool stateBefore = isTraceNotificationSet();
     if (onTraced) {
         m_sqlNotifications[name] = onTraced;
     } else {
         m_sqlNotifications.erase(name);
     }
-    setupTrace();
+    bool stateAfter = isTraceNotificationSet();
+    if (stateBefore != stateAfter) {
+        setupTraceNotification();
+    }
 }
 
-void HandleNotification::onSQLTraced(const std::string &sql)
+void HandleNotification::dispatchSQLTraceNotification(const std::string &sql)
 {
     WCTInnerAssert(!m_sqlNotifications.empty());
     for (const auto &element : m_sqlNotifications) {
@@ -99,17 +131,20 @@ HandleNotification::Footprint::Footprint(const std::string &sql_)
 void HandleNotification::setNotificationWhenPerformanceTraced(
     const std::string &name, const PerformanceNotification &onTraced)
 {
+    bool stateBefore = isTraceNotificationSet();
     if (onTraced) {
         m_performanceNotifications[name] = onTraced;
     } else {
         m_performanceNotifications.erase(name);
     }
-    setupTrace();
+    bool stateAfter = isTraceNotificationSet();
+    if (stateAfter != stateBefore) {
+        setupTraceNotification();
+    }
 }
 
-void HandleNotification::onPerformanceTraced(const std::string &sql,
-                                             const int64_t &cost,
-                                             bool isInTransaction)
+void HandleNotification::dispatchPerformanceTraceNotification(
+    const std::string &sql, const int64_t &cost, bool isInTransaction)
 {
     if (!m_footprints.empty()) {
         auto &footprint = m_footprints.back();
@@ -135,18 +170,27 @@ void HandleNotification::onPerformanceTraced(const std::string &sql,
 void HandleNotification::setNotificationWhenCommitted(
     const std::string &name, const CommittedNotification &onCommitted)
 {
+    bool stateBefore = isCommittedNotificationSet();
     if (onCommitted) {
         m_commitedNotifications[name] = onCommitted;
     } else {
         m_commitedNotifications.erase(name);
     }
+    bool stateAfter = isCommittedNotificationSet();
+    if (stateBefore != stateAfter) {
+        setupCommittedNotification();
+    }
+}
+
+void HandleNotification::setupCommittedNotification()
+{
     if (!m_commitedNotifications.empty()) {
         sqlite3_wal_hook(
             (sqlite3 *) getRawHandle(),
             [](void *p, sqlite3 *, const char *, int frames) -> int {
                 HandleNotification *notification =
                     reinterpret_cast<HandleNotification *>(p);
-                notification->onCommitted(frames);
+                notification->dispatchCommittedNotification(frames);
                 return SQLITE_OK;
             },
             this);
@@ -155,7 +199,12 @@ void HandleNotification::setNotificationWhenCommitted(
     }
 }
 
-void HandleNotification::onCommitted(int frames)
+bool HandleNotification::isCommittedNotificationSet() const
+{
+    return !m_commitedNotifications.empty();
+}
+
+void HandleNotification::dispatchCommittedNotification(int frames)
 {
     WCTInnerAssert(!m_commitedNotifications.empty());
     for (const auto &element : m_commitedNotifications) {
@@ -164,18 +213,21 @@ void HandleNotification::onCommitted(int frames)
 }
 
 #pragma mark - Checkpoint
-bool HandleNotification::setNotificationWhenCheckpoint(
-    const CheckpointNotification &willCheckpoint)
+bool HandleNotification::isCheckpointNotificationSet() const
 {
-    m_checkpointNotification = willCheckpoint;
+    return !m_checkpointNotifications.empty();
+}
+
+bool HandleNotification::setupCheckpointNotification(bool ignorable)
+{
     int rc = SQLITE_OK;
-    if (m_checkpointNotification) {
+    if (!m_checkpointNotifications.empty()) {
         rc = sqlite3_wal_checkpoint_handler(
             (sqlite3 *) getRawHandle(),
             [](void *p, int frames) -> int {
                 HandleNotification *notification =
                     reinterpret_cast<HandleNotification *>(p);
-                if (notification->willCheckpoint(frames)) {
+                if (notification->dispatchCheckpointNotification(frames)) {
                     return SQLITE_OK;
                 }
                 return SQLITE_ABORT;
@@ -185,17 +237,52 @@ bool HandleNotification::setNotificationWhenCheckpoint(
         rc = sqlite3_wal_checkpoint_handler((sqlite3 *) getRawHandle(), nullptr,
                                             nullptr);
     }
-    if (rc == SQLITE_OK) {
+    if (rc == SQLITE_OK || ignorable) {
         return true;
     }
     setError(rc);
     return false;
 }
 
-bool HandleNotification::willCheckpoint(int frames)
+bool HandleNotification::setNotificationWhenCheckpoint(
+    const std::string &name,
+    const CheckpointNotification &willCheckpoint,
+    bool ignorable)
 {
-    WCTInnerAssert(m_checkpointNotification != nullptr);
-    return m_checkpointNotification(m_handle, frames);
+    CheckpointNotification oldNotification = nullptr;
+    auto iter = m_checkpointNotifications.find(name);
+    if (iter != m_checkpointNotifications.end()) {
+        oldNotification = iter->second;
+    }
+    bool stateBefore = isCheckpointNotificationSet();
+    if (willCheckpoint) {
+        m_checkpointNotifications[name] = willCheckpoint;
+    } else {
+        m_checkpointNotifications.erase(name);
+    }
+    bool stateAfter = isCheckpointNotificationSet();
+    if (stateBefore != stateAfter) {
+        if (!setupCheckpointNotification(ignorable)) {
+            //recover
+            if (oldNotification) {
+                m_checkpointNotifications[name] = oldNotification;
+            } else {
+                m_checkpointNotifications.erase(name);
+            }
+            return false;
+        }
+    }
+    return true;
+}
+
+bool HandleNotification::dispatchCheckpointNotification(int frames)
+{
+    WCTInnerAssert(!m_checkpointNotifications.empty());
+    bool pass = true;
+    for (const auto &element : m_checkpointNotifications) {
+        pass = element.second(m_handle, frames) && pass;
+    }
+    return pass;
 }
 
 } //namespace WCDB

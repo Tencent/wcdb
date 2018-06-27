@@ -25,8 +25,6 @@
 
 namespace WCDB {
 
-namespace Repair {
-
 class SerializeIteration {
 #pragma mark - SerializeIteration
 public:
@@ -64,6 +62,8 @@ public:
     bool putSizedString(const std::string &string);
     bool putSizedData(const Data &data);
     bool put4BytesUInt(uint32_t value);
+    bool put8BytesUInt(uint64_t value);
+    bool putString(const std::string &string);
     size_t putVarint(uint64_t value);
 };
 
@@ -130,8 +130,6 @@ public:
     bool deserialize(const std::string &path);
     virtual bool deserialize(Deserialization &deserialization) = 0;
 };
-
-} //namespace Repair
 
 } //namespace WCDB
 

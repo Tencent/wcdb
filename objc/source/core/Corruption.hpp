@@ -21,6 +21,7 @@
 #ifndef Corruption_hpp
 #define Corruption_hpp
 
+#include <WCDB/HandlePoolRelated.hpp>
 #include <WCDB/Time.hpp>
 #include <functional>
 #include <string>
@@ -29,11 +30,11 @@ namespace WCDB {
 
 class Database;
 
-class Corruption {
+class Corruption : public HandlePoolRelated {
 public:
-    Corruption(const std::string &associatedPath);
+    Corruption(HandlePool *pool);
 
-    const std::string associatedPath;
+    const std::string &getPath() const;
 
 #pragma mark - Reaction
 public:
@@ -62,9 +63,8 @@ protected:
     bool markAsCorrupted();
 
 private:
-    std::atomic<bool> m_handling;
-    std::atomic<bool> m_corrupted;
-    Time m_identifier;
+    std::atomic<int> m_handling;
+    std::atomic<uint32_t> m_corruptedIdentifier;
     ExtraReaction m_extraReaction;
 };
 

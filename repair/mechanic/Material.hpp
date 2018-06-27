@@ -31,11 +31,10 @@
 namespace WCDB {
 
 class Data;
-
-namespace Repair {
-
 class Serialization;
 class Deserialization;
+
+namespace Repair {
 
 class Material : public Serializable, public Deserializable {
 #pragma mark - Serializable

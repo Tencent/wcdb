@@ -47,7 +47,7 @@ void CorruptionNotifier::addPath(const std::string &path)
         return;
     }
     if (pool->attachment.corruption.markAsCorrupted()) {
-        std::unique_lock<std::mutex> lockGuard(m_mutex);
+        std::lock_guard<std::mutex> lockGuard(m_mutex);
         bool notify = m_paths.empty();
         m_paths.insert(path);
         if (notify) {
@@ -58,21 +58,25 @@ void CorruptionNotifier::addPath(const std::string &path)
 
 void CorruptionNotifier::loop()
 {
-    std::unique_lock<std::mutex> lockGuard(m_mutex);
     while (true) {
-        if (m_paths.empty()) {
-            m_cond.wait(lockGuard);
-            continue;
+        std::string path;
+        {
+            std::unique_lock<std::mutex> lockGuard(m_mutex);
+            if (m_paths.empty()) {
+                m_cond.wait(lockGuard);
+                continue;
+            }
+            path = std::move(*m_paths.begin());
         }
-        std::string path = std::move(*m_paths.begin());
-        m_paths.erase(m_paths.begin());
-        lockGuard.unlock();
         auto pool = HandlePools::defaultPools()->getExistingPool(path);
         if (pool == nullptr) {
             continue;
         }
         pool->attachment.corruption.notify();
-        lockGuard.lock();
+        {
+            std::lock_guard<std::mutex> lockGuard(m_mutex);
+            m_paths.erase(path);
+        }
     }
 }
 

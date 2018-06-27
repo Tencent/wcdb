@@ -22,6 +22,7 @@
 #include <WCDB/Core.h>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Path.hpp>
+#include <WCDB/Serialization.hpp>
 #include <algorithm>
 #include <map>
 #include <thread>
@@ -73,6 +74,35 @@ bool HandlePool::initialize()
         unblockade();
     }
     return true;
+}
+
+#pragma mark - Identifier
+uint32_t HandlePool::getIdentifier()
+{
+    uint32_t identifier = 0;
+    do {
+        bool succeed;
+        Time fileCreatedTime;
+        std::tie(succeed, fileCreatedTime) =
+            FileManager::shared()->getFileCreatedTime(path);
+        if (!succeed) {
+            break;
+        }
+        Serialization serialization;
+        if (!serialization.expand(sizeof(uint64_t) * 2 + path.size() + 1)) {
+            break;
+        }
+        uint64_t seconds = fileCreatedTime.seconds();
+        uint64_t nanoseconds = fileCreatedTime.nanoseconds();
+        serialization.put8BytesUInt(seconds);
+        serialization.put8BytesUInt(nanoseconds);
+        serialization.putString(path);
+        identifier = serialization.finalize().hash();
+    } while (false);
+    if (identifier == 0) {
+        assignWithSharedThreadedError();
+    }
+    return identifier;
 }
 
 #pragma mark - Basic
@@ -152,15 +182,12 @@ bool HandlePool::isBlockaded() const
     return m_sharedLock.level() == SharedLock::Level::Write;
 }
 
-void HandlePool::drain(const HandlePool::DrainedCallback &onDrained,
-                       bool forceClose)
+void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
 {
     LockGuard lockGuard(m_sharedLock);
     ConcurrentList<ConfiguredHandle>::ElementType handle;
     while ((handle = m_handles.popBack())) {
-        if (forceClose) {
-            handle->getHandle()->close();
-        }
+        handle->getHandle()->close();
         --m_aliveHandleCount;
     }
     if (onDrained) {

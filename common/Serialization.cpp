@@ -25,8 +25,6 @@
 
 namespace WCDB {
 
-namespace Repair {
-
 #pragma mark - SerializeIteration
 SerializeIteration::SerializeIteration() : m_cursor(0)
 {
@@ -168,6 +166,27 @@ bool Serialization::put4BytesUInt(uint32_t value)
     p[2] = (uint8_t)(value >> 8);
     p[3] = (uint8_t) value;
     advance(sizeof(uint32_t));
+    return true;
+}
+
+bool Serialization::put8BytesUInt(uint64_t value)
+{
+    off_t cursor = m_cursor;
+    if (!put4BytesUInt((uint32_t)(value >> 32)) ||
+        !put4BytesUInt((uint32_t) value)) {
+        seek(cursor);
+        return false;
+    }
+    return true;
+}
+
+bool Serialization::putString(const std::string &string)
+{
+    if (!expand(string.size() + 1)) {
+        return false;
+    }
+    unsigned char *p = pointee();
+    memcpy(p, string.data(), string.size() + 1);
     return true;
 }
 
@@ -644,7 +663,5 @@ bool Deserializable::deserialize(const std::string &path)
     fileHandle.close();
     return succeed;
 }
-
-} //namespace Repair
 
 } //namespace WCDB

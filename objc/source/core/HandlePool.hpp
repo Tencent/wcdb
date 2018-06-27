@@ -57,6 +57,10 @@ protected:
     InitializeNotificationCallback m_onInitializing;
     bool initialize();
 
+#pragma mark - Identifier
+public:
+    uint32_t getIdentifier();
+
 #pragma mark - Basic
 public:
     using Tag = Handle::Tag;
@@ -91,7 +95,7 @@ public:
     void unblockade();
 
     typedef std::function<void(void)> DrainedCallback;
-    void drain(const HandlePool::DrainedCallback &onDrained, bool forceClose);
+    void drain(const HandlePool::DrainedCallback &onDrained);
     bool isDrained();
 
     void purgeFreeHandles();

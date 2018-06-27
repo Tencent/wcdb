@@ -43,21 +43,7 @@ RecyclableHandlePool HandlePools::getPool(const std::string &path,
     std::shared_ptr<HandlePool> pool = nullptr;
     std::lock_guard<std::mutex> lockGuard(m_mutex);
     auto iter = m_pools.find(path);
-    bool generate = false;
-    if (iter != m_pools.end()) {
-        //check path is still sanity
-        auto pair = FileManager::shared()->fileExists(path);
-        if (!pair.first) {
-            return nullptr;
-        }
-        if (!pair.second && !iter->second.first->isDrained()) {
-            m_pools.erase(iter);
-            generate = true;
-        }
-    } else {
-        generate = true;
-    }
-    if (generate) {
+    if (iter == m_pools.end()) {
         pool = generator(path);
         if (pool == nullptr) {
             return nullptr;
