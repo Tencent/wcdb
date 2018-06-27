@@ -48,10 +48,17 @@
     return [self.class.baseDirectory stringByAppendingPathComponent:self.className];
 }
 
+- (NSString *)testname
+{
+    NSString *name = self.name;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\[\\w+ (\\w+).*\\]" options:NSRegularExpressionCaseInsensitive error:nil];
+    NSTextCheckingResult *match = [regex firstMatchInString:name options:0 range:NSMakeRange(0, [name length])];
+    return [name substringWithRange:[match rangeAtIndex:1]];
+}
+
 - (NSString *)recommendedPath
 {
-    NSString *hash = [NSString stringWithFormat:@"%lu", (unsigned long) self.className.hash];
-    return [self.recommendedDirectory stringByAppendingPathComponent:hash];
+    return [self.recommendedDirectory stringByAppendingPathComponent:self.testname];
 }
 
 - (WCTTag)recommendedTag
