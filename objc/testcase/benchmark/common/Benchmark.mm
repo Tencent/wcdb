@@ -49,6 +49,9 @@
 
 - (void)tearDownDatabase
 {
+    if (!self.database) {
+        [self setUpDatabase];
+    }
     XCTAssertTrue([self.database removeFiles]);
     [self.database finalizeDatabase];
     _database = nil;
