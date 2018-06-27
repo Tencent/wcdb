@@ -33,6 +33,26 @@
     [_database getValueOnResult:1 fromTable:WCTMaster.tableName];
 }
 
+- (void)test_is_corrupted
+{
+    NSString *tableName = self.className;
+    int count = 100;
+    XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
+
+    _database.reactionWhenCorrupted = WCTCorruptionReactionCustom;
+
+    XCTAssertTrue([self corruptWithCheckpoint:YES]);
+    [self triggerCorruptionNotifier];
+
+    [NSThread sleepForTimeInterval:3];
+
+    XCTAssertTrue([_database isCorrupted]);
+
+    XCTAssertTrue([_database removeFiles]);
+
+    XCTAssertFalse([_database isCorrupted]);
+}
+
 - (void)test_reaction_custom
 {
     NSString *tableName = self.className;
@@ -42,10 +62,11 @@
     __block BOOL hit = NO;
     _database.reactionWhenCorrupted = WCTCorruptionReactionCustom;
     NSLock *locker = [[NSLock alloc] init];
-    [_database setExtraReactionWhenCorrupted:^(WCTDatabase *database) {
+    [_database setExtraReactionWhenCorrupted:^BOOL(WCTDatabase *database) {
       [locker lock];
       hit = YES;
       [locker unlock];
+      return YES;
     }];
 
     XCTAssertTrue([self corruptWithCheckpoint:YES]);
@@ -56,6 +77,30 @@
     [locker lock];
     XCTAssertTrue(hit);
     [locker unlock];
+    XCTAssertFalse([_database isCorrupted]);
+}
+
+- (void)test_reaction_custom_handle_failed
+{
+    NSString *tableName = self.className;
+    int count = 100;
+    XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
+
+    _database.reactionWhenCorrupted = WCTCorruptionReactionCustom;
+    [_database setExtraReactionWhenCorrupted:^BOOL(WCTDatabase *database) {
+      return NO;
+    }];
+
+    XCTAssertTrue([self corruptWithCheckpoint:YES]);
+    [self triggerCorruptionNotifier];
+
+    [NSThread sleepForTimeInterval:3];
+
+    XCTAssertTrue([_database isCorrupted]);
+
+    XCTAssertTrue([_database removeFiles]);
+
+    XCTAssertFalse([_database isCorrupted]);
 }
 
 - (void)test_reaction_remove
