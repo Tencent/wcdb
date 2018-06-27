@@ -83,7 +83,7 @@
     XCTAssertGreaterThan(tableObjects.count, 0);
 
     XCTAssertTrue([_database backup]);
-    XCTAssertTrue([self corruptWithClose:YES]);
+    XCTAssertTrue([self corruptWithCheckpoint:YES]);
     XCTAssertEqual([_database retrieve:nil], 1.0);
 
     for (NSString *tableName in tableObjects.allKeys) {

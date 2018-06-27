@@ -29,6 +29,7 @@
 
 - (void)triggerCorruptionNotifier
 {
+    [_database close];
     [_database getValueOnResult:1 fromTable:WCTMaster.tableName];
 }
 
@@ -47,7 +48,7 @@
       [locker unlock];
     }];
 
-    XCTAssertTrue([self corruptWithClose:YES]);
+    XCTAssertTrue([self corruptWithCheckpoint:YES]);
     [self triggerCorruptionNotifier];
 
     [NSThread sleepForTimeInterval:3];
@@ -65,7 +66,7 @@
 
     _database.reactionWhenCorrupted = WCTCorruptionReactionRemove;
 
-    XCTAssertTrue([self corruptWithClose:YES]);
+    XCTAssertTrue([self corruptWithCheckpoint:YES]);
     [self triggerCorruptionNotifier];
 
     [NSThread sleepForTimeInterval:3];
@@ -82,7 +83,7 @@
     _database.reactionWhenCorrupted = WCTCorruptionReactionDeposit;
 
     XCTAssertTrue([_database backup]);
-    XCTAssertTrue([self corruptWithClose:YES]);
+    XCTAssertTrue([self corruptWithCheckpoint:YES]);
     [self triggerCorruptionNotifier];
 
     [NSThread sleepForTimeInterval:3];

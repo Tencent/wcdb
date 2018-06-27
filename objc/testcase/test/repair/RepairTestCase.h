@@ -31,6 +31,6 @@
 
 - (NSArray<TestCaseObject *> *)insertObjectsOfCount:(int)count from:(int)offset intoTable:(NSString *)tableName;
 
-- (BOOL)corruptWithClose:(BOOL)close;
+- (BOOL)corruptWithCheckpoint:(BOOL)checkpoint;
 
 @end

@@ -53,10 +53,12 @@
     [super tearDown];
 }
 
-- (BOOL)corruptWithClose:(BOOL)close
+- (BOOL)corruptWithCheckpoint:(BOOL)checkpoint
 {
-    if (close) {
-        [_database close];
+    if (checkpoint) {
+        if (![_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]) {
+            return NO;
+        }
     }
     DatabaseBomber *bomber = [[DatabaseBomber alloc] initWithPath:_database.path];
     return [bomber attackRootPage];
