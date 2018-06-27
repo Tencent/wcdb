@@ -72,6 +72,9 @@ void Corruption::notify()
     if (m_corruptedIdentifier.load() == 0 || m_handling.load() > 0) {
         return;
     }
+    if (m_reaction == Reaction::Custom && m_extraReaction == nullptr) {
+        return;
+    }
     {
         Error error;
         error.level = Error::Level::Notice;
@@ -87,6 +90,7 @@ void Corruption::notify()
     WCTInnerAssert(database != nullptr);
     database->blockade();
     markAsHandling();
+    bool succeed = false;
     do {
         uint32_t identifier = m_pool->getIdentifier();
         if (identifier != m_corruptedIdentifier.load()) {
@@ -98,6 +102,7 @@ void Corruption::notify()
             error.infos.set("Old", m_corruptedIdentifier.load());
             error.infos.set("New", identifier);
             Notifier::shared()->notify(error);
+            succeed = true;
             break;
         }
 
@@ -113,13 +118,15 @@ void Corruption::notify()
             default:
                 break;
         }
-        if (doExtraReaction && m_extraReaction) {
-            m_extraReaction(database);
+        if (doExtraReaction) {
+            if (m_extraReaction) {
+                succeed = m_extraReaction(database);
+            } else {
+                succeed = true;
+            }
         }
-
     } while (false);
-
-    markAsHandled();
+    markAsHandled(succeed);
     database->unblockade();
 }
 
@@ -140,12 +147,19 @@ void Corruption::markAsHandling()
     ++m_handling;
 }
 
-void Corruption::markAsHandled()
+void Corruption::markAsHandled(bool succeed)
 {
     if (--m_handling == 0) {
-        m_corruptedIdentifier.store(0);
+        if (succeed) {
+            m_corruptedIdentifier.store(0);
+        }
     }
     WCTInnerAssert(m_handling.load() >= 0);
+}
+
+bool Corruption::isCorrupted() const
+{
+    return m_corruptedIdentifier.load() != 0;
 }
 
 } //namespace WCDB

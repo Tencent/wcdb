@@ -205,7 +205,7 @@ bool Database::removeFiles()
         if (!result) {
             assignWithSharedThreadedError();
         }
-        m_pool->attachment.corruption.markAsHandled();
+        m_pool->attachment.corruption.markAsHandled(result);
     });
     return result;
 }
@@ -239,7 +239,7 @@ bool Database::moveFiles(const std::string &directory)
         if (!result) {
             assignWithSharedThreadedError();
         }
-        m_pool->attachment.corruption.markAsHandled();
+        m_pool->attachment.corruption.markAsHandled(result);
     });
     return result;
 }
@@ -258,7 +258,7 @@ bool Database::moveFilesToDirectoryWithExtraFiles(
         if (!result) {
             assignWithSharedThreadedError();
         }
-        m_pool->attachment.corruption.markAsHandled();
+        m_pool->attachment.corruption.markAsHandled(result);
     });
     return result;
 }
@@ -296,7 +296,7 @@ std::list<std::string> Database::getPaths() const
     };
 }
 
-#pragma mark - Repair Kit
+#pragma mark - Repair
 void Database::setReactionWhenCorrupted(CorruptionReaction reaction)
 {
     m_pool->attachment.corruption.setReaction(reaction);
@@ -311,6 +311,11 @@ void Database::setExtraReactionWhenCorrupted(
     const CorruptionExtraReaction &extraReaction)
 {
     m_pool->attachment.corruption.setExtraReaction(extraReaction);
+}
+
+bool Database::isCorrupted() const
+{
+    return m_pool->attachment.corruption.isCorrupted();
 }
 
 std::string Database::getFirstMaterialPath() const
@@ -382,7 +387,7 @@ bool Database::deposit()
             }
             result = true;
         } while (false);
-        m_pool->attachment.corruption.markAsHandled();
+        m_pool->attachment.corruption.markAsHandled(result);
     });
     return result;
 }
@@ -403,7 +408,7 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
         bool result = retriever.work();
         setThreadedError(retriever.getError());
         score = result ? retriever.getScore().value() : -1;
-        m_pool->attachment.corruption.markAsHandled();
+        m_pool->attachment.corruption.markAsHandled(result);
     });
     return score;
 }

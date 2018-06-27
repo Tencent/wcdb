@@ -46,16 +46,17 @@ public:
     static const char *reactionName(Reaction reaction);
     void setReaction(Reaction reaction);
     Reaction getReaction() const;
+    bool isCorrupted() const;
 
 protected:
     Reaction m_reaction;
 
 #pragma mark - Notification
 public:
-    typedef std::function<void(std::shared_ptr<Database> &)> ExtraReaction;
+    typedef std::function<bool(std::shared_ptr<Database> &)> ExtraReaction;
     void setExtraReaction(const ExtraReaction &extraReaction);
     void markAsHandling();
-    void markAsHandled();
+    void markAsHandled(bool succeed);
 
 protected:
     friend class CorruptionNotifier;

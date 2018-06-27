@@ -56,7 +56,7 @@
 #import <WCDB/WCTDatabase+File.h>
 #import <WCDB/WCTDatabase+Handle.h>
 #import <WCDB/WCTDatabase+Memory.h>
-#import <WCDB/WCTDatabase+RepairKit.h>
+#import <WCDB/WCTDatabase+Repair.h>
 #import <WCDB/WCTDatabase+Trace.h>
 #import <WCDB/WCTDatabase+Transaction.h>
 

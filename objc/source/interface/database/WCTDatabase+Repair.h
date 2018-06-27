@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef BOOL (^WCTBackupFilterBlock)(NSString *);
 typedef BOOL (^WCTRetrieveProgressUpdateBlock)(double, double);
-typedef void (^WCTCorruptionExtraReactionBlock)(WCTDatabase *);
+typedef BOOL (^WCTCorruptionExtraReactionBlock)(WCTDatabase *);
 
 typedef NS_ENUM(NSInteger, WCTCorruptionReaction) {
     WCTCorruptionReactionCustom = 0,
@@ -32,25 +32,27 @@ typedef NS_ENUM(NSInteger, WCTCorruptionReaction) {
     WCTCorruptionReactionDeposit = 2,
 };
 
-@interface WCTDatabase (RepairKit)
+@interface WCTDatabase (Repair)
 
 @property(nonatomic, assign) WCTCorruptionReaction reactionWhenCorrupted;
 
+- (void)setExtraReactionWhenCorrupted:(WCTCorruptionExtraReactionBlock)onCorrupted;
+
+- (BOOL)isCorrupted;
+
 - (void)setAutoBackup:(BOOL)flag;
 
-- (void)setExtraReactionWhenCorrupted:(WCTCorruptionExtraReactionBlock)onCorrupted;
+- (BOOL)backup;
 
 - (void)filterBackup:(WCTBackupFilterBlock)tableShouldBeBackedUp;
 
 - (BOOL)deposit;
 
-- (BOOL)backup;
-
-- (double)retrieve:(nullable WCTRetrieveProgressUpdateBlock)onProgressUpdate;
-
 - (BOOL)removeDeposit;
 
 - (BOOL)canRetrieve;
+
+- (double)retrieve:(nullable WCTRetrieveProgressUpdateBlock)onProgressUpdate;
 
 @end
 

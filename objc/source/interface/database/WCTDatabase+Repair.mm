@@ -22,7 +22,7 @@
 #import <WCDB/Interface.h>
 #import <WCDB/WCTCore+Private.h>
 
-@implementation WCTDatabase (RepairKit)
+@implementation WCTDatabase (Repair)
 
 static_assert((int) WCTCorruptionReactionCustom == (int) WCDB::Database::CorruptionReaction::Custom, "");
 static_assert((int) WCTCorruptionReactionRemove == (int) WCDB::Database::CorruptionReaction::Remove, "");
@@ -42,8 +42,8 @@ static_assert((int) WCTCorruptionReactionDeposit == (int) WCDB::Database::Corrup
 {
     WCDB::Database::CorruptionExtraReaction extraReaction = nullptr;
     if (onCorrupted) {
-        extraReaction = [onCorrupted](std::shared_ptr<WCDB::Database> &database) {
-            onCorrupted([[WCTDatabase alloc] initWithDatabase:database]);
+        extraReaction = [onCorrupted](std::shared_ptr<WCDB::Database> &database) -> bool {
+            return onCorrupted([[WCTDatabase alloc] initWithDatabase:database]);
         };
     }
     _database->setExtraReactionWhenCorrupted(extraReaction);
@@ -94,6 +94,11 @@ static_assert((int) WCTCorruptionReactionDeposit == (int) WCDB::Database::Corrup
 - (BOOL)canRetrieve
 {
     return _database->canRetrieve();
+}
+
+- (BOOL)isCorrupted
+{
+    return _database->isCorrupted();
 }
 
 @end

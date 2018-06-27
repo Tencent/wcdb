@@ -101,7 +101,7 @@ public:
     bool removeFiles();
     std::pair<bool, size_t> getFilesSize();
 
-#pragma mark - Repair Kit
+#pragma mark - Repair
 public:
     typedef Corruption::ExtraReaction CorruptionExtraReaction;
     typedef Corruption::Reaction CorruptionReaction;
@@ -109,6 +109,7 @@ public:
     CorruptionReaction getReactionWhenCorrupted() const;
     void
     setExtraReactionWhenCorrupted(const CorruptionExtraReaction &notification);
+    bool isCorrupted() const;
 
     std::string getFirstMaterialPath() const;
     std::string getLastMaterialPath() const;
@@ -118,13 +119,15 @@ public:
     void autoBackup(bool flag = true);
     void filterBackup(const BackupFilter &tableShouldBeBackedup);
     bool backup(int maxWalFrame = std::numeric_limits<int>::max());
+    bool removeMaterials();
+
     bool deposit();
+    bool removeDeposit();
+
     typedef Repair::FactoryRetriever::ProgressUpdateCallback
         RetrieveProgressCallback;
     double retrieve(const RetrieveProgressCallback &onProgressUpdate);
     bool canRetrieve() const;
-    bool removeDeposit();
-    bool removeMaterials();
 
 protected:
     bool retrieveRenewed();
