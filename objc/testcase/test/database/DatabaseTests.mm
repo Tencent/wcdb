@@ -141,20 +141,6 @@
     XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:longPath]);
 }
 
-- (void)test_remove_and_recreated
-{
-    NSString *tableName = NSStringFromSelector(_cmd);
-    XCTAssertTrue([_database createTableAndIndexes:tableName withClass:TestCaseObject.class]);
-    XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:_database.path]);
-
-    //remove whole directory
-    XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:[_database.path stringByDeletingLastPathComponent] error:nil]);
-
-    _database = [[WCTDatabase alloc] initWithPath:_database.path];
-    XCTAssertTrue([_database createTableAndIndexes:tableName withClass:TestCaseObject.class]);
-    XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:_database.path]);
-}
-
 - (void)test_close
 {
     NSString *tableName = NSStringFromSelector(_cmd);
