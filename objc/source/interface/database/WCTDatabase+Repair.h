@@ -23,7 +23,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef BOOL (^WCTBackupFilterBlock)(NSString *);
-typedef BOOL (^WCTRetrieveProgressUpdateBlock)(double, double);
+typedef void (^WCTRetrieveProgressUpdateBlock)(double, double);
 typedef BOOL (^WCTCorruptionExtraReactionBlock)(WCTDatabase *);
 
 typedef NS_ENUM(NSInteger, WCTCorruptionReaction) {
