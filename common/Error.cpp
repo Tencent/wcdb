@@ -155,29 +155,30 @@ bool Error::isCorruption() const
 }
 
 #pragma mark - Info
-void Error::Infos::set(const std::string &key, int64_t value)
-{
-    m_ints[key] = value;
-}
-
 void Error::Infos::set(const std::string &key, const std::string &value)
 {
     m_strings[key] = value;
 }
 
-const std::map<std::string, int64_t> &Error::Infos::getIntInfos() const
+const std::map<std::string, int64_t> &Error::Infos::getIntegers() const
 {
-    return m_ints;
+    return m_integers;
 }
 
-const std::map<std::string, std::string> &Error::Infos::getStringInfos() const
+const std::map<std::string, std::string> &Error::Infos::getStrings() const
 {
     return m_strings;
 }
 
+const std::map<std::string, double> &Error::Infos::getDoubles() const
+{
+    return m_doubles;
+}
+
 void Error::Infos::clear()
 {
-    m_ints.clear();
+    m_integers.clear();
+    m_doubles.clear();
     m_strings.clear();
 }
 

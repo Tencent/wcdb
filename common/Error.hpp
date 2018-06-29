@@ -184,16 +184,29 @@ public:
 
     class Infos {
     public:
-        void set(const std::string &key, int64_t value);
+        template <typename T>
+        typename std::enable_if<std::is_integral<T>::value, void>::type
+        set(const std::string &key, const T &value)
+        {
+            m_integers[key] = (int64_t) value;
+        }
+        template <typename T>
+        typename std::enable_if<std::is_floating_point<T>::value, void>::type
+        set(const std::string &key, const T &value)
+        {
+            m_doubles[key] = (double) value;
+        }
         void set(const std::string &key, const std::string &value);
 
-        const std::map<std::string, int64_t> &getIntInfos() const;
-        const std::map<std::string, std::string> &getStringInfos() const;
+        const std::map<std::string, int64_t> &getIntegers() const;
+        const std::map<std::string, std::string> &getStrings() const;
+        const std::map<std::string, double> &getDoubles() const;
 
         void clear();
 
     protected:
-        std::map<std::string, int64_t> m_ints;
+        std::map<std::string, int64_t> m_integers;
+        std::map<std::string, double> m_doubles;
         std::map<std::string, std::string> m_strings;
     };
     Infos infos;

@@ -111,8 +111,7 @@ double SteadyClock::seconds() const
     std::time_t nanoseconds =
         std::chrono::duration_cast<std::chrono::nanoseconds>(time_since_epoch())
             .count();
-    printf("nanoseconds %llu \n");
-    return (double) seconds + (double) nanoseconds / 10E9;
+    return (double) seconds + (double) nanoseconds / 1E9;
 }
 
 } //namespace WCDB

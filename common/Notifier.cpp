@@ -46,10 +46,13 @@ void Notifier::logger(const Error &error)
         }
         stream << "]";
 
-        for (const auto &info : error.infos.getIntInfos()) {
+        for (const auto &info : error.infos.getIntegers()) {
             stream << ", " << info.first << ": " << info.second;
         }
-        for (const auto &info : error.infos.getStringInfos()) {
+        for (const auto &info : error.infos.getStrings()) {
+            stream << ", " << info.first << ": " << info.second;
+        }
+        for (const auto &info : error.infos.getDoubles()) {
             stream << ", " << info.first << ": " << info.second;
         }
         stream << std::endl;
@@ -111,7 +114,7 @@ void Notifier::onCorrupted(const std::string &path) const
 void Notifier::notify(const Error &error) const
 {
     if (error.isCorruption()) {
-        const auto &infos = error.infos.getStringInfos();
+        const auto &infos = error.infos.getStrings();
         auto iter = infos.find("Path");
         if (iter != infos.end()) {
             onCorrupted(iter->second);

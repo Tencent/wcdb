@@ -35,11 +35,14 @@ WCTErrorKey const WCTErrorKeySource = @"Source";
 - (instancetype)initWithError:(const WCDB::Error &)error
 {
     NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
-    for (const auto &info : error.infos.getIntInfos()) {
-        [userInfo setObject:@(info.second) forKey:[NSString stringWithCppString:info.first]];
+    for (const auto &info : error.infos.getIntegers()) {
+        [userInfo setObject:[NSNumber numberWithLongLong:info.second] forKey:[NSString stringWithCppString:info.first]];
     }
-    for (const auto &info : error.infos.getStringInfos()) {
+    for (const auto &info : error.infos.getStrings()) {
         [userInfo setObject:[NSString stringWithCppString:info.second] forKey:[NSString stringWithCppString:info.first]];
+    }
+    for (const auto &info : error.infos.getDoubles()) {
+        [userInfo setObject:[NSNumber numberWithDouble:info.second] forKey:[NSString stringWithCppString:info.first]];
     }
 
     if (self = [super initWithDomain:@"WCDB"
@@ -74,16 +77,13 @@ WCTErrorKey const WCTErrorKeySource = @"Source";
     return nil;
 }
 
-- (NSInteger)integerForKey:(WCTErrorKey)key
+- (NSNumber *)numberForKey:(WCTErrorKey)key
 {
     id value = [self.userInfo objectForKey:key];
     if (value && [value isKindOfClass:NSNumber.class]) {
-        return ((NSNumber *) value).integerValue;
+        return value;
     }
-    if ([key isEqualToString:WCTErrorKeyTag]) {
-        return WCTInvalidTag;
-    }
-    return 0;
+    return nil;
 }
 
 - (NSString *)description
@@ -113,7 +113,7 @@ WCTErrorKey const WCTErrorKeySource = @"Source";
 
 - (WCTTag)tag
 {
-    return (WCTTag) [self integerForKey:WCTErrorKeyTag];
+    return (WCTTag) [self numberForKey:WCTErrorKeyTag].intValue;
 }
 
 @end
@@ -129,9 +129,9 @@ WCTErrorKey const WCTErrorKeySource = @"Source";
 
 @implementation WCTError (ExtendedCode)
 
-- (NSInteger)extendedCode
+- (int)extendedCode
 {
-    return (NSInteger) [self integerForKey:WCTErrorKeyExtendedCode];
+    return (int) [self numberForKey:WCTErrorKeyExtendedCode].intValue;
 }
 
 @end

@@ -36,7 +36,9 @@ Fraction::Fraction(int64_t value) : m_numerator(value), m_denominator(1)
 Fraction::Fraction(int64_t numerator, int64_t denominator)
     : m_numerator(numerator), m_denominator(denominator)
 {
-    WCTAssert(denominator != 0, "Denominator can't be 0.");
+    WCTRemedialAssert(denominator != 0, "Denominator can't be 0.",
+                      m_numerator = 0;
+                      m_denominator = 1;);
 }
 
 int64_t Fraction::euclidean(int64_t a, int64_t b)

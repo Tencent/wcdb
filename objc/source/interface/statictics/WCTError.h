@@ -99,7 +99,7 @@ typedef NS_ENUM(NSUInteger, WCTErrorCode) {
 
 @interface WCTError (ExtendedCode)
 
-- (NSInteger)extendedCode;
+- (int)extendedCode;
 
 @end
 

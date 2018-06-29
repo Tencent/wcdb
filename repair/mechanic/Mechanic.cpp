@@ -83,9 +83,7 @@ bool Mechanic::work()
         pageCount += element.second.verifiedPagenos.size();
     }
     WCTInnerAssert(pageCount > 0);
-    setPageWeight(pageCount > 0
-                      ? Fraction(1, pageCount + m_pager.getDisposedWalPage())
-                      : 0);
+    setPageWeight(Fraction(1, pageCount + m_pager.getDisposedWalPage()));
 
     if (markAsAssembling()) {
         for (const auto &element : m_material->contents) {

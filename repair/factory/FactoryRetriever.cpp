@@ -29,6 +29,7 @@
 #include <WCDB/Mechanic.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/ThreadedErrors.hpp>
+#include <numeric>
 
 namespace WCDB {
 
@@ -39,6 +40,7 @@ FactoryRetriever::FactoryRetriever(Factory &factory_)
     , databaseFileName(factory.getDatabaseName())
     , database(Path::addComponent(factory.getRestoreDirectory(),
                                   factory.getDatabaseName()))
+    , m_totalSize(0)
 {
 }
 
@@ -75,10 +77,11 @@ bool FactoryRetriever::work()
             break;
         }
 
-        if (!calculateWeights(workshopDirectories)) {
+        if (!calculateSizes(workshopDirectories)) {
             break;
         }
 
+        SteadyClock before = SteadyClock::now();
         //2. Restore from current db. It must be succeed without even non-critical errors.
         if (!restore(factory.database) ||
             getErrorSeverity() >= Severity::Normal) {
@@ -98,9 +101,10 @@ bool FactoryRetriever::work()
             break;
         }
 
-        summaryReport();
+        SteadyClock after = SteadyClock::now();
+        reportSummary(after - before);
 
-        //4. Do a Backup on restore db.
+        //4. Do a backup on restore db.
         FactoryBackup backup(factory);
         backup.setLocker(m_locker);
         if (!backup.work(database)) {
@@ -178,7 +182,9 @@ bool FactoryRetriever::restore(const std::string &database)
             mechanic.setProgressCallback(
                 std::bind(&FactoryRetriever::increaseProgress, this, database,
                           true, std::placeholders::_1, std::placeholders::_2));
+            SteadyClock before = SteadyClock::now();
             bool result = mechanic.work();
+            SteadyClock after = SteadyClock::now();
             if (!result) {
                 WCTInnerAssert(isErrorCritial());
                 setCriticalError(mechanic.getError());
@@ -187,7 +193,8 @@ bool FactoryRetriever::restore(const std::string &database)
                 tryUpgradeError(mechanic.getError());
             }
             score = mechanic.getScore();
-            report(mechanic.getScore(), database, materialTime);
+            reportMechanic(mechanic.getScore(), database, after - before,
+                           materialTime);
         }
     } else {
         Error warning;
@@ -203,8 +210,10 @@ bool FactoryRetriever::restore(const std::string &database)
     fullCrawler.setProgressCallback(
         std::bind(&FactoryRetriever::increaseProgress, this, database,
                   useMaterial, std::placeholders::_1, std::placeholders::_2));
+    SteadyClock before = SteadyClock::now();
     if (fullCrawler.work()) {
-        report(fullCrawler.getScore(), database);
+        SteadyClock after = SteadyClock::now();
+        reportFullCrawler(fullCrawler.getScore(), database, after - before);
         score = std::max(score, fullCrawler.getScore());
     } else if (!useMaterial) {
         WCTInnerAssert(isErrorCritial());
@@ -217,42 +226,71 @@ bool FactoryRetriever::restore(const std::string &database)
     return true;
 }
 
-void FactoryRetriever::report(const Fraction &score,
-                              const std::string &path,
-                              Time material)
+#pragma mark - Report
+void FactoryRetriever::reportMechanic(const Fraction &score,
+                                      const std::string &path,
+                                      const SteadyClock &cost,
+                                      const Time &material)
 {
     Error error;
     error.setCode(Error::Code::Notice, "Repair");
     error.level = Error::Level::Notice;
     error.message = "Retriever Report.";
     error.infos.set("Path", path);
-    error.infos.set("Score", score.value() * 10000);
-    if (!material.empty()) {
-        error.infos.set("Material", material.stringify());
-    }
-    error.infos.set("Weight", m_weights[path].value() * 10000);
+    error.infos.set("Score", score.value());
+    error.infos.set("Material", material.stringify());
+    finishReportOfPerformance(error, path, cost);
+    error.infos.set("Weight", getWeight(path).value());
     Notifier::shared()->notify(error);
 }
 
-void FactoryRetriever::summaryReport()
+void FactoryRetriever::reportFullCrawler(const Fraction &score,
+                                         const std::string &path,
+                                         const SteadyClock &cost)
+{
+    Error error;
+    error.setCode(Error::Code::Notice, "Repair");
+    error.level = Error::Level::Notice;
+    error.message = "Retriever Report.";
+    error.infos.set("Path", path);
+    error.infos.set("Score", score.value());
+    finishReportOfPerformance(error, path, cost);
+    error.infos.set("Weight", getWeight(path).value());
+    Notifier::shared()->notify(error);
+}
+
+void FactoryRetriever::reportSummary(const SteadyClock &cost)
 {
     Error error;
     error.setCode(Error::Code::Notice, "Repair");
     error.level = Error::Level::Notice;
     error.message = "Retriever Summary Report.";
     error.infos.set("Path", database);
-    error.infos.set("Score", getScore().value() * 10000);
+    error.infos.set("Cost", cost.seconds());
+    error.infos.set("Score", getScore().value());
     Notifier::shared()->notify(error);
 }
 
+void FactoryRetriever::finishReportOfPerformance(Error &error,
+                                                 const std::string &database,
+                                                 const SteadyClock &cost)
+{
+    double seconds = cost.seconds();
+    assert(m_sizes.find(database) != m_sizes.end());
+    size_t size = m_sizes[database];
+    double sizeInMB = (double) size / 1024 / 1024;
+    double speed = sizeInMB > 0 ? seconds / sizeInMB : 0;
+    error.infos.set("Cost", seconds);
+    error.infos.set("Size", sizeInMB);
+    error.infos.set("Speed", speed);
+}
+
 #pragma mark - Score and Progress
-bool FactoryRetriever::calculateWeights(
+bool FactoryRetriever::calculateSizes(
     const std::list<std::string> &workshopDirectories)
 {
-    size_t totalSize = 0;
-
     //Origin database
-    if (!calculateWeight(factory.database, totalSize)) {
+    if (!calculateSize(factory.database)) {
         return false;
     }
 
@@ -260,20 +298,21 @@ bool FactoryRetriever::calculateWeights(
     for (const auto &workshopDirectory : workshopDirectories) {
         std::string database =
             Path::addComponent(workshopDirectory, databaseFileName);
-        if (!calculateWeight(database, totalSize)) {
+        if (!calculateSize(database)) {
             return false;
         }
     }
 
-    //Resolve to percentage
-    for (auto &element : m_weights) {
-        element.second = element.second / (int) totalSize;
-    }
+    m_totalSize =
+        std::accumulate(m_sizes.begin(), m_sizes.end(), 0,
+                        [](const size_t previous,
+                           const std::pair<std::string, size_t> &element) {
+                            return previous + element.second;
+                        });
     return true;
 }
 
-bool FactoryRetriever::calculateWeight(const std::string &database,
-                                       size_t &totalSize)
+bool FactoryRetriever::calculateSize(const std::string &database)
 {
     bool succeed;
     size_t fileSize;
@@ -283,9 +322,14 @@ bool FactoryRetriever::calculateWeight(const std::string &database,
         setCriticalErrorWithSharedThreadedError();
         return false;
     }
-    totalSize += fileSize;
-    m_weights[database] = (int) fileSize;
+    m_sizes[database] = fileSize;
     return true;
+}
+
+Fraction FactoryRetriever::getWeight(const std::string &database)
+{
+    assert(m_sizes.find(database) != m_sizes.end());
+    return Fraction(m_sizes[database], m_totalSize);
 }
 
 void FactoryRetriever::increaseProgress(const std::string &database,
@@ -296,13 +340,13 @@ void FactoryRetriever::increaseProgress(const std::string &database,
     if (useMaterial) {
         increment *= 0.5;
     }
-    Progress::increaseProgress(m_weights[database].value() * increment);
+    Progress::increaseProgress(getWeight(database).value() * increment);
 }
 
 void FactoryRetriever::increaseScore(const std::string &database,
                                      const Fraction &increment)
 {
-    Scoreable::increaseScore(increment * m_weights[database]);
+    Scoreable::increaseScore(getWeight(database) * increment);
 }
 
 #pragma mark - Error

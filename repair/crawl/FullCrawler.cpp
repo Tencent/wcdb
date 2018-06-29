@@ -64,7 +64,7 @@ bool FullCrawler::work()
             ++leafTablePageCount;
         }
     }
-    setPageWeight(leafTablePageCount > 0 ? Fraction(1, leafTablePageCount) : 0);
+    setPageWeight(Fraction(1, leafTablePageCount));
 
     if (markAsAssembling()) {
         m_masterCrawler.work(this);

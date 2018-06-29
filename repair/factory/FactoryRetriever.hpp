@@ -49,23 +49,37 @@ public:
     bool work();
 
 protected:
-    void report(const Fraction &score,
-                const std::string &path,
-                Time material = Time());
-    void summaryReport();
     bool restore(const std::string &database);
     const std::string databaseFileName;
 
+#pragma mark - Report
+protected:
+    void reportMechanic(const Fraction &score,
+                        const std::string &path,
+                        const SteadyClock &cost,
+                        const Time &material);
+    void reportFullCrawler(const Fraction &score,
+                           const std::string &path,
+                           const SteadyClock &cost);
+    void reportSummary(const SteadyClock &cost);
+
+    void finishReportOfPerformance(Error &error,
+                                   const std::string &database,
+                                   const SteadyClock &cost);
+
 #pragma mark - Evaluation and Progress
 protected:
-    bool calculateWeights(const std::list<std::string> &workshopDirectories);
-    bool calculateWeight(const std::string &database, size_t &totalSize);
+    bool calculateSizes(const std::list<std::string> &workshopDirectories);
+    bool calculateSize(const std::string &database);
     void increaseProgress(const std::string &database,
                           bool useMaterial,
                           double progress,
                           double increment);
 
-    std::map<std::string, Fraction> m_weights;
+    Fraction getWeight(const std::string &database);
+
+    std::map<std::string, size_t> m_sizes;
+    size_t m_totalSize;
     void increaseScore(const std::string &database, const Fraction &increment);
 
 #pragma mark - Error
