@@ -239,4 +239,18 @@
     XCTAssertEqual([fileManager attributesOfItemAtPath:walPath error:nil].fileSize, 0);
 }
 
+- (void)test_with_reserved_table
+{
+    XCTAssertTrue([_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::automaticIndex()).to(true)]);
+
+    WCDB::Column column("i");
+    XCTAssertTrue([_database execute:WCDB::StatementCreateTable().createTable("tableWithAutoIndex").define(WCDB::ColumnDef(column)).addTableConstraint(WCDB::TableConstraint().withUnique(column))]);
+
+    WCTMaster *master = [_database getObjectOfClass:WCTMaster.class fromTable:WCTMaster.tableName where:WCTMaster.name.like("sqlite\\_autoindex\\_%").escape("\\")];
+    XCTAssertNotNil(master);
+    XCTAssertNil(master.sql);
+
+    XCTAssertTrue([_database backup]);
+}
+
 @end
