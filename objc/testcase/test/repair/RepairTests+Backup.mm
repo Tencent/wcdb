@@ -27,6 +27,15 @@
 
 @implementation RepairTests_Backup
 
+- (void)test_backup
+{
+    NSString *tableName = self.className;
+    int count = 1000;
+    XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
+
+    XCTAssertTrue([_database backup]);
+}
+
 - (void)test_dual_backup
 {
     NSString *tableName = self.className;
