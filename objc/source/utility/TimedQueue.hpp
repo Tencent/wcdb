@@ -105,7 +105,7 @@ public:
             }
             std::pair<Key, Element> min = *std::min_element(
                 m_map.begin(), m_map.end(), &TimedQueue::compare);
-            SteadyClock now = std::chrono::steady_clock::now();
+            SteadyClock now = SteadyClock::now();
             if (now < min.second.expired) {
                 m_cond.wait_for(lockGuard, min.second.expired - now);
                 continue;
