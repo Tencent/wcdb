@@ -279,7 +279,7 @@ void FactoryRetriever::finishReportOfPerformance(Error &error,
     assert(m_sizes.find(database) != m_sizes.end());
     size_t size = m_sizes[database];
     double sizeInMB = (double) size / 1024 / 1024;
-    double speed = sizeInMB > 0 ? seconds / sizeInMB : 0;
+    double speed = sizeInMB > 0 ? sizeInMB / seconds : 0;
     error.infos.set("Cost", seconds);
     error.infos.set("Size", sizeInMB);
     error.infos.set("Speed", speed);
