@@ -44,7 +44,24 @@ public:
     std::string stringify() const;
 };
 
-typedef std::chrono::steady_clock::time_point SteadyClock;
+class SteadyClock : public std::chrono::steady_clock::time_point {
+public:
+    using Super = std::chrono::steady_clock::time_point;
+    using Super::time_point;
+    SteadyClock(const Super &super);
+    SteadyClock(Super &&super);
+
+    template <typename T, typename U>
+    SteadyClock(const std::chrono::duration<T, U> &duration)
+        : Super(std::chrono::duration_cast<std::chrono::steady_clock::duration>(
+              duration))
+    {
+    }
+
+    static SteadyClock now();
+
+    double seconds() const;
+};
 
 } //namespace WCDB
 

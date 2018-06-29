@@ -79,7 +79,7 @@ std::string Time::stringify() const
         setThreadedError(std::move(error));
         return String::empty();
     }
-    size_t nanoseconds =
+    std::time_t nanoseconds =
         std::chrono::duration_cast<std::chrono::nanoseconds>(time_since_epoch())
             .count();
     while (nanoseconds != 0 && nanoseconds % 10 == 0) {
@@ -88,6 +88,31 @@ std::string Time::stringify() const
     std::ostringstream stream;
     stream << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S") << "." << nanoseconds;
     return stream.str();
+}
+
+SteadyClock::SteadyClock(const Super &super) : Super(super)
+{
+}
+
+SteadyClock::SteadyClock(Super &&super) : Super(std::move(super))
+{
+}
+
+SteadyClock SteadyClock::now()
+{
+    return std::chrono::steady_clock::now();
+}
+
+double SteadyClock::seconds() const
+{
+    std::time_t seconds =
+        std::chrono::duration_cast<std::chrono::seconds>(time_since_epoch())
+            .count();
+    std::time_t nanoseconds =
+        std::chrono::duration_cast<std::chrono::nanoseconds>(time_since_epoch())
+            .count();
+    printf("nanoseconds %llu \n");
+    return (double) seconds + (double) nanoseconds / 10E9;
 }
 
 } //namespace WCDB
