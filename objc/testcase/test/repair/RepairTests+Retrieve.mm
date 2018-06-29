@@ -49,7 +49,7 @@
     XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:factoryPath]);
 
     __block double checking = 0;
-    XCTAssertEqual([_database retrieve:^BOOL(double progress, double increment) {
+    XCTAssertEqual([_database retrieve:^void(double progress, double increment) {
                      XCTAssertGreaterThan(increment, 0);
                      XCTAssertGreaterThan(progress, checking);
                      XCTAssertEqual(progress - checking, increment);
@@ -104,12 +104,13 @@
 
     XCTAssertTrue([self corruptWithCheckpoint:YES]);
 
-    XCTAssertTrue([_database deposit]);
-
     XCTAssertEqual([_database retrieve:nil], -1);
 
     NSArray<TestCaseObject *> *retrieved = [_database getObjectsOfClass:TestCaseObject.class fromTable:tableName orderBy:TestCaseObject.variable1];
     XCTAssertNil(retrieved);
+
+    NSString *factoryDirectory = [_database.path stringByAppendingString:@".factory"];
+    XCTAssertFalse([self.fileManager fileExistsAtPath:factoryDirectory]);
 }
 
 #pragma mark - With Backup

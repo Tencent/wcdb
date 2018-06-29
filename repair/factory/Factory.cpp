@@ -135,6 +135,30 @@ FactoryRenewer Factory::renewer()
 }
 
 #pragma mark - Helper
+bool Factory::removeDirectoryIfEmpty() const
+{
+    FileManager *fileManager = FileManager::shared();
+    bool canRemove = true;
+    const std::string restoreDirectory = getRestoreDirectory();
+    bool succeed = fileManager->enumerateDirectory(
+        directory,
+        [&canRemove, &restoreDirectory](const std::string &subpath,
+                                        bool) -> bool {
+            if (subpath == restoreDirectory) {
+                return true;
+            }
+            canRemove = false;
+            return false;
+        });
+    if (!succeed) {
+        return false;
+    }
+    if (canRemove) {
+        return fileManager->removeItem(directory);
+    }
+    return true;
+}
+
 std::string Factory::firstMaterialPathForDatabase(const std::string &database)
 {
     return Path::addExtention(database, "-first.material");
