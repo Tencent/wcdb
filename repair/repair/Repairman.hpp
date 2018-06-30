@@ -27,6 +27,7 @@
 #include <WCDB/Progress.hpp>
 #include <WCDB/Scoreable.hpp>
 #include <WCDB/UpgradeableErrorProne.hpp>
+#include <list>
 
 namespace WCDB {
 
@@ -68,6 +69,7 @@ protected:
     bool assembleTable(const std::string &tableName, const std::string &sql);
     bool assembleCell(const Cell &cell);
     bool assembleSequence(const std::string &tableName, int64_t sequence);
+    void assembleAssociatedSQLs(const std::list<std::string> &sqls);
 
 protected:
     bool towardMilestone(int mile);

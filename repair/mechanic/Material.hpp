@@ -89,6 +89,7 @@ public:
     public:
         Content();
         std::string sql;
+        std::list<std::string> associatedSQLs;
         int64_t sequence;
         std::map<uint32_t, uint32_t> verifiedPagenos;
 #pragma mark - Serializable

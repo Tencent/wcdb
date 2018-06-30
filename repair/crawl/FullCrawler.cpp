@@ -25,6 +25,7 @@
 #include <WCDB/Page.hpp>
 #include <WCDB/Sequence.hpp>
 #include <WCDB/SequenceCrawler.hpp>
+#include <WCDB/String.hpp>
 
 namespace WCDB {
 
@@ -67,6 +68,9 @@ bool FullCrawler::work()
 
     if (markAsAssembling()) {
         m_masterCrawler.work(this);
+        for (const auto &element : m_associatedSQLs) {
+            assembleAssociatedSQLs(element.second);
+        }
         markAsAssembled();
     }
 
@@ -107,28 +111,31 @@ void FullCrawler::onMasterPageCrawled(const Page &page)
     markPageAsCounted(page);
 }
 
-void FullCrawler::onMasterCellCrawled(const Cell &cell, const Master *master)
+void FullCrawler::onMasterCellCrawled(const Cell &cell, const Master &master)
 {
     if (isErrorCritial()) {
         return;
     }
     markCellAsCounted(cell);
-    if (master == nullptr) {
-        //skip index/view/trigger
+    if (master.name == Sequence::tableName()) {
+        WCTInnerAssert(String::isCaseInsensiveEqual(master.type, "table"));
+        WCTInnerAssert(
+            String::isCaseInsensiveEqual(master.tableName, master.name));
+        m_sequenceCrawler.work(master.rootpage, this);
+    } else if (Master::isReservedTableName(master.name) ||
+               Master::isReservedTableName(master.tableName)) {
+        //Skip sqlite reserved table
         return;
-    }
-    if (master->tableName == Sequence::tableName()) {
-        m_sequenceCrawler.work(master->rootpage, this);
-    } else if (Master::isReservedTableName(master->tableName)) {
-        Error error;
-        error.level = Error::Level::Notice;
-        error.setCode(Error::Code::Notice, "Repair");
-        error.message = "Filter reserved table when retrieving.";
-        error.infos.set("Table", master->tableName);
-        Notifier::shared()->notify(error);
-        return;
-    } else if (assembleTable(master->tableName, master->sql)) {
-        crawl(master->rootpage);
+    } else {
+        if (String::isCaseInsensiveEqual(master.type, "table")) {
+            WCTInnerAssert(
+                String::isCaseInsensiveEqual(master.tableName, master.name));
+            if (assembleTable(master.name, master.sql)) {
+                crawl(master.rootpage);
+            }
+        } else {
+            m_associatedSQLs[master.tableName].push_back(master.sql);
+        }
     }
 }
 

@@ -81,7 +81,9 @@ bool Mechanic::work()
     for (const auto &element : m_material->contents) {
         pageCount += element.second.verifiedPagenos.size();
     }
-    WCTInnerAssert(pageCount > 0);
+    if (pageCount == 0) {
+        return exit(true);
+    }
     setPageWeight(Fraction(1, pageCount + m_pager.getDisposedWalPage()));
 
     if (markAsAssembling()) {
@@ -93,6 +95,7 @@ bool Mechanic::work()
                 !assembleSequence(element.first, element.second.sequence)) {
                 continue;
             }
+            assembleAssociatedSQLs(element.second.associatedSQLs);
             for (const auto &element : element.second.verifiedPagenos) {
                 if (isErrorCritial()) {
                     break;

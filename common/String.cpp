@@ -36,6 +36,20 @@ bool CaseInsensiveComparator::operator()(const std::string &lhs,
     return strcasecmp(lhs.c_str(), rhs.c_str()) < 0;
 }
 
+bool isCaseInsensiveEqual(const std::string &lhs, const std::string &rhs)
+{
+    return strcasecmp(lhs.c_str(), rhs.c_str()) == 0;
+}
+
+bool hasCaseInsensivePrefix(const std::string &origin,
+                            const std::string &target)
+{
+    if (origin.size() < target.size()) {
+        return false;
+    }
+    return strncasecmp(origin.c_str(), target.c_str(), target.size()) == 0;
+}
+
 CopyOnWriteString
 stringByReplacingOccurrencesOfString(const CopyOnWriteString &cowOrigin,
                                      const std::string &target,

@@ -43,10 +43,6 @@ bool Material::serialize(Serialization &serialization) const
     }
 
     //Contents
-    if (contents.empty()) {
-        markAsEmpty("Content");
-        return false;
-    }
     Data encoded;
     Serialization encoder;
     for (const auto &element : contents) {
@@ -110,7 +106,6 @@ bool Material::deserialize(Deserialization &deserialization)
         return false;
     }
 
-    int pages = 0;
     Deserialization decoder(decompressed);
     while (!decoder.ended()) {
         size_t lengthOfSizedString;
@@ -125,13 +120,7 @@ bool Material::deserialize(Deserialization &deserialization)
         if (!content.deserialize(decoder)) {
             return false;
         }
-
-        pages += content.verifiedPagenos.size();
         contents[std::move(tableName)] = std::move(content);
-    }
-    if (pages == 0) {
-        markAsCorrupt("Pageno");
-        return false;
     }
     return true;
 }
@@ -222,17 +211,21 @@ Material::Content::Content() : sequence(0)
 #pragma mark - Serialization
 bool Material::Content::serialize(Serialization &serialization) const
 {
-    if (sql.empty()) {
-        markAsEmpty("SQL");
-        return false;
-    }
-    if (verifiedPagenos.empty()) {
-        markAsEmpty("Pagenos");
-        return false;
-    }
     if (!serialization.putVarint(sequence) ||
-        !serialization.putSizedString(sql) ||
-        !serialization.putVarint(verifiedPagenos.size())) {
+        !serialization.putSizedString(sql)) {
+        return false;
+    }
+
+    if (!serialization.putVarint(associatedSQLs.size())) {
+        return false;
+    }
+    for (const auto &associatedSQL : associatedSQLs) {
+        if (!serialization.putSizedString(associatedSQL)) {
+            return false;
+        }
+    }
+
+    if (!serialization.putVarint(verifiedPagenos.size())) {
         return false;
     }
     for (const auto &element : verifiedPagenos) {
@@ -251,7 +244,7 @@ bool Material::Content::deserialize(Deserialization &deserialization)
     uint64_t varint;
     std::tie(lengthOfVarint, varint) = deserialization.advanceVarint();
     if (lengthOfVarint == 0) {
-        Material::markAsCorrupt("Sequence");
+        markAsCorrupt("Sequence");
         return false;
     }
     sequence = (int64_t) varint;
@@ -259,33 +252,47 @@ bool Material::Content::deserialize(Deserialization &deserialization)
     size_t lengthOfSizedString;
     std::tie(lengthOfSizedString, sql) = deserialization.advanceSizedString();
     if (lengthOfSizedString == 0 || sql.empty()) {
-        Material::markAsCorrupt("SQL");
+        markAsCorrupt("SQL");
         return false;
     }
 
-    if (!deserialization.canAdvance(sizeof(uint32_t))) {
-        Material::markAsCorrupt("PageCount");
-        return false;
-    }
     std::tie(lengthOfVarint, varint) = deserialization.advanceVarint();
     if (lengthOfVarint == 0) {
-        Material::markAsCorrupt("PageCount");
+        markAsCorrupt("SQLs");
         return false;
     }
-    int64_t pageCount = varint;
+    int associatedSQLCount = (int) varint;
+    associatedSQLs.clear();
+    for (int i = 0; i < associatedSQLCount; ++i) {
+        std::string sql;
+        std::tie(lengthOfSizedString, sql) =
+            deserialization.advanceSizedString();
+        if (lengthOfSizedString == 0 || sql.empty()) {
+            markAsCorrupt("SQLs");
+            return false;
+        }
+        associatedSQLs.push_back(std::move(sql));
+    }
+
+    std::tie(lengthOfVarint, varint) = deserialization.advanceVarint();
+    if (lengthOfVarint == 0) {
+        markAsCorrupt("PageCount");
+        return false;
+    }
+    int pageCount = (int) varint;
     if (pageCount == 0) {
         markAsCorrupt("PageCount");
         return false;
     }
     verifiedPagenos.clear();
-    for (uint32_t i = 0; i < pageCount; ++i) {
+    for (int i = 0; i < pageCount; ++i) {
         std::tie(lengthOfVarint, varint) = deserialization.advanceVarint();
         if (lengthOfVarint == 0) {
-            Material::markAsCorrupt("Pageno");
+            markAsCorrupt("Pageno");
             return false;
         }
         if (!deserialization.canAdvance(4)) {
-            Material::markAsCorrupt("PageChecksum");
+            markAsCorrupt("PageChecksum");
             return false;
         }
         uint32_t checksum = deserialization.advance4BytesUInt();

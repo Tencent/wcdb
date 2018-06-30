@@ -72,7 +72,7 @@ protected:
 
 #pragma mark - MasterCrawlerDelegate
 protected:
-    void onMasterCellCrawled(const Cell &cell, const Master *master) override;
+    void onMasterCellCrawled(const Cell &cell, const Master &master) override;
     void onMasterCrawlerError() override;
 
     MasterCrawler m_masterCrawler;

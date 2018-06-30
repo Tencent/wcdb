@@ -92,10 +92,13 @@
 {
     __block double score;
     [self measure:^{
+      NSLog(@"start repair");
       score = [_cachedDatabase retrieve:nil];
+      NSLog(@"end repair");
     }
         setUp:^{
           XCTAssertTrue([self lazyPrepareCachedDatabase:self.config.databaseSize]);
+          [NSThread sleepForTimeInterval:10];
         }
         tearDown:nil
         checkCorrectness:^{

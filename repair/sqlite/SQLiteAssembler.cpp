@@ -78,8 +78,7 @@ bool SQLiteAssembler::assembleTable(const std::string &tableName,
 {
     finalize(&m_cellSTMT);
     m_table.clear();
-    // ignore SQLITE_ERROR when it's a duplicated assemble
-    if (execute(sql.c_str(), m_duplicated ? SQLITE_ERROR : SQLITE_OK)) {
+    if (execute(sql.c_str(), SQLITE_ERROR)) {
         m_table = tableName;
         return true;
     }
@@ -129,6 +128,11 @@ bool SQLiteAssembler::assembleCell(const Cell &cell)
     bool result = step(m_cellSTMT);
     sqlite3_reset((sqlite3_stmt *) m_cellSTMT);
     return result;
+}
+
+bool SQLiteAssembler::assembleSQL(const std::string &sql)
+{
+    return execute(sql.c_str());
 }
 
 void SQLiteAssembler::markAsDuplicated(bool duplicated)

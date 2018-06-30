@@ -33,6 +33,8 @@ public:
 
     static bool isReservedTableName(const std::string &tableName);
 
+    std::string type;
+    std::string name;
     std::string tableName;
     std::string sql;
     int rootpage;

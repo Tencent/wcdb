@@ -48,6 +48,8 @@ public:
     virtual bool assembleCell(const Cell &cell) = 0;
     virtual void markAsDuplicated(bool duplicated) = 0;
 
+    virtual bool assembleSQL(const std::string &sql) = 0;
+
     virtual const Error &getError() const = 0;
 };
 

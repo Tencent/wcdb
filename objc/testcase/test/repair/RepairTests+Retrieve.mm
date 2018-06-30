@@ -78,6 +78,9 @@
     XCTAssertEqual(sequences.count, 1);
     XCTAssertEqual(sequences[0].seq, count - 1);
 
+    NSString *indexName = [tableName stringByAppendingString:@"_index"];
+    XCTAssertTrue([_database execute:WCDB::StatementCreateIndex().createIndex(indexName.UTF8String).on(tableName.UTF8String).indexedBy(TestCaseObject.variable2)]);
+
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *walPath = [NSString stringWithFormat:@"%@-wal", _database.path];
     XCTAssertGreaterThan([[fileManager attributesOfItemAtPath:walPath error:nil] fileSize], 0);
@@ -90,6 +93,8 @@
     NSArray<WCTSequence *> *retrievedSequences = [_database getObjectsOfClass:WCTSequence.class fromTable:WCTSequence.tableName];
     XCTAssertEqual(retrievedSequences.count, 1);
     XCTAssertEqual(retrievedSequences[0].seq, count - 1);
+
+    XCTAssertEqual([_database getValueOnResult:WCTMaster.allResults.count() fromTable:WCTMaster.tableName where:WCTMaster.name == indexName].numberValue.intValue, 1);
 }
 
 - (void)test_retrieve_corrupted
@@ -124,6 +129,9 @@
     XCTAssertEqual(sequences.count, 1);
     XCTAssertEqual(sequences[0].seq, count - 1);
 
+    NSString *indexName = [tableName stringByAppendingString:@"_index"];
+    XCTAssertTrue([_database execute:WCDB::StatementCreateIndex().createIndex(indexName.UTF8String).on(tableName.UTF8String).indexedBy(TestCaseObject.variable2)]);
+
     XCTAssertTrue([_database backup]);
 
     XCTAssertEqual([_database retrieve:nil], 1.0);
@@ -134,6 +142,8 @@
     NSArray<WCTSequence *> *retrievedSequences = [_database getObjectsOfClass:WCTSequence.class fromTable:WCTSequence.tableName];
     XCTAssertEqual(retrievedSequences.count, 1);
     XCTAssertEqual(retrievedSequences[0].seq, count - 1);
+
+    XCTAssertEqual([_database getValueOnResult:WCTMaster.allResults.count() fromTable:WCTMaster.tableName where:WCTMaster.name == indexName].numberValue.intValue, 1);
 }
 
 - (void)test_retrieve_inserted_after_backup

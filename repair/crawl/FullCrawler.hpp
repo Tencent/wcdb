@@ -26,6 +26,7 @@
 #include <WCDB/MasterCrawler.hpp>
 #include <WCDB/Repairman.hpp>
 #include <WCDB/SequenceCrawler.hpp>
+#include <list>
 #include <map>
 
 namespace WCDB {
@@ -43,6 +44,9 @@ public:
 public:
     bool work();
 
+protected:
+    std::map<std::string, std::list<std::string>> m_associatedSQLs;
+
 #pragma mark - Crawlable
 protected:
     void onCellCrawled(const Cell &cell) override;
@@ -55,7 +59,7 @@ protected:
 #pragma mark - MasterCrawlerDelegate
 protected:
     void onMasterPageCrawled(const Page &page) override;
-    void onMasterCellCrawled(const Cell &cell, const Master *master) override;
+    void onMasterCellCrawled(const Cell &cell, const Master &master) override;
     void onMasterCrawlerError() override;
 
     MasterCrawler m_masterCrawler;

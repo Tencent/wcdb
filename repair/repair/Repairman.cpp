@@ -150,6 +150,14 @@ bool Repairman::assembleSequence(const std::string &tableName, int64_t sequence)
     return false;
 }
 
+void Repairman::assembleAssociatedSQLs(const std::list<std::string> &sqls)
+{
+    for (const auto &sql : sqls) {
+        //ignore its errors
+        m_assembler->assembleSQL(sql);
+    }
+}
+
 #pragma mark - Crawlable
 void Repairman::onCrawlerError()
 {

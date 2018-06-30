@@ -25,6 +25,7 @@
 #include <WCDB/Master.hpp>
 #include <WCDB/Page.hpp>
 #include <WCDB/Sequence.hpp>
+#include <WCDB/String.hpp>
 
 namespace WCDB {
 
@@ -98,15 +99,7 @@ void Backup::filter(const Filter &tableShouldBeBackedUp)
 
 bool Backup::filter(const std::string &tableName)
 {
-    if (Master::isReservedTableName(tableName)) {
-        Error error;
-        error.level = Error::Level::Notice;
-        error.setCode(Error::Code::Notice, "Repair");
-        error.message = "Filter reserved table when backup.";
-        error.infos.set("Table", tableName);
-        Notifier::shared()->notify(error);
-        return false;
-    } else if (m_filter) {
+    if (m_filter) {
         return m_filter(tableName);
     }
     return true;
@@ -144,22 +137,26 @@ void Backup::onCrawlerError()
 }
 
 #pragma mark - MasterCrawlerDelegate
-void Backup::onMasterCellCrawled(const Cell &cell, const Master *master)
+void Backup::onMasterCellCrawled(const Cell &cell, const Master &master)
 {
-    if (master == nullptr) {
-        //skip index/view/trigger
-        return;
-    }
-    if (master->tableName == Sequence::tableName()) {
-        SequenceCrawler(m_pager).work(master->rootpage, this);
-    } else if (filter(master->tableName)) {
-        if (!crawl(master->rootpage)) {
-            return;
+    if (master.name == Sequence::tableName()) {
+        SequenceCrawler(m_pager).work(master.rootpage, this);
+    } else if (filter(master.tableName) &&
+               !Master::isReservedTableName(master.tableName) &&
+               !Master::isReservedTableName(master.name)) {
+        Material::Content &content = getOrCreateContent(master.tableName);
+        if (String::isCaseInsensiveEqual(master.type, "table") &&
+            String::isCaseInsensiveEqual(master.name, master.tableName)) {
+            if (!crawl(master.rootpage)) {
+                return;
+            }
+            content.verifiedPagenos = std::move(m_verifiedPagenos);
+            content.sql = master.sql;
+        } else {
+            if (!master.sql.empty()) {
+                content.associatedSQLs.push_back(master.sql);
+            }
         }
-
-        Material::Content &content = getOrCreateContent(master->tableName);
-        content.verifiedPagenos = std::move(m_verifiedPagenos);
-        content.sql = std::move(master->sql);
     }
 }
 
@@ -171,7 +168,7 @@ void Backup::onMasterCrawlerError()
 #pragma mark - SequenceCrawlerDelegate
 void Backup::onSequenceCellCrawled(const Cell &cell, const Sequence &sequence)
 {
-    if (filter(sequence.name)) {
+    if (!Master::isReservedTableName(sequence.name) && filter(sequence.name)) {
         Material::Content &content = getOrCreateContent(sequence.name);
         //the columns in sqlite_sequence are not unique.
         content.sequence = std::max(content.sequence, sequence.seq);

@@ -151,7 +151,7 @@
       return NO;
     }];
 
-    XCTAssertFalse([_database backup]);
+    XCTAssertTrue([_database backup]);
 }
 
 - (void)test_auto_backup_with_checkpoint

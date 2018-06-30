@@ -47,6 +47,7 @@ public:
     bool assembleTable(const std::string &tableName,
                        const std::string &sql) override;
     bool assembleCell(const Cell &cell) override;
+    bool assembleSQL(const std::string &sql) override;
 
     void markAsDuplicated(bool duplicated) override;
 

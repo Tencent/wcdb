@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Master.hpp>
+#include <WCDB/String.hpp>
 
 namespace WCDB {
 
@@ -30,7 +31,7 @@ Master::Master() : rootpage(0)
 
 bool Master::isReservedTableName(const std::string &tableName)
 {
-    return strncasecmp(tableName.c_str(), "sqlite_", 7) == 0;
+    return String::hasCaseInsensivePrefix(tableName, "sqlite_");
 }
 
 } //namespace Repair

@@ -48,38 +48,27 @@ bool MasterCrawler::work(MasterCrawlerDelegate *delegate)
 
 void MasterCrawler::onCellCrawled(const Cell &cell)
 {
-    if (cell.getValueType(0) != Cell::Type::Text) {
-        markAsCorrupted(cell.getPage().number, "CellType");
-        return;
+    Master master;
+    if (cell.getValueType(0) == Cell::Type::Text) {
+        master.type = cell.stringValue(0);
     }
-    std::string type = cell.stringValue(0);
-    if (type == "table") {
-        if (cell.getValueType(1) != Cell::Type::Text ||
-            cell.getValueType(2) != Cell::Type::Text ||
-            cell.getValueType(3) != Cell::Type::Integer ||
-            cell.getValueType(4) != Cell::Type::Text) {
-            markAsCorrupted(cell.getPage().number, "CellType");
-            return;
-        }
-        std::string name = cell.stringValue(1);
-        std::string tblName = cell.stringValue(2);
-        int rootpage = (int) cell.integerValue(3);
-        std::string sql = cell.stringValue(4);
-        if (tblName.empty() || sql.empty() || name.empty() || rootpage <= 0 ||
-            name != tblName) {
+    if (cell.getValueType(1) == Cell::Type::Text) {
+        master.name = cell.stringValue(1);
+    }
+    if (cell.getValueType(2) == Cell::Type::Text) {
+        master.tableName = cell.stringValue(2);
+    }
+    if (cell.getValueType(3) == Cell::Type::Integer) {
+        master.rootpage = (int) cell.integerValue(3);
+        if (master.rootpage < 0) {
             markAsCorrupted(cell.getPage().number, "CellValue");
             return;
         }
-
-        Master master;
-        master.rootpage = rootpage;
-        master.tableName = std::move(name);
-        master.sql = std::move(sql);
-        m_delegate->onMasterCellCrawled(cell, &master);
-    } else {
-        //skip index/view/trigger
-        m_delegate->onMasterCellCrawled(cell, nullptr);
     }
+    if (cell.getValueType(4) == Cell::Type::Text) {
+        master.sql = cell.stringValue(4);
+    }
+    m_delegate->onMasterCellCrawled(cell, master);
 }
 
 bool MasterCrawler::willCrawlPage(const Page &page, int)

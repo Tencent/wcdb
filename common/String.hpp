@@ -35,6 +35,10 @@ struct CaseInsensiveComparator {
 };
 typedef struct CaseInsensiveComparator CaseInsensiveComparator;
 
+bool isCaseInsensiveEqual(const std::string &lhs, const std::string &rhs);
+bool hasCaseInsensivePrefix(const std::string &origin,
+                            const std::string &target);
+
 CopyOnWriteString
 stringByReplacingOccurrencesOfString(const CopyOnWriteString &origin,
                                      const std::string &target,
