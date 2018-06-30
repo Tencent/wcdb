@@ -88,8 +88,35 @@
 }
 
 //Note that since repair will usually be run in background thread with blocked UI, test is not for the best performance but for a tolerable performance.
-- (void)test_repair
+- (void)test_repair_without_backup
 {
+    __block double score;
+    [self measure:^{
+      score = [_cachedDatabase retrieve:nil];
+    }
+        setUp:^{
+          XCTAssertTrue([self lazyPrepareCachedDatabase:self.config.databaseSize]);
+        }
+        tearDown:nil
+        checkCorrectness:^{
+          XCTAssertEqual(score, 1);
+        }];
+}
+
+- (void)test_repair_with_backup
+{
+    __block double score;
+    [self measure:^{
+      score = [_cachedDatabase retrieve:nil];
+    }
+        setUp:^{
+          XCTAssertTrue([self lazyPrepareCachedDatabase:self.config.databaseSize]);
+          XCTAssertTrue([_cachedDatabase backup]);
+        }
+        tearDown:nil
+        checkCorrectness:^{
+          XCTAssertEqual(score, 1);
+        }];
 }
 
 @end
