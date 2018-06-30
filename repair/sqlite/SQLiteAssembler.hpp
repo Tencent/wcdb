@@ -73,17 +73,14 @@ protected:
 
 #pragma mark - Sequence
 protected:
-    bool markAsSequenceAssembling();
+    bool markSequenceAsAssembling();
     bool assembleSequence(const std::string &tableName,
                           int64_t sequence) override;
-    bool markAsSequenceAssembled();
+    bool markSequenceAsAssembled();
 
     std::pair<bool, bool> updateSequence(const std::string &tableName,
                                          int64_t sequence);
     bool insertSequence(const std::string &tableName, int64_t sequence);
-
-    void *m_insertSequenceSTMT;
-    void *m_updateSequenceSTMT;
 
 #pragma mark - SQLite Base
 protected:

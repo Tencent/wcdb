@@ -30,11 +30,7 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialize
-SQLiteAssembler::SQLiteAssembler()
-    : m_cellSTMT(nullptr)
-    , m_insertSequenceSTMT(nullptr)
-    , m_updateSequenceSTMT(nullptr)
-    , m_primary(-1)
+SQLiteAssembler::SQLiteAssembler() : m_cellSTMT(nullptr), m_primary(-1)
 //    , m_onTableAssembled(nullptr)
 {
 }
@@ -73,14 +69,21 @@ const std::string &SQLiteAssembler::getPath() const
 
 bool SQLiteAssembler::markAsAssembling()
 {
-    return open();
+    if (!open()) {
+        return false;
+    }
+    if (!markSequenceAsAssembling()) {
+        close();
+        return false;
+    }
+    return true;
 }
 
 bool SQLiteAssembler::markAsAssembled()
 {
     m_table.clear();
     finalize(&m_cellSTMT);
-    bool result = markAsSequenceAssembled();
+    bool result = markSequenceAsAssembled();
     result = lazyCommitOrRollbackTransaction() && result;
     close();
     return result;
@@ -225,51 +228,27 @@ SQLiteAssembler::getColumnNames(const std::string &tableName)
 }
 
 #pragma mark - Sequence
-bool SQLiteAssembler::markAsSequenceAssembling()
+bool SQLiteAssembler::markSequenceAsAssembling()
 {
-    if (m_updateSequenceSTMT == nullptr && m_insertSequenceSTMT == nullptr) {
-        if (!execute(
-                "CREATE TABLE IF NOT EXISTS dummy_sqlite_sequence(i INTEGER "
-                "PRIMARY KEY AUTOINCREMENT)")) {
-            return false;
-        }
-    }
-
-    if (m_updateSequenceSTMT == nullptr) {
-        m_updateSequenceSTMT =
-            prepare("UPDATE sqlite_sequence SET seq = ?1 WHERE name = ?2");
-        if (m_updateSequenceSTMT == nullptr) {
-            return false;
-        }
-    }
-
-    if (m_insertSequenceSTMT == nullptr) {
-        m_insertSequenceSTMT =
-            prepare("INSERT INTO sqlite_sequence(name, seq) VALUES(?1, ?2)");
-        if (m_insertSequenceSTMT == nullptr) {
-            return false;
-        }
-    }
-
-    return true;
+    return execute(
+        "CREATE TABLE IF NOT EXISTS wcdb_dummy_sqlite_sequence(i INTEGER "
+        "PRIMARY KEY AUTOINCREMENT)");
 }
 
-bool SQLiteAssembler::markAsSequenceAssembled()
+bool SQLiteAssembler::markSequenceAsAssembled()
 {
-    bool result = execute("DROP TABLE IF EXISTS dummy_sqlite_sequence");
-    finalize(&m_updateSequenceSTMT);
-    finalize(&m_insertSequenceSTMT);
-    return result;
+    return execute("DROP TABLE IF EXISTS wcdb_dummy_sqlite_sequence");
 }
 
 std::pair<bool, bool>
 SQLiteAssembler::updateSequence(const std::string &tableName, int64_t sequence)
 {
-    sqlite3_bind_int64((sqlite3_stmt *) m_updateSequenceSTMT, 1, sequence);
-    sqlite3_bind_text((sqlite3_stmt *) m_updateSequenceSTMT, 2,
-                      tableName.c_str(), -1, SQLITE_TRANSIENT);
-    bool result = step(m_updateSequenceSTMT);
-    sqlite3_reset((sqlite3_stmt *) m_updateSequenceSTMT);
+    void *stmt = prepare("UPDATE sqlite_sequence SET seq = ?1 WHERE name = ?2");
+    sqlite3_bind_int64((sqlite3_stmt *) stmt, 1, sequence);
+    sqlite3_bind_text((sqlite3_stmt *) stmt, 2, tableName.c_str(), -1,
+                      SQLITE_TRANSIENT);
+    bool result = step(stmt);
+    finalize(&stmt);
     if (!result) {
         return {false, false};
     }
@@ -281,11 +260,13 @@ SQLiteAssembler::updateSequence(const std::string &tableName, int64_t sequence)
 bool SQLiteAssembler::insertSequence(const std::string &tableName,
                                      int64_t sequence)
 {
-    sqlite3_bind_text((sqlite3_stmt *) m_insertSequenceSTMT, 1,
-                      tableName.c_str(), -1, SQLITE_TRANSIENT);
-    sqlite3_bind_int64((sqlite3_stmt *) m_insertSequenceSTMT, 2, sequence);
-    bool result = step(m_insertSequenceSTMT);
-    sqlite3_reset((sqlite3_stmt *) m_insertSequenceSTMT);
+    void *stmt =
+        prepare("INSERT INTO sqlite_sequence(name, seq) VALUES(?1, ?2)");
+    sqlite3_bind_text((sqlite3_stmt *) stmt, 1, tableName.c_str(), -1,
+                      SQLITE_TRANSIENT);
+    sqlite3_bind_int64((sqlite3_stmt *) stmt, 2, sequence);
+    bool result = step(stmt);
+    finalize(&stmt);
     return result;
 }
 
@@ -295,7 +276,7 @@ bool SQLiteAssembler::assembleSequence(const std::string &tableName,
     if (sequence <= 0) {
         return true;
     }
-    if (!markAsSequenceAssembling()) {
+    if (!markSequenceAsAssembling()) {
         return false;
     }
     bool succeed, updated;
@@ -325,8 +306,6 @@ bool SQLiteAssembler::open()
 
 void SQLiteAssembler::close()
 {
-    WCTInnerAssert(m_insertSequenceSTMT == nullptr);
-    WCTInnerAssert(m_updateSequenceSTMT == nullptr);
     WCTInnerAssert(m_cellSTMT == nullptr);
     SQLiteBase::close();
 }
