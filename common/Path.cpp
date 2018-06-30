@@ -75,6 +75,16 @@ std::string getBaseName(const std::string &base)
     return dir;
 }
 
+std::string normalize(const std::string &path)
+{
+    std::string normalized = path;
+    std::size_t found;
+    while ((found = normalized.find("//")) != std::string::npos) {
+        normalized.replace(found, 2, "/");
+    }
+    return normalized;
+}
+
 } //namespace Path
 
 } //namespace WCDB

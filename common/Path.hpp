@@ -34,6 +34,12 @@ std::string addComponent(const std::string &base, const std::string &component);
 std::string getFileName(const std::string &base);
 std::string getBaseName(const std::string &base);
 
+#if __cplusplus > 201402L
+#warning TODO \
+std::filesystem::path is available since C++17
+#endif
+std::string normalize(const std::string &path);
+
 } //namespace Path
 
 } //namespace WCDB

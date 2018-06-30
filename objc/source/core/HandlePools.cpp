@@ -22,6 +22,7 @@
 #include <WCDB/Core.h>
 #include <WCDB/CorruptionNotifier.hpp>
 #include <WCDB/FileManager.hpp>
+#include <WCDB/Path.hpp>
 
 namespace WCDB {
 
@@ -41,14 +42,15 @@ RecyclableHandlePool HandlePools::getPool(const std::string &path,
                                           const Generator &generator)
 {
     std::shared_ptr<HandlePool> pool = nullptr;
+    std::string normalized = Path::normalize(path);
     std::lock_guard<std::mutex> lockGuard(m_mutex);
-    auto iter = m_pools.find(path);
+    auto iter = m_pools.find(normalized);
     if (iter == m_pools.end()) {
-        pool = generator(path);
+        pool = generator(normalized);
         if (pool == nullptr) {
             return nullptr;
         }
-        iter = m_pools.insert({path, {pool, 0}}).first;
+        iter = m_pools.insert({normalized, {pool, 0}}).first;
     }
     return getExistingPool(iter);
 }
@@ -68,10 +70,11 @@ RecyclableHandlePool HandlePools::getExistingPool(HandlePool::Tag tag)
 
 RecyclableHandlePool HandlePools::getExistingPool(const std::string &path)
 {
+    std::string normalized = Path::normalize(path);
     std::lock_guard<std::mutex> lockGuard(m_mutex);
     auto iter = m_pools.begin();
     for (; iter != m_pools.end(); ++iter) {
-        if (iter->second.first->path == path) {
+        if (iter->second.first->path == normalized) {
             break;
         }
     }

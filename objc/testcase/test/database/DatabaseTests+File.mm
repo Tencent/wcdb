@@ -45,6 +45,16 @@
     //TODO
 }
 
+- (void)test_path_with_normalized
+{
+    XCTAssertTrue([_database canOpen]);
+    XCTAssertTrue([_database isOpened]);
+    NSString *path = [_database.path stringByReplacingOccurrencesOfString:@"/" withString:@"//"];
+    WCTDatabase *database = [[WCTDatabase alloc] initWithPath:path];
+    XCTAssertTrue([database isOpened]);
+    XCTAssertTrue([_database.path isEqualToString:database.path]);
+}
+
 //TODO test materials
 - (void)test_paths
 {
