@@ -49,6 +49,9 @@ public:
     bool work();
 
 protected:
+    bool exit(bool result);
+
+protected:
     bool restore(const std::string &database);
     const std::string databaseFileName;
 
@@ -81,10 +84,6 @@ protected:
     std::map<std::string, size_t> m_sizes;
     size_t m_totalSize;
     void increaseScore(const std::string &database, const Fraction &increment);
-
-#pragma mark - Error
-protected:
-    void onErrorCritical() override;
 };
 
 } //namespace Repair

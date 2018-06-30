@@ -44,6 +44,18 @@ const std::string &Repairman::getPath() const
     return m_pager.getPath();
 }
 
+bool Repairman::exit()
+{
+    finishProgress();
+    return !isErrorCritial();
+}
+
+bool Repairman::exit(bool result)
+{
+    finishProgress();
+    return result;
+}
+
 bool Repairman::isEmptyDatabase()
 {
     bool succeed;
@@ -78,9 +90,7 @@ bool Repairman::markAsAssembling()
 void Repairman::markAsAssembled()
 {
     markAsMilestone();
-    if (m_assembler->markAsAssembled()) {
-        finishProgress();
-    } else {
+    if (!m_assembler->markAsAssembled()) {
         setCriticalError(m_assembler->getError());
     }
 }

@@ -53,7 +53,7 @@ protected:
     void setCriticalError(Error &&error);
     void setCriticalErrorWithSharedThreadedError();
 
-    virtual void onErrorCritical() = 0;
+    virtual void onErrorCritical();
 
 private:
     void setSeverity(int severity);

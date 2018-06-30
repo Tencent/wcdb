@@ -124,6 +124,10 @@ void UpgradeableErrorProne::setSeverity(int severity)
     }
 }
 
+void UpgradeableErrorProne::onErrorCritical()
+{
+}
+
 } //namespace Repair
 
 } //namespace WCDB

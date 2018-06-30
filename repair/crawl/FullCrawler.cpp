@@ -40,17 +40,16 @@ FullCrawler::FullCrawler(const std::string &source)
 bool FullCrawler::work()
 {
     if (isEmptyDatabase()) {
-        finishProgress();
-        return true;
+        return exit(true);
     }
 
     if (!m_pager.initialize()) {
         if (m_pager.getError().isCorruption()) {
             tryUpgradeCrawlerError();
-            return true;
+            return exit(true);
         } else {
             setCriticalError(m_pager.getError());
-            return false;
+            return exit(false);
         }
     }
 
@@ -68,10 +67,10 @@ bool FullCrawler::work()
 
     if (markAsAssembling()) {
         m_masterCrawler.work(this);
+        markAsAssembled();
     }
-    markAsAssembled();
 
-    return !isErrorCritial();
+    return exit();
 }
 
 #pragma mark - Crawlable

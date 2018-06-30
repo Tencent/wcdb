@@ -43,8 +43,7 @@ bool Mechanic::work()
     WCTInnerAssert(m_material != nullptr);
 
     if (isEmptyDatabase()) {
-        finishProgress();
-        return true;
+        return exit(true);
     }
 
     m_pager.setMaxWalFrame(m_material->info.walFrame);
@@ -55,10 +54,10 @@ bool Mechanic::work()
         //Actually, the initialization of pager always succeed if material is not corrupted.
         if (m_pager.getError().isCorruption()) {
             tryUpgradeCrawlerError();
-            return true;
+            return exit(true);
         } else {
             setCriticalError(m_pager.getError());
-            return false;
+            return exit(false);
         }
     }
 
@@ -104,9 +103,9 @@ bool Mechanic::work()
                 }
             }
         }
+        markAsAssembled();
     }
-    markAsAssembled();
-    return !isErrorCritial();
+    return exit();
 }
 
 #pragma mark - Crawlable

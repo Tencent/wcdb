@@ -52,92 +52,83 @@ bool FactoryRetriever::work()
     m_assembler->setPath(database);
 
     FileManager *fileManager = FileManager::shared();
-    bool done = false;
+    bool succeed;
+    //1. Remove the old restore db
+    std::string restoreDirectory = factory.getRestoreDirectory();
+    if (!fileManager->removeItem(restoreDirectory)) {
+        setCriticalErrorWithSharedThreadedError();
+        return exit(false);
+    }
+    if (!fileManager->createDirectoryWithIntermediateDirectories(
+            factory.getRestoreDirectory())) {
+        setCriticalErrorWithSharedThreadedError();
+        return exit(false);
+    }
 
-    do {
-        bool succeed;
-        //1. Remove the old restore db
-        std::string restoreDirectory = factory.getRestoreDirectory();
-        if (!fileManager->removeItem(restoreDirectory)) {
-            setCriticalErrorWithSharedThreadedError();
-            break;
-        }
-        if (!fileManager->createDirectoryWithIntermediateDirectories(
-                factory.getRestoreDirectory())) {
-            setCriticalErrorWithSharedThreadedError();
-            break;
-        }
+    //1.5 calculate weights to deal with the progress and score
+    std::list<std::string> workshopDirectories;
+    std::tie(succeed, workshopDirectories) = factory.getWorkshopDirectories();
+    if (!succeed) {
+        setCriticalErrorWithSharedThreadedError();
+        return exit(false);
+    }
 
-        //1.5 calculate weights to deal with the progress and score
-        std::list<std::string> workshopDirectories;
-        std::tie(succeed, workshopDirectories) =
-            factory.getWorkshopDirectories();
-        if (!succeed) {
-            setCriticalErrorWithSharedThreadedError();
-            break;
-        }
+    if (!calculateSizes(workshopDirectories)) {
+        return exit(false);
+    }
 
-        if (!calculateSizes(workshopDirectories)) {
-            break;
-        }
+    SteadyClock before = SteadyClock::now();
+    //2. Restore from current db. It must be succeed without even non-critical errors.
+    if (!restore(factory.database) || getErrorSeverity() >= Severity::Normal) {
+        return exit(false);
+    }
 
-        SteadyClock before = SteadyClock::now();
-        //2. Restore from current db. It must be succeed without even non-critical errors.
-        if (!restore(factory.database) ||
-            getErrorSeverity() >= Severity::Normal) {
-            break;
+    //3. Restore from all depositor db. It should be succeed without critical errors.
+    succeed = true;
+    for (const auto &workshopDirectory : workshopDirectories) {
+        if (!restore(Path::addComponent(workshopDirectory, databaseFileName))) {
+            return exit(false);
         }
+    }
 
-        //3. Restore from all depositor db. It should be succeed without critical errors.
-        succeed = true;
-        for (const auto &workshopDirectory : workshopDirectories) {
-            if (!restore(
-                    Path::addComponent(workshopDirectory, databaseFileName))) {
-                succeed = false;
-                break;
-            }
-        }
-        if (!succeed) {
-            break;
-        }
+    SteadyClock after = SteadyClock::now();
+    reportSummary(after - before);
 
-        SteadyClock after = SteadyClock::now();
-        reportSummary(after - before);
+    //4. Do a backup on restore db.
+    FactoryBackup backup(factory);
+    backup.setLocker(m_locker);
+    if (!backup.work(database)) {
+        setCriticalError(backup.getError());
+        return exit(false);
+    }
 
-        //4. Do a backup on restore db.
-        FactoryBackup backup(factory);
-        backup.setLocker(m_locker);
-        if (!backup.work(database)) {
-            setCriticalError(backup.getError());
-            break;
-        }
+    //5. Archive current db and use restore db
+    FactoryDepositor depositor(factory);
+    if (!depositor.work()) {
+        setCriticalError(depositor.getError());
+        return exit(false);
+    }
+    std::string baseDirectory = Path::getBaseName(factory.database);
+    succeed = FileManager::shared()->moveItems(
+        Factory::associatedPathsForDatabase(database), baseDirectory);
+    if (!succeed) {
+        setCriticalErrorWithSharedThreadedError();
+        return exit(false);
+    }
 
-        //5. Archive current db and use restore db
-        FactoryDepositor depositor(factory);
-        if (!depositor.work()) {
-            setCriticalError(depositor.getError());
-            break;
-        }
-        std::string baseDirectory = Path::getBaseName(factory.database);
-        succeed = FileManager::shared()->moveItems(
-            Factory::associatedPathsForDatabase(database), baseDirectory);
-        if (!succeed) {
-            setCriticalErrorWithSharedThreadedError();
-            break;
-        }
+    //6. Remove all deposited dbs if error is ignorable.
+    if (isErrorIgnorable()) {
+        FileManager::shared()->removeItem(factory.directory);
+    }
 
-        //6. Remove all deposited dbs if error is ignorable.
-        if (isErrorIgnorable()) {
-            FileManager::shared()->removeItem(factory.directory);
-        }
-        done = true;
-    } while (false);
+    return exit(true);
+}
 
+bool FactoryRetriever::exit(bool result)
+{
     factory.removeDirectoryIfEmpty();
-
     finishProgress();
-
-    return done;
+    return result;
 }
 
 bool FactoryRetriever::restore(const std::string &database)
@@ -347,12 +338,6 @@ void FactoryRetriever::increaseScore(const std::string &database,
                                      const Fraction &increment)
 {
     Scoreable::increaseScore(getWeight(database) * increment);
-}
-
-#pragma mark - Error
-void FactoryRetriever::onErrorCritical()
-{
-    finishProgress();
 }
 
 } //namespace Repair

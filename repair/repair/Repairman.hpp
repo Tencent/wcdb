@@ -45,6 +45,8 @@ public:
 
 protected:
     bool isEmptyDatabase();
+    bool exit();
+    bool exit(bool result);
 
 #pragma mark - Crawlable
 protected:
