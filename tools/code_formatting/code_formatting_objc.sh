@@ -5,6 +5,9 @@ objc=$root/objc
 repair=$root/repair
 common=$root/common
 
-find $objc \( -name "*.cpp" -or -name "*.hpp" -or -name "*.h" -or -name "*.mm" -or -name "*.m" \) | xargs clang-format -i
-find $repair \( -name "*.cpp" -or -name "*.hpp" -or -name "*.h" -or -name "*.c" \) | xargs clang-format -i
-find $common \( -name "*.cpp" -or -name "*.hpp" -or -name "*.h" -or -name "*.c" \) | xargs clang-format -i
+paths=($objc $repair $common)
+
+for path in ${paths[@]}
+do
+    find $path \( -name "*.cpp" -or -name "*.c" -or -name "*.hpp" -or -name "*.h" -or -name "*.mm" -or -name "*.m" \) | xargs clang-format -i
+done
