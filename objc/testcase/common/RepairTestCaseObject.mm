@@ -115,37 +115,27 @@ WCDB_INDEX(RepairTestCaseObject, "_index3", doubleValue)
     int count = 0;
     do {
         count = [NSNumber randomUInt8];
-    } while (count <= 3);
+    } while (count <= 0);
     return [self randomObjects:count];
 }
 
 + (NSArray<RepairTestCaseObject *> *)randomObjects:(int)count
 {
-    XCTAssertGreaterThan(count, 3);
-
     NSMutableDictionary<NSNumber *, RepairTestCaseObject *> *objects = [[NSMutableDictionary<NSNumber *, RepairTestCaseObject *> alloc] initWithCapacity:count];
-    int maxPos, minPos, zeroPos;
-    do {
-        maxPos = [NSNumber randomUInt] % count;
-        minPos = [NSNumber randomUInt] % count;
-        zeroPos = [NSNumber randomUInt] % count;
-    } while (maxPos == minPos || minPos == zeroPos || zeroPos == maxPos);
-    RepairTestCaseObject *maxObject = [self maxObject];
-    RepairTestCaseObject *minObject = [self minObject];
-    RepairTestCaseObject *zeroObject = [self zeroObject];
-    for (int i = 0; i < count; ++i) {
-        RepairTestCaseObject *object;
-        if (i == maxPos) {
-            object = maxObject;
-        } else if (i == minPos) {
-            object = minObject;
-        } else if (i == zeroPos) {
-            object = zeroObject;
-        } else {
-            do {
-                object = [self randomObject];
-            } while (object.int64Value == maxObject.int64Value || object.int64Value == minObject.int64Value || object.int64Value == zeroObject.int64Value || [objects objectForKey:@(object.int64Value)] != nil);
-        }
+    if ([NSNumber randomBool]) {
+        RepairTestCaseObject *object = [self maxObject];
+        [objects setObject:object forKey:@(object.int64Value)];
+    }
+    if ([NSNumber randomBool]) {
+        RepairTestCaseObject *object = [self minObject];
+        [objects setObject:object forKey:@(object.int64Value)];
+    }
+    if ([NSNumber randomBool]) {
+        RepairTestCaseObject *object = [self zeroObject];
+        [objects setObject:object forKey:@(object.int64Value)];
+    }
+    while (objects.count < count) {
+        RepairTestCaseObject *object = [self randomObject];
         [objects setObject:object forKey:@(object.int64Value)];
     }
     return objects.allValues;
