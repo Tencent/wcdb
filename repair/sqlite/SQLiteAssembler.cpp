@@ -276,9 +276,6 @@ bool SQLiteAssembler::assembleSequence(const std::string &tableName,
     if (sequence <= 0) {
         return true;
     }
-    if (!markSequenceAsAssembling()) {
-        return false;
-    }
     bool succeed, updated;
     std::tie(succeed, updated) = updateSequence(tableName, sequence);
     if (!succeed) {
@@ -296,8 +293,7 @@ bool SQLiteAssembler::open()
     if (!SQLiteBase::open()) {
         return false;
     }
-    int rc = execute("PRAGMA journal_mode=OFF");
-    if (rc != SQLITE_OK) {
+    if (!execute("PRAGMA journal_mode=OFF") != SQLITE_OK) {
         close();
         return false;
     }
