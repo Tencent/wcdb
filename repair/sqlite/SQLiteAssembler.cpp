@@ -132,7 +132,7 @@ bool SQLiteAssembler::assembleCell(const Cell &cell)
 
 bool SQLiteAssembler::assembleSQL(const std::string &sql)
 {
-    return execute(sql.c_str());
+    return execute(sql.c_str(), SQLITE_ERROR);
 }
 
 void SQLiteAssembler::markAsDuplicated(bool duplicated)
