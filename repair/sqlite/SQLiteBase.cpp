@@ -63,7 +63,7 @@ bool SQLiteBase::lazyCommitOrRollbackTransaction(bool commit)
 {
     if (isInTransaction()) {
         if (!commit || !execute("COMMIT")) {
-            execute("ROLLBACK", true); //ignore error
+            execute("ROLLBACK", -1); //ignore all errors
             return false;
         }
     }
@@ -119,18 +119,16 @@ void SQLiteBase::close()
     }
 }
 
-bool SQLiteBase::execute(const char *sql, bool ignoreError)
+bool SQLiteBase::execute(const char *sql, int errorToBeIgnored)
 {
     WCTInnerAssert(isOpened());
     WCTInnerAssert(sql != nullptr);
     int rc = sqlite3_exec((sqlite3 *) m_handle, sql, nullptr, nullptr, nullptr);
-    if (rc == SQLITE_OK) {
-        return true;
-    }
-    if (!ignoreError) {
+    if (rc != SQLITE_OK && errorToBeIgnored >= 0 && rc != errorToBeIgnored) {
         setError(rc, sql);
+        return false;
     }
-    return false;
+    return true;
 }
 
 #pragma mark - SQLite STMT

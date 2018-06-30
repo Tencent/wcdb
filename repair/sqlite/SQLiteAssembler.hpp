@@ -34,16 +34,6 @@ class SQLiteAssembler : public Assembler, public SQLiteBase {
 public:
     SQLiteAssembler();
 
-    //TODO: add interface for table assembled notification OR backup all table associated sqls
-    //    typedef std::function<int(const std::string &, void *)>
-    //        TableAssembledCallback;
-    //    void setNotificationWhenTableAssembled(
-    //        const TableAssembledCallback &onTableAssembled);
-
-protected:
-    bool onTableAssembled(const std::string &tableName);
-//    TableAssembledCallback m_onTableAssembled;
-
 #pragma mark - Assembler
 public:
     void setPath(const std::string &path) override;
@@ -58,7 +48,12 @@ public:
                        const std::string &sql) override;
     bool assembleCell(const Cell &cell) override;
 
+    void markAsDuplicated(bool duplicated) override;
+
     const Error &getError() const override;
+
+protected:
+    bool m_duplicated;
 
 #pragma mark - Cell
 protected:

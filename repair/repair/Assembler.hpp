@@ -46,6 +46,7 @@ public:
     virtual bool assembleSequence(const std::string &tableName,
                                   int64_t sequence) = 0;
     virtual bool assembleCell(const Cell &cell) = 0;
+    virtual void markAsDuplicated(bool duplicated) = 0;
 
     virtual const Error &getError() const = 0;
 };

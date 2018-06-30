@@ -48,7 +48,8 @@ protected:
     bool isOpened() const;
     void close();
 
-    bool execute(const char *sql, bool ignoreError = false);
+    // if errorToBeIgnored < 0, all errors will be ignored.
+    bool execute(const char *sql, int errorToBeIgnored = 0);
 
     void *m_handle;
 

@@ -30,30 +30,9 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialize
-SQLiteAssembler::SQLiteAssembler() : m_cellSTMT(nullptr), m_primary(-1)
-//    , m_onTableAssembled(nullptr)
+SQLiteAssembler::SQLiteAssembler()
+    : m_cellSTMT(nullptr), m_primary(-1), m_duplicated(false)
 {
-}
-
-//void SQLiteAssembler::setNotificationWhenTableAssembled(
-//    const TableAssembledCallback &onTableAssembled)
-//{
-//    m_onTableAssembled = onTableAssembled;
-//}
-
-bool SQLiteAssembler::onTableAssembled(const std::string &tableName)
-{
-    //    int rc = SQLITE_OK;
-    //    if (m_onTableAssembled) {
-    //        rc = m_onTableAssembled(tableName, m_handle);
-    //    }
-    //    if (rc == SQLITE_OK) {
-    m_table = tableName;
-    finalize(&m_cellSTMT);
-    return true;
-    //    }
-    //    setError(rc);
-    //    return false;
 }
 
 #pragma mark - Assemble
@@ -97,12 +76,14 @@ bool SQLiteAssembler::markAsMilestone()
 bool SQLiteAssembler::assembleTable(const std::string &tableName,
                                     const std::string &sql)
 {
-    if (!execute(sql.c_str())) {
-        if (m_error.code() != Error::Code::Error) {
-            return false;
-        }
+    finalize(&m_cellSTMT);
+    m_table.clear();
+    // ignore SQLITE_ERROR when it's a duplicated assemble
+    if (execute(sql.c_str(), m_duplicated ? SQLITE_ERROR : SQLITE_OK)) {
+        m_table = tableName;
+        return true;
     }
-    return onTableAssembled(tableName);
+    return false;
 }
 
 bool SQLiteAssembler::assembleCell(const Cell &cell)
@@ -150,6 +131,11 @@ bool SQLiteAssembler::assembleCell(const Cell &cell)
     return result;
 }
 
+void SQLiteAssembler::markAsDuplicated(bool duplicated)
+{
+    m_duplicated = duplicated;
+}
+
 const Error &SQLiteAssembler::getError() const
 {
     return ErrorProne::getError();
@@ -183,7 +169,12 @@ SQLiteAssembler::getAssembleSQL(const std::string &tableName)
 
     std::ostringstream firstHalfStream;
     std::ostringstream lastHalfStream;
-    firstHalfStream << "INSERT INTO " << tableName << "(rowid";
+    if (!m_duplicated) {
+        firstHalfStream << "INSERT INTO ";
+    } else {
+        firstHalfStream << "INSERT OR IGNORE INTO ";
+    }
+    firstHalfStream << tableName << "(rowid";
     lastHalfStream << ") VALUES(?";
     for (const auto &columnName : columnNames) {
         firstHalfStream << ", " << columnName;
