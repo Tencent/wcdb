@@ -95,7 +95,7 @@ bool Mechanic::work()
                 !assembleSequence(element.first, element.second.sequence)) {
                 continue;
             }
-            assembleAssociatedSQLs(element.second.associatedSQLs);
+
             for (const auto &element : element.second.verifiedPagenos) {
                 if (isErrorCritial()) {
                     break;
@@ -105,6 +105,7 @@ bool Mechanic::work()
                     tryUpgradeCrawlerError();
                 }
             }
+            assembleAssociatedSQLs(element.second.associatedSQLs);
         }
         markAsAssembled();
     }
