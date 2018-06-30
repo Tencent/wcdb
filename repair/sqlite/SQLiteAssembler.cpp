@@ -288,7 +288,7 @@ bool SQLiteAssembler::open()
     if (!SQLiteBase::open()) {
         return false;
     }
-    if (!execute("PRAGMA journal_mode=OFF") != SQLITE_OK) {
+    if (!execute("PRAGMA journal_mode=OFF")) {
         close();
         return false;
     }
