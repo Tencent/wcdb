@@ -113,10 +113,13 @@
     [self measureMetrics:self.class.defaultPerformanceMetrics
         automaticallyStartMeasuring:false
                            forBlock:^{
+                             if (tearDownBlock) {
+                                 tearDownBlock();
+                             }
 
-                             tearDownBlock();
-
-                             setUpBlock();
+                             if (setUpBlock) {
+                                 setUpBlock();
+                             }
 
                              [self startMeasuring];
 
@@ -126,7 +129,9 @@
 
                              correctnessBlock();
 
-                             tearDownBlock();
+                             if (tearDownBlock) {
+                                 tearDownBlock();
+                             }
                            }];
 }
 
