@@ -87,6 +87,7 @@ protected:
 
 #pragma mark - SQLite Base
 protected:
+    bool open();
     void close();
 };
 

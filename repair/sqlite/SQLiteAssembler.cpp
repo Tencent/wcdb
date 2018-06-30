@@ -142,13 +142,9 @@ bool SQLiteAssembler::assembleCell(const Cell &cell)
                 break;
         }
     }
-    if (!step(m_cellSTMT)) {
-        if (m_error.code() != Error::Code::Constraint) {
-            return false;
-        }
-    }
+    bool result = step(m_cellSTMT);
     sqlite3_reset((sqlite3_stmt *) m_cellSTMT);
-    return true;
+    return result;
 }
 
 const Error &SQLiteAssembler::getError() const
@@ -314,6 +310,19 @@ bool SQLiteAssembler::assembleSequence(const std::string &tableName,
 }
 
 #pragma mark - SQLite Base
+bool SQLiteAssembler::open()
+{
+    if (!SQLiteBase::open()) {
+        return false;
+    }
+    int rc = execute("PRAGMA journal_mode=OFF");
+    if (rc != SQLITE_OK) {
+        close();
+        return false;
+    }
+    return true;
+}
+
 void SQLiteAssembler::close()
 {
     WCTInnerAssert(m_insertSequenceSTMT == nullptr);
