@@ -128,7 +128,10 @@
 
 + (NSString *)randomString
 {
-    int length = [NSNumber randomUInt8];
+    int length;
+    do {
+        length = [NSNumber randomUInt8];
+    } while (length < 8);
     static const char alphanum[] =
         "0123456789"
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
