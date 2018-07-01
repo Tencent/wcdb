@@ -21,7 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/SQLiteBase.hpp>
 #include <WCDB/String.hpp>
-#include <sqlite3.h>
+#include <sqlcipher/sqlite3.h>
 #include <sstream>
 
 namespace WCDB {

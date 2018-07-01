@@ -19,7 +19,7 @@
  */
 
 #include <WCDB/SQLiteLocker.hpp>
-#include <sqlite3.h>
+#include <sqlcipher/sqlite3.h>
 
 namespace WCDB {
 
