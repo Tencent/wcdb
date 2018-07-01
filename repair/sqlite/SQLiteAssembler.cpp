@@ -288,7 +288,8 @@ bool SQLiteAssembler::open()
     if (!SQLiteBase::open()) {
         return false;
     }
-    if (!execute("PRAGMA journal_mode=OFF")) {
+    if (!execute("PRAGMA journal_mode=OFF") ||
+        !execute("PRAGMA mmap_size=2147418112")) {
         close();
         return false;
     }
