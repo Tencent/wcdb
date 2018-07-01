@@ -90,6 +90,9 @@
 //Note that since repair will usually be run in background thread with blocked UI, test is not for the best performance but for a tolerable performance.
 - (void)test_repair_without_backup
 {
+    NSString *firstBackupPath = [_cachedDatabase.path stringByAppendingString:@"-first.material"];
+    NSString *lastBackupPath = [_cachedDatabase.path stringByAppendingString:@"-last.material"];
+
     __block double score;
     [self measure:^{
       score = [_cachedDatabase retrieve:nil];
@@ -97,7 +100,14 @@
         setUp:^{
           XCTAssertTrue([self lazyPrepareCachedDatabase:self.config.databaseSize]);
         }
-        tearDown:nil
+        tearDown:^{
+          if ([self.fileManager fileExistsAtPath:firstBackupPath]) {
+              XCTAssertTrue([self.fileManager removeItemAtPath:firstBackupPath error:nil]);
+          }
+          if ([self.fileManager fileExistsAtPath:lastBackupPath]) {
+              XCTAssertTrue([self.fileManager removeItemAtPath:lastBackupPath error:nil]);
+          }
+        }
         checkCorrectness:^{
           XCTAssertEqual(score, 1);
         }];
@@ -105,6 +115,9 @@
 
 - (void)test_repair_with_backup
 {
+    NSString *firstBackupPath = [_cachedDatabase.path stringByAppendingString:@"-first.material"];
+    NSString *lastBackupPath = [_cachedDatabase.path stringByAppendingString:@"-last.material"];
+
     __block double score;
     [self measure:^{
       score = [_cachedDatabase retrieve:nil];
@@ -112,6 +125,8 @@
         setUp:^{
           XCTAssertTrue([self lazyPrepareCachedDatabase:self.config.databaseSize]);
           XCTAssertTrue([_cachedDatabase backup]);
+
+          XCTAssertTrue([self.fileManager fileExistsAtPath:firstBackupPath] || [self.fileManager fileExistsAtPath:lastBackupPath]);
         }
         tearDown:nil
         checkCorrectness:^{
