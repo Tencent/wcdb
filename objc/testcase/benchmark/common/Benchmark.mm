@@ -38,7 +38,7 @@
     _config.readCount = 100;
     _config.writeCount = 100;
     _config.tableCount = 50;
-    _config.databaseSize = 500 * 1024 * 1024; //500MB
+    _config.databaseSize = 100 * 1024 * 1024; //100MB
 }
 
 - (void)tearDown
