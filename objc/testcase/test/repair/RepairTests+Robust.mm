@@ -137,7 +137,7 @@
 
     double ratio = 0.1;
     double attackRatio = [self carpetBombingPage:ratio];
-    XCTAssertGreaterThan(attackRatio, ratio);
+    XCTAssertGreaterThanOrEqual(attackRatio, ratio);
 
     double score = [_database retrieve:nil];
     XCTAssertGreaterThanOrEqual(score, 0);

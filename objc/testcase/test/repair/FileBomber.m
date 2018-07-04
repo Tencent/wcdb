@@ -90,7 +90,7 @@
 {
     if (self = [super initWithPath:path]) {
         _walFileBomber = [[FileBomber alloc] initWithPath:[path stringByAppendingString:@"-wal"]];
-        _pageSize = getpagesize();
+        _pageSize = 4096;
         _attacked = [[NSMutableSet alloc] init];
         _pageCount = (int) (self.fileSize / _pageSize) + ((self.fileSize % _pageSize) > 0);
     }
