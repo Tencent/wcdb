@@ -24,6 +24,8 @@
 
 - (instancetype)initWithMessage:(NSString *)message;
 
+- (instancetype)initWithExtension:(NSString *)extension;
+
 - (instancetype)initWithMessage:(NSString *)message
                    andExtension:(NSString *)extension;
 

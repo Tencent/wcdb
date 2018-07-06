@@ -32,6 +32,7 @@
     FTSTestCaseObject *_englishObject;
     FTSTestCaseObject *_digitObject;
     NSString *_tableName;
+    WCDB::Column _tableColumn;
     Class _cls;
 }
 
@@ -45,19 +46,11 @@
 
     _cls = FTSTestCaseObject.class;
 
-    _chineseObject = [[FTSTestCaseObject alloc] initWithMessage:@"苹果树" andExtension:@"WeChat"];
-
-    _englishObject = [[FTSTestCaseObject alloc] initWithMessage:@"WCDB is a cross-platform database framework developed by WeChat."];
-
-    _digitObject = [[FTSTestCaseObject alloc] initWithMessage:@"abc123efg456" andExtension:@"digit"];
+    _tableColumn = FTSTestCaseObject.columnNamed(_tableName);
 
     [_database setTokenizer:WCTTokenizer.name];
 
     XCTAssertTrue([_database createVirtualTable:_tableName withClass:_cls]);
-
-    NSArray<FTSTestCaseObject *> *objects = @[ _chineseObject, _englishObject, _digitObject ];
-
-    XCTAssertTrue([_database insertObjects:objects intoTable:_tableName]);
 }
 
 - (void)tearDown
@@ -71,141 +64,199 @@
     [super tearDown];
 }
 
-- (void)searching_test:(const char *)keyword
-        expectedObject:(FTSTestCaseObject *)expected
+- (BOOL)expectObject:(FTSTestCaseObject *)expected
+       withCondition:(const WCDB::Expression &)condition
 {
-    NSArray<FTSTestCaseObject *> *objects = [_database getObjectsOfClass:_cls fromTable:_tableName where:FTSTestCaseObject.message.match(keyword)];
-    XCTAssertEqual(objects.count, 1);
-    XCTAssertTrue([objects[0] isEqualToObject:expected]);
+    NSArray<FTSTestCaseObject *> *objects = [_database getObjectsOfClass:_cls fromTable:_tableName where:condition];
+    return objects.count == 1 && [objects[0] isEqualToObject:expected];
 }
 
-- (void)searching_test_failed:(const char *)keyword
+- (BOOL)expectNilWithCondition:(const WCDB::Expression)condition
 {
-    NSArray<FTSTestCaseObject *> *objects = [_database getObjectsOfClass:_cls fromTable:_tableName where:FTSTestCaseObject.message.match(keyword)];
-    XCTAssertNotNil(objects);
-    XCTAssertEqual(objects.count, 0);
+    NSArray<FTSTestCaseObject *> *objects = [_database getObjectsOfClass:_cls fromTable:_tableName where:condition];
+    return objects != nil && objects.count == 0;
 }
 
-- (void)test_search_chinese
+- (BOOL)expectObjects:(NSArray<FTSTestCaseObject *> *)expected
+        withCondition:(const WCDB::Expression &)condition
 {
-    [self searching_test:"苹" expectedObject:_chineseObject];
-    [self searching_test:"苹果" expectedObject:_chineseObject];
-    [self searching_test:"苹果树" expectedObject:_chineseObject];
-    [self searching_test:"果" expectedObject:_chineseObject];
-    [self searching_test:"果树" expectedObject:_chineseObject];
-    [self searching_test:"树" expectedObject:_chineseObject];
-    [self searching_test_failed:"苹树"];
+    NSArray<FTSTestCaseObject *> *objects = [_database getObjectsOfClass:_cls fromTable:_tableName where:condition];
+    if (objects.count != expected.count) {
+        return NO;
+    }
+    expected = expected.sorted;
+    objects = objects.sorted;
+    for (NSUInteger i = 0; i < expected.count; ++i) {
+        if (![expected[i] isEqualToObject:objects[i]]) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
+- (BOOL)expectObject:(FTSTestCaseObject *)expected
+    whileSearchingByKeyword:(const char *)keyword
+{
+    return [self expectObject:expected withCondition:_tableColumn.match(keyword)];
+}
+
+- (BOOL)expectNilWhileSearchingByKeyword:(const char *)keyword
+{
+    return [self expectNilWithCondition:_tableColumn.match(keyword)];
+}
+
+- (BOOL)expectObjects:(NSArray<FTSTestCaseObject *> *)expected
+    whileSearchingByKeyword:(const char *)keyword
+{
+    return [self expectObjects:expected withCondition:_tableColumn.match(keyword)];
+}
+
+- (BOOL)insertDummyObject
+{
+    FTSTestCaseObject *dummy = [[FTSTestCaseObject alloc] initWithMessage:@"dummy" andExtension:@"dummy"];
+    return [_database insertObject:dummy intoTable:_tableName];
+}
+
+- (void)test_chinese
+{
+    FTSTestCaseObject *chinese = [[FTSTestCaseObject alloc] initWithMessage:@"苹果树"];
+    XCTAssertTrue([_database insertObject:chinese intoTable:_tableName]);
+
+    XCTAssertTrue([self insertDummyObject]);
+
+    XCTAssertTrue([self expectObject:chinese whileSearchingByKeyword:"苹"]);
+    XCTAssertTrue([self expectObject:chinese whileSearchingByKeyword:"苹果"]);
+    XCTAssertTrue([self expectObject:chinese whileSearchingByKeyword:"苹果树"]);
+    XCTAssertTrue([self expectObject:chinese whileSearchingByKeyword:"果树"]);
+    XCTAssertTrue([self expectObject:chinese whileSearchingByKeyword:"树"]);
+    XCTAssertTrue([self expectNilWhileSearchingByKeyword:"苹树"]);
 }
 
 - (void)test_english
 {
-    [self searching_test:"WeChat" expectedObject:_englishObject];
-    [self searching_test_failed:"We Chat"];
+    FTSTestCaseObject *english = [[FTSTestCaseObject alloc] initWithMessage:@"WCDB is a cross-platform database framework developed by WeChat."];
+    XCTAssertTrue([_database insertObject:english intoTable:_tableName]);
+
+    XCTAssertTrue([self insertDummyObject]);
+
+    XCTAssertTrue([self expectObject:english whileSearchingByKeyword:"WCDB"]);
+    XCTAssertTrue([self expectObject:english whileSearchingByKeyword:"WeChat"]);
+    //case insensive
+    XCTAssertTrue([self expectObject:english whileSearchingByKeyword:"DATABASE"]);
+    XCTAssertTrue([self expectNilWhileSearchingByKeyword:"Hello"]);
 }
 
-- (void)test_english_case_insensive
+- (void)test_number
 {
-    [self searching_test:"DATABASE" expectedObject:_englishObject];
+    FTSTestCaseObject *number = [[FTSTestCaseObject alloc] initWithMessage:@"123 456 789"];
+    XCTAssertTrue([_database insertObject:number intoTable:_tableName]);
+
+    XCTAssertTrue([self insertDummyObject]);
+
+    XCTAssertTrue([self expectObject:number whileSearchingByKeyword:"123"]);
+    XCTAssertTrue([self expectObject:number whileSearchingByKeyword:"456"]);
+    XCTAssertTrue([self expectObject:number whileSearchingByKeyword:"789"]);
+    XCTAssertTrue([self expectNilWhileSearchingByKeyword:"567"]);
 }
 
-- (void)test_english_lemmatization
+- (void)test_lemmatization
 {
-    //"is" can be matched
-    [self searching_test:"are" expectedObject:_englishObject];
-    [self searching_test:"are*" expectedObject:_englishObject];
+    FTSTestCaseObject *island = [[FTSTestCaseObject alloc] initWithMessage:@"island"];
+    XCTAssertTrue([_database insertObject:island intoTable:_tableName]);
+
+    FTSTestCaseObject *benefit = [[FTSTestCaseObject alloc] initWithMessage:@"benefit"];
+    XCTAssertTrue([_database insertObject:benefit intoTable:_tableName]);
+
+    XCTAssertTrue([self expectObject:island whileSearchingByKeyword:"is*"]);
+    XCTAssertTrue([self expectObject:island whileSearchingByKeyword:"be*"]);
+    XCTAssertTrue([self expectNilWhileSearchingByKeyword:"are*"]);
+    XCTAssertTrue([self expectNilWhileSearchingByKeyword:"am*"]);
+    XCTAssertTrue([self expectNilWhileSearchingByKeyword:"are"]);
+    XCTAssertTrue([self expectNilWhileSearchingByKeyword:"am"]);
+    XCTAssertTrue([self expectNilWhileSearchingByKeyword:"is"]);
+    XCTAssertTrue([self expectNilWhileSearchingByKeyword:"be"]);
 }
 
-- (void)test_digit
+- (void)test_mixed
 {
-    [self searching_test:"123" expectedObject:_digitObject];
-    [self searching_test:"45*" expectedObject:_digitObject];
-    [self searching_test_failed:"7*"];
+    FTSTestCaseObject *mixed = [[FTSTestCaseObject alloc] initWithMessage:@"中文English日本語123"];
+    XCTAssertTrue([_database insertObject:mixed intoTable:_tableName]);
+    XCTAssertTrue([self insertDummyObject]);
+    XCTAssertTrue([self expectObject:mixed whileSearchingByKeyword:"中"]);
+    XCTAssertTrue([self expectObject:mixed whileSearchingByKeyword:"English"]);
+    XCTAssertTrue([self expectObject:mixed whileSearchingByKeyword:"語"]);
+    XCTAssertTrue([self expectObject:mixed whileSearchingByKeyword:"123"]);
 }
 
-- (void)test_table_search
+- (void)test_column_match
 {
-    NSArray<FTSTestCaseObject *> *objects = [_database getObjectsOfClass:_cls fromTable:_tableName where:FTSTestCaseObject.columnNamed(_tableName).match("WeChat")];
-    XCTAssertEqual(objects.count, 2);
+    FTSTestCaseObject *message = [[FTSTestCaseObject alloc] initWithMessage:@"error_prone"];
+    FTSTestCaseObject *extension = [[FTSTestCaseObject alloc] initWithExtension:@"error_prone"];
+    NSArray<FTSTestCaseObject *> *objects = @[ message, extension ];
+    XCTAssertTrue([_database insertObjects:objects intoTable:_tableName]);
+
+    XCTAssertTrue([self expectObject:message withCondition:FTSTestCaseObject.message.match("error_prone")]);
+    XCTAssertTrue([self expectObject:extension withCondition:FTSTestCaseObject.extension.match("error_prone")]);
+    XCTAssertTrue([self expectObjects:objects whileSearchingByKeyword:"error_prone"]);
+
+    XCTAssertTrue([self expectObject:message whileSearchingByKeyword:"message: error_prone"]);
+    XCTAssertTrue([self expectObject:extension whileSearchingByKeyword:"extension: error_prone"]);
+    XCTAssertTrue([self expectNilWhileSearchingByKeyword:"empty: error_prone"]);
 }
 
-- (void)searching_offset_test:(NSString *)keyword
-             expectedProperty:(const WCTProperty &)expectedProperty
-                   termNumber:(int)expectedtermNumber
-                       string:(NSString *)expectedString
-                       object:(FTSTestCaseObject *)object
+- (void)test_token_prefix_queries
 {
-    WCTOneColumn *column = [_database getColumnOnResult:FTSTestCaseObject.columnNamed(_tableName).offsets() fromTable:_tableName where:FTSTestCaseObject.columnNamed(_tableName).match(keyword.UTF8String)];
-    XCTAssertEqual(column.count, 1);
+    FTSTestCaseObject *tokenPrefix = [[FTSTestCaseObject alloc] initWithMessage:@"token prefix queries"];
+    XCTAssertTrue([_database insertObject:tokenPrefix intoTable:_tableName]);
+    XCTAssertTrue([self insertDummyObject]);
 
-    NSArray<NSString *> *components = [column[0].stringValue componentsSeparatedByString:@" "];
-    XCTAssertEqual(components.count, 4);
-
-    int expectedColumnNumber = [FTSTestCaseObject indexOfProperty:expectedProperty];
-    XCTAssertNotEqual(expectedColumnNumber, -1);
-    int columnNumber = components[0].intValue;
-    XCTAssertEqual(columnNumber, expectedColumnNumber);
-
-    int termNumber = components[1].intValue;
-    XCTAssertEqual(termNumber, expectedtermNumber);
-
-    int offset = components[2].intValue;
-    int size = components[3].intValue;
-
-    NSString *expectedFullString;
-    if (expectedProperty.isSameColumnBinding(FTSTestCaseObject.message)) {
-        expectedFullString = object.message;
-    } else if (expectedProperty.isSameColumnBinding(FTSTestCaseObject.extension)) {
-        expectedFullString = object.extension;
-    } else {
-        XCTFail(@"");
-    }
-
-    NSData *data = [[expectedFullString dataUsingEncoding:NSUTF8StringEncoding] subdataWithRange:NSMakeRange(offset, size)];
-    NSString *matchedString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    XCTAssertTrue([matchedString compare:expectedString options:NSCaseInsensitiveSearch] == NSOrderedSame);
+    XCTAssertTrue([self expectObject:tokenPrefix whileSearchingByKeyword:"tok*"]);
+    XCTAssertTrue([self expectNilWhileSearchingByKeyword:"ok*"]);
 }
 
-- (void)test_offset_chinese
+- (void)test_phrase_queries
 {
-    [self searching_offset_test:@"果树"
-               expectedProperty:FTSTestCaseObject.message
-                     termNumber:0
-                         string:@"果树"
-                         object:_chineseObject];
+    FTSTestCaseObject *phraseQueries = [[FTSTestCaseObject alloc] initWithMessage:@"prefix phrase queries subfix"];
+    XCTAssertTrue([_database insertObject:phraseQueries intoTable:_tableName]);
+    XCTAssertTrue([self insertDummyObject]);
+
+    XCTAssertTrue([self expectObject:phraseQueries whileSearchingByKeyword:"phrase subfix"]);
+    XCTAssertTrue([self expectNilWhileSearchingByKeyword:"\"phrase subfix\""]);
+    XCTAssertTrue([self expectObject:phraseQueries whileSearchingByKeyword:"\"phrase queries\""]);
 }
 
-- (void)test_offset_english
+- (void)test_near_queries
 {
-    [self searching_offset_test:@"framework*"
-               expectedProperty:FTSTestCaseObject.message
-                     termNumber:0
-                         string:@"framework"
-                         object:_englishObject];
+    FTSTestCaseObject *objectWithOneGaps = [[FTSTestCaseObject alloc] initWithMessage:@"Cowherd one WeaverGirl"];
+    FTSTestCaseObject *objectWithTenGaps = [[FTSTestCaseObject alloc] initWithMessage:@"Cowherd one two three four five six seven eight nine ten WeaverGirl"];
+    FTSTestCaseObject *objectWithEleventGaps = [[FTSTestCaseObject alloc] initWithMessage:@"Cowherd one two three four five six seven eight nine ten eleven WeaverGirl"];
+    NSArray<FTSTestCaseObject *> *objects = @[ objectWithOneGaps, objectWithTenGaps, objectWithEleventGaps ];
+    XCTAssertTrue([_database insertObjects:objects intoTable:_tableName]);
+
+    NSArray<FTSTestCaseObject *> *objectsLessThanTenGaps = @[ objectWithOneGaps, objectWithTenGaps ];
+
+    XCTAssertTrue([self expectObject:objectWithOneGaps whileSearchingByKeyword:"Cowherd NEAR/1 WeaverGirl"]);
+    XCTAssertTrue([self expectObjects:objectsLessThanTenGaps whileSearchingByKeyword:"Cowherd NEAR/10 WeaverGirl"]);
+    XCTAssertTrue([self expectObjects:objects whileSearchingByKeyword:"Cowherd NEAR/11 WeaverGirl"]);
+
+    XCTAssertTrue([self expectObjects:objectsLessThanTenGaps whileSearchingByKeyword:"Cowherd NEAR WeaverGirl"]);
 }
 
-- (void)test_offset_multiple_terms
+- (void)test_operation
 {
-    [self searching_offset_test:@"数字 OR DIGIT"
-               expectedProperty:FTSTestCaseObject.extension
-                     termNumber:1
-                         string:@"DIGIT"
-                         object:_digitObject];
-}
+    FTSTestCaseObject *AB = [[FTSTestCaseObject alloc] initWithMessage:@"A B"];
+    FTSTestCaseObject *BC = [[FTSTestCaseObject alloc] initWithMessage:@"B C"];
+    FTSTestCaseObject *CD = [[FTSTestCaseObject alloc] initWithMessage:@"C D"];
 
-//- (void)test_error_prone
-//{
-//    //TODO
-//    FTSTestCaseObject *errorProneObject1 = [[FTSTestCaseObject alloc] initWithMessage:@"error prone: benefit"];
-//    FTSTestCaseObject *errorProneObject2 = [[FTSTestCaseObject alloc] initWithMessage:@"error prone: island"];
-//    NSArray<FTSTestCaseObject *> *objects = @[ errorProneObject1, errorProneObject2 ];
-//    XCTAssertTrue([_database insertObjects:objects intoTable:_tableName]);
-//
-//    [self searching_test_failed:"is"];
-//    [self searching_test:"is*" expectedObject:errorProneObject1];
-//    [self searching_test_failed:"be"];
-//    [self searching_test:"be*" expectedObject:errorProneObject2];
-//    [self searching_test_failed:"are"];
-//    [self searching_test_failed:"are*"];
-//}
+    NSArray<FTSTestCaseObject *> *objects = @[ AB, BC, CD ];
+    XCTAssertTrue([_database insertObjects:objects intoTable:_tableName]);
+
+    NSArray<FTSTestCaseObject *> *ABBC = @[ AB, BC ];
+    XCTAssertTrue([self expectObject:AB whileSearchingByKeyword:"A AND B"]);
+    XCTAssertTrue([self expectObject:AB whileSearchingByKeyword:"A B"]);
+    XCTAssertTrue([self expectObjects:ABBC whileSearchingByKeyword:"A OR B"]);
+
+    XCTAssertTrue([self expectObject:AB whileSearchingByKeyword:"B NOT C"]);
+}
 
 @end

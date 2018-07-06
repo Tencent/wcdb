@@ -19,6 +19,7 @@
  */
 
 #import "FTSTestCaseObject.h"
+#import "Convenience.h"
 #import "FTSTestCaseObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
@@ -36,11 +37,15 @@ WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE_WCDB(FTSTestCaseObject)
     return [self initWithMessage:message andExtension:nil];
 }
 
+- (instancetype)initWithExtension:(NSString *)extension
+{
+    return [self initWithMessage:nil andExtension:extension];
+}
+
 - (instancetype)initWithMessage:(NSString *)message
                    andExtension:(NSString *)extension
 {
     if (self = [super init]) {
-        assert(message != nil);
         _message = message;
         _extension = extension;
     }
@@ -49,13 +54,7 @@ WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE_WCDB(FTSTestCaseObject)
 
 - (BOOL)isEqualToObject:(FTSTestCaseObject *)object
 {
-    if (![self.message isEqualToString:object.message]) {
-        return NO;
-    }
-    if (self.extension != nil) {
-        return [self.extension isEqualToString:object.extension];
-    }
-    return object.extension == nil;
+    return [NSString isNullableString:self.message equalTo:object.message] && [NSString isNullableString:self.extension equalTo:object.extension];
 }
 
 + (int)indexOfProperty:(const WCTProperty &)property
@@ -66,6 +65,14 @@ WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE_WCDB(FTSTestCaseObject)
         return -1;
     }
     return (int) std::distance(columnBindings.begin(), iter);
+}
+
+- (NSUInteger)hash
+{
+    NSMutableData *data = [[NSMutableData alloc] init];
+    [data appendData:[self.message dataUsingEncoding:NSUTF8StringEncoding]];
+    [data appendData:[self.extension dataUsingEncoding:NSUTF8StringEncoding]];
+    return data.hash;
 }
 
 @end

@@ -42,8 +42,7 @@ WCDBCursorInfo::WCDBCursorInfo(const char *input,
     , m_subTokensCursor(0)
     , m_subTokensDoubleChar(true)
     , m_bufferLength(0)
-{
-}
+{}
 
 //Inspired by zorrozhang
 int WCDBCursorInfo::step(const char **ppToken,
@@ -139,6 +138,12 @@ int WCDBCursorInfo::step(const char **ppToken,
     *piStartOffset = m_startOffset;
     *piEndOffset = m_endOffset;
     *piPosition = m_position++;
+
+#warning - TODO
+    printf("step: [%s] to [%s], range: %d %d pos: %d \n",
+           std::string(m_input, m_inputLength).c_str(),
+           std::string(*ppToken, *pnBytes).c_str(), m_startOffset, m_endOffset,
+           m_position);
 
     return SQLITE_OK;
 }

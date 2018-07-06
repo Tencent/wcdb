@@ -49,6 +49,7 @@
 #pragma mark - NSString
 @interface NSString (Random)
 + (NSString *)randomString;
++ (BOOL)isNullableString:(NSString *)lhs equalTo:(NSString *)rhs;
 @end
 
 #pragma mark - NSNumber

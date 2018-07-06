@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/String.hpp>
 #include <WCDB/WINQ.h>
 
 namespace WCDB {
@@ -27,6 +28,12 @@ const Column &Column::rowid()
 {
     static const Column *s_rowid = new Column("rowid");
     return *s_rowid;
+}
+
+Column::Column()
+{
+    Lang::Column &lang = getMutableLang();
+    lang.name.assign(String::empty());
 }
 
 Column::Column(const std::string &name)
@@ -42,8 +49,7 @@ Lang::CopyOnWriteLazyLang<Lang::Expr> Column::getExpressionLang() const
 
 Column::Column(const Lang::CopyOnWriteLazyLang<Lang::Column> &column)
     : DescribableWithLang<Lang::Column>(column)
-{
-}
+{}
 
 Expression Column::getRedirectSource() const
 {

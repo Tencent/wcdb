@@ -143,6 +143,14 @@
     return [NSString stringWithString:randomString];
 }
 
++ (BOOL)isNullableString:(NSString *)lhs equalTo:(NSString *)rhs
+{
+    if (lhs == nil) {
+        return rhs == nil;
+    }
+    return [rhs isEqualToString:lhs];
+}
+
 @end
 
 @implementation NSNumber (Random)
