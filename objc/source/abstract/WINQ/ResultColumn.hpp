@@ -30,10 +30,9 @@ class ResultColumn : public DescribableWithLang<Lang::ResultColumn> {
 public:
     static const ResultColumn &all();
 
-    template <typename T>
+    template<typename T>
     ResultColumn(const T &t,
-                 typename std::enable_if<ExpressionConvertible<T>::value>::type
-                     * = nullptr)
+                 typename std::enable_if<ExpressionConvertible<T>::value>::type * = nullptr)
     {
         setupWithExpression(ExpressionConvertible<T>::as(t));
     }

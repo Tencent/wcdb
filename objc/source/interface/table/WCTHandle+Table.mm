@@ -61,7 +61,7 @@
 {
     WCTRemedialAssert(tableName && cls, "Class or table name can't be null.", return NO;);
     return [self runNestedTransaction:^BOOL(WCTHandle *handle) {
-      return [handle rebindTable:tableName toClass:cls];
+        return [handle rebindTable:tableName toClass:cls];
     }];
 }
 

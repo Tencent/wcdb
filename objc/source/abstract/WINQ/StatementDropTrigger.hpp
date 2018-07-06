@@ -27,7 +27,6 @@
 namespace WCDB {
 
 class StatementDropTrigger : public StatementWithLang<Lang::DropTriggerSTMT> {
-
 public:
     StatementDropTrigger();
     StatementDropTrigger &dropTrigger(const std::string &triggerName);

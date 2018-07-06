@@ -35,7 +35,7 @@ void Notifier::logger(const Error &error)
 #ifndef DEBUG
                && error.level != Error::Level::Debug
 #endif
-        ;
+    ;
 
     if (log) {
         std::ostringstream stream;
@@ -74,8 +74,7 @@ Notifier::Notifier()
     m_callbacks["default"] = Notifier::logger;
 }
 
-void Notifier::setNotification(const std::string &name,
-                               const Callback &callback)
+void Notifier::setNotification(const std::string &name, const Callback &callback)
 {
     LockGuard lockGuard(m_lock);
     auto iter = m_callbacks.find(name);
@@ -86,7 +85,7 @@ void Notifier::setNotification(const std::string &name,
             m_callbacks.erase(iter);
         }
     } else {
-        m_callbacks.insert({name, callback});
+        m_callbacks.insert({ name, callback });
     }
 }
 
@@ -138,10 +137,7 @@ void Notifier::warning(const std::string &message, const char *file, int line)
     error(Error::Level::Warning, message, file, line);
 }
 
-void Notifier::error(Error::Level level,
-                     const std::string &message,
-                     const char *file,
-                     int line)
+void Notifier::error(Error::Level level, const std::string &message, const char *file, int line)
 {
     Error error;
     error.setCode(Error::Code::Misuse, "Assertion");

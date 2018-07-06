@@ -51,27 +51,24 @@ bool HandleNotification::isTraceNotificationSet() const
     return !m_sqlNotifications.empty() || !m_performanceNotifications.empty();
 }
 
-void HandleNotification::dispatchTraceNotification(unsigned int flag,
-                                                   void *P,
-                                                   void *X)
+void HandleNotification::dispatchTraceNotification(unsigned int flag, void *P, void *X)
 {
     sqlite3_stmt *stmt = (sqlite3_stmt *) P;
     const char *sql = sqlite3_sql(stmt);
     switch (flag) {
-        case SQLITE_TRACE_STMT: {
-            if (sql) {
-                dispatchSQLTraceNotification(sql);
-            }
-        } break;
-        case SQLITE_TRACE_PROFILE: {
-            sqlite3_int64 *cost = (sqlite3_int64 *) X;
-            sqlite3 *db = sqlite3_db_handle(stmt);
-            dispatchPerformanceTraceNotification(sql ? sql : String::empty(),
-                                                 *cost,
-                                                 !sqlite3_get_autocommit(db));
-        } break;
-        default:
-            break;
+    case SQLITE_TRACE_STMT: {
+        if (sql) {
+            dispatchSQLTraceNotification(sql);
+        }
+    } break;
+    case SQLITE_TRACE_PROFILE: {
+        sqlite3_int64 *cost = (sqlite3_int64 *) X;
+        sqlite3 *db = sqlite3_db_handle(stmt);
+        dispatchPerformanceTraceNotification(
+        sql ? sql : String::empty(), *cost, !sqlite3_get_autocommit(db));
+    } break;
+    default:
+        break;
     }
 }
 
@@ -85,10 +82,11 @@ void HandleNotification::setupTraceNotification()
         flag |= SQLITE_TRACE_PROFILE;
     }
     if (flag != 0) {
-        sqlite3_trace_v2((sqlite3 *) getRawHandle(), flag,
+        sqlite3_trace_v2((sqlite3 *) getRawHandle(),
+                         flag,
                          [](unsigned int T, void *C, void *P, void *X) {
-                             HandleNotification *notification =
-                                 reinterpret_cast<HandleNotification *>(C);
+                             HandleNotification *notification
+                             = reinterpret_cast<HandleNotification *>(C);
                              notification->dispatchTraceNotification(T, P, X);
                              return SQLITE_OK;
                          },
@@ -99,8 +97,8 @@ void HandleNotification::setupTraceNotification()
 }
 
 #pragma mark - SQL
-void HandleNotification::setNotificationWhenSQLTraced(
-    const std::string &name, const SQLNotification &onTraced)
+void HandleNotification::setNotificationWhenSQLTraced(const std::string &name,
+                                                      const SQLNotification &onTraced)
 {
     bool stateBefore = isTraceNotificationSet();
     if (onTraced) {
@@ -124,12 +122,12 @@ void HandleNotification::dispatchSQLTraceNotification(const std::string &sql)
 
 #pragma mark - Performance
 HandleNotification::Footprint::Footprint(const std::string &sql_)
-    : sql(sql_), frequency(1)
+: sql(sql_), frequency(1)
 {
 }
 
-void HandleNotification::setNotificationWhenPerformanceTraced(
-    const std::string &name, const PerformanceNotification &onTraced)
+void HandleNotification::setNotificationWhenPerformanceTraced(const std::string &name,
+                                                              const PerformanceNotification &onTraced)
 {
     bool stateBefore = isTraceNotificationSet();
     if (onTraced) {
@@ -143,8 +141,9 @@ void HandleNotification::setNotificationWhenPerformanceTraced(
     }
 }
 
-void HandleNotification::dispatchPerformanceTraceNotification(
-    const std::string &sql, const int64_t &cost, bool isInTransaction)
+void HandleNotification::dispatchPerformanceTraceNotification(const std::string &sql,
+                                                              const int64_t &cost,
+                                                              bool isInTransaction)
 {
     if (!m_footprints.empty()) {
         auto &footprint = m_footprints.back();
@@ -167,8 +166,8 @@ void HandleNotification::dispatchPerformanceTraceNotification(
 }
 
 #pragma mark - Committed
-void HandleNotification::setNotificationWhenCommitted(
-    const std::string &name, const CommittedNotification &onCommitted)
+void HandleNotification::setNotificationWhenCommitted(const std::string &name,
+                                                      const CommittedNotification &onCommitted)
 {
     bool stateBefore = isCommittedNotificationSet();
     if (onCommitted) {
@@ -185,15 +184,14 @@ void HandleNotification::setNotificationWhenCommitted(
 void HandleNotification::setupCommittedNotification()
 {
     if (!m_commitedNotifications.empty()) {
-        sqlite3_wal_hook(
-            (sqlite3 *) getRawHandle(),
-            [](void *p, sqlite3 *, const char *, int frames) -> int {
-                HandleNotification *notification =
-                    reinterpret_cast<HandleNotification *>(p);
-                notification->dispatchCommittedNotification(frames);
-                return SQLITE_OK;
-            },
-            this);
+        sqlite3_wal_hook((sqlite3 *) getRawHandle(),
+                         [](void *p, sqlite3 *, const char *, int frames) -> int {
+                             HandleNotification *notification
+                             = reinterpret_cast<HandleNotification *>(p);
+                             notification->dispatchCommittedNotification(frames);
+                             return SQLITE_OK;
+                         },
+                         this);
     } else {
         sqlite3_wal_hook((sqlite3 *) getRawHandle(), nullptr, nullptr);
     }
@@ -223,19 +221,18 @@ bool HandleNotification::setupCheckpointNotification(bool ignorable)
     int rc = SQLITE_OK;
     if (!m_checkpointNotifications.empty()) {
         rc = sqlite3_wal_checkpoint_handler(
-            (sqlite3 *) getRawHandle(),
-            [](void *p, int frames) -> int {
-                HandleNotification *notification =
-                    reinterpret_cast<HandleNotification *>(p);
-                if (notification->dispatchCheckpointNotification(frames)) {
-                    return SQLITE_OK;
-                }
-                return SQLITE_ABORT;
-            },
-            this);
+        (sqlite3 *) getRawHandle(),
+        [](void *p, int frames) -> int {
+            HandleNotification *notification
+            = reinterpret_cast<HandleNotification *>(p);
+            if (notification->dispatchCheckpointNotification(frames)) {
+                return SQLITE_OK;
+            }
+            return SQLITE_ABORT;
+        },
+        this);
     } else {
-        rc = sqlite3_wal_checkpoint_handler((sqlite3 *) getRawHandle(), nullptr,
-                                            nullptr);
+        rc = sqlite3_wal_checkpoint_handler((sqlite3 *) getRawHandle(), nullptr, nullptr);
     }
     if (rc == SQLITE_OK || ignorable) {
         return true;
@@ -244,10 +241,9 @@ bool HandleNotification::setupCheckpointNotification(bool ignorable)
     return false;
 }
 
-bool HandleNotification::setNotificationWhenCheckpoint(
-    const std::string &name,
-    const CheckpointNotification &willCheckpoint,
-    bool ignorable)
+bool HandleNotification::setNotificationWhenCheckpoint(const std::string &name,
+                                                       const CheckpointNotification &willCheckpoint,
+                                                       bool ignorable)
 {
     CheckpointNotification oldNotification = nullptr;
     auto iter = m_checkpointNotifications.find(name);

@@ -24,30 +24,27 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-std::shared_ptr<MigrationInfo>
-MigrationInfo::info(const std::string &targetTable,
-                    const std::string &sourceTable,
-                    const std::string &sourceDatabasePath)
+std::shared_ptr<MigrationInfo> MigrationInfo::info(const std::string &targetTable,
+                                                   const std::string &sourceTable,
+                                                   const std::string &sourceDatabasePath)
 {
-    WCTAssert(
-        !sourceDatabasePath.empty() || targetTable != sourceTable,
-        "Migrating the same name database to the same table is meaningless.");
+    WCTAssert(!sourceDatabasePath.empty() || targetTable != sourceTable,
+              "Migrating the same name database to the same table is meaningless.");
     WCTAssert(!targetTable.empty() && !sourceTable.empty(),
               "Migrating table name can't not be empty.");
     return std::shared_ptr<MigrationInfo>(
-        new MigrationInfo(targetTable, sourceTable, sourceDatabasePath));
+    new MigrationInfo(targetTable, sourceTable, sourceDatabasePath));
 }
 
 MigrationInfo::MigrationInfo(const std::string &targetTable_,
                              const std::string &sourceTable_,
                              const std::string &sourceDatabasePath_)
-    : targetTable(targetTable_)
-    , sourceTable(sourceTable_)
-    , sourceDatabasePath(sourceDatabasePath_)
-    , schema(MigrationInfo::resolvedSchema(sourceDatabasePath_))
-    , unionedViewName(getUnionedViewPrefix() + "_" + targetTable + "_" +
-                      sourceTable)
-    , m_inited(false)
+: targetTable(targetTable_)
+, sourceTable(sourceTable_)
+, sourceDatabasePath(sourceDatabasePath_)
+, schema(MigrationInfo::resolvedSchema(sourceDatabasePath_))
+, unionedViewName(getUnionedViewPrefix() + "_" + targetTable + "_" + sourceTable)
+, m_inited(false)
 {
 }
 
@@ -74,38 +71,32 @@ void MigrationInfo::initialize(const std::set<std::string> &columnNames)
     //setup reusable statement
     OrderingTerm order = OrderingTerm(Column::rowid()).withOrder(Order::ASC);
 
-    m_statementForPickingRowIDs = StatementSelect()
-                                      .select(Column::rowid())
+    m_statementForPickingRowIDs
+    = StatementSelect().select(Column::rowid()).from(getSourceTable()).limit(BindParameter(1));
+
+    m_statementForMigration = StatementInsert()
+                              .insertInto(targetTable)
+                              .on(columns)
+                              .values(StatementSelect()
+                                      .select(resultColumns)
                                       .from(getSourceTable())
-                                      .limit(BindParameter(1));
+                                      .where(Column::rowid() == BindParameter(1))
+                                      .limit(1));
 
-    m_statementForMigration =
-        StatementInsert()
-            .insertInto(targetTable)
-            .on(columns)
-            .values(StatementSelect()
-                        .select(resultColumns)
-                        .from(getSourceTable())
-                        .where(Column::rowid() == BindParameter(1))
-                        .limit(1));
+    m_statementForDeletingMigratedRow = StatementDelete()
+                                        .deleteFrom(getQualifiedSourceTable())
+                                        .where(Column::rowid() == BindParameter(1))
+                                        .limit(1);
 
-    m_statementForDeletingMigratedRow =
-        StatementDelete()
-            .deleteFrom(getQualifiedSourceTable())
-            .where(Column::rowid() == BindParameter(1))
-            .limit(1);
-
-    m_statementForCreatingUnionedView =
-        StatementCreateView()
-            .createView(unionedViewName)
-            .temp()
-            .ifNotExists()
-            .as(StatementSelect()
-                    .select(resultColumns)
-                    .from(targetTable)
-                    .union_(SelectCore()
-                                .select(resultColumns)
-                                .from(getSourceTable())));
+    m_statementForCreatingUnionedView
+    = StatementCreateView()
+      .createView(unionedViewName)
+      .temp()
+      .ifNotExists()
+      .as(StatementSelect()
+          .select(resultColumns)
+          .from(targetTable)
+          .union_(SelectCore().select(resultColumns).from(getSourceTable())));
 
     m_inited.store(true);
 }
@@ -120,8 +111,7 @@ std::string MigrationInfo::resolvedSchema(const std::string &path)
     if (path.empty()) {
         return Schema::main();
     }
-    return MigrationInfo::schemaPrefix() +
-           std::to_string(std::hash<std::string>{}(path));
+    return MigrationInfo::schemaPrefix() + std::to_string(std::hash<std::string>{}(path));
 }
 
 bool MigrationInfo::isSameDatabaseMigration() const
@@ -152,10 +142,7 @@ const StatementDelete &MigrationInfo::getStatementForDeletingMigratedRow() const
 
 StatementDropTable MigrationInfo::getStatementForDroppingOldTable() const
 {
-    return StatementDropTable()
-        .dropTable(sourceTable)
-        .withSchema(schema)
-        .ifExists();
+    return StatementDropTable().dropTable(sourceTable).withSchema(schema).ifExists();
 }
 
 const std::string MigrationInfo::getUnionedViewPrefix()
@@ -170,14 +157,11 @@ StatementCreateView MigrationInfo::getStatementForCreatingUnionedView() const
 
 StatementDropView MigrationInfo::getStatementForDroppingUnionedView() const
 {
-    return StatementDropView()
-        .dropView(unionedViewName)
-        .ifExists()
-        .withSchema(Schema::temp());
+    return StatementDropView().dropView(unionedViewName).ifExists().withSchema(Schema::temp());
 }
 
-StatementInsert MigrationInfo::getStatementForTamperingConflictType(
-    const Lang::InsertSTMT::Type &type) const
+StatementInsert
+MigrationInfo::getStatementForTamperingConflictType(const Lang::InsertSTMT::Type &type) const
 {
     StatementInsert statement = m_statementForMigration;
     statement.getCOWLang().get_or_copy<Lang::InsertSTMT>().type = type;

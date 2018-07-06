@@ -26,30 +26,25 @@ namespace WCDB {
 namespace FTS {
 
 #pragma mark - Cursor
-WCDBCursorInfo::WCDBCursorInfo(const char *input,
-                               int inputLength,
-                               TokenizerInfoBase *tokenizerInfo)
-    : CursorInfoBase(input, inputLength, tokenizerInfo)
-    , m_input(input)
-    , m_inputLength(inputLength)
-    , m_position(0)
-    , m_startOffset(0)
-    , m_endOffset(0)
-    , m_cursor(0)
-    , m_cursorTokenType(TokenType::None)
-    , m_cursorTokenLength(0)
-    , m_lemmaBufferLength(0)
-    , m_subTokensCursor(0)
-    , m_subTokensDoubleChar(true)
-    , m_bufferLength(0)
-{}
+WCDBCursorInfo::WCDBCursorInfo(const char *input, int inputLength, TokenizerInfoBase *tokenizerInfo)
+: CursorInfoBase(input, inputLength, tokenizerInfo)
+, m_input(input)
+, m_inputLength(inputLength)
+, m_position(0)
+, m_startOffset(0)
+, m_endOffset(0)
+, m_cursor(0)
+, m_cursorTokenType(TokenType::None)
+, m_cursorTokenLength(0)
+, m_lemmaBufferLength(0)
+, m_subTokensCursor(0)
+, m_subTokensDoubleChar(true)
+, m_bufferLength(0)
+{
+}
 
 //Inspired by zorrozhang
-int WCDBCursorInfo::step(const char **ppToken,
-                         int *pnBytes,
-                         int *piStartOffset,
-                         int *piEndOffset,
-                         int *piPosition)
+int WCDBCursorInfo::step(const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *piPosition)
 {
     int rc = SQLITE_OK;
     if (m_position == 0) {
@@ -78,34 +73,32 @@ int WCDBCursorInfo::step(const char **ppToken,
 
         TokenType type = m_cursorTokenType;
         switch (type) {
-            case TokenType::BasicMultilingualPlaneLetter:
-            case TokenType::BasicMultilingualPlaneDigit:
-                m_startOffset = m_cursor;
-                while (((rc = cursorStep()) == SQLITE_OK) &&
-                       m_cursorTokenType == type)
-                    ;
-                if (rc != SQLITE_OK) {
-                    return rc;
-                }
-                m_endOffset = m_cursor;
-                m_bufferLength = m_endOffset - m_startOffset;
-                break;
-            case TokenType::BasicMultilingualPlaneOther:
-            case TokenType::AuxiliaryPlaneOther:
+        case TokenType::BasicMultilingualPlaneLetter:
+        case TokenType::BasicMultilingualPlaneDigit:
+            m_startOffset = m_cursor;
+            while (((rc = cursorStep()) == SQLITE_OK) && m_cursorTokenType == type)
+                ;
+            if (rc != SQLITE_OK) {
+                return rc;
+            }
+            m_endOffset = m_cursor;
+            m_bufferLength = m_endOffset - m_startOffset;
+            break;
+        case TokenType::BasicMultilingualPlaneOther:
+        case TokenType::AuxiliaryPlaneOther:
+            m_subTokensLengthArray.push_back(m_cursorTokenLength);
+            m_subTokensCursor = m_cursor;
+            m_subTokensDoubleChar = true;
+            while (((rc = cursorStep()) == SQLITE_OK) && m_cursorTokenType == type) {
                 m_subTokensLengthArray.push_back(m_cursorTokenLength);
-                m_subTokensCursor = m_cursor;
-                m_subTokensDoubleChar = true;
-                while (((rc = cursorStep()) == SQLITE_OK) &&
-                       m_cursorTokenType == type) {
-                    m_subTokensLengthArray.push_back(m_cursorTokenLength);
-                }
-                if (rc != SQLITE_OK) {
-                    return rc;
-                }
-                subTokensStep();
-                break;
-            default:
-                break;
+            }
+            if (rc != SQLITE_OK) {
+                return rc;
+            }
+            subTokensStep();
+            break;
+        default:
+            break;
         }
         if (type == TokenType::BasicMultilingualPlaneLetter) {
             rc = lemmatization(m_input + m_startOffset, m_bufferLength);
@@ -142,7 +135,9 @@ int WCDBCursorInfo::step(const char **ppToken,
 #warning - TODO
     printf("step: [%s] to [%s], range: %d %d pos: %d \n",
            std::string(m_input, m_inputLength).c_str(),
-           std::string(*ppToken, *pnBytes).c_str(), m_startOffset, m_endOffset,
+           std::string(*ppToken, *pnBytes).c_str(),
+           m_startOffset,
+           m_endOffset,
            m_position);
 
     return SQLITE_OK;
@@ -168,8 +163,7 @@ int WCDBCursorInfo::cursorSetup()
         m_cursorTokenLength = 1;
         if (first >= 0x30 && first <= 0x39) {
             m_cursorTokenType = TokenType::BasicMultilingualPlaneDigit;
-        } else if ((first >= 0x41 && first <= 0x5a) ||
-                   (first >= 0x61 && first <= 0x7a)) {
+        } else if ((first >= 0x41 && first <= 0x5a) || (first >= 0x61 && first <= 0x7a)) {
             m_cursorTokenType = TokenType::BasicMultilingualPlaneLetter;
         } else {
             bool result = false;

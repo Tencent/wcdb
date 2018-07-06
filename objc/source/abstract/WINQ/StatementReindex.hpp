@@ -27,7 +27,6 @@
 namespace WCDB {
 
 class StatementReindex : public StatementWithLang<Lang::ReindexSTMT> {
-
 public:
     StatementReindex &reindex();
     StatementReindex &reindex(const std::string &tableOrIndexName);

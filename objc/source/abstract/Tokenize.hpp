@@ -40,15 +40,11 @@ public:
 
 class CursorInfoBase {
 public:
-    CursorInfoBase(const char *input,
-                   int inputLength,
-                   TokenizerInfoBase *tokenizerInfo);
+    CursorInfoBase(const char *input, int inputLength, TokenizerInfoBase *tokenizerInfo);
 
-    virtual int step(const char **ppToken,
-                     int *pnBytes,
-                     int *piStartOffset,
-                     int *piEndOffset,
-                     int *piPosition) = 0;
+    virtual int
+    step(const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *piPosition)
+    = 0;
 
 protected:
     TokenizerInfoBase *m_tokenizerInfo;
@@ -57,8 +53,7 @@ protected:
 class ModuleBase {
 };
 
-template <typename TokenizerInfo /* = TokenizerInfoBase */,
-          typename CursorInfo /* = CursorInfoBase */>
+template<typename TokenizerInfo /* = TokenizerInfoBase */, typename CursorInfo /* = CursorInfoBase */>
 class Module {
 public:
     struct Tokenizer {
@@ -73,8 +68,7 @@ public:
     };
     typedef struct Cursor Cursor;
 
-    static int
-    create(int argc, const char *const *argv, sqlite3_tokenizer **ppTokenizer)
+    static int create(int argc, const char *const *argv, sqlite3_tokenizer **ppTokenizer)
     {
         Tokenizer *tokenizer = (Tokenizer *) sqlite3_malloc(sizeof(Tokenizer));
         if (!tokenizer) {
@@ -99,7 +93,7 @@ public:
         return SQLITE_OK;
     }
 
-    template <typename T /* = TokenizerInfo */>
+    template<typename T /* = TokenizerInfo */>
     static typename std::enable_if<!std::is_same<T, void>::value, int>::type
     createTokenizerInfo(Tokenizer *tokenizer, int argc, const char *const *argv)
     {
@@ -110,14 +104,14 @@ public:
         return SQLITE_OK;
     }
 
-    template <typename T /* = void */>
+    template<typename T /* = void */>
     static typename std::enable_if<std::is_same<T, void>::value, int>::type
     createTokenizerInfo(Tokenizer *tokenizer, int argc, const char *const *argv)
     {
         return SQLITE_OK;
     }
 
-    template <typename T /* = TokenizerInfo */>
+    template<typename T /* = TokenizerInfo */>
     static typename std::enable_if<!std::is_same<T, void>::value, void>::type
     destroyTokenizerInfo(Tokenizer *tokenizer)
     {
@@ -127,7 +121,7 @@ public:
         }
     }
 
-    template <typename T /* = void */>
+    template<typename T /* = void */>
     static typename std::enable_if<std::is_same<T, void>::value, void>::type
     destroyTokenizerInfo(Tokenizer *tokenizer)
     {
@@ -150,8 +144,8 @@ public:
         }
         memset(cursor, 0, sizeof(Cursor));
         Tokenizer *tokenizer = (Tokenizer *) pTokenizer;
-        cursor->info = new CursorInfo(pInput, nBytes,
-                                      (TokenizerInfoBase *) tokenizer->info);
+        cursor->info
+        = new CursorInfo(pInput, nBytes, (TokenizerInfoBase *) tokenizer->info);
         if (!cursor->info) {
             return SQLITE_NOMEM;
         }
@@ -182,8 +176,7 @@ public:
         if (pCursor) {
             CursorInfo *info = ((Cursor *) pCursor)->info;
             if (info) {
-                return info->step(ppToken, pnBytes, piStartOffset, piEndOffset,
-                                  piPosition);
+                return info->step(ppToken, pnBytes, piStartOffset, piEndOffset, piPosition);
             }
         }
         return SQLITE_NOMEM;
@@ -191,13 +184,13 @@ public:
 
     static unsigned char *address()
     {
-        static sqlite3_tokenizer_module *s_module =
-            new sqlite3_tokenizer_module(
-                {0, Module<TokenizerInfo, CursorInfo>::create,
-                 Module<TokenizerInfo, CursorInfo>::destroy,
-                 Module<TokenizerInfo, CursorInfo>::open,
-                 Module<TokenizerInfo, CursorInfo>::close,
-                 Module<TokenizerInfo, CursorInfo>::next});
+        static sqlite3_tokenizer_module *s_module
+        = new sqlite3_tokenizer_module({ 0,
+                                         Module<TokenizerInfo, CursorInfo>::create,
+                                         Module<TokenizerInfo, CursorInfo>::destroy,
+                                         Module<TokenizerInfo, CursorInfo>::open,
+                                         Module<TokenizerInfo, CursorInfo>::close,
+                                         Module<TokenizerInfo, CursorInfo>::next });
         return reinterpret_cast<unsigned char *>(s_module);
     }
 };

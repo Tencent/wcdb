@@ -23,7 +23,7 @@
 
 namespace WCDB {
 
-template <>
+template<>
 WCTProperty Redirectable::redirect(const WCTProperty &property) const
 {
     return WCTProperty(getRedirectSource(), property.getColumnBinding());

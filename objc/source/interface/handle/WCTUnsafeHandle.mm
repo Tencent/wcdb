@@ -128,75 +128,75 @@
     const WCTColumnBinding &columnBinding = property.getColumnBinding();
     const std::shared_ptr<WCTBaseAccessor> &accessor = columnBinding.accessor;
     switch (accessor->getAccessorType()) {
-        case WCTAccessorCpp: {
+    case WCTAccessorCpp: {
+        switch (accessor->getColumnType()) {
+        case WCDB::ColumnType::Integer32: {
+            WCTCppAccessor<WCDB::ColumnType::Integer32> *i32Accessor = (WCTCppAccessor<WCDB::ColumnType::Integer32> *) accessor.get();
+            _handle->bindInteger32(i32Accessor->getValue(object),
+                                   index);
+        } break;
+        case WCDB::ColumnType::Integer64: {
+            WCTCppAccessor<WCDB::ColumnType::Integer64> *i64Accessor = (WCTCppAccessor<WCDB::ColumnType::Integer64> *) accessor.get();
+            _handle->bindInteger64(i64Accessor->getValue(object),
+                                   index);
+        } break;
+        case WCDB::ColumnType::Float: {
+            WCTCppAccessor<WCDB::ColumnType::Float> *floatAccessor = (WCTCppAccessor<WCDB::ColumnType::Float> *) accessor.get();
+            _handle->bindDouble(floatAccessor->getValue(object),
+                                index);
+        } break;
+        case WCDB::ColumnType::Text: {
+            WCTCppAccessor<WCDB::ColumnType::Text> *textAccessor = (WCTCppAccessor<WCDB::ColumnType::Text> *) accessor.get();
+            _handle->bindText(textAccessor->getValue(object),
+                              index);
+        } break;
+        case WCDB::ColumnType::BLOB: {
+            WCTCppAccessor<WCDB::ColumnType::BLOB> *blobAccessor = (WCTCppAccessor<WCDB::ColumnType::BLOB> *) accessor.get();
+            _handle->bindBLOB(blobAccessor->getValue(object), index);
+        } break;
+        case WCDB::ColumnType::Null:
+            _handle->bindNull(index);
+            break;
+        }
+    } break;
+    case WCTAccessorObjC: {
+        WCTObjCAccessor *objcAccessor = (WCTObjCAccessor *) accessor.get();
+        NSObject *value = objcAccessor->getObject(object);
+        if (value) {
             switch (accessor->getColumnType()) {
-                case WCDB::ColumnType::Integer32: {
-                    WCTCppAccessor<WCDB::ColumnType::Integer32> *i32Accessor = (WCTCppAccessor<WCDB::ColumnType::Integer32> *) accessor.get();
-                    _handle->bindInteger32(i32Accessor->getValue(object),
-                                           index);
-                } break;
-                case WCDB::ColumnType::Integer64: {
-                    WCTCppAccessor<WCDB::ColumnType::Integer64> *i64Accessor = (WCTCppAccessor<WCDB::ColumnType::Integer64> *) accessor.get();
-                    _handle->bindInteger64(i64Accessor->getValue(object),
-                                           index);
-                } break;
-                case WCDB::ColumnType::Float: {
-                    WCTCppAccessor<WCDB::ColumnType::Float> *floatAccessor = (WCTCppAccessor<WCDB::ColumnType::Float> *) accessor.get();
-                    _handle->bindDouble(floatAccessor->getValue(object),
-                                        index);
-                } break;
-                case WCDB::ColumnType::Text: {
-                    WCTCppAccessor<WCDB::ColumnType::Text> *textAccessor = (WCTCppAccessor<WCDB::ColumnType::Text> *) accessor.get();
-                    _handle->bindText(textAccessor->getValue(object),
-                                      index);
-                } break;
-                case WCDB::ColumnType::BLOB: {
-                    WCTCppAccessor<WCDB::ColumnType::BLOB> *blobAccessor = (WCTCppAccessor<WCDB::ColumnType::BLOB> *) accessor.get();
-                    _handle->bindBLOB(blobAccessor->getValue(object), index);
-                } break;
-                case WCDB::ColumnType::Null:
-                    _handle->bindNull(index);
-                    break;
+            case WCDB::ColumnType::Integer32: {
+                NSNumber *number = (NSNumber *) value;
+                _handle->bindInteger32(number.intValue, index);
+                break;
             }
-        } break;
-        case WCTAccessorObjC: {
-            WCTObjCAccessor *objcAccessor = (WCTObjCAccessor *) accessor.get();
-            NSObject *value = objcAccessor->getObject(object);
-            if (value) {
-                switch (accessor->getColumnType()) {
-                    case WCDB::ColumnType::Integer32: {
-                        NSNumber *number = (NSNumber *) value;
-                        _handle->bindInteger32(number.intValue, index);
-                        break;
-                    }
-                    case WCDB::ColumnType::Integer64: {
-                        NSNumber *number = (NSNumber *) value;
-                        _handle->bindInteger64(number.longLongValue, index);
-                        break;
-                    }
-                    case WCDB::ColumnType::Float: {
-                        NSNumber *number = (NSNumber *) value;
-                        _handle->bindDouble(number.numberValue.doubleValue, index);
-                        break;
-                    }
-                    case WCDB::ColumnType::Text: {
-                        NSString *string = (NSString *) value;
-                        _handle->bindText(string.UTF8String, index);
-                        break;
-                    }
-                    case WCDB::ColumnType::BLOB: {
-                        NSData *data = (NSData *) value;
-                        _handle->bindBLOB(WCDB::Data::immutableNoCopyData((const unsigned char *) data.bytes, (size_t) data.length), index);
-                        break;
-                    }
-                    case WCDB::ColumnType::Null:
-                        _handle->bindNull(index);
-                        break;
-                }
-            } else {
+            case WCDB::ColumnType::Integer64: {
+                NSNumber *number = (NSNumber *) value;
+                _handle->bindInteger64(number.longLongValue, index);
+                break;
+            }
+            case WCDB::ColumnType::Float: {
+                NSNumber *number = (NSNumber *) value;
+                _handle->bindDouble(number.numberValue.doubleValue, index);
+                break;
+            }
+            case WCDB::ColumnType::Text: {
+                NSString *string = (NSString *) value;
+                _handle->bindText(string.UTF8String, index);
+                break;
+            }
+            case WCDB::ColumnType::BLOB: {
+                NSData *data = (NSData *) value;
+                _handle->bindBLOB(WCDB::Data::immutableNoCopyData((const unsigned char *) data.bytes, (size_t) data.length), index);
+                break;
+            }
+            case WCDB::ColumnType::Null:
                 _handle->bindNull(index);
+                break;
             }
-        } break;
+        } else {
+            _handle->bindNull(index);
+        }
+    } break;
     }
 }
 
@@ -248,62 +248,62 @@
     const WCTColumnBinding &columnBinding = property.getColumnBinding();
     const std::shared_ptr<WCTBaseAccessor> &accessor = columnBinding.accessor;
     switch (accessor->getAccessorType()) {
-        case WCTAccessorCpp: {
+    case WCTAccessorCpp: {
+        switch (accessor->getColumnType()) {
+        case WCDB::ColumnType::Integer32: {
+            WCTCppAccessor<WCDB::ColumnType::Integer32> *i32Accessor = (WCTCppAccessor<WCDB::ColumnType::Integer32> *) accessor.get();
+            i32Accessor->setValue(object, _handle->getInteger32(index));
+        } break;
+        case WCDB::ColumnType::Integer64: {
+            WCTCppAccessor<WCDB::ColumnType::Integer64> *i64Accessor = (WCTCppAccessor<WCDB::ColumnType::Integer64> *) accessor.get();
+            i64Accessor->setValue(object, _handle->getInteger64(index));
+        } break;
+        case WCDB::ColumnType::Float: {
+            WCTCppAccessor<WCDB::ColumnType::Float> *floatAccessor = (WCTCppAccessor<WCDB::ColumnType::Float> *) accessor.get();
+            floatAccessor->setValue(object, _handle->getDouble(index));
+        } break;
+        case WCDB::ColumnType::Text: {
+            WCTCppAccessor<WCDB::ColumnType::Text> *textAccessor = (WCTCppAccessor<WCDB::ColumnType::Text> *) accessor.get();
+            textAccessor->setValue(object, _handle->getText(index));
+        } break;
+        case WCDB::ColumnType::BLOB: {
+            WCTCppAccessor<WCDB::ColumnType::BLOB> *blobAccessor = (WCTCppAccessor<WCDB::ColumnType::BLOB> *) accessor.get();
+            blobAccessor->setValue(object, _handle->getBLOB(index));
+        } break;
+        case WCDB::ColumnType::Null: {
+            WCTCppAccessor<WCDB::ColumnType::Null> *nullAccessor = (WCTCppAccessor<WCDB::ColumnType::Null> *) accessor.get();
+            nullAccessor->setValue(object, nullptr);
+        } break;
+        }
+    } break;
+    case WCTAccessorObjC: {
+        WCTObjCAccessor *objcAccessor = (WCTObjCAccessor *) accessor.get();
+        id value = nil;
+        if (_handle->getType(index) != WCDB::ColumnType::Null) {
             switch (accessor->getColumnType()) {
-                case WCDB::ColumnType::Integer32: {
-                    WCTCppAccessor<WCDB::ColumnType::Integer32> *i32Accessor = (WCTCppAccessor<WCDB::ColumnType::Integer32> *) accessor.get();
-                    i32Accessor->setValue(object, _handle->getInteger32(index));
-                } break;
-                case WCDB::ColumnType::Integer64: {
-                    WCTCppAccessor<WCDB::ColumnType::Integer64> *i64Accessor = (WCTCppAccessor<WCDB::ColumnType::Integer64> *) accessor.get();
-                    i64Accessor->setValue(object, _handle->getInteger64(index));
-                } break;
-                case WCDB::ColumnType::Float: {
-                    WCTCppAccessor<WCDB::ColumnType::Float> *floatAccessor = (WCTCppAccessor<WCDB::ColumnType::Float> *) accessor.get();
-                    floatAccessor->setValue(object, _handle->getDouble(index));
-                } break;
-                case WCDB::ColumnType::Text: {
-                    WCTCppAccessor<WCDB::ColumnType::Text> *textAccessor = (WCTCppAccessor<WCDB::ColumnType::Text> *) accessor.get();
-                    textAccessor->setValue(object, _handle->getText(index));
-                } break;
-                case WCDB::ColumnType::BLOB: {
-                    WCTCppAccessor<WCDB::ColumnType::BLOB> *blobAccessor = (WCTCppAccessor<WCDB::ColumnType::BLOB> *) accessor.get();
-                    blobAccessor->setValue(object, _handle->getBLOB(index));
-                } break;
-                case WCDB::ColumnType::Null: {
-                    WCTCppAccessor<WCDB::ColumnType::Null> *nullAccessor = (WCTCppAccessor<WCDB::ColumnType::Null> *) accessor.get();
-                    nullAccessor->setValue(object, nullptr);
-                } break;
+            case WCDB::ColumnType::Integer32:
+                value = [NSNumber numberWithInt:_handle->getInteger32(index)];
+                break;
+            case WCDB::ColumnType::Integer64:
+                value = [NSNumber numberWithLongLong:_handle->getInteger64(index)];
+                break;
+            case WCDB::ColumnType::Float:
+                value = [NSNumber numberWithDouble:_handle->getDouble(index)];
+                break;
+            case WCDB::ColumnType::Text:
+                value = [NSString stringWithUTF8String:_handle->getText(index)];
+                break;
+            case WCDB::ColumnType::BLOB: {
+                const WCDB::Data data = _handle->getBLOB(index);
+                value = [NSData dataWithBytes:data.buffer() length:data.size()];
+            } break;
+            case WCDB::ColumnType::Null:
+                value = nil;
+                break;
             }
-        } break;
-        case WCTAccessorObjC: {
-            WCTObjCAccessor *objcAccessor = (WCTObjCAccessor *) accessor.get();
-            id value = nil;
-            if (_handle->getType(index) != WCDB::ColumnType::Null) {
-                switch (accessor->getColumnType()) {
-                    case WCDB::ColumnType::Integer32:
-                        value = [NSNumber numberWithInt:_handle->getInteger32(index)];
-                        break;
-                    case WCDB::ColumnType::Integer64:
-                        value = [NSNumber numberWithLongLong:_handle->getInteger64(index)];
-                        break;
-                    case WCDB::ColumnType::Float:
-                        value = [NSNumber numberWithDouble:_handle->getDouble(index)];
-                        break;
-                    case WCDB::ColumnType::Text:
-                        value = [NSString stringWithUTF8String:_handle->getText(index)];
-                        break;
-                    case WCDB::ColumnType::BLOB: {
-                        const WCDB::Data data = _handle->getBLOB(index);
-                        value = [NSData dataWithBytes:data.buffer() length:data.size()];
-                    } break;
-                    case WCDB::ColumnType::Null:
-                        value = nil;
-                        break;
-                }
-            }
-            objcAccessor->setObject(object, value);
-        } break;
+        }
+        objcAccessor->setObject(object, value);
+    } break;
     }
 }
 
@@ -311,20 +311,20 @@
 {
     WCTHandleAssert(return nil;);
     switch (_handle->getType(index)) {
-        case WCDB::ColumnType::Integer32:
-            return [NSNumber numberWithInt:_handle->getInteger32(index)];
-        case WCDB::ColumnType::Integer64:
-            return [NSNumber numberWithLongLong:_handle->getInteger64(index)];
-        case WCDB::ColumnType::Float:
-            return [NSNumber numberWithDouble:_handle->getDouble(index)];
-        case WCDB::ColumnType::Text:
-            return [NSString stringWithUTF8String:_handle->getText(index)];
-        case WCDB::ColumnType::BLOB: {
-            const WCDB::Data data = _handle->getBLOB(index);
-            return [NSData dataWithBytes:data.buffer() length:data.size()];
-        }
-        case WCDB::ColumnType::Null:
-            return nil;
+    case WCDB::ColumnType::Integer32:
+        return [NSNumber numberWithInt:_handle->getInteger32(index)];
+    case WCDB::ColumnType::Integer64:
+        return [NSNumber numberWithLongLong:_handle->getInteger64(index)];
+    case WCDB::ColumnType::Float:
+        return [NSNumber numberWithDouble:_handle->getDouble(index)];
+    case WCDB::ColumnType::Text:
+        return [NSString stringWithUTF8String:_handle->getText(index)];
+    case WCDB::ColumnType::BLOB: {
+        const WCDB::Data data = _handle->getBLOB(index);
+        return [NSData dataWithBytes:data.buffer() length:data.size()];
+    }
+    case WCDB::ColumnType::Null:
+        return nil;
     }
 }
 
@@ -489,8 +489,8 @@
 }
 
 - (BOOL)execute:(const WCDB::Statement &)statement
-      withObject:(WCTObject *)object
-    onProperties:(const WCTPropertyList &)properties
+     withObject:(WCTObject *)object
+   onProperties:(const WCTPropertyList &)properties
 {
     if (![self prepare:statement]) {
         return NO;
@@ -619,17 +619,17 @@
 - (void)doAutoFinalize:(BOOL)keepError
 {
     switch (_finalizeLevel) {
-        case WCTFinalizeLevelHandle:
-            [self finalizeHandleIfGeneratedAndKeepError:keepError];
-            break;
-        case WCTFinalizeLevelStatement:
-            [self finalizeStatement];
-            break;
-        case WCTFinalizeLevelDatabase:
-            [self finalizeDatabase:keepError];
-            break;
-        default:
-            break;
+    case WCTFinalizeLevelHandle:
+        [self finalizeHandleIfGeneratedAndKeepError:keepError];
+        break;
+    case WCTFinalizeLevelStatement:
+        [self finalizeStatement];
+        break;
+    case WCTFinalizeLevelDatabase:
+        [self finalizeDatabase:keepError];
+        break;
+    default:
+        break;
     }
 }
 

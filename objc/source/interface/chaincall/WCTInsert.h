@@ -25,9 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Not Thread-safe
  */
-@interface WCTInsert <ObjectType> : WCTUnsafeHandle
+@interface WCTInsert<ObjectType> : WCTUnsafeHandle
 
-@property(nonatomic, readonly) WCDB::StatementInsert& statement;
+@property (nonatomic, readonly) WCDB::StatementInsert &statement;
 
 - (instancetype)orReplace;
 

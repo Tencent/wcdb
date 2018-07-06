@@ -26,11 +26,11 @@ namespace WCDB {
 namespace Lang {
 
 ColumnConstraint::ColumnConstraint()
-    : type(Type::NotSet)
-    , order(Order::NotSet)
-    , conflictClause(ConflictClause::NotSet)
-    , autoIncrement(false)
-    , defaultSwitcher(DefaultSwitch::NotSet)
+: type(Type::NotSet)
+, order(Order::NotSet)
+, conflictClause(ConflictClause::NotSet)
+, autoIncrement(false)
+, defaultSwitcher(DefaultSwitch::NotSet)
 {
 }
 
@@ -41,72 +41,71 @@ CopyOnWriteString ColumnConstraint::SQL() const
         description.append("CONSTRAINT " + name.get() + " ");
     }
     switch (type) {
-        case Type::PrimaryKey:
-            description.append("PRIMARY KEY");
-            if (order != Order::NotSet) {
-                description.append(" ");
-                description.append(LangOrderName(order));
-            }
-            if (conflictClause != ConflictClause::NotSet) {
-                description.append(" ");
-                description.append(LangConflictClauseName(conflictClause));
-            }
-            if (autoIncrement) {
-                description.append(" AUTOINCREMENT");
-            }
+    case Type::PrimaryKey:
+        description.append("PRIMARY KEY");
+        if (order != Order::NotSet) {
+            description.append(" ");
+            description.append(LangOrderName(order));
+        }
+        if (conflictClause != ConflictClause::NotSet) {
+            description.append(" ");
+            description.append(LangConflictClauseName(conflictClause));
+        }
+        if (autoIncrement) {
+            description.append(" AUTOINCREMENT");
+        }
+        break;
+    case Type::NotNull:
+        description.append("NOT NULL");
+        if (conflictClause != ConflictClause::NotSet) {
+            description.append(" ");
+            description.append(LangConflictClauseName(conflictClause));
+        }
+        break;
+    case Type::Unique:
+        description.append("UNIQUE");
+        if (conflictClause != ConflictClause::NotSet) {
+            description.append(" ");
+            description.append(LangConflictClauseName(conflictClause));
+        }
+        break;
+    case Type::Check:
+        LangRemedialAssert(!expr.empty());
+        description.append("CHECK(" + expr.description().get() + ")");
+        break;
+    case Type::Default:
+        description.append("DEFAULT");
+        switch (defaultSwitcher) {
+        case DefaultSwitch::LiteralValue:
+            LangRemedialAssert(!literalValue.empty());
+            description.append(" " + literalValue.description().get());
             break;
-        case Type::NotNull:
-            description.append("NOT NULL");
-            if (conflictClause != ConflictClause::NotSet) {
-                description.append(" ");
-                description.append(LangConflictClauseName(conflictClause));
-            }
-            break;
-        case Type::Unique:
-            description.append("UNIQUE");
-            if (conflictClause != ConflictClause::NotSet) {
-                description.append(" ");
-                description.append(LangConflictClauseName(conflictClause));
-            }
-            break;
-        case Type::Check:
+        case DefaultSwitch::Expr:
             LangRemedialAssert(!expr.empty());
-            description.append("CHECK(" + expr.description().get() + ")");
-            break;
-        case Type::Default:
-            description.append("DEFAULT");
-            switch (defaultSwitcher) {
-                case DefaultSwitch::LiteralValue:
-                    LangRemedialAssert(!literalValue.empty());
-                    description.append(" " + literalValue.description().get());
-                    break;
-                case DefaultSwitch::Expr:
-                    LangRemedialAssert(!expr.empty());
-                    description.append("(" + expr.description().get() + ")");
-                    break;
-                default:
-                    LangRemedialFatalError();
-                    break;
-            }
-            break;
-        case Type::Collate:
-            LangRemedialAssert(!collationName.empty());
-            description.append("COLLATE " + collationName.get());
-            break;
-        case Type::ForeignKeyClause:
-            LangRemedialAssert(!foreignKeyClause.empty());
-            description.append(foreignKeyClause.description().get());
+            description.append("(" + expr.description().get() + ")");
             break;
         default:
             LangRemedialFatalError();
             break;
+        }
+        break;
+    case Type::Collate:
+        LangRemedialAssert(!collationName.empty());
+        description.append("COLLATE " + collationName.get());
+        break;
+    case Type::ForeignKeyClause:
+        LangRemedialAssert(!foreignKeyClause.empty());
+        description.append(foreignKeyClause.description().get());
+        break;
+    default:
+        LangRemedialFatalError();
+        break;
     }
     return description;
 }
 
-template <>
-CopyOnWriteString
-CopyOnWriteLazyLangList<ColumnConstraint>::calculatedDescription() const
+template<>
+CopyOnWriteString CopyOnWriteLazyLangList<ColumnConstraint>::calculatedDescription() const
 {
     std::string description;
     bool space = false;

@@ -40,18 +40,16 @@ CopyOnWriteString UpdateSTMT::SQL() const
     LangRemedialAssert(!qualifiedTableName.empty());
 
     auto qualified = qualifiedTableName;
-    if (!withClause.empty() && !withClause.get().pairs.empty() &&
-        !qualified.get().tableName.empty() &&
-        qualified.get().schemaName.isNull()) {
+    if (!withClause.empty() && !withClause.get().pairs.empty()
+        && !qualified.get().tableName.empty() && qualified.get().schemaName.isNull()) {
         const CopyOnWriteString &tableName = qualified.get().tableName;
         for (const auto &pair : withClause.get().pairs.get()) {
             if (pair.empty()) {
                 continue;
             }
-            const CopyOnWriteLazyLang<CTETableName> &cteTableName =
-                pair.get().cteTableName;
-            if (!cteTableName.empty() &&
-                cteTableName.get().tableName.equal(tableName.get())) {
+            const CopyOnWriteLazyLang<CTETableName> &cteTableName = pair.get().cteTableName;
+            if (!cteTableName.empty()
+                && cteTableName.get().tableName.equal(tableName.get())) {
                 //set schema to empty string to avoid default main schema.x
                 qualified.get_or_copy().schemaName.assign(anySchema());
             }
@@ -87,20 +85,20 @@ CopyOnWriteString UpdateSTMT::SQL() const
 constexpr const char *UpdateSTMT::typeName(const Type &type)
 {
     switch (type) {
-        case Type::Update:
-            return "UPDATE";
-        case Type::UpdateOrRollback:
-            return "UPDATE OR ROLLBACK";
-        case Type::UpdateOrAbort:
-            return "UPDATE OR ABORT";
-        case Type::UpdateOrReplace:
-            return "UPDATE OR REPLACE";
-        case Type::UpdateOrFail:
-            return "UPDATE OR FAIL";
-        case Type::UpdateOrIgnore:
-            return "UPDATE OR IGNORE";
-        default:
-            return "";
+    case Type::Update:
+        return "UPDATE";
+    case Type::UpdateOrRollback:
+        return "UPDATE OR ROLLBACK";
+    case Type::UpdateOrAbort:
+        return "UPDATE OR ABORT";
+    case Type::UpdateOrReplace:
+        return "UPDATE OR REPLACE";
+    case Type::UpdateOrFail:
+        return "UPDATE OR FAIL";
+    case Type::UpdateOrIgnore:
+        return "UPDATE OR IGNORE";
+    default:
+        return "";
     }
 }
 

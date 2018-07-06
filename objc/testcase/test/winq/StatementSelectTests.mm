@@ -31,208 +31,208 @@
     XCTAssertEqual(WCDB::StatementSelect().getType(), WCDB::Statement::Type::Select);
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .select(self.class.resultColumn)
-                        .from(self.class.tableOrSubquery)
-                        .where(self.class.condition)
-                        .groupBy(self.class.group)
-                        .having(self.class.having)
-                        .orderBy(self.class.orderingTerm)
-                        .limit(self.class.limit)
-                        .offset(self.class.limitParameter),
+                    .select(self.class.resultColumn)
+                    .from(self.class.tableOrSubquery)
+                    .where(self.class.condition)
+                    .groupBy(self.class.group)
+                    .having(self.class.having)
+                    .orderBy(self.class.orderingTerm)
+                    .limit(self.class.limit)
+                    .offset(self.class.limitParameter),
                     @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .select(self.class.resultColumn)
-                        .from(self.class.tableOrSubquery)
-                        .where(self.class.condition)
-                        .groupBy(self.class.group)
-                        .having(self.class.having)
-                        .orderBy(self.class.orderingTerm)
-                        .limit(self.class.limit, self.class.limitParameter),
+                    .select(self.class.resultColumn)
+                    .from(self.class.tableOrSubquery)
+                    .where(self.class.condition)
+                    .groupBy(self.class.group)
+                    .having(self.class.having)
+                    .orderBy(self.class.orderingTerm)
+                    .limit(self.class.limit, self.class.limitParameter),
                     @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1, 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .select(self.class.resultColumn)
-                        .from(self.class.tableOrSubquery)
-                        .where(self.class.condition)
-                        .groupBy(self.class.group)
-                        .having(self.class.having)
-                        .orderBy(self.class.orderingTerm)
-                        .limit(self.class.limit),
+                    .select(self.class.resultColumn)
+                    .from(self.class.tableOrSubquery)
+                    .where(self.class.condition)
+                    .groupBy(self.class.group)
+                    .having(self.class.having)
+                    .orderBy(self.class.orderingTerm)
+                    .limit(self.class.limit),
                     @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1");
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .select(self.class.resultColumn)
-                        .from(self.class.tableOrSubquery)
-                        .where(self.class.condition)
-                        .groupBy(self.class.group)
-                        .having(self.class.having)
-                        .orderBy(self.class.orderingTerm),
+                    .select(self.class.resultColumn)
+                    .from(self.class.tableOrSubquery)
+                    .where(self.class.condition)
+                    .groupBy(self.class.group)
+                    .having(self.class.having)
+                    .orderBy(self.class.orderingTerm),
                     @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn");
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .select(self.class.resultColumn)
-                        .from(self.class.tableOrSubquery)
-                        .where(self.class.condition)
-                        .groupBy(self.class.group)
-                        .having(self.class.having)
-                        .orderBy(self.class.orderingTerms)
-                        .limit(self.class.limit)
-                        .offset(self.class.limitParameter),
+                    .select(self.class.resultColumn)
+                    .from(self.class.tableOrSubquery)
+                    .where(self.class.condition)
+                    .groupBy(self.class.group)
+                    .having(self.class.having)
+                    .orderBy(self.class.orderingTerms)
+                    .limit(self.class.limit)
+                    .offset(self.class.limitParameter),
                     @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn, testColumn2 LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .select(self.class.resultColumn)
-                        .from(self.class.tableOrSubquery)
-                        .where(self.class.condition)
-                        .groupBy(self.class.group)
-                        .having(self.class.having)
-                        .limit(self.class.limit)
-                        .offset(self.class.limitParameter),
+                    .select(self.class.resultColumn)
+                    .from(self.class.tableOrSubquery)
+                    .where(self.class.condition)
+                    .groupBy(self.class.group)
+                    .having(self.class.having)
+                    .limit(self.class.limit)
+                    .offset(self.class.limitParameter),
                     @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .select(self.class.resultColumn)
-                        .from(self.class.tableOrSubquery)
-                        .where(self.class.condition)
-                        .groupBy(self.class.group)
-                        .orderBy(self.class.orderingTerm)
-                        .limit(self.class.limit)
-                        .offset(self.class.limitParameter),
+                    .select(self.class.resultColumn)
+                    .from(self.class.tableOrSubquery)
+                    .where(self.class.condition)
+                    .groupBy(self.class.group)
+                    .orderBy(self.class.orderingTerm)
+                    .limit(self.class.limit)
+                    .offset(self.class.limitParameter),
                     @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .select(self.class.resultColumn)
-                        .from(self.class.tableOrSubquery)
-                        .where(self.class.condition)
-                        .groupBy(self.class.groups)
-                        .having(self.class.having)
-                        .orderBy(self.class.orderingTerm)
-                        .limit(self.class.limit)
-                        .offset(self.class.limitParameter),
+                    .select(self.class.resultColumn)
+                    .from(self.class.tableOrSubquery)
+                    .where(self.class.condition)
+                    .groupBy(self.class.groups)
+                    .having(self.class.having)
+                    .orderBy(self.class.orderingTerm)
+                    .limit(self.class.limit)
+                    .offset(self.class.limitParameter),
                     @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn, testColumn2 HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .select(self.class.resultColumn)
-                        .from(self.class.tableOrSubquery)
-                        .where(self.class.condition)
-                        .orderBy(self.class.orderingTerm)
-                        .limit(self.class.limit)
-                        .offset(self.class.limitParameter),
+                    .select(self.class.resultColumn)
+                    .from(self.class.tableOrSubquery)
+                    .where(self.class.condition)
+                    .orderBy(self.class.orderingTerm)
+                    .limit(self.class.limit)
+                    .offset(self.class.limitParameter),
                     @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .select(self.class.resultColumn)
-                        .from(self.class.tableOrSubquery)
-                        .groupBy(self.class.group)
-                        .having(self.class.having)
-                        .orderBy(self.class.orderingTerm)
-                        .limit(self.class.limit)
-                        .offset(self.class.limitParameter),
+                    .select(self.class.resultColumn)
+                    .from(self.class.tableOrSubquery)
+                    .groupBy(self.class.group)
+                    .having(self.class.having)
+                    .orderBy(self.class.orderingTerm)
+                    .limit(self.class.limit)
+                    .offset(self.class.limitParameter),
                     @"SELECT testColumn FROM main.testTable GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .select(self.class.resultColumn)
-                        .from(self.class.tableOrSubquerys)
-                        .where(self.class.condition)
-                        .groupBy(self.class.group)
-                        .having(self.class.having)
-                        .orderBy(self.class.orderingTerm)
-                        .limit(self.class.limit)
-                        .offset(self.class.limitParameter),
+                    .select(self.class.resultColumn)
+                    .from(self.class.tableOrSubquerys)
+                    .where(self.class.condition)
+                    .groupBy(self.class.group)
+                    .having(self.class.having)
+                    .orderBy(self.class.orderingTerm)
+                    .limit(self.class.limit)
+                    .offset(self.class.limitParameter),
                     @"SELECT testColumn FROM main.testTable, main.testTable2 WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .select(self.class.resultColumn)
-                        .from(self.class.joinClause)
-                        .where(self.class.condition)
-                        .groupBy(self.class.group)
-                        .having(self.class.having)
-                        .orderBy(self.class.orderingTerm)
-                        .limit(self.class.limit)
-                        .offset(self.class.limitParameter),
+                    .select(self.class.resultColumn)
+                    .from(self.class.joinClause)
+                    .where(self.class.condition)
+                    .groupBy(self.class.group)
+                    .having(self.class.having)
+                    .orderBy(self.class.orderingTerm)
+                    .limit(self.class.limit)
+                    .offset(self.class.limitParameter),
                     @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .select(self.class.resultColumns)
-                        .from(self.class.tableOrSubquery)
-                        .where(self.class.condition)
-                        .groupBy(self.class.group)
-                        .having(self.class.having)
-                        .orderBy(self.class.orderingTerm)
-                        .limit(self.class.limit)
-                        .offset(self.class.limitParameter),
+                    .select(self.class.resultColumns)
+                    .from(self.class.tableOrSubquery)
+                    .where(self.class.condition)
+                    .groupBy(self.class.group)
+                    .having(self.class.having)
+                    .orderBy(self.class.orderingTerm)
+                    .limit(self.class.limit)
+                    .offset(self.class.limitParameter),
                     @"SELECT testColumn, testColumn2 FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .select(self.class.resultColumn)
-                        .distinct()
-                        .from(self.class.tableOrSubquery)
-                        .where(self.class.condition)
-                        .groupBy(self.class.group)
-                        .having(self.class.having)
-                        .orderBy(self.class.orderingTerm)
-                        .limit(self.class.limit)
-                        .offset(self.class.limitParameter),
+                    .select(self.class.resultColumn)
+                    .distinct()
+                    .from(self.class.tableOrSubquery)
+                    .where(self.class.condition)
+                    .groupBy(self.class.group)
+                    .having(self.class.having)
+                    .orderBy(self.class.orderingTerm)
+                    .limit(self.class.limit)
+                    .offset(self.class.limitParameter),
                     @"SELECT DISTINCT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .with(self.class.commonTableExpression)
-                        .select(self.class.resultColumn)
-                        .from(self.class.tableOrSubquery)
-                        .where(self.class.condition)
-                        .groupBy(self.class.group)
-                        .having(self.class.having)
-                        .orderBy(self.class.orderingTerm)
-                        .limit(self.class.limit)
-                        .offset(self.class.limitParameter),
+                    .with(self.class.commonTableExpression)
+                    .select(self.class.resultColumn)
+                    .from(self.class.tableOrSubquery)
+                    .where(self.class.condition)
+                    .groupBy(self.class.group)
+                    .having(self.class.having)
+                    .orderBy(self.class.orderingTerm)
+                    .limit(self.class.limit)
+                    .offset(self.class.limitParameter),
                     @"WITH testCTETable AS(SELECT testColumn FROM main.testTable) SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .with(self.class.commonTableExpressions)
-                        .select(self.class.resultColumn)
-                        .from(self.class.tableOrSubquery)
-                        .where(self.class.condition)
-                        .groupBy(self.class.group)
-                        .having(self.class.having)
-                        .orderBy(self.class.orderingTerm)
-                        .limit(self.class.limit)
-                        .offset(self.class.limitParameter),
+                    .with(self.class.commonTableExpressions)
+                    .select(self.class.resultColumn)
+                    .from(self.class.tableOrSubquery)
+                    .where(self.class.condition)
+                    .groupBy(self.class.group)
+                    .having(self.class.having)
+                    .orderBy(self.class.orderingTerm)
+                    .limit(self.class.limit)
+                    .offset(self.class.limitParameter),
                     @"WITH testCTETable AS(SELECT testColumn FROM main.testTable), testCTETable2 AS(SELECT testColumn FROM main.testTable) SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .withRecursive(self.class.commonTableExpression)
-                        .select(self.class.resultColumn)
-                        .from(self.class.tableOrSubquery)
-                        .where(self.class.condition)
-                        .groupBy(self.class.group)
-                        .having(self.class.having)
-                        .orderBy(self.class.orderingTerm)
-                        .limit(self.class.limit)
-                        .offset(self.class.limitParameter),
+                    .withRecursive(self.class.commonTableExpression)
+                    .select(self.class.resultColumn)
+                    .from(self.class.tableOrSubquery)
+                    .where(self.class.condition)
+                    .groupBy(self.class.group)
+                    .having(self.class.having)
+                    .orderBy(self.class.orderingTerm)
+                    .limit(self.class.limit)
+                    .offset(self.class.limitParameter),
                     @"WITH RECURSIVE testCTETable AS(SELECT testColumn FROM main.testTable) SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .withRecursive(self.class.commonTableExpressions)
-                        .select(self.class.resultColumn)
-                        .from(self.class.tableOrSubquery)
-                        .where(self.class.condition)
-                        .groupBy(self.class.group)
-                        .having(self.class.having)
-                        .orderBy(self.class.orderingTerm)
-                        .limit(self.class.limit)
-                        .offset(self.class.limitParameter),
+                    .withRecursive(self.class.commonTableExpressions)
+                    .select(self.class.resultColumn)
+                    .from(self.class.tableOrSubquery)
+                    .where(self.class.condition)
+                    .groupBy(self.class.group)
+                    .having(self.class.having)
+                    .orderBy(self.class.orderingTerm)
+                    .limit(self.class.limit)
+                    .offset(self.class.limitParameter),
                     @"WITH RECURSIVE testCTETable AS(SELECT testColumn FROM main.testTable), testCTETable2 AS(SELECT testColumn FROM main.testTable) SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
 }
 
 - (void)testValues
 {
     WINQAssertEqual(WCDB::StatementSelect()
-                        .values(self.class.value),
+                    .values(self.class.value),
                     @"VALUES(1)");
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .values(self.class.values),
+                    .values(self.class.values),
                     @"VALUES(1, 'testValue')");
 }
 
@@ -241,51 +241,51 @@
     WCDB::SelectCore selectCore = WCDB::SelectCore().select(self.class.resultColumn).from(self.class.tableOrSubquery);
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .select(self.class.resultColumn)
-                        .from(self.class.tableOrSubquery)
-                        .where(self.class.condition)
-                        .groupBy(self.class.group)
-                        .having(self.class.having)
-                        .union_(selectCore)
-                        .orderBy(self.class.orderingTerm)
-                        .limit(self.class.limit)
-                        .offset(self.class.limitParameter),
+                    .select(self.class.resultColumn)
+                    .from(self.class.tableOrSubquery)
+                    .where(self.class.condition)
+                    .groupBy(self.class.group)
+                    .having(self.class.having)
+                    .union_(selectCore)
+                    .orderBy(self.class.orderingTerm)
+                    .limit(self.class.limit)
+                    .offset(self.class.limitParameter),
                     @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL UNION SELECT testColumn FROM main.testTable ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .select(self.class.resultColumn)
-                        .from(self.class.tableOrSubquery)
-                        .where(self.class.condition)
-                        .groupBy(self.class.group)
-                        .having(self.class.having)
-                        .unionAll(selectCore)
-                        .orderBy(self.class.orderingTerm)
-                        .limit(self.class.limit)
-                        .offset(self.class.limitParameter),
+                    .select(self.class.resultColumn)
+                    .from(self.class.tableOrSubquery)
+                    .where(self.class.condition)
+                    .groupBy(self.class.group)
+                    .having(self.class.having)
+                    .unionAll(selectCore)
+                    .orderBy(self.class.orderingTerm)
+                    .limit(self.class.limit)
+                    .offset(self.class.limitParameter),
                     @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL UNION ALL SELECT testColumn FROM main.testTable ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .select(self.class.resultColumn)
-                        .from(self.class.tableOrSubquery)
-                        .where(self.class.condition)
-                        .groupBy(self.class.group)
-                        .having(self.class.having)
-                        .intersect(selectCore)
-                        .orderBy(self.class.orderingTerm)
-                        .limit(self.class.limit)
-                        .offset(self.class.limitParameter),
+                    .select(self.class.resultColumn)
+                    .from(self.class.tableOrSubquery)
+                    .where(self.class.condition)
+                    .groupBy(self.class.group)
+                    .having(self.class.having)
+                    .intersect(selectCore)
+                    .orderBy(self.class.orderingTerm)
+                    .limit(self.class.limit)
+                    .offset(self.class.limitParameter),
                     @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL INTERSECT SELECT testColumn FROM main.testTable ORDER BY testColumn LIMIT 1 OFFSET 2");
 
     WINQAssertEqual(WCDB::StatementSelect()
-                        .select(self.class.resultColumn)
-                        .from(self.class.tableOrSubquery)
-                        .where(self.class.condition)
-                        .groupBy(self.class.group)
-                        .having(self.class.having)
-                        .except(selectCore)
-                        .orderBy(self.class.orderingTerm)
-                        .limit(self.class.limit)
-                        .offset(self.class.limitParameter),
+                    .select(self.class.resultColumn)
+                    .from(self.class.tableOrSubquery)
+                    .where(self.class.condition)
+                    .groupBy(self.class.group)
+                    .having(self.class.having)
+                    .except(selectCore)
+                    .orderBy(self.class.orderingTerm)
+                    .limit(self.class.limit)
+                    .offset(self.class.limitParameter),
                     @"SELECT testColumn FROM main.testTable WHERE testColumn NOTNULL GROUP BY testColumn HAVING testColumn NOTNULL EXCEPT SELECT testColumn FROM main.testTable ORDER BY testColumn LIMIT 1 OFFSET 2");
 }
 

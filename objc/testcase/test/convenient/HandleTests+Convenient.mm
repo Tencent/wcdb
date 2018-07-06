@@ -117,14 +117,14 @@
 #pragma mark - Get Part Of Object
 - (void)test_get_object_onProperties
 {
-    TestCaseObject *object = [_handle getObjectOnProperties:{TestCaseObject.variable1, TestCaseObject.variable3}
+    TestCaseObject *object = [_handle getObjectOnProperties:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                                   fromTable:_tableName];
     XCTAssertTrue([object isEqualToObject:_preInserted[0] onProperties:TestCaseObjectPropertiesVariable1 | TestCaseObjectPropertiesVariable3]);
 }
 
 - (void)test_get_object_onProperties_where
 {
-    TestCaseObject *object = [_handle getObjectOnProperties:{TestCaseObject.variable1, TestCaseObject.variable3}
+    TestCaseObject *object = [_handle getObjectOnProperties:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                                   fromTable:_tableName
                                                       where:_greaterThan0Condition];
     XCTAssertTrue([object isEqualToObject:_preInserted[1] onProperties:TestCaseObjectPropertiesVariable1 | TestCaseObjectPropertiesVariable3]);
@@ -132,7 +132,7 @@
 
 - (void)test_get_object_onProperties_orderBy
 {
-    TestCaseObject *object = [_handle getObjectOnProperties:{TestCaseObject.variable1, TestCaseObject.variable3}
+    TestCaseObject *object = [_handle getObjectOnProperties:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                                   fromTable:_tableName
                                                     orderBy:_descendingOrder];
     XCTAssertTrue([object isEqualToObject:_preInserted.lastObject onProperties:TestCaseObjectPropertiesVariable1 | TestCaseObjectPropertiesVariable3]);
@@ -140,7 +140,7 @@
 
 - (void)test_get_object_onProperties_offset
 {
-    TestCaseObject *object = [_handle getObjectOnProperties:{TestCaseObject.variable1, TestCaseObject.variable3}
+    TestCaseObject *object = [_handle getObjectOnProperties:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                                   fromTable:_tableName
                                                      offset:_offset1];
     XCTAssertTrue([object isEqualToObject:_preInserted[1] onProperties:TestCaseObjectPropertiesVariable1 | TestCaseObjectPropertiesVariable3]);
@@ -148,7 +148,7 @@
 
 - (void)test_get_object_onProperties_where_orderBy
 {
-    TestCaseObject *object = [_handle getObjectOnProperties:{TestCaseObject.variable1, TestCaseObject.variable3}
+    TestCaseObject *object = [_handle getObjectOnProperties:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                                   fromTable:_tableName
                                                       where:_removeBothEndCondition
                                                     orderBy:_descendingOrder];
@@ -157,7 +157,7 @@
 
 - (void)test_get_object_onProperties_where_offset
 {
-    TestCaseObject *object = [_handle getObjectOnProperties:{TestCaseObject.variable1, TestCaseObject.variable3}
+    TestCaseObject *object = [_handle getObjectOnProperties:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                                   fromTable:_tableName
                                                       where:_greaterThan0Condition
                                                      offset:_offset1];
@@ -166,7 +166,7 @@
 
 - (void)test_get_object_onProperties_orderBy_offset
 {
-    TestCaseObject *object = [_handle getObjectOnProperties:{TestCaseObject.variable1, TestCaseObject.variable3}
+    TestCaseObject *object = [_handle getObjectOnProperties:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                                   fromTable:_tableName
                                                     orderBy:_descendingOrder
                                                      offset:_offset1];
@@ -175,7 +175,7 @@
 
 - (void)test_get_object_onProperties_where_orderBy_offset
 {
-    TestCaseObject *object = [_handle getObjectOnProperties:{TestCaseObject.variable1, TestCaseObject.variable3}
+    TestCaseObject *object = [_handle getObjectOnProperties:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                                   fromTable:_tableName
                                                       where:_removeBothEndCondition
                                                     orderBy:_descendingOrder
@@ -186,7 +186,7 @@
 #pragma mark - Get One Row
 - (void)test_get_row_on_results
 {
-    WCTOneRow *row = [_handle getRowOnResults:{TestCaseObject.variable1, TestCaseObject.variable3}
+    WCTOneRow *row = [_handle getRowOnResults:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                     fromTable:_tableName];
     XCTAssertEqual(row.count, 2);
     XCTAssertEqual(row[0].numberValue.intValue, _preInserted[0].variable1);
@@ -195,7 +195,7 @@
 
 - (void)test_get_row_on_results_where
 {
-    WCTOneRow *row = [_handle getRowOnResults:{TestCaseObject.variable1, TestCaseObject.variable3}
+    WCTOneRow *row = [_handle getRowOnResults:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                     fromTable:_tableName
                                         where:_greaterThan0Condition];
     XCTAssertEqual(row.count, 2);
@@ -205,7 +205,7 @@
 
 - (void)test_get_row_on_results_orderBy
 {
-    WCTOneRow *row = [_handle getRowOnResults:{TestCaseObject.variable1, TestCaseObject.variable3}
+    WCTOneRow *row = [_handle getRowOnResults:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                     fromTable:_tableName
                                       orderBy:_descendingOrder];
     XCTAssertEqual(row.count, 2);
@@ -215,7 +215,7 @@
 
 - (void)test_get_row_on_results_offset
 {
-    WCTOneRow *row = [_handle getRowOnResults:{TestCaseObject.variable1, TestCaseObject.variable3}
+    WCTOneRow *row = [_handle getRowOnResults:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                     fromTable:_tableName
                                        offset:_offset1];
     XCTAssertEqual(row.count, 2);
@@ -225,7 +225,7 @@
 
 - (void)test_get_row_on_results_where_orderBy
 {
-    WCTOneRow *row = [_handle getRowOnResults:{TestCaseObject.variable1, TestCaseObject.variable3}
+    WCTOneRow *row = [_handle getRowOnResults:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                     fromTable:_tableName
                                         where:_removeBothEndCondition
                                       orderBy:_descendingOrder];
@@ -236,7 +236,7 @@
 
 - (void)test_get_row_on_results_where_offset
 {
-    WCTOneRow *row = [_handle getRowOnResults:{TestCaseObject.variable1, TestCaseObject.variable3}
+    WCTOneRow *row = [_handle getRowOnResults:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                     fromTable:_tableName
                                         where:_greaterThan0Condition
                                        offset:_offset1];
@@ -247,7 +247,7 @@
 
 - (void)test_get_row_on_results_orderBy_offset
 {
-    WCTOneRow *row = [_handle getRowOnResults:{TestCaseObject.variable1, TestCaseObject.variable3}
+    WCTOneRow *row = [_handle getRowOnResults:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                     fromTable:_tableName
                                       orderBy:_descendingOrder
                                        offset:_offset1];
@@ -258,7 +258,7 @@
 
 - (void)test_get_row_on_results_where_orderBy_offset
 {
-    WCTOneRow *row = [_handle getRowOnResults:{TestCaseObject.variable1, TestCaseObject.variable3}
+    WCTOneRow *row = [_handle getRowOnResults:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                     fromTable:_tableName
                                         where:_removeBothEndCondition
                                       orderBy:_descendingOrder
@@ -274,7 +274,7 @@
     WCTOneColumn *column = [_handle getColumnOnResult:TestCaseObject.variable1 fromTable:_tableName];
     XCTAssertTrue([column isEqualToObjects:_preInserted
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.numberValue.intValue == rhs.variable1;
+                                return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -287,7 +287,7 @@
     [result removeObjectAtIndex:0];
     XCTAssertTrue([column isEqualToObjects:result
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.numberValue.intValue == rhs.variable1;
+                                return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -299,7 +299,7 @@
     NSArray<TestCaseObject *> *result = _preInserted.reversed;
     XCTAssertTrue([column isEqualToObjects:result
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.numberValue.intValue == rhs.variable1;
+                                return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -311,7 +311,7 @@
     NSMutableArray<TestCaseObject *> *result = [NSMutableArray<TestCaseObject *> arrayWithObject:[_preInserted objectAtIndex:0]];
     XCTAssertTrue([column isEqualToObjects:result
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.numberValue.intValue == rhs.variable1;
+                                return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -327,7 +327,7 @@
     result = result.reversed;
     XCTAssertTrue([column isEqualToObjects:result
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.numberValue.intValue == rhs.variable1;
+                                return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -340,7 +340,7 @@
     NSMutableArray<TestCaseObject *> *result = [NSMutableArray<TestCaseObject *> arrayWithObject:_preInserted[1]];
     XCTAssertTrue([column isEqualToObjects:result
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.numberValue.intValue == rhs.variable1;
+                                return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -353,7 +353,7 @@
     NSMutableArray<TestCaseObject *> *result = [NSMutableArray<TestCaseObject *> arrayWithObject:_preInserted[_preInserted.count - 1]];
     XCTAssertTrue([column isEqualToObjects:result
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.numberValue.intValue == rhs.variable1;
+                                return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -366,7 +366,7 @@
     NSMutableArray<TestCaseObject *> *result = [NSMutableArray<TestCaseObject *> arrayWithObject:_preInserted[1]];
     XCTAssertTrue([column isEqualToObjects:result
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.numberValue.intValue == rhs.variable1;
+                                return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -379,7 +379,7 @@
     NSMutableArray<TestCaseObject *> *result = [NSMutableArray<TestCaseObject *> arrayWithObject:_preInserted[_preInserted.count - 1]];
     XCTAssertTrue([column isEqualToObjects:result
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.numberValue.intValue == rhs.variable1;
+                                return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -396,7 +396,7 @@
     result = [NSMutableArray<TestCaseObject *> arrayWithObject:result[1]];
     XCTAssertTrue([column isEqualToObjects:result
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.numberValue.intValue == rhs.variable1;
+                                return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -412,7 +412,7 @@
     result = [NSMutableArray<TestCaseObject *> arrayWithObject:result[1]];
     XCTAssertTrue([column isEqualToObjects:result
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.numberValue.intValue == rhs.variable1;
+                                return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -431,7 +431,7 @@
     result = [NSMutableArray<TestCaseObject *> arrayWithObject:result[1]];
     XCTAssertTrue([column isEqualToObjects:result
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.numberValue.intValue == rhs.variable1;
+                                return lhs.numberValue.intValue == rhs.variable1;
                             }]);
 }
 
@@ -638,13 +638,13 @@
 #pragma mark - Get Part Of Objects
 - (void)test_get_objects_onProperties
 {
-    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{TestCaseObject.variable1, TestCaseObject.variable2} fromTable:_tableName];
+    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{ TestCaseObject.variable1, TestCaseObject.variable2 } fromTable:_tableName];
     XCTAssertTrue([objects isEqualToTestCaseObjects:_preInserted onProperties:TestCaseObjectPropertiesVariable1 | TestCaseObjectPropertiesVariable2]);
 }
 
 - (void)test_get_objects_onProperties_where
 {
-    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{TestCaseObject.variable1, TestCaseObject.variable2}
+    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{ TestCaseObject.variable1, TestCaseObject.variable2 }
                                                                fromTable:_tableName
                                                                    where:_greaterThan0Condition];
     NSMutableArray<TestCaseObject *> *result = [NSMutableArray arrayWithArray:_preInserted];
@@ -654,7 +654,7 @@
 
 - (void)test_get_objects_onProperties_orderBy
 {
-    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{TestCaseObject.variable1, TestCaseObject.variable2}
+    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{ TestCaseObject.variable1, TestCaseObject.variable2 }
                                                                fromTable:_tableName
                                                                  orderBy:_descendingOrder];
     NSArray<TestCaseObject *> *result = _preInserted.reversed;
@@ -663,7 +663,7 @@
 
 - (void)test_get_objects_onProperties_limit
 {
-    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{TestCaseObject.variable1, TestCaseObject.variable2}
+    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{ TestCaseObject.variable1, TestCaseObject.variable2 }
                                                                fromTable:_tableName
                                                                    limit:_limit1];
     NSMutableArray<TestCaseObject *> *result = [NSMutableArray<TestCaseObject *> arrayWithObject:[_preInserted objectAtIndex:0]];
@@ -672,7 +672,7 @@
 
 - (void)test_get_objects_onProperties_where_orderBy
 {
-    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{TestCaseObject.variable1, TestCaseObject.variable2}
+    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{ TestCaseObject.variable1, TestCaseObject.variable2 }
                                                                fromTable:_tableName
                                                                    where:_removeBothEndCondition
                                                                  orderBy:_descendingOrder];
@@ -685,7 +685,7 @@
 
 - (void)test_get_objects_onProperties_where_limit
 {
-    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{TestCaseObject.variable1, TestCaseObject.variable2}
+    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{ TestCaseObject.variable1, TestCaseObject.variable2 }
                                                                fromTable:_tableName
                                                                    where:_removeBothEndCondition
                                                                    limit:_limit1];
@@ -695,7 +695,7 @@
 
 - (void)test_get_objects_onProperties_orderBy_limit
 {
-    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{TestCaseObject.variable1, TestCaseObject.variable2}
+    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{ TestCaseObject.variable1, TestCaseObject.variable2 }
                                                                fromTable:_tableName
                                                                  orderBy:_descendingOrder
                                                                    limit:_limit1];
@@ -705,7 +705,7 @@
 
 - (void)test_get_objects_onProperties_limit_offset
 {
-    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{TestCaseObject.variable1, TestCaseObject.variable2}
+    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{ TestCaseObject.variable1, TestCaseObject.variable2 }
                                                                fromTable:_tableName
                                                                    limit:_limit1
                                                                   offset:_offset1];
@@ -715,7 +715,7 @@
 
 - (void)test_get_objects_onProperties_where_orderBy_limit
 {
-    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{TestCaseObject.variable1, TestCaseObject.variable2}
+    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{ TestCaseObject.variable1, TestCaseObject.variable2 }
                                                                fromTable:_tableName
                                                                  orderBy:_descendingOrder
                                                                    limit:_limit1];
@@ -725,7 +725,7 @@
 
 - (void)test_get_objects_onProperties_where_limit_offset
 {
-    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{TestCaseObject.variable1, TestCaseObject.variable2}
+    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{ TestCaseObject.variable1, TestCaseObject.variable2 }
                                                                fromTable:_tableName
                                                                    where:_removeBothEndCondition
                                                                    limit:_limit1
@@ -739,7 +739,7 @@
 
 - (void)test_get_objects_onProperties_orderBy_limit_offset
 {
-    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{TestCaseObject.variable1, TestCaseObject.variable2}
+    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{ TestCaseObject.variable1, TestCaseObject.variable2 }
                                                                fromTable:_tableName
                                                                  orderBy:_descendingOrder
                                                                    limit:_limit1
@@ -752,7 +752,7 @@
 
 - (void)test_get_objects_onProperties_where_orderBy_limit_offset
 {
-    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{TestCaseObject.variable1, TestCaseObject.variable2}
+    NSArray<TestCaseObject *> *objects = [_handle getObjectsOnProperties:{ TestCaseObject.variable1, TestCaseObject.variable2 }
                                                                fromTable:_tableName
                                                                    where:_removeBothEndCondition
                                                                  orderBy:_descendingOrder
@@ -769,65 +769,65 @@
 #pragma mark - Get Rows
 - (void)test_get_rows_onResults
 {
-    WCTColumnsXRows *rows = [_handle getRowsOnResults:{TestCaseObject.variable1, TestCaseObject.variable3} fromTable:_tableName];
+    WCTColumnsXRows *rows = [_handle getRowsOnResults:{ TestCaseObject.variable1, TestCaseObject.variable3 } fromTable:_tableName];
     XCTAssertTrue([rows isEqualToObjects:_preInserted
                           withComparator:^BOOL(WCTOneRow *lhs, TestCaseObject *rhs) {
-                            if (lhs.count != 2) {
-                                return NO;
-                            }
-                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
+                              if (lhs.count != 2) {
+                                  return NO;
+                              }
+                              return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
 - (void)test_get_rows_onResults_where
 {
-    WCTColumnsXRows *rows = [_handle getRowsOnResults:{TestCaseObject.variable1, TestCaseObject.variable3}
+    WCTColumnsXRows *rows = [_handle getRowsOnResults:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                             fromTable:_tableName
                                                 where:_greaterThan0Condition];
     NSMutableArray<TestCaseObject *> *result = [NSMutableArray arrayWithArray:_preInserted];
     [result removeObjectAtIndex:0];
     XCTAssertTrue([rows isEqualToObjects:result
                           withComparator:^BOOL(WCTOneRow *lhs, TestCaseObject *rhs) {
-                            if (lhs.count != 2) {
-                                return NO;
-                            }
-                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
+                              if (lhs.count != 2) {
+                                  return NO;
+                              }
+                              return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
 - (void)test_get_rows_onResults_orderBy
 {
-    WCTColumnsXRows *rows = [_handle getRowsOnResults:{TestCaseObject.variable1, TestCaseObject.variable3}
+    WCTColumnsXRows *rows = [_handle getRowsOnResults:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                             fromTable:_tableName
                                               orderBy:_descendingOrder];
     NSArray<TestCaseObject *> *result = _preInserted.reversed;
     XCTAssertTrue([rows isEqualToObjects:result
                           withComparator:^BOOL(WCTOneRow *lhs, TestCaseObject *rhs) {
-                            if (lhs.count != 2) {
-                                return NO;
-                            }
-                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
+                              if (lhs.count != 2) {
+                                  return NO;
+                              }
+                              return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
 - (void)test_get_rows_onResults_limit
 {
-    WCTColumnsXRows *rows = [_handle getRowsOnResults:{TestCaseObject.variable1, TestCaseObject.variable3}
+    WCTColumnsXRows *rows = [_handle getRowsOnResults:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                             fromTable:_tableName
                                                 limit:_limit1];
     NSMutableArray<TestCaseObject *> *result = [NSMutableArray<TestCaseObject *> arrayWithObject:[_preInserted objectAtIndex:0]];
     XCTAssertTrue([rows isEqualToObjects:result
                           withComparator:^BOOL(WCTOneRow *lhs, TestCaseObject *rhs) {
-                            if (lhs.count != 2) {
-                                return NO;
-                            }
-                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
+                              if (lhs.count != 2) {
+                                  return NO;
+                              }
+                              return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
 - (void)test_get_rows_onResults_where_orderBy
 {
-    WCTColumnsXRows *rows = [_handle getRowsOnResults:{TestCaseObject.variable1, TestCaseObject.variable3}
+    WCTColumnsXRows *rows = [_handle getRowsOnResults:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                             fromTable:_tableName
                                                 where:_removeBothEndCondition
                                               orderBy:_descendingOrder];
@@ -837,80 +837,80 @@
     result = result.reversed;
     XCTAssertTrue([rows isEqualToObjects:result
                           withComparator:^BOOL(WCTOneRow *lhs, TestCaseObject *rhs) {
-                            if (lhs.count != 2) {
-                                return NO;
-                            }
-                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
+                              if (lhs.count != 2) {
+                                  return NO;
+                              }
+                              return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
 - (void)test_get_rows_onResults_where_limit
 {
-    WCTColumnsXRows *rows = [_handle getRowsOnResults:{TestCaseObject.variable1, TestCaseObject.variable3}
+    WCTColumnsXRows *rows = [_handle getRowsOnResults:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                             fromTable:_tableName
                                                 where:_removeBothEndCondition
                                                 limit:_limit1];
     NSMutableArray<TestCaseObject *> *result = [NSMutableArray<TestCaseObject *> arrayWithObject:_preInserted[1]];
     XCTAssertTrue([rows isEqualToObjects:result
                           withComparator:^BOOL(WCTOneRow *lhs, TestCaseObject *rhs) {
-                            if (lhs.count != 2) {
-                                return NO;
-                            }
-                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
+                              if (lhs.count != 2) {
+                                  return NO;
+                              }
+                              return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
 - (void)test_get_rows_onResults_orderBy_limit
 {
-    WCTColumnsXRows *rows = [_handle getRowsOnResults:{TestCaseObject.variable1, TestCaseObject.variable3}
+    WCTColumnsXRows *rows = [_handle getRowsOnResults:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                             fromTable:_tableName
                                               orderBy:_descendingOrder
                                                 limit:_limit1];
     NSMutableArray<TestCaseObject *> *result = [NSMutableArray<TestCaseObject *> arrayWithObject:_preInserted[_preInserted.count - 1]];
     XCTAssertTrue([rows isEqualToObjects:result
                           withComparator:^BOOL(WCTOneRow *lhs, TestCaseObject *rhs) {
-                            if (lhs.count != 2) {
-                                return NO;
-                            }
-                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
+                              if (lhs.count != 2) {
+                                  return NO;
+                              }
+                              return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
 - (void)test_get_rows_onResults_limit_offset
 {
-    WCTColumnsXRows *rows = [_handle getRowsOnResults:{TestCaseObject.variable1, TestCaseObject.variable3}
+    WCTColumnsXRows *rows = [_handle getRowsOnResults:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                             fromTable:_tableName
                                                 limit:_limit1
                                                offset:_offset1];
     NSMutableArray<TestCaseObject *> *result = [NSMutableArray<TestCaseObject *> arrayWithObject:_preInserted[1]];
     XCTAssertTrue([rows isEqualToObjects:result
                           withComparator:^BOOL(WCTOneRow *lhs, TestCaseObject *rhs) {
-                            if (lhs.count != 2) {
-                                return NO;
-                            }
-                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
+                              if (lhs.count != 2) {
+                                  return NO;
+                              }
+                              return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
 - (void)test_get_rows_onResults_where_orderBy_limit
 {
-    WCTColumnsXRows *rows = [_handle getRowsOnResults:{TestCaseObject.variable1, TestCaseObject.variable3}
+    WCTColumnsXRows *rows = [_handle getRowsOnResults:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                             fromTable:_tableName
                                               orderBy:_descendingOrder
                                                 limit:_limit1];
     NSMutableArray<TestCaseObject *> *result = [NSMutableArray<TestCaseObject *> arrayWithObject:_preInserted[_preInserted.count - 1]];
     XCTAssertTrue([rows isEqualToObjects:result
                           withComparator:^BOOL(WCTOneRow *lhs, TestCaseObject *rhs) {
-                            if (lhs.count != 2) {
-                                return NO;
-                            }
-                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
+                              if (lhs.count != 2) {
+                                  return NO;
+                              }
+                              return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
 - (void)test_get_rows_onResults_where_limit_offset
 {
-    WCTColumnsXRows *rows = [_handle getRowsOnResults:{TestCaseObject.variable1, TestCaseObject.variable3}
+    WCTColumnsXRows *rows = [_handle getRowsOnResults:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                             fromTable:_tableName
                                                 where:_removeBothEndCondition
                                                 limit:_limit1
@@ -921,16 +921,16 @@
     result = [NSMutableArray<TestCaseObject *> arrayWithObject:result[1]];
     XCTAssertTrue([rows isEqualToObjects:result
                           withComparator:^BOOL(WCTOneRow *lhs, TestCaseObject *rhs) {
-                            if (lhs.count != 2) {
-                                return NO;
-                            }
-                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
+                              if (lhs.count != 2) {
+                                  return NO;
+                              }
+                              return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
 - (void)test_get_rows_onResults_orderBy_limit_offset
 {
-    WCTColumnsXRows *rows = [_handle getRowsOnResults:{TestCaseObject.variable1, TestCaseObject.variable3}
+    WCTColumnsXRows *rows = [_handle getRowsOnResults:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                             fromTable:_tableName
                                               orderBy:_descendingOrder
                                                 limit:_limit1
@@ -940,16 +940,16 @@
     result = [NSMutableArray<TestCaseObject *> arrayWithObject:result[1]];
     XCTAssertTrue([rows isEqualToObjects:result
                           withComparator:^BOOL(WCTOneRow *lhs, TestCaseObject *rhs) {
-                            if (lhs.count != 2) {
-                                return NO;
-                            }
-                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
+                              if (lhs.count != 2) {
+                                  return NO;
+                              }
+                              return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
 - (void)test_get_rows_onResults_where_orderBy_limit_offset
 {
-    WCTColumnsXRows *rows = [_handle getRowsOnResults:{TestCaseObject.variable1, TestCaseObject.variable3}
+    WCTColumnsXRows *rows = [_handle getRowsOnResults:{ TestCaseObject.variable1, TestCaseObject.variable3 }
                                             fromTable:_tableName
                                                 where:_removeBothEndCondition
                                               orderBy:_descendingOrder
@@ -962,10 +962,10 @@
     result = [NSMutableArray<TestCaseObject *> arrayWithObject:result[1]];
     XCTAssertTrue([rows isEqualToObjects:result
                           withComparator:^BOOL(WCTOneRow *lhs, TestCaseObject *rhs) {
-                            if (lhs.count != 2) {
-                                return NO;
-                            }
-                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
+                              if (lhs.count != 2) {
+                                  return NO;
+                              }
+                              return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
@@ -1016,7 +1016,7 @@
 {
     TestCaseObject *object = [TestCaseObject objectWithId:(int) _preInserted.count];
     object.isAutoIncrement = YES;
-    XCTAssertTrue(([_handle insertObject:object onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} intoTable:_tableName]));
+    XCTAssertTrue(([_handle insertObject:object onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } intoTable:_tableName]));
     XCTAssertEqual(object.lastInsertedRowID, object.variable1);
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
@@ -1030,7 +1030,7 @@
     for (TestCaseObject *object in objects) {
         object.isAutoIncrement = YES;
     }
-    XCTAssertTrue(([_handle insertObjects:objects onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} intoTable:_tableName]));
+    XCTAssertTrue(([_handle insertObjects:objects onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } intoTable:_tableName]));
     for (TestCaseObject *object in objects) {
         XCTAssertEqual(object.lastInsertedRowID, object.variable1);
     }
@@ -1043,7 +1043,7 @@
 - (void)test_insert_or_replace_object_onProperties
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
-    XCTAssertTrue(([_handle insertOrReplaceObject:object onProperties:{TestCaseObject.variable1, TestCaseObject.variable2} intoTable:_tableName]));
+    XCTAssertTrue(([_handle insertOrReplaceObject:object onProperties:{ TestCaseObject.variable1, TestCaseObject.variable2 } intoTable:_tableName]));
 
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
@@ -1054,7 +1054,7 @@
 - (void)test_insert_or_replace_objects_onProperties
 {
     NSArray<TestCaseObject *> *objects = [TestCaseObject objectsWithCount:3 from:0];
-    XCTAssertTrue(([_handle insertOrReplaceObjects:objects onProperties:{TestCaseObject.variable1, TestCaseObject.variable2} intoTable:_tableName]));
+    XCTAssertTrue(([_handle insertOrReplaceObjects:objects onProperties:{ TestCaseObject.variable1, TestCaseObject.variable2 } intoTable:_tableName]));
 
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
@@ -1068,7 +1068,7 @@
 - (void)test_update_withObject
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
-    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} withObject:object]));
+    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } withObject:object]));
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
     for (TestCaseObject *element in expected) {
@@ -1081,7 +1081,7 @@
 - (void)test_update_withObject_where
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
-    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} withObject:object where:_greaterThan0Condition]));
+    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } withObject:object where:_greaterThan0Condition]));
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
     for (TestCaseObject *element in expected) {
@@ -1096,7 +1096,7 @@
 - (void)test_update_withObject_limit
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
-    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} withObject:object limit:_limit1]));
+    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } withObject:object limit:_limit1]));
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
     expected[0].variable2 = object.variable2;
@@ -1107,7 +1107,7 @@
 - (void)test_update_withObject_where_limit
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
-    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} withObject:object where:_greaterThan0Condition limit:_limit1]));
+    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } withObject:object where:_greaterThan0Condition limit:_limit1]));
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
     expected[1].variable2 = object.variable2;
@@ -1118,7 +1118,7 @@
 - (void)test_update_withObject_orderBy_limit
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
-    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} withObject:object orderBy:_descendingOrder limit:_limit1]));
+    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } withObject:object orderBy:_descendingOrder limit:_limit1]));
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
     expected[expected.count - 1].variable2 = object.variable2;
@@ -1129,7 +1129,7 @@
 - (void)test_update_withObject_limit_offset
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
-    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} withObject:object limit:_limit1 offset:_offset1]));
+    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } withObject:object limit:_limit1 offset:_offset1]));
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
     expected[1].variable2 = object.variable2;
@@ -1140,7 +1140,7 @@
 - (void)test_update_withObject_where_orderBy_limit
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
-    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} withObject:object where:_removeBothEndCondition orderBy:_descendingOrder limit:_limit1]));
+    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } withObject:object where:_removeBothEndCondition orderBy:_descendingOrder limit:_limit1]));
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
     expected[expected.count - 2].variable2 = object.variable2;
@@ -1151,7 +1151,7 @@
 - (void)test_update_withObject_where_limit_offset
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
-    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} withObject:object where:_greaterThan0Condition limit:_limit1 offset:_offset1]));
+    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } withObject:object where:_greaterThan0Condition limit:_limit1 offset:_offset1]));
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
     expected[2].variable2 = object.variable2;
@@ -1162,7 +1162,7 @@
 - (void)test_update_withObject_orderBy_limit_offset
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
-    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} withObject:object orderBy:_descendingOrder limit:_limit1 offset:_offset1]));
+    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } withObject:object orderBy:_descendingOrder limit:_limit1 offset:_offset1]));
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
     expected[expected.count - 2].variable2 = object.variable2;
@@ -1173,7 +1173,7 @@
 - (void)test_update_withObject_where_orderBy_limit_offset
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
-    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} withObject:object where:_removeBothEndCondition orderBy:_descendingOrder limit:_limit1 offset:_offset1]));
+    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } withObject:object where:_removeBothEndCondition orderBy:_descendingOrder limit:_limit1 offset:_offset1]));
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
     expected[expected.count - 3].variable2 = object.variable2;
@@ -1186,7 +1186,7 @@
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
     WCTColumnCodingRow *row = [TestCaseObject rowWithObject:object onProperties:TestCaseObjectPropertiesVariable2 | TestCaseObjectPropertiesVariable3];
-    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} withRow:row]));
+    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } withRow:row]));
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
     for (TestCaseObject *element in expected) {
@@ -1200,7 +1200,7 @@
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
     WCTColumnCodingRow *row = [TestCaseObject rowWithObject:object onProperties:TestCaseObjectPropertiesVariable2 | TestCaseObjectPropertiesVariable3];
-    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} withRow:row where:_greaterThan0Condition]));
+    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } withRow:row where:_greaterThan0Condition]));
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
     for (TestCaseObject *element in expected) {
@@ -1216,7 +1216,7 @@
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
     WCTColumnCodingRow *row = [TestCaseObject rowWithObject:object onProperties:TestCaseObjectPropertiesVariable2 | TestCaseObjectPropertiesVariable3];
-    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} withRow:row limit:_limit1]));
+    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } withRow:row limit:_limit1]));
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
     expected[0].variable2 = object.variable2;
@@ -1228,7 +1228,7 @@
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
     WCTColumnCodingRow *row = [TestCaseObject rowWithObject:object onProperties:TestCaseObjectPropertiesVariable2 | TestCaseObjectPropertiesVariable3];
-    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} withRow:row where:_greaterThan0Condition limit:_limit1]));
+    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } withRow:row where:_greaterThan0Condition limit:_limit1]));
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
     expected[1].variable2 = object.variable2;
@@ -1240,7 +1240,7 @@
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
     WCTColumnCodingRow *row = [TestCaseObject rowWithObject:object onProperties:TestCaseObjectPropertiesVariable2 | TestCaseObjectPropertiesVariable3];
-    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} withRow:row orderBy:_descendingOrder limit:_limit1]));
+    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } withRow:row orderBy:_descendingOrder limit:_limit1]));
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
     expected[expected.count - 1].variable2 = object.variable2;
@@ -1252,7 +1252,7 @@
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
     WCTColumnCodingRow *row = [TestCaseObject rowWithObject:object onProperties:TestCaseObjectPropertiesVariable2 | TestCaseObjectPropertiesVariable3];
-    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} withRow:row limit:_limit1 offset:_offset1]));
+    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } withRow:row limit:_limit1 offset:_offset1]));
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
     expected[1].variable2 = object.variable2;
@@ -1264,7 +1264,7 @@
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
     WCTColumnCodingRow *row = [TestCaseObject rowWithObject:object onProperties:TestCaseObjectPropertiesVariable2 | TestCaseObjectPropertiesVariable3];
-    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} withRow:row where:_removeBothEndCondition orderBy:_descendingOrder limit:_limit1]));
+    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } withRow:row where:_removeBothEndCondition orderBy:_descendingOrder limit:_limit1]));
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
     expected[expected.count - 2].variable2 = object.variable2;
@@ -1276,7 +1276,7 @@
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
     WCTColumnCodingRow *row = [TestCaseObject rowWithObject:object onProperties:TestCaseObjectPropertiesVariable2 | TestCaseObjectPropertiesVariable3];
-    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} withRow:row where:_greaterThan0Condition limit:_limit1 offset:_offset1]));
+    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } withRow:row where:_greaterThan0Condition limit:_limit1 offset:_offset1]));
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
     expected[2].variable2 = object.variable2;
@@ -1288,7 +1288,7 @@
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
     WCTColumnCodingRow *row = [TestCaseObject rowWithObject:object onProperties:TestCaseObjectPropertiesVariable2 | TestCaseObjectPropertiesVariable3];
-    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} withRow:row orderBy:_descendingOrder limit:_limit1 offset:_offset1]));
+    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } withRow:row orderBy:_descendingOrder limit:_limit1 offset:_offset1]));
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
     expected[expected.count - 2].variable2 = object.variable2;
@@ -1300,7 +1300,7 @@
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
     WCTColumnCodingRow *row = [TestCaseObject rowWithObject:object onProperties:TestCaseObjectPropertiesVariable2 | TestCaseObjectPropertiesVariable3];
-    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} withRow:row where:_removeBothEndCondition orderBy:_descendingOrder limit:_limit1 offset:_offset1]));
+    XCTAssertTrue(([_handle updateTable:_tableName onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } withRow:row where:_removeBothEndCondition orderBy:_descendingOrder limit:_limit1 offset:_offset1]));
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
     expected[expected.count - 3].variable2 = object.variable2;

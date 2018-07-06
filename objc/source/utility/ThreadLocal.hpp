@@ -35,7 +35,7 @@
 
 namespace WCDB {
 
-template <typename T>
+template<typename T>
 class ThreadLocal {
 public:
     ThreadLocal() : m_defaultValue(nullptr)

@@ -66,7 +66,7 @@ Error::Error(Code code) : level(Level::Error), m_code(code)
 }
 
 Error::Error(Code code, const std::string &message_)
-    : level(Level::Error), m_code(code), message(message_)
+: level(Level::Error), m_code(code), message(message_)
 {
 }
 
@@ -94,30 +94,30 @@ void Error::setSystemCode(int systemCode, Code codeIfUnresolved)
 {
     Code code;
     switch (systemCode) {
-        case EIO:
-            code = Code::IOError;
-            break;
-        case ENOMEM:
-            code = Code::NoMemory;
-            break;
-        case EACCES:
-            code = Code::Permission;
-            break;
-        case EBUSY:
-            code = Code::Busy;
-            break;
-        case ENOSPC:
-            code = Code::Full;
-            break;
-        case EAUTH:
-            code = Code::Authorization;
-            break;
-        case ENOENT:
-            code = Code::NotFound;
-            break;
-        default:
-            code = codeIfUnresolved;
-            break;
+    case EIO:
+        code = Code::IOError;
+        break;
+    case ENOMEM:
+        code = Code::NoMemory;
+        break;
+    case EACCES:
+        code = Code::Permission;
+        break;
+    case EBUSY:
+        code = Code::Busy;
+        break;
+    case ENOSPC:
+        code = Code::Full;
+        break;
+    case EAUTH:
+        code = Code::Authorization;
+        break;
+    case ENOENT:
+        code = Code::NotFound;
+        break;
+    default:
+        code = codeIfUnresolved;
+        break;
     }
     const char *errorMessage = strerror(systemCode);
     if (errorMessage) {
@@ -150,8 +150,7 @@ bool Error::isOK() const
 
 bool Error::isCorruption() const
 {
-    return m_code == Error::Code::Corrupt ||
-           m_code == Error::Code::NotADatabase;
+    return m_code == Error::Code::Corrupt || m_code == Error::Code::NotADatabase;
 }
 
 #pragma mark - Info

@@ -23,8 +23,7 @@
 
 namespace WCDB {
 
-ModuleArgument::ModuleArgument(const std::string &left,
-                               const std::string &right)
+ModuleArgument::ModuleArgument(const std::string &left, const std::string &right)
 {
     Lang::ModuleArgument &lang = getMutableLang();
     lang.type = Lang::ModuleArgument::Type::LeftRight;

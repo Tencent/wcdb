@@ -29,28 +29,28 @@
 - (void)testConflictClause
 {
     WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)
-                        .withPrimaryKey(self.class.indexedColumn)
-                        .onConflict(WCDB::ConflictClause::Rollback),
+                    .withPrimaryKey(self.class.indexedColumn)
+                    .onConflict(WCDB::ConflictClause::Rollback),
                     @"CONSTRAINT testConstraint PRIMARY KEY(testColumn) ON CONFLICT ROLLBACK");
 
     WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)
-                        .withPrimaryKey(self.class.indexedColumn)
-                        .onConflict(WCDB::ConflictClause::Abort),
+                    .withPrimaryKey(self.class.indexedColumn)
+                    .onConflict(WCDB::ConflictClause::Abort),
                     @"CONSTRAINT testConstraint PRIMARY KEY(testColumn) ON CONFLICT ABORT");
 
     WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)
-                        .withPrimaryKey(self.class.indexedColumn)
-                        .onConflict(WCDB::ConflictClause::Fail),
+                    .withPrimaryKey(self.class.indexedColumn)
+                    .onConflict(WCDB::ConflictClause::Fail),
                     @"CONSTRAINT testConstraint PRIMARY KEY(testColumn) ON CONFLICT FAIL");
 
     WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)
-                        .withPrimaryKey(self.class.indexedColumn)
-                        .onConflict(WCDB::ConflictClause::Ignore),
+                    .withPrimaryKey(self.class.indexedColumn)
+                    .onConflict(WCDB::ConflictClause::Ignore),
                     @"CONSTRAINT testConstraint PRIMARY KEY(testColumn) ON CONFLICT IGNORE");
 
     WINQAssertEqual(WCDB::TableConstraint(self.class.constraintName)
-                        .withPrimaryKey(self.class.indexedColumn)
-                        .onConflict(WCDB::ConflictClause::Replace),
+                    .withPrimaryKey(self.class.indexedColumn)
+                    .onConflict(WCDB::ConflictClause::Replace),
                     @"CONSTRAINT testConstraint PRIMARY KEY(testColumn) ON CONFLICT REPLACE");
 }
 

@@ -127,9 +127,9 @@ protected:
 #pragma mark - Convenient
 public:
     std::pair<bool, bool> tableExists(const TableOrSubquery &table);
-    std::pair<bool, std::set<std::string>> getUnorderedColumnsWithTable(
-        const std::string &tableName,
-        const std::string &schemaName = Schema::main());
+    std::pair<bool, std::set<std::string>>
+    getUnorderedColumnsWithTable(const std::string &tableName,
+                                 const std::string &schemaName = Schema::main());
     std::pair<bool, std::set<std::string>> getUnorderedAttachedSchemas();
 
     typedef std::function<bool(Handle *)> TransactionCallback;
@@ -158,21 +158,19 @@ public:
 #pragma mark - Notification
 public:
     typedef HandleNotification::PerformanceNotification PerformanceNotification;
-    void setNotificationWhenPerformanceTraced(
-        const std::string &name, const PerformanceNotification &onTraced);
+    void setNotificationWhenPerformanceTraced(const std::string &name,
+                                              const PerformanceNotification &onTraced);
 
     typedef HandleNotification::SQLNotification SQLNotification;
-    void setNotificationWhenSQLTraced(const std::string &name,
-                                      const SQLNotification &onTraced);
+    void setNotificationWhenSQLTraced(const std::string &name, const SQLNotification &onTraced);
 
     typedef HandleNotification::CommittedNotification CommittedNotification;
     void setNotificationWhenCommitted(const std::string &name,
                                       const CommittedNotification &onCommitted);
 
     typedef HandleNotification::CheckpointNotification CheckpointNotification;
-    bool
-    setNotificationWhenCheckpoint(const std::string &name,
-                                  const CheckpointNotification &willCheckpoint);
+    bool setNotificationWhenCheckpoint(const std::string &name,
+                                       const CheckpointNotification &willCheckpoint);
 
 protected:
     HandleNotification m_notification;

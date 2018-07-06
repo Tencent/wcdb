@@ -38,8 +38,7 @@ HandlePools::HandlePools()
     CorruptionNotifier::shared();
 }
 
-RecyclableHandlePool HandlePools::getPool(const std::string &path,
-                                          const Generator &generator)
+RecyclableHandlePool HandlePools::getPool(const std::string &path, const Generator &generator)
 {
     std::shared_ptr<HandlePool> pool = nullptr;
     std::string normalized = Path::normalize(path);
@@ -50,7 +49,7 @@ RecyclableHandlePool HandlePools::getPool(const std::string &path,
         if (pool == nullptr) {
             return nullptr;
         }
-        iter = m_pools.insert({normalized, {pool, 0}}).first;
+        iter = m_pools.insert({ normalized, { pool, 0 } }).first;
     }
     return getExistingPool(iter);
 }
@@ -82,21 +81,19 @@ RecyclableHandlePool HandlePools::getExistingPool(const std::string &path)
 }
 
 RecyclableHandlePool HandlePools::getExistingPool(
-    const std::map<std::string,
-                   std::pair<std::shared_ptr<HandlePool>, int>>::iterator &iter)
+const std::map<std::string, std::pair<std::shared_ptr<HandlePool>, int>>::iterator &iter)
 {
     if (iter == m_pools.end()) {
         return nullptr;
     }
     ++iter->second.second;
     const std::string path = iter->second.first->path;
-    return RecyclableHandlePool(iter->second.first,
-                                std::bind(&HandlePools::flowBackHandlePool,
-                                          this, std::placeholders::_1));
+    return RecyclableHandlePool(
+    iter->second.first,
+    std::bind(&HandlePools::flowBackHandlePool, this, std::placeholders::_1));
 }
 
-void HandlePools::flowBackHandlePool(
-    const std::shared_ptr<HandlePool> &handlePool)
+void HandlePools::flowBackHandlePool(const std::shared_ptr<HandlePool> &handlePool)
 {
     std::lock_guard<std::mutex> lockGuard(m_mutex);
     const auto &iter = m_pools.find(handlePool->path);
@@ -104,8 +101,7 @@ void HandlePools::flowBackHandlePool(
         //drop it
         return;
     }
-    if (iter->second.first.get() == handlePool.get() &&
-        --iter->second.second == 0) {
+    if (iter->second.first.get() == handlePool.get() && --iter->second.second == 0) {
         m_pools.erase(iter);
     }
 }

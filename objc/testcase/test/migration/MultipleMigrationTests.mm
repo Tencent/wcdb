@@ -71,9 +71,9 @@
     __block BOOL tableTested = NO;
     NSMutableSet *tables = [NSMutableSet setWithObjects:_table1, _migratedTable2, _migratedTable3, nil];
     [_migrated setTableMigratedCallback:^(WCTMigrationInfo *info) {
-      if ([tables containsObject:info.targetTable]) {
-          tableTested = YES;
-      }
+        if ([tables containsObject:info.targetTable]) {
+            tableTested = YES;
+        }
     }];
     while ([_migrated stepMigration:done] && !done)
         ;
@@ -116,19 +116,19 @@
 
     __block NSCondition *condition = [[NSCondition alloc] init];
     [_migrated setTableMigratedCallback:^(WCTMigrationInfo *_Nullable info) {
-      [condition lock];
-      [expectedMigratedTable removeObject:info.targetTable];
-      [condition unlock];
+        [condition lock];
+        [expectedMigratedTable removeObject:info.targetTable];
+        [condition unlock];
     }];
 
     [_migrated asyncMigrationWhenStepped:^BOOL(WCTMigrationState state, BOOL result) {
-      if (state == WCTMigrationStateDone && result) {
-          [condition lock];
-          migrated = YES;
-          [condition signal];
-          [condition unlock];
-      }
-      return YES;
+        if (state == WCTMigrationStateDone && result) {
+            [condition lock];
+            migrated = YES;
+            [condition signal];
+            [condition unlock];
+        }
+        return YES;
     }];
     [condition lock];
     while (!migrated) {

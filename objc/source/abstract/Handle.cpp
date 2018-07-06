@@ -35,12 +35,12 @@ std::shared_ptr<Handle> Handle::handleWithPath(const std::string &path)
 }
 
 Handle::Handle(const std::string &path_)
-    : m_handle(nullptr)
-    , m_handleStatement(this)
-    , m_notification(this)
-    , path(path_)
-    , m_nestedLevel(0)
-    , m_tag(invalidTag)
+: m_handle(nullptr)
+, m_handleStatement(this)
+, m_notification(this)
+, path(path_)
+, m_nestedLevel(0)
+, m_tag(invalidTag)
 {
     m_error.infos.set("Path", path);
 }
@@ -70,7 +70,8 @@ std::array<std::string, 4> Handle::getSubfixs()
 {
     return std::array<std::string, 4>{
         "", //main db file
-        Handle::getWALSubfix(), Handle::getSHMSubfix(),
+        Handle::getWALSubfix(),
+        Handle::getSHMSubfix(),
         Handle::getJournalSubfix(),
     };
 }
@@ -106,7 +107,7 @@ void Handle::close()
         m_notification.purge();
         //disable checkpoint when closing. If ones need a checkpoint, they should do it manually.
         m_notification.setNotificationWhenCheckpoint(
-            "close", [](Handle *, int) -> bool { return false; }, true);
+        "close", [](Handle *, int) -> bool { return false; }, true);
         sqlite3_close_v2((sqlite3 *) m_handle);
         m_handle = nullptr;
     }
@@ -114,9 +115,8 @@ void Handle::close()
 
 bool Handle::execute(const Statement &statement)
 {
-    int rc =
-        sqlite3_exec((sqlite3 *) m_handle, statement.getDescription().c_str(),
-                     nullptr, nullptr, nullptr);
+    int rc = sqlite3_exec(
+    (sqlite3 *) m_handle, statement.getDescription().c_str(), nullptr, nullptr, nullptr);
     if (rc == SQLITE_OK) {
         return true;
     }
@@ -279,31 +279,26 @@ bool Handle::isPrepared()
 #pragma mark - Convenient
 std::pair<bool, bool> Handle::tableExists(const TableOrSubquery &table)
 {
-    StatementSelect statementSelect =
-        StatementSelect().select(1).from(table).limit(0);
+    StatementSelect statementSelect = StatementSelect().select(1).from(table).limit(0);
     ignoreError(true);
     bool unused;
     bool result = Handle::prepare(statementSelect) && Handle::step(unused);
     ignoreError(false);
     finalize();
-    return {result || getResultCode() == SQLITE_ERROR, result};
+    return { result || getResultCode() == SQLITE_ERROR, result };
 }
 
 std::pair<bool, std::set<std::string>>
-Handle::getUnorderedColumnsWithTable(const std::string &tableName,
-                                     const std::string &schemaName)
+Handle::getUnorderedColumnsWithTable(const std::string &tableName, const std::string &schemaName)
 {
-    WCDB::StatementPragma statement = StatementPragma()
-                                          .withSchema(schemaName)
-                                          .pragma(Pragma::tableInfo())
-                                          .with(tableName);
+    WCDB::StatementPragma statement
+    = StatementPragma().withSchema(schemaName).pragma(Pragma::tableInfo()).with(tableName);
     return getUnorderedValues(statement, 1);
 }
 
 std::pair<bool, std::set<std::string>> Handle::getUnorderedAttachedSchemas()
 {
-    return getUnorderedValues(StatementPragma().pragma(Pragma::databaseList()),
-                              1);
+    return getUnorderedValues(StatementPragma().pragma(Pragma::databaseList()), 1);
 }
 
 std::pair<bool, std::set<std::string>>
@@ -317,10 +312,10 @@ Handle::getUnorderedValues(const Statement &statement, int index)
         }
         finalize();
         if (done) {
-            return {true, std::move(values)};
+            return { true, std::move(values) };
         }
     }
-    return {false, {}};
+    return { false, {} };
 }
 
 const std::string &Handle::savepointPrefix()
@@ -334,8 +329,7 @@ bool Handle::beginNestedTransaction()
     if (!isInTransaction()) {
         return beginTransaction();
     }
-    std::string savepointName =
-        Handle::savepointPrefix() + std::to_string(++m_nestedLevel);
+    std::string savepointName = Handle::savepointPrefix() + std::to_string(++m_nestedLevel);
     return Handle::execute(StatementSavepoint().savepoint(savepointName));
 }
 
@@ -344,8 +338,8 @@ bool Handle::commitOrRollbackNestedTransaction()
     if (m_nestedLevel == 0) {
         return commitOrRollbackTransaction();
     }
-    std::string savepointName =
-        Handle::savepointPrefix() + std::to_string(m_nestedLevel--);
+    std::string savepointName
+    = Handle::savepointPrefix() + std::to_string(m_nestedLevel--);
     if (!Handle::execute(StatementRelease().release(savepointName))) {
         discardableExecute(StatementRollback().rollbackTo(savepointName));
         return false;
@@ -358,8 +352,8 @@ void Handle::rollbackNestedTransaction()
     if (m_nestedLevel == 0) {
         return rollbackTransaction();
     }
-    std::string savepointName =
-        Handle::savepointPrefix() + std::to_string(m_nestedLevel--);
+    std::string savepointName
+    = Handle::savepointPrefix() + std::to_string(m_nestedLevel--);
     discardableExecute(StatementRollback().rollbackTo(savepointName));
 }
 
@@ -410,16 +404,15 @@ bool Handle::runTransaction(const TransactionCallback &transaction)
 
 void Handle::discardableExecute(const Statement &statement)
 {
-    sqlite3_exec((sqlite3 *) m_handle, statement.getDescription().c_str(),
-                 nullptr, nullptr, nullptr);
+    sqlite3_exec(
+    (sqlite3 *) m_handle, statement.getDescription().c_str(), nullptr, nullptr, nullptr);
 }
 
 #pragma mark - Cipher
 bool Handle::setCipherKey(const Data &data)
 {
 #ifdef SQLITE_HAS_CODEC
-    int rc =
-        sqlite3_key((sqlite3 *) m_handle, data.buffer(), (int) data.size());
+    int rc = sqlite3_key((sqlite3 *) m_handle, data.buffer(), (int) data.size());
     if (rc == SQLITE_OK) {
         return true;
     }
@@ -432,27 +425,25 @@ bool Handle::setCipherKey(const Data &data)
 }
 
 #pragma mark - Notification
-void Handle::setNotificationWhenSQLTraced(const std::string &name,
-                                          const SQLNotification &onTraced)
+void Handle::setNotificationWhenSQLTraced(const std::string &name, const SQLNotification &onTraced)
 {
     m_notification.setNotificationWhenSQLTraced(name, onTraced);
 }
 
-void Handle::setNotificationWhenPerformanceTraced(
-    const std::string &name, const PerformanceNotification &onTraced)
+void Handle::setNotificationWhenPerformanceTraced(const std::string &name,
+                                                  const PerformanceNotification &onTraced)
 {
     m_notification.setNotificationWhenPerformanceTraced(name, onTraced);
 }
 
-void Handle::setNotificationWhenCommitted(
-    const std::string &name, const CommittedNotification &onCommitted)
+void Handle::setNotificationWhenCommitted(const std::string &name,
+                                          const CommittedNotification &onCommitted)
 {
     m_notification.setNotificationWhenCommitted(name, onCommitted);
 }
 
-bool Handle::setNotificationWhenCheckpoint(
-    const std::string &name,
-    const WCDB::Handle::CheckpointNotification &willCheckpoint)
+bool Handle::setNotificationWhenCheckpoint(const std::string &name,
+                                           const WCDB::Handle::CheckpointNotification &willCheckpoint)
 {
     return m_notification.setNotificationWhenCheckpoint(name, willCheckpoint);
 }

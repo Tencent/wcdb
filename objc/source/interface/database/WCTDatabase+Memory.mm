@@ -32,13 +32,13 @@
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     //keep it the entire life cycle
     static id s_observer_memory_warning __attribute__((unused)) =
-        [notificationCenter addObserverForName:
-                                UIApplicationDidReceiveMemoryWarningNotification
-                                        object:nil
-                                         queue:nil
-                                    usingBlock:^(NSNotification *) {
-                                      WCDB::Database::purgeAllDatabases();
-                                    }];
+    [notificationCenter addObserverForName:
+                        UIApplicationDidReceiveMemoryWarningNotification
+                                    object:nil
+                                     queue:nil
+                                usingBlock:^(NSNotification *) {
+                                    WCDB::Database::purgeAllDatabases();
+                                }];
 }
 #endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
 

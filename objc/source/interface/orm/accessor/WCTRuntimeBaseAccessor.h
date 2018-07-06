@@ -31,15 +31,15 @@ protected:
     static Class getPropertyClass(Class cls, const std::string &propertyName);
 };
 
-template <typename PropertyType>
+template<typename PropertyType>
 class WCTRuntimeAccessor : public WCTRuntimeBaseAccessor {
 public:
     using Setter = void (^)(InstanceType, PropertyType);
     using Getter = PropertyType (^)(InstanceType);
 
     WCTRuntimeAccessor(Class cls, const std::string &propertyName)
-        : getProperty(GenerateGetter(cls, propertyName))
-        , setProperty(GenerateSetter(cls, propertyName))
+    : getProperty(GenerateGetter(cls, propertyName))
+    , setProperty(GenerateSetter(cls, propertyName))
     {
     }
 
@@ -52,8 +52,8 @@ protected:
         SEL selector = getGetterSelector(cls, propertyName);
         IMP imp = getInstanceMethodImplementation(cls, selector);
         auto block = ^(InstanceType instance) {
-          using IMPGetter = PropertyType (*)(id, SEL);
-          return ((IMPGetter) imp)(instance, selector);
+            using IMPGetter = PropertyType (*)(id, SEL);
+            return ((IMPGetter) imp)(instance, selector);
         };
         return [block copy];
     }
@@ -63,8 +63,8 @@ protected:
         SEL selector = getSetterSelector(cls, propertyName);
         IMP imp = getInstanceMethodImplementation(cls, selector);
         auto block = ^(InstanceType instance, PropertyType value) {
-          using IMPSetter = void (*)(InstanceType, SEL, PropertyType);
-          return ((IMPSetter) imp)(instance, selector, value);
+            using IMPSetter = void (*)(InstanceType, SEL, PropertyType);
+            return ((IMPSetter) imp)(instance, selector, value);
         };
         return [block copy];
     }

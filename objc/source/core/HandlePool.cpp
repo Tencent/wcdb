@@ -30,16 +30,15 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-HandlePool::HandlePool(const std::string &thePath,
-                       const std::shared_ptr<Configs> &configs)
-    : path(thePath)
-    , m_tag(Handle::invalidTag)
-    , m_configs(configs)
-    , m_handles(HandlePool::hardwareConcurrency())
-    , m_aliveHandleCount(0)
-    , attachment(this)
-    , m_inited(false)
-    , m_onInitializing(nullptr)
+HandlePool::HandlePool(const std::string &thePath, const std::shared_ptr<Configs> &configs)
+: path(thePath)
+, m_tag(Handle::invalidTag)
+, m_configs(configs)
+, m_handles(HandlePool::hardwareConcurrency())
+, m_aliveHandleCount(0)
+, attachment(this)
+, m_inited(false)
+, m_onInitializing(nullptr)
 {
 }
 
@@ -50,8 +49,7 @@ HandlePool::~HandlePool()
     unblockade();
 }
 
-void HandlePool::setInitializeNotification(
-    const WCDB::HandlePool::InitializeNotificationCallback &onInitializing)
+void HandlePool::setInitializeNotification(const WCDB::HandlePool::InitializeNotificationCallback &onInitializing)
 {
     LockGuard lockGuard(m_sharedLock);
     m_onInitializing = onInitializing;
@@ -63,7 +61,7 @@ bool HandlePool::initialize()
         WCTInnerAssert(m_aliveHandleCount.load() == 0);
         blockade();
         if (!FileManager::shared()->createDirectoryWithIntermediateDirectories(
-                Path::getBaseName(path))) {
+            Path::getBaseName(path))) {
             assignWithSharedThreadedError();
             return false;
         }
@@ -83,8 +81,8 @@ uint32_t HandlePool::getIdentifier()
     do {
         bool succeed;
         Time fileCreatedTime;
-        std::tie(succeed, fileCreatedTime) =
-            FileManager::shared()->getFileCreatedTime(path);
+        std::tie(succeed, fileCreatedTime)
+        = FileManager::shared()->getFileCreatedTime(path);
         if (!succeed) {
             break;
         }
@@ -131,17 +129,14 @@ void HandlePool::removeConfig(const std::string &name)
 #pragma mark - Handle
 int HandlePool::hardwareConcurrency()
 {
-    static const int s_hardwareConcurrency =
-        std::thread::hardware_concurrency() > 0
-            ? std::thread::hardware_concurrency()
-            : 8;
+    static const int s_hardwareConcurrency
+    = std::thread::hardware_concurrency() > 0 ? std::thread::hardware_concurrency() : 8;
     return s_hardwareConcurrency;
 }
 
 int HandlePool::maxConcurrency()
 {
-    static int s_maxConcurrency =
-        std::max<int>(HandlePool::hardwareConcurrency(), 64);
+    static int s_maxConcurrency = std::max<int>(HandlePool::hardwareConcurrency(), 64);
     return s_maxConcurrency;
 }
 
@@ -156,8 +151,7 @@ bool HandlePool::blockadeUntilDone(const BlockadeCallback &onBlockaded)
         return false;
     }
     LockGuard lockGuard(m_sharedLock);
-    std::shared_ptr<ConfiguredHandle> configuredHandle =
-        flowOutConfiguredHandle();
+    std::shared_ptr<ConfiguredHandle> configuredHandle = flowOutConfiguredHandle();
     if (!configuredHandle) {
         configuredHandle = generateConfiguredHandle();
     }
@@ -172,8 +166,7 @@ bool HandlePool::blockadeUntilDone(const BlockadeCallback &onBlockaded)
 
 void HandlePool::unblockade()
 {
-    WCTAssert(isBlockaded(),
-              "Unblockade should not be called without blockaded.");
+    WCTAssert(isBlockaded(), "Unblockade should not be called without blockaded.");
     m_sharedLock.unlock();
 }
 
@@ -213,8 +206,7 @@ bool HandlePool::canFlowOut()
         return false;
     }
     SharedLockGuard lockGuard(m_sharedLock);
-    std::shared_ptr<ConfiguredHandle> configuredHandle =
-        flowOutConfiguredHandle();
+    std::shared_ptr<ConfiguredHandle> configuredHandle = flowOutConfiguredHandle();
     if (!configuredHandle) {
         configuredHandle = generateConfiguredHandle();
     }
@@ -231,22 +223,19 @@ RecyclableHandle HandlePool::flowOut()
         return nullptr;
     }
     SharedLockGuard lockGuard(m_sharedLock);
-    std::shared_ptr<ConfiguredHandle> configuredHandle =
-        flowOutConfiguredHandle();
+    std::shared_ptr<ConfiguredHandle> configuredHandle = flowOutConfiguredHandle();
     if (!configuredHandle) {
         configuredHandle = generateConfiguredHandle();
     }
     if (configuredHandle) {
         m_sharedLock.lockShared();
         return RecyclableHandle(
-            configuredHandle,
-            std::bind(&HandlePool::flowBack, this, std::placeholders::_1));
+        configuredHandle, std::bind(&HandlePool::flowBack, this, std::placeholders::_1));
     }
     return nullptr;
 }
 
-void HandlePool::flowBack(
-    const std::shared_ptr<ConfiguredHandle> &configuredHandle)
+void HandlePool::flowBack(const std::shared_ptr<ConfiguredHandle> &configuredHandle)
 {
     flowBackConfiguredHandle(configuredHandle);
     m_sharedLock.unlockShared();
@@ -268,8 +257,7 @@ std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
         configuredHandle->getHandle()->setTag(getTag());
     }
     std::shared_ptr<Configs> configs = m_configs;
-    if (!configuredHandle->configured(configs) &&
-        !configuredHandle->configure(configs)) {
+    if (!configuredHandle->configured(configs) && !configuredHandle->configure(configs)) {
         setThreadedError(configuredHandle->getHandle()->getError());
         return nullptr;
     }
@@ -283,8 +271,7 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
     if (m_aliveHandleCount.load() >= HandlePool::maxConcurrency()) {
         Error error;
         error.setCode(Error::Code::Exceed);
-        error.message =
-            "The concurrency of database exceeds the maximum allowed.";
+        error.message = "The concurrency of database exceeds the maximum allowed.";
         error.infos.set("MaxConcurrency", HandlePool::maxConcurrency());
         Notifier::shared()->notify(error);
         setThreadedError(std::move(error));
@@ -302,8 +289,8 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
         return nullptr;
     }
 
-    std::shared_ptr<ConfiguredHandle> configuredHandle =
-        ConfiguredHandle::configuredHandle(handle);
+    std::shared_ptr<ConfiguredHandle> configuredHandle
+    = ConfiguredHandle::configuredHandle(handle);
     if (!configuredHandle) {
         setThreadedError(Error(Error::Code::NoMemory));
         return nullptr;
@@ -317,8 +304,7 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
     return configuredHandle;
 }
 
-void HandlePool::flowBackConfiguredHandle(
-    const std::shared_ptr<ConfiguredHandle> &configuredHandle)
+void HandlePool::flowBackConfiguredHandle(const std::shared_ptr<ConfiguredHandle> &configuredHandle)
 {
     WCTInnerAssert(configuredHandle != nullptr);
     WCTInnerAssert(m_sharedLock.level() > SharedLock::Level::None);

@@ -112,7 +112,7 @@ WCDB_PRIMARY_ASC_AUTO_INCREMENT(TestCaseObject, variable1)
 {
     return [self isEqualToObjects:objects
                    withComparator:^BOOL(TestCaseObject *lhs, TestCaseObject *rhs) {
-                     return [lhs isEqualToObject:rhs];
+                       return [lhs isEqualToObject:rhs];
                    }];
 }
 
@@ -121,7 +121,7 @@ WCDB_PRIMARY_ASC_AUTO_INCREMENT(TestCaseObject, variable1)
 {
     return [self isEqualToObjects:objects
                    withComparator:^BOOL(NSObject<TestCaseObjectProtocol> *lhs, NSObject<TestCaseObjectProtocol> *rhs) {
-                     return [lhs isEqualToObject:rhs onProperties:properties];
+                       return [lhs isEqualToObject:rhs onProperties:properties];
                    }];
 }
 
@@ -132,26 +132,26 @@ WCDB_PRIMARY_ASC_AUTO_INCREMENT(TestCaseObject, variable1)
 + (NSComparator)ValueComparator
 {
     return ^NSComparisonResult(WCTValue *lhs, WCTValue *rhs) {
-      if (lhs.valueType != rhs.valueType) {
-          if (lhs.valueType > rhs.valueType) {
-              return NSOrderedDescending;
-          } else {
-              return NSOrderedAscending;
-          }
-      }
-      switch (lhs.valueType) {
-          case WCTColumnTypeNil:
-              return NSOrderedSame;
-          case WCTColumnTypeInteger32:
-          case WCTColumnTypeInteger64:
-          case WCTColumnTypeFloat:
-              return [lhs.numberValue compare:rhs.numberValue];
-          case WCTColumnTypeString:
-              return [lhs.stringValue compare:rhs.stringValue];
-          default:
-              assert(false);
-              return NSOrderedSame;
-      }
+        if (lhs.valueType != rhs.valueType) {
+            if (lhs.valueType > rhs.valueType) {
+                return NSOrderedDescending;
+            } else {
+                return NSOrderedAscending;
+            }
+        }
+        switch (lhs.valueType) {
+        case WCTColumnTypeNil:
+            return NSOrderedSame;
+        case WCTColumnTypeInteger32:
+        case WCTColumnTypeInteger64:
+        case WCTColumnTypeFloat:
+            return [lhs.numberValue compare:rhs.numberValue];
+        case WCTColumnTypeString:
+            return [lhs.stringValue compare:rhs.stringValue];
+        default:
+            assert(false);
+            return NSOrderedSame;
+        }
     };
 }
 

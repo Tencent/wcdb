@@ -38,7 +38,7 @@
 @end
 
 @interface WCTDatabase (
-    ConvenientInsertOrReplace) <WCTConvenientInsertOrReplace>
+ConvenientInsertOrReplace) <WCTConvenientInsertOrReplace>
 
 @end
 
@@ -47,7 +47,7 @@
 @end
 
 @interface WCTDatabase (
-    ConvenientPartialInsertOrReplace) <WCTConvenientPartialInsertOrReplace>
+ConvenientPartialInsertOrReplace) <WCTConvenientPartialInsertOrReplace>
 
 @end
 

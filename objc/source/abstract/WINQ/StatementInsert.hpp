@@ -50,8 +50,7 @@ public:
     bool isReplace() const;
 
 protected:
-    void insertInto(const std::string &tableName,
-                    const Lang::InsertSTMT::Type &type);
+    void insertInto(const std::string &tableName, const Lang::InsertSTMT::Type &type);
 };
 
 } // namespace WCDB

@@ -29,8 +29,7 @@ namespace WCDB {
 
 class MigrationTamperer {
 public:
-    MigrationTamperer(
-        const std::map<std::string, std::shared_ptr<MigrationInfo>> &infos);
+    MigrationTamperer(const std::map<std::string, std::shared_ptr<MigrationInfo>> &infos);
 
     MigrationTamperer() = delete;
     MigrationTamperer(const MigrationTamperer &) = delete;
@@ -73,8 +72,7 @@ protected:
     bool tamper(Lang::CopyOnWriteLazyLang<Lang::DropTableSTMT> &cowLang);
 #pragma mark - Lang
 protected:
-    bool
-    tamper(Lang::CopyOnWriteLazyLang<Lang::CommonTableExpression> &cowLang);
+    bool tamper(Lang::CopyOnWriteLazyLang<Lang::CommonTableExpression> &cowLang);
     bool tamper(Lang::CopyOnWriteLazyLang<Lang::Expr> &lang);
     bool tamper(Lang::CopyOnWriteLazyLang<Lang::ExprColumn> &cowLang);
     bool tamper(Lang::CopyOnWriteLazyLang<Lang::ExprUnaryOperation> &cowLang);
@@ -101,23 +99,19 @@ protected:
     bool tamper(Lang::CopyOnWriteLazyLang<Lang::SelectSTMT::Compound> &cowLang);
     bool tamper(Lang::CopyOnWriteLazyLang<Lang::TableOrSubquery> &cowLang);
     bool tamper(Lang::CopyOnWriteLazyLang<Lang::TableOrSubqueryTable> &cowLang);
-    bool tamper(
-        Lang::CopyOnWriteLazyLang<Lang::TableOrSubqueryTableFunction> &cowLang);
+    bool tamper(Lang::CopyOnWriteLazyLang<Lang::TableOrSubqueryTableFunction> &cowLang);
     bool tamper(Lang::CopyOnWriteLazyLang<Lang::TableOrSubqueryList> &cowLang);
-    bool
-    tamper(Lang::CopyOnWriteLazyLang<Lang::TableOrSubqueryJoinClause> &cowLang);
-    bool
-    tamper(Lang::CopyOnWriteLazyLang<Lang::TableOrSubquerySelect> &cowLang);
+    bool tamper(Lang::CopyOnWriteLazyLang<Lang::TableOrSubqueryJoinClause> &cowLang);
+    bool tamper(Lang::CopyOnWriteLazyLang<Lang::TableOrSubquerySelect> &cowLang);
     bool tamper(Lang::CopyOnWriteLazyLang<Lang::TableOrSubqueryBase> &cowLang);
     bool tamper(Lang::CopyOnWriteLazyLang<Lang::UpdateSTMT::KeyValue> &cowLang);
     bool tamper(Lang::CopyOnWriteLazyLang<Lang::WithClause> &cowLang);
     bool tamper(Lang::CopyOnWriteLazyLang<Lang::WithClause::Pair> &cowLang);
 
     bool tamperTableName(CopyOnWriteString &tableName);
-    bool tamperTableAndSchemaName(CopyOnWriteString &tableName,
-                                  CopyOnWriteString &schemaName);
+    bool tamperTableAndSchemaName(CopyOnWriteString &tableName, CopyOnWriteString &schemaName);
 
-    template <typename T>
+    template<typename T>
     bool tamperList(Lang::CopyOnWriteLazyLangList<T> &lang)
     {
         if (lang.empty()) {

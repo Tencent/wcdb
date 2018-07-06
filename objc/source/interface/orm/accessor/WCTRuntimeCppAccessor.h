@@ -22,17 +22,17 @@
 #import <WCDB/WCTCppAccessor.h>
 #import <WCDB/WCTRuntimeBaseAccessor.h>
 
-template <typename PropertyType, typename Enable = void>
+template<typename PropertyType, typename Enable = void>
 class WCTRuntimeCppAccessor {
 };
 
-template <typename PropertyType>
+template<typename PropertyType>
 class WCTRuntimeCppAccessor<
-    PropertyType,
-    typename std::enable_if<WCDB::ColumnInfo<PropertyType>::isBaseType>::type>
-    : public WCTRuntimeAccessor<PropertyType>,
-      public WCTCppAccessor<(
-          WCDB::ColumnType) WCDB::ColumnInfo<PropertyType>::type> {
+PropertyType,
+typename std::enable_if<WCDB::ColumnInfo<PropertyType>::isBaseType>::type>
+: public WCTRuntimeAccessor<PropertyType>,
+  public WCTCppAccessor<(
+  WCDB::ColumnType) WCDB::ColumnInfo<PropertyType>::type> {
 protected:
     using CppAccessor = WCTCppAccessor<WCDB::ColumnInfo<PropertyType>::type>;
     using RuntimeAccessor = WCTRuntimeAccessor<PropertyType>;
@@ -45,8 +45,8 @@ protected:
 
 public:
     WCTRuntimeCppAccessor(Class cls, const std::string &propertyName)
-        : RuntimeAccessor(cls, propertyName)
-        , CppAccessor(generateValueGetter(), generateValueSetter())
+    : RuntimeAccessor(cls, propertyName)
+    , CppAccessor(generateValueGetter(), generateValueSetter())
     {
     }
 
@@ -64,24 +64,24 @@ protected:
     ValueGetter generateValueGetter()
     {
         return ^(InstanceType instance) {
-          return convertPropertyTypeToCType(this->getProperty(instance));
+            return convertPropertyTypeToCType(this->getProperty(instance));
         };
     }
 
     ValueSetter generateValueSetter()
     {
         return ^(InstanceType instance, UnderlyingType value) {
-          this->setProperty(instance, convertCTypeToPropertyType(value));
+            this->setProperty(instance, convertCTypeToPropertyType(value));
         };
     }
 };
 
-template <typename PropertyType>
+template<typename PropertyType>
 class WCTRuntimeCppAccessor<
-    PropertyType,
-    typename std::enable_if<WCDB::ColumnInfo<PropertyType>::isBLOB>::type>
-    : public WCTRuntimeAccessor<PropertyType>,
-      public WCTCppAccessor<WCDB::ColumnInfo<PropertyType>::type> {
+PropertyType,
+typename std::enable_if<WCDB::ColumnInfo<PropertyType>::isBLOB>::type>
+: public WCTRuntimeAccessor<PropertyType>,
+  public WCTCppAccessor<WCDB::ColumnInfo<PropertyType>::type> {
 public:
     using CppAccessor = WCTCppAccessor<WCDB::ColumnInfo<PropertyType>::type>;
     using RuntimeAccessor = WCTRuntimeAccessor<PropertyType>;
@@ -94,8 +94,8 @@ public:
     using ValueSetter = typename CppAccessor::Setter;
 
     WCTRuntimeCppAccessor(Class cls, const std::string &propertyName)
-        : RuntimeAccessor(cls, propertyName)
-        , CppAccessor(generateValueGetter(), generateValueSetter())
+    : RuntimeAccessor(cls, propertyName)
+    , CppAccessor(generateValueGetter(), generateValueSetter())
     {
     }
 
@@ -106,14 +106,14 @@ public:
     ValueGetter generateValueGetter()
     {
         return ^(InstanceType instance, SizeType &size) {
-          return convertPropertyTypeToCType(getProperty(instance), size);
+            return convertPropertyTypeToCType(getProperty(instance), size);
         };
     }
 
     ValueSetter generateValueSetter()
     {
         return ^(InstanceType instance, UnderlyingType value, SizeType size) {
-          setProperty(instance, convertCTypeToPropertyType(value, size));
+            setProperty(instance, convertCTypeToPropertyType(value, size));
         };
     }
 };

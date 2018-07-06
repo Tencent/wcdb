@@ -79,8 +79,7 @@ protected:
 
 #pragma mark - SequenceCrawlerDelegate
 protected:
-    void onSequenceCellCrawled(const Cell &cell,
-                               const Sequence &sequence) override;
+    void onSequenceCellCrawled(const Cell &cell, const Sequence &sequence) override;
     void onSequenceCrawlerError() override;
 };
 

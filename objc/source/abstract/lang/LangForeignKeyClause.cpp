@@ -26,9 +26,7 @@ namespace WCDB {
 namespace Lang {
 
 ForeignKeyClause::ForeignKeyClause()
-    : doDeferrable(false)
-    , notDeferrable(false)
-    , initiallySwitcher(InitiallySwitch::NotSet)
+: doDeferrable(false), notDeferrable(false), initiallySwitcher(InitiallySwitch::NotSet)
 {
 }
 
@@ -36,36 +34,35 @@ constexpr const char *
 ForeignKeyClause::InitiallySwitchName(const InitiallySwitch &initiallySwitcher)
 {
     switch (initiallySwitcher) {
-        case InitiallySwitch::Deferred:
-            return "INITIALLY DEFERRED";
-        case InitiallySwitch::Immediate:
-            return "INITIALLY IMMEDIATE";
-        default:
-            return "";
+    case InitiallySwitch::Deferred:
+        return "INITIALLY DEFERRED";
+    case InitiallySwitch::Immediate:
+        return "INITIALLY IMMEDIATE";
+    default:
+        return "";
     }
 }
 
 ForeignKeyClause::Trigger::Trigger()
-    : operation(Operation::NotSet), match(false), update(false)
+: operation(Operation::NotSet), match(false), update(false)
 {
 }
 
-constexpr const char *
-ForeignKeyClause::Trigger::operationName(const Operation &operation)
+constexpr const char *ForeignKeyClause::Trigger::operationName(const Operation &operation)
 {
     switch (operation) {
-        case Operation::SetNull:
-            return "SET NULL";
-        case Operation::SetDefault:
-            return "SET DEFAULT";
-        case Operation::Cascade:
-            return "CASCADE";
-        case Operation::Restrict:
-            return "RESTRICT";
-        case Operation::NoAction:
-            return "NO ACTION";
-        default:
-            return "";
+    case Operation::SetNull:
+        return "SET NULL";
+    case Operation::SetDefault:
+        return "SET DEFAULT";
+    case Operation::Cascade:
+        return "CASCADE";
+    case Operation::Restrict:
+        return "RESTRICT";
+    case Operation::NoAction:
+        return "NO ACTION";
+    default:
+        return "";
     }
 }
 
@@ -87,8 +84,7 @@ CopyOnWriteString ForeignKeyClause::SQL() const
         description.append(" DEFERRABLE");
         if (initiallySwitcher != InitiallySwitch::NotSet) {
             description.append(" ");
-            description.append(
-                ForeignKeyClause::InitiallySwitchName(initiallySwitcher));
+            description.append(ForeignKeyClause::InitiallySwitchName(initiallySwitcher));
         }
     }
     return description;
@@ -112,10 +108,9 @@ CopyOnWriteString ForeignKeyClause::Trigger::SQL() const
     return description;
 }
 
-template <>
+template<>
 CopyOnWriteString
-CopyOnWriteLazyLangList<ForeignKeyClause::Trigger>::calculatedDescription()
-    const
+CopyOnWriteLazyLangList<ForeignKeyClause::Trigger>::calculatedDescription() const
 {
     std::string description;
     bool space = false;

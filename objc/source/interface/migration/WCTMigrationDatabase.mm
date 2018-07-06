@@ -46,7 +46,7 @@
 {
     WCTRemedialAssert(info, "Migration info can't be null. If you want to refer an inited migration database, use [initWithExistingPath:] instead.", return nil;);
     WCTRemedialAssert(path, "Path can't be null.", return nil;);
-    return [self initWithDatabase:WCDB::MigrationDatabase::databaseWithPath(path.cppString, {[info getWCDBMigrationInfo]})];
+    return [self initWithDatabase:WCDB::MigrationDatabase::databaseWithPath(path.cppString, { [info getWCDBMigrationInfo] })];
 }
 
 - (instancetype)initWithExistingPath:(nonnull NSString *)path

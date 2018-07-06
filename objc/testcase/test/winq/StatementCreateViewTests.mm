@@ -31,49 +31,49 @@
     XCTAssertEqual(WCDB::StatementCreateView().getType(), WCDB::Statement::Type::CreateView);
 
     WINQAssertEqual(WCDB::StatementCreateView()
-                        .createView(self.class.viewName)
-                        .ifNotExists(false)
-                        .as(self.class.statementSelect),
+                    .createView(self.class.viewName)
+                    .ifNotExists(false)
+                    .as(self.class.statementSelect),
                     @"CREATE VIEW main.testView AS SELECT testColumn FROM main.testTable");
 
     WINQAssertEqual(WCDB::StatementCreateView()
-                        .createView(self.class.viewName)
-                        .ifNotExists(false)
-                        .on(self.class.column)
-                        .as(self.class.statementSelect),
+                    .createView(self.class.viewName)
+                    .ifNotExists(false)
+                    .on(self.class.column)
+                    .as(self.class.statementSelect),
                     @"CREATE VIEW main.testView(testColumn) AS SELECT testColumn FROM main.testTable");
 
     WINQAssertEqual(WCDB::StatementCreateView()
-                        .createView(self.class.viewName)
-                        .ifNotExists(false)
-                        .on(self.class.columns)
-                        .as(self.class.statementSelect),
+                    .createView(self.class.viewName)
+                    .ifNotExists(false)
+                    .on(self.class.columns)
+                    .as(self.class.statementSelect),
                     @"CREATE VIEW main.testView(testColumn, testColumn2) AS SELECT testColumn FROM main.testTable");
 
     WINQAssertEqual(WCDB::StatementCreateView()
-                        .createView(self.class.viewName)
-                        .ifNotExists(false)
-                        .withSchema(self.class.schemaName)
-                        .as(self.class.statementSelect),
+                    .createView(self.class.viewName)
+                    .ifNotExists(false)
+                    .withSchema(self.class.schemaName)
+                    .as(self.class.statementSelect),
                     @"CREATE VIEW testSchema.testView AS SELECT testColumn FROM main.testTable");
 
     WINQAssertEqual(WCDB::StatementCreateView()
-                        .createView(self.class.viewName)
-                        .ifNotExists(true)
-                        .as(self.class.statementSelect),
+                    .createView(self.class.viewName)
+                    .ifNotExists(true)
+                    .as(self.class.statementSelect),
                     @"CREATE VIEW IF NOT EXISTS main.testView AS SELECT testColumn FROM main.testTable");
 
     WINQAssertEqual(WCDB::StatementCreateView()
-                        .createView(self.class.viewName)
-                        .temp()
-                        .ifNotExists(false)
-                        .as(self.class.statementSelect),
+                    .createView(self.class.viewName)
+                    .temp()
+                    .ifNotExists(false)
+                    .as(self.class.statementSelect),
                     @"CREATE TEMP VIEW temp.testView AS SELECT testColumn FROM main.testTable");
 
     //Default
     WINQAssertEqual(WCDB::StatementCreateView()
-                        .createView(self.class.viewName)
-                        .as(self.class.statementSelect),
+                    .createView(self.class.viewName)
+                    .as(self.class.statementSelect),
                     @"CREATE VIEW IF NOT EXISTS main.testView AS SELECT testColumn FROM main.testTable");
 }
 

@@ -30,19 +30,17 @@ namespace WCDB {
 #pragma mark - Configs
 std::shared_ptr<Configs> Configs::default_()
 {
-    static std::shared_ptr<Configs> *s_configs =
-        new std::shared_ptr<Configs>(new Configs({
-            Element(SharedSQLTraceConfig::shared(), Priority::Highest),
-            Element(SharedPerformanceTraceConfig::shared(), Priority::Highest),
-            Element(BasicConfig::shared(), Priority::Higher),
-            Element(CheckpointConfig::shared(), Priority::Low),
-        }));
+    static std::shared_ptr<Configs> *s_configs = new std::shared_ptr<Configs>(new Configs({
+    Element(SharedSQLTraceConfig::shared(), Priority::Highest),
+    Element(SharedPerformanceTraceConfig::shared(), Priority::Highest),
+    Element(BasicConfig::shared(), Priority::Higher),
+    Element(CheckpointConfig::shared(), Priority::Low),
+    }));
     return *s_configs;
 }
 
 std::shared_ptr<Configs>
-Configs::configsBySettingConfig(const std::shared_ptr<Config> &config,
-                                int priority) const
+Configs::configsBySettingConfig(const std::shared_ptr<Config> &config, int priority) const
 {
     WCTInnerAssert(config != nullptr);
     std::shared_ptr<Configs> configs(new Configs(m_elements));
@@ -50,8 +48,7 @@ Configs::configsBySettingConfig(const std::shared_ptr<Config> &config,
     return configs;
 }
 
-std::shared_ptr<Configs>
-Configs::configsByRemovingConfig(const std::string &name) const
+std::shared_ptr<Configs> Configs::configsByRemovingConfig(const std::string &name) const
 {
     std::shared_ptr<Configs> configs(new Configs(m_elements));
     configs->removeElement(name);
@@ -75,7 +72,7 @@ bool Configs::equal(const std::shared_ptr<Configs> &configs) const
 
 #pragma mark - Element
 Configs::Element::Element(const std::shared_ptr<Config> &config_, int priority_)
-    : config(config_), priority(priority_)
+: config(config_), priority(priority_)
 {
 }
 

@@ -23,8 +23,7 @@
 
 namespace WCDB {
 
-WithClause &WithClause::with(const CTETableName &cteTableName,
-                             const StatementSelect &selectSTMT)
+WithClause &WithClause::with(const CTETableName &cteTableName, const StatementSelect &selectSTMT)
 {
     return with(cteTableName, selectSTMT, false);
 }
@@ -35,9 +34,8 @@ WithClause &WithClause::withRecursive(const CTETableName &cteTableName,
     return with(cteTableName, selectSTMT, true);
 }
 
-WithClause &WithClause::with(const CTETableName &cteTableName,
-                             const StatementSelect &selectSTMT,
-                             bool recursive)
+WithClause &
+WithClause::with(const CTETableName &cteTableName, const StatementSelect &selectSTMT, bool recursive)
 {
     Lang::CopyOnWriteLazyLang<Lang::WithClause::Pair> pair;
     {

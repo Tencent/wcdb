@@ -22,9 +22,9 @@
 
 namespace WCDB {
 
-PerformanceTraceConfig::PerformanceTraceConfig(
-    const std::string &name, const Handle::PerformanceNotification &trace)
-    : Config(name), m_performanceTrace(trace)
+PerformanceTraceConfig::PerformanceTraceConfig(const std::string &name,
+                                               const Handle::PerformanceNotification &trace)
+: Config(name), m_performanceTrace(trace)
 {
 }
 
@@ -36,14 +36,12 @@ bool PerformanceTraceConfig::invoke(Handle *handle)
 
 const std::shared_ptr<Config> &SharedPerformanceTraceConfig::shared()
 {
-    static const std::shared_ptr<Config> *s_shared =
-        new std::shared_ptr<Config>(new SharedPerformanceTraceConfig(
-            "WCDBGlobalPerformanceTrace", nullptr));
+    static const std::shared_ptr<Config> *s_shared = new std::shared_ptr<Config>(
+    new SharedPerformanceTraceConfig("WCDBGlobalPerformanceTrace", nullptr));
     return *s_shared;
 }
 
-void SharedPerformanceTraceConfig::setPerformanceTrace(
-    const Handle::PerformanceNotification &trace)
+void SharedPerformanceTraceConfig::setPerformanceTrace(const Handle::PerformanceNotification &trace)
 {
     LockGuard lockGuard(m_lock);
     m_performanceTrace = trace;

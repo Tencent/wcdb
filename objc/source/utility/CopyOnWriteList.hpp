@@ -23,7 +23,7 @@
 
 #include <WCDB/CopyOnWrite.hpp>
 
-template <typename T>
+template<typename T>
 class CopyOnWriteList : public CopyOnWrite<std::list<CopyOnWrite<T>>> {
 public:
     using Super = CopyOnWrite<std::list<CopyOnWrite<T>>>;
@@ -35,7 +35,7 @@ public:
         if (!this->empty()) {
             this->get_or_copy().push_back(element);
         } else {
-            this->assign({element});
+            this->assign({ element });
         }
     }
 };

@@ -31,9 +31,9 @@ typedef NS_ENUM(NSUInteger, FileBomberAttackType) {
 
 - (instancetype)initWithPath:(NSString *)path;
 
-@property(nonatomic, assign) FileBomberAttackType attackType;
+@property (nonatomic, assign) FileBomberAttackType attackType;
 
-@property(nonatomic, readonly) int fileSize;
+@property (nonatomic, readonly) int fileSize;
 
 - (BOOL)attack:(NSRange)range;
 
@@ -43,9 +43,9 @@ typedef NS_ENUM(NSUInteger, FileBomberAttackType) {
 
 @interface DatabaseBomber : FileBomber
 
-@property(nonatomic, assign) int pageSize;
+@property (nonatomic, assign) int pageSize;
 
-@property(nonatomic, readonly) int pageCount;
+@property (nonatomic, readonly) int pageCount;
 
 - (BOOL)attackRootPage;
 

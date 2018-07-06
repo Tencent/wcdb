@@ -27,11 +27,11 @@
 
 @interface Benchmark : TestCase
 
-@property(readonly) Config *config;
+@property (readonly) Config *config;
 
-@property(readonly) WCTDatabase *database;
+@property (readonly) WCTDatabase *database;
 
-@property(readonly) NSArray<BenchmarkObject *> *objects;
+@property (readonly) NSArray<BenchmarkObject *> *objects;
 
 - (NSString *)getTableNameWithIndex:(int)index;
 
@@ -50,8 +50,8 @@
 - (void)tearDownDatabaseCache;
 
 - (void)measure:(void (^)(void))block
-               setUp:(void (^)(void))setUpBlock
-            tearDown:(void (^)(void))tearDownBlock
-    checkCorrectness:(void (^)(void))correctnessBlock;
+           setUp:(void (^)(void))setUpBlock
+        tearDown:(void (^)(void))tearDownBlock
+checkCorrectness:(void (^)(void))correctnessBlock;
 
 @end

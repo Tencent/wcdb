@@ -29,36 +29,37 @@
 - (void)test_initialization
 {
     __block BOOL result = NO;
-    [self measure:^{
-      result = self.database.canOpen;
+    [self
+    measure:^{
+        result = self.database.canOpen;
     }
-        setUp:^{
-          [self setUpDatabase];
-          [self setUpWithPreCreateTable:self.config.tableCount];
-          [self tearDownDatabaseCache];
-        }
-        tearDown:^{
-          [self tearDownDatabase];
-        }
-        checkCorrectness:^{
-          XCTAssertTrue(result);
+    setUp:^{
+        [self setUpDatabase];
+        [self setUpWithPreCreateTable:self.config.tableCount];
+        [self tearDownDatabaseCache];
+    }
+    tearDown:^{
+        [self tearDownDatabase];
+    }
+    checkCorrectness:^{
+        XCTAssertTrue(result);
 
-          NSArray<WCTValue *> *values = [self.database getColumnOnResult:WCTMaster.name fromTable:WCTMaster.tableName orderBy:WCTMaster.name.asOrder(WCTOrderedAscending)];
-          XCTAssertEqual(values.count, self.config.tableCount);
+        NSArray<WCTValue *> *values = [self.database getColumnOnResult:WCTMaster.name fromTable:WCTMaster.tableName orderBy:WCTMaster.name.asOrder(WCTOrderedAscending)];
+        XCTAssertEqual(values.count, self.config.tableCount);
 
-          NSMutableSet<NSString *> *expectedTableNames = [[NSMutableSet<NSString *> alloc] initWithCapacity:values.count];
-          for (NSUInteger i = 0; i < values.count; ++i) {
-              NSString *expectedTableName = [self getTableNameWithIndex:(int) i];
-              [expectedTableNames addObject:expectedTableName];
-          }
-          XCTAssertNotEqual(expectedTableNames.count, 0);
-          for (NSUInteger i = 0; i < values.count; ++i) {
-              if ([expectedTableNames containsObject:values[i].stringValue]) {
-                  [expectedTableNames removeObject:values[i].stringValue];
-              }
-          }
-          XCTAssertEqual(expectedTableNames.count, 0);
-        }];
+        NSMutableSet<NSString *> *expectedTableNames = [[NSMutableSet<NSString *> alloc] initWithCapacity:values.count];
+        for (NSUInteger i = 0; i < values.count; ++i) {
+            NSString *expectedTableName = [self getTableNameWithIndex:(int) i];
+            [expectedTableNames addObject:expectedTableName];
+        }
+        XCTAssertNotEqual(expectedTableNames.count, 0);
+        for (NSUInteger i = 0; i < values.count; ++i) {
+            if ([expectedTableNames containsObject:values[i].stringValue]) {
+                [expectedTableNames removeObject:values[i].stringValue];
+            }
+        }
+        XCTAssertEqual(expectedTableNames.count, 0);
+    }];
 }
 
 @end

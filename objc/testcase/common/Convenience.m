@@ -25,15 +25,15 @@
 + (NSComparator)Comparator
 {
     return ^NSComparisonResult(NSObject *obj1, NSObject *obj2) {
-      NSUInteger hash1 = obj1.hash;
-      NSUInteger hash2 = obj2.hash;
-      if (hash1 < hash2) {
-          return NSOrderedAscending;
-      } else if (hash1 > hash2) {
-          return NSOrderedDescending;
-      } else {
-          return NSOrderedSame;
-      }
+        NSUInteger hash1 = obj1.hash;
+        NSUInteger hash2 = obj2.hash;
+        if (hash1 < hash2) {
+            return NSOrderedAscending;
+        } else if (hash1 > hash2) {
+            return NSOrderedDescending;
+        } else {
+            return NSOrderedSame;
+        }
     };
 }
 
@@ -133,9 +133,9 @@
         length = [NSNumber randomUInt8];
     } while (length < 8);
     static const char alphanum[] =
-        "0123456789"
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        "abcdefghijklmnopqrstuvwxyz";
+    "0123456789"
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    "abcdefghijklmnopqrstuvwxyz";
     NSMutableString *randomString = [NSMutableString string];
     for (int i = 0; i < length; ++i) {
         [randomString appendFormat:@"%c", alphanum[rand() % (sizeof(alphanum) - 1)]];

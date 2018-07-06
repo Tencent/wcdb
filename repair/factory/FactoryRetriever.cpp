@@ -36,11 +36,10 @@ namespace WCDB {
 namespace Repair {
 
 FactoryRetriever::FactoryRetriever(Factory &factory_)
-    : FactoryRelated(factory_)
-    , databaseFileName(factory.getDatabaseName())
-    , database(Path::addComponent(factory.getRestoreDirectory(),
-                                  factory.getDatabaseName()))
-    , m_totalSize(0)
+: FactoryRelated(factory_)
+, databaseFileName(factory.getDatabaseName())
+, database(Path::addComponent(factory.getRestoreDirectory(), factory.getDatabaseName()))
+, m_totalSize(0)
 {
 }
 
@@ -59,8 +58,7 @@ bool FactoryRetriever::work()
         setCriticalErrorWithSharedThreadedError();
         return exit(false);
     }
-    if (!fileManager->createDirectoryWithIntermediateDirectories(
-            factory.getRestoreDirectory())) {
+    if (!fileManager->createDirectoryWithIntermediateDirectories(factory.getRestoreDirectory())) {
         setCriticalErrorWithSharedThreadedError();
         return exit(false);
     }
@@ -110,7 +108,7 @@ bool FactoryRetriever::work()
     }
     std::string baseDirectory = Path::getBaseName(factory.database);
     succeed = FileManager::shared()->moveItems(
-        Factory::associatedPathsForDatabase(database), baseDirectory);
+    Factory::associatedPathsForDatabase(database), baseDirectory);
     if (!succeed) {
         setCriticalErrorWithSharedThreadedError();
         return exit(false);
@@ -137,8 +135,8 @@ bool FactoryRetriever::restore(const std::string &database)
 
     std::list<std::string> materialPaths;
     bool succeed;
-    std::tie(succeed, materialPaths) =
-        Factory::materialsForDeserializingForDatabase(database);
+    std::tie(succeed, materialPaths)
+    = Factory::materialsForDeserializingForDatabase(database);
     if (!succeed) {
         setCriticalErrorWithSharedThreadedError();
         return false;
@@ -153,8 +151,8 @@ bool FactoryRetriever::restore(const std::string &database)
         for (const auto &materialPath : materialPaths) {
             useMaterial = material.deserialize(materialPath);
             if (useMaterial) {
-                std::tie(succeed, materialTime) =
-                    FileManager::shared()->getFileModifiedTime(materialPath);
+                std::tie(succeed, materialTime)
+                = FileManager::shared()->getFileModifiedTime(materialPath);
                 if (!succeed) {
                     setCriticalErrorWithSharedThreadedError();
                     return false;
@@ -171,9 +169,12 @@ bool FactoryRetriever::restore(const std::string &database)
             m_assembler->markAsDuplicated(false);
             mechanic.setAssembler(m_assembler);
             mechanic.setMaterial(&material);
-            mechanic.setProgressCallback(
-                std::bind(&FactoryRetriever::increaseProgress, this, database,
-                          true, std::placeholders::_1, std::placeholders::_2));
+            mechanic.setProgressCallback(std::bind(&FactoryRetriever::increaseProgress,
+                                                   this,
+                                                   database,
+                                                   true,
+                                                   std::placeholders::_1,
+                                                   std::placeholders::_2));
             SteadyClock before = SteadyClock::now();
             bool result = mechanic.work();
             SteadyClock after = SteadyClock::now();
@@ -185,8 +186,7 @@ bool FactoryRetriever::restore(const std::string &database)
                 tryUpgradeError(mechanic.getError());
             }
             score = mechanic.getScore();
-            reportMechanic(mechanic.getScore(), database, after - before,
-                           materialTime);
+            reportMechanic(mechanic.getScore(), database, after - before, materialTime);
         }
     } else {
         Error warning;
@@ -200,9 +200,12 @@ bool FactoryRetriever::restore(const std::string &database)
     FullCrawler fullCrawler(database);
     m_assembler->markAsDuplicated(useMaterial);
     fullCrawler.setAssembler(m_assembler);
-    fullCrawler.setProgressCallback(
-        std::bind(&FactoryRetriever::increaseProgress, this, database,
-                  useMaterial, std::placeholders::_1, std::placeholders::_2));
+    fullCrawler.setProgressCallback(std::bind(&FactoryRetriever::increaseProgress,
+                                              this,
+                                              database,
+                                              useMaterial,
+                                              std::placeholders::_1,
+                                              std::placeholders::_2));
     SteadyClock before = SteadyClock::now();
     if (fullCrawler.work()) {
         SteadyClock after = SteadyClock::now();
@@ -279,8 +282,7 @@ void FactoryRetriever::finishReportOfPerformance(Error &error,
 }
 
 #pragma mark - Score and Progress
-bool FactoryRetriever::calculateSizes(
-    const std::list<std::string> &workshopDirectories)
+bool FactoryRetriever::calculateSizes(const std::list<std::string> &workshopDirectories)
 {
     //Origin database
     if (!calculateSize(factory.database)) {
@@ -289,19 +291,19 @@ bool FactoryRetriever::calculateSizes(
 
     //Materials
     for (const auto &workshopDirectory : workshopDirectories) {
-        std::string database =
-            Path::addComponent(workshopDirectory, databaseFileName);
+        std::string database = Path::addComponent(workshopDirectory, databaseFileName);
         if (!calculateSize(database)) {
             return false;
         }
     }
 
-    m_totalSize =
-        std::accumulate(m_sizes.begin(), m_sizes.end(), 0,
-                        [](const size_t previous,
-                           const std::pair<std::string, size_t> &element) {
-                            return previous + element.second;
-                        });
+    m_totalSize = std::accumulate(
+    m_sizes.begin(),
+    m_sizes.end(),
+    0,
+    [](const size_t previous, const std::pair<std::string, size_t> &element) {
+        return previous + element.second;
+    });
     return true;
 }
 
@@ -309,8 +311,8 @@ bool FactoryRetriever::calculateSize(const std::string &database)
 {
     bool succeed;
     size_t fileSize;
-    std::tie(succeed, fileSize) = FileManager::shared()->getItemsSize(
-        Factory::databasePathsForDatabase(database));
+    std::tie(succeed, fileSize)
+    = FileManager::shared()->getItemsSize(Factory::databasePathsForDatabase(database));
     if (!succeed) {
         setCriticalErrorWithSharedThreadedError();
         return false;
@@ -336,8 +338,7 @@ void FactoryRetriever::increaseProgress(const std::string &database,
     Progress::increaseProgress(getWeight(database).value() * increment);
 }
 
-void FactoryRetriever::increaseScore(const std::string &database,
-                                     const Fraction &increment)
+void FactoryRetriever::increaseScore(const std::string &database, const Fraction &increment)
 {
     Scoreable::increaseScore(getWeight(database) * increment);
 }

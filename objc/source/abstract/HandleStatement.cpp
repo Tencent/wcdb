@@ -25,7 +25,7 @@
 namespace WCDB {
 
 HandleStatement::HandleStatement(Handle *handle)
-    : HandleRelated(handle), m_stmt(nullptr)
+: HandleRelated(handle), m_stmt(nullptr)
 {
 }
 
@@ -34,8 +34,8 @@ bool HandleStatement::prepare(const Statement &statement)
     WCTInnerAssert(m_stmt == nullptr);
     m_statement = statement;
     const std::string &sql = m_statement.getDescription();
-    int rc = sqlite3_prepare_v2((sqlite3 *) getRawHandle(), sql.c_str(), -1,
-                                (sqlite3_stmt **) &m_stmt, nullptr);
+    int rc = sqlite3_prepare_v2(
+    (sqlite3 *) getRawHandle(), sql.c_str(), -1, (sqlite3_stmt **) &m_stmt, nullptr);
     if (rc == SQLITE_OK) {
         return true;
     }
@@ -97,16 +97,16 @@ ColumnType HandleStatement::getType(int index)
 {
     WCTInnerAssert(isPrepared());
     switch (sqlite3_column_type((sqlite3_stmt *) m_stmt, index)) {
-        case SQLITE_INTEGER:
-            return ColumnType::Integer64;
-        case SQLITE_FLOAT:
-            return ColumnType::Float;
-        case SQLITE_BLOB:
-            return ColumnType::BLOB;
-        case SQLITE_TEXT:
-            return ColumnType::Text;
-        default:
-            return ColumnType::Null;
+    case SQLITE_INTEGER:
+        return ColumnType::Integer64;
+    case SQLITE_FLOAT:
+        return ColumnType::Float;
+    case SQLITE_BLOB:
+        return ColumnType::BLOB;
+    case SQLITE_TEXT:
+        return ColumnType::Text;
+    default:
+        return ColumnType::Null;
     }
 }
 
@@ -136,15 +136,14 @@ void HandleStatement::bindText(const Text &value, int index)
 void HandleStatement::bindText(const Text &value, int length, int index)
 {
     WCTInnerAssert(isPrepared());
-    sqlite3_bind_text((sqlite3_stmt *) m_stmt, index, value, length,
-                      SQLITE_TRANSIENT);
+    sqlite3_bind_text((sqlite3_stmt *) m_stmt, index, value, length, SQLITE_TRANSIENT);
 }
 
 void HandleStatement::bindBLOB(const BLOB &value, int index)
 {
     WCTInnerAssert(isPrepared());
-    sqlite3_bind_blob((sqlite3_stmt *) m_stmt, index, value.buffer(),
-                      (int) value.size(), SQLITE_TRANSIENT);
+    sqlite3_bind_blob(
+    (sqlite3_stmt *) m_stmt, index, value.buffer(), (int) value.size(), SQLITE_TRANSIENT);
 }
 
 void HandleStatement::bindNull(int index)
@@ -156,29 +155,26 @@ void HandleStatement::bindNull(int index)
 HandleStatement::Integer32 HandleStatement::getInteger32(int index)
 {
     WCTInnerAssert(isPrepared());
-    return static_cast<Integer32>(
-        sqlite3_column_int((sqlite3_stmt *) m_stmt, index));
+    return static_cast<Integer32>(sqlite3_column_int((sqlite3_stmt *) m_stmt, index));
 }
 
 HandleStatement::Integer64 HandleStatement::getInteger64(int index)
 {
     WCTInnerAssert(isPrepared());
-    return static_cast<Integer64>(
-        sqlite3_column_int64((sqlite3_stmt *) m_stmt, index));
+    return static_cast<Integer64>(sqlite3_column_int64((sqlite3_stmt *) m_stmt, index));
 }
 
 HandleStatement::Float HandleStatement::getDouble(int index)
 {
     WCTInnerAssert(isPrepared());
-    return static_cast<Float>(
-        sqlite3_column_double((sqlite3_stmt *) m_stmt, index));
+    return static_cast<Float>(sqlite3_column_double((sqlite3_stmt *) m_stmt, index));
 }
 
 HandleStatement::Text HandleStatement::getText(int index)
 {
     WCTInnerAssert(isPrepared());
-    Text text = reinterpret_cast<Text>(
-        sqlite3_column_text((sqlite3_stmt *) m_stmt, index));
+    Text text
+    = reinterpret_cast<Text>(sqlite3_column_text((sqlite3_stmt *) m_stmt, index));
     return text ? text : "";
 }
 
@@ -186,8 +182,8 @@ const HandleStatement::BLOB HandleStatement::getBLOB(int index)
 {
     WCTInnerAssert(isPrepared());
     int size = sqlite3_column_bytes((sqlite3_stmt *) m_stmt, index);
-    const unsigned char *data = (const unsigned char *) sqlite3_column_blob(
-        (sqlite3_stmt *) m_stmt, index);
+    const unsigned char *data
+    = (const unsigned char *) sqlite3_column_blob((sqlite3_stmt *) m_stmt, index);
     return BLOB::immutableNoCopyData(data, size);
 }
 

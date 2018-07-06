@@ -25,13 +25,11 @@
 
 namespace WCDB {
 
-class QualifiedTableName
-    : public DescribableWithLang<Lang::QualifiedTableName> {
+class QualifiedTableName : public DescribableWithLang<Lang::QualifiedTableName> {
 public:
-    template <typename T>
-    QualifiedTableName(
-        const T &t,
-        typename std::enable_if<ColumnIsTextType<T>::value>::type * = nullptr)
+    template<typename T>
+    QualifiedTableName(const T &t,
+                       typename std::enable_if<ColumnIsTextType<T>::value>::type * = nullptr)
     {
         setTableName(ColumnIsTextType<T>::asUnderlyingType(t));
     }

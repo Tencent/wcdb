@@ -108,8 +108,7 @@ public:
 
     Type type;
     CopyOnWriteLazyLang<TableOrSubqueryTable> tableOrSubqueryTable;
-    CopyOnWriteLazyLang<TableOrSubqueryTableFunction>
-        tableOrSubqueryTableFunction;
+    CopyOnWriteLazyLang<TableOrSubqueryTableFunction> tableOrSubqueryTableFunction;
     CopyOnWriteLazyLang<TableOrSubqueryJoinClause> tableOrSubqueryJoinClause;
     CopyOnWriteLazyLang<TableOrSubquerySelect> tableOrSubquerySelect;
     CopyOnWriteLazyLang<TableOrSubqueryList> tableOrSubqueryList;

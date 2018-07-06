@@ -27,8 +27,7 @@
 
 namespace WCDB {
 
-class Time : public std::chrono::system_clock::time_point,
-             public SharedThreadedErrorProne {
+class Time : public std::chrono::system_clock::time_point, public SharedThreadedErrorProne {
 public:
     using Super = std::chrono::system_clock::time_point;
     using Super::time_point;
@@ -51,10 +50,9 @@ public:
     SteadyClock(const Super &super);
     SteadyClock(Super &&super);
 
-    template <typename T, typename U>
+    template<typename T, typename U>
     SteadyClock(const std::chrono::duration<T, U> &duration)
-        : Super(std::chrono::duration_cast<std::chrono::steady_clock::duration>(
-              duration))
+    : Super(std::chrono::duration_cast<std::chrono::steady_clock::duration>(duration))
     {
     }
 

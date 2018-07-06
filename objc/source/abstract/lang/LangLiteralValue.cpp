@@ -34,44 +34,41 @@ CopyOnWriteString LiteralValue::SQL() const
 {
     std::string description;
     switch (type) {
-        case Type::NumbericInteger:
-        case Type::NumbericFloat:
-            //TODO use integer to store number
-            description.append(stringValue.get());
-            break;
-        case Type::String:
-            description.append("'");
-            description.append(
-                LiteralValue::stringByAntiInjecting(stringValue).get());
-            description.append("'");
-            break;
-        case Type::BLOB:
-            description.append("'");
-            description.append(
-                LiteralValue::stringByAntiInjecting(dataValue).get());
-            description.append("'");
-            break;
-        case Type::Null:
-            description.append("NULL");
-            break;
-        case Type::CurrentTime:
-            description.append("CURRENT_TIME");
-            break;
-        case Type::CurrentDate:
-            description.append("CURRENT_DATE");
-            break;
-        case Type::CurrentTimestamp:
-            description.append("CURRENT_TIMESTAMP");
-            break;
-        default:
-            LangRemedialFatalError();
-            break;
+    case Type::NumbericInteger:
+    case Type::NumbericFloat:
+        //TODO use integer to store number
+        description.append(stringValue.get());
+        break;
+    case Type::String:
+        description.append("'");
+        description.append(LiteralValue::stringByAntiInjecting(stringValue).get());
+        description.append("'");
+        break;
+    case Type::BLOB:
+        description.append("'");
+        description.append(LiteralValue::stringByAntiInjecting(dataValue).get());
+        description.append("'");
+        break;
+    case Type::Null:
+        description.append("NULL");
+        break;
+    case Type::CurrentTime:
+        description.append("CURRENT_TIME");
+        break;
+    case Type::CurrentDate:
+        description.append("CURRENT_DATE");
+        break;
+    case Type::CurrentTimestamp:
+        description.append("CURRENT_TIMESTAMP");
+        break;
+    default:
+        LangRemedialFatalError();
+        break;
     }
     return description;
 }
 
-CopyOnWriteString
-LiteralValue::stringByAntiInjecting(const CopyOnWriteString &origin)
+CopyOnWriteString LiteralValue::stringByAntiInjecting(const CopyOnWriteString &origin)
 {
     return String::stringByReplacingOccurrencesOfString(origin, "'", "''");
 }
@@ -80,8 +77,8 @@ CopyOnWriteString LiteralValue::stringByAntiInjecting(const Data &origin)
 {
     //TODO use BindParameter to accept data with '\0'
     CopyOnWriteString cowString;
-    cowString.assign(std::string(
-        reinterpret_cast<const char *>(origin.buffer()), origin.size()));
+    cowString.assign(
+    std::string(reinterpret_cast<const char *>(origin.buffer()), origin.size()));
     return String::stringByReplacingOccurrencesOfString(cowString, "'", "''");
 }
 

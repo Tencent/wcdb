@@ -22,7 +22,7 @@
 #import <WCDB/WCDB.h>
 
 @interface ORMColumnConstraintPrimaryAutoIncrement (
-    WCTTableCoding) <WCTTableCoding>
+WCTTableCoding) <WCTTableCoding>
 
 WCDB_PROPERTY(variable)
 

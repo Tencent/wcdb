@@ -31,19 +31,19 @@
     std::string errorMessage = "testError";
 
     WINQAssertEqual(WCDB::RaiseFunction()
-                        .ignore(),
+                    .ignore(),
                     @"RAISE(IGNORE)");
 
     WINQAssertEqual(WCDB::RaiseFunction()
-                        .rollback(errorMessage),
+                    .rollback(errorMessage),
                     @"RAISE(ROLLBACK, testError)");
 
     WINQAssertEqual(WCDB::RaiseFunction()
-                        .abort(errorMessage),
+                    .abort(errorMessage),
                     @"RAISE(ABORT, testError)");
 
     WINQAssertEqual(WCDB::RaiseFunction()
-                        .fail(errorMessage),
+                    .fail(errorMessage),
                     @"RAISE(FAIL, testError)");
 }
 

@@ -33,22 +33,22 @@ CopyOnWriteString ResultColumn::SQL() const
 {
     std::string description;
     switch (type) {
-        case Type::Expr:
-            LangRemedialAssert(!expr.empty());
-            description.append(expr.description().get());
-            if (!columnAlias.empty()) {
-                description.append(" AS " + columnAlias.description().get());
-            }
-            break;
-        case Type::Star:
-            if (!tableName.empty()) {
-                description.append(tableName.get() + ".");
-            }
-            description.append("*");
-            break;
-        default:
-            LangRemedialFatalError();
-            break;
+    case Type::Expr:
+        LangRemedialAssert(!expr.empty());
+        description.append(expr.description().get());
+        if (!columnAlias.empty()) {
+            description.append(" AS " + columnAlias.description().get());
+        }
+        break;
+    case Type::Star:
+        if (!tableName.empty()) {
+            description.append(tableName.get() + ".");
+        }
+        description.append("*");
+        break;
+    default:
+        LangRemedialFatalError();
+        break;
     }
     return description;
 }

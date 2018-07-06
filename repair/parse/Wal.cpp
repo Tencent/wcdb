@@ -32,12 +32,12 @@ namespace Repair {
 
 #pragma mark - Initialize
 Wal::Wal(Pager *pager)
-    : PagerRelated(pager)
-    , m_fileHandle(Path::addExtention(m_pager->getPath(), "-wal"))
-    , m_salt({0, 0})
-    , m_isNativeChecksum(false)
-    , m_maxFrame(std::numeric_limits<int>::max())
-    , m_frames(0)
+: PagerRelated(pager)
+, m_fileHandle(Path::addExtention(m_pager->getPath(), "-wal"))
+, m_salt({ 0, 0 })
+, m_isNativeChecksum(false)
+, m_maxFrame(std::numeric_limits<int>::max())
+, m_frames(0)
 {
 }
 
@@ -48,9 +48,8 @@ const std::string &Wal::getPath() const
 
 Data Wal::acquireData(off_t offset, size_t size)
 {
-    if (!m_fileHandle.isOpened() &&
-        !m_fileHandle.open(FileHandle::Mode::ReadOnly |
-                           FileHandle::Mode::Mmap)) {
+    if (!m_fileHandle.isOpened()
+        && !m_fileHandle.open(FileHandle::Mode::ReadOnly | FileHandle::Mode::Mmap)) {
         assignWithSharedThreadedError();
         return Data::emptyData();
     }
@@ -58,8 +57,7 @@ Data Wal::acquireData(off_t offset, size_t size)
     if (data.size() != size) {
         if (data.size() > 0) {
             //short read
-            markAsCorrupted((int) ((offset - headerSize) / getFrameSize() + 1),
-                            "ShortRead");
+            markAsCorrupted((int) ((offset - headerSize) / getFrameSize() + 1), "ShortRead");
         } else {
             assignWithSharedThreadedError();
         }
@@ -85,9 +83,8 @@ Data Wal::acquirePageData(int pageno, off_t offset, size_t size)
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(containsPage(pageno));
     WCTInnerAssert(offset + size <= getPageSize());
-    return acquireData(headerSize +
-                           getFrameSize() * (m_framePages[pageno] - 1) +
-                           Frame::headerSize + offset,
+    return acquireData(headerSize + getFrameSize() * (m_framePages[pageno] - 1)
+                       + Frame::headerSize + offset,
                        size);
 }
 
@@ -103,8 +100,7 @@ int Wal::getMaxPageno() const
 Data Wal::acquireFrameData(int frameno)
 {
     WCTInnerAssert(isInitializing());
-    return acquireData(headerSize + getFrameSize() * (frameno - 1),
-                       getFrameSize());
+    return acquireData(headerSize + getFrameSize() * (frameno - 1), getFrameSize());
 }
 
 void Wal::setMaxFrame(int maxFrame)
@@ -201,8 +197,8 @@ bool Wal::doInitialize()
             bool succeed;
             Page::Type pageType;
             std::tie(succeed, pageType) = frame.getPageType();
-            if (!succeed || pageType == Page::Type::LeafTable ||
-                pageType == Page::Type::Unknown) {
+            if (!succeed || pageType == Page::Type::LeafTable
+                || pageType == Page::Type::Unknown) {
                 m_disposedPages.insert(frame.getPageNumber());
                 Error error;
                 error.level = Error::Level::Notice;

@@ -27,7 +27,6 @@
 namespace WCDB {
 
 class StatementPragma : public StatementWithLang<Lang::PragmaSTMT> {
-
 public:
     StatementPragma &withSchema(const std::string &schemaName);
     StatementPragma &pragma(const Pragma &pragmaName);

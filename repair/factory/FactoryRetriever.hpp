@@ -61,9 +61,7 @@ protected:
                         const std::string &path,
                         const SteadyClock &cost,
                         const Time &material);
-    void reportFullCrawler(const Fraction &score,
-                           const std::string &path,
-                           const SteadyClock &cost);
+    void reportFullCrawler(const Fraction &score, const std::string &path, const SteadyClock &cost);
     void reportSummary(const SteadyClock &cost);
 
     void finishReportOfPerformance(Error &error,
@@ -74,10 +72,7 @@ protected:
 protected:
     bool calculateSizes(const std::list<std::string> &workshopDirectories);
     bool calculateSize(const std::string &database);
-    void increaseProgress(const std::string &database,
-                          bool useMaterial,
-                          double progress,
-                          double increment);
+    void increaseProgress(const std::string &database, bool useMaterial, double progress, double increment);
 
     Fraction getWeight(const std::string &database);
 

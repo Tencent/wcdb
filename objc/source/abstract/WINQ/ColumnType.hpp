@@ -34,7 +34,7 @@ typedef Lang::ColumnType ColumnType;
 
 #pragma mark - Column Type Info
 //Null
-template <ColumnType T = ColumnType::Null>
+template<ColumnType T = ColumnType::Null>
 struct ColumnTypeInfo {
     static constexpr const bool isNull = true;
     static constexpr const bool isFloat = false;
@@ -47,7 +47,7 @@ struct ColumnTypeInfo {
     static constexpr const ColumnType type = ColumnType::Null;
 };
 //Float
-template <>
+template<>
 struct ColumnTypeInfo<ColumnType::Float> {
     static constexpr const bool isNull = false;
     static constexpr const bool isFloat = true;
@@ -60,7 +60,7 @@ struct ColumnTypeInfo<ColumnType::Float> {
     static constexpr const ColumnType type = ColumnType::Float;
 };
 //Integer32
-template <>
+template<>
 struct ColumnTypeInfo<ColumnType::Integer32> {
     static constexpr const bool isNull = false;
     static constexpr const bool isFloat = false;
@@ -73,7 +73,7 @@ struct ColumnTypeInfo<ColumnType::Integer32> {
     static constexpr const ColumnType type = ColumnType::Integer32;
 };
 //Integer64
-template <>
+template<>
 struct ColumnTypeInfo<ColumnType::Integer64> {
     static constexpr const bool isNull = false;
     static constexpr const bool isFloat = false;
@@ -86,7 +86,7 @@ struct ColumnTypeInfo<ColumnType::Integer64> {
     static constexpr const ColumnType type = ColumnType::Integer64;
 };
 //Text
-template <>
+template<>
 struct ColumnTypeInfo<ColumnType::Text> {
     static constexpr const bool isNull = false;
     static constexpr const bool isFloat = false;
@@ -99,7 +99,7 @@ struct ColumnTypeInfo<ColumnType::Text> {
     static constexpr const ColumnType type = ColumnType::Text;
 };
 //BLOB
-template <>
+template<>
 struct ColumnTypeInfo<ColumnType::BLOB> {
     static constexpr const bool isNull = false;
     static constexpr const bool isFloat = false;
@@ -114,90 +114,82 @@ struct ColumnTypeInfo<ColumnType::BLOB> {
 
 #pragma mark - ColumnIsType
 //NULL
-template <typename T, typename Enable = void>
+template<typename T, typename Enable = void>
 struct ColumnIsNullType : public std::false_type {
 public:
-    static ColumnTypeInfo<ColumnType::Null>::UnderlyingType
-    asUnderlyingType(const T &);
+    static ColumnTypeInfo<ColumnType::Null>::UnderlyingType asUnderlyingType(const T &);
 };
 //Float
-template <typename T, typename Enable = void>
+template<typename T, typename Enable = void>
 struct ColumnIsFloatType : public std::false_type {
 public:
-    static ColumnTypeInfo<ColumnType::Float>::UnderlyingType
-    asUnderlyingType(const T &);
+    static ColumnTypeInfo<ColumnType::Float>::UnderlyingType asUnderlyingType(const T &);
 };
 //Integer32
-template <typename T, typename Enable = void>
+template<typename T, typename Enable = void>
 struct ColumnIsInteger32Type : public std::false_type {
 public:
     static ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType
     asUnderlyingType(const T &);
 };
 //Integer64
-template <typename T, typename Enable = void>
+template<typename T, typename Enable = void>
 struct ColumnIsInteger64Type : public std::false_type {
 public:
     static ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType
     asUnderlyingType(const T &);
 };
 //Text
-template <typename T, typename Enable = void>
+template<typename T, typename Enable = void>
 struct ColumnIsTextType : public std::false_type {
 public:
-    static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
-    asUnderlyingType(const T &);
+    static ColumnTypeInfo<ColumnType::Text>::UnderlyingType asUnderlyingType(const T &);
 };
 //BLOB
-template <typename T, typename Enable = void>
+template<typename T, typename Enable = void>
 struct ColumnIsBLOBType : public std::false_type {
 public:
-    static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
-    asUnderlyingType(const T &);
+    static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType asUnderlyingType(const T &);
 };
 
 #pragma mark - ColumnInfo
-template <typename T, typename Enable = void>
+template<typename T, typename Enable = void>
 struct ColumnInfo {
 };
 //NULL
-template <typename T>
+template<typename T>
 struct ColumnInfo<T, typename std::enable_if<ColumnIsNullType<T>::value>::type>
-    : public ColumnTypeInfo<ColumnType::Null> {
+: public ColumnTypeInfo<ColumnType::Null> {
 };
 //Float
-template <typename T>
+template<typename T>
 struct ColumnInfo<T, typename std::enable_if<ColumnIsFloatType<T>::value>::type>
-    : public ColumnTypeInfo<ColumnType::Float> {
+: public ColumnTypeInfo<ColumnType::Float> {
 };
 //Integer32
-template <typename T>
-struct ColumnInfo<
-    T,
-    typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>
-    : public ColumnTypeInfo<ColumnType::Integer32> {
+template<typename T>
+struct ColumnInfo<T, typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>
+: public ColumnTypeInfo<ColumnType::Integer32> {
 };
 //Integer64
-template <typename T>
-struct ColumnInfo<
-    T,
-    typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>
-    : public ColumnTypeInfo<ColumnType::Integer64> {
+template<typename T>
+struct ColumnInfo<T, typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>
+: public ColumnTypeInfo<ColumnType::Integer64> {
 };
 //Text
-template <typename T>
+template<typename T>
 struct ColumnInfo<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>
-    : public ColumnTypeInfo<ColumnType::Text> {
+: public ColumnTypeInfo<ColumnType::Text> {
 };
 //BLOB
-template <typename T>
+template<typename T>
 struct ColumnInfo<T, typename std::enable_if<ColumnIsBLOBType<T>::value>::type>
-    : public ColumnTypeInfo<ColumnType::BLOB> {
+: public ColumnTypeInfo<ColumnType::BLOB> {
 };
 
 #pragma mark - Builtin Type
 //NULL
-template <>
+template<>
 struct ColumnIsNullType<std::nullptr_t> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Null>::UnderlyingType
@@ -205,26 +197,20 @@ public:
 };
 
 //Float
-template <typename T>
-struct ColumnIsFloatType<
-    T,
-    typename std::enable_if<std::is_floating_point<T>::value>::type>
-    : public std::true_type {
+template<typename T>
+struct ColumnIsFloatType<T, typename std::enable_if<std::is_floating_point<T>::value>::type>
+: public std::true_type {
 public:
-    static ColumnTypeInfo<ColumnType::Float>::UnderlyingType
-    asUnderlyingType(const T &t)
+    static ColumnTypeInfo<ColumnType::Float>::UnderlyingType asUnderlyingType(const T &t)
     {
         return (ColumnTypeInfo<ColumnType::Float>::UnderlyingType) t;
     }
 };
 
 //Integer32
-template <typename T>
-struct ColumnIsInteger32Type<
-    T,
-    typename std::enable_if<(std::is_integral<T>::value ||
-                             std::is_enum<T>::value) &&
-                            (sizeof(T) <= 4)>::type> : public std::true_type {
+template<typename T>
+struct ColumnIsInteger32Type<T, typename std::enable_if<(std::is_integral<T>::value || std::is_enum<T>::value) && (sizeof(T) <= 4)>::type>
+: public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType
     asUnderlyingType(const T &t)
@@ -234,12 +220,9 @@ public:
 };
 
 //Integer64
-template <typename T>
-struct ColumnIsInteger64Type<
-    T,
-    typename std::enable_if<(std::is_integral<T>::value ||
-                             std::is_enum<T>::value) &&
-                            (sizeof(T) > 4)>::type> : public std::true_type {
+template<typename T>
+struct ColumnIsInteger64Type<T, typename std::enable_if<(std::is_integral<T>::value || std::is_enum<T>::value) && (sizeof(T) > 4)>::type>
+: public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType
     asUnderlyingType(const T &t)
@@ -249,21 +232,21 @@ public:
 };
 
 //Text
-template <>
+template<>
 struct ColumnIsTextType<const char *> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
     asUnderlyingType(const char *text);
 };
 
-template <>
+template<>
 struct ColumnIsTextType<char *> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
     asUnderlyingType(const char *text);
 };
 
-template <int size>
+template<int size>
 struct ColumnIsTextType<const char[size]> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
@@ -273,7 +256,7 @@ public:
     }
 };
 
-template <int size>
+template<int size>
 struct ColumnIsTextType<char[size]> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
@@ -283,7 +266,7 @@ public:
     }
 };
 
-template <>
+template<>
 struct ColumnIsTextType<std::string> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
@@ -291,14 +274,14 @@ public:
 };
 
 //BLOB
-template <>
+template<>
 struct ColumnIsBLOBType<std::vector<unsigned char>> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
     asUnderlyingType(const std::vector<unsigned char> &blob);
 };
 
-template <>
+template<>
 struct ColumnIsBLOBType<Data> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType

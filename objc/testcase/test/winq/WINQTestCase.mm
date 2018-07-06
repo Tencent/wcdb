@@ -90,41 +90,41 @@
 
 + (std::list<WCDB::Column>)columns
 {
-    return {self.class.column, self.class.column2};
+    return { self.class.column, self.class.column2 };
 }
 
 + (WCDB::StatementUpdate)statementUpdate
 {
     return WCDB::StatementUpdate()
-        .update(self.class.qualifiedTableName)
-        .set(self.class.column, self.class.value);
+    .update(self.class.qualifiedTableName)
+    .set(self.class.column, self.class.value);
 }
 
 + (WCDB::StatementInsert)statementInsert
 {
     return WCDB::StatementInsert()
-        .insertInto(self.class.tableName)
-        .values(self.class.value);
+    .insertInto(self.class.tableName)
+    .values(self.class.value);
 }
 
 + (WCDB::StatementDelete)statementDelete
 {
     return WCDB::StatementDelete()
-        .deleteFrom(self.class.qualifiedTableName);
+    .deleteFrom(self.class.qualifiedTableName);
 }
 
 + (WCDB::StatementSelect)statementSelect
 {
     return WCDB::StatementSelect()
-        .select(self.class.resultColumn)
-        .from(self.class.tableOrSubquery);
+    .select(self.class.resultColumn)
+    .from(self.class.tableOrSubquery);
 }
 
 + (WCDB::WithClause)withClause
 {
     WCDB::CTETableName cteTableName(self.class.cteTableName);
     return WCDB::WithClause()
-        .with(cteTableName, self.class.statementSelect);
+    .with(cteTableName, self.class.statementSelect);
 }
 
 + (WCDB::ResultColumn)resultColumn
@@ -151,7 +151,7 @@
 {
     WCDB::TableOrSubquery tableOrSubquery1(self.class.tableName);
     WCDB::TableOrSubquery tableOrSubquery2("testTable2");
-    return {tableOrSubquery1, tableOrSubquery2};
+    return { tableOrSubquery1, tableOrSubquery2 };
 }
 
 + (WCDB::JoinClause)joinClause
@@ -174,7 +174,7 @@
     WCDB::Expression group1 = self.class.group;
     WCDB::Expression group2 = WCDB::Expression(self.class.column2);
     ;
-    return {group1, group2};
+    return { group1, group2 };
 }
 
 + (WCDB::Expression)having
@@ -194,7 +194,7 @@
 
 + (std::list<WCDB::Expression>)values
 {
-    return {self.class.value, self.class.value2};
+    return { self.class.value, self.class.value2 };
 }
 
 + (WCDB::OrderingTerm)orderingTerm
@@ -206,7 +206,7 @@
 {
     WCDB::OrderingTerm orderingTerm1 = self.class.orderingTerm;
     WCDB::OrderingTerm orderingTerm2 = WCDB::OrderingTerm(WCDB::Expression(self.class.column2));
-    return {orderingTerm1, orderingTerm2};
+    return { orderingTerm1, orderingTerm2 };
 }
 
 + (WCDB::Expression)limit
@@ -228,7 +228,7 @@
 {
     WCDB::CommonTableExpression commonTableExpression1 = self.class.commonTableExpression;
     WCDB::CommonTableExpression commonTableExpression2 = WCDB::CommonTableExpression("testCTETable2").as(self.class.statementSelect);
-    return {commonTableExpression1, commonTableExpression2};
+    return { commonTableExpression1, commonTableExpression2 };
 }
 
 + (WCDB::QualifiedTableName)qualifiedTableName
@@ -269,7 +269,7 @@
     return {
         self.class.columnDef,
         WCDB::ColumnDef(self.class.column2)
-            .withType(WCDB::ColumnType::Text),
+        .withType(WCDB::ColumnType::Text),
     };
 }
 
@@ -283,7 +283,7 @@
     return {
         self.class.tableConstraint,
         WCDB::TableConstraint("testConstraint2")
-            .withUnique(WCDB::IndexedColumn(self.class.column2)),
+        .withUnique(WCDB::IndexedColumn(self.class.column2)),
     };
 }
 

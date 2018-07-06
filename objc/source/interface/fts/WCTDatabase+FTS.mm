@@ -27,7 +27,7 @@
 - (void)setTokenizer:(NSString *)tokenizerName
 {
     WCTRemedialAssert(tokenizerName, "Tokenizer name can't be null.", return;)
-        _database->setTokenizes({tokenizerName.cppString});
+    _database->setTokenizes({ tokenizerName.cppString });
 }
 
 - (void)setTokenizers:(NSArray<NSString *> *)tokenizerNames

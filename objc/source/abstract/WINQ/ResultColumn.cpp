@@ -25,8 +25,7 @@ namespace WCDB {
 
 const ResultColumn &ResultColumn::all()
 {
-    static const ResultColumn *s_all =
-        new ResultColumn(Lang::ResultColumn::Type::Star);
+    static const ResultColumn *s_all = new ResultColumn(Lang::ResultColumn::Type::Star);
     return *s_all;
 }
 
@@ -76,7 +75,7 @@ void ResultColumn::setupWithExpression(const Expression &expression)
 
 ResultColumn::operator std::list<ResultColumn>() const
 {
-    return {*this};
+    return { *this };
 }
 
 } // namespace WCDB

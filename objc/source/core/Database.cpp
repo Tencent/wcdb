@@ -32,29 +32,26 @@ namespace WCDB {
 std::shared_ptr<Database> Database::databaseWithExistingTag(const Tag &tag)
 {
     std::shared_ptr<Database> database(
-        new Database(HandlePools::defaultPools()->getExistingPool(tag)));
+    new Database(HandlePools::defaultPools()->getExistingPool(tag)));
     if (database && database->isValid()) {
         return database;
     }
     return nullptr;
 }
 
-std::shared_ptr<Database>
-Database::databaseWithExistingPath(const std::string &path)
+std::shared_ptr<Database> Database::databaseWithExistingPath(const std::string &path)
 {
     std::shared_ptr<Database> database(
-        new Database(HandlePools::defaultPools()->getExistingPool(path)));
+    new Database(HandlePools::defaultPools()->getExistingPool(path)));
     if (database && database->isValid()) {
         return database;
     }
     return nullptr;
 }
 
-std::shared_ptr<HandlePool>
-Database::generateHandlePool(const std::string &path)
+std::shared_ptr<HandlePool> Database::generateHandlePool(const std::string &path)
 {
-    std::shared_ptr<HandlePool> handlePool(
-        new HandlePool(path, Configs::default_()));
+    std::shared_ptr<HandlePool> handlePool(new HandlePool(path, Configs::default_()));
     if (handlePool) {
         handlePool->setInitializeNotification(Database::initializeHandlePool);
     }
@@ -63,17 +60,16 @@ Database::generateHandlePool(const std::string &path)
 
 bool Database::initializeHandlePool(const HandlePool &handlePool)
 {
-    std::shared_ptr<Database> database =
-        Database::databaseWithExistingPath(handlePool.path);
+    std::shared_ptr<Database> database
+    = Database::databaseWithExistingPath(handlePool.path);
     WCTInnerAssert(database != nullptr);
     return database->retrieveRenewed();
 }
 
 std::shared_ptr<Database> Database::databaseWithPath(const std::string &path)
 {
-    std::shared_ptr<Database> database(
-        new Database(HandlePools::defaultPools()->getPool(
-            path, Database::generateHandlePool)));
+    std::shared_ptr<Database> database(new Database(
+    HandlePools::defaultPools()->getPool(path, Database::generateHandlePool)));
     if (database && database->isValid()) {
         return database;
     }
@@ -166,30 +162,26 @@ void Database::removeConfig(const std::string &name)
 
 void Database::setCipher(const Data &cipher, int pageSize)
 {
-    m_pool->setConfig(
-        std::shared_ptr<Config>(new CipherConfig(cipher, pageSize)),
-        Configs::Priority::Highest);
+    m_pool->setConfig(std::shared_ptr<Config>(new CipherConfig(cipher, pageSize)),
+                      Configs::Priority::Highest);
 }
 
 void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
 {
-    m_pool->setConfig(
-        std::shared_ptr<Config>(new TokenizeConfig(tokenizeNames)),
-        Configs::Priority::Higher);
+    m_pool->setConfig(std::shared_ptr<Config>(new TokenizeConfig(tokenizeNames)),
+                      Configs::Priority::Higher);
 }
 
 void Database::setSQLTrace(const SQLNotification &onSQLTraced)
 {
-    m_pool->setConfig(std::shared_ptr<Config>(
-                          new SQLTraceConfig("WCDBSQLTrace", onSQLTraced)),
+    m_pool->setConfig(std::shared_ptr<Config>(new SQLTraceConfig("WCDBSQLTrace", onSQLTraced)),
                       Configs::Priority::Highest);
 }
 
-void Database::setPerformanceTrace(
-    const PerformanceNotification &onPerformanceTraced)
+void Database::setPerformanceTrace(const PerformanceNotification &onPerformanceTraced)
 {
     m_pool->setConfig(std::shared_ptr<Config>(new PerformanceTraceConfig(
-                          "WCDBPerformanceTrace", onPerformanceTraced)),
+                      "WCDBPerformanceTrace", onPerformanceTraced)),
                       Configs::Priority::Highest);
 }
 
@@ -244,8 +236,8 @@ bool Database::moveFiles(const std::string &directory)
     return result;
 }
 
-bool Database::moveFilesToDirectoryWithExtraFiles(
-    const std::string &directory, const std::list<std::string> &extraFiles)
+bool Database::moveFilesToDirectoryWithExtraFiles(const std::string &directory,
+                                                  const std::list<std::string> &extraFiles)
 {
     bool result = false;
     close([&result, &directory, &extraFiles, this]() {
@@ -307,8 +299,7 @@ Database::CorruptionReaction Database::getReactionWhenCorrupted() const
     return m_pool->attachment.corruption.getReaction();
 }
 
-void Database::setExtraReactionWhenCorrupted(
-    const CorruptionExtraReaction &extraReaction)
+void Database::setExtraReactionWhenCorrupted(const CorruptionExtraReaction &extraReaction)
 {
     m_pool->attachment.corruption.setExtraReaction(extraReaction);
 }
@@ -365,8 +356,7 @@ bool Database::deposit()
     close([&result, this]() {
         m_pool->attachment.corruption.markAsHandling();
         Repair::FactoryRenewer renewer = m_pool->attachment.factory.renewer();
-        std::shared_ptr<Repair::Assembler> assembler(
-            new Repair::SQLiteAssembler);
+        std::shared_ptr<Repair::Assembler> assembler(new Repair::SQLiteAssembler);
         renewer.setAssembler(assembler);
         std::shared_ptr<Repair::Locker> locker(new Repair::SQLiteLocker);
         renewer.setLocker(locker);
@@ -375,8 +365,7 @@ bool Database::deposit()
                 setThreadedError(renewer.getError());
                 break;
             }
-            Repair::FactoryDepositor depositor =
-                m_pool->attachment.factory.depositor();
+            Repair::FactoryDepositor depositor = m_pool->attachment.factory.depositor();
             if (!depositor.work()) {
                 setThreadedError(depositor.getError());
                 break;
@@ -397,10 +386,8 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
     double score = 0;
     close([&score, &onProgressUpdate, this]() {
         m_pool->attachment.corruption.markAsHandling();
-        Repair::FactoryRetriever retriever =
-            m_pool->attachment.factory.retriever();
-        std::shared_ptr<Repair::Assembler> assembler(
-            new Repair::SQLiteAssembler);
+        Repair::FactoryRetriever retriever = m_pool->attachment.factory.retriever();
+        std::shared_ptr<Repair::Assembler> assembler(new Repair::SQLiteAssembler);
         retriever.setAssembler(assembler);
         std::shared_ptr<Repair::Locker> locker(new Repair::SQLiteLocker);
         retriever.setLocker(locker);
@@ -429,8 +416,7 @@ bool Database::removeDeposit()
 
 bool Database::removeMaterials()
 {
-    if (FileManager::shared()->removeItems(
-            {getFirstMaterialPath(), getLastMaterialPath()})) {
+    if (FileManager::shared()->removeItems({ getFirstMaterialPath(), getLastMaterialPath() })) {
         return true;
     }
     assignWithSharedThreadedError();
@@ -452,8 +438,8 @@ bool Database::retrieveRenewed()
 #pragma mark - Handle
 ThreadLocal<Database::ThreadedHandles> &Database::threadedHandles()
 {
-    static ThreadLocal<ThreadedHandles> *s_threadedHandles =
-        new ThreadLocal<ThreadedHandles>;
+    static ThreadLocal<ThreadedHandles> *s_threadedHandles
+    = new ThreadLocal<ThreadedHandles>;
     return *s_threadedHandles;
 }
 
@@ -485,15 +471,15 @@ bool Database::execute(const Statement &statement)
         }
         if (handle->execute(statement)) {
             switch (statement.getStatementType()) {
-                case Statement::Type::Begin:
-                case Statement::Type::Savepoint:
-                    retainThreadedHandle(handle);
-                    break;
-                case Statement::Type::Commit:
-                    releaseThreadedHandle();
-                    break;
-                default:
-                    break;
+            case Statement::Type::Begin:
+            case Statement::Type::Savepoint:
+                retainThreadedHandle(handle);
+                break;
+            case Statement::Type::Commit:
+                releaseThreadedHandle();
+                break;
+            default:
+                break;
             }
             return true;
         }
@@ -512,20 +498,18 @@ std::pair<bool, bool> Database::tableExists(const TableOrSubquery &table)
         }
         return pair;
     }
-    return {false, false};
+    return { false, false };
 }
 
-void Database::retainThreadedHandle(
-    const RecyclableHandle &recyclableHandle) const
+void Database::retainThreadedHandle(const RecyclableHandle &recyclableHandle) const
 {
-    std::map<const HandlePool *, std::pair<RecyclableHandle, int>>
-        *threadHandles = Database::threadedHandles().get();
+    std::map<const HandlePool *, std::pair<RecyclableHandle, int>> *threadHandles
+    = Database::threadedHandles().get();
     auto iter = threadHandles->find(m_pool);
-    WCTInnerAssert(iter == threadHandles->end() ||
-                   recyclableHandle.getHandle() ==
-                       iter->second.first.getHandle());
+    WCTInnerAssert(iter == threadHandles->end()
+                   || recyclableHandle.getHandle() == iter->second.first.getHandle());
     if (iter == threadHandles->end()) {
-        threadHandles->insert({m_pool, {recyclableHandle, 1}});
+        threadHandles->insert({ m_pool, { recyclableHandle, 1 } });
     } else {
         ++iter->second.second;
     }
@@ -533,8 +517,8 @@ void Database::retainThreadedHandle(
 
 void Database::releaseThreadedHandle() const
 {
-    std::map<const HandlePool *, std::pair<RecyclableHandle, int>>
-        *threadHandles = Database::threadedHandles().get();
+    std::map<const HandlePool *, std::pair<RecyclableHandle, int>> *threadHandles
+    = Database::threadedHandles().get();
     auto iter = threadHandles->find(m_pool);
     WCTInnerAssert(iter != threadHandles->end());
     if (--iter->second.second == 0) {

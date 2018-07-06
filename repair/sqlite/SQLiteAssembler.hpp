@@ -44,8 +44,7 @@ public:
 
     bool markAsMilestone() override;
 
-    bool assembleTable(const std::string &tableName,
-                       const std::string &sql) override;
+    bool assembleTable(const std::string &tableName, const std::string &sql) override;
     bool assembleCell(const Cell &cell) override;
     bool assembleSQL(const std::string &sql) override;
 
@@ -60,8 +59,7 @@ protected:
 protected:
     bool lazyPrepareCell();
     std::pair<bool, std::string> getAssembleSQL(const std::string &tableName);
-    std::pair<bool, std::list<std::string>>
-    getColumnNames(const std::string &tableName);
+    std::pair<bool, std::list<std::string>> getColumnNames(const std::string &tableName);
 
     std::string m_table;
     int m_primary;
@@ -70,12 +68,10 @@ protected:
 #pragma mark - Sequence
 protected:
     bool markSequenceAsAssembling();
-    bool assembleSequence(const std::string &tableName,
-                          int64_t sequence) override;
+    bool assembleSequence(const std::string &tableName, int64_t sequence) override;
     bool markSequenceAsAssembled();
 
-    std::pair<bool, bool> updateSequence(const std::string &tableName,
-                                         int64_t sequence);
+    std::pair<bool, bool> updateSequence(const std::string &tableName, int64_t sequence);
     bool insertSequence(const std::string &tableName, int64_t sequence);
 
 #pragma mark - SQLite Base

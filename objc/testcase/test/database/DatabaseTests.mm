@@ -73,11 +73,10 @@
     __block NSDate *subthread;
     dispatch_group_t group = dispatch_group_create();
     dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-      XCTAssertTrue([_database canOpen]);
-      @synchronized(self)
-      {
-          subthread = [NSDate date];
-      }
+        XCTAssertTrue([_database canOpen]);
+        @synchronized(self) {
+            subthread = [NSDate date];
+        }
     });
     [NSThread sleepForTimeInterval:3];
     main = [NSDate date];
@@ -92,16 +91,15 @@
     __block NSDate *main;
     __block NSDate *subthread;
     BOOL result = [_database blockadeUntilDone:^(WCTHandle *handle) {
-      XCTAssertTrue([_database isBlockaded]);
-      dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        XCTAssertTrue([_database canOpen]);
-        @synchronized(self)
-        {
-            subthread = [NSDate date];
-        }
-      });
-      [NSThread sleepForTimeInterval:3];
-      main = [NSDate date];
+        XCTAssertTrue([_database isBlockaded]);
+        dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            XCTAssertTrue([_database canOpen]);
+            @synchronized(self) {
+                subthread = [NSDate date];
+            }
+        });
+        [NSThread sleepForTimeInterval:3];
+        main = [NSDate date];
     }];
     dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
     XCTAssertTrue([main compare:subthread] == NSOrderedAscending);

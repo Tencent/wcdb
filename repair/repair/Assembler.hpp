@@ -41,10 +41,8 @@ public:
     virtual bool markAsAssembled() = 0;
 
     virtual bool markAsMilestone() = 0;
-    virtual bool assembleTable(const std::string &tableName,
-                               const std::string &sql) = 0;
-    virtual bool assembleSequence(const std::string &tableName,
-                                  int64_t sequence) = 0;
+    virtual bool assembleTable(const std::string &tableName, const std::string &sql) = 0;
+    virtual bool assembleSequence(const std::string &tableName, int64_t sequence) = 0;
     virtual bool assembleCell(const Cell &cell) = 0;
     virtual void markAsDuplicated(bool duplicated) = 0;
 

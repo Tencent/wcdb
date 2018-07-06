@@ -30,50 +30,43 @@ StatementUpdate &StatementUpdate::with(const WithClause &withClause)
     return *this;
 }
 
-StatementUpdate &
-StatementUpdate::update(const QualifiedTableName &qualifiedTableName)
+StatementUpdate &StatementUpdate::update(const QualifiedTableName &qualifiedTableName)
 {
     update(qualifiedTableName, Lang::UpdateSTMT::Type::Update);
     return *this;
 }
 
-StatementUpdate &
-StatementUpdate::updateOrRollback(const QualifiedTableName &qualifiedTableName)
+StatementUpdate &StatementUpdate::updateOrRollback(const QualifiedTableName &qualifiedTableName)
 {
     update(qualifiedTableName, Lang::UpdateSTMT::Type::UpdateOrRollback);
     return *this;
 }
 
-StatementUpdate &
-StatementUpdate::updateOrAbort(const QualifiedTableName &qualifiedTableName)
+StatementUpdate &StatementUpdate::updateOrAbort(const QualifiedTableName &qualifiedTableName)
 {
     update(qualifiedTableName, Lang::UpdateSTMT::Type::UpdateOrAbort);
     return *this;
 }
 
-StatementUpdate &
-StatementUpdate::updateOrReplace(const QualifiedTableName &qualifiedTableName)
+StatementUpdate &StatementUpdate::updateOrReplace(const QualifiedTableName &qualifiedTableName)
 {
     update(qualifiedTableName, Lang::UpdateSTMT::Type::UpdateOrReplace);
     return *this;
 }
 
-StatementUpdate &
-StatementUpdate::updateOrFail(const QualifiedTableName &qualifiedTableName)
+StatementUpdate &StatementUpdate::updateOrFail(const QualifiedTableName &qualifiedTableName)
 {
     update(qualifiedTableName, Lang::UpdateSTMT::Type::UpdateOrFail);
     return *this;
 }
 
-StatementUpdate &
-StatementUpdate::updateOrIgnore(const QualifiedTableName &qualifiedTableName)
+StatementUpdate &StatementUpdate::updateOrIgnore(const QualifiedTableName &qualifiedTableName)
 {
     update(qualifiedTableName, Lang::UpdateSTMT::Type::UpdateOrIgnore);
     return *this;
 }
 
-StatementUpdate &StatementUpdate::set(const Column &column,
-                                      const Expression &expression)
+StatementUpdate &StatementUpdate::set(const Column &column, const Expression &expression)
 {
     Lang::CopyOnWriteLazyLang<Lang::UpdateSTMT::KeyValue> cowKeyValue;
     Lang::UpdateSTMT::KeyValue &keyValue = cowKeyValue.get_or_copy();
@@ -85,8 +78,8 @@ StatementUpdate &StatementUpdate::set(const Column &column,
     return *this;
 }
 
-StatementUpdate &StatementUpdate::set(const std::list<Column> &columns,
-                                      const Expression &expression)
+StatementUpdate &
+StatementUpdate::set(const std::list<Column> &columns, const Expression &expression)
 {
     Lang::CopyOnWriteLazyLang<Lang::UpdateSTMT::KeyValue> cowKeyValue;
     Lang::UpdateSTMT::KeyValue &keyValue = cowKeyValue.get_or_copy();
@@ -114,8 +107,7 @@ StatementUpdate &StatementUpdate::orderBy(const OrderingTerm &orderingTerm)
     return *this;
 }
 
-StatementUpdate &
-StatementUpdate::orderBy(const std::list<OrderingTerm> &orderingTerms)
+StatementUpdate &StatementUpdate::orderBy(const std::list<OrderingTerm> &orderingTerms)
 {
     Lang::UpdateSTMT &lang = getMutableLang();
     for (const OrderingTerm &orderingTerm : orderingTerms) {
@@ -124,8 +116,7 @@ StatementUpdate::orderBy(const std::list<OrderingTerm> &orderingTerms)
     return *this;
 }
 
-StatementUpdate &StatementUpdate::limit(const Expression &from,
-                                        const Expression &to)
+StatementUpdate &StatementUpdate::limit(const Expression &from, const Expression &to)
 {
     Lang::UpdateSTMT &lang = getMutableLang();
     lang.offset = false;

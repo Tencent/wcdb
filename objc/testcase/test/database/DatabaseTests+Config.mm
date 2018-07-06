@@ -44,10 +44,11 @@
 {
     WCTDatabase *database = [[WCTDatabase alloc] initWithPath:[self.recommendedPath stringByAppendingString:NSStringFromSelector(_cmd)]];
 
-    [database setConfig:^BOOL(WCTHandle *_Nonnull) {
-      return NO;
+    [database
+    setConfig:^BOOL(WCTHandle *_Nonnull) {
+        return NO;
     }
-                forName:@"failed"];
+      forName:@"failed"];
     XCTAssertFalse([database canOpen]);
 }
 
@@ -61,10 +62,11 @@
     }
     {
         WCDB::StatementPragma doSecureDelete = _doSecureDelete;
-        [database setConfig:^BOOL(WCTHandle *handle) {
-          return [handle execute:doSecureDelete];
+        [database
+        setConfig:^BOOL(WCTHandle *handle) {
+            return [handle execute:doSecureDelete];
         }
-                    forName:@"secure_delete"];
+          forName:@"secure_delete"];
     }
     {
         WCTValue *isSecureDelete = [database getValueFromStatement:_isSecureDelete];
@@ -79,11 +81,12 @@
     __block int counter = 0;
     {
         WCDB::StatementPragma doSecureDelete = _doSecureDelete;
-        [database setConfig:^BOOL(WCTHandle *handle) {
-          ++counter;
-          return YES;
+        [database
+        setConfig:^BOOL(WCTHandle *handle) {
+            ++counter;
+            return YES;
         }
-                    forName:@"counter"];
+          forName:@"counter"];
     }
     {
         WCTValue *isSecureDelete = [database getValueFromStatement:_isSecureDelete];
@@ -102,24 +105,27 @@
 {
     WCTDatabase *database = [[WCTDatabase alloc] initWithPath:[self.recommendedPath stringByAppendingString:NSStringFromSelector(_cmd)]];
     __block int step = 0;
-    [database setConfig:^BOOL(WCTHandle *handle) {
-      ++step;
-      return step == 1;
-    }
-                forName:@"step1"
-           withPriority:10];
-    [database setConfig:^BOOL(WCTHandle *handle) {
-      ++step;
-      return step == 2;
-    }
-                forName:@"step2"
-           withPriority:10];
-    [database setConfig:^BOOL(WCTHandle *handle) {
-      ++step;
-      return step == 3;
-    }
-                forName:@"step3"
-           withPriority:20];
+    [database
+       setConfig:^BOOL(WCTHandle *handle) {
+           ++step;
+           return step == 1;
+       }
+         forName:@"step1"
+    withPriority:10];
+    [database
+       setConfig:^BOOL(WCTHandle *handle) {
+           ++step;
+           return step == 2;
+       }
+         forName:@"step2"
+    withPriority:10];
+    [database
+       setConfig:^BOOL(WCTHandle *handle) {
+           ++step;
+           return step == 3;
+       }
+         forName:@"step3"
+    withPriority:20];
     XCTAssertTrue([database canOpen]);
     XCTAssertEqual(step, 3);
 }
@@ -128,15 +134,17 @@
 {
     WCTDatabase *database = [[WCTDatabase alloc] initWithPath:[self.recommendedPath stringByAppendingString:NSStringFromSelector(_cmd)]];
     __block BOOL step = NO;
-    [database setConfig:^BOOL(WCTHandle *_Nonnull) {
-      return NO;
+    [database
+    setConfig:^BOOL(WCTHandle *_Nonnull) {
+        return NO;
     }
-                forName:@"covered"];
-    [database setConfig:^BOOL(WCTHandle *_Nonnull) {
-      step = YES;
-      return YES;
+      forName:@"covered"];
+    [database
+    setConfig:^BOOL(WCTHandle *_Nonnull) {
+        step = YES;
+        return YES;
     }
-                forName:@"covered"];
+      forName:@"covered"];
     XCTAssertTrue([database canOpen]);
     XCTAssertTrue(step);
 }
@@ -145,23 +153,26 @@
 {
     WCTDatabase *database = [[WCTDatabase alloc] initWithPath:[self.recommendedPath stringByAppendingString:NSStringFromSelector(_cmd)]];
     __block int step = 0;
-    [database setConfig:^BOOL(WCTHandle *handle) {
-      ++step;
-      return step == 2;
-    }
-                forName:@"step1"
-           withPriority:20];
-    [database setConfig:^BOOL(WCTHandle *handle) {
-      return NO;
-    }
-                forName:@"step2"
-           withPriority:30];
-    [database setConfig:^BOOL(WCTHandle *handle) {
-      ++step;
-      return step == 1;
-    }
-                forName:@"step2"
-           withPriority:10];
+    [database
+       setConfig:^BOOL(WCTHandle *handle) {
+           ++step;
+           return step == 2;
+       }
+         forName:@"step1"
+    withPriority:20];
+    [database
+       setConfig:^BOOL(WCTHandle *handle) {
+           return NO;
+       }
+         forName:@"step2"
+    withPriority:30];
+    [database
+       setConfig:^BOOL(WCTHandle *handle) {
+           ++step;
+           return step == 1;
+       }
+         forName:@"step2"
+    withPriority:10];
     XCTAssertTrue([database canOpen]);
     XCTAssertEqual(step, 2);
 }
@@ -176,10 +187,11 @@
     }
     {
         WCDB::StatementPragma doSecureDelete = _doSecureDelete;
-        [database setConfig:^BOOL(WCTHandle *handle) {
-          return [handle execute:doSecureDelete];
+        [database
+        setConfig:^BOOL(WCTHandle *handle) {
+            return [handle execute:doSecureDelete];
         }
-                    forName:@"secure_delete"];
+          forName:@"secure_delete"];
     }
     {
         WCTValue *isSecureDelete = [database getValueFromStatement:_isSecureDelete];
@@ -188,10 +200,11 @@
     }
     {
         WCDB::StatementPragma doNotSecureDelete = _doNotSecureDelete;
-        [database setConfig:^BOOL(WCTHandle *handle) {
-          return [handle execute:doNotSecureDelete];
+        [database
+        setConfig:^BOOL(WCTHandle *handle) {
+            return [handle execute:doNotSecureDelete];
         }
-                    forName:@"secure_delete"];
+          forName:@"secure_delete"];
     }
     {
         WCTValue *isSecureDelete = [database getValueFromStatement:_isSecureDelete];

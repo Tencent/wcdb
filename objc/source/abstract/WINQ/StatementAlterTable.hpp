@@ -27,10 +27,9 @@
 namespace WCDB {
 
 class StatementAlterTable : public StatementWithLang<Lang::AlterTableSTMT> {
-
 public:
-    StatementAlterTable &alterTable(const std::string &schemaName,
-                                    const std::string &tableName);
+    StatementAlterTable &
+    alterTable(const std::string &schemaName, const std::string &tableName);
     StatementAlterTable &alterTable(const std::string &tableName);
     StatementAlterTable &renameTo(const std::string &newTableName);
     StatementAlterTable &addColumn(const ColumnDef &columnDef);

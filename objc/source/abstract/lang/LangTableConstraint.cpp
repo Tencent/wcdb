@@ -26,7 +26,7 @@ namespace WCDB {
 namespace Lang {
 
 TableConstraint::TableConstraint()
-    : type(Type::NotSet), conflictClause(ConflictClause::NotSet)
+: type(Type::NotSet), conflictClause(ConflictClause::NotSet)
 {
 }
 
@@ -37,37 +37,35 @@ CopyOnWriteString TableConstraint::SQL() const
         description.append("CONSTRAINT " + name.get() + " ");
     }
     switch (type) {
-        case Type::PrimaryKey:
-            LangRemedialAssert(!indexedColumns.empty());
-            description.append("PRIMARY KEY(" +
-                               indexedColumns.description().get() + ")");
-            if (conflictClause != ConflictClause::NotSet) {
-                description.append(" ");
-                description.append(LangConflictClauseName(conflictClause));
-            }
-            break;
-        case Type::Unique:
-            LangRemedialAssert(!indexedColumns.empty());
-            description.append("UNIQUE(" + indexedColumns.description().get() +
-                               ")");
-            if (conflictClause != ConflictClause::NotSet) {
-                description.append(" ");
-                description.append(LangConflictClauseName(conflictClause));
-            }
-            break;
-        case Type::Check:
-            LangRemedialAssert(!expr.empty());
-            description.append("CHECK(" + expr.description().get() + ")");
-            break;
-        case Type::ForeignKey:
-            LangRemedialAssert(!columns.empty());
-            LangRemedialAssert(!foreignKeyClause.empty());
-            description.append("FOREIGN KEY(" + columns.description().get() +
-                               ") " + foreignKeyClause.description().get());
-            break;
-        default:
-            LangRemedialFatalError();
-            break;
+    case Type::PrimaryKey:
+        LangRemedialAssert(!indexedColumns.empty());
+        description.append("PRIMARY KEY(" + indexedColumns.description().get() + ")");
+        if (conflictClause != ConflictClause::NotSet) {
+            description.append(" ");
+            description.append(LangConflictClauseName(conflictClause));
+        }
+        break;
+    case Type::Unique:
+        LangRemedialAssert(!indexedColumns.empty());
+        description.append("UNIQUE(" + indexedColumns.description().get() + ")");
+        if (conflictClause != ConflictClause::NotSet) {
+            description.append(" ");
+            description.append(LangConflictClauseName(conflictClause));
+        }
+        break;
+    case Type::Check:
+        LangRemedialAssert(!expr.empty());
+        description.append("CHECK(" + expr.description().get() + ")");
+        break;
+    case Type::ForeignKey:
+        LangRemedialAssert(!columns.empty());
+        LangRemedialAssert(!foreignKeyClause.empty());
+        description.append("FOREIGN KEY(" + columns.description().get() + ") "
+                           + foreignKeyClause.description().get());
+        break;
+    default:
+        LangRemedialFatalError();
+        break;
     }
     return description;
 }

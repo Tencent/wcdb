@@ -38,11 +38,9 @@ bool FactoryDepositor::work()
         return false;
     }
 
-    if (!fileManager->createDirectoryWithIntermediateDirectories(
-            workshopDirectory) ||
-        !fileManager->moveItems(
-            Factory::associatedPathsForDatabase(factory.database),
-            workshopDirectory)) {
+    if (!fileManager->createDirectoryWithIntermediateDirectories(workshopDirectory)
+        || !fileManager->moveItems(
+           Factory::associatedPathsForDatabase(factory.database), workshopDirectory)) {
         assignWithSharedThreadedError();
         return false;
     }

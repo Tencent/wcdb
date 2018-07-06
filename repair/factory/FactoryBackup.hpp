@@ -28,9 +28,7 @@ namespace WCDB {
 
 namespace Repair {
 
-class FactoryBackup : public FactoryRelated,
-                      public ErrorProne,
-                      public LockerHolder {
+class FactoryBackup : public FactoryRelated, public ErrorProne, public LockerHolder {
 public:
     using FactoryRelated::FactoryRelated;
     bool work(const std::string &database,

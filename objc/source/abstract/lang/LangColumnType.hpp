@@ -37,17 +37,17 @@ enum class ColumnType {
 constexpr const char *ColumnTypeName(const ColumnType &columnType)
 {
     switch (columnType) {
-        case ColumnType::Null:
-            return "NULL";
-        case ColumnType::Integer32:
-        case ColumnType::Integer64:
-            return "INTEGER";
-        case ColumnType::Float:
-            return "REAL";
-        case ColumnType::Text:
-            return "TEXT";
-        case ColumnType::BLOB:
-            return "BLOB";
+    case ColumnType::Null:
+        return "NULL";
+    case ColumnType::Integer32:
+    case ColumnType::Integer64:
+        return "INTEGER";
+    case ColumnType::Float:
+        return "REAL";
+    case ColumnType::Text:
+        return "TEXT";
+    case ColumnType::BLOB:
+        return "BLOB";
     }
 }
 

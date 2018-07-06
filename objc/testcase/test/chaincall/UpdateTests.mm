@@ -36,7 +36,7 @@
 
     _update = [[_database prepareUpdate] table:_tableName];
 
-    _properties = {TestCaseObject.variable2, TestCaseObject.variable3};
+    _properties = { TestCaseObject.variable2, TestCaseObject.variable3 };
 }
 
 - (void)tearDown

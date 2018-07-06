@@ -63,10 +63,10 @@
     _database.reactionWhenCorrupted = WCTCorruptionReactionCustom;
     NSLock *locker = [[NSLock alloc] init];
     [_database setExtraReactionWhenCorrupted:^BOOL(WCTDatabase *database) {
-      [locker lock];
-      hit = YES;
-      [locker unlock];
-      return YES;
+        [locker lock];
+        hit = YES;
+        [locker unlock];
+        return YES;
     }];
 
     XCTAssertTrue([self corruptWithCheckpoint:YES]);
@@ -88,7 +88,7 @@
 
     _database.reactionWhenCorrupted = WCTCorruptionReactionCustom;
     [_database setExtraReactionWhenCorrupted:^BOOL(WCTDatabase *database) {
-      return NO;
+        return NO;
     }];
 
     XCTAssertTrue([self corruptWithCheckpoint:YES]);

@@ -23,70 +23,69 @@
 namespace WCDB {
 
 //NSObject
-template <>
+template<>
 class LiteralValueConvertible<NSObject *> : public std::true_type {
 public:
     static LiteralValue as(NSObject *const &t);
 };
 
-template <>
+template<>
 class ExpressionConvertible<NSObject *> : public std::true_type {
 public:
     static Expression as(NSObject *const &t);
 };
 
 //NSObject Subclass
-template <typename T, typename Enable = void>
+template<typename T, typename Enable = void>
 struct IsObjCType : std::false_type {
 };
 
-template <typename T>
+template<typename T>
 struct IsObjCType<
-    T,
-    typename std::enable_if<std::is_convertible<NSObject *, T>::value &&
-                            std::is_pointer<T>::value>::type> : std::true_type {
+T,
+typename std::enable_if<std::is_convertible<NSObject *, T>::value && std::is_pointer<T>::value>::type> : std::true_type {
 };
 
-template <typename T>
+template<typename T>
 class LiteralValueConvertible<
-    T,
-    typename std::enable_if<IsObjCType<T>::value>::type>
-    : public std::true_type {
+T,
+typename std::enable_if<IsObjCType<T>::value>::type>
+: public std::true_type {
 public:
     static LiteralValue as(const T &t);
 };
 
 //NSObject Subclass Implementation
-template <typename T>
+template<typename T>
 LiteralValue LiteralValueConvertible<
-    T,
-    typename std::enable_if<IsObjCType<T>::value>::type>::as(const T &t)
+T,
+typename std::enable_if<IsObjCType<T>::value>::type>::as(const T &t)
 {
     return LiteralValueConvertible<NSObject *>::as(t);
 }
 
 //WCTProperty
-template <>
+template<>
 class ExpressionConvertible<WCTProperty> : public std::true_type {
 public:
     static Expression as(const WCTProperty &property);
 };
 
 //NSString
-template <>
+template<>
 struct ColumnIsTextType<NSString *> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
     asUnderlyingType(NSString *text);
 };
 
-template <>
+template<>
 class LiteralValueConvertible<NSString *> : public std::true_type {
 public:
     static LiteralValue as(NSString *const &t);
 };
 
-template <>
+template<>
 class ExpressionConvertible<NSString *> : public std::true_type {
 public:
     static Expression as(NSString *const &t);

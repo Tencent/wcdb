@@ -51,19 +51,19 @@ int UpgradeableErrorProne::errorSeverity(const Error &error)
         return -1;
     }
     switch (error.code()) {
-        case Error::Code::Full:
-            return Severity::Critical + 3;
-        case Error::Code::Corrupt:
-        case Error::Code::NotADatabase:
-            return Severity::Critical + 2;
-        case Error::Code::IOError:
-            return Severity::Critical + 1;
-        case Error::Code::NoMemory:
-            return Severity::Critical;
-        case Error::Code::OK:
-            return Severity::None;
-        default:
-            return Severity::Normal;
+    case Error::Code::Full:
+        return Severity::Critical + 3;
+    case Error::Code::Corrupt:
+    case Error::Code::NotADatabase:
+        return Severity::Critical + 2;
+    case Error::Code::IOError:
+        return Severity::Critical + 1;
+    case Error::Code::NoMemory:
+        return Severity::Critical;
+    case Error::Code::OK:
+        return Severity::None;
+    default:
+        return Severity::Normal;
     }
 }
 
@@ -89,8 +89,7 @@ int UpgradeableErrorProne::tryUpgradeError(Error &&error)
 
 int UpgradeableErrorProne::tryUpgradeErrorWithSharedThreadedError()
 {
-    return tryUpgradeError(
-        std::move(ThreadedErrors::shared()->moveThreadedError()));
+    return tryUpgradeError(std::move(ThreadedErrors::shared()->moveThreadedError()));
 }
 
 void UpgradeableErrorProne::setCriticalError(const Error &error)

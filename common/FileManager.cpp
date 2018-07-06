@@ -46,49 +46,44 @@ std::tuple<bool, bool, bool> FileManager::itemExists(const std::string &path)
     struct stat s;
     if (stat(path.c_str(), &s) == 0) {
         if (s.st_mode & S_IFDIR) {
-            return {true, true, true};
+            return { true, true, true };
         } else {
-            return {true, true, false};
+            return { true, true, false };
         }
     } else if (errno == ENOENT) {
-        return {true, false, false};
+        return { true, false, false };
     }
     setThreadedError(path);
-    return {false, false, false};
+    return { false, false, false };
 }
 
 std::pair<bool, size_t> FileManager::getFileSize(const std::string &file)
 {
     struct stat temp;
     if (stat(file.c_str(), &temp) == 0) {
-        return {true, (size_t) temp.st_size};
+        return { true, (size_t) temp.st_size };
     } else if (errno == ENOENT) {
-        return {true, 0};
+        return { true, 0 };
     }
     setThreadedError(file);
-    return {false, 0};
+    return { false, 0 };
 }
 
-std::pair<bool, size_t>
-FileManager::getDirectorySize(const std::string &directory)
+std::pair<bool, size_t> FileManager::getDirectorySize(const std::string &directory)
 {
     size_t totalSize = 0;
-    if (enumerateDirectory(
-            directory,
-            [&totalSize, this](const std::string &path, bool isDirectory) {
-                auto intermediate =
-                    isDirectory ? getDirectorySize(path) : getFileSize(path);
-                totalSize += intermediate.second;
-                return intermediate.first;
-            })) {
-        return {true, totalSize};
+    if (enumerateDirectory(directory, [&totalSize, this](const std::string &path, bool isDirectory) {
+            auto intermediate = isDirectory ? getDirectorySize(path) : getFileSize(path);
+            totalSize += intermediate.second;
+            return intermediate.first;
+        })) {
+        return { true, totalSize };
     };
-    return {false, 0};
+    return { false, 0 };
 }
 
-bool FileManager::enumerateDirectory(
-    const std::string &directory,
-    const std::function<bool(const std::string &, bool)> &enumeration)
+bool FileManager::enumerateDirectory(const std::string &directory,
+                                     const std::function<bool(const std::string &, bool)> &enumeration)
 {
     DIR *dir = opendir(directory.c_str());
     if (dir == NULL) {
@@ -102,8 +97,7 @@ bool FileManager::enumerateDirectory(
     std::string path;
     struct dirent *entry;
     while ((entry = readdir(dir)) != NULL) {
-        if (strcmp(entry->d_name, ".") != 0 &&
-            strcmp(entry->d_name, "..") != 0) {
+        if (strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0) {
             path = Path::addComponent(directory, entry->d_name);
             if (!enumeration(path, entry->d_type == DT_DIR)) {
                 break;
@@ -192,20 +186,20 @@ std::pair<bool, Time> FileManager::getFileModifiedTime(const std::string &path)
 {
     struct stat result;
     if (stat(path.c_str(), &result) == 0) {
-        return {true, Time(result.st_mtimespec)};
+        return { true, Time(result.st_mtimespec) };
     }
     setThreadedError(path);
-    return {false, {}};
+    return { false, {} };
 }
 
 std::pair<bool, Time> FileManager::getFileCreatedTime(const std::string &path)
 {
     struct stat result;
     if (stat(path.c_str(), &result) == 0) {
-        return {true, Time(result.st_ctimespec)};
+        return { true, Time(result.st_ctimespec) };
     }
     setThreadedError(path);
-    return {false, Time()};
+    return { false, Time() };
 }
 
 #pragma mark - Combination
@@ -218,39 +212,38 @@ std::pair<bool, size_t> FileManager::getItemSize(const std::string &path)
         }
         return getFileSize(path);
     } else if (errno == ENOENT) {
-        return {true, 0};
+        return { true, 0 };
     }
     setThreadedError(path);
-    return {false, 0};
+    return { false, 0 };
 }
 
 std::pair<bool, bool> FileManager::fileExists(const std::string &file)
 {
     bool succeed, exists, isDirectory;
     std::tie(succeed, exists, isDirectory) = itemExists(file);
-    return {succeed, exists && !isDirectory};
+    return { succeed, exists && !isDirectory };
 }
 
 std::pair<bool, bool> FileManager::directoryExists(const std::string &directory)
 {
     bool succeed, exists, isDirectory;
     std::tie(succeed, exists, isDirectory) = itemExists(directory);
-    return {succeed, exists && isDirectory};
+    return { succeed, exists && isDirectory };
 }
 
-std::pair<bool, size_t>
-FileManager::getItemsSize(const std::list<std::string> &paths)
+std::pair<bool, size_t> FileManager::getItemsSize(const std::list<std::string> &paths)
 {
     size_t size = 0;
     std::pair<bool, size_t> temp;
     for (const auto &path : paths) {
         temp = getItemSize(path);
         if (!temp.first) {
-            return {false, 0};
+            return { false, 0 };
         }
         size += temp.second;
     }
-    return {true, size};
+    return { true, size };
 }
 
 bool FileManager::removeItem(const std::string &path)
@@ -278,8 +271,7 @@ bool FileManager::removeItems(const std::list<std::string> &items)
     return true;
 }
 
-bool FileManager::moveItems(const std::list<std::string> &paths,
-                            const std::string &directory)
+bool FileManager::moveItems(const std::list<std::string> &paths, const std::string &directory)
 {
     if (!createDirectoryWithIntermediateDirectories(directory)) {
         return false;
@@ -288,13 +280,12 @@ bool FileManager::moveItems(const std::list<std::string> &paths,
     for (const auto &path : paths) {
         const std::string fileName = Path::getFileName(path);
         std::string newPath = Path::addComponent(directory, fileName);
-        pairedPaths.push_back({path, newPath});
+        pairedPaths.push_back({ path, newPath });
     }
     return moveItems(pairedPaths);
 }
 
-bool FileManager::moveItems(
-    const std::list<std::pair<std::string, std::string>> &pairedPaths)
+bool FileManager::moveItems(const std::list<std::pair<std::string, std::string>> &pairedPaths)
 {
     bool result = true;
     std::list<std::string> recovers;
@@ -305,8 +296,8 @@ bool FileManager::moveItems(
         }
         if (ret.second) {
             const std::string &newPath = pairedPath.second;
-            if (!removeItem(newPath) ||
-                !createHardLink(pairedPath.first, pairedPath.second)) {
+            if (!removeItem(newPath)
+                || !createHardLink(pairedPath.first, pairedPath.second)) {
                 result = false;
                 break;
             }
@@ -327,17 +318,15 @@ bool FileManager::moveItems(
     return result;
 }
 
-bool FileManager::createDirectoryWithIntermediateDirectories(
-    const std::string &directory)
+bool FileManager::createDirectoryWithIntermediateDirectories(const std::string &directory)
 {
     auto ret = directoryExists(directory);
     if (!ret.first) {
         return false;
     }
     if (!ret.second) {
-        return createDirectoryWithIntermediateDirectories(
-                   Path::getBaseName(directory)) &&
-               createDirectory(directory);
+        return createDirectoryWithIntermediateDirectories(Path::getBaseName(directory))
+               && createDirectory(directory);
     }
     return true;
 }

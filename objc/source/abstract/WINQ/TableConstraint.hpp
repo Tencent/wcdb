@@ -31,8 +31,7 @@ public:
     TableConstraint(const std::string &name);
 
     TableConstraint &withPrimaryKey(const IndexedColumn &indexedColumn);
-    TableConstraint &
-    withPrimaryKey(const std::list<IndexedColumn> &indexedColumns);
+    TableConstraint &withPrimaryKey(const std::list<IndexedColumn> &indexedColumns);
 
     TableConstraint &withUnique(const IndexedColumn &indexedColumn);
     TableConstraint &withUnique(const std::list<IndexedColumn> &indexedColumns);
@@ -41,8 +40,8 @@ public:
 
     TableConstraint &check(const Expression &expression);
 
-    TableConstraint &withForeignKey(const Column &column,
-                                    const ForeignKeyClause &foreignKeyClause);
+    TableConstraint &
+    withForeignKey(const Column &column, const ForeignKeyClause &foreignKeyClause);
     TableConstraint &withForeignKey(const std::list<Column> &columns,
                                     const ForeignKeyClause &foreignKeyClause);
 };

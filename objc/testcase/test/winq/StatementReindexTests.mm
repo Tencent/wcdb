@@ -31,25 +31,25 @@
     XCTAssertEqual(WCDB::StatementReindex().getType(), WCDB::Statement::Type::Reindex);
 
     WINQAssertEqual(WCDB::StatementReindex()
-                        .reindex(),
+                    .reindex(),
                     @"REINDEX");
 
     WINQAssertEqual(WCDB::StatementReindex()
-                        .reindexCollation(self.class.collationName),
+                    .reindexCollation(self.class.collationName),
                     @"REINDEX testCollation");
 
     WINQAssertEqual(WCDB::StatementReindex()
-                        .withSchema(self.class.schemaName)
-                        .reindex(self.class.tableName),
+                    .withSchema(self.class.schemaName)
+                    .reindex(self.class.tableName),
                     @"REINDEX testSchema.testTable");
 
     WINQAssertEqual(WCDB::StatementReindex()
-                        .withSchema(self.class.schemaName)
-                        .reindex(self.class.indexName),
+                    .withSchema(self.class.schemaName)
+                    .reindex(self.class.indexName),
                     @"REINDEX testSchema.testIndex");
 
     WINQAssertEqual(WCDB::StatementReindex()
-                        .reindex(self.class.tableName),
+                    .reindex(self.class.tableName),
                     @"REINDEX main.testTable");
 }
 

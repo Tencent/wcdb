@@ -46,7 +46,7 @@
     [_migrated setMigrateRowPerStep:1];
     __block BOOL migrated = NO;
     [_migrated setTableMigratedCallback:^(WCTMigrationInfo *_Nullable info) {
-      migrated = YES;
+        migrated = YES;
     }];
     BOOL done;
     XCTAssertTrue([_migrated stepMigration:done]);
@@ -339,7 +339,7 @@
         withPreInsertedObjects:(NSArray<TestCaseObject *> *)preInsertedObjects
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
-    XCTAssertTrue(([_migrated updateTable:tableName onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} withObject:object]));
+    XCTAssertTrue(([_migrated updateTable:tableName onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } withObject:object]));
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_migrated getObjectsOfClass:_cls fromTable:tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:preInsertedObjects];
     for (TestCaseObject *element in expected) {
@@ -360,7 +360,7 @@
               withPreInsertedObjects:(NSArray<TestCaseObject *> *)preInsertedObjects
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
-    XCTAssertTrue(([_migrated updateTable:tableName onProperties:{TestCaseObject.variable2, TestCaseObject.variable3} withObject:object where:_greaterThan0Condition]));
+    XCTAssertTrue(([_migrated updateTable:tableName onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 } withObject:object where:_greaterThan0Condition]));
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_migrated getObjectsOfClass:_cls fromTable:tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:preInsertedObjects];
     for (TestCaseObject *element in expected) {
@@ -396,7 +396,7 @@
 }
 
 - (void)delete_where_test:(NSString *)tableName
-    withPreInsertedObjects:(NSArray<TestCaseObject *> *)preInsertedObjects
+   withPreInsertedObjects:(NSArray<TestCaseObject *> *)preInsertedObjects
 {
     XCTAssertTrue([_migrated deleteFromTable:tableName where:_greaterThan0Condition]);
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_migrated getObjectsOfClass:_cls fromTable:tableName orderBy:TestCaseObject.variable1]];

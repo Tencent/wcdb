@@ -28,8 +28,7 @@ StatementCreateIndex::StatementCreateIndex()
     getMutableLang().ifNotExists = true;
 }
 
-StatementCreateIndex &
-StatementCreateIndex::createIndex(const std::string &indexName)
+StatementCreateIndex &StatementCreateIndex::createIndex(const std::string &indexName)
 {
     Lang::CreateIndexSTMT &lang = getMutableLang();
     lang.indexName.assign(indexName);
@@ -50,8 +49,7 @@ StatementCreateIndex &StatementCreateIndex::unique(bool unique)
     return *this;
 }
 
-StatementCreateIndex &
-StatementCreateIndex::withSchema(const std::string &schemaName)
+StatementCreateIndex &StatementCreateIndex::withSchema(const std::string &schemaName)
 {
     Lang::CreateIndexSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
@@ -65,8 +63,7 @@ StatementCreateIndex &StatementCreateIndex::on(const std::string &tableName)
     return *this;
 }
 
-StatementCreateIndex &
-StatementCreateIndex::indexedBy(const IndexedColumn &indexedColumn)
+StatementCreateIndex &StatementCreateIndex::indexedBy(const IndexedColumn &indexedColumn)
 {
     Lang::CreateIndexSTMT &lang = getMutableLang();
     lang.indexedColumns.append(indexedColumn.getCOWLang());

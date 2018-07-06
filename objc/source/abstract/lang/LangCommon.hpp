@@ -32,12 +32,10 @@
 #include <WCDB/LangOrder.hpp>
 
 #define LangRemedialAssert(cond)                                               \
-    WCTRemedialAssert(cond, "WINQ expression is not complete",                 \
-                      return description;)
+    WCTRemedialAssert(cond, "WINQ expression is not complete", return description;)
 
 #define LangRemedialFatalError()                                               \
-    WCTRemedialFatalError("WINQ expression is not complete",                   \
-                          return description;)
+    WCTRemedialFatalError("WINQ expression is not complete", return description;)
 
 namespace WCDB {
 
@@ -52,14 +50,14 @@ public:
     virtual CopyOnWriteString SQL() const = 0;
 };
 
-template <typename T>
+template<typename T>
 class CopyOnWriteLazyLang : public CopyOnWriteLazyDescribable<T, Lang> {
 public:
     CopyOnWriteLazyLang() : CopyOnWriteLazyDescribable<T, Lang>() {}
 
-    template <typename OtherType>
+    template<typename OtherType>
     CopyOnWriteLazyLang(const CopyOnWriteLazyLang<OtherType> &o)
-        : CopyOnWriteLazyDescribable<T, Lang>(o)
+    : CopyOnWriteLazyDescribable<T, Lang>(o)
     {
     }
 
@@ -70,15 +68,14 @@ protected:
     }
 };
 
-template <typename T>
+template<typename T>
 class CopyOnWriteLazyLangList
-    : public CopyOnWriteLazyDescribable<std::list<CopyOnWriteLazyLang<T>>> {
+: public CopyOnWriteLazyDescribable<std::list<CopyOnWriteLazyLang<T>>> {
 public:
     bool empty() const
     {
-        return CopyOnWriteLazyDescribable<
-                   std::list<CopyOnWriteLazyLang<T>>>::empty() ||
-               this->get().empty();
+        return CopyOnWriteLazyDescribable<std::list<CopyOnWriteLazyLang<T>>>::empty()
+               || this->get().empty();
     }
 
     void append(const CopyOnWriteLazyLang<T> &element)
@@ -86,11 +83,11 @@ public:
         if (!this->empty()) {
             this->get_or_copy().push_back(element);
         } else {
-            this->assign({element});
+            this->assign({ element });
         }
     }
 
-    template <typename U>
+    template<typename U>
     void append(const CopyOnWriteLazyLang<U> &element)
     {
         CopyOnWriteLazyLang<T> convert;
@@ -98,7 +95,7 @@ public:
         if (!this->empty()) {
             this->get_or_copy().push_back(convert);
         } else {
-            this->assign({convert});
+            this->assign({ convert });
         }
     }
 

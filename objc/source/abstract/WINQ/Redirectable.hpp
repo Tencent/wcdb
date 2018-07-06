@@ -27,7 +27,7 @@ namespace WCDB {
 
 class Redirectable {
 public:
-    template <typename T>
+    template<typename T>
     T redirect(const T &t) const;
 
     virtual Expression getRedirectSource() const = 0;

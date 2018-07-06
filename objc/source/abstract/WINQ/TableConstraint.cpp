@@ -33,8 +33,7 @@ TableConstraint::TableConstraint(const std::string &name)
     lang.name.assign(name);
 }
 
-TableConstraint &
-TableConstraint::withPrimaryKey(const IndexedColumn &indexedColumn)
+TableConstraint &TableConstraint::withPrimaryKey(const IndexedColumn &indexedColumn)
 {
     Lang::TableConstraint &lang = getMutableLang();
     lang.type = Lang::TableConstraint::Type::PrimaryKey;
@@ -42,8 +41,7 @@ TableConstraint::withPrimaryKey(const IndexedColumn &indexedColumn)
     return *this;
 }
 
-TableConstraint &
-TableConstraint::withPrimaryKey(const std::list<IndexedColumn> &indexedColumns)
+TableConstraint &TableConstraint::withPrimaryKey(const std::list<IndexedColumn> &indexedColumns)
 {
     Lang::TableConstraint &lang = getMutableLang();
     lang.type = Lang::TableConstraint::Type::PrimaryKey;
@@ -61,8 +59,7 @@ TableConstraint &TableConstraint::withUnique(const IndexedColumn &indexedColumn)
     return *this;
 }
 
-TableConstraint &
-TableConstraint::withUnique(const std::list<IndexedColumn> &indexedColumns)
+TableConstraint &TableConstraint::withUnique(const std::list<IndexedColumn> &indexedColumns)
 {
     Lang::TableConstraint &lang = getMutableLang();
     lang.type = Lang::TableConstraint::Type::Unique;
@@ -72,8 +69,7 @@ TableConstraint::withUnique(const std::list<IndexedColumn> &indexedColumns)
     return *this;
 }
 
-TableConstraint &
-TableConstraint::onConflict(const ConflictClause &conflictClause)
+TableConstraint &TableConstraint::onConflict(const ConflictClause &conflictClause)
 {
     Lang::TableConstraint &lang = getMutableLang();
     lang.conflictClause = conflictClause;
@@ -89,8 +85,7 @@ TableConstraint &TableConstraint::check(const Expression &expression)
 }
 
 TableConstraint &
-TableConstraint::withForeignKey(const Column &column,
-                                const ForeignKeyClause &foreignKeyClause)
+TableConstraint::withForeignKey(const Column &column, const ForeignKeyClause &foreignKeyClause)
 {
     Lang::TableConstraint &lang = getMutableLang();
     lang.type = Lang::TableConstraint::Type::ForeignKey;
@@ -99,9 +94,8 @@ TableConstraint::withForeignKey(const Column &column,
     return *this;
 }
 
-TableConstraint &
-TableConstraint::withForeignKey(const std::list<Column> &columns,
-                                const ForeignKeyClause &foreignKeyClause)
+TableConstraint &TableConstraint::withForeignKey(const std::list<Column> &columns,
+                                                 const ForeignKeyClause &foreignKeyClause)
 {
     Lang::TableConstraint &lang = getMutableLang();
     lang.type = Lang::TableConstraint::Type::ForeignKey;

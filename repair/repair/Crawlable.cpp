@@ -31,7 +31,7 @@ namespace Repair {
 
 #pragma mark - Initialize
 Crawlable::Crawlable(Pager &pager)
-    : m_associatedPager(pager), m_stop(false), m_isCrawling(false)
+: m_associatedPager(pager), m_stop(false), m_isCrawling(false)
 {
 }
 
@@ -68,9 +68,7 @@ bool Crawlable::crawl(int rootpageno)
     return m_associatedPager.getError().isOK();
 }
 
-void Crawlable::safeCrawl(int rootpageno,
-                          std::set<int> &crawledInteriorPages,
-                          int height)
+void Crawlable::safeCrawl(int rootpageno, std::set<int> &crawledInteriorPages, int height)
 {
     Page rootpage(rootpageno, &m_associatedPager);
     if (!rootpage.initialize()) {
@@ -81,38 +79,37 @@ void Crawlable::safeCrawl(int rootpageno,
         return;
     }
     switch (rootpage.getType()) {
-        case Page::Type::InteriorTable:
-            if (crawledInteriorPages.find(rootpageno) !=
-                crawledInteriorPages.end()) {
-                //avoid dead loop
-                markAsCorrupted(rootpageno, "Pageno");
-                return;
+    case Page::Type::InteriorTable:
+        if (crawledInteriorPages.find(rootpageno) != crawledInteriorPages.end()) {
+            //avoid dead loop
+            markAsCorrupted(rootpageno, "Pageno");
+            return;
+        }
+        crawledInteriorPages.insert(rootpageno);
+        for (int i = 0; i < rootpage.getSubPageCount(); ++i) {
+            if (m_stop) {
+                break;
             }
-            crawledInteriorPages.insert(rootpageno);
-            for (int i = 0; i < rootpage.getSubPageCount(); ++i) {
-                if (m_stop) {
-                    break;
-                }
-                int pageno = rootpage.getSubPageno(i);
-                safeCrawl(pageno, crawledInteriorPages, height + 1);
+            int pageno = rootpage.getSubPageno(i);
+            safeCrawl(pageno, crawledInteriorPages, height + 1);
+        }
+        break;
+    case Page::Type::LeafTable:
+        for (int i = 0; i < rootpage.getCellCount(); ++i) {
+            if (m_stop) {
+                break;
             }
-            break;
-        case Page::Type::LeafTable:
-            for (int i = 0; i < rootpage.getCellCount(); ++i) {
-                if (m_stop) {
-                    break;
-                }
-                Cell cell = rootpage.getCell(i);
-                if (cell.initialize()) {
-                    onCellCrawled(cell);
-                } else {
-                    markAsError();
-                }
+            Cell cell = rootpage.getCell(i);
+            if (cell.initialize()) {
+                onCellCrawled(cell);
+            } else {
+                markAsError();
             }
-            break;
-        default:
-            markAsCorrupted(rootpageno, "PageType");
-            break;
+        }
+        break;
+    default:
+        markAsCorrupted(rootpageno, "PageType");
+        break;
     }
 }
 

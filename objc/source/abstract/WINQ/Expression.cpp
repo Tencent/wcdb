@@ -62,25 +62,21 @@ Expression &Expression::withSchema(const std::string &schemaName)
     return *this;
 }
 
-Expression::Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprUnaryOperation>
-                           &exprUnaryOperation)
+Expression::Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprUnaryOperation> &exprUnaryOperation)
 {
     Lang::Expr &lang = getMutableLang();
     lang.type = Lang::ExprBase::Type::UnaryOperator;
     lang.exprUnaryOperator.assign(exprUnaryOperation);
 }
 
-Expression::Expression(
-    const Lang::CopyOnWriteLazyLang<Lang::ExprBinaryOperation>
-        &exprBinaryOperation)
+Expression::Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprBinaryOperation> &exprBinaryOperation)
 {
     Lang::Expr &lang = getMutableLang();
     lang.type = Lang::ExprBase::Type::BinaryOperator;
     lang.exprBinaryOperator.assign(exprBinaryOperation);
 }
 
-Expression::Expression(
-    const Lang::CopyOnWriteLazyLang<Lang::ExprFunction> &exprFunction)
+Expression::Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprFunction> &exprFunction)
 {
     Lang::Expr &lang = getMutableLang();
     lang.type = Lang::ExprBase::Type::Function;
@@ -89,8 +85,7 @@ Expression::Expression(
 
 const Expression &Expression::lastInsertedRowid()
 {
-    static const Expression *s_lastInsertedRowid =
-        new Expression("last_insert_rowid");
+    static const Expression *s_lastInsertedRowid = new Expression("last_insert_rowid");
     return *s_lastInsertedRowid;
 }
 
@@ -103,9 +98,8 @@ Expression Expression::function(const std::string &functionName)
     return cowLang;
 }
 
-Expression Expression::function(const std::string &functionName,
-                                const Expression &parameter,
-                                bool distinct)
+Expression
+Expression::function(const std::string &functionName, const Expression &parameter, bool distinct)
 {
     Lang::CopyOnWriteLazyLang<Lang::ExprFunction> cowLang;
     Lang::ExprFunction &lang = cowLang.get_or_copy();
@@ -143,8 +137,7 @@ const Expression::All &Expression::All::default_()
     return *s_default;
 }
 
-Expression Expression::All::function(const std::string &functionName,
-                                     __unused bool distinct) const
+Expression Expression::All::function(const std::string &functionName, __unused bool distinct) const
 {
     Lang::CopyOnWriteLazyLang<Lang::ExprFunction> cowLang;
     Lang::ExprFunction &lang = cowLang.get_or_copy();
@@ -163,16 +156,14 @@ Expression::Expression(const std::list<Expression> &expressions)
     }
 }
 
-Expression::Expression(
-    const Lang::CopyOnWriteLazyLang<Lang::ExprCast> &exprCast)
+Expression::Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprCast> &exprCast)
 {
     Lang::Expr &lang = getMutableLang();
     lang.type = Lang::ExprBase::Type::Cast;
     lang.exprCast.assign(exprCast);
 }
 
-Expression::Expression(
-    const Lang::CopyOnWriteLazyLang<Lang::ExprPattern> &exprPattern)
+Expression::Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprPattern> &exprPattern)
 {
     Lang::Expr &lang = getMutableLang();
     lang.type = Lang::ExprBase::Type::Pattern;
@@ -181,23 +172,20 @@ Expression::Expression(
 
 Expression &Expression::escape(const Expression &expr)
 {
-    WINQRemedialAssert(getCOWLang().get<Lang::Expr>().type ==
-                       Lang::ExprBase::Type::Pattern);
+    WINQRemedialAssert(getCOWLang().get<Lang::Expr>().type == Lang::ExprBase::Type::Pattern);
     Lang::Expr &lang = getMutableLang();
     lang.exprPattern.get_or_copy().escape.assign(expr.getCOWLang());
     return *this;
 }
 
-Expression::Expression(
-    const Lang::CopyOnWriteLazyLang<Lang::ExprNull> &exprNull)
+Expression::Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprNull> &exprNull)
 {
     Lang::Expr &lang = getMutableLang();
     lang.type = Lang::ExprBase::Type::Null;
     lang.exprNull.assign(exprNull);
 }
 
-Expression::Expression(
-    const Lang::CopyOnWriteLazyLang<Lang::ExprBetween> &exprBetween)
+Expression::Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprBetween> &exprBetween)
 {
     Lang::Expr &lang = getMutableLang();
     lang.type = Lang::ExprBase::Type::Between;
@@ -211,9 +199,7 @@ Expression::Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprIn> &exprIn)
     lang.exprIn.assign(exprIn);
 }
 
-Expression::Expression(const StatementSelect &selectSTMT,
-                       bool isNot,
-                       bool exists)
+Expression::Expression(const StatementSelect &selectSTMT, bool isNot, bool exists)
 {
     Lang::Expr &lang = getMutableLang();
     lang.type = Lang::ExprBase::Type::Exists;
@@ -261,8 +247,7 @@ Expression::CaseInternal::CaseInternal(const Expression &expression)
 }
 
 Expression::CaseInternal &
-Expression::CaseInternal::whenAndThen(const Expression &when,
-                                      const Expression &then)
+Expression::CaseInternal::whenAndThen(const Expression &when, const Expression &then)
 {
     Lang::CopyOnWriteLazyLang<Lang::ExprCase::Pair> pair;
     {
@@ -275,8 +260,7 @@ Expression::CaseInternal::whenAndThen(const Expression &when,
     return *this;
 }
 
-Expression::CaseInternal &
-Expression::CaseInternal::else_(const Expression &expression)
+Expression::CaseInternal &Expression::CaseInternal::else_(const Expression &expression)
 {
     Lang::ExprCase &lang = getMutableLang();
     lang.exprElse.assign(expression.getCOWLang());
@@ -302,8 +286,7 @@ Lang::CopyOnWriteLazyLang<Lang::Expr> Expression::getExpressionLang() const
     return getCOWLang();
 }
 
-Expression::Expression(
-    const Lang::CopyOnWriteLazyLang<Lang::ExprCollate> &exprCollate)
+Expression::Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprCollate> &exprCollate)
 {
     Lang::Expr &lang = getMutableLang();
     lang.type = Lang::ExprBase::Type::Collate;
@@ -311,7 +294,7 @@ Expression::Expression(
 }
 
 Expression::Expression(const Lang::CopyOnWriteLazyLang<Lang::Expr> &expr)
-    : DescribableWithLang<Lang::Expr>(expr)
+: DescribableWithLang<Lang::Expr>(expr)
 {
 }
 
@@ -322,7 +305,7 @@ Expression Expression::getRedirectSource() const
 
 Expression::operator std::list<WCDB::Expression>() const
 {
-    return {*this};
+    return { *this };
 }
 
 } // namespace WCDB

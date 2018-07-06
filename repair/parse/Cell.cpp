@@ -30,7 +30,7 @@ namespace WCDB {
 namespace Repair {
 
 Cell::Cell(int pointer, Page *page, Pager *pager)
-    : PagerRelated(pager), m_pointer(pointer), m_rowid(0), m_page(page)
+: PagerRelated(pager), m_pointer(pointer), m_rowid(0), m_page(page)
 {
     WCTInnerAssert(m_page != nullptr);
 }
@@ -119,27 +119,27 @@ int64_t Cell::integerValue(int index) const
         int length = getLengthOfSerialType(serialType);
         WCTInnerAssert(m_deserialization.isEnough(cell.second + length));
         switch (length) {
-            case 1:
-                value = m_deserialization.get1ByteInt(cell.second);
-                break;
-            case 2:
-                value = m_deserialization.get2BytesInt(cell.second);
-                break;
-            case 3:
-                value = m_deserialization.get3BytesInt(cell.second);
-                break;
-            case 4:
-                value = m_deserialization.get4BytesInt(cell.second);
-                break;
-            case 6:
-                value = m_deserialization.get6BytesInt(cell.second);
-                break;
-            case 8:
-                value = m_deserialization.get8BytesInt(cell.second);
-                break;
-            default:
-                WCTInnerFatalError();
-                break;
+        case 1:
+            value = m_deserialization.get1ByteInt(cell.second);
+            break;
+        case 2:
+            value = m_deserialization.get2BytesInt(cell.second);
+            break;
+        case 3:
+            value = m_deserialization.get3BytesInt(cell.second);
+            break;
+        case 4:
+            value = m_deserialization.get4BytesInt(cell.second);
+            break;
+        case 6:
+            value = m_deserialization.get6BytesInt(cell.second);
+            break;
+        case 8:
+            value = m_deserialization.get8BytesInt(cell.second);
+            break;
+        default:
+            WCTInnerFatalError();
+            break;
         }
     }
     return value;
@@ -161,8 +161,8 @@ std::pair<int, const char *> Cell::textValue(int index) const
     WCTInnerAssert(index < m_columns.size());
     WCTInnerAssert(getValueType(index) == Type::Text);
     const auto &cell = m_columns[index];
-    return {getLengthOfSerialType(cell.first),
-            reinterpret_cast<const char *>(m_payload.buffer() + cell.second)};
+    return { getLengthOfSerialType(cell.first),
+             reinterpret_cast<const char *>(m_payload.buffer() + cell.second) };
 }
 
 std::string Cell::stringValue(int index) const
@@ -194,8 +194,7 @@ bool Cell::doInitialize()
     //parse payload size
     deserialization.seek(m_pointer);
     int lengthOfPayloadSize, payloadSize;
-    std::tie(lengthOfPayloadSize, payloadSize) =
-        deserialization.advanceVarint();
+    std::tie(lengthOfPayloadSize, payloadSize) = deserialization.advanceVarint();
     if (lengthOfPayloadSize == 0) {
         markPagerAsCorrupted(m_page->number, "PayloadSize");
         return false;
@@ -208,9 +207,9 @@ bool Cell::doInitialize()
         return false;
     }
     //parse local
-    int localPayloadSize =
-        m_page->getMinLocal() +
-        (payloadSize - m_page->getMinLocal()) % (m_pager->getUsableSize() - 4);
+    int localPayloadSize
+    = m_page->getMinLocal()
+      + (payloadSize - m_page->getMinLocal()) % (m_pager->getUsableSize() - 4);
     if (localPayloadSize > m_page->getMaxLocal()) {
         localPayloadSize = m_page->getMinLocal();
     }
@@ -234,16 +233,14 @@ bool Cell::doInitialize()
             return false;
         }
         //fill payload with local data
-        memcpy(m_payload.buffer(), m_page->getData().buffer() + offsetOfPayload,
-               localPayloadSize);
+        memcpy(m_payload.buffer(), m_page->getData().buffer() + offsetOfPayload, localPayloadSize);
 
         int cursorOfPayload = localPayloadSize;
         std::set<int> overflowPagenos;
         while (overflowPageno > 0 && cursorOfPayload < payloadSize) {
-            if (overflowPagenos.find(overflowPageno) !=
-                    overflowPagenos.end() // redunant overflow page found
+            if (overflowPagenos.find(overflowPageno) != overflowPagenos.end() // redunant overflow page found
                 || overflowPageno > m_pager->getPageCount() // pageno exceeds
-                ) {
+            ) {
                 m_pager->markAsCorrupted(m_page->number, "OverflowPage");
                 return false;
             }
@@ -253,11 +250,10 @@ bool Cell::doInitialize()
             if (overflow.empty()) {
                 return false;
             }
-            int overflowSize = std::min(payloadSize - cursorOfPayload,
-                                        m_pager->getUsableSize() - 4);
+            int overflowSize
+            = std::min(payloadSize - cursorOfPayload, m_pager->getUsableSize() - 4);
             WCTInnerAssert(cursorOfPayload + overflowSize <= m_payload.size());
-            memcpy(m_payload.buffer() + cursorOfPayload, overflow.buffer() + 4,
-                   overflowSize);
+            memcpy(m_payload.buffer() + cursorOfPayload, overflow.buffer() + 4, overflowSize);
             cursorOfPayload += overflowSize;
             //next overflow page
             Deserialization overflowDeserialization(overflow);
@@ -270,14 +266,12 @@ bool Cell::doInitialize()
         }
     } else {
         //non-overflow
-        m_payload =
-            m_page->getData().subdata(offsetOfPayload, localPayloadSize);
+        m_payload = m_page->getData().subdata(offsetOfPayload, localPayloadSize);
     }
     m_deserialization.reset(m_payload);
     //parse value offsets
     int lengthOfOffsetOfValues, offsetOfValues;
-    std::tie(lengthOfOffsetOfValues, offsetOfValues) =
-        m_deserialization.advanceVarint();
+    std::tie(lengthOfOffsetOfValues, offsetOfValues) = m_deserialization.advanceVarint();
     if (lengthOfOffsetOfValues == 0) {
         markPagerAsCorrupted(m_page->number, "CellValueOffset");
         return false;
@@ -291,22 +285,20 @@ bool Cell::doInitialize()
     while (cursorOfSerialTypes < endOfSerialTypes) {
         int lengthOfSerialType, serialType;
         m_deserialization.seek(cursorOfSerialTypes);
-        std::tie(lengthOfSerialType, serialType) =
-            m_deserialization.advanceVarint();
+        std::tie(lengthOfSerialType, serialType) = m_deserialization.advanceVarint();
         if (lengthOfSerialType == 0 || !isSerialTypeSanity(serialType)) {
             markPagerAsCorrupted(m_page->number, "SerialType");
             return false;
         }
         cursorOfSerialTypes += lengthOfSerialType;
-        m_columns.push_back({serialType, cursorOfValues});
+        m_columns.push_back({ serialType, cursorOfValues });
         cursorOfValues += getLengthOfSerialType(serialType);
         if (cursorOfValues > endOfValues) {
             markPagerAsCorrupted(m_page->number, "Payload");
             return false;
         }
     }
-    if (cursorOfSerialTypes != endOfSerialTypes ||
-        cursorOfValues != endOfValues) {
+    if (cursorOfSerialTypes != endOfSerialTypes || cursorOfValues != endOfValues) {
         markPagerAsCorrupted(m_page->number, "Payload");
         return false;
     }

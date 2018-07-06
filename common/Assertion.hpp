@@ -32,8 +32,7 @@
     }
 
 #define WCTInnerAssert(cond)                                                   \
-    WCTAssert((cond),                                                          \
-              "If you think it's a bug caused by WCDB, please report to us.")
+    WCTAssert((cond), "If you think it's a bug caused by WCDB, please report to us.")
 
 #else // DEBUG
 

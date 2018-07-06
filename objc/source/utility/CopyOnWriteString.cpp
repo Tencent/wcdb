@@ -30,7 +30,7 @@ CopyOnWriteString::CopyOnWriteString(const std::string &string) : Super(string)
 }
 
 CopyOnWriteString::CopyOnWriteString(const char *string)
-    : Super(string ? string : WCDB::String::empty())
+: Super(string ? string : WCDB::String::empty())
 {
 }
 
@@ -54,8 +54,7 @@ CopyOnWriteString::CopyOnWriteString(const char *string)
 
 bool CopyOnWriteString::empty() const
 {
-    return CopyOnWrite<std::string>::empty() ||
-           CopyOnWrite<std::string>::get().empty();
+    return CopyOnWrite<std::string>::empty() || CopyOnWrite<std::string>::get().empty();
 }
 
 bool CopyOnWriteString::isNull() const

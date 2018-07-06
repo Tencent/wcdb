@@ -33,7 +33,7 @@ public:
     virtual Statement::Type getStatementType() const;
 };
 
-template <typename T>
+template<typename T>
 class StatementWithLang : public Statement {
 public:
     using Statement::Statement;
@@ -56,7 +56,7 @@ public:
     virtual Lang::CopyOnWriteLazyLang<Lang::CRUDSTMT> getCRUDSTMT() const = 0;
 };
 
-template <typename T>
+template<typename T>
 class CRUDStatementWithLang : public CRUDStatement {
 public:
     using CRUDStatement::CRUDStatement;

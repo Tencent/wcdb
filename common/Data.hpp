@@ -57,8 +57,7 @@ protected:
 #pragma mark - No Shared
 public:
     static Data noCopyData(unsigned char *buffer, size_t size);
-    static const Data immutableNoCopyData(const unsigned char *buffer,
-                                          size_t size);
+    static const Data immutableNoCopyData(const unsigned char *buffer, size_t size);
 
 #pragma mark - Subdata
 public:

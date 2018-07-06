@@ -27,7 +27,6 @@
 namespace WCDB {
 
 class StatementCreateTable : public StatementWithLang<Lang::CreateTableSTMT> {
-
 public:
     StatementCreateTable();
     StatementCreateTable &createTable(const std::string &tableName);
@@ -37,8 +36,7 @@ public:
     StatementCreateTable &as(const StatementSelect &selectSTMT);
     StatementCreateTable &define(const ColumnDef &columnDef);
     StatementCreateTable &define(const std::list<ColumnDef> &columnDefs);
-    StatementCreateTable &
-    addTableConstraint(const TableConstraint &tableConstraint);
+    StatementCreateTable &addTableConstraint(const TableConstraint &tableConstraint);
     StatementCreateTable &
     addTableConstraints(const std::list<TableConstraint> &tableConstraints);
     StatementCreateTable &withoutRowID();

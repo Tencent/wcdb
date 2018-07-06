@@ -70,13 +70,10 @@ protected:
 
 #pragma mark - Helper
 public:
-    static std::list<std::string>
-    associatedPathsForDatabase(const std::string &database);
-    static std::list<std::string>
-    databasePathsForDatabase(const std::string &database);
+    static std::list<std::string> associatedPathsForDatabase(const std::string &database);
+    static std::list<std::string> databasePathsForDatabase(const std::string &database);
 
-    static std::string
-    firstMaterialPathForDatabase(const std::string &database);
+    static std::string firstMaterialPathForDatabase(const std::string &database);
     static std::string lastMaterialPathForDatabase(const std::string &database);
 
     static std::pair<bool, std::string>
@@ -85,8 +82,7 @@ public:
     materialsForDeserializingForDatabase(const std::string &database);
 
 protected:
-    static std::pair<bool, Time>
-    getModifiedTimeOr0IfNotExists(const std::string &path);
+    static std::pair<bool, Time> getModifiedTimeOr0IfNotExists(const std::string &path);
 };
 
 } //namespace Repair

@@ -29,29 +29,26 @@ SelectSTMT::SelectSTMT() : recursive(false), offset(false)
 {
 }
 
-void SelectSTMT::resolveTableOrSubquery(
-    CopyOnWriteLazyLang<TableOrSubquery> &tableOrSubquery) const
+void SelectSTMT::resolveTableOrSubquery(CopyOnWriteLazyLang<TableOrSubquery> &tableOrSubquery) const
 {
     if (tableOrSubquery.empty()) {
         return;
     }
     switch (tableOrSubquery.get().type) {
-        case TableOrSubqueryBase::Type::Table:
-            resolveTable(tableOrSubquery.get_or_copy().tableOrSubqueryTable);
-            break;
-        case TableOrSubqueryBase::Type::TableOrSubquery:
-            resolveTableOrSubquery(tableOrSubquery);
-            break;
-        case TableOrSubqueryBase::Type::List:
-            resolveTableOrSubqueryList(
-                tableOrSubquery.get_or_copy().tableOrSubqueryList);
-        default:
-            break;
+    case TableOrSubqueryBase::Type::Table:
+        resolveTable(tableOrSubquery.get_or_copy().tableOrSubqueryTable);
+        break;
+    case TableOrSubqueryBase::Type::TableOrSubquery:
+        resolveTableOrSubquery(tableOrSubquery);
+        break;
+    case TableOrSubqueryBase::Type::List:
+        resolveTableOrSubqueryList(tableOrSubquery.get_or_copy().tableOrSubqueryList);
+    default:
+        break;
     }
 }
 
-void SelectSTMT::resolveTableOrSubqueryBases(
-    CopyOnWriteLazyLangList<TableOrSubqueryBase> &tableOrSubquerys) const
+void SelectSTMT::resolveTableOrSubqueryBases(CopyOnWriteLazyLangList<TableOrSubqueryBase> &tableOrSubquerys) const
 {
     if (tableOrSubquerys.empty()) {
         return;
@@ -61,60 +58,53 @@ void SelectSTMT::resolveTableOrSubqueryBases(
             continue;
         }
         switch (tableOrSubquery.get().getType()) {
-            case TableOrSubqueryBase::Type::Table: {
-                CopyOnWriteLazyLang<TableOrSubqueryTable> table =
-                    tableOrSubquery;
-                resolveTable(table);
-                tableOrSubquery.assign(table);
-            } break;
-            case TableOrSubqueryBase::Type::TableOrSubquery: {
-                CopyOnWriteLazyLang<TableOrSubquery> table = tableOrSubquery;
-                resolveTableOrSubquery(table);
-                tableOrSubquery.assign(table);
-            } break;
-            case TableOrSubqueryBase::Type::List: {
-                CopyOnWriteLazyLang<TableOrSubqueryList> table =
-                    tableOrSubquery;
-                resolveTableOrSubqueryList(table);
-                tableOrSubquery.assign(table);
-            } break;
-            default:
-                break;
+        case TableOrSubqueryBase::Type::Table: {
+            CopyOnWriteLazyLang<TableOrSubqueryTable> table = tableOrSubquery;
+            resolveTable(table);
+            tableOrSubquery.assign(table);
+        } break;
+        case TableOrSubqueryBase::Type::TableOrSubquery: {
+            CopyOnWriteLazyLang<TableOrSubquery> table = tableOrSubquery;
+            resolveTableOrSubquery(table);
+            tableOrSubquery.assign(table);
+        } break;
+        case TableOrSubqueryBase::Type::List: {
+            CopyOnWriteLazyLang<TableOrSubqueryList> table = tableOrSubquery;
+            resolveTableOrSubqueryList(table);
+            tableOrSubquery.assign(table);
+        } break;
+        default:
+            break;
         }
     }
 }
 
-void SelectSTMT::resolveTableOrSubqueryList(
-    CopyOnWriteLazyLang<TableOrSubqueryList> &tableOrSubqueryList) const
+void SelectSTMT::resolveTableOrSubqueryList(CopyOnWriteLazyLang<TableOrSubqueryList> &tableOrSubqueryList) const
 {
     if (tableOrSubqueryList.empty()) {
         return;
     }
-    resolveTableOrSubqueryBases(
-        tableOrSubqueryList.get_or_copy().tableOrSubquerys);
+    resolveTableOrSubqueryBases(tableOrSubqueryList.get_or_copy().tableOrSubquerys);
 }
 
-void SelectSTMT::resolveTable(
-    CopyOnWriteLazyLang<TableOrSubqueryTable> &table) const
+void SelectSTMT::resolveTable(CopyOnWriteLazyLang<TableOrSubqueryTable> &table) const
 {
-    if (table.empty() || !table.get().schemaName.isNull() ||
-        table.get().tableName.empty()) {
+    if (table.empty() || !table.get().schemaName.isNull()
+        || table.get().tableName.empty()) {
         return;
     }
     for (const auto &commonTableExpression : commonTableExpressions.get()) {
         if (commonTableExpression.empty()) {
             continue;
         }
-        const CopyOnWriteString &tableName =
-            commonTableExpression.get().tableName;
+        const CopyOnWriteString &tableName = commonTableExpression.get().tableName;
         if (tableName.equal(table.get().tableName.get())) {
             table.get_or_copy().schemaName.assign(anySchema());
         }
     }
 }
 
-void SelectSTMT::resolveTableOrSubquerys(
-    CopyOnWriteLazyLangList<TableOrSubquery> &tableOrSubquerys) const
+void SelectSTMT::resolveTableOrSubquerys(CopyOnWriteLazyLangList<TableOrSubquery> &tableOrSubquerys) const
 {
     if (tableOrSubquerys.empty()) {
         return;
@@ -192,20 +182,19 @@ CopyOnWriteString SelectSTMT::Compound::SQL() const
     return description;
 }
 
-constexpr const char *
-SelectSTMT::Compound::OperatorName(const Operator &compoundOperator)
+constexpr const char *SelectSTMT::Compound::OperatorName(const Operator &compoundOperator)
 {
     switch (compoundOperator) {
-        case Operator::Union:
-            return "UNION";
-        case Operator::UnionAll:
-            return "UNION ALL";
-        case Operator::Intersect:
-            return "INTERSECT";
-        case Operator::Except:
-            return "EXCEPT";
-        default:
-            return "";
+    case Operator::Union:
+        return "UNION";
+    case Operator::UnionAll:
+        return "UNION ALL";
+    case Operator::Intersect:
+        return "INTERSECT";
+    case Operator::Except:
+        return "EXCEPT";
+    default:
+        return "";
     }
 }
 
@@ -220,7 +209,7 @@ STMT::Type SelectSTMT::getType()
 }
 
 //TODO refactor: remove redundant calculatedDescription
-template <>
+template<>
 CopyOnWriteString
 CopyOnWriteLazyLangList<SelectSTMT::Compound>::calculatedDescription() const
 {

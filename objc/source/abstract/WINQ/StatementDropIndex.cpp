@@ -35,8 +35,7 @@ StatementDropIndex &StatementDropIndex::dropIndex(const std::string &indexName)
     return *this;
 }
 
-StatementDropIndex &
-StatementDropIndex::withSchema(const std::string &schemaName)
+StatementDropIndex &StatementDropIndex::withSchema(const std::string &schemaName)
 {
     Lang::DropIndexSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);

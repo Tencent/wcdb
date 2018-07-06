@@ -34,22 +34,21 @@ enum class ConflictClause {
     Replace,
 };
 
-constexpr const char *
-LangConflictClauseName(const ConflictClause &conflictClause)
+constexpr const char *LangConflictClauseName(const ConflictClause &conflictClause)
 {
     switch (conflictClause) {
-        case ConflictClause::Rollback:
-            return "ON CONFLICT ROLLBACK";
-        case ConflictClause::Abort:
-            return "ON CONFLICT ABORT";
-        case ConflictClause::Fail:
-            return "ON CONFLICT FAIL";
-        case ConflictClause::Ignore:
-            return "ON CONFLICT IGNORE";
-        case ConflictClause::Replace:
-            return "ON CONFLICT REPLACE";
-        default:
-            return "";
+    case ConflictClause::Rollback:
+        return "ON CONFLICT ROLLBACK";
+    case ConflictClause::Abort:
+        return "ON CONFLICT ABORT";
+    case ConflictClause::Fail:
+        return "ON CONFLICT FAIL";
+    case ConflictClause::Ignore:
+        return "ON CONFLICT IGNORE";
+    case ConflictClause::Replace:
+        return "ON CONFLICT REPLACE";
+    default:
+        return "";
     }
 }
 

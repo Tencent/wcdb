@@ -33,7 +33,7 @@ namespace Repair {
 
 #pragma mark - Initialize
 Backup::Backup(const std::string &path)
-    : m_pager(path), Crawlable(m_pager), m_masterCrawler(m_pager)
+: m_pager(path), Crawlable(m_pager), m_masterCrawler(m_pager)
 {
 }
 
@@ -86,7 +86,7 @@ Material::Content &Backup::getOrCreateContent(const std::string &tableName)
     auto &contents = m_material.contents;
     auto iter = contents.find(tableName);
     if (iter == contents.end()) {
-        iter = contents.insert({tableName, Material::Content()}).first;
+        iter = contents.insert({ tableName, Material::Content() }).first;
     }
     return iter->second;
 }
@@ -114,19 +114,19 @@ void Backup::onCellCrawled(const Cell &cell)
 bool Backup::willCrawlPage(const Page &page, int height)
 {
     switch (page.getType()) {
-        case Page::Type::LeafTable: {
-            auto iter = m_verifiedPagenos.find(page.number);
-            if (iter != m_verifiedPagenos.end()) {
-                markAsCorrupted(page.number, "PageNumber");
-            } else {
-                m_verifiedPagenos[page.number] = page.getData().hash();
-            }
-            return false;
+    case Page::Type::LeafTable: {
+        auto iter = m_verifiedPagenos.find(page.number);
+        if (iter != m_verifiedPagenos.end()) {
+            markAsCorrupted(page.number, "PageNumber");
+        } else {
+            m_verifiedPagenos[page.number] = page.getData().hash();
         }
-        case Page::Type::InteriorTable:
-            return true;
-        default:
-            break;
+        return false;
+    }
+    case Page::Type::InteriorTable:
+        return true;
+    default:
+        break;
     }
     return false;
 }
@@ -141,12 +141,11 @@ void Backup::onMasterCellCrawled(const Cell &cell, const Master &master)
 {
     if (master.name == Sequence::tableName()) {
         SequenceCrawler(m_pager).work(master.rootpage, this);
-    } else if (filter(master.tableName) &&
-               !Master::isReservedTableName(master.tableName) &&
-               !Master::isReservedTableName(master.name)) {
+    } else if (filter(master.tableName) && !Master::isReservedTableName(master.tableName)
+               && !Master::isReservedTableName(master.name)) {
         Material::Content &content = getOrCreateContent(master.tableName);
-        if (String::isCaseInsensiveEqual(master.type, "table") &&
-            String::isCaseInsensiveEqual(master.name, master.tableName)) {
+        if (String::isCaseInsensiveEqual(master.type, "table")
+            && String::isCaseInsensiveEqual(master.name, master.tableName)) {
             if (!crawl(master.rootpage)) {
                 return;
             }

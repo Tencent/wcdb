@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Not Thread-safe
  */
-@interface WCTSelect <ObjectType> : WCTSelectable
+@interface WCTSelect<ObjectType> : WCTSelectable
 
 - (instancetype)fromTable:(NSString *)tableName;
 

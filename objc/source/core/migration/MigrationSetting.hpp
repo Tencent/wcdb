@@ -51,8 +51,7 @@ public:
     bool isSameDatabaseMigration() const;
     const std::map<std::string, std::pair<std::string, int>> &
     getSchemasForAttaching() const;
-    const std::map<std::string, std::shared_ptr<MigrationInfo>> &
-    getInfos() const;
+    const std::map<std::string, std::shared_ptr<MigrationInfo>> &getInfos() const;
     //return true to indicate schemas changed
     bool markAsMigrated(const std::string &table);
     bool isMigrated() const;
@@ -66,15 +65,13 @@ public:
     int getMigrationRowPerStep() const;
 
     //info, rowid -> return true to replace and false to ignore
-    typedef std::function<bool(const MigrationInfo *, const long long &)>
-        ConflictCallback;
+    typedef std::function<bool(const MigrationInfo *, const long long &)> ConflictCallback;
     void setConflictCallback(const ConflictCallback &callback);
     bool invokeConflictCallback(const MigrationInfo *, const long long &) const;
 
 #ifdef DEBUG
     const int64_t hash;
-    int64_t
-    hashedInfos(const std::list<std::shared_ptr<MigrationInfo>> &infos) const;
+    int64_t hashedInfos(const std::list<std::shared_ptr<MigrationInfo>> &infos) const;
 #endif
 
 protected:

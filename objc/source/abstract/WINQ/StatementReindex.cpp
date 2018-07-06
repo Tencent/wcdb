@@ -30,8 +30,7 @@ StatementReindex &StatementReindex::reindex()
     return *this;
 }
 
-StatementReindex &
-StatementReindex::reindexCollation(const std::string &collationName)
+StatementReindex &StatementReindex::reindexCollation(const std::string &collationName)
 {
     Lang::ReindexSTMT &lang = getMutableLang();
     lang.switcher = Lang::ReindexSTMT::Switch::Collation;

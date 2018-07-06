@@ -33,7 +33,7 @@ void MasterCrawlerDelegate::onMasterPageCrawled(const Page &page)
 }
 
 MasterCrawler::MasterCrawler(Pager &pager)
-    : Crawlable(pager), m_delegate(nullptr)
+: Crawlable(pager), m_delegate(nullptr)
 {
 }
 

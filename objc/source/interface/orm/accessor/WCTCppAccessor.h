@@ -20,7 +20,7 @@
 
 #import <WCDB/WCTBaseAccessor.h>
 
-template <WCDB::ColumnType t>
+template<WCDB::ColumnType t>
 class WCTCppAccessor : public WCTBaseAccessor {
 public:
     using UnderlyingType = typename WCDB::ColumnTypeInfo<t>::UnderlyingType;
@@ -28,7 +28,7 @@ public:
     using Getter = UnderlyingType (^)(InstanceType);
 
     WCTCppAccessor(Getter getter, Setter setter)
-        : getValue(getter), setValue(setter)
+    : getValue(getter), setValue(setter)
     {
     }
 

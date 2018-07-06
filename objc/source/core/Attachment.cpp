@@ -25,7 +25,7 @@
 namespace WCDB {
 
 Attachment::Attachment(HandlePool *handlePool_)
-    : HandlePoolRelated(handlePool_), factory(m_pool->path), corruption(m_pool)
+: HandlePoolRelated(handlePool_), factory(m_pool->path), corruption(m_pool)
 {
 }
 

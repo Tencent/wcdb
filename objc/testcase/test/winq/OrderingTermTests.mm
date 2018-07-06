@@ -33,19 +33,19 @@
     WINQAssertEqual(WCDB::OrderingTerm(expression), @"testColumn");
 
     WINQAssertEqual(WCDB::OrderingTerm(expression)
-                        .withOrder(WCDB::Order::NotSet),
+                    .withOrder(WCDB::Order::NotSet),
                     @"testColumn");
 
     WINQAssertEqual(WCDB::OrderingTerm(expression)
-                        .withOrder(WCDB::Order::ASC),
+                    .withOrder(WCDB::Order::ASC),
                     @"testColumn ASC");
 
     WINQAssertEqual(WCDB::OrderingTerm(expression)
-                        .withOrder(WCDB::Order::DESC),
+                    .withOrder(WCDB::Order::DESC),
                     @"testColumn DESC");
 
     WINQAssertEqual(WCDB::OrderingTerm(expression)
-                        .collate(self.class.collationName),
+                    .collate(self.class.collationName),
                     @"testColumn COLLATE testCollation");
 }
 

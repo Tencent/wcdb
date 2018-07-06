@@ -31,11 +31,7 @@ namespace Repair {
 
 #pragma mark - Initialize
 Repairman::Repairman(const std::string &path)
-    : m_pager(path)
-    , Crawlable(m_pager)
-    , Progress()
-    , m_milestone(1000)
-    , m_mile(0)
+: m_pager(path), Crawlable(m_pager), Progress(), m_milestone(1000), m_mile(0)
 {
 }
 
@@ -116,8 +112,7 @@ bool Repairman::towardMilestone(int mile)
     return true;
 }
 
-bool Repairman::assembleTable(const std::string &tableName,
-                              const std::string &sql)
+bool Repairman::assembleTable(const std::string &tableName, const std::string &sql)
 {
     if (m_assembler->assembleTable(tableName, sql)) {
         if (markAsMilestone()) {

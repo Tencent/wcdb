@@ -69,9 +69,9 @@ typedef NS_ENUM(NSUInteger, WCTErrorCode) {
 
 @interface WCTError : NSError
 
-@property(nonatomic, readonly) WCTErrorLevel level;
+@property (nonatomic, readonly) WCTErrorLevel level;
 
-@property(nonatomic, readonly, nullable) NSString *message;
+@property (nonatomic, readonly, nullable) NSString *message;
 
 - (BOOL)isOK;
 

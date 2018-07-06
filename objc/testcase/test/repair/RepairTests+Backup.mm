@@ -121,10 +121,10 @@
     XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName2].count, count);
 
     [_database filterBackup:^BOOL(NSString *tableName) {
-      if ([tableName isEqualToString:tableName1]) {
-          return YES;
-      }
-      return NO;
+        if ([tableName isEqualToString:tableName1]) {
+            return YES;
+        }
+        return NO;
     }];
 
     XCTAssertTrue([_database backup]);
@@ -148,7 +148,7 @@
     XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
 
     [_database filterBackup:^BOOL(NSString *tableName) {
-      return NO;
+        return NO;
     }];
 
     XCTAssertTrue([_database backup]);

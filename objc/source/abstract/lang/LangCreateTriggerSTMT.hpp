@@ -69,9 +69,8 @@ protected:
     static constexpr const char *operationName(const Operation &operation);
 };
 
-template <>
-CopyOnWriteString
-CopyOnWriteLazyLangList<CRUDSTMT>::calculatedDescription() const;
+template<>
+CopyOnWriteString CopyOnWriteLazyLangList<CRUDSTMT>::calculatedDescription() const;
 
 } // namespace Lang
 

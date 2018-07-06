@@ -36,11 +36,11 @@
     WCDB::Expression column = WCDB::Expression(self.class.column);
 
     WINQAssertEqual(WCDB::Expression(column)
-                        .cast(WCDB::ColumnType::Integer32),
+                    .cast(WCDB::ColumnType::Integer32),
                     @"CAST(testColumn AS INTEGER)");
 
     WINQAssertEqual(WCDB::Expression(column)
-                        .collate(self.class.collationName),
+                    .collate(self.class.collationName),
                     @"testColumn COLLATE testCollation");
 
     WINQAssertEqual(WCDB::Expression::Exists(self.class.statementSelect), @"EXISTS(SELECT testColumn FROM main.testTable)");
@@ -75,12 +75,12 @@
     WINQAssertEqual(WCDB::Expression(self.class.column), @"testColumn");
 
     WINQAssertEqual(WCDB::Expression(self.class.column)
-                        .withTable(self.class.tableName),
+                    .withTable(self.class.tableName),
                     @"testTable.testColumn");
 
     WINQAssertEqual(WCDB::Expression(self.class.column)
-                        .withTable(self.class.tableName)
-                        .withSchema(self.class.schemaName),
+                    .withTable(self.class.tableName)
+                    .withSchema(self.class.schemaName),
                     @"testSchema.testTable.testColumn");
 }
 
@@ -125,7 +125,7 @@
 {
     WCDB::Expression expression1 = WCDB::Expression(self.class.column);
     WCDB::Expression expression2 = WCDB::Expression(self.class.column2);
-    std::list<WCDB::Expression> expressions = {expression1, expression2};
+    std::list<WCDB::Expression> expressions = { expression1, expression2 };
 
     WINQAssertEqual(WCDB::Expression::function(self.class.functionName, expression1, true), @"testFunction(DISTINCT testColumn)");
 
@@ -149,7 +149,7 @@
 {
     WCDB::Expression expression1 = WCDB::Expression(self.class.column);
     WCDB::Expression expression2 = WCDB::Expression(self.class.column2);
-    std::list<WCDB::Expression> expressions = {expression1, expression2};
+    std::list<WCDB::Expression> expressions = { expression1, expression2 };
 
     WINQAssertEqual(WCDB::Expression(expressions), @"(testColumn, testColumn2)");
 }
@@ -161,75 +161,75 @@
     WCDB::Expression expression3((WCDB::BindParameter(1)));
 
     WINQAssertEqual(expression1
-                        .notLike(expression2),
+                    .notLike(expression2),
                     @"testColumn NOT LIKE 'a%'");
 
     WINQAssertEqual(expression1
-                        .notLike(expression2)
-                        .escape(expression3),
+                    .notLike(expression2)
+                    .escape(expression3),
                     @"testColumn NOT LIKE 'a%' ESCAPE ?1");
 
     WINQAssertEqual(expression1
-                        .notGlob(expression2),
+                    .notGlob(expression2),
                     @"testColumn NOT GLOB 'a%'");
 
     WINQAssertEqual(expression1
-                        .notGlob(expression2)
-                        .escape(expression3),
+                    .notGlob(expression2)
+                    .escape(expression3),
                     @"testColumn NOT GLOB 'a%' ESCAPE ?1");
 
     WINQAssertEqual(expression1
-                        .notRegexp(expression2),
+                    .notRegexp(expression2),
                     @"testColumn NOT REGEXP 'a%'");
 
     WINQAssertEqual(expression1
-                        .notRegexp(expression2)
-                        .escape(expression3),
+                    .notRegexp(expression2)
+                    .escape(expression3),
                     @"testColumn NOT REGEXP 'a%' ESCAPE ?1");
 
     WINQAssertEqual(expression1
-                        .notMatch(expression2),
+                    .notMatch(expression2),
                     @"testColumn NOT MATCH 'a%'");
 
     WINQAssertEqual(expression1
-                        .notMatch(expression2)
-                        .escape(expression3),
+                    .notMatch(expression2)
+                    .escape(expression3),
                     @"testColumn NOT MATCH 'a%' ESCAPE ?1");
 
     WINQAssertEqual(expression1
-                        .like(expression2),
+                    .like(expression2),
                     @"testColumn LIKE 'a%'");
 
     WINQAssertEqual(expression1
-                        .like(expression2)
-                        .escape(expression3),
+                    .like(expression2)
+                    .escape(expression3),
                     @"testColumn LIKE 'a%' ESCAPE ?1");
 
     WINQAssertEqual(expression1
-                        .glob(expression2),
+                    .glob(expression2),
                     @"testColumn GLOB 'a%'");
 
     WINQAssertEqual(expression1
-                        .glob(expression2)
-                        .escape(expression3),
+                    .glob(expression2)
+                    .escape(expression3),
                     @"testColumn GLOB 'a%' ESCAPE ?1");
 
     WINQAssertEqual(expression1
-                        .regexp(expression2),
+                    .regexp(expression2),
                     @"testColumn REGEXP 'a%'");
 
     WINQAssertEqual(expression1
-                        .regexp(expression2)
-                        .escape(expression3),
+                    .regexp(expression2)
+                    .escape(expression3),
                     @"testColumn REGEXP 'a%' ESCAPE ?1");
 
     WINQAssertEqual(expression1
-                        .match(expression2),
+                    .match(expression2),
                     @"testColumn MATCH 'a%'");
 
     WINQAssertEqual(expression1
-                        .match(expression2)
-                        .escape(expression3),
+                    .match(expression2)
+                    .escape(expression3),
                     @"testColumn MATCH 'a%' ESCAPE ?1");
 }
 
@@ -248,11 +248,11 @@
     WCDB::Expression expression3 = WCDB::LiteralValue(3);
 
     WINQAssertEqual(expression1
-                        .notBetween(expression2, expression3),
+                    .notBetween(expression2, expression3),
                     @"testColumn NOT BETWEEN 1 AND 3");
 
     WINQAssertEqual(expression1
-                        .between(expression2, expression3),
+                    .between(expression2, expression3),
                     @"testColumn BETWEEN 1 AND 3");
 }
 
@@ -261,102 +261,102 @@
     WCDB::Expression expression = WCDB::Expression(self.class.column);
     WCDB::Expression expression1 = self.class.literalValue;
     WCDB::Expression expression2 = WCDB::LiteralValue(2);
-    std::list<WCDB::Expression> expressions = {expression1, expression2};
+    std::list<WCDB::Expression> expressions = { expression1, expression2 };
 
     WINQAssertEqual(expression
-                        .notIn(),
+                    .notIn(),
                     @"testColumn NOT IN()");
 
     WINQAssertEqual(expression
-                        .notIn(self.class.statementSelect),
+                    .notIn(self.class.statementSelect),
                     @"testColumn NOT IN(SELECT testColumn FROM main.testTable)");
 
     WINQAssertEqual(expression
-                        .notIn(expression1),
+                    .notIn(expression1),
                     @"testColumn NOT IN(1)");
 
     WINQAssertEqual(expression
-                        .notIn(expressions),
+                    .notIn(expressions),
                     @"testColumn NOT IN(1, 2)");
 
     WINQAssertEqual(expression
-                        .in(),
+                    .in(),
                     @"testColumn IN()");
 
     WINQAssertEqual(expression
-                        .in(self.class.statementSelect),
+                    .in(self.class.statementSelect),
                     @"testColumn IN(SELECT testColumn FROM main.testTable)");
 
     WINQAssertEqual(expression
-                        .in(expression1),
+                    .in(expression1),
                     @"testColumn IN(1)");
 
     WINQAssertEqual(expression
-                        .in(expressions),
+                    .in(expressions),
                     @"testColumn IN(1, 2)");
 
     WINQAssertEqual(expression
-                        .notIn(self.class.tableName),
+                    .notIn(self.class.tableName),
                     @"testColumn NOT IN main.testTable");
 
     WINQAssertEqual(expression
-                        .notIn(self.class.schemaName, self.class.tableName),
+                    .notIn(self.class.schemaName, self.class.tableName),
                     @"testColumn NOT IN testSchema.testTable");
 
     WINQAssertEqual(expression
-                        .in(self.class.tableName),
+                    .in(self.class.tableName),
                     @"testColumn IN main.testTable");
 
     WINQAssertEqual(expression
-                        .in(self.class.schemaName, self.class.tableName),
+                    .in(self.class.schemaName, self.class.tableName),
                     @"testColumn IN testSchema.testTable");
 
     WINQAssertEqual(expression
-                        .notInFunction(self.class.functionName),
+                    .notInFunction(self.class.functionName),
                     @"testColumn NOT IN main.testFunction()");
 
     WINQAssertEqual(expression
-                        .notInFunction(self.class.schemaName, self.class.functionName),
+                    .notInFunction(self.class.schemaName, self.class.functionName),
                     @"testColumn NOT IN testSchema.testFunction()");
 
     WINQAssertEqual(expression
-                        .notInFunction(self.class.functionName, expression1),
+                    .notInFunction(self.class.functionName, expression1),
                     @"testColumn NOT IN main.testFunction(1)");
 
     WINQAssertEqual(expression
-                        .notInFunction(self.class.functionName, expressions),
+                    .notInFunction(self.class.functionName, expressions),
                     @"testColumn NOT IN main.testFunction(1, 2)");
 
     WINQAssertEqual(expression
-                        .notInFunction(self.class.schemaName, self.class.functionName, expression1),
+                    .notInFunction(self.class.schemaName, self.class.functionName, expression1),
                     @"testColumn NOT IN testSchema.testFunction(1)");
 
     WINQAssertEqual(expression
-                        .notInFunction(self.class.schemaName, self.class.functionName, expressions),
+                    .notInFunction(self.class.schemaName, self.class.functionName, expressions),
                     @"testColumn NOT IN testSchema.testFunction(1, 2)");
 
     WINQAssertEqual(expression
-                        .inFunction(self.class.functionName),
+                    .inFunction(self.class.functionName),
                     @"testColumn IN main.testFunction()");
 
     WINQAssertEqual(expression
-                        .inFunction(self.class.schemaName, self.class.functionName),
+                    .inFunction(self.class.schemaName, self.class.functionName),
                     @"testColumn IN testSchema.testFunction()");
 
     WINQAssertEqual(expression
-                        .inFunction(self.class.functionName, expression1),
+                    .inFunction(self.class.functionName, expression1),
                     @"testColumn IN main.testFunction(1)");
 
     WINQAssertEqual(expression
-                        .inFunction(self.class.functionName, expressions),
+                    .inFunction(self.class.functionName, expressions),
                     @"testColumn IN main.testFunction(1, 2)");
 
     WINQAssertEqual(expression
-                        .inFunction(self.class.schemaName, self.class.functionName, expression1),
+                    .inFunction(self.class.schemaName, self.class.functionName, expression1),
                     @"testColumn IN testSchema.testFunction(1)");
 
     WINQAssertEqual(expression
-                        .inFunction(self.class.schemaName, self.class.functionName, expressions),
+                    .inFunction(self.class.schemaName, self.class.functionName, expressions),
                     @"testColumn IN testSchema.testFunction(1, 2)");
 }
 
@@ -370,21 +370,21 @@
     WCDB::Expression elseExpression = WCDB::LiteralValue(3);
 
     WINQAssertEqual(WCDB::Expression(WCDB::Expression::case_(caseExpression)
-                                         .whenAndThen(when1, then1)
-                                         .else_(elseExpression)),
+                                     .whenAndThen(when1, then1)
+                                     .else_(elseExpression)),
                     @"CASE testColumn WHEN (testColumn2 > 0) THEN 1 ELSE 3 END");
 
     WINQAssertEqual(WCDB::Expression(WCDB::Expression::case_(caseExpression)
-                                         .whenAndThen(when1, then1)),
+                                     .whenAndThen(when1, then1)),
                     @"CASE testColumn WHEN (testColumn2 > 0) THEN 1 END");
 
     WINQAssertEqual(WCDB::Expression(WCDB::Expression::case_(caseExpression)
-                                         .whenAndThen(when1, then1)
-                                         .whenAndThen(when2, then2)),
+                                     .whenAndThen(when1, then1)
+                                     .whenAndThen(when2, then2)),
                     @"CASE testColumn WHEN (testColumn2 > 0) THEN 1 WHEN (testColumn3 < 0) THEN 2 END");
 
     WINQAssertEqual(WCDB::Expression(WCDB::Expression::case_()
-                                         .whenAndThen(when1, then1)),
+                                     .whenAndThen(when1, then1)),
                     @"CASE WHEN (testColumn2 > 0) THEN 1 END");
 }
 

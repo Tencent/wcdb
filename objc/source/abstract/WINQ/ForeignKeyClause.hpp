@@ -53,10 +53,8 @@ public:
     ForeignKeyClause &initiallyDeferred();
 
 private:
-    void addTriggerForUpdating(
-        const Lang::ForeignKeyClause::Trigger::Operation &operation);
-    void addTriggerForDeleting(
-        const Lang::ForeignKeyClause::Trigger::Operation &operation);
+    void addTriggerForUpdating(const Lang::ForeignKeyClause::Trigger::Operation &operation);
+    void addTriggerForDeleting(const Lang::ForeignKeyClause::Trigger::Operation &operation);
     void addTriggerForMatching(const std::string &name);
     void addTrigger(const Lang::ForeignKeyClause::Trigger &trigger);
 };

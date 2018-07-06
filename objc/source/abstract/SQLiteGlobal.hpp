@@ -31,8 +31,7 @@ class SQLiteGlobal {
 public:
     static SQLiteGlobal *shared();
 
-    void setNotificationWhenFileCreated(
-        const std::function<void(const char *)> &onFileCreated);
+    void setNotificationWhenFileCreated(const std::function<void(const char *)> &onFileCreated);
 
 protected:
     SQLiteGlobal();

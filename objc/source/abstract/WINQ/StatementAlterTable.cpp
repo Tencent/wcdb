@@ -24,8 +24,7 @@
 namespace WCDB {
 
 StatementAlterTable &
-StatementAlterTable::alterTable(const std::string &schemaName,
-                                const std::string &tableName)
+StatementAlterTable::alterTable(const std::string &schemaName, const std::string &tableName)
 {
     Lang::AlterTableSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);
@@ -33,8 +32,7 @@ StatementAlterTable::alterTable(const std::string &schemaName,
     return *this;
 }
 
-StatementAlterTable &
-StatementAlterTable::alterTable(const std::string &tableName)
+StatementAlterTable &StatementAlterTable::alterTable(const std::string &tableName)
 {
     Lang::AlterTableSTMT &lang = getMutableLang();
     lang.schemaName.clear();
@@ -42,8 +40,7 @@ StatementAlterTable::alterTable(const std::string &tableName)
     return *this;
 }
 
-StatementAlterTable &
-StatementAlterTable::renameTo(const std::string &newTableName)
+StatementAlterTable &StatementAlterTable::renameTo(const std::string &newTableName)
 {
     Lang::AlterTableSTMT &lang = getMutableLang();
     lang.switcher = Lang::AlterTableSTMT::Switch::Rename;
@@ -69,15 +66,14 @@ bool StatementAlterTable::isAlteringDefaultValueColumn() const
     if (langColumnDef.empty()) {
         return false;
     }
-    const auto &langColumnConstraints =
-        langColumnDef.get<Lang::ColumnDef>().columnConstraints;
+    const auto &langColumnConstraints = langColumnDef.get<Lang::ColumnDef>().columnConstraints;
     if (langColumnConstraints.empty()) {
         return false;
     }
     for (const auto &langColumnConstraint : langColumnConstraints.get()) {
-        if (!langColumnConstraint.empty() &&
-            langColumnConstraint.get<Lang::ColumnConstraint>().type ==
-                Lang::ColumnConstraint::Type::Default) {
+        if (!langColumnConstraint.empty()
+            && langColumnConstraint.get<Lang::ColumnConstraint>().type
+               == Lang::ColumnConstraint::Type::Default) {
             return true;
         }
     }

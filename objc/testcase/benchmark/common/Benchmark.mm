@@ -65,13 +65,13 @@
 - (void)setUpWithPreCreateTable:(int)count
 {
     XCTAssertTrue([self.database runTransaction:^BOOL(WCTHandle *_Nonnull handle) {
-      for (int i = 0; i < count; ++i) {
-          NSString *tableName = [self getTableNameWithIndex:i];
-          if (![self.database createTableAndIndexes:tableName withClass:BenchmarkObject.class]) {
-              return NO;
-          }
-      }
-      return YES;
+        for (int i = 0; i < count; ++i) {
+            NSString *tableName = [self getTableNameWithIndex:i];
+            if (![self.database createTableAndIndexes:tableName withClass:BenchmarkObject.class]) {
+                return NO;
+            }
+        }
+        return YES;
     }]);
 }
 
@@ -106,33 +106,33 @@
 }
 
 - (void)measure:(void (^)(void))block
-               setUp:(void (^)(void))setUpBlock
-            tearDown:(void (^)(void))tearDownBlock
-    checkCorrectness:(void (^)(void))correctnessBlock
+           setUp:(void (^)(void))setUpBlock
+        tearDown:(void (^)(void))tearDownBlock
+checkCorrectness:(void (^)(void))correctnessBlock
 {
     [self measureMetrics:self.class.defaultPerformanceMetrics
-        automaticallyStartMeasuring:false
-                           forBlock:^{
-                             if (tearDownBlock) {
-                                 tearDownBlock();
-                             }
+    automaticallyStartMeasuring:false
+                       forBlock:^{
+                           if (tearDownBlock) {
+                               tearDownBlock();
+                           }
 
-                             if (setUpBlock) {
-                                 setUpBlock();
-                             }
+                           if (setUpBlock) {
+                               setUpBlock();
+                           }
 
-                             [self startMeasuring];
+                           [self startMeasuring];
 
-                             block();
+                           block();
 
-                             [self stopMeasuring];
+                           [self stopMeasuring];
 
-                             correctnessBlock();
+                           correctnessBlock();
 
-                             if (tearDownBlock) {
-                                 tearDownBlock();
-                             }
-                           }];
+                           if (tearDownBlock) {
+                               tearDownBlock();
+                           }
+                       }];
 }
 
 @end

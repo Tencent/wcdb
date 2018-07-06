@@ -31,8 +31,7 @@ public:
 
     ColumnDef &withType(const ColumnType &columnType);
     ColumnDef &byAddingConstraint(const ColumnConstraint &columnConstraint);
-    ColumnDef &
-    byAddingConstraints(const std::list<ColumnConstraint> &columnConstraints);
+    ColumnDef &byAddingConstraints(const std::list<ColumnConstraint> &columnConstraints);
 
     bool isAutoIncrement() const;
     bool isPrimary() const;

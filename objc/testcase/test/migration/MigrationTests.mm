@@ -52,7 +52,7 @@
     XCTAssertTrue([_migrated dropTable:_migratedTableName]);
 
     [_migrated close:^{
-      XCTAssertTrue([_migrated removeFiles]);
+        XCTAssertTrue([_migrated removeFiles]);
     }];
     [_migrated finalizeDatabase];
 
@@ -175,8 +175,8 @@
     XCTAssertTrue([_migrated insertObject:object intoTable:_migratedTableName]);
 
     [_migrated setConflictCallback:^BOOL(WCTMigrationInfo *info, long long rowid) {
-      conflictRowID = rowid;
-      return YES;
+        conflictRowID = rowid;
+        return YES;
     }];
 
     BOOL done = NO;
@@ -207,8 +207,8 @@
     XCTAssertTrue([_migrated insertObject:object intoTable:_migratedTableName]);
 
     [_migrated setConflictCallback:^BOOL(WCTMigrationInfo *info, long long rowid) {
-      conflictRowID = rowid;
-      return NO;
+        conflictRowID = rowid;
+        return NO;
     }];
 
     BOOL done = NO;
@@ -240,21 +240,19 @@
 
     __block BOOL migrated = NO;
     [_migrated asyncMigrationWhenStepped:^BOOL(WCTMigrationState state, BOOL result) {
-      [NSThread sleepForTimeInterval:0.1];
-      if (state == WCTMigrationStateDone && result) {
-          @synchronized(self)
-          {
-              migrated = YES;
-          }
-      }
-      return true;
+        [NSThread sleepForTimeInterval:0.1];
+        if (state == WCTMigrationStateDone && result) {
+            @synchronized(self) {
+                migrated = YES;
+            }
+        }
+        return true;
     }];
 
     NSMutableArray *inserted = [[NSMutableArray alloc] initWithArray:_preInserted];
     int testCount = 0;
     while (YES) {
-        @synchronized(self)
-        {
+        @synchronized(self) {
             if (migrated) {
                 break;
             };
@@ -265,31 +263,31 @@
             to = 1;
         }
         switch (rand() % 4) {
-            case 0: {
-                //select
-                NSArray<TestCaseObject *> *objects = [_migrated getObjectsOfClass:TestCaseObject.class fromTable:_migratedTableName orderBy:TestCaseObject.variable1.asOrder(WCTOrderedAscending) limit:to offset:from];
-                NSArray<TestCaseObject *> *expected = [inserted subarrayWithRange:NSMakeRange(from, to)];
-                XCTAssertTrue([objects isEqualToTestCaseObjects:expected]);
-            } break;
-            case 1: {
-                //insert
-                TestCaseObject *object = [TestCaseObject objectWithId:_count];
-                ++_count;
-                XCTAssertTrue([_migrated insertObject:object intoTable:_migratedTableName]);
-                [inserted addObject:object];
-            } break;
-            case 2: {
-                //replace
-                int index = rand() % _count;
-                TestCaseObject *object = [TestCaseObject objectWithId:index];
-                XCTAssertTrue([_migrated insertOrReplaceObject:object intoTable:_migratedTableName]);
-                inserted[index] = object;
-            } break;
-            case 3: {
-                //create table
-                NSString *tableName = [NSString stringWithFormat:@"%@_%d", _migratedTableName, rand()];
-                XCTAssertTrue([_migrated createTableAndIndexes:tableName withClass:_cls]);
-            } break;
+        case 0: {
+            //select
+            NSArray<TestCaseObject *> *objects = [_migrated getObjectsOfClass:TestCaseObject.class fromTable:_migratedTableName orderBy:TestCaseObject.variable1.asOrder(WCTOrderedAscending) limit:to offset:from];
+            NSArray<TestCaseObject *> *expected = [inserted subarrayWithRange:NSMakeRange(from, to)];
+            XCTAssertTrue([objects isEqualToTestCaseObjects:expected]);
+        } break;
+        case 1: {
+            //insert
+            TestCaseObject *object = [TestCaseObject objectWithId:_count];
+            ++_count;
+            XCTAssertTrue([_migrated insertObject:object intoTable:_migratedTableName]);
+            [inserted addObject:object];
+        } break;
+        case 2: {
+            //replace
+            int index = rand() % _count;
+            TestCaseObject *object = [TestCaseObject objectWithId:index];
+            XCTAssertTrue([_migrated insertOrReplaceObject:object intoTable:_migratedTableName]);
+            inserted[index] = object;
+        } break;
+        case 3: {
+            //create table
+            NSString *tableName = [NSString stringWithFormat:@"%@_%d", _migratedTableName, rand()];
+            XCTAssertTrue([_migrated createTableAndIndexes:tableName withClass:_cls]);
+        } break;
         }
         ++testCount;
     }
@@ -302,14 +300,13 @@
 
     __block BOOL migrated = NO;
     [_migrated asyncMigrationWhenStepped:^BOOL(WCTMigrationState state, BOOL result) {
-      [NSThread sleepForTimeInterval:1.0];
-      if (state == WCTMigrationStateDone && result) {
-          @synchronized(self)
-          {
-              migrated = YES;
-          }
-      }
-      return true;
+        [NSThread sleepForTimeInterval:1.0];
+        if (state == WCTMigrationStateDone && result) {
+            @synchronized(self) {
+                migrated = YES;
+            }
+        }
+        return true;
     }];
 
     int maxTasks = 10;
@@ -318,39 +315,35 @@
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     queue.maxConcurrentOperationCount = 4;
     while (YES) {
-        @synchronized(self)
-        {
+        @synchronized(self) {
             if (migrated) {
                 break;
             };
         }
         BOOL wait = NO;
-        @synchronized(self)
-        {
+        @synchronized(self) {
             if (++tasks == maxTasks) {
                 wait = YES;
             }
         }
         [queue waitUntilAllOperationsAreFinished];
         [queue addOperationWithBlock:^{
-          int from = rand() % _count;
-          int to = rand() % (_count - from);
-          if (to == 0) {
-              to = 1;
-          }
-          NSArray<TestCaseObject *> *objects = [_migrated getObjectsOfClass:TestCaseObject.class fromTable:_migratedTableName orderBy:TestCaseObject.variable1.asOrder(WCTOrderedAscending) limit:to offset:from];
-          NSArray<TestCaseObject *> *expected = [_preInserted subarrayWithRange:NSMakeRange(from, to)];
-          XCTAssertTrue([objects isEqualToTestCaseObjects:expected]);
-          @synchronized(self)
-          {
-              ++testCount;
-              --tasks;
-          }
+            int from = rand() % _count;
+            int to = rand() % (_count - from);
+            if (to == 0) {
+                to = 1;
+            }
+            NSArray<TestCaseObject *> *objects = [_migrated getObjectsOfClass:TestCaseObject.class fromTable:_migratedTableName orderBy:TestCaseObject.variable1.asOrder(WCTOrderedAscending) limit:to offset:from];
+            NSArray<TestCaseObject *> *expected = [_preInserted subarrayWithRange:NSMakeRange(from, to)];
+            XCTAssertTrue([objects isEqualToTestCaseObjects:expected]);
+            @synchronized(self) {
+                ++testCount;
+                --tasks;
+            }
         }];
     }
     [queue waitUntilAllOperationsAreFinished];
-    @synchronized(self)
-    {
+    @synchronized(self) {
         XCTAssertGreaterThan(testCount, 10);
     }
 }
@@ -358,16 +351,16 @@
 - (void)test_disorder
 {
     WCDB::StatementCreateTable statement = WCDB::StatementCreateTable()
-                                               .createTable(_migratedTableName.UTF8String)
-                                               .define(WCDB::ColumnDef(TestCaseObject.variable3).withType(WCDB::ColumnType::Float))
-                                               .define(WCDB::ColumnDef(TestCaseObject.variable2).withType(WCDB::ColumnType::Text))
-                                               .define(WCDB::ColumnDef(TestCaseObject.variable1).withType(WCDB::ColumnType::Integer32));
+                                           .createTable(_migratedTableName.UTF8String)
+                                           .define(WCDB::ColumnDef(TestCaseObject.variable3).withType(WCDB::ColumnType::Float))
+                                           .define(WCDB::ColumnDef(TestCaseObject.variable2).withType(WCDB::ColumnType::Text))
+                                           .define(WCDB::ColumnDef(TestCaseObject.variable1).withType(WCDB::ColumnType::Integer32));
     XCTAssertTrue([_migrated execute:statement]);
 
     //check if it's disordered
     WCTOneColumn *columnNames = [_migrated getColumnFromStatement:WCDB::StatementPragma()
-                                                                      .pragma(WCDB::Pragma::tableInfo())
-                                                                      .with(_migratedTableName.UTF8String)
+                                                                  .pragma(WCDB::Pragma::tableInfo())
+                                                                  .with(_migratedTableName.UTF8String)
                                                           atIndex:1];
     XCTAssertEqual(columnNames.count, 3);
     XCTAssertTrue([columnNames[0].stringValue isEqualToString:@"variable3"]);

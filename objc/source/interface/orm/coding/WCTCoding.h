@@ -34,8 +34,8 @@ typedef WCDB::Column (^WCTColumnNamed)(NSString *_Nonnull);
 + (const WCDB::Expression::All &)allResults;
 + (WCTColumnNamed)columnNamed;
 @optional
-@property(nonatomic, assign) long long lastInsertedRowID;
-@property(nonatomic, assign) BOOL isAutoIncrement;
+@property (nonatomic, assign) long long lastInsertedRowID;
+@property (nonatomic, assign) BOOL isAutoIncrement;
 @end
 
 @protocol WCTColumnCoding

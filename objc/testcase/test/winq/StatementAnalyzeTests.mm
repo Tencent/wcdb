@@ -31,27 +31,27 @@
     XCTAssertEqual(WCDB::StatementAnalyze().getType(), WCDB::Statement::Type::Analyze);
 
     WINQAssertEqual(WCDB::StatementAnalyze()
-                        .analyze(),
+                    .analyze(),
                     @"ANALYZE");
 
     WINQAssertEqual(WCDB::StatementAnalyze()
-                        .analyze(self.class.schemaName),
+                    .analyze(self.class.schemaName),
                     @"ANALYZE testSchema");
 
     WINQAssertEqual(WCDB::StatementAnalyze()
-                        .analyze(self.class.tableName),
+                    .analyze(self.class.tableName),
                     @"ANALYZE testTable");
 
     WINQAssertEqual(WCDB::StatementAnalyze()
-                        .analyze(self.class.indexName),
+                    .analyze(self.class.indexName),
                     @"ANALYZE testIndex");
 
     WINQAssertEqual(WCDB::StatementAnalyze()
-                        .analyze(self.class.schemaName, self.class.tableName),
+                    .analyze(self.class.schemaName, self.class.tableName),
                     @"ANALYZE testSchema.testTable");
 
     WINQAssertEqual(WCDB::StatementAnalyze()
-                        .analyze(self.class.schemaName, self.class.indexName),
+                    .analyze(self.class.schemaName, self.class.indexName),
                     @"ANALYZE testSchema.testIndex");
 }
 

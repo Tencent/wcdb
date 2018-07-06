@@ -26,21 +26,18 @@
 
 namespace WCDB {
 
-static_assert(BackupConfig::framesForMandatoryCheckpoint >
-                  CheckpointConfig::framesForFull,
-              "");
+static_assert(BackupConfig::framesForMandatoryCheckpoint > CheckpointConfig::framesForFull, "");
 
 const std::shared_ptr<Config> &BackupConfig::shared()
 {
-    static const std::shared_ptr<Config> *s_shared =
-        new std::shared_ptr<Config>(new BackupConfig);
+    static const std::shared_ptr<Config> *s_shared
+    = new std::shared_ptr<Config>(new BackupConfig);
     return *s_shared;
 }
 
 BackupConfig::BackupConfig() : Config(BackupConfig::name)
 {
-    Dispatch::async("com.Tencent.WCDB.Backup",
-                    std::bind(&BackupConfig::loop, this));
+    Dispatch::async("com.Tencent.WCDB.Backup", std::bind(&BackupConfig::loop, this));
 }
 
 BackupConfig::~BackupConfig()
@@ -55,21 +52,21 @@ bool BackupConfig::invoke(Handle *handle)
         return false;
     }
     bool result = handle->setNotificationWhenCheckpoint(
-        "backup", std::bind(&BackupConfig::willCheckpoint, this,
-                            std::placeholders::_1, std::placeholders::_2));
+    "backup",
+    std::bind(&BackupConfig::willCheckpoint, this, std::placeholders::_1, std::placeholders::_2));
     handle->rollbackTransaction();
     if (result) {
         handle->setNotificationWhenCommitted(
-            "backup", std::bind(&BackupConfig::onCommitted, this,
-                                std::placeholders::_1, std::placeholders::_2));
+        "backup",
+        std::bind(&BackupConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
     }
     return result;
 }
 
 void BackupConfig::loop()
 {
-    m_timedQueue.loop(std::bind(&BackupConfig::onTimed, this,
-                                std::placeholders::_1, std::placeholders::_2));
+    m_timedQueue.loop(std::bind(
+    &BackupConfig::onTimed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 void BackupConfig::onTimed(const std::string &path, const int &frames)
@@ -80,8 +77,7 @@ void BackupConfig::onTimed(const std::string &path, const int &frames)
         return;
     }
 
-    std::shared_ptr<Database> database =
-        Database::databaseWithExistingPath(path);
+    std::shared_ptr<Database> database = Database::databaseWithExistingPath(path);
     if (database == nullptr || !database->isOpened()) {
         return;
     }
@@ -104,8 +100,8 @@ void BackupConfig::onCommitted(Handle *handle, int frames)
 
 bool BackupConfig::willCheckpoint(Handle *handle, int frames)
 {
-    std::shared_ptr<Database> database =
-        Database::databaseWithExistingPath(handle->path);
+    std::shared_ptr<Database> database
+    = Database::databaseWithExistingPath(handle->path);
     WCTInnerAssert(database != nullptr);
     if (database->backup(frames)) {
         m_timedQueue.reQueue(handle->path, 60.0, frames);

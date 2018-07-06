@@ -36,7 +36,7 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
 }
 
 - (void)setCipherKey:(NSData *)cipherKey
-    andCipherPageSize:(int)cipherPageSize
+   andCipherPageSize:(int)cipherPageSize
 {
     WCTRemedialAssert(cipherKey, "Cipher key can't be null.", return;);
     _database->setCipher(WCDB::Data::immutableNoCopyData((const unsigned char *) cipherKey.bytes, (size_t) cipherKey.length), cipherPageSize);

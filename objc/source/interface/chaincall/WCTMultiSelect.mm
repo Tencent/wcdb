@@ -29,9 +29,9 @@ struct MultiInfo {
     NSString *tableName;
     Class cls;
     MultiInfo(const WCTProperty &property_, NSString *tableName_, Class cls_)
-        : property(property_)
-        , tableName(tableName_)
-        , cls(cls_)
+    : property(property_)
+    , tableName(tableName_)
+    , cls(cls_)
     {
     }
 };

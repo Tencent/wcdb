@@ -22,9 +22,9 @@
 
 @interface ORMProperty : NSObject
 
-@property(nonatomic, assign) int property1;
-@property(nonatomic, retain) NSDate *property2;
-@property(nonatomic, retain) NSString *property3;
-@property(nonatomic, assign) float property4;
+@property (nonatomic, assign) int property1;
+@property (nonatomic, retain) NSDate *property2;
+@property (nonatomic, retain) NSString *property3;
+@property (nonatomic, assign) float property4;
 
 @end

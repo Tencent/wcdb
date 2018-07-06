@@ -31,26 +31,26 @@
     WINQAssertEqual(WCDB::IndexedColumn(self.class.column), @"testColumn");
 
     WINQAssertEqual(WCDB::IndexedColumn(self.class.column)
-                        .withOrder(WCDB::Order::NotSet),
+                    .withOrder(WCDB::Order::NotSet),
                     @"testColumn");
 
     WINQAssertEqual(WCDB::IndexedColumn(self.class.column)
-                        .withOrder(WCDB::Order::ASC),
+                    .withOrder(WCDB::Order::ASC),
                     @"testColumn ASC");
 
     WINQAssertEqual(WCDB::IndexedColumn(self.class.column)
-                        .withOrder(WCDB::Order::DESC),
+                    .withOrder(WCDB::Order::DESC),
                     @"testColumn DESC");
 
     WINQAssertEqual(WCDB::IndexedColumn(self.class.column)
-                        .collate(self.class.collationName),
+                    .collate(self.class.collationName),
                     @"testColumn COLLATE testCollation");
 
     WCDB::Expression column = WCDB::Expression(self.class.column);
     WINQAssertEqual(WCDB::IndexedColumn(column), @"testColumn");
     //Default
     WINQAssertEqual(WCDB::IndexedColumn(self.class.column)
-                        .withOrder(),
+                    .withOrder(),
                     @"testColumn");
 }
 

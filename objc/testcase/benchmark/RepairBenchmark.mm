@@ -48,11 +48,11 @@
 {
     while (![self isDatabaseLargeEnough:fileSize]) {
         if (![_cachedDatabase runTransaction:^BOOL(WCTHandle *_Nonnull) {
-              NSArray<RepairTestCaseObject *> *objects = [RepairTestCaseObject randomObjects];
-              NSString *tableName = [NSString stringWithFormat:@"t_%@", [NSString randomString]];
-              return [_cachedDatabase createTableAndIndexes:tableName withClass:RepairTestCaseObject.class] && [_cachedDatabase insertOrReplaceObjects:objects intoTable:tableName];
-            }] ||
-            ![_cachedDatabase execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]) {
+                NSArray<RepairTestCaseObject *> *objects = [RepairTestCaseObject randomObjects];
+                NSString *tableName = [NSString stringWithFormat:@"t_%@", [NSString randomString]];
+                return [_cachedDatabase createTableAndIndexes:tableName withClass:RepairTestCaseObject.class] && [_cachedDatabase insertOrReplaceObjects:objects intoTable:tableName];
+            }]
+            || ![_cachedDatabase execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]) {
             return NO;
         }
     }
@@ -65,26 +65,27 @@
     __block BOOL result;
     NSString *firstBackupPath = [_cachedDatabase.path stringByAppendingString:@"-first.material"];
     NSString *lastBackupPath = [_cachedDatabase.path stringByAppendingString:@"-last.material"];
-    [self measure:^{
-      result = [_cachedDatabase backup];
+    [self
+    measure:^{
+        result = [_cachedDatabase backup];
     }
-        setUp:^{
-          XCTAssertTrue([self lazyPrepareCachedDatabase:self.config.databaseSize]);
+    setUp:^{
+        XCTAssertTrue([self lazyPrepareCachedDatabase:self.config.databaseSize]);
+    }
+    tearDown:^{
+        if ([self.fileManager fileExistsAtPath:firstBackupPath]) {
+            XCTAssertTrue([self.fileManager removeItemAtPath:firstBackupPath error:nil]);
         }
-        tearDown:^{
-          if ([self.fileManager fileExistsAtPath:firstBackupPath]) {
-              XCTAssertTrue([self.fileManager removeItemAtPath:firstBackupPath error:nil]);
-          }
-          if ([self.fileManager fileExistsAtPath:lastBackupPath]) {
-              XCTAssertTrue([self.fileManager removeItemAtPath:lastBackupPath error:nil]);
-          }
+        if ([self.fileManager fileExistsAtPath:lastBackupPath]) {
+            XCTAssertTrue([self.fileManager removeItemAtPath:lastBackupPath error:nil]);
         }
-        checkCorrectness:^{
-          XCTAssertTrue(result);
-          XCTAssertGreaterThan([self.fileManager attributesOfItemAtPath:firstBackupPath error:nil].fileSize, self.config.databaseSize * 0.0001);
-          XCTAssertLessThan([self.fileManager attributesOfItemAtPath:firstBackupPath error:nil].fileSize, self.config.databaseSize * 0.01);
-          XCTAssertFalse([self.fileManager fileExistsAtPath:lastBackupPath]);
-        }];
+    }
+    checkCorrectness:^{
+        XCTAssertTrue(result);
+        XCTAssertGreaterThan([self.fileManager attributesOfItemAtPath:firstBackupPath error:nil].fileSize, self.config.databaseSize * 0.0001);
+        XCTAssertLessThan([self.fileManager attributesOfItemAtPath:firstBackupPath error:nil].fileSize, self.config.databaseSize * 0.01);
+        XCTAssertFalse([self.fileManager fileExistsAtPath:lastBackupPath]);
+    }];
 }
 
 //Note that since repair will usually be run in background thread with blocked UI, test is not for the best performance but for a tolerable performance.
@@ -94,23 +95,24 @@
     NSString *lastBackupPath = [_cachedDatabase.path stringByAppendingString:@"-last.material"];
 
     __block double score;
-    [self measure:^{
-      score = [_cachedDatabase retrieve:nil];
+    [self
+    measure:^{
+        score = [_cachedDatabase retrieve:nil];
     }
-        setUp:^{
-          XCTAssertTrue([self lazyPrepareCachedDatabase:self.config.databaseSize]);
+    setUp:^{
+        XCTAssertTrue([self lazyPrepareCachedDatabase:self.config.databaseSize]);
+    }
+    tearDown:^{
+        if ([self.fileManager fileExistsAtPath:firstBackupPath]) {
+            XCTAssertTrue([self.fileManager removeItemAtPath:firstBackupPath error:nil]);
         }
-        tearDown:^{
-          if ([self.fileManager fileExistsAtPath:firstBackupPath]) {
-              XCTAssertTrue([self.fileManager removeItemAtPath:firstBackupPath error:nil]);
-          }
-          if ([self.fileManager fileExistsAtPath:lastBackupPath]) {
-              XCTAssertTrue([self.fileManager removeItemAtPath:lastBackupPath error:nil]);
-          }
+        if ([self.fileManager fileExistsAtPath:lastBackupPath]) {
+            XCTAssertTrue([self.fileManager removeItemAtPath:lastBackupPath error:nil]);
         }
-        checkCorrectness:^{
-          XCTAssertEqual(score, 1);
-        }];
+    }
+    checkCorrectness:^{
+        XCTAssertEqual(score, 1);
+    }];
 }
 
 - (void)test_repair_with_backup
@@ -119,19 +121,20 @@
     NSString *lastBackupPath = [_cachedDatabase.path stringByAppendingString:@"-last.material"];
 
     __block double score;
-    [self measure:^{
-      score = [_cachedDatabase retrieve:nil];
+    [self
+    measure:^{
+        score = [_cachedDatabase retrieve:nil];
     }
-        setUp:^{
-          XCTAssertTrue([self lazyPrepareCachedDatabase:self.config.databaseSize]);
-          XCTAssertTrue([_cachedDatabase backup]);
+    setUp:^{
+        XCTAssertTrue([self lazyPrepareCachedDatabase:self.config.databaseSize]);
+        XCTAssertTrue([_cachedDatabase backup]);
 
-          XCTAssertTrue([self.fileManager fileExistsAtPath:firstBackupPath] || [self.fileManager fileExistsAtPath:lastBackupPath]);
-        }
-        tearDown:nil
-        checkCorrectness:^{
-          XCTAssertEqual(score, 1);
-        }];
+        XCTAssertTrue([self.fileManager fileExistsAtPath:firstBackupPath] || [self.fileManager fileExistsAtPath:lastBackupPath]);
+    }
+    tearDown:nil
+    checkCorrectness:^{
+        XCTAssertEqual(score, 1);
+    }];
 }
 
 @end

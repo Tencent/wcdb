@@ -27,7 +27,6 @@
 namespace WCDB {
 
 class StatementBegin : public StatementWithLang<Lang::BeginSTMT> {
-
 public:
     static const StatementBegin &deferred();
     static const StatementBegin &immediate();

@@ -31,26 +31,26 @@
     XCTAssertEqual(WCDB::StatementDropTable().getType(), WCDB::Statement::Type::DropTable);
 
     WINQAssertEqual(WCDB::StatementDropTable()
-                        .dropTable(self.class.tableName)
-                        .ifExists(true)
-                        .withSchema(self.class.schemaName),
+                    .dropTable(self.class.tableName)
+                    .ifExists(true)
+                    .withSchema(self.class.schemaName),
                     @"DROP TABLE IF EXISTS testSchema.testTable");
 
     WINQAssertEqual(WCDB::StatementDropTable()
-                        .dropTable(self.class.tableName)
-                        .ifExists(true),
+                    .dropTable(self.class.tableName)
+                    .ifExists(true),
                     @"DROP TABLE IF EXISTS main.testTable");
 
     WINQAssertEqual(WCDB::StatementDropTable()
-                        .dropTable(self.class.tableName)
-                        .ifExists(false)
-                        .withSchema(self.class.schemaName),
+                    .dropTable(self.class.tableName)
+                    .ifExists(false)
+                    .withSchema(self.class.schemaName),
                     @"DROP TABLE testSchema.testTable");
 
     //Default
     WINQAssertEqual(WCDB::StatementDropTable()
-                        .dropTable(self.class.tableName)
-                        .withSchema(self.class.schemaName),
+                    .dropTable(self.class.tableName)
+                    .withSchema(self.class.schemaName),
                     @"DROP TABLE IF EXISTS testSchema.testTable");
 }
 

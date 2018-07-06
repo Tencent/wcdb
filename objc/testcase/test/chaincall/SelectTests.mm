@@ -59,7 +59,7 @@
 
 - (void)test_select_onProperties
 {
-    NSArray<TestCaseObject *> *objects = [[_select onProperties:{TestCaseObject.variable1, TestCaseObject.variable2}] allObjects];
+    NSArray<TestCaseObject *> *objects = [[_select onProperties:{ TestCaseObject.variable1, TestCaseObject.variable2 }] allObjects];
     XCTAssertTrue([objects isEqualToTestCaseObjects:_preInserted onProperties:TestCaseObjectPropertiesVariable1 | TestCaseObjectPropertiesVariable2]);
 }
 

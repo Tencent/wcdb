@@ -44,8 +44,7 @@ public:
 
     SharedPerformanceTraceConfig() = delete;
     SharedPerformanceTraceConfig(const SharedPerformanceTraceConfig &) = delete;
-    SharedPerformanceTraceConfig &
-    operator=(const SharedPerformanceTraceConfig &) = delete;
+    SharedPerformanceTraceConfig &operator=(const SharedPerformanceTraceConfig &) = delete;
 
     bool invoke(Handle *handle) override;
 

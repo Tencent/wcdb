@@ -34,7 +34,7 @@ void SequenceCrawlerDelegate::onSequencePageCrawled(const Page &page)
 
 #pragma mark - Initialize
 SequenceCrawler::SequenceCrawler(Pager &pager)
-    : Crawlable(pager), m_delegate(nullptr)
+: Crawlable(pager), m_delegate(nullptr)
 {
 }
 
@@ -51,8 +51,8 @@ bool SequenceCrawler::work(int rootpage, SequenceCrawlerDelegate *delegate)
 #pragma mark - Crawlable
 void SequenceCrawler::onCellCrawled(const Cell &cell)
 {
-    if (cell.getValueType(0) != Cell::Type::Text ||
-        cell.getValueType(1) != Cell::Type::Integer) {
+    if (cell.getValueType(0) != Cell::Type::Text
+        || cell.getValueType(1) != Cell::Type::Integer) {
         markAsCorrupted(cell.getPage().number, "CellType");
         return;
     }

@@ -33,11 +33,11 @@ Data::Data() : m_sharedBuffer(nullptr), m_size(0), m_buffer(nullptr)
 Data::Data(const std::shared_ptr<std::vector<unsigned char>> &sharedBuffer,
            unsigned char *buffer,
            size_t size)
-    : m_sharedBuffer(sharedBuffer), m_buffer(buffer), m_size(size)
+: m_sharedBuffer(sharedBuffer), m_buffer(buffer), m_size(size)
 {
-    WCTInnerAssert(
-        m_sharedBuffer == nullptr || (m_buffer == nullptr && m_size == 0) ||
-        m_buffer + m_size <= m_sharedBuffer->data() + m_sharedBuffer->size());
+    WCTInnerAssert(m_sharedBuffer == nullptr || (m_buffer == nullptr && m_size == 0)
+                   || m_buffer + m_size
+                      <= m_sharedBuffer->data() + m_sharedBuffer->size());
 }
 
 #pragma mark - Shared
@@ -54,7 +54,7 @@ Data::Data(size_t size) : m_sharedBuffer(new std::vector<unsigned char>(size))
 }
 
 Data::Data(const unsigned char *buffer, size_t size)
-    : m_sharedBuffer(new std::vector<unsigned char>(size))
+: m_sharedBuffer(new std::vector<unsigned char>(size))
 {
     if (m_sharedBuffer != nullptr) {
         if (buffer != nullptr) {
@@ -140,8 +140,7 @@ Data Data::subdata(size_t size) const
 
 Data Data::subdata(off_t offset, size_t size) const
 {
-    WCTRemedialAssert(m_sharedBuffer == nullptr ||
-                          m_sharedBuffer->size() >= offset + size,
+    WCTRemedialAssert(m_sharedBuffer == nullptr || m_sharedBuffer->size() >= offset + size,
                       "Memory cross-border",
                       size = m_sharedBuffer->size() - (size_t) offset;);
     return Data(m_sharedBuffer, m_buffer + offset, size);

@@ -32,19 +32,16 @@ class WCTBinding {
 public:
     static const WCTBinding &bindingWithClass(Class cls);
 
-    template <typename T>
-    void addColumnBinding(const std::string &propertyName,
-                          const std::string &columnName)
+    template<typename T>
+    void addColumnBinding(const std::string &propertyName, const std::string &columnName)
     {
-        WCTColumnBinding columnBinding(m_cls, propertyName, columnName,
-                                       (T *) nullptr);
+        WCTColumnBinding columnBinding(m_cls, propertyName, columnName, (T *) nullptr);
         addColumnBinding(columnName, std::move(columnBinding));
     }
 
     const WCTProperty &getProperty(const std::string &propertyName) const;
 
-    const WCTColumnBinding &
-    getColumnBinding(const std::string &columnName) const;
+    const WCTColumnBinding &getColumnBinding(const std::string &columnName) const;
 
     WCDB::ColumnDef &getColumnDef(const WCTProperty &property);
 
@@ -52,9 +49,7 @@ public:
 
     WCDB::StatementCreateIndex &getOrCreateIndex(const std::string &subfix);
 
-    const std::map<std::string,
-                   WCTColumnBinding,
-                   WCDB::String::CaseInsensiveComparator> &
+    const std::map<std::string, WCTColumnBinding, WCDB::String::CaseInsensiveComparator> &
     getColumnBindings() const;
 
     WCDB::StatementCreateVirtualTable statementVirtualTable;
@@ -77,16 +72,12 @@ protected:
 
     void initialize();
 
-    void addColumnBinding(const std::string &columnName,
-                          const WCTColumnBinding &columnBinding);
+    void addColumnBinding(const std::string &columnName, const WCTColumnBinding &columnBinding);
 
     WCTPropertyList m_properties;
     std::map<std::string, WCTPropertyList::iterator> m_mappedProperties;
 
-    std::map<std::string,
-             WCTColumnBinding,
-             WCDB::String::CaseInsensiveComparator>
-        m_columnBindings;
+    std::map<std::string, WCTColumnBinding, WCDB::String::CaseInsensiveComparator> m_columnBindings;
 
     std::map<std::string, WCDB::TableConstraint> m_constraints;
 

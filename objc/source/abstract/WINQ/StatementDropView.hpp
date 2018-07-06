@@ -27,7 +27,6 @@
 namespace WCDB {
 
 class StatementDropView : public StatementWithLang<Lang::DropViewSTMT> {
-
 public:
     StatementDropView();
     StatementDropView &dropView(const std::string &viewName);

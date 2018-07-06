@@ -28,8 +28,7 @@ StatementDropTrigger::StatementDropTrigger()
     getMutableLang().ifExists = true;
 }
 
-StatementDropTrigger &
-StatementDropTrigger::dropTrigger(const std::string &triggerName)
+StatementDropTrigger &StatementDropTrigger::dropTrigger(const std::string &triggerName)
 {
     Lang::DropTriggerSTMT &lang = getMutableLang();
     lang.name.assign(triggerName);
@@ -43,8 +42,7 @@ StatementDropTrigger &StatementDropTrigger::ifExists(bool ifExists)
     return *this;
 }
 
-StatementDropTrigger &
-StatementDropTrigger::withSchema(const std::string &schemaName)
+StatementDropTrigger &StatementDropTrigger::withSchema(const std::string &schemaName)
 {
     Lang::DropTriggerSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);

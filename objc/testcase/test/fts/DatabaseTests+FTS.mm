@@ -95,7 +95,7 @@
 }
 
 - (BOOL)expectObject:(FTSTestCaseObject *)expected
-    whileSearchingByKeyword:(const char *)keyword
+whileSearchingByKeyword:(const char *)keyword
 {
     return [self expectObject:expected withCondition:_tableColumn.match(keyword)];
 }
@@ -106,7 +106,7 @@
 }
 
 - (BOOL)expectObjects:(NSArray<FTSTestCaseObject *> *)expected
-    whileSearchingByKeyword:(const char *)keyword
+whileSearchingByKeyword:(const char *)keyword
 {
     return [self expectObjects:expected withCondition:_tableColumn.match(keyword)];
 }

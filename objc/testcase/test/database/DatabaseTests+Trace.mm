@@ -57,19 +57,19 @@
     __block BOOL hit1 = NO;
     __block BOOL hit2 = NO;
     [WCTDatabase globalTraceSQL:^(NSString *sql) {
-      if ([sql isEqualToString:@"PRAGMA main.user_version"]) {
-          hit = YES;
-      }
+        if ([sql isEqualToString:@"PRAGMA main.user_version"]) {
+            hit = YES;
+        }
     }];
     [_database1 traceSQL:^(NSString *sql) {
-      if ([sql isEqualToString:@"PRAGMA main.user_version"]) {
-          hit1 = YES;
-      }
+        if ([sql isEqualToString:@"PRAGMA main.user_version"]) {
+            hit1 = YES;
+        }
     }];
     [_database2 traceSQL:^(NSString *sql) {
-      if ([sql isEqualToString:@"PRAGMA main.user_version"]) {
-          hit2 = YES;
-      }
+        if ([sql isEqualToString:@"PRAGMA main.user_version"]) {
+            hit2 = YES;
+        }
     }];
 
     XCTAssertTrue([_database1 execute:WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion())]);
@@ -94,26 +94,26 @@
     __block BOOL hit1 = NO;
     __block BOOL hit2 = NO;
     [WCTDatabase globalTracePerformance:^(NSArray<WCTPerformanceFootprint *> *footprints, NSInteger cost) {
-      for (WCTPerformanceFootprint *footprint in footprints) {
-          if (footprint.frequency == count && cost > 0) {
-              hit = YES;
-          }
-      }
+        for (WCTPerformanceFootprint *footprint in footprints) {
+            if (footprint.frequency == count && cost > 0) {
+                hit = YES;
+            }
+        }
     }];
 
     [_database1 tracePerformance:^(NSArray<WCTPerformanceFootprint *> *footprints, NSInteger cost) {
-      for (WCTPerformanceFootprint *footprint in footprints) {
-          if (footprint.frequency == count && cost > 0) {
-              hit1 = YES;
-          }
-      }
+        for (WCTPerformanceFootprint *footprint in footprints) {
+            if (footprint.frequency == count && cost > 0) {
+                hit1 = YES;
+            }
+        }
     }];
     [_database2 tracePerformance:^(NSArray<WCTPerformanceFootprint *> *footprints, NSInteger cost) {
-      for (WCTPerformanceFootprint *footprint in footprints) {
-          if (footprint.frequency == count && cost > 0) {
-              hit2 = YES;
-          }
-      }
+        for (WCTPerformanceFootprint *footprint in footprints) {
+            if (footprint.frequency == count && cost > 0) {
+                hit2 = YES;
+            }
+        }
     }];
 
     NSArray<TestCaseObject *> *objects = [TestCaseObject objectsWithCount:count];

@@ -33,8 +33,8 @@
     WCDB::Expression expr = WCDB::Expression(self.class.column);
 
     WINQAssertEqual(WCDB::StatementAttach()
-                        .attach(expr)
-                        .as(self.class.schemaName),
+                    .attach(expr)
+                    .as(self.class.schemaName),
                     @"ATTACH testColumn AS testSchema");
 }
 

@@ -31,18 +31,18 @@
     XCTAssertEqual(WCDB::StatementAlterTable().getType(), WCDB::Statement::Type::AlterTable);
 
     WINQAssertEqual(WCDB::StatementAlterTable()
-                        .alterTable(self.class.schemaName, self.class.tableName)
-                        .renameTo("testNewTable"),
+                    .alterTable(self.class.schemaName, self.class.tableName)
+                    .renameTo("testNewTable"),
                     @"ALTER TABLE testSchema.testTable RENAME TO testNewTable");
 
     WINQAssertEqual(WCDB::StatementAlterTable()
-                        .alterTable(self.class.schemaName, self.class.tableName)
-                        .addColumn(self.class.columnDef),
+                    .alterTable(self.class.schemaName, self.class.tableName)
+                    .addColumn(self.class.columnDef),
                     @"ALTER TABLE testSchema.testTable ADD COLUMN testColumn INTEGER");
 
     WINQAssertEqual(WCDB::StatementAlterTable()
-                        .alterTable(self.class.tableName)
-                        .renameTo("testNewTable"),
+                    .alterTable(self.class.tableName)
+                    .renameTo("testNewTable"),
                     @"ALTER TABLE main.testTable RENAME TO testNewTable");
 }
 

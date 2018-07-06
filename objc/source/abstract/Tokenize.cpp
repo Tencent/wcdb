@@ -50,10 +50,8 @@ TokenizerInfoBase::TokenizerInfoBase(int argc, const char *const *argv)
 {
 }
 
-CursorInfoBase::CursorInfoBase(const char *input,
-                               int inputLength,
-                               TokenizerInfoBase *tokenizerInfo)
-    : m_tokenizerInfo(tokenizerInfo)
+CursorInfoBase::CursorInfoBase(const char *input, int inputLength, TokenizerInfoBase *tokenizerInfo)
+: m_tokenizerInfo(tokenizerInfo)
 {
 }
 

@@ -27,10 +27,9 @@ namespace WCDB {
 
 class IndexedColumn : public DescribableWithLang<Lang::IndexedColumn> {
 public:
-    template <typename T, typename Enable = void>
+    template<typename T, typename Enable = void>
     IndexedColumn(const T &t,
-                  typename std::enable_if<ExpressionConvertible<T>::value>::type
-                      * = nullptr)
+                  typename std::enable_if<ExpressionConvertible<T>::value>::type * = nullptr)
     {
         setupWithExpression(ExpressionConvertible<T>::as(t));
     }

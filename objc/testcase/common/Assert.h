@@ -28,11 +28,11 @@
     {                                                                          \
         NSString *tempDescription = @((describable).getDescription().c_str()); \
         XCTAssertTrue(                                                         \
-            [(expression) isEqualToString:tempDescription],                    \
-            @"different from `%@` for `%@`",                                   \
-            [tempDescription commonPrefixWithString:(expression) options       \
-                                                   :NSCaseInsensitiveSearch],  \
-            tempDescription);                                                  \
+        [(expression) isEqualToString:tempDescription],                        \
+        @"different from `%@` for `%@`",                                       \
+        [tempDescription commonPrefixWithString:(expression)                   \
+                                        options:NSCaseInsensitiveSearch],      \
+        tempDescription);                                                      \
     }
 
 #endif /* Assert_h */

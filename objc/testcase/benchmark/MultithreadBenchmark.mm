@@ -42,33 +42,34 @@
     __block NSArray<BenchmarkObject *> *results1 = nil;
     __block NSArray<BenchmarkObject *> *results2 = nil;
 
-    [self measure:^{
-      dispatch_group_async(_group, _queue, ^{
-        results1 = [self.database getObjectsOfClass:BenchmarkObject.class fromTable:tableName orderBy:BenchmarkObject.key.asOrder(WCTOrderedAscending)];
-      });
-      dispatch_group_async(_group, _queue, ^{
-        results2 = [self.database getObjectsOfClass:BenchmarkObject.class fromTable:tableName orderBy:BenchmarkObject.key.asOrder(WCTOrderedAscending)];
-      });
-      dispatch_group_wait(_group, DISPATCH_TIME_FOREVER);
+    [self
+    measure:^{
+        dispatch_group_async(_group, _queue, ^{
+            results1 = [self.database getObjectsOfClass:BenchmarkObject.class fromTable:tableName orderBy:BenchmarkObject.key.asOrder(WCTOrderedAscending)];
+        });
+        dispatch_group_async(_group, _queue, ^{
+            results2 = [self.database getObjectsOfClass:BenchmarkObject.class fromTable:tableName orderBy:BenchmarkObject.key.asOrder(WCTOrderedAscending)];
+        });
+        dispatch_group_wait(_group, DISPATCH_TIME_FOREVER);
     }
-        setUp:^{
-          [self setUpDatabase];
-          [self setUpWithPreCreateTable:1];
-          [self setUpWithPreCreateObject:self.config.readCount];
-          [self setUpWithPreInsertObjects:self.objects intoTable:tableName];
+    setUp:^{
+        [self setUpDatabase];
+        [self setUpWithPreCreateTable:1];
+        [self setUpWithPreCreateObject:self.config.readCount];
+        [self setUpWithPreInsertObjects:self.objects intoTable:tableName];
 
-          [self tearDownDatabaseCache];
-          [self setUpDatabaseCache];
-        }
-        tearDown:^{
-          [self tearDownDatabase];
-        }
-        checkCorrectness:^{
-          XCTAssertEqual(results1.count, self.config.readCount);
-          XCTAssertTrue([results1 isEqualToBenchmarkObjects:self.objects]);
-          XCTAssertEqual(results2.count, self.config.readCount);
-          XCTAssertTrue([results2 isEqualToBenchmarkObjects:self.objects]);
-        }];
+        [self tearDownDatabaseCache];
+        [self setUpDatabaseCache];
+    }
+    tearDown:^{
+        [self tearDownDatabase];
+    }
+    checkCorrectness:^{
+        XCTAssertEqual(results1.count, self.config.readCount);
+        XCTAssertTrue([results1 isEqualToBenchmarkObjects:self.objects]);
+        XCTAssertEqual(results2.count, self.config.readCount);
+        XCTAssertTrue([results2 isEqualToBenchmarkObjects:self.objects]);
+    }];
 }
 
 - (void)test_read_write
@@ -76,34 +77,35 @@
     NSString *tableName = [self getTableNameWithIndex:0];
     __block BOOL result1 = NO;
     __block NSArray<BenchmarkObject *> *results2 = nil;
-    [self measure:^{
-      dispatch_group_async(_group, _queue, ^{
-        result1 = [self.database insertObjects:self.objects intoTable:tableName];
-      });
-      dispatch_group_async(_group, _queue, ^{
-        results2 = [self.database getObjectsOfClass:BenchmarkObject.class fromTable:tableName orderBy:BenchmarkObject.key.asOrder(WCTOrderedAscending)];
-      });
-      dispatch_group_wait(_group, DISPATCH_TIME_FOREVER);
+    [self
+    measure:^{
+        dispatch_group_async(_group, _queue, ^{
+            result1 = [self.database insertObjects:self.objects intoTable:tableName];
+        });
+        dispatch_group_async(_group, _queue, ^{
+            results2 = [self.database getObjectsOfClass:BenchmarkObject.class fromTable:tableName orderBy:BenchmarkObject.key.asOrder(WCTOrderedAscending)];
+        });
+        dispatch_group_wait(_group, DISPATCH_TIME_FOREVER);
     }
-        setUp:^{
-          [self setUpDatabase];
-          [self setUpWithPreCreateTable:1];
-          [self setUpWithPreCreateObject:self.config.batchWriteCount];
-          [self setUpWithPreInsertObjects:self.objects intoTable:tableName];
+    setUp:^{
+        [self setUpDatabase];
+        [self setUpWithPreCreateTable:1];
+        [self setUpWithPreCreateObject:self.config.batchWriteCount];
+        [self setUpWithPreInsertObjects:self.objects intoTable:tableName];
 
-          [self tearDownDatabaseCache];
-          [self setUpDatabaseCache];
+        [self tearDownDatabaseCache];
+        [self setUpDatabaseCache];
+    }
+    tearDown:^{
+        [self tearDownDatabase];
+    }
+    checkCorrectness:^{
+        NSArray<BenchmarkObject *> *objects = [self.database getObjectsOfClass:BenchmarkObject.class fromTable:tableName orderBy:BenchmarkObject.key.asOrder(WCTOrderedAscending)];
+        XCTAssertEqual(objects.count, self.config.batchWriteCount * 2);
+        for (NSInteger i = 0; i < objects.count; ++i) {
+            XCTAssertTrue([objects[i] isEqualToBenchmarkObject:self.objects[i / 2]]);
         }
-        tearDown:^{
-          [self tearDownDatabase];
-        }
-        checkCorrectness:^{
-          NSArray<BenchmarkObject *> *objects = [self.database getObjectsOfClass:BenchmarkObject.class fromTable:tableName orderBy:BenchmarkObject.key.asOrder(WCTOrderedAscending)];
-          XCTAssertEqual(objects.count, self.config.batchWriteCount * 2);
-          for (NSInteger i = 0; i < objects.count; ++i) {
-              XCTAssertTrue([objects[i] isEqualToBenchmarkObject:self.objects[i / 2]]);
-          }
-        }];
+    }];
 }
 
 - (void)test_write_write
@@ -111,33 +113,34 @@
     NSString *tableName = [self getTableNameWithIndex:0];
     __block BOOL result1 = NO;
     __block BOOL result2 = NO;
-    [self measure:^{
-      dispatch_group_async(_group, _queue, ^{
-        result1 = [self.database insertObjects:self.objects intoTable:tableName];
-      });
-      dispatch_group_async(_group, _queue, ^{
-        result2 = [self.database insertObjects:self.objects intoTable:tableName];
-      });
-      dispatch_group_wait(_group, DISPATCH_TIME_FOREVER);
+    [self
+    measure:^{
+        dispatch_group_async(_group, _queue, ^{
+            result1 = [self.database insertObjects:self.objects intoTable:tableName];
+        });
+        dispatch_group_async(_group, _queue, ^{
+            result2 = [self.database insertObjects:self.objects intoTable:tableName];
+        });
+        dispatch_group_wait(_group, DISPATCH_TIME_FOREVER);
     }
-        setUp:^{
-          [self setUpDatabase];
-          [self setUpWithPreCreateTable:1];
-          [self setUpWithPreCreateObject:self.config.batchWriteCount];
+    setUp:^{
+        [self setUpDatabase];
+        [self setUpWithPreCreateTable:1];
+        [self setUpWithPreCreateObject:self.config.batchWriteCount];
 
-          [self tearDownDatabaseCache];
-          [self setUpDatabaseCache];
+        [self tearDownDatabaseCache];
+        [self setUpDatabaseCache];
+    }
+    tearDown:^{
+        [self tearDownDatabase];
+    }
+    checkCorrectness:^{
+        NSArray<BenchmarkObject *> *objects = [self.database getObjectsOfClass:BenchmarkObject.class fromTable:tableName orderBy:BenchmarkObject.key.asOrder(WCTOrderedAscending)];
+        XCTAssertEqual(objects.count, self.config.batchWriteCount * 2);
+        for (NSInteger i = 0; i < objects.count; ++i) {
+            XCTAssertTrue([objects[i] isEqualToBenchmarkObject:self.objects[i / 2]]);
         }
-        tearDown:^{
-          [self tearDownDatabase];
-        }
-        checkCorrectness:^{
-          NSArray<BenchmarkObject *> *objects = [self.database getObjectsOfClass:BenchmarkObject.class fromTable:tableName orderBy:BenchmarkObject.key.asOrder(WCTOrderedAscending)];
-          XCTAssertEqual(objects.count, self.config.batchWriteCount * 2);
-          for (NSInteger i = 0; i < objects.count; ++i) {
-              XCTAssertTrue([objects[i] isEqualToBenchmarkObject:self.objects[i / 2]]);
-          }
-        }];
+    }];
 }
 
 @end

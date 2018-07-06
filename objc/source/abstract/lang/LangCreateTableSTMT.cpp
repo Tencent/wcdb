@@ -26,10 +26,7 @@ namespace WCDB {
 namespace Lang {
 
 CreateTableSTMT::CreateTableSTMT()
-    : temp(false)
-    , ifNotExists(false)
-    , switcher(Switch::NotSet)
-    , withoutRowID(false)
+: temp(false), ifNotExists(false), switcher(Switch::NotSet), withoutRowID(false)
 {
 }
 
@@ -55,24 +52,24 @@ CopyOnWriteString CreateTableSTMT::SQL() const
     LangRemedialAssert(!tableName.empty());
     description.append(tableName.get());
     switch (switcher) {
-        case Switch::ColumnDef:
-            LangRemedialAssert(!columnDefs.empty());
-            description.append("(" + columnDefs.description().get());
-            if (!tableConstraints.empty()) {
-                description.append(", " + tableConstraints.description().get());
-            }
-            description.append(")");
-            if (withoutRowID) {
-                description.append(" WITHOUT ROWID");
-            }
-            break;
-        case Switch::Select:
-            LangRemedialAssert(!selectSTMT.empty());
-            description.append(" AS " + selectSTMT.description().get());
-            break;
-        default:
-            LangRemedialFatalError();
-            break;
+    case Switch::ColumnDef:
+        LangRemedialAssert(!columnDefs.empty());
+        description.append("(" + columnDefs.description().get());
+        if (!tableConstraints.empty()) {
+            description.append(", " + tableConstraints.description().get());
+        }
+        description.append(")");
+        if (withoutRowID) {
+            description.append(" WITHOUT ROWID");
+        }
+        break;
+    case Switch::Select:
+        LangRemedialAssert(!selectSTMT.empty());
+        description.append(" AS " + selectSTMT.description().get());
+        break;
+    default:
+        LangRemedialFatalError();
+        break;
     }
     return description;
 }

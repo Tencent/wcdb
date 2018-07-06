@@ -34,18 +34,18 @@
     WCDB::LiteralValue pragmaValue = WCDB::LiteralValue("WAL");
 
     WINQAssertEqual(WCDB::StatementPragma()
-                        .withSchema(self.class.schemaName)
-                        .pragma(pragmaName),
+                    .withSchema(self.class.schemaName)
+                    .pragma(pragmaName),
                     @"PRAGMA testSchema.journal_mode");
 
     WINQAssertEqual(WCDB::StatementPragma()
-                        .withSchema(self.class.schemaName)
-                        .pragma(pragmaName)
-                        .to(pragmaValue),
+                    .withSchema(self.class.schemaName)
+                    .pragma(pragmaName)
+                    .to(pragmaValue),
                     @"PRAGMA testSchema.journal_mode = 'WAL'");
 
     WINQAssertEqual(WCDB::StatementPragma()
-                        .pragma(pragmaName),
+                    .pragma(pragmaName),
                     @"PRAGMA main.journal_mode");
 }
 

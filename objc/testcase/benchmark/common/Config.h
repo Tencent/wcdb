@@ -22,13 +22,13 @@
 
 @interface Config : NSObject
 
-@property(assign) int valueLength;
+@property (assign) int valueLength;
 
-@property(assign) int readCount;
-@property(assign) int writeCount;
-@property(assign) int batchWriteCount;
+@property (assign) int readCount;
+@property (assign) int writeCount;
+@property (assign) int batchWriteCount;
 
-@property(assign) int tableCount;
-@property(assign) unsigned long long databaseSize;
+@property (assign) int tableCount;
+@property (assign) unsigned long long databaseSize;
 
 @end

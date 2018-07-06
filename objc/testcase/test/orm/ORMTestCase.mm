@@ -35,12 +35,12 @@
     _expectedSQLs = [[NSMutableArray alloc] init];
 
     [WCTDatabase globalTraceSQL:^(NSString *sql) {
-      if (_expectedSQLs.count > 0 && [sql isEqualToString:_expectedSQLs[0]]) {
-          [_expectedSQLs removeObjectAtIndex:0];
-          if (_expectedSQLs.count == 0) {
-              _tested = YES;
-          }
-      }
+        if (_expectedSQLs.count > 0 && [sql isEqualToString:_expectedSQLs[0]]) {
+            [_expectedSQLs removeObjectAtIndex:0];
+            if (_expectedSQLs.count == 0) {
+                _tested = YES;
+            }
+        }
     }];
 }
 

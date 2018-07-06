@@ -51,7 +51,7 @@
 
     WCTDatabase *database = [_handle getDatabase];
     [database close:^{
-      XCTAssertTrue([database removeFiles]);
+        XCTAssertTrue([database removeFiles]);
     }];
 
     [super tearDown];

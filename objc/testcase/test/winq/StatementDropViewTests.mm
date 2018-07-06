@@ -31,26 +31,26 @@
     XCTAssertEqual(WCDB::StatementDropView().getType(), WCDB::Statement::Type::DropView);
 
     WINQAssertEqual(WCDB::StatementDropView()
-                        .dropView(self.class.viewName)
-                        .ifExists(true)
-                        .withSchema(self.class.schemaName),
+                    .dropView(self.class.viewName)
+                    .ifExists(true)
+                    .withSchema(self.class.schemaName),
                     @"DROP VIEW IF EXISTS testSchema.testView");
 
     WINQAssertEqual(WCDB::StatementDropView()
-                        .dropView(self.class.viewName)
-                        .ifExists(true),
+                    .dropView(self.class.viewName)
+                    .ifExists(true),
                     @"DROP VIEW IF EXISTS main.testView");
 
     WINQAssertEqual(WCDB::StatementDropView()
-                        .dropView(self.class.viewName)
-                        .ifExists(false)
-                        .withSchema(self.class.schemaName),
+                    .dropView(self.class.viewName)
+                    .ifExists(false)
+                    .withSchema(self.class.schemaName),
                     @"DROP VIEW testSchema.testView");
 
     //Default
     WINQAssertEqual(WCDB::StatementDropView()
-                        .dropView(self.class.viewName)
-                        .withSchema(self.class.schemaName),
+                    .dropView(self.class.viewName)
+                    .withSchema(self.class.schemaName),
                     @"DROP VIEW IF EXISTS testSchema.testView");
 }
 

@@ -23,7 +23,7 @@
 #import <WCDB/WCTProperty.h>
 
 WCTProperty::WCTProperty(const WCTColumnBinding &columnBinding)
-    : m_columnBinding(&columnBinding)
+: m_columnBinding(&columnBinding)
 {
     WCDB::Lang::Expr &lang = getMutableLang();
     lang.type = WCDB::Lang::ExprBase::Type::Column;
@@ -32,8 +32,8 @@ WCTProperty::WCTProperty(const WCTColumnBinding &columnBinding)
 
 WCTProperty::WCTProperty(const WCDB::Expression &expression,
                          const WCTColumnBinding &columnBinding)
-    : WCDB::DescribableWithLang<WCDB::Lang::Expr>(expression.getCOWLang())
-    , m_columnBinding(&columnBinding)
+: WCDB::DescribableWithLang<WCDB::Lang::Expr>(expression.getCOWLang())
+, m_columnBinding(&columnBinding)
 {
 }
 
@@ -124,7 +124,7 @@ WCDB::Expression WCTProperty::getRedirectSource() const
 }
 
 WCTPropertyList::WCTPropertyList(const WCTProperty &property)
-    : std::list<WCTProperty>({property})
+: std::list<WCTProperty>({ property })
 {
 }
 

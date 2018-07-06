@@ -31,8 +31,8 @@ public:
 
     ColumnConstraint &named(const std::string &name);
 
-    ColumnConstraint &withPrimaryKey(const Order &order = Order::NotSet,
-                                     bool autoIncrement = false);
+    ColumnConstraint &
+    withPrimaryKey(const Order &order = Order::NotSet, bool autoIncrement = false);
 
     ColumnConstraint &withNotNull();
 
@@ -47,8 +47,7 @@ public:
 
     ColumnConstraint &collate(const std::string &collationName);
 
-    ColumnConstraint &
-    withForeignKeyClause(const ForeignKeyClause &foreignKeyClause);
+    ColumnConstraint &withForeignKeyClause(const ForeignKeyClause &foreignKeyClause);
 };
 
 } // namespace WCDB

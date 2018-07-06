@@ -40,15 +40,15 @@ CopyOnWriteString QualifiedTableName::SQL() const
     LangRemedialAssert(!tableName.empty());
     description.append(tableName.get());
     switch (indexSwitcher) {
-        case IndexSwitch::Indexed:
-            LangRemedialAssert(!indexName.empty());
-            description.append(" INDEXED BY " + indexName.get());
-            break;
-        case IndexSwitch::NotIndexed:
-            description.append(" NOT INDEXED");
-            break;
-        default:
-            break;
+    case IndexSwitch::Indexed:
+        LangRemedialAssert(!indexName.empty());
+        description.append(" INDEXED BY " + indexName.get());
+        break;
+    case IndexSwitch::NotIndexed:
+        description.append(" NOT INDEXED");
+        break;
+    default:
+        break;
     }
     return description;
 }

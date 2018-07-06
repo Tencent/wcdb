@@ -23,10 +23,10 @@
 namespace WCDB {
 
 TokenizeConfig::TokenizeConfig(const std::list<std::string> &names)
-    : Config(TokenizeConfig::name)
-    , m_names(names)
-    , m_fts3Tokenizer(StatementSelect().select(Expression::function(
-          "fts3_tokenizer", {BindParameter(1), BindParameter(2)})))
+: Config(TokenizeConfig::name)
+, m_names(names)
+, m_fts3Tokenizer(StatementSelect().select(Expression::function(
+  "fts3_tokenizer", { BindParameter(1), BindParameter(2) })))
 {
 }
 

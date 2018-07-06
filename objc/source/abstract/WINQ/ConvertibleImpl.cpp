@@ -23,8 +23,7 @@
 
 namespace WCDB {
 
-Expression
-ExpressionConvertible<LiteralValue>::as(const LiteralValue &literalValue)
+Expression ExpressionConvertible<LiteralValue>::as(const LiteralValue &literalValue)
 {
     return literalValue;
 }
@@ -34,20 +33,17 @@ Expression ExpressionConvertible<Column>::as(const Column &column)
     return column;
 }
 
-Expression
-ExpressionConvertible<BindParameter>::as(const BindParameter &bindParameter)
+Expression ExpressionConvertible<BindParameter>::as(const BindParameter &bindParameter)
 {
     return bindParameter;
 }
 
-Expression
-ExpressionConvertible<RaiseFunction>::as(const RaiseFunction &raiseFunction)
+Expression ExpressionConvertible<RaiseFunction>::as(const RaiseFunction &raiseFunction)
 {
     return raiseFunction;
 }
 
-Expression ExpressionConvertible<StatementSelect>::as(
-    const StatementSelect &statementSelect)
+Expression ExpressionConvertible<StatementSelect>::as(const StatementSelect &statementSelect)
 {
     return statementSelect;
 }

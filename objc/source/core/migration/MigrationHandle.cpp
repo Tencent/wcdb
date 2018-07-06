@@ -25,21 +25,19 @@ namespace WCDB {
 
 #pragma mark - Initialize
 std::shared_ptr<Handle>
-MigrationHandle::handleWithPath(const std::string &path,
-                                MigrationSetting &setting)
+MigrationHandle::handleWithPath(const std::string &path, MigrationSetting &setting)
 {
     return std::shared_ptr<Handle>(new MigrationHandle(path, setting));
 }
 
-MigrationHandle::MigrationHandle(const std::string &path,
-                                 MigrationSetting &setting)
-    : Handle(path)
-    , m_setting(setting)
-    , m_unlockShared(false)
-    , m_tamperer(setting.getInfos())
-    , m_extraHandleStatement1(this)
-    , m_extraHandleStatement2(this)
-    , m_tamperedHandleStatement(this)
+MigrationHandle::MigrationHandle(const std::string &path, MigrationSetting &setting)
+: Handle(path)
+, m_setting(setting)
+, m_unlockShared(false)
+, m_tamperer(setting.getInfos())
+, m_extraHandleStatement1(this)
+, m_extraHandleStatement2(this)
+, m_tamperedHandleStatement(this)
 {
 }
 
@@ -63,21 +61,19 @@ bool MigrationHandle::execute(const Statement &statement)
     if (m_tamperer.isTampered()) {
         if (beginNestedTransaction()) {
             switch (source.getStatementType()) {
-                case Statement::Type::Insert:
-                    result =
-                        executeWithoutTampering(source) &&
-                        migrateWithRowID(
+            case Statement::Type::Insert:
+                result = executeWithoutTampering(source)
+                         && migrateWithRowID(
                             getLastInsertedRowID(),
                             m_tamperer.getAssociatedInfo(),
                             source.getCOWLang().get<Lang::InsertSTMT>().type);
-                    m_extraHandleStatement1.finalize();
-                    m_extraHandleStatement2.finalize();
-                    break;
-                default:
-                    result = executeWithoutTampering(source) &&
-                             executeWithoutTampering(
-                                 m_tamperer.getTamperedStatement());
-                    break;
+                m_extraHandleStatement1.finalize();
+                m_extraHandleStatement2.finalize();
+                break;
+            default:
+                result = executeWithoutTampering(source)
+                         && executeWithoutTampering(m_tamperer.getTamperedStatement());
+                break;
             }
             if (result) {
                 result = commitOrRollbackNestedTransaction();
@@ -113,8 +109,8 @@ bool MigrationHandle::prepare(const Statement &statement)
     if (!prepareWithoutTampering(source)) {
         return false;
     }
-    if (source.getStatementType() != Statement::Type::Insert &&
-        !m_tamperedHandleStatement.prepare(m_tamperer.getTamperedStatement())) {
+    if (source.getStatementType() != Statement::Type::Insert
+        && !m_tamperedHandleStatement.prepare(m_tamperer.getTamperedStatement())) {
         m_handleStatement.finalize();
         return false;
     }
@@ -134,10 +130,10 @@ bool MigrationHandle::step(bool &done)
         }
         const Statement &source = m_tamperer.getSourceStatement();
         if (source.getStatementType() == Statement::Type::Insert) {
-            if (Handle::step(done) &&
-                migrateWithRowID(
-                    getLastInsertedRowID(), m_tamperer.getAssociatedInfo(),
-                    source.getCOWLang().get<Lang::InsertSTMT>().type)) {
+            if (Handle::step(done)
+                && migrateWithRowID(getLastInsertedRowID(),
+                                    m_tamperer.getAssociatedInfo(),
+                                    source.getCOWLang().get<Lang::InsertSTMT>().type)) {
                 return commitOrRollbackNestedTransaction();
             }
         } else {
@@ -220,30 +216,27 @@ void MigrationHandle::finalize()
 }
 
 #pragma mark - Migration
-bool MigrationHandle::migrateWithRowID(
-    const long long &rowid,
-    const std::shared_ptr<MigrationInfo> &info,
-    const Lang::InsertSTMT::Type &onConflict)
+bool MigrationHandle::migrateWithRowID(const long long &rowid,
+                                       const std::shared_ptr<MigrationInfo> &info,
+                                       const Lang::InsertSTMT::Type &onConflict)
 {
     WCTInnerAssert(info != nullptr && isInTransaction());
-    if (!m_extraHandleStatement1.isPrepared() ||
-        m_associatedConflictType != onConflict) {
+    if (!m_extraHandleStatement1.isPrepared() || m_associatedConflictType != onConflict) {
         m_extraHandleStatement1.finalize();
         if (!m_extraHandleStatement1.prepare(
-                info->getStatementForTamperingConflictType(onConflict))) {
+            info->getStatementForTamperingConflictType(onConflict))) {
             return false;
         }
     }
     if (!m_extraHandleStatement2.isPrepared()) {
         m_extraHandleStatement2.finalize();
-        if (!m_extraHandleStatement2.prepare(
-                info->getStatementForDeletingMigratedRow())) {
+        if (!m_extraHandleStatement2.prepare(info->getStatementForDeletingMigratedRow())) {
             m_extraHandleStatement1.finalize();
             return false;
         }
     }
-    if (!_migrateWithRowID(rowid, m_extraHandleStatement1) ||
-        !_migrateWithRowID(rowid, m_extraHandleStatement2)) {
+    if (!_migrateWithRowID(rowid, m_extraHandleStatement1)
+        || !_migrateWithRowID(rowid, m_extraHandleStatement2)) {
         m_extraHandleStatement1.finalize();
         m_extraHandleStatement2.finalize();
         return false;
@@ -251,8 +244,7 @@ bool MigrationHandle::migrateWithRowID(
     return true;
 }
 
-bool MigrationHandle::_migrateWithRowID(const long long &rowid,
-                                        HandleStatement &handleStatement)
+bool MigrationHandle::_migrateWithRowID(const long long &rowid, HandleStatement &handleStatement)
 {
     handleStatement.bindInteger64(rowid, 1);
     bool done = false;
@@ -277,54 +269,52 @@ void MigrationHandle::debug_checkStatementLegal(const Statement &statement)
 {
     SharedLockGuard lockGuard(m_setting.getSharedLock());
     switch (statement.getStatementType()) {
-        case Statement::Type::AlterTable: {
-            if (((const StatementAlterTable &) statement)
-                    .isAlteringDefaultValueColumn()) {
-                return;
-            }
-            const Lang::AlterTableSTMT &lang =
-                statement.getCOWLang().get<Lang::AlterTableSTMT>();
-            if (!lang.schemaName.empty() ||
-                !lang.schemaName.equal(Lang::mainSchema())) {
-                return;
-            }
-            auto iter = m_setting.getInfos().find(lang.tableName.get());
-            WCTAssert(iter == m_setting.getInfos().end(),
-                      "Altering a column without default value on a migrating "
-                      "table is not allowed yet.");
-        } break;
-        case Statement::Type::Update: {
-            //Update statement with orderBy/limit/offset is not allowed.
-            StatementUpdate statementUpdate(statement.getCOWLang());
-            if (!statementUpdate.isLimited()) {
-                return;
-            }
-            auto iter = m_setting.getInfos().find(
-                statementUpdate.getCOWLang()
-                    .get<Lang::UpdateSTMT>()
-                    .qualifiedTableName.get<Lang::QualifiedTableName>()
-                    .tableName.get());
-            WCTAssert(iter == m_setting.getInfos().end(),
-                      "Updating with OrderBy/Limit/Offset on "
-                      "a migrating table is not allowed yet.");
-        } break;
-        case Statement::Type::Delete: {
-            //Delete statement with orderBy/limit/offset is not allowed.
-            StatementDelete statementDelete(statement.getCOWLang());
-            if (!statementDelete.isLimited()) {
-                return;
-            }
-            auto iter = m_setting.getInfos().find(
-                statementDelete.getCOWLang()
-                    .get<Lang::DeleteSTMT>()
-                    .qualifiedTableName.get<Lang::QualifiedTableName>()
-                    .tableName.get());
-            WCTAssert(iter == m_setting.getInfos().end(),
-                      "Deleting with OrderBy/Limit/Offset on "
-                      "a migrating table is not allowed yet.");
-        } break;
-        default:
-            break;
+    case Statement::Type::AlterTable: {
+        if (((const StatementAlterTable &) statement).isAlteringDefaultValueColumn()) {
+            return;
+        }
+        const Lang::AlterTableSTMT &lang
+        = statement.getCOWLang().get<Lang::AlterTableSTMT>();
+        if (!lang.schemaName.empty() || !lang.schemaName.equal(Lang::mainSchema())) {
+            return;
+        }
+        auto iter = m_setting.getInfos().find(lang.tableName.get());
+        WCTAssert(iter == m_setting.getInfos().end(),
+                  "Altering a column without default value on a migrating "
+                  "table is not allowed yet.");
+    } break;
+    case Statement::Type::Update: {
+        //Update statement with orderBy/limit/offset is not allowed.
+        StatementUpdate statementUpdate(statement.getCOWLang());
+        if (!statementUpdate.isLimited()) {
+            return;
+        }
+        auto iter = m_setting.getInfos().find(
+        statementUpdate.getCOWLang()
+        .get<Lang::UpdateSTMT>()
+        .qualifiedTableName.get<Lang::QualifiedTableName>()
+        .tableName.get());
+        WCTAssert(iter == m_setting.getInfos().end(),
+                  "Updating with OrderBy/Limit/Offset on "
+                  "a migrating table is not allowed yet.");
+    } break;
+    case Statement::Type::Delete: {
+        //Delete statement with orderBy/limit/offset is not allowed.
+        StatementDelete statementDelete(statement.getCOWLang());
+        if (!statementDelete.isLimited()) {
+            return;
+        }
+        auto iter = m_setting.getInfos().find(
+        statementDelete.getCOWLang()
+        .get<Lang::DeleteSTMT>()
+        .qualifiedTableName.get<Lang::QualifiedTableName>()
+        .tableName.get());
+        WCTAssert(iter == m_setting.getInfos().end(),
+                  "Deleting with OrderBy/Limit/Offset on "
+                  "a migrating table is not allowed yet.");
+    } break;
+    default:
+        break;
     }
 }
 #endif

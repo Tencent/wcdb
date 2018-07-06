@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Not Thread-safe
  */
-@interface WCTUpdate <ObjectType> : WCTUnsafeHandle
+@interface WCTUpdate<ObjectType> : WCTUnsafeHandle
 
 - (instancetype)table:(NSString *)tableName;
 

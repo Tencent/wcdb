@@ -48,22 +48,22 @@
     WCTColumnsXRows *rows = [[_rowSelect fromTable:_tableName] allRows];
     XCTAssertTrue([rows isEqualToObjects:_preInserted
                           withComparator:^BOOL(WCTOneRow *lhs, TestCaseObject *rhs) {
-                            if (lhs.count != 3) {
-                                return NO;
-                            }
-                            return lhs[0].numberValue.intValue == rhs.variable1 && [lhs[1].stringValue isEqualToString:rhs.variable2] && lhs[2].numberValue.doubleValue == rhs.variable3;
+                              if (lhs.count != 3) {
+                                  return NO;
+                              }
+                              return lhs[0].numberValue.intValue == rhs.variable1 && [lhs[1].stringValue isEqualToString:rhs.variable2] && lhs[2].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
 - (void)test_rowSelect_onResults
 {
-    WCTColumnsXRows *rows = [[[_rowSelect fromTable:_tableName] onResultColumns:{TestCaseObject.variable1, TestCaseObject.variable3}] allRows];
+    WCTColumnsXRows *rows = [[[_rowSelect fromTable:_tableName] onResultColumns:{ TestCaseObject.variable1, TestCaseObject.variable3 }] allRows];
     XCTAssertTrue([rows isEqualToObjects:_preInserted
                           withComparator:^BOOL(WCTOneRow *lhs, TestCaseObject *rhs) {
-                            if (lhs.count != 2) {
-                                return NO;
-                            }
-                            return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
+                              if (lhs.count != 2) {
+                                  return NO;
+                              }
+                              return lhs[0].numberValue.intValue == rhs.variable1 && lhs[1].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
@@ -105,10 +105,10 @@
     }
     XCTAssertTrue([rows isEqualToObjects:_preInserted
                           withComparator:^BOOL(WCTOneRow *lhs, TestCaseObject *rhs) {
-                            if (lhs.count != 3) {
-                                return NO;
-                            }
-                            return lhs[0].numberValue.intValue == rhs.variable1 && [lhs[1].stringValue isEqualToString:rhs.variable2] && lhs[2].numberValue.doubleValue == rhs.variable3;
+                              if (lhs.count != 3) {
+                                  return NO;
+                              }
+                              return lhs[0].numberValue.intValue == rhs.variable1 && [lhs[1].stringValue isEqualToString:rhs.variable2] && lhs[2].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 
@@ -117,7 +117,7 @@
     WCTOneColumn *column = [[[_rowSelect fromTable:_tableName] onResultColumns:TestCaseObject.variable3] allValues];
     XCTAssertTrue([column isEqualToObjects:_preInserted
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.numberValue.doubleValue == rhs.variable3;
+                                return lhs.numberValue.doubleValue == rhs.variable3;
                             }]);
 }
 
@@ -131,7 +131,7 @@
     }
     XCTAssertTrue([column isEqualToObjects:_preInserted
                             withComparator:^BOOL(WCTValue *lhs, TestCaseObject *rhs) {
-                              return lhs.numberValue.doubleValue == rhs.variable3;
+                                return lhs.numberValue.doubleValue == rhs.variable3;
                             }]);
 }
 

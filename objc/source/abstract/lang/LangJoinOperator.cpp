@@ -50,16 +50,16 @@ CopyOnWriteString JoinOperator::SQL() const
 constexpr const char *JoinOperator::joinTypeName(const Type &type)
 {
     switch (type) {
-        case Type::Left:
-            return "LEFT";
-        case Type::LeftOuter:
-            return "LEFT OUTER";
-        case Type::Inner:
-            return "INNER";
-        case Type::Cross:
-            return "CROSS";
-        default:
-            return "";
+    case Type::Left:
+        return "LEFT";
+    case Type::LeftOuter:
+        return "LEFT OUTER";
+    case Type::Inner:
+        return "INNER";
+    case Type::Cross:
+        return "CROSS";
+    default:
+        return "";
     }
 }
 

@@ -44,8 +44,7 @@ SQLiteGlobal::SQLiteGlobal()
     vfs->xSetSystemCall(vfs, "open", (void (*)(void)) SQLiteGlobal::vfsOpen);
 }
 
-void SQLiteGlobal::setNotificationWhenFileCreated(
-    const std::function<void(const char *)> &onFileCreated)
+void SQLiteGlobal::setNotificationWhenFileCreated(const std::function<void(const char *)> &onFileCreated)
 {
     m_onFileCreated = onFileCreated;
 }
@@ -66,15 +65,15 @@ void SQLiteGlobal::log(void *userInfo, int code, const char *message)
 {
     Error error;
     switch (code) {
-        case SQLITE_WARNING:
-            error.level = Error::Level::Warning;
-            break;
-        case SQLITE_NOTICE:
-            error.level = Error::Level::Ignore;
-            break;
-        default:
-            error.level = Error::Level::Debug;
-            break;
+    case SQLITE_WARNING:
+        error.level = Error::Level::Warning;
+        break;
+    case SQLITE_NOTICE:
+        error.level = Error::Level::Ignore;
+        break;
+    default:
+        error.level = Error::Level::Debug;
+        break;
     }
     error.setSQLiteCode(code);
     error.message = message ? message : String::empty();

@@ -57,24 +57,16 @@ constexpr const WCDB::Order WCTOrderedAscending = WCDB::Order::ASC;
 constexpr const WCDB::Order WCTOrderedDescending = WCDB::Order::DESC;
 constexpr const WCDB::Order WCTOrderedNotSet = WCDB::Order::NotSet;
 
-constexpr const WCDB::ConflictClause WCTConflictNotSet =
-    WCDB::ConflictClause::NotSet;
-constexpr const WCDB::ConflictClause WCTConflictRollback =
-    WCDB::ConflictClause::Rollback;
-constexpr const WCDB::ConflictClause WCTConflictAbort =
-    WCDB::ConflictClause::Abort;
-constexpr const WCDB::ConflictClause WCTConflictFail =
-    WCDB::ConflictClause::Fail;
-constexpr const WCDB::ConflictClause WCTConflictIgnore =
-    WCDB::ConflictClause::Ignore;
-constexpr const WCDB::ConflictClause WCTConflictReplace =
-    WCDB::ConflictClause::Replace;
+constexpr const WCDB::ConflictClause WCTConflictNotSet = WCDB::ConflictClause::NotSet;
+constexpr const WCDB::ConflictClause WCTConflictRollback = WCDB::ConflictClause::Rollback;
+constexpr const WCDB::ConflictClause WCTConflictAbort = WCDB::ConflictClause::Abort;
+constexpr const WCDB::ConflictClause WCTConflictFail = WCDB::ConflictClause::Fail;
+constexpr const WCDB::ConflictClause WCTConflictIgnore = WCDB::ConflictClause::Ignore;
+constexpr const WCDB::ConflictClause WCTConflictReplace = WCDB::ConflictClause::Replace;
 
 using WCTColumnType = WCDB::ColumnType;
-constexpr const WCDB::ColumnType WCTColumnTypeInteger32 =
-    WCDB::ColumnType::Integer32;
-constexpr const WCDB::ColumnType WCTColumnTypeInteger64 =
-    WCDB::ColumnType::Integer64;
+constexpr const WCDB::ColumnType WCTColumnTypeInteger32 = WCDB::ColumnType::Integer32;
+constexpr const WCDB::ColumnType WCTColumnTypeInteger64 = WCDB::ColumnType::Integer64;
 constexpr const WCDB::ColumnType WCTColumnTypeFloat = WCDB::ColumnType::Float;
 constexpr const WCDB::ColumnType WCTColumnTypeString = WCDB::ColumnType::Text;
 constexpr const WCDB::ColumnType WCTColumnTypeData = WCDB::ColumnType::BLOB;
@@ -83,7 +75,7 @@ constexpr const WCDB::ColumnType WCTColumnTypeNil = WCDB::ColumnType::Null;
 #pragma mark - Object
 typedef NSObject<WCTTableCoding> WCTObject;
 typedef NSDictionary<NSString *, WCTObject *>
-    WCTMultiObject; //table name -> object
+WCTMultiObject; //table name -> object
 
 typedef NSObject<WCTColumnCoding> WCTColumnCodingValue;
 typedef NSArray<NSObject<WCTColumnCoding> *> WCTColumnCodingRow;

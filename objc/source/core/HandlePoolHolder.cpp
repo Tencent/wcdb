@@ -11,7 +11,7 @@
 namespace WCDB {
 
 HandlePoolHolder::HandlePoolHolder(const RecyclableHandlePool &pool)
-    : HandlePoolRelated(pool.getHandlePool()), m_holdingPool(pool)
+: HandlePoolRelated(pool.getHandlePool()), m_holdingPool(pool)
 {
 }
 

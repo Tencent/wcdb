@@ -24,15 +24,14 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-MigrationSetting::MigrationSetting(
-    MigrationHandlePool *pool,
-    const std::list<std::shared_ptr<MigrationInfo>> &infos)
-    : m_onMigrated(nullptr)
-    , m_rowPerStep(10)
-    , m_onConflict(nullptr)
-    , m_pool(pool)
+MigrationSetting::MigrationSetting(MigrationHandlePool *pool,
+                                   const std::list<std::shared_ptr<MigrationInfo>> &infos)
+: m_onMigrated(nullptr)
+, m_rowPerStep(10)
+, m_onConflict(nullptr)
+, m_pool(pool)
 #ifdef DEBUG
-    , hash(hashedInfos(infos))
+, hash(hashedInfos(infos))
 #endif
 {
     WCTAssert(!infos.empty(), "Migration infos can't be empty.");
@@ -40,23 +39,21 @@ MigrationSetting::MigrationSetting(
         if (!info->isSameDatabaseMigration()) {
             auto iter = m_schemas.find(info->schema);
             if (iter == m_schemas.end()) {
-                iter =
-                    m_schemas
-                        .insert({info->schema, {info->sourceDatabasePath, 0}})
-                        .first;
+                iter = m_schemas
+                       .insert({ info->schema, { info->sourceDatabasePath, 0 } })
+                       .first;
             }
             ++iter->second.second;
         }
-        WCTAssert(
-            m_infos.find(info->targetTable) == m_infos.end(),
-            "Migrating multiple tables to the same table is not allowed.");
+        WCTAssert(m_infos.find(info->targetTable) == m_infos.end(),
+                  "Migrating multiple tables to the same table is not allowed.");
         m_infos[info->targetTable] = info;
     }
 }
 
 #ifdef DEBUG
-int64_t MigrationSetting::hashedInfos(
-    const std::list<std::shared_ptr<MigrationInfo>> &infos) const
+int64_t
+MigrationSetting::hashedInfos(const std::list<std::shared_ptr<MigrationInfo>> &infos) const
 {
     std::string hashSource;
     for (const auto &info : infos) {
@@ -120,8 +117,7 @@ bool MigrationSetting::markAsMigrated(const std::string &table)
     return schemasChanged;
 }
 
-const std::shared_ptr<MigrationInfo> &
-MigrationSetting::pickUpForMigration() const
+const std::shared_ptr<MigrationInfo> &MigrationSetting::pickUpForMigration() const
 {
     WCTInnerAssert(m_lock.level() >= SharedLock::Level::Read);
     WCTInnerAssert(!m_infos.empty());
@@ -141,8 +137,7 @@ MigrationSetting::pickUpForMigration() const
     return *toMigrate;
 }
 
-void MigrationSetting::setTableMigratedCallback(
-    const TableMigratedCallback &onMigrated)
+void MigrationSetting::setTableMigratedCallback(const TableMigratedCallback &onMigrated)
 {
     LockGuard lockGuard(m_lock);
     m_onMigrated = onMigrated;

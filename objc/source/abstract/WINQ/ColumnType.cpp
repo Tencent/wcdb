@@ -52,8 +52,7 @@ ColumnIsTextType<std::string>::asUnderlyingType(const std::string &text)
 
 //BLOB
 ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
-ColumnIsBLOBType<std::vector<unsigned char>>::asUnderlyingType(
-    const std::vector<unsigned char> &blob)
+ColumnIsBLOBType<std::vector<unsigned char>>::asUnderlyingType(const std::vector<unsigned char> &blob)
 {
     return Data::immutableNoCopyData(blob.data(), blob.size());
 }

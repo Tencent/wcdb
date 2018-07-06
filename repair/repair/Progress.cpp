@@ -52,8 +52,7 @@ void Progress::updateProgress(double progress)
     }
 }
 
-void Progress::setProgressCallback(
-    const ProgressUpdateCallback &onProgressUpdated)
+void Progress::setProgressCallback(const ProgressUpdateCallback &onProgressUpdated)
 {
     m_onProgressUpdate = onProgressUpdated;
 }

@@ -37,15 +37,15 @@ CopyOnWriteString AlterTableSTMT::SQL() const
     LangRemedialAssert(!tableName.empty());
     description.append(tableName.get());
     switch (switcher) {
-        case Switch::Rename:
-            description.append(" RENAME TO " + newTableName.get());
-            break;
-        case Switch::AddColumn:
-            description.append(" ADD COLUMN " + columnDef.description().get());
-            break;
-        default:
-            LangRemedialFatalError();
-            break;
+    case Switch::Rename:
+        description.append(" RENAME TO " + newTableName.get());
+        break;
+    case Switch::AddColumn:
+        description.append(" ADD COLUMN " + columnDef.description().get());
+        break;
+    default:
+        LangRemedialFatalError();
+        break;
     }
     return description;
 }

@@ -23,8 +23,7 @@
 
 namespace WCDB {
 
-CommonTableExpression &
-CommonTableExpression::byAddingColumn(const Column &column)
+CommonTableExpression &CommonTableExpression::byAddingColumn(const Column &column)
 {
     Lang::CommonTableExpression &lang = getMutableLang();
     lang.columns.append(column.getCOWLang());
@@ -41,8 +40,7 @@ CommonTableExpression::byAddingColumns(const std::list<Column> &columns)
     return *this;
 }
 
-CommonTableExpression &
-CommonTableExpression::as(const StatementSelect &statementSelect)
+CommonTableExpression &CommonTableExpression::as(const StatementSelect &statementSelect)
 {
     Lang::CommonTableExpression &lang = getMutableLang();
     lang.selectSTMT.assign(statementSelect.getCOWLang());

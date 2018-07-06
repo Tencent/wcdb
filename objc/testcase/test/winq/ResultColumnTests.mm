@@ -33,7 +33,7 @@
     WINQAssertEqual(WCDB::ResultColumn(column), @"testColumn");
 
     WINQAssertEqual(WCDB::ResultColumn(column)
-                        .as(self.class.column2),
+                    .as(self.class.column2),
                     @"testColumn AS testColumn2");
 
     WINQAssertEqual(WCDB::ResultColumn::all(), @"*");

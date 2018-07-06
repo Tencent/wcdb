@@ -75,7 +75,7 @@
 {
     TestCaseObject *object = [TestCaseObject objectWithId:(int) _preInserted.count];
     object.isAutoIncrement = YES;
-    XCTAssertTrue(([[_insert onProperties:{TestCaseObject.variable2, TestCaseObject.variable3}] executeWithObject:object]));
+    XCTAssertTrue(([[_insert onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 }] executeWithObject:object]));
     XCTAssertEqual(object.lastInsertedRowID, object.variable1);
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_database getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];

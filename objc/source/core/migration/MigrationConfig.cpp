@@ -23,7 +23,7 @@
 namespace WCDB {
 
 MigrationConfig::MigrationConfig(MigrationSetting *setting)
-    : Config(MigrationConfig::name), m_setting(setting)
+: Config(MigrationConfig::name), m_setting(setting)
 {
 }
 
@@ -51,9 +51,8 @@ bool MigrationConfig::doAttachSchema(Handle *handle) const
             //necessary
             toDetachs.erase(iter);
         } else {
-            WCDB::StatementAttach statement = WCDB::StatementAttach()
-                                                  .attach(schemas.second.first)
-                                                  .as(schemas.first);
+            WCDB::StatementAttach statement
+            = WCDB::StatementAttach().attach(schemas.second.first).as(schemas.first);
             if (!handle->execute(statement)) {
                 return false;
             }
@@ -66,8 +65,7 @@ bool MigrationConfig::doAttachSchema(Handle *handle) const
             continue;
         }
         //detach unnecessary WCDBMigration_ schema
-        WCDB::StatementDetach statement =
-            WCDB::StatementDetach().detach(toDetach);
+        WCDB::StatementDetach statement = WCDB::StatementDetach().detach(toDetach);
         if (!handle->execute(statement)) {
             return false;
         }
@@ -75,8 +73,7 @@ bool MigrationConfig::doAttachSchema(Handle *handle) const
     return true;
 }
 
-bool MigrationConfig::doCreateView(WCDB::Handle *handle,
-                                   bool &schemaChanged) const
+bool MigrationConfig::doCreateView(WCDB::Handle *handle, bool &schemaChanged) const
 {
     schemaChanged = false;
     std::list<std::shared_ptr<MigrationInfo>> infos;
@@ -84,8 +81,7 @@ bool MigrationConfig::doCreateView(WCDB::Handle *handle,
         SharedLockGuard lockGuard(m_setting->getSharedLock());
         if (!handle->runTransaction([&infos, this](Handle *handle) -> bool {
                 for (const auto &info : m_setting->getInfos()) {
-                    auto pair =
-                        handle->tableExists(info.second->getSourceTable());
+                    auto pair = handle->tableExists(info.second->getSourceTable());
                     if (!pair.first) {
                         return false;
                     }
@@ -93,16 +89,14 @@ bool MigrationConfig::doCreateView(WCDB::Handle *handle,
                         //initialize info with column names
                         if (!info.second->isInited()) {
                             auto pair = handle->getUnorderedColumnsWithTable(
-                                info.second->sourceTable, info.second->schema);
+                            info.second->sourceTable, info.second->schema);
                             if (!pair.first) {
                                 return false;
                             }
                             info.second->initialize(pair.second);
                         }
                         //Create view
-                        if (!handle->execute(
-                                info.second
-                                    ->getStatementForCreatingUnionedView())) {
+                        if (!handle->execute(info.second->getStatementForCreatingUnionedView())) {
                             return false;
                         }
                     } else {
@@ -118,8 +112,7 @@ bool MigrationConfig::doCreateView(WCDB::Handle *handle,
         LockGuard lockGuard(m_setting->getSharedLock());
         if (!handle->runTransaction([&infos](Handle *handle) {
                 for (const auto &info : infos) {
-                    if (!handle->execute(
-                            info->getStatementForDroppingUnionedView())) {
+                    if (!handle->execute(info->getStatementForDroppingUnionedView())) {
                         return false;
                     }
                 }
@@ -128,8 +121,7 @@ bool MigrationConfig::doCreateView(WCDB::Handle *handle,
             return false;
         }
         for (const auto &info : infos) {
-            schemaChanged =
-                m_setting->markAsMigrated(info->targetTable) || schemaChanged;
+            schemaChanged = m_setting->markAsMigrated(info->targetTable) || schemaChanged;
         }
     }
     return true;

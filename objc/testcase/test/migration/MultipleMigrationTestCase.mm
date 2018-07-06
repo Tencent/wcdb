@@ -73,17 +73,17 @@
 {
     XCTAssertTrue([_database1 dropTable:_table1]);
     [_database1 close:^{
-      XCTAssertTrue([_database1 removeFiles]);
+        XCTAssertTrue([_database1 removeFiles]);
     }];
 
     XCTAssertTrue([_database2 dropTable:_migratedTable2]);
     [_database2 close:^{
-      XCTAssertTrue([_database2 removeFiles]);
+        XCTAssertTrue([_database2 removeFiles]);
     }];
 
     XCTAssertTrue([_migrated dropTable:_migratedTable3]);
     [_migrated close:^{
-      XCTAssertTrue([_migrated removeFiles]);
+        XCTAssertTrue([_migrated removeFiles]);
     }];
     [_migrated finalizeDatabase];
 

@@ -43,18 +43,18 @@ public:
     static constexpr const char *levelName(const Level &level)
     {
         switch (level) {
-            case Level::Ignore:
-                return "IGNORE";
-            case Level::Debug:
-                return "DEBUG";
-            case Level::Warning:
-                return "WARNING";
-            case Level::Notice:
-                return "NOTICE";
-            case Level::Error:
-                return "ERROR";
-            case Level::Fatal:
-                return "FATAL";
+        case Level::Ignore:
+            return "IGNORE";
+        case Level::Debug:
+            return "DEBUG";
+        case Level::Warning:
+            return "WARNING";
+        case Level::Notice:
+            return "NOTICE";
+        case Level::Error:
+            return "ERROR";
+        case Level::Fatal:
+            return "FATAL";
         }
     }
 
@@ -72,8 +72,7 @@ public:
         Readonly = 8,   /* Attempt to write a readonly file */
         Interrupt = 9,  /* Operation terminated by sqlite3_interrupt()*/
         IOError = 10,   /* Some kind of disk I/O error occurred */
-        Corrupt =
-            11, /* The data(database, memory or other files) acquired is malformed */
+        Corrupt = 11, /* The data(database, memory or other files) acquired is malformed */
         NotFound = 12, /* Unknown opcode in sqlite3_file_control() */
         Full = 13,     /* Disk is full */
         CantOpen = 14, /* Unable to open the database file */
@@ -87,8 +86,7 @@ public:
         NoLargeFileSupport = 22, /* Uses OS features not supported on host */
         Authorization = 23,      /* Authorization denied */
         Format = 24,             /* Auxiliary database format error */
-        Range =
-            25, /* 2nd parameter to sqlite3_bind out of range or System call result too large */
+        Range = 25, /* 2nd parameter to sqlite3_bind out of range or System call result too large */
         NotADatabase = 26, /* File opened that is not a database file */
         Notice = 27,       /* Notifications */
         Warning = 28,      /* Warnings */
@@ -96,64 +94,64 @@ public:
     static constexpr const char *codeName(const Code &code)
     {
         switch (code) {
-            case Code::OK:
-                return "OK";
-            case Code::Error:
-                return "Error";
-            case Code::Internal:
-                return "Internal";
-            case Code::Permission:
-                return "Permission";
-            case Code::Abort:
-                return "Abort";
-            case Code::Busy:
-                return "Busy";
-            case Code::Locked:
-                return "Locked";
-            case Code::NoMemory:
-                return "NoMemory";
-            case Code::Readonly:
-                return "Readonly";
-            case Code::Interrupt:
-                return "Interrupt";
-            case Code::IOError:
-                return "IOError";
-            case Code::Corrupt:
-                return "Corrupt";
-            case Code::NotFound:
-                return "NotFound";
-            case Code::Full:
-                return "Full";
-            case Code::CantOpen:
-                return "CantOpen";
-            case Code::Protocol:
-                return "Protocol";
-            case Code::Empty:
-                return "Empty";
-            case Code::Schema:
-                return "Schema";
-            case Code::Exceed:
-                return "Exceed";
-            case Code::Constraint:
-                return "Constraint";
-            case Code::Mismatch:
-                return "Mismatch";
-            case Code::Misuse:
-                return "Misuse";
-            case Code::NoLargeFileSupport:
-                return "NoLargeFileSupport";
-            case Code::Authorization:
-                return "Authorization";
-            case Code::Format:
-                return "Format";
-            case Code::Range:
-                return "Range";
-            case Code::NotADatabase:
-                return "NotADatabase";
-            case Code::Notice:
-                return "Notice";
-            case Code::Warning:
-                return "Warning";
+        case Code::OK:
+            return "OK";
+        case Code::Error:
+            return "Error";
+        case Code::Internal:
+            return "Internal";
+        case Code::Permission:
+            return "Permission";
+        case Code::Abort:
+            return "Abort";
+        case Code::Busy:
+            return "Busy";
+        case Code::Locked:
+            return "Locked";
+        case Code::NoMemory:
+            return "NoMemory";
+        case Code::Readonly:
+            return "Readonly";
+        case Code::Interrupt:
+            return "Interrupt";
+        case Code::IOError:
+            return "IOError";
+        case Code::Corrupt:
+            return "Corrupt";
+        case Code::NotFound:
+            return "NotFound";
+        case Code::Full:
+            return "Full";
+        case Code::CantOpen:
+            return "CantOpen";
+        case Code::Protocol:
+            return "Protocol";
+        case Code::Empty:
+            return "Empty";
+        case Code::Schema:
+            return "Schema";
+        case Code::Exceed:
+            return "Exceed";
+        case Code::Constraint:
+            return "Constraint";
+        case Code::Mismatch:
+            return "Mismatch";
+        case Code::Misuse:
+            return "Misuse";
+        case Code::NoLargeFileSupport:
+            return "NoLargeFileSupport";
+        case Code::Authorization:
+            return "Authorization";
+        case Code::Format:
+            return "Format";
+        case Code::Range:
+            return "Range";
+        case Code::NotADatabase:
+            return "NotADatabase";
+        case Code::Notice:
+            return "Notice";
+        case Code::Warning:
+            return "Warning";
         }
     }
 
@@ -184,13 +182,13 @@ public:
 
     class Infos {
     public:
-        template <typename T>
+        template<typename T>
         typename std::enable_if<std::is_integral<T>::value, void>::type
         set(const std::string &key, const T &value)
         {
             m_integers[key] = (int64_t) value;
         }
-        template <typename T>
+        template<typename T>
         typename std::enable_if<std::is_floating_point<T>::value, void>::type
         set(const std::string &key, const T &value)
         {

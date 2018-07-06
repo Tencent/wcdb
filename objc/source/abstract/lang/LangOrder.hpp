@@ -34,12 +34,12 @@ enum class Order : int {
 constexpr const char *LangOrderName(const Order &order)
 {
     switch (order) {
-        case Order::ASC:
-            return "ASC";
-        case Order::DESC:
-            return "DESC";
-        default:
-            return "";
+    case Order::ASC:
+        return "ASC";
+    case Order::DESC:
+        return "DESC";
+    default:
+        return "";
     }
 }
 

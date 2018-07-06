@@ -263,8 +263,8 @@
 }
 
 - (BOOL)execute:(const WCDB::Statement &)statement
-      withObject:(WCTObject *)object
-    onProperties:(const WCTPropertyList &)properties
+     withObject:(WCTObject *)object
+   onProperties:(const WCTPropertyList &)properties
 {
     return [super execute:statement withObject:object onProperties:properties];
 }

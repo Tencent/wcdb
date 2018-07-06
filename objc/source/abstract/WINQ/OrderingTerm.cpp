@@ -54,7 +54,7 @@ void OrderingTerm::setupWithExpression(const Expression &expression)
 
 OrderingTerm::operator std::list<OrderingTerm>() const
 {
-    return {*this};
+    return { *this };
 }
 
 } // namespace WCDB

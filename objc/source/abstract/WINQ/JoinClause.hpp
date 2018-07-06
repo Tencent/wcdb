@@ -29,10 +29,10 @@ class JoinClause : public DescribableWithLang<Lang::JoinClause> {
 public:
     JoinClause(const TableOrSubquery &tableOrSubquery);
 
-    JoinClause &with(const TableOrSubquery &tableOrSubquery,
-                     const JoinConstraint &joinConstraint);
-    JoinClause &join(const TableOrSubquery &tableOrSubquery,
-                     const JoinConstraint &joinConstraint);
+    JoinClause &
+    with(const TableOrSubquery &tableOrSubquery, const JoinConstraint &joinConstraint);
+    JoinClause &
+    join(const TableOrSubquery &tableOrSubquery, const JoinConstraint &joinConstraint);
 
     JoinClause &leftJoin(const TableOrSubquery &tableOrSubquery,
                          const JoinConstraint &joinConstraint);

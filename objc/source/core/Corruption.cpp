@@ -26,10 +26,7 @@
 namespace WCDB {
 
 Corruption::Corruption(HandlePool *pool)
-    : HandlePoolRelated(pool)
-    , m_reaction(Reaction::Custom)
-    , m_handling(0)
-    , m_corruptedIdentifier(0)
+: HandlePoolRelated(pool), m_reaction(Reaction::Custom), m_handling(0), m_corruptedIdentifier(0)
 {
 }
 
@@ -58,12 +55,12 @@ void Corruption::setExtraReaction(const ExtraReaction &extraReaction)
 const char *Corruption::reactionName(Reaction reaction)
 {
     switch (reaction) {
-        case Custom:
-            return "Custom";
-        case Deposit:
-            return "Deposit";
-        case Remove:
-            return "Remove";
+    case Custom:
+        return "Custom";
+    case Deposit:
+        return "Deposit";
+    case Remove:
+        return "Remove";
     }
 }
 
@@ -97,8 +94,7 @@ void Corruption::notify()
             Error error;
             error.level = Error::Level::Warning;
             error.setCode(Error::Code::Warning, "Repair");
-            error.message =
-                "Skip corruption handling due to mismatch identifier.";
+            error.message = "Skip corruption handling due to mismatch identifier.";
             error.infos.set("Old", m_corruptedIdentifier.load());
             error.infos.set("New", identifier);
             Notifier::shared()->notify(error);
@@ -109,14 +105,14 @@ void Corruption::notify()
         database->close(nullptr);
         bool doExtraReaction = true;
         switch (m_reaction) {
-            case Reaction::Remove:
-                doExtraReaction = database->removeFiles();
-                break;
-            case Reaction::Deposit:
-                doExtraReaction = database->deposit();
-                break;
-            default:
-                break;
+        case Reaction::Remove:
+            doExtraReaction = database->removeFiles();
+            break;
+        case Reaction::Deposit:
+            doExtraReaction = database->deposit();
+            break;
+        default:
+            break;
         }
         if (doExtraReaction) {
             if (m_extraReaction) {

@@ -50,10 +50,10 @@
 
     __block double checking = 0;
     XCTAssertEqual([_database retrieve:^void(double progress, double increment) {
-                     XCTAssertGreaterThan(increment, 0);
-                     XCTAssertGreaterThan(progress, checking);
-                     XCTAssertEqual(progress - checking, increment);
-                     checking = progress;
+                       XCTAssertGreaterThan(increment, 0);
+                       XCTAssertGreaterThan(progress, checking);
+                       XCTAssertEqual(progress - checking, increment);
+                       checking = progress;
                    }],
                    1.0);
     XCTAssertEqual(checking, 1.0);

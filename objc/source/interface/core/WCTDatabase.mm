@@ -46,7 +46,7 @@
                 if ([fileProtection isEqualToString:NSFileProtectionCompleteUntilFirstUserAuthentication] || [fileProtection isEqualToString:NSFileProtectionNone]) {
                     return;
                 }
-                NSDictionary *fileProtectionAttribute = @{NSFileProtectionKey : NSFileProtectionCompleteUntilFirstUserAuthentication};
+                NSDictionary *fileProtectionAttribute = @{ NSFileProtectionKey : NSFileProtectionCompleteUntilFirstUserAuthentication };
                 [fileManager setAttributes:fileProtectionAttribute
                               ofItemAtPath:nsPath
                                      error:&nsError];

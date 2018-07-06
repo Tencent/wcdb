@@ -44,15 +44,15 @@ CopyOnWriteString JoinClause::Operand::SQL() const
     std::string description;
     LangRemedialAssert(!joinOperator.empty());
     LangRemedialAssert(!tableOrSubquery.empty());
-    description.append(joinOperator.description().get() + " " +
-                       tableOrSubquery.description().get());
+    description.append(joinOperator.description().get() + " "
+                       + tableOrSubquery.description().get());
     if (!joinConstraint.empty()) {
         description.append(" " + joinConstraint.description().get());
     }
     return description;
 }
 
-template <>
+template<>
 CopyOnWriteString
 CopyOnWriteLazyLangList<JoinClause::Operand>::calculatedDescription() const
 {

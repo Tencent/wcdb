@@ -73,10 +73,9 @@ protected:
     InitiallySwitchName(const InitiallySwitch &initiallySwitcher);
 };
 
-template <>
+template<>
 CopyOnWriteString
-CopyOnWriteLazyLangList<ForeignKeyClause::Trigger>::calculatedDescription()
-    const;
+CopyOnWriteLazyLangList<ForeignKeyClause::Trigger>::calculatedDescription() const;
 
 } // namespace Lang
 

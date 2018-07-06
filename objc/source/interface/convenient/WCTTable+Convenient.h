@@ -22,11 +22,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCTTable <ObjectType>
-(Convenient)
+@interface WCTTable <ObjectType>(Convenient)
 
 #pragma mark - Get Object
-    - (nullable ObjectType) getObject;
+- (nullable ObjectType)getObject;
 
 - (nullable ObjectType)getObjectWhere:(const WCDB::Expression &)condition;
 

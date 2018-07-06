@@ -30,9 +30,9 @@ namespace WCDB {
 namespace Repair {
 
 FactoryRenewer::FactoryRenewer(Factory &factory_)
-    : FactoryRelated(factory_)
-    , directory(factory.getRenewDirectory())
-    , database(Path::addComponent(directory, factory.getDatabaseName()))
+: FactoryRelated(factory_)
+, directory(factory.getRenewDirectory())
+, database(Path::addComponent(directory, factory.getDatabaseName()))
 {
 }
 
@@ -63,14 +63,12 @@ bool FactoryRenewer::work()
         fileManager->removeItem(directory);
         return true;
     }
-    if (!fileManager->removeItems(
-            Factory::associatedPathsForDatabase(factory.database))) {
+    if (!fileManager->removeItems(Factory::associatedPathsForDatabase(factory.database))) {
         assignWithSharedThreadedError();
         return false;
     }
 
-    std::list<std::string> toMove =
-        Factory::associatedPathsForDatabase(database);
+    std::list<std::string> toMove = Factory::associatedPathsForDatabase(database);
     toMove.reverse();
     if (!fileManager->moveItems(toMove, Path::getBaseName(factory.database))) {
         assignWithSharedThreadedError();
@@ -87,14 +85,13 @@ bool FactoryRenewer::prepare()
 
     // 1. create temp directory for acquisition
     std::string tempDirectory = Path::addComponent(directory, "temp");
-    std::string tempDatabase =
-        Path::addComponent(tempDirectory, factory.getDatabaseName());
+    std::string tempDatabase
+    = Path::addComponent(tempDirectory, factory.getDatabaseName());
     m_assembler->setPath(tempDatabase);
 
     FileManager *fileManager = FileManager::shared();
-    if (!fileManager->removeItem(tempDirectory) ||
-        !fileManager->createDirectoryWithIntermediateDirectories(
-            tempDirectory)) {
+    if (!fileManager->removeItem(tempDirectory)
+        || !fileManager->createDirectoryWithIntermediateDirectories(tempDirectory)) {
         assignWithSharedThreadedError();
         return false;
     }
@@ -115,8 +112,8 @@ bool FactoryRenewer::prepare()
     }
     const std::string databaseName = Path::getFileName(factory.database);
     for (const auto &workshopDirectory : workshopDirectories) {
-        std::string databaseForAcquisition =
-            Path::addComponent(workshopDirectory, databaseName);
+        std::string databaseForAcquisition
+        = Path::addComponent(workshopDirectory, databaseName);
         if (!resolveInfosForDatabase(infos, databaseForAcquisition)) {
             return false;
         }
@@ -128,9 +125,8 @@ bool FactoryRenewer::prepare()
         return false;
     }
     for (const auto &element : infos) {
-        if (!m_assembler->assembleTable(element.first, element.second.sql) ||
-            !m_assembler->assembleSequence(element.first,
-                                           element.second.sequence)) {
+        if (!m_assembler->assembleTable(element.first, element.second.sql)
+            || !m_assembler->assembleSequence(element.first, element.second.sequence)) {
             succeed = false;
             setError(m_assembler->getError());
             break;
@@ -160,15 +156,13 @@ bool FactoryRenewer::prepare()
     }
 
     // 7. move the assembled database to renew directory and wait for renew.
-    std::list<std::string> toRemove =
-        Factory::associatedPathsForDatabase(database);
+    std::list<std::string> toRemove = Factory::associatedPathsForDatabase(database);
     toRemove.reverse();
     if (!fileManager->removeItems(toRemove)) {
         assignWithSharedThreadedError();
         return false;
     }
-    std::list<std::string> toMove =
-        Factory::associatedPathsForDatabase(tempDatabase);
+    std::list<std::string> toMove = Factory::associatedPathsForDatabase(tempDatabase);
     toMove.reverse();
     if (!fileManager->moveItems(toMove, directory)) {
         assignWithSharedThreadedError();
@@ -178,14 +172,13 @@ bool FactoryRenewer::prepare()
     return true;
 }
 
-bool FactoryRenewer::resolveInfosForDatabase(
-    std::map<std::string, Info> &infos,
-    const std::string &databaseForAcquisition)
+bool FactoryRenewer::resolveInfosForDatabase(std::map<std::string, Info> &infos,
+                                             const std::string &databaseForAcquisition)
 {
     bool succeed;
     std::list<std::string> materialPaths;
-    std::tie(succeed, materialPaths) =
-        Factory::materialsForDeserializingForDatabase(databaseForAcquisition);
+    std::tie(succeed, materialPaths)
+    = Factory::materialsForDeserializingForDatabase(databaseForAcquisition);
     if (!succeed) {
         assignWithSharedThreadedError();
         return false;
@@ -211,7 +204,7 @@ bool FactoryRenewer::resolveInfosForDatabase(
         for (auto &element : material.contents) {
             auto iter = infos.find(element.first);
             if (iter == infos.end()) {
-                iter = infos.insert({std::move(element.first), Info()}).first;
+                iter = infos.insert({ std::move(element.first), Info() }).first;
                 iter->second.sql = std::move(element.second.sql);
             } else {
                 if (iter->second.sql != element.second.sql) {

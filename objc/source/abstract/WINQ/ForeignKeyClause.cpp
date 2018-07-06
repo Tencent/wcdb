@@ -36,8 +36,7 @@ ForeignKeyClause &ForeignKeyClause::byAddingColumn(const Column &column)
     return *this;
 }
 
-ForeignKeyClause &
-ForeignKeyClause::byAddingColumns(const std::list<Column> &columns)
+ForeignKeyClause &ForeignKeyClause::byAddingColumns(const std::list<Column> &columns)
 {
     Lang::ForeignKeyClause &lang = getMutableLang();
     for (const Column &column : columns) {
@@ -53,8 +52,7 @@ ForeignKeyClause &ForeignKeyClause::onDeleteSetNull()
 }
 ForeignKeyClause &ForeignKeyClause::onDeleteSetDefault()
 {
-    addTriggerForDeleting(
-        Lang::ForeignKeyClause::Trigger::Operation::SetDefault);
+    addTriggerForDeleting(Lang::ForeignKeyClause::Trigger::Operation::SetDefault);
     return *this;
 }
 ForeignKeyClause &ForeignKeyClause::onDeleteCascade()
@@ -80,8 +78,7 @@ ForeignKeyClause &ForeignKeyClause::onUpdateSetNull()
 }
 ForeignKeyClause &ForeignKeyClause::onUpdateSetDefault()
 {
-    addTriggerForUpdating(
-        Lang::ForeignKeyClause::Trigger::Operation::SetDefault);
+    addTriggerForUpdating(Lang::ForeignKeyClause::Trigger::Operation::SetDefault);
     return *this;
 }
 ForeignKeyClause &ForeignKeyClause::onUpdateCascade()
@@ -136,8 +133,7 @@ ForeignKeyClause &ForeignKeyClause::initiallyDeferred()
     return *this;
 }
 
-void ForeignKeyClause::addTriggerForUpdating(
-    const Lang::ForeignKeyClause::Trigger::Operation &operation)
+void ForeignKeyClause::addTriggerForUpdating(const Lang::ForeignKeyClause::Trigger::Operation &operation)
 {
     Lang::ForeignKeyClause::Trigger trigger;
     trigger.match = false;
@@ -146,8 +142,7 @@ void ForeignKeyClause::addTriggerForUpdating(
     addTrigger(trigger);
 }
 
-void ForeignKeyClause::addTriggerForDeleting(
-    const Lang::ForeignKeyClause::Trigger::Operation &operation)
+void ForeignKeyClause::addTriggerForDeleting(const Lang::ForeignKeyClause::Trigger::Operation &operation)
 {
     Lang::ForeignKeyClause::Trigger trigger;
     trigger.match = false;
@@ -164,8 +159,7 @@ void ForeignKeyClause::addTriggerForMatching(const std::string &name)
     addTrigger(trigger);
 }
 
-void ForeignKeyClause::addTrigger(
-    const Lang::ForeignKeyClause::Trigger &trigger)
+void ForeignKeyClause::addTrigger(const Lang::ForeignKeyClause::Trigger &trigger)
 {
     Lang::CopyOnWriteLazyLang<Lang::ForeignKeyClause::Trigger> cowTrigger;
     cowTrigger.assign(trigger);

@@ -68,7 +68,7 @@ WCDB_SYNTHESIZE(BenchmarkObject, value)
 {
     return [self isEqualToObjects:objects
                    withComparator:^BOOL(BenchmarkObject *lhs, BenchmarkObject *rhs) {
-                     return [lhs isEqualToBenchmarkObject:rhs];
+                       return [lhs isEqualToBenchmarkObject:rhs];
                    }];
 }
 

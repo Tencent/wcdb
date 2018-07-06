@@ -18,16 +18,13 @@
  * limitations under the License.
  */
 
-#define __WCDB_INDEX_IMP(className, indexSubfixName, propertyName, order,      \
-                         isUnique)                                             \
-    +(void) WCDB_ORM(className, index)                                         \
-    {                                                                          \
-        WCDB_COMPILE_TIME_CHECK(className.propertyName);                       \
-        const WCTProperty &property =                                          \
-            binding.getProperty(WCDB_STRINGIFY(propertyName));                 \
-        binding.getOrCreateIndex(indexSubfixName)                              \
-            .indexedBy(property.asIndex(order));                               \
-        WCDB_IF(isUnique, binding.getOrCreateIndex(indexSubfixName).unique();) \
+#define __WCDB_INDEX_IMP(className, indexSubfixName, propertyName, order, isUnique)      \
+    +(void) WCDB_ORM(className, index)                                                   \
+    {                                                                                    \
+        WCDB_COMPILE_TIME_CHECK(className.propertyName);                                 \
+        const WCTProperty &property = binding.getProperty(WCDB_STRINGIFY(propertyName)); \
+        binding.getOrCreateIndex(indexSubfixName).indexedBy(property.asIndex(order));    \
+        WCDB_IF(isUnique, binding.getOrCreateIndex(indexSubfixName).unique();)           \
     }
 
 #define __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, left, right)              \

@@ -44,7 +44,7 @@ public:
     CopyOnWriteString SQL() const override;
 };
 
-template <>
+template<>
 CopyOnWriteString
 CopyOnWriteLazyLangList<JoinClause::Operand>::calculatedDescription() const;
 

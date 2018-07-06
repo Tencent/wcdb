@@ -61,7 +61,7 @@
 {
     TestCaseObject *object = [TestCaseObject objectWithId:0];
     WCTUpdate *update = [[_handle prepareUpdate] table:_tableName];
-    XCTAssertTrue(([[update onProperties:{TestCaseObject.variable2, TestCaseObject.variable3}] executeWithObject:object]));
+    XCTAssertTrue(([[update onProperties:{ TestCaseObject.variable2, TestCaseObject.variable3 }] executeWithObject:object]));
     NSMutableArray<TestCaseObject *> *results = [NSMutableArray arrayWithArray:[_database getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1]];
     NSMutableArray<TestCaseObject *> *expected = [NSMutableArray arrayWithArray:_preInserted];
     for (TestCaseObject *element in expected) {
@@ -93,10 +93,10 @@
     WCTColumnsXRows *rows = [[rowSelect fromTable:_tableName] allRows];
     XCTAssertTrue([rows isEqualToObjects:_preInserted
                           withComparator:^BOOL(WCTOneRow *lhs, TestCaseObject *rhs) {
-                            if (lhs.count != 3) {
-                                return NO;
-                            }
-                            return lhs[0].numberValue.intValue == rhs.variable1 && [lhs[1].stringValue isEqualToString:rhs.variable2] && lhs[2].numberValue.doubleValue == rhs.variable3;
+                              if (lhs.count != 3) {
+                                  return NO;
+                              }
+                              return lhs[0].numberValue.intValue == rhs.variable1 && [lhs[1].stringValue isEqualToString:rhs.variable2] && lhs[2].numberValue.doubleValue == rhs.variable3;
                           }]);
 }
 

@@ -30,140 +30,116 @@
 
 namespace WCDB {
 
-template <typename T>
-class ExpressionConvertible<
-    T,
-    typename std::enable_if<ColumnIsNullType<T>::value>::type>
-    : public std::true_type {
+template<typename T>
+class ExpressionConvertible<T, typename std::enable_if<ColumnIsNullType<T>::value>::type>
+: public std::true_type {
 public:
     static Expression as(const T &t) { return LiteralValue(t); }
 };
 
-template <typename T>
-class ExpressionConvertible<
-    T,
-    typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>
-    : public std::true_type {
+template<typename T>
+class ExpressionConvertible<T, typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>
+: public std::true_type {
 public:
     static Expression as(const T &t) { return LiteralValue(t); }
 };
 
-template <typename T>
-class ExpressionConvertible<
-    T,
-    typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>
-    : public std::true_type {
+template<typename T>
+class ExpressionConvertible<T, typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>
+: public std::true_type {
 public:
     static Expression as(const T &t) { return LiteralValue(t); }
 };
 
-template <typename T>
-class ExpressionConvertible<
-    T,
-    typename std::enable_if<ColumnIsFloatType<T>::value>::type>
-    : public std::true_type {
+template<typename T>
+class ExpressionConvertible<T, typename std::enable_if<ColumnIsFloatType<T>::value>::type>
+: public std::true_type {
 public:
     static Expression as(const T &t) { return LiteralValue(t); }
 };
 
-template <typename T>
-class ExpressionConvertible<
-    T,
-    typename std::enable_if<ColumnIsTextType<T>::value>::type>
-    : public std::true_type {
+template<typename T>
+class ExpressionConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>
+: public std::true_type {
 public:
     static Expression as(const T &t) { return LiteralValue(t); }
 };
 
-template <typename T>
-class ExpressionConvertible<
-    T,
-    typename std::enable_if<ColumnIsBLOBType<T>::value>::type>
-    : public std::true_type {
+template<typename T>
+class ExpressionConvertible<T, typename std::enable_if<ColumnIsBLOBType<T>::value>::type>
+: public std::true_type {
 public:
     static Expression as(const T &t) { return LiteralValue(t); }
 };
 
-template <>
+template<>
 class ExpressionConvertible<LiteralValue> : public std::true_type {
 public:
     static Expression as(const LiteralValue &literalValue);
 };
 
-template <>
+template<>
 class ExpressionConvertible<Column> : public std::true_type {
 public:
     static Expression as(const Column &column);
 };
 
-template <>
+template<>
 class ExpressionConvertible<BindParameter> : public std::true_type {
 public:
     static Expression as(const BindParameter &bindParameter);
 };
 
-template <>
+template<>
 class ExpressionConvertible<RaiseFunction> : public std::true_type {
 public:
     static Expression as(const RaiseFunction &raiseFunction);
 };
 
-template <>
+template<>
 class ExpressionConvertible<StatementSelect> : public std::true_type {
 public:
     static Expression as(const StatementSelect &statementSelect);
 };
 
-template <typename T>
-class LiteralValueConvertible<
-    T,
-    typename std::enable_if<ColumnIsNullType<T>::value>::type>
-    : public std::true_type {
+template<typename T>
+class LiteralValueConvertible<T, typename std::enable_if<ColumnIsNullType<T>::value>::type>
+: public std::true_type {
 public:
     static LiteralValue as(const T &t) { return t; }
 };
 
-template <typename T>
-class LiteralValueConvertible<
-    T,
-    typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>
-    : public std::true_type {
+template<typename T>
+class LiteralValueConvertible<T, typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>
+: public std::true_type {
 public:
     static LiteralValue as(const T &t) { return t; }
 };
 
-template <typename T>
-class LiteralValueConvertible<
-    T,
-    typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>
-    : public std::true_type {
+template<typename T>
+class LiteralValueConvertible<T, typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>
+: public std::true_type {
 public:
     static LiteralValue as(const T &t) { return t; }
 };
 
-template <typename T>
-class LiteralValueConvertible<
-    T,
-    typename std::enable_if<ColumnIsFloatType<T>::value>::type>
-    : public std::true_type {
+template<typename T>
+class LiteralValueConvertible<T, typename std::enable_if<ColumnIsFloatType<T>::value>::type>
+: public std::true_type {
 public:
     static LiteralValue as(const T &t) { return t; }
 };
 
-template <typename T>
-class LiteralValueConvertible<
-    T,
-    typename std::enable_if<ColumnIsTextType<T>::value>::type>
-    : public std::true_type {
+template<typename T>
+class LiteralValueConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>
+: public std::true_type {
 public:
     static LiteralValue as(const T &t) { return t; }
 };
 
-template <typename T>
-class LiteralValueConvertible<
-    T,
-    typename std::enable_if<ColumnIsBLOBType<T>::value>::type>
-    : public std::true_type {
+template<typename T>
+class LiteralValueConvertible<T, typename std::enable_if<ColumnIsBLOBType<T>::value>::type>
+: public std::true_type {
 public:
     static LiteralValue as(const T &t) { return t; }
 };

@@ -35,10 +35,7 @@ Page::Page(int number_, Pager *pager) : PagerRelated(pager), number(number_)
 }
 
 Page::Page(int number_, Pager *pager, const Data &data)
-    : PagerRelated(pager)
-    , number(number_)
-    , m_data(data)
-    , m_deserialization(data)
+: PagerRelated(pager), number(number_), m_data(data), m_deserialization(data)
 {
 }
 
@@ -48,7 +45,7 @@ std::pair<bool, Page::Type> Page::acquireType()
     if (m_deserialization.getData().empty()) {
         Data data = m_pager->acquirePageData(number, getOffsetOfHeader(), 1);
         if (data.empty()) {
-            return {false, Type::Unknown};
+            return { false, Type::Unknown };
         }
         Deserialization deserialization(data);
         WCTInnerAssert(deserialization.canAdvance(1));
@@ -59,13 +56,13 @@ std::pair<bool, Page::Type> Page::acquireType()
         type = m_deserialization.get1ByteInt(0);
     }
     switch (type) {
-        case (int) Type::InteriorIndex:
-        case (int) Type::InteriorTable:
-        case (int) Type::LeafIndex:
-        case (int) Type::LeafTable:
-            return {true, (Type) type};
-        default:
-            return {true, Type::Unknown};
+    case (int) Type::InteriorIndex:
+    case (int) Type::InteriorTable:
+    case (int) Type::LeafIndex:
+    case (int) Type::LeafTable:
+        return { true, (Type) type };
+    default:
+        return { true, Type::Unknown };
     }
 }
 
@@ -155,21 +152,20 @@ bool Page::doInitialize()
     WCTInnerAssert(m_deserialization.canAdvance(1));
     int type = m_deserialization.advance1ByteInt();
     switch (type) {
-        case (int) Type::InteriorIndex:
-        case (int) Type::InteriorTable:
-        case (int) Type::LeafIndex:
-        case (int) Type::LeafTable:
-            m_type = (Type) type;
-            break;
-        default:
-            m_type = Type::Unknown;
-            break;
+    case (int) Type::InteriorIndex:
+    case (int) Type::InteriorTable:
+    case (int) Type::LeafIndex:
+    case (int) Type::LeafTable:
+        m_type = (Type) type;
+        break;
+    default:
+        m_type = Type::Unknown;
+        break;
     }
     WCTInnerAssert(m_deserialization.canAdvance(4));
     m_deserialization.advance(2);
     int cellCount = m_deserialization.advance2BytesInt();
-    if (cellCount < 0 ||
-        cellCount * 2 + getOffsetOfCellPointer() > m_pager->getPageSize()) {
+    if (cellCount < 0 || cellCount * 2 + getOffsetOfCellPointer() > m_pager->getPageSize()) {
         markPagerAsCorrupted(number, "CellCount");
         return false;
     }
@@ -189,8 +185,8 @@ bool Page::doInitialize()
     if (m_type == Type::InteriorTable) {
         int subPageCount = (int) m_cellPointers.size() + hasRightMostPageNo();
         for (int i = 0; i < subPageCount; ++i) {
-            int offset = i < m_cellPointers.size() ? m_cellPointers[i]
-                                                   : 8 + getOffsetOfHeader();
+            int offset = i < m_cellPointers.size() ? m_cellPointers[i] :
+                                                     8 + getOffsetOfHeader();
             if (!m_deserialization.isEnough(offset + 4)) {
                 markPagerAsCorrupted(number, "SubPageno");
                 return false;

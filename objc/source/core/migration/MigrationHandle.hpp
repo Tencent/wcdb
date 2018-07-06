@@ -32,8 +32,8 @@ namespace WCDB {
 class MigrationHandle : public Handle {
 #pragma mark - Initialize
 public:
-    static std::shared_ptr<Handle> handleWithPath(const std::string &path,
-                                                  MigrationSetting &setting);
+    static std::shared_ptr<Handle>
+    handleWithPath(const std::string &path, MigrationSetting &setting);
 
 protected:
     MigrationHandle(const std::string &path, MigrationSetting &setting);
@@ -72,8 +72,7 @@ protected:
 protected:
     bool prepareWithMultipleStatements(const Statement &statement,
                                        const Statement &tamperedStatement);
-    bool _migrateWithRowID(const long long &rowid,
-                           HandleStatement &handleStatement);
+    bool _migrateWithRowID(const long long &rowid, HandleStatement &handleStatement);
 
     HandleStatement m_tamperedHandleStatement;
     bool m_unlockShared;

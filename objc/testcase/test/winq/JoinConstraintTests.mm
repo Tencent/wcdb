@@ -29,15 +29,15 @@
 - (void)testJoinConstraint
 {
     WINQAssertEqual(WCDB::JoinConstraint()
-                        .on(self.class.condition),
+                    .on(self.class.condition),
                     @"ON testColumn NOTNULL");
 
     WINQAssertEqual(WCDB::JoinConstraint()
-                        .usingColumn(self.class.column),
+                    .usingColumn(self.class.column),
                     @"USING(testColumn)");
 
     WINQAssertEqual(WCDB::JoinConstraint()
-                        .usingColumns(self.class.columns),
+                    .usingColumns(self.class.columns),
                     @"USING(testColumn, testColumn2)");
 
     WINQAssertEqual(WCDB::JoinConstraint(), @"");

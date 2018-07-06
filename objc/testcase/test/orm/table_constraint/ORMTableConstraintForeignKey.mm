@@ -27,6 +27,6 @@
 WCDB_IMPLEMENTATION(ORMTableConstraintForeignKey)
 WCDB_SYNTHESIZE(ORMTableConstraintForeignKey, variable)
 
-WCDB_FOREIGN_KEY(ORMTableConstraintForeignKey, "ORMTableConstraintForeignKey", {WCDB::Column("variable")}, WCDB::ForeignKeyClause("otherTable").onDeleteSetNull())
+WCDB_FOREIGN_KEY(ORMTableConstraintForeignKey, "ORMTableConstraintForeignKey", { WCDB::Column("variable") }, WCDB::ForeignKeyClause("otherTable").onDeleteSetNull())
 
 @end

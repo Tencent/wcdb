@@ -22,18 +22,18 @@
 
 @interface ORMColumnCoding : NSObject
 
-@property(nonatomic, assign) int32_t int32Value;
-@property(nonatomic, assign) int64_t int64Value;
-@property(nonatomic, assign) uint32_t uint32Value;
-@property(nonatomic, assign) uint64_t uint64Value;
-@property(nonatomic, assign) float floatValue;
-@property(nonatomic, assign) double doubleValue;
+@property (nonatomic, assign) int32_t int32Value;
+@property (nonatomic, assign) int64_t int64Value;
+@property (nonatomic, assign) uint32_t uint32Value;
+@property (nonatomic, assign) uint64_t uint64Value;
+@property (nonatomic, assign) float floatValue;
+@property (nonatomic, assign) double doubleValue;
 
-@property(nonatomic, retain) NSString *stringValue;
-@property(nonatomic, retain) NSNumber *numberValue;
-@property(nonatomic, retain) NSDate *dateValue;
-@property(nonatomic, retain) NSData *dataValue;
-@property(nonatomic, retain) NSArray *arrayValue;
+@property (nonatomic, retain) NSString *stringValue;
+@property (nonatomic, retain) NSNumber *numberValue;
+@property (nonatomic, retain) NSDate *dateValue;
+@property (nonatomic, retain) NSData *dataValue;
+@property (nonatomic, retain) NSArray *arrayValue;
 
 - (BOOL)isEqualToObject:(ORMColumnCoding *)object;
 

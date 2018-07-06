@@ -42,8 +42,7 @@ StatementDropTable &StatementDropTable::ifExists(bool ifExists)
     return *this;
 }
 
-StatementDropTable &
-StatementDropTable::withSchema(const std::string &schemaName)
+StatementDropTable &StatementDropTable::withSchema(const std::string &schemaName)
 {
     Lang::DropTableSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);

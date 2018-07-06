@@ -29,17 +29,17 @@
 - (void)testCommonTableExpression
 {
     WINQAssertEqual(WCDB::CommonTableExpression(self.class.cteTableName)
-                        .byAddingColumn(self.class.column)
-                        .as(self.class.statementSelect),
+                    .byAddingColumn(self.class.column)
+                    .as(self.class.statementSelect),
                     @"testCTETable(testColumn) AS(SELECT testColumn FROM main.testTable)");
 
     WINQAssertEqual(WCDB::CommonTableExpression(self.class.cteTableName)
-                        .byAddingColumns(self.class.columns)
-                        .as(self.class.statementSelect),
+                    .byAddingColumns(self.class.columns)
+                    .as(self.class.statementSelect),
                     @"testCTETable(testColumn, testColumn2) AS(SELECT testColumn FROM main.testTable)");
 
     WINQAssertEqual(WCDB::CommonTableExpression(self.class.cteTableName)
-                        .as(self.class.statementSelect),
+                    .as(self.class.statementSelect),
                     @"testCTETable AS(SELECT testColumn FROM main.testTable)");
 }
 

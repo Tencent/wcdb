@@ -66,7 +66,7 @@ public:
     CopyOnWriteString SQL() const override;
 };
 
-template <>
+template<>
 CopyOnWriteString
 CopyOnWriteLazyLangList<ColumnConstraint>::calculatedDescription() const;
 

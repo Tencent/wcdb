@@ -27,7 +27,6 @@
 namespace WCDB {
 
 class StatementRelease : public StatementWithLang<Lang::ReleaseSTMT> {
-
 public:
     StatementRelease &release(const std::string &savepointName);
 };

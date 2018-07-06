@@ -91,8 +91,8 @@ bool Mechanic::work()
             if (isErrorCritial()) {
                 break;
             }
-            if (!assembleTable(element.first, element.second.sql) ||
-                !assembleSequence(element.first, element.second.sequence)) {
+            if (!assembleTable(element.first, element.second.sql)
+                || !assembleSequence(element.first, element.second.sequence)) {
                 continue;
             }
 

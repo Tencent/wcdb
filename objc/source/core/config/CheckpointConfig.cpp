@@ -26,26 +26,21 @@
 
 namespace WCDB {
 
-static_assert(CheckpointConfig::framesForPassive <
-                  CheckpointConfig::framesForFull,
-              "");
+static_assert(CheckpointConfig::framesForPassive < CheckpointConfig::framesForFull, "");
 
 const std::shared_ptr<Config> &CheckpointConfig::shared()
 {
-    static const std::shared_ptr<Config> *s_shared =
-        new std::shared_ptr<Config>(new CheckpointConfig);
+    static const std::shared_ptr<Config> *s_shared
+    = new std::shared_ptr<Config>(new CheckpointConfig);
     return *s_shared;
 }
 
 CheckpointConfig::CheckpointConfig()
-    : Config(CheckpointConfig::name)
-    , m_checkpointTruncate(
-          StatementPragma().pragma(Pragma::walCheckpoint()).to("TRUNCATE"))
-    , m_checkpointPassive(
-          StatementPragma().pragma(Pragma::walCheckpoint()).to("PASSIVE"))
+: Config(CheckpointConfig::name)
+, m_checkpointTruncate(StatementPragma().pragma(Pragma::walCheckpoint()).to("TRUNCATE"))
+, m_checkpointPassive(StatementPragma().pragma(Pragma::walCheckpoint()).to("PASSIVE"))
 {
-    Dispatch::async("com.Tencent.WCDB.Checkpoint",
-                    std::bind(&CheckpointConfig::loop, this));
+    Dispatch::async("com.Tencent.WCDB.Checkpoint", std::bind(&CheckpointConfig::loop, this));
 }
 
 CheckpointConfig::~CheckpointConfig()
@@ -57,8 +52,8 @@ CheckpointConfig::~CheckpointConfig()
 bool CheckpointConfig::invoke(Handle *handle)
 {
     handle->setNotificationWhenCommitted(
-        "checkpoint", std::bind(&CheckpointConfig::onCommitted, this,
-                                std::placeholders::_1, std::placeholders::_2));
+    "checkpoint",
+    std::bind(&CheckpointConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
     return true;
 }
 
@@ -71,8 +66,8 @@ void CheckpointConfig::onCommitted(Handle *handle, int frames)
 
 void CheckpointConfig::loop()
 {
-    m_timedQueue.loop(std::bind(&CheckpointConfig::onTimed, this,
-                                std::placeholders::_1, std::placeholders::_2));
+    m_timedQueue.loop(std::bind(
+    &CheckpointConfig::onTimed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 void CheckpointConfig::onTimed(const std::string &path, const int &frames) const
@@ -83,8 +78,7 @@ void CheckpointConfig::onTimed(const std::string &path, const int &frames) const
         return;
     }
 
-    std::shared_ptr<Database> database =
-        Database::databaseWithExistingPath(path);
+    std::shared_ptr<Database> database = Database::databaseWithExistingPath(path);
     if (database == nullptr || !database->isOpened()) {
         return;
     }

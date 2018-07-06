@@ -28,10 +28,9 @@ namespace WCDB {
 class TableOrSubquery : public DescribableWithLang<Lang::TableOrSubquery> {
 public:
     //TODO accept ColumnTextType for all text-based WINQ interfaces
-    template <typename T>
-    TableOrSubquery(
-        const T &t,
-        typename std::enable_if<ColumnIsTextType<T>::value>::type * = nullptr)
+    template<typename T>
+    TableOrSubquery(const T &t,
+                    typename std::enable_if<ColumnIsTextType<T>::value>::type * = nullptr)
     {
         setTableName(ColumnIsTextType<T>::asUnderlyingType(t));
     }
@@ -48,15 +47,13 @@ public:
     TableOrSubquery &notIndexed();
 
     static TableOrSubquery function(const std::string &functionName);
-    static TableOrSubquery function(const std::string &functionName,
-                                    const Expression &expression);
+    static TableOrSubquery
+    function(const std::string &functionName, const Expression &expression);
     static TableOrSubquery function(const std::string &functionName,
                                     const std::list<Expression> &expressions);
 
 protected:
-    TableOrSubquery(
-        const Lang::CopyOnWriteLazyLang<Lang::TableOrSubqueryTableFunction>
-            &tableOrSubqueryTableFunction);
+    TableOrSubquery(const Lang::CopyOnWriteLazyLang<Lang::TableOrSubqueryTableFunction> &tableOrSubqueryTableFunction);
     void setTableName(const std::string &tableName);
 };
 

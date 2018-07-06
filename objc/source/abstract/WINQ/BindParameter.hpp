@@ -25,8 +25,7 @@
 
 namespace WCDB {
 
-class BindParameter : public DescribableWithLang<Lang::BindParameter>,
-                      public Redirectable {
+class BindParameter : public DescribableWithLang<Lang::BindParameter>, public Redirectable {
 public:
     static std::list<Expression> bindParameters(int count);
     //    enum class Type : int {

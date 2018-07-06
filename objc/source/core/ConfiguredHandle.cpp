@@ -33,7 +33,7 @@ ConfiguredHandle::configuredHandle(const std::shared_ptr<Handle> &handle)
 }
 
 ConfiguredHandle::ConfiguredHandle(const std::shared_ptr<Handle> &handle)
-    : m_handle(handle)
+: m_handle(handle)
 {
 }
 

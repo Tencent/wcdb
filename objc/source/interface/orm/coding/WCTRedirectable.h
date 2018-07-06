@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-template <>
+template<>
 WCTProperty Redirectable::redirect(const WCTProperty &property) const;
 
 } //namespace WCDB

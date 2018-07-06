@@ -33,9 +33,7 @@ namespace WCDB {
 
 namespace Repair {
 
-class FullCrawler : public Repairman,
-                    public MasterCrawlerDelegate,
-                    public SequenceCrawlerDelegate {
+class FullCrawler : public Repairman, public MasterCrawlerDelegate, public SequenceCrawlerDelegate {
 #pragma mark - Initialize
 public:
     FullCrawler(const std::string &source);
@@ -67,8 +65,7 @@ protected:
 #pragma mark - SequenceCrawlerDelegate
 protected:
     void onSequencePageCrawled(const Page &page) override;
-    void onSequenceCellCrawled(const Cell &cell,
-                               const Sequence &sequence) override;
+    void onSequenceCellCrawled(const Cell &cell, const Sequence &sequence) override;
     void onSequenceCrawlerError() override;
 
     SequenceCrawler m_sequenceCrawler;

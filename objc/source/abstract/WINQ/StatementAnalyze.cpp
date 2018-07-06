@@ -40,8 +40,7 @@ StatementAnalyze &StatementAnalyze::analyze(const std::string &schemaName,
     return *this;
 }
 
-StatementAnalyze &
-StatementAnalyze::analyze(const std::string &schemaOrTableOrIndexName)
+StatementAnalyze &StatementAnalyze::analyze(const std::string &schemaOrTableOrIndexName)
 {
     Lang::AnalyzeSTMT &lang = getMutableLang();
     lang.first.assign(schemaOrTableOrIndexName);

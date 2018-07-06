@@ -27,9 +27,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithSQL:(NSString *)sql
                andFrequency:(unsigned int)frequency;
 
-@property(nonatomic, readonly) NSString *sql;
+@property (nonatomic, readonly) NSString *sql;
 
-@property(nonatomic, readonly) unsigned int frequency;
+@property (nonatomic, readonly) unsigned int frequency;
 
 @end
 

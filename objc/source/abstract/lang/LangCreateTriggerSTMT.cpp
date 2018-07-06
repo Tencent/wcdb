@@ -26,11 +26,7 @@ namespace WCDB {
 namespace Lang {
 
 CreateTriggerSTMT::CreateTriggerSTMT()
-    : temp(false)
-    , ifNotExists(false)
-    , type(Type::NotSet)
-    , operation(Operation::NotSet)
-    , forEachRow(false)
+: temp(false), ifNotExists(false), type(Type::NotSet), operation(Operation::NotSet), forEachRow(false)
 {
 }
 
@@ -80,35 +76,33 @@ CopyOnWriteString CreateTriggerSTMT::SQL() const
 constexpr const char *CreateTriggerSTMT::typeName(const Type &type)
 {
     switch (type) {
-        case Type::Before:
-            return "BEFORE";
-        case Type::After:
-            return "AFTER";
-        case Type::InsteadOf:
-            return "INSTEAD OF";
-        default:
-            return "";
+    case Type::Before:
+        return "BEFORE";
+    case Type::After:
+        return "AFTER";
+    case Type::InsteadOf:
+        return "INSTEAD OF";
+    default:
+        return "";
     }
 }
 
-constexpr const char *
-CreateTriggerSTMT::operationName(const Operation &operation)
+constexpr const char *CreateTriggerSTMT::operationName(const Operation &operation)
 {
     switch (operation) {
-        case Operation::Delete:
-            return "DELETE";
-        case Operation::Insert:
-            return "INSERT";
-        case Operation::Update:
-            return "UPDATE";
-        default:
-            return "";
+    case Operation::Delete:
+        return "DELETE";
+    case Operation::Insert:
+        return "INSERT";
+    case Operation::Update:
+        return "UPDATE";
+    default:
+        return "";
     }
 }
 
-template <>
-CopyOnWriteString
-CopyOnWriteLazyLangList<CRUDSTMT>::calculatedDescription() const
+template<>
+CopyOnWriteString CopyOnWriteLazyLangList<CRUDSTMT>::calculatedDescription() const
 {
     std::string description;
     bool space = false;

@@ -35,7 +35,7 @@ CorruptionNotifier *CorruptionNotifier::shared()
 CorruptionNotifier::CorruptionNotifier()
 {
     Notifier::shared()->setCorruptionNotification(
-        std::bind(&CorruptionNotifier::addPath, this, std::placeholders::_1));
+    std::bind(&CorruptionNotifier::addPath, this, std::placeholders::_1));
     Dispatch::async("com.Tencent.WCDB.CorruptionNotifier",
                     std::bind(&CorruptionNotifier::loop, this));
 }

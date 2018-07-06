@@ -30,11 +30,7 @@ namespace Repair {
 
 #pragma mark - Initialize
 Pager::Pager(const std::string &path)
-    : m_fileHandle(path)
-    , m_pageSize(-1)
-    , m_reservedBytes(-1)
-    , m_pageCount(0)
-    , m_wal(this)
+: m_fileHandle(path), m_pageSize(-1), m_reservedBytes(-1), m_pageCount(0), m_wal(this)
 {
 }
 
@@ -99,9 +95,8 @@ Data Pager::acquirePageData(int number, off_t offset, size_t size)
 Data Pager::acquireData(off_t offset, size_t size)
 {
     WCTInnerAssert(isInitializing() || isInitialized());
-    if (!m_fileHandle.isOpened() &&
-        !m_fileHandle.open(FileHandle::Mode::ReadOnly |
-                           FileHandle::Mode::Mmap)) {
+    if (!m_fileHandle.isOpened()
+        && !m_fileHandle.open(FileHandle::Mode::ReadOnly | FileHandle::Mode::Mmap)) {
         assignWithSharedThreadedError();
         return Data::emptyData();
     }

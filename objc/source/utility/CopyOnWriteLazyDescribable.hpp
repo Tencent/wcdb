@@ -24,20 +24,19 @@
 #include <WCDB/CopyOnWrite.hpp>
 #include <WCDB/CopyOnWriteString.hpp>
 
-template <typename Type, typename StorageType = Type>
+template<typename Type, typename StorageType = Type>
 class CopyOnWriteLazyDescribable : public CopyOnWrite<Type, StorageType> {
 public:
     CopyOnWriteLazyDescribable()
-        : CopyOnWrite<Type, StorageType>(), m_calculated(false)
+    : CopyOnWrite<Type, StorageType>(), m_calculated(false)
     {
     }
 
-    template <typename OtherType, typename OtherStorageType = OtherType>
-    CopyOnWriteLazyDescribable(
-        const CopyOnWriteLazyDescribable<OtherType, OtherStorageType> &o)
-        : CopyOnWrite<Type, StorageType>(o)
-        , m_calculated(o.m_calculated)
-        , m_description(o.m_description)
+    template<typename OtherType, typename OtherStorageType = OtherType>
+    CopyOnWriteLazyDescribable(const CopyOnWriteLazyDescribable<OtherType, OtherStorageType> &o)
+    : CopyOnWrite<Type, StorageType>(o)
+    , m_calculated(o.m_calculated)
+    , m_description(o.m_description)
     {
     }
 
@@ -57,7 +56,7 @@ protected:
     virtual CopyOnWriteString calculatedDescription() const = 0;
 
 private:
-    template <typename T, typename U>
+    template<typename T, typename U>
     friend class CopyOnWriteLazyDescribable;
     mutable CopyOnWriteString m_description;
     mutable bool m_calculated;

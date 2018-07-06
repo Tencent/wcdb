@@ -32,7 +32,7 @@ int main(int argc, const char *argv[])
 #import <UIKit/UIKit.h>
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
-@property(strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic) UIWindow *window;
 @end
 
 @implementation AppDelegate

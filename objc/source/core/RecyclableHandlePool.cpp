@@ -23,15 +23,14 @@
 
 namespace WCDB {
 
-RecyclableHandlePool::RecyclableHandlePool(
-    const std::shared_ptr<HandlePool> &value,
-    const Super::OnRecycled &onRecycled)
-    : Super(value, onRecycled)
+RecyclableHandlePool::RecyclableHandlePool(const std::shared_ptr<HandlePool> &value,
+                                           const Super::OnRecycled &onRecycled)
+: Super(value, onRecycled)
 {
 }
 
 RecyclableHandlePool::RecyclableHandlePool(const std::nullptr_t &)
-    : Super(nullptr, nullptr)
+: Super(nullptr, nullptr)
 {
 }
 

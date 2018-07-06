@@ -25,32 +25,32 @@
 
 class WCTColumnBinding {
 public:
-    template <typename T>
+    template<typename T>
     WCTColumnBinding(
-        Class cls,
-        const std::string &pn,
-        const std::string &cn,
-        T * = nullptr,
-        typename std::enable_if<!WCDB::IsObjCType<T>::value>::type * = nullptr)
-        : accessor(new WCTRuntimeCppAccessor<T>(cls, pn))
-        , propertyName(pn)
-        , m_class(cls)
-        , columnDef(WCDB::Column(cn))
+    Class cls,
+    const std::string &pn,
+    const std::string &cn,
+    T * = nullptr,
+    typename std::enable_if<!WCDB::IsObjCType<T>::value>::type * = nullptr)
+    : accessor(new WCTRuntimeCppAccessor<T>(cls, pn))
+    , propertyName(pn)
+    , m_class(cls)
+    , columnDef(WCDB::Column(cn))
     {
         typed();
     }
 
-    template <typename T>
+    template<typename T>
     WCTColumnBinding(
-        Class cls,
-        const std::string &pn,
-        const std::string &cn,
-        T * = nullptr,
-        typename std::enable_if<WCDB::IsObjCType<T>::value>::type * = nullptr)
-        : accessor(new WCTRuntimeObjCAccessor(cls, pn))
-        , propertyName(pn)
-        , m_class(cls)
-        , columnDef(WCDB::Column(cn))
+    Class cls,
+    const std::string &pn,
+    const std::string &cn,
+    T * = nullptr,
+    typename std::enable_if<WCDB::IsObjCType<T>::value>::type * = nullptr)
+    : accessor(new WCTRuntimeObjCAccessor(cls, pn))
+    , propertyName(pn)
+    , m_class(cls)
+    , columnDef(WCDB::Column(cn))
     {
         typed();
     }

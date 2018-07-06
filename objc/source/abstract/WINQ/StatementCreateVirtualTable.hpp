@@ -26,18 +26,15 @@
 
 namespace WCDB {
 
-class StatementCreateVirtualTable
-    : public StatementWithLang<Lang::CreateVirtualTableSTMT> {
+class StatementCreateVirtualTable : public StatementWithLang<Lang::CreateVirtualTableSTMT> {
 public:
     StatementCreateVirtualTable();
-    StatementCreateVirtualTable &
-    createVirtualTable(const std::string &tableName);
+    StatementCreateVirtualTable &createVirtualTable(const std::string &tableName);
     StatementCreateVirtualTable &withSchema(const std::string &schemaName);
     StatementCreateVirtualTable &ifNotExists(bool ifNotExists = true);
     StatementCreateVirtualTable &usingModule(const std::string &moduleName);
     StatementCreateVirtualTable &on(const ModuleArgument &moduleArgument);
-    StatementCreateVirtualTable &
-    on(const std::list<ModuleArgument> &moduleArguments);
+    StatementCreateVirtualTable &on(const std::list<ModuleArgument> &moduleArguments);
 };
 
 } // namespace WCDB

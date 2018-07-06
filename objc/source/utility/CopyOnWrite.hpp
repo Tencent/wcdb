@@ -24,16 +24,16 @@
 #include <assert.h>
 #include <memory>
 
-template <typename Type, typename StorageType = Type>
+template<typename Type, typename StorageType = Type>
 class CopyOnWrite {
 public:
     CopyOnWrite() : m_shared(nullptr) {}
 
     CopyOnWrite(const Type &t) : m_shared(new Type(t)) {}
 
-    template <typename OtherType, typename OtherStorageType = OtherType>
+    template<typename OtherType, typename OtherStorageType = OtherType>
     CopyOnWrite(const CopyOnWrite<OtherType, OtherStorageType> &o)
-        : m_shared(std::static_pointer_cast<StorageType>(o.m_shared))
+    : m_shared(std::static_pointer_cast<StorageType>(o.m_shared))
     {
     }
 
@@ -43,7 +43,7 @@ public:
         m_shared.reset(new Type(t));
     }
 
-    template <typename OtherType, typename OtherStorageType = OtherType>
+    template<typename OtherType, typename OtherStorageType = OtherType>
     void assign(const CopyOnWrite<OtherType, OtherStorageType> &o)
     {
         willProbablyChange();
@@ -58,7 +58,7 @@ public:
 
     bool empty() const { return m_shared == nullptr; }
 
-    template <typename OtherType>
+    template<typename OtherType>
     const OtherType *get_pointer() const
     {
         return (OtherType *) m_shared.get();
@@ -66,7 +66,7 @@ public:
 
     const Type *get_pointer() const { return get_pointer<Type>(); }
 
-    template <typename OtherType>
+    template<typename OtherType>
     const OtherType &get() const
     {
         assert(!empty());
@@ -79,7 +79,7 @@ public:
         return *(Type *) m_shared.get();
     }
 
-    template <typename OtherType>
+    template<typename OtherType>
     OtherType &get_or_copy()
     {
         willProbablyChange();
@@ -100,7 +100,7 @@ public:
         return m_shared.get() == other.m_shared.get();
     }
 
-    template <typename OtherType, typename OtherStorageType = OtherType>
+    template<typename OtherType, typename OtherStorageType = OtherType>
     bool equal(const CopyOnWrite<OtherType, OtherStorageType> &other) const
     {
         return m_shared.get() == other.m_shared.get();
@@ -112,7 +112,7 @@ protected:
 private:
     std::shared_ptr<StorageType> m_shared;
 
-    template <typename OtherType, typename OtherStorageType>
+    template<typename OtherType, typename OtherStorageType>
     friend class CopyOnWrite;
 };
 

@@ -23,20 +23,18 @@
 
 namespace WCDB {
 #pragma mark - Initialize
-std::shared_ptr<HandlePool> MigrationHandlePool::pool(
-    const std::string &path,
-    const std::shared_ptr<Configs> &configs,
-    const std::list<std::shared_ptr<MigrationInfo>> &infos)
+std::shared_ptr<HandlePool>
+MigrationHandlePool::pool(const std::string &path,
+                          const std::shared_ptr<Configs> &configs,
+                          const std::list<std::shared_ptr<MigrationInfo>> &infos)
 {
-    return std::shared_ptr<HandlePool>(
-        new MigrationHandlePool(path, configs, infos));
+    return std::shared_ptr<HandlePool>(new MigrationHandlePool(path, configs, infos));
 }
 
-MigrationHandlePool::MigrationHandlePool(
-    const std::string &path,
-    const std::shared_ptr<Configs> &configs,
-    const std::list<std::shared_ptr<MigrationInfo>> &infos)
-    : HandlePool(path, configs), m_setting(this, infos)
+MigrationHandlePool::MigrationHandlePool(const std::string &path,
+                                         const std::shared_ptr<Configs> &configs,
+                                         const std::list<std::shared_ptr<MigrationInfo>> &infos)
+: HandlePool(path, configs), m_setting(this, infos)
 {
 #ifdef DEBUG
     debug_m_migratingThreadId = std::thread::id();

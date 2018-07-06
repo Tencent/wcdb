@@ -50,8 +50,7 @@ bool Material::serialize(Serialization &serialization) const
             markAsEmpty("TableName");
             return false;
         }
-        if (!encoder.putSizedString(element.first) ||
-            !element.second.serialize(encoder)) {
+        if (!encoder.putSizedString(element.first) || !element.second.serialize(encoder)) {
             return false;
         }
     }
@@ -61,8 +60,7 @@ bool Material::serialize(Serialization &serialization) const
 bool Material::serializeData(Serialization &serialization, const Data &data)
 {
     uint32_t checksum = data.empty() ? 0 : data.hash();
-    return serialization.put4BytesUInt(checksum) &&
-           serialization.putSizedData(data);
+    return serialization.put4BytesUInt(checksum) && serialization.putSizedData(data);
 }
 
 void Material::markAsEmpty(const std::string &element)
@@ -125,8 +123,7 @@ bool Material::deserialize(Deserialization &deserialization)
     return true;
 }
 
-std::pair<bool, Data>
-Material::deserializeData(Deserialization &deserialization)
+std::pair<bool, Data> Material::deserializeData(Deserialization &deserialization)
 {
     bool succeed = false;
     Data data;
@@ -153,7 +150,7 @@ Material::deserializeData(Deserialization &deserialization)
         }
         succeed = true;
     } while (false);
-    return {succeed, succeed ? data : Data::emptyData()};
+    return { succeed, succeed ? data : Data::emptyData() };
 }
 
 void Material::markAsCorrupt(const std::string &element)
@@ -170,7 +167,7 @@ void Material::markAsCorrupt(const std::string &element)
 static_assert(Material::Info::size == 20, "");
 
 Material::Info::Info()
-    : pageSize(0), walFrame(0), walSalt({0, 0}), reservedBytes(0)
+: pageSize(0), walFrame(0), walSalt({ 0, 0 }), reservedBytes(0)
 {
 }
 
@@ -211,8 +208,7 @@ Material::Content::Content() : sequence(0)
 #pragma mark - Serialization
 bool Material::Content::serialize(Serialization &serialization) const
 {
-    if (!serialization.putVarint(sequence) ||
-        !serialization.putSizedString(sql)) {
+    if (!serialization.putVarint(sequence) || !serialization.putSizedString(sql)) {
         return false;
     }
 
@@ -229,8 +225,8 @@ bool Material::Content::serialize(Serialization &serialization) const
         return false;
     }
     for (const auto &element : verifiedPagenos) {
-        if (!serialization.putVarint(element.first) ||
-            !serialization.put4BytesUInt(element.second)) {
+        if (!serialization.putVarint(element.first)
+            || !serialization.put4BytesUInt(element.second)) {
             return false;
         }
     }
@@ -265,8 +261,7 @@ bool Material::Content::deserialize(Deserialization &deserialization)
     associatedSQLs.clear();
     for (int i = 0; i < associatedSQLCount; ++i) {
         std::string sql;
-        std::tie(lengthOfSizedString, sql) =
-            deserialization.advanceSizedString();
+        std::tie(lengthOfSizedString, sql) = deserialization.advanceSizedString();
         if (lengthOfSizedString == 0 || sql.empty()) {
             markAsCorrupt("SQLs");
             return false;

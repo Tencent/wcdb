@@ -36,8 +36,7 @@ StatementCreateVirtualTable::createVirtualTable(const std::string &tableName)
     return *this;
 }
 
-StatementCreateVirtualTable &
-StatementCreateVirtualTable::ifNotExists(bool ifNotExists)
+StatementCreateVirtualTable &StatementCreateVirtualTable::ifNotExists(bool ifNotExists)
 {
     Lang::CreateVirtualTableSTMT &lang = getMutableLang();
     lang.ifNotExists = ifNotExists;
@@ -68,8 +67,8 @@ StatementCreateVirtualTable::on(const ModuleArgument &moduleArgument)
     return *this;
 }
 
-StatementCreateVirtualTable &StatementCreateVirtualTable::on(
-    const std::list<ModuleArgument> &moduleArguments)
+StatementCreateVirtualTable &
+StatementCreateVirtualTable::on(const std::list<ModuleArgument> &moduleArguments)
 {
     Lang::CreateVirtualTableSTMT &lang = getMutableLang();
     for (const ModuleArgument &moduleArgument : moduleArguments) {

@@ -36,10 +36,9 @@ Time::Time(Super &&super) : Super(std::move(super))
 }
 
 Time::Time(const struct timespec &ts)
-    : Super(std::chrono::system_clock::time_point{
-          std::chrono::duration_cast<std::chrono::system_clock::duration>(
-              std::chrono::seconds{ts.tv_sec} +
-              std::chrono::nanoseconds{ts.tv_nsec})})
+: Super(std::chrono::system_clock::time_point{
+  std::chrono::duration_cast<std::chrono::system_clock::duration>(
+  std::chrono::seconds{ ts.tv_sec } + std::chrono::nanoseconds{ ts.tv_nsec }) })
 {
 }
 
@@ -50,16 +49,14 @@ Time Time::now()
 
 std::time_t Time::seconds() const
 {
-    return (std::time_t) std::chrono::duration_cast<std::chrono::seconds>(
-               time_since_epoch())
-        .count();
+    return (std::time_t) std::chrono::duration_cast<std::chrono::seconds>(time_since_epoch())
+    .count();
 }
 
 std::time_t Time::nanoseconds() const
 {
-    return (std::time_t) std::chrono::duration_cast<std::chrono::nanoseconds>(
-               time_since_epoch())
-        .count();
+    return (std::time_t) std::chrono::duration_cast<std::chrono::nanoseconds>(time_since_epoch())
+    .count();
 }
 
 bool Time::empty() const
@@ -69,10 +66,9 @@ bool Time::empty() const
 
 std::string Time::stringify() const
 {
-    std::time_t seconds =
-        (std::time_t) std::chrono::duration_cast<std::chrono::seconds>(
-            time_since_epoch())
-            .count();
+    std::time_t seconds
+    = (std::time_t) std::chrono::duration_cast<std::chrono::seconds>(time_since_epoch())
+      .count();
     struct tm tm;
     if (!localtime_r(&seconds, &tm)) {
         Error error;
@@ -81,10 +77,9 @@ std::string Time::stringify() const
         setThreadedError(std::move(error));
         return String::empty();
     }
-    std::time_t nanoseconds =
-        (std::time_t) std::chrono::duration_cast<std::chrono::nanoseconds>(
-            time_since_epoch())
-            .count();
+    std::time_t nanoseconds
+    = (std::time_t) std::chrono::duration_cast<std::chrono::nanoseconds>(time_since_epoch())
+      .count();
     while (nanoseconds != 0 && nanoseconds % 10 == 0) {
         nanoseconds /= 10;
     }
@@ -108,14 +103,12 @@ SteadyClock SteadyClock::now()
 
 double SteadyClock::seconds() const
 {
-    std::time_t seconds =
-        (std::time_t) std::chrono::duration_cast<std::chrono::seconds>(
-            time_since_epoch())
-            .count();
-    std::time_t nanoseconds =
-        (std::time_t) std::chrono::duration_cast<std::chrono::nanoseconds>(
-            time_since_epoch())
-            .count();
+    std::time_t seconds
+    = (std::time_t) std::chrono::duration_cast<std::chrono::seconds>(time_since_epoch())
+      .count();
+    std::time_t nanoseconds
+    = (std::time_t) std::chrono::duration_cast<std::chrono::nanoseconds>(time_since_epoch())
+      .count();
     return (double) seconds + (double) nanoseconds / 1E9;
 }
 

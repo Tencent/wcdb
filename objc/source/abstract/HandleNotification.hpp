@@ -41,8 +41,7 @@ protected:
 #pragma mark - SQL
 public:
     typedef std::function<void(const std::string &)> SQLNotification;
-    void setNotificationWhenSQLTraced(const std::string &name,
-                                      const SQLNotification &onTraced);
+    void setNotificationWhenSQLTraced(const std::string &name, const SQLNotification &onTraced);
 
 protected:
     void dispatchSQLTraceNotification(const std::string &sql);
@@ -58,10 +57,9 @@ public:
     typedef struct Footprint Footprint;
 
     using Footprints = std::list<Footprint>;
-    typedef std::function<void(const Footprints &, const int64_t &)>
-        PerformanceNotification;
-    void setNotificationWhenPerformanceTraced(
-        const std::string &name, const PerformanceNotification &onTraced);
+    typedef std::function<void(const Footprints &, const int64_t &)> PerformanceNotification;
+    void setNotificationWhenPerformanceTraced(const std::string &name,
+                                              const PerformanceNotification &onTraced);
 
 protected:
     void dispatchPerformanceTraceNotification(const std::string &sql,
@@ -88,10 +86,9 @@ protected:
 #pragma mark - Checkpoint
 public:
     typedef std::function<bool(Handle *, int)> CheckpointNotification;
-    bool
-    setNotificationWhenCheckpoint(const std::string &name,
-                                  const CheckpointNotification &willCheckpoint,
-                                  bool ignorable = false);
+    bool setNotificationWhenCheckpoint(const std::string &name,
+                                       const CheckpointNotification &willCheckpoint,
+                                       bool ignorable = false);
 
 protected:
     bool isCheckpointNotificationSet() const;

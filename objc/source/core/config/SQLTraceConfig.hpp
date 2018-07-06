@@ -28,8 +28,7 @@ namespace WCDB {
 
 class SQLTraceConfig : public Config {
 public:
-    SQLTraceConfig(const std::string &name,
-                   const Handle::SQLNotification &trace);
+    SQLTraceConfig(const std::string &name, const Handle::SQLNotification &trace);
 
     bool invoke(Handle *handle) override;
 

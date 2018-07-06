@@ -38,7 +38,7 @@
 @end
 
 @interface WCTHandle (
-    WCTConvenientInsertOrReplace) <WCTConvenientInsertOrReplace>
+WCTConvenientInsertOrReplace) <WCTConvenientInsertOrReplace>
 
 @end
 
@@ -47,7 +47,7 @@
 @end
 
 @interface WCTHandle (
-    WCTConvenientPartialInsertOrReplace) <WCTConvenientPartialInsertOrReplace>
+WCTConvenientPartialInsertOrReplace) <WCTConvenientPartialInsertOrReplace>
 
 @end
 

@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-template <typename T>
+template<typename T>
 class ConcurrentList {
 public:
     using ElementType = std::shared_ptr<T>;

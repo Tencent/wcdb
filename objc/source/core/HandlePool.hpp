@@ -42,15 +42,12 @@ public:
     HandlePool(const HandlePool &) = delete;
     HandlePool &operator=(const HandlePool &) = delete;
 
-    HandlePool(const std::string &path,
-               const std::shared_ptr<Configs> &configs);
+    HandlePool(const std::string &path, const std::shared_ptr<Configs> &configs);
 
     virtual ~HandlePool();
 
-    typedef std::function<bool(const HandlePool &)>
-        InitializeNotificationCallback;
-    void setInitializeNotification(
-        const InitializeNotificationCallback &onInitializing);
+    typedef std::function<bool(const HandlePool &)> InitializeNotificationCallback;
+    void setInitializeNotification(const InitializeNotificationCallback &onInitializing);
 
 protected:
     std::atomic<bool> m_inited;
@@ -103,8 +100,7 @@ public:
 protected:
     std::shared_ptr<ConfiguredHandle> generateConfiguredHandle();
     std::shared_ptr<ConfiguredHandle> flowOutConfiguredHandle();
-    void flowBackConfiguredHandle(
-        const std::shared_ptr<ConfiguredHandle> &configuredHandle);
+    void flowBackConfiguredHandle(const std::shared_ptr<ConfiguredHandle> &configuredHandle);
     virtual std::shared_ptr<Handle> generateHandle();
 
     SharedLock m_sharedLock;

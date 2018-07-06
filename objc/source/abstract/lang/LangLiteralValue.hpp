@@ -49,8 +49,7 @@ public:
     CopyOnWriteString SQL() const override;
 
 protected:
-    static CopyOnWriteString
-    stringByAntiInjecting(const CopyOnWriteString &origin);
+    static CopyOnWriteString stringByAntiInjecting(const CopyOnWriteString &origin);
     static CopyOnWriteString stringByAntiInjecting(const Data &origin);
 };
 

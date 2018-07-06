@@ -22,7 +22,7 @@
 
 @interface TestCaseVirtualObject : NSObject
 
-@property(nonatomic, assign) int variable1;
-@property(nonatomic, retain) NSString *variable2;
+@property (nonatomic, assign) int variable1;
+@property (nonatomic, retain) NSString *variable2;
 
 @end

@@ -65,8 +65,7 @@ protected:
     virtual void onCrawlerError();
 
 private:
-    void
-    safeCrawl(int rootpageno, std::set<int> &crawledInteriorPages, int height);
+    void safeCrawl(int rootpageno, std::set<int> &crawledInteriorPages, int height);
     bool m_isCrawling;
 };
 

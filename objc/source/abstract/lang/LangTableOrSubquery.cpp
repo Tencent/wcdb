@@ -41,15 +41,15 @@ CopyOnWriteString TableOrSubqueryTable::SQL() const
     }
     if (indexSwitcher != IndexSwitch::NotSet) {
         switch (indexSwitcher) {
-            case IndexSwitch::Indexed:
-                LangRemedialAssert(!indexName.empty());
-                description.append(" INDEXED BY " + indexName.get());
-                break;
-            case IndexSwitch::NotIndexed:
-                description.append(" NOT INDEXED");
-                break;
-            default:
-                break;
+        case IndexSwitch::Indexed:
+            LangRemedialAssert(!indexName.empty());
+            description.append(" INDEXED BY " + indexName.get());
+            break;
+        case IndexSwitch::NotIndexed:
+            description.append(" NOT INDEXED");
+            break;
+        default:
+            break;
         }
     }
     return description;
@@ -61,7 +61,7 @@ TableOrSubqueryBase::Type TableOrSubqueryTable::getType() const
 }
 
 TableOrSubqueryTable::TableOrSubqueryTable()
-    : indexSwitcher(IndexSwitch::NotSet)
+: indexSwitcher(IndexSwitch::NotSet)
 {
 }
 
@@ -143,23 +143,23 @@ CopyOnWriteString TableOrSubquery::SQL() const
 {
     std::string description = String::empty();
     switch (type) {
-        case Type::Table:
-            LangRemedialAssert(!tableOrSubqueryTable.empty());
-            return tableOrSubqueryTable.description();
-        case Type::TableFunction:
-            LangRemedialAssert(!tableOrSubqueryTableFunction.empty());
-            return tableOrSubqueryTableFunction.description();
-        case Type::JoinClause:
-            LangRemedialAssert(!tableOrSubqueryJoinClause.empty());
-            return tableOrSubqueryJoinClause.description();
-        case Type::Select:
-            LangRemedialAssert(!tableOrSubquerySelect.empty());
-            return tableOrSubquerySelect.description();
-        case Type::List:
-            LangRemedialAssert(!tableOrSubqueryList.empty());
-            return tableOrSubqueryList.description();
-        default:
-            LangRemedialFatalError();
+    case Type::Table:
+        LangRemedialAssert(!tableOrSubqueryTable.empty());
+        return tableOrSubqueryTable.description();
+    case Type::TableFunction:
+        LangRemedialAssert(!tableOrSubqueryTableFunction.empty());
+        return tableOrSubqueryTableFunction.description();
+    case Type::JoinClause:
+        LangRemedialAssert(!tableOrSubqueryJoinClause.empty());
+        return tableOrSubqueryJoinClause.description();
+    case Type::Select:
+        LangRemedialAssert(!tableOrSubquerySelect.empty());
+        return tableOrSubquerySelect.description();
+    case Type::List:
+        LangRemedialAssert(!tableOrSubqueryList.empty());
+        return tableOrSubqueryList.description();
+    default:
+        LangRemedialFatalError();
     }
     return description;
 }

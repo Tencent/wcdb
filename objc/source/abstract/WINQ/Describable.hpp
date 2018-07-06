@@ -38,9 +38,9 @@ public:
 
     Describable(const Lang::CopyOnWriteLazyLang<Lang::Lang> &cowLang);
 
-    template <typename T>
+    template<typename T>
     Describable(const Lang::CopyOnWriteLazyLang<T> &cowLang)
-        : m_cowLang(cowLang)
+    : m_cowLang(cowLang)
     {
     }
 
@@ -52,7 +52,7 @@ public:
 
     bool empty() const;
 
-    template <typename T>
+    template<typename T>
     static std::string getDescription(const std::list<T> &list)
     {
         std::string output;
@@ -69,7 +69,7 @@ protected:
     Lang::CopyOnWriteLazyLang<Lang::Lang> m_cowLang;
 };
 
-template <typename T>
+template<typename T>
 class DescribableWithLang : public Describable {
 public:
     using Describable::Describable;

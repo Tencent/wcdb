@@ -25,8 +25,7 @@
 
 namespace WCDB {
 
-class RaiseFunction : public DescribableWithLang<Lang::RaiseFunction>,
-                      public Redirectable {
+class RaiseFunction : public DescribableWithLang<Lang::RaiseFunction>, public Redirectable {
 public:
     RaiseFunction &ignore();
     RaiseFunction &rollback(const std::string &errorMessage);

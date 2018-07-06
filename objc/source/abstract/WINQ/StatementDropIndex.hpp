@@ -27,7 +27,6 @@
 namespace WCDB {
 
 class StatementDropIndex : public StatementWithLang<Lang::DropIndexSTMT> {
-
 public:
     StatementDropIndex();
     StatementDropIndex &dropIndex(const std::string &indexName);

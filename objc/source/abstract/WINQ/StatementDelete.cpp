@@ -30,8 +30,7 @@ StatementDelete &StatementDelete::with(const WithClause &withClause)
     return *this;
 }
 
-StatementDelete &
-StatementDelete::deleteFrom(const QualifiedTableName &qualifiedTableName)
+StatementDelete &StatementDelete::deleteFrom(const QualifiedTableName &qualifiedTableName)
 {
     Lang::DeleteSTMT &lang = getMutableLang();
     lang.qualifiedTableName.assign(qualifiedTableName.getCOWLang());
@@ -52,8 +51,7 @@ StatementDelete &StatementDelete::orderBy(const OrderingTerm &orderingTerm)
     return *this;
 }
 
-StatementDelete &
-StatementDelete::orderBy(const std::list<OrderingTerm> &orderingTerms)
+StatementDelete &StatementDelete::orderBy(const std::list<OrderingTerm> &orderingTerms)
 {
     Lang::DeleteSTMT &lang = getMutableLang();
     for (const OrderingTerm &orderingTerm : orderingTerms) {
@@ -62,8 +60,7 @@ StatementDelete::orderBy(const std::list<OrderingTerm> &orderingTerms)
     return *this;
 }
 
-StatementDelete &StatementDelete::limit(const Expression &from,
-                                        const Expression &to)
+StatementDelete &StatementDelete::limit(const Expression &from, const Expression &to)
 {
     Lang::DeleteSTMT &lang = getMutableLang();
     lang.offset = false;

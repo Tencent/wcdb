@@ -29,7 +29,7 @@ Describable::Describable()
 }
 
 Describable::Describable(const Lang::CopyOnWriteLazyLang<Lang::Lang> &cowLang)
-    : m_cowLang(cowLang)
+: m_cowLang(cowLang)
 {
 }
 

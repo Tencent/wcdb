@@ -24,11 +24,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WCTMigrationInfo : NSObject
 
-@property(nonatomic, readonly) NSString *targetTable;
+@property (nonatomic, readonly) NSString *targetTable;
 
-@property(nonatomic, readonly) NSString *sourceTable;
+@property (nonatomic, readonly) NSString *sourceTable;
 
-@property(nonatomic, readonly, nullable) NSString *sourceDatabasePath;
+@property (nonatomic, readonly, nullable) NSString *sourceDatabasePath;
 
 - (nullable NSString *)schema;
 

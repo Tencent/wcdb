@@ -31,26 +31,26 @@
     XCTAssertEqual(WCDB::StatementDropTrigger().getType(), WCDB::Statement::Type::DropTrigger);
 
     WINQAssertEqual(WCDB::StatementDropTrigger()
-                        .dropTrigger(self.class.triggerName)
-                        .ifExists(true)
-                        .withSchema(self.class.schemaName),
+                    .dropTrigger(self.class.triggerName)
+                    .ifExists(true)
+                    .withSchema(self.class.schemaName),
                     @"DROP TRIGGER IF EXISTS testSchema.testTrigger");
 
     WINQAssertEqual(WCDB::StatementDropTrigger()
-                        .dropTrigger(self.class.triggerName)
-                        .ifExists(true),
+                    .dropTrigger(self.class.triggerName)
+                    .ifExists(true),
                     @"DROP TRIGGER IF EXISTS main.testTrigger");
 
     WINQAssertEqual(WCDB::StatementDropTrigger()
-                        .dropTrigger(self.class.triggerName)
-                        .ifExists(false)
-                        .withSchema(self.class.schemaName),
+                    .dropTrigger(self.class.triggerName)
+                    .ifExists(false)
+                    .withSchema(self.class.schemaName),
                     @"DROP TRIGGER testSchema.testTrigger");
 
     //Default
     WINQAssertEqual(WCDB::StatementDropTrigger()
-                        .dropTrigger(self.class.triggerName)
-                        .withSchema(self.class.schemaName),
+                    .dropTrigger(self.class.triggerName)
+                    .withSchema(self.class.schemaName),
                     @"DROP TRIGGER IF EXISTS testSchema.testTrigger");
 }
 

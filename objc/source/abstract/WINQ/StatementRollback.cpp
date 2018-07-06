@@ -33,8 +33,7 @@ const StatementRollback &StatementRollback::rollback()
     return *s_rollback;
 }
 
-StatementRollback &
-StatementRollback::rollbackTo(const std::string &savepointName)
+StatementRollback &StatementRollback::rollbackTo(const std::string &savepointName)
 {
     Lang::RollbackSTMT &lang = getMutableLang();
     lang.savepointName.assign(savepointName);

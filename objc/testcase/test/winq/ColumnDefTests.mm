@@ -29,17 +29,17 @@
 - (void)testColumnDef
 {
     WINQAssertEqual(WCDB::ColumnDef(self.class.column)
-                        .withType(WCDB::ColumnType::Integer32),
+                    .withType(WCDB::ColumnType::Integer32),
                     @"testColumn INTEGER");
 
     WINQAssertEqual(WCDB::ColumnDef(self.class.column)
-                        .withType(WCDB::ColumnType::Integer32)
-                        .byAddingConstraint(self.class.columnConstraint),
+                    .withType(WCDB::ColumnType::Integer32)
+                    .byAddingConstraint(self.class.columnConstraint),
                     @"testColumn INTEGER NOT NULL");
 
     WINQAssertEqual(WCDB::ColumnDef(self.class.column)
-                        .withType(WCDB::ColumnType::Integer32)
-                        .byAddingConstraints(self.class.columnConstraints),
+                    .withType(WCDB::ColumnType::Integer32)
+                    .byAddingConstraints(self.class.columnConstraints),
                     @"testColumn INTEGER NOT NULL UNIQUE");
 
     WINQAssertEqual(WCDB::ColumnDef(self.class.column), @"testColumn");

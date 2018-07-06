@@ -38,8 +38,7 @@ bool FactoryBackup::work(const std::string &database, int maxWalFrame)
 
     bool succeed;
     std::string materialPath;
-    std::tie(succeed, materialPath) =
-        Factory::materialForSerializingForDatabase(database);
+    std::tie(succeed, materialPath) = Factory::materialForSerializingForDatabase(database);
     if (succeed && backup.getMaterial().serialize(materialPath)) {
         return true;
     }

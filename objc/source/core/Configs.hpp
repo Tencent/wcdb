@@ -43,8 +43,7 @@ public:
     std::shared_ptr<Configs>
     configsBySettingConfig(const std::shared_ptr<Config> &config,
                            int priority = Priority::Default) const;
-    std::shared_ptr<Configs>
-    configsByRemovingConfig(const std::string &names) const;
+    std::shared_ptr<Configs> configsByRemovingConfig(const std::string &names) const;
 
     bool invoke(Handle *handle);
 

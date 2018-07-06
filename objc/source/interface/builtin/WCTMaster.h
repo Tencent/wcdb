@@ -24,14 +24,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WCTMaster : NSObject
 
-@property(class, nonatomic, readonly) NSString *tableName;
-@property(class, nonatomic, readonly) NSString *tempTableName;
+@property (class, nonatomic, readonly) NSString *tableName;
+@property (class, nonatomic, readonly) NSString *tempTableName;
 
-@property(nonatomic, retain, nullable) NSString *type;
-@property(nonatomic, retain, nullable) NSString *name;
-@property(nonatomic, retain, nullable) NSString *tblName;
-@property(nonatomic, assign) int rootpage;
-@property(nonatomic, retain, nullable) NSString *sql;
+@property (nonatomic, retain, nullable) NSString *type;
+@property (nonatomic, retain, nullable) NSString *name;
+@property (nonatomic, retain, nullable) NSString *tblName;
+@property (nonatomic, assign) int rootpage;
+@property (nonatomic, retain, nullable) NSString *sql;
 
 @end
 

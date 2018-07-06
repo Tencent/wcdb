@@ -27,10 +27,8 @@ namespace WCDB {
 
 namespace Repair {
 
-Frame::Frame(int frameno_,
-             Wal *wal,
-             const std::pair<uint32_t, uint32_t> &checksum)
-    : WalRelated(wal), frameno(frameno_), m_checksum(checksum)
+Frame::Frame(int frameno_, Wal *wal, const std::pair<uint32_t, uint32_t> &checksum)
+: WalRelated(wal), frameno(frameno_), m_checksum(checksum)
 {
     WCTInnerAssert(m_wal != nullptr);
 }
@@ -56,15 +54,14 @@ std::pair<bool, Page::Type> Frame::getPageType() const
 }
 
 std::pair<uint32_t, uint32_t>
-Frame::calculateChecksum(const Data &data,
-                         const std::pair<uint32_t, uint32_t> &checksum)
+Frame::calculateChecksum(const Data &data, const std::pair<uint32_t, uint32_t> &checksum)
 {
     WCTInnerAssert(data.size() >= 8);
     WCTInnerAssert((data.size() & 0x00000007) == 0);
 
     const uint32_t *iter = reinterpret_cast<const uint32_t *>(data.buffer());
-    const uint32_t *end =
-        reinterpret_cast<const uint32_t *>(data.buffer() + data.size());
+    const uint32_t *end
+    = reinterpret_cast<const uint32_t *>(data.buffer() + data.size());
 
     std::pair<uint32_t, uint32_t> result = checksum;
 
@@ -76,8 +73,8 @@ Frame::calculateChecksum(const Data &data,
     } else {
         do {
 #define BYTESWAP32(x)                                                          \
-    ((((x) &0x000000FF) << 24) + (((x) &0x0000FF00) << 8) +                    \
-     (((x) &0x00FF0000) >> 8) + (((x) &0xFF000000) >> 24))
+    ((((x) &0x000000FF) << 24) + (((x) &0x0000FF00) << 8)                      \
+     + (((x) &0x00FF0000) >> 8) + (((x) &0xFF000000) >> 24))
             result.first += BYTESWAP32(iter[0]) + result.second;
             result.second += BYTESWAP32(iter[1]) + result.first;
             iter += 2;

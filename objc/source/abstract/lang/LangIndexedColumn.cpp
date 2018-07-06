@@ -33,17 +33,17 @@ CopyOnWriteString IndexedColumn::SQL() const
 {
     std::string description;
     switch (switcher) {
-        case Switch::Column:
-            LangRemedialAssert(!column.empty());
-            description.append(column.description().get());
-            break;
-        case Switch::Expr:
-            LangRemedialAssert(!expr.empty());
-            description.append(expr.description().get());
-            break;
-        default:
-            LangRemedialFatalError();
-            break;
+    case Switch::Column:
+        LangRemedialAssert(!column.empty());
+        description.append(column.description().get());
+        break;
+    case Switch::Expr:
+        LangRemedialAssert(!expr.empty());
+        description.append(expr.description().get());
+        break;
+    default:
+        LangRemedialFatalError();
+        break;
     }
     if (!collationName.empty()) {
         description.append(" COLLATE " + collationName.get());

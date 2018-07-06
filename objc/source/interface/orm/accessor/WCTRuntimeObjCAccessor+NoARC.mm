@@ -29,9 +29,9 @@
 #endif
 
 WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const std::string &propertyName)
-    : WCTRuntimeAccessor<id>(instanceClass, propertyName)
-    , WCTObjCAccessor(generateValueGetter(instanceClass, propertyName), generateValueSetter(instanceClass, propertyName))
-    , m_columnType(GetColumnType(instanceClass, propertyName))
+: WCTRuntimeAccessor<id>(instanceClass, propertyName)
+, WCTObjCAccessor(generateValueGetter(instanceClass, propertyName), generateValueSetter(instanceClass, propertyName))
+, m_columnType(GetColumnType(instanceClass, propertyName))
 {
     Class propertyClass = getPropertyClass(instanceClass, propertyName);
     WCTAssert([propertyClass conformsToProtocol:@protocol(WCTColumnCoding)], "Class %@ should conforms to protocol WCTColumnCoding.");
@@ -43,10 +43,10 @@ WCTRuntimeObjCAccessor::ValueGetter WCTRuntimeObjCAccessor::generateValueGetter(
     Class propertyClass = getPropertyClass(instanceClass, propertyName);
     IMP implementation = getInstanceMethodImplementation(propertyClass, archiveSelector);
     auto block = ^(InstanceType instance) {
-      using Archiver = OCType (*)(InstanceType, SEL);
-      PropertyType property = getProperty(instance);
-      OCType value = property ? ((Archiver) implementation)(property, archiveSelector) : nil;
-      return value;
+        using Archiver = OCType (*)(InstanceType, SEL);
+        PropertyType property = getProperty(instance);
+        OCType value = property ? ((Archiver) implementation)(property, archiveSelector) : nil;
+        return value;
     };
     return [block copy];
 }
@@ -57,11 +57,11 @@ WCTRuntimeObjCAccessor::ValueSetter WCTRuntimeObjCAccessor::generateValueSetter(
     Class propertyClass = getPropertyClass(instanceClass, propertyName);
     IMP implementation = getClassMethodImplementation(propertyClass, unarchiveSelector);
     auto block = ^(InstanceType instance, OCType value) {
-      using Unarchiver = PropertyType (*)(Class, SEL, OCType);
-      if (instance) {
-          PropertyType property = ((Unarchiver) implementation)(propertyClass, unarchiveSelector, value);
-          setProperty(instance, property);
-      }
+        using Unarchiver = PropertyType (*)(Class, SEL, OCType);
+        if (instance) {
+            PropertyType property = ((Unarchiver) implementation)(propertyClass, unarchiveSelector, value);
+            setProperty(instance, property);
+        }
     };
     return [block copy];
 }

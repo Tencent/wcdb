@@ -33,22 +33,22 @@ CopyOnWriteString ReindexSTMT::SQL() const
 {
     std::string description("REINDEX");
     switch (switcher) {
-        case Switch::Collation:
-            LangRemedialAssert(!collationName.empty());
-            description.append(" " + collationName.get());
-            break;
-        case Switch::TableOrIndex:
-            description.append(" ");
-            if (schemaName.isNull()) {
-                description.append(mainSchema() + ".");
-            } else if (!schemaName.get().empty()) {
-                description.append(schemaName.get() + ".");
-            }
-            LangRemedialAssert(!tableOrIndexName.empty());
-            description.append(tableOrIndexName.get());
-            break;
-        default:
-            break;
+    case Switch::Collation:
+        LangRemedialAssert(!collationName.empty());
+        description.append(" " + collationName.get());
+        break;
+    case Switch::TableOrIndex:
+        description.append(" ");
+        if (schemaName.isNull()) {
+            description.append(mainSchema() + ".");
+        } else if (!schemaName.get().empty()) {
+            description.append(schemaName.get() + ".");
+        }
+        LangRemedialAssert(!tableOrIndexName.empty());
+        description.append(tableOrIndexName.get());
+        break;
+    default:
+        break;
     }
     return description;
 }

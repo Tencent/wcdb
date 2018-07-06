@@ -34,8 +34,7 @@ ColumnConstraint &ColumnConstraint::named(const std::string &name)
     return *this;
 }
 
-ColumnConstraint &ColumnConstraint::withPrimaryKey(const Order &order,
-                                                   bool autoIncrement)
+ColumnConstraint &ColumnConstraint::withPrimaryKey(const Order &order, bool autoIncrement)
 {
     Lang::ColumnConstraint &lang = getMutableLang();
     lang.type = Lang::ColumnConstraint::Type::PrimaryKey;
@@ -58,8 +57,7 @@ ColumnConstraint &ColumnConstraint::withUnique()
     return *this;
 }
 
-ColumnConstraint &
-ColumnConstraint::onConflict(const ConflictClause &conflictClause)
+ColumnConstraint &ColumnConstraint::onConflict(const ConflictClause &conflictClause)
 {
     Lang::ColumnConstraint &lang = getMutableLang();
     lang.conflictClause = conflictClause;
@@ -74,8 +72,7 @@ ColumnConstraint &ColumnConstraint::check(const Expression &expression)
     return *this;
 }
 
-ColumnConstraint &
-ColumnConstraint::withDefaultValue(const LiteralValue &literalValue)
+ColumnConstraint &ColumnConstraint::withDefaultValue(const LiteralValue &literalValue)
 {
     Lang::ColumnConstraint &lang = getMutableLang();
     lang.type = Lang::ColumnConstraint::Type::Default;
@@ -84,8 +81,7 @@ ColumnConstraint::withDefaultValue(const LiteralValue &literalValue)
     return *this;
 }
 
-ColumnConstraint &
-ColumnConstraint::withDefaultExpression(const Expression &expression)
+ColumnConstraint &ColumnConstraint::withDefaultExpression(const Expression &expression)
 {
     Lang::ColumnConstraint &lang = getMutableLang();
     lang.type = Lang::ColumnConstraint::Type::Default;
@@ -102,8 +98,7 @@ ColumnConstraint &ColumnConstraint::collate(const std::string &collationName)
     return *this;
 }
 
-ColumnConstraint &
-ColumnConstraint::withForeignKeyClause(const ForeignKeyClause &foreignKeyClause)
+ColumnConstraint &ColumnConstraint::withForeignKeyClause(const ForeignKeyClause &foreignKeyClause)
 {
     Lang::ColumnConstraint &lang = getMutableLang();
     lang.type = Lang::ColumnConstraint::Type::ForeignKeyClause;

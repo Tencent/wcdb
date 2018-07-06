@@ -28,16 +28,14 @@ StatementCreateView::StatementCreateView()
     getMutableLang().ifNotExists = true;
 }
 
-StatementCreateView &
-StatementCreateView::createView(const std::string &viewName)
+StatementCreateView &StatementCreateView::createView(const std::string &viewName)
 {
     Lang::CreateViewSTMT &lang = getMutableLang();
     lang.viewName.assign(viewName);
     return *this;
 }
 
-StatementCreateView &
-StatementCreateView::withSchema(const std::string &schemaName)
+StatementCreateView &StatementCreateView::withSchema(const std::string &schemaName)
 {
     Lang::CreateViewSTMT &lang = getMutableLang();
     lang.schemaName.assign(schemaName);

@@ -27,7 +27,6 @@
 namespace WCDB {
 
 class StatementCreateIndex : public StatementWithLang<Lang::CreateIndexSTMT> {
-
 public:
     StatementCreateIndex();
     StatementCreateIndex &createIndex(const std::string &indexName);
@@ -36,8 +35,7 @@ public:
     StatementCreateIndex &withSchema(const std::string &schemaName);
     StatementCreateIndex &on(const std::string &tableName);
     StatementCreateIndex &indexedBy(const IndexedColumn &indexedColumn);
-    StatementCreateIndex &
-    indexedBy(const std::list<IndexedColumn> &indexedColumns);
+    StatementCreateIndex &indexedBy(const std::list<IndexedColumn> &indexedColumns);
     StatementCreateIndex &where(const Expression &condition);
 };
 

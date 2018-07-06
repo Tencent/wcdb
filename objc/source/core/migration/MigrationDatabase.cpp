@@ -26,13 +26,11 @@
 namespace WCDB {
 
 #pragma mark - Initializer
-std::shared_ptr<Database>
-MigrationDatabase::databaseWithExistingTag(const Tag &tag)
+std::shared_ptr<Database> MigrationDatabase::databaseWithExistingTag(const Tag &tag)
 {
-    std::shared_ptr<Database> database(new MigrationDatabase(
-        HandlePools::defaultPools()->getExistingPool(tag)));
-    if (database &&
-        static_cast<MigrationDatabase *>(database.get())->isValid()) {
+    std::shared_ptr<Database> database(
+    new MigrationDatabase(HandlePools::defaultPools()->getExistingPool(tag)));
+    if (database && static_cast<MigrationDatabase *>(database.get())->isValid()) {
         return database;
     }
     return nullptr;
@@ -41,53 +39,48 @@ MigrationDatabase::databaseWithExistingTag(const Tag &tag)
 std::shared_ptr<Database>
 MigrationDatabase::databaseWithExistingPath(const std::string &path)
 {
-    std::shared_ptr<Database> database(new MigrationDatabase(
-        HandlePools::defaultPools()->getExistingPool(path)));
-    if (database &&
-        static_cast<MigrationDatabase *>(database.get())->isValid()) {
+    std::shared_ptr<Database> database(
+    new MigrationDatabase(HandlePools::defaultPools()->getExistingPool(path)));
+    if (database && static_cast<MigrationDatabase *>(database.get())->isValid()) {
         return database;
     }
     return nullptr;
 }
 
-std::shared_ptr<HandlePool> MigrationDatabase::generateHandlePool(
-    const std::string &path,
-    const std::list<std::shared_ptr<MigrationInfo>> &infos)
+std::shared_ptr<HandlePool>
+MigrationDatabase::generateHandlePool(const std::string &path,
+                                      const std::list<std::shared_ptr<MigrationInfo>> &infos)
 {
-    std::shared_ptr<HandlePool> pool =
-        MigrationHandlePool::pool(path, Configs::default_(), infos);
+    std::shared_ptr<HandlePool> pool
+    = MigrationHandlePool::pool(path, Configs::default_(), infos);
     if (pool) {
-        MigrationHandlePool *migrationHandlePool =
-            static_cast<MigrationHandlePool *>(pool.get());
+        MigrationHandlePool *migrationHandlePool
+        = static_cast<MigrationHandlePool *>(pool.get());
         std::shared_ptr<Config> config(
-            new MigrationConfig(migrationHandlePool->getMigrationSetting()));
+        new MigrationConfig(migrationHandlePool->getMigrationSetting()));
         migrationHandlePool->setConfig(config, Configs::Priority::Higher);
-        migrationHandlePool->setInitializeNotification(
-            Database::initializeHandlePool);
+        migrationHandlePool->setInitializeNotification(Database::initializeHandlePool);
     }
     return pool;
 }
 
-std::shared_ptr<Database> MigrationDatabase::databaseWithPath(
-    const std::string &path,
-    const std::list<std::shared_ptr<MigrationInfo>> &infos)
+std::shared_ptr<Database>
+MigrationDatabase::databaseWithPath(const std::string &path,
+                                    const std::list<std::shared_ptr<MigrationInfo>> &infos)
 {
     std::shared_ptr<Database> database(
-        new MigrationDatabase(HandlePools::defaultPools()->getPool(
-            path, std::bind(&MigrationDatabase::generateHandlePool,
-                            std::placeholders::_1, infos))));
-    if (database &&
-        static_cast<MigrationDatabase *>(database.get())->isValid()) {
+    new MigrationDatabase(HandlePools::defaultPools()->getPool(
+    path, std::bind(&MigrationDatabase::generateHandlePool, std::placeholders::_1, infos))));
+    if (database && static_cast<MigrationDatabase *>(database.get())->isValid()) {
         return database;
     }
     return nullptr;
 }
 
 MigrationDatabase::MigrationDatabase(const RecyclableHandlePool &pool)
-    : Database(pool)
-    , m_migrationPool(pool != nullptr ? dynamic_cast<MigrationHandlePool *>(
-                                            pool.getHandlePool())
-                                      : nullptr)
+: Database(pool)
+, m_migrationPool(
+  pool != nullptr ? dynamic_cast<MigrationHandlePool *>(pool.getHandlePool()) : nullptr)
 {
     WCTInnerAssert(pool == nullptr || m_migrationPool != nullptr);
 }
@@ -99,8 +92,7 @@ bool MigrationDatabase::stepMigration(bool &done)
     WCTAssert(m_migrationPool->debug_checkMigratingThread(),
               "Migration stepping is not thread-safe.");
 #endif
-    WCTAssert(!isInThreadedTransaction(),
-              "Migration can't run in a transaction.");
+    WCTAssert(!isInThreadedTransaction(), "Migration can't run in a transaction.");
     done = false;
     if (interruptIfDeposited()) {
         return false;
@@ -116,14 +108,13 @@ bool MigrationDatabase::stepMigration(bool &done)
         }
         info = setting->pickUpForMigration();
         bool isMigrated = false;
-        bool committed = runTransaction([this, &migratedEve, &isMigrated, &info,
-                                         setting](Handle *handle) -> bool {
-            MigrationHandle *migrationHandle =
-                static_cast<MigrationHandle *>(handle);
+        bool committed = runTransaction(
+        [this, &migratedEve, &isMigrated, &info, setting](Handle *handle) -> bool {
+            MigrationHandle *migrationHandle = static_cast<MigrationHandle *>(handle);
             {
                 //check if source table exists
-                std::pair<bool, bool> sourceTableExists =
-                    migrationHandle->tableExists(info->getSourceTable());
+                std::pair<bool, bool> sourceTableExists
+                = migrationHandle->tableExists(info->getSourceTable());
                 if (!sourceTableExists.first || !sourceTableExists.second) {
                     isMigrated = sourceTableExists.first;
                     return false;
@@ -133,8 +124,7 @@ bool MigrationDatabase::stepMigration(bool &done)
             std::list<long long> rowids;
             {
                 //pick up row ids
-                if (!migrationHandle->prepare(
-                        info->getStatementForPickingRowIDs())) {
+                if (!migrationHandle->prepare(info->getStatementForPickingRowIDs())) {
                     return false;
                 }
                 migrationHandle->bindInteger64(rowPerStep, 1);
@@ -151,7 +141,7 @@ bool MigrationDatabase::stepMigration(bool &done)
             bool result = true;
             for (const auto &rowid : rowids) {
                 if (migrationHandle->migrateWithRowID(
-                        rowid, info, Lang::InsertSTMT::Type::Insert)) {
+                    rowid, info, Lang::InsertSTMT::Type::Insert)) {
                     continue;
                 }
                 //handle failure
@@ -161,13 +151,11 @@ bool MigrationDatabase::stepMigration(bool &done)
                     if (setting->invokeConflictCallback(info.get(), rowid)) {
                         //override
                         result = migrationHandle->migrateWithRowID(
-                            rowid, info,
-                            Lang::InsertSTMT::Type::InsertOrReplace);
+                        rowid, info, Lang::InsertSTMT::Type::InsertOrReplace);
                     } else {
                         //ignore conflict
                         result = migrationHandle->migrateWithRowID(
-                            rowid, info,
-                            Lang::InsertSTMT::Type::InsertOrIgnore);
+                        rowid, info, Lang::InsertSTMT::Type::InsertOrIgnore);
                     }
                 }
                 if (!result) {
@@ -189,10 +177,9 @@ bool MigrationDatabase::stepMigration(bool &done)
     }
     {
         LockGuard lockGuard(setting->getSharedLock());
-        if (migratedEve &&
-            !runTransaction([this, &info](Handle *handle) -> bool {
-                return execute(info->getStatementForDroppingOldTable()) &&
-                       execute(info->getStatementForDroppingUnionedView());
+        if (migratedEve && !runTransaction([this, &info](Handle *handle) -> bool {
+                return execute(info->getStatementForDroppingOldTable())
+                       && execute(info->getStatementForDroppingUnionedView());
             })) {
             return false;
         }
@@ -218,13 +205,13 @@ void MigrationDatabase::asyncMigration(const SteppedCallback &callback)
         bool done = false;
         bool result = false;
         while (!done) {
-            std::shared_ptr<Database> database =
-                MigrationDatabase::databaseWithExistingPath(path);
+            std::shared_ptr<Database> database
+            = MigrationDatabase::databaseWithExistingPath(path);
             if (!database) {
                 break;
             }
-            MigrationDatabase *migrationDatabase =
-                static_cast<MigrationDatabase *>(database.get());
+            MigrationDatabase *migrationDatabase
+            = static_cast<MigrationDatabase *>(database.get());
             result = migrationDatabase->stepMigration(done);
             if (done || (callback && !callback(State::Migrating, result))) {
                 break;
@@ -238,14 +225,13 @@ void MigrationDatabase::asyncMigration(const SteppedCallback &callback)
 
 void MigrationDatabase::asyncMigration(double interval, int retryTimes)
 {
-    asyncMigration([interval, retryTimes](bool result,
-                                          bool done) mutable -> bool {
+    asyncMigration([interval, retryTimes](bool result, bool done) mutable -> bool {
         if (!done) {
             if (!result && --retryTimes == 0) {
                 return false;
             }
             std::this_thread::sleep_for(
-                std::chrono::microseconds((long long) (interval * 1000000)));
+            std::chrono::microseconds((long long) (interval * 1000000)));
         }
         return true;
     });

@@ -33,14 +33,14 @@
 
 - (BOOL)isEqualToRepairTestCaseObject:(RepairTestCaseObject *)object;
 
-@property(nonatomic, assign) BOOL boolValue;
-@property(nonatomic, assign) int8_t int8Value;
-@property(nonatomic, assign) int16_t int16Value;
-@property(nonatomic, assign) int32_t int32Value;
-@property(nonatomic, assign) int64_t int64Value;
-@property(nonatomic, assign) double doubleValue;
-@property(nonatomic, retain) NSString *stringValue;
-@property(nonatomic, retain) NSData *dataValue;
-@property(nonatomic, retain) NSObject *nullValue;
+@property (nonatomic, assign) BOOL boolValue;
+@property (nonatomic, assign) int8_t int8Value;
+@property (nonatomic, assign) int16_t int16Value;
+@property (nonatomic, assign) int32_t int32Value;
+@property (nonatomic, assign) int64_t int64Value;
+@property (nonatomic, assign) double doubleValue;
+@property (nonatomic, retain) NSString *stringValue;
+@property (nonatomic, retain) NSData *dataValue;
+@property (nonatomic, retain) NSObject *nullValue;
 
 @end

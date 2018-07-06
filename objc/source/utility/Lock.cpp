@@ -43,20 +43,19 @@ void SpinLock::unlock()
 }
 
 SharedLock::SharedLock()
-    : m_readers(0)
-    , m_writers(0)
-    , m_pendingReaders(0)
-    , m_pendingWriters(0)
-    , m_locking(std::thread::id())
-    , m_threadedReaders(0)
+: m_readers(0)
+, m_writers(0)
+, m_pendingReaders(0)
+, m_pendingWriters(0)
+, m_locking(std::thread::id())
+, m_threadedReaders(0)
 {
 }
 
 void SharedLock::lockShared()
 {
     std::unique_lock<std::mutex> lockGuard(m_mutex);
-    if (m_writers > 0 ? m_locking != std::this_thread::get_id()
-                      : m_pendingWriters > 0) {
+    if (m_writers > 0 ? m_locking != std::this_thread::get_id() : m_pendingWriters > 0) {
         WCTInnerAssert(*m_threadedReaders.get() == 0);
         ++m_pendingReaders;
         do {
@@ -73,8 +72,9 @@ void SharedLock::unlockShared()
     std::unique_lock<std::mutex> lockGuard(m_mutex);
     WCTInnerAssert(m_readers > 0);
     WCTInnerAssert(*m_threadedReaders.get() > 0);
-    WCTInnerAssert(m_writers == 0 || (m_readers == *m_threadedReaders.get() &&
-                                      m_locking == std::this_thread::get_id()));
+    WCTInnerAssert(m_writers == 0
+                   || (m_readers == *m_threadedReaders.get()
+                       && m_locking == std::this_thread::get_id()));
     --m_readers;
     --*m_threadedReaders.get();
     if (m_readers == 0) {
@@ -88,10 +88,8 @@ void SharedLock::unlockShared()
 void SharedLock::lock()
 {
     std::unique_lock<std::mutex> lockGuard(m_mutex);
-    WCTInnerAssert(*m_threadedReaders.get() ==
-                   0); //Upgrade lock is not supported yet.
-    if ((m_readers > 0 || m_writers > 0) &&
-        m_locking != std::this_thread::get_id()) {
+    WCTInnerAssert(*m_threadedReaders.get() == 0); //Upgrade lock is not supported yet.
+    if ((m_readers > 0 || m_writers > 0) && m_locking != std::this_thread::get_id()) {
         ++m_pendingWriters;
         do {
             m_writersCond.wait(lockGuard);
@@ -105,8 +103,7 @@ void SharedLock::lock()
 void SharedLock::unlock()
 {
     std::unique_lock<std::mutex> lockGuard(m_mutex);
-    WCTInnerAssert(*m_threadedReaders.get() ==
-                   0); //Upgrade lock is not supported yet.
+    WCTInnerAssert(*m_threadedReaders.get() == 0); //Upgrade lock is not supported yet.
     if (--m_writers == 0) {
         m_locking = std::thread::id();
         if (m_pendingWriters > 0) {
@@ -130,13 +127,11 @@ SharedLock::Level SharedLock::level() const
 
 SharedLock::~SharedLock()
 {
-    WCTRemedialAssert(m_readers == 0 && m_writers == 0 &&
-                          m_pendingWriters == 0 && m_pendingWriters == 0 &&
-                          m_pendingReaders == 0,
-                      "Unpaired shared lock",
-                      while (m_writers > 0) {
-                          unlock();
-                      } while (m_readers > 0) { unlockShared(); })
+    WCTRemedialAssert(
+    m_readers == 0 && m_writers == 0 && m_pendingWriters == 0
+    && m_pendingWriters == 0 && m_pendingReaders == 0,
+    "Unpaired shared lock",
+    while (m_writers > 0) { unlock(); } while (m_readers > 0) { unlockShared(); })
 }
 
 LockGuard::LockGuard(Lockable &lock) : m_lock(lock)

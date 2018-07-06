@@ -36,13 +36,13 @@
     int tableCount = [NSNumber randomUInt8];
     for (int i = 0; i < tableCount; ++i) {
         if (![_database runTransaction:^BOOL(WCTHandle *_Nonnull) {
-              NSArray<RepairTestCaseObject *> *objects = [RepairTestCaseObject randomObjects];
-              NSString *tableName;
-              do {
-                  tableName = [NSString stringWithFormat:@"t_%@", [NSString randomString]];
-              } while ([tableObjects objectForKey:tableName] != nil);
-              [tableObjects setObject:objects forKey:tableName];
-              return [_database createTableAndIndexes:tableName withClass:RepairTestCaseObject.class] && [_database insertObjects:objects intoTable:tableName];
+                NSArray<RepairTestCaseObject *> *objects = [RepairTestCaseObject randomObjects];
+                NSString *tableName;
+                do {
+                    tableName = [NSString stringWithFormat:@"t_%@", [NSString randomString]];
+                } while ([tableObjects objectForKey:tableName] != nil);
+                [tableObjects setObject:objects forKey:tableName];
+                return [_database createTableAndIndexes:tableName withClass:RepairTestCaseObject.class] && [_database insertObjects:objects intoTable:tableName];
             }]) {
             return nil;
         }
@@ -62,17 +62,17 @@
 
         NSArray<RepairTestCaseObject *> *retrieved = [_database getObjectsOfClass:RepairTestCaseObject.class fromTable:tableName orderBy:RepairTestCaseObject.int64Value];
         NSArray<RepairTestCaseObject *> *expected = [objects sortedArrayUsingComparator:^NSComparisonResult(RepairTestCaseObject *obj1, RepairTestCaseObject *obj2) {
-          if (obj1.int64Value > obj2.int64Value) {
-              return NSOrderedDescending;
-          } else if (obj1.int64Value < obj2.int64Value) {
-              return NSOrderedAscending;
-          } else {
-              return NSOrderedSame;
-          }
+            if (obj1.int64Value > obj2.int64Value) {
+                return NSOrderedDescending;
+            } else if (obj1.int64Value < obj2.int64Value) {
+                return NSOrderedAscending;
+            } else {
+                return NSOrderedSame;
+            }
         }];
         XCTAssertTrue([retrieved isEqualToObjects:expected
                                    withComparator:^BOOL(RepairTestCaseObject *lhs, RepairTestCaseObject *rhs) {
-                                     return [lhs isEqualToRepairTestCaseObject:rhs];
+                                       return [lhs isEqualToRepairTestCaseObject:rhs];
                                    }]);
     }
 }
@@ -91,17 +91,17 @@
 
         NSArray<RepairTestCaseObject *> *retrieved = [_database getObjectsOfClass:RepairTestCaseObject.class fromTable:tableName orderBy:RepairTestCaseObject.int64Value];
         NSArray<RepairTestCaseObject *> *expected = [objects sortedArrayUsingComparator:^NSComparisonResult(RepairTestCaseObject *obj1, RepairTestCaseObject *obj2) {
-          if (obj1.int64Value > obj2.int64Value) {
-              return NSOrderedDescending;
-          } else if (obj1.int64Value < obj2.int64Value) {
-              return NSOrderedAscending;
-          } else {
-              return NSOrderedSame;
-          }
+            if (obj1.int64Value > obj2.int64Value) {
+                return NSOrderedDescending;
+            } else if (obj1.int64Value < obj2.int64Value) {
+                return NSOrderedAscending;
+            } else {
+                return NSOrderedSame;
+            }
         }];
         XCTAssertTrue([retrieved isEqualToObjects:expected
                                    withComparator:^BOOL(RepairTestCaseObject *lhs, RepairTestCaseObject *rhs) {
-                                     return [lhs isEqualToRepairTestCaseObject:rhs];
+                                       return [lhs isEqualToRepairTestCaseObject:rhs];
                                    }]);
     }
 }

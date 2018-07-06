@@ -22,8 +22,8 @@
 
 @interface ORMUniqueIndex : NSObject
 
-@property(nonatomic, retain) NSString *variable1;
-@property(nonatomic, assign) NSInteger variable2;
-@property(nonatomic, assign) float variable3;
+@property (nonatomic, retain) NSString *variable1;
+@property (nonatomic, assign) NSInteger variable2;
+@property (nonatomic, assign) float variable3;
 
 @end

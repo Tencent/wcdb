@@ -26,22 +26,19 @@ namespace WCDB {
 
 const std::shared_ptr<Config> &BasicConfig::shared()
 {
-    static const std::shared_ptr<Config> *s_shared =
-        new std::shared_ptr<Config>(new BasicConfig);
+    static const std::shared_ptr<Config> *s_shared
+    = new std::shared_ptr<Config>(new BasicConfig);
     return *s_shared;
 }
 
 BasicConfig::BasicConfig()
-    : Config(BasicConfig::name)
-    , m_getJournalMode(StatementPragma().pragma(Pragma::journalMode()))
-    , m_getLockingMode(StatementPragma().pragma(Pragma::lockingMode()))
-    , m_setFullFSync(StatementPragma().pragma(Pragma::fullfsync()).to(true))
-    , m_setLockingModeNormal(
-          StatementPragma().pragma(Pragma::lockingMode()).to("NORMAL"))
-    , m_setSynchronousNormal(
-          StatementPragma().pragma(Pragma::synchronous()).to("NORMAL"))
-    , m_setJournalModeWAL(
-          StatementPragma().pragma(Pragma::journalMode()).to("WAL"))
+: Config(BasicConfig::name)
+, m_getJournalMode(StatementPragma().pragma(Pragma::journalMode()))
+, m_getLockingMode(StatementPragma().pragma(Pragma::lockingMode()))
+, m_setFullFSync(StatementPragma().pragma(Pragma::fullfsync()).to(true))
+, m_setLockingModeNormal(StatementPragma().pragma(Pragma::lockingMode()).to("NORMAL"))
+, m_setSynchronousNormal(StatementPragma().pragma(Pragma::synchronous()).to("NORMAL"))
+, m_setJournalModeWAL(StatementPragma().pragma(Pragma::journalMode()).to("WAL"))
 {
 }
 
@@ -56,10 +53,9 @@ bool BasicConfig::invoke(Handle *handle)
             handle->finalize();
 
             // See also: http://www.sqlite.org/wal.html#readonly
-            WCTRemedialAssert(
-                strcasecmp(journalMode.c_str(), "WAL") != 0,
-                "It is not possible to open read-only WAL databases.",
-                return false;);
+            WCTRemedialAssert(strcasecmp(journalMode.c_str(), "WAL") != 0,
+                              "It is not possible to open read-only WAL databases.",
+                              return false;);
             return true;
         }
 

@@ -49,7 +49,7 @@ typedef BOOL (^WCTConfigBlock)(WCTHandle *_Nonnull);
  @param cipherPageSize Cipher Page Size
  */
 - (void)setCipherKey:(nullable NSData *)cipherKey
-    andCipherPageSize:(int)cipherPageSize;
+   andCipherPageSize:(int)cipherPageSize;
 
 /**
  @brief Set config for this database.  

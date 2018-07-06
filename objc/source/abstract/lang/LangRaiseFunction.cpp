@@ -33,21 +33,21 @@ CopyOnWriteString RaiseFunction::SQL() const
 {
     std::string description("RAISE(");
     switch (type) {
-        case Type::Ignore:
-            description.append("IGNORE");
-            break;
-        case Type::Rollback:
-            LangRemedialAssert(!errorMessage.empty());
-            description.append("ROLLBACK, " + errorMessage.get());
-            break;
-        case Type::Abort:
-            LangRemedialAssert(!errorMessage.empty());
-            description.append("ABORT, " + errorMessage.get());
-            break;
-        case Type::Fail:
-            LangRemedialAssert(!errorMessage.empty());
-            description.append("FAIL, " + errorMessage.get());
-            break;
+    case Type::Ignore:
+        description.append("IGNORE");
+        break;
+    case Type::Rollback:
+        LangRemedialAssert(!errorMessage.empty());
+        description.append("ROLLBACK, " + errorMessage.get());
+        break;
+    case Type::Abort:
+        LangRemedialAssert(!errorMessage.empty());
+        description.append("ABORT, " + errorMessage.get());
+        break;
+    case Type::Fail:
+        LangRemedialAssert(!errorMessage.empty());
+        description.append("FAIL, " + errorMessage.get());
+        break;
     }
     description.append(")");
     return description;

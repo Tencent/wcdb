@@ -29,27 +29,27 @@
 - (void)testColumnType
 {
     WINQAssertEqual(WCDB::ColumnDef(self.class.column)
-                        .withType(WCDB::ColumnType::Null),
+                    .withType(WCDB::ColumnType::Null),
                     @"testColumn NULL");
 
     WINQAssertEqual(WCDB::ColumnDef(self.class.column)
-                        .withType(WCDB::ColumnType::Integer32),
+                    .withType(WCDB::ColumnType::Integer32),
                     @"testColumn INTEGER");
 
     WINQAssertEqual(WCDB::ColumnDef(self.class.column)
-                        .withType(WCDB::ColumnType::Integer64),
+                    .withType(WCDB::ColumnType::Integer64),
                     @"testColumn INTEGER");
 
     WINQAssertEqual(WCDB::ColumnDef(self.class.column)
-                        .withType(WCDB::ColumnType::Float),
+                    .withType(WCDB::ColumnType::Float),
                     @"testColumn REAL");
 
     WINQAssertEqual(WCDB::ColumnDef(self.class.column)
-                        .withType(WCDB::ColumnType::Text),
+                    .withType(WCDB::ColumnType::Text),
                     @"testColumn TEXT");
 
     WINQAssertEqual(WCDB::ColumnDef(self.class.column)
-                        .withType(WCDB::ColumnType::BLOB),
+                    .withType(WCDB::ColumnType::BLOB),
                     @"testColumn BLOB");
 }
 

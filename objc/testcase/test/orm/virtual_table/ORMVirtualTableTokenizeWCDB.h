@@ -22,6 +22,6 @@
 
 @interface ORMVirtualTableTokenizeWCDB : NSObject
 
-@property(nonatomic, assign) NSInteger variable;
+@property (nonatomic, assign) NSInteger variable;
 
 @end

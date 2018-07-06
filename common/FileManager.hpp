@@ -53,9 +53,8 @@ public:
     std::pair<bool, Time> getFileModifiedTime(const std::string &path);
     std::pair<bool, Time> getFileCreatedTime(const std::string &path);
 
-    bool enumerateDirectory(
-        const std::string &directory,
-        const std::function<bool(const std::string &, bool)> &enumeration);
+    bool enumerateDirectory(const std::string &directory,
+                            const std::function<bool(const std::string &, bool)> &enumeration);
 
 protected:
     bool removeFile(const std::string &file);
@@ -69,12 +68,9 @@ public:
     std::pair<bool, size_t> getItemsSize(const std::list<std::string> &paths);
     bool removeItem(const std::string &path);
     bool removeItems(const std::list<std::string> &paths);
-    bool moveItems(const std::list<std::string> &paths,
-                   const std::string &directory);
-    bool moveItems(
-        const std::list<std::pair<std::string, std::string>> &pairedPaths);
-    bool
-    createDirectoryWithIntermediateDirectories(const std::string &directory);
+    bool moveItems(const std::list<std::string> &paths, const std::string &directory);
+    bool moveItems(const std::list<std::pair<std::string, std::string>> &pairedPaths);
+    bool createDirectoryWithIntermediateDirectories(const std::string &directory);
 
 #pragma mark - Error
 protected:

@@ -34,20 +34,20 @@
 
 @interface TestCase : XCTestCase
 
-@property(class, readonly) NSString *baseDirectory;
+@property (class, readonly) NSString *baseDirectory;
 
-@property(readonly) NSString *recommendedDirectory;
+@property (readonly) NSString *recommendedDirectory;
 
-@property(readonly) NSString *recommendedPath;
+@property (readonly) NSString *recommendedPath;
 
-@property(readonly) WCTTag recommendedTag;
+@property (readonly) WCTTag recommendedTag;
 
-@property(readonly) NSFileManager *fileManager;
+@property (readonly) NSFileManager *fileManager;
 
-@property(class, readonly) NSString *className;
+@property (class, readonly) NSString *className;
 
-@property(readonly) NSString *className;
+@property (readonly) NSString *className;
 
-@property(class, readonly) NSString *cachedDirectory;
+@property (class, readonly) NSString *cachedDirectory;
 
 @end

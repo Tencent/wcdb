@@ -38,15 +38,13 @@ ColumnDef &ColumnDef::withType(const ColumnType &columnType)
     return *this;
 }
 
-ColumnDef &
-ColumnDef::byAddingConstraint(const ColumnConstraint &columnConstraint)
+ColumnDef &ColumnDef::byAddingConstraint(const ColumnConstraint &columnConstraint)
 {
     getMutableLang().columnConstraints.append(columnConstraint.getCOWLang());
     return *this;
 }
 
-ColumnDef &ColumnDef::byAddingConstraints(
-    const std::list<ColumnConstraint> &columnConstraints)
+ColumnDef &ColumnDef::byAddingConstraints(const std::list<ColumnConstraint> &columnConstraints)
 {
     Lang::ColumnDef &lang = getMutableLang();
     for (const ColumnConstraint &columnConstraint : columnConstraints) {
@@ -61,8 +59,7 @@ bool ColumnDef::isAutoIncrement() const
     if (lang.empty()) {
         return false;
     }
-    const auto &columnConstraints =
-        lang.get<Lang::ColumnDef>().columnConstraints;
+    const auto &columnConstraints = lang.get<Lang::ColumnDef>().columnConstraints;
     if (columnConstraints.empty()) {
         return false;
     }
@@ -80,14 +77,12 @@ bool ColumnDef::isPrimary() const
     if (lang.empty()) {
         return false;
     }
-    const auto &columnConstraints =
-        lang.get<Lang::ColumnDef>().columnConstraints;
+    const auto &columnConstraints = lang.get<Lang::ColumnDef>().columnConstraints;
     if (columnConstraints.empty()) {
         return false;
     }
     for (const auto &columnConstraint : columnConstraints.get()) {
-        if (columnConstraint.get().type ==
-            Lang::ColumnConstraint::Type::PrimaryKey) {
+        if (columnConstraint.get().type == Lang::ColumnConstraint::Type::PrimaryKey) {
             return true;
         }
     }

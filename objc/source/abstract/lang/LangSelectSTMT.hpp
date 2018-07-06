@@ -53,8 +53,7 @@ public:
         CopyOnWriteString SQL() const override;
 
     protected:
-        static constexpr const char *
-        OperatorName(const Operator &compoundOperator);
+        static constexpr const char *OperatorName(const Operator &compoundOperator);
     };
     CopyOnWriteLazyLangList<Compound> compoundCores;
 
@@ -70,18 +69,14 @@ public:
     static STMT::Type getType();
 
 protected:
-    void resolveTableOrSubquerys(
-        CopyOnWriteLazyLangList<TableOrSubquery> &tableOrSubquerys) const;
-    void resolveTableOrSubqueryBases(
-        CopyOnWriteLazyLangList<TableOrSubqueryBase> &tableOrSubquerys) const;
-    void resolveTableOrSubquery(
-        CopyOnWriteLazyLang<TableOrSubquery> &tableOrSubquery) const;
+    void resolveTableOrSubquerys(CopyOnWriteLazyLangList<TableOrSubquery> &tableOrSubquerys) const;
+    void resolveTableOrSubqueryBases(CopyOnWriteLazyLangList<TableOrSubqueryBase> &tableOrSubquerys) const;
+    void resolveTableOrSubquery(CopyOnWriteLazyLang<TableOrSubquery> &tableOrSubquery) const;
     void resolveTable(CopyOnWriteLazyLang<TableOrSubqueryTable> &table) const;
-    void resolveTableOrSubqueryList(
-        CopyOnWriteLazyLang<TableOrSubqueryList> &tableOrSubqueryList) const;
+    void resolveTableOrSubqueryList(CopyOnWriteLazyLang<TableOrSubqueryList> &tableOrSubqueryList) const;
 };
 
-template <>
+template<>
 CopyOnWriteString
 CopyOnWriteLazyLangList<SelectSTMT::Compound>::calculatedDescription() const;
 

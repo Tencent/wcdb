@@ -28,19 +28,15 @@ namespace WCDB {
 
 class LiteralValue : public DescribableWithLang<Lang::LiteralValue> {
 public:
-    template <typename T>
-    LiteralValue(
-        const T &t,
-        typename std::enable_if<ColumnIsNullType<T>::value>::type * = nullptr)
+    template<typename T>
+    LiteralValue(const T &t, typename std::enable_if<ColumnIsNullType<T>::value>::type * = nullptr)
     {
         Lang::LiteralValue &lang = getMutableLang();
         lang.type = Lang::LiteralValue::Type::Null;
     }
 
-    template <typename T>
-    LiteralValue(
-        const T &t,
-        typename std::enable_if<ColumnIsFloatType<T>::value>::type * = nullptr)
+    template<typename T>
+    LiteralValue(const T &t, typename std::enable_if<ColumnIsFloatType<T>::value>::type * = nullptr)
     {
         Lang::LiteralValue &lang = getMutableLang();
         lang.type = Lang::LiteralValue::Type::NumbericFloat;
@@ -49,40 +45,34 @@ public:
         lang.stringValue.assign(os.str());
     }
 
-    template <typename T>
+    template<typename T>
     LiteralValue(const T &t,
-                 typename std::enable_if<ColumnIsInteger32Type<T>::value>::type
-                     * = nullptr)
+                 typename std::enable_if<ColumnIsInteger32Type<T>::value>::type * = nullptr)
     {
         Lang::LiteralValue &lang = getMutableLang();
         lang.type = Lang::LiteralValue::Type::NumbericInteger;
         lang.stringValue.assign(std::to_string(t));
     }
 
-    template <typename T>
+    template<typename T>
     LiteralValue(const T &t,
-                 typename std::enable_if<ColumnIsInteger64Type<T>::value>::type
-                     * = nullptr)
+                 typename std::enable_if<ColumnIsInteger64Type<T>::value>::type * = nullptr)
     {
         Lang::LiteralValue &lang = getMutableLang();
         lang.type = Lang::LiteralValue::Type::NumbericInteger;
         lang.stringValue.assign(std::to_string(t));
     }
 
-    template <typename T>
-    LiteralValue(
-        const T &t,
-        typename std::enable_if<ColumnIsTextType<T>::value>::type * = nullptr)
+    template<typename T>
+    LiteralValue(const T &t, typename std::enable_if<ColumnIsTextType<T>::value>::type * = nullptr)
     {
         Lang::LiteralValue &lang = getMutableLang();
         lang.type = Lang::LiteralValue::Type::String;
         lang.stringValue.assign(ColumnIsTextType<T>::asUnderlyingType(t));
     }
 
-    template <typename T>
-    LiteralValue(
-        const T &t,
-        typename std::enable_if<ColumnIsBLOBType<T>::value>::type * = nullptr)
+    template<typename T>
+    LiteralValue(const T &t, typename std::enable_if<ColumnIsBLOBType<T>::value>::type * = nullptr)
     {
         Lang::LiteralValue &lang = getMutableLang();
         lang.type = Lang::LiteralValue::Type::BLOB;

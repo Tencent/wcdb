@@ -69,7 +69,7 @@
     WCTDatabase *database = [_handle getDatabase];
     [_handle finalizeHandle];
     [database close:^{
-      XCTAssertTrue([database removeFiles]);
+        XCTAssertTrue([database removeFiles]);
     }];
     _handle = nil;
     _tableName = nil;
@@ -82,8 +82,8 @@
 - (void)test_commit
 {
     BOOL result = [_handle runTransaction:^BOOL(WCTHandle *handle) {
-      XCTAssertTrue([handle insertObject:_object1 intoTable:_tableName]);
-      return true;
+        XCTAssertTrue([handle insertObject:_object1 intoTable:_tableName]);
+        return true;
     }];
     XCTAssertTrue(result);
     NSArray<TestCaseObject *> *objects = [_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1.asOrder(WCTOrderedAscending)];
@@ -94,8 +94,8 @@
 - (void)test_rollback
 {
     BOOL result = [_handle runTransaction:^BOOL(WCTHandle *handle) {
-      XCTAssertTrue([handle insertObject:_object1 intoTable:_tableName]);
-      return false;
+        XCTAssertTrue([handle insertObject:_object1 intoTable:_tableName]);
+        return false;
     }];
     XCTAssertFalse(result);
     NSArray<TestCaseObject *> *objects = [_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1.asOrder(WCTOrderedAscending)];
@@ -126,8 +126,8 @@
 - (void)test_commit_nested
 {
     BOOL result = [_handle runNestedTransaction:^BOOL(WCTHandle *handle) {
-      XCTAssertTrue([handle insertObject:_object1 intoTable:_tableName]);
-      return true;
+        XCTAssertTrue([handle insertObject:_object1 intoTable:_tableName]);
+        return true;
     }];
     XCTAssertTrue(result);
     NSArray<TestCaseObject *> *objects = [_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1.asOrder(WCTOrderedAscending)];
@@ -138,8 +138,8 @@
 - (void)test_rollback_nested
 {
     BOOL result = [_handle runNestedTransaction:^BOOL(WCTHandle *handle) {
-      XCTAssertTrue([handle insertObject:_object1 intoTable:_tableName]);
-      return false;
+        XCTAssertTrue([handle insertObject:_object1 intoTable:_tableName]);
+        return false;
     }];
     XCTAssertFalse(result);
     NSArray<TestCaseObject *> *objects = [_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1.asOrder(WCTOrderedAscending)];
@@ -170,12 +170,12 @@
 - (void)test_commit_and_commit_nested
 {
     XCTAssertTrue([_handle runTransaction:^BOOL(WCTHandle *handle) {
-      XCTAssertTrue([handle insertObject:_object1 intoTable:_tableName]);
-      XCTAssertTrue([handle runNestedTransaction:^BOOL(WCTHandle *handle) {
-        XCTAssertTrue([handle insertObject:_object2 intoTable:_tableName]);
+        XCTAssertTrue([handle insertObject:_object1 intoTable:_tableName]);
+        XCTAssertTrue([handle runNestedTransaction:^BOOL(WCTHandle *handle) {
+            XCTAssertTrue([handle insertObject:_object2 intoTable:_tableName]);
+            return true;
+        }]);
         return true;
-      }]);
-      return true;
     }]);
     NSArray<TestCaseObject *> *objects = [_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1.asOrder(WCTOrderedAscending)];
     XCTAssertEqual(objects.count, 2);
@@ -186,12 +186,12 @@
 - (void)test_commit_but_rollback_nested
 {
     XCTAssertTrue([_handle runTransaction:^BOOL(WCTHandle *handle) {
-      XCTAssertTrue([handle insertObject:_object1 intoTable:_tableName]);
-      XCTAssertFalse([handle runNestedTransaction:^BOOL(WCTHandle *handle) {
-        XCTAssertTrue([handle insertObject:_object2 intoTable:_tableName]);
-        return false;
-      }]);
-      return true;
+        XCTAssertTrue([handle insertObject:_object1 intoTable:_tableName]);
+        XCTAssertFalse([handle runNestedTransaction:^BOOL(WCTHandle *handle) {
+            XCTAssertTrue([handle insertObject:_object2 intoTable:_tableName]);
+            return false;
+        }]);
+        return true;
     }]);
     NSArray<TestCaseObject *> *objects = [_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1.asOrder(WCTOrderedAscending)];
     XCTAssertEqual(objects.count, 1);
@@ -201,12 +201,12 @@
 - (void)test_rollback_but_commit_nested
 {
     XCTAssertFalse([_handle runTransaction:^BOOL(WCTHandle *handle) {
-      XCTAssertTrue([handle insertObject:_object1 intoTable:_tableName]);
-      XCTAssertTrue([handle runNestedTransaction:^BOOL(WCTHandle *handle) {
-        XCTAssertTrue([handle insertObject:_object2 intoTable:_tableName]);
-        return true;
-      }]);
-      return false;
+        XCTAssertTrue([handle insertObject:_object1 intoTable:_tableName]);
+        XCTAssertTrue([handle runNestedTransaction:^BOOL(WCTHandle *handle) {
+            XCTAssertTrue([handle insertObject:_object2 intoTable:_tableName]);
+            return true;
+        }]);
+        return false;
     }]);
     NSArray<TestCaseObject *> *objects = [_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1.asOrder(WCTOrderedAscending)];
     XCTAssertNotNil(objects);
@@ -216,12 +216,12 @@
 - (void)test_rollback_and_rollback_nested
 {
     XCTAssertFalse([_handle runTransaction:^BOOL(WCTHandle *handle) {
-      XCTAssertTrue([handle insertObject:_object1 intoTable:_tableName]);
-      XCTAssertFalse([handle runNestedTransaction:^BOOL(WCTHandle *handle) {
-        XCTAssertTrue([handle insertObject:_object2 intoTable:_tableName]);
+        XCTAssertTrue([handle insertObject:_object1 intoTable:_tableName]);
+        XCTAssertFalse([handle runNestedTransaction:^BOOL(WCTHandle *handle) {
+            XCTAssertTrue([handle insertObject:_object2 intoTable:_tableName]);
+            return false;
+        }]);
         return false;
-      }]);
-      return false;
     }]);
     NSArray<TestCaseObject *> *objects = [_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1.asOrder(WCTOrderedAscending)];
     XCTAssertNotNil(objects);
@@ -231,20 +231,20 @@
 - (void)test_interspersed
 {
     XCTAssertTrue([_handle runTransaction:^BOOL(WCTHandle *handle) {
-      XCTAssertTrue([handle insertObject:_object1 intoTable:_tableName]);
-      XCTAssertFalse([handle runNestedTransaction:^BOOL(WCTHandle *handle) {
-        XCTAssertTrue([handle insertObject:_object2 intoTable:_tableName]);
-        return false;
-      }]);
-      XCTAssertTrue([handle runNestedTransaction:^BOOL(WCTHandle *handle) {
-        XCTAssertTrue([handle insertObject:_object3 intoTable:_tableName]);
+        XCTAssertTrue([handle insertObject:_object1 intoTable:_tableName]);
         XCTAssertFalse([handle runNestedTransaction:^BOOL(WCTHandle *handle) {
-          XCTAssertTrue([handle insertObject:_object4 intoTable:_tableName]);
-          return false;
+            XCTAssertTrue([handle insertObject:_object2 intoTable:_tableName]);
+            return false;
+        }]);
+        XCTAssertTrue([handle runNestedTransaction:^BOOL(WCTHandle *handle) {
+            XCTAssertTrue([handle insertObject:_object3 intoTable:_tableName]);
+            XCTAssertFalse([handle runNestedTransaction:^BOOL(WCTHandle *handle) {
+                XCTAssertTrue([handle insertObject:_object4 intoTable:_tableName]);
+                return false;
+            }]);
+            return true;
         }]);
         return true;
-      }]);
-      return true;
     }]);
     NSArray<TestCaseObject *> *objects = [_handle getObjectsOfClass:_cls fromTable:_tableName orderBy:TestCaseObject.variable1.asOrder(WCTOrderedAscending)];
     XCTAssertEqual(objects.count, 2);

@@ -30,10 +30,9 @@ namespace WCDB {
 class MigrationInfo {
 public:
 #pragma mark - Initialize
-    static std::shared_ptr<MigrationInfo>
-    info(const std::string &targetTable,
-         const std::string &sourceTable,
-         const std::string &sourceDatabasePath);
+    static std::shared_ptr<MigrationInfo> info(const std::string &targetTable,
+                                               const std::string &sourceTable,
+                                               const std::string &sourceDatabasePath);
 
 protected:
     MigrationInfo(const std::string &targetTable,
@@ -109,8 +108,8 @@ public:
      @param type type
      @return StatementInsert; 
      */
-    StatementInsert getStatementForTamperingConflictType(
-        const Lang::InsertSTMT::Type &type) const;
+    StatementInsert
+    getStatementForTamperingConflictType(const Lang::InsertSTMT::Type &type) const;
 
 protected:
     static const std::string getUnionedViewPrefix();

@@ -31,7 +31,7 @@
 
 - (BOOL)isEqualToObject:(FTSTestCaseObject *)object;
 
-@property(nonatomic, retain) NSString *message;
-@property(nonatomic, retain) NSString *extension;
+@property (nonatomic, retain) NSString *message;
+@property (nonatomic, retain) NSString *extension;
 
 @end

@@ -36,22 +36,19 @@ StatementInsert &StatementInsert::insertInto(const std::string &tableName)
     return *this;
 }
 
-StatementInsert &
-StatementInsert::insertOrReplaceInto(const std::string &tableName)
+StatementInsert &StatementInsert::insertOrReplaceInto(const std::string &tableName)
 {
     insertInto(tableName, Lang::InsertSTMT::Type::InsertOrReplace);
     return *this;
 }
 
-StatementInsert &
-StatementInsert::insertOrRollbackInto(const std::string &tableName)
+StatementInsert &StatementInsert::insertOrRollbackInto(const std::string &tableName)
 {
     insertInto(tableName, Lang::InsertSTMT::Type::InsertOrRollback);
     return *this;
 }
 
-StatementInsert &
-StatementInsert::insertOrAbortInto(const std::string &tableName)
+StatementInsert &StatementInsert::insertOrAbortInto(const std::string &tableName)
 {
     insertInto(tableName, Lang::InsertSTMT::Type::InsertOrAbort);
     return *this;
@@ -63,8 +60,7 @@ StatementInsert &StatementInsert::insertOrFailInto(const std::string &tableName)
     return *this;
 }
 
-StatementInsert &
-StatementInsert::insertOrIgnoreInto(const std::string &tableName)
+StatementInsert &StatementInsert::insertOrIgnoreInto(const std::string &tableName)
 {
     insertInto(tableName, Lang::InsertSTMT::Type::InsertOrIgnore);
     return *this;
@@ -138,12 +134,12 @@ bool StatementInsert::isValuesNotSet() const
 {
     const Lang::InsertSTMT &lang = getCOWLang().get<Lang::InsertSTMT>();
     switch (lang.switcher) {
-        case Lang::InsertSTMT::Switch::Values:
-            return lang.exprs.empty();
-        case Lang::InsertSTMT::Switch::NotSet:
-            return true;
-        default:
-            return false;
+    case Lang::InsertSTMT::Switch::Values:
+        return lang.exprs.empty();
+    case Lang::InsertSTMT::Switch::NotSet:
+        return true;
+    default:
+        return false;
     }
 }
 

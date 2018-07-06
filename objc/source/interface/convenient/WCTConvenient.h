@@ -735,8 +735,8 @@ NS_ASSUME_NONNULL_BEGIN
      withObject:(WCTObject *)object;
 
 - (BOOL)execute:(const WCDB::Statement &)statement
-      withObject:(WCTObject *)object
-    onProperties:(const WCTPropertyList &)properties;
+     withObject:(WCTObject *)object
+   onProperties:(const WCTPropertyList &)properties;
 
 - (BOOL)execute:(const WCDB::Statement &)statement
       withValue:(WCTColumnCodingValue *)value;

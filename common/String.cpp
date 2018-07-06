@@ -30,8 +30,7 @@ const std::string &empty()
     return *s_empty;
 }
 
-bool CaseInsensiveComparator::operator()(const std::string &lhs,
-                                         const std::string &rhs) const
+bool CaseInsensiveComparator::operator()(const std::string &lhs, const std::string &rhs) const
 {
     return strcasecmp(lhs.c_str(), rhs.c_str()) < 0;
 }
@@ -41,8 +40,7 @@ bool isCaseInsensiveEqual(const std::string &lhs, const std::string &rhs)
     return strcasecmp(lhs.c_str(), rhs.c_str()) == 0;
 }
 
-bool hasCaseInsensivePrefix(const std::string &origin,
-                            const std::string &target)
+bool hasCaseInsensivePrefix(const std::string &origin, const std::string &target)
 {
     if (origin.size() < target.size()) {
         return false;
@@ -50,10 +48,9 @@ bool hasCaseInsensivePrefix(const std::string &origin,
     return strncasecmp(origin.c_str(), target.c_str(), target.size()) == 0;
 }
 
-CopyOnWriteString
-stringByReplacingOccurrencesOfString(const CopyOnWriteString &cowOrigin,
-                                     const std::string &target,
-                                     const std::string &replacement)
+CopyOnWriteString stringByReplacingOccurrencesOfString(const CopyOnWriteString &cowOrigin,
+                                                       const std::string &target,
+                                                       const std::string &replacement)
 {
     size_t last = 0;
     const std::string &origin = cowOrigin.get();

@@ -31,11 +31,11 @@
     XCTAssertEqual(WCDB::StatementVacuum().getType(), WCDB::Statement::Type::Vacuum);
 
     WINQAssertEqual(WCDB::StatementVacuum()
-                        .vacuum(),
+                    .vacuum(),
                     @"VACUUM");
 
     WINQAssertEqual(WCDB::StatementVacuum()
-                        .vacuum(self.class.schemaName),
+                    .vacuum(self.class.schemaName),
                     @"VACUUM testSchema");
 }
 

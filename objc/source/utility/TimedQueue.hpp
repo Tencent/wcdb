@@ -35,7 +35,7 @@
 
 namespace WCDB {
 
-template <typename Key, typename Info>
+template<typename Key, typename Info>
 class TimedQueue {
 public:
     TimedQueue() : m_stop(false), m_running(false){};
@@ -51,9 +51,9 @@ public:
                 return;
             }
 
-            SteadyClock expired =
-                std::chrono::steady_clock::now() +
-                std::chrono::microseconds((long long) (delay * 1000000));
+            SteadyClock expired
+            = std::chrono::steady_clock::now()
+              + std::chrono::microseconds((long long) (delay * 1000000));
 
             auto iter = m_map.find(key);
             if (iter != m_map.end()) {
@@ -62,9 +62,9 @@ public:
                 notify = true;
             } else {
                 Element element(key, expired, info);
-                m_map.insert({key, std::move(element)});
-                std::pair<Key, Element> min = *std::min_element(
-                    m_map.begin(), m_map.end(), &TimedQueue::compare);
+                m_map.insert({ key, std::move(element) });
+                std::pair<Key, Element> min
+                = *std::min_element(m_map.begin(), m_map.end(), &TimedQueue::compare);
                 if (min.first == key) {
                     notify = true;
                 }
@@ -103,8 +103,8 @@ public:
                 m_cond.wait(lockGuard);
                 continue;
             }
-            std::pair<Key, Element> min = *std::min_element(
-                m_map.begin(), m_map.end(), &TimedQueue::compare);
+            std::pair<Key, Element> min
+            = *std::min_element(m_map.begin(), m_map.end(), &TimedQueue::compare);
             SteadyClock now = SteadyClock::now();
             if (now < min.second.expired) {
                 m_cond.wait_for(lockGuard, min.second.expired - now);
@@ -121,7 +121,7 @@ public:
 protected:
     struct Element {
         Element(const Key &key_, const SteadyClock &expired_, const Info &info_)
-            : key(key_), expired(expired_), info(info_)
+        : key(key_), expired(expired_), info(info_)
         {
         }
         Key key;
@@ -131,8 +131,8 @@ protected:
     typedef struct Element Element;
     typedef std::map<Key, Element> Map;
 
-    static bool compare(const std::pair<Key, Element> &lhs,
-                        const std::pair<Key, Element> &rhs)
+    static bool
+    compare(const std::pair<Key, Element> &lhs, const std::pair<Key, Element> &rhs)
     {
         return lhs.second.expired < rhs.second.expired;
     }

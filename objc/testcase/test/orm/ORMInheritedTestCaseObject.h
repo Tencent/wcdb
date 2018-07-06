@@ -23,7 +23,7 @@
 
 @interface ORMInheritedTestCaseObject : TestCaseObject
 
-@property(nonatomic, retain) NSString *variable4;
-@property(nonatomic, assign) float variable5;
+@property (nonatomic, retain) NSString *variable4;
+@property (nonatomic, assign) float variable5;
 
 @end

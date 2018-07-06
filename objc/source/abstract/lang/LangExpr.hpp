@@ -266,9 +266,8 @@ public:
     Type getType() const override;
 };
 
-template <>
-CopyOnWriteString
-CopyOnWriteLazyLangList<ExprCase::Pair>::calculatedDescription() const;
+template<>
+CopyOnWriteString CopyOnWriteLazyLangList<ExprCase::Pair>::calculatedDescription() const;
 
 class Expr : public ExprBase {
 public:

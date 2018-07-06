@@ -40,12 +40,12 @@ CopyOnWriteString BeginSTMT::SQL() const
 constexpr const char *BeginSTMT::typeName(const Type &type)
 {
     switch (type) {
-        case Type::Deferred:
-            return "DEFERRED";
-        case Type::Immediate:
-            return "IMMEDIATE";
-        case Type::Exclusive:
-            return "EXCLUSIVE";
+    case Type::Deferred:
+        return "DEFERRED";
+    case Type::Immediate:
+        return "IMMEDIATE";
+    case Type::Exclusive:
+        return "EXCLUSIVE";
     }
 }
 

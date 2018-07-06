@@ -27,9 +27,7 @@
 
 namespace WCDB {
 
-class Column : public DescribableWithLang<Lang::Column>,
-               public Operable,
-               public Redirectable {
+class Column : public DescribableWithLang<Lang::Column>, public Operable, public Redirectable {
 public:
     static const Column &rowid();
     Column();

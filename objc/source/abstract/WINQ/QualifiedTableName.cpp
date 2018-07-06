@@ -23,8 +23,7 @@
 
 namespace WCDB {
 
-QualifiedTableName &
-QualifiedTableName::withSchema(const std::string &schemaName)
+QualifiedTableName &QualifiedTableName::withSchema(const std::string &schemaName)
 {
     Lang::QualifiedTableName &lang = getMutableLang();
     lang.schemaName.assign(schemaName);

@@ -48,9 +48,9 @@ typedef NS_OPTIONS(NSUInteger, TestCaseObjectProperties) {
 
 @interface TestCaseObject : NSObject <TestCaseObjectProtocol>
 
-@property(nonatomic, assign) int variable1;
-@property(nonatomic, retain) NSString *variable2;
-@property(nonatomic, assign) float variable3;
+@property (nonatomic, assign) int variable1;
+@property (nonatomic, retain) NSString *variable2;
+@property (nonatomic, assign) float variable3;
 
 @end
 

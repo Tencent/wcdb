@@ -22,9 +22,9 @@
 
 @interface ORMRebindNew : NSObject
 
-@property(nonatomic, assign) NSInteger variable1;
-@property(nonatomic, assign) float renamedVariable2;
-@property(nonatomic, retain) NSString *variable4;
+@property (nonatomic, assign) NSInteger variable1;
+@property (nonatomic, assign) float renamedVariable2;
+@property (nonatomic, retain) NSString *variable4;
 
 - (BOOL)isEqualToObject:(ORMRebindNew *)object;
 

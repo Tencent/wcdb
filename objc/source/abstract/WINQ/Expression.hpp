@@ -27,16 +27,13 @@
 
 namespace WCDB {
 
-class Expression : public DescribableWithLang<Lang::Expr>,
-                   public Operable,
-                   public Redirectable {
+class Expression : public DescribableWithLang<Lang::Expr>, public Operable, public Redirectable {
 public:
     Expression();
 
-    template <typename T>
+    template<typename T>
     Expression(const T &t,
-               typename std::enable_if<LiteralValueConvertible<T>::value>::type
-                   * = nullptr)
+               typename std::enable_if<LiteralValueConvertible<T>::value>::type * = nullptr)
     {
         setLiteralValue(LiteralValueConvertible<T>::as(t));
     }
@@ -58,8 +55,7 @@ public:
                                bool distinct = false);
     static const Expression &lastInsertedRowid();
 
-    class All : public DescribableWithLang<Lang::ExprFunction>,
-                public FunctionOperable {
+    class All : public DescribableWithLang<Lang::ExprFunction>, public FunctionOperable {
     public:
         static const Expression::All &default_();
         Expression function(const std::string &functionName,
@@ -72,17 +68,14 @@ public:
 
     static Expression Exists(const StatementSelect &selectSTMT);
     static Expression NotExists(const StatementSelect &selectSTMT);
-    Expression(const StatementSelect &selectSTMT,
-               bool isNot = false,
-               bool exists = false);
+    Expression(const StatementSelect &selectSTMT, bool isNot = false, bool exists = false);
 
     class CaseInternal : public DescribableWithLang<Lang::ExprCase> {
     public:
         CaseInternal();
         CaseInternal(const Expression &expression);
         //TODO refactor -> when(...).then(...)
-        CaseInternal &whenAndThen(const Expression &when,
-                                  const Expression &then);
+        CaseInternal &whenAndThen(const Expression &when, const Expression &then);
         CaseInternal &else_(const Expression &expression);
     };
     static Expression::CaseInternal case_(const Expression &expression);
@@ -97,12 +90,9 @@ public:
 
 protected:
     friend class Operable;
-    Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprUnaryOperation>
-                   &exprUnaryOperation);
-    Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprBinaryOperation>
-                   &exprBinaryOperation);
-    Expression(
-        const Lang::CopyOnWriteLazyLang<Lang::ExprFunction> &exprFunction);
+    Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprUnaryOperation> &exprUnaryOperation);
+    Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprBinaryOperation> &exprBinaryOperation);
+    Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprFunction> &exprFunction);
     Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprCast> &exprCast);
     Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprPattern> &exprPattern);
     Expression(const Lang::CopyOnWriteLazyLang<Lang::ExprNull> &exprNull);

@@ -44,18 +44,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface WCTTable < ObjectType : NSObject <WCTTableCoding>
-* > : WCTCore
+@interface WCTTable<ObjectType> : WCTCore
 
-      /**
+/**
  The name of the table.
  */
-      @property(nonatomic, readonly) NSString *tableName;
+@property (nonatomic, readonly) NSString *tableName;
 
 /**
  The class binding to this table.
  */
-@property(nonatomic, readonly) Class _Nonnull cls;
+@property (nonatomic, readonly) Class _Nonnull cls;
 
 - (WCTDatabase *)getDatabase;
 

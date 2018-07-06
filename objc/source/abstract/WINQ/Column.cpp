@@ -48,8 +48,9 @@ Lang::CopyOnWriteLazyLang<Lang::Expr> Column::getExpressionLang() const
 }
 
 Column::Column(const Lang::CopyOnWriteLazyLang<Lang::Column> &column)
-    : DescribableWithLang<Lang::Column>(column)
-{}
+: DescribableWithLang<Lang::Column>(column)
+{
+}
 
 Expression Column::getRedirectSource() const
 {

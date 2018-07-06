@@ -29,17 +29,17 @@
 - (void)testQualifiedTableName
 {
     WINQAssertEqual(WCDB::QualifiedTableName(self.class.tableName)
-                        .withSchema(self.class.schemaName),
+                    .withSchema(self.class.schemaName),
                     @"testSchema.testTable");
 
     WINQAssertEqual(WCDB::QualifiedTableName(self.class.tableName)
-                        .withSchema(self.class.schemaName)
-                        .indexedBy(self.class.indexName),
+                    .withSchema(self.class.schemaName)
+                    .indexedBy(self.class.indexName),
                     @"testSchema.testTable INDEXED BY testIndex");
 
     WINQAssertEqual(WCDB::QualifiedTableName(self.class.tableName)
-                        .withSchema(self.class.schemaName)
-                        .notIndexed(),
+                    .withSchema(self.class.schemaName)
+                    .notIndexed(),
                     @"testSchema.testTable NOT INDEXED");
 
     WINQAssertEqual(WCDB::QualifiedTableName(self.class.tableName), @"main.testTable");

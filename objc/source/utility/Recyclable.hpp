@@ -27,31 +27,29 @@
 
 namespace WCDB {
 
-template <typename T>
+template<typename T>
 class Recyclable {
 public:
     typedef std::function<void(const T &)> OnRecycled;
 
     Recyclable(const T &value, const Recyclable::OnRecycled &onRecycled)
-        : m_value(value)
-        , m_onRecycled(onRecycled)
-        , m_reference(new std::atomic<int>(0))
+    : m_value(value), m_onRecycled(onRecycled), m_reference(new std::atomic<int>(0))
     {
         retain();
     }
 
     Recyclable(Recyclable &&other)
-        : m_value(std::move(other.m_value))
-        , m_onRecycled(std::move(other.m_onRecycled))
-        , m_reference(std::move(other.m_reference))
+    : m_value(std::move(other.m_value))
+    , m_onRecycled(std::move(other.m_onRecycled))
+    , m_reference(std::move(other.m_reference))
     {
         other.m_reference = new std::atomic<int>(0);
     }
 
     Recyclable(const Recyclable &other)
-        : m_value(other.m_value)
-        , m_onRecycled(other.m_onRecycled)
-        , m_reference(other.m_reference)
+    : m_value(other.m_value)
+    , m_onRecycled(other.m_onRecycled)
+    , m_reference(other.m_reference)
     {
         retain();
     }

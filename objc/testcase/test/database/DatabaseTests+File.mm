@@ -72,7 +72,7 @@
     //Then
     XCTAssertTrue(([_database.paths isEqualToObjects:expectedPaths
                                       withComparator:^BOOL(NSString *lhs, NSString *rhs) {
-                                        return [lhs isEqualToString:rhs];
+                                          return [lhs isEqualToString:rhs];
                                       }]));
 }
 
@@ -87,10 +87,10 @@
     }
     //When
     [_database close:^{
-      //also tests recursive close
-      [_database close:^{
-        XCTAssertTrue([_database removeFiles]);
-      }];
+        //also tests recursive close
+        [_database close:^{
+            XCTAssertTrue([_database removeFiles]);
+        }];
     }];
     //Then
     for (NSString *path in _database.paths) {
@@ -123,7 +123,7 @@
 
     //When
     [_database close:^{
-      XCTAssertTrue([_database moveFilesToDirectory:newDirectory withExtraFiles:@[ extraFile ]]);
+        XCTAssertTrue([_database moveFilesToDirectory:newDirectory withExtraFiles:@[ extraFile ]]);
     }];
     //Then
     for (NSString *path in newPaths) {
@@ -147,8 +147,8 @@
     }
     //Then
     [_database close:^{
-      NSUInteger filesSize = [_database getFilesSize];
-      XCTAssertEqual(filesSize, expectedFilesSize);
+        NSUInteger filesSize = [_database getFilesSize];
+        XCTAssertEqual(filesSize, expectedFilesSize);
     }];
 }
 
@@ -156,10 +156,10 @@
 {
     __block BOOL tested = NO;
     [WCTDatabase globalTraceError:^(WCTError *error) {
-      if (error.code == WCTErrorCodeMisuse && error.level == WCTErrorLevelWarning) {
-          tested = YES;
-      }
-      NSLog(@"%@", error);
+        if (error.code == WCTErrorCodeMisuse && error.level == WCTErrorLevelWarning) {
+            tested = YES;
+        }
+        NSLog(@"%@", error);
     }];
     //Give
     NSData *data = [@"testGetFilesSize" dataUsingEncoding:NSASCIIStringEncoding];

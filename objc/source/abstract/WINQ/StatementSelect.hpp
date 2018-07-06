@@ -27,16 +27,13 @@
 
 namespace WCDB {
 
-class StatementSelect : public CRUDStatementWithLang<Lang::SelectSTMT>,
-                        public Redirectable {
+class StatementSelect : public CRUDStatementWithLang<Lang::SelectSTMT>, public Redirectable {
 public:
     StatementSelect &with(const CommonTableExpression &commonTableExpression);
+    StatementSelect &with(const std::list<CommonTableExpression> &commonTableExpressions);
+    StatementSelect &withRecursive(const CommonTableExpression &commonTableExpression);
     StatementSelect &
-    with(const std::list<CommonTableExpression> &commonTableExpressions);
-    StatementSelect &
-    withRecursive(const CommonTableExpression &commonTableExpression);
-    StatementSelect &withRecursive(
-        const std::list<CommonTableExpression> &commonTableExpressions);
+    withRecursive(const std::list<CommonTableExpression> &commonTableExpressions);
 
     StatementSelect &distinct();
     StatementSelect &select(const ResultColumn &resultColumn);

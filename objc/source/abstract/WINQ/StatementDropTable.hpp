@@ -27,7 +27,6 @@
 namespace WCDB {
 
 class StatementDropTable : public StatementWithLang<Lang::DropTableSTMT> {
-
 public:
     StatementDropTable();
     StatementDropTable &dropTable(const std::string &tableName);

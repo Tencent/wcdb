@@ -22,8 +22,8 @@
 
 @interface ORMRebindOld : NSObject
 
-@property(nonatomic, assign) NSInteger variable1;
-@property(nonatomic, assign) float variable2;
-@property(nonatomic, retain) NSString *variable3;
+@property (nonatomic, assign) NSInteger variable1;
+@property (nonatomic, assign) float variable2;
+@property (nonatomic, retain) NSString *variable3;
 
 @end

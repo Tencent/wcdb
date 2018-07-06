@@ -39,8 +39,7 @@ public:
     static std::shared_ptr<Database>
     databaseWithPath(const std::string &path,
                      const std::list<std::shared_ptr<MigrationInfo>> &infos);
-    static std::shared_ptr<Database>
-    databaseWithExistingPath(const std::string &path);
+    static std::shared_ptr<Database> databaseWithExistingPath(const std::string &path);
     static std::shared_ptr<Database> databaseWithExistingTag(const Tag &tag);
 
 protected:

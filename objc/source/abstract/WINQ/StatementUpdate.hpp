@@ -32,19 +32,14 @@ public:
 
     StatementUpdate &with(const WithClause &withClause);
     StatementUpdate &update(const QualifiedTableName &qualifiedTableName);
-    StatementUpdate &
-    updateOrRollback(const QualifiedTableName &qualifiedTableName);
-    StatementUpdate &
-    updateOrAbort(const QualifiedTableName &qualifiedTableName);
-    StatementUpdate &
-    updateOrReplace(const QualifiedTableName &qualifiedTableName);
+    StatementUpdate &updateOrRollback(const QualifiedTableName &qualifiedTableName);
+    StatementUpdate &updateOrAbort(const QualifiedTableName &qualifiedTableName);
+    StatementUpdate &updateOrReplace(const QualifiedTableName &qualifiedTableName);
     StatementUpdate &updateOrFail(const QualifiedTableName &qualifiedTableName);
-    StatementUpdate &
-    updateOrIgnore(const QualifiedTableName &qualifiedTableName);
+    StatementUpdate &updateOrIgnore(const QualifiedTableName &qualifiedTableName);
 
     StatementUpdate &set(const Column &column, const Expression &expression);
-    StatementUpdate &set(const std::list<Column> &columns,
-                         const Expression &expression);
+    StatementUpdate &set(const std::list<Column> &columns, const Expression &expression);
 
     StatementUpdate &where(const Expression &condition);
 

@@ -29,15 +29,15 @@
 namespace WCDB {
 
 FileHandle::FileHandle(const std::string &path_)
-    : path(path_), m_fd(-1), m_mode(Mode::None)
+: path(path_), m_fd(-1), m_mode(Mode::None)
 {
 }
 
 FileHandle::FileHandle(FileHandle &&other)
-    : path(std::move(other.path))
-    , m_fd(std::move(other.m_fd))
-    , m_mode(std::move(other.m_mode))
-    , m_mmap(std::move(other.m_mmap))
+: path(std::move(other.path))
+, m_fd(std::move(other.m_fd))
+, m_mode(std::move(other.m_mode))
+, m_mmap(std::move(other.m_mmap))
 {
     other.m_fd = -1;
     other.m_mode = Mode::None;
@@ -63,32 +63,32 @@ bool FileHandle::open(int mode)
 {
     WCTInnerAssert(m_mmap.empty());
     WCTInnerAssert(mode != Mode::None);
-    WCTRemedialAssert(!isOpened(), "File already is opened",
-                      markAsMisuse("Duplicate open.");
+    WCTRemedialAssert(!isOpened(), "File already is opened", markAsMisuse("Duplicate open.");
                       return true;);
     m_mode = mode;
     int openMode = m_mode & 0xff;
     bool mmap = m_mode & Mode::Mmap;
     switch (openMode) {
-        case Mode::OverWrite:
-            m_fd = ::open(path.c_str(), O_CREAT | O_WRONLY | O_TRUNC,
-                          S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH); //0x0644
-            if (mmap) {
-                markAsMisuse("Invalid mmap mode.");
+    case Mode::OverWrite:
+        m_fd = ::open(path.c_str(),
+                      O_CREAT | O_WRONLY | O_TRUNC,
+                      S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH); //0x0644
+        if (mmap) {
+            markAsMisuse("Invalid mmap mode.");
+            close();
+        }
+        break;
+    case Mode::ReadOnly:
+        m_fd = ::open(path.c_str(), O_RDONLY);
+        if (mmap) {
+            if (!remap()) {
                 close();
             }
-            break;
-        case Mode::ReadOnly:
-            m_fd = ::open(path.c_str(), O_RDONLY);
-            if (mmap) {
-                if (!remap()) {
-                    close();
-                }
-            }
-            break;
-        default:
-            markAsMisuse("Invalid open mode.");
-            return false;
+        }
+        break;
+    default:
+        markAsMisuse("Invalid open mode.");
+        return false;
     }
     if (m_fd == -1) {
         m_mode = Mode::None;
@@ -116,7 +116,8 @@ bool FileHandle::remap()
 {
     WCTInnerAssert(isOpened());
     WCTRemedialAssert((m_mode & 0xff) == Mode::ReadOnly,
-                      "Mmap only supports read-only mode.", return false;);
+                      "Mmap only supports read-only mode.",
+                      return false;);
     if (!unmap()) {
         return false;
     }

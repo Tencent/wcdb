@@ -1186,8 +1186,8 @@
 }
 
 - (BOOL)execute:(const WCDB::Statement &)statement
-      withObject:(WCTObject *)object
-    onProperties:(const WCTPropertyList &)properties
+     withObject:(WCTObject *)object
+   onProperties:(const WCTPropertyList &)properties
 {
     WCTHandle *handle = [self getHandle];
     BOOL result = [handle execute:statement

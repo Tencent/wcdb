@@ -47,15 +47,9 @@ public:
         AuxiliaryPlaneOther = 0xFFFFFFFF,
     };
 
-    WCDBCursorInfo(const char *input,
-                   int inputLength,
-                   TokenizerInfoBase *tokenizerInfo);
+    WCDBCursorInfo(const char *input, int inputLength, TokenizerInfoBase *tokenizerInfo);
 
-    int step(const char **ppToken,
-             int *pnBytes,
-             int *piStartOffset,
-             int *piEndOffset,
-             int *piPosition) override;
+    int step(const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *piPosition) override;
 
 protected:
     const char *m_input;

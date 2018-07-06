@@ -39,8 +39,7 @@ public:
     Database &operator=(const Database &) = delete;
 
     static std::shared_ptr<Database> databaseWithPath(const std::string &path);
-    static std::shared_ptr<Database>
-    databaseWithExistingPath(const std::string &path);
+    static std::shared_ptr<Database> databaseWithExistingPath(const std::string &path);
     static std::shared_ptr<Database> databaseWithExistingTag(const Tag &tag);
 
 protected:
@@ -84,8 +83,7 @@ public:
     void setSQLTrace(const SQLNotification &onSQLTraced);
 
     typedef Handle::PerformanceNotification PerformanceNotification;
-    void
-    setPerformanceTrace(const PerformanceNotification &onPerformanceTraced);
+    void setPerformanceTrace(const PerformanceNotification &onPerformanceTraced);
 
 #pragma mark - File
 public:
@@ -96,8 +94,8 @@ public:
     std::list<std::string> getPaths() const;
 
     bool moveFiles(const std::string &directory);
-    bool moveFilesToDirectoryWithExtraFiles(
-        const std::string &directory, const std::list<std::string> &extraFiles);
+    bool moveFilesToDirectoryWithExtraFiles(const std::string &directory,
+                                            const std::list<std::string> &extraFiles);
     bool removeFiles();
     std::pair<bool, size_t> getFilesSize();
 
@@ -107,8 +105,7 @@ public:
     typedef Corruption::Reaction CorruptionReaction;
     void setReactionWhenCorrupted(CorruptionReaction reaction);
     CorruptionReaction getReactionWhenCorrupted() const;
-    void
-    setExtraReactionWhenCorrupted(const CorruptionExtraReaction &notification);
+    void setExtraReactionWhenCorrupted(const CorruptionExtraReaction &notification);
     bool isCorrupted() const;
 
     std::string getFirstMaterialPath() const;
@@ -124,8 +121,7 @@ public:
     bool deposit();
     bool removeDeposit();
 
-    typedef Repair::FactoryRetriever::ProgressUpdateCallback
-        RetrieveProgressCallback;
+    typedef Repair::FactoryRetriever::ProgressUpdateCallback RetrieveProgressCallback;
     double retrieve(const RetrieveProgressCallback &onProgressUpdate);
     bool canRetrieve() const;
 
@@ -139,16 +135,15 @@ public:
     std::pair<bool, bool> tableExists(const TableOrSubquery &table);
 
 protected:
-    using ThreadedHandles =
-        std::map<const HandlePool *, std::pair<RecyclableHandle, int>>;
+    using ThreadedHandles
+    = std::map<const HandlePool *, std::pair<RecyclableHandle, int>>;
     static ThreadLocal<ThreadedHandles> &threadedHandles();
 
     RecyclableHandle flowOutThreadedHandle();
     void retainThreadedHandle(const RecyclableHandle &recyclableHandle) const;
     void releaseThreadedHandle() const;
 
-    static std::shared_ptr<HandlePool>
-    generateHandlePool(const std::string &path);
+    static std::shared_ptr<HandlePool> generateHandlePool(const std::string &path);
     static bool initializeHandlePool(const HandlePool &handlePool);
 
 #pragma mark - Transaction

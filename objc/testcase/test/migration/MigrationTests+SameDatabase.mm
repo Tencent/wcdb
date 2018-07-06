@@ -55,7 +55,7 @@
     XCTAssertTrue([_migrated dropTable:_migratedTableName]);
 
     [_migrated close:^{
-      XCTAssertTrue([_migrated removeFiles]);
+        XCTAssertTrue([_migrated removeFiles]);
     }];
 
     _migrated = nil;

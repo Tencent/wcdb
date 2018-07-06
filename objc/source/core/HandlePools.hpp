@@ -34,11 +34,9 @@ public:
 
     static HandlePools *defaultPools();
 
-    typedef std::function<std::shared_ptr<HandlePool>(const std::string &)>
-        Generator;
+    typedef std::function<std::shared_ptr<HandlePool>(const std::string &)> Generator;
 
-    RecyclableHandlePool getPool(const std::string &path,
-                                 const Generator &generator);
+    RecyclableHandlePool getPool(const std::string &path, const Generator &generator);
     RecyclableHandlePool getExistingPool(HandlePool::Tag tag);
     RecyclableHandlePool getExistingPool(const std::string &path);
 
@@ -52,12 +50,9 @@ protected:
     std::shared_ptr<HandlePool> generate(const std::string &path);
 
     RecyclableHandlePool getExistingPool(
-        const std::map<std::string,
-                       std::pair<std::shared_ptr<HandlePool>, int>>::iterator
-            &iter);
+    const std::map<std::string, std::pair<std::shared_ptr<HandlePool>, int>>::iterator &iter);
 
-    std::map<std::string, std::pair<std::shared_ptr<HandlePool>, int>>
-        m_pools; //path->{pool, reference}
+    std::map<std::string, std::pair<std::shared_ptr<HandlePool>, int>> m_pools; //path->{pool, reference}
     std::mutex m_mutex;
 };
 

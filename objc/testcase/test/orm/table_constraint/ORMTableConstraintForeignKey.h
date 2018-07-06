@@ -22,6 +22,6 @@
 
 @interface ORMTableConstraintForeignKey : NSObject
 
-@property(nonatomic, assign) int variable;
+@property (nonatomic, assign) int variable;
 
 @end

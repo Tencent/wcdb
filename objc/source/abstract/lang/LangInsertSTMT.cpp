@@ -48,20 +48,20 @@ CopyOnWriteString InsertSTMT::SQL() const
         description.append("(" + columns.description().get() + ")");
     }
     switch (switcher) {
-        case Switch::Values:
-            LangRemedialAssert(!exprs.empty());
-            description.append(" VALUES(" + exprs.description().get() + ")");
-            break;
-        case Switch::Select:
-            LangRemedialAssert(!selectSTMT.empty());
-            description.append(" " + selectSTMT.description().get());
-            break;
-        case Switch::DefaultValues:
-            description.append(" DEFAULT VALUES");
-            break;
-        default:
-            LangRemedialFatalError();
-            break;
+    case Switch::Values:
+        LangRemedialAssert(!exprs.empty());
+        description.append(" VALUES(" + exprs.description().get() + ")");
+        break;
+    case Switch::Select:
+        LangRemedialAssert(!selectSTMT.empty());
+        description.append(" " + selectSTMT.description().get());
+        break;
+    case Switch::DefaultValues:
+        description.append(" DEFAULT VALUES");
+        break;
+    default:
+        LangRemedialFatalError();
+        break;
     }
     return description;
 }
@@ -69,20 +69,20 @@ CopyOnWriteString InsertSTMT::SQL() const
 constexpr const char *InsertSTMT::typeName(const Type &type)
 {
     switch (type) {
-        case Type::Insert:
-            return "INSERT";
-        case Type::InsertOrReplace:
-            return "INSERT OR REPLACE";
-        case Type::InsertOrRollback:
-            return "INSERT OR ROLLBACK";
-        case Type::InsertOrAbort:
-            return "INSERT OR ABORT";
-        case Type::InsertOrFail:
-            return "INSERT OR FAIL";
-        case Type::InsertOrIgnore:
-            return "INSERT OR IGNORE";
-        default:
-            return "";
+    case Type::Insert:
+        return "INSERT";
+    case Type::InsertOrReplace:
+        return "INSERT OR REPLACE";
+    case Type::InsertOrRollback:
+        return "INSERT OR ROLLBACK";
+    case Type::InsertOrAbort:
+        return "INSERT OR ABORT";
+    case Type::InsertOrFail:
+        return "INSERT OR FAIL";
+    case Type::InsertOrIgnore:
+        return "INSERT OR IGNORE";
+    default:
+        return "";
     }
 }
 

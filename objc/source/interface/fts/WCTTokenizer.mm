@@ -30,8 +30,8 @@ public:
     WCTCursorInfo(const char *input,
                   int inputLength,
                   WCDB::FTS::TokenizerInfoBase *tokenizerInfo)
-        : WCDB::FTS::WCDBCursorInfo(input, inputLength, tokenizerInfo)
-        , m_symbolCharacterSet(generateSymbolCharacterSet())
+    : WCDB::FTS::WCDBCursorInfo(input, inputLength, tokenizerInfo)
+    , m_symbolCharacterSet(generateSymbolCharacterSet())
     {
     }
 
@@ -77,14 +77,14 @@ protected:
         }
         __block NSString *lemma = nil;
         NSString *string = [[NSString alloc] initWithBytes:input length:inputLength encoding:NSASCIIStringEncoding];
-        NSDictionary *languageMap = @{ @"Latn" : @[ @"en" ] };
+        NSDictionary *languageMap = @{@"Latn" : @[ @"en" ]};
         [string enumerateLinguisticTagsInRange:NSMakeRange(0, string.length)
                                         scheme:NSLinguisticTagSchemeLemma
                                        options:NSLinguisticTaggerOmitWhitespace
                                    orthography:[NSOrthography orthographyWithDominantScript:@"Latn" languageMap:languageMap]
                                     usingBlock:^(NSString *tag, NSRange tokenRange, NSRange sentenceRange, BOOL *stop) {
-                                      lemma = tag.lowercaseString;
-                                      *stop = YES;
+                                        lemma = tag.lowercaseString;
+                                        *stop = YES;
                                     }];
         if (lemma.length > 0 && [lemma caseInsensitiveCompare:string] != NSOrderedSame) {
             m_lemmaBufferLength = (int) lemma.length;
