@@ -100,10 +100,6 @@ int Wal::getMaxPageno() const
 Data Wal::acquireFrameData(int frameno)
 {
     WCTInnerAssert(isInitializing());
-    if (frameno > m_frames) {
-        markAsCorrupted(frameno, "WalData");
-        return Data::emptyData();
-    }
     return acquireData(headerSize + getFrameSize() * (frameno - 1), getFrameSize());
 }
 
