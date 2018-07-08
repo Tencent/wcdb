@@ -156,7 +156,7 @@ Data FileHandle::read(off_t offset, size_t size)
 {
     WCTInnerAssert(isOpened());
     if (!m_mmap.empty()) {
-        if (m_mmap.size() < size) {
+        if (offset + size > m_mmap.size()) {
             Error error;
             error.setCode(Error::Code::Exceed);
             error.message = "Size exceeds the mapped data.";

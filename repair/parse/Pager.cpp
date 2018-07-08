@@ -89,6 +89,10 @@ Data Pager::acquirePageData(int number, off_t offset, size_t size)
     if (m_wal.containsPage(number)) {
         return m_wal.acquirePageData(number, offset, size);
     }
+    if (number > m_pageCount) {
+        markAsCorrupted(number, "PageData");
+        return Data::emptyData();
+    }
     return acquireData((number - 1) * m_pageSize + offset, size);
 }
 
