@@ -37,7 +37,7 @@ public:
     typedef std::function<std::shared_ptr<HandlePool>(const std::string &)> Generator;
 
     RecyclableHandlePool getPool(const std::string &path, const Generator &generator);
-    RecyclableHandlePool getExistingPool(HandlePool::Tag tag);
+    RecyclableHandlePool getExistingPool(Tag tag);
     RecyclableHandlePool getExistingPool(const std::string &path);
 
     void purge();

@@ -60,7 +60,6 @@ public:
 
 #pragma mark - Basic
 public:
-    using Tag = Handle::Tag;
     void setTag(const Tag &tag);
     Tag getTag() const;
     const std::string path;

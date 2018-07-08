@@ -54,9 +54,9 @@ RecyclableHandlePool HandlePools::getPool(const std::string &path, const Generat
     return getExistingPool(iter);
 }
 
-RecyclableHandlePool HandlePools::getExistingPool(HandlePool::Tag tag)
+RecyclableHandlePool HandlePools::getExistingPool(Tag tag)
 {
-    WCTAssert(tag != Handle::invalidTag, "Tag invalid");
+    WCTAssert(tag != Tag::invalid(), "Tag invalid");
     std::lock_guard<std::mutex> lockGuard(m_mutex);
     auto iter = m_pools.end();
     for (iter = m_pools.begin(); iter != m_pools.end(); ++iter) {

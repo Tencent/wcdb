@@ -98,7 +98,7 @@ void Database::setTag(const Tag &tag)
     m_pool->setTag(tag);
 }
 
-Database::Tag Database::getTag() const
+Tag Database::getTag() const
 {
     return m_pool->getTag();
 }
@@ -208,9 +208,12 @@ std::pair<bool, size_t> Database::getFilesSize()
         Error error;
         error.setCode(Error::Code::Misuse);
         error.level = Error::Level::Warning;
-        error.message = "Getting files size on an opened database may get "
-                        "incorrect results.";
+        error.message = "Getting files size on an opened database may get incorrect results.";
         error.infos.set("Path", getPath());
+        Tag tag = getTag();
+        if (tag != Tag::invalid()) {
+            error.infos.set("Tag", tag);
+        }
         Notifier::shared()->notify(error);
     }
     auto pair = FileManager::shared()->getItemsSize(getPaths());

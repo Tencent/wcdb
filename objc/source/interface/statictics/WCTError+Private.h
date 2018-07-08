@@ -63,5 +63,5 @@ static_assert((int) WCTErrorCodeNotADatabase == (int) WCDB::Error::Code::NotADat
 static_assert((int) WCTErrorCodeNotice == (int) WCDB::Error::Code::Notice, "");
 static_assert((int) WCTErrorCodeWarning == (int) WCDB::Error::Code::Warning, "");
 
-static_assert((int) WCTInvalidTag == (int) WCDB::Handle::invalidTag, "");
-static_assert(sizeof(WCTTag) == sizeof(WCDB::Handle::Tag), "");
+static_assert((int) WCTInvalidTag == (int) WCDB::Tag::invalidValue, "");
+static_assert(sizeof(WCTTag) == sizeof(WCDB::Tag), "");

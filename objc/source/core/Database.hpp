@@ -32,8 +32,6 @@ namespace WCDB {
 class Database : public HandlePoolHolder {
 #pragma mark - Initializer
 public:
-    using Tag = HandlePool::Tag;
-
     Database() = delete;
     Database(const Database &) = delete;
     Database &operator=(const Database &) = delete;

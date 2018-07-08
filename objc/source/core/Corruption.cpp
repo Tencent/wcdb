@@ -72,18 +72,22 @@ void Corruption::notify()
     if (m_reaction == Reaction::Custom && m_extraReaction == nullptr) {
         return;
     }
+    auto database = Database::databaseWithExistingPath(getPath());
     {
         Error error;
         error.level = Error::Level::Notice;
         error.setCode(Error::Code::Notice);
         error.message = "Corruption will be handled.";
+        Tag tag = database->getTag();
+        if (tag != Tag::invalid()) {
+            error.infos.set("Tag", tag);
+        }
         error.infos.set("Reaction", reactionName(m_reaction));
         error.infos.set("Path", getPath());
         error.infos.set("ExtraReaction", m_extraReaction != nullptr);
         Notifier::shared()->notify(error);
     }
 
-    auto database = Database::databaseWithExistingPath(getPath());
     WCTInnerAssert(database != nullptr);
     database->blockade();
     markAsHandling();
@@ -94,7 +98,11 @@ void Corruption::notify()
             Error error;
             error.level = Error::Level::Warning;
             error.setCode(Error::Code::Warning, "Repair");
-            error.message = "Skip corruption handling due to mismatch identifier.";
+            error.message = "Skip corruption handling due to mismatched identifier.";
+            Tag tag = database->getTag();
+            if (tag != Tag::invalid()) {
+                error.infos.set("Tag", tag);
+            }
             error.infos.set("Old", m_corruptedIdentifier.load());
             error.infos.set("New", identifier);
             Notifier::shared()->notify(error);

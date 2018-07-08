@@ -24,6 +24,7 @@
 #include <WCDB/ErrorProne.hpp>
 #include <WCDB/HandleNotification.hpp>
 #include <WCDB/HandleStatement.hpp>
+#include <WCDB/Tag.hpp>
 #include <WCDB/WINQ.h>
 #include <array>
 #include <memory>
@@ -60,9 +61,6 @@ public:
 
 #pragma mark - Tag
 public:
-    using Tag = int32_t;
-    static constexpr const Tag invalidTag = 0;
-
     void setTag(Tag tag);
     Tag getTag() const;
 

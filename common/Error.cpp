@@ -159,6 +159,13 @@ void Error::Infos::set(const std::string &key, const std::string &value)
     m_strings[key] = value;
 }
 
+void Error::Infos::unset(const std::string &key)
+{
+    m_strings.erase(key);
+    m_integers.erase(key);
+    m_doubles.erase(key);
+}
+
 const std::map<std::string, int64_t> &Error::Infos::getIntegers() const
 {
     return m_integers;

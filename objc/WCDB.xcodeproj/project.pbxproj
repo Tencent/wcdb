@@ -48,6 +48,10 @@
 		232DCE0A207F81FD00AC2CD0 /* Lock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 232DCE08207F81FD00AC2CD0 /* Lock.cpp */; };
 		232DCE0B207F81FD00AC2CD0 /* Lock.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 232DCE09207F81FD00AC2CD0 /* Lock.hpp */; };
 		2330712F1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2330712E1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm */; };
+		2332F32820F262280037EF8D /* Tag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2332F32620F262280037EF8D /* Tag.cpp */; };
+		2332F32920F262280037EF8D /* Tag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2332F32620F262280037EF8D /* Tag.cpp */; };
+		2332F32A20F262280037EF8D /* Tag.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2332F32720F262280037EF8D /* Tag.hpp */; };
+		2332F32B20F262280037EF8D /* Tag.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2332F32720F262280037EF8D /* Tag.hpp */; };
 		233A058B2062698E00F1A212 /* WCTHandle+ChainCall.h in Headers */ = {isa = PBXBuildFile; fileRef = 233A05892062698E00F1A212 /* WCTHandle+ChainCall.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		233A058C2062698E00F1A212 /* WCTUnsafeHandle+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233A058A2062698E00F1A212 /* WCTUnsafeHandle+ChainCall.mm */; };
 		234591F220440A0200DC7D34 /* WCTRedirectable.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234591F020440A0200DC7D34 /* WCTRedirectable.mm */; };
@@ -1146,6 +1150,8 @@
 		232DCE08207F81FD00AC2CD0 /* Lock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Lock.cpp; sourceTree = "<group>"; };
 		232DCE09207F81FD00AC2CD0 /* Lock.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Lock.hpp; sourceTree = "<group>"; };
 		2330712E1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSObject+WCTColumnCoding.mm"; sourceTree = "<group>"; };
+		2332F32620F262280037EF8D /* Tag.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Tag.cpp; sourceTree = "<group>"; };
+		2332F32720F262280037EF8D /* Tag.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Tag.hpp; sourceTree = "<group>"; };
 		233A05892062698E00F1A212 /* WCTHandle+ChainCall.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTHandle+ChainCall.h"; sourceTree = "<group>"; };
 		233A058A2062698E00F1A212 /* WCTUnsafeHandle+ChainCall.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTUnsafeHandle+ChainCall.mm"; sourceTree = "<group>"; };
 		234591F020440A0200DC7D34 /* WCTRedirectable.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTRedirectable.mm; sourceTree = "<group>"; };
@@ -1734,6 +1740,8 @@
 				23DC3078202B0066000F7895 /* Tokenize.hpp */,
 				23DC306D202AFF8B000F7895 /* Handle.cpp */,
 				23DC306E202AFF8B000F7895 /* Handle.hpp */,
+				2332F32620F262280037EF8D /* Tag.cpp */,
+				2332F32720F262280037EF8D /* Tag.hpp */,
 				2360A5F420D78F1B00E4A311 /* HandleNotification.cpp */,
 				2360A5F520D78F1B00E4A311 /* HandleNotification.hpp */,
 				2360A5F320D78F1B00E4A311 /* HandleRelated.cpp */,
@@ -2750,6 +2758,7 @@
 				23D920C72009B534000634CB /* Abstract.h in Headers */,
 				2349F7701EA0D6680021EFA7 /* WCTDatabase+Table.h in Headers */,
 				23D0C31020C125420001BFAE /* SQLiteAssembler.hpp in Headers */,
+				2332F32A20F262280037EF8D /* Tag.hpp in Headers */,
 				23567D4D20CA7E15005F1C35 /* HandlePoolRelated.hpp in Headers */,
 				2349F72F1EA0D6680021EFA7 /* WCTSelectable.h in Headers */,
 				2349F75B1EA0D6680021EFA7 /* WCTRuntimeObjCAccessor.h in Headers */,
@@ -3043,6 +3052,7 @@
 				23F5BDC520887FD3000CCD37 /* Abstract.h in Headers */,
 				23F5BDC620887FD3000CCD37 /* WCTDatabase+Table.h in Headers */,
 				23D0C31120C125420001BFAE /* SQLiteAssembler.hpp in Headers */,
+				2332F32B20F262280037EF8D /* Tag.hpp in Headers */,
 				23567D4E20CA7E15005F1C35 /* HandlePoolRelated.hpp in Headers */,
 				23F5BDC720887FD3000CCD37 /* WCTSelectable.h in Headers */,
 				23F5BDC820887FD3000CCD37 /* WCTRuntimeObjCAccessor.h in Headers */,
@@ -3394,6 +3404,7 @@
 				2349F70E1EA0D6680021EFA7 /* NSData+WCTColumnCoding.mm in Sources */,
 				23977592202AECD3000A681C /* LangRaiseFunction.cpp in Sources */,
 				2370980A20590CA700E768B4 /* HandleStatement.cpp in Sources */,
+				2332F32820F262280037EF8D /* Tag.cpp in Sources */,
 				2349F75E1EA0D6680021EFA7 /* WCTBinding.mm in Sources */,
 				2349F7371EA0D6680021EFA7 /* WCTDatabase+Convenient.mm in Sources */,
 				2374C9962090A393000F046F /* WCTDatabase+Trace.mm in Sources */,
@@ -3641,6 +3652,7 @@
 				23F5BCB820887FD3000CCD37 /* NSData+WCTColumnCoding.mm in Sources */,
 				23F5BCB920887FD3000CCD37 /* LangRaiseFunction.cpp in Sources */,
 				23F5BCBA20887FD3000CCD37 /* HandleStatement.cpp in Sources */,
+				2332F32920F262280037EF8D /* Tag.cpp in Sources */,
 				23F5BCBB20887FD3000CCD37 /* WCTBinding.mm in Sources */,
 				23F5BCBC20887FD3000CCD37 /* WCTDatabase+Convenient.mm in Sources */,
 				2374C9972090A393000F046F /* WCTDatabase+Trace.mm in Sources */,

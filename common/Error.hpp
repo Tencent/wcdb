@@ -182,6 +182,10 @@ public:
 
     class Infos {
     public:
+#if __cplusplus > 201402L
+#warning TODO \
+std::any is available since C++17.
+#endif
         template<typename T>
         typename std::enable_if<std::is_integral<T>::value, void>::type
         set(const std::string &key, const T &value)
@@ -195,6 +199,7 @@ public:
             m_doubles[key] = (double) value;
         }
         void set(const std::string &key, const std::string &value);
+        void unset(const std::string &key);
 
         const std::map<std::string, int64_t> &getIntegers() const;
         const std::map<std::string, std::string> &getStrings() const;

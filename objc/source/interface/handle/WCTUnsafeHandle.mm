@@ -566,6 +566,11 @@
             error.message = "Skip column";
             error.infos.set("Table", tableName.cppString);
             error.infos.set("Column", columnName);
+            WCTTag tag = self.tag;
+            if (tag != WCTInvalidTag) {
+                error.infos.set("Tag", tag);
+            }
+            error.infos.set("Path", self.path.cppString);
             WCDB::Notifier::shared()->notify(error);
         }
         //Add new column

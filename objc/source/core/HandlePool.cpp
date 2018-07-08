@@ -32,7 +32,7 @@ namespace WCDB {
 #pragma mark - Initialize
 HandlePool::HandlePool(const std::string &thePath, const std::shared_ptr<Configs> &configs)
 : path(thePath)
-, m_tag(Handle::invalidTag)
+, m_tag(Tag::invalid())
 , m_configs(configs)
 , m_handles(HandlePool::hardwareConcurrency())
 , m_aliveHandleCount(0)
@@ -106,11 +106,11 @@ uint32_t HandlePool::getIdentifier()
 #pragma mark - Basic
 void HandlePool::setTag(const Tag &tag)
 {
-    WCTAssert(tag != Handle::invalidTag, "Tag invalid");
+    WCTAssert(tag != Tag::invalid(), "Tag invalid");
     m_tag.store(tag);
 }
 
-HandlePool::Tag HandlePool::getTag() const
+Tag HandlePool::getTag() const
 {
     return m_tag.load();
 }
@@ -272,6 +272,11 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
         Error error;
         error.setCode(Error::Code::Exceed);
         error.message = "The concurrency of database exceeds the maximum allowed.";
+        Tag tag = getTag();
+        if (tag != Tag::invalid()) {
+            error.infos.set("Tag", tag);
+        }
+        error.infos.set("Path", path);
         error.infos.set("MaxConcurrency", HandlePool::maxConcurrency());
         Notifier::shared()->notify(error);
         setThreadedError(std::move(error));

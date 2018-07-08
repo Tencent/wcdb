@@ -249,6 +249,10 @@ bool MigrationDatabase::interruptIfDeposited()
         error.setCode(Error::Code::Interrupt);
         error.message = "Migration stepping should be run after retrieved.";
         error.infos.set("Path", getPath());
+        Tag tag = getTag();
+        if (tag != Tag::invalid()) {
+            error.infos.set("Tag", tag);
+        }
         Notifier::shared()->notify(error);
         setThreadedError(std::move(error));
         return true;
