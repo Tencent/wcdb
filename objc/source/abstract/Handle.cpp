@@ -41,6 +41,7 @@ Handle::Handle(const std::string &path_)
 , path(path_)
 , m_nestedLevel(0)
 , m_tag(Tag::invalid())
+, m_ignorableCode(SQLITE_OK)
 {
     m_error.infos.set("Path", path);
 }
@@ -284,10 +285,10 @@ bool Handle::isPrepared()
 std::pair<bool, bool> Handle::tableExists(const TableOrSubquery &table)
 {
     StatementSelect statementSelect = StatementSelect().select(1).from(table).limit(0);
-    ignoreError(true);
+    markAsIgnorable(SQLITE_ERROR);
     bool unused;
     bool result = Handle::prepare(statementSelect) && Handle::step(unused);
-    ignoreError(false);
+    markAsUnignorable();
     finalize();
     return { result || getResultCode() == SQLITE_ERROR, result };
 }
@@ -460,6 +461,11 @@ void Handle::setError(int rc, const std::string &sql)
     } else {
         m_error.setSQLiteCode(rc);
     }
+    if (rc == m_ignorableCode) {
+        m_error.level = Error::Level::Ignore;
+    } else {
+        m_error.level = Error::Level::Error;
+    }
     const char *message = getErrorMessage();
     if (message) {
         m_error.message = message;
@@ -470,13 +476,14 @@ void Handle::setError(int rc, const std::string &sql)
     Notifier::shared()->notify(m_error);
 }
 
-void Handle::ignoreError(bool ignore)
+void Handle::markAsIgnorable(int code)
 {
-    if (ignore) {
-        m_error.level = Error::Level::Ignore;
-    } else {
-        m_error.level = Error::Level::Error;
-    }
+    m_ignorableCode = code;
+}
+
+void Handle::markAsUnignorable()
+{
+    m_ignorableCode = SQLITE_OK;
 }
 
 } //namespace WCDB

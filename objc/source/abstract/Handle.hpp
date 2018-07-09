@@ -176,7 +176,10 @@ protected:
 #pragma mark - Error
 protected:
     void setError(int rc, const std::string &sql = "");
-    void ignoreError(bool ignore = true);
+
+    void markAsIgnorable(int code);
+    void markAsUnignorable();
+    int m_ignorableCode;
 };
 
 } //namespace WCDB
