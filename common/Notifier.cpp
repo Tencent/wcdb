@@ -50,7 +50,9 @@ void Notifier::logger(const Error &error)
             stream << ", " << info.first << ": " << info.second;
         }
         for (const auto &info : error.infos.getStrings()) {
-            stream << ", " << info.first << ": " << info.second;
+            if (!info.second.empty()) {
+                stream << ", " << info.first << ": " << info.second;
+            }
         }
         for (const auto &info : error.infos.getDoubles()) {
             stream << ", " << info.first << ": " << info.second;

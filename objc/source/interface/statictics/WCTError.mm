@@ -39,7 +39,18 @@ WCTErrorKey const WCTErrorKeySource = @"Source";
         [userInfo setObject:[NSNumber numberWithLongLong:info.second] forKey:[NSString stringWithCppString:info.first]];
     }
     for (const auto &info : error.infos.getStrings()) {
-        [userInfo setObject:[NSString stringWithCppString:info.second] forKey:[NSString stringWithCppString:info.first]];
+        NSString *key = [NSString stringWithCppString:info.first];
+        NSString *object = [NSString stringWithCppString:info.second];
+#if TARGET_OS_IPHONE
+        if ([key isEqualToString:WCTErrorKeyPath]) {
+            NSString *path = [object stringByAbbreviatingWithTildeInPath];
+            if (path) {
+                object = path;
+            }
+        }
+#endif //TARGET_OS_IPHONE
+        [userInfo setObject:object
+                     forKey:key];
     }
     for (const auto &info : error.infos.getDoubles()) {
         [userInfo setObject:[NSNumber numberWithDouble:info.second] forKey:[NSString stringWithCppString:info.first]];
@@ -91,9 +102,16 @@ WCTErrorKey const WCTErrorKeySource = @"Source";
     if (self.code == WCTErrorCodeOK) {
         return nil;
     }
-    NSMutableString *description = [[NSMutableString alloc] initWithFormat:@"[%s: %ld, %@]", WCDB::Error::levelName((WCDB::Error::Level) self.level), (long) self.code, self.message];
+    NSMutableString *description = [[NSMutableString alloc] initWithFormat:@"[%s: %ld", WCDB::Error::levelName((WCDB::Error::Level) self.level), (long) self.code];
+    if (self.message.length > 0) {
+        [description appendFormat:@", %@", self.message];
+    }
+    [description appendString:@"]"];
     [self.userInfo enumerateKeysAndObjectsUsingBlock:^(NSErrorUserInfoKey key, id obj, BOOL *) {
-        [description appendFormat:@", %@: %@", key, obj];
+        if (![obj isKindOfClass:NSString.class]
+            || ((NSString *) obj).length > 0) {
+            [description appendFormat:@", %@: %@", key, obj];
+        }
     }];
     return description;
 }

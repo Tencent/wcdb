@@ -24,6 +24,7 @@
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/RepairKit.h>
+#include <WCDB/String.hpp>
 #include <sqlcipher/sqlite3.h>
 
 namespace WCDB {
@@ -461,18 +462,18 @@ void Handle::setError(int rc, const std::string &sql)
     } else {
         m_error.setSQLiteCode(rc);
     }
-    if (rc == m_ignorableCode) {
-        m_error.level = Error::Level::Ignore;
-    } else {
+    if (rc != m_ignorableCode) {
         m_error.level = Error::Level::Error;
+    } else {
+        m_error.level = Error::Level::Ignore;
     }
     const char *message = getErrorMessage();
     if (message) {
         m_error.message = message;
+    } else {
+        m_error.message = String::empty();
     }
-    if (!sql.empty()) {
-        m_error.infos.set("SQL", sql);
-    }
+    m_error.infos.set("SQL", sql);
     Notifier::shared()->notify(m_error);
 }
 
