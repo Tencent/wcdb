@@ -2,18 +2,15 @@
 
 #import <WCDB/WCDB.h>
 
-template <>
-struct ColumnIsInteger32Type<___VARIABLE_productName___>
-    : public std::true_type {
+template<>
+struct ColumnIsInteger32Type<___VARIABLE_productName___> : public std::true_type {
 };
 
-template <>
+template<>
 WCTColumnRuntimeCppAccessor<___VARIABLE_productName___>::CType
-WCTColumnRuntimeCppAccessor<___VARIABLE_productName___>::
-    convertPropertyTypeToCType(___VARIABLE_productName___ t);
+WCTColumnRuntimeCppAccessor<___VARIABLE_productName___>::convertPropertyTypeToCType(___VARIABLE_productName___ t);
 
-template <>
+template<>
 ___VARIABLE_productName___
-WCTColumnRuntimeCppAccessor<___VARIABLE_productName___ *>::
-    convertCTypeToPropertyType(
-        WCTColumnRuntimeCppAccessor<___VARIABLE_productName___>::CType t);
+WCTColumnRuntimeCppAccessor<___VARIABLE_productName___ *>::convertCTypeToPropertyType(
+WCTColumnRuntimeCppAccessor<___VARIABLE_productName___>::CType t);

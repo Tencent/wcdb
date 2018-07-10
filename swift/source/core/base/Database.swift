@@ -529,10 +529,10 @@ public extension Database {
             handlePool.setConfig(named: DefaultConfigOrder.synchronous.description, with: { (handle: Handle) throws in
                 try handle.exec(CommonStatement.enableSynchronousFull)
             })
-            handlePool.setConfig(named: DefaultConfigOrder.checkpoint.description, with: { (handle: Handle) throws in
+            handlePool.setConfig(named: DefaultConfigOrder.checkpoint.description, with: { (_: Handle) throws in
             })
         } else {
-            handlePool.setConfig(named: DefaultConfigOrder.synchronous.description, with: { (handle: Handle) throws in
+            handlePool.setConfig(named: DefaultConfigOrder.synchronous.description, with: { (_: Handle) throws in
             })
             let checkpointConfig = Database.defaultConfigs.config(
                 by: DefaultConfigOrder.checkpoint.description)
