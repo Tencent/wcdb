@@ -43,7 +43,8 @@ public:
     , m_onRecycled(std::move(other.m_onRecycled))
     , m_reference(std::move(other.m_reference))
     {
-        other.m_reference = new std::atomic<int>(0);
+        other.m_onRecycled = nullptr;
+        other.m_reference = nullptr;
     }
 
     Recyclable(const Recyclable &other)
@@ -58,7 +59,6 @@ public:
     {
         other.retain();
         release();
-        m_value = other.m_value;
         m_onRecycled = other.m_onRecycled;
         m_reference = other.m_reference;
         return *this;
@@ -70,7 +70,8 @@ public:
         m_value = std::move(other.m_value);
         m_onRecycled = std::move(other.m_onRecycled);
         m_reference = std::move(other.m_reference);
-        other.m_reference = new std::atomic<int>(0);
+        other.m_onRecycled = nullptr;
+        other.m_reference = nullptr;
         return *this;
     }
 
