@@ -60,7 +60,13 @@ bool CheckpointConfig::invoke(Handle *handle)
 void CheckpointConfig::onCommitted(Handle *handle, int frames)
 {
     if (frames > framesForPassive) {
-        m_timedQueue.reQueue(handle->path, 2.0, frames);
+        if (frames > framesForFull) {
+            if (handle->execute(m_checkpointTruncate)) {
+                m_timedQueue.remove(handle->path);
+            }
+        } else {
+            m_timedQueue.reQueue(handle->path, 1.0, frames);
+        }
     }
 }
 

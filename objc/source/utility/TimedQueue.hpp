@@ -75,6 +75,15 @@ public:
         }
     }
 
+    void remove(const Key &key)
+    {
+        std::lock_guard<std::mutex> lockGuard(m_mutex);
+        if (m_stop) {
+            return;
+        }
+        m_map.erase(key);
+    }
+
     void stop()
     {
         {
