@@ -30,7 +30,7 @@ namespace WCDB {
 template<typename T>
 class Recyclable {
 public:
-    typedef std::function<void(const T &)> OnRecycled;
+    typedef std::function<void(T &)> OnRecycled;
 
     Recyclable(const T &value, const Recyclable::OnRecycled &onRecycled)
     : m_value(value), m_onRecycled(onRecycled), m_reference(new std::atomic<int>(0))
@@ -79,6 +79,7 @@ public:
 
     constexpr T &operator->() const { return m_value; }
     const T &get() const { return m_value; }
+    T &unsafeGet() { return m_value; }
 
 protected:
     void retain() const

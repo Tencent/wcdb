@@ -56,7 +56,7 @@ void SharedLock::lockShared()
 {
     std::unique_lock<std::mutex> lockGuard(m_mutex);
     if (m_writers > 0 ? m_locking != std::this_thread::get_id() : m_pendingWriters > 0) {
-        WCTInnerAssert(*m_threadedReaders.get() == 0);
+        WCTInnerAssert(*m_threadedReaders.getOrCreate() == 0);
         ++m_pendingReaders;
         do {
             m_readersCond.wait(lockGuard);
@@ -64,21 +64,21 @@ void SharedLock::lockShared()
         --m_pendingReaders;
     }
     ++m_readers;
-    ++*m_threadedReaders.get();
+    ++*m_threadedReaders.getOrCreate();
 }
 
 void SharedLock::unlockShared()
 {
     std::unique_lock<std::mutex> lockGuard(m_mutex);
     WCTInnerAssert(m_readers > 0);
-    WCTInnerAssert(*m_threadedReaders.get() > 0);
+    WCTInnerAssert(*m_threadedReaders.getOrCreate() > 0);
     WCTInnerAssert(m_writers == 0
-                   || (m_readers == *m_threadedReaders.get()
+                   || (m_readers == *m_threadedReaders.getOrCreate()
                        && m_locking == std::this_thread::get_id()));
     --m_readers;
-    --*m_threadedReaders.get();
+    --*m_threadedReaders.getOrCreate();
     if (m_readers == 0) {
-        WCTInnerAssert(*m_threadedReaders.get() == 0);
+        WCTInnerAssert(*m_threadedReaders.getOrCreate() == 0);
         if (m_writers == 0 && m_pendingWriters > 0) {
             m_writersCond.notify_one();
         }
@@ -88,7 +88,7 @@ void SharedLock::unlockShared()
 void SharedLock::lock()
 {
     std::unique_lock<std::mutex> lockGuard(m_mutex);
-    WCTInnerAssert(*m_threadedReaders.get() == 0); //Upgrade lock is not supported yet.
+    WCTInnerAssert(*m_threadedReaders.getOrCreate() == 0); //Upgrade lock is not supported yet.
     if ((m_readers > 0 || m_writers > 0) && m_locking != std::this_thread::get_id()) {
         ++m_pendingWriters;
         do {
@@ -103,7 +103,7 @@ void SharedLock::lock()
 void SharedLock::unlock()
 {
     std::unique_lock<std::mutex> lockGuard(m_mutex);
-    WCTInnerAssert(*m_threadedReaders.get() == 0); //Upgrade lock is not supported yet.
+    WCTInnerAssert(*m_threadedReaders.getOrCreate() == 0); //Upgrade lock is not supported yet.
     if (--m_writers == 0) {
         m_locking = std::thread::id();
         if (m_pendingWriters > 0) {

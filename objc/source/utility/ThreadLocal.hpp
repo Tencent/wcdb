@@ -29,53 +29,85 @@
  * See also: http://stackoverflow.com/questions/28094794/why-does-apple-clang-disallow-c11-thread-local-when-official-clang-supports
  */
 
+#include <WCDB/Recyclable.hpp>
+#include <map>
 #include <pthread.h>
 
 #pragma GCC visibility push(hidden)
 
 namespace WCDB {
 
-template<typename T>
-class ThreadLocal {
+class UntypedThreadLocal {
+#pragma mark - Declare
+private:
+    class Info;
+    typedef unsigned int Identifier;
+    typedef std::map<Identifier, Info> Infos;
+#pragma mark - Threaded Info
+private:
+    class Info {
+    public:
+        typedef std::function<void *(void)> Constructor;
+        typedef std::function<void(void *)> Deconstructor;
+
+        Info(const Recyclable<pthread_key_t> &key,
+             const Constructor &constructor,
+             const Deconstructor &deconstructor);
+        ~Info();
+
+        void *getOrCreate();
+
+    protected:
+        const Constructor m_constructor;
+        const Deconstructor m_deconstructor;
+        void *m_holder;
+        Recyclable<pthread_key_t> m_key;
+    };
+#pragma mark - UntypedThreadLocal
 public:
-    ThreadLocal() : m_defaultValue(nullptr)
+    UntypedThreadLocal();
+    void *getOrCreate();
+
+protected:
+    virtual void *constructor() = 0;
+    virtual void deconstructor(void *) = 0;
+
+private:
+    Recyclable<pthread_key_t> m_key;
+    Identifier m_identifier;
+#pragma mark - Shared
+private:
+    static Identifier nextIdentifier();
+    static const Recyclable<pthread_key_t> &sharedKey();
+#pragma mark - Helper
+private:
+    static void threadDeconstructor(void *p);
+    static pthread_key_t constructKey();
+    static void deconstructKey(pthread_key_t &key);
+};
+
+template<typename T>
+class ThreadLocal : public UntypedThreadLocal {
+public:
+    ThreadLocal() : UntypedThreadLocal() {}
+
+    ThreadLocal(const T &defaultValue)
+    : UntypedThreadLocal(), m_defaultValue(defaultValue)
     {
-        pthread_key_create(&m_key, ThreadLocal::destructor);
     }
 
-    ThreadLocal(const T &defaultValue) : m_defaultValue(new T(defaultValue))
-    {
-        pthread_key_create(&m_key, ThreadLocal::destructor);
-    }
+    T *getOrCreate() { return (T *) UntypedThreadLocal::getOrCreate(); }
 
-    T *get()
+    void *constructor() override
     {
-        T *value = (T *) pthread_getspecific(m_key);
-        if (value) {
-            return value;
-        }
-        value = new T;
-        if (m_defaultValue) {
-            *value = *m_defaultValue;
-        }
-        pthread_setspecific(m_key, value);
+        T *value = new T;
         return value;
     }
 
-    ~ThreadLocal()
-    {
-        if (m_defaultValue) {
-            delete m_defaultValue;
-            m_defaultValue = nullptr;
-        }
-        pthread_key_delete(m_key);
-    }
+    void deconstructor(void *value) override { delete (T *) value; }
 
 protected:
-    pthread_key_t m_key;
-    T *m_defaultValue;
-
-    static void destructor(void *value) { delete (T *) value; }
+    T m_defaultValue;
 };
 
 } //namespace WCDB

@@ -457,7 +457,7 @@ RecyclableHandle Database::getHandle()
 
 RecyclableHandle Database::flowOutThreadedHandle()
 {
-    ThreadedHandles *threadedHandle = Database::threadedHandles().get();
+    ThreadedHandles *threadedHandle = Database::threadedHandles().getOrCreate();
     const auto iter = threadedHandle->find(m_pool);
     if (iter != threadedHandle->end()) {
         return iter->second.first;
@@ -507,7 +507,7 @@ std::pair<bool, bool> Database::tableExists(const TableOrSubquery &table)
 void Database::retainThreadedHandle(const RecyclableHandle &recyclableHandle) const
 {
     std::map<const HandlePool *, std::pair<RecyclableHandle, int>> *threadHandles
-    = Database::threadedHandles().get();
+    = Database::threadedHandles().getOrCreate();
     auto iter = threadHandles->find(m_pool);
     WCTInnerAssert(iter == threadHandles->end()
                    || recyclableHandle.getHandle() == iter->second.first.getHandle());
@@ -521,7 +521,7 @@ void Database::retainThreadedHandle(const RecyclableHandle &recyclableHandle) co
 void Database::releaseThreadedHandle() const
 {
     std::map<const HandlePool *, std::pair<RecyclableHandle, int>> *threadHandles
-    = Database::threadedHandles().get();
+    = Database::threadedHandles().getOrCreate();
     auto iter = threadHandles->find(m_pool);
     WCTInnerAssert(iter != threadHandles->end());
     if (--iter->second.second == 0) {
@@ -625,7 +625,7 @@ bool Database::runNestedTransaction(const TransactionCallback &transaction)
 
 bool Database::isInThreadedTransaction() const
 {
-    ThreadedHandles *threadedHandle = Database::threadedHandles().get();
+    ThreadedHandles *threadedHandle = Database::threadedHandles().getOrCreate();
     return threadedHandle->find(m_pool) != threadedHandle->end();
 }
 

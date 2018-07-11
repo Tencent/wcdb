@@ -30,22 +30,22 @@ ThreadedErrors *ThreadedErrors::shared()
 
 const Error &ThreadedErrors::getThreadedError()
 {
-    return *(m_errors.get());
+    return *(m_errors.getOrCreate());
 }
 
 Error &&ThreadedErrors::moveThreadedError()
 {
-    return std::move(*(m_errors.get()));
+    return std::move(*(m_errors.getOrCreate()));
 }
 
 void ThreadedErrors::setThreadedError(const Error &error)
 {
-    *m_errors.get() = error;
+    *m_errors.getOrCreate() = error;
 }
 
 void ThreadedErrors::setThreadedError(Error &&error)
 {
-    *m_errors.get() = std::move(error);
+    *m_errors.getOrCreate() = std::move(error);
 }
 
 } //namespace WCDB
