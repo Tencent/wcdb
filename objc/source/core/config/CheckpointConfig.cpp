@@ -88,11 +88,7 @@ void CheckpointConfig::onTimed(const std::string &path, const int &frames) const
     if (database == nullptr || !database->isOpened()) {
         return;
     }
-    if (frames < framesForFull) {
-        database->execute(m_checkpointPassive);
-    } else {
-        database->execute(m_checkpointTruncate);
-    }
+    database->execute(m_checkpointPassive);
 }
 
 } //namespace WCDB
