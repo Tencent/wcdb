@@ -25,48 +25,16 @@
 
 namespace WCDB {
 
-template<typename Key, typename Value>
+template<typename Key, typename Value, typename Order = int>
 class OrderedUniqueList {
 public:
     struct Element {
-        int order;
+        Order order;
         Key key;
         Value value;
     };
 
-    void insert(const Key& key, const Value& value)
-    {
-        Element element;
-        element.order = 0;
-        element.key = key;
-        element.value = value;
-        insert(std::move(element));
-    }
-    void insert(const Key& key, Value&& value)
-    {
-        Element element;
-        element.order = 0;
-        element.key = key;
-        element.value = std::move(value);
-        insert(std::move(element));
-    }
-    void insert(Key&& key, const Value& value)
-    {
-        Element element;
-        element.order = 0;
-        element.key = std::move(key);
-        element.value = value;
-        insert(std::move(element));
-    }
-    void insert(Key&& key, Value&& value)
-    {
-        Element element;
-        element.order = 0;
-        element.key = std::move(key);
-        element.value = std::move(value);
-        insert(std::move(element));
-    }
-    void insert(int order, const Key& key, const Value& value)
+    void insert(Order order, const Key& key, const Value& value)
     {
         Element element;
         element.order = order;
@@ -74,7 +42,7 @@ public:
         element.value = value;
         insert(std::move(element));
     }
-    void insert(int order, const Key& key, Value&& value)
+    void insert(Order order, const Key& key, Value&& value)
     {
         Element element;
         element.order = order;
@@ -82,7 +50,7 @@ public:
         element.value = std::move(value);
         insert(std::move(element));
     }
-    void insert(int order, Key&& key, const Value& value)
+    void insert(Order order, Key&& key, const Value& value)
     {
         Element element;
         element.order = order;
@@ -90,7 +58,7 @@ public:
         element.value = value;
         insert(std::move(element));
     }
-    void insert(int order, Key&& key, Value&& value)
+    void insert(Order order, Key&& key, Value&& value)
     {
         Element element;
         element.order = order;
@@ -116,6 +84,8 @@ public:
         }
         return nullptr;
     }
+
+    void clear() { m_elements.clear(); }
 
     const std::list<Element>& elements() const { return m_elements; }
 

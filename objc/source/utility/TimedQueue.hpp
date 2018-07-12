@@ -21,14 +21,12 @@
 #ifndef TimedQueue_hpp
 #define TimedQueue_hpp
 
+#include <WCDB/OrderedUniqueList.hpp>
 #include <WCDB/Time.hpp>
 #include <chrono>
 #include <condition_variable>
-#include <list>
-#include <map>
 #include <mutex>
 #include <stdio.h>
-#include <string>
 #include <thread>
 
 #pragma GCC visibility push(hidden)
@@ -55,19 +53,15 @@ public:
             = std::chrono::steady_clock::now()
               + std::chrono::microseconds((long long) (delay * 1000000));
 
-            auto iter = m_map.find(key);
-            if (iter != m_map.end()) {
-                iter->second.expired = expired;
-                iter->second.info = info;
-                notify = true;
+            SteadyClock shortest;
+            if (!m_list.elements().empty()) {
+                shortest = m_list.elements().begin()->order;
             } else {
-                Element element(key, expired, info);
-                m_map.emplace(key, std::move(element));
-                std::pair<Key, Element> min
-                = *std::min_element(m_map.begin(), m_map.end(), &TimedQueue::compare);
-                if (min.first == key) {
-                    notify = true;
-                }
+                shortest = SteadyClock::max();
+            }
+            m_list.insert(expired, key, info);
+            if (m_list.elements().begin()->order < shortest) {
+                notify = true;
             }
         }
         if (notify) {
@@ -81,14 +75,14 @@ public:
         if (m_stop) {
             return;
         }
-        m_map.erase(key);
+        m_list.erase(key);
     }
 
     void stop()
     {
         {
             std::lock_guard<std::mutex> lockGuard(m_mutex);
-            m_map.clear();
+            m_list.clear();
             m_stop = true;
         }
         m_cond.notify_one();
@@ -108,45 +102,26 @@ public:
             if (m_stop) {
                 break;
             }
-            if (m_map.empty()) {
+            if (m_list.elements().empty()) {
                 m_cond.wait(lockGuard);
                 continue;
             }
-            std::pair<Key, Element> min
-            = *std::min_element(m_map.begin(), m_map.end(), &TimedQueue::compare);
             SteadyClock now = SteadyClock::now();
-            if (now < min.second.expired) {
-                m_cond.wait_for(lockGuard, min.second.expired - now);
+            const auto &shortest = m_list.elements().begin();
+            if (now < shortest->order) {
+                m_cond.wait_for(lockGuard, shortest->order - now);
                 continue;
             }
-            m_map.erase(min.first);
+            m_list.erase(shortest->key);
             lockGuard.unlock();
-            onElementExpired(min.first, min.second.info);
+            onElementExpired(shortest->key, shortest->value);
             lockGuard.lock();
         }
         m_running.store(false);
     }
 
 protected:
-    struct Element {
-        Element(const Key &key_, const SteadyClock &expired_, const Info &info_)
-        : key(key_), expired(expired_), info(info_)
-        {
-        }
-        Key key;
-        SteadyClock expired;
-        Info info;
-    };
-    typedef struct Element Element;
-    typedef std::map<Key, Element> Map;
-
-    static bool
-    compare(const std::pair<Key, Element> &lhs, const std::pair<Key, Element> &rhs)
-    {
-        return lhs.second.expired < rhs.second.expired;
-    }
-
-    Map m_map;
+    OrderedUniqueList<Key, Info, SteadyClock> m_list;
     std::condition_variable m_cond;
     std::mutex m_mutex;
     bool m_stop;
