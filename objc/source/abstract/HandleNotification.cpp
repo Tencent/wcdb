@@ -213,13 +213,13 @@ void HandleNotification::dispatchCommittedNotification(int frames)
 #pragma mark - Checkpoint
 bool HandleNotification::isCheckpointNotificationSet() const
 {
-    return !m_checkpointNotifications.empty();
+    return !m_checkpointNotifications.elements().empty();
 }
 
 bool HandleNotification::setupCheckpointNotification(bool ignorable)
 {
     int rc = SQLITE_OK;
-    if (!m_checkpointNotifications.empty()) {
+    if (!m_checkpointNotifications.elements().empty()) {
         rc = sqlite3_wal_checkpoint_handler(
         (sqlite3 *) getRawHandle(),
         [](void *p, int frames) -> int {
@@ -241,29 +241,27 @@ bool HandleNotification::setupCheckpointNotification(bool ignorable)
     return false;
 }
 
-bool HandleNotification::setNotificationWhenCheckpoint(const std::string &name,
+bool HandleNotification::setNotificationWhenCheckpoint(int order,
+                                                       const std::string &name,
                                                        const CheckpointNotification &willCheckpoint,
                                                        bool ignorable)
 {
+    WCTInnerAssert(willCheckpoint != nullptr);
+    const auto *element = m_checkpointNotifications.find(name);
+    int oldOrder = 0;
     CheckpointNotification oldNotification = nullptr;
-    auto iter = m_checkpointNotifications.find(name);
-    if (iter != m_checkpointNotifications.end()) {
-        oldNotification = iter->second;
+    if (element != nullptr) {
+        oldOrder = element->order;
+        oldNotification = element->value;
     }
     bool stateBefore = isCheckpointNotificationSet();
-    if (willCheckpoint) {
-        m_checkpointNotifications[name] = willCheckpoint;
-    } else {
-        m_checkpointNotifications.erase(name);
-    }
+    m_checkpointNotifications.insert(order, name, willCheckpoint);
     bool stateAfter = isCheckpointNotificationSet();
     if (stateBefore != stateAfter) {
         if (!setupCheckpointNotification(ignorable)) {
             //recover
             if (oldNotification) {
-                m_checkpointNotifications[name] = oldNotification;
-            } else {
-                m_checkpointNotifications.erase(name);
+                m_checkpointNotifications.insert(oldOrder, name, oldNotification);
             }
             return false;
         }
@@ -273,12 +271,13 @@ bool HandleNotification::setNotificationWhenCheckpoint(const std::string &name,
 
 bool HandleNotification::dispatchCheckpointNotification(int frames)
 {
-    WCTInnerAssert(!m_checkpointNotifications.empty());
-    bool pass = true;
-    for (const auto &element : m_checkpointNotifications) {
-        pass = element.second(m_handle, frames) && pass;
+    WCTInnerAssert(!m_checkpointNotifications.elements().empty());
+    for (const auto &element : m_checkpointNotifications.elements()) {
+        if (!element.value(m_handle, frames)) {
+            return false;
+        }
     }
-    return pass;
+    return true;
 }
 
 } //namespace WCDB

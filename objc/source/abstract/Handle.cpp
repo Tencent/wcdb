@@ -113,7 +113,10 @@ void Handle::close()
         m_notification.purge();
         //disable checkpoint when closing. If ones need a checkpoint, they should do it manually.
         m_notification.setNotificationWhenCheckpoint(
-        "close", [](Handle *, int) -> bool { return false; }, true);
+        std::numeric_limits<int>::min(),
+        "close",
+        [](Handle *, int) -> bool { return false; },
+        true);
         sqlite3_close_v2((sqlite3 *) m_handle);
         m_handle = nullptr;
     }
@@ -448,10 +451,11 @@ void Handle::setNotificationWhenCommitted(const std::string &name,
     m_notification.setNotificationWhenCommitted(name, onCommitted);
 }
 
-bool Handle::setNotificationWhenCheckpoint(const std::string &name,
+bool Handle::setNotificationWhenCheckpoint(int order,
+                                           const std::string &name,
                                            const WCDB::Handle::CheckpointNotification &willCheckpoint)
 {
-    return m_notification.setNotificationWhenCheckpoint(name, willCheckpoint);
+    return m_notification.setNotificationWhenCheckpoint(order, name, willCheckpoint);
 }
 
 #pragma mark - Error

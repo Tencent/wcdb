@@ -52,6 +52,7 @@ bool BackupConfig::invoke(Handle *handle)
         return false;
     }
     bool result = handle->setNotificationWhenCheckpoint(
+    0,
     "backup",
     std::bind(&BackupConfig::willCheckpoint, this, std::placeholders::_1, std::placeholders::_2));
     handle->rollbackTransaction();

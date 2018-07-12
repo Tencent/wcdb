@@ -22,7 +22,7 @@
 #define HandleNotification_hpp
 
 #include <WCDB/HandleRelated.hpp>
-#include <list>
+#include <WCDB/OrderedUniqueList.hpp>
 
 namespace WCDB {
 
@@ -85,8 +85,10 @@ protected:
 
 #pragma mark - Checkpoint
 public:
+    //checkpoint will abort if any notification return false
     typedef std::function<bool(Handle *, int)> CheckpointNotification;
-    bool setNotificationWhenCheckpoint(const std::string &name,
+    bool setNotificationWhenCheckpoint(int order,
+                                       const std::string &name,
                                        const CheckpointNotification &willCheckpoint,
                                        bool ignorable = false);
 
@@ -94,7 +96,7 @@ protected:
     bool isCheckpointNotificationSet() const;
     bool setupCheckpointNotification(bool ignorable = false);
     bool dispatchCheckpointNotification(int frames);
-    std::map<std::string, CheckpointNotification> m_checkpointNotifications;
+    OrderedUniqueList<std::string, CheckpointNotification> m_checkpointNotifications;
 };
 
 } //namespace WCDB

@@ -167,7 +167,8 @@ public:
                                       const CommittedNotification &onCommitted);
 
     typedef HandleNotification::CheckpointNotification CheckpointNotification;
-    bool setNotificationWhenCheckpoint(const std::string &name,
+    bool setNotificationWhenCheckpoint(int order,
+                                       const std::string &name,
                                        const CheckpointNotification &willCheckpoint);
 
 protected:
