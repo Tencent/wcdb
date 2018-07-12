@@ -22,6 +22,7 @@
 #define Configs_hpp
 
 #include <WCDB/Config.hpp>
+#include <WCDB/OrderedUniqueList.hpp>
 
 #pragma GCC visibility push(hidden)
 
@@ -30,7 +31,7 @@ namespace WCDB {
 class Configs {
 #pragma mark - Configs
 public:
-    enum Priority {
+    enum Priority : int {
         Highest = std::numeric_limits<int>::min(),
         Higher = std::numeric_limits<int>::min() + 1,
         High = -100,
@@ -49,20 +50,11 @@ public:
 
     bool equal(const std::shared_ptr<Configs> &configs) const;
 
-#pragma mark - Element
 protected:
-    struct Element {
-        Element(const std::shared_ptr<Config> &config, int priority);
-        std::shared_ptr<Config> config;
-        int priority;
-    };
-    typedef struct Element Element;
-    Configs(const std::list<Element> &elements);
-
-    void setElement(const Element &element);
-    void removeElement(const std::string &name);
-
-    std::list<Element> m_elements;
+    Configs();
+    Configs(const OrderedUniqueList<std::string, std::shared_ptr<Config>> &list);
+    Configs(OrderedUniqueList<std::string, std::shared_ptr<Config>> &&list);
+    OrderedUniqueList<std::string, std::shared_ptr<Config>> m_list;
 };
 
 #pragma GCC visibility pop
