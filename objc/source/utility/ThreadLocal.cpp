@@ -63,11 +63,13 @@ void* UntypedThreadLocal::getOrCreate()
     }
     auto iter = infos->find(m_identifier);
     if (iter == infos->end()) {
-        infos->emplace(std::make_pair(
-        m_identifier,
-        Info(m_key,
-             std::bind(&UntypedThreadLocal::constructor, this),
-             std::bind(&UntypedThreadLocal::deconstructor, this, std::placeholders::_1))));
+        iter = infos
+               ->emplace(
+               m_identifier,
+               Info(m_key,
+                    std::bind(&UntypedThreadLocal::constructor, this),
+                    std::bind(&UntypedThreadLocal::deconstructor, this, std::placeholders::_1)))
+               .first;
     }
     return infos->at(m_identifier).getOrCreate();
 }

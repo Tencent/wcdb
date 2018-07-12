@@ -85,7 +85,7 @@ void Crawlable::safeCrawl(int rootpageno, std::set<int> &crawledInteriorPages, i
             markAsCorrupted(rootpageno, "Pageno");
             return;
         }
-        crawledInteriorPages.insert(rootpageno);
+        crawledInteriorPages.emplace(rootpageno);
         for (int i = 0; i < rootpage.getSubPageCount(); ++i) {
             if (m_stop) {
                 break;

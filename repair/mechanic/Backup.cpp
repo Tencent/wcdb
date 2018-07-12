@@ -86,7 +86,7 @@ Material::Content &Backup::getOrCreateContent(const std::string &tableName)
     auto &contents = m_material.contents;
     auto iter = contents.find(tableName);
     if (iter == contents.end()) {
-        iter = contents.insert({ tableName, Material::Content() }).first;
+        iter = contents.emplace(tableName, Material::Content()).first;
     }
     return iter->second;
 }

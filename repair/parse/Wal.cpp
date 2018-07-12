@@ -199,7 +199,7 @@ bool Wal::doInitialize()
             std::tie(succeed, pageType) = frame.getPageType();
             if (!succeed || pageType == Page::Type::LeafTable
                 || pageType == Page::Type::Unknown) {
-                m_disposedPages.insert(frame.getPageNumber());
+                m_disposedPages.emplace(frame.getPageNumber());
                 Error error;
                 error.level = Error::Level::Notice;
                 error.setCode(Error::Code::Notice, "Repair");
@@ -247,7 +247,7 @@ void Wal::dispose()
 {
     WCTInnerAssert(isInitialized() || isInitializeFalied());
     for (const auto &element : m_framePages) {
-        m_disposedPages.insert(element.first);
+        m_disposedPages.emplace(element.first);
     }
     m_framePages.clear();
     m_frames = 0;

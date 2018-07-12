@@ -204,7 +204,7 @@ bool FactoryRenewer::resolveInfosForDatabase(std::map<std::string, Info> &infos,
         for (auto &element : material.contents) {
             auto iter = infos.find(element.first);
             if (iter == infos.end()) {
-                iter = infos.insert({ std::move(element.first), Info() }).first;
+                iter = infos.emplace(std::move(element.first), Info()).first;
                 iter->second.sql = std::move(element.second.sql);
             } else {
                 if (iter->second.sql != element.second.sql) {

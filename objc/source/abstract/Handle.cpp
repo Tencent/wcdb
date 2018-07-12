@@ -314,7 +314,7 @@ Handle::getUnorderedValues(const Statement &statement, int index)
         bool done = false;
         std::set<std::string> values;
         while (Handle::step(done) && !done) {
-            values.insert(getText(index));
+            values.emplace(getText(index));
         }
         finalize();
         if (done) {

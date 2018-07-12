@@ -40,7 +40,7 @@ MigrationSetting::MigrationSetting(MigrationHandlePool *pool,
             auto iter = m_schemas.find(info->schema);
             if (iter == m_schemas.end()) {
                 iter = m_schemas
-                       .insert({ info->schema, { info->sourceDatabasePath, 0 } })
+                       .emplace(info->schema, std::make_pair(info->sourceDatabasePath, 0))
                        .first;
             }
             ++iter->second.second;

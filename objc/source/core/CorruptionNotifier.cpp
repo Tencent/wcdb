@@ -49,7 +49,7 @@ void CorruptionNotifier::addPath(const std::string &path)
     if (pool->attachment.corruption.markAsCorrupted()) {
         std::lock_guard<std::mutex> lockGuard(m_mutex);
         bool notify = m_paths.empty();
-        m_paths.insert(path);
+        m_paths.emplace(path);
         if (notify) {
             m_cond.notify_all();
         }

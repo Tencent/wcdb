@@ -137,7 +137,7 @@ WCDB::TableConstraint &WCTBinding::getOrCreateTableConstraint(const std::string 
 {
     auto iter = m_constraints.find(name);
     if (iter == m_constraints.end()) {
-        iter = m_constraints.insert({ name, WCDB::TableConstraint(name) }).first;
+        iter = m_constraints.emplace(name, WCDB::TableConstraint(name)).first;
     }
     return iter->second;
 }
@@ -146,7 +146,7 @@ WCDB::StatementCreateIndex &WCTBinding::getOrCreateIndex(const std::string &subf
 {
     auto iter = m_indexes.find(subfix);
     if (iter == m_indexes.end()) {
-        iter = m_indexes.insert({ subfix, WCDB::StatementCreateIndex() }).first;
+        iter = m_indexes.emplace(subfix, WCDB::StatementCreateIndex()).first;
     }
     return iter->second;
 }
@@ -186,11 +186,11 @@ void WCTBinding::addColumnBinding(const std::string &columnName,
                                   const WCTColumnBinding &columnBinding)
 {
     WCTInnerAssert(m_columnBindings.find(columnName) == m_columnBindings.end());
-    auto iter = m_columnBindings.insert({ columnName, columnBinding }).first;
+    auto iter = m_columnBindings.emplace(columnName, columnBinding).first;
     m_properties.push_back(iter->second);
     auto listIter = m_properties.end();
     std::advance(listIter, -1);
-    m_mappedProperties.insert({ iter->second.propertyName, listIter });
+    m_mappedProperties.emplace(iter->second.propertyName, listIter);
 }
 
 WCTColumnNamed WCTBinding::getColumnGenerator()

@@ -49,7 +49,7 @@ RecyclableHandlePool HandlePools::getPool(const std::string &path, const Generat
         if (pool == nullptr) {
             return nullptr;
         }
-        iter = m_pools.insert({ normalized, { pool, 0 } }).first;
+        iter = m_pools.emplace(normalized, std::make_pair(pool, 0)).first;
     }
     return getExistingPool(iter);
 }

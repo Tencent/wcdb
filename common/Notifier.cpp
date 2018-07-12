@@ -87,7 +87,7 @@ void Notifier::setNotification(const std::string &name, const Callback &callback
             m_callbacks.erase(iter);
         }
     } else {
-        m_callbacks.insert({ name, callback });
+        m_callbacks.emplace(name, callback);
     }
 }
 

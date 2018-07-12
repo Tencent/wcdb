@@ -62,7 +62,7 @@ public:
                 notify = true;
             } else {
                 Element element(key, expired, info);
-                m_map.insert({ key, std::move(element) });
+                m_map.emplace(key, std::move(element));
                 std::pair<Key, Element> min
                 = *std::min_element(m_map.begin(), m_map.end(), &TimedQueue::compare);
                 if (min.first == key) {

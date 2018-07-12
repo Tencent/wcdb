@@ -244,7 +244,7 @@ bool Cell::doInitialize()
                 m_pager->markAsCorrupted(m_page->number, "OverflowPage");
                 return false;
             }
-            overflowPagenos.insert(overflowPageno);
+            overflowPagenos.emplace(overflowPageno);
             //fill payload with overflow data
             Data overflow = m_pager->acquirePageData(overflowPageno);
             if (overflow.empty()) {

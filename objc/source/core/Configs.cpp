@@ -97,7 +97,7 @@ void Configs::setElement(const Element &element)
             break;
         }
     }
-    m_elements.insert(iter, element);
+    m_elements.emplace(iter, element);
 }
 
 void Configs::removeElement(const std::string &name)
