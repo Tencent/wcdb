@@ -112,10 +112,12 @@ public:
                 m_cond.wait_for(lockGuard, shortest->order - now);
                 continue;
             }
+            Key key = shortest->key;
+            Info info = shortest->value;
             lockGuard.unlock();
-            onElementExpired(shortest->key, shortest->value);
+            onElementExpired(key, info);
             lockGuard.lock();
-            m_list.erase(shortest->key);
+            m_list.erase(key);
         }
         m_running.store(false);
     }
