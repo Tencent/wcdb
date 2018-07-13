@@ -166,15 +166,23 @@ void HandleNotification::dispatchPerformanceTraceNotification(const std::string 
 }
 
 #pragma mark - Committed
-void HandleNotification::setNotificationWhenCommitted(const std::string &name,
+void HandleNotification::setNotificationWhenCommitted(int order,
+                                                      const std::string &name,
                                                       const CommittedNotification &onCommitted)
 {
+    WCTInnerAssert(onCommitted);
     bool stateBefore = isCommittedNotificationSet();
-    if (onCommitted) {
-        m_commitedNotifications[name] = onCommitted;
-    } else {
-        m_commitedNotifications.erase(name);
+    m_commitedNotifications.insert(order, name, onCommitted);
+    bool stateAfter = isCommittedNotificationSet();
+    if (stateBefore != stateAfter) {
+        setupCommittedNotification();
     }
+}
+
+void HandleNotification::unsetNotificationWhenCommitted(const std::string &name)
+{
+    bool stateBefore = isCommittedNotificationSet();
+    m_commitedNotifications.erase(name);
     bool stateAfter = isCommittedNotificationSet();
     if (stateBefore != stateAfter) {
         setupCommittedNotification();
@@ -183,7 +191,7 @@ void HandleNotification::setNotificationWhenCommitted(const std::string &name,
 
 void HandleNotification::setupCommittedNotification()
 {
-    if (!m_commitedNotifications.empty()) {
+    if (!m_commitedNotifications.elements().empty()) {
         sqlite3_wal_hook((sqlite3 *) getRawHandle(),
                          [](void *p, sqlite3 *, const char *, int frames) -> int {
                              HandleNotification *notification
@@ -199,14 +207,16 @@ void HandleNotification::setupCommittedNotification()
 
 bool HandleNotification::isCommittedNotificationSet() const
 {
-    return !m_commitedNotifications.empty();
+    return !m_commitedNotifications.elements().empty();
 }
 
 void HandleNotification::dispatchCommittedNotification(int frames)
 {
-    WCTInnerAssert(!m_commitedNotifications.empty());
-    for (const auto &element : m_commitedNotifications) {
-        element.second(m_handle, frames);
+    WCTInnerAssert(!m_commitedNotifications.elements().empty());
+    for (const auto &element : m_commitedNotifications.elements()) {
+        if (!element.value(m_handle, frames)) {
+            break;
+        }
     }
 }
 

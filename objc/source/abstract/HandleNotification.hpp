@@ -72,16 +72,19 @@ protected:
 
 #pragma mark - Committed
 public:
-    typedef std::function<void(Handle *, int)> CommittedNotification;
-    void setNotificationWhenCommitted(const std::string &name,
+    //commited dispatch will abort if any notification return false
+    typedef std::function<bool(Handle *, int)> CommittedNotification;
+    void setNotificationWhenCommitted(int order,
+                                      const std::string &name,
                                       const CommittedNotification &onCommitted);
+    void unsetNotificationWhenCommitted(const std::string &name);
 
 protected:
     bool isCommittedNotificationSet() const;
     void setupCommittedNotification();
 
     void dispatchCommittedNotification(int frames);
-    std::map<std::string, CommittedNotification> m_commitedNotifications;
+    OrderedUniqueList<std::string, CommittedNotification> m_commitedNotifications;
 
 #pragma mark - Checkpoint
 public:

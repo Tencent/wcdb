@@ -47,7 +47,7 @@ protected:
     SharedLock m_lock;
     std::map<std::string, int> m_backedUp;
 
-    void onCommitted(Handle *handle, int frames);
+    bool onCommitted(Handle *handle, int frames);
     bool willCheckpoint(Handle *handle, int frames);
 };
 

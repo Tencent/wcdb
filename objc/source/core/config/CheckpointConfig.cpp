@@ -52,12 +52,13 @@ CheckpointConfig::~CheckpointConfig()
 bool CheckpointConfig::invoke(Handle *handle)
 {
     handle->setNotificationWhenCommitted(
+    0,
     "checkpoint",
     std::bind(&CheckpointConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
     return true;
 }
 
-void CheckpointConfig::onCommitted(Handle *handle, int frames)
+bool CheckpointConfig::onCommitted(Handle *handle, int frames)
 {
     if (frames > framesForPassive) {
         if (frames > framesForFull) {
@@ -68,6 +69,7 @@ void CheckpointConfig::onCommitted(Handle *handle, int frames)
             m_timedQueue.reQueue(handle->path, 1.0, frames);
         }
     }
+    return true;
 }
 
 void CheckpointConfig::loop()

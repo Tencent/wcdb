@@ -445,10 +445,16 @@ void Handle::setNotificationWhenPerformanceTraced(const std::string &name,
     m_notification.setNotificationWhenPerformanceTraced(name, onTraced);
 }
 
-void Handle::setNotificationWhenCommitted(const std::string &name,
+void Handle::setNotificationWhenCommitted(int order,
+                                          const std::string &name,
                                           const CommittedNotification &onCommitted)
 {
-    m_notification.setNotificationWhenCommitted(name, onCommitted);
+    m_notification.setNotificationWhenCommitted(order, name, onCommitted);
+}
+
+void Handle::unsetNotificationWhenCommitted(const std::string &name)
+{
+    m_notification.unsetNotificationWhenCommitted(name);
 }
 
 bool Handle::setNotificationWhenCheckpoint(int order,

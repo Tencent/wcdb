@@ -163,13 +163,15 @@ public:
     void setNotificationWhenSQLTraced(const std::string &name, const SQLNotification &onTraced);
 
     typedef HandleNotification::CommittedNotification CommittedNotification;
-    void setNotificationWhenCommitted(const std::string &name,
+    void setNotificationWhenCommitted(int order,
+                                      const std::string &name,
                                       const CommittedNotification &onCommitted);
 
     typedef HandleNotification::CheckpointNotification CheckpointNotification;
     bool setNotificationWhenCheckpoint(int order,
                                        const std::string &name,
                                        const CheckpointNotification &willCheckpoint);
+    void unsetNotificationWhenCommitted(const std::string &name);
 
 protected:
     HandleNotification m_notification;

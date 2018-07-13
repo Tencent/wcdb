@@ -58,6 +58,7 @@ bool BackupConfig::invoke(Handle *handle)
     handle->rollbackTransaction();
     if (result) {
         handle->setNotificationWhenCommitted(
+        0,
         "backup",
         std::bind(&BackupConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
     }
@@ -87,7 +88,7 @@ void BackupConfig::onTimed(const std::string &path, const int &frames)
     m_backedUp[path] = frames;
 }
 
-void BackupConfig::onCommitted(Handle *handle, int frames)
+bool BackupConfig::onCommitted(Handle *handle, int frames)
 {
     int backedUp = 0;
     {
@@ -97,6 +98,7 @@ void BackupConfig::onCommitted(Handle *handle, int frames)
     if (frames > backedUp + framesIntervalForAutoBackup || frames < backedUp) {
         m_timedQueue.reQueue(handle->path, 0, frames);
     }
+    return true;
 }
 
 bool BackupConfig::willCheckpoint(Handle *handle, int frames)

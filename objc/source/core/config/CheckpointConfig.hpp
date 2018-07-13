@@ -42,7 +42,7 @@ public:
 
 protected:
     void onTimed(const std::string &path, const int &pages) const;
-    void onCommitted(Handle *handle, int pages);
+    bool onCommitted(Handle *handle, int pages);
 
     void loop();
 

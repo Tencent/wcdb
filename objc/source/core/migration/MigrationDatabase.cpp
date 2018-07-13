@@ -107,8 +107,16 @@ bool MigrationDatabase::stepMigration(bool &done)
             return true;
         }
         info = setting->pickUpForMigration();
+        auto handle = getHandle();
+        if (handle == nullptr) {
+            return false;
+        }
         bool isMigrated = false;
-        bool committed = runTransaction(
+        handle->setNotificationWhenCommitted(
+        std::numeric_limits<int>::min(), "migration", [](Handle *, int) -> bool {
+            return false;
+        });
+        bool committed = handle->runTransaction(
         [this, &migratedEve, &isMigrated, &info, setting](Handle *handle) -> bool {
             MigrationHandle *migrationHandle = static_cast<MigrationHandle *>(handle);
             {
@@ -170,6 +178,7 @@ bool MigrationDatabase::stepMigration(bool &done)
             }
             return result;
         });
+        handle->unsetNotificationWhenCommitted("migration");
         migratedEve = migratedEve && committed;
         if (!isMigrated && !migratedEve) {
             return committed;
