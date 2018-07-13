@@ -110,21 +110,21 @@
 {
     NSString *tableName = NSStringFromSelector(_cmd);
     XCTAssertTrue([_database createTableAndIndexes:tableName withClass:TestCaseObject.class]);
-    for (int i = 0; i < 5000; ++i) {
+    int count = 100;
+    int pageSize = 4096;
+    for (int i = 0; i < count; ++i) {
         TestCaseObject *object = [TestCaseObject objectWithId:i];
         XCTAssertTrue([_database insertObject:object intoTable:tableName]);
     }
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *walPath = [_database.path stringByAppendingString:@"-wal"];
-    {
-        unsigned long long fileSize = [[fileManager attributesOfItemAtPath:walPath error:nil] fileSize];
-        XCTAssertGreaterThan(fileSize, 5000 * 4 * 1024);
-    }
+    unsigned long long fileSize = [[fileManager attributesOfItemAtPath:walPath error:nil] fileSize];
+    XCTAssertGreaterThan(fileSize, count * pageSize);
     [NSThread sleepForTimeInterval:5];
-    {
-        unsigned long long fileSize = [[fileManager attributesOfItemAtPath:walPath error:nil] fileSize];
-        XCTAssertEqual(fileSize, 0);
-    }
+    TestCaseObject *object = [TestCaseObject objectWithId:count];
+    XCTAssertTrue([_database insertObject:object intoTable:tableName]);
+    unsigned long long newFileSize = [[fileManager attributesOfItemAtPath:walPath error:nil] fileSize];
+    XCTAssertEqual(fileSize, newFileSize);
 }
 
 - (void)test_create_intermediate_directories
