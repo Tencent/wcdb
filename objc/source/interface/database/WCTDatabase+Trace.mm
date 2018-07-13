@@ -27,7 +27,7 @@
 
 + (void)globalTraceError:(WCTErrorTraceBlock)block
 {
-    [self globalTraceError:block tracerNamed:@"WCDB"];
+    [self globalTraceError:block tracerNamed:@"default"];
 }
 
 + (void)globalTraceError:(nullable WCTErrorTraceBlock)block
