@@ -227,9 +227,7 @@
 {
     _database.autoBackup = YES;
 
-    int count = 100;
     NSString *tableName = self.className;
-    XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
 
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *firstBackupPath = [_database.path stringByAppendingString:@"-first.material"];
@@ -238,14 +236,23 @@
     XCTAssertTrue([fileManager createDirectoryAtPath:firstBackupPath withIntermediateDirectories:YES attributes:nil error:nil]);
     XCTAssertTrue([fileManager createDirectoryAtPath:lastBackupPath withIntermediateDirectories:YES attributes:nil error:nil]);
 
-    for (int i = 0; i < 10001; ++i) {
+    int step1InsertCount = 1000;
+    int step2InsertCount = 500;
+    int pageSize = 4096;
+    int expectedStep1WalSize = step1InsertCount * pageSize;
+    NSString *walPath = [_database.path stringByAppendingString:@"-wal"];
+
+    for (int i = 0; i < step1InsertCount; ++i) {
         XCTAssertTrue([self insertObjectsOfCount:1 from:i intoTable:tableName]);
     }
 
-    XCTAssertTrue([_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
+    XCTAssertGreaterThan([fileManager attributesOfItemAtPath:walPath error:nil].fileSize, expectedStep1WalSize);
 
-    NSString *walPath = [_database.path stringByAppendingString:@"-wal"];
-    XCTAssertEqual([fileManager attributesOfItemAtPath:walPath error:nil].fileSize, 0);
+    for (int i = step1InsertCount; i < step1InsertCount + step2InsertCount; ++i) {
+        XCTAssertTrue([self insertObjectsOfCount:1 from:i intoTable:tableName]);
+    }
+
+    XCTAssertLessThan([fileManager attributesOfItemAtPath:walPath error:nil].fileSize, expectedStep1WalSize);
 }
 
 - (void)test_with_reserved_table
