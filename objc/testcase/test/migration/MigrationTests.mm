@@ -290,6 +290,7 @@
         } break;
         }
         ++testCount;
+        [NSThread sleepForTimeInterval:0.5];
     }
     XCTAssertGreaterThan(testCount, 10);
 }
