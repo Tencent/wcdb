@@ -34,37 +34,21 @@ public:
         Value value;
     };
 
-    void insert(Order order, const Key& key, const Value& value)
+    void insert(const Order& order, const Key& key, const Value& value)
     {
         Element element;
         element.order = order;
         element.key = key;
         element.value = value;
-        insert(std::move(element));
+        insert(order, key, std::move(element));
     }
-    void insert(Order order, const Key& key, Value&& value)
+    void insert(const Order& order, const Key& key, Value&& value)
     {
         Element element;
         element.order = order;
         element.key = key;
         element.value = std::move(value);
-        insert(std::move(element));
-    }
-    void insert(Order order, Key&& key, const Value& value)
-    {
-        Element element;
-        element.order = order;
-        element.key = std::move(key);
-        element.value = value;
-        insert(std::move(element));
-    }
-    void insert(Order order, Key&& key, Value&& value)
-    {
-        Element element;
-        element.order = order;
-        element.key = std::move(key);
-        element.value = std::move(value);
-        insert(std::move(element));
+        insert(order, key, std::move(element));
     }
 
     void erase(const Key& key)
@@ -90,18 +74,18 @@ public:
     const std::list<Element>& elements() const { return m_elements; }
 
 protected:
-    void insert(Element&& element)
+    void insert(const Order& order, const Key& key, Element&& element)
     {
         auto iter = m_elements.begin();
         bool inserted = false;
         bool erased = false;
         while (iter != m_elements.end() && (!inserted || !erased)) {
-            if (!erased && iter->key == element.key) {
+            if (!erased && iter->key == key) {
                 iter = m_elements.erase(iter);
                 erased = true;
                 continue;
             }
-            if (!inserted && element.order < iter->order) {
+            if (!inserted && order < iter->order) {
                 iter = m_elements.insert(iter, std::move(element));
                 inserted = true;
             }
