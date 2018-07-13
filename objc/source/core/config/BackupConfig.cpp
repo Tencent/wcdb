@@ -91,27 +91,32 @@ void BackupConfig::onTimed(const std::string &path, const int &frames)
 bool BackupConfig::onCommitted(Handle *handle, int frames)
 {
     int backedUp = 0;
+    const auto &path = handle->path;
     {
         SharedLockGuard lockGuard(m_lock);
-        backedUp = m_backedUp[handle->path];
+        backedUp = m_backedUp[path];
     }
-    if (frames > backedUp + framesIntervalForAutoBackup || frames < backedUp) {
-        m_timedQueue.reQueue(handle->path, 0, frames);
+    if (frames > backedUp + framesIntervalForDelayAutoBackup) {
+        m_timedQueue.reQueue(path, 1.0, frames);
+    } else if (frames > backedUp + framesIntervalForAutoBackup || frames < backedUp) {
+        m_timedQueue.reQueue(path, 0, frames);
     }
     return true;
 }
 
 bool BackupConfig::willCheckpoint(Handle *handle, int frames)
 {
-    std::shared_ptr<Database> database
-    = Database::databaseWithExistingPath(handle->path);
+    const auto &path = handle->path;
+    std::shared_ptr<Database> database = Database::databaseWithExistingPath(path);
     WCTInnerAssert(database != nullptr);
     if (database->backup(frames)) {
-        m_timedQueue.reQueue(handle->path, 60.0, frames);
+        m_timedQueue.remove(path);
+        LockGuard lockGuard(m_lock);
+        m_backedUp[path] = frames;
         return true;
     }
     if (frames > framesForMandatoryCheckpoint) {
-        m_timedQueue.reQueue(handle->path, 10.0, frames);
+        m_timedQueue.reQueue(path, 10.0, frames);
         return true;
     }
     return false;

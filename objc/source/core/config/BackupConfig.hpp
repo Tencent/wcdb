@@ -36,8 +36,9 @@ public:
     bool invoke(Handle *handle) override;
 
     static constexpr const char *name = "WCDBBackup";
-    static constexpr const int framesForMandatoryCheckpoint = 10000;
-    static constexpr const int framesIntervalForAutoBackup = 200;
+    static constexpr const int framesForMandatoryCheckpoint = 3000;
+    static constexpr const int framesIntervalForAutoBackup = 300;
+    static constexpr const int framesIntervalForDelayAutoBackup = 100;
 
 protected:
     TimedQueue<std::string, int> m_timedQueue;
