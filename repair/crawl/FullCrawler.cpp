@@ -64,6 +64,9 @@ bool FullCrawler::work()
             ++leafTablePageCount;
         }
     }
+    if (leafTablePageCount == 0) {
+        return exit(true);
+    }
     setPageWeight(Fraction(1, leafTablePageCount));
 
     if (markAsAssembling()) {
