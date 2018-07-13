@@ -82,9 +82,13 @@ bool Factory::canRetrieve() const
 {
     bool result = false;
     std::string databaseName = getDatabaseName();
+    std::string restoreDirectory = getRestoreDirectory();
+    std::string renewDirectory = getRenewDirectory();
     FileManager::shared()->enumerateDirectory(
-    directory, [&result, &databaseName](const std::string &subpath, bool isDirectory) -> bool {
-        if (isDirectory) {
+    directory,
+    [&result, &databaseName, &renewDirectory, &restoreDirectory](
+    const std::string &subpath, bool isDirectory) -> bool {
+        if (isDirectory && subpath != restoreDirectory && subpath != renewDirectory) {
             bool succeed, exists;
             std::tie(succeed, exists)
             = FileManager::shared()->fileExists(Path::addComponent(subpath, databaseName));
