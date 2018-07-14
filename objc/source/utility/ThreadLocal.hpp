@@ -89,7 +89,10 @@ private:
 template<typename T>
 class ThreadLocal : public UntypedThreadLocal {
 public:
-    ThreadLocal() : UntypedThreadLocal() {}
+    ThreadLocal(const typename std::enable_if<std::is_default_constructible<T>::value>::type * = nullptr)
+    : UntypedThreadLocal()
+    {
+    }
 
     ThreadLocal(const T &defaultValue)
     : UntypedThreadLocal(), m_defaultValue(defaultValue)
@@ -98,11 +101,7 @@ public:
 
     T *getOrCreate() { return (T *) UntypedThreadLocal::getOrCreate(); }
 
-    void *constructor() override
-    {
-        T *value = new T;
-        return value;
-    }
+    void *constructor() override { return new T(m_defaultValue); }
 
     void deconstructor(void *value) override { delete (T *) value; }
 
