@@ -25,27 +25,15 @@ namespace WCDB {
 
 #pragma mark - Threaded Info
 UntypedThreadLocal::Info::Info(const Recyclable<pthread_key_t>& key,
-                               const Constructor& constructor,
-                               const Deconstructor& deconstructor)
-: m_key(key), m_constructor(constructor), m_deconstructor(deconstructor), m_holder(nullptr)
+                               std::shared_ptr<void>&& value)
+: m_key(key), m_value(std::move(value))
 {
-    WCTInnerAssert(m_constructor != nullptr);
-    WCTInnerAssert(m_deconstructor != nullptr);
+    WCTInnerAssert(m_value != nullptr);
 }
 
-UntypedThreadLocal::Info::~Info()
+void* UntypedThreadLocal::Info::get()
 {
-    if (m_holder) {
-        m_deconstructor(m_holder);
-    }
-}
-
-void* UntypedThreadLocal::Info::getOrCreate()
-{
-    if (m_holder == nullptr) {
-        m_holder = m_constructor();
-    }
-    return m_holder;
+    return m_value.get();
 }
 
 #pragma mark - UntypedThreadLocal
@@ -63,15 +51,9 @@ void* UntypedThreadLocal::getOrCreate()
     }
     auto iter = infos->find(m_identifier);
     if (iter == infos->end()) {
-        iter = infos
-               ->emplace(
-               m_identifier,
-               Info(m_key,
-                    std::bind(&UntypedThreadLocal::constructor, this),
-                    std::bind(&UntypedThreadLocal::deconstructor, this, std::placeholders::_1)))
-               .first;
+        iter = infos->emplace(m_identifier, Info(m_key, constructor())).first;
     }
-    return infos->at(m_identifier).getOrCreate();
+    return iter->second.get();
 }
 
 #pragma mark - Shared
@@ -91,7 +73,8 @@ const Recyclable<pthread_key_t>& UntypedThreadLocal::sharedKey()
 #pragma mark - Helper
 void UntypedThreadLocal::threadDeconstructor(void* p)
 {
-    std::map<Identifier, Info>* infos = (std::map<Identifier, Info>*) p;
+    WCTInnerAssert(p != nullptr);
+    Infos* infos = (Infos*) p;
     delete infos;
 }
 

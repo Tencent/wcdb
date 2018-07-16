@@ -31,6 +31,7 @@
 
 #include <WCDB/Recyclable.hpp>
 #include <map>
+#include <memory>
 #include <pthread.h>
 
 #pragma GCC visibility push(hidden)
@@ -43,25 +44,18 @@ private:
     class Info;
     typedef unsigned int Identifier;
     typedef std::map<Identifier, Info> Infos;
+    typedef std::function<std::shared_ptr<void>(void)> Constructor;
 #pragma mark - Threaded Info
 private:
     class Info {
     public:
-        typedef std::function<void *(void)> Constructor;
-        typedef std::function<void(void *)> Deconstructor;
+        Info(const Recyclable<pthread_key_t> &key, std::shared_ptr<void> &&value);
 
-        Info(const Recyclable<pthread_key_t> &key,
-             const Constructor &constructor,
-             const Deconstructor &deconstructor);
-        ~Info();
-
-        void *getOrCreate();
+        void *get();
 
     protected:
-        const Constructor m_constructor;
-        const Deconstructor m_deconstructor;
-        void *m_holder;
         Recyclable<pthread_key_t> m_key;
+        std::shared_ptr<void> m_value;
     };
 #pragma mark - UntypedThreadLocal
 public:
@@ -69,8 +63,7 @@ public:
     void *getOrCreate();
 
 protected:
-    virtual void *constructor() = 0;
-    virtual void deconstructor(void *) = 0;
+    virtual std::shared_ptr<void> constructor() = 0;
 
 private:
     Recyclable<pthread_key_t> m_key;
@@ -101,9 +94,10 @@ public:
 
     T *getOrCreate() { return (T *) UntypedThreadLocal::getOrCreate(); }
 
-    void *constructor() override { return new T(m_defaultValue); }
-
-    void deconstructor(void *value) override { delete (T *) value; }
+    std::shared_ptr<void> constructor() override
+    {
+        return std::shared_ptr<void>(new T(m_defaultValue));
+    }
 
 protected:
     T m_defaultValue;
