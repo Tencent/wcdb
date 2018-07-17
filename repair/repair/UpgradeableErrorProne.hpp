@@ -40,7 +40,6 @@ public:
     using ErrorProne::getError;
     int getErrorSeverity() const;
     bool isErrorCritial() const;
-    bool isErrorIgnorable() const;
 
 protected:
     static int errorSeverity(const Error &error);

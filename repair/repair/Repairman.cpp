@@ -171,7 +171,11 @@ int Repairman::tryUpgradeCrawlerError()
 
 int Repairman::tryUpgrateAssemblerError()
 {
-    return tryUpgradeError(m_assembler->getError());
+    Error error = m_assembler->getError();
+    if (error.code() == Error::Code::Constraint) {
+        error.level = Error::Level::Notice;
+    }
+    return tryUpgradeError(std::move(error));
 }
 
 void Repairman::onErrorCritical()

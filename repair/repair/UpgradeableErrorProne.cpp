@@ -40,11 +40,6 @@ bool UpgradeableErrorProne::isErrorCritial() const
     return m_severity >= Severity::Critical;
 }
 
-bool UpgradeableErrorProne::isErrorIgnorable() const
-{
-    return m_severity < Severity::Normal;
-}
-
 int UpgradeableErrorProne::errorSeverity(const Error &error)
 {
     if (error.level < Error::Level::Error) {

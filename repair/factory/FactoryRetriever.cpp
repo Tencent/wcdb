@@ -115,7 +115,7 @@ bool FactoryRetriever::work()
     }
 
     //6. Remove all deposited dbs if error is ignorable.
-    if (isErrorIgnorable()) {
+    if (getErrorSeverity() <= UpgradeableErrorProne::Severity::Normal) {
         FileManager::shared()->removeItem(factory.directory);
     }
 
