@@ -89,33 +89,9 @@ const Expression &Expression::lastInsertedRowid()
     return *s_lastInsertedRowid;
 }
 
-Expression Expression::function(const std::string &functionName)
-{
-    Lang::CopyOnWriteLazyLang<Lang::ExprFunction> cowLang;
-    Lang::ExprFunction &lang = cowLang.get_or_copy();
-    lang.type = Lang::ExprFunction::Type::NotSet;
-    lang.functionName.assign(functionName);
-    return cowLang;
-}
-
-Expression
-Expression::function(const std::string &functionName, const Expression &parameter, bool distinct)
-{
-    Lang::CopyOnWriteLazyLang<Lang::ExprFunction> cowLang;
-    Lang::ExprFunction &lang = cowLang.get_or_copy();
-    if (distinct) {
-        lang.type = Lang::ExprFunction::Type::DistinctExpr;
-    } else {
-        lang.type = Lang::ExprFunction::Type::Expr;
-    }
-    lang.functionName.assign(functionName);
-    lang.exprs.append(parameter.getCOWLang());
-    return cowLang;
-}
-
 Expression Expression::function(const std::string &functionName,
-                                const std::list<Expression> &parameters,
-                                bool distinct)
+                                bool distinct,
+                                const std::list<Expression> &parameters)
 {
     Lang::CopyOnWriteLazyLang<Lang::ExprFunction> cowLang;
     Lang::ExprFunction &lang = cowLang.get_or_copy();
@@ -143,6 +119,20 @@ Expression Expression::All::function(const std::string &functionName, __unused b
     Lang::ExprFunction &lang = cowLang.get_or_copy();
     lang.type = Lang::ExprFunction::Type::Star;
     lang.functionName.assign(functionName);
+    return cowLang;
+}
+
+Expression Expression::All::function(const std::string &functionName,
+                                     const std::list<Expression> &otherParameters,
+                                     bool distinct) const
+{
+    Lang::CopyOnWriteLazyLang<Lang::ExprFunction> cowLang;
+    Lang::ExprFunction &lang = cowLang.get_or_copy();
+    lang.type = Lang::ExprFunction::Type::Star;
+    lang.functionName.assign(functionName);
+    for (const Expression &parameter : otherParameters) {
+        lang.exprs.append(parameter.getCOWLang());
+    }
     return cowLang;
 }
 

@@ -70,7 +70,7 @@ Expression FunctionOperable::group_concat(bool distinct) const
 
 Expression FunctionOperable::group_concat(const Expression &separator, bool distinct) const
 {
-    return function("group_concat", distinct);
+    return function("group_concat", { separator }, distinct);
 }
 
 Expression FunctionOperable::max(bool distinct) const
@@ -98,9 +98,19 @@ Expression FunctionOperable::offsets() const
     return function("offsets");
 }
 
-Expression FunctionOperable::snippet() const
+Expression FunctionOperable::snippet(const std::string &startMatchText,
+                                     const std::string &endMatchText,
+                                     const std::string &ellipses,
+                                     int columnNumber,
+                                     int approximateNumberOfTokens) const
 {
-    return function("snippet");
+    return function("snippet",
+                    { Expression(startMatchText),
+                      Expression(endMatchText),
+                      Expression(ellipses),
+                      Expression(columnNumber),
+                      Expression(approximateNumberOfTokens) },
+                    false);
 }
 
 Expression FunctionOperable::matchinfo() const
@@ -660,7 +670,20 @@ Expression Operable::collate(const std::string &collationName) const
 
 Expression Operable::function(const std::string &functionName, bool distinct) const
 {
-    return Expression::function(functionName, getExpressionLang(), distinct);
+    return Expression::function(
+    functionName, distinct, { Expression(getExpressionLang()) });
+}
+
+Expression Operable::function(const std::string &functionName,
+                              const std::list<Expression> &otherParameters,
+                              bool distinct) const
+{
+    std::list<Expression> parameters;
+    parameters.push_back(getExpressionLang());
+    for (const auto &parameter : otherParameters) {
+        parameters.push_back(parameter);
+    }
+    return Expression::function(functionName, distinct, parameters);
 }
 
 } // namespace WCDB

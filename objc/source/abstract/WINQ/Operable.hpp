@@ -29,6 +29,9 @@ class FunctionOperable {
 public:
     virtual Expression
     function(const std::string &functionName, bool distinct = false) const = 0;
+    virtual Expression function(const std::string &functionName,
+                                const std::list<Expression> &otherParameters,
+                                bool distinct) const = 0;
 
     //Core Functions
     Expression abs(bool distinct = false) const;
@@ -50,7 +53,11 @@ public:
 
     //FTS Functions
     Expression offsets() const;
-    Expression snippet() const;
+    Expression snippet(const std::string &startMatchText = "<b>",
+                       const std::string &endMatchText = "</b>",
+                       const std::string &ellipses = "<b>...</b>",
+                       int columnNumber = -1,
+                       int approximateNumberOfTokens = -15) const;
     Expression matchinfo() const;
 };
 
@@ -146,6 +153,9 @@ public:
     Expression collate(const std::string &collationName) const;
 
     Expression function(const std::string &functionName, bool distinct = false) const override;
+    Expression function(const std::string &functionName,
+                        const std::list<Expression> &otherParameters,
+                        bool distinct) const override;
 
 protected:
     virtual Lang::CopyOnWriteLazyLang<Lang::Expr> getExpressionLang() const = 0;

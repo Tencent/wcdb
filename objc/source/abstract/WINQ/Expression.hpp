@@ -46,13 +46,9 @@ public:
     Expression &withTable(const std::string &tableName);
     Expression &withSchema(const std::string &schemaName);
 
-    static Expression function(const std::string &functionName);
     static Expression function(const std::string &functionName,
-                               const Expression &parameter,
-                               bool distinct = false);
-    static Expression function(const std::string &functionName,
-                               const std::list<Expression> &parameters,
-                               bool distinct = false);
+                               bool distinct,
+                               const std::list<Expression> &parameters);
     static const Expression &lastInsertedRowid();
 
     class All : public DescribableWithLang<Lang::ExprFunction>, public FunctionOperable {
@@ -60,6 +56,9 @@ public:
         static const Expression::All &default_();
         Expression function(const std::string &functionName,
                             __unused bool distinct = false) const override;
+        Expression function(const std::string &functionName,
+                            const std::list<Expression> &otherParameters,
+                            bool distinct) const override;
     };
 
     Expression(const std::list<Expression> &expressions);
