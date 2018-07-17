@@ -28,6 +28,10 @@
 
 #pragma GCC visibility push(hidden)
 
+extern "C" {
+int stem(char *p, int i, int j);
+}
+
 namespace WCDB {
 
 namespace FTS {
@@ -36,7 +40,7 @@ typedef unsigned short UnicodeChar;
 static_assert(sizeof(UnicodeChar) == 2, "UnicodeChar must be 2 byte length");
 
 #pragma mark - Cursor
-class WCDBCursorInfo : public CursorInfoBase {
+class CursorInfo : public CursorInfoBase {
 public:
     enum class TokenType : unsigned int {
         None = 0,
@@ -47,7 +51,7 @@ public:
         AuxiliaryPlaneOther = 0xFFFFFFFF,
     };
 
-    WCDBCursorInfo(const char *input, int inputLength, TokenizerInfoBase *tokenizerInfo);
+    CursorInfo(const char *input, int inputLength, TokenizerInfoBase *tokenizerInfo);
 
     int step(const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *piPosition) override;
 
@@ -68,7 +72,7 @@ protected:
     //You must figure out the unicode character set of [symbol] on current platform or implement it refer to http://www.fileformat.info/info/unicode/category/index.htm
     virtual int isSymbol(UnicodeChar theChar, bool *result) = 0;
 
-    virtual int lemmatization(const char *input, int inputLength);
+    int lemmatization(const char *input, int inputLength);
     std::vector<char> m_lemmaBuffer;
     int m_lemmaBufferLength; //>0 lemma is not empty
 

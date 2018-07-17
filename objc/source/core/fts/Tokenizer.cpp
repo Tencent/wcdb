@@ -26,7 +26,7 @@ namespace WCDB {
 namespace FTS {
 
 #pragma mark - Cursor
-WCDBCursorInfo::WCDBCursorInfo(const char *input, int inputLength, TokenizerInfoBase *tokenizerInfo)
+CursorInfo::CursorInfo(const char *input, int inputLength, TokenizerInfoBase *tokenizerInfo)
 : CursorInfoBase(input, inputLength, tokenizerInfo)
 , m_input(input)
 , m_inputLength(inputLength)
@@ -44,7 +44,7 @@ WCDBCursorInfo::WCDBCursorInfo(const char *input, int inputLength, TokenizerInfo
 }
 
 //Inspired by zorrozhang
-int WCDBCursorInfo::step(const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *piPosition)
+int CursorInfo::step(const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *piPosition)
 {
     int rc = SQLITE_OK;
     if (m_position == 0) {
@@ -132,18 +132,10 @@ int WCDBCursorInfo::step(const char **ppToken, int *pnBytes, int *piStartOffset,
     *piEndOffset = m_endOffset;
     *piPosition = m_position++;
 
-#warning - TODO
-    printf("step: [%s] to [%s], range: %d %d pos: %d \n",
-           std::string(m_input, m_inputLength).c_str(),
-           std::string(*ppToken, *pnBytes).c_str(),
-           m_startOffset,
-           m_endOffset,
-           m_position);
-
     return SQLITE_OK;
 }
 
-int WCDBCursorInfo::cursorStep()
+int CursorInfo::cursorStep()
 {
     if (m_cursor + m_cursorTokenLength < m_inputLength) {
         m_cursor += m_cursorTokenLength;
@@ -155,7 +147,7 @@ int WCDBCursorInfo::cursorStep()
     return SQLITE_OK;
 }
 
-int WCDBCursorInfo::cursorSetup()
+int CursorInfo::cursorSetup()
 {
     int rc;
     const unsigned char &first = m_input[m_cursor];
@@ -220,7 +212,7 @@ int WCDBCursorInfo::cursorSetup()
     return SQLITE_OK;
 }
 
-int WCDBCursorInfo::lemmatization(const char *input, int inputLength)
+int CursorInfo::lemmatization(const char *input, int inputLength)
 {
     //tolower only. You can implement your own lemmatization.
     if (inputLength > m_buffer.capacity()) {
@@ -229,10 +221,11 @@ int WCDBCursorInfo::lemmatization(const char *input, int inputLength)
     for (int i = 0; i < inputLength; ++i) {
         m_buffer.data()[i] = tolower(input[i]);
     }
+    m_bufferLength = stem(m_buffer.data(), 0, m_bufferLength - 1) + 1;
     return SQLITE_OK;
 }
 
-void WCDBCursorInfo::subTokensStep()
+void CursorInfo::subTokensStep()
 {
     m_startOffset = m_subTokensCursor;
     m_bufferLength = m_subTokensLengthArray[0];

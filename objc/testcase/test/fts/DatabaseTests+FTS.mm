@@ -159,22 +159,14 @@ whileSearchingByKeyword:(const char *)keyword
     XCTAssertTrue([self expectNilWhileSearchingByKeyword:"567"]);
 }
 
-- (void)test_lemmatization
+- (void)test_stemming
 {
-    FTSTestCaseObject *island = [[FTSTestCaseObject alloc] initWithMessage:@"island"];
-    XCTAssertTrue([_database insertObject:island intoTable:_tableName]);
+    FTSTestCaseObject *developer = [[FTSTestCaseObject alloc] initWithMessage:@"developer"];
+    XCTAssertTrue([_database insertObject:developer intoTable:_tableName]);
 
-    FTSTestCaseObject *benefit = [[FTSTestCaseObject alloc] initWithMessage:@"benefit"];
-    XCTAssertTrue([_database insertObject:benefit intoTable:_tableName]);
+    XCTAssertTrue([self insertDummyObject]);
 
-    XCTAssertTrue([self expectObject:island whileSearchingByKeyword:"is*"]);
-    XCTAssertTrue([self expectObject:island whileSearchingByKeyword:"be*"]);
-    XCTAssertTrue([self expectNilWhileSearchingByKeyword:"are*"]);
-    XCTAssertTrue([self expectNilWhileSearchingByKeyword:"am*"]);
-    XCTAssertTrue([self expectNilWhileSearchingByKeyword:"are"]);
-    XCTAssertTrue([self expectNilWhileSearchingByKeyword:"am"]);
-    XCTAssertTrue([self expectNilWhileSearchingByKeyword:"is"]);
-    XCTAssertTrue([self expectNilWhileSearchingByKeyword:"be"]);
+    XCTAssertTrue([self expectObject:developer whileSearchingByKeyword:"developed"]);
 }
 
 - (void)test_mixed

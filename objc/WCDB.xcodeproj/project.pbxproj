@@ -163,8 +163,6 @@
 		23567D7C20CA93C5005F1C35 /* Time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23567D7920CA93C5005F1C35 /* Time.cpp */; };
 		23567D7D20CA93C5005F1C35 /* Time.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567D7A20CA93C5005F1C35 /* Time.hpp */; };
 		23567D7E20CA93C5005F1C35 /* Time.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567D7A20CA93C5005F1C35 /* Time.hpp */; };
-		23577F731F74F4D000D31C05 /* Tokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23577F701F74F4CF00D31C05 /* Tokenizer.hpp */; };
-		23577F741F74F4D000D31C05 /* Tokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23577F721F74F4D000D31C05 /* Tokenizer.cpp */; };
 		23577F791F74F4E800D31C05 /* WCTTokenizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 23577F771F74F4E800D31C05 /* WCTTokenizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23577F7A1F74F4E800D31C05 /* WCTTokenizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23577F781F74F4E800D31C05 /* WCTTokenizer.mm */; };
 		23593B7D20D3ADF80058B416 /* WalRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23593B7B20D3ADF80058B416 /* WalRelated.cpp */; };
@@ -635,6 +633,12 @@
 		23DD773120D13E8E00E9B451 /* BackupConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23DD772E20D13E8E00E9B451 /* BackupConfig.cpp */; };
 		23DD773220D13E8E00E9B451 /* BackupConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23DD772F20D13E8E00E9B451 /* BackupConfig.hpp */; };
 		23DD773320D13E8E00E9B451 /* BackupConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23DD772F20D13E8E00E9B451 /* BackupConfig.hpp */; };
+		23E163CD20FDDD6900C3F910 /* Tokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23E163CB20FDDD6900C3F910 /* Tokenizer.cpp */; };
+		23E163CE20FDDD6900C3F910 /* Tokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23E163CB20FDDD6900C3F910 /* Tokenizer.cpp */; };
+		23E163CF20FDDD6900C3F910 /* Tokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23E163CC20FDDD6900C3F910 /* Tokenizer.hpp */; };
+		23E163D020FDDD6900C3F910 /* Tokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23E163CC20FDDD6900C3F910 /* Tokenizer.hpp */; };
+		23E163D320FDDD8500C3F910 /* PorterStemming.c in Sources */ = {isa = PBXBuildFile; fileRef = 23E163D120FDDD8500C3F910 /* PorterStemming.c */; };
+		23E163D420FDDD8500C3F910 /* PorterStemming.c in Sources */ = {isa = PBXBuildFile; fileRef = 23E163D120FDDD8500C3F910 /* PorterStemming.c */; };
 		23E1FD79206C962E006C6C8E /* NSObject+WCTColumnCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E1FD77206C962E006C6C8E /* NSObject+WCTColumnCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23E1FD7E206C963C006C6C8E /* NSDate+WCTColumnCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E1FD7C206C963C006C6C8E /* NSDate+WCTColumnCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23E1FD82206C9644006C6C8E /* NSNumber+WCTColumnCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E1FD80206C9644006C6C8E /* NSNumber+WCTColumnCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -703,7 +707,6 @@
 		23F5BC7920887FD3000CCD37 /* Describable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2397742C202AECD3000A681C /* Describable.cpp */; };
 		23F5BC7A20887FD3000CCD37 /* LangInsertSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239774BA202AECD3000A681C /* LangInsertSTMT.cpp */; };
 		23F5BC7B20887FD3000CCD37 /* WCTHandle.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBCEF2064DD0B000E31E8 /* WCTHandle.mm */; };
-		23F5BC7C20887FD3000CCD37 /* Tokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23577F721F74F4D000D31C05 /* Tokenizer.cpp */; };
 		23F5BC7D20887FD3000CCD37 /* WCTRuntimeObjCAccessor+NoARC.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6821EA0D6680021EFA7 /* WCTRuntimeObjCAccessor+NoARC.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		23F5BC7E20887FD3000CCD37 /* LangAnalyzeSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977488202AECD3000A681C /* LangAnalyzeSTMT.cpp */; };
 		23F5BC7F20887FD3000CCD37 /* WCTRuntimeBaseAccessor+NoARC.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F67F1EA0D6680021EFA7 /* WCTRuntimeBaseAccessor+NoARC.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -991,7 +994,6 @@
 		23F5BDBB20887FD3000CCD37 /* WCTMaster.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6371EA0D6680021EFA7 /* WCTMaster.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F5BDBC20887FD3000CCD37 /* WCTUpdate.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6541EA0D6680021EFA7 /* WCTUpdate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F5BDBD20887FD3000CCD37 /* HandlePool.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6231EA0D6680021EFA7 /* HandlePool.hpp */; };
-		23F5BDBE20887FD3000CCD37 /* Tokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23577F701F74F4CF00D31C05 /* Tokenizer.hpp */; };
 		23F5BDC020887FD3000CCD37 /* WCDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6BA1EA0D6680021EFA7 /* WCDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F5BDC120887FD3000CCD37 /* WCTMultiSelect.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6471EA0D6680021EFA7 /* WCTMultiSelect.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F5BDC320887FD3000CCD37 /* Convertible.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2301DA61203F016200C3B52A /* Convertible.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1256,8 +1258,6 @@
 		23567D7420CA91FF005F1C35 /* SharedThreadedErrorProne.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SharedThreadedErrorProne.hpp; sourceTree = "<group>"; };
 		23567D7920CA93C5005F1C35 /* Time.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Time.cpp; sourceTree = "<group>"; };
 		23567D7A20CA93C5005F1C35 /* Time.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Time.hpp; sourceTree = "<group>"; };
-		23577F701F74F4CF00D31C05 /* Tokenizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Tokenizer.hpp; sourceTree = "<group>"; };
-		23577F721F74F4D000D31C05 /* Tokenizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tokenizer.cpp; sourceTree = "<group>"; };
 		23577F771F74F4E800D31C05 /* WCTTokenizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTTokenizer.h; sourceTree = "<group>"; };
 		23577F781F74F4E800D31C05 /* WCTTokenizer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTTokenizer.mm; sourceTree = "<group>"; };
 		23593B7B20D3ADF80058B416 /* WalRelated.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WalRelated.cpp; sourceTree = "<group>"; };
@@ -1625,6 +1625,9 @@
 		23DD76BC20CF78C800E9B451 /* FactoryRenewer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FactoryRenewer.hpp; sourceTree = "<group>"; };
 		23DD772E20D13E8E00E9B451 /* BackupConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BackupConfig.cpp; sourceTree = "<group>"; };
 		23DD772F20D13E8E00E9B451 /* BackupConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BackupConfig.hpp; sourceTree = "<group>"; };
+		23E163CB20FDDD6900C3F910 /* Tokenizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tokenizer.cpp; sourceTree = "<group>"; };
+		23E163CC20FDDD6900C3F910 /* Tokenizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Tokenizer.hpp; sourceTree = "<group>"; };
+		23E163D120FDDD8500C3F910 /* PorterStemming.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = PorterStemming.c; sourceTree = "<group>"; };
 		23E1FD77206C962E006C6C8E /* NSObject+WCTColumnCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+WCTColumnCoding.h"; sourceTree = "<group>"; };
 		23E1FD7C206C963C006C6C8E /* NSDate+WCTColumnCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDate+WCTColumnCoding.h"; sourceTree = "<group>"; };
 		23E1FD80206C9644006C6C8E /* NSNumber+WCTColumnCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSNumber+WCTColumnCoding.h"; sourceTree = "<group>"; };
@@ -1763,10 +1766,9 @@
 		2349F6151EA0D6680021EFA7 /* core */ = {
 			isa = PBXGroup;
 			children = (
+				23E163CA20FDDD6900C3F910 /* fts */,
 				23F70F9D20A055A400CCE3CD /* config */,
 				23A870E3204F82AE00273A98 /* migration */,
-				23577F721F74F4D000D31C05 /* Tokenizer.cpp */,
-				23577F701F74F4CF00D31C05 /* Tokenizer.hpp */,
 				23F70FC220A0618100CCE3CD /* Configs.cpp */,
 				23F70FC320A0618100CCE3CD /* Configs.hpp */,
 				2349F61B1EA0D6680021EFA7 /* Database.cpp */,
@@ -2513,6 +2515,16 @@
 			path = factory;
 			sourceTree = "<group>";
 		};
+		23E163CA20FDDD6900C3F910 /* fts */ = {
+			isa = PBXGroup;
+			children = (
+				23E163CB20FDDD6900C3F910 /* Tokenizer.cpp */,
+				23E163CC20FDDD6900C3F910 /* Tokenizer.hpp */,
+				23E163D120FDDD8500C3F910 /* PorterStemming.c */,
+			);
+			path = fts;
+			sourceTree = "<group>";
+		};
 		23F70F9D20A055A400CCE3CD /* config */ = {
 			isa = PBXGroup;
 			children = (
@@ -2671,6 +2683,7 @@
 				2397757C202AECD3000A681C /* LangForeignKeyClause.hpp in Headers */,
 				2397757E202AECD3000A681C /* LangIndexedColumn.hpp in Headers */,
 				2308F8A820E37FB1001CD9C3 /* WCTDatabase+Repair.h in Headers */,
+				23E163CF20FDDD6900C3F910 /* Tokenizer.hpp in Headers */,
 				23977580202AECD3000A681C /* LangInsertSTMT.hpp in Headers */,
 				23977582202AECD3000A681C /* LangJoinClause.hpp in Headers */,
 				23D4DA452085A40A00AE6D90 /* Interface.h in Headers */,
@@ -2756,7 +2769,6 @@
 				2349F7061EA0D6680021EFA7 /* HandlePool.hpp in Headers */,
 				23D0C35720C149D80001BFAE /* FactoryDepositor.hpp in Headers */,
 				23F70FC020A055D400CCE3CD /* TokenizeConfig.hpp in Headers */,
-				23577F731F74F4D000D31C05 /* Tokenizer.hpp in Headers */,
 				23F670ED209428CE00DB2E28 /* Schema.hpp in Headers */,
 				2349F78E1EA0D6680021EFA7 /* WCDB.h in Headers */,
 				2349F7271EA0D6680021EFA7 /* WCTMultiSelect.h in Headers */,
@@ -2966,6 +2978,7 @@
 				23F5BD7620887FD3000CCD37 /* LangForeignKeyClause.hpp in Headers */,
 				23F5BD7720887FD3000CCD37 /* LangIndexedColumn.hpp in Headers */,
 				2308F8A920E37FB1001CD9C3 /* WCTDatabase+Repair.h in Headers */,
+				23E163D020FDDD6900C3F910 /* Tokenizer.hpp in Headers */,
 				23F5BD7820887FD3000CCD37 /* LangInsertSTMT.hpp in Headers */,
 				23F5BD7920887FD3000CCD37 /* LangJoinClause.hpp in Headers */,
 				23F5BD7A20887FD3000CCD37 /* Interface.h in Headers */,
@@ -3051,7 +3064,6 @@
 				23F5BDBD20887FD3000CCD37 /* HandlePool.hpp in Headers */,
 				23D0C35820C149D80001BFAE /* FactoryDepositor.hpp in Headers */,
 				23F70FC120A055D400CCE3CD /* TokenizeConfig.hpp in Headers */,
-				23F5BDBE20887FD3000CCD37 /* Tokenizer.hpp in Headers */,
 				23F670EE209428CE00DB2E28 /* Schema.hpp in Headers */,
 				23F5BDC020887FD3000CCD37 /* WCDB.h in Headers */,
 				23F5BDC120887FD3000CCD37 /* WCTMultiSelect.h in Headers */,
@@ -3337,7 +3349,6 @@
 				239774F2202AECD3000A681C /* Describable.cpp in Sources */,
 				2397757F202AECD3000A681C /* LangInsertSTMT.cpp in Sources */,
 				234DBCF62064DD0C000E31E8 /* WCTHandle.mm in Sources */,
-				23577F741F74F4D000D31C05 /* Tokenizer.cpp in Sources */,
 				2349F75C1EA0D6680021EFA7 /* WCTRuntimeObjCAccessor+NoARC.mm in Sources */,
 				23593B7D20D3ADF80058B416 /* WalRelated.cpp in Sources */,
 				23F70FC420A0618100CCE3CD /* Configs.cpp in Sources */,
@@ -3466,6 +3477,7 @@
 				23F70FA620A055BE00CCE3CD /* BasicConfig.cpp in Sources */,
 				2397759C202AECD3000A681C /* LangSavepointSTMT.cpp in Sources */,
 				239774FE202AECD3000A681C /* LiteralValue.cpp in Sources */,
+				23E163CD20FDDD6900C3F910 /* Tokenizer.cpp in Sources */,
 				2349F7691EA0D6680021EFA7 /* WCTProperty.mm in Sources */,
 				23036A40205F9BF100ADF01A /* WCTMigrationInfo.mm in Sources */,
 				2386B3C61ED442FE000B72F6 /* WCTError.mm in Sources */,
@@ -3494,6 +3506,7 @@
 				2308F85320E32A51001CD9C3 /* Serialization.cpp in Sources */,
 				239775A4202AECD3000A681C /* LangTableOrSubquery.cpp in Sources */,
 				23D4DA4B2085A99000AE6D90 /* ConvertibleImpl.cpp in Sources */,
+				23E163D320FDDD8500C3F910 /* PorterStemming.c in Sources */,
 				23D0C30E20C125420001BFAE /* SQLiteAssembler.cpp in Sources */,
 				2308F84F20E32A51001CD9C3 /* FileHandle.cpp in Sources */,
 				2397758E202AECD3000A681C /* LangPragmaSTMT.cpp in Sources */,
@@ -3586,7 +3599,6 @@
 				23F5BC7920887FD3000CCD37 /* Describable.cpp in Sources */,
 				23F5BC7A20887FD3000CCD37 /* LangInsertSTMT.cpp in Sources */,
 				23F5BC7B20887FD3000CCD37 /* WCTHandle.mm in Sources */,
-				23F5BC7C20887FD3000CCD37 /* Tokenizer.cpp in Sources */,
 				23F5BC7D20887FD3000CCD37 /* WCTRuntimeObjCAccessor+NoARC.mm in Sources */,
 				23593B7E20D3ADF80058B416 /* WalRelated.cpp in Sources */,
 				23F70FC520A0618100CCE3CD /* Configs.cpp in Sources */,
@@ -3715,6 +3727,7 @@
 				23F70FA720A055BE00CCE3CD /* BasicConfig.cpp in Sources */,
 				23F5BCE020887FD3000CCD37 /* LangSavepointSTMT.cpp in Sources */,
 				23F5BCE120887FD3000CCD37 /* LiteralValue.cpp in Sources */,
+				23E163CE20FDDD6900C3F910 /* Tokenizer.cpp in Sources */,
 				23F5BCE220887FD3000CCD37 /* WCTProperty.mm in Sources */,
 				23F5BCE320887FD3000CCD37 /* WCTMigrationInfo.mm in Sources */,
 				23F5BCE420887FD3000CCD37 /* WCTError.mm in Sources */,
@@ -3743,6 +3756,7 @@
 				2308F85420E32A51001CD9C3 /* Serialization.cpp in Sources */,
 				23F5BCF220887FD3000CCD37 /* LangTableOrSubquery.cpp in Sources */,
 				23F5BCF320887FD3000CCD37 /* ConvertibleImpl.cpp in Sources */,
+				23E163D420FDDD8500C3F910 /* PorterStemming.c in Sources */,
 				23D0C30F20C125420001BFAE /* SQLiteAssembler.cpp in Sources */,
 				2308F85020E32A51001CD9C3 /* FileHandle.cpp in Sources */,
 				23F5BCF420887FD3000CCD37 /* LangPragmaSTMT.cpp in Sources */,

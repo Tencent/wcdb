@@ -25,12 +25,12 @@
 #import <WCDB/Tokenizer.hpp>
 #import <WCDB/WCTError+Private.h>
 
-class WCTCursorInfo : public WCDB::FTS::WCDBCursorInfo {
+class WCTCursorInfo : public WCDB::FTS::CursorInfo {
 public:
     WCTCursorInfo(const char *input,
                   int inputLength,
                   WCDB::FTS::TokenizerInfoBase *tokenizerInfo)
-    : WCDB::FTS::WCDBCursorInfo(input, inputLength, tokenizerInfo)
+    : WCDB::FTS::CursorInfo(input, inputLength, tokenizerInfo)
     , m_symbolCharacterSet(generateSymbolCharacterSet())
     {
     }
@@ -38,7 +38,7 @@ public:
     WCTCursorInfo(const WCTCursorInfo &) = delete;
     WCTCursorInfo &operator=(const WCTCursorInfo &) = delete;
 
-    ~WCTCursorInfo()
+    virtual ~WCTCursorInfo()
     {
         if (m_symbolCharacterSet) {
             CFRelease(m_symbolCharacterSet);
@@ -67,33 +67,6 @@ protected:
             return SQLITE_OK;
         }
         return SQLITE_NOMEM;
-    }
-
-    int lemmatization(const char *input, int inputLength) override
-    {
-        int rc = WCDB::FTS::WCDBCursorInfo::lemmatization(input, inputLength);
-        if (rc != SQLITE_OK) {
-            return rc;
-        }
-        __block NSString *lemma = nil;
-        NSString *string = [[NSString alloc] initWithBytes:input length:inputLength encoding:NSASCIIStringEncoding];
-        NSDictionary *languageMap = @{@"Latn" : @[ @"en" ]};
-        [string enumerateLinguisticTagsInRange:NSMakeRange(0, string.length)
-                                        scheme:NSLinguisticTagSchemeLemma
-                                       options:NSLinguisticTaggerOmitWhitespace
-                                   orthography:[NSOrthography orthographyWithDominantScript:@"Latn" languageMap:languageMap]
-                                    usingBlock:^(NSString *tag, NSRange tokenRange, NSRange sentenceRange, BOOL *stop) {
-                                        lemma = tag.lowercaseString;
-                                        *stop = YES;
-                                    }];
-        if (lemma.length > 0 && [lemma caseInsensitiveCompare:string] != NSOrderedSame) {
-            m_lemmaBufferLength = (int) lemma.length;
-            if (m_lemmaBufferLength > m_lemmaBuffer.capacity()) {
-                m_lemmaBuffer.resize(lemma.length);
-            }
-            memcpy(m_lemmaBuffer.data(), lemma.cppString.data(), m_lemmaBufferLength);
-        }
-        return rc;
     }
 };
 
