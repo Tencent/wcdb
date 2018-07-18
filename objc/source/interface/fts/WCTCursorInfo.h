@@ -18,18 +18,22 @@
  * limitations under the License.
  */
 
+#import <CoreFoundation/CoreFoundation.h>
+#import <WCDB/Tokenizer.hpp>
 #import <WCDB/WCTCommon.h>
 
-NS_ASSUME_NONNULL_BEGIN
+class WCTCursorInfo : public WCDB::FTS::CursorInfo {
+public:
+    WCTCursorInfo(const char *input, int inputLength, WCDB::FTS::TokenizerInfoBase *tokenizerInfo);
 
-@interface WCTTokenizer : NSObject
+    WCTCursorInfo(const WCTCursorInfo &) = delete;
+    WCTCursorInfo &operator=(const WCTCursorInfo &) = delete;
 
-+ (NSString *)name;
+    virtual ~WCTCursorInfo();
 
-+ (unsigned char *)address;
+protected:
+    CFCharacterSetRef m_symbolCharacterSet;
+    static CFCharacterSetRef generateSymbolCharacterSet();
 
-+ (void)enroll;
-
-@end
-
-NS_ASSUME_NONNULL_END
+    int isSymbol(WCDB::FTS::UnicodeChar theChar, bool *result) override;
+};

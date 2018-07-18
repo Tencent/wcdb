@@ -82,7 +82,6 @@
 #import <WCDB/WCTPerformanceFootprint.h>
 
 #import <WCDB/WCTDatabase+FTS.h>
-#import <WCDB/WCTTokenizer.h>
 
 #import <WCDB/WCTMigrationDatabase.h>
 #import <WCDB/WCTMigrationInfo.h>

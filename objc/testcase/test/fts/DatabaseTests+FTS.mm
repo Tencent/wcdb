@@ -48,7 +48,7 @@
 
     _tableColumn = FTSTestCaseObject.columnNamed(_tableName);
 
-    [_database setTokenizer:WCTTokenizer.name];
+    [_database setTokenizer:WCTTokenizerWCDB];
 
     XCTAssertTrue([_database createVirtualTable:_tableName withClass:_cls]);
 }

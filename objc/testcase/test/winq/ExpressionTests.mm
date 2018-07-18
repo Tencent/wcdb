@@ -127,22 +127,22 @@
     WCDB::Expression expression2 = WCDB::Expression(self.class.column2);
     std::list<WCDB::Expression> expressions = { expression1, expression2 };
 
-    WINQAssertEqual(WCDB::Expression::function(self.class.functionName, expression1, true), @"testFunction(DISTINCT testColumn)");
+    WINQAssertEqual(WCDB::Expression::function(self.class.functionName, true, { expression1 }), @"testFunction(DISTINCT testColumn)");
 
-    WINQAssertEqual(WCDB::Expression::function(self.class.functionName, expressions, true), @"testFunction(DISTINCT testColumn, testColumn2)");
+    WINQAssertEqual(WCDB::Expression::function(self.class.functionName, true, expressions), @"testFunction(DISTINCT testColumn, testColumn2)");
 
-    WINQAssertEqual(WCDB::Expression::function(self.class.functionName, expression1, false), @"testFunction(testColumn)");
+    WINQAssertEqual(WCDB::Expression::function(self.class.functionName, false, { expression1 }), @"testFunction(testColumn)");
 
-    WINQAssertEqual(WCDB::Expression::function(self.class.functionName, expressions, false), @"testFunction(testColumn, testColumn2)");
+    WINQAssertEqual(WCDB::Expression::function(self.class.functionName, false, expressions), @"testFunction(testColumn, testColumn2)");
 
     WINQAssertEqual(WCDB::Expression::All().function(self.class.functionName), @"testFunction(*)");
 
     WINQAssertEqual(WCDB::Expression::function(self.class.functionName), @"testFunction()");
 
     //Default
-    WINQAssertEqual(WCDB::Expression::function(self.class.functionName, expression1), @"testFunction(testColumn)");
+    WINQAssertEqual(WCDB::Expression::function(self.class.functionName, false, { expression1 }), @"testFunction(testColumn)");
 
-    WINQAssertEqual(WCDB::Expression::function(self.class.functionName, expressions), @"testFunction(testColumn, testColumn2)");
+    WINQAssertEqual(WCDB::Expression::function(self.class.functionName, false, expressions), @"testFunction(testColumn, testColumn2)");
 }
 
 - (void)testList

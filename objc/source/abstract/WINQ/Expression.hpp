@@ -47,8 +47,8 @@ public:
     Expression &withSchema(const std::string &schemaName);
 
     static Expression function(const std::string &functionName,
-                               bool distinct,
-                               const std::list<Expression> &parameters);
+                               bool distinct = false,
+                               const std::list<Expression> &parameters = {});
     static const Expression &lastInsertedRowid();
 
     class All : public DescribableWithLang<Lang::ExprFunction>, public FunctionOperable {

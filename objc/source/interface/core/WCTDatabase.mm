@@ -23,7 +23,6 @@
 #import <WCDB/ThreadedErrors.hpp>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTError+Private.h>
-#import <WCDB/WCTTokenizer.h>
 #import <WCDB/WCTUnsafeHandle+Private.h>
 
 @implementation WCTDatabase
@@ -31,7 +30,6 @@
 + (void)initialize
 {
     if (self == [WCTDatabase self]) {
-        [WCTTokenizer enroll];
 #if TARGET_OS_IPHONE
         WCDB::SQLiteGlobal::shared()->setNotificationWhenFileCreated([](const char *path) {
             if (!path) {

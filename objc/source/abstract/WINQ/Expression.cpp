@@ -95,15 +95,19 @@ Expression Expression::function(const std::string &functionName,
 {
     Lang::CopyOnWriteLazyLang<Lang::ExprFunction> cowLang;
     Lang::ExprFunction &lang = cowLang.get_or_copy();
-    if (distinct) {
-        lang.type = Lang::ExprFunction::Type::DistinctExpr;
+    if (!parameters.empty()) {
+        if (distinct) {
+            lang.type = Lang::ExprFunction::Type::DistinctExpr;
+        } else {
+            lang.type = Lang::ExprFunction::Type::Expr;
+        }
+        for (const Expression &parameter : parameters) {
+            lang.exprs.append(parameter.getCOWLang());
+        }
     } else {
-        lang.type = Lang::ExprFunction::Type::Expr;
+        lang.type = Lang::ExprFunction::Type::NotSet;
     }
     lang.functionName.assign(functionName);
-    for (const Expression &parameter : parameters) {
-        lang.exprs.append(parameter.getCOWLang());
-    }
     return cowLang;
 }
 

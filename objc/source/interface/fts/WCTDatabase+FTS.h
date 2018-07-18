@@ -19,15 +19,21 @@
  */
 
 #import <WCDB/WCTCommon.h>
-#import <WCDB/WCTTokenizer.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NSString *WCTTokenizer;
+extern WCTTokenizer const WCTTokenizerSimple;
+extern WCTTokenizer const WCTTokenizerPorter;
+extern WCTTokenizer const WCTTokenizerICU;
+extern WCTTokenizer const WCTTokenizerUnicode61;
+extern WCTTokenizer const WCTTokenizerWCDB;
+
 @interface WCTDatabase (FTS)
 
-- (void)setTokenizer:(NSString *)tokenizerName;
+- (void)setTokenizer:(WCTTokenizer)tokenizerName;
 
-- (void)setTokenizers:(NSArray<NSString *> *)tokenizerNames;
+- (void)setTokenizers:(NSArray<WCTTokenizer> *)tokenizerNames;
 
 @end
 
