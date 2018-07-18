@@ -62,6 +62,8 @@
         [self setUpDatabaseCache];
     }
     tearDown:^{
+        results1 = nil;
+        results2 = nil;
         [self tearDownDatabase];
     }
     checkCorrectness:^{
@@ -97,6 +99,7 @@
         [self setUpDatabaseCache];
     }
     tearDown:^{
+        results2 = nil;
         [self tearDownDatabase];
     }
     checkCorrectness:^{

@@ -53,6 +53,7 @@
         [self setUpDatabaseCache];
     }
     tearDown:^{
+        results = nil;
         [self tearDownDatabase];
     }
     checkCorrectness:^{
@@ -64,10 +65,13 @@
 - (void)test_write
 {
     NSString *tableName = [self getTableNameWithIndex:0];
+    __block WCTDatabase *database = nil;
+    __block NSArray<BenchmarkObject *> *objects = nil;
+
     [self
     measure:^{
-        for (BenchmarkObject *object in self.objects) {
-            [self.database insertObject:object intoTable:tableName];
+        for (BenchmarkObject *object in objects) {
+            [database insertObject:object intoTable:tableName];
         }
     }
     setUp:^{
@@ -78,8 +82,12 @@
 
         [self tearDownDatabaseCache];
         [self setUpDatabaseCache];
+        database = self.database;
+        objects = self.objects;
     }
     tearDown:^{
+        database = nil;
+        objects = nil;
         [self tearDownDatabase];
     }
     checkCorrectness:^{
