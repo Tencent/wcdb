@@ -30,14 +30,10 @@
 
     _config = [[Config alloc] init];
     _config.valueLength = 100;
-    //    _config.batchWriteCount = 1000000;
-    //    _config.readCount = 1000000;
-    //    _config.writeCount = 100000;
-    //    _config.tableCount = 50000;
-    _config.batchWriteCount = 1000;
-    _config.readCount = 100;
-    _config.writeCount = 100;
-    _config.tableCount = 50;
+    _config.batchWriteCount = 1000000;
+    _config.readCount = 1000000;
+    _config.writeCount = 100000;
+    _config.tableCount = 50000;
     _config.databaseSize = 100 * 1024 * 1024; //100MB
 }
 
