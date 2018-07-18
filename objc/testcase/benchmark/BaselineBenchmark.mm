@@ -33,7 +33,7 @@
 
     [self
     measure:^{
-        results = [self.database getObjectsOfClass:BenchmarkObject.class fromTable:tableName orderBy:BenchmarkObject.key.asOrder(WCTOrderedAscending)];
+        results = [self.database getObjectsOfClass:BenchmarkObject.class fromTable:tableName];
     }
     setUp:^{
         [self setUpDatabase];
