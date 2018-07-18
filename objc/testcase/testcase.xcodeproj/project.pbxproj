@@ -377,7 +377,7 @@
 		2308F6B520E0D38E001CD9C3 /* RepairTestCaseObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepairTestCaseObject.h; sourceTree = "<group>"; };
 		2308F6B620E0D38E001CD9C3 /* RepairTestCaseObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RepairTestCaseObject.mm; sourceTree = "<group>"; };
 		2308F6B720E0D38E001CD9C3 /* RepairTestCaseObject+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RepairTestCaseObject+WCTTableCoding.h"; sourceTree = "<group>"; };
-		2313B6BE20A2F2EE0067C211 /* TestHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2313B6BE20A2F2EE0067C211 /* Host.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Host.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2313B6CE20A2F2F00067C211 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2313B6CF20A2F2F00067C211 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		23191EBF20D7D62400495B65 /* RepairTests+Deposit.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "RepairTests+Deposit.mm"; sourceTree = "<group>"; };
@@ -875,7 +875,7 @@
 				23698A6320045EF100C0291C /* CoverageTests.xctest */,
 				23698B6A20047E1A00C0291C /* Benchmark.xctest */,
 				23BA69BD208CE0AC005CAFB7 /* CorrectnessTests.xctest */,
-				2313B6BE20A2F2EE0067C211 /* TestHost.app */,
+				2313B6BE20A2F2EE0067C211 /* Host.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1096,9 +1096,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		2313B6BD20A2F2EE0067C211 /* TestHost */ = {
+		2313B6BD20A2F2EE0067C211 /* Host */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2313B6D120A2F2F00067C211 /* Build configuration list for PBXNativeTarget "TestHost" */;
+			buildConfigurationList = 2313B6D120A2F2F00067C211 /* Build configuration list for PBXNativeTarget "Host" */;
 			buildPhases = (
 				2313B6BA20A2F2EE0067C211 /* Sources */,
 				2313B6BB20A2F2EE0067C211 /* Frameworks */,
@@ -1110,9 +1110,9 @@
 			dependencies = (
 				2313B6DA20A2F6CD0067C211 /* PBXTargetDependency */,
 			);
-			name = TestHost;
+			name = Host;
 			productName = TestHost;
-			productReference = 2313B6BE20A2F2EE0067C211 /* TestHost.app */;
+			productReference = 2313B6BE20A2F2EE0067C211 /* Host.app */;
 			productType = "com.apple.product-type.application";
 		};
 		23698A6220045EF100C0291C /* CoverageTests */ = {
@@ -1221,7 +1221,7 @@
 				23BA6937208CE0AC005CAFB7 /* CorrectnessTests */,
 				23698B3C20047E1A00C0291C /* Benchmark */,
 				23698A6220045EF100C0291C /* CoverageTests */,
-				2313B6BD20A2F2EE0067C211 /* TestHost */,
+				2313B6BD20A2F2EE0067C211 /* Host */,
 			);
 		};
 /* End PBXProject section */
@@ -1592,7 +1592,7 @@
 		};
 		2313B6D620A2F4140067C211 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2313B6BD20A2F2EE0067C211 /* TestHost */;
+			target = 2313B6BD20A2F2EE0067C211 /* Host */;
 			targetProxy = 2313B6D520A2F4140067C211 /* PBXContainerItemProxy */;
 		};
 		2313B6DA20A2F6CD0067C211 /* PBXTargetDependency */ = {
@@ -1602,12 +1602,12 @@
 		};
 		2349ED9B20A31BC800763F30 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2313B6BD20A2F2EE0067C211 /* TestHost */;
+			target = 2313B6BD20A2F2EE0067C211 /* Host */;
 			targetProxy = 2349ED9A20A31BC800763F30 /* PBXContainerItemProxy */;
 		};
 		2349ED9D20A31C1400763F30 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2313B6BD20A2F2EE0067C211 /* TestHost */;
+			target = 2313B6BD20A2F2EE0067C211 /* Host */;
 			targetProxy = 2349ED9C20A31C1400763F30 /* PBXContainerItemProxy */;
 		};
 		23BA6AD2208CE0D7005CAFB7 /* PBXTargetDependency */ = {
@@ -1745,9 +1745,9 @@
 					UIKit,
 				);
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/TestHost.app/TestHost";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/TestHost.app/TestHost";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/TestHost.app/Contents/MacOS/TestHost";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VALID_ARCHS = "x86_64 arm64 armv7";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
@@ -1828,9 +1828,9 @@
 					UIKit,
 				);
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/TestHost.app/TestHost";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/TestHost.app/TestHost";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/TestHost.app/Contents/MacOS/TestHost";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VALID_ARCHS = "x86_64 arm64 armv7";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
@@ -1904,7 +1904,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2313B6D120A2F2F00067C211 /* Build configuration list for PBXNativeTarget "TestHost" */ = {
+		2313B6D120A2F2F00067C211 /* Build configuration list for PBXNativeTarget "Host" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2313B6D220A2F2F00067C211 /* Debug */,
