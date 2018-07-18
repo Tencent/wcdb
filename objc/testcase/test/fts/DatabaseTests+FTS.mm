@@ -251,4 +251,68 @@ whileSearchingByKeyword:(const char *)keyword
     XCTAssertTrue([self expectObject:AB whileSearchingByKeyword:"B NOT C"]);
 }
 
+- (void)test_offsets
+{
+    FTSTestCaseObject *sentence = [[FTSTestCaseObject alloc] initWithMessage:@"one two three four" andExtension:@"five six seven eight nine ten"];
+    XCTAssertTrue([_database insertObject:sentence intoTable:_tableName]);
+
+    WCTValue *result = [_database getValueOnResult:_tableColumn.offsets() fromTable:_tableName where:_tableColumn.match("f* t*")];
+
+    NSArray<NSString *> *offsets = [result.stringValue componentsSeparatedByString:@" "];
+    XCTAssertGreaterThan(offsets.count, 0);
+    XCTAssertEqual(offsets.count % 4, 0);
+
+    //"f*" match "five"
+    XCTAssertEqual(offsets[0].intValue, 0); // 0 for first column in database, which is "extension" here.
+    XCTAssertEqual(offsets[1].intValue, 0); // 0 for first matched term in query, which is "f*" here.
+    XCTAssertEqual(offsets[2].intValue, 0); // 0 for the byte offset matched term.
+    XCTAssertEqual(offsets[3].intValue, 4); // 4 for the byte length matched term.
+
+    //"t*" match "ten"
+    XCTAssertEqual(offsets[4].intValue, 0);  // 0 for first column in database, which is "extension" here.
+    XCTAssertEqual(offsets[5].intValue, 1);  // 1 for second matched term in query, which is "t*" here.
+    XCTAssertEqual(offsets[6].intValue, 26); // 26 for the byte offset matched term.
+    XCTAssertEqual(offsets[7].intValue, 3);  // 4 for the byte length matched term.
+
+    //"t*" match "two"
+    XCTAssertEqual(offsets[8].intValue, 1);  // 1 for second column in database, which is "message" here.
+    XCTAssertEqual(offsets[9].intValue, 1);  // 1 for second matched term in query, which is "t*" here.
+    XCTAssertEqual(offsets[10].intValue, 4); // 4 for the byte offset matched term.
+    XCTAssertEqual(offsets[11].intValue, 3); // 3 for the byte length matched term.
+
+    //"t*" match "three"
+    XCTAssertEqual(offsets[12].intValue, 1); // 1 for second column in database, which is "message" here.
+    XCTAssertEqual(offsets[13].intValue, 1); // 1 for second matched term in query, which is "t*" here.
+    XCTAssertEqual(offsets[14].intValue, 8); // 8 for the byte offset matched term.
+    XCTAssertEqual(offsets[15].intValue, 5); // 5 for the byte length matched term.
+
+    //"f*" match "four"
+    XCTAssertEqual(offsets[16].intValue, 1);  // 1 for second column in database, which is "message" here.
+    XCTAssertEqual(offsets[17].intValue, 0);  // 0 for first matched term in query, which is "f*" here.
+    XCTAssertEqual(offsets[18].intValue, 14); // 14 for the byte offset matched term.
+    XCTAssertEqual(offsets[19].intValue, 4);  // 4 for the byte length matched term.
+}
+
+- (void)test_snippet
+{
+    FTSTestCaseObject *easyToUse = [[FTSTestCaseObject alloc] initWithMessage:@"Easy-to-use" andExtension:@"Through WCDB, you can get objects from database in one line code."];
+    FTSTestCaseObject *efficient = [[FTSTestCaseObject alloc] initWithMessage:@"Efficient" andExtension:@"Through the framework layer and sqlcipher source optimization, WCDB have more efficient performance."];
+    FTSTestCaseObject *complete = [[FTSTestCaseObject alloc] initWithMessage:@"Complete" andExtension:@"Encryption Support, Corruption recovery, Anti-injection."];
+    XCTAssertTrue([_database insertObject:easyToUse intoTable:_tableName]);
+    XCTAssertTrue([_database insertObject:efficient intoTable:_tableName]);
+    XCTAssertTrue([_database insertObject:complete intoTable:_tableName]);
+
+    const char *startMatchText = "/* ";
+    const char *endMatchText = " */";
+    const char *ellipses = "...";
+    int columnNumber = -1;
+    int approximateNumberOfTokens = 5;
+
+    WCTOneColumn *results = [_database getColumnOnResult:_tableColumn.snippet(startMatchText, endMatchText, ellipses, columnNumber, approximateNumberOfTokens) fromTable:_tableName where:FTSTestCaseObject.extension.match("e*")];
+
+    XCTAssertEqual(results.count, 2);
+    XCTAssertTrue([results[0].stringValue isEqualToString:@"...WCDB have more /* efficient */ performance."]);
+    XCTAssertTrue([results[1].stringValue isEqualToString:@"/* Encryption */ Support, Corruption recovery, Anti..."]);
+}
+
 @end
