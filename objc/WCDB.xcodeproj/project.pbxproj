@@ -608,6 +608,7 @@
 		23D4DA4A2085A99000AE6D90 /* ColumnType.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D4DA472085A98F00AE6D90 /* ColumnType.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23D4DA4B2085A99000AE6D90 /* ConvertibleImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D4DA482085A99000AE6D90 /* ConvertibleImpl.cpp */; };
 		23D4DA4C2085A99000AE6D90 /* ConvertibleImpl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D4DA492085A99000AE6D90 /* ConvertibleImpl.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23D53B1820FEFB60004E1853 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23C43BCC2087435800AB186D /* libz.tbd */; };
 		23D920C72009B534000634CB /* Abstract.h in Headers */ = {isa = PBXBuildFile; fileRef = 23D920422009B52E000634CB /* Abstract.h */; };
 		23D96B922050DED700DB5E93 /* HandlePools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D96B902050DED700DB5E93 /* HandlePools.cpp */; };
 		23D96B932050DED700DB5E93 /* HandlePools.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D96B912050DED700DB5E93 /* HandlePools.hpp */; };
@@ -1606,6 +1607,7 @@
 		23D4DA472085A98F00AE6D90 /* ColumnType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ColumnType.hpp; sourceTree = "<group>"; };
 		23D4DA482085A99000AE6D90 /* ConvertibleImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConvertibleImpl.cpp; sourceTree = "<group>"; };
 		23D4DA492085A99000AE6D90 /* ConvertibleImpl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ConvertibleImpl.hpp; sourceTree = "<group>"; };
+		23D53B1620FEFB51004E1853 /* libdz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libdz.tbd; path = usr/lib/libdz.tbd; sourceTree = SDKROOT; };
 		23D920422009B52E000634CB /* Abstract.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Abstract.h; sourceTree = "<group>"; };
 		23D96B902050DED700DB5E93 /* HandlePools.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HandlePools.cpp; sourceTree = "<group>"; };
 		23D96B912050DED700DB5E93 /* HandlePools.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HandlePools.hpp; sourceTree = "<group>"; };
@@ -1686,6 +1688,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23D53B1820FEFB60004E1853 /* libz.tbd in Frameworks */,
 				23F5BD0920887FD3000CCD37 /* sqlcipher.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2478,6 +2481,7 @@
 		23B5F93E1E111CB100E58396 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				23D53B1620FEFB51004E1853 /* libdz.tbd */,
 				23C43BCC2087435800AB186D /* libz.tbd */,
 			);
 			name = Frameworks;
