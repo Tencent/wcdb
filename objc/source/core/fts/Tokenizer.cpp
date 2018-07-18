@@ -21,6 +21,10 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Core.h>
 
+extern "C" {
+extern int porterStem(char *p, int i, int j);
+}
+
 namespace WCDB {
 
 namespace FTS {
@@ -221,7 +225,7 @@ int CursorInfo::lemmatization(const char *input, int inputLength)
     for (int i = 0; i < inputLength; ++i) {
         m_buffer.data()[i] = tolower(input[i]);
     }
-    m_bufferLength = stem(m_buffer.data(), 0, m_bufferLength - 1) + 1;
+    m_bufferLength = porterStem(m_buffer.data(), 0, m_bufferLength - 1) + 1;
     return SQLITE_OK;
 }
 

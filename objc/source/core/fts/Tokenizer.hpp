@@ -28,10 +28,6 @@
 
 #pragma GCC visibility push(hidden)
 
-extern "C" {
-int stem(char *p, int i, int j);
-}
-
 namespace WCDB {
 
 namespace FTS {

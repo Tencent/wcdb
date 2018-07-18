@@ -621,7 +621,7 @@ static void step5()
  file.
  */
 
-int stem(char* p, int i, int j)
+int porterStem(char* p, int i, int j)
 {
     b = p;
     k = j;
