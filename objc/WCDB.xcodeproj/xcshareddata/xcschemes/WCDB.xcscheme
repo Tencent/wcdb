@@ -26,115 +26,16 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      enableASanStackUseAfterReturn = "YES"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "23BA6B40208CE13E005CAFB7"
-               BuildableName = "ChainCall Tests.xctest"
-               BlueprintName = "ChainCall Tests"
-               ReferencedContainer = "container:testcase/testcase.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "23BA6B64208CE140005CAFB7"
-               BuildableName = "Convenient Tests.xctest"
-               BlueprintName = "Convenient Tests"
-               ReferencedContainer = "container:testcase/testcase.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "23BA6B52208CE13F005CAFB7"
-               BuildableName = "Database Tests.xctest"
-               BlueprintName = "Database Tests"
-               ReferencedContainer = "container:testcase/testcase.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "23BA6937208CE0AC005CAFB7"
-               BuildableName = "FTS Tests.xctest"
-               BlueprintName = "FTS Tests"
-               ReferencedContainer = "container:testcase/testcase.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "23BA6B1C208CE13A005CAFB7"
-               BuildableName = "Handle Tests.xctest"
-               BlueprintName = "Handle Tests"
-               ReferencedContainer = "container:testcase/testcase.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "23BA6AE6208CE12D005CAFB7"
-               BuildableName = "Migration Tests.xctest"
-               BlueprintName = "Migration Tests"
-               ReferencedContainer = "container:testcase/testcase.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "23BA6AF8208CE132005CAFB7"
-               BuildableName = "ORM Tests.xctest"
-               BlueprintName = "ORM Tests"
-               ReferencedContainer = "container:testcase/testcase.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "23BA6B2E208CE13C005CAFB7"
-               BuildableName = "Table Tests.xctest"
-               BlueprintName = "Table Tests"
-               ReferencedContainer = "container:testcase/testcase.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "23BA6B0A208CE139005CAFB7"
-               BuildableName = "Transaction Tests.xctest"
-               BlueprintName = "Transaction Tests"
-               ReferencedContainer = "container:testcase/testcase.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "23BA6B76208CE142005CAFB7"
-               BuildableName = "WINQ Tests.xctest"
-               BlueprintName = "WINQ Tests"
-               ReferencedContainer = "container:testcase/testcase.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2324D16520D2470200834A82"
-               BuildableName = "Repair Tests.xctest"
-               BlueprintName = "Repair Tests"
+               BuildableName = "CorrectnessTests.xctest"
+               BlueprintName = "CorrectnessTests"
                ReferencedContainer = "container:testcase/testcase.xcodeproj">
             </BuildableReference>
          </TestableReference>

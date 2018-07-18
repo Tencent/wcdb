@@ -9,17 +9,10 @@
 /* Begin PBXBuildFile section */
 		2308F6B820E0D38E001CD9C3 /* RepairTestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2308F6B620E0D38E001CD9C3 /* RepairTestCaseObject.mm */; };
 		2308F6B920E0D38E001CD9C3 /* RepairTestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2308F6B620E0D38E001CD9C3 /* RepairTestCaseObject.mm */; };
-		2308F6BA20E0D38E001CD9C3 /* RepairTestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2308F6B620E0D38E001CD9C3 /* RepairTestCaseObject.mm */; };
 		2313B6D020A2F2F00067C211 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2313B6CF20A2F2F00067C211 /* main.m */; };
 		2313B6D720A2F6CD0067C211 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; };
 		2313B6D820A2F6CD0067C211 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		23191EC020D7D62400495B65 /* RepairTests+Deposit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23191EBF20D7D62400495B65 /* RepairTests+Deposit.mm */; };
-		23191EC120D7D62400495B65 /* RepairTests+Deposit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23191EBF20D7D62400495B65 /* RepairTests+Deposit.mm */; };
-		2324D16F20D2470200834A82 /* Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B58200F577400E0CECE /* Convenience.m */; };
-		2324D17120D2470200834A82 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
-		2324D17220D2470200834A82 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5098209D5B3D00C78CC8 /* TestCaseObject.mm */; };
-		2324D17420D2470200834A82 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; };
-		2324D18120D247A000834A82 /* RepairTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2324D18020D247A000834A82 /* RepairTestCase.mm */; };
 		233861E4207B076D004CAC6F /* DatabaseTests+Transaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233861E3207B076D004CAC6F /* DatabaseTests+Transaction.mm */; };
 		233861E7207B1916004CAC6F /* TableTests+Transaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233861E6207B1916004CAC6F /* TableTests+Transaction.mm */; };
 		233861E9207B191E004CAC6F /* HandleTests+Transaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233861E8207B191E004CAC6F /* HandleTests+Transaction.mm */; };
@@ -109,17 +102,14 @@
 		234DBD9120651FF4000E31E8 /* DatabaseTests+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD9020651FF4000E31E8 /* DatabaseTests+Convenient.mm */; };
 		23593B7620D369BD0058B416 /* RepairTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2324D18020D247A000834A82 /* RepairTestCase.mm */; };
 		23593B7920D369DD0058B416 /* RepairTests+Backup.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23593B7820D369DD0058B416 /* RepairTests+Backup.mm */; };
-		23593B7A20D369DD0058B416 /* RepairTests+Backup.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23593B7820D369DD0058B416 /* RepairTests+Backup.mm */; };
 		235F5D442079BCAB00B440CA /* MigrationTests+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D432079BCAB00B440CA /* MigrationTests+Convenient.mm */; };
 		235F5D552079F92D00B440CA /* MigrationTests+SameDatabase+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D542079F92D00B440CA /* MigrationTests+SameDatabase+Convenient.mm */; };
 		235F5D57207A22F000B440CA /* MigrationTests+Innocent+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D56207A22F000B440CA /* MigrationTests+Innocent+Convenient.mm */; };
 		235F5D5D207A387B00B440CA /* HandleTests+Table.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D5C207A387B00B440CA /* HandleTests+Table.mm */; };
 		235F5D5F207A388100B440CA /* DatabaseTests+Table.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D5E207A388100B440CA /* DatabaseTests+Table.mm */; };
 		2367267A20DFD5B600A1E7E3 /* FileBomber.m in Sources */ = {isa = PBXBuildFile; fileRef = 2367267920DFD5B600A1E7E3 /* FileBomber.m */; };
-		2367267B20DFD5B600A1E7E3 /* FileBomber.m in Sources */ = {isa = PBXBuildFile; fileRef = 2367267920DFD5B600A1E7E3 /* FileBomber.m */; };
 		23698A8D2004613600C0291C /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
 		23698B5E20047E1A00C0291C /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
-		236A46AF20D7526E001816AF /* DatabaseTests+Trace.mm in Sources */ = {isa = PBXBuildFile; fileRef = 236A46AE20D7526E001816AF /* DatabaseTests+Trace.mm */; };
 		236A46B020D7526E001816AF /* DatabaseTests+Trace.mm in Sources */ = {isa = PBXBuildFile; fileRef = 236A46AE20D7526E001816AF /* DatabaseTests+Trace.mm */; };
 		237B4D072068F7F200AB79CA /* TableTests+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D062068F7F200AB79CA /* TableTests+Convenient.mm */; };
 		237B4D0A2068F7FA00AB79CA /* HandleTests+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D092068F7FA00AB79CA /* HandleTests+Convenient.mm */; };
@@ -129,48 +119,12 @@
 		23885F7B208640A80085FA1E /* DatabaseTests+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23885F7A208640A80085FA1E /* DatabaseTests+FTS.mm */; };
 		23885F80208642910085FA1E /* FTSTestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23885F7D208642910085FA1E /* FTSTestCaseObject.mm */; };
 		238B50A0209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5097209D5B3C00C78CC8 /* CRUDTestCase.mm */; };
-		238B50A1209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5097209D5B3C00C78CC8 /* CRUDTestCase.mm */; };
-		238B50A2209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5097209D5B3C00C78CC8 /* CRUDTestCase.mm */; };
-		238B50A3209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5097209D5B3C00C78CC8 /* CRUDTestCase.mm */; };
-		238B50A4209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5097209D5B3C00C78CC8 /* CRUDTestCase.mm */; };
-		238B50A5209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5097209D5B3C00C78CC8 /* CRUDTestCase.mm */; };
-		238B50A6209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5097209D5B3C00C78CC8 /* CRUDTestCase.mm */; };
-		238B50A7209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5097209D5B3C00C78CC8 /* CRUDTestCase.mm */; };
-		238B50A8209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5097209D5B3C00C78CC8 /* CRUDTestCase.mm */; };
-		238B50A9209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5097209D5B3C00C78CC8 /* CRUDTestCase.mm */; };
 		238B50AA209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5097209D5B3C00C78CC8 /* CRUDTestCase.mm */; };
 		238B50AB209D5B3D00C78CC8 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5098209D5B3D00C78CC8 /* TestCaseObject.mm */; };
-		238B50AC209D5B3D00C78CC8 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5098209D5B3D00C78CC8 /* TestCaseObject.mm */; };
-		238B50AD209D5B3D00C78CC8 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5098209D5B3D00C78CC8 /* TestCaseObject.mm */; };
-		238B50AE209D5B3D00C78CC8 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5098209D5B3D00C78CC8 /* TestCaseObject.mm */; };
-		238B50AF209D5B3D00C78CC8 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5098209D5B3D00C78CC8 /* TestCaseObject.mm */; };
-		238B50B0209D5B3D00C78CC8 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5098209D5B3D00C78CC8 /* TestCaseObject.mm */; };
-		238B50B1209D5B3D00C78CC8 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5098209D5B3D00C78CC8 /* TestCaseObject.mm */; };
-		238B50B2209D5B3D00C78CC8 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5098209D5B3D00C78CC8 /* TestCaseObject.mm */; };
-		238B50B3209D5B3D00C78CC8 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5098209D5B3D00C78CC8 /* TestCaseObject.mm */; };
-		238B50B4209D5B3D00C78CC8 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5098209D5B3D00C78CC8 /* TestCaseObject.mm */; };
 		238B50B5209D5B3D00C78CC8 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5098209D5B3D00C78CC8 /* TestCaseObject.mm */; };
 		238B50B6209D5B3D00C78CC8 /* TestCaseVirtualObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5099209D5B3D00C78CC8 /* TestCaseVirtualObject.mm */; };
-		238B50B7209D5B3D00C78CC8 /* TestCaseVirtualObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5099209D5B3D00C78CC8 /* TestCaseVirtualObject.mm */; };
-		238B50B8209D5B3D00C78CC8 /* TestCaseVirtualObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5099209D5B3D00C78CC8 /* TestCaseVirtualObject.mm */; };
-		238B50B9209D5B3D00C78CC8 /* TestCaseVirtualObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5099209D5B3D00C78CC8 /* TestCaseVirtualObject.mm */; };
-		238B50BA209D5B3D00C78CC8 /* TestCaseVirtualObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5099209D5B3D00C78CC8 /* TestCaseVirtualObject.mm */; };
-		238B50BB209D5B3D00C78CC8 /* TestCaseVirtualObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5099209D5B3D00C78CC8 /* TestCaseVirtualObject.mm */; };
-		238B50BC209D5B3D00C78CC8 /* TestCaseVirtualObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5099209D5B3D00C78CC8 /* TestCaseVirtualObject.mm */; };
-		238B50BD209D5B3D00C78CC8 /* TestCaseVirtualObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5099209D5B3D00C78CC8 /* TestCaseVirtualObject.mm */; };
-		238B50BE209D5B3D00C78CC8 /* TestCaseVirtualObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5099209D5B3D00C78CC8 /* TestCaseVirtualObject.mm */; };
-		238B50BF209D5B3D00C78CC8 /* TestCaseVirtualObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5099209D5B3D00C78CC8 /* TestCaseVirtualObject.mm */; };
 		238B50C0209D5B3D00C78CC8 /* TestCaseVirtualObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B5099209D5B3D00C78CC8 /* TestCaseVirtualObject.mm */; };
 		238B50C1209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B509A209D5B3D00C78CC8 /* TestCaseIndexedObject.mm */; };
-		238B50C2209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B509A209D5B3D00C78CC8 /* TestCaseIndexedObject.mm */; };
-		238B50C3209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B509A209D5B3D00C78CC8 /* TestCaseIndexedObject.mm */; };
-		238B50C4209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B509A209D5B3D00C78CC8 /* TestCaseIndexedObject.mm */; };
-		238B50C5209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B509A209D5B3D00C78CC8 /* TestCaseIndexedObject.mm */; };
-		238B50C6209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B509A209D5B3D00C78CC8 /* TestCaseIndexedObject.mm */; };
-		238B50C7209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B509A209D5B3D00C78CC8 /* TestCaseIndexedObject.mm */; };
-		238B50C8209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B509A209D5B3D00C78CC8 /* TestCaseIndexedObject.mm */; };
-		238B50C9209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B509A209D5B3D00C78CC8 /* TestCaseIndexedObject.mm */; };
-		238B50CA209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B509A209D5B3D00C78CC8 /* TestCaseIndexedObject.mm */; };
 		238B50CB209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B509A209D5B3D00C78CC8 /* TestCaseIndexedObject.mm */; };
 		238B50D8209D5CDB00C78CC8 /* Benchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238B50D2209D5CDB00C78CC8 /* Benchmark.mm */; };
 		238B50D9209D5CDB00C78CC8 /* Config.m in Sources */ = {isa = PBXBuildFile; fileRef = 238B50D3209D5CDB00C78CC8 /* Config.m */; };
@@ -180,169 +134,148 @@
 		23A3AF22206CDBE300D05634 /* HandleTests+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3AF21206CDBE300D05634 /* HandleTests+ChainCall.mm */; };
 		23A3AF24206CDBF900D05634 /* UnsafeHandleTests+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3AF23206CDBF900D05634 /* UnsafeHandleTests+ChainCall.mm */; };
 		23A3AF26206CDC0A00D05634 /* TableTests+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3AF25206CDC0A00D05634 /* TableTests+ChainCall.mm */; };
-		23AA166B2098C46F0013912B /* TestCaseConflictObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23AA16682098C46F0013912B /* TestCaseConflictObject.mm */; };
 		23AA166C2098C46F0013912B /* TestCaseConflictObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23AA16682098C46F0013912B /* TestCaseConflictObject.mm */; };
 		23B13A7120E086F600B26927 /* RepairTests+Robust.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23B13A7020E086F600B26927 /* RepairTests+Robust.mm */; };
-		23B13A7220E086F600B26927 /* RepairTests+Robust.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23B13A7020E086F600B26927 /* RepairTests+Robust.mm */; };
 		23BA6AD3208CE0DE005CAFB7 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; };
 		23BA6AE3208CE101005CAFB7 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
 		23BA6AE4208CE101005CAFB7 /* Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B58200F577400E0CECE /* Convenience.m */; };
-		23BA6AED208CE12D005CAFB7 /* Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B58200F577400E0CECE /* Convenience.m */; };
-		23BA6AEE208CE12D005CAFB7 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
-		23BA6AF1208CE12D005CAFB7 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; };
-		23BA6AFF208CE132005CAFB7 /* Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B58200F577400E0CECE /* Convenience.m */; };
-		23BA6B00208CE132005CAFB7 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
-		23BA6B03208CE132005CAFB7 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; };
-		23BA6B11208CE139005CAFB7 /* Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B58200F577400E0CECE /* Convenience.m */; };
-		23BA6B12208CE139005CAFB7 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
-		23BA6B15208CE139005CAFB7 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; };
-		23BA6B23208CE13A005CAFB7 /* Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B58200F577400E0CECE /* Convenience.m */; };
-		23BA6B24208CE13A005CAFB7 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
-		23BA6B27208CE13A005CAFB7 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; };
-		23BA6B35208CE13C005CAFB7 /* Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B58200F577400E0CECE /* Convenience.m */; };
-		23BA6B36208CE13C005CAFB7 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
-		23BA6B39208CE13C005CAFB7 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; };
-		23BA6B47208CE13E005CAFB7 /* Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B58200F577400E0CECE /* Convenience.m */; };
-		23BA6B48208CE13E005CAFB7 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
-		23BA6B4B208CE13E005CAFB7 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; };
-		23BA6B59208CE13F005CAFB7 /* Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B58200F577400E0CECE /* Convenience.m */; };
-		23BA6B5A208CE13F005CAFB7 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
-		23BA6B5D208CE13F005CAFB7 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; };
-		23BA6B6B208CE140005CAFB7 /* Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B58200F577400E0CECE /* Convenience.m */; };
-		23BA6B6C208CE140005CAFB7 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
-		23BA6B6F208CE140005CAFB7 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; };
-		23BA6B7D208CE142005CAFB7 /* Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B58200F577400E0CECE /* Convenience.m */; };
-		23BA6B7E208CE142005CAFB7 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23698A8C2004613600C0291C /* TestCase.mm */; };
-		23BA6B81208CE142005CAFB7 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23698A8120045F4A00C0291C /* WCDB.framework */; };
 		23BA6B9A208CE169005CAFB7 /* DatabaseTests+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23885F7A208640A80085FA1E /* DatabaseTests+FTS.mm */; };
 		23BA6B9B208CE169005CAFB7 /* FTSTestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23885F7D208642910085FA1E /* FTSTestCaseObject.mm */; };
-		23BA6BB0208CE26A005CAFB7 /* MigrationTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23CB210A206DDBCE000EFB02 /* MigrationTestCase.mm */; };
-		23BA6BB1208CE26A005CAFB7 /* MigrationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23CB2105206DDBB7000EFB02 /* MigrationTests.mm */; };
-		23BA6BB2208CE26A005CAFB7 /* MigrationTests+SameDatabase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23CB2103206DDBAE000EFB02 /* MigrationTests+SameDatabase.mm */; };
-		23BA6BB3208CE26A005CAFB7 /* MigrationTests+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D432079BCAB00B440CA /* MigrationTests+Convenient.mm */; };
-		23BA6BB4208CE26A005CAFB7 /* MigrationTests+SameDatabase+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D542079F92D00B440CA /* MigrationTests+SameDatabase+Convenient.mm */; };
-		23BA6BB5208CE26A005CAFB7 /* MigrationTests+Innocent+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D56207A22F000B440CA /* MigrationTests+Innocent+Convenient.mm */; };
-		23BA6BB6208CE26A005CAFB7 /* MultipleMigrationTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23D507E620805E220015E1C9 /* MultipleMigrationTestCase.mm */; };
-		23BA6BB7208CE26A005CAFB7 /* MultipleMigrationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23D507E9208060CB0015E1C9 /* MultipleMigrationTests.mm */; };
-		23BA6BB8208CE26A005CAFB7 /* MultipleMigrationTestCase+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23D507EB2080611B0015E1C9 /* MultipleMigrationTestCase+Convenient.mm */; };
-		23BA6BB9208CE279005CAFB7 /* ORMTests+Inherited.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23C5C61B2089DCD200C828AE /* ORMTests+Inherited.mm */; };
-		23BA6BBA208CE279005CAFB7 /* ORMRebindOld.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2338626E207B8A42004CAC6F /* ORMRebindOld.mm */; };
-		23BA6BBB208CE279005CAFB7 /* ORMRebindNew.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386272207B8A47004CAC6F /* ORMRebindNew.mm */; };
-		23BA6BBC208CE279005CAFB7 /* ORMTests+Rebind.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386274207B8AF2004CAC6F /* ORMTests+Rebind.mm */; };
-		23BA6BBD208CE279005CAFB7 /* ORMTests+ColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386203207B48DF004CAC6F /* ORMTests+ColumnCoding.mm */; };
-		23BA6BBE208CE279005CAFB7 /* ORMColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386255207B5E1E004CAC6F /* ORMColumnCoding.mm */; };
-		23BA6BBF208CE279005CAFB7 /* ORMTests+ColumnConstraint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386201207B48DF004CAC6F /* ORMTests+ColumnConstraint.mm */; };
-		23BA6BC0208CE279005CAFB7 /* ORMColumnConstraintPrimary.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386215207B4ED6004CAC6F /* ORMColumnConstraintPrimary.mm */; };
-		23BA6BC1208CE279005CAFB7 /* ORMColumnConstraintPrimaryAsc.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386219207B4EE0004CAC6F /* ORMColumnConstraintPrimaryAsc.mm */; };
-		23BA6BC2208CE279005CAFB7 /* ORMColumnConstraintPrimaryDesc.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2338621D207B4EE6004CAC6F /* ORMColumnConstraintPrimaryDesc.mm */; };
-		23BA6BC3208CE279005CAFB7 /* ORMColumnConstraintPrimaryAutoIncrement.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386221207B4EEF004CAC6F /* ORMColumnConstraintPrimaryAutoIncrement.mm */; };
-		23BA6BC4208CE279005CAFB7 /* ORMColumnConstraintPrimaryAscAutoIncrement.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386225207B4EFA004CAC6F /* ORMColumnConstraintPrimaryAscAutoIncrement.mm */; };
-		23BA6BC5208CE279005CAFB7 /* ORMColumnConstraintPrimaryImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386229207B4F05004CAC6F /* ORMColumnConstraintPrimaryImpl.mm */; };
-		23BA6BC6208CE279005CAFB7 /* ORMColumnConstraintNotNull.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386231207B4F18004CAC6F /* ORMColumnConstraintNotNull.mm */; };
-		23BA6BC7208CE279005CAFB7 /* ORMColumnConstraintUnique.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386235207B4F1F004CAC6F /* ORMColumnConstraintUnique.mm */; };
-		23BA6BC8208CE279005CAFB7 /* ORMTests+Index.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233861FB207B48DE004CAC6F /* ORMTests+Index.mm */; };
-		23BA6BC9208CE279005CAFB7 /* ORMIndex.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386249207B595A004CAC6F /* ORMIndex.mm */; };
-		23BA6BCA208CE279005CAFB7 /* ORMMultiIndex.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2338624D207B5961004CAC6F /* ORMMultiIndex.mm */; };
-		23BA6BCB208CE279005CAFB7 /* ORMUniqueIndex.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386251207B596B004CAC6F /* ORMUniqueIndex.mm */; };
-		23BA6BCC208CE279005CAFB7 /* ORMTests+Property.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233861FF207B48DF004CAC6F /* ORMTests+Property.mm */; };
-		23BA6BCD208CE279005CAFB7 /* ORMProperty.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2338620E207B48F9004CAC6F /* ORMProperty.mm */; };
-		23BA6BCE208CE279005CAFB7 /* ORMTests+TableConstraint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386205207B48DF004CAC6F /* ORMTests+TableConstraint.mm */; };
-		23BA6BCF208CE279005CAFB7 /* ORMTableConstraintMultiPrimary.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386239207B5391004CAC6F /* ORMTableConstraintMultiPrimary.mm */; };
-		23BA6BD0208CE279005CAFB7 /* ORMTableConstraintMultiUnique.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2338623D207B53A1004CAC6F /* ORMTableConstraintMultiUnique.mm */; };
-		23BA6BD1208CE279005CAFB7 /* ORMTableConstraintCheck.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386241207B53AA004CAC6F /* ORMTableConstraintCheck.mm */; };
-		23BA6BD2208CE279005CAFB7 /* ORMTableConstraintForeignKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386245207B53B2004CAC6F /* ORMTableConstraintForeignKey.mm */; };
-		23BA6BD3208CE279005CAFB7 /* ORMTests+VirtualTable.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233861FD207B48DE004CAC6F /* ORMTests+VirtualTable.mm */; };
-		23BA6BD4208CE279005CAFB7 /* ORMVirtualTable.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386259207B6C1D004CAC6F /* ORMVirtualTable.mm */; };
-		23BA6BD5208CE279005CAFB7 /* ORMVirtualTableTokenize.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386261207B6C46004CAC6F /* ORMVirtualTableTokenize.mm */; };
-		23BA6BD6208CE279005CAFB7 /* ORMVirtualTableTokenizeWCDB.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386265207B6C4B004CAC6F /* ORMVirtualTableTokenizeWCDB.mm */; };
-		23BA6BD7208CE279005CAFB7 /* ORMVirtualTableModuleFTS3.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386269207B6C53004CAC6F /* ORMVirtualTableModuleFTS3.mm */; };
-		23BA6BD8208CE279005CAFB7 /* ORMTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386211207B4A3C004CAC6F /* ORMTestCase.mm */; };
-		23BA6BD9208CE279005CAFB7 /* ORMInheritedTestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23C5C6132089DBF700C828AE /* ORMInheritedTestCaseObject.mm */; };
-		23BA6BDA208CE27E005CAFB7 /* DatabaseTests+Transaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233861E3207B076D004CAC6F /* DatabaseTests+Transaction.mm */; };
-		23BA6BDB208CE27E005CAFB7 /* TableTests+Transaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233861E6207B1916004CAC6F /* TableTests+Transaction.mm */; };
-		23BA6BDC208CE27E005CAFB7 /* HandleTests+Transaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233861E8207B191E004CAC6F /* HandleTests+Transaction.mm */; };
-		23BA6BDD208CE282005CAFB7 /* HandleTests+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3AF21206CDBE300D05634 /* HandleTests+ChainCall.mm */; };
-		23BA6BDE208CE282005CAFB7 /* UnsafeHandleTests+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3AF23206CDBF900D05634 /* UnsafeHandleTests+ChainCall.mm */; };
-		23BA6BDF208CE282005CAFB7 /* HandleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23EABBE1206D07C200241F3B /* HandleTests.mm */; };
-		23BA6BE0208CE287005CAFB7 /* TableTests+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3AF25206CDC0A00D05634 /* TableTests+ChainCall.mm */; };
-		23BA6BE1208CE287005CAFB7 /* HandleTests+Table.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D5C207A387B00B440CA /* HandleTests+Table.mm */; };
-		23BA6BE2208CE287005CAFB7 /* DatabaseTests+Table.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D5E207A388100B440CA /* DatabaseTests+Table.mm */; };
-		23BA6BE3208CE28C005CAFB7 /* InsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FEC481206B961C001E7A3B /* InsertTests.mm */; };
-		23BA6BE4208CE28C005CAFB7 /* UpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FEC483206B9620001E7A3B /* UpdateTests.mm */; };
-		23BA6BE5208CE28C005CAFB7 /* DeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FEC485206B9627001E7A3B /* DeleteTests.mm */; };
-		23BA6BE6208CE28C005CAFB7 /* SelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FEC487206B9640001E7A3B /* SelectTests.mm */; };
-		23BA6BE7208CE28C005CAFB7 /* RowSelects.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FEC489206B9646001E7A3B /* RowSelects.mm */; };
-		23BA6BE8208CE28C005CAFB7 /* MultiSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FEC48B206B964E001E7A3B /* MultiSelectTests.mm */; };
-		23BA6BE9208CE290005CAFB7 /* DatabaseTests+File.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D2A20691E4600AB79CA /* DatabaseTests+File.mm */; };
-		23BA6BEB208CE290005CAFB7 /* DatabaseTests+Config.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D2E20691E5700AB79CA /* DatabaseTests+Config.mm */; };
-		23BA6BEC208CE290005CAFB7 /* DatabaseTests+Memory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D3020691E5D00AB79CA /* DatabaseTests+Memory.mm */; };
-		23BA6BED208CE290005CAFB7 /* DatabaseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386276207B918F004CAC6F /* DatabaseTests.mm */; };
-		23BA6BEE208CE294005CAFB7 /* DatabaseTests+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD9020651FF4000E31E8 /* DatabaseTests+Convenient.mm */; };
-		23BA6BEF208CE294005CAFB7 /* TableTests+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D062068F7F200AB79CA /* TableTests+Convenient.mm */; };
-		23BA6BF0208CE294005CAFB7 /* HandleTests+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D092068F7FA00AB79CA /* HandleTests+Convenient.mm */; };
-		23BA6BF1208CE299005CAFB7 /* BindParameterTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD252064EB6C000E31E8 /* BindParameterTests.mm */; };
-		23BA6BF2208CE299005CAFB7 /* ColumnConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD262064EB6C000E31E8 /* ColumnConstraintTests.mm */; };
-		23BA6BF3208CE299005CAFB7 /* ColumnDefTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD272064EB6C000E31E8 /* ColumnDefTests.mm */; };
-		23BA6BF4208CE299005CAFB7 /* ColumnTypeTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD282064EB6C000E31E8 /* ColumnTypeTests.mm */; };
-		23BA6BF5208CE299005CAFB7 /* CommonTableExpressionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD292064EB6C000E31E8 /* CommonTableExpressionTests.mm */; };
-		23BA6BF6208CE299005CAFB7 /* ConflictClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD2A2064EB6C000E31E8 /* ConflictClauseTests.mm */; };
-		23BA6BF7208CE299005CAFB7 /* ConvertibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD2B2064EB6C000E31E8 /* ConvertibleTests.mm */; };
-		23BA6BF8208CE299005CAFB7 /* CTETableNameTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD2C2064EB6C000E31E8 /* CTETableNameTests.mm */; };
-		23BA6BF9208CE299005CAFB7 /* ExpressionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD2D2064EB6C000E31E8 /* ExpressionTests.mm */; };
-		23BA6BFA208CE299005CAFB7 /* ForeignKeyClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD2E2064EB6C000E31E8 /* ForeignKeyClauseTests.mm */; };
-		23BA6BFB208CE299005CAFB7 /* IndexedColumnTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD2F2064EB6C000E31E8 /* IndexedColumnTests.mm */; };
-		23BA6BFC208CE299005CAFB7 /* JoinClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD302064EB6C000E31E8 /* JoinClauseTests.mm */; };
-		23BA6BFD208CE299005CAFB7 /* JoinConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD312064EB6C000E31E8 /* JoinConstraintTests.mm */; };
-		23BA6BFE208CE299005CAFB7 /* LiteralValueTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD322064EB6C000E31E8 /* LiteralValueTests.mm */; };
-		23BA6BFF208CE299005CAFB7 /* ModuleArgumentTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD332064EB6C000E31E8 /* ModuleArgumentTests.mm */; };
-		23BA6C00208CE299005CAFB7 /* OrderingTermTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD342064EB6C000E31E8 /* OrderingTermTests.mm */; };
-		23BA6C01208CE299005CAFB7 /* PragmaTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD352064EB6C000E31E8 /* PragmaTests.mm */; };
-		23BA6C02208CE299005CAFB7 /* QualifiedTableNameTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD362064EB6C000E31E8 /* QualifiedTableNameTests.mm */; };
-		23BA6C03208CE299005CAFB7 /* RaiseFunctionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD372064EB6C000E31E8 /* RaiseFunctionTests.mm */; };
-		23BA6C04208CE299005CAFB7 /* ResultColumnTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD382064EB6C000E31E8 /* ResultColumnTests.mm */; };
-		23BA6C05208CE299005CAFB7 /* SelectCoreTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD392064EB6C000E31E8 /* SelectCoreTests.mm */; };
-		23BA6C06208CE299005CAFB7 /* StatementAlterTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD3A2064EB6C000E31E8 /* StatementAlterTableTests.mm */; };
-		23BA6C07208CE299005CAFB7 /* StatementAnalyzeTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD3B2064EB6C000E31E8 /* StatementAnalyzeTests.mm */; };
-		23BA6C08208CE299005CAFB7 /* StatementAttachTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD3C2064EB6C000E31E8 /* StatementAttachTests.mm */; };
-		23BA6C09208CE299005CAFB7 /* StatementBeginTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD3D2064EB6C000E31E8 /* StatementBeginTests.mm */; };
-		23BA6C0A208CE299005CAFB7 /* StatementCommitTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD3E2064EB6C000E31E8 /* StatementCommitTests.mm */; };
-		23BA6C0B208CE299005CAFB7 /* StatementCreateIndexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD3F2064EB6C000E31E8 /* StatementCreateIndexTests.mm */; };
-		23BA6C0C208CE299005CAFB7 /* StatementCreateTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD402064EB6C000E31E8 /* StatementCreateTableTests.mm */; };
-		23BA6C0D208CE299005CAFB7 /* StatementCreateTriggerTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD412064EB6C000E31E8 /* StatementCreateTriggerTests.mm */; };
-		23BA6C0E208CE299005CAFB7 /* StatementCreateViewTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD422064EB6C000E31E8 /* StatementCreateViewTests.mm */; };
-		23BA6C0F208CE299005CAFB7 /* StatementCreateVirtualTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD432064EB6C000E31E8 /* StatementCreateVirtualTableTests.mm */; };
-		23BA6C10208CE299005CAFB7 /* StatementDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD442064EB6C000E31E8 /* StatementDeleteTests.mm */; };
-		23BA6C11208CE299005CAFB7 /* StatementDetachTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD452064EB6C000E31E8 /* StatementDetachTests.mm */; };
-		23BA6C12208CE299005CAFB7 /* StatementDropIndexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD462064EB6C000E31E8 /* StatementDropIndexTests.mm */; };
-		23BA6C13208CE299005CAFB7 /* StatementDropTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD472064EB6C000E31E8 /* StatementDropTableTests.mm */; };
-		23BA6C14208CE299005CAFB7 /* StatementDropTriggerTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD482064EB6C000E31E8 /* StatementDropTriggerTests.mm */; };
-		23BA6C15208CE299005CAFB7 /* StatementDropViewTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD492064EB6C000E31E8 /* StatementDropViewTests.mm */; };
-		23BA6C16208CE299005CAFB7 /* StatementInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD4A2064EB6C000E31E8 /* StatementInsertTests.mm */; };
-		23BA6C17208CE299005CAFB7 /* StatementPragmaTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD4B2064EB6C000E31E8 /* StatementPragmaTests.mm */; };
-		23BA6C18208CE299005CAFB7 /* StatementReindexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD4C2064EB6C000E31E8 /* StatementReindexTests.mm */; };
-		23BA6C19208CE299005CAFB7 /* StatementReleaseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD4D2064EB6C000E31E8 /* StatementReleaseTests.mm */; };
-		23BA6C1A208CE299005CAFB7 /* StatementRollbackTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD4E2064EB6C000E31E8 /* StatementRollbackTests.mm */; };
-		23BA6C1B208CE299005CAFB7 /* StatementSavepointTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD4F2064EB6C000E31E8 /* StatementSavepointTests.mm */; };
-		23BA6C1C208CE299005CAFB7 /* StatementSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD502064EB6C000E31E8 /* StatementSelectTests.mm */; };
-		23BA6C1D208CE299005CAFB7 /* StatementUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD512064EB6C000E31E8 /* StatementUpdateTests.mm */; };
-		23BA6C1E208CE299005CAFB7 /* StatementVacuumTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD522064EB6C000E31E8 /* StatementVacuumTests.mm */; };
-		23BA6C1F208CE299005CAFB7 /* TableConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD532064EB6C000E31E8 /* TableConstraintTests.mm */; };
-		23BA6C20208CE299005CAFB7 /* TableOrSubqueryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD542064EB6C000E31E8 /* TableOrSubqueryTests.mm */; };
-		23BA6C21208CE299005CAFB7 /* UnexpectedTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD552064EB6C000E31E8 /* UnexpectedTests.mm */; };
-		23BA6C22208CE299005CAFB7 /* WINQTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD572064EB6C000E31E8 /* WINQTestCase.mm */; };
-		23BA6C23208CE299005CAFB7 /* WithClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD582064EB6C000E31E8 /* WithClauseTests.mm */; };
 		23BBE3AD20DE19730046A543 /* RepairTests+CorruptionReaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BBE3AC20DE19730046A543 /* RepairTests+CorruptionReaction.mm */; };
-		23BBE3AE20DE19730046A543 /* RepairTests+CorruptionReaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BBE3AC20DE19730046A543 /* RepairTests+CorruptionReaction.mm */; };
 		23C5C6142089DBF700C828AE /* ORMInheritedTestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23C5C6132089DBF700C828AE /* ORMInheritedTestCaseObject.mm */; };
 		23C5C61C2089DCD200C828AE /* ORMTests+Inherited.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23C5C61B2089DCD200C828AE /* ORMTests+Inherited.mm */; };
 		23CB2104206DDBAE000EFB02 /* MigrationTests+SameDatabase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23CB2103206DDBAE000EFB02 /* MigrationTests+SameDatabase.mm */; };
 		23CB2106206DDBB7000EFB02 /* MigrationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23CB2105206DDBB7000EFB02 /* MigrationTests.mm */; };
 		23CB210B206DDBCE000EFB02 /* MigrationTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23CB210A206DDBCE000EFB02 /* MigrationTestCase.mm */; };
 		23CFE85F20DA455B00D112B8 /* RepairTests+Retrieve.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23CFE85E20DA455B00D112B8 /* RepairTests+Retrieve.mm */; };
-		23CFE86020DA455B00D112B8 /* RepairTests+Retrieve.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23CFE85E20DA455B00D112B8 /* RepairTests+Retrieve.mm */; };
 		23D507E720805E220015E1C9 /* MultipleMigrationTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23D507E620805E220015E1C9 /* MultipleMigrationTestCase.mm */; };
 		23D507EA208060CB0015E1C9 /* MultipleMigrationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23D507E9208060CB0015E1C9 /* MultipleMigrationTests.mm */; };
 		23D507EC2080611B0015E1C9 /* MultipleMigrationTestCase+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23D507EB2080611B0015E1C9 /* MultipleMigrationTestCase+Convenient.mm */; };
+		23D53A9920FEEDCB004E1853 /* RepairTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2324D18020D247A000834A82 /* RepairTestCase.mm */; };
+		23D53A9A20FEEDCB004E1853 /* RepairTests+Backup.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23593B7820D369DD0058B416 /* RepairTests+Backup.mm */; };
+		23D53A9B20FEEDCB004E1853 /* RepairTests+Deposit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23191EBF20D7D62400495B65 /* RepairTests+Deposit.mm */; };
+		23D53A9C20FEEDCB004E1853 /* RepairTests+Retrieve.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23CFE85E20DA455B00D112B8 /* RepairTests+Retrieve.mm */; };
+		23D53A9D20FEEDCB004E1853 /* RepairTests+CorruptionReaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BBE3AC20DE19730046A543 /* RepairTests+CorruptionReaction.mm */; };
+		23D53A9E20FEEDCB004E1853 /* RepairTests+Robust.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23B13A7020E086F600B26927 /* RepairTests+Robust.mm */; };
+		23D53A9F20FEEDCB004E1853 /* FileBomber.m in Sources */ = {isa = PBXBuildFile; fileRef = 2367267920DFD5B600A1E7E3 /* FileBomber.m */; };
+		23D53AA020FEEDCB004E1853 /* MigrationTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23CB210A206DDBCE000EFB02 /* MigrationTestCase.mm */; };
+		23D53AA120FEEDCB004E1853 /* TestCaseConflictObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23AA16682098C46F0013912B /* TestCaseConflictObject.mm */; };
+		23D53AA220FEEDCB004E1853 /* MigrationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23CB2105206DDBB7000EFB02 /* MigrationTests.mm */; };
+		23D53AA320FEEDCB004E1853 /* MigrationTests+SameDatabase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23CB2103206DDBAE000EFB02 /* MigrationTests+SameDatabase.mm */; };
+		23D53AA420FEEDCB004E1853 /* MigrationTests+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D432079BCAB00B440CA /* MigrationTests+Convenient.mm */; };
+		23D53AA520FEEDCB004E1853 /* MigrationTests+SameDatabase+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D542079F92D00B440CA /* MigrationTests+SameDatabase+Convenient.mm */; };
+		23D53AA620FEEDCB004E1853 /* MigrationTests+Innocent+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D56207A22F000B440CA /* MigrationTests+Innocent+Convenient.mm */; };
+		23D53AA720FEEDCB004E1853 /* MultipleMigrationTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23D507E620805E220015E1C9 /* MultipleMigrationTestCase.mm */; };
+		23D53AA820FEEDCB004E1853 /* MultipleMigrationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23D507E9208060CB0015E1C9 /* MultipleMigrationTests.mm */; };
+		23D53AA920FEEDCB004E1853 /* MultipleMigrationTestCase+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23D507EB2080611B0015E1C9 /* MultipleMigrationTestCase+Convenient.mm */; };
+		23D53AAA20FEEDCB004E1853 /* ORMTests+Inherited.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23C5C61B2089DCD200C828AE /* ORMTests+Inherited.mm */; };
+		23D53AAB20FEEDCB004E1853 /* ORMRebindOld.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2338626E207B8A42004CAC6F /* ORMRebindOld.mm */; };
+		23D53AAC20FEEDCB004E1853 /* ORMRebindNew.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386272207B8A47004CAC6F /* ORMRebindNew.mm */; };
+		23D53AAD20FEEDCB004E1853 /* ORMTests+Rebind.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386274207B8AF2004CAC6F /* ORMTests+Rebind.mm */; };
+		23D53AAE20FEEDCB004E1853 /* ORMTests+ColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386203207B48DF004CAC6F /* ORMTests+ColumnCoding.mm */; };
+		23D53AAF20FEEDCB004E1853 /* ORMColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386255207B5E1E004CAC6F /* ORMColumnCoding.mm */; };
+		23D53AB020FEEDCB004E1853 /* ORMTests+ColumnConstraint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386201207B48DF004CAC6F /* ORMTests+ColumnConstraint.mm */; };
+		23D53AB120FEEDCB004E1853 /* ORMColumnConstraintPrimary.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386215207B4ED6004CAC6F /* ORMColumnConstraintPrimary.mm */; };
+		23D53AB220FEEDCB004E1853 /* ORMColumnConstraintPrimaryAsc.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386219207B4EE0004CAC6F /* ORMColumnConstraintPrimaryAsc.mm */; };
+		23D53AB320FEEDCB004E1853 /* ORMColumnConstraintPrimaryDesc.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2338621D207B4EE6004CAC6F /* ORMColumnConstraintPrimaryDesc.mm */; };
+		23D53AB420FEEDCB004E1853 /* ORMColumnConstraintPrimaryAutoIncrement.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386221207B4EEF004CAC6F /* ORMColumnConstraintPrimaryAutoIncrement.mm */; };
+		23D53AB520FEEDCB004E1853 /* ORMColumnConstraintPrimaryAscAutoIncrement.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386225207B4EFA004CAC6F /* ORMColumnConstraintPrimaryAscAutoIncrement.mm */; };
+		23D53AB620FEEDCB004E1853 /* ORMColumnConstraintPrimaryImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386229207B4F05004CAC6F /* ORMColumnConstraintPrimaryImpl.mm */; };
+		23D53AB720FEEDCB004E1853 /* ORMColumnConstraintNotNull.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386231207B4F18004CAC6F /* ORMColumnConstraintNotNull.mm */; };
+		23D53AB820FEEDCB004E1853 /* ORMColumnConstraintUnique.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386235207B4F1F004CAC6F /* ORMColumnConstraintUnique.mm */; };
+		23D53AB920FEEDCB004E1853 /* ORMTests+Index.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233861FB207B48DE004CAC6F /* ORMTests+Index.mm */; };
+		23D53ABA20FEEDCB004E1853 /* ORMIndex.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386249207B595A004CAC6F /* ORMIndex.mm */; };
+		23D53ABB20FEEDCB004E1853 /* ORMMultiIndex.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2338624D207B5961004CAC6F /* ORMMultiIndex.mm */; };
+		23D53ABC20FEEDCB004E1853 /* ORMUniqueIndex.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386251207B596B004CAC6F /* ORMUniqueIndex.mm */; };
+		23D53ABD20FEEDCB004E1853 /* ORMTests+Property.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233861FF207B48DF004CAC6F /* ORMTests+Property.mm */; };
+		23D53ABE20FEEDCB004E1853 /* ORMProperty.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2338620E207B48F9004CAC6F /* ORMProperty.mm */; };
+		23D53ABF20FEEDCB004E1853 /* ORMTests+TableConstraint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386205207B48DF004CAC6F /* ORMTests+TableConstraint.mm */; };
+		23D53AC020FEEDCB004E1853 /* ORMTableConstraintMultiPrimary.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386239207B5391004CAC6F /* ORMTableConstraintMultiPrimary.mm */; };
+		23D53AC120FEEDCB004E1853 /* ORMTableConstraintMultiUnique.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2338623D207B53A1004CAC6F /* ORMTableConstraintMultiUnique.mm */; };
+		23D53AC220FEEDCB004E1853 /* ORMTableConstraintCheck.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386241207B53AA004CAC6F /* ORMTableConstraintCheck.mm */; };
+		23D53AC320FEEDCB004E1853 /* ORMTableConstraintForeignKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386245207B53B2004CAC6F /* ORMTableConstraintForeignKey.mm */; };
+		23D53AC420FEEDCB004E1853 /* ORMTests+VirtualTable.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233861FD207B48DE004CAC6F /* ORMTests+VirtualTable.mm */; };
+		23D53AC520FEEDCB004E1853 /* ORMVirtualTable.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386259207B6C1D004CAC6F /* ORMVirtualTable.mm */; };
+		23D53AC620FEEDCB004E1853 /* ORMVirtualTableTokenize.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386261207B6C46004CAC6F /* ORMVirtualTableTokenize.mm */; };
+		23D53AC720FEEDCB004E1853 /* ORMVirtualTableTokenizeWCDB.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386265207B6C4B004CAC6F /* ORMVirtualTableTokenizeWCDB.mm */; };
+		23D53AC820FEEDCB004E1853 /* ORMVirtualTableModuleFTS3.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386269207B6C53004CAC6F /* ORMVirtualTableModuleFTS3.mm */; };
+		23D53AC920FEEDCB004E1853 /* ORMTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386211207B4A3C004CAC6F /* ORMTestCase.mm */; };
+		23D53ACA20FEEDCB004E1853 /* ORMInheritedTestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23C5C6132089DBF700C828AE /* ORMInheritedTestCaseObject.mm */; };
+		23D53ACB20FEEDCB004E1853 /* DatabaseTests+Transaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233861E3207B076D004CAC6F /* DatabaseTests+Transaction.mm */; };
+		23D53ACC20FEEDCB004E1853 /* TableTests+Transaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233861E6207B1916004CAC6F /* TableTests+Transaction.mm */; };
+		23D53ACD20FEEDCB004E1853 /* HandleTests+Transaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233861E8207B191E004CAC6F /* HandleTests+Transaction.mm */; };
+		23D53ACE20FEEDCB004E1853 /* HandleTests+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3AF21206CDBE300D05634 /* HandleTests+ChainCall.mm */; };
+		23D53ACF20FEEDCB004E1853 /* UnsafeHandleTests+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3AF23206CDBF900D05634 /* UnsafeHandleTests+ChainCall.mm */; };
+		23D53AD020FEEDCB004E1853 /* HandleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23EABBE1206D07C200241F3B /* HandleTests.mm */; };
+		23D53AD120FEEDCB004E1853 /* TableTests+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3AF25206CDC0A00D05634 /* TableTests+ChainCall.mm */; };
+		23D53AD220FEEDCB004E1853 /* HandleTests+Table.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D5C207A387B00B440CA /* HandleTests+Table.mm */; };
+		23D53AD320FEEDCB004E1853 /* DatabaseTests+Table.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D5E207A388100B440CA /* DatabaseTests+Table.mm */; };
+		23D53AD420FEEDCB004E1853 /* InsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FEC481206B961C001E7A3B /* InsertTests.mm */; };
+		23D53AD520FEEDCB004E1853 /* UpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FEC483206B9620001E7A3B /* UpdateTests.mm */; };
+		23D53AD620FEEDCB004E1853 /* DeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FEC485206B9627001E7A3B /* DeleteTests.mm */; };
+		23D53AD720FEEDCB004E1853 /* SelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FEC487206B9640001E7A3B /* SelectTests.mm */; };
+		23D53AD820FEEDCB004E1853 /* RowSelects.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FEC489206B9646001E7A3B /* RowSelects.mm */; };
+		23D53AD920FEEDCB004E1853 /* MultiSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FEC48B206B964E001E7A3B /* MultiSelectTests.mm */; };
+		23D53ADA20FEEDCB004E1853 /* DatabaseTests+File.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D2A20691E4600AB79CA /* DatabaseTests+File.mm */; };
+		23D53ADB20FEEDCB004E1853 /* DatabaseTests+Config.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D2E20691E5700AB79CA /* DatabaseTests+Config.mm */; };
+		23D53ADC20FEEDCB004E1853 /* DatabaseTests+Memory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D3020691E5D00AB79CA /* DatabaseTests+Memory.mm */; };
+		23D53ADD20FEEDCB004E1853 /* DatabaseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23386276207B918F004CAC6F /* DatabaseTests.mm */; };
+		23D53ADE20FEEDCB004E1853 /* DatabaseTests+Trace.mm in Sources */ = {isa = PBXBuildFile; fileRef = 236A46AE20D7526E001816AF /* DatabaseTests+Trace.mm */; };
+		23D53ADF20FEEDCB004E1853 /* DatabaseTests+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD9020651FF4000E31E8 /* DatabaseTests+Convenient.mm */; };
+		23D53AE020FEEDCB004E1853 /* TableTests+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D062068F7F200AB79CA /* TableTests+Convenient.mm */; };
+		23D53AE120FEEDCB004E1853 /* HandleTests+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237B4D092068F7FA00AB79CA /* HandleTests+Convenient.mm */; };
+		23D53AE220FEEDCB004E1853 /* BindParameterTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD252064EB6C000E31E8 /* BindParameterTests.mm */; };
+		23D53AE320FEEDCB004E1853 /* ColumnConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD262064EB6C000E31E8 /* ColumnConstraintTests.mm */; };
+		23D53AE420FEEDCB004E1853 /* ColumnDefTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD272064EB6C000E31E8 /* ColumnDefTests.mm */; };
+		23D53AE520FEEDCB004E1853 /* ColumnTypeTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD282064EB6C000E31E8 /* ColumnTypeTests.mm */; };
+		23D53AE620FEEDCB004E1853 /* CommonTableExpressionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD292064EB6C000E31E8 /* CommonTableExpressionTests.mm */; };
+		23D53AE720FEEDCB004E1853 /* ConflictClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD2A2064EB6C000E31E8 /* ConflictClauseTests.mm */; };
+		23D53AE820FEEDCB004E1853 /* ConvertibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD2B2064EB6C000E31E8 /* ConvertibleTests.mm */; };
+		23D53AE920FEEDCB004E1853 /* CTETableNameTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD2C2064EB6C000E31E8 /* CTETableNameTests.mm */; };
+		23D53AEA20FEEDCB004E1853 /* ExpressionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD2D2064EB6C000E31E8 /* ExpressionTests.mm */; };
+		23D53AEB20FEEDCB004E1853 /* ForeignKeyClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD2E2064EB6C000E31E8 /* ForeignKeyClauseTests.mm */; };
+		23D53AEC20FEEDCB004E1853 /* IndexedColumnTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD2F2064EB6C000E31E8 /* IndexedColumnTests.mm */; };
+		23D53AED20FEEDCB004E1853 /* JoinClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD302064EB6C000E31E8 /* JoinClauseTests.mm */; };
+		23D53AEE20FEEDCB004E1853 /* JoinConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD312064EB6C000E31E8 /* JoinConstraintTests.mm */; };
+		23D53AEF20FEEDCB004E1853 /* LiteralValueTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD322064EB6C000E31E8 /* LiteralValueTests.mm */; };
+		23D53AF020FEEDCB004E1853 /* ModuleArgumentTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD332064EB6C000E31E8 /* ModuleArgumentTests.mm */; };
+		23D53AF120FEEDCB004E1853 /* OrderingTermTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD342064EB6C000E31E8 /* OrderingTermTests.mm */; };
+		23D53AF220FEEDCB004E1853 /* PragmaTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD352064EB6C000E31E8 /* PragmaTests.mm */; };
+		23D53AF320FEEDCB004E1853 /* QualifiedTableNameTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD362064EB6C000E31E8 /* QualifiedTableNameTests.mm */; };
+		23D53AF420FEEDCB004E1853 /* RaiseFunctionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD372064EB6C000E31E8 /* RaiseFunctionTests.mm */; };
+		23D53AF520FEEDCB004E1853 /* ResultColumnTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD382064EB6C000E31E8 /* ResultColumnTests.mm */; };
+		23D53AF620FEEDCB004E1853 /* SelectCoreTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD392064EB6C000E31E8 /* SelectCoreTests.mm */; };
+		23D53AF720FEEDCB004E1853 /* StatementAlterTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD3A2064EB6C000E31E8 /* StatementAlterTableTests.mm */; };
+		23D53AF820FEEDCB004E1853 /* StatementAnalyzeTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD3B2064EB6C000E31E8 /* StatementAnalyzeTests.mm */; };
+		23D53AF920FEEDCB004E1853 /* StatementAttachTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD3C2064EB6C000E31E8 /* StatementAttachTests.mm */; };
+		23D53AFA20FEEDCB004E1853 /* StatementBeginTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD3D2064EB6C000E31E8 /* StatementBeginTests.mm */; };
+		23D53AFB20FEEDCB004E1853 /* StatementCommitTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD3E2064EB6C000E31E8 /* StatementCommitTests.mm */; };
+		23D53AFC20FEEDCB004E1853 /* StatementCreateIndexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD3F2064EB6C000E31E8 /* StatementCreateIndexTests.mm */; };
+		23D53AFD20FEEDCB004E1853 /* StatementCreateTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD402064EB6C000E31E8 /* StatementCreateTableTests.mm */; };
+		23D53AFE20FEEDCB004E1853 /* StatementCreateTriggerTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD412064EB6C000E31E8 /* StatementCreateTriggerTests.mm */; };
+		23D53AFF20FEEDCB004E1853 /* StatementCreateViewTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD422064EB6C000E31E8 /* StatementCreateViewTests.mm */; };
+		23D53B0020FEEDCB004E1853 /* StatementCreateVirtualTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD432064EB6C000E31E8 /* StatementCreateVirtualTableTests.mm */; };
+		23D53B0120FEEDCB004E1853 /* StatementDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD442064EB6C000E31E8 /* StatementDeleteTests.mm */; };
+		23D53B0220FEEDCB004E1853 /* StatementDetachTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD452064EB6C000E31E8 /* StatementDetachTests.mm */; };
+		23D53B0320FEEDCB004E1853 /* StatementDropIndexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD462064EB6C000E31E8 /* StatementDropIndexTests.mm */; };
+		23D53B0420FEEDCB004E1853 /* StatementDropTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD472064EB6C000E31E8 /* StatementDropTableTests.mm */; };
+		23D53B0520FEEDCB004E1853 /* StatementDropTriggerTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD482064EB6C000E31E8 /* StatementDropTriggerTests.mm */; };
+		23D53B0620FEEDCB004E1853 /* StatementDropViewTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD492064EB6C000E31E8 /* StatementDropViewTests.mm */; };
+		23D53B0720FEEDCB004E1853 /* StatementInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD4A2064EB6C000E31E8 /* StatementInsertTests.mm */; };
+		23D53B0820FEEDCB004E1853 /* StatementPragmaTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD4B2064EB6C000E31E8 /* StatementPragmaTests.mm */; };
+		23D53B0920FEEDCB004E1853 /* StatementReindexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD4C2064EB6C000E31E8 /* StatementReindexTests.mm */; };
+		23D53B0A20FEEDCB004E1853 /* StatementReleaseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD4D2064EB6C000E31E8 /* StatementReleaseTests.mm */; };
+		23D53B0B20FEEDCB004E1853 /* StatementRollbackTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD4E2064EB6C000E31E8 /* StatementRollbackTests.mm */; };
+		23D53B0C20FEEDCB004E1853 /* StatementSavepointTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD4F2064EB6C000E31E8 /* StatementSavepointTests.mm */; };
+		23D53B0D20FEEDCB004E1853 /* StatementSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD502064EB6C000E31E8 /* StatementSelectTests.mm */; };
+		23D53B0E20FEEDCB004E1853 /* StatementUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD512064EB6C000E31E8 /* StatementUpdateTests.mm */; };
+		23D53B0F20FEEDCB004E1853 /* StatementVacuumTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD522064EB6C000E31E8 /* StatementVacuumTests.mm */; };
+		23D53B1020FEEDCB004E1853 /* TableConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD532064EB6C000E31E8 /* TableConstraintTests.mm */; };
+		23D53B1120FEEDCB004E1853 /* TableOrSubqueryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD542064EB6C000E31E8 /* TableOrSubqueryTests.mm */; };
+		23D53B1220FEEDCB004E1853 /* UnexpectedTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD552064EB6C000E31E8 /* UnexpectedTests.mm */; };
+		23D53B1320FEEDCB004E1853 /* WINQTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD572064EB6C000E31E8 /* WINQTestCase.mm */; };
+		23D53B1420FEEDCB004E1853 /* WithClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD582064EB6C000E31E8 /* WithClauseTests.mm */; };
+		23D53B1520FEEDCB004E1853 /* RepairTestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2308F6B620E0D38E001CD9C3 /* RepairTestCaseObject.mm */; };
 		23E58B59200F577400E0CECE /* Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E58B58200F577400E0CECE /* Convenience.m */; };
 		23E82836209EBB2D00807001 /* CipherBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23E82835209EBB2D00807001 /* CipherBenchmark.mm */; };
 		23E82839209F3BD900807001 /* InitializationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23E82838209F3BD900807001 /* InitializationBenchmark.mm */; };
@@ -382,20 +315,6 @@
 			remoteGlobalIDString = 239326601E836D7300D677CC;
 			remoteInfo = WCDB;
 		};
-		2324D16720D2470200834A82 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 239326601E836D7300D677CC;
-			remoteInfo = WCDB;
-		};
-		2324D16920D2470200834A82 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23698A4320045EF100C0291C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2313B6BD20A2F2EE0067C211;
-			remoteInfo = TestHost;
-		};
 		2349ED9A20A31BC800763F30 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 23698A4320045EF100C0291C /* Project object */;
@@ -410,69 +329,6 @@
 			remoteGlobalIDString = 2313B6BD20A2F2EE0067C211;
 			remoteInfo = TestHost;
 		};
-		2349ED9E20A31C1600763F30 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23698A4320045EF100C0291C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2313B6BD20A2F2EE0067C211;
-			remoteInfo = TestHost;
-		};
-		2349EDA020A31C1800763F30 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23698A4320045EF100C0291C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2313B6BD20A2F2EE0067C211;
-			remoteInfo = TestHost;
-		};
-		2349EDA220A31C1A00763F30 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23698A4320045EF100C0291C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2313B6BD20A2F2EE0067C211;
-			remoteInfo = TestHost;
-		};
-		2349EDA420A31C1C00763F30 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23698A4320045EF100C0291C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2313B6BD20A2F2EE0067C211;
-			remoteInfo = TestHost;
-		};
-		2349EDA620A31C1E00763F30 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23698A4320045EF100C0291C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2313B6BD20A2F2EE0067C211;
-			remoteInfo = TestHost;
-		};
-		2349EDA820A31C2000763F30 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23698A4320045EF100C0291C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2313B6BD20A2F2EE0067C211;
-			remoteInfo = TestHost;
-		};
-		2349EDAA20A31C2200763F30 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23698A4320045EF100C0291C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2313B6BD20A2F2EE0067C211;
-			remoteInfo = TestHost;
-		};
-		2349EDAC20A31C2300763F30 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23698A4320045EF100C0291C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2313B6BD20A2F2EE0067C211;
-			remoteInfo = TestHost;
-		};
-		2349EDAE20A31C2500763F30 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23698A4320045EF100C0291C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2313B6BD20A2F2EE0067C211;
-			remoteInfo = TestHost;
-		};
 		23698A8020045F4A00C0291C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
@@ -481,69 +337,6 @@
 			remoteInfo = WCDB;
 		};
 		23BA6AD1208CE0D7005CAFB7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 239326601E836D7300D677CC;
-			remoteInfo = WCDB;
-		};
-		23BA6AE8208CE12D005CAFB7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 239326601E836D7300D677CC;
-			remoteInfo = WCDB;
-		};
-		23BA6AFA208CE132005CAFB7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 239326601E836D7300D677CC;
-			remoteInfo = WCDB;
-		};
-		23BA6B0C208CE139005CAFB7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 239326601E836D7300D677CC;
-			remoteInfo = WCDB;
-		};
-		23BA6B1E208CE13A005CAFB7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 239326601E836D7300D677CC;
-			remoteInfo = WCDB;
-		};
-		23BA6B30208CE13C005CAFB7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 239326601E836D7300D677CC;
-			remoteInfo = WCDB;
-		};
-		23BA6B42208CE13E005CAFB7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 239326601E836D7300D677CC;
-			remoteInfo = WCDB;
-		};
-		23BA6B54208CE13F005CAFB7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 239326601E836D7300D677CC;
-			remoteInfo = WCDB;
-		};
-		23BA6B66208CE140005CAFB7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 239326601E836D7300D677CC;
-			remoteInfo = WCDB;
-		};
-		23BA6B78208CE142005CAFB7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 23698A7820045F4A00C0291C /* WCDB.xcodeproj */;
 			proxyType = 1;
@@ -588,7 +381,6 @@
 		2313B6CE20A2F2F00067C211 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2313B6CF20A2F2F00067C211 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		23191EBF20D7D62400495B65 /* RepairTests+Deposit.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "RepairTests+Deposit.mm"; sourceTree = "<group>"; };
-		2324D17920D2470200834A82 /* Repair Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Repair Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2324D17F20D247A000834A82 /* RepairTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RepairTestCase.h; sourceTree = "<group>"; };
 		2324D18020D247A000834A82 /* RepairTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RepairTestCase.mm; sourceTree = "<group>"; };
 		233861E3207B076D004CAC6F /* DatabaseTests+Transaction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "DatabaseTests+Transaction.mm"; sourceTree = "<group>"; };
@@ -734,7 +526,7 @@
 		235F5D5E207A388100B440CA /* DatabaseTests+Table.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "DatabaseTests+Table.mm"; sourceTree = "<group>"; };
 		2367267820DFD5B500A1E7E3 /* FileBomber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileBomber.h; sourceTree = "<group>"; };
 		2367267920DFD5B600A1E7E3 /* FileBomber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileBomber.m; sourceTree = "<group>"; };
-		23698A6320045EF100C0291C /* Coverage Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Coverage Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		23698A6320045EF100C0291C /* CoverageTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoverageTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		23698A7820045F4A00C0291C /* WCDB.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = WCDB.xcodeproj; path = ../WCDB.xcodeproj; sourceTree = "<group>"; };
 		23698A8C2004613600C0291C /* TestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCase.mm; sourceTree = "<group>"; };
 		23698A8E2004619800C0291C /* TestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestCase.h; sourceTree = "<group>"; };
@@ -776,16 +568,7 @@
 		23AA16692098C46F0013912B /* TestCaseConflictObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestCaseConflictObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		23AA166A2098C46F0013912B /* TestCaseConflictObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestCaseConflictObject.h; sourceTree = "<group>"; };
 		23B13A7020E086F600B26927 /* RepairTests+Robust.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "RepairTests+Robust.mm"; sourceTree = "<group>"; };
-		23BA69BD208CE0AC005CAFB7 /* FTS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FTS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		23BA6AF6208CE12D005CAFB7 /* Migration Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Migration Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		23BA6B08208CE132005CAFB7 /* ORM Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ORM Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		23BA6B1A208CE139005CAFB7 /* Transaction Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Transaction Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		23BA6B2C208CE13A005CAFB7 /* Handle Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Handle Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		23BA6B3E208CE13C005CAFB7 /* Table Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Table Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		23BA6B50208CE13E005CAFB7 /* ChainCall Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ChainCall Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		23BA6B62208CE13F005CAFB7 /* Database Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Database Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		23BA6B74208CE140005CAFB7 /* Convenient Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Convenient Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		23BA6B86208CE142005CAFB7 /* WINQ Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "WINQ Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		23BA69BD208CE0AC005CAFB7 /* CorrectnessTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CorrectnessTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		23BBE3AC20DE19730046A543 /* RepairTests+CorruptionReaction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "RepairTests+CorruptionReaction.mm"; sourceTree = "<group>"; };
 		23C5C6112089DBF700C828AE /* ORMInheritedTestCaseObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ORMInheritedTestCaseObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		23C5C6122089DBF700C828AE /* ORMInheritedTestCaseObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORMInheritedTestCaseObject.h; sourceTree = "<group>"; };
@@ -827,14 +610,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2324D17320D2470200834A82 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2324D17420D2470200834A82 /* WCDB.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		23698A6020045EF100C0291C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -856,78 +631,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				23BA6AD3208CE0DE005CAFB7 /* WCDB.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6AF0208CE12D005CAFB7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				23BA6AF1208CE12D005CAFB7 /* WCDB.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6B02208CE132005CAFB7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				23BA6B03208CE132005CAFB7 /* WCDB.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6B14208CE139005CAFB7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				23BA6B15208CE139005CAFB7 /* WCDB.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6B26208CE13A005CAFB7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				23BA6B27208CE13A005CAFB7 /* WCDB.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6B38208CE13C005CAFB7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				23BA6B39208CE13C005CAFB7 /* WCDB.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6B4A208CE13E005CAFB7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				23BA6B4B208CE13E005CAFB7 /* WCDB.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6B5C208CE13F005CAFB7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				23BA6B5D208CE13F005CAFB7 /* WCDB.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6B6E208CE140005CAFB7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				23BA6B6F208CE140005CAFB7 /* WCDB.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6B80208CE142005CAFB7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				23BA6B81208CE142005CAFB7 /* WCDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1169,20 +872,10 @@
 		23698A4C20045EF100C0291C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				23698A6320045EF100C0291C /* Coverage Tests.xctest */,
+				23698A6320045EF100C0291C /* CoverageTests.xctest */,
 				23698B6A20047E1A00C0291C /* Benchmark.xctest */,
-				23BA69BD208CE0AC005CAFB7 /* FTS Tests.xctest */,
-				23BA6AF6208CE12D005CAFB7 /* Migration Tests.xctest */,
-				23BA6B08208CE132005CAFB7 /* ORM Tests.xctest */,
-				23BA6B1A208CE139005CAFB7 /* Transaction Tests.xctest */,
-				23BA6B2C208CE13A005CAFB7 /* Handle Tests.xctest */,
-				23BA6B3E208CE13C005CAFB7 /* Table Tests.xctest */,
-				23BA6B50208CE13E005CAFB7 /* ChainCall Tests.xctest */,
-				23BA6B62208CE13F005CAFB7 /* Database Tests.xctest */,
-				23BA6B74208CE140005CAFB7 /* Convenient Tests.xctest */,
-				23BA6B86208CE142005CAFB7 /* WINQ Tests.xctest */,
+				23BA69BD208CE0AC005CAFB7 /* CorrectnessTests.xctest */,
 				2313B6BE20A2F2EE0067C211 /* TestHost.app */,
-				2324D17920D2470200834A82 /* Repair Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1422,28 +1115,9 @@
 			productReference = 2313B6BE20A2F2EE0067C211 /* TestHost.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2324D16520D2470200834A82 /* Repair Tests */ = {
+		23698A6220045EF100C0291C /* CoverageTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2324D17620D2470200834A82 /* Build configuration list for PBXNativeTarget "Repair Tests" */;
-			buildPhases = (
-				2324D16A20D2470200834A82 /* Sources */,
-				2324D17320D2470200834A82 /* Frameworks */,
-				2324D17520D2470200834A82 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				2324D16620D2470200834A82 /* PBXTargetDependency */,
-				2324D16820D2470200834A82 /* PBXTargetDependency */,
-			);
-			name = "Repair Tests";
-			productName = testcaseTests;
-			productReference = 2324D17920D2470200834A82 /* Repair Tests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		23698A6220045EF100C0291C /* Coverage Tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 23698A6F20045EF100C0291C /* Build configuration list for PBXNativeTarget "Coverage Tests" */;
+			buildConfigurationList = 23698A6F20045EF100C0291C /* Build configuration list for PBXNativeTarget "CoverageTests" */;
 			buildPhases = (
 				23698A5F20045EF100C0291C /* Sources */,
 				23698A6020045EF100C0291C /* Frameworks */,
@@ -1455,9 +1129,9 @@
 				23F5BE262088839C000CCD37 /* PBXTargetDependency */,
 				2349ED9B20A31BC800763F30 /* PBXTargetDependency */,
 			);
-			name = "Coverage Tests";
+			name = CoverageTests;
 			productName = testcaseTests;
-			productReference = 23698A6320045EF100C0291C /* Coverage Tests.xctest */;
+			productReference = 23698A6320045EF100C0291C /* CoverageTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		23698B3C20047E1A00C0291C /* Benchmark */ = {
@@ -1479,9 +1153,9 @@
 			productReference = 23698B6A20047E1A00C0291C /* Benchmark.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		23BA6937208CE0AC005CAFB7 /* FTS Tests */ = {
+		23BA6937208CE0AC005CAFB7 /* CorrectnessTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 23BA69BA208CE0AC005CAFB7 /* Build configuration list for PBXNativeTarget "FTS Tests" */;
+			buildConfigurationList = 23BA69BA208CE0AC005CAFB7 /* Build configuration list for PBXNativeTarget "CorrectnessTests" */;
 			buildPhases = (
 				23BA693A208CE0AC005CAFB7 /* Sources */,
 				23BA69B7208CE0AC005CAFB7 /* Frameworks */,
@@ -1493,180 +1167,9 @@
 				23BA6AD2208CE0D7005CAFB7 /* PBXTargetDependency */,
 				2349ED9D20A31C1400763F30 /* PBXTargetDependency */,
 			);
-			name = "FTS Tests";
+			name = CorrectnessTests;
 			productName = testcaseTests;
-			productReference = 23BA69BD208CE0AC005CAFB7 /* FTS Tests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		23BA6AE6208CE12D005CAFB7 /* Migration Tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 23BA6AF3208CE12D005CAFB7 /* Build configuration list for PBXNativeTarget "Migration Tests" */;
-			buildPhases = (
-				23BA6AE9208CE12D005CAFB7 /* Sources */,
-				23BA6AF0208CE12D005CAFB7 /* Frameworks */,
-				23BA6AF2208CE12D005CAFB7 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				23BA6AE7208CE12D005CAFB7 /* PBXTargetDependency */,
-				2349ED9F20A31C1600763F30 /* PBXTargetDependency */,
-			);
-			name = "Migration Tests";
-			productName = testcaseTests;
-			productReference = 23BA6AF6208CE12D005CAFB7 /* Migration Tests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		23BA6AF8208CE132005CAFB7 /* ORM Tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 23BA6B05208CE132005CAFB7 /* Build configuration list for PBXNativeTarget "ORM Tests" */;
-			buildPhases = (
-				23BA6AFB208CE132005CAFB7 /* Sources */,
-				23BA6B02208CE132005CAFB7 /* Frameworks */,
-				23BA6B04208CE132005CAFB7 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				23BA6AF9208CE132005CAFB7 /* PBXTargetDependency */,
-				2349EDA120A31C1800763F30 /* PBXTargetDependency */,
-			);
-			name = "ORM Tests";
-			productName = testcaseTests;
-			productReference = 23BA6B08208CE132005CAFB7 /* ORM Tests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		23BA6B0A208CE139005CAFB7 /* Transaction Tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 23BA6B17208CE139005CAFB7 /* Build configuration list for PBXNativeTarget "Transaction Tests" */;
-			buildPhases = (
-				23BA6B0D208CE139005CAFB7 /* Sources */,
-				23BA6B14208CE139005CAFB7 /* Frameworks */,
-				23BA6B16208CE139005CAFB7 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				23BA6B0B208CE139005CAFB7 /* PBXTargetDependency */,
-				2349EDA320A31C1A00763F30 /* PBXTargetDependency */,
-			);
-			name = "Transaction Tests";
-			productName = testcaseTests;
-			productReference = 23BA6B1A208CE139005CAFB7 /* Transaction Tests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		23BA6B1C208CE13A005CAFB7 /* Handle Tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 23BA6B29208CE13A005CAFB7 /* Build configuration list for PBXNativeTarget "Handle Tests" */;
-			buildPhases = (
-				23BA6B1F208CE13A005CAFB7 /* Sources */,
-				23BA6B26208CE13A005CAFB7 /* Frameworks */,
-				23BA6B28208CE13A005CAFB7 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				23BA6B1D208CE13A005CAFB7 /* PBXTargetDependency */,
-				2349EDA520A31C1C00763F30 /* PBXTargetDependency */,
-			);
-			name = "Handle Tests";
-			productName = testcaseTests;
-			productReference = 23BA6B2C208CE13A005CAFB7 /* Handle Tests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		23BA6B2E208CE13C005CAFB7 /* Table Tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 23BA6B3B208CE13C005CAFB7 /* Build configuration list for PBXNativeTarget "Table Tests" */;
-			buildPhases = (
-				23BA6B31208CE13C005CAFB7 /* Sources */,
-				23BA6B38208CE13C005CAFB7 /* Frameworks */,
-				23BA6B3A208CE13C005CAFB7 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				23BA6B2F208CE13C005CAFB7 /* PBXTargetDependency */,
-				2349EDA720A31C1E00763F30 /* PBXTargetDependency */,
-			);
-			name = "Table Tests";
-			productName = testcaseTests;
-			productReference = 23BA6B3E208CE13C005CAFB7 /* Table Tests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		23BA6B40208CE13E005CAFB7 /* ChainCall Tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 23BA6B4D208CE13E005CAFB7 /* Build configuration list for PBXNativeTarget "ChainCall Tests" */;
-			buildPhases = (
-				23BA6B43208CE13E005CAFB7 /* Sources */,
-				23BA6B4A208CE13E005CAFB7 /* Frameworks */,
-				23BA6B4C208CE13E005CAFB7 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				23BA6B41208CE13E005CAFB7 /* PBXTargetDependency */,
-				2349EDA920A31C2000763F30 /* PBXTargetDependency */,
-			);
-			name = "ChainCall Tests";
-			productName = testcaseTests;
-			productReference = 23BA6B50208CE13E005CAFB7 /* ChainCall Tests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		23BA6B52208CE13F005CAFB7 /* Database Tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 23BA6B5F208CE13F005CAFB7 /* Build configuration list for PBXNativeTarget "Database Tests" */;
-			buildPhases = (
-				23BA6B55208CE13F005CAFB7 /* Sources */,
-				23BA6B5C208CE13F005CAFB7 /* Frameworks */,
-				23BA6B5E208CE13F005CAFB7 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				23BA6B53208CE13F005CAFB7 /* PBXTargetDependency */,
-				2349EDAB20A31C2200763F30 /* PBXTargetDependency */,
-			);
-			name = "Database Tests";
-			productName = testcaseTests;
-			productReference = 23BA6B62208CE13F005CAFB7 /* Database Tests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		23BA6B64208CE140005CAFB7 /* Convenient Tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 23BA6B71208CE140005CAFB7 /* Build configuration list for PBXNativeTarget "Convenient Tests" */;
-			buildPhases = (
-				23BA6B67208CE140005CAFB7 /* Sources */,
-				23BA6B6E208CE140005CAFB7 /* Frameworks */,
-				23BA6B70208CE140005CAFB7 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				23BA6B65208CE140005CAFB7 /* PBXTargetDependency */,
-				2349EDAD20A31C2300763F30 /* PBXTargetDependency */,
-			);
-			name = "Convenient Tests";
-			productName = testcaseTests;
-			productReference = 23BA6B74208CE140005CAFB7 /* Convenient Tests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		23BA6B76208CE142005CAFB7 /* WINQ Tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 23BA6B83208CE142005CAFB7 /* Build configuration list for PBXNativeTarget "WINQ Tests" */;
-			buildPhases = (
-				23BA6B79208CE142005CAFB7 /* Sources */,
-				23BA6B80208CE142005CAFB7 /* Frameworks */,
-				23BA6B82208CE142005CAFB7 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				23BA6B77208CE142005CAFB7 /* PBXTargetDependency */,
-				2349EDAF20A31C2500763F30 /* PBXTargetDependency */,
-			);
-			name = "WINQ Tests";
-			productName = testcaseTests;
-			productReference = 23BA6B86208CE142005CAFB7 /* WINQ Tests.xctest */;
+			productReference = 23BA69BD208CE0AC005CAFB7 /* CorrectnessTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -1682,9 +1185,6 @@
 						CreatedOnToolsVersion = 9.3;
 						ProvisioningStyle = Automatic;
 					};
-					2324D16520D2470200834A82 = {
-						TestTargetID = 2313B6BD20A2F2EE0067C211;
-					};
 					23698A6220045EF100C0291C = {
 						CreatedOnToolsVersion = 9.0;
 						ProvisioningStyle = Automatic;
@@ -1694,42 +1194,6 @@
 						TestTargetID = 2313B6BD20A2F2EE0067C211;
 					};
 					23BA6937208CE0AC005CAFB7 = {
-						ProvisioningStyle = Automatic;
-						TestTargetID = 2313B6BD20A2F2EE0067C211;
-					};
-					23BA6AE6208CE12D005CAFB7 = {
-						ProvisioningStyle = Automatic;
-						TestTargetID = 2313B6BD20A2F2EE0067C211;
-					};
-					23BA6AF8208CE132005CAFB7 = {
-						ProvisioningStyle = Automatic;
-						TestTargetID = 2313B6BD20A2F2EE0067C211;
-					};
-					23BA6B0A208CE139005CAFB7 = {
-						ProvisioningStyle = Automatic;
-						TestTargetID = 2313B6BD20A2F2EE0067C211;
-					};
-					23BA6B1C208CE13A005CAFB7 = {
-						ProvisioningStyle = Automatic;
-						TestTargetID = 2313B6BD20A2F2EE0067C211;
-					};
-					23BA6B2E208CE13C005CAFB7 = {
-						ProvisioningStyle = Automatic;
-						TestTargetID = 2313B6BD20A2F2EE0067C211;
-					};
-					23BA6B40208CE13E005CAFB7 = {
-						ProvisioningStyle = Automatic;
-						TestTargetID = 2313B6BD20A2F2EE0067C211;
-					};
-					23BA6B52208CE13F005CAFB7 = {
-						ProvisioningStyle = Automatic;
-						TestTargetID = 2313B6BD20A2F2EE0067C211;
-					};
-					23BA6B64208CE140005CAFB7 = {
-						ProvisioningStyle = Automatic;
-						TestTargetID = 2313B6BD20A2F2EE0067C211;
-					};
-					23BA6B76208CE142005CAFB7 = {
 						ProvisioningStyle = Automatic;
 						TestTargetID = 2313B6BD20A2F2EE0067C211;
 					};
@@ -1754,20 +1218,10 @@
 			);
 			projectRoot = "";
 			targets = (
-				23698A6220045EF100C0291C /* Coverage Tests */,
+				23BA6937208CE0AC005CAFB7 /* CorrectnessTests */,
 				23698B3C20047E1A00C0291C /* Benchmark */,
+				23698A6220045EF100C0291C /* CoverageTests */,
 				2313B6BD20A2F2EE0067C211 /* TestHost */,
-				23BA6937208CE0AC005CAFB7 /* FTS Tests */,
-				23BA6AE6208CE12D005CAFB7 /* Migration Tests */,
-				23BA6AF8208CE132005CAFB7 /* ORM Tests */,
-				23BA6B0A208CE139005CAFB7 /* Transaction Tests */,
-				23BA6B1C208CE13A005CAFB7 /* Handle Tests */,
-				23BA6B2E208CE13C005CAFB7 /* Table Tests */,
-				23BA6B40208CE13E005CAFB7 /* ChainCall Tests */,
-				23BA6B52208CE13F005CAFB7 /* Database Tests */,
-				23BA6B64208CE140005CAFB7 /* Convenient Tests */,
-				23BA6B76208CE142005CAFB7 /* WINQ Tests */,
-				2324D16520D2470200834A82 /* Repair Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -1797,13 +1251,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2324D17520D2470200834A82 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		23698A6120045EF100C0291C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1825,69 +1272,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		23BA6AF2208CE12D005CAFB7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6B04208CE132005CAFB7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6B16208CE139005CAFB7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6B28208CE13A005CAFB7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6B3A208CE13C005CAFB7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6B4C208CE13E005CAFB7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6B5E208CE13F005CAFB7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6B70208CE140005CAFB7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6B82208CE142005CAFB7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1896,24 +1280,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2313B6D020A2F2F00067C211 /* main.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2324D16A20D2470200834A82 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2324D16F20D2470200834A82 /* Convenience.m in Sources */,
-				23CFE86020DA455B00D112B8 /* RepairTests+Retrieve.mm in Sources */,
-				2308F6BA20E0D38E001CD9C3 /* RepairTestCaseObject.mm in Sources */,
-				23191EC120D7D62400495B65 /* RepairTests+Deposit.mm in Sources */,
-				23BBE3AE20DE19730046A543 /* RepairTests+CorruptionReaction.mm in Sources */,
-				2367267B20DFD5B600A1E7E3 /* FileBomber.m in Sources */,
-				23B13A7220E086F600B26927 /* RepairTests+Robust.mm in Sources */,
-				2324D17120D2470200834A82 /* TestCase.mm in Sources */,
-				2324D18120D247A000834A82 /* RepairTestCase.mm in Sources */,
-				23593B7A20D369DD0058B416 /* RepairTests+Backup.mm in Sources */,
-				2324D17220D2470200834A82 /* TestCaseObject.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2080,248 +1446,139 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23BA6B9A208CE169005CAFB7 /* DatabaseTests+FTS.mm in Sources */,
+				23D53A9920FEEDCB004E1853 /* RepairTestCase.mm in Sources */,
+				23D53A9A20FEEDCB004E1853 /* RepairTests+Backup.mm in Sources */,
+				23D53A9B20FEEDCB004E1853 /* RepairTests+Deposit.mm in Sources */,
+				23D53A9C20FEEDCB004E1853 /* RepairTests+Retrieve.mm in Sources */,
+				23D53A9D20FEEDCB004E1853 /* RepairTests+CorruptionReaction.mm in Sources */,
+				23D53A9E20FEEDCB004E1853 /* RepairTests+Robust.mm in Sources */,
+				23D53A9F20FEEDCB004E1853 /* FileBomber.m in Sources */,
 				238B50B6209D5B3D00C78CC8 /* TestCaseVirtualObject.mm in Sources */,
-				23BA6B9B208CE169005CAFB7 /* FTSTestCaseObject.mm in Sources */,
-				238B50A0209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */,
-				23BA6AE4208CE101005CAFB7 /* Convenience.m in Sources */,
-				238B50C1209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */,
-				23BA6AE3208CE101005CAFB7 /* TestCase.mm in Sources */,
 				238B50AB209D5B3D00C78CC8 /* TestCaseObject.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6AE9208CE12D005CAFB7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				23BA6BB3208CE26A005CAFB7 /* MigrationTests+Convenient.mm in Sources */,
-				23BA6BB2208CE26A005CAFB7 /* MigrationTests+SameDatabase.mm in Sources */,
-				238B50AC209D5B3D00C78CC8 /* TestCaseObject.mm in Sources */,
-				23BA6BB4208CE26A005CAFB7 /* MigrationTests+SameDatabase+Convenient.mm in Sources */,
-				23AA166B2098C46F0013912B /* TestCaseConflictObject.mm in Sources */,
-				238B50A1209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */,
-				23BA6BB8208CE26A005CAFB7 /* MultipleMigrationTestCase+Convenient.mm in Sources */,
-				23BA6BB7208CE26A005CAFB7 /* MultipleMigrationTests.mm in Sources */,
-				23BA6AED208CE12D005CAFB7 /* Convenience.m in Sources */,
-				238B50C2209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */,
-				23BA6BB0208CE26A005CAFB7 /* MigrationTestCase.mm in Sources */,
-				23BA6AEE208CE12D005CAFB7 /* TestCase.mm in Sources */,
-				23BA6BB1208CE26A005CAFB7 /* MigrationTests.mm in Sources */,
-				238B50B7209D5B3D00C78CC8 /* TestCaseVirtualObject.mm in Sources */,
-				23BA6BB5208CE26A005CAFB7 /* MigrationTests+Innocent+Convenient.mm in Sources */,
-				23BA6BB6208CE26A005CAFB7 /* MultipleMigrationTestCase.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6AFB208CE132005CAFB7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				23BA6BCE208CE279005CAFB7 /* ORMTests+TableConstraint.mm in Sources */,
-				23BA6BC3208CE279005CAFB7 /* ORMColumnConstraintPrimaryAutoIncrement.mm in Sources */,
-				23BA6BD1208CE279005CAFB7 /* ORMTableConstraintCheck.mm in Sources */,
-				23BA6BCD208CE279005CAFB7 /* ORMProperty.mm in Sources */,
-				23BA6BD3208CE279005CAFB7 /* ORMTests+VirtualTable.mm in Sources */,
-				23BA6BCC208CE279005CAFB7 /* ORMTests+Property.mm in Sources */,
-				23BA6BCF208CE279005CAFB7 /* ORMTableConstraintMultiPrimary.mm in Sources */,
-				23BA6BBD208CE279005CAFB7 /* ORMTests+ColumnCoding.mm in Sources */,
-				23BA6BC6208CE279005CAFB7 /* ORMColumnConstraintNotNull.mm in Sources */,
-				23BA6BD5208CE279005CAFB7 /* ORMVirtualTableTokenize.mm in Sources */,
-				238B50B8209D5B3D00C78CC8 /* TestCaseVirtualObject.mm in Sources */,
-				23BA6BBA208CE279005CAFB7 /* ORMRebindOld.mm in Sources */,
-				23BA6BD6208CE279005CAFB7 /* ORMVirtualTableTokenizeWCDB.mm in Sources */,
-				23BA6BCB208CE279005CAFB7 /* ORMUniqueIndex.mm in Sources */,
-				23BA6BC0208CE279005CAFB7 /* ORMColumnConstraintPrimary.mm in Sources */,
-				23BA6BC1208CE279005CAFB7 /* ORMColumnConstraintPrimaryAsc.mm in Sources */,
-				238B50A2209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */,
-				23BA6BD9208CE279005CAFB7 /* ORMInheritedTestCaseObject.mm in Sources */,
-				23BA6BBF208CE279005CAFB7 /* ORMTests+ColumnConstraint.mm in Sources */,
-				238B50C3209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */,
-				23BA6BCA208CE279005CAFB7 /* ORMMultiIndex.mm in Sources */,
-				23BA6BC8208CE279005CAFB7 /* ORMTests+Index.mm in Sources */,
-				23BA6BD7208CE279005CAFB7 /* ORMVirtualTableModuleFTS3.mm in Sources */,
-				23BA6BC2208CE279005CAFB7 /* ORMColumnConstraintPrimaryDesc.mm in Sources */,
-				23BA6AFF208CE132005CAFB7 /* Convenience.m in Sources */,
-				23BA6B00208CE132005CAFB7 /* TestCase.mm in Sources */,
-				23BA6BD2208CE279005CAFB7 /* ORMTableConstraintForeignKey.mm in Sources */,
-				23BA6BB9208CE279005CAFB7 /* ORMTests+Inherited.mm in Sources */,
-				23BA6BBB208CE279005CAFB7 /* ORMRebindNew.mm in Sources */,
-				23BA6BD0208CE279005CAFB7 /* ORMTableConstraintMultiUnique.mm in Sources */,
-				23BA6BBC208CE279005CAFB7 /* ORMTests+Rebind.mm in Sources */,
-				238B50AD209D5B3D00C78CC8 /* TestCaseObject.mm in Sources */,
-				23BA6BC5208CE279005CAFB7 /* ORMColumnConstraintPrimaryImpl.mm in Sources */,
-				23BA6BC4208CE279005CAFB7 /* ORMColumnConstraintPrimaryAscAutoIncrement.mm in Sources */,
-				23BA6BC9208CE279005CAFB7 /* ORMIndex.mm in Sources */,
-				23BA6BC7208CE279005CAFB7 /* ORMColumnConstraintUnique.mm in Sources */,
-				23BA6BD8208CE279005CAFB7 /* ORMTestCase.mm in Sources */,
-				23BA6BBE208CE279005CAFB7 /* ORMColumnCoding.mm in Sources */,
-				23BA6BD4208CE279005CAFB7 /* ORMVirtualTable.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6B0D208CE139005CAFB7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				23BA6BDA208CE27E005CAFB7 /* DatabaseTests+Transaction.mm in Sources */,
-				238B50C4209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */,
-				23BA6B11208CE139005CAFB7 /* Convenience.m in Sources */,
-				238B50AE209D5B3D00C78CC8 /* TestCaseObject.mm in Sources */,
-				23BA6BDB208CE27E005CAFB7 /* TableTests+Transaction.mm in Sources */,
-				23BA6BDC208CE27E005CAFB7 /* HandleTests+Transaction.mm in Sources */,
-				238B50A3209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */,
-				23BA6B12208CE139005CAFB7 /* TestCase.mm in Sources */,
-				238B50B9209D5B3D00C78CC8 /* TestCaseVirtualObject.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6B1F208CE13A005CAFB7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				23BA6BDE208CE282005CAFB7 /* UnsafeHandleTests+ChainCall.mm in Sources */,
-				238B50C5209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */,
-				23BA6BDD208CE282005CAFB7 /* HandleTests+ChainCall.mm in Sources */,
-				238B50AF209D5B3D00C78CC8 /* TestCaseObject.mm in Sources */,
-				23BA6BDF208CE282005CAFB7 /* HandleTests.mm in Sources */,
-				23BA6B23208CE13A005CAFB7 /* Convenience.m in Sources */,
-				238B50A4209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */,
-				23BA6B24208CE13A005CAFB7 /* TestCase.mm in Sources */,
-				238B50BA209D5B3D00C78CC8 /* TestCaseVirtualObject.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6B31208CE13C005CAFB7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				23BA6BE2208CE287005CAFB7 /* DatabaseTests+Table.mm in Sources */,
-				238B50C6209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */,
-				23BA6B35208CE13C005CAFB7 /* Convenience.m in Sources */,
-				238B50B0209D5B3D00C78CC8 /* TestCaseObject.mm in Sources */,
-				23BA6B36208CE13C005CAFB7 /* TestCase.mm in Sources */,
-				23BA6BE0208CE287005CAFB7 /* TableTests+ChainCall.mm in Sources */,
-				238B50A5209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */,
-				23BA6BE1208CE287005CAFB7 /* HandleTests+Table.mm in Sources */,
-				238B50BB209D5B3D00C78CC8 /* TestCaseVirtualObject.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6B43208CE13E005CAFB7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				238B50A6209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */,
-				238B50C7209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */,
-				238B50BC209D5B3D00C78CC8 /* TestCaseVirtualObject.mm in Sources */,
-				23BA6B47208CE13E005CAFB7 /* Convenience.m in Sources */,
-				23BA6BE4208CE28C005CAFB7 /* UpdateTests.mm in Sources */,
-				23BA6BE6208CE28C005CAFB7 /* SelectTests.mm in Sources */,
-				23BA6B48208CE13E005CAFB7 /* TestCase.mm in Sources */,
-				238B50B1209D5B3D00C78CC8 /* TestCaseObject.mm in Sources */,
-				23BA6BE7208CE28C005CAFB7 /* RowSelects.mm in Sources */,
-				23BA6BE8208CE28C005CAFB7 /* MultiSelectTests.mm in Sources */,
-				23BA6BE5208CE28C005CAFB7 /* DeleteTests.mm in Sources */,
-				23BA6BE3208CE28C005CAFB7 /* InsertTests.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6B55208CE13F005CAFB7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				238B50B2209D5B3D00C78CC8 /* TestCaseObject.mm in Sources */,
-				238B50C8209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */,
-				23BA6B59208CE13F005CAFB7 /* Convenience.m in Sources */,
-				238B50A7209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */,
-				23BA6BEC208CE290005CAFB7 /* DatabaseTests+Memory.mm in Sources */,
-				236A46AF20D7526E001816AF /* DatabaseTests+Trace.mm in Sources */,
-				23BA6B5A208CE13F005CAFB7 /* TestCase.mm in Sources */,
-				23BA6BE9208CE290005CAFB7 /* DatabaseTests+File.mm in Sources */,
-				238B50BD209D5B3D00C78CC8 /* TestCaseVirtualObject.mm in Sources */,
-				23BA6BEB208CE290005CAFB7 /* DatabaseTests+Config.mm in Sources */,
-				23BA6BED208CE290005CAFB7 /* DatabaseTests.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6B67208CE140005CAFB7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				23BA6BEE208CE294005CAFB7 /* DatabaseTests+Convenient.mm in Sources */,
-				238B50C9209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */,
-				23BA6B6B208CE140005CAFB7 /* Convenience.m in Sources */,
-				238B50B3209D5B3D00C78CC8 /* TestCaseObject.mm in Sources */,
-				23BA6B6C208CE140005CAFB7 /* TestCase.mm in Sources */,
-				238B50A8209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */,
-				23BA6BF0208CE294005CAFB7 /* HandleTests+Convenient.mm in Sources */,
-				238B50BE209D5B3D00C78CC8 /* TestCaseVirtualObject.mm in Sources */,
-				23BA6BEF208CE294005CAFB7 /* TableTests+Convenient.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		23BA6B79208CE142005CAFB7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				23BA6BF6208CE299005CAFB7 /* ConflictClauseTests.mm in Sources */,
-				23BA6BFE208CE299005CAFB7 /* LiteralValueTests.mm in Sources */,
-				23BA6C0D208CE299005CAFB7 /* StatementCreateTriggerTests.mm in Sources */,
-				23BA6C07208CE299005CAFB7 /* StatementAnalyzeTests.mm in Sources */,
-				23BA6BF7208CE299005CAFB7 /* ConvertibleTests.mm in Sources */,
-				23BA6BFA208CE299005CAFB7 /* ForeignKeyClauseTests.mm in Sources */,
-				23BA6C14208CE299005CAFB7 /* StatementDropTriggerTests.mm in Sources */,
-				23BA6BF3208CE299005CAFB7 /* ColumnDefTests.mm in Sources */,
-				23BA6C21208CE299005CAFB7 /* UnexpectedTests.mm in Sources */,
-				23BA6BFF208CE299005CAFB7 /* ModuleArgumentTests.mm in Sources */,
-				23BA6C18208CE299005CAFB7 /* StatementReindexTests.mm in Sources */,
-				23BA6C05208CE299005CAFB7 /* SelectCoreTests.mm in Sources */,
-				23BA6C1D208CE299005CAFB7 /* StatementUpdateTests.mm in Sources */,
-				23BA6C17208CE299005CAFB7 /* StatementPragmaTests.mm in Sources */,
-				23BA6C1E208CE299005CAFB7 /* StatementVacuumTests.mm in Sources */,
-				23BA6B7D208CE142005CAFB7 /* Convenience.m in Sources */,
-				23BA6C13208CE299005CAFB7 /* StatementDropTableTests.mm in Sources */,
-				23BA6C08208CE299005CAFB7 /* StatementAttachTests.mm in Sources */,
-				23BA6C02208CE299005CAFB7 /* QualifiedTableNameTests.mm in Sources */,
-				238B50B4209D5B3D00C78CC8 /* TestCaseObject.mm in Sources */,
-				23BA6B7E208CE142005CAFB7 /* TestCase.mm in Sources */,
-				23BA6C00208CE299005CAFB7 /* OrderingTermTests.mm in Sources */,
-				23BA6C0A208CE299005CAFB7 /* StatementCommitTests.mm in Sources */,
-				23BA6C0E208CE299005CAFB7 /* StatementCreateViewTests.mm in Sources */,
-				23BA6BF1208CE299005CAFB7 /* BindParameterTests.mm in Sources */,
-				23BA6C0C208CE299005CAFB7 /* StatementCreateTableTests.mm in Sources */,
-				23BA6C09208CE299005CAFB7 /* StatementBeginTests.mm in Sources */,
-				23BA6C16208CE299005CAFB7 /* StatementInsertTests.mm in Sources */,
-				23BA6C06208CE299005CAFB7 /* StatementAlterTableTests.mm in Sources */,
-				23BA6C19208CE299005CAFB7 /* StatementReleaseTests.mm in Sources */,
-				23BA6C12208CE299005CAFB7 /* StatementDropIndexTests.mm in Sources */,
-				238B50BF209D5B3D00C78CC8 /* TestCaseVirtualObject.mm in Sources */,
-				23BA6BFC208CE299005CAFB7 /* JoinClauseTests.mm in Sources */,
-				23BA6C03208CE299005CAFB7 /* RaiseFunctionTests.mm in Sources */,
-				23BA6C11208CE299005CAFB7 /* StatementDetachTests.mm in Sources */,
-				23BA6BF2208CE299005CAFB7 /* ColumnConstraintTests.mm in Sources */,
-				238B50A9209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */,
-				23BA6BF5208CE299005CAFB7 /* CommonTableExpressionTests.mm in Sources */,
-				23BA6C1A208CE299005CAFB7 /* StatementRollbackTests.mm in Sources */,
-				23BA6C1B208CE299005CAFB7 /* StatementSavepointTests.mm in Sources */,
-				23BA6C20208CE299005CAFB7 /* TableOrSubqueryTests.mm in Sources */,
-				23BA6C0B208CE299005CAFB7 /* StatementCreateIndexTests.mm in Sources */,
-				23BA6C22208CE299005CAFB7 /* WINQTestCase.mm in Sources */,
-				23BA6C01208CE299005CAFB7 /* PragmaTests.mm in Sources */,
-				23BA6C0F208CE299005CAFB7 /* StatementCreateVirtualTableTests.mm in Sources */,
-				23BA6BFB208CE299005CAFB7 /* IndexedColumnTests.mm in Sources */,
-				23BA6C15208CE299005CAFB7 /* StatementDropViewTests.mm in Sources */,
-				23BA6C04208CE299005CAFB7 /* ResultColumnTests.mm in Sources */,
-				23BA6C1C208CE299005CAFB7 /* StatementSelectTests.mm in Sources */,
-				23BA6BF9208CE299005CAFB7 /* ExpressionTests.mm in Sources */,
-				23BA6C1F208CE299005CAFB7 /* TableConstraintTests.mm in Sources */,
-				23BA6BF8208CE299005CAFB7 /* CTETableNameTests.mm in Sources */,
-				23BA6BF4208CE299005CAFB7 /* ColumnTypeTests.mm in Sources */,
-				23BA6C10208CE299005CAFB7 /* StatementDeleteTests.mm in Sources */,
-				23BA6BFD208CE299005CAFB7 /* JoinConstraintTests.mm in Sources */,
-				238B50CA209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */,
-				23BA6C23208CE299005CAFB7 /* WithClauseTests.mm in Sources */,
+				238B50C1209D5B3D00C78CC8 /* TestCaseIndexedObject.mm in Sources */,
+				238B50A0209D5B3D00C78CC8 /* CRUDTestCase.mm in Sources */,
+				23BA6B9A208CE169005CAFB7 /* DatabaseTests+FTS.mm in Sources */,
+				23BA6B9B208CE169005CAFB7 /* FTSTestCaseObject.mm in Sources */,
+				23D53AA020FEEDCB004E1853 /* MigrationTestCase.mm in Sources */,
+				23D53AA120FEEDCB004E1853 /* TestCaseConflictObject.mm in Sources */,
+				23D53AA220FEEDCB004E1853 /* MigrationTests.mm in Sources */,
+				23D53AA320FEEDCB004E1853 /* MigrationTests+SameDatabase.mm in Sources */,
+				23D53AA420FEEDCB004E1853 /* MigrationTests+Convenient.mm in Sources */,
+				23D53AA520FEEDCB004E1853 /* MigrationTests+SameDatabase+Convenient.mm in Sources */,
+				23D53AA620FEEDCB004E1853 /* MigrationTests+Innocent+Convenient.mm in Sources */,
+				23D53AA720FEEDCB004E1853 /* MultipleMigrationTestCase.mm in Sources */,
+				23D53AA820FEEDCB004E1853 /* MultipleMigrationTests.mm in Sources */,
+				23D53AA920FEEDCB004E1853 /* MultipleMigrationTestCase+Convenient.mm in Sources */,
+				23D53AAA20FEEDCB004E1853 /* ORMTests+Inherited.mm in Sources */,
+				23D53AAB20FEEDCB004E1853 /* ORMRebindOld.mm in Sources */,
+				23D53AAC20FEEDCB004E1853 /* ORMRebindNew.mm in Sources */,
+				23D53AAD20FEEDCB004E1853 /* ORMTests+Rebind.mm in Sources */,
+				23D53AAE20FEEDCB004E1853 /* ORMTests+ColumnCoding.mm in Sources */,
+				23D53AAF20FEEDCB004E1853 /* ORMColumnCoding.mm in Sources */,
+				23D53AB020FEEDCB004E1853 /* ORMTests+ColumnConstraint.mm in Sources */,
+				23D53AB120FEEDCB004E1853 /* ORMColumnConstraintPrimary.mm in Sources */,
+				23D53AB220FEEDCB004E1853 /* ORMColumnConstraintPrimaryAsc.mm in Sources */,
+				23D53AB320FEEDCB004E1853 /* ORMColumnConstraintPrimaryDesc.mm in Sources */,
+				23D53AB420FEEDCB004E1853 /* ORMColumnConstraintPrimaryAutoIncrement.mm in Sources */,
+				23D53AB520FEEDCB004E1853 /* ORMColumnConstraintPrimaryAscAutoIncrement.mm in Sources */,
+				23D53AB620FEEDCB004E1853 /* ORMColumnConstraintPrimaryImpl.mm in Sources */,
+				23D53AB720FEEDCB004E1853 /* ORMColumnConstraintNotNull.mm in Sources */,
+				23D53AB820FEEDCB004E1853 /* ORMColumnConstraintUnique.mm in Sources */,
+				23D53AB920FEEDCB004E1853 /* ORMTests+Index.mm in Sources */,
+				23D53ABA20FEEDCB004E1853 /* ORMIndex.mm in Sources */,
+				23D53ABB20FEEDCB004E1853 /* ORMMultiIndex.mm in Sources */,
+				23D53ABC20FEEDCB004E1853 /* ORMUniqueIndex.mm in Sources */,
+				23D53ABD20FEEDCB004E1853 /* ORMTests+Property.mm in Sources */,
+				23D53ABE20FEEDCB004E1853 /* ORMProperty.mm in Sources */,
+				23D53ABF20FEEDCB004E1853 /* ORMTests+TableConstraint.mm in Sources */,
+				23D53AC020FEEDCB004E1853 /* ORMTableConstraintMultiPrimary.mm in Sources */,
+				23D53AC120FEEDCB004E1853 /* ORMTableConstraintMultiUnique.mm in Sources */,
+				23D53AC220FEEDCB004E1853 /* ORMTableConstraintCheck.mm in Sources */,
+				23D53AC320FEEDCB004E1853 /* ORMTableConstraintForeignKey.mm in Sources */,
+				23D53AC420FEEDCB004E1853 /* ORMTests+VirtualTable.mm in Sources */,
+				23D53AC520FEEDCB004E1853 /* ORMVirtualTable.mm in Sources */,
+				23D53AC620FEEDCB004E1853 /* ORMVirtualTableTokenize.mm in Sources */,
+				23D53AC720FEEDCB004E1853 /* ORMVirtualTableTokenizeWCDB.mm in Sources */,
+				23D53AC820FEEDCB004E1853 /* ORMVirtualTableModuleFTS3.mm in Sources */,
+				23D53AC920FEEDCB004E1853 /* ORMTestCase.mm in Sources */,
+				23D53ACA20FEEDCB004E1853 /* ORMInheritedTestCaseObject.mm in Sources */,
+				23D53ACB20FEEDCB004E1853 /* DatabaseTests+Transaction.mm in Sources */,
+				23D53ACC20FEEDCB004E1853 /* TableTests+Transaction.mm in Sources */,
+				23D53ACD20FEEDCB004E1853 /* HandleTests+Transaction.mm in Sources */,
+				23D53ACE20FEEDCB004E1853 /* HandleTests+ChainCall.mm in Sources */,
+				23D53ACF20FEEDCB004E1853 /* UnsafeHandleTests+ChainCall.mm in Sources */,
+				23D53AD020FEEDCB004E1853 /* HandleTests.mm in Sources */,
+				23D53AD120FEEDCB004E1853 /* TableTests+ChainCall.mm in Sources */,
+				23D53AD220FEEDCB004E1853 /* HandleTests+Table.mm in Sources */,
+				23D53AD320FEEDCB004E1853 /* DatabaseTests+Table.mm in Sources */,
+				23D53AD420FEEDCB004E1853 /* InsertTests.mm in Sources */,
+				23D53AD520FEEDCB004E1853 /* UpdateTests.mm in Sources */,
+				23D53AD620FEEDCB004E1853 /* DeleteTests.mm in Sources */,
+				23D53AD720FEEDCB004E1853 /* SelectTests.mm in Sources */,
+				23D53AD820FEEDCB004E1853 /* RowSelects.mm in Sources */,
+				23D53AD920FEEDCB004E1853 /* MultiSelectTests.mm in Sources */,
+				23D53ADA20FEEDCB004E1853 /* DatabaseTests+File.mm in Sources */,
+				23D53ADB20FEEDCB004E1853 /* DatabaseTests+Config.mm in Sources */,
+				23D53ADC20FEEDCB004E1853 /* DatabaseTests+Memory.mm in Sources */,
+				23D53ADD20FEEDCB004E1853 /* DatabaseTests.mm in Sources */,
+				23D53ADE20FEEDCB004E1853 /* DatabaseTests+Trace.mm in Sources */,
+				23D53ADF20FEEDCB004E1853 /* DatabaseTests+Convenient.mm in Sources */,
+				23D53AE020FEEDCB004E1853 /* TableTests+Convenient.mm in Sources */,
+				23D53AE120FEEDCB004E1853 /* HandleTests+Convenient.mm in Sources */,
+				23D53AE220FEEDCB004E1853 /* BindParameterTests.mm in Sources */,
+				23D53AE320FEEDCB004E1853 /* ColumnConstraintTests.mm in Sources */,
+				23D53AE420FEEDCB004E1853 /* ColumnDefTests.mm in Sources */,
+				23D53AE520FEEDCB004E1853 /* ColumnTypeTests.mm in Sources */,
+				23D53AE620FEEDCB004E1853 /* CommonTableExpressionTests.mm in Sources */,
+				23D53AE720FEEDCB004E1853 /* ConflictClauseTests.mm in Sources */,
+				23D53AE820FEEDCB004E1853 /* ConvertibleTests.mm in Sources */,
+				23D53AE920FEEDCB004E1853 /* CTETableNameTests.mm in Sources */,
+				23D53AEA20FEEDCB004E1853 /* ExpressionTests.mm in Sources */,
+				23D53AEB20FEEDCB004E1853 /* ForeignKeyClauseTests.mm in Sources */,
+				23D53AEC20FEEDCB004E1853 /* IndexedColumnTests.mm in Sources */,
+				23D53AED20FEEDCB004E1853 /* JoinClauseTests.mm in Sources */,
+				23D53AEE20FEEDCB004E1853 /* JoinConstraintTests.mm in Sources */,
+				23D53AEF20FEEDCB004E1853 /* LiteralValueTests.mm in Sources */,
+				23D53AF020FEEDCB004E1853 /* ModuleArgumentTests.mm in Sources */,
+				23D53AF120FEEDCB004E1853 /* OrderingTermTests.mm in Sources */,
+				23D53AF220FEEDCB004E1853 /* PragmaTests.mm in Sources */,
+				23D53AF320FEEDCB004E1853 /* QualifiedTableNameTests.mm in Sources */,
+				23D53AF420FEEDCB004E1853 /* RaiseFunctionTests.mm in Sources */,
+				23D53AF520FEEDCB004E1853 /* ResultColumnTests.mm in Sources */,
+				23D53AF620FEEDCB004E1853 /* SelectCoreTests.mm in Sources */,
+				23D53AF720FEEDCB004E1853 /* StatementAlterTableTests.mm in Sources */,
+				23D53AF820FEEDCB004E1853 /* StatementAnalyzeTests.mm in Sources */,
+				23D53AF920FEEDCB004E1853 /* StatementAttachTests.mm in Sources */,
+				23D53AFA20FEEDCB004E1853 /* StatementBeginTests.mm in Sources */,
+				23D53AFB20FEEDCB004E1853 /* StatementCommitTests.mm in Sources */,
+				23D53AFC20FEEDCB004E1853 /* StatementCreateIndexTests.mm in Sources */,
+				23D53AFD20FEEDCB004E1853 /* StatementCreateTableTests.mm in Sources */,
+				23D53AFE20FEEDCB004E1853 /* StatementCreateTriggerTests.mm in Sources */,
+				23D53AFF20FEEDCB004E1853 /* StatementCreateViewTests.mm in Sources */,
+				23D53B0020FEEDCB004E1853 /* StatementCreateVirtualTableTests.mm in Sources */,
+				23D53B0120FEEDCB004E1853 /* StatementDeleteTests.mm in Sources */,
+				23D53B0220FEEDCB004E1853 /* StatementDetachTests.mm in Sources */,
+				23D53B0320FEEDCB004E1853 /* StatementDropIndexTests.mm in Sources */,
+				23D53B0420FEEDCB004E1853 /* StatementDropTableTests.mm in Sources */,
+				23D53B0520FEEDCB004E1853 /* StatementDropTriggerTests.mm in Sources */,
+				23D53B0620FEEDCB004E1853 /* StatementDropViewTests.mm in Sources */,
+				23D53B0720FEEDCB004E1853 /* StatementInsertTests.mm in Sources */,
+				23D53B0820FEEDCB004E1853 /* StatementPragmaTests.mm in Sources */,
+				23D53B0920FEEDCB004E1853 /* StatementReindexTests.mm in Sources */,
+				23D53B0A20FEEDCB004E1853 /* StatementReleaseTests.mm in Sources */,
+				23D53B0B20FEEDCB004E1853 /* StatementRollbackTests.mm in Sources */,
+				23D53B0C20FEEDCB004E1853 /* StatementSavepointTests.mm in Sources */,
+				23D53B0D20FEEDCB004E1853 /* StatementSelectTests.mm in Sources */,
+				23D53B0E20FEEDCB004E1853 /* StatementUpdateTests.mm in Sources */,
+				23D53B0F20FEEDCB004E1853 /* StatementVacuumTests.mm in Sources */,
+				23D53B1020FEEDCB004E1853 /* TableConstraintTests.mm in Sources */,
+				23D53B1120FEEDCB004E1853 /* TableOrSubqueryTests.mm in Sources */,
+				23D53B1220FEEDCB004E1853 /* UnexpectedTests.mm in Sources */,
+				23D53B1320FEEDCB004E1853 /* WINQTestCase.mm in Sources */,
+				23D53B1420FEEDCB004E1853 /* WithClauseTests.mm in Sources */,
+				23D53B1520FEEDCB004E1853 /* RepairTestCaseObject.mm in Sources */,
+				23BA6AE3208CE101005CAFB7 /* TestCase.mm in Sources */,
+				23BA6AE4208CE101005CAFB7 /* Convenience.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2343,16 +1600,6 @@
 			name = WCDB;
 			targetProxy = 2313B6D920A2F6CD0067C211 /* PBXContainerItemProxy */;
 		};
-		2324D16620D2470200834A82 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = WCDB;
-			targetProxy = 2324D16720D2470200834A82 /* PBXContainerItemProxy */;
-		};
-		2324D16820D2470200834A82 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2313B6BD20A2F2EE0067C211 /* TestHost */;
-			targetProxy = 2324D16920D2470200834A82 /* PBXContainerItemProxy */;
-		};
 		2349ED9B20A31BC800763F30 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 2313B6BD20A2F2EE0067C211 /* TestHost */;
@@ -2363,100 +1610,10 @@
 			target = 2313B6BD20A2F2EE0067C211 /* TestHost */;
 			targetProxy = 2349ED9C20A31C1400763F30 /* PBXContainerItemProxy */;
 		};
-		2349ED9F20A31C1600763F30 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2313B6BD20A2F2EE0067C211 /* TestHost */;
-			targetProxy = 2349ED9E20A31C1600763F30 /* PBXContainerItemProxy */;
-		};
-		2349EDA120A31C1800763F30 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2313B6BD20A2F2EE0067C211 /* TestHost */;
-			targetProxy = 2349EDA020A31C1800763F30 /* PBXContainerItemProxy */;
-		};
-		2349EDA320A31C1A00763F30 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2313B6BD20A2F2EE0067C211 /* TestHost */;
-			targetProxy = 2349EDA220A31C1A00763F30 /* PBXContainerItemProxy */;
-		};
-		2349EDA520A31C1C00763F30 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2313B6BD20A2F2EE0067C211 /* TestHost */;
-			targetProxy = 2349EDA420A31C1C00763F30 /* PBXContainerItemProxy */;
-		};
-		2349EDA720A31C1E00763F30 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2313B6BD20A2F2EE0067C211 /* TestHost */;
-			targetProxy = 2349EDA620A31C1E00763F30 /* PBXContainerItemProxy */;
-		};
-		2349EDA920A31C2000763F30 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2313B6BD20A2F2EE0067C211 /* TestHost */;
-			targetProxy = 2349EDA820A31C2000763F30 /* PBXContainerItemProxy */;
-		};
-		2349EDAB20A31C2200763F30 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2313B6BD20A2F2EE0067C211 /* TestHost */;
-			targetProxy = 2349EDAA20A31C2200763F30 /* PBXContainerItemProxy */;
-		};
-		2349EDAD20A31C2300763F30 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2313B6BD20A2F2EE0067C211 /* TestHost */;
-			targetProxy = 2349EDAC20A31C2300763F30 /* PBXContainerItemProxy */;
-		};
-		2349EDAF20A31C2500763F30 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2313B6BD20A2F2EE0067C211 /* TestHost */;
-			targetProxy = 2349EDAE20A31C2500763F30 /* PBXContainerItemProxy */;
-		};
 		23BA6AD2208CE0D7005CAFB7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = WCDB;
 			targetProxy = 23BA6AD1208CE0D7005CAFB7 /* PBXContainerItemProxy */;
-		};
-		23BA6AE7208CE12D005CAFB7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = WCDB;
-			targetProxy = 23BA6AE8208CE12D005CAFB7 /* PBXContainerItemProxy */;
-		};
-		23BA6AF9208CE132005CAFB7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = WCDB;
-			targetProxy = 23BA6AFA208CE132005CAFB7 /* PBXContainerItemProxy */;
-		};
-		23BA6B0B208CE139005CAFB7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = WCDB;
-			targetProxy = 23BA6B0C208CE139005CAFB7 /* PBXContainerItemProxy */;
-		};
-		23BA6B1D208CE13A005CAFB7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = WCDB;
-			targetProxy = 23BA6B1E208CE13A005CAFB7 /* PBXContainerItemProxy */;
-		};
-		23BA6B2F208CE13C005CAFB7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = WCDB;
-			targetProxy = 23BA6B30208CE13C005CAFB7 /* PBXContainerItemProxy */;
-		};
-		23BA6B41208CE13E005CAFB7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = WCDB;
-			targetProxy = 23BA6B42208CE13E005CAFB7 /* PBXContainerItemProxy */;
-		};
-		23BA6B53208CE13F005CAFB7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = WCDB;
-			targetProxy = 23BA6B54208CE13F005CAFB7 /* PBXContainerItemProxy */;
-		};
-		23BA6B65208CE140005CAFB7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = WCDB;
-			targetProxy = 23BA6B66208CE140005CAFB7 /* PBXContainerItemProxy */;
-		};
-		23BA6B77208CE142005CAFB7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = WCDB;
-			targetProxy = 23BA6B78208CE142005CAFB7 /* PBXContainerItemProxy */;
 		};
 		23F5BE262088839C000CCD37 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2504,26 +1661,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		2324D17720D2470200834A82 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		2324D17820D2470200834A82 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -2764,186 +1901,6 @@
 			};
 			name = Release;
 		};
-		23BA6AF4208CE12D005CAFB7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		23BA6AF5208CE12D005CAFB7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		23BA6B06208CE132005CAFB7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		23BA6B07208CE132005CAFB7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		23BA6B18208CE139005CAFB7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		23BA6B19208CE139005CAFB7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		23BA6B2A208CE13A005CAFB7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		23BA6B2B208CE13A005CAFB7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		23BA6B3C208CE13C005CAFB7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		23BA6B3D208CE13C005CAFB7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		23BA6B4E208CE13E005CAFB7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		23BA6B4F208CE13E005CAFB7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		23BA6B60208CE13F005CAFB7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		23BA6B61208CE13F005CAFB7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		23BA6B72208CE140005CAFB7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		23BA6B73208CE140005CAFB7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		23BA6B84208CE142005CAFB7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		23BA6B85208CE142005CAFB7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2952,15 +1909,6 @@
 			buildConfigurations = (
 				2313B6D220A2F2F00067C211 /* Debug */,
 				2313B6D320A2F2F00067C211 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		2324D17620D2470200834A82 /* Build configuration list for PBXNativeTarget "Repair Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				2324D17720D2470200834A82 /* Debug */,
-				2324D17820D2470200834A82 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2974,7 +1922,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		23698A6F20045EF100C0291C /* Build configuration list for PBXNativeTarget "Coverage Tests" */ = {
+		23698A6F20045EF100C0291C /* Build configuration list for PBXNativeTarget "CoverageTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				23698A7020045EF100C0291C /* Debug */,
@@ -2992,92 +1940,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		23BA69BA208CE0AC005CAFB7 /* Build configuration list for PBXNativeTarget "FTS Tests" */ = {
+		23BA69BA208CE0AC005CAFB7 /* Build configuration list for PBXNativeTarget "CorrectnessTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				23BA69BB208CE0AC005CAFB7 /* Debug */,
 				23BA69BC208CE0AC005CAFB7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		23BA6AF3208CE12D005CAFB7 /* Build configuration list for PBXNativeTarget "Migration Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				23BA6AF4208CE12D005CAFB7 /* Debug */,
-				23BA6AF5208CE12D005CAFB7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		23BA6B05208CE132005CAFB7 /* Build configuration list for PBXNativeTarget "ORM Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				23BA6B06208CE132005CAFB7 /* Debug */,
-				23BA6B07208CE132005CAFB7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		23BA6B17208CE139005CAFB7 /* Build configuration list for PBXNativeTarget "Transaction Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				23BA6B18208CE139005CAFB7 /* Debug */,
-				23BA6B19208CE139005CAFB7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		23BA6B29208CE13A005CAFB7 /* Build configuration list for PBXNativeTarget "Handle Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				23BA6B2A208CE13A005CAFB7 /* Debug */,
-				23BA6B2B208CE13A005CAFB7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		23BA6B3B208CE13C005CAFB7 /* Build configuration list for PBXNativeTarget "Table Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				23BA6B3C208CE13C005CAFB7 /* Debug */,
-				23BA6B3D208CE13C005CAFB7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		23BA6B4D208CE13E005CAFB7 /* Build configuration list for PBXNativeTarget "ChainCall Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				23BA6B4E208CE13E005CAFB7 /* Debug */,
-				23BA6B4F208CE13E005CAFB7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		23BA6B5F208CE13F005CAFB7 /* Build configuration list for PBXNativeTarget "Database Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				23BA6B60208CE13F005CAFB7 /* Debug */,
-				23BA6B61208CE13F005CAFB7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		23BA6B71208CE140005CAFB7 /* Build configuration list for PBXNativeTarget "Convenient Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				23BA6B72208CE140005CAFB7 /* Debug */,
-				23BA6B73208CE140005CAFB7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		23BA6B83208CE142005CAFB7 /* Build configuration list for PBXNativeTarget "WINQ Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				23BA6B84208CE142005CAFB7 /* Debug */,
-				23BA6B85208CE142005CAFB7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

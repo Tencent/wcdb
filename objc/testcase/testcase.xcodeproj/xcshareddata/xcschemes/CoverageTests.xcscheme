@@ -17,8 +17,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "23698A6220045EF100C0291C"
-               BuildableName = "Coverage Tests.xctest"
-               BlueprintName = "Coverage Tests"
+               BuildableName = "CoverageTests.xctest"
+               BlueprintName = "CoverageTests"
                ReferencedContainer = "container:testcase.xcodeproj">
             </BuildableReference>
          </TestableReference>
