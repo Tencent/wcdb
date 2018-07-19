@@ -33,12 +33,12 @@ TokenizeConfig::TokenizeConfig(const std::list<std::string> &names)
 bool TokenizeConfig::invoke(Handle *handle)
 {
     for (const std::string &name : m_names) {
-        const Data &data = FTS::Modules::shared()->getAddress(name);
+        const UnsafeData &address = FTS::Modules::shared()->getAddress(name);
 
         //Setup Tokenize
         if (handle->prepare(m_fts3Tokenizer)) {
             handle->bindText(name.c_str(), 1);
-            handle->bindBLOB(data, 2);
+            handle->bindBLOB(address, 2);
             bool result = handle->step();
             handle->finalize();
             return result;

@@ -104,7 +104,7 @@ bool SQLiteAssembler::assembleCell(const Cell &cell)
             break;
         }
         case Cell::BLOB: {
-            const Data data = cell.blobValue(i);
+            const UnsafeData data = cell.blobValue(i);
             sqlite3_bind_blob(
             (sqlite3_stmt *) m_cellSTMT, bindIndex, data.buffer(), (int) data.size(), SQLITE_TRANSIENT);
             break;

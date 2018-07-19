@@ -29,14 +29,12 @@ namespace WCDB {
 
 class CipherConfig : public Config {
 public:
-    CipherConfig(const Data &cipher, int pageSize);
+    CipherConfig(const UnsafeData &cipher, int pageSize);
     bool invoke(Handle *handle) override;
 
     static constexpr const char *name = "WCDBCipher";
 
 protected:
-    const Data &getKey() const;
-
     Data m_key;
     int m_pageSize;
 };

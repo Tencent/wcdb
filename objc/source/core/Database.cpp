@@ -160,7 +160,7 @@ void Database::removeConfig(const std::string &name)
     m_pool->removeConfig(name);
 }
 
-void Database::setCipher(const Data &cipher, int pageSize)
+void Database::setCipher(const UnsafeData &cipher, int pageSize)
 {
     m_pool->setConfig(std::shared_ptr<Config>(new CipherConfig(cipher, pageSize)),
                       Configs::Priority::Highest);

@@ -418,7 +418,7 @@ void Handle::discardableExecute(const Statement &statement)
 }
 
 #pragma mark - Cipher
-bool Handle::setCipherKey(const Data &data)
+bool Handle::setCipherKey(const UnsafeData &data)
 {
 #ifdef SQLITE_HAS_CODEC
     int rc = sqlite3_key((sqlite3 *) m_handle, data.buffer(), (int) data.size());

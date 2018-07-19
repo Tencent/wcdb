@@ -186,7 +186,7 @@
             }
             case WCDB::ColumnType::BLOB: {
                 NSData *data = (NSData *) value;
-                _handle->bindBLOB(WCDB::Data::immutableNoCopyData((const unsigned char *) data.bytes, (size_t) data.length), index);
+                _handle->bindBLOB(WCDB::UnsafeData::immutable((const unsigned char *) data.bytes, (size_t) data.length), index);
                 break;
             }
             case WCDB::ColumnType::Null:
@@ -219,7 +219,7 @@
     value = [value archivedWCTValue];
     if ([value isKindOfClass:NSData.class]) {
         NSData *data = (NSData *) value;
-        _handle->bindBLOB(WCDB::Data::immutableNoCopyData((const unsigned char *) data.bytes, (size_t) data.length), index);
+        _handle->bindBLOB(WCDB::UnsafeData::immutable((const unsigned char *) data.bytes, (size_t) data.length), index);
     } else if ([value isKindOfClass:NSString.class]) {
         NSString *string = (NSString *) value;
         _handle->bindText(string.UTF8String, index);
@@ -294,7 +294,7 @@
                 value = [NSString stringWithUTF8String:_handle->getText(index)];
                 break;
             case WCDB::ColumnType::BLOB: {
-                const WCDB::Data data = _handle->getBLOB(index);
+                const WCDB::UnsafeData data = _handle->getBLOB(index);
                 value = [NSData dataWithBytes:data.buffer() length:data.size()];
             } break;
             case WCDB::ColumnType::Null:
@@ -320,7 +320,7 @@
     case WCDB::ColumnType::Text:
         return [NSString stringWithUTF8String:_handle->getText(index)];
     case WCDB::ColumnType::BLOB: {
-        const WCDB::Data data = _handle->getBLOB(index);
+        const WCDB::UnsafeData data = _handle->getBLOB(index);
         return [NSData dataWithBytes:data.buffer() length:data.size()];
     }
     case WCDB::ColumnType::Null:

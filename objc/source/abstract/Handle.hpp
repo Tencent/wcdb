@@ -151,7 +151,7 @@ protected:
 
 #pragma mark - Cipher
 public:
-    bool setCipherKey(const Data &data);
+    bool setCipherKey(const UnsafeData &data);
 
 #pragma mark - Notification
 public:

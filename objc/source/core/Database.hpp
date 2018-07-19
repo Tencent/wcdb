@@ -74,7 +74,7 @@ public:
     void setConfig(const std::shared_ptr<Config> &config,
                    int priority = Configs::Priority::Default);
     void removeConfig(const std::string &name);
-    void setCipher(const Data &cipher, int pageSize = 4096);
+    void setCipher(const UnsafeData &cipher, int pageSize = 4096);
     void setTokenizes(const std::list<std::string> &tokenizeNames);
 
     typedef Handle::SQLNotification SQLNotification;

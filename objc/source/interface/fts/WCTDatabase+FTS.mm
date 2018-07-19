@@ -35,8 +35,7 @@ WCTTokenizer const WCTTokenizerWCDB = @"WCDB";
 {
     static std::atomic<bool> *s_enrolled = new std::atomic<bool>(false);
     if (!s_enrolled->load()) {
-        unsigned char *address = WCDB::FTS::Module<void, WCTCursorInfo>::address();
-        WCDB::FTS::Modules::shared()->addAddress("WCDB", address);
+        WCDB::FTS::Modules::shared()->addAddress("WCDB", WCDB::FTS::Module<void, WCTCursorInfo>::address());
         s_enrolled->store(true);
     }
 }

@@ -23,14 +23,9 @@
 
 namespace WCDB {
 
-CipherConfig::CipherConfig(const Data &cipher, int pageSize)
-: Config(CipherConfig::name), m_key(cipher.copy()), m_pageSize(pageSize)
+CipherConfig::CipherConfig(const UnsafeData &cipher, int pageSize)
+: Config(CipherConfig::name), m_key(cipher), m_pageSize(pageSize)
 {
-}
-
-const Data &CipherConfig::getKey() const
-{
-    return m_key;
 }
 
 bool CipherConfig::invoke(Handle *handle)

@@ -56,7 +56,7 @@ public:
     void close();
     ssize_t size();
     Data read(off_t offset, size_t size);
-    bool write(off_t offset, const Data &data);
+    bool write(off_t offset, const UnsafeData &unsafeData);
 
 protected:
     int m_mode;

@@ -125,7 +125,7 @@
 - (void)bindBLOB:(NSData *)value toIndex:(int)index
 {
     WCTHandleAssert(return;);
-    _handle->bindBLOB(WCDB::Data::immutableNoCopyData((const unsigned char *) value.bytes, (size_t) value.length), index);
+    _handle->bindBLOB(WCDB::UnsafeData::immutable((const unsigned char *) value.bytes, (size_t) value.length), index);
 }
 
 - (void)bindNullToIndex:(int)index
@@ -193,7 +193,7 @@
 - (NSData *)getBLOB:(int)index
 {
     WCTHandleAssert(return nil;);
-    const WCDB::Data data = _handle->getBLOB(index);
+    const WCDB::UnsafeData data = _handle->getBLOB(index);
     return [NSData dataWithBytes:data.buffer() length:data.size()];
 }
 

@@ -76,8 +76,7 @@ public:
     {
         Lang::LiteralValue &lang = getMutableLang();
         lang.type = Lang::LiteralValue::Type::BLOB;
-        Data data = ColumnIsBLOBType<T>::asUnderlyingType(t);
-        data.makeShared();
+        UnsafeData data = ColumnIsBLOBType<T>::asUnderlyingType(t);
         lang.dataValue = data;
     }
 

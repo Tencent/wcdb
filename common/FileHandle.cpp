@@ -145,13 +145,13 @@ Data FileHandle::read(off_t offset, size_t size)
     return data.subdata(got + prior);
 }
 
-bool FileHandle::write(off_t offset, const Data &data)
+bool FileHandle::write(off_t offset, const UnsafeData &unsafeData)
 {
     WCTInnerAssert(isOpened());
     ssize_t wrote;
     ssize_t prior = 0;
-    size_t size = data.size();
-    const unsigned char *buffer = data.buffer();
+    size_t size = unsafeData.size();
+    const unsigned char *buffer = unsafeData.buffer();
     do {
         wrote = pwrite(m_fd, buffer, size, offset);
         if (wrote == size) {

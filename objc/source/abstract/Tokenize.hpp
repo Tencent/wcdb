@@ -182,7 +182,7 @@ public:
         return SQLITE_NOMEM;
     }
 
-    static unsigned char *address()
+    static sqlite3_tokenizer_module **address()
     {
         static sqlite3_tokenizer_module *s_module
         = new sqlite3_tokenizer_module({ 0,
@@ -191,7 +191,7 @@ public:
                                          Module<TokenizerInfo, CursorInfo>::open,
                                          Module<TokenizerInfo, CursorInfo>::close,
                                          Module<TokenizerInfo, CursorInfo>::next });
-        return reinterpret_cast<unsigned char *>(s_module);
+        return &s_module;
     }
 };
 
@@ -199,12 +199,12 @@ class Modules {
 public:
     static Modules *shared();
 
-    void addAddress(const std::string &name, unsigned char *address);
+    void addAddress(const std::string &name, sqlite3_tokenizer_module **address);
 
-    const Data &getAddress(const std::string &name) const;
+    const UnsafeData &getAddress(const std::string &name) const;
 
 protected:
-    std::map<std::string, Data> m_modules;
+    std::map<std::string, UnsafeData> m_modules;
     mutable SharedLock m_lock;
 };
 

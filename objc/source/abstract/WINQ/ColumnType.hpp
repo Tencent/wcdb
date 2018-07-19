@@ -108,7 +108,7 @@ struct ColumnTypeInfo<ColumnType::BLOB> {
     static constexpr const bool isText = false;
     static constexpr const bool isBLOB = true;
     static constexpr const bool isBaseType = false;
-    using UnderlyingType = Data;
+    using UnderlyingType = UnsafeData;
     static constexpr const ColumnType type = ColumnType::BLOB;
 };
 
@@ -279,6 +279,13 @@ struct ColumnIsBLOBType<std::vector<unsigned char>> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
     asUnderlyingType(const std::vector<unsigned char> &blob);
+};
+
+template<>
+struct ColumnIsBLOBType<UnsafeData> : public std::true_type {
+public:
+    static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
+    asUnderlyingType(const UnsafeData &blob);
 };
 
 template<>

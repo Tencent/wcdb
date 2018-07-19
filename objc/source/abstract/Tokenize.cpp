@@ -32,13 +32,13 @@ Modules *Modules::shared()
     return s_modules;
 }
 
-void Modules::addAddress(const std::string &name, unsigned char *module)
+void Modules::addAddress(const std::string &name, sqlite3_tokenizer_module **address)
 {
     LockGuard lockGuard(m_lock);
-    m_modules[name] = Data((unsigned char *) &module, sizeof(unsigned char *));
+    m_modules[name] = UnsafeData((unsigned char *) address, sizeof(unsigned char *));
 }
 
-const Data &Modules::getAddress(const std::string &name) const
+const UnsafeData &Modules::getAddress(const std::string &name) const
 {
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_modules.find(name);

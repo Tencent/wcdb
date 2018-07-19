@@ -21,43 +21,34 @@
 #ifndef Data_hpp
 #define Data_hpp
 
-#include <WCDB/SharedThreadedErrorProne.hpp>
+#include <WCDB/UnsafeData.hpp>
 #include <memory>
-#include <stdio.h>
 #include <vector>
 
 namespace WCDB {
 
-class Data : protected SharedThreadedErrorProne {
+class Data : public UnsafeData {
 #pragma mark - Initialize
 public:
     Data();
-
-protected:
-    Data(const std::shared_ptr<std::vector<unsigned char>> &sharedBuffer,
-         unsigned char *buffer,
-         size_t size);
-    size_t m_size;
-    unsigned char *m_buffer;
-
-#pragma mark - Shared
-public:
+    Data(const UnsafeData& data);
     Data(size_t size);
-    Data(const unsigned char *buffer, size_t size);
-
-    bool makeShared();
-    bool isShared() const;
-    Data copy() const;
-
-    bool resize(size_t size);
+    Data(const unsigned char* buffer, size_t size);
 
 protected:
+    Data(const std::shared_ptr<std::vector<unsigned char>>& sharedBuffer, off_t offset, size_t size);
+    off_t getCurrentOffset() const;
+    size_t getSharedSize() const;
+
     std::shared_ptr<std::vector<unsigned char>> m_sharedBuffer;
 
-#pragma mark - No Shared
+#pragma mark - Reset
 public:
-    static Data noCopyData(unsigned char *buffer, size_t size);
-    static const Data immutableNoCopyData(const unsigned char *buffer, size_t size);
+    bool resize(size_t size);
+
+    bool reset(const unsigned char* buffer, size_t size);
+    bool reset(size_t size);
+    bool reset(const UnsafeData& unsafeData);
 
 #pragma mark - Subdata
 public:
@@ -66,18 +57,13 @@ public:
 
 #pragma mark - Empty
 public:
-    bool empty() const;
-    static Data emptyData();
-    static unsigned char *emptyBuffer();
+    static const Data& emptyData();
 
-#pragma mark - Basic
-public:
-    size_t size() const;
-    uint32_t hash() const;
-
-    //Nota that buffer will never be null.
-    const unsigned char *buffer() const;
-    unsigned char *buffer();
+#pragma mark - Opaque
+protected:
+    using UnsafeData::subdata;
+    using UnsafeData::immutable;
+    using UnsafeData::emptyData;
 };
 
 } //namespace WCDB
