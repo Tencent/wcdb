@@ -48,8 +48,7 @@ const std::string &Wal::getPath() const
 
 Data Wal::acquireData(off_t offset, size_t size)
 {
-    if (!m_fileHandle.isOpened()
-        && !m_fileHandle.open(FileHandle::Mode::ReadOnly | FileHandle::Mode::Mmap)) {
+    if (!m_fileHandle.isOpened() && !m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
         assignWithSharedThreadedError();
         return Data::emptyData();
     }

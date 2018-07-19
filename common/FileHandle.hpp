@@ -43,23 +43,14 @@ public:
 protected:
     int m_fd;
 
-#pragma mark - Mmap
-public:
-    bool remap();
-
-protected:
-    bool unmap();
-    Data m_mmap;
-
 #pragma mark - Basic
 public:
     enum Mode {
         None = 0,
         OverWrite = 1,
         ReadOnly = 2,
-        Mmap = 1 << 8,
     };
-    bool open(int mode);
+    bool open(Mode mode);
     bool isOpened() const;
     void close();
     ssize_t size();
