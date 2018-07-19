@@ -24,6 +24,7 @@
 #include <WCDB/Data.hpp>
 #include <WCDB/SharedThreadedErrorProne.hpp>
 #include <stdio.h>
+#include <string>
 
 namespace WCDB {
 

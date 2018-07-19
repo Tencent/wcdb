@@ -23,7 +23,6 @@
 #include <WCDB/Notifier.hpp>
 #include <errno.h>
 #include <fcntl.h>
-#include <sys/mman.h>
 #include <unistd.h>
 
 namespace WCDB {
@@ -55,6 +54,7 @@ FileHandle &FileHandle::operator=(FileHandle &&other)
     WCTInnerAssert(path == other.path);
     m_fd = std::move(other.m_fd);
     other.m_fd = -1;
+    other.m_mode = Mode::None;
     return *this;
 }
 
