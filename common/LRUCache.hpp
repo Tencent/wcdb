@@ -29,8 +29,8 @@ namespace WCDB {
 template<typename Key, typename Value>
 class LRUCache {
 public:
-    typedef typename std::pair<Key, Value> KeyValue;
-    typedef typename std::list<KeyValue>::iterator Iterator;
+    using KeyValue = typename std::pair<Key, Value>;
+    using KeyValueIterator = typename std::list<KeyValue>::iterator;
 
     LRUCache(size_t maxSize = std::numeric_limits<size_t>::max())
     : m_maxSize(maxSize)
@@ -64,7 +64,7 @@ public:
     const Value& get(const Key& key)
     {
         auto it = m_map.find(key);
-        assert(exists(key));
+        WCTInnerAssert(exists(key));
         m_list.splice(m_list.begin(), m_list, it->second);
         return it->second->second;
     }
@@ -78,7 +78,7 @@ public:
 protected:
     size_t m_maxSize;
     std::list<KeyValue> m_list;
-    std::unordered_map<Key, Iterator> m_map;
+    std::unordered_map<Key, KeyValueIterator> m_map;
 };
 
 } // namespace WCDB
