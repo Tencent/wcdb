@@ -34,13 +34,13 @@ void PageBasedFileHandle::setPageSize(size_t pageSize)
     WCTInnerAssert(m_cachePageSize == 0);
     m_pageSize = pageSize;
     static size_t s_memoryPageSize = getpagesize();
-    size_t cachePageSize = pageSize;
-    size_t alignment = cachePageSize % s_memoryPageSize;
+    m_cachePageSize = pageSize;
+    size_t alignment = m_cachePageSize % s_memoryPageSize;
     if (alignment > 0) {
-        cachePageSize = cachePageSize - alignment + s_memoryPageSize;
+        m_cachePageSize = m_cachePageSize - alignment + s_memoryPageSize;
     }
-    WCTInnerAssert(cachePageSize > 0 && cachePageSize % s_memoryPageSize == 0);
-    m_cachePageSize = std::max(s_memoryPageSize, cachePageSize);
+    WCTInnerAssert(m_cachePageSize > 0 && m_cachePageSize % s_memoryPageSize == 0);
+    m_cachePageSize = std::max(s_memoryPageSize, m_cachePageSize);
 }
 
 MappedData PageBasedFileHandle::lazyMap(int pageno, off_t offset, size_t size)
