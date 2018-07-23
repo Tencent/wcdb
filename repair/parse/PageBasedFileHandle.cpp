@@ -74,7 +74,8 @@ MappedData PageBasedFileHandle::lazyMap(int pageno, off_t offset, size_t size)
 
 MappedData PageBasedFileHandle::lazyMap(int pageno)
 {
-    WCTInnerAssert(pageno > 0) return lazyMap(pageno, 0, m_pageSize);
+    WCTInnerAssert(pageno > 0);
+    return lazyMap(pageno, 0, m_pageSize);
 }
 
 } // namespace WCDB
