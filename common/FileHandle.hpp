@@ -22,6 +22,7 @@
 #define FileHandle_hpp
 
 #include <WCDB/Data.hpp>
+#include <WCDB/MappedData.hpp>
 #include <WCDB/SharedThreadedErrorProne.hpp>
 #include <stdio.h>
 #include <string>
@@ -57,6 +58,7 @@ public:
     ssize_t size();
     Data read(off_t offset, size_t size);
     bool write(off_t offset, const UnsafeData &unsafeData);
+    MappedData map(off_t offset, size_t size);
 
 protected:
     int m_mode;

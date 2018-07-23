@@ -176,7 +176,7 @@ std::string Cell::stringValue(int index) const
     return m_deserialization.getString(cell.second, length);
 }
 
-const Data Cell::blobValue(int index) const
+const UnsafeData Cell::blobValue(int index) const
 {
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(index < m_columns.size());
@@ -227,13 +227,15 @@ bool Cell::doInitialize()
             return false;
         }
         int overflowPageno = deserialization.advance4BytesInt();
-        m_payload = Data(payloadSize);
-        if (m_payload.empty()) {
+        m_overflowedPayloadHolder = Data(payloadSize);
+        if (m_overflowedPayloadHolder.empty()) {
             assignWithSharedThreadedError();
             return false;
         }
         //fill payload with local data
-        memcpy(m_payload.buffer(), m_page->getData().buffer() + offsetOfPayload, localPayloadSize);
+        memcpy(m_overflowedPayloadHolder.buffer(),
+               m_page->getData().buffer() + offsetOfPayload,
+               localPayloadSize);
 
         int cursorOfPayload = localPayloadSize;
         std::set<int> overflowPagenos;
@@ -246,14 +248,17 @@ bool Cell::doInitialize()
             }
             overflowPagenos.emplace(overflowPageno);
             //fill payload with overflow data
-            Data overflow = m_pager->acquirePageData(overflowPageno);
+            MappedData overflow = m_pager->acquirePageData(overflowPageno);
             if (overflow.empty()) {
                 return false;
             }
             int overflowSize
             = std::min(payloadSize - cursorOfPayload, m_pager->getUsableSize() - 4);
-            WCTInnerAssert(cursorOfPayload + overflowSize <= m_payload.size());
-            memcpy(m_payload.buffer() + cursorOfPayload, overflow.buffer() + 4, overflowSize);
+            WCTInnerAssert(cursorOfPayload + overflowSize
+                           <= m_overflowedPayloadHolder.size());
+            memcpy(m_overflowedPayloadHolder.buffer() + cursorOfPayload,
+                   overflow.buffer() + 4,
+                   overflowSize);
             cursorOfPayload += overflowSize;
             //next overflow page
             Deserialization overflowDeserialization(overflow);
@@ -264,9 +269,12 @@ bool Cell::doInitialize()
             markPagerAsCorrupted(m_page->number, "OverflowPage");
             return false;
         }
+        m_payload = m_overflowedPayloadHolder;
     } else {
         //non-overflow
-        m_payload = m_page->getData().subdata(offsetOfPayload, localPayloadSize);
+        m_nonOverflowedPayloadHolder
+        = m_page->getData().subdata(offsetOfPayload, localPayloadSize);
+        m_payload = m_nonOverflowedPayloadHolder;
     }
     m_deserialization.reset(m_payload);
     //parse value offsets

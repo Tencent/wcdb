@@ -102,7 +102,7 @@ bool BackupConfig::onCommitted(Handle *handle, int frames)
         m_timedQueue.reQueue(path, 0, frames);
     } else {
         // backed up will happen after 60s if no more write operation
-        m_timedQueue.reQueue(path, 60, frames);
+        m_timedQueue.reQueue(path, 10, frames);
     }
     return true;
 }
@@ -110,19 +110,8 @@ bool BackupConfig::onCommitted(Handle *handle, int frames)
 bool BackupConfig::willCheckpoint(Handle *handle, int frames)
 {
     const auto &path = handle->path;
-    std::shared_ptr<Database> database = Database::databaseWithExistingPath(path);
-    WCTInnerAssert(database != nullptr);
-    if (database->backup(frames)) {
-        m_timedQueue.remove(path);
-        LockGuard lockGuard(m_lock);
-        m_backedUp[path] = frames;
-        return true;
-    }
-    if (frames > framesForMandatoryCheckpoint) {
-        m_timedQueue.reQueue(path, 10.0, frames);
-        return true;
-    }
-    return false;
+    m_timedQueue.reQueue(path, 3, frames);
+    return true;
 }
 
 } //namespace WCDB

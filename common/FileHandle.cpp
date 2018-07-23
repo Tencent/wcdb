@@ -23,6 +23,7 @@
 #include <WCDB/Notifier.hpp>
 #include <errno.h>
 #include <fcntl.h>
+#include <sys/mman.h>
 #include <unistd.h>
 
 namespace WCDB {
@@ -181,6 +182,25 @@ bool FileHandle::write(off_t offset, const UnsafeData &unsafeData)
     Notifier::shared()->notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
     return false;
+}
+
+MappedData FileHandle::map(off_t offset, size_t size)
+{
+    if (m_mode != Mode::ReadOnly) {
+        markAsMisuse("Map is only supported in Readonly mode.");
+        return MappedData::emptyData();
+    }
+    WCTInnerAssert(size > 0);
+    static int s_pagesize = getpagesize();
+    int alignment = offset % s_pagesize;
+    off_t roundedOffset = offset - alignment;
+    size_t roundedSize = size + alignment;
+    void *mapped = mmap(nullptr, roundedSize, PROT_READ, MAP_PRIVATE, m_fd, roundedOffset);
+    if (mapped == MAP_FAILED) {
+        setThreadedError();
+        return MappedData::emptyData();
+    }
+    return MappedData(reinterpret_cast<unsigned char *>(mapped), roundedSize).subdata(alignment, size);
 }
 
 void FileHandle::setThreadedError()

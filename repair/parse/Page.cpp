@@ -20,7 +20,6 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Cell.hpp>
-#include <WCDB/Data.hpp>
 #include <WCDB/Page.hpp>
 #include <WCDB/Pager.hpp>
 #include <WCDB/Serialization.hpp>
@@ -34,7 +33,7 @@ Page::Page(int number_, Pager *pager) : PagerRelated(pager), number(number_)
 {
 }
 
-Page::Page(int number_, Pager *pager, const Data &data)
+Page::Page(int number_, Pager *pager, const MappedData &data)
 : PagerRelated(pager), number(number_), m_data(data), m_deserialization(data)
 {
 }
@@ -42,8 +41,8 @@ Page::Page(int number_, Pager *pager, const Data &data)
 std::pair<bool, Page::Type> Page::acquireType()
 {
     int type = 0;
-    if (m_deserialization.getData().empty()) {
-        Data data = m_pager->acquirePageData(number, getOffsetOfHeader(), 1);
+    if (m_deserialization.data().empty()) {
+        MappedData data = m_pager->acquirePageData(number, getOffsetOfHeader(), 1);
         if (data.empty()) {
             return { false, Type::Unknown };
         }
@@ -66,7 +65,7 @@ std::pair<bool, Page::Type> Page::acquireType()
     }
 }
 
-const Data &Page::getData() const
+const MappedData &Page::getData() const
 {
     WCTInnerAssert(isInitialized());
     return m_data;

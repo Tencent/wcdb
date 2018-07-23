@@ -76,12 +76,12 @@ int Pager::getReservedBytes() const
     return m_reservedBytes;
 }
 
-Data Pager::acquirePageData(int number)
+MappedData Pager::acquirePageData(int number)
 {
     return acquirePageData(number, 0, m_pageSize);
 }
 
-Data Pager::acquirePageData(int number, off_t offset, size_t size)
+MappedData Pager::acquirePageData(int number, off_t offset, size_t size)
 {
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(number > 0);
@@ -91,19 +91,19 @@ Data Pager::acquirePageData(int number, off_t offset, size_t size)
     }
     if (number > m_pageCount) {
         markAsCorrupted(number, "PageData");
-        return Data::emptyData();
+        return MappedData::emptyData();
     }
     return acquireData((number - 1) * m_pageSize + offset, size);
 }
 
-Data Pager::acquireData(off_t offset, size_t size)
+MappedData Pager::acquireData(off_t offset, size_t size)
 {
     WCTInnerAssert(isInitializing() || isInitialized());
     if (!m_fileHandle.isOpened() && !m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
         assignWithSharedThreadedError();
-        return Data::emptyData();
+        return MappedData::emptyData();
     }
-    Data data = m_fileHandle.read(offset, size);
+    MappedData data = m_fileHandle.map(offset, size);
     if (data.size() != size) {
         if (data.size() > 0) {
             //short read
@@ -111,7 +111,7 @@ Data Pager::acquireData(off_t offset, size_t size)
         } else {
             assignWithSharedThreadedError();
         }
-        return Data::emptyData();
+        return MappedData::emptyData();
     }
     return data;
 }
@@ -180,7 +180,7 @@ bool Pager::doInitialize()
     }
 
     if (m_pageSize == -1 || m_reservedBytes == -1) {
-        Data data = acquireData(0, 100);
+        MappedData data = acquireData(0, 100);
         if (data.empty()) {
             assignWithSharedThreadedError();
             return false;

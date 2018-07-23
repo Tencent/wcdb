@@ -21,8 +21,8 @@
 #ifndef Cell_hpp
 #define Cell_hpp
 
-#include <WCDB/Data.hpp>
 #include <WCDB/Initializeable.hpp>
+#include <WCDB/MappedData.hpp>
 #include <WCDB/PagerRelated.hpp>
 #include <WCDB/Serialization.hpp>
 
@@ -53,7 +53,7 @@ public:
     double doubleValue(int index) const;
     std::pair<int, const char *> textValue(int index) const;
     std::string stringValue(int index) const;
-    const Data blobValue(int index) const;
+    const UnsafeData blobValue(int index) const;
 
 protected:
     static int getLengthOfSerialType(int serialType);
@@ -65,7 +65,9 @@ protected:
     int m_pointer;
 
     Deserialization m_deserialization;
-    Data m_payload;
+    Data m_overflowedPayloadHolder;
+    MappedData m_nonOverflowedPayloadHolder;
+    UnsafeData m_payload;
     //serial type -> offset of value
     std::vector<std::pair<int, int>> m_columns;
 

@@ -23,7 +23,6 @@
 
 #include <WCDB/Error.hpp>
 #include <WCDB/ErrorProne.hpp>
-#include <WCDB/FileHandle.hpp>
 #include <WCDB/Initializeable.hpp>
 #include <WCDB/Wal.hpp>
 
@@ -50,15 +49,15 @@ protected:
 #pragma mark - Page
 public:
     int getPageCount() const;
-    Data acquirePageData(int number);
-    Data acquirePageData(int number, off_t offset, size_t size);
+    MappedData acquirePageData(int number);
+    MappedData acquirePageData(int number, off_t offset, size_t size);
 
     int getUsableSize() const;
     int getPageSize() const;
     int getReservedBytes() const;
 
 protected:
-    Data acquireData(off_t offset, size_t size);
+    MappedData acquireData(off_t offset, size_t size);
     int m_pageSize;
     int m_reservedBytes;
     int m_pageCount;

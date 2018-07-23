@@ -46,13 +46,13 @@ const std::string &Wal::getPath() const
     return m_fileHandle.path;
 }
 
-Data Wal::acquireData(off_t offset, size_t size)
+MappedData Wal::acquireData(off_t offset, size_t size)
 {
     if (!m_fileHandle.isOpened() && !m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
         assignWithSharedThreadedError();
-        return Data::emptyData();
+        return MappedData::emptyData();
     }
-    Data data = m_fileHandle.read(offset, size);
+    MappedData data = m_fileHandle.map(offset, size);
     if (data.size() != size) {
         if (data.size() > 0) {
             //short read
@@ -60,7 +60,7 @@ Data Wal::acquireData(off_t offset, size_t size)
         } else {
             assignWithSharedThreadedError();
         }
-        return Data::emptyData();
+        return MappedData::emptyData();
     }
     return data;
 }
@@ -72,12 +72,12 @@ bool Wal::containsPage(int pageno) const
     return m_framePages.find(pageno) != m_framePages.end();
 }
 
-Data Wal::acquirePageData(int pageno)
+MappedData Wal::acquirePageData(int pageno)
 {
     return acquirePageData(pageno, 0, getPageSize());
 }
 
-Data Wal::acquirePageData(int pageno, off_t offset, size_t size)
+MappedData Wal::acquirePageData(int pageno, off_t offset, size_t size)
 {
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(containsPage(pageno));
@@ -96,7 +96,7 @@ int Wal::getMaxPageno() const
 }
 
 #pragma mark - Wal
-Data Wal::acquireFrameData(int frameno)
+MappedData Wal::acquireFrameData(int frameno)
 {
     WCTInnerAssert(isInitializing());
     return acquireData(headerSize + getFrameSize() * (frameno - 1), getFrameSize());
@@ -161,7 +161,7 @@ bool Wal::doInitialize()
         return succeed;
     }
 
-    Data data = acquireData(0, headerSize);
+    MappedData data = acquireData(0, headerSize);
     if (data.empty()) {
         return false;
     }

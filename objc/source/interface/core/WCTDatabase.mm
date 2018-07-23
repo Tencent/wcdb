@@ -69,9 +69,7 @@
 
 - (instancetype)initWithPath:(NSString *)path
 {
-    if (self = [super initWithDatabase:WCDB::Database::databaseWithPath(path.cppString)]) {
-    }
-    return self;
+    return [super initWithDatabase:WCDB::Database::databaseWithPath(path.cppString)];
 }
 
 - (instancetype)initWithExistingTag:(WCTTag)tag

@@ -77,7 +77,8 @@ public:
 
     virtual ~Recyclable() { release(); }
 
-    constexpr T &operator->() const { return m_value; }
+    constexpr const T *operator->() const { return &m_value; }
+    constexpr T *operator->() { return &m_value; }
     const T &get() const { return m_value; }
     T &unsafeGet() { return m_value; }
 

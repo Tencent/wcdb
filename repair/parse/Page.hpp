@@ -21,8 +21,8 @@
 #ifndef Page_hpp
 #define Page_hpp
 
-#include <WCDB/Data.hpp>
 #include <WCDB/Initializeable.hpp>
+#include <WCDB/MappedData.hpp>
 #include <WCDB/PagerRelated.hpp>
 #include <WCDB/Serialization.hpp>
 
@@ -36,7 +36,7 @@ class Page : public PagerRelated, public Initializeable {
 #pragma mark - Initialize
 public:
     Page(int number, Pager *pager);
-    Page(int number, Pager *pager, const Data &data);
+    Page(int number, Pager *pager, const MappedData &data);
 
     const int number;
 
@@ -51,12 +51,12 @@ public:
     std::pair<bool, Type> acquireType();
     Type getType() const;
 
-    const Data &getData() const;
+    const MappedData &getData() const;
 
 protected:
     Type m_type;
     Deserialization m_deserialization;
-    Data m_data;
+    MappedData m_data;
 
 #pragma mark - Interior Table
 public:

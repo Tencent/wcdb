@@ -30,11 +30,6 @@ SerializeIteration::SerializeIteration() : m_cursor(0)
 {
 }
 
-SerializeIteration::SerializeIteration(const Data &data)
-: m_data(data), m_cursor(0)
-{
-}
-
 void SerializeIteration::seek(off_t position)
 {
     if (position < 0) {
@@ -64,36 +59,22 @@ bool SerializeIteration::ended() const
     return m_cursor == capacity();
 }
 
-unsigned char *SerializeIteration::pointee()
-{
-    return m_data.buffer() + m_cursor;
-}
-
 const unsigned char *SerializeIteration::pointee() const
 {
-    return m_data.buffer() + m_cursor;
-}
-
-unsigned char *SerializeIteration::base()
-{
-    return m_data.buffer();
+    return data().buffer() + m_cursor;
 }
 
 const unsigned char *SerializeIteration::base() const
 {
-    return m_data.buffer();
+    return data().buffer();
 }
 
 size_t SerializeIteration::capacity() const
 {
-    return m_data.size();
+    return data().size();
 }
 
 #pragma mark - Serialization
-Serialization::Serialization() : SerializeIteration()
-{
-}
-
 bool Serialization::resize(size_t size)
 {
     if (size < m_data.size()) {
@@ -105,6 +86,21 @@ bool Serialization::resize(size_t size)
 bool Serialization::expand(size_t expand)
 {
     return resize((size_t) m_cursor + expand);
+}
+
+const UnsafeData &Serialization::data() const
+{
+    return m_data;
+}
+
+unsigned char *Serialization::pointee()
+{
+    return m_data.buffer() + m_cursor;
+}
+
+unsigned char *Serialization::base()
+{
+    return m_data.buffer();
 }
 
 #pragma mark - Put
@@ -131,7 +127,7 @@ bool Serialization::putSizedString(const std::string &string)
     return true;
 }
 
-bool Serialization::putSizedData(const Data &data)
+bool Serialization::putSizedData(const UnsafeData &data)
 {
     off_t cursor = m_cursor;
     bool succeed = false;
@@ -240,7 +236,16 @@ Data Serialization::finalize()
 static_assert(Deserialization::slot_2_0 == ((0x7f << 14) | (0x7f)), "");
 static_assert(Deserialization::slot_4_2_0 == ((0xfU << 28) | (0x7f << 14) | (0x7f)), "");
 
-void Deserialization::reset(const Data &data)
+Deserialization::Deserialization(const UnsafeData &data) : m_data(data)
+{
+}
+
+const UnsafeData &Deserialization::data() const
+{
+    return m_data;
+}
+
+void Deserialization::reset(const UnsafeData &data)
 {
     m_data = data;
     m_cursor = 0;
@@ -256,7 +261,7 @@ std::pair<size_t, std::string> Deserialization::advanceSizedString()
     return pair;
 }
 
-std::pair<size_t, const Data> Deserialization::advanceSizedData()
+std::pair<size_t, const UnsafeData> Deserialization::advanceSizedData()
 {
     auto pair = getSizedData(m_cursor);
     if (pair.first > 0) {
@@ -341,7 +346,7 @@ std::pair<size_t, std::string> Deserialization::getSizedString(off_t offset) con
     return { lengthOfSize + size, getString((size_t) offset + lengthOfSize, (size_t) size) };
 }
 
-std::pair<size_t, const Data> Deserialization::getSizedData(off_t offset) const
+std::pair<size_t, const UnsafeData> Deserialization::getSizedData(off_t offset) const
 {
     size_t lengthOfSize;
     uint64_t size;
@@ -529,7 +534,7 @@ std::string Deserialization::getString(off_t offset, size_t size) const
     return std::string(reinterpret_cast<const char *>(base() + offset), size);
 }
 
-const Data Deserialization::getData(off_t offset, size_t size) const
+const UnsafeData Deserialization::getData(off_t offset, size_t size) const
 {
     WCTInnerAssert(isEnough(offset + size));
     return UnsafeData::immutable(base() + offset, size);
@@ -595,11 +600,6 @@ uint32_t Deserialization::get4BytesUInt(off_t offset) const
     return (((uint32_t) p[0] << 24) | (p[1] << 16) | (p[2] << 8) | p[3]);
 }
 
-const Data &Deserialization::getData() const
-{
-    return m_data;
-}
-
 #pragma mark - Serializable
 Data Serializable::serialize() const
 {
@@ -644,11 +644,18 @@ bool Deserializable::deserialize(const std::string &path)
         if (size < 0) {
             break;
         }
-        Data data = fileHandle.read(0, size);
-        if (data.size() != size) {
-            break;
+        {
+            MappedData data = fileHandle.map(0, size);
+            if (data.size() == size) {
+                succeed = deserialize(data);
+            }
         }
-        succeed = deserialize(data);
+        if (!succeed) {
+            Data data = fileHandle.read(0, size);
+            if (data.size() == size) {
+                succeed = deserialize(data);
+            }
+        }
     } while (false);
     fileHandle.close();
     return succeed;

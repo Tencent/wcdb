@@ -21,7 +21,6 @@
 #ifndef Wal_hpp
 #define Wal_hpp
 
-#include <WCDB/Data.hpp>
 #include <WCDB/FileHandle.hpp>
 #include <WCDB/Initializeable.hpp>
 #include <WCDB/PagerRelated.hpp>
@@ -43,13 +42,13 @@ public:
 protected:
     FileHandle m_fileHandle;
     friend class WalRelated;
-    Data acquireData(off_t offset, size_t size);
+    MappedData acquireData(off_t offset, size_t size);
 
 #pragma mark - Page
 public:
     bool containsPage(int pageno) const;
-    Data acquirePageData(int pageno);
-    Data acquirePageData(int pageno, off_t offset, size_t size);
+    MappedData acquirePageData(int pageno);
+    MappedData acquirePageData(int pageno, off_t offset, size_t size);
     int getMaxPageno() const;
 
 protected:
@@ -73,7 +72,7 @@ protected:
 #pragma mark - Frame
 public:
     int getFrameSize() const;
-    Data acquireFrameData(int frameno);
+    MappedData acquireFrameData(int frameno);
 
 #pragma mark - Initializeable
 protected:

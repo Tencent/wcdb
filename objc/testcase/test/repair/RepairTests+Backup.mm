@@ -154,23 +154,6 @@
     XCTAssertTrue([_database backup]);
 }
 
-- (void)test_auto_backup_with_checkpoint
-{
-    _database.autoBackup = YES;
-
-    int count = 100;
-    NSString *tableName = self.className;
-    XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
-
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *backupPath = [_database.path stringByAppendingString:@"-first.material"];
-    XCTAssertFalse([fileManager fileExistsAtPath:backupPath]);
-
-    XCTAssertTrue([_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
-
-    XCTAssertTrue([fileManager fileExistsAtPath:backupPath]);
-}
-
 - (void)test_backup_fail
 {
     int count = 100;
@@ -184,23 +167,6 @@
     XCTAssertTrue([fileManager createDirectoryAtPath:lastBackupPath withIntermediateDirectories:YES attributes:nil error:nil]);
 
     XCTAssertFalse([_database backup]);
-}
-
-- (void)test_checkpoint_failed_with_backup
-{
-    _database.autoBackup = YES;
-
-    int count = 100;
-    NSString *tableName = self.className;
-    XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
-
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *firstBackupPath = [_database.path stringByAppendingString:@"-first.material"];
-    NSString *lastBackupPath = [_database.path stringByAppendingString:@"-last.material"];
-    XCTAssertTrue([fileManager createDirectoryAtPath:firstBackupPath withIntermediateDirectories:YES attributes:nil error:nil]);
-    XCTAssertTrue([fileManager createDirectoryAtPath:lastBackupPath withIntermediateDirectories:YES attributes:nil error:nil]);
-
-    XCTAssertFalse([_database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
 }
 
 - (void)test_auto_backup_with_frames_exceed
@@ -221,38 +187,6 @@
     [NSThread sleepForTimeInterval:3];
 
     XCTAssertTrue([self.fileManager fileExistsAtPath:backupPath]);
-}
-
-- (void)test_mandatory_checkpoint_cover_backup_with_super_large_wal
-{
-    _database.autoBackup = YES;
-
-    NSString *tableName = self.className;
-
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *firstBackupPath = [_database.path stringByAppendingString:@"-first.material"];
-    NSString *lastBackupPath = [_database.path stringByAppendingString:@"-last.material"];
-
-    XCTAssertTrue([fileManager createDirectoryAtPath:firstBackupPath withIntermediateDirectories:YES attributes:nil error:nil]);
-    XCTAssertTrue([fileManager createDirectoryAtPath:lastBackupPath withIntermediateDirectories:YES attributes:nil error:nil]);
-
-    int step1InsertCount = 1000;
-    int step2InsertCount = 500;
-    int pageSize = 4096;
-    int expectedStep1WalSize = step1InsertCount * pageSize;
-    NSString *walPath = [_database.path stringByAppendingString:@"-wal"];
-
-    for (int i = 0; i < step1InsertCount; ++i) {
-        XCTAssertTrue([self insertObjectsOfCount:1 from:i intoTable:tableName]);
-    }
-
-    XCTAssertGreaterThan([fileManager attributesOfItemAtPath:walPath error:nil].fileSize, expectedStep1WalSize);
-
-    for (int i = step1InsertCount; i < step1InsertCount + step2InsertCount; ++i) {
-        XCTAssertTrue([self insertObjectsOfCount:1 from:i intoTable:tableName]);
-    }
-
-    XCTAssertLessThan([fileManager attributesOfItemAtPath:walPath error:nil].fileSize, expectedStep1WalSize);
 }
 
 - (void)test_with_reserved_table

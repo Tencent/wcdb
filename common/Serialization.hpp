@@ -29,7 +29,6 @@ class SerializeIteration {
 #pragma mark - SerializeIteration
 public:
     SerializeIteration();
-    SerializeIteration(const Data &data);
 
     void seek(off_t position);
     void advance(off_t offset);
@@ -38,29 +37,33 @@ public:
     bool ended() const;
 
 protected:
-    unsigned char *pointee();
+    virtual const UnsafeData &data() const = 0;
     const unsigned char *pointee() const;
-    unsigned char *base();
     const unsigned char *base() const;
     size_t capacity() const;
 
     off_t m_cursor;
-    Data m_data;
 };
 
 class Serialization : public SerializeIteration {
 #pragma mark - Serialization
 public:
-    Serialization();
+    using SerializeIteration::SerializeIteration;
 
     Data finalize();
     bool resize(size_t size);
     bool expand(size_t expand);
 
+protected:
+    unsigned char *pointee();
+    unsigned char *base();
+    const UnsafeData &data() const override;
+    Data m_data;
+
 #pragma mark - Put
 public:
     bool putSizedString(const std::string &string);
-    bool putSizedData(const Data &data);
+    bool putSizedData(const UnsafeData &data);
     bool put4BytesUInt(uint32_t value);
     bool put8BytesUInt(uint64_t value);
     bool putString(const std::string &string);
@@ -71,18 +74,23 @@ class Deserialization : public SerializeIteration {
 #pragma mark - Deserialization
 public:
     using SerializeIteration::SerializeIteration;
-    void reset(const Data &data);
+    Deserialization(const UnsafeData &data);
 
-    const Data &getData() const;
+    void reset(const UnsafeData &data);
 
     static constexpr const int slot_2_0 = 0x001fc07f;
     static constexpr const int slot_4_2_0 = 0xf01fc07f;
+
+    const UnsafeData &data() const override;
+
+protected:
+    UnsafeData m_data;
 
 #pragma mark - Advance
 public:
     //return 0 size to indicate failure
     std::pair<size_t, std::string> advanceSizedString();
-    std::pair<size_t, const Data> advanceSizedData();
+    std::pair<size_t, const UnsafeData> advanceSizedData();
     std::pair<size_t, uint64_t> advanceVarint();
 
     // For the following types with specified size, `canAdvance` should be called first.
@@ -99,12 +107,12 @@ public:
 public:
     //return 0 size to indicate failure
     std::pair<size_t, std::string> getSizedString(off_t offset) const;
-    std::pair<size_t, const Data> getSizedData(off_t offset) const;
+    std::pair<size_t, const UnsafeData> getSizedData(off_t offset) const;
     std::pair<size_t, uint64_t> getVarint(off_t offset) const;
 
     // For the following types with specified size, `isEnough` should be called first.
     std::string getString(off_t offset, size_t size) const;
-    const Data getData(off_t offset, size_t size) const;
+    const UnsafeData getData(off_t offset, size_t size) const;
     int64_t get8BytesInt(off_t offset) const;
     int64_t get6BytesInt(off_t offset) const;
     int32_t get4BytesInt(off_t offset) const;

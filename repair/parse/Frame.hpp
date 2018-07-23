@@ -21,7 +21,6 @@
 #ifndef Frame_hpp
 #define Frame_hpp
 
-#include <WCDB/Data.hpp>
 #include <WCDB/Initializeable.hpp>
 #include <WCDB/Page.hpp>
 #include <WCDB/WalRelated.hpp>
@@ -47,10 +46,10 @@ public:
 protected:
     std::pair<uint32_t, uint32_t> m_checksum;
     int m_pageno;
-    Data m_data;
+    MappedData m_data;
 
     std::pair<uint32_t, uint32_t>
-    calculateChecksum(const Data &data, const std::pair<uint32_t, uint32_t> &checksum);
+    calculateChecksum(const MappedData &data, const std::pair<uint32_t, uint32_t> &checksum);
 
 #pragma mark - Initializeable
 protected:
