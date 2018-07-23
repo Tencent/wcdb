@@ -59,8 +59,10 @@ public:
     Data read(off_t offset, size_t size);
     bool write(off_t offset, const UnsafeData &unsafeData);
     MappedData map(off_t offset, size_t size);
+    void markErrorAsIgnorable(bool flag = true);
 
 protected:
+    bool m_errorIgnorable;
     int m_mode;
 
 #pragma mark - Error

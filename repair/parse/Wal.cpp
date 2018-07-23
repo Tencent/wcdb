@@ -48,14 +48,7 @@ const std::string &Wal::getPath() const
 
 MappedData Wal::acquireData(off_t offset, size_t size)
 {
-    if (!m_fileHandle.isOpened()) {
-        if (!m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
-            assignWithSharedThreadedError();
-            return MappedData::emptyData();
-        }
-        FileManager::shared()->setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(
-        getPath());
-    }
+    WCTInnerAssert(m_fileHandle.isOpened());
     MappedData data = m_fileHandle.map(offset, size);
     if (data.size() != size) {
         if (data.size() > 0) {
@@ -164,6 +157,12 @@ bool Wal::doInitialize()
         }
         return succeed;
     }
+
+    if (!m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
+        assignWithSharedThreadedError();
+        return false;
+    }
+    fileManager->setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(getPath());
 
     MappedData data = acquireData(0, headerSize);
     if (data.empty()) {

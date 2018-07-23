@@ -49,6 +49,12 @@
 		2316D93421057CA700707AFC /* MappedData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2316D92E21057CA700707AFC /* MappedData.cpp */; };
 		2316D93721058B5500707AFC /* WCTFileManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2316D93521058B5500707AFC /* WCTFileManager.mm */; };
 		2316D93821058B5500707AFC /* WCTFileManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2316D93521058B5500707AFC /* WCTFileManager.mm */; };
+		2316D9432105D19500707AFC /* PageBasedFileHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2316D9412105D19500707AFC /* PageBasedFileHandle.cpp */; };
+		2316D9442105D19500707AFC /* PageBasedFileHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2316D9412105D19500707AFC /* PageBasedFileHandle.cpp */; };
+		2316D9452105D19500707AFC /* PageBasedFileHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D9422105D19500707AFC /* PageBasedFileHandle.hpp */; };
+		2316D9462105D19500707AFC /* PageBasedFileHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D9422105D19500707AFC /* PageBasedFileHandle.hpp */; };
+		2316D94B2105D21500707AFC /* LRUCache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D9482105D21500707AFC /* LRUCache.hpp */; };
+		2316D94C2105D21500707AFC /* LRUCache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D9482105D21500707AFC /* LRUCache.hpp */; };
 		232741501F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		232741521F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */; };
 		232DCE0A207F81FD00AC2CD0 /* Lock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 232DCE08207F81FD00AC2CD0 /* Lock.cpp */; };
@@ -1164,6 +1170,9 @@
 		2316D92D21057CA700707AFC /* Recyclable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Recyclable.hpp; sourceTree = "<group>"; };
 		2316D92E21057CA700707AFC /* MappedData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MappedData.cpp; sourceTree = "<group>"; };
 		2316D93521058B5500707AFC /* WCTFileManager.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTFileManager.mm; sourceTree = "<group>"; };
+		2316D9412105D19500707AFC /* PageBasedFileHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PageBasedFileHandle.cpp; sourceTree = "<group>"; };
+		2316D9422105D19500707AFC /* PageBasedFileHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PageBasedFileHandle.hpp; sourceTree = "<group>"; };
+		2316D9482105D21500707AFC /* LRUCache.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LRUCache.hpp; sourceTree = "<group>"; };
 		231C22BA1EA6191100B55554 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+FTS.h"; sourceTree = "<group>"; };
 		2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+FTS.mm"; sourceTree = "<group>"; };
@@ -2101,6 +2110,7 @@
 				23759460210081AA00DBB721 /* UnsafeData.hpp */,
 				23567D7920CA93C5005F1C35 /* Time.cpp */,
 				23567D7A20CA93C5005F1C35 /* Time.hpp */,
+				2316D9482105D21500707AFC /* LRUCache.hpp */,
 			);
 			name = common;
 			path = ../../common;
@@ -2181,6 +2191,8 @@
 				23567CF920CA3889005F1C35 /* Frame.hpp */,
 				23AF4E1C20CD04E20050033C /* Initializeable.cpp */,
 				23AF4E1D20CD04E20050033C /* Initializeable.hpp */,
+				2316D9412105D19500707AFC /* PageBasedFileHandle.cpp */,
+				2316D9422105D19500707AFC /* PageBasedFileHandle.hpp */,
 			);
 			path = parse;
 			sourceTree = "<group>";
@@ -2692,6 +2704,7 @@
 				23977568202AECD3000A681C /* LangCreateVirtualTableSTMT.hpp in Headers */,
 				2397756A202AECD3000A681C /* LangCTETableName.hpp in Headers */,
 				23D07CEC20BE873E0043F4D4 /* SequenceCrawler.hpp in Headers */,
+				2316D9452105D19500707AFC /* PageBasedFileHandle.hpp in Headers */,
 				236814F020C5640200BDF4D3 /* Attachment.hpp in Headers */,
 				2397756C202AECD3000A681C /* LangDeleteSTMT.hpp in Headers */,
 				2360A60520D78F2C00E4A311 /* SQLTraceConfig.hpp in Headers */,
@@ -2845,6 +2858,7 @@
 				23775B8020AD666900E21AB0 /* Mechanic.hpp in Headers */,
 				23567D4720CA7DBC005F1C35 /* ErrorProne.hpp in Headers */,
 				2349F7581EA0D6680021EFA7 /* WCTRuntimeBaseAccessor.h in Headers */,
+				2316D94B2105D21500707AFC /* LRUCache.hpp in Headers */,
 				23977549202AECD3000A681C /* Lang.h in Headers */,
 				234DBCF72064DD0C000E31E8 /* WCTUnsafeHandle+Private.h in Headers */,
 				2349F73D1EA0D6680021EFA7 /* WCTDatabase.h in Headers */,
@@ -2989,6 +3003,7 @@
 				23F5BD6920887FD3000CCD37 /* LangCreateVirtualTableSTMT.hpp in Headers */,
 				23F5BD6A20887FD3000CCD37 /* LangCTETableName.hpp in Headers */,
 				23D07CED20BE873E0043F4D4 /* SequenceCrawler.hpp in Headers */,
+				2316D9462105D19500707AFC /* PageBasedFileHandle.hpp in Headers */,
 				236814F120C5640200BDF4D3 /* Attachment.hpp in Headers */,
 				23F5BD6B20887FD3000CCD37 /* LangDeleteSTMT.hpp in Headers */,
 				2360A60620D78F2C00E4A311 /* SQLTraceConfig.hpp in Headers */,
@@ -3142,6 +3157,7 @@
 				23775B8120AD666900E21AB0 /* Mechanic.hpp in Headers */,
 				23567D4820CA7DBC005F1C35 /* ErrorProne.hpp in Headers */,
 				23F5BDE720887FD3000CCD37 /* WCTRuntimeBaseAccessor.h in Headers */,
+				2316D94C2105D21500707AFC /* LRUCache.hpp in Headers */,
 				23F5BDE820887FD3000CCD37 /* Lang.h in Headers */,
 				23F5BDE920887FD3000CCD37 /* WCTUnsafeHandle+Private.h in Headers */,
 				23F5BDEA20887FD3000CCD37 /* WCTDatabase.h in Headers */,
@@ -3344,6 +3360,7 @@
 				23C7559120DCF90F00031A93 /* SQLiteLocker.cpp in Sources */,
 				23AF4E1E20CD04E20050033C /* Initializeable.cpp in Sources */,
 				2349F70F1EA0D6680021EFA7 /* NSDate+WCTColumnCoding.mm in Sources */,
+				2316D9432105D19500707AFC /* PageBasedFileHandle.cpp in Sources */,
 				23977581202AECD3000A681C /* LangJoinClause.cpp in Sources */,
 				23A6D4BF20BFD7F9004F2DAA /* Progress.cpp in Sources */,
 				23775B7E20AD666900E21AB0 /* Mechanic.cpp in Sources */,
@@ -3597,6 +3614,7 @@
 				23C7559220DCF90F00031A93 /* SQLiteLocker.cpp in Sources */,
 				23AF4E1F20CD04E20050033C /* Initializeable.cpp in Sources */,
 				23F5BC5B20887FD3000CCD37 /* NSDate+WCTColumnCoding.mm in Sources */,
+				2316D9442105D19500707AFC /* PageBasedFileHandle.cpp in Sources */,
 				23F5BC5C20887FD3000CCD37 /* LangJoinClause.cpp in Sources */,
 				23A6D4C020BFD7F9004F2DAA /* Progress.cpp in Sources */,
 				23775B7F20AD666900E21AB0 /* Mechanic.cpp in Sources */,

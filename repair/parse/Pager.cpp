@@ -86,27 +86,30 @@ MappedData Pager::acquirePageData(int number, off_t offset, size_t size)
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(number > 0);
     WCTInnerAssert(offset + size <= m_pageSize);
+    MappedData data;
     if (m_wal.containsPage(number)) {
-        return m_wal.acquirePageData(number, offset, size);
-    }
-    if (number > m_pageCount) {
+        data = m_wal.acquirePageData(number, offset, size);
+    } else if (number > m_pageCount) {
         markAsCorrupted(number, "PageData");
         return MappedData::emptyData();
+    } else {
+        data = m_fileHandle.lazyMap(number, offset, size);
     }
-    return acquireData((number - 1) * m_pageSize + offset, size);
+    if (data.size() != size) {
+        if (data.size() > 0) {
+            //short read
+            markAsCorrupted((int) (offset / m_pageSize + 1), "ShortRead");
+        } else {
+            assignWithSharedThreadedError();
+        }
+        return MappedData::emptyData();
+    }
+    return data;
 }
 
 MappedData Pager::acquireData(off_t offset, size_t size)
 {
-    WCTInnerAssert(isInitializing() || isInitialized());
-    if (!m_fileHandle.isOpened()) {
-        if (!m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
-            assignWithSharedThreadedError();
-            return MappedData::emptyData();
-        }
-        FileManager::shared()->setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(
-        getPath());
-    }
+    WCTInnerAssert(m_fileHandle.isOpened());
     MappedData data = m_fileHandle.map(offset, size);
     if (data.size() != size) {
         if (data.size() > 0) {
@@ -183,6 +186,11 @@ bool Pager::doInitialize()
         return false;
     }
 
+    if (!m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
+        assignWithSharedThreadedError();
+        return false;
+    }
+    fileManager->setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(getPath());
     if (m_pageSize == -1 || m_reservedBytes == -1) {
         MappedData data = acquireData(0, 100);
         if (data.empty()) {
@@ -215,6 +223,8 @@ bool Pager::doInitialize()
         markAsCorrupted(1, "ReversedBytes");
         return false;
     }
+
+    m_fileHandle.setPageSize(m_pageSize);
 
     m_pageCount = (int) ((fileSize + m_pageSize - 1) / m_pageSize);
 

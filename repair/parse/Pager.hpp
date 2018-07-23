@@ -24,6 +24,7 @@
 #include <WCDB/Error.hpp>
 #include <WCDB/ErrorProne.hpp>
 #include <WCDB/Initializeable.hpp>
+#include <WCDB/PageBasedFileHandle.hpp>
 #include <WCDB/Wal.hpp>
 
 namespace WCDB {
@@ -43,7 +44,7 @@ public:
     const std::string &getPath() const;
 
 protected:
-    FileHandle m_fileHandle;
+    PageBasedFileHandle m_fileHandle;
     friend class PagerRelated;
 
 #pragma mark - Page

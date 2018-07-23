@@ -29,7 +29,7 @@
 namespace WCDB {
 
 FileHandle::FileHandle(const std::string &path_)
-: path(path_), m_fd(-1), m_mode(Mode::None)
+: path(path_), m_fd(-1), m_mode(Mode::None), m_errorIgnorable(false)
 {
 }
 
@@ -203,9 +203,17 @@ MappedData FileHandle::map(off_t offset, size_t size)
     return MappedData(reinterpret_cast<unsigned char *>(mapped), roundedSize).subdata(alignment, size);
 }
 
+void FileHandle::markErrorAsIgnorable(bool flag)
+{
+    m_errorIgnorable = flag;
+}
+
 void FileHandle::setThreadedError()
 {
     Error error;
+    if (m_errorIgnorable) {
+        error.level = Error::Level::Warning;
+    }
     error.setSystemCode(errno, Error::Code::IOError);
     error.message = strerror(errno);
     error.infos.set("Path", path);
@@ -216,6 +224,9 @@ void FileHandle::setThreadedError()
 void FileHandle::markAsMisuse(const char *message)
 {
     Error error;
+    if (m_errorIgnorable) {
+        error.level = Error::Level::Warning;
+    }
     error.setCode(Error::Code::Misuse);
     error.message = message;
     error.infos.set("Path", path);

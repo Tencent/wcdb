@@ -648,7 +648,9 @@ bool Deserializable::deserialize(const std::string &path)
         }
         {
             FileManager::shared()->setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
+            fileHandle.markErrorAsIgnorable(true);
             MappedData data = fileHandle.map(0, size);
+            fileHandle.markErrorAsIgnorable(false);
             if (data.size() == size) {
                 succeed = deserialize(data);
             }
