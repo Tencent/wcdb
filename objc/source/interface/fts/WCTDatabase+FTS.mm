@@ -31,6 +31,13 @@ WCTTokenizer const WCTTokenizerWCDB = @"WCDB";
 
 @implementation WCTDatabase (FTS)
 
++ (void)initialize
+{
+    if (self == [WCTDatabase self]) {
+        [self lazyEnrollTokenizer];
+    }
+}
+
 + (void)lazyEnrollTokenizer
 {
     static std::atomic<bool> *s_enrolled = new std::atomic<bool>(false);
@@ -43,15 +50,14 @@ WCTTokenizer const WCTTokenizerWCDB = @"WCDB";
 - (void)setTokenizer:(NSString *)tokenizerName
 {
     WCTRemedialAssert(tokenizerName, "Tokenizer name can't be null.", return;)
-    [WCTDatabase lazyEnrollTokenizer];
     _database->setTokenizes({ tokenizerName.cppString });
 }
 
 - (void)setTokenizers:(NSArray<NSString *> *)tokenizerNames
 {
     WCTRemedialAssert(tokenizerNames, "Tokenizers can't be null.", return;)
-    [WCTDatabase lazyEnrollTokenizer];
-    std::list<std::string> theTokenizeNames;
+    std::list<std::string>
+    theTokenizeNames;
     for (NSString *tokenizerName in tokenizerNames) {
         theTokenizeNames.push_back(tokenizerName.cppString);
     }

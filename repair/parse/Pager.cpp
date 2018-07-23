@@ -99,9 +99,13 @@ MappedData Pager::acquirePageData(int number, off_t offset, size_t size)
 MappedData Pager::acquireData(off_t offset, size_t size)
 {
     WCTInnerAssert(isInitializing() || isInitialized());
-    if (!m_fileHandle.isOpened() && !m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
-        assignWithSharedThreadedError();
-        return MappedData::emptyData();
+    if (!m_fileHandle.isOpened()) {
+        if (!m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
+            assignWithSharedThreadedError();
+            return MappedData::emptyData();
+        }
+        FileManager::shared()->setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(
+        getPath());
     }
     MappedData data = m_fileHandle.map(offset, size);
     if (data.size() != size) {

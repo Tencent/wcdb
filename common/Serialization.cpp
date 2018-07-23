@@ -20,6 +20,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/FileHandle.hpp>
+#include <WCDB/FileManager.hpp>
 #include <WCDB/Serialization.hpp>
 #include <WCDB/String.hpp>
 
@@ -622,6 +623,7 @@ bool Serializable::serialize(const std::string &path) const
     }
     bool succeed = fileHandle.write(0, data);
     fileHandle.close();
+    FileManager::shared()->setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
     return succeed;
 }
 
@@ -645,6 +647,7 @@ bool Deserializable::deserialize(const std::string &path)
             break;
         }
         {
+            FileManager::shared()->setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
             MappedData data = fileHandle.map(0, size);
             if (data.size() == size) {
                 succeed = deserialize(data);

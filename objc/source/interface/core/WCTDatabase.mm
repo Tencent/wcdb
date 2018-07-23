@@ -27,46 +27,6 @@
 
 @implementation WCTDatabase
 
-+ (void)initialize
-{
-    if (self == [WCTDatabase self]) {
-#if TARGET_OS_IPHONE
-        WCDB::SQLiteGlobal::shared()->setNotificationWhenFileCreated([](const char *path) {
-            if (!path) {
-                return;
-            }
-            NSError *nsError = nil;
-            NSFileManager *fileManager = [NSFileManager defaultManager];
-            NSString *nsPath = [NSString stringWithUTF8String:path];
-            NSDictionary *attributes = [fileManager attributesOfItemAtPath:nsPath error:&nsError];
-            if (attributes) {
-                NSString *fileProtection = [attributes objectForKey:NSFileProtectionKey];
-                if ([fileProtection isEqualToString:NSFileProtectionCompleteUntilFirstUserAuthentication] || [fileProtection isEqualToString:NSFileProtectionNone]) {
-                    return;
-                }
-                NSDictionary *fileProtectionAttribute = @{ NSFileProtectionKey : NSFileProtectionCompleteUntilFirstUserAuthentication };
-                [fileManager setAttributes:fileProtectionAttribute
-                              ofItemAtPath:nsPath
-                                     error:&nsError];
-            }
-            if (nsError) {
-                WCDB::Error error;
-                error.setCode(WCDB::Error::Code::IOError, "Native");
-                if (nsError.description.length > 0) {
-                    error.message = nsError.description.cppString;
-                } else {
-                    error.message = WCDB::Error::codeName(WCDB::Error::Code::IOError);
-                }
-                error.infos.set("Path", path);
-                error.infos.set("ExtCode", nsError.code);
-                WCDB::Notifier::shared()->notify(error);
-                WCDB::ThreadedErrors::shared()->setThreadedError(std::move(error));
-            }
-        });
-#endif //TARGET_OS_IPHONE
-    }
-}
-
 - (instancetype)initWithPath:(NSString *)path
 {
     return [super initWithDatabase:WCDB::Database::databaseWithPath(path.cppString)];

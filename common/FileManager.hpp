@@ -32,6 +32,13 @@
 
 namespace WCDB {
 
+enum FileProtection {
+    None = 0,
+    Complete,
+    CompleteUnlessOpen,
+    CompleteUntilFirstUserAuthentication,
+};
+
 class FileManager : public SharedThreadedErrorProne {
 #pragma mark - Initialize
 public:
@@ -56,7 +63,11 @@ public:
     bool enumerateDirectory(const std::string &directory,
                             const std::function<bool(const std::string &, bool)> &enumeration);
 
+    bool setFileProtection(const std::string &path, FileProtection fileProtection);
+    std::pair<bool, FileProtection> getFileProtection(const std::string &path);
+
 protected:
+    static const char *fileProtectionName(FileProtection fileProtection);
     bool removeFile(const std::string &file);
     bool removeDirectory(const std::string &directory);
 
@@ -71,6 +82,7 @@ public:
     bool moveItems(const std::list<std::string> &paths, const std::string &directory);
     bool moveItems(const std::list<std::pair<std::string, std::string>> &pairedPaths);
     bool createDirectoryWithIntermediateDirectories(const std::string &directory);
+    bool setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(const std::string &path);
 
 #pragma mark - Error
 protected:

@@ -47,6 +47,8 @@
 		2316D93221057CA700707AFC /* Recyclable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D92D21057CA700707AFC /* Recyclable.hpp */; };
 		2316D93321057CA700707AFC /* MappedData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2316D92E21057CA700707AFC /* MappedData.cpp */; };
 		2316D93421057CA700707AFC /* MappedData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2316D92E21057CA700707AFC /* MappedData.cpp */; };
+		2316D93721058B5500707AFC /* WCTFileManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2316D93521058B5500707AFC /* WCTFileManager.mm */; };
+		2316D93821058B5500707AFC /* WCTFileManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2316D93521058B5500707AFC /* WCTFileManager.mm */; };
 		232741501F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		232741521F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */; };
 		232DCE0A207F81FD00AC2CD0 /* Lock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 232DCE08207F81FD00AC2CD0 /* Lock.cpp */; };
@@ -1161,6 +1163,7 @@
 		2316D92B21057CA600707AFC /* MappedData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MappedData.hpp; sourceTree = "<group>"; };
 		2316D92D21057CA700707AFC /* Recyclable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Recyclable.hpp; sourceTree = "<group>"; };
 		2316D92E21057CA700707AFC /* MappedData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MappedData.cpp; sourceTree = "<group>"; };
+		2316D93521058B5500707AFC /* WCTFileManager.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTFileManager.mm; sourceTree = "<group>"; };
 		231C22BA1EA6191100B55554 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+FTS.h"; sourceTree = "<group>"; };
 		2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+FTS.mm"; sourceTree = "<group>"; };
@@ -1910,6 +1913,7 @@
 				2349F65E1EA0D6680021EFA7 /* WCTCore.mm */,
 				2349F65F1EA0D6680021EFA7 /* WCTDatabase.h */,
 				2349F6601EA0D6680021EFA7 /* WCTDatabase.mm */,
+				2316D93521058B5500707AFC /* WCTFileManager.mm */,
 				23F70F79209FF0EC00CCE3CD /* WCTValue.h */,
 				23F70F7A209FF0EC00CCE3CD /* WCTValue.mm */,
 				23F70F9420A03E5200CCE3CD /* WCTValue+Private.h */,
@@ -3512,6 +3516,7 @@
 				2397752D202AECD3000A681C /* StatementDropView.cpp in Sources */,
 				23EE0EB220B838E100C95998 /* Repairman.cpp in Sources */,
 				239774FA202AECD3000A681C /* JoinClause.cpp in Sources */,
+				2316D93721058B5500707AFC /* WCTFileManager.mm in Sources */,
 				23B8F5662043A2CE00EC571D /* Operable.cpp in Sources */,
 				23977537202AECD3000A681C /* StatementRollback.cpp in Sources */,
 				23775B7A20AD666900E21AB0 /* Material.cpp in Sources */,
@@ -3764,6 +3769,7 @@
 				23F5BCE720887FD3000CCD37 /* StatementDropView.cpp in Sources */,
 				23EE0EB320B838E100C95998 /* Repairman.cpp in Sources */,
 				23F5BCE820887FD3000CCD37 /* JoinClause.cpp in Sources */,
+				2316D93821058B5500707AFC /* WCTFileManager.mm in Sources */,
 				23F5BCE920887FD3000CCD37 /* Operable.cpp in Sources */,
 				23F5BCEA20887FD3000CCD37 /* StatementRollback.cpp in Sources */,
 				23775B7B20AD666900E21AB0 /* Material.cpp in Sources */,

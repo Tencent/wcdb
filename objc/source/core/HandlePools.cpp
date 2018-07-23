@@ -34,7 +34,12 @@ HandlePools *HandlePools::defaultPools()
 
 HandlePools::HandlePools()
 {
-    SQLiteGlobal::shared();
+    SQLiteGlobal::shared()->setNotificationWhenFileCreated([](const char *path) {
+        if (!path) {
+            return;
+        }
+        FileManager::shared()->setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
+    });
     CorruptionNotifier::shared();
 }
 

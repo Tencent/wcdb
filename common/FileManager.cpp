@@ -331,6 +331,21 @@ bool FileManager::createDirectoryWithIntermediateDirectories(const std::string &
     return true;
 }
 
+bool FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(const std::string &path)
+{
+    bool succeed;
+    FileProtection fileProtection;
+    std::tie(succeed, fileProtection) = getFileProtection(path);
+    if (!succeed) {
+        return false;
+    }
+    if (fileProtection != FileProtection::None
+        && fileProtection != FileProtection::CompleteUntilFirstUserAuthentication) {
+        return setFileProtection(path, FileProtection::CompleteUntilFirstUserAuthentication);
+    }
+    return true;
+}
+
 #pragma mark - Error
 void FileManager::setThreadedError(const std::string &path)
 {

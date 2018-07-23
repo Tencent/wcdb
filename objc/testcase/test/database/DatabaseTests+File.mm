@@ -183,10 +183,15 @@
     _database = [[WCTDatabase alloc] initWithPath:self.recommendedPath];
     XCTAssertTrue([_database createTableAndIndexes:self.className
                                          withClass:TestCaseObject.class]);
+    XCTAssertTrue([_database backup]);
+    [NSThread sleepForTimeInterval:1.0];
+    XCTAssertTrue([_database backup]);
     NSArray<NSString *> *paths = @[
         _database.path,
         [_database.path stringByAppendingString:@"-shm"],
         [_database.path stringByAppendingString:@"-wal"],
+        [_database.path stringByAppendingString:@"-first.material"],
+        [_database.path stringByAppendingString:@"-last.material"],
     ];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     for (NSString *path in paths) {
