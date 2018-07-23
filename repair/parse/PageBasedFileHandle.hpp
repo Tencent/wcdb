@@ -33,8 +33,8 @@ public:
 
     void setPageSize(size_t pageSize);
 
-    MappedData lazyMap(int pageno, off_t offset, size_t size);
-    MappedData lazyMap(int pageno);
+    MappedData mapPage(int pageno, off_t offset, size_t size);
+    MappedData mapPage(int pageno);
 
 protected:
     LRUCache<int, MappedData> m_cache;

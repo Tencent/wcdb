@@ -93,7 +93,7 @@ MappedData Pager::acquirePageData(int number, off_t offset, size_t size)
         markAsCorrupted(number, "PageData");
         return MappedData::emptyData();
     } else {
-        data = m_fileHandle.lazyMap(number, offset, size);
+        data = m_fileHandle.mapPage(number, offset, size);
     }
     if (data.size() != size) {
         if (data.size() > 0) {

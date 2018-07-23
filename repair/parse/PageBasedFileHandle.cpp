@@ -43,7 +43,7 @@ void PageBasedFileHandle::setPageSize(size_t pageSize)
     m_cachePageSize = std::max(s_memoryPageSize, m_cachePageSize);
 }
 
-MappedData PageBasedFileHandle::lazyMap(int pageno, off_t offset, size_t size)
+MappedData PageBasedFileHandle::mapPage(int pageno, off_t offset, size_t size)
 {
     WCTInnerAssert(m_cachePageSize > 0);
     WCTInnerAssert(pageno > 0);
@@ -72,10 +72,10 @@ MappedData PageBasedFileHandle::lazyMap(int pageno, off_t offset, size_t size)
     return MappedData::emptyData();
 }
 
-MappedData PageBasedFileHandle::lazyMap(int pageno)
+MappedData PageBasedFileHandle::mapPage(int pageno)
 {
     WCTInnerAssert(pageno > 0);
-    return lazyMap(pageno, 0, m_pageSize);
+    return mapPage(pageno, 0, m_pageSize);
 }
 
 } // namespace WCDB
