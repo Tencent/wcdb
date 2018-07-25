@@ -41,6 +41,10 @@
 		2308F85620E32A51001CD9C3 /* Serialization.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2308F84E20E32A51001CD9C3 /* Serialization.hpp */; };
 		2308F8A820E37FB1001CD9C3 /* WCTDatabase+Repair.h in Headers */ = {isa = PBXBuildFile; fileRef = 2308F8A720E37FB0001CD9C3 /* WCTDatabase+Repair.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2308F8A920E37FB1001CD9C3 /* WCTDatabase+Repair.h in Headers */ = {isa = PBXBuildFile; fileRef = 2308F8A720E37FB0001CD9C3 /* WCTDatabase+Repair.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2314AE7121070A1700244D39 /* Range.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2314AE6F21070A1700244D39 /* Range.cpp */; };
+		2314AE7221070A1700244D39 /* Range.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2314AE6F21070A1700244D39 /* Range.cpp */; };
+		2314AE7321070A1700244D39 /* Range.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2314AE7021070A1700244D39 /* Range.hpp */; };
+		2314AE7421070A1700244D39 /* Range.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2314AE7021070A1700244D39 /* Range.hpp */; };
 		2316D92F21057CA700707AFC /* MappedData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D92B21057CA600707AFC /* MappedData.hpp */; };
 		2316D93021057CA700707AFC /* MappedData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D92B21057CA600707AFC /* MappedData.hpp */; };
 		2316D93121057CA700707AFC /* Recyclable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D92D21057CA700707AFC /* Recyclable.hpp */; };
@@ -1166,6 +1170,8 @@
 		2308F84D20E32A51001CD9C3 /* Serialization.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Serialization.cpp; sourceTree = "<group>"; };
 		2308F84E20E32A51001CD9C3 /* Serialization.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Serialization.hpp; sourceTree = "<group>"; };
 		2308F8A720E37FB0001CD9C3 /* WCTDatabase+Repair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Repair.h"; sourceTree = "<group>"; };
+		2314AE6F21070A1700244D39 /* Range.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Range.cpp; sourceTree = "<group>"; };
+		2314AE7021070A1700244D39 /* Range.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Range.hpp; sourceTree = "<group>"; };
 		2316D92B21057CA600707AFC /* MappedData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MappedData.hpp; sourceTree = "<group>"; };
 		2316D92D21057CA700707AFC /* Recyclable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Recyclable.hpp; sourceTree = "<group>"; };
 		2316D92E21057CA700707AFC /* MappedData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MappedData.cpp; sourceTree = "<group>"; };
@@ -2111,6 +2117,8 @@
 				23567D7920CA93C5005F1C35 /* Time.cpp */,
 				23567D7A20CA93C5005F1C35 /* Time.hpp */,
 				2316D9482105D21500707AFC /* LRUCache.hpp */,
+				2314AE6F21070A1700244D39 /* Range.cpp */,
+				2314AE7021070A1700244D39 /* Range.hpp */,
 			);
 			name = common;
 			path = ../../common;
@@ -2855,6 +2863,7 @@
 				23036A3B205F9A4700ADF01A /* WCTMigrationDatabase.h in Headers */,
 				23BBE2B12049576D00C4CBB6 /* WCTDatabase+Memory.h in Headers */,
 				23567D7720CA9200005F1C35 /* SharedThreadedErrorProne.hpp in Headers */,
+				2314AE7321070A1700244D39 /* Range.hpp in Headers */,
 				23775B8020AD666900E21AB0 /* Mechanic.hpp in Headers */,
 				23567D4720CA7DBC005F1C35 /* ErrorProne.hpp in Headers */,
 				2349F7581EA0D6680021EFA7 /* WCTRuntimeBaseAccessor.h in Headers */,
@@ -3154,6 +3163,7 @@
 				23F5BDE320887FD3000CCD37 /* WCTMigrationDatabase.h in Headers */,
 				23F5BDE420887FD3000CCD37 /* WCTDatabase+Memory.h in Headers */,
 				23567D7820CA9200005F1C35 /* SharedThreadedErrorProne.hpp in Headers */,
+				2314AE7421070A1700244D39 /* Range.hpp in Headers */,
 				23775B8120AD666900E21AB0 /* Mechanic.hpp in Headers */,
 				23567D4820CA7DBC005F1C35 /* ErrorProne.hpp in Headers */,
 				23F5BDE720887FD3000CCD37 /* WCTRuntimeBaseAccessor.h in Headers */,
@@ -3401,6 +3411,7 @@
 				23775BCD20AD72BC00E21AB0 /* Data.cpp in Sources */,
 				2397754D202AECD3000A681C /* LangAnalyzeSTMT.cpp in Sources */,
 				2349F7591EA0D6680021EFA7 /* WCTRuntimeBaseAccessor+NoARC.mm in Sources */,
+				2314AE7121070A1700244D39 /* Range.cpp in Sources */,
 				234DBCF92064DD0C000E31E8 /* WCTUnsafeHandle.mm in Sources */,
 				2349F73C1EA0D6680021EFA7 /* WCTCore.mm in Sources */,
 				23977508202AECD3000A681C /* RaiseFunction.cpp in Sources */,
@@ -3655,6 +3666,7 @@
 				23775BCE20AD72BC00E21AB0 /* Data.cpp in Sources */,
 				23F5BC7E20887FD3000CCD37 /* LangAnalyzeSTMT.cpp in Sources */,
 				23F5BC7F20887FD3000CCD37 /* WCTRuntimeBaseAccessor+NoARC.mm in Sources */,
+				2314AE7221070A1700244D39 /* Range.cpp in Sources */,
 				23F5BC8220887FD3000CCD37 /* WCTUnsafeHandle.mm in Sources */,
 				23F5BC8320887FD3000CCD37 /* WCTCore.mm in Sources */,
 				23F5BC8420887FD3000CCD37 /* RaiseFunction.cpp in Sources */,

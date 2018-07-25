@@ -24,23 +24,44 @@
 #include <WCDB/FileHandle.hpp>
 #include <WCDB/LRUCache.hpp>
 #include <WCDB/MappedData.hpp>
+#include <WCDB/Range.hpp>
 
 namespace WCDB {
 
 class PageBasedFileHandle : public FileHandle {
+#pragma mark - PageBasedFileHandle
 public:
     PageBasedFileHandle(const std::string& path);
-
-    void setPageSize(size_t pageSize);
 
     MappedData mapPage(int pageno, off_t offset, size_t size);
     MappedData mapPage(int pageno);
 
-protected:
-    LRUCache<int, MappedData> m_cache;
-    size_t m_cachePageSize;
+#pragma mark - PageSize
+public:
+    void setPageSize(size_t pageSize);
 
+protected:
     size_t m_pageSize;
+
+#pragma mark - Cache
+protected:
+    class Cache : protected LRUCache<Range, MappedData> {
+    public:
+        using Super = LRUCache<Range, MappedData>;
+        using Location = Range::Location;
+        using Length = Range::Length;
+        using Super::purge;
+        using Super::empty;
+
+        std::pair<Range, const MappedData*> find(Location location);
+        void insert(const Range& range, const MappedData& data);
+
+    protected:
+        MapIterator findIterator(Location location);
+    };
+
+    Cache m_cache;
+    size_t m_cachePageSize;
 };
 
 } // namespace WCDB

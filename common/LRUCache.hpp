@@ -21,6 +21,7 @@
 #ifndef LRUCache_hpp
 #define LRUCache_hpp
 
+#include <WCDB/Assertion.hpp>
 #include <list>
 #include <unordered_map>
 
@@ -28,10 +29,14 @@ namespace WCDB {
 
 template<typename Key, typename Value>
 class LRUCache {
-public:
+protected:
     using KeyValue = typename std::pair<Key, Value>;
-    using KeyValueIterator = typename std::list<KeyValue>::iterator;
+    using List = std::list<KeyValue>;
+    using KeyValueIterator = typename List::iterator;
+    using Map = std::map<Key, KeyValueIterator>;
+    using MapIterator = typename Map::iterator;
 
+public:
     LRUCache(size_t maxSize = std::numeric_limits<size_t>::max())
     : m_maxSize(maxSize)
     {
@@ -65,7 +70,7 @@ public:
     {
         auto it = m_map.find(key);
         WCTInnerAssert(exists(key));
-        m_list.splice(m_list.begin(), m_list, it->second);
+        retain(it);
         return it->second->second;
     }
 
@@ -76,9 +81,14 @@ public:
     bool empty() const { return m_map.empty(); }
 
 protected:
+    void retain(const MapIterator& it)
+    {
+        m_list.splice(m_list.begin(), m_list, it->second);
+    }
+
     size_t m_maxSize;
-    std::list<KeyValue> m_list;
-    std::unordered_map<Key, KeyValueIterator> m_map;
+    List m_list;
+    Map m_map;
 };
 
 } // namespace WCDB

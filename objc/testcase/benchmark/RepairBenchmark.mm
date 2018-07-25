@@ -44,9 +44,26 @@
     return attributes.fileSize > fileSize;
 }
 
-- (BOOL)lazyPrepareCachedDatabase:(unsigned long long)fileSize
+- (BOOL)lazyPrepareCachedDatabase:(unsigned long long)size
 {
-    while (![self isDatabaseLargeEnough:fileSize]) {
+    NSUInteger databaseSize = [_cachedDatabase getFilesSize];
+    if (databaseSize > 0) {
+        if (size < databaseSize * 0.99 || size > databaseSize * 1.01) {
+            XCTAssertTrue([_cachedDatabase removeFiles]);
+        }
+    }
+    int percentage = 0;
+    while (YES) {
+        databaseSize = [_cachedDatabase getFilesSize];
+        if (databaseSize >= size
+            && databaseSize % getpagesize() != 0) {
+            break;
+        }
+        int gap = (double) databaseSize / size * 100 - percentage;
+        if (gap > 0) {
+            percentage += gap;
+            NSLog(@"Preparing %d%%", percentage);
+        }
         if (![_cachedDatabase runTransaction:^BOOL(WCTHandle *_Nonnull) {
                 NSArray<RepairTestCaseObject *> *objects = [RepairTestCaseObject randomObjects];
                 NSString *tableName = [NSString stringWithFormat:@"t_%@", [NSString randomString]];
@@ -56,12 +73,15 @@
             return NO;
         }
     }
+    NSLog(@"Tests for database with size: %fMB", (double) databaseSize / 1024 / 1024);
     return YES;
 }
 
 //Note that since backup will be run concurrently and in the background thread, test is not for the best performance but for a tolerable performance.
 - (void)test_backup
 {
+    NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@(self.config.databaseSize), @"DatabaseSize", nil];
+    [self addAttachment:[XCTAttachment attachmentWithPlistObject:dictionary]];
     __block BOOL result;
     NSString *firstBackupPath = [_cachedDatabase.path stringByAppendingString:@"-first.material"];
     NSString *lastBackupPath = [_cachedDatabase.path stringByAppendingString:@"-last.material"];
@@ -83,7 +103,7 @@
     checkCorrectness:^{
         XCTAssertTrue(result);
         XCTAssertGreaterThan([self.fileManager attributesOfItemAtPath:firstBackupPath error:nil].fileSize, self.config.databaseSize * 0.0001);
-        XCTAssertLessThan([self.fileManager attributesOfItemAtPath:firstBackupPath error:nil].fileSize, self.config.databaseSize * 0.01);
+        XCTAssertLessThan([self.fileManager attributesOfItemAtPath:firstBackupPath error:nil].fileSize, self.config.databaseSize * 0.02);
         XCTAssertFalse([self.fileManager fileExistsAtPath:lastBackupPath]);
     }];
 }

@@ -24,9 +24,77 @@
 
 namespace WCDB {
 
+#pragma mark - PageBasedFileHandle
 PageBasedFileHandle::PageBasedFileHandle(const std::string& path)
 : FileHandle(path), m_pageSize(0), m_cachePageSize(0)
 {
+}
+
+MappedData PageBasedFileHandle::mapPage(int pageno, off_t offsetWithinPage, size_t sizeWithinPage)
+{
+    WCTInnerAssert(m_cachePageSize > 0);
+    WCTInnerAssert(pageno > 0);
+    WCTInnerAssert(offsetWithinPage < m_pageSize);
+    WCTInnerAssert(sizeWithinPage <= m_pageSize && sizeWithinPage > 0);
+    WCTInnerAssert(m_cachePageSize >= m_pageSize);
+
+    off_t offset = (pageno - 1) * m_pageSize + offsetWithinPage;
+    off_t cachePageno = offset / m_cachePageSize;
+
+    // assert same cache page
+    WCTInnerAssert(cachePageno == (offset + sizeWithinPage - 1) / m_cachePageSize);
+
+    Range range;
+    const MappedData* cachedData;
+    std::tie(range, cachedData) = m_cache.find(cachePageno);
+    if (cachedData != nullptr) {
+        WCTInnerAssert(range.contains(cachePageno));
+        off_t offsetWithinCache = offset - range.location * m_cachePageSize;
+        WCTInnerAssert(offsetWithinCache < range.length * m_cachePageSize);
+        return cachedData->subdata(offsetWithinCache, sizeWithinPage);
+    }
+
+    size_t fileSize = FileHandle::size();
+    Range::Location restrictCachePageno
+    = fileSize / m_cachePageSize + (fileSize % m_cachePageSize > 0);
+    do {
+        range.restrict_(0, restrictCachePageno);
+
+        bool cuttable = range.length > 1;
+        bool purgeable = !m_cache.empty();
+        bool ignorable = cuttable || purgeable;
+
+        markErrorAsIgnorable(ignorable);
+        MappedData mappedData
+        = map(range.location * m_cachePageSize, range.length * m_cachePageSize);
+        markErrorAsIgnorable(false);
+
+        if (!mappedData.empty()) {
+            WCTInnerAssert(range.contains(cachePageno));
+            m_cache.insert(range, mappedData);
+            off_t offsetWithinCache = offset - range.location * m_cachePageSize;
+            WCTInnerAssert(offsetWithinCache < range.length * m_cachePageSize);
+            return mappedData.subdata(offsetWithinCache, sizeWithinPage);
+        } else if (cuttable) {
+            range.location = (range.location + 1 + cachePageno) / 2;
+            range.setEdge((range.edge() + 1 + cachePageno) / 2);
+            WCTInnerAssert(range.length >= 1);
+        } else if (purgeable) {
+            m_cache.purge();
+            std::tie(range, cachedData) = m_cache.find(cachePageno);
+            WCTInnerAssert(cachedData == nullptr);
+        } else {
+            break;
+        }
+    } while (true);
+    return MappedData::emptyData();
+}
+
+#pragma mark - PageSize
+MappedData PageBasedFileHandle::mapPage(int pageno)
+{
+    WCTInnerAssert(pageno > 0);
+    return mapPage(pageno, 0, m_pageSize);
 }
 
 void PageBasedFileHandle::setPageSize(size_t pageSize)
@@ -43,39 +111,68 @@ void PageBasedFileHandle::setPageSize(size_t pageSize)
     m_cachePageSize = std::max(s_memoryPageSize, m_cachePageSize);
 }
 
-MappedData PageBasedFileHandle::mapPage(int pageno, off_t offset, size_t size)
+#pragma mark - Cache
+std::pair<Range, const MappedData*> PageBasedFileHandle::Cache::find(Location location)
 {
-    WCTInnerAssert(m_cachePageSize > 0);
-    WCTInnerAssert(pageno > 0);
-    WCTInnerAssert(offset < m_pageSize);
-    WCTInnerAssert(size <= m_pageSize && size > 0);
-    off_t resolvedOffset = (pageno - 1) * m_pageSize;
-    int cachePageno = (int) resolvedOffset / m_cachePageSize;
-    off_t resolvedOffsetInCache = resolvedOffset - cachePageno * m_cachePageSize;
-    if (m_cache.exists(cachePageno)) {
-        return m_cache.get(cachePageno).subdata(resolvedOffsetInCache, size);
-    }
-    do {
-        bool purgeable = !m_cache.empty();
-        markErrorAsIgnorable(purgeable);
-        MappedData data = map(cachePageno * m_cachePageSize, m_cachePageSize);
-        markErrorAsIgnorable(false);
-        if (!data.empty()) {
-            m_cache.put(cachePageno, data);
-            return data.subdata(resolvedOffsetInCache, size);
-        } else if (purgeable) {
-            m_cache.purge();
+    static constexpr const auto s_min = std::numeric_limits<Location>::min();
+    static constexpr const auto s_max = std::numeric_limits<Location>::max();
+
+    Range range;
+    const MappedData* data = nullptr;
+
+    // assume: a < b < c < d < e < f < g
+    // { [b, c), [e, f) }
+    // findIterator(a) = [b, c), find(a) = [min, b)
+    // findIterator(b) = [b, c), find(b) = [b, c)
+    // findIterator(c) = [e, f), find(c) = [c, e)
+    // findIterator(d) = [e, f), find(d) = [c, e)
+    // findIterator(e) = [e, f), find(e) = [e, f)
+    // findIterator(f) = end(), find(f) = [f, max)
+    // findIterator(g) = end(), find(g) = [f, max)
+    auto match = findIterator(location);
+    if (match != m_map.end()) {
+        if (match->first.contains(location)) {
+            retain(match);
+            range = match->first;
+            data = &(match->second->second);
         } else {
-            break;
+            if (match != m_map.begin()) {
+                auto previous = match;
+                --previous;
+                range.location = previous->first.edge();
+            } else {
+                range.location = s_min;
+            }
+            range.setEdge(match->first.location);
         }
-    } while (true);
-    return MappedData::emptyData();
+    } else {
+        if (!m_map.empty()) {
+            auto last = m_map.end();
+            --last;
+            range.location = last->first.edge();
+        } else {
+            range.location = s_min;
+        }
+        range.setEdge(s_max);
+    }
+    return std::make_pair(range, data);
 }
 
-MappedData PageBasedFileHandle::mapPage(int pageno)
+void PageBasedFileHandle::Cache::insert(const Range& range, const MappedData& data)
 {
-    WCTInnerAssert(pageno > 0);
-    return mapPage(pageno, 0, m_pageSize);
+    assert(range.length > 0);
+    assert(find(range.location).second == nullptr);
+    assert(find(range.edge() - 1).second == nullptr);
+    put(range, data);
+}
+
+PageBasedFileHandle::Cache::MapIterator
+PageBasedFileHandle::Cache::findIterator(Location location)
+{
+    return std::find_if(m_map.begin(), m_map.end(), [&location](const auto& iter) -> bool {
+        const Range& range = iter.first;
+        return location < range.edge();
+    });
 }
 
 } // namespace WCDB
