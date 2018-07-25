@@ -34,7 +34,8 @@
     _config.readCount = 1000000;
     _config.writeCount = 100000;
     _config.tableCount = 50000;
-    _config.databaseSize = 500 * 1024 * 1024;
+    _config.databaseSizeForRepair = 100 * 1024 * 1024;
+    _config.databaseSizeForBackup = 500 * 1024 * 1024;
 
     XCTAttachment *attachment = [XCTAttachment attachmentWithPlistObject:_config.dictionaryWithProperties];
     attachment.name = @"Config";
@@ -78,7 +79,8 @@
 
 - (void)setUpDatabase
 {
-    _database = [[WCTDatabase alloc] initWithPath:self.recommendedPath];
+    _recommendedDatabase = [[WCTDatabase alloc] initWithPath:self.recommendedPath];
+    _cachedDatabase = [[WCTDatabase alloc] initWithPath:self.cachePath];
 }
 
 - (void)setUpWithPreInsertObjects:(NSArray<BenchmarkObject *> *)objects intoTable:(NSString *)tableName

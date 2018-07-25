@@ -29,7 +29,11 @@
 
 @property (readonly) Config *config;
 
-@property (readonly) WCTDatabase *database;
+@property (retain) WCTDatabase *database;
+
+@property (readonly) WCTDatabase *recommendedDatabase;
+
+@property (readonly) WCTDatabase *cachedDatabase;
 
 @property (readonly) NSArray<BenchmarkObject *> *objects;
 

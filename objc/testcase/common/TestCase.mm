@@ -27,6 +27,17 @@
     srand((unsigned int) time(NULL));
 }
 
++ (NSString *)directory
+{
+    NSString *name = [NSString stringWithFormat:@"WCDB_%@", TestCase.className];
+    return [NSTemporaryDirectory() stringByAppendingPathComponent:name];
+}
+
++ (NSString *)cacheDirectory
+{
+    return [self.directory stringByAppendingPathComponent:@"Cache"];
+}
+
 + (NSString *)className
 {
     return NSStringFromClass(self.class);
@@ -37,17 +48,6 @@
     return self.class.className;
 }
 
-+ (NSString *)baseDirectory
-{
-    NSString *name = [NSString stringWithFormat:@"WCDB_%@", TestCase.className];
-    return [NSTemporaryDirectory() stringByAppendingPathComponent:name];
-}
-
-- (NSString *)recommendedDirectory
-{
-    return [self.class.baseDirectory stringByAppendingPathComponent:self.className];
-}
-
 - (NSString *)testname
 {
     NSString *name = self.name;
@@ -56,19 +56,29 @@
     return [name substringWithRange:[match rangeAtIndex:1]];
 }
 
-- (NSString *)recommendedPath
-{
-    return [self.recommendedDirectory stringByAppendingPathComponent:self.testname];
-}
-
 - (WCTTag)recommendedTag
 {
     return (int) self.recommendedPath.hash;
 }
 
-+ (NSString *)cachedDirectory
+- (NSString *)recommendedDirectory
 {
-    return [self.baseDirectory stringByAppendingPathComponent:@"cached"];
+    return [self.class.directory stringByAppendingPathComponent:self.className];
+}
+
+- (NSString *)recommendedPath
+{
+    return [self.recommendedDirectory stringByAppendingPathComponent:self.testname];
+}
+
+- (NSString *)cacheDirectory
+{
+    return [self.class.cacheDirectory stringByAppendingPathComponent:self.className];
+}
+
+- (NSString *)cachePath
+{
+    return [self.cacheDirectory stringByAppendingPathComponent:self.testname];
 }
 
 - (NSFileManager *)fileManager
@@ -89,8 +99,6 @@
                               withIntermediateDirectories:YES
                                                attributes:nil
                                                     error:nil]);
-
-    NSLog(@"Tests at %@", self.recommendedDirectory);
 }
 
 - (void)tearDown

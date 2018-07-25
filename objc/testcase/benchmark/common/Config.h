@@ -29,6 +29,7 @@
 @property (assign) int batchWriteCount;
 
 @property (assign) int tableCount;
-@property (assign) unsigned long long databaseSize;
+@property (assign) unsigned long long databaseSizeForBackup;
+@property (assign) unsigned long long databaseSizeForRepair;
 
 @end
