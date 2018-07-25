@@ -69,10 +69,9 @@ void CorruptionNotifier::loop()
             path = std::move(*m_paths.begin());
         }
         auto pool = HandlePools::defaultPools()->getExistingPool(path);
-        if (pool == nullptr) {
-            continue;
+        if (pool != nullptr) {
+            pool->attachment.corruption.notify();
         }
-        pool->attachment.corruption.notify();
         {
             std::lock_guard<std::mutex> lockGuard(m_mutex);
             m_paths.erase(path);
