@@ -19,6 +19,7 @@
  */
 
 #import "Convenience.h"
+#import <objc/runtime.h>
 
 @implementation NSObject (Comparator)
 
@@ -35,6 +36,23 @@
             return NSOrderedSame;
         }
     };
+}
+
+- (NSDictionary *)dictionaryWithProperties
+{
+    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+    unsigned count;
+
+    objc_property_t *properties = class_copyPropertyList([self class], &count);
+
+    for (int i = 0; i < count; i++) {
+        NSString *key = [NSString stringWithUTF8String:property_getName(properties[i])];
+        [dictionary setObject:[self valueForKey:key] forKey:key];
+    }
+
+    free(properties);
+
+    return dictionary;
 }
 
 @end

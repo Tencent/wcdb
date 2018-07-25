@@ -80,8 +80,6 @@
 //Note that since backup will be run concurrently and in the background thread, test is not for the best performance but for a tolerable performance.
 - (void)test_backup
 {
-    NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@(self.config.databaseSize), @"DatabaseSize", nil];
-    [self addAttachment:[XCTAttachment attachmentWithPlistObject:dictionary]];
     __block BOOL result;
     NSString *firstBackupPath = [_cachedDatabase.path stringByAppendingString:@"-first.material"];
     NSString *lastBackupPath = [_cachedDatabase.path stringByAppendingString:@"-last.material"];

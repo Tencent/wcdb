@@ -34,7 +34,12 @@
     _config.readCount = 1000000;
     _config.writeCount = 100000;
     _config.tableCount = 50000;
-    _config.databaseSize = 100 * 1024 * 1024; //100MB
+    _config.databaseSize = 500 * 1024 * 1024;
+
+    XCTAttachment *attachment = [XCTAttachment attachmentWithPlistObject:_config.dictionaryWithProperties];
+    attachment.name = @"Config";
+    attachment.lifetime = XCTAttachmentLifetimeKeepAlways;
+    [self addAttachment:attachment];
 }
 
 - (void)tearDown

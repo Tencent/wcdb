@@ -31,6 +31,7 @@
 #pragma mark - NSObject
 @interface NSObject (Comparator)
 + (NSComparator)Comparator;
+- (NSDictionary *)dictionaryWithProperties;
 @end
 
 #pragma mark - NSMutableArray
