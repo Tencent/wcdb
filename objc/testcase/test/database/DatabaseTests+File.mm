@@ -152,31 +152,6 @@
     }];
 }
 
-- (void)test_unsafe_get_files_size
-{
-    __block BOOL tested = NO;
-    [WCTDatabase globalTraceError:^(WCTError *error) {
-        if (error.code == WCTErrorCodeMisuse && error.level == WCTErrorLevelWarning) {
-            tested = YES;
-        }
-        NSLog(@"%@", error);
-    }];
-    //Give
-    NSData *data = [@"testGetFilesSize" dataUsingEncoding:NSASCIIStringEncoding];
-    NSUInteger expectedFilesSize = data.length * _database.paths.count;
-    for (NSString *path in _database.paths) {
-        if ([self.fileManager fileExistsAtPath:path]) {
-            XCTAssertTrue([self.fileManager removeItemAtPath:path error:nil]);
-        }
-        XCTAssertTrue([self.fileManager createFileAtPath:path contents:data attributes:nil]);
-    }
-    //Then
-    NSUInteger filesSize = [_database getFilesSize];
-    XCTAssertEqual(filesSize, expectedFilesSize);
-    [WCTDatabase globalTraceError:nil];
-    XCTAssertTrue(tested);
-}
-
 #if TARGET_OS_IPHONE
 - (void)test_file_protection
 {
