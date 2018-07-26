@@ -29,20 +29,19 @@
 
 - (void)setUpDatabase
 {
-    NSString *tableName = [self getTableNameWithIndex:0];
-    NSString *migratedTableName = [tableName stringByAppendingString:@"_migrated"];
-    WCTMigrationInfo *info = [[WCTMigrationInfo alloc] initWithTargetTable:migratedTableName fromSourceTable:tableName];
-    self.database = [[WCTMigrationDatabase alloc] initWithPath:self.recommendedPath andInfo:info];
+    self.database = [[WCTDatabase alloc] initWithPath:self.recommendedPath];
 }
 
 - (void)test_read_within_migration
 {
     NSString *tableName = [self getTableNameWithIndex:0];
+    NSString *migratedTableName = [tableName stringByAppendingString:@"_migrated"];
+
     __block NSArray<BenchmarkObject *> *results = nil;
 
     [self
     measure:^{
-        results = [self.database getObjectsOfClass:BenchmarkObject.class fromTable:tableName];
+        results = [self.database getObjectsOfClass:BenchmarkObject.class fromTable:migratedTableName];
     }
     setUp:^{
         [self setUpDatabase];
@@ -50,12 +49,19 @@
         [self setUpWithPreCreateObject:self.config.readCount];
         [self setUpWithPreInsertObjects:self.objects intoTable:tableName];
 
+        [self.database finalizeDatabase];
+        self.database = nil;
+
         // migrate half the number of objects
-        WCTMigrationDatabase *migrationDatabase = (WCTMigrationDatabase *) self.database;
+        WCTMigrationInfo *info = [[WCTMigrationInfo alloc] initWithTargetTable:migratedTableName fromSourceTable:tableName];
+        WCTMigrationDatabase *migrationDatabase = [[WCTMigrationDatabase alloc] initWithPath:self.recommendedPath andInfo:info];
+        XCTAssertTrue([migrationDatabase createTableAndIndexes:migratedTableName withClass:BenchmarkObject.class]);
         migrationDatabase.migrateRowPerStep = self.config.readCount / 2;
         BOOL done;
         XCTAssertTrue([migrationDatabase stepMigration:done]);
         XCTAssertFalse(done);
+
+        self.database = migrationDatabase;
 
         [self tearDownDatabaseCache];
         [self setUpDatabaseCache];
