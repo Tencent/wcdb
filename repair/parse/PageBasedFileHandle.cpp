@@ -54,12 +54,7 @@ MappedData PageBasedFileHandle::mapPage(int pageno, off_t offsetWithinPage, size
         return cachedData->subdata(offsetWithinCache, sizeWithinPage);
     }
 
-    size_t fileSize = FileHandle::size();
-    Range::Location restrictCachePageno
-    = fileSize / m_cachePageSize + (fileSize % m_cachePageSize > 0);
     do {
-        range.restrict_(0, restrictCachePageno);
-
         bool cuttable = range.length > 1;
         bool purgeable = !m_cache.empty();
         bool ignorable = cuttable || purgeable;
@@ -109,13 +104,27 @@ void PageBasedFileHandle::setPageSize(size_t pageSize)
     }
     WCTInnerAssert(m_cachePageSize > 0 && m_cachePageSize % s_memoryPageSize == 0);
     m_cachePageSize = std::max(s_memoryPageSize, m_cachePageSize);
+
+    size_t fileSize = FileHandle::size();
+    Range::Length restrictCachePageno
+    = fileSize / m_cachePageSize + (fileSize % m_cachePageSize > 0);
+    m_cache.setRange(Range(0, restrictCachePageno));
 }
 
 #pragma mark - Cache
+PageBasedFileHandle::Cache::Cache() : m_range(Range::notFound())
+{
+}
+
+void PageBasedFileHandle::Cache::setRange(const WCDB::Range& range)
+{
+    m_range = range;
+}
+
 std::pair<Range, const MappedData*> PageBasedFileHandle::Cache::find(Location location)
 {
-    static constexpr const auto s_min = std::numeric_limits<Location>::min();
-    static constexpr const auto s_max = std::numeric_limits<Location>::max();
+    WCTInnerAssert(m_range != Range::notFound());
+    WCTInnerAssert(m_range.contains(location));
 
     Range range;
     const MappedData* data = nullptr;
@@ -141,7 +150,7 @@ std::pair<Range, const MappedData*> PageBasedFileHandle::Cache::find(Location lo
                 --previous;
                 range.location = previous->first.edge();
             } else {
-                range.location = s_min;
+                range.location = m_range.location;
             }
             range.setEdge(match->first.location);
         }
@@ -151,18 +160,19 @@ std::pair<Range, const MappedData*> PageBasedFileHandle::Cache::find(Location lo
             --last;
             range.location = last->first.edge();
         } else {
-            range.location = s_min;
+            range.location = m_range.location;
         }
-        range.setEdge(s_max);
+        range.setEdge(m_range.edge());
     }
     return std::make_pair(range, data);
 }
 
 void PageBasedFileHandle::Cache::insert(const Range& range, const MappedData& data)
 {
-    assert(range.length > 0);
-    assert(find(range.location).second == nullptr);
-    assert(find(range.edge() - 1).second == nullptr);
+    WCTInnerAssert(range.length > 0);
+    WCTInnerAssert(m_range.contains(range));
+    WCTInnerAssert(find(range.location).second == nullptr);
+    WCTInnerAssert(find(range.edge() - 1).second == nullptr);
     put(range, data);
 }
 

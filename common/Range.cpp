@@ -66,12 +66,22 @@ bool Range::contains(Location location_) const
 
 bool Range::contains(const Range& other) const
 {
-    return other.location >= location && other.edge() < edge();
+    return other.location >= location && other.edge() <= edge();
 }
 
 bool Range::operator<(const Range& other) const
 {
     return location < other.location;
+}
+
+bool Range::operator==(const Range& other) const
+{
+    return location == other.location && length == other.length;
+}
+
+bool Range::operator!=(const Range& other) const
+{
+    return !operator==(other);
 }
 
 } // namespace WCDB

@@ -47,17 +47,21 @@ protected:
 protected:
     class Cache : protected LRUCache<Range, MappedData> {
     public:
+        Cache();
+
         using Super = LRUCache<Range, MappedData>;
         using Location = Range::Location;
         using Length = Range::Length;
         using Super::purge;
         using Super::empty;
 
+        void setRange(const Range& range);
         std::pair<Range, const MappedData*> find(Location location);
         void insert(const Range& range, const MappedData& data);
 
     protected:
         MapIterator findIterator(Location location);
+        Range m_range;
     };
 
     Cache m_cache;

@@ -47,6 +47,8 @@ public:
     bool contains(const Range& other) const;
 
     bool operator<(const Range& other) const;
+    bool operator==(const Range& other) const;
+    bool operator!=(const Range& other) const;
 };
 
 } // namespace WCDB
