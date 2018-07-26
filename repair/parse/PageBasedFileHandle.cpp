@@ -26,7 +26,7 @@ namespace WCDB {
 
 #pragma mark - PageBasedFileHandle
 PageBasedFileHandle::PageBasedFileHandle(const std::string& path)
-: FileHandle(path), m_pageSize(0), m_cachePageSize(0)
+: FileHandle(path), m_pageSize(0), m_cachePageSize(0), m_cache(maxCacheSize)
 {
 }
 
@@ -55,6 +55,19 @@ MappedData PageBasedFileHandle::mapPage(int pageno, off_t offsetWithinPage, size
     }
 
     do {
+        if (range.length > maxMapPage) {
+            Range middle(cachePageno - maxMapPage / 2, maxMapPage);
+            if (middle.location < range.location) {
+                range.length = maxMapPage;
+            } else if (middle.edge() > range.edge()) {
+                range.location = range.edge() - maxMapPage;
+            } else {
+                range = middle;
+            }
+        }
+        WCTInnerAssert(range.length <= maxMapPage);
+        WCTInnerAssert(range.contains(cachePageno));
+
         bool cuttable = range.length > 1;
         bool purgeable = !m_cache.empty();
         bool ignorable = cuttable || purgeable;
@@ -65,7 +78,6 @@ MappedData PageBasedFileHandle::mapPage(int pageno, off_t offsetWithinPage, size
         markErrorAsIgnorable(false);
 
         if (!mappedData.empty()) {
-            WCTInnerAssert(range.contains(cachePageno));
             m_cache.insert(range, mappedData);
             off_t offsetWithinCache = offset - range.location * m_cachePageSize;
             WCTInnerAssert(offsetWithinCache < range.length * m_cachePageSize);
@@ -112,7 +124,8 @@ void PageBasedFileHandle::setPageSize(size_t pageSize)
 }
 
 #pragma mark - Cache
-PageBasedFileHandle::Cache::Cache() : m_range(Range::notFound())
+PageBasedFileHandle::Cache::Cache(size_t maxSize)
+: LRUCache<WCDB::Range, WCDB::MappedData>(maxSize), m_range(Range::notFound())
 {
 }
 

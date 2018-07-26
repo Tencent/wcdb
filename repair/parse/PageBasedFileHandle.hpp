@@ -45,9 +45,12 @@ protected:
 
 #pragma mark - Cache
 protected:
+    static constexpr const int maxMapPage = 8 * 1024;
+    static constexpr const int maxCacheSize = 5;
+
     class Cache : protected LRUCache<Range, MappedData> {
     public:
-        Cache();
+        Cache(size_t maxSize);
 
         using Super = LRUCache<Range, MappedData>;
         using Location = Range::Location;
