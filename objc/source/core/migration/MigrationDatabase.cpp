@@ -68,9 +68,13 @@ std::shared_ptr<Database>
 MigrationDatabase::databaseWithPath(const std::string &path,
                                     const std::list<std::shared_ptr<MigrationInfo>> &infos)
 {
-    std::shared_ptr<Database> database(
-    new MigrationDatabase(HandlePools::defaultPools()->getPool(
-    path, std::bind(&MigrationDatabase::generateHandlePool, std::placeholders::_1, infos))));
+    RecyclableHandlePool pool = HandlePools::defaultPools()->getPool(
+    path, std::bind(&MigrationDatabase::generateHandlePool, std::placeholders::_1, infos));
+    WCTRemedialAssert(
+    pool == nullptr || dynamic_cast<MigrationHandlePool *>(pool.getHandlePool()) != nullptr,
+    "Failed to init it as a migration database due to it's already a normal database.",
+    return nullptr;);
+    std::shared_ptr<Database> database(new MigrationDatabase(pool));
     if (database && static_cast<MigrationDatabase *>(database.get())->isValid()) {
         return database;
     }
