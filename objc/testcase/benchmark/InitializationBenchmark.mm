@@ -26,6 +26,24 @@
 
 @implementation InitializationBenchmark
 
+- (void)setUpDatabase
+{
+    [super setUpDatabase];
+    self.database = self.cachedDatabase;
+}
+
+- (void)lazyPrepareTable:(int)count
+{
+    int tableCount = [self.database getValueOnResult:WCTMaster.allResults.count() fromTable:WCTMaster.tableName where:WCTMaster.type == "table"].numberValue.intValue;
+    if (tableCount > count) {
+        XCTAssertTrue([self.database removeFiles]);
+        tableCount = 0;
+    }
+    if (tableCount < count) {
+        [self setUpWithPreCreateTable:count];
+    }
+}
+
 - (void)test_initialization
 {
     __block BOOL result = NO;
@@ -35,7 +53,7 @@
     }
     setUp:^{
         [self setUpDatabase];
-        [self setUpWithPreCreateTable:self.config.tableCount];
+        [self lazyPrepareTable:self.config.tableCount];
         [self tearDownDatabaseCache];
     }
     tearDown:^{

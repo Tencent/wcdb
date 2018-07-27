@@ -30,6 +30,7 @@
 
 - (void)setUp
 {
+    [super setUp];
     _cipher = [NSData randomData];
 }
 
