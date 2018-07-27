@@ -96,7 +96,7 @@ void MigrationInfo::initialize(const std::set<std::string> &columnNames)
       .as(StatementSelect()
           .select(resultColumns)
           .from(targetTable)
-          .union_(SelectCore().select(resultColumns).from(getSourceTable())));
+          .unionAll(SelectCore().select(resultColumns).from(getSourceTable())));
 
     m_inited.store(true);
 }
