@@ -92,6 +92,9 @@
 
     self.continueAfterFailure = YES;
 
+    NSLog(@"Test directory: %@", self.recommendedDirectory);
+    NSLog(@"Cached directory: %@", self.cacheDirectory);
+
     if ([self.fileManager fileExistsAtPath:self.recommendedDirectory]) {
         XCTAssertTrue([self.fileManager removeItemAtPath:self.recommendedDirectory error:nil]);
     }
