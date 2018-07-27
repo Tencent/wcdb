@@ -32,7 +32,7 @@
     _config.valueLength = 100;
     _config.batchWriteCount = 1000000;
     _config.readCount = 1000000;
-    _config.writeCount = 100000;
+    _config.writeCount = 10000;
     _config.tableCount = 50000;
     _config.databaseSizeForRepair = 100 * 1024 * 1024;
     _config.databaseSizeForBackup = 500 * 1024 * 1024;
@@ -81,6 +81,7 @@
 {
     _recommendedDatabase = [[WCTDatabase alloc] initWithPath:self.recommendedPath];
     _cachedDatabase = [[WCTDatabase alloc] initWithPath:self.cachePath];
+    self.database = _recommendedDatabase;
 }
 
 - (void)setUpWithPreInsertObjects:(NSArray<BenchmarkObject *> *)objects intoTable:(NSString *)tableName
@@ -124,11 +125,15 @@ checkCorrectness:(void (^)(void))correctnessBlock
                                setUpBlock();
                            }
 
+                           [NSThread sleepForTimeInterval:1];
+
                            [self startMeasuring];
 
                            block();
 
                            [self stopMeasuring];
+
+                           [NSThread sleepForTimeInterval:1];
 
                            correctnessBlock();
 

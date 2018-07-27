@@ -27,11 +27,6 @@
 //Note that nothing is different between a normal database and a migration database after migrated, tests here are not for the best performance but for a tolerable performance.
 @implementation MigrationBenchmark
 
-- (void)setUpDatabase
-{
-    self.database = [[WCTDatabase alloc] initWithPath:self.recommendedPath];
-}
-
 - (void)test_read_within_migration
 {
     NSString *tableName = [self getTableNameWithIndex:0];
@@ -79,6 +74,7 @@
 - (void)test_write_within_migration
 {
     NSString *tableName = [self getTableNameWithIndex:0];
+    NSString *migratedTableName = [tableName stringByAppendingString:@"_migrated"];
     __block WCTDatabase *database = nil;
     __block NSArray<BenchmarkObject *> *objects = nil;
 
@@ -92,13 +88,13 @@
         [self setUpDatabase];
         [self setUpWithPreCreateTable:1];
         [self setUpWithPreCreateObject:self.config.writeCount];
+        [self.database finalizeDatabase];
+        self.database = nil;
 
-        // migrate half the number of objects
-        WCTMigrationDatabase *migrationDatabase = (WCTMigrationDatabase *) self.database;
-        migrationDatabase.migrateRowPerStep = self.config.writeCount / 2;
-        BOOL done;
-        XCTAssertTrue([migrationDatabase stepMigration:done]);
-        XCTAssertFalse(done);
+        WCTMigrationInfo *info = [[WCTMigrationInfo alloc] initWithTargetTable:migratedTableName fromSourceTable:tableName];
+        WCTMigrationDatabase *migrationDatabase = [[WCTMigrationDatabase alloc] initWithPath:self.recommendedPath andInfo:info];
+        XCTAssertTrue([migrationDatabase createTableAndIndexes:migratedTableName withClass:BenchmarkObject.class]);
+        self.database = migrationDatabase;
 
         [self tearDownDatabaseCache];
         [self setUpDatabaseCache];
@@ -120,6 +116,7 @@
 - (void)test_batch_write_within_migration
 {
     NSString *tableName = [self getTableNameWithIndex:0];
+    NSString *migratedTableName = [tableName stringByAppendingString:@"_migrated"];
     [self
     measure:^{
         [self.database insertObjects:self.objects intoTable:tableName];
@@ -128,13 +125,13 @@
         [self setUpDatabase];
         [self setUpWithPreCreateTable:1];
         [self setUpWithPreCreateObject:self.config.batchWriteCount];
+        [self.database finalizeDatabase];
+        self.database = nil;
 
-        // migrate half the number of objects
-        WCTMigrationDatabase *migrationDatabase = (WCTMigrationDatabase *) self.database;
-        migrationDatabase.migrateRowPerStep = self.config.batchWriteCount / 2;
-        BOOL done;
-        XCTAssertTrue([migrationDatabase stepMigration:done]);
-        XCTAssertFalse(done);
+        WCTMigrationInfo *info = [[WCTMigrationInfo alloc] initWithTargetTable:migratedTableName fromSourceTable:tableName];
+        WCTMigrationDatabase *migrationDatabase = [[WCTMigrationDatabase alloc] initWithPath:self.recommendedPath andInfo:info];
+        XCTAssertTrue([migrationDatabase createTableAndIndexes:migratedTableName withClass:BenchmarkObject.class]);
+        self.database = migrationDatabase;
 
         [self tearDownDatabaseCache];
         [self setUpDatabaseCache];
