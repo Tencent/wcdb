@@ -57,6 +57,7 @@
         XCTAssertFalse(done);
 
         self.database = migrationDatabase;
+        XCTAssertTrue([migrationDatabase execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
 
         [self tearDownDatabaseCache];
         [self setUpDatabaseCache];
