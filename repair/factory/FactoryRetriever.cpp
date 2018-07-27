@@ -300,7 +300,7 @@ bool FactoryRetriever::calculateSizes(const std::list<std::string> &workshopDire
     m_totalSize = std::accumulate(
     m_sizes.begin(),
     m_sizes.end(),
-    0,
+    m_totalSize,
     [](const size_t previous, const std::pair<std::string, size_t> &element) {
         return previous + element.second;
     });
