@@ -55,7 +55,8 @@ SharedLock::SharedLock()
 void SharedLock::lockShared()
 {
     std::unique_lock<std::mutex> lockGuard(m_mutex);
-    if (m_writers > 0 ? m_locking != std::this_thread::get_id() : m_pendingWriters > 0) {
+    if (m_writers > 0 ? m_locking != std::this_thread::get_id() :
+                        (m_pendingWriters > 0 && *m_threadedReaders.getOrCreate() == 0)) {
         WCTInnerAssert(*m_threadedReaders.getOrCreate() == 0);
         ++m_pendingReaders;
         do {
