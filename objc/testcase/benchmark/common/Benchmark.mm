@@ -33,7 +33,7 @@
     _config.batchWriteCount = 1000000;
     _config.readCount = 1000000;
     _config.writeCount = 10000;
-    _config.tableCount = 50000;
+    _config.tableCount = 1000;
     _config.databaseSizeForRepair = 100 * 1024 * 1024;
     _config.databaseSizeForBackup = 500 * 1024 * 1024;
 
