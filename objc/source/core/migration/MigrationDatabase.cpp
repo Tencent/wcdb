@@ -116,6 +116,7 @@ bool MigrationDatabase::stepMigration(bool &done)
             return false;
         }
         bool isMigrated = false;
+        // Since a checkpoint will cause too much time and may result in race condition, it shoule be disabled when migrating. Ones can call checkpoint manually or wait for the async checkpoint.
         handle->setNotificationWhenCommitted(
         std::numeric_limits<int>::min(), "migration", [](Handle *, int) -> bool {
             return false;
