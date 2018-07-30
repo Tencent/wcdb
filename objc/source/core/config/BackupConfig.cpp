@@ -101,7 +101,7 @@ bool BackupConfig::onCommitted(Handle *handle, int frames)
     } else if (frames > backedUp + framesIntervalForAutoBackup || frames < backedUp) {
         m_timedQueue.reQueue(path, 0, frames);
     } else {
-        // backed up will happen after 60s if no more write operation
+        // backed up will happen after 10s if no more write operation
         m_timedQueue.reQueue(path, 10, frames);
     }
     return true;
