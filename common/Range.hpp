@@ -41,8 +41,6 @@ public:
     void setEdge(Location edge);
     Location edge() const;
 
-    void restrict_(Location minLocation, Location maxEdge);
-
     bool contains(Location location_) const;
     bool contains(const Range& other) const;
 

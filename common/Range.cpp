@@ -51,14 +51,6 @@ Range::Location Range::edge() const
     return location + length;
 }
 
-void Range::restrict_(Location minLocation, Location maxEdge)
-{
-    Location edge = this->edge();
-    location = std::max(location, minLocation);
-    edge = std::min(edge, maxEdge);
-    setEdge(edge);
-}
-
 bool Range::contains(Location location_) const
 {
     return location_ >= location && location_ < location + length;
