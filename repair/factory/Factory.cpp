@@ -40,14 +40,13 @@ Factory::Factory(const std::string &database_)
 std::pair<bool, std::list<std::string>> Factory::getWorkshopDirectories() const
 {
     std::list<std::string> workshopDirectories;
-    std::string restoreDirectory = getRestoreDirectory();
-    std::string renewDirectory = getRenewDirectory();
     if (FileManager::shared()->enumerateDirectory(
         directory,
-        [&workshopDirectories, &restoreDirectory, &renewDirectory](
-        const std::string &path, bool isDirectory) -> bool {
-            if (isDirectory && path != restoreDirectory && path != renewDirectory) {
-                workshopDirectories.push_back(path);
+        [&workshopDirectories](
+        const std::string &directory, const std::string &subpath, bool isDirectory) -> bool {
+            if (isDirectory && subpath != getRestoreDirectoryName()
+                && subpath != getRenewDirectoryName()) {
+                workshopDirectories.push_back(Path::addComponent(directory, subpath));
             }
             return true;
         })) {
@@ -82,13 +81,12 @@ bool Factory::canRetrieve() const
 {
     bool result = false;
     std::string databaseName = getDatabaseName();
-    std::string restoreDirectory = getRestoreDirectory();
-    std::string renewDirectory = getRenewDirectory();
     FileManager::shared()->enumerateDirectory(
     directory,
-    [&result, &databaseName, &renewDirectory, &restoreDirectory](
-    const std::string &subpath, bool isDirectory) -> bool {
-        if (isDirectory && subpath != restoreDirectory && subpath != renewDirectory) {
+    [&result, &databaseName](
+    const std::string &directory, const std::string &subpath, bool isDirectory) -> bool {
+        if (isDirectory && subpath != getRestoreDirectoryName()
+            && subpath != getRenewDirectoryName()) {
             bool succeed, exists;
             std::tie(succeed, exists)
             = FileManager::shared()->fileExists(Path::addComponent(subpath, databaseName));
@@ -136,14 +134,35 @@ FactoryRenewer Factory::renewer()
 }
 
 #pragma mark - Helper
+bool Factory::removeDeposite() const
+{
+    std::list<std::string> depositedPath;
+    FileManager *fileManager = FileManager::shared();
+    fileManager->enumerateDirectory(
+    directory,
+    [&depositedPath](
+    const std::string &directory, const std::string &subpath, bool isDirectory) -> bool {
+        if (isDirectory && subpath != getRenewDirectoryName()
+            && subpath != getRestoreDirectoryName()) {
+            depositedPath.push_back(Path::addComponent(directory, subpath));
+        }
+        return true;
+    });
+    if (fileManager->removeItems(depositedPath)) {
+        removeDirectoryIfEmpty();
+        return true;
+    }
+    return false;
+}
+
 bool Factory::removeDirectoryIfEmpty() const
 {
     FileManager *fileManager = FileManager::shared();
     bool canRemove = true;
-    const std::string restoreDirectory = getRestoreDirectory();
     bool succeed = fileManager->enumerateDirectory(
-    directory, [&canRemove, &restoreDirectory](const std::string &subpath, bool) -> bool {
-        if (subpath == restoreDirectory) {
+    directory,
+    [&canRemove](const std::string &directory, const std::string &subpath, bool isDirectory) -> bool {
+        if (subpath == getRestoreDirectoryName() || !isDirectory) {
             return true;
         }
         canRemove = false;
@@ -170,12 +189,12 @@ std::string Factory::lastMaterialPathForDatabase(const std::string &database)
 
 std::string Factory::getRestoreDirectory() const
 {
-    return Path::addComponent(directory, "restore");
+    return Path::addComponent(directory, getRestoreDirectoryName());
 }
 
 std::string Factory::getRenewDirectory() const
 {
-    return Path::addComponent(directory, "renew");
+    return Path::addComponent(directory, getRenewDirectoryName());
 }
 
 std::string Factory::getDatabaseName() const

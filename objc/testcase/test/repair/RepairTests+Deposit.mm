@@ -160,4 +160,50 @@
     XCTAssertEqual(sequences[2].seq, count3 - 1);
 }
 
+- (void)test_remove_factory_after_remove_deposited
+{
+    NSString *tableName = self.className;
+    int count = 100;
+    XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
+
+    XCTAssertTrue([_database isOpened]);
+
+    //Deposit
+    XCTAssertTrue([_database deposit]);
+
+    NSString *factory = [_database.path stringByAppendingString:@".factory"];
+    XCTAssertTrue([self.fileManager fileExistsAtPath:factory]);
+
+    XCTAssertTrue([_database removeDeposit]);
+
+    XCTAssertFalse([self.fileManager fileExistsAtPath:factory]);
+}
+
+- (void)test_remove_factory_after_renewed
+{
+    NSString *tableName = self.className;
+    int count = 100;
+    XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
+
+    XCTAssertTrue([_database isOpened]);
+
+    //Deposit
+    XCTAssertTrue([_database deposit]);
+
+    NSString *factory = [_database.path stringByAppendingString:@".factory"];
+    XCTAssertTrue([self.fileManager fileExistsAtPath:factory]);
+
+    NSArray<NSString *> *subpaths = [self.fileManager contentsOfDirectoryAtPath:factory error:nil];
+    XCTAssertEqual(subpaths.count, 1);
+    for (NSString *subpathName in subpaths) {
+        NSString *subpath = [factory stringByAppendingPathComponent:subpathName];
+        XCTAssertTrue([self.fileManager removeItemAtPath:subpath error:nil]);
+    }
+
+    // trigger renew
+    XCTAssertTrue([_database canOpen]);
+
+    XCTAssertFalse([self.fileManager fileExistsAtPath:factory]);
+}
+
 @end

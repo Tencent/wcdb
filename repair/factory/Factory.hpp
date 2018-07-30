@@ -44,10 +44,13 @@ public:
     const std::string database;
     const std::string directory;
 
+    static constexpr const char *getRestoreDirectoryName() { return "restore"; }
+    static constexpr const char *getRenewDirectoryName() { return "renew"; }
     std::string getRestoreDirectory() const;
     std::string getRenewDirectory() const;
     std::string getDatabaseName() const;
     bool removeDirectoryIfEmpty() const;
+    bool removeDeposite() const;
     std::pair<bool, std::list<std::string>> getWorkshopDirectories() const;
     std::pair<bool, std::string> getUniqueWorkshopDiectory() const;
     bool canRetrieve() const;

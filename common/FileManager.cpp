@@ -72,7 +72,10 @@ std::pair<bool, size_t> FileManager::getFileSize(const std::string &file)
 std::pair<bool, size_t> FileManager::getDirectorySize(const std::string &directory)
 {
     size_t totalSize = 0;
-    if (enumerateDirectory(directory, [&totalSize, this](const std::string &path, bool isDirectory) {
+    if (enumerateDirectory(
+        directory,
+        [&totalSize, this](const std::string &directory, const std::string &subpath, bool isDirectory) {
+            std::string path = Path::addComponent(directory, subpath);
             auto intermediate = isDirectory ? getDirectorySize(path) : getFileSize(path);
             totalSize += intermediate.second;
             return intermediate.first;
@@ -82,8 +85,9 @@ std::pair<bool, size_t> FileManager::getDirectorySize(const std::string &directo
     return { false, 0 };
 }
 
-bool FileManager::enumerateDirectory(const std::string &directory,
-                                     const std::function<bool(const std::string &, bool)> &enumeration)
+bool FileManager::enumerateDirectory(
+const std::string &directory,
+const std::function<bool(const std::string &, const std::string &, bool)> &enumeration)
 {
     DIR *dir = opendir(directory.c_str());
     if (dir == NULL) {
@@ -94,12 +98,10 @@ bool FileManager::enumerateDirectory(const std::string &directory,
         return false;
     }
 
-    std::string path;
     struct dirent *entry;
     while ((entry = readdir(dir)) != NULL) {
         if (strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0) {
-            path = Path::addComponent(directory, entry->d_name);
-            if (!enumeration(path, entry->d_type == DT_DIR)) {
+            if (!enumeration(directory, entry->d_name, entry->d_type == DT_DIR)) {
                 break;
             }
         }

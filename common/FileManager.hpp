@@ -60,8 +60,9 @@ public:
     std::pair<bool, Time> getFileModifiedTime(const std::string &path);
     std::pair<bool, Time> getFileCreatedTime(const std::string &path);
 
-    bool enumerateDirectory(const std::string &directory,
-                            const std::function<bool(const std::string &, bool)> &enumeration);
+    bool enumerateDirectory(
+    const std::string &directory,
+    const std::function<bool(const std::string &, const std::string &, bool)> &enumeration);
 
     bool setFileProtection(const std::string &path, FileProtection fileProtection);
     std::pair<bool, FileProtection> getFileProtection(const std::string &path);

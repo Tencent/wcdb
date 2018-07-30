@@ -50,7 +50,6 @@ public:
     void setInitializeNotification(const InitializeNotificationCallback &onInitializing);
 
 protected:
-    std::atomic<bool> m_inited;
     InitializeNotificationCallback m_onInitializing;
     bool initialize();
 

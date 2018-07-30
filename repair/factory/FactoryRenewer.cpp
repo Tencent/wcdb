@@ -45,6 +45,7 @@ bool FactoryRenewer::work()
         if (!succeed) {
             assignWithSharedThreadedError();
         }
+        factory.removeDirectoryIfEmpty();
         return succeed;
     }
 
@@ -57,10 +58,11 @@ bool FactoryRenewer::work()
         Error error;
         error.level = Error::Level::Warning;
         error.setCode(Error::Code::Misuse, "Repair");
-        error.message = "Database already exists when renewing";
+        error.message = "Database already exists when renewing.";
         error.infos.set("Path", database);
         Notifier::shared()->notify(error);
         fileManager->removeItem(directory);
+        factory.removeDirectoryIfEmpty();
         return true;
     }
     if (!fileManager->removeItems(Factory::associatedPathsForDatabase(factory.database))) {
@@ -75,6 +77,8 @@ bool FactoryRenewer::work()
         return false;
     }
     fileManager->removeItem(directory);
+    factory.removeDirectoryIfEmpty();
+
     return true;
 }
 

@@ -37,7 +37,6 @@ HandlePool::HandlePool(const std::string &thePath, const std::shared_ptr<Configs
 , m_handles(HandlePool::hardwareConcurrency())
 , m_aliveHandleCount(0)
 , attachment(this)
-, m_inited(false)
 , m_onInitializing(nullptr)
 {
 }
@@ -57,9 +56,11 @@ void HandlePool::setInitializeNotification(const WCDB::HandlePool::InitializeNot
 
 bool HandlePool::initialize()
 {
-    if (!m_inited.load()) {
-        WCTInnerAssert(m_aliveHandleCount.load() == 0);
-        blockade();
+    if (m_aliveHandleCount.load() == 0) {
+        LockGuard lockGuard(m_sharedLock);
+        if (m_aliveHandleCount.load() != 0) {
+            return true;
+        }
         if (!FileManager::shared()->createDirectoryWithIntermediateDirectories(
             Path::getBaseName(path))) {
             assignWithSharedThreadedError();
@@ -68,8 +69,6 @@ bool HandlePool::initialize()
         if (m_onInitializing && !m_onInitializing(*this)) {
             return false;
         }
-        m_inited.store(true);
-        unblockade();
     }
     return true;
 }
@@ -266,7 +265,6 @@ std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
 
 std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
 {
-    WCTInnerAssert(m_inited.load());
     WCTInnerAssert(m_sharedLock.level() > SharedLock::Level::None);
     if (m_aliveHandleCount.load() >= HandlePool::maxConcurrency()) {
         Error error;
