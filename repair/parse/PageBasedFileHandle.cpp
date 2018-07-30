@@ -61,6 +61,7 @@ MappedData PageBasedFileHandle::mapPage(int pageno, off_t offsetWithinPage, size
                 range.length = maxMapPage;
             } else if (middle.edge() > range.edge()) {
                 range.location = range.edge() - maxMapPage;
+                range.length = maxMapPage;
             } else {
                 range = middle;
             }
