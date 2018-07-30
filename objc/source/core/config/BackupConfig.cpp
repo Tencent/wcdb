@@ -20,13 +20,10 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/BackupConfig.hpp>
-#include <WCDB/CheckpointConfig.hpp>
 #include <WCDB/Database.hpp>
 #include <WCDB/Dispatch.hpp>
 
 namespace WCDB {
-
-static_assert(BackupConfig::framesForMandatoryCheckpoint > CheckpointConfig::framesForFull, "");
 
 const std::shared_ptr<Config> &BackupConfig::shared()
 {
@@ -97,12 +94,12 @@ bool BackupConfig::onCommitted(Handle *handle, int frames)
         backedUp = m_backedUp[path];
     }
     if (frames > backedUp + framesIntervalForDelayAutoBackup) {
-        m_timedQueue.reQueue(path, 1, frames);
+        m_timedQueue.reQueue(path, 1.0, frames);
     } else if (frames > backedUp + framesIntervalForAutoBackup || frames < backedUp) {
         m_timedQueue.reQueue(path, 0, frames);
     } else {
-        // backed up will happen after 10s if no more write operation
-        m_timedQueue.reQueue(path, 10, frames);
+        // backed up will happen after 15s if no more write operation
+        m_timedQueue.reQueue(path, 15.0, frames);
     }
     return true;
 }

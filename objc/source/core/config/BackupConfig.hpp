@@ -36,7 +36,6 @@ public:
     bool invoke(Handle *handle) override;
 
     static constexpr const char *name = "WCDBBackup";
-    static constexpr const int framesForMandatoryCheckpoint = 3000;
     static constexpr const int framesIntervalForAutoBackup = 300;
     static constexpr const int framesIntervalForDelayAutoBackup = 100;
 

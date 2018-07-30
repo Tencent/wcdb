@@ -69,7 +69,7 @@ bool CheckpointConfig::onCommitted(Handle *handle, int frames)
             m_timedQueue.reQueue(handle->path, 1.0, frames);
         }
     } else {
-        m_timedQueue.reQueue(handle->path, 60.0, frames);
+        m_timedQueue.reQueue(handle->path, 10.0, frames);
     }
     return true;
 }
