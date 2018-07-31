@@ -41,7 +41,7 @@ public:
     static constexpr const int framesForFull = 10 * 1024;
 
 protected:
-    void onTimed(const std::string &path, const int &pages) const;
+    bool onTimed(const std::string &path, const int &pages) const;
     bool onCommitted(Handle *handle, int pages);
 
     void loop();

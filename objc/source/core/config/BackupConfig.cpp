@@ -68,21 +68,26 @@ void BackupConfig::loop()
     &BackupConfig::onTimed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
-void BackupConfig::onTimed(const std::string &path, const int &frames)
+bool BackupConfig::onTimed(const std::string &path, const int &frames)
 {
     static std::atomic<bool> *s_exit = new std::atomic<bool>(false);
     atexit([]() { s_exit->store(true); });
     if (s_exit->load()) {
-        return;
+        return true;
     }
 
     std::shared_ptr<Database> database = Database::databaseWithExistingPath(path);
     if (database == nullptr || !database->isOpened()) {
-        return;
+        return true;
     }
-    database->backup();
+    bool result = database->backup();
+    if (!result) {
+        // retry after 15.0s if failed
+        m_timedQueue.reQueue(path, 15.0, frames);
+    }
     LockGuard lockGuard(m_lock);
     m_backedUp[path] = frames;
+    return result;
 }
 
 bool BackupConfig::onCommitted(Handle *handle, int frames)

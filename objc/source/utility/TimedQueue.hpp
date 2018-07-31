@@ -38,7 +38,7 @@ class TimedQueue {
 public:
     TimedQueue() : m_stop(false), m_running(false){};
 
-    typedef std::function<void(const Key &, const Info &)> ExpiredCallback;
+    typedef std::function<bool(const Key &, const Info &)> ExpiredCallback;
 
     void reQueue(const Key &key, double delay, const Info &info)
     {
@@ -115,9 +115,11 @@ public:
             Key key = shortest->key;
             Info info = shortest->value;
             lockGuard.unlock();
-            onElementExpired(key, info);
+            bool erase = onElementExpired(key, info);
             lockGuard.lock();
-            m_list.erase(key);
+            if (erase) {
+                m_list.erase(key);
+            }
         }
         m_running.store(false);
     }

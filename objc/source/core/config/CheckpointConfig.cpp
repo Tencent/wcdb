@@ -80,19 +80,24 @@ void CheckpointConfig::loop()
     &CheckpointConfig::onTimed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
-void CheckpointConfig::onTimed(const std::string &path, const int &frames) const
+bool CheckpointConfig::onTimed(const std::string &path, const int &frames) const
 {
     static std::atomic<bool> *s_exit = new std::atomic<bool>(false);
     atexit([]() { s_exit->store(true); });
     if (s_exit->load()) {
-        return;
+        return true;
     }
 
     std::shared_ptr<Database> database = Database::databaseWithExistingPath(path);
     if (database == nullptr || !database->isOpened()) {
-        return;
+        return true;
     }
-    database->execute(m_checkpointPassive);
+    if (database->execute(m_checkpointPassive)) {
+        return true;
+    }
+    // retry after 10.0s if failed
+    m_timedQueue.reQueue(path, 10.0, frames);
+    return false;
 }
 
 } //namespace WCDB

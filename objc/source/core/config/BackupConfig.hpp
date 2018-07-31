@@ -42,7 +42,7 @@ public:
 protected:
     TimedQueue<std::string, int> m_timedQueue;
     void loop();
-    void onTimed(const std::string &path, const int &frames);
+    bool onTimed(const std::string &path, const int &frames);
 
     SharedLock m_lock;
     std::map<std::string, int> m_backedUp;
