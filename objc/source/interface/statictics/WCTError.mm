@@ -41,14 +41,12 @@ WCTErrorKey const WCTErrorKeySource = @"Source";
     for (const auto &info : error.infos.getStrings()) {
         NSString *key = [NSString stringWithCppString:info.first];
         NSString *object = [NSString stringWithCppString:info.second];
-#if TARGET_OS_IPHONE
         if ([key isEqualToString:WCTErrorKeyPath]) {
             NSString *path = [object stringByAbbreviatingWithTildeInPath];
             if (path) {
                 object = path;
             }
         }
-#endif //TARGET_OS_IPHONE
         [userInfo setObject:object
                      forKey:key];
     }
