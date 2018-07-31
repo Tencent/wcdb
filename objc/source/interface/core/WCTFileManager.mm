@@ -86,7 +86,7 @@ std::pair<bool, WCDB::FileProtection> FileManager::getFileProtection(const std::
     WCDB::ThreadedErrors::shared()->setThreadedError(std::move(error));
     return { false, WCDB::FileProtection::None };
 #else
-    return { true, std::numeric_limits<WCDB::FileProtection>::max() };
+    return { true, std::numeric_limits<WCDB::FileProtection>::min() };
 #endif
 }
 
