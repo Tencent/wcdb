@@ -231,7 +231,7 @@ bool FactoryRenewer::resolveInfosForDatabase(std::map<std::string, Info> &infos,
     Error error;
     error.level = Error::Level::Notice;
     error.setCode(Error::Code::Notice, "Repair");
-    error.message = "All materials is corrupted when renewing.";
+    error.message = "All materials are corrupted when renewing.";
     error.infos.set("Path", databaseForAcquisition);
     Notifier::shared()->notify(error);
     return true;
