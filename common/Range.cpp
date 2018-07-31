@@ -39,11 +39,21 @@ Range::Range(Location location_, Length length_)
 {
 }
 
-void Range::setEdge(Location edge)
+void Range::expandToEdge(Location edge)
 {
     WCTRemedialAssert(
     edge >= location, "Edge should be greater than length.", edge = location;);
     length = Length(edge - location);
+}
+
+void Range::shiftToLocation(Location location_)
+{
+    location = location_;
+}
+
+void Range::shiftToEdge(Location edge)
+{
+    location = edge - length;
 }
 
 Range::Location Range::edge() const

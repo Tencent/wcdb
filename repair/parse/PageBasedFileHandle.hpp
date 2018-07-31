@@ -36,6 +36,10 @@ public:
     MappedData mapPage(int pageno, off_t offset, size_t size);
     MappedData mapPage(int pageno);
 
+protected:
+    static Range
+    restrictedRange(Range::Location base, Range::Length maxLength, const Range& restrictor);
+
 #pragma mark - PageSize
 public:
     void setPageSize(size_t pageSize);

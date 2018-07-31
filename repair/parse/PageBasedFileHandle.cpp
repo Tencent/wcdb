@@ -30,6 +30,21 @@ PageBasedFileHandle::PageBasedFileHandle(const std::string& path)
 {
 }
 
+Range PageBasedFileHandle::restrictedRange(Range::Location base,
+                                           Range::Length maxLength,
+                                           const Range& restrictor)
+{
+    Range result;
+    result.length = std::min(maxLength, restrictor.length);
+    result.location = base - result.length / 2;
+    if (result.location < restrictor.location) {
+        result.shiftToLocation(restrictor.location);
+    } else if (result.edge() > restrictor.edge()) {
+        result.shiftToEdge(restrictor.edge());
+    }
+    return result;
+}
+
 MappedData PageBasedFileHandle::mapPage(int pageno, off_t offsetWithinPage, size_t sizeWithinPage)
 {
     WCTInnerAssert(m_cachePageSize > 0);
@@ -44,29 +59,21 @@ MappedData PageBasedFileHandle::mapPage(int pageno, off_t offsetWithinPage, size
     // assert same cache page
     WCTInnerAssert(cachePageno == (offset + sizeWithinPage - 1) / m_cachePageSize);
 
-    Range range;
+    Range gap;
     const MappedData* cachedData;
-    std::tie(range, cachedData) = m_cache.find(cachePageno);
+    std::tie(gap, cachedData) = m_cache.find(cachePageno);
     if (cachedData != nullptr) {
-        WCTInnerAssert(range.contains(cachePageno));
-        off_t offsetWithinCache = offset - range.location * m_cachePageSize;
-        WCTInnerAssert(offsetWithinCache < range.length * m_cachePageSize);
+        WCTInnerAssert(gap.contains(cachePageno));
+        off_t offsetWithinCache = offset - gap.location * m_cachePageSize;
+        WCTInnerAssert(offsetWithinCache < gap.length * m_cachePageSize);
         return cachedData->subdata(offsetWithinCache, sizeWithinPage);
     }
 
+    Range::Length maxLength = maxMapPage;
     do {
-        if (range.length > maxMapPage) {
-            Range middle(cachePageno - maxMapPage / 2, maxMapPage);
-            if (middle.location < range.location) {
-                range.length = maxMapPage;
-            } else if (middle.edge() > range.edge()) {
-                range.location = range.edge() - maxMapPage;
-                range.length = maxMapPage;
-            } else {
-                range = middle;
-            }
-        }
-        WCTInnerAssert(range.length <= maxMapPage);
+        Range range = restrictedRange(cachePageno, maxLength, gap);
+
+        WCTInnerAssert(gap.contains(range));
         WCTInnerAssert(range.contains(cachePageno));
 
         bool cuttable = range.length > 1;
@@ -84,12 +91,12 @@ MappedData PageBasedFileHandle::mapPage(int pageno, off_t offsetWithinPage, size
             WCTInnerAssert(offsetWithinCache < range.length * m_cachePageSize);
             return mappedData.subdata(offsetWithinCache, sizeWithinPage);
         } else if (cuttable) {
-            range.location = (range.location + 1 + cachePageno) / 2;
-            range.setEdge((range.edge() + 1 + cachePageno) / 2);
-            WCTInnerAssert(range.length >= 1);
+            maxLength = (range.length + 1) / 2;
+            WCTInnerAssert(maxLength >= 1);
         } else if (purgeable) {
             m_cache.purge();
-            std::tie(range, cachedData) = m_cache.find(cachePageno);
+            std::tie(gap, cachedData) = m_cache.find(cachePageno);
+            maxLength = maxMapPage;
             WCTInnerAssert(cachedData == nullptr);
         } else {
             break;
@@ -132,6 +139,7 @@ PageBasedFileHandle::Cache::Cache(size_t maxSize)
 
 void PageBasedFileHandle::Cache::setRange(const WCDB::Range& range)
 {
+    WCTInnerAssert(range != Range::notFound());
     m_range = range;
 }
 
@@ -166,7 +174,7 @@ std::pair<Range, const MappedData*> PageBasedFileHandle::Cache::find(Location lo
             } else {
                 range.location = m_range.location;
             }
-            range.setEdge(match->first.location);
+            range.expandToEdge(match->first.location);
         }
     } else {
         if (!m_map.empty()) {
@@ -176,7 +184,7 @@ std::pair<Range, const MappedData*> PageBasedFileHandle::Cache::find(Location lo
         } else {
             range.location = m_range.location;
         }
-        range.setEdge(m_range.edge());
+        range.expandToEdge(m_range.edge());
     }
     return std::make_pair(range, data);
 }

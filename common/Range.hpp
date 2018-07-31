@@ -38,7 +38,9 @@ public:
     Location location;
     Length length;
 
-    void setEdge(Location edge);
+    void expandToEdge(Location edge);
+    void shiftToLocation(Location location);
+    void shiftToEdge(Location edge);
     Location edge() const;
 
     bool contains(Location location_) const;
