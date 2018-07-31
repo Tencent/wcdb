@@ -124,11 +124,13 @@ int Page::getMinLocal() const
 #pragma mark - Common
 int Page::getOffsetOfCellPointer() const
 {
+    WCTInnerAssert(m_type != Type::Unknown);
     return m_type == Type::InteriorTable ? 12 : 8;
 }
 
 bool Page::hasRightMostPageNo() const
 {
+    WCTInnerAssert(m_type != Type::Unknown);
     return m_type == Type::InteriorTable;
 }
 
@@ -159,12 +161,12 @@ bool Page::doInitialize()
         break;
     default:
         m_type = Type::Unknown;
-        break;
+        return true;
     }
     WCTInnerAssert(m_deserialization.canAdvance(4));
     m_deserialization.advance(2);
     int cellCount = m_deserialization.advance2BytesInt();
-    if (cellCount < 0 || cellCount * 2 + getOffsetOfCellPointer() > m_pager->getPageSize()) {
+    if (cellCount < 0) {
         markPagerAsCorrupted(number, "CellCount");
         return false;
     }
@@ -175,10 +177,6 @@ bool Page::doInitialize()
             return false;
         }
         int cellPointer = m_deserialization.get2BytesInt(offset);
-        if (cellPointer > m_pager->getPageSize()) {
-            markPagerAsCorrupted(number, "CellPointer");
-            return false;
-        }
         m_cellPointers.push_back(cellPointer);
     }
     if (m_type == Type::InteriorTable) {
