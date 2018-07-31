@@ -45,7 +45,7 @@ std::tuple<bool, bool, bool> FileManager::itemExists(const std::string &path)
 {
     struct stat s;
     if (stat(path.c_str(), &s) == 0) {
-        if (s.st_mode & S_IFDIR) {
+        if ((s.st_mode & S_IFMT) == S_IFDIR) {
             return { true, true, true };
         } else {
             return { true, true, false };
@@ -209,7 +209,7 @@ std::pair<bool, size_t> FileManager::getItemSize(const std::string &path)
 {
     struct stat temp;
     if (stat(path.c_str(), &temp) == 0) {
-        if (temp.st_mode & S_IFDIR) {
+        if ((temp.st_mode & S_IFMT) == S_IFDIR) {
             return getDirectorySize(path);
         }
         return getFileSize(path);
@@ -252,7 +252,7 @@ bool FileManager::removeItem(const std::string &path)
 {
     struct stat temp;
     if (stat(path.c_str(), &temp) == 0) {
-        if (temp.st_mode & S_IFDIR) {
+        if ((temp.st_mode & S_IFMT) == S_IFDIR) {
             return removeDirectory(path);
         }
         return removeFile(path);
