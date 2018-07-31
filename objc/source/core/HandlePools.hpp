@@ -21,6 +21,7 @@
 #ifndef HandlePools_hpp
 #define HandlePools_hpp
 
+#include <WCDB/Lock.hpp>
 #include <WCDB/RecyclableHandlePool.hpp>
 
 #pragma GCC visibility push(hidden)
@@ -36,7 +37,8 @@ public:
 
     typedef std::function<std::shared_ptr<HandlePool>(const std::string &)> Generator;
 
-    RecyclableHandlePool getPool(const std::string &path, const Generator &generator);
+    RecyclableHandlePool
+    getOrGeneratePool(const std::string &path, const Generator &generator);
     RecyclableHandlePool getExistingPool(Tag tag);
     RecyclableHandlePool getExistingPool(const std::string &path);
 
@@ -53,7 +55,7 @@ protected:
     const std::map<std::string, std::pair<std::shared_ptr<HandlePool>, int>>::iterator &iter);
 
     std::map<std::string, std::pair<std::shared_ptr<HandlePool>, int>> m_pools; //path->{pool, reference}
-    std::mutex m_mutex;
+    SharedLock m_lock;
 };
 
 } //namespace WCDB

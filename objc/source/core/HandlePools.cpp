@@ -43,26 +43,35 @@ HandlePools::HandlePools()
     CorruptionNotifier::shared();
 }
 
-RecyclableHandlePool HandlePools::getPool(const std::string &path, const Generator &generator)
+RecyclableHandlePool
+HandlePools::getOrGeneratePool(const std::string &path, const Generator &generator)
 {
-    std::shared_ptr<HandlePool> pool = nullptr;
     std::string normalized = Path::normalize(path);
-    std::lock_guard<std::mutex> lockGuard(m_mutex);
-    auto iter = m_pools.find(normalized);
-    if (iter == m_pools.end()) {
-        pool = generator(normalized);
-        if (pool == nullptr) {
-            return nullptr;
+    {
+        SharedLockGuard lockGuard(m_lock);
+        auto iter = m_pools.find(normalized);
+        if (iter != m_pools.end()) {
+            return getExistingPool(iter);
         }
-        iter = m_pools.emplace(normalized, std::make_pair(pool, 0)).first;
     }
-    return getExistingPool(iter);
+    {
+        LockGuard lockGuard(m_lock);
+        auto iter = m_pools.find(normalized);
+        if (iter == m_pools.end()) {
+            std::shared_ptr<HandlePool> pool = generator(normalized);
+            if (pool == nullptr) {
+                return nullptr;
+            }
+            iter = m_pools.emplace(normalized, std::make_pair(pool, 0)).first;
+        }
+        return getExistingPool(iter);
+    }
 }
 
 RecyclableHandlePool HandlePools::getExistingPool(Tag tag)
 {
     WCTAssert(tag != Tag::invalid(), "Tag invalid");
-    std::lock_guard<std::mutex> lockGuard(m_mutex);
+    SharedLockGuard lockGuard(m_lock);
     auto iter = m_pools.end();
     for (iter = m_pools.begin(); iter != m_pools.end(); ++iter) {
         if (iter->second.first->getTag() == tag) {
@@ -75,7 +84,7 @@ RecyclableHandlePool HandlePools::getExistingPool(Tag tag)
 RecyclableHandlePool HandlePools::getExistingPool(const std::string &path)
 {
     std::string normalized = Path::normalize(path);
-    std::lock_guard<std::mutex> lockGuard(m_mutex);
+    SharedLockGuard lockGuard(m_lock);
     auto iter = m_pools.begin();
     for (; iter != m_pools.end(); ++iter) {
         if (iter->second.first->path == normalized) {
@@ -88,6 +97,7 @@ RecyclableHandlePool HandlePools::getExistingPool(const std::string &path)
 RecyclableHandlePool HandlePools::getExistingPool(
 const std::map<std::string, std::pair<std::shared_ptr<HandlePool>, int>>::iterator &iter)
 {
+    SharedLockGuard lockGuard(m_lock);
     if (iter == m_pools.end()) {
         return nullptr;
     }
@@ -100,7 +110,7 @@ const std::map<std::string, std::pair<std::shared_ptr<HandlePool>, int>>::iterat
 
 void HandlePools::flowBackHandlePool(const std::shared_ptr<HandlePool> &handlePool)
 {
-    std::lock_guard<std::mutex> lockGuard(m_mutex);
+    LockGuard lockGuard(m_lock);
     const auto &iter = m_pools.find(handlePool->path);
     if (iter == m_pools.end()) {
         //drop it
@@ -115,7 +125,7 @@ void HandlePools::purge()
 {
     std::list<std::shared_ptr<HandlePool>> handlePools;
     {
-        std::lock_guard<std::mutex> lockGuard(m_mutex);
+        SharedLockGuard lockGuard(m_lock);
         for (const auto &iter : m_pools) {
             handlePools.push_back(iter.second.first);
         }

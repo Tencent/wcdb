@@ -69,7 +69,7 @@ bool Database::initializeHandlePool(const HandlePool &handlePool)
 std::shared_ptr<Database> Database::databaseWithPath(const std::string &path)
 {
     std::shared_ptr<Database> database(new Database(
-    HandlePools::defaultPools()->getPool(path, Database::generateHandlePool)));
+    HandlePools::defaultPools()->getOrGeneratePool(path, Database::generateHandlePool)));
     if (database && database->isValid()) {
         return database;
     }

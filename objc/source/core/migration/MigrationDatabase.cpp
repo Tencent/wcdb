@@ -68,7 +68,7 @@ std::shared_ptr<Database>
 MigrationDatabase::databaseWithPath(const std::string &path,
                                     const std::list<std::shared_ptr<MigrationInfo>> &infos)
 {
-    RecyclableHandlePool pool = HandlePools::defaultPools()->getPool(
+    RecyclableHandlePool pool = HandlePools::defaultPools()->getOrGeneratePool(
     path, std::bind(&MigrationDatabase::generateHandlePool, std::placeholders::_1, infos));
     WCTRemedialAssert(
     pool == nullptr || dynamic_cast<MigrationHandlePool *>(pool.getHandlePool()) != nullptr,
