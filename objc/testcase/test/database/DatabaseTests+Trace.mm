@@ -19,6 +19,7 @@
  */
 
 #import "TestCaseCommon.h"
+#include <pwd.h>
 
 @interface DatabaseTests_Trace : TestCase
 
@@ -27,6 +28,7 @@
 @implementation DatabaseTests_Trace {
     WCTDatabase *_database1;
     WCTDatabase *_database2;
+    NSString *_errorTracerName;
 }
 
 - (void)setUp
@@ -35,6 +37,7 @@
 
     _database1 = [[WCTDatabase alloc] initWithPath:[self.recommendedPath stringByAppendingString:@"_1"]];
     _database2 = [[WCTDatabase alloc] initWithPath:[self.recommendedPath stringByAppendingString:@"_2"]];
+    _errorTracerName = self.testname;
 }
 
 - (void)tearDown
@@ -47,6 +50,7 @@
 
     [WCTDatabase globalTracePerformance:nil];
     [WCTDatabase globalTraceSQL:nil];
+    [WCTDatabase globalTraceError:nil tracerNamed:_errorTracerName];
 
     [super tearDown];
 }
@@ -134,6 +138,42 @@
     XCTAssertTrue(hit);
     XCTAssertFalse(hit1);
     XCTAssertTrue(hit2);
+}
+
+- (void)test_trace_error
+{
+    __block BOOL hit = NO;
+    _database1.tag = (int) self.hash;
+    [WCTDatabase
+    globalTraceError:^(WCTError *error) {
+        if (error.level == WCTErrorLevelError) {
+            XCTAssertEqual(error.tag, _database1.tag);
+            hit = YES;
+        }
+    }
+         tracerNamed:_errorTracerName];
+    XCTAssertFalse([_database1 getObjectOfClass:TestCaseObject.class fromTable:@"non_existent_table"]);
+    XCTAssertTrue(hit);
+}
+
+- (void)test_abbreviated_path
+{
+    NSString *document = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, NO)[0];
+    NSString *path = [document stringByAppendingPathComponent:self.testname];
+    XCTAssertTrue([path hasPrefix:@"~/"]);
+
+    WCTDatabase *database = [[WCTDatabase alloc] initWithPath:path];
+    __block BOOL hit = NO;
+    [WCTDatabase
+    globalTraceError:^(WCTError *error) {
+        if (error.level == WCTErrorLevelError) {
+            XCTAssertTrue([error.path hasPrefix:@"~/"]);
+            hit = YES;
+        }
+    }
+         tracerNamed:_errorTracerName];
+    XCTAssertFalse([database getObjectOfClass:TestCaseObject.class fromTable:@"non_existent_table"]);
+    XCTAssertTrue(hit);
 }
 
 @end
