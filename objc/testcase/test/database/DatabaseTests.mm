@@ -66,6 +66,37 @@
     XCTAssertTrue([_database.path isEqualToString:database2.path]);
 }
 
+- (void)test_path
+{
+    NSString *document = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, NO)[0];
+    NSString *tildeExpandedDocument = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+
+    NSString *origin = [tildeExpandedDocument stringByAppendingPathComponent:self.testname];
+    _database = [[WCTDatabase alloc] initWithPath:origin];
+    WCTTag tag = (WCTTag) self.testname.hash;
+    _database.tag = tag;
+
+    NSString *symboliclink = [origin stringByAppendingString:@"_symboliclink"];
+    XCTAssertTrue([self.fileManager createSymbolicLinkAtPath:symboliclink withDestinationPath:origin error:nil]);
+    WCTDatabase *databaseFromSymboliclink = [[WCTDatabase alloc] initWithPath:symboliclink];
+    XCTAssertTrue([databaseFromSymboliclink.path isEqualToString:symboliclink]);
+    XCTAssertEqual(databaseFromSymboliclink.tag, tag);
+    XCTAssertFalse([databaseFromSymboliclink.path hasPrefix:@"~/"]);
+
+    NSString *hardlink = [origin stringByAppendingString:@"_hardlink"];
+    XCTAssertTrue([self.fileManager linkItemAtPath:hardlink toPath:origin error:nil]);
+    WCTDatabase *databaseFromHardlink = [[WCTDatabase alloc] initWithPath:hardlink];
+    XCTAssertTrue([databaseFromHardlink.path isEqualToString:hardlink]);
+    XCTAssertEqual(databaseFromHardlink.tag, tag);
+    XCTAssertFalse([databaseFromHardlink.path hasPrefix:@"~/"]);
+
+    NSString *tilde = [[document stringByAppendingPathComponent:self.testname] stringByAppendingString:@"_tilde"];
+    WCTDatabase *databaseFromTilde = [[WCTDatabase alloc] initWithPath:tilde];
+    XCTAssertTrue([databaseFromTilde.path isEqualToString:tilde]);
+    XCTAssertEqual(databaseFromTilde.tag, tag);
+    XCTAssertTrue([databaseFromTilde.path hasPrefix:@"~/"]);
+}
+
 - (void)test_blockade
 {
     [_database blockade];
