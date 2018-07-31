@@ -20,6 +20,8 @@
 
 #include <WCDB/Path.hpp>
 #include <libgen.h>
+#include <pwd.h>
+#include <unistd.h>
 
 #if __cplusplus > 201402L
 #warning TODO std::filesystem is supported since C++17
@@ -77,11 +79,50 @@ std::string getBaseName(const std::string &base)
 
 std::string normalize(const std::string &path)
 {
-    std::string normalized = path;
+    std::string normalized;
+
+    // expand tilde
+    if (path.length() != 0 & path[0] == '~') {
+        const char *pfx = NULL;
+        std::string::size_type pos = path.find_first_of('/');
+        if (path.length() == 1 || pos == 1) {
+            pfx = getenv("HOME");
+            if (!pfx) {
+                struct passwd *pw = getpwuid(getuid());
+                if (pw) {
+                    pfx = pw->pw_dir;
+                }
+            }
+        } else {
+            std::string user(
+            path, 1, (pos == std::string::npos) ? std::string::npos : pos - 1);
+            struct passwd *pw = getpwnam(user.c_str());
+            if (pw) {
+                pfx = pw->pw_dir;
+            }
+        }
+
+        if (pfx) {
+            normalized = pfx;
+            if (pos != std::string::npos) {
+                if (normalized.length() == 0 || normalized[normalized.length() - 1] != '/') {
+                    normalized += '/';
+                }
+                normalized += path.substr(pos + 1);
+            }
+        } else {
+            normalized = path;
+        }
+    } else {
+        normalized = path;
+    }
+
+    // replace '//' with '/'
     std::size_t found;
     while ((found = normalized.find("//")) != std::string::npos) {
         normalized.replace(found, 2, "/");
     }
+
     return normalized;
 }
 
