@@ -54,4 +54,6 @@
 
 @property (readonly) NSString *className;
 
+@property (readonly) NSString *testname;
+
 @end
