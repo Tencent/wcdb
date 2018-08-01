@@ -221,12 +221,12 @@ bool Wal::doInitialize()
 }
 
 #pragma mark - Error
-void Wal::markAsCorrupted(int frame, const std::string &diagnostic)
+void Wal::markAsCorrupted(int frame, const std::string &message)
 {
     Error error;
     error.setCode(Error::Code::Corrupt, "Repair");
+    error.message = message;
     error.infos.set("Path", getPath());
-    error.infos.set("Diagnostic", diagnostic);
     error.infos.set("Frame", frame);
     Notifier::shared()->notify(error);
     setError(std::move(error));

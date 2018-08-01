@@ -51,9 +51,9 @@ void WalRelated::assignWithSharedThreadedError()
     m_wal->assignWithSharedThreadedError();
 }
 
-void WalRelated::markWalAsCorrupted(int frame, const std::string &diagnostic)
+void WalRelated::markWalAsCorrupted(int frame, const std::string &message)
 {
-    m_wal->markAsCorrupted(frame, diagnostic);
+    m_wal->markAsCorrupted(frame, message);
 }
 
 } //namespace Repair

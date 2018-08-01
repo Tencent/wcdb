@@ -81,7 +81,7 @@ protected:
 
 #pragma mark - Error
 protected:
-    void markAsCorrupted(int frame, const std::string &diagnostic);
+    void markAsCorrupted(int frame, const std::string &message);
     void markAsError(Error::Code code);
 
 #pragma mark - Dispose

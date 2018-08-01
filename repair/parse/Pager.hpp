@@ -76,7 +76,7 @@ protected:
 
 #pragma mark - Error
 public:
-    void markAsCorrupted(int page, const std::string &diagnostic);
+    void markAsCorrupted(int page, const std::string &message);
 
 protected:
     void markAsError(Error::Code code);

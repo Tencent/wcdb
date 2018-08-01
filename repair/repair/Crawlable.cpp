@@ -47,9 +47,9 @@ const Error &Crawlable::getCrawlError() const
     return m_associatedPager.getError();
 }
 
-void Crawlable::markAsCorrupted(int page, const std::string &diagnostic)
+void Crawlable::markAsCorrupted(int page, const std::string &message)
 {
-    m_associatedPager.markAsCorrupted(page, diagnostic);
+    m_associatedPager.markAsCorrupted(page, message);
     markAsError();
 }
 

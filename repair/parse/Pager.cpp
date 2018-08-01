@@ -157,12 +157,12 @@ int Pager::getWalFrameCount() const
 }
 
 #pragma mark - Error
-void Pager::markAsCorrupted(int page, const std::string &diagnostic)
+void Pager::markAsCorrupted(int page, const std::string &message)
 {
     Error error;
     error.setCode(Error::Code::Corrupt, "Repair");
+    error.message = message;
     error.infos.set("Path", getPath());
-    error.infos.set("Diagnostic", diagnostic);
     error.infos.set("Page", page);
     Notifier::shared()->notify(error);
     setError(std::move(error));
