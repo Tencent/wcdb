@@ -69,6 +69,16 @@ typedef NS_ENUM(NSUInteger, WCTErrorCode) {
 
 @interface WCTError : NSError
 
++ (instancetype)errorWithCode:(WCTErrorCode)code
+                        level:(WCTErrorLevel)level
+                      message:(nonnull NSString *)message
+                     userInfo:(nullable NSDictionary<NSErrorUserInfoKey, id> *)userInfo;
+
+- (instancetype)initWithCode:(WCTErrorCode)code
+                       level:(WCTErrorLevel)level
+                     message:(nonnull NSString *)message
+                    userInfo:(nullable NSDictionary<NSErrorUserInfoKey, id> *)userInfo;
+
 @property (nonatomic, readonly) WCTErrorLevel level;
 
 @property (nonatomic, readonly, nullable) NSString *message;

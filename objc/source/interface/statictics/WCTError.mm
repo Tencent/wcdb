@@ -32,6 +32,33 @@ WCTErrorKey const WCTErrorKeySource = @"Source";
 
 @implementation WCTError
 
++ (NSErrorDomain)domain
+{
+    return @"WCDB";
+}
+
++ (instancetype)errorWithCode:(WCTErrorCode)code
+                        level:(WCTErrorLevel)level
+                      message:(NSString *)message
+                     userInfo:(NSDictionary<NSErrorUserInfoKey, id> *)userInfo
+{
+    return [[self alloc] initWithCode:code level:level message:message userInfo:userInfo];
+}
+
+- (instancetype)initWithCode:(WCTErrorCode)code
+                       level:(WCTErrorLevel)level
+                     message:(NSString *)message
+                    userInfo:(NSDictionary<NSErrorUserInfoKey, id> *)userInfo
+{
+    if (self = [super initWithDomain:self.class.domain
+                                code:(NSInteger) code
+                            userInfo:userInfo]) {
+        _message = message;
+        _level = (WCTErrorLevel) level;
+    }
+    return self;
+}
+
 - (instancetype)initWithError:(const WCDB::Error &)error
 {
     NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
@@ -46,17 +73,13 @@ WCTErrorKey const WCTErrorKeySource = @"Source";
         [userInfo setObject:[NSNumber numberWithDouble:info.second] forKey:[NSString stringWithCppString:info.first]];
     }
 
-    if (self = [super initWithDomain:@"WCDB"
-                                code:(NSInteger) error.code()
-                            userInfo:userInfo]) {
-        if (!error.message.empty()) {
-            _message = [NSString stringWithCppString:error.message];
-        } else {
-            _message = [NSString stringWithUTF8String:WCDB::Error::codeName((WCDB::Error::Code) self.code)];
-        }
-        _level = (WCTErrorLevel) error.level;
+    NSString *message;
+    if (!error.message.empty()) {
+        message = [NSString stringWithCppString:error.message];
+    } else {
+        message = [NSString stringWithUTF8String:WCDB::Error::codeName((WCDB::Error::Code) self.code)];
     }
-    return self;
+    return [self initWithCode:(WCTErrorCode) error.code() level:(WCTErrorLevel) error.level message:message userInfo:userInfo];
 }
 
 - (BOOL)isOK
