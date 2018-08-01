@@ -22,6 +22,7 @@
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Pager.hpp>
 #include <WCDB/Serialization.hpp>
+#include <WCDB/String.hpp>
 #include <WCDB/ThreadedErrors.hpp>
 
 namespace WCDB {
@@ -90,7 +91,8 @@ MappedData Pager::acquirePageData(int number, off_t offset, size_t size)
     if (m_wal.containsPage(number)) {
         data = m_wal.acquirePageData(number, offset, size);
     } else if (number > m_pageCount) {
-        markAsCorrupted(number, "PageData");
+        markAsCorrupted(
+        number, String::formatted("Page number: %d exceeds the page count: %d.", number, m_pageCount));
         return MappedData::emptyData();
     } else {
         data = m_fileHandle.mapPage(number, offset, size);
@@ -98,7 +100,10 @@ MappedData Pager::acquirePageData(int number, off_t offset, size_t size)
     if (data.size() != size) {
         if (data.size() > 0) {
             //short read
-            markAsCorrupted((int) (offset / m_pageSize + 1), "ShortRead");
+            markAsCorrupted((int) (offset / m_pageSize + 1),
+                            String::formatted("Acquired page data with size: %d is less than the expected size: %d.",
+                                              data.size(),
+                                              size));
         } else {
             assignWithSharedThreadedError();
         }
@@ -113,8 +118,10 @@ MappedData Pager::acquireData(off_t offset, size_t size)
     MappedData data = m_fileHandle.map(offset, size);
     if (data.size() != size) {
         if (data.size() > 0) {
-            //short read
-            markAsCorrupted((int) (offset / m_pageSize + 1), "ShortRead");
+            markAsCorrupted((int) (offset / m_pageSize + 1),
+                            String::formatted("Acquired data with size: %d is less than the expected size: %d.",
+                                              data.size(),
+                                              size));
         } else {
             assignWithSharedThreadedError();
         }
@@ -150,12 +157,12 @@ int Pager::getWalFrameCount() const
 }
 
 #pragma mark - Error
-void Pager::markAsCorrupted(int page, const std::string &element)
+void Pager::markAsCorrupted(int page, const std::string &diagnostic)
 {
     Error error;
     error.setCode(Error::Code::Corrupt, "Repair");
     error.infos.set("Path", getPath());
-    error.infos.set("Element", element);
+    error.infos.set("Diagnostic", diagnostic);
     error.infos.set("Page", page);
     Notifier::shared()->notify(error);
     setError(std::move(error));
@@ -216,11 +223,13 @@ bool Pager::doInitialize()
         }
     }
     if (((m_pageSize - 1) & m_pageSize) != 0 || m_pageSize < 512) {
-        markAsCorrupted(1, "PageSize");
+        markAsCorrupted(
+        1, String::formatted("Page size: %d is not aligned or not too small.", m_pageSize));
         return false;
     }
     if (m_reservedBytes < 0 || m_reservedBytes > 255) {
-        markAsCorrupted(1, "ReversedBytes");
+        markAsCorrupted(
+        1, String::formatted("Reversed bytes: %d is illegal.", m_reservedBytes));
         return false;
     }
 

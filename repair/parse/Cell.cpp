@@ -23,6 +23,7 @@
 #include <WCDB/Page.hpp>
 #include <WCDB/Pager.hpp>
 #include <WCDB/Serialization.hpp>
+#include <WCDB/String.hpp>
 #include <set>
 
 namespace WCDB {
@@ -196,14 +197,14 @@ bool Cell::doInitialize()
     int lengthOfPayloadSize, payloadSize;
     std::tie(lengthOfPayloadSize, payloadSize) = deserialization.advanceVarint();
     if (lengthOfPayloadSize == 0) {
-        markPagerAsCorrupted(m_page->number, "PayloadSize");
+        markPagerAsCorrupted(m_page->number, "Unable to deserialize PayloadSize.");
         return false;
     }
     //parse rowid
     int lengthOfRowid;
     std::tie(lengthOfRowid, m_rowid) = deserialization.advanceVarint();
     if (lengthOfRowid == 0) {
-        markPagerAsCorrupted(m_page->number, "Rowid");
+        markPagerAsCorrupted(m_page->number, "Unable to deserialize Rowid.");
         return false;
     }
     //parse local
@@ -214,7 +215,7 @@ bool Cell::doInitialize()
         localPayloadSize = m_page->getMinLocal();
     }
     if (!deserialization.canAdvance(localPayloadSize)) {
-        markPagerAsCorrupted(m_page->number, "LocalPayloadSize");
+        markPagerAsCorrupted(m_page->number, "Unable to deserialize LocalPayloadSize.");
         return false;
     }
     //parse payload
@@ -223,7 +224,7 @@ bool Cell::doInitialize()
         //append overflow pages
         deserialization.seek(offsetOfPayload + localPayloadSize);
         if (!deserialization.canAdvance(4)) {
-            markPagerAsCorrupted(m_page->number, "OverflowPageno");
+            markPagerAsCorrupted(m_page->number, "Unable to deserialize OverflowPageno.");
             return false;
         }
         int overflowPageno = deserialization.advance4BytesInt();
@@ -240,10 +241,18 @@ bool Cell::doInitialize()
         int cursorOfPayload = localPayloadSize;
         std::set<int> overflowPagenos;
         while (overflowPageno > 0 && cursorOfPayload < payloadSize) {
-            if (overflowPagenos.find(overflowPageno) != overflowPagenos.end() // redunant overflow page found
-                || overflowPageno > m_pager->getPageCount() // pageno exceeds
-            ) {
-                m_pager->markAsCorrupted(m_page->number, "OverflowPage");
+            if (overflowPagenos.find(overflowPageno) != overflowPagenos.end()) {
+                m_pager->markAsCorrupted(
+                m_page->number,
+                String::formatted("Overflow page: %d is redundant.", overflowPageno));
+                return false;
+            }
+            if (overflowPageno > m_pager->getPageCount()) {
+                m_pager->markAsCorrupted(
+                m_page->number,
+                String::formatted("Overflow page: %d exceeds the page count: %d.",
+                                  overflowPageno,
+                                  m_pager->getPageCount()));
                 return false;
             }
             overflowPagenos.emplace(overflowPageno);
@@ -266,7 +275,7 @@ bool Cell::doInitialize()
             overflowPageno = overflowDeserialization.advance4BytesInt();
         }
         if (overflowPageno != 0 || cursorOfPayload != payloadSize) {
-            markPagerAsCorrupted(m_page->number, "OverflowPage");
+            markPagerAsCorrupted(m_page->number, "Unexpected termination of OverflowPage.");
             return false;
         }
         m_payload = m_overflowedPayloadHolder;
@@ -281,7 +290,7 @@ bool Cell::doInitialize()
     int lengthOfOffsetOfValues, offsetOfValues;
     std::tie(lengthOfOffsetOfValues, offsetOfValues) = m_deserialization.advanceVarint();
     if (lengthOfOffsetOfValues == 0) {
-        markPagerAsCorrupted(m_page->number, "CellValueOffset");
+        markPagerAsCorrupted(m_page->number, "Unable to deserialize CellValueOffset.");
         return false;
     }
 
@@ -294,20 +303,25 @@ bool Cell::doInitialize()
         int lengthOfSerialType, serialType;
         m_deserialization.seek(cursorOfSerialTypes);
         std::tie(lengthOfSerialType, serialType) = m_deserialization.advanceVarint();
-        if (lengthOfSerialType == 0 || !isSerialTypeSanity(serialType)) {
-            markPagerAsCorrupted(m_page->number, "SerialType");
+        if (lengthOfSerialType == 0) {
+            markPagerAsCorrupted(m_page->number, "Unable to deserialize SerialType.");
+            return false;
+        }
+        if (!isSerialTypeSanity(serialType)) {
+            markPagerAsCorrupted(
+            m_page->number, String::formatted("Serial type: %d is illegal.", serialType));
             return false;
         }
         cursorOfSerialTypes += lengthOfSerialType;
         m_columns.push_back({ serialType, cursorOfValues });
         cursorOfValues += getLengthOfSerialType(serialType);
         if (cursorOfValues > endOfValues) {
-            markPagerAsCorrupted(m_page->number, "Payload");
+            markPagerAsCorrupted(m_page->number, "Unexpected termination of Payload.");
             return false;
         }
     }
     if (cursorOfSerialTypes != endOfSerialTypes || cursorOfValues != endOfValues) {
-        markPagerAsCorrupted(m_page->number, "Payload");
+        markPagerAsCorrupted(m_page->number, "Unexpected termination of Payload.");
         return false;
     }
     return true;

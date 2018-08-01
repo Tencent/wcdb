@@ -23,6 +23,7 @@
 #include <WCDB/Master.hpp>
 #include <WCDB/MasterCrawler.hpp>
 #include <WCDB/Page.hpp>
+#include <WCDB/String.hpp>
 
 namespace WCDB {
 
@@ -60,8 +61,10 @@ void MasterCrawler::onCellCrawled(const Cell &cell)
     }
     if (cell.getValueType(3) == Cell::Type::Integer) {
         master.rootpage = (int) cell.integerValue(3);
-        if (master.rootpage < 0) {
-            markAsCorrupted(cell.getPage().number, "CellValue");
+        if (master.rootpage <= 0) {
+            markAsCorrupted(cell.getPage().number,
+                            String::formatted("Root page: %d in Master is less than or equal to 0.",
+                                              master.rootpage));
             return;
         }
     }

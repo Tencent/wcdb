@@ -71,6 +71,29 @@ CopyOnWriteString stringByReplacingOccurrencesOfString(const CopyOnWriteString &
     return cowOutput;
 }
 
+std::string formatted(const char *format, ...)
+{
+    size_t size = strlen(format) * 2 + 50;
+    std::string result;
+    va_list ap;
+    do {
+        result.resize(size);
+        va_start(ap, format);
+        int n = vsnprintf((char *) result.data(), size, format, ap);
+        va_end(ap);
+        if (n > -1 && n < size) {
+            result.resize(n);
+            return result;
+        }
+        if (n > -1) {
+            size = n + 1;
+        } else {
+            size *= 2;
+        }
+    } while (size < 1000);
+    return result;
+}
+
 } //namespace String
 
 } //namespace WCDB

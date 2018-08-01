@@ -51,9 +51,9 @@ void PagerRelated::assignWithSharedThreadedError()
     m_pager->assignWithSharedThreadedError();
 }
 
-void PagerRelated::markPagerAsCorrupted(int page, const std::string &element)
+void PagerRelated::markPagerAsCorrupted(int page, const std::string &diagnostic)
 {
-    m_pager->markAsCorrupted(page, element);
+    m_pager->markAsCorrupted(page, diagnostic);
 }
 
 } //namespace Repair

@@ -42,6 +42,8 @@ CopyOnWriteString stringByReplacingOccurrencesOfString(const CopyOnWriteString &
                                                        const std::string &target,
                                                        const std::string &replacement);
 
+std::string formatted(const char *format, ...);
+
 } //namespace String
 
 } //namespace WCDB

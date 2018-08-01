@@ -37,7 +37,7 @@ public:
     WalRelated &operator=(WalRelated &&);
 
 protected:
-    void markWalAsCorrupted(int frame, const std::string &element);
+    void markWalAsCorrupted(int frame, const std::string &diagnostic);
     void setError(Error &&error);
     void assignWithSharedThreadedError();
 

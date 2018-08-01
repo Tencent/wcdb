@@ -21,6 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Frame.hpp>
 #include <WCDB/Serialization.hpp>
+#include <WCDB/String.hpp>
 #include <WCDB/Wal.hpp>
 
 namespace WCDB {
@@ -118,7 +119,8 @@ bool Frame::doInitialize()
     m_checksum = calculateChecksum(m_data.subdata(0, 8), m_checksum);
     m_checksum = calculateChecksum(pageData, m_checksum);
     if (m_checksum != checksum) {
-        markWalAsCorrupted(frameno, "Checksum");
+        markWalAsCorrupted(
+        frameno, String::formatted("Mismatched checksum: %u to %u.", m_checksum, checksum));
         return false;
     }
     return true;

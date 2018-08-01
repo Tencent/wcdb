@@ -24,6 +24,7 @@
 #include <WCDB/Pager.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/Serialization.hpp>
+#include <WCDB/String.hpp>
 #include <WCDB/Wal.hpp>
 
 namespace WCDB {
@@ -52,8 +53,10 @@ MappedData Wal::acquireData(off_t offset, size_t size)
     MappedData data = m_fileHandle.map(offset, size);
     if (data.size() != size) {
         if (data.size() > 0) {
-            //short read
-            markAsCorrupted((int) ((offset - headerSize) / getFrameSize() + 1), "ShortRead");
+            markAsCorrupted((int) ((offset - headerSize) / getFrameSize() + 1),
+                            String::formatted("Acquired wal data with size: %d is less than the expected size: %d.",
+                                              data.size(),
+                                              size));
         } else {
             assignWithSharedThreadedError();
         }
@@ -171,7 +174,7 @@ bool Wal::doInitialize()
     Deserialization deserialization(data);
     uint32_t magic = deserialization.advance4BytesUInt();
     if (magic != 0x377f0682 && magic != 0x377f0683) {
-        markAsCorrupted(0, "Magic");
+        markAsCorrupted(0, String::formatted("Magic number: 0x%x is illegal.", magic));
         return false;
     }
     m_isNativeChecksum = (magic & 0x00000001) == isBigEndian();
@@ -218,12 +221,12 @@ bool Wal::doInitialize()
 }
 
 #pragma mark - Error
-void Wal::markAsCorrupted(int frame, const std::string &element)
+void Wal::markAsCorrupted(int frame, const std::string &diagnostic)
 {
     Error error;
     error.setCode(Error::Code::Corrupt, "Repair");
     error.infos.set("Path", getPath());
-    error.infos.set("Element", element);
+    error.infos.set("Diagnostic", diagnostic);
     error.infos.set("Frame", frame);
     Notifier::shared()->notify(error);
     setError(std::move(error));

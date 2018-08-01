@@ -36,7 +36,7 @@ public:
     PagerRelated &operator=(PagerRelated &&);
 
 protected:
-    void markPagerAsCorrupted(int page, const std::string &element);
+    void markPagerAsCorrupted(int page, const std::string &diagnostic);
     void setError(Error &&error);
     void assignWithSharedThreadedError();
 

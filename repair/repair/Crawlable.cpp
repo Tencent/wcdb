@@ -23,6 +23,7 @@
 #include <WCDB/Crawlable.hpp>
 #include <WCDB/Page.hpp>
 #include <WCDB/Pager.hpp>
+#include <WCDB/String.hpp>
 #include <WCDB/ThreadedErrors.hpp>
 
 namespace WCDB {
@@ -46,9 +47,9 @@ const Error &Crawlable::getCrawlError() const
     return m_associatedPager.getError();
 }
 
-void Crawlable::markAsCorrupted(int page, const std::string &element)
+void Crawlable::markAsCorrupted(int page, const std::string &diagnostic)
 {
-    m_associatedPager.markAsCorrupted(page, element);
+    m_associatedPager.markAsCorrupted(page, diagnostic);
     markAsError();
 }
 
@@ -82,7 +83,7 @@ void Crawlable::safeCrawl(int rootpageno, std::set<int> &crawledInteriorPages, i
     case Page::Type::InteriorTable:
         if (crawledInteriorPages.find(rootpageno) != crawledInteriorPages.end()) {
             //avoid dead loop
-            markAsCorrupted(rootpageno, "Pageno");
+            markAsCorrupted(rootpageno, "Page is already crawled.");
             return;
         }
         crawledInteriorPages.emplace(rootpageno);
@@ -108,7 +109,8 @@ void Crawlable::safeCrawl(int rootpageno, std::set<int> &crawledInteriorPages, i
         }
         break;
     default:
-        markAsCorrupted(rootpageno, "PageType");
+        markAsCorrupted(
+        rootpageno, String::formatted("Unexpected page type: %d", rootpage.getType()));
         break;
     }
 }

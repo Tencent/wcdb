@@ -117,7 +117,7 @@ bool Backup::willCrawlPage(const Page &page, int height)
     case Page::Type::LeafTable: {
         auto iter = m_verifiedPagenos.find(page.number);
         if (iter != m_verifiedPagenos.end()) {
-            markAsCorrupted(page.number, "PageNumber");
+            markAsCorrupted(page.number, "Page is already crawled.");
         } else {
             m_verifiedPagenos[page.number] = page.getData().hash();
         }

@@ -23,6 +23,7 @@
 #include <WCDB/Page.hpp>
 #include <WCDB/Pager.hpp>
 #include <WCDB/Serialization.hpp>
+#include <WCDB/String.hpp>
 
 namespace WCDB {
 
@@ -167,13 +168,14 @@ bool Page::doInitialize()
     m_deserialization.advance(2);
     int cellCount = m_deserialization.advance2BytesInt();
     if (cellCount < 0) {
-        markPagerAsCorrupted(number, "CellCount");
+        markPagerAsCorrupted(
+        number, String::formatted("Unexpected CellCount: %d.", cellCount));
         return false;
     }
     for (int i = 0; i < cellCount; ++i) {
         int offset = getOffsetOfHeader() + getOffsetOfCellPointer() + i * 2;
         if (!m_deserialization.isEnough(offset + 2)) {
-            markPagerAsCorrupted(number, "CellPointer");
+            markPagerAsCorrupted(number, "Unable to deserialize CellPointer.");
             return false;
         }
         int cellPointer = m_deserialization.get2BytesInt(offset);
@@ -185,12 +187,20 @@ bool Page::doInitialize()
             int offset = i < m_cellPointers.size() ? m_cellPointers[i] :
                                                      8 + getOffsetOfHeader();
             if (!m_deserialization.isEnough(offset + 4)) {
-                markPagerAsCorrupted(number, "SubPageno");
+                markPagerAsCorrupted(number, "Unable to deserialize SubPageno.");
                 return false;
             }
             int pageno = m_deserialization.get4BytesInt(offset);
-            if (pageno > m_pager->getPageCount() || pageno <= 0) {
-                markPagerAsCorrupted(number, "SubPageno");
+            if (pageno > m_pager->getPageCount()) {
+                markPagerAsCorrupted(number,
+                                     String::formatted("Pageno: %d exceeds the page count: %d.",
+                                                       pageno,
+                                                       m_pager->getPageCount()));
+                return false;
+            }
+            if (pageno <= 0) {
+                markPagerAsCorrupted(
+                number, String::formatted("Pageno: %d is less than or equal to 0.", pageno));
                 return false;
             }
             m_subPagenos.push_back(pageno);

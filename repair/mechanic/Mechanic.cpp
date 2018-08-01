@@ -21,6 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Mechanic.hpp>
 #include <WCDB/Page.hpp>
+#include <WCDB/String.hpp>
 
 namespace WCDB {
 
@@ -128,11 +129,15 @@ bool Mechanic::willCrawlPage(const Page &page, int)
         return false;
     }
     if (page.getType() != Page::Type::LeafTable) {
-        markAsCorrupted(page.number, "PageType");
+        markAsCorrupted(
+        page.number,
+        String::formatted("Unexpected page type: %d.", page.getType(), page.getType()));
         return false;
     }
     if (page.getData().hash() != m_checksum) {
-        markAsCorrupted(page.number, "PageData");
+        markAsCorrupted(
+        page.number,
+        String::formatted("Mismatched hash: %u for %u.", page.getData().hash(), m_checksum));
         return false;
     }
     markPageAsCounted(page);
