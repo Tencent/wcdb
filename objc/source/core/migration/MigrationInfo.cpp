@@ -56,10 +56,10 @@ bool MigrationInfo::isInited() const
 
 void MigrationInfo::initialize(const std::set<std::string> &columnNames)
 {
-    LockGuard lockGuard(m_spin);
     if (m_inited) {
         return;
     }
+    LockGuard lockGuard(m_spin);
     std::list<Column> columns;
     std::list<ResultColumn> resultColumns;
     for (const auto &columnName : columnNames) {
@@ -88,15 +88,20 @@ void MigrationInfo::initialize(const std::set<std::string> &columnNames)
                                         .where(Column::rowid() == BindParameter(1))
                                         .limit(1);
 
+    StatementSelect leftSelect = StatementSelect().select(resultColumns).from(targetTable);
+
+    SelectCore rightSelect = SelectCore().select(resultColumns).from(getSourceTable());
+
+    StatementSelect select;
+    if (isSameDatabaseMigration()) {
+        select = leftSelect.unionAll(rightSelect);
+    } else {
+        //Use UNION to avoid SQLite bug of UNION ALL in cross database schema.
+        select = leftSelect.union_(rightSelect);
+    }
+
     m_statementForCreatingUnionedView
-    = StatementCreateView()
-      .createView(unionedViewName)
-      .temp()
-      .ifNotExists()
-      .as(StatementSelect()
-          .select(resultColumns)
-          .from(targetTable)
-          .union_(SelectCore().select(resultColumns).from(getSourceTable())));
+    = StatementCreateView().createView(unionedViewName).temp().ifNotExists().as(select);
 
     m_inited.store(true);
 }
