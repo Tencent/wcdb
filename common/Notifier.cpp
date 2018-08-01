@@ -79,15 +79,10 @@ Notifier::Notifier()
 void Notifier::setNotification(const std::string &name, const Callback &callback)
 {
     LockGuard lockGuard(m_lock);
-    auto iter = m_callbacks.find(name);
-    if (iter != m_callbacks.end()) {
-        if (callback) {
-            iter->second = callback;
-        } else {
-            m_callbacks.erase(iter);
-        }
+    if (callback) {
+        m_callbacks[name] = callback;
     } else {
-        m_callbacks.emplace(name, callback);
+        m_callbacks.erase(name);
     }
 }
 

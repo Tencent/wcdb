@@ -39,16 +39,8 @@ WCTErrorKey const WCTErrorKeySource = @"Source";
         [userInfo setObject:[NSNumber numberWithLongLong:info.second] forKey:[NSString stringWithCppString:info.first]];
     }
     for (const auto &info : error.infos.getStrings()) {
-        NSString *key = [NSString stringWithCppString:info.first];
-        NSString *object = [NSString stringWithCppString:info.second];
-        if ([key isEqualToString:WCTErrorKeyPath]) {
-            NSString *path = [object stringByAbbreviatingWithTildeInPath];
-            if (path) {
-                object = path;
-            }
-        }
-        [userInfo setObject:object
-                     forKey:key];
+        [userInfo setObject:[NSString stringWithCppString:info.second]
+                     forKey:[NSString stringWithCppString:info.first]];
     }
     for (const auto &info : error.infos.getDoubles()) {
         [userInfo setObject:[NSNumber numberWithDouble:info.second] forKey:[NSString stringWithCppString:info.first]];

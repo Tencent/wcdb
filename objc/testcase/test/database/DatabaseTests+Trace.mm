@@ -156,24 +156,4 @@
     XCTAssertTrue(hit);
 }
 
-- (void)test_abbreviated_path
-{
-    NSString *document = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, NO)[0];
-    NSString *path = [document stringByAppendingPathComponent:self.testname];
-    XCTAssertTrue([path hasPrefix:@"~/"]);
-
-    WCTDatabase *database = [[WCTDatabase alloc] initWithPath:path];
-    __block BOOL hit = NO;
-    [WCTDatabase
-    globalTraceError:^(WCTError *error) {
-        if (error.level == WCTErrorLevelError) {
-            XCTAssertTrue([error.path hasPrefix:@"~/"]);
-            hit = YES;
-        }
-    }
-         tracerNamed:_errorTracerName];
-    XCTAssertFalse([database getObjectOfClass:TestCaseObject.class fromTable:@"non_existent_table"]);
-    XCTAssertTrue(hit);
-}
-
 @end
