@@ -329,13 +329,13 @@
         }
         [queue waitUntilAllOperationsAreFinished];
         [queue addOperationWithBlock:^{
-            int from = rand() % _count;
-            int to = rand() % (_count - from);
-            if (to == 0) {
-                to = 1;
+            int location = rand() % (_count / 2);
+            int length = rand() % 4;
+            if (length == 0) {
+                length = 1;
             }
-            NSArray<TestCaseObject *> *objects = [_migrated getObjectsOfClass:TestCaseObject.class fromTable:_migratedTableName orderBy:TestCaseObject.variable1.asOrder(WCTOrderedAscending) limit:to offset:from];
-            NSArray<TestCaseObject *> *expected = [_preInserted subarrayWithRange:NSMakeRange(from, to)];
+            NSArray<TestCaseObject *> *objects = [_migrated getObjectsOfClass:TestCaseObject.class fromTable:_migratedTableName orderBy:TestCaseObject.variable1.asOrder(WCTOrderedAscending) limit:length offset:location];
+            NSArray<TestCaseObject *> *expected = [_preInserted subarrayWithRange:NSMakeRange(location, length)];
             XCTAssertTrue([objects isEqualToTestCaseObjects:expected]);
             @synchronized(self) {
                 ++testCount;
@@ -347,6 +347,9 @@
     @synchronized(self) {
         XCTAssertGreaterThan(testCount, 10);
     }
+
+    NSArray<TestCaseObject *> *objects = [_migrated getObjectsOfClass:TestCaseObject.class fromTable:_migratedTableName orderBy:TestCaseObject.variable1.asOrder(WCTOrderedAscending)];
+    XCTAssertTrue([objects isEqualToTestCaseObjects:_preInserted]);
 }
 
 - (void)test_disorder
