@@ -24,8 +24,8 @@ namespace WCDB {
 
 Notifier *Notifier::shared()
 {
-    static Notifier *notifier = new Notifier;
-    return notifier;
+    static Notifier *s_shared = new Notifier;
+    return s_shared;
 }
 
 void Notifier::setNotification(const Callback &callback)
