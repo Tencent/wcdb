@@ -79,33 +79,28 @@ bool MigrationConfig::doCreateView(WCDB::Handle *handle, bool &schemaChanged) co
     std::list<std::shared_ptr<MigrationInfo>> infos;
     {
         SharedLockGuard lockGuard(m_setting->getSharedLock());
-        if (!handle->runTransaction([&infos, this](Handle *handle) -> bool {
-                for (const auto &info : m_setting->getInfos()) {
-                    auto pair = handle->tableExists(info.second->getSourceTable());
+        for (const auto &info : m_setting->getInfos()) {
+            auto pair = handle->tableExists(info.second->getSourceTable());
+            if (!pair.first) {
+                return false;
+            }
+            if (pair.second) {
+                //initialize info with column names
+                if (!info.second->isInited()) {
+                    auto pair = handle->getUnorderedColumnsWithTable(
+                    info.second->sourceTable, info.second->schema);
                     if (!pair.first) {
                         return false;
                     }
-                    if (pair.second) {
-                        //initialize info with column names
-                        if (!info.second->isInited()) {
-                            auto pair = handle->getUnorderedColumnsWithTable(
-                            info.second->sourceTable, info.second->schema);
-                            if (!pair.first) {
-                                return false;
-                            }
-                            info.second->initialize(pair.second);
-                        }
-                        //Create view
-                        if (!handle->execute(info.second->getStatementForCreatingUnionedView())) {
-                            return false;
-                        }
-                    } else {
-                        infos.push_back(info.second);
-                    }
+                    info.second->initialize(pair.second);
                 }
-                return true;
-            })) {
-            return false;
+                //Create view
+                if (!handle->execute(info.second->getStatementForCreatingUnionedView())) {
+                    return false;
+                }
+            } else {
+                infos.push_back(info.second);
+            }
         }
     }
     if (!infos.empty()) {
