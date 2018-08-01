@@ -45,10 +45,6 @@ protected:
 
     bool isValid() const;
 
-#pragma mark - Identifier
-public:
-    uint32_t getIdentifier();
-
 #pragma mark - Basic
 public:
     void setTag(const Tag &tag);

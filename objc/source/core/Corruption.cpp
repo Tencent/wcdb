@@ -93,12 +93,13 @@ void Corruption::notify()
     markAsHandling();
     bool succeed = false;
     do {
-        uint32_t identifier = m_pool->getIdentifier();
-        if (identifier != m_corruptedIdentifier.load()) {
+        uint32_t identifier;
+        std::tie(succeed, identifier) = m_pool->getIdentifier();
+        if (!succeed || identifier != m_corruptedIdentifier.load()) {
             Error error;
             error.level = Error::Level::Warning;
             error.setCode(Error::Code::Warning, "Repair");
-            error.message = "Skip corruption handling due to mismatched identifier.";
+            error.message = "Skip corruption handling due to mismatched identifier or error.";
             Tag tag = database->getTag();
             if (tag != Tag::invalid()) {
                 error.infos.set("Tag", tag);
@@ -139,8 +140,10 @@ bool Corruption::markAsCorrupted()
     if (m_handling.load() > 0 || m_corruptedIdentifier.load() != 0) {
         return false;
     }
-    uint32_t identifier = m_pool->getIdentifier();
-    if (identifier == 0) {
+    bool succeed;
+    uint32_t identifier;
+    std::tie(succeed, identifier) = m_pool->getIdentifier();
+    if (!succeed) {
         return false;
     }
     return m_corruptedIdentifier.exchange(identifier) == 0;

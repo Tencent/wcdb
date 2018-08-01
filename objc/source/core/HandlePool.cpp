@@ -74,32 +74,13 @@ bool HandlePool::initialize()
 }
 
 #pragma mark - Identifier
-uint32_t HandlePool::getIdentifier()
+std::pair<bool, uint32_t> HandlePool::getIdentifier()
 {
-    uint32_t identifier = 0;
-    do {
-        bool succeed;
-        Time fileCreatedTime;
-        std::tie(succeed, fileCreatedTime)
-        = FileManager::shared()->getFileCreatedTime(path);
-        if (!succeed) {
-            break;
-        }
-        Serialization serialization;
-        if (!serialization.expand(sizeof(uint64_t) * 2 + path.size() + 1)) {
-            break;
-        }
-        uint64_t seconds = fileCreatedTime.seconds();
-        uint64_t nanoseconds = fileCreatedTime.nanoseconds();
-        serialization.put8BytesUInt(seconds);
-        serialization.put8BytesUInt(nanoseconds);
-        serialization.putString(path);
-        identifier = serialization.finalize().hash();
-    } while (false);
-    if (identifier == 0) {
+    auto result = FileManager::shared()->getFileIdentifier(path);
+    if (!result.first) {
         assignWithSharedThreadedError();
     }
-    return identifier;
+    return result;
 }
 
 #pragma mark - Basic

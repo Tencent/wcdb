@@ -59,6 +59,7 @@ public:
     bool createDirectory(const std::string &path);
     std::pair<bool, Time> getFileModifiedTime(const std::string &path);
     std::pair<bool, Time> getFileCreatedTime(const std::string &path);
+    std::pair<bool, uint32_t> getFileIdentifier(const std::string &path);
 
     bool enumerateDirectory(
     const std::string &directory,

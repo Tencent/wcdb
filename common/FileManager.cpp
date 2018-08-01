@@ -22,6 +22,7 @@
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/String.hpp>
+#include <WCDB/UnsafeData.hpp>
 #include <dirent.h>
 #include <errno.h>
 #include <sys/stat.h>
@@ -202,6 +203,19 @@ std::pair<bool, Time> FileManager::getFileCreatedTime(const std::string &path)
     }
     setThreadedError(path);
     return { false, Time() };
+}
+
+std::pair<bool, uint32_t> FileManager::getFileIdentifier(const std::string &path)
+{
+    struct stat result;
+    if (stat(path.c_str(), &result) == 0) {
+        int size = sizeof(result.st_dev) + sizeof(result.st_ino);
+        unsigned char buffer[size];
+        memcpy(buffer, &result.st_dev, sizeof(result.st_dev));
+        memcpy(buffer + sizeof(result.st_dev), &result.st_ino, sizeof(result.st_ino));
+        return { true, UnsafeData(buffer, size).hash() };
+    }
+    return { false, 0 };
 }
 
 #pragma mark - Combination

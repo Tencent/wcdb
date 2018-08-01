@@ -55,7 +55,7 @@ protected:
 
 #pragma mark - Identifier
 public:
-    uint32_t getIdentifier();
+    std::pair<bool, uint32_t> getIdentifier();
 
 #pragma mark - Basic
 public:

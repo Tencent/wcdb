@@ -85,12 +85,6 @@ bool Database::isValid() const
     return m_pool != nullptr;
 }
 
-#pragma mark - Identifier
-uint32_t Database::getIdentifier()
-{
-    return m_pool->getIdentifier();
-}
-
 #pragma mark - Basic
 
 void Database::setTag(const Tag &tag)
