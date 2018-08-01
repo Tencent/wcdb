@@ -73,11 +73,9 @@ WCTErrorKey const WCTErrorKeySource = @"Source";
         [userInfo setObject:[NSNumber numberWithDouble:info.second] forKey:[NSString stringWithCppString:info.first]];
     }
 
-    NSString *message;
+    NSString *message = nil;
     if (!error.message.empty()) {
         message = [NSString stringWithCppString:error.message];
-    } else {
-        message = [NSString stringWithUTF8String:WCDB::Error::codeName((WCDB::Error::Code) self.code)];
     }
     return [self initWithCode:(WCTErrorCode) error.code() level:(WCTErrorLevel) error.level message:message userInfo:userInfo];
 }
