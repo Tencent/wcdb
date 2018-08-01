@@ -24,7 +24,6 @@
 #include <WCDB/ErrorProne.hpp>
 #include <WCDB/HandleNotification.hpp>
 #include <WCDB/HandleStatement.hpp>
-#include <WCDB/Tag.hpp>
 #include <WCDB/WINQ.h>
 #include <array>
 #include <memory>
@@ -58,14 +57,6 @@ public:
     static std::string getWALSubfix();
     static std::string getJournalSubfix();
     static std::array<std::string, 4> getSubfixs();
-
-#pragma mark - Tag
-public:
-    void setTag(Tag tag);
-    Tag getTag() const;
-
-protected:
-    Tag m_tag;
 
 #pragma mark - Basic
 public:

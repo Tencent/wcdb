@@ -29,23 +29,15 @@ namespace WCDB {
 class Notifier {
 public:
     typedef std::function<void(const Error &)> Callback;
-    typedef std::function<void(const std::string &)> CorruptionCallback;
     static Notifier *shared();
 
     void notify(const Error &error) const;
 
     void setNotification(const Callback &callback);
-    void setCorruptionNotification(const CorruptionCallback &callback);
-
-    static void logger(const Error &error);
 
 protected:
     mutable SharedLock m_lock;
 
-    void onNotified(const Error &error) const;
-    void onCorrupted(const std::string &path) const;
-
-    CorruptionCallback m_corruptionCallback;
     Callback m_callback;
 
 public:

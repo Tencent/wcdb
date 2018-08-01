@@ -58,7 +58,6 @@ public:
     void markAsHandling();
     void markAsHandled(bool succeed);
 
-protected:
     friend class CorruptionNotifier;
     void notify();
     bool markAsCorrupted();

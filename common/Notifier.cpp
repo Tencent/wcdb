@@ -19,7 +19,6 @@
  */
 
 #include <WCDB/Notifier.hpp>
-#include <iostream>
 
 namespace WCDB {
 
@@ -29,86 +28,18 @@ Notifier *Notifier::shared()
     return notifier;
 }
 
-void Notifier::logger(const Error &error)
-{
-    bool log = error.level != Error::Level::Ignore
-#ifndef DEBUG
-               && error.level != Error::Level::Debug
-#endif
-    ;
-
-    if (log) {
-        std::ostringstream stream;
-        stream << "[" << Error::levelName(error.level) << ": ";
-        stream << (int) error.code();
-        if (!error.message.empty()) {
-            stream << ", " << error.message;
-        }
-        stream << "]";
-
-        for (const auto &info : error.infos.getIntegers()) {
-            stream << ", " << info.first << ": " << info.second;
-        }
-        for (const auto &info : error.infos.getStrings()) {
-            if (!info.second.empty()) {
-                stream << ", " << info.first << ": " << info.second;
-            }
-        }
-        for (const auto &info : error.infos.getDoubles()) {
-            stream << ", " << info.first << ": " << info.second;
-        }
-        stream << std::endl;
-        std::cout << stream.str();
-#ifdef DEBUG
-        if (error.level >= Error::Level::Error) {
-            std::cout << "Set breakpoint in Notifier::logger to debug.\n";
-        }
-#endif
-    }
-
-    if (error.level == Error::Level::Fatal) {
-        abort();
-    }
-}
-
 void Notifier::setNotification(const Callback &callback)
 {
     LockGuard lockGuard(m_lock);
     m_callback = callback;
 }
 
-void Notifier::setCorruptionNotification(const CorruptionCallback &callback)
-{
-    LockGuard lockGuard(m_lock);
-    m_corruptionCallback = callback;
-}
-
-void Notifier::onNotified(const Error &error) const
+void Notifier::notify(const Error &error) const
 {
     SharedLockGuard lockGuard(m_lock);
     if (m_callback) {
         m_callback(error);
     }
-}
-
-void Notifier::onCorrupted(const std::string &path) const
-{
-    SharedLockGuard lockGuard(m_lock);
-    if (m_corruptionCallback) {
-        m_corruptionCallback(path);
-    }
-}
-
-void Notifier::notify(const Error &error) const
-{
-    if (error.isCorruption()) {
-        const auto &infos = error.infos.getStrings();
-        auto iter = infos.find("Path");
-        if (iter != infos.end()) {
-            onCorrupted(iter->second);
-        }
-    }
-    onNotified(error);
 }
 
 void Notifier::fatal(const std::string &message, const char *file, int line)

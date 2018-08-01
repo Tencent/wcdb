@@ -18,33 +18,35 @@
  * limitations under the License.
  */
 
-#include "Tag.hpp"
+#ifndef CoreNotifier_hpp
+#define CoreNotifier_hpp
+
+#include <WCDB/Error.hpp>
+#include <WCDB/Lock.hpp>
+#include <WCDB/Notifier.hpp>
 
 namespace WCDB {
 
-const Tag& Tag::invalid()
-{
-    static const Tag* s_invalid = new Tag(invalidValue);
-    return *s_invalid;
-}
+class CoreNotifier {
+public:
+    static CoreNotifier* shared();
 
-Tag::Tag(int32_t tag) : m_value(tag)
-{
-}
+    CoreNotifier(const CoreNotifier&) = delete;
+    CoreNotifier& operator=(const CoreNotifier&) = delete;
 
-bool Tag::operator==(const Tag& other) const
-{
-    return m_value == other.m_value;
-}
+    using Callback = Notifier::Callback;
+    void setNotification(const Callback& callback);
 
-bool Tag::operator!=(const Tag& other) const
-{
-    return m_value != other.m_value;
-}
+    static void logger(const Error& error);
 
-Tag::operator int32_t() const
-{
-    return m_value;
-}
+protected:
+    CoreNotifier();
+    void notify(const Error& error);
+
+    SharedLock m_lock;
+    Callback m_callback;
+};
 
 } // namespace WCDB
+
+#endif /* CoreNotifier_hpp */

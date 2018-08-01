@@ -41,7 +41,6 @@ Handle::Handle(const std::string &path_)
 , m_notification(this)
 , path(path_)
 , m_nestedLevel(0)
-, m_tag(Tag::invalid())
 , m_ignorableCode(SQLITE_OK)
 {
     m_error.infos.set("Path", path);
@@ -79,21 +78,6 @@ std::array<std::string, 4> Handle::getSubfixs()
 }
 
 #pragma mark - Basic
-void Handle::setTag(Tag tag)
-{
-    m_tag = tag;
-    if (m_tag != Tag::invalid()) {
-        m_error.infos.set("Tag", m_tag);
-    } else {
-        m_error.infos.unset("Tag");
-    }
-}
-
-Tag Handle::getTag() const
-{
-    return m_tag;
-}
-
 bool Handle::open()
 {
     if (!m_handle) {

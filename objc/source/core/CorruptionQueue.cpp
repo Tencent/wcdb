@@ -19,28 +19,26 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/CorruptionNotifier.hpp>
+#include <WCDB/CorruptionQueue.hpp>
 #include <WCDB/Dispatch.hpp>
 #include <WCDB/HandlePools.hpp>
 #include <WCDB/Notifier.hpp>
 
 namespace WCDB {
 
-CorruptionNotifier *CorruptionNotifier::shared()
+CorruptionQueue *CorruptionQueue::shared()
 {
-    static CorruptionNotifier *s_corruptionNotifer = new CorruptionNotifier;
-    return s_corruptionNotifer;
+    static CorruptionQueue *s_corruptionQueue = new CorruptionQueue;
+    return s_corruptionQueue;
 }
 
-CorruptionNotifier::CorruptionNotifier()
+CorruptionQueue::CorruptionQueue()
 {
-    Notifier::shared()->setCorruptionNotification(
-    std::bind(&CorruptionNotifier::addPath, this, std::placeholders::_1));
-    Dispatch::async("com.Tencent.WCDB.CorruptionNotifier",
-                    std::bind(&CorruptionNotifier::loop, this));
+    Dispatch::async("com.Tencent.WCDB.CorruptionQueue",
+                    std::bind(&CorruptionQueue::loop, this));
 }
 
-void CorruptionNotifier::addPath(const std::string &path)
+void CorruptionQueue::put(const std::string &path)
 {
     auto pool = HandlePools::defaultPools()->getExistingPool(path);
     if (pool == nullptr) {
@@ -56,7 +54,7 @@ void CorruptionNotifier::addPath(const std::string &path)
     }
 }
 
-void CorruptionNotifier::loop()
+void CorruptionQueue::loop()
 {
     while (true) {
         std::string path;

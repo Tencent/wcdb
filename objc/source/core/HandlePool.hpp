@@ -29,6 +29,7 @@
 #include <WCDB/Factory.hpp>
 #include <WCDB/Lock.hpp>
 #include <WCDB/RecyclableHandle.hpp>
+#include <WCDB/Tag.hpp>
 #include <WCDB/ThreadedErrors.hpp>
 
 #pragma GCC visibility push(hidden)

@@ -18,30 +18,33 @@
  * limitations under the License.
  */
 
-#ifndef Core_h
-#define Core_h
+#include <WCDB/Tag.hpp>
 
-#include <WCDB/Abstract.h>
+namespace WCDB {
 
-#include <WCDB/BackupConfig.hpp>
-#include <WCDB/BasicConfig.hpp>
-#include <WCDB/CheckpointConfig.hpp>
-#include <WCDB/CipherConfig.hpp>
-#include <WCDB/Config.hpp>
-#include <WCDB/Configs.hpp>
-#include <WCDB/ConfiguredHandle.hpp>
-#include <WCDB/CoreNotifier.hpp>
-#include <WCDB/CustomConfig.hpp>
-#include <WCDB/Database.hpp>
-#include <WCDB/HandlePool.hpp>
-#include <WCDB/HandlePools.hpp>
-#include <WCDB/PerformanceTraceConfig.hpp>
-#include <WCDB/RecyclableHandle.hpp>
-#include <WCDB/RecyclableHandlePool.hpp>
-#include <WCDB/SQLTraceConfig.hpp>
-#include <WCDB/TokenizeConfig.hpp>
-#include <WCDB/Tokenizer.hpp>
+const Tag& Tag::invalid()
+{
+    static const Tag* s_invalid = new Tag(invalidValue);
+    return *s_invalid;
+}
 
-#include <WCDB/Migration.h>
+Tag::Tag(int32_t tag) : m_value(tag)
+{
+}
 
-#endif /* Core_h */
+bool Tag::operator==(const Tag& other) const
+{
+    return m_value == other.m_value;
+}
+
+bool Tag::operator!=(const Tag& other) const
+{
+    return m_value != other.m_value;
+}
+
+Tag::operator int32_t() const
+{
+    return m_value;
+}
+
+} // namespace WCDB

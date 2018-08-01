@@ -233,9 +233,6 @@ std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
     if (!configuredHandle) {
         return nullptr;
     }
-    if (configuredHandle->getHandle()->getTag() != getTag()) {
-        configuredHandle->getHandle()->setTag(getTag());
-    }
     std::shared_ptr<Configs> configs = m_configs;
     if (!configuredHandle->configured(configs) && !configuredHandle->configure(configs)) {
         setThreadedError(configuredHandle->getHandle()->getError());
@@ -267,7 +264,6 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
         setThreadedError(Error(Error::Code::NoMemory));
         return nullptr;
     }
-    handle->setTag(getTag());
     if (!handle->open()) {
         setThreadedError(handle->getError());
         return nullptr;

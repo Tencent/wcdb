@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef CorruptionNotifier_hpp
-#define CorruptionNotifier_hpp
+#ifndef CorruptionQueue_hpp
+#define CorruptionQueue_hpp
 
 #include <WCDB/Lock.hpp>
 #include <mutex>
@@ -27,14 +27,17 @@
 
 namespace WCDB {
 
-class CorruptionNotifier {
+class CorruptionQueue {
 public:
-    static CorruptionNotifier *shared();
+    static CorruptionQueue *shared();
 
-    void boot();
+    CorruptionQueue(const CorruptionQueue &) = delete;
+    CorruptionQueue &operator=(const CorruptionQueue &) = delete;
+
+    void put(const std::string &path);
 
 protected:
-    CorruptionNotifier();
+    CorruptionQueue();
 
     std::mutex m_mutex;
     std::condition_variable m_cond;
@@ -46,4 +49,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* CorruptionNotifier_hpp */
+#endif /* CorruptionQueue_hpp */

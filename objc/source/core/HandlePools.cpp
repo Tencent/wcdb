@@ -20,7 +20,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Core.h>
-#include <WCDB/CorruptionNotifier.hpp>
+#include <WCDB/CoreNotifier.hpp>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Path.hpp>
 
@@ -40,7 +40,7 @@ HandlePools::HandlePools()
         }
         FileManager::shared()->setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
     });
-    CorruptionNotifier::shared();
+    CoreNotifier::shared();
 }
 
 RecyclableHandlePool

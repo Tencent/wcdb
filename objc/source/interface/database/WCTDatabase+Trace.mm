@@ -34,12 +34,12 @@
             block(nsError);
         };
     }
-    WCDB::Notifier::shared()->setNotification(callback);
+    WCDB::CoreNotifier::shared()->setNotification(callback);
 }
 
 + (void)resetGlobalTraceError
 {
-    WCDB::Notifier::shared()->setNotification(WCDB::Notifier::logger);
+    WCDB::CoreNotifier::shared()->setNotification(WCDB::CoreNotifier::logger);
 }
 
 + (void)globalTracePerformance:(WCTPerformanceTraceBlock)trace
