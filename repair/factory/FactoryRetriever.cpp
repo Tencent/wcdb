@@ -106,7 +106,7 @@ bool FactoryRetriever::work()
         setCriticalError(depositor.getError());
         return exit(false);
     }
-    std::string baseDirectory = Path::getBaseName(factory.database);
+    std::string baseDirectory = Path::getDirectoryName(factory.database);
     succeed = FileManager::shared()->moveItems(
     Factory::associatedPathsForDatabase(database), baseDirectory);
     if (!succeed) {

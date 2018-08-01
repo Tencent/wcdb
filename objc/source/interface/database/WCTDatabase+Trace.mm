@@ -27,13 +27,6 @@
 
 + (void)globalTraceError:(WCTErrorTraceBlock)block
 {
-    [self globalTraceError:block tracerNamed:@"default"];
-}
-
-+ (void)globalTraceError:(nullable WCTErrorTraceBlock)block
-             tracerNamed:(NSString *)name
-{
-    WCTRemedialAssert(name != nil, "Tracer name can't be nil.", return;);
     WCDB::Notifier::Callback callback = nullptr;
     if (block) {
         callback = [block](const WCDB::Error &error) {
@@ -41,7 +34,12 @@
             block(nsError);
         };
     }
-    WCDB::Notifier::shared()->setNotification(name.cppString, callback);
+    WCDB::Notifier::shared()->setNotification(callback);
+}
+
++ (void)resetGlobalTraceError
+{
+    WCDB::Notifier::shared()->setNotification(WCDB::Notifier::logger);
 }
 
 + (void)globalTracePerformance:(WCTPerformanceTraceBlock)trace

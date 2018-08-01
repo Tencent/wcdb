@@ -34,20 +34,19 @@ public:
 
     void notify(const Error &error) const;
 
-    void setNotification(const std::string &name, const Callback &callback);
+    void setNotification(const Callback &callback);
     void setCorruptionNotification(const CorruptionCallback &callback);
 
     static void logger(const Error &error);
 
 protected:
-    Notifier();
     mutable SharedLock m_lock;
 
     void onNotified(const Error &error) const;
     void onCorrupted(const std::string &path) const;
 
     CorruptionCallback m_corruptionCallback;
-    std::map<std::string, Callback> m_callbacks;
+    Callback m_callback;
 
 public:
     static void fatal(const std::string &message, const char *file, int line);

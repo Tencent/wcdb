@@ -341,7 +341,7 @@ bool FileManager::createDirectoryWithIntermediateDirectories(const std::string &
         return false;
     }
     if (!ret.second) {
-        return createDirectoryWithIntermediateDirectories(Path::getBaseName(directory))
+        return createDirectoryWithIntermediateDirectories(Path::getDirectoryName(directory))
                && createDirectory(directory);
     }
     return true;

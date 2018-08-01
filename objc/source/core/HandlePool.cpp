@@ -62,7 +62,7 @@ bool HandlePool::initialize()
             return true;
         }
         if (!FileManager::shared()->createDirectoryWithIntermediateDirectories(
-            Path::getBaseName(path))) {
+            Path::getDirectoryName(path))) {
             assignWithSharedThreadedError();
             return false;
         }

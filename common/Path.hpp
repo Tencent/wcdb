@@ -32,7 +32,7 @@ namespace Path {
 std::string addExtention(const std::string &base, const std::string &extention);
 std::string addComponent(const std::string &base, const std::string &component);
 std::string getFileName(const std::string &base);
-std::string getBaseName(const std::string &base);
+std::string getDirectoryName(const std::string &base);
 
 #if __cplusplus > 201402L
 #warning TODO \

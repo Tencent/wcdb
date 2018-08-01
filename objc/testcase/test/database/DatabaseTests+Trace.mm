@@ -28,7 +28,6 @@
 @implementation DatabaseTests_Trace {
     WCTDatabase *_database1;
     WCTDatabase *_database2;
-    NSString *_errorTracerName;
 }
 
 - (void)setUp
@@ -37,7 +36,6 @@
 
     _database1 = [[WCTDatabase alloc] initWithPath:[self.recommendedPath stringByAppendingString:@"_1"]];
     _database2 = [[WCTDatabase alloc] initWithPath:[self.recommendedPath stringByAppendingString:@"_2"]];
-    _errorTracerName = self.testname;
 }
 
 - (void)tearDown
@@ -50,7 +48,7 @@
 
     [WCTDatabase globalTracePerformance:nil];
     [WCTDatabase globalTraceSQL:nil];
-    [WCTDatabase globalTraceError:nil tracerNamed:_errorTracerName];
+    [WCTDatabase resetGlobalTraceError];
 
     [super tearDown];
 }
@@ -150,8 +148,7 @@
             XCTAssertEqual(error.tag, _database1.tag);
             hit = YES;
         }
-    }
-         tracerNamed:_errorTracerName];
+    }];
     XCTAssertFalse([_database1 getObjectOfClass:TestCaseObject.class fromTable:@"non_existent_table"]);
     XCTAssertTrue(hit);
 }

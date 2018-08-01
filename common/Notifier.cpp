@@ -71,19 +71,10 @@ void Notifier::logger(const Error &error)
     }
 }
 
-Notifier::Notifier()
-{
-    m_callbacks["default"] = Notifier::logger;
-}
-
-void Notifier::setNotification(const std::string &name, const Callback &callback)
+void Notifier::setNotification(const Callback &callback)
 {
     LockGuard lockGuard(m_lock);
-    if (callback) {
-        m_callbacks[name] = callback;
-    } else {
-        m_callbacks.erase(name);
-    }
+    m_callback = callback;
 }
 
 void Notifier::setCorruptionNotification(const CorruptionCallback &callback)
@@ -95,13 +86,14 @@ void Notifier::setCorruptionNotification(const CorruptionCallback &callback)
 void Notifier::onNotified(const Error &error) const
 {
     SharedLockGuard lockGuard(m_lock);
-    for (const auto &element : m_callbacks) {
-        element.second(error);
+    if (m_callback) {
+        m_callback(error);
     }
 }
 
 void Notifier::onCorrupted(const std::string &path) const
 {
+    SharedLockGuard lockGuard(m_lock);
     if (m_corruptionCallback) {
         m_corruptionCallback(path);
     }

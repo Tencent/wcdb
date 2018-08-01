@@ -72,7 +72,7 @@ bool FactoryRenewer::work()
 
     std::list<std::string> toMove = Factory::associatedPathsForDatabase(database);
     toMove.reverse();
-    if (!fileManager->moveItems(toMove, Path::getBaseName(factory.database))) {
+    if (!fileManager->moveItems(toMove, Path::getDirectoryName(factory.database))) {
         assignWithSharedThreadedError();
         return false;
     }
