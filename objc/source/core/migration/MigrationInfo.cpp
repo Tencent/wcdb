@@ -60,6 +60,9 @@ void MigrationInfo::initialize(const std::set<std::string> &columnNames)
         return;
     }
     LockGuard lockGuard(m_spin);
+    if (m_inited) {
+        return;
+    }
     std::list<Column> columns;
     std::list<ResultColumn> resultColumns;
     for (const auto &columnName : columnNames) {
