@@ -18,31 +18,26 @@
  * limitations under the License.
  */
 
-#ifndef CorruptionQueue_hpp
-#define CorruptionQueue_hpp
+#ifndef HandlePoolsRelated_hpp
+#define HandlePoolsRelated_hpp
 
-#include <WCDB/AsyncQueue.hpp>
 #include <WCDB/HandlePoolsRelated.hpp>
-#include <WCDB/Lock.hpp>
-#include <mutex>
-#include <set>
 
 namespace WCDB {
 
-class CorruptionQueue : public AsyncQueue, public HandlePoolsRelated {
+class HandlePools;
+
+class HandlePoolsRelated {
 public:
-    CorruptionQueue(const std::string& name, HandlePools* handlePools);
-    void put(const std::string& path);
+    HandlePoolsRelated();
+    HandlePoolsRelated(HandlePools* handlePools);
+
+    void setRelatedHandlePools(HandlePools* handlePools);
 
 protected:
-    using HandlePoolsRelated::setRelatedHandlePools;
-    void loop() override;
-
-    std::mutex m_mutex;
-    std::condition_variable m_cond;
-    std::set<std::string> m_paths;
+    HandlePools* m_handlePools;
 };
 
-} //namespace WCDB
+} // namespace WCDB
 
-#endif /* CorruptionQueue_hpp */
+#endif /* HandlePoolsRelated_hpp */

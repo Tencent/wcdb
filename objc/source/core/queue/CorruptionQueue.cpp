@@ -25,7 +25,13 @@
 
 namespace WCDB {
 
-void CorruptionQueue::put(const std::string &path)
+CorruptionQueue::CorruptionQueue(const std::string& name, HandlePools* handlePools)
+: AsyncQueue(name), HandlePoolsRelated(handlePools)
+{
+    WCTInnerAssert(m_handlePools != nullptr);
+}
+
+void CorruptionQueue::put(const std::string& path)
 {
     auto pool = Core::handlePools()->getExistingPool(path);
     if (pool == nullptr) {

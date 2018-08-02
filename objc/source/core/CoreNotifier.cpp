@@ -25,7 +25,7 @@
 namespace WCDB {
 
 CoreNotifier::CoreNotifier()
-: m_callback(CoreNotifier::logger), m_corruptionQueue(nullptr)
+: HandlePoolsRelated(), m_callback(CoreNotifier::logger), m_corruptionQueue(nullptr)
 {
     Notifier::shared()->setNotification(
     std::bind(&CoreNotifier::notify, this, std::placeholders::_1));
@@ -43,28 +43,36 @@ void CoreNotifier::setCorruptionQueue(CorruptionQueue* queue)
     m_corruptionQueue = queue;
 }
 
+void CoreNotifier::setRelatedHandlePools(HandlePools* handlePools)
+{
+    LockGuard lockGuard(m_lock);
+    HandlePoolsRelated::setRelatedHandlePools(handlePools);
+}
+
 void CoreNotifier::notify(const Error& error)
 {
     Error processed = error;
 
     const auto& stringInfos = error.infos.getStrings();
-    auto iter = stringInfos.find("Path");
-    if (iter != stringInfos.end()) {
-        auto pool = Core::handlePools()->getExistingPool(iter->second);
-        if (pool != nullptr) {
-            if (pool->getTag() != Tag::invalid()) {
-                processed.infos.set("Tag", pool->getTag());
-            }
-            if (error.isCorruption()) {
-                SharedLockGuard lockGuard(m_lock);
-                if (m_corruptionQueue) {
-                    m_corruptionQueue->put(iter->second);
+
+    SharedLockGuard lockGuard(m_lock);
+    if (m_handlePools) {
+        auto iter = stringInfos.find("Path");
+        if (iter != stringInfos.end()) {
+            auto pool = m_handlePools->getExistingPool(iter->second);
+            if (pool != nullptr) {
+                if (pool->getTag() != Tag::invalid()) {
+                    processed.infos.set("Tag", pool->getTag());
+                }
+                if (error.isCorruption()) {
+                    if (m_corruptionQueue) {
+                        m_corruptionQueue->put(iter->second);
+                    }
                 }
             }
         }
     }
 
-    SharedLockGuard lockGuard(m_lock);
     if (m_callback) {
         m_callback(processed);
     }

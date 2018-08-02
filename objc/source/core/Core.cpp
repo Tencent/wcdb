@@ -31,7 +31,7 @@ Core* Core::shared()
 }
 
 Core::Core()
-: m_corruptionQueue(CorruptionQueueName)
+: m_corruptionQueue(CorruptionQueueName, &m_handlePools)
 , m_checkpointQueue(CheckpointQueueName)
 , m_backupQueue(BackupQueueName)
 // Configs
@@ -58,6 +58,7 @@ Core::Core()
     m_backupQueue.run();
 
     m_notifier.setCorruptionQueue(&m_corruptionQueue);
+    m_notifier.setRelatedHandlePools(&m_handlePools);
 }
 
 int Core::vfsOpen(const char* path, int flags, int mode)

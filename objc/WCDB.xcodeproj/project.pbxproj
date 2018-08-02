@@ -575,6 +575,10 @@
 		23B4DD102112EDC600954D71 /* GlobalConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4DD0D2112EDC600954D71 /* GlobalConfig.cpp */; };
 		23B4DD112112EDC600954D71 /* GlobalConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DD0E2112EDC600954D71 /* GlobalConfig.hpp */; };
 		23B4DD122112EDC600954D71 /* GlobalConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DD0E2112EDC600954D71 /* GlobalConfig.hpp */; };
+		23B4DD1B2113082C00954D71 /* HandlePoolsRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4DD192113082C00954D71 /* HandlePoolsRelated.cpp */; };
+		23B4DD1C2113082C00954D71 /* HandlePoolsRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4DD192113082C00954D71 /* HandlePoolsRelated.cpp */; };
+		23B4DD1D2113082C00954D71 /* HandlePoolsRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DD1A2113082C00954D71 /* HandlePoolsRelated.hpp */; };
+		23B4DD1E2113082C00954D71 /* HandlePoolsRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DD1A2113082C00954D71 /* HandlePoolsRelated.hpp */; };
 		23B8F5662043A2CE00EC571D /* Operable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B8F5642043A2CE00EC571D /* Operable.cpp */; };
 		23B8F5672043A2CE00EC571D /* Operable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B8F5652043A2CE00EC571D /* Operable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23B8F56F2043FD1E00EC571D /* Redirectable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B8F56D2043FD1E00EC571D /* Redirectable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1620,6 +1624,8 @@
 		23B4DCF22112B32D00954D71 /* BackupQueue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BackupQueue.hpp; sourceTree = "<group>"; };
 		23B4DD0D2112EDC600954D71 /* GlobalConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GlobalConfig.cpp; sourceTree = "<group>"; };
 		23B4DD0E2112EDC600954D71 /* GlobalConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GlobalConfig.hpp; sourceTree = "<group>"; };
+		23B4DD192113082C00954D71 /* HandlePoolsRelated.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HandlePoolsRelated.cpp; sourceTree = "<group>"; };
+		23B4DD1A2113082C00954D71 /* HandlePoolsRelated.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HandlePoolsRelated.hpp; sourceTree = "<group>"; };
 		23B8F5642043A2CE00EC571D /* Operable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Operable.cpp; sourceTree = "<group>"; };
 		23B8F5652043A2CE00EC571D /* Operable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Operable.hpp; sourceTree = "<group>"; };
 		23B8F56D2043FD1E00EC571D /* Redirectable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Redirectable.hpp; sourceTree = "<group>"; };
@@ -1842,16 +1848,18 @@
 				23567D4B20CA7E15005F1C35 /* HandlePoolRelated.hpp */,
 				23DD76B520CF69BF00E9B451 /* HandlePoolHolder.cpp */,
 				23DD76B620CF69BF00E9B451 /* HandlePoolHolder.hpp */,
+				2349F6221EA0D6680021EFA7 /* HandlePool.cpp */,
+				2349F6231EA0D6680021EFA7 /* HandlePool.hpp */,
+				23D96B952050E53600DB5E93 /* RecyclableHandlePool.cpp */,
+				23D96B962050E53600DB5E93 /* RecyclableHandlePool.hpp */,
 				236814EC20C5640200BDF4D3 /* Attachment.cpp */,
 				236814ED20C5640200BDF4D3 /* Attachment.hpp */,
 				23A8CD5320C8E40500A45C54 /* Corruption.cpp */,
 				23A8CD5420C8E40500A45C54 /* Corruption.hpp */,
-				2349F6221EA0D6680021EFA7 /* HandlePool.cpp */,
-				2349F6231EA0D6680021EFA7 /* HandlePool.hpp */,
 				23D96B902050DED700DB5E93 /* HandlePools.cpp */,
 				23D96B912050DED700DB5E93 /* HandlePools.hpp */,
-				23D96B952050E53600DB5E93 /* RecyclableHandlePool.cpp */,
-				23D96B962050E53600DB5E93 /* RecyclableHandlePool.hpp */,
+				23B4DD192113082C00954D71 /* HandlePoolsRelated.cpp */,
+				23B4DD1A2113082C00954D71 /* HandlePoolsRelated.hpp */,
 				2349F6241EA0D6680021EFA7 /* RecyclableHandle.cpp */,
 				2349F6251EA0D6680021EFA7 /* RecyclableHandle.hpp */,
 				23B0071A2047ED4800045245 /* ConfiguredHandle.cpp */,
@@ -2931,6 +2939,7 @@
 				239776FA202AF2E3000A681C /* TimedQueue.hpp in Headers */,
 				23567D7D20CA93C5005F1C35 /* Time.hpp in Headers */,
 				2374C9942090A393000F046F /* WCTDatabase+Trace.h in Headers */,
+				23B4DD1D2113082C00954D71 /* HandlePoolsRelated.hpp in Headers */,
 				23B9E67520AE733B00CF1683 /* FileManager.hpp in Headers */,
 				234EF46E2015CFDE00B81929 /* NSObject+Convertible.h in Headers */,
 				2349F7741EA0D6680021EFA7 /* WCTTable+Private.h in Headers */,
@@ -3236,6 +3245,7 @@
 				23F5BDEB20887FD3000CCD37 /* TimedQueue.hpp in Headers */,
 				23567D7E20CA93C5005F1C35 /* Time.hpp in Headers */,
 				2374C9952090A393000F046F /* WCTDatabase+Trace.h in Headers */,
+				23B4DD1E2113082C00954D71 /* HandlePoolsRelated.hpp in Headers */,
 				23B9E67620AE733B00CF1683 /* FileManager.hpp in Headers */,
 				23F5BDEC20887FD3000CCD37 /* NSObject+Convertible.h in Headers */,
 				23F5BDED20887FD3000CCD37 /* WCTTable+Private.h in Headers */,
@@ -3533,6 +3543,7 @@
 				23977590202AECD3000A681C /* LangQualifiedTableName.cpp in Sources */,
 				2349F6FE1EA0D6680021EFA7 /* Database.cpp in Sources */,
 				23000F12203EC89700ED8008 /* LangColumn.cpp in Sources */,
+				23B4DD1B2113082C00954D71 /* HandlePoolsRelated.cpp in Sources */,
 				23D96B9F2050E9A500DB5E93 /* MigrationHandlePool.cpp in Sources */,
 				23DC3079202B0066000F7895 /* Tokenize.cpp in Sources */,
 				23AD52F220DBAC4C00664B62 /* UpgradeableErrorProne.cpp in Sources */,
@@ -3794,6 +3805,7 @@
 				23F5BCA720887FD3000CCD37 /* LangQualifiedTableName.cpp in Sources */,
 				23F5BCA920887FD3000CCD37 /* Database.cpp in Sources */,
 				23F5BCAA20887FD3000CCD37 /* LangColumn.cpp in Sources */,
+				23B4DD1C2113082C00954D71 /* HandlePoolsRelated.cpp in Sources */,
 				23F5BCAB20887FD3000CCD37 /* MigrationHandlePool.cpp in Sources */,
 				23F5BCAC20887FD3000CCD37 /* Tokenize.cpp in Sources */,
 				23AD52F320DBAC4C00664B62 /* UpgradeableErrorProne.cpp in Sources */,
