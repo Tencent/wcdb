@@ -39,8 +39,7 @@ FactoryRenewer::FactoryRenewer(Factory &factory_)
 bool FactoryRenewer::work()
 {
     bool succeed, exists;
-    FileManager *fileManager = FileManager::shared();
-    std::tie(succeed, exists) = fileManager->fileExists(database);
+    std::tie(succeed, exists) = FileManager::fileExists(database);
     if (!exists) {
         if (!succeed) {
             assignWithSharedThreadedError();
@@ -49,7 +48,7 @@ bool FactoryRenewer::work()
         return succeed;
     }
 
-    std::tie(succeed, exists) = fileManager->fileExists(factory.database);
+    std::tie(succeed, exists) = FileManager::fileExists(factory.database);
     if (!succeed) {
         assignWithSharedThreadedError();
         return false;
@@ -61,22 +60,22 @@ bool FactoryRenewer::work()
         error.message = "Database already exists when renewing.";
         error.infos.set("Path", database);
         Notifier::shared()->notify(error);
-        fileManager->removeItem(directory);
+        FileManager::removeItem(directory);
         factory.removeDirectoryIfEmpty();
         return true;
     }
-    if (!fileManager->removeItems(Factory::associatedPathsForDatabase(factory.database))) {
+    if (!FileManager::removeItems(Factory::associatedPathsForDatabase(factory.database))) {
         assignWithSharedThreadedError();
         return false;
     }
 
     std::list<std::string> toMove = Factory::associatedPathsForDatabase(database);
     toMove.reverse();
-    if (!fileManager->moveItems(toMove, Path::getDirectoryName(factory.database))) {
+    if (!FileManager::moveItems(toMove, Path::getDirectoryName(factory.database))) {
         assignWithSharedThreadedError();
         return false;
     }
-    fileManager->removeItem(directory);
+    FileManager::removeItem(directory);
     factory.removeDirectoryIfEmpty();
 
     return true;
@@ -93,9 +92,8 @@ bool FactoryRenewer::prepare()
     = Path::addComponent(tempDirectory, factory.getDatabaseName());
     m_assembler->setPath(tempDatabase);
 
-    FileManager *fileManager = FileManager::shared();
-    if (!fileManager->removeItem(tempDirectory)
-        || !fileManager->createDirectoryWithIntermediateDirectories(tempDirectory)) {
+    if (!FileManager::removeItem(tempDirectory)
+        || !FileManager::createDirectoryWithIntermediateDirectories(tempDirectory)) {
         assignWithSharedThreadedError();
         return false;
     }
@@ -145,7 +143,7 @@ bool FactoryRenewer::prepare()
 
     // 6. force backup assembled database if exists
     size_t fileSize;
-    std::tie(succeed, fileSize) = fileManager->getFileSize(tempDatabase);
+    std::tie(succeed, fileSize) = FileManager::getFileSize(tempDatabase);
     if (!succeed) {
         assignWithSharedThreadedError();
         return false;
@@ -162,17 +160,17 @@ bool FactoryRenewer::prepare()
     // 7. move the assembled database to renew directory and wait for renew.
     std::list<std::string> toRemove = Factory::associatedPathsForDatabase(database);
     toRemove.reverse();
-    if (!fileManager->removeItems(toRemove)) {
+    if (!FileManager::removeItems(toRemove)) {
         assignWithSharedThreadedError();
         return false;
     }
     std::list<std::string> toMove = Factory::associatedPathsForDatabase(tempDatabase);
     toMove.reverse();
-    if (!fileManager->moveItems(toMove, directory)) {
+    if (!FileManager::moveItems(toMove, directory)) {
         assignWithSharedThreadedError();
         return false;
     }
-    fileManager->removeItem(tempDirectory);
+    FileManager::removeItem(tempDirectory);
     return true;
 }
 

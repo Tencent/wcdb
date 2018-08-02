@@ -26,17 +26,6 @@
 
 namespace WCDB {
 
-HandlePools::HandlePools()
-{
-    //sanhuazhang TODO:
-    //    SQLiteGlobal::shared()->setNotificationWhenFileCreated([](const char *path) {
-    //        if (!path) {
-    //            return;
-    //        }
-    //        FileManager::shared()->setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
-    //    });
-}
-
 RecyclableHandlePool
 HandlePools::getOrGeneratePool(const std::string &path, const Generator &generator)
 {

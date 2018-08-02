@@ -150,10 +150,9 @@ bool Wal::doInitialize()
 {
     WCTInnerAssert(m_pager->isInitialized() || m_pager->isInitializing());
 
-    FileManager *fileManager = FileManager::shared();
     bool succeed;
     size_t fileSize;
-    std::tie(succeed, fileSize) = fileManager->getFileSize(getPath());
+    std::tie(succeed, fileSize) = FileManager::getFileSize(getPath());
     if (fileSize == 0) {
         if (!succeed) {
             assignWithSharedThreadedError();
@@ -165,7 +164,7 @@ bool Wal::doInitialize()
         assignWithSharedThreadedError();
         return false;
     }
-    fileManager->setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(getPath());
+    FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(getPath());
 
     MappedData data = acquireData(0, headerSize);
     if (data.empty()) {

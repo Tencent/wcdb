@@ -19,6 +19,8 @@
  */
 
 #include <WCDB/Core.h>
+#include <WCDB/FileManager.hpp>
+#include <fcntl.h>
 
 namespace WCDB {
 
@@ -49,12 +51,22 @@ Core::Core()
     GlobalConfig::enableMemoryStatus(false);
     //        GlobalConfig::setMemoryMapSize(0x7fff0000, 0x7fff0000);
     GlobalConfig::setNotificationForLog(CoreNotifier::globalLogger);
+    GlobalConfig::hookVFSOpen(Core::vfsOpen);
 
     m_corruptionQueue.run();
     m_checkpointQueue.run();
     m_backupQueue.run();
 
     m_notifier.setCorruptionQueue(&m_corruptionQueue);
+}
+
+int Core::vfsOpen(const char* path, int flags, int mode)
+{
+    int fd = open(path, flags, mode);
+    if (fd != -1 && (flags & O_CREAT)) {
+        FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
+    }
+    return fd;
 }
 
 HandlePools* Core::handlePools()

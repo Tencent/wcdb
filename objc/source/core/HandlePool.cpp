@@ -61,7 +61,7 @@ bool HandlePool::initialize()
         if (m_aliveHandleCount.load() != 0) {
             return true;
         }
-        if (!FileManager::shared()->createDirectoryWithIntermediateDirectories(
+        if (!FileManager::createDirectoryWithIntermediateDirectories(
             Path::getDirectoryName(path))) {
             assignWithSharedThreadedError();
             return false;
@@ -76,7 +76,7 @@ bool HandlePool::initialize()
 #pragma mark - Identifier
 std::pair<bool, uint32_t> HandlePool::getIdentifier()
 {
-    auto result = FileManager::shared()->getFileIdentifier(path);
+    auto result = FileManager::getFileIdentifier(path);
     if (!result.first) {
         assignWithSharedThreadedError();
     }

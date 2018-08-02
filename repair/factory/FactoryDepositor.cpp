@@ -29,7 +29,6 @@ namespace Repair {
 
 bool FactoryDepositor::work()
 {
-    FileManager *fileManager = FileManager::shared();
     bool succeed;
     std::string workshopDirectory;
     std::tie(succeed, workshopDirectory) = factory.getUniqueWorkshopDiectory();
@@ -38,8 +37,8 @@ bool FactoryDepositor::work()
         return false;
     }
 
-    if (!fileManager->createDirectoryWithIntermediateDirectories(workshopDirectory)
-        || !fileManager->moveItems(
+    if (!FileManager::createDirectoryWithIntermediateDirectories(workshopDirectory)
+        || !FileManager::moveItems(
            Factory::associatedPathsForDatabase(factory.database), workshopDirectory)) {
         assignWithSharedThreadedError();
         return false;

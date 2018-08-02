@@ -40,51 +40,50 @@ enum FileProtection {
 };
 
 class FileManager : public SharedThreadedErrorProne {
-#pragma mark - Initialize
 public:
-    static FileManager *shared();
-
-protected:
-    FileManager();
+    FileManager() = delete;
     FileManager(const FileManager &) = delete;
     FileManager &operator=(const FileManager &) = delete;
 
 #pragma mark - Basic
 public:
-    std::tuple<bool, bool, bool> itemExists(const std::string &path);
-    std::pair<bool, size_t> getDirectorySize(const std::string &directory);
-    std::pair<bool, size_t> getFileSize(const std::string &file);
-    bool createHardLink(const std::string &from, const std::string &to);
-    bool removeHardLink(const std::string &path);
-    bool createDirectory(const std::string &path);
-    std::pair<bool, Time> getFileModifiedTime(const std::string &path);
-    std::pair<bool, Time> getFileCreatedTime(const std::string &path);
-    std::pair<bool, uint32_t> getFileIdentifier(const std::string &path);
+    static std::tuple<bool, bool, bool> itemExists(const std::string &path);
+    static std::pair<bool, size_t> getDirectorySize(const std::string &directory);
+    static std::pair<bool, size_t> getFileSize(const std::string &file);
+    static bool createHardLink(const std::string &from, const std::string &to);
+    static bool removeHardLink(const std::string &path);
+    static bool createDirectory(const std::string &path);
+    static std::pair<bool, Time> getFileModifiedTime(const std::string &path);
+    static std::pair<bool, Time> getFileCreatedTime(const std::string &path);
+    static std::pair<bool, uint32_t> getFileIdentifier(const std::string &path);
 
-    bool enumerateDirectory(
+    static bool enumerateDirectory(
     const std::string &directory,
     const std::function<bool(const std::string &, const std::string &, bool)> &enumeration);
 
-    bool setFileProtection(const std::string &path, FileProtection fileProtection);
-    std::pair<bool, FileProtection> getFileProtection(const std::string &path);
+    static bool setFileProtection(const std::string &path, FileProtection fileProtection);
+    static std::pair<bool, FileProtection> getFileProtection(const std::string &path);
+
+    static const char *fileProtectionName(FileProtection fileProtection);
 
 protected:
-    static const char *fileProtectionName(FileProtection fileProtection);
-    bool removeFile(const std::string &file);
-    bool removeDirectory(const std::string &directory);
+    static bool removeFile(const std::string &file);
+    static bool removeDirectory(const std::string &directory);
 
 #pragma mark - Combination
 public:
-    std::pair<bool, bool> fileExists(const std::string &file);
-    std::pair<bool, bool> directoryExists(const std::string &directory);
-    std::pair<bool, size_t> getItemSize(const std::string &path);
-    std::pair<bool, size_t> getItemsSize(const std::list<std::string> &paths);
-    bool removeItem(const std::string &path);
-    bool removeItems(const std::list<std::string> &paths);
-    bool moveItems(const std::list<std::string> &paths, const std::string &directory);
-    bool moveItems(const std::list<std::pair<std::string, std::string>> &pairedPaths);
-    bool createDirectoryWithIntermediateDirectories(const std::string &directory);
-    bool setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(const std::string &path);
+    static std::pair<bool, bool> fileExists(const std::string &file);
+    static std::pair<bool, bool> directoryExists(const std::string &directory);
+    static std::pair<bool, size_t> getItemSize(const std::string &path);
+    static std::pair<bool, size_t> getItemsSize(const std::list<std::string> &paths);
+    static bool removeItem(const std::string &path);
+    static bool removeItems(const std::list<std::string> &paths);
+    static bool
+    moveItems(const std::list<std::string> &paths, const std::string &directory);
+    static bool moveItems(const std::list<std::pair<std::string, std::string>> &pairedPaths);
+    static bool createDirectoryWithIntermediateDirectories(const std::string &directory);
+    static bool
+    setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(const std::string &path);
 
 #pragma mark - Error
 protected:

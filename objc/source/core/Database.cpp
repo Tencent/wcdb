@@ -185,7 +185,7 @@ bool Database::removeFiles()
         m_pool->attachment.corruption.markAsHandling();
         std::list<std::string> paths = getPaths();
         paths.reverse();
-        result = FileManager::shared()->removeItems(paths);
+        result = FileManager::removeItems(paths);
         if (!result) {
             assignWithSharedThreadedError();
         }
@@ -196,7 +196,7 @@ bool Database::removeFiles()
 
 std::pair<bool, size_t> Database::getFilesSize()
 {
-    auto pair = FileManager::shared()->getItemsSize(getPaths());
+    auto pair = FileManager::getItemsSize(getPaths());
     if (!pair.first) {
         assignWithSharedThreadedError();
     }
@@ -210,7 +210,7 @@ bool Database::moveFiles(const std::string &directory)
         m_pool->attachment.corruption.markAsHandling();
         std::list<std::string> paths = getPaths();
         paths.reverse();
-        result = FileManager::shared()->moveItems(paths, directory);
+        result = FileManager::moveItems(paths, directory);
         if (!result) {
             assignWithSharedThreadedError();
         }
@@ -229,7 +229,7 @@ bool Database::moveFilesToDirectoryWithExtraFiles(const std::string &directory,
         std::list<std::string> dbPaths = getPaths();
         dbPaths.reverse();
         paths.insert(paths.end(), dbPaths.begin(), dbPaths.end());
-        result = FileManager::shared()->moveItems(paths, directory);
+        result = FileManager::moveItems(paths, directory);
         if (!result) {
             assignWithSharedThreadedError();
         }
@@ -399,7 +399,7 @@ bool Database::removeDeposit()
 
 bool Database::removeMaterials()
 {
-    if (FileManager::shared()->removeItems({ getFirstMaterialPath(), getLastMaterialPath() })) {
+    if (FileManager::removeItems({ getFirstMaterialPath(), getLastMaterialPath() })) {
         return true;
     }
     assignWithSharedThreadedError();

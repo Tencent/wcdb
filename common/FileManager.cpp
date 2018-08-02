@@ -31,16 +31,6 @@
 
 namespace WCDB {
 
-FileManager::FileManager()
-{
-}
-
-FileManager *FileManager::shared()
-{
-    static FileManager *s_fileManager = new FileManager;
-    return s_fileManager;
-}
-
 #pragma mark - Basic
 std::tuple<bool, bool, bool> FileManager::itemExists(const std::string &path)
 {
@@ -74,8 +64,7 @@ std::pair<bool, size_t> FileManager::getDirectorySize(const std::string &directo
 {
     size_t totalSize = 0;
     if (enumerateDirectory(
-        directory,
-        [&totalSize, this](const std::string &directory, const std::string &subpath, bool isDirectory) {
+        directory, [&totalSize](const std::string &directory, const std::string &subpath, bool isDirectory) {
             std::string path = Path::addComponent(directory, subpath);
             auto intermediate = isDirectory ? getDirectorySize(path) : getFileSize(path);
             totalSize += intermediate.second;

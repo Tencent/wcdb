@@ -102,6 +102,8 @@ public:
 protected:
     Core();
 
+    static int vfsOpen(const char* path, int flags, int mode);
+
     // The order of member variables here is important.
     HandlePools m_handlePools;
     FTS::Modules m_modules;

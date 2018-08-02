@@ -56,7 +56,7 @@ bool Repairman::isEmptyDatabase()
 {
     bool succeed;
     size_t fileSize;
-    std::tie(succeed, fileSize) = FileManager::shared()->getFileSize(getPath());
+    std::tie(succeed, fileSize) = FileManager::getFileSize(getPath());
     if (fileSize == 0) {
         if (succeed) {
             Error error;

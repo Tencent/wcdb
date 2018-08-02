@@ -30,8 +30,6 @@ namespace WCDB {
 
 class HandlePools {
 public:
-    HandlePools();
-
     typedef std::function<std::shared_ptr<HandlePool>(const std::string &)> Generator;
 
     RecyclableHandlePool

@@ -40,7 +40,7 @@ Factory::Factory(const std::string &database_)
 std::pair<bool, std::list<std::string>> Factory::getWorkshopDirectories() const
 {
     std::list<std::string> workshopDirectories;
-    if (FileManager::shared()->enumerateDirectory(
+    if (FileManager::enumerateDirectory(
         directory,
         [&workshopDirectories](
         const std::string &directory, const std::string &subpath, bool isDirectory) -> bool {
@@ -58,7 +58,6 @@ std::pair<bool, std::list<std::string>> Factory::getWorkshopDirectories() const
 std::pair<bool, std::string> Factory::getUniqueWorkshopDiectory() const
 {
     bool succeed = false;
-    FileManager *fileManager = FileManager::shared();
     std::string path;
     do {
         Time time = Time::now();
@@ -69,7 +68,7 @@ std::pair<bool, std::string> Factory::getUniqueWorkshopDiectory() const
         path = Path::addComponent(directory, fileName);
 
         bool exists = false;
-        std::tie(succeed, exists) = fileManager->directoryExists(path);
+        std::tie(succeed, exists) = FileManager::directoryExists(path);
         if (exists) {
             succeed = false;
         }
@@ -81,7 +80,7 @@ bool Factory::canRetrieve() const
 {
     bool result = false;
     std::string databaseName = getDatabaseName();
-    FileManager::shared()->enumerateDirectory(
+    FileManager::enumerateDirectory(
     directory,
     [&result, &databaseName](
     const std::string &directory, const std::string &subpath, bool isDirectory) -> bool {
@@ -89,7 +88,7 @@ bool Factory::canRetrieve() const
             && subpath != getRenewDirectoryName()) {
             bool succeed, exists;
             std::tie(succeed, exists)
-            = FileManager::shared()->fileExists(Path::addComponent(subpath, databaseName));
+            = FileManager::fileExists(Path::addComponent(subpath, databaseName));
             if (exists) {
                 result = true;
                 return false;
@@ -137,8 +136,7 @@ FactoryRenewer Factory::renewer()
 bool Factory::removeDeposite() const
 {
     std::list<std::string> depositedPath;
-    FileManager *fileManager = FileManager::shared();
-    fileManager->enumerateDirectory(
+    FileManager::enumerateDirectory(
     directory,
     [&depositedPath](
     const std::string &directory, const std::string &subpath, bool isDirectory) -> bool {
@@ -148,7 +146,7 @@ bool Factory::removeDeposite() const
         }
         return true;
     });
-    if (fileManager->removeItems(depositedPath)) {
+    if (FileManager::removeItems(depositedPath)) {
         removeDirectoryIfEmpty();
         return true;
     }
@@ -157,9 +155,8 @@ bool Factory::removeDeposite() const
 
 bool Factory::removeDirectoryIfEmpty() const
 {
-    FileManager *fileManager = FileManager::shared();
     bool canRemove = true;
-    bool succeed = fileManager->enumerateDirectory(
+    bool succeed = FileManager::enumerateDirectory(
     directory,
     [&canRemove](const std::string &directory, const std::string &subpath, bool isDirectory) -> bool {
         if (subpath == getRestoreDirectoryName() || !isDirectory) {
@@ -172,7 +169,7 @@ bool Factory::removeDirectoryIfEmpty() const
         return false;
     }
     if (canRemove) {
-        return fileManager->removeItem(directory);
+        return FileManager::removeItem(directory);
     }
     return true;
 }
@@ -314,15 +311,14 @@ Factory::materialsForDeserializingForDatabase(const std::string &database)
 
 std::pair<bool, Time> Factory::getModifiedTimeOr0IfNotExists(const std::string &path)
 {
-    FileManager *fileManager = FileManager::shared();
     bool succeed, exists;
     Time modifiedTime;
     do {
-        std::tie(succeed, exists) = fileManager->fileExists(path);
+        std::tie(succeed, exists) = FileManager::fileExists(path);
         if (!succeed || !exists) {
             break;
         }
-        std::tie(succeed, modifiedTime) = fileManager->getFileModifiedTime(path);
+        std::tie(succeed, modifiedTime) = FileManager::getFileModifiedTime(path);
     } while (false);
     return { succeed, modifiedTime };
 }

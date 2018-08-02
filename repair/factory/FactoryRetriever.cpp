@@ -50,15 +50,14 @@ bool FactoryRetriever::work()
     WCTInnerAssert(m_assembler->getPath().empty());
     m_assembler->setPath(database);
 
-    FileManager *fileManager = FileManager::shared();
     bool succeed;
     //1. Remove the old restore db
     std::string restoreDirectory = factory.getRestoreDirectory();
-    if (!fileManager->removeItem(restoreDirectory)) {
+    if (!FileManager::removeItem(restoreDirectory)) {
         setCriticalErrorWithSharedThreadedError();
         return exit(false);
     }
-    if (!fileManager->createDirectoryWithIntermediateDirectories(factory.getRestoreDirectory())) {
+    if (!FileManager::createDirectoryWithIntermediateDirectories(factory.getRestoreDirectory())) {
         setCriticalErrorWithSharedThreadedError();
         return exit(false);
     }
@@ -107,7 +106,7 @@ bool FactoryRetriever::work()
         return exit(false);
     }
     std::string baseDirectory = Path::getDirectoryName(factory.database);
-    succeed = FileManager::shared()->moveItems(
+    succeed = FileManager::moveItems(
     Factory::associatedPathsForDatabase(database), baseDirectory);
     if (!succeed) {
         setCriticalErrorWithSharedThreadedError();
@@ -116,7 +115,7 @@ bool FactoryRetriever::work()
 
     //6. Remove all deposited dbs if error is ignorable.
     if (getErrorSeverity() <= UpgradeableErrorProne::Severity::Normal) {
-        FileManager::shared()->removeItem(factory.directory);
+        FileManager::removeItem(factory.directory);
     }
 
     return exit(true);
@@ -152,7 +151,7 @@ bool FactoryRetriever::restore(const std::string &database)
             useMaterial = material.deserialize(materialPath);
             if (useMaterial) {
                 std::tie(succeed, materialTime)
-                = FileManager::shared()->getFileModifiedTime(materialPath);
+                = FileManager::getFileModifiedTime(materialPath);
                 if (!succeed) {
                     setCriticalErrorWithSharedThreadedError();
                     return false;
@@ -312,7 +311,7 @@ bool FactoryRetriever::calculateSize(const std::string &database)
     bool succeed;
     size_t fileSize;
     std::tie(succeed, fileSize)
-    = FileManager::shared()->getItemsSize(Factory::databasePathsForDatabase(database));
+    = FileManager::getItemsSize(Factory::databasePathsForDatabase(database));
     if (!succeed) {
         setCriticalErrorWithSharedThreadedError();
         return false;

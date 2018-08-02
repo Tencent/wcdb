@@ -623,7 +623,7 @@ bool Serializable::serialize(const std::string &path) const
     }
     bool succeed = fileHandle.write(0, data);
     fileHandle.close();
-    FileManager::shared()->setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
+    FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
     return succeed;
 }
 
@@ -647,7 +647,7 @@ bool Deserializable::deserialize(const std::string &path)
             break;
         }
         {
-            FileManager::shared()->setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
+            FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
             fileHandle.markErrorAsIgnorable(true);
             MappedData data = fileHandle.map(0, size);
             fileHandle.markErrorAsIgnorable(false);

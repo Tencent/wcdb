@@ -180,10 +180,9 @@ void Pager::markAsError(Error::Code code)
 #pragma mark - Initializeable
 bool Pager::doInitialize()
 {
-    FileManager *fileManager = FileManager::shared();
     bool succeed;
     size_t fileSize;
-    std::tie(succeed, fileSize) = fileManager->getFileSize(getPath());
+    std::tie(succeed, fileSize) = FileManager::getFileSize(getPath());
     if (fileSize == 0) {
         if (succeed) {
             markAsError(Error::Code::Empty);
@@ -197,7 +196,7 @@ bool Pager::doInitialize()
         assignWithSharedThreadedError();
         return false;
     }
-    fileManager->setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(getPath());
+    FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(getPath());
     if (m_pageSize == -1 || m_reservedBytes == -1) {
         MappedData data = acquireData(0, 100);
         if (data.empty()) {
