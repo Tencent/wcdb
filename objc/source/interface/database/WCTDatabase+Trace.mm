@@ -82,7 +82,9 @@
             trace(array, (NSUInteger) cost);
         };
     }
-    _database->setNotification(callback);
+    _database->setConfig(WCDB::Core::PerformanceTraceConfigName,
+                         WCDB::Core::performanceTraceConfig(callback),
+                         WCDB::Configs::Priority::Highest);
 }
 
 - (void)traceSQL:(WCTSQLTraceBlock)trace
@@ -93,7 +95,9 @@
             trace([NSString stringWithCppString:sql]);
         };
     }
-    _database->setNotification(callback);
+    _database->setConfig(WCDB::Core::SQLTraceConfigName,
+                         WCDB::Core::sqlTraceConfig(callback),
+                         WCDB::Configs::Priority::Highest);
 }
 
 @end

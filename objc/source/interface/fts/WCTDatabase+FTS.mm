@@ -44,7 +44,9 @@ WCTTokenizer const WCTTokenizerWCDB = @"WCDB";
 {
     [self.class lazyEnrollTokenizer];
     WCTRemedialAssert(tokenizerName, "Tokenizer name can't be null.", return;)
-    _database->setTokenizes({ tokenizerName.cppString });
+    _database->setConfig(WCDB::Core::TokenizeConfigName,
+                         WCDB::Core::tokenizeConfig({ tokenizerName.cppString }),
+                         WCDB::Configs::Priority::Higher);
 }
 
 - (void)setTokenizers:(NSArray<NSString *> *)tokenizerNames
@@ -56,7 +58,9 @@ WCTTokenizer const WCTTokenizerWCDB = @"WCDB";
     for (NSString *tokenizerName in tokenizerNames) {
         theTokenizeNames.push_back(tokenizerName.cppString);
     }
-    _database->setTokenizes(theTokenizeNames);
+    _database->setConfig(WCDB::Core::TokenizeConfigName,
+                         WCDB::Core::tokenizeConfig(theTokenizeNames),
+                         WCDB::Configs::Priority::Higher);
 }
 
 @end

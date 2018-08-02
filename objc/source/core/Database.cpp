@@ -154,34 +154,6 @@ void Database::removeConfig(const std::string &name)
     m_pool->removeConfig(name);
 }
 
-void Database::setCipher(const UnsafeData &cipher, int pageSize)
-{
-    m_pool->setConfig(Core::CipherConfigName,
-                      Core::cipherConfig(cipher, pageSize),
-                      Configs::Priority::Highest);
-}
-
-void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
-{
-    m_pool->setConfig(Core::TokenizeConfigName,
-                      Core::tokenizeConfig(tokenizeNames),
-                      Configs::Priority::Higher);
-}
-
-void Database::setNotification(const SQLNotification &onSQLTraced)
-{
-    m_pool->setConfig(Core::SQLTraceConfigName,
-                      std::shared_ptr<Config>(new SQLTraceConfig(onSQLTraced)),
-                      Configs::Priority::Highest);
-}
-
-void Database::setNotification(const PerformanceNotification &onPerformanceTraced)
-{
-    m_pool->setConfig(Core::PerformanceTraceConfigName,
-                      std::shared_ptr<Config>(new PerformanceTraceConfig(onPerformanceTraced)),
-                      Configs::Priority::Highest);
-}
-
 #pragma mark - File
 bool Database::removeFiles()
 {

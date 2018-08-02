@@ -32,14 +32,18 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
 - (void)setCipherKey:(NSData *)cipherKey
 {
     WCTRemedialAssert(cipherKey, "Cipher key can't be null.", return;);
-    _database->setCipher(WCDB::UnsafeData::immutable((const unsigned char *) cipherKey.bytes, (size_t) cipherKey.length));
+    _database->setConfig(WCDB::Core::CipherConfigName,
+                         WCDB::Core::cipherConfig(WCDB::UnsafeData::immutable((const unsigned char *) cipherKey.bytes, (size_t) cipherKey.length)),
+                         WCDB::Configs::Priority::Highest);
 }
 
 - (void)setCipherKey:(NSData *)cipherKey
    andCipherPageSize:(int)cipherPageSize
 {
     WCTRemedialAssert(cipherKey, "Cipher key can't be null.", return;);
-    _database->setCipher(WCDB::UnsafeData::immutable((const unsigned char *) cipherKey.bytes, (size_t) cipherKey.length), cipherPageSize);
+    _database->setConfig(WCDB::Core::CipherConfigName,
+                         WCDB::Core::cipherConfig(WCDB::UnsafeData::immutable((const unsigned char *) cipherKey.bytes, (size_t) cipherKey.length), cipherPageSize),
+                         WCDB::Configs::Priority::Highest);
 }
 
 - (void)setConfig:(WCTConfigBlock)nsInvocation

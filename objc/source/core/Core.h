@@ -69,7 +69,8 @@ public:
     static const std::shared_ptr<Config>& backupConfig();
     static std::shared_ptr<Config>
     tokenizeConfig(const std::list<std::string>& tokenizeNames);
-    static std::shared_ptr<Config> cipherConfig(const UnsafeData& cipher, int pageSize);
+    static std::shared_ptr<Config>
+    cipherConfig(const UnsafeData& cipher, int pageSize = 4096);
     static std::shared_ptr<Config>
     sqlTraceConfig(const SQLTraceConfig::Notification& notification);
     static std::shared_ptr<Config>
