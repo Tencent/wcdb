@@ -31,7 +31,7 @@ class CheckpointQueue;
 
 class CheckpointConfig : public Config {
 public:
-    CheckpointConfig(const std::string &name, CheckpointQueue *queue);
+    CheckpointConfig(CheckpointQueue *queue);
     bool invoke(Handle *handle) override;
 
     static constexpr const int framesForPassive = 100;

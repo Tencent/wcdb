@@ -23,8 +23,7 @@
 
 namespace WCDB {
 
-BackupConfig::BackupConfig(const std::string &name, BackupQueue *queue)
-: Config(name), m_queue(queue)
+BackupConfig::BackupConfig(BackupQueue *queue) : Config(), m_queue(queue)
 {
     WCTInnerAssert(m_queue != nullptr);
 }
@@ -35,11 +34,15 @@ bool BackupConfig::invoke(Handle *handle)
         return false;
     }
     bool result = handle->setNotificationWhenCheckpoint(
-    0, name, std::bind(&BackupConfig::willCheckpoint, this, std::placeholders::_1, std::placeholders::_2));
+    0,
+    "Backup",
+    std::bind(&BackupConfig::willCheckpoint, this, std::placeholders::_1, std::placeholders::_2));
     handle->rollbackTransaction();
     if (result) {
         handle->setNotificationWhenCommitted(
-        0, name, std::bind(&BackupConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
+        0,
+        "Backup",
+        std::bind(&BackupConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
     }
     return result;
 }

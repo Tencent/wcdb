@@ -33,9 +33,7 @@ class Modules;
 
 class TokenizeConfig : public Config {
 public:
-    TokenizeConfig(const std::string& name,
-                   const std::list<std::string>& tokenizeNames,
-                   FTS::Modules* modules);
+    TokenizeConfig(const std::list<std::string>& tokenizeNames, FTS::Modules* modules);
     bool invoke(Handle* handle) override;
 
 protected:

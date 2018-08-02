@@ -23,19 +23,18 @@
 
 namespace WCDB {
 
-SQLTraceConfig::SQLTraceConfig(const std::string &name, const Notification &notification)
-: Config(name), m_notification(notification)
+SQLTraceConfig::SQLTraceConfig(const Notification &notification)
+: Config(), m_notification(notification)
 {
 }
 
 bool SQLTraceConfig::invoke(Handle *handle)
 {
-    handle->setNotificationWhenSQLTraced(name, m_notification);
+    handle->setNotificationWhenSQLTraced("SQLTrace", m_notification);
     return true;
 }
 
-ShareableSQLTraceConfig::ShareableSQLTraceConfig(const std::string &name)
-: SQLTraceConfig(name, nullptr)
+ShareableSQLTraceConfig::ShareableSQLTraceConfig() : SQLTraceConfig(nullptr)
 {
 }
 

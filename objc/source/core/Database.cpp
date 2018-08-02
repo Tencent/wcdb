@@ -144,9 +144,9 @@ void Database::purgeAllDatabases()
 }
 
 #pragma mark - Config
-void Database::setConfig(const std::shared_ptr<Config> &config, int priority)
+void Database::setConfig(const std::string &name, const std::shared_ptr<Config> &config, int priority)
 {
-    m_pool->setConfig(config, priority);
+    m_pool->setConfig(name, config, priority);
 }
 
 void Database::removeConfig(const std::string &name)
@@ -156,24 +156,29 @@ void Database::removeConfig(const std::string &name)
 
 void Database::setCipher(const UnsafeData &cipher, int pageSize)
 {
-    m_pool->setConfig(Core::cipherConfig(cipher, pageSize), Configs::Priority::Highest);
+    m_pool->setConfig(Core::CipherConfigName,
+                      Core::cipherConfig(cipher, pageSize),
+                      Configs::Priority::Highest);
 }
 
 void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
 {
-    m_pool->setConfig(Core::tokenizeConfig(tokenizeNames), Configs::Priority::Higher);
+    m_pool->setConfig(Core::TokenizeConfigName,
+                      Core::tokenizeConfig(tokenizeNames),
+                      Configs::Priority::Higher);
 }
 
 void Database::setNotification(const SQLNotification &onSQLTraced)
 {
-    m_pool->setConfig(std::shared_ptr<Config>(new SQLTraceConfig("WCDBSQLTrace", onSQLTraced)),
+    m_pool->setConfig(Core::SQLTraceConfigName,
+                      std::shared_ptr<Config>(new SQLTraceConfig(onSQLTraced)),
                       Configs::Priority::Highest);
 }
 
 void Database::setNotification(const PerformanceNotification &onPerformanceTraced)
 {
-    m_pool->setConfig(std::shared_ptr<Config>(new PerformanceTraceConfig(
-                      "WCDBPerformanceTrace", onPerformanceTraced)),
+    m_pool->setConfig(Core::PerformanceTraceConfigName,
+                      std::shared_ptr<Config>(new PerformanceTraceConfig(onPerformanceTraced)),
                       Configs::Priority::Highest);
 }
 
@@ -310,9 +315,9 @@ const std::string &Database::getFactoryDirectory() const
 void Database::autoBackup(bool flag)
 {
     if (flag) {
-        setConfig(Core::backupConfig(), Configs::Priority::Low);
+        setConfig(Core::BackupConfigName, Core::backupConfig(), Configs::Priority::Low);
     } else {
-        removeConfig(Core::backupConfig()->name);
+        removeConfig(Core::BackupConfigName);
     }
 }
 

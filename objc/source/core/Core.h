@@ -78,6 +78,8 @@ public:
     sqlTraceConfig(const SQLTraceConfig::Notification& notification);
     static std::shared_ptr<Config>
     performanceTraceConfig(const PerformanceTraceConfig::Notification& notification);
+    static std::shared_ptr<Config> migrationConfig(MigrationSetting* setting);
+    static std::shared_ptr<Config> customConfig(const CustomConfig::Invocation& invocation);
 
     static constexpr const char* CorruptionQueueName = "com.Tencent.WCDB.Queue.Corruption";
     static constexpr const char* CheckpointQueueName = "com.Tencent.WCDB.Queue.Checkpoint";
@@ -95,6 +97,7 @@ public:
     = "com.Tencent.WCDB.Config.GlobalSQLTrace";
     static constexpr const char* GlobalPerformanceTraceConfigName
     = "com.Tencent.WCDB.Config.GlobalPerformanceTrace";
+    static constexpr const char* MigrationConfigName = "com.Tencent.WCDB.Config.Migration";
 
     Core(const Core&) = delete;
     Core& operator=(const Core&) = delete;

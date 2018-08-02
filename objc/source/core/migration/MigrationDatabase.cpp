@@ -56,9 +56,10 @@ MigrationDatabase::generateHandlePool(const std::string &path,
     if (pool) {
         MigrationHandlePool *migrationHandlePool
         = static_cast<MigrationHandlePool *>(pool.get());
-        std::shared_ptr<Config> config(
-        new MigrationConfig(migrationHandlePool->getMigrationSetting()));
-        migrationHandlePool->setConfig(config, Configs::Priority::Higher);
+        migrationHandlePool->setConfig(
+        Core::MigrationConfigName,
+        Core::migrationConfig(migrationHandlePool->getMigrationSetting()),
+        Configs::Priority::Higher);
         migrationHandlePool->setInitializeNotification(Database::initializeHandlePool);
     }
     return pool;
@@ -199,7 +200,8 @@ bool MigrationDatabase::stepMigration(bool &done)
         }
         if (setting->markAsMigrated(info->targetTable)) {
             //schema changed
-            setConfig(std::shared_ptr<Config>(new MigrationConfig(setting)),
+            setConfig(Core::MigrationConfigName,
+                      Core::migrationConfig(setting),
                       Configs::Priority::Higher);
         }
         done = setting->isMigrated();

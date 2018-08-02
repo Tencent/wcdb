@@ -43,7 +43,8 @@ public:
     Configs(OrderedUniqueList<std::string, std::shared_ptr<Config>> &&list);
 
     std::shared_ptr<Configs>
-    configsBySettingConfig(const std::shared_ptr<Config> &config,
+    configsBySettingConfig(const std::string &name,
+                           const std::shared_ptr<Config> &config,
                            int priority = Priority::Default) const;
     std::shared_ptr<Configs> configsByRemovingConfig(const std::string &names) const;
 

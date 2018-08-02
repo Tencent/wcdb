@@ -23,7 +23,7 @@
 namespace WCDB {
 
 MigrationConfig::MigrationConfig(MigrationSetting *setting)
-: Config(MigrationConfig::name), m_setting(setting)
+: Config(), m_setting(setting)
 {
 }
 

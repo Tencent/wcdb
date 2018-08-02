@@ -31,7 +31,7 @@ class CustomConfig : public Config {
 public:
     using Invocation = std::function<bool(Handle *)>;
 
-    CustomConfig(const std::string &name, const Invocation &invocation);
+    CustomConfig(const Invocation &invocation);
 
     bool invoke(Handle *handle) override;
 

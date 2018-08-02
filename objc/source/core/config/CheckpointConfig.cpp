@@ -26,8 +26,8 @@ namespace WCDB {
 
 static_assert(CheckpointConfig::framesForPassive < CheckpointConfig::framesForFull, "");
 
-CheckpointConfig::CheckpointConfig(const std::string& name, CheckpointQueue* queue)
-: Config(name)
+CheckpointConfig::CheckpointConfig(CheckpointQueue* queue)
+: Config()
 , m_checkpointTruncate(StatementPragma().pragma(Pragma::walCheckpoint()).to("TRUNCATE"))
 , m_queue(queue)
 {
@@ -37,7 +37,9 @@ CheckpointConfig::CheckpointConfig(const std::string& name, CheckpointQueue* que
 bool CheckpointConfig::invoke(Handle* handle)
 {
     handle->setNotificationWhenCommitted(
-    0, name, std::bind(&CheckpointConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
+    0,
+    "Checkpoint",
+    std::bind(&CheckpointConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
     return true;
 }
 

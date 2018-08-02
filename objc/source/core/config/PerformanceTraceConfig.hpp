@@ -29,7 +29,7 @@ namespace WCDB {
 class PerformanceTraceConfig : public Config {
 public:
     using Notification = Handle::PerformanceNotification;
-    PerformanceTraceConfig(const std::string &name, const Notification &notification);
+    PerformanceTraceConfig(const Notification &notification);
 
     bool invoke(Handle *handle) override;
 
@@ -39,7 +39,7 @@ protected:
 
 class ShareablePerformanceTraceConfig : public PerformanceTraceConfig {
 public:
-    ShareablePerformanceTraceConfig(const std::string &name);
+    ShareablePerformanceTraceConfig();
 
     bool invoke(Handle *handle) override;
 

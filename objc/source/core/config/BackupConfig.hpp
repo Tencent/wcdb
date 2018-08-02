@@ -31,7 +31,7 @@ class BackupQueue;
 
 class BackupConfig : public Config {
 public:
-    BackupConfig(const std::string& name, BackupQueue* queue);
+    BackupConfig(BackupQueue* queue);
     bool invoke(Handle* handle) override;
 
     static constexpr const int framesIntervalForAutoBackup = 300;

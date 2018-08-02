@@ -29,11 +29,13 @@ namespace WCDB {
 
 #pragma mark - Configs
 std::shared_ptr<Configs>
-Configs::configsBySettingConfig(const std::shared_ptr<Config> &config, int priority) const
+Configs::configsBySettingConfig(const std::string &name,
+                                const std::shared_ptr<Config> &config,
+                                int priority) const
 {
     WCTInnerAssert(config != nullptr);
     std::shared_ptr<Configs> configs(new Configs(m_list));
-    configs->m_list.insert(priority, config->name, config);
+    configs->m_list.insert(priority, name, config);
     return configs;
 }
 

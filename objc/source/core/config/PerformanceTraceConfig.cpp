@@ -22,20 +22,19 @@
 
 namespace WCDB {
 
-PerformanceTraceConfig::PerformanceTraceConfig(const std::string &name,
-                                               const Notification &notification)
-: Config(name), m_notification(notification)
+PerformanceTraceConfig::PerformanceTraceConfig(const Notification &notification)
+: Config(), m_notification(notification)
 {
 }
 
 bool PerformanceTraceConfig::invoke(Handle *handle)
 {
-    handle->setNotificationWhenPerformanceTraced(name, m_notification);
+    handle->setNotificationWhenPerformanceTraced("PerformanceTrace", m_notification);
     return true;
 }
 
-ShareablePerformanceTraceConfig::ShareablePerformanceTraceConfig(const std::string &name)
-: PerformanceTraceConfig(name, nullptr)
+ShareablePerformanceTraceConfig::ShareablePerformanceTraceConfig()
+: PerformanceTraceConfig(nullptr)
 {
 }
 

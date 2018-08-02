@@ -29,7 +29,7 @@ namespace WCDB {
 
 class CipherConfig : public Config {
 public:
-    CipherConfig(const std::string &name, const UnsafeData &cipher, int pageSize);
+    CipherConfig(const UnsafeData &cipher, int pageSize);
     bool invoke(Handle *handle) override;
 
 protected:

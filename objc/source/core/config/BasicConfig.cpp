@@ -24,8 +24,8 @@
 
 namespace WCDB {
 
-BasicConfig::BasicConfig(const std::string& name)
-: Config(name)
+BasicConfig::BasicConfig()
+: Config()
 , m_getJournalMode(StatementPragma().pragma(Pragma::journalMode()))
 , m_getLockingMode(StatementPragma().pragma(Pragma::lockingMode()))
 , m_setFullFSync(StatementPragma().pragma(Pragma::fullfsync()).to(true))

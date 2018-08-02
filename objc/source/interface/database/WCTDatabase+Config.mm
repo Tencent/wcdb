@@ -54,7 +54,7 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
         [unsafeHandle finalizeDatabase];
         return result;
     };
-    _database->setConfig(std::shared_ptr<WCDB::Config>(new WCDB::CustomConfig(name.cppString, invocation)), priority);
+    _database->setConfig(name.cppString, WCDB::Core::customConfig(invocation), priority);
 }
 
 - (void)setConfig:(WCTConfigBlock)nsInvocation
@@ -68,7 +68,7 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
         [unsafeHandle finalizeDatabase];
         return result;
     };
-    _database->setConfig(std::shared_ptr<WCDB::Config>(new WCDB::CustomConfig(name.cppString, invocation)));
+    _database->setConfig(name.cppString, WCDB::Core::customConfig(invocation));
 }
 
 - (void)removeConfigForName:(NSString *)name

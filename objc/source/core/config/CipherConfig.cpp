@@ -23,8 +23,8 @@
 
 namespace WCDB {
 
-CipherConfig::CipherConfig(const std::string &name, const UnsafeData &cipher, int pageSize)
-: Config(name), m_key(cipher), m_pageSize(pageSize)
+CipherConfig::CipherConfig(const UnsafeData &cipher, int pageSize)
+: Config(), m_key(cipher), m_pageSize(pageSize)
 {
 }
 

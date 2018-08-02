@@ -29,7 +29,7 @@ namespace WCDB {
 
 class BasicConfig : public Config {
 public:
-    BasicConfig(const std::string& name);
+    BasicConfig();
     bool invoke(Handle* handle) override;
 
 protected:

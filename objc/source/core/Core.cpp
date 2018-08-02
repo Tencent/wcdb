@@ -35,16 +35,16 @@ Core::Core()
 , m_checkpointQueue(CheckpointQueueName)
 , m_backupQueue(BackupQueueName)
 // Configs
-, m_basicConfig(new BasicConfig(BasicConfigName))
-, m_backupConfig(new BackupConfig(BackupConfigName, &m_backupQueue))
-, m_checkpointConfig(new CheckpointConfig(CheckpointConfigName, &m_checkpointQueue))
-, m_globalSQLTraceConfig(new ShareableSQLTraceConfig(GlobalSQLTraceConfigName))
-, m_globalPerformanceTraceConfig(new ShareablePerformanceTraceConfig(GlobalPerformanceTraceConfigName))
+, m_basicConfig(new BasicConfig)
+, m_backupConfig(new BackupConfig(&m_backupQueue))
+, m_checkpointConfig(new CheckpointConfig(&m_checkpointQueue))
+, m_globalSQLTraceConfig(new ShareableSQLTraceConfig)
+, m_globalPerformanceTraceConfig(new ShareablePerformanceTraceConfig)
 , m_configs(new Configs(OrderedUniqueList<std::string, std::shared_ptr<Config>>({
-  { Configs::Priority::Highest, m_globalSQLTraceConfig->name, m_globalSQLTraceConfig },
-  { Configs::Priority::Highest, m_globalPerformanceTraceConfig->name, m_globalPerformanceTraceConfig },
-  { Configs::Priority::Higher, m_basicConfig->name, m_basicConfig },
-  { Configs::Priority::Low, m_checkpointConfig->name, m_checkpointConfig },
+  { Configs::Priority::Highest, GlobalSQLTraceConfigName, m_globalSQLTraceConfig },
+  { Configs::Priority::Highest, GlobalPerformanceTraceConfigName, m_globalPerformanceTraceConfig },
+  { Configs::Priority::Higher, BasicConfigName, m_basicConfig },
+  { Configs::Priority::Low, CheckpointConfigName, m_checkpointConfig },
   })))
 {
     GlobalConfig::enableMultithread();
@@ -124,25 +124,33 @@ ShareablePerformanceTraceConfig* Core::globalPerformanceTraceConfig()
 
 std::shared_ptr<Config> Core::tokenizeConfig(const std::list<std::string>& tokenizeNames)
 {
-    return std::shared_ptr<Config>(
-    new TokenizeConfig(TokenizeConfigName, tokenizeNames, shared()->modules()));
+    return std::shared_ptr<Config>(new TokenizeConfig(tokenizeNames, shared()->modules()));
 }
 
 std::shared_ptr<Config> Core::cipherConfig(const UnsafeData& cipher, int pageSize)
 {
-    return std::shared_ptr<Config>(new CipherConfig(CipherConfigName, cipher, pageSize));
+    return std::shared_ptr<Config>(new CipherConfig(cipher, pageSize));
 }
 
 std::shared_ptr<Config> Core::sqlTraceConfig(const SQLTraceConfig::Notification& notification)
 {
-    return std::shared_ptr<Config>(new SQLTraceConfig(SQLTraceConfigName, notification));
+    return std::shared_ptr<Config>(new SQLTraceConfig(notification));
 }
 
 std::shared_ptr<Config>
 Core::performanceTraceConfig(const PerformanceTraceConfig::Notification& notification)
 {
-    return std::shared_ptr<Config>(
-    new PerformanceTraceConfig(PerformanceTraceConfigName, notification));
+    return std::shared_ptr<Config>(new PerformanceTraceConfig(notification));
+}
+
+std::shared_ptr<Config> Core::migrationConfig(MigrationSetting* setting)
+{
+    return std::shared_ptr<Config>(new MigrationConfig(setting));
+}
+
+std::shared_ptr<Config> Core::customConfig(const CustomConfig::Invocation& invocation)
+{
+    return std::shared_ptr<Config>(new CustomConfig(invocation));
 }
 
 } // namespace WCDB

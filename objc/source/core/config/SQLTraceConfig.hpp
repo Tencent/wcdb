@@ -29,7 +29,7 @@ namespace WCDB {
 class SQLTraceConfig : public Config {
 public:
     using Notification = Handle::SQLNotification;
-    SQLTraceConfig(const std::string &name, const Notification &notification);
+    SQLTraceConfig(const Notification &notification);
 
     bool invoke(Handle *handle) override;
 
@@ -39,7 +39,7 @@ protected:
 
 class ShareableSQLTraceConfig : public SQLTraceConfig {
 public:
-    ShareableSQLTraceConfig(const std::string &name);
+    ShareableSQLTraceConfig();
 
     bool invoke(Handle *handle) override;
 

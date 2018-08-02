@@ -96,9 +96,9 @@ Tag HandlePool::getTag() const
 }
 
 #pragma mark - Config
-void HandlePool::setConfig(const std::shared_ptr<Config> &config, int priority)
+void HandlePool::setConfig(const std::string &name, const std::shared_ptr<Config> &config, int priority)
 {
-    m_configs = m_configs->configsBySettingConfig(config, priority);
+    m_configs = m_configs->configsBySettingConfig(name, config, priority);
 }
 
 void HandlePool::removeConfig(const std::string &name)
