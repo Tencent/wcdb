@@ -33,7 +33,7 @@ CorruptionQueue::CorruptionQueue(const std::string& name, HandlePools* handlePoo
 
 void CorruptionQueue::put(const std::string& path)
 {
-    auto pool = Core::handlePools()->getExistingPool(path);
+    auto pool = m_handlePools->getExistingPool(path);
     if (pool == nullptr) {
         return;
     }
@@ -59,7 +59,7 @@ void CorruptionQueue::loop()
             }
             path = std::move(*m_paths.begin());
         }
-        auto pool = Core::handlePools()->getExistingPool(path);
+        auto pool = m_handlePools->getExistingPool(path);
         if (pool != nullptr) {
             pool->attachment.corruption.notify();
         }
