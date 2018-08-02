@@ -18,27 +18,30 @@
  * limitations under the License.
  */
 
-#ifndef CipherConfig_hpp
-#define CipherConfig_hpp
+#ifndef GlobalConfig_hpp
+#define GlobalConfig_hpp
 
-#include <WCDB/Config.hpp>
+#include <functional>
 
 #pragma GCC visibility push(hidden)
 
 namespace WCDB {
 
-class CipherConfig : public Config {
+class GlobalConfig {
 public:
-    CipherConfig(const std::string &name, const UnsafeData &cipher, int pageSize);
-    bool invoke(Handle *handle) override;
+    static void enableMultithread();
+    static void enableMemoryStatus(bool enable);
+    static void setMemoryMapSize(int64_t defaultSizeLimit, int64_t maximumAllowedSizeLimit);
 
-protected:
-    Data m_key;
-    int m_pageSize;
+    typedef void (*Log)(void *, int, const char *);
+    static void setNotificationForLog(const Log &log);
+
+    typedef int (*VFSOpen)(const char *, int, int);
+    static void hookVFSOpen(const VFSOpen &vfsOpen);
 };
 
 } //namespace WCDB
 
 #pragma GCC visibility pop
 
-#endif /* CipherConfig_hpp */
+#endif /* GlobalConfig_hpp */

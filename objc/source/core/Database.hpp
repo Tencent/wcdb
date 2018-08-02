@@ -74,10 +74,10 @@ public:
     void setTokenizes(const std::list<std::string> &tokenizeNames);
 
     typedef Handle::SQLNotification SQLNotification;
-    void setSQLTrace(const SQLNotification &onSQLTraced);
+    void setNotification(const SQLNotification &onSQLTraced);
 
     typedef Handle::PerformanceNotification PerformanceNotification;
-    void setPerformanceTrace(const PerformanceNotification &onPerformanceTraced);
+    void setNotification(const PerformanceNotification &onPerformanceTraced);
 
 #pragma mark - File
 public:

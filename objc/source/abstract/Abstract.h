@@ -25,10 +25,10 @@
 
 #include <WCDB/WINQ.h>
 
+#include <WCDB/GlobalConfig.hpp>
 #include <WCDB/Handle.hpp>
 #include <WCDB/HandleNotification.hpp>
 #include <WCDB/HandleStatement.hpp>
-#include <WCDB/SQLiteGlobal.hpp>
 #include <WCDB/Tokenize.hpp>
 
 #endif /* Abstract_h */

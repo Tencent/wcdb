@@ -184,7 +184,7 @@
 
     NSString *backupPath = [_database.path stringByAppendingString:@"-first.material"];
 
-    [NSThread sleepForTimeInterval:3];
+    [NSThread sleepForTimeInterval:5];
 
     XCTAssertTrue([self.fileManager fileExistsAtPath:backupPath]);
 }

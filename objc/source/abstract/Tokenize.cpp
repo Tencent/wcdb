@@ -19,32 +19,10 @@
  */
 
 #include <WCDB/Abstract.h>
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Error.hpp>
 
 namespace WCDB {
 
 namespace FTS {
-
-Modules *Modules::shared()
-{
-    static Modules *s_modules = new Modules;
-    return s_modules;
-}
-
-void Modules::addAddress(const std::string &name, sqlite3_tokenizer_module **address)
-{
-    LockGuard lockGuard(m_lock);
-    m_modules[name] = UnsafeData((unsigned char *) address, sizeof(unsigned char *));
-}
-
-const UnsafeData &Modules::getAddress(const std::string &name) const
-{
-    SharedLockGuard lockGuard(m_lock);
-    auto iter = m_modules.find(name);
-    WCTAssert(iter != m_modules.end(), "Tokenize name is not registered.");
-    return iter->second;
-}
 
 TokenizerInfoBase::TokenizerInfoBase(int argc, const char *const *argv)
 {

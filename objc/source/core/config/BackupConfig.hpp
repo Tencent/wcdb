@@ -27,28 +27,21 @@
 
 namespace WCDB {
 
+class BackupQueue;
+
 class BackupConfig : public Config {
 public:
-    static const std::shared_ptr<Config> &shared();
+    BackupConfig(const std::string& name, BackupQueue* queue);
+    bool invoke(Handle* handle) override;
 
-    BackupConfig();
-    ~BackupConfig();
-    bool invoke(Handle *handle) override;
-
-    static constexpr const char *name = "WCDBBackup";
     static constexpr const int framesIntervalForAutoBackup = 300;
     static constexpr const int framesIntervalForDelayAutoBackup = 100;
 
 protected:
-    TimedQueue<std::string, int> m_timedQueue;
-    void loop();
-    bool onTimed(const std::string &path, const int &frames);
+    bool onCommitted(Handle* handle, int frames);
+    bool willCheckpoint(Handle* handle, int frames);
 
-    SharedLock m_lock;
-    std::map<std::string, int> m_backedUp;
-
-    bool onCommitted(Handle *handle, int frames);
-    bool willCheckpoint(Handle *handle, int frames);
+    BackupQueue* m_queue;
 };
 
 } //namespace WCDB

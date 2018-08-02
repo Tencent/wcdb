@@ -26,21 +26,15 @@
 
 namespace WCDB {
 
-HandlePools *HandlePools::defaultPools()
-{
-    static HandlePools *s_handlePools = new HandlePools;
-    return s_handlePools;
-}
-
 HandlePools::HandlePools()
 {
-    SQLiteGlobal::shared()->setNotificationWhenFileCreated([](const char *path) {
-        if (!path) {
-            return;
-        }
-        FileManager::shared()->setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
-    });
-    CoreNotifier::shared();
+    //sanhuazhang TODO:
+    //    SQLiteGlobal::shared()->setNotificationWhenFileCreated([](const char *path) {
+    //        if (!path) {
+    //            return;
+    //        }
+    //        FileManager::shared()->setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
+    //    });
 }
 
 RecyclableHandlePool

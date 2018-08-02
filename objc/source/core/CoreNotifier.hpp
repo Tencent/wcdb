@@ -27,24 +27,28 @@
 
 namespace WCDB {
 
+class CorruptionQueue;
+
 class CoreNotifier {
 public:
-    static CoreNotifier* shared();
-
+    CoreNotifier();
     CoreNotifier(const CoreNotifier&) = delete;
     CoreNotifier& operator=(const CoreNotifier&) = delete;
 
     using Callback = Notifier::Callback;
     void setNotification(const Callback& callback);
 
+    void setCorruptionQueue(CorruptionQueue* queue);
+
     static void logger(const Error& error);
+    static void globalLogger(void* userInfo, int code, const char* message);
 
 protected:
-    CoreNotifier();
     void notify(const Error& error);
 
     SharedLock m_lock;
     Callback m_callback;
+    CorruptionQueue* m_corruptionQueue;
 };
 
 } // namespace WCDB

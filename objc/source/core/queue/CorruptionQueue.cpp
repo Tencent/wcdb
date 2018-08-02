@@ -19,28 +19,15 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/CorruptionQueue.hpp>
+#include <WCDB/Core.h>
 #include <WCDB/Dispatch.hpp>
-#include <WCDB/HandlePools.hpp>
 #include <WCDB/Notifier.hpp>
 
 namespace WCDB {
 
-CorruptionQueue *CorruptionQueue::shared()
-{
-    static CorruptionQueue *s_corruptionQueue = new CorruptionQueue;
-    return s_corruptionQueue;
-}
-
-CorruptionQueue::CorruptionQueue()
-{
-    Dispatch::async("com.Tencent.WCDB.CorruptionQueue",
-                    std::bind(&CorruptionQueue::loop, this));
-}
-
 void CorruptionQueue::put(const std::string &path)
 {
-    auto pool = HandlePools::defaultPools()->getExistingPool(path);
+    auto pool = Core::handlePools()->getExistingPool(path);
     if (pool == nullptr) {
         return;
     }
@@ -56,7 +43,7 @@ void CorruptionQueue::put(const std::string &path)
 
 void CorruptionQueue::loop()
 {
-    while (true) {
+    while (!exit()) {
         std::string path;
         {
             std::unique_lock<std::mutex> lockGuard(m_mutex);
@@ -66,7 +53,7 @@ void CorruptionQueue::loop()
             }
             path = std::move(*m_paths.begin());
         }
-        auto pool = HandlePools::defaultPools()->getExistingPool(path);
+        auto pool = Core::handlePools()->getExistingPool(path);
         if (pool != nullptr) {
             pool->attachment.corruption.notify();
         }

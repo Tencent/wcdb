@@ -182,7 +182,7 @@ public:
         return SQLITE_NOMEM;
     }
 
-    static sqlite3_tokenizer_module **address()
+    static unsigned char *address()
     {
         static sqlite3_tokenizer_module *s_module
         = new sqlite3_tokenizer_module({ 0,
@@ -191,21 +191,8 @@ public:
                                          Module<TokenizerInfo, CursorInfo>::open,
                                          Module<TokenizerInfo, CursorInfo>::close,
                                          Module<TokenizerInfo, CursorInfo>::next });
-        return &s_module;
+        return (unsigned char *) &s_module;
     }
-};
-
-class Modules {
-public:
-    static Modules *shared();
-
-    void addAddress(const std::string &name, sqlite3_tokenizer_module **address);
-
-    const UnsafeData &getAddress(const std::string &name) const;
-
-protected:
-    std::map<std::string, UnsafeData> m_modules;
-    mutable SharedLock m_lock;
 };
 
 } // namespace FTS

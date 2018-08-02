@@ -18,27 +18,30 @@
  * limitations under the License.
  */
 
-#ifndef CipherConfig_hpp
-#define CipherConfig_hpp
+#ifndef CheckpointQueue_hpp
+#define CheckpointQueue_hpp
 
-#include <WCDB/Config.hpp>
-
-#pragma GCC visibility push(hidden)
+#include <WCDB/AsyncQueue.hpp>
+#include <WCDB/TimedQueue.hpp>
 
 namespace WCDB {
 
-class CipherConfig : public Config {
+class CheckpointQueue : public AsyncQueue {
 public:
-    CipherConfig(const std::string &name, const UnsafeData &cipher, int pageSize);
-    bool invoke(Handle *handle) override;
+    CheckpointQueue(const std::string& name);
+    ~CheckpointQueue();
+
+    void put(const std::string& path, double delay, int frames);
+    void remove(const std::string& path);
 
 protected:
-    Data m_key;
-    int m_pageSize;
+    bool onTimed(const std::string& path, const int& frames);
+    void loop() override;
+
+    TimedQueue<std::string, int> m_timedQueue;
+    const StatementPragma m_checkpointPassive;
 };
 
-} //namespace WCDB
+} // namespace WCDB
 
-#pragma GCC visibility pop
-
-#endif /* CipherConfig_hpp */
+#endif /* CheckpointQueue_hpp */

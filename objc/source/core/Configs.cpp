@@ -28,26 +28,6 @@
 namespace WCDB {
 
 #pragma mark - Configs
-std::shared_ptr<Configs> Configs::default_()
-{
-    static std::shared_ptr<Configs> *s_configs = []() -> std::shared_ptr<Configs> * {
-        OrderedUniqueList<std::string, std::shared_ptr<Config>> list;
-        list.insert(Priority::Highest,
-                    SharedSQLTraceConfig::shared()->name,
-                    SharedSQLTraceConfig::shared());
-        list.insert(Priority::Highest,
-                    SharedPerformanceTraceConfig::shared()->name,
-                    SharedPerformanceTraceConfig::shared());
-        list.insert(Priority::Higher, BasicConfig::shared()->name, BasicConfig::shared());
-        list.insert(
-        Priority::Low, CheckpointConfig::shared()->name, CheckpointConfig::shared());
-        std::shared_ptr<Configs> *configs
-        = new std::shared_ptr<Configs>(new Configs(std::move(list)));
-        return configs;
-    }();
-    return *s_configs;
-}
-
 std::shared_ptr<Configs>
 Configs::configsBySettingConfig(const std::shared_ptr<Config> &config, int priority) const
 {
@@ -77,10 +57,6 @@ bool Configs::invoke(Handle *handle)
 bool Configs::equal(const std::shared_ptr<Configs> &configs) const
 {
     return this == configs.get();
-}
-
-Configs::Configs()
-{
 }
 
 Configs::Configs(const OrderedUniqueList<std::string, std::shared_ptr<Config>> &list)

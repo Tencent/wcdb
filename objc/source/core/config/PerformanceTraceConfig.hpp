@@ -28,30 +28,24 @@ namespace WCDB {
 
 class PerformanceTraceConfig : public Config {
 public:
-    static const std::shared_ptr<Config> &shared();
+    using Notification = Handle::PerformanceNotification;
+    PerformanceTraceConfig(const std::string &name, const Notification &notification);
 
-    PerformanceTraceConfig(const std::string &name,
-                           const Handle::PerformanceNotification &trace);
     bool invoke(Handle *handle) override;
 
 protected:
-    Handle::PerformanceNotification m_performanceTrace;
+    Notification m_notification;
 };
 
-class SharedPerformanceTraceConfig : public PerformanceTraceConfig {
+class ShareablePerformanceTraceConfig : public PerformanceTraceConfig {
 public:
-    static const std::shared_ptr<Config> &shared();
-
-    SharedPerformanceTraceConfig() = delete;
-    SharedPerformanceTraceConfig(const SharedPerformanceTraceConfig &) = delete;
-    SharedPerformanceTraceConfig &operator=(const SharedPerformanceTraceConfig &) = delete;
+    ShareablePerformanceTraceConfig(const std::string &name);
 
     bool invoke(Handle *handle) override;
 
-    void setPerformanceTrace(const Handle::PerformanceNotification &trace);
+    void setNotification(const Notification &notification);
 
 protected:
-    using PerformanceTraceConfig::PerformanceTraceConfig;
     mutable SharedLock m_lock;
 };
 

@@ -30,10 +30,7 @@ namespace WCDB {
 
 class HandlePools {
 public:
-    HandlePools(const HandlePools &) = delete;
-    HandlePools &operator=(const HandlePools &) = delete;
-
-    static HandlePools *defaultPools();
+    HandlePools();
 
     typedef std::function<std::shared_ptr<HandlePool>(const std::string &)> Generator;
 
@@ -45,8 +42,6 @@ public:
     void purge();
 
 protected:
-    HandlePools();
-
     void flowBackHandlePool(const std::shared_ptr<HandlePool> &handlePool);
 
     std::shared_ptr<HandlePool> generate(const std::string &path);

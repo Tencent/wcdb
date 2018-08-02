@@ -18,27 +18,34 @@
  * limitations under the License.
  */
 
-#ifndef CipherConfig_hpp
-#define CipherConfig_hpp
-
-#include <WCDB/Config.hpp>
-
-#pragma GCC visibility push(hidden)
+#include <WCDB/Core.h>
+#include <WCDB/Dispatch.hpp>
+#include <atomic>
 
 namespace WCDB {
 
-class CipherConfig : public Config {
-public:
-    CipherConfig(const std::string &name, const UnsafeData &cipher, int pageSize);
-    bool invoke(Handle *handle) override;
+AsyncQueue::AsyncQueue(const std::string& name_)
+: name(name_)
+#ifdef DEBUG
+, m_running(false)
+#endif
+{
+}
 
-protected:
-    Data m_key;
-    int m_pageSize;
-};
+void AsyncQueue::run()
+{
+#ifdef DEBUG
+    WCTInnerAssert(m_running == false);
+    m_running = true;
+#endif
+    Dispatch::async(name, std::bind(&AsyncQueue::loop, this));
+}
 
-} //namespace WCDB
+bool AsyncQueue::exit()
+{
+    static std::atomic<bool>* s_exit = new std::atomic<bool>(false);
+    atexit([]() { s_exit->store(true); });
+    return s_exit->load();
+}
 
-#pragma GCC visibility pop
-
-#endif /* CipherConfig_hpp */
+} // namespace WCDB

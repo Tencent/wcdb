@@ -32,7 +32,7 @@ namespace WCDB {
 std::shared_ptr<Database> Database::databaseWithExistingTag(const Tag &tag)
 {
     std::shared_ptr<Database> database(
-    new Database(HandlePools::defaultPools()->getExistingPool(tag)));
+    new Database(Core::handlePools()->getExistingPool(tag)));
     if (database && database->isValid()) {
         return database;
     }
@@ -42,7 +42,7 @@ std::shared_ptr<Database> Database::databaseWithExistingTag(const Tag &tag)
 std::shared_ptr<Database> Database::databaseWithExistingPath(const std::string &path)
 {
     std::shared_ptr<Database> database(
-    new Database(HandlePools::defaultPools()->getExistingPool(path)));
+    new Database(Core::handlePools()->getExistingPool(path)));
     if (database && database->isValid()) {
         return database;
     }
@@ -51,7 +51,7 @@ std::shared_ptr<Database> Database::databaseWithExistingPath(const std::string &
 
 std::shared_ptr<HandlePool> Database::generateHandlePool(const std::string &path)
 {
-    std::shared_ptr<HandlePool> handlePool(new HandlePool(path, Configs::default_()));
+    std::shared_ptr<HandlePool> handlePool(new HandlePool(path, Core::configs()));
     if (handlePool) {
         handlePool->setInitializeNotification(Database::initializeHandlePool);
     }
@@ -69,7 +69,7 @@ bool Database::initializeHandlePool(const HandlePool &handlePool)
 std::shared_ptr<Database> Database::databaseWithPath(const std::string &path)
 {
     std::shared_ptr<Database> database(new Database(
-    HandlePools::defaultPools()->getOrGeneratePool(path, Database::generateHandlePool)));
+    Core::handlePools()->getOrGeneratePool(path, Database::generateHandlePool)));
     if (database && database->isValid()) {
         return database;
     }
@@ -140,7 +140,7 @@ void Database::purge()
 
 void Database::purgeAllDatabases()
 {
-    HandlePools::defaultPools()->purge();
+    Core::handlePools()->purge();
 }
 
 #pragma mark - Config
@@ -156,23 +156,21 @@ void Database::removeConfig(const std::string &name)
 
 void Database::setCipher(const UnsafeData &cipher, int pageSize)
 {
-    m_pool->setConfig(std::shared_ptr<Config>(new CipherConfig(cipher, pageSize)),
-                      Configs::Priority::Highest);
+    m_pool->setConfig(Core::cipherConfig(cipher, pageSize), Configs::Priority::Highest);
 }
 
 void Database::setTokenizes(const std::list<std::string> &tokenizeNames)
 {
-    m_pool->setConfig(std::shared_ptr<Config>(new TokenizeConfig(tokenizeNames)),
-                      Configs::Priority::Higher);
+    m_pool->setConfig(Core::tokenizeConfig(tokenizeNames), Configs::Priority::Higher);
 }
 
-void Database::setSQLTrace(const SQLNotification &onSQLTraced)
+void Database::setNotification(const SQLNotification &onSQLTraced)
 {
     m_pool->setConfig(std::shared_ptr<Config>(new SQLTraceConfig("WCDBSQLTrace", onSQLTraced)),
                       Configs::Priority::Highest);
 }
 
-void Database::setPerformanceTrace(const PerformanceNotification &onPerformanceTraced)
+void Database::setNotification(const PerformanceNotification &onPerformanceTraced)
 {
     m_pool->setConfig(std::shared_ptr<Config>(new PerformanceTraceConfig(
                       "WCDBPerformanceTrace", onPerformanceTraced)),
@@ -312,9 +310,9 @@ const std::string &Database::getFactoryDirectory() const
 void Database::autoBackup(bool flag)
 {
     if (flag) {
-        setConfig(BackupConfig::shared(), Configs::Priority::Low);
+        setConfig(Core::backupConfig(), Configs::Priority::Low);
     } else {
-        removeConfig(BackupConfig::name);
+        removeConfig(Core::backupConfig()->name);
     }
 }
 

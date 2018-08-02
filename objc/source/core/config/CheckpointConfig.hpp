@@ -22,34 +22,27 @@
 #define CheckpointConfig_hpp
 
 #include <WCDB/Config.hpp>
-#include <WCDB/TimedQueue.hpp>
 
 #pragma GCC visibility push(hidden)
 
 namespace WCDB {
 
+class CheckpointQueue;
+
 class CheckpointConfig : public Config {
 public:
-    static const std::shared_ptr<Config> &shared();
-
-    CheckpointConfig();
-    ~CheckpointConfig();
+    CheckpointConfig(const std::string &name, CheckpointQueue *queue);
     bool invoke(Handle *handle) override;
 
-    static constexpr const char *name = "WCDBCheckpoint";
     static constexpr const int framesForPassive = 100;
     static constexpr const int framesForFull = 10 * 1024;
 
 protected:
-    bool onTimed(const std::string &path, const int &pages) const;
     bool onCommitted(Handle *handle, int pages);
 
-    void loop();
-
-    const StatementPragma m_checkpointPassive;
     const StatementPragma m_checkpointTruncate;
-    mutable TimedQueue<std::string, int> m_timedQueue;
-    std::once_flag m_once;
+
+    CheckpointQueue *m_queue;
 };
 
 } //namespace WCDB

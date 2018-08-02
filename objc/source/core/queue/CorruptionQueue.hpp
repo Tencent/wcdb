@@ -18,27 +18,29 @@
  * limitations under the License.
  */
 
-#ifndef CipherConfig_hpp
-#define CipherConfig_hpp
+#ifndef CorruptionQueue_hpp
+#define CorruptionQueue_hpp
 
-#include <WCDB/Config.hpp>
-
-#pragma GCC visibility push(hidden)
+#include <WCDB/AsyncQueue.hpp>
+#include <WCDB/Lock.hpp>
+#include <mutex>
+#include <set>
 
 namespace WCDB {
 
-class CipherConfig : public Config {
+class CorruptionQueue : public AsyncQueue {
 public:
-    CipherConfig(const std::string &name, const UnsafeData &cipher, int pageSize);
-    bool invoke(Handle *handle) override;
+    using AsyncQueue::AsyncQueue;
+    void put(const std::string &path);
 
 protected:
-    Data m_key;
-    int m_pageSize;
+    void loop() override;
+
+    std::mutex m_mutex;
+    std::condition_variable m_cond;
+    std::set<std::string> m_paths;
 };
 
 } //namespace WCDB
 
-#pragma GCC visibility pop
-
-#endif /* CipherConfig_hpp */
+#endif /* CorruptionQueue_hpp */

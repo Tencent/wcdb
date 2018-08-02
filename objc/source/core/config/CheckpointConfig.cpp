@@ -19,85 +19,42 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/CheckpointConfig.hpp>
-#include <WCDB/Database.hpp>
-#include <WCDB/Dispatch.hpp>
+#include <WCDB/Core.h>
 #include <mutex>
 
 namespace WCDB {
 
 static_assert(CheckpointConfig::framesForPassive < CheckpointConfig::framesForFull, "");
 
-const std::shared_ptr<Config> &CheckpointConfig::shared()
-{
-    static const std::shared_ptr<Config> *s_shared
-    = new std::shared_ptr<Config>(new CheckpointConfig);
-    return *s_shared;
-}
-
-CheckpointConfig::CheckpointConfig()
-: Config(CheckpointConfig::name)
+CheckpointConfig::CheckpointConfig(const std::string& name, CheckpointQueue* queue)
+: Config(name)
 , m_checkpointTruncate(StatementPragma().pragma(Pragma::walCheckpoint()).to("TRUNCATE"))
-, m_checkpointPassive(StatementPragma().pragma(Pragma::walCheckpoint()).to("PASSIVE"))
+, m_queue(queue)
 {
-    Dispatch::async("com.Tencent.WCDB.Checkpoint", std::bind(&CheckpointConfig::loop, this));
+    WCTInnerAssert(m_queue != nullptr);
 }
 
-CheckpointConfig::~CheckpointConfig()
-{
-    m_timedQueue.stop();
-    m_timedQueue.waitUntilDone();
-}
-
-bool CheckpointConfig::invoke(Handle *handle)
+bool CheckpointConfig::invoke(Handle* handle)
 {
     handle->setNotificationWhenCommitted(
-    0,
-    "checkpoint",
-    std::bind(&CheckpointConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
+    0, name, std::bind(&CheckpointConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
     return true;
 }
 
-bool CheckpointConfig::onCommitted(Handle *handle, int frames)
+bool CheckpointConfig::onCommitted(Handle* handle, int frames)
 {
     if (frames > framesForPassive) {
         if (frames > framesForFull) {
             if (handle->execute(m_checkpointTruncate)) {
-                m_timedQueue.remove(handle->path);
+                m_queue->remove(handle->path);
             }
         } else {
-            m_timedQueue.reQueue(handle->path, 1.0, frames);
+            m_queue->put(handle->path, 1.0, frames);
         }
     } else {
-        m_timedQueue.reQueue(handle->path, 10.0, frames);
+        m_queue->put(handle->path, 10.0, frames);
     }
     return true;
-}
-
-void CheckpointConfig::loop()
-{
-    m_timedQueue.loop(std::bind(
-    &CheckpointConfig::onTimed, this, std::placeholders::_1, std::placeholders::_2));
-}
-
-bool CheckpointConfig::onTimed(const std::string &path, const int &frames) const
-{
-    static std::atomic<bool> *s_exit = new std::atomic<bool>(false);
-    atexit([]() { s_exit->store(true); });
-    if (s_exit->load()) {
-        return true;
-    }
-
-    std::shared_ptr<Database> database = Database::databaseWithExistingPath(path);
-    if (database == nullptr || !database->isOpened()) {
-        return true;
-    }
-    if (database->execute(m_checkpointPassive)) {
-        return true;
-    }
-    // retry after 10.0s if failed
-    m_timedQueue.reQueue(path, 10.0, frames);
-    return false;
 }
 
 } //namespace WCDB

@@ -29,7 +29,7 @@ namespace WCDB {
 std::shared_ptr<Database> MigrationDatabase::databaseWithExistingTag(const Tag &tag)
 {
     std::shared_ptr<Database> database(
-    new MigrationDatabase(HandlePools::defaultPools()->getExistingPool(tag)));
+    new MigrationDatabase(Core::handlePools()->getExistingPool(tag)));
     if (database && static_cast<MigrationDatabase *>(database.get())->isValid()) {
         return database;
     }
@@ -40,7 +40,7 @@ std::shared_ptr<Database>
 MigrationDatabase::databaseWithExistingPath(const std::string &path)
 {
     std::shared_ptr<Database> database(
-    new MigrationDatabase(HandlePools::defaultPools()->getExistingPool(path)));
+    new MigrationDatabase(Core::handlePools()->getExistingPool(path)));
     if (database && static_cast<MigrationDatabase *>(database.get())->isValid()) {
         return database;
     }
@@ -52,7 +52,7 @@ MigrationDatabase::generateHandlePool(const std::string &path,
                                       const std::list<std::shared_ptr<MigrationInfo>> &infos)
 {
     std::shared_ptr<HandlePool> pool
-    = MigrationHandlePool::pool(path, Configs::default_(), infos);
+    = MigrationHandlePool::pool(path, Core::configs(), infos);
     if (pool) {
         MigrationHandlePool *migrationHandlePool
         = static_cast<MigrationHandlePool *>(pool.get());
@@ -68,7 +68,7 @@ std::shared_ptr<Database>
 MigrationDatabase::databaseWithPath(const std::string &path,
                                     const std::list<std::shared_ptr<MigrationInfo>> &infos)
 {
-    RecyclableHandlePool pool = HandlePools::defaultPools()->getOrGeneratePool(
+    RecyclableHandlePool pool = Core::handlePools()->getOrGeneratePool(
     path, std::bind(&MigrationDatabase::generateHandlePool, std::placeholders::_1, infos));
     WCTRemedialAssert(
     pool == nullptr || dynamic_cast<MigrationHandlePool *>(pool.getHandlePool()) != nullptr,

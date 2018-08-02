@@ -39,7 +39,8 @@ public:
         Low = 100,
     };
 
-    static std::shared_ptr<Configs> default_();
+    Configs(const OrderedUniqueList<std::string, std::shared_ptr<Config>> &list);
+    Configs(OrderedUniqueList<std::string, std::shared_ptr<Config>> &&list);
 
     std::shared_ptr<Configs>
     configsBySettingConfig(const std::shared_ptr<Config> &config,
@@ -51,9 +52,6 @@ public:
     bool equal(const std::shared_ptr<Configs> &configs) const;
 
 protected:
-    Configs();
-    Configs(const OrderedUniqueList<std::string, std::shared_ptr<Config>> &list);
-    Configs(OrderedUniqueList<std::string, std::shared_ptr<Config>> &&list);
     OrderedUniqueList<std::string, std::shared_ptr<Config>> m_list;
 };
 

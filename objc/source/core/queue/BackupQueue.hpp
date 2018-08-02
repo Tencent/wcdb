@@ -18,27 +18,32 @@
  * limitations under the License.
  */
 
-#ifndef CipherConfig_hpp
-#define CipherConfig_hpp
+#ifndef BackupQueue_hpp
+#define BackupQueue_hpp
 
-#include <WCDB/Config.hpp>
-
-#pragma GCC visibility push(hidden)
+#include <WCDB/AsyncQueue.hpp>
+#include <WCDB/Lock.hpp>
+#include <WCDB/TimedQueue.hpp>
+#include <map>
 
 namespace WCDB {
 
-class CipherConfig : public Config {
+class BackupQueue : public AsyncQueue {
 public:
-    CipherConfig(const std::string &name, const UnsafeData &cipher, int pageSize);
-    bool invoke(Handle *handle) override;
+    using AsyncQueue::AsyncQueue;
+    ~BackupQueue();
+    void put(const std::string& path, double delay, int frames);
+    int getBackedUpFrames(const std::string& path);
 
 protected:
-    Data m_key;
-    int m_pageSize;
+    bool onTimed(const std::string& path, const int& frames);
+    void loop() override;
+
+    TimedQueue<std::string, int> m_timedQueue;
+    SharedLock m_lock;
+    std::map<std::string, int> m_backedUp;
 };
 
-} //namespace WCDB
+} // namespace WCDB
 
-#pragma GCC visibility pop
-
-#endif /* CipherConfig_hpp */
+#endif /* BackupQueue_hpp */

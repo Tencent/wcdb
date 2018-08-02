@@ -31,30 +31,25 @@ WCTTokenizer const WCTTokenizerWCDB = @"WCDB";
 
 @implementation WCTDatabase (FTS)
 
-+ (void)initialize
-{
-    if (self == [WCTDatabase self]) {
-        [self lazyEnrollTokenizer];
-    }
-}
-
 + (void)lazyEnrollTokenizer
 {
     static std::atomic<bool> *s_enrolled = new std::atomic<bool>(false);
     if (!s_enrolled->load()) {
-        WCDB::FTS::Modules::shared()->addAddress("WCDB", WCDB::FTS::Module<void, WCTCursorInfo>::address());
+        WCDB::Core::modules()->addAddress("WCDB", WCDB::FTS::Module<void, WCTCursorInfo>::address());
         s_enrolled->store(true);
     }
 }
 
 - (void)setTokenizer:(NSString *)tokenizerName
 {
+    [self.class lazyEnrollTokenizer];
     WCTRemedialAssert(tokenizerName, "Tokenizer name can't be null.", return;)
     _database->setTokenizes({ tokenizerName.cppString });
 }
 
 - (void)setTokenizers:(NSArray<NSString *> *)tokenizerNames
 {
+    [self.class lazyEnrollTokenizer];
     WCTRemedialAssert(tokenizerNames, "Tokenizers can't be null.", return;)
     std::list<std::string>
     theTokenizeNames;

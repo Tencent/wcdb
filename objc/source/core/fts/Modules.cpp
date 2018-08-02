@@ -18,35 +18,28 @@
  * limitations under the License.
  */
 
-#ifndef CorruptionQueue_hpp
-#define CorruptionQueue_hpp
-
-#include <WCDB/Lock.hpp>
-#include <mutex>
-#include <set>
+#include <WCDB/Assertion.hpp>
+#include <WCDB/Error.hpp>
+#include <WCDB/Modules.hpp>
 
 namespace WCDB {
 
-class CorruptionQueue {
-public:
-    static CorruptionQueue *shared();
+namespace FTS {
 
-    CorruptionQueue(const CorruptionQueue &) = delete;
-    CorruptionQueue &operator=(const CorruptionQueue &) = delete;
+void Modules::addAddress(const std::string &name, unsigned char *address)
+{
+    LockGuard lockGuard(m_lock);
+    m_addresses[name] = UnsafeData(address, sizeof(unsigned char *));
+}
 
-    void put(const std::string &path);
+const UnsafeData &Modules::getAddress(const std::string &name) const
+{
+    SharedLockGuard lockGuard(m_lock);
+    auto iter = m_addresses.find(name);
+    WCTAssert(iter != m_addresses.end(), "Tokenize name is not registered.");
+    return iter->second;
+}
 
-protected:
-    CorruptionQueue();
+} // namespace FTS
 
-    std::mutex m_mutex;
-    std::condition_variable m_cond;
-    std::set<std::string> m_paths;
-
-    void addPath(const std::string &path);
-    void loop();
-};
-
-} //namespace WCDB
-
-#endif /* CorruptionQueue_hpp */
+} // namespace WCDB

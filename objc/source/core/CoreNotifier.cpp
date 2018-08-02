@@ -18,20 +18,14 @@
  * limitations under the License.
  */
 
-#include <WCDB/CoreNotifier.hpp>
-#include <WCDB/CorruptionQueue.hpp>
-#include <WCDB/HandlePools.hpp>
+#include <WCDB/Core.h>
+#include <WCDB/String.hpp>
 #include <iostream>
 
 namespace WCDB {
 
-CoreNotifier* CoreNotifier::shared()
-{
-    static CoreNotifier* s_coreNotifier = new CoreNotifier;
-    return s_coreNotifier;
-}
-
-CoreNotifier::CoreNotifier() : m_callback(CoreNotifier::logger)
+CoreNotifier::CoreNotifier()
+: m_callback(CoreNotifier::logger), m_corruptionQueue(nullptr)
 {
     Notifier::shared()->setNotification(
     std::bind(&CoreNotifier::notify, this, std::placeholders::_1));
@@ -43,6 +37,12 @@ void CoreNotifier::setNotification(const Callback& callback)
     m_callback = callback;
 }
 
+void CoreNotifier::setCorruptionQueue(CorruptionQueue* queue)
+{
+    LockGuard lockGuard(m_lock);
+    m_corruptionQueue = queue;
+}
+
 void CoreNotifier::notify(const Error& error)
 {
     Error processed = error;
@@ -50,13 +50,16 @@ void CoreNotifier::notify(const Error& error)
     const auto& stringInfos = error.infos.getStrings();
     auto iter = stringInfos.find("Path");
     if (iter != stringInfos.end()) {
-        auto pool = HandlePools::defaultPools()->getExistingPool(iter->second);
+        auto pool = Core::handlePools()->getExistingPool(iter->second);
         if (pool != nullptr) {
             if (pool->getTag() != Tag::invalid()) {
                 processed.infos.set("Tag", pool->getTag());
             }
             if (error.isCorruption()) {
-                CorruptionQueue::shared()->put(iter->second);
+                SharedLockGuard lockGuard(m_lock);
+                if (m_corruptionQueue) {
+                    m_corruptionQueue->put(iter->second);
+                }
             }
         }
     }
@@ -65,6 +68,25 @@ void CoreNotifier::notify(const Error& error)
     if (m_callback) {
         m_callback(processed);
     }
+}
+
+void CoreNotifier::globalLogger(void* unused, int code, const char* message)
+{
+    Error error;
+    switch (code) {
+    case SQLITE_WARNING:
+        error.level = Error::Level::Warning;
+        break;
+    case SQLITE_NOTICE:
+        error.level = Error::Level::Ignore;
+        break;
+    default:
+        error.level = Error::Level::Debug;
+        break;
+    }
+    error.setSQLiteCode(code);
+    error.message = message ? message : String::empty();
+    Notifier::shared()->notify(error);
 }
 
 void CoreNotifier::logger(const Error& error)

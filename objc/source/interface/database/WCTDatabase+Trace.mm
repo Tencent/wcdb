@@ -34,12 +34,12 @@
             block(nsError);
         };
     }
-    WCDB::CoreNotifier::shared()->setNotification(callback);
+    WCDB::Core::notifier()->setNotification(callback);
 }
 
 + (void)resetGlobalTraceError
 {
-    WCDB::CoreNotifier::shared()->setNotification(WCDB::CoreNotifier::logger);
+    WCDB::Core::notifier()->setNotification(WCDB::CoreNotifier::logger);
 }
 
 + (void)globalTracePerformance:(WCTPerformanceTraceBlock)trace
@@ -55,7 +55,7 @@
             trace(array, (NSUInteger) cost);
         };
     }
-    static_cast<WCDB::SharedPerformanceTraceConfig *>(WCDB::SharedPerformanceTraceConfig::shared().get())->setPerformanceTrace(callback);
+    WCDB::Core::globalPerformanceTraceConfig()->setNotification(callback);
 }
 
 + (void)globalTraceSQL:(WCTSQLTraceBlock)trace
@@ -66,7 +66,7 @@
             trace([NSString stringWithCppString:sql]);
         };
     }
-    static_cast<WCDB::SharedSQLTraceConfig *>(WCDB::SharedSQLTraceConfig::shared().get())->setSQLTrace(callback);
+    WCDB::Core::globalSQLTraceConfig()->setNotification(callback);
 }
 
 - (void)tracePerformance:(WCTPerformanceTraceBlock)trace
@@ -82,7 +82,7 @@
             trace(array, (NSUInteger) cost);
         };
     }
-    _database->setPerformanceTrace(callback);
+    _database->setNotification(callback);
 }
 
 - (void)traceSQL:(WCTSQLTraceBlock)trace
@@ -93,7 +93,7 @@
             trace([NSString stringWithCppString:sql]);
         };
     }
-    _database->setSQLTrace(callback);
+    _database->setNotification(callback);
 }
 
 @end

@@ -18,27 +18,35 @@
  * limitations under the License.
  */
 
-#ifndef CipherConfig_hpp
-#define CipherConfig_hpp
-
-#include <WCDB/Config.hpp>
-
-#pragma GCC visibility push(hidden)
+#include <WCDB/Abstract.h>
+#include <sqlcipher/sqlite3.h>
 
 namespace WCDB {
 
-class CipherConfig : public Config {
-public:
-    CipherConfig(const std::string &name, const UnsafeData &cipher, int pageSize);
-    bool invoke(Handle *handle) override;
+void GlobalConfig::enableMultithread()
+{
+    sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
+}
 
-protected:
-    Data m_key;
-    int m_pageSize;
-};
+void GlobalConfig::setMemoryMapSize(int64_t defaultSizeLimit, int64_t maximumAllowedSizeLimit)
+{
+    sqlite3_config(SQLITE_CONFIG_MMAP_SIZE, defaultSizeLimit, maximumAllowedSizeLimit);
+}
 
-} //namespace WCDB
+void GlobalConfig::enableMemoryStatus(bool enable)
+{
+    sqlite3_config(SQLITE_CONFIG_MEMSTATUS, enable);
+}
 
-#pragma GCC visibility pop
+void GlobalConfig::setNotificationForLog(const Log& log)
+{
+    sqlite3_config(SQLITE_CONFIG_LOG, log, nullptr);
+}
 
-#endif /* CipherConfig_hpp */
+void GlobalConfig::hookVFSOpen(const VFSOpen& vfsOpen)
+{
+    sqlite3_vfs* vfs = sqlite3_vfs_find(nullptr);
+    vfs->xSetSystemCall(vfs, "open", (void (*)(void)) vfsOpen);
+}
+
+} // namespace WCDB

@@ -27,16 +27,21 @@
 
 namespace WCDB {
 
+namespace FTS {
+class Modules;
+}
+
 class TokenizeConfig : public Config {
 public:
-    TokenizeConfig(const std::list<std::string> &names);
-    bool invoke(Handle *handle) override;
-
-    static constexpr const char *name = "WCDBTokenize";
+    TokenizeConfig(const std::string& name,
+                   const std::list<std::string>& tokenizeNames,
+                   FTS::Modules* modules);
+    bool invoke(Handle* handle) override;
 
 protected:
+    const FTS::Modules* m_modules;
     const StatementSelect m_fts3Tokenizer;
-    const std::list<std::string> m_names;
+    const std::list<std::string> m_tokenizeNames;
 };
 
 } //namespace WCDB

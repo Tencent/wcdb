@@ -28,28 +28,24 @@ namespace WCDB {
 
 class SQLTraceConfig : public Config {
 public:
-    SQLTraceConfig(const std::string &name, const Handle::SQLNotification &trace);
+    using Notification = Handle::SQLNotification;
+    SQLTraceConfig(const std::string &name, const Notification &notification);
 
     bool invoke(Handle *handle) override;
 
 protected:
-    Handle::SQLNotification m_sqlTrace;
+    Notification m_notification;
 };
 
-class SharedSQLTraceConfig : public SQLTraceConfig {
+class ShareableSQLTraceConfig : public SQLTraceConfig {
 public:
-    static const std::shared_ptr<Config> &shared();
+    ShareableSQLTraceConfig(const std::string &name);
 
     bool invoke(Handle *handle) override;
 
-    void setSQLTrace(const Handle::SQLNotification &trace);
-
-    SharedSQLTraceConfig() = delete;
-    SharedSQLTraceConfig(const SharedSQLTraceConfig &) = delete;
-    SharedSQLTraceConfig &operator=(const SharedSQLTraceConfig &) = delete;
+    void setNotification(const Notification &notification);
 
 protected:
-    using SQLTraceConfig::SQLTraceConfig;
     mutable SharedLock m_lock;
 };
 

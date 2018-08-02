@@ -23,31 +23,29 @@
 
 namespace WCDB {
 
-SQLTraceConfig::SQLTraceConfig(const std::string &name, const Handle::SQLNotification &trace)
-: Config(name), m_sqlTrace(trace)
+SQLTraceConfig::SQLTraceConfig(const std::string &name, const Notification &notification)
+: Config(name), m_notification(notification)
 {
 }
 
 bool SQLTraceConfig::invoke(Handle *handle)
 {
-    handle->setNotificationWhenSQLTraced(name, m_sqlTrace);
+    handle->setNotificationWhenSQLTraced(name, m_notification);
     return true;
 }
 
-const std::shared_ptr<Config> &SharedSQLTraceConfig::shared()
+ShareableSQLTraceConfig::ShareableSQLTraceConfig(const std::string &name)
+: SQLTraceConfig(name, nullptr)
 {
-    static const std::shared_ptr<Config> *s_shared
-    = new std::shared_ptr<Config>(new SharedSQLTraceConfig("WCDBGlobalSQLTrace", nullptr));
-    return *s_shared;
 }
 
-void SharedSQLTraceConfig::setSQLTrace(const Handle::SQLNotification &trace)
+void ShareableSQLTraceConfig::setNotification(const Notification &notification)
 {
     LockGuard lockGuard(m_lock);
-    m_sqlTrace = trace;
+    m_notification = notification;
 }
 
-bool SharedSQLTraceConfig::invoke(Handle *handle)
+bool ShareableSQLTraceConfig::invoke(Handle *handle)
 {
     SharedLockGuard lockGuard(m_lock);
     return SQLTraceConfig::invoke(handle);

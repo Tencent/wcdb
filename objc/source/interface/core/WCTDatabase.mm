@@ -27,6 +27,13 @@
 
 @implementation WCTDatabase
 
++ (void)initialize
+{
+    //    WCDB::GlobalConfig::hookVFSOpen([](const char *, int, int)->int {
+    //        return 0;
+    //    });
+}
+
 - (instancetype)initWithPath:(NSString *)path
 {
     return [super initWithDatabase:WCDB::Database::databaseWithPath(path.cppString)];

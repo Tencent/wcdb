@@ -73,7 +73,7 @@ typedef void (^WCTSQLTraceBlock)(NSString *);
  @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
  @param trace trace
  @see WCTPerformanceTraceBlock
- @see [WCTDatabase setPerformanceTrace:]
+ @see [WCTDatabase setNotification:]
  */
 + (void)globalTracePerformance:(nullable WCTPerformanceTraceBlock)trace;
 

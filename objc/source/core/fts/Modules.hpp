@@ -18,34 +18,29 @@
  * limitations under the License.
  */
 
-#ifndef SQLiteGlobal_hpp
-#define SQLiteGlobal_hpp
+#ifndef Modules_hpp
+#define Modules_hpp
 
-#include <functional>
-
-#pragma GCC visibility push(hidden)
+#include <WCDB/Abstract.h>
+#include <WCDB/UnsafeData.hpp>
 
 namespace WCDB {
 
-class SQLiteGlobal {
-public:
-    static SQLiteGlobal *shared();
+namespace FTS {
 
-    void setNotificationWhenFileCreated(const std::function<void(const char *)> &onFileCreated);
+class Modules {
+public:
+    void addAddress(const std::string &name, unsigned char *address);
+
+    const UnsafeData &getAddress(const std::string &name) const;
 
 protected:
-    SQLiteGlobal();
-    SQLiteGlobal(const SQLiteGlobal &) = delete;
-    SQLiteGlobal &operator=(const SQLiteGlobal &) = delete;
-
-    static int vfsOpen(const char *zFile, int flags, int mode);
-    static void log(void *userInfo, int code, const char *message);
-
-    std::function<void(const char *)> m_onFileCreated;
+    std::map<std::string, UnsafeData> m_addresses;
+    mutable SharedLock m_lock;
 };
 
-} //namespace WCDB
+} // namespace FTS
 
-#pragma GCC visibility pop
+} // namespace WCDB
 
-#endif /* SQLiteGlobal_hpp */
+#endif /* Modules_hpp */

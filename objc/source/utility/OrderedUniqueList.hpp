@@ -34,6 +34,15 @@ public:
         Value value;
     };
 
+    OrderedUniqueList() {}
+
+    OrderedUniqueList(std::list<Element>&& elements)
+    {
+        for (auto&& element : elements) {
+            insert(element.order, element.key, std::move(element));
+        }
+    }
+
     void insert(const Order& order, const Key& key, const Value& value)
     {
         Element element;
