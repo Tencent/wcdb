@@ -90,21 +90,6 @@ CoreNotifier* Core::notifier()
     return &shared()->m_notifier;
 }
 
-CorruptionQueue* Core::corruptionQueue()
-{
-    return &shared()->m_corruptionQueue;
-}
-
-CheckpointQueue* Core::checkpointQueue()
-{
-    return &shared()->m_checkpointQueue;
-}
-
-BackupQueue* Core::backupQueue()
-{
-    return &shared()->m_backupQueue;
-}
-
 const std::shared_ptr<Config>& Core::backupConfig()
 {
     return shared()->m_backupConfig;

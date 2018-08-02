@@ -63,10 +63,6 @@ public:
     static FTS::Modules* modules();
     static CoreNotifier* notifier();
 
-    static CorruptionQueue* corruptionQueue();
-    static CheckpointQueue* checkpointQueue();
-    static BackupQueue* backupQueue();
-
     static ShareableSQLTraceConfig* globalSQLTraceConfig();
     static ShareablePerformanceTraceConfig* globalPerformanceTraceConfig();
 
