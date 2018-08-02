@@ -200,9 +200,7 @@ bool MigrationDatabase::stepMigration(bool &done)
         }
         if (setting->markAsMigrated(info->targetTable)) {
             //schema changed
-            setConfig(Core::MigrationConfigName,
-                      Core::migrationConfig(setting),
-                      Configs::Priority::Higher);
+            m_pool->markConfigsAsDirty();
         }
         done = setting->isMigrated();
     }

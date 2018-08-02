@@ -73,6 +73,7 @@ public:
                    const std::shared_ptr<Config> &config,
                    int priority = Configs::Priority::Default);
     void removeConfig(const std::string &name);
+    void markConfigsAsDirty();
 
 protected:
     std::shared_ptr<Configs> m_configs;

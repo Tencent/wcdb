@@ -106,6 +106,11 @@ void HandlePool::removeConfig(const std::string &name)
     m_configs = m_configs->configsByRemovingConfig(name);
 }
 
+void HandlePool::markConfigsAsDirty()
+{
+    m_configs.reset(new Configs(*m_configs.get()));
+}
+
 #pragma mark - Handle
 int HandlePool::hardwareConcurrency()
 {
