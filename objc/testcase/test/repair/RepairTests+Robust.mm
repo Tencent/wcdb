@@ -164,9 +164,9 @@
 
     double retrievedScore = (double) retrieved / total;
     XCTAssertGreaterThanOrEqual(score, 1.0 - ratio * 2);
-    XCTAssertLessThanOrEqual(score, 1.0 - ratio);
+    XCTAssertLessThanOrEqual(score, 1.0);
     XCTAssertGreaterThanOrEqual(retrievedScore, 1.0 - ratio * 2);
-    XCTAssertLessThanOrEqual(retrievedScore, 1.0 - ratio);
+    XCTAssertLessThanOrEqual(retrievedScore, 1.0);
 
     NSLog(@"Carpet Bombing Retrieving Result: Attack Ratio %f, Retrieve Score %f, retrieved %f", attackRatio, score, retrievedScore);
 }
