@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/PerformanceTraceConfig.hpp>
+#include <WCDB/String.hpp>
 
 namespace WCDB {
 
@@ -29,7 +30,8 @@ PerformanceTraceConfig::PerformanceTraceConfig(const Notification &notification)
 
 bool PerformanceTraceConfig::invoke(Handle *handle)
 {
-    handle->setNotificationWhenPerformanceTraced("PerformanceTrace", m_notification);
+    handle->setNotificationWhenPerformanceTraced(
+    String::formatted("PerformanceTrace-%p", this), m_notification);
     return true;
 }
 

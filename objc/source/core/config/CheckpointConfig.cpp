@@ -20,6 +20,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Core.h>
+#include <WCDB/String.hpp>
 #include <mutex>
 
 namespace WCDB {
@@ -38,7 +39,7 @@ bool CheckpointConfig::invoke(Handle* handle)
 {
     handle->setNotificationWhenCommitted(
     0,
-    "Checkpoint",
+    String::formatted("Checkpoint-%p", this),
     std::bind(&CheckpointConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
     return true;
 }

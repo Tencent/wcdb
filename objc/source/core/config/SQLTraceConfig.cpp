@@ -20,6 +20,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/SQLTraceConfig.hpp>
+#include <WCDB/String.hpp>
 
 namespace WCDB {
 
@@ -30,7 +31,7 @@ SQLTraceConfig::SQLTraceConfig(const Notification &notification)
 
 bool SQLTraceConfig::invoke(Handle *handle)
 {
-    handle->setNotificationWhenSQLTraced("SQLTrace", m_notification);
+    handle->setNotificationWhenSQLTraced(String::formatted("SQLTrace-%p", this), m_notification);
     return true;
 }
 

@@ -20,6 +20,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Core.h>
+#include <WCDB/String.hpp>
 
 namespace WCDB {
 
@@ -35,13 +36,13 @@ bool BackupConfig::invoke(Handle *handle)
     }
     bool result = handle->setNotificationWhenCheckpoint(
     0,
-    "Backup",
+    String::formatted("Backup-%p", this),
     std::bind(&BackupConfig::willCheckpoint, this, std::placeholders::_1, std::placeholders::_2));
     handle->rollbackTransaction();
     if (result) {
         handle->setNotificationWhenCommitted(
         0,
-        "Backup",
+        String::formatted("Backup-%p", this),
         std::bind(&BackupConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
     }
     return result;
