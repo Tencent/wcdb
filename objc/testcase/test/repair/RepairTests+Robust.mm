@@ -168,7 +168,7 @@
     XCTAssertGreaterThanOrEqual(retrievedScore, 1.0 - ratio * 2);
     XCTAssertLessThanOrEqual(retrievedScore, 1.0);
 
-    NSLog(@"Carpet Bombing Retrieving Result: Attack Ratio %f, Retrieve Score %f, retrieved %f", attackRatio, score, retrievedScore);
+    NSLog(@"Carpet Bombing Retrieving Result: Attack Ratio %f, Retrieve Score %f, retrieved %f. Repair Rate: %.2f%%", attackRatio, score, retrievedScore, score / (1 - attackRatio) * 100);
 }
 
 - (BOOL)carpetBombing
