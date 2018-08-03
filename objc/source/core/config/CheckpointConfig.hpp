@@ -32,12 +32,15 @@ class CheckpointQueue;
 class CheckpointConfig : public Config {
 public:
     CheckpointConfig(CheckpointQueue *queue);
+
     bool invoke(Handle *handle) override;
+    bool uninvoke(Handle *handle) override;
 
     static constexpr const int framesForPassive = 100;
     static constexpr const int framesForFull = 10 * 1024;
 
 protected:
+    std::string identifier() const;
     bool onCommitted(Handle *handle, int pages);
 
     const StatementPragma m_checkpointTruncate;

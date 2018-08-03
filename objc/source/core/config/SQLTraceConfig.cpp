@@ -31,8 +31,19 @@ SQLTraceConfig::SQLTraceConfig(const Notification &notification)
 
 bool SQLTraceConfig::invoke(Handle *handle)
 {
-    handle->setNotificationWhenSQLTraced(String::formatted("SQLTrace-%p", this), m_notification);
+    handle->setNotificationWhenSQLTraced(identifier(), m_notification);
     return true;
+}
+
+bool SQLTraceConfig::uninvoke(Handle *handle)
+{
+    handle->setNotificationWhenSQLTraced(identifier(), nullptr);
+    return true;
+}
+
+std::string SQLTraceConfig::identifier() const
+{
+    return String::formatted("SQLTrace-%p", this);
 }
 
 ShareableSQLTraceConfig::ShareableSQLTraceConfig() : SQLTraceConfig(nullptr)

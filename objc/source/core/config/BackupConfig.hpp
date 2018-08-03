@@ -32,12 +32,15 @@ class BackupQueue;
 class BackupConfig : public Config {
 public:
     BackupConfig(BackupQueue* queue);
+
     bool invoke(Handle* handle) override;
+    bool uninvoke(Handle* handle) override;
 
     static constexpr const int framesIntervalForAutoBackup = 300;
     static constexpr const int framesIntervalForDelayAutoBackup = 100;
 
 protected:
+    std::string identifier() const;
     bool onCommitted(Handle* handle, int frames);
     bool willCheckpoint(Handle* handle, int frames);
 

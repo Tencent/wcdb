@@ -42,15 +42,13 @@ public:
     Configs(const OrderedUniqueList<std::string, std::shared_ptr<Config>> &list);
     Configs(OrderedUniqueList<std::string, std::shared_ptr<Config>> &&list);
 
-    std::shared_ptr<Configs>
-    configsBySettingConfig(const std::string &name,
-                           const std::shared_ptr<Config> &config,
-                           int priority = Priority::Default) const;
-    std::shared_ptr<Configs> configsByRemovingConfig(const std::string &names) const;
+    void insert(const std::string &name,
+                const std::shared_ptr<Config> &config,
+                int priority = Priority::Default);
+    void remove(const std::string &name);
 
     bool invoke(Handle *handle);
-
-    bool equal(const std::shared_ptr<Configs> &configs) const;
+    bool uninvoke(Handle *handle);
 
 protected:
     OrderedUniqueList<std::string, std::shared_ptr<Config>> m_list;

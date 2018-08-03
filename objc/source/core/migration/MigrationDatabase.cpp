@@ -118,8 +118,9 @@ bool MigrationDatabase::stepMigration(bool &done)
         }
         bool isMigrated = false;
         // Since a checkpoint will cause too much time and may result in race condition, it shoule be disabled when migrating. Ones can call checkpoint manually or wait for the async checkpoint.
+        constexpr const char *notificationName = "migration";
         handle->setNotificationWhenCommitted(
-        std::numeric_limits<int>::min(), "migration", [](Handle *, int) -> bool {
+        std::numeric_limits<int>::min(), notificationName, [](Handle *, int) -> bool {
             return false;
         });
         bool committed = handle->runTransaction(
@@ -184,7 +185,7 @@ bool MigrationDatabase::stepMigration(bool &done)
             }
             return result;
         });
-        handle->unsetNotificationWhenCommitted("migration");
+        handle->unsetNotificationWhenCommitted(notificationName);
         migratedEve = migratedEve && committed;
         if (!isMigrated && !migratedEve) {
             return committed;
@@ -200,7 +201,9 @@ bool MigrationDatabase::stepMigration(bool &done)
         }
         if (setting->markAsMigrated(info->targetTable)) {
             //schema changed
-            m_pool->markConfigsAsDirty();
+            setConfig(Core::MigrationConfigName,
+                      Core::migrationConfig(setting),
+                      Configs::Priority::Higher);
         }
         done = setting->isMigrated();
     }

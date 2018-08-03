@@ -30,9 +30,19 @@ PerformanceTraceConfig::PerformanceTraceConfig(const Notification &notification)
 
 bool PerformanceTraceConfig::invoke(Handle *handle)
 {
-    handle->setNotificationWhenPerformanceTraced(
-    String::formatted("PerformanceTrace-%p", this), m_notification);
+    handle->setNotificationWhenPerformanceTraced(identifier(), m_notification);
     return true;
+}
+
+bool PerformanceTraceConfig::uninvoke(Handle *handle)
+{
+    handle->setNotificationWhenPerformanceTraced(identifier(), nullptr);
+    return true;
+}
+
+std::string PerformanceTraceConfig::identifier() const
+{
+    return String::formatted("PerformanceTrace-%p", this);
 }
 
 ShareablePerformanceTraceConfig::ShareablePerformanceTraceConfig()

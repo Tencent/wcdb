@@ -37,7 +37,6 @@ public:
     static std::shared_ptr<ConfiguredHandle>
     configuredHandle(const std::shared_ptr<Handle> &handle);
 
-    bool configured(const std::shared_ptr<Configs> &configs) const;
     bool configure(const std::shared_ptr<Configs> &configs);
 
     Handle *getHandle() const;

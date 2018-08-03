@@ -30,6 +30,7 @@ namespace WCDB {
 class Config {
 public:
     virtual bool invoke(Handle *handle) = 0;
+    virtual bool uninvoke(Handle *handle) { return true; };
 };
 
 } //namespace WCDB

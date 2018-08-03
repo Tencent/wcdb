@@ -47,6 +47,7 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
 }
 
 - (void)setConfig:(WCTConfigBlock)nsInvocation
+ withUninvocation:(WCTConfigBlock)nsUninvocation
           forName:(NSString *)name
      withPriority:(int)priority
 {
@@ -58,21 +59,23 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
         [unsafeHandle finalizeDatabase];
         return result;
     };
-    _database->setConfig(name.cppString, WCDB::Core::customConfig(invocation), priority);
+    WCDB::CustomConfig::Invocation uninvocation = nullptr;
+    if (nsUninvocation) {
+        uninvocation = [nsUninvocation, self](WCDB::Handle *handle) -> bool {
+            WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithDatabase:_database andHandle:handle];
+            BOOL result = nsUninvocation(unsafeHandle);
+            [unsafeHandle finalizeDatabase];
+            return result;
+        };
+    }
+    _database->setConfig(name.cppString, WCDB::Core::customConfig(invocation, uninvocation), priority);
 }
 
 - (void)setConfig:(WCTConfigBlock)nsInvocation
+ withUninvocation:(WCTConfigBlock)nsUninvocation
           forName:(NSString *)name
 {
-    WCTRemedialAssert(name, "Config name can't be null.", return;);
-    WCTRemedialAssert(nsInvocation, "Use [removeConfigForName:] instead.", return;);
-    WCDB::CustomConfig::Invocation invocation = [nsInvocation, self](WCDB::Handle *handle) -> bool {
-        WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithDatabase:_database andHandle:handle];
-        BOOL result = nsInvocation(unsafeHandle);
-        [unsafeHandle finalizeDatabase];
-        return result;
-    };
-    _database->setConfig(name.cppString, WCDB::Core::customConfig(invocation));
+    return [self setConfig:nsInvocation withUninvocation:nsUninvocation forName:name withPriority:WCTConfigPriorityDefault];
 }
 
 - (void)removeConfigForName:(NSString *)name

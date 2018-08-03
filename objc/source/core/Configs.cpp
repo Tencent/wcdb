@@ -28,22 +28,16 @@
 namespace WCDB {
 
 #pragma mark - Configs
-std::shared_ptr<Configs>
-Configs::configsBySettingConfig(const std::string &name,
-                                const std::shared_ptr<Config> &config,
-                                int priority) const
+
+void Configs::insert(const std::string &name, const std::shared_ptr<Config> &config, int priority)
 {
     WCTInnerAssert(config != nullptr);
-    std::shared_ptr<Configs> configs(new Configs(m_list));
-    configs->m_list.insert(priority, name, config);
-    return configs;
+    m_list.insert(priority, name, config);
 }
 
-std::shared_ptr<Configs> Configs::configsByRemovingConfig(const std::string &name) const
+void Configs::remove(const std::string &name)
 {
-    std::shared_ptr<Configs> configs(new Configs(m_list));
-    configs->m_list.erase(name);
-    return configs;
+    m_list.erase(name);
 }
 
 bool Configs::invoke(Handle *handle)
@@ -56,9 +50,14 @@ bool Configs::invoke(Handle *handle)
     return true;
 }
 
-bool Configs::equal(const std::shared_ptr<Configs> &configs) const
+bool Configs::uninvoke(Handle *handle)
 {
-    return this == configs.get();
+    for (const auto &element : m_list.elements()) {
+        if (!element.value->uninvoke(handle)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 Configs::Configs(const OrderedUniqueList<std::string, std::shared_ptr<Config>> &list)

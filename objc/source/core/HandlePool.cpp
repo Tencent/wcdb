@@ -39,6 +39,7 @@ HandlePool::HandlePool(const std::string &thePath, const std::shared_ptr<Configs
 , attachment(this)
 , m_onInitializing(nullptr)
 {
+    WCTInnerAssert(m_configs != nullptr);
 }
 
 HandlePool::~HandlePool()
@@ -98,17 +99,16 @@ Tag HandlePool::getTag() const
 #pragma mark - Config
 void HandlePool::setConfig(const std::string &name, const std::shared_ptr<Config> &config, int priority)
 {
-    m_configs = m_configs->configsBySettingConfig(name, config, priority);
+    std::shared_ptr<Configs> configs(new Configs(*m_configs.get()));
+    configs->insert(name, config, priority);
+    m_configs = configs;
 }
 
 void HandlePool::removeConfig(const std::string &name)
 {
-    m_configs = m_configs->configsByRemovingConfig(name);
-}
-
-void HandlePool::markConfigsAsDirty()
-{
-    m_configs.reset(new Configs(*m_configs.get()));
+    std::shared_ptr<Configs> configs(new Configs(*m_configs.get()));
+    configs->remove(name);
+    m_configs = configs;
 }
 
 #pragma mark - Handle
@@ -238,8 +238,7 @@ std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
     if (!configuredHandle) {
         return nullptr;
     }
-    std::shared_ptr<Configs> configs = m_configs;
-    if (!configuredHandle->configured(configs) && !configuredHandle->configure(configs)) {
+    if (!configuredHandle->configure(m_configs)) {
         setThreadedError(configuredHandle->getHandle()->getError());
         return nullptr;
     }
@@ -280,8 +279,7 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
         setThreadedError(Error(Error::Code::NoMemory));
         return nullptr;
     }
-    std::shared_ptr<Configs> configs = m_configs;
-    if (!configuredHandle->configure(configs)) {
+    if (!configuredHandle->configure(m_configs)) {
         setThreadedError(handle->getError());
         return nullptr;
     }

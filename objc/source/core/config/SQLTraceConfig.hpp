@@ -32,8 +32,10 @@ public:
     SQLTraceConfig(const Notification &notification);
 
     bool invoke(Handle *handle) override;
+    bool uninvoke(Handle *handle) override;
 
 protected:
+    std::string identifier() const;
     Notification m_notification;
 };
 

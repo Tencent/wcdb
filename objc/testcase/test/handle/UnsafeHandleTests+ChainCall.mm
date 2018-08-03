@@ -56,13 +56,14 @@
     __block BOOL tested = NO;
     __weak id weakSelf = self;
     [_database
-    setConfig:^BOOL(WCTHandle *_Nonnull unsafeHandle) {
-        id strongSelf = weakSelf;
-        [strongSelf verification_test_insert:unsafeHandle withObject:object];
-        tested = YES;
-        return YES;
-    }
-      forName:_configName];
+           setConfig:^BOOL(WCTHandle *_Nonnull unsafeHandle) {
+               id strongSelf = weakSelf;
+               [strongSelf verification_test_insert:unsafeHandle withObject:object];
+               tested = YES;
+               return YES;
+           }
+    withUninvocation:nil
+             forName:_configName];
     [_database purge];
     XCTAssertTrue([_database canOpen]);
     XCTAssertTrue(tested);
@@ -87,13 +88,14 @@
     __block BOOL tested = NO;
     __weak id weakSelf = self;
     [_database
-    setConfig:^BOOL(WCTHandle *_Nonnull unsafeHandle) {
-        id strongSelf = weakSelf;
-        [strongSelf verification_test_update:unsafeHandle withObject:object];
-        tested = YES;
-        return YES;
-    }
-      forName:_configName];
+           setConfig:^BOOL(WCTHandle *_Nonnull unsafeHandle) {
+               id strongSelf = weakSelf;
+               [strongSelf verification_test_update:unsafeHandle withObject:object];
+               tested = YES;
+               return YES;
+           }
+    withUninvocation:nil
+             forName:_configName];
     [_database purge];
     XCTAssertTrue([_database canOpen]);
     XCTAssertTrue(tested);
@@ -118,13 +120,14 @@
     __block BOOL tested = NO;
     __weak id weakSelf = self;
     [_database
-    setConfig:^BOOL(WCTHandle *_Nonnull unsafeHandle) {
-        id strongSelf = weakSelf;
-        [strongSelf verification_test_delete:unsafeHandle];
-        tested = YES;
-        return YES;
-    }
-      forName:_configName];
+           setConfig:^BOOL(WCTHandle *_Nonnull unsafeHandle) {
+               id strongSelf = weakSelf;
+               [strongSelf verification_test_delete:unsafeHandle];
+               tested = YES;
+               return YES;
+           }
+    withUninvocation:nil
+             forName:_configName];
     [_database purge];
     XCTAssertTrue([_database canOpen]);
     XCTAssertTrue(tested);
@@ -146,13 +149,14 @@
     __block BOOL tested = NO;
     __weak id weakSelf = self;
     [_database
-    setConfig:^BOOL(WCTHandle *_Nonnull unsafeHandle) {
-        id strongSelf = weakSelf;
-        [strongSelf verification_test_select:unsafeHandle];
-        tested = YES;
-        return YES;
-    }
-      forName:_configName];
+           setConfig:^BOOL(WCTHandle *_Nonnull unsafeHandle) {
+               id strongSelf = weakSelf;
+               [strongSelf verification_test_select:unsafeHandle];
+               tested = YES;
+               return YES;
+           }
+    withUninvocation:nil
+             forName:_configName];
     [_database purge];
     XCTAssertTrue([_database canOpen]);
     XCTAssertTrue(tested);
@@ -176,13 +180,14 @@
     __block BOOL tested = NO;
     __weak id weakSelf = self;
     [_database
-    setConfig:^BOOL(WCTHandle *_Nonnull unsafeHandle) {
-        id strongSelf = weakSelf;
-        [strongSelf verification_test_rowSelect:unsafeHandle];
-        tested = YES;
-        return YES;
-    }
-      forName:_configName];
+           setConfig:^BOOL(WCTHandle *_Nonnull unsafeHandle) {
+               id strongSelf = weakSelf;
+               [strongSelf verification_test_rowSelect:unsafeHandle];
+               tested = YES;
+               return YES;
+           }
+    withUninvocation:nil
+             forName:_configName];
     [_database purge];
     XCTAssertTrue([_database canOpen]);
     XCTAssertTrue(tested);
@@ -222,15 +227,16 @@
     __block BOOL tested = NO;
     __weak id weakSelf = self;
     [_database
-    setConfig:^BOOL(WCTHandle *_Nonnull unsafeHandle) {
-        id strongSelf = weakSelf;
-        [strongSelf verification_test_multiSelect:unsafeHandle
-                                      withObjects:preInserted2
-                                         andTable:tableName2];
-        tested = YES;
-        return YES;
-    }
-      forName:_configName];
+           setConfig:^BOOL(WCTHandle *_Nonnull unsafeHandle) {
+               id strongSelf = weakSelf;
+               [strongSelf verification_test_multiSelect:unsafeHandle
+                                             withObjects:preInserted2
+                                                andTable:tableName2];
+               tested = YES;
+               return YES;
+           }
+    withUninvocation:nil
+             forName:_configName];
     [_database purge];
     XCTAssertTrue([_database canOpen]);
     XCTAssertTrue(tested);

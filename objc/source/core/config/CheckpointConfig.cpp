@@ -39,9 +39,20 @@ bool CheckpointConfig::invoke(Handle* handle)
 {
     handle->setNotificationWhenCommitted(
     0,
-    String::formatted("Checkpoint-%p", this),
+    identifier(),
     std::bind(&CheckpointConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
     return true;
+}
+
+bool CheckpointConfig::uninvoke(Handle* handle)
+{
+    handle->unsetNotificationWhenCommitted(identifier());
+    return true;
+}
+
+std::string CheckpointConfig::identifier() const
+{
+    return String::formatted("Checkpoint-%p", this);
 }
 
 bool CheckpointConfig::onCommitted(Handle* handle, int frames)

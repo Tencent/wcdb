@@ -34,18 +34,31 @@ bool BackupConfig::invoke(Handle *handle)
     if (!handle->beginTransaction()) {
         return false;
     }
+    const std::string id = identifier();
     bool result = handle->setNotificationWhenCheckpoint(
-    0,
-    String::formatted("Backup-%p", this),
-    std::bind(&BackupConfig::willCheckpoint, this, std::placeholders::_1, std::placeholders::_2));
+    0, id, std::bind(&BackupConfig::willCheckpoint, this, std::placeholders::_1, std::placeholders::_2));
     handle->rollbackTransaction();
     if (result) {
         handle->setNotificationWhenCommitted(
-        0,
-        String::formatted("Backup-%p", this),
-        std::bind(&BackupConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
+        0, id, std::bind(&BackupConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
     }
     return result;
+}
+
+bool BackupConfig::uninvoke(Handle *handle)
+{
+    const std::string id = identifier();
+    bool result = handle->setNotificationWhenCheckpoint(
+    0, id, std::bind(&BackupConfig::willCheckpoint, this, std::placeholders::_1, std::placeholders::_2));
+    if (result) {
+        handle->unsetNotificationWhenCommitted(id);
+    }
+    return result;
+}
+
+std::string BackupConfig::identifier() const
+{
+    return String::formatted("Backup-%p", this);
 }
 
 bool BackupConfig::onCommitted(Handle *handle, int frames)

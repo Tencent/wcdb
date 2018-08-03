@@ -133,9 +133,10 @@ std::shared_ptr<Config> Core::migrationConfig(MigrationSetting* setting)
     return std::shared_ptr<Config>(new MigrationConfig(setting));
 }
 
-std::shared_ptr<Config> Core::customConfig(const CustomConfig::Invocation& invocation)
+std::shared_ptr<Config> Core::customConfig(const CustomConfig::Invocation& invocation,
+                                           const CustomConfig::Invocation& uninvocation)
 {
-    return std::shared_ptr<Config>(new CustomConfig(invocation));
+    return std::shared_ptr<Config>(new CustomConfig(invocation, uninvocation));
 }
 
 } // namespace WCDB
