@@ -201,4 +201,51 @@
     XCTAssertTrue([_database backup]);
 }
 
+- (void)test_with_async_write
+{
+    NSString *tableName = self.className;
+    int count = 1000;
+    XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
+
+    XCTAssertTrue([_database backup]);
+
+    int expectedInsertCount = 2000;
+    int expectedBackupCount = 100;
+
+    __block int insertCount = 0;
+    __block int backupCount = 0;
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    queue.maxConcurrentOperationCount = 10;
+    [queue addOperationWithBlock:^{
+        int i = count;
+        while (YES) {
+            @synchronized(self) {
+                if (insertCount > expectedInsertCount && backupCount > expectedBackupCount) {
+                    break;
+                }
+            }
+            XCTAssertEqual([self insertObjectsOfCount:1 from:i intoTable:tableName].count, 1);
+            ++i;
+            @synchronized(self) {
+                ++insertCount;
+            }
+        }
+    }];
+    [queue addOperationWithBlock:^{
+        while (YES) {
+            @synchronized(self) {
+                if (insertCount > expectedInsertCount && backupCount > expectedBackupCount) {
+                    break;
+                }
+            }
+            XCTAssertTrue([_database backup]);
+            @synchronized(self) {
+                ++backupCount;
+            }
+        }
+    }];
+
+    [queue waitUntilAllOperationsAreFinished];
+}
+
 @end
