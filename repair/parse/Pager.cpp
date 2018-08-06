@@ -92,7 +92,9 @@ MappedData Pager::acquirePageData(int number, off_t offset, size_t size)
         data = m_wal.acquirePageData(number, offset, size);
     } else if (number > m_pageCount) {
         markAsCorrupted(
-        number, String::formatted("Page number: %d exceeds the page count: %d.", number, m_pageCount));
+        number,
+        String::formatted(
+        "Acquired page number: %d exceeds the page count: %d.", number, m_pageCount));
         return MappedData::emptyData();
     } else {
         data = m_fileHandle.mapPage(number, offset, size);

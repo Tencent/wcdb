@@ -193,7 +193,7 @@ bool Page::doInitialize()
             int pageno = m_deserialization.get4BytesInt(offset);
             if (pageno > m_pager->getPageCount()) {
                 markPagerAsCorrupted(number,
-                                     String::formatted("Pageno: %d exceeds the page count: %d.",
+                                     String::formatted("Page number: %d exceeds the page count: %d.",
                                                        pageno,
                                                        m_pager->getPageCount()));
                 return false;
