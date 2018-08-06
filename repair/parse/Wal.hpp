@@ -72,6 +72,22 @@ protected:
     bool m_isNativeChecksum;
     std::pair<uint32_t, uint32_t> m_salt;
 
+#pragma mark - Shm
+public:
+    typedef struct {
+        uint32_t version;
+        uint32_t unused;
+        uint32_t change;
+        uint8_t isInit;
+        uint8_t bigEndChecksum;
+        uint16_t pageSize;
+        uint32_t maxFrame;
+        uint32_t pageCount;
+        uint32_t frameChecksum[2];
+        uint32_t salt[2];
+        uint32_t ckecksum[2];
+    } ShmHeader;
+
 #pragma mark - Frame
 public:
     int getFrameSize() const;
