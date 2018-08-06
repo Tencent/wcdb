@@ -57,7 +57,7 @@ protected:
 
 #pragma mark - Wal
 public:
-    void setMaxFrame(int maxFrame);
+    void setMaxAllowedFrame(int maxFrame);
     int getFrameCount() const;
     bool isNativeChecksum() const;
     const std::pair<uint32_t, uint32_t> &getSalt() const;
@@ -67,8 +67,8 @@ protected:
     std::pair<uint32_t, uint32_t>
     calculateChecksum(const MappedData &data, const std::pair<uint32_t, uint32_t> &checksum);
 
-    int m_maxFrame;
-    int m_frames;
+    int m_maxAllowedFrame;
+    int m_maxFrames;
     bool m_isNativeChecksum;
     std::pair<uint32_t, uint32_t> m_salt;
 

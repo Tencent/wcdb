@@ -135,7 +135,7 @@ MappedData Pager::acquireData(off_t offset, size_t size)
 #pragma mark - Wal
 void Pager::setMaxWalFrame(int maxWalFrame)
 {
-    m_wal.setMaxFrame(maxWalFrame);
+    m_wal.setMaxAllowedFrame(maxWalFrame);
 }
 
 int Pager::getDisposedWalPage() const

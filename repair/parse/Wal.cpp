@@ -37,8 +37,8 @@ Wal::Wal(Pager *pager)
 , m_fileHandle(Path::addExtention(m_pager->getPath(), "-wal"))
 , m_salt({ 0, 0 })
 , m_isNativeChecksum(false)
-, m_maxFrame(std::numeric_limits<int>::max())
-, m_frames(0)
+, m_maxAllowedFrame(std::numeric_limits<int>::max())
+, m_maxFrames(0)
 {
 }
 
@@ -102,16 +102,16 @@ MappedData Wal::acquireFrameData(int frameno)
     return acquireData(headerSize + getFrameSize() * (frameno - 1), getFrameSize());
 }
 
-void Wal::setMaxFrame(int maxFrame)
+void Wal::setMaxAllowedFrame(int maxAllowedFrame)
 {
     WCTInnerAssert(!isInitialized());
-    m_maxFrame = maxFrame;
+    m_maxAllowedFrame = maxAllowedFrame;
 }
 
 int Wal::getFrameCount() const
 {
     WCTInnerAssert(isInitialized());
-    return m_frames;
+    return m_maxFrames;
 }
 
 int Wal::getPageSize() const
@@ -244,11 +244,11 @@ bool Wal::doInitialize()
             //If it's the latter one, it doesn't mean disposed.
             break;
         }
-        if (frameno <= m_maxFrame) {
+        if (frameno <= m_maxAllowedFrame) {
             if (frame.getTruncate() == 0) {
                 commitRecords[frame.getPageNumber()] = frameno;
             } else {
-                m_frames = frameno;
+                m_maxFrames = frameno;
                 for (const auto &element : commitRecords) {
                     m_framePages[element.first] = element.second;
                 }
@@ -324,7 +324,7 @@ void Wal::dispose()
         m_disposedPages.emplace(element.first);
     }
     m_framePages.clear();
-    m_frames = 0;
+    m_maxFrames = 0;
 }
 
 } //namespace Repair
