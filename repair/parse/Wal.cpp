@@ -187,6 +187,7 @@ bool Wal::doInitialize()
     const int frameSize = getFrameSize();
     const int framesSize = (int) fileSize - headerSize;
     const int frameCountInFile = framesSize / frameSize;
+    std::map<int, int> commitRecords;
     for (int frameno = 1; frameno <= frameCountInFile; ++frameno) {
         Frame frame(frameno, this, checksum);
         if (!frame.initialize()) {
@@ -195,8 +196,15 @@ bool Wal::doInitialize()
             break;
         }
         if (frameno <= m_maxFrame) {
-            m_frames = frameno;
-            m_framePages[frame.getPageNumber()] = frameno;
+            if (frame.getTruncate() == 0) {
+                commitRecords[frame.getPageNumber()] = frameno;
+            } else {
+                m_frames = frameno;
+                for (const auto &element : commitRecords) {
+                    m_framePages[element.first] = element.second;
+                }
+                commitRecords.clear();
+            }
         } else {
             bool succeed;
             Page::Type pageType;
@@ -215,6 +223,19 @@ bool Wal::doInitialize()
             }
         }
         checksum = frame.getChecksum();
+    }
+    if (!commitRecords.empty()) {
+        for (const auto &element : commitRecords) {
+            m_disposedPages.emplace(element.first);
+            Error error;
+            error.level = Error::Level::Notice;
+            error.setCode(Error::Code::Notice, "Repair");
+            error.message = "Dispose wal frame that is not already committed.";
+            error.infos.set("Frame", element.second);
+            error.infos.set("Page", element.first);
+            error.infos.set("Path", getPath());
+            Notifier::shared()->notify(error);
+        }
     }
     return true;
 }

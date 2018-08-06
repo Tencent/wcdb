@@ -42,10 +42,12 @@ public:
     int getPageNumber() const;
     std::pair<bool, Page::Type> getPageType() const;
     const std::pair<uint32_t, uint32_t> &getChecksum() const;
+    uint32_t getTruncate() const;
 
 protected:
     std::pair<uint32_t, uint32_t> m_checksum;
     int m_pageno;
+    uint32_t m_truncate;
     MappedData m_data;
 
     std::pair<uint32_t, uint32_t>

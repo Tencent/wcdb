@@ -54,6 +54,12 @@ std::pair<bool, Page::Type> Frame::getPageType() const
     return page.acquireType();
 }
 
+uint32_t Frame::getTruncate() const
+{
+    WCTInnerAssert(isInitialized());
+    return m_truncate;
+}
+
 std::pair<uint32_t, uint32_t>
 Frame::calculateChecksum(const MappedData &data, const std::pair<uint32_t, uint32_t> &checksum)
 {
@@ -100,7 +106,7 @@ bool Frame::doInitialize()
     m_pageno = (int) deserialization.advance4BytesUInt();
 
     WCTInnerAssert(deserialization.canAdvance(4));
-    deserialization.advance(4);
+    m_truncate = deserialization.advance4BytesUInt();
 
     std::pair<uint32_t, uint32_t> salt;
     WCTInnerAssert(deserialization.canAdvance(4));
