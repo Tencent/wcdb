@@ -56,6 +56,13 @@ void WalRelated::markWalAsCorrupted(int frame, const std::string &message)
     m_wal->markAsCorrupted(frame, message);
 }
 
+std::pair<uint32_t, uint32_t>
+WalRelated::calculateChecksum(const MappedData &data,
+                              const std::pair<uint32_t, uint32_t> &checksum)
+{
+    return m_wal->calculateChecksum(data, checksum);
+}
+
 } //namespace Repair
 
 } //namespace WCDB

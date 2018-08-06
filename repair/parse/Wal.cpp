@@ -146,6 +146,37 @@ bool Wal::isBigEndian()
     return s_isBigEndian;
 }
 
+std::pair<uint32_t, uint32_t>
+Wal::calculateChecksum(const MappedData &data, const std::pair<uint32_t, uint32_t> &checksum)
+{
+    WCTInnerAssert(data.size() >= 8);
+    WCTInnerAssert((data.size() & 0x00000007) == 0);
+
+    const uint32_t *iter = reinterpret_cast<const uint32_t *>(data.buffer());
+    const uint32_t *end
+    = reinterpret_cast<const uint32_t *>(data.buffer() + data.size());
+
+    std::pair<uint32_t, uint32_t> result = checksum;
+
+    if (isNativeChecksum()) {
+        do {
+            result.first += *iter++ + result.second;
+            result.second += *iter++ + result.first;
+        } while (iter < end);
+    } else {
+        do {
+#define BYTESWAP32(x)                                                          \
+    ((((x) &0x000000FF) << 24) + (((x) &0x0000FF00) << 8)                      \
+     + (((x) &0x00FF0000) >> 8) + (((x) &0xFF000000) >> 24))
+            result.first += BYTESWAP32(iter[0]) + result.second;
+            result.second += BYTESWAP32(iter[1]) + result.first;
+            iter += 2;
+        } while (iter < end);
+    }
+
+    return result;
+}
+
 bool Wal::doInitialize()
 {
     WCTInnerAssert(m_pager->isInitialized() || m_pager->isInitializing());
@@ -178,11 +209,29 @@ bool Wal::doInitialize()
     }
     m_isNativeChecksum = (magic & 0x00000001) == isBigEndian();
     deserialization.seek(16);
+    WCTInnerAssert(deserialization.canAdvance(4));
     m_salt.first = deserialization.advance4BytesUInt();
+    WCTInnerAssert(deserialization.canAdvance(4));
     m_salt.second = deserialization.advance4BytesUInt();
-    std::pair<uint32_t, uint32_t> checksum;
-    checksum.first = deserialization.advance4BytesUInt();
-    checksum.second = deserialization.advance4BytesUInt();
+
+    std::pair<uint32_t, uint32_t> checksum = { 0, 0 };
+    checksum = calculateChecksum(data.subdata(headerSize - 2 * sizeof(uint32_t)), checksum);
+
+    std::pair<uint32_t, uint32_t> deserializedChecksum;
+    WCTInnerAssert(deserialization.canAdvance(4));
+    deserializedChecksum.first = deserialization.advance4BytesUInt();
+    WCTInnerAssert(deserialization.canAdvance(4));
+    deserializedChecksum.second = deserialization.advance4BytesUInt();
+
+    if (checksum != deserializedChecksum) {
+        markAsCorrupted(0,
+                        String::formatted("Mismatched wal checksum: %u, %u to %u, %u.",
+                                          checksum.first,
+                                          checksum.second,
+                                          deserializedChecksum.first,
+                                          deserializedChecksum.second));
+        return false;
+    }
 
     const int frameSize = getFrameSize();
     const int framesSize = (int) fileSize - headerSize;

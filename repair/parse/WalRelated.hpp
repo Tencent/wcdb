@@ -40,6 +40,8 @@ protected:
     void markWalAsCorrupted(int frame, const std::string &message);
     void setError(Error &&error);
     void assignWithSharedThreadedError();
+    std::pair<uint32_t, uint32_t>
+    calculateChecksum(const MappedData &data, const std::pair<uint32_t, uint32_t> &checksum);
 
     Wal *m_wal;
     Pager *m_pager;

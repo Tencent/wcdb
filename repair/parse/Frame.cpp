@@ -60,37 +60,6 @@ uint32_t Frame::getTruncate() const
     return m_truncate;
 }
 
-std::pair<uint32_t, uint32_t>
-Frame::calculateChecksum(const MappedData &data, const std::pair<uint32_t, uint32_t> &checksum)
-{
-    WCTInnerAssert(data.size() >= 8);
-    WCTInnerAssert((data.size() & 0x00000007) == 0);
-
-    const uint32_t *iter = reinterpret_cast<const uint32_t *>(data.buffer());
-    const uint32_t *end
-    = reinterpret_cast<const uint32_t *>(data.buffer() + data.size());
-
-    std::pair<uint32_t, uint32_t> result = checksum;
-
-    if (m_wal->isNativeChecksum()) {
-        do {
-            result.first += *iter++ + result.second;
-            result.second += *iter++ + result.first;
-        } while (iter < end);
-    } else {
-        do {
-#define BYTESWAP32(x)                                                          \
-    ((((x) &0x000000FF) << 24) + (((x) &0x0000FF00) << 8)                      \
-     + (((x) &0x00FF0000) >> 8) + (((x) &0xFF000000) >> 24))
-            result.first += BYTESWAP32(iter[0]) + result.second;
-            result.second += BYTESWAP32(iter[1]) + result.first;
-            iter += 2;
-        } while (iter < end);
-    }
-
-    return result;
-}
-
 #pragma mark - Initializeable
 bool Frame::doInitialize()
 {
@@ -125,8 +94,12 @@ bool Frame::doInitialize()
     m_checksum = calculateChecksum(m_data.subdata(0, 8), m_checksum);
     m_checksum = calculateChecksum(pageData, m_checksum);
     if (m_checksum != checksum) {
-        markWalAsCorrupted(
-        frameno, String::formatted("Mismatched checksum: %u to %u.", m_checksum, checksum));
+        markWalAsCorrupted(frameno,
+                           String::formatted("Mismatched frame checksum: %u, %u to %u, %u.",
+                                             m_checksum.first,
+                                             m_checksum.second,
+                                             checksum.first,
+                                             checksum.second));
         return false;
     }
     return true;

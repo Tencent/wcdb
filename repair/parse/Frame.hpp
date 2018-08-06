@@ -50,9 +50,6 @@ protected:
     uint32_t m_truncate;
     MappedData m_data;
 
-    std::pair<uint32_t, uint32_t>
-    calculateChecksum(const MappedData &data, const std::pair<uint32_t, uint32_t> &checksum);
-
 #pragma mark - Initializeable
 protected:
     bool doInitialize() override;

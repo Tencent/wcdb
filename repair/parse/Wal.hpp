@@ -64,6 +64,9 @@ public:
     int getPageSize() const;
 
 protected:
+    std::pair<uint32_t, uint32_t>
+    calculateChecksum(const MappedData &data, const std::pair<uint32_t, uint32_t> &checksum);
+
     int m_maxFrame;
     int m_frames;
     bool m_isNativeChecksum;
