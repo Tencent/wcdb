@@ -33,18 +33,29 @@ class Locker {
 public:
     virtual void setPath(const std::string &path) = 0;
     virtual const std::string &getPath() const = 0;
-
-    virtual bool acquireReadLock() = 0;
-    virtual bool releaseReadLock() = 0;
     virtual const Error &getError() const = 0;
+};
+
+class ReadLocker : public Locker {
+public:
+    virtual bool acquireLock() = 0;
+    virtual bool releaseLock() = 0;
+};
+
+class WriteLocker : public Locker {
+public:
+    virtual bool acquireLock() = 0;
+    virtual bool releaseLock() = 0;
 };
 
 class LockerHolder {
 public:
-    void setLocker(const std::shared_ptr<Locker> &locker);
+    void setWriteLocker(const std::shared_ptr<WriteLocker> &locker);
+    void setReadLocker(const std::shared_ptr<ReadLocker> &locker);
 
 protected:
-    std::shared_ptr<Locker> m_locker;
+    std::shared_ptr<ReadLocker> m_readLocker;
+    std::shared_ptr<WriteLocker> m_writeLocker;
 };
 
 } //namespace Repair

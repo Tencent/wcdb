@@ -40,21 +40,40 @@ Backup::Backup(const std::string &path)
 #pragma mark - Backup
 bool Backup::work(int maxWalFrame)
 {
-    WCTInnerAssert(m_locker != nullptr);
-    WCTInnerAssert(m_locker->getPath().empty());
-    m_locker->setPath(m_pager.getPath());
+    WCTInnerAssert(m_readLocker != nullptr);
+    WCTInnerAssert(m_readLocker->getPath().empty());
+    WCTInnerAssert(m_writeLocker != nullptr);
+    WCTInnerAssert(m_writeLocker->getPath().empty());
+    m_readLocker->setPath(m_pager.getPath());
+    m_writeLocker->setPath(m_pager.getPath());
 
-    if (!m_locker->acquireReadLock()) {
-        setError(m_locker->getError());
-        return false;
-    }
-
+    bool writeLocked = false;
+    bool readLocked = false;
     bool succeed = false;
     do {
+        if (!m_writeLocker->acquireLock()) {
+            setError(m_writeLocker->getError());
+            break;
+        }
+        writeLocked = true;
+
+        if (!m_readLocker->acquireLock()) {
+            setError(m_readLocker->getError());
+            break;
+        }
+        readLocked = true;
+
         m_pager.setMaxWalFrame(maxWalFrame);
         if (!m_pager.initialize()) {
             break;
         }
+
+        if (!m_writeLocker->releaseLock()) {
+            setError(m_writeLocker->getError());
+            break;
+        }
+        writeLocked = false;
+
         m_material.info.pageSize = m_pager.getPageSize();
         m_material.info.reservedBytes = m_pager.getReservedBytes();
         if (m_pager.getWalFrameCount() > 0) {
@@ -67,12 +86,16 @@ bool Backup::work(int maxWalFrame)
         setError(m_pager.getError());
     }
 
-    if (!m_locker->releaseReadLock()) {
-        if (succeed) {
-            setError(m_locker->getError());
-            succeed = false;
-        }
+    if (writeLocked && !m_writeLocker->releaseLock() && succeed) {
+        setError(m_writeLocker->getError());
+        succeed = false;
     }
+
+    if (readLocked && !m_readLocker->releaseLock() && succeed) {
+        setError(m_readLocker->getError());
+        succeed = false;
+    }
+
     return succeed;
 }
 

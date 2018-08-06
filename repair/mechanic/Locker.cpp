@@ -24,9 +24,14 @@ namespace WCDB {
 
 namespace Repair {
 
-void LockerHolder::setLocker(const std::shared_ptr<Locker> &locker)
+void LockerHolder::setReadLocker(const std::shared_ptr<ReadLocker> &locker)
 {
-    m_locker = locker;
+    m_readLocker = locker;
+}
+
+void LockerHolder::setWriteLocker(const std::shared_ptr<WriteLocker> &locker)
+{
+    m_writeLocker = locker;
 }
 
 } //namespace Repair

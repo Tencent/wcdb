@@ -25,7 +25,22 @@ namespace WCDB {
 
 namespace Repair {
 
-bool SQLiteLocker::acquireReadLock()
+const Error &SQLiteReadLocker::getError() const
+{
+    return ErrorProne::getError();
+}
+
+void SQLiteReadLocker::setPath(const std::string &path)
+{
+    SQLiteBase::setPath(path);
+}
+
+const std::string &SQLiteReadLocker::getPath() const
+{
+    return SQLiteBase::getPath();
+}
+
+bool SQLiteReadLocker::acquireLock()
 {
     if (!open()) {
         return false;
@@ -37,26 +52,41 @@ bool SQLiteLocker::acquireReadLock()
     return execute("SELECT 1 FROM sqlite_master LIMIT 0");
 }
 
-bool SQLiteLocker::releaseReadLock()
+bool SQLiteReadLocker::releaseLock()
 {
     lazyCommitOrRollbackTransaction(false);
     close();
     return true;
 }
 
-const Error &SQLiteLocker::getError() const
+const Error &SQLiteWriteLocker::getError() const
 {
     return ErrorProne::getError();
 }
 
-void SQLiteLocker::setPath(const std::string &path)
+void SQLiteWriteLocker::setPath(const std::string &path)
 {
     SQLiteBase::setPath(path);
 }
 
-const std::string &SQLiteLocker::getPath() const
+const std::string &SQLiteWriteLocker::getPath() const
 {
     return SQLiteBase::getPath();
+}
+
+bool SQLiteWriteLocker::acquireLock()
+{
+    if (!open()) {
+        return false;
+    }
+    return lazyBeginTransactionImmediate();
+}
+
+bool SQLiteWriteLocker::releaseLock()
+{
+    lazyCommitOrRollbackTransaction(false);
+    close();
+    return true;
 }
 
 } //namespace Repair
