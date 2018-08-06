@@ -41,6 +41,16 @@ WalRelated &WalRelated::operator=(WalRelated &&other)
     return *this;
 }
 
+const std::string &WalRelated::getWalPath() const
+{
+    return m_wal->getPath();
+}
+
+const std::string &WalRelated::getPagerPath() const
+{
+    return m_pager->getPath();
+}
+
 void WalRelated::setError(Error &&error)
 {
     m_wal->setError(std::move(error));

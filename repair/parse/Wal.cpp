@@ -39,6 +39,7 @@ Wal::Wal(Pager *pager)
 , m_isNativeChecksum(false)
 , m_maxAllowedFrame(std::numeric_limits<int>::max())
 , m_maxFrames(0)
+, m_shm(this)
 {
 }
 
@@ -232,6 +233,11 @@ bool Wal::doInitialize()
                                           deserializedChecksum.second));
         return false;
     }
+
+    if (!m_shm.initialize()) {
+        return false;
+    }
+    m_maxAllowedFrame = std::min(m_maxAllowedFrame, m_shm.getMaxFrame());
 
     const int frameSize = getFrameSize();
     const int framesSize = (int) fileSize - headerSize;

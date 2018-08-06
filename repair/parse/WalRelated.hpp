@@ -36,6 +36,9 @@ public:
     WalRelated(WalRelated &&);
     WalRelated &operator=(WalRelated &&);
 
+    const std::string &getWalPath() const;
+    const std::string &getPagerPath() const;
+
 protected:
     void markWalAsCorrupted(int frame, const std::string &message);
     void setError(Error &&error);

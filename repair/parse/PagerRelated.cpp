@@ -41,6 +41,11 @@ PagerRelated &PagerRelated::operator=(PagerRelated &&other)
     return *this;
 }
 
+const std::string &PagerRelated::getPagerPath() const
+{
+    return m_pager->getPath();
+}
+
 void PagerRelated::setError(Error &&error)
 {
     m_pager->setError(std::move(error));

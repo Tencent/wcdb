@@ -18,35 +18,38 @@
  * limitations under the License.
  */
 
-#ifndef PagerRelated_hpp
-#define PagerRelated_hpp
+#ifndef Shm_hpp
+#define Shm_hpp
 
-#include <WCDB/Error.hpp>
+#include <WCDB/FileHandle.hpp>
+#include <WCDB/Initializeable.hpp>
+#include <WCDB/WalRelated.hpp>
 
 namespace WCDB {
 
 namespace Repair {
 
-class Pager;
-
-class PagerRelated {
+class Shm : public WalRelated, public Initializeable {
 public:
-    PagerRelated(Pager *pager);
-    PagerRelated(PagerRelated &&);
-    PagerRelated &operator=(PagerRelated &&);
+    Shm(Wal *wal);
 
-    const std::string &getPagerPath() const;
+    const std::string &getPath() const;
 
 protected:
-    void markPagerAsCorrupted(int page, const std::string &message);
-    void setError(Error &&error);
-    void assignWithSharedThreadedError();
+    bool doInitialize() override;
+    void markAsCorrupted(const std::string &message);
+    FileHandle m_fileHandle;
 
-    Pager *m_pager;
+public:
+    int getMaxFrame() const;
+
+protected:
+    static constexpr const int headerSize = 48;
+    int m_maxFrame;
 };
 
-} //namespace Repair
+} // namespace Repair
 
-} //namespace WCDB
+} // namespace WCDB
 
-#endif /* PagerRelated_hpp */
+#endif /* Shm_hpp */
