@@ -223,7 +223,7 @@ bool Pager::doInitialize()
             m_reservedBytes = deserialization.advance1ByteInt();
         }
     }
-    if (((m_pageSize - 1) & m_pageSize) != 0 || m_pageSize < 512) {
+    if (((m_pageSize - 1) & m_pageSize) != 0 || m_pageSize < 512 || m_pageSize > 65536) {
         markAsCorrupted(
         1, String::formatted("Page size: %d is not aligned or not too small.", m_pageSize));
         return false;

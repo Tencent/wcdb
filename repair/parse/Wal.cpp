@@ -172,7 +172,7 @@ bool Wal::doInitialize()
     }
     Deserialization deserialization(data);
     uint32_t magic = deserialization.advance4BytesUInt();
-    if (magic != 0x377f0682 && magic != 0x377f0683) {
+    if ((magic & 0xFFFFFFFE) != 0x377f0682) {
         markAsCorrupted(0, String::formatted("Magic number: 0x%x is illegal.", magic));
         return false;
     }
