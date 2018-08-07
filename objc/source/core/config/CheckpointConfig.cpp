@@ -25,13 +25,12 @@
 
 namespace WCDB {
 
-static_assert(CheckpointConfig::framesForPassive < CheckpointConfig::framesForFull, "");
-
 CheckpointConfig::CheckpointConfig(CheckpointQueue* queue)
 : Config()
 , m_checkpointTruncate(StatementPragma().pragma(Pragma::walCheckpoint()).to("TRUNCATE"))
 , m_queue(queue)
 {
+    static_assert(framesForPassive < framesForFull, "");
     WCTInnerAssert(m_queue != nullptr);
 }
 
