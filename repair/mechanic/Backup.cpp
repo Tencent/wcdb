@@ -58,7 +58,7 @@ bool Backup::work(int maxWalFrame)
         }
         writeLocked = true;
 
-        //acquire lock to avoid wal truncated during whole iteration of pager
+        //acquire lock to avoid wal truncated/restarted during whole iteration of pager
         if (!m_readLocker->acquireLock()) {
             setError(m_readLocker->getError());
             break;
