@@ -45,6 +45,7 @@ CursorInfo::CursorInfo(const char *input, int inputLength, TokenizerInfoBase *to
 , m_subTokensDoubleChar(true)
 , m_bufferLength(0)
 {
+    static_assert(sizeof(UnicodeChar) == 2, "UnicodeChar must be 2 byte length.");
 }
 
 //Inspired by zorrozhang

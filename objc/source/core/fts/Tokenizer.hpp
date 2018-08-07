@@ -32,9 +32,6 @@ namespace WCDB {
 
 namespace FTS {
 
-typedef unsigned short UnicodeChar;
-static_assert(sizeof(UnicodeChar) == 2, "UnicodeChar must be 2 byte length");
-
 #pragma mark - Cursor
 class CursorInfo : public CursorInfoBase {
 public:
@@ -66,6 +63,7 @@ protected:
     int cursorSetup();
 
     //You must figure out the unicode character set of [symbol] on current platform or implement it refer to http://www.fileformat.info/info/unicode/category/index.htm
+    typedef unsigned short UnicodeChar;
     virtual int isSymbol(UnicodeChar theChar, bool *result) = 0;
 
     int lemmatization(const char *input, int inputLength);

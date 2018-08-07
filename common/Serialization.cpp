@@ -234,11 +234,10 @@ Data Serialization::finalize()
 }
 
 #pragma mark - Deserialization
-static_assert(Deserialization::slot_2_0 == ((0x7f << 14) | (0x7f)), "");
-static_assert(Deserialization::slot_4_2_0 == ((0xfU << 28) | (0x7f << 14) | (0x7f)), "");
-
 Deserialization::Deserialization(const UnsafeData &data) : m_data(data)
 {
+    static_assert(slot_2_0 == ((0x7f << 14) | (0x7f)), "");
+    static_assert(slot_4_2_0 == ((0xfU << 28) | (0x7f << 14) | (0x7f)), "");
 }
 
 const UnsafeData &Deserialization::data() const

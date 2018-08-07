@@ -35,5 +35,5 @@ protected:
     CFCharacterSetRef m_symbolCharacterSet;
     static CFCharacterSetRef generateSymbolCharacterSet();
 
-    int isSymbol(WCDB::FTS::UnicodeChar theChar, bool *result) override;
+    int isSymbol(UnicodeChar theChar, bool *result) override;
 };

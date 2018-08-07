@@ -164,11 +164,10 @@ void Material::markAsCorrupt(const std::string &element)
 }
 
 #pragma mark - Info
-static_assert(Material::Info::size == 20, "");
-
 Material::Info::Info()
 : pageSize(0), walFrame(0), walSalt({ 0, 0 }), reservedBytes(0)
 {
+    static_assert(size == 20, "");
 }
 
 #pragma mark - Serialization

@@ -31,10 +31,10 @@ namespace WCDB {
 namespace Repair {
 
 Shm::Shm(Wal *wal)
-: WalRelated(wal)
-, m_fileHandle(Path::addExtention(getPagerPath(), "-shm"))
-, m_maxFrame(std::numeric_limits<int>::max())
+: WalRelated(wal), m_fileHandle(Path::addExtention(getPagerPath(), "-shm"))
 {
+    static_assert(sizeof(Header) == 48, "");
+    static_assert(offsetof(Header, maxFrame) == 16, "");
 }
 
 const std::string &Shm::getPath() const
@@ -42,10 +42,10 @@ const std::string &Shm::getPath() const
     return m_fileHandle.path;
 }
 
-int Shm::getMaxFrame() const
+uint32_t Shm::getMaxFrame() const
 {
     WCTInnerAssert(isInitialized());
-    return m_maxFrame;
+    return m_header.maxFrame;
 }
 
 void Shm::markAsCorrupted(const std::string &message)
@@ -78,31 +78,35 @@ bool Shm::doInitialize()
     }
     FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(getPath());
 
-    if (fileSize < headerSize) {
+    if (fileSize < sizeof(Header)) {
         markAsCorrupted(String::formatted("File size: %lu is not enough for header.", fileSize));
         return false;
     }
 
-    MappedData data = m_fileHandle.map(0, headerSize);
-    if (data.size() != headerSize) {
+    MappedData data = m_fileHandle.map(0, sizeof(Header));
+    if (data.size() != sizeof(Header)) {
         if (data.size() > 0) {
             markAsCorrupted(String::formatted("Acquired shm data with size: %d is less than the expected size: %d.",
                                               data.size(),
-                                              headerSize));
+                                              sizeof(Header)));
         } else {
             assignWithSharedThreadedError();
         }
         return false;
     }
 
-    Deserialization deserialization(data);
-    WCTInnerAssert(deserialization.canAdvance(4));
-    uint32_t version = deserialization.advance4BytesUInt();
-#warning TODO check version
-    deserialization.seek(16);
-    WCTInnerAssert(deserialization.canAdvance(4));
-    m_maxFrame = deserialization.advance4BytesUInt();
+    memcpy(&m_header, data.buffer(), sizeof(Header));
+    if (m_header.version != 3007000) {
+        markAsCorrupted(
+        String::formatted("Shm version: %u is illegal.", m_header.version));
+        return false;
+    }
     return true;
+}
+
+Shm::Header::Header()
+: version(3007000), maxFrame(std::numeric_limits<decltype(maxFrame)>::max())
+{
 }
 
 } // namespace Repair

@@ -41,11 +41,26 @@ protected:
     FileHandle m_fileHandle;
 
 public:
-    int getMaxFrame() const;
+    uint32_t getMaxFrame() const;
 
 protected:
-    static constexpr const int headerSize = 48;
-    int m_maxFrame;
+    struct Header {
+        Header();
+        uint32_t version;
+        uint32_t ___unused;
+        uint32_t ___change;
+        uint8_t ___isInit;
+        uint8_t ___bigEndChecksum;
+        uint16_t ___pageSize;
+        uint32_t maxFrame;
+        uint32_t ___page;
+        uint32_t ___frameChecksum[2];
+        uint32_t ___salt[2];
+        uint32_t ___checksum[2];
+    };
+    typedef struct Header Header;
+
+    Header m_header;
 };
 
 } // namespace Repair

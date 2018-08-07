@@ -78,13 +78,13 @@ public:
 
     void reset(const UnsafeData &data);
 
-    static constexpr const int slot_2_0 = 0x001fc07f;
-    static constexpr const int slot_4_2_0 = 0xf01fc07f;
-
     const UnsafeData &data() const override;
 
 protected:
     UnsafeData m_data;
+
+    static constexpr const int slot_2_0 = 0x001fc07f;
+    static constexpr const int slot_4_2_0 = 0xf01fc07f;
 
 #pragma mark - Advance
 public:

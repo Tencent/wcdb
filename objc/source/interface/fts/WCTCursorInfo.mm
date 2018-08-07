@@ -51,7 +51,7 @@ CFCharacterSetRef WCTCursorInfo::generateSymbolCharacterSet()
     return characterSetRef;
 }
 
-int WCTCursorInfo::isSymbol(WCDB::FTS::UnicodeChar theChar, bool *result)
+int WCTCursorInfo::isSymbol(UnicodeChar theChar, bool *result)
 {
     if (m_symbolCharacterSet) {
         *result = CFCharacterSetIsCharacterMember(m_symbolCharacterSet, theChar);

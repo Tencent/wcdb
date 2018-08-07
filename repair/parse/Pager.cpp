@@ -133,6 +133,11 @@ MappedData Pager::acquireData(off_t offset, size_t size)
 }
 
 #pragma mark - Wal
+void Pager::setShmLegality(bool flag)
+{
+    m_wal.setShmLegality(flag);
+}
+
 void Pager::setMaxWalFrame(int maxWalFrame)
 {
     m_wal.setMaxAllowedFrame(maxWalFrame);

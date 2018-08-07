@@ -47,6 +47,7 @@ bool Mechanic::work()
         return exit(true);
     }
 
+    m_pager.setShmLegality(false);
     m_pager.setMaxWalFrame(m_material->info.walFrame);
     m_pager.setPageSize(m_material->info.pageSize);
     m_pager.setReservedBytes(m_material->info.reservedBytes);

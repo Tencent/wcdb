@@ -56,7 +56,7 @@ protected:
     static void markAsCorrupt(const std::string &element);
 
 #pragma mark - Header
-public:
+protected:
     static constexpr const uint32_t magic = 0x57434442;
     static constexpr const uint32_t version = 0x01000000; //1.0.0.0
     static constexpr const int headerSize = sizeof(magic) + sizeof(version); //magic + version

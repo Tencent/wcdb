@@ -40,6 +40,7 @@ Wal::Wal(Pager *pager)
 , m_maxAllowedFrame(std::numeric_limits<int>::max())
 , m_maxFrames(0)
 , m_shm(this)
+, m_shmLegality(true)
 {
 }
 
@@ -97,6 +98,12 @@ int Wal::getMaxPageno() const
 }
 
 #pragma mark - Wal
+void Wal::setShmLegality(bool flag)
+{
+    WCTInnerAssert(!isInitialized());
+    m_shmLegality = flag;
+}
+
 MappedData Wal::acquireFrameData(int frameno)
 {
     WCTInnerAssert(isInitializing());
@@ -234,10 +241,12 @@ bool Wal::doInitialize()
         return false;
     }
 
-    if (!m_shm.initialize()) {
-        return false;
+    if (m_shmLegality) {
+        if (!m_shm.initialize()) {
+            return false;
+        }
+        m_maxAllowedFrame = std::min(m_maxAllowedFrame, (int) m_shm.getMaxFrame());
     }
-    m_maxAllowedFrame = std::min(m_maxAllowedFrame, m_shm.getMaxFrame());
 
     const int frameSize = getFrameSize();
     const int framesSize = (int) fileSize - headerSize;
