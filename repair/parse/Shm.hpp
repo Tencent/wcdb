@@ -42,6 +42,7 @@ protected:
 
 public:
     uint32_t getMaxFrame() const;
+    uint32_t getBackfill() const;
 
 protected:
     struct Header {
@@ -60,7 +61,17 @@ protected:
     };
     typedef struct Header Header;
 
+    struct CheckpointInfo {
+        uint32_t backfill;
+        uint32_t ___readMark[5];
+        uint8_t ___lock[8];
+        uint32_t ___backfillAttempted;
+        uint32_t ___unused;
+    };
+    typedef struct CheckpointInfo CheckpointInfo;
+
     Header m_header;
+    CheckpointInfo m_checkpointInfo;
 };
 
 } // namespace Repair

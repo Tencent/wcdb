@@ -245,7 +245,12 @@ bool Wal::doInitialize()
         if (!m_shm.initialize()) {
             return false;
         }
-        m_maxAllowedFrame = std::min(m_maxAllowedFrame, (int) m_shm.getMaxFrame());
+        if (m_shm.getBackfill() < m_shm.getMaxFrame()) {
+            m_maxAllowedFrame = std::min(m_maxAllowedFrame, (int) m_shm.getMaxFrame());
+        } else {
+            // dispose all wal frames since they are already checkpointed.
+            return true;
+        }
     }
 
     const int frameSize = getFrameSize();
@@ -260,9 +265,8 @@ bool Wal::doInitialize()
             break;
         }
         if (frameno <= m_maxAllowedFrame) {
-            if (frame.getTruncate() == 0) {
-                commitRecords[frame.getPageNumber()] = frameno;
-            } else {
+            commitRecords[frame.getPageNumber()] = frameno;
+            if (frame.getTruncate() != 0) {
                 m_maxFrames = frameno;
                 for (const auto &element : commitRecords) {
                     m_framePages[element.first] = element.second;

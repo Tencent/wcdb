@@ -34,7 +34,8 @@ Shm::Shm(Wal *wal)
 : WalRelated(wal), m_fileHandle(Path::addExtention(getPagerPath(), "-shm"))
 {
     static_assert(sizeof(Header) == 48, "");
-    static_assert(offsetof(Header, maxFrame) == 16, "");
+    static_assert(sizeof(CheckpointInfo) == 40, "");
+    memset(&m_checkpointInfo, 0, sizeof(m_checkpointInfo));
 }
 
 const std::string &Shm::getPath() const
@@ -46,6 +47,12 @@ uint32_t Shm::getMaxFrame() const
 {
     WCTInnerAssert(isInitialized());
     return m_header.maxFrame;
+}
+
+uint32_t Shm::getBackfill() const
+{
+    WCTInnerAssert(isInitialized());
+    return m_checkpointInfo.backfill;
 }
 
 void Shm::markAsCorrupted(const std::string &message)
@@ -83,12 +90,13 @@ bool Shm::doInitialize()
         return false;
     }
 
-    MappedData data = m_fileHandle.map(0, sizeof(Header));
-    if (data.size() != sizeof(Header)) {
+    constexpr const int size = sizeof(Header) * 2 + sizeof(CheckpointInfo);
+    MappedData data = m_fileHandle.map(0, size);
+    if (data.size() != size) {
         if (data.size() > 0) {
             markAsCorrupted(String::formatted("Acquired shm data with size: %d is less than the expected size: %d.",
                                               data.size(),
-                                              sizeof(Header)));
+                                              size));
         } else {
             assignWithSharedThreadedError();
         }
@@ -101,6 +109,7 @@ bool Shm::doInitialize()
         String::formatted("Shm version: %u is illegal.", m_header.version));
         return false;
     }
+    memcpy(&m_checkpointInfo, data.buffer() + sizeof(Header) * 2, sizeof(CheckpointInfo));
     return true;
 }
 
