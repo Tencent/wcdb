@@ -203,22 +203,20 @@
 
 - (void)test_with_async_write
 {
-    //Remove checkpoint config to avoid wal truncated
-    //    [_database removeConfigForName:@"com.Tencent.WCDB.Config.Checkpoint"];
-
     NSString *tableName = self.className;
+    int init = 1;
     int count = 100000;
-    XCTAssertEqual([self insertObjectsOfCount:1 intoTable:tableName].count, 1);
+    XCTAssertEqual([self insertObjectsOfCount:init intoTable:tableName].count, init);
 
     int expectedInsertCount = 5;
-    int expectedBackupCount = 1000;
+    int expectedBackupCount = 100;
 
     __block int insertCount = 0;
     __block int backupCount = 0;
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     queue.maxConcurrentOperationCount = 2;
     [queue addOperationWithBlock:^{
-        int i = count;
+        int i = init;
         while (YES) {
             @synchronized(self) {
                 if (insertCount > expectedInsertCount && backupCount > expectedBackupCount) {
