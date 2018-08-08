@@ -80,7 +80,7 @@ RecyclableHandlePool HandlePools::getExistingPool(const std::string &path)
 RecyclableHandlePool HandlePools::getExistingPool(
 const std::map<std::string, std::pair<std::shared_ptr<HandlePool>, int>>::iterator &iter)
 {
-    SharedLockGuard lockGuard(m_lock);
+    WCTInnerAssert(m_lock.level() >= SharedLock::Level::Read);
     if (iter == m_pools.end()) {
         return nullptr;
     }
@@ -106,15 +106,9 @@ void HandlePools::flowBackHandlePool(const std::shared_ptr<HandlePool> &handlePo
 
 void HandlePools::purge()
 {
-    std::list<std::shared_ptr<HandlePool>> handlePools;
-    {
-        SharedLockGuard lockGuard(m_lock);
-        for (const auto &iter : m_pools) {
-            handlePools.push_back(iter.second.first);
-        }
-    }
-    for (const auto &handlePool : handlePools) {
-        handlePool->purgeFreeHandles();
+    SharedLockGuard lockGuard(m_lock);
+    for (const auto &iter : m_pools) {
+        iter.second.first->purgeFreeHandles();
     }
 }
 

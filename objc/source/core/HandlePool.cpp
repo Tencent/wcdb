@@ -87,7 +87,6 @@ std::pair<bool, uint32_t> HandlePool::getIdentifier()
 #pragma mark - Basic
 void HandlePool::setTag(const Tag &tag)
 {
-    WCTAssert(tag != Tag::invalid(), "Tag invalid");
     m_tag.store(tag);
 }
 
