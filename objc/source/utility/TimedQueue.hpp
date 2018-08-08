@@ -50,8 +50,7 @@ public:
             }
 
             SteadyClock expired
-            = std::chrono::steady_clock::now()
-              + std::chrono::microseconds((long long) (delay * 1000000));
+            = SteadyClock::now() + std::chrono::microseconds((long long) (delay * 1000000));
 
             SteadyClock shortest;
             if (!m_list.elements().empty()) {
