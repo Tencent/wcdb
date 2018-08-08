@@ -32,10 +32,6 @@ namespace WCDB {
 class MigrationHandle : public Handle {
 #pragma mark - Initialize
 public:
-    static std::shared_ptr<Handle>
-    handleWithPath(const std::string &path, MigrationSetting &setting);
-
-protected:
     MigrationHandle(const std::string &path, MigrationSetting &setting);
 
 #pragma mark - Override

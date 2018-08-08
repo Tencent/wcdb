@@ -38,7 +38,8 @@ namespace WCDB {
 class Handle : public ErrorProne {
 #pragma mark - Initialize
 public:
-    static std::shared_ptr<Handle> handleWithPath(const std::string &path);
+    Handle(const std::string &path);
+
     Handle() = delete;
     Handle(const Handle &) = delete;
     Handle &operator=(const Handle &) = delete;
@@ -46,7 +47,6 @@ public:
 
 protected:
     friend class HandleRelated;
-    Handle(const std::string &path);
     void *m_handle;
 
 #pragma mark - Path

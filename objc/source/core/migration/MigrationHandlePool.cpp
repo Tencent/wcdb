@@ -73,7 +73,7 @@ MigrationSetting *MigrationHandlePool::getMigrationSetting()
 #pragma mark - Override
 std::shared_ptr<Handle> MigrationHandlePool::generateHandle()
 {
-    return MigrationHandle::handleWithPath(path, m_setting);
+    return std::shared_ptr<Handle>(new MigrationHandle(path, m_setting));
 }
 
 } //namespace WCDB

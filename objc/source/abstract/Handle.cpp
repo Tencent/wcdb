@@ -30,11 +30,6 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-std::shared_ptr<Handle> Handle::handleWithPath(const std::string &path)
-{
-    return std::shared_ptr<Handle>(new Handle(path));
-}
-
 Handle::Handle(const std::string &path_)
 : m_handle(nullptr)
 , m_handleStatement(this)

@@ -24,12 +24,6 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-std::shared_ptr<Handle>
-MigrationHandle::handleWithPath(const std::string &path, MigrationSetting &setting)
-{
-    return std::shared_ptr<Handle>(new MigrationHandle(path, setting));
-}
-
 MigrationHandle::MigrationHandle(const std::string &path, MigrationSetting &setting)
 : Handle(path)
 , m_setting(setting)

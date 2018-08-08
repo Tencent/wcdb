@@ -227,7 +227,7 @@ void HandlePool::flowBack(const std::shared_ptr<ConfiguredHandle> &configuredHan
 
 std::shared_ptr<Handle> HandlePool::generateHandle()
 {
-    return Handle::handleWithPath(path);
+    return std::shared_ptr<Handle>(new Handle(path));
 }
 
 std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
