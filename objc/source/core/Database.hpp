@@ -63,7 +63,6 @@ public:
 #pragma mark - Memory
 public:
     void purge();
-    static void purgeAllDatabases();
 
 #pragma mark - Config
 public:

@@ -25,13 +25,35 @@
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTUnsafeHandle+Private.h>
 
+// Memory
+#if TARGET_OS_IPHONE && !TARGET_OS_WATCH
+#import <UIKit/UIKit.h>
+#endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
+
+// FTS
+#import <WCDB/WCTCursorInfo.h>
+#import <WCDB/WCTDatabase+FTS.h>
+
 @implementation WCTDatabase
 
 + (void)initialize
 {
-    //    WCDB::GlobalConfig::hookVFSOpen([](const char *, int, int)->int {
-    //        return 0;
-    //    });
+    if (self == WCTDatabase.class) {
+#if TARGET_OS_IPHONE && !TARGET_OS_WATCH
+        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+        //keep it the entire life cycle
+        static id s_observer_memory_warning __attribute__((unused)) =
+        [notificationCenter addObserverForName:
+                            UIApplicationDidReceiveMemoryWarningNotification
+                                        object:nil
+                                         queue:nil
+                                    usingBlock:^(NSNotification *) {
+                                        [WCTDatabase purgeAllDatabases];
+                                    }];
+#endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
+
+        WCDB::Core::modules()->addAddress(WCTTokenizerWCDB.cppString, WCDB::FTS::Module<void, WCTCursorInfo>::address());
+    }
 }
 
 - (instancetype)initWithPath:(NSString *)path

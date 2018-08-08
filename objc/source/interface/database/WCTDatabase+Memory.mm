@@ -20,27 +20,8 @@
 
 #import <WCDB/Interface.h>
 #import <WCDB/WCTCore+Private.h>
-#if TARGET_OS_IPHONE && !TARGET_OS_WATCH
-#import <UIKit/UIKit.h>
-#endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
 
 @implementation WCTDatabase (Memory)
-
-#if TARGET_OS_IPHONE && !TARGET_OS_WATCH
-+ (void)load
-{
-    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    //keep it the entire life cycle
-    static id s_observer_memory_warning __attribute__((unused)) =
-    [notificationCenter addObserverForName:
-                        UIApplicationDidReceiveMemoryWarningNotification
-                                    object:nil
-                                     queue:nil
-                                usingBlock:^(NSNotification *) {
-                                    WCDB::Database::purgeAllDatabases();
-                                }];
-}
-#endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
 
 - (void)purge
 {
@@ -49,7 +30,7 @@
 
 + (void)purgeAllDatabases
 {
-    WCDB::Database::purgeAllDatabases();
+    WCDB::Core::handlePools()->purge();
 }
 
 @end

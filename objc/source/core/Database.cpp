@@ -138,11 +138,6 @@ void Database::purge()
     m_pool->purgeFreeHandles();
 }
 
-void Database::purgeAllDatabases()
-{
-    Core::handlePools()->purge();
-}
-
 #pragma mark - Config
 void Database::setConfig(const std::string &name, const std::shared_ptr<Config> &config, int priority)
 {

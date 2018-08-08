@@ -21,7 +21,6 @@
 #import <WCDB/Assertion.hpp>
 #import <WCDB/Interface.h>
 #import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTCursorInfo.h>
 
 WCTTokenizer const WCTTokenizerSimple = @"simple";
 WCTTokenizer const WCTTokenizerPorter = @"porter";
@@ -31,18 +30,8 @@ WCTTokenizer const WCTTokenizerWCDB = @"WCDB";
 
 @implementation WCTDatabase (FTS)
 
-+ (void)lazyEnrollTokenizer
-{
-    static std::atomic<bool> *s_enrolled = new std::atomic<bool>(false);
-    if (!s_enrolled->load()) {
-        WCDB::Core::modules()->addAddress("WCDB", WCDB::FTS::Module<void, WCTCursorInfo>::address());
-        s_enrolled->store(true);
-    }
-}
-
 - (void)setTokenizer:(NSString *)tokenizerName
 {
-    [self.class lazyEnrollTokenizer];
     WCTRemedialAssert(tokenizerName, "Tokenizer name can't be null.", return;)
     _database->setConfig(WCDB::Core::TokenizeConfigName,
                          WCDB::Core::tokenizeConfig({ tokenizerName.cppString }),
@@ -51,7 +40,6 @@ WCTTokenizer const WCTTokenizerWCDB = @"WCDB";
 
 - (void)setTokenizers:(NSArray<NSString *> *)tokenizerNames
 {
-    [self.class lazyEnrollTokenizer];
     WCTRemedialAssert(tokenizerNames, "Tokenizers can't be null.", return;)
     std::list<std::string>
     theTokenizeNames;
