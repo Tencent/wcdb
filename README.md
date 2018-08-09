@@ -217,6 +217,10 @@ and place them to proper locations suitable for WCDB library building.
 * Documentations can be found on [our Wiki][wcdb-wiki].
 * API references for Android can be found [here][wcdb-docs-android].
 
+## Contributing
+
+If you are interested in contributing, check out the [CONTRIBUTING.md], also join our [Tencent OpenSource Plan](https://opensource.tencent.com/contribution).
+
 [install-carthage]: https://github.com/Carthage/Carthage#installing-carthage
 [wcdb-wiki]: https://github.com/Tencent/wcdb/wiki
 [wcdb-docs-ios]: https://tencent.github.io/wcdb/references/ios/index.html
