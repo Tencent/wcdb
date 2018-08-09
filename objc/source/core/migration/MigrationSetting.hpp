@@ -36,8 +36,9 @@ class MigrationSetting {
 public:
     typedef std::function<void(const MigrationInfo *)> TableMigratedCallback;
 
-    MigrationSetting(MigrationHandlePool *m_pool,
-                     const std::list<std::shared_ptr<MigrationInfo>> &infos);
+    MigrationSetting(MigrationHandlePool *m_pool);
+
+    void setInfo(const std::list<std::shared_ptr<MigrationInfo>> &infos);
 
 protected:
     MigrationSetting() = delete;
@@ -68,11 +69,6 @@ public:
     typedef std::function<bool(const MigrationInfo *, const long long &)> ConflictCallback;
     void setConflictCallback(const ConflictCallback &callback);
     bool invokeConflictCallback(const MigrationInfo *, const long long &) const;
-
-#ifdef DEBUG
-    const int64_t hash;
-    int64_t hashedInfos(const std::list<std::shared_ptr<MigrationInfo>> &infos) const;
-#endif
 
 protected:
     mutable SharedLock m_lock;

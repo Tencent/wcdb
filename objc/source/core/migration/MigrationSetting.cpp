@@ -24,17 +24,16 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-MigrationSetting::MigrationSetting(MigrationHandlePool *pool,
-                                   const std::list<std::shared_ptr<MigrationInfo>> &infos)
-: m_onMigrated(nullptr)
-, m_rowPerStep(10)
-, m_onConflict(nullptr)
-, m_pool(pool)
-#ifdef DEBUG
-, hash(hashedInfos(infos))
-#endif
+MigrationSetting::MigrationSetting(MigrationHandlePool *pool)
+: m_onMigrated(nullptr), m_rowPerStep(10), m_onConflict(nullptr), m_pool(pool)
 {
+}
+
+void MigrationSetting::setInfo(const std::list<std::shared_ptr<MigrationInfo>> &infos)
+{
+#warning TODO avoid multi-threading issue
     WCTAssert(!infos.empty(), "Migration infos can't be empty.");
+    WCTAssert(m_infos.empty(), "Migration infos are already set.");
     for (const auto &info : infos) {
         if (!info->isSameDatabaseMigration()) {
             auto iter = m_schemas.find(info->schema);
@@ -50,20 +49,6 @@ MigrationSetting::MigrationSetting(MigrationHandlePool *pool,
         m_infos[info->targetTable] = info;
     }
 }
-
-#ifdef DEBUG
-int64_t
-MigrationSetting::hashedInfos(const std::list<std::shared_ptr<MigrationInfo>> &infos) const
-{
-    std::string hashSource;
-    for (const auto &info : infos) {
-        hashSource.append(info->targetTable);
-        hashSource.append(info->sourceTable);
-        hashSource.append(info->sourceDatabasePath);
-    }
-    return std::hash<std::string>{}(hashSource);
-}
-#endif
 
 #pragma mark - Basic
 bool MigrationSetting::isSameDatabaseMigration() const

@@ -43,8 +43,8 @@
     _info = [[WCTMigrationInfo alloc] initWithTargetTable:_migratedTableName
                                           fromSourceTable:_tableName];
 
-    _migrated = [[WCTMigrationDatabase alloc] initWithPath:self.recommendedPath
-                                                   andInfo:_info];
+    _migrated = [[WCTMigrationDatabase alloc] initWithPath:self.recommendedPath];
+    [_migrated setMigrationInfo:_info];
     _database = _migrated;
 
     XCTAssertTrue([_migrated createTableAndIndexes:_migratedTableName withClass:_cls]);

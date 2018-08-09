@@ -49,7 +49,8 @@
 
         // migrate half the number of objects
         WCTMigrationInfo *info = [[WCTMigrationInfo alloc] initWithTargetTable:migratedTableName fromSourceTable:tableName];
-        WCTMigrationDatabase *migrationDatabase = [[WCTMigrationDatabase alloc] initWithPath:self.recommendedPath andInfo:info];
+        WCTMigrationDatabase *migrationDatabase = [[WCTMigrationDatabase alloc] initWithPath:self.recommendedPath];
+        [migrationDatabase setMigrationInfo:info];
         XCTAssertTrue([migrationDatabase createTableAndIndexes:migratedTableName withClass:BenchmarkObject.class]);
         migrationDatabase.migrateRowPerStep = self.config.readCount / 2;
         BOOL done;
@@ -93,7 +94,8 @@
         self.database = nil;
 
         WCTMigrationInfo *info = [[WCTMigrationInfo alloc] initWithTargetTable:migratedTableName fromSourceTable:tableName];
-        WCTMigrationDatabase *migrationDatabase = [[WCTMigrationDatabase alloc] initWithPath:self.recommendedPath andInfo:info];
+        WCTMigrationDatabase *migrationDatabase = [[WCTMigrationDatabase alloc] initWithPath:self.recommendedPath];
+        [migrationDatabase setMigrationInfo:info];
         XCTAssertTrue([migrationDatabase createTableAndIndexes:migratedTableName withClass:BenchmarkObject.class]);
         self.database = migrationDatabase;
 
@@ -130,7 +132,8 @@
         self.database = nil;
 
         WCTMigrationInfo *info = [[WCTMigrationInfo alloc] initWithTargetTable:migratedTableName fromSourceTable:tableName];
-        WCTMigrationDatabase *migrationDatabase = [[WCTMigrationDatabase alloc] initWithPath:self.recommendedPath andInfo:info];
+        WCTMigrationDatabase *migrationDatabase = [[WCTMigrationDatabase alloc] initWithPath:self.recommendedPath];
+        [migrationDatabase setMigrationInfo:info];
         XCTAssertTrue([migrationDatabase createTableAndIndexes:migratedTableName withClass:BenchmarkObject.class]);
         self.database = migrationDatabase;
 

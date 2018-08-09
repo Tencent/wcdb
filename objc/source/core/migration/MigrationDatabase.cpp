@@ -47,12 +47,9 @@ MigrationDatabase::databaseWithExistingPath(const std::string &path)
     return nullptr;
 }
 
-std::shared_ptr<HandlePool>
-MigrationDatabase::generateHandlePool(const std::string &path,
-                                      const std::list<std::shared_ptr<MigrationInfo>> &infos)
+std::shared_ptr<HandlePool> MigrationDatabase::generateHandlePool(const std::string &path)
 {
-    std::shared_ptr<HandlePool> pool
-    = MigrationHandlePool::pool(path, Core::configs(), infos);
+    std::shared_ptr<HandlePool> pool = MigrationHandlePool::pool(path, Core::configs());
     if (pool) {
         MigrationHandlePool *migrationHandlePool
         = static_cast<MigrationHandlePool *>(pool.get());
@@ -65,12 +62,10 @@ MigrationDatabase::generateHandlePool(const std::string &path,
     return pool;
 }
 
-std::shared_ptr<Database>
-MigrationDatabase::databaseWithPath(const std::string &path,
-                                    const std::list<std::shared_ptr<MigrationInfo>> &infos)
+std::shared_ptr<Database> MigrationDatabase::databaseWithPath(const std::string &path)
 {
     RecyclableHandlePool pool = Core::handlePools()->getOrGeneratePool(
-    path, std::bind(&MigrationDatabase::generateHandlePool, std::placeholders::_1, infos));
+    path, std::bind(&MigrationDatabase::generateHandlePool, std::placeholders::_1));
     WCTRemedialAssert(
     pool == nullptr || dynamic_cast<MigrationHandlePool *>(pool.getHandlePool()) != nullptr,
     "Failed to init it as a migration database due to it's already a normal database.",
@@ -91,6 +86,11 @@ MigrationDatabase::MigrationDatabase(const RecyclableHandlePool &pool)
 }
 
 #pragma mark - Migration
+void MigrationDatabase::setMigrationInfos(const std::list<std::shared_ptr<MigrationInfo>> &infos)
+{
+    m_migrationPool->setMigrationInfo(infos);
+}
+
 bool MigrationDatabase::stepMigration(bool &done)
 {
 #ifdef DEBUG

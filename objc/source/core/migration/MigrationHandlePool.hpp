@@ -32,14 +32,12 @@ class MigrationHandlePool : public HandlePool {
 #pragma mark - Initialize
 public:
     static std::shared_ptr<HandlePool>
-    pool(const std::string &path,
-         const std::shared_ptr<Configs> &configs,
-         const std::list<std::shared_ptr<MigrationInfo>> &infos);
+    pool(const std::string &path, const std::shared_ptr<Configs> &configs);
+
+    void setMigrationInfo(const std::list<std::shared_ptr<MigrationInfo>> &infos);
 
 protected:
-    MigrationHandlePool(const std::string &path,
-                        const std::shared_ptr<Configs> &configs,
-                        const std::list<std::shared_ptr<MigrationInfo>> &infos);
+    MigrationHandlePool(const std::string &path, const std::shared_ptr<Configs> &configs);
 
 #ifdef DEBUG
 public:

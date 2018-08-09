@@ -36,21 +36,19 @@ public:
     MigrationDatabase(const MigrationDatabase &) = delete;
     MigrationDatabase &operator=(const MigrationDatabase &) = delete;
 
-    static std::shared_ptr<Database>
-    databaseWithPath(const std::string &path,
-                     const std::list<std::shared_ptr<MigrationInfo>> &infos);
+    static std::shared_ptr<Database> databaseWithPath(const std::string &path);
     static std::shared_ptr<Database> databaseWithExistingPath(const std::string &path);
     static std::shared_ptr<Database> databaseWithExistingTag(const Tag &tag);
 
 protected:
     MigrationDatabase(const RecyclableHandlePool &pool);
 
-    static std::shared_ptr<HandlePool>
-    generateHandlePool(const std::string &path,
-                       const std::list<std::shared_ptr<MigrationInfo>> &infos);
+    static std::shared_ptr<HandlePool> generateHandlePool(const std::string &path);
 
 #pragma mark - Migration
 public:
+    void setMigrationInfos(const std::list<std::shared_ptr<MigrationInfo>> &infos);
+
     bool stepMigration(bool &done);
 
     enum State {

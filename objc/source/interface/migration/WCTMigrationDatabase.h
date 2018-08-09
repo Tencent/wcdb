@@ -34,13 +34,11 @@ typedef BOOL (^WCTSteppedBlock)(WCTMigrationState, BOOL);
 
 @interface WCTMigrationDatabase : WCTDatabase
 
-- (nullable instancetype)initWithPath:(NSString *)path
-                              andInfo:(WCTMigrationInfo *)info;
+- (instancetype)initWithPath:(NSString *)path;
 
-- (nullable instancetype)initWithPath:(NSString *)path
-                             andInfos:(NSArray<WCTMigrationInfo *> *)infos;
+- (void)setMigrationInfo:(WCTMigrationInfo *)info;
 
-- (nullable instancetype)initWithExistingPath:(NSString *)path;
+- (void)setMigrationInfos:(NSArray<WCTMigrationInfo *> *)infos;
 
 - (void)setTableMigratedCallback:(nullable WCTTableMigratedBlock)onMigrated;
 

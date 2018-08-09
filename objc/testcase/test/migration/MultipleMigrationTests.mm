@@ -50,7 +50,8 @@
     [_migrated finalizeDatabase];
     _migrated = nil;
 
-    _migrated = [[WCTMigrationDatabase alloc] initWithPath:_migratedPath andInfos:_infos];
+    _migrated = [[WCTMigrationDatabase alloc] initWithPath:_migratedPath];
+    [_migrated setMigrationInfos:_infos];
     {
         NSArray<TestCaseObject *> *objects = [_migrated getObjectsOfClass:TestCaseObject.class fromTable:_table1];
         XCTAssertTrue([_preInsertObjects1 isEqualToTestCaseObjects:objects]);

@@ -58,7 +58,14 @@
 
 - (instancetype)initWithPath:(NSString *)path
 {
+    WCTRemedialAssert(path.length > 0, "Path can't be null.", return nil;);
     return [super initWithDatabase:WCDB::Database::databaseWithPath(path.cppString)];
+}
+
+- (instancetype)initWithExistingPath:(NSString *)path
+{
+    WCTRemedialAssert(path.length > 0, "Path can't be null.", return nil;);
+    return [super initWithDatabase:WCDB::Database::databaseWithExistingPath(path.cppString)];
 }
 
 - (instancetype)initWithExistingTag:(WCTTag)tag

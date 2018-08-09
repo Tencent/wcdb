@@ -30,27 +30,14 @@
 }
 
 - (instancetype)initWithPath:(NSString *)path
-                    andInfos:(NSArray<WCTMigrationInfo *> *)infos
 {
-    WCTRemedialAssert(path, "Path can't be null.", return nil;);
-    WCTRemedialAssert(infos.count > 0, "Migration infos can't be null or empty. If you want to refer a inited migration database, use [initWithExistingPath:] instead.", return nil;);
-    std::list<std::shared_ptr<WCDB::MigrationInfo>> infoList;
-    for (WCTMigrationInfo *info in infos) {
-        infoList.push_back([info getWCDBMigrationInfo]);
-    }
-    return [self initWithDatabase:WCDB::MigrationDatabase::databaseWithPath(path.cppString, infoList)];
-}
-
-- (instancetype)initWithPath:(NSString *)path
-                     andInfo:(WCTMigrationInfo *)info
-{
-    WCTRemedialAssert(info, "Migration info can't be null. If you want to refer an inited migration database, use [initWithExistingPath:] instead.", return nil;);
-    WCTRemedialAssert(path, "Path can't be null.", return nil;);
-    return [self initWithDatabase:WCDB::MigrationDatabase::databaseWithPath(path.cppString, { [info getWCDBMigrationInfo] })];
+    WCTRemedialAssert(path != nil, "Path can't be null.", return nil;);
+    return [self initWithDatabase:WCDB::MigrationDatabase::databaseWithPath(path.cppString)];
 }
 
 - (instancetype)initWithExistingPath:(nonnull NSString *)path
 {
+    WCTRemedialAssert(path != nil, "Path can't be null.", return nil;);
     return [self initWithDatabase:WCDB::MigrationDatabase::databaseWithExistingPath(path.cppString)];
 }
 
@@ -59,18 +46,28 @@
     return [self initWithDatabase:WCDB::MigrationDatabase::databaseWithExistingTag(tag)];
 }
 
-- (instancetype)initWithPath:(NSString *)path
-{
-    WCTFatalError("Use [initWithExistingPath:] instead.");
-    return nil;
-}
-
 - (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
 {
     if (self = [super initWithDatabase:database]) {
         _migrationDatabase = static_cast<WCDB::MigrationDatabase *>(database.get());
     }
     return self;
+}
+
+- (void)setMigrationInfo:(WCTMigrationInfo *)info
+{
+    WCTRemedialAssert(info, "Migration info can't be null.", return;);
+    _migrationDatabase->setMigrationInfos({ [info getWCDBMigrationInfo] });
+}
+
+- (void)setMigrationInfos:(NSArray<WCTMigrationInfo *> *)infos
+{
+    WCTRemedialAssert(infos.count > 0, "Migration infos can't be null or empty.", return;);
+    std::list<std::shared_ptr<WCDB::MigrationInfo>> infoList;
+    for (WCTMigrationInfo *info in infos) {
+        infoList.push_back([info getWCDBMigrationInfo]);
+    }
+    _migrationDatabase->setMigrationInfos(infoList);
 }
 
 - (BOOL)stepMigration:(BOOL &)done

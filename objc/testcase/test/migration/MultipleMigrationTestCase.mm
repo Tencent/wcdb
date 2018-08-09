@@ -63,7 +63,8 @@
     WCTMigrationInfo *info2 = [[WCTMigrationInfo alloc] initWithTargetTable:_migratedTable2 fromSourceTable:_table2 ofDatabase:_path2];
     WCTMigrationInfo *info3 = [[WCTMigrationInfo alloc] initWithTargetTable:_migratedTable3 fromSourceTable:_table3];
     _infos = @[ info1, info2, info3 ];
-    _migrated = [[WCTMigrationDatabase alloc] initWithPath:_migratedPath andInfos:_infos];
+    _migrated = [[WCTMigrationDatabase alloc] initWithPath:_migratedPath];
+    [_migrated setMigrationInfos:_infos];
     XCTAssertTrue([_migrated createTableAndIndexes:_table1 withClass:_cls]);
     XCTAssertTrue([_migrated createTableAndIndexes:_migratedTable2 withClass:_cls]);
     XCTAssertTrue([_migrated createTableAndIndexes:_migratedTable3 withClass:_cls]);
