@@ -26,17 +26,17 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-Data::Data() : UnsafeData(), m_sharedBuffer(nullptr)
+Data::Data() : UnsafeData(), m_sharedBuffer(nullptr), m_sharedSize(0)
 {
 }
 
-Data::Data(size_t size) : UnsafeData(), m_sharedBuffer(nullptr)
+Data::Data(size_t size) : UnsafeData(), m_sharedBuffer(nullptr), m_sharedSize(0)
 {
     reset(size);
 }
 
 Data::Data(const unsigned char* buffer, size_t size)
-: UnsafeData(), m_sharedBuffer(nullptr)
+: UnsafeData(), m_sharedBuffer(nullptr), m_sharedSize(0)
 {
     reset(buffer, size);
 }
@@ -49,17 +49,17 @@ Data::Data(const UnsafeData& unsafeData)
 off_t Data::getCurrentOffset() const
 {
     WCTInnerAssert(m_sharedBuffer != nullptr);
-    return m_sharedBuffer->data() - m_buffer;
+    return m_sharedBuffer.get() - m_buffer;
 }
 
 size_t Data::getSharedSize() const
 {
     WCTInnerAssert(m_sharedBuffer != nullptr);
-    return m_sharedBuffer->size();
+    return m_sharedSize;
 }
 
-Data::Data(const std::shared_ptr<std::vector<unsigned char>>& sharedBuffer, off_t offset, size_t size)
-: UnsafeData(sharedBuffer->data() + offset, size), m_sharedBuffer(sharedBuffer)
+Data::Data(const std::shared_ptr<unsigned char>& sharedBuffer, size_t sharedSize, off_t offset, size_t size)
+: UnsafeData(sharedBuffer.get() + offset, size), m_sharedBuffer(sharedBuffer), m_sharedSize(sharedSize)
 {
 }
 
@@ -69,13 +69,13 @@ bool Data::resize(size_t size)
     if (m_sharedBuffer != nullptr && getCurrentOffset() + size <= getSharedSize()) {
         m_size = size;
     } else {
-        std::shared_ptr<std::vector<unsigned char>> oldSharedBuffer = m_sharedBuffer;
+        std::shared_ptr<unsigned char> oldSharedBuffer = m_sharedBuffer;
         unsigned char* oldBuffer = m_buffer;
         size_t oldSize = m_size;
         if (!reset(size)) {
             return false;
         }
-        if (oldBuffer) {
+        if (oldBuffer && oldSize > 0) {
             memcpy(m_buffer, oldBuffer, oldSize);
         }
     }
@@ -84,18 +84,24 @@ bool Data::resize(size_t size)
 
 bool Data::reset(const unsigned char* buffer, size_t size)
 {
-    std::shared_ptr<std::vector<unsigned char>> newSharedBuffer(
-    new std::vector<unsigned char>(size));
+    if (size == 0) {
+        m_sharedBuffer = nullptr;
+        m_sharedSize = 0;
+        return true;
+    }
+    std::shared_ptr<unsigned char> newSharedBuffer(
+    new unsigned char[size]);
     if (newSharedBuffer == nullptr) {
         setThreadedError(Error(Error::Code::NoMemory));
         return false;
     }
     if (buffer != nullptr) {
-        memcpy(newSharedBuffer->data(), buffer, size);
+        memcpy(newSharedBuffer.get(), buffer, size);
     }
     m_sharedBuffer = newSharedBuffer;
+    m_sharedSize = size;
     m_size = size;
-    m_buffer = m_sharedBuffer->data();
+    m_buffer = m_sharedBuffer.get();
     return true;
 }
 
@@ -116,8 +122,8 @@ Data Data::subdata(size_t size) const
         return emptyData();
     }
     WCTRemedialAssert(
-    getCurrentOffset() + size <= getSharedSize(), "Memory cross-border", return Data(););
-    return Data(m_sharedBuffer, getCurrentOffset(), size);
+    getCurrentOffset() + size <= getSharedSize(), "Memory cross-border.", return emptyData(););
+    return Data(m_sharedBuffer, m_sharedSize, getCurrentOffset(), size);
 }
 
 Data Data::subdata(off_t offset, size_t size) const
@@ -126,9 +132,9 @@ Data Data::subdata(off_t offset, size_t size) const
         return emptyData();
     }
     WCTRemedialAssert(size > 0 && getCurrentOffset() + offset + size <= getSharedSize(),
-                      "Memory cross-border",
-                      return Data(););
-    return Data(m_sharedBuffer, getCurrentOffset() + offset, size);
+                      "Memory cross-border.",
+                      return emptyData(););
+    return Data(m_sharedBuffer, m_sharedSize, getCurrentOffset() + offset, size);
 }
 
 const Data& Data::emptyData()

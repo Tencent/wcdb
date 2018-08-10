@@ -36,11 +36,13 @@ public:
     Data(const unsigned char* buffer, size_t size);
 
 protected:
-    Data(const std::shared_ptr<std::vector<unsigned char>>& sharedBuffer, off_t offset, size_t size);
+    Data(const std::shared_ptr<unsigned char>& sharedBuffer, size_t sharedSize, off_t offset, size_t size);
     off_t getCurrentOffset() const;
     size_t getSharedSize() const;
-
-    std::shared_ptr<std::vector<unsigned char>> m_sharedBuffer;
+    
+private:
+    std::shared_ptr<unsigned char> m_sharedBuffer;
+    size_t m_sharedSize;
 
 #pragma mark - Reset
 public:
