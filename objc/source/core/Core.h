@@ -80,23 +80,23 @@ public:
     customConfig(const CustomConfig::Invocation& invocation,
                  const CustomConfig::Invocation& uninvocation = nullptr);
 
-    static constexpr const char* CorruptionQueueName = "com.Tencent.WCDB.Queue.Corruption";
-    static constexpr const char* CheckpointQueueName = "com.Tencent.WCDB.Queue.Checkpoint";
-    static constexpr const char* BackupQueueName = "com.Tencent.WCDB.Queue.Backup";
+    static constexpr const char* corruptionQueueName = "com.Tencent.WCDB.Queue.Corruption";
+    static constexpr const char* checkpointQueueName = "com.Tencent.WCDB.Queue.Checkpoint";
+    static constexpr const char* backupQueueName = "com.Tencent.WCDB.Queue.Backup";
 
-    static constexpr const char* BasicConfigName = "com.Tencent.WCDB.Config.Basic";
-    static constexpr const char* BackupConfigName = "com.Tencent.WCDB.Config.Backup";
-    static constexpr const char* CheckpointConfigName = "com.Tencent.WCDB.Config.Checkpoint";
-    static constexpr const char* TokenizeConfigName = "com.Tencent.WCDB.Config.Tokenize";
-    static constexpr const char* CipherConfigName = "com.Tencent.WCDB.Config.Cipher";
-    static constexpr const char* SQLTraceConfigName = "com.Tencent.WCDB.Config.SQLTrace";
-    static constexpr const char* PerformanceTraceConfigName
+    static constexpr const char* basicConfigName = "com.Tencent.WCDB.Config.Basic";
+    static constexpr const char* backupConfigName = "com.Tencent.WCDB.Config.Backup";
+    static constexpr const char* checkpointConfigName = "com.Tencent.WCDB.Config.Checkpoint";
+    static constexpr const char* tokenizeConfigName = "com.Tencent.WCDB.Config.Tokenize";
+    static constexpr const char* cipherConfigName = "com.Tencent.WCDB.Config.Cipher";
+    static constexpr const char* sqlTraceConfigName = "com.Tencent.WCDB.Config.SQLTrace";
+    static constexpr const char* performanceTraceConfigName
     = "com.Tencent.WCDB.Config.PerformanceTrace";
-    static constexpr const char* GlobalSQLTraceConfigName
+    static constexpr const char* globalSQLTraceConfigName
     = "com.Tencent.WCDB.Config.GlobalSQLTrace";
-    static constexpr const char* GlobalPerformanceTraceConfigName
+    static constexpr const char* globalPerformanceTraceConfigName
     = "com.Tencent.WCDB.Config.GlobalPerformanceTrace";
-    static constexpr const char* MigrationConfigName = "com.Tencent.WCDB.Config.Migration";
+    static constexpr const char* migrationConfigName = "com.Tencent.WCDB.Config.Migration";
 
     Core(const Core&) = delete;
     Core& operator=(const Core&) = delete;

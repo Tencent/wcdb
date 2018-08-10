@@ -33,7 +33,7 @@ WCTTokenizer const WCTTokenizerWCDB = @"WCDB";
 - (void)setTokenizer:(NSString *)tokenizerName
 {
     WCTRemedialAssert(tokenizerName, "Tokenizer name can't be null.", return;)
-    _database->setConfig(WCDB::Core::TokenizeConfigName,
+    _database->setConfig(WCDB::Core::tokenizeConfigName,
                          WCDB::Core::tokenizeConfig({ tokenizerName.cppString }),
                          WCDB::Configs::Priority::Higher);
 }
@@ -46,7 +46,7 @@ WCTTokenizer const WCTTokenizerWCDB = @"WCDB";
     for (NSString *tokenizerName in tokenizerNames) {
         theTokenizeNames.push_back(tokenizerName.cppString);
     }
-    _database->setConfig(WCDB::Core::TokenizeConfigName,
+    _database->setConfig(WCDB::Core::tokenizeConfigName,
                          WCDB::Core::tokenizeConfig(theTokenizeNames),
                          WCDB::Configs::Priority::Higher);
 }

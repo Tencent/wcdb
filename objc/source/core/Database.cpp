@@ -282,9 +282,9 @@ const std::string &Database::getFactoryDirectory() const
 void Database::autoBackup(bool flag)
 {
     if (flag) {
-        setConfig(Core::BackupConfigName, Core::backupConfig(), Configs::Priority::Low);
+        setConfig(Core::backupConfigName, Core::backupConfig(), Configs::Priority::Low);
     } else {
-        removeConfig(Core::BackupConfigName);
+        removeConfig(Core::backupConfigName);
     }
 }
 

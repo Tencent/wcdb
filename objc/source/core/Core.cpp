@@ -31,9 +31,9 @@ Core* Core::shared()
 }
 
 Core::Core()
-: m_corruptionQueue(CorruptionQueueName, &m_handlePools)
-, m_checkpointQueue(CheckpointQueueName)
-, m_backupQueue(BackupQueueName)
+: m_corruptionQueue(corruptionQueueName, &m_handlePools)
+, m_checkpointQueue(checkpointQueueName)
+, m_backupQueue(backupQueueName)
 // Configs
 , m_basicConfig(new BasicConfig)
 , m_backupConfig(new BackupConfig(&m_backupQueue))
@@ -41,10 +41,10 @@ Core::Core()
 , m_globalSQLTraceConfig(new ShareableSQLTraceConfig)
 , m_globalPerformanceTraceConfig(new ShareablePerformanceTraceConfig)
 , m_configs(new Configs(OrderedUniqueList<std::string, std::shared_ptr<Config>>({
-  { Configs::Priority::Highest, GlobalSQLTraceConfigName, m_globalSQLTraceConfig },
-  { Configs::Priority::Highest, GlobalPerformanceTraceConfigName, m_globalPerformanceTraceConfig },
-  { Configs::Priority::Higher, BasicConfigName, m_basicConfig },
-  { Configs::Priority::Low, CheckpointConfigName, m_checkpointConfig },
+  { Configs::Priority::Highest, globalSQLTraceConfigName, m_globalSQLTraceConfig },
+  { Configs::Priority::Highest, globalPerformanceTraceConfigName, m_globalPerformanceTraceConfig },
+  { Configs::Priority::Higher, basicConfigName, m_basicConfig },
+  { Configs::Priority::Low, checkpointConfigName, m_checkpointConfig },
   })))
 {
     GlobalConfig::enableMultithread();

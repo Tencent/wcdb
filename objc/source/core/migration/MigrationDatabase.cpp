@@ -57,7 +57,7 @@ MigrationDatabase::generateHandlePool(const std::string &path,
         MigrationHandlePool *migrationHandlePool
         = static_cast<MigrationHandlePool *>(pool.get());
         migrationHandlePool->setConfig(
-        Core::MigrationConfigName,
+        Core::migrationConfigName,
         Core::migrationConfig(migrationHandlePool->getMigrationSetting()),
         Configs::Priority::Higher);
         migrationHandlePool->setInitializeNotification(Database::initializeHandlePool);
@@ -201,7 +201,7 @@ bool MigrationDatabase::stepMigration(bool &done)
         }
         if (setting->markAsMigrated(info->targetTable)) {
             //schema changed
-            setConfig(Core::MigrationConfigName,
+            setConfig(Core::migrationConfigName,
                       Core::migrationConfig(setting),
                       Configs::Priority::Higher);
         }
