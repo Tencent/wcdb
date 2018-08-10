@@ -62,16 +62,6 @@ std::string Handle::getJournalSubfix()
     return "-journal";
 }
 
-std::array<std::string, 4> Handle::getSubfixs()
-{
-    return std::array<std::string, 4>{
-        "", //main db file
-        Handle::getWALSubfix(),
-        Handle::getSHMSubfix(),
-        Handle::getJournalSubfix(),
-    };
-}
-
 #pragma mark - Basic
 bool Handle::open()
 {

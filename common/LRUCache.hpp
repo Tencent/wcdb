@@ -85,7 +85,7 @@ protected:
         m_list.splice(m_list.begin(), m_list, it->second);
     }
     
-    virtual bool shouldPurge() const { return false; }
+    virtual bool shouldPurge() const = 0;
     virtual void willPurge(const Key& key, const Value& value) {}
 
     List m_list;

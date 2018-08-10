@@ -32,8 +32,13 @@ class Data : public UnsafeData {
 public:
     Data();
     Data(const UnsafeData& data);
+    Data(const Data& data);
+    Data(Data&& data);
     Data(size_t size);
     Data(const unsigned char* buffer, size_t size);
+    
+    Data& operator=(const Data& other);
+    Data& operator=(Data&& other);
 
 protected:
     Data(const std::shared_ptr<unsigned char>& sharedBuffer, size_t sharedSize, off_t offset, size_t size);

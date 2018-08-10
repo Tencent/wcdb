@@ -30,6 +30,11 @@ class MappedData : public UnsafeData {
 public:
     MappedData();
     MappedData(unsigned char* mapped, size_t size);
+    MappedData(const MappedData& other);
+    MappedData(MappedData&& other);
+    MappedData& operator=(const MappedData& other);
+    MappedData& operator=(MappedData&& other);
+    ~MappedData();
 
     MappedData subdata(size_t size) const;
     MappedData subdata(off_t offset, size_t size) const;

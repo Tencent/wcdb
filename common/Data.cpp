@@ -45,6 +45,38 @@ Data::Data(const UnsafeData& unsafeData)
 {
     reset(unsafeData);
 }
+    
+    Data::Data(const Data& data)
+    : UnsafeData(data)
+    , m_sharedBuffer(data.m_sharedBuffer)
+    , m_sharedSize(data.m_sharedSize)
+    {
+    }
+    
+    Data::Data(Data&& data)
+    : UnsafeData(std::move(data))
+    , m_sharedBuffer(std::move(data.m_sharedBuffer))
+    , m_sharedSize(data.m_sharedSize)
+    {
+        data.m_sharedSize = 0;
+    }
+    
+    Data& Data::operator=(const Data& other)
+    {
+        UnsafeData::operator=(other);
+        m_sharedBuffer = other.m_sharedBuffer;
+        m_sharedSize = other.m_sharedSize;
+        return *this;
+    }
+    
+    Data& Data::operator=(Data&& other)
+    {
+        UnsafeData::operator=(std::move(other));
+        m_sharedBuffer = std::move(other.m_sharedBuffer);
+        m_sharedSize = other.m_sharedSize;
+        other.m_sharedSize = 0;
+        return *this;
+    }
 
 off_t Data::getCurrentOffset() const
 {
@@ -118,12 +150,7 @@ bool Data::reset(const UnsafeData& unsafeData)
 #pragma mark - Subdata
 Data Data::subdata(size_t size) const
 {
-    if (size == 0) {
-        return emptyData();
-    }
-    WCTRemedialAssert(
-    getCurrentOffset() + size <= getSharedSize(), "Memory cross-border.", return emptyData(););
-    return Data(m_sharedBuffer, m_sharedSize, getCurrentOffset(), size);
+    return subdata(0, size);
 }
 
 Data Data::subdata(off_t offset, size_t size) const

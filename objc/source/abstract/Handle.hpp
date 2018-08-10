@@ -56,7 +56,6 @@ public:
     static std::string getSHMSubfix();
     static std::string getWALSubfix();
     static std::string getJournalSubfix();
-    static std::array<std::string, 4> getSubfixs();
 
 #pragma mark - Basic
 public:

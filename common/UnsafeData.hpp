@@ -31,6 +31,12 @@ class UnsafeData : protected SharedThreadedErrorProne {
 #pragma mark - Initialize
 public:
     UnsafeData();
+    UnsafeData(UnsafeData&& other);
+    UnsafeData(const UnsafeData& other);
+    
+    UnsafeData& operator=(const UnsafeData& other);
+    UnsafeData& operator=(UnsafeData&& other);
+    
     UnsafeData(unsigned char *buffer, size_t size);
 
     static const UnsafeData immutable(const unsigned char *buffer, size_t size);
