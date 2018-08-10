@@ -37,9 +37,7 @@ protected:
     using MapIterator = typename Map::iterator;
 
 public:
-    LRUCache(size_t maxSize = std::numeric_limits<size_t>::max())
-    : m_maxSize(maxSize)
-    {
+    LRUCache() {
     }
 
     void put(const Key& key, const Value& value)
@@ -51,7 +49,7 @@ public:
             m_map.erase(it);
         }
         m_map[key] = m_list.begin();
-        if (m_map.size() > m_maxSize) {
+        if (shouldPurge()) {
             purge();
         }
     }
@@ -61,6 +59,7 @@ public:
         for (size_t i = 0; i < count && !m_list.empty(); ++i) {
             auto last = m_list.end();
             --last;
+            willPurge(last->first, last->second);
             m_map.erase(last->first);
             m_list.pop_back();
         }
@@ -85,8 +84,10 @@ protected:
     {
         m_list.splice(m_list.begin(), m_list, it->second);
     }
+    
+    virtual bool shouldPurge() const { return false; }
+    virtual void willPurge(const Key& key, const Value& value) {}
 
-    size_t m_maxSize;
     List m_list;
     Map m_map;
 };

@@ -43,18 +43,20 @@ protected:
 #pragma mark - PageSize
 public:
     void setPageSize(size_t pageSize);
+    size_t cachePagePerRange() const;
 
 protected:
     size_t m_pageSize;
 
 #pragma mark - Cache
 protected:
-    static constexpr const int maxMapPage = 8 * 1024;
-    static constexpr const int maxCacheSize = 5;
+    static constexpr const size_t memoryPerRange = 16 * 1024 * 1024;
+    static constexpr const size_t maxAllowedMemory = 128 * 1024 * 1024;
+    static const size_t& memoryPageSize();
 
     class Cache : protected LRUCache<Range, MappedData> {
     public:
-        Cache(size_t maxSize);
+        Cache(size_t maxAllowedMemory);
 
         using Super = LRUCache<Range, MappedData>;
         using Location = Range::Location;
@@ -69,6 +71,11 @@ protected:
     protected:
         MapIterator findIterator(Location location);
         Range m_range;
+        
+        bool shouldPurge() const override;
+        void willPurge(const Range& range, const MappedData& data) override;
+        size_t m_maxAllowedMemory;
+        size_t m_currentUsedMemery;
     };
 
     Cache m_cache;

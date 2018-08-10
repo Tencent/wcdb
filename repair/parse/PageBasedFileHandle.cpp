@@ -26,8 +26,11 @@ namespace WCDB {
 
 #pragma mark - PageBasedFileHandle
 PageBasedFileHandle::PageBasedFileHandle(const std::string& path)
-: FileHandle(path), m_pageSize(0), m_cachePageSize(0), m_cache(maxCacheSize)
+: FileHandle(path), m_pageSize(0), m_cachePageSize(0), m_cache(maxAllowedMemory)
 {
+    static_assert(maxAllowedMemory % memoryPerRange == 0, "");
+    static_assert((maxAllowedMemory & maxAllowedMemory-1)==0, "");
+    static_assert((memoryPerRange & memoryPerRange-1)==0, "");
 }
 
 Range PageBasedFileHandle::restrictedRange(Range::Location base,
@@ -68,8 +71,8 @@ MappedData PageBasedFileHandle::mapPage(int pageno, off_t offsetWithinPage, size
         WCTInnerAssert(offsetWithinCache < gap.length * m_cachePageSize);
         return cachedData->subdata(offsetWithinCache, sizeWithinPage);
     }
-
-    Range::Length maxLength = maxMapPage;
+    
+    Range::Length maxLength = cachePagePerRange();
     do {
         Range range = restrictedRange(cachePageno, maxLength, gap);
 
@@ -96,7 +99,7 @@ MappedData PageBasedFileHandle::mapPage(int pageno, off_t offsetWithinPage, size
         } else if (purgeable) {
             m_cache.purge();
             std::tie(gap, cachedData) = m_cache.find(cachePageno);
-            maxLength = maxMapPage;
+            maxLength = cachePagePerRange();
             WCTInnerAssert(cachedData == nullptr);
         } else {
             break;
@@ -111,19 +114,31 @@ MappedData PageBasedFileHandle::mapPage(int pageno)
     WCTInnerAssert(pageno > 0);
     return mapPage(pageno, 0, m_pageSize);
 }
+    
+    const size_t& PageBasedFileHandle::memoryPageSize()
+    {
+        static size_t s_memoryPageSize = getpagesize();
+        return s_memoryPageSize;
+    }
+    
+    size_t PageBasedFileHandle::cachePagePerRange() const
+    {
+        WCTInnerAssert(m_cachePageSize != 0);
+        return memoryPerRange / m_cachePageSize;
+    }
 
 void PageBasedFileHandle::setPageSize(size_t pageSize)
 {
     WCTInnerAssert(m_cachePageSize == 0);
     m_pageSize = pageSize;
-    static size_t s_memoryPageSize = getpagesize();
     m_cachePageSize = pageSize;
-    size_t alignment = m_cachePageSize % s_memoryPageSize;
+    size_t alignment = m_cachePageSize % memoryPageSize();
     if (alignment > 0) {
-        m_cachePageSize = m_cachePageSize - alignment + s_memoryPageSize;
+        m_cachePageSize = m_cachePageSize - alignment + memoryPageSize();
     }
-    WCTInnerAssert(m_cachePageSize > 0 && m_cachePageSize % s_memoryPageSize == 0);
-    m_cachePageSize = std::max(s_memoryPageSize, m_cachePageSize);
+    WCTInnerAssert(m_cachePageSize > 0 && m_cachePageSize % memoryPageSize() == 0);
+    m_cachePageSize = std::max(memoryPageSize(), m_cachePageSize);
+    WCTInnerAssert(memoryPerRange % m_cachePageSize == 0);
 
     size_t fileSize = FileHandle::size();
     Range::Length restrictCachePageno
@@ -132,8 +147,8 @@ void PageBasedFileHandle::setPageSize(size_t pageSize)
 }
 
 #pragma mark - Cache
-PageBasedFileHandle::Cache::Cache(size_t maxSize)
-: LRUCache<WCDB::Range, WCDB::MappedData>(maxSize), m_range(Range::notFound())
+PageBasedFileHandle::Cache::Cache(size_t maxAllowedMemory)
+: LRUCache<WCDB::Range, WCDB::MappedData>(), m_range(Range::notFound()), m_maxAllowedMemory(maxAllowedMemory), m_currentUsedMemery(0)
 {
 }
 
@@ -195,9 +210,20 @@ void PageBasedFileHandle::Cache::insert(const Range& range, const MappedData& da
     WCTInnerAssert(m_range.contains(range));
     WCTInnerAssert(find(range.location).second == nullptr);
     WCTInnerAssert(find(range.edge() - 1).second == nullptr);
+    m_currentUsedMemery += data.size();
     put(range, data);
 }
-
+    
+    bool PageBasedFileHandle::Cache::shouldPurge() const
+    {
+        return m_currentUsedMemery > m_maxAllowedMemory;
+    }
+    
+    void PageBasedFileHandle::Cache::willPurge(const Range& range, const MappedData& data)
+    {
+        m_currentUsedMemery -= data.size();
+    }
+    
 PageBasedFileHandle::Cache::MapIterator
 PageBasedFileHandle::Cache::findIterator(Location location)
 {
