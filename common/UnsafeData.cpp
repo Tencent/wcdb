@@ -79,6 +79,7 @@ size_t UnsafeData::size() const
 
 uint32_t UnsafeData::hash() const
 {
+    // crc32 is pretty fast and have more collisions. BUT it's enough for checking whether corrupted.
     return (uint32_t) crc32(0, buffer(), (uint32_t) size());
 }
 
