@@ -166,9 +166,9 @@
 				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
 				<dict>
 					<key>baselineAverage</key>
-					<real>0.282</real>
+					<real>0.27</real>
 					<key>baselineIntegrationDisplayName</key>
-					<string>Jul 27, 2018 at 18:08:35</string>
+					<string>Aug 10, 2018 at 17:09:39</string>
 				</dict>
 			</dict>
 			<key>test_repair_with_backup</key>
