@@ -20,6 +20,7 @@
 
 #include <WCDB/SQLiteLocker.hpp>
 #include <sqlcipher/sqlite3.h>
+#include <WCDB/Assertion.hpp>
 
 namespace WCDB {
 
@@ -32,6 +33,7 @@ const Error &SQLiteReadLocker::getError() const
 
 void SQLiteReadLocker::setPath(const std::string &path)
 {
+    WCTInnerAssert(m_path.empty());
     SQLiteBase::setPath(path);
 }
 
@@ -66,6 +68,7 @@ const Error &SQLiteWriteLocker::getError() const
 
 void SQLiteWriteLocker::setPath(const std::string &path)
 {
+    WCTInnerAssert(m_path.empty());
     SQLiteBase::setPath(path);
 }
 

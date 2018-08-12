@@ -90,7 +90,7 @@ std::string formatted(const char *format, ...)
         } else {
             size *= 2;
         }
-    } while (size < 1000);
+    } while (true);
     return result;
 }
 
