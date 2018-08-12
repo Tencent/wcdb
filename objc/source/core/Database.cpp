@@ -153,16 +153,17 @@ void Database::removeConfig(const std::string &name)
 bool Database::removeFiles()
 {
     bool result = false;
-    close([&result, this]() {
-        m_pool->attachment.corruption.markAsHandling();
-        std::list<std::string> paths = getPaths();
-        paths.reverse();
-        result = FileManager::removeItems(paths);
-        if (!result) {
-            assignWithSharedThreadedError();
-        }
-        m_pool->attachment.corruption.markAsHandled(result);
-    });
+    blockade();
+    close(nullptr);
+    m_pool->attachment.corruption.markAsHandling();
+    std::list<std::string> paths = getPaths();
+    paths.reverse();
+    result = FileManager::removeItems(paths);
+    if (!result) {
+        assignWithSharedThreadedError();
+    }
+    m_pool->attachment.corruption.markAsHandled(result);
+    unblockade();
     return result;
 }
 
@@ -178,16 +179,17 @@ std::pair<bool, size_t> Database::getFilesSize()
 bool Database::moveFiles(const std::string &directory)
 {
     bool result = false;
-    close([&result, &directory, this]() {
-        m_pool->attachment.corruption.markAsHandling();
-        std::list<std::string> paths = getPaths();
-        paths.reverse();
-        result = FileManager::moveItems(paths, directory);
-        if (!result) {
-            assignWithSharedThreadedError();
-        }
-        m_pool->attachment.corruption.markAsHandled(result);
-    });
+    blockade();
+    close(nullptr);
+    m_pool->attachment.corruption.markAsHandling();
+    std::list<std::string> paths = getPaths();
+    paths.reverse();
+    result = FileManager::moveItems(paths, directory);
+    if (!result) {
+        assignWithSharedThreadedError();
+    }
+    m_pool->attachment.corruption.markAsHandled(result);
+    unblockade();
     return result;
 }
 
@@ -195,18 +197,19 @@ bool Database::moveFilesToDirectoryWithExtraFiles(const std::string &directory,
                                                   const std::list<std::string> &extraFiles)
 {
     bool result = false;
-    close([&result, &directory, &extraFiles, this]() {
-        m_pool->attachment.corruption.markAsHandling();
-        std::list<std::string> paths = extraFiles;
-        std::list<std::string> dbPaths = getPaths();
-        dbPaths.reverse();
-        paths.insert(paths.end(), dbPaths.begin(), dbPaths.end());
-        result = FileManager::moveItems(paths, directory);
-        if (!result) {
-            assignWithSharedThreadedError();
-        }
-        m_pool->attachment.corruption.markAsHandled(result);
-    });
+    blockade();
+    close(nullptr);
+    m_pool->attachment.corruption.markAsHandling();
+    std::list<std::string> paths = extraFiles;
+    std::list<std::string> dbPaths = getPaths();
+    dbPaths.reverse();
+    paths.insert(paths.end(), dbPaths.begin(), dbPaths.end());
+    result = FileManager::moveItems(paths, directory);
+    if (!result) {
+        assignWithSharedThreadedError();
+    }
+    m_pool->attachment.corruption.markAsHandled(result);
+    unblockade();
     return result;
 }
 
@@ -310,54 +313,56 @@ bool Database::backup(int maxWalFrame)
 bool Database::deposit()
 {
     bool result = false;
-    close([&result, this]() {
-        m_pool->attachment.corruption.markAsHandling();
-        Repair::FactoryRenewer renewer = m_pool->attachment.factory.renewer();
-        std::shared_ptr<Repair::Assembler> assembler(new Repair::SQLiteAssembler);
-        renewer.setAssembler(assembler);
-        std::shared_ptr<Repair::ReadLocker> readLocker(new Repair::SQLiteReadLocker);
-        renewer.setReadLocker(readLocker);
-        std::shared_ptr<Repair::WriteLocker> writeLocker(new Repair::SQLiteWriteLocker);
-        renewer.setWriteLocker(writeLocker);
-        do {
-            if (!renewer.prepare()) {
-                setThreadedError(renewer.getError());
-                break;
-            }
-            Repair::FactoryDepositor depositor = m_pool->attachment.factory.depositor();
-            if (!depositor.work()) {
-                setThreadedError(depositor.getError());
-                break;
-            }
-            if (!renewer.work()) {
-                setThreadedError(renewer.getError());
-                break;
-            }
-            result = true;
-        } while (false);
-        m_pool->attachment.corruption.markAsHandled(result);
-    });
+    blockade();
+    close(nullptr);
+    m_pool->attachment.corruption.markAsHandling();
+    Repair::FactoryRenewer renewer = m_pool->attachment.factory.renewer();
+    std::shared_ptr<Repair::Assembler> assembler(new Repair::SQLiteAssembler);
+    renewer.setAssembler(assembler);
+    std::shared_ptr<Repair::ReadLocker> readLocker(new Repair::SQLiteReadLocker);
+    renewer.setReadLocker(readLocker);
+    std::shared_ptr<Repair::WriteLocker> writeLocker(new Repair::SQLiteWriteLocker);
+    renewer.setWriteLocker(writeLocker);
+    do {
+        if (!renewer.prepare()) {
+            setThreadedError(renewer.getError());
+            break;
+        }
+        Repair::FactoryDepositor depositor = m_pool->attachment.factory.depositor();
+        if (!depositor.work()) {
+            setThreadedError(depositor.getError());
+            break;
+        }
+        if (!renewer.work()) {
+            setThreadedError(renewer.getError());
+            break;
+        }
+        result = true;
+    } while (false);
+    m_pool->attachment.corruption.markAsHandled(result);
+    unblockade();
     return result;
 }
 
 double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
 {
     double score = 0;
-    close([&score, &onProgressUpdate, this]() {
-        m_pool->attachment.corruption.markAsHandling();
-        Repair::FactoryRetriever retriever = m_pool->attachment.factory.retriever();
-        std::shared_ptr<Repair::Assembler> assembler(new Repair::SQLiteAssembler);
-        retriever.setAssembler(assembler);
-        std::shared_ptr<Repair::ReadLocker> readLocker(new Repair::SQLiteReadLocker);
-        retriever.setReadLocker(readLocker);
-        std::shared_ptr<Repair::WriteLocker> writeLocker(new Repair::SQLiteWriteLocker);
-        retriever.setWriteLocker(writeLocker);
-        retriever.setProgressCallback(onProgressUpdate);
-        bool result = retriever.work();
-        setThreadedError(retriever.getError());
-        score = result ? retriever.getScore().value() : -1;
-        m_pool->attachment.corruption.markAsHandled(result);
-    });
+    blockade();
+    close(nullptr);
+    m_pool->attachment.corruption.markAsHandling();
+    Repair::FactoryRetriever retriever = m_pool->attachment.factory.retriever();
+    std::shared_ptr<Repair::Assembler> assembler(new Repair::SQLiteAssembler);
+    retriever.setAssembler(assembler);
+    std::shared_ptr<Repair::ReadLocker> readLocker(new Repair::SQLiteReadLocker);
+    retriever.setReadLocker(readLocker);
+    std::shared_ptr<Repair::WriteLocker> writeLocker(new Repair::SQLiteWriteLocker);
+    retriever.setWriteLocker(writeLocker);
+    retriever.setProgressCallback(onProgressUpdate);
+    bool result = retriever.work();
+    setThreadedError(retriever.getError());
+    score = result ? retriever.getScore().value() : -1;
+    m_pool->attachment.corruption.markAsHandled(result);
+    unblockade();
     return score;
 }
 
