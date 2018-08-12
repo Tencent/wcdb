@@ -299,10 +299,8 @@ void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
 bool Database::backup(int maxWalFrame)
 {
     Repair::FactoryBackup backup = m_pool->attachment.factory.backup();
-    std::shared_ptr<Repair::ReadLocker> readLocker(new Repair::SQLiteReadLocker);
-    backup.setReadLocker(readLocker);
-    std::shared_ptr<Repair::WriteLocker> writeLocker(new Repair::SQLiteWriteLocker);
-    backup.setWriteLocker(writeLocker);
+    std::shared_ptr<Repair::Locker> locker(new Repair::SQLiteReadLocker);
+    backup.setLocker(locker);
     if (backup.work(getPath(), maxWalFrame)) {
         return true;
     }
@@ -319,10 +317,8 @@ bool Database::deposit()
     Repair::FactoryRenewer renewer = m_pool->attachment.factory.renewer();
     std::shared_ptr<Repair::Assembler> assembler(new Repair::SQLiteAssembler);
     renewer.setAssembler(assembler);
-    std::shared_ptr<Repair::ReadLocker> readLocker(new Repair::SQLiteReadLocker);
-    renewer.setReadLocker(readLocker);
-    std::shared_ptr<Repair::WriteLocker> writeLocker(new Repair::SQLiteWriteLocker);
-    renewer.setWriteLocker(writeLocker);
+    std::shared_ptr<Repair::Locker> locker(new Repair::SQLiteReadLocker);
+    renewer.setLocker(locker);
     do {
         if (!renewer.prepare()) {
             setThreadedError(renewer.getError());
@@ -353,10 +349,8 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
     Repair::FactoryRetriever retriever = m_pool->attachment.factory.retriever();
     std::shared_ptr<Repair::Assembler> assembler(new Repair::SQLiteAssembler);
     retriever.setAssembler(assembler);
-    std::shared_ptr<Repair::ReadLocker> readLocker(new Repair::SQLiteReadLocker);
-    retriever.setReadLocker(readLocker);
-    std::shared_ptr<Repair::WriteLocker> writeLocker(new Repair::SQLiteWriteLocker);
-    retriever.setWriteLocker(writeLocker);
+    std::shared_ptr<Repair::Locker> locker(new Repair::SQLiteReadLocker);
+    retriever.setLocker(locker);
     retriever.setProgressCallback(onProgressUpdate);
     bool result = retriever.work();
     setThreadedError(retriever.getError());

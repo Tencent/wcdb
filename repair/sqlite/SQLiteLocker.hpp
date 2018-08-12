@@ -28,17 +28,7 @@ namespace WCDB {
 
 namespace Repair {
 
-class SQLiteReadLocker : public ReadLocker, public SQLiteBase {
-public:
-    void setPath(const std::string &path) override;
-    const std::string &getPath() const override;
-
-    bool acquireLock() override;
-    bool releaseLock() override;
-    const Error &getError() const override;
-};
-
-class SQLiteWriteLocker : public WriteLocker, public SQLiteBase {
+class SQLiteReadLocker : public Locker, public SQLiteBase {
 public:
     void setPath(const std::string &path) override;
     const std::string &getPath() const override;

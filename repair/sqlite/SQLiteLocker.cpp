@@ -61,37 +61,6 @@ bool SQLiteReadLocker::releaseLock()
     return true;
 }
 
-const Error &SQLiteWriteLocker::getError() const
-{
-    return ErrorProne::getError();
-}
-
-void SQLiteWriteLocker::setPath(const std::string &path)
-{
-    WCTInnerAssert(m_path.empty());
-    SQLiteBase::setPath(path);
-}
-
-const std::string &SQLiteWriteLocker::getPath() const
-{
-    return SQLiteBase::getPath();
-}
-
-bool SQLiteWriteLocker::acquireLock()
-{
-    if (!open()) {
-        return false;
-    }
-    return lazyBeginTransactionImmediate();
-}
-
-bool SQLiteWriteLocker::releaseLock()
-{
-    lazyCommitOrRollbackTransaction(false);
-    close();
-    return true;
-}
-
 } //namespace Repair
 
 } //namespace WCDB

@@ -205,7 +205,11 @@
 {
     NSString *tableName = self.className;
     int init = 1;
+#if TARGER_OS_IPHONE
     int count = 100000;
+#else
+    int count = 300000;
+#endif
     XCTAssertEqual([self insertObjectsOfCount:init intoTable:tableName].count, init);
 
     int expectedInsertCount = 5;

@@ -241,12 +241,13 @@ bool Wal::doInitialize()
         return false;
     }
 
+    int maxWalFrame = m_maxAllowedFrame;
     if (m_shmLegality) {
         if (!m_shm.initialize()) {
             return false;
         }
         if (m_shm.getBackfill() < m_shm.getMaxFrame()) {
-            m_maxAllowedFrame = std::min(m_maxAllowedFrame, (int) m_shm.getMaxFrame());
+            maxWalFrame = std::min(m_maxAllowedFrame, (int) m_shm.getMaxFrame());
         } else {
             // dispose all wal frames since they are already checkpointed.
             return true;
@@ -256,7 +257,7 @@ bool Wal::doInitialize()
     const int frameSize = getFrameSize();
     const int framesSize = (int) fileSize - headerSize;
     const int frameCountInFile = framesSize / frameSize;
-    std::map<int, int> commitRecords;
+    std::map<int, int> committedRecords;
     for (int frameno = 1; frameno <= frameCountInFile; ++frameno) {
         Frame frame(frameno, this, checksum);
         if (!frame.initialize()) {
@@ -264,46 +265,18 @@ bool Wal::doInitialize()
             //If it's the latter one, it doesn't mean disposed.
             break;
         }
-        if (frameno <= m_maxAllowedFrame) {
-            commitRecords[frame.getPageNumber()] = frameno;
+        if (frameno <= maxWalFrame) {
+            committedRecords[frame.getPageNumber()] = frameno;
             if (frame.getTruncate() != 0) {
                 m_maxFrames = frameno;
-                for (const auto &element : commitRecords) {
+                for (const auto &element : committedRecords) {
                     m_framePages[element.first] = element.second;
                 }
-                commitRecords.clear();
-            }
-        } else {
-            bool succeed;
-            Page::Type pageType;
-            std::tie(succeed, pageType) = frame.getPageType();
-            if (!succeed || pageType == Page::Type::LeafTable
-                || pageType == Page::Type::Unknown) {
-                m_disposedPages.emplace(frame.getPageNumber());
-                Error error;
-                error.level = Error::Level::Notice;
-                error.setCode(Error::Code::Notice, "Repair");
-                error.message = "Dispose wal frame that is not backed up.";
-                error.infos.set("Frame", frameno);
-                error.infos.set("Page", frame.getPageNumber());
-                error.infos.set("Path", getPath());
-                Notifier::shared()->notify(error);
+                committedRecords.clear();
             }
         }
         checksum = frame.getChecksum();
-    }
-    if (!commitRecords.empty()) {
-        for (const auto &element : commitRecords) {
-            m_disposedPages.emplace(element.first);
-            Error error;
-            error.level = Error::Level::Notice;
-            error.setCode(Error::Code::Notice, "Repair");
-            error.message = "Dispose wal frame that is not already committed.";
-            error.infos.set("Frame", element.second);
-            error.infos.set("Page", element.first);
-            error.infos.set("Path", getPath());
-            Notifier::shared()->notify(error);
-        }
+        // all those frames that are uncommitted or exceeds the max allowed count will be disposed.
     }
     return true;
 }

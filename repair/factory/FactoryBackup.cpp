@@ -29,8 +29,7 @@ namespace Repair {
 bool FactoryBackup::work(const std::string &database, int maxWalFrame)
 {
     Backup backup(database);
-    backup.setReadLocker(m_readLocker);
-    backup.setWriteLocker(m_writeLocker);
+    backup.setLocker(m_locker);
     backup.filter(factory.getFilter());
     if (!backup.work(maxWalFrame)) {
         setError(backup.getError());
