@@ -37,7 +37,9 @@
     _config.databaseSizeForRepair = 100 * 1024 * 1024;
     _config.databaseSizeForBackup = 500 * 1024 * 1024;
 
-    XCTAttachment *attachment = [XCTAttachment attachmentWithPlistObject:_config.dictionaryWithProperties];
+    NSDictionary *properties = _config.dictionaryWithProperties;
+    NSLog(@"Configs: %@", properties);
+    XCTAttachment *attachment = [XCTAttachment attachmentWithPlistObject:properties];
     attachment.name = @"Config";
     attachment.lifetime = XCTAttachmentLifetimeKeepAlways;
     [self addAttachment:attachment];
