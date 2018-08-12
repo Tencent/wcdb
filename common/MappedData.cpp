@@ -39,34 +39,32 @@ MappedData::MappedData(const UnsafeData& data, const Recyclable<UnsafeData>& map
 : UnsafeData(data), m_mapped(mapped)
 {
 }
-    
-    MappedData::MappedData(const MappedData& other)
-    : UnsafeData(other)
-    , m_mapped(other.m_mapped)
-    {
-    }
-    
-    MappedData::MappedData(MappedData&& other)
-    : UnsafeData(std::move(other))
-    , m_mapped(std::move(other.m_mapped))
-    {
-    }
-    
-    MappedData& MappedData::operator=(const MappedData& other)
-    {
-        UnsafeData::operator=(other);
-        m_mapped = other.m_mapped;
-        return *this;
-    }
-    
-    MappedData& MappedData::operator=(MappedData&& other)
-    {
-        UnsafeData::operator=(std::move(other));
-        m_mapped = std::move(other.m_mapped);
-        return *this;
-    }
-    
-    MappedData::~MappedData()
+
+MappedData::MappedData(const MappedData& other)
+: UnsafeData(other), m_mapped(other.m_mapped)
+{
+}
+
+MappedData::MappedData(MappedData&& other)
+: UnsafeData(std::move(other)), m_mapped(std::move(other.m_mapped))
+{
+}
+
+MappedData& MappedData::operator=(const MappedData& other)
+{
+    UnsafeData::operator=(other);
+    m_mapped = other.m_mapped;
+    return *this;
+}
+
+MappedData& MappedData::operator=(MappedData&& other)
+{
+    UnsafeData::operator=(std::move(other));
+    m_mapped = std::move(other.m_mapped);
+    return *this;
+}
+
+MappedData::~MappedData()
 {
 }
 

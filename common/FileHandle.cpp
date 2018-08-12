@@ -34,9 +34,7 @@ FileHandle::FileHandle(const std::string &path_)
 }
 
 FileHandle::FileHandle(FileHandle &&other)
-: path(std::move(other.path))
-, m_fd(other.m_fd)
-, m_mode(other.m_mode)
+: path(std::move(other.path)), m_fd(other.m_fd), m_mode(other.m_mode)
 {
     other.m_fd = -1;
     other.m_mode = Mode::None;
@@ -186,7 +184,9 @@ bool FileHandle::write(off_t offset, const UnsafeData &unsafeData)
 
 MappedData FileHandle::map(off_t offset, size_t size)
 {
-    WCTRemedialAssert(m_mode == Mode::ReadOnly, "Map is only supported in Readonly mode.", return MappedData::emptyData(););
+    WCTRemedialAssert(m_mode == Mode::ReadOnly,
+                      "Map is only supported in Readonly mode.",
+                      return MappedData::emptyData(););
     WCTInnerAssert(size > 0);
     static int s_pagesize = getpagesize();
     int alignment = offset % s_pagesize;

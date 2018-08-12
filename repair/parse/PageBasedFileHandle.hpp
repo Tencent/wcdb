@@ -71,7 +71,7 @@ protected:
     protected:
         MapIterator findIterator(Location location);
         Range m_range;
-        
+
         bool shouldPurge() const override;
         void willPurge(const Range& range, const MappedData& data) override;
         size_t m_maxAllowedMemory;

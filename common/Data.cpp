@@ -45,38 +45,36 @@ Data::Data(const UnsafeData& unsafeData)
 {
     reset(unsafeData);
 }
-    
-    Data::Data(const Data& data)
-    : UnsafeData(data)
-    , m_sharedBuffer(data.m_sharedBuffer)
-    , m_sharedSize(data.m_sharedSize)
-    {
-    }
-    
-    Data::Data(Data&& data)
-    : UnsafeData(std::move(data))
-    , m_sharedBuffer(std::move(data.m_sharedBuffer))
-    , m_sharedSize(data.m_sharedSize)
-    {
-        data.m_sharedSize = 0;
-    }
-    
-    Data& Data::operator=(const Data& other)
-    {
-        UnsafeData::operator=(other);
-        m_sharedBuffer = other.m_sharedBuffer;
-        m_sharedSize = other.m_sharedSize;
-        return *this;
-    }
-    
-    Data& Data::operator=(Data&& other)
-    {
-        UnsafeData::operator=(std::move(other));
-        m_sharedBuffer = std::move(other.m_sharedBuffer);
-        m_sharedSize = other.m_sharedSize;
-        other.m_sharedSize = 0;
-        return *this;
-    }
+
+Data::Data(const Data& data)
+: UnsafeData(data), m_sharedBuffer(data.m_sharedBuffer), m_sharedSize(data.m_sharedSize)
+{
+}
+
+Data::Data(Data&& data)
+: UnsafeData(std::move(data))
+, m_sharedBuffer(std::move(data.m_sharedBuffer))
+, m_sharedSize(data.m_sharedSize)
+{
+    data.m_sharedSize = 0;
+}
+
+Data& Data::operator=(const Data& other)
+{
+    UnsafeData::operator=(other);
+    m_sharedBuffer = other.m_sharedBuffer;
+    m_sharedSize = other.m_sharedSize;
+    return *this;
+}
+
+Data& Data::operator=(Data&& other)
+{
+    UnsafeData::operator=(std::move(other));
+    m_sharedBuffer = std::move(other.m_sharedBuffer);
+    m_sharedSize = other.m_sharedSize;
+    other.m_sharedSize = 0;
+    return *this;
+}
 
 off_t Data::getCurrentOffset() const
 {
@@ -91,7 +89,9 @@ size_t Data::getSharedSize() const
 }
 
 Data::Data(const std::shared_ptr<unsigned char>& sharedBuffer, size_t sharedSize, off_t offset, size_t size)
-: UnsafeData(sharedBuffer.get() + offset, size), m_sharedBuffer(sharedBuffer), m_sharedSize(sharedSize)
+: UnsafeData(sharedBuffer.get() + offset, size)
+, m_sharedBuffer(sharedBuffer)
+, m_sharedSize(sharedSize)
 {
 }
 
@@ -121,8 +121,7 @@ bool Data::reset(const unsigned char* buffer, size_t size)
         m_sharedSize = 0;
         return true;
     }
-    std::shared_ptr<unsigned char> newSharedBuffer(
-    new unsigned char[size]);
+    std::shared_ptr<unsigned char> newSharedBuffer(new unsigned char[size]);
     if (newSharedBuffer == nullptr) {
         setThreadedError(Error(Error::Code::NoMemory));
         return false;

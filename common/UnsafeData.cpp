@@ -33,36 +33,34 @@ UnsafeData::UnsafeData(unsigned char *buffer, size_t size)
 : m_buffer(buffer), m_size(size)
 {
 }
-    
-    UnsafeData::UnsafeData(const UnsafeData& other)
-    : m_buffer(other.m_buffer)
-    , m_size(other.m_size)
-    {
-    }
-    
-    UnsafeData::UnsafeData(UnsafeData&& other)
-    : m_buffer(other.m_buffer)
-    , m_size(other.m_size)
-    {
-        other.m_buffer = nullptr;
-        other.m_size = 0;
-    }
-    
-    UnsafeData& UnsafeData::operator=(const UnsafeData& other)
-    {
-        m_buffer = other.m_buffer;
-        m_size = other.m_size;
-        return *this;
-    }
-    
-    UnsafeData& UnsafeData::operator=(UnsafeData&& other)
-    {
-        m_buffer = other.m_buffer;
-        m_size = other.m_size;
-        other.m_buffer = nullptr;
-        other.m_size = 0;
-        return *this;
-    }
+
+UnsafeData::UnsafeData(const UnsafeData &other)
+: m_buffer(other.m_buffer), m_size(other.m_size)
+{
+}
+
+UnsafeData::UnsafeData(UnsafeData &&other)
+: m_buffer(other.m_buffer), m_size(other.m_size)
+{
+    other.m_buffer = nullptr;
+    other.m_size = 0;
+}
+
+UnsafeData &UnsafeData::operator=(const UnsafeData &other)
+{
+    m_buffer = other.m_buffer;
+    m_size = other.m_size;
+    return *this;
+}
+
+UnsafeData &UnsafeData::operator=(UnsafeData &&other)
+{
+    m_buffer = other.m_buffer;
+    m_size = other.m_size;
+    other.m_buffer = nullptr;
+    other.m_size = 0;
+    return *this;
+}
 
 const UnsafeData UnsafeData::immutable(const unsigned char *buffer, size_t size)
 {

@@ -29,8 +29,8 @@ PageBasedFileHandle::PageBasedFileHandle(const std::string& path)
 : FileHandle(path), m_pageSize(0), m_cachePageSize(0), m_cache(maxAllowedCacheMemory)
 {
     static_assert(maxAllowedCacheMemory % cacheMemoryPerRange == 0, "");
-    static_assert((maxAllowedCacheMemory & maxAllowedCacheMemory-1)==0, "");
-    static_assert((cacheMemoryPerRange & cacheMemoryPerRange-1)==0, "");
+    static_assert((maxAllowedCacheMemory & maxAllowedCacheMemory - 1) == 0, "");
+    static_assert((cacheMemoryPerRange & cacheMemoryPerRange - 1) == 0, "");
 }
 
 Range PageBasedFileHandle::restrictedRange(Range::Location base,
@@ -71,7 +71,7 @@ MappedData PageBasedFileHandle::mapPage(int pageno, off_t offsetWithinPage, size
         WCTInnerAssert(offsetWithinCache < gap.length * m_cachePageSize);
         return cachedData->subdata(offsetWithinCache, sizeWithinPage);
     }
-    
+
     Range::Length maxLength = cachePagePerRange();
     do {
         Range range = restrictedRange(cachePageno, maxLength, gap);
@@ -114,18 +114,18 @@ MappedData PageBasedFileHandle::mapPage(int pageno)
     WCTInnerAssert(pageno > 0);
     return mapPage(pageno, 0, m_pageSize);
 }
-    
-    const size_t& PageBasedFileHandle::memoryPageSize()
-    {
-        static size_t s_memoryPageSize = getpagesize();
-        return s_memoryPageSize;
-    }
-    
-    size_t PageBasedFileHandle::cachePagePerRange() const
-    {
-        WCTInnerAssert(m_cachePageSize != 0);
-        return cacheMemoryPerRange / m_cachePageSize;
-    }
+
+const size_t& PageBasedFileHandle::memoryPageSize()
+{
+    static size_t s_memoryPageSize = getpagesize();
+    return s_memoryPageSize;
+}
+
+size_t PageBasedFileHandle::cachePagePerRange() const
+{
+    WCTInnerAssert(m_cachePageSize != 0);
+    return cacheMemoryPerRange / m_cachePageSize;
+}
 
 void PageBasedFileHandle::setPageSize(size_t pageSize)
 {
@@ -148,7 +148,10 @@ void PageBasedFileHandle::setPageSize(size_t pageSize)
 
 #pragma mark - Cache
 PageBasedFileHandle::Cache::Cache(size_t maxAllowedMemory)
-: LRUCache<WCDB::Range, WCDB::MappedData>(), m_range(Range::notFound()), m_maxAllowedMemory(maxAllowedMemory), m_currentUsedMemery(0)
+: LRUCache<WCDB::Range, WCDB::MappedData>()
+, m_range(Range::notFound())
+, m_maxAllowedMemory(maxAllowedMemory)
+, m_currentUsedMemery(0)
 {
 }
 
@@ -213,17 +216,17 @@ void PageBasedFileHandle::Cache::insert(const Range& range, const MappedData& da
     m_currentUsedMemery += data.size();
     put(range, data);
 }
-    
-    bool PageBasedFileHandle::Cache::shouldPurge() const
-    {
-        return m_currentUsedMemery > m_maxAllowedMemory;
-    }
-    
-    void PageBasedFileHandle::Cache::willPurge(const Range& range, const MappedData& data)
-    {
-        m_currentUsedMemery -= data.size();
-    }
-    
+
+bool PageBasedFileHandle::Cache::shouldPurge() const
+{
+    return m_currentUsedMemery > m_maxAllowedMemory;
+}
+
+void PageBasedFileHandle::Cache::willPurge(const Range& range, const MappedData& data)
+{
+    m_currentUsedMemery -= data.size();
+}
+
 PageBasedFileHandle::Cache::MapIterator
 PageBasedFileHandle::Cache::findIterator(Location location)
 {

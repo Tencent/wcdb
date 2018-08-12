@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/SQLiteLocker.hpp>
 #include <sqlcipher/sqlite3.h>
-#include <WCDB/Assertion.hpp>
 
 namespace WCDB {
 

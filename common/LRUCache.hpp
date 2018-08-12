@@ -37,8 +37,7 @@ protected:
     using MapIterator = typename Map::iterator;
 
 public:
-    LRUCache() {
-    }
+    LRUCache() {}
 
     void put(const Key& key, const Value& value)
     {
@@ -84,7 +83,7 @@ protected:
     {
         m_list.splice(m_list.begin(), m_list, it->second);
     }
-    
+
     virtual bool shouldPurge() const = 0;
     virtual void willPurge(const Key& key, const Value& value) {}
 
