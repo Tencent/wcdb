@@ -41,15 +41,19 @@ MappedData::MappedData()
 }
 
 MappedData::MappedData(unsigned char* mapped, size_t size)
-: UnsafeData(mapped, size), m_mapped(UnsafeData(mapped, size), MappedData::unmap)
+: UnsafeData(mapped, size), m_mapped(UnsafeData(mapped, size), MappedData::unmapData)
 {
     sharedHighWater().increase(size);
 }
 
-void MappedData::unmap(UnsafeData& data)
+void MappedData::unmap()
 {
-    size_t size = data.size();
-    if (munmap(data.buffer(), size) == 0) {
+    unmapBuffer(m_buffer, m_size);
+}
+
+void MappedData::unmapBuffer(unsigned char* buffer, size_t size)
+{
+    if (munmap(buffer, size) == 0) {
         sharedHighWater().decrease(size);
     } else {
         Error error;
@@ -59,6 +63,11 @@ void MappedData::unmap(UnsafeData& data)
         Notifier::shared()->notify(error);
         SharedThreadedErrorProne::setThreadedError(std::move(error));
     }
+}
+
+void MappedData::unmapData(UnsafeData& data)
+{
+    unmapBuffer(data.buffer(), data.size());
 }
 
 MappedData::MappedData(const UnsafeData& data, const Recyclable<UnsafeData>& mapped)

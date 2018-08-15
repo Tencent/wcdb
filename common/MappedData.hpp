@@ -40,6 +40,7 @@ public:
 
     MappedData subdata(size_t size) const;
     MappedData subdata(off_t offset, size_t size) const;
+    void unmap();
 
     static const MappedData& emptyData();
 
@@ -48,7 +49,8 @@ public:
 protected:
     static ShareableHighWater& sharedHighWater();
 
-    static void unmap(UnsafeData& data);
+    static void unmapData(UnsafeData& data);
+    static void unmapBuffer(unsigned char* buffer, size_t size);
 
     MappedData(const UnsafeData& data, const Recyclable<UnsafeData>& mapped);
     Recyclable<UnsafeData> m_mapped;
