@@ -196,7 +196,7 @@ MappedData FileHandle::map(off_t offset, size_t size)
     off_t roundedOffset = offset - alignment;
     size_t roundedSize = size + alignment;
     void *mapped = mmap(
-    nullptr, roundedSize, PROT_READ, MAP_PRIVATE | MAP_NOEXTEND | MAP_NORESERVE, m_fd, roundedOffset);
+    nullptr, roundedSize, PROT_READ, MAP_SHARED | MAP_NOEXTEND | MAP_NORESERVE, m_fd, roundedOffset);
     if (mapped == MAP_FAILED) {
         Error error;
         if (m_errorIgnorable) {
