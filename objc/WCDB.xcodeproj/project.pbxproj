@@ -697,6 +697,10 @@
 		23E1FD86206C9649006C6C8E /* NSString+WCTColumnCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E1FD84206C9649006C6C8E /* NSString+WCTColumnCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23E1FD8A206C966E006C6C8E /* NSData+WCTColumnCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E1FD88206C966E006C6C8E /* NSData+WCTColumnCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23E732651F209FFF00AA1614 /* WCTSequence+WCTTableCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E732631F209FFF00AA1614 /* WCTSequence+WCTTableCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23E7EB1D2123D58D0056B5D8 /* HighWater.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23E7EB1B2123D58D0056B5D8 /* HighWater.cpp */; };
+		23E7EB1E2123D58D0056B5D8 /* HighWater.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23E7EB1B2123D58D0056B5D8 /* HighWater.cpp */; };
+		23E7EB1F2123D58D0056B5D8 /* HighWater.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23E7EB1C2123D58D0056B5D8 /* HighWater.hpp */; };
+		23E7EB202123D58D0056B5D8 /* HighWater.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23E7EB1C2123D58D0056B5D8 /* HighWater.hpp */; };
 		23EABBE6206D08EC00241F3B /* WCTHandle+Table.h in Headers */ = {isa = PBXBuildFile; fileRef = 23EABBE4206D08EC00241F3B /* WCTHandle+Table.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23EABBE7206D08EC00241F3B /* WCTHandle+Table.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23EABBE5206D08EC00241F3B /* WCTHandle+Table.mm */; };
 		23EB91DE20CA1EBE00ECF668 /* Wal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EB91DC20CA1EBE00ECF668 /* Wal.cpp */; };
@@ -1708,6 +1712,8 @@
 		23E1FD84206C9649006C6C8E /* NSString+WCTColumnCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+WCTColumnCoding.h"; sourceTree = "<group>"; };
 		23E1FD88206C966E006C6C8E /* NSData+WCTColumnCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSData+WCTColumnCoding.h"; sourceTree = "<group>"; };
 		23E732631F209FFF00AA1614 /* WCTSequence+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTSequence+WCTTableCoding.h"; sourceTree = "<group>"; };
+		23E7EB1B2123D58D0056B5D8 /* HighWater.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HighWater.cpp; sourceTree = "<group>"; };
+		23E7EB1C2123D58D0056B5D8 /* HighWater.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HighWater.hpp; sourceTree = "<group>"; };
 		23EABBE4206D08EC00241F3B /* WCTHandle+Table.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTHandle+Table.h"; sourceTree = "<group>"; };
 		23EABBE5206D08EC00241F3B /* WCTHandle+Table.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTHandle+Table.mm"; sourceTree = "<group>"; };
 		23EB91DC20CA1EBE00ECF668 /* Wal.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Wal.cpp; sourceTree = "<group>"; };
@@ -2135,6 +2141,8 @@
 				2316D92E21057CA700707AFC /* MappedData.cpp */,
 				2316D92B21057CA600707AFC /* MappedData.hpp */,
 				2316D92D21057CA700707AFC /* Recyclable.hpp */,
+				23E7EB1B2123D58D0056B5D8 /* HighWater.cpp */,
+				23E7EB1C2123D58D0056B5D8 /* HighWater.hpp */,
 				2308F84B20E32A51001CD9C3 /* FileHandle.cpp */,
 				2308F84C20E32A51001CD9C3 /* FileHandle.hpp */,
 				2308F84D20E32A51001CD9C3 /* Serialization.cpp */,
@@ -2843,6 +2851,7 @@
 				239775A1202AECD3000A681C /* LangSelectSTMT.hpp in Headers */,
 				239775A3202AECD3000A681C /* LangTableConstraint.hpp in Headers */,
 				239775A5202AECD3000A681C /* LangTableOrSubquery.hpp in Headers */,
+				23E7EB1F2123D58D0056B5D8 /* HighWater.hpp in Headers */,
 				23AD52E820DB852B00664B62 /* Fraction.hpp in Headers */,
 				239775A7202AECD3000A681C /* LangUpdateSTMT.hpp in Headers */,
 				23D07CE620BE87360043F4D4 /* MasterCrawler.hpp in Headers */,
@@ -3150,6 +3159,7 @@
 				23F5BD9920887FD3000CCD37 /* LangSelectSTMT.hpp in Headers */,
 				23F5BD9A20887FD3000CCD37 /* LangTableConstraint.hpp in Headers */,
 				23F5BD9B20887FD3000CCD37 /* LangTableOrSubquery.hpp in Headers */,
+				23E7EB202123D58D0056B5D8 /* HighWater.hpp in Headers */,
 				23AD52E920DB852B00664B62 /* Fraction.hpp in Headers */,
 				23F5BD9C20887FD3000CCD37 /* LangUpdateSTMT.hpp in Headers */,
 				23D07CE720BE87360043F4D4 /* MasterCrawler.hpp in Headers */,
@@ -3419,6 +3429,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23977565202AECD3000A681C /* LangCreateViewSTMT.cpp in Sources */,
+				23E7EB1D2123D58D0056B5D8 /* HighWater.cpp in Sources */,
 				2376CB1B20DA5D3B00A68DB5 /* Scoreable.cpp in Sources */,
 				2397751F202AECD3000A681C /* StatementCreateView.cpp in Sources */,
 				2316D93321057CA700707AFC /* MappedData.cpp in Sources */,
@@ -3681,6 +3692,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F5BC4A20887FD3000CCD37 /* LangCreateViewSTMT.cpp in Sources */,
+				23E7EB1E2123D58D0056B5D8 /* HighWater.cpp in Sources */,
 				2376CB1C20DA5D3B00A68DB5 /* Scoreable.cpp in Sources */,
 				23F5BC4B20887FD3000CCD37 /* StatementCreateView.cpp in Sources */,
 				2316D93421057CA700707AFC /* MappedData.cpp in Sources */,

@@ -21,7 +21,9 @@
 #ifndef MappedData_hpp
 #define MappedData_hpp
 
+#include <WCDB/HighWater.hpp>
 #include <WCDB/Recyclable.hpp>
+#include <WCDB/SharedThreadedErrorProne.hpp>
 #include <WCDB/UnsafeData.hpp>
 
 namespace WCDB {
@@ -41,7 +43,13 @@ public:
 
     static const MappedData& emptyData();
 
+    static ssize_t getMappedHighWater();
+
 protected:
+    static ShareableHighWater& sharedHighWater();
+
+    static void unmap(UnsafeData& data);
+
     MappedData(const UnsafeData& data, const Recyclable<UnsafeData>& mapped);
     Recyclable<UnsafeData> m_mapped;
 };

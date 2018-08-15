@@ -89,6 +89,19 @@ MappedData PageBasedFileHandle::mapPage(int pageno, off_t offsetWithinPage, size
         markErrorAsIgnorable(false);
 
         if (!mappedData.empty()) {
+            ssize_t highWater = MappedData::getMappedHighWater();
+            static constexpr const ssize_t s_allowedHighWater = maxAllowedCacheMemory * 2;
+            if (highWater > s_allowedHighWater) {
+                Error error;
+                error.level = Error::Level::Warning;
+                error.setCode(Error::Code::Warning, "Repair");
+                error.message = "Mapped memory exceeds.";
+                error.infos.set("Path", path);
+                error.infos.set("HighWater", highWater);
+                error.infos.set("AllowedHighWater", s_allowedHighWater);
+                Notifier::shared()->notify(error);
+            }
+
             m_cache.insert(range, mappedData);
             off_t offsetWithinCache = offset - range.location * m_cachePageSize;
             WCTInnerAssert(offsetWithinCache < range.length * m_cachePageSize);

@@ -58,12 +58,15 @@ public:
     ssize_t size();
     Data read(off_t offset, size_t size);
     bool write(off_t offset, const UnsafeData &unsafeData);
-    MappedData map(off_t offset, size_t size);
     void markErrorAsIgnorable(bool flag = true);
 
 protected:
     bool m_errorIgnorable;
     int m_mode;
+
+#pragma mark - Memory map
+public:
+    MappedData map(off_t offset, size_t size);
 
 #pragma mark - Error
 protected:

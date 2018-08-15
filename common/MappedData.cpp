@@ -19,9 +19,21 @@
  */
 
 #include <WCDB/MappedData.hpp>
+#include <WCDB/Notifier.hpp>
 #include <sys/mman.h>
 
 namespace WCDB {
+
+ssize_t MappedData::getMappedHighWater()
+{
+    return sharedHighWater().getHighWater();
+}
+
+ShareableHighWater& MappedData::sharedHighWater()
+{
+    static ShareableHighWater* s_shared = new ShareableHighWater(0);
+    return *s_shared;
+}
 
 MappedData::MappedData()
 : UnsafeData(), m_mapped(UnsafeData::emptyData(), nullptr)
@@ -29,10 +41,24 @@ MappedData::MappedData()
 }
 
 MappedData::MappedData(unsigned char* mapped, size_t size)
-: UnsafeData(mapped, size)
-, m_mapped(UnsafeData(mapped, size),
-           [](UnsafeData& data) { munmap(data.buffer(), data.size()); })
+: UnsafeData(mapped, size), m_mapped(UnsafeData(mapped, size), MappedData::unmap)
 {
+    sharedHighWater().increase(size);
+}
+
+void MappedData::unmap(UnsafeData& data)
+{
+    size_t size = data.size();
+    if (munmap(data.buffer(), size) == 0) {
+        sharedHighWater().decrease(size);
+    } else {
+        Error error;
+        error.setSystemCode(errno, Error::Code::IOError);
+        error.message = strerror(errno);
+        error.infos.set("MunmapSize", size);
+        Notifier::shared()->notify(error);
+        SharedThreadedErrorProne::setThreadedError(std::move(error));
+    }
 }
 
 MappedData::MappedData(const UnsafeData& data, const Recyclable<UnsafeData>& mapped)

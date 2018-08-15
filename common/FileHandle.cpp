@@ -28,6 +28,7 @@
 
 namespace WCDB {
 
+#pragma mark - Initialize
 FileHandle::FileHandle(const std::string &path_)
 : path(path_), m_fd(-1), m_mode(Mode::None), m_errorIgnorable(false)
 {
@@ -57,6 +58,7 @@ FileHandle &FileHandle::operator=(FileHandle &&other)
     return *this;
 }
 
+#pragma mark - Basic
 bool FileHandle::open(Mode mode)
 {
     WCTInnerAssert(mode != Mode::None);
@@ -182,6 +184,7 @@ bool FileHandle::write(off_t offset, const UnsafeData &unsafeData)
     return false;
 }
 
+#pragma mark - Memory map
 MappedData FileHandle::map(off_t offset, size_t size)
 {
     WCTRemedialAssert(m_mode == Mode::ReadOnly,
@@ -195,12 +198,22 @@ MappedData FileHandle::map(off_t offset, size_t size)
     void *mapped = mmap(
     nullptr, roundedSize, PROT_READ, MAP_PRIVATE | MAP_NOEXTEND | MAP_NORESERVE, m_fd, roundedOffset);
     if (mapped == MAP_FAILED) {
-        setThreadedError();
+        Error error;
+        if (m_errorIgnorable) {
+            error.level = Error::Level::Warning;
+        }
+        error.setSystemCode(errno, Error::Code::IOError);
+        error.message = strerror(errno);
+        error.infos.set("Path", path);
+        error.infos.set("MmapSize", roundedSize);
+        Notifier::shared()->notify(error);
+        SharedThreadedErrorProne::setThreadedError(std::move(error));
         return MappedData::emptyData();
     }
     return MappedData(reinterpret_cast<unsigned char *>(mapped), roundedSize).subdata(alignment, size);
 }
 
+#pragma mark - Error
 void FileHandle::markErrorAsIgnorable(bool flag)
 {
     m_errorIgnorable = flag;
