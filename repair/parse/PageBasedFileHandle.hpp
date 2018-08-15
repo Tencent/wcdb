@@ -50,8 +50,8 @@ protected:
 
 #pragma mark - Cache
 protected:
-    static constexpr const size_t cacheMemoryPerRange = 16 * 1024 * 1024;
-    static constexpr const size_t maxAllowedCacheMemory = 128 * 1024 * 1024;
+    static constexpr const size_t cacheMemoryPerRange = 1 * 1024 * 1024;
+    static constexpr const size_t maxAllowedCacheMemory = 16 * 1024 * 1024;
     static const size_t& memoryPageSize();
 
     class Cache : protected LRUCache<Range, MappedData> {
