@@ -265,8 +265,19 @@ bool Wal::doInitialize()
         }
         checksum = frame.calculateChecksum(checksum);
         if (checksum != frame.getChecksum()) {
-            //If the frame checksum is mismatched, it mean to be disposed.
-            break;
+            if (m_shmLegality) {
+                //If the frame checksum is mismatched and shm is legal, it mean to be corrupted.
+                markAsCorrupted(frameno,
+                                String::formatted("Mismatched frame checksum: %u, %u to %u, %u.",
+                                                  frame.getChecksum().first,
+                                                  frame.getChecksum().second,
+                                                  checksum.first,
+                                                  checksum.second));
+                return false;
+            } else {
+                //If the frame checksum is mismatched and shm is not legal, it mean to be disposed.
+                break;
+            }
         }
         if (frameno <= maxWalFrame) {
             committedRecords[frame.getPageNumber()] = frameno;
