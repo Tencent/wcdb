@@ -155,7 +155,7 @@ bool Wal::isBigEndian()
 }
 
 std::pair<uint32_t, uint32_t>
-Wal::calculateChecksum(const MappedData &data, const std::pair<uint32_t, uint32_t> &checksum)
+Wal::calculateChecksum(const MappedData &data, const std::pair<uint32_t, uint32_t> &checksum) const
 {
     WCTInnerAssert(data.size() >= 8);
     WCTInnerAssert((data.size() & 0x00000007) == 0);
@@ -259,10 +259,13 @@ bool Wal::doInitialize()
     const int frameCountInFile = framesSize / frameSize;
     std::map<int, int> committedRecords;
     for (int frameno = 1; frameno <= frameCountInFile; ++frameno) {
-        Frame frame(frameno, this, checksum);
+        Frame frame(frameno, this);
         if (!frame.initialize()) {
-            //If frame can't be inited, it means that it' already corrupted or only a reused frame.
-            //If it's the latter one, it doesn't mean disposed.
+            return false;
+        }
+        checksum = frame.calculateChecksum(checksum);
+        if (checksum != frame.getChecksum()) {
+            //If the frame checksum is mismatched, it mean to be disposed.
             break;
         }
         if (frameno <= maxWalFrame) {

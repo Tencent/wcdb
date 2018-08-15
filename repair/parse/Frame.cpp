@@ -28,8 +28,7 @@ namespace WCDB {
 
 namespace Repair {
 
-Frame::Frame(int frameno_, Wal *wal, const std::pair<uint32_t, uint32_t> &checksum)
-: WalRelated(wal), frameno(frameno_), m_checksum(checksum)
+Frame::Frame(int frameno_, Wal *wal) : WalRelated(wal), frameno(frameno_)
 {
     WCTInnerAssert(m_wal != nullptr);
 }
@@ -60,6 +59,17 @@ uint32_t Frame::getTruncate() const
     return m_truncate;
 }
 
+std::pair<uint32_t, uint32_t>
+Frame::calculateChecksum(const std::pair<uint32_t, uint32_t> &source) const
+{
+    WCTInnerAssert(isInitialized());
+    std::pair<uint32_t, uint32_t> checksum = source;
+    checksum = WalRelated::calculateChecksum(m_data.subdata(0, 8), checksum);
+    checksum = WalRelated::calculateChecksum(
+    m_data.subdata(headerSize, m_wal->getPageSize()), checksum);
+    return checksum;
+}
+
 #pragma mark - Initializeable
 bool Frame::doInitialize()
 {
@@ -86,22 +96,8 @@ bool Frame::doInitialize()
         return false;
     }
 
-    std::pair<uint32_t, uint32_t> checksum;
-    checksum.first = deserialization.advance4BytesUInt();
-    checksum.second = deserialization.advance4BytesUInt();
-
-    MappedData pageData = m_data.subdata(headerSize, m_wal->getPageSize());
-    m_checksum = calculateChecksum(m_data.subdata(0, 8), m_checksum);
-    m_checksum = calculateChecksum(pageData, m_checksum);
-    if (m_checksum != checksum) {
-        markWalAsCorrupted(frameno,
-                           String::formatted("Mismatched frame checksum: %u, %u to %u, %u.",
-                                             m_checksum.first,
-                                             m_checksum.second,
-                                             checksum.first,
-                                             checksum.second));
-        return false;
-    }
+    m_checksum.first = deserialization.advance4BytesUInt();
+    m_checksum.second = deserialization.advance4BytesUInt();
     return true;
 }
 

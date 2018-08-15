@@ -44,7 +44,8 @@ protected:
     void setError(Error &&error);
     void assignWithSharedThreadedError();
     std::pair<uint32_t, uint32_t>
-    calculateChecksum(const MappedData &data, const std::pair<uint32_t, uint32_t> &checksum);
+    calculateChecksum(const MappedData &data,
+                      const std::pair<uint32_t, uint32_t> &checksum) const;
 
     Wal *m_wal;
     Pager *m_pager;

@@ -67,7 +67,8 @@ public:
 
 protected:
     std::pair<uint32_t, uint32_t>
-    calculateChecksum(const MappedData &data, const std::pair<uint32_t, uint32_t> &checksum);
+    calculateChecksum(const MappedData &data,
+                      const std::pair<uint32_t, uint32_t> &checksum) const;
 
     int m_maxAllowedFrame;
     int m_maxFrames;

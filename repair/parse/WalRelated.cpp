@@ -68,7 +68,7 @@ void WalRelated::markWalAsCorrupted(int frame, const std::string &message)
 
 std::pair<uint32_t, uint32_t>
 WalRelated::calculateChecksum(const MappedData &data,
-                              const std::pair<uint32_t, uint32_t> &checksum)
+                              const std::pair<uint32_t, uint32_t> &checksum) const
 {
     return m_wal->calculateChecksum(data, checksum);
 }
