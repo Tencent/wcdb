@@ -189,6 +189,19 @@ bool Wal::doInitialize()
 {
     WCTInnerAssert(m_pager->isInitialized() || m_pager->isInitializing());
 
+    int maxWalFrame = m_maxAllowedFrame;
+    if (m_shmLegality) {
+        if (!m_shm.initialize()) {
+            return false;
+        }
+        if (m_shm.getBackfill() < m_shm.getMaxFrame()) {
+            maxWalFrame = std::min(m_maxAllowedFrame, (int) m_shm.getMaxFrame());
+        } else {
+            // dispose all wal frames since they are already checkpointed.
+            return true;
+        }
+    }
+
     bool succeed;
     size_t fileSize;
     std::tie(succeed, fileSize) = FileManager::getFileSize(getPath());
@@ -239,19 +252,6 @@ bool Wal::doInitialize()
                                           deserializedChecksum.first,
                                           deserializedChecksum.second));
         return false;
-    }
-
-    int maxWalFrame = m_maxAllowedFrame;
-    if (m_shmLegality) {
-        if (!m_shm.initialize()) {
-            return false;
-        }
-        if (m_shm.getBackfill() < m_shm.getMaxFrame()) {
-            maxWalFrame = std::min(m_maxAllowedFrame, (int) m_shm.getMaxFrame());
-        } else {
-            // dispose all wal frames since they are already checkpointed.
-            return true;
-        }
     }
 
     const int frameSize = getFrameSize();
