@@ -100,6 +100,8 @@ MappedData PageBasedFileHandle::mapPage(int pageno, off_t offsetWithinPage, size
                 error.infos.set("HighWater", highWater);
                 error.infos.set("AllowedHighWater", s_allowedHighWater);
                 Notifier::shared()->notify(error);
+
+                m_cache.purge();
             }
 
             m_cache.insert(range, mappedData);
