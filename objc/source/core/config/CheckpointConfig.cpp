@@ -26,11 +26,8 @@
 namespace WCDB {
 
 CheckpointConfig::CheckpointConfig(CheckpointQueue* queue)
-: Config()
-, m_checkpointTruncate(StatementPragma().pragma(Pragma::walCheckpoint()).to("TRUNCATE"))
-, m_queue(queue)
+: Config(), m_queue(queue)
 {
-    static_assert(framesForPassive < framesForFull, "");
     WCTInnerAssert(m_queue != nullptr);
 }
 
@@ -57,13 +54,7 @@ std::string CheckpointConfig::identifier() const
 bool CheckpointConfig::onCommitted(Handle* handle, int frames)
 {
     if (frames > framesForPassive) {
-        if (frames > framesForFull) {
-            if (handle->execute(m_checkpointTruncate)) {
-                m_queue->remove(handle->path);
-            }
-        } else {
-            m_queue->put(handle->path, 1.0, frames);
-        }
+        m_queue->put(handle->path, 1.0, frames);
     } else {
         m_queue->put(handle->path, 10.0, frames);
     }

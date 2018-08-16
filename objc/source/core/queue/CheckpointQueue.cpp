@@ -25,6 +25,7 @@ namespace WCDB {
 CheckpointQueue::CheckpointQueue(const std::string& name)
 : AsyncQueue(name)
 , m_checkpointPassive(StatementPragma().pragma(Pragma::walCheckpoint()).to("PASSIVE"))
+, m_checkpointTruncate(StatementPragma().pragma(Pragma::walCheckpoint()).to("TRUNCATE"))
 {
 }
 
@@ -51,11 +52,16 @@ bool CheckpointQueue::onTimed(const std::string& path, const int& frames)
     if (database == nullptr || !database->isOpened()) {
         return true;
     }
-    if (database->execute(m_checkpointPassive)) {
-        return true;
+    bool result;
+    if (frames > framesForFull) {
+        result = database->execute(m_checkpointTruncate);
+    } else {
+        result = database->execute(m_checkpointPassive);
     }
-    // retry after 10.0s if failed
-    m_timedQueue.reQueue(path, 10.0, frames);
+    if (!result) {
+        // retry after 10.0s if failed
+        m_timedQueue.reQueue(path, 10.0, frames);
+    }
     return false;
 }
 

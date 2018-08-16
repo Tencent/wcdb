@@ -31,6 +31,8 @@ public:
     CheckpointQueue(const std::string& name);
     ~CheckpointQueue();
 
+    static constexpr const int framesForFull = 10 * 1024;
+
     void put(const std::string& path, double delay, int frames);
     void remove(const std::string& path);
 
@@ -40,6 +42,7 @@ protected:
 
     TimedQueue<std::string, int> m_timedQueue;
     const StatementPragma m_checkpointPassive;
+    const StatementPragma m_checkpointTruncate;
 };
 
 } // namespace WCDB
