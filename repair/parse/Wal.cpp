@@ -194,12 +194,11 @@ bool Wal::doInitialize()
         if (!m_shm.initialize()) {
             return false;
         }
-        if (m_shm.getBackfill() < m_shm.getMaxFrame()) {
-            maxWalFrame = std::min(m_maxAllowedFrame, (int) m_shm.getMaxFrame());
-        } else {
+        if (m_shm.getBackfill() >= m_shm.getMaxFrame()) {
             // dispose all wal frames since they are already checkpointed.
             return true;
         }
+        maxWalFrame = std::min(maxWalFrame, (int) m_shm.getMaxFrame());
     }
 
     bool succeed;
@@ -211,6 +210,8 @@ bool Wal::doInitialize()
         }
         return succeed;
     }
+    const int frameCountInFile = ((int) fileSize - headerSize) / getFrameSize();
+    maxWalFrame = std::min(frameCountInFile, maxWalFrame);
 
     if (!m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
         assignWithSharedThreadedError();
@@ -254,11 +255,8 @@ bool Wal::doInitialize()
         return false;
     }
 
-    const int frameSize = getFrameSize();
-    const int framesSize = (int) fileSize - headerSize;
-    const int frameCountInFile = framesSize / frameSize;
     std::map<int, int> committedRecords;
-    for (int frameno = 1; frameno <= frameCountInFile; ++frameno) {
+    for (int frameno = 1; frameno <= maxWalFrame; ++frameno) {
         Frame frame(frameno, this);
         if (!frame.initialize()) {
             return false;
@@ -279,19 +277,17 @@ bool Wal::doInitialize()
                 break;
             }
         }
-        if (frameno <= maxWalFrame) {
-            committedRecords[frame.getPageNumber()] = frameno;
-            if (frame.getTruncate() != 0) {
-                m_maxFrames = frameno;
-                for (const auto &element : committedRecords) {
-                    m_framePages[element.first] = element.second;
-                }
-                committedRecords.clear();
-            }
-        }
         checksum = frame.getChecksum();
-        // all those frames that are uncommitted or exceeds the max allowed count will be disposed.
+        committedRecords[frame.getPageNumber()] = frameno;
+        if (frame.getTruncate() != 0) {
+            m_maxFrames = frameno;
+            for (const auto &element : committedRecords) {
+                m_framePages[element.first] = element.second;
+            }
+            committedRecords.clear();
+        }
     }
+    // all those frames that are uncommitted or exceeds the max allowed count will be disposed.
     return true;
 }
 
