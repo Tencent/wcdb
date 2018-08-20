@@ -62,7 +62,7 @@ bool CheckpointQueue::onTimed(const std::string& path, const int& frames)
         // retry after 10.0s if failed
         m_timedQueue.reQueue(path, 10.0, frames);
     }
-    return false;
+    return result;
 }
 
 void CheckpointQueue::put(const std::string& path, double delay, int frames)
