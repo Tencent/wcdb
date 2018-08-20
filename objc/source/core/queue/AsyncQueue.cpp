@@ -44,7 +44,10 @@ void AsyncQueue::run()
 bool AsyncQueue::exit()
 {
     static std::atomic<bool>* s_exit = new std::atomic<bool>(false);
-    atexit([]() { s_exit->store(true); });
+    static auto s_dummy __attribute__((unused)) = []() -> std::nullptr_t {
+        atexit([]() { s_exit->store(true); });
+        return nullptr;
+    }();
     return s_exit->load();
 }
 
