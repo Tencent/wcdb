@@ -6,20 +6,6 @@
 	objectVersion = 48;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		23A1FF731FB08C780023527D /* Install templates */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 23A1FF741FB08C780023527D /* Build configuration list for PBXAggregateTarget "Install templates" */;
-			buildPhases = (
-				23A1FF771FB08C820023527D /* Install templates */,
-			);
-			dependencies = (
-			);
-			name = "Install templates";
-			productName = "Install file template";
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
 		2302098B1FBED533000D69B6 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209641FBED533000D69B6 /* Config.swift */; };
 		2302098C1FBED533000D69B6 /* Core.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230209651FBED533000D69B6 /* Core.swift */; };
@@ -124,13 +110,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		23A1FF781FB08CC50023527D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 238D0AFA1FAB1F4300BC2659 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 23A1FF731FB08C780023527D;
-			remoteInfo = "Install file template";
-		};
 		23E8206020C69F6B00D1901F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 23E8205B20C69F6A00D1901F /* sqliterk.swift.xcodeproj */;
@@ -530,7 +509,6 @@
 			dependencies = (
 				23E8206A20C69F7200D1901F /* PBXTargetDependency */,
 				23E8206C20C69F7200D1901F /* PBXTargetDependency */,
-				23A1FF791FB08CC50023527D /* PBXTargetDependency */,
 			);
 			name = WCDB.swift;
 			productName = WCDB;
@@ -549,10 +527,6 @@
 					238D0B021FAB1F4300BC2659 = {
 						CreatedOnToolsVersion = 9.0;
 						LastSwiftMigration = 0900;
-						ProvisioningStyle = Automatic;
-					};
-					23A1FF731FB08C780023527D = {
-						CreatedOnToolsVersion = 9.0;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -580,7 +554,6 @@
 			projectRoot = "";
 			targets = (
 				238D0B021FAB1F4300BC2659 /* WCDB.swift */,
-				23A1FF731FB08C780023527D /* Install templates */,
 			);
 		};
 /* End PBXProject section */
@@ -611,23 +584,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		23A1FF771FB08C820023527D /* Install templates */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Install templates";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cd ${PROJECT_DIR}/../tools/templates\nsh install.sh || true";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		238D0AFE1FAB1F4300BC2659 /* Sources */ = {
@@ -736,11 +692,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		23A1FF791FB08CC50023527D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 23A1FF731FB08C780023527D /* Install templates */;
-			targetProxy = 23A1FF781FB08CC50023527D /* PBXContainerItemProxy */;
-		};
 		23E8206A20C69F7200D1901F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = sqlcipher.swift;
@@ -958,22 +909,6 @@
 			};
 			name = Release;
 		};
-		23A1FF751FB08C780023527D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		23A1FF761FB08C780023527D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -991,15 +926,6 @@
 			buildConfigurations = (
 				238D0B0C1FAB1F4300BC2659 /* Debug */,
 				238D0B0D1FAB1F4300BC2659 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		23A1FF741FB08C780023527D /* Build configuration list for PBXAggregateTarget "Install templates" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				23A1FF751FB08C780023527D /* Debug */,
-				23A1FF761FB08C780023527D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
