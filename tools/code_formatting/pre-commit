@@ -1,4 +1,8 @@
 #!/bin/bash  
   
 root=`git rev-parse --show-toplevel`
-sh $root/tools/code_formatting/code_formatting_cached.sh
+formatter=$root/tools/code_formatting/code_formatting_cached.sh
+if [ -f "$formatter" ]
+then
+	sh $formatter
+fi
