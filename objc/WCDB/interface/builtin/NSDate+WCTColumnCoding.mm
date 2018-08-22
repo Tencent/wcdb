@@ -30,17 +30,17 @@
 
 + (instancetype)unarchiveWithWCTValue:(NSNumber *)value
 {
-    return value ? [NSDate dateWithTimeIntervalSince1970:value.longLongValue] : nil;
+    return value ? [NSDate dateWithTimeIntervalSince1970:value.doubleValue] : nil;
 }
 
 - (NSNumber *)archivedWCTValue
 {
-    return [NSNumber numberWithLongLong:self.timeIntervalSince1970];
+    return [NSNumber numberWithDouble:self.timeIntervalSince1970];
 }
 
 + (WCTColumnType)columnTypeForWCDB
 {
-    return WCTColumnTypeInteger64;
+    return WCTColumnTypeDouble;
 }
 
 @end

@@ -30,7 +30,7 @@
 
 + (instancetype)unarchiveWithWCTValue:(NSString *)value
 {
-    return value.length > 0 ? [NSString stringWithString:value] : nil;
+    return value ? [NSString stringWithString:value] : nil;
 }
 
 - (NSString *)archivedWCTValue
