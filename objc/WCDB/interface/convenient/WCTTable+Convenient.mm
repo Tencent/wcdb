@@ -62,7 +62,7 @@
 - (id /* WCTObject* */)getOneObjectWhere:(const WCTCondition &)condition
                                  orderBy:(const WCDB::OrderList &)order
 {
-    return [[[[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] where:condition] limit:1] orderBy:order] nextObject];
+    return [[[[[[WCTSelect alloc] initWithCore:_core andResults:[_cls AllProperties] fromTable:_tableName] where:condition] orderBy:order] limit:1] nextObject];
 }
 
 - (id /* WCTObject* */)getOneObjectWhere:(const WCTCondition &)condition
