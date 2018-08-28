@@ -20,7 +20,11 @@
 
 #include <WCDB/File.hpp>
 #include <WCDB/Path.hpp>
+#ifndef COCOAPODS
 #include <WCDB/SQLiteRepairKit.h>
+#else
+#include <sqliterk/SQLiteRepairKit.h>
+#endif
 #include <WCDB/handle.hpp>
 #include <WCDB/handle_statement.hpp>
 #include <WCDB/macro.hpp>

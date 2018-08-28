@@ -254,7 +254,7 @@
 		2384AB4C1EDBFD48007369FF /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		2384AB4F1EDBFDEC007369FF /* libcommonCrypto.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcommonCrypto.tbd; path = usr/lib/system/libcommonCrypto.tbd; sourceTree = SDKROOT; };
 		2384AB511EDBFDF7007369FF /* libcorecrypto.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcorecrypto.tbd; path = usr/lib/system/libcorecrypto.tbd; sourceTree = SDKROOT; };
-		239325C81E836A7700D677CC /* sqlcipher.swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = sqlcipher.swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		239325C81E836A7700D677CC /* sqlcipher.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = sqlcipher.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		239D64E61ECE9FE8008F5B61 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -284,7 +284,7 @@
 		23121AE51E6FF9110012B45E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				239325C81E836A7700D677CC /* sqlcipher.swift.framework */,
+				239325C81E836A7700D677CC /* sqlcipher.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -469,9 +469,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		239325C71E836A7700D677CC /* sqlcipher.swift */ = {
+		239325C71E836A7700D677CC /* sqlcipher */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 239325CF1E836A7700D677CC /* Build configuration list for PBXNativeTarget "sqlcipher.swift" */;
+			buildConfigurationList = 239325CF1E836A7700D677CC /* Build configuration list for PBXNativeTarget "sqlcipher" */;
 			buildPhases = (
 				239325C31E836A7700D677CC /* Sources */,
 				239325C41E836A7700D677CC /* Frameworks */,
@@ -482,9 +482,9 @@
 			);
 			dependencies = (
 			);
-			name = sqlcipher.swift;
+			name = sqlcipher;
 			productName = sqlcipher;
-			productReference = 239325C81E836A7700D677CC /* sqlcipher.swift.framework */;
+			productReference = 239325C81E836A7700D677CC /* sqlcipher.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -502,7 +502,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 23121ADF1E6FF9110012B45E /* Build configuration list for PBXProject "sqlcipher.swift" */;
+			buildConfigurationList = 23121ADF1E6FF9110012B45E /* Build configuration list for PBXProject "sqlcipher" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -514,7 +514,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				239325C71E836A7700D677CC /* sqlcipher.swift */,
+				239325C71E836A7700D677CC /* sqlcipher */,
 			);
 		};
 /* End PBXProject section */
@@ -834,7 +834,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				OTHER_CFLAGS = "-Wno-shorten-64-to-32";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.sqlcipher.swift;
-				PRODUCT_NAME = sqlcipher.swift;
+				PRODUCT_NAME = sqlcipher;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -856,7 +856,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				OTHER_CFLAGS = "-Wno-shorten-64-to-32";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.sqlcipher.swift;
-				PRODUCT_NAME = sqlcipher.swift;
+				PRODUCT_NAME = sqlcipher;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -866,7 +866,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		23121ADF1E6FF9110012B45E /* Build configuration list for PBXProject "sqlcipher.swift" */ = {
+		23121ADF1E6FF9110012B45E /* Build configuration list for PBXProject "sqlcipher" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				23121AE61E6FF9110012B45E /* Debug */,
@@ -875,7 +875,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		239325CF1E836A7700D677CC /* Build configuration list for PBXNativeTarget "sqlcipher.swift" */ = {
+		239325CF1E836A7700D677CC /* Build configuration list for PBXNativeTarget "sqlcipher" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				239325CD1E836A7700D677CC /* Debug */,

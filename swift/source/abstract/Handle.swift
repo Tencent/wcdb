@@ -146,22 +146,18 @@ public final class Handle {
 //Cipher
 extension Handle {
     public func setCipher(key: Data) throws {
-        #if WCDB_HAS_CODEC
-            let rc = key.withUnsafeBytes ({ (bytes: UnsafePointer<Int8>) -> Int32 in
-                return sqlite3_key(handle, bytes, Int32(key.count))
-            })
-            guard rc == SQLITE_OK else {
-                throw Error.reportSQLite(tag: tag,
-                                         path: path,
-                                         operation: .setCipherKey,
-                                         extendedError: sqlite3_extended_errcode(handle),
-                                         code: rc,
-                                         message: String(cString: sqlite3_errmsg(handle))
-                )
-            }
-        #else
-            fatalError("[sqlite3_key] is not supported for current config")
-        #endif
+        let rc = key.withUnsafeBytes ({ (bytes: UnsafePointer<Int8>) -> Int32 in
+            return sqlite3_key(handle, bytes, Int32(key.count))
+        })
+        guard rc == SQLITE_OK else {
+            throw Error.reportSQLite(tag: tag,
+                                     path: path,
+                                     operation: .setCipherKey,
+                                     extendedError: sqlite3_extended_errcode(handle),
+                                     code: rc,
+                                     message: String(cString: sqlite3_errmsg(handle))
+            )
+        }
     }
 }
 

@@ -19,11 +19,7 @@
  */
 
 #include <SQLite-Bridging.h>
-#ifdef WCDB_COCOAPODS
-#include "sqlite3.h"
-#else //WCDB_COCOAPODS
-#include <sqlcipher.swift/sqlite3.h>
-#endif //WCDB_COCOAPODS
+#include <sqlcipher/sqlite3.h>
 
 int sqlite3_bind_text_transient(sqlite3_stmt *a, int b, const char *c, int d)
 {

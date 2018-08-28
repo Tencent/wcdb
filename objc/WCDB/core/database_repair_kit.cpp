@@ -18,7 +18,11 @@
  * limitations under the License.
  */
 
+#ifndef COCOAPODS
 #include <WCDB/SQLiteRepairKit.h>
+#else
+#include <sqliterk/SQLiteRepairKit.h>
+#endif
 #include <WCDB/database.hpp>
 #include <WCDB/path.hpp>
 #include <WCDB/utility.hpp>

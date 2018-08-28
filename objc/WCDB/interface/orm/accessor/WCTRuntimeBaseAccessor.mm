@@ -23,7 +23,7 @@
 #import <objc/runtime.h>
 #import <string>
 
-#ifndef WCDB_COCOAPODS
+#ifndef COCOAPODS
 #if __has_feature(objc_arc)
 #error This file should be compiled without ARC to get better performance. Please use -fno-objc-arc flag on this file.
 #endif

@@ -10,7 +10,7 @@ Pod::Spec.new do |sqliterk|
                           It's basically used in WCDB, which is an efficient, complete, easy-to-use mobile database framework.
                           DESC
   sqliterk.homepage     = "https://github.com/Tencent/wcdb"
-  sqliterk.license      = { :type => "BSD", :file => "LICENSE"}
+  sqliterk.license      = { :type => "BSD", :file => "LICENSE" }
   sqliterk.author             = { "sanhuazhang" => "sanhuazhang@tencent.com" }
   sqliterk.module_name = "sqliterk"
   sqliterk.watchos.deployment_target = "2.0"
@@ -23,10 +23,11 @@ Pod::Spec.new do |sqliterk|
   sqliterk.source_files  = "repair/*.{h,c,cpp}"
   sqliterk.libraries = "z", "c++"
   sqliterk.pod_target_xcconfig = {
-    "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) SQLITE_HAS_CODEC WCDB_BUILTIN_SQLCIPHER WCDB_COCOAPODS",
-    "LIBRARY_SEARCH_PATHS[sdk=macosx*]" => "$(inherited) $(SDKROOT)/usr/lib/system",
+    "GCC_PREPROCESSOR_DEFINITIONS" => "SQLITE_HAS_CODEC WCDB_BUILTIN_SQLCIPHER",
+    "LIBRARY_SEARCH_PATHS[sdk=macosx*]" => "$(SDKROOT)/usr/lib/system",
     "CLANG_CXX_LANGUAGE_STANDARD" => "gnu++0x",
     "CLANG_CXX_LIBRARY" => "libc++",
-    "GCC_SYMBOLS_PRIVATE_EXTERN" => "YES",
+    "OTHER_CFLAGS" => "-fvisibility-inlines-hidden",
+    "OTHER_CPLUSPLUSFLAGS" => "-fvisibility-inlines-hidden",
   }
 end
