@@ -2630,7 +2630,6 @@
 					"$(SDKROOT)/usr/lib/system",
 				);
 				MACH_O_TYPE = mh_dylib;
-				"OTHER_CFLAGS[sdk=iphoneos*]" = "-fembed-bitcode-marker";
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"-framework",
 					UIKit,
@@ -2667,7 +2666,6 @@
 					"$(SDKROOT)/usr/lib/system",
 				);
 				MACH_O_TYPE = mh_dylib;
-				"OTHER_CFLAGS[sdk=iphoneos*]" = "-fembed-bitcode-marker";
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"-framework",
 					UIKit,
@@ -2722,6 +2720,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2791,6 +2790,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
