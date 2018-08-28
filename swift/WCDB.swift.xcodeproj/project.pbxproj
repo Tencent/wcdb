@@ -101,6 +101,8 @@
 		23A00CD91FBAF82B000180A8 /* Tokenize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A00CD81FBAF82B000180A8 /* Tokenize.swift */; };
 		23AC5C83213531FE0087C004 /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23AC5C78213531DE0087C004 /* sqlcipher.framework */; };
 		23AC5C84213531FE0087C004 /* sqliterk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23AC5C7B213531DE0087C004 /* sqliterk.framework */; };
+		23AC5C8A21353B140087C004 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2330322D1FB9420000101373 /* libz.tbd */; };
+		23AC5C8E21353B980087C004 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23AC5C8D21353B980087C004 /* libc++.tbd */; };
 		23C8E0041FD8184300DAE97D /* CodableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C8E0031FD8184300DAE97D /* CodableType.swift */; };
 		23E737C41FB1601C00EEBC3D /* Master.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E737C31FB1601C00EEBC3D /* Master.swift */; };
 		23E9E0021FC3C5CB005DE71C /* Tracer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E9E0011FC3C5CB005DE71C /* Tracer.swift */; };
@@ -236,6 +238,8 @@
 		238D0B721FAB1F7E00BC2659 /* ThreadLocal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadLocal.swift; sourceTree = "<group>"; };
 		239FBDF220C6831A0082FE24 /* FundamentalValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FundamentalValue.swift; sourceTree = "<group>"; };
 		23A00CD81FBAF82B000180A8 /* Tokenize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tokenize.swift; sourceTree = "<group>"; };
+		23AC5C8B21353B900087C004 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
+		23AC5C8D21353B980087C004 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		23C8E0031FD8184300DAE97D /* CodableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableType.swift; sourceTree = "<group>"; };
 		23E737C31FB1601C00EEBC3D /* Master.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Master.swift; sourceTree = "<group>"; };
 		23E8205B20C69F6A00D1901F /* sqliterk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqliterk.xcodeproj; path = source/util/sqliterk.xcodeproj; sourceTree = "<group>"; };
@@ -251,6 +255,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23AC5C8E21353B980087C004 /* libc++.tbd in Frameworks */,
+				23AC5C8A21353B140087C004 /* libz.tbd in Frameworks */,
 				23AC5C83213531FE0087C004 /* sqlcipher.framework in Frameworks */,
 				23AC5C84213531FE0087C004 /* sqliterk.framework in Frameworks */,
 			);
@@ -342,6 +348,8 @@
 		23794DAC1FAB206E001E79DE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				23AC5C8D21353B980087C004 /* libc++.tbd */,
+				23AC5C8B21353B900087C004 /* libstdc++.tbd */,
 				2330322D1FB9420000101373 /* libz.tbd */,
 			);
 			name = Frameworks;
@@ -750,6 +758,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -829,6 +838,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					WCDB_BUILTIN_SQLCIPHER,
