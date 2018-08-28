@@ -1,3 +1,12 @@
+## v1.0.7
+
+#### iOS/macOS
+
+* Fix nil string bug while inserting empty string.
+* Code template is not installed automatically now.
+* Reduce size of binary and provide a non-bitcode scheme for Carthage.
+* Avoid conflict between builtin SQLCipher and other SQLite based library(including system library).
+
 ## v1.0.6.2
 
 #### iOS/macOS
