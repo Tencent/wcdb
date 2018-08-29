@@ -1,8 +1,8 @@
-# pod lib lint --verbose --skip-import-validation WCDB.podspec
-# pod trunk push WCDB.podspec --verbose --skip-import-validation
+# pod lib lint --verbose --skip-import-validation --allow-warnings WCDB.podspec
+# pod trunk push WCDB.podspec --verbose --skip-import-validation --allow-warnings
 Pod::Spec.new do |wcdb|
   wcdb.name         = "WCDB"
-  wcdb.version      = "1.0.7.3"
+  wcdb.version      = "1.0.7.4"
   wcdb.summary      = "WCDB is a cross-platform database framework developed by WeChat."
   wcdb.description  = <<-DESC
                       The WeChat Database, for Objective-C. (If you want to use WCDB for Swift, see the "WCDBSwift" pod.)
@@ -33,7 +33,7 @@ Pod::Spec.new do |wcdb|
     "OTHER_CFLAGS" => "-fvisibility-inlines-hidden",
     "OTHER_CPLUSPLUSFLAGS" => "-fvisibility-inlines-hidden",
   }
-  wcdb.dependency 'WCDBOptimizedSQLCipher', '1.1.3'
-  wcdb.dependency 'SQLiteRepairKit', '1.1.3'
+  wcdb.dependency 'WCDBOptimizedSQLCipher', '~> 1.1.0'
+  wcdb.dependency 'SQLiteRepairKit', '~> 1.1.0'
   wcdb.static_framework = true
 end

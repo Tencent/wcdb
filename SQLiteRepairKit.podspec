@@ -1,8 +1,8 @@
-# pod lib lint SQLiteRepairKit.podspec --verbose --skip-import-validation --allow-warnings
-# pod trunk push SQLiteRepairKit.podspec --verbose --skip-import-validation --allow-warnings
+# pod lib lint --verbose --skip-import-validation --allow-warnings SQLiteRepairKit.podspec
+# pod trunk push --verbose --skip-import-validation --allow-warnings SQLiteRepairKit.podspec
 Pod::Spec.new do |sqliterk|
   sqliterk.name         = "SQLiteRepairKit"
-  sqliterk.version      = "1.1.3"
+  sqliterk.version      = "1.1.4"
   sqliterk.summary      = "Repair kit for SQLite based database"
   sqliterk.description  = <<-DESC
                           sqliterk is a efficient, self-contain repair kit for restoring corrupted SQLite based database.
@@ -17,7 +17,7 @@ Pod::Spec.new do |sqliterk|
   sqliterk.tvos.deployment_target = "9.0"
   sqliterk.osx.deployment_target = "10.9"
   sqliterk.ios.deployment_target = "8.0"
-  sqliterk.dependency 'WCDBOptimizedSQLCipher', '1.1.3'
+  sqliterk.dependency 'WCDBOptimizedSQLCipher', '~> 1.1.0'
   sqliterk.source       = { :git => "https://github.com/Tencent/wcdb.git", :commit => "e3731f4ddbf57c1906442f67eba3ad96d4b54206" }
   sqliterk.public_header_files = "repair/SQLiteRepairKit.h"
   sqliterk.source_files  = "repair/*.{h,c,cpp}"
