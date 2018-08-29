@@ -25,7 +25,7 @@ Pod::Spec.new do |wcdb|
   wcdb.libraries = "z", "c++"
   wcdb.requires_arc = true
   wcdb.pod_target_xcconfig = {
-    "GCC_PREPROCESSOR_DEFINITIONS" => "WCDB_BUILTIN_COLUMN_CODING",
+    "GCC_PREPROCESSOR_DEFINITIONS" => "WCDB_BUILTIN_COLUMN_CODING SQLITE_HAS_CODEC",
     "HEADER_SEARCH_PATHS" => "${PODS_ROOT}/WCDB",
     "LIBRARY_SEARCH_PATHS[sdk=macosx*]" => "$(SDKROOT)/usr/lib/system",
     "CLANG_CXX_LANGUAGE_STANDARD" => "gnu++0x",
