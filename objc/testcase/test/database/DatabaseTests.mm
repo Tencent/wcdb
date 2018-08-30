@@ -127,6 +127,29 @@
     XCTAssertEqual(fileSize, newFileSize);
 }
 
+- (void)test_close_without_checkpoint
+{
+    NSString *tableName = NSStringFromSelector(_cmd);
+    XCTAssertTrue([_database createTableAndIndexes:tableName withClass:TestCaseObject.class]);
+    int count = 10;
+    int pageSize = 4096;
+    for (int i = 0; i < count; ++i) {
+        TestCaseObject *object = [TestCaseObject objectWithId:i];
+        XCTAssertTrue([_database insertObject:object intoTable:tableName]);
+    }
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *walPath = [_database.path stringByAppendingString:@"-wal"];
+    {
+        unsigned long long fileSize = [[fileManager attributesOfItemAtPath:walPath error:nil] fileSize];
+        XCTAssertGreaterThan(fileSize, count * pageSize);
+    }
+
+    [_database close];
+
+    unsigned long long newFileSize = [[fileManager attributesOfItemAtPath:walPath error:nil] fileSize];
+    XCTAssertGreaterThan(newFileSize, count * pageSize);
+}
+
 - (void)test_create_intermediate_directories
 {
     NSString *longPath = self.recommendedDirectory;

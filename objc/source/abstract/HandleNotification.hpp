@@ -89,17 +89,24 @@ protected:
 #pragma mark - Checkpoint
 public:
     //checkpoint will abort if any notification return false
-    typedef std::function<bool(Handle *, int)> CheckpointNotification;
-    bool setNotificationWhenCheckpoint(int order,
-                                       const std::string &name,
-                                       const CheckpointNotification &willCheckpoint,
-                                       bool ignorable = false);
+    typedef std::function<bool(Handle *)> WillCheckpointNotification;
+    bool setNotificationWhenWillCheckpoint(int order,
+                                           const std::string &name,
+                                           const WillCheckpointNotification &willCheckpoint,
+                                           bool ignorable = false);
+    bool unsetNotificationWhenWillCheckpoint(const std::string &name, bool ignorable = false);
+
+    typedef std::function<void(Handle *, int)> CheckpointedNotification;
+    bool setNotificationWhenCheckpointed(const std::string &name,
+                                         const CheckpointedNotification &checkpointed,
+                                         bool ignorable = false);
 
 protected:
     bool isCheckpointNotificationSet() const;
     bool setupCheckpointNotification(bool ignorable = false);
-    bool dispatchCheckpointNotification(int frames);
-    OrderedUniqueList<std::string, CheckpointNotification> m_checkpointNotifications;
+    bool dispatchCheckpointNotification(int rc);
+    OrderedUniqueList<std::string, WillCheckpointNotification> m_willCheckpointNotifications;
+    std::map<std::string, CheckpointedNotification> m_checkpointedNotifications;
 };
 
 } //namespace WCDB

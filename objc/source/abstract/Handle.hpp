@@ -157,10 +157,14 @@ public:
                                       const std::string &name,
                                       const CommittedNotification &onCommitted);
 
-    typedef HandleNotification::CheckpointNotification CheckpointNotification;
-    bool setNotificationWhenCheckpoint(int order,
-                                       const std::string &name,
-                                       const CheckpointNotification &willCheckpoint);
+    typedef HandleNotification::WillCheckpointNotification WillCheckpointNotification;
+    bool setNotificationWhenWillCheckpoint(int order,
+                                           const std::string &name,
+                                           const WillCheckpointNotification &willCheckpoint);
+    bool unsetNotificationWhenWillCheckpoint(const std::string &name);
+    typedef HandleNotification::CheckpointedNotification CheckpointedNotification;
+    bool setNotificationWhenCheckpointed(const std::string &name,
+                                         const CheckpointedNotification &checkpointed);
     void unsetNotificationWhenCommitted(const std::string &name);
 
 protected:

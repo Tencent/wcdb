@@ -35,8 +35,8 @@ bool BackupConfig::invoke(Handle *handle)
         return false;
     }
     const std::string id = identifier();
-    bool result = handle->setNotificationWhenCheckpoint(
-    0, id, std::bind(&BackupConfig::willCheckpoint, this, std::placeholders::_1, std::placeholders::_2));
+    bool result = handle->setNotificationWhenCheckpointed(
+    id, std::bind(&BackupConfig::checkpointed, this, std::placeholders::_1, std::placeholders::_2));
     handle->rollbackTransaction();
     if (result) {
         handle->setNotificationWhenCommitted(
@@ -48,11 +48,12 @@ bool BackupConfig::invoke(Handle *handle)
 bool BackupConfig::uninvoke(Handle *handle)
 {
     const std::string id = identifier();
-    bool result = handle->setNotificationWhenCheckpoint(
-    0, id, std::bind(&BackupConfig::willCheckpoint, this, std::placeholders::_1, std::placeholders::_2));
-    if (result) {
-        handle->unsetNotificationWhenCommitted(id);
+    if (!handle->beginTransaction()) {
+        return false;
     }
+    bool result = handle->setNotificationWhenCheckpointed(id, nullptr);
+    handle->rollbackTransaction();
+    handle->unsetNotificationWhenCommitted(id);
     return result;
 }
 
@@ -76,10 +77,11 @@ bool BackupConfig::onCommitted(Handle *handle, int frames)
     return true;
 }
 
-bool BackupConfig::willCheckpoint(Handle *handle, int frames)
+void BackupConfig::checkpointed(Handle *handle, int rc)
 {
-    m_queue->put(handle->path, 3, frames);
-    return true;
+    if (rc == SQLITE_OK) {
+        m_queue->put(handle->path, 0, 0);
+    }
 }
 
 } //namespace WCDB

@@ -42,7 +42,7 @@ public:
 protected:
     std::string identifier() const;
     bool onCommitted(Handle* handle, int frames);
-    bool willCheckpoint(Handle* handle, int frames);
+    void checkpointed(Handle* handle, int rc);
 
     BackupQueue* m_queue;
 };
