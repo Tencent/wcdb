@@ -2,7 +2,7 @@
 # pod trunk push --verbose --skip-import-validation --allow-warnings SQLiteRepairKit.podspec
 Pod::Spec.new do |sqliterk|
   sqliterk.name         = "SQLiteRepairKit"
-  sqliterk.version      = "1.1.5"
+  sqliterk.version      = "1.1.6"
   sqliterk.summary      = "Repair kit for SQLite based database"
   sqliterk.description  = <<-DESC
                           sqliterk is a efficient, self-contain repair kit for restoring corrupted SQLite based database.
@@ -28,6 +28,7 @@ Pod::Spec.new do |sqliterk|
     "CLANG_CXX_LANGUAGE_STANDARD" => "gnu++0x",
     "CLANG_CXX_LIBRARY" => "libc++",
     "GCC_SYMBOLS_PRIVATE_EXTERN" => "YES",
+    "DEFINES_MODULE" => 'YES',
   }
   sqliterk.static_framework = true
   sqliterk.header_dir = "sqliterk"
