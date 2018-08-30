@@ -18,7 +18,7 @@ Pod::Spec.new do |sqliterk|
   sqliterk.osx.deployment_target = "10.9"
   sqliterk.ios.deployment_target = "8.0"
   sqliterk.dependency 'WCDBOptimizedSQLCipher', '~> 1.1.0'
-  sqliterk.source       = { :git => "https://github.com/Tencent/wcdb.git", :commit => "e3731f4ddbf57c1906442f67eba3ad96d4b54206" }
+  sqliterk.source       = { :git => "https://github.com/Tencent/wcdb.git", :commit => "5a4cd1b71cb1dcd79b48f334e577c78c2d88db1d" }
   sqliterk.public_header_files = "repair/SQLiteRepairKit.h"
   sqliterk.source_files  = "repair/*.{h,c,cpp}"
   sqliterk.libraries = "z", "c++"
