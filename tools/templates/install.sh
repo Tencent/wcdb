@@ -7,16 +7,19 @@ xctemplates_zip=xctemplates.zip
 local_codesnippets_zip=`pwd`/archive/$codesnippets_zip
 local_xctemplates_zip=`pwd`/archive/$xctemplates_zip
 
-if ! git rev-parse --git-dir > /dev/null 2>&1; then
-    # fetch remote zip    
-    remote_url="https://raw.githubusercontent.com/Tencent/wcdb/master/tools/templates/archive"
-    temp_directory=`mktemp -d`
-    
+remote_url="https://raw.githubusercontent.com/Tencent/wcdb/master/tools/templates/archive"
+temp_directory=`mktemp -d`
+
+if [ ! -f "$local_codesnippets_zip" ]; then
+    # fetch remote codesnippets zip    
     remote_codesnippets_zip=$remote_url/$codesnippets_zip
     local_codesnippets_zip=$temp_directory/$codesnippets_zip
     curl $remote_codesnippets_zip -o $local_codesnippets_zip -s
     echo "fetch $remote_codesnippets_zip to $local_codesnippets_zip"
-    
+fi
+
+if [ ! -f "$local_xctemplates_zip" ]; then
+    # fetch remote xctemplates zip    
     remote_xctemplates_zip=$remote_url/$xctemplates_zip
     local_xctemplates_zip=$temp_directory/$xctemplates_zip
     curl $remote_xctemplates_zip -o $local_xctemplates_zip -s
