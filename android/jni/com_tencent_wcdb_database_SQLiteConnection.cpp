@@ -671,7 +671,7 @@ static jboolean nativeIsReadOnly(JNIEnv *env,
 {
     sqlite3_stmt *statement = (sqlite3_stmt *) (intptr_t) statementPtr;
 
-    return sqlite3_stmt_readonly(statement) != 0;
+    return static_cast<jboolean>(sqlite3_stmt_readonly(statement) ? 1 : 0);
 }
 
 static jint nativeGetColumnCount(JNIEnv *env,

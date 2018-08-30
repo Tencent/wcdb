@@ -115,9 +115,25 @@ public abstract class SQLiteProgram extends SQLiteClosable {
     }
 
     /** @hide */
-    protected final void onCorruption() {
-        SQLiteDebug.collectLastIOTraceStats(mDatabase);
-        mDatabase.onCorruption();
+    protected final void checkCorruption(SQLiteException e) {
+        boolean isCorruption = false;
+        if (e instanceof SQLiteDatabaseCorruptException) {
+            isCorruption = true;
+        } else if (e instanceof SQLiteFullException) {
+            // When SQLite executing OP_Column opcode during SELECT or UPDATE statements,
+            // it may return SQLITE_FULL when trying to access unreachable pages.
+            // It's considered corruption on this scenario. We cannot distinguish such
+            // situation here, so we treat all SQLiteFullException thrown by a SELECT
+            // statement a signal on corruption.
+            if (mReadOnly) {
+                isCorruption = true;
+            }
+        }
+
+        if (isCorruption) {
+            SQLiteDebug.collectLastIOTraceStats(mDatabase);
+            mDatabase.onCorruption();
+        }
     }
 
     /**
