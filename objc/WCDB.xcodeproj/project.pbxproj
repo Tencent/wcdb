@@ -6,20 +6,6 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		2349FC171FDF8648005230E8 /* Install templates */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 2349FC1B1FDF8648005230E8 /* Build configuration list for PBXAggregateTarget "Install templates" */;
-			buildPhases = (
-				2349FC1C1FDF864B005230E8 /* Install templates */,
-			);
-			dependencies = (
-			);
-			name = "Install templates";
-			productName = "Install file template";
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
 		23000F12203EC89700ED8008 /* LangColumn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23000F10203EC89700ED8008 /* LangColumn.cpp */; };
 		23000F14203EC89700ED8008 /* LangColumn.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23000F11203EC89700ED8008 /* LangColumn.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1149,26 +1135,12 @@
 			remoteGlobalIDString = 239325C81E836A7700D677CC;
 			remoteInfo = sqlcipher;
 		};
-		2349FC1D1FDF8665005230E8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2349FC171FDF8648005230E8;
-			remoteInfo = "Install file template";
-		};
 		23F5BC4420887FD3000CCD37 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 23A747BE20039675003CECFA /* sqlcipher.preprocessed.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 239325C71E836A7700D677CC;
 			remoteInfo = sqlcipher;
-		};
-		23F5BC4820887FD3000CCD37 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2349FC171FDF8648005230E8;
-			remoteInfo = "Install file template";
 		};
 		23F5BE0520887FD4000CCD37 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3301,7 +3273,6 @@
 			);
 			dependencies = (
 				23F5BE0E20887FFF000CCD37 /* PBXTargetDependency */,
-				2349FC1E1FDF8665005230E8 /* PBXTargetDependency */,
 			);
 			name = WCDB;
 			productName = "WCDB framework";
@@ -3321,7 +3292,6 @@
 			);
 			dependencies = (
 				23F5BC4320887FD3000CCD37 /* PBXTargetDependency */,
-				23F5BC4720887FD3000CCD37 /* PBXTargetDependency */,
 			);
 			name = "WCDB for Coverage";
 			productName = "WCDB framework";
@@ -3337,10 +3307,6 @@
 				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = sanhuazhang;
 				TargetAttributes = {
-					2349FC171FDF8648005230E8 = {
-						CreatedOnToolsVersion = 9.0;
-						ProvisioningStyle = Automatic;
-					};
 					239326601E836D7300D677CC = {
 						CreatedOnToolsVersion = 8.2;
 						ProvisioningStyle = Automatic;
@@ -3367,7 +3333,6 @@
 			targets = (
 				239326601E836D7300D677CC /* WCDB */,
 				23F5BC4220887FD3000CCD37 /* WCDB for Coverage */,
-				2349FC171FDF8648005230E8 /* Install templates */,
 			);
 		};
 /* End PBXProject section */
@@ -3405,23 +3370,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		2349FC1C1FDF864B005230E8 /* Install templates */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Install templates";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cd ${PROJECT_DIR}/../tools/templates\nsh install.sh || true";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		2393265C1E836D7300D677CC /* Sources */ = {
@@ -3953,20 +3901,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		2349FC1E1FDF8665005230E8 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2349FC171FDF8648005230E8 /* Install templates */;
-			targetProxy = 2349FC1D1FDF8665005230E8 /* PBXContainerItemProxy */;
-		};
 		23F5BC4320887FD3000CCD37 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = sqlcipher;
 			targetProxy = 23F5BC4420887FD3000CCD37 /* PBXContainerItemProxy */;
-		};
-		23F5BC4720887FD3000CCD37 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2349FC171FDF8648005230E8 /* Install templates */;
-			targetProxy = 23F5BC4820887FD3000CCD37 /* PBXContainerItemProxy */;
 		};
 		23F5BE0E20887FFF000CCD37 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3976,24 +3914,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		2349FC181FDF8648005230E8 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				ENABLE_BITCODE = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		2349FC191FDF8648005230E8 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				ENABLE_BITCODE = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		239326671E836D7300D677CC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4232,15 +4152,6 @@
 			};
 			name = WithoutBitcode;
 		};
-		23A2C8C2208CDC1500C6BB6B /* WithoutBitcode */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				ENABLE_BITCODE = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = WithoutBitcode;
-		};
 		23B5F7681E1111C100E58396 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4474,16 +4385,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2349FC1B1FDF8648005230E8 /* Build configuration list for PBXAggregateTarget "Install templates" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				2349FC181FDF8648005230E8 /* Debug */,
-				2349FC191FDF8648005230E8 /* Release */,
-				23A2C8C2208CDC1500C6BB6B /* WithoutBitcode */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		239326661E836D7300D677CC /* Build configuration list for PBXNativeTarget "WCDB" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
