@@ -46,7 +46,7 @@ protected:
 
 #pragma mark - Backup
 public:
-    bool work(int maxWalFrame = std::numeric_limits<int>::max());
+    bool work();
 
     const Material &getMaterial() const;
 

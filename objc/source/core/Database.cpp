@@ -296,12 +296,12 @@ void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
     m_pool->attachment.factory.filter(tableShouldBeBackedup);
 }
 
-bool Database::backup(int maxWalFrame)
+bool Database::backup()
 {
     Repair::FactoryBackup backup = m_pool->attachment.factory.backup();
     std::shared_ptr<Repair::Locker> locker(new Repair::SQLiteReadLocker);
     backup.setLocker(locker);
-    if (backup.work(getPath(), maxWalFrame)) {
+    if (backup.work(getPath())) {
         return true;
     }
     setThreadedError(backup.getError());

@@ -26,12 +26,12 @@ namespace WCDB {
 
 namespace Repair {
 
-bool FactoryBackup::work(const std::string &database, int maxWalFrame)
+bool FactoryBackup::work(const std::string &database)
 {
     Backup backup(database);
     backup.setLocker(m_locker);
     backup.filter(factory.getFilter());
-    if (!backup.work(maxWalFrame)) {
+    if (!backup.work()) {
         setError(backup.getError());
         return false;
     }

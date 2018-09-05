@@ -38,7 +38,7 @@ Backup::Backup(const std::string &path)
 }
 
 #pragma mark - Backup
-bool Backup::work(int maxWalFrame)
+bool Backup::work()
 {
     WCTInnerAssert(m_locker != nullptr);
     WCTInnerAssert(m_locker->getPath().empty());
@@ -54,7 +54,6 @@ bool Backup::work(int maxWalFrame)
         }
         locked = true;
 
-        m_pager.setMaxWalFrame(maxWalFrame);
         if (!m_pager.initialize()) {
             break;
         }
