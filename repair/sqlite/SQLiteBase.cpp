@@ -114,7 +114,11 @@ bool SQLiteBase::isOpened() const
 void SQLiteBase::close()
 {
     if (m_handle) {
-        sqlite3_close((sqlite3 *) m_handle);
+#ifdef SQLITE_WCDB_CHECKPOINT_HANDLER
+        sqlite3_wal_checkpoint_handler(
+        (sqlite3 *) m_handle, [](void *, int) -> int { return SQLITE_ABORT; }, nullptr);
+#endif
+        sqlite3_close_v2((sqlite3 *) m_handle);
         m_handle = nullptr;
     }
 }
