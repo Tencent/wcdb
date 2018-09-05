@@ -299,8 +299,8 @@ void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
 bool Database::backup()
 {
     Repair::FactoryBackup backup = m_pool->attachment.factory.backup();
-    std::shared_ptr<Repair::Locker> locker(new Repair::SQLiteReadLocker);
-    backup.setLocker(locker);
+    backup.setReadLocker(std::shared_ptr<Repair::ReadLocker>(new Repair::SQLiteReadLocker));
+    backup.setWriteLocker(std::shared_ptr<Repair::WriteLocker>(new Repair::SQLiteWriteLocker));
     if (backup.work(getPath())) {
         return true;
     }
@@ -317,8 +317,8 @@ bool Database::deposit()
     Repair::FactoryRenewer renewer = m_pool->attachment.factory.renewer();
     std::shared_ptr<Repair::Assembler> assembler(new Repair::SQLiteAssembler);
     renewer.setAssembler(assembler);
-    std::shared_ptr<Repair::Locker> locker(new Repair::SQLiteReadLocker);
-    renewer.setLocker(locker);
+    renewer.setReadLocker(std::shared_ptr<Repair::ReadLocker>(new Repair::SQLiteReadLocker));
+    renewer.setWriteLocker(std::shared_ptr<Repair::WriteLocker>(new Repair::SQLiteWriteLocker));
     do {
         if (!renewer.prepare()) {
             setThreadedError(renewer.getError());
@@ -349,8 +349,8 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
     Repair::FactoryRetriever retriever = m_pool->attachment.factory.retriever();
     std::shared_ptr<Repair::Assembler> assembler(new Repair::SQLiteAssembler);
     retriever.setAssembler(assembler);
-    std::shared_ptr<Repair::Locker> locker(new Repair::SQLiteReadLocker);
-    retriever.setLocker(locker);
+    retriever.setReadLocker(std::shared_ptr<Repair::ReadLocker>(new Repair::SQLiteReadLocker));
+    retriever.setWriteLocker(std::shared_ptr<Repair::WriteLocker>(new Repair::SQLiteWriteLocker));
     retriever.setProgressCallback(onProgressUpdate);
     bool result = retriever.work();
     setThreadedError(retriever.getError());
