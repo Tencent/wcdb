@@ -38,5 +38,4 @@ echo """
 #define WCDB_BUILD_TIME \"${buildDate}\"
 
 #endif /* WCDBVersion_h */
-
 """ > ${root}/objc/source/WCDBVersion.h
