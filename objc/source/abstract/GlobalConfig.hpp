@@ -23,8 +23,6 @@
 
 #include <functional>
 
-#pragma GCC visibility push(hidden)
-
 namespace WCDB {
 
 class GlobalConfig {
@@ -41,7 +39,5 @@ public:
 };
 
 } //namespace WCDB
-
-#pragma GCC visibility pop
 
 #endif /* GlobalConfig_hpp */

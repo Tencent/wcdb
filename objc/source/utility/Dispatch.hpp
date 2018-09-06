@@ -24,8 +24,6 @@
 #include <functional>
 #include <string>
 
-#pragma GCC visibility push(hidden)
-
 namespace WCDB {
 
 class Dispatch {
@@ -34,7 +32,5 @@ public:
 };
 
 } //namespace WCDB
-
-#pragma GCC visibility pop
 
 #endif /* Dispatch_hpp */

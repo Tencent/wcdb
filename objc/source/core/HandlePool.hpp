@@ -32,8 +32,6 @@
 #include <WCDB/Tag.hpp>
 #include <WCDB/ThreadedErrors.hpp>
 
-#pragma GCC visibility push(hidden)
-
 namespace WCDB {
 
 class HandlePool : private ThreadedErrorProne {
@@ -121,7 +119,5 @@ public:
 };
 
 } //namespace WCDB
-
-#pragma GCC visibility pop
 
 #endif /* HandlePool_hpp */

@@ -23,8 +23,6 @@
 
 #include <WCDB/Abstract.h>
 
-#pragma GCC visibility push(hidden)
-
 namespace WCDB {
 
 class MigrationInfo {
@@ -125,7 +123,5 @@ protected:
 };
 
 } //namespace WCDB
-
-#pragma GCC visibility pop
 
 #endif /* MigrationInfo_hpp */

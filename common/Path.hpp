@@ -23,8 +23,6 @@
 
 #include <string>
 
-#pragma GCC visibility push(hidden)
-
 namespace WCDB {
 
 namespace Path {
@@ -43,7 +41,5 @@ std::string normalize(const std::string &path);
 } //namespace Path
 
 } //namespace WCDB
-
-#pragma GCC visibility pop
 
 #endif /* Path_hpp */

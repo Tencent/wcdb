@@ -25,8 +25,6 @@
 #include <atomic>
 #include <thread>
 
-#pragma GCC visibility push(hidden)
-
 namespace WCDB {
 
 class Lockable {
@@ -111,7 +109,5 @@ protected:
 };
 
 } //namespace WCDB
-
-#pragma GCC visibility pop
 
 #endif /* Lock_hpp */

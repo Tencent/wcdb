@@ -25,8 +25,6 @@
 #include <WCDB/MigrationSetting.hpp>
 #include <WCDB/MigrationTamperer.hpp>
 
-#pragma GCC visibility push(hidden)
-
 namespace WCDB {
 
 class MigrationHandle : public Handle {
@@ -81,7 +79,5 @@ protected:
 };
 
 } //namespace WCDB
-
-#pragma GCC visibility pop
 
 #endif /* MigrationHandle_hpp */

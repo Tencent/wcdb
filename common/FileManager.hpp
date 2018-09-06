@@ -28,8 +28,6 @@
 #include <list>
 #include <string>
 
-#pragma GCC visibility push(hidden)
-
 namespace WCDB {
 
 enum FileProtection {
@@ -92,7 +90,5 @@ protected:
 };
 
 } //namespace WCDB
-
-#pragma GCC visibility pop
 
 #endif /* FileManager_hpp */

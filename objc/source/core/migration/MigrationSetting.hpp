@@ -25,8 +25,6 @@
 #include <WCDB/MigrationInfo.hpp>
 #include <map>
 
-#pragma GCC visibility push(hidden)
-
 namespace WCDB {
 
 class MigrationHandlePool;
@@ -83,7 +81,5 @@ protected:
 };
 
 } //namespace WCDB
-
-#pragma GCC visibility pop
 
 #endif /* MigrationSetting_hpp */

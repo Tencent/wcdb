@@ -24,8 +24,6 @@
 #include <WCDB/Config.hpp>
 #include <WCDB/OrderedUniqueList.hpp>
 
-#pragma GCC visibility push(hidden)
-
 namespace WCDB {
 
 class Configs {
@@ -53,8 +51,6 @@ public:
 protected:
     OrderedUniqueList<std::string, std::shared_ptr<Config>> m_list;
 };
-
-#pragma GCC visibility pop
 
 } //namespace WCDB
 

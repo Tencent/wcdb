@@ -25,8 +25,6 @@
 #include <WCDB/HandlePoolHolder.hpp>
 #include <WCDB/ThreadLocal.hpp>
 
-#pragma GCC visibility push(hidden)
-
 namespace WCDB {
 
 class Database : public HandlePoolHolder {
@@ -150,7 +148,5 @@ public:
 };
 
 } //namespace WCDB
-
-#pragma GCC visibility pop
 
 #endif /* database_hpp */

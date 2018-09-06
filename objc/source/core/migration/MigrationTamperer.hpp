@@ -23,8 +23,6 @@
 
 #include <WCDB/MigrationSetting.hpp>
 
-#pragma GCC visibility push(hidden)
-
 namespace WCDB {
 
 class MigrationTamperer {
@@ -128,7 +126,5 @@ protected:
 };
 
 } //namespace WCDB
-
-#pragma GCC visibility pop
 
 #endif /* MigrationTamperer_hpp */

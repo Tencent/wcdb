@@ -29,8 +29,6 @@
 #include <stdio.h>
 #include <thread>
 
-#pragma GCC visibility push(hidden)
-
 namespace WCDB {
 
 template<typename Key, typename Info>
@@ -132,7 +130,5 @@ protected:
 };
 
 } //namespace WCDB
-
-#pragma GCC visibility pop
 
 #endif /* TimedQueue_hpp */

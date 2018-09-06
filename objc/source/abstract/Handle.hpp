@@ -31,8 +31,6 @@
 #include <set>
 #include <string>
 
-#pragma GCC visibility push(hidden)
-
 namespace WCDB {
 
 class Handle : public ErrorProne {
@@ -180,7 +178,5 @@ protected:
 };
 
 } //namespace WCDB
-
-#pragma GCC visibility pop
 
 #endif /* Handle_hpp */

@@ -23,8 +23,6 @@
 
 #include <WCDB/Config.hpp>
 
-#pragma GCC visibility push(hidden)
-
 namespace WCDB {
 
 class BasicConfig : public Config {
@@ -42,7 +40,5 @@ protected:
 };
 
 } //namespace WCDB
-
-#pragma GCC visibility pop
 
 #endif /* BasicConfig_hpp */

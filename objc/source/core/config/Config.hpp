@@ -23,8 +23,6 @@
 
 #include <WCDB/Abstract.h>
 
-#pragma GCC visibility push(hidden)
-
 namespace WCDB {
 
 class Config {
@@ -34,7 +32,5 @@ public:
 };
 
 } //namespace WCDB
-
-#pragma GCC visibility pop
 
 #endif /* Config_hpp */

@@ -23,8 +23,6 @@
 
 #include <WCDB/Config.hpp>
 
-#pragma GCC visibility push(hidden)
-
 namespace WCDB {
 
 namespace FTS {
@@ -43,7 +41,5 @@ protected:
 };
 
 } //namespace WCDB
-
-#pragma GCC visibility pop
 
 #endif /* TokenizeConfig_hpp */

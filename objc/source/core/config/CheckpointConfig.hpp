@@ -23,8 +23,6 @@
 
 #include <WCDB/Config.hpp>
 
-#pragma GCC visibility push(hidden)
-
 namespace WCDB {
 
 class CheckpointQueue;
@@ -46,7 +44,5 @@ protected:
 };
 
 } //namespace WCDB
-
-#pragma GCC visibility pop
 
 #endif /* CheckpointConfig_hpp */

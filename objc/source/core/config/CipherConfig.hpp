@@ -23,8 +23,6 @@
 
 #include <WCDB/Config.hpp>
 
-#pragma GCC visibility push(hidden)
-
 namespace WCDB {
 
 class CipherConfig : public Config {
@@ -38,7 +36,5 @@ protected:
 };
 
 } //namespace WCDB
-
-#pragma GCC visibility pop
 
 #endif /* CipherConfig_hpp */

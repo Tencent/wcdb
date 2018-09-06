@@ -24,8 +24,6 @@
 #include <WCDB/HandleRelated.hpp>
 #include <WCDB/WINQ.h>
 
-#pragma GCC visibility push(hidden)
-
 namespace WCDB {
 
 class HandleStatement : public HandleRelated {
@@ -75,7 +73,5 @@ protected:
 };
 
 } //namespace WCDB
-
-#pragma GCC visibility pop
 
 #endif /* HandleStatement_hpp */

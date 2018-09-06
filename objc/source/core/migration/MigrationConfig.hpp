@@ -24,8 +24,6 @@
 #include <WCDB/Config.hpp>
 #include <WCDB/MigrationSetting.hpp>
 
-#pragma GCC visibility push(hidden)
-
 namespace WCDB {
 
 class MigrationConfig : public Config {
@@ -41,7 +39,5 @@ protected:
 };
 
 } //namespace WCDB
-
-#pragma GCC visibility pop
 
 #endif /* MigrationConfig_hpp */
