@@ -1,4 +1,3 @@
-
 /*
  * Tencent is pleased to support the open source community by making
  * WCDB available.
@@ -25,8 +24,8 @@
 /* DO NOT CHANGE IT MANUALLY */
 
 #define WCDB_VERSION "1.1.0"
-#define WCDB_COMMIT_ID "e2f2235c8590e4875cc5f8086b18b73ee0885cb3"
-#define WCDB_BUILD_TIMESTAMP 1536206179
-#define WCDB_BUILD_TIME "2018-09-06 11:56:19 UTC+0800"
+#define WCDB_COMMIT_ID "baf90d6b8641275eb2b9d5e626d764cb0bee8977"
+#define WCDB_BUILD_TIMESTAMP 1536206423
+#define WCDB_BUILD_TIME "2018-09-06 12:00:23 UTC+0800"
 
 #endif /* WCDBVersion_h */

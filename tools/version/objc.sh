@@ -6,8 +6,7 @@ buildDate=`date -r ${buildTimestamp} +"%Y-%m-%d %H:%M:%S UTC%z"`
 commitID=`git rev-parse HEAD`
 version=`defaults read /Users/sanhuazhang/Developer/Github/wcdb/objc/Info.plist CFBundleShortVersionString`
 
-echo """
-/*
+echo """/*
  * Tencent is pleased to support the open source community by making
  * WCDB available.
  *
