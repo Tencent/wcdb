@@ -22,20 +22,20 @@
 #define CorruptionQueue_hpp
 
 #include <WCDB/AsyncQueue.hpp>
-#include <WCDB/HandlePoolsRelated.hpp>
+#include <WCDB/DatabasePoolRelated.hpp>
 #include <WCDB/Lock.hpp>
 #include <mutex>
 #include <set>
 
 namespace WCDB {
 
-class CorruptionQueue : public AsyncQueue, public HandlePoolsRelated {
+class CorruptionQueue : public AsyncQueue, public DatabasePoolRelated {
 public:
-    CorruptionQueue(const std::string& name, HandlePools* handlePools);
+    CorruptionQueue(const std::string& name, DatabasePool* databasePool);
     void put(const std::string& path);
 
 protected:
-    using HandlePoolsRelated::setRelatedHandlePools;
+    using DatabasePoolRelated::setRelatedDatabasePool;
     void loop() override;
 
     std::mutex m_mutex;

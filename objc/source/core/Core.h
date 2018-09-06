@@ -42,8 +42,8 @@
 #include <WCDB/ConfiguredHandle.hpp>
 #include <WCDB/CoreNotifier.hpp>
 #include <WCDB/Database.hpp>
+#include <WCDB/DatabasePool.hpp>
 #include <WCDB/HandlePool.hpp>
-#include <WCDB/HandlePools.hpp>
 #include <WCDB/RecyclableHandle.hpp>
 #include <WCDB/RecyclableHandlePool.hpp>
 
@@ -58,7 +58,7 @@ class Core {
 public:
     static Core* shared();
 
-    static HandlePools* handlePools();
+    static DatabasePool* databasePool();
     static const std::shared_ptr<Configs>& configs();
     static FTS::Modules* modules();
     static CoreNotifier* notifier();
@@ -107,7 +107,7 @@ protected:
     static int vfsOpen(const char* path, int flags, int mode);
 
     // The order of member variables here is important.
-    HandlePools m_handlePools;
+    DatabasePool m_databasePool;
     FTS::Modules m_modules;
     CoreNotifier m_notifier;
 

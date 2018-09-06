@@ -18,22 +18,22 @@
  * limitations under the License.
  */
 
-#include <WCDB/HandlePoolsRelated.hpp>
+#include <WCDB/DatabasePoolRelated.hpp>
 
 namespace WCDB {
 
-HandlePoolsRelated::HandlePoolsRelated() : m_handlePools(nullptr)
+DatabasePoolRelated::DatabasePoolRelated() : m_databasePool(nullptr)
 {
 }
 
-HandlePoolsRelated::HandlePoolsRelated(HandlePools* handlePools)
-: m_handlePools(handlePools)
+DatabasePoolRelated::DatabasePoolRelated(DatabasePool* databasePool)
+: m_databasePool(databasePool)
 {
 }
 
-void HandlePoolsRelated::setRelatedHandlePools(HandlePools* handlePools)
+void DatabasePoolRelated::setRelatedDatabasePool(DatabasePool* databasePool)
 {
-    m_handlePools = handlePools;
+    m_databasePool = databasePool;
 }
 
 } // namespace WCDB

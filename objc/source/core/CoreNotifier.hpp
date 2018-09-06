@@ -21,8 +21,8 @@
 #ifndef CoreNotifier_hpp
 #define CoreNotifier_hpp
 
+#include <WCDB/DatabasePoolRelated.hpp>
 #include <WCDB/Error.hpp>
-#include <WCDB/HandlePoolsRelated.hpp>
 #include <WCDB/Lock.hpp>
 #include <WCDB/Notifier.hpp>
 
@@ -30,7 +30,7 @@ namespace WCDB {
 
 class CorruptionQueue;
 
-class CoreNotifier : public HandlePoolsRelated {
+class CoreNotifier : public DatabasePoolRelated {
 public:
     CoreNotifier();
     CoreNotifier(const CoreNotifier&) = delete;
@@ -40,7 +40,7 @@ public:
     void setNotification(const Callback& callback);
 
     void setCorruptionQueue(CorruptionQueue* queue);
-    void setRelatedHandlePools(HandlePools* handlePools);
+    void setRelatedDatabasePool(DatabasePool* databasePool);
 
     static void logger(const Error& error);
     static void globalLogger(void* userInfo, int code, const char* message);

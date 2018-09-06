@@ -561,10 +561,10 @@
 		23B4DD102112EDC600954D71 /* GlobalConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4DD0D2112EDC600954D71 /* GlobalConfig.cpp */; };
 		23B4DD112112EDC600954D71 /* GlobalConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DD0E2112EDC600954D71 /* GlobalConfig.hpp */; };
 		23B4DD122112EDC600954D71 /* GlobalConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DD0E2112EDC600954D71 /* GlobalConfig.hpp */; };
-		23B4DD1B2113082C00954D71 /* HandlePoolsRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4DD192113082C00954D71 /* HandlePoolsRelated.cpp */; };
-		23B4DD1C2113082C00954D71 /* HandlePoolsRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4DD192113082C00954D71 /* HandlePoolsRelated.cpp */; };
-		23B4DD1D2113082C00954D71 /* HandlePoolsRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DD1A2113082C00954D71 /* HandlePoolsRelated.hpp */; };
-		23B4DD1E2113082C00954D71 /* HandlePoolsRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DD1A2113082C00954D71 /* HandlePoolsRelated.hpp */; };
+		23B4DD1B2113082C00954D71 /* DatabasePoolRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4DD192113082C00954D71 /* DatabasePoolRelated.cpp */; };
+		23B4DD1C2113082C00954D71 /* DatabasePoolRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4DD192113082C00954D71 /* DatabasePoolRelated.cpp */; };
+		23B4DD1D2113082C00954D71 /* DatabasePoolRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DD1A2113082C00954D71 /* DatabasePoolRelated.hpp */; };
+		23B4DD1E2113082C00954D71 /* DatabasePoolRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DD1A2113082C00954D71 /* DatabasePoolRelated.hpp */; };
 		23B8F5662043A2CE00EC571D /* Operable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B8F5642043A2CE00EC571D /* Operable.cpp */; };
 		23B8F5672043A2CE00EC571D /* Operable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B8F5652043A2CE00EC571D /* Operable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23B8F56F2043FD1E00EC571D /* Redirectable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B8F56D2043FD1E00EC571D /* Redirectable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -645,8 +645,8 @@
 		23D4DA4C2085A99000AE6D90 /* ConvertibleImpl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D4DA492085A99000AE6D90 /* ConvertibleImpl.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23D53B1820FEFB60004E1853 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23C43BCC2087435800AB186D /* libz.tbd */; };
 		23D920C72009B534000634CB /* Abstract.h in Headers */ = {isa = PBXBuildFile; fileRef = 23D920422009B52E000634CB /* Abstract.h */; };
-		23D96B922050DED700DB5E93 /* HandlePools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D96B902050DED700DB5E93 /* HandlePools.cpp */; };
-		23D96B932050DED700DB5E93 /* HandlePools.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D96B912050DED700DB5E93 /* HandlePools.hpp */; };
+		23D96B922050DED700DB5E93 /* DatabasePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D96B902050DED700DB5E93 /* DatabasePool.cpp */; };
+		23D96B932050DED700DB5E93 /* DatabasePool.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D96B912050DED700DB5E93 /* DatabasePool.hpp */; };
 		23D96B972050E53600DB5E93 /* RecyclableHandlePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D96B952050E53600DB5E93 /* RecyclableHandlePool.cpp */; };
 		23D96B982050E53600DB5E93 /* RecyclableHandlePool.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D96B962050E53600DB5E93 /* RecyclableHandlePool.hpp */; };
 		23D96B9F2050E9A500DB5E93 /* MigrationHandlePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D96B9D2050E9A500DB5E93 /* MigrationHandlePool.cpp */; };
@@ -753,7 +753,7 @@
 		23F5BC8220887FD3000CCD37 /* WCTUnsafeHandle.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBCF22064DD0B000E31E8 /* WCTUnsafeHandle.mm */; };
 		23F5BC8320887FD3000CCD37 /* WCTCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F65E1EA0D6680021EFA7 /* WCTCore.mm */; };
 		23F5BC8420887FD3000CCD37 /* RaiseFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977442202AECD3000A681C /* RaiseFunction.cpp */; };
-		23F5BC8520887FD3000CCD37 /* HandlePools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D96B902050DED700DB5E93 /* HandlePools.cpp */; };
+		23F5BC8520887FD3000CCD37 /* DatabasePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D96B902050DED700DB5E93 /* DatabasePool.cpp */; };
 		23F5BC8620887FD3000CCD37 /* NSString+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6341EA0D6680021EFA7 /* NSString+WCTColumnCoding.mm */; };
 		23F5BC8720887FD3000CCD37 /* IndexedColumn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23977432202AECD3000A681C /* IndexedColumn.cpp */; };
 		23F5BC8820887FD3000CCD37 /* WCTHandle+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3CFB4205FB1A800692F94 /* WCTHandle+Convenient.mm */; };
@@ -1070,7 +1070,7 @@
 		23F5BDEC20887FD3000CCD37 /* NSObject+Convertible.h in Headers */ = {isa = PBXBuildFile; fileRef = 234EF46C2015CFDE00B81929 /* NSObject+Convertible.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F5BDED20887FD3000CCD37 /* WCTTable+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F69E1EA0D6680021EFA7 /* WCTTable+Private.h */; };
 		23F5BDEE20887FD3000CCD37 /* Migration.h in Headers */ = {isa = PBXBuildFile; fileRef = 23D4DA432085A2CA00AE6D90 /* Migration.h */; };
-		23F5BDF020887FD3000CCD37 /* HandlePools.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D96B912050DED700DB5E93 /* HandlePools.hpp */; };
+		23F5BDF020887FD3000CCD37 /* DatabasePool.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D96B912050DED700DB5E93 /* DatabasePool.hpp */; };
 		23F5BDF120887FD3000CCD37 /* ConfiguredHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B0071B2047ED4800045245 /* ConfiguredHandle.hpp */; };
 		23F5BDF320887FD3000CCD37 /* WCTDatabase+Transaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 234DBCFF2064DE04000E31E8 /* WCTDatabase+Transaction.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F5BDF420887FD3000CCD37 /* WCTHandle+Transaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 234DBD012064DE04000E31E8 /* WCTHandle+Transaction.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1600,8 +1600,8 @@
 		23B4DCF22112B32D00954D71 /* BackupQueue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BackupQueue.hpp; sourceTree = "<group>"; };
 		23B4DD0D2112EDC600954D71 /* GlobalConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GlobalConfig.cpp; sourceTree = "<group>"; };
 		23B4DD0E2112EDC600954D71 /* GlobalConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GlobalConfig.hpp; sourceTree = "<group>"; };
-		23B4DD192113082C00954D71 /* HandlePoolsRelated.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HandlePoolsRelated.cpp; sourceTree = "<group>"; };
-		23B4DD1A2113082C00954D71 /* HandlePoolsRelated.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HandlePoolsRelated.hpp; sourceTree = "<group>"; };
+		23B4DD192113082C00954D71 /* DatabasePoolRelated.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DatabasePoolRelated.cpp; sourceTree = "<group>"; };
+		23B4DD1A2113082C00954D71 /* DatabasePoolRelated.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DatabasePoolRelated.hpp; sourceTree = "<group>"; };
 		23B8F5642043A2CE00EC571D /* Operable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Operable.cpp; sourceTree = "<group>"; };
 		23B8F5652043A2CE00EC571D /* Operable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Operable.hpp; sourceTree = "<group>"; };
 		23B8F56D2043FD1E00EC571D /* Redirectable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Redirectable.hpp; sourceTree = "<group>"; };
@@ -1654,8 +1654,8 @@
 		23D4DA492085A99000AE6D90 /* ConvertibleImpl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ConvertibleImpl.hpp; sourceTree = "<group>"; };
 		23D53B1620FEFB51004E1853 /* libdz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libdz.tbd; path = usr/lib/libdz.tbd; sourceTree = SDKROOT; };
 		23D920422009B52E000634CB /* Abstract.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Abstract.h; sourceTree = "<group>"; };
-		23D96B902050DED700DB5E93 /* HandlePools.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HandlePools.cpp; sourceTree = "<group>"; };
-		23D96B912050DED700DB5E93 /* HandlePools.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HandlePools.hpp; sourceTree = "<group>"; };
+		23D96B902050DED700DB5E93 /* DatabasePool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DatabasePool.cpp; sourceTree = "<group>"; };
+		23D96B912050DED700DB5E93 /* DatabasePool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DatabasePool.hpp; sourceTree = "<group>"; };
 		23D96B952050E53600DB5E93 /* RecyclableHandlePool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RecyclableHandlePool.cpp; sourceTree = "<group>"; };
 		23D96B962050E53600DB5E93 /* RecyclableHandlePool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RecyclableHandlePool.hpp; sourceTree = "<group>"; };
 		23D96B9D2050E9A500DB5E93 /* MigrationHandlePool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationHandlePool.cpp; sourceTree = "<group>"; };
@@ -1835,10 +1835,10 @@
 				236814ED20C5640200BDF4D3 /* Attachment.hpp */,
 				23A8CD5320C8E40500A45C54 /* Corruption.cpp */,
 				23A8CD5420C8E40500A45C54 /* Corruption.hpp */,
-				23D96B902050DED700DB5E93 /* HandlePools.cpp */,
-				23D96B912050DED700DB5E93 /* HandlePools.hpp */,
-				23B4DD192113082C00954D71 /* HandlePoolsRelated.cpp */,
-				23B4DD1A2113082C00954D71 /* HandlePoolsRelated.hpp */,
+				23D96B902050DED700DB5E93 /* DatabasePool.cpp */,
+				23D96B912050DED700DB5E93 /* DatabasePool.hpp */,
+				23B4DD192113082C00954D71 /* DatabasePoolRelated.cpp */,
+				23B4DD1A2113082C00954D71 /* DatabasePoolRelated.hpp */,
 				2349F6241EA0D6680021EFA7 /* RecyclableHandle.cpp */,
 				2349F6251EA0D6680021EFA7 /* RecyclableHandle.hpp */,
 				23B0071A2047ED4800045245 /* ConfiguredHandle.cpp */,
@@ -2921,13 +2921,13 @@
 				239776FA202AF2E3000A681C /* TimedQueue.hpp in Headers */,
 				23567D7D20CA93C5005F1C35 /* Time.hpp in Headers */,
 				2374C9942090A393000F046F /* WCTDatabase+Trace.h in Headers */,
-				23B4DD1D2113082C00954D71 /* HandlePoolsRelated.hpp in Headers */,
+				23B4DD1D2113082C00954D71 /* DatabasePoolRelated.hpp in Headers */,
 				23B9E67520AE733B00CF1683 /* FileManager.hpp in Headers */,
 				234EF46E2015CFDE00B81929 /* NSObject+Convertible.h in Headers */,
 				2349F7741EA0D6680021EFA7 /* WCTTable+Private.h in Headers */,
 				23775B6420AD666900E21AB0 /* Error.hpp in Headers */,
 				23D4DA462085A41A00AE6D90 /* Migration.h in Headers */,
-				23D96B932050DED700DB5E93 /* HandlePools.hpp in Headers */,
+				23D96B932050DED700DB5E93 /* DatabasePool.hpp in Headers */,
 				23B0071D2047ED4800045245 /* ConfiguredHandle.hpp in Headers */,
 				234DBD032064DE04000E31E8 /* WCTDatabase+Transaction.h in Headers */,
 				23D0C35F20C149D80001BFAE /* FactoryRetriever.hpp in Headers */,
@@ -3229,13 +3229,13 @@
 				23F5BDEB20887FD3000CCD37 /* TimedQueue.hpp in Headers */,
 				23567D7E20CA93C5005F1C35 /* Time.hpp in Headers */,
 				2374C9952090A393000F046F /* WCTDatabase+Trace.h in Headers */,
-				23B4DD1E2113082C00954D71 /* HandlePoolsRelated.hpp in Headers */,
+				23B4DD1E2113082C00954D71 /* DatabasePoolRelated.hpp in Headers */,
 				23B9E67620AE733B00CF1683 /* FileManager.hpp in Headers */,
 				23F5BDEC20887FD3000CCD37 /* NSObject+Convertible.h in Headers */,
 				23F5BDED20887FD3000CCD37 /* WCTTable+Private.h in Headers */,
 				23775B6520AD666900E21AB0 /* Error.hpp in Headers */,
 				23F5BDEE20887FD3000CCD37 /* Migration.h in Headers */,
-				23F5BDF020887FD3000CCD37 /* HandlePools.hpp in Headers */,
+				23F5BDF020887FD3000CCD37 /* DatabasePool.hpp in Headers */,
 				23F5BDF120887FD3000CCD37 /* ConfiguredHandle.hpp in Headers */,
 				23F5BDF320887FD3000CCD37 /* WCTDatabase+Transaction.h in Headers */,
 				23D0C36020C149D80001BFAE /* FactoryRetriever.hpp in Headers */,
@@ -3454,7 +3454,7 @@
 				23B4DC902111B6DF00954D71 /* CoreNotifier.cpp in Sources */,
 				23977508202AECD3000A681C /* RaiseFunction.cpp in Sources */,
 				23F1698C20B6638F009B5C47 /* ThreadedErrors.cpp in Sources */,
-				23D96B922050DED700DB5E93 /* HandlePools.cpp in Sources */,
+				23D96B922050DED700DB5E93 /* DatabasePool.cpp in Sources */,
 				2349F7151EA0D6680021EFA7 /* NSString+WCTColumnCoding.mm in Sources */,
 				23D0C35520C149D80001BFAE /* FactoryDepositor.cpp in Sources */,
 				239774F8202AECD3000A681C /* IndexedColumn.cpp in Sources */,
@@ -3503,7 +3503,7 @@
 				23977590202AECD3000A681C /* LangQualifiedTableName.cpp in Sources */,
 				2349F6FE1EA0D6680021EFA7 /* Database.cpp in Sources */,
 				23000F12203EC89700ED8008 /* LangColumn.cpp in Sources */,
-				23B4DD1B2113082C00954D71 /* HandlePoolsRelated.cpp in Sources */,
+				23B4DD1B2113082C00954D71 /* DatabasePoolRelated.cpp in Sources */,
 				23D96B9F2050E9A500DB5E93 /* MigrationHandlePool.cpp in Sources */,
 				23DC3079202B0066000F7895 /* Tokenize.cpp in Sources */,
 				23AD52F220DBAC4C00664B62 /* UpgradeableErrorProne.cpp in Sources */,
@@ -3716,7 +3716,7 @@
 				23B4DC912111B6DF00954D71 /* CoreNotifier.cpp in Sources */,
 				23F5BC8420887FD3000CCD37 /* RaiseFunction.cpp in Sources */,
 				23F1698D20B6638F009B5C47 /* ThreadedErrors.cpp in Sources */,
-				23F5BC8520887FD3000CCD37 /* HandlePools.cpp in Sources */,
+				23F5BC8520887FD3000CCD37 /* DatabasePool.cpp in Sources */,
 				23F5BC8620887FD3000CCD37 /* NSString+WCTColumnCoding.mm in Sources */,
 				23D0C35620C149D80001BFAE /* FactoryDepositor.cpp in Sources */,
 				23F5BC8720887FD3000CCD37 /* IndexedColumn.cpp in Sources */,
@@ -3765,7 +3765,7 @@
 				23F5BCA720887FD3000CCD37 /* LangQualifiedTableName.cpp in Sources */,
 				23F5BCA920887FD3000CCD37 /* Database.cpp in Sources */,
 				23F5BCAA20887FD3000CCD37 /* LangColumn.cpp in Sources */,
-				23B4DD1C2113082C00954D71 /* HandlePoolsRelated.cpp in Sources */,
+				23B4DD1C2113082C00954D71 /* DatabasePoolRelated.cpp in Sources */,
 				23F5BCAB20887FD3000CCD37 /* MigrationHandlePool.cpp in Sources */,
 				23F5BCAC20887FD3000CCD37 /* Tokenize.cpp in Sources */,
 				23AD52F320DBAC4C00664B62 /* UpgradeableErrorProne.cpp in Sources */,

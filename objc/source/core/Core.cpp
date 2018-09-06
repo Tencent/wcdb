@@ -31,7 +31,7 @@ Core* Core::shared()
 }
 
 Core::Core()
-: m_corruptionQueue(corruptionQueueName, &m_handlePools)
+: m_corruptionQueue(corruptionQueueName, &m_databasePool)
 , m_checkpointQueue(checkpointQueueName)
 , m_backupQueue(backupQueueName)
 // Configs
@@ -58,7 +58,7 @@ Core::Core()
     m_backupQueue.run();
 
     m_notifier.setCorruptionQueue(&m_corruptionQueue);
-    m_notifier.setRelatedHandlePools(&m_handlePools);
+    m_notifier.setRelatedDatabasePool(&m_databasePool);
 }
 
 int Core::vfsOpen(const char* path, int flags, int mode)
@@ -70,9 +70,9 @@ int Core::vfsOpen(const char* path, int flags, int mode)
     return fd;
 }
 
-HandlePools* Core::handlePools()
+DatabasePool* Core::databasePool()
 {
-    return &shared()->m_handlePools;
+    return &shared()->m_databasePool;
 }
 
 const std::shared_ptr<Configs>& Core::configs()

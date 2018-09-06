@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
+#include <WCDB/DatabasePool.hpp>
 #include <WCDB/HandlePoolRelated.hpp>
-#include <WCDB/HandlePools.hpp>
 
 namespace WCDB {
 

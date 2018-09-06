@@ -18,15 +18,15 @@
  * limitations under the License.
  */
 
-#ifndef HandlePools_hpp
-#define HandlePools_hpp
+#ifndef DatabasePool_hpp
+#define DatabasePool_hpp
 
 #include <WCDB/Lock.hpp>
 #include <WCDB/RecyclableHandlePool.hpp>
 
 namespace WCDB {
 
-class HandlePools {
+class DatabasePool {
 public:
     typedef std::function<std::shared_ptr<HandlePool>(const std::string &)> Generator;
 
@@ -45,10 +45,10 @@ protected:
     RecyclableHandlePool getExistingPool(
     const std::map<std::string, std::pair<std::shared_ptr<HandlePool>, int>>::iterator &iter);
 
-    std::map<std::string, std::pair<std::shared_ptr<HandlePool>, int>> m_pools; //path->{pool, reference}
+    std::map<std::string, std::pair<std::shared_ptr<HandlePool>, int>> m_databases; //path->{database, reference}
     SharedLock m_lock;
 };
 
 } //namespace WCDB
 
-#endif /* HandlePools_hpp */
+#endif /* DatabasePool_hpp */

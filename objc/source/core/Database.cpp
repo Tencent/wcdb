@@ -32,7 +32,7 @@ namespace WCDB {
 std::shared_ptr<Database> Database::databaseWithExistingTag(const Tag &tag)
 {
     std::shared_ptr<Database> database(
-    new Database(Core::handlePools()->getExistingPool(tag)));
+    new Database(Core::databasePool()->getExistingPool(tag)));
     if (database && database->isValid()) {
         return database;
     }
@@ -42,7 +42,7 @@ std::shared_ptr<Database> Database::databaseWithExistingTag(const Tag &tag)
 std::shared_ptr<Database> Database::databaseWithExistingPath(const std::string &path)
 {
     std::shared_ptr<Database> database(
-    new Database(Core::handlePools()->getExistingPool(path)));
+    new Database(Core::databasePool()->getExistingPool(path)));
     if (database && database->isValid()) {
         return database;
     }
@@ -69,7 +69,7 @@ bool Database::initializeHandlePool(const HandlePool &handlePool)
 std::shared_ptr<Database> Database::databaseWithPath(const std::string &path)
 {
     std::shared_ptr<Database> database(new Database(
-    Core::handlePools()->getOrGeneratePool(path, Database::generateHandlePool)));
+    Core::databasePool()->getOrGeneratePool(path, Database::generateHandlePool)));
     if (database && database->isValid()) {
         return database;
     }

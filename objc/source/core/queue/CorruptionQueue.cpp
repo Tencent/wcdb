@@ -25,15 +25,15 @@
 
 namespace WCDB {
 
-CorruptionQueue::CorruptionQueue(const std::string& name, HandlePools* handlePools)
-: AsyncQueue(name), HandlePoolsRelated(handlePools)
+CorruptionQueue::CorruptionQueue(const std::string& name, DatabasePool* databasePool)
+: AsyncQueue(name), DatabasePoolRelated(databasePool)
 {
-    WCTInnerAssert(m_handlePools != nullptr);
+    WCTInnerAssert(m_databasePool != nullptr);
 }
 
 void CorruptionQueue::put(const std::string& path)
 {
-    auto pool = m_handlePools->getExistingPool(path);
+    auto pool = m_databasePool->getExistingPool(path);
     if (pool == nullptr) {
         return;
     }
@@ -59,7 +59,7 @@ void CorruptionQueue::loop()
             }
             path = std::move(*m_paths.begin());
         }
-        auto pool = m_handlePools->getExistingPool(path);
+        auto pool = m_databasePool->getExistingPool(path);
         if (pool != nullptr) {
             pool->attachment.corruption.notify();
         }

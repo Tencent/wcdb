@@ -25,7 +25,7 @@
 namespace WCDB {
 
 CoreNotifier::CoreNotifier()
-: HandlePoolsRelated(), m_callback(CoreNotifier::logger), m_corruptionQueue(nullptr)
+: DatabasePoolRelated(), m_callback(CoreNotifier::logger), m_corruptionQueue(nullptr)
 {
     Notifier::shared()->setNotification(
     std::bind(&CoreNotifier::notify, this, std::placeholders::_1));
@@ -43,10 +43,10 @@ void CoreNotifier::setCorruptionQueue(CorruptionQueue* queue)
     m_corruptionQueue = queue;
 }
 
-void CoreNotifier::setRelatedHandlePools(HandlePools* handlePools)
+void CoreNotifier::setRelatedDatabasePool(DatabasePool* databasePool)
 {
     LockGuard lockGuard(m_lock);
-    HandlePoolsRelated::setRelatedHandlePools(handlePools);
+    DatabasePoolRelated::setRelatedDatabasePool(databasePool);
 }
 
 void CoreNotifier::notify(const Error& error)
@@ -56,10 +56,10 @@ void CoreNotifier::notify(const Error& error)
     const auto& stringInfos = error.infos.getStrings();
 
     SharedLockGuard lockGuard(m_lock);
-    if (m_handlePools) {
+    if (m_databasePool) {
         auto iter = stringInfos.find("Path");
         if (iter != stringInfos.end()) {
-            auto pool = m_handlePools->getExistingPool(iter->second);
+            auto pool = m_databasePool->getExistingPool(iter->second);
             if (pool != nullptr) {
                 if (pool->getTag() != Tag::invalid()) {
                     processed.infos.set("Tag", pool->getTag());

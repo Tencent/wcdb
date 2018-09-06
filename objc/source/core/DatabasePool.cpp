@@ -27,36 +27,36 @@
 namespace WCDB {
 
 RecyclableHandlePool
-HandlePools::getOrGeneratePool(const std::string &path, const Generator &generator)
+DatabasePool::getOrGeneratePool(const std::string &path, const Generator &generator)
 {
     std::string normalized = Path::normalize(path);
     {
         SharedLockGuard lockGuard(m_lock);
-        auto iter = m_pools.find(normalized);
-        if (iter != m_pools.end()) {
+        auto iter = m_databases.find(normalized);
+        if (iter != m_databases.end()) {
             return getExistingPool(iter);
         }
     }
     {
         LockGuard lockGuard(m_lock);
-        auto iter = m_pools.find(normalized);
-        if (iter == m_pools.end()) {
+        auto iter = m_databases.find(normalized);
+        if (iter == m_databases.end()) {
             std::shared_ptr<HandlePool> pool = generator(normalized);
             if (pool == nullptr) {
                 return nullptr;
             }
-            iter = m_pools.emplace(normalized, std::make_pair(pool, 0)).first;
+            iter = m_databases.emplace(normalized, std::make_pair(pool, 0)).first;
         }
         return getExistingPool(iter);
     }
 }
 
-RecyclableHandlePool HandlePools::getExistingPool(Tag tag)
+RecyclableHandlePool DatabasePool::getExistingPool(Tag tag)
 {
     WCTAssert(tag != Tag::invalid(), "Tag invalid");
     SharedLockGuard lockGuard(m_lock);
-    auto iter = m_pools.end();
-    for (iter = m_pools.begin(); iter != m_pools.end(); ++iter) {
+    auto iter = m_databases.end();
+    for (iter = m_databases.begin(); iter != m_databases.end(); ++iter) {
         if (iter->second.first->getTag() == tag) {
             break;
         }
@@ -64,12 +64,12 @@ RecyclableHandlePool HandlePools::getExistingPool(Tag tag)
     return getExistingPool(iter);
 }
 
-RecyclableHandlePool HandlePools::getExistingPool(const std::string &path)
+RecyclableHandlePool DatabasePool::getExistingPool(const std::string &path)
 {
     std::string normalized = Path::normalize(path);
     SharedLockGuard lockGuard(m_lock);
-    auto iter = m_pools.begin();
-    for (; iter != m_pools.end(); ++iter) {
+    auto iter = m_databases.begin();
+    for (; iter != m_databases.end(); ++iter) {
         if (iter->second.first->path == normalized) {
             break;
         }
@@ -77,37 +77,37 @@ RecyclableHandlePool HandlePools::getExistingPool(const std::string &path)
     return getExistingPool(iter);
 }
 
-RecyclableHandlePool HandlePools::getExistingPool(
+RecyclableHandlePool DatabasePool::getExistingPool(
 const std::map<std::string, std::pair<std::shared_ptr<HandlePool>, int>>::iterator &iter)
 {
     WCTInnerAssert(m_lock.level() >= SharedLock::Level::Read);
-    if (iter == m_pools.end()) {
+    if (iter == m_databases.end()) {
         return nullptr;
     }
     ++iter->second.second;
     const std::string path = iter->second.first->path;
     return RecyclableHandlePool(
     iter->second.first,
-    std::bind(&HandlePools::flowBackHandlePool, this, std::placeholders::_1));
+    std::bind(&DatabasePool::flowBackHandlePool, this, std::placeholders::_1));
 }
 
-void HandlePools::flowBackHandlePool(const std::shared_ptr<HandlePool> &handlePool)
+void DatabasePool::flowBackHandlePool(const std::shared_ptr<HandlePool> &handlePool)
 {
     LockGuard lockGuard(m_lock);
-    const auto &iter = m_pools.find(handlePool->path);
-    if (iter == m_pools.end()) {
+    const auto &iter = m_databases.find(handlePool->path);
+    if (iter == m_databases.end()) {
         //drop it
         return;
     }
     if (iter->second.first.get() == handlePool.get() && --iter->second.second == 0) {
-        m_pools.erase(iter);
+        m_databases.erase(iter);
     }
 }
 
-void HandlePools::purge()
+void DatabasePool::purge()
 {
     SharedLockGuard lockGuard(m_lock);
-    for (const auto &iter : m_pools) {
+    for (const auto &iter : m_databases) {
         iter.second.first->purgeFreeHandles();
     }
 }
