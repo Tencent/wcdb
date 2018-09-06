@@ -173,6 +173,8 @@
 		23593B7E20D3ADF80058B416 /* WalRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23593B7B20D3ADF80058B416 /* WalRelated.cpp */; };
 		23593B7F20D3ADF80058B416 /* WalRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23593B7C20D3ADF80058B416 /* WalRelated.hpp */; };
 		23593B8020D3ADF80058B416 /* WalRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23593B7C20D3ADF80058B416 /* WalRelated.hpp */; };
+		235A6FB42140DA260034C26B /* WCDBVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 235A6FB32140DA260034C26B /* WCDBVersion.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		235A6FB52140DA260034C26B /* WCDBVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 235A6FB32140DA260034C26B /* WCDBVersion.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		235F5D5A207A377E00B440CA /* WCTTable+Transaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 235F5D58207A377E00B440CA /* WCTTable+Transaction.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		235F5D5B207A377E00B440CA /* WCTTable+Transaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D59207A377E00B440CA /* WCTTable+Transaction.mm */; };
 		2360A5F720D78F1B00E4A311 /* HandleRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2360A5F320D78F1B00E4A311 /* HandleRelated.cpp */; };
@@ -1296,6 +1298,7 @@
 		23577F781F74F4E800D31C05 /* WCTCursorInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTCursorInfo.mm; sourceTree = "<group>"; };
 		23593B7B20D3ADF80058B416 /* WalRelated.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WalRelated.cpp; sourceTree = "<group>"; };
 		23593B7C20D3ADF80058B416 /* WalRelated.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WalRelated.hpp; sourceTree = "<group>"; };
+		235A6FB32140DA260034C26B /* WCDBVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCDBVersion.h; sourceTree = "<group>"; };
 		235F5D58207A377E00B440CA /* WCTTable+Transaction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTTable+Transaction.h"; sourceTree = "<group>"; };
 		235F5D59207A377E00B440CA /* WCTTable+Transaction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTTable+Transaction.mm"; sourceTree = "<group>"; };
 		2360A5F320D78F1B00E4A311 /* HandleRelated.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HandleRelated.cpp; sourceTree = "<group>"; };
@@ -1788,6 +1791,7 @@
 				2349F62A1EA0D6680021EFA7 /* interface */,
 				2349F6A71EA0D6680021EFA7 /* utility */,
 				2349F6BA1EA0D6680021EFA7 /* WCDB.h */,
+				235A6FB32140DA260034C26B /* WCDBVersion.h */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -2834,6 +2838,7 @@
 				239775AB202AECD3000A681C /* LangWithClause.hpp in Headers */,
 				23AFC89C2093540F00074AF6 /* LangCommon.hpp in Headers */,
 				2349F76A1EA0D6680021EFA7 /* WCTCodingMacro.h in Headers */,
+				235A6FB42140DA260034C26B /* WCDBVersion.h in Headers */,
 				23775B8820AD666900E21AB0 /* Page.hpp in Headers */,
 				2349F7081EA0D6680021EFA7 /* RecyclableHandle.hpp in Headers */,
 				2349F7311EA0D6680021EFA7 /* WCTTable+ChainCall.h in Headers */,
@@ -3142,6 +3147,7 @@
 				23F5BDA120887FD3000CCD37 /* LangWithClause.hpp in Headers */,
 				23AFC89D2093541400074AF6 /* LangCommon.hpp in Headers */,
 				23F5BDA220887FD3000CCD37 /* WCTCodingMacro.h in Headers */,
+				235A6FB52140DA260034C26B /* WCDBVersion.h in Headers */,
 				23775B8920AD666900E21AB0 /* Page.hpp in Headers */,
 				23F5BDA320887FD3000CCD37 /* RecyclableHandle.hpp in Headers */,
 				23F5BDA420887FD3000CCD37 /* WCTTable+ChainCall.h in Headers */,
