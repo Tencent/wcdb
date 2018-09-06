@@ -19,6 +19,7 @@
  */
 
 #import "TestCaseCommon.h"
+#import <WCDB/WCDBVersion.h>
 
 @interface DatabaseTests : TestCase
 
@@ -190,6 +191,14 @@
     XCTAssertFalse([database isOpened]);
     XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:database.path]);
     XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:[database.path stringByAppendingString:@"-wal"]]);
+}
+
+- (void)test_version
+{
+    XCTAssertGreaterThan(@WCDB_VERSION.length, 0);
+    XCTAssertGreaterThan(@WCDB_SOURCE_ID.length, 0);
+    XCTAssertGreaterThan(WCDB_BUILD_TIMESTAMP, 0);
+    XCTAssertGreaterThan(@WCDB_BUILD_TIME.length, 0);
 }
 
 @end

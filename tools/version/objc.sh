@@ -32,7 +32,7 @@ echo """/*
 /* DO NOT CHANGE IT MANUALLY */
 
 #define WCDB_VERSION \"${version}\"
-#define WCDB_COMMIT_ID \"${commitID}\"
+#define WCDB_SOURCE_ID \"${commitID}\"
 #define WCDB_BUILD_TIMESTAMP ${buildTimestamp}
 #define WCDB_BUILD_TIME \"${buildDate}\"
 
