@@ -22,12 +22,23 @@ import Foundation
 import WCDBSwift
 
 class SampleCodableColumn: ColumnCodable {
-    typealias FundamentalType = Double
-    var floatValue: Float?
-    required init?(with value: Double) {
-        self.floatValue = Float(value)
+    
+    static var columnType: ColumnType {
+        return .float
     }
-    func archivedValue() -> Double? {
-        return floatValue != nil ? Double(floatValue!) : nil
+    
+    var floatValue: Float?
+    
+    required init?(with value: FundamentalValue) {
+        self.floatValue = Float(exactly: value.doubleValue)
+    }
+    
+    func archivedValue() -> FundamentalValue {
+        
+        if floatValue != nil {
+            return FundamentalValue(Double(floatValue!))
+        } else {
+            return FundamentalValue(nil)
+        }
     }
 }
