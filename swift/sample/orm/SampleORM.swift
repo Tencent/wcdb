@@ -23,12 +23,20 @@ import WCDBSwift
 enum SampleORMType: Int, ColumnCodable {
     case type1 = 1
     case type2 = 2
-    typealias FundamentalType = Int64
-    init?(with value: Int64) {
-        self.init(rawValue: Int(truncatingIfNeeded: value))
+    
+    static var columnType: ColumnType {
+        return .integer64
     }
-    func archivedValue() -> Int64? {
-        return Int64(rawValue)
+    
+    init?(with value: FundamentalValue) {
+        guard let object = SampleORMType(rawValue: Int(truncatingIfNeeded: value.int64Value)) else {
+            return nil
+        }
+        self = object
+    }
+    
+    func archivedValue() -> FundamentalValue {
+        return FundamentalValue(Int64(self.rawValue))
     }
 }
 
