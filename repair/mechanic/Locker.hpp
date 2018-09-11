@@ -39,19 +39,12 @@ public:
     virtual bool releaseLock() = 0;
 };
 
-class ReadLocker : public Locker {
-};
-class WriteLocker : public Locker {
-};
-
 class LockerHolder {
 public:
-    void setReadLocker(const std::shared_ptr<ReadLocker> &readLocker);
-    void setWriteLocker(const std::shared_ptr<WriteLocker> &writeLocker);
+    void setLocker(const std::shared_ptr<Locker> &readLocker);
 
 protected:
-    std::shared_ptr<ReadLocker> m_readLocker;
-    std::shared_ptr<WriteLocker> m_writeLocker;
+    std::shared_ptr<Locker> m_locker;
 };
 
 } //namespace Repair

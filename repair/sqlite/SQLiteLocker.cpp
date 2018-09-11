@@ -26,24 +26,24 @@ namespace WCDB {
 
 namespace Repair {
 
-#pragma mark - SQLiteReadLocker
-const Error &SQLiteReadLocker::getError() const
+#pragma mark - SQLiteLocker
+const Error &SQLiteLocker::getError() const
 {
     return ErrorProne::getError();
 }
 
-void SQLiteReadLocker::setPath(const std::string &path)
+void SQLiteLocker::setPath(const std::string &path)
 {
     WCTInnerAssert(m_path.empty());
     SQLiteBase::setPath(path);
 }
 
-const std::string &SQLiteReadLocker::getPath() const
+const std::string &SQLiteLocker::getPath() const
 {
     return SQLiteBase::getPath();
 }
 
-bool SQLiteReadLocker::acquireLock()
+bool SQLiteLocker::acquireLock()
 {
     if (!open()) {
         return false;
@@ -55,39 +55,7 @@ bool SQLiteReadLocker::acquireLock()
     return execute("SELECT 1 FROM sqlite_master LIMIT 0");
 }
 
-bool SQLiteReadLocker::releaseLock()
-{
-    lazyCommitOrRollbackTransaction(false);
-    close();
-    return true;
-}
-
-#pragma mark - SQLiteWriteLocker
-const Error &SQLiteWriteLocker::getError() const
-{
-    return ErrorProne::getError();
-}
-
-void SQLiteWriteLocker::setPath(const std::string &path)
-{
-    WCTInnerAssert(m_path.empty());
-    SQLiteBase::setPath(path);
-}
-
-const std::string &SQLiteWriteLocker::getPath() const
-{
-    return SQLiteBase::getPath();
-}
-
-bool SQLiteWriteLocker::acquireLock()
-{
-    if (!open()) {
-        return false;
-    }
-    return lazyBeginTransactionImmediate();
-}
-
-bool SQLiteWriteLocker::releaseLock()
+bool SQLiteLocker::releaseLock()
 {
     lazyCommitOrRollbackTransaction(false);
     close();

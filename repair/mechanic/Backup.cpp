@@ -40,40 +40,23 @@ Backup::Backup(const std::string &path)
 #pragma mark - Backup
 bool Backup::work()
 {
-    WCTInnerAssert(m_readLocker != nullptr);
-    WCTInnerAssert(m_readLocker->getPath().empty());
-    WCTInnerAssert(m_writeLocker != nullptr);
-    WCTInnerAssert(m_writeLocker->getPath().empty());
-    m_readLocker->setPath(m_pager.getPath());
-    m_writeLocker->setPath(m_pager.getPath());
+    WCTInnerAssert(m_locker != nullptr);
+    WCTInnerAssert(m_locker->getPath().empty());
+    m_locker->setPath(m_pager.getPath());
 
-    bool readLocked = false;
-    bool writeLocked = false;
+    bool locked = false;
     bool succeed = false;
     do {
-        //acquire write lock to avoid shm changed during initialize
-        if (!m_writeLocker->acquireLock()) {
-            setError(m_writeLocker->getError());
-            break;
-        }
-        writeLocked = true;
-
         //acquire read lock to avoid wal truncated/restarted during whole iteration of pager
-        if (!m_readLocker->acquireLock()) {
-            setError(m_readLocker->getError());
+        if (!m_locker->acquireLock()) {
+            setError(m_locker->getError());
             break;
         }
-        readLocked = true;
+        locked = true;
 
         if (!m_pager.initialize()) {
             break;
         }
-
-        if (!m_writeLocker->releaseLock()) {
-            setError(m_writeLocker->getError());
-            break;
-        }
-        writeLocked = false;
 
         m_material.info.pageSize = m_pager.getPageSize();
         m_material.info.reservedBytes = m_pager.getReservedBytes();
@@ -87,13 +70,8 @@ bool Backup::work()
         setError(m_pager.getError());
     }
 
-    if (writeLocked && !m_writeLocker->releaseLock() && succeed) {
-        setError(m_writeLocker->getError());
-        succeed = false;
-    }
-
-    if (readLocked && !m_readLocker->releaseLock() && succeed) {
-        setError(m_readLocker->getError());
+    if (locked && !m_locker->releaseLock() && succeed) {
+        setError(m_locker->getError());
         succeed = false;
     }
 

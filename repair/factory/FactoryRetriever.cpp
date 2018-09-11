@@ -93,8 +93,7 @@ bool FactoryRetriever::work()
 
     //4. Do a backup on restore db.
     FactoryBackup backup(factory);
-    backup.setWriteLocker(m_writeLocker);
-    backup.setReadLocker(m_readLocker);
+    backup.setLocker(m_locker);
     if (!backup.work(database)) {
         setCriticalError(backup.getError());
         return exit(false);
