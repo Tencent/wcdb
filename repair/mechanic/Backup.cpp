@@ -51,7 +51,7 @@ bool Backup::work()
     bool writeLocked = false;
     bool succeed = false;
     do {
-        //acquire read lock to avoid shm changed during initialize
+        //acquire write lock to avoid shm changed during initialize
         if (!m_writeLocker->acquireLock()) {
             setError(m_writeLocker->getError());
             break;

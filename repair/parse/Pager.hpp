@@ -65,7 +65,6 @@ protected:
 
 #pragma mark - Wal
 public:
-    void setShmLegality(bool flag);
     int getWalFrameCount() const;
     void setMaxWalFrame(int maxWalFrame);
     int getDisposedWalPage() const;

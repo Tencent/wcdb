@@ -39,8 +39,6 @@ Wal::Wal(Pager *pager)
 , m_isNativeChecksum(false)
 , m_maxAllowedFrame(std::numeric_limits<int>::max())
 , m_maxFrames(0)
-, m_shm(this)
-, m_shmLegality(true)
 {
 }
 
@@ -98,12 +96,6 @@ int Wal::getMaxPageno() const
 }
 
 #pragma mark - Wal
-void Wal::setShmLegality(bool flag)
-{
-    WCTInnerAssert(!isInitialized());
-    m_shmLegality = flag;
-}
-
 MappedData Wal::acquireFrameData(int frameno)
 {
     WCTInnerAssert(isInitializing());
@@ -190,16 +182,6 @@ bool Wal::doInitialize()
     WCTInnerAssert(m_pager->isInitialized() || m_pager->isInitializing());
 
     int maxWalFrame = m_maxAllowedFrame;
-    if (m_shmLegality) {
-        if (!m_shm.initialize()) {
-            return false;
-        }
-        if (m_shm.getBackfill() >= m_shm.getMaxFrame()) {
-            // dispose all wal frames since they are already checkpointed.
-            return true;
-        }
-        maxWalFrame = std::min(maxWalFrame, (int) m_shm.getMaxFrame());
-    }
 
     bool succeed;
     size_t fileSize;
@@ -263,19 +245,8 @@ bool Wal::doInitialize()
         }
         checksum = frame.calculateChecksum(checksum);
         if (checksum != frame.getChecksum()) {
-            if (m_shmLegality) {
-                //If the frame checksum is mismatched and shm is legal, it mean to be corrupted.
-                markAsCorrupted(frameno,
-                                String::formatted("Mismatched frame checksum: %u, %u to %u, %u.",
-                                                  frame.getChecksum().first,
-                                                  frame.getChecksum().second,
-                                                  checksum.first,
-                                                  checksum.second));
-                return false;
-            } else {
-                //If the frame checksum is mismatched and shm is not legal, it mean to be disposed.
-                break;
-            }
+            //If the frame checksum is mismatched, it means to be disposed.
+            break;
         }
         checksum = frame.getChecksum();
         committedRecords[frame.getPageNumber()] = frameno;
@@ -287,7 +258,7 @@ bool Wal::doInitialize()
             committedRecords.clear();
         }
     }
-    // all those frames that are uncommitted or exceeds the max allowed count will be disposed.
+    // all those frames that are uncommitted or exceed the max allowed count will be disposed.
     return true;
 }
 

@@ -24,7 +24,6 @@
 #include <WCDB/FileHandle.hpp>
 #include <WCDB/Initializeable.hpp>
 #include <WCDB/PagerRelated.hpp>
-#include <WCDB/Shm.hpp>
 #include <map>
 #include <set>
 
@@ -58,7 +57,6 @@ protected:
 
 #pragma mark - Wal
 public:
-    void setShmLegality(bool flag);
     void setMaxAllowedFrame(int maxFrame);
     int getFrameCount() const;
     bool isNativeChecksum() const;
@@ -74,8 +72,6 @@ protected:
     int m_maxFrames;
     bool m_isNativeChecksum;
     std::pair<uint32_t, uint32_t> m_salt;
-    bool m_shmLegality;
-    Shm m_shm;
 
 #pragma mark - Frame
 public:
