@@ -88,7 +88,6 @@ void Handle::close()
         [](Handle *) -> bool { return false; },
         true);
         sqlite3_close_v2((sqlite3 *) m_handle);
-        m_notification.unsetNotificationWhenWillCheckpoint(name, true);
         m_handle = nullptr;
     }
 }
