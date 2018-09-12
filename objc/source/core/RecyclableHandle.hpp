@@ -36,12 +36,15 @@ public:
     RecyclableHandle();
 
     constexpr Handle *operator->() const { return m_handle; }
-    Handle *getHandle() const;
+    Handle *get() const;
 
     bool operator==(const std::nullptr_t &) const;
     bool operator!=(const std::nullptr_t &) const;
 
 protected:
+    using Recyclable::get;
+    using Recyclable::unsafeGet;
+
     Handle *m_handle;
 };
 

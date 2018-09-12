@@ -20,30 +20,52 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Core.h>
-#include <WCDB/Dispatch.hpp>
+#include <WCDB/FileManager.hpp>
 #include <WCDB/Notifier.hpp>
 
 namespace WCDB {
 
 CorruptionQueue::CorruptionQueue(const std::string& name, DatabasePool* databasePool)
-: AsyncQueue(name), DatabasePoolRelated(databasePool)
+: AsyncQueue(name), m_databasePool(databasePool)
 {
     WCTInnerAssert(m_databasePool != nullptr);
+    Notifier::shared()->setNotification(
+    name, std::bind(&CorruptionQueue::handleError, this, std::placeholders::_1));
 }
 
-void CorruptionQueue::put(const std::string& path)
+CorruptionQueue::~CorruptionQueue()
 {
-    auto pool = m_databasePool->getExistingPool(path);
-    if (pool == nullptr) {
+    Notifier::shared()->setNotification(name, nullptr);
+}
+
+void CorruptionQueue::handleError(const Error& error)
+{
+    if (!error.isCorruption()) {
         return;
     }
-    if (pool->attachment.corruption.markAsCorrupted()) {
+    const auto& infos = error.infos.getStrings();
+    auto iter = infos.find("Path");
+    if (iter == infos.end()) {
+        return;
+    }
+    auto database = m_databasePool->get(iter->second);
+    if (!database->containsRecoverScheme()) {
+        return;
+    }
+    bool succeed;
+    uint32_t identifier;
+    std::tie(succeed, identifier) = FileManager::getFileIdentifier(iter->second);
+    if (!succeed) {
+        return;
+    }
+    bool notify = false;
+    {
         std::lock_guard<std::mutex> lockGuard(m_mutex);
-        bool notify = m_paths.empty();
-        m_paths.emplace(path);
-        if (notify) {
-            m_cond.notify_all();
-        }
+        notify = m_corrupted.empty();
+        m_corrupted[iter->second] = identifier;
+    }
+    if (notify) {
+        m_cond.notify_all();
     }
 }
 
@@ -51,22 +73,36 @@ void CorruptionQueue::loop()
 {
     while (!exit()) {
         std::string path;
+        uint32_t corruptedIdentifier;
         {
             std::unique_lock<std::mutex> lockGuard(m_mutex);
-            if (m_paths.empty()) {
+            if (m_corrupted.empty()) {
                 m_cond.wait(lockGuard);
                 continue;
             }
-            path = std::move(*m_paths.begin());
+            auto iter = m_corrupted.begin();
+            path = iter->first;
+            corruptedIdentifier = iter->second;
         }
-        auto pool = m_databasePool->getExistingPool(path);
-        if (pool != nullptr) {
-            pool->attachment.corruption.notify();
+        auto database = m_databasePool->get(path);
+        if (database != nullptr) {
+            database->blockade();
+            do {
+                bool succeed;
+                uint32_t identifier;
+                std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
+                if (!succeed) {
+                    break;
+                }
+                if (identifier != corruptedIdentifier) {
+                    break;
+                }
+                database->recover();
+            } while (false);
+            database->unblockade();
         }
-        {
-            std::lock_guard<std::mutex> lockGuard(m_mutex);
-            m_paths.erase(path);
-        }
+        std::lock_guard<std::mutex> lockGuard(m_mutex);
+        m_corrupted.erase(path);
     }
 }
 

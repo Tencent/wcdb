@@ -25,7 +25,7 @@ namespace WCDB {
 
 namespace Repair {
 
-FactoryRelated::FactoryRelated(Factory &factory_) : factory(factory_)
+FactoryRelated::FactoryRelated(const Factory &factory_) : factory(factory_)
 {
 }
 

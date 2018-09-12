@@ -52,25 +52,25 @@
                                     }];
 #endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
 
-        WCDB::Core::modules()->addAddress(WCTTokenizerWCDB.cppString, WCDB::FTS::Module<void, WCTCursorInfo>::address());
+        WCDB::Core::shared()->modules()->addAddress(WCTTokenizerWCDB.cppString, WCDB::FTS::Module<void, WCTCursorInfo>::address());
     }
 }
 
 - (instancetype)initWithPath:(NSString *)path
 {
     WCTRemedialAssert(path.length > 0, "Path can't be null.", return nil;);
-    return [super initWithDatabase:WCDB::Database::databaseWithPath(path.cppString)];
+    return [super initWithHolder:WCDB::Core::shared()->getOrCreateDatabase(path.cppString)];
 }
 
 - (instancetype)initWithExistingPath:(NSString *)path
 {
     WCTRemedialAssert(path.length > 0, "Path can't be null.", return nil;);
-    return [super initWithDatabase:WCDB::Database::databaseWithExistingPath(path.cppString)];
+    return [super initWithHolder:WCDB::Core::shared()->getExistingDatabase(path.cppString)];
 }
 
 - (instancetype)initWithExistingTag:(WCTTag)tag
 {
-    return [super initWithDatabase:WCDB::Database::databaseWithExistingTag(tag)];
+    return [super initWithHolder:WCDB::Core::shared()->getExistingDatabase(tag)];
 }
 
 - (void)setTag:(WCTTag)tag
@@ -112,13 +112,6 @@
 - (void)blockade
 {
     _database->blockade();
-}
-
-- (bool)blockadeUntilDone:(WCDB_NO_ESCAPE WCTBlockadeBlock)onBlockaded
-{
-    return _database->blockadeUntilDone([onBlockaded, self](WCDB::Handle *handle) {
-        onBlockaded([[WCTHandle alloc] initWithDatabase:_database andHandle:handle]);
-    });
 }
 
 - (void)unblockade

@@ -47,6 +47,7 @@ protected:
     void setThreadedError(Error &&error);
     void assignWithSharedThreadedError();
 
+private:
     ThreadedErrors m_threadedError;
 };
 

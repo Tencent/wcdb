@@ -22,15 +22,13 @@
 #define MigrationHandle_hpp
 
 #include <WCDB/Abstract.h>
-#include <WCDB/MigrationSetting.hpp>
-#include <WCDB/MigrationTamperer.hpp>
 
 namespace WCDB {
 
 class MigrationHandle : public Handle {
 #pragma mark - Initialize
 public:
-    MigrationHandle(const std::string &path, MigrationSetting &setting);
+    MigrationHandle(const std::string &path);
 
 #pragma mark - Override
 public:
@@ -46,36 +44,6 @@ public:
     void bindText(const Text &value, int length, int index) override;
     void bindBLOB(const BLOB &value, int index) override;
     void bindNull(int index) override;
-
-#pragma mark - Migration
-public:
-    bool migrateWithRowID(const long long &rowid,
-                          const std::shared_ptr<MigrationInfo> &info,
-                          const Lang::InsertSTMT::Type &onConflict);
-
-protected:
-    bool executeWithoutTampering(const Statement &statement);
-    bool prepareWithoutTampering(const Statement &statement);
-
-#ifdef DEBUG
-    void debug_checkStatementLegal(const Statement &statement);
-#endif
-    MigrationSetting &m_setting;
-
-#pragma mark - Multiple Statements
-protected:
-    bool prepareWithMultipleStatements(const Statement &statement,
-                                       const Statement &tamperedStatement);
-    bool _migrateWithRowID(const long long &rowid, HandleStatement &handleStatement);
-
-    HandleStatement m_tamperedHandleStatement;
-    bool m_unlockShared;
-
-    HandleStatement m_extraHandleStatement1;
-    HandleStatement m_extraHandleStatement2;
-    Lang::InsertSTMT::Type m_associatedConflictType;
-
-    MigrationTamperer m_tamperer;
 };
 
 } //namespace WCDB

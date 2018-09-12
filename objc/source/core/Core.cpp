@@ -20,7 +20,9 @@
 
 #include <WCDB/Core.h>
 #include <WCDB/FileManager.hpp>
+#include <WCDB/String.hpp>
 #include <fcntl.h>
+#include <iostream>
 
 namespace WCDB {
 
@@ -32,8 +34,8 @@ Core* Core::shared()
 
 Core::Core()
 : m_corruptionQueue(corruptionQueueName, &m_databasePool)
-, m_checkpointQueue(checkpointQueueName)
-, m_backupQueue(backupQueueName)
+, m_checkpointQueue(checkpointQueueName, &m_databasePool)
+, m_backupQueue(backupQueueName, &m_databasePool)
 // Configs
 , m_basicConfig(new BasicConfig)
 , m_backupConfig(new BackupConfig(&m_backupQueue))
@@ -47,69 +49,87 @@ Core::Core()
   { Configs::Priority::Low, checkpointConfigName, m_checkpointConfig },
   })))
 {
+    m_databasePool.setEvent(this);
+
     GlobalConfig::enableMultithread();
     GlobalConfig::enableMemoryStatus(false);
     //        GlobalConfig::setMemoryMapSize(0x7fff0000, 0x7fff0000);
-    GlobalConfig::setNotificationForLog(CoreNotifier::globalLogger);
+    GlobalConfig::setNotificationForLog(Core::globalLogger);
     GlobalConfig::hookVFSOpen(Core::vfsOpen);
 
     m_corruptionQueue.run();
     m_checkpointQueue.run();
     m_backupQueue.run();
 
-    m_notifier.setCorruptionQueue(&m_corruptionQueue);
-    m_notifier.setRelatedDatabasePool(&m_databasePool);
+    Notifier::shared()->setNotification(notifierLoggerName, Core::logger);
 }
 
-int Core::vfsOpen(const char* path, int flags, int mode)
+RecyclableDatabase Core::getOrCreateDatabase(const std::string& path)
 {
-    int fd = open(path, flags, mode);
-    if (fd != -1 && (flags & O_CREAT)) {
-        FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
+    return m_databasePool.getOrCreate<Database>(path);
+}
+
+RecyclableDatabase Core::getOrCreateMigrationDatabase(const std::string& path)
+{
+    RecyclableDatabase database = m_databasePool.getOrCreate<MigrationDatabase>(path);
+    if (database.get()) {
+        WCTRemedialAssert(dynamic_cast<MigrationDatabase*>(database.get()),
+                          String::formatted("Failed to init %s as a migration database due to it's already a normal database.",
+                                            path.c_str()),
+                          return nullptr;);
     }
-    return fd;
+    return database;
 }
 
-DatabasePool* Core::databasePool()
+RecyclableDatabase Core::getExistingDatabase(const std::string& path)
 {
-    return &shared()->m_databasePool;
+    return m_databasePool.get(path);
+}
+
+RecyclableDatabase Core::getExistingDatabase(const Tag& tag)
+{
+    return m_databasePool.get(tag);
+}
+
+void Core::purge()
+{
+    m_databasePool.purge();
+}
+
+void Core::onDatabaseCreated(Database* database)
+{
+    database->setConfigs(m_configs);
 }
 
 const std::shared_ptr<Configs>& Core::configs()
 {
-    return shared()->m_configs;
+    return m_configs;
 }
 
 FTS::Modules* Core::modules()
 {
-    return &shared()->m_modules;
-}
-
-CoreNotifier* Core::notifier()
-{
-    return &shared()->m_notifier;
+    return &m_modules;
 }
 
 const std::shared_ptr<Config>& Core::backupConfig()
 {
-    return shared()->m_backupConfig;
+    return m_backupConfig;
 }
 
 ShareableSQLTraceConfig* Core::globalSQLTraceConfig()
 {
-    return static_cast<ShareableSQLTraceConfig*>(
-    shared()->m_globalSQLTraceConfig.get());
+    return static_cast<ShareableSQLTraceConfig*>(m_globalSQLTraceConfig.get());
 }
 
 ShareablePerformanceTraceConfig* Core::globalPerformanceTraceConfig()
 {
     return static_cast<ShareablePerformanceTraceConfig*>(
-    shared()->m_globalPerformanceTraceConfig.get());
+    m_globalPerformanceTraceConfig.get());
 }
 
 std::shared_ptr<Config> Core::tokenizeConfig(const std::list<std::string>& tokenizeNames)
 {
-    return std::shared_ptr<Config>(new TokenizeConfig(tokenizeNames, shared()->modules()));
+    return std::shared_ptr<Config>(new TokenizeConfig(tokenizeNames, &m_modules));
 }
 
 std::shared_ptr<Config> Core::cipherConfig(const UnsafeData& cipher, int pageSize)
@@ -128,15 +148,80 @@ Core::performanceTraceConfig(const PerformanceTraceConfig::Notification& notific
     return std::shared_ptr<Config>(new PerformanceTraceConfig(notification));
 }
 
-std::shared_ptr<Config> Core::migrationConfig(MigrationSetting* setting)
-{
-    return std::shared_ptr<Config>(new MigrationConfig(setting));
-}
-
 std::shared_ptr<Config> Core::customConfig(const CustomConfig::Invocation& invocation,
                                            const CustomConfig::Invocation& uninvocation)
 {
     return std::shared_ptr<Config>(new CustomConfig(invocation, uninvocation));
+}
+
+void Core::logger(const Error& error)
+{
+    bool log = error.level != Error::Level::Ignore
+#ifndef DEBUG
+               && error.level != Error::Level::Debug
+#endif
+    ;
+
+    if (log) {
+        std::ostringstream stream;
+        stream << "[" << Error::levelName(error.level) << ": ";
+        stream << (int) error.code();
+        if (!error.message.empty()) {
+            stream << ", " << error.message;
+        }
+        stream << "]";
+
+        for (const auto& info : error.infos.getIntegers()) {
+            stream << ", " << info.first << ": " << info.second;
+        }
+        for (const auto& info : error.infos.getStrings()) {
+            if (!info.second.empty()) {
+                stream << ", " << info.first << ": " << info.second;
+            }
+        }
+        for (const auto& info : error.infos.getDoubles()) {
+            stream << ", " << info.first << ": " << info.second;
+        }
+        stream << std::endl;
+        std::cout << stream.str();
+#ifdef DEBUG
+        if (error.level >= Error::Level::Error) {
+            std::cout << "Set breakpoint in Core::logger to debug.\n";
+        }
+#endif
+    }
+
+    if (error.level == Error::Level::Fatal) {
+        abort();
+    }
+}
+
+int Core::vfsOpen(const char* path, int flags, int mode)
+{
+    int fd = open(path, flags, mode);
+    if (fd != -1 && (flags & O_CREAT)) {
+        FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
+    }
+    return fd;
+}
+
+void Core::globalLogger(void* unused, int code, const char* message)
+{
+    Error error;
+    switch (code) {
+    case SQLITE_WARNING:
+        error.level = Error::Level::Warning;
+        break;
+    case SQLITE_NOTICE:
+        error.level = Error::Level::Ignore;
+        break;
+    default:
+        error.level = Error::Level::Debug;
+        break;
+    }
+    error.setSQLiteCode(code);
+    error.message = message ? message : String::empty();
+    Notifier::shared()->notify(error);
 }
 
 } // namespace WCDB

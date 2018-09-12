@@ -43,7 +43,7 @@
 {
     return _database->runTransaction([&inTransaction, self](WCDB::Handle *handle) -> bool {
         @autoreleasepool {
-            WCTHandle *transactionHandle = [[WCTHandle alloc] initWithDatabase:_database andHandle:handle];
+            WCTHandle *transactionHandle = [[WCTHandle alloc] initWithCore:self andHandle:handle];
             BOOL result = inTransaction(transactionHandle);
             [transactionHandle finalizeDatabase];
             return result;
@@ -70,7 +70,7 @@
 {
     return _database->runNestedTransaction([&inTransaction, self](WCDB::Handle *handle) -> bool {
         @autoreleasepool {
-            WCTHandle *transactionHandle = [[WCTHandle alloc] initWithDatabase:_database andHandle:handle];
+            WCTHandle *transactionHandle = [[WCTHandle alloc] initWithCore:self andHandle:handle];
             BOOL result = inTransaction(transactionHandle);
             [transactionHandle finalizeDatabase];
             return result;

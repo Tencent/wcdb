@@ -33,6 +33,7 @@ typedef NS_ENUM(NSUInteger, WCTFinalizeLevel) {
 
 @interface WCTUnsafeHandle () {
 @protected
+#warning TODO rename recyclable handle to handle holder
     WCDB::Handle *_handle;
     WCDB::RecyclableHandle _recyclableHandle;
     WCTError *_nonHandleError;
@@ -41,13 +42,13 @@ typedef NS_ENUM(NSUInteger, WCTFinalizeLevel) {
 
 #pragma mark - Initialize
 
-- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithCore:(WCTCore *)core NS_DESIGNATED_INITIALIZER;
 
-- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
-             andRecyclableHandle:(const WCDB::RecyclableHandle &)recyclableHandle NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithCore:(WCTCore *)core
+         andRecyclableHandle:(const WCDB::RecyclableHandle &)recyclableHandle NS_DESIGNATED_INITIALIZER;
 
-- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
-                       andHandle:(nonnull WCDB::Handle *)handle NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithCore:(WCTCore *)core
+                   andHandle:(nonnull WCDB::Handle *)handle NS_DESIGNATED_INITIALIZER;
 
 #pragma mark - Safety
 

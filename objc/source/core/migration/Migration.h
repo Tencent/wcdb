@@ -21,12 +21,7 @@
 #ifndef Migration_h
 #define Migration_h
 
-#include <WCDB/MigrationConfig.hpp>
 #include <WCDB/MigrationDatabase.hpp>
 #include <WCDB/MigrationHandle.hpp>
-#include <WCDB/MigrationHandlePool.hpp>
-#include <WCDB/MigrationInfo.hpp>
-#include <WCDB/MigrationSetting.hpp>
-#include <WCDB/MigrationTamperer.hpp>
 
 #endif /* Migration_h */

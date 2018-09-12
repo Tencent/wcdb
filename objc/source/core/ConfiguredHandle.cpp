@@ -23,17 +23,8 @@
 
 namespace WCDB {
 
-std::shared_ptr<ConfiguredHandle>
-ConfiguredHandle::configuredHandle(const std::shared_ptr<Handle> &handle)
-{
-    if (handle) {
-        return std::shared_ptr<ConfiguredHandle>(new ConfiguredHandle(handle));
-    }
-    return nullptr;
-}
-
 ConfiguredHandle::ConfiguredHandle(const std::shared_ptr<Handle> &handle)
-: m_handle(handle)
+: m_handle(handle), m_configs(nullptr)
 {
 }
 
@@ -56,7 +47,7 @@ bool ConfiguredHandle::configure(const std::shared_ptr<Configs> &configs)
     return true;
 }
 
-Handle *ConfiguredHandle::getHandle() const
+Handle *ConfiguredHandle::get() const
 {
     return m_handle.get();
 }

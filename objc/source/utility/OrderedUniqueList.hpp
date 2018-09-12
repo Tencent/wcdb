@@ -25,6 +25,7 @@
 
 namespace WCDB {
 
+// Small order first
 template<typename Key, typename Value, typename Order = int>
 class OrderedUniqueList {
 public:
@@ -51,6 +52,7 @@ public:
         element.value = value;
         insert(order, key, std::move(element));
     }
+
     void insert(const Order& order, const Key& key, Value&& value)
     {
         Element element;

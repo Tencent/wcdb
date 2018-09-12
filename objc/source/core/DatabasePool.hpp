@@ -22,31 +22,69 @@
 #define DatabasePool_hpp
 
 #include <WCDB/Lock.hpp>
-#include <WCDB/RecyclableHandlePool.hpp>
+#include <WCDB/Path.hpp>
+#include <WCDB/RecyclableDatabase.hpp>
 
 namespace WCDB {
 
-class DatabasePool {
-public:
-    typedef std::function<std::shared_ptr<HandlePool>(const std::string &)> Generator;
+class DatabasePoolEvent {
+protected:
+    virtual void onDatabaseCreated(Database* database) = 0;
+    friend class DatabasePool;
+};
 
-    RecyclableHandlePool
-    getOrGeneratePool(const std::string &path, const Generator &generator);
-    RecyclableHandlePool getExistingPool(Tag tag);
-    RecyclableHandlePool getExistingPool(const std::string &path);
+class DatabasePool {
+#pragma mark - DatabasePool
+public:
+    DatabasePool();
+
+    template<typename T>
+    RecyclableDatabase getOrCreate(const std::string& path)
+    {
+        std::string normalized = Path::normalize(path);
+        {
+            SharedLockGuard lockGuard(m_lock);
+            RecyclableDatabase database = get(normalized);
+            if (database != nullptr) {
+                return database;
+            }
+        }
+        LockGuard lockGuard(m_lock);
+        RecyclableDatabase database = get(normalized);
+        if (database != nullptr) {
+            return database;
+        }
+        return add(normalized, std::shared_ptr<Database>(new T(normalized)));
+    }
+
+    RecyclableDatabase get(const std::string& path);
+    RecyclableDatabase get(const Tag& tag);
 
     void purge();
 
 protected:
-    void flowBackHandlePool(const std::shared_ptr<HandlePool> &handlePool);
+    struct ReferencedDatabase {
+        ReferencedDatabase(std::shared_ptr<Database>&& database);
+        std::shared_ptr<Database> database;
+        int reference;
+    };
+    typedef struct ReferencedDatabase ReferencedDatabase;
 
-    std::shared_ptr<HandlePool> generate(const std::string &path);
+    RecyclableDatabase add(const std::string& path, std::shared_ptr<Database>&& database);
+    RecyclableDatabase
+    get(const std::map<std::string, ReferencedDatabase>::iterator& iter);
+    void flowBack(Database* database);
 
-    RecyclableHandlePool getExistingPool(
-    const std::map<std::string, std::pair<std::shared_ptr<HandlePool>, int>>::iterator &iter);
-
-    std::map<std::string, std::pair<std::shared_ptr<HandlePool>, int>> m_databases; //path->{database, reference}
+    std::map<std::string, ReferencedDatabase> m_databases; //path->{database, reference}
     SharedLock m_lock;
+
+#pragma mark - Event
+public:
+    void setEvent(DatabasePoolEvent* event);
+
+protected:
+    DatabasePoolEvent* m_event;
+    void onDatabaseCreated(Database* database);
 };
 
 } //namespace WCDB

@@ -39,7 +39,7 @@
     int count = 100;
     XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
 
-    _database.reactionWhenCorrupted = WCTCorruptionReactionCustom;
+    _database.reactionWhenCorrupted = WCTRecoveryModeCustom;
 
     XCTAssertTrue([self corruptWithCheckpoint:YES]);
     [self triggerCorruptionNotifier];
@@ -60,9 +60,9 @@
     XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
 
     __block BOOL hit = NO;
-    _database.reactionWhenCorrupted = WCTCorruptionReactionCustom;
+    _database.reactionWhenCorrupted = WCTRecoveryModeCustom;
     NSLock *locker = [[NSLock alloc] init];
-    [_database setExtraReactionWhenCorrupted:^BOOL(WCTDatabase *database) {
+    [_database setNotificationWhenRecovering:^BOOL(WCTDatabase *database) {
         [locker lock];
         hit = YES;
         [locker unlock];
@@ -86,8 +86,8 @@
     int count = 100;
     XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
 
-    _database.reactionWhenCorrupted = WCTCorruptionReactionCustom;
-    [_database setExtraReactionWhenCorrupted:^BOOL(WCTDatabase *database) {
+    _database.reactionWhenCorrupted = WCTRecoveryModeCustom;
+    [_database setNotificationWhenRecovering:^BOOL(WCTDatabase *database) {
         return NO;
     }];
 
@@ -109,7 +109,7 @@
     int count = 100;
     XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
 
-    _database.reactionWhenCorrupted = WCTCorruptionReactionRemove;
+    _database.reactionWhenCorrupted = WCTRecoveryModeRemove;
 
     XCTAssertTrue([self corruptWithCheckpoint:YES]);
     [self triggerCorruptionNotifier];
@@ -125,7 +125,7 @@
     int count = 100;
     XCTAssertEqual([self insertObjectsOfCount:count intoTable:tableName].count, count);
 
-    _database.reactionWhenCorrupted = WCTCorruptionReactionDeposit;
+    _database.reactionWhenCorrupted = WCTRecoveryModeDeposit;
 
     XCTAssertTrue([_database backup]);
     XCTAssertTrue([self corruptWithCheckpoint:YES]);

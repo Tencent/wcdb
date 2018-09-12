@@ -27,12 +27,12 @@
 - (WCTInsert *)prepareInsert
 {
     if (![self isSafe]) {
-        return [[WCTInsert alloc] initWithDatabase:_database
-                                         andHandle:_handle];
+        return [[WCTInsert alloc] initWithCore:self
+                                     andHandle:_handle];
     }
     if ([self getOrGenerateHandle]) {
-        return [[WCTInsert alloc] initWithDatabase:_database
-                               andRecyclableHandle:_recyclableHandle];
+        return [[WCTInsert alloc] initWithCore:self
+                           andRecyclableHandle:_recyclableHandle];
     }
     return nil;
 }
@@ -40,12 +40,12 @@
 - (WCTDelete *)prepareDelete
 {
     if (![self isSafe]) {
-        return [[WCTDelete alloc] initWithDatabase:_database
-                                         andHandle:_handle];
+        return [[WCTDelete alloc] initWithCore:self
+                                     andHandle:_handle];
     }
     if ([self getOrGenerateHandle]) {
-        return [[WCTDelete alloc] initWithDatabase:_database
-                               andRecyclableHandle:_recyclableHandle];
+        return [[WCTDelete alloc] initWithCore:self
+                           andRecyclableHandle:_recyclableHandle];
     }
     return nil;
 }
@@ -53,12 +53,12 @@
 - (WCTUpdate *)prepareUpdate
 {
     if (![self isSafe]) {
-        return [[WCTUpdate alloc] initWithDatabase:_database
-                                         andHandle:_handle];
+        return [[WCTUpdate alloc] initWithCore:self
+                                     andHandle:_handle];
     }
     if ([self getOrGenerateHandle]) {
-        return [[WCTUpdate alloc] initWithDatabase:_database
-                               andRecyclableHandle:_recyclableHandle];
+        return [[WCTUpdate alloc] initWithCore:self
+                           andRecyclableHandle:_recyclableHandle];
     }
     return nil;
 }
@@ -66,12 +66,12 @@
 - (WCTSelect *)prepareSelect
 {
     if (![self isSafe]) {
-        return [[WCTSelect alloc] initWithDatabase:_database
-                                         andHandle:_handle];
+        return [[WCTSelect alloc] initWithCore:self
+                                     andHandle:_handle];
     }
     if ([self getOrGenerateHandle]) {
-        return [[WCTSelect alloc] initWithDatabase:_database
-                               andRecyclableHandle:_recyclableHandle];
+        return [[WCTSelect alloc] initWithCore:self
+                           andRecyclableHandle:_recyclableHandle];
     }
     return nil;
 }
@@ -79,12 +79,12 @@
 - (WCTRowSelect *)prepareRowSelect
 {
     if (![self isSafe]) {
-        return [[WCTRowSelect alloc] initWithDatabase:_database
-                                            andHandle:_handle];
+        return [[WCTRowSelect alloc] initWithCore:self
+                                        andHandle:_handle];
     }
     if ([self getOrGenerateHandle]) {
-        return [[WCTRowSelect alloc] initWithDatabase:_database
-                                  andRecyclableHandle:_recyclableHandle];
+        return [[WCTRowSelect alloc] initWithCore:self
+                              andRecyclableHandle:_recyclableHandle];
     }
     return nil;
 }
@@ -92,12 +92,12 @@
 - (WCTMultiSelect *)prepareMultiSelect
 {
     if (![self isSafe]) {
-        return [[WCTMultiSelect alloc] initWithDatabase:_database
-                                              andHandle:_handle];
+        return [[WCTMultiSelect alloc] initWithCore:self
+                                          andHandle:_handle];
     }
     if ([self getOrGenerateHandle]) {
-        return [[WCTMultiSelect alloc] initWithDatabase:_database
-                                    andRecyclableHandle:_recyclableHandle];
+        return [[WCTMultiSelect alloc] initWithCore:self
+                                andRecyclableHandle:_recyclableHandle];
     }
     return nil;
 }

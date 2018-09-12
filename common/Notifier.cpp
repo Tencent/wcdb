@@ -28,17 +28,40 @@ Notifier *Notifier::shared()
     return s_shared;
 }
 
-void Notifier::setNotification(const Callback &callback)
+Notifier::Notifier()
+{
+}
+
+void Notifier::setNotification(const std::string &key, const Callback &callback)
 {
     LockGuard lockGuard(m_lock);
-    m_callback = callback;
+    if (callback != nullptr) {
+        m_notifications[key] = callback;
+    } else {
+        m_notifications.erase(key);
+    }
+}
+
+void Notifier::setNotificationForPreprocessing(const std::string &key,
+                                               const PreprocessCallback &callback)
+{
+    LockGuard lockGuard(m_lock);
+    if (callback != nullptr) {
+        m_preprocessNotifications[key] = callback;
+    } else {
+        m_preprocessNotifications.erase(key);
+    }
 }
 
 void Notifier::notify(const Error &error) const
 {
+    Error preprocessed = error;
     SharedLockGuard lockGuard(m_lock);
-    if (m_callback) {
-        m_callback(error);
+    for (const auto &element : m_preprocessNotifications) {
+        element.second(preprocessed);
+    }
+    for (const auto &element : m_notifications) {
+        element.second(preprocessed);
     }
 }
 

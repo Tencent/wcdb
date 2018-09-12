@@ -64,7 +64,7 @@ public:
     long long getLastInsertedRowID();
     const char *getErrorMessage();
     int getExtendedErrorCode();
-    int getResultCode() const;
+    int getResultCode();
     int getChanges();
     bool isReadonly();
     bool isInTransaction();

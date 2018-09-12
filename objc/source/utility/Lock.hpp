@@ -69,6 +69,8 @@ public:
         Write = 2,
     };
     Level level() const;
+    bool readSafety() const;
+    bool writeSafety() const;
 
 protected:
     mutable std::mutex m_mutex;

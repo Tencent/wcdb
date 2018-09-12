@@ -32,15 +32,13 @@ public:
     ConfiguredHandle(const ConfiguredHandle &) = delete;
     ConfiguredHandle &operator=(const ConfiguredHandle &) = delete;
 
-    static std::shared_ptr<ConfiguredHandle>
-    configuredHandle(const std::shared_ptr<Handle> &handle);
+    ConfiguredHandle(const std::shared_ptr<Handle> &handle);
 
     bool configure(const std::shared_ptr<Configs> &configs);
 
-    Handle *getHandle() const;
+    Handle *get() const;
 
 protected:
-    ConfiguredHandle(const std::shared_ptr<Handle> &handle);
     std::shared_ptr<Handle> m_handle;
     std::shared_ptr<Configs> m_configs;
 };

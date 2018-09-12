@@ -22,100 +22,74 @@
 #define HandlePool_hpp
 
 #include <WCDB/Abstract.h>
-#include <WCDB/Attachment.hpp>
-#include <WCDB/ConcurrentList.hpp>
 #include <WCDB/Config.hpp>
 #include <WCDB/ErrorProne.hpp>
-#include <WCDB/Factory.hpp>
 #include <WCDB/Lock.hpp>
 #include <WCDB/RecyclableHandle.hpp>
-#include <WCDB/Tag.hpp>
 #include <WCDB/ThreadedErrors.hpp>
+#include <list>
 
 namespace WCDB {
 
-class HandlePool : private ThreadedErrorProne {
+class HandlePool : public ThreadedErrorProne {
 #pragma mark - Initialize
 public:
     HandlePool() = delete;
     HandlePool(const HandlePool &) = delete;
     HandlePool &operator=(const HandlePool &) = delete;
 
-    HandlePool(const std::string &path, const std::shared_ptr<Configs> &configs);
+    HandlePool(const std::string &path);
+    const std::string path;
 
     virtual ~HandlePool();
 
-    typedef std::function<bool(const HandlePool &)> InitializeNotificationCallback;
-    void setInitializeNotification(const InitializeNotificationCallback &onInitializing);
-
-protected:
-    InitializeNotificationCallback m_onInitializing;
-    bool initialize();
-
-#pragma mark - Identifier
-public:
-    std::pair<bool, uint32_t> getIdentifier();
-
-#pragma mark - Basic
-public:
-    void setTag(const Tag &tag);
-    Tag getTag() const;
-    const std::string path;
-
-protected:
-    std::atomic<Tag> m_tag;
-
 #pragma mark - Config
 public:
+    void setConfigs(const std::shared_ptr<Configs> &configs);
     void setConfig(const std::string &name,
                    const std::shared_ptr<Config> &config,
                    int priority = Configs::Priority::Default);
     void removeConfig(const std::string &name);
 
-protected:
+private:
     std::shared_ptr<Configs> m_configs;
 
-#pragma mark - Handle
+#pragma mark - Concurrency
 public:
-    RecyclableHandle flowOut();
-    bool canFlowOut();
-
-    /**
-     It will be trigger when pool is blockaded and handle is generated and configured successfully.
-     */
-    typedef std::function<void(Handle *)> BlockadeCallback;
     void blockade();
-    bool blockadeUntilDone(const BlockadeCallback &onBlockaded);
     bool isBlockaded() const;
     void unblockade();
 
     typedef std::function<void(void)> DrainedCallback;
     void drain(const HandlePool::DrainedCallback &onDrained);
-    bool isDrained();
+    bool isDrained() const;
 
-    void purgeFreeHandles();
-
-protected:
-    std::shared_ptr<ConfiguredHandle> generateConfiguredHandle();
-    std::shared_ptr<ConfiguredHandle> flowOutConfiguredHandle();
-    void flowBackConfiguredHandle(const std::shared_ptr<ConfiguredHandle> &configuredHandle);
-    virtual std::shared_ptr<Handle> generateHandle();
-
-    SharedLock m_sharedLock;
-
-    void flowBack(const std::shared_ptr<ConfiguredHandle> &handleWrap);
-
-    ConcurrentList<ConfiguredHandle> m_handles;
-    std::atomic<int> m_aliveHandleCount;
     static int hardwareConcurrency();
     static int maxConcurrency();
 
-#pragma mark - HandlePoolRelated
-    friend class HandlePoolRelated;
+protected:
+    bool allowedConcurrent();
+    int m_aliveHandleCount;
+    mutable SharedLock m_concurrency;
 
-#pragma mark - Attachment
+#pragma mark - Handle
 public:
-    Attachment attachment;
+    bool canFlowOut();
+    RecyclableHandle flowOut();
+    void purge();
+
+protected:
+    virtual std::shared_ptr<Handle> generateHandle() = 0;
+
+    mutable SharedLock m_lock;
+
+private:
+    std::shared_ptr<ConfiguredHandle> generateConfiguredHandle();
+    std::shared_ptr<ConfiguredHandle> flowOutConfiguredHandle();
+    void flowBackConfiguredHandle(const std::shared_ptr<ConfiguredHandle> &configuredHandle);
+    void flowBack(const std::shared_ptr<ConfiguredHandle> &configuredHandle);
+
+    std::list<std::shared_ptr<ConfiguredHandle>> m_handles;
 };
 
 } //namespace WCDB

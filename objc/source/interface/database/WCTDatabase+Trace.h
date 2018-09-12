@@ -49,7 +49,10 @@ typedef void (^WCTSQLTraceBlock)(NSString *);
  @param block block
  @see WCTErrorTraceBlock
  */
-+ (void)globalTraceError:(nullable WCTErrorTraceBlock)block;
++ (void)globalTraceError:(WCTErrorTraceBlock)block;
+
++ (void)globalTraceError:(WCTErrorTraceBlock)block
+                 forName:(NSString *)name;
 
 + (void)resetGlobalTraceError;
 /**

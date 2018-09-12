@@ -35,7 +35,7 @@ namespace WCDB {
 
 namespace Repair {
 
-FactoryRetriever::FactoryRetriever(Factory &factory_)
+FactoryRetriever::FactoryRetriever(const Factory &factory_)
 : FactoryRelated(factory_)
 , databaseFileName(factory.getDatabaseName())
 , database(Path::addComponent(factory.getRestoreDirectory(), factory.getDatabaseName()))

@@ -18,22 +18,32 @@
  * limitations under the License.
  */
 
-#include <WCDB/DatabasePoolRelated.hpp>
+#ifndef RecyclableDatabase_hpp
+#define RecyclableDatabase_hpp
+
+#include <WCDB/Database.hpp>
+#include <WCDB/Recyclable.hpp>
 
 namespace WCDB {
 
-DatabasePoolRelated::DatabasePoolRelated() : m_databasePool(nullptr)
-{
-}
+class RecyclableDatabase : public Recyclable<Database *> {
+public:
+    using Super = Recyclable<Database *>;
 
-DatabasePoolRelated::DatabasePoolRelated(DatabasePool* databasePool)
-: m_databasePool(databasePool)
-{
-}
+    RecyclableDatabase();
+    RecyclableDatabase(Database *value, const Super::OnRecycled &onRecycled);
+    RecyclableDatabase(const std::nullptr_t &);
 
-void DatabasePoolRelated::setRelatedDatabasePool(DatabasePool* databasePool)
-{
-    m_databasePool = databasePool;
-}
+    bool operator==(const std::nullptr_t &) const;
+    bool operator!=(const std::nullptr_t &) const;
 
-} // namespace WCDB
+    constexpr Database *operator->() const { return m_value; }
+    Database *get() const;
+
+protected:
+    using Recyclable::unsafeGet;
+};
+
+} //namespace WCDB
+
+#endif /* RecyclableDatabase_hpp */

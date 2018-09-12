@@ -22,11 +22,14 @@
 
 @interface WCTCore () {
 @protected
-    std::shared_ptr<WCDB::Database> _database;
+    WCDB::RecyclableDatabase _holder;
+    WCDB::Database *_database;
 }
 
-- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithDatabase:(WCDB::Database *)database NS_DESIGNATED_INITIALIZER;
 
-- (const std::shared_ptr<WCDB::Database> &)database;
+- (instancetype)initWithHolder:(const WCDB::RecyclableDatabase &)database NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)initWithCore:(WCTCore *)core NS_DESIGNATED_INITIALIZER;
 
 @end

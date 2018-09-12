@@ -18,27 +18,38 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTCommon.h>
+#include <WCDB/Assertion.hpp>
+#include <WCDB/Core.h>
 
-NS_ASSUME_NONNULL_BEGIN
+namespace WCDB {
 
-@interface WCTMigrationInfo : NSObject
+RecyclableDatabase::RecyclableDatabase() : Super(nullptr, nullptr)
+{
+}
 
-@property (nonatomic, readonly) NSString *targetTable;
+RecyclableDatabase::RecyclableDatabase(Database *value, const Super::OnRecycled &onRecycled)
+: Super(value, onRecycled)
+{
+}
 
-@property (nonatomic, readonly) NSString *sourceTable;
+RecyclableDatabase::RecyclableDatabase(const std::nullptr_t &)
+: Super(nullptr, nullptr)
+{
+}
 
-@property (nonatomic, readonly, nullable) NSString *sourceDatabasePath;
+bool RecyclableDatabase::operator==(const std::nullptr_t &) const
+{
+    return m_value == nullptr;
+}
 
-- (nullable NSString *)schema;
+bool RecyclableDatabase::operator!=(const std::nullptr_t &) const
+{
+    return m_value != nullptr;
+}
 
-- (instancetype)initWithTargetTable:(NSString *)targetTable
-                    fromSourceTable:(NSString *)sourceTable
-                         ofDatabase:(nullable NSString *)sourceDatabasePath NS_DESIGNATED_INITIALIZER;
+Database *RecyclableDatabase::get() const
+{
+    return m_value;
+}
 
-- (instancetype)initWithTargetTable:(NSString *)targetTable
-                    fromSourceTable:(NSString *)sourceTable;
-
-@end
-
-NS_ASSUME_NONNULL_END
+} //namespace WCDB

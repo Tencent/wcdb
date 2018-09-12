@@ -58,10 +58,10 @@ public:
 #pragma - Factory Related
 public:
     friend class FactoryRelated;
-    FactoryDepositor depositor();
-    FactoryRetriever retriever();
-    FactoryBackup backup();
-    FactoryRenewer renewer();
+    FactoryDepositor depositor() const;
+    FactoryRetriever retriever() const;
+    FactoryBackup backup() const;
+    FactoryRenewer renewer() const;
 
     typedef Backup::Filter Filter;
     void filter(const Filter &tableShouldBeBackedUp);
@@ -69,7 +69,6 @@ public:
 
 protected:
     Filter m_filter;
-    mutable std::mutex m_mutex;
 
 #pragma mark - Helper
 public:

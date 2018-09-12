@@ -22,26 +22,20 @@
 #define Database_hpp
 
 #include <WCDB/Abstract.h>
-#include <WCDB/HandlePoolHolder.hpp>
+#include <WCDB/Factory.hpp>
+#include <WCDB/HandlePool.hpp>
+#include <WCDB/Tag.hpp>
 #include <WCDB/ThreadLocal.hpp>
 
 namespace WCDB {
 
-class Database : public HandlePoolHolder {
+class Database : protected HandlePool {
 #pragma mark - Initializer
 public:
+    Database(const std::string &path);
     Database() = delete;
     Database(const Database &) = delete;
     Database &operator=(const Database &) = delete;
-
-    static std::shared_ptr<Database> databaseWithPath(const std::string &path);
-    static std::shared_ptr<Database> databaseWithExistingPath(const std::string &path);
-    static std::shared_ptr<Database> databaseWithExistingTag(const Tag &tag);
-
-protected:
-    Database(const RecyclableHandlePool &recyclableHandlePool);
-
-    bool isValid() const;
 
 #pragma mark - Basic
 public:
@@ -50,67 +44,14 @@ public:
 
     bool canOpen();
     bool isOpened() const;
-    void blockade();
-    typedef HandlePool::BlockadeCallback BlockadeCallback;
-    bool blockadeUntilDone(const BlockadeCallback &onBlockaded);
-    typedef HandlePool::DrainedCallback ClosedCallback;
+    using HandlePool::blockade;
+    using ClosedCallback = HandlePool::DrainedCallback;
     void close(const ClosedCallback &onClosed);
-    void unblockade();
-    bool isBlockaded();
-
-#pragma mark - Memory
-public:
-    void purge();
-
-#pragma mark - Config
-public:
-    void setConfig(const std::string &name,
-                   const std::shared_ptr<Config> &config,
-                   int priority = Configs::Priority::Default);
-    void removeConfig(const std::string &name);
-
-#pragma mark - File
-public:
-    const std::string &getPath() const;
-    std::string getSHMPath() const;
-    std::string getWALPath() const;
-    std::string getJournalPath() const;
-    std::list<std::string> getPaths() const;
-
-    bool moveFiles(const std::string &directory);
-    bool moveFilesToDirectoryWithExtraFiles(const std::string &directory,
-                                            const std::list<std::string> &extraFiles);
-    bool removeFiles();
-    std::pair<bool, size_t> getFilesSize();
-
-#pragma mark - Repair
-public:
-    typedef Corruption::ExtraReaction CorruptionExtraReaction;
-    typedef Corruption::Reaction CorruptionReaction;
-    void setReactionWhenCorrupted(CorruptionReaction reaction);
-    CorruptionReaction getReactionWhenCorrupted() const;
-    void setExtraReactionWhenCorrupted(const CorruptionExtraReaction &notification);
-    bool isCorrupted() const;
-
-    std::string getFirstMaterialPath() const;
-    std::string getLastMaterialPath() const;
-    const std::string &getFactoryDirectory() const;
-
-    typedef Repair::Factory::Filter BackupFilter;
-    void autoBackup(bool flag = true);
-    void filterBackup(const BackupFilter &tableShouldBeBackedup);
-    bool backup();
-    bool removeMaterials();
-
-    bool deposit();
-    bool removeDeposit();
-
-    typedef Repair::FactoryRetriever::ProgressUpdateCallback RetrieveProgressCallback;
-    double retrieve(const RetrieveProgressCallback &onProgressUpdate);
-    bool canRetrieve() const;
+    using HandlePool::unblockade;
+    using HandlePool::isBlockaded;
 
 protected:
-    bool retrieveRenewed();
+    std::atomic<Tag> m_tag;
 
 #pragma mark - Handle
 public:
@@ -119,16 +60,26 @@ public:
     std::pair<bool, bool> tableExists(const TableOrSubquery &table);
 
 protected:
-    using ThreadedHandles
-    = std::map<const HandlePool *, std::pair<RecyclableHandle, int>>;
+    std::shared_ptr<Handle> generateHandle() override;
+
+#pragma mark - Threaded
+private:
+    using ThreadedHandles = std::map<const Database *, RecyclableHandle>;
     static ThreadLocal<ThreadedHandles> &threadedHandles();
+    static void
+    markHandleAsThreaded(const Database *database, const RecyclableHandle &handle);
+    static void markHandleAsUnthreaded(const Database *database);
 
-    RecyclableHandle flowOutThreadedHandle();
-    void retainThreadedHandle(const RecyclableHandle &recyclableHandle) const;
-    void releaseThreadedHandle() const;
+    class ThreadedGuard {
+    public:
+        ThreadedGuard(const Database *database, const RecyclableHandle &handle);
+        ~ThreadedGuard();
 
-    static std::shared_ptr<HandlePool> generateHandlePool(const std::string &path);
-    static bool initializeHandlePool(const HandlePool &handlePool);
+    private:
+        bool m_isInTransactionBefore;
+        const Database *m_database;
+        RecyclableHandle m_handle;
+    };
 
 #pragma mark - Transaction
 public:
@@ -144,7 +95,77 @@ public:
     void rollbackNestedTransaction();
     bool runNestedTransaction(const TransactionCallback &transaction);
 
-    bool isInThreadedTransaction() const;
+#pragma mark - Config
+public:
+    using HandlePool::setConfigs;
+    using HandlePool::setConfig;
+    using HandlePool::removeConfig;
+
+#pragma mark - File
+public:
+    const std::string &getPath() const;
+    std::string getSHMPath() const;
+    std::string getWALPath() const;
+    std::string getJournalPath() const;
+    std::list<std::string> getPaths() const;
+
+    bool moveFiles(const std::string &directory);
+    bool moveFilesToDirectoryWithExtraFiles(const std::string &directory,
+                                            const std::list<std::string> &extraFiles);
+    bool removeFiles();
+    std::pair<bool, size_t> getFilesSize();
+    std::pair<bool, uint32_t> getIdentifier();
+
+#pragma mark - Repair
+public:
+    std::string getFirstMaterialPath() const;
+    std::string getLastMaterialPath() const;
+    const std::string &getFactoryDirectory() const;
+
+    typedef Repair::Factory::Filter BackupFilter;
+    void filterBackup(const BackupFilter &tableShouldBeBackedup);
+    bool backup();
+    bool removeMaterials();
+
+    bool deposit();
+    bool removeDeposit();
+
+    typedef Repair::FactoryRetriever::ProgressUpdateCallback RetrieveProgressCallback;
+    double retrieve(const RetrieveProgressCallback &onProgressUpdate);
+    bool canRetrieve() const;
+
+private:
+    bool retrieveRenewed();
+    Repair::Factory m_factory;
+
+#pragma mark - Recovery
+public:
+    enum RecoveryMode {
+        Custom = 0,
+        Remove = 1,
+        Deposit = 2,
+    };
+    void setRecoveryMode(RecoveryMode mode);
+    RecoveryMode getRecoverMode() const;
+
+    typedef std::function<bool(Database *)> RecoverNotification;
+    void setNotificationWhenRecovering(const RecoverNotification &notification);
+
+    bool containsRecoverScheme() const;
+
+    bool recover();
+
+private:
+    RecoveryMode m_recoveryMode;
+    RecoverNotification m_recoverNotification;
+
+#pragma mark - Memory
+public:
+    using HandlePool::purge;
+
+#pragma mark - Error
+public:
+    using HandlePool::getThreadedError;
 };
 
 } //namespace WCDB

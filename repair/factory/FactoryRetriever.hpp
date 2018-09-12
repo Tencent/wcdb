@@ -41,7 +41,7 @@ class FactoryRetriever : public FactoryRelated,
                          public LockerHolder {
 #pragma mark - Retriever
 public:
-    FactoryRetriever(Factory &factory);
+    FactoryRetriever(const Factory &factory);
 
     const std::string database;
 

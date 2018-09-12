@@ -30,7 +30,7 @@
 
 + (void)purgeAllDatabases
 {
-    WCDB::Core::databasePool()->purge();
+    WCDB::Core::shared()->purge();
 }
 
 @end

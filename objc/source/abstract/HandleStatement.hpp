@@ -35,7 +35,6 @@ public:
     bool step(bool &done);
     bool step();
     void finalize();
-    bool isStatementReadonly();
     void reset();
 
     using Integer32 = ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType;

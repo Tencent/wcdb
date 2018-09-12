@@ -113,7 +113,7 @@ long long Handle::getLastInsertedRowID()
     return sqlite3_last_insert_rowid((sqlite3 *) m_handle);
 }
 
-int Handle::getResultCode() const
+int Handle::getResultCode()
 {
     return sqlite3_errcode((sqlite3 *) m_handle);
 }
@@ -261,7 +261,7 @@ std::pair<bool, bool> Handle::tableExists(const TableOrSubquery &table)
     StatementSelect statementSelect = StatementSelect().select(1).from(table).limit(0);
     markAsIgnorable(SQLITE_ERROR);
     bool unused;
-    bool result = Handle::prepare(statementSelect) && Handle::step(unused);
+    bool result = prepare(statementSelect) && step(unused);
     markAsUnignorable();
     finalize();
     return { result || getResultCode() == SQLITE_ERROR, result };
@@ -283,10 +283,10 @@ std::pair<bool, std::set<std::string>> Handle::getUnorderedAttachedSchemas()
 std::pair<bool, std::set<std::string>>
 Handle::getUnorderedValues(const Statement &statement, int index)
 {
-    if (Handle::prepare(statement)) {
+    if (prepare(statement)) {
         bool done = false;
         std::set<std::string> values;
-        while (Handle::step(done) && !done) {
+        while (step(done) && !done) {
             values.emplace(getText(index));
         }
         finalize();
@@ -308,8 +308,8 @@ bool Handle::beginNestedTransaction()
     if (!isInTransaction()) {
         return beginTransaction();
     }
-    std::string savepointName = Handle::savepointPrefix() + std::to_string(++m_nestedLevel);
-    return Handle::execute(StatementSavepoint().savepoint(savepointName));
+    std::string savepointName = savepointPrefix() + std::to_string(++m_nestedLevel);
+    return execute(StatementSavepoint().savepoint(savepointName));
 }
 
 bool Handle::commitOrRollbackNestedTransaction()
@@ -317,9 +317,8 @@ bool Handle::commitOrRollbackNestedTransaction()
     if (m_nestedLevel == 0) {
         return commitOrRollbackTransaction();
     }
-    std::string savepointName
-    = Handle::savepointPrefix() + std::to_string(m_nestedLevel--);
-    if (!Handle::execute(StatementRelease().release(savepointName))) {
+    std::string savepointName = savepointPrefix() + std::to_string(m_nestedLevel--);
+    if (!execute(StatementRelease().release(savepointName))) {
         discardableExecute(StatementRollback().rollbackTo(savepointName));
         return false;
     }
@@ -331,8 +330,7 @@ void Handle::rollbackNestedTransaction()
     if (m_nestedLevel == 0) {
         return rollbackTransaction();
     }
-    std::string savepointName
-    = Handle::savepointPrefix() + std::to_string(m_nestedLevel--);
+    std::string savepointName = savepointPrefix() + std::to_string(m_nestedLevel--);
     discardableExecute(StatementRollback().rollbackTo(savepointName));
 }
 
@@ -350,13 +348,13 @@ bool Handle::runNestedTransaction(const TransactionCallback &transaction)
 
 bool Handle::beginTransaction()
 {
-    return Handle::execute(StatementBegin::immediate());
+    return execute(StatementBegin::immediate());
 }
 
 bool Handle::commitOrRollbackTransaction()
 {
     m_nestedLevel = 0;
-    if (!Handle::execute(StatementCommit::commit())) {
+    if (!execute(StatementCommit::commit())) {
         discardableExecute(StatementRollback::rollback());
         return false;
     }

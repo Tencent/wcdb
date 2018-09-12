@@ -26,8 +26,8 @@
     NSString *_tableName;
 }
 
-- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
-                    andTableName:(NSString *)tableName
-                        andClass:(Class<WCTTableCoding>)cls;
+- (instancetype)initWithCore:(WCTCore *)core
+                andTableName:(NSString *)tableName
+                    andClass:(Class<WCTTableCoding>)cls;
 
 @end

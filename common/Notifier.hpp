@@ -23,22 +23,32 @@
 
 #include <WCDB/Error.hpp>
 #include <WCDB/Lock.hpp>
+#include <WCDB/OrderedUniqueList.hpp>
 
 namespace WCDB {
 
 class Notifier {
 public:
-    typedef std::function<void(const Error &)> Callback;
     static Notifier *shared();
+    Notifier(const Notifier &) = delete;
+    Notifier &operator=(const Notifier &) = delete;
 
     void notify(const Error &error) const;
 
-    void setNotification(const Callback &callback);
+    typedef std::function<void(const Error &)> Callback;
+    void setNotification(const std::string &key, const Callback &callback);
+
+    typedef std::function<void(Error &)> PreprocessCallback;
+    void setNotificationForPreprocessing(const std::string &key,
+                                         const PreprocessCallback &callback);
 
 protected:
+    Notifier();
+
     mutable SharedLock m_lock;
 
-    Callback m_callback;
+    std::map<std::string, Callback> m_notifications;
+    std::map<std::string, PreprocessCallback> m_preprocessNotifications;
 
 public:
     static void fatal(const std::string &message, const char *file, int line);

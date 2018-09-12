@@ -22,6 +22,12 @@
 
 namespace WCDB {
 
+BackupQueue::BackupQueue(const std::string& name, DatabasePool* databasePool)
+: AsyncQueue(name), m_databasePool(databasePool)
+{
+    WCTInnerAssert(m_databasePool);
+}
+
 BackupQueue::~BackupQueue()
 {
     m_timedQueue.stop();
@@ -52,8 +58,8 @@ bool BackupQueue::onTimed(const std::string& path, const int& frames)
         return true;
     }
 
-    std::shared_ptr<Database> database = Database::databaseWithExistingPath(path);
-    if (database == nullptr || !database->isOpened()) {
+    auto database = m_databasePool->get(path);
+    if (database == nullptr) {
         return true;
     }
     bool result = database->backup();

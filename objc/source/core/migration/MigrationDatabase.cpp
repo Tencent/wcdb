@@ -26,218 +26,18 @@
 namespace WCDB {
 
 #pragma mark - Initializer
-std::shared_ptr<Database> MigrationDatabase::databaseWithExistingTag(const Tag &tag)
+MigrationDatabase::MigrationDatabase(const std::string &path) : Database(path)
 {
-    std::shared_ptr<Database> database(
-    new MigrationDatabase(Core::databasePool()->getExistingPool(tag)));
-    if (database && static_cast<MigrationDatabase *>(database.get())->isValid()) {
-        return database;
-    }
-    return nullptr;
-}
-
-std::shared_ptr<Database>
-MigrationDatabase::databaseWithExistingPath(const std::string &path)
-{
-    std::shared_ptr<Database> database(
-    new MigrationDatabase(Core::databasePool()->getExistingPool(path)));
-    if (database && static_cast<MigrationDatabase *>(database.get())->isValid()) {
-        return database;
-    }
-    return nullptr;
-}
-
-std::shared_ptr<HandlePool> MigrationDatabase::generateHandlePool(const std::string &path)
-{
-    std::shared_ptr<HandlePool> pool = MigrationHandlePool::pool(path, Core::configs());
-    if (pool) {
-        MigrationHandlePool *migrationHandlePool
-        = static_cast<MigrationHandlePool *>(pool.get());
-        migrationHandlePool->setConfig(
-        Core::migrationConfigName,
-        Core::migrationConfig(migrationHandlePool->getMigrationSetting()),
-        Configs::Priority::Higher);
-        migrationHandlePool->setInitializeNotification(Database::initializeHandlePool);
-    }
-    return pool;
-}
-
-std::shared_ptr<Database> MigrationDatabase::databaseWithPath(const std::string &path)
-{
-    RecyclableHandlePool pool = Core::databasePool()->getOrGeneratePool(
-    path, std::bind(&MigrationDatabase::generateHandlePool, std::placeholders::_1));
-    WCTRemedialAssert(
-    pool == nullptr || dynamic_cast<MigrationHandlePool *>(pool.getHandlePool()) != nullptr,
-    "Failed to init it as a migration database due to it's already a normal database.",
-    return nullptr;);
-    std::shared_ptr<Database> database(new MigrationDatabase(pool));
-    if (database && static_cast<MigrationDatabase *>(database.get())->isValid()) {
-        return database;
-    }
-    return nullptr;
-}
-
-MigrationDatabase::MigrationDatabase(const RecyclableHandlePool &pool)
-: Database(pool)
-, m_migrationPool(
-  pool != nullptr ? dynamic_cast<MigrationHandlePool *>(pool.getHandlePool()) : nullptr)
-{
-    WCTInnerAssert(pool == nullptr || m_migrationPool != nullptr);
 }
 
 #pragma mark - Migration
-void MigrationDatabase::setMigrationInfos(const std::list<std::shared_ptr<MigrationInfo>> &infos)
-{
-    m_migrationPool->setMigrationInfo(infos);
-}
-
 bool MigrationDatabase::stepMigration(bool &done)
 {
-#ifdef DEBUG
-    WCTAssert(m_migrationPool->debug_checkMigratingThread(),
-              "Migration stepping is not thread-safe.");
-#endif
-    WCTAssert(!isInThreadedTransaction(), "Migration can't run in a transaction.");
-    done = false;
-    if (interruptIfDeposited()) {
-        return false;
-    }
-    MigrationSetting *setting = m_migrationPool->getMigrationSetting();
-    std::shared_ptr<MigrationInfo> info;
-    bool migratedEve = false;
-    {
-        SharedLockGuard lockGuard(setting->getSharedLock());
-        if (setting->isMigrated()) {
-            done = true;
-            return true;
-        }
-        info = setting->pickUpForMigration();
-        auto handle = getHandle();
-        if (handle == nullptr) {
-            return false;
-        }
-        bool isMigrated = false;
-        // Since a checkpoint will cause too much time and may result in race condition, it shoule be disabled when migrating. Ones can call checkpoint manually or wait for the async checkpoint.
-        constexpr const char *notificationName = "migration";
-        handle->setNotificationWhenCommitted(
-        std::numeric_limits<int>::min(), notificationName, [](Handle *, int) -> bool {
-            return false;
-        });
-        bool committed = handle->runTransaction(
-        [this, &migratedEve, &isMigrated, &info, setting](Handle *handle) -> bool {
-            MigrationHandle *migrationHandle = static_cast<MigrationHandle *>(handle);
-            {
-                //check if source table exists
-                std::pair<bool, bool> sourceTableExists
-                = migrationHandle->tableExists(info->getSourceTable());
-                if (!sourceTableExists.first || !sourceTableExists.second) {
-                    isMigrated = sourceTableExists.first;
-                    return false;
-                }
-            }
-            int rowPerStep = setting->getMigrationRowPerStep();
-            std::list<long long> rowids;
-            {
-                //pick up row ids
-                if (!migrationHandle->prepare(info->getStatementForPickingRowIDs())) {
-                    return false;
-                }
-                migrationHandle->bindInteger64(rowPerStep, 1);
-                bool done = false;
-                while (migrationHandle->step(done) && !done) {
-                    rowids.push_back(migrationHandle->getInteger64(0));
-                }
-                migrationHandle->finalize();
-                if (!done) {
-                    return false;
-                }
-            }
-            //migration
-            bool result = true;
-            for (const auto &rowid : rowids) {
-                if (migrationHandle->migrateWithRowID(
-                    rowid, info, Lang::InsertSTMT::Type::Insert)) {
-                    continue;
-                }
-                //handle failure
-                if (migrationHandle->getResultCode() != SQLITE_CONSTRAINT) {
-                    result = false;
-                } else {
-                    if (setting->invokeConflictCallback(info.get(), rowid)) {
-                        //override
-                        result = migrationHandle->migrateWithRowID(
-                        rowid, info, Lang::InsertSTMT::Type::InsertOrReplace);
-                    } else {
-                        //ignore conflict
-                        result = migrationHandle->migrateWithRowID(
-                        rowid, info, Lang::InsertSTMT::Type::InsertOrIgnore);
-                    }
-                }
-                if (!result) {
-                    break;
-                }
-            }
-            migrationHandle->finalize();
-            if (result) {
-                migratedEve = rowids.size() < rowPerStep;
-            } else {
-                setThreadedError(migrationHandle->getError());
-            }
-            return result;
-        });
-        handle->unsetNotificationWhenCommitted(notificationName);
-        migratedEve = migratedEve && committed;
-        if (!isMigrated && !migratedEve) {
-            return committed;
-        }
-    }
-    {
-        LockGuard lockGuard(setting->getSharedLock());
-        if (migratedEve && !runTransaction([this, &info](Handle *handle) -> bool {
-                return execute(info->getStatementForDroppingOldTable())
-                       && execute(info->getStatementForDroppingUnionedView());
-            })) {
-            return false;
-        }
-        if (setting->markAsMigrated(info->targetTable)) {
-            //schema changed
-            setConfig(Core::migrationConfigName,
-                      Core::migrationConfig(setting),
-                      Configs::Priority::Higher);
-        }
-        done = setting->isMigrated();
-    }
-    return true;
+    return false;
 }
 
 void MigrationDatabase::asyncMigration(const SteppedCallback &callback)
 {
-    if (interruptIfDeposited()) {
-        return;
-    }
-    std::string name("com.Tencent.WCDB.Migration.");
-    name.append(std::to_string(getTag()));
-    std::string path = getPath();
-    Dispatch::async(name, [path, callback]() {
-        bool done = false;
-        bool result = false;
-        while (!done) {
-            std::shared_ptr<Database> database
-            = MigrationDatabase::databaseWithExistingPath(path);
-            if (!database) {
-                break;
-            }
-            MigrationDatabase *migrationDatabase
-            = static_cast<MigrationDatabase *>(database.get());
-            result = migrationDatabase->stepMigration(done);
-            if (done || (callback && !callback(State::Migrating, result))) {
-                break;
-            }
-        }
-        if (callback) {
-            callback(State::Done, done);
-        }
-    });
 }
 
 void MigrationDatabase::asyncMigration(double interval, int retryTimes)
@@ -254,11 +54,6 @@ void MigrationDatabase::asyncMigration(double interval, int retryTimes)
     });
 }
 
-MigrationSetting *MigrationDatabase::getMigrationSetting()
-{
-    return m_migrationPool->getMigrationSetting();
-}
-
 bool MigrationDatabase::interruptIfDeposited()
 {
     if (canRetrieve()) {
@@ -266,15 +61,17 @@ bool MigrationDatabase::interruptIfDeposited()
         error.setCode(Error::Code::Interrupt);
         error.message = "Migration stepping should be run after retrieved.";
         error.infos.set("Path", getPath());
-        Tag tag = getTag();
-        if (tag != Tag::invalid()) {
-            error.infos.set("Tag", tag);
-        }
         Notifier::shared()->notify(error);
         setThreadedError(std::move(error));
         return true;
     }
     return false;
+}
+
+#pragma mark -Handle
+std::shared_ptr<Handle> MigrationDatabase::generateHandle()
+{
+    return std::shared_ptr<Handle>(new MigrationHandle(path));
 }
 
 } //namespace WCDB

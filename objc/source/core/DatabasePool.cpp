@@ -20,86 +20,74 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Core.h>
-#include <WCDB/CoreNotifier.hpp>
-#include <WCDB/FileManager.hpp>
-#include <WCDB/Path.hpp>
 
 namespace WCDB {
 
-RecyclableHandlePool
-DatabasePool::getOrGeneratePool(const std::string &path, const Generator &generator)
+#pragma mark - DatabasePool
+DatabasePool::DatabasePool() : m_event(nullptr)
 {
-    std::string normalized = Path::normalize(path);
-    {
-        SharedLockGuard lockGuard(m_lock);
-        auto iter = m_databases.find(normalized);
-        if (iter != m_databases.end()) {
-            return getExistingPool(iter);
-        }
-    }
-    {
-        LockGuard lockGuard(m_lock);
-        auto iter = m_databases.find(normalized);
-        if (iter == m_databases.end()) {
-            std::shared_ptr<HandlePool> pool = generator(normalized);
-            if (pool == nullptr) {
-                return nullptr;
-            }
-            iter = m_databases.emplace(normalized, std::make_pair(pool, 0)).first;
-        }
-        return getExistingPool(iter);
-    }
 }
 
-RecyclableHandlePool DatabasePool::getExistingPool(Tag tag)
+RecyclableDatabase DatabasePool::get(const std::string &path)
+{
+    std::string normalized = Path::normalize(path);
+    SharedLockGuard lockGuard(m_lock);
+    auto iter = m_databases.find(normalized);
+    return get(iter);
+}
+
+RecyclableDatabase DatabasePool::get(const Tag &tag)
 {
     WCTAssert(tag != Tag::invalid(), "Tag invalid");
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_databases.end();
     for (iter = m_databases.begin(); iter != m_databases.end(); ++iter) {
-        if (iter->second.first->getTag() == tag) {
+        if (iter->second.database->getTag() == tag) {
             break;
         }
     }
-    return getExistingPool(iter);
+    return get(iter);
 }
 
-RecyclableHandlePool DatabasePool::getExistingPool(const std::string &path)
+DatabasePool::ReferencedDatabase::ReferencedDatabase(std::shared_ptr<Database> &&database_)
+: database(std::move(database_)), reference(0)
 {
-    std::string normalized = Path::normalize(path);
-    SharedLockGuard lockGuard(m_lock);
-    auto iter = m_databases.begin();
-    for (; iter != m_databases.end(); ++iter) {
-        if (iter->second.first->path == normalized) {
-            break;
-        }
-    }
-    return getExistingPool(iter);
 }
 
-RecyclableHandlePool DatabasePool::getExistingPool(
-const std::map<std::string, std::pair<std::shared_ptr<HandlePool>, int>>::iterator &iter)
+RecyclableDatabase
+DatabasePool::add(const std::string &path, std::shared_ptr<Database> &&database)
 {
-    WCTInnerAssert(m_lock.level() >= SharedLock::Level::Read);
+    WCTInnerAssert(m_lock.writeSafety());
+    WCTInnerAssert(m_databases.find(path) == m_databases.end());
+    ReferencedDatabase referencedDatabase(std::move(database));
+    ++referencedDatabase.reference;
+    auto result = m_databases.emplace(path, std::move(referencedDatabase));
+    WCTInnerAssert(result.second);
+    onDatabaseCreated(result.first->second.database.get());
+    return get(result.first);
+}
+
+RecyclableDatabase
+DatabasePool::get(const std::map<std::string, ReferencedDatabase>::iterator &iter)
+{
+    WCTInnerAssert(m_lock.readSafety());
     if (iter == m_databases.end()) {
         return nullptr;
     }
-    ++iter->second.second;
-    const std::string path = iter->second.first->path;
-    return RecyclableHandlePool(
-    iter->second.first,
-    std::bind(&DatabasePool::flowBackHandlePool, this, std::placeholders::_1));
+    ++iter->second.reference;
+    return RecyclableDatabase(
+    iter->second.database.get(),
+    std::bind(&DatabasePool::flowBack, this, std::placeholders::_1));
 }
 
-void DatabasePool::flowBackHandlePool(const std::shared_ptr<HandlePool> &handlePool)
+void DatabasePool::flowBack(Database *database)
 {
     LockGuard lockGuard(m_lock);
-    const auto &iter = m_databases.find(handlePool->path);
-    if (iter == m_databases.end()) {
-        //drop it
-        return;
-    }
-    if (iter->second.first.get() == handlePool.get() && --iter->second.second == 0) {
+    const auto &iter = m_databases.find(database->getPath());
+    WCTInnerAssert(iter != m_databases.end());
+#warning TODO will database be different?
+    WCTInnerAssert(iter->second.database.get() == database);
+    if (--iter->second.reference == 0) {
         m_databases.erase(iter);
     }
 }
@@ -108,7 +96,22 @@ void DatabasePool::purge()
 {
     SharedLockGuard lockGuard(m_lock);
     for (const auto &iter : m_databases) {
-        iter.second.first->purgeFreeHandles();
+        iter.second.database->purge();
+    }
+}
+
+#pragma mark - Event
+void DatabasePool::setEvent(DatabasePoolEvent *event)
+{
+    LockGuard lockGuard(m_lock);
+    m_event = event;
+}
+
+void DatabasePool::onDatabaseCreated(Database *database)
+{
+    WCTInnerAssert(m_lock.readSafety());
+    if (m_event != nullptr) {
+        m_event->onDatabaseCreated(database);
     }
 }
 

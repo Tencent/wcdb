@@ -24,29 +24,29 @@
 
 @implementation WCTDatabase (Repair)
 
-static_assert((int) WCTCorruptionReactionCustom == (int) WCDB::Database::CorruptionReaction::Custom, "");
-static_assert((int) WCTCorruptionReactionRemove == (int) WCDB::Database::CorruptionReaction::Remove, "");
-static_assert((int) WCTCorruptionReactionDeposit == (int) WCDB::Database::CorruptionReaction::Deposit, "");
+static_assert((int) WCTRecoveryModeCustom == (int) WCDB::Database::RecoveryMode::Custom, "");
+static_assert((int) WCTRecoveryModeRemove == (int) WCDB::Database::RecoveryMode::Remove, "");
+static_assert((int) WCTRecoveryModeDeposit == (int) WCDB::Database::RecoveryMode::Deposit, "");
 
-- (void)setReactionWhenCorrupted:(WCTCorruptionReaction)reaction
+- (void)setRecoveryMode:(WCTRecoveryMode)recoveryMode
 {
-    _database->setReactionWhenCorrupted((WCDB::Database::CorruptionReaction) reaction);
+    _database->setRecoveryMode((WCDB::Database::RecoveryMode) recoveryMode);
 }
 
-- (WCTCorruptionReaction)reactionWhenCorrupted
+- (WCTRecoveryMode)recoveryMode
 {
-    return (WCTCorruptionReaction) _database->getReactionWhenCorrupted();
+    return (WCTRecoveryMode) _database->getRecoverMode();
 }
 
-- (void)setExtraReactionWhenCorrupted:(WCTCorruptionExtraReactionBlock)onCorrupted
+- (void)setNotificationWhenRecovering:(WCTRecoverNotificationBlock)onRecovering
 {
-    WCDB::Database::CorruptionExtraReaction extraReaction = nullptr;
-    if (onCorrupted) {
-        extraReaction = [onCorrupted](std::shared_ptr<WCDB::Database> &database) -> bool {
-            return onCorrupted([[WCTDatabase alloc] initWithDatabase:database]);
+    WCDB::Database::RecoverNotification notification = nullptr;
+    if (onRecovering) {
+        notification = [onRecovering](WCDB::Database *database) -> bool {
+            return onRecovering([[WCTDatabase alloc] initWithDatabase:database]);
         };
     }
-    _database->setExtraReactionWhenCorrupted(extraReaction);
+    _database->setNotificationWhenRecovering(notification);
 }
 
 - (void)filterBackup:(WCTBackupFilterBlock)tableShouldBeBackedUp
@@ -67,7 +67,11 @@ static_assert((int) WCTCorruptionReactionDeposit == (int) WCDB::Database::Corrup
 
 - (void)setAutoBackup:(BOOL)flag
 {
-    _database->autoBackup(flag);
+    if (flag) {
+        _database->setConfig(WCDB::Core::backupConfigName, WCDB::Core::shared()->backupConfig(), WCDB::Configs::Priority::Low);
+    } else {
+        _database->removeConfig(WCDB::Core::backupConfigName);
+    }
 }
 
 - (BOOL)backup
@@ -94,11 +98,6 @@ static_assert((int) WCTCorruptionReactionDeposit == (int) WCDB::Database::Corrup
 - (BOOL)canRetrieve
 {
     return _database->canRetrieve();
-}
-
-- (BOOL)isCorrupted
-{
-    return _database->isCorrupted();
 }
 
 @end

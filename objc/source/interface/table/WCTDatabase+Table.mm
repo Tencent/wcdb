@@ -61,9 +61,9 @@
              withClass:(Class<WCTTableCoding>)cls
 {
     WCTRemedialAssert(tableName && cls, "Class or table name can't be null.", return nil;);
-    return [[WCTTable alloc] initWithDatabase:_database
-                                 andTableName:tableName
-                                     andClass:cls];
+    return [[WCTTable alloc] initWithCore:self
+                             andTableName:tableName
+                                 andClass:cls];
 }
 
 - (BOOL)createVirtualTable:(NSString *)tableName

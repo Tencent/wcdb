@@ -28,7 +28,17 @@
     return [self initWithDatabase:nullptr];
 }
 
-- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
+- (instancetype)initWithHolder:(const WCDB::RecyclableDatabase &)database
+{
+    WCTInnerAssert(database != nullptr);
+    if (self = [super init]) {
+        _holder = database;
+        _database = database.get();
+    }
+    return self;
+}
+
+- (instancetype)initWithDatabase:(WCDB::Database *)database
 {
     if (database == nullptr) {
         return nil;
@@ -39,9 +49,14 @@
     return self;
 }
 
-- (const std::shared_ptr<WCDB::Database> &)database
+- (instancetype)initWithCore:(WCTCore *)core
 {
-    return _database;
+    WCTInnerAssert(core != nil);
+    if (self = [super init]) {
+        _holder = core->_holder;
+        _database = core->_database;
+    }
+    return self;
 }
 
 - (WCTTag)tag
@@ -56,6 +71,7 @@
 
 - (void)finalizeDatabase
 {
+    _holder = nullptr;
     _database = nullptr;
 }
 

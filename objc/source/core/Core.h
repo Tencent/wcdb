@@ -40,12 +40,11 @@
 #include <WCDB/TokenizeConfig.hpp>
 
 #include <WCDB/ConfiguredHandle.hpp>
-#include <WCDB/CoreNotifier.hpp>
 #include <WCDB/Database.hpp>
 #include <WCDB/DatabasePool.hpp>
 #include <WCDB/HandlePool.hpp>
+#include <WCDB/RecyclableDatabase.hpp>
 #include <WCDB/RecyclableHandle.hpp>
-#include <WCDB/RecyclableHandlePool.hpp>
 
 #include <WCDB/Modules.hpp>
 #include <WCDB/Tokenizer.hpp>
@@ -54,31 +53,35 @@
 
 namespace WCDB {
 
-class Core {
+class Core : public DatabasePoolEvent {
 public:
     static Core* shared();
 
-    static DatabasePool* databasePool();
-    static const std::shared_ptr<Configs>& configs();
-    static FTS::Modules* modules();
-    static CoreNotifier* notifier();
+    RecyclableDatabase getOrCreateDatabase(const std::string& path);
+    RecyclableDatabase getOrCreateMigrationDatabase(const std::string& path);
 
-    static ShareableSQLTraceConfig* globalSQLTraceConfig();
-    static ShareablePerformanceTraceConfig* globalPerformanceTraceConfig();
+    RecyclableDatabase getExistingDatabase(const std::string& path);
+    RecyclableDatabase getExistingDatabase(const Tag& tag);
 
-    static const std::shared_ptr<Config>& backupConfig();
-    static std::shared_ptr<Config>
-    tokenizeConfig(const std::list<std::string>& tokenizeNames);
-    static std::shared_ptr<Config>
-    cipherConfig(const UnsafeData& cipher, int pageSize = 4096);
-    static std::shared_ptr<Config>
-    sqlTraceConfig(const SQLTraceConfig::Notification& notification);
-    static std::shared_ptr<Config>
+    void purge();
+
+    const std::shared_ptr<Configs>& configs();
+    FTS::Modules* modules();
+
+    ShareableSQLTraceConfig* globalSQLTraceConfig();
+    ShareablePerformanceTraceConfig* globalPerformanceTraceConfig();
+
+    const std::shared_ptr<Config>& backupConfig();
+    std::shared_ptr<Config> tokenizeConfig(const std::list<std::string>& tokenizeNames);
+    std::shared_ptr<Config> cipherConfig(const UnsafeData& cipher, int pageSize = 4096);
+    std::shared_ptr<Config> sqlTraceConfig(const SQLTraceConfig::Notification& notification);
+    std::shared_ptr<Config>
     performanceTraceConfig(const PerformanceTraceConfig::Notification& notification);
-    static std::shared_ptr<Config> migrationConfig(MigrationSetting* setting);
-    static std::shared_ptr<Config>
+    std::shared_ptr<Config>
     customConfig(const CustomConfig::Invocation& invocation,
                  const CustomConfig::Invocation& uninvocation = nullptr);
+
+    static constexpr const char* notifierLoggerName = "com.Tencent.WCDB.Notifier.Logger";
 
     static constexpr const char* corruptionQueueName = "com.Tencent.WCDB.Queue.Corruption";
     static constexpr const char* checkpointQueueName = "com.Tencent.WCDB.Queue.Checkpoint";
@@ -101,15 +104,18 @@ public:
     Core(const Core&) = delete;
     Core& operator=(const Core&) = delete;
 
+    static void logger(const Error& error);
+
 protected:
     Core();
 
     static int vfsOpen(const char* path, int flags, int mode);
+    static void globalLogger(void* unused, int code, const char* message);
+    void onDatabaseCreated(Database* database) override;
 
     // The order of member variables here is important.
     DatabasePool m_databasePool;
     FTS::Modules m_modules;
-    CoreNotifier m_notifier;
 
     CorruptionQueue m_corruptionQueue;
     CheckpointQueue m_checkpointQueue;

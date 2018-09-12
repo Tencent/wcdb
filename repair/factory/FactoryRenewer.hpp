@@ -34,7 +34,7 @@ class FactoryRenewer : public FactoryRelated,
                        public AssemblerHolder,
                        public LockerHolder {
 public:
-    FactoryRenewer(Factory &factory);
+    FactoryRenewer(const Factory &factory);
     const std::string directory;
     const std::string database;
 

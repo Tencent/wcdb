@@ -33,7 +33,7 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
 {
     WCTRemedialAssert(cipherKey, "Cipher key can't be null.", return;);
     _database->setConfig(WCDB::Core::cipherConfigName,
-                         WCDB::Core::cipherConfig(WCDB::UnsafeData::immutable((const unsigned char *) cipherKey.bytes, (size_t) cipherKey.length)),
+                         WCDB::Core::shared()->cipherConfig(WCDB::UnsafeData::immutable((const unsigned char *) cipherKey.bytes, (size_t) cipherKey.length)),
                          WCDB::Configs::Priority::Highest);
 }
 
@@ -42,7 +42,7 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
 {
     WCTRemedialAssert(cipherKey, "Cipher key can't be null.", return;);
     _database->setConfig(WCDB::Core::cipherConfigName,
-                         WCDB::Core::cipherConfig(WCDB::UnsafeData::immutable((const unsigned char *) cipherKey.bytes, (size_t) cipherKey.length), cipherPageSize),
+                         WCDB::Core::shared()->cipherConfig(WCDB::UnsafeData::immutable((const unsigned char *) cipherKey.bytes, (size_t) cipherKey.length), cipherPageSize),
                          WCDB::Configs::Priority::Highest);
 }
 
@@ -54,7 +54,7 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
     WCTRemedialAssert(name, "Config name can't be null.", return;);
     WCTRemedialAssert(nsInvocation, "Use [removeConfigForName:] instead.", return;);
     WCDB::CustomConfig::Invocation invocation = [nsInvocation, self](WCDB::Handle *handle) -> bool {
-        WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithDatabase:_database andHandle:handle];
+        WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithCore:self andHandle:handle];
         BOOL result = nsInvocation(unsafeHandle);
         [unsafeHandle finalizeDatabase];
         return result;
@@ -62,13 +62,13 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
     WCDB::CustomConfig::Invocation uninvocation = nullptr;
     if (nsUninvocation) {
         uninvocation = [nsUninvocation, self](WCDB::Handle *handle) -> bool {
-            WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithDatabase:_database andHandle:handle];
+            WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithCore:self andHandle:handle];
             BOOL result = nsUninvocation(unsafeHandle);
             [unsafeHandle finalizeDatabase];
             return result;
         };
     }
-    _database->setConfig(name.cppString, WCDB::Core::customConfig(invocation, uninvocation), priority);
+    _database->setConfig(name.cppString, WCDB::Core::shared()->customConfig(invocation, uninvocation), priority);
 }
 
 - (void)setConfig:(WCTConfigBlock)nsInvocation

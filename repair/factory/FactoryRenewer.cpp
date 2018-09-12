@@ -29,7 +29,7 @@ namespace WCDB {
 
 namespace Repair {
 
-FactoryRenewer::FactoryRenewer(Factory &factory_)
+FactoryRenewer::FactoryRenewer(const Factory &factory_)
 : FactoryRelated(factory_)
 , directory(factory.getRenewDirectory())
 , database(Path::addComponent(directory, factory.getDatabaseName()))

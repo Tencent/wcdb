@@ -34,7 +34,7 @@ WCTTokenizer const WCTTokenizerWCDB = @"WCDB";
 {
     WCTRemedialAssert(tokenizerName, "Tokenizer name can't be null.", return;)
     _database->setConfig(WCDB::Core::tokenizeConfigName,
-                         WCDB::Core::tokenizeConfig({ tokenizerName.cppString }),
+                         WCDB::Core::shared()->tokenizeConfig({ tokenizerName.cppString }),
                          WCDB::Configs::Priority::Higher);
 }
 
@@ -47,7 +47,7 @@ WCTTokenizer const WCTTokenizerWCDB = @"WCDB";
         theTokenizeNames.push_back(tokenizerName.cppString);
     }
     _database->setConfig(WCDB::Core::tokenizeConfigName,
-                         WCDB::Core::tokenizeConfig(theTokenizeNames),
+                         WCDB::Core::shared()->tokenizeConfig(theTokenizeNames),
                          WCDB::Configs::Priority::Higher);
 }
 

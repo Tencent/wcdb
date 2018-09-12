@@ -24,9 +24,9 @@
 
 @implementation WCTHandle
 
-- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
+- (instancetype)initWithCore:(WCTCore *)core
 {
-    if (self = [super initWithDatabase:database]) {
+    if (self = [super initWithCore:core]) {
         _finalizeLevel = WCTFinalizeLevelStatement;
     }
     return self;

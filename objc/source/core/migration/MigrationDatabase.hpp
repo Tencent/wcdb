@@ -22,31 +22,16 @@
 #define MigrationDatabase_hpp
 
 #include <WCDB/Database.hpp>
-#include <WCDB/MigrationHandlePool.hpp>
-#include <WCDB/MigrationSetting.hpp>
 
 namespace WCDB {
 
 class MigrationDatabase : public Database {
 public:
 #pragma mark - Initializer
-    MigrationDatabase() = delete;
-    MigrationDatabase(const MigrationDatabase &) = delete;
-    MigrationDatabase &operator=(const MigrationDatabase &) = delete;
-
-    static std::shared_ptr<Database> databaseWithPath(const std::string &path);
-    static std::shared_ptr<Database> databaseWithExistingPath(const std::string &path);
-    static std::shared_ptr<Database> databaseWithExistingTag(const Tag &tag);
-
-protected:
-    MigrationDatabase(const RecyclableHandlePool &pool);
-
-    static std::shared_ptr<HandlePool> generateHandlePool(const std::string &path);
+    MigrationDatabase(const std::string &path);
 
 #pragma mark - Migration
 public:
-    void setMigrationInfos(const std::list<std::shared_ptr<MigrationInfo>> &infos);
-
     bool stepMigration(bool &done);
 
     enum State {
@@ -58,12 +43,12 @@ public:
     void asyncMigration(double interval = 3.0, int retryTimes = 10);
     void asyncMigration(const SteppedCallback &callback);
 
-    MigrationSetting *getMigrationSetting();
-
 protected:
-    MigrationHandlePool *m_migrationPool;
-
     bool interruptIfDeposited();
+
+#pragma mark -Handle
+protected:
+    std::shared_ptr<Handle> generateHandle() override;
 };
 
 } //namespace WCDB

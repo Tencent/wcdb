@@ -102,32 +102,30 @@ bool Factory::canRetrieve() const
 #pragma mark - Factory Related
 void Factory::filter(const Filter &tableShouldBeBackedUp)
 {
-    std::lock_guard<std::mutex> lockGuard(m_mutex);
     m_filter = tableShouldBeBackedUp;
 }
 
 Factory::Filter Factory::getFilter() const
 {
-    std::lock_guard<std::mutex> lockGuard(m_mutex);
     return m_filter;
 }
 
-FactoryDepositor Factory::depositor()
+FactoryDepositor Factory::depositor() const
 {
     return FactoryDepositor(*this);
 }
 
-FactoryRetriever Factory::retriever()
+FactoryRetriever Factory::retriever() const
 {
     return FactoryRetriever(*this);
 }
 
-FactoryBackup Factory::backup()
+FactoryBackup Factory::backup() const
 {
     return FactoryBackup(*this);
 }
 
-FactoryRenewer Factory::renewer()
+FactoryRenewer Factory::renewer() const
 {
     return FactoryRenewer(*this);
 }

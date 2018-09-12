@@ -22,11 +22,13 @@
 
 namespace WCDB {
 
-CheckpointQueue::CheckpointQueue(const std::string& name)
+CheckpointQueue::CheckpointQueue(const std::string& name, DatabasePool* databasePool)
 : AsyncQueue(name)
+, m_databasePool(databasePool)
 , m_checkpointPassive(StatementPragma().pragma(Pragma::walCheckpoint()).to("PASSIVE"))
 , m_checkpointTruncate(StatementPragma().pragma(Pragma::walCheckpoint()).to("TRUNCATE"))
 {
+    WCTInnerAssert(m_databasePool != nullptr);
 }
 
 CheckpointQueue::~CheckpointQueue()
@@ -48,8 +50,8 @@ bool CheckpointQueue::onTimed(const std::string& path, const int& frames)
         return true;
     }
 
-    std::shared_ptr<Database> database = Database::databaseWithExistingPath(path);
-    if (database == nullptr || !database->isOpened()) {
+    auto database = m_databasePool->get(path);
+    if (database == nullptr) {
         return true;
     }
     bool result;

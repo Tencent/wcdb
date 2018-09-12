@@ -29,141 +29,273 @@
 namespace WCDB {
 
 #pragma mark - Initializer
-std::shared_ptr<Database> Database::databaseWithExistingTag(const Tag &tag)
+Database::Database(const std::string &path)
+: HandlePool(path)
+, m_factory(path)
+, m_tag(Tag::invalid())
+, m_recoveryMode(RecoveryMode::Custom)
+, m_recoverNotification(nullptr)
 {
-    std::shared_ptr<Database> database(
-    new Database(Core::databasePool()->getExistingPool(tag)));
-    if (database && database->isValid()) {
-        return database;
-    }
-    return nullptr;
-}
-
-std::shared_ptr<Database> Database::databaseWithExistingPath(const std::string &path)
-{
-    std::shared_ptr<Database> database(
-    new Database(Core::databasePool()->getExistingPool(path)));
-    if (database && database->isValid()) {
-        return database;
-    }
-    return nullptr;
-}
-
-std::shared_ptr<HandlePool> Database::generateHandlePool(const std::string &path)
-{
-    std::shared_ptr<HandlePool> handlePool(new HandlePool(path, Core::configs()));
-    if (handlePool) {
-        handlePool->setInitializeNotification(Database::initializeHandlePool);
-    }
-    return handlePool;
-}
-
-bool Database::initializeHandlePool(const HandlePool &handlePool)
-{
-    std::shared_ptr<Database> database
-    = Database::databaseWithExistingPath(handlePool.path);
-    WCTInnerAssert(database != nullptr);
-    return database->retrieveRenewed();
-}
-
-std::shared_ptr<Database> Database::databaseWithPath(const std::string &path)
-{
-    std::shared_ptr<Database> database(new Database(
-    Core::databasePool()->getOrGeneratePool(path, Database::generateHandlePool)));
-    if (database && database->isValid()) {
-        return database;
-    }
-    return nullptr;
-}
-
-Database::Database(const RecyclableHandlePool &pool) : HandlePoolHolder(pool)
-{
-}
-
-bool Database::isValid() const
-{
-    return m_pool != nullptr;
 }
 
 #pragma mark - Basic
-
 void Database::setTag(const Tag &tag)
 {
-    m_pool->setTag(tag);
+    m_tag.store(tag);
 }
 
 Tag Database::getTag() const
 {
-    return m_pool->getTag();
+    return m_tag.load();
 }
 
 bool Database::canOpen()
 {
-    return m_pool->canFlowOut();
+    return canFlowOut();
 }
 
 void Database::close(const ClosedCallback &onClosed)
 {
-    m_pool->drain(onClosed);
-}
-
-void Database::blockade()
-{
-    m_pool->blockade();
-}
-
-bool Database::blockadeUntilDone(const BlockadeCallback &onBlockaded)
-{
-    return m_pool->blockadeUntilDone(onBlockaded);
-}
-
-bool Database::isBlockaded()
-{
-    return m_pool->isBlockaded();
-}
-
-void Database::unblockade()
-{
-    m_pool->unblockade();
+    drain(onClosed);
 }
 
 bool Database::isOpened() const
 {
-    return !m_pool->isDrained();
+    return !isDrained();
 }
 
-#pragma mark - Memory
-void Database::purge()
+#pragma mark - Handle
+RecyclableHandle Database::getHandle()
 {
-    m_pool->purgeFreeHandles();
+    SharedLockGuard lockConcurrencyGuard(m_concurrency);
+    do {
+        {
+            SharedLockGuard lockGuard(m_lock);
+            if (m_aliveHandleCount != 0) {
+                break;
+            }
+        }
+        LockGuard lockGuard(m_lock);
+        if (m_aliveHandleCount != 0) {
+            break;
+        }
+        // Blocked initialization
+        if (!FileManager::createDirectoryWithIntermediateDirectories(
+            Path::getDirectoryName(path))) {
+            assignWithSharedThreadedError();
+            return nullptr;
+        }
+        if (!retrieveRenewed()) {
+            return nullptr;
+        }
+    } while (false);
+    ThreadedHandles *threadedHandle = Database::threadedHandles().getOrCreate();
+    const auto iter = threadedHandle->find(this);
+    if (iter != threadedHandle->end()) {
+        return iter->second;
+    }
+    return flowOut();
 }
 
-#pragma mark - Config
-void Database::setConfig(const std::string &name, const std::shared_ptr<Config> &config, int priority)
+bool Database::execute(const Statement &statement)
 {
-    m_pool->setConfig(name, config, priority);
+    RecyclableHandle handle = getHandle();
+    if (handle != nullptr) {
+        ThreadedGuard threadedGuard(this, handle);
+        if (!handle->execute(statement)) {
+            setThreadedError(handle->getError());
+            return false;
+        }
+        return true;
+    }
+    return false;
 }
 
-void Database::removeConfig(const std::string &name)
+std::pair<bool, bool> Database::tableExists(const TableOrSubquery &table)
 {
-    m_pool->removeConfig(name);
+    RecyclableHandle handle = getHandle();
+    if (handle != nullptr) {
+        ThreadedGuard threadedGuard(this, handle);
+        auto pair = handle->tableExists(table);
+        if (!pair.first) {
+            setThreadedError(handle->getError());
+        }
+        return pair;
+    }
+    return { false, false };
+}
+
+std::shared_ptr<Handle> Database::generateHandle()
+{
+    return std::shared_ptr<Handle>(new Handle(path));
+}
+
+#pragma mark - Threaded
+ThreadLocal<Database::ThreadedHandles> &Database::threadedHandles()
+{
+    static ThreadLocal<ThreadedHandles> *s_threadedHandles
+    = new ThreadLocal<ThreadedHandles>;
+    return *s_threadedHandles;
+}
+
+void Database::markHandleAsThreaded(const Database *database, const RecyclableHandle &handle)
+{
+    ThreadedHandles *threadedHandles = Database::threadedHandles().getOrCreate();
+    auto iter = threadedHandles->find(database);
+    WCTInnerAssert(iter == threadedHandles->end());
+    threadedHandles->emplace(database, handle);
+}
+
+void Database::markHandleAsUnthreaded(const Database *database)
+{
+    ThreadedHandles *threadedHandles = Database::threadedHandles().getOrCreate();
+    WCTInnerAssert(threadedHandles->find(database) != threadedHandles->end());
+    threadedHandles->erase(database);
+}
+
+Database::ThreadedGuard::ThreadedGuard(const Database *database, const RecyclableHandle &handle)
+: m_database(database), m_handle(handle), m_isInTransactionBefore(handle->isInTransaction())
+{
+    WCTInnerAssert(m_database != nullptr);
+    WCTInnerAssert(m_handle != nullptr);
+}
+
+Database::ThreadedGuard::~ThreadedGuard()
+{
+    bool isInTransactionAfter = m_handle->isInTransaction();
+    if (!m_isInTransactionBefore && isInTransactionAfter) {
+        markHandleAsThreaded(m_database, m_handle);
+    } else if (m_isInTransactionBefore && !isInTransactionAfter) {
+        markHandleAsUnthreaded(m_database);
+    }
+}
+
+#pragma mark - Transaction
+bool Database::beginTransaction()
+{
+    RecyclableHandle handle = getHandle();
+    if (handle == nullptr) {
+        return false;
+    }
+    ThreadedGuard threadedGuard(this, handle);
+    if (handle->beginTransaction()) {
+        return true;
+    }
+    setThreadedError(handle->getError());
+    return false;
+}
+
+bool Database::commitOrRollbackTransaction()
+{
+    RecyclableHandle handle = getHandle();
+    WCTRemedialAssert(handle != nullptr,
+                      "Commit or rollback transaction should not be called without begin.",
+                      return false;);
+    ThreadedGuard threadedGuard(this, handle);
+    if (handle->commitOrRollbackTransaction()) {
+        return true;
+    }
+    setThreadedError(handle->getError());
+    return false;
+}
+
+void Database::rollbackTransaction()
+{
+    RecyclableHandle handle = getHandle();
+    WCTRemedialAssert(handle != nullptr,
+                      "Rollback transaction should not be called without begin.",
+                      return;);
+    ThreadedGuard threadedGuard(this, handle);
+    handle->rollbackTransaction();
+}
+
+bool Database::runTransaction(const TransactionCallback &transaction)
+{
+    RecyclableHandle handle = getHandle();
+    if (handle == nullptr) {
+        return false;
+    }
+    ThreadedGuard threadedGuard(this, handle);
+    if (handle->runTransaction(transaction)) {
+        return true;
+    }
+    setThreadedError(handle->getError());
+    return false;
+}
+
+bool Database::beginNestedTransaction()
+{
+    RecyclableHandle handle = getHandle();
+    if (handle == nullptr) {
+        return false;
+    }
+    ThreadedGuard threadedGuard(this, handle);
+    if (handle->beginNestedTransaction()) {
+        return true;
+    }
+    setThreadedError(handle->getError());
+    return false;
+}
+
+bool Database::commitOrRollbackNestedTransaction()
+{
+    RecyclableHandle handle = getHandle();
+    WCTRemedialAssert(handle != nullptr,
+                      "Commit or rollback nested transaction should not be called without begin.",
+                      return false;);
+    ThreadedGuard threadedGuard(this, handle);
+    if (handle->commitOrRollbackNestedTransaction()) {
+        return true;
+    }
+    setThreadedError(handle->getError());
+    return false;
+}
+
+void Database::rollbackNestedTransaction()
+{
+    RecyclableHandle handle = getHandle();
+    WCTRemedialAssert(handle != nullptr,
+                      "Rollback nested transaction should not be called without begin.",
+                      return;);
+    ThreadedGuard threadedGuard(this, handle);
+    handle->rollbackNestedTransaction();
+}
+
+bool Database::runNestedTransaction(const TransactionCallback &transaction)
+{
+    RecyclableHandle handle = getHandle();
+    if (handle == nullptr) {
+        return false;
+    }
+    ThreadedGuard threadedGuard(this, handle);
+    if (handle->runNestedTransaction(transaction)) {
+        return true;
+    }
+    setThreadedError(handle->getError());
+    return false;
 }
 
 #pragma mark - File
+std::pair<bool, uint32_t> Database::getIdentifier()
+{
+    auto result = FileManager::getFileIdentifier(path);
+    if (!result.first) {
+        assignWithSharedThreadedError();
+    }
+    return result;
+}
+
 bool Database::removeFiles()
 {
     bool result = false;
-    blockade();
+    LockGuard lockGuard(m_concurrency);
     close(nullptr);
-    m_pool->attachment.corruption.markAsHandling();
     std::list<std::string> paths = getPaths();
     paths.reverse();
     result = FileManager::removeItems(paths);
     if (!result) {
         assignWithSharedThreadedError();
     }
-    m_pool->attachment.corruption.markAsHandled(result);
-    unblockade();
     return result;
 }
 
@@ -178,44 +310,36 @@ std::pair<bool, size_t> Database::getFilesSize()
 
 bool Database::moveFiles(const std::string &directory)
 {
-    bool result = false;
-    blockade();
+    LockGuard lockGuard(m_concurrency);
     close(nullptr);
-    m_pool->attachment.corruption.markAsHandling();
     std::list<std::string> paths = getPaths();
     paths.reverse();
-    result = FileManager::moveItems(paths, directory);
-    if (!result) {
-        assignWithSharedThreadedError();
+    if (FileManager::moveItems(paths, directory)) {
+        return true;
     }
-    m_pool->attachment.corruption.markAsHandled(result);
-    unblockade();
-    return result;
+    assignWithSharedThreadedError();
+    return false;
 }
 
 bool Database::moveFilesToDirectoryWithExtraFiles(const std::string &directory,
                                                   const std::list<std::string> &extraFiles)
 {
-    bool result = false;
-    blockade();
+    LockGuard lockGuard(m_concurrency);
     close(nullptr);
-    m_pool->attachment.corruption.markAsHandling();
     std::list<std::string> paths = extraFiles;
     std::list<std::string> dbPaths = getPaths();
     dbPaths.reverse();
     paths.insert(paths.end(), dbPaths.begin(), dbPaths.end());
-    result = FileManager::moveItems(paths, directory);
-    if (!result) {
-        assignWithSharedThreadedError();
+    if (FileManager::moveItems(paths, directory)) {
+        return true;
     }
-    m_pool->attachment.corruption.markAsHandled(result);
-    unblockade();
-    return result;
+    assignWithSharedThreadedError();
+    return false;
 }
 
 const std::string &Database::getPath() const
 {
-    return m_pool->path;
+    return path;
 }
 
 std::string Database::getSHMPath() const
@@ -247,26 +371,6 @@ std::list<std::string> Database::getPaths() const
 }
 
 #pragma mark - Repair
-void Database::setReactionWhenCorrupted(CorruptionReaction reaction)
-{
-    m_pool->attachment.corruption.setReaction(reaction);
-}
-
-Database::CorruptionReaction Database::getReactionWhenCorrupted() const
-{
-    return m_pool->attachment.corruption.getReaction();
-}
-
-void Database::setExtraReactionWhenCorrupted(const CorruptionExtraReaction &extraReaction)
-{
-    m_pool->attachment.corruption.setExtraReaction(extraReaction);
-}
-
-bool Database::isCorrupted() const
-{
-    return m_pool->attachment.corruption.isCorrupted();
-}
-
 std::string Database::getFirstMaterialPath() const
 {
     return Repair::Factory::firstMaterialPathForDatabase(getPath());
@@ -279,27 +383,21 @@ std::string Database::getLastMaterialPath() const
 
 const std::string &Database::getFactoryDirectory() const
 {
-    return m_pool->attachment.factory.directory;
-}
-
-void Database::autoBackup(bool flag)
-{
-    if (flag) {
-        setConfig(Core::backupConfigName, Core::backupConfig(), Configs::Priority::Low);
-    } else {
-        removeConfig(Core::backupConfigName);
-    }
+    SharedLockGuard lockGuard(m_lock);
+    return m_factory.directory;
 }
 
 void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
 {
-    m_pool->attachment.factory.filter(tableShouldBeBackedup);
+    LockGuard lockGuard(m_lock);
+    m_factory.filter(tableShouldBeBackedup);
 }
 
 bool Database::backup()
 {
-    RecyclableHandle handle = getHandle(); // Get handle to acquire shared lock. It's a temporary solution here.
-    Repair::FactoryBackup backup = m_pool->attachment.factory.backup();
+    SharedLockGuard lockConcurrencyGuard(m_concurrency);
+    SharedLockGuard lockGuard(m_lock);
+    Repair::FactoryBackup backup = m_factory.backup();
     backup.setReadLocker(std::shared_ptr<Repair::ReadLocker>(new Repair::SQLiteReadLocker));
     backup.setWriteLocker(std::shared_ptr<Repair::WriteLocker>(new Repair::SQLiteWriteLocker));
     if (backup.work(getPath())) {
@@ -311,64 +409,56 @@ bool Database::backup()
 
 bool Database::deposit()
 {
-    bool result = false;
-    blockade();
+    LockGuard lockConcurrencyGuard(m_concurrency);
+    SharedLockGuard lockGuard(m_lock);
     close(nullptr);
-    m_pool->attachment.corruption.markAsHandling();
-    Repair::FactoryRenewer renewer = m_pool->attachment.factory.renewer();
+    Repair::FactoryRenewer renewer = m_factory.renewer();
     std::shared_ptr<Repair::Assembler> assembler(new Repair::SQLiteAssembler);
     renewer.setAssembler(assembler);
     renewer.setReadLocker(std::shared_ptr<Repair::ReadLocker>(new Repair::SQLiteReadLocker));
     renewer.setWriteLocker(std::shared_ptr<Repair::WriteLocker>(new Repair::SQLiteWriteLocker));
-    do {
-        if (!renewer.prepare()) {
-            setThreadedError(renewer.getError());
-            break;
-        }
-        Repair::FactoryDepositor depositor = m_pool->attachment.factory.depositor();
-        if (!depositor.work()) {
-            setThreadedError(depositor.getError());
-            break;
-        }
-        if (!renewer.work()) {
-            setThreadedError(renewer.getError());
-            break;
-        }
-        result = true;
-    } while (false);
-    m_pool->attachment.corruption.markAsHandled(result);
-    unblockade();
-    return result;
+    if (!renewer.prepare()) {
+        setThreadedError(renewer.getError());
+        return false;
+    }
+    Repair::FactoryDepositor depositor = m_factory.depositor();
+    if (!depositor.work()) {
+        setThreadedError(depositor.getError());
+        return false;
+    }
+    if (!renewer.work()) {
+        setThreadedError(renewer.getError());
+        return false;
+    }
+    return true;
 }
 
 double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
 {
-    double score = 0;
-    blockade();
+    LockGuard lockConcurrencyGuard(m_concurrency);
+    SharedLockGuard lockGuard(m_lock);
     close(nullptr);
-    m_pool->attachment.corruption.markAsHandling();
-    Repair::FactoryRetriever retriever = m_pool->attachment.factory.retriever();
+    Repair::FactoryRetriever retriever = m_factory.retriever();
     std::shared_ptr<Repair::Assembler> assembler(new Repair::SQLiteAssembler);
     retriever.setAssembler(assembler);
     retriever.setReadLocker(std::shared_ptr<Repair::ReadLocker>(new Repair::SQLiteReadLocker));
     retriever.setWriteLocker(std::shared_ptr<Repair::WriteLocker>(new Repair::SQLiteWriteLocker));
     retriever.setProgressCallback(onProgressUpdate);
     bool result = retriever.work();
-    setThreadedError(retriever.getError());
-    score = result ? retriever.getScore().value() : -1;
-    m_pool->attachment.corruption.markAsHandled(result);
-    unblockade();
-    return score;
+    setThreadedError(retriever.getError()); // retriever may have non-critical error even if it succeeds.
+    return result ? retriever.getScore().value() : -1;
 }
 
 bool Database::canRetrieve() const
 {
-    return m_pool->attachment.factory.canRetrieve();
+    SharedLockGuard lockGuard(m_lock);
+    return m_factory.canRetrieve();
 }
 
 bool Database::removeDeposit()
 {
-    if (m_pool->attachment.factory.removeDeposite()) {
+    SharedLockGuard lockGuard(m_lock);
+    if (m_factory.removeDeposite()) {
         return true;
     }
     assignWithSharedThreadedError();
@@ -387,8 +477,9 @@ bool Database::removeMaterials()
 bool Database::retrieveRenewed()
 {
     WCTInnerAssert(isBlockaded());
+    SharedLockGuard lockGuard(m_lock);
     WCTInnerAssert(!isOpened());
-    Repair::FactoryRenewer renewer = m_pool->attachment.factory.renewer();
+    Repair::FactoryRenewer renewer = m_factory.renewer();
     if (renewer.work()) {
         return true;
     }
@@ -396,195 +487,53 @@ bool Database::retrieveRenewed()
     return false;
 }
 
-#pragma mark - Handle
-ThreadLocal<Database::ThreadedHandles> &Database::threadedHandles()
+#pragma mark - Corruption
+void Database::setRecoveryMode(RecoveryMode mode)
 {
-    static ThreadLocal<ThreadedHandles> *s_threadedHandles
-    = new ThreadLocal<ThreadedHandles>;
-    return *s_threadedHandles;
+    LockGuard lockGuard(m_lock);
+    m_recoveryMode = mode;
 }
 
-RecyclableHandle Database::getHandle()
+Database::RecoveryMode Database::getRecoverMode() const
 {
-    RecyclableHandle recyclableHandle = flowOutThreadedHandle();
-    if (recyclableHandle == nullptr) {
-        recyclableHandle = m_pool->flowOut();
-    }
-    return recyclableHandle;
+    SharedLockGuard lockGuard(m_lock);
+    return m_recoveryMode;
 }
 
-RecyclableHandle Database::flowOutThreadedHandle()
+void Database::setNotificationWhenRecovering(const RecoverNotification &notification)
 {
-    ThreadedHandles *threadedHandle = Database::threadedHandles().getOrCreate();
-    const auto iter = threadedHandle->find(m_pool);
-    if (iter != threadedHandle->end()) {
-        return iter->second.first;
-    }
-    return nullptr;
+    LockGuard lockGuard(m_lock);
+    m_recoverNotification = notification;
 }
 
-bool Database::execute(const Statement &statement)
+bool Database::containsRecoverScheme() const
 {
-    RecyclableHandle handle = getHandle();
-    if (handle != nullptr) {
-        if (statement.getStatementType() == Statement::Type::Rollback) {
-            releaseThreadedHandle();
-        }
-        if (handle->execute(statement)) {
-            switch (statement.getStatementType()) {
-            case Statement::Type::Begin:
-            case Statement::Type::Savepoint:
-                retainThreadedHandle(handle);
-                break;
-            case Statement::Type::Commit:
-                releaseThreadedHandle();
-                break;
-            default:
-                break;
-            }
-            return true;
-        }
-        setThreadedError(handle->getError());
-    }
-    return false;
+    SharedLockGuard lockGuard(m_lock);
+    return m_recoveryMode != RecoveryMode::Custom || m_recoverNotification != nullptr;
 }
 
-std::pair<bool, bool> Database::tableExists(const TableOrSubquery &table)
+bool Database::recover()
 {
-    RecyclableHandle handle = getHandle();
-    if (handle != nullptr) {
-        auto pair = handle->tableExists(table);
-        if (!pair.first) {
-            setThreadedError(handle->getError());
-        }
-        return pair;
-    }
-    return { false, false };
-}
-
-void Database::retainThreadedHandle(const RecyclableHandle &recyclableHandle) const
-{
-    std::map<const HandlePool *, std::pair<RecyclableHandle, int>> *threadHandles
-    = Database::threadedHandles().getOrCreate();
-    auto iter = threadHandles->find(m_pool);
-    WCTInnerAssert(iter == threadHandles->end()
-                   || recyclableHandle.getHandle() == iter->second.first.getHandle());
-    if (iter == threadHandles->end()) {
-        threadHandles->insert({ m_pool, { recyclableHandle, 1 } });
-    } else {
-        ++iter->second.second;
-    }
-}
-
-void Database::releaseThreadedHandle() const
-{
-    std::map<const HandlePool *, std::pair<RecyclableHandle, int>> *threadHandles
-    = Database::threadedHandles().getOrCreate();
-    auto iter = threadHandles->find(m_pool);
-    WCTInnerAssert(iter != threadHandles->end());
-    if (--iter->second.second == 0) {
-        threadHandles->erase(iter);
-    }
-}
-
-#pragma mark - Transaction
-bool Database::beginTransaction()
-{
-    RecyclableHandle recyclableHandle = getHandle();
-    if (recyclableHandle == nullptr) {
-        return false;
-    }
-
-    if (recyclableHandle->beginTransaction()) {
-        retainThreadedHandle(recyclableHandle);
+    LockGuard lockGuard(m_concurrency);
+    if (!containsRecoverScheme()) {
         return true;
     }
-    return false;
-}
-
-bool Database::commitOrRollbackTransaction()
-{
-    RecyclableHandle recyclableHandle = flowOutThreadedHandle();
-    WCTInnerAssert(recyclableHandle != nullptr);
-    bool result = recyclableHandle->commitOrRollbackTransaction();
-    releaseThreadedHandle();
-    return result;
-}
-
-void Database::rollbackTransaction()
-{
-    RecyclableHandle recyclableHandle = flowOutThreadedHandle();
-    WCTInnerAssert(recyclableHandle != nullptr);
-    recyclableHandle->rollbackTransaction();
-    releaseThreadedHandle();
-}
-
-bool Database::runTransaction(const TransactionCallback &transaction)
-{
-    if (!beginTransaction()) {
-        return false;
+    close(nullptr);
+    bool succeed = true;
+    switch (m_recoveryMode) {
+    case RecoveryMode::Remove:
+        succeed = removeFiles();
+        break;
+    case RecoveryMode::Deposit:
+        succeed = deposit();
+        break;
+    default:
+        break;
     }
-    RecyclableHandle recyclableHandle = flowOutThreadedHandle();
-    WCTInnerAssert(recyclableHandle != nullptr);
-    if (transaction(recyclableHandle.getHandle())) {
-        return commitOrRollbackTransaction();
+    if (succeed && m_recoverNotification != nullptr) {
+        succeed = m_recoverNotification(this);
     }
-    rollbackTransaction();
-    return false;
-}
-
-bool Database::beginNestedTransaction()
-{
-    if (!isInThreadedTransaction()) {
-        return beginTransaction();
-    }
-
-    RecyclableHandle recyclableHandle = flowOutThreadedHandle();
-    WCTInnerAssert(recyclableHandle != nullptr);
-
-    if (recyclableHandle->beginNestedTransaction()) {
-        retainThreadedHandle(recyclableHandle);
-        return true;
-    }
-    return false;
-}
-
-bool Database::commitOrRollbackNestedTransaction()
-{
-    RecyclableHandle recyclableHandle = flowOutThreadedHandle();
-    WCTInnerAssert(recyclableHandle != nullptr);
-
-    bool result = recyclableHandle->commitOrRollbackNestedTransaction();
-    releaseThreadedHandle();
-    return result;
-}
-
-void Database::rollbackNestedTransaction()
-{
-    RecyclableHandle recyclableHandle = flowOutThreadedHandle();
-    WCTInnerAssert(recyclableHandle != nullptr);
-    recyclableHandle->rollbackNestedTransaction();
-    releaseThreadedHandle();
-}
-
-bool Database::runNestedTransaction(const TransactionCallback &transaction)
-{
-    if (!beginNestedTransaction()) {
-        return false;
-    }
-    RecyclableHandle recyclableHandle = flowOutThreadedHandle();
-    WCTInnerAssert(recyclableHandle != nullptr);
-    if (transaction(recyclableHandle.getHandle())) {
-        return commitOrRollbackNestedTransaction();
-    }
-    rollbackNestedTransaction();
-    return false;
-}
-
-bool Database::isInThreadedTransaction() const
-{
-    ThreadedHandles *threadedHandle = Database::threadedHandles().getOrCreate();
-    return threadedHandle->find(m_pool) != threadedHandle->end();
+    return succeed;
 }
 
 } //namespace WCDB

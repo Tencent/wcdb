@@ -31,10 +31,10 @@ class Factory;
 
 class FactoryRelated {
 public:
-    FactoryRelated(Factory &factory);
+    FactoryRelated(const Factory &factory);
 
 protected:
-    Factory &factory;
+    const Factory &factory;
 };
 
 } //namespace Repair

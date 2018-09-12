@@ -29,12 +29,12 @@
 @synthesize tableName = _tableName;
 @synthesize cls = _class;
 
-- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
-                    andTableName:(NSString *)tableName
-                        andClass:(Class<WCTTableCoding>)cls
+- (instancetype)initWithCore:(WCTCore *)core
+                andTableName:(NSString *)tableName
+                    andClass:(Class<WCTTableCoding>)cls
 {
     WCTInnerAssert(cls && tableName);
-    if (self = [super initWithDatabase:database]) {
+    if (self = [super initWithCore:core]) {
         _tableName = tableName;
         _class = cls;
     }

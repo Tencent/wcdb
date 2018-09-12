@@ -126,6 +126,16 @@ SharedLock::Level SharedLock::level() const
     return Level::None;
 }
 
+bool SharedLock::readSafety() const
+{
+    return level() >= SharedLock::Level::Read;
+}
+
+bool SharedLock::writeSafety() const
+{
+    return level() >= SharedLock::Level::Write;
+}
+
 SharedLock::~SharedLock()
 {
     WCTRemedialAssert(

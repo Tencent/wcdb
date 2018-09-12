@@ -28,31 +28,31 @@
 @implementation WCTUnsafeHandle
 
 #pragma mark - Initialize
-- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
+- (instancetype)initWithCore:(WCTCore *)core
 {
-    if (self = [super initWithDatabase:database]) {
+    if (self = [super initWithCore:core]) {
         _finalizeLevel = WCTFinalizeLevelDatabase;
     }
     return self;
 }
 
-- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
-             andRecyclableHandle:(const WCDB::RecyclableHandle &)recyclableHandle
+- (instancetype)initWithCore:(WCTCore *)core
+         andRecyclableHandle:(const WCDB::RecyclableHandle &)recyclableHandle
 {
     WCTInnerAssert(recyclableHandle != nullptr);
-    if (self = [super initWithDatabase:database]) {
+    if (self = [super initWithCore:core]) {
         _recyclableHandle = recyclableHandle;
-        _handle = recyclableHandle.getHandle();
+        _handle = recyclableHandle.get();
     }
     return self;
 }
 
-- (instancetype)initWithDatabase:(const std::shared_ptr<WCDB::Database> &)database
-                       andHandle:(WCDB::Handle *)handle
+- (instancetype)initWithCore:(WCTCore *)core
+                   andHandle:(WCDB::Handle *)handle
 {
     //Unsafe
     WCTInnerAssert(handle != nullptr);
-    if (self = [super initWithDatabase:database]) {
+    if (self = [super initWithCore:core]) {
         _handle = handle;
     }
     return self;
@@ -76,7 +76,7 @@
     if (_handle == nullptr) {
         _recyclableHandle = _database->getHandle();
         if (_recyclableHandle != nullptr) {
-            _handle = _recyclableHandle.getHandle();
+            _handle = _recyclableHandle.get();
         } else {
             _nonHandleError = [[WCTError alloc] initWithError:_database->getThreadedError()];
         }
@@ -566,10 +566,6 @@
             error.message = "Skip column";
             error.infos.set("Table", tableName.cppString);
             error.infos.set("Column", columnName);
-            WCTTag tag = self.tag;
-            if (tag != WCTInvalidTag) {
-                error.infos.set("Tag", tag);
-            }
             error.infos.set("Path", self.path.cppString);
             WCDB::Notifier::shared()->notify(error);
         }

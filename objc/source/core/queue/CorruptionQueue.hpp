@@ -22,25 +22,31 @@
 #define CorruptionQueue_hpp
 
 #include <WCDB/AsyncQueue.hpp>
-#include <WCDB/DatabasePoolRelated.hpp>
 #include <WCDB/Lock.hpp>
+#include <map>
 #include <mutex>
-#include <set>
 
 namespace WCDB {
 
-class CorruptionQueue : public AsyncQueue, public DatabasePoolRelated {
+class DatabasePool;
+
+class CorruptionQueue : public AsyncQueue {
 public:
     CorruptionQueue(const std::string& name, DatabasePool* databasePool);
-    void put(const std::string& path);
+    ~CorruptionQueue();
 
 protected:
-    using DatabasePoolRelated::setRelatedDatabasePool;
+    void handleError(const Error& error);
+
     void loop() override;
+
+    DatabasePool* m_databasePool;
 
     std::mutex m_mutex;
     std::condition_variable m_cond;
-    std::set<std::string> m_paths;
+
+    // path -> identifier
+    std::map<std::string, uint32_t> m_corrupted;
 };
 
 } //namespace WCDB

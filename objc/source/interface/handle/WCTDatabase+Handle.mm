@@ -26,7 +26,7 @@
 
 - (WCTHandle *)getHandle
 {
-    return [[WCTHandle alloc] initWithDatabase:_database];
+    return [[WCTHandle alloc] initWithCore:self];
 }
 
 - (BOOL)execute:(const WCDB::Statement &)statement

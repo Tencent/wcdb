@@ -112,8 +112,6 @@ typedef void (^WCTBlockadeBlock)(WCTHandle *);
  */
 - (void)blockade;
 
-- (bool)blockadeUntilDone:(WCDB_NO_ESCAPE WCTBlockadeBlock)onBlockaded;
-
 /**
  @brief Unblockade the database.
  @see close:

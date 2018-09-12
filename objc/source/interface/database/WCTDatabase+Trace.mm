@@ -27,6 +27,12 @@
 
 + (void)globalTraceError:(WCTErrorTraceBlock)block
 {
+    [WCTDatabase globalTraceError:block forName:@(WCDB::Core::notifierLoggerName)];
+}
+
++ (void)globalTraceError:(WCTErrorTraceBlock)block
+                 forName:(NSString *)name
+{
     WCDB::Notifier::Callback callback = nullptr;
     if (block) {
         callback = [block](const WCDB::Error &error) {
@@ -34,12 +40,12 @@
             block(nsError);
         };
     }
-    WCDB::Core::notifier()->setNotification(callback);
+    WCDB::Notifier::shared()->setNotification(name.cppString, callback);
 }
 
 + (void)resetGlobalTraceError
 {
-    WCDB::Core::notifier()->setNotification(WCDB::CoreNotifier::logger);
+    WCDB::Notifier::shared()->setNotification(WCDB::Core::notifierLoggerName, WCDB::Core::logger);
 }
 
 + (void)globalTracePerformance:(WCTPerformanceTraceBlock)trace
@@ -55,7 +61,7 @@
             trace(array, (NSUInteger) cost);
         };
     }
-    WCDB::Core::globalPerformanceTraceConfig()->setNotification(callback);
+    WCDB::Core::shared()->globalPerformanceTraceConfig()->setNotification(callback);
 }
 
 + (void)globalTraceSQL:(WCTSQLTraceBlock)trace
@@ -66,7 +72,7 @@
             trace([NSString stringWithCppString:sql]);
         };
     }
-    WCDB::Core::globalSQLTraceConfig()->setNotification(callback);
+    WCDB::Core::shared()->globalSQLTraceConfig()->setNotification(callback);
 }
 
 - (void)tracePerformance:(WCTPerformanceTraceBlock)trace
@@ -83,7 +89,7 @@
         };
     }
     _database->setConfig(WCDB::Core::performanceTraceConfigName,
-                         WCDB::Core::performanceTraceConfig(callback),
+                         WCDB::Core::shared()->performanceTraceConfig(callback),
                          WCDB::Configs::Priority::Highest);
 }
 
@@ -96,7 +102,7 @@
         };
     }
     _database->setConfig(WCDB::Core::sqlTraceConfigName,
-                         WCDB::Core::sqlTraceConfig(callback),
+                         WCDB::Core::shared()->sqlTraceConfig(callback),
                          WCDB::Configs::Priority::Highest);
 }
 
