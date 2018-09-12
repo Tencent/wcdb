@@ -244,7 +244,6 @@ bool Wal::doInitialize()
     }
 
     std::map<int, int> committedRecords;
-    uint32_t truncate = 0;
     for (int frameno = 1; frameno <= maxWalFrame; ++frameno) {
         Frame frame(frameno, this);
         if (!frame.initialize()) {
