@@ -29,7 +29,8 @@ namespace Repair {
 bool FactoryBackup::work(const std::string &database)
 {
     Backup backup(database);
-    backup.setLocker(m_locker);
+    backup.setReadLocker(m_readLocker);
+    backup.setWriteLocker(m_writeLocker);
     backup.filter(factory.getFilter());
     if (!backup.work()) {
         setError(backup.getError());

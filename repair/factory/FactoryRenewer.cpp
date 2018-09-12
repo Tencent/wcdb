@@ -150,7 +150,8 @@ bool FactoryRenewer::prepare()
     }
     if (fileSize > 0) {
         FactoryBackup backup(factory);
-        backup.setLocker(m_locker);
+        backup.setWriteLocker(m_writeLocker);
+        backup.setReadLocker(m_readLocker);
         if (!backup.work(tempDatabase)) {
             setError(backup.getError());
             return false;
