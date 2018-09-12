@@ -298,6 +298,7 @@ void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
 
 bool Database::backup()
 {
+    RecyclableHandle handle = getHandle(); // Get handle to acquire shared lock. It's a temporary solution here.
     Repair::FactoryBackup backup = m_pool->attachment.factory.backup();
     backup.setReadLocker(std::shared_ptr<Repair::ReadLocker>(new Repair::SQLiteReadLocker));
     backup.setWriteLocker(std::shared_ptr<Repair::WriteLocker>(new Repair::SQLiteWriteLocker));
