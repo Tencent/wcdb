@@ -238,12 +238,14 @@ bool Pager::doInitialize()
 
     m_pageCount = (int) ((fileSize + m_pageSize - 1) / m_pageSize);
 
-    if (!m_wal.initialize()) {
-        if (!m_error.isCorruption()) {
-            return false;
-        }
-        disposeWal();
+    if (m_wal.initialize()) {
+        m_pageCount = std::min((uint32_t) m_pageCount, m_wal.getTruncate());
+        return true;
     }
+    if (!m_error.isCorruption()) {
+        return false;
+    }
+    disposeWal();
     return true;
 }
 

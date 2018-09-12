@@ -38,6 +38,7 @@ Wal::Wal(Pager *pager)
 , m_salt({ 0, 0 })
 , m_isNativeChecksum(false)
 , m_maxAllowedFrame(std::numeric_limits<int>::max())
+, m_truncate(std::numeric_limits<uint32_t>::max())
 , m_maxFrames(0)
 {
 }
@@ -106,6 +107,11 @@ void Wal::setMaxAllowedFrame(int maxAllowedFrame)
 {
     WCTInnerAssert(!isInitialized());
     m_maxAllowedFrame = maxAllowedFrame;
+}
+
+uint32_t Wal::getTruncate() const
+{
+    return m_truncate;
 }
 
 int Wal::getFrameCount() const
@@ -238,6 +244,7 @@ bool Wal::doInitialize()
     }
 
     std::map<int, int> committedRecords;
+    uint32_t truncate = 0;
     for (int frameno = 1; frameno <= maxWalFrame; ++frameno) {
         Frame frame(frameno, this);
         if (!frame.initialize()) {
@@ -251,6 +258,7 @@ bool Wal::doInitialize()
         checksum = frame.getChecksum();
         committedRecords[frame.getPageNumber()] = frameno;
         if (frame.getTruncate() != 0) {
+            m_truncate = frame.getTruncate();
             m_maxFrames = frameno;
             for (const auto &element : committedRecords) {
                 m_framePages[element.first] = element.second;
