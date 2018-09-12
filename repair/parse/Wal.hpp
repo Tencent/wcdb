@@ -62,14 +62,12 @@ public:
     bool isNativeChecksum() const;
     const std::pair<uint32_t, uint32_t> &getSalt() const;
     int getPageSize() const;
-    uint32_t getTruncate() const;
 
 protected:
     std::pair<uint32_t, uint32_t>
     calculateChecksum(const MappedData &data,
                       const std::pair<uint32_t, uint32_t> &checksum) const;
 
-    uint32_t m_truncate;
     int m_maxAllowedFrame;
     int m_maxFrames;
     bool m_isNativeChecksum;
