@@ -37,7 +37,7 @@ public:
     static constexpr const int framesForPassive = 100;
 
 protected:
-    std::string identifier() const;
+    const std::string m_identifier;
     bool onCommitted(Handle *handle, int pages);
 
     CheckpointQueue *m_queue;

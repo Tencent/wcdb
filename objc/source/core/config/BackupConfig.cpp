@@ -24,7 +24,8 @@
 
 namespace WCDB {
 
-BackupConfig::BackupConfig(BackupQueue *queue) : Config(), m_queue(queue)
+BackupConfig::BackupConfig(BackupQueue *queue)
+: Config(), m_identifier(String::formatted("Backup-%p", this)), m_queue(queue)
 {
     WCTInnerAssert(m_queue != nullptr);
 }
@@ -34,32 +35,28 @@ bool BackupConfig::invoke(Handle *handle)
     if (!handle->beginTransaction()) {
         return false;
     }
-    const std::string id = identifier();
     bool result = handle->setNotificationWhenCheckpointed(
-    id, std::bind(&BackupConfig::checkpointed, this, std::placeholders::_1, std::placeholders::_2));
+    m_identifier,
+    std::bind(&BackupConfig::checkpointed, this, std::placeholders::_1, std::placeholders::_2));
     handle->rollbackTransaction();
     if (result) {
         handle->setNotificationWhenCommitted(
-        0, id, std::bind(&BackupConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
+        0,
+        m_identifier,
+        std::bind(&BackupConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
     }
     return result;
 }
 
 bool BackupConfig::uninvoke(Handle *handle)
 {
-    const std::string id = identifier();
     if (!handle->beginTransaction()) {
         return false;
     }
-    bool result = handle->setNotificationWhenCheckpointed(id, nullptr);
+    bool result = handle->setNotificationWhenCheckpointed(m_identifier, nullptr);
     handle->rollbackTransaction();
-    handle->unsetNotificationWhenCommitted(id);
+    handle->unsetNotificationWhenCommitted(m_identifier);
     return result;
-}
-
-std::string BackupConfig::identifier() const
-{
-    return String::formatted("Backup-%p", this);
 }
 
 bool BackupConfig::onCommitted(Handle *handle, int frames)

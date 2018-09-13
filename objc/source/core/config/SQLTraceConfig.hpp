@@ -35,7 +35,7 @@ public:
     bool uninvoke(Handle *handle) override;
 
 protected:
-    std::string identifier() const;
+    const std::string m_identifier;
     Notification m_notification;
 };
 

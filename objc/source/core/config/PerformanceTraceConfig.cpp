@@ -24,25 +24,22 @@
 namespace WCDB {
 
 PerformanceTraceConfig::PerformanceTraceConfig(const Notification &notification)
-: Config(), m_notification(notification)
+: Config()
+, m_identifier(String::formatted("PerformanceTrace-%p", this))
+, m_notification(notification)
 {
 }
 
 bool PerformanceTraceConfig::invoke(Handle *handle)
 {
-    handle->setNotificationWhenPerformanceTraced(identifier(), m_notification);
+    handle->setNotificationWhenPerformanceTraced(m_identifier, m_notification);
     return true;
 }
 
 bool PerformanceTraceConfig::uninvoke(Handle *handle)
 {
-    handle->setNotificationWhenPerformanceTraced(identifier(), nullptr);
+    handle->setNotificationWhenPerformanceTraced(m_identifier, nullptr);
     return true;
-}
-
-std::string PerformanceTraceConfig::identifier() const
-{
-    return String::formatted("PerformanceTrace-%p", this);
 }
 
 ShareablePerformanceTraceConfig::ShareablePerformanceTraceConfig()

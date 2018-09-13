@@ -26,7 +26,7 @@
 namespace WCDB {
 
 CheckpointConfig::CheckpointConfig(CheckpointQueue* queue)
-: Config(), m_queue(queue)
+: Config(), m_identifier(String::formatted("Checkpoint-%p", this)), m_queue(queue)
 {
     WCTInnerAssert(m_queue != nullptr);
 }
@@ -35,20 +35,15 @@ bool CheckpointConfig::invoke(Handle* handle)
 {
     handle->setNotificationWhenCommitted(
     0,
-    identifier(),
+    m_identifier,
     std::bind(&CheckpointConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
     return true;
 }
 
 bool CheckpointConfig::uninvoke(Handle* handle)
 {
-    handle->unsetNotificationWhenCommitted(identifier());
+    handle->unsetNotificationWhenCommitted(m_identifier);
     return true;
-}
-
-std::string CheckpointConfig::identifier() const
-{
-    return String::formatted("Checkpoint-%p", this);
 }
 
 bool CheckpointConfig::onCommitted(Handle* handle, int frames)

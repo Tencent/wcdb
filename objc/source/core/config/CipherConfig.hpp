@@ -31,8 +31,8 @@ public:
     bool invoke(Handle *handle) override;
 
 protected:
-    Data m_key;
-    int m_pageSize;
+    const Data m_key;
+    const StatementPragma m_statement;
 };
 
 } //namespace WCDB

@@ -24,14 +24,15 @@
 namespace WCDB {
 
 CipherConfig::CipherConfig(const UnsafeData &cipher, int pageSize)
-: Config(), m_key(cipher), m_pageSize(pageSize)
+: Config()
+, m_key(cipher)
+, m_statement(StatementPragma().pragma(Pragma::cipherPageSize()).to(pageSize))
 {
 }
 
 bool CipherConfig::invoke(Handle *handle)
 {
-    return handle->setCipherKey(m_key)
-           && handle->execute(StatementPragma().pragma(Pragma::cipherPageSize()).to(m_pageSize));
+    return handle->setCipherKey(m_key) && handle->execute(m_statement);
 }
 
 } //namespace WCDB

@@ -35,8 +35,8 @@ public:
     bool uninvoke(Handle *handle) override;
 
 protected:
-    Invocation m_invocation;
-    Invocation m_uninvocation;
+    const Invocation m_invocation;
+    const Invocation m_uninvocation;
 };
 
 } //namespace WCDB
