@@ -170,7 +170,7 @@ RecyclableHandle HandlePool::flowOut()
 void HandlePool::flowBack(const std::shared_ptr<ConfiguredHandle> &configuredHandle)
 {
     flowBackConfiguredHandle(configuredHandle);
-    m_lock.unlockShared();
+    m_concurrency.unlockShared();
 }
 
 std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
