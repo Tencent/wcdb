@@ -33,7 +33,6 @@ namespace WCDB {
 HandlePool::HandlePool(const std::string &thePath)
 : path(thePath), m_configs(nullptr), m_aliveHandleCount(0)
 {
-    WCTInnerAssert(m_configs != nullptr);
 }
 
 HandlePool::~HandlePool()
