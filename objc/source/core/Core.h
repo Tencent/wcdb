@@ -49,7 +49,8 @@
 #include <WCDB/Modules.hpp>
 #include <WCDB/Tokenizer.hpp>
 
-#include <WCDB/Migration.h>
+#include <WCDB/MigrationDatabase.hpp>
+#include <WCDB/MigrationHandle.hpp>
 
 namespace WCDB {
 

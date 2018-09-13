@@ -468,8 +468,6 @@
 		239776FA202AF2E3000A681C /* TimedQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776CE202AF2E2000A681C /* TimedQueue.hpp */; };
 		239776FE202AF2E3000A681C /* Macro.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776D0202AF2E2000A681C /* Macro.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2397770A202AF2E3000A681C /* CopyOnWrite.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776D6202AF2E3000A681C /* CopyOnWrite.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		23A09D732146204400F62EE8 /* Migration.h in Headers */ = {isa = PBXBuildFile; fileRef = 23A09D642146204300F62EE8 /* Migration.h */; };
-		23A09D742146204400F62EE8 /* Migration.h in Headers */ = {isa = PBXBuildFile; fileRef = 23A09D642146204300F62EE8 /* Migration.h */; };
 		23A09D792146204400F62EE8 /* MigrationDatabase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A09D672146204300F62EE8 /* MigrationDatabase.cpp */; };
 		23A09D7A2146204400F62EE8 /* MigrationDatabase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A09D672146204300F62EE8 /* MigrationDatabase.cpp */; };
 		23A09D7B2146204400F62EE8 /* MigrationDatabase.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A09D682146204300F62EE8 /* MigrationDatabase.hpp */; };
@@ -1498,7 +1496,6 @@
 		239776CE202AF2E2000A681C /* TimedQueue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TimedQueue.hpp; sourceTree = "<group>"; };
 		239776D0202AF2E2000A681C /* Macro.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Macro.hpp; sourceTree = "<group>"; };
 		239776D6202AF2E3000A681C /* CopyOnWrite.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CopyOnWrite.hpp; sourceTree = "<group>"; };
-		23A09D642146204300F62EE8 /* Migration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Migration.h; sourceTree = "<group>"; };
 		23A09D672146204300F62EE8 /* MigrationDatabase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationDatabase.cpp; sourceTree = "<group>"; };
 		23A09D682146204300F62EE8 /* MigrationDatabase.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MigrationDatabase.hpp; sourceTree = "<group>"; };
 		23A09D692146204300F62EE8 /* MigrationHandle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationHandle.cpp; sourceTree = "<group>"; };
@@ -2417,7 +2414,6 @@
 		23A09D632146204300F62EE8 /* migration */ = {
 			isa = PBXGroup;
 			children = (
-				23A09D642146204300F62EE8 /* Migration.h */,
 				23A09D672146204300F62EE8 /* MigrationDatabase.cpp */,
 				23A09D682146204300F62EE8 /* MigrationDatabase.hpp */,
 				23A09D692146204300F62EE8 /* MigrationHandle.cpp */,
@@ -2777,7 +2773,6 @@
 				2370980B20590CA700E768B4 /* HandleStatement.hpp in Headers */,
 				23BBE2A8204955CE00C4CBB6 /* WCTCommon.h in Headers */,
 				23C7559320DCF90F00031A93 /* SQLiteLocker.hpp in Headers */,
-				23A09D732146204400F62EE8 /* Migration.h in Headers */,
 				23D96B982050E53600DB5E93 /* RecyclableDatabase.hpp in Headers */,
 				23977545202AECD3000A681C /* WINQ.h in Headers */,
 				2349F7381EA0D6680021EFA7 /* WCTTable+Convenient.h in Headers */,
@@ -3072,7 +3067,6 @@
 				23F5BDCA20887FD3000CCD37 /* HandleStatement.hpp in Headers */,
 				23F5BDCB20887FD3000CCD37 /* WCTCommon.h in Headers */,
 				23C7559420DCF90F00031A93 /* SQLiteLocker.hpp in Headers */,
-				23A09D742146204400F62EE8 /* Migration.h in Headers */,
 				23F5BDCD20887FD3000CCD37 /* RecyclableDatabase.hpp in Headers */,
 				23F5BDCF20887FD3000CCD37 /* WINQ.h in Headers */,
 				23F5BDD120887FD3000CCD37 /* WCTTable+Convenient.h in Headers */,
