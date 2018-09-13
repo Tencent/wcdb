@@ -52,6 +52,7 @@ public:
     const MigrationInfo* getOrIdentifyInfo(const std::string& tableName);
 
 protected:
+    const MigrationInfo* getInfo(const std::string& tableName);
     std::list<const MigrationInfo> m_infos;
     std::map<std::string, const MigrationInfo*> m_tableInfos;
 };

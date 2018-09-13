@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/MigrationInfos.hpp>
 
 namespace WCDB {
@@ -35,24 +36,36 @@ void MigrationInfos::setNotificaitionWhenTableShouldBeMigrated(const TableShould
 }
 
 #pragma mark - Infos
-const MigrationInfo* MigrationInfos::getOrIdentifyInfo(const std::string& sourceTable)
+const MigrationInfo* MigrationInfos::getInfo(const std::string& tableName)
 {
-    m_lock.lockShared();
-    auto iter = m_tableInfos.find(sourceTable);
+    WCTInnerAssert(m_lock.readSafety());
+    auto iter = m_tableInfos.find(tableName);
     if (iter != m_tableInfos.end()) {
         return iter->second;
     }
-    if (!m_tableShouldBeMigratedCallback) {
-        return nullptr;
+    return nullptr;
+}
+
+const MigrationInfo* MigrationInfos::getOrIdentifyInfo(const std::string& sourceTable)
+{
+    {
+        SharedLockGuard lockGuard(m_lock);
+        const MigrationInfo* info = getInfo(sourceTable);
+        if (info != nullptr) {
+            return info;
+        }
+    }
+    LockGuard lockGuard(m_lock);
+    const MigrationInfo* info = getInfo(sourceTable);
+    if (info != nullptr) {
+        return info;
     }
     std::string targetTable;
     std::string targetDatabase;
     m_tableShouldBeMigratedCallback(sourceTable, targetTable, targetDatabase);
-    m_lock.unlockShared();
-
-    LockGuard lockGuard(m_lock);
     if (!targetTable.empty()) {
         m_infos.push_back(MigrationInfo(sourceTable, targetTable, targetDatabase));
+        WCTInnerAssert(m_tableInfos.find(sourceTable) == m_tableInfos.end());
         m_tableInfos[sourceTable] = &m_infos.back();
         return &m_infos.back();
     } else {
