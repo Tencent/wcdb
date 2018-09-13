@@ -260,6 +260,7 @@ void Pager::hint() const
     Error error;
     error.level = Error::Level::Notice;
     error.setCode(Error::Code::Notice, "Repair");
+    error.message = "Pager hint.";
     error.infos.set("PageCount", m_pageCount);
     error.infos.set("OriginFileSize", m_fileSize);
     bool succeed;

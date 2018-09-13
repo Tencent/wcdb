@@ -121,6 +121,7 @@ void Shm::hint() const
     Error error;
     error.level = Error::Level::Notice;
     error.setCode(Error::Code::Notice, "Repair");
+    error.message = "Shm hint.";
     error.infos.set("Backfill", m_checkpointInfo.backfill);
     error.infos.set("MaxFrame", m_header.maxFrame);
     Notifier::shared()->notify(error);

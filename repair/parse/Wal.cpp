@@ -307,6 +307,7 @@ void Wal::hint() const
     Error error;
     error.level = Error::Level::Notice;
     error.setCode(Error::Code::Notice, "Repair");
+    error.message = "Wal hint.";
     error.infos.set("Truncate", m_truncate);
     error.infos.set("MaxFrame", m_maxFrame);
     error.infos.set("OriginFileSize", m_fileSize);
@@ -316,27 +317,57 @@ void Wal::hint() const
     if (succeed) {
         error.infos.set("CurrentFileSize", fileSize);
     }
+    Notifier::shared()->notify(error);
+
+    //Pages to frames
     if (!m_pages2Frames.empty()) {
+        Error error;
+        error.level = Error::Level::Notice;
+        error.setCode(Error::Code::Notice, "Repair");
+        error.message = "Wal pages hint.";
         std::ostringstream stream;
+        int i = 0;
         for (const auto &iter : m_pages2Frames) {
             if (!stream.str().empty()) {
-                stream << ", ";
+                stream << "; ";
             }
-            stream << "{" << iter.first << ", " << iter.second << "}";
+            stream << iter.first << ", " << iter.second;
+            if (++i % 20 == 0) {
+                error.infos.set("Pages2Frames", stream.str());
+                Notifier::shared()->notify(error);
+                stream.clear();
+            }
         }
-        error.infos.set("Pages2Frames", stream.str());
+        if (!stream.str().empty()) {
+            error.infos.set("Pages2Frames", stream.str());
+            Notifier::shared()->notify(error);
+        }
     }
+
+    //Disposed
     if (!m_disposedPages.empty()) {
+        Error error;
+        error.level = Error::Level::Notice;
+        error.setCode(Error::Code::Notice, "Repair");
+        error.message = "Wal disposed hint.";
         std::ostringstream stream;
+        int i = 0;
         for (const auto &page : m_disposedPages) {
             if (!stream.str().empty()) {
                 stream << ", ";
             }
             stream << page;
+            if (++i % 20 == 0) {
+                error.infos.set("Disposed", stream.str());
+                Notifier::shared()->notify(error);
+                stream.clear();
+            }
         }
-        error.infos.set("Disposed", stream.str());
+        if (!stream.str().empty()) {
+            error.infos.set("Disposed", stream.str());
+            Notifier::shared()->notify(error);
+        }
     }
-    Notifier::shared()->notify(error);
 
     m_shm.hint();
 }
