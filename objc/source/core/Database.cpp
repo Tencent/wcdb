@@ -131,6 +131,12 @@ std::shared_ptr<Handle> Database::generateHandle()
     return std::shared_ptr<Handle>(new Handle(path));
 }
 
+void Database::handleWillFlowBack(Handle *handle)
+{
+    WCTRemedialAssert(
+    !handle->isInTransaction(), "Unpaired transaction.", handle->rollbackTransaction(););
+}
+
 #pragma mark - Threaded
 ThreadLocal<Database::ThreadedHandles> &Database::threadedHandles()
 {

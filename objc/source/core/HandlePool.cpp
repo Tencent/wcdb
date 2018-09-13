@@ -243,6 +243,7 @@ void HandlePool::flowBackConfiguredHandle(const std::shared_ptr<ConfiguredHandle
     WCTInnerAssert(configuredHandle != nullptr);
     WCTInnerAssert(m_concurrency.readSafety());
     {
+        handleWillFlowBack(configuredHandle->get());
         LockGuard lockGuard(m_lock);
         if (m_handles.size() < hardwareConcurrency()) {
             m_handles.push_back(configuredHandle);

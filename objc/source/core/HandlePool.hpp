@@ -80,6 +80,7 @@ public:
 
 protected:
     virtual std::shared_ptr<Handle> generateHandle() = 0;
+    virtual void handleWillFlowBack(Handle *handle) = 0;
 
     mutable SharedLock m_lock;
 
