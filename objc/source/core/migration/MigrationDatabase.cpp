@@ -71,7 +71,7 @@ bool MigrationDatabase::interruptIfDeposited()
 #pragma mark -Handle
 std::shared_ptr<Handle> MigrationDatabase::generateHandle()
 {
-    return std::shared_ptr<Handle>(new MigrationHandle(path));
+    return std::shared_ptr<Handle>(new MigrationHandle(path, &m_infos));
 }
 
 } //namespace WCDB

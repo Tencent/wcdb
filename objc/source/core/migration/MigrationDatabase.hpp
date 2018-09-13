@@ -22,6 +22,7 @@
 #define MigrationDatabase_hpp
 
 #include <WCDB/Database.hpp>
+#include <WCDB/MigrationInfos.hpp>
 
 namespace WCDB {
 
@@ -45,6 +46,7 @@ public:
 
 protected:
     bool interruptIfDeposited();
+    MigrationInfos m_infos;
 
 #pragma mark -Handle
 protected:

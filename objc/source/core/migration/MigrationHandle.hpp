@@ -25,10 +25,15 @@
 
 namespace WCDB {
 
+class MigrationInfos;
+
 class MigrationHandle : public Handle {
 #pragma mark - Initialize
 public:
-    MigrationHandle(const std::string &path);
+    MigrationHandle(const std::string &path, MigrationInfos *infos);
+
+protected:
+    MigrationInfos *m_infos;
 
 #pragma mark - Override
 public:

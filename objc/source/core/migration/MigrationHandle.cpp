@@ -20,12 +20,15 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Core.h>
+#include <WCDB/MigrationInfos.hpp>
 
 namespace WCDB {
 
 #pragma mark - Initialize
-MigrationHandle::MigrationHandle(const std::string &path) : Handle(path)
+MigrationHandle::MigrationHandle(const std::string &path, MigrationInfos *infos)
+: Handle(path), m_infos(infos)
 {
+    WCTInnerAssert(m_infos != nullptr);
 }
 
 #pragma mark - Override
