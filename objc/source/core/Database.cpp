@@ -67,7 +67,6 @@ bool Database::isOpened() const
 #pragma mark - Handle
 RecyclableHandle Database::getHandle()
 {
-    SharedLockGuard lockConcurrencyGuard(m_concurrency);
     do {
         {
             SharedLockGuard lockGuard(m_lock);
@@ -75,6 +74,7 @@ RecyclableHandle Database::getHandle()
                 break;
             }
         }
+        LockGuard lockConcurrencyGuard(m_concurrency);
         LockGuard lockGuard(m_lock);
         if (m_aliveHandleCount != 0) {
             break;
@@ -89,6 +89,7 @@ RecyclableHandle Database::getHandle()
             return nullptr;
         }
     } while (false);
+    SharedLockGuard lockConcurrencyGuard(m_concurrency);
     ThreadedHandles *threadedHandle = Database::threadedHandles().getOrCreate();
     const auto iter = threadedHandle->find(this);
     if (iter != threadedHandle->end()) {
