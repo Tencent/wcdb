@@ -324,7 +324,6 @@ void Wal::hint() const
         Error error;
         error.level = Error::Level::Notice;
         error.setCode(Error::Code::Notice, "Repair");
-        error.message = "Wal pages hint.";
         std::ostringstream stream;
         int i = 0;
         for (const auto &iter : m_pages2Frames) {
@@ -332,9 +331,12 @@ void Wal::hint() const
                 stream << "; ";
             }
             stream << iter.first << ", " << iter.second;
-            if (++i % 20 == 0) {
+            ++i;
+            if (i % 20 == 0) {
+                error.message = "Wal pages hint " + std::to_string(i / 20);
                 error.infos.set("Pages2Frames", stream.str());
                 Notifier::shared()->notify(error);
+                stream.str("");
                 stream.clear();
             }
         }
@@ -349,7 +351,6 @@ void Wal::hint() const
         Error error;
         error.level = Error::Level::Notice;
         error.setCode(Error::Code::Notice, "Repair");
-        error.message = "Wal disposed hint.";
         std::ostringstream stream;
         int i = 0;
         for (const auto &page : m_disposedPages) {
@@ -357,9 +358,12 @@ void Wal::hint() const
                 stream << ", ";
             }
             stream << page;
-            if (++i % 20 == 0) {
+            ++i;
+            if (i % 20 == 0) {
+                error.message = "Wal disposed hint " + std::to_string(i / 20);
                 error.infos.set("Disposed", stream.str());
                 Notifier::shared()->notify(error);
+                stream.str("");
                 stream.clear();
             }
         }
