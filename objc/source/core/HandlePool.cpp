@@ -183,7 +183,7 @@ std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
         if (m_handles.empty()) {
             return nullptr;
         }
-        std::shared_ptr<ConfiguredHandle> configuredHandle = m_handles.back();
+        configuredHandle = m_handles.back();
         WCTInnerAssert(configuredHandle != nullptr);
         m_handles.pop_back();
         configs = m_configs;
@@ -228,6 +228,7 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
     }
     {
         LockGuard lockGuard(m_lock);
+        WCTInnerAssert(configuredHandle != nullptr);
         ++m_aliveHandleCount;
         if (!allowedConcurrent()) {
             --m_aliveHandleCount;
@@ -243,7 +244,7 @@ void HandlePool::flowBackConfiguredHandle(const std::shared_ptr<ConfiguredHandle
     WCTInnerAssert(m_concurrency.readSafety());
     {
         LockGuard lockGuard(m_lock);
-        if (m_aliveHandleCount <= hardwareConcurrency()) {
+        if (m_handles.size() < hardwareConcurrency()) {
             m_handles.push_back(configuredHandle);
         } else {
             // drop this handle
