@@ -41,7 +41,6 @@ public:
     bool prepare(const Statement &statement) override;
     bool step(bool &done) override;
     void reset() override;
-    using Handle::step;
     void finalize() override;
     void bindInteger32(const Integer32 &value, int index) override;
     void bindInteger64(const Integer64 &value, int index) override;

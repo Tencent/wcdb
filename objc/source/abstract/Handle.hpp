@@ -92,7 +92,6 @@ public:
     virtual void bindDouble(const Float &value, int index);
     void bindText(const Text &value, int index);
     virtual void bindText(const Text &value, int length, int index);
-
     virtual void bindBLOB(const BLOB &value, int index);
     virtual void bindNull(int index);
 
