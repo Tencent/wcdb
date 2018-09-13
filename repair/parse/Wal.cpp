@@ -38,9 +38,11 @@ Wal::Wal(Pager *pager)
 , m_salt({ 0, 0 })
 , m_isNativeChecksum(false)
 , m_maxAllowedFrame(std::numeric_limits<int>::max())
-, m_maxFrames(0)
+, m_maxFrame(0)
 , m_shm(this)
 , m_shmLegality(true)
+, m_fileSize(0)
+, m_truncate(std::numeric_limits<uint32_t>::max())
 {
 }
 
@@ -71,7 +73,7 @@ MappedData Wal::acquireData(off_t offset, size_t size)
 bool Wal::containsPage(int pageno) const
 {
     WCTInnerAssert(isInitialized());
-    return m_framePages.find(pageno) != m_framePages.end();
+    return m_pages2Frames.find(pageno) != m_pages2Frames.end();
 }
 
 MappedData Wal::acquirePageData(int pageno)
@@ -84,17 +86,17 @@ MappedData Wal::acquirePageData(int pageno, off_t offset, size_t size)
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(containsPage(pageno));
     WCTInnerAssert(offset + size <= getPageSize());
-    return acquireData(headerSize + getFrameSize() * (m_framePages[pageno] - 1)
+    return acquireData(headerSize + getFrameSize() * (m_pages2Frames[pageno] - 1)
                        + Frame::headerSize + offset,
                        size);
 }
 
 int Wal::getMaxPageno() const
 {
-    if (m_framePages.empty()) {
+    if (m_pages2Frames.empty()) {
         return 0;
     }
-    return m_framePages.rbegin()->first;
+    return m_pages2Frames.rbegin()->first;
 }
 
 #pragma mark - Wal
@@ -119,7 +121,7 @@ void Wal::setMaxAllowedFrame(int maxAllowedFrame)
 int Wal::getFrameCount() const
 {
     WCTInnerAssert(isInitialized());
-    return m_maxFrames;
+    return m_maxFrame;
 }
 
 int Wal::getPageSize() const
@@ -202,15 +204,14 @@ bool Wal::doInitialize()
     }
 
     bool succeed;
-    size_t fileSize;
-    std::tie(succeed, fileSize) = FileManager::getFileSize(getPath());
-    if (fileSize == 0) {
+    std::tie(succeed, m_fileSize) = FileManager::getFileSize(getPath());
+    if (m_fileSize == 0) {
         if (!succeed) {
             assignWithSharedThreadedError();
         }
         return succeed;
     }
-    const int frameCountInFile = ((int) fileSize - headerSize) / getFrameSize();
+    const int frameCountInFile = ((int) m_fileSize - headerSize) / getFrameSize();
     maxWalFrame = std::min(frameCountInFile, maxWalFrame);
 
     if (!m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
@@ -280,11 +281,17 @@ bool Wal::doInitialize()
         checksum = frame.getChecksum();
         committedRecords[frame.getPageNumber()] = frameno;
         if (frame.getTruncate() != 0) {
-            m_maxFrames = frameno;
+            m_truncate = frame.getTruncate();
+            m_maxFrame = frameno;
             for (const auto &element : committedRecords) {
-                m_framePages[element.first] = element.second;
+                m_pages2Frames[element.first] = element.second;
             }
             committedRecords.clear();
+        }
+    }
+    if (!committedRecords.empty()) {
+        for (const auto &iter : committedRecords) {
+            m_disposedPages.emplace(iter.first);
         }
     }
     // all those frames that are uncommitted or exceeds the max allowed count will be disposed.
@@ -292,6 +299,48 @@ bool Wal::doInitialize()
 }
 
 #pragma mark - Error
+void Wal::hint() const
+{
+    if (!isInitialized()) {
+        return;
+    }
+    Error error;
+    error.level = Error::Level::Notice;
+    error.setCode(Error::Code::Notice, "Repair");
+    error.infos.set("Truncate", m_truncate);
+    error.infos.set("MaxFrame", m_maxFrame);
+    error.infos.set("OriginFileSize", m_fileSize);
+    bool succeed;
+    size_t fileSize;
+    std::tie(succeed, fileSize) = FileManager::getFileSize(getPath());
+    if (succeed) {
+        error.infos.set("CurrentFileSize", fileSize);
+    }
+    if (!m_pages2Frames.empty()) {
+        std::ostringstream stream;
+        for (const auto &iter : m_pages2Frames) {
+            if (!stream.str().empty()) {
+                stream << ", ";
+            }
+            stream << "{" << iter.first << ", " << iter.second << "}";
+        }
+        error.infos.set("Pages2Frames", stream.str());
+    }
+    if (!m_disposedPages.empty()) {
+        std::ostringstream stream;
+        for (const auto &page : m_disposedPages) {
+            if (!stream.str().empty()) {
+                stream << ", ";
+            }
+            stream << page;
+        }
+        error.infos.set("Disposed", stream.str());
+    }
+    Notifier::shared()->notify(error);
+
+    m_shm.hint();
+}
+
 void Wal::markAsCorrupted(int frame, const std::string &message)
 {
     Error error;
@@ -322,11 +371,13 @@ int Wal::getDisposedPage() const
 void Wal::dispose()
 {
     WCTInnerAssert(isInitialized() || isInitializeFalied());
-    for (const auto &element : m_framePages) {
+    for (const auto &element : m_pages2Frames) {
         m_disposedPages.emplace(element.first);
     }
-    m_framePages.clear();
-    m_maxFrames = 0;
+    m_pages2Frames.clear();
+    m_truncate = std::numeric_limits<uint32_t>::max();
+    m_fileSize = 0;
+    m_maxFrame = 0;
 }
 
 } //namespace Repair

@@ -113,6 +113,19 @@ bool Shm::doInitialize()
     return true;
 }
 
+void Shm::hint() const
+{
+    if (!isInitialized()) {
+        return;
+    }
+    Error error;
+    error.level = Error::Level::Notice;
+    error.setCode(Error::Code::Notice, "Repair");
+    error.infos.set("Backfill", m_checkpointInfo.backfill);
+    error.infos.set("MaxFrame", m_header.maxFrame);
+    Notifier::shared()->notify(error);
+}
+
 Shm::Header::Header()
 : version(3007000), maxFrame(std::numeric_limits<decltype(maxFrame)>::max())
 {

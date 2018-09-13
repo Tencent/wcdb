@@ -31,7 +31,7 @@ namespace Repair {
 
 #pragma mark - Initialize
 Pager::Pager(const std::string &path)
-: m_fileHandle(path), m_pageSize(-1), m_reservedBytes(-1), m_pageCount(0), m_wal(this)
+: m_fileHandle(path), m_pageSize(-1), m_reservedBytes(-1), m_pageCount(0), m_wal(this), m_fileSize(0)
 {
 }
 
@@ -188,9 +188,8 @@ void Pager::markAsError(Error::Code code)
 bool Pager::doInitialize()
 {
     bool succeed;
-    size_t fileSize;
-    std::tie(succeed, fileSize) = FileManager::getFileSize(getPath());
-    if (fileSize == 0) {
+    std::tie(succeed, m_fileSize) = FileManager::getFileSize(getPath());
+    if (m_fileSize == 0) {
         if (succeed) {
             markAsError(Error::Code::Empty);
         } else {
@@ -241,7 +240,7 @@ bool Pager::doInitialize()
 
     m_fileHandle.setPageSize(m_pageSize);
 
-    m_pageCount = (int) ((fileSize + m_pageSize - 1) / m_pageSize);
+    m_pageCount = (int) ((m_fileSize + m_pageSize - 1) / m_pageSize);
 
     if (m_wal.initialize()) {
         return true;
@@ -251,6 +250,26 @@ bool Pager::doInitialize()
     }
     disposeWal();
     return true;
+}
+
+void Pager::hint() const
+{
+    if (!isInitialized()) {
+        return;
+    }
+    Error error;
+    error.level = Error::Level::Notice;
+    error.setCode(Error::Code::Notice, "Repair");
+    error.infos.set("PageCount", m_pageCount);
+    error.infos.set("OriginFileSize", m_fileSize);
+    bool succeed;
+    size_t fileSize;
+    std::tie(succeed, fileSize) = FileManager::getFileSize(getPath());
+    if (succeed) {
+        error.infos.set("CurrentFileSize", fileSize);
+    }
+    Notifier::shared()->notify(error);
+    m_wal.hint();
 }
 
 } //namespace Repair

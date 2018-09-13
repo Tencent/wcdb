@@ -54,7 +54,7 @@ public:
 
 protected:
     // pageno -> frameno
-    std::map<int, int> m_framePages;
+    std::map<int, int> m_pages2Frames;
 
 #pragma mark - Wal
 public:
@@ -70,8 +70,10 @@ protected:
     calculateChecksum(const MappedData &data,
                       const std::pair<uint32_t, uint32_t> &checksum) const;
 
+    size_t m_fileSize;
+    uint32_t m_truncate;
     int m_maxAllowedFrame;
-    int m_maxFrames;
+    int m_maxFrame;
     bool m_isNativeChecksum;
     std::pair<uint32_t, uint32_t> m_salt;
     bool m_shmLegality;
@@ -88,6 +90,9 @@ protected:
     static bool isBigEndian();
 
 #pragma mark - Error
+public:
+    void hint() const;
+
 protected:
     void markAsCorrupted(int frame, const std::string &message);
     void markAsError(Error::Code code);

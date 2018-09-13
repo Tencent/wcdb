@@ -62,6 +62,7 @@ protected:
     int m_pageSize;
     int m_reservedBytes;
     int m_pageCount;
+    size_t m_fileSize;
 
 #pragma mark - Wal
 public:
@@ -78,6 +79,7 @@ protected:
 #pragma mark - Error
 public:
     void markAsCorrupted(int page, const std::string &message);
+    void hint() const;
 
 protected:
     void markAsError(Error::Code code);
