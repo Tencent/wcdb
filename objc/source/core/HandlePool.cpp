@@ -250,7 +250,6 @@ void HandlePool::flowBackConfiguredHandle(const std::shared_ptr<ConfiguredHandle
             --m_aliveHandleCount;
         }
     }
-    m_concurrency.unlockShared();
 }
 
 } //namespace WCDB
