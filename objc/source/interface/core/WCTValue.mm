@@ -25,16 +25,16 @@
 
 - (WCTValueType)valueType
 {
-    if ([self isKindOfClass:NSString.class]) {
+    if ([self isKindOfClass:NSNull.class]) {
+        return WCTValueTypeNil;
+    } else if ([self conformsToProtocol:@protocol(WCTColumnCoding)]) {
+        return WCTValueTypeColumnCoding;
+    } else if ([self isKindOfClass:NSString.class]) {
         return WCTValueTypeString;
     } else if ([self isKindOfClass:NSData.class]) {
         return WCTValueTypeData;
     } else if ([self isKindOfClass:NSNumber.class]) {
         return WCTValueTypeNumber;
-    } else if ([self isKindOfClass:NSNull.class]) {
-        return WCTValueTypeNil;
-    } else if ([self conformsToProtocol:@protocol(WCTColumnCoding)]) {
-        return WCTValueTypeColumnCoding;
     } else {
         return WCTValueTypeUnknown;
     }
