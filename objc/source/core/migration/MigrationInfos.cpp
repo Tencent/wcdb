@@ -54,6 +54,9 @@ const MigrationInfo* MigrationInfos::getOrIdentifyInfo(const std::string& source
         if (info != nullptr) {
             return info;
         }
+        if (m_tableShouldBeMigratedCallback == nullptr) {
+            return nullptr;
+        }
     }
     LockGuard lockGuard(m_lock);
     const MigrationInfo* info = getInfo(sourceTable);
