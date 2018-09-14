@@ -36,45 +36,69 @@ void MigrationInfos::setNotificaitionWhenTableShouldBeMigrated(const TableShould
 }
 
 #pragma mark - Infos
-const MigrationInfo* MigrationInfos::getInfo(const std::string& tableName)
-{
-    WCTInnerAssert(m_lock.readSafety());
-    auto iter = m_tableInfos.find(tableName);
-    if (iter != m_tableInfos.end()) {
-        return iter->second;
-    }
-    return nullptr;
-}
-
-const MigrationInfo* MigrationInfos::getOrIdentifyInfo(const std::string& sourceTable)
+MigrationInfo* MigrationInfos::getOrIdentifyInfo(const std::string& migratedTable)
 {
     {
         SharedLockGuard lockGuard(m_lock);
-        const MigrationInfo* info = getInfo(sourceTable);
-        if (info != nullptr) {
-            return info;
+        if (m_ignored.find(migratedTable) != m_ignored.end()) {
+            return nullptr;
+        }
+        auto iter = m_infos.find(migratedTable);
+        if (iter != m_infos.end()) {
+            return &iter->second;
         }
         if (m_tableShouldBeMigratedCallback == nullptr) {
             return nullptr;
         }
     }
     LockGuard lockGuard(m_lock);
-    const MigrationInfo* info = getInfo(sourceTable);
-    if (info != nullptr) {
-        return info;
-    }
-    std::string targetTable;
-    std::string targetDatabase;
-    m_tableShouldBeMigratedCallback(sourceTable, targetTable, targetDatabase);
-    if (!targetTable.empty()) {
-        m_infos.push_back(MigrationInfo(sourceTable, targetTable, targetDatabase));
-        WCTInnerAssert(m_tableInfos.find(sourceTable) == m_tableInfos.end());
-        m_tableInfos[sourceTable] = &m_infos.back();
-        return &m_infos.back();
-    } else {
-        m_tableInfos[sourceTable] = nullptr;
+    if (m_ignored.find(migratedTable) != m_ignored.end()) {
         return nullptr;
     }
+    auto iter = m_infos.find(migratedTable);
+    if (iter != m_infos.end()) {
+        return &iter->second;
+    }
+    if (m_tableShouldBeMigratedCallback == nullptr) {
+        return nullptr;
+    }
+    std::string originTable;
+    std::string originDatabase;
+    m_tableShouldBeMigratedCallback(migratedTable, originTable, originDatabase);
+    if (!originTable.empty()) {
+        m_infos.emplace(
+        migratedTable, MigrationInfo(migratedTable, originTable, originDatabase));
+    } else {
+        m_ignored.emplace(migratedTable);
+        return nullptr;
+    }
+    return nullptr;
+}
+
+void MigrationInfos::markInfoAsMigrated(MigrationInfo* info)
+{
+    WCTInnerAssert(info != nullptr);
+    {
+        LockGuard lockGuard(m_lock);
+        m_ignored.emplace(info->migratedTable);
+    }
+    SharedLockGuard lockGuard(m_lock);
+    auto iter = m_infos.find(info->migratedTable);
+    WCTInnerAssert(iter != m_infos.end());
+    iter->second.markAsMigrated();
+}
+
+std::list<MigrationInfo*>
+MigrationInfos::resolveDetachableInfos(const std::map<std::string, MigrationInfo*>& attachedInfos)
+{
+    std::list<MigrationInfo*> detachableInfos;
+    SharedLockGuard lockGuard(m_lock);
+    for (const auto& iter : attachedInfos) {
+        if (m_ignored.find(iter.first) != m_ignored.end()) {
+            detachableInfos.push_back(iter.second);
+        }
+    }
+    return detachableInfos;
 }
 
 } // namespace WCDB

@@ -22,6 +22,7 @@
 #define MigrationHandle_hpp
 
 #include <WCDB/Abstract.h>
+#include <map>
 
 namespace WCDB {
 
@@ -33,6 +34,7 @@ public:
     MigrationHandle(const std::string &path, MigrationInfos *infos);
 
 protected:
+    std::map<std::string, MigrationInfo *> m_attachedInfos;
     MigrationInfos *m_infos;
 
 #pragma mark - Override

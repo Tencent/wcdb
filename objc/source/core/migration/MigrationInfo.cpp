@@ -23,13 +23,48 @@
 
 namespace WCDB {
 
-MigrationInfo::MigrationInfo(const std::string& sourceTable_,
-                             const std::string& targetTable_,
-                             const std::string& targetDatabase_)
-: sourceTable(sourceTable_), targetTable(targetTable_), targetDatabase(targetDatabase_)
+MigrationInfo::MigrationInfo(const std::string& migratedTable_,
+                             const std::string& originTable_,
+                             const std::string& originDatabase_)
+: originTable(originTable_)
+, migratedTable(migratedTable_)
+, originDatabase(originDatabase_)
+, m_state(State::None)
 {
-    WCTInnerAssert(!sourceTable.empty());
-    WCTInnerAssert(!targetTable.empty());
+    WCTInnerAssert(!originTable.empty());
+    WCTInnerAssert(!migratedTable.empty());
+}
+
+MigrationInfo::State MigrationInfo::getState() const
+{
+    SharedLockGuard lockGuard(m_lock);
+    return m_state;
+}
+
+void MigrationInfo::markAsMigrated()
+{
+    LockGuard lockGuard(m_lock);
+    m_state = State::Migrated;
+}
+
+void MigrationInfo::initialize(const std::list<std::string>& columns)
+{
+    WCTInnerAssert(!isInitialized());
+    LockGuard lockGuard(m_lock);
+    //TODO
+    m_state = State::Initialized;
+}
+
+bool MigrationInfo::isSameDatabaseMigration() const
+{
+    WCTInnerAssert(isInitialized());
+    SharedLockGuard lockGuard(m_lock);
+    return m_schemaForOriginDatabase == Schema::main();
+}
+
+bool MigrationInfo::isInitialized() const
+{
+    return m_state == State::Initialized;
 }
 
 } // namespace WCDB

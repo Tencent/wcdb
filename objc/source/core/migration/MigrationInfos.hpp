@@ -24,8 +24,8 @@
 #include <WCDB/Lock.hpp>
 #include <WCDB/MigrationInfo.hpp>
 #include <functional>
-#include <list>
 #include <map>
+#include <set>
 
 namespace WCDB {
 
@@ -49,12 +49,16 @@ protected:
 #pragma mark - Infos
 public:
     // identified? -> Migration Info
-    const MigrationInfo* getOrIdentifyInfo(const std::string& tableName);
+    MigrationInfo* getOrIdentifyInfo(const std::string& migratedTable);
+
+    void markInfoAsMigrated(MigrationInfo* info);
+
+    std::list<MigrationInfo*>
+    resolveDetachableInfos(const std::map<std::string, MigrationInfo*>& attachedInfos);
 
 protected:
-    const MigrationInfo* getInfo(const std::string& tableName);
-    std::list<const MigrationInfo> m_infos;
-    std::map<std::string, const MigrationInfo*> m_tableInfos;
+    std::set<std::string> m_ignored;
+    std::map<std::string, MigrationInfo> m_infos;
 };
 
 } // namespace WCDB
