@@ -786,6 +786,7 @@
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				"VALID_ARCHS[sdk=iphoneos*]" = "armv7 arm64";
 				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
@@ -864,6 +865,7 @@
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.2;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				"VALID_ARCHS[sdk=iphoneos*]" = "armv7 arm64";
 				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
@@ -897,7 +899,7 @@
 				STRIP_STYLE = debugging;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/source/util/WCDB-Bridging.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -923,7 +925,7 @@
 				SKIP_INSTALL = YES;
 				STRIP_STYLE = "non-global";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/source/util/WCDB-Bridging.h";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -994,6 +996,7 @@
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.2;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				"VALID_ARCHS[sdk=iphoneos*]" = "armv7 arm64";
 				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
@@ -1026,7 +1029,7 @@
 				SKIP_INSTALL = YES;
 				STRIP_STYLE = "non-global";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/source/util/WCDB-Bridging.h";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = WithoutBitcode;
 		};
