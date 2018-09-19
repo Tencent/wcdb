@@ -53,7 +53,7 @@ public final class Database: Core {
             DispatchQueue.once(name: "com.Tencent.WCDB.swift.purge", {
                 let purgeFreeHandleQueue: DispatchQueue = DispatchQueue(label: "com.Tencent.WCDB.swift.purge")
                 _ = NotificationCenter.default.addObserver(
-                    forName: .UIApplicationDidReceiveMemoryWarning,
+                    forName: UIApplication.didReceiveMemoryWarningNotification,
                     object: nil,
                     queue: nil,
                     using: { (_) in
