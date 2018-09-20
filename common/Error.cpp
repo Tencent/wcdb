@@ -55,6 +55,8 @@ static_assert((int) Error::Code::Range == SQLITE_RANGE, "");
 static_assert((int) Error::Code::NotADatabase == SQLITE_NOTADB, "");
 static_assert((int) Error::Code::Notice == SQLITE_NOTICE, "");
 static_assert((int) Error::Code::Warning == SQLITE_WARNING, "");
+static_assert((int) Error::Code::Row == SQLITE_ROW, "");
+static_assert((int) Error::Code::Done == SQLITE_DONE, "");
 
 #pragma mark - Initialize
 Error::Error() : level(Level::Error), m_code(Code::OK)

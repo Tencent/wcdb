@@ -65,6 +65,8 @@ typedef NS_ENUM(NSUInteger, WCTErrorCode) {
     WCTErrorCodeNotADatabase = 26,       /* File opened that is not a database file */
     WCTErrorCodeNotice = 27,             /* Notifications */
     WCTErrorCodeWarning = 28,            /* Warnings */
+    WCTErrorCodeRow = 100,               /* another row ready */
+    WCTErrorCodeDone = 101,              /* finished executing */
 };
 
 @interface WCTError : NSError

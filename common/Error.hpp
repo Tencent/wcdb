@@ -90,6 +90,8 @@ public:
         NotADatabase = 26, /* File opened that is not a database file */
         Notice = 27,       /* Notifications */
         Warning = 28,      /* Warnings */
+        Row = 100,         /* another row ready */
+        Done = 101,        /* finished executing */
     };
     static constexpr const char *codeName(const Code &code)
     {
@@ -152,6 +154,10 @@ public:
             return "Notice";
         case Code::Warning:
             return "Warning";
+        case Code::Row:
+            return "Row";
+        case Code::Done:
+            return "Done";
         }
     }
 
