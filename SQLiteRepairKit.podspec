@@ -2,7 +2,7 @@
 # pod trunk push --verbose --skip-import-validation --allow-warnings SQLiteRepairKit.podspec
 Pod::Spec.new do |sqliterk|
   sqliterk.name         = "SQLiteRepairKit"
-  sqliterk.version      = "1.1.6"
+  sqliterk.version      = "1.2.0"
   sqliterk.summary      = "Repair kit for SQLite based database"
   sqliterk.description  = <<-DESC
                           sqliterk is a efficient, self-contain repair kit for restoring corrupted SQLite based database.
@@ -17,8 +17,8 @@ Pod::Spec.new do |sqliterk|
   sqliterk.tvos.deployment_target = "9.0"
   sqliterk.osx.deployment_target = "10.9"
   sqliterk.ios.deployment_target = "8.0"
-  sqliterk.dependency 'WCDBOptimizedSQLCipher', '~> 1.1.0'
-  sqliterk.source       = { :git => "https://github.com/Tencent/wcdb.git", :commit => "5a4cd1b71cb1dcd79b48f334e577c78c2d88db1d" }
+  sqliterk.dependency 'WCDBOptimizedSQLCipher', '~> 1.2.0'
+  sqliterk.source       = { :git => "https://github.com/Tencent/wcdb.git", :tag => "v1.0.7.5" }
   sqliterk.public_header_files = "repair/SQLiteRepairKit.h"
   sqliterk.source_files  = "repair/*.{h,c,cpp}"
   sqliterk.libraries = "z", "c++"
@@ -27,10 +27,6 @@ Pod::Spec.new do |sqliterk|
     "LIBRARY_SEARCH_PATHS[sdk=macosx*]" => "$(SDKROOT)/usr/lib/system",
     "CLANG_CXX_LANGUAGE_STANDARD" => "gnu++0x",
     "CLANG_CXX_LIBRARY" => "libc++",
-    "GCC_SYMBOLS_PRIVATE_EXTERN" => "YES",
-    "DEFINES_MODULE" => 'YES',
   }
-  sqliterk.static_framework = true
   sqliterk.header_dir = "sqliterk"
-  sqliterk.module_map = "repair/SQLiteRepairKit.modulemap"
 end
