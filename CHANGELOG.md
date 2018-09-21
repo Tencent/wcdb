@@ -1,3 +1,10 @@
+## v1.0.7.5
+
+#### iOS/macOS
+
+* Compatible with Swift 4.2
+* Enable FTS5 macro for sqlcipher.
+
 ## v1.0.7
 
 #### iOS/macOS
