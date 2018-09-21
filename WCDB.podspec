@@ -13,6 +13,7 @@ Pod::Spec.new do |wcdb|
   wcdb.homepage     = "https://github.com/Tencent/wcdb"
   wcdb.license      = { :type => "BSD", :file => "LICENSE" }
   wcdb.author             = { "sanhuazhang" => "sanhuazhang@tencent.com" }
+  wcdb.module_name = "WCDB"
   wcdb.ios.deployment_target = "7.0"
   wcdb.osx.deployment_target = "10.9"
   wcdb.watchos.deployment_target = "2.0"
@@ -33,6 +34,7 @@ Pod::Spec.new do |wcdb|
     "OTHER_CFLAGS" => "-fvisibility-inlines-hidden",
     "OTHER_CPLUSPLUSFLAGS" => "-fvisibility-inlines-hidden",
   }
+  wcdb.header_dir = "WCDB"
   wcdb.dependency 'WCDBOptimizedSQLCipher', '~> 1.2.0'
   wcdb.dependency 'SQLiteRepairKit', '~> 1.2.0'
 end
