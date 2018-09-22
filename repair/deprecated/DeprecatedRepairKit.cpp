@@ -19,3 +19,5 @@
  */
 
 #include <WCDB/DeprecatedRepairKit.hpp>
+
+#warning TODO compatible for old repair kit
