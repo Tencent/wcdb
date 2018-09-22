@@ -36,6 +36,9 @@ bool TokenizeConfig::invoke(Handle *handle)
     for (const std::string &name : m_tokenizeNames) {
         const UnsafeData &address = m_modules->getAddress(name);
 
+        if (address.empty()) {
+            continue;
+        }
         //Setup Tokenize
         if (handle->prepare(m_fts3Tokenizer)) {
             handle->bindText(name.c_str(), 1);

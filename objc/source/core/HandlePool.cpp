@@ -102,7 +102,8 @@ void HandlePool::blockade()
 
 void HandlePool::unblockade()
 {
-    WCTAssert(isBlockaded(), "Unblockade should not be called without blockaded.");
+    WCTRemedialAssert(
+    isBlockaded(), "Unblockade should not be called without blockaded.", return;);
     m_concurrency.unlock();
 }
 

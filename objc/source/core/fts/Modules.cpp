@@ -36,7 +36,9 @@ const UnsafeData &Modules::getAddress(const std::string &name) const
 {
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_addresses.find(name);
-    WCTAssert(iter != m_addresses.end(), "Tokenize name is not registered.");
+    WCTRemedialAssert(iter != m_addresses.end(),
+                      "Tokenize name is not registered.",
+                      return UnsafeData::emptyData(););
     return iter->second;
 }
 

@@ -22,6 +22,7 @@
 #import <WCDB/Error.hpp>
 #import <WCDB/NSString+CppString.h>
 #import <WCDB/Notifier.hpp>
+#import <WCDB/String.hpp>
 #import <WCDB/WCTRuntimeObjCAccessor.h>
 
 #if __has_feature(objc_arc)
@@ -34,7 +35,8 @@ WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const std::s
 , m_columnType(GetColumnType(instanceClass, propertyName))
 {
     Class propertyClass = getPropertyClass(instanceClass, propertyName);
-    WCTAssert([propertyClass conformsToProtocol:@protocol(WCTColumnCoding)], "Class %@ should conforms to protocol WCTColumnCoding.");
+    WCTRemedialAssert(propertyClass, WCDB::String::formatted("Unable to find out the class of %s.%s.", NSStringFromClass(instanceClass), propertyName.c_str()), ;);
+    WCTRemedialAssert([propertyClass conformsToProtocol:@protocol(WCTColumnCoding)], WCDB::String::formatted("Class %s should conforms to protocol WCTColumnCoding.", propertyName.c_str()), ;);
 }
 
 WCTRuntimeObjCAccessor::ValueGetter WCTRuntimeObjCAccessor::generateValueGetter(Class instanceClass, const std::string &propertyName)
@@ -70,6 +72,7 @@ WCDB::ColumnType WCTRuntimeObjCAccessor::GetColumnType(Class instanceClass, cons
 {
     static const SEL columnTypeSelector = NSSelectorFromString(@"columnType");
     Class propertyClass = getPropertyClass(instanceClass, propertyName);
+#warning TODO - replace all un-remedial assert/fatal and `#if DEBUG` with configurable parameters
 #ifdef DEBUG
     if (![propertyClass conformsToProtocol:@protocol(WCTColumnCoding)]) {
         NSString *message = [NSString stringWithFormat:@"[%@] should conform to WCTColumnCoding protocol, which is the class of [%@ %s]", NSStringFromClass(propertyClass), NSStringFromClass(instanceClass), propertyName.c_str()];

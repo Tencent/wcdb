@@ -26,7 +26,7 @@
 + (instancetype)unarchiveWithWCTValue:(NSData *)value
 {
     if (value) {
-        WCTAssert([self.class conformsToProtocol:@protocol(NSCoding)], "Class should conform to NSCoding or WCTColumnCoding.");
+        WCTRemedialAssert([self.class conformsToProtocol:@protocol(NSCoding)], "Class should conform to NSCoding or WCTColumnCoding.", return nil;);
         return [NSKeyedUnarchiver unarchiveObjectWithData:value];
     }
     return nil;
@@ -34,7 +34,7 @@
 
 - (NSData *)archivedWCTValue
 {
-    WCTAssert([self.class conformsToProtocol:@protocol(NSCoding)], "Class should conform to NSCoding or WCTColumnCoding.");
+    WCTRemedialAssert([self.class conformsToProtocol:@protocol(NSCoding)], "Class should conform to NSCoding or WCTColumnCoding.", return nil;);
     return [NSKeyedArchiver archivedDataWithRootObject:self];
 }
 

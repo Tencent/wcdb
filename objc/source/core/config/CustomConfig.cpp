@@ -26,11 +26,12 @@ namespace WCDB {
 CustomConfig::CustomConfig(const Invocation &invocation, const Invocation &uninvocation)
 : Config(), m_invocation(invocation), m_uninvocation(uninvocation)
 {
-    WCTAssert(invocation != nullptr, "Invocation should not be null.");
 }
 
 bool CustomConfig::invoke(Handle *handle)
 {
+    WCTRemedialAssert(
+    m_invocation != nullptr, "Invocation should not be null.", return false;);
     return m_invocation(handle);
 }
 

@@ -38,7 +38,7 @@ RecyclableDatabase DatabasePool::get(const std::string &path)
 
 RecyclableDatabase DatabasePool::get(const Tag &tag)
 {
-    WCTAssert(tag != Tag::invalid(), "Tag invalid");
+    WCTRemedialAssert(tag != Tag::invalid(), "Tag invalid", return nullptr;);
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_databases.end();
     for (iter = m_databases.begin(); iter != m_databases.end(); ++iter) {
