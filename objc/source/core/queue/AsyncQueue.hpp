@@ -37,9 +37,7 @@ public:
     const std::string name;
 
 protected:
-#ifdef DEBUG
     std::atomic<bool> m_running;
-#endif
     static bool exit();
     virtual void loop() = 0;
 };

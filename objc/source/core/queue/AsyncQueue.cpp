@@ -20,24 +20,20 @@
 
 #include <WCDB/Core.h>
 #include <WCDB/Dispatch.hpp>
+#include <WCDB/String.hpp>
 #include <atomic>
 
 namespace WCDB {
 
-AsyncQueue::AsyncQueue(const std::string& name_)
-: name(name_)
-#ifdef DEBUG
-, m_running(false)
-#endif
+AsyncQueue::AsyncQueue(const std::string& name_) : name(name_), m_running(false)
 {
 }
 
 void AsyncQueue::run()
 {
-#ifdef DEBUG
-    WCTInnerAssert(m_running == false);
+    WCTRemedialAssert(
+    !m_running.load(), String::formatted("Queue: %s is already run.", name), return;);
     m_running = true;
-#endif
     Dispatch::async(name, std::bind(&AsyncQueue::loop, this));
 }
 
