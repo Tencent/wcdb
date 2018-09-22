@@ -52,7 +52,7 @@ typedef void (^WCTSQLTraceBlock)(NSString *);
 + (void)globalTraceError:(WCTErrorTraceBlock)block;
 
 + (void)globalTraceError:(WCTErrorTraceBlock)block
-                 forName:(NSString *)name;
+                   named:(NSString *)name;
 
 + (void)resetGlobalTraceError;
 /**

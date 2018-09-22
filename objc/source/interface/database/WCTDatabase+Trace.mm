@@ -31,7 +31,7 @@
 }
 
 + (void)globalTraceError:(WCTErrorTraceBlock)block
-                 forName:(NSString *)name
+                   named:(NSString *)name
 {
     WCDB::Notifier::Callback callback = nullptr;
     if (block) {
