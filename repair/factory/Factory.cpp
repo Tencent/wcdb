@@ -44,8 +44,7 @@ std::pair<bool, std::list<std::string>> Factory::getWorkshopDirectories() const
         directory,
         [&workshopDirectories](
         const std::string &directory, const std::string &subpath, bool isDirectory) -> bool {
-            if (isDirectory && subpath != getRestoreDirectoryName()
-                && subpath != getRenewDirectoryName()) {
+            if (isDirectory && subpath != restoreDirectory && subpath != renewDirectory) {
                 workshopDirectories.push_back(Path::addComponent(directory, subpath));
             }
             return true;
@@ -84,8 +83,7 @@ bool Factory::canRetrieve() const
     directory,
     [&result, &databaseName](
     const std::string &directory, const std::string &subpath, bool isDirectory) -> bool {
-        if (isDirectory && subpath != getRestoreDirectoryName()
-            && subpath != getRenewDirectoryName()) {
+        if (isDirectory && subpath != restoreDirectory && subpath != renewDirectory) {
             bool succeed, exists;
             std::tie(succeed, exists)
             = FileManager::fileExists(Path::addComponent(subpath, databaseName));
@@ -138,8 +136,7 @@ bool Factory::removeDeposite() const
     directory,
     [&depositedPath](
     const std::string &directory, const std::string &subpath, bool isDirectory) -> bool {
-        if (isDirectory && subpath != getRenewDirectoryName()
-            && subpath != getRestoreDirectoryName()) {
+        if (isDirectory && subpath != renewDirectory && subpath != restoreDirectory) {
             depositedPath.push_back(Path::addComponent(directory, subpath));
         }
         return true;
@@ -157,7 +154,7 @@ bool Factory::removeDirectoryIfEmpty() const
     bool succeed = FileManager::enumerateDirectory(
     directory,
     [&canRemove](const std::string &directory, const std::string &subpath, bool isDirectory) -> bool {
-        if (subpath == getRestoreDirectoryName() || !isDirectory) {
+        if (subpath == restoreDirectory || !isDirectory) {
             return true;
         }
         canRemove = false;
@@ -184,12 +181,12 @@ std::string Factory::lastMaterialPathForDatabase(const std::string &database)
 
 std::string Factory::getRestoreDirectory() const
 {
-    return Path::addComponent(directory, getRestoreDirectoryName());
+    return Path::addComponent(directory, restoreDirectory);
 }
 
 std::string Factory::getRenewDirectory() const
 {
-    return Path::addComponent(directory, getRenewDirectoryName());
+    return Path::addComponent(directory, renewDirectory);
 }
 
 std::string Factory::getDatabaseName() const
