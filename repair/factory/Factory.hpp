@@ -44,8 +44,8 @@ public:
     const std::string database;
     const std::string directory;
 
-    static constexpr const char *restoreDirectory = "restore";
-    static constexpr const char *renewDirectory = "renew";
+    static constexpr const char *restoreDirectoryName = "restore";
+    static constexpr const char *renewDirectoryName = "renew";
     std::string getRestoreDirectory() const;
     std::string getRenewDirectory() const;
     std::string getDatabaseName() const;
