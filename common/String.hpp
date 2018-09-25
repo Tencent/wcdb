@@ -44,6 +44,8 @@ CopyOnWriteString stringByReplacingOccurrencesOfString(const CopyOnWriteString &
 
 std::string formatted(const char *format, ...);
 
+uint32_t hash(const std::string &source);
+
 } //namespace String
 
 } //namespace WCDB

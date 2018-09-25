@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/String.hpp>
+#include <zlib.h>
 
 namespace WCDB {
 
@@ -92,6 +93,12 @@ std::string formatted(const char *format, ...)
         }
     } while (true);
     return result;
+}
+
+uint32_t hash(const std::string &source)
+{
+    return (uint32_t) crc32(
+    0, (const unsigned char *) source.data(), (uint32_t) source.size());
 }
 
 } //namespace String
