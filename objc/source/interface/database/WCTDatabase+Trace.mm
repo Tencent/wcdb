@@ -27,7 +27,7 @@
 
 + (void)globalTraceError:(WCTErrorTraceBlock)block
 {
-    [WCTDatabase globalTraceError:block forName:@(WCDB::Core::notifierLoggerName)];
+    [WCTDatabase globalTraceError:block named:@(WCDB::Core::notifierLoggerName)];
 }
 
 + (void)globalTraceError:(WCTErrorTraceBlock)block
