@@ -52,7 +52,7 @@ static_assert((int) WCTErrorCodeProtocol == (int) WCDB::Error::Code::Protocol, "
 static_assert((int) WCTErrorCodeEmpty == (int) WCDB::Error::Code::Empty, "");
 static_assert((int) WCTErrorCodeSchema == (int) WCDB::Error::Code::Schema, "");
 static_assert((int) WCTErrorCodeExceed == (int) WCDB::Error::Code::Exceed, "");
-static_assert((int) WCTErrorCodeConstraint == (int) WCDB::Error::Code::Constraint, "");
+static_assert((int) WCTErrorCodeConflict == (int) WCDB::Error::Code::Conflict, "");
 static_assert((int) WCTErrorCodeMismatch == (int) WCDB::Error::Code::Mismatch, "");
 static_assert((int) WCTErrorCodeMisuse == (int) WCDB::Error::Code::Misuse, "");
 static_assert((int) WCTErrorCodeNoLargeFileSupport == (int) WCDB::Error::Code::NoLargeFileSupport, "");

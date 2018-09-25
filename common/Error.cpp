@@ -45,7 +45,7 @@ static_assert((int) Error::Code::Protocol == SQLITE_PROTOCOL, "");
 static_assert((int) Error::Code::Empty == SQLITE_EMPTY, "");
 static_assert((int) Error::Code::Schema == SQLITE_SCHEMA, "");
 static_assert((int) Error::Code::Exceed == SQLITE_TOOBIG, "");
-static_assert((int) Error::Code::Constraint == SQLITE_CONSTRAINT, "");
+static_assert((int) Error::Code::Conflict == SQLITE_CONSTRAINT, "");
 static_assert((int) Error::Code::Mismatch == SQLITE_MISMATCH, "");
 static_assert((int) Error::Code::Misuse == SQLITE_MISUSE, "");
 static_assert((int) Error::Code::NoLargeFileSupport == SQLITE_NOLFS, "");

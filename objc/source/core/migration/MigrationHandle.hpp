@@ -22,19 +22,22 @@
 #define MigrationHandle_hpp
 
 #include <WCDB/Abstract.h>
+#include <WCDB/MigrationInfos.hpp>
 #include <map>
 
 namespace WCDB {
 
 class MigrationInfos;
 
-class MigrationHandle : public Handle {
+class MigrationHandle : public Handle, protected MigrationInfosInitializer {
 #pragma mark - Initialize
 public:
     MigrationHandle(const std::string &path, MigrationInfos *infos);
 
 protected:
-    std::map<std::string, MigrationInfo *> m_attachedInfos;
+    std::pair<bool, std::set<std::string>> getAllExistingTables() override;
+    std::pair<bool, std::set<std::string>>
+    getAllColumns(const std::string &schema, const std::string &table) override;
     MigrationInfos *m_infos;
 
 #pragma mark - Override

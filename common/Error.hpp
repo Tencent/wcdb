@@ -80,9 +80,9 @@ public:
         Empty = 16,    /* Database is empty */
         Schema = 17,   /* The database schema changed */
         Exceed = 18,   /* String, BLOB, File, Concurrency exceeds size limit */
-        Constraint = 19,         /* Abort due to constraint violation */
-        Mismatch = 20,           /* Data type mismatch */
-        Misuse = 21,             /* WCDB or SQLite used incorrectly */
+        Conflict = 19, /* Abort due to constraint violation */
+        Mismatch = 20, /* Data type mismatch */
+        Misuse = 21,   /* WCDB or SQLite used incorrectly */
         NoLargeFileSupport = 22, /* Uses OS features not supported on host */
         Authorization = 23,      /* Authorization denied */
         Format = 24,             /* Auxiliary database format error */
@@ -134,8 +134,8 @@ public:
             return "Schema";
         case Code::Exceed:
             return "Exceed";
-        case Code::Constraint:
-            return "Constraint";
+        case Code::Conflict:
+            return "Conflict";
         case Code::Mismatch:
             return "Mismatch";
         case Code::Misuse:

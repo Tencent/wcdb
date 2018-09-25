@@ -29,6 +29,15 @@
 
 namespace WCDB {
 
+class MigrationInfosInitializer {
+protected:
+    virtual std::pair<bool, std::set<std::string>> getAllExistingTables() = 0;
+    // When succeed, if the empty columns means that table is already migrated.
+    virtual std::pair<bool, std::set<std::string>>
+    getAllColumns(const std::string& schema, const std::string& table) = 0;
+    friend class MigrationInfos;
+};
+
 class MigrationInfos {
 #pragma mark - Initialize
 public:
@@ -39,8 +48,7 @@ protected:
 
 #pragma mark - Notification
 public:
-    // source table -> target table, target database
-    typedef std::function<void(const std::string&, std::string&, std::string&)> TableShouldBeMigratedCallback;
+    typedef std::function<void(MigrationUserInfo&)> TableShouldBeMigratedCallback;
     void setNotificaitionWhenTableShouldBeMigrated(const TableShouldBeMigratedCallback& callback);
 
 protected:
@@ -48,17 +56,26 @@ protected:
 
 #pragma mark - Infos
 public:
-    // identified? -> Migration Info
-    MigrationInfo* getOrIdentifyInfo(const std::string& migratedTable);
+    bool initialize(MigrationInfosInitializer& initializer);
 
-    void markInfoAsMigrated(MigrationInfo* info);
+    void addUserInfo(const MigrationUserInfo& info);
 
-    std::list<MigrationInfo*>
-    resolveDetachableInfos(const std::map<std::string, MigrationInfo*>& attachedInfos);
+    //#warning TODO - cross database migration should be picked first
+    //    const MigrationInfo* pickMigratingInfo();
+
+    void markInfoAsMigrated(const MigrationInfo* info);
 
 protected:
-    std::set<std::string> m_ignored;
-    std::map<std::string, MigrationInfo> m_infos;
+    void addInfo(const MigrationInfo& info);
+    void markTableAsIgnorable(const std::string& table);
+
+    //    std::map<std::string, const MigrationInfo*> m_crossDatabaseMigrating; // migrated table -> info
+    //    std::map<std::string, const MigrationInfo*> m_sameDatabaseMigrating; // migrated table -> info
+    std::map<std::string, const MigrationInfo*> m_infos; // migrated table -> info
+
+    std::list<const MigrationInfo> m_holder; // infos will never be deleted.
+    std::list<const MigrationUserInfo> m_uninitialized;
+    bool m_firstInitialized;
 };
 
 } // namespace WCDB

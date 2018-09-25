@@ -172,7 +172,7 @@ int Repairman::tryUpgradeCrawlerError()
 int Repairman::tryUpgrateAssemblerError()
 {
     Error error = m_assembler->getError();
-    if (error.code() == Error::Code::Constraint) {
+    if (error.code() == Error::Code::Conflict) {
         error.level = Error::Level::Notice;
     }
     return tryUpgradeError(std::move(error));

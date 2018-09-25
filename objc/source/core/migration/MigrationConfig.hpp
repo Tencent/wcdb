@@ -18,34 +18,18 @@
  * limitations under the License.
  */
 
-#include <WCDB/Core.h>
-#include <WCDB/Dispatch.hpp>
-#include <WCDB/String.hpp>
-#include <atomic>
+#ifndef MigrationConfig_hpp
+#define MigrationConfig_hpp
+
+#include <WCDB/Config.hpp>
 
 namespace WCDB {
 
-AsyncQueue::AsyncQueue(const std::string& name_) : name(name_), m_running(false)
-{
-}
-
-void AsyncQueue::run()
-{
-    WCTRemedialAssert(!m_running.load(),
-                      String::formatted("Queue: %s is already run.", name.c_str()),
-                      return;);
-    m_running = true;
-    Dispatch::async(name, std::bind(&AsyncQueue::loop, this));
-}
-
-bool AsyncQueue::exit()
-{
-    static std::atomic<bool>* s_exit = new std::atomic<bool>(false);
-    static auto s_dummy __attribute__((unused)) = []() -> std::nullptr_t {
-        atexit([]() { s_exit->store(true); });
-        return nullptr;
-    }();
-    return s_exit->load();
-}
+class MigrationConfig : public Config {
+public:
+    bool invoke(Handle* handle) override;
+};
 
 } // namespace WCDB
+
+#endif /* MigrationConfig_hpp */

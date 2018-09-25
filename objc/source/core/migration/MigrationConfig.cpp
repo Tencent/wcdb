@@ -18,34 +18,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/Core.h>
-#include <WCDB/Dispatch.hpp>
-#include <WCDB/String.hpp>
-#include <atomic>
+#include <WCDB/MigrationConfig.hpp>
 
 namespace WCDB {
 
-AsyncQueue::AsyncQueue(const std::string& name_) : name(name_), m_running(false)
+bool MigrationConfig::invoke(Handle* handle)
 {
-}
-
-void AsyncQueue::run()
-{
-    WCTRemedialAssert(!m_running.load(),
-                      String::formatted("Queue: %s is already run.", name.c_str()),
-                      return;);
-    m_running = true;
-    Dispatch::async(name, std::bind(&AsyncQueue::loop, this));
-}
-
-bool AsyncQueue::exit()
-{
-    static std::atomic<bool>* s_exit = new std::atomic<bool>(false);
-    static auto s_dummy __attribute__((unused)) = []() -> std::nullptr_t {
-        atexit([]() { s_exit->store(true); });
-        return nullptr;
-    }();
-    return s_exit->load();
+    return false;
 }
 
 } // namespace WCDB

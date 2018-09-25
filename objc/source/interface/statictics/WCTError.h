@@ -55,7 +55,7 @@ typedef NS_ENUM(NSUInteger, WCTErrorCode) {
     WCTErrorCodeEmpty = 16,              /* Database is empty */
     WCTErrorCodeSchema = 17,             /* The database schema changed */
     WCTErrorCodeExceed = 18,             /* String, BLOB, File, Concurrency exceeds size limit */
-    WCTErrorCodeConstraint = 19,         /* Abort due to constraint violation */
+    WCTErrorCodeConflict = 19,           /* Abort due to constraint violation */
     WCTErrorCodeMismatch = 20,           /* Data type mismatch */
     WCTErrorCodeMisuse = 21,             /* WCDB or SQLite used incorrectly */
     WCTErrorCodeNoLargeFileSupport = 22, /* Uses OS features not supported on host */

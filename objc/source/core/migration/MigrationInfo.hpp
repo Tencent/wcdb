@@ -21,78 +21,81 @@
 #ifndef MigrationInfo_hpp
 #define MigrationInfo_hpp
 
+#include <WCDB/DebugDescribable.hpp>
 #include <WCDB/Lock.hpp>
 #include <WCDB/WINQ.h>
+#include <set>
 #include <string>
 
 namespace WCDB {
 
-class MigrationInfo {
-#pragma mark - Initialize
+class MigrationUserInfo : public DebugDescribable {
 public:
-    MigrationInfo(const std::string& migratedTable,
-                  const std::string& originTable,
-                  const std::string& originDatabase);
+    MigrationUserInfo(const std::string& migratedTable);
 
-    const std::string originTable;
-    const std::string migratedTable;
-    const std::string originDatabase;
+    const std::string& getMigratedTable() const;
+    const std::string& getOriginTable() const;
+    const std::string& getOriginDatabase() const;
+    const std::string& getSchemaForOriginDatabase() const;
 
+    // WCDBMigration_
+    static const std::string& getSchemaPrefix();
+
+    bool shouldMigrate() const;
     bool isSameDatabaseMigration() const;
 
-    enum State : int {
-        None = 0,
-        Initialized,
-        Migrated,
-    };
-    State getState() const;
-    void markAsMigrated();
-    void initialize(const std::list<std::string>& columns);
+    void setOrigin(const std::string& table, const std::string& database = "");
+
+    std::string getDebugDescription() const override;
 
 protected:
-    bool isInitialized() const;
-    State m_state;
-    mutable SharedLock m_lock;
+    const std::string m_migratedTable;
+    std::string m_originTable;
+    std::string m_originDatabase;
+    std::string m_schemaForOriginDatabase; // WCDBMigration_ + hash([originDatabase])
+};
 
-#pragma mark - Scheme
+class MigrationInfo : public MigrationUserInfo {
+#pragma mark - Initialize
+public:
+    MigrationInfo(const MigrationUserInfo& userInfo, const std::set<std::string>& columns);
+
+#pragma mark - Schema
 public:
     /*
-     ATTACH [targetDatabase]
-     AS [schema]
+     ATTACH [originDatabase]
+     AS [schemaForOriginDatabase]
      */
     const StatementAttach& getStatementForAttachingSchema() const;
 
     /*
-     DETACH [schema]
+     DETACH [schemaForOriginDatabase]
      */
     const StatementDetach& getStatementForDetachingSchema() const;
 
 protected:
-    // WCDBMigration_ + hash(targetDatabase)
-    std::string m_schemaForOriginDatabase;
     StatementAttach m_statementForAttachingSchema;
     StatementDetach m_statementForDetachingSchema;
 
-#warning TODO Does rowid need to be selected?
 #pragma mark - View
 public:
     /*
-     CREATE VIEW IF NOT EXISTS [view]
-     SELECT [columns]
-     FROM [schema].sourceTable
+     CREATE VIEW IF NOT EXISTS [unionedView]
+     SELECT rowid, [columns]
+     FROM [schemaForOriginDatabase].[originTable]
      UNION/UNION ALL
-     SELECT [columns]
-     FROM main.targetTable
+     SELECT rowid, [columns]
+     FROM main.[migratedTable]
      */
     const StatementCreateView& getStatementForCreatingUnionedView() const;
 
     /*
-     DROP VIEW IF EXISTS [view]
+     DROP VIEW IF EXISTS [unionedView]
      */
     const StatementDropView& getStatementForDroppingUnionedView() const;
 
 protected:
-    // WCDBUnioned_ + targetTable + _ + sourceTable
+    // WCDBUnioned_ + [migratedTable] + _ + [originTable]
     std::string m_unionedView;
     StatementCreateView m_statementForCreatingUnionedView;
     StatementDropView m_statementForDroppingUnionedView;
@@ -100,22 +103,28 @@ protected:
 #pragma mark - Migrate
 public:
     /*
-     DELETE FROM sourceTable WHERE rowid = ?1
+     DELETE FROM [originTable] WHERE rowid = ?1
      */
     const StatementDelete& getStatementForDeletingMigratedRow() const;
 
     /*
      INSERT rowid, [columns]
-     INTO [targetTable]
+     INTO [migratedTable]
      SELECT rowid, [columns]
-     FROM [sourceTable]
+     FROM [originTable]
      LIMIT ?1
      */
-    const StatementInsert getStatementForMigratingRow() const;
+    const StatementInsert& getStatementForMigratingRow() const;
+
+    /*
+     DROP TABLE IF EXISTS [originTable]
+     */
+    const StatementDropTable& getStatementForDroppingOriginTable() const;
 
 protected:
     StatementInsert m_statementForMigratingRow;
     StatementDelete m_statementForDeletingMigratedRow;
+    StatementDropTable m_statementForDroppingOriginTable;
 };
 
 } // namespace WCDB
