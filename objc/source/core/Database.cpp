@@ -89,6 +89,7 @@ RecyclableHandle Database::getHandle()
             return nullptr;
         }
         if (m_migration.shouldMigrate()) {
+            // This temporary handle will be dropped since it's dirty.
             MigrationHandle handle(path, &m_migration);
             if (!handle.open() || !m_migration.initialize(handle)) {
                 return nullptr;

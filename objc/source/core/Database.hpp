@@ -166,6 +166,7 @@ private:
 #pragma mark - Migration
 public:
     void addMigrationInfo(const MigrationUserInfo &userInfo);
+
     typedef MigrationInfos::TableFilter MigrationTableFilter;
     void filterMigration(const MigrationTableFilter &filter);
 
