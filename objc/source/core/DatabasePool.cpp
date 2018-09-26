@@ -28,6 +28,29 @@ DatabasePool::DatabasePool() : m_event(nullptr)
 {
 }
 
+RecyclableDatabase DatabasePool::getOrCreate(const std::string &path)
+{
+    std::string normalized = Path::normalize(path);
+    {
+        SharedLockGuard lockGuard(m_lock);
+        RecyclableDatabase database = get(normalized);
+        if (database != nullptr) {
+            return database;
+        }
+    }
+    LockGuard lockGuard(m_lock);
+    RecyclableDatabase database = get(normalized);
+    if (database != nullptr) {
+        return database;
+    }
+    ReferencedDatabase referencedDatabase(std::shared_ptr<Database>(new Database(normalized)));
+    ++referencedDatabase.reference;
+    auto result = m_databases.emplace(path, std::move(referencedDatabase));
+    WCTInnerAssert(result.second);
+    onDatabaseCreated(result.first->second.database.get());
+    return get(result.first);
+}
+
 RecyclableDatabase DatabasePool::get(const std::string &path)
 {
     std::string normalized = Path::normalize(path);
@@ -52,19 +75,6 @@ RecyclableDatabase DatabasePool::get(const Tag &tag)
 DatabasePool::ReferencedDatabase::ReferencedDatabase(std::shared_ptr<Database> &&database_)
 : database(std::move(database_)), reference(0)
 {
-}
-
-RecyclableDatabase
-DatabasePool::add(const std::string &path, std::shared_ptr<Database> &&database)
-{
-    WCTInnerAssert(m_lock.writeSafety());
-    WCTInnerAssert(m_databases.find(path) == m_databases.end());
-    ReferencedDatabase referencedDatabase(std::move(database));
-    ++referencedDatabase.reference;
-    auto result = m_databases.emplace(path, std::move(referencedDatabase));
-    WCTInnerAssert(result.second);
-    onDatabaseCreated(result.first->second.database.get());
-    return get(result.first);
 }
 
 RecyclableDatabase

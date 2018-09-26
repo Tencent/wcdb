@@ -66,7 +66,7 @@ Core::Core()
 
 RecyclableDatabase Core::getOrCreateDatabase(const std::string& path)
 {
-    return m_databasePool.getOrCreate<Database>(path);
+    return m_databasePool.getOrCreate(path);
 }
 
 RecyclableDatabase Core::getExistingDatabase(const std::string& path)

@@ -38,25 +38,7 @@ class DatabasePool {
 public:
     DatabasePool();
 
-    template<typename T>
-    RecyclableDatabase getOrCreate(const std::string& path)
-    {
-        std::string normalized = Path::normalize(path);
-        {
-            SharedLockGuard lockGuard(m_lock);
-            RecyclableDatabase database = get(normalized);
-            if (database != nullptr) {
-                return database;
-            }
-        }
-        LockGuard lockGuard(m_lock);
-        RecyclableDatabase database = get(normalized);
-        if (database != nullptr) {
-            return database;
-        }
-        return add(normalized, std::shared_ptr<Database>(new T(normalized)));
-    }
-
+    RecyclableDatabase getOrCreate(const std::string& path);
     RecyclableDatabase get(const std::string& path);
     RecyclableDatabase get(const Tag& tag);
 
@@ -70,7 +52,6 @@ protected:
     };
     typedef struct ReferencedDatabase ReferencedDatabase;
 
-    RecyclableDatabase add(const std::string& path, std::shared_ptr<Database>&& database);
     RecyclableDatabase
     get(const std::map<std::string, ReferencedDatabase>::iterator& iter);
     void flowBack(Database* database);
