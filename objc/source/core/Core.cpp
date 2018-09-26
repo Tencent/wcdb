@@ -86,6 +86,7 @@ void Core::purge()
 
 void Core::onDatabaseCreated(Database* database)
 {
+    WCTInnerAssert(database != nullptr);
     database->setConfigs(m_configs);
 }
 
