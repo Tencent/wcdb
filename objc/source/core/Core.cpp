@@ -69,18 +69,6 @@ RecyclableDatabase Core::getOrCreateDatabase(const std::string& path)
     return m_databasePool.getOrCreate<Database>(path);
 }
 
-RecyclableDatabase Core::getOrCreateMigrationDatabase(const std::string& path)
-{
-    RecyclableDatabase database = m_databasePool.getOrCreate<MigrationDatabase>(path);
-    if (database.get()) {
-        WCTRemedialAssert(dynamic_cast<MigrationDatabase*>(database.get()),
-                          String::formatted("Failed to init %s as a migration database due to it's already a normal database.",
-                                            path.c_str()),
-                          return nullptr;);
-    }
-    return database;
-}
-
 RecyclableDatabase Core::getExistingDatabase(const std::string& path)
 {
     return m_databasePool.get(path);

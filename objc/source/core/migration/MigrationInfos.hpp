@@ -21,7 +21,6 @@
 #ifndef MigrationInfos_hpp
 #define MigrationInfos_hpp
 
-#include <WCDB/Lock.hpp>
 #include <WCDB/MigrationInfo.hpp>
 #include <functional>
 #include <map>
@@ -43,39 +42,38 @@ class MigrationInfos {
 public:
     MigrationInfos();
 
-protected:
-    mutable SharedLock m_lock;
+    bool initialize(MigrationInfosInitializer& initializer);
+    bool shouldMigrate() const;
 
-#pragma mark - Notification
+#pragma mark - Filter
 public:
-    typedef std::function<void(MigrationUserInfo&)> TableShouldBeMigratedCallback;
-    void setNotificaitionWhenTableShouldBeMigrated(const TableShouldBeMigratedCallback& callback);
+    typedef std::function<void(MigrationUserInfo&)> TableFilter;
+    void filterTable(const TableFilter& tableFilter);
 
 protected:
-    TableShouldBeMigratedCallback m_tableShouldBeMigratedCallback;
+    TableFilter m_tableFilter;
+
+#pragma mark - UserInfos
+public:
+    void addUserInfo(const MigrationUserInfo& info);
+
+protected:
+    std::map<std::string, const MigrationUserInfo> m_userInfos;
 
 #pragma mark - Infos
 public:
-    bool initialize(MigrationInfosInitializer& initializer);
-
-    void addUserInfo(const MigrationUserInfo& info);
-
     //#warning TODO - cross database migration should be picked first
     //    const MigrationInfo* pickMigratingInfo();
 
     void markInfoAsMigrated(const MigrationInfo* info);
 
-protected:
-    void addInfo(const MigrationInfo& info);
-    void markTableAsIgnorable(const std::string& table);
+    std::map<std::string, const MigrationInfo*> getInfos() const;
 
-    //    std::map<std::string, const MigrationInfo*> m_crossDatabaseMigrating; // migrated table -> info
-    //    std::map<std::string, const MigrationInfo*> m_sameDatabaseMigrating; // migrated table -> info
+protected:
+    //    std::set<const MigrationInfo*> m_crossDatabaseMigrating; // migrated table -> info
     std::map<std::string, const MigrationInfo*> m_infos; // migrated table -> info
 
     std::list<const MigrationInfo> m_holder; // infos will never be deleted.
-    std::list<const MigrationUserInfo> m_uninitialized;
-    bool m_firstInitialized;
 };
 
 } // namespace WCDB

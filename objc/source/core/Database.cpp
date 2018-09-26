@@ -88,6 +88,12 @@ RecyclableHandle Database::getHandle()
         if (!retrieveRenewed()) {
             return nullptr;
         }
+        if (m_migration.shouldMigrate()) {
+            MigrationHandle handle(path, &m_migration);
+            if (!m_migration.initialize(handle)) {
+                return nullptr;
+            }
+        }
     } while (false);
     SharedLockGuard lockConcurrencyGuard(m_concurrency);
     ThreadedHandles *threadedHandle = Database::threadedHandles().getOrCreate();
@@ -103,11 +109,10 @@ bool Database::execute(const Statement &statement)
     RecyclableHandle handle = getHandle();
     if (handle != nullptr) {
         ThreadedGuard threadedGuard(this, handle);
-        if (!handle->execute(statement)) {
-            setThreadedError(handle->getError());
-            return false;
+        if (handle->execute(statement)) {
+            return true;
         }
-        return true;
+        setThreadedError(handle->getError());
     }
     return false;
 }
@@ -128,11 +133,19 @@ std::pair<bool, bool> Database::tableExists(const TableOrSubquery &table)
 
 std::shared_ptr<Handle> Database::generateHandle()
 {
-    return std::shared_ptr<Handle>(new Handle(path));
+    SharedLockGuard lockGuard(m_lock);
+    std::shared_ptr<Handle> handle;
+    if (m_migration.shouldMigrate()) {
+        handle.reset(new MigrationHandle(path, &m_migration));
+    } else {
+        handle.reset(new Handle(path));
+    }
+    return handle;
 }
 
 void Database::handleWillFlowBack(Handle *handle)
 {
+#warning TODO a threaded transaction will never flowback
     WCTRemedialAssert(
     !handle->isInTransaction(), "Unpaired transaction.", handle->rollbackTransaction(););
 }
@@ -233,14 +246,13 @@ bool Database::runTransaction(const TransactionCallback &transaction)
 bool Database::beginNestedTransaction()
 {
     RecyclableHandle handle = getHandle();
-    if (handle == nullptr) {
-        return false;
+    if (handle != nullptr) {
+        ThreadedGuard threadedGuard(this, handle);
+        if (handle->beginNestedTransaction()) {
+            return true;
+        }
+        setThreadedError(handle->getError());
     }
-    ThreadedGuard threadedGuard(this, handle);
-    if (handle->beginNestedTransaction()) {
-        return true;
-    }
-    setThreadedError(handle->getError());
     return false;
 }
 
@@ -271,14 +283,13 @@ void Database::rollbackNestedTransaction()
 bool Database::runNestedTransaction(const TransactionCallback &transaction)
 {
     RecyclableHandle handle = getHandle();
-    if (handle == nullptr) {
-        return false;
+    if (handle != nullptr) {
+        ThreadedGuard threadedGuard(this, handle);
+        if (handle->runNestedTransaction(transaction)) {
+            return true;
+        }
+        setThreadedError(handle->getError());
     }
-    ThreadedGuard threadedGuard(this, handle);
-    if (handle->runNestedTransaction(transaction)) {
-        return true;
-    }
-    setThreadedError(handle->getError());
     return false;
 }
 
@@ -448,6 +459,7 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
     Repair::FactoryRetriever retriever = m_factory.retriever();
     std::shared_ptr<Repair::Assembler> assembler(new Repair::SQLiteAssembler);
     retriever.setAssembler(assembler);
+#warning TODO use Handle based locker/assembler
     retriever.setReadLocker(std::shared_ptr<Repair::ReadLocker>(new Repair::SQLiteReadLocker));
     retriever.setWriteLocker(std::shared_ptr<Repair::WriteLocker>(new Repair::SQLiteWriteLocker));
     retriever.setProgressCallback(onProgressUpdate);
@@ -494,7 +506,7 @@ bool Database::retrieveRenewed()
     return false;
 }
 
-#pragma mark - Corruption
+#pragma mark - Recovery
 void Database::setRecoveryMode(RecoveryMode mode)
 {
     LockGuard lockGuard(m_lock);
@@ -541,6 +553,41 @@ bool Database::recover()
         succeed = m_recoverNotification(this);
     }
     return succeed;
+}
+
+bool Database::isCorrupted() const
+{
+#warning TODO
+    return false;
+}
+
+#pragma mark - Migration
+void Database::addMigrationInfo(const MigrationUserInfo &userInfo)
+{
+    LockGuard lockGuard(m_lock);
+    WCTRemedialAssert(m_aliveHandleCount == 0,
+                      "Migration method must be set before the very first operation.",
+                      return;);
+    m_migration.addUserInfo(userInfo);
+}
+
+void Database::filterMigration(const MigrationTableFilter &filter)
+{
+    LockGuard lockGuard(m_lock);
+    WCTRemedialAssert(m_aliveHandleCount == 0,
+                      "Migration user info must be set before the very first operation.",
+                      return;);
+    m_migration.filterTable(filter);
+}
+
+void Database::asyncMigration()
+{
+#warning TODO
+}
+
+void Database::stepMigration()
+{
+#warning TODO
 }
 
 } //namespace WCDB

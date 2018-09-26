@@ -29,16 +29,16 @@ namespace WCDB {
 
 class MigrationInfos;
 
-class MigrationHandle : public Handle, protected MigrationInfosInitializer {
+class MigrationHandle : public Handle, public MigrationInfosInitializer {
 #pragma mark - Initialize
 public:
-    MigrationHandle(const std::string &path, MigrationInfos *infos);
+    MigrationHandle(const std::string &path, const MigrationInfos const *infos);
 
 protected:
     std::pair<bool, std::set<std::string>> getAllExistingTables() override;
     std::pair<bool, std::set<std::string>>
     getAllColumns(const std::string &schema, const std::string &table) override;
-    MigrationInfos *m_infos;
+    const MigrationInfos const *m_infos;
 
 #pragma mark - Override
 public:

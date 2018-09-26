@@ -83,6 +83,4 @@
 
 #import <WCDB/WCTDatabase+FTS.h>
 
-#import <WCDB/WCTMigrationDatabase.h>
-
 #endif /* WCDB_h */

@@ -25,7 +25,7 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-MigrationHandle::MigrationHandle(const std::string &path, MigrationInfos *infos)
+MigrationHandle::MigrationHandle(const std::string &path, const MigrationInfos const *infos)
 : Handle(path), m_infos(infos)
 {
     WCTInnerAssert(m_infos != nullptr);
@@ -33,12 +33,16 @@ MigrationHandle::MigrationHandle(const std::string &path, MigrationInfos *infos)
 
 std::pair<bool, std::set<std::string>> MigrationHandle::getAllExistingTables()
 {
+    // PRAGMA table_info
     return { false, {} };
 }
 
 std::pair<bool, std::set<std::string>>
 MigrationHandle::getAllColumns(const std::string &schema, const std::string &table)
 {
+    // return {true, {}} if the schema.table does not exist.
+
+    // attach schema, PRAGMA table_info, detach schema
     return { false, {} };
 }
 

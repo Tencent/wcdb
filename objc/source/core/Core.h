@@ -49,7 +49,6 @@
 #include <WCDB/Modules.hpp>
 #include <WCDB/Tokenizer.hpp>
 
-#include <WCDB/MigrationDatabase.hpp>
 #include <WCDB/MigrationHandle.hpp>
 
 namespace WCDB {
@@ -59,8 +58,6 @@ public:
     static Core* shared();
 
     RecyclableDatabase getOrCreateDatabase(const std::string& path);
-    RecyclableDatabase getOrCreateMigrationDatabase(const std::string& path);
-
     RecyclableDatabase getExistingDatabase(const std::string& path);
     RecyclableDatabase getExistingDatabase(const Tag& tag);
 

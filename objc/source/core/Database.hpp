@@ -24,6 +24,7 @@
 #include <WCDB/Abstract.h>
 #include <WCDB/Factory.hpp>
 #include <WCDB/HandlePool.hpp>
+#include <WCDB/MigrationInfos.hpp>
 #include <WCDB/Tag.hpp>
 #include <WCDB/ThreadLocal.hpp>
 
@@ -156,9 +157,23 @@ public:
 
     bool recover();
 
+    bool isCorrupted() const;
+
 private:
     RecoveryMode m_recoveryMode;
     RecoverNotification m_recoverNotification;
+
+#pragma mark - Migration
+public:
+    void addMigrationInfo(const MigrationUserInfo &userInfo);
+    typedef MigrationInfos::TableFilter MigrationTableFilter;
+    void filterMigration(const MigrationTableFilter &filter);
+
+    void asyncMigration();
+    void stepMigration();
+
+protected:
+    MigrationInfos m_migration;
 
 #pragma mark - Memory
 public:
