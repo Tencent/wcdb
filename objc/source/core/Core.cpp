@@ -33,13 +33,13 @@ Core* Core::shared()
 }
 
 Core::Core()
-: m_corruptionQueue(corruptionQueueName, &m_databasePool)
-, m_checkpointQueue(checkpointQueueName, &m_databasePool)
-, m_backupQueue(backupQueueName, &m_databasePool)
+: m_corruptionQueue(new CorruptionQueue(corruptionQueueName, m_databasePool))
+, m_checkpointQueue(new CheckpointQueue(checkpointQueueName, m_databasePool))
+, m_backupQueue(new BackupQueue(backupQueueName, m_databasePool))
 // Configs
 , m_basicConfig(new BasicConfig)
-, m_backupConfig(new BackupConfig(&m_backupQueue))
-, m_checkpointConfig(new CheckpointConfig(&m_checkpointQueue))
+, m_backupConfig(new BackupConfig(m_backupQueue))
+, m_checkpointConfig(new CheckpointConfig(m_checkpointQueue))
 , m_globalSQLTraceConfig(new ShareableSQLTraceConfig)
 , m_globalPerformanceTraceConfig(new ShareablePerformanceTraceConfig)
 , m_configs(new Configs(OrderedUniqueList<std::string, std::shared_ptr<Config>>({
@@ -49,7 +49,7 @@ Core::Core()
   { Configs::Priority::Low, checkpointConfigName, m_checkpointConfig },
   })))
 {
-    m_databasePool.setEvent(this);
+    m_databasePool->setEvent(this);
 
     GlobalConfig::enableMultithread();
     GlobalConfig::enableMemoryStatus(false);
@@ -57,31 +57,31 @@ Core::Core()
     GlobalConfig::setNotificationForLog(Core::globalLogger);
     GlobalConfig::hookVFSOpen(Core::vfsOpen);
 
-    m_corruptionQueue.run();
-    m_checkpointQueue.run();
-    m_backupQueue.run();
+    m_corruptionQueue->run();
+    m_checkpointQueue->run();
+    m_backupQueue->run();
 
     Notifier::shared()->setNotification(notifierLoggerName, Core::logger);
 }
 
 RecyclableDatabase Core::getOrCreateDatabase(const std::string& path)
 {
-    return m_databasePool.getOrCreate(path);
+    return m_databasePool->getOrCreate(path);
 }
 
 RecyclableDatabase Core::getExistingDatabase(const std::string& path)
 {
-    return m_databasePool.get(path);
+    return m_databasePool->get(path);
 }
 
 RecyclableDatabase Core::getExistingDatabase(const Tag& tag)
 {
-    return m_databasePool.get(tag);
+    return m_databasePool->get(tag);
 }
 
 void Core::purge()
 {
-    m_databasePool.purge();
+    m_databasePool->purge();
 }
 
 void Core::onDatabaseCreated(Database* database)
@@ -94,9 +94,20 @@ const std::shared_ptr<Configs>& Core::configs()
     return m_configs;
 }
 
-FTS::Modules* Core::modules()
+void Core::addTokenizer(const std::string& name, unsigned char* address)
 {
-    return &m_modules;
+    m_modules->addAddress(name, address);
+}
+
+void Core::setNotificationForGlobalSQLTrace(const ShareableSQLTraceConfig::Notification& notification)
+{
+    static_cast<ShareableSQLTraceConfig*>(m_globalSQLTraceConfig.get())->setNotification(notification);
+}
+
+void Core::setNotificationForGlobalPerformanceTrace(const ShareablePerformanceTraceConfig::Notification& notification)
+{
+    static_cast<ShareablePerformanceTraceConfig*>(m_globalPerformanceTraceConfig.get())
+    ->setNotification(notification);
 }
 
 const std::shared_ptr<Config>& Core::backupConfig()
@@ -104,20 +115,9 @@ const std::shared_ptr<Config>& Core::backupConfig()
     return m_backupConfig;
 }
 
-ShareableSQLTraceConfig* Core::globalSQLTraceConfig()
-{
-    return static_cast<ShareableSQLTraceConfig*>(m_globalSQLTraceConfig.get());
-}
-
-ShareablePerformanceTraceConfig* Core::globalPerformanceTraceConfig()
-{
-    return static_cast<ShareablePerformanceTraceConfig*>(
-    m_globalPerformanceTraceConfig.get());
-}
-
 std::shared_ptr<Config> Core::tokenizeConfig(const std::list<std::string>& tokenizeNames)
 {
-    return std::shared_ptr<Config>(new TokenizeConfig(tokenizeNames, &m_modules));
+    return std::shared_ptr<Config>(new TokenizeConfig(tokenizeNames, m_modules));
 }
 
 std::shared_ptr<Config> Core::cipherConfig(const UnsafeData& cipher, int pageSize)

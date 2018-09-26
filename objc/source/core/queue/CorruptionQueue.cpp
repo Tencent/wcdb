@@ -26,7 +26,8 @@
 
 namespace WCDB {
 
-CorruptionQueue::CorruptionQueue(const std::string& name, DatabasePool* databasePool)
+CorruptionQueue::CorruptionQueue(const std::string& name,
+                                 const std::shared_ptr<DatabasePool>& databasePool)
 : AsyncQueue(name), m_databasePool(databasePool)
 {
     WCTInnerAssert(m_databasePool != nullptr);

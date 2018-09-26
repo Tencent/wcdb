@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-BackupConfig::BackupConfig(BackupQueue *queue)
+BackupConfig::BackupConfig(const std::shared_ptr<BackupQueue> &queue)
 : Config(), m_identifier(String::formatted("Backup-%p", this)), m_queue(queue)
 {
     WCTInnerAssert(m_queue != nullptr);

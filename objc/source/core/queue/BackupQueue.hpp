@@ -32,7 +32,7 @@ class DatabasePool;
 
 class BackupQueue : public AsyncQueue {
 public:
-    BackupQueue(const std::string& name, DatabasePool* databasePool);
+    BackupQueue(const std::string& name, const std::shared_ptr<DatabasePool>& databasePool);
     ~BackupQueue();
     void put(const std::string& path, double delay, int frames);
     int getBackedUpFrames(const std::string& path);
@@ -41,7 +41,7 @@ protected:
     bool onTimed(const std::string& path, const int& frames);
     void loop() override;
 
-    DatabasePool* m_databasePool;
+    std::shared_ptr<DatabasePool> m_databasePool;
     TimedQueue<std::string, int> m_timedQueue;
     SharedLock m_lock;
     std::map<std::string, int> m_backedUp;

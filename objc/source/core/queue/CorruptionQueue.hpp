@@ -32,7 +32,7 @@ class DatabasePool;
 
 class CorruptionQueue : public AsyncQueue {
 public:
-    CorruptionQueue(const std::string& name, DatabasePool* databasePool);
+    CorruptionQueue(const std::string& name, const std::shared_ptr<DatabasePool>& databasePool);
     ~CorruptionQueue();
 
 protected:
@@ -40,7 +40,7 @@ protected:
 
     void loop() override;
 
-    DatabasePool* m_databasePool;
+    std::shared_ptr<DatabasePool> m_databasePool;
 
     std::mutex m_mutex;
     std::condition_variable m_cond;

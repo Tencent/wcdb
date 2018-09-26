@@ -31,7 +31,7 @@ class BackupQueue;
 
 class BackupConfig : public Config {
 public:
-    BackupConfig(BackupQueue* queue);
+    BackupConfig(const std::shared_ptr<BackupQueue>& queue);
 
     bool invoke(Handle* handle) override;
     bool uninvoke(Handle* handle) override;
@@ -44,7 +44,7 @@ protected:
     bool onCommitted(Handle* handle, int frames);
     void checkpointed(Handle* handle, int rc);
 
-    BackupQueue* m_queue;
+    std::shared_ptr<BackupQueue> m_queue;
 };
 
 } //namespace WCDB

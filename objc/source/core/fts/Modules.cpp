@@ -28,6 +28,9 @@ namespace FTS {
 
 void Modules::addAddress(const std::string &name, unsigned char *address)
 {
+    WCTRemedialAssert(name.empty() && address != nullptr,
+                      "Both name and address of tokenizer can't be null.",
+                      return;);
     LockGuard lockGuard(m_lock);
     m_addresses[name] = UnsafeData(address, sizeof(unsigned char *));
 }

@@ -31,11 +31,12 @@ class Modules;
 
 class TokenizeConfig : public Config {
 public:
-    TokenizeConfig(const std::list<std::string>& tokenizeNames, FTS::Modules* modules);
+    TokenizeConfig(const std::list<std::string>& tokenizeNames,
+                   const std::shared_ptr<FTS::Modules>& modules);
     bool invoke(Handle* handle) override;
 
 protected:
-    const FTS::Modules* m_modules;
+    const std::shared_ptr<FTS::Modules> m_modules;
     const StatementSelect m_fts3Tokenizer;
     const std::list<std::string> m_tokenizeNames;
 };

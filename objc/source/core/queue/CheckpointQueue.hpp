@@ -31,7 +31,7 @@ class DatabasePool;
 
 class CheckpointQueue : public AsyncQueue {
 public:
-    CheckpointQueue(const std::string& name, DatabasePool* databasePool);
+    CheckpointQueue(const std::string& name, const std::shared_ptr<DatabasePool>& databasePool);
     ~CheckpointQueue();
 
     static constexpr const int framesForFull = 10 * 1024;
@@ -43,7 +43,7 @@ protected:
     bool onTimed(const std::string& path, const int& frames);
     void loop() override;
 
-    DatabasePool* m_databasePool;
+    std::shared_ptr<DatabasePool> m_databasePool;
     TimedQueue<std::string, int> m_timedQueue;
     const StatementPragma m_checkpointPassive;
     const StatementPragma m_checkpointTruncate;

@@ -21,6 +21,8 @@
 #ifndef Tokenize_hpp
 #define Tokenize_hpp
 
+#warning Make it public and add template for this
+
 #include <WCDB/Lock.hpp>
 #include <map>
 #include <sqlcipher/fts3_tokenizer.h>

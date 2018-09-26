@@ -51,4 +51,11 @@ WCTTokenizer const WCTTokenizerWCDB = @"WCDB";
                          WCDB::Configs::Priority::Higher);
 }
 
++ (void)addTokenizer:(unsigned char *)address named:(NSString *)name
+{
+    WCTRemedialAssert(name, "Tokenizer's name can't be null.", return;)
+    WCDB::Core::shared()
+    ->addTokenizer(name.cppString, address);
+}
+
 @end

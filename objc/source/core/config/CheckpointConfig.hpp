@@ -29,7 +29,7 @@ class CheckpointQueue;
 
 class CheckpointConfig : public Config {
 public:
-    CheckpointConfig(CheckpointQueue *queue);
+    CheckpointConfig(const std::shared_ptr<CheckpointQueue> &queue);
 
     bool invoke(Handle *handle) override;
     bool uninvoke(Handle *handle) override;
@@ -40,7 +40,7 @@ protected:
     const std::string m_identifier;
     bool onCommitted(Handle *handle, int pages);
 
-    CheckpointQueue *m_queue;
+    std::shared_ptr<CheckpointQueue> m_queue;
 };
 
 } //namespace WCDB

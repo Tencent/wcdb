@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-CheckpointConfig::CheckpointConfig(CheckpointQueue* queue)
+CheckpointConfig::CheckpointConfig(const std::shared_ptr<CheckpointQueue>& queue)
 : Config(), m_identifier(String::formatted("Checkpoint-%p", this)), m_queue(queue)
 {
     WCTInnerAssert(m_queue != nullptr);

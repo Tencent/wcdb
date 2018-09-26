@@ -23,7 +23,8 @@
 
 namespace WCDB {
 
-TokenizeConfig::TokenizeConfig(const std::list<std::string> &tokenizeNames, FTS::Modules *modules)
+TokenizeConfig::TokenizeConfig(const std::list<std::string> &tokenizeNames,
+                               const std::shared_ptr<FTS::Modules> &modules)
 : Config()
 , m_tokenizeNames(tokenizeNames)
 , m_fts3Tokenizer(StatementSelect().select(Expression::function(

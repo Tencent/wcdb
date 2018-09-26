@@ -35,6 +35,8 @@ extern WCTTokenizer const WCTTokenizerWCDB;
 
 - (void)setTokenizers:(NSArray<WCTTokenizer> *)tokenizerNames;
 
++ (void)addTokenizer:(unsigned char *)address named:(NSString *)name;
+
 @end
 
 NS_ASSUME_NONNULL_END

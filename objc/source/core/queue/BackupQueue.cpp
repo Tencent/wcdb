@@ -24,7 +24,7 @@
 
 namespace WCDB {
 
-BackupQueue::BackupQueue(const std::string& name, DatabasePool* databasePool)
+BackupQueue::BackupQueue(const std::string& name, const std::shared_ptr<DatabasePool>& databasePool)
 : AsyncQueue(name), m_databasePool(databasePool)
 {
     WCTInnerAssert(m_databasePool);

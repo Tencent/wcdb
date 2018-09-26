@@ -24,7 +24,8 @@
 
 namespace WCDB {
 
-CheckpointQueue::CheckpointQueue(const std::string& name, DatabasePool* databasePool)
+CheckpointQueue::CheckpointQueue(const std::string& name,
+                                 const std::shared_ptr<DatabasePool>& databasePool)
 : AsyncQueue(name)
 , m_databasePool(databasePool)
 , m_checkpointPassive(StatementPragma().pragma(Pragma::walCheckpoint()).to("PASSIVE"))

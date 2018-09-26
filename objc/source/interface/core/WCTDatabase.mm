@@ -52,7 +52,7 @@
                                     }];
 #endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
 
-        WCDB::Core::shared()->modules()->addAddress(WCTTokenizerWCDB.cppString, WCDB::FTS::Module<void, WCTCursorInfo>::address());
+        WCDB::Core::shared()->addTokenizer(WCTTokenizerWCDB.cppString, WCDB::FTS::Module<void, WCTCursorInfo>::address());
     }
 }
 

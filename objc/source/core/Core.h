@@ -64,10 +64,11 @@ public:
     void purge();
 
     const std::shared_ptr<Configs>& configs();
-    FTS::Modules* modules();
 
-    ShareableSQLTraceConfig* globalSQLTraceConfig();
-    ShareablePerformanceTraceConfig* globalPerformanceTraceConfig();
+    void addTokenizer(const std::string& name, unsigned char* address);
+    void setNotificationForGlobalSQLTrace(const ShareableSQLTraceConfig::Notification& notification);
+    void setNotificationForGlobalPerformanceTrace(
+    const ShareablePerformanceTraceConfig::Notification& notification);
 
     const std::shared_ptr<Config>& backupConfig();
     std::shared_ptr<Config> tokenizeConfig(const std::list<std::string>& tokenizeNames);
@@ -112,12 +113,12 @@ protected:
     void onDatabaseCreated(Database* database) override;
 
     // The order of member variables here is important.
-    DatabasePool m_databasePool;
-    FTS::Modules m_modules;
+    std::shared_ptr<DatabasePool> m_databasePool;
+    std::shared_ptr<FTS::Modules> m_modules;
 
-    CorruptionQueue m_corruptionQueue;
-    CheckpointQueue m_checkpointQueue;
-    BackupQueue m_backupQueue;
+    std::shared_ptr<CorruptionQueue> m_corruptionQueue;
+    std::shared_ptr<CheckpointQueue> m_checkpointQueue;
+    std::shared_ptr<BackupQueue> m_backupQueue;
 
     std::shared_ptr<Config> m_backupConfig;
     std::shared_ptr<Config> m_basicConfig;
