@@ -19,7 +19,8 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/Core.h>
+#include <WCDB/BackupConfig.hpp>
+#include <WCDB/BackupQueue.hpp>
 #include <WCDB/String.hpp>
 
 namespace WCDB {

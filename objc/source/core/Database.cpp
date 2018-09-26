@@ -19,9 +19,10 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/Core.h>
+#include <WCDB/Database.hpp>
 #include <WCDB/Error.hpp>
 #include <WCDB/FileManager.hpp>
+#include <WCDB/MigrationHandle.hpp>
 #include <WCDB/MigrationInitializerHandle.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/RepairKit.h>

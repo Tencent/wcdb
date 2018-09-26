@@ -19,8 +19,8 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/Core.h>
 #include <WCDB/FileManager.hpp>
+#include <WCDB/HandlePool.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/Serialization.hpp>
 #include <algorithm>

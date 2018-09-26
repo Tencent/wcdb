@@ -19,7 +19,8 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/Core.h>
+#include <WCDB/CorruptionQueue.hpp>
+#include <WCDB/DatabasePool.hpp>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Notifier.hpp>
 

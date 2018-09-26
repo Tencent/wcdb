@@ -18,7 +18,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Core.h>
+#include <WCDB/Assertion.hpp>
+#include <WCDB/AsyncQueue.hpp>
 #include <WCDB/Dispatch.hpp>
 #include <WCDB/String.hpp>
 #include <atomic>

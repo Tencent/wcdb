@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Abstract.h>
 #include <WCDB/Assertion.hpp>
+#include <WCDB/HandleStatement.hpp>
 #include <sqlcipher/sqlite3.h>
 
 namespace WCDB {

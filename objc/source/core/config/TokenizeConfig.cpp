@@ -18,7 +18,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Core.h>
+#include <WCDB/Modules.hpp>
+#include <WCDB/TokenizeConfig.hpp>
 
 namespace WCDB {
 

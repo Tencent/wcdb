@@ -18,7 +18,9 @@
  * limitations under the License.
  */
 
-#include <WCDB/Core.h>
+#include <WCDB/Assertion.hpp>
+#include <WCDB/CheckpointQueue.hpp>
+#include <WCDB/DatabasePool.hpp>
 
 namespace WCDB {
 

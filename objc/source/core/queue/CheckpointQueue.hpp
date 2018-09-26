@@ -21,6 +21,7 @@
 #ifndef CheckpointQueue_hpp
 #define CheckpointQueue_hpp
 
+#include <WCDB/Abstract.h>
 #include <WCDB/AsyncQueue.hpp>
 #include <WCDB/TimedQueue.hpp>
 

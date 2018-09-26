@@ -19,7 +19,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/Core.h>
+#include <WCDB/ConfiguredHandle.hpp>
 
 namespace WCDB {
 

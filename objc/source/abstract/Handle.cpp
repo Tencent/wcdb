@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Abstract.h>
 #include <WCDB/Assertion.hpp>
+#include <WCDB/Handle.hpp>
 #include <WCDB/Macro.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Path.hpp>

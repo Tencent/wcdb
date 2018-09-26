@@ -24,6 +24,7 @@
 #import <WCDB/Abstract.h>
 #import <WCDB/Core.h>
 
+#warning TODO avoid including this file inside interface layer files
 #import <WCDB/NSData+WCTColumnCoding.h>
 #import <WCDB/NSDate+WCTColumnCoding.h>
 #import <WCDB/NSNull+WCTColumnCoding.h>

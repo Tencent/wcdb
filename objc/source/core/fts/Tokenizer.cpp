@@ -19,7 +19,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/Core.h>
+#include <WCDB/Tokenizer.hpp>
 
 extern "C" {
 extern int porterStem(char *p, int i, int j);
