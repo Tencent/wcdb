@@ -31,7 +31,7 @@ HandleStatement::HandleStatement(Handle *handle)
 
 bool HandleStatement::prepare(const Statement &statement)
 {
-    WCTInnerAssert(m_stmt == nullptr);
+    WCTInnerAssert(!isPrepared());
     m_statement = statement;
     const std::string &sql = m_statement.getDescription();
     int rc = sqlite3_prepare_v2(
@@ -41,6 +41,11 @@ bool HandleStatement::prepare(const Statement &statement)
     }
     setError(rc, sql);
     return false;
+}
+
+bool HandleStatement::isPrepared() const
+{
+    return m_stmt != nullptr;
 }
 
 void HandleStatement::reset()
@@ -63,6 +68,7 @@ bool HandleStatement::step(bool &done)
 
 bool HandleStatement::step()
 {
+    WCTInnerAssert(isPrepared());
     bool unused;
     return step(unused);
 }

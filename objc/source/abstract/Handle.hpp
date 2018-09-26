@@ -59,6 +59,8 @@ public:
 public:
     bool open();
     void close();
+    bool isOpened() const;
+
     virtual bool execute(const Statement &statement);
 
     long long getLastInsertedRowID();
@@ -74,6 +76,7 @@ public:
     virtual bool prepare(const Statement &statement);
     virtual void finalize();
     virtual bool step(bool &done);
+    bool isPrepared() const;
 
     bool step();
     virtual void reset();

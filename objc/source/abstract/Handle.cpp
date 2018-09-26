@@ -75,6 +75,11 @@ bool Handle::open()
     return true;
 }
 
+bool Handle::isOpened() const
+{
+    return m_handle != nullptr;
+}
+
 void Handle::close()
 {
     finalize();
@@ -94,6 +99,7 @@ void Handle::close()
 
 bool Handle::execute(const Statement &statement)
 {
+    WCTInnerAssert(isOpened());
     int rc = sqlite3_exec(
     (sqlite3 *) m_handle, statement.getDescription().c_str(), nullptr, nullptr, nullptr);
     if (rc == SQLITE_OK) {
@@ -105,148 +111,183 @@ bool Handle::execute(const Statement &statement)
 
 int Handle::getExtendedErrorCode()
 {
+    WCTInnerAssert(isOpened());
     return sqlite3_extended_errcode((sqlite3 *) m_handle);
 }
 
 long long Handle::getLastInsertedRowID()
 {
+    WCTInnerAssert(isOpened());
     return sqlite3_last_insert_rowid((sqlite3 *) m_handle);
 }
 
 int Handle::getResultCode()
 {
+    WCTInnerAssert(isOpened());
     return sqlite3_errcode((sqlite3 *) m_handle);
 }
 
 const char *Handle::getErrorMessage()
 {
+    WCTInnerAssert(isOpened());
     return sqlite3_errmsg((sqlite3 *) m_handle);
 }
 
 int Handle::getChanges()
 {
+    WCTInnerAssert(isOpened());
     return sqlite3_changes((sqlite3 *) m_handle);
 }
 
 bool Handle::isReadonly()
 {
+    WCTInnerAssert(isOpened());
     return sqlite3_db_readonly((sqlite3 *) m_handle, NULL) == 1;
 }
 
 bool Handle::isInTransaction()
 {
+    WCTInnerAssert(isOpened());
     return sqlite3_get_autocommit((sqlite3 *) m_handle) == 0;
 }
 
 #pragma mark - Statement
 bool Handle::prepare(const Statement &statement)
 {
+    WCTInnerAssert(isOpened());
+    WCTInnerAssert(!isPrepared());
     return m_handleStatement.prepare(statement);
+}
+
+bool Handle::isPrepared() const
+{
+    return m_handleStatement.isPrepared();
 }
 
 void Handle::reset()
 {
+    WCTInnerAssert(isPrepared());
     m_handleStatement.reset();
 }
 
 bool Handle::step(bool &done)
 {
+    WCTInnerAssert(isPrepared());
     return m_handleStatement.step(done);
 }
 
 bool Handle::step()
 {
+    WCTInnerAssert(isPrepared());
     bool unused;
     return step(unused);
 }
 
 int Handle::getColumnCount()
 {
+    WCTInnerAssert(isPrepared());
     return m_handleStatement.getColumnCount();
 }
 
 const char *Handle::getColumnName(int index)
 {
+    WCTInnerAssert(isPrepared());
     return m_handleStatement.getColumnName(index);
 }
 
 const char *Handle::getColumnTableName(int index)
 {
+    WCTInnerAssert(isPrepared());
     return m_handleStatement.getColumnTableName(index);
 }
 
 ColumnType Handle::getType(int index)
 {
+    WCTInnerAssert(isPrepared());
     return m_handleStatement.getType(index);
 }
 
 void Handle::bindInteger32(const Integer32 &value, int index)
 {
+    WCTInnerAssert(isPrepared());
     m_handleStatement.bindInteger32(value, index);
 }
 
 void Handle::bindInteger64(const Integer64 &value, int index)
 {
+    WCTInnerAssert(isPrepared());
     m_handleStatement.bindInteger64(value, index);
 }
 
 void Handle::bindDouble(const Float &value, int index)
 {
+    WCTInnerAssert(isPrepared());
     m_handleStatement.bindDouble(value, index);
 }
 
 void Handle::bindText(const Text &value, int index)
 {
+    WCTInnerAssert(isPrepared());
     bindText(value, -1, index);
 }
 
 void Handle::bindText(const Text &value, int length, int index)
 {
+    WCTInnerAssert(isPrepared());
     m_handleStatement.bindText(value, length, index);
 }
 
 void Handle::bindBLOB(const BLOB &value, int index)
 {
+    WCTInnerAssert(isPrepared());
     m_handleStatement.bindBLOB(value, index);
 }
 
 void Handle::bindNull(int index)
 {
+    WCTInnerAssert(isPrepared());
     m_handleStatement.bindNull(index);
 }
 
 Handle::Integer32 Handle::getInteger32(int index)
 {
+    WCTInnerAssert(isPrepared());
     return m_handleStatement.getInteger32(index);
 }
 
 Handle::Integer64 Handle::getInteger64(int index)
 {
+    WCTInnerAssert(isPrepared());
     return m_handleStatement.getInteger64(index);
 }
 
 Handle::Float Handle::getDouble(int index)
 {
+    WCTInnerAssert(isPrepared());
     return m_handleStatement.getDouble(index);
 }
 
 Handle::Text Handle::getText(int index)
 {
+    WCTInnerAssert(isPrepared());
     return m_handleStatement.getText(index);
 }
 
 Handle::BLOB Handle::getBLOB(int index)
 {
+    WCTInnerAssert(isPrepared());
     return m_handleStatement.getBLOB(index);
 }
 
 void Handle::finalize()
 {
+    WCTInnerAssert(isPrepared());
     m_handleStatement.finalize();
 }
 
 bool Handle::isStatementReadonly()
 {
+    WCTInnerAssert(isPrepared());
     return m_handleStatement.isReadonly();
 }
 
@@ -382,6 +423,7 @@ bool Handle::runTransaction(const TransactionCallback &transaction)
 
 void Handle::discardableExecute(const Statement &statement)
 {
+    WCTInnerAssert(isOpened());
     sqlite3_exec(
     (sqlite3 *) m_handle, statement.getDescription().c_str(), nullptr, nullptr, nullptr);
 }
@@ -389,28 +431,26 @@ void Handle::discardableExecute(const Statement &statement)
 #pragma mark - Cipher
 bool Handle::setCipherKey(const UnsafeData &data)
 {
-#ifdef SQLITE_HAS_CODEC
+    WCTInnerAssert(isOpened());
     int rc = sqlite3_key((sqlite3 *) m_handle, data.buffer(), (int) data.size());
     if (rc == SQLITE_OK) {
         return true;
     }
     setError(rc);
     return false;
-#else  //SQLITE_HAS_CODEC
-    Error::fatal("[sqlite3_key] is not supported for current config");
-    return false;
-#endif //SQLITE_HAS_CODEC
 }
 
 #pragma mark - Notification
 void Handle::setNotificationWhenSQLTraced(const std::string &name, const SQLNotification &onTraced)
 {
+    WCTInnerAssert(isOpened());
     m_notification.setNotificationWhenSQLTraced(name, onTraced);
 }
 
 void Handle::setNotificationWhenPerformanceTraced(const std::string &name,
                                                   const PerformanceNotification &onTraced)
 {
+    WCTInnerAssert(isOpened());
     m_notification.setNotificationWhenPerformanceTraced(name, onTraced);
 }
 
@@ -418,11 +458,13 @@ void Handle::setNotificationWhenCommitted(int order,
                                           const std::string &name,
                                           const CommittedNotification &onCommitted)
 {
+    WCTInnerAssert(isOpened());
     m_notification.setNotificationWhenCommitted(order, name, onCommitted);
 }
 
 void Handle::unsetNotificationWhenCommitted(const std::string &name)
 {
+    WCTInnerAssert(isOpened());
     m_notification.unsetNotificationWhenCommitted(name);
 }
 
@@ -430,17 +472,20 @@ bool Handle::setNotificationWhenWillCheckpoint(int order,
                                                const std::string &name,
                                                const WCDB::Handle::WillCheckpointNotification &willCheckpoint)
 {
+    WCTInnerAssert(isOpened());
     return m_notification.setNotificationWhenWillCheckpoint(order, name, willCheckpoint);
 }
 
 bool Handle::unsetNotificationWhenWillCheckpoint(const std::string &name)
 {
+    WCTInnerAssert(isOpened());
     return m_notification.unsetNotificationWhenWillCheckpoint(name);
 }
 
 bool Handle::setNotificationWhenCheckpointed(const std::string &name,
                                              const CheckpointedNotification &checkpointed)
 {
+    WCTInnerAssert(isOpened());
     return m_notification.setNotificationWhenCheckpointed(name, checkpointed);
 }
 

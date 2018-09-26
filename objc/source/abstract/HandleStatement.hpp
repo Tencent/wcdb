@@ -31,6 +31,7 @@ public:
     HandleStatement(Handle *handle);
 
     bool prepare(const Statement &statement);
+    bool isPrepared() const;
 
     bool step(bool &done);
     bool step();
