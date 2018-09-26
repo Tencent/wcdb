@@ -22,6 +22,7 @@
 #include <WCDB/Core.h>
 #include <WCDB/Error.hpp>
 #include <WCDB/FileManager.hpp>
+#include <WCDB/MigrationInitializerHandle.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/RepairKit.h>
 #include <WCDB/String.hpp>
@@ -90,8 +91,8 @@ RecyclableHandle Database::getHandle()
         }
         if (m_migration.shouldMigrate()) {
             // This temporary handle will be dropped since it's dirty.
-            MigrationHandle handle(path, &m_migration);
-            if (!handle.open() || !m_migration.initialize(handle)) {
+            MigrationInitializerHandle handle(path);
+            if (!m_migration.initialize(handle)) {
                 return nullptr;
             }
         }

@@ -36,10 +36,6 @@ public:
     const std::string& getMigratedTable() const;
     const std::string& getOriginTable() const;
     const std::string& getOriginDatabase() const;
-    const std::string& getSchemaForOriginDatabase() const;
-
-    // WCDBMigration_
-    static const std::string& getSchemaPrefix();
 
     bool shouldMigrate() const;
     bool isSameDatabaseMigration() const;
@@ -52,7 +48,6 @@ protected:
     const std::string m_migratedTable;
     std::string m_originTable;
     std::string m_originDatabase;
-    std::string m_schemaForOriginDatabase; // WCDBMigration_ + hash([originDatabase])
 };
 
 class MigrationInfo : public MigrationUserInfo {
@@ -62,6 +57,13 @@ public:
 
 #pragma mark - Schema
 public:
+    const std::string& getSchemaForOriginDatabase() const;
+
+    // WCDBMigration_
+    static const std::string& getSchemaPrefix();
+
+    static std::string getSchemaForDatabase(const std::string& database);
+
     /*
      ATTACH [originDatabase]
      AS [schemaForOriginDatabase]
@@ -74,6 +76,8 @@ public:
     const StatementDetach& getStatementForDetachingSchema() const;
 
 protected:
+    // WCDBMigration_ + hash([originDatabase])
+    std::string m_schemaForOriginDatabase;
     StatementAttach m_statementForAttachingSchema;
     StatementDetach m_statementForDetachingSchema;
 

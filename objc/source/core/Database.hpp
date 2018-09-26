@@ -24,7 +24,7 @@
 #include <WCDB/Abstract.h>
 #include <WCDB/Factory.hpp>
 #include <WCDB/HandlePool.hpp>
-#include <WCDB/MigrationInfos.hpp>
+#include <WCDB/Migration.hpp>
 #include <WCDB/Tag.hpp>
 #include <WCDB/ThreadLocal.hpp>
 
@@ -167,14 +167,14 @@ private:
 public:
     void addMigrationInfo(const MigrationUserInfo &userInfo);
 
-    typedef MigrationInfos::TableFilter MigrationTableFilter;
+    typedef Migration::TableFilter MigrationTableFilter;
     void filterMigration(const MigrationTableFilter &filter);
 
     void asyncMigration();
     void stepMigration();
 
 protected:
-    MigrationInfos m_migration;
+    Migration m_migration;
 
 #pragma mark - Memory
 public:

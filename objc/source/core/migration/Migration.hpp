@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef MigrationInfos_hpp
-#define MigrationInfos_hpp
+#ifndef Migration_hpp
+#define Migration_hpp
 
 #include <WCDB/MigrationInfo.hpp>
 #include <functional>
@@ -28,21 +28,19 @@
 
 namespace WCDB {
 
-class MigrationInfosInitializer {
-protected:
-    virtual std::pair<bool, std::set<std::string>> getAllExistingTables() = 0;
-    // When succeed, if the empty columns means that table is already migrated.
-    virtual std::pair<bool, std::set<std::string>>
-    getAllColumns(const std::string& schema, const std::string& table) = 0;
-    friend class MigrationInfos;
-};
-
-class MigrationInfos {
+class Migration {
 #pragma mark - Initialize
 public:
-    MigrationInfos();
+    Migration();
 
-    bool initialize(MigrationInfosInitializer& initializer);
+    class Initializer {
+    public:
+        virtual std::pair<bool, std::set<std::string>> getAllExistingTables() = 0;
+        // When succeed, if the empty columns means that table is already migrated.
+        virtual std::pair<bool, std::set<std::string>>
+        getAllColumns(const std::string& table, const std::string& database) = 0;
+    };
+    bool initialize(Initializer& initializer);
     bool shouldMigrate() const;
 
 #pragma mark - Filter
@@ -78,4 +76,4 @@ protected:
 
 } // namespace WCDB
 
-#endif /* MigrationInfos_hpp */
+#endif /* Migration_hpp */

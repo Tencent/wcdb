@@ -55,25 +55,14 @@ const std::string& MigrationUserInfo::getOriginDatabase() const
     return m_originDatabase;
 }
 
-const std::string& MigrationUserInfo::getSchemaForOriginDatabase() const
-{
-    return m_schemaForOriginDatabase;
-}
-
 void MigrationUserInfo::setOrigin(const std::string& table, const std::string& database)
 {
     WCTInnerAssert(!table.empty());
     m_originTable = table;
     m_originDatabase = database;
-    if (isSameDatabaseMigration()) {
-        m_schemaForOriginDatabase = Schema::main();
-    } else {
-        m_schemaForOriginDatabase
-        = getSchemaPrefix() + std::to_string(String::hash(m_originDatabase));
-    }
 }
 
-const std::string& MigrationUserInfo::getSchemaPrefix()
+const std::string& MigrationInfo::getSchemaPrefix()
 {
     static const std::string* s_schemaPrefix = new std::string("WCDBMigration_");
     return *s_schemaPrefix;
@@ -101,10 +90,14 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
 
     // Schema
     if (!isSameDatabaseMigration()) {
+        m_schemaForOriginDatabase = getSchemaForDatabase(m_originDatabase);
+
         m_statementForAttachingSchema
         = StatementAttach().attach(m_originDatabase).as(m_schemaForOriginDatabase);
 
         m_statementForDetachingSchema = StatementDetach().detach(m_schemaForOriginDatabase);
+    } else {
+        m_schemaForOriginDatabase = Schema::main();
     }
 
     WCTInnerAssert(!columns.empty());
@@ -179,6 +172,19 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
 }
 
 #pragma mark - Schema
+std::string MigrationInfo::getSchemaForDatabase(const std::string& database)
+{
+    if (database.empty()) {
+        return Schema::main();
+    }
+    return getSchemaPrefix() + std::to_string(String::hash(database));
+}
+
+const std::string& MigrationInfo::getSchemaForOriginDatabase() const
+{
+    return m_schemaForOriginDatabase;
+}
+
 const StatementAttach& MigrationInfo::getStatementForAttachingSchema() const
 {
     WCTInnerAssert(!isSameDatabaseMigration());

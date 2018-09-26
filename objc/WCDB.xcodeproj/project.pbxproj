@@ -476,10 +476,10 @@
 		23A64D0A214A458A00ED28BB /* MigrationInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A64D07214A458A00ED28BB /* MigrationInfo.cpp */; };
 		23A64D0B214A458A00ED28BB /* MigrationInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A64D08214A458A00ED28BB /* MigrationInfo.hpp */; };
 		23A64D0C214A458A00ED28BB /* MigrationInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A64D08214A458A00ED28BB /* MigrationInfo.hpp */; };
-		23A64D0F214A4A7000ED28BB /* MigrationInfos.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A64D0D214A4A7000ED28BB /* MigrationInfos.cpp */; };
-		23A64D10214A4A7000ED28BB /* MigrationInfos.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A64D0D214A4A7000ED28BB /* MigrationInfos.cpp */; };
-		23A64D11214A4A7000ED28BB /* MigrationInfos.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A64D0E214A4A7000ED28BB /* MigrationInfos.hpp */; };
-		23A64D12214A4A7000ED28BB /* MigrationInfos.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A64D0E214A4A7000ED28BB /* MigrationInfos.hpp */; };
+		23A64D0F214A4A7000ED28BB /* Migration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A64D0D214A4A7000ED28BB /* Migration.cpp */; };
+		23A64D10214A4A7000ED28BB /* Migration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A64D0D214A4A7000ED28BB /* Migration.cpp */; };
+		23A64D11214A4A7000ED28BB /* Migration.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A64D0E214A4A7000ED28BB /* Migration.hpp */; };
+		23A64D12214A4A7000ED28BB /* Migration.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A64D0E214A4A7000ED28BB /* Migration.hpp */; };
 		23A6D4BF20BFD7F9004F2DAA /* Progress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A6D4BD20BFD7F9004F2DAA /* Progress.cpp */; };
 		23A6D4C020BFD7F9004F2DAA /* Progress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A6D4BD20BFD7F9004F2DAA /* Progress.cpp */; };
 		23A6D4C120BFD7F9004F2DAA /* Progress.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A6D4BE20BFD7F9004F2DAA /* Progress.hpp */; };
@@ -491,6 +491,10 @@
 		23AB8911215A1FA500554DF1 /* MigrationConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AB890D215A1FA500554DF1 /* MigrationConfig.hpp */; };
 		23AB891C215A28F700554DF1 /* DebugDescribable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AB8919215A28F700554DF1 /* DebugDescribable.hpp */; };
 		23AB891D215A28F700554DF1 /* DebugDescribable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AB8919215A28F700554DF1 /* DebugDescribable.hpp */; };
+		23AB8970215B73F700554DF1 /* MigrationInitializerHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AB896E215B73F700554DF1 /* MigrationInitializerHandle.cpp */; };
+		23AB8971215B73F700554DF1 /* MigrationInitializerHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AB896E215B73F700554DF1 /* MigrationInitializerHandle.cpp */; };
+		23AB8972215B73F700554DF1 /* MigrationInitializerHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AB896F215B73F700554DF1 /* MigrationInitializerHandle.hpp */; };
+		23AB8973215B73F700554DF1 /* MigrationInitializerHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AB896F215B73F700554DF1 /* MigrationInitializerHandle.hpp */; };
 		23AD52D620DB4A3C00664B62 /* Master.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52D420DB4A3C00664B62 /* Master.cpp */; };
 		23AD52D720DB4A3C00664B62 /* Master.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52D420DB4A3C00664B62 /* Master.cpp */; };
 		23AD52D820DB4A3C00664B62 /* Master.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AD52D520DB4A3C00664B62 /* Master.hpp */; };
@@ -1506,8 +1510,8 @@
 		23A3CFB4205FB1A800692F94 /* WCTHandle+Convenient.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTHandle+Convenient.mm"; sourceTree = "<group>"; };
 		23A64D07214A458A00ED28BB /* MigrationInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationInfo.cpp; sourceTree = "<group>"; };
 		23A64D08214A458A00ED28BB /* MigrationInfo.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrationInfo.hpp; sourceTree = "<group>"; };
-		23A64D0D214A4A7000ED28BB /* MigrationInfos.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationInfos.cpp; sourceTree = "<group>"; };
-		23A64D0E214A4A7000ED28BB /* MigrationInfos.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrationInfos.hpp; sourceTree = "<group>"; };
+		23A64D0D214A4A7000ED28BB /* Migration.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Migration.cpp; sourceTree = "<group>"; };
+		23A64D0E214A4A7000ED28BB /* Migration.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Migration.hpp; sourceTree = "<group>"; };
 		23A6D4BD20BFD7F9004F2DAA /* Progress.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Progress.cpp; sourceTree = "<group>"; };
 		23A6D4BE20BFD7F9004F2DAA /* Progress.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Progress.hpp; sourceTree = "<group>"; };
 		23A747BE20039675003CECFA /* sqlcipher.preprocessed.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqlcipher.preprocessed.xcodeproj; path = ../sqlcipher/sqlcipher.preprocessed.xcodeproj; sourceTree = "<group>"; };
@@ -1515,6 +1519,8 @@
 		23AB890C215A1FA500554DF1 /* MigrationConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationConfig.cpp; sourceTree = "<group>"; };
 		23AB890D215A1FA500554DF1 /* MigrationConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrationConfig.hpp; sourceTree = "<group>"; };
 		23AB8919215A28F700554DF1 /* DebugDescribable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DebugDescribable.hpp; sourceTree = "<group>"; };
+		23AB896E215B73F700554DF1 /* MigrationInitializerHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationInitializerHandle.cpp; sourceTree = "<group>"; };
+		23AB896F215B73F700554DF1 /* MigrationInitializerHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrationInitializerHandle.hpp; sourceTree = "<group>"; };
 		23AD52D420DB4A3C00664B62 /* Master.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Master.cpp; sourceTree = "<group>"; };
 		23AD52D520DB4A3C00664B62 /* Master.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Master.hpp; sourceTree = "<group>"; };
 		23AD52DB20DB56D200664B62 /* Sequence.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sequence.cpp; sourceTree = "<group>"; };
@@ -2418,8 +2424,10 @@
 				23A09D6A2146204300F62EE8 /* MigrationHandle.hpp */,
 				23A64D07214A458A00ED28BB /* MigrationInfo.cpp */,
 				23A64D08214A458A00ED28BB /* MigrationInfo.hpp */,
-				23A64D0D214A4A7000ED28BB /* MigrationInfos.cpp */,
-				23A64D0E214A4A7000ED28BB /* MigrationInfos.hpp */,
+				23A64D0D214A4A7000ED28BB /* Migration.cpp */,
+				23A64D0E214A4A7000ED28BB /* Migration.hpp */,
+				23AB896E215B73F700554DF1 /* MigrationInitializerHandle.cpp */,
+				23AB896F215B73F700554DF1 /* MigrationInitializerHandle.hpp */,
 				23AB890C215A1FA500554DF1 /* MigrationConfig.cpp */,
 				23AB890D215A1FA500554DF1 /* MigrationConfig.hpp */,
 			);
@@ -2647,6 +2655,7 @@
 				23F1698A20B6638F009B5C47 /* ThreadedErrors.hpp in Headers */,
 				23775B7020AD666900E21AB0 /* DeprecatedBackup.hpp in Headers */,
 				23977562202AECD3000A681C /* LangCreateTableSTMT.hpp in Headers */,
+				23AB8972215B73F700554DF1 /* MigrationInitializerHandle.hpp in Headers */,
 				23977564202AECD3000A681C /* LangCreateTriggerSTMT.hpp in Headers */,
 				23977566202AECD3000A681C /* LangCreateViewSTMT.hpp in Headers */,
 				23977568202AECD3000A681C /* LangCreateVirtualTableSTMT.hpp in Headers */,
@@ -2703,7 +2712,7 @@
 				23977591202AECD3000A681C /* LangQualifiedTableName.hpp in Headers */,
 				234591F320440A0200DC7D34 /* WCTRedirectable.h in Headers */,
 				239776F8202AF2E3000A681C /* CopyOnWriteString.hpp in Headers */,
-				23A64D11214A4A7000ED28BB /* MigrationInfos.hpp in Headers */,
+				23A64D11214A4A7000ED28BB /* Migration.hpp in Headers */,
 				23977593202AECD3000A681C /* LangRaiseFunction.hpp in Headers */,
 				23977595202AECD3000A681C /* LangReindexSTMT.hpp in Headers */,
 				23F340DE204D3482007DB8AB /* WCTDatabase+ChainCall.h in Headers */,
@@ -2943,6 +2952,7 @@
 				23F1698B20B6638F009B5C47 /* ThreadedErrors.hpp in Headers */,
 				23775B7120AD666900E21AB0 /* DeprecatedBackup.hpp in Headers */,
 				23F5BD6520887FD3000CCD37 /* LangCreateTableSTMT.hpp in Headers */,
+				23AB8973215B73F700554DF1 /* MigrationInitializerHandle.hpp in Headers */,
 				23F5BD6720887FD3000CCD37 /* LangCreateTriggerSTMT.hpp in Headers */,
 				23F5BD6820887FD3000CCD37 /* LangCreateViewSTMT.hpp in Headers */,
 				23F5BD6920887FD3000CCD37 /* LangCreateVirtualTableSTMT.hpp in Headers */,
@@ -2999,7 +3009,7 @@
 				23F5BD8C20887FD3000CCD37 /* LangQualifiedTableName.hpp in Headers */,
 				23F5BD8D20887FD3000CCD37 /* WCTRedirectable.h in Headers */,
 				23F5BD8E20887FD3000CCD37 /* CopyOnWriteString.hpp in Headers */,
-				23A64D12214A4A7000ED28BB /* MigrationInfos.hpp in Headers */,
+				23A64D12214A4A7000ED28BB /* Migration.hpp in Headers */,
 				23F5BD8F20887FD3000CCD37 /* LangRaiseFunction.hpp in Headers */,
 				23F5BD9020887FD3000CCD37 /* LangReindexSTMT.hpp in Headers */,
 				23F5BD9120887FD3000CCD37 /* WCTDatabase+ChainCall.h in Headers */,
@@ -3348,7 +3358,7 @@
 				23C7559620DCFA0B00031A93 /* Locker.cpp in Sources */,
 				23977563202AECD3000A681C /* LangCreateTriggerSTMT.cpp in Sources */,
 				23B35CCD20C0261A00425033 /* String.cpp in Sources */,
-				23A64D0F214A4A7000ED28BB /* MigrationInfos.cpp in Sources */,
+				23A64D0F214A4A7000ED28BB /* Migration.cpp in Sources */,
 				2397758C202AECD3000A681C /* LangOrderingTerm.cpp in Sources */,
 				23BBE2B22049576D00C4CBB6 /* WCTDatabase+Memory.mm in Sources */,
 				23977575202AECD3000A681C /* LangDropTriggerSTMT.cpp in Sources */,
@@ -3439,6 +3449,7 @@
 				232DCE0A207F81FD00AC2CD0 /* Lock.cpp in Sources */,
 				23567CFA20CA3889005F1C35 /* Frame.cpp in Sources */,
 				23B35C7820BFE39500425033 /* Path.cpp in Sources */,
+				23AB8970215B73F700554DF1 /* MigrationInitializerHandle.cpp in Sources */,
 				2360A60720D78F2C00E4A311 /* PerformanceTraceConfig.cpp in Sources */,
 				239774E7202AECD3000A681C /* BindParameter.cpp in Sources */,
 				23977506202AECD3000A681C /* QualifiedTableName.cpp in Sources */,
@@ -3600,7 +3611,7 @@
 				23C7559720DCFA0B00031A93 /* Locker.cpp in Sources */,
 				23F5BC8F20887FD3000CCD37 /* LangCreateTriggerSTMT.cpp in Sources */,
 				23B35CCE20C0261A00425033 /* String.cpp in Sources */,
-				23A64D10214A4A7000ED28BB /* MigrationInfos.cpp in Sources */,
+				23A64D10214A4A7000ED28BB /* Migration.cpp in Sources */,
 				23F5BC9020887FD3000CCD37 /* LangOrderingTerm.cpp in Sources */,
 				23F5BC9120887FD3000CCD37 /* WCTDatabase+Memory.mm in Sources */,
 				23F5BC9220887FD3000CCD37 /* LangDropTriggerSTMT.cpp in Sources */,
@@ -3691,6 +3702,7 @@
 				23F5BCD820887FD3000CCD37 /* Lock.cpp in Sources */,
 				23567CFB20CA3889005F1C35 /* Frame.cpp in Sources */,
 				23B35C7920BFE39500425033 /* Path.cpp in Sources */,
+				23AB8971215B73F700554DF1 /* MigrationInitializerHandle.cpp in Sources */,
 				2360A60820D78F2C00E4A311 /* PerformanceTraceConfig.cpp in Sources */,
 				23F5BCD920887FD3000CCD37 /* BindParameter.cpp in Sources */,
 				23F5BCDC20887FD3000CCD37 /* QualifiedTableName.cpp in Sources */,

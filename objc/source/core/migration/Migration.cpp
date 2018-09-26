@@ -19,29 +19,29 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/MigrationInfos.hpp>
+#include <WCDB/Migration.hpp>
 #include <WCDB/String.hpp>
 
 namespace WCDB {
 
 #pragma mark - Initialize
-MigrationInfos::MigrationInfos() : m_tableFilter(nullptr)
+Migration::Migration() : m_tableFilter(nullptr)
 {
 }
 
-bool MigrationInfos::shouldMigrate() const
+bool Migration::shouldMigrate() const
 {
     return m_tableFilter != nullptr || !m_userInfos.empty();
 }
 
 #pragma mark - Filter
-void MigrationInfos::filterTable(const TableFilter& tableFilter)
+void Migration::filterTable(const TableFilter& tableFilter)
 {
     m_tableFilter = tableFilter;
 }
 
 #pragma mark - UserInfo
-void MigrationInfos::addUserInfo(const MigrationUserInfo& info)
+void Migration::addUserInfo(const MigrationUserInfo& info)
 {
     WCTRemedialAssert(
     !info.shouldMigrate(), "Adding a unspecified migration info make no sense.", return;);
@@ -55,7 +55,7 @@ void MigrationInfos::addUserInfo(const MigrationUserInfo& info)
 }
 
 #pragma mark - Infos
-bool MigrationInfos::initialize(MigrationInfosInitializer& initializer)
+bool Migration::initialize(Initializer& initializer)
 {
     WCTInnerAssert(shouldMigrate());
     WCTInnerAssert(m_infos.empty() && m_holder.empty());
@@ -95,7 +95,7 @@ bool MigrationInfos::initialize(MigrationInfosInitializer& initializer)
 
             std::set<std::string> columns;
             std::tie(succeed, columns) = initializer.getAllColumns(
-            userInfo.getSchemaForOriginDatabase(), userInfo.getOriginTable());
+            userInfo.getOriginTable(), userInfo.getOriginDatabase());
             if (!succeed) {
                 break;
             }
@@ -119,12 +119,12 @@ bool MigrationInfos::initialize(MigrationInfosInitializer& initializer)
     return succeed;
 }
 
-std::map<std::string, const MigrationInfo*> MigrationInfos::getInfos() const
+std::map<std::string, const MigrationInfo*> Migration::getInfos() const
 {
     return m_infos;
 }
 
-void MigrationInfos::markInfoAsMigrated(const MigrationInfo* info)
+void Migration::markInfoAsMigrated(const MigrationInfo* info)
 {
     WCTInnerAssert(info != nullptr);
     WCTInnerAssert(m_infos.find(info->getMigratedTable()) != m_infos.end());
