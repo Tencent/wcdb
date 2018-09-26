@@ -90,7 +90,7 @@ RecyclableHandle Database::getHandle()
         }
         if (m_migration.shouldMigrate()) {
             MigrationHandle handle(path, &m_migration);
-            if (!m_migration.initialize(handle)) {
+            if (!handle.open() || !m_migration.initialize(handle)) {
                 return nullptr;
             }
         }
