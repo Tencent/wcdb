@@ -141,7 +141,7 @@ bool FactoryRenewer::prepare()
         return false;
     }
 
-    // 6. force backup assembled database if exists
+    // 5. force backup assembled database if exists
     size_t fileSize;
     std::tie(succeed, fileSize) = FileManager::getFileSize(tempDatabase);
     if (!succeed) {
@@ -158,7 +158,7 @@ bool FactoryRenewer::prepare()
         }
     }
 
-    // 7. move the assembled database to renew directory and wait for renew.
+    // 6. move the assembled database to renew directory and wait for renew.
     std::list<std::string> toRemove = Factory::associatedPathsForDatabase(database);
     toRemove.reverse();
     if (!FileManager::removeItems(toRemove)) {
