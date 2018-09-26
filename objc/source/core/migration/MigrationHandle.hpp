@@ -30,7 +30,7 @@ class Migration;
 class MigrationHandle : public Handle {
 #pragma mark - Initialize
 public:
-    MigrationHandle(const std::string &path, const Migration *const infos);
+    MigrationHandle(const Migration *const infos);
 
 protected:
     const Migration *const m_infos;

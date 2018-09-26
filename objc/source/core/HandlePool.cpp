@@ -213,6 +213,7 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
         setThreadedError(Error(Error::Code::NoMemory));
         return nullptr;
     }
+    handle->setPath(path);
     if (!handle->open()) {
         setThreadedError(handle->getError());
         return nullptr;

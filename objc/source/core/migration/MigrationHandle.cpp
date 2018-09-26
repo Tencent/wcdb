@@ -24,8 +24,8 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-MigrationHandle::MigrationHandle(const std::string &path, const Migration *const infos)
-: Handle(path), m_infos(infos)
+MigrationHandle::MigrationHandle(const Migration *const infos)
+: Handle(), m_infos(infos)
 {
     WCTInnerAssert(m_infos != nullptr);
 }

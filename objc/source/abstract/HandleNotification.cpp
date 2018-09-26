@@ -20,8 +20,8 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/HandleNotification.hpp>
+#include <WCDB/SQLite.h>
 #include <WCDB/String.hpp>
-#include <sqlcipher/sqlite3.h>
 
 namespace WCDB {
 

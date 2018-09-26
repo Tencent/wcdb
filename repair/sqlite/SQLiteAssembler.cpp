@@ -20,9 +20,9 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Cell.hpp>
+#include <WCDB/SQLite.h>
 #include <WCDB/SQLiteAssembler.hpp>
 #include <WCDB/String.hpp>
-#include <sqlcipher/sqlite3.h>
 #include <sstream>
 
 namespace WCDB {

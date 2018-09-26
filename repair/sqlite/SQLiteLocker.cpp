@@ -19,8 +19,8 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/SQLite.h>
 #include <WCDB/SQLiteLocker.hpp>
-#include <sqlcipher/sqlite3.h>
 
 namespace WCDB {
 

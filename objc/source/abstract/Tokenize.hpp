@@ -24,9 +24,8 @@
 #warning Make it public and add template for this
 
 #include <WCDB/Lock.hpp>
+#include <WCDB/SQLite.h>
 #include <map>
-#include <sqlcipher/fts3_tokenizer.h>
-#include <sqlcipher/sqlite3.h>
 #include <stdlib.h>
 #include <string>
 #include <vector>

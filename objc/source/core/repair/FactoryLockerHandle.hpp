@@ -18,35 +18,34 @@
  * limitations under the License.
  */
 
-#include <WCDB/GlobalConfig.hpp>
-#include <WCDB/SQLite.h>
+#ifndef FactoryLockerHandle_hpp
+#define FactoryLockerHandle_hpp
+
+#include <WCDB/Abstract.h>
+#include <WCDB/Factory.hpp>
 
 namespace WCDB {
 
-void GlobalConfig::enableMultithread()
-{
-    sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
-}
+class FactoryReadLockerHandle : public Handle, public Repair::ReadLocker {
+public:
+    void setPath(const std::string &path) override;
+    const std::string &getPath() const override;
 
-void GlobalConfig::setMemoryMapSize(int64_t defaultSizeLimit, int64_t maximumAllowedSizeLimit)
-{
-    sqlite3_config(SQLITE_CONFIG_MMAP_SIZE, defaultSizeLimit, maximumAllowedSizeLimit);
-}
+    bool acquireLock() override;
+    bool releaseLock() override;
+    const Error &getError() const override;
+};
 
-void GlobalConfig::enableMemoryStatus(bool enable)
-{
-    sqlite3_config(SQLITE_CONFIG_MEMSTATUS, enable);
-}
+class FactoryWriteLockerHandle : public Handle, public Repair::WriteLocker {
+public:
+    void setPath(const std::string &path) override;
+    const std::string &getPath() const override;
 
-void GlobalConfig::setNotificationForLog(const Log& log)
-{
-    sqlite3_config(SQLITE_CONFIG_LOG, log, nullptr);
-}
-
-void GlobalConfig::hookVFSOpen(const VFSOpen& vfsOpen)
-{
-    sqlite3_vfs* vfs = sqlite3_vfs_find(nullptr);
-    vfs->xSetSystemCall(vfs, "open", (void (*)(void)) vfsOpen);
-}
+    bool acquireLock() override;
+    bool releaseLock() override;
+    const Error &getError() const override;
+};
 
 } // namespace WCDB
+
+#endif /* FactoryLockerHandle_hpp */

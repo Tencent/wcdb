@@ -24,6 +24,8 @@
 #include <WCDB/ErrorProne.hpp>
 #include <string>
 
+// repair/sqlite are optional. Ones can implement their own tools.
+
 namespace WCDB {
 
 namespace Repair {

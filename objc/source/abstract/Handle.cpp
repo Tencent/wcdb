@@ -24,21 +24,19 @@
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/RepairKit.h>
+#include <WCDB/SQLite.h>
 #include <WCDB/String.hpp>
-#include <sqlcipher/sqlite3.h>
 
 namespace WCDB {
 
 #pragma mark - Initialize
-Handle::Handle(const std::string &path_)
+Handle::Handle()
 : m_handle(nullptr)
 , m_handleStatement(this)
 , m_notification(this)
-, path(path_)
 , m_nestedLevel(0)
 , m_ignorableCode(SQLITE_OK)
 {
-    m_error.infos.set("Path", path);
 }
 
 Handle::~Handle()
@@ -47,6 +45,18 @@ Handle::~Handle()
 }
 
 #pragma mark - Path
+void Handle::setPath(const std::string &path)
+{
+    WCTInnerAssert(!isOpened());
+    m_path = path;
+    m_error.infos.set("Path", path);
+}
+
+const std::string &Handle::getPath() const
+{
+    return m_path;
+}
+
 std::string Handle::getSHMSubfix()
 {
     return "-shm";
@@ -65,8 +75,9 @@ std::string Handle::getJournalSubfix()
 #pragma mark - Basic
 bool Handle::open()
 {
+    WCTInnerAssert(!m_path.empty());
     if (!m_handle) {
-        int rc = sqlite3_open(path.c_str(), (sqlite3 **) &m_handle);
+        int rc = sqlite3_open(m_path.c_str(), (sqlite3 **) &m_handle);
         if (rc != SQLITE_OK) {
             setError(rc);
             return false;

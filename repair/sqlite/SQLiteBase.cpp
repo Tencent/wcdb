@@ -19,9 +19,9 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/SQLite.h>
 #include <WCDB/SQLiteBase.hpp>
 #include <WCDB/String.hpp>
-#include <sqlcipher/sqlite3.h>
 #include <sstream>
 
 namespace WCDB {

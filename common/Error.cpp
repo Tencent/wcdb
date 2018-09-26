@@ -21,8 +21,8 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Error.hpp>
 #include <WCDB/Macro.hpp>
+#include <WCDB/SQLite.h>
 #include <WCDB/String.hpp>
-#include <sqlcipher/sqlite3.h>
 
 namespace WCDB {
 
