@@ -38,6 +38,7 @@ CopyOnWriteString ModuleArgument::SQL() const
         description.append(tableConstraint.description().get());
         break;
     case Type::ColumnDef:
+#warning TODO fts5 does not support typed columns.
         LangRemedialAssert(!columnDef.empty());
         description.append(columnDef.description().get());
         break;
