@@ -21,8 +21,6 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Database.hpp>
 #include <WCDB/Error.hpp>
-#include <WCDB/FactoryAssemblerHandle.hpp>
-#include <WCDB/FactoryLockerHandle.hpp>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/MigrationHandle.hpp>
 #include <WCDB/MigrationInitializerHandle.hpp>
@@ -422,8 +420,6 @@ bool Database::backup()
     SharedLockGuard lockConcurrencyGuard(m_concurrency);
     SharedLockGuard lockGuard(m_lock);
     Repair::FactoryBackup backup = m_factory.backup();
-    backup.setReadLocker(std::shared_ptr<Repair::ReadLocker>(new FactoryReadLockerHandle));
-    backup.setWriteLocker(std::shared_ptr<Repair::WriteLocker>(new FactoryWriteLockerHandle));
     if (backup.work(getPath())) {
         return true;
     }
@@ -437,10 +433,6 @@ bool Database::deposit()
     SharedLockGuard lockGuard(m_lock);
     close(nullptr);
     Repair::FactoryRenewer renewer = m_factory.renewer();
-    std::shared_ptr<Repair::Assembler> assembler(new FactoryAssemblerHandle);
-    renewer.setAssembler(assembler);
-    renewer.setReadLocker(std::shared_ptr<Repair::ReadLocker>(new FactoryReadLockerHandle));
-    renewer.setWriteLocker(std::shared_ptr<Repair::WriteLocker>(new FactoryWriteLockerHandle));
     if (!renewer.prepare()) {
         setThreadedError(renewer.getError());
         return false;
@@ -463,11 +455,6 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
     SharedLockGuard lockGuard(m_lock);
     close(nullptr);
     Repair::FactoryRetriever retriever = m_factory.retriever();
-    std::shared_ptr<Repair::Assembler> assembler(new FactoryAssemblerHandle);
-    retriever.setAssembler(assembler);
-#warning TODO use Handle based locker/assembler
-    retriever.setReadLocker(std::shared_ptr<Repair::ReadLocker>(new FactoryReadLockerHandle));
-    retriever.setWriteLocker(std::shared_ptr<Repair::WriteLocker>(new FactoryWriteLockerHandle));
     retriever.setProgressCallback(onProgressUpdate);
     bool result = retriever.work();
     setThreadedError(retriever.getError()); // retriever may have non-critical error even if it succeeds.

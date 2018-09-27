@@ -75,7 +75,6 @@ bool Repairman::isEmptyDatabase()
 
 bool Repairman::markAsAssembling()
 {
-    WCTInnerAssert(!m_assembler->getPath().empty());
     if (m_assembler->markAsAssembling()) {
         return true;
     }

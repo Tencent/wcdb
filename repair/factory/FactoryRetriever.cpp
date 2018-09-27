@@ -28,6 +28,7 @@
 #include <WCDB/FullCrawler.hpp>
 #include <WCDB/Mechanic.hpp>
 #include <WCDB/Path.hpp>
+#include <WCDB/SQLiteAssembler.hpp>
 #include <WCDB/ThreadedErrors.hpp>
 #include <numeric>
 
@@ -46,8 +47,9 @@ FactoryRetriever::FactoryRetriever(const Factory &factory_)
 #pragma mark - Retriever
 bool FactoryRetriever::work()
 {
-    WCTInnerAssert(m_assembler != nullptr);
-    WCTInnerAssert(m_assembler->getPath().empty());
+    if (m_assembler == nullptr) {
+        m_assembler.reset(new SQLiteAssembler);
+    }
     m_assembler->setPath(database);
 
     bool succeed;
@@ -131,8 +133,6 @@ bool FactoryRetriever::exit(bool result)
 
 bool FactoryRetriever::restore(const std::string &database)
 {
-    WCTInnerAssert(m_assembler != nullptr);
-
     std::list<std::string> materialPaths;
     bool succeed;
     std::tie(succeed, materialPaths)

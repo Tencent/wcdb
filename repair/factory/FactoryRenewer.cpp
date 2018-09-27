@@ -24,6 +24,7 @@
 #include <WCDB/FactoryRenewer.hpp>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Path.hpp>
+#include <WCDB/SQLiteAssembler.hpp>
 
 namespace WCDB {
 
@@ -83,8 +84,9 @@ bool FactoryRenewer::work()
 
 bool FactoryRenewer::prepare()
 {
-    WCTInnerAssert(m_assembler != nullptr);
-    WCTInnerAssert(m_assembler->getPath().empty());
+    if (m_assembler == nullptr) {
+        m_assembler.reset(new SQLiteAssembler);
+    }
 
     // 1. create temp directory for acquisition
     std::string tempDirectory = Path::addComponent(directory, "temp");

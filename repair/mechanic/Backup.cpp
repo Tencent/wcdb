@@ -24,6 +24,7 @@
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Master.hpp>
 #include <WCDB/Page.hpp>
+#include <WCDB/SQLiteLocker.hpp>
 #include <WCDB/Sequence.hpp>
 #include <WCDB/String.hpp>
 
@@ -40,10 +41,12 @@ Backup::Backup(const std::string &path)
 #pragma mark - Backup
 bool Backup::work()
 {
-    WCTInnerAssert(m_readLocker != nullptr);
-    WCTInnerAssert(m_readLocker->getPath().empty());
-    WCTInnerAssert(m_writeLocker != nullptr);
-    WCTInnerAssert(m_writeLocker->getPath().empty());
+    if (m_readLocker == nullptr) {
+        m_readLocker.reset(new SQLiteReadLocker);
+    }
+    if (m_writeLocker == nullptr) {
+        m_writeLocker.reset(new SQLiteWriteLocker);
+    }
     m_readLocker->setPath(m_pager.getPath());
     m_writeLocker->setPath(m_pager.getPath());
 

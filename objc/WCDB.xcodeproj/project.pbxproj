@@ -495,14 +495,6 @@
 		23AB8971215B73F700554DF1 /* MigrationInitializerHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AB896E215B73F700554DF1 /* MigrationInitializerHandle.cpp */; };
 		23AB8972215B73F700554DF1 /* MigrationInitializerHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AB896F215B73F700554DF1 /* MigrationInitializerHandle.hpp */; };
 		23AB8973215B73F700554DF1 /* MigrationInitializerHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AB896F215B73F700554DF1 /* MigrationInitializerHandle.hpp */; };
-		23AB8977215B9D4A00554DF1 /* FactoryLockerHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AB8975215B9D4A00554DF1 /* FactoryLockerHandle.cpp */; };
-		23AB8978215B9D4A00554DF1 /* FactoryLockerHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AB8975215B9D4A00554DF1 /* FactoryLockerHandle.cpp */; };
-		23AB8979215B9D4A00554DF1 /* FactoryLockerHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AB8976215B9D4A00554DF1 /* FactoryLockerHandle.hpp */; };
-		23AB897A215B9D4A00554DF1 /* FactoryLockerHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AB8976215B9D4A00554DF1 /* FactoryLockerHandle.hpp */; };
-		23AB8989215BA4D400554DF1 /* FactoryAssemblerHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AB8987215BA4D400554DF1 /* FactoryAssemblerHandle.cpp */; };
-		23AB898A215BA4D400554DF1 /* FactoryAssemblerHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AB8987215BA4D400554DF1 /* FactoryAssemblerHandle.cpp */; };
-		23AB898B215BA4D400554DF1 /* FactoryAssemblerHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AB8988215BA4D400554DF1 /* FactoryAssemblerHandle.hpp */; };
-		23AB898C215BA4D400554DF1 /* FactoryAssemblerHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AB8988215BA4D400554DF1 /* FactoryAssemblerHandle.hpp */; };
 		23AB898E215BA81300554DF1 /* SQLite.h in Headers */ = {isa = PBXBuildFile; fileRef = 23AB898D215BA6DB00554DF1 /* SQLite.h */; };
 		23AB898F215BA81300554DF1 /* SQLite.h in Headers */ = {isa = PBXBuildFile; fileRef = 23AB898D215BA6DB00554DF1 /* SQLite.h */; };
 		23AD52D620DB4A3C00664B62 /* Master.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52D420DB4A3C00664B62 /* Master.cpp */; };
@@ -1531,10 +1523,6 @@
 		23AB8919215A28F700554DF1 /* DebugDescribable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DebugDescribable.hpp; sourceTree = "<group>"; };
 		23AB896E215B73F700554DF1 /* MigrationInitializerHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationInitializerHandle.cpp; sourceTree = "<group>"; };
 		23AB896F215B73F700554DF1 /* MigrationInitializerHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrationInitializerHandle.hpp; sourceTree = "<group>"; };
-		23AB8975215B9D4A00554DF1 /* FactoryLockerHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FactoryLockerHandle.cpp; sourceTree = "<group>"; };
-		23AB8976215B9D4A00554DF1 /* FactoryLockerHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FactoryLockerHandle.hpp; sourceTree = "<group>"; };
-		23AB8987215BA4D400554DF1 /* FactoryAssemblerHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FactoryAssemblerHandle.cpp; sourceTree = "<group>"; };
-		23AB8988215BA4D400554DF1 /* FactoryAssemblerHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FactoryAssemblerHandle.hpp; sourceTree = "<group>"; };
 		23AB898D215BA6DB00554DF1 /* SQLite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SQLite.h; sourceTree = "<group>"; };
 		23AD52D420DB4A3C00664B62 /* Master.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Master.cpp; sourceTree = "<group>"; };
 		23AD52D520DB4A3C00664B62 /* Master.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Master.hpp; sourceTree = "<group>"; };
@@ -1758,7 +1746,6 @@
 		2349F6151EA0D6680021EFA7 /* core */ = {
 			isa = PBXGroup;
 			children = (
-				23AB8974215B9D1500554DF1 /* repair */,
 				23A09D632146204300F62EE8 /* migration */,
 				23B4DCDE2112B03200954D71 /* queue */,
 				23E163CA20FDDD6900C3F910 /* fts */,
@@ -2451,17 +2438,6 @@
 			path = migration;
 			sourceTree = "<group>";
 		};
-		23AB8974215B9D1500554DF1 /* repair */ = {
-			isa = PBXGroup;
-			children = (
-				23AB8975215B9D4A00554DF1 /* FactoryLockerHandle.cpp */,
-				23AB8976215B9D4A00554DF1 /* FactoryLockerHandle.hpp */,
-				23AB8987215BA4D400554DF1 /* FactoryAssemblerHandle.cpp */,
-				23AB8988215BA4D400554DF1 /* FactoryAssemblerHandle.hpp */,
-			);
-			path = repair;
-			sourceTree = "<group>";
-		};
 		23B4DCDE2112B03200954D71 /* queue */ = {
 			isa = PBXGroup;
 			children = (
@@ -2584,7 +2560,6 @@
 				239774E8202AECD3000A681C /* BindParameter.hpp in Headers */,
 				2397770A202AF2E3000A681C /* CopyOnWrite.hpp in Headers */,
 				239774EA202AECD3000A681C /* ColumnConstraint.hpp in Headers */,
-				23AB898B215BA4D400554DF1 /* FactoryAssemblerHandle.hpp in Headers */,
 				238A8FC5208B377300DDFDCB /* NSString+CppString.h in Headers */,
 				23BFE309207CA64F00A4BD81 /* NSNull+WCTColumnCoding.h in Headers */,
 				23DC3070202AFF8B000F7895 /* Handle.hpp in Headers */,
@@ -2614,7 +2589,6 @@
 				23B4DCDC2112AC5600954D71 /* Modules.hpp in Headers */,
 				23977507202AECD3000A681C /* QualifiedTableName.hpp in Headers */,
 				23E1FD7E206C963C006C6C8E /* NSDate+WCTColumnCoding.h in Headers */,
-				23AB8979215B9D4A00554DF1 /* FactoryLockerHandle.hpp in Headers */,
 				23977509202AECD3000A681C /* RaiseFunction.hpp in Headers */,
 				2397750B202AECD3000A681C /* ResultColumn.hpp in Headers */,
 				2397750D202AECD3000A681C /* SelectCore.hpp in Headers */,
@@ -2884,7 +2858,6 @@
 				23F5BD0C20887FD3000CCD37 /* BindParameter.hpp in Headers */,
 				23F5BD0D20887FD3000CCD37 /* CopyOnWrite.hpp in Headers */,
 				23F5BD0E20887FD3000CCD37 /* ColumnConstraint.hpp in Headers */,
-				23AB898C215BA4D400554DF1 /* FactoryAssemblerHandle.hpp in Headers */,
 				238A8FC6208B377300DDFDCB /* NSString+CppString.h in Headers */,
 				23F5BD0F20887FD3000CCD37 /* NSNull+WCTColumnCoding.h in Headers */,
 				23F5BD1020887FD3000CCD37 /* Handle.hpp in Headers */,
@@ -2914,7 +2887,6 @@
 				23B4DCDD2112AC5600954D71 /* Modules.hpp in Headers */,
 				23F5BD2520887FD3000CCD37 /* QualifiedTableName.hpp in Headers */,
 				23F5BD2720887FD3000CCD37 /* NSDate+WCTColumnCoding.h in Headers */,
-				23AB897A215B9D4A00554DF1 /* FactoryLockerHandle.hpp in Headers */,
 				23F5BD2820887FD3000CCD37 /* RaiseFunction.hpp in Headers */,
 				23F5BD2920887FD3000CCD37 /* ResultColumn.hpp in Headers */,
 				23F5BD2A20887FD3000CCD37 /* SelectCore.hpp in Headers */,
@@ -3505,13 +3477,11 @@
 				23A64D09214A458A00ED28BB /* MigrationInfo.cpp in Sources */,
 				23B8F5662043A2CE00EC571D /* Operable.cpp in Sources */,
 				23977537202AECD3000A681C /* StatementRollback.cpp in Sources */,
-				23AB8989215BA4D400554DF1 /* FactoryAssemblerHandle.cpp in Sources */,
 				23775B7A20AD666900E21AB0 /* Material.cpp in Sources */,
 				23775B9620AD666900E21AB0 /* Crawlable.cpp in Sources */,
 				23C7559A20DD17B100031A93 /* SQLiteBase.cpp in Sources */,
 				2397756F202AECD3000A681C /* LangDropIndexSTMT.cpp in Sources */,
 				23D0C31420C125570001BFAE /* Assembler.cpp in Sources */,
-				23AB8977215B9D4A00554DF1 /* FactoryLockerHandle.cpp in Sources */,
 				2360A5F720D78F1B00E4A311 /* HandleRelated.cpp in Sources */,
 				23977551202AECD3000A681C /* LangBeginSTMT.cpp in Sources */,
 				23775B8620AD666900E21AB0 /* Page.cpp in Sources */,
@@ -3760,13 +3730,11 @@
 				23A64D0A214A458A00ED28BB /* MigrationInfo.cpp in Sources */,
 				23F5BCE920887FD3000CCD37 /* Operable.cpp in Sources */,
 				23F5BCEA20887FD3000CCD37 /* StatementRollback.cpp in Sources */,
-				23AB898A215BA4D400554DF1 /* FactoryAssemblerHandle.cpp in Sources */,
 				23775B7B20AD666900E21AB0 /* Material.cpp in Sources */,
 				23775B9720AD666900E21AB0 /* Crawlable.cpp in Sources */,
 				23C7559B20DD17B100031A93 /* SQLiteBase.cpp in Sources */,
 				23F5BCEB20887FD3000CCD37 /* LangDropIndexSTMT.cpp in Sources */,
 				23D0C31520C125570001BFAE /* Assembler.cpp in Sources */,
-				23AB8978215B9D4A00554DF1 /* FactoryLockerHandle.cpp in Sources */,
 				2360A5F820D78F1B00E4A311 /* HandleRelated.cpp in Sources */,
 				23F5BCED20887FD3000CCD37 /* LangBeginSTMT.cpp in Sources */,
 				23775B8720AD666900E21AB0 /* Page.cpp in Sources */,
