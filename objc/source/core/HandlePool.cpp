@@ -31,7 +31,7 @@ namespace WCDB {
 
 #pragma mark - Initialize
 HandlePool::HandlePool(const std::string &thePath)
-: path(thePath), m_configs(nullptr), m_aliveHandleCount(0)
+: path(thePath), m_configs(nullptr)
 {
 }
 
@@ -81,7 +81,7 @@ int HandlePool::maxConcurrency()
 bool HandlePool::allowedConcurrent()
 {
     WCTInnerAssert(m_concurrency.readSafety());
-    if (m_aliveHandleCount < maxConcurrency()) {
+    if (m_handles.size() < maxConcurrency()) {
         return true;
     }
     Error error;
@@ -89,7 +89,7 @@ bool HandlePool::allowedConcurrent()
     error.message = "The concurrency of database exceeds the maximum allowed.";
     error.infos.set("Path", path);
     error.infos.set("MaxConcurrency", maxConcurrency());
-    error.infos.set("Concurrency", m_aliveHandleCount);
+    error.infos.set("Concurrency", m_handles.size());
     Notifier::shared()->notify(error);
     setThreadedError(std::move(error));
     return false;
@@ -115,6 +115,7 @@ bool HandlePool::isBlockaded() const
 void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
 {
     LockGuard lockConcurrencyGuard(m_concurrency);
+    WCTInnerAssert(m_frees.size() == m_handles.size());
     purge();
     if (onDrained) {
         onDrained();
@@ -124,7 +125,7 @@ void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
 bool HandlePool::isDrained() const
 {
     SharedLockGuard lockGuard(m_lock);
-    return m_aliveHandleCount == 0;
+    return m_handles.size() == 0;
 }
 
 #pragma mark - Handle
@@ -132,16 +133,25 @@ void HandlePool::purge()
 {
     SharedLockGuard lockConcurrencyGuard(m_concurrency);
     LockGuard lockGuard(m_lock);
-    while (!m_handles.empty()) {
-        m_handles.back()->get()->close();
-        m_handles.pop_back();
-        --m_aliveHandleCount;
+    for (const auto &handle : m_frees) {
+        handle->get()->close();
+        m_handles.erase(handle);
     }
+    m_frees.clear();
+}
+
+size_t HandlePool::aliveHandleCount() const
+{
+    SharedLockGuard lockGuard(m_lock);
+    return m_handles.size();
 }
 
 bool HandlePool::canFlowOut()
 {
     SharedLockGuard lockConcurrencyGuard(m_concurrency);
+    if (m_handles.size() > 0) {
+        return true;
+    }
     std::shared_ptr<ConfiguredHandle> configuredHandle = flowOutConfiguredHandle();
     if (configuredHandle == nullptr) {
         configuredHandle = generateConfiguredHandle();
@@ -181,12 +191,12 @@ std::shared_ptr<ConfiguredHandle> HandlePool::flowOutConfiguredHandle()
     std::shared_ptr<Configs> configs = nullptr;
     {
         LockGuard lockGuard(m_lock);
-        if (m_handles.empty()) {
+        if (m_frees.empty()) {
             return nullptr;
         }
-        configuredHandle = m_handles.back();
+        configuredHandle = m_frees.back();
         WCTInnerAssert(configuredHandle != nullptr);
-        m_handles.pop_back();
+        m_frees.pop_back();
         configs = m_configs;
     }
     if (!configuredHandle->configure(configs)) {
@@ -231,11 +241,10 @@ std::shared_ptr<ConfiguredHandle> HandlePool::generateConfiguredHandle()
     {
         LockGuard lockGuard(m_lock);
         WCTInnerAssert(configuredHandle != nullptr);
-        ++m_aliveHandleCount;
         if (!allowedConcurrent()) {
-            --m_aliveHandleCount;
             return nullptr;
         }
+        m_handles.emplace(configuredHandle);
     }
     return configuredHandle;
 }
@@ -248,10 +257,9 @@ void HandlePool::flowBackConfiguredHandle(const std::shared_ptr<ConfiguredHandle
         handleWillFlowBack(configuredHandle->get());
         LockGuard lockGuard(m_lock);
         if (m_handles.size() < hardwareConcurrency()) {
-            m_handles.push_back(configuredHandle);
+            m_frees.push_back(configuredHandle);
         } else {
-            // drop this handle
-            --m_aliveHandleCount;
+            m_handles.erase(configuredHandle);
         }
     }
 }

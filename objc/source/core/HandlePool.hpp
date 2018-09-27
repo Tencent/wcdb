@@ -69,7 +69,6 @@ public:
 
 protected:
     bool allowedConcurrent();
-    int m_aliveHandleCount;
     mutable SharedLock m_concurrency;
 
 #pragma mark - Handle
@@ -77,6 +76,7 @@ public:
     bool canFlowOut();
     RecyclableHandle flowOut();
     void purge();
+    size_t aliveHandleCount() const;
 
 protected:
     virtual std::shared_ptr<Handle> generateHandle() = 0;
@@ -90,7 +90,8 @@ private:
     void flowBackConfiguredHandle(const std::shared_ptr<ConfiguredHandle> &configuredHandle);
     void flowBack(const std::shared_ptr<ConfiguredHandle> &configuredHandle);
 
-    std::list<std::shared_ptr<ConfiguredHandle>> m_handles;
+    std::set<std::shared_ptr<ConfiguredHandle>> m_handles;
+    std::list<std::shared_ptr<ConfiguredHandle>> m_frees;
 };
 
 } //namespace WCDB

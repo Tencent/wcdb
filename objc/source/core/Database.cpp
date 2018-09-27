@@ -72,13 +72,13 @@ RecyclableHandle Database::getHandle()
     do {
         {
             SharedLockGuard lockGuard(m_lock);
-            if (m_aliveHandleCount != 0) {
+            if (aliveHandleCount() > 0) {
                 break;
             }
         }
         LockGuard lockConcurrencyGuard(m_concurrency);
         LockGuard lockGuard(m_lock);
-        if (m_aliveHandleCount != 0) {
+        if (aliveHandleCount() > 0) {
             break;
         }
         // Blocked initialization
@@ -561,7 +561,7 @@ bool Database::isCorrupted() const
 void Database::addMigrationInfo(const MigrationUserInfo &userInfo)
 {
     LockGuard lockGuard(m_lock);
-    WCTRemedialAssert(m_aliveHandleCount == 0,
+    WCTRemedialAssert(aliveHandleCount() == 0,
                       "Migration method must be set before the very first operation.",
                       return;);
     m_migration.addUserInfo(userInfo);
@@ -570,7 +570,7 @@ void Database::addMigrationInfo(const MigrationUserInfo &userInfo)
 void Database::filterMigration(const MigrationTableFilter &filter)
 {
     LockGuard lockGuard(m_lock);
-    WCTRemedialAssert(m_aliveHandleCount == 0,
+    WCTRemedialAssert(aliveHandleCount() == 0,
                       "Migration user info must be set before the very first operation.",
                       return;);
     m_migration.filterTable(filter);
