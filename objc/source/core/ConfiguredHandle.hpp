@@ -26,6 +26,7 @@
 
 namespace WCDB {
 
+#warning TODO move this into Recyclable Handle
 class ConfiguredHandle {
 public:
     ConfiguredHandle() = delete;
