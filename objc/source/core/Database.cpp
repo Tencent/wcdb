@@ -444,7 +444,7 @@ bool Database::deposit()
         return false;
     }
     // If app stop here, it results that the old database is moved to deposited directory and the renewed one is not moved to the origin directory.
-    // At next time this database launchs, the retriveRenewed method will do the remaining work. So data will not lost.
+    // At next time this database launchs, the retrieveRenewed method will do the remaining work. So data will not lost.
     if (!renewer.work()) {
         setThreadedError(renewer.getError());
         return false;
