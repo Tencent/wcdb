@@ -117,6 +117,7 @@ void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
     LockGuard lockConcurrencyGuard(m_concurrency);
     WCTInnerAssert(m_frees.size() == m_handles.size());
     purge();
+    WCTInnerAssert(m_handles.size() == 0);
     if (onDrained) {
         onDrained();
     }
