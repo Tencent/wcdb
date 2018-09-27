@@ -166,6 +166,7 @@ bool HandlePool::canFlowOut()
 RecyclableHandle HandlePool::flowOut()
 {
     SharedLockGuard lockConcurrencyGuard(m_concurrency);
+#warning TODO integrate all flowout and generate handle method here to avoid data inconsistency
     std::shared_ptr<ConfiguredHandle> configuredHandle = flowOutConfiguredHandle();
     if (configuredHandle == nullptr) {
         configuredHandle = generateConfiguredHandle();
