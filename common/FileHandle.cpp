@@ -61,7 +61,8 @@ FileHandle &FileHandle::operator=(FileHandle &&other)
 #pragma mark - Basic
 bool FileHandle::open(Mode mode)
 {
-    WCTInnerAssert(mode != Mode::None);
+    WCTRemedialAssert(mode != Mode::None, "Invalid argument", markAsMisuse("Invalid argument.");
+                      return false;);
     WCTRemedialAssert(!isOpened(), "File already is opened", markAsMisuse("Duplicate open.");
                       return true;);
     switch (mode) {
