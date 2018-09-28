@@ -116,6 +116,7 @@ RecyclableHandle Database::getHandle()
         }
         // When migration associated is not set, the initialize state is default to true
         if (!m_migration.isInitialized()) {
+            WCTInnerAssert(m_concurrency.readSafety());
             // This temporary handle will be dropped since it's dirty.
             MigrationInitializerHandle handle;
             handle.setPath(path);
@@ -124,6 +125,8 @@ RecyclableHandle Database::getHandle()
             }
         }
     } while (false);
+    WCTInnerAssert(m_identifier != 0);
+    checkIdentifier();
     // additional shared lock is not needed since when it's blocked the threadedHandles is always empty.
     ThreadedHandles *threadedHandle = Database::threadedHandles().getOrCreate();
     const auto iter = threadedHandle->find(this);
@@ -132,6 +135,18 @@ RecyclableHandle Database::getHandle()
         return iter->second;
     }
     return flowOut();
+}
+
+void Database::checkIdentifier() const
+{
+#warning TODO It's only for debug usage
+    WCTInnerAssert(m_identifier != 0);
+    bool succeed;
+    uint32_t identifier;
+    std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
+    WCTRemedialAssert(succeed && identifier == m_identifier,
+                      "Database should be closed before it's removed.",
+                      ;);
 }
 
 bool Database::execute(const Statement &statement)

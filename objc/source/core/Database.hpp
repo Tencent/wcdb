@@ -54,6 +54,7 @@ public:
     uint32_t getIdentifier() const;
 
 protected:
+    void checkIdentifier() const;
     Tag m_tag;
     uint32_t m_identifier;
 

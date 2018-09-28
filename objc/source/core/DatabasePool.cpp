@@ -95,7 +95,6 @@ void DatabasePool::flowBack(Database *database)
     LockGuard lockGuard(m_lock);
     const auto &iter = m_databases.find(database->getPath());
     WCTInnerAssert(iter != m_databases.end());
-#warning TODO will database be different?
     WCTInnerAssert(iter->second.database.get() == database);
     if (--iter->second.reference == 0) {
         m_databases.erase(iter);
