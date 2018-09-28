@@ -52,7 +52,7 @@ public:
     using HandlePool::isBlockaded;
 
 protected:
-    std::atomic<Tag> m_tag;
+    Tag m_tag;
 
 #pragma mark - Handle
 public:

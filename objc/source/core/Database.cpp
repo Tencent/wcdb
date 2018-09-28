@@ -43,12 +43,14 @@ Database::Database(const std::string &path)
 #pragma mark - Basic
 void Database::setTag(const Tag &tag)
 {
-    m_tag.store(tag);
+    LockGuard lockGuard(m_lock);
+    m_tag = tag;
 }
 
 Tag Database::getTag() const
 {
-    return m_tag.load();
+    SharedLockGuard lockGuard(m_lock);
+    return m_tag;
 }
 
 bool Database::canOpen()
