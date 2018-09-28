@@ -47,6 +47,10 @@
 		2330712F1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2330712E1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm */; };
 		233A058B2062698E00F1A212 /* WCTHandle+ChainCall.h in Headers */ = {isa = PBXBuildFile; fileRef = 233A05892062698E00F1A212 /* WCTHandle+ChainCall.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		233A058C2062698E00F1A212 /* WCTUnsafeHandle+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233A058A2062698E00F1A212 /* WCTUnsafeHandle+ChainCall.mm */; };
+		233A8532215E7CFE00BB8D4F /* Console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233A8530215E7CFE00BB8D4F /* Console.cpp */; };
+		233A8533215E7CFE00BB8D4F /* Console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233A8530215E7CFE00BB8D4F /* Console.cpp */; };
+		233A8534215E7CFE00BB8D4F /* Console.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233A8531215E7CFE00BB8D4F /* Console.hpp */; };
+		233A8535215E7CFE00BB8D4F /* Console.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233A8531215E7CFE00BB8D4F /* Console.hpp */; };
 		23408F0F211897AA0071E5A7 /* Shm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23408F0D211897AA0071E5A7 /* Shm.cpp */; };
 		23408F10211897AA0071E5A7 /* Shm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23408F0D211897AA0071E5A7 /* Shm.cpp */; };
 		23408F11211897AA0071E5A7 /* Shm.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23408F0E211897AA0071E5A7 /* Shm.hpp */; };
@@ -1138,6 +1142,8 @@
 		2330712E1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSObject+WCTColumnCoding.mm"; sourceTree = "<group>"; };
 		233A05892062698E00F1A212 /* WCTHandle+ChainCall.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTHandle+ChainCall.h"; sourceTree = "<group>"; };
 		233A058A2062698E00F1A212 /* WCTUnsafeHandle+ChainCall.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTUnsafeHandle+ChainCall.mm"; sourceTree = "<group>"; };
+		233A8530215E7CFE00BB8D4F /* Console.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Console.cpp; sourceTree = "<group>"; };
+		233A8531215E7CFE00BB8D4F /* Console.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Console.hpp; sourceTree = "<group>"; };
 		23408F0D211897AA0071E5A7 /* Shm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Shm.cpp; sourceTree = "<group>"; };
 		23408F0E211897AA0071E5A7 /* Shm.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Shm.hpp; sourceTree = "<group>"; };
 		234591F020440A0200DC7D34 /* WCTRedirectable.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTRedirectable.mm; sourceTree = "<group>"; };
@@ -2046,6 +2052,8 @@
 				2314AE6F21070A1700244D39 /* Range.cpp */,
 				2314AE7021070A1700244D39 /* Range.hpp */,
 				23AB898D215BA6DB00554DF1 /* SQLite.h */,
+				233A8530215E7CFE00BB8D4F /* Console.cpp */,
+				233A8531215E7CFE00BB8D4F /* Console.hpp */,
 			);
 			name = common;
 			path = ../../common;
@@ -2563,6 +2571,7 @@
 				239774FB202AECD3000A681C /* JoinClause.hpp in Headers */,
 				239774FD202AECD3000A681C /* JoinConstraint.hpp in Headers */,
 				2316D92F21057CA700707AFC /* MappedData.hpp in Headers */,
+				233A8534215E7CFE00BB8D4F /* Console.hpp in Headers */,
 				239774FF202AECD3000A681C /* LiteralValue.hpp in Headers */,
 				23977501202AECD3000A681C /* ModuleArgument.hpp in Headers */,
 				23977503202AECD3000A681C /* OrderingTerm.hpp in Headers */,
@@ -2859,6 +2868,7 @@
 				23F5BD1D20887FD3000CCD37 /* JoinClause.hpp in Headers */,
 				23F5BD1F20887FD3000CCD37 /* JoinConstraint.hpp in Headers */,
 				2316D93021057CA700707AFC /* MappedData.hpp in Headers */,
+				233A8535215E7CFE00BB8D4F /* Console.hpp in Headers */,
 				23F5BD2020887FD3000CCD37 /* LiteralValue.hpp in Headers */,
 				23F5BD2120887FD3000CCD37 /* ModuleArgument.hpp in Headers */,
 				23F5BD2220887FD3000CCD37 /* OrderingTerm.hpp in Headers */,
@@ -3425,6 +3435,7 @@
 				23775B8A20AD666900E21AB0 /* Pager.cpp in Sources */,
 				239775A2202AECD3000A681C /* LangTableConstraint.cpp in Sources */,
 				2397759A202AECD3000A681C /* LangRollbackSTMT.cpp in Sources */,
+				233A8532215E7CFE00BB8D4F /* Console.cpp in Sources */,
 				23AD52D620DB4A3C00664B62 /* Master.cpp in Sources */,
 				23775B6220AD666900E21AB0 /* Error.cpp in Sources */,
 				2397755A202AECD3000A681C /* LangCommitSTMT.cpp in Sources */,
@@ -3676,6 +3687,7 @@
 				23775B8B20AD666900E21AB0 /* Pager.cpp in Sources */,
 				23F5BCD420887FD3000CCD37 /* LangTableConstraint.cpp in Sources */,
 				23F5BCD520887FD3000CCD37 /* LangRollbackSTMT.cpp in Sources */,
+				233A8533215E7CFE00BB8D4F /* Console.cpp in Sources */,
 				23AD52D720DB4A3C00664B62 /* Master.cpp in Sources */,
 				23775B6320AD666900E21AB0 /* Error.cpp in Sources */,
 				23F5BCD620887FD3000CCD37 /* LangCommitSTMT.cpp in Sources */,
