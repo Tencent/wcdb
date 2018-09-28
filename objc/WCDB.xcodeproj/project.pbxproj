@@ -485,10 +485,6 @@
 		23A6D4C120BFD7F9004F2DAA /* Progress.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A6D4BE20BFD7F9004F2DAA /* Progress.hpp */; };
 		23A6D4C220BFD7F9004F2DAA /* Progress.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A6D4BE20BFD7F9004F2DAA /* Progress.hpp */; };
 		23A7B35B2044F52000775DB8 /* CopyOnWriteList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A7B35A2044F52000775DB8 /* CopyOnWriteList.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		23AB890E215A1FA500554DF1 /* MigrationConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AB890C215A1FA500554DF1 /* MigrationConfig.cpp */; };
-		23AB890F215A1FA500554DF1 /* MigrationConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AB890C215A1FA500554DF1 /* MigrationConfig.cpp */; };
-		23AB8910215A1FA500554DF1 /* MigrationConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AB890D215A1FA500554DF1 /* MigrationConfig.hpp */; };
-		23AB8911215A1FA500554DF1 /* MigrationConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AB890D215A1FA500554DF1 /* MigrationConfig.hpp */; };
 		23AB891C215A28F700554DF1 /* DebugDescribable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AB8919215A28F700554DF1 /* DebugDescribable.hpp */; };
 		23AB891D215A28F700554DF1 /* DebugDescribable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AB8919215A28F700554DF1 /* DebugDescribable.hpp */; };
 		23AB8970215B73F700554DF1 /* MigrationInitializerHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AB896E215B73F700554DF1 /* MigrationInitializerHandle.cpp */; };
@@ -1518,8 +1514,6 @@
 		23A6D4BE20BFD7F9004F2DAA /* Progress.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Progress.hpp; sourceTree = "<group>"; };
 		23A747BE20039675003CECFA /* sqlcipher.preprocessed.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqlcipher.preprocessed.xcodeproj; path = ../sqlcipher/sqlcipher.preprocessed.xcodeproj; sourceTree = "<group>"; };
 		23A7B35A2044F52000775DB8 /* CopyOnWriteList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CopyOnWriteList.hpp; sourceTree = "<group>"; };
-		23AB890C215A1FA500554DF1 /* MigrationConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationConfig.cpp; sourceTree = "<group>"; };
-		23AB890D215A1FA500554DF1 /* MigrationConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrationConfig.hpp; sourceTree = "<group>"; };
 		23AB8919215A28F700554DF1 /* DebugDescribable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DebugDescribable.hpp; sourceTree = "<group>"; };
 		23AB896E215B73F700554DF1 /* MigrationInitializerHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationInitializerHandle.cpp; sourceTree = "<group>"; };
 		23AB896F215B73F700554DF1 /* MigrationInitializerHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrationInitializerHandle.hpp; sourceTree = "<group>"; };
@@ -2432,8 +2426,6 @@
 				23A64D0E214A4A7000ED28BB /* Migration.hpp */,
 				23AB896E215B73F700554DF1 /* MigrationInitializerHandle.cpp */,
 				23AB896F215B73F700554DF1 /* MigrationInitializerHandle.hpp */,
-				23AB890C215A1FA500554DF1 /* MigrationConfig.cpp */,
-				23AB890D215A1FA500554DF1 /* MigrationConfig.hpp */,
 			);
 			path = migration;
 			sourceTree = "<group>";
@@ -2668,7 +2660,6 @@
 				2316D9452105D19500707AFC /* PageBasedFileHandle.hpp in Headers */,
 				2397756C202AECD3000A681C /* LangDeleteSTMT.hpp in Headers */,
 				2360A60520D78F2C00E4A311 /* SQLTraceConfig.hpp in Headers */,
-				23AB8910215A1FA500554DF1 /* MigrationConfig.hpp in Headers */,
 				23775BCF20AD72BC00E21AB0 /* Data.hpp in Headers */,
 				23775B6020AD666900E21AB0 /* Assertion.hpp in Headers */,
 				2397756E202AECD3000A681C /* LangDetachSTMT.hpp in Headers */,
@@ -2966,7 +2957,6 @@
 				2316D9462105D19500707AFC /* PageBasedFileHandle.hpp in Headers */,
 				23F5BD6B20887FD3000CCD37 /* LangDeleteSTMT.hpp in Headers */,
 				2360A60620D78F2C00E4A311 /* SQLTraceConfig.hpp in Headers */,
-				23AB8911215A1FA500554DF1 /* MigrationConfig.hpp in Headers */,
 				23775BD020AD72BC00E21AB0 /* Data.hpp in Headers */,
 				23775B6120AD666900E21AB0 /* Assertion.hpp in Headers */,
 				23F5BD6C20887FD3000CCD37 /* LangDetachSTMT.hpp in Headers */,
@@ -3370,7 +3360,6 @@
 				23977575202AECD3000A681C /* LangDropTriggerSTMT.cpp in Sources */,
 				23DC306F202AFF8B000F7895 /* Handle.cpp in Sources */,
 				23DD773020D13E8E00E9B451 /* BackupConfig.cpp in Sources */,
-				23AB890E215A1FA500554DF1 /* MigrationConfig.cpp in Sources */,
 				23977502202AECD3000A681C /* OrderingTerm.cpp in Sources */,
 				2397751D202AECD3000A681C /* StatementCreateTrigger.cpp in Sources */,
 				23977500202AECD3000A681C /* ModuleArgument.cpp in Sources */,
@@ -3623,7 +3612,6 @@
 				23F5BC9220887FD3000CCD37 /* LangDropTriggerSTMT.cpp in Sources */,
 				23F5BC9420887FD3000CCD37 /* Handle.cpp in Sources */,
 				23DD773120D13E8E00E9B451 /* BackupConfig.cpp in Sources */,
-				23AB890F215A1FA500554DF1 /* MigrationConfig.cpp in Sources */,
 				23F5BC9620887FD3000CCD37 /* OrderingTerm.cpp in Sources */,
 				23F5BC9720887FD3000CCD37 /* StatementCreateTrigger.cpp in Sources */,
 				23F5BC9820887FD3000CCD37 /* ModuleArgument.cpp in Sources */,
