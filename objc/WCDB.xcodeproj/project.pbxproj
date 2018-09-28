@@ -555,10 +555,6 @@
 		23B4DCF42112B32D00954D71 /* BackupQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4DCF12112B32D00954D71 /* BackupQueue.cpp */; };
 		23B4DCF52112B32D00954D71 /* BackupQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DCF22112B32D00954D71 /* BackupQueue.hpp */; };
 		23B4DCF62112B32D00954D71 /* BackupQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DCF22112B32D00954D71 /* BackupQueue.hpp */; };
-		23B4DD0F2112EDC600954D71 /* GlobalConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4DD0D2112EDC600954D71 /* GlobalConfig.cpp */; };
-		23B4DD102112EDC600954D71 /* GlobalConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4DD0D2112EDC600954D71 /* GlobalConfig.cpp */; };
-		23B4DD112112EDC600954D71 /* GlobalConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DD0E2112EDC600954D71 /* GlobalConfig.hpp */; };
-		23B4DD122112EDC600954D71 /* GlobalConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DD0E2112EDC600954D71 /* GlobalConfig.hpp */; };
 		23B8F5662043A2CE00EC571D /* Operable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B8F5642043A2CE00EC571D /* Operable.cpp */; };
 		23B8F5672043A2CE00EC571D /* Operable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B8F5652043A2CE00EC571D /* Operable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23B8F56F2043FD1E00EC571D /* Redirectable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B8F56D2043FD1E00EC571D /* Redirectable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1550,8 +1546,6 @@
 		23B4DCEC2112B32400954D71 /* CheckpointQueue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CheckpointQueue.hpp; sourceTree = "<group>"; };
 		23B4DCF12112B32D00954D71 /* BackupQueue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BackupQueue.cpp; sourceTree = "<group>"; };
 		23B4DCF22112B32D00954D71 /* BackupQueue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BackupQueue.hpp; sourceTree = "<group>"; };
-		23B4DD0D2112EDC600954D71 /* GlobalConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GlobalConfig.cpp; sourceTree = "<group>"; };
-		23B4DD0E2112EDC600954D71 /* GlobalConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GlobalConfig.hpp; sourceTree = "<group>"; };
 		23B8F5642043A2CE00EC571D /* Operable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Operable.cpp; sourceTree = "<group>"; };
 		23B8F5652043A2CE00EC571D /* Operable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Operable.hpp; sourceTree = "<group>"; };
 		23B8F56D2043FD1E00EC571D /* Redirectable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Redirectable.hpp; sourceTree = "<group>"; };
@@ -1730,8 +1724,6 @@
 				2360A5F620D78F1B00E4A311 /* HandleRelated.hpp */,
 				2370980820590CA700E768B4 /* HandleStatement.cpp */,
 				2370980920590CA700E768B4 /* HandleStatement.hpp */,
-				23B4DD0D2112EDC600954D71 /* GlobalConfig.cpp */,
-				23B4DD0E2112EDC600954D71 /* GlobalConfig.hpp */,
 			);
 			path = abstract;
 			sourceTree = "<group>";
@@ -2759,7 +2751,6 @@
 				2349F75F1EA0D6680021EFA7 /* WCTColumnBinding.h in Headers */,
 				23B4DC802111B39200954D71 /* Tag.hpp in Headers */,
 				23AB898E215BA81300554DF1 /* SQLite.h in Headers */,
-				23B4DD112112EDC600954D71 /* GlobalConfig.hpp in Headers */,
 				2349F75D1EA0D6680021EFA7 /* WCTBinding.h in Headers */,
 				2349F7361EA0D6680021EFA7 /* WCTDatabase+Convenient.h in Headers */,
 				2349F72C1EA0D6680021EFA7 /* WCTSelect.h in Headers */,
@@ -3056,7 +3047,6 @@
 				23F5BDB620887FD3000CCD37 /* WCTColumnBinding.h in Headers */,
 				23B4DC812111B39200954D71 /* Tag.hpp in Headers */,
 				23AB898F215BA81300554DF1 /* SQLite.h in Headers */,
-				23B4DD122112EDC600954D71 /* GlobalConfig.hpp in Headers */,
 				23F5BDB720887FD3000CCD37 /* WCTBinding.h in Headers */,
 				23F5BDB820887FD3000CCD37 /* WCTDatabase+Convenient.h in Headers */,
 				23F5BDB920887FD3000CCD37 /* WCTSelect.h in Headers */,
@@ -3439,7 +3429,6 @@
 				23775B6220AD666900E21AB0 /* Error.cpp in Sources */,
 				2397755A202AECD3000A681C /* LangCommitSTMT.cpp in Sources */,
 				23B4DCED2112B32400954D71 /* CheckpointQueue.cpp in Sources */,
-				23B4DD0F2112EDC600954D71 /* GlobalConfig.cpp in Sources */,
 				23775B8220AD666900E21AB0 /* Cell.cpp in Sources */,
 				232DCE0A207F81FD00AC2CD0 /* Lock.cpp in Sources */,
 				23567CFA20CA3889005F1C35 /* Frame.cpp in Sources */,
@@ -3691,7 +3680,6 @@
 				23775B6320AD666900E21AB0 /* Error.cpp in Sources */,
 				23F5BCD620887FD3000CCD37 /* LangCommitSTMT.cpp in Sources */,
 				23B4DCEE2112B32400954D71 /* CheckpointQueue.cpp in Sources */,
-				23B4DD102112EDC600954D71 /* GlobalConfig.cpp in Sources */,
 				23775B8320AD666900E21AB0 /* Cell.cpp in Sources */,
 				23F5BCD820887FD3000CCD37 /* Lock.cpp in Sources */,
 				23567CFB20CA3889005F1C35 /* Frame.cpp in Sources */,

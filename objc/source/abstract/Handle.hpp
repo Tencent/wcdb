@@ -46,6 +46,18 @@ protected:
     friend class HandleRelated;
     void *m_handle;
 
+#pragma mark - Global
+public:
+    static void enableMultithread();
+    static void enableMemoryStatus(bool enable);
+    static void setMemoryMapSize(int64_t defaultSizeLimit, int64_t maximumAllowedSizeLimit);
+
+    typedef void (*Log)(void *, int, const char *);
+    static void setNotificationForLog(const Log &log);
+
+    typedef int (*VFSOpen)(const char *, int, int);
+    static void setNotificationWhenVFSOpened(const VFSOpen &vfsOpen);
+
 #pragma mark - Path
 public:
     void setPath(const std::string &path);

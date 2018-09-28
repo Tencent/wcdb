@@ -44,6 +44,33 @@ Handle::~Handle()
     close();
 }
 
+#pragma mark - Global
+void Handle::enableMultithread()
+{
+    sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
+}
+
+void Handle::setMemoryMapSize(int64_t defaultSizeLimit, int64_t maximumAllowedSizeLimit)
+{
+    sqlite3_config(SQLITE_CONFIG_MMAP_SIZE, defaultSizeLimit, maximumAllowedSizeLimit);
+}
+
+void Handle::enableMemoryStatus(bool enable)
+{
+    sqlite3_config(SQLITE_CONFIG_MEMSTATUS, enable);
+}
+
+void Handle::setNotificationForLog(const Log &log)
+{
+    sqlite3_config(SQLITE_CONFIG_LOG, log, nullptr);
+}
+
+void Handle::setNotificationWhenVFSOpened(const VFSOpen &vfsOpen)
+{
+    sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
+    vfs->xSetSystemCall(vfs, "open", (void (*)(void)) vfsOpen);
+}
+
 #pragma mark - Path
 void Handle::setPath(const std::string &path)
 {

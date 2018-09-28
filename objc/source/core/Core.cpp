@@ -51,11 +51,11 @@ Core::Core()
 {
     m_databasePool->setEvent(this);
 
-    GlobalConfig::enableMultithread();
-    GlobalConfig::enableMemoryStatus(false);
-    //        GlobalConfig::setMemoryMapSize(0x7fff0000, 0x7fff0000);
-    GlobalConfig::setNotificationForLog(Core::globalLogger);
-    GlobalConfig::hookVFSOpen(Core::vfsOpen);
+    Handle::enableMultithread();
+    Handle::enableMemoryStatus(false);
+    //        Handle::setMemoryMapSize(0x7fff0000, 0x7fff0000);
+    Handle::setNotificationForLog(Core::globalLogger);
+    Handle::setNotificationWhenVFSOpened(Core::vfsOpen);
 
     m_corruptionQueue->run();
     m_checkpointQueue->run();
