@@ -65,11 +65,12 @@ bool FileHandle::open(Mode mode)
     WCTRemedialAssert(!isOpened(), "File already is opened", markAsMisuse("Duplicate open.");
                       return true;);
     switch (mode) {
-    case Mode::OverWrite:
-        m_fd = ::open(path.c_str(),
-                      O_CREAT | O_WRONLY | O_TRUNC,
-                      S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH); //0x0644
+    case Mode::OverWrite: {
+        constexpr const int mask = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+        static_assert(mask == 0644, "");
+        m_fd = ::open(path.c_str(), O_CREAT | O_WRONLY | O_TRUNC, mask);
         break;
+    }
     case Mode::ReadOnly:
         m_fd = ::open(path.c_str(), O_RDONLY);
         break;

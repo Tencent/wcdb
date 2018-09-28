@@ -54,6 +54,7 @@ public:
     static std::pair<bool, Time> getFileModifiedTime(const std::string &path);
     static std::pair<bool, Time> getFileCreatedTime(const std::string &path);
     static std::pair<bool, uint32_t> getFileIdentifier(const std::string &path);
+    static bool createFile(const std::string &path);
 
     static bool enumerateDirectory(
     const std::string &directory,

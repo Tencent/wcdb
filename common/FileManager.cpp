@@ -25,6 +25,7 @@
 #include <WCDB/UnsafeData.hpp>
 #include <dirent.h>
 #include <errno.h>
+#include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -167,7 +168,9 @@ bool FileManager::removeDirectory(const std::string &directory)
 
 bool FileManager::createDirectory(const std::string &path)
 {
-    if (mkdir(path.c_str(), 0755) == 0) {
+    constexpr const int mask = S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH;
+    static_assert(mask == 0755, "");
+    if (mkdir(path.c_str(), mask) == 0) {
         return true;
     }
     setThreadedError(path);
@@ -205,6 +208,19 @@ std::pair<bool, uint32_t> FileManager::getFileIdentifier(const std::string &path
         return { true, UnsafeData(buffer, size).hash() };
     }
     return { false, 0 };
+}
+
+bool FileManager::createFile(const std::string &path)
+{
+    constexpr const int mask = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+    static_assert(mask == 0644, "");
+    int fd = open(path.c_str(), O_CREAT | O_RDWR, mask);
+    if (fd != -1) {
+        close(fd);
+        return true;
+    }
+    setThreadedError(path);
+    return false;
 }
 
 #pragma mark - Combination

@@ -37,6 +37,7 @@ Database::Database(const std::string &path)
 , m_tag(Tag::invalid())
 , m_recoveryMode(RecoveryMode::Custom)
 , m_recoverNotification(nullptr)
+, m_identifier(0)
 {
 }
 
@@ -68,6 +69,12 @@ bool Database::isOpened() const
     return !isDrained();
 }
 
+uint32_t Database::getIdentifier() const
+{
+    SharedLockGuard lockGuard(m_lock);
+    return m_identifier;
+}
+
 #pragma mark - Handle
 RecyclableHandle Database::getHandle()
 {
@@ -90,6 +97,21 @@ RecyclableHandle Database::getHandle()
             return nullptr;
         }
         if (!retrieveRenewed()) {
+            return nullptr;
+        }
+        bool succeed, exists;
+        std::tie(succeed, exists) = FileManager::fileExists(path);
+        if (!succeed) {
+            assignWithSharedThreadedError();
+            return nullptr;
+        }
+        if (!exists && !FileManager::createFile(path)) {
+            assignWithSharedThreadedError();
+            return nullptr;
+        }
+        std::tie(succeed, m_identifier) = FileManager::getFileIdentifier(path);
+        if (!succeed) {
+            assignWithSharedThreadedError();
             return nullptr;
         }
         // When migration associated is not set, the initialize state is default to true
