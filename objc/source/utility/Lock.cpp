@@ -79,10 +79,10 @@ void SharedLock::unlockShared()
     std::unique_lock<std::mutex> lockGuard(m_mutex);
     int threadedReader = --*m_threadedReaders.getOrCreate();
     WCTRemedialAssert(
-    threadedReaders > 0, "Unpaired unlock shared.", ++*m_threadedReaders.getOrCreate();
+    threadedReader > 0, "Unpaired unlock shared.", ++*m_threadedReaders.getOrCreate();
     return;);
     --m_readers;
-    WCTInnerAssert(threadedReaders > 0);
+    WCTInnerAssert(threadedReader > 0);
     WCTInnerAssert(m_readers > 0);
     if (m_readers == 0) {
         WCTInnerAssert(*m_threadedReaders.getOrCreate() == 0);
