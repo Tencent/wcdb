@@ -31,7 +31,7 @@ class MigrationInfo;
 class MigrationHandle : public Handle {
 #pragma mark - Initialize
 public:
-    MigrationHandle();
+    MigrationHandle(const std::string &path);
 
     bool rebindMigration(const std::set<const MigrationInfo *> &migratingInfos);
 

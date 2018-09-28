@@ -26,8 +26,9 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-MigrationHandle::MigrationHandle()
-: m_statementForGettingDatabaseList(StatementPragma().pragma(Pragma::databaseList()))
+MigrationHandle::MigrationHandle(const std::string& path)
+: Handle(path)
+, m_statementForGettingDatabaseList(StatementPragma().pragma(Pragma::databaseList()))
 , m_statementForGettingTempViews(StatementSelect()
                                  .select(Column("name"))
                                  .from(TableOrSubquery("sqlite_master").withSchema("temp"))

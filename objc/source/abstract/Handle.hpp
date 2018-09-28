@@ -36,8 +36,9 @@ namespace WCDB {
 class Handle : public ErrorProne {
 #pragma mark - Initialize
 public:
-    Handle();
+    Handle(const std::string &path);
 
+    Handle() = delete;
     Handle(const Handle &) = delete;
     Handle &operator=(const Handle &) = delete;
     virtual ~Handle();
@@ -60,15 +61,11 @@ public:
 
 #pragma mark - Path
 public:
-    void setPath(const std::string &path);
-    const std::string &getPath() const;
+    const std::string path;
 
     static std::string getSHMSubfix();
     static std::string getWALSubfix();
     static std::string getJournalSubfix();
-
-protected:
-    std::string m_path;
 
 #pragma mark - Basic
 public:

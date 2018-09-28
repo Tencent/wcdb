@@ -118,8 +118,7 @@ RecyclableHandle Database::getHandle()
         if (!m_migration.isInitialized()) {
             WCTInnerAssert(m_concurrency.readSafety());
             // This temporary handle will be dropped since it's dirty.
-            MigrationInitializerHandle handle;
-            handle.setPath(path);
+            MigrationInitializerHandle handle(path);
             if (!m_migration.initialize(handle)) {
                 return nullptr;
             }
@@ -182,9 +181,9 @@ std::shared_ptr<Handle> Database::generateHandle()
     std::shared_ptr<Handle> handle;
     WCTInnerAssert(m_migration.isInitialized());
     if (m_migration.shouldMigrate()) {
-        handle.reset(new MigrationHandle);
+        handle.reset(new MigrationHandle(path));
     } else {
-        handle.reset(new Handle);
+        handle.reset(new Handle(path));
     }
     return handle;
 }
