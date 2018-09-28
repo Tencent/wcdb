@@ -69,6 +69,8 @@ public:
 
 protected:
     bool allowedConcurrent();
+    // lock for blocked operations
+    // shared lock for all other operations with handles
     mutable SharedLock m_concurrency;
 
 #pragma mark - Handle
@@ -81,13 +83,13 @@ public:
 protected:
     virtual std::shared_ptr<Handle> generateHandle() = 0;
     virtual void handleWillFlowBack(Handle *handle) = 0;
+    virtual bool handleWillConfigure(Handle *handle) = 0;
 
+    // lock for all write operation
+    // shared lock for all read operation
     mutable SharedLock m_lock;
 
 private:
-    std::shared_ptr<ConfiguredHandle> generateConfiguredHandle();
-    std::shared_ptr<ConfiguredHandle> flowOutConfiguredHandle();
-    void flowBackConfiguredHandle(const std::shared_ptr<ConfiguredHandle> &configuredHandle);
     void flowBack(const std::shared_ptr<ConfiguredHandle> &configuredHandle);
 
     std::set<std::shared_ptr<ConfiguredHandle>> m_handles;
