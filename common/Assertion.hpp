@@ -23,6 +23,10 @@
 
 #include <WCDB/Notifier.hpp>
 
+// Inner assert if for WCDB debugging only, which will be removed when released
+// Remedial assertion will abort or result in error when it's debuggable accoding to the configuration
+#warning TODO
+
 #ifdef DEBUG
 
 #define WCTRemedialAssert(cond, message, remedial)                             \
