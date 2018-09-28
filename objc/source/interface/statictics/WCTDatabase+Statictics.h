@@ -37,7 +37,17 @@ typedef void (^WCTPerformanceTraceBlock)(NSArray<WCTPerformanceFootprint *> *, N
  */
 typedef void (^WCTSQLTraceBlock)(NSString *);
 
-@interface WCTDatabase (Trace)
+@interface WCTDatabase (Statictics)
+
+@property (class, readonly, nonatomic, assign) NSString *version;
+
+@property (class, readwrite, nonatomic, assign) BOOL debuggable;
+
+@property (class, readonly, nonatomic, assign) NSString *commitHash;
+
+@property (class, readonly, nonatomic, assign) NSUInteger buildTimestamp;
+
+@property (class, readonly, nonatomic, assign) NSDate *buildTime;
 
 /**
  @brief You can register a reporter to monitor all errors.
@@ -55,6 +65,7 @@ typedef void (^WCTSQLTraceBlock)(NSString *);
                    named:(NSString *)name;
 
 + (void)resetGlobalTraceError;
+
 /**
  @brief You can register a tracer to monitor the performance of all SQLs.
  It returns 

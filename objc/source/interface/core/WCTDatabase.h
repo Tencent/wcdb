@@ -128,4 +128,5 @@ typedef void (^WCTBlockadeBlock)(WCTHandle *);
 - (WCTError *)error;
 
 @end
+
 NS_ASSUME_NONNULL_END

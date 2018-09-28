@@ -18,14 +18,14 @@
  * limitations under the License.
  */
 
-#ifndef WCDBVersion_h
-#define WCDBVersion_h
+#ifndef Version_h
+#define Version_h
 
 /* DO NOT CHANGE IT MANUALLY */
 
 #define WCDB_VERSION "1.1.0"
-#define WCDB_SOURCE_ID "763e12cf5bcf2ed939da8cdeb38d84ba694c0477"
-#define WCDB_BUILD_TIMESTAMP 1536207683
-#define WCDB_BUILD_TIME "2018-09-06 12:21:23 UTC+0800"
+#define WCDB_COMMIT_HASH "3f40e5e107eb3294237660a9a39ddcdbcc1846ac"
+#define WCDB_BUILD_TIMESTAMP 1538135995
+#define WCDB_BUILD_TIME "2018-09-28 19:59:55 UTC+0800"
 
-#endif /* WCDBVersion_h */
+#endif /* Version_h */

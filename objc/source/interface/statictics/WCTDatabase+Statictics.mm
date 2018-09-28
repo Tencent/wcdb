@@ -20,10 +20,41 @@
 
 #import <WCDB/Assertion.hpp>
 #import <WCDB/Interface.h>
+#import <WCDB/Version.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTError+Private.h>
 
-@implementation WCTDatabase (Trace)
+@implementation WCTDatabase (Statictics)
+
++ (NSString *)version
+{
+    return @WCDB_VERSION;
+}
+
++ (BOOL)debuggable
+{
+    return NO;
+}
+
++ (void)setDebuggable:(BOOL)debuggable
+{
+#warning TODO
+}
+
++ (NSString *)commitHash
+{
+    return @WCDB_COMMIT_HASH;
+}
+
++ (NSUInteger)buildTimestamp
+{
+    return WCDB_BUILD_TIMESTAMP;
+}
+
++ (NSDate *)buildTime
+{
+    return [NSDate dateWithTimeIntervalSince1970:WCDB_BUILD_TIMESTAMP];
+}
 
 + (void)globalTraceError:(WCTErrorTraceBlock)block
 {

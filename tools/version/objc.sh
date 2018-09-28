@@ -26,15 +26,15 @@ echo """/*
  * limitations under the License.
  */
 
-#ifndef WCDBVersion_h
-#define WCDBVersion_h
+#ifndef Version_h
+#define Version_h
 
 /* DO NOT CHANGE IT MANUALLY */
 
 #define WCDB_VERSION \"${version}\"
-#define WCDB_SOURCE_ID \"${commitID}\"
+#define WCDB_COMMIT_HASH \"${commitID}\"
 #define WCDB_BUILD_TIMESTAMP ${buildTimestamp}
 #define WCDB_BUILD_TIME \"${buildDate}\"
 
-#endif /* WCDBVersion_h */
-""" > ${root}/objc/source/WCDBVersion.h
+#endif /* Version_h */
+""" > ${root}/common/Version.h
