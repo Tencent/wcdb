@@ -23,6 +23,11 @@
 
 namespace WCDB {
 
+const Error& MigrationInitializerHandle::getError() const
+{
+    return Handle::getError();
+}
+
 std::pair<bool, std::set<std::string>> MigrationInitializerHandle::getAllExistingTables()
 {
     WCTInnerAssert(!isPrepared());
@@ -38,7 +43,7 @@ std::pair<bool, std::set<std::string>> MigrationInitializerHandle::getAllExistin
 }
 
 std::pair<bool, std::set<std::string>>
-MigrationInitializerHandle::getAllColumns(const std::string &table, const std::string &database)
+MigrationInitializerHandle::getAllColumns(const std::string& table, const std::string& database)
 {
     WCTInnerAssert(!isPrepared());
     WCTInnerAssert(!isInTransaction());
@@ -67,6 +72,11 @@ MigrationInitializerHandle::getAllColumns(const std::string &table, const std::s
         return { succeed, {} };
     }
     return getUnorderedColumnsWithTable(table, schema);
+}
+
+void MigrationInitializerHandle::setError(const Error& error)
+{
+    Handle::ErrorProne::setError(error);
 }
 
 bool MigrationInitializerHandle::lazyOpen()

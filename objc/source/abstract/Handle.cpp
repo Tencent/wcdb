@@ -327,11 +327,6 @@ Handle::getUnorderedColumnsWithTable(const std::string &tableName, const std::st
     return getUnorderedValues(statement, 1);
 }
 
-std::pair<bool, std::set<std::string>> Handle::getUnorderedAttachedSchemas()
-{
-    return getUnorderedValues(StatementPragma().pragma(Pragma::databaseList()), 1);
-}
-
 std::pair<bool, std::set<std::string>>
 Handle::getUnorderedValues(const Statement &statement, int index)
 {

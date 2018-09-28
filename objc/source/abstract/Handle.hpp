@@ -121,7 +121,6 @@ public:
     std::pair<bool, std::set<std::string>>
     getUnorderedColumnsWithTable(const std::string &tableName,
                                  const std::string &schemaName = Schema::main());
-    std::pair<bool, std::set<std::string>> getUnorderedAttachedSchemas();
 
     typedef std::function<bool(Handle *)> TransactionCallback;
 

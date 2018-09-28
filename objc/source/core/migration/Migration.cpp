@@ -25,26 +25,34 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-Migration::Migration() : m_tableFilter(nullptr)
+Migration::Migration() : m_tableFilter(nullptr), m_initialized(true)
 {
 }
 
-bool Migration::shouldMigrate() const
+bool Migration::isInitialized() const
 {
-    return m_tableFilter != nullptr || !m_userInfos.empty();
+    return m_initialized;
+}
+
+void Migration::onStateChanged()
+{
+    m_initialized = m_tableFilter == nullptr && m_userInfos.empty();
+    m_holder.clear();
+    m_migrating.clear();
 }
 
 #pragma mark - Filter
 void Migration::filterTable(const TableFilter& tableFilter)
 {
     m_tableFilter = tableFilter;
+    onStateChanged();
 }
 
 #pragma mark - UserInfo
 void Migration::addUserInfo(const MigrationUserInfo& info)
 {
     WCTRemedialAssert(
-    !info.shouldMigrate(), "Adding a unspecified migration info make no sense.", return;);
+    !info.shouldMigrate(), "Adding a unspecified migration info makes no sense.", return;);
     auto iter = m_userInfos.emplace(info.getMigratedTable(), info);
     WCTRemedialAssert(
     iter.second,
@@ -52,83 +60,108 @@ void Migration::addUserInfo(const MigrationUserInfo& info)
                       info.getDebugDescription().c_str(),
                       iter.first->second.getDebugDescription().c_str()),
     ;);
+    onStateChanged();
 }
 
 #pragma mark - Infos
 bool Migration::initialize(Initializer& initializer)
 {
-    WCTInnerAssert(shouldMigrate());
-    WCTInnerAssert(m_infos.empty() && m_holder.empty());
+    if (m_initialized) {
+        return true;
+    }
 
     m_holder.clear();
-    m_infos.clear();
+    m_migrating.clear();
 
     bool succeed;
-    do {
-        std::set<std::string> tables;
-        std::tie(succeed, tables) = initializer.getAllExistingTables();
-        if (!succeed) {
-            break;
-        }
-        std::map<std::string, const MigrationUserInfo> uninitialized = m_userInfos;
-        if (m_tableFilter) {
-            for (const auto& table : tables) {
-                MigrationUserInfo userInfo(table);
-                if (uninitialized.find(userInfo.getMigratedTable())
-                    == uninitialized.end()) {
-                    // It's already set manually.
-                    continue;
-                }
-                m_tableFilter(userInfo);
-                if (userInfo.shouldMigrate()) {
-                    uninitialized.emplace(userInfo.getMigratedTable(), userInfo);
-                } else {
-                    // Mark as ignored.
-                    m_infos[table] = nullptr;
-                }
+
+    std::set<std::string> tables;
+    std::tie(succeed, tables) = initializer.getAllExistingTables();
+    if (!succeed) {
+        return false;
+    }
+    std::map<std::string, const MigrationUserInfo> uninitialized = m_userInfos;
+    if (m_tableFilter) {
+        for (const auto& table : tables) {
+            MigrationUserInfo userInfo(table);
+            if (uninitialized.find(userInfo.getMigratedTable()) == uninitialized.end()) {
+                // It's already set manually.
+                continue;
+            }
+            m_tableFilter(userInfo);
+            if (userInfo.shouldMigrate()) {
+                uninitialized.emplace(userInfo.getMigratedTable(), userInfo);
             }
         }
+    }
 
+    {
+        // check if some of the infos contain same origin table
+        std::map<std::pair<std::string, std::string>, const MigrationUserInfo*> origins;
         for (const auto& iter : uninitialized) {
             const MigrationUserInfo& userInfo = iter.second;
-            WCTInnerAssert(userInfo.shouldMigrate());
-
-            std::set<std::string> columns;
-            std::tie(succeed, columns) = initializer.getAllColumns(
-            userInfo.getOriginTable(), userInfo.getOriginDatabase());
-            if (!succeed) {
-                break;
+            auto key
+            = std::make_pair(userInfo.getOriginDatabase(), userInfo.getOriginTable());
+            auto origin = origins.find(key);
+            if (origin != origins.end()) {
+                WCTInnerAssert(origin->second != nullptr);
+                succeed = false;
+                Error error;
+                error.setCode(Error::Code::Misuse);
+                error.message = "Duplicated origin table and database are found";
+                error.infos.set("Migrated_1", userInfo.getMigratedTable());
+                error.infos.set("Migrated_2", origin->second->getMigratedTable());
+                error.infos.set("OriginTable", userInfo.getOriginTable());
+                error.infos.set("OriginDatabase", userInfo.getOriginDatabase());
+                initializer.setError(error);
+                return false;
             }
-            if (columns.empty()) {
-                // Mark as ignored. It usually means that the origin table had been migrated.
-                m_infos[userInfo.getMigratedTable()] = nullptr;
-            } else {
-                m_holder.push_back(MigrationInfo(userInfo, columns));
-                const MigrationInfo* holdedInfo = &m_holder.back();
-                WCTInnerAssert(m_infos.find(holdedInfo->getMigratedTable())
-                               == m_infos.end());
-                m_infos[holdedInfo->getMigratedTable()] = holdedInfo;
-            }
+            origins.emplace(key, &userInfo);
         }
-    } while (false);
-
-    if (!succeed) {
-        m_holder.clear();
-        m_infos.clear();
     }
-    return succeed;
+
+    for (const auto& iter : uninitialized) {
+        const MigrationUserInfo& userInfo = iter.second;
+        WCTInnerAssert(userInfo.shouldMigrate());
+
+        std::set<std::string> columns;
+        std::tie(succeed, columns) = initializer.getAllColumns(
+        userInfo.getOriginTable(), userInfo.getOriginDatabase());
+        if (!succeed) {
+            return false;
+        }
+        // When [columns] is empty, it usually means that the origin table had been migrated before the database is opened. At this case, it will be discarded but not marked as migrated.
+        if (!columns.empty()) {
+            auto inserted = m_holder.emplace(userInfo.getMigratedTable(),
+                                             MigrationInfo(userInfo, columns));
+            WCTInnerAssert(inserted.second);
+            const MigrationInfo* info = &inserted.first->second;
+            m_migrating.emplace(info);
+        }
+    }
+
+    m_initialized = true;
+    return m_initialized;
 }
 
-std::map<std::string, const MigrationInfo*> Migration::getInfos() const
+bool Migration::shouldMigrate() const
 {
-    return m_infos;
+    WCTInnerAssert(isInitialized());
+    return !m_holder.empty();
+}
+
+const std::set<const MigrationInfo*>& Migration::getMigratingInfos() const
+{
+    WCTInnerAssert(isInitialized());
+    return m_migrating;
 }
 
 void Migration::markInfoAsMigrated(const MigrationInfo* info)
 {
+    WCTInnerAssert(isInitialized());
     WCTInnerAssert(info != nullptr);
-    WCTInnerAssert(m_infos.find(info->getMigratedTable()) != m_infos.end());
-    m_infos[info->getMigratedTable()] = nullptr;
+    WCTInnerAssert(m_migrating.find(info) != m_migrating.end());
+    m_migrating.erase(info);
 }
 
 } // namespace WCDB

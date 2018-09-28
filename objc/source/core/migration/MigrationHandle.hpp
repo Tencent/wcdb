@@ -22,18 +22,23 @@
 #define MigrationHandle_hpp
 
 #include <WCDB/Abstract.h>
+#include <set>
 
 namespace WCDB {
 
-class Migration;
+class MigrationInfo;
 
 class MigrationHandle : public Handle {
 #pragma mark - Initialize
 public:
-    MigrationHandle(const Migration *const infos);
+    MigrationHandle();
+
+    bool rebindMigration(const std::set<const MigrationInfo *> &migratingInfos);
 
 protected:
-    const Migration *const m_infos;
+    const StatementPragma m_statementForGettingDatabaseList;
+    const StatementSelect m_statementForGettingTempViews;
+    std::set<const MigrationInfo *> m_migrating;
 
 #pragma mark - Override
 public:

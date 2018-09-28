@@ -49,6 +49,14 @@ bool hasCaseInsensivePrefix(const std::string &origin, const std::string &target
     return strncasecmp(origin.c_str(), target.c_str(), target.size()) == 0;
 }
 
+bool hasPrefix(const std::string &origin, const std::string &target)
+{
+    if (origin.size() < target.size()) {
+        return false;
+    }
+    return strncmp(origin.c_str(), target.c_str(), target.size()) == 0;
+}
+
 CopyOnWriteString stringByReplacingOccurrencesOfString(const CopyOnWriteString &cowOrigin,
                                                        const std::string &target,
                                                        const std::string &replacement)

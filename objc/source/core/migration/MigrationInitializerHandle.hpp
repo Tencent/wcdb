@@ -30,9 +30,14 @@ class MigrationInitializerHandle : public Handle, public Migration::Initializer 
 public:
     using Handle::Handle;
 
+    const Error& getError() const override;
+
+protected:
     std::pair<bool, std::set<std::string>> getAllExistingTables() override;
     std::pair<bool, std::set<std::string>>
-    getAllColumns(const std::string &table, const std::string &database) override;
+    getAllColumns(const std::string& table, const std::string& database) override;
+
+    void setError(const Error& error) override;
 
 protected:
     bool lazyOpen();

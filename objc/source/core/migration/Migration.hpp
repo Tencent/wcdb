@@ -35,13 +35,22 @@ public:
 
     class Initializer {
     public:
+        virtual const Error& getError() const = 0;
+
+    protected:
+        friend class Migration;
         virtual std::pair<bool, std::set<std::string>> getAllExistingTables() = 0;
         // When succeed, if the empty columns means that table is already migrated.
         virtual std::pair<bool, std::set<std::string>>
         getAllColumns(const std::string& table, const std::string& database) = 0;
+        virtual void setError(const Error& error) = 0;
     };
     bool initialize(Initializer& initializer);
-    bool shouldMigrate() const;
+    bool isInitialized() const;
+
+protected:
+    void onStateChanged();
+    bool m_initialized;
 
 #pragma mark - Filter
 public:
@@ -60,18 +69,15 @@ protected:
 
 #pragma mark - Infos
 public:
-    //#warning TODO - cross database migration should be picked first
-    //    const MigrationInfo* pickMigratingInfo();
-
+    bool shouldMigrate() const;
     void markInfoAsMigrated(const MigrationInfo* info);
 
-    std::map<std::string, const MigrationInfo*> getInfos() const;
+    const std::set<const MigrationInfo*>& getMigratingInfos() const;
 
 protected:
-    //    std::set<const MigrationInfo*> m_crossDatabaseMigrating; // migrated table -> info
-    std::map<std::string, const MigrationInfo*> m_infos; // migrated table -> info
+    std::set<const MigrationInfo*> m_migrating;
 
-    std::list<const MigrationInfo> m_holder; // infos will never be deleted.
+    std::map<std::string, const MigrationInfo> m_holder; // infos will never be deleted.
 };
 
 } // namespace WCDB

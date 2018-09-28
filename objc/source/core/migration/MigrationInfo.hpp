@@ -73,16 +73,20 @@ public:
     /*
      DETACH [schemaForOriginDatabase]
      */
-    const StatementDetach& getStatementForDetachingSchema() const;
+    static const StatementDetach getStatementForDetachingSchema(const std::string& schema);
 
 protected:
     // WCDBMigration_ + hash([originDatabase])
     std::string m_schemaForOriginDatabase;
     StatementAttach m_statementForAttachingSchema;
-    StatementDetach m_statementForDetachingSchema;
 
 #pragma mark - View
 public:
+    // WCDBUnioned_
+    static const std::string& getUnionedViewPrefix();
+
+    const std::string& getUnionedView() const;
+
     /*
      CREATE VIEW IF NOT EXISTS [unionedView]
      SELECT rowid, [columns]
@@ -96,13 +100,13 @@ public:
     /*
      DROP VIEW IF EXISTS [unionedView]
      */
-    const StatementDropView& getStatementForDroppingUnionedView() const;
+    static const StatementDropView
+    getStatementForDroppingUnionedView(const std::string& unionedView);
 
 protected:
     // WCDBUnioned_ + [migratedTable] + _ + [originTable]
     std::string m_unionedView;
     StatementCreateView m_statementForCreatingUnionedView;
-    StatementDropView m_statementForDroppingUnionedView;
 
 #pragma mark - Migrate
 public:

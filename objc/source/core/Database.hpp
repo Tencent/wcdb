@@ -174,6 +174,7 @@ public:
     void stepMigration();
 
 protected:
+    bool rebindMigration(Handle *handle);
     Migration m_migration;
 
 #pragma mark - Memory

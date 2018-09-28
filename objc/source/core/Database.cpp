@@ -90,7 +90,8 @@ RecyclableHandle Database::getHandle()
         if (!retrieveRenewed()) {
             return nullptr;
         }
-        if (m_migration.shouldMigrate()) {
+        // When migration associated is not set, the initialize state is default to true
+        if (!m_migration.isInitialized()) {
             // This temporary handle will be dropped since it's dirty.
             MigrationInitializerHandle handle;
             handle.setPath(path);
@@ -139,8 +140,9 @@ std::shared_ptr<Handle> Database::generateHandle()
 {
     SharedLockGuard lockGuard(m_lock);
     std::shared_ptr<Handle> handle;
+    WCTInnerAssert(m_migration.isInitialized());
     if (m_migration.shouldMigrate()) {
-        handle.reset(new MigrationHandle(&m_migration));
+        handle.reset(new MigrationHandle);
     } else {
         handle.reset(new Handle);
     }
@@ -558,6 +560,19 @@ bool Database::isCorrupted() const
 }
 
 #pragma mark - Migration
+bool Database::rebindMigration(Handle *handle)
+{
+    WCTInnerAssert(handle != nullptr);
+    WCTInnerAssert(m_migration.shouldMigrate());
+    WCTInnerAssert(dynamic_cast<MigrationHandle *>(handle) != nullptr);
+    std::set<const MigrationInfo *> migratingInfos;
+    {
+        SharedLockGuard lockGuard(m_lock);
+        migratingInfos = m_migration.getMigratingInfos();
+    }
+    return static_cast<MigrationHandle *>(handle)->rebindMigration(migratingInfos);
+}
+
 void Database::addMigrationInfo(const MigrationUserInfo &userInfo)
 {
     LockGuard lockGuard(m_lock);
