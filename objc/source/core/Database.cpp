@@ -76,12 +76,12 @@ RecyclableHandle Database::getHandle()
                 break;
             }
         }
+        // Blocked initialization
         LockGuard lockConcurrencyGuard(m_concurrency);
         LockGuard lockGuard(m_lock);
         if (aliveHandleCount() > 0) {
             break;
         }
-        // Blocked initialization
         if (!FileManager::createDirectoryWithIntermediateDirectories(
             Path::getDirectoryName(path))) {
             assignWithSharedThreadedError();
@@ -100,10 +100,11 @@ RecyclableHandle Database::getHandle()
             }
         }
     } while (false);
-    SharedLockGuard lockConcurrencyGuard(m_concurrency);
+    // additional shared lock is not needed since when it's blocked the threadedHandles is always empty.
     ThreadedHandles *threadedHandle = Database::threadedHandles().getOrCreate();
     const auto iter = threadedHandle->find(this);
     if (iter != threadedHandle->end()) {
+        WCTInnerAssert(m_concurrency.readSafety());
         return iter->second;
     }
     return flowOut();
@@ -147,6 +148,11 @@ std::shared_ptr<Handle> Database::generateHandle()
         handle.reset(new Handle);
     }
     return handle;
+}
+
+bool Database::handleWillConfigure(Handle *handle)
+{
+    return rebindMigration(handle);
 }
 
 void Database::handleWillFlowBack(Handle *handle)
@@ -419,7 +425,7 @@ void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
 
 bool Database::backup()
 {
-    SharedLockGuard lockConcurrencyGuard(m_concurrency);
+    SharedLockGuard lockConcurrencyGuard(m_concurrency); // lock concurrency shared since backup is kind of handle operation
     SharedLockGuard lockGuard(m_lock);
     Repair::FactoryBackup backup = m_factory.backup();
     if (backup.work(getPath())) {
