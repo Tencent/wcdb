@@ -321,7 +321,7 @@ bool Database::removeFiles()
     LockGuard lockGuard(m_concurrency);
     close(nullptr);
     std::list<std::string> paths = getPaths();
-    paths.reverse();
+    paths.reverse(); // reverse to remove the non-critical paths first avoiding app stopped between the removing
     result = FileManager::removeItems(paths);
     if (!result) {
         assignWithSharedThreadedError();
