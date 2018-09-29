@@ -28,9 +28,11 @@
 
 #ifdef DEBUG
 
-#define WCTInnerAssert(cond)                                                   \
-    WCDB::Console::fatal(                                                      \
-    "If you think it's a bug caused by WCDB, please report to us.", __FILE__, __LINE__);
+#define WCTInnerAssert(cond)                                                                 \
+    if (!(cond)) {                                                                           \
+        WCDB::Console::fatal(                                                                \
+        "If you think it's a bug caused by WCDB, please report to us.", __FILE__, __LINE__); \
+    }
 
 #else // DEBUG
 
