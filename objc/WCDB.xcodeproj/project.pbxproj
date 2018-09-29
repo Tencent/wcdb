@@ -678,6 +678,8 @@
 		23EE0EB520B838E100C95998 /* Repairman.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EE0EB120B838E100C95998 /* Repairman.hpp */; };
 		23F0FD7D215F1C92008399FB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F0FD7C215F1C92008399FB /* Security.framework */; };
 		23F0FD7E215F1C98008399FB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F0FD7C215F1C92008399FB /* Security.framework */; };
+		23F0FDF1215F266C008399FB /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 23F0FDEF215F266C008399FB /* Info.plist */; };
+		23F0FDF2215F266C008399FB /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 23F0FDEF215F266C008399FB /* Info.plist */; };
 		23F1698A20B6638F009B5C47 /* ThreadedErrors.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F1698720B6638F009B5C47 /* ThreadedErrors.hpp */; };
 		23F1698B20B6638F009B5C47 /* ThreadedErrors.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F1698720B6638F009B5C47 /* ThreadedErrors.hpp */; };
 		23F1698C20B6638F009B5C47 /* ThreadedErrors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F1698920B6638F009B5C47 /* ThreadedErrors.cpp */; };
@@ -1136,7 +1138,6 @@
 		2316D9412105D19500707AFC /* PageBasedFileHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PageBasedFileHandle.cpp; sourceTree = "<group>"; };
 		2316D9422105D19500707AFC /* PageBasedFileHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PageBasedFileHandle.hpp; sourceTree = "<group>"; };
 		2316D9482105D21500707AFC /* LRUCache.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LRUCache.hpp; sourceTree = "<group>"; };
-		231C22BA1EA6191100B55554 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+FTS.h"; sourceTree = "<group>"; };
 		2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+FTS.mm"; sourceTree = "<group>"; };
 		232DCE08207F81FD00AC2CD0 /* Lock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Lock.cpp; sourceTree = "<group>"; };
@@ -1630,7 +1631,8 @@
 		23EE0EB020B838E100C95998 /* Repairman.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Repairman.cpp; sourceTree = "<group>"; };
 		23EE0EB120B838E100C95998 /* Repairman.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Repairman.hpp; sourceTree = "<group>"; };
 		23F0FD7C215F1C92008399FB /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		23F0FD7F215F1DA8008399FB /* WCDB.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = WCDB.modulemap; sourceTree = "<group>"; };
+		23F0FDEF215F266C008399FB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		23F0FDF0215F266C008399FB /* WCDB.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = WCDB.modulemap; sourceTree = "<group>"; };
 		23F1698720B6638F009B5C47 /* ThreadedErrors.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ThreadedErrors.hpp; sourceTree = "<group>"; };
 		23F1698920B6638F009B5C47 /* ThreadedErrors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadedErrors.cpp; sourceTree = "<group>"; };
 		23F340D8204D32C2007DB8AB /* WCTTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTTable.h; sourceTree = "<group>"; };
@@ -2454,9 +2456,8 @@
 			isa = PBXGroup;
 			children = (
 				23A747BE20039675003CECFA /* sqlcipher.preprocessed.xcodeproj */,
-				231C22BA1EA6191100B55554 /* Info.plist */,
-				23F0FD7F215F1DA8008399FB /* WCDB.modulemap */,
 				2349F5D51EA0D6680021EFA7 /* source */,
+				23F0FDEE215F266C008399FB /* support */,
 				23B5F93E1E111CB100E58396 /* Frameworks */,
 				23B5F7641E1111C100E58396 /* Products */,
 			);
@@ -2522,6 +2523,15 @@
 				23B4DCD92112AC5600954D71 /* Modules.hpp */,
 			);
 			path = fts;
+			sourceTree = "<group>";
+		};
+		23F0FDEE215F266C008399FB /* support */ = {
+			isa = PBXGroup;
+			children = (
+				23F0FDEF215F266C008399FB /* Info.plist */,
+				23F0FDF0215F266C008399FB /* WCDB.modulemap */,
+			);
+			path = support;
 			sourceTree = "<group>";
 		};
 		23F70F9D20A055A400CCE3CD /* config */ = {
@@ -3247,6 +3257,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23F0FDF1215F266C008399FB /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3254,6 +3265,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23F0FDF2215F266C008399FB /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3794,7 +3806,6 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				"LIBRARY_SEARCH_PATHS[sdk=macosx*]" = (
@@ -3836,7 +3847,6 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				"LIBRARY_SEARCH_PATHS[sdk=macosx*]" = (
@@ -3930,9 +3940,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/support/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				MODULEMAP_FILE = "$(SRCROOT)/WCDB.modulemap";
+				MODULEMAP_FILE = "$(SRCROOT)/support/WCDB.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CFLAGS = "-Wglobal-constructors";
 				SDKROOT = macosx;
@@ -3957,7 +3968,6 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				"LIBRARY_SEARCH_PATHS[sdk=macosx*]" = (
@@ -3996,7 +4006,6 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				"LIBRARY_SEARCH_PATHS[sdk=macosx*]" = (
@@ -4092,9 +4101,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/support/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				MODULEMAP_FILE = "$(SRCROOT)/WCDB.modulemap";
+				MODULEMAP_FILE = "$(SRCROOT)/support/WCDB.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-Wglobal-constructors";
@@ -4173,9 +4183,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/support/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				MODULEMAP_FILE = "$(SRCROOT)/WCDB.modulemap";
+				MODULEMAP_FILE = "$(SRCROOT)/support/WCDB.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CFLAGS = "-Wglobal-constructors";
 				SDKROOT = macosx;
@@ -4197,7 +4208,6 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				"LIBRARY_SEARCH_PATHS[sdk=macosx*]" = (
@@ -4234,7 +4244,6 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				"LIBRARY_SEARCH_PATHS[sdk=macosx*]" = (
