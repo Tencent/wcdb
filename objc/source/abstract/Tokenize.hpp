@@ -23,7 +23,6 @@
 
 #warning Make it public and add template for this
 
-#include <WCDB/Lock.hpp>
 #include <WCDB/SQLite.h>
 #include <map>
 #include <stdlib.h>
