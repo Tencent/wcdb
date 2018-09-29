@@ -133,6 +133,7 @@ void SQLiteBase::close()
 {
     if (m_handle) {
 #ifdef SQLITE_WCDB_CHECKPOINT_HANDLER
+        // disable checkpoint when closing. If ones need a checkpoint, they should do it manually.
         sqlite3_wal_checkpoint_handler(
         (sqlite3 *) m_handle, [](void *, int) -> int { return SQLITE_ABORT; }, nullptr);
 #endif

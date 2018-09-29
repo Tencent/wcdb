@@ -117,7 +117,7 @@ void Handle::close()
                           m_nestedLevel = 0;
                           rollbackTransaction(););
         m_notification.purge();
-        //disable checkpoint when closing. If ones need a checkpoint, they should do it manually.
+        // disable checkpoint when closing. If ones need a checkpoint, they should do it manually.
         constexpr const char *name = "close";
         m_notification.setNotificationWhenWillCheckpoint(
         std::numeric_limits<int>::min(),
