@@ -2,7 +2,7 @@
 
 #### iOS/macOS
 
-* Compatible with Swift 4.2
+* Compatible with Swift 4.2.
 * Enable FTS5 macro for sqlcipher.
 
 ## v1.0.7
@@ -22,7 +22,7 @@ It's a bug fixed version. Since Swift 4.1.x contains [bugs](https://github.com/T
 
 ##### Swift
 * Compatible with Swift 4.2. The `ColumnEncodable` and `ColumnDecodable` is now changed. Check the code snippet, file template or wiki for the new usage.
-* Use `Double` column type for `Date` 
+* Use `Double` column type for `Date`.
 
 FYI, a refactor is needed to fit the new conditional conformance design of Swift 4.2. We will finish it in next version.
 
@@ -38,13 +38,13 @@ FYI, a refactor is needed to fit the new conditional conformance design of Swift
 
 It's the first release for WCDB Swift, which contains exactly the same features as the ObjC version, including:
 
-* Object-Relational-Mapping based on Swift 4.0 `Codable` protocol
-* WCDB Integrated Language Query
-* Multithreading safety and concurrency
-* Encryption based on SQLCipher
-* Protection for SQL injection
-* Full text search
-* Corruption recovery
+* Object-Relational-Mapping based on Swift 4.0 `Codable` protocol.
+* WCDB Integrated Language Query.
+* Multithreading safety and concurrency.
+* Encryption based on SQLCipher.
+* Protection for SQL injection.
+* Full text search.
+* Corruption recovery.
 * ...
 
 For further information, please check tutorial on wiki.
@@ -76,7 +76,7 @@ SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabaseInWalMode(...);
 db.setAsyncCheckpointEnabled(true);
 ```
 * Add benchmark for asynchronous checkpointer.
-* Add connection pooling friendly interface `SQLiteDatabase.setSynchronousMode()` to set database synchronization mode.
+* Add connection pooling friendly interface. `SQLiteDatabase.setSynchronousMode()` to set database synchronization mode.
 * Enable `dbstat` virtual table while compiling.
 
 ## v1.0.4
@@ -201,7 +201,7 @@ NSDate *now = [NSDate date];
 #### Android
 
 * Add `x86_64` ABI support.
-* Publish debug version of AAR and native symbols. To reference debug version of WCDB library, modify your `build.gradle`
+* Publish debug version of AAR and native symbols. To reference debug version of WCDB library, modify your `build.gradle`.
 
 ```gradle
 dependencies {

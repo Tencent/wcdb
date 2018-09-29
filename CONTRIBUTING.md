@@ -40,7 +40,7 @@ feature/bugfix PR
 ```  
 
 ### Make Pull Requests
-The code team will monitor all pull request, we run some code check and test on it. After all tests passed, we will accecpt this PR. But it won't merge to `master` branch at once, which have some delay.
+The code team will monitor all pull request, we run some code check and test on it. After all tests passed, we will accept this PR. But it won't merge to `master` branch at once, which have some delay.
 
 Before submitting a pull request, please make sure the followings are done:
 
