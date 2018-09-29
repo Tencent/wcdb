@@ -327,24 +327,23 @@ void Wal::hint() const
         error.setCode(Error::Code::Notice, "Repair");
         std::ostringstream stream;
         int i = 0;
-        for (const auto &iter : m_pages2Frames) {
-            if (!stream.str().empty()) {
-                stream << "; ";
+        auto iter = m_pages2Frames.begin();
+        while (iter != m_pages2Frames.end()) {
+            while (iter != m_pages2Frames.end() && i % 20 != 0) {
+                if (!stream.str().empty()) {
+                    stream << "; ";
+                }
+                stream << iter->first << ", " << iter->second;
+                ++i;
+                ++iter;
             }
-            stream << iter.first << ", " << iter.second;
-            ++i;
-            if (i % 20 == 0) {
-                error.message = "Wal pages hint " + std::to_string(i / 20);
-                error.infos.set("Pages2Frames", stream.str());
-                Notifier::shared()->notify(error);
-                stream.str("");
-                stream.clear();
-            }
-        }
-        if (!stream.str().empty()) {
+            error.message = "Wal pages hint " + std::to_string(i / 20);
             error.infos.set("Pages2Frames", stream.str());
             Notifier::shared()->notify(error);
+            stream.str("");
+            stream.clear();
         }
+        WCTInnerAssert(stream.str().empty());
     }
 
     //Disposed
@@ -354,24 +353,23 @@ void Wal::hint() const
         error.setCode(Error::Code::Notice, "Repair");
         std::ostringstream stream;
         int i = 0;
-        for (const auto &page : m_disposedPages) {
-            if (!stream.str().empty()) {
-                stream << ", ";
+        auto iter = m_disposedPages.begin();
+        while (iter != m_disposedPages.end()) {
+            while (iter != m_disposedPages.end() && i % 20 != 0) {
+                if (!stream.str().empty()) {
+                    stream << ", ";
+                }
+                stream << *iter;
+                ++i;
+                ++iter;
             }
-            stream << page;
-            ++i;
-            if (i % 20 == 0) {
-                error.message = "Wal disposed hint " + std::to_string(i / 20);
-                error.infos.set("Disposed", stream.str());
-                Notifier::shared()->notify(error);
-                stream.str("");
-                stream.clear();
-            }
-        }
-        if (!stream.str().empty()) {
+            error.message = "Wal disposed hint " + std::to_string(i / 20);
             error.infos.set("Disposed", stream.str());
             Notifier::shared()->notify(error);
+            stream.str("");
+            stream.clear();
         }
+        WCTInnerAssert(stream.str().empty());
     }
 
     m_shm.hint();
