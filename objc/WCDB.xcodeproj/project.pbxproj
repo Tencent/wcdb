@@ -1599,7 +1599,6 @@
 		23D4DA472085A98F00AE6D90 /* ColumnType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ColumnType.hpp; sourceTree = "<group>"; };
 		23D4DA482085A99000AE6D90 /* ConvertibleImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConvertibleImpl.cpp; sourceTree = "<group>"; };
 		23D4DA492085A99000AE6D90 /* ConvertibleImpl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ConvertibleImpl.hpp; sourceTree = "<group>"; };
-		23D53B1620FEFB51004E1853 /* libdz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libdz.tbd; path = usr/lib/libdz.tbd; sourceTree = SDKROOT; };
 		23D920422009B52E000634CB /* Abstract.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Abstract.h; sourceTree = "<group>"; };
 		23D96B902050DED700DB5E93 /* DatabasePool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DatabasePool.cpp; sourceTree = "<group>"; };
 		23D96B912050DED700DB5E93 /* DatabasePool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DatabasePool.hpp; sourceTree = "<group>"; };
@@ -2476,7 +2475,6 @@
 			isa = PBXGroup;
 			children = (
 				23F0FD7C215F1C92008399FB /* Security.framework */,
-				23D53B1620FEFB51004E1853 /* libdz.tbd */,
 				23C43BCC2087435800AB186D /* libz.tbd */,
 			);
 			name = Frameworks;
