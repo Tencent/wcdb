@@ -195,13 +195,6 @@ bool Database::handleWillConfigure(Handle *handle)
     return rebindMigration(handle);
 }
 
-void Database::handleWillFlowBack(Handle *handle)
-{
-#warning TODO a threaded transaction will never flowback
-    WCTRemedialAssert(
-    !handle->isInTransaction(), "Unpaired transaction.", handle->rollbackTransaction(););
-}
-
 #pragma mark - Threaded
 ThreadLocal<Database::ThreadedHandles> &Database::threadedHandles()
 {

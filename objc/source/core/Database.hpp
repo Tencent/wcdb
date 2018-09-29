@@ -67,7 +67,6 @@ public:
 protected:
     std::shared_ptr<Handle> generateHandle() override;
     bool handleWillConfigure(Handle *handle) override;
-    void handleWillFlowBack(Handle *handle) override;
 
 #pragma mark - Threaded
 private:
