@@ -161,6 +161,7 @@ WCTErrorKey const WCTErrorKeySource = @"Source";
 
 - (WCTTag)tag
 {
+    static_assert(WCTInvalidTag == 0, "");
     return (WCTTag) [self numberForKey:WCTErrorKeyTag].intValue;
 }
 
