@@ -228,8 +228,8 @@ bool Wal::doInitialize()
     Deserialization deserialization(data);
     uint32_t magic = deserialization.advance4BytesUInt();
     if ((magic & 0xFFFFFFFE) != 0x377F0682) {
-        markAsCorrupted(0, String::formatted("Magic number: 0x%x is illegal.", magic));
-        return false;
+        // ignore wal
+        return true;
     }
     m_isNativeChecksum = (magic & 0x00000001) == isBigEndian();
     deserialization.seek(16);
