@@ -21,7 +21,7 @@
 #define __WCDB_INDEX_IMP(className, indexSubfixName, propertyName, order, isUnique)      \
     +(void) WCDB_ORM(className, index)                                                   \
     {                                                                                    \
-        WCDB_COMPILE_TIME_CHECK(className.propertyName);                                 \
+        WCDB_STATIC_ASSERT_EXISTS(className.propertyName);                               \
         const WCTProperty &property = binding.getProperty(WCDB_STRINGIFY(propertyName)); \
         binding.getOrCreateIndex(indexSubfixName).indexedBy(property.asIndex(order));    \
         WCDB_IF(isUnique, binding.getOrCreateIndex(indexSubfixName).unique();)           \

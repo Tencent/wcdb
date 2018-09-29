@@ -70,7 +70,7 @@
         break;                                                                 \
     }
 
-#define WCDB_COMPILE_TIME_CHECK(type_or_expression)                            \
+#define WCDB_STATIC_ASSERT_EXISTS(type_or_expression)                          \
     static_assert(sizeof(type_or_expression) > 0,                              \
                   WCDB_STRINGIFY(type_or_expression) "does not exist.")
 

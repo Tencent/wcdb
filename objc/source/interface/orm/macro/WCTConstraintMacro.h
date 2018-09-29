@@ -24,7 +24,7 @@
     WCDB_IF(autoIncrement, @synthesize lastInsertedRowID;)                                \
     +(void) WCDB_ORM(className, primary)                                                  \
     {                                                                                     \
-        WCDB_COMPILE_TIME_CHECK(className.propertyName);                                  \
+        WCDB_STATIC_ASSERT_EXISTS(className.propertyName);                                \
         const WCTProperty &property = binding.getProperty(WCDB_STRINGIFY(propertyName));  \
         binding.getColumnDef(property).byAddingConstraint(                                \
         WCDB::ColumnConstraint()                                                          \
@@ -35,7 +35,7 @@
 #define __WCDB_NOT_NULL_IMP(className, propertyName)                                     \
     +(void) WCDB_ORM(className, not_null)                                                \
     {                                                                                    \
-        WCDB_COMPILE_TIME_CHECK(className.propertyName);                                 \
+        WCDB_STATIC_ASSERT_EXISTS(className.propertyName);                               \
         const WCTProperty &property = binding.getProperty(WCDB_STRINGIFY(propertyName)); \
         binding.getColumnDef(property).byAddingConstraint(                               \
         WCDB::ColumnConstraint().withNotNull());                                         \
@@ -44,7 +44,7 @@
 #define __WCDB_UNIQUE_IMP(className, propertyName)                                       \
     +(void) WCDB_ORM(className, unique)                                                  \
     {                                                                                    \
-        WCDB_COMPILE_TIME_CHECK(className.propertyName);                                 \
+        WCDB_STATIC_ASSERT_EXISTS(className.propertyName);                               \
         const WCTProperty &property = binding.getProperty(WCDB_STRINGIFY(propertyName)); \
         binding.getColumnDef(property).byAddingConstraint(                               \
         WCDB::ColumnConstraint().withUnique());                                          \
@@ -54,7 +54,7 @@
 #define __WCDB_MULTI_PRIMARY_IMP(className, constraintName, propertyName, order)         \
     +(void) WCDB_ORM(className, multi_primary)                                           \
     {                                                                                    \
-        WCDB_COMPILE_TIME_CHECK(className.propertyName);                                 \
+        WCDB_STATIC_ASSERT_EXISTS(className.propertyName);                               \
         const WCTProperty &property = binding.getProperty(WCDB_STRINGIFY(propertyName)); \
         binding.getOrCreateTableConstraint(constraintName)                               \
         .withPrimaryKey(property.asIndex(order));                                        \
@@ -70,7 +70,7 @@
 #define __WCDB_MULTI_UNIQUE_IMP(className, constraintName, propertyName, order)          \
     +(void) WCDB_ORM(className, multi_unique)                                            \
     {                                                                                    \
-        WCDB_COMPILE_TIME_CHECK(className.propertyName);                                 \
+        WCDB_STATIC_ASSERT_EXISTS(className.propertyName);                               \
         const WCTProperty &property = binding.getProperty(WCDB_STRINGIFY(propertyName)); \
         binding.getOrCreateTableConstraint(constraintName)                               \
         .withUnique(property.asIndex(order));                                            \
