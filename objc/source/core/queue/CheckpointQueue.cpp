@@ -73,6 +73,7 @@ bool CheckpointQueue::onTimed(const std::string& path, const int& frames)
 void CheckpointQueue::put(const std::string& path, double delay, int frames)
 {
     m_timedQueue.reQueue(path, delay, frames);
+    lazyRun();
 }
 
 void CheckpointQueue::remove(const std::string& path)

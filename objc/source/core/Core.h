@@ -118,7 +118,6 @@ protected:
     std::shared_ptr<BackupQueue> m_backupQueue;
 
     std::shared_ptr<Config> m_backupConfig;
-    std::shared_ptr<Config> m_basicConfig;
     std::shared_ptr<Config> m_checkpointConfig;
     std::shared_ptr<Config> m_globalSQLTraceConfig;
     std::shared_ptr<Config> m_globalPerformanceTraceConfig;

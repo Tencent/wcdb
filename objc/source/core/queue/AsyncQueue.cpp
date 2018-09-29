@@ -30,13 +30,40 @@ AsyncQueue::AsyncQueue(const std::string& name_) : name(name_), m_running(false)
 {
 }
 
+AsyncQueue::~AsyncQueue()
+{
+    std::unique_lock<std::mutex> lockGuard(m_lock);
+    while (m_running) {
+        // wait until done
+        m_cond.wait_for(lockGuard, std::chrono::seconds(10));
+    }
+    WCTRemedialAssert(!m_running, String::formatted("Queue: %s does not exit on time."), ;);
+}
+
 void AsyncQueue::run()
 {
-    WCTRemedialAssert(!m_running.load(),
-                      String::formatted("Queue: %s is already run.", name.c_str()),
-                      return;);
-    m_running = true;
-    Dispatch::async(name, std::bind(&AsyncQueue::loop, this));
+    std::lock_guard<std::mutex> lockGuard(m_lock);
+    if (!m_started) {
+        m_started = true;
+        Dispatch::async(name, std::bind(&AsyncQueue::willRun, this));
+    }
+}
+
+void AsyncQueue::willRun()
+{
+    m_running.store(true);
+    loop();
+    std::lock_guard<std::mutex> lockGuard(m_lock);
+    m_running.store(false);
+    m_cond.notify_one();
+}
+
+void AsyncQueue::lazyRun()
+{
+    // lock free if it's already running
+    if (!m_running.load()) {
+        run();
+    }
 }
 
 bool AsyncQueue::exit()

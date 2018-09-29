@@ -21,6 +21,7 @@
 #ifndef AsyncQueue_hpp
 #define AsyncQueue_hpp
 
+#include <mutex>
 #include <string>
 
 namespace WCDB {
@@ -28,6 +29,8 @@ namespace WCDB {
 class AsyncQueue {
 public:
     AsyncQueue(const std::string &name);
+    ~AsyncQueue();
+
     AsyncQueue() = delete;
     AsyncQueue(const AsyncQueue &) = delete;
     AsyncQueue &operator=(const AsyncQueue &) = delete;
@@ -37,9 +40,18 @@ public:
     const std::string name;
 
 protected:
-    std::atomic<bool> m_running;
-    static bool exit();
+    void lazyRun();
     virtual void loop() = 0;
+    static bool exit();
+
+private:
+    std::mutex m_lock;
+    std::condition_variable m_cond;
+
+    bool m_started;
+    std::atomic<bool> m_running;
+
+    void willRun();
 };
 
 } // namespace WCDB

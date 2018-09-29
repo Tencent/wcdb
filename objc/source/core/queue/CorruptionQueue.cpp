@@ -66,6 +66,7 @@ void CorruptionQueue::handleError(const Error& error)
         notify = m_corrupted.empty();
         m_corrupted[iter->second] = identifier;
     }
+    lazyRun();
     if (notify) {
         m_cond.notify_all();
     }

@@ -37,16 +37,14 @@ Core::Core()
 , m_checkpointQueue(new CheckpointQueue(checkpointQueueName, m_databasePool))
 , m_backupQueue(new BackupQueue(backupQueueName, m_databasePool))
 // Configs
-, m_basicConfig(new BasicConfig)
 , m_backupConfig(new BackupConfig(m_backupQueue))
-, m_checkpointConfig(new CheckpointConfig(m_checkpointQueue))
 , m_globalSQLTraceConfig(new ShareableSQLTraceConfig)
 , m_globalPerformanceTraceConfig(new ShareablePerformanceTraceConfig)
 , m_configs(new Configs(OrderedUniqueList<std::string, std::shared_ptr<Config>>({
   { Configs::Priority::Highest, globalSQLTraceConfigName, m_globalSQLTraceConfig },
   { Configs::Priority::Highest, globalPerformanceTraceConfigName, m_globalPerformanceTraceConfig },
-  { Configs::Priority::Higher, basicConfigName, m_basicConfig },
-  { Configs::Priority::Low, checkpointConfigName, m_checkpointConfig },
+  { Configs::Priority::Higher, basicConfigName, std::shared_ptr<Config>(new BasicConfig) },
+  { Configs::Priority::Low, checkpointConfigName, std::shared_ptr<Config>(new CheckpointConfig(m_checkpointQueue)) },
   })))
 {
     m_databasePool->setEvent(this);
@@ -56,10 +54,6 @@ Core::Core()
     //        Handle::setMemoryMapSize(0x7fff0000, 0x7fff0000);
     Handle::setNotificationForLog(Core::handleLog);
     Handle::setNotificationWhenVFSOpened(Core::vfsOpen);
-
-    m_corruptionQueue->run();
-    m_checkpointQueue->run();
-    m_backupQueue->run();
 
     Notifier::shared()->setNotification(notifierLoggerName, Console::log);
 }

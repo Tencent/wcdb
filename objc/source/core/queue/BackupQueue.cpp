@@ -45,6 +45,7 @@ void BackupQueue::loop()
 void BackupQueue::put(const std::string& path, double delay, int frames)
 {
     m_timedQueue.reQueue(path, delay, frames);
+    lazyRun();
 }
 
 int BackupQueue::getBackedUpFrames(const std::string& path)
