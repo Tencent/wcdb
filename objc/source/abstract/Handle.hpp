@@ -188,7 +188,7 @@ protected:
 
     // if code >= 0, then the level of error with the specified code will be marked as ignored
     // if code < 0, then the level of all errors will be marked as ignored
-    // when the error is marked as ignored, the error will not be set to m_error
+    // when the error is marked as ignored, it will not be set to m_error
     void markErrorAsIgnorable(int codeToBeIgnored);
     void markErrorAsUnignorable();
 
