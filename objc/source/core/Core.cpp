@@ -55,7 +55,16 @@ Core::Core()
     Handle::setNotificationForLog(Core::handleLog);
     Handle::setNotificationWhenVFSOpened(Core::vfsOpen);
 
+    Notifier::shared()->setNotificationForPreprocessing(
+    notifierPreprocessorName,
+    std::bind(&Core::preprocessError, this, std::placeholders::_1, std::placeholders::_2));
     Notifier::shared()->setNotification(notifierLoggerName, Console::log);
+}
+
+Core::~Core()
+{
+    m_databasePool->setEvent(nullptr);
+    Notifier::shared()->setNotificationForPreprocessing(notifierPreprocessorName, nullptr);
 }
 
 RecyclableDatabase Core::getOrCreateDatabase(const std::string& path)
@@ -163,6 +172,23 @@ void Core::handleLog(void* unused, int code, const char* message)
     error.setSQLiteCode(code);
     error.message = message ? message : String::empty();
     Notifier::shared()->notify(error);
+}
+
+void Core::preprocessError(const Error& error, Error::Infos& infos)
+{
+    const auto& strings = error.infos.getStrings();
+    auto iter = strings.find("Path");
+    if (iter == strings.end()) {
+        return;
+    }
+    auto database = m_databasePool->get(iter->second);
+    if (database == nullptr) {
+        return;
+    }
+    auto tag = database->getTag();
+    if (tag != Tag::invalid()) {
+        infos.set("Tag", tag);
+    }
 }
 
 } // namespace WCDB

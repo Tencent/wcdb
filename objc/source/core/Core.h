@@ -56,6 +56,7 @@ namespace WCDB {
 class Core : public DatabasePoolEvent {
 public:
     static Core* shared();
+    ~Core();
 
     RecyclableDatabase getOrCreateDatabase(const std::string& path);
     RecyclableDatabase getExistingDatabase(const std::string& path);
@@ -81,6 +82,8 @@ public:
                  const CustomConfig::Invocation& uninvocation = nullptr);
 
     static constexpr const char* notifierLoggerName = "com.Tencent.WCDB.Notifier.Logger";
+    static constexpr const char* notifierPreprocessorName
+    = "com.Tencent.WCDB.Notifier.PreprocessTag";
 
     static constexpr const char* corruptionQueueName = "com.Tencent.WCDB.Queue.Corruption";
     static constexpr const char* checkpointQueueName = "com.Tencent.WCDB.Queue.Checkpoint";
@@ -107,6 +110,7 @@ protected:
 
     static int vfsOpen(const char* path, int flags, int mode);
     static void handleLog(void* unused, int code, const char* message);
+    void preprocessError(const Error& error, Error::Infos& infos);
     void onDatabaseCreated(Database* database) override;
 
     // The order of member variables here is important.

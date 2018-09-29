@@ -212,6 +212,7 @@ std::any is available since C++17.
         const std::map<std::string, double> &getDoubles() const;
 
         void clear();
+        bool empty() const;
 
     protected:
         std::map<std::string, int64_t> m_integers;

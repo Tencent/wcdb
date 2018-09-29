@@ -55,13 +55,32 @@ void Notifier::setNotificationForPreprocessing(const std::string &key,
 
 void Notifier::notify(const Error &error) const
 {
-    Error preprocessed = error;
+    Error::Infos infosToBeAdded;
     SharedLockGuard lockGuard(m_lock);
     for (const auto &element : m_preprocessNotifications) {
-        element.second(preprocessed);
+        element.second(error, infosToBeAdded);
     }
+    if (infosToBeAdded.empty()) {
+        doNotify(error);
+    } else {
+        Error preprocessedError = error;
+        for (const auto &info : infosToBeAdded.getDoubles()) {
+            preprocessedError.infos.set(info.first, info.second);
+        }
+        for (const auto &info : infosToBeAdded.getStrings()) {
+            preprocessedError.infos.set(info.first, info.second);
+        }
+        for (const auto &info : infosToBeAdded.getIntegers()) {
+            preprocessedError.infos.set(info.first, info.second);
+        }
+        doNotify(preprocessedError);
+    }
+}
+
+void Notifier::doNotify(const Error &error) const
+{
     for (const auto &element : m_notifications) {
-        element.second(preprocessed);
+        element.second(error);
     }
 }
 

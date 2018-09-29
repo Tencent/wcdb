@@ -188,4 +188,9 @@ void Error::Infos::clear()
     m_strings.clear();
 }
 
+bool Error::Infos::empty() const
+{
+    return m_integers.empty() && m_doubles.empty() && m_strings.empty();
+}
+
 } //namespace WCDB
