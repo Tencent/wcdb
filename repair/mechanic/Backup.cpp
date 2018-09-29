@@ -87,10 +87,9 @@ bool Backup::work()
         succeed = m_masterCrawler.work(this);
     } while (false);
     if (!succeed) {
-#define WCDB_BACKUP_HINT 1
-#ifdef WCDB_BACKUP_HINT
-        m_pager.hint();
-#endif
+        if (Console::debuggable) {
+            m_pager.hint();
+        }
         setError(m_pager.getError());
     }
 
