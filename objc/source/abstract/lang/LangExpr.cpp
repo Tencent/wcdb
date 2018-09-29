@@ -454,7 +454,7 @@ CopyOnWriteString Expr::SQL() const
         LangRemedialAssert(!raiseFunction.empty());
         return raiseFunction.description();
     default:
-        LangRemedialFatalError();
+        LangRemedialAssert(false);
     }
     return description;
 }

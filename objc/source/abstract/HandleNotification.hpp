@@ -23,6 +23,8 @@
 
 #include <WCDB/HandleRelated.hpp>
 #include <WCDB/OrderedUniqueList.hpp>
+#include <functional>
+#include <map>
 
 namespace WCDB {
 

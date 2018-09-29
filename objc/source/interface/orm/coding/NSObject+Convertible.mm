@@ -25,7 +25,7 @@ namespace WCDB {
 
 LiteralValue LiteralValueConvertible<NSObject *>::as(NSObject *const &t)
 {
-    WCTAssert([t conformsToProtocol:@protocol(WCTColumnCoding)], "Column should conform to WCTColumnCoding.");
+    WCTRemedialAssert([t conformsToProtocol:@protocol(WCTColumnCoding)], "Column should conform to WCTColumnCoding.", return LiteralValue(nullptr););
     id value = [(id<WCTColumnCoding>) t archivedWCTValue];
     value = [(id<WCTColumnCoding>) value archivedWCTValue];
     if ([value isKindOfClass:NSData.class]) {

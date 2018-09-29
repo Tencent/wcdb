@@ -19,7 +19,9 @@
  */
 
 #import <WCDB/Assertion.hpp>
+#import <WCDB/Console.hpp>
 #import <WCDB/NSString+cppString.h>
+#import <WCDB/String.hpp>
 #import <WCDB/WCTRuntimeBaseAccessor.h>
 #import <objc/runtime.h>
 #import <string>
@@ -68,12 +70,9 @@ Class WCTRuntimeBaseAccessor::getPropertyClass(Class cls, const std::string &pro
     if (splitAttributes.count > 0) {
         NSString *encodeType = splitAttributes[0];
         NSArray *splitEncodeTypes = [encodeType componentsSeparatedByString:@"\""];
-#ifdef DEBUG
-        if (splitEncodeTypes.count <= 1) {
-            NSString *message = [NSString stringWithFormat:@"Failed to parse the type of [%s].", propertyName.c_str()];
-            WCTFatalError(message.cppString);
+        if (WCDB::Console::debuggable) {
+            WCTRemedialAssert(splitEncodeTypes.count > 1, WCDB::String::formatted("Failed to parse the type of [%s].", propertyName.c_str()), return nil;);
         }
-#endif
         NSString *className = splitEncodeTypes[1];
         return NSClassFromString(className);
     }

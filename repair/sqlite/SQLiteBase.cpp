@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/Notifier.hpp>
 #include <WCDB/SQLite.h>
 #include <WCDB/SQLiteBase.hpp>
 #include <WCDB/String.hpp>

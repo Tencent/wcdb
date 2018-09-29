@@ -68,7 +68,7 @@ CopyOnWriteString CreateTableSTMT::SQL() const
         description.append(" AS " + selectSTMT.description().get());
         break;
     default:
-        LangRemedialFatalError();
+        LangRemedialAssert(false);
         break;
     }
     return description;

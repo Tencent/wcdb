@@ -98,18 +98,15 @@ public:
     = "com.Tencent.WCDB.Config.GlobalSQLTrace";
     static constexpr const char* globalPerformanceTraceConfigName
     = "com.Tencent.WCDB.Config.GlobalPerformanceTrace";
-    static constexpr const char* migrationConfigName = "com.Tencent.WCDB.Config.Migration";
 
     Core(const Core&) = delete;
     Core& operator=(const Core&) = delete;
-
-    static void logger(const Error& error);
 
 protected:
     Core();
 
     static int vfsOpen(const char* path, int flags, int mode);
-    static void globalLogger(void* unused, int code, const char* message);
+    static void handleLog(void* unused, int code, const char* message);
     void onDatabaseCreated(Database* database) override;
 
     // The order of member variables here is important.

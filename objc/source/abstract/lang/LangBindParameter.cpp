@@ -50,7 +50,7 @@ CopyOnWriteString BindParameter::SQL() const
     //            description.append("$" + name.get());
     //            break;
     //        default:
-    //            LangRemedialFatalError();
+    //            LangRemedialAssert(false);
     //            ;
     //    }
     return description;

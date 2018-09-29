@@ -139,7 +139,7 @@ int64_t Cell::integerValue(int index) const
             value = m_deserialization.get8BytesInt(cell.second);
             break;
         default:
-            WCTInnerFatalError();
+            WCTInnerAssert(false);
             break;
         }
     }

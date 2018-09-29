@@ -61,7 +61,7 @@ TableOrSubquery &TableOrSubquery::withSchema(const std::string &schemaName)
         lang.tableOrSubqueryTableFunction.get_or_copy().schemaName.assign(schemaName);
         break;
     default:
-        WINQRemedialError();
+        WINQRemedialAssert(false);
     }
     return *this;
 }
@@ -80,7 +80,7 @@ TableOrSubquery &TableOrSubquery::as(const std::string &tableAlias)
         lang.tableOrSubquerySelect.get_or_copy().tableAlias.assign(tableAlias);
         break;
     default:
-        WINQRemedialError();
+        WINQRemedialAssert(false);
     }
     return *this;
 }

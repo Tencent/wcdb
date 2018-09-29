@@ -28,8 +28,6 @@
 		2316D94B2105D21500707AFC /* LRUCache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D9482105D21500707AFC /* LRUCache.hpp */; };
 		232741501F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		232741521F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */; };
-		232DCE0A207F81FD00AC2CD0 /* Lock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 232DCE08207F81FD00AC2CD0 /* Lock.cpp */; };
-		232DCE0B207F81FD00AC2CD0 /* Lock.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 232DCE09207F81FD00AC2CD0 /* Lock.hpp */; };
 		2330712F1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2330712E1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm */; };
 		233A058B2062698E00F1A212 /* WCTHandle+ChainCall.h in Headers */ = {isa = PBXBuildFile; fileRef = 233A05892062698E00F1A212 /* WCTHandle+ChainCall.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		233A058C2062698E00F1A212 /* WCTUnsafeHandle+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233A058A2062698E00F1A212 /* WCTUnsafeHandle+ChainCall.mm */; };
@@ -182,7 +180,6 @@
 		23775BCD20AD72BC00E21AB0 /* Data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775BCB20AD72BC00E21AB0 /* Data.cpp */; };
 		23775BCF20AD72BC00E21AB0 /* Data.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775BCC20AD72BC00E21AB0 /* Data.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		237A65F520F731DF008B4771 /* OrderedUniqueList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */; };
-		23823AE820F5F65D00619022 /* ThreadLocal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23823AE720F5F65D00619022 /* ThreadLocal.cpp */; };
 		2386B3C51ED442FE000B72F6 /* WCTError.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C21ED442FE000B72F6 /* WCTError.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2386B3C61ED442FE000B72F6 /* WCTError.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386B3C31ED442FE000B72F6 /* WCTError.mm */; };
 		2386B3C71ED442FE000B72F6 /* WCTError+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C41ED442FE000B72F6 /* WCTError+Private.h */; };
@@ -389,7 +386,6 @@
 		239775AB202AECD3000A681C /* LangWithClause.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239774E6202AECD3000A681C /* LangWithClause.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		239776DA202AF2E3000A681C /* CopyOnWriteString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 239776BE202AF2E1000A681C /* CopyOnWriteString.cpp */; };
 		239776E0202AF2E3000A681C /* CopyOnWriteLazyDescribable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776C1202AF2E1000A681C /* CopyOnWriteLazyDescribable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		239776F0202AF2E3000A681C /* ThreadLocal.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776C9202AF2E2000A681C /* ThreadLocal.hpp */; };
 		239776F8202AF2E3000A681C /* CopyOnWriteString.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776CD202AF2E2000A681C /* CopyOnWriteString.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		239776FA202AF2E3000A681C /* TimedQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776CE202AF2E2000A681C /* TimedQueue.hpp */; };
 		239776FE202AF2E3000A681C /* Macro.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776D0202AF2E2000A681C /* Macro.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -516,7 +512,10 @@
 		23EE0EB220B838E100C95998 /* Repairman.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EE0EB020B838E100C95998 /* Repairman.cpp */; };
 		23EE0EB420B838E100C95998 /* Repairman.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EE0EB120B838E100C95998 /* Repairman.hpp */; };
 		23F0FD7D215F1C92008399FB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F0FD7C215F1C92008399FB /* Security.framework */; };
-		23F0FDF1215F266C008399FB /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 23F0FDEF215F266C008399FB /* Info.plist */; };
+		23F0FEB4215F5E9A008399FB /* ThreadLocal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F0FEB0215F5E99008399FB /* ThreadLocal.cpp */; };
+		23F0FEB5215F5E9A008399FB /* Lock.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F0FEB1215F5E9A008399FB /* Lock.hpp */; };
+		23F0FEB6215F5E9A008399FB /* ThreadLocal.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F0FEB2215F5E9A008399FB /* ThreadLocal.hpp */; };
+		23F0FEB7215F5E9A008399FB /* Lock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F0FEB3215F5E9A008399FB /* Lock.cpp */; };
 		23F1698A20B6638F009B5C47 /* ThreadedErrors.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F1698720B6638F009B5C47 /* ThreadedErrors.hpp */; };
 		23F1698C20B6638F009B5C47 /* ThreadedErrors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F1698920B6638F009B5C47 /* ThreadedErrors.cpp */; };
 		23F340DA204D32C3007DB8AB /* WCTTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 23F340D8204D32C2007DB8AB /* WCTTable.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -587,8 +586,6 @@
 		2316D9482105D21500707AFC /* LRUCache.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LRUCache.hpp; sourceTree = "<group>"; };
 		2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+FTS.h"; sourceTree = "<group>"; };
 		2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+FTS.mm"; sourceTree = "<group>"; };
-		232DCE08207F81FD00AC2CD0 /* Lock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Lock.cpp; sourceTree = "<group>"; };
-		232DCE09207F81FD00AC2CD0 /* Lock.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Lock.hpp; sourceTree = "<group>"; };
 		2330712E1F612CF5004B01FF /* NSObject+WCTColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSObject+WCTColumnCoding.mm"; sourceTree = "<group>"; };
 		233A05892062698E00F1A212 /* WCTHandle+ChainCall.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTHandle+ChainCall.h"; sourceTree = "<group>"; };
 		233A058A2062698E00F1A212 /* WCTUnsafeHandle+ChainCall.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTUnsafeHandle+ChainCall.mm"; sourceTree = "<group>"; };
@@ -741,7 +738,6 @@
 		23775BCB20AD72BC00E21AB0 /* Data.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Data.cpp; sourceTree = "<group>"; };
 		23775BCC20AD72BC00E21AB0 /* Data.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Data.hpp; sourceTree = "<group>"; };
 		237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OrderedUniqueList.hpp; sourceTree = "<group>"; };
-		23823AE720F5F65D00619022 /* ThreadLocal.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadLocal.cpp; sourceTree = "<group>"; };
 		2386B3C21ED442FE000B72F6 /* WCTError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTError.h; sourceTree = "<group>"; };
 		2386B3C31ED442FE000B72F6 /* WCTError.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTError.mm; sourceTree = "<group>"; };
 		2386B3C41ED442FE000B72F6 /* WCTError+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTError+Private.h"; sourceTree = "<group>"; };
@@ -949,7 +945,6 @@
 		239774E6202AECD3000A681C /* LangWithClause.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LangWithClause.hpp; sourceTree = "<group>"; };
 		239776BE202AF2E1000A681C /* CopyOnWriteString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CopyOnWriteString.cpp; sourceTree = "<group>"; };
 		239776C1202AF2E1000A681C /* CopyOnWriteLazyDescribable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CopyOnWriteLazyDescribable.hpp; sourceTree = "<group>"; };
-		239776C9202AF2E2000A681C /* ThreadLocal.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ThreadLocal.hpp; sourceTree = "<group>"; };
 		239776CD202AF2E2000A681C /* CopyOnWriteString.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CopyOnWriteString.hpp; sourceTree = "<group>"; };
 		239776CE202AF2E2000A681C /* TimedQueue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TimedQueue.hpp; sourceTree = "<group>"; };
 		239776D0202AF2E2000A681C /* Macro.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Macro.hpp; sourceTree = "<group>"; };
@@ -1080,6 +1075,10 @@
 		23F0FD7C215F1C92008399FB /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		23F0FDEF215F266C008399FB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		23F0FDF0215F266C008399FB /* WCDB.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = WCDB.modulemap; sourceTree = "<group>"; };
+		23F0FEB0215F5E99008399FB /* ThreadLocal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadLocal.cpp; sourceTree = "<group>"; };
+		23F0FEB1215F5E9A008399FB /* Lock.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Lock.hpp; sourceTree = "<group>"; };
+		23F0FEB2215F5E9A008399FB /* ThreadLocal.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ThreadLocal.hpp; sourceTree = "<group>"; };
+		23F0FEB3215F5E9A008399FB /* Lock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Lock.cpp; sourceTree = "<group>"; };
 		23F1698720B6638F009B5C47 /* ThreadedErrors.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ThreadedErrors.hpp; sourceTree = "<group>"; };
 		23F1698920B6638F009B5C47 /* ThreadedErrors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadedErrors.cpp; sourceTree = "<group>"; };
 		23F340D8204D32C2007DB8AB /* WCTTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTTable.h; sourceTree = "<group>"; };
@@ -1413,10 +1412,6 @@
 				239776D6202AF2E3000A681C /* CopyOnWrite.hpp */,
 				23A7B35A2044F52000775DB8 /* CopyOnWriteList.hpp */,
 				239776D0202AF2E2000A681C /* Macro.hpp */,
-				232DCE08207F81FD00AC2CD0 /* Lock.cpp */,
-				232DCE09207F81FD00AC2CD0 /* Lock.hpp */,
-				23823AE720F5F65D00619022 /* ThreadLocal.cpp */,
-				239776C9202AF2E2000A681C /* ThreadLocal.hpp */,
 				239776CE202AF2E2000A681C /* TimedQueue.hpp */,
 				237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */,
 				23C40CF4208DBCDD007B1648 /* Dispatch.cpp */,
@@ -1457,6 +1452,10 @@
 		23775B2E20AD666900E21AB0 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				23F0FEB3215F5E9A008399FB /* Lock.cpp */,
+				23F0FEB1215F5E9A008399FB /* Lock.hpp */,
+				23F0FEB0215F5E99008399FB /* ThreadLocal.cpp */,
+				23F0FEB2215F5E9A008399FB /* ThreadLocal.hpp */,
 				23906AB4215E4F4400C2B717 /* Version.h */,
 				2316D92E21057CA700707AFC /* MappedData.cpp */,
 				2316D92B21057CA600707AFC /* MappedData.hpp */,
@@ -2094,7 +2093,6 @@
 				23A6D4C120BFD7F9004F2DAA /* Progress.hpp in Headers */,
 				23977558202AECD3000A681C /* LangColumnDef.hpp in Headers */,
 				23977559202AECD3000A681C /* LangColumnType.hpp in Headers */,
-				232DCE0B207F81FD00AC2CD0 /* Lock.hpp in Headers */,
 				2397755B202AECD3000A681C /* LangCommitSTMT.hpp in Headers */,
 				2397755D202AECD3000A681C /* LangCommonTableExpression.hpp in Headers */,
 				23906AB5215E4F4400C2B717 /* Version.h in Headers */,
@@ -2145,7 +2143,6 @@
 				2397758B202AECD3000A681C /* LangOrder.hpp in Headers */,
 				23EE0EB420B838E100C95998 /* Repairman.hpp in Headers */,
 				2397758D202AECD3000A681C /* LangOrderingTerm.hpp in Headers */,
-				239776F0202AF2E3000A681C /* ThreadLocal.hpp in Headers */,
 				23E1FD86206C9649006C6C8E /* NSString+WCTColumnCoding.h in Headers */,
 				2397758F202AECD3000A681C /* LangPragmaSTMT.hpp in Headers */,
 				2360A5FD20D78F1B00E4A311 /* HandleRelated.hpp in Headers */,
@@ -2275,7 +2272,9 @@
 				23775B6420AD666900E21AB0 /* Error.hpp in Headers */,
 				23D96B932050DED700DB5E93 /* DatabasePool.hpp in Headers */,
 				23B0071D2047ED4800045245 /* ConfiguredHandle.hpp in Headers */,
+				23F0FEB6215F5E9A008399FB /* ThreadLocal.hpp in Headers */,
 				234DBD032064DE04000E31E8 /* WCTDatabase+Transaction.h in Headers */,
+				23F0FEB5215F5E9A008399FB /* Lock.hpp in Headers */,
 				23D0C35F20C149D80001BFAE /* FactoryRetriever.hpp in Headers */,
 				234DBD052064DE04000E31E8 /* WCTHandle+Transaction.h in Headers */,
 				23775B7C20AD666900E21AB0 /* Material.hpp in Headers */,
@@ -2367,7 +2366,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23F0FDF1215F266C008399FB /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2484,7 +2482,6 @@
 				2397751D202AECD3000A681C /* StatementCreateTrigger.cpp in Sources */,
 				23977500202AECD3000A681C /* ModuleArgument.cpp in Sources */,
 				239774FC202AECD3000A681C /* JoinConstraint.cpp in Sources */,
-				23823AE820F5F65D00619022 /* ThreadLocal.cpp in Sources */,
 				238A8FC7208B377300DDFDCB /* NSString+CppString.mm in Sources */,
 				2349F7051EA0D6680021EFA7 /* HandlePool.cpp in Sources */,
 				239774EF202AECD3000A681C /* CTETableName.cpp in Sources */,
@@ -2550,6 +2547,7 @@
 				2349F71B1EA0D6680021EFA7 /* WCTSequence.mm in Sources */,
 				239775A8202AECD3000A681C /* LangVacuumSTMT.cpp in Sources */,
 				2349F7351EA0D6680021EFA7 /* WCTUpdate.mm in Sources */,
+				23F0FEB4215F5E9A008399FB /* ThreadLocal.cpp in Sources */,
 				23977521202AECD3000A681C /* StatementCreateVirtualTable.cpp in Sources */,
 				23B4DCBD2112A9C800954D71 /* Core.cpp in Sources */,
 				23775B8A20AD666900E21AB0 /* Pager.cpp in Sources */,
@@ -2561,7 +2559,6 @@
 				2397755A202AECD3000A681C /* LangCommitSTMT.cpp in Sources */,
 				23B4DCED2112B32400954D71 /* CheckpointQueue.cpp in Sources */,
 				23775B8220AD666900E21AB0 /* Cell.cpp in Sources */,
-				232DCE0A207F81FD00AC2CD0 /* Lock.cpp in Sources */,
 				23567CFA20CA3889005F1C35 /* Frame.cpp in Sources */,
 				23B35C7820BFE39500425033 /* Path.cpp in Sources */,
 				23AB8970215B73F700554DF1 /* MigrationInitializerHandle.cpp in Sources */,
@@ -2623,6 +2620,7 @@
 				23F4EF7A20567F4B0088DE3D /* LangPragma.cpp in Sources */,
 				2349F7211EA0D6680021EFA7 /* WCTDelete.mm in Sources */,
 				23F340DF204D3482007DB8AB /* WCTDatabase+ChainCall.mm in Sources */,
+				23F0FEB7215F5E9A008399FB /* Lock.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

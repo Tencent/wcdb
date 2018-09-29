@@ -20,6 +20,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Mechanic.hpp>
+#include <WCDB/Notifier.hpp>
 #include <WCDB/Page.hpp>
 #include <WCDB/String.hpp>
 

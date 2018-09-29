@@ -138,14 +138,16 @@ RecyclableHandle Database::getHandle()
 
 void Database::checkIdentifier() const
 {
-#warning TODO It's only for debug usage
-    WCTInnerAssert(m_identifier != 0);
-    bool succeed;
-    uint32_t identifier;
-    std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
-    WCTRemedialAssert(succeed && identifier == m_identifier,
-                      "Database should be closed before it's removed.",
-                      ;);
+    if (Console::debuggable) {
+        // run only in debuggable mode since it's expensive
+        WCTInnerAssert(m_identifier != 0);
+        bool succeed;
+        uint32_t identifier;
+        std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
+        WCTRemedialAssert(succeed && identifier == m_identifier,
+                          "Database should be closed before it's removed.",
+                          ;);
+    }
 }
 
 bool Database::execute(const Statement &statement)

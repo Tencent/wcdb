@@ -19,7 +19,9 @@
  */
 
 #import <WCDB/Assertion.hpp>
+#import <WCDB/Console.hpp>
 #import <WCDB/Interface.h>
+#import <WCDB/Notifier.hpp>
 #import <WCDB/Version.h>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTError+Private.h>
@@ -33,12 +35,12 @@
 
 + (BOOL)debuggable
 {
-    return NO;
+    return WCDB::Console::debuggable;
 }
 
 + (void)setDebuggable:(BOOL)debuggable
 {
-#warning TODO
+    WCDB::Console::debuggable = debuggable;
 }
 
 + (NSString *)commitHash
@@ -72,11 +74,6 @@
         };
     }
     WCDB::Notifier::shared()->setNotification(name.cppString, callback);
-}
-
-+ (void)resetGlobalTraceError
-{
-    WCDB::Notifier::shared()->setNotification(WCDB::Core::notifierLoggerName, WCDB::Core::logger);
 }
 
 + (void)globalTracePerformance:(WCTPerformanceTraceBlock)trace

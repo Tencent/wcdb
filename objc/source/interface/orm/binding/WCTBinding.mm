@@ -204,5 +204,8 @@ WCTColumnNamed WCTBinding::getColumnGenerator()
 
 void WCTBinding::checkSafeCall(Class cls) const
 {
-    WCTAssert(m_cls == cls, "Inheritance is not supported for ORM yet.");
+    if (WCDB::Console::debuggable) {
+        // run only in debuggable mode since it's very frequent
+        WCTRemedialAssert(m_cls == cls, "Inheritance is not supported for ORM yet.", ;);
+    }
 }

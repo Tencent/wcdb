@@ -20,6 +20,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/FileManager.hpp>
+#include <WCDB/Notifier.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/Serialization.hpp>
 #include <WCDB/Shm.hpp>

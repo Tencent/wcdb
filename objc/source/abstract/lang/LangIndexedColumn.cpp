@@ -42,7 +42,7 @@ CopyOnWriteString IndexedColumn::SQL() const
         description.append(expr.description().get());
         break;
     default:
-        LangRemedialFatalError();
+        LangRemedialAssert(false);
         break;
     }
     if (!collationName.empty()) {

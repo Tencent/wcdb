@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/Error.hpp>
 #include <WCDB/Migration.hpp>
 #include <WCDB/String.hpp>
 

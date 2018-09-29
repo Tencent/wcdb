@@ -159,7 +159,7 @@ CopyOnWriteString TableOrSubquery::SQL() const
         LangRemedialAssert(!tableOrSubqueryList.empty());
         return tableOrSubqueryList.description();
     default:
-        LangRemedialFatalError();
+        LangRemedialAssert(false);
     }
     return description;
 }

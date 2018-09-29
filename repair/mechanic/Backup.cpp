@@ -139,7 +139,7 @@ bool Backup::filter(const std::string &tableName)
 #pragma mark - Crawlable
 void Backup::onCellCrawled(const Cell &cell)
 {
-    WCTInnerFatalError();
+    WCTInnerAssert(false);
 }
 
 bool Backup::willCrawlPage(const Page &page, int height)

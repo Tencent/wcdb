@@ -41,6 +41,13 @@ typedef void (^WCTSQLTraceBlock)(NSString *);
 
 @property (class, readonly, nonatomic, assign) NSString *version;
 
+/* It's recommended to add the following code at the beginning of your project
+ * ```
+ * #ifdef DEBUG
+ * WCTDatabase.debuggable = YES
+ * #endif
+ * ```
+ */
 @property (class, readwrite, nonatomic, assign) BOOL debuggable;
 
 @property (class, readonly, nonatomic, assign) NSString *commitHash;
@@ -63,8 +70,6 @@ typedef void (^WCTSQLTraceBlock)(NSString *);
 
 + (void)globalTraceError:(WCTErrorTraceBlock)block
                    named:(NSString *)name;
-
-+ (void)resetGlobalTraceError;
 
 /**
  @brief You can register a tracer to monitor the performance of all SQLs.

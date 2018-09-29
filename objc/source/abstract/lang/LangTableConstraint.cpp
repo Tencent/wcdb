@@ -64,7 +64,7 @@ CopyOnWriteString TableConstraint::SQL() const
                            + foreignKeyClause.description().get());
         break;
     default:
-        LangRemedialFatalError();
+        LangRemedialAssert(false);
         break;
     }
     return description;

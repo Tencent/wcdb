@@ -19,6 +19,8 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/Error.hpp>
+#include <WCDB/Notifier.hpp>
 #include <WCDB/PageBasedFileHandle.hpp>
 #include <unistd.h>
 

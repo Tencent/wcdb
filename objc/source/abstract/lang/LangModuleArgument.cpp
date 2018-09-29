@@ -47,7 +47,7 @@ CopyOnWriteString ModuleArgument::SQL() const
         description.append(left.get() + "=" + right.get());
         break;
     default:
-        LangRemedialFatalError();
+        LangRemedialAssert(false);
         break;
     }
     return description;

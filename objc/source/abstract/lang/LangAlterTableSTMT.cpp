@@ -44,7 +44,7 @@ CopyOnWriteString AlterTableSTMT::SQL() const
         description.append(" ADD COLUMN " + columnDef.description().get());
         break;
     default:
-        LangRemedialFatalError();
+        LangRemedialAssert(false);
         break;
     }
     return description;

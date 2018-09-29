@@ -21,42 +21,28 @@
 #ifndef Assertion_hpp
 #define Assertion_hpp
 
-#include <WCDB/Notifier.hpp>
+#include <WCDB/Console.hpp>
 
-// Inner assert if for WCDB debugging only, which will be removed when released
-// Remedial assertion will abort or result in error when it's debuggable accoding to the configuration
-#warning TODO
+// Inner assert is for WCDB debugging only, which will be removed when released.
+// Remedial assertion will abort or result in error when it's Console::debuggable accoding to the configuration
 
 #ifdef DEBUG
 
-#define WCTRemedialAssert(cond, message, remedial)                             \
-    if (!(cond)) {                                                             \
-        WCDB::Notifier::fatal((message), __FILE__, __LINE__);                  \
-        remedial                                                               \
-    }
-
 #define WCTInnerAssert(cond)                                                   \
-    WCTAssert((cond), "If you think it's a bug caused by WCDB, please report to us.")
+    WCDB::Console::fatal(                                                      \
+    "If you think it's a bug caused by WCDB, please report to us.", __FILE__, __LINE__);
 
 #else // DEBUG
-
-#define WCTRemedialAssert(cond, message, remedial)                             \
-    if (!(cond)) {                                                             \
-        WCDB::Notifier::error((message), __FILE__, __LINE__);                  \
-        remedial                                                               \
-    }
 
 #define WCTInnerAssert(cond)
 
 #endif // DEBUG
 
-#define WCTAssert(cond, message) WCTRemedialAssert((cond), (message), ;)
-
-#define WCTFatalError(message) WCTAssert(false, (message))
-
-#define WCTRemedialFatalError(message, remedial)                               \
-    WCTRemedialAssert(false, (message), remedial)
-
-#define WCTInnerFatalError() WCTInnerAssert(false);
+#warning TODO check all assertion to confirm their correctness
+#define WCTRemedialAssert(cond, message, remedial)                             \
+    if (!(cond)) {                                                             \
+        WCDB::Console::fatal((message), __FILE__, __LINE__);                   \
+        remedial                                                               \
+    }
 
 #endif /* Assertion_hpp */

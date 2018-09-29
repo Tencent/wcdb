@@ -65,32 +65,4 @@ void Notifier::notify(const Error &error) const
     }
 }
 
-void Notifier::fatal(const std::string &message, const char *file, int line)
-{
-    error(Error::Level::Fatal, message, file, line);
-}
-
-void Notifier::error(const std::string &message, const char *file, int line)
-{
-    error(Error::Level::Error, message, file, line);
-}
-
-void Notifier::warning(const std::string &message, const char *file, int line)
-{
-    error(Error::Level::Warning, message, file, line);
-}
-
-void Notifier::error(Error::Level level, const std::string &message, const char *file, int line)
-{
-    Error error;
-    error.setCode(Error::Code::Misuse, "Assertion");
-    error.level = level;
-    error.message = message;
-    if (file) {
-        error.infos.set("File", file);
-    }
-    error.infos.set("Line", line);
-    Notifier::shared()->notify(error);
-}
-
 } //namespace WCDB

@@ -60,7 +60,7 @@ CopyOnWriteString InsertSTMT::SQL() const
         description.append(" DEFAULT VALUES");
         break;
     default:
-        LangRemedialFatalError();
+        LangRemedialAssert(false);
         break;
     }
     return description;

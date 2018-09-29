@@ -85,7 +85,7 @@ CopyOnWriteString ColumnConstraint::SQL() const
             description.append("(" + expr.description().get() + ")");
             break;
         default:
-            LangRemedialFatalError();
+            LangRemedialAssert(false);
             break;
         }
         break;
@@ -98,7 +98,7 @@ CopyOnWriteString ColumnConstraint::SQL() const
         description.append(foreignKeyClause.description().get());
         break;
     default:
-        LangRemedialFatalError();
+        LangRemedialAssert(false);
         break;
     }
     return description;

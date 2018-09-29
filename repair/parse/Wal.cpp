@@ -21,6 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Frame.hpp>
+#include <WCDB/Notifier.hpp>
 #include <WCDB/Pager.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/Serialization.hpp>

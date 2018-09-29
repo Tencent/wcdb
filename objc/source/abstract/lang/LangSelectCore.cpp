@@ -68,7 +68,7 @@ CopyOnWriteString SelectCore::SQL() const
         description.append("VALUES(" + values.description().get() + ")");
         break;
     default:
-        LangRemedialFatalError();
+        LangRemedialAssert(false);
         break;
     }
     return description;

@@ -20,9 +20,9 @@
 
 #include <WCDB/Core.h>
 #include <WCDB/FileManager.hpp>
+#include <WCDB/Notifier.hpp>
 #include <WCDB/String.hpp>
 #include <fcntl.h>
-#include <iostream>
 
 namespace WCDB {
 
@@ -54,14 +54,14 @@ Core::Core()
     Handle::enableMultithread();
     Handle::enableMemoryStatus(false);
     //        Handle::setMemoryMapSize(0x7fff0000, 0x7fff0000);
-    Handle::setNotificationForLog(Core::globalLogger);
+    Handle::setNotificationForLog(Core::handleLog);
     Handle::setNotificationWhenVFSOpened(Core::vfsOpen);
 
     m_corruptionQueue->run();
     m_checkpointQueue->run();
     m_backupQueue->run();
 
-    Notifier::shared()->setNotification(notifierLoggerName, Core::logger);
+    Notifier::shared()->setNotification(notifierLoggerName, Console::log);
 }
 
 RecyclableDatabase Core::getOrCreateDatabase(const std::string& path)
@@ -143,48 +143,6 @@ std::shared_ptr<Config> Core::customConfig(const CustomConfig::Invocation& invoc
     return std::shared_ptr<Config>(new CustomConfig(invocation, uninvocation));
 }
 
-void Core::logger(const Error& error)
-{
-    bool log = error.level != Error::Level::Ignore
-#ifndef DEBUG
-               && error.level != Error::Level::Debug
-#endif
-    ;
-
-    if (log) {
-        std::ostringstream stream;
-        stream << "[" << Error::levelName(error.level) << ": ";
-        stream << (int) error.code();
-        if (!error.message.empty()) {
-            stream << ", " << error.message;
-        }
-        stream << "]";
-
-        for (const auto& info : error.infos.getIntegers()) {
-            stream << ", " << info.first << ": " << info.second;
-        }
-        for (const auto& info : error.infos.getStrings()) {
-            if (!info.second.empty()) {
-                stream << ", " << info.first << ": " << info.second;
-            }
-        }
-        for (const auto& info : error.infos.getDoubles()) {
-            stream << ", " << info.first << ": " << info.second;
-        }
-        stream << std::endl;
-        std::cout << stream.str();
-#ifdef DEBUG
-        if (error.level >= Error::Level::Error) {
-            std::cout << "Set breakpoint in Core::logger to debug.\n";
-        }
-#endif
-    }
-
-    if (error.level == Error::Level::Fatal) {
-        abort();
-    }
-}
-
 int Core::vfsOpen(const char* path, int flags, int mode)
 {
     int fd = open(path, flags, mode);
@@ -194,7 +152,7 @@ int Core::vfsOpen(const char* path, int flags, int mode)
     return fd;
 }
 
-void Core::globalLogger(void* unused, int code, const char* message)
+void Core::handleLog(void* unused, int code, const char* message)
 {
     Error error;
     switch (code) {

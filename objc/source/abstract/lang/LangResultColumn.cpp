@@ -47,7 +47,7 @@ CopyOnWriteString ResultColumn::SQL() const
         description.append("*");
         break;
     default:
-        LangRemedialFatalError();
+        LangRemedialAssert(false);
         break;
     }
     return description;

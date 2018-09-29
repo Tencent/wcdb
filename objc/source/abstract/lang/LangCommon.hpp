@@ -34,9 +34,6 @@
 #define LangRemedialAssert(cond)                                               \
     WCTRemedialAssert(cond, "WINQ expression is not complete", return description;)
 
-#define LangRemedialFatalError()                                               \
-    WCTRemedialFatalError("WINQ expression is not complete", return description;)
-
 namespace WCDB {
 
 namespace Lang {

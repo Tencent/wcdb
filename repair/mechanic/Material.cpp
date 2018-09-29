@@ -20,7 +20,9 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Data.hpp>
+#include <WCDB/Error.hpp>
 #include <WCDB/Material.hpp>
+#include <WCDB/Notifier.hpp>
 #include <WCDB/Serialization.hpp>
 
 namespace WCDB {

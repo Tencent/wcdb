@@ -72,13 +72,9 @@ WCDB::ColumnType WCTRuntimeObjCAccessor::GetColumnType(Class instanceClass, cons
 {
     static const SEL columnTypeSelector = NSSelectorFromString(@"columnType");
     Class propertyClass = getPropertyClass(instanceClass, propertyName);
-#warning TODO - replace all un-remedial assert/fatal and `#if DEBUG` with configurable parameters
-#ifdef DEBUG
-    if (![propertyClass conformsToProtocol:@protocol(WCTColumnCoding)]) {
-        NSString *message = [NSString stringWithFormat:@"[%@] should conform to WCTColumnCoding protocol, which is the class of [%@ %s]", NSStringFromClass(propertyClass), NSStringFromClass(instanceClass), propertyName.c_str()];
-        WCTFatalError(message.cppString);
+    if (WCDB::Console::debuggable) {
+        WCTRemedialAssert([propertyClass conformsToProtocol:@protocol(WCTColumnCoding)], WCDB::String::formatted("[%s] should conform to WCTColumnCoding protocol, which is the class of [%s %s]", NSStringFromClass(propertyClass).UTF8String, NSStringFromClass(instanceClass).UTF8String, propertyName.c_str()), return WCDB::ColumnType::Null;);
     }
-#endif
     IMP implementation = getClassMethodImplementation(propertyClass, columnTypeSelector);
     using GetColumnTyper = WCDB::ColumnType (*)(Class, SEL);
     return ((GetColumnTyper) implementation)(propertyClass, columnTypeSelector);

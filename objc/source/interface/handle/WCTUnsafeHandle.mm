@@ -20,6 +20,7 @@
 
 #import <WCDB/Assertion.hpp>
 #import <WCDB/Interface.h>
+#import <WCDB/Notifier.hpp>
 #import <WCDB/WCTCore+Private.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTUnsafeHandle+Private.h>

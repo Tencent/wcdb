@@ -23,6 +23,7 @@
 #include <WCDB/FactoryBackup.hpp>
 #include <WCDB/FactoryRenewer.hpp>
 #include <WCDB/FileManager.hpp>
+#include <WCDB/Notifier.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/SQLiteAssembler.hpp>
 

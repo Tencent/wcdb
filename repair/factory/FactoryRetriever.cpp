@@ -27,6 +27,7 @@
 #include <WCDB/FileManager.hpp>
 #include <WCDB/FullCrawler.hpp>
 #include <WCDB/Mechanic.hpp>
+#include <WCDB/Notifier.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/SQLiteAssembler.hpp>
 #include <WCDB/ThreadedErrors.hpp>

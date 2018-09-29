@@ -21,6 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Cell.hpp>
 #include <WCDB/FileManager.hpp>
+#include <WCDB/Notifier.hpp>
 #include <WCDB/Page.hpp>
 #include <WCDB/Repairman.hpp>
 #include <WCDB/ThreadedErrors.hpp>

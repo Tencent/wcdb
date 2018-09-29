@@ -62,7 +62,7 @@ CopyOnWriteString LiteralValue::SQL() const
         description.append("CURRENT_TIMESTAMP");
         break;
     default:
-        LangRemedialFatalError();
+        LangRemedialAssert(false);
         break;
     }
     return description;

@@ -21,11 +21,20 @@
 #ifndef Console_hpp
 #define Console_hpp
 
+#include <string>
+
 namespace WCDB {
+
+class Error;
 
 class Console {
 public:
     static bool debuggable;
+    static void log(const Error& error);
+    static void fatal(const std::string& message, const char* file, int line);
+
+protected:
+    static void print(const Error& error);
 };
 
 } // namespace WCDB
