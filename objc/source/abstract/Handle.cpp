@@ -36,7 +36,7 @@ Handle::Handle(const std::string &path_)
 , m_handleStatement(this)
 , m_notification(this)
 , m_nestedLevel(0)
-, m_ignorableCode(SQLITE_OK)
+, m_codeToBeIgnored(SQLITE_OK)
 {
     m_error.infos.set("Path", path);
 }
@@ -328,10 +328,10 @@ bool Handle::isPrepared()
 std::pair<bool, bool> Handle::tableExists(const TableOrSubquery &table)
 {
     StatementSelect statementSelect = StatementSelect().select(1).from(table).limit(0);
-    markAsIgnorable(SQLITE_ERROR);
+    markErrorAsIgnorable(SQLITE_ERROR);
     bool unused;
     bool result = prepare(statementSelect) && step(unused);
-    markAsUnignorable();
+    markErrorAsUnignorable();
     finalize();
     return { result || getResultCode() == SQLITE_ERROR, result };
 }
@@ -384,7 +384,9 @@ bool Handle::commitOrRollbackNestedTransaction()
     }
     std::string savepointName = savepointPrefix() + std::to_string(m_nestedLevel--);
     if (!execute(StatementRelease().release(savepointName))) {
-        discardableExecute(StatementRollback().rollbackTo(savepointName));
+        markErrorAsIgnorable(-1);
+        execute(StatementRollback().rollbackTo(savepointName));
+        markErrorAsUnignorable();
         return false;
     }
     return true;
@@ -396,7 +398,9 @@ void Handle::rollbackNestedTransaction()
         return rollbackTransaction();
     }
     std::string savepointName = savepointPrefix() + std::to_string(m_nestedLevel--);
-    discardableExecute(StatementRollback().rollbackTo(savepointName));
+    markErrorAsIgnorable(-1);
+    execute(StatementRollback().rollbackTo(savepointName));
+    markErrorAsUnignorable();
 }
 
 bool Handle::runNestedTransaction(const TransactionCallback &transaction)
@@ -420,7 +424,9 @@ bool Handle::commitOrRollbackTransaction()
 {
     m_nestedLevel = 0;
     if (!execute(StatementCommit::commit())) {
-        discardableExecute(StatementRollback::rollback());
+        markErrorAsIgnorable(-1);
+        execute(StatementRollback::rollback());
+        markErrorAsUnignorable();
         return false;
     }
     return true;
@@ -429,7 +435,9 @@ bool Handle::commitOrRollbackTransaction()
 void Handle::rollbackTransaction()
 {
     m_nestedLevel = 0;
-    discardableExecute(StatementRollback::rollback());
+    markErrorAsIgnorable(-1);
+    execute(StatementRollback::rollback());
+    markErrorAsUnignorable();
 }
 
 bool Handle::runTransaction(const TransactionCallback &transaction)
@@ -442,13 +450,6 @@ bool Handle::runTransaction(const TransactionCallback &transaction)
     }
     rollbackTransaction();
     return false;
-}
-
-void Handle::discardableExecute(const Statement &statement)
-{
-    WCTInnerAssert(isOpened());
-    sqlite3_exec(
-    (sqlite3 *) m_handle, statement.getDescription().c_str(), nullptr, nullptr, nullptr);
 }
 
 #pragma mark - Cipher
@@ -515,34 +516,46 @@ bool Handle::setNotificationWhenCheckpointed(const std::string &name,
 #pragma mark - Error
 void Handle::setError(int rc, const std::string &sql)
 {
-    if (rc != SQLITE_MISUSE) {
-        m_error.setSQLiteCode(rc, getExtendedErrorCode());
+    WCTInnerAssert(rc != SQLITE_OK);
+    if (m_codeToBeIgnored >= 0 && rc != m_codeToBeIgnored) {
+        doSetError(m_error, rc, sql);
     } else {
-        m_error.setSQLiteCode(rc);
+        Error error = m_error;
+        doSetError(error, rc, sql);
     }
-    if (rc != m_ignorableCode) {
-        m_error.level = Error::Level::Error;
+}
+
+void Handle::doSetError(Error &error, int rc, const std::string &sql)
+{
+    if (rc != SQLITE_MISUSE) {
+        // extended error code will not be set in some case for misuse error
+        error.setSQLiteCode(rc, getExtendedErrorCode());
     } else {
-        m_error.level = Error::Level::Ignore;
+        error.setSQLiteCode(rc);
+    }
+    if (m_codeToBeIgnored >= 0 && rc != m_codeToBeIgnored) {
+        error.level = Error::Level::Error;
+    } else {
+        error.level = Error::Level::Ignore;
     }
     const char *message = getErrorMessage();
     if (message) {
-        m_error.message = message;
+        error.message = message;
     } else {
-        m_error.message = String::empty();
+        error.message = String::empty();
     }
-    m_error.infos.set("SQL", sql);
-    Notifier::shared()->notify(m_error);
+    error.infos.set("SQL", sql);
+    Notifier::shared()->notify(error);
 }
 
-void Handle::markAsIgnorable(int code)
+void Handle::markErrorAsIgnorable(int codeToBeIgnored)
 {
-    m_ignorableCode = code;
+    m_codeToBeIgnored = codeToBeIgnored;
 }
 
-void Handle::markAsUnignorable()
+void Handle::markErrorAsUnignorable()
 {
-    m_ignorableCode = SQLITE_OK;
+    m_codeToBeIgnored = SQLITE_OK;
 }
 
 } //namespace WCDB

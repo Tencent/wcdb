@@ -44,14 +44,21 @@ protected:
 protected:
     void setError(int rc, const char *sql = nullptr);
 
+    // if code >= 0, then the level of error with the specified code will be marked as ignored
+    // if code < 0, then the level of all errors will be marked as ignored
+    void markErrorAsIgnorable(int codeToBeIgnored);
+    void markErrorAsUnignorable();
+
+private:
+    int m_codeToBeIgnored;
+
 #pragma mark - SQLite Handle
 protected:
     bool open();
     bool isOpened() const;
     void close();
 
-    // if errorToBeIgnored < 0, all errors will be ignored.
-    bool execute(const char *sql, int errorToBeIgnored = 0);
+    bool execute(const char *sql);
 
     void *m_handle;
 

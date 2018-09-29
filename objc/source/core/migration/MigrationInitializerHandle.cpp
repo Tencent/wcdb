@@ -56,13 +56,13 @@ MigrationInitializerHandle::getAllColumns(const std::string& table, const std::s
 
     std::string schema = MigrationInfo::getSchemaForDatabase(database);
     if (!database.empty()) {
-        markAsIgnorable(SQLITE_ERROR);
+        markErrorAsIgnorable(SQLITE_ERROR);
         // Adoptable for duplicate attach
         if (!execute(StatementAttach().attach(database).as(schema))
             && getResultCode() != SQLITE_ERROR) {
             return { false, {} };
         }
-        markAsUnignorable();
+        markErrorAsUnignorable();
     }
 
     bool succeed, exists;

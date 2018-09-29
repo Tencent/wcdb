@@ -29,7 +29,7 @@ namespace WCDB {
 
 namespace Repair {
 
-SQLiteBase::SQLiteBase() : m_handle(nullptr)
+SQLiteBase::SQLiteBase() : m_handle(nullptr), m_codeToBeIgnored(SQLITE_OK)
 {
 }
 
@@ -64,7 +64,9 @@ bool SQLiteBase::lazyCommitOrRollbackTransaction(bool commit)
 {
     if (isInTransaction()) {
         if (!commit || !execute("COMMIT")) {
-            execute("ROLLBACK", -1); //ignore all errors
+            markErrorAsIgnorable(-1);
+            execute("ROLLBACK"); //ignore all errors
+            markErrorAsUnignorable();
             return false;
         }
     }
@@ -77,9 +79,24 @@ bool SQLiteBase::isInTransaction()
 }
 
 #pragma mark - Error
+void SQLiteBase::markErrorAsIgnorable(int codeToBeIgnored)
+{
+    m_codeToBeIgnored = codeToBeIgnored;
+}
+
+void SQLiteBase::markErrorAsUnignorable()
+{
+    m_codeToBeIgnored = SQLITE_OK;
+}
+
 void SQLiteBase::setError(int rc, const char *sql)
 {
     Error error;
+    if (m_codeToBeIgnored >= 0 && rc != m_codeToBeIgnored) {
+        error.level = Error::Level::Error;
+    } else {
+        error.level = Error::Level::Ignore;
+    }
     error.setSQLiteCode(rc, sqlite3_extended_errcode((sqlite3 *) m_handle));
     const char *message = sqlite3_errmsg((sqlite3 *) m_handle);
     if (message) {
@@ -124,12 +141,12 @@ void SQLiteBase::close()
     }
 }
 
-bool SQLiteBase::execute(const char *sql, int errorToBeIgnored)
+bool SQLiteBase::execute(const char *sql)
 {
     WCTInnerAssert(isOpened());
     WCTInnerAssert(sql != nullptr);
     int rc = sqlite3_exec((sqlite3 *) m_handle, sql, nullptr, nullptr, nullptr);
-    if (rc != SQLITE_OK && errorToBeIgnored >= 0 && rc != errorToBeIgnored) {
+    if (rc != SQLITE_OK) {
         setError(rc, sql);
         return false;
     }

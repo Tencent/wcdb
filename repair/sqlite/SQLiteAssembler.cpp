@@ -77,7 +77,10 @@ bool SQLiteAssembler::assembleTable(const std::string &tableName, const std::str
 {
     finalize(&m_cellSTMT);
     m_table.clear();
-    if (execute(sql.c_str(), SQLITE_ERROR)) {
+    markErrorAsIgnorable(SQLITE_ERROR);
+    bool succeed = execute(sql.c_str());
+    markErrorAsUnignorable();
+    if (succeed) {
         m_table = tableName;
         return true;
     }
@@ -129,7 +132,10 @@ bool SQLiteAssembler::assembleCell(const Cell &cell)
 
 bool SQLiteAssembler::assembleSQL(const std::string &sql)
 {
-    return execute(sql.c_str(), SQLITE_ERROR);
+    markErrorAsIgnorable(SQLITE_ERROR);
+    bool succeed = execute(sql.c_str());
+    markErrorAsUnignorable();
+    return succeed;
 }
 
 void SQLiteAssembler::markAsDuplicated(bool duplicated)

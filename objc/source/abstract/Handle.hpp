@@ -144,9 +144,10 @@ public:
     bool runNestedTransaction(const TransactionCallback &transaction);
 
 protected:
-    void discardableExecute(const Statement &statement);
     std::pair<bool, std::set<std::string>>
     getUnorderedValues(const Statement &statement, int index);
+
+private:
     static const std::string &savepointPrefix();
     int m_nestedLevel;
 
@@ -178,16 +179,22 @@ public:
                                          const CheckpointedNotification &checkpointed);
     void unsetNotificationWhenCommitted(const std::string &name);
 
-protected:
+private:
     HandleNotification m_notification;
 
 #pragma mark - Error
 protected:
     void setError(int rc, const std::string &sql = "");
 
-    void markAsIgnorable(int code);
-    void markAsUnignorable();
-    int m_ignorableCode;
+    // if code >= 0, then the level of error with the specified code will be marked as ignored
+    // if code < 0, then the level of all errors will be marked as ignored
+    // when the error is marked as ignored, the error will not be set to m_error
+    void markErrorAsIgnorable(int codeToBeIgnored);
+    void markErrorAsUnignorable();
+
+private:
+    void doSetError(Error &error, int rc, const std::string &sql);
+    int m_codeToBeIgnored;
 };
 
 } //namespace WCDB
