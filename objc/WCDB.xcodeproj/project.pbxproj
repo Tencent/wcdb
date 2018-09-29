@@ -3823,7 +3823,6 @@
 					UIKit,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB;
-				PRODUCT_MODULE_NAME = WCDB;
 				PRODUCT_NAME = WCDB;
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -3864,7 +3863,6 @@
 					UIKit,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB;
-				PRODUCT_MODULE_NAME = WCDB;
 				PRODUCT_NAME = WCDB;
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = YES;
@@ -3946,6 +3944,7 @@
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDB.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CFLAGS = "-Wglobal-constructors";
+				PRODUCT_MODULE_NAME = WCDB;
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos watchos watchsimulator appletvos appletvsimulator";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
@@ -3985,7 +3984,6 @@
 					UIKit,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB;
-				PRODUCT_MODULE_NAME = WCDB;
 				PRODUCT_NAME = WCDB;
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = YES;
@@ -4023,7 +4021,6 @@
 					UIKit,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB;
-				PRODUCT_MODULE_NAME = WCDB;
 				PRODUCT_NAME = WCDB;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -4108,6 +4105,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-Wglobal-constructors";
+				PRODUCT_MODULE_NAME = WCDB;
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos watchos watchsimulator appletvos appletvsimulator";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
@@ -4189,6 +4187,7 @@
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDB.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CFLAGS = "-Wglobal-constructors";
+				PRODUCT_MODULE_NAME = WCDB;
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos watchos watchsimulator appletvos appletvsimulator";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
@@ -4225,7 +4224,6 @@
 					UIKit,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB;
-				PRODUCT_MODULE_NAME = WCDB;
 				PRODUCT_NAME = WCDB;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -4261,7 +4259,6 @@
 					UIKit,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB;
-				PRODUCT_MODULE_NAME = WCDB;
 				PRODUCT_NAME = WCDB;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
