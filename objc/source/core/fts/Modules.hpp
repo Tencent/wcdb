@@ -22,6 +22,7 @@
 #define Modules_hpp
 
 #include <WCDB/Abstract.h>
+#include <WCDB/Lock.hpp>
 #include <WCDB/UnsafeData.hpp>
 
 namespace WCDB {
