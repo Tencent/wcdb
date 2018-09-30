@@ -25,6 +25,8 @@
 #error Since WCDB is an Objective-C++ framework, for those files in your project that includes WCDB, you should rename their extension `.m` to `.mm`.
 #endif
 
+#warning TODO 1. add empty virtual destructor for all non-final classes 2. add final keyword for all final classes and methods
+
 #import <WCDB/WINQ.h>
 
 #import <WCDB/NSData+WCTColumnCoding.h>
