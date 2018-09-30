@@ -28,18 +28,18 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       enableASanStackUseAfterReturn = "YES"
       codeCoverageEnabled = "YES"
+      onlyGenerateCoverageForSpecifiedTargets = "YES"
       shouldUseLaunchSchemeArgsEnv = "YES">
+      <CodeCoverageTargets>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "239326601E836D7300D677CC"
+            BuildableName = "WCDB.framework"
+            BlueprintName = "WCDB"
+            ReferencedContainer = "container:WCDB.xcodeproj">
+         </BuildableReference>
+      </CodeCoverageTargets>
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "23BA6937208CE0AC005CAFB7"
-               BuildableName = "CorrectnessTests.xctest"
-               BlueprintName = "CorrectnessTests"
-               ReferencedContainer = "container:testcase/testcase.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
