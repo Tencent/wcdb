@@ -396,6 +396,56 @@
 		239E8AB22160B76A00BCB308 /* WINQTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AB12160B76A00BCB308 /* WINQTestCase.mm */; };
 		239E8AB32160B7BE00BCB308 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		239E8AB42160B7D200BCB308 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
+		239E8AE92160BCBB00BCB308 /* StatementCreateViewTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AB52160BCB300BCB308 /* StatementCreateViewTests.mm */; };
+		239E8AEA2160BCBB00BCB308 /* StatementBeginTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AB62160BCB300BCB308 /* StatementBeginTests.mm */; };
+		239E8AEB2160BCBB00BCB308 /* BindParameterTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AB72160BCB300BCB308 /* BindParameterTests.mm */; };
+		239E8AEC2160BCBB00BCB308 /* JoinConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AB82160BCB400BCB308 /* JoinConstraintTests.mm */; };
+		239E8AED2160BCBB00BCB308 /* StatementDropTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AB92160BCB400BCB308 /* StatementDropTableTests.mm */; };
+		239E8AEE2160BCBB00BCB308 /* StatementDetachTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8ABA2160BCB400BCB308 /* StatementDetachTests.mm */; };
+		239E8AEF2160BCBB00BCB308 /* ModuleArgumentTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8ABB2160BCB400BCB308 /* ModuleArgumentTests.mm */; };
+		239E8AF02160BCBB00BCB308 /* StatementDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8ABC2160BCB400BCB308 /* StatementDeleteTests.mm */; };
+		239E8AF12160BCBB00BCB308 /* TableOrSubqueryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8ABD2160BCB400BCB308 /* TableOrSubqueryTests.mm */; };
+		239E8AF22160BCBB00BCB308 /* QualifiedTableNameTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8ABE2160BCB400BCB308 /* QualifiedTableNameTests.mm */; };
+		239E8AF32160BCBB00BCB308 /* TableConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8ABF2160BCB400BCB308 /* TableConstraintTests.mm */; };
+		239E8AF42160BCBB00BCB308 /* StatementCreateTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AC02160BCB400BCB308 /* StatementCreateTableTests.mm */; };
+		239E8AF52160BCBB00BCB308 /* StatementAlterTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AC12160BCB500BCB308 /* StatementAlterTableTests.mm */; };
+		239E8AF62160BCBB00BCB308 /* PragmaTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AC22160BCB500BCB308 /* PragmaTests.mm */; };
+		239E8AF72160BCBB00BCB308 /* WithClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AC32160BCB500BCB308 /* WithClauseTests.mm */; };
+		239E8AF82160BCBB00BCB308 /* OrderingTermTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AC42160BCB500BCB308 /* OrderingTermTests.mm */; };
+		239E8AF92160BCBB00BCB308 /* StatementVacuumTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AC52160BCB500BCB308 /* StatementVacuumTests.mm */; };
+		239E8AFA2160BCBB00BCB308 /* StatementCreateTriggerTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AC62160BCB500BCB308 /* StatementCreateTriggerTests.mm */; };
+		239E8AFB2160BCBB00BCB308 /* StatementAnalyzeTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AC72160BCB500BCB308 /* StatementAnalyzeTests.mm */; };
+		239E8AFC2160BCBB00BCB308 /* StatementReindexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AC82160BCB500BCB308 /* StatementReindexTests.mm */; };
+		239E8AFD2160BCBB00BCB308 /* StatementCreateVirtualTableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AC92160BCB500BCB308 /* StatementCreateVirtualTableTests.mm */; };
+		239E8AFE2160BCBB00BCB308 /* StatementCommitTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8ACA2160BCB600BCB308 /* StatementCommitTests.mm */; };
+		239E8AFF2160BCBB00BCB308 /* ResultColumnTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8ACB2160BCB600BCB308 /* ResultColumnTests.mm */; };
+		239E8B012160BCBB00BCB308 /* JoinClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8ACD2160BCB600BCB308 /* JoinClauseTests.mm */; };
+		239E8B022160BCBB00BCB308 /* ColumnDefTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8ACE2160BCB600BCB308 /* ColumnDefTests.mm */; };
+		239E8B032160BCBB00BCB308 /* StatementInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8ACF2160BCB600BCB308 /* StatementInsertTests.mm */; };
+		239E8B042160BCBB00BCB308 /* UnexpectedTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AD02160BCB600BCB308 /* UnexpectedTests.mm */; };
+		239E8B052160BCBB00BCB308 /* StatementDropIndexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AD12160BCB700BCB308 /* StatementDropIndexTests.mm */; };
+		239E8B062160BCBB00BCB308 /* ConvertibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AD22160BCB700BCB308 /* ConvertibleTests.mm */; };
+		239E8B072160BCBB00BCB308 /* StatementSavepointTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AD32160BCB700BCB308 /* StatementSavepointTests.mm */; };
+		239E8B082160BCBB00BCB308 /* StatementSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AD42160BCB700BCB308 /* StatementSelectTests.mm */; };
+		239E8B092160BCBB00BCB308 /* IndexedColumnTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AD52160BCB700BCB308 /* IndexedColumnTests.mm */; };
+		239E8B0A2160BCBB00BCB308 /* StatementReleaseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AD62160BCB700BCB308 /* StatementReleaseTests.mm */; };
+		239E8B0B2160BCBB00BCB308 /* CommonTableExpressionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AD72160BCB700BCB308 /* CommonTableExpressionTests.mm */; };
+		239E8B0C2160BCBB00BCB308 /* ColumnTypeTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AD82160BCB800BCB308 /* ColumnTypeTests.mm */; };
+		239E8B0D2160BCBB00BCB308 /* StatementAttachTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8ADA2160BCB800BCB308 /* StatementAttachTests.mm */; };
+		239E8B0E2160BCBB00BCB308 /* ForeignKeyClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8ADB2160BCB800BCB308 /* ForeignKeyClauseTests.mm */; };
+		239E8B0F2160BCBB00BCB308 /* ColumnConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8ADC2160BCB800BCB308 /* ColumnConstraintTests.mm */; };
+		239E8B102160BCBB00BCB308 /* StatementRollbackTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8ADD2160BCB800BCB308 /* StatementRollbackTests.mm */; };
+		239E8B112160BCBB00BCB308 /* RaiseFunctionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8ADE2160BCB900BCB308 /* RaiseFunctionTests.mm */; };
+		239E8B122160BCBB00BCB308 /* ExpressionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8ADF2160BCB900BCB308 /* ExpressionTests.mm */; };
+		239E8B132160BCBB00BCB308 /* StatementCreateIndexTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AE02160BCB900BCB308 /* StatementCreateIndexTests.mm */; };
+		239E8B142160BCBB00BCB308 /* StatementDropTriggerTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AE12160BCB900BCB308 /* StatementDropTriggerTests.mm */; };
+		239E8B152160BCBB00BCB308 /* StatementPragmaTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AE22160BCB900BCB308 /* StatementPragmaTests.mm */; };
+		239E8B162160BCBB00BCB308 /* StatementDropViewTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AE32160BCBA00BCB308 /* StatementDropViewTests.mm */; };
+		239E8B172160BCBB00BCB308 /* LiteralValueTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AE42160BCBA00BCB308 /* LiteralValueTests.mm */; };
+		239E8B182160BCBB00BCB308 /* ConflictClauseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AE52160BCBA00BCB308 /* ConflictClauseTests.mm */; };
+		239E8B192160BCBB00BCB308 /* CTETableNameTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AE62160BCBA00BCB308 /* CTETableNameTests.mm */; };
+		239E8B1A2160BCBB00BCB308 /* StatementUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AE72160BCBA00BCB308 /* StatementUpdateTests.mm */; };
+		239E8B1B2160BCBB00BCB308 /* SelectCoreTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 239E8AE82160BCBB00BCB308 /* SelectCoreTests.mm */; };
 		23A09D7D2146204400F62EE8 /* MigrationHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A09D692146204300F62EE8 /* MigrationHandle.cpp */; };
 		23A09D7F2146204400F62EE8 /* MigrationHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A09D6A2146204300F62EE8 /* MigrationHandle.hpp */; };
 		23A3CFB5205FB1A800692F94 /* WCTHandle+Convenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 23A3CFB3205FB1A800692F94 /* WCTHandle+Convenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -989,6 +1039,57 @@
 		239E8A922160A81600BCB308 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		239E8A9D2160B37600BCB308 /* WINQ tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "WINQ tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		239E8AB12160B76A00BCB308 /* WINQTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WINQTestCase.mm; sourceTree = "<group>"; };
+		239E8AB52160BCB300BCB308 /* StatementCreateViewTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementCreateViewTests.mm; sourceTree = "<group>"; };
+		239E8AB62160BCB300BCB308 /* StatementBeginTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementBeginTests.mm; sourceTree = "<group>"; };
+		239E8AB72160BCB300BCB308 /* BindParameterTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BindParameterTests.mm; sourceTree = "<group>"; };
+		239E8AB82160BCB400BCB308 /* JoinConstraintTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JoinConstraintTests.mm; sourceTree = "<group>"; };
+		239E8AB92160BCB400BCB308 /* StatementDropTableTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementDropTableTests.mm; sourceTree = "<group>"; };
+		239E8ABA2160BCB400BCB308 /* StatementDetachTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementDetachTests.mm; sourceTree = "<group>"; };
+		239E8ABB2160BCB400BCB308 /* ModuleArgumentTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ModuleArgumentTests.mm; sourceTree = "<group>"; };
+		239E8ABC2160BCB400BCB308 /* StatementDeleteTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementDeleteTests.mm; sourceTree = "<group>"; };
+		239E8ABD2160BCB400BCB308 /* TableOrSubqueryTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableOrSubqueryTests.mm; sourceTree = "<group>"; };
+		239E8ABE2160BCB400BCB308 /* QualifiedTableNameTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = QualifiedTableNameTests.mm; sourceTree = "<group>"; };
+		239E8ABF2160BCB400BCB308 /* TableConstraintTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableConstraintTests.mm; sourceTree = "<group>"; };
+		239E8AC02160BCB400BCB308 /* StatementCreateTableTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementCreateTableTests.mm; sourceTree = "<group>"; };
+		239E8AC12160BCB500BCB308 /* StatementAlterTableTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementAlterTableTests.mm; sourceTree = "<group>"; };
+		239E8AC22160BCB500BCB308 /* PragmaTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PragmaTests.mm; sourceTree = "<group>"; };
+		239E8AC32160BCB500BCB308 /* WithClauseTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WithClauseTests.mm; sourceTree = "<group>"; };
+		239E8AC42160BCB500BCB308 /* OrderingTermTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OrderingTermTests.mm; sourceTree = "<group>"; };
+		239E8AC52160BCB500BCB308 /* StatementVacuumTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementVacuumTests.mm; sourceTree = "<group>"; };
+		239E8AC62160BCB500BCB308 /* StatementCreateTriggerTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementCreateTriggerTests.mm; sourceTree = "<group>"; };
+		239E8AC72160BCB500BCB308 /* StatementAnalyzeTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementAnalyzeTests.mm; sourceTree = "<group>"; };
+		239E8AC82160BCB500BCB308 /* StatementReindexTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementReindexTests.mm; sourceTree = "<group>"; };
+		239E8AC92160BCB500BCB308 /* StatementCreateVirtualTableTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementCreateVirtualTableTests.mm; sourceTree = "<group>"; };
+		239E8ACA2160BCB600BCB308 /* StatementCommitTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementCommitTests.mm; sourceTree = "<group>"; };
+		239E8ACB2160BCB600BCB308 /* ResultColumnTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ResultColumnTests.mm; sourceTree = "<group>"; };
+		239E8ACD2160BCB600BCB308 /* JoinClauseTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JoinClauseTests.mm; sourceTree = "<group>"; };
+		239E8ACE2160BCB600BCB308 /* ColumnDefTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ColumnDefTests.mm; sourceTree = "<group>"; };
+		239E8ACF2160BCB600BCB308 /* StatementInsertTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementInsertTests.mm; sourceTree = "<group>"; };
+		239E8AD02160BCB600BCB308 /* UnexpectedTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UnexpectedTests.mm; sourceTree = "<group>"; };
+		239E8AD12160BCB700BCB308 /* StatementDropIndexTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementDropIndexTests.mm; sourceTree = "<group>"; };
+		239E8AD22160BCB700BCB308 /* ConvertibleTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ConvertibleTests.mm; sourceTree = "<group>"; };
+		239E8AD32160BCB700BCB308 /* StatementSavepointTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementSavepointTests.mm; sourceTree = "<group>"; };
+		239E8AD42160BCB700BCB308 /* StatementSelectTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementSelectTests.mm; sourceTree = "<group>"; };
+		239E8AD52160BCB700BCB308 /* IndexedColumnTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IndexedColumnTests.mm; sourceTree = "<group>"; };
+		239E8AD62160BCB700BCB308 /* StatementReleaseTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementReleaseTests.mm; sourceTree = "<group>"; };
+		239E8AD72160BCB700BCB308 /* CommonTableExpressionTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CommonTableExpressionTests.mm; sourceTree = "<group>"; };
+		239E8AD82160BCB800BCB308 /* ColumnTypeTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ColumnTypeTests.mm; sourceTree = "<group>"; };
+		239E8AD92160BCB800BCB308 /* WINQTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WINQTestCase.h; sourceTree = "<group>"; };
+		239E8ADA2160BCB800BCB308 /* StatementAttachTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementAttachTests.mm; sourceTree = "<group>"; };
+		239E8ADB2160BCB800BCB308 /* ForeignKeyClauseTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ForeignKeyClauseTests.mm; sourceTree = "<group>"; };
+		239E8ADC2160BCB800BCB308 /* ColumnConstraintTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ColumnConstraintTests.mm; sourceTree = "<group>"; };
+		239E8ADD2160BCB800BCB308 /* StatementRollbackTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementRollbackTests.mm; sourceTree = "<group>"; };
+		239E8ADE2160BCB900BCB308 /* RaiseFunctionTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RaiseFunctionTests.mm; sourceTree = "<group>"; };
+		239E8ADF2160BCB900BCB308 /* ExpressionTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ExpressionTests.mm; sourceTree = "<group>"; };
+		239E8AE02160BCB900BCB308 /* StatementCreateIndexTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementCreateIndexTests.mm; sourceTree = "<group>"; };
+		239E8AE12160BCB900BCB308 /* StatementDropTriggerTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementDropTriggerTests.mm; sourceTree = "<group>"; };
+		239E8AE22160BCB900BCB308 /* StatementPragmaTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementPragmaTests.mm; sourceTree = "<group>"; };
+		239E8AE32160BCBA00BCB308 /* StatementDropViewTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementDropViewTests.mm; sourceTree = "<group>"; };
+		239E8AE42160BCBA00BCB308 /* LiteralValueTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LiteralValueTests.mm; sourceTree = "<group>"; };
+		239E8AE52160BCBA00BCB308 /* ConflictClauseTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ConflictClauseTests.mm; sourceTree = "<group>"; };
+		239E8AE62160BCBA00BCB308 /* CTETableNameTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CTETableNameTests.mm; sourceTree = "<group>"; };
+		239E8AE72160BCBA00BCB308 /* StatementUpdateTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementUpdateTests.mm; sourceTree = "<group>"; };
+		239E8AE82160BCBB00BCB308 /* SelectCoreTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SelectCoreTests.mm; sourceTree = "<group>"; };
 		23A09D692146204300F62EE8 /* MigrationHandle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationHandle.cpp; sourceTree = "<group>"; };
 		23A09D6A2146204300F62EE8 /* MigrationHandle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MigrationHandle.hpp; sourceTree = "<group>"; };
 		23A3CFB3205FB1A800692F94 /* WCTHandle+Convenient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTHandle+Convenient.h"; sourceTree = "<group>"; };
@@ -1934,7 +2035,58 @@
 		239E8AA62160B39D00BCB308 /* WINQ */ = {
 			isa = PBXGroup;
 			children = (
+				239E8AD92160BCB800BCB308 /* WINQTestCase.h */,
 				239E8AB12160B76A00BCB308 /* WINQTestCase.mm */,
+				239E8AB72160BCB300BCB308 /* BindParameterTests.mm */,
+				239E8ADC2160BCB800BCB308 /* ColumnConstraintTests.mm */,
+				239E8ACE2160BCB600BCB308 /* ColumnDefTests.mm */,
+				239E8AD82160BCB800BCB308 /* ColumnTypeTests.mm */,
+				239E8AD72160BCB700BCB308 /* CommonTableExpressionTests.mm */,
+				239E8AE52160BCBA00BCB308 /* ConflictClauseTests.mm */,
+				239E8AD22160BCB700BCB308 /* ConvertibleTests.mm */,
+				239E8AE62160BCBA00BCB308 /* CTETableNameTests.mm */,
+				239E8ADF2160BCB900BCB308 /* ExpressionTests.mm */,
+				239E8ADB2160BCB800BCB308 /* ForeignKeyClauseTests.mm */,
+				239E8AD52160BCB700BCB308 /* IndexedColumnTests.mm */,
+				239E8ACD2160BCB600BCB308 /* JoinClauseTests.mm */,
+				239E8AB82160BCB400BCB308 /* JoinConstraintTests.mm */,
+				239E8AE42160BCBA00BCB308 /* LiteralValueTests.mm */,
+				239E8ABB2160BCB400BCB308 /* ModuleArgumentTests.mm */,
+				239E8AC42160BCB500BCB308 /* OrderingTermTests.mm */,
+				239E8AC22160BCB500BCB308 /* PragmaTests.mm */,
+				239E8ABE2160BCB400BCB308 /* QualifiedTableNameTests.mm */,
+				239E8ADE2160BCB900BCB308 /* RaiseFunctionTests.mm */,
+				239E8ACB2160BCB600BCB308 /* ResultColumnTests.mm */,
+				239E8AE82160BCBB00BCB308 /* SelectCoreTests.mm */,
+				239E8AC12160BCB500BCB308 /* StatementAlterTableTests.mm */,
+				239E8AC72160BCB500BCB308 /* StatementAnalyzeTests.mm */,
+				239E8ADA2160BCB800BCB308 /* StatementAttachTests.mm */,
+				239E8AB62160BCB300BCB308 /* StatementBeginTests.mm */,
+				239E8ACA2160BCB600BCB308 /* StatementCommitTests.mm */,
+				239E8AE02160BCB900BCB308 /* StatementCreateIndexTests.mm */,
+				239E8AC02160BCB400BCB308 /* StatementCreateTableTests.mm */,
+				239E8AC62160BCB500BCB308 /* StatementCreateTriggerTests.mm */,
+				239E8AB52160BCB300BCB308 /* StatementCreateViewTests.mm */,
+				239E8AC92160BCB500BCB308 /* StatementCreateVirtualTableTests.mm */,
+				239E8ABC2160BCB400BCB308 /* StatementDeleteTests.mm */,
+				239E8ABA2160BCB400BCB308 /* StatementDetachTests.mm */,
+				239E8AD12160BCB700BCB308 /* StatementDropIndexTests.mm */,
+				239E8AB92160BCB400BCB308 /* StatementDropTableTests.mm */,
+				239E8AE12160BCB900BCB308 /* StatementDropTriggerTests.mm */,
+				239E8AE32160BCBA00BCB308 /* StatementDropViewTests.mm */,
+				239E8ACF2160BCB600BCB308 /* StatementInsertTests.mm */,
+				239E8AE22160BCB900BCB308 /* StatementPragmaTests.mm */,
+				239E8AC82160BCB500BCB308 /* StatementReindexTests.mm */,
+				239E8AD62160BCB700BCB308 /* StatementReleaseTests.mm */,
+				239E8ADD2160BCB800BCB308 /* StatementRollbackTests.mm */,
+				239E8AD32160BCB700BCB308 /* StatementSavepointTests.mm */,
+				239E8AD42160BCB700BCB308 /* StatementSelectTests.mm */,
+				239E8AE72160BCBA00BCB308 /* StatementUpdateTests.mm */,
+				239E8AC52160BCB500BCB308 /* StatementVacuumTests.mm */,
+				239E8ABF2160BCB400BCB308 /* TableConstraintTests.mm */,
+				239E8ABD2160BCB400BCB308 /* TableOrSubqueryTests.mm */,
+				239E8AD02160BCB600BCB308 /* UnexpectedTests.mm */,
+				239E8AC32160BCB500BCB308 /* WithClauseTests.mm */,
 			);
 			path = WINQ;
 			sourceTree = "<group>";
@@ -2787,7 +2939,57 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				239E8AF02160BCBB00BCB308 /* StatementDeleteTests.mm in Sources */,
+				239E8AF52160BCBB00BCB308 /* StatementAlterTableTests.mm in Sources */,
+				239E8AFD2160BCBB00BCB308 /* StatementCreateVirtualTableTests.mm in Sources */,
+				239E8B0E2160BCBB00BCB308 /* ForeignKeyClauseTests.mm in Sources */,
+				239E8B122160BCBB00BCB308 /* ExpressionTests.mm in Sources */,
+				239E8B072160BCBB00BCB308 /* StatementSavepointTests.mm in Sources */,
+				239E8B052160BCBB00BCB308 /* StatementDropIndexTests.mm in Sources */,
+				239E8B0F2160BCBB00BCB308 /* ColumnConstraintTests.mm in Sources */,
+				239E8B042160BCBB00BCB308 /* UnexpectedTests.mm in Sources */,
+				239E8B172160BCBB00BCB308 /* LiteralValueTests.mm in Sources */,
+				239E8B182160BCBB00BCB308 /* ConflictClauseTests.mm in Sources */,
+				239E8B162160BCBB00BCB308 /* StatementDropViewTests.mm in Sources */,
+				239E8B1A2160BCBB00BCB308 /* StatementUpdateTests.mm in Sources */,
+				239E8AEA2160BCBB00BCB308 /* StatementBeginTests.mm in Sources */,
+				239E8B0D2160BCBB00BCB308 /* StatementAttachTests.mm in Sources */,
+				239E8AFF2160BCBB00BCB308 /* ResultColumnTests.mm in Sources */,
+				239E8B0B2160BCBB00BCB308 /* CommonTableExpressionTests.mm in Sources */,
+				239E8AE92160BCBB00BCB308 /* StatementCreateViewTests.mm in Sources */,
+				239E8B192160BCBB00BCB308 /* CTETableNameTests.mm in Sources */,
+				239E8AF12160BCBB00BCB308 /* TableOrSubqueryTests.mm in Sources */,
+				239E8B142160BCBB00BCB308 /* StatementDropTriggerTests.mm in Sources */,
+				239E8AEF2160BCBB00BCB308 /* ModuleArgumentTests.mm in Sources */,
+				239E8AF92160BCBB00BCB308 /* StatementVacuumTests.mm in Sources */,
+				239E8AF72160BCBB00BCB308 /* WithClauseTests.mm in Sources */,
+				239E8AFB2160BCBB00BCB308 /* StatementAnalyzeTests.mm in Sources */,
+				239E8B032160BCBB00BCB308 /* StatementInsertTests.mm in Sources */,
+				239E8AF82160BCBB00BCB308 /* OrderingTermTests.mm in Sources */,
+				239E8B0C2160BCBB00BCB308 /* ColumnTypeTests.mm in Sources */,
+				239E8AEB2160BCBB00BCB308 /* BindParameterTests.mm in Sources */,
+				239E8B132160BCBB00BCB308 /* StatementCreateIndexTests.mm in Sources */,
+				239E8B102160BCBB00BCB308 /* StatementRollbackTests.mm in Sources */,
+				239E8AFC2160BCBB00BCB308 /* StatementReindexTests.mm in Sources */,
+				239E8AEC2160BCBB00BCB308 /* JoinConstraintTests.mm in Sources */,
+				239E8B082160BCBB00BCB308 /* StatementSelectTests.mm in Sources */,
+				239E8AFA2160BCBB00BCB308 /* StatementCreateTriggerTests.mm in Sources */,
+				239E8AF42160BCBB00BCB308 /* StatementCreateTableTests.mm in Sources */,
+				239E8AF32160BCBB00BCB308 /* TableConstraintTests.mm in Sources */,
+				239E8B022160BCBB00BCB308 /* ColumnDefTests.mm in Sources */,
+				239E8AEE2160BCBB00BCB308 /* StatementDetachTests.mm in Sources */,
 				239E8AB22160B76A00BCB308 /* WINQTestCase.mm in Sources */,
+				239E8AED2160BCBB00BCB308 /* StatementDropTableTests.mm in Sources */,
+				239E8B1B2160BCBB00BCB308 /* SelectCoreTests.mm in Sources */,
+				239E8B112160BCBB00BCB308 /* RaiseFunctionTests.mm in Sources */,
+				239E8AFE2160BCBB00BCB308 /* StatementCommitTests.mm in Sources */,
+				239E8B092160BCBB00BCB308 /* IndexedColumnTests.mm in Sources */,
+				239E8AF62160BCBB00BCB308 /* PragmaTests.mm in Sources */,
+				239E8B012160BCBB00BCB308 /* JoinClauseTests.mm in Sources */,
+				239E8AF22160BCBB00BCB308 /* QualifiedTableNameTests.mm in Sources */,
+				239E8B0A2160BCBB00BCB308 /* StatementReleaseTests.mm in Sources */,
+				239E8B062160BCBB00BCB308 /* ConvertibleTests.mm in Sources */,
+				239E8B152160BCBB00BCB308 /* StatementPragmaTests.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
