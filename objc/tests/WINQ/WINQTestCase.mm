@@ -18,14 +18,13 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import <WCDB/WCDB.h>
+#import <XCTest/XCTest.h>
 
-@interface ORMRebindNew : NSObject
+@interface WINQTestCase : XCTestCase
 
-@property (nonatomic, assign) NSInteger variable1;
-@property (nonatomic, assign) float renamedVariable2;
-@property (nonatomic, retain) NSString *variable4;
+@end
 
-- (BOOL)isEqualToObject:(ORMRebindNew *)object;
+@implementation WINQTestCase
 
 @end
