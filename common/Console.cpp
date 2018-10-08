@@ -78,7 +78,7 @@ void Console::log(const Error& error)
     case Error::Level::Ignore:
         break;
     case Error::Level::Debug:
-        if (!debuggable) {
+        if (!debuggable()) {
             break;
         }
         // fallthrough
