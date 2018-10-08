@@ -81,7 +81,6 @@ public:
     customConfig(const CustomConfig::Invocation& invocation,
                  const CustomConfig::Invocation& uninvocation = nullptr);
 
-    static constexpr const char* notifierLoggerName = "com.Tencent.WCDB.Notifier.Logger";
     static constexpr const char* notifierPreprocessorName
     = "com.Tencent.WCDB.Notifier.PreprocessTag";
 

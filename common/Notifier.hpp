@@ -36,7 +36,8 @@ public:
     void notify(const Error &error) const;
 
     typedef std::function<void(const Error &)> Callback;
-    void setNotification(const std::string &key, const Callback &callback);
+    void setNotification(int order, const std::string &key, const Callback &callback);
+    void unsetNotification(const std::string &key);
 
     typedef std::function<void(const Error &, Error::Infos &)> PreprocessCallback;
     void setNotificationForPreprocessing(const std::string &key,
@@ -48,7 +49,7 @@ protected:
     mutable SharedLock m_lock;
 
     void doNotify(const Error &error) const;
-    std::map<std::string, Callback> m_notifications;
+    OrderedUniqueList<std::string, Callback> m_notifications;
     std::map<std::string, PreprocessCallback> m_preprocessNotifications;
 };
 

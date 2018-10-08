@@ -24,7 +24,7 @@
 #include <WCDB/Console.hpp>
 
 // Inner assert is for WCDB debugging only, which will be removed when released.
-// Remedial assertion will abort or result in error when it's Console::debuggable accoding to the configuration
+// Remedial assertion will abort or result in error when it's Console::debuggable() accoding to the configuration
 
 #ifdef DEBUG
 

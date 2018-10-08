@@ -87,7 +87,7 @@ bool Backup::work()
         succeed = m_masterCrawler.work(this);
     } while (false);
     if (!succeed) {
-        if (Console::debuggable) {
+        if (Console::debuggable()) {
             m_pager.hint();
         }
         setError(m_pager.getError());

@@ -32,12 +32,12 @@ CorruptionQueue::CorruptionQueue(const std::string& name,
 {
     WCTInnerAssert(m_databasePool != nullptr);
     Notifier::shared()->setNotification(
-    name, std::bind(&CorruptionQueue::handleError, this, std::placeholders::_1));
+    0, name, std::bind(&CorruptionQueue::handleError, this, std::placeholders::_1));
 }
 
 CorruptionQueue::~CorruptionQueue()
 {
-    Notifier::shared()->setNotification(name, nullptr);
+    Notifier::shared()->unsetNotification(name);
 }
 
 void CorruptionQueue::handleError(const Error& error)

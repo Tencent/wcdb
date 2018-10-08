@@ -58,7 +58,6 @@ Core::Core()
     Notifier::shared()->setNotificationForPreprocessing(
     notifierPreprocessorName,
     std::bind(&Core::preprocessError, this, std::placeholders::_1, std::placeholders::_2));
-    Notifier::shared()->setNotification(notifierLoggerName, Console::log);
 }
 
 Core::~Core()

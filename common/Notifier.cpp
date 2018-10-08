@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/Notifier.hpp>
 
 namespace WCDB {
@@ -32,14 +33,17 @@ Notifier::Notifier()
 {
 }
 
-void Notifier::setNotification(const std::string &key, const Callback &callback)
+void Notifier::setNotification(int order, const std::string &key, const Callback &callback)
+{
+    WCTInnerAssert(callback != nullptr);
+    LockGuard lockGuard(m_lock);
+    m_notifications.insert(order, key, callback);
+}
+
+void Notifier::unsetNotification(const std::string &key)
 {
     LockGuard lockGuard(m_lock);
-    if (callback != nullptr) {
-        m_notifications[key] = callback;
-    } else {
-        m_notifications.erase(key);
-    }
+    m_notifications.erase(key);
 }
 
 void Notifier::setNotificationForPreprocessing(const std::string &key,
@@ -79,8 +83,8 @@ void Notifier::notify(const Error &error) const
 
 void Notifier::doNotify(const Error &error) const
 {
-    for (const auto &element : m_notifications) {
-        element.second(error);
+    for (const auto &element : m_notifications.elements()) {
+        element.value(error);
     }
 }
 

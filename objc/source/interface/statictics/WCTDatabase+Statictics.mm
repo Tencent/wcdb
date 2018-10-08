@@ -35,12 +35,12 @@
 
 + (BOOL)debuggable
 {
-    return WCDB::Console::debuggable;
+    return WCDB::Console::debuggable();
 }
 
 + (void)setDebuggable:(BOOL)debuggable
 {
-    WCDB::Console::debuggable = debuggable;
+    WCDB::Console::shared()->setDebuggable(debuggable);
 }
 
 + (NSString *)commitHash
@@ -60,12 +60,6 @@
 
 + (void)globalTraceError:(WCTErrorTraceBlock)block
 {
-    [WCTDatabase globalTraceError:block named:@(WCDB::Core::notifierLoggerName)];
-}
-
-+ (void)globalTraceError:(WCTErrorTraceBlock)block
-                   named:(NSString *)name
-{
     WCDB::Notifier::Callback callback = nullptr;
     if (block) {
         callback = [block](const WCDB::Error &error) {
@@ -73,7 +67,7 @@
             block(nsError);
         };
     }
-    WCDB::Notifier::shared()->setNotification(name.cppString, callback);
+    WCDB::Console::shared()->setLogger(callback);
 }
 
 + (void)globalTracePerformance:(WCTPerformanceTraceBlock)trace

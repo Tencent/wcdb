@@ -25,11 +25,52 @@
 
 namespace WCDB {
 
-#ifdef DEBUG
-bool Console::debuggable = true;
-#else
-bool Console::debuggable = false;
+Console* Console::shared()
+{
+    static Console* s_shared = new Console;
+    return s_shared;
+}
+
+Console::Console() : m_debugable(false)
+{
+#if DEBUG
+    setDebuggable(true);
 #endif
+    setLogger(Console::log);
+}
+
+void Console::setDebuggable(bool debuggable)
+{
+    m_debugable = debuggable;
+    constexpr const char* breakpointIdentifier = "com.Tencent.WCDB.Notifier.Console.Breakpoint";
+    if (m_debugable) {
+        Notifier::shared()->setNotification(
+        std::numeric_limits<int>::max(), breakpointIdentifier, Console::breakpoint);
+    } else {
+        Notifier::shared()->unsetNotification(breakpointIdentifier);
+    }
+}
+
+bool Console::debuggable()
+{
+    return Console::shared()->isDebuggable();
+}
+
+bool Console::isDebuggable()
+{
+    return m_debugable;
+}
+
+void Console::setLogger(const Callback& callback)
+{
+    constexpr const char* logIdentifier = "com.Tencent.WCDB.Notifier.Console.Log";
+    if (callback) {
+        Notifier::shared()->setNotification(
+        std::numeric_limits<int>::min(), logIdentifier, callback);
+    } else {
+        Notifier::shared()->unsetNotification(logIdentifier);
+    }
+}
 
 void Console::log(const Error& error)
 {
@@ -44,13 +85,8 @@ void Console::log(const Error& error)
     case Error::Level::Warning:
     case Error::Level::Notice:
     case Error::Level::Error:
-        print(error);
-        break;
     case Error::Level::Fatal:
         print(error);
-        if (debuggable) {
-            abort();
-        }
         break;
     }
 }
@@ -78,6 +114,14 @@ void Console::print(const Error& error)
     }
     stream << std::endl;
     std::cout << stream.str();
+}
+
+void Console::breakpoint(const Error& error)
+{
+    if (error.level == Error::Level::Fatal) {
+        printf("Set breakpoint at Console::breakpoint to debug\n");
+        abort();
+    }
 }
 
 void Console::fatal(const std::string& message, const char* file, int line)

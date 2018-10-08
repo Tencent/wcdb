@@ -138,7 +138,7 @@ RecyclableHandle Database::getHandle()
 
 void Database::checkIdentifier() const
 {
-    if (Console::debuggable) {
+    if (Console::debuggable()) {
         // run only in debuggable mode since it's expensive
         WCTInnerAssert(m_identifier != 0);
         bool succeed;

@@ -21,6 +21,8 @@
 #ifndef Console_hpp
 #define Console_hpp
 
+#include <WCDB/Notifier.hpp>
+#include <atomic>
 #include <string>
 
 namespace WCDB {
@@ -29,11 +31,27 @@ class Error;
 
 class Console {
 public:
-    static bool debuggable;
+    static Console* shared();
+
+    void setDebuggable(bool debuggable);
+    bool isDebuggable();
+    typedef Notifier::Callback Callback;
+    void setLogger(const Callback& callback);
+
+    static bool debuggable();
+
     static void log(const Error& error);
     static void fatal(const std::string& message, const char* file, int line);
+    static void breakpoint(const Error& error);
+
+    Console(const Console&) = delete;
+    Console& operator=(const Console&) = delete;
 
 protected:
+    Console();
+
+private:
+    std::atomic<bool> m_debugable;
     static void print(const Error& error);
 };
 
