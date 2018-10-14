@@ -38,6 +38,7 @@ protected:
 
 public:
     LRUCache() {}
+    virtual ~LRUCache() {}
 
     void put(const Key& key, const Value& value)
     {

@@ -31,6 +31,10 @@ SerializeIteration::SerializeIteration() : m_cursor(0)
 {
 }
 
+SerializeIteration::~SerializeIteration()
+{
+}
+
 void SerializeIteration::seek(off_t position)
 {
     if (position < 0) {
@@ -601,6 +605,10 @@ uint32_t Deserialization::get4BytesUInt(off_t offset) const
 }
 
 #pragma mark - Serializable
+Serializable::~Serializable()
+{
+}
+
 Data Serializable::serialize() const
 {
     Serialization serialization;
@@ -627,6 +635,10 @@ bool Serializable::serialize(const std::string &path) const
 }
 
 #pragma mark - Deserializable
+Deserializable::~Deserializable()
+{
+}
+
 bool Deserializable::deserialize(const Data &data)
 {
     Deserialization deserialization(data);

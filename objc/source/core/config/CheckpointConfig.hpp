@@ -27,12 +27,12 @@ namespace WCDB {
 
 class CheckpointQueue;
 
-class CheckpointConfig : public Config {
+class CheckpointConfig final : public Config {
 public:
     CheckpointConfig(const std::shared_ptr<CheckpointQueue> &queue);
 
-    bool invoke(Handle *handle) override;
-    bool uninvoke(Handle *handle) override;
+    bool invoke(Handle *handle) override final;
+    bool uninvoke(Handle *handle) override final;
 
     static constexpr const int framesForPassive = 100;
 

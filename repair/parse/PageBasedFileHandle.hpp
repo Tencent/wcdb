@@ -54,7 +54,7 @@ protected:
     static constexpr const size_t maxAllowedCacheMemory = 16 * 1024 * 1024;
     static const size_t& memoryPageSize();
 
-    class Cache : protected LRUCache<Range, MappedData> {
+    class Cache final : protected LRUCache<Range, MappedData> {
     public:
         Cache(size_t maxAllowedMemory);
 
@@ -72,8 +72,8 @@ protected:
         MapIterator findIterator(Location location);
         Range m_range;
 
-        bool shouldPurge() const override;
-        void willPurge(const Range& range, const MappedData& data) override;
+        bool shouldPurge() const override final;
+        void willPurge(const Range& range, const MappedData& data) override final;
         size_t m_maxAllowedMemory;
         size_t m_currentUsedMemery;
     };

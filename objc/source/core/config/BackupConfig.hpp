@@ -29,12 +29,12 @@ namespace WCDB {
 
 class BackupQueue;
 
-class BackupConfig : public Config {
+class BackupConfig final : public Config {
 public:
     BackupConfig(const std::shared_ptr<BackupQueue>& queue);
 
-    bool invoke(Handle* handle) override;
-    bool uninvoke(Handle* handle) override;
+    bool invoke(Handle* handle) override final;
+    bool uninvoke(Handle* handle) override final;
 
     static constexpr const int framesIntervalForAutoBackup = 300;
     static constexpr const int framesIntervalForDelayAutoBackup = 100;

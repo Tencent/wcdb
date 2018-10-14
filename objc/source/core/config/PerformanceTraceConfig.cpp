@@ -23,40 +23,70 @@
 
 namespace WCDB {
 
-PerformanceTraceConfig::PerformanceTraceConfig(const Notification &notification)
-: Config()
-, m_identifier(String::formatted("PerformanceTrace-%p", this))
-, m_notification(notification)
+#pragma mark - PerformanceTracer
+PerformanceTracer::PerformanceTracer()
+: m_identifier(String::formatted("PerformanceTrace-%p", this)), m_notification(nullptr)
 {
 }
 
-bool PerformanceTraceConfig::invoke(Handle *handle)
+PerformanceTracer::~PerformanceTracer()
+{
+}
+
+void PerformanceTracer::setNotification(const Notification &notification)
+{
+    m_notification = notification;
+}
+
+bool PerformanceTracer::invoke(Handle *handle)
 {
     handle->setNotificationWhenPerformanceTraced(m_identifier, m_notification);
     return true;
 }
 
-bool PerformanceTraceConfig::uninvoke(Handle *handle)
+bool PerformanceTracer::uninvoke(Handle *handle)
 {
     handle->setNotificationWhenPerformanceTraced(m_identifier, nullptr);
     return true;
 }
 
+#pragma mark - PerformanceTraceConfig
+PerformanceTraceConfig::PerformanceTraceConfig(const Notification &notification)
+{
+    setNotification(notification);
+}
+
+bool PerformanceTraceConfig::invoke(Handle *handle)
+{
+    return PerformanceTracer::invoke(handle);
+}
+
+bool PerformanceTraceConfig::uninvoke(Handle *handle)
+{
+    return PerformanceTracer::uninvoke(handle);
+}
+
+#pragma mark - ShareablePerformanceTraceConfig
 ShareablePerformanceTraceConfig::ShareablePerformanceTraceConfig()
-: PerformanceTraceConfig(nullptr)
 {
 }
 
 void ShareablePerformanceTraceConfig::setNotification(const Notification &notification)
 {
     LockGuard lockGuard(m_lock);
-    m_notification = notification;
+    PerformanceTracer::setNotification(notification);
 }
 
 bool ShareablePerformanceTraceConfig::invoke(Handle *handle)
 {
     SharedLockGuard lockGuard(m_lock);
-    return PerformanceTraceConfig::invoke(handle);
+    return PerformanceTracer::invoke(handle);
+}
+
+bool ShareablePerformanceTraceConfig::uninvoke(Handle *handle)
+{
+    SharedLockGuard lockGuard(m_lock);
+    return PerformanceTracer::uninvoke(handle);
 }
 
 } //namespace WCDB

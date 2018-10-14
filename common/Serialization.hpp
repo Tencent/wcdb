@@ -29,6 +29,7 @@ class SerializeIteration {
 #pragma mark - SerializeIteration
 public:
     SerializeIteration();
+    virtual ~SerializeIteration();
 
     void seek(off_t position);
     void advance(off_t offset);
@@ -45,7 +46,7 @@ protected:
     off_t m_cursor;
 };
 
-class Serialization : public SerializeIteration {
+class Serialization final : public SerializeIteration {
 #pragma mark - Serialization
 public:
     using SerializeIteration::SerializeIteration;
@@ -57,7 +58,7 @@ public:
 protected:
     unsigned char *pointee();
     unsigned char *base();
-    const UnsafeData &data() const override;
+    const UnsafeData &data() const override final;
     Data m_data;
 
 #pragma mark - Put
@@ -70,7 +71,7 @@ public:
     size_t putVarint(uint64_t value);
 };
 
-class Deserialization : public SerializeIteration {
+class Deserialization final : public SerializeIteration {
 #pragma mark - Deserialization
 public:
     using SerializeIteration::SerializeIteration;
@@ -78,7 +79,7 @@ public:
 
     void reset(const UnsafeData &data);
 
-    const UnsafeData &data() const override;
+    const UnsafeData &data() const override final;
 
 protected:
     UnsafeData m_data;
@@ -126,6 +127,7 @@ public:
 #pragma mark - Serializable
 class Serializable : protected SharedThreadedErrorProne {
 public:
+    virtual ~Serializable();
     Data serialize() const;
     bool serialize(const std::string &path) const;
     virtual bool serialize(Serialization &serialization) const = 0;
@@ -134,6 +136,7 @@ public:
 #pragma mark - Deserializable
 class Deserializable : protected SharedThreadedErrorProne {
 public:
+    virtual ~Deserializable();
     bool deserialize(const Data &data);
     bool deserialize(const std::string &path);
     virtual bool deserialize(Deserialization &deserialization) = 0;

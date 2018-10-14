@@ -58,6 +58,7 @@ private:
 #pragma mark - UntypedThreadLocal
 public:
     UntypedThreadLocal();
+    virtual ~UntypedThreadLocal();
     void *getOrCreate();
 
 protected:
@@ -78,7 +79,7 @@ private:
 };
 
 template<typename T>
-class ThreadLocal : public UntypedThreadLocal {
+class ThreadLocal final : public UntypedThreadLocal {
 public:
     ThreadLocal(const typename std::enable_if<std::is_default_constructible<T>::value>::type * = nullptr)
     : UntypedThreadLocal()
@@ -92,7 +93,7 @@ public:
 
     T *getOrCreate() { return (T *) UntypedThreadLocal::getOrCreate(); }
 
-    std::shared_ptr<void> constructor() override
+    std::shared_ptr<void> constructor() override final
     {
         return std::shared_ptr<void>(new T(m_defaultValue));
     }

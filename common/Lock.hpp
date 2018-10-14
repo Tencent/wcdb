@@ -32,16 +32,17 @@ public:
     Lockable();
     Lockable(const Lockable &) = delete;
     Lockable &operator=(const Lockable &) = delete;
+    virtual ~Lockable();
     virtual void lock() = 0;
     virtual void unlock() = 0;
 };
 
-class SpinLock : public Lockable {
+class SpinLock final : public Lockable {
 public:
     SpinLock();
 
-    void lock() override;
-    void unlock() override;
+    void lock() override final;
+    void unlock() override final;
 
 protected:
     std::atomic_flag m_locked = ATOMIC_FLAG_INIT;
@@ -52,13 +53,13 @@ protected:
 std::shared_mutex is available since C++17, iOS 10.0, macOS 10.12\
 std::shared_timed_mutex is available since C++14, iOS 10.0, macOS 10.12
 #endif
-class SharedLock : public Lockable {
+class SharedLock final : public Lockable {
 public:
     SharedLock();
     ~SharedLock();
 
-    void lock() override;
-    void unlock() override;
+    void lock() override final;
+    void unlock() override final;
 
     void lockShared();
     void unlockShared();

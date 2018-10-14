@@ -32,7 +32,7 @@ namespace Repair {
 
 class Page;
 
-class Cell : public PagerRelated, public Initializeable {
+class Cell final : public PagerRelated, public Initializeable {
 public:
     Cell(int pointer, Page *page, Pager *pager);
 
@@ -73,7 +73,7 @@ protected:
 
 #pragma mark - Initializeable
 protected:
-    bool doInitialize() override;
+    bool doInitialize() override final;
 };
 
 } //namespace Repair

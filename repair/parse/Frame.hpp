@@ -32,7 +32,7 @@ namespace Repair {
 
 class Wal;
 
-class Frame : public WalRelated, public Initializeable {
+class Frame final : public WalRelated, public Initializeable {
 public:
     Frame(int frameno, Wal *wal);
 
@@ -54,7 +54,7 @@ protected:
 
 #pragma mark - Initializeable
 protected:
-    bool doInitialize() override;
+    bool doInitialize() override final;
 };
 
 } //namespace Repair

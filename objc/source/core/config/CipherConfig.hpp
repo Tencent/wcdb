@@ -25,10 +25,10 @@
 
 namespace WCDB {
 
-class CipherConfig : public Config {
+class CipherConfig final : public Config {
 public:
     CipherConfig(const UnsafeData &cipher, int pageSize);
-    bool invoke(Handle *handle) override;
+    bool invoke(Handle *handle) override final;
 
 protected:
     const Data m_key;

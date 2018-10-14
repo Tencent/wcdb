@@ -28,6 +28,10 @@ Initializeable::Initializeable() : m_state(State::None)
 {
 }
 
+Initializeable::~Initializeable()
+{
+}
+
 bool Initializeable::isInitialized() const
 {
     return m_state == State::Initialized;

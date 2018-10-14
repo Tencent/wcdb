@@ -36,10 +36,10 @@ class Deserialization;
 
 namespace Repair {
 
-class Material : public Serializable, public Deserializable {
+class Material final : public Serializable, public Deserializable {
 #pragma mark - Serializable
 public:
-    bool serialize(Serialization &serialization) const override;
+    bool serialize(Serialization &serialization) const override final;
     using Serializable::serialize;
 
 protected:
@@ -48,7 +48,7 @@ protected:
 
 #pragma mark - Deserializable
 public:
-    bool deserialize(Deserialization &deserialization) override;
+    bool deserialize(Deserialization &deserialization) override final;
     using Deserializable::deserialize;
 
 protected:
@@ -63,7 +63,7 @@ protected:
 
 #pragma mark - Info
 public:
-    class Info : public Serializable, public Deserializable {
+    class Info final : public Serializable, public Deserializable {
     public:
         static constexpr const int size = sizeof(uint32_t) * 5;
         Info();
@@ -73,17 +73,17 @@ public:
         uint32_t walFrame;
 #pragma mark - Serializable
     public:
-        bool serialize(Serialization &serialization) const override;
+        bool serialize(Serialization &serialization) const override final;
 #pragma mark - Deserializable
     public:
-        bool deserialize(Deserialization &deserialization) override;
+        bool deserialize(Deserialization &deserialization) override final;
     };
 
     Info info;
 
 #pragma mark - Content
 public:
-    class Content : public Serializable, public Deserializable {
+    class Content final : public Serializable, public Deserializable {
     public:
         Content();
         std::string sql;
@@ -92,10 +92,10 @@ public:
         std::map<uint32_t, uint32_t> verifiedPagenos;
 #pragma mark - Serializable
     public:
-        bool serialize(Serialization &serialization) const override;
+        bool serialize(Serialization &serialization) const override final;
 #pragma mark - Deserializable
     public:
-        bool deserialize(Deserialization &deserialization) override;
+        bool deserialize(Deserialization &deserialization) override final;
     };
 
     std::map<std::string, Content> contents;

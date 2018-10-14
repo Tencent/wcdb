@@ -29,11 +29,11 @@ namespace FTS {
 class Modules;
 }
 
-class TokenizeConfig : public Config {
+class TokenizeConfig final : public Config {
 public:
     TokenizeConfig(const std::list<std::string>& tokenizeNames,
                    const std::shared_ptr<FTS::Modules>& modules);
-    bool invoke(Handle* handle) override;
+    bool invoke(Handle* handle) override final;
 
 protected:
     const std::shared_ptr<FTS::Modules> m_modules;

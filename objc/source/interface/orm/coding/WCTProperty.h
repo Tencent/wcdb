@@ -23,9 +23,9 @@
 class WCTColumnBinding;
 class WCTProperty;
 
-class WCTProperty : public WCDB::Operable,
-                    public WCDB::DescribableWithLang<WCDB::Lang::Expr>,
-                    public WCDB::Redirectable {
+class WCTProperty final : public WCDB::Operable,
+                          public WCDB::DescribableWithLang<WCDB::Lang::Expr>,
+                          public WCDB::Redirectable {
 public:
     WCTProperty(const WCTColumnBinding &columnBinding);
     WCTProperty(const WCDB::Expression &expression,
@@ -52,10 +52,10 @@ public:
     bool isSameColumnBinding(const WCTProperty &property) const;
 
 protected:
-    WCDB::Expression getRedirectSource() const override;
+    WCDB::Expression getRedirectSource() const override final;
 
     WCDB::Lang::CopyOnWriteLazyLang<WCDB::Lang::Expr>
-    getExpressionLang() const override;
+    getExpressionLang() const override final;
 
     const WCTColumnBinding *m_columnBinding;
 };

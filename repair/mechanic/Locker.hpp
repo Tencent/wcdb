@@ -31,6 +31,7 @@ namespace Repair {
 
 class Locker {
 public:
+    virtual ~Locker();
     virtual void setPath(const std::string &path) = 0;
     virtual const std::string &getPath() const = 0;
     virtual const Error &getError() const = 0;

@@ -32,7 +32,7 @@ namespace WCDB {
 
 namespace Repair {
 
-class Wal : public PagerRelated, public Initializeable {
+class Wal final : public PagerRelated, public Initializeable {
 #pragma mark - Initialize
 public:
     Wal(Pager *pager);
@@ -86,7 +86,7 @@ public:
 
 #pragma mark - Initializeable
 protected:
-    bool doInitialize() override;
+    bool doInitialize() override final;
     static bool isBigEndian();
 
 #pragma mark - Error

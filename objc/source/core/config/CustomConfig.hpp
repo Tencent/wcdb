@@ -25,14 +25,14 @@
 
 namespace WCDB {
 
-class CustomConfig : public Config {
+class CustomConfig final : public Config {
 public:
     using Invocation = std::function<bool(Handle *)>;
 
     CustomConfig(const Invocation &invocation, const Invocation &uninvocation);
 
-    bool invoke(Handle *handle) override;
-    bool uninvoke(Handle *handle) override;
+    bool invoke(Handle *handle) override final;
+    bool uninvoke(Handle *handle) override final;
 
 protected:
     const Invocation m_invocation;

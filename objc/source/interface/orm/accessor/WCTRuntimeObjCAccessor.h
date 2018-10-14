@@ -23,8 +23,8 @@
 #import <WCDB/WCTRuntimeBaseAccessor.h>
 #import <objc/runtime.h>
 
-class WCTRuntimeObjCAccessor : public WCTRuntimeAccessor<id>,
-                               public WCTObjCAccessor {
+class WCTRuntimeObjCAccessor final : public WCTRuntimeAccessor<id>,
+                                     public WCTObjCAccessor {
 protected:
     using InstanceType = WCTObjCAccessor::InstanceType;
     using PropertyType = NSObject *; //NSObject<WCTColumnCoding>*
@@ -43,7 +43,7 @@ protected:
     ValueSetter generateValueSetter(Class instanceClass,
                                     const std::string &propertyName);
 
-    WCDB::ColumnType getColumnType() const override;
+    WCDB::ColumnType getColumnType() const override final;
 
     WCDB::ColumnType GetColumnType(Class instanceClass,
                                    const std::string &propertyName);

@@ -27,6 +27,10 @@ Lockable::Lockable()
 {
 }
 
+Lockable::~Lockable()
+{
+}
+
 SpinLock::SpinLock() : Lockable()
 {
 }

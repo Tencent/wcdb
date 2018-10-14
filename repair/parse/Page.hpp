@@ -32,7 +32,7 @@ namespace Repair {
 
 class Cell;
 
-class Page : public PagerRelated, public Initializeable {
+class Page final : public PagerRelated, public Initializeable {
 #pragma mark - Initialize
 public:
     Page(int number, Pager *pager);
@@ -82,7 +82,7 @@ protected:
     std::vector<int> m_cellPointers;
 #pragma mark - Initializeable
 protected:
-    bool doInitialize() override;
+    bool doInitialize() override final;
 };
 
 } //namespace Repair

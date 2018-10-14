@@ -29,7 +29,7 @@ namespace WCDB {
 
 class DatabasePool;
 
-class CheckpointQueue : public AsyncQueue {
+class CheckpointQueue final : public AsyncQueue {
 public:
     CheckpointQueue(const std::string& name, const std::shared_ptr<DatabasePool>& databasePool);
     ~CheckpointQueue();
@@ -41,7 +41,7 @@ public:
 
 protected:
     bool onTimed(const std::string& path, const int& frames);
-    void loop() override;
+    void loop() override final;
 
     std::shared_ptr<DatabasePool> m_databasePool;
     TimedQueue<std::string, int> m_timedQueue;

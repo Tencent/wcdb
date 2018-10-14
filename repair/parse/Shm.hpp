@@ -29,14 +29,14 @@ namespace WCDB {
 
 namespace Repair {
 
-class Shm : public WalRelated, public Initializeable {
+class Shm final : public WalRelated, public Initializeable {
 public:
     Shm(Wal *wal);
 
     const std::string &getPath() const;
 
 protected:
-    bool doInitialize() override;
+    bool doInitialize() override final;
     void markAsCorrupted(const std::string &message);
     FileHandle m_fileHandle;
 

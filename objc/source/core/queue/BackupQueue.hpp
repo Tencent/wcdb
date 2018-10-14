@@ -30,7 +30,7 @@ namespace WCDB {
 
 class DatabasePool;
 
-class BackupQueue : public AsyncQueue {
+class BackupQueue final : public AsyncQueue {
 public:
     BackupQueue(const std::string& name, const std::shared_ptr<DatabasePool>& databasePool);
     ~BackupQueue();
@@ -39,7 +39,7 @@ public:
 
 protected:
     bool onTimed(const std::string& path, const int& frames);
-    void loop() override;
+    void loop() override final;
 
     std::shared_ptr<DatabasePool> m_databasePool;
     TimedQueue<std::string, int> m_timedQueue;

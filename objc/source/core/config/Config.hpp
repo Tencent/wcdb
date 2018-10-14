@@ -27,6 +27,7 @@ namespace WCDB {
 
 class Config {
 public:
+    virtual ~Config(){};
     virtual bool invoke(Handle *handle) = 0;
     virtual bool uninvoke(Handle *handle) { return true; };
 };

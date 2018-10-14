@@ -25,10 +25,10 @@
 
 namespace WCDB {
 
-class BasicConfig : public Config {
+class BasicConfig final : public Config {
 public:
     BasicConfig();
-    bool invoke(Handle* handle) override;
+    bool invoke(Handle* handle) override final;
 
 protected:
     const StatementPragma m_getJournalMode;

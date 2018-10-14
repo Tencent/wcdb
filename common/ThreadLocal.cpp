@@ -31,6 +31,10 @@ UntypedThreadLocal::Info::Info(const Recyclable<pthread_key_t>& key,
     WCTInnerAssert(m_value != nullptr);
 }
 
+UntypedThreadLocal::~UntypedThreadLocal()
+{
+}
+
 void* UntypedThreadLocal::Info::get()
 {
     return m_value.get();

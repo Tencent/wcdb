@@ -33,7 +33,7 @@ class Data;
 
 namespace Repair {
 
-class Pager : public ErrorProne, public Initializeable {
+class Pager final : public ErrorProne, public Initializeable {
 #pragma mark - Initialize
 public:
     Pager(const std::string &path);
@@ -86,7 +86,7 @@ protected:
 
 #pragma mark - Initializeable
 protected:
-    bool doInitialize() override;
+    bool doInitialize() override final;
 };
 
 } //namespace Repair

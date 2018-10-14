@@ -30,7 +30,7 @@ namespace WCDB {
 
 class DatabasePool;
 
-class CorruptionQueue : public AsyncQueue {
+class CorruptionQueue final : public AsyncQueue {
 public:
     CorruptionQueue(const std::string& name, const std::shared_ptr<DatabasePool>& databasePool);
     ~CorruptionQueue();
@@ -38,7 +38,7 @@ public:
 protected:
     void handleError(const Error& error);
 
-    void loop() override;
+    void loop() override final;
 
     std::shared_ptr<DatabasePool> m_databasePool;
 
