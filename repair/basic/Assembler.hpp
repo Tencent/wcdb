@@ -34,6 +34,8 @@ class Cell;
 
 class Assembler {
 public:
+    virtual ~Assembler();
+
     virtual void setPath(const std::string &path) = 0;
     virtual const std::string &getPath() const = 0;
 
@@ -53,6 +55,7 @@ public:
 
 class AssemblerHolder {
 public:
+    virtual ~AssemblerHolder();
     void setAssembler(const std::shared_ptr<Assembler> &assembler);
 
 protected:

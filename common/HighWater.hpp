@@ -26,28 +26,34 @@
 
 namespace WCDB {
 
-class HighWater {
+class AbstractHighWater {
 public:
-    HighWater(ssize_t init = 0);
+    AbstractHighWater(ssize_t init = 0);
+    virtual ~AbstractHighWater();
 
-    void increase(size_t size);
-    void decrease(size_t size);
-    ssize_t getCurrent() const;
-    ssize_t getHighWater() const;
+    virtual void increase(size_t size);
+    virtual void decrease(size_t size);
+    virtual ssize_t getCurrent() const;
+    virtual ssize_t getHighWater() const;
 
 protected:
     ssize_t m_current;
     ssize_t m_highWater;
 };
 
-class ShareableHighWater : public HighWater {
+class HighWater final : public AbstractHighWater {
 public:
-    using HighWater::HighWater;
+    using AbstractHighWater::AbstractHighWater;
+};
 
-    void increase(size_t size);
-    void decrease(size_t size);
-    ssize_t getCurrent() const;
-    ssize_t getHighWater() const;
+class ShareableHighWater final : public AbstractHighWater {
+public:
+    using AbstractHighWater::AbstractHighWater;
+
+    void increase(size_t size) override final;
+    void decrease(size_t size) override final;
+    ssize_t getCurrent() const override final;
+    ssize_t getHighWater() const override final;
 
 protected:
     mutable SpinLock m_lock;

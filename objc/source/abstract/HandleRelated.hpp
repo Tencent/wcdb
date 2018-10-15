@@ -30,6 +30,7 @@ class Handle;
 class HandleRelated {
 public:
     HandleRelated(Handle *handle);
+    virtual ~HandleRelated();
 
 protected:
     void *getRawHandle();

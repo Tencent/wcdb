@@ -33,6 +33,7 @@ public:
     UnsafeData();
     UnsafeData(UnsafeData &&other);
     UnsafeData(const UnsafeData &other);
+    virtual ~UnsafeData();
 
     UnsafeData &operator=(const UnsafeData &other);
     UnsafeData &operator=(UnsafeData &&other);

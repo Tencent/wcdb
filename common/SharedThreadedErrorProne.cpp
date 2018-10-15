@@ -23,6 +23,10 @@
 
 namespace WCDB {
 
+SharedThreadedErrorProne::~SharedThreadedErrorProne()
+{
+}
+
 void SharedThreadedErrorProne::setThreadedError(const Error &error)
 {
     ThreadedErrors::shared()->setThreadedError(error);

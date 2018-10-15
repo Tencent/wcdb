@@ -28,8 +28,20 @@ TokenizerInfoBase::TokenizerInfoBase(int argc, const char *const *argv)
 {
 }
 
+TokenizerInfoBase::~TokenizerInfoBase()
+{
+}
+
 CursorInfoBase::CursorInfoBase(const char *input, int inputLength, TokenizerInfoBase *tokenizerInfo)
 : m_tokenizerInfo(tokenizerInfo)
+{
+}
+
+CursorInfoBase::~CursorInfoBase()
+{
+}
+
+ModuleBase::~ModuleBase()
 {
 }
 

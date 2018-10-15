@@ -36,7 +36,7 @@ public:
     MappedData(MappedData&& other);
     MappedData& operator=(const MappedData& other);
     MappedData& operator=(MappedData&& other);
-    ~MappedData();
+    virtual ~MappedData();
 
     MappedData subdata(size_t size) const;
     MappedData subdata(off_t offset, size_t size) const;

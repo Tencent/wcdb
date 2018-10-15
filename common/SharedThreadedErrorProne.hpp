@@ -26,6 +26,9 @@ namespace WCDB {
 class Error;
 
 class SharedThreadedErrorProne {
+public:
+    virtual ~SharedThreadedErrorProne();
+
 protected:
     static void setThreadedError(const Error &error);
     static void setThreadedError(Error &&error);

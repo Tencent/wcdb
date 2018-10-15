@@ -27,7 +27,7 @@
 
 namespace WCDB {
 
-class Time : public std::chrono::system_clock::time_point, public SharedThreadedErrorProne {
+class Time final : public std::chrono::system_clock::time_point, public SharedThreadedErrorProne {
 public:
     using Super = std::chrono::system_clock::time_point;
     using Super::time_point;
@@ -43,7 +43,7 @@ public:
     std::string stringify() const;
 };
 
-class SteadyClock : public std::chrono::steady_clock::time_point {
+class SteadyClock final : public std::chrono::steady_clock::time_point {
 public:
     using Super = std::chrono::steady_clock::time_point;
     using Super::time_point;

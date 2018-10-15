@@ -36,11 +36,13 @@ namespace FTS {
 class TokenizerInfoBase {
 public:
     TokenizerInfoBase(int argc, const char *const *argv);
+    virtual ~TokenizerInfoBase();
 };
 
 class CursorInfoBase {
 public:
     CursorInfoBase(const char *input, int inputLength, TokenizerInfoBase *tokenizerInfo);
+    virtual ~CursorInfoBase();
 
     virtual int
     step(const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *piPosition)
@@ -51,10 +53,12 @@ protected:
 };
 
 class ModuleBase {
+public:
+    virtual ~ModuleBase();
 };
 
 template<typename TokenizerInfo /* = TokenizerInfoBase */, typename CursorInfo /* = CursorInfoBase */>
-class Module {
+class Module final {
 public:
     struct Tokenizer {
         sqlite3_tokenizer base;

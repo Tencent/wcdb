@@ -26,9 +26,17 @@ namespace WCDB {
 
 namespace Repair {
 
+Assembler::~Assembler()
+{
+}
+
 void AssemblerHolder::setAssembler(const std::shared_ptr<Assembler> &assembler)
 {
     m_assembler = assembler;
+}
+
+AssemblerHolder::~AssemblerHolder()
+{
 }
 
 } //namespace Repair

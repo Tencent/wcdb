@@ -29,6 +29,10 @@ HandleRelated::HandleRelated(Handle *handle) : m_handle(handle)
     WCTInnerAssert(m_handle != nullptr);
 }
 
+HandleRelated::~HandleRelated()
+{
+}
+
 void HandleRelated::setError(int rc, const std::string &sql)
 {
     m_handle->setError(rc, sql);

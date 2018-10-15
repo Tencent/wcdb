@@ -22,11 +22,16 @@
 
 namespace WCDB {
 
-HighWater::HighWater(ssize_t init) : m_current(init), m_highWater(init)
+AbstractHighWater::AbstractHighWater(ssize_t init)
+: m_current(init), m_highWater(init)
 {
 }
 
-void HighWater::increase(size_t size)
+AbstractHighWater::~AbstractHighWater()
+{
+}
+
+void AbstractHighWater::increase(size_t size)
 {
     m_current += size;
     if (m_current > m_highWater) {
@@ -34,17 +39,17 @@ void HighWater::increase(size_t size)
     }
 }
 
-void HighWater::decrease(size_t size)
+void AbstractHighWater::decrease(size_t size)
 {
     m_current -= size;
 }
 
-ssize_t HighWater::getCurrent() const
+ssize_t AbstractHighWater::getCurrent() const
 {
     return m_current;
 }
 
-ssize_t HighWater::getHighWater() const
+ssize_t AbstractHighWater::getHighWater() const
 {
     return m_highWater;
 }
@@ -52,25 +57,25 @@ ssize_t HighWater::getHighWater() const
 void ShareableHighWater::increase(size_t size)
 {
     LockGuard lockGuard(m_lock);
-    HighWater::increase(size);
+    AbstractHighWater::increase(size);
 }
 
 void ShareableHighWater::decrease(size_t size)
 {
     LockGuard lockGuard(m_lock);
-    HighWater::decrease(size);
+    AbstractHighWater::decrease(size);
 }
 
 ssize_t ShareableHighWater::getCurrent() const
 {
     LockGuard lockGuard(m_lock);
-    return HighWater::getCurrent();
+    return AbstractHighWater::getCurrent();
 }
 
 ssize_t ShareableHighWater::getHighWater() const
 {
     LockGuard lockGuard(m_lock);
-    return HighWater::getHighWater();
+    return AbstractHighWater::getHighWater();
 }
 
 } // namespace WCDB
