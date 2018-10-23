@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)fromTables:(NSArray<NSString *> *)tableNames;
 
-- (instancetype)onResultColumns:(const WCTResultColumns &)resultColumns;
+- (instancetype)onResultColumns:(const WCDB::ResultColumns &)resultColumns;
 
 /**
  @brief Get next selected object. You can do an iteration using it.

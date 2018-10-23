@@ -38,7 +38,7 @@ struct MultiInfo {
 typedef struct MultiInfo MultiInfo;
 
 @implementation WCTMultiSelect {
-    WCTResultColumns _resultColumns;
+    WCDB::ResultColumns _resultColumns;
     std::list<MultiInfo> _infos;
 }
 
@@ -52,7 +52,7 @@ typedef struct MultiInfo MultiInfo;
     return self;
 }
 
-- (instancetype)onResultColumns:(const WCTResultColumns &)resultColumns
+- (instancetype)onResultColumns:(const WCDB::ResultColumns &)resultColumns
 {
     _resultColumns = resultColumns;
     _statement.select(resultColumns);

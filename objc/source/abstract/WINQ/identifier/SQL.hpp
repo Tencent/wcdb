@@ -42,6 +42,8 @@ public:
     virtual void iterate(const Iterator& iterator, void* parameter) = 0;
 
     virtual std::string getDescription() const = 0;
+
+    void* userInfo = nullptr;
 };
 
 template<typename T>

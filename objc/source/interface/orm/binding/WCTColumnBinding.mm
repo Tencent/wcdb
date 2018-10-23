@@ -25,13 +25,3 @@ Class WCTColumnBinding::getClass() const
 {
     return m_class;
 }
-
-WCTColumnBindingHolder::WCTColumnBindingHolder(const WCTColumnBinding& columnBinding)
-: m_columnBinding(&columnBinding)
-{
-}
-
-const WCTColumnBinding& WCTColumnBindingHolder::getColumnBinding() const
-{
-    return *m_columnBinding;
-}

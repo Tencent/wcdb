@@ -53,7 +53,7 @@ class WCTProperty;
 class WCTProperties;
 class WCTExpression;
 class WCTExpressions;
-class WCTResultColumns;
+class ResultColumns;
 
 using WCTOrder = WCDB::Order;
 constexpr const WCDB::Order WCTOrderedAscending = WCDB::Order::ASC;

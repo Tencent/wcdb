@@ -218,7 +218,7 @@
     return [self getObjectOfClass:cls onProperties:properties];
 }
 
-- (WCTObject *)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
+- (WCTObject *)getObjectOnResultColumns:(const WCDB::ResultColumns &)resultColumns
 {
 #warning TODO
     //    Class cls = resultColumns.front().getColumnBinding().getClass();

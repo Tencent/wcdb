@@ -18,21 +18,28 @@
  * limitations under the License.
  */
 
+#import <WCDB/WCTColumnBinding.h>
 #import <WCDB/WCTProperty.h>
 
 WCTProperty::WCTProperty(const WCTColumnBinding &columnBinding)
-: WCDB::Column()
-, WCTColumnBindingHolder(columnBinding)
-{
-    syntax = columnBinding.columnDef.syntax.column;
+: WCDB::Column(){
+#warning TODO
+    //    userInfo = &columnBinding;
 }
 
-WCTProperty::WCTProperty(const WCDB::Column &column,
-                         const WCTColumnBinding &columnBinding)
-: WCDB::Column(column)
-, WCTColumnBindingHolder(columnBinding)
+WCDB::IndexedColumn WCTProperty::asIndex() const
 {
-    syntax = columnBinding.columnDef.syntax.column;
+    return WCDB::IndexedColumn(*this);
+}
+
+WCDB::OrderingTerm WCTProperty::asOrder() const
+{
+    return WCDB::OrderingTerm(*this);
+}
+
+const WCTColumnBinding &WCTProperty::getColumnBinding() const
+{
+    return *(const WCTColumnBinding *) userInfo;
 }
 
 WCDB::Expression WCTProperties::count() const

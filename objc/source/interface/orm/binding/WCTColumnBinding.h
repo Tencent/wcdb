@@ -60,13 +60,3 @@ public:
 protected:
     Class m_class;
 };
-
-class WCTColumnBindingHolder {
-public:
-    WCTColumnBindingHolder(const WCTColumnBinding &columnBinding);
-
-    const WCTColumnBinding &getColumnBinding() const;
-
-protected:
-    const WCTColumnBinding *m_columnBinding;
-};

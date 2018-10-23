@@ -21,13 +21,15 @@
 #import <WCDB/WCTColumnBinding.h>
 #import <WCDB/WCTCommon.h>
 
-class WCTProperty : public WCDB::Column, public WCTColumnBindingHolder {
+class WCTProperty : public WCDB::Column {
 public:
+    using WCDB::Column::Column;
     WCTProperty(const WCTColumnBinding &columnBinding);
-    WCTProperty(const WCDB::Column &column, const WCTColumnBinding &columnBinding);
 
     WCDB::IndexedColumn asIndex() const;
     WCDB::OrderingTerm asOrder() const;
+
+    const WCTColumnBinding &getColumnBinding() const;
 };
 
 class WCTProperties : public WCDB::SyntaxList<WCTProperty> {

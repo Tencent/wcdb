@@ -151,51 +151,51 @@
 }
 
 #pragma mark - Get Part Of Object
-- (WCTObject *)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
+- (WCTObject *)getObjectOnResultColumns:(const WCDB::ResultColumns &)resultColumns
 {
     return [[[[[self prepareSelect] autoFinalizeImmediately] onResultColumns:resultColumns] limit:1] nextObject];
 }
 
-- (WCTObject *)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
+- (WCTObject *)getObjectOnResultColumns:(const WCDB::ResultColumns &)resultColumns
                                   where:(const WCDB::Expression &)condition
 {
     return [[[[[[self prepareSelect] autoFinalizeImmediately] onResultColumns:resultColumns] where:condition] limit:1] nextObject];
 }
 
-- (WCTObject *)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
+- (WCTObject *)getObjectOnResultColumns:(const WCDB::ResultColumns &)resultColumns
                                   order:(const WCDB::OrderingTerms &)orders
 {
     return [[[[[[self prepareSelect] autoFinalizeImmediately] onResultColumns:resultColumns] order:orders] limit:1] nextObject];
 }
 
-- (WCTObject *)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
+- (WCTObject *)getObjectOnResultColumns:(const WCDB::ResultColumns &)resultColumns
                                  offset:(const WCDB::Expression &)offset
 {
     return [[[[[[self prepareSelect] autoFinalizeImmediately] onResultColumns:resultColumns] limit:1] offset:offset] nextObject];
 }
 
-- (WCTObject *)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
+- (WCTObject *)getObjectOnResultColumns:(const WCDB::ResultColumns &)resultColumns
                                   where:(const WCDB::Expression &)condition
                                   order:(const WCDB::OrderingTerms &)orders
 {
     return [[[[[[[self prepareSelect] autoFinalizeImmediately] onResultColumns:resultColumns] where:condition] order:orders] limit:1] nextObject];
 }
 
-- (WCTObject *)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
+- (WCTObject *)getObjectOnResultColumns:(const WCDB::ResultColumns &)resultColumns
                                   where:(const WCDB::Expression &)condition
                                  offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[self prepareSelect] autoFinalizeImmediately] onResultColumns:resultColumns] where:condition] limit:1] offset:offset] nextObject];
 }
 
-- (WCTObject *)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
+- (WCTObject *)getObjectOnResultColumns:(const WCDB::ResultColumns &)resultColumns
                                   order:(const WCDB::OrderingTerms &)orders
                                  offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[self prepareSelect] autoFinalizeImmediately] onResultColumns:resultColumns] order:orders] limit:1] offset:offset] nextObject];
 }
 
-- (WCTObject *)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
+- (WCTObject *)getObjectOnResultColumns:(const WCDB::ResultColumns &)resultColumns
                                   where:(const WCDB::Expression &)condition
                                   order:(const WCDB::OrderingTerms &)orders
                                  offset:(const WCDB::Expression &)offset
@@ -204,58 +204,58 @@
 }
 
 #pragma mark - Get Part Of Objects
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCDB::ResultColumns &)resultColumns
 {
     return [[[self prepareSelect] onResultColumns:resultColumns] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCDB::ResultColumns &)resultColumns
                                                     where:(const WCDB::Expression &)condition
 {
     return [[[[self prepareSelect] onResultColumns:resultColumns] where:condition] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCDB::ResultColumns &)resultColumns
                                                     order:(const WCDB::OrderingTerms &)orders
 {
     return [[[[self prepareSelect] onResultColumns:resultColumns] order:orders] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCDB::ResultColumns &)resultColumns
                                                     limit:(const WCDB::Expression &)limit
 {
     return [[[[self prepareSelect] onResultColumns:resultColumns] limit:limit] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCDB::ResultColumns &)resultColumns
                                                     where:(const WCDB::Expression &)condition
                                                     order:(const WCDB::OrderingTerms &)orders
 {
     return [[[[[self prepareSelect] onResultColumns:resultColumns] where:condition] order:orders] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCDB::ResultColumns &)resultColumns
                                                     where:(const WCDB::Expression &)condition
                                                     limit:(const WCDB::Expression &)limit
 {
     return [[[[[self prepareSelect] onResultColumns:resultColumns] where:condition] limit:limit] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCDB::ResultColumns &)resultColumns
                                                     order:(const WCDB::OrderingTerms &)orders
                                                     limit:(const WCDB::Expression &)limit
 {
     return [[[[[self prepareSelect] onResultColumns:resultColumns] order:orders] limit:limit] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCDB::ResultColumns &)resultColumns
                                                     limit:(const WCDB::Expression &)limit
                                                    offset:(const WCDB::Expression &)offset
 {
     return [[[[[self prepareSelect] onResultColumns:resultColumns] limit:limit] offset:offset] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCDB::ResultColumns &)resultColumns
                                                     where:(const WCDB::Expression &)condition
                                                     order:(const WCDB::OrderingTerms &)orders
                                                     limit:(const WCDB::Expression &)limit
@@ -263,7 +263,7 @@
     return [[[[[[self prepareSelect] onResultColumns:resultColumns] where:condition] order:orders] limit:limit] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCDB::ResultColumns &)resultColumns
                                                     where:(const WCDB::Expression &)condition
                                                     limit:(const WCDB::Expression &)limit
                                                    offset:(const WCDB::Expression &)offset
@@ -271,7 +271,7 @@
     return [[[[[[self prepareSelect] onResultColumns:resultColumns] where:condition] limit:limit] offset:offset] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCDB::ResultColumns &)resultColumns
                                                     order:(const WCDB::OrderingTerms &)orders
                                                     limit:(const WCDB::Expression &)limit
                                                    offset:(const WCDB::Expression &)offset
@@ -279,7 +279,7 @@
     return [[[[[[self prepareSelect] onResultColumns:resultColumns] order:orders] limit:limit] offset:offset] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCDB::ResultColumns &)resultColumns
                                                     where:(const WCDB::Expression &)condition
                                                     order:(const WCDB::OrderingTerms &)orders
                                                     limit:(const WCDB::Expression &)limit

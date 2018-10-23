@@ -25,7 +25,7 @@
 #import <WCDB/WCTUnsafeHandle+Private.h>
 
 @implementation WCTSelect {
-    WCTResultColumns _resultColumns;
+    WCDB::ResultColumns _resultColumns;
     Class<WCTTableCoding> _class;
 }
 
@@ -36,10 +36,11 @@
     return self;
 }
 
-- (instancetype)onResultColumns:(const WCTResultColumns &)resultColumns
+- (instancetype)onResultColumns:(const WCDB::ResultColumns &)resultColumns
 {
     _resultColumns = resultColumns;
-    _class = resultColumns.front().getColumnBinding().getClass();
+#warning TODO
+    //    _class = resultColumns.front().getColumnBinding().getClass();
     _statement.select(resultColumns);
     return self;
 }
@@ -47,7 +48,8 @@
 - (instancetype)ofClass:(Class<WCTTableCoding>)cls
 {
     _class = cls;
-    _resultColumns = [cls allProperties];
+#warning TODO
+    //    _resultColumns = [cls allProperties];
     _statement.select(_resultColumns);
     return self;
 }

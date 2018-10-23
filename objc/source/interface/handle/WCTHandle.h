@@ -95,7 +95,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable WCTObject *)getObjectOfClass:(nonnull Class)cls;
 
-- (nullable WCTObject *)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns;
+- (nullable WCTObject *)getObjectOnResultColumns:(const WCDB::ResultColumns &)resultColumns;
 
 - (int)getColumnCount;
 

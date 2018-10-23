@@ -430,35 +430,36 @@
     return done ? rows : nil;
 }
 
-- (id /* WCTObject* */)nextObjectOnResultColumns:(const WCTResultColumns &)resultColumns orDone:(BOOL &)isDone
+- (id /* WCTObject* */)nextObjectOnResultColumns:(const WCDB::ResultColumns &)resultColumns orDone:(BOOL &)isDone
 {
     if (resultColumns.empty()) {
         return nil;
     }
-    Class cls = resultColumns.front().getColumnBinding().getClass();
-    if (_handle->step((bool &) isDone) && !isDone) {
 #warning TODO
-        //        return [self getObjectOfClass:cls onResultColumns:resultColumns];
-    }
-    [self finalizeStatement];
+    //    Class cls = resultColumns.front().getColumnBinding().getClass();
+    //    if (_handle->step((bool &) isDone) && !isDone) {
+    //                return [self getObjectOfClass:cls onResultColumns:resultColumns];
+    //    }
+    //    [self finalizeStatement];
     return nil;
 }
 
-- (NSArray /* <WCTObject*> */ *)allObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+- (NSArray /* <WCTObject*> */ *)allObjectsOnResultColumns:(const WCDB::ResultColumns &)resultColumns
 {
     if (resultColumns.empty()) {
         return nil;
     }
-    Class cls = resultColumns.front().getColumnBinding().getClass();
-    WCTHandleAssert(return nil;);
-    NSMutableArray<WCTObject *> *objects = [[NSMutableArray<WCTObject *> alloc] init];
-    bool done = false;
-    while (_handle->step(done) && !done) {
 #warning TODO
-        //        [objects addObject:[self getObjectOfClass:cls OnResultColumns:resultColumns]];
-    }
-    [self finalizeStatement];
-    return done ? objects : nil;
+    //    Class cls = resultColumns.front().getColumnBinding().getClass();
+    //    WCTHandleAssert(return nil;);
+    //    NSMutableArray<WCTObject *> *objects = [[NSMutableArray<WCTObject *> alloc] init];
+    //    bool done = false;
+    //    while (_handle->step(done) && !done) {
+    //                [objects addObject:[self getObjectOfClass:cls OnResultColumns:resultColumns]];
+    //    }
+    //    [self finalizeStatement];
+    //    return done ? objects : nil;
+    return nil;
 }
 
 - (BOOL)execute:(const WCDB::Statement &)statement

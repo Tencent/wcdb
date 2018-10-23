@@ -96,7 +96,7 @@ typedef NS_ENUM(NSUInteger, WCTFinalizeLevel) {
 
 - (nullable WCTColumnsXRows *)allRows;
 
-- (nullable id /* WCTObject* */)nextObjectOnResultColumns:(const WCTResultColumns &)resultColumns orDone:(BOOL &)isDone;
+- (nullable id /* WCTObject* */)nextObjectOnResultColumns:(const WCDB::ResultColumns &)resultColumns orDone:(BOOL &)isDone;
 
 - (nullable NSArray /* <WCTObject*> */ *)allObjectsOnProperties:(const WCTProperties &)properties;
 
