@@ -71,14 +71,14 @@ typedef NS_ENUM(NSUInteger, WCTFinalizeLevel) {
             ofObject:(WCTObject *)object
              toIndex:(int)index;
 
-- (void)bindProperties:(const WCTPropertyList &)properties
+- (void)bindProperties:(const WCTProperties &)properties
               ofObject:(WCTObject *)object;
 
 - (void)bindValue:(nullable WCTColumnCodingValue *)value
           toIndex:(int)index;
 
 - (nullable WCTObject *)getObjectOfClass:(nonnull Class)cls
-                            onProperties:(const WCTPropertyList &)properties;
+                            onProperties:(const WCTProperties &)properties;
 
 - (nullable WCTValue *)getValueAtIndex:(int)index;
 
@@ -96,20 +96,16 @@ typedef NS_ENUM(NSUInteger, WCTFinalizeLevel) {
 
 - (nullable WCTColumnsXRows *)allRows;
 
-- (nullable id /* WCTObject* */)nextObjectOfClass:(nonnull Class)cls orDone:(BOOL &)isDone;
+- (nullable id /* WCTObject* */)nextObjectOnResultColumns:(const WCTResultColumns &)resultColumns orDone:(BOOL &)isDone;
 
-- (nullable id /* WCTObject* */)nextObjectOnProperties:(const WCTPropertyList &)properties orDone:(BOOL &)isDone;
-
-- (nullable NSArray /* <WCTObject*> */ *)allObjectsOfClass:(nonnull Class)cls;
-
-- (nullable NSArray /* <WCTObject*> */ *)allObjectsOnProperties:(const WCTPropertyList &)properties;
+- (nullable NSArray /* <WCTObject*> */ *)allObjectsOnProperties:(const WCTProperties &)properties;
 
 - (BOOL)execute:(const WCDB::Statement &)statement
      withObject:(WCTObject *)object;
 
 - (BOOL)execute:(const WCDB::Statement &)statement
      withObject:(WCTObject *)object
-   onProperties:(const WCTPropertyList &)properties;
+   onProperties:(const WCTProperties &)properties;
 
 - (BOOL)execute:(const WCDB::Statement &)statement
       withValue:(WCTColumnCodingValue *)value;

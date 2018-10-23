@@ -19,34 +19,77 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface OrderingTermTests : WINQTestCase
 
 @end
 
-@implementation OrderingTermTests
+@implementation OrderingTermTests {
+    WCDB::Expression expression;
+    NSString* collation;
+}
 
-- (void)testOrderingTerm
+- (void)setUp
 {
-    WCDB::Expression expression = WCDB::Expression(self.class.column);
+    [super setUp];
+    expression = WCDB::Column(@"testColumn");
+    collation = @"testCollation";
+}
 
-    WINQAssertEqual(WCDB::OrderingTerm(expression), @"testColumn");
+- (void)test_default_constructible
+{
+    WCDB::OrderingTerm constructible __attribute((unused));
+}
 
-    WINQAssertEqual(WCDB::OrderingTerm(expression)
-                    .withOrder(WCDB::Order::NotSet),
-                    @"testColumn");
+- (void)test
+{
+    auto testingSQL = WCDB::OrderingTerm(expression);
 
-    WINQAssertEqual(WCDB::OrderingTerm(expression)
-                    .withOrder(WCDB::Order::ASC),
-                    @"testColumn ASC");
+    auto testingTypes = { WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testColumn");
+}
 
-    WINQAssertEqual(WCDB::OrderingTerm(expression)
-                    .withOrder(WCDB::Order::DESC),
-                    @"testColumn DESC");
+- (void)test_with_collation
+{
+    auto testingSQL = WCDB::OrderingTerm(expression).collate(collation);
 
-    WINQAssertEqual(WCDB::OrderingTerm(expression)
-                    .collate(self.class.collationName),
-                    @"testColumn COLLATE testCollation");
+    auto testingTypes = { WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testColumn COLLATE testCollation");
+}
+
+- (void)test_with_order
+{
+    auto testingSQL = WCDB::OrderingTerm(expression).order(WCDB::Order::ASC);
+
+    auto testingTypes = { WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testColumn ASC");
+}
+
+WCDB::OrderingTerm acceptable(const WCDB::OrderingTerm& orderingTerm)
+{
+    return orderingTerm;
+}
+
+- (void)test_convertible
+{
+    WINQAssertEqual(acceptable(1), @"1");
+    WINQAssertEqual(acceptable(@(1)), @"1");
+    WINQAssertEqual(acceptable(true), @"1");
+    WINQAssertEqual(acceptable(YES), @"1");
+    WINQAssertEqual(acceptable(WCDB::Column("testColumn")), @"testColumn");
+    WINQAssertEqual(acceptable((float) 0.1), @"0.1");
+    WINQAssertEqual(acceptable((double) 0.1), @"0.1");
+    WINQAssertEqual(acceptable("test"), @"'test'");
+    WINQAssertEqual(acceptable(@"test"), @"'test'");
+    WINQAssertEqual(acceptable(std::string("test")), @"'test'");
+    WINQAssertEqual(acceptable(nullptr), @"NULL");
+    WINQAssertEqual(acceptable(nil), @"NULL");
+    WINQAssertEqual(acceptable(WCDB::LiteralValue::currentTime()), @"CURRENT_TIME");
+    WINQAssertEqual(acceptable(WCDB::Expression::function(@"testFunction")), @"testFunction()");
 }
 
 @end

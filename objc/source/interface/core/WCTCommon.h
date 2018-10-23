@@ -50,19 +50,20 @@ class WCTColumnBinding;
 
 #pragma mark - WINQ
 class WCTProperty;
-class WCTPropertyList;
+class WCTProperties;
+class WCTExpression;
+class WCTExpressions;
+class WCTResultColumns;
 
 using WCTOrder = WCDB::Order;
 constexpr const WCDB::Order WCTOrderedAscending = WCDB::Order::ASC;
 constexpr const WCDB::Order WCTOrderedDescending = WCDB::Order::DESC;
-constexpr const WCDB::Order WCTOrderedNotSet = WCDB::Order::NotSet;
 
-constexpr const WCDB::ConflictClause WCTConflictNotSet = WCDB::ConflictClause::NotSet;
-constexpr const WCDB::ConflictClause WCTConflictRollback = WCDB::ConflictClause::Rollback;
-constexpr const WCDB::ConflictClause WCTConflictAbort = WCDB::ConflictClause::Abort;
-constexpr const WCDB::ConflictClause WCTConflictFail = WCDB::ConflictClause::Fail;
-constexpr const WCDB::ConflictClause WCTConflictIgnore = WCDB::ConflictClause::Ignore;
-constexpr const WCDB::ConflictClause WCTConflictReplace = WCDB::ConflictClause::Replace;
+constexpr const WCDB::Conflict WCTConflictRollback = WCDB::Conflict::Rollback;
+constexpr const WCDB::Conflict WCTConflictAbort = WCDB::Conflict::Abort;
+constexpr const WCDB::Conflict WCTConflictFail = WCDB::Conflict::Fail;
+constexpr const WCDB::Conflict WCTConflictIgnore = WCDB::Conflict::Ignore;
+constexpr const WCDB::Conflict WCTConflictReplace = WCDB::Conflict::Replace;
 
 using WCTColumnType = WCDB::ColumnType;
 constexpr const WCDB::ColumnType WCTColumnTypeInteger32 = WCDB::ColumnType::Integer32;

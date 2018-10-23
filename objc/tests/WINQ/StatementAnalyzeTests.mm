@@ -19,40 +19,62 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface StatementAnalyzeTests : WINQTestCase
 
 @end
 
-@implementation StatementAnalyzeTests
+@implementation StatementAnalyzeTests {
+    WCDB::Schema schema;
+    NSString* tableOrIndex;
+}
 
-- (void)testStatementAnalyze
+- (void)setUp
 {
-    XCTAssertEqual(WCDB::StatementAnalyze().getType(), WCDB::Statement::Type::Analyze);
+    [super setUp];
+    schema = @"testSchema";
+    tableOrIndex = @"testTableOrIndex";
+}
 
-    WINQAssertEqual(WCDB::StatementAnalyze()
-                    .analyze(),
-                    @"ANALYZE");
+- (void)test_default_constructible
+{
+    WCDB::StatementAnalyze constructible __attribute((unused));
+}
 
-    WINQAssertEqual(WCDB::StatementAnalyze()
-                    .analyze(self.class.schemaName),
-                    @"ANALYZE testSchema");
+- (void)test_analyze
+{
+    auto testingSQL = WCDB::StatementAnalyze().analyze();
+    auto testingTypes = { WCDB::SQL::Type::AnalyzeSTMT };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"ANALYZE");
+}
 
-    WINQAssertEqual(WCDB::StatementAnalyze()
-                    .analyze(self.class.tableName),
-                    @"ANALYZE testTable");
+- (void)test_analyze_schema
+{
+    auto testingSQL = WCDB::StatementAnalyze().analyzeSchema(schema);
 
-    WINQAssertEqual(WCDB::StatementAnalyze()
-                    .analyze(self.class.indexName),
-                    @"ANALYZE testIndex");
+    auto testingTypes = { WCDB::SQL::Type::AnalyzeSTMT, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"ANALYZE testSchema");
+}
 
-    WINQAssertEqual(WCDB::StatementAnalyze()
-                    .analyze(self.class.schemaName, self.class.tableName),
-                    @"ANALYZE testSchema.testTable");
+- (void)test_analyze_table_or_index
+{
+    auto testingSQL = WCDB::StatementAnalyze().analyzeTableOrIndex(tableOrIndex);
 
-    WINQAssertEqual(WCDB::StatementAnalyze()
-                    .analyze(self.class.schemaName, self.class.indexName),
-                    @"ANALYZE testSchema.testIndex");
+    auto testingTypes = { WCDB::SQL::Type::AnalyzeSTMT, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"ANALYZE main.testTableOrIndex");
+}
+
+- (void)test_analyze_table_or_index_without_schema
+{
+    auto testingSQL = WCDB::StatementAnalyze().analyzeTableOrIndex(schema, tableOrIndex);
+
+    auto testingTypes = { WCDB::SQL::Type::AnalyzeSTMT, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"ANALYZE testSchema.testTableOrIndex");
 }
 
 @end

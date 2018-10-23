@@ -27,8 +27,8 @@ TokenizeConfig::TokenizeConfig(const std::list<std::string> &tokenizeNames,
                                const std::shared_ptr<FTS::Modules> &modules)
 : Config()
 , m_tokenizeNames(tokenizeNames)
-, m_fts3Tokenizer(StatementSelect().select(Expression::function(
-  "fts3_tokenizer", false, { BindParameter(1), BindParameter(2) })))
+, m_fts3Tokenizer(StatementSelect().select(
+  Expression::function("fts3_tokenizer").invoke(BindParameter::bindParameters(2))))
 , m_modules(modules)
 {
 }

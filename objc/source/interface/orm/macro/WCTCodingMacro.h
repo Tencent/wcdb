@@ -32,15 +32,11 @@
         s_binding.checkSafeCall(className.class);                              \
         return s_binding;                                                      \
     }                                                                          \
-    +(const WCTPropertyList &) allProperties                                   \
+    +(const WCTProperties &) allProperties                                     \
     {                                                                          \
-        static const WCTPropertyList &s_properties                             \
+        static const WCTProperties &s_properties                               \
         = WCTBinding::bindingWithClass(className.class).getAllProperties();    \
         return s_properties;                                                   \
-    }                                                                          \
-    +(const WCDB::Expression::All &) allResults                                \
-    {                                                                          \
-        return WCDB::Expression::All::default_();                              \
     }                                                                          \
     +(WCTColumnNamed) columnNamed { return WCTBinding::getColumnGenerator(); }
 

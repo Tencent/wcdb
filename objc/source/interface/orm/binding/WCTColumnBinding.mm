@@ -26,7 +26,12 @@ Class WCTColumnBinding::getClass() const
     return m_class;
 }
 
-void WCTColumnBinding::typed()
+WCTColumnBindingHolder::WCTColumnBindingHolder(const WCTColumnBinding& columnBinding)
+: m_columnBinding(&columnBinding)
 {
-    columnDef.withType(accessor->getColumnType());
+}
+
+const WCTColumnBinding& WCTColumnBindingHolder::getColumnBinding() const
+{
+    return *m_columnBinding;
 }

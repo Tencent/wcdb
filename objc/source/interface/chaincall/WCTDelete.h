@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param orders order list
  @return self
  */
-- (instancetype)orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
+- (instancetype)order:(const WCDB::OrderingTerms &)orders;
 
 /**
  @brief WINQ interface for SQL.

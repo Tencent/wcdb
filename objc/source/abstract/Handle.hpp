@@ -128,8 +128,9 @@ protected:
 public:
     std::pair<bool, bool> tableExists(const TableOrSubquery &table);
     std::pair<bool, std::set<std::string>>
-    getUnorderedColumnsWithTable(const std::string &tableName,
-                                 const std::string &schemaName = Schema::main());
+    getUnorderedColumnsWithTable(const Schema &schema, const std::string &tableName);
+    std::pair<bool, std::set<std::string>>
+    getUnorderedColumnsWithTable(const std::string &tableName);
 
     typedef std::function<bool(Handle *)> TransactionCallback;
 

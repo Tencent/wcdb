@@ -101,9 +101,11 @@ WCDB::StatementCreateTable WCTBinding::generateCreateTableStatement(const std::s
     for (const auto &columnBinding : m_columnBindings) {
         statement.define(columnBinding.second.columnDef);
     }
+    WCDB::TableConstraints constraints;
     for (const auto &constraint : m_constraints) {
-        statement.addTableConstraint(constraint.second);
+        constraints.push_back(constraint.second);
     }
+    statement.constraint(constraints);
     return statement;
 }
 
@@ -117,18 +119,20 @@ WCTBinding::generateVirtualCreateTableStatement(const std::string &tableName) co
 {
     WCDB::StatementCreateVirtualTable statement = statementVirtualTable;
     statement.createVirtualTable(tableName);
+    WCDB::ModuleArguments arguments;
     for (const auto &columnBinding : m_columnBindings) {
-        statement.on(columnBinding.second.columnDef);
+        arguments.push_back(columnBinding.second.columnDef);
     }
-    for (const auto &tableConstraint : m_constraints) {
-        statement.on(tableConstraint.second);
+    for (const auto &constraint : m_constraints) {
+        arguments.push_back(constraint.second);
     }
+    statement.arguments(arguments);
     return statement;
 }
 
 WCDB::ColumnDef &WCTBinding::getColumnDef(const WCTProperty &property)
 {
-    auto iter = m_columnBindings.find(property.getColumnBinding().columnDef.getColumnName());
+    auto iter = m_columnBindings.find(property.getColumnBinding().columnDef.syntax.column.getDescription());
     WCTInnerAssert(iter != m_columnBindings.end());
     return iter->second.columnDef;
 }
@@ -164,13 +168,13 @@ WCTBinding::generateCreateIndexStatements(const std::string &tableName) const
     std::list<WCDB::StatementCreateIndex> statementCreateIndexs;
     for (const auto &iter : m_indexes) {
         WCDB::StatementCreateIndex statementCreateIndex = iter.second;
-        statementCreateIndex.createIndex(tableName + iter.first).on(tableName);
+        statementCreateIndex.createIndex(tableName + iter.first).onTable(tableName);
         statementCreateIndexs.push_back(statementCreateIndex);
     }
     return statementCreateIndexs;
 }
 
-const WCTPropertyList &WCTBinding::getAllProperties() const
+const WCTProperties &WCTBinding::getAllProperties() const
 {
     return m_properties;
 }

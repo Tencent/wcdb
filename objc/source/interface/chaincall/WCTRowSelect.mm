@@ -26,7 +26,7 @@
 
 @implementation WCTRowSelect
 
-- (instancetype)onResultColumns:(const std::list<WCDB::ResultColumn> &)resultColumns
+- (instancetype)onResultColumns:(const WCDB::ResultColumns &)resultColumns
 {
     _statement.select(resultColumns);
     return self;
@@ -38,19 +38,25 @@
     return self;
 }
 
+- (instancetype)onAllResultColumns
+{
+    _statement.select(WCDB::ResultColumnAll());
+    return self;
+}
+
 - (instancetype)fromTable:(NSString *)tableName
 {
     WCTRemedialAssert(tableName, "Table name can't be null.", return self;);
-    _statement.from(tableName.cppString);
+    _statement.from(tableName);
     return self;
 }
 
 - (instancetype)fromTables:(NSArray<NSString *> *)tableNames
 {
     WCTRemedialAssert(tableNames, "Table names can't be null.", return self;);
-    std::list<WCDB::TableOrSubquery> tables;
+    WCDB::TablesOrSubqueries tables;
     for (NSString *tableName in tableNames) {
-        tables.push_back(tableName.cppString);
+        tables.push_back(tableName);
     }
     _statement.from(tables);
     return self;
@@ -118,9 +124,6 @@
 
 - (BOOL)lazyPrepare
 {
-    if (_statement.isResultColumnsNotSet()) {
-        _statement.select(WCDB::ResultColumn::all());
-    }
     return [super lazyPrepare];
 }
 

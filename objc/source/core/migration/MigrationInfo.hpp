@@ -57,12 +57,12 @@ public:
 
 #pragma mark - Schema
 public:
-    const std::string& getSchemaForOriginDatabase() const;
+    const Schema& getSchemaForOriginDatabase() const;
 
     // WCDBMigration_
     static const std::string& getSchemaPrefix();
 
-    static std::string getSchemaForDatabase(const std::string& database);
+    static Schema getSchemaForDatabase(const std::string& database);
 
     /*
      ATTACH [originDatabase]
@@ -73,11 +73,11 @@ public:
     /*
      DETACH [schemaForOriginDatabase]
      */
-    static const StatementDetach getStatementForDetachingSchema(const std::string& schema);
+    static const StatementDetach getStatementForDetachingSchema(const Schema& schema);
 
 protected:
     // WCDBMigration_ + hash([originDatabase])
-    std::string m_schemaForOriginDatabase;
+    Schema m_schemaForOriginDatabase;
     StatementAttach m_statementForAttachingSchema;
 
 #pragma mark - View

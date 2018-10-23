@@ -19,28 +19,50 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface CommonTableExpressionTests : WINQTestCase
 
 @end
 
-@implementation CommonTableExpressionTests
+@implementation CommonTableExpressionTests {
+    NSString* table;
+    WCDB::Columns columns;
+    WCDB::StatementSelect select;
+}
 
-- (void)testCommonTableExpression
+- (void)setUp
 {
-    WINQAssertEqual(WCDB::CommonTableExpression(self.class.cteTableName)
-                    .byAddingColumn(self.class.column)
-                    .as(self.class.statementSelect),
-                    @"testCTETable(testColumn) AS(SELECT testColumn FROM main.testTable)");
+    [super setUp];
+    table = @"testTable";
+    columns = {
+        WCDB::Column(@"testColumn1"),
+        WCDB::Column(@"testColumn2"),
+    };
+    select = WCDB::StatementSelect().select(1);
+}
 
-    WINQAssertEqual(WCDB::CommonTableExpression(self.class.cteTableName)
-                    .byAddingColumns(self.class.columns)
-                    .as(self.class.statementSelect),
-                    @"testCTETable(testColumn, testColumn2) AS(SELECT testColumn FROM main.testTable)");
+- (void)test_default_constructible
+{
+    WCDB::CommonTableExpression constructible __attribute((unused));
+}
 
-    WINQAssertEqual(WCDB::CommonTableExpression(self.class.cteTableName)
-                    .as(self.class.statementSelect),
-                    @"testCTETable AS(SELECT testColumn FROM main.testTable)");
+- (void)test_common_table_expression
+{
+    auto testingSQL = WCDB::CommonTableExpression(table).columns(columns).as(select);
+
+    auto testingTypes = { WCDB::SQL::Type::CommonTableExpression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testTable(testColumn1, testColumn2) AS(SELECT 1)");
+}
+
+- (void)test_common_table_expression_without_columns
+{
+    auto testingSQL = WCDB::CommonTableExpression(table).as(select);
+
+    auto testingTypes = { WCDB::SQL::Type::CommonTableExpression, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testTable AS(SELECT 1)");
 }
 
 @end

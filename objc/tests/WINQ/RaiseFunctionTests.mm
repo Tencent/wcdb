@@ -19,32 +19,61 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface RaiseFunctionTests : WINQTestCase
 
 @end
 
-@implementation RaiseFunctionTests
+@implementation RaiseFunctionTests {
+    NSString *errorMessage;
+}
 
-- (void)testRaiseFunction
+- (void)setUp
 {
-    std::string errorMessage = "testError";
+    [super setUp];
+    errorMessage = @"testErrorMessage";
+}
 
-    WINQAssertEqual(WCDB::RaiseFunction()
-                    .ignore(),
-                    @"RAISE(IGNORE)");
+- (void)test_default_constructible
+{
+    WCDB::RaiseFunction constructible __attribute((unused));
+}
 
-    WINQAssertEqual(WCDB::RaiseFunction()
-                    .rollback(errorMessage),
-                    @"RAISE(ROLLBACK, testError)");
+- (void)test_ignore
+{
+    auto testingSQL = WCDB::RaiseFunction().ignore();
 
-    WINQAssertEqual(WCDB::RaiseFunction()
-                    .abort(errorMessage),
-                    @"RAISE(ABORT, testError)");
+    auto testingTypes = { WCDB::SQL::Type::RaiseFunction };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"RAISE(IGNORE)");
+}
 
-    WINQAssertEqual(WCDB::RaiseFunction()
-                    .fail(errorMessage),
-                    @"RAISE(FAIL, testError)");
+- (void)test_rollback
+{
+    auto testingSQL = WCDB::RaiseFunction().rollback(errorMessage);
+
+    auto testingTypes = { WCDB::SQL::Type::RaiseFunction };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"RAISE(ROLLBACK, testErrorMessage)");
+}
+
+- (void)test_abort
+{
+    auto testingSQL = WCDB::RaiseFunction().abort(errorMessage);
+
+    auto testingTypes = { WCDB::SQL::Type::RaiseFunction };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"RAISE(ABORT, testErrorMessage)");
+}
+
+- (void)test_fail
+{
+    auto testingSQL = WCDB::RaiseFunction().fail(errorMessage);
+
+    auto testingTypes = { WCDB::SQL::Type::RaiseFunction };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"RAISE(FAIL, testErrorMessage)");
 }
 
 @end

@@ -22,6 +22,7 @@
 #define CipherConfig_hpp
 
 #include <WCDB/Config.hpp>
+#include <WCDB/Data.hpp>
 
 namespace WCDB {
 

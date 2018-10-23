@@ -24,33 +24,40 @@
 #import <WCDB/WCTUnsafeHandle+Private.h>
 
 @implementation WCTInsert {
-    WCTPropertyList _properties;
+    WCTProperties _properties;
     WCDB::StatementInsert _statement;
     BOOL _replace;
 }
 
+- (instancetype)init
+{
+    if (self = [super init]) {
+        _replace = NO;
+    }
+    return self;
+}
+
 - (instancetype)orReplace
 {
-    _statement.getMutableLang().type = WCDB::Lang::InsertSTMT::Type::InsertOrReplace;
+    _statement.orReplace();
     _replace = true;
     return self;
 }
 
 - (instancetype)intoTable:(NSString *)tableName
 {
-    if (!_replace) {
-        _statement.insertInto(tableName.cppString);
-    } else {
-        _statement.insertOrReplaceInto(tableName.cppString);
+    _statement.insertIntoTable(tableName);
+    if (_replace) {
+        _statement.orReplace();
     }
     return self;
 }
 
-- (instancetype)onProperties:(const WCTPropertyList &)properties
+- (instancetype)onProperties:(const WCTProperties &)properties
 {
     _properties = properties;
-    _statement.on(properties)
-    .values(WCDB::BindParameter::bindParameters((int) properties.size()));
+    _statement.columns(properties)
+    .values(WCDB::BindParameter((int) properties.size()));
     return self;
 }
 
@@ -65,14 +72,12 @@
         return NO;
     }
 
-    const WCTPropertyList &properties = _properties.empty() ? [object.class allProperties] : _properties;
+    const WCTProperties &properties = _properties.empty() ? [object.class allProperties] : _properties;
 
-    if (_statement.isColumnsNotSet()) {
-        _statement.on(properties);
-    }
-
-    if (_statement.isValuesNotSet()) {
-        _statement.values(WCDB::BindParameter::bindParameters((int) properties.size()));
+    if (_statement.syntax.columns.empty()) {
+        _statement
+        .columns(properties)
+        .values(WCDB::BindParameter::bindParameters(properties.size()));
     }
 
     if (!handle->prepare(_statement)) {
@@ -83,7 +88,16 @@
     std::vector<bool> autoIncrements;
     for (const WCTProperty &property : properties) {
         const WCTColumnBinding &columnBinding = property.getColumnBinding();
-        autoIncrements.push_back(!_replace && columnBinding.columnDef.isPrimary() && columnBinding.columnDef.isAutoIncrement());
+        bool isAutoIncrement = false;
+        if (!_replace) {
+            for (const auto &constraint : columnBinding.columnDef.syntax.constraints) {
+                if (constraint.switcher == WCDB::ColumnConstraint::SyntaxType::Switch::PrimaryKey) {
+                    isAutoIncrement = constraint.autoIncrement;
+                    break;
+                }
+            }
+        }
+        autoIncrements.push_back(isAutoIncrement);
     }
 
     BOOL canFillLastInsertedRowID = [object respondsToSelector:@selector(lastInsertedRowID)];
@@ -91,15 +105,16 @@
     int index = 1;
     for (const WCTProperty &property : properties) {
         const WCTColumnBinding &columnBinding = property.getColumnBinding();
-        bool isAutoIncrement = !_replace && columnBinding.columnDef.isPrimary() && columnBinding.columnDef.isAutoIncrement();
-
-        if (!isAutoIncrement || !object.isAutoIncrement) {
-            [self bindProperty:property
-                      ofObject:object
-                       toIndex:index];
-        } else {
-            handle->bindNull(index);
-        }
+#warning TODO
+        //        bool isAutoIncrement = !_replace && columnBinding.columnDef.isPrimary() && columnBinding.columnDef.isAutoIncrement();
+        //
+        //        if (!isAutoIncrement || !object.isAutoIncrement) {
+        //            [self bindProperty:property
+        //                      ofObject:object
+        //                       toIndex:index];
+        //        } else {
+        //            handle->bindNull(index);
+        //        }
         ++index;
     }
     bool result = handle->step();
@@ -124,14 +139,12 @@
     }
 
     BOOL committed = handle->runNestedTransaction([self, objects](WCDB::Handle *handle) -> bool {
-        const WCTPropertyList &properties = _properties.empty() ? [objects[0].class allProperties] : _properties;
+        const WCTProperties &properties = _properties.empty() ? [objects[0].class allProperties] : _properties;
 
-        if (_statement.isColumnsNotSet()) {
-            _statement.on(properties);
-        }
-
-        if (_statement.isValuesNotSet()) {
-            _statement.values(WCDB::BindParameter::bindParameters((int) properties.size()));
+        if (_statement.syntax.columns.empty()) {
+            _statement
+            .columns(properties)
+            .values(WCDB::BindParameter::bindParameters(properties.size()));
         }
 
         if (!handle->prepare(_statement)) {
@@ -143,7 +156,8 @@
         std::vector<bool> autoIncrements;
         for (const WCTProperty &property : properties) {
             const WCTColumnBinding &columnBinding = property.getColumnBinding();
-            autoIncrements.push_back(!_replace && columnBinding.columnDef.isPrimary() && columnBinding.columnDef.isAutoIncrement());
+#warning TODO
+            //            autoIncrements.push_back(!_replace && columnBinding.columnDef.isPrimary() && columnBinding.columnDef.isAutoIncrement());
         }
 
         BOOL canFillLastInsertedRowID = [objects[0] respondsToSelector:@selector(lastInsertedRowID)];

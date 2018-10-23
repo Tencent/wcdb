@@ -19,24 +19,43 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface StatementVacuumTests : WINQTestCase
 
 @end
 
-@implementation StatementVacuumTests
+@implementation StatementVacuumTests {
+    WCDB::Schema schema;
+}
 
-- (void)testStatementVacuum
+- (void)setUp
 {
-    XCTAssertEqual(WCDB::StatementVacuum().getType(), WCDB::Statement::Type::Vacuum);
+    [super setUp];
+    schema = @"testSchema";
+}
 
-    WINQAssertEqual(WCDB::StatementVacuum()
-                    .vacuum(),
-                    @"VACUUM");
+- (void)test_default_constructible
+{
+    WCDB::StatementVacuum constructible __attribute((unused));
+}
 
-    WINQAssertEqual(WCDB::StatementVacuum()
-                    .vacuum(self.class.schemaName),
-                    @"VACUUM testSchema");
+- (void)test_vacuum
+{
+    auto testingSQL = WCDB::StatementVacuum().vacuum();
+
+    auto testingTypes = { WCDB::SQL::Type::VacuumSTMT };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"VACUUM");
+}
+
+- (void)test_vacuum_with_schema
+{
+    auto testingSQL = WCDB::StatementVacuum().vacuum(schema);
+
+    auto testingTypes = { WCDB::SQL::Type::VacuumSTMT, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"VACUUM testSchema");
 }
 
 @end

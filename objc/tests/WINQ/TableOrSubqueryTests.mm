@@ -19,65 +19,179 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface TableOrSubqueryTests : WINQTestCase
 
 @end
 
-@implementation TableOrSubqueryTests
-
-- (void)testTableOrSubquery
-{
-    WINQAssertEqual(WCDB::TableOrSubquery(self.class.tableName), @"main.testTable");
-
-    WINQAssertEqual(WCDB::TableOrSubquery(self.class.tableName)
-                    .indexedBy(self.class.indexName),
-                    @"main.testTable INDEXED BY testIndex");
-
-    WINQAssertEqual(WCDB::TableOrSubquery(self.class.tableName)
-                    .notIndexed(),
-                    @"main.testTable NOT INDEXED");
-
-    WINQAssertEqual(WCDB::TableOrSubquery(self.class.tableName)
-                    .as("testTableAlias"),
-                    @"main.testTable AS testTableAlias");
-
-    WINQAssertEqual(WCDB::TableOrSubquery(self.class.tableName)
-                    .withSchema(self.class.schemaName),
-                    @"testSchema.testTable");
+@implementation TableOrSubqueryTests {
+    WCDB::Schema schema;
+    NSString* table;
+    NSString* alias;
+    NSString* index;
+    NSString* function;
+    WCDB::Expressions expressions;
+    WCDB::TablesOrSubqueries tablesOrSubqueries;
+    WCDB::Join join;
+    WCDB::StatementSelect select;
 }
 
-- (void)testTableOrSubqueryWithTableFunction
+- (void)setUp
 {
-    WINQAssertEqual(WCDB::TableOrSubquery::function(self.class.functionName, self.class.value), @"main.testFunction(1)");
-
-    WINQAssertEqual(WCDB::TableOrSubquery::function(self.class.functionName, self.class.value)
-                    .as("testTableAlias"),
-                    @"main.testFunction(1) AS testTableAlias");
-
-    WINQAssertEqual(WCDB::TableOrSubquery::function(self.class.functionName, self.class.values), @"main.testFunction(1, 'testValue')");
-
-    WINQAssertEqual(WCDB::TableOrSubquery::function(self.class.functionName), @"main.testFunction()");
-
-    WINQAssertEqual(WCDB::TableOrSubquery::function(self.class.functionName, self.class.value)
-                    .withSchema(self.class.schemaName),
-                    @"testSchema.testFunction(1)");
+    [super setUp];
+    schema = @"testSchema";
+    table = @"testTable";
+    alias = @"testAliasTable";
+    index = @"testIndex";
+    function = @"testFunction";
+    expressions = {
+        1,
+        2,
+    };
+    tablesOrSubqueries = {
+        @"testTable1",
+        @"testTable2",
+    };
+    join = WCDB::Join().table(@"testJoinTable");
+    select = WCDB::StatementSelect().select(1);
 }
 
-- (void)testTableOrSubqueryWithListOrJoinClause
+- (void)test_default_constructible
 {
-    WINQAssertEqual(WCDB::TableOrSubquery(self.class.tableOrSubquerys), @"(main.testTable, main.testTable2)");
-
-    WINQAssertEqual(WCDB::TableOrSubquery(self.class.joinClause), @"(main.testTable)");
+    WCDB::TableOrSubquery constructible __attribute((unused));
 }
 
-- (void)testTableOrSubqueryWithStatementSelect
+- (void)test_table
 {
-    WINQAssertEqual(WCDB::TableOrSubquery(self.class.statementSelect), @"(SELECT testColumn FROM main.testTable)");
+    auto testingSQL = WCDB::TableOrSubquery(table);
 
-    WINQAssertEqual(WCDB::TableOrSubquery(self.class.statementSelect)
-                    .as("testTableAlias"),
-                    @"(SELECT testColumn FROM main.testTable) AS testTableAlias");
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"main.testTable");
+}
+
+- (void)test_table_with_schema
+{
+    auto testingSQL = WCDB::TableOrSubquery(schema, table);
+
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testSchema.testTable");
+}
+
+- (void)test_table_with_alias
+{
+    auto testingSQL = WCDB::TableOrSubquery(table).as(alias);
+
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"main.testTable AS testAliasTable");
+}
+
+- (void)test_table_with_index
+{
+    auto testingSQL = WCDB::TableOrSubquery(table).indexed(index);
+
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"main.testTable INDEXED BY testIndex");
+}
+
+- (void)test_table_without_index
+{
+    auto testingSQL = WCDB::TableOrSubquery(table).notIndexed();
+
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"main.testTable NOT INDEXED");
+}
+
+- (void)test_table_function
+{
+    auto testingSQL = WCDB::TableOrSubquery::function(function);
+
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"main.testFunction()");
+}
+
+- (void)test_table_function_with_schema
+{
+    auto testingSQL = WCDB::TableOrSubquery::function(schema, function);
+
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testSchema.testFunction()");
+}
+
+- (void)test_table_function_with_parameters
+{
+    auto testingSQL = WCDB::TableOrSubquery::function(function, expressions);
+
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"main.testFunction(1, 2)");
+}
+
+- (void)test_table_function_with_alias
+{
+    auto testingSQL = WCDB::TableOrSubquery::function(function).as(alias);
+
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"main.testFunction() AS testAliasTable");
+}
+
+- (void)test_tables_or_subqueries
+{
+    auto testingSQL = WCDB::TableOrSubquery(tablesOrSubqueries);
+
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"(main.testTable1, main.testTable2)");
+}
+
+- (void)test_join
+{
+    auto testingSQL = WCDB::TableOrSubquery(join);
+
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"(main.testJoinTable)");
+}
+
+- (void)test_select
+{
+    auto testingSQL = WCDB::TableOrSubquery(select);
+
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"(SELECT 1)");
+}
+
+- (void)test_select_with_alias
+{
+    auto testingSQL = WCDB::TableOrSubquery(select).as(alias);
+
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"(SELECT 1) AS testAliasTable");
+}
+
+WCDB::TableOrSubquery acceptable(const WCDB::TableOrSubquery& tableOrSubquery)
+{
+    return tableOrSubquery;
+}
+
+- (void)test_convertible
+{
+    WINQAssertEqual(acceptable("testTable"), @"main.testTable");
+    WINQAssertEqual(acceptable(@"testTable"), @"main.testTable");
+    WINQAssertEqual(acceptable(std::string("testTable")), @"main.testTable");
+    WINQAssertEqual(acceptable(WCDB::Join().table(@"testTable")), @"(main.testTable)");
+    WINQAssertEqual(acceptable(WCDB::TablesOrSubqueries({ @"testTable1", @"testTable2" })), @"(main.testTable1, main.testTable2)");
+    WINQAssertEqual(acceptable(WCDB::StatementSelect().select(1)), @"(SELECT 1)");
 }
 
 @end

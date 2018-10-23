@@ -32,14 +32,15 @@ HandleStatement::HandleStatement(Handle *handle)
 bool HandleStatement::prepare(const Statement &statement)
 {
     WCTInnerAssert(!isPrepared());
-    m_statement = statement;
-    const std::string &sql = m_statement.getDescription();
-    int rc = sqlite3_prepare_v2(
-    (sqlite3 *) getRawHandle(), sql.c_str(), -1, (sqlite3_stmt **) &m_stmt, nullptr);
-    if (rc == SQLITE_OK) {
-        return true;
-    }
-    setError(rc, sql);
+#warning TODO
+    //    m_statement = statement;
+    //    const std::string &sql = m_statement.getDescription();
+    //    int rc = sqlite3_prepare_v2(
+    //    (sqlite3 *) getRawHandle(), sql.c_str(), -1, (sqlite3_stmt **) &m_stmt, nullptr);
+    //    if (rc == SQLITE_OK) {
+    //        return true;
+    //    }
+    //    setError(rc, sql);
     return false;
 }
 
@@ -62,7 +63,8 @@ bool HandleStatement::step(bool &done)
     if (rc == SQLITE_OK || rc == SQLITE_ROW || rc == SQLITE_DONE) {
         return true;
     }
-    setError(rc, m_statement.getDescription());
+#warning TODO
+    //    setError(rc, m_statement.getDescription());
     return false;
 }
 

@@ -21,61 +21,48 @@
 #ifndef WINQ_h
 #define WINQ_h
 
-/*  How WINQ implement?
- *  
- *  It's implemented by C++ class, function and template feature.
- *
- *  As the [SQL syntax](http://www.sqlite.org/lang.html) documented,
- *
- *  1. For those fixed big-letter **keywords**, they will be implemented as function, while the keyword will be the function name.
- *
- *      e.g. `ALTER TABLE` keyword in [`alter-table-stmt`](http://www.sqlite.org/syntax/alter-table-stmt.html) is one of the functions in `StatementAlterTable`.
- *
- *  2. For those small-letter **tokens**, they will be implemented as a class , enum type or pure string.
- *
- *      e.g. `column-def` token in [`alter-table-stmt`](http://www.sqlite.org/syntax/alter-table-stmt.html) is a separated class.
- *
- *     WCDB divides tokens into two different types - statements and other tokens.
- *     A statement can be prepared or executed and all its functions will return itself.
- *     Instead, a non-statement token is the parameter of statement and it will return a new copy or have no return.
- *
- *  Why we need WINQ?
- *
- *  1. With a pure string SQL, IDE can't recognize it so that developers can't find the syntax error until it runs.
- *     Instead, it will result in a compiler error for a syntax error while writing WINQ, which can let developers notice the error much ealier.
- *     Further more, IDE can give developers a code hint so that developers have less need to check the syntax documentation.
- *  2. More importantly, WINQ gives WCDB an ability to recognize, check and hook the SQL to do some smart feature, such as data migration. This kind of feature may not be implemented in current version, but it's already in our roadmap.
- *
- */
+// See also: https://sqlite.org/syntaxdiagrams.html
 
+#include <WCDB/SQL.hpp>
+
+#include <WCDB/AggregateFunction.hpp>
+#include <WCDB/ColumnType.hpp>
 #include <WCDB/Convertible.hpp>
-#include <WCDB/Operable.hpp>
-#include <WCDB/Redirectable.hpp>
+#include <WCDB/CoreFunction.hpp>
+#include <WCDB/ExpressionOperable.hpp>
+#include <WCDB/FTS3Function.hpp>
 
 #include <WCDB/BindParameter.hpp>
-#include <WCDB/CTETableName.hpp>
+#include <WCDB/CTETable.hpp>
 #include <WCDB/Column.hpp>
 #include <WCDB/ColumnConstraint.hpp>
 #include <WCDB/ColumnDef.hpp>
 #include <WCDB/CommonTableExpression.hpp>
 #include <WCDB/Expression.hpp>
-#include <WCDB/ForeignKeyClause.hpp>
+#include <WCDB/Filter.hpp>
+#include <WCDB/ForeignKey.hpp>
+#include <WCDB/FrameSpec.hpp>
+#include <WCDB/FunctionInvocation.hpp>
 #include <WCDB/IndexedColumn.hpp>
-#include <WCDB/JoinClause.hpp>
+#include <WCDB/Join.hpp>
 #include <WCDB/JoinConstraint.hpp>
 #include <WCDB/LiteralValue.hpp>
 #include <WCDB/ModuleArgument.hpp>
 #include <WCDB/OrderingTerm.hpp>
 #include <WCDB/Pragma.hpp>
-#include <WCDB/QualifiedTableName.hpp>
+#include <WCDB/QualifiedTable.hpp>
 #include <WCDB/RaiseFunction.hpp>
+#include <WCDB/RecursiveCTE.hpp>
 #include <WCDB/ResultColumn.hpp>
 #include <WCDB/Schema.hpp>
-#include <WCDB/SelectCore.hpp>
 #include <WCDB/TableConstraint.hpp>
 #include <WCDB/TableOrSubquery.hpp>
-#include <WCDB/WithClause.hpp>
+#include <WCDB/Upsert.hpp>
+#include <WCDB/WindowDef.hpp>
+#include <WCDB/WindowFunctionInvocation.hpp>
+#include <WCDB/With.hpp>
 
+#include <WCDB/Statement.hpp>
 #include <WCDB/StatementAlterTable.hpp>
 #include <WCDB/StatementAnalyze.hpp>
 #include <WCDB/StatementAttach.hpp>
@@ -102,8 +89,6 @@
 #include <WCDB/StatementUpdate.hpp>
 #include <WCDB/StatementVacuum.hpp>
 
-#include <WCDB/ColumnType.hpp>
-
-#include <WCDB/ConvertibleImpl.hpp>
+#include <WCDB/ConvertibleImplementation.hpp>
 
 #endif /* WINQ_h */

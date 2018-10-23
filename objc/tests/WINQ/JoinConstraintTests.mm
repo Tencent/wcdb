@@ -19,28 +19,48 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface JoinConstraintTests : WINQTestCase
 
 @end
 
-@implementation JoinConstraintTests
+@implementation JoinConstraintTests {
+    WCDB::Expression expression;
+    WCDB::Columns columns;
+}
 
-- (void)testJoinConstraint
+- (void)setUp
 {
-    WINQAssertEqual(WCDB::JoinConstraint()
-                    .on(self.class.condition),
-                    @"ON testColumn NOTNULL");
+    [super setUp];
+    expression = 1;
+    columns = {
+        WCDB::Column(@"testColumn1"),
+        WCDB::Column(@"testColumn2"),
+    };
+}
 
-    WINQAssertEqual(WCDB::JoinConstraint()
-                    .usingColumn(self.class.column),
-                    @"USING(testColumn)");
+- (void)test_default_constructible
+{
+    WCDB::JoinConstraint constructible __attribute((unused));
+}
 
-    WINQAssertEqual(WCDB::JoinConstraint()
-                    .usingColumns(self.class.columns),
-                    @"USING(testColumn, testColumn2)");
+- (void)test_on
+{
+    auto testingSQL = WCDB::JoinConstraint().on(expression);
 
-    WINQAssertEqual(WCDB::JoinConstraint(), @"");
+    auto testingTypes = { WCDB::SQL::Type::JoinConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"ON 1");
+}
+
+- (void)test_using
+{
+    auto testingSQL = WCDB::JoinConstraint().usingColumns(columns);
+
+    auto testingTypes = { WCDB::SQL::Type::JoinConstraint, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"USING(testColumn1, testColumn2)");
 }
 
 @end

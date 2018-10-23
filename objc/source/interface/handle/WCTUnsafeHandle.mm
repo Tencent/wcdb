@@ -201,7 +201,7 @@
     }
 }
 
-- (void)bindProperties:(const WCTPropertyList &)properties
+- (void)bindProperties:(const WCTProperties &)properties
               ofObject:(WCTObject *)object
 {
     int i = 0;
@@ -340,7 +340,7 @@
     return row;
 }
 
-- (WCTObject *)getObjectOfClass:(Class)cls onProperties:(const WCTPropertyList &)properties
+- (WCTObject *)getObjectOfClass:(Class)cls onProperties:(const WCTProperties &)properties
 {
     WCTObject *object = [[cls alloc] init];
     if (!object) {
@@ -430,50 +430,32 @@
     return done ? rows : nil;
 }
 
-- (id /* WCTObject* */)nextObjectOfClass:(Class)cls orDone:(BOOL &)isDone
+- (id /* WCTObject* */)nextObjectOnResultColumns:(const WCTResultColumns &)resultColumns orDone:(BOOL &)isDone
 {
-    return [self nextObjectOfClass:cls onProperties:[cls allProperties] orDone:isDone];
-}
-
-- (id /* WCTObject* */)nextObjectOnProperties:(const WCTPropertyList &)properties orDone:(BOOL &)isDone
-{
-    if (properties.empty()) {
+    if (resultColumns.empty()) {
         return nil;
     }
-    Class cls = properties.front().getColumnBinding().getClass();
-    return [self nextObjectOfClass:cls onProperties:properties orDone:isDone];
-}
-
-- (id /* WCTObject* */)nextObjectOfClass:(Class)cls onProperties:(const WCTPropertyList &)properties orDone:(BOOL)isDone
-{
+    Class cls = resultColumns.front().getColumnBinding().getClass();
     if (_handle->step((bool &) isDone) && !isDone) {
-        return [self getObjectOfClass:cls onProperties:properties];
+#warning TODO
+        //        return [self getObjectOfClass:cls onResultColumns:resultColumns];
     }
     [self finalizeStatement];
     return nil;
 }
 
-- (NSArray /* <WCTObject*> */ *)allObjectsOfClass:(Class)cls
+- (NSArray /* <WCTObject*> */ *)allObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
 {
-    return [self allObjectsOfClass:cls onProperties:[cls allProperties]];
-}
-
-- (NSArray /* <WCTObject*> */ *)allObjectsOnProperties:(const WCTPropertyList &)properties
-{
-    if (properties.empty()) {
+    if (resultColumns.empty()) {
         return nil;
     }
-    Class cls = properties.front().getColumnBinding().getClass();
-    return [self allObjectsOfClass:cls onProperties:properties];
-}
-
-- (NSArray /* <WCTObject*> */ *)allObjectsOfClass:(Class)cls onProperties:(const WCTPropertyList &)properties
-{
+    Class cls = resultColumns.front().getColumnBinding().getClass();
     WCTHandleAssert(return nil;);
     NSMutableArray<WCTObject *> *objects = [[NSMutableArray<WCTObject *> alloc] init];
     bool done = false;
     while (_handle->step(done) && !done) {
-        [objects addObject:[self getObjectOfClass:cls onProperties:properties]];
+#warning TODO
+        //        [objects addObject:[self getObjectOfClass:cls OnResultColumns:resultColumns]];
     }
     [self finalizeStatement];
     return done ? objects : nil;
@@ -483,7 +465,7 @@
      withObject:(WCTObject *)object
 {
     Class cls = object.class;
-    const WCTPropertyList &properties = [cls allProperties];
+    const WCTProperties &properties = [cls allProperties];
     return [self execute:statement
               withObject:object
             onProperties:properties];
@@ -491,7 +473,7 @@
 
 - (BOOL)execute:(const WCDB::Statement &)statement
      withObject:(WCTObject *)object
-   onProperties:(const WCTPropertyList &)properties
+   onProperties:(const WCTProperties &)properties
 {
     if (![self prepare:statement]) {
         return NO;

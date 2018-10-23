@@ -19,26 +19,88 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface ResultColumnTests : WINQTestCase
 
 @end
 
-@implementation ResultColumnTests
+@implementation ResultColumnTests {
+    WCDB::Expression expression;
+    NSString* alias;
+    NSString* table;
+}
 
-- (void)testResultColumn
+- (void)setUp
 {
-    WCDB::Expression column = WCDB::Expression(self.class.column);
+    [super setUp];
+    expression = 1;
+    alias = @"testAlias";
+    table = @"testTable";
+}
 
-    WINQAssertEqual(WCDB::ResultColumn(column), @"testColumn");
+- (void)test_default_constructible
+{
+    WCDB::ResultColumn constructible __attribute((unused));
+}
 
-    WINQAssertEqual(WCDB::ResultColumn(column)
-                    .as(self.class.column2),
-                    @"testColumn AS testColumn2");
+- (void)test_result_column
+{
+    auto testingSQL = WCDB::ResultColumn(expression);
 
-    WINQAssertEqual(WCDB::ResultColumn::all(), @"*");
+    auto testingTypes = { WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"1");
+}
 
-    WINQAssertEqual(WCDB::ResultColumn(WCDB::Expression::All()).withTable(self.class.tableName), @"testTable.*");
+- (void)test_result_column_with_alias
+{
+    auto testingSQL = WCDB::ResultColumn(expression).as(alias);
+
+    auto testingTypes = { WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"1 AS testAlias");
+}
+
+- (void)test_all
+{
+    auto testingSQL = WCDB::ResultColumnAll();
+
+    auto testingTypes = { WCDB::SQL::Type::ResultColumn };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"*");
+}
+
+- (void)test_all_with_table
+{
+    auto testingSQL = WCDB::ResultColumnAll().inTable(table);
+
+    auto testingTypes = { WCDB::SQL::Type::ResultColumn };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testTable.*");
+}
+
+WCDB::ResultColumn acceptable(const WCDB::ResultColumn& resultColumn)
+{
+    return resultColumn;
+}
+
+- (void)test_convertible
+{
+    WINQAssertEqual(acceptable(1), @"1");
+    WINQAssertEqual(acceptable(@(1)), @"1");
+    WINQAssertEqual(acceptable(true), @"1");
+    WINQAssertEqual(acceptable(YES), @"1");
+    WINQAssertEqual(acceptable(WCDB::Column("testColumn")), @"testColumn");
+    WINQAssertEqual(acceptable((float) 0.1), @"0.1");
+    WINQAssertEqual(acceptable((double) 0.1), @"0.1");
+    WINQAssertEqual(acceptable("test"), @"'test'");
+    WINQAssertEqual(acceptable(@"test"), @"'test'");
+    WINQAssertEqual(acceptable(std::string("test")), @"'test'");
+    WINQAssertEqual(acceptable(nullptr), @"NULL");
+    WINQAssertEqual(acceptable(nil), @"NULL");
+    WINQAssertEqual(acceptable(WCDB::LiteralValue::currentTime()), @"CURRENT_TIME");
+    WINQAssertEqual(acceptable(WCDB::Expression(1)), @"1");
 }
 
 @end

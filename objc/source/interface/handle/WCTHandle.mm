@@ -143,7 +143,7 @@
                 toIndex:index];
 }
 
-- (void)bindProperties:(const WCTPropertyList &)properties
+- (void)bindProperties:(const WCTProperties &)properties
               ofObject:(WCTObject *)object
 {
     [super bindProperties:properties ofObject:object];
@@ -214,14 +214,16 @@
 
 - (WCTObject *)getObjectOfClass:(Class)cls
 {
-    const WCTPropertyList &properties = [cls allProperties];
+    const WCTProperties &properties = [cls allProperties];
     return [self getObjectOfClass:cls onProperties:properties];
 }
 
-- (WCTObject *)getObjectOnProperties:(const WCTPropertyList &)properties
+- (WCTObject *)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
 {
-    Class cls = properties.front().getColumnBinding().getClass();
-    return [self getObjectOfClass:cls onProperties:properties];
+#warning TODO
+    //    Class cls = resultColumns.front().getColumnBinding().getClass();
+    //    return [self getObjectOfClass:cls onProperties:properties];
+    return nil;
 }
 
 - (int)getColumnCount
@@ -264,7 +266,7 @@
 
 - (BOOL)execute:(const WCDB::Statement &)statement
      withObject:(WCTObject *)object
-   onProperties:(const WCTPropertyList &)properties
+   onProperties:(const WCTProperties &)properties
 {
     return [super execute:statement withObject:object onProperties:properties];
 }

@@ -19,20 +19,34 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface StatementReleaseTests : WINQTestCase
 
 @end
 
-@implementation StatementReleaseTests
+@implementation StatementReleaseTests {
+    NSString* savepoint;
+}
 
-- (void)testStatementRelease
+- (void)setUp
 {
-    XCTAssertEqual(WCDB::StatementRelease().getType(), WCDB::Statement::Type::Release);
+    [super setUp];
+    savepoint = @"testSavepoint";
+}
 
-    WINQAssertEqual(WCDB::StatementRelease()
-                    .release(self.class.savepointName),
-                    @"RELEASE testSavepoint");
+- (void)test_default_constructible
+{
+    WCDB::StatementRelease constructible __attribute((unused));
+}
+
+- (void)test_release
+{
+    auto testingSQL = WCDB::StatementRelease().release(savepoint);
+
+    auto testingTypes = { WCDB::SQL::Type::ReleaseSTMT };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"RELEASE testSavepoint");
 }
 
 @end

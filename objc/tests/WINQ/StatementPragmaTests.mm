@@ -19,34 +19,65 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface StatementPragmaTests : WINQTestCase
 
 @end
 
-@implementation StatementPragmaTests
+@implementation StatementPragmaTests {
+    WCDB::Pragma pragma;
+    WCDB::Schema schema;
+    WCDB::LiteralValue value;
+}
 
-- (void)testStatementPragma
+- (void)setUp
 {
-    XCTAssertEqual(WCDB::StatementPragma().getType(), WCDB::Statement::Type::Pragma);
+    [super setUp];
+    pragma = @"testPragma";
+    schema = @"testSchema";
+    value = 1;
+}
 
-    WCDB::Pragma pragmaName = WCDB::Pragma::journalMode();
-    WCDB::LiteralValue pragmaValue = WCDB::LiteralValue("WAL");
+- (void)test_default_constructible
+{
+    WCDB::StatementPragma constructible __attribute((unused));
+}
 
-    WINQAssertEqual(WCDB::StatementPragma()
-                    .withSchema(self.class.schemaName)
-                    .pragma(pragmaName),
-                    @"PRAGMA testSchema.journal_mode");
+- (void)test_pragma
+{
+    auto testingSQL = WCDB::StatementPragma().pragma(schema, pragma);
 
-    WINQAssertEqual(WCDB::StatementPragma()
-                    .withSchema(self.class.schemaName)
-                    .pragma(pragmaName)
-                    .to(pragmaValue),
-                    @"PRAGMA testSchema.journal_mode = 'WAL'");
+    auto testingTypes = { WCDB::SQL::Type::PragmaSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Pragma };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"PRAGMA testSchema.testPragma");
+}
 
-    WINQAssertEqual(WCDB::StatementPragma()
-                    .pragma(pragmaName),
-                    @"PRAGMA main.journal_mode");
+- (void)test_pragma_to
+{
+    auto testingSQL = WCDB::StatementPragma().pragma(schema, pragma).to(value);
+
+    auto testingTypes = { WCDB::SQL::Type::PragmaSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Pragma, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"PRAGMA testSchema.testPragma = 1");
+}
+
+- (void)test_pragma_to_without_schema
+{
+    auto testingSQL = WCDB::StatementPragma().pragma(pragma).to(value);
+
+    auto testingTypes = { WCDB::SQL::Type::PragmaSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Pragma, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"PRAGMA main.testPragma = 1");
+}
+
+- (void)test_pragma_with
+{
+    auto testingSQL = WCDB::StatementPragma().pragma(schema, pragma).with(value);
+
+    auto testingTypes = { WCDB::SQL::Type::PragmaSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Pragma, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"PRAGMA testSchema.testPragma(1)");
 }
 
 @end

@@ -1,0 +1,124 @@
+/*
+ * Tencent is pleased to support the open source community by making
+ * WCDB available.
+ *
+ * Copyright (C) 2017 THL A29 Limited, a Tencent company.
+ * All rights reserved.
+ *
+ * Licensed under the BSD 3-Clause License (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ *       https://opensource.org/licenses/BSD-3-Clause
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#include <WCDB/WINQ.h>
+
+namespace WCDB {
+
+TableOrSubquery::TableOrSubquery(const char* table)
+{
+    syntax.switcher = SyntaxType::Switch::Table;
+    syntax.tableOrFunction = table;
+    syntax.schema = Schema();
+}
+
+TableOrSubquery::TableOrSubquery(const SyntaxString& table)
+{
+    syntax.switcher = SyntaxType::Switch::Table;
+    syntax.tableOrFunction = table;
+    syntax.schema = Schema();
+}
+
+TableOrSubquery::TableOrSubquery(const Schema& schema, const SyntaxString& table)
+{
+    syntax.switcher = SyntaxType::Switch::Table;
+    syntax.tableOrFunction = table;
+    syntax.schema = schema;
+}
+
+TableOrSubquery& TableOrSubquery::as(const SyntaxString& alias)
+{
+    syntax.alias = alias;
+    return *this;
+}
+
+TableOrSubquery& TableOrSubquery::notIndexed()
+{
+    syntax.indexType = SyntaxType::IndexType::NotIndexed;
+    return *this;
+}
+
+TableOrSubquery& TableOrSubquery::indexed(const SyntaxString& index)
+{
+    syntax.indexType = SyntaxType::IndexType::Indexed;
+    syntax.index = index;
+    return *this;
+}
+
+TableOrSubquery TableOrSubquery::function(const SyntaxString& function)
+{
+    TableOrSubquery tableOrSubquery;
+    tableOrSubquery.syntax.switcher = SyntaxType::Switch::Function;
+    tableOrSubquery.syntax.schema = Schema();
+    tableOrSubquery.syntax.tableOrFunction = function;
+    return tableOrSubquery;
+}
+
+TableOrSubquery TableOrSubquery::function(const Schema& schema, const SyntaxString& function)
+{
+    TableOrSubquery tableOrSubquery;
+    tableOrSubquery.syntax.switcher = SyntaxType::Switch::Function;
+    tableOrSubquery.syntax.schema = schema;
+    tableOrSubquery.syntax.tableOrFunction = function;
+    return tableOrSubquery;
+}
+
+TableOrSubquery
+TableOrSubquery::function(const SyntaxString& function, const Expressions& expressions)
+{
+    TableOrSubquery tableOrSubquery;
+    tableOrSubquery.syntax.switcher = SyntaxType::Switch::Function;
+    tableOrSubquery.syntax.schema = Schema();
+    tableOrSubquery.syntax.tableOrFunction = function;
+    tableOrSubquery.syntax.expressions = expressions;
+    return tableOrSubquery;
+}
+
+TableOrSubquery TableOrSubquery::function(const Schema& schema,
+                                          const SyntaxString& function,
+                                          const Expressions& expressions)
+{
+    TableOrSubquery tableOrSubquery;
+    tableOrSubquery.syntax.switcher = SyntaxType::Switch::Function;
+    tableOrSubquery.syntax.schema = schema;
+    tableOrSubquery.syntax.tableOrFunction = function;
+    tableOrSubquery.syntax.expressions = expressions;
+    return tableOrSubquery;
+}
+
+TableOrSubquery::TableOrSubquery(const TablesOrSubqueries& tableOrSubqueries)
+{
+    syntax.switcher = SyntaxType::Switch::TableOrSubqueries;
+    syntax.tableOrSubqueries = tableOrSubqueries;
+}
+
+TableOrSubquery::TableOrSubquery(const Join& join)
+{
+    syntax.switcher = SyntaxType::Switch::JoinClause;
+    syntax.joinClause = join;
+}
+
+TableOrSubquery::TableOrSubquery(const StatementSelect& select)
+{
+    syntax.switcher = SyntaxType::Switch::Select;
+    syntax.select = select;
+}
+
+} // namespace WCDB

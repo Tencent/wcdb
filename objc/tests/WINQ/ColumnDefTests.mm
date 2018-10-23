@@ -19,30 +19,59 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface ColumnDefTests : WINQTestCase
 
 @end
 
-@implementation ColumnDefTests
+@implementation ColumnDefTests {
+    WCDB::Column column;
+    WCDB::ColumnType columnType;
+    WCDB::ColumnConstraints columnConstraints;
+}
 
-- (void)testColumnDef
+- (void)setUp
 {
-    WINQAssertEqual(WCDB::ColumnDef(self.class.column)
-                    .withType(WCDB::ColumnType::Integer32),
-                    @"testColumn INTEGER");
+    [super setUp];
+    column = WCDB::Column(@"testColumn");
+    columnType = WCDB::ColumnType::Integer32;
+    columnConstraints = {
+        WCDB::ColumnConstraint().check(1),
+        WCDB::ColumnConstraint().check(2),
+    };
+}
 
-    WINQAssertEqual(WCDB::ColumnDef(self.class.column)
-                    .withType(WCDB::ColumnType::Integer32)
-                    .byAddingConstraint(self.class.columnConstraint),
-                    @"testColumn INTEGER NOT NULL");
+- (void)test_default_constructible
+{
+    WCDB::ColumnDef constructible __attribute((unused));
+}
 
-    WINQAssertEqual(WCDB::ColumnDef(self.class.column)
-                    .withType(WCDB::ColumnType::Integer32)
-                    .byAddingConstraints(self.class.columnConstraints),
-                    @"testColumn INTEGER NOT NULL UNIQUE");
+- (void)test_column_def
+{
+    auto testingSQL = WCDB::ColumnDef(column, columnType);
 
-    WINQAssertEqual(WCDB::ColumnDef(self.class.column), @"testColumn");
+    auto testingTypes = { WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testColumn INTEGER");
+}
+
+- (void)test_column_def_without_type
+{
+    auto testingSQL = WCDB::ColumnDef(column);
+
+    auto testingTypes = { WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testColumn");
+}
+
+- (void)test_column_def_with_constraints
+{
+    auto testingSQL = WCDB::ColumnDef(column, columnType).constraint(columnConstraints);
+
+    auto testingTypes = { WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column, WCDB::SQL::Type::ColumnConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ColumnConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testColumn INTEGER CHECK(1) CHECK(2)");
 }
 
 @end

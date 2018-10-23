@@ -19,20 +19,34 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface StatementSavepointTests : WINQTestCase
 
 @end
 
-@implementation StatementSavepointTests
+@implementation StatementSavepointTests {
+    NSString* savepoint;
+}
 
-- (void)testStatementSavepoint
+- (void)setUp
 {
-    XCTAssertEqual(WCDB::StatementSavepoint().getType(), WCDB::Statement::Type::Savepoint);
+    [super setUp];
+    savepoint = @"testSavepoint";
+}
 
-    WINQAssertEqual(WCDB::StatementSavepoint()
-                    .savepoint(self.class.savepointName),
-                    @"SAVEPOINT testSavepoint");
+- (void)test_default_constructible
+{
+    WCDB::StatementSavepoint constructible __attribute((unused));
+}
+
+- (void)test_savepoint
+{
+    auto testingSQL = WCDB::StatementSavepoint().savepoint(savepoint);
+
+    auto testingTypes = { WCDB::SQL::Type::SavepointSTMT };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"SAVEPOINT testSavepoint");
 }
 
 @end

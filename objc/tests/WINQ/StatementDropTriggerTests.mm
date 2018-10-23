@@ -19,39 +19,54 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface StatementDropTriggerTests : WINQTestCase
 
 @end
 
-@implementation StatementDropTriggerTests
+@implementation StatementDropTriggerTests {
+    WCDB::Schema schema;
+    NSString* trigger;
+}
 
-- (void)testStatementDropTrigger
+- (void)setUp
 {
-    XCTAssertEqual(WCDB::StatementDropTrigger().getType(), WCDB::Statement::Type::DropTrigger);
+    [super setUp];
+    schema = @"testSchema";
+    trigger = @"testTrigger";
+}
 
-    WINQAssertEqual(WCDB::StatementDropTrigger()
-                    .dropTrigger(self.class.triggerName)
-                    .ifExists(true)
-                    .withSchema(self.class.schemaName),
-                    @"DROP TRIGGER IF EXISTS testSchema.testTrigger");
+- (void)test_default_constructible
+{
+    WCDB::StatementDropTrigger constructible __attribute((unused));
+}
 
-    WINQAssertEqual(WCDB::StatementDropTrigger()
-                    .dropTrigger(self.class.triggerName)
-                    .ifExists(true),
-                    @"DROP TRIGGER IF EXISTS main.testTrigger");
+- (void)test_drop_trigger
+{
+    auto testingSQL = WCDB::StatementDropTrigger().dropTrigger(schema, trigger).ifExists();
 
-    WINQAssertEqual(WCDB::StatementDropTrigger()
-                    .dropTrigger(self.class.triggerName)
-                    .ifExists(false)
-                    .withSchema(self.class.schemaName),
-                    @"DROP TRIGGER testSchema.testTrigger");
+    auto testingTypes = { WCDB::SQL::Type::DropTriggerSTMT, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"DROP TRIGGER IF EXISTS testSchema.testTrigger");
+}
 
-    //Default
-    WINQAssertEqual(WCDB::StatementDropTrigger()
-                    .dropTrigger(self.class.triggerName)
-                    .withSchema(self.class.schemaName),
-                    @"DROP TRIGGER IF EXISTS testSchema.testTrigger");
+- (void)test_drop_trigger_without_if_exists
+{
+    auto testingSQL = WCDB::StatementDropTrigger().dropTrigger(schema, trigger);
+
+    auto testingTypes = { WCDB::SQL::Type::DropTriggerSTMT, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"DROP TRIGGER testSchema.testTrigger");
+}
+
+- (void)test_drop_trigger_without_schema
+{
+    auto testingSQL = WCDB::StatementDropTrigger().dropTrigger(trigger).ifExists();
+
+    auto testingTypes = { WCDB::SQL::Type::DropTriggerSTMT, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"DROP TRIGGER IF EXISTS main.testTrigger");
 }
 
 @end

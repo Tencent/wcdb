@@ -54,7 +54,7 @@ MigrationInitializerHandle::getAllColumns(const std::string& table, const std::s
         return { false, {} };
     }
 
-    std::string schema = MigrationInfo::getSchemaForDatabase(database);
+    Schema schema = MigrationInfo::getSchemaForDatabase(database);
     if (!database.empty()) {
         markErrorAsIgnorable(SQLITE_ERROR);
         // Adoptable for duplicate attach
@@ -66,12 +66,12 @@ MigrationInitializerHandle::getAllColumns(const std::string& table, const std::s
     }
 
     bool succeed, exists;
-    std::tie(succeed, exists) = tableExists(TableOrSubquery(table).withSchema(schema));
+    std::tie(succeed, exists) = tableExists(TableOrSubquery(schema, table));
     if (!exists) {
         // return {true, {}} if the schema.table does not exist.
         return { succeed, {} };
     }
-    return getUnorderedColumnsWithTable(table, schema);
+    return getUnorderedColumnsWithTable(schema, table);
 }
 
 void MigrationInitializerHandle::setError(const Error& error)

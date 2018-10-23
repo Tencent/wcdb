@@ -19,220 +19,179 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface StatementCreateTriggerTests : WINQTestCase
 
 @end
 
-@implementation StatementCreateTriggerTests
+@implementation StatementCreateTriggerTests {
+    WCDB::Schema schema;
+    NSString* name;
+    WCDB::Columns columns;
+    NSString* table;
+    WCDB::Expression condition;
+    WCDB::StatementUpdate update;
+    WCDB::StatementSelect select;
+    WCDB::StatementInsert insert;
+    WCDB::StatementDelete delete_;
+}
 
-- (void)testStatementCreateTrigger
+- (void)setUp
 {
-    XCTAssertEqual(WCDB::StatementCreateTrigger().getType(), WCDB::Statement::Type::CreateTrigger);
+    [super setUp];
+    schema = @"testSchema";
+    name = @"testTrigger";
+    columns = {
+        WCDB::Column(@"testColumn1"),
+        WCDB::Column(@"testColumn2"),
+    };
+    table = @"testTable";
+    condition = 1;
+    update = WCDB::StatementUpdate().update(table).set(WCDB::Column(@"testColumn")).to(1);
+    select = WCDB::StatementSelect().select(1);
+    insert = WCDB::StatementInsert().insertIntoTable(table).values(1);
+    delete_ = WCDB::StatementDelete().deleteFrom(table);
+}
 
-    WINQAssertEqual(WCDB::StatementCreateTrigger()
-                    .createTrigger(self.class.triggerName)
-                    .ifNotExists(false)
-                    .withSchema(self.class.schemaName)
-                    .before()
-                    .delete_()
-                    .on(self.class.tableName)
-                    .forEachRow()
-                    .when(self.class.condition)
-                    .run(self.class.statementUpdate),
-                    @"CREATE TRIGGER testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN UPDATE main.testTable SET testColumn = 1; END");
+- (void)test_default_constructible
+{
+    WCDB::StatementCreateTrigger constructible __attribute((unused));
+}
 
-    WINQAssertEqual(WCDB::StatementCreateTrigger()
-                    .createTrigger(self.class.triggerName)
-                    .ifNotExists(false)
-                    .withSchema(self.class.schemaName)
-                    .before()
-                    .delete_()
-                    .on(self.class.tableName)
-                    .forEachRow()
-                    .when(self.class.condition)
-                    .run(self.class.statementInsert),
-                    @"CREATE TRIGGER testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN INSERT INTO main.testTable VALUES(1); END");
+- (void)test_create_trigger
+{
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).before().delete_().on(table).forEachRow().when(condition).execute(update);
 
-    WINQAssertEqual(WCDB::StatementCreateTrigger()
-                    .createTrigger(self.class.triggerName)
-                    .ifNotExists(false)
-                    .withSchema(self.class.schemaName)
-                    .before()
-                    .delete_()
-                    .on(self.class.tableName)
-                    .forEachRow()
-                    .when(self.class.condition)
-                    .run(self.class.statementDelete),
-                    @"CREATE TRIGGER testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN DELETE FROM main.testTable; END");
+    auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE TRIGGER testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN 1 BEGIN UPDATE main.testTable SET testColumn = 1; END");
+}
 
-    WINQAssertEqual(WCDB::StatementCreateTrigger()
-                    .createTrigger(self.class.triggerName)
-                    .ifNotExists(false)
-                    .withSchema(self.class.schemaName)
-                    .before()
-                    .delete_()
-                    .on(self.class.tableName)
-                    .forEachRow()
-                    .when(self.class.condition)
-                    .run(self.class.statementSelect),
-                    @"CREATE TRIGGER testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN SELECT testColumn FROM main.testTable; END");
+- (void)test_create_temp_trigger
+{
+    auto testingSQL = WCDB::StatementCreateTrigger().createTempTrigger(schema, name).before().delete_().on(table).forEachRow().when(condition).execute(update);
 
-    WINQAssertEqual(WCDB::StatementCreateTrigger()
-                    .createTrigger(self.class.triggerName)
-                    .ifNotExists(false)
-                    .withSchema(self.class.schemaName)
-                    .before()
-                    .delete_()
-                    .on(self.class.tableName)
-                    .forEachRow()
-                    .when(self.class.condition)
-                    .run(self.class.statementUpdate)
-                    .run(self.class.statementInsert)
-                    .run(self.class.statementDelete)
-                    .run(self.class.statementSelect),
-                    @"CREATE TRIGGER testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN UPDATE main.testTable SET testColumn = 1; INSERT INTO main.testTable VALUES(1); DELETE FROM main.testTable; SELECT testColumn FROM main.testTable; END");
+    auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE TEMP TRIGGER testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN 1 BEGIN UPDATE main.testTable SET testColumn = 1; END");
+}
 
-    WINQAssertEqual(WCDB::StatementCreateTrigger()
-                    .createTrigger(self.class.triggerName)
-                    .ifNotExists(false)
-                    .withSchema(self.class.schemaName)
-                    .before()
-                    .delete_()
-                    .on(self.class.tableName)
-                    .forEachRow()
-                    .run(self.class.statementUpdate),
-                    @"CREATE TRIGGER testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW BEGIN UPDATE main.testTable SET testColumn = 1; END");
+- (void)test_create_trigger_if_not_exists
+{
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).ifNotExists().before().delete_().on(table).forEachRow().when(condition).execute(update);
 
-    WINQAssertEqual(WCDB::StatementCreateTrigger()
-                    .createTrigger(self.class.triggerName)
-                    .ifNotExists(false)
-                    .withSchema(self.class.schemaName)
-                    .before()
-                    .insert()
-                    .on(self.class.tableName)
-                    .when(self.class.condition)
-                    .run(self.class.statementUpdate),
-                    @"CREATE TRIGGER testSchema.testTrigger BEFORE INSERT ON testTable WHEN testColumn NOTNULL BEGIN UPDATE main.testTable SET testColumn = 1; END");
+    auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE TRIGGER IF NOT EXISTS testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN 1 BEGIN UPDATE main.testTable SET testColumn = 1; END");
+}
 
-    WINQAssertEqual(WCDB::StatementCreateTrigger()
-                    .createTrigger(self.class.triggerName)
-                    .ifNotExists(false)
-                    .withSchema(self.class.schemaName)
-                    .before()
-                    .update()
-                    .on(self.class.tableName)
-                    .forEachRow()
-                    .when(self.class.condition)
-                    .run(self.class.statementUpdate),
-                    @"CREATE TRIGGER testSchema.testTrigger BEFORE UPDATE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN UPDATE main.testTable SET testColumn = 1; END");
+- (void)test_create_trigger_without_schema
+{
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(name).before().delete_().on(table).forEachRow().when(condition).execute(update);
 
-    WINQAssertEqual(WCDB::StatementCreateTrigger()
-                    .createTrigger(self.class.triggerName)
-                    .ifNotExists(false)
-                    .withSchema(self.class.schemaName)
-                    .before()
-                    .updateOf(self.class.column)
-                    .on(self.class.tableName)
-                    .forEachRow()
-                    .when(self.class.condition)
-                    .run(self.class.statementUpdate),
-                    @"CREATE TRIGGER testSchema.testTrigger BEFORE UPDATE OF testColumn ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN UPDATE main.testTable SET testColumn = 1; END");
+    auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE TRIGGER main.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN 1 BEGIN UPDATE main.testTable SET testColumn = 1; END");
+}
 
-    WINQAssertEqual(WCDB::StatementCreateTrigger()
-                    .createTrigger(self.class.triggerName)
-                    .ifNotExists(false)
-                    .withSchema(self.class.schemaName)
-                    .before()
-                    .updateOf(self.class.columns)
-                    .on(self.class.tableName)
-                    .forEachRow()
-                    .when(self.class.condition)
-                    .run(self.class.statementUpdate),
-                    @"CREATE TRIGGER testSchema.testTrigger BEFORE UPDATE OF testColumn, testColumn2 ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN UPDATE main.testTable SET testColumn = 1; END");
+- (void)test_create_trigger_after_delete
+{
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).after().delete_().on(table).forEachRow().when(condition).execute(update);
 
-    WINQAssertEqual(WCDB::StatementCreateTrigger()
-                    .createTrigger(self.class.triggerName)
-                    .ifNotExists(false)
-                    .withSchema(self.class.schemaName)
-                    .after()
-                    .delete_()
-                    .on(self.class.tableName)
-                    .forEachRow()
-                    .when(self.class.condition)
-                    .run(self.class.statementUpdate),
-                    @"CREATE TRIGGER testSchema.testTrigger AFTER DELETE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN UPDATE main.testTable SET testColumn = 1; END");
+    auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE TRIGGER testSchema.testTrigger AFTER DELETE ON testTable FOR EACH ROW WHEN 1 BEGIN UPDATE main.testTable SET testColumn = 1; END");
+}
 
-    WINQAssertEqual(WCDB::StatementCreateTrigger()
-                    .createTrigger(self.class.triggerName)
-                    .ifNotExists(false)
-                    .withSchema(self.class.schemaName)
-                    .insteadOf()
-                    .delete_()
-                    .on(self.class.tableName)
-                    .forEachRow()
-                    .when(self.class.condition)
-                    .run(self.class.statementUpdate),
-                    @"CREATE TRIGGER testSchema.testTrigger INSTEAD OF DELETE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN UPDATE main.testTable SET testColumn = 1; END");
+- (void)test_create_trigger_instead_of_delete
+{
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).insteadOf().delete_().on(table).forEachRow().when(condition).execute(update);
 
-    WINQAssertEqual(WCDB::StatementCreateTrigger()
-                    .createTrigger(self.class.triggerName)
-                    .ifNotExists(false)
-                    .withSchema(self.class.schemaName)
-                    .delete_()
-                    .on(self.class.tableName)
-                    .forEachRow()
-                    .when(self.class.condition)
-                    .run(self.class.statementUpdate),
-                    @"CREATE TRIGGER testSchema.testTrigger DELETE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN UPDATE main.testTable SET testColumn = 1; END");
+    auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE TRIGGER testSchema.testTrigger INSTEAD OF DELETE ON testTable FOR EACH ROW WHEN 1 BEGIN UPDATE main.testTable SET testColumn = 1; END");
+}
 
-    WINQAssertEqual(WCDB::StatementCreateTrigger()
-                    .createTrigger(self.class.triggerName)
-                    .ifNotExists(false)
-                    .before()
-                    .delete_()
-                    .on(self.class.tableName)
-                    .forEachRow()
-                    .when(self.class.condition)
-                    .run(self.class.statementUpdate),
-                    @"CREATE TRIGGER main.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN UPDATE main.testTable SET testColumn = 1; END");
+- (void)test_create_trigger_before_insert
+{
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).before().insert().on(table).forEachRow().when(condition).execute(update);
 
-    WINQAssertEqual(WCDB::StatementCreateTrigger()
-                    .createTrigger(self.class.triggerName)
-                    .ifNotExists(true)
-                    .withSchema(self.class.schemaName)
-                    .before()
-                    .delete_()
-                    .on(self.class.tableName)
-                    .forEachRow()
-                    .when(self.class.condition)
-                    .run(self.class.statementUpdate),
-                    @"CREATE TRIGGER IF NOT EXISTS testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN UPDATE main.testTable SET testColumn = 1; END");
+    auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE TRIGGER testSchema.testTrigger BEFORE INSERT ON testTable FOR EACH ROW WHEN 1 BEGIN UPDATE main.testTable SET testColumn = 1; END");
+}
 
-    WINQAssertEqual(WCDB::StatementCreateTrigger()
-                    .createTrigger(self.class.triggerName)
-                    .temp()
-                    .ifNotExists(false)
-                    .withSchema(self.class.schemaName)
-                    .before()
-                    .delete_()
-                    .on(self.class.tableName)
-                    .forEachRow()
-                    .when(self.class.condition)
-                    .run(self.class.statementUpdate),
-                    @"CREATE TEMP TRIGGER testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN UPDATE main.testTable SET testColumn = 1; END");
+- (void)test_create_trigger_before_update
+{
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).before().update().on(table).forEachRow().when(condition).execute(update);
 
-    //Default
-    WINQAssertEqual(WCDB::StatementCreateTrigger()
-                    .createTrigger(self.class.triggerName)
-                    .withSchema(self.class.schemaName)
-                    .before()
-                    .delete_()
-                    .on(self.class.tableName)
-                    .forEachRow()
-                    .when(self.class.condition)
-                    .run(self.class.statementUpdate),
-                    @"CREATE TRIGGER IF NOT EXISTS testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN testColumn NOTNULL BEGIN UPDATE main.testTable SET testColumn = 1; END");
+    auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE TRIGGER testSchema.testTrigger BEFORE UPDATE ON testTable FOR EACH ROW WHEN 1 BEGIN UPDATE main.testTable SET testColumn = 1; END");
+}
+
+- (void)test_create_trigger_before_update_of_columns
+{
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).before().updateOf(columns).on(table).forEachRow().when(condition).execute(update);
+
+    auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE TRIGGER testSchema.testTrigger BEFORE UPDATE OF testColumn1, testColumn2 ON testTable FOR EACH ROW WHEN 1 BEGIN UPDATE main.testTable SET testColumn = 1; END");
+}
+
+- (void)test_create_trigger_without_for_each_row
+{
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).before().delete_().on(table).when(condition).execute(update);
+
+    auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE TRIGGER testSchema.testTrigger BEFORE DELETE ON testTable WHEN 1 BEGIN UPDATE main.testTable SET testColumn = 1; END");
+}
+
+- (void)test_create_trigger_without_condition
+{
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).before().delete_().on(table).forEachRow().execute(update);
+
+    auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE TRIGGER testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW BEGIN UPDATE main.testTable SET testColumn = 1; END");
+}
+
+- (void)test_create_trigger_with_insert
+{
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).before().delete_().on(table).forEachRow().when(condition).execute(insert);
+
+    auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE TRIGGER testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN 1 BEGIN INSERT INTO main.testTable VALUES(1); END");
+}
+
+- (void)test_create_trigger_with_delete
+{
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).before().delete_().on(table).forEachRow().when(condition).execute(delete_);
+
+    auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE TRIGGER testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN 1 BEGIN DELETE FROM main.testTable; END");
+}
+
+- (void)test_create_trigger_with_select
+{
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).before().delete_().on(table).forEachRow().when(condition).execute(select);
+
+    auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE TRIGGER testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN 1 BEGIN SELECT 1; END");
+}
+
+- (void)test_create_trigger_with_multiple_stmts
+{
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).before().delete_().on(table).forEachRow().when(condition).execute(update).execute(insert).execute(delete_).execute(select);
+
+    auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE TRIGGER testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN 1 BEGIN UPDATE main.testTable SET testColumn = 1; INSERT INTO main.testTable VALUES(1); DELETE FROM main.testTable; SELECT 1; END");
 }
 
 @end

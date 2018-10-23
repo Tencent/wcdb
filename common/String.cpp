@@ -57,19 +57,17 @@ bool hasPrefix(const std::string &origin, const std::string &target)
     return strncmp(origin.c_str(), target.c_str(), target.size()) == 0;
 }
 
-CopyOnWriteString stringByReplacingOccurrencesOfString(const CopyOnWriteString &cowOrigin,
-                                                       const std::string &target,
-                                                       const std::string &replacement)
+std::string replacingOccurrencesOfString(const std::string &origin,
+                                         const std::string &target,
+                                         const std::string &replacement)
 {
     size_t last = 0;
-    const std::string &origin = cowOrigin.get();
     size_t found = origin.find(target, last);
     if (found == std::string::npos) {
         //quick return for no replacing
-        return cowOrigin;
+        return origin;
     }
-    CopyOnWriteString cowOutput;
-    std::string &output = cowOutput.get_or_copy();
+    std::string output;
     const size_t targetLength = target.length();
     do {
         output.append(origin.substr(last, found - last));
@@ -77,7 +75,7 @@ CopyOnWriteString stringByReplacingOccurrencesOfString(const CopyOnWriteString &
         last = found + targetLength;
     } while ((found = origin.find(target, last)) != std::string::npos);
     output.append(origin.substr(last, -1));
-    return cowOutput;
+    return output;
 }
 
 std::string formatted(const char *format, ...)

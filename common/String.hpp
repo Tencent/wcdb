@@ -21,7 +21,6 @@
 #ifndef String_hpp
 #define String_hpp
 
-#include <WCDB/CopyOnWriteString.hpp>
 #include <string>
 
 namespace WCDB {
@@ -39,9 +38,9 @@ bool isCaseInsensiveEqual(const std::string &lhs, const std::string &rhs);
 bool hasCaseInsensivePrefix(const std::string &origin, const std::string &target);
 bool hasPrefix(const std::string &origin, const std::string &target);
 
-CopyOnWriteString stringByReplacingOccurrencesOfString(const CopyOnWriteString &origin,
-                                                       const std::string &target,
-                                                       const std::string &replacement);
+std::string replacingOccurrencesOfString(const std::string &origin,
+                                         const std::string &target,
+                                         const std::string &replacement);
 
 std::string formatted(const char *format, ...);
 

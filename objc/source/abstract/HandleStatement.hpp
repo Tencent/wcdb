@@ -68,7 +68,7 @@ public:
     bool isPrepared();
 
 protected:
-    Statement m_statement;
+    Shadow<Statement> m_statement;
     void *m_stmt;
 };
 

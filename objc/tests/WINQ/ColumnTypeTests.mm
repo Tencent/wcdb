@@ -19,38 +19,33 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface ColumnTypeTests : WINQTestCase
 
 @end
 
-@implementation ColumnTypeTests
+@implementation ColumnTypeTests {
+}
 
-- (void)testColumnType
+- (void)setUp
 {
-    WINQAssertEqual(WCDB::ColumnDef(self.class.column)
-                    .withType(WCDB::ColumnType::Null),
-                    @"testColumn NULL");
+    [super setUp];
+}
 
-    WINQAssertEqual(WCDB::ColumnDef(self.class.column)
-                    .withType(WCDB::ColumnType::Integer32),
-                    @"testColumn INTEGER");
+- (void)test_default_constructible
+{
+    WCDB::ColumnType constructible __attribute((unused));
+}
 
-    WINQAssertEqual(WCDB::ColumnDef(self.class.column)
-                    .withType(WCDB::ColumnType::Integer64),
-                    @"testColumn INTEGER");
-
-    WINQAssertEqual(WCDB::ColumnDef(self.class.column)
-                    .withType(WCDB::ColumnType::Float),
-                    @"testColumn REAL");
-
-    WINQAssertEqual(WCDB::ColumnDef(self.class.column)
-                    .withType(WCDB::ColumnType::Text),
-                    @"testColumn TEXT");
-
-    WINQAssertEqual(WCDB::ColumnDef(self.class.column)
-                    .withType(WCDB::ColumnType::BLOB),
-                    @"testColumn BLOB");
+- (void)test_type
+{
+    WINQEnumAssertEqual(WCDB::ColumnType::Integer32, @"INTEGER");
+    WINQEnumAssertEqual(WCDB::ColumnType::Integer64, @"INTEGER");
+    WINQEnumAssertEqual(WCDB::ColumnType::Text, @"TEXT");
+    WINQEnumAssertEqual(WCDB::ColumnType::BLOB, @"BLOB");
+    WINQEnumAssertEqual(WCDB::ColumnType::Float, @"REAL");
+    WINQEnumAssertEqual(WCDB::ColumnType::Null, @"NULL");
 }
 
 @end

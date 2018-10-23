@@ -66,7 +66,7 @@ NS_ASSUME_NONNULL_BEGIN
             ofObject:(nonnull WCTObject *)object
              toIndex:(int)index;
 
-- (void)bindProperties:(const WCTPropertyList &)properties
+- (void)bindProperties:(const WCTProperties &)properties
               ofObject:(nonnull WCTObject *)object;
 
 #pragma mark - Get row
@@ -95,7 +95,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable WCTObject *)getObjectOfClass:(nonnull Class)cls;
 
-- (nullable WCTObject *)getObjectOnProperties:(const WCTPropertyList &)properties;
+- (nullable WCTObject *)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns;
 
 - (int)getColumnCount;
 
@@ -111,7 +111,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)execute:(const WCDB::Statement &)statement
      withObject:(WCTObject *)object
-   onProperties:(const WCTPropertyList &)properties;
+   onProperties:(const WCTProperties &)properties;
 
 - (BOOL)execute:(const WCDB::Statement &)statement
       withValue:(nullable WCTColumnCodingValue *)value;

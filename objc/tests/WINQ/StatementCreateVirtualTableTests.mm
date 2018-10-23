@@ -19,64 +19,70 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface StatementCreateVirtualTableTests : WINQTestCase
 
 @end
 
-@implementation StatementCreateVirtualTableTests
+@implementation StatementCreateVirtualTableTests {
+    WCDB::Schema schema;
+    NSString* table;
+    NSString* module;
+    WCDB::ModuleArguments moduleArguments;
+}
 
-- (void)testStatementCreateVirtualTable
+- (void)setUp
 {
-    XCTAssertEqual(WCDB::StatementCreateVirtualTable().getType(), WCDB::Statement::Type::CreateVirtualTable);
+    [super setUp];
+    schema = @"testSchema";
+    table = @"testTable";
+    module = @"testModule";
+    moduleArguments = {
+        WCDB::ModuleArgument(1, 1),
+        WCDB::ModuleArgument(2, 2),
+    };
+}
 
-    std::string moduleName = "fts3";
+- (void)test_default_constructible
+{
+    WCDB::StatementCreateVirtualTable constructible __attribute((unused));
+}
 
-    WINQAssertEqual(WCDB::StatementCreateVirtualTable()
-                    .createVirtualTable(self.class.tableName)
-                    .ifNotExists(false)
-                    .withSchema(self.class.schemaName)
-                    .usingModule(moduleName)
-                    .on(self.class.moduleArgument),
-                    @"CREATE VIRTUAL TABLE testSchema.testTable USING fts3(tokenize=WCDB)");
+- (void)test_create_virtual_table
+{
+    auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(schema, table).usingModule(module).arguments(moduleArguments);
 
-    WINQAssertEqual(WCDB::StatementCreateVirtualTable()
-                    .createVirtualTable(self.class.tableName)
-                    .ifNotExists(false)
-                    .withSchema(self.class.schemaName)
-                    .usingModule(moduleName)
-                    .on(self.class.moduleArguments),
-                    @"CREATE VIRTUAL TABLE testSchema.testTable USING fts3(tokenize=WCDB, testColumn INTEGER)");
+    auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ModuleArgument, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ModuleArgument, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE VIRTUAL TABLE testSchema.testTable USING testModule(1 = 1, 2 = 2)");
+}
 
-    WINQAssertEqual(WCDB::StatementCreateVirtualTable()
-                    .createVirtualTable(self.class.tableName)
-                    .ifNotExists(false)
-                    .withSchema(self.class.schemaName)
-                    .usingModule(moduleName),
-                    @"CREATE VIRTUAL TABLE testSchema.testTable USING fts3");
+- (void)test_create_virtual_table_if_not_exists
+{
+    auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(schema, table).ifNotExists().usingModule(module).arguments(moduleArguments);
 
-    WINQAssertEqual(WCDB::StatementCreateVirtualTable()
-                    .createVirtualTable(self.class.tableName)
-                    .ifNotExists(false)
-                    .usingModule(moduleName)
-                    .on(self.class.moduleArgument),
-                    @"CREATE VIRTUAL TABLE main.testTable USING fts3(tokenize=WCDB)");
+    auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ModuleArgument, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ModuleArgument, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE VIRTUAL TABLE IF NOT EXISTS testSchema.testTable USING testModule(1 = 1, 2 = 2)");
+}
 
-    WINQAssertEqual(WCDB::StatementCreateVirtualTable()
-                    .createVirtualTable(self.class.tableName)
-                    .ifNotExists(true)
-                    .withSchema(self.class.schemaName)
-                    .usingModule(moduleName)
-                    .on(self.class.moduleArgument),
-                    @"CREATE VIRTUAL TABLE IF NOT EXISTS testSchema.testTable USING fts3(tokenize=WCDB)");
+- (void)test_create_virtual_table_without_schema
+{
+    auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(table).usingModule(module).arguments(moduleArguments);
 
-    //Default
-    WINQAssertEqual(WCDB::StatementCreateVirtualTable()
-                    .createVirtualTable(self.class.tableName)
-                    .withSchema(self.class.schemaName)
-                    .usingModule(moduleName)
-                    .on(self.class.moduleArgument),
-                    @"CREATE VIRTUAL TABLE IF NOT EXISTS testSchema.testTable USING fts3(tokenize=WCDB)");
+    auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ModuleArgument, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ModuleArgument, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE VIRTUAL TABLE main.testTable USING testModule(1 = 1, 2 = 2)");
+}
+
+- (void)test_create_virtual_table_without_arguments
+{
+    auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(schema, table).usingModule(module);
+
+    auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE VIRTUAL TABLE testSchema.testTable USING testModule");
 }
 
 @end

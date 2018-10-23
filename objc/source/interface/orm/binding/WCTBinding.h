@@ -61,7 +61,7 @@ public:
     std::list<WCDB::StatementCreateIndex>
     generateCreateIndexStatements(const std::string &tableName) const;
 
-    const WCTPropertyList &getAllProperties() const;
+    const WCTProperties &getAllProperties() const;
 
     static WCTColumnNamed getColumnGenerator();
 
@@ -74,8 +74,8 @@ protected:
 
     void addColumnBinding(const std::string &columnName, const WCTColumnBinding &columnBinding);
 
-    WCTPropertyList m_properties;
-    std::map<std::string, WCTPropertyList::iterator> m_mappedProperties;
+    WCTProperties m_properties;
+    std::map<std::string, WCTProperties::iterator> m_mappedProperties;
 
     std::map<std::string, WCTColumnBinding, WCDB::String::CaseInsensiveComparator> m_columnBindings;
 

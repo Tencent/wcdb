@@ -25,38 +25,36 @@
 #import <WCDB/WCTUnsafeHandle+Private.h>
 
 @implementation WCTSelect {
-    WCTPropertyList _properties;
+    WCTResultColumns _resultColumns;
     Class<WCTTableCoding> _class;
 }
 
 - (instancetype)fromTable:(NSString *)tableName
 {
     WCTRemedialAssert(tableName, "Table name can't be null.", return self;);
-    _statement.from(tableName.cppString);
+    _statement.from(tableName);
     return self;
 }
 
-- (instancetype)onProperties:(const WCTPropertyList &)properties
+- (instancetype)onResultColumns:(const WCTResultColumns &)resultColumns
 {
-    _properties = properties;
+    _resultColumns = resultColumns;
+    _class = resultColumns.front().getColumnBinding().getClass();
+    _statement.select(resultColumns);
     return self;
 }
 
 - (instancetype)ofClass:(Class<WCTTableCoding>)cls
 {
     _class = cls;
+    _resultColumns = [cls allProperties];
+    _statement.select(_resultColumns);
     return self;
 }
 
 - (BOOL)lazyPrepare
 {
-    WCTRemedialAssert(_class != nil || !_properties.empty(), "Class or properties is not specificed.", return NO;);
-    if (_statement.isResultColumnsNotSet()) {
-        _statement.select(!_properties.empty() ? _properties : [_class allProperties]);
-    }
-    if (!_class) {
-        _class = _properties.front().getColumnBinding().getClass();
-    }
+    WCTRemedialAssert(_class != nil || !_resultColumns.empty(), "Class or result columns is not specificed.", return NO;);
     return [super lazyPrepare];
 }
 
@@ -66,12 +64,8 @@
         [self doAutoFinalize:YES];
         return nil;
     }
-    NSArray *objects;
-    if (!_properties.empty()) {
-        objects = [self allObjectsOnProperties:_properties];
-    } else {
-        objects = [self allObjectsOfClass:_class];
-    }
+#warning TODO
+    NSArray *objects; // = [self allObjectsOnResultColumns:_resultColumns];
     [self doAutoFinalize:!objects];
     return objects;
 }
@@ -83,12 +77,7 @@
         return nil;
     }
     BOOL done = NO;
-    id object = nil;
-    if (!_properties.empty()) {
-        object = [self nextObjectOnProperties:_properties orDone:done];
-    } else {
-        object = [self nextObjectOfClass:_class orDone:done];
-    }
+    id object = [self nextObjectOnResultColumns:_resultColumns orDone:done];
     if (!object || _finalizeImmediately) {
         [self doAutoFinalize:!done];
     }

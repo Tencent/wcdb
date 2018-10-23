@@ -19,31 +19,76 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface StatementAlterTableTests : WINQTestCase
 
 @end
 
-@implementation StatementAlterTableTests
+@implementation StatementAlterTableTests {
+    WCDB::Schema schema;
+    NSString* table;
+    NSString* newTable;
+    WCDB::Column column;
+    WCDB::Column newColumn;
+    WCDB::ColumnDef columnDef;
+}
 
-- (void)testStatementAlterTable
+- (void)setUp
 {
-    XCTAssertEqual(WCDB::StatementAlterTable().getType(), WCDB::Statement::Type::AlterTable);
+    [super setUp];
+    schema = @"testSchema";
+    table = @"testTable";
+    newTable = @"testNewTable";
+    column = WCDB::Column(@"testColumn");
+    newColumn = WCDB::Column(@"testNewColumn");
+    columnDef = WCDB::ColumnDef(newColumn);
+}
 
-    WINQAssertEqual(WCDB::StatementAlterTable()
-                    .alterTable(self.class.schemaName, self.class.tableName)
-                    .renameTo("testNewTable"),
-                    @"ALTER TABLE testSchema.testTable RENAME TO testNewTable");
+- (void)test_default_constructible
+{
+    WCDB::StatementAlterTable constructible __attribute((unused));
+}
 
-    WINQAssertEqual(WCDB::StatementAlterTable()
-                    .alterTable(self.class.schemaName, self.class.tableName)
-                    .addColumn(self.class.columnDef),
-                    @"ALTER TABLE testSchema.testTable ADD COLUMN testColumn INTEGER");
+- (void)test_alter_table_rename_to
+{
+    auto testingSQL = WCDB::StatementAlterTable().alterTable(schema, table).renameToTable(newTable);
+    auto testingTypes = { WCDB::SQL::Type::AlterTableSTMT, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"ALTER TABLE testSchema.testTable RENAME TO testNewTable");
+}
 
-    WINQAssertEqual(WCDB::StatementAlterTable()
-                    .alterTable(self.class.tableName)
-                    .renameTo("testNewTable"),
+- (void)test_alter_table_rename_to_without_schema
+{
+    auto testingSQL = WCDB::StatementAlterTable()
+                      .alterTable(table)
+                      .renameToTable(newTable);
+    auto testingTypes = { WCDB::SQL::Type::AlterTableSTMT, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL,
                     @"ALTER TABLE main.testTable RENAME TO testNewTable");
+}
+
+- (void)test_alter_table_rename_column
+{
+    auto testingSQL = WCDB::StatementAlterTable()
+                      .alterTable(schema, table)
+                      .renameColumn(column)
+                      .toColumn(newColumn);
+    auto testingTypes = { WCDB::SQL::Type::AlterTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"ALTER TABLE testSchema.testTable RENAME COLUMN testColumn TO testNewColumn");
+}
+
+- (void)test_alter_table_add_column
+{
+    auto testingSQL = WCDB::StatementAlterTable()
+                      .alterTable(schema, table)
+                      .addColumn(columnDef);
+    auto testingTypes = { WCDB::SQL::Type::AlterTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL,
+                    @"ALTER TABLE testSchema.testTable ADD COLUMN testNewColumn");
 }
 
 @end

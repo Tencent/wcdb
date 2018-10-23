@@ -19,39 +19,54 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface StatementDropIndexTests : WINQTestCase
 
 @end
 
-@implementation StatementDropIndexTests
+@implementation StatementDropIndexTests {
+    WCDB::Schema schema;
+    NSString* index;
+}
 
-- (void)testStatementDropIndex
+- (void)setUp
 {
-    XCTAssertEqual(WCDB::StatementDropIndex().getType(), WCDB::Statement::Type::DropIndex);
+    [super setUp];
+    schema = @"testSchema";
+    index = @"testIndex";
+}
 
-    WINQAssertEqual(WCDB::StatementDropIndex()
-                    .dropIndex(self.class.indexName)
-                    .ifExists(true)
-                    .withSchema(self.class.schemaName),
-                    @"DROP INDEX IF EXISTS testSchema.testIndex");
+- (void)test_default_constructible
+{
+    WCDB::StatementDropIndex constructible __attribute((unused));
+}
 
-    WINQAssertEqual(WCDB::StatementDropIndex()
-                    .dropIndex(self.class.indexName)
-                    .ifExists(true),
-                    @"DROP INDEX IF EXISTS main.testIndex");
+- (void)test_drop_index
+{
+    auto testingSQL = WCDB::StatementDropIndex().dropIndex(schema, index).ifExists();
 
-    WINQAssertEqual(WCDB::StatementDropIndex()
-                    .dropIndex(self.class.indexName)
-                    .ifExists(false)
-                    .withSchema(self.class.schemaName),
-                    @"DROP INDEX testSchema.testIndex");
+    auto testingTypes = { WCDB::SQL::Type::DropIndexSTMT, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"DROP INDEX IF EXISTS testSchema.testIndex");
+}
 
-    //Default
-    WINQAssertEqual(WCDB::StatementDropIndex()
-                    .dropIndex(self.class.indexName)
-                    .withSchema(self.class.schemaName),
-                    @"DROP INDEX IF EXISTS testSchema.testIndex");
+- (void)test_drop_index_without_if_exists
+{
+    auto testingSQL = WCDB::StatementDropIndex().dropIndex(schema, index);
+
+    auto testingTypes = { WCDB::SQL::Type::DropIndexSTMT, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"DROP INDEX testSchema.testIndex");
+}
+
+- (void)test_drop_index_without_schema
+{
+    auto testingSQL = WCDB::StatementDropIndex().dropIndex(index).ifExists();
+
+    auto testingTypes = { WCDB::SQL::Type::DropIndexSTMT, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"DROP INDEX IF EXISTS main.testIndex");
 }
 
 @end

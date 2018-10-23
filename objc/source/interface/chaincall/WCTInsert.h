@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)intoTable:(NSString *)tableName;
 
-- (instancetype)onProperties:(const WCTPropertyList &)properties;
+- (instancetype)onProperties:(const WCTProperties &)properties;
 
 /**
  @brief Execute the insert SQL with objects.

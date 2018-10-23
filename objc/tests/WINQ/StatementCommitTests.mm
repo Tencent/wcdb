@@ -19,19 +19,32 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface StatementCommitTests : WINQTestCase
 
 @end
 
-@implementation StatementCommitTests
+@implementation StatementCommitTests {
+}
 
-- (void)testStatementCommit
+- (void)setUp
 {
-    XCTAssertEqual(WCDB::StatementCommit().getType(), WCDB::Statement::Type::Commit);
+    [super setUp];
+}
 
-    WINQAssertEqual(WCDB::StatementCommit::commit(),
-                    @"COMMIT");
+- (void)test_default_constructible
+{
+    WCDB::StatementCommit constructible __attribute((unused));
+}
+
+- (void)test_commit
+{
+    auto testingSQL = WCDB::StatementCommit().commit();
+
+    auto testingTypes = { WCDB::SQL::Type::CommitSTMT };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"COMMIT");
 }
 
 @end

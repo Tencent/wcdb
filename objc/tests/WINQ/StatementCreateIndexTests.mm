@@ -19,73 +19,79 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface StatementCreateIndexTests : WINQTestCase
 
 @end
 
-@implementation StatementCreateIndexTests
+@implementation StatementCreateIndexTests {
+    WCDB::Schema schema;
+    NSString* index;
+    NSString* table;
+    WCDB::IndexedColumns indexedColumns;
+    WCDB::Expression condition;
+}
 
-- (void)testStatementCreateIndex
+- (void)setUp
 {
-    XCTAssertEqual(WCDB::StatementCreateIndex().getType(), WCDB::Statement::Type::CreateIndex);
+    [super setUp];
 
-    WINQAssertEqual(WCDB::StatementCreateIndex()
-                    .createIndex(self.class.indexName)
-                    .ifNotExists(false)
-                    .withSchema(self.class.schemaName)
-                    .on(self.class.tableName)
-                    .indexedBy(self.class.indexedColumn),
-                    @"CREATE INDEX testSchema.testIndex ON testTable(testColumn)");
+    schema = @"testSchema";
+    index = @"testIndex";
+    table = @"testTable";
+    indexedColumns = { WCDB::Column(@"testColumn1"), WCDB::Column("testColumn2") };
+    condition = 1;
+}
 
-    WINQAssertEqual(WCDB::StatementCreateIndex()
-                    .createIndex(self.class.indexName)
-                    .ifNotExists(false)
-                    .withSchema(self.class.schemaName)
-                    .on(self.class.tableName)
-                    .indexedBy(self.class.indexedColumn)
-                    .where(self.class.condition),
-                    @"CREATE INDEX testSchema.testIndex ON testTable(testColumn) WHERE testColumn NOTNULL");
+- (void)test_default_constructible
+{
+    WCDB::StatementCreateIndex constructible __attribute((unused));
+}
 
-    WINQAssertEqual(WCDB::StatementCreateIndex()
-                    .createIndex(self.class.indexName)
-                    .ifNotExists(false)
-                    .withSchema(self.class.schemaName)
-                    .on(self.class.tableName)
-                    .indexedBy(self.class.indexedColumns),
-                    @"CREATE INDEX testSchema.testIndex ON testTable(testColumn, testColumn2)");
+- (void)test_create_index
+{
+    auto testingSQL = WCDB::StatementCreateIndex().createIndex(schema, index).onTable(table).indexed(indexedColumns);
 
-    WINQAssertEqual(WCDB::StatementCreateIndex()
-                    .createIndex(self.class.indexName)
-                    .ifNotExists(false)
-                    .on(self.class.tableName)
-                    .indexedBy(self.class.indexedColumn),
-                    @"CREATE INDEX main.testIndex ON testTable(testColumn)");
+    auto testingTypes = { WCDB::SQL::Type::CreateIndexSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE INDEX testSchema.testIndex ON testTable(testColumn1, testColumn2)");
+}
 
-    WINQAssertEqual(WCDB::StatementCreateIndex()
-                    .createIndex(self.class.indexName)
-                    .ifNotExists(true)
-                    .withSchema(self.class.schemaName)
-                    .on(self.class.tableName)
-                    .indexedBy(self.class.indexedColumn),
-                    @"CREATE INDEX IF NOT EXISTS testSchema.testIndex ON testTable(testColumn)");
+- (void)test_create_unique_index
+{
+    auto testingSQL = WCDB::StatementCreateIndex().createUniqueIndex(schema, index).onTable(table).indexed(indexedColumns);
 
-    WINQAssertEqual(WCDB::StatementCreateIndex()
-                    .createIndex(self.class.indexName)
-                    .ifNotExists(false)
-                    .unique()
-                    .withSchema(self.class.schemaName)
-                    .on(self.class.tableName)
-                    .indexedBy(self.class.indexedColumn),
-                    @"CREATE UNIQUE INDEX testSchema.testIndex ON testTable(testColumn)");
+    auto testingTypes = { WCDB::SQL::Type::CreateIndexSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE UNIQUE INDEX testSchema.testIndex ON testTable(testColumn1, testColumn2)");
+}
 
-    //Default
-    WINQAssertEqual(WCDB::StatementCreateIndex()
-                    .createIndex(self.class.indexName)
-                    .withSchema(self.class.schemaName)
-                    .on(self.class.tableName)
-                    .indexedBy(self.class.indexedColumn),
-                    @"CREATE INDEX IF NOT EXISTS testSchema.testIndex ON testTable(testColumn)");
+- (void)test_create_index_if_not_exists
+{
+    auto testingSQL = WCDB::StatementCreateIndex().createIndex(schema, index).ifNotExists().onTable(table).indexed(indexedColumns);
+
+    auto testingTypes = { WCDB::SQL::Type::CreateIndexSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE INDEX IF NOT EXISTS testSchema.testIndex ON testTable(testColumn1, testColumn2)");
+}
+
+- (void)test_create_index_without_schema
+{
+    auto testingSQL = WCDB::StatementCreateIndex().createIndex(index).onTable(table).indexed(indexedColumns);
+
+    auto testingTypes = { WCDB::SQL::Type::CreateIndexSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE INDEX main.testIndex ON testTable(testColumn1, testColumn2)");
+}
+
+- (void)test_create_index_with_condition
+{
+    auto testingSQL = WCDB::StatementCreateIndex().createIndex(schema, index).onTable(table).indexed(indexedColumns).where(condition);
+
+    auto testingTypes = { WCDB::SQL::Type::CreateIndexSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE INDEX testSchema.testIndex ON testTable(testColumn1, testColumn2) WHERE 1");
 }
 
 @end

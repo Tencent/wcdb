@@ -19,39 +19,54 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface StatementDropTableTests : WINQTestCase
 
 @end
 
-@implementation StatementDropTableTests
+@implementation StatementDropTableTests {
+    WCDB::Schema schema;
+    NSString* table;
+}
 
-- (void)testStatementDropTable
+- (void)setUp
 {
-    XCTAssertEqual(WCDB::StatementDropTable().getType(), WCDB::Statement::Type::DropTable);
+    [super setUp];
+    schema = @"testSchema";
+    table = @"testTable";
+}
 
-    WINQAssertEqual(WCDB::StatementDropTable()
-                    .dropTable(self.class.tableName)
-                    .ifExists(true)
-                    .withSchema(self.class.schemaName),
-                    @"DROP TABLE IF EXISTS testSchema.testTable");
+- (void)test_default_constructible
+{
+    WCDB::StatementDropTable constructible __attribute((unused));
+}
 
-    WINQAssertEqual(WCDB::StatementDropTable()
-                    .dropTable(self.class.tableName)
-                    .ifExists(true),
-                    @"DROP TABLE IF EXISTS main.testTable");
+- (void)test_drop_table
+{
+    auto testingSQL = WCDB::StatementDropTable().dropTable(schema, table).ifExists();
 
-    WINQAssertEqual(WCDB::StatementDropTable()
-                    .dropTable(self.class.tableName)
-                    .ifExists(false)
-                    .withSchema(self.class.schemaName),
-                    @"DROP TABLE testSchema.testTable");
+    auto testingTypes = { WCDB::SQL::Type::DropTableSTMT, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"DROP TABLE IF EXISTS testSchema.testTable");
+}
 
-    //Default
-    WINQAssertEqual(WCDB::StatementDropTable()
-                    .dropTable(self.class.tableName)
-                    .withSchema(self.class.schemaName),
-                    @"DROP TABLE IF EXISTS testSchema.testTable");
+- (void)test_drop_table_without_if_exists
+{
+    auto testingSQL = WCDB::StatementDropTable().dropTable(schema, table);
+
+    auto testingTypes = { WCDB::SQL::Type::DropTableSTMT, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"DROP TABLE testSchema.testTable");
+}
+
+- (void)test_drop_table_without_schema
+{
+    auto testingSQL = WCDB::StatementDropTable().dropTable(table).ifExists();
+
+    auto testingTypes = { WCDB::SQL::Type::DropTableSTMT, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"DROP TABLE IF EXISTS main.testTable");
 }
 
 @end

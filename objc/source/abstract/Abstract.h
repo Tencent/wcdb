@@ -21,7 +21,7 @@
 #ifndef Abstract_h
 #define Abstract_h
 
-#include <WCDB/Lang.h>
+#include <WCDB/Syntax.h>
 
 #include <WCDB/WINQ.h>
 

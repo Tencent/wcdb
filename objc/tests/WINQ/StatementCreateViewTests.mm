@@ -19,62 +19,79 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface StatementCreateViewTests : WINQTestCase
 
 @end
 
-@implementation StatementCreateViewTests
+@implementation StatementCreateViewTests {
+    WCDB::Schema schema;
+    NSString* name;
+    WCDB::Columns columns;
+    WCDB::StatementSelect select;
+}
 
-- (void)testStatementCreateView
+- (void)setUp
 {
-    XCTAssertEqual(WCDB::StatementCreateView().getType(), WCDB::Statement::Type::CreateView);
+    [super setUp];
+    schema = @"testSchema";
+    name = @"testView";
+    columns = {
+        WCDB::Column(@"testColumn1"),
+        WCDB::Column(@"testColumn2"),
+    };
+    select = WCDB::StatementSelect().select(1);
+}
 
-    WINQAssertEqual(WCDB::StatementCreateView()
-                    .createView(self.class.viewName)
-                    .ifNotExists(false)
-                    .as(self.class.statementSelect),
-                    @"CREATE VIEW main.testView AS SELECT testColumn FROM main.testTable");
+- (void)test_default_constructible
+{
+    WCDB::StatementCreateView constructible __attribute((unused));
+}
 
-    WINQAssertEqual(WCDB::StatementCreateView()
-                    .createView(self.class.viewName)
-                    .ifNotExists(false)
-                    .on(self.class.column)
-                    .as(self.class.statementSelect),
-                    @"CREATE VIEW main.testView(testColumn) AS SELECT testColumn FROM main.testTable");
+- (void)test_create_view
+{
+    auto testingSQL = WCDB::StatementCreateView().createView(name).as(select);
 
-    WINQAssertEqual(WCDB::StatementCreateView()
-                    .createView(self.class.viewName)
-                    .ifNotExists(false)
-                    .on(self.class.columns)
-                    .as(self.class.statementSelect),
-                    @"CREATE VIEW main.testView(testColumn, testColumn2) AS SELECT testColumn FROM main.testTable");
+    auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE VIEW main.testView AS SELECT 1");
+}
 
-    WINQAssertEqual(WCDB::StatementCreateView()
-                    .createView(self.class.viewName)
-                    .ifNotExists(false)
-                    .withSchema(self.class.schemaName)
-                    .as(self.class.statementSelect),
-                    @"CREATE VIEW testSchema.testView AS SELECT testColumn FROM main.testTable");
+- (void)test_create_temp_view
+{
+    auto testingSQL = WCDB::StatementCreateView().createTempView(name).as(select);
 
-    WINQAssertEqual(WCDB::StatementCreateView()
-                    .createView(self.class.viewName)
-                    .ifNotExists(true)
-                    .as(self.class.statementSelect),
-                    @"CREATE VIEW IF NOT EXISTS main.testView AS SELECT testColumn FROM main.testTable");
+    auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE TEMP VIEW main.testView AS SELECT 1");
+}
 
-    WINQAssertEqual(WCDB::StatementCreateView()
-                    .createView(self.class.viewName)
-                    .temp()
-                    .ifNotExists(false)
-                    .as(self.class.statementSelect),
-                    @"CREATE TEMP VIEW temp.testView AS SELECT testColumn FROM main.testTable");
+- (void)test_create_view_if_not_exists
+{
+    auto testingSQL = WCDB::StatementCreateView().createView(name).ifNotExists().as(select);
 
-    //Default
-    WINQAssertEqual(WCDB::StatementCreateView()
-                    .createView(self.class.viewName)
-                    .as(self.class.statementSelect),
-                    @"CREATE VIEW IF NOT EXISTS main.testView AS SELECT testColumn FROM main.testTable");
+    auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE VIEW IF NOT EXISTS main.testView AS SELECT 1");
+}
+
+- (void)test_create_view_with_schema
+{
+    auto testingSQL = WCDB::StatementCreateView().createView(schema, name).as(select);
+
+    auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE VIEW testSchema.testView AS SELECT 1");
+}
+
+- (void)test_create_view_with_columns
+{
+    auto testingSQL = WCDB::StatementCreateView().createView(name).columns(columns).as(select);
+
+    auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE VIEW main.testView(testColumn1, testColumn2) AS SELECT 1");
 }
 
 @end

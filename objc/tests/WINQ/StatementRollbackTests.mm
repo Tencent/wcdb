@@ -19,23 +19,43 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface StatementRollbackTests : WINQTestCase
 
 @end
 
-@implementation StatementRollbackTests
+@implementation StatementRollbackTests {
+    NSString* savepoint;
+}
 
-- (void)testStatementRollback
+- (void)setUp
 {
-    XCTAssertEqual(WCDB::StatementRollback().getType(), WCDB::Statement::Type::Rollback);
+    [super setUp];
+    savepoint = @"testSavepoint";
+}
 
-    WINQAssertEqual(WCDB::StatementRollback()
-                    .rollbackTo(self.class.savepointName),
-                    @"ROLLBACK TO testSavepoint");
+- (void)test_default_constructible
+{
+    WCDB::StatementRollback constructible __attribute((unused));
+}
 
-    WINQAssertEqual(WCDB::StatementRollback::rollback(),
-                    @"ROLLBACK");
+- (void)test_rollback
+{
+    auto testingSQL = WCDB::StatementRollback().rollback();
+
+    auto testingTypes = { WCDB::SQL::Type::RollbackSTMT };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"ROLLBACK");
+}
+
+- (void)test_rollback_savepoint
+{
+    auto testingSQL = WCDB::StatementRollback().rollbackToSavepoint(savepoint);
+
+    auto testingTypes = { WCDB::SQL::Type::RollbackSTMT };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"ROLLBACK TO testSavepoint");
 }
 
 @end

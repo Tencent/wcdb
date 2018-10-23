@@ -19,23 +19,50 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface StatementBeginTests : WINQTestCase
 
 @end
 
-@implementation StatementBeginTests
+@implementation StatementBeginTests {
+}
 
-- (void)testStatementBegin
+- (void)setUp
 {
-    XCTAssertEqual(WCDB::StatementBegin().getType(), WCDB::Statement::Type::Begin);
+    [super setUp];
+}
 
-    WINQAssertEqual(WCDB::StatementBegin::deferred(),
-                    @"BEGIN DEFERRED");
-    WINQAssertEqual(WCDB::StatementBegin::immediate(),
-                    @"BEGIN IMMEDIATE");
-    WINQAssertEqual(WCDB::StatementBegin::exclusive(),
-                    @"BEGIN EXCLUSIVE");
+- (void)test_default_constructible
+{
+    WCDB::StatementBegin constructible __attribute((unused));
+}
+
+- (void)test_begin_deferred
+{
+    auto testingSQL = WCDB::StatementBegin().beginDeferred();
+
+    auto testingTypes = { WCDB::SQL::Type::BeginSTMT };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"BEGIN DEFERRED");
+}
+
+- (void)test_begin_immediate
+{
+    auto testingSQL = WCDB::StatementBegin().beginImmediate();
+
+    auto testingTypes = { WCDB::SQL::Type::BeginSTMT };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"BEGIN IMMEDIATE");
+}
+
+- (void)test_begin_exclusive
+{
+    auto testingSQL = WCDB::StatementBegin().beginExclusive();
+
+    auto testingTypes = { WCDB::SQL::Type::BeginSTMT };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"BEGIN EXCLUSIVE");
 }
 
 @end

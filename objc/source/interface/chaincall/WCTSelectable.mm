@@ -49,9 +49,9 @@
     return self;
 }
 
-- (instancetype)orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+- (instancetype)order:(const WCDB::OrderingTerms &)orders
 {
-    _statement.orderBy(orders);
+    _statement.order(orders);
     return self;
 }
 
@@ -67,9 +67,9 @@
     return self;
 }
 
-- (instancetype)groupBy:(const std::list<WCDB::Expression> &)groups
+- (instancetype)group:(const WCDB::Expressions &)groups
 {
-    _statement.groupBy(groups);
+    _statement.group(groups);
     return self;
 }
 

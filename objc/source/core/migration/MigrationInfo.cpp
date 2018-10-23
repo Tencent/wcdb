@@ -104,27 +104,22 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
             resultColumns.push_back(Column(column));
         }
 
-        StatementSelect migratedSelection
-        = StatementSelect()
-          .select(resultColumns)
-          .from(TableOrSubquery(m_migratedTable).as(Schema::main()));
+        StatementSelect select
+        = StatementSelect().select(resultColumns).from(TableOrSubquery(Schema::main(), m_migratedTable));
 
-        SelectCore originSelection
-        = SelectCore().select(resultColumns).from(TableOrSubquery(m_originTable).as(m_schemaForOriginDatabase));
-
-        // UNION ALL has better performance, but it will trigger a bug of SQLite. See https://github.com/RingoD/SQLiteBugOfUnionAll for further information.
-        StatementSelect selection;
         if (isSameDatabaseMigration()) {
-            selection = migratedSelection.unionAll(originSelection);
+            // UNION ALL has better performance, but it will trigger a bug of SQLite. See https://github.com/RingoD/SQLiteBugOfUnionAll for further information.
+            select.unionAll();
         } else {
-            selection = migratedSelection.union_(originSelection);
+            select.union_();
         }
 
+        select.select(resultColumns).from(TableOrSubquery(m_schemaForOriginDatabase, m_originTable));
+
         m_statementForCreatingUnionedView = StatementCreateView()
-                                            .createView(m_unionedView)
-                                            .withSchema(Schema::main())
+                                            .createView(Schema::main(), m_unionedView)
                                             .ifNotExists()
-                                            .as(selection);
+                                            .as(select);
     }
 
     // Migrate
@@ -141,21 +136,19 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
 
         m_statementForMigratingRow
         = StatementInsert()
-          .insertInto(m_migratedTable)
-          .withSchema(Schema::main())
-          .on(specificColumns)
+          .insertIntoTable(Schema::main(), m_migratedTable)
+          .columns(specificColumns)
           .values(StatementSelect()
                   .select(specificResultColumns)
-                  .from(TableOrSubquery(m_originTable).withSchema(m_schemaForOriginDatabase)));
+                  .from(TableOrSubquery(m_schemaForOriginDatabase, m_originTable)));
 
         m_statementForDeletingMigratedRow
         = StatementDelete()
-          .deleteFrom(QualifiedTableName(m_originTable).withSchema(m_schemaForOriginDatabase))
+          .deleteFrom(QualifiedTable(m_schemaForOriginDatabase, m_originTable))
           .limit(BindParameter(1));
 
         m_statementForDroppingOriginTable = StatementDropTable()
-                                            .dropTable(m_originTable)
-                                            .withSchema(m_schemaForOriginDatabase)
+                                            .dropTable(m_schemaForOriginDatabase, m_originTable)
                                             .ifExists();
     }
 }
@@ -172,7 +165,7 @@ const std::string& MigrationInfo::getUnionedView() const
     return m_unionedView;
 }
 
-std::string MigrationInfo::getSchemaForDatabase(const std::string& database)
+Schema MigrationInfo::getSchemaForDatabase(const std::string& database)
 {
     if (database.empty()) {
         return Schema::main();
@@ -180,7 +173,7 @@ std::string MigrationInfo::getSchemaForDatabase(const std::string& database)
     return getSchemaPrefix() + std::to_string(String::hash(database));
 }
 
-const std::string& MigrationInfo::getSchemaForOriginDatabase() const
+const Schema& MigrationInfo::getSchemaForOriginDatabase() const
 {
     return m_schemaForOriginDatabase;
 }
@@ -191,10 +184,9 @@ const StatementAttach& MigrationInfo::getStatementForAttachingSchema() const
     return m_statementForAttachingSchema;
 }
 
-const StatementDetach
-MigrationInfo::getStatementForDetachingSchema(const std::string& schema)
+const StatementDetach MigrationInfo::getStatementForDetachingSchema(const Schema& schema)
 {
-    WCTInnerAssert(String::hasPrefix(schema, getSchemaPrefix()));
+    WCTInnerAssert(String::hasPrefix(schema.getDescription(), getSchemaPrefix()));
     return StatementDetach().detach(schema);
 }
 
@@ -214,7 +206,7 @@ const StatementDropView
 MigrationInfo::getStatementForDroppingUnionedView(const std::string& unionedView)
 {
     WCTInnerAssert(String::hasPrefix(unionedView, getUnionedViewPrefix()));
-    return StatementDropView().dropView(unionedView).withSchema(Schema::temp()).ifExists();
+    return StatementDropView().dropView(Schema::temp(), unionedView).ifExists();
 }
 
 #pragma mark - Migrate

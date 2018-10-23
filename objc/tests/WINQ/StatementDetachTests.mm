@@ -19,20 +19,34 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface StatementDetachTests : WINQTestCase
 
 @end
 
-@implementation StatementDetachTests
+@implementation StatementDetachTests {
+    WCDB::Schema schema;
+}
 
-- (void)testStatementDetach
+- (void)setUp
 {
-    XCTAssertEqual(WCDB::StatementDetach().getType(), WCDB::Statement::Type::Detach);
+    [super setUp];
+    schema = @"testSchema";
+}
 
-    WINQAssertEqual(WCDB::StatementDetach()
-                    .detach(self.class.schemaName),
-                    @"DETACH testSchema");
+- (void)test_default_constructible
+{
+    WCDB::StatementDetach constructible __attribute((unused));
+}
+
+- (void)test_detach
+{
+    auto testingSQL = WCDB::StatementDetach().detach(schema);
+
+    auto testingTypes = { WCDB::SQL::Type::DetachSTMT, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"DETACH testSchema");
 }
 
 @end

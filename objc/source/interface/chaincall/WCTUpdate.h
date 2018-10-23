@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)table:(NSString *)tableName;
 
-- (instancetype)onProperties:(const WCTPropertyList &)properties;
+- (instancetype)onProperties:(const WCTProperties &)properties;
 
 /**
  @brief WINQ interface for SQL.
@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param orders order list
  @return self
  */
-- (instancetype)orderBy:(const std::list<WCDB::OrderingTerm> &)orders;
+- (instancetype)order:(const WCDB::OrderingTerms &)orders;
 
 /**
  @brief WINQ interface for SQL.

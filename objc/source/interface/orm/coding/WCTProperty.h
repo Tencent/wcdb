@@ -18,63 +18,40 @@
  * limitations under the License.
  */
 
+#import <WCDB/WCTColumnBinding.h>
 #import <WCDB/WCTCommon.h>
 
-class WCTColumnBinding;
-class WCTProperty;
-
-class WCTProperty final : public WCDB::Operable,
-                          public WCDB::DescribableWithLang<WCDB::Lang::Expr>,
-                          public WCDB::Redirectable {
+class WCTProperty : public WCDB::Column, public WCTColumnBindingHolder {
 public:
     WCTProperty(const WCTColumnBinding &columnBinding);
-    WCTProperty(const WCDB::Expression &expression,
-                const WCTColumnBinding &columnBinding);
+    WCTProperty(const WCDB::Column &column, const WCTColumnBinding &columnBinding);
 
-    WCTProperty inTable(NSString *tableName) const;
-    WCTProperty inSchema(NSString *schemaName) const;
-
-    WCDB::IndexedColumn asIndex(WCDB::Order order = WCTOrderedNotSet) const;
-    WCDB::OrderingTerm asOrder(WCDB::Order order = WCTOrderedNotSet) const;
-
-    const WCDB::ColumnDef &getColumnDef() const;
-
-    const WCTColumnBinding &getColumnBinding() const;
-
-    operator WCDB::Column() const;
-    operator WCDB::Expression() const;
-    operator WCDB::ResultColumn() const;
-    operator WCDB::OrderingTerm() const;
-    operator WCDB::IndexedColumn() const;
-    operator std::list<WCDB::ResultColumn>() const;
-    operator std::list<WCDB::OrderingTerm>() const;
-
-    bool isSameColumnBinding(const WCTProperty &property) const;
-
-protected:
-    WCDB::Expression getRedirectSource() const override final;
-
-    WCDB::Lang::CopyOnWriteLazyLang<WCDB::Lang::Expr>
-    getExpressionLang() const override final;
-
-    const WCTColumnBinding *m_columnBinding;
+    WCDB::IndexedColumn asIndex() const;
+    WCDB::OrderingTerm asOrder() const;
 };
 
-class WCTPropertyList : public std::list<WCTProperty> {
+class WCTProperties : public WCDB::SyntaxList<WCTProperty> {
 public:
-    using list<WCTProperty>::list;
-    WCTPropertyList(const WCTProperty &property);
+    using WCDB::SyntaxList<WCTProperty>::SyntaxList;
 
-    WCTPropertyList inTable(NSString *tableName) const;
-    WCTPropertyList inSchema(NSString *schemaName) const;
-
-    void addProperties(const WCTPropertyList &properties);
-
-    WCTPropertyList byAddingProperties(const WCTPropertyList &properties) const;
-
-    operator std::list<WCDB::Column>() const;
-    operator std::list<WCDB::Expression>() const;
-    operator std::list<WCDB::ResultColumn>() const;
-    operator std::list<WCDB::OrderingTerm>() const;
-    operator std::list<WCDB::IndexedColumn>() const;
+    WCDB::Expression count() const;
 };
+
+//class WCTProperties : public std::list<WCTProperty> {
+//public:
+//    using list<WCTProperty>::list;
+//    WCTProperties(const WCTProperty &property);
+//
+//    WCTProperties inTable(NSString *tableName) const;
+//    WCTProperties inSchema(NSString *schemaName) const;
+//
+//    void addProperties(const WCTProperties &properties);
+//
+//    WCTProperties byAddingProperties(const WCTProperties &properties) const;
+//
+//    operator std::list<WCDB::Column>() const;
+//    operator WCDB::Expressions() const;
+//    operator WCDB::ResultColumns() const;
+//    operator WCDB::OrderingTerms() const;
+//    operator std::list<WCDB::IndexedColumn>() const;
+//};

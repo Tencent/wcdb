@@ -39,9 +39,9 @@
     return self;
 }
 
-- (instancetype)orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+- (instancetype)order:(const WCDB::OrderingTerms &)orders
 {
-    _statement.orderBy(orders);
+    _statement.order(orders);
     return self;
 }
 

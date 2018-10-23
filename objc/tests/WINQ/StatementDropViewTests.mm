@@ -19,39 +19,54 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface StatementDropViewTests : WINQTestCase
 
 @end
 
-@implementation StatementDropViewTests
+@implementation StatementDropViewTests {
+    WCDB::Schema schema;
+    NSString* view;
+}
 
-- (void)testStatementDropView
+- (void)setUp
 {
-    XCTAssertEqual(WCDB::StatementDropView().getType(), WCDB::Statement::Type::DropView);
+    [super setUp];
+    schema = @"testSchema";
+    view = @"testView";
+}
 
-    WINQAssertEqual(WCDB::StatementDropView()
-                    .dropView(self.class.viewName)
-                    .ifExists(true)
-                    .withSchema(self.class.schemaName),
-                    @"DROP VIEW IF EXISTS testSchema.testView");
+- (void)test_default_constructible
+{
+    WCDB::StatementDropView constructible __attribute((unused));
+}
 
-    WINQAssertEqual(WCDB::StatementDropView()
-                    .dropView(self.class.viewName)
-                    .ifExists(true),
-                    @"DROP VIEW IF EXISTS main.testView");
+- (void)test_drop_view
+{
+    auto testingSQL = WCDB::StatementDropView().dropView(schema, view).ifExists();
 
-    WINQAssertEqual(WCDB::StatementDropView()
-                    .dropView(self.class.viewName)
-                    .ifExists(false)
-                    .withSchema(self.class.schemaName),
-                    @"DROP VIEW testSchema.testView");
+    auto testingTypes = { WCDB::SQL::Type::DropViewSTMT, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"DROP VIEW IF EXISTS testSchema.testView");
+}
 
-    //Default
-    WINQAssertEqual(WCDB::StatementDropView()
-                    .dropView(self.class.viewName)
-                    .withSchema(self.class.schemaName),
-                    @"DROP VIEW IF EXISTS testSchema.testView");
+- (void)test_drop_view_without_if_exists
+{
+    auto testingSQL = WCDB::StatementDropView().dropView(schema, view);
+
+    auto testingTypes = { WCDB::SQL::Type::DropViewSTMT, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"DROP VIEW testSchema.testView");
+}
+
+- (void)test_drop_view_without_schema
+{
+    auto testingSQL = WCDB::StatementDropView().dropView(view).ifExists();
+
+    auto testingTypes = { WCDB::SQL::Type::DropViewSTMT, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"DROP VIEW IF EXISTS main.testView");
 }
 
 @end

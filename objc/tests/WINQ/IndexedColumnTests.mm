@@ -19,39 +19,77 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface IndexedColumnTests : WINQTestCase
 
 @end
 
-@implementation IndexedColumnTests
+@implementation IndexedColumnTests {
+    WCDB::Column column;
+    WCDB::Expression expression;
+    NSString* collation;
+    WCDB::Order order;
+}
 
-- (void)testIndexedColumn
+- (void)setUp
 {
-    WINQAssertEqual(WCDB::IndexedColumn(self.class.column), @"testColumn");
+    [super setUp];
+    column = WCDB::Column(@"testColumn");
+    expression = column;
+    collation = @"testCollation";
+    order = WCDB::Order::ASC;
+}
 
-    WINQAssertEqual(WCDB::IndexedColumn(self.class.column)
-                    .withOrder(WCDB::Order::NotSet),
-                    @"testColumn");
+- (void)test_default_constructible
+{
+    WCDB::IndexedColumn constructible __attribute((unused));
+}
 
-    WINQAssertEqual(WCDB::IndexedColumn(self.class.column)
-                    .withOrder(WCDB::Order::ASC),
-                    @"testColumn ASC");
+- (void)test_column
+{
+    auto testingSQL = WCDB::IndexedColumn(column);
 
-    WINQAssertEqual(WCDB::IndexedColumn(self.class.column)
-                    .withOrder(WCDB::Order::DESC),
-                    @"testColumn DESC");
+    auto testingTypes = { WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testColumn");
+}
 
-    WINQAssertEqual(WCDB::IndexedColumn(self.class.column)
-                    .collate(self.class.collationName),
-                    @"testColumn COLLATE testCollation");
+- (void)test_expression
+{
+    auto testingSQL = WCDB::IndexedColumn(expression);
 
-    WCDB::Expression column = WCDB::Expression(self.class.column);
-    WINQAssertEqual(WCDB::IndexedColumn(column), @"testColumn");
-    //Default
-    WINQAssertEqual(WCDB::IndexedColumn(self.class.column)
-                    .withOrder(),
-                    @"testColumn");
+    auto testingTypes = { WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testColumn");
+}
+
+- (void)test_collate
+{
+    auto testingSQL = WCDB::IndexedColumn(column).collate(collation);
+
+    auto testingTypes = { WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testColumn COLLATE testCollation");
+}
+
+- (void)test_order
+{
+    auto testingSQL = WCDB::IndexedColumn(column).order(order);
+
+    auto testingTypes = { WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testColumn ASC");
+}
+
+WCDB::IndexedColumn acceptable(const WCDB::IndexedColumn& indexedColumn)
+{
+    return indexedColumn;
+}
+
+- (void)test_init
+{
+    WINQAssertEqual(acceptable(1), @"1");
 }
 
 @end

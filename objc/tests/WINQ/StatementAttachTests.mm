@@ -19,23 +19,38 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface StatementAttachTests : WINQTestCase
 
 @end
 
-@implementation StatementAttachTests
+@implementation StatementAttachTests {
+    NSString* path;
+    WCDB::Expression expression;
+    WCDB::Schema schema;
+}
 
-- (void)testStatementAttach
+- (void)setUp
 {
-    XCTAssertEqual(WCDB::StatementAttach().getType(), WCDB::Statement::Type::Attach);
+    [super setUp];
+    path = @"testPath";
+    expression = path;
+    schema = @"testSchema";
+}
 
-    WCDB::Expression expr = WCDB::Expression(self.class.column);
+- (void)test_default_constructible
+{
+    WCDB::StatementAttach constructible __attribute((unused));
+}
 
-    WINQAssertEqual(WCDB::StatementAttach()
-                    .attach(expr)
-                    .as(self.class.schemaName),
-                    @"ATTACH testColumn AS testSchema");
+- (void)test_attach
+{
+    auto testingSQL = WCDB::StatementAttach().attach(expression).as(schema);
+
+    auto testingTypes = { WCDB::SQL::Type::AttachSTMT, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"ATTACH 'testPath' AS testSchema");
 }
 
 @end

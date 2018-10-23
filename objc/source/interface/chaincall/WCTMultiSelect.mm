@@ -38,24 +38,24 @@ struct MultiInfo {
 typedef struct MultiInfo MultiInfo;
 
 @implementation WCTMultiSelect {
-    WCTPropertyList _properties;
+    WCTResultColumns _resultColumns;
     std::list<MultiInfo> _infos;
 }
 
 - (instancetype)fromTables:(NSArray<NSString *> *)tableNames
 {
-    std::list<WCDB::TableOrSubquery> tables;
+    WCDB::TablesOrSubqueries tables;
     for (NSString *tableName in tableNames) {
-        tables.push_back(tableName.cppString);
+        tables.push_back(tableName);
     }
     _statement.from(tables);
     return self;
 }
 
-- (instancetype)onProperties:(const WCTPropertyList &)properties
+- (instancetype)onResultColumns:(const WCTResultColumns &)resultColumns
 {
-    _properties = properties;
-    _statement.select(properties);
+    _resultColumns = resultColumns;
+    _statement.select(resultColumns);
     return self;
 }
 
@@ -64,19 +64,20 @@ typedef struct MultiInfo MultiInfo;
     WCTInnerAssert(_handle != nullptr);
     if (_infos.empty()) {
         int index = 0;
-        for (const WCTProperty &property : _properties) {
-            const char *tableName = _handle->getColumnTableName(index);
-            NSString *nsTableName = nil;
-            if (tableName) {
-                nsTableName = [NSString stringWithUTF8String:tableName];
-            }
-            if (!nsTableName) {
-                nsTableName = @"";
-            }
-            Class cls = property.getColumnBinding().getClass();
-            _infos.push_back(MultiInfo(property, nsTableName, cls));
-            ++index;
-        }
+#warning TODO
+        //        for (const WCTProperty &property : _properties) {
+        //            const char *tableName = _handle->getColumnTableName(index);
+        //            NSString *nsTableName = nil;
+        //            if (tableName) {
+        //                nsTableName = [NSString stringWithUTF8String:tableName];
+        //            }
+        //            if (!nsTableName) {
+        //                nsTableName = @"";
+        //            }
+        //            Class cls = property.getColumnBinding().getClass();
+        //            _infos.push_back(MultiInfo(property, nsTableName, cls));
+        //            ++index;
+        //        }
     }
 }
 

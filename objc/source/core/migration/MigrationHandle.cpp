@@ -31,7 +31,7 @@ MigrationHandle::MigrationHandle(const std::string& path)
 , m_statementForGettingDatabaseList(StatementPragma().pragma(Pragma::databaseList()))
 , m_statementForGettingTempViews(StatementSelect()
                                  .select(Column("name"))
-                                 .from(TableOrSubquery("sqlite_master").withSchema("temp"))
+                                 .from(TableOrSubquery(Schema::temp(), "sqlite_master"))
                                  .where(Column("type") == "view"))
 {
 }
@@ -83,7 +83,7 @@ bool MigrationHandle::rebindMigration(const std::set<const MigrationInfo*>& migr
     for (const auto& migratingInfo : migratingInfos) {
         if (!migratingInfo->isSameDatabaseMigration()) {
             infosToAttachSchema.emplace(
-            migratingInfo->getSchemaForOriginDatabase(), migratingInfo);
+            migratingInfo->getSchemaForOriginDatabase().getDescription(), migratingInfo);
         }
     }
 

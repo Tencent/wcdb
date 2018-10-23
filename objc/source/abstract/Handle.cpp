@@ -341,11 +341,17 @@ std::pair<bool, bool> Handle::tableExists(const TableOrSubquery &table)
 }
 
 std::pair<bool, std::set<std::string>>
-Handle::getUnorderedColumnsWithTable(const std::string &tableName, const std::string &schemaName)
+Handle::getUnorderedColumnsWithTable(const Schema &schema, const std::string &table)
 {
     WCDB::StatementPragma statement
-    = StatementPragma().withSchema(schemaName).pragma(Pragma::tableInfo()).with(tableName);
+    = StatementPragma().pragma(schema, Pragma::tableInfo()).with(table);
     return getUnorderedValues(statement, 1);
+}
+
+std::pair<bool, std::set<std::string>>
+Handle::getUnorderedColumnsWithTable(const std::string &table)
+{
+    return getUnorderedColumnsWithTable(Schema::main(), table);
 }
 
 std::pair<bool, std::set<std::string>>
@@ -389,7 +395,7 @@ bool Handle::commitOrRollbackNestedTransaction()
     std::string savepointName = savepointPrefix() + std::to_string(m_nestedLevel--);
     if (!execute(StatementRelease().release(savepointName))) {
         markErrorAsIgnorable(-1);
-        execute(StatementRollback().rollbackTo(savepointName));
+        execute(StatementRollback().rollbackToSavepoint(savepointName));
         markErrorAsUnignorable();
         return false;
     }
@@ -403,7 +409,7 @@ void Handle::rollbackNestedTransaction()
     }
     std::string savepointName = savepointPrefix() + std::to_string(m_nestedLevel--);
     markErrorAsIgnorable(-1);
-    execute(StatementRollback().rollbackTo(savepointName));
+    execute(StatementRollback().rollbackToSavepoint(savepointName));
     markErrorAsUnignorable();
 }
 
@@ -421,15 +427,15 @@ bool Handle::runNestedTransaction(const TransactionCallback &transaction)
 
 bool Handle::beginTransaction()
 {
-    return execute(StatementBegin::immediate());
+    return execute(StatementBegin().beginImmediate());
 }
 
 bool Handle::commitOrRollbackTransaction()
 {
     m_nestedLevel = 0;
-    if (!execute(StatementCommit::commit())) {
+    if (!execute(StatementCommit().commit())) {
         markErrorAsIgnorable(-1);
-        execute(StatementRollback::rollback());
+        execute(StatementRollback().rollback());
         markErrorAsUnignorable();
         return false;
     }
@@ -440,7 +446,7 @@ void Handle::rollbackTransaction()
 {
     m_nestedLevel = 0;
     markErrorAsIgnorable(-1);
-    execute(StatementRollback::rollback());
+    execute(StatementRollback().rollback());
     markErrorAsUnignorable();
 }
 

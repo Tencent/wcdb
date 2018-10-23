@@ -25,7 +25,7 @@
 
 @implementation WCTUpdate {
     WCDB::StatementUpdate _statement;
-    WCTPropertyList _properties;
+    WCTProperties _properties;
 }
 
 - (instancetype)table:(NSString *)tableName
@@ -35,12 +35,12 @@
     return self;
 }
 
-- (instancetype)onProperties:(const WCTPropertyList &)properties
+- (instancetype)onProperties:(const WCTProperties &)properties
 {
     _properties = properties;
     int bindParameterIndex = 0;
     for (const WCTProperty &property : properties) {
-        _statement.set(property, WCDB::BindParameter(++bindParameterIndex));
+        _statement.set(property).to(WCDB::BindParameter(++bindParameterIndex));
     }
     return self;
 }
@@ -51,9 +51,9 @@
     return self;
 }
 
-- (instancetype)orderBy:(const std::list<WCDB::OrderingTerm> &)orders
+- (instancetype)order:(const WCDB::OrderingTerms &)orders
 {
-    _statement.orderBy(orders);
+    _statement.order(orders);
     return self;
 }
 

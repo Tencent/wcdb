@@ -19,55 +19,191 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface LiteralValueTests : WINQTestCase
 
 @end
 
-@implementation LiteralValueTests
-
-- (void)testLiteralValue
-{
-    int numericLiteral = 1;
-    float floatLitearl = 2.1;
-    std::string stringLiteral = "3";
-    std::vector<unsigned char> blobLiteral;
-    blobLiteral.push_back('4');
-
-    WINQAssertEqual(WCDB::LiteralValue(numericLiteral), @"1");
-    WINQAssertEqual(WCDB::LiteralValue(floatLitearl), @"2.1");
-    WINQAssertEqual(WCDB::LiteralValue(stringLiteral), @"'3'");
-    WINQAssertEqual(WCDB::LiteralValue(blobLiteral), @"'4'");
-
-    WINQAssertEqual(WCDB::LiteralValue("3"), @"'3'");
-    WINQAssertEqual(WCDB::LiteralValue(nullptr), @"NULL");
-
-    WINQAssertEqual(WCDB::LiteralValue::currentTime(), @"CURRENT_TIME");
-    WINQAssertEqual(WCDB::LiteralValue::currentDate(), @"CURRENT_DATE");
-    WINQAssertEqual(WCDB::LiteralValue::currentTimestamp(), @"CURRENT_TIMESTAMP");
+@implementation LiteralValueTests {
 }
 
-- (void)testBound
+- (void)setUp
 {
-    WINQAssertEqual(WCDB::LiteralValue(0), @"0");
-    WINQAssertEqual(WCDB::LiteralValue(nullptr), @"NULL");
-    WINQAssertEqual(WCDB::LiteralValue(NULL), @"0");
-
-    WINQAssertEqual(WCDB::LiteralValue(INT32_MIN), @"-2147483648");
-    WINQAssertEqual(WCDB::LiteralValue(INT64_MIN), @"-9223372036854775808");
-
-    WINQAssertEqual(WCDB::LiteralValue(INT32_MAX), @"2147483647");
-    WINQAssertEqual(WCDB::LiteralValue(INT64_MAX), @"9223372036854775807");
-    WINQAssertEqual(WCDB::LiteralValue(UINT32_MAX), @"4294967295");
-    WINQAssertEqual(WCDB::LiteralValue(UINT64_MAX), @"18446744073709551615");
-
-    NSString *nilValue = nil;
-    WINQAssertEqual(WCDB::LiteralValue(nilValue), @"''");
+    [super setUp];
 }
 
-- (void)testAnitInjection
+- (void)test_default_constructible
 {
-    WINQAssertEqual(WCDB::LiteralValue("'SELECT'"), @"'''SELECT'''")
+    WCDB::LiteralValue constructible __attribute((unused));
+}
+
+- (void)test_uint
+{
+    auto testingSQL = WCDB::LiteralValue(1);
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"1");
+}
+
+- (void)test_int
+{
+    auto testingSQL = WCDB::LiteralValue(-1);
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"-1");
+}
+
+- (void)test_ns_number
+{
+    auto testingSQL = WCDB::LiteralValue(@(1));
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"1");
+}
+
+- (void)test_true
+{
+    auto testingSQL = WCDB::LiteralValue(true);
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"1");
+}
+
+- (void)test_false
+{
+    auto testingSQL = WCDB::LiteralValue(false);
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"0");
+}
+
+- (void)test_yes
+{
+    auto testingSQL = WCDB::LiteralValue(YES);
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"1");
+}
+
+- (void)test_no
+{
+    auto testingSQL = WCDB::LiteralValue(NO);
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"0");
+}
+
+- (void)test_int32_max
+{
+    auto testingSQL = WCDB::LiteralValue(std::numeric_limits<int32_t>::max());
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"2147483647");
+}
+
+- (void)test_int32_min
+{
+    auto testingSQL = WCDB::LiteralValue(std::numeric_limits<int32_t>::min());
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"-2147483648");
+}
+
+- (void)test_int64_max
+{
+    auto testingSQL = WCDB::LiteralValue(std::numeric_limits<int64_t>::max());
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"9223372036854775807");
+}
+
+- (void)test_int64_min
+{
+    auto testingSQL = WCDB::LiteralValue(std::numeric_limits<int64_t>::min());
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"-9223372036854775808");
+}
+
+- (void)test_float
+{
+    auto testingSQL = WCDB::LiteralValue((float) 0.1);
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"0.1");
+}
+
+- (void)test_double
+{
+    auto testingSQL = WCDB::LiteralValue((float) 0.1);
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"0.1");
+}
+
+- (void)test_string
+{
+    auto testingSQL = WCDB::LiteralValue("test");
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"'test'");
+}
+
+- (void)test_cpp_string
+{
+    auto testingSQL = WCDB::LiteralValue(std::string("test"));
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"'test'");
+}
+
+- (void)test_ns_string
+{
+    auto testingSQL = WCDB::LiteralValue(@"test");
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"'test'");
+}
+
+- (void)test_null
+{
+    auto testingSQL = WCDB::LiteralValue(nullptr);
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"NULL");
+}
+
+- (void)test_nil
+{
+    auto testingSQL = WCDB::LiteralValue(nil);
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"NULL");
+}
+
+- (void)test_current_time
+{
+    auto testingSQL = WCDB::LiteralValue::currentTime();
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CURRENT_TIME");
+}
+
+- (void)test_current_date
+{
+    auto testingSQL = WCDB::LiteralValue::currentDate();
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CURRENT_DATE");
+}
+
+- (void)test_current_timestamp
+{
+    auto testingSQL = WCDB::LiteralValue::currentTimestamp();
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CURRENT_TIMESTAMP");
 }
 
 @end

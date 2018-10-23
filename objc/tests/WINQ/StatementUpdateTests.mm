@@ -19,139 +19,166 @@
  */
 
 #import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
 @interface StatementUpdateTests : WINQTestCase
 
 @end
 
-@implementation StatementUpdateTests
+@implementation StatementUpdateTests {
+    WCDB::With with;
+    WCDB::QualifiedTable table;
+    WCDB::Column column;
+    WCDB::Columns columns;
+    WCDB::Expression expression1;
+    WCDB::Expression expression2;
+    WCDB::Expression condition;
+    WCDB::OrderingTerms orderingTerms;
+    WCDB::Expression limit;
+    WCDB::Expression limitParameter;
+}
 
-- (void)testStatementUpdate
+- (void)setUp
 {
-    XCTAssertEqual(WCDB::StatementUpdate().getType(), WCDB::Statement::Type::Update);
+    [super setUp];
+    with = WCDB::With().table(@"testTable").as(WCDB::StatementSelect().select(1));
+    table = @"testTable";
+    column = WCDB::Column(@"testColumn");
+    columns = {
+        WCDB::Column(@"testColumn1"),
+        WCDB::Column(@"testColumn2"),
+    };
+    expression1 = 1;
+    expression2 = 2;
+    condition = 3;
+    orderingTerms = {
+        1,
+        2,
+    };
+    limit = 1;
+    limitParameter = 2;
+}
 
-    WINQAssertEqual(WCDB::StatementUpdate()
-                    .update(self.class.qualifiedTableName)
-                    .set(self.class.column, self.class.value)
-                    .where(self.class.condition)
-                    .orderBy(self.class.orderingTerm)
-                    .limit(self.class.limit)
-                    .offset(self.class.limitParameter),
-                    @"UPDATE main.testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+- (void)test_default_constructible
+{
+    WCDB::StatementUpdate constructible __attribute((unused));
+}
 
-    WINQAssertEqual(WCDB::StatementUpdate()
-                    .update(self.class.qualifiedTableName)
-                    .set(self.class.column, self.class.value)
-                    .where(self.class.condition)
-                    .orderBy(self.class.orderingTerm)
-                    .limit(self.class.limit, self.class.limitParameter),
-                    @"UPDATE main.testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1, 2");
+- (void)test_update
+{
+    auto testingSQL = WCDB::StatementUpdate().update(table).set(column).to(expression1);
 
-    WINQAssertEqual(WCDB::StatementUpdate()
-                    .update(self.class.qualifiedTableName)
-                    .set(self.class.column, self.class.value)
-                    .where(self.class.condition)
-                    .orderBy(self.class.orderingTerm)
-                    .limit(self.class.limit),
-                    @"UPDATE main.testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1");
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1");
+}
 
-    WINQAssertEqual(WCDB::StatementUpdate()
-                    .update(self.class.qualifiedTableName)
-                    .set(self.class.column, self.class.value)
-                    .where(self.class.condition)
-                    .orderBy(self.class.orderingTerms)
-                    .limit(self.class.limit, self.class.limitParameter),
-                    @"UPDATE main.testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn, testColumn2 LIMIT 1, 2");
+- (void)test_update_with
+{
+    auto testingSQL = WCDB::StatementUpdate().with(with).update(table).set(column).to(expression1);
 
-    WINQAssertEqual(WCDB::StatementUpdate()
-                    .update(self.class.qualifiedTableName)
-                    .set(self.class.column, self.class.value)
-                    .where(self.class.condition)
-                    .limit(self.class.limit)
-                    .offset(self.class.limitParameter),
-                    @"UPDATE main.testTable SET testColumn = 1 WHERE testColumn NOTNULL LIMIT 1 OFFSET 2");
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::WithClause, WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"WITH testTable AS(SELECT 1) UPDATE main.testTable SET testColumn = 1");
+}
 
-    WINQAssertEqual(WCDB::StatementUpdate()
-                    .update(self.class.qualifiedTableName)
-                    .set(self.class.column, self.class.value)
-                    .orderBy(self.class.orderingTerm)
-                    .limit(self.class.limit)
-                    .offset(self.class.limitParameter),
-                    @"UPDATE main.testTable SET testColumn = 1 ORDER BY testColumn LIMIT 1 OFFSET 2");
+- (void)test_update_or_rollback
+{
+    auto testingSQL = WCDB::StatementUpdate().update(table).orRollback().set(column).to(expression1);
 
-    WINQAssertEqual(WCDB::StatementUpdate()
-                    .update(self.class.qualifiedTableName)
-                    .set(self.class.columns, self.class.value)
-                    .where(self.class.condition)
-                    .orderBy(self.class.orderingTerm)
-                    .limit(self.class.limit)
-                    .offset(self.class.limitParameter),
-                    @"UPDATE main.testTable SET testColumn, testColumn2 = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"UPDATE OR ROLLBACK main.testTable SET testColumn = 1");
+}
 
-    WINQAssertEqual(WCDB::StatementUpdate()
-                    .update(self.class.qualifiedTableName)
-                    .set(self.class.column, self.class.value)
-                    .set(self.class.column2, self.class.value2)
-                    .where(self.class.condition)
-                    .orderBy(self.class.orderingTerm)
-                    .limit(self.class.limit)
-                    .offset(self.class.limitParameter),
-                    @"UPDATE main.testTable SET testColumn = 1, testColumn2 = 'testValue' WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+- (void)test_update_or_abort
+{
+    auto testingSQL = WCDB::StatementUpdate().update(table).orAbort().set(column).to(expression1);
 
-    WINQAssertEqual(WCDB::StatementUpdate()
-                    .updateOrRollback(self.class.qualifiedTableName)
-                    .set(self.class.column, self.class.value)
-                    .where(self.class.condition)
-                    .orderBy(self.class.orderingTerm)
-                    .limit(self.class.limit)
-                    .offset(self.class.limitParameter),
-                    @"UPDATE OR ROLLBACK main.testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"UPDATE OR ABORT main.testTable SET testColumn = 1");
+}
 
-    WINQAssertEqual(WCDB::StatementUpdate()
-                    .updateOrAbort(self.class.qualifiedTableName)
-                    .set(self.class.column, self.class.value)
-                    .where(self.class.condition)
-                    .orderBy(self.class.orderingTerm)
-                    .limit(self.class.limit)
-                    .offset(self.class.limitParameter),
-                    @"UPDATE OR ABORT main.testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+- (void)test_update_or_replace
+{
+    auto testingSQL = WCDB::StatementUpdate().update(table).orReplace().set(column).to(expression1);
 
-    WINQAssertEqual(WCDB::StatementUpdate()
-                    .updateOrReplace(self.class.qualifiedTableName)
-                    .set(self.class.column, self.class.value)
-                    .where(self.class.condition)
-                    .orderBy(self.class.orderingTerm)
-                    .limit(self.class.limit)
-                    .offset(self.class.limitParameter),
-                    @"UPDATE OR REPLACE main.testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"UPDATE OR REPLACE main.testTable SET testColumn = 1");
+}
 
-    WINQAssertEqual(WCDB::StatementUpdate()
-                    .updateOrFail(self.class.qualifiedTableName)
-                    .set(self.class.column, self.class.value)
-                    .where(self.class.condition)
-                    .orderBy(self.class.orderingTerm)
-                    .limit(self.class.limit)
-                    .offset(self.class.limitParameter),
-                    @"UPDATE OR FAIL main.testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+- (void)test_update_or_fail
+{
+    auto testingSQL = WCDB::StatementUpdate().update(table).orFail().set(column).to(expression1);
 
-    WINQAssertEqual(WCDB::StatementUpdate()
-                    .updateOrIgnore(self.class.qualifiedTableName)
-                    .set(self.class.column, self.class.value)
-                    .where(self.class.condition)
-                    .orderBy(self.class.orderingTerm)
-                    .limit(self.class.limit)
-                    .offset(self.class.limitParameter),
-                    @"UPDATE OR IGNORE main.testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"UPDATE OR FAIL main.testTable SET testColumn = 1");
+}
 
-    WINQAssertEqual(WCDB::StatementUpdate()
-                    .with(self.class.withClause)
-                    .update(self.class.qualifiedTableName)
-                    .set(self.class.column, self.class.value)
-                    .where(self.class.condition)
-                    .orderBy(self.class.orderingTerm)
-                    .limit(self.class.limit)
-                    .offset(self.class.limitParameter),
-                    @"WITH testCTETable AS(SELECT testColumn FROM main.testTable) UPDATE main.testTable SET testColumn = 1 WHERE testColumn NOTNULL ORDER BY testColumn LIMIT 1 OFFSET 2");
+- (void)test_update_or_ignore
+{
+    auto testingSQL = WCDB::StatementUpdate().update(table).orIgnore().set(column).to(expression1);
+
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"UPDATE OR IGNORE main.testTable SET testColumn = 1");
+}
+
+- (void)test_update_multiple
+{
+    auto testingSQL = WCDB::StatementUpdate().update(table).set(column).to(expression1).set(columns).to(expression2);
+
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1, (testColumn1, testColumn2) = 2");
+}
+
+- (void)test_update_with_condition
+{
+    auto testingSQL = WCDB::StatementUpdate().update(table).set(column).to(expression1).where(condition);
+
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 WHERE 3");
+}
+
+- (void)test_update_with_orders
+{
+    auto testingSQL = WCDB::StatementUpdate().update(table).set(column).to(expression1).order(orderingTerms).limit(limit);
+
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 ORDER BY 1, 2 LIMIT 1");
+}
+
+- (void)test_update_with_limit
+{
+    auto testingSQL = WCDB::StatementUpdate().update(table).set(column).to(expression1).limit(limit);
+
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 LIMIT 1");
+}
+
+- (void)test_update_with_limit_length
+{
+    auto testingSQL = WCDB::StatementUpdate().update(table).set(column).to(expression1).limit(limit, limitParameter);
+
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 LIMIT 1, 2");
+}
+
+- (void)test_update_with_limit_offset
+{
+    auto testingSQL = WCDB::StatementUpdate().update(table).set(column).to(expression1).limit(limit).offset(limitParameter);
+
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 LIMIT 1 OFFSET 2");
 }
 
 @end
