@@ -51,7 +51,7 @@
 
 - (void)test_create_virtual_table
 {
-    auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(schema, table).usingModule(module).arguments(moduleArguments);
+    auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(table).schema(schema).usingModule(module).arguments(moduleArguments);
 
     auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ModuleArgument, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ModuleArgument, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -60,7 +60,7 @@
 
 - (void)test_create_virtual_table_if_not_exists
 {
-    auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(schema, table).ifNotExists().usingModule(module).arguments(moduleArguments);
+    auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(table).schema(schema).ifNotExists().usingModule(module).arguments(moduleArguments);
 
     auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ModuleArgument, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ModuleArgument, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -78,7 +78,7 @@
 
 - (void)test_create_virtual_table_without_arguments
 {
-    auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(schema, table).usingModule(module);
+    auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(table).schema(schema).usingModule(module);
 
     auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);

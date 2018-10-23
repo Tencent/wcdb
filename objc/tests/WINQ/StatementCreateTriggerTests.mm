@@ -61,7 +61,7 @@
 
 - (void)test_create_trigger
 {
-    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).before().delete_().on(table).forEachRow().when(condition).execute(update);
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(name).schema(schema).before().delete_().on(table).forEachRow().when(condition).execute(update);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -70,7 +70,7 @@
 
 - (void)test_create_temp_trigger
 {
-    auto testingSQL = WCDB::StatementCreateTrigger().createTempTrigger(schema, name).before().delete_().on(table).forEachRow().when(condition).execute(update);
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(name).schema(schema).temp().before().delete_().on(table).forEachRow().when(condition).execute(update);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -79,7 +79,7 @@
 
 - (void)test_create_trigger_if_not_exists
 {
-    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).ifNotExists().before().delete_().on(table).forEachRow().when(condition).execute(update);
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(name).schema(schema).ifNotExists().before().delete_().on(table).forEachRow().when(condition).execute(update);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -97,7 +97,7 @@
 
 - (void)test_create_trigger_after_delete
 {
-    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).after().delete_().on(table).forEachRow().when(condition).execute(update);
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(name).schema(schema).after().delete_().on(table).forEachRow().when(condition).execute(update);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -106,7 +106,7 @@
 
 - (void)test_create_trigger_instead_of_delete
 {
-    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).insteadOf().delete_().on(table).forEachRow().when(condition).execute(update);
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(name).schema(schema).insteadOf().delete_().on(table).forEachRow().when(condition).execute(update);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -115,7 +115,7 @@
 
 - (void)test_create_trigger_before_insert
 {
-    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).before().insert().on(table).forEachRow().when(condition).execute(update);
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(name).schema(schema).before().insert().on(table).forEachRow().when(condition).execute(update);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -124,7 +124,7 @@
 
 - (void)test_create_trigger_before_update
 {
-    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).before().update().on(table).forEachRow().when(condition).execute(update);
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(name).schema(schema).before().update().on(table).forEachRow().when(condition).execute(update);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -133,7 +133,7 @@
 
 - (void)test_create_trigger_before_update_of_columns
 {
-    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).before().updateOf(columns).on(table).forEachRow().when(condition).execute(update);
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(name).schema(schema).before().updateOf(columns).on(table).forEachRow().when(condition).execute(update);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -142,7 +142,7 @@
 
 - (void)test_create_trigger_without_for_each_row
 {
-    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).before().delete_().on(table).when(condition).execute(update);
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(name).schema(schema).before().delete_().on(table).when(condition).execute(update);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -151,7 +151,7 @@
 
 - (void)test_create_trigger_without_condition
 {
-    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).before().delete_().on(table).forEachRow().execute(update);
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(name).schema(schema).before().delete_().on(table).forEachRow().execute(update);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -160,7 +160,7 @@
 
 - (void)test_create_trigger_with_insert
 {
-    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).before().delete_().on(table).forEachRow().when(condition).execute(insert);
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(name).schema(schema).before().delete_().on(table).forEachRow().when(condition).execute(insert);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -169,7 +169,7 @@
 
 - (void)test_create_trigger_with_delete
 {
-    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).before().delete_().on(table).forEachRow().when(condition).execute(delete_);
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(name).schema(schema).before().delete_().on(table).forEachRow().when(condition).execute(delete_);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -178,7 +178,7 @@
 
 - (void)test_create_trigger_with_select
 {
-    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).before().delete_().on(table).forEachRow().when(condition).execute(select);
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(name).schema(schema).before().delete_().on(table).forEachRow().when(condition).execute(select);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -187,7 +187,7 @@
 
 - (void)test_create_trigger_with_multiple_stmts
 {
-    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(schema, name).before().delete_().on(table).forEachRow().when(condition).execute(update).execute(insert).execute(delete_).execute(select);
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(name).schema(schema).before().delete_().on(table).forEachRow().when(condition).execute(update).execute(insert).execute(delete_).execute(select);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);

@@ -24,34 +24,18 @@ namespace WCDB {
 
 StatementCreateTable& StatementCreateTable::createTable(const SyntaxString& table)
 {
-    syntax.schema = Schema();
     syntax.table = table;
-    syntax.temp = false;
     return *this;
 }
 
-StatementCreateTable&
-StatementCreateTable::createTable(const Schema& schema, const SyntaxString& table)
+StatementCreateTable& StatementCreateTable::schema(const Schema& schema)
 {
     syntax.schema = schema;
-    syntax.table = table;
-    syntax.temp = false;
     return *this;
 }
 
-StatementCreateTable& StatementCreateTable::createTempTable(const SyntaxString& table)
+StatementCreateTable& StatementCreateTable::temp()
 {
-    syntax.schema = Schema();
-    syntax.table = table;
-    syntax.temp = true;
-    return *this;
-}
-
-StatementCreateTable&
-StatementCreateTable::createTempTable(const Schema& schema, const SyntaxString& table)
-{
-    syntax.schema = schema;
-    syntax.table = table;
     syntax.temp = true;
     return *this;
 }

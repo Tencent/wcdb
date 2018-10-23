@@ -53,7 +53,7 @@
 
 - (void)test_create_table
 {
-    auto testingSQL = WCDB::StatementCreateTable().createTable(schema, table).define(columnDefs);
+    auto testingSQL = WCDB::StatementCreateTable().createTable(table).schema(schema).define(columnDefs);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -62,7 +62,7 @@
 
 - (void)test_create_temp_table
 {
-    auto testingSQL = WCDB::StatementCreateTable().createTempTable(schema, table).define(columnDefs);
+    auto testingSQL = WCDB::StatementCreateTable().createTable(table).schema(schema).temp().define(columnDefs);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -71,7 +71,7 @@
 
 - (void)test_create_table_if_not_exists
 {
-    auto testingSQL = WCDB::StatementCreateTable().createTable(schema, table).ifNotExists().define(columnDefs);
+    auto testingSQL = WCDB::StatementCreateTable().createTable(table).schema(schema).ifNotExists().define(columnDefs);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -89,7 +89,7 @@
 
 - (void)test_create_table_with_constraints
 {
-    auto testingSQL = WCDB::StatementCreateTable().createTable(schema, table).define(columnDefs).constraint(tableConstraints);
+    auto testingSQL = WCDB::StatementCreateTable().createTable(table).schema(schema).define(columnDefs).constraint(tableConstraints);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column, WCDB::SQL::Type::TableConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::TableConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -98,7 +98,7 @@
 
 - (void)test_create_table_without_rowid
 {
-    auto testingSQL = WCDB::StatementCreateTable().createTable(schema, table).define(columnDefs).withoutRowID();
+    auto testingSQL = WCDB::StatementCreateTable().createTable(table).schema(schema).define(columnDefs).withoutRowID();
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -107,7 +107,7 @@
 
 - (void)test_create_table_as_select
 {
-    auto testingSQL = WCDB::StatementCreateTable().createTable(schema, table).as(select);
+    auto testingSQL = WCDB::StatementCreateTable().createTable(table).schema(schema).as(select);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);

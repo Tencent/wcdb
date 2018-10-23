@@ -44,7 +44,7 @@
 
 - (void)test_drop_view
 {
-    auto testingSQL = WCDB::StatementDropView().dropView(schema, view).ifExists();
+    auto testingSQL = WCDB::StatementDropView().dropView(view).schema(schema).ifExists();
 
     auto testingTypes = { WCDB::SQL::Type::DropViewSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -53,7 +53,7 @@
 
 - (void)test_drop_view_without_if_exists
 {
-    auto testingSQL = WCDB::StatementDropView().dropView(schema, view);
+    auto testingSQL = WCDB::StatementDropView().dropView(view).schema(schema);
 
     auto testingTypes = { WCDB::SQL::Type::DropViewSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);

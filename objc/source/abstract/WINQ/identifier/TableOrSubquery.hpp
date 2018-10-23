@@ -37,7 +37,7 @@ public:
 
     TableOrSubquery(const char* table);
     TableOrSubquery(const SyntaxString& table);
-    TableOrSubquery(const Schema& schema, const SyntaxString& table);
+    TableOrSubquery& schema(const Schema& schema);
 
     TableOrSubquery& as(const SyntaxString& alias);
 
@@ -45,11 +45,8 @@ public:
     TableOrSubquery& indexed(const SyntaxString& index);
 
     static TableOrSubquery function(const SyntaxString& function);
-    static TableOrSubquery function(const Schema& schema, const SyntaxString& function);
-    static TableOrSubquery
-    function(const SyntaxString& function, const Expressions& expressions);
-    static TableOrSubquery
-    function(const Schema& schema, const SyntaxString& function, const Expressions& expressions);
+    TableOrSubquery& invoke();
+    TableOrSubquery& invoke(const Expressions& expressions);
 
     TableOrSubquery(const TablesOrSubqueries& tableOrSubqueries);
     TableOrSubquery(const Join& join);

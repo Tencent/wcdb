@@ -34,6 +34,7 @@
     WCDB::Schema schema;
     NSString* table;
     WCDB::Expression columnExpression;
+    NSString* function;
 }
 
 - (void)setUp
@@ -50,6 +51,7 @@
     schema = @"testSchema";
     table = @"testTable";
     columnExpression = WCDB::Column(@"testColumn");
+    function = @"testFunction";
 }
 
 - (void)test_unary_tilde
@@ -390,7 +392,7 @@
 
 - (void)test_in_table
 {
-    auto testingSQL = columnExpression.inTable(schema, table);
+    auto testingSQL = columnExpression.inTable(table).schema(schema);
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
     WINQAssertEqual(testingSQL, @"testColumn IN testSchema.testTable");
@@ -406,26 +408,26 @@
 
 - (void)test_in_function
 {
-    auto testingSQL = columnExpression.inFunction(schema, table, expressions);
+    auto testingSQL = columnExpression.inFunction(function).schema(schema).invoke(expressions);
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testColumn IN testSchema.testTable(1, 2)");
+    WINQAssertEqual(testingSQL, @"testColumn IN testSchema.testFunction(1, 2)");
 }
 
 - (void)test_in_function_without_schema
 {
-    auto testingSQL = columnExpression.inFunction(table, expressions);
+    auto testingSQL = columnExpression.inFunction(function).invoke(expressions);
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testColumn IN main.testTable(1, 2)");
+    WINQAssertEqual(testingSQL, @"testColumn IN main.testFunction(1, 2)");
 }
 
 - (void)test_in_function_without_parameter
 {
-    auto testingSQL = columnExpression.inFunction(schema, table);
+    auto testingSQL = columnExpression.inFunction(table).schema(schema).invoke();
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testColumn IN testSchema.testTable()");
+    WINQAssertEqual(testingSQL, @"testColumn IN testSchema.testFunction()");
 }
 
 @end

@@ -46,7 +46,7 @@
 
 - (void)test_pragma
 {
-    auto testingSQL = WCDB::StatementPragma().pragma(schema, pragma);
+    auto testingSQL = WCDB::StatementPragma().pragma(pragma).schema(schema);
 
     auto testingTypes = { WCDB::SQL::Type::PragmaSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Pragma };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -55,7 +55,7 @@
 
 - (void)test_pragma_to
 {
-    auto testingSQL = WCDB::StatementPragma().pragma(schema, pragma).to(value);
+    auto testingSQL = WCDB::StatementPragma().pragma(pragma).schema(schema).to(value);
 
     auto testingTypes = { WCDB::SQL::Type::PragmaSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Pragma, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -73,7 +73,7 @@
 
 - (void)test_pragma_with
 {
-    auto testingSQL = WCDB::StatementPragma().pragma(schema, pragma).with(value);
+    auto testingSQL = WCDB::StatementPragma().pragma(pragma).schema(schema).with(value);
 
     auto testingTypes = { WCDB::SQL::Type::PragmaSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Pragma, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);

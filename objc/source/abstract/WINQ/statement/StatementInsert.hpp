@@ -29,7 +29,7 @@ class StatementInsert : public StatementSyntax<Syntax::InsertSTMT> {
 public:
     StatementInsert& with(const With& with);
     StatementInsert& insertIntoTable(const SyntaxString& table);
-    StatementInsert& insertIntoTable(const Schema& schema, const SyntaxString& table);
+    StatementInsert& schema(const Schema& schema);
 
     StatementInsert& orReplace();
     StatementInsert& orRollback();

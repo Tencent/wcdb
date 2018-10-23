@@ -24,32 +24,27 @@ namespace WCDB {
 
 StatementAnalyze& StatementAnalyze::analyze()
 {
-    syntax.switcher = SyntaxType::Switch::Analyze;
     return *this;
 }
 
-StatementAnalyze& StatementAnalyze::analyzeSchema(const Schema& schema)
+StatementAnalyze& StatementAnalyze::schema(const Schema& schema)
 {
-    syntax.switcher = SyntaxType::Switch::Schema;
+    syntax.useSchema = true;
     syntax.schema = schema;
-    syntax.tableOrIndex.clear();
     return *this;
 }
 
-StatementAnalyze& StatementAnalyze::analyzeTableOrIndex(const SyntaxString& tableOrIndex)
+StatementAnalyze& StatementAnalyze::table(const SyntaxString& table)
 {
-    syntax.switcher = SyntaxType::Switch::TableOrIndex;
-    syntax.schema = Schema();
-    syntax.tableOrIndex = tableOrIndex;
+    syntax.useSchema = true;
+    syntax.tableOrIndex = table;
     return *this;
 }
 
-StatementAnalyze&
-StatementAnalyze::analyzeTableOrIndex(const Schema& schema, const SyntaxString& tableOrIndex)
+StatementAnalyze& StatementAnalyze::index(const SyntaxString& index)
 {
-    syntax.switcher = SyntaxType::Switch::TableOrIndex;
-    syntax.schema = schema;
-    syntax.tableOrIndex = tableOrIndex;
+    syntax.useSchema = true;
+    syntax.tableOrIndex = index;
     return *this;
 }
 

@@ -31,16 +31,13 @@ StatementInsert& StatementInsert::with(const With& with)
 
 StatementInsert& StatementInsert::insertIntoTable(const SyntaxString& table)
 {
-    syntax.schema = Schema();
     syntax.table = table;
     return *this;
 }
 
-StatementInsert&
-StatementInsert::insertIntoTable(const Schema& schema, const SyntaxString& table)
+StatementInsert& StatementInsert::schema(const Schema& schema)
 {
     syntax.schema = schema;
-    syntax.table = table;
     return *this;
 }
 

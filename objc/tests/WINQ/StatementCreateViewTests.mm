@@ -60,7 +60,7 @@
 
 - (void)test_create_temp_view
 {
-    auto testingSQL = WCDB::StatementCreateView().createTempView(name).as(select);
+    auto testingSQL = WCDB::StatementCreateView().createView(name).temp().as(select);
 
     auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -78,7 +78,7 @@
 
 - (void)test_create_view_with_schema
 {
-    auto testingSQL = WCDB::StatementCreateView().createView(schema, name).as(select);
+    auto testingSQL = WCDB::StatementCreateView().createView(name).schema(schema).as(select);
 
     auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);

@@ -44,7 +44,7 @@
 
 - (void)test_drop_table
 {
-    auto testingSQL = WCDB::StatementDropTable().dropTable(schema, table).ifExists();
+    auto testingSQL = WCDB::StatementDropTable().dropTable(table).schema(schema).ifExists();
 
     auto testingTypes = { WCDB::SQL::Type::DropTableSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -53,7 +53,7 @@
 
 - (void)test_drop_table_without_if_exists
 {
-    auto testingSQL = WCDB::StatementDropTable().dropTable(schema, table);
+    auto testingSQL = WCDB::StatementDropTable().dropTable(table).schema(schema);
 
     auto testingTypes = { WCDB::SQL::Type::DropTableSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);

@@ -105,25 +105,12 @@ public:
     Expression notIn();
     Expression inTable(const SyntaxString &table);
     Expression notInTable(const SyntaxString &table);
-    Expression inTable(const Schema &schema, const SyntaxString &table);
-    Expression notInTable(const Schema &schema, const SyntaxString &table);
     Expression in(const StatementSelect &select);
     Expression notIn(const StatementSelect &select);
     Expression in(const Expressions &expressions);
     Expression notIn(const Expressions &expressions);
     Expression inFunction(const SyntaxString &tableFunction);
-    Expression inFunction(const Schema &schema, const SyntaxString &tableFunction);
     Expression notInFunction(const SyntaxString &tableFunction);
-    Expression notInFunction(const Schema &schema, const SyntaxString &tableFunction);
-    Expression inFunction(const SyntaxString &tableFunction, const Expressions &parameters);
-    Expression inFunction(const Schema &schema,
-                          const SyntaxString &tableFunction,
-                          const Expressions &parameters);
-    Expression
-    notInFunction(const SyntaxString &tableFunction, const Expressions &parameters);
-    Expression notInFunction(const Schema &schema,
-                             const SyntaxString &tableFunction,
-                             const Expressions &parameters);
 };
 
 class ExpressionCollateOperable : virtual public ExpressionOperable {

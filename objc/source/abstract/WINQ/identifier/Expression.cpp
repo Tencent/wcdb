@@ -37,25 +37,19 @@ Expression::Expression(const BindParameter& bindParameter)
 Expression::Expression(const Column& column)
 {
     syntax.switcher = SyntaxType::Switch::Column;
-    syntax.schema = Schema();
-    syntax.table.clear();
     syntax.column = column;
 }
 
-Expression::Expression(const SyntaxString& table, const Column& column)
+Expression& Expression::table(const SyntaxString& table)
 {
-    syntax.switcher = SyntaxType::Switch::Column;
-    syntax.schema = Schema();
     syntax.table = table;
-    syntax.column = column;
+    return *this;
 }
 
-Expression::Expression(const Schema& schema, const SyntaxString& table, const Column& column)
+Expression& Expression::schema(const Schema& schema)
 {
-    syntax.switcher = SyntaxType::Switch::Column;
     syntax.schema = schema;
-    syntax.table = table;
-    syntax.column = column;
+    return *this;
 }
 
 Expression::Expression(const Expressions& expressions)
@@ -88,7 +82,9 @@ Expression& Expression::invoke()
 
 Expression& Expression::invoke(const Expressions& parameters)
 {
-    syntax.expressions = parameters;
+    for (const Expression& parameter : parameters) {
+        syntax.expressions.push_back(parameter);
+    }
     syntax.useWildcard = false;
     return *this;
 }

@@ -66,7 +66,7 @@ MigrationInitializerHandle::getAllColumns(const std::string& table, const std::s
     }
 
     bool succeed, exists;
-    std::tie(succeed, exists) = tableExists(TableOrSubquery(schema, table));
+    std::tie(succeed, exists) = tableExists(TableOrSubquery(table).schema(schema));
     if (!exists) {
         // return {true, {}} if the schema.table does not exist.
         return { succeed, {} };

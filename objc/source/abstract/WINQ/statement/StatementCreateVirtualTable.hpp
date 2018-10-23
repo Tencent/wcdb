@@ -28,8 +28,7 @@ namespace WCDB {
 class StatementCreateVirtualTable : public StatementSyntax<Syntax::CreateVirtualTableSTMT> {
 public:
     StatementCreateVirtualTable& createVirtualTable(const SyntaxString& table);
-    StatementCreateVirtualTable&
-    createVirtualTable(const Schema& schema, const SyntaxString& table);
+    StatementCreateVirtualTable& schema(const Schema& schema);
 
     StatementCreateVirtualTable& ifNotExists();
 

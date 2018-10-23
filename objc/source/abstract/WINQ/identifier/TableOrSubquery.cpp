@@ -26,21 +26,18 @@ TableOrSubquery::TableOrSubquery(const char* table)
 {
     syntax.switcher = SyntaxType::Switch::Table;
     syntax.tableOrFunction = table;
-    syntax.schema = Schema();
 }
 
 TableOrSubquery::TableOrSubquery(const SyntaxString& table)
 {
     syntax.switcher = SyntaxType::Switch::Table;
     syntax.tableOrFunction = table;
-    syntax.schema = Schema();
 }
 
-TableOrSubquery::TableOrSubquery(const Schema& schema, const SyntaxString& table)
+TableOrSubquery& TableOrSubquery::schema(const Schema& schema)
 {
-    syntax.switcher = SyntaxType::Switch::Table;
-    syntax.tableOrFunction = table;
     syntax.schema = schema;
+    return *this;
 }
 
 TableOrSubquery& TableOrSubquery::as(const SyntaxString& alias)
@@ -66,41 +63,19 @@ TableOrSubquery TableOrSubquery::function(const SyntaxString& function)
 {
     TableOrSubquery tableOrSubquery;
     tableOrSubquery.syntax.switcher = SyntaxType::Switch::Function;
-    tableOrSubquery.syntax.schema = Schema();
     tableOrSubquery.syntax.tableOrFunction = function;
     return tableOrSubquery;
 }
 
-TableOrSubquery TableOrSubquery::function(const Schema& schema, const SyntaxString& function)
+TableOrSubquery& TableOrSubquery::invoke()
 {
-    TableOrSubquery tableOrSubquery;
-    tableOrSubquery.syntax.switcher = SyntaxType::Switch::Function;
-    tableOrSubquery.syntax.schema = schema;
-    tableOrSubquery.syntax.tableOrFunction = function;
-    return tableOrSubquery;
+    return *this;
 }
 
-TableOrSubquery
-TableOrSubquery::function(const SyntaxString& function, const Expressions& expressions)
+TableOrSubquery& TableOrSubquery::invoke(const Expressions& expressions)
 {
-    TableOrSubquery tableOrSubquery;
-    tableOrSubquery.syntax.switcher = SyntaxType::Switch::Function;
-    tableOrSubquery.syntax.schema = Schema();
-    tableOrSubquery.syntax.tableOrFunction = function;
-    tableOrSubquery.syntax.expressions = expressions;
-    return tableOrSubquery;
-}
-
-TableOrSubquery TableOrSubquery::function(const Schema& schema,
-                                          const SyntaxString& function,
-                                          const Expressions& expressions)
-{
-    TableOrSubquery tableOrSubquery;
-    tableOrSubquery.syntax.switcher = SyntaxType::Switch::Function;
-    tableOrSubquery.syntax.schema = schema;
-    tableOrSubquery.syntax.tableOrFunction = function;
-    tableOrSubquery.syntax.expressions = expressions;
-    return tableOrSubquery;
+    syntax.expressions = expressions;
+    return *this;
 }
 
 TableOrSubquery::TableOrSubquery(const TablesOrSubqueries& tableOrSubqueries)

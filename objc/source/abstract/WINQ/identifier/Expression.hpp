@@ -49,8 +49,10 @@ public:
     Expression(const LiteralValue& literalValue);
     Expression(const BindParameter& bindParameter);
     Expression(const Column& column);
-    Expression(const SyntaxString& table, const Column& column);
-    Expression(const Schema& schema, const SyntaxString& table, const Column& column);
+
+    Expression& table(const SyntaxString& table);
+    Expression& schema(const Schema& schema);
+
     Expression(const Expressions& expressions);
     Expression(const RaiseFunction& raiseFunction);
 

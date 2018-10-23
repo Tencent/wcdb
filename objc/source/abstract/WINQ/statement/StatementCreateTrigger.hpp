@@ -28,12 +28,8 @@ namespace WCDB {
 class StatementCreateTrigger : public StatementSyntax<Syntax::CreateTriggerSTMT> {
 public:
     StatementCreateTrigger& createTrigger(const SyntaxString& trigger);
-    StatementCreateTrigger&
-    createTrigger(const Schema& schema, const SyntaxString& trigger);
-    StatementCreateTrigger& createTempTrigger(const SyntaxString& trigger);
-    StatementCreateTrigger&
-    createTempTrigger(const Schema& schema, const SyntaxString& trigger);
-
+    StatementCreateTrigger& schema(const Schema& schema);
+    StatementCreateTrigger& temp();
     StatementCreateTrigger& ifNotExists();
 
     StatementCreateTrigger& before();

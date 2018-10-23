@@ -28,9 +28,8 @@ namespace WCDB {
 class StatementCreateTable : public StatementSyntax<Syntax::CreateTableSTMT> {
 public:
     StatementCreateTable& createTable(const SyntaxString& table);
-    StatementCreateTable& createTable(const Schema& schema, const SyntaxString& table);
-    StatementCreateTable& createTempTable(const SyntaxString& table);
-    StatementCreateTable& createTempTable(const Schema& schema, const SyntaxString& table);
+    StatementCreateTable& schema(const Schema& schema);
+    StatementCreateTable& temp();
 
     StatementCreateTable& ifNotExists();
 

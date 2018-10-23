@@ -28,43 +28,29 @@ StatementReindex& StatementReindex::reindex()
     return *this;
 }
 
-StatementReindex& StatementReindex::reindexCollation(const SyntaxString& collation)
+StatementReindex& StatementReindex::collation(const SyntaxString& collation)
 {
     syntax.switcher = SyntaxType::Switch::Collation;
     syntax.collationOrTableOrIndex = collation;
     return *this;
 }
 
-StatementReindex& StatementReindex::reindexTable(const SyntaxString& table)
+StatementReindex& StatementReindex::table(const SyntaxString& table)
 {
     syntax.switcher = SyntaxType::Switch::TableOrIndex;
-    syntax.schema = Schema();
     syntax.collationOrTableOrIndex = table;
     return *this;
 }
 
-StatementReindex&
-StatementReindex::reindexTable(const Schema& schema, const SyntaxString& table)
+StatementReindex& StatementReindex::schema(const Schema& schema)
 {
-    syntax.switcher = SyntaxType::Switch::TableOrIndex;
     syntax.schema = schema;
-    syntax.collationOrTableOrIndex = table;
     return *this;
 }
 
-StatementReindex& StatementReindex::reindexIndex(const SyntaxString& index)
+StatementReindex& StatementReindex::index(const SyntaxString& index)
 {
     syntax.switcher = SyntaxType::Switch::TableOrIndex;
-    syntax.schema = Schema();
-    syntax.collationOrTableOrIndex = index;
-    return *this;
-}
-
-StatementReindex&
-StatementReindex::reindexIndex(const Schema& schema, const SyntaxString& index)
-{
-    syntax.switcher = SyntaxType::Switch::TableOrIndex;
-    syntax.schema = schema;
     syntax.collationOrTableOrIndex = index;
     return *this;
 }

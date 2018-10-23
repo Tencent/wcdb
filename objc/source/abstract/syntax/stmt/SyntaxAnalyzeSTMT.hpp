@@ -31,11 +31,7 @@ namespace Syntax {
 class AnalyzeSTMT : public Identifier {
 #pragma mark - Lang
 public:
-    enum class Switch {
-        Analyze,
-        Schema,
-        TableOrIndex,
-    } switcher;
+    bool useSchema = false;
     Schema schema;
     std::string tableOrIndex;
 

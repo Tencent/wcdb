@@ -44,7 +44,7 @@
 
 - (void)test_drop_trigger
 {
-    auto testingSQL = WCDB::StatementDropTrigger().dropTrigger(schema, trigger).ifExists();
+    auto testingSQL = WCDB::StatementDropTrigger().dropTrigger(trigger).schema(schema).ifExists();
 
     auto testingTypes = { WCDB::SQL::Type::DropTriggerSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -53,7 +53,7 @@
 
 - (void)test_drop_trigger_without_if_exists
 {
-    auto testingSQL = WCDB::StatementDropTrigger().dropTrigger(schema, trigger);
+    auto testingSQL = WCDB::StatementDropTrigger().dropTrigger(trigger).schema(schema);
 
     auto testingTypes = { WCDB::SQL::Type::DropTriggerSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);

@@ -52,7 +52,7 @@
 
 - (void)test_alter_table_rename_to
 {
-    auto testingSQL = WCDB::StatementAlterTable().alterTable(schema, table).renameToTable(newTable);
+    auto testingSQL = WCDB::StatementAlterTable().alterTable(table).schema(schema).renameToTable(newTable);
     auto testingTypes = { WCDB::SQL::Type::AlterTableSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
     WINQAssertEqual(testingSQL, @"ALTER TABLE testSchema.testTable RENAME TO testNewTable");
@@ -72,7 +72,8 @@
 - (void)test_alter_table_rename_column
 {
     auto testingSQL = WCDB::StatementAlterTable()
-                      .alterTable(schema, table)
+                      .alterTable(table)
+                      .schema(schema)
                       .renameColumn(column)
                       .toColumn(newColumn);
     auto testingTypes = { WCDB::SQL::Type::AlterTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column };
@@ -83,7 +84,8 @@
 - (void)test_alter_table_add_column
 {
     auto testingSQL = WCDB::StatementAlterTable()
-                      .alterTable(schema, table)
+                      .alterTable(table)
+                      .schema(schema)
                       .addColumn(columnDef);
     auto testingTypes = { WCDB::SQL::Type::AlterTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);

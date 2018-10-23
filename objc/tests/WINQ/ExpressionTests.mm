@@ -42,7 +42,6 @@
     WCDB::StatementSelect select;
     WCDB::Expressions expressions;
     WCDB::RaiseFunction raiseFunction;
-    NSString* tableFunction;
     NSString* windowFunction;
     WCDB::Filter filter;
     WCDB::WindowDef windowDef;
@@ -71,7 +70,6 @@
         2,
     };
     raiseFunction = WCDB::RaiseFunction().ignore();
-    tableFunction = @"testTableFunction";
     windowFunction = @"testWindowFunction";
     filter = WCDB::Filter().where(1);
     windowDef = WCDB::WindowDef();
@@ -103,7 +101,7 @@
 
 - (void)test_column
 {
-    auto testingSQL = WCDB::Expression(schema, table, column);
+    auto testingSQL = WCDB::Expression(column).table(table).schema(schema);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -112,7 +110,7 @@
 
 - (void)test_column_without_schema
 {
-    auto testingSQL = WCDB::Expression(table, column);
+    auto testingSQL = WCDB::Expression(column).table(table);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);

@@ -24,35 +24,19 @@ namespace WCDB {
 
 StatementCreateTrigger& StatementCreateTrigger::createTrigger(const SyntaxString& trigger)
 {
-    syntax.temp = false;
-    syntax.schema = Schema();
     syntax.trigger = trigger;
     return *this;
 }
 
-StatementCreateTrigger&
-StatementCreateTrigger::createTrigger(const Schema& schema, const SyntaxString& trigger)
+StatementCreateTrigger& StatementCreateTrigger::schema(const Schema& schema)
 {
-    syntax.temp = false;
     syntax.schema = schema;
-    syntax.trigger = trigger;
     return *this;
 }
 
-StatementCreateTrigger& StatementCreateTrigger::createTempTrigger(const SyntaxString& trigger)
+StatementCreateTrigger& StatementCreateTrigger::temp()
 {
     syntax.temp = true;
-    syntax.schema = Schema();
-    syntax.trigger = trigger;
-    return *this;
-}
-
-StatementCreateTrigger&
-StatementCreateTrigger::createTempTrigger(const Schema& schema, const SyntaxString& trigger)
-{
-    syntax.temp = true;
-    syntax.schema = schema;
-    syntax.trigger = trigger;
     return *this;
 }
 

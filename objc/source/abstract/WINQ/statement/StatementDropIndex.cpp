@@ -24,16 +24,13 @@ namespace WCDB {
 
 StatementDropIndex& StatementDropIndex::dropIndex(const SyntaxString& index)
 {
-    syntax.schema = Schema();
     syntax.index = index;
     return *this;
 }
 
-StatementDropIndex&
-StatementDropIndex::dropIndex(const Schema& schema, const SyntaxString& index)
+StatementDropIndex& StatementDropIndex::schema(const Schema& schema)
 {
     syntax.schema = schema;
-    syntax.index = index;
     return *this;
 }
 

@@ -28,10 +28,9 @@ namespace WCDB {
 class StatementAnalyze : public StatementSyntax<Syntax::AnalyzeSTMT> {
 public:
     StatementAnalyze& analyze();
-    StatementAnalyze& analyzeSchema(const Schema& schema);
-    StatementAnalyze& analyzeTableOrIndex(const SyntaxString& tableOrIndex);
-    StatementAnalyze&
-    analyzeTableOrIndex(const Schema& schema, const SyntaxString& tableOrIndex);
+    StatementAnalyze& schema(const Schema& schema);
+    StatementAnalyze& table(const SyntaxString& table);
+    StatementAnalyze& index(const SyntaxString& index);
 };
 
 } // namespace WCDB

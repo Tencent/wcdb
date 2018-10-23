@@ -25,16 +25,13 @@ namespace WCDB {
 StatementCreateVirtualTable&
 StatementCreateVirtualTable::createVirtualTable(const SyntaxString& table)
 {
-    syntax.schema = Schema();
     syntax.table = table;
     return *this;
 }
 
-StatementCreateVirtualTable&
-StatementCreateVirtualTable::createVirtualTable(const Schema& schema, const SyntaxString& table)
+StatementCreateVirtualTable& StatementCreateVirtualTable::schema(const Schema& schema)
 {
     syntax.schema = schema;
-    syntax.table = table;
     return *this;
 }
 

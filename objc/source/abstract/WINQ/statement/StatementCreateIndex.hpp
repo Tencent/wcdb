@@ -27,11 +27,9 @@ namespace WCDB {
 
 class StatementCreateIndex : public StatementSyntax<Syntax::CreateIndexSTMT> {
 public:
-    StatementCreateIndex& createIndex(const Schema& schema, const SyntaxString& index);
     StatementCreateIndex& createIndex(const SyntaxString& index);
-    StatementCreateIndex& createUniqueIndex(const SyntaxString& index);
-    StatementCreateIndex&
-    createUniqueIndex(const Schema& schema, const SyntaxString& index);
+    StatementCreateIndex& schema(const Schema& schema);
+    StatementCreateIndex& unique();
     StatementCreateIndex& ifNotExists();
     StatementCreateIndex& onTable(const SyntaxString& table);
 

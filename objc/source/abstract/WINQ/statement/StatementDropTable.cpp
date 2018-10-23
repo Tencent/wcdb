@@ -24,16 +24,13 @@ namespace WCDB {
 
 StatementDropTable& StatementDropTable::dropTable(const SyntaxString& table)
 {
-    syntax.schema = Schema();
     syntax.table = table;
     return *this;
 }
 
-StatementDropTable&
-StatementDropTable::dropTable(const Schema& schema, const SyntaxString& table)
+StatementDropTable& StatementDropTable::schema(const Schema& schema)
 {
     syntax.schema = schema;
-    syntax.table = table;
     return *this;
 }
 

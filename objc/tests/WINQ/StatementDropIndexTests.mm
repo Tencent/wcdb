@@ -44,7 +44,7 @@
 
 - (void)test_drop_index
 {
-    auto testingSQL = WCDB::StatementDropIndex().dropIndex(schema, index).ifExists();
+    auto testingSQL = WCDB::StatementDropIndex().dropIndex(index).schema(schema).ifExists();
 
     auto testingTypes = { WCDB::SQL::Type::DropIndexSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -53,7 +53,7 @@
 
 - (void)test_drop_index_without_if_exists
 {
-    auto testingSQL = WCDB::StatementDropIndex().dropIndex(schema, index);
+    auto testingSQL = WCDB::StatementDropIndex().dropIndex(index).schema(schema);
 
     auto testingTypes = { WCDB::SQL::Type::DropIndexSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);

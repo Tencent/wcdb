@@ -73,7 +73,7 @@
 
 - (void)test_table_with_schema
 {
-    auto testingSQL = WCDB::TableOrSubquery(schema, table);
+    auto testingSQL = WCDB::TableOrSubquery(table).schema(schema);
 
     auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -109,7 +109,7 @@
 
 - (void)test_table_function
 {
-    auto testingSQL = WCDB::TableOrSubquery::function(function);
+    auto testingSQL = WCDB::TableOrSubquery::function(function).invoke();
 
     auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -118,7 +118,7 @@
 
 - (void)test_table_function_with_schema
 {
-    auto testingSQL = WCDB::TableOrSubquery::function(schema, function);
+    auto testingSQL = WCDB::TableOrSubquery::function(function).schema(schema).invoke();
 
     auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -127,7 +127,7 @@
 
 - (void)test_table_function_with_parameters
 {
-    auto testingSQL = WCDB::TableOrSubquery::function(function, expressions);
+    auto testingSQL = WCDB::TableOrSubquery::function(function).invoke(expressions);
 
     auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -136,7 +136,7 @@
 
 - (void)test_table_function_with_alias
 {
-    auto testingSQL = WCDB::TableOrSubquery::function(function).as(alias);
+    auto testingSQL = WCDB::TableOrSubquery::function(function).as(alias).invoke();
 
     auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);

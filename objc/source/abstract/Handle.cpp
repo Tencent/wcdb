@@ -344,7 +344,7 @@ std::pair<bool, std::set<std::string>>
 Handle::getUnorderedColumnsWithTable(const Schema &schema, const std::string &table)
 {
     WCDB::StatementPragma statement
-    = StatementPragma().pragma(schema, Pragma::tableInfo()).with(table);
+    = StatementPragma().pragma(Pragma::tableInfo()).schema(schema).with(table);
     return getUnorderedValues(statement, 1);
 }
 

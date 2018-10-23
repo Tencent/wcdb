@@ -57,7 +57,7 @@
 
 - (void)test_reindex_collation
 {
-    auto testingSQL = WCDB::StatementReindex().reindexCollation(collation);
+    auto testingSQL = WCDB::StatementReindex().reindex().collation(collation);
 
     auto testingTypes = { WCDB::SQL::Type::ReindexSTMT };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -66,7 +66,7 @@
 
 - (void)test_reindex_table
 {
-    auto testingSQL = WCDB::StatementReindex().reindexTable(schema, table);
+    auto testingSQL = WCDB::StatementReindex().reindex().schema(schema).table(table);
 
     auto testingTypes = { WCDB::SQL::Type::ReindexSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -75,7 +75,7 @@
 
 - (void)test_reindex_table_without_schema
 {
-    auto testingSQL = WCDB::StatementReindex().reindexTable(table);
+    auto testingSQL = WCDB::StatementReindex().reindex().table(table);
 
     auto testingTypes = { WCDB::SQL::Type::ReindexSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -84,7 +84,7 @@
 
 - (void)test_reindex_index
 {
-    auto testingSQL = WCDB::StatementReindex().reindexIndex(schema, index);
+    auto testingSQL = WCDB::StatementReindex().reindex().schema(schema).index(index);
 
     auto testingTypes = { WCDB::SQL::Type::ReindexSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -93,7 +93,7 @@
 
 - (void)test_reindex_index_without_schema
 {
-    auto testingSQL = WCDB::StatementReindex().reindexIndex(index);
+    auto testingSQL = WCDB::StatementReindex().reindex().index(index);
 
     auto testingTypes = { WCDB::SQL::Type::ReindexSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);

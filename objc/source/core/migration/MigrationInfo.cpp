@@ -105,7 +105,9 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
         }
 
         StatementSelect select
-        = StatementSelect().select(resultColumns).from(TableOrSubquery(Schema::main(), m_migratedTable));
+        = StatementSelect()
+          .select(resultColumns)
+          .from(TableOrSubquery(m_migratedTable).schema(Schema::main()));
 
         if (isSameDatabaseMigration()) {
             // UNION ALL has better performance, but it will trigger a bug of SQLite. See https://github.com/RingoD/SQLiteBugOfUnionAll for further information.
@@ -114,10 +116,11 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
             select.union_();
         }
 
-        select.select(resultColumns).from(TableOrSubquery(m_schemaForOriginDatabase, m_originTable));
+        select.select(resultColumns).from(TableOrSubquery(m_originTable).schema(m_schemaForOriginDatabase));
 
         m_statementForCreatingUnionedView = StatementCreateView()
-                                            .createView(Schema::main(), m_unionedView)
+                                            .createView(m_unionedView)
+                                            .schema(Schema::main())
                                             .ifNotExists()
                                             .as(select);
     }
@@ -136,19 +139,21 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
 
         m_statementForMigratingRow
         = StatementInsert()
-          .insertIntoTable(Schema::main(), m_migratedTable)
+          .insertIntoTable(m_migratedTable)
+          .schema(Schema::main())
           .columns(specificColumns)
           .values(StatementSelect()
                   .select(specificResultColumns)
-                  .from(TableOrSubquery(m_schemaForOriginDatabase, m_originTable)));
+                  .from(TableOrSubquery(m_originTable).schema(m_schemaForOriginDatabase)));
 
         m_statementForDeletingMigratedRow
         = StatementDelete()
-          .deleteFrom(QualifiedTable(m_schemaForOriginDatabase, m_originTable))
+          .deleteFrom(QualifiedTable(m_originTable).schema(m_schemaForOriginDatabase))
           .limit(BindParameter(1));
 
         m_statementForDroppingOriginTable = StatementDropTable()
-                                            .dropTable(m_schemaForOriginDatabase, m_originTable)
+                                            .dropTable(m_originTable)
+                                            .schema(m_schemaForOriginDatabase)
                                             .ifExists();
     }
 }
@@ -206,7 +211,7 @@ const StatementDropView
 MigrationInfo::getStatementForDroppingUnionedView(const std::string& unionedView)
 {
     WCTInnerAssert(String::hasPrefix(unionedView, getUnionedViewPrefix()));
-    return StatementDropView().dropView(Schema::temp(), unionedView).ifExists();
+    return StatementDropView().dropView(unionedView).schema(Schema::temp()).ifExists();
 }
 
 #pragma mark - Migrate

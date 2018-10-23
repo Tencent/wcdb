@@ -35,15 +35,11 @@ std::string AnalyzeSTMT::getDescription() const
 {
     std::ostringstream stream;
     stream << "ANALYZE";
-    switch (switcher) {
-    case Switch::Analyze:
-        break;
-    case Switch::Schema:
+    if (useSchema) {
         stream << space << schema;
-        break;
-    case Switch::TableOrIndex:
-        stream << space << schema << "." << tableOrIndex;
-        break;
+        if (!tableOrIndex.empty()) {
+            stream << "." << tableOrIndex;
+        }
     }
     return stream.str();
 }
@@ -51,14 +47,8 @@ std::string AnalyzeSTMT::getDescription() const
 void AnalyzeSTMT::iterate(const Iterator& iterator, void* parameter)
 {
     Identifier::iterate(iterator, parameter);
-    switch (switcher) {
-    case Switch::Analyze:
-        break;
-    case Switch::Schema:
-        // fallthrough
-    case Switch::TableOrIndex:
+    if (useSchema) {
         schema.iterate(iterator, parameter);
-        break;
     }
 }
 

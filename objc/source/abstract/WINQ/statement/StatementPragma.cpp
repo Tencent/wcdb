@@ -24,17 +24,14 @@ namespace WCDB {
 
 StatementPragma& StatementPragma::pragma(const Pragma& pragma)
 {
-    syntax.schema = Schema();
     syntax.pragma = pragma;
     syntax.switcher = SyntaxType::Switch::NotSet;
     return *this;
 }
 
-StatementPragma& StatementPragma::pragma(const Schema& schema, const Pragma& pragma)
+StatementPragma& StatementPragma::schema(const Schema& schema)
 {
     syntax.schema = schema;
-    syntax.pragma = pragma;
-    syntax.switcher = SyntaxType::Switch::NotSet;
     return *this;
 }
 

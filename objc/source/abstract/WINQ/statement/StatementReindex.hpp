@@ -28,11 +28,10 @@ namespace WCDB {
 class StatementReindex : public StatementSyntax<Syntax::ReindexSTMT> {
 public:
     StatementReindex& reindex();
-    StatementReindex& reindexCollation(const SyntaxString& collation);
-    StatementReindex& reindexTable(const SyntaxString& tableOrIndex);
-    StatementReindex& reindexTable(const Schema& schema, const SyntaxString& tableOrIndex);
-    StatementReindex& reindexIndex(const SyntaxString& tableOrIndex);
-    StatementReindex& reindexIndex(const Schema& schema, const SyntaxString& tableOrIndex);
+    StatementReindex& collation(const SyntaxString& collation);
+    StatementReindex& table(const SyntaxString& table);
+    StatementReindex& index(const SyntaxString& index);
+    StatementReindex& schema(const Schema& schema);
 };
 
 } // namespace WCDB

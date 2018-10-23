@@ -24,20 +24,18 @@ namespace WCDB {
 
 QualifiedTable::QualifiedTable(const SyntaxString& table)
 {
-    syntax.schema = Schema();
-    syntax.table = table;
-}
-
-QualifiedTable::QualifiedTable(const Schema& schema, const SyntaxString& table)
-{
-    syntax.schema = schema;
     syntax.table = table;
 }
 
 QualifiedTable::QualifiedTable(const char* table)
 {
-    syntax.schema = Schema();
     syntax.table = table;
+}
+
+QualifiedTable& QualifiedTable::schema(const Schema& schema)
+{
+    syntax.schema = schema;
+    return *this;
 }
 
 QualifiedTable& QualifiedTable::as(const SyntaxString& alias)

@@ -28,9 +28,8 @@ namespace WCDB {
 class StatementCreateView : public StatementSyntax<Syntax::CreateViewSTMT> {
 public:
     StatementCreateView& createView(const SyntaxString& view);
-    StatementCreateView& createView(const Schema& schema, const SyntaxString& view);
-    StatementCreateView& createTempView(const SyntaxString& view);
-    StatementCreateView& createTempView(const Schema& schema, const SyntaxString& view);
+    StatementCreateView& schema(const Schema& schema);
+    StatementCreateView& temp();
 
     StatementCreateView& ifNotExists();
 

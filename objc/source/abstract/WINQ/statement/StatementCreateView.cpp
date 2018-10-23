@@ -24,34 +24,18 @@ namespace WCDB {
 
 StatementCreateView& StatementCreateView::createView(const SyntaxString& view)
 {
-    syntax.schema = Schema();
     syntax.view = view;
-    syntax.temp = false;
     return *this;
 }
 
-StatementCreateView&
-StatementCreateView::createView(const Schema& schema, const SyntaxString& view)
+StatementCreateView& StatementCreateView::schema(const Schema& schema)
 {
     syntax.schema = schema;
-    syntax.view = view;
-    syntax.temp = false;
     return *this;
 }
 
-StatementCreateView& StatementCreateView::createTempView(const SyntaxString& view)
+StatementCreateView& StatementCreateView::temp()
 {
-    syntax.schema = Schema();
-    syntax.view = view;
-    syntax.temp = true;
-    return *this;
-}
-
-StatementCreateView&
-StatementCreateView::createTempView(const Schema& schema, const SyntaxString& view)
-{
-    syntax.schema = schema;
-    syntax.view = view;
     syntax.temp = true;
     return *this;
 }

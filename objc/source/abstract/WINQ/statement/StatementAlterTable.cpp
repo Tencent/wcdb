@@ -24,16 +24,13 @@ namespace WCDB {
 
 StatementAlterTable& StatementAlterTable::alterTable(const SyntaxString& table)
 {
-    syntax.schema = Syntax::Schema();
     syntax.table = table;
     return *this;
 }
 
-StatementAlterTable&
-StatementAlterTable::alterTable(const Schema& schema, const SyntaxString& table)
+StatementAlterTable& StatementAlterTable::schema(const Schema& schema)
 {
     syntax.schema = schema;
-    syntax.table = table;
     return *this;
 }
 

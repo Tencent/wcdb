@@ -51,7 +51,7 @@
 
 - (void)test_create_index
 {
-    auto testingSQL = WCDB::StatementCreateIndex().createIndex(schema, index).onTable(table).indexed(indexedColumns);
+    auto testingSQL = WCDB::StatementCreateIndex().createIndex(index).schema(schema).onTable(table).indexed(indexedColumns);
 
     auto testingTypes = { WCDB::SQL::Type::CreateIndexSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -60,7 +60,7 @@
 
 - (void)test_create_unique_index
 {
-    auto testingSQL = WCDB::StatementCreateIndex().createUniqueIndex(schema, index).onTable(table).indexed(indexedColumns);
+    auto testingSQL = WCDB::StatementCreateIndex().createIndex(index).schema(schema).unique().onTable(table).indexed(indexedColumns);
 
     auto testingTypes = { WCDB::SQL::Type::CreateIndexSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -69,7 +69,7 @@
 
 - (void)test_create_index_if_not_exists
 {
-    auto testingSQL = WCDB::StatementCreateIndex().createIndex(schema, index).ifNotExists().onTable(table).indexed(indexedColumns);
+    auto testingSQL = WCDB::StatementCreateIndex().createIndex(index).schema(schema).ifNotExists().onTable(table).indexed(indexedColumns);
 
     auto testingTypes = { WCDB::SQL::Type::CreateIndexSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -87,7 +87,7 @@
 
 - (void)test_create_index_with_condition
 {
-    auto testingSQL = WCDB::StatementCreateIndex().createIndex(schema, index).onTable(table).indexed(indexedColumns).where(condition);
+    auto testingSQL = WCDB::StatementCreateIndex().createIndex(index).schema(schema).onTable(table).indexed(indexedColumns).where(condition);
 
     auto testingTypes = { WCDB::SQL::Type::CreateIndexSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);

@@ -24,35 +24,19 @@ namespace WCDB {
 
 StatementCreateIndex& StatementCreateIndex::createIndex(const SyntaxString& index)
 {
-    syntax.unique = false;
-    syntax.schema = Schema();
     syntax.index = index;
     return *this;
 }
 
-StatementCreateIndex&
-StatementCreateIndex::createIndex(const Schema& schema, const SyntaxString& index)
+StatementCreateIndex& StatementCreateIndex::schema(const Schema& schema)
 {
-    syntax.unique = false;
     syntax.schema = schema;
-    syntax.index = index;
     return *this;
 }
 
-StatementCreateIndex& StatementCreateIndex::createUniqueIndex(const SyntaxString& index)
+StatementCreateIndex& StatementCreateIndex::unique()
 {
     syntax.unique = true;
-    syntax.schema = Schema();
-    syntax.index = index;
-    return *this;
-}
-
-StatementCreateIndex&
-StatementCreateIndex::createUniqueIndex(const Schema& schema, const SyntaxString& index)
-{
-    syntax.unique = true;
-    syntax.schema = schema;
-    syntax.index = index;
     return *this;
 }
 

@@ -48,7 +48,7 @@
 
 - (void)test_qualified_table
 {
-    auto testingSQL = WCDB::QualifiedTable(schema, table);
+    auto testingSQL = WCDB::QualifiedTable(table).schema(schema);
 
     auto testingTypes = { WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -66,7 +66,7 @@
 
 - (void)test_qualified_table_with_alias
 {
-    auto testingSQL = WCDB::QualifiedTable(schema, table).as(alias);
+    auto testingSQL = WCDB::QualifiedTable(table).schema(schema).as(alias);
 
     auto testingTypes = { WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -75,7 +75,7 @@
 
 - (void)test_qualified_table_with_indexed
 {
-    auto testingSQL = WCDB::QualifiedTable(schema, table).indexed(index);
+    auto testingSQL = WCDB::QualifiedTable(table).schema(schema).indexed(index);
 
     auto testingTypes = { WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -84,7 +84,7 @@
 
 - (void)test_qualified_table_without_index
 {
-    auto testingSQL = WCDB::QualifiedTable(schema, table).notIndexed();
+    auto testingSQL = WCDB::QualifiedTable(table).schema(schema).notIndexed();
 
     auto testingTypes = { WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);

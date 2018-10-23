@@ -27,14 +27,16 @@
 
 @implementation StatementAnalyzeTests {
     WCDB::Schema schema;
-    NSString* tableOrIndex;
+    NSString* table;
+    NSString* index;
 }
 
 - (void)setUp
 {
     [super setUp];
     schema = @"testSchema";
-    tableOrIndex = @"testTableOrIndex";
+    table = @"testTable";
+    index = @"testIndex";
 }
 
 - (void)test_default_constructible
@@ -52,29 +54,38 @@
 
 - (void)test_analyze_schema
 {
-    auto testingSQL = WCDB::StatementAnalyze().analyzeSchema(schema);
+    auto testingSQL = WCDB::StatementAnalyze().analyze().schema(schema);
 
     auto testingTypes = { WCDB::SQL::Type::AnalyzeSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
     WINQAssertEqual(testingSQL, @"ANALYZE testSchema");
 }
 
-- (void)test_analyze_table_or_index
+- (void)test_analyze_table
 {
-    auto testingSQL = WCDB::StatementAnalyze().analyzeTableOrIndex(tableOrIndex);
+    auto testingSQL = WCDB::StatementAnalyze().analyze().schema(schema).table(table);
 
     auto testingTypes = { WCDB::SQL::Type::AnalyzeSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"ANALYZE main.testTableOrIndex");
+    WINQAssertEqual(testingSQL, @"ANALYZE testSchema.testTable");
 }
 
-- (void)test_analyze_table_or_index_without_schema
+- (void)test_analyze_table_without_schema
 {
-    auto testingSQL = WCDB::StatementAnalyze().analyzeTableOrIndex(schema, tableOrIndex);
+    auto testingSQL = WCDB::StatementAnalyze().analyze().table(table);
 
     auto testingTypes = { WCDB::SQL::Type::AnalyzeSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"ANALYZE testSchema.testTableOrIndex");
+    WINQAssertEqual(testingSQL, @"ANALYZE main.testTable");
+}
+
+- (void)test_analyze_index
+{
+    auto testingSQL = WCDB::StatementAnalyze().analyze().schema(schema).index(index);
+
+    auto testingTypes = { WCDB::SQL::Type::AnalyzeSTMT, WCDB::SQL::Type::Schema };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"ANALYZE testSchema.testIndex");
 }
 
 @end

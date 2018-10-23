@@ -323,7 +323,6 @@ Expression ExpressionInOperable::inTable(const SyntaxString &table)
     expression.syntax.isNot = false;
     expression.syntax.expressions.push_back(asExpressionOperand());
     expression.syntax.inSwitcher = Expression::SyntaxType::SwitchIn::Table;
-    expression.syntax.schema = Schema();
     expression.syntax.table = table;
     return expression;
 }
@@ -331,25 +330,6 @@ Expression ExpressionInOperable::inTable(const SyntaxString &table)
 Expression ExpressionInOperable::notInTable(const SyntaxString &table)
 {
     Expression expression = inTable(table);
-    expression.syntax.isNot = true;
-    return expression;
-}
-
-Expression ExpressionInOperable::inTable(const Schema &schema, const SyntaxString &table)
-{
-    Expression expression;
-    expression.syntax.switcher = Expression::SyntaxType::Switch::In;
-    expression.syntax.isNot = false;
-    expression.syntax.expressions.push_back(asExpressionOperand());
-    expression.syntax.inSwitcher = Expression::SyntaxType::SwitchIn::Table;
-    expression.syntax.schema = schema;
-    expression.syntax.table = table;
-    return expression;
-}
-
-Expression ExpressionInOperable::notInTable(const Schema &schema, const SyntaxString &table)
-{
-    Expression expression = inTable(schema, table);
     expression.syntax.isNot = true;
     return expression;
 }
@@ -398,19 +378,6 @@ Expression ExpressionInOperable::inFunction(const SyntaxString &tableFunction)
     expression.syntax.inSwitcher = Expression::SyntaxType::SwitchIn::Function;
     expression.syntax.isNot = false;
     expression.syntax.expressions.push_back(asExpressionOperand());
-    expression.syntax.schema = Schema();
-    expression.syntax.function = tableFunction;
-    return expression;
-}
-
-Expression ExpressionInOperable::inFunction(const Schema &schema, const SyntaxString &tableFunction)
-{
-    Expression expression;
-    expression.syntax.switcher = Expression::SyntaxType::Switch::In;
-    expression.syntax.inSwitcher = Expression::SyntaxType::SwitchIn::Function;
-    expression.syntax.isNot = false;
-    expression.syntax.expressions.push_back(asExpressionOperand());
-    expression.syntax.schema = schema;
     expression.syntax.function = tableFunction;
     return expression;
 }
@@ -419,62 +386,6 @@ Expression ExpressionInOperable::notInFunction(const SyntaxString &tableFunction
 {
     Expression expression = inFunction(tableFunction);
     expression.syntax.isNot = true;
-    return expression;
-}
-
-Expression ExpressionInOperable::notInFunction(const Schema &schema,
-                                               const SyntaxString &tableFunction)
-{
-    Expression expression = inFunction(schema, tableFunction);
-    expression.syntax.isNot = true;
-    return expression;
-}
-
-Expression ExpressionInOperable::inFunction(const SyntaxString &tableFunction,
-                                            const Expressions &parameters)
-{
-    Expression expression;
-    expression.syntax.switcher = Expression::SyntaxType::Switch::In;
-    expression.syntax.inSwitcher = Expression::SyntaxType::SwitchIn::Function;
-    expression.syntax.isNot = false;
-    expression.syntax.expressions.push_back(asExpressionOperand());
-    expression.syntax.expressions.insert(
-    expression.syntax.expressions.end(), parameters.begin(), parameters.end());
-    expression.syntax.schema = Schema();
-    expression.syntax.function = tableFunction;
-    return expression;
-}
-
-Expression ExpressionInOperable::inFunction(const Schema &schema,
-                                            const SyntaxString &tableFunction,
-                                            const Expressions &parameters)
-{
-    Expression expression;
-    expression.syntax.switcher = Expression::SyntaxType::Switch::In;
-    expression.syntax.inSwitcher = Expression::SyntaxType::SwitchIn::Function;
-    expression.syntax.isNot = false;
-    expression.syntax.expressions.push_back(asExpressionOperand());
-    expression.syntax.expressions.insert(
-    expression.syntax.expressions.end(), parameters.begin(), parameters.end());
-    expression.syntax.schema = schema;
-    expression.syntax.function = tableFunction;
-    return expression;
-}
-
-Expression ExpressionInOperable::notInFunction(const SyntaxString &tableFunction,
-                                               const Expressions &parameters)
-{
-    Expression expression = inFunction(tableFunction, parameters);
-    expression.syntax.isNot = true;
-    return expression;
-}
-
-Expression ExpressionInOperable::notInFunction(const Schema &schema,
-                                               const SyntaxString &tableFunction,
-                                               const Expressions &parameters)
-{
-    Expression expression = inFunction(schema, tableFunction, parameters);
-    expression.syntax.isNot = false;
     return expression;
 }
 

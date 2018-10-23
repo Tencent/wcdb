@@ -37,8 +37,8 @@ public:
 
     QualifiedTable(const char* table);
     QualifiedTable(const SyntaxString& table);
-    QualifiedTable(const Schema& schema, const SyntaxString& table);
 
+    QualifiedTable& schema(const Schema& schema);
     QualifiedTable& as(const SyntaxString& alias);
 
     QualifiedTable& indexed(const SyntaxString& index);
