@@ -81,13 +81,12 @@ void SharedLock::lockShared()
 void SharedLock::unlockShared()
 {
     std::unique_lock<std::mutex> lockGuard(m_mutex);
-    int threadedReader = --*m_threadedReaders.getOrCreate();
-    WCTRemedialAssert(
-    threadedReader > 0, "Unpaired unlock shared.", ++*m_threadedReaders.getOrCreate();
-    return;);
-    --m_readers;
-    WCTInnerAssert(threadedReader > 0);
+    int *threadedReader = m_threadedReaders.getOrCreate();
+    WCTInnerAssert(*threadedReader > 0);
     WCTInnerAssert(m_readers > 0);
+    WCTRemedialAssert(*threadedReader > 0, "Unpaired unlock shared.", return;);
+    --*threadedReader;
+    --m_readers;
     if (m_readers == 0) {
         WCTInnerAssert(*m_threadedReaders.getOrCreate() == 0);
         if (m_writers == 0 && m_pendingWriters > 0) {
@@ -125,6 +124,8 @@ void SharedLock::unlock()
     WCTRemedialAssert(
     *m_threadedReaders.getOrCreate() == 0, "Downgrade lock is not supported.", return;);
     WCTRemedialAssert(m_locking == std::this_thread::get_id(), "Unpaired unlock.", return;);
+    WCTInnerAssert(m_readers == 0);
+    WCTInnerAssert(m_writers > 0);
     if (--m_writers == 0) {
         m_locking = std::thread::id();
         // write lock first
