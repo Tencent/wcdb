@@ -82,13 +82,13 @@ publishing {
 
 afterEvaluate {
     publishing.publications.wcdbLibrary {
-        artifact(bundleRelease)
+        artifact(bundleReleaseAar) { classifier = null }
         artifact(bundleReleaseJavadoc)
         artifact(bundleReleaseSources)
-        artifact(bundleReleaseNativeSymbols)
+        artifact(bundleReleaseNativeSymbols) { classifier = 'symbols' }
 
-        artifact(bundleDebug)
-        artifact(bundleDebugNativeSymbols)
+        artifact(bundleDebugAar) { classifier = 'debug' }
+        artifact(bundleDebugNativeSymbols) { classifier = 'debugSymbols' }
     }
 
     tasks.withType(PublishToMavenRepository) { task ->
