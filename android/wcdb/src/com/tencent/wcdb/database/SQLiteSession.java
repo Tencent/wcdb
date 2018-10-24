@@ -16,6 +16,7 @@
 
 package com.tencent.wcdb.database;
 
+import android.database.sqlite.SQLiteTransactionListener;
 import android.os.Process;
 import android.util.Pair;
 
@@ -301,8 +302,8 @@ public final class SQLiteSession {
     }
 
     private void beginTransactionUnchecked(int transactionMode,
-            SQLiteTransactionListener transactionListener, int connectionFlags,
-            CancellationSignal cancellationSignal) {
+                                           SQLiteTransactionListener transactionListener, int connectionFlags,
+                                           CancellationSignal cancellationSignal) {
         if (cancellationSignal != null) {
             cancellationSignal.throwIfCanceled();
         }

@@ -82,11 +82,11 @@ publishing {
 
 afterEvaluate {
     publishing.publications.wcdbRoomLibrary {
-        artifact(source: bundleRelease, classifier: null)
+        artifact(bundleReleaseAar) { classifier = null }
         artifact(bundleReleaseJavadoc)
         artifact(bundleReleaseSources)
 
-        artifact(bundleDebug)
+        artifact(bundleDebugAar) { classifier = 'debug' }
     }
 
     tasks.withType(PublishToMavenRepository) { task ->
