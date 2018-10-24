@@ -424,7 +424,7 @@
 
 - (void)test_in_function_without_parameter
 {
-    auto testingSQL = columnExpression.inFunction(table).schema(schema).invoke();
+    auto testingSQL = columnExpression.inFunction(function).schema(schema).invoke();
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
     WINQAssertEqual(testingSQL, @"testColumn IN testSchema.testFunction()");

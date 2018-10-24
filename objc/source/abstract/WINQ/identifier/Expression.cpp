@@ -76,7 +76,6 @@ Expression Expression::function(const SyntaxString& function)
 Expression& Expression::invoke()
 {
     syntax.useWildcard = false;
-    syntax.expressions.clear();
     return *this;
 }
 
