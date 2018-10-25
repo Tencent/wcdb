@@ -18,26 +18,27 @@
  * limitations under the License.
  */
 
-#ifndef FunctionInvocation_hpp
-#define FunctionInvocation_hpp
+#import <WCDB/WCTColumnBinding.h>
+#import <WCDB/WCTCommon.h>
 
-#include <WCDB/SQL.hpp>
+class WCTResultColumn : public WCDB::ResultColumn, public WCTColumnBindingHolder {
+public:
+    WCTResultColumn();
+    WCTResultColumn(const WCTProperty& property);
+    WCTResultColumn(const WCDB::ResultColumn& resultColumn,
+                    const WCTColumnBinding& columnBinding);
+};
 
 namespace WCDB {
 
-class FunctionInvocation : public SQLSyntax<Syntax::FunctionInvocation> {
+template<>
+class SyntaxList<WCTResultColumn> : public _SyntaxList<WCTResultColumn> {
 public:
-    using SQLSyntax<Syntax::FunctionInvocation>::SQLSyntax;
-    explicit FunctionInvocation(const SyntaxString& name);
+    using _SyntaxList<WCTResultColumn>::_SyntaxList;
 
-    FunctionInvocation& distinct();
-    FunctionInvocation& invoke(const Expressions& expressions);
-
-    FunctionInvocation& invoke();
-
-    FunctionInvocation& invokeAll();
+    WCTResultColumns
+    resultColumnsByAddingNewResultColumns(const WCTResultColumns& resultColumns) const;
+    WCTResultColumns& addingNewResultColumns(const WCTResultColumns& resultColumns);
 };
 
 } // namespace WCDB
-
-#endif /* FunctionInvocation_hpp */

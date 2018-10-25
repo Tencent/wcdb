@@ -47,6 +47,18 @@ public:
     asUnderlyingType(NSNumber *number);
 };
 
+template<>
+class ExpressionConvertible<WCTProperty> : public std::true_type {
+public:
+    static Expression asExpression(const WCTProperty &property);
+};
+
+template<>
+class IndexedColumnConvertible<WCTProperty> : public std::true_type {
+public:
+    static IndexedColumn asIndexedColumn(const WCTProperty &property);
+};
+
 #warning TODO
 //    template<>
 //    class LiteralValueConvertible<NSNumber *> : public std::true_type {

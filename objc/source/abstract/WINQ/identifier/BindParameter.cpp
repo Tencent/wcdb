@@ -26,7 +26,6 @@ BindParameter::BindParameter(int n)
 {
     syntax.switcher = SyntaxType::Switch::QuestionSign;
     syntax.n = n;
-    syntax.name.clear();
 }
 
 BindParameter::BindParameter(const SyntaxString& name)
@@ -39,23 +38,31 @@ BindParameters BindParameter::bindParameters(size_t count)
 {
     BindParameters result;
     for (size_t i = 1; i <= count; ++i) {
-        result.push_back(BindParameter(i));
+        result.push_back(BindParameter((int) i));
     }
     return result;
 }
 
+BindParameter BindParameter::at(const SyntaxString& name)
+{
+    return bindParameter(name, SyntaxType::Switch::AtSign);
+}
+
 BindParameter BindParameter::colon(const SyntaxString& name)
 {
-    BindParameter bindParameter;
-    bindParameter.syntax.switcher = SyntaxType::Switch::ColonSign;
-    bindParameter.syntax.name = name;
-    return bindParameter;
+    return bindParameter(name, SyntaxType::Switch::ColonSign);
 }
 
 BindParameter BindParameter::dollar(const SyntaxString& name)
 {
+    return bindParameter(name, SyntaxType::Switch::DollarSign);
+}
+
+BindParameter
+BindParameter::bindParameter(const SyntaxString& name, const SyntaxType::Switch& switcher)
+{
     BindParameter bindParameter;
-    bindParameter.syntax.switcher = SyntaxType::Switch::DollarSign;
+    bindParameter.syntax.switcher = switcher;
     bindParameter.syntax.name = name;
     return bindParameter;
 }

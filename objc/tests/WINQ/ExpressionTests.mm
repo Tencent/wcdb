@@ -308,26 +308,31 @@
     WINQAssertEqual(testingSQL, @"testWindowFunction(1, 2) OVER testWindow");
 }
 
-WCDB::Expression acceptable(const WCDB::Expression& expression)
+- (void)test_expression_convertible
 {
-    return expression;
+    WCDB::Expression sql(1);
+    NSString* expected = @"1";
+    WINQConvertibleTest(WCDB::Expression, sql, expected);
+    WINQConvertibleTest(WCDB::Expressions, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumn, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumn, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerm, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sql, expected);
 }
 
-- (void)test_convertible
+- (void)test_expressions_convertible
 {
-    WINQAssertEqual(acceptable(1), @"1");
-    WINQAssertEqual(acceptable(@(1)), @"1");
-    WINQAssertEqual(acceptable(true), @"1");
-    WINQAssertEqual(acceptable(YES), @"1");
-    WINQAssertEqual(acceptable(WCDB::Column("testColumn")), @"testColumn");
-    WINQAssertEqual(acceptable((float) 0.1), @"0.1");
-    WINQAssertEqual(acceptable((double) 0.1), @"0.1");
-    WINQAssertEqual(acceptable("test"), @"'test'");
-    WINQAssertEqual(acceptable(@"test"), @"'test'");
-    WINQAssertEqual(acceptable(std::string("test")), @"'test'");
-    WINQAssertEqual(acceptable(nullptr), @"NULL");
-    WINQAssertEqual(acceptable(nil), @"NULL");
-    WINQAssertEqual(acceptable(WCDB::LiteralValue::currentTime()), @"CURRENT_TIME");
+    WCDB::Expressions sqls = {
+        1,
+        WCDB::Column(@"testColumn"),
+    };
+    NSString* expected = @"1, testColumn";
+    WINQConvertibleTest(WCDB::Expressions, sqls, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sqls, expected);
 }
 
 @end

@@ -21,39 +21,32 @@
 #import <WCDB/WCTColumnBinding.h>
 #import <WCDB/WCTCommon.h>
 
-class WCTProperty : public WCDB::Column {
+class WCTProperty : public WCDB::Column, public WCTColumnBindingHolder {
 public:
-    using WCDB::Column::Column;
-    WCTProperty(const WCTColumnBinding &columnBinding);
+    WCTProperty();
+    WCTProperty(const WCTColumnBinding& columnBinding);
+    WCTProperty(const WCDB::Column& column, const WCTColumnBinding& columnBinding);
 
     WCDB::IndexedColumn asIndex() const;
     WCDB::OrderingTerm asOrder() const;
-
-    const WCTColumnBinding &getColumnBinding() const;
+    WCDB::Expression table(const WCDB::SyntaxString& table) const;
 };
 
-class WCTProperties : public WCDB::SyntaxList<WCTProperty> {
+namespace WCDB {
+
+template<>
+class SyntaxList<WCTProperty> : public _SyntaxList<WCTProperty> {
 public:
-    using WCDB::SyntaxList<WCTProperty>::SyntaxList;
+    using _SyntaxList<WCTProperty>::_SyntaxList;
+
+    WCTResultColumns redirect(const WCDB::ResultColumns& resultColumns) const;
 
     WCDB::Expression count() const;
+
+    WCDB::Expressions table(NSString* table) const;
+
+    WCTProperties propertiesByAddingNewProperties(const WCTProperties& properties) const;
+    WCTProperties& addingNewProperties(const WCTProperties& properties);
 };
 
-//class WCTProperties : public std::list<WCTProperty> {
-//public:
-//    using list<WCTProperty>::list;
-//    WCTProperties(const WCTProperty &property);
-//
-//    WCTProperties inTable(NSString *tableName) const;
-//    WCTProperties inSchema(NSString *schemaName) const;
-//
-//    void addProperties(const WCTProperties &properties);
-//
-//    WCTProperties byAddingProperties(const WCTProperties &properties) const;
-//
-//    operator std::list<WCDB::Column>() const;
-//    operator WCDB::Expressions() const;
-//    operator WCDB::ResultColumns() const;
-//    operator WCDB::OrderingTerms() const;
-//    operator std::list<WCDB::IndexedColumn>() const;
-//};
+}

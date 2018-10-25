@@ -18,10 +18,30 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
 #import <WCDB/WCTColumnBinding.h>
+#import <WCDB/WCTResultColumn.h>
 
 Class WCTColumnBinding::getClass() const
 {
     return m_class;
+}
+
+WCTColumnBindingHolder::WCTColumnBindingHolder()
+: m_columnBinding(nullptr)
+{
+}
+
+WCTColumnBindingHolder::WCTColumnBindingHolder(const WCTColumnBinding& columnBinding)
+: m_columnBinding(&columnBinding)
+{
+}
+
+const WCTColumnBinding& WCTColumnBindingHolder::getColumnBinding() const
+{
+    return *m_columnBinding;
+}
+
+WCTResultColumn WCTColumnBindingHolder::redirect(const WCDB::ResultColumn& resultColumn) const
+{
+    return WCTResultColumn(resultColumn, *m_columnBinding);
 }

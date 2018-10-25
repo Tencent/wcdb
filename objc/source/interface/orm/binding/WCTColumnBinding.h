@@ -27,10 +27,10 @@ class WCTColumnBinding {
 public:
     template<typename T>
     WCTColumnBinding(Class cls,
-                     const std::string &pn,
-                     const std::string &cn,
-                     T * = nullptr,
-                     typename std::enable_if<!WCDB::IsObjCType<T>::value>::type * = nullptr)
+                     const WCDB::SyntaxString& pn,
+                     const WCDB::SyntaxString& cn,
+                     T* = nullptr,
+                     typename std::enable_if<!WCDB::IsObjCType<T>::value>::type* = nullptr)
     : accessor(new WCTRuntimeCppAccessor<T>(cls, pn))
     , propertyName(pn)
     , m_class(cls)
@@ -40,10 +40,10 @@ public:
 
     template<typename T>
     WCTColumnBinding(Class cls,
-                     const std::string &pn,
-                     const std::string &cn,
-                     T * = nullptr,
-                     typename std::enable_if<WCDB::IsObjCType<T>::value>::type * = nullptr)
+                     const WCDB::SyntaxString& pn,
+                     const WCDB::SyntaxString& cn,
+                     T* = nullptr,
+                     typename std::enable_if<WCDB::IsObjCType<T>::value>::type* = nullptr)
     : accessor(new WCTRuntimeObjCAccessor(cls, pn))
     , propertyName(pn)
     , m_class(cls)
@@ -59,4 +59,17 @@ public:
 
 protected:
     Class m_class;
+};
+
+class WCTColumnBindingHolder {
+public:
+    WCTColumnBindingHolder();
+    WCTColumnBindingHolder(const WCTColumnBinding& columnBinding);
+
+    WCTResultColumn redirect(const WCDB::ResultColumn& resultColumn) const;
+
+    const WCTColumnBinding& getColumnBinding() const;
+
+protected:
+    const WCTColumnBinding* m_columnBinding;
 };

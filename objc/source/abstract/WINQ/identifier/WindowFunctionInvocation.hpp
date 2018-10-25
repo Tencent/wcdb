@@ -28,7 +28,7 @@ namespace WCDB {
 class WindowFunctionInvocation : public SQLSyntax<Syntax::WindowFunctionInvocation> {
 public:
     using SQLSyntax<Syntax::WindowFunctionInvocation>::SQLSyntax;
-    WindowFunctionInvocation(const SyntaxString& name);
+    explicit WindowFunctionInvocation(const SyntaxString& name);
 
     WindowFunctionInvocation& invoke(const Expressions& expressions);
     WindowFunctionInvocation& invoke();

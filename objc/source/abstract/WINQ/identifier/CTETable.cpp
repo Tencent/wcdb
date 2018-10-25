@@ -22,11 +22,6 @@
 
 namespace WCDB {
 
-CTETable::CTETable(const SyntaxString& name)
-{
-    syntax.name = name;
-}
-
 CTETable::CTETable(const char* name)
 {
     syntax.name = name;

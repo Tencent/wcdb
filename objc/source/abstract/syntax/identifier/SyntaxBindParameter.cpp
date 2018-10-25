@@ -33,6 +33,8 @@ constexpr const char* Enum::description(const Syntax::BindParameter::Switch& swt
         return ":";
     case Syntax::BindParameter::Switch::DollarSign:
         return "$";
+    case Syntax::BindParameter::Switch::AtSign:
+        return "@";
     }
 }
 
@@ -50,10 +52,14 @@ std::string BindParameter::getDescription() const
     stream << switcher;
     switch (switcher) {
     case Switch::QuestionSign:
-        SyntaxRemedialAssert(n > 0);
-        stream << n;
-        break;
+        if (name.empty()) {
+            SyntaxRemedialAssert(n > 0);
+            stream << n;
+            break;
+        }
+        // fallthrough
     case Switch::ColonSign:
+    case Switch::AtSign:
     case Switch::DollarSign:
         stream << name;
         break;

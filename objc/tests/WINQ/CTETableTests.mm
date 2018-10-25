@@ -63,16 +63,4 @@
     WINQAssertEqual(testingSQL, @"testTable");
 }
 
-WCDB::CTETable acceptable(const WCDB::CTETable& table)
-{
-    return table;
-}
-
-- (void)test_convertible
-{
-    WINQAssertEqual(acceptable("testTable"), @"testTable");
-    WINQAssertEqual(acceptable(@"testTable"), @"testTable");
-    WINQAssertEqual(acceptable(std::string("testTable")), @"testTable");
-}
-
 @end

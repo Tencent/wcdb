@@ -82,14 +82,4 @@
     WINQAssertEqual(testingSQL, @"testColumn ASC");
 }
 
-WCDB::IndexedColumn acceptable(const WCDB::IndexedColumn& indexedColumn)
-{
-    return indexedColumn;
-}
-
-- (void)test_init
-{
-    WINQAssertEqual(acceptable(1), @"1");
-}
-
 @end

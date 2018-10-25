@@ -35,4 +35,14 @@ ColumnIsFloatType<NSNumber*>::asUnderlyingType(NSNumber* number)
     return number ? number.doubleValue : 0;
 }
 
+Expression ExpressionConvertible<WCTProperty>::asExpression(const WCTProperty& property)
+{
+    return Expression((const WCDB::Column&) property);
+}
+
+IndexedColumn IndexedColumnConvertible<WCTProperty>::asIndexedColumn(const WCTProperty& property)
+{
+    return Expression((const WCDB::Column&) property);
+}
+
 }

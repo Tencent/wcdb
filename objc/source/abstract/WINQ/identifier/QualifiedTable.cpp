@@ -22,11 +22,6 @@
 
 namespace WCDB {
 
-QualifiedTable::QualifiedTable(const SyntaxString& table)
-{
-    syntax.table = table;
-}
-
 QualifiedTable::QualifiedTable(const char* table)
 {
     syntax.table = table;

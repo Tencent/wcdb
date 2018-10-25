@@ -206,4 +206,349 @@
     WINQAssertEqual(testingSQL, @"CURRENT_TIMESTAMP");
 }
 
+- (void)test_null_convertible
+{
+    std::nullptr_t sql = nullptr;
+    NSString* expected = @"NULL";
+    WINQConvertibleTest(WCDB::LiteralValue, sql, expected);
+    WINQConvertibleTest(WCDB::LiteralValues, sql, expected);
+    WINQConvertibleTest(WCDB::Expression, sql, expected);
+    WINQConvertibleTest(WCDB::Expressions, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumn, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumn, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerm, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sql, expected);
+}
+
+- (void)test_nulls_convertible
+{
+    std::list<std::nullptr_t> sqls = { nullptr, nullptr };
+    NSString* expected = @"NULL, NULL";
+    WINQConvertibleTest(WCDB::LiteralValues, sqls, expected);
+    WINQConvertibleTest(WCDB::Expressions, sqls, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sqls, expected);
+}
+
+- (void)test_int32_convertible
+{
+    int32_t sql = 1;
+    NSString* expected = @"1";
+    WINQConvertibleTest(WCDB::LiteralValue, sql, expected);
+    WINQConvertibleTest(WCDB::LiteralValues, sql, expected);
+    WINQConvertibleTest(WCDB::Expression, sql, expected);
+    WINQConvertibleTest(WCDB::Expressions, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumn, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumn, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerm, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sql, expected);
+}
+
+- (void)test_int32s_convertible
+{
+    std::list<int32_t> sqls = { 1, 2 };
+    NSString* expected = @"1, 2";
+    WINQConvertibleTest(WCDB::LiteralValues, sqls, expected);
+    WINQConvertibleTest(WCDB::Expressions, sqls, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sqls, expected);
+}
+
+- (void)test_int64_convertible
+{
+    int64_t sql = 1;
+    NSString* expected = @"1";
+    WINQConvertibleTest(WCDB::LiteralValue, sql, expected);
+    WINQConvertibleTest(WCDB::LiteralValues, sql, expected);
+    WINQConvertibleTest(WCDB::Expression, sql, expected);
+    WINQConvertibleTest(WCDB::Expressions, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumn, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumn, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerm, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sql, expected);
+}
+
+- (void)test_int64s_convertible
+{
+    std::list<int32_t> sqls = { 1, 2 };
+    NSString* expected = @"1, 2";
+    WINQConvertibleTest(WCDB::LiteralValues, sqls, expected);
+    WINQConvertibleTest(WCDB::Expressions, sqls, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sqls, expected);
+}
+
+- (void)test_float_convertible
+{
+    float sql = 1.1;
+    NSString* expected = @"1.1";
+    WINQConvertibleTest(WCDB::LiteralValue, sql, expected);
+    WINQConvertibleTest(WCDB::LiteralValues, sql, expected);
+    WINQConvertibleTest(WCDB::Expression, sql, expected);
+    WINQConvertibleTest(WCDB::Expressions, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumn, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumn, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerm, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sql, expected);
+}
+
+- (void)test_floats_convertible
+{
+    std::list<float> sqls = { 1.1, 2.2 };
+    NSString* expected = @"1.1, 2.2";
+    WINQConvertibleTest(WCDB::LiteralValues, sqls, expected);
+    WINQConvertibleTest(WCDB::Expressions, sqls, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sqls, expected);
+}
+
+- (void)test_double_convertible
+{
+    double sql = 1.1;
+    NSString* expected = @"1.1";
+    WINQConvertibleTest(WCDB::LiteralValue, sql, expected);
+    WINQConvertibleTest(WCDB::LiteralValues, sql, expected);
+    WINQConvertibleTest(WCDB::Expression, sql, expected);
+    WINQConvertibleTest(WCDB::Expressions, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumn, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumn, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerm, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sql, expected);
+}
+
+- (void)test_doubles_convertible
+{
+    std::list<double> sqls = { 1.1, 2.2 };
+    NSString* expected = @"1.1, 2.2";
+    WINQConvertibleTest(WCDB::LiteralValues, sqls, expected);
+    WINQConvertibleTest(WCDB::Expressions, sqls, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sqls, expected);
+}
+
+- (void)test_bool_convertible
+{
+    bool sql = true;
+    NSString* expected = @"1";
+    WINQConvertibleTest(WCDB::LiteralValue, sql, expected);
+    WINQConvertibleTest(WCDB::LiteralValues, sql, expected);
+    WINQConvertibleTest(WCDB::Expression, sql, expected);
+    WINQConvertibleTest(WCDB::Expressions, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumn, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumn, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerm, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sql, expected);
+}
+
+- (void)test_bools_convertible
+{
+    std::list<bool> sqls = { true, false };
+    NSString* expected = @"1, 0";
+    WINQConvertibleTest(WCDB::LiteralValues, sqls, expected);
+    WINQConvertibleTest(WCDB::Expressions, sqls, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sqls, expected);
+}
+
+- (void)test_ns_number_convertible
+{
+    NSNumber* sql = @(1);
+    NSString* expected = @"1";
+    WINQConvertibleTest(WCDB::LiteralValue, sql, expected);
+    WINQConvertibleTest(WCDB::LiteralValues, sql, expected);
+    WINQConvertibleTest(WCDB::Expression, sql, expected);
+    WINQConvertibleTest(WCDB::Expressions, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumn, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumn, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerm, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sql, expected);
+}
+
+- (void)test_ns_numbers_convertible
+{
+    std::list<NSNumber*> sqls = { @(1),
+                                  @(2) };
+    NSString* expected = @"1, 2";
+    WINQConvertibleTest(WCDB::LiteralValues, sqls, expected);
+    WINQConvertibleTest(WCDB::Expressions, sqls, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sqls, expected);
+}
+
+- (void)test_const_char_p_convertible
+{
+    const char* sql = "t";
+
+    NSString* expected = @"'t'";
+    WINQConvertibleTest(WCDB::LiteralValue, sql, expected);
+    WINQConvertibleTest(WCDB::LiteralValues, sql, expected);
+    WINQConvertibleTest(WCDB::Expression, sql, expected);
+    WINQConvertibleTest(WCDB::Expressions, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumn, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumn, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerm, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sql, expected);
+
+    WINQConvertibleTest(WCDB::QualifiedTable, sql, @"main.t");
+    WINQConvertibleTest(WCDB::CTETable, sql, @"t");
+    WINQConvertibleTest(WCDB::TableOrSubquery, sql, @"main.t");
+    WINQConvertibleTest(WCDB::TablesOrSubqueries, sql, @"main.t");
+}
+
+- (void)test_const_char_ps_convertible
+{
+    std::list<const char*> sqls = {
+        "t1",
+        "t2",
+    };
+
+    NSString* expected = @"'t1', 't2'";
+    WINQConvertibleTest(WCDB::LiteralValues, sqls, expected);
+    WINQConvertibleTest(WCDB::Expressions, sqls, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sqls, expected);
+
+    WINQConvertibleTest(WCDB::TablesOrSubqueries, sqls, @"main.t1, main.t2");
+}
+
+- (void)test_std_string_convertible
+{
+    std::string sql = "t";
+
+    NSString* expected = @"'t'";
+    WINQConvertibleTest(WCDB::LiteralValue, sql, expected);
+    WINQConvertibleTest(WCDB::LiteralValues, sql, expected);
+    WINQConvertibleTest(WCDB::Expression, sql, expected);
+    WINQConvertibleTest(WCDB::Expressions, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumn, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumn, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerm, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sql, expected);
+
+    WINQConvertibleTest(WCDB::QualifiedTable, sql, @"main.t");
+    WINQConvertibleTest(WCDB::CTETable, sql, @"t");
+    WINQConvertibleTest(WCDB::TableOrSubquery, sql, @"main.t");
+    WINQConvertibleTest(WCDB::TablesOrSubqueries, sql, @"main.t");
+}
+
+- (void)test_std_strings_convertible
+{
+    std::list<std::string> sqls = {
+        "t1",
+        "t2",
+    };
+
+    NSString* expected = @"'t1', 't2'";
+    WINQConvertibleTest(WCDB::LiteralValues, sqls, expected);
+    WINQConvertibleTest(WCDB::Expressions, sqls, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sqls, expected);
+
+    WINQConvertibleTest(WCDB::TablesOrSubqueries, sqls, @"main.t1, main.t2");
+}
+
+- (void)test_ns_string_convertible
+{
+    NSString* sql = @"t";
+
+    NSString* expected = @"'t'";
+    WINQConvertibleTest(WCDB::LiteralValue, sql, expected);
+    WINQConvertibleTest(WCDB::LiteralValues, sql, expected);
+    WINQConvertibleTest(WCDB::Expression, sql, expected);
+    WINQConvertibleTest(WCDB::Expressions, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumn, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumn, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerm, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sql, expected);
+
+    WINQConvertibleTest(WCDB::QualifiedTable, sql, @"main.t");
+    WINQConvertibleTest(WCDB::CTETable, sql, @"t");
+    WINQConvertibleTest(WCDB::TableOrSubquery, sql, @"main.t");
+    WINQConvertibleTest(WCDB::TablesOrSubqueries, sql, @"main.t");
+}
+
+- (void)test_ns_strings_convertible
+{
+    std::list<NSString*> sqls = {
+        @"t1",
+        @"t2",
+    };
+
+    NSString* expected = @"'t1', 't2'";
+    WINQConvertibleTest(WCDB::LiteralValues, sqls, expected);
+    WINQConvertibleTest(WCDB::Expressions, sqls, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sqls, expected);
+
+    WINQConvertibleTest(WCDB::TablesOrSubqueries, sqls, @"main.t1, main.t2");
+}
+
+- (void)test_literal_value_convertible
+{
+    WCDB::LiteralValue sql = 1;
+    NSString* expected = @"1";
+    WINQConvertibleTest(WCDB::LiteralValue, sql, expected);
+    WINQConvertibleTest(WCDB::LiteralValues, sql, expected);
+    WINQConvertibleTest(WCDB::Expression, sql, expected);
+    WINQConvertibleTest(WCDB::Expressions, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumn, sql, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumn, sql, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerm, sql, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sql, expected);
+}
+
+- (void)test_literal_values_convertible
+{
+    WCDB::LiteralValues sqls = {
+        (bool) true,
+        (int32_t) 1,
+        (std::nullptr_t) nullptr,
+        (int64_t) 2,
+        (NSNumber*) @(3),
+        (float) 1.1,
+        (double) 2.2,
+        (const char*) "t1",
+        (std::string) "t2",
+        (NSString*) @"t3",
+    };
+    NSString* expected = @"1, 1, NULL, 2, 3, 1.1, 2.2, 't1', 't2', 't3'";
+    WINQConvertibleTest(WCDB::LiteralValues, sqls, expected);
+    WINQConvertibleTest(WCDB::Expressions, sqls, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sqls, expected);
+}
+
 @end

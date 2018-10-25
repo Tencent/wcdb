@@ -91,16 +91,4 @@
     WINQAssertEqual(testingSQL, @"testSchema.testTable NOT INDEXED");
 }
 
-WCDB::QualifiedTable acceptable(const WCDB::QualifiedTable& qualifiedTable)
-{
-    return qualifiedTable;
-}
-
-- (void)test_convertible
-{
-    WINQAssertEqual(acceptable("testTable"), @"main.testTable");
-    WINQAssertEqual(acceptable(@"testTable"), @"main.testTable");
-    WINQAssertEqual(acceptable(std::string("testTable")), @"main.testTable");
-}
-
 @end

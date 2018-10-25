@@ -179,19 +179,9 @@
     WINQAssertEqual(testingSQL, @"(SELECT 1) AS testAliasTable");
 }
 
-WCDB::TableOrSubquery acceptable(const WCDB::TableOrSubquery& tableOrSubquery)
+- (void)test_master
 {
-    return tableOrSubquery;
-}
-
-- (void)test_convertible
-{
-    WINQAssertEqual(acceptable("testTable"), @"main.testTable");
-    WINQAssertEqual(acceptable(@"testTable"), @"main.testTable");
-    WINQAssertEqual(acceptable(std::string("testTable")), @"main.testTable");
-    WINQAssertEqual(acceptable(WCDB::Join().table(@"testTable")), @"(main.testTable)");
-    WINQAssertEqual(acceptable(WCDB::TablesOrSubqueries({ @"testTable1", @"testTable2" })), @"(main.testTable1, main.testTable2)");
-    WINQAssertEqual(acceptable(WCDB::StatementSelect().select(1)), @"(SELECT 1)");
+    WINQAssertEqual(WCDB::TableOrSubquery::master(), @"main.sqlite_master");
 }
 
 @end

@@ -154,23 +154,25 @@ constexpr const char *Enum::description(const Syntax::Identifier::Type &type)
 
 @end
 
-#define WINQAssertEqual(_sql, _expected)                                                                  \
-    {                                                                                                     \
-        NSString *sql = @((_sql).getDescription().c_str());                                               \
-        NSString *expected = (_expected);                                                                 \
-        XCTAssertTrue([expected isEqualToString:sql], @"%@", [WINQTestCase hint:sql expecting:expected]); \
+#define WINQAssertEqual(_sql, _expected)                                                                          \
+    {                                                                                                             \
+        NSString *__sql = @((_sql).getDescription().c_str());                                                     \
+        NSString *__expected = (_expected);                                                                       \
+        XCTAssertTrue([__expected isEqualToString:__sql], @"%@", [WINQTestCase hint:__sql expecting:__expected]); \
     }
 
-#define WINQEnumAssertEqual(_enum, _expected)                                                             \
-    {                                                                                                     \
-        NSString *sql = @(WCDB::Enum::description(_enum));                                                \
-        NSString *expected = (_expected);                                                                 \
-        XCTAssertTrue([expected isEqualToString:sql], @"%@", [WINQTestCase hint:sql expecting:expected]); \
+#define WINQEnumAssertEqual(_enum, _expected)                                                                     \
+    {                                                                                                             \
+        NSString *__sql = @(WCDB::Enum::description(_enum));                                                      \
+        NSString *__expected = (_expected);                                                                       \
+        XCTAssertTrue([__expected isEqualToString:__sql], @"%@", [WINQTestCase hint:__sql expecting:__expected]); \
     }
 
-#define IterateAssertEqual(_sql, _expected)                                                            \
-    {                                                                                                  \
-        std::list<WCDB::Syntax::Identifier::Type> types = ([WINQTestCase getTypes:_sql]);              \
-        std::list<WCDB::Syntax::Identifier::Type> expected = (_expected);                              \
-        XCTAssertTrue(types == expected, @"%@", [WINQTestCase hintForTypes:types expecting:expected]); \
+#define IterateAssertEqual(_sql, _expected)                                                                    \
+    {                                                                                                          \
+        std::list<WCDB::Syntax::Identifier::Type> __types = ([WINQTestCase getTypes:_sql]);                    \
+        std::list<WCDB::Syntax::Identifier::Type> __expected = (_expected);                                    \
+        XCTAssertTrue(__types == __expected, @"%@", [WINQTestCase hintForTypes:__types expecting:__expected]); \
     }
+
+#define WINQConvertibleTest(_Type, _parameter, _sql) WINQAssertEqual([](const _Type &_value) -> _Type { return _value; }(_parameter), _sql)

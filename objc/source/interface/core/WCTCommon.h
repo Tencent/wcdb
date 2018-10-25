@@ -50,10 +50,9 @@ class WCTColumnBinding;
 
 #pragma mark - WINQ
 class WCTProperty;
-class WCTProperties;
-class WCTExpression;
-class WCTExpressions;
-class ResultColumns;
+typedef WCDB::SyntaxList<WCTProperty> WCTProperties;
+class WCTResultColumn;
+typedef WCDB::SyntaxList<WCTResultColumn> WCTResultColumns;
 
 using WCTOrder = WCDB::Order;
 constexpr const WCDB::Order WCTOrderedAscending = WCDB::Order::ASC;

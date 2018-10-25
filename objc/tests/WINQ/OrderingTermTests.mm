@@ -69,27 +69,4 @@
     WINQAssertEqual(testingSQL, @"testColumn ASC");
 }
 
-WCDB::OrderingTerm acceptable(const WCDB::OrderingTerm& orderingTerm)
-{
-    return orderingTerm;
-}
-
-- (void)test_convertible
-{
-    WINQAssertEqual(acceptable(1), @"1");
-    WINQAssertEqual(acceptable(@(1)), @"1");
-    WINQAssertEqual(acceptable(true), @"1");
-    WINQAssertEqual(acceptable(YES), @"1");
-    WINQAssertEqual(acceptable(WCDB::Column("testColumn")), @"testColumn");
-    WINQAssertEqual(acceptable((float) 0.1), @"0.1");
-    WINQAssertEqual(acceptable((double) 0.1), @"0.1");
-    WINQAssertEqual(acceptable("test"), @"'test'");
-    WINQAssertEqual(acceptable(@"test"), @"'test'");
-    WINQAssertEqual(acceptable(std::string("test")), @"'test'");
-    WINQAssertEqual(acceptable(nullptr), @"NULL");
-    WINQAssertEqual(acceptable(nil), @"NULL");
-    WINQAssertEqual(acceptable(WCDB::LiteralValue::currentTime()), @"CURRENT_TIME");
-    WINQAssertEqual(acceptable(WCDB::Expression::function(@"testFunction")), @"testFunction()");
-}
-
 @end

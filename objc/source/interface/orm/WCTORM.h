@@ -27,6 +27,7 @@
 #import <WCDB/WCTCoding.h>
 #import <WCDB/WCTConvertible.h>
 #import <WCDB/WCTProperty.h>
+#import <WCDB/WCTResultColumn.h>
 
 #import <WCDB/WCTCodingMacro.h>
 #import <WCDB/WCTIndexMacro.h>

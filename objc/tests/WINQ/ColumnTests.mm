@@ -21,66 +21,43 @@
 #import "WINQTestCase.h"
 #import <WCDB/WCDB.h>
 
-@interface RaiseFunctionTests : WINQTestCase
+@interface ColumnTests : WINQTestCase
 
 @end
 
-@implementation RaiseFunctionTests {
-    NSString* errorMessage;
+@implementation ColumnTests {
 }
 
 - (void)setUp
 {
     [super setUp];
-    errorMessage = @"testErrorMessage";
 }
 
 - (void)test_default_constructible
 {
-    WCDB::RaiseFunction constructible __attribute((unused));
+    WCDB::Column constructible;
 }
 
-- (void)test_ignore
+- (void)test_column
 {
-    auto testingSQL = WCDB::RaiseFunction().ignore();
+    auto testingSQL = WCDB::Column(@"testColumn");
 
-    auto testingTypes = { WCDB::SQL::Type::RaiseFunction };
+    auto testingTypes = { WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"RAISE(IGNORE)");
+    WINQAssertEqual(testingSQL, @"testColumn");
 }
 
-- (void)test_rollback
+- (void)test_rowid
 {
-    auto testingSQL = WCDB::RaiseFunction().rollback(errorMessage);
-
-    auto testingTypes = { WCDB::SQL::Type::RaiseFunction };
-    IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"RAISE(ROLLBACK, testErrorMessage)");
+    WINQAssertEqual(WCDB::Column::rowid(), @"rowid");
 }
 
-- (void)test_abort
+- (void)test_column_convertible
 {
-    auto testingSQL = WCDB::RaiseFunction().abort(errorMessage);
-
-    auto testingTypes = { WCDB::SQL::Type::RaiseFunction };
-    IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"RAISE(ABORT, testErrorMessage)");
-}
-
-- (void)test_fail
-{
-    auto testingSQL = WCDB::RaiseFunction().fail(errorMessage);
-
-    auto testingTypes = { WCDB::SQL::Type::RaiseFunction };
-    IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"RAISE(FAIL, testErrorMessage)");
-}
-
-- (void)test_raise_function_convertible
-{
-    WCDB::RaiseFunction sql = WCDB::RaiseFunction().ignore();
-
-    NSString* expected = @"RAISE(IGNORE)";
+    WCDB::Column sql(@"testColumn");
+    NSString* expected = @"testColumn";
+    WINQConvertibleTest(WCDB::Column, sql, expected);
+    WINQConvertibleTest(WCDB::Columns, sql, expected);
     WINQConvertibleTest(WCDB::Expression, sql, expected);
     WINQConvertibleTest(WCDB::Expressions, sql, expected);
     WINQConvertibleTest(WCDB::IndexedColumn, sql, expected);
@@ -89,6 +66,20 @@
     WINQConvertibleTest(WCDB::ResultColumns, sql, expected);
     WINQConvertibleTest(WCDB::OrderingTerm, sql, expected);
     WINQConvertibleTest(WCDB::OrderingTerms, sql, expected);
+}
+
+- (void)test_columns_convertible
+{
+    WCDB::Columns sqls = {
+        WCDB::Column(@"testColumn1"),
+        WCDB::Column(@"testColumn2"),
+    };
+    NSString* expected = @"testColumn1, testColumn2";
+    WINQConvertibleTest(WCDB::Columns, sqls, expected);
+    WINQConvertibleTest(WCDB::Expressions, sqls, expected);
+    WINQConvertibleTest(WCDB::IndexedColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::ResultColumns, sqls, expected);
+    WINQConvertibleTest(WCDB::OrderingTerms, sqls, expected);
 }
 
 @end

@@ -74,6 +74,8 @@
 
     const WCTProperties &properties = _properties.empty() ? [object.class allProperties] : _properties;
 
+    WCDB::Expressions e = WCDB::BindParameters();
+
     if (_statement.syntax.columns.empty()) {
         _statement
         .columns(properties)

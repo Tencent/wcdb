@@ -32,7 +32,7 @@ class SQL;
 // we can add random accessibility for this list since the total size is small, usually less than 10
 // all other method is same as std::list, see also: http://www.cplusplus.com/reference/list/list/
 template<typename T>
-class SyntaxList : public std::list<T> {
+class _SyntaxList : public std::list<T> {
     static_assert(std::is_base_of<SQL, T>::value, "");
 
 protected:
@@ -43,16 +43,16 @@ public:
     typedef T SQLType;
     typedef typename T::SyntaxType SyntaxType;
 
-    SyntaxList(const T& t) { this->push_back(t); }
+    _SyntaxList(const T& t) { this->push_back(t); }
 
     template<typename U, typename Enable = typename std::enable_if<std::is_constructible<T, U>::value>::type>
-    SyntaxList(const U& u)
+    _SyntaxList(const U& u)
     {
         this->push_back(u);
     }
 
     template<typename U, typename Enable = typename std::enable_if<std::is_constructible<T, U>::value>::type>
-    SyntaxList(const SyntaxList<U>& others)
+    _SyntaxList(const SyntaxList<U>& others)
     {
         for (const auto& other : others) {
             this->push_back(other);
@@ -60,7 +60,7 @@ public:
     }
 
     template<typename U, typename Enable = typename std::enable_if<std::is_constructible<T, U>::value>::type>
-    SyntaxList(const std::initializer_list<U>& others)
+    _SyntaxList(const std::initializer_list<U>& others)
     {
         for (const auto& other : others) {
             this->push_back(other);
@@ -68,7 +68,7 @@ public:
     }
 
     template<typename U, typename Enable = typename std::enable_if<std::is_constructible<T, U>::value>::type>
-    SyntaxList(const std::list<U>& others)
+    _SyntaxList(const std::list<U>& others)
     {
         for (const auto& other : others) {
             this->push_back(other);
@@ -84,24 +84,26 @@ public:
         return list;
     }
 
-    const T& operator[](int index) const
+    const T& operator[](size_t index) const
     {
         assert(index < this->size());
         auto iter = this->begin();
-        while (--index >= 0) {
-            --iter;
+        while (index != 0) {
+            ++iter;
+            --index;
         }
-        return iter->syntax;
+        return *iter;
     }
 
     T& operator[](size_t index)
     {
         assert(index < this->size());
         auto iter = this->begin();
-        while (--index >= 0) {
-            --iter;
+        while (index != 0) {
+            ++iter;
+            --index;
         }
-        return iter->syntax;
+        return *iter;
     }
 
     std::string getDescription() const
@@ -118,6 +120,12 @@ public:
         }
         return stream.str();
     }
+};
+
+template<typename T>
+class SyntaxList : public _SyntaxList<T> {
+public:
+    using _SyntaxList<T>::_SyntaxList;
 };
 
 } // namespace WCDB

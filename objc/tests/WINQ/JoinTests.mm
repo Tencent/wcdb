@@ -165,4 +165,12 @@
     WINQAssertEqual(testingSQL, @"main.testTable JOIN main.testTable1 ON 1 LEFT OUTER JOIN main.testTable2 ON 2");
 }
 
+- (void)test_join_convertible
+{
+    WCDB::Join sql(WCDB::Join().table(@"testTable"));
+    NSString* expected = @"(main.testTable)";
+    WINQConvertibleTest(WCDB::TableOrSubquery, sql, expected);
+    WINQConvertibleTest(WCDB::TablesOrSubqueries, sql, expected);
+}
+
 @end

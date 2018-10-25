@@ -28,12 +28,6 @@ TableOrSubquery::TableOrSubquery(const char* table)
     syntax.tableOrFunction = table;
 }
 
-TableOrSubquery::TableOrSubquery(const SyntaxString& table)
-{
-    syntax.switcher = SyntaxType::Switch::Table;
-    syntax.tableOrFunction = table;
-}
-
 TableOrSubquery& TableOrSubquery::schema(const Schema& schema)
 {
     syntax.schema = schema;
@@ -94,6 +88,11 @@ TableOrSubquery::TableOrSubquery(const StatementSelect& select)
 {
     syntax.switcher = SyntaxType::Switch::Select;
     syntax.select = select;
+}
+
+TableOrSubquery TableOrSubquery::master()
+{
+    return "sqlite_master";
 }
 
 } // namespace WCDB

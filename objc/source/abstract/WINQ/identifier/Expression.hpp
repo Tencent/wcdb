@@ -53,7 +53,7 @@ public:
     Expression& table(const SyntaxString& table);
     Expression& schema(const Schema& schema);
 
-    Expression(const Expressions& expressions);
+    explicit Expression(const Expressions& expressions);
     Expression(const RaiseFunction& raiseFunction);
 
     static Expression function(const SyntaxString& function);

@@ -18,13 +18,30 @@
  * limitations under the License.
  */
 
+#import <WCDB/Assertion.hpp>
 #import <WCDB/WCTColumnBinding.h>
 #import <WCDB/WCTProperty.h>
+#import <WCDB/WCTResultColumn.h>
 
-WCTProperty::WCTProperty(const WCTColumnBinding &columnBinding)
-: WCDB::Column(){
-#warning TODO
-    //    userInfo = &columnBinding;
+#pragma mark - WCTProperty
+
+WCTProperty::WCTProperty()
+: WCDB::Column()
+, WCTColumnBindingHolder()
+{
+}
+
+WCTProperty::WCTProperty(const WCTColumnBinding& columnBinding)
+: WCDB::Column()
+, WCTColumnBindingHolder(columnBinding)
+{
+    syntax = columnBinding.columnDef.syntax.column;
+}
+
+WCTProperty::WCTProperty(const WCDB::Column& column, const WCTColumnBinding& columnBinding)
+: WCDB::Column(column)
+, WCTColumnBindingHolder(columnBinding)
+{
 }
 
 WCDB::IndexedColumn WCTProperty::asIndex() const
@@ -37,12 +54,48 @@ WCDB::OrderingTerm WCTProperty::asOrder() const
     return WCDB::OrderingTerm(*this);
 }
 
-const WCTColumnBinding &WCTProperty::getColumnBinding() const
+WCDB::Expression WCTProperty::table(const WCDB::SyntaxString& table) const
 {
-    return *(const WCTColumnBinding *) userInfo;
+    return WCDB::Expression((const WCDB::Column&) *this).table(table);
 }
 
+#pragma mark - WCTProperties
 WCDB::Expression WCTProperties::count() const
 {
     return WCDB::ResultColumnAll().count();
+}
+
+WCTResultColumns WCTProperties::redirect(const WCDB::ResultColumns& resultColumns) const
+{
+    WCTResultColumns result;
+    auto property = begin();
+    auto resultColumn = resultColumns.begin();
+    while (property != end() && resultColumn != resultColumns.end()) {
+        result.push_back(WCTResultColumn(*resultColumn, property->getColumnBinding()));
+        ++property;
+        ++resultColumn;
+    }
+    return result;
+}
+
+WCDB::Expressions WCTProperties::table(NSString* table) const
+{
+    WCDB::Expressions expressions;
+    for (const auto& property : *this) {
+        expressions.push_back(WCDB::Expression(property).table(table));
+    }
+    return expressions;
+}
+
+WCTProperties WCTProperties::propertiesByAddingNewProperties(const WCTProperties& properties) const
+{
+    WCTProperties newProperties = *this;
+    newProperties.insert(newProperties.begin(), properties.begin(), properties.end());
+    return newProperties;
+}
+
+WCTProperties& WCTProperties::addingNewProperties(const WCTProperties& properties)
+{
+    insert(end(), properties.begin(), properties.end());
+    return *this;
 }

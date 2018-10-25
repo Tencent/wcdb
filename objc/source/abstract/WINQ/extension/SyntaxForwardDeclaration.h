@@ -99,6 +99,7 @@ typedef SyntaxList<CommonTableExpression> CommonTableExpressions;
 typedef SyntaxList<ResultColumn> ResultColumns;
 typedef SyntaxList<ColumnDef> ColumnDefs;
 typedef SyntaxList<BindParameter> BindParameters;
+typedef SyntaxList<LiteralValue> LiteralValues;
 
 } // namespace WCDB
 

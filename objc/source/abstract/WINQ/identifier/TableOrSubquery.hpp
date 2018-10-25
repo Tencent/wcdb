@@ -36,7 +36,6 @@ public:
     }
 
     TableOrSubquery(const char* table);
-    TableOrSubquery(const SyntaxString& table);
     TableOrSubquery& schema(const Schema& schema);
 
     TableOrSubquery& as(const SyntaxString& alias);
@@ -48,10 +47,12 @@ public:
     TableOrSubquery& invoke();
     TableOrSubquery& invoke(const Expressions& expressions);
 
-    TableOrSubquery(const TablesOrSubqueries& tableOrSubqueries);
+    explicit TableOrSubquery(const TablesOrSubqueries& tableOrSubqueries);
     TableOrSubquery(const Join& join);
 
     TableOrSubquery(const StatementSelect& select);
+
+    static TableOrSubquery master();
 };
 
 } // namespace WCDB

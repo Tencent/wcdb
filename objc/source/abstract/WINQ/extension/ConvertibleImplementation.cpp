@@ -69,12 +69,6 @@ TableOrSubquery TableOrSubqueryConvertible<Join>::asTableOrSubquery(const Join &
 }
 
 TableOrSubquery
-TableOrSubqueryConvertible<TablesOrSubqueries>::asTableOrSubquery(const TablesOrSubqueries &tablesOrSubqueries)
-{
-    return tablesOrSubqueries;
-}
-
-TableOrSubquery
 TableOrSubqueryConvertible<StatementSelect>::asTableOrSubquery(const StatementSelect &statementSelect)
 {
     return statementSelect;

@@ -34,6 +34,7 @@ public:
         QuestionSign,
         ColonSign,
         DollarSign,
+        AtSign,
     } switcher;
     int n;
     std::string name;

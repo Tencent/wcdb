@@ -73,16 +73,6 @@ public:
 };
 
 template<typename T>
-class LiteralValueConvertible<T, typename std::enable_if<ColumnIsBLOBType<T>::value>::type>
-: public std::true_type {
-public:
-    static LiteralValue asLiteralValue(const T& t)
-    {
-        return ColumnIsBLOBType<T>::asUnderlyingType(t);
-    }
-};
-
-template<typename T>
 class ExpressionConvertible<T, typename std::enable_if<LiteralValueConvertible<T>::value>::type>
 : public std::true_type {
 public:
@@ -108,12 +98,6 @@ template<>
 class ExpressionConvertible<LiteralValue> : public std::true_type {
 public:
     static Expression asExpression(const LiteralValue& literalValue);
-};
-
-template<>
-class ExpressionConvertible<Expressions> : public std::true_type {
-public:
-    static Expression asExpression(const Expressions& expressions);
 };
 
 template<>
@@ -210,12 +194,6 @@ template<>
 class TableOrSubqueryConvertible<Join> : public std::true_type {
 public:
     static TableOrSubquery asTableOrSubquery(const Join& join);
-};
-
-template<>
-class TableOrSubqueryConvertible<TablesOrSubqueries> : public std::true_type {
-public:
-    static TableOrSubquery asTableOrSubquery(const TablesOrSubqueries& tablesOrSubqueries);
 };
 
 template<>

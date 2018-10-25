@@ -35,7 +35,6 @@ public:
     }
 
     CTETable(const char* name);
-    CTETable(const SyntaxString& name);
     CTETable& columns(const Columns& columns);
 };
 

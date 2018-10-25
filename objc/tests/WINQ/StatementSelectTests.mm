@@ -275,4 +275,12 @@
     WINQAssertEqual(testingSQL, @"SELECT 1, 2 LIMIT 1 OFFSET 2");
 }
 
+- (void)test_select_convertible
+{
+    WCDB::StatementSelect sql = WCDB::StatementSelect().select(1);
+    NSString* expected = @"(SELECT 1)";
+    WINQConvertibleTest(WCDB::TableOrSubquery, sql, expected);
+    WINQConvertibleTest(WCDB::TablesOrSubqueries, sql, expected);
+}
+
 @end

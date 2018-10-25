@@ -182,6 +182,14 @@
 		23906AB5215E4F4400C2B717 /* Version.h in Headers */ = {isa = PBXBuildFile; fileRef = 23906AB4215E4F4400C2B717 /* Version.h */; };
 		23906AB9215E500100C2B717 /* WCTDatabase+Statictics.h in Headers */ = {isa = PBXBuildFile; fileRef = 23906AB7215E500100C2B717 /* WCTDatabase+Statictics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23906ABB215E500100C2B717 /* WCTDatabase+Statictics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23906AB8215E500100C2B717 /* WCTDatabase+Statictics.mm */; };
+		2396EB0D21801BD60079066C /* WCTResultColumn.h in Headers */ = {isa = PBXBuildFile; fileRef = 2396EB0B21801BD60079066C /* WCTResultColumn.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2396EB0E21801BD60079066C /* WCTResultColumn.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2396EB0C21801BD60079066C /* WCTResultColumn.mm */; };
+		2396EB11218054200079066C /* ColumnTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2396EB0F218054080079066C /* ColumnTests.mm */; };
+		2396EB162180571B0079066C /* WCTPropertyTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2396EB12218057100079066C /* WCTPropertyTests.mm */; };
+		2396EB172180571B0079066C /* WCTResultColumnTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2396EB14218057170079066C /* WCTResultColumnTests.mm */; };
+		2396EB1A218066EC0079066C /* SyntaxStringTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2396EB18218066EC0079066C /* SyntaxStringTests.mm */; };
+		2396EB1B218066EC0079066C /* SyntaxListTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2396EB19218066EC0079066C /* SyntaxListTests.mm */; };
+		2396EB1D21806AE00079066C /* BindParameterTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2396EB1C21806AE00079066C /* BindParameterTests.mm */; };
 		239776FA202AF2E3000A681C /* TimedQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776CE202AF2E2000A681C /* TimedQueue.hpp */; };
 		239776FE202AF2E3000A681C /* Macro.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776D0202AF2E2000A681C /* Macro.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2398975F217EC9E30014BF33 /* AggregateFunctionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23989720217EC9E20014BF33 /* AggregateFunctionTests.mm */; };
@@ -237,8 +245,6 @@
 		23989791217EC9E30014BF33 /* StatementSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23989752217EC9E20014BF33 /* StatementSelectTests.mm */; };
 		23989792217EC9E30014BF33 /* StatementUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23989753217EC9E20014BF33 /* StatementUpdateTests.mm */; };
 		23989793217EC9E30014BF33 /* StatementVacuumTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23989754217EC9E20014BF33 /* StatementVacuumTests.mm */; };
-		23989794217EC9E30014BF33 /* SyntaxListTestsTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23989755217EC9E20014BF33 /* SyntaxListTestsTests.mm */; };
-		23989795217EC9E30014BF33 /* SyntaxStringTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23989756217EC9E20014BF33 /* SyntaxStringTests.mm */; };
 		23989796217EC9E30014BF33 /* TableConstraintTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23989757217EC9E20014BF33 /* TableConstraintTests.mm */; };
 		23989797217EC9E30014BF33 /* TableOrSubqueryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23989758217EC9E20014BF33 /* TableOrSubqueryTests.mm */; };
 		23989798217EC9E30014BF33 /* UpsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23989759217EC9E20014BF33 /* UpsertTests.mm */; };
@@ -866,6 +872,14 @@
 		23906AB7215E500100C2B717 /* WCTDatabase+Statictics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Statictics.h"; sourceTree = "<group>"; };
 		23906AB8215E500100C2B717 /* WCTDatabase+Statictics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Statictics.mm"; sourceTree = "<group>"; };
 		239326611E836D7300D677CC /* WCDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2396EB0B21801BD60079066C /* WCTResultColumn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTResultColumn.h; sourceTree = "<group>"; };
+		2396EB0C21801BD60079066C /* WCTResultColumn.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTResultColumn.mm; sourceTree = "<group>"; };
+		2396EB0F218054080079066C /* ColumnTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ColumnTests.mm; sourceTree = "<group>"; };
+		2396EB12218057100079066C /* WCTPropertyTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTPropertyTests.mm; sourceTree = "<group>"; };
+		2396EB14218057170079066C /* WCTResultColumnTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTResultColumnTests.mm; sourceTree = "<group>"; };
+		2396EB18218066EC0079066C /* SyntaxStringTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SyntaxStringTests.mm; sourceTree = "<group>"; };
+		2396EB19218066EC0079066C /* SyntaxListTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SyntaxListTests.mm; sourceTree = "<group>"; };
+		2396EB1C21806AE00079066C /* BindParameterTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = BindParameterTests.mm; sourceTree = "<group>"; };
 		239776CE202AF2E2000A681C /* TimedQueue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TimedQueue.hpp; sourceTree = "<group>"; };
 		239776D0202AF2E2000A681C /* Macro.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Macro.hpp; sourceTree = "<group>"; };
 		23989720217EC9E20014BF33 /* AggregateFunctionTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AggregateFunctionTests.mm; sourceTree = "<group>"; };
@@ -921,8 +935,6 @@
 		23989752217EC9E20014BF33 /* StatementSelectTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementSelectTests.mm; sourceTree = "<group>"; };
 		23989753217EC9E20014BF33 /* StatementUpdateTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementUpdateTests.mm; sourceTree = "<group>"; };
 		23989754217EC9E20014BF33 /* StatementVacuumTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementVacuumTests.mm; sourceTree = "<group>"; };
-		23989755217EC9E20014BF33 /* SyntaxListTestsTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SyntaxListTestsTests.mm; sourceTree = "<group>"; };
-		23989756217EC9E20014BF33 /* SyntaxStringTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SyntaxStringTests.mm; sourceTree = "<group>"; };
 		23989757217EC9E20014BF33 /* TableConstraintTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableConstraintTests.mm; sourceTree = "<group>"; };
 		23989758217EC9E20014BF33 /* TableOrSubqueryTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableOrSubqueryTests.mm; sourceTree = "<group>"; };
 		23989759217EC9E20014BF33 /* UpsertTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UpsertTests.mm; sourceTree = "<group>"; };
@@ -1607,6 +1619,8 @@
 				2349F68D1EA0D6680021EFA7 /* WCTCoding.h */,
 				2349F6901EA0D6680021EFA7 /* WCTProperty.h */,
 				2349F6911EA0D6680021EFA7 /* WCTProperty.mm */,
+				2396EB0B21801BD60079066C /* WCTResultColumn.h */,
+				2396EB0C21801BD60079066C /* WCTResultColumn.mm */,
 				234EF46C2015CFDE00B81929 /* WCTConvertible.h */,
 				234EF46D2015CFDE00B81929 /* WCTConvertible.mm */,
 				238A8FC3208B377300DDFDCB /* NSString+CppString.h */,
@@ -1868,8 +1882,10 @@
 			isa = PBXGroup;
 			children = (
 				23989720217EC9E20014BF33 /* AggregateFunctionTests.mm */,
+				2396EB1C21806AE00079066C /* BindParameterTests.mm */,
 				23989721217EC9E20014BF33 /* ColumnConstraintTests.mm */,
 				23989722217EC9E20014BF33 /* ColumnDefTests.mm */,
+				2396EB0F218054080079066C /* ColumnTests.mm */,
 				23989723217EC9E20014BF33 /* ColumnOperableTests.mm */,
 				23989724217EC9E20014BF33 /* ColumnTypeTests.mm */,
 				23989725217EC9E20014BF33 /* CommonTableExpressionTests.mm */,
@@ -1920,8 +1936,6 @@
 				23989752217EC9E20014BF33 /* StatementSelectTests.mm */,
 				23989753217EC9E20014BF33 /* StatementUpdateTests.mm */,
 				23989754217EC9E20014BF33 /* StatementVacuumTests.mm */,
-				23989755217EC9E20014BF33 /* SyntaxListTestsTests.mm */,
-				23989756217EC9E20014BF33 /* SyntaxStringTests.mm */,
 				23989757217EC9E20014BF33 /* TableConstraintTests.mm */,
 				23989758217EC9E20014BF33 /* TableOrSubqueryTests.mm */,
 				23989759217EC9E20014BF33 /* UpsertTests.mm */,
@@ -1930,6 +1944,10 @@
 				2398975C217EC9E20014BF33 /* WINQTestCase.h */,
 				2398975D217EC9E20014BF33 /* WINQTestCase.mm */,
 				2398975E217EC9E20014BF33 /* WithTests.mm */,
+				2396EB12218057100079066C /* WCTPropertyTests.mm */,
+				2396EB14218057170079066C /* WCTResultColumnTests.mm */,
+				2396EB19218066EC0079066C /* SyntaxListTests.mm */,
+				2396EB18218066EC0079066C /* SyntaxStringTests.mm */,
 			);
 			path = WINQ;
 			sourceTree = "<group>";
@@ -2698,6 +2716,7 @@
 				23EEDCEE217DFADC006E9E73 /* SyntaxBindParameter.hpp in Headers */,
 				23F0FEB5215F5E9A008399FB /* Lock.hpp in Headers */,
 				23D0C35F20C149D80001BFAE /* FactoryRetriever.hpp in Headers */,
+				2396EB0D21801BD60079066C /* WCTResultColumn.h in Headers */,
 				234DBD052064DE04000E31E8 /* WCTHandle+Transaction.h in Headers */,
 				23EEDD5A217DFADC006E9E73 /* SyntaxVacuumSTMT.hpp in Headers */,
 				23775B7C20AD666900E21AB0 /* Material.hpp in Headers */,
@@ -2877,6 +2896,7 @@
 				23EEDD11217DFADC006E9E73 /* SyntaxPragma.cpp in Sources */,
 				23D0C35120C149D80001BFAE /* Factory.cpp in Sources */,
 				234DBD042064DE04000E31E8 /* WCTDatabase+Transaction.mm in Sources */,
+				2396EB0E21801BD60079066C /* WCTResultColumn.mm in Sources */,
 				23D0C38D20C17CAE0001BFAE /* FactoryBackup.cpp in Sources */,
 				23F70FD620A07CEC00CCE3CD /* CustomConfig.cpp in Sources */,
 				23EEDCD3217DFADC006E9E73 /* StatementDropView.cpp in Sources */,
@@ -3141,6 +3161,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23989785217EC9E30014BF33 /* StatementDeleteTests.mm in Sources */,
+				2396EB162180571B0079066C /* WCTPropertyTests.mm in Sources */,
 				23989765217EC9E30014BF33 /* ConflictTests.mm in Sources */,
 				23989772217EC9E30014BF33 /* LiteralValueTests.mm in Sources */,
 				2398979C217EC9E30014BF33 /* WithTests.mm in Sources */,
@@ -3157,11 +3178,13 @@
 				2398977C217EC9E30014BF33 /* StatementAnalyzeTests.mm in Sources */,
 				2398978D217EC9E30014BF33 /* StatementReindexTests.mm in Sources */,
 				23989771217EC9E30014BF33 /* JoinTests.mm in Sources */,
+				2396EB1D21806AE00079066C /* BindParameterTests.mm in Sources */,
 				2398977F217EC9E30014BF33 /* StatementCommitTests.mm in Sources */,
 				2398976E217EC9E30014BF33 /* FunctionInvocationTests.mm in Sources */,
 				23989799217EC9E30014BF33 /* WindowDefTests.mm in Sources */,
 				2398977E217EC9E30014BF33 /* StatementBeginTests.mm in Sources */,
 				23989768217EC9E30014BF33 /* ExpressionOperableTests.mm in Sources */,
+				2396EB11218054200079066C /* ColumnTests.mm in Sources */,
 				23989788217EC9E30014BF33 /* StatementDropTableTests.mm in Sources */,
 				2398979A217EC9E30014BF33 /* WindowFunctionInvocationTests.mm in Sources */,
 				23989797217EC9E30014BF33 /* TableOrSubqueryTests.mm in Sources */,
@@ -3170,12 +3193,12 @@
 				23989798217EC9E30014BF33 /* UpsertTests.mm in Sources */,
 				23989796217EC9E30014BF33 /* TableConstraintTests.mm in Sources */,
 				2398976D217EC9E30014BF33 /* FTS3FunctionTests.mm in Sources */,
-				23989794217EC9E30014BF33 /* SyntaxListTestsTests.mm in Sources */,
 				23989790217EC9E30014BF33 /* StatementSavepointTests.mm in Sources */,
 				23989780217EC9E30014BF33 /* StatementCreateIndexTests.mm in Sources */,
 				23989764217EC9E30014BF33 /* CommonTableExpressionTests.mm in Sources */,
-				23989795217EC9E30014BF33 /* SyntaxStringTests.mm in Sources */,
 				2398976A217EC9E30014BF33 /* FilterTests.mm in Sources */,
+				2396EB1B218066EC0079066C /* SyntaxListTests.mm in Sources */,
+				2396EB172180571B0079066C /* WCTResultColumnTests.mm in Sources */,
 				23989769217EC9E30014BF33 /* ExpressionTests.mm in Sources */,
 				2398978A217EC9E30014BF33 /* StatementDropViewTests.mm in Sources */,
 				23989777217EC9E30014BF33 /* RaiseFunctionTests.mm in Sources */,
@@ -3184,6 +3207,7 @@
 				23989775217EC9E30014BF33 /* PragmaTests.mm in Sources */,
 				2398976F217EC9E30014BF33 /* IndexedColumnTests.mm in Sources */,
 				23989766217EC9E30014BF33 /* CoreFunctionTests.mm in Sources */,
+				2396EB1A218066EC0079066C /* SyntaxStringTests.mm in Sources */,
 				2398978F217EC9E30014BF33 /* StatementRollbackTests.mm in Sources */,
 				23989784217EC9E30014BF33 /* StatementCreateVirtualTableTests.mm in Sources */,
 				23989792217EC9E30014BF33 /* StatementUpdateTests.mm in Sources */,

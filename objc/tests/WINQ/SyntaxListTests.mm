@@ -21,11 +21,11 @@
 #import "WINQTestCase.h"
 #import <WCDB/WCDB.h>
 
-@interface SyntaxListTestsTests : WINQTestCase
+@interface SyntaxListTests : WINQTestCase
 
 @end
 
-@implementation SyntaxListTestsTests {
+@implementation SyntaxListTests {
 }
 
 - (void)setUp
