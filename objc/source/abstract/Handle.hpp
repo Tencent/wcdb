@@ -43,6 +43,14 @@ public:
     Handle &operator=(const Handle &) = delete;
     virtual ~Handle();
 
+    // Developers can call sqlite interfaces those WCDB does not provided currently by using this raw handle.
+    // Note that this is not tested, which means that it may result in an unpredictable behavior.
+    // Usage:
+    //  e.g. 1. sqlite3** rawHandle = (sqlite3**)getRawHandle()
+    //  e.g. 2. sqlite3_open(rawHandle, ...)
+    //  e.g. 3. sqlite3_exec(*rawHandle, ...)
+    void **getRawHandle();
+
 protected:
     friend class HandleRelated;
     void *m_handle;

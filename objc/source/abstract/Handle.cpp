@@ -46,6 +46,11 @@ Handle::~Handle()
     close();
 }
 
+void **Handle::getRawHandle()
+{
+    return &m_handle;
+}
+
 #pragma mark - Global
 void Handle::enableMultithread()
 {
