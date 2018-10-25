@@ -1,5 +1,9 @@
 apply plugin: 'com.android.library'
 
+group 'com.tencent.wcdb'
+version rootProject.VERSION
+ext.artifactId = 'wcdb-room'
+
 android {
     compileSdkVersion 28
     buildToolsVersion '28.0.3'

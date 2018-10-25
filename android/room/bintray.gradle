@@ -2,7 +2,7 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven-publish'
 
 def propertyWithDefault(name, defVal) {
-    return rootProject.hasProperty(name) ? rootProject.getProperty(name) : defVal;
+    return rootProject.hasProperty(name) ? rootProject.getProperty(name) : defVal
 }
 
 bintray {
