@@ -22,14 +22,14 @@
 
 namespace WCDB {
 
-ForeignKey& ForeignKey::references(const SyntaxString& table)
+ForeignKey& ForeignKey::references(const String& table)
 {
     syntax.foreignTable = table;
     syntax.columns.clear();
     return *this;
 }
 
-ForeignKey& ForeignKey::references(const SyntaxString& table, const Columns& columns)
+ForeignKey& ForeignKey::references(const String& table, const Columns& columns)
 {
     syntax.foreignTable = table;
     syntax.columns = columns;
@@ -96,7 +96,7 @@ ForeignKey& ForeignKey::onUpdateNoAction()
     return *this;
 }
 
-ForeignKey& ForeignKey::match(const SyntaxString& name)
+ForeignKey& ForeignKey::match(const String& name)
 {
     syntax.switchers.push_back(SyntaxType::Switch::Match);
     syntax.matchings.push_back(name);

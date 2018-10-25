@@ -37,7 +37,7 @@ public:
     bool temp = false;
     bool ifNotExists = false;
     Schema schema;
-    std::string table;
+    String table;
     enum class Switch {
         ColumnDefs,
         Select,
@@ -52,7 +52,7 @@ public:
 public:
     static constexpr const Type type = Type::CreateTableSTMT;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
     void iterate(const Iterator& iterator, void* parameter) override final;
 };
 

@@ -31,7 +31,7 @@ Identifier::Type AttachSTMT::getType() const
     return type;
 }
 
-std::string AttachSTMT::getDescription() const
+String AttachSTMT::getDescription() const
 {
     std::ostringstream stream;
     stream << "ATTACH " << expression << " AS " << schema;

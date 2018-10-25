@@ -29,8 +29,8 @@ class StatementAnalyze : public StatementSyntax<Syntax::AnalyzeSTMT> {
 public:
     StatementAnalyze& analyze();
     StatementAnalyze& schema(const Schema& schema);
-    StatementAnalyze& table(const SyntaxString& table);
-    StatementAnalyze& index(const SyntaxString& index);
+    StatementAnalyze& table(const String& table);
+    StatementAnalyze& index(const String& index);
 };
 
 } // namespace WCDB

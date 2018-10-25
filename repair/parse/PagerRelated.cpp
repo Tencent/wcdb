@@ -41,7 +41,7 @@ PagerRelated &PagerRelated::operator=(PagerRelated &&other)
     return *this;
 }
 
-const std::string &PagerRelated::getPagerPath() const
+const String &PagerRelated::getPagerPath() const
 {
     return m_pager->getPath();
 }
@@ -56,7 +56,7 @@ void PagerRelated::assignWithSharedThreadedError()
     m_pager->assignWithSharedThreadedError();
 }
 
-void PagerRelated::markPagerAsCorrupted(int page, const std::string &message)
+void PagerRelated::markPagerAsCorrupted(int page, const String &message)
 {
     m_pager->markAsCorrupted(page, message);
 }

@@ -27,7 +27,7 @@ namespace WCDB {
 
 class StatementSavepoint : public StatementSyntax<Syntax::SavepointSTMT> {
 public:
-    StatementSavepoint& savepoint(const SyntaxString& savepoint);
+    StatementSavepoint& savepoint(const String& savepoint);
 };
 
 } // namespace WCDB

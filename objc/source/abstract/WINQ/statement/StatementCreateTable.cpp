@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-StatementCreateTable& StatementCreateTable::createTable(const SyntaxString& table)
+StatementCreateTable& StatementCreateTable::createTable(const String& table)
 {
     syntax.table = table;
     return *this;

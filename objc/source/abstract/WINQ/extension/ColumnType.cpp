@@ -49,6 +49,12 @@ ColumnIsTextType<std::string>::asUnderlyingType(const std::string &text)
     return text.c_str();
 }
 
+ColumnTypeInfo<ColumnType::Text>::UnderlyingType
+ColumnIsTextType<String>::asUnderlyingType(const String &text)
+{
+    return text.c_str();
+}
+
 //BLOB
 ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
 ColumnIsBLOBType<std::vector<unsigned char>>::asUnderlyingType(const std::vector<unsigned char> &blob)

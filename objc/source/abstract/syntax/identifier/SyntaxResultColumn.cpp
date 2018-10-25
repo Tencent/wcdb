@@ -31,7 +31,7 @@ Identifier::Type ResultColumn::getType() const
     return type;
 }
 
-std::string ResultColumn::getDescription() const
+String ResultColumn::getDescription() const
 {
     std::ostringstream stream;
     if (wildcard) {

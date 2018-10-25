@@ -24,19 +24,19 @@
 #include <WCDB/ErrorProne.hpp>
 #include <WCDB/HandleNotification.hpp>
 #include <WCDB/HandleStatement.hpp>
+#include <WCDB/String.hpp>
 #include <WCDB/WINQ.h>
 #include <array>
 #include <memory>
 #include <mutex>
 #include <set>
-#include <string>
 
 namespace WCDB {
 
 class Handle : public ErrorProne {
 #pragma mark - Initialize
 public:
-    Handle(const std::string &path);
+    Handle(const String &path);
 
     Handle() = delete;
     Handle(const Handle &) = delete;
@@ -61,11 +61,11 @@ public:
 
 #pragma mark - Path
 public:
-    const std::string path;
+    const String path;
 
-    static std::string getSHMSubfix();
-    static std::string getWALSubfix();
-    static std::string getJournalSubfix();
+    static String getSHMSubfix();
+    static String getWALSubfix();
+    static String getJournalSubfix();
 
 #pragma mark - Basic
 public:
@@ -127,10 +127,9 @@ protected:
 #pragma mark - Convenient
 public:
     std::pair<bool, bool> tableExists(const TableOrSubquery &table);
-    std::pair<bool, std::set<std::string>>
-    getUnorderedColumnsWithTable(const Schema &schema, const std::string &tableName);
-    std::pair<bool, std::set<std::string>>
-    getUnorderedColumnsWithTable(const std::string &tableName);
+    std::pair<bool, std::set<String>>
+    getUnorderedColumnsWithTable(const Schema &schema, const String &tableName);
+    std::pair<bool, std::set<String>> getUnorderedColumnsWithTable(const String &tableName);
 
     typedef std::function<bool(Handle *)> TransactionCallback;
 
@@ -145,11 +144,11 @@ public:
     bool runNestedTransaction(const TransactionCallback &transaction);
 
 protected:
-    std::pair<bool, std::set<std::string>>
+    std::pair<bool, std::set<String>>
     getUnorderedValues(const Statement &statement, int index);
 
 private:
-    static const std::string &savepointPrefix();
+    static const String &savepointPrefix();
     int m_nestedLevel;
 
 #pragma mark - Cipher
@@ -159,33 +158,33 @@ public:
 #pragma mark - Notification
 public:
     typedef HandleNotification::PerformanceNotification PerformanceNotification;
-    void setNotificationWhenPerformanceTraced(const std::string &name,
+    void setNotificationWhenPerformanceTraced(const String &name,
                                               const PerformanceNotification &onTraced);
 
     typedef HandleNotification::SQLNotification SQLNotification;
-    void setNotificationWhenSQLTraced(const std::string &name, const SQLNotification &onTraced);
+    void setNotificationWhenSQLTraced(const String &name, const SQLNotification &onTraced);
 
     typedef HandleNotification::CommittedNotification CommittedNotification;
     void setNotificationWhenCommitted(int order,
-                                      const std::string &name,
+                                      const String &name,
                                       const CommittedNotification &onCommitted);
 
     typedef HandleNotification::WillCheckpointNotification WillCheckpointNotification;
     bool setNotificationWhenWillCheckpoint(int order,
-                                           const std::string &name,
+                                           const String &name,
                                            const WillCheckpointNotification &willCheckpoint);
-    bool unsetNotificationWhenWillCheckpoint(const std::string &name);
+    bool unsetNotificationWhenWillCheckpoint(const String &name);
     typedef HandleNotification::CheckpointedNotification CheckpointedNotification;
-    bool setNotificationWhenCheckpointed(const std::string &name,
+    bool setNotificationWhenCheckpointed(const String &name,
                                          const CheckpointedNotification &checkpointed);
-    void unsetNotificationWhenCommitted(const std::string &name);
+    void unsetNotificationWhenCommitted(const String &name);
 
 private:
     HandleNotification m_notification;
 
 #pragma mark - Error
 protected:
-    void setError(int rc, const std::string &sql = "");
+    void setError(int rc, const String &sql = "");
 
     // if code >= 0, then the level of error with the specified code will be marked as ignored
     // if code < 0, then the level of all errors will be marked as ignored
@@ -194,7 +193,7 @@ protected:
     void markErrorAsUnignorable();
 
 private:
-    void doSetError(Error &error, int rc, const std::string &sql);
+    void doSetError(Error &error, int rc, const String &sql);
     int m_codeToBeIgnored;
 };
 

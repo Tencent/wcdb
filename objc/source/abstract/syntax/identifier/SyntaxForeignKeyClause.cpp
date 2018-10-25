@@ -80,7 +80,7 @@ Identifier::Type ForeignKeyClause::getType() const
     return type;
 }
 
-std::string ForeignKeyClause::getDescription() const
+String ForeignKeyClause::getDescription() const
 {
     std::ostringstream stream;
     stream << "REFERENCES " << foreignTable;

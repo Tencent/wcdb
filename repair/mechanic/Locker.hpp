@@ -21,7 +21,7 @@
 #ifndef Locker_hpp
 #define Locker_hpp
 
-#include <string>
+#include <WCDB/String.hpp>
 
 namespace WCDB {
 
@@ -32,8 +32,8 @@ namespace Repair {
 class Locker {
 public:
     virtual ~Locker();
-    virtual void setPath(const std::string &path) = 0;
-    virtual const std::string &getPath() const = 0;
+    virtual void setPath(const String &path) = 0;
+    virtual const String &getPath() const = 0;
     virtual const Error &getError() const = 0;
 
     virtual bool acquireLock() = 0;

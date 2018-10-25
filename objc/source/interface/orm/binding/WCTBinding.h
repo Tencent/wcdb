@@ -33,33 +33,33 @@ public:
     static const WCTBinding &bindingWithClass(Class cls);
 
     template<typename T>
-    void addColumnBinding(const std::string &propertyName, const std::string &columnName)
+    void addColumnBinding(const WCDB::String &propertyName, const WCDB::String &columnName)
     {
         WCTColumnBinding columnBinding(m_cls, propertyName, columnName, (T *) nullptr);
         addColumnBinding(columnName, std::move(columnBinding));
     }
 
-    const WCTProperty &getProperty(const std::string &propertyName) const;
+    const WCTProperty &getProperty(const WCDB::String &propertyName) const;
 
-    const WCTColumnBinding &getColumnBinding(const std::string &columnName) const;
+    const WCTColumnBinding &getColumnBinding(const WCDB::String &columnName) const;
 
     WCDB::ColumnDef &getColumnDef(const WCTProperty &property);
 
-    WCDB::TableConstraint &getOrCreateTableConstraint(const std::string &name);
+    WCDB::TableConstraint &getOrCreateTableConstraint(const WCDB::String &name);
 
-    WCDB::StatementCreateIndex &getOrCreateIndex(const std::string &subfix);
+    WCDB::StatementCreateIndex &getOrCreateIndex(const WCDB::String &subfix);
 
-    const std::map<std::string, WCTColumnBinding, WCDB::String::CaseInsensiveComparator> &
+    const std::map<WCDB::String, WCTColumnBinding, WCDB::String::CaseInsensiveComparator> &
     getColumnBindings() const;
 
     WCDB::StatementCreateVirtualTable statementVirtualTable;
 
     WCDB::StatementCreateTable
-    generateCreateTableStatement(const std::string &tableName) const;
+    generateCreateTableStatement(const WCDB::String &tableName) const;
     WCDB::StatementCreateVirtualTable
-    generateVirtualCreateTableStatement(const std::string &tableName) const;
+    generateVirtualCreateTableStatement(const WCDB::String &tableName) const;
     std::list<WCDB::StatementCreateIndex>
-    generateCreateIndexStatements(const std::string &tableName) const;
+    generateCreateIndexStatements(const WCDB::String &tableName) const;
 
     const WCTProperties &getAllProperties() const;
 
@@ -72,16 +72,16 @@ protected:
 
     void initialize();
 
-    void addColumnBinding(const std::string &columnName, const WCTColumnBinding &columnBinding);
+    void addColumnBinding(const WCDB::String &columnName, const WCTColumnBinding &columnBinding);
 
     WCTProperties m_properties;
-    std::map<std::string, WCTProperties::iterator> m_mappedProperties;
+    std::map<WCDB::String, WCTProperties::iterator> m_mappedProperties;
 
-    std::map<std::string, WCTColumnBinding, WCDB::String::CaseInsensiveComparator> m_columnBindings;
+    std::map<WCDB::String, WCTColumnBinding, WCDB::String::CaseInsensiveComparator> m_columnBindings;
 
-    std::map<std::string, WCDB::TableConstraint> m_constraints;
+    std::map<WCDB::String, WCDB::TableConstraint> m_constraints;
 
-    std::map<std::string, WCDB::StatementCreateIndex> m_indexes;
+    std::map<WCDB::String, WCDB::StatementCreateIndex> m_indexes;
 
     Class m_cls;
 };

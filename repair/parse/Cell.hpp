@@ -52,7 +52,7 @@ public:
     int64_t integerValue(int index) const;
     double doubleValue(int index) const;
     std::pair<int, const char *> textValue(int index) const;
-    std::string stringValue(int index) const;
+    String stringValue(int index) const;
     const UnsafeData blobValue(int index) const;
 
 protected:

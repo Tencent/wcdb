@@ -33,7 +33,7 @@ public:
     bool temp = false;
     bool ifNotExists = false;
     Schema schema;
-    std::string view;
+    String view;
     std::list<Column> columns;
     SelectSTMT select;
 
@@ -41,7 +41,7 @@ public:
 public:
     static constexpr const Type type = Type::CreateViewSTMT;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
     void iterate(const Iterator& iterator, void* parameter) override final;
 };
 

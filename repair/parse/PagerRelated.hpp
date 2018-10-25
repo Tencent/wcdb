@@ -35,10 +35,10 @@ public:
     PagerRelated(PagerRelated &&);
     PagerRelated &operator=(PagerRelated &&);
 
-    const std::string &getPagerPath() const;
+    const String &getPagerPath() const;
 
 protected:
-    void markPagerAsCorrupted(int page, const std::string &message);
+    void markPagerAsCorrupted(int page, const String &message);
     void setError(Error &&error);
     void assignWithSharedThreadedError();
 

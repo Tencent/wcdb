@@ -23,7 +23,7 @@
 
 namespace WCDB {
 
-TokenizeConfig::TokenizeConfig(const std::list<std::string> &tokenizeNames,
+TokenizeConfig::TokenizeConfig(const std::list<String> &tokenizeNames,
                                const std::shared_ptr<FTS::Modules> &modules)
 : Config()
 , m_tokenizeNames(tokenizeNames)
@@ -35,7 +35,7 @@ TokenizeConfig::TokenizeConfig(const std::list<std::string> &tokenizeNames,
 
 bool TokenizeConfig::invoke(Handle *handle)
 {
-    for (const std::string &name : m_tokenizeNames) {
+    for (const String &name : m_tokenizeNames) {
         const UnsafeData &address = m_modules->getAddress(name);
 
         if (address.empty()) {

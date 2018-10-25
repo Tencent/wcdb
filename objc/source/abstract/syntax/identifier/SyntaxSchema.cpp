@@ -28,7 +28,7 @@ namespace Syntax {
 #pragma mark - Syntax
 bool Schema::isMain() const
 {
-    return name.empty() || String::isCaseInsensiveEqual(name, "main");
+    return name.empty() || name.isCaseInsensiveEqual("main");
 }
 
 #pragma mark - Identifier
@@ -37,7 +37,7 @@ Identifier::Type Schema::getType() const
     return type;
 }
 
-std::string Schema::getDescription() const
+String Schema::getDescription() const
 {
     if (name.empty()) {
         // Empty schema is not allowed in WCDB. It must be explicitly specified.

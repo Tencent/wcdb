@@ -31,7 +31,7 @@ Identifier::Type ReindexSTMT::getType() const
     return type;
 }
 
-std::string ReindexSTMT::getDescription() const
+String ReindexSTMT::getDescription() const
 {
     std::ostringstream stream;
     stream << "REINDEX";

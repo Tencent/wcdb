@@ -31,7 +31,7 @@ Identifier::Type RollbackSTMT::getType() const
     return type;
 }
 
-std::string RollbackSTMT::getDescription() const
+String RollbackSTMT::getDescription() const
 {
     std::ostringstream stream;
     stream << "ROLLBACK";

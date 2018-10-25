@@ -31,7 +31,7 @@ Identifier::Type WindowFunctionInvocation::getType() const
     return type;
 }
 
-std::string WindowFunctionInvocation::getDescription() const
+String WindowFunctionInvocation::getDescription() const
 {
     std::ostringstream stream;
     stream << name << "(";

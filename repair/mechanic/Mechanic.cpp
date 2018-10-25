@@ -29,7 +29,7 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialize
-Mechanic::Mechanic(const std::string &path) : Repairman(path), m_checksum(0)
+Mechanic::Mechanic(const String &path) : Repairman(path), m_checksum(0)
 {
 }
 

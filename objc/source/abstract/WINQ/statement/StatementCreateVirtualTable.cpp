@@ -23,7 +23,7 @@
 namespace WCDB {
 
 StatementCreateVirtualTable&
-StatementCreateVirtualTable::createVirtualTable(const SyntaxString& table)
+StatementCreateVirtualTable::createVirtualTable(const String& table)
 {
     syntax.table = table;
     return *this;
@@ -41,8 +41,7 @@ StatementCreateVirtualTable& StatementCreateVirtualTable::ifNotExists()
     return *this;
 }
 
-StatementCreateVirtualTable&
-StatementCreateVirtualTable::usingModule(const SyntaxString& module)
+StatementCreateVirtualTable& StatementCreateVirtualTable::usingModule(const String& module)
 {
     syntax.module = module;
     return *this;

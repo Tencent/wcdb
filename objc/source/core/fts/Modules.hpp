@@ -31,12 +31,12 @@ namespace FTS {
 
 class Modules {
 public:
-    void addAddress(const std::string &name, unsigned char *address);
+    void addAddress(const String &name, unsigned char *address);
 
-    const UnsafeData &getAddress(const std::string &name) const;
+    const UnsafeData &getAddress(const String &name) const;
 
 protected:
-    std::map<std::string, UnsafeData> m_addresses;
+    std::map<String, UnsafeData> m_addresses;
     mutable SharedLock m_lock;
 };
 

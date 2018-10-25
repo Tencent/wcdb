@@ -29,7 +29,7 @@ public:
 
     WCDB::IndexedColumn asIndex() const;
     WCDB::OrderingTerm asOrder() const;
-    WCDB::Expression table(const WCDB::SyntaxString& table) const;
+    WCDB::Expression table(const WCDB::String& table) const;
 };
 
 namespace WCDB {

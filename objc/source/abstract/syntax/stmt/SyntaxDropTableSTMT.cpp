@@ -31,7 +31,7 @@ Identifier::Type DropTableSTMT::getType() const
     return type;
 }
 
-std::string DropTableSTMT::getDescription() const
+String DropTableSTMT::getDescription() const
 {
     std::ostringstream stream;
     stream << "DROP TABLE ";

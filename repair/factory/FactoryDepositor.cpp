@@ -30,7 +30,7 @@ namespace Repair {
 bool FactoryDepositor::work()
 {
     bool succeed;
-    std::string workshopDirectory;
+    String workshopDirectory;
     std::tie(succeed, workshopDirectory) = factory.getUniqueWorkshopDiectory();
     if (!succeed) {
         assignWithSharedThreadedError();

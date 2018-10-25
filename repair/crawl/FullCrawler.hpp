@@ -36,14 +36,14 @@ namespace Repair {
 class FullCrawler : public Repairman, public MasterCrawlerDelegate, public SequenceCrawlerDelegate {
 #pragma mark - Initialize
 public:
-    FullCrawler(const std::string &source);
+    FullCrawler(const String &source);
 
 #pragma mark - Repair
 public:
     bool work();
 
 protected:
-    std::map<std::string, std::list<std::string>> m_associatedSQLs;
+    std::map<String, std::list<String>> m_associatedSQLs;
 
 #pragma mark - Crawlable
 protected:

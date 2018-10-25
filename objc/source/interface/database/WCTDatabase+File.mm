@@ -31,7 +31,7 @@
 - (BOOL)moveFilesToDirectory:(NSString *)directory
               withExtraFiles:(NSArray<NSString *> *)extraFiles
 {
-    std::list<std::string> files;
+    std::list<WCDB::String> files;
     for (NSString *extraFile in extraFiles) {
         files.push_back(extraFile.cppString);
     }

@@ -90,7 +90,7 @@
 {
     WCDB::Handle::SQLNotification callback = nullptr;
     if (trace) {
-        callback = [trace](const std::string &sql) {
+        callback = [trace](const WCDB::String &sql) {
             trace([NSString stringWithCppString:sql]);
         };
     }
@@ -119,7 +119,7 @@
 {
     WCDB::Handle::SQLNotification callback = nullptr;
     if (trace) {
-        callback = [trace](const std::string &sql) {
+        callback = [trace](const WCDB::String &sql) {
             trace([NSString stringWithCppString:sql]);
         };
     }

@@ -35,7 +35,7 @@ class Material;
 class Mechanic : public Repairman {
 #pragma mark - Initialize
 public:
-    Mechanic(const std::string &path);
+    Mechanic(const String &path);
 
 #pragma mark - Mechanic
 public:

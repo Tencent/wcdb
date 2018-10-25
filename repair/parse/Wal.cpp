@@ -47,7 +47,7 @@ Wal::Wal(Pager *pager)
 {
 }
 
-const std::string &Wal::getPath() const
+const String &Wal::getPath() const
 {
     return m_fileHandle.path;
 }
@@ -375,7 +375,7 @@ void Wal::hint() const
     m_shm.hint();
 }
 
-void Wal::markAsCorrupted(int frame, const std::string &message)
+void Wal::markAsCorrupted(int frame, const String &message)
 {
     Error error;
     error.setCode(Error::Code::Corrupt, "Repair");

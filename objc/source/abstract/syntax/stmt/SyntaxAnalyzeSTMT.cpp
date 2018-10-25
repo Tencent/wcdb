@@ -31,7 +31,7 @@ Identifier::Type AnalyzeSTMT::getType() const
     return type;
 }
 
-std::string AnalyzeSTMT::getDescription() const
+String AnalyzeSTMT::getDescription() const
 {
     std::ostringstream stream;
     stream << "ANALYZE";

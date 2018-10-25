@@ -31,21 +31,21 @@ class QualifiedTableName : public Identifier {
 #pragma mark - Lang
 public:
     Schema schema;
-    std::string table;
-    std::string alias;
+    String table;
+    String alias;
     enum class Switch {
         NotSet,
         Indexed,
         NotIndexed,
     } switcher
     = Switch::NotSet;
-    std::string index;
+    String index;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::QualifiedTableName;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
     void iterate(const Iterator& iterator, void* parameter) override final;
 };
 

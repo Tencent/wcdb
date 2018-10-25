@@ -31,7 +31,7 @@ Identifier::Type CreateVirtualTableSTMT::getType() const
     return type;
 }
 
-std::string CreateVirtualTableSTMT::getDescription() const
+String CreateVirtualTableSTMT::getDescription() const
 {
     std::ostringstream stream;
     stream << "CREATE VIRTUAL TABLE ";

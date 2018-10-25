@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-FunctionInvocation::FunctionInvocation(const SyntaxString& name)
+FunctionInvocation::FunctionInvocation(const String& name)
 {
     syntax.name = name;
 }

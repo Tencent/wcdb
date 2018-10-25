@@ -50,13 +50,13 @@ public:
     Expression(const BindParameter& bindParameter);
     Expression(const Column& column);
 
-    Expression& table(const SyntaxString& table);
+    Expression& table(const String& table);
     Expression& schema(const Schema& schema);
 
     explicit Expression(const Expressions& expressions);
     Expression(const RaiseFunction& raiseFunction);
 
-    static Expression function(const SyntaxString& function);
+    static Expression function(const String& function);
     Expression& invoke();
     Expression& invoke(const Expressions& parameters);
     Expression& invokeAll();
@@ -77,13 +77,12 @@ public:
 
     Expression& escape(const Expression& operand);
 
-    static Expression windowFunction(const SyntaxString& function);
-    static Expression
-    windowFunction(const SyntaxString& function, const Expressions& parameter);
-    static Expression windowFunctionAll(const SyntaxString& function);
+    static Expression windowFunction(const String& function);
+    static Expression windowFunction(const String& function, const Expressions& parameter);
+    static Expression windowFunctionAll(const String& function);
     Expression& filter(const Filter& filter);
     Expression& over(const WindowDef& windowDef);
-    Expression& over(const SyntaxString& window);
+    Expression& over(const String& window);
 
 protected:
     Expression asExpressionOperand() const override final;

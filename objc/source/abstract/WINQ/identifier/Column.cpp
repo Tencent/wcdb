@@ -26,7 +26,7 @@ Column::Column()
 {
 }
 
-Column::Column(const SyntaxString& name)
+Column::Column(const String& name)
 {
     syntax.name = name;
 }

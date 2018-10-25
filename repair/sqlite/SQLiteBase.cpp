@@ -33,12 +33,12 @@ SQLiteBase::SQLiteBase() : m_handle(nullptr), m_codeToBeIgnored(SQLITE_OK)
 {
 }
 
-void SQLiteBase::setPath(const std::string &path)
+void SQLiteBase::setPath(const String &path)
 {
     m_path = path;
 }
 
-const std::string &SQLiteBase::getPath() const
+const String &SQLiteBase::getPath() const
 {
     return m_path;
 }

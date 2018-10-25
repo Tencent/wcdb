@@ -24,15 +24,15 @@
 #include <WCDB/Data.hpp>
 #include <WCDB/MappedData.hpp>
 #include <WCDB/SharedThreadedErrorProne.hpp>
+#include <WCDB/String.hpp>
 #include <stdio.h>
-#include <string>
 
 namespace WCDB {
 
 class FileHandle : public SharedThreadedErrorProne {
 #pragma mark - Initialize
 public:
-    FileHandle(const std::string &path);
+    FileHandle(const String &path);
     FileHandle(FileHandle &&);
     ~FileHandle();
     FileHandle &operator=(FileHandle &&);
@@ -40,7 +40,7 @@ public:
     FileHandle(const FileHandle &) = delete;
     FileHandle &operator=(const FileHandle &) = delete;
 
-    const std::string path;
+    const String path;
 
 protected:
     int m_fd;

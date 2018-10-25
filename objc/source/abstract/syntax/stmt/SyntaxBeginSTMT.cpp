@@ -44,7 +44,7 @@ Identifier::Type BeginSTMT::getType() const
     return type;
 }
 
-std::string BeginSTMT::getDescription() const
+String BeginSTMT::getDescription() const
 {
     std::ostringstream stream;
     stream << "BEGIN " << transaction;

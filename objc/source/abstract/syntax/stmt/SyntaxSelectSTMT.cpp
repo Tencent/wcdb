@@ -31,7 +31,7 @@ Identifier::Type SelectSTMT::getType() const
     return type;
 }
 
-std::string SelectSTMT::getDescription() const
+String SelectSTMT::getDescription() const
 {
     std::ostringstream stream;
     if (!commonTableExpressions.empty()) {

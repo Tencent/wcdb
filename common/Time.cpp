@@ -64,7 +64,7 @@ bool Time::empty() const
     return time_since_epoch().count() == 0;
 }
 
-std::string Time::stringify() const
+String Time::stringify() const
 {
     std::time_t seconds
     = (std::time_t) std::chrono::duration_cast<std::chrono::seconds>(time_since_epoch())
@@ -75,7 +75,7 @@ std::string Time::stringify() const
         error.setSystemCode(errno, Error::Code::Error);
         Notifier::shared()->notify(error);
         setThreadedError(std::move(error));
-        return String::empty();
+        return String::null();
     }
     std::time_t nanoseconds
     = (std::time_t) std::chrono::duration_cast<std::chrono::nanoseconds>(time_since_epoch())

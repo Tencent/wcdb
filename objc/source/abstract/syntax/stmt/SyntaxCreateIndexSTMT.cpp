@@ -31,7 +31,7 @@ Identifier::Type CreateIndexSTMT::getType() const
     return type;
 }
 
-std::string CreateIndexSTMT::getDescription() const
+String CreateIndexSTMT::getDescription() const
 {
     std::ostringstream stream;
     stream << "CREATE ";

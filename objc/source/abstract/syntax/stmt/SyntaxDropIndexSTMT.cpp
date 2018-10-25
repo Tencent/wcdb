@@ -31,7 +31,7 @@ Identifier::Type DropIndexSTMT::getType() const
     return type;
 }
 
-std::string DropIndexSTMT::getDescription() const
+String DropIndexSTMT::getDescription() const
 {
     std::ostringstream stream;
     stream << "DROP INDEX ";

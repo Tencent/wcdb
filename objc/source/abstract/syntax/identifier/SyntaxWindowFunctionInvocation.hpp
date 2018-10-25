@@ -30,19 +30,19 @@ namespace Syntax {
 class WindowFunctionInvocation : public Identifier {
 #pragma mark - Lang
 public:
-    std::string name;
+    String name;
     std::list<Expression> expressions;
     bool wildcard = false;
     bool useFilter = false;
     Filter filter;
-    std::string window;
+    String window;
     WindowDef windowDef;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::WindowFunctionInvocation;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
     void iterate(const Iterator& iterator, void* parameter) override final;
 };
 

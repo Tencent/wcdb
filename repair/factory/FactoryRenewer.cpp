@@ -71,7 +71,7 @@ bool FactoryRenewer::work()
         return false;
     }
 
-    std::list<std::string> toMove = Factory::associatedPathsForDatabase(database);
+    std::list<String> toMove = Factory::associatedPathsForDatabase(database);
     toMove.reverse();
     if (!FileManager::moveItems(toMove, Path::getDirectoryName(factory.database))) {
         assignWithSharedThreadedError();
@@ -90,9 +90,8 @@ bool FactoryRenewer::prepare()
     }
 
     // 1. create temp directory for acquisition
-    std::string tempDirectory = Path::addComponent(directory, "temp");
-    std::string tempDatabase
-    = Path::addComponent(tempDirectory, factory.getDatabaseName());
+    String tempDirectory = Path::addComponent(directory, "temp");
+    String tempDatabase = Path::addComponent(tempDirectory, factory.getDatabaseName());
     m_assembler->setPath(tempDatabase);
 
     if (!FileManager::removeItem(tempDirectory)
@@ -103,7 +102,7 @@ bool FactoryRenewer::prepare()
 
     // 2. get deposited directories for acquisition
     bool succeed;
-    std::list<std::string> workshopDirectories;
+    std::list<String> workshopDirectories;
     std::tie(succeed, workshopDirectories) = factory.getWorkshopDirectories();
     if (!succeed) {
         assignWithSharedThreadedError();
@@ -111,14 +110,13 @@ bool FactoryRenewer::prepare()
     }
 
     // 3. resolve infos
-    std::map<std::string, Info> infos;
+    std::map<String, Info> infos;
     if (!resolveInfosForDatabase(infos, factory.database)) {
         return false;
     }
-    const std::string databaseName = Path::getFileName(factory.database);
+    const String databaseName = Path::getFileName(factory.database);
     for (const auto &workshopDirectory : workshopDirectories) {
-        std::string databaseForAcquisition
-        = Path::addComponent(workshopDirectory, databaseName);
+        String databaseForAcquisition = Path::addComponent(workshopDirectory, databaseName);
         if (!resolveInfosForDatabase(infos, databaseForAcquisition)) {
             return false;
         }
@@ -162,13 +160,13 @@ bool FactoryRenewer::prepare()
     }
 
     // 6. move the assembled database to renew directory and wait for renew.
-    std::list<std::string> toRemove = Factory::associatedPathsForDatabase(database);
+    std::list<String> toRemove = Factory::associatedPathsForDatabase(database);
     toRemove.reverse();
     if (!FileManager::removeItems(toRemove)) {
         assignWithSharedThreadedError();
         return false;
     }
-    std::list<std::string> toMove = Factory::associatedPathsForDatabase(tempDatabase);
+    std::list<String> toMove = Factory::associatedPathsForDatabase(tempDatabase);
     toMove.reverse();
     if (!FileManager::moveItems(toMove, directory)) {
         assignWithSharedThreadedError();
@@ -178,11 +176,11 @@ bool FactoryRenewer::prepare()
     return true;
 }
 
-bool FactoryRenewer::resolveInfosForDatabase(std::map<std::string, Info> &infos,
-                                             const std::string &databaseForAcquisition)
+bool FactoryRenewer::resolveInfosForDatabase(std::map<String, Info> &infos,
+                                             const String &databaseForAcquisition)
 {
     bool succeed;
-    std::list<std::string> materialPaths;
+    std::list<String> materialPaths;
     std::tie(succeed, materialPaths)
     = Factory::materialsForDeserializingForDatabase(databaseForAcquisition);
     if (!succeed) {

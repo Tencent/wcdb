@@ -24,7 +24,7 @@
 
 namespace WCDB {
 
-BackupQueue::BackupQueue(const std::string& name, const std::shared_ptr<DatabasePool>& databasePool)
+BackupQueue::BackupQueue(const String& name, const std::shared_ptr<DatabasePool>& databasePool)
 : AsyncQueue(name), m_databasePool(databasePool)
 {
     WCTInnerAssert(m_databasePool);
@@ -42,19 +42,19 @@ void BackupQueue::loop()
     &BackupQueue::onTimed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
-void BackupQueue::put(const std::string& path, double delay, int frames)
+void BackupQueue::put(const String& path, double delay, int frames)
 {
     m_timedQueue.reQueue(path, delay, frames);
     lazyRun();
 }
 
-int BackupQueue::getBackedUpFrames(const std::string& path)
+int BackupQueue::getBackedUpFrames(const String& path)
 {
     SharedLockGuard lockGuard(m_lock);
     return m_backedUp[path];
 }
 
-bool BackupQueue::onTimed(const std::string& path, const int& frames)
+bool BackupQueue::onTimed(const String& path, const int& frames)
 {
     if (exit()) {
         m_timedQueue.stop();

@@ -31,15 +31,15 @@ class ResultColumn : public Identifier {
 #pragma mark - Lang
 public:
     Expression expression;
-    std::string alias;
+    String alias;
     bool wildcard = false;
-    std::string table;
+    String table;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::ResultColumn;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
     void iterate(const Iterator& iterator, void* parameter) override final;
 };
 

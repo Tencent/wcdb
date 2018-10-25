@@ -37,13 +37,13 @@ public:
         AtSign,
     } switcher;
     int n;
-    std::string name;
+    String name;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::BindParameter;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
 };
 
 } // namespace Syntax

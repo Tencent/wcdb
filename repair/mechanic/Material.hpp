@@ -22,10 +22,10 @@
 #define Material_hpp
 
 #include <WCDB/Serialization.hpp>
+#include <WCDB/String.hpp>
 #include <list>
 #include <map>
 #include <stdlib.h>
-#include <string>
 #include <vector>
 
 namespace WCDB {
@@ -44,7 +44,7 @@ public:
 
 protected:
     static bool serializeData(Serialization &serialization, const Data &data);
-    static void markAsEmpty(const std::string &element);
+    static void markAsEmpty(const String &element);
 
 #pragma mark - Deserializable
 public:
@@ -53,7 +53,7 @@ public:
 
 protected:
     static std::pair<bool, Data> deserializeData(Deserialization &deserialization);
-    static void markAsCorrupt(const std::string &element);
+    static void markAsCorrupt(const String &element);
 
 #pragma mark - Header
 protected:
@@ -86,8 +86,8 @@ public:
     class Content final : public Serializable, public Deserializable {
     public:
         Content();
-        std::string sql;
-        std::list<std::string> associatedSQLs;
+        String sql;
+        std::list<String> associatedSQLs;
         int64_t sequence;
         std::map<uint32_t, uint32_t> verifiedPagenos;
 #pragma mark - Serializable
@@ -98,7 +98,7 @@ public:
         bool deserialize(Deserialization &deserialization) override final;
     };
 
-    std::map<std::string, Content> contents;
+    std::map<String, Content> contents;
 };
 
 } //namespace Repair

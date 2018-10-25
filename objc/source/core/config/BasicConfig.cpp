@@ -42,7 +42,7 @@ bool BasicConfig::invoke(Handle* handle)
             //Get Journal Mode
             WCDB_BREAK_IF_NOT(handle->prepare(m_getJournalMode));
             WCDB_BREAK_IF_NOT(handle->step());
-            std::string journalMode = handle->getText(0);
+            String journalMode = handle->getText(0);
             handle->finalize();
 
             // See also: http://www.sqlite.org/wal.html#readonly
@@ -55,7 +55,7 @@ bool BasicConfig::invoke(Handle* handle)
         //Get Locking Mode
         WCDB_BREAK_IF_NOT(handle->prepare(m_getLockingMode));
         WCDB_BREAK_IF_NOT(handle->step());
-        std::string lockingMode = handle->getText(0);
+        String lockingMode = handle->getText(0);
         handle->finalize();
         if (strcasecmp(lockingMode.c_str(), "NORMAL") != 0) {
             //Set Locking Mode Normal
@@ -68,7 +68,7 @@ bool BasicConfig::invoke(Handle* handle)
         //Get Journal Mode
         WCDB_BREAK_IF_NOT(handle->prepare(m_getJournalMode));
         WCDB_BREAK_IF_NOT(handle->step());
-        std::string journalMode = handle->getText(0);
+        String journalMode = handle->getText(0);
         handle->finalize();
         if (strcasecmp(journalMode.c_str(), "WAL") != 0) {
             //Set Journal Mode WAL

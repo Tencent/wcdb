@@ -76,12 +76,12 @@ bool Migration::initialize(Initializer& initializer)
 
     bool succeed;
 
-    std::set<std::string> tables;
+    std::set<String> tables;
     std::tie(succeed, tables) = initializer.getAllExistingTables();
     if (!succeed) {
         return false;
     }
-    std::map<std::string, const MigrationUserInfo> uninitialized = m_userInfos;
+    std::map<String, const MigrationUserInfo> uninitialized = m_userInfos;
     if (m_tableFilter) {
         for (const auto& table : tables) {
             MigrationUserInfo userInfo(table);
@@ -98,7 +98,7 @@ bool Migration::initialize(Initializer& initializer)
 
     {
         // check if some of the infos contain same origin table
-        std::map<std::pair<std::string, std::string>, const MigrationUserInfo*> origins;
+        std::map<std::pair<String, String>, const MigrationUserInfo*> origins;
         for (const auto& iter : uninitialized) {
             const MigrationUserInfo& userInfo = iter.second;
             auto key
@@ -125,7 +125,7 @@ bool Migration::initialize(Initializer& initializer)
         const MigrationUserInfo& userInfo = iter.second;
         WCTInnerAssert(userInfo.shouldMigrate());
 
-        std::set<std::string> columns;
+        std::set<String> columns;
         std::tie(succeed, columns) = initializer.getAllColumns(
         userInfo.getOriginTable(), userInfo.getOriginDatabase());
         if (!succeed) {

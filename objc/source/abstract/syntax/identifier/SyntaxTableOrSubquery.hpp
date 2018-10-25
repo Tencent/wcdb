@@ -40,15 +40,15 @@ public:
     } switcher;
 
     Schema schema;
-    std::string tableOrFunction;
-    std::string alias;
+    String tableOrFunction;
+    String alias;
     enum class IndexType {
         NotSet,
         Indexed,
         NotIndexed,
     } indexType
     = IndexType::NotSet;
-    std::string index;
+    String index;
     std::list<Expression> expressions;
     std::list<TableOrSubquery> tableOrSubqueries;
     JoinClause joinClause;
@@ -58,7 +58,7 @@ public:
 public:
     static constexpr const Type type = Type::TableOrSubquery;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
     void iterate(const Iterator& iterator, void* parameter) override final;
 };
 

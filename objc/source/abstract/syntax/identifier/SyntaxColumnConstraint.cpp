@@ -31,7 +31,7 @@ Identifier::Type ColumnConstraint::getType() const
     return type;
 }
 
-std::string ColumnConstraint::getDescription() const
+String ColumnConstraint::getDescription() const
 {
     std::ostringstream stream;
     if (!name.empty()) {

@@ -30,8 +30,8 @@ namespace Repair {
 
 class SQLiteReadLocker : public ReadLocker, public SQLiteBase {
 public:
-    void setPath(const std::string &path) override;
-    const std::string &getPath() const override;
+    void setPath(const String &path) override;
+    const String &getPath() const override;
 
     bool acquireLock() override;
     bool releaseLock() override;
@@ -40,8 +40,8 @@ public:
 
 class SQLiteWriteLocker : public WriteLocker, public SQLiteBase {
 public:
-    void setPath(const std::string &path) override;
-    const std::string &getPath() const override;
+    void setPath(const String &path) override;
+    const String &getPath() const override;
 
     bool acquireLock() override;
     bool releaseLock() override;

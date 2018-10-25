@@ -31,7 +31,7 @@ Identifier::Type CommonTableExpression::getType() const
     return type;
 }
 
-std::string CommonTableExpression::getDescription() const
+String CommonTableExpression::getDescription() const
 {
     std::ostringstream stream;
     stream << table;

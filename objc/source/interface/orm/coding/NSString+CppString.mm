@@ -23,16 +23,16 @@
 
 @implementation NSString (WCDBCppString)
 
-+ (instancetype)stringWithCppString:(const std::string &)cppString
++ (instancetype)stringWithCppString:(const WCDB::String &)cppString
 {
     NSString *string = [NSString stringWithUTF8String:cppString.c_str()];
     return string ? string : @"";
 }
 
-- (std::string)cppString
+- (WCDB::String)cppString
 {
     const char *utf8String = self.UTF8String;
-    return utf8String ? utf8String : WCDB::String::empty();
+    return utf8String ? utf8String : WCDB::String::null();
 }
 
 @end

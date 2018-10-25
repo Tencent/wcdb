@@ -31,7 +31,7 @@ Identifier::Type DetachSTMT::getType() const
     return type;
 }
 
-std::string DetachSTMT::getDescription() const
+String DetachSTMT::getDescription() const
 {
     std::ostringstream stream;
     stream << "DETACH " << schema;

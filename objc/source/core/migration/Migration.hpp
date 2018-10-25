@@ -39,10 +39,10 @@ public:
 
     protected:
         friend class Migration;
-        virtual std::pair<bool, std::set<std::string>> getAllExistingTables() = 0;
+        virtual std::pair<bool, std::set<String>> getAllExistingTables() = 0;
         // When succeed, if the empty columns means that table is already migrated.
-        virtual std::pair<bool, std::set<std::string>>
-        getAllColumns(const std::string& table, const std::string& database) = 0;
+        virtual std::pair<bool, std::set<String>>
+        getAllColumns(const String& table, const String& database) = 0;
         virtual void setError(const Error& error) = 0;
     };
     bool initialize(Initializer& initializer);
@@ -65,7 +65,7 @@ public:
     void addUserInfo(const MigrationUserInfo& info);
 
 protected:
-    std::map<std::string, const MigrationUserInfo> m_userInfos;
+    std::map<String, const MigrationUserInfo> m_userInfos;
 
 #pragma mark - Infos
 public:
@@ -77,7 +77,7 @@ public:
 protected:
     std::set<const MigrationInfo*> m_migrating;
 
-    std::map<std::string, const MigrationInfo> m_holder; // infos will never be deleted.
+    std::map<String, const MigrationInfo> m_holder; // infos will never be deleted.
 };
 
 } // namespace WCDB

@@ -42,8 +42,8 @@ public:
     } switcher
     = Switch::Insert;
     Schema schema;
-    std::string table;
-    std::string alias;
+    String table;
+    String alias;
     std::list<Column> columns;
 
     enum class SwitchValue {
@@ -61,7 +61,7 @@ public:
 public:
     static constexpr const Type type = Type::InsertSTMT;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
     void iterate(const Iterator& iterator, void* parameter) override final;
 };
 

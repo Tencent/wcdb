@@ -30,7 +30,7 @@ namespace Syntax {
 class FunctionInvocation : public Identifier {
 #pragma mark - Lang
 public:
-    std::string name;
+    String name;
     bool distinct = false;
     bool wildcard = false;
     std::list<Expression> expressions;
@@ -39,7 +39,7 @@ public:
 public:
     static constexpr const Type type = Type::FunctionInvocation;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
     void iterate(const Iterator& iterator, void* parameter) override final;
 };
 

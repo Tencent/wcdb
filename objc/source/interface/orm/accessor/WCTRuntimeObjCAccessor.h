@@ -35,18 +35,18 @@ protected:
 
 public:
     WCTRuntimeObjCAccessor(Class instanceClass,
-                           const std::string &propertyName);
+                           const WCDB::String &propertyName);
 
 protected:
     ValueGetter generateValueGetter(Class instanceClass,
-                                    const std::string &propertyName);
+                                    const WCDB::String &propertyName);
     ValueSetter generateValueSetter(Class instanceClass,
-                                    const std::string &propertyName);
+                                    const WCDB::String &propertyName);
 
     WCDB::ColumnType getColumnType() const override final;
 
     WCDB::ColumnType GetColumnType(Class instanceClass,
-                                   const std::string &propertyName);
+                                   const WCDB::String &propertyName);
 
     const WCDB::ColumnType m_columnType;
 };

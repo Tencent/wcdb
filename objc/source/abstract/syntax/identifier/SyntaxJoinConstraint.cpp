@@ -31,7 +31,7 @@ Identifier::Type JoinConstraint::getType() const
     return type;
 }
 
-std::string JoinConstraint::getDescription() const
+String JoinConstraint::getDescription() const
 {
     std::ostringstream stream;
     if (!columns.empty()) {

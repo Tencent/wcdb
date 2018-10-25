@@ -21,13 +21,13 @@
 #ifndef DebugDescribable_hpp
 #define DebugDescribable_hpp
 
-#include <string>
+#include <WCDB/String.hpp>
 
 namespace WCDB {
 
 class DebugDescribable {
 public:
-    virtual std::string getDebugDescription() const = 0;
+    virtual String getDebugDescription() const = 0;
 };
 
 } // namespace WCDB

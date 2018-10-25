@@ -520,7 +520,7 @@
     if (!handle) {
         return NO;
     }
-    std::string table = tableName.cppString;
+    WCDB::String table = tableName.cppString;
     const WCTBinding &binding = [cls objectRelationalMapping];
     std::pair<bool, bool> tableExists = handle->tableExists(table);
     if (!tableExists.first) {
@@ -531,7 +531,7 @@
         if (!pair.first) {
             return NO;
         }
-        std::set<std::string> &columnNames = pair.second;
+        std::set<WCDB::String> &columnNames = pair.second;
         std::list<const WCTColumnBinding *> columnBindingsToAdded;
         //Check whether the column names exists
         const auto &columnBindings = binding.getColumnBindings();
@@ -543,7 +543,7 @@
                 columnNames.erase(iter);
             }
         }
-        for (const std::string &columnName : columnNames) {
+        for (const WCDB::String &columnName : columnNames) {
             WCDB::Error error;
             error.setCode(WCDB::Error::Code::Mismatch);
             error.level = WCDB::Error::Level::Notice;

@@ -30,13 +30,13 @@ namespace Syntax {
 class SavepointSTMT : public Identifier {
 #pragma mark - Lang
 public:
-    std::string savepoint;
+    String savepoint;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::SavepointSTMT;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
 };
 
 } // namespace Syntax

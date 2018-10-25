@@ -32,7 +32,7 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialize
-FullCrawler::FullCrawler(const std::string &source)
+FullCrawler::FullCrawler(const String &source)
 : Repairman(source), m_sequenceCrawler(m_pager), m_masterCrawler(m_pager)
 {
 }
@@ -121,16 +121,16 @@ void FullCrawler::onMasterCellCrawled(const Cell &cell, const Master &master)
     }
     markCellAsCounted(cell);
     if (master.name == Sequence::tableName()) {
-        WCTInnerAssert(String::isCaseInsensiveEqual(master.type, "table"));
-        WCTInnerAssert(String::isCaseInsensiveEqual(master.tableName, master.name));
+        WCTInnerAssert(master.type.isCaseInsensiveEqual("table"));
+        WCTInnerAssert(master.tableName.isCaseInsensiveEqual(master.name));
         m_sequenceCrawler.work(master.rootpage, this);
     } else if (Master::isReservedTableName(master.name)
                || Master::isReservedTableName(master.tableName)) {
         //Skip sqlite reserved table
         return;
     } else {
-        if (String::isCaseInsensiveEqual(master.type, "table")) {
-            WCTInnerAssert(String::isCaseInsensiveEqual(master.tableName, master.name));
+        if (master.type.isCaseInsensiveEqual("table")) {
+            WCTInnerAssert(master.tableName.isCaseInsensiveEqual(master.name));
             if (assembleTable(master.name, master.sql)) {
                 crawl(master.rootpage);
             }

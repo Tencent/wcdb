@@ -31,7 +31,7 @@ Identifier::Type OrderingTerm::getType() const
     return type;
 }
 
-std::string OrderingTerm::getDescription() const
+String OrderingTerm::getDescription() const
 {
     std::ostringstream stream;
     stream << expression;

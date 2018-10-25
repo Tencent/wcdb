@@ -31,7 +31,7 @@ Identifier::Type IndexedColumn::getType() const
     return type;
 }
 
-std::string IndexedColumn::getDescription() const
+String IndexedColumn::getDescription() const
 {
     std::ostringstream stream;
     switch (switcher) {

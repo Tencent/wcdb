@@ -31,7 +31,7 @@ Identifier::Type VacuumSTMT::getType() const
     return type;
 }
 
-std::string VacuumSTMT::getDescription() const
+String VacuumSTMT::getDescription() const
 {
     std::ostringstream stream;
     stream << "VACUUM";

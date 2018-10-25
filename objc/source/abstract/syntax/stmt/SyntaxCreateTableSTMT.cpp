@@ -31,7 +31,7 @@ Identifier::Type CreateTableSTMT::getType() const
     return type;
 }
 
-std::string CreateTableSTMT::getDescription() const
+String CreateTableSTMT::getDescription() const
 {
     std::ostringstream stream;
     stream << "CREATE ";

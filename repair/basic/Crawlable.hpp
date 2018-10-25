@@ -53,7 +53,7 @@ public:
     const Error &getCrawlError() const;
 
 protected:
-    void markAsCorrupted(int page, const std::string &message);
+    void markAsCorrupted(int page, const String &message);
     void markAsError();
 
 #pragma mark - Crawlable

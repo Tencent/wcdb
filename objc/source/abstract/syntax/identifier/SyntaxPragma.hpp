@@ -30,13 +30,13 @@ namespace Syntax {
 class Pragma : public Identifier {
 #pragma mark - Lang
 public:
-    std::string name;
+    String name;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::Pragma;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
 };
 
 } // namespace Syntax

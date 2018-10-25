@@ -31,7 +31,7 @@ Identifier::Type Pragma::getType() const
     return type;
 }
 
-std::string Pragma::getDescription() const
+String Pragma::getDescription() const
 {
     return name;
 }

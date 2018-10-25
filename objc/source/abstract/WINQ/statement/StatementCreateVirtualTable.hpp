@@ -27,12 +27,12 @@ namespace WCDB {
 
 class StatementCreateVirtualTable : public StatementSyntax<Syntax::CreateVirtualTableSTMT> {
 public:
-    StatementCreateVirtualTable& createVirtualTable(const SyntaxString& table);
+    StatementCreateVirtualTable& createVirtualTable(const String& table);
     StatementCreateVirtualTable& schema(const Schema& schema);
 
     StatementCreateVirtualTable& ifNotExists();
 
-    StatementCreateVirtualTable& usingModule(const SyntaxString& module);
+    StatementCreateVirtualTable& usingModule(const String& module);
 
     StatementCreateVirtualTable& arguments(const ModuleArguments& arguments);
 };

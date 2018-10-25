@@ -31,7 +31,7 @@ Identifier::Type QualifiedTableName::getType() const
     return type;
 }
 
-std::string QualifiedTableName::getDescription() const
+String QualifiedTableName::getDescription() const
 {
     std::ostringstream stream;
     stream << schema << "." << table;

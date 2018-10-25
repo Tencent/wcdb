@@ -31,7 +31,7 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialize
-Pager::Pager(const std::string &path)
+Pager::Pager(const String &path)
 : m_fileHandle(path), m_pageSize(-1), m_reservedBytes(-1), m_pageCount(0), m_wal(this), m_fileSize(0)
 {
 }
@@ -48,7 +48,7 @@ void Pager::setReservedBytes(int reservedBytes)
     m_reservedBytes = reservedBytes;
 }
 
-const std::string &Pager::getPath() const
+const String &Pager::getPath() const
 {
     return m_fileHandle.path;
 }
@@ -165,7 +165,7 @@ int Pager::getWalFrameCount() const
 }
 
 #pragma mark - Error
-void Pager::markAsCorrupted(int page, const std::string &message)
+void Pager::markAsCorrupted(int page, const String &message)
 {
     Error error;
     error.setCode(Error::Code::Corrupt, "Repair");

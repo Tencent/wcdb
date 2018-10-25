@@ -45,7 +45,7 @@ public:
         return TypedSyntax<T>::syntax.iterate(iterator, parameter);
     }
 
-    std::string getDescription() const override final
+    String getDescription() const override final
     {
         return TypedSyntax<T>::syntax.getDescription();
     }

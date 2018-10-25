@@ -40,7 +40,7 @@ Core::Core()
 , m_backupConfig(new BackupConfig(m_backupQueue))
 , m_globalSQLTraceConfig(new ShareableSQLTraceConfig)
 , m_globalPerformanceTraceConfig(new ShareablePerformanceTraceConfig)
-, m_configs(new Configs(OrderedUniqueList<std::string, std::shared_ptr<Config>>({
+, m_configs(new Configs(OrderedUniqueList<String, std::shared_ptr<Config>>({
   { Configs::Priority::Highest, globalSQLTraceConfigName, m_globalSQLTraceConfig },
   { Configs::Priority::Highest, globalPerformanceTraceConfigName, m_globalPerformanceTraceConfig },
   { Configs::Priority::Higher, basicConfigName, std::shared_ptr<Config>(new BasicConfig) },
@@ -66,12 +66,12 @@ Core::~Core()
     Notifier::shared()->setNotificationForPreprocessing(notifierPreprocessorName, nullptr);
 }
 
-RecyclableDatabase Core::getOrCreateDatabase(const std::string& path)
+RecyclableDatabase Core::getOrCreateDatabase(const String& path)
 {
     return m_databasePool->getOrCreate(path);
 }
 
-RecyclableDatabase Core::getExistingDatabase(const std::string& path)
+RecyclableDatabase Core::getExistingDatabase(const String& path)
 {
     return m_databasePool->get(path);
 }
@@ -97,7 +97,7 @@ const std::shared_ptr<Configs>& Core::configs()
     return m_configs;
 }
 
-void Core::addTokenizer(const std::string& name, unsigned char* address)
+void Core::addTokenizer(const String& name, unsigned char* address)
 {
     m_modules->addAddress(name, address);
 }
@@ -118,7 +118,7 @@ const std::shared_ptr<Config>& Core::backupConfig()
     return m_backupConfig;
 }
 
-std::shared_ptr<Config> Core::tokenizeConfig(const std::list<std::string>& tokenizeNames)
+std::shared_ptr<Config> Core::tokenizeConfig(const std::list<String>& tokenizeNames)
 {
     return std::shared_ptr<Config>(new TokenizeConfig(tokenizeNames, m_modules));
 }
@@ -169,7 +169,7 @@ void Core::handleLog(void* unused, int code, const char* message)
         break;
     }
     error.setSQLiteCode(code);
-    error.message = message ? message : String::empty();
+    error.message = message ? message : String::null();
     Notifier::shared()->notify(error);
 }
 

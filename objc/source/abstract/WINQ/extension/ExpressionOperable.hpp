@@ -103,20 +103,20 @@ public:
 
     Expression in();
     Expression notIn();
-    Expression inTable(const SyntaxString &table);
-    Expression notInTable(const SyntaxString &table);
+    Expression inTable(const String &table);
+    Expression notInTable(const String &table);
     Expression in(const StatementSelect &select);
     Expression notIn(const StatementSelect &select);
     Expression in(const Expressions &expressions);
     Expression notIn(const Expressions &expressions);
-    Expression inFunction(const SyntaxString &tableFunction);
-    Expression notInFunction(const SyntaxString &tableFunction);
+    Expression inFunction(const String &tableFunction);
+    Expression notInFunction(const String &tableFunction);
 };
 
 class ExpressionCollateOperable : virtual public ExpressionOperable {
 public:
     virtual ~ExpressionCollateOperable();
-    Expression collate(const SyntaxString &collation);
+    Expression collate(const String &collation);
 };
 
 } // namespace WCDB

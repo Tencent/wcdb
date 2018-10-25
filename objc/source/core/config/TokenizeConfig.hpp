@@ -31,14 +31,14 @@ class Modules;
 
 class TokenizeConfig final : public Config {
 public:
-    TokenizeConfig(const std::list<std::string>& tokenizeNames,
+    TokenizeConfig(const std::list<String>& tokenizeNames,
                    const std::shared_ptr<FTS::Modules>& modules);
     bool invoke(Handle* handle) override final;
 
 protected:
     const std::shared_ptr<FTS::Modules> m_modules;
     const StatementSelect m_fts3Tokenizer;
-    const std::list<std::string> m_tokenizeNames;
+    const std::list<String> m_tokenizeNames;
 };
 
 } //namespace WCDB

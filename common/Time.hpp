@@ -22,8 +22,8 @@
 #define Time_hpp
 
 #include <WCDB/SharedThreadedErrorProne.hpp>
+#include <WCDB/String.hpp>
 #include <chrono>
-#include <string>
 
 namespace WCDB {
 
@@ -40,7 +40,7 @@ public:
     std::time_t seconds() const;
     std::time_t nanoseconds() const;
     bool empty() const;
-    std::string stringify() const;
+    String stringify() const;
 };
 
 class SteadyClock final : public std::chrono::steady_clock::time_point {

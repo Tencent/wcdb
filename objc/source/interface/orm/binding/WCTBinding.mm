@@ -95,7 +95,7 @@ void WCTBinding::initialize()
     }
 }
 
-WCDB::StatementCreateTable WCTBinding::generateCreateTableStatement(const std::string &tableName) const
+WCDB::StatementCreateTable WCTBinding::generateCreateTableStatement(const WCDB::String &tableName) const
 {
     WCDB::StatementCreateTable statement = WCDB::StatementCreateTable().createTable(tableName);
     for (const auto &columnBinding : m_columnBindings) {
@@ -109,13 +109,13 @@ WCDB::StatementCreateTable WCTBinding::generateCreateTableStatement(const std::s
     return statement;
 }
 
-const std::map<std::string, WCTColumnBinding, WCDB::String::CaseInsensiveComparator> &WCTBinding::getColumnBindings() const
+const std::map<WCDB::String, WCTColumnBinding, WCDB::String::CaseInsensiveComparator> &WCTBinding::getColumnBindings() const
 {
     return m_columnBindings;
 }
 
 WCDB::StatementCreateVirtualTable
-WCTBinding::generateVirtualCreateTableStatement(const std::string &tableName) const
+WCTBinding::generateVirtualCreateTableStatement(const WCDB::String &tableName) const
 {
     WCDB::StatementCreateVirtualTable statement = statementVirtualTable;
     statement.createVirtualTable(tableName);
@@ -137,7 +137,7 @@ WCDB::ColumnDef &WCTBinding::getColumnDef(const WCTProperty &property)
     return iter->second.columnDef;
 }
 
-WCDB::TableConstraint &WCTBinding::getOrCreateTableConstraint(const std::string &name)
+WCDB::TableConstraint &WCTBinding::getOrCreateTableConstraint(const WCDB::String &name)
 {
     auto iter = m_constraints.find(name);
     if (iter == m_constraints.end()) {
@@ -146,7 +146,7 @@ WCDB::TableConstraint &WCTBinding::getOrCreateTableConstraint(const std::string 
     return iter->second;
 }
 
-WCDB::StatementCreateIndex &WCTBinding::getOrCreateIndex(const std::string &subfix)
+WCDB::StatementCreateIndex &WCTBinding::getOrCreateIndex(const WCDB::String &subfix)
 {
     auto iter = m_indexes.find(subfix);
     if (iter == m_indexes.end()) {
@@ -155,7 +155,7 @@ WCDB::StatementCreateIndex &WCTBinding::getOrCreateIndex(const std::string &subf
     return iter->second;
 }
 
-const WCTColumnBinding &WCTBinding::getColumnBinding(const std::string &columnName) const
+const WCTColumnBinding &WCTBinding::getColumnBinding(const WCDB::String &columnName) const
 {
     auto iter = m_columnBindings.find(columnName);
     WCTInnerAssert(iter != m_columnBindings.end());
@@ -163,7 +163,7 @@ const WCTColumnBinding &WCTBinding::getColumnBinding(const std::string &columnNa
 }
 
 std::list<WCDB::StatementCreateIndex>
-WCTBinding::generateCreateIndexStatements(const std::string &tableName) const
+WCTBinding::generateCreateIndexStatements(const WCDB::String &tableName) const
 {
     std::list<WCDB::StatementCreateIndex> statementCreateIndexs;
     for (const auto &iter : m_indexes) {
@@ -179,14 +179,14 @@ const WCTProperties &WCTBinding::getAllProperties() const
     return m_properties;
 }
 
-const WCTProperty &WCTBinding::getProperty(const std::string &propertyName) const
+const WCTProperty &WCTBinding::getProperty(const WCDB::String &propertyName) const
 {
     auto iter = m_mappedProperties.find(propertyName);
     WCTInnerAssert(iter != m_mappedProperties.end());
     return *iter->second;
 }
 
-void WCTBinding::addColumnBinding(const std::string &columnName,
+void WCTBinding::addColumnBinding(const WCDB::String &columnName,
                                   const WCTColumnBinding &columnBinding)
 {
     WCTInnerAssert(m_columnBindings.find(columnName) == m_columnBindings.end());
@@ -201,7 +201,7 @@ WCTColumnNamed WCTBinding::getColumnGenerator()
 {
     static WCTColumnNamed s_columnNamed = ^WCDB::Column(NSString *name)
     {
-        return WCDB::Column(name ? name.cppString : WCDB::String::empty());
+        return WCDB::Column(name ? name.cppString : WCDB::String::null());
     };
     return s_columnNamed;
 }

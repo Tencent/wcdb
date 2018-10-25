@@ -32,15 +32,15 @@ class CreateVirtualTableSTMT : public Identifier {
 public:
     bool ifNotExists = false;
     Schema schema;
-    std::string table;
-    std::string module;
+    String table;
+    String module;
     std::list<ModuleArgument> moduleArguments;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::CreateVirtualTableSTMT;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
     void iterate(const Iterator& iterator, void* parameter) override final;
 };
 

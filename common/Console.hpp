@@ -22,8 +22,8 @@
 #define Console_hpp
 
 #include <WCDB/Notifier.hpp>
+#include <WCDB/String.hpp>
 #include <atomic>
-#include <string>
 
 namespace WCDB {
 
@@ -41,7 +41,7 @@ public:
     static bool debuggable();
 
     static void log(const Error& error);
-    static void fatal(const std::string& message, const char* file, int line);
+    static void fatal(const String& message, const char* file, int line);
     static void breakpoint(const Error& error);
 
     Console(const Console&) = delete;

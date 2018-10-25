@@ -23,46 +23,46 @@
 
 #include <WCDB/DebugDescribable.hpp>
 #include <WCDB/Lock.hpp>
+#include <WCDB/String.hpp>
 #include <WCDB/WINQ.h>
 #include <set>
-#include <string>
 
 namespace WCDB {
 
 class MigrationUserInfo : public DebugDescribable {
 public:
-    MigrationUserInfo(const std::string& migratedTable);
+    MigrationUserInfo(const String& migratedTable);
 
-    const std::string& getMigratedTable() const;
-    const std::string& getOriginTable() const;
-    const std::string& getOriginDatabase() const;
+    const String& getMigratedTable() const;
+    const String& getOriginTable() const;
+    const String& getOriginDatabase() const;
 
     bool shouldMigrate() const;
     bool isSameDatabaseMigration() const;
 
-    void setOrigin(const std::string& table, const std::string& database = "");
+    void setOrigin(const String& table, const String& database = "");
 
-    std::string getDebugDescription() const override;
+    String getDebugDescription() const override;
 
 protected:
-    const std::string m_migratedTable;
-    std::string m_originTable;
-    std::string m_originDatabase;
+    const String m_migratedTable;
+    String m_originTable;
+    String m_originDatabase;
 };
 
 class MigrationInfo : public MigrationUserInfo {
 #pragma mark - Initialize
 public:
-    MigrationInfo(const MigrationUserInfo& userInfo, const std::set<std::string>& columns);
+    MigrationInfo(const MigrationUserInfo& userInfo, const std::set<String>& columns);
 
 #pragma mark - Schema
 public:
     const Schema& getSchemaForOriginDatabase() const;
 
     // WCDBMigration_
-    static const std::string& getSchemaPrefix();
+    static const String& getSchemaPrefix();
 
-    static Schema getSchemaForDatabase(const std::string& database);
+    static Schema getSchemaForDatabase(const String& database);
 
     /*
      ATTACH [originDatabase]
@@ -83,9 +83,9 @@ protected:
 #pragma mark - View
 public:
     // WCDBUnioned_
-    static const std::string& getUnionedViewPrefix();
+    static const String& getUnionedViewPrefix();
 
-    const std::string& getUnionedView() const;
+    const String& getUnionedView() const;
 
     /*
      CREATE VIEW IF NOT EXISTS [unionedView]
@@ -101,11 +101,11 @@ public:
      DROP VIEW IF EXISTS [unionedView]
      */
     static const StatementDropView
-    getStatementForDroppingUnionedView(const std::string& unionedView);
+    getStatementForDroppingUnionedView(const String& unionedView);
 
 protected:
     // WCDBUnioned_ + [migratedTable] + _ + [originTable]
-    std::string m_unionedView;
+    String m_unionedView;
     StatementCreateView m_statementForCreatingUnionedView;
 
 #pragma mark - Migrate

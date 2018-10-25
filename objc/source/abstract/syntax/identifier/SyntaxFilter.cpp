@@ -31,7 +31,7 @@ Identifier::Type Filter::getType() const
     return type;
 }
 
-std::string Filter::getDescription() const
+String Filter::getDescription() const
 {
     std::ostringstream stream;
     SyntaxRemedialAssert(expression != nullptr);

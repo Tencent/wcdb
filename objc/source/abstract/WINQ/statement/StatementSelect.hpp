@@ -39,7 +39,7 @@ public:
     StatementSelect& group(const Expressions& groups);
     StatementSelect& having(const Expression& having);
 
-    StatementSelect& window(const SyntaxString& window);
+    StatementSelect& window(const String& window);
     StatementSelect& as(const WindowDef& windowDef);
 
     StatementSelect& values(const Expressions& expressions);

@@ -36,7 +36,7 @@ public:
     }
 
     OrderingTerm(const Expression& expression);
-    OrderingTerm& collate(const SyntaxString& collation);
+    OrderingTerm& collate(const String& collation);
     OrderingTerm& order(const Order& order);
 };
 

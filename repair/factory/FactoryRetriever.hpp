@@ -43,7 +43,7 @@ class FactoryRetriever : public FactoryRelated,
 public:
     FactoryRetriever(const Factory &factory);
 
-    const std::string database;
+    const String database;
 
 public:
     bool work();
@@ -52,33 +52,31 @@ protected:
     bool exit(bool result);
 
 protected:
-    bool restore(const std::string &database);
-    const std::string databaseFileName;
+    bool restore(const String &database);
+    const String databaseFileName;
 
 #pragma mark - Report
 protected:
     void reportMechanic(const Fraction &score,
-                        const std::string &path,
+                        const String &path,
                         const SteadyClock &cost,
                         const Time &material);
-    void reportFullCrawler(const Fraction &score, const std::string &path, const SteadyClock &cost);
+    void reportFullCrawler(const Fraction &score, const String &path, const SteadyClock &cost);
     void reportSummary(const SteadyClock &cost);
 
-    void finishReportOfPerformance(Error &error,
-                                   const std::string &database,
-                                   const SteadyClock &cost);
+    void finishReportOfPerformance(Error &error, const String &database, const SteadyClock &cost);
 
 #pragma mark - Evaluation and Progress
 protected:
-    bool calculateSizes(const std::list<std::string> &workshopDirectories);
-    bool calculateSize(const std::string &database);
-    void increaseProgress(const std::string &database, bool useMaterial, double progress, double increment);
+    bool calculateSizes(const std::list<String> &workshopDirectories);
+    bool calculateSize(const String &database);
+    void increaseProgress(const String &database, bool useMaterial, double progress, double increment);
 
-    Fraction getWeight(const std::string &database);
+    Fraction getWeight(const String &database);
 
-    std::map<std::string, size_t> m_sizes;
+    std::map<String, size_t> m_sizes;
     size_t m_totalSize;
-    void increaseScore(const std::string &database, const Fraction &increment);
+    void increaseScore(const String &database, const Fraction &increment);
 };
 
 } //namespace Repair

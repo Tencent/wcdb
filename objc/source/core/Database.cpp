@@ -31,7 +31,7 @@
 namespace WCDB {
 
 #pragma mark - Initializer
-Database::Database(const std::string &path)
+Database::Database(const String &path)
 : HandlePool(path)
 , m_factory(path)
 , m_tag(Tag::invalid())
@@ -353,7 +353,7 @@ bool Database::removeFiles()
     bool result = false;
     LockGuard lockGuard(m_concurrency);
     close(nullptr);
-    std::list<std::string> paths = getPaths();
+    std::list<String> paths = getPaths();
     paths.reverse(); // reverse to remove the non-critical paths first avoiding app stopped between the removing
     result = FileManager::removeItems(paths);
     if (!result) {
@@ -371,11 +371,11 @@ std::pair<bool, size_t> Database::getFilesSize()
     return pair;
 }
 
-bool Database::moveFiles(const std::string &directory)
+bool Database::moveFiles(const String &directory)
 {
     LockGuard lockGuard(m_concurrency);
     close(nullptr);
-    std::list<std::string> paths = getPaths();
+    std::list<String> paths = getPaths();
     paths.reverse();
     if (FileManager::moveItems(paths, directory)) {
         return true;
@@ -384,13 +384,13 @@ bool Database::moveFiles(const std::string &directory)
     return false;
 }
 
-bool Database::moveFilesToDirectoryWithExtraFiles(const std::string &directory,
-                                                  const std::list<std::string> &extraFiles)
+bool Database::moveFilesToDirectoryWithExtraFiles(const String &directory,
+                                                  const std::list<String> &extraFiles)
 {
     LockGuard lockGuard(m_concurrency);
     close(nullptr);
-    std::list<std::string> paths = extraFiles;
-    std::list<std::string> dbPaths = getPaths();
+    std::list<String> paths = extraFiles;
+    std::list<String> dbPaths = getPaths();
     dbPaths.reverse();
     paths.insert(paths.end(), dbPaths.begin(), dbPaths.end());
     if (FileManager::moveItems(paths, directory)) {
@@ -400,27 +400,27 @@ bool Database::moveFilesToDirectoryWithExtraFiles(const std::string &directory,
     return false;
 }
 
-const std::string &Database::getPath() const
+const String &Database::getPath() const
 {
     return path;
 }
 
-std::string Database::getSHMPath() const
+String Database::getSHMPath() const
 {
     return Path::addExtention(getPath(), Handle::getSHMSubfix());
 }
 
-std::string Database::getWALPath() const
+String Database::getWALPath() const
 {
     return Path::addExtention(getPath(), Handle::getWALSubfix());
 }
 
-std::string Database::getJournalPath() const
+String Database::getJournalPath() const
 {
     return Path::addExtention(getPath(), Handle::getJournalSubfix());
 }
 
-std::list<std::string> Database::getPaths() const
+std::list<String> Database::getPaths() const
 {
     return {
         getPath(),
@@ -434,17 +434,17 @@ std::list<std::string> Database::getPaths() const
 }
 
 #pragma mark - Repair
-std::string Database::getFirstMaterialPath() const
+String Database::getFirstMaterialPath() const
 {
     return Repair::Factory::firstMaterialPathForDatabase(getPath());
 }
 
-std::string Database::getLastMaterialPath() const
+String Database::getLastMaterialPath() const
 {
     return Repair::Factory::lastMaterialPathForDatabase(getPath());
 }
 
-const std::string &Database::getFactoryDirectory() const
+const String &Database::getFactoryDirectory() const
 {
     SharedLockGuard lockGuard(m_lock);
     return m_factory.directory;

@@ -34,14 +34,14 @@ StatementAnalyze& StatementAnalyze::schema(const Schema& schema)
     return *this;
 }
 
-StatementAnalyze& StatementAnalyze::table(const SyntaxString& table)
+StatementAnalyze& StatementAnalyze::table(const String& table)
 {
     syntax.useSchema = true;
     syntax.tableOrIndex = table;
     return *this;
 }
 
-StatementAnalyze& StatementAnalyze::index(const SyntaxString& index)
+StatementAnalyze& StatementAnalyze::index(const String& index)
 {
     syntax.useSchema = true;
     syntax.tableOrIndex = index;

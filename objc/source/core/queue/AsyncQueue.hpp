@@ -21,14 +21,14 @@
 #ifndef AsyncQueue_hpp
 #define AsyncQueue_hpp
 
+#include <WCDB/String.hpp>
 #include <mutex>
-#include <string>
 
 namespace WCDB {
 
 class AsyncQueue {
 public:
-    AsyncQueue(const std::string &name);
+    AsyncQueue(const String &name);
     virtual ~AsyncQueue();
 
     AsyncQueue() = delete;
@@ -37,7 +37,7 @@ public:
 
     void run();
 
-    const std::string name;
+    const String name;
 
 protected:
     void lazyRun();

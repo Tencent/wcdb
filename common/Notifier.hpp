@@ -36,12 +36,11 @@ public:
     void notify(const Error &error) const;
 
     typedef std::function<void(const Error &)> Callback;
-    void setNotification(int order, const std::string &key, const Callback &callback);
-    void unsetNotification(const std::string &key);
+    void setNotification(int order, const String &key, const Callback &callback);
+    void unsetNotification(const String &key);
 
     typedef std::function<void(const Error &, Error::Infos &)> PreprocessCallback;
-    void setNotificationForPreprocessing(const std::string &key,
-                                         const PreprocessCallback &callback);
+    void setNotificationForPreprocessing(const String &key, const PreprocessCallback &callback);
 
 protected:
     Notifier();
@@ -49,8 +48,8 @@ protected:
     mutable SharedLock m_lock;
 
     void doNotify(const Error &error) const;
-    OrderedUniqueList<std::string, Callback> m_notifications;
-    std::map<std::string, PreprocessCallback> m_preprocessNotifications;
+    OrderedUniqueList<String, Callback> m_notifications;
+    std::map<String, PreprocessCallback> m_preprocessNotifications;
 };
 
 } //namespace WCDB

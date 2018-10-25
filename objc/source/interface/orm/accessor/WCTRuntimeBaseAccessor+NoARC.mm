@@ -24,13 +24,12 @@
 #import <WCDB/String.hpp>
 #import <WCDB/WCTRuntimeBaseAccessor.h>
 #import <objc/runtime.h>
-#import <string>
 
 #if __has_feature(objc_arc)
 #error This file should be compiled without ARC to get better performance. Please use -fno-objc-arc flag on this file.
 #endif
 
-SEL WCTRuntimeBaseAccessor::getGetterSelector(Class cls, const std::string &propertyName)
+SEL WCTRuntimeBaseAccessor::getGetterSelector(Class cls, const WCDB::String &propertyName)
 {
     objc_property_t objcProperty = class_getProperty(cls, propertyName.c_str());
     const char *getter = property_copyAttributeValue(objcProperty, "G");
@@ -40,14 +39,14 @@ SEL WCTRuntimeBaseAccessor::getGetterSelector(Class cls, const std::string &prop
     return sel_registerName(getter);
 }
 
-SEL WCTRuntimeBaseAccessor::getSetterSelector(Class cls, const std::string &propertyName)
+SEL WCTRuntimeBaseAccessor::getSetterSelector(Class cls, const WCDB::String &propertyName)
 {
     objc_property_t objcProperty = class_getProperty(cls, propertyName.c_str());
     const char *setter = property_copyAttributeValue(objcProperty, "S");
     if (setter) {
         return sel_registerName(setter);
     }
-    std::string defaultSetter = "set" + propertyName + ":";
+    WCDB::String defaultSetter = "set" + propertyName + ":";
     defaultSetter[3] = std::toupper(propertyName[0]);
     return sel_registerName(defaultSetter.c_str());
 }
@@ -62,7 +61,7 @@ IMP WCTRuntimeBaseAccessor::getInstanceMethodImplementation(Class cls, SEL selec
     return [cls instanceMethodForSelector:selector];
 }
 
-Class WCTRuntimeBaseAccessor::getPropertyClass(Class cls, const std::string &propertyName)
+Class WCTRuntimeBaseAccessor::getPropertyClass(Class cls, const WCDB::String &propertyName)
 {
     objc_property_t property = class_getProperty(cls, propertyName.c_str());
     NSString *attributes = [NSString stringWithUTF8String:property_getAttributes(property)];

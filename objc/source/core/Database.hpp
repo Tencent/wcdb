@@ -33,7 +33,7 @@ namespace WCDB {
 class Database : protected HandlePool {
 #pragma mark - Initializer
 public:
-    Database(const std::string &path);
+    Database(const String &path);
     Database() = delete;
     Database(const Database &) = delete;
     Database &operator=(const Database &) = delete;
@@ -109,24 +109,24 @@ public:
 
 #pragma mark - File
 public:
-    const std::string &getPath() const;
-    std::string getSHMPath() const;
-    std::string getWALPath() const;
-    std::string getJournalPath() const;
-    std::list<std::string> getPaths() const;
+    const String &getPath() const;
+    String getSHMPath() const;
+    String getWALPath() const;
+    String getJournalPath() const;
+    std::list<String> getPaths() const;
 
-    bool moveFiles(const std::string &directory);
-    bool moveFilesToDirectoryWithExtraFiles(const std::string &directory,
-                                            const std::list<std::string> &extraFiles);
+    bool moveFiles(const String &directory);
+    bool moveFilesToDirectoryWithExtraFiles(const String &directory,
+                                            const std::list<String> &extraFiles);
     bool removeFiles();
     std::pair<bool, size_t> getFilesSize();
     std::pair<bool, uint32_t> getIdentifier();
 
 #pragma mark - Repair
 public:
-    std::string getFirstMaterialPath() const;
-    std::string getLastMaterialPath() const;
-    const std::string &getFactoryDirectory() const;
+    String getFirstMaterialPath() const;
+    String getLastMaterialPath() const;
+    const String &getFactoryDirectory() const;
 
     typedef Repair::Factory::Filter BackupFilter;
     void filterBackup(const BackupFilter &tableShouldBeBackedup);

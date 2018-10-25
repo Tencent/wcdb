@@ -33,13 +33,13 @@ QualifiedTable& QualifiedTable::schema(const Schema& schema)
     return *this;
 }
 
-QualifiedTable& QualifiedTable::as(const SyntaxString& alias)
+QualifiedTable& QualifiedTable::as(const String& alias)
 {
     syntax.alias = alias;
     return *this;
 }
 
-QualifiedTable& QualifiedTable::indexed(const SyntaxString& index)
+QualifiedTable& QualifiedTable::indexed(const String& index)
 {
     syntax.switcher = SyntaxType::Switch::Indexed;
     syntax.index = index;

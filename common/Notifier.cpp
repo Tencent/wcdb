@@ -33,20 +33,20 @@ Notifier::Notifier()
 {
 }
 
-void Notifier::setNotification(int order, const std::string &key, const Callback &callback)
+void Notifier::setNotification(int order, const String &key, const Callback &callback)
 {
     WCTInnerAssert(callback != nullptr);
     LockGuard lockGuard(m_lock);
     m_notifications.insert(order, key, callback);
 }
 
-void Notifier::unsetNotification(const std::string &key)
+void Notifier::unsetNotification(const String &key)
 {
     LockGuard lockGuard(m_lock);
     m_notifications.erase(key);
 }
 
-void Notifier::setNotificationForPreprocessing(const std::string &key,
+void Notifier::setNotificationForPreprocessing(const String &key,
                                                const PreprocessCallback &callback)
 {
     LockGuard lockGuard(m_lock);

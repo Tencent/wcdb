@@ -103,7 +103,7 @@ Identifier::Type Expression::getType() const
     return type;
 }
 
-std::string Expression::getDescription() const
+String Expression::getDescription() const
 {
     std::ostringstream stream;
     switch (switcher) {

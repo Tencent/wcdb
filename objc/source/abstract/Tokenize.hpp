@@ -24,9 +24,9 @@
 #warning Make it public and add template for this
 
 #include <WCDB/SQLite.h>
+#include <WCDB/String.hpp>
 #include <map>
 #include <stdlib.h>
-#include <string>
 #include <vector>
 
 namespace WCDB {

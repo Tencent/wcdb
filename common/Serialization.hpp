@@ -63,11 +63,11 @@ protected:
 
 #pragma mark - Put
 public:
-    bool putSizedString(const std::string &string);
+    bool putSizedString(const String &string);
     bool putSizedData(const UnsafeData &data);
     bool put4BytesUInt(uint32_t value);
     bool put8BytesUInt(uint64_t value);
-    bool putString(const std::string &string);
+    bool putString(const String &string);
     size_t putVarint(uint64_t value);
 };
 
@@ -90,7 +90,7 @@ protected:
 #pragma mark - Advance
 public:
     //return 0 size to indicate failure
-    std::pair<size_t, std::string> advanceSizedString();
+    std::pair<size_t, String> advanceSizedString();
     std::pair<size_t, const UnsafeData> advanceSizedData();
     std::pair<size_t, uint64_t> advanceVarint();
 
@@ -107,12 +107,12 @@ public:
 #pragma mark - Get
 public:
     //return 0 size to indicate failure
-    std::pair<size_t, std::string> getSizedString(off_t offset) const;
+    std::pair<size_t, String> getSizedString(off_t offset) const;
     std::pair<size_t, const UnsafeData> getSizedData(off_t offset) const;
     std::pair<size_t, uint64_t> getVarint(off_t offset) const;
 
     // For the following types with specified size, `isEnough` should be called first.
-    std::string getString(off_t offset, size_t size) const;
+    String getString(off_t offset, size_t size) const;
     const UnsafeData getData(off_t offset, size_t size) const;
     int64_t get8BytesInt(off_t offset) const;
     int64_t get6BytesInt(off_t offset) const;
@@ -129,7 +129,7 @@ class Serializable : protected SharedThreadedErrorProne {
 public:
     virtual ~Serializable();
     Data serialize() const;
-    bool serialize(const std::string &path) const;
+    bool serialize(const String &path) const;
     virtual bool serialize(Serialization &serialization) const = 0;
 };
 
@@ -138,7 +138,7 @@ class Deserializable : protected SharedThreadedErrorProne {
 public:
     virtual ~Deserializable();
     bool deserialize(const Data &data);
-    bool deserialize(const std::string &path);
+    bool deserialize(const String &path);
     virtual bool deserialize(Deserialization &deserialization) = 0;
 };
 

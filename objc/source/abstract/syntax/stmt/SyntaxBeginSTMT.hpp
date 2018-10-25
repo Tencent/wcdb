@@ -40,7 +40,7 @@ public:
 public:
     static constexpr const Type type = Type::BeginSTMT;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
 };
 
 } // namespace Syntax

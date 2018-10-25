@@ -29,9 +29,9 @@ Master::Master() : rootpage(0)
 {
 }
 
-bool Master::isReservedTableName(const std::string &tableName)
+bool Master::isReservedTableName(const String &tableName)
 {
-    return String::hasCaseInsensivePrefix(tableName, "sqlite_");
+    return tableName.isCaseInsensiveEqual("sqlite_");
 }
 
 } //namespace Repair

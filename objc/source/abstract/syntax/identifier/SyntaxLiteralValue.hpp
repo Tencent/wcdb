@@ -41,7 +41,7 @@ public:
         CurrentTimestamp,
     } switcher;
 
-    std::string stringValue;
+    String stringValue;
     double floatValue;
     int64_t integerValue;
 
@@ -49,7 +49,7 @@ public:
 public:
     static constexpr const Type type = Type::LiteralValue;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
 };
 
 } // namespace Syntax

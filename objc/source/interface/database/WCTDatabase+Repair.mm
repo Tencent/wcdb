@@ -52,7 +52,7 @@ static_assert((int) WCTRecoveryModeDeposit == (int) WCDB::Database::RecoveryMode
 - (void)filterBackup:(WCTBackupFilterBlock)tableShouldBeBackedUp
 {
     if (tableShouldBeBackedUp) {
-        _database->filterBackup([tableShouldBeBackedUp](const std::string &tableName) -> bool {
+        _database->filterBackup([tableShouldBeBackedUp](const WCDB::String &tableName) -> bool {
             return tableShouldBeBackedUp([NSString stringWithCppString:tableName]);
         });
     } else {

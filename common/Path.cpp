@@ -31,14 +31,14 @@ namespace WCDB {
 
 namespace Path {
 
-std::string addExtention(const std::string &base, const std::string &extention)
+String addExtention(const String &base, const String &extention)
 {
     return base + extention;
 }
 
-std::string addComponent(const std::string &base, const std::string &component)
+String addComponent(const String &base, const String &component)
 {
-    std::string newPath = base;
+    String newPath = base;
     if (newPath.empty() || newPath[newPath.size() - 1] != '/') {
         newPath.append("/");
     }
@@ -46,26 +46,26 @@ std::string addComponent(const std::string &base, const std::string &component)
     return newPath;
 }
 
-std::string getFileName(const std::string &base)
+String getFileName(const String &base)
 {
-    std::string file = base;
+    String file = base;
     file = basename(&(*file.begin()));
     return file;
 }
 
-std::string getDirectoryName(const std::string &base)
+String getDirectoryName(const String &base)
 {
-    std::string dir = base;
+    String dir = base;
     dir = dirname(&(*dir.begin()));
     return dir;
 }
 
-std::string normalize(const std::string &path)
+String normalize(const String &path)
 {
-    std::string normalized = path;
+    String normalized = path;
     // replace '//' with '/'
     std::size_t found;
-    while ((found = normalized.find("//")) != std::string::npos) {
+    while ((found = normalized.find("//")) != String::npos) {
         normalized.replace(found, 2, "/");
     }
     return normalized;

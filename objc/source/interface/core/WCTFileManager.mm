@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-bool FileManager::setFileProtection(const std::string &path, WCDB::FileProtection fileProtection)
+bool FileManager::setFileProtection(const WCDB::String &path, WCDB::FileProtection fileProtection)
 {
 #if TARGET_OS_IPHONE
     NSError *nsError = nil;
@@ -54,7 +54,7 @@ bool FileManager::setFileProtection(const std::string &path, WCDB::FileProtectio
 #endif
 }
 
-std::pair<bool, WCDB::FileProtection> FileManager::getFileProtection(const std::string &path)
+std::pair<bool, WCDB::FileProtection> FileManager::getFileProtection(const WCDB::String &path)
 {
 #if TARGET_OS_IPHONE
     NSError *nsError = nil;

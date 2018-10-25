@@ -26,7 +26,6 @@
 #include <WCDB/Syntax.h>
 #include <WCDB/SyntaxForwardDeclaration.h>
 #include <WCDB/SyntaxList.hpp>
-#include <WCDB/SyntaxString.hpp>
 #include <memory>
 
 namespace WCDB {
@@ -41,7 +40,7 @@ public:
     typedef Syntax::Identifier::Iterator Iterator;
     virtual void iterate(const Iterator& iterator, void* parameter) = 0;
 
-    virtual std::string getDescription() const = 0;
+    virtual String getDescription() const = 0;
 };
 
 template<typename T>
@@ -75,7 +74,7 @@ public:
         return TypedSyntax<T>::syntax.iterate(iterator, parameter);
     }
 
-    std::string getDescription() const override final
+    String getDescription() const override final
     {
         return TypedSyntax<T>::syntax.getDescription();
     }

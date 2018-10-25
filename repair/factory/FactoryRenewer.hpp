@@ -35,8 +35,8 @@ class FactoryRenewer : public FactoryRelated,
                        public LockerHolder {
 public:
     FactoryRenewer(const Factory &factory);
-    const std::string directory;
-    const std::string database;
+    const String directory;
+    const String database;
 
     bool prepare();
     bool work();
@@ -44,13 +44,13 @@ public:
 protected:
     struct Info {
         Info();
-        std::string sql;
+        String sql;
         int64_t sequence;
     };
     typedef struct Info Info;
 
-    bool resolveInfosForDatabase(std::map<std::string, Info> &infos,
-                                 const std::string &databaseForAcquisition);
+    bool resolveInfosForDatabase(std::map<String, Info> &infos,
+                                 const String &databaseForAcquisition);
 };
 
 } //namespace Repair

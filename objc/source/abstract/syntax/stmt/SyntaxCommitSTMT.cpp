@@ -31,7 +31,7 @@ Identifier::Type CommitSTMT::getType() const
     return type;
 }
 
-std::string CommitSTMT::getDescription() const
+String CommitSTMT::getDescription() const
 {
     return "COMMIT";
 }

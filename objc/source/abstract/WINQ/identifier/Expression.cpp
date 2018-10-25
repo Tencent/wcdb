@@ -40,7 +40,7 @@ Expression::Expression(const Column& column)
     syntax.column = column;
 }
 
-Expression& Expression::table(const SyntaxString& table)
+Expression& Expression::table(const String& table)
 {
     syntax.table = table;
     return *this;
@@ -64,7 +64,7 @@ Expression::Expression(const RaiseFunction& raiseFunction)
     syntax.raiseFunction = raiseFunction;
 }
 
-Expression Expression::function(const SyntaxString& function)
+Expression Expression::function(const String& function)
 {
     Expression expression;
     expression.syntax.switcher = SyntaxType::Switch::Function;
@@ -175,7 +175,7 @@ Expression& Expression::escape(const Expression& operand)
     return *this;
 }
 
-Expression Expression::windowFunction(const SyntaxString& function)
+Expression Expression::windowFunction(const String& function)
 {
     Expression expression;
     expression.syntax.switcher = SyntaxType::Switch::Window;
@@ -184,7 +184,7 @@ Expression Expression::windowFunction(const SyntaxString& function)
     return expression;
 }
 
-Expression Expression::windowFunction(const SyntaxString& function, const Expressions& parameter)
+Expression Expression::windowFunction(const String& function, const Expressions& parameter)
 {
     Expression expression;
     expression.syntax.switcher = SyntaxType::Switch::Window;
@@ -194,7 +194,7 @@ Expression Expression::windowFunction(const SyntaxString& function, const Expres
     return expression;
 }
 
-Expression Expression::windowFunctionAll(const SyntaxString& function)
+Expression Expression::windowFunctionAll(const String& function)
 {
     Expression expression;
     expression.syntax.switcher = SyntaxType::Switch::Window;
@@ -216,7 +216,7 @@ Expression& Expression::over(const WindowDef& windowDef)
     return *this;
 }
 
-Expression& Expression::over(const SyntaxString& window)
+Expression& Expression::over(const String& window)
 {
     syntax.windowName = window;
     return *this;

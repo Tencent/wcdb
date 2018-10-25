@@ -40,9 +40,9 @@ class Repairman : public Crawlable,
                   public AssemblerHolder {
 #pragma mark - Initialize
 public:
-    Repairman(const std::string &path);
+    Repairman(const String &path);
 
-    const std::string &getPath() const;
+    const String &getPath() const;
 
 protected:
     bool isEmptyDatabase();
@@ -66,10 +66,10 @@ protected:
     bool markAsAssembling();
     void markAsAssembled();
 
-    bool assembleTable(const std::string &tableName, const std::string &sql);
+    bool assembleTable(const String &tableName, const String &sql);
     bool assembleCell(const Cell &cell);
-    bool assembleSequence(const std::string &tableName, int64_t sequence);
-    void assembleAssociatedSQLs(const std::list<std::string> &sqls);
+    bool assembleSequence(const String &tableName, int64_t sequence);
+    void assembleAssociatedSQLs(const std::list<String> &sqls);
 
 protected:
     bool towardMilestone(int mile);

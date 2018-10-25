@@ -39,7 +39,7 @@ Shm::Shm(Wal *wal)
     memset(&m_checkpointInfo, 0, sizeof(m_checkpointInfo));
 }
 
-const std::string &Shm::getPath() const
+const String &Shm::getPath() const
 {
     return m_fileHandle.path;
 }
@@ -56,7 +56,7 @@ uint32_t Shm::getBackfill() const
     return m_checkpointInfo.backfill;
 }
 
-void Shm::markAsCorrupted(const std::string &message)
+void Shm::markAsCorrupted(const String &message)
 {
     Error error;
     error.setCode(Error::Code::Corrupt, "Repair");

@@ -31,7 +31,7 @@ Identifier::Type ColumnDef::getType() const
     return type;
 }
 
-std::string ColumnDef::getDescription() const
+String ColumnDef::getDescription() const
 {
     std::ostringstream stream;
     stream << column;

@@ -37,19 +37,19 @@ public:
         Low = 100,
     };
 
-    Configs(const OrderedUniqueList<std::string, std::shared_ptr<Config>> &list);
-    Configs(OrderedUniqueList<std::string, std::shared_ptr<Config>> &&list);
+    Configs(const OrderedUniqueList<String, std::shared_ptr<Config>> &list);
+    Configs(OrderedUniqueList<String, std::shared_ptr<Config>> &&list);
 
-    void insert(const std::string &name,
+    void insert(const String &name,
                 const std::shared_ptr<Config> &config,
                 int priority = Priority::Default);
-    void remove(const std::string &name);
+    void remove(const String &name);
 
     bool invoke(Handle *handle);
     bool uninvoke(Handle *handle);
 
 protected:
-    OrderedUniqueList<std::string, std::shared_ptr<Config>> m_list;
+    OrderedUniqueList<String, std::shared_ptr<Config>> m_list;
 };
 
 } //namespace WCDB

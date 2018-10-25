@@ -28,7 +28,7 @@ namespace WCDB {
 class ColumnConstraint : public SQLSyntax<Syntax::ColumnConstraint> {
 public:
     ColumnConstraint();
-    explicit ColumnConstraint(const SyntaxString& name);
+    explicit ColumnConstraint(const String& name);
 
     ColumnConstraint& primaryKey();
     ColumnConstraint& order(const Order& order);
@@ -43,7 +43,7 @@ public:
     ColumnConstraint& default_(const LiteralValue& defaultValue);
     ColumnConstraint& default_(const Expression& defaultValue);
 
-    ColumnConstraint& collate(const SyntaxString& collation);
+    ColumnConstraint& collate(const String& collation);
     ColumnConstraint& foreignKey(const ForeignKey& foreignKey);
 };
 

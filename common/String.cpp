@@ -23,65 +23,70 @@
 
 namespace WCDB {
 
-namespace String {
-
-const std::string &empty()
+String::String(std::string &&str) : std::string(std::move(str))
 {
-    static const std::string *s_empty = new std::string("");
+}
+
+String::String(const std::string &str) : std::string(str)
+{
+}
+
+const String &String::null()
+{
+    static const String *s_empty = new String("");
     return *s_empty;
 }
 
-bool CaseInsensiveComparator::operator()(const std::string &lhs, const std::string &rhs) const
+bool String::CaseInsensiveComparator::operator()(const String &lhs, const String &rhs) const
 {
     return strcasecmp(lhs.c_str(), rhs.c_str()) < 0;
 }
 
-bool isCaseInsensiveEqual(const std::string &lhs, const std::string &rhs)
+bool String::isCaseInsensiveEqual(const String &target) const
 {
-    return strcasecmp(lhs.c_str(), rhs.c_str()) == 0;
+    return strcasecmp(c_str(), target.c_str()) == 0;
 }
 
-bool hasCaseInsensivePrefix(const std::string &origin, const std::string &target)
+bool String::hasCaseInsensivePrefix(const String &target) const
 {
-    if (origin.size() < target.size()) {
+    if (size() < target.size()) {
         return false;
     }
-    return strncasecmp(origin.c_str(), target.c_str(), target.size()) == 0;
+    return strncasecmp(c_str(), target.c_str(), target.size()) == 0;
 }
 
-bool hasPrefix(const std::string &origin, const std::string &target)
+bool String::hasPrefix(const String &target) const
 {
-    if (origin.size() < target.size()) {
+    if (size() < target.size()) {
         return false;
     }
-    return strncmp(origin.c_str(), target.c_str(), target.size()) == 0;
+    return strncmp(c_str(), target.c_str(), target.size()) == 0;
 }
 
-std::string replacingOccurrencesOfString(const std::string &origin,
-                                         const std::string &target,
-                                         const std::string &replacement)
+String &String::replacingOccurrencesOfString(const String &target, const String &replacement)
 {
     size_t last = 0;
-    size_t found = origin.find(target, last);
-    if (found == std::string::npos) {
+    size_t found = find(target, last);
+    if (found == String::npos) {
         //quick return for no replacing
-        return origin;
+        return *this;
     }
-    std::string output;
+    String newString;
     const size_t targetLength = target.length();
     do {
-        output.append(origin.substr(last, found - last));
-        output.append(replacement);
+        newString.append(substr(last, found - last));
+        newString.append(replacement);
         last = found + targetLength;
-    } while ((found = origin.find(target, last)) != std::string::npos);
-    output.append(origin.substr(last, -1));
-    return output;
+    } while ((found = find(target, last)) != String::npos);
+    newString.append(substr(last, -1));
+    assign(newString);
+    return *this;
 }
 
-std::string formatted(const char *format, ...)
+String String::formatted(const char *format, ...)
 {
     size_t size = strlen(format) * 2 + 50;
-    std::string result;
+    String result;
     va_list ap;
     do {
         result.resize(size);
@@ -101,12 +106,9 @@ std::string formatted(const char *format, ...)
     return result;
 }
 
-uint32_t hash(const std::string &source)
+uint32_t String::hash() const
 {
-    return (uint32_t) crc32(
-    0, (const unsigned char *) source.data(), (uint32_t) source.size());
+    return (uint32_t) crc32(0, (const unsigned char *) data(), (uint32_t) size());
 }
-
-} //namespace String
 
 } //namespace WCDB

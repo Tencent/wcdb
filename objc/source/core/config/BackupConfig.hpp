@@ -40,7 +40,7 @@ public:
     static constexpr const int framesIntervalForDelayAutoBackup = 100;
 
 protected:
-    const std::string m_identifier;
+    const String m_identifier;
     bool onCommitted(Handle* handle, int frames);
     void checkpointed(Handle* handle, int rc);
 

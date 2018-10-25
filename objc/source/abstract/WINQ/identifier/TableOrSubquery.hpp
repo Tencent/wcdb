@@ -38,12 +38,12 @@ public:
     TableOrSubquery(const char* table);
     TableOrSubquery& schema(const Schema& schema);
 
-    TableOrSubquery& as(const SyntaxString& alias);
+    TableOrSubquery& as(const String& alias);
 
     TableOrSubquery& notIndexed();
-    TableOrSubquery& indexed(const SyntaxString& index);
+    TableOrSubquery& indexed(const String& index);
 
-    static TableOrSubquery function(const SyntaxString& function);
+    static TableOrSubquery function(const String& function);
     TableOrSubquery& invoke();
     TableOrSubquery& invoke(const Expressions& expressions);
 

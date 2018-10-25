@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-CommonTableExpression::CommonTableExpression(const SyntaxString& table)
+CommonTableExpression::CommonTableExpression(const String& table)
 {
     syntax.table = table;
 }

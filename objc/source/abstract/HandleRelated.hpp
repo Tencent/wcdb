@@ -21,7 +21,7 @@
 #ifndef HandleRelated_hpp
 #define HandleRelated_hpp
 
-#include <string>
+#include <WCDB/String.hpp>
 
 namespace WCDB {
 
@@ -34,7 +34,7 @@ public:
 
 protected:
     void *getRawHandle();
-    void setError(int rc, const std::string &sql = "");
+    void setError(int rc, const String &sql = "");
     Handle *m_handle;
 };
 

@@ -31,7 +31,7 @@ Identifier::Type DeleteSTMT::getType() const
     return type;
 }
 
-std::string DeleteSTMT::getDescription() const
+String DeleteSTMT::getDescription() const
 {
     std::ostringstream stream;
     if (useWithClause) {

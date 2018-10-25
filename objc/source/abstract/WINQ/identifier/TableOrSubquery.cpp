@@ -34,7 +34,7 @@ TableOrSubquery& TableOrSubquery::schema(const Schema& schema)
     return *this;
 }
 
-TableOrSubquery& TableOrSubquery::as(const SyntaxString& alias)
+TableOrSubquery& TableOrSubquery::as(const String& alias)
 {
     syntax.alias = alias;
     return *this;
@@ -46,14 +46,14 @@ TableOrSubquery& TableOrSubquery::notIndexed()
     return *this;
 }
 
-TableOrSubquery& TableOrSubquery::indexed(const SyntaxString& index)
+TableOrSubquery& TableOrSubquery::indexed(const String& index)
 {
     syntax.indexType = SyntaxType::IndexType::Indexed;
     syntax.index = index;
     return *this;
 }
 
-TableOrSubquery TableOrSubquery::function(const SyntaxString& function)
+TableOrSubquery TableOrSubquery::function(const String& function)
 {
     TableOrSubquery tableOrSubquery;
     tableOrSubquery.syntax.switcher = SyntaxType::Switch::Function;

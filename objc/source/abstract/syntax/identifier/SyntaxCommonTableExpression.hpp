@@ -30,7 +30,7 @@ namespace Syntax {
 class CommonTableExpression : public Identifier {
 #pragma mark - Lang
 public:
-    std::string table;
+    String table;
     std::list<Column> columns;
     Shadow<SelectSTMT> select;
 
@@ -38,7 +38,7 @@ public:
 public:
     static constexpr const Type type = Type::CommonTableExpression;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
     void iterate(const Iterator& iterator, void* parameter) override final;
 };
 

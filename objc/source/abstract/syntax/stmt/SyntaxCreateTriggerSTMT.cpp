@@ -57,7 +57,7 @@ Identifier::Type CreateTriggerSTMT::getType() const
     return type;
 }
 
-std::string CreateTriggerSTMT::getDescription() const
+String CreateTriggerSTMT::getDescription() const
 {
     std::ostringstream stream;
     stream << "CREATE ";

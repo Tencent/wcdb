@@ -19,15 +19,15 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <string>
+#import <WCDB/String.hpp>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface NSString (WCDBCppString)
 
-+ (instancetype)stringWithCppString:(const std::string &)cppString;
++ (instancetype)stringWithCppString:(const WCDB::String &)cppString;
 
-- (std::string)cppString;
+- (WCDB::String)cppString;
 
 @end
 

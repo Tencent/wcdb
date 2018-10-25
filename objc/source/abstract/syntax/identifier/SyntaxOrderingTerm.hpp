@@ -31,7 +31,7 @@ class OrderingTerm : public Identifier {
 #pragma mark - Lang
 public:
     Expression expression;
-    std::string collation;
+    String collation;
     bool useOrder = false;
     Order order;
 
@@ -39,7 +39,7 @@ public:
 public:
     static constexpr const Type type = Type::OrderingTerm;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
     void iterate(const Iterator& iterator, void* parameter) override final;
 };
 

@@ -29,7 +29,7 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-FileHandle::FileHandle(const std::string &path_)
+FileHandle::FileHandle(const String &path_)
 : path(path_), m_fd(-1), m_mode(Mode::None), m_errorIgnorable(false)
 {
 }

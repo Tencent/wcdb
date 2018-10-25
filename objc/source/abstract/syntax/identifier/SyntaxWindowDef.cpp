@@ -31,7 +31,7 @@ Identifier::Type WindowDef::getType() const
     return type;
 }
 
-std::string WindowDef::getDescription() const
+String WindowDef::getDescription() const
 {
     std::ostringstream stream;
     bool extraSpace = false;

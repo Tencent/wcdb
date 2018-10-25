@@ -31,7 +31,7 @@ Identifier::Type AlterTableSTMT::getType() const
     return type;
 }
 
-std::string AlterTableSTMT::getDescription() const
+String AlterTableSTMT::getDescription() const
 {
     std::ostringstream stream;
     stream << "ALTER TABLE " << schema << "." << table;

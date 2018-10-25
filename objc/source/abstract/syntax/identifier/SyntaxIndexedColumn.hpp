@@ -35,7 +35,7 @@ public:
     enum class Switch { Column, Expression } switcher;
     Column column;
     Expression expression;
-    std::string collation;
+    String collation;
 
     bool useOrder = false;
     Order order;
@@ -44,7 +44,7 @@ public:
 public:
     static constexpr const Type type = Type::IndexedColumn;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
     void iterate(const Iterator& iterator, void* parameter) override final;
 };
 

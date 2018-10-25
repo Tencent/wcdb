@@ -33,11 +33,11 @@ class Shm final : public WalRelated, public Initializeable {
 public:
     Shm(Wal *wal);
 
-    const std::string &getPath() const;
+    const String &getPath() const;
 
 protected:
     bool doInitialize() override final;
-    void markAsCorrupted(const std::string &message);
+    void markAsCorrupted(const String &message);
     FileHandle m_fileHandle;
 
 public:

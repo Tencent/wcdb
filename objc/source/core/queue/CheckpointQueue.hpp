@@ -31,20 +31,20 @@ class DatabasePool;
 
 class CheckpointQueue final : public AsyncQueue {
 public:
-    CheckpointQueue(const std::string& name, const std::shared_ptr<DatabasePool>& databasePool);
+    CheckpointQueue(const String& name, const std::shared_ptr<DatabasePool>& databasePool);
     ~CheckpointQueue();
 
     static constexpr const int framesForFull = 10 * 1024;
 
-    void put(const std::string& path, double delay, int frames);
-    void remove(const std::string& path);
+    void put(const String& path, double delay, int frames);
+    void remove(const String& path);
 
 protected:
-    bool onTimed(const std::string& path, const int& frames);
+    bool onTimed(const String& path, const int& frames);
     void loop() override final;
 
     std::shared_ptr<DatabasePool> m_databasePool;
-    TimedQueue<std::string, int> m_timedQueue;
+    TimedQueue<String, int> m_timedQueue;
     const StatementPragma m_checkpointPassive;
     const StatementPragma m_checkpointTruncate;
 };

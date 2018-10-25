@@ -24,11 +24,11 @@
 class WCTRuntimeBaseAccessor {
 protected:
     using InstanceType = id;
-    static SEL getGetterSelector(Class cls, const std::string &propertyName);
-    static SEL getSetterSelector(Class cls, const std::string &propertyName);
+    static SEL getGetterSelector(Class cls, const WCDB::String &propertyName);
+    static SEL getSetterSelector(Class cls, const WCDB::String &propertyName);
     static IMP getClassMethodImplementation(Class cls, SEL selector);
     static IMP getInstanceMethodImplementation(Class cls, SEL selector);
-    static Class getPropertyClass(Class cls, const std::string &propertyName);
+    static Class getPropertyClass(Class cls, const WCDB::String &propertyName);
 };
 
 template<typename PropertyType>
@@ -37,7 +37,7 @@ public:
     using Setter = void (^)(InstanceType, PropertyType);
     using Getter = PropertyType (^)(InstanceType);
 
-    WCTRuntimeAccessor(Class cls, const std::string &propertyName)
+    WCTRuntimeAccessor(Class cls, const WCDB::String &propertyName)
     : getProperty(GenerateGetter(cls, propertyName))
     , setProperty(GenerateSetter(cls, propertyName))
     {
@@ -47,7 +47,7 @@ public:
     const Getter getProperty;
 
 protected:
-    Getter GenerateGetter(Class cls, const std::string &propertyName)
+    Getter GenerateGetter(Class cls, const WCDB::String &propertyName)
     {
         SEL selector = getGetterSelector(cls, propertyName);
         IMP imp = getInstanceMethodImplementation(cls, selector);
@@ -58,7 +58,7 @@ protected:
         return [block copy];
     }
 
-    Setter GenerateSetter(Class cls, const std::string &propertyName)
+    Setter GenerateSetter(Class cls, const WCDB::String &propertyName)
     {
         SEL selector = getSetterSelector(cls, propertyName);
         IMP imp = getInstanceMethodImplementation(cls, selector);

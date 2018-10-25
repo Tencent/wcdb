@@ -28,7 +28,7 @@ const Error& MigrationInitializerHandle::getError() const
     return Handle::getError();
 }
 
-std::pair<bool, std::set<std::string>> MigrationInitializerHandle::getAllExistingTables()
+std::pair<bool, std::set<String>> MigrationInitializerHandle::getAllExistingTables()
 {
     WCTInnerAssert(!isPrepared());
     WCTInnerAssert(!isInTransaction());
@@ -42,8 +42,8 @@ std::pair<bool, std::set<std::string>> MigrationInitializerHandle::getAllExistin
     0);
 }
 
-std::pair<bool, std::set<std::string>>
-MigrationInitializerHandle::getAllColumns(const std::string& table, const std::string& database)
+std::pair<bool, std::set<String>>
+MigrationInitializerHandle::getAllColumns(const String& table, const String& database)
 {
     WCTInnerAssert(!isPrepared());
     WCTInnerAssert(!isInTransaction());

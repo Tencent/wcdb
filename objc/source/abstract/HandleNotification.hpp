@@ -42,64 +42,64 @@ protected:
 
 #pragma mark - SQL
 public:
-    typedef std::function<void(const std::string &)> SQLNotification;
-    void setNotificationWhenSQLTraced(const std::string &name, const SQLNotification &onTraced);
+    typedef std::function<void(const String &)> SQLNotification;
+    void setNotificationWhenSQLTraced(const String &name, const SQLNotification &onTraced);
 
 protected:
-    void dispatchSQLTraceNotification(const std::string &sql);
-    std::map<std::string, SQLNotification> m_sqlNotifications;
+    void dispatchSQLTraceNotification(const String &sql);
+    std::map<String, SQLNotification> m_sqlNotifications;
 
 #pragma mark - Performance
 public:
     struct Footprint {
-        std::string sql;
+        String sql;
         unsigned int frequency;
-        Footprint(const std::string &sql);
+        Footprint(const String &sql);
     };
     typedef struct Footprint Footprint;
 
     using Footprints = std::list<Footprint>;
     typedef std::function<void(const Footprints &, const int64_t &)> PerformanceNotification;
-    void setNotificationWhenPerformanceTraced(const std::string &name,
+    void setNotificationWhenPerformanceTraced(const String &name,
                                               const PerformanceNotification &onTraced);
 
 protected:
-    void dispatchPerformanceTraceNotification(const std::string &sql,
+    void dispatchPerformanceTraceNotification(const String &sql,
                                               const int64_t &cost,
                                               bool isInTransaction);
 
     Footprints m_footprints;
     int64_t m_cost;
-    std::map<std::string, PerformanceNotification> m_performanceNotifications;
+    std::map<String, PerformanceNotification> m_performanceNotifications;
 
 #pragma mark - Committed
 public:
     //commited dispatch will abort if any notification return false
     typedef std::function<bool(Handle *, int)> CommittedNotification;
     void setNotificationWhenCommitted(int order,
-                                      const std::string &name,
+                                      const String &name,
                                       const CommittedNotification &onCommitted);
-    void unsetNotificationWhenCommitted(const std::string &name);
+    void unsetNotificationWhenCommitted(const String &name);
 
 protected:
     bool isCommittedNotificationSet() const;
     void setupCommittedNotification();
 
     void dispatchCommittedNotification(int frames);
-    OrderedUniqueList<std::string, CommittedNotification> m_commitedNotifications;
+    OrderedUniqueList<String, CommittedNotification> m_commitedNotifications;
 
 #pragma mark - Checkpoint
 public:
     //checkpoint will abort if any notification return false
     typedef std::function<bool(Handle *)> WillCheckpointNotification;
     bool setNotificationWhenWillCheckpoint(int order,
-                                           const std::string &name,
+                                           const String &name,
                                            const WillCheckpointNotification &willCheckpoint,
                                            bool ignorable = false);
-    bool unsetNotificationWhenWillCheckpoint(const std::string &name, bool ignorable = false);
+    bool unsetNotificationWhenWillCheckpoint(const String &name, bool ignorable = false);
 
     typedef std::function<void(Handle *, int)> CheckpointedNotification;
-    bool setNotificationWhenCheckpointed(const std::string &name,
+    bool setNotificationWhenCheckpointed(const String &name,
                                          const CheckpointedNotification &checkpointed,
                                          bool ignorable = false);
 
@@ -107,8 +107,8 @@ protected:
     bool isCheckpointNotificationSet() const;
     bool setupCheckpointNotification(bool ignorable = false);
     bool dispatchCheckpointNotification(int rc);
-    OrderedUniqueList<std::string, WillCheckpointNotification> m_willCheckpointNotifications;
-    std::map<std::string, CheckpointedNotification> m_checkpointedNotifications;
+    OrderedUniqueList<String, WillCheckpointNotification> m_willCheckpointNotifications;
+    std::map<String, CheckpointedNotification> m_checkpointedNotifications;
 };
 
 } //namespace WCDB

@@ -27,7 +27,7 @@ OrderingTerm::OrderingTerm(const Expression& expression)
     syntax.expression = expression;
 }
 
-OrderingTerm& OrderingTerm::collate(const SyntaxString& collation)
+OrderingTerm& OrderingTerm::collate(const String& collation)
 {
     syntax.collation = collation;
     return *this;

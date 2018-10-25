@@ -187,7 +187,6 @@
 		2396EB11218054200079066C /* ColumnTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2396EB0F218054080079066C /* ColumnTests.mm */; };
 		2396EB162180571B0079066C /* WCTPropertyTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2396EB12218057100079066C /* WCTPropertyTests.mm */; };
 		2396EB172180571B0079066C /* WCTResultColumnTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2396EB14218057170079066C /* WCTResultColumnTests.mm */; };
-		2396EB1A218066EC0079066C /* SyntaxStringTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2396EB18218066EC0079066C /* SyntaxStringTests.mm */; };
 		2396EB1B218066EC0079066C /* SyntaxListTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2396EB19218066EC0079066C /* SyntaxListTests.mm */; };
 		2396EB1D21806AE00079066C /* BindParameterTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2396EB1C21806AE00079066C /* BindParameterTests.mm */; };
 		239776FA202AF2E3000A681C /* TimedQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776CE202AF2E2000A681C /* TimedQueue.hpp */; };
@@ -383,8 +382,6 @@
 		23EEDC72217DFADC006E9E73 /* FTS3Function.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB74217DFADC006E9E73 /* FTS3Function.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23EEDC73217DFADC006E9E73 /* SyntaxForwardDeclaration.h in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB75217DFADC006E9E73 /* SyntaxForwardDeclaration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23EEDC74217DFADC006E9E73 /* SyntaxList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB76217DFADC006E9E73 /* SyntaxList.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		23EEDC75217DFADC006E9E73 /* SyntaxString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB77217DFADC006E9E73 /* SyntaxString.cpp */; };
-		23EEDC76217DFADC006E9E73 /* SyntaxString.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB78217DFADC006E9E73 /* SyntaxString.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23EEDC77217DFADC006E9E73 /* BindParameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB7A217DFADC006E9E73 /* BindParameter.cpp */; };
 		23EEDC78217DFADC006E9E73 /* BindParameter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB7B217DFADC006E9E73 /* BindParameter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23EEDC79217DFADC006E9E73 /* Column.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB7C217DFADC006E9E73 /* Column.cpp */; };
@@ -877,7 +874,6 @@
 		2396EB0F218054080079066C /* ColumnTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ColumnTests.mm; sourceTree = "<group>"; };
 		2396EB12218057100079066C /* WCTPropertyTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTPropertyTests.mm; sourceTree = "<group>"; };
 		2396EB14218057170079066C /* WCTResultColumnTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTResultColumnTests.mm; sourceTree = "<group>"; };
-		2396EB18218066EC0079066C /* SyntaxStringTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SyntaxStringTests.mm; sourceTree = "<group>"; };
 		2396EB19218066EC0079066C /* SyntaxListTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SyntaxListTests.mm; sourceTree = "<group>"; };
 		2396EB1C21806AE00079066C /* BindParameterTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = BindParameterTests.mm; sourceTree = "<group>"; };
 		239776CE202AF2E2000A681C /* TimedQueue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TimedQueue.hpp; sourceTree = "<group>"; };
@@ -1076,8 +1072,6 @@
 		23EEDB74217DFADC006E9E73 /* FTS3Function.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FTS3Function.hpp; sourceTree = "<group>"; };
 		23EEDB75217DFADC006E9E73 /* SyntaxForwardDeclaration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyntaxForwardDeclaration.h; sourceTree = "<group>"; };
 		23EEDB76217DFADC006E9E73 /* SyntaxList.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SyntaxList.hpp; sourceTree = "<group>"; };
-		23EEDB77217DFADC006E9E73 /* SyntaxString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SyntaxString.cpp; sourceTree = "<group>"; };
-		23EEDB78217DFADC006E9E73 /* SyntaxString.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SyntaxString.hpp; sourceTree = "<group>"; };
 		23EEDB7A217DFADC006E9E73 /* BindParameter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BindParameter.cpp; sourceTree = "<group>"; };
 		23EEDB7B217DFADC006E9E73 /* BindParameter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BindParameter.hpp; sourceTree = "<group>"; };
 		23EEDB7C217DFADC006E9E73 /* Column.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Column.cpp; sourceTree = "<group>"; };
@@ -1947,7 +1941,6 @@
 				2396EB12218057100079066C /* WCTPropertyTests.mm */,
 				2396EB14218057170079066C /* WCTResultColumnTests.mm */,
 				2396EB19218066EC0079066C /* SyntaxListTests.mm */,
-				2396EB18218066EC0079066C /* SyntaxStringTests.mm */,
 			);
 			path = WINQ;
 			sourceTree = "<group>";
@@ -2105,8 +2098,6 @@
 				23EEDB74217DFADC006E9E73 /* FTS3Function.hpp */,
 				23EEDB75217DFADC006E9E73 /* SyntaxForwardDeclaration.h */,
 				23EEDB76217DFADC006E9E73 /* SyntaxList.hpp */,
-				23EEDB77217DFADC006E9E73 /* SyntaxString.cpp */,
-				23EEDB78217DFADC006E9E73 /* SyntaxString.hpp */,
 			);
 			path = extension;
 			sourceTree = "<group>";
@@ -2682,7 +2673,6 @@
 				23F70FC620A0618100CCE3CD /* Configs.hpp in Headers */,
 				23BBE2B12049576D00C4CBB6 /* WCTDatabase+Memory.h in Headers */,
 				23567D7720CA9200005F1C35 /* SharedThreadedErrorProne.hpp in Headers */,
-				23EEDC76217DFADC006E9E73 /* SyntaxString.hpp in Headers */,
 				2314AE7321070A1700244D39 /* Range.hpp in Headers */,
 				23EEDD1A217DFADC006E9E73 /* SyntaxResultColumn.hpp in Headers */,
 				23775B8020AD666900E21AB0 /* Mechanic.hpp in Headers */,
@@ -2975,7 +2965,6 @@
 				23EEDD17217DFADC006E9E73 /* SyntaxRecursiveCTE.cpp in Sources */,
 				23EEDC8D217DFADC006E9E73 /* IndexedColumn.cpp in Sources */,
 				23EEDC9D217DFADC006E9E73 /* RaiseFunction.cpp in Sources */,
-				23EEDC75217DFADC006E9E73 /* SyntaxString.cpp in Sources */,
 				23EEDC7B217DFADC006E9E73 /* ColumnConstraint.cpp in Sources */,
 				2349F7591EA0D6680021EFA7 /* WCTRuntimeBaseAccessor+NoARC.mm in Sources */,
 				2314AE7121070A1700244D39 /* Range.cpp in Sources */,
@@ -3207,7 +3196,6 @@
 				23989775217EC9E30014BF33 /* PragmaTests.mm in Sources */,
 				2398976F217EC9E30014BF33 /* IndexedColumnTests.mm in Sources */,
 				23989766217EC9E30014BF33 /* CoreFunctionTests.mm in Sources */,
-				2396EB1A218066EC0079066C /* SyntaxStringTests.mm in Sources */,
 				2398978F217EC9E30014BF33 /* StatementRollbackTests.mm in Sources */,
 				23989784217EC9E30014BF33 /* StatementCreateVirtualTableTests.mm in Sources */,
 				23989792217EC9E30014BF33 /* StatementUpdateTests.mm in Sources */,

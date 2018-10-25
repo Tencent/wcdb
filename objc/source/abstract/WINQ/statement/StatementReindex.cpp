@@ -28,14 +28,14 @@ StatementReindex& StatementReindex::reindex()
     return *this;
 }
 
-StatementReindex& StatementReindex::collation(const SyntaxString& collation)
+StatementReindex& StatementReindex::collation(const String& collation)
 {
     syntax.switcher = SyntaxType::Switch::Collation;
     syntax.collationOrTableOrIndex = collation;
     return *this;
 }
 
-StatementReindex& StatementReindex::table(const SyntaxString& table)
+StatementReindex& StatementReindex::table(const String& table)
 {
     syntax.switcher = SyntaxType::Switch::TableOrIndex;
     syntax.collationOrTableOrIndex = table;
@@ -48,7 +48,7 @@ StatementReindex& StatementReindex::schema(const Schema& schema)
     return *this;
 }
 
-StatementReindex& StatementReindex::index(const SyntaxString& index)
+StatementReindex& StatementReindex::index(const String& index)
 {
     syntax.switcher = SyntaxType::Switch::TableOrIndex;
     syntax.collationOrTableOrIndex = index;

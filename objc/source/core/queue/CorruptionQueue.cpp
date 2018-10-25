@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-CorruptionQueue::CorruptionQueue(const std::string& name,
+CorruptionQueue::CorruptionQueue(const String& name,
                                  const std::shared_ptr<DatabasePool>& databasePool)
 : AsyncQueue(name), m_databasePool(databasePool)
 {
@@ -75,7 +75,7 @@ void CorruptionQueue::handleError(const Error& error)
 void CorruptionQueue::loop()
 {
     while (!exit()) {
-        std::string path;
+        String path;
         uint32_t corruptedIdentifier;
         {
             std::unique_lock<std::mutex> lockGuard(m_mutex);

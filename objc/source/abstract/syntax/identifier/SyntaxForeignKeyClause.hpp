@@ -30,7 +30,7 @@ namespace Syntax {
 class ForeignKeyClause : public Identifier {
 #pragma mark - Lang
 public:
-    std::string foreignTable;
+    String foreignTable;
     std::list<Column> columns;
     enum class Switch {
         OnDeleteSetNull,
@@ -46,7 +46,7 @@ public:
         Match,
     };
     std::list<Switch> switchers;
-    std::list<std::string> matchings;
+    std::list<String> matchings;
 
     enum class Deferrable {
         DeferrableInitiallyDeferred,
@@ -62,7 +62,7 @@ public:
 public:
     static constexpr const Type type = Type::ForeignKeyClause;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
     void iterate(const Iterator& iterator, void* parameter) override final;
 };
 

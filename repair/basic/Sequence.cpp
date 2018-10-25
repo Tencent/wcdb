@@ -28,7 +28,7 @@ Sequence::Sequence() : seq(0)
 {
 }
 
-std::string Sequence::tableName()
+String Sequence::tableName()
 {
     return "sqlite_sequence";
 }

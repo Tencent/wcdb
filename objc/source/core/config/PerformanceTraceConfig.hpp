@@ -35,11 +35,7 @@ public:
     virtual void setNotification(const Notification &notification);
 
 protected:
-    bool invoke(Handle *handle);
-    bool uninvoke(Handle *handle);
-
-private:
-    const std::string m_identifier;
+    const String m_identifier;
     Notification m_notification;
 };
 

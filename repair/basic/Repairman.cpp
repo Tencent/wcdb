@@ -31,12 +31,12 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialize
-Repairman::Repairman(const std::string &path)
+Repairman::Repairman(const String &path)
 : m_pager(path), Crawlable(m_pager), Progress(), m_milestone(1000), m_mile(0)
 {
 }
 
-const std::string &Repairman::getPath() const
+const String &Repairman::getPath() const
 {
     return m_pager.getPath();
 }
@@ -112,7 +112,7 @@ bool Repairman::towardMilestone(int mile)
     return true;
 }
 
-bool Repairman::assembleTable(const std::string &tableName, const std::string &sql)
+bool Repairman::assembleTable(const String &tableName, const String &sql)
 {
     if (m_assembler->assembleTable(tableName, sql)) {
         if (markAsMilestone()) {
@@ -135,7 +135,7 @@ bool Repairman::assembleCell(const Cell &cell)
     return false;
 }
 
-bool Repairman::assembleSequence(const std::string &tableName, int64_t sequence)
+bool Repairman::assembleSequence(const String &tableName, int64_t sequence)
 {
     if (m_assembler->assembleSequence(tableName, sequence)) {
         towardMilestone(1);
@@ -145,7 +145,7 @@ bool Repairman::assembleSequence(const std::string &tableName, int64_t sequence)
     return false;
 }
 
-void Repairman::assembleAssociatedSQLs(const std::list<std::string> &sqls)
+void Repairman::assembleAssociatedSQLs(const std::list<String> &sqls)
 {
     for (const auto &sql : sqls) {
         //ignore its errors

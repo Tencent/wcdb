@@ -31,7 +31,7 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-HandlePool::HandlePool(const std::string &thePath)
+HandlePool::HandlePool(const String &thePath)
 : path(thePath), m_configs(nullptr)
 {
 }
@@ -49,7 +49,7 @@ void HandlePool::setConfigs(const std::shared_ptr<Configs> &configs)
     m_configs = configs;
 }
 
-void HandlePool::setConfig(const std::string &name, const std::shared_ptr<Config> &config, int priority)
+void HandlePool::setConfig(const String &name, const std::shared_ptr<Config> &config, int priority)
 {
     LockGuard lockGuard(m_lock);
     std::shared_ptr<Configs> configs(new Configs(*m_configs.get()));
@@ -57,7 +57,7 @@ void HandlePool::setConfig(const std::string &name, const std::shared_ptr<Config
     m_configs = configs;
 }
 
-void HandlePool::removeConfig(const std::string &name)
+void HandlePool::removeConfig(const String &name)
 {
     LockGuard lockGuard(m_lock);
     std::shared_ptr<Configs> configs(new Configs(*m_configs.get()));

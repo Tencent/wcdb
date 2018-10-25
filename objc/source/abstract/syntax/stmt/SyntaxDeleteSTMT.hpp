@@ -50,7 +50,7 @@ public:
 public:
     static constexpr const Type type = Type::DeleteSTMT;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
     void iterate(const Iterator& iterator, void* parameter) override final;
 };
 

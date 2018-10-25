@@ -26,7 +26,7 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-MigrationHandle::MigrationHandle(const std::string& path)
+MigrationHandle::MigrationHandle(const String& path)
 : Handle(path)
 , m_statementForGettingDatabaseList(StatementPragma().pragma(Pragma::databaseList()))
 , m_statementForGettingTempViews(
@@ -46,19 +46,19 @@ bool MigrationHandle::rebindMigration(const std::set<const MigrationInfo*>& migr
     bool succeed;
 
     // views
-    std::map<std::string, const MigrationInfo*> infosToCreateView; // view -> info
+    std::map<String, const MigrationInfo*> infosToCreateView; // view -> info
     for (const auto& migratingInfo : migratingInfos) {
         infosToCreateView.emplace(migratingInfo->getUnionedView(), migratingInfo);
     }
 
-    std::set<std::string> createdViews;
+    std::set<String> createdViews;
     std::tie(succeed, createdViews)
     = getUnorderedValues(m_statementForGettingTempViews, 0);
     if (!succeed) {
         return false;
     }
     for (const auto& createdView : createdViews) {
-        if (String::hasPrefix(createdView, MigrationInfo::getUnionedViewPrefix())) {
+        if (createdView.hasPrefix(MigrationInfo::getUnionedViewPrefix())) {
             auto iter = infosToCreateView.find(createdView);
             if (iter != infosToCreateView.end()) {
                 // it is already created
@@ -80,7 +80,7 @@ bool MigrationHandle::rebindMigration(const std::set<const MigrationInfo*>& migr
     }
 
     // schemas
-    std::map<std::string, const MigrationInfo*> infosToAttachSchema; // schema -> info
+    std::map<String, const MigrationInfo*> infosToAttachSchema; // schema -> info
     for (const auto& migratingInfo : migratingInfos) {
         if (!migratingInfo->isSameDatabaseMigration()) {
             infosToAttachSchema.emplace(
@@ -88,7 +88,7 @@ bool MigrationHandle::rebindMigration(const std::set<const MigrationInfo*>& migr
         }
     }
 
-    std::set<std::string> attachedSchemas;
+    std::set<String> attachedSchemas;
     std::tie(succeed, attachedSchemas)
     = getUnorderedValues(m_statementForGettingDatabaseList, 1);
     if (!succeed) {
@@ -96,7 +96,7 @@ bool MigrationHandle::rebindMigration(const std::set<const MigrationInfo*>& migr
     }
 
     for (const auto& attachedSchema : attachedSchemas) {
-        if (String::hasPrefix(attachedSchema, MigrationInfo::getSchemaPrefix())) {
+        if (attachedSchema.hasPrefix(MigrationInfo::getSchemaPrefix())) {
             auto iter = infosToAttachSchema.find(attachedSchema);
             if (iter != infosToAttachSchema.end()) {
                 // it is already attached

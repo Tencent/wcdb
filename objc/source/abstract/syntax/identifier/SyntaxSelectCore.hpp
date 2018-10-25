@@ -48,7 +48,7 @@ public:
     std::list<Expression> groups;
     bool useHaving = false;
     Expression having;
-    std::list<std::string> windows;
+    std::list<String> windows;
     std::list<WindowDef> windowDefs;
 
     std::list<std::list<Expression>> valuesList;
@@ -57,7 +57,7 @@ public:
 public:
     static constexpr const Type type = Type::SelectCore;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
     void iterate(const Iterator& iterator, void* parameter) override final;
 };
 

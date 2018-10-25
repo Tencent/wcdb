@@ -25,10 +25,10 @@
 #include <WCDB/FactoryDepositor.hpp>
 #include <WCDB/FactoryRenewer.hpp>
 #include <WCDB/FactoryRetriever.hpp>
+#include <WCDB/String.hpp>
 #include <WCDB/Time.hpp>
 #include <future>
 #include <list>
-#include <string>
 
 namespace WCDB {
 
@@ -39,20 +39,20 @@ class Assembler;
 class Factory {
 #pragma mark - Factory
 public:
-    Factory(const std::string &database);
+    Factory(const String &database);
 
-    const std::string database;
-    const std::string directory;
+    const String database;
+    const String directory;
 
     static constexpr const char *restoreDirectoryName = "restore";
     static constexpr const char *renewDirectoryName = "renew";
-    std::string getRestoreDirectory() const;
-    std::string getRenewDirectory() const;
-    std::string getDatabaseName() const;
+    String getRestoreDirectory() const;
+    String getRenewDirectory() const;
+    String getDatabaseName() const;
     bool removeDirectoryIfEmpty() const;
     bool removeDeposite() const;
-    std::pair<bool, std::list<std::string>> getWorkshopDirectories() const;
-    std::pair<bool, std::string> getUniqueWorkshopDiectory() const;
+    std::pair<bool, std::list<String>> getWorkshopDirectories() const;
+    std::pair<bool, String> getUniqueWorkshopDiectory() const;
     bool canRetrieve() const;
 
 #pragma - Factory Related
@@ -72,19 +72,19 @@ protected:
 
 #pragma mark - Helper
 public:
-    static std::list<std::string> associatedPathsForDatabase(const std::string &database);
-    static std::list<std::string> databasePathsForDatabase(const std::string &database);
+    static std::list<String> associatedPathsForDatabase(const String &database);
+    static std::list<String> databasePathsForDatabase(const String &database);
 
-    static std::string firstMaterialPathForDatabase(const std::string &database);
-    static std::string lastMaterialPathForDatabase(const std::string &database);
+    static String firstMaterialPathForDatabase(const String &database);
+    static String lastMaterialPathForDatabase(const String &database);
 
-    static std::pair<bool, std::string>
-    materialForSerializingForDatabase(const std::string &database);
-    static std::pair<bool, std::list<std::string>>
-    materialsForDeserializingForDatabase(const std::string &database);
+    static std::pair<bool, String>
+    materialForSerializingForDatabase(const String &database);
+    static std::pair<bool, std::list<String>>
+    materialsForDeserializingForDatabase(const String &database);
 
 protected:
-    static std::pair<bool, Time> getModifiedTimeOr0IfNotExists(const std::string &path);
+    static std::pair<bool, Time> getModifiedTimeOr0IfNotExists(const String &path);
 };
 
 } //namespace Repair

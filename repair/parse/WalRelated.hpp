@@ -36,11 +36,11 @@ public:
     WalRelated(WalRelated &&);
     WalRelated &operator=(WalRelated &&);
 
-    const std::string &getWalPath() const;
-    const std::string &getPagerPath() const;
+    const String &getWalPath() const;
+    const String &getPagerPath() const;
 
 protected:
-    void markWalAsCorrupted(int frame, const std::string &message);
+    void markWalAsCorrupted(int frame, const String &message);
     void setError(Error &&error);
     void assignWithSharedThreadedError();
     std::pair<uint32_t, uint32_t>

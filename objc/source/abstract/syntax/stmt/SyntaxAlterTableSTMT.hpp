@@ -31,14 +31,14 @@ class AlterTableSTMT : public Identifier {
 #pragma mark - Syntax
 public:
     Schema schema;
-    std::string table;
+    String table;
 
     enum class Switch {
         RenameTable,
         RenameColumn,
         AddColumn,
     } switcher;
-    std::string newTable;
+    String newTable;
     Column column;
     Column newColumn;
     ColumnDef columnDef;
@@ -47,7 +47,7 @@ public:
 public:
     static constexpr const Type type = Type::AlterTableSTMT;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
     void iterate(const Iterator& iterator, void* parameter) override final;
 };
 

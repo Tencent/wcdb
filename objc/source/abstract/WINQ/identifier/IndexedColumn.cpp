@@ -34,7 +34,7 @@ IndexedColumn::IndexedColumn(const Expression& expression)
     syntax.expression = expression;
 }
 
-IndexedColumn& IndexedColumn::collate(const SyntaxString& collation)
+IndexedColumn& IndexedColumn::collate(const String& collation)
 {
     syntax.collation = collation;
     return *this;

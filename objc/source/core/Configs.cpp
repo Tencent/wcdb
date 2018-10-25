@@ -29,13 +29,13 @@ namespace WCDB {
 
 #pragma mark - Configs
 
-void Configs::insert(const std::string &name, const std::shared_ptr<Config> &config, int priority)
+void Configs::insert(const String &name, const std::shared_ptr<Config> &config, int priority)
 {
     WCTInnerAssert(config != nullptr);
     m_list.insert(priority, name, config);
 }
 
-void Configs::remove(const std::string &name)
+void Configs::remove(const String &name)
 {
     m_list.erase(name);
 }
@@ -60,12 +60,12 @@ bool Configs::uninvoke(Handle *handle)
     return true;
 }
 
-Configs::Configs(const OrderedUniqueList<std::string, std::shared_ptr<Config>> &list)
+Configs::Configs(const OrderedUniqueList<String, std::shared_ptr<Config>> &list)
 : m_list(list)
 {
 }
 
-Configs::Configs(OrderedUniqueList<std::string, std::shared_ptr<Config>> &&list)
+Configs::Configs(OrderedUniqueList<String, std::shared_ptr<Config>> &&list)
 : m_list(std::move(list))
 {
 }

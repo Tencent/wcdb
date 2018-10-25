@@ -46,7 +46,7 @@ Identifier::Type BindParameter::getType() const
     return type;
 }
 
-std::string BindParameter::getDescription() const
+String BindParameter::getDescription() const
 {
     std::ostringstream stream;
     stream << switcher;

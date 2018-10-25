@@ -27,8 +27,8 @@ class WCTColumnBinding {
 public:
     template<typename T>
     WCTColumnBinding(Class cls,
-                     const WCDB::SyntaxString& pn,
-                     const WCDB::SyntaxString& cn,
+                     const WCDB::String& pn,
+                     const WCDB::String& cn,
                      T* = nullptr,
                      typename std::enable_if<!WCDB::IsObjCType<T>::value>::type* = nullptr)
     : accessor(new WCTRuntimeCppAccessor<T>(cls, pn))
@@ -40,8 +40,8 @@ public:
 
     template<typename T>
     WCTColumnBinding(Class cls,
-                     const WCDB::SyntaxString& pn,
-                     const WCDB::SyntaxString& cn,
+                     const WCDB::String& pn,
+                     const WCDB::String& cn,
                      T* = nullptr,
                      typename std::enable_if<WCDB::IsObjCType<T>::value>::type* = nullptr)
     : accessor(new WCTRuntimeObjCAccessor(cls, pn))
@@ -55,7 +55,7 @@ public:
     const std::shared_ptr<WCTBaseAccessor> accessor;
 
     WCDB::ColumnDef columnDef;
-    const std::string propertyName;
+    const WCDB::String propertyName;
 
 protected:
     Class m_class;

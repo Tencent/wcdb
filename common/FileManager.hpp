@@ -23,10 +23,10 @@
 
 #include <WCDB/Error.hpp>
 #include <WCDB/SharedThreadedErrorProne.hpp>
+#include <WCDB/String.hpp>
 #include <WCDB/Time.hpp>
 #include <functional>
 #include <list>
-#include <string>
 
 namespace WCDB {
 
@@ -45,48 +45,47 @@ public:
 
 #pragma mark - Basic
 public:
-    static std::tuple<bool, bool, bool> itemExists(const std::string &path);
-    static std::pair<bool, size_t> getDirectorySize(const std::string &directory);
-    static std::pair<bool, size_t> getFileSize(const std::string &file);
-    static bool createHardLink(const std::string &from, const std::string &to);
-    static bool removeHardLink(const std::string &path);
-    static bool createDirectory(const std::string &path);
-    static std::pair<bool, Time> getFileModifiedTime(const std::string &path);
-    static std::pair<bool, Time> getFileCreatedTime(const std::string &path);
-    static std::pair<bool, uint32_t> getFileIdentifier(const std::string &path);
-    static bool createFile(const std::string &path);
+    static std::tuple<bool, bool, bool> itemExists(const String &path);
+    static std::pair<bool, size_t> getDirectorySize(const String &directory);
+    static std::pair<bool, size_t> getFileSize(const String &file);
+    static bool createHardLink(const String &from, const String &to);
+    static bool removeHardLink(const String &path);
+    static bool createDirectory(const String &path);
+    static std::pair<bool, Time> getFileModifiedTime(const String &path);
+    static std::pair<bool, Time> getFileCreatedTime(const String &path);
+    static std::pair<bool, uint32_t> getFileIdentifier(const String &path);
+    static bool createFile(const String &path);
 
-    static bool enumerateDirectory(
-    const std::string &directory,
-    const std::function<bool(const std::string &, const std::string &, bool)> &enumeration);
+    static bool
+    enumerateDirectory(const String &directory,
+                       const std::function<bool(const String &, const String &, bool)> &enumeration);
 
-    static bool setFileProtection(const std::string &path, FileProtection fileProtection);
-    static std::pair<bool, FileProtection> getFileProtection(const std::string &path);
+    static bool setFileProtection(const String &path, FileProtection fileProtection);
+    static std::pair<bool, FileProtection> getFileProtection(const String &path);
 
     static const char *fileProtectionName(FileProtection fileProtection);
 
 protected:
-    static bool removeFile(const std::string &file);
-    static bool removeDirectory(const std::string &directory);
+    static bool removeFile(const String &file);
+    static bool removeDirectory(const String &directory);
 
 #pragma mark - Combination
 public:
-    static std::pair<bool, bool> fileExists(const std::string &file);
-    static std::pair<bool, bool> directoryExists(const std::string &directory);
-    static std::pair<bool, size_t> getItemSize(const std::string &path);
-    static std::pair<bool, size_t> getItemsSize(const std::list<std::string> &paths);
-    static bool removeItem(const std::string &path);
-    static bool removeItems(const std::list<std::string> &paths);
+    static std::pair<bool, bool> fileExists(const String &file);
+    static std::pair<bool, bool> directoryExists(const String &directory);
+    static std::pair<bool, size_t> getItemSize(const String &path);
+    static std::pair<bool, size_t> getItemsSize(const std::list<String> &paths);
+    static bool removeItem(const String &path);
+    static bool removeItems(const std::list<String> &paths);
+    static bool moveItems(const std::list<String> &paths, const String &directory);
+    static bool moveItems(const std::list<std::pair<String, String>> &pairedPaths);
+    static bool createDirectoryWithIntermediateDirectories(const String &directory);
     static bool
-    moveItems(const std::list<std::string> &paths, const std::string &directory);
-    static bool moveItems(const std::list<std::pair<std::string, std::string>> &pairedPaths);
-    static bool createDirectoryWithIntermediateDirectories(const std::string &directory);
-    static bool
-    setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(const std::string &path);
+    setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(const String &path);
 
 #pragma mark - Error
 protected:
-    static void setThreadedError(const std::string &path);
+    static void setThreadedError(const String &path);
     static void setThreadedError(Error::Code codeIfUnresolved);
 };
 

@@ -41,12 +41,12 @@ WalRelated &WalRelated::operator=(WalRelated &&other)
     return *this;
 }
 
-const std::string &WalRelated::getWalPath() const
+const String &WalRelated::getWalPath() const
 {
     return m_wal->getPath();
 }
 
-const std::string &WalRelated::getPagerPath() const
+const String &WalRelated::getPagerPath() const
 {
     return m_pager->getPath();
 }
@@ -61,7 +61,7 @@ void WalRelated::assignWithSharedThreadedError()
     m_wal->assignWithSharedThreadedError();
 }
 
-void WalRelated::markWalAsCorrupted(int frame, const std::string &message)
+void WalRelated::markWalAsCorrupted(int frame, const String &message)
 {
     m_wal->markAsCorrupted(frame, message);
 }

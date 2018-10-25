@@ -28,9 +28,9 @@ namespace WCDB {
 class StatementReindex : public StatementSyntax<Syntax::ReindexSTMT> {
 public:
     StatementReindex& reindex();
-    StatementReindex& collation(const SyntaxString& collation);
-    StatementReindex& table(const SyntaxString& table);
-    StatementReindex& index(const SyntaxString& index);
+    StatementReindex& collation(const String& collation);
+    StatementReindex& table(const String& table);
+    StatementReindex& index(const String& index);
     StatementReindex& schema(const Schema& schema);
 };
 

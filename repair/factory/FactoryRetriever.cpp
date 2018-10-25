@@ -55,7 +55,7 @@ bool FactoryRetriever::work()
 
     bool succeed;
     //1. Remove the old restore db
-    std::string restoreDirectory = factory.getRestoreDirectory();
+    String restoreDirectory = factory.getRestoreDirectory();
     if (!FileManager::removeItem(restoreDirectory)) {
         setCriticalErrorWithSharedThreadedError();
         return exit(false);
@@ -66,7 +66,7 @@ bool FactoryRetriever::work()
     }
 
     //1.5 calculate weights to deal with the progress and score
-    std::list<std::string> workshopDirectories;
+    std::list<String> workshopDirectories;
     std::tie(succeed, workshopDirectories) = factory.getWorkshopDirectories();
     if (!succeed) {
         setCriticalErrorWithSharedThreadedError();
@@ -109,7 +109,7 @@ bool FactoryRetriever::work()
         setCriticalError(depositor.getError());
         return exit(false);
     }
-    std::string baseDirectory = Path::getDirectoryName(factory.database);
+    String baseDirectory = Path::getDirectoryName(factory.database);
     succeed = FileManager::moveItems(
     Factory::associatedPathsForDatabase(database), baseDirectory);
     if (!succeed) {
@@ -132,9 +132,9 @@ bool FactoryRetriever::exit(bool result)
     return result;
 }
 
-bool FactoryRetriever::restore(const std::string &database)
+bool FactoryRetriever::restore(const String &database)
 {
-    std::list<std::string> materialPaths;
+    std::list<String> materialPaths;
     bool succeed;
     std::tie(succeed, materialPaths)
     = Factory::materialsForDeserializingForDatabase(database);
@@ -148,7 +148,7 @@ bool FactoryRetriever::restore(const std::string &database)
     if (!materialPaths.empty()) {
         Material material;
         Time materialTime;
-        std::string path;
+        String path;
         for (const auto &materialPath : materialPaths) {
             useMaterial = material.deserialize(materialPath);
             if (useMaterial) {
@@ -225,7 +225,7 @@ bool FactoryRetriever::restore(const std::string &database)
 
 #pragma mark - Report
 void FactoryRetriever::reportMechanic(const Fraction &score,
-                                      const std::string &path,
+                                      const String &path,
                                       const SteadyClock &cost,
                                       const Time &material)
 {
@@ -242,7 +242,7 @@ void FactoryRetriever::reportMechanic(const Fraction &score,
 }
 
 void FactoryRetriever::reportFullCrawler(const Fraction &score,
-                                         const std::string &path,
+                                         const String &path,
                                          const SteadyClock &cost)
 {
     Error error;
@@ -269,7 +269,7 @@ void FactoryRetriever::reportSummary(const SteadyClock &cost)
 }
 
 void FactoryRetriever::finishReportOfPerformance(Error &error,
-                                                 const std::string &database,
+                                                 const String &database,
                                                  const SteadyClock &cost)
 {
     double seconds = cost.seconds();
@@ -283,7 +283,7 @@ void FactoryRetriever::finishReportOfPerformance(Error &error,
 }
 
 #pragma mark - Score and Progress
-bool FactoryRetriever::calculateSizes(const std::list<std::string> &workshopDirectories)
+bool FactoryRetriever::calculateSizes(const std::list<String> &workshopDirectories)
 {
     //Origin database
     if (!calculateSize(factory.database)) {
@@ -292,7 +292,7 @@ bool FactoryRetriever::calculateSizes(const std::list<std::string> &workshopDire
 
     //Materials
     for (const auto &workshopDirectory : workshopDirectories) {
-        std::string database = Path::addComponent(workshopDirectory, databaseFileName);
+        String database = Path::addComponent(workshopDirectory, databaseFileName);
         if (!calculateSize(database)) {
             return false;
         }
@@ -302,13 +302,13 @@ bool FactoryRetriever::calculateSizes(const std::list<std::string> &workshopDire
     m_sizes.begin(),
     m_sizes.end(),
     m_totalSize,
-    [](const size_t previous, const std::pair<std::string, size_t> &element) {
+    [](const size_t previous, const std::pair<String, size_t> &element) {
         return previous + element.second;
     });
     return true;
 }
 
-bool FactoryRetriever::calculateSize(const std::string &database)
+bool FactoryRetriever::calculateSize(const String &database)
 {
     bool succeed;
     size_t fileSize;
@@ -322,13 +322,13 @@ bool FactoryRetriever::calculateSize(const std::string &database)
     return true;
 }
 
-Fraction FactoryRetriever::getWeight(const std::string &database)
+Fraction FactoryRetriever::getWeight(const String &database)
 {
     assert(m_sizes.find(database) != m_sizes.end());
     return Fraction(m_sizes[database], m_totalSize);
 }
 
-void FactoryRetriever::increaseProgress(const std::string &database,
+void FactoryRetriever::increaseProgress(const String &database,
                                         bool useMaterial,
                                         double progress,
                                         double increment)
@@ -339,7 +339,7 @@ void FactoryRetriever::increaseProgress(const std::string &database,
     Progress::increaseProgress(getWeight(database).value() * increment);
 }
 
-void FactoryRetriever::increaseScore(const std::string &database, const Fraction &increment)
+void FactoryRetriever::increaseScore(const String &database, const Fraction &increment)
 {
     Scoreable::increaseScore(getWeight(database) * increment);
 }

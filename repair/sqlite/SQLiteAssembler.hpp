@@ -36,17 +36,17 @@ public:
 
 #pragma mark - Assembler
 public:
-    void setPath(const std::string &path) override;
-    const std::string &getPath() const override;
+    void setPath(const String &path) override;
+    const String &getPath() const override;
 
     bool markAsAssembling() override;
     bool markAsAssembled() override;
 
     bool markAsMilestone() override;
 
-    bool assembleTable(const std::string &tableName, const std::string &sql) override;
+    bool assembleTable(const String &tableName, const String &sql) override;
     bool assembleCell(const Cell &cell) override;
-    bool assembleSQL(const std::string &sql) override;
+    bool assembleSQL(const String &sql) override;
 
     void markAsDuplicated(bool duplicated) override;
 
@@ -58,21 +58,21 @@ protected:
 #pragma mark - Cell
 protected:
     bool lazyPrepareCell();
-    std::pair<bool, std::string> getAssembleSQL(const std::string &tableName);
-    std::pair<bool, std::list<std::string>> getColumnNames(const std::string &tableName);
+    std::pair<bool, String> getAssembleSQL(const String &tableName);
+    std::pair<bool, std::list<String>> getColumnNames(const String &tableName);
 
-    std::string m_table;
+    String m_table;
     int m_primary;
     void *m_cellSTMT;
 
 #pragma mark - Sequence
 protected:
     bool markSequenceAsAssembling();
-    bool assembleSequence(const std::string &tableName, int64_t sequence) override;
+    bool assembleSequence(const String &tableName, int64_t sequence) override;
     bool markSequenceAsAssembled();
 
-    std::pair<bool, bool> updateSequence(const std::string &tableName, int64_t sequence);
-    bool insertSequence(const std::string &tableName, int64_t sequence);
+    std::pair<bool, bool> updateSequence(const String &tableName, int64_t sequence);
+    bool insertSequence(const String &tableName, int64_t sequence);
 
 #pragma mark - SQLite Base
 protected:

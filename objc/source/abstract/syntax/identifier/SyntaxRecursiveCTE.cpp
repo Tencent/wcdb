@@ -43,7 +43,7 @@ Identifier::Type RecursiveCTE::getType() const
     return type;
 }
 
-std::string RecursiveCTE::getDescription() const
+String RecursiveCTE::getDescription() const
 {
     std::ostringstream stream;
     stream << table << " AS(" << initialSelect << space << combination << space

@@ -38,8 +38,8 @@ class DatabasePool {
 public:
     DatabasePool();
 
-    RecyclableDatabase getOrCreate(const std::string& path);
-    RecyclableDatabase get(const std::string& path);
+    RecyclableDatabase getOrCreate(const String& path);
+    RecyclableDatabase get(const String& path);
     RecyclableDatabase get(const Tag& tag);
 
     void purge();
@@ -52,11 +52,10 @@ protected:
     };
     typedef struct ReferencedDatabase ReferencedDatabase;
 
-    RecyclableDatabase
-    get(const std::map<std::string, ReferencedDatabase>::iterator& iter);
+    RecyclableDatabase get(const std::map<String, ReferencedDatabase>::iterator& iter);
     void flowBack(Database* database);
 
-    std::map<std::string, ReferencedDatabase> m_databases; //path->{database, reference}
+    std::map<String, ReferencedDatabase> m_databases; //path->{database, reference}
     SharedLock m_lock;
 
 #pragma mark - Event

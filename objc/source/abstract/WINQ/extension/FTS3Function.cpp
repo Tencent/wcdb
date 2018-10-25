@@ -28,9 +28,9 @@ Expression FTS3Function::offsets(const Expression &expression)
 }
 
 Expression FTS3Function::snippet(const Expression &expression,
-                                 const std::string &startMatchText,
-                                 const std::string &endMatchText,
-                                 const std::string &ellipses,
+                                 const String &startMatchText,
+                                 const String &endMatchText,
+                                 const String &ellipses,
                                  int columnNumber,
                                  int approximateNumberOfTokens)
 {
@@ -52,9 +52,9 @@ Expression FTS3FunctionOperable::offsets() const
     return FTS3Function::offsets(asExpressionOperand());
 }
 
-Expression FTS3FunctionOperable::snippet(const std::string &startMatchText,
-                                         const std::string &endMatchText,
-                                         const std::string &ellipses,
+Expression FTS3FunctionOperable::snippet(const String &startMatchText,
+                                         const String &endMatchText,
+                                         const String &ellipses,
                                          int columnNumber,
                                          int approximateNumberOfTokens) const
 {

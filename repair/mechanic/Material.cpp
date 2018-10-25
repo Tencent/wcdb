@@ -65,7 +65,7 @@ bool Material::serializeData(Serialization &serialization, const Data &data)
     return serialization.put4BytesUInt(checksum) && serialization.putSizedData(data);
 }
 
-void Material::markAsEmpty(const std::string &element)
+void Material::markAsEmpty(const String &element)
 {
     Error error;
     error.setCode(Error::Code::Empty, "Repair");
@@ -109,7 +109,7 @@ bool Material::deserialize(Deserialization &deserialization)
     Deserialization decoder(decompressed);
     while (!decoder.ended()) {
         size_t lengthOfSizedString;
-        std::string tableName;
+        String tableName;
         std::tie(lengthOfSizedString, tableName) = decoder.advanceSizedString();
         if (lengthOfSizedString == 0 || tableName.empty()) {
             markAsCorrupt("TableName");
@@ -155,7 +155,7 @@ std::pair<bool, Data> Material::deserializeData(Deserialization &deserialization
     return { succeed, succeed ? data : Data::emptyData() };
 }
 
-void Material::markAsCorrupt(const std::string &element)
+void Material::markAsCorrupt(const String &element)
 {
     Error error;
     error.setCode(Error::Code::Corrupt, "Repair");
@@ -261,7 +261,7 @@ bool Material::Content::deserialize(Deserialization &deserialization)
     int associatedSQLCount = (int) varint;
     associatedSQLs.clear();
     for (int i = 0; i < associatedSQLCount; ++i) {
-        std::string sql;
+        String sql;
         std::tie(lengthOfSizedString, sql) = deserialization.advanceSizedString();
         if (lengthOfSizedString == 0 || sql.empty()) {
             markAsCorrupt("SQLs");

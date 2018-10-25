@@ -31,11 +31,11 @@ Identifier::Type LiteralValue::getType() const
     return type;
 }
 
-std::string LiteralValue::getDescription() const
+String LiteralValue::getDescription() const
 {
     switch (switcher) {
     case Switch::String:
-        return "'" + String::replacingOccurrencesOfString(stringValue, "'", "''") + "'";
+        return "'" + String(stringValue).replacingOccurrencesOfString("'", "''") + "'";
     case Switch::Null:
         return "NULL";
     case Switch::Float: {

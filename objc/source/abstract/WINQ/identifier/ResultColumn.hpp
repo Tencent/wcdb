@@ -37,7 +37,7 @@ public:
     }
 
     ResultColumn(const Expression& expression);
-    ResultColumn& as(const SyntaxString& alias);
+    ResultColumn& as(const String& alias);
 };
 
 class ResultColumnAll : public ResultColumn {
@@ -45,7 +45,7 @@ public:
     ResultColumnAll();
 
     Expression count() const;
-    ResultColumnAll& inTable(const SyntaxString& table);
+    ResultColumnAll& inTable(const String& table);
 
 protected:
     using ResultColumn::as;

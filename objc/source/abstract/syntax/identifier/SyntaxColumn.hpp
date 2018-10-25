@@ -30,13 +30,13 @@ namespace Syntax {
 class Column : public Identifier {
 #pragma mark - Syntax
 public:
-    std::string name;
+    String name;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::Column;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
 };
 
 } // namespace Syntax

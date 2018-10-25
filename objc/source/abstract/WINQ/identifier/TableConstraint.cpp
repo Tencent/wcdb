@@ -26,7 +26,7 @@ TableConstraint::TableConstraint()
 {
 }
 
-TableConstraint::TableConstraint(const SyntaxString& name)
+TableConstraint::TableConstraint(const String& name)
 {
     syntax.name = name;
 }

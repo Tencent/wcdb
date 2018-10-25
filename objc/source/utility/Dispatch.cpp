@@ -23,7 +23,7 @@
 
 namespace WCDB {
 
-void Dispatch::async(const std::string &name, const std::function<void(void)> &callback)
+void Dispatch::async(const String &name, const std::function<void(void)> &callback)
 {
     std::thread t([name, callback]() {
         pthread_setname_np(name.c_str());

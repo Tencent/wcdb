@@ -21,8 +21,8 @@
 #ifndef Assembler_hpp
 #define Assembler_hpp
 
+#include <WCDB/String.hpp>
 #include <map>
-#include <string>
 
 namespace WCDB {
 
@@ -36,19 +36,19 @@ class Assembler {
 public:
     virtual ~Assembler();
 
-    virtual void setPath(const std::string &path) = 0;
-    virtual const std::string &getPath() const = 0;
+    virtual void setPath(const String &path) = 0;
+    virtual const String &getPath() const = 0;
 
     virtual bool markAsAssembling() = 0;
     virtual bool markAsAssembled() = 0;
 
     virtual bool markAsMilestone() = 0;
-    virtual bool assembleTable(const std::string &tableName, const std::string &sql) = 0;
-    virtual bool assembleSequence(const std::string &tableName, int64_t sequence) = 0;
+    virtual bool assembleTable(const String &tableName, const String &sql) = 0;
+    virtual bool assembleSequence(const String &tableName, int64_t sequence) = 0;
     virtual bool assembleCell(const Cell &cell) = 0;
     virtual void markAsDuplicated(bool duplicated) = 0;
 
-    virtual bool assembleSQL(const std::string &sql) = 0;
+    virtual bool assembleSQL(const String &sql) = 0;
 
     virtual const Error &getError() const = 0;
 };

@@ -31,7 +31,7 @@ Identifier::Type WithClause::getType() const
     return type;
 }
 
-std::string WithClause::getDescription() const
+String WithClause::getDescription() const
 {
     std::ostringstream stream;
     SyntaxRemedialAssert(tables.size() == selects.size());

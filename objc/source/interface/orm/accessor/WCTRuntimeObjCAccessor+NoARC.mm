@@ -29,7 +29,7 @@
 #error This file should be compiled without ARC to get better performance. Please use -fno-objc-arc flag on this file.
 #endif
 
-WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const std::string &propertyName)
+WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const WCDB::String &propertyName)
 : WCTRuntimeAccessor<id>(instanceClass, propertyName)
 , WCTObjCAccessor(generateValueGetter(instanceClass, propertyName), generateValueSetter(instanceClass, propertyName))
 , m_columnType(GetColumnType(instanceClass, propertyName))
@@ -39,7 +39,7 @@ WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const std::s
     WCTRemedialAssert([propertyClass conformsToProtocol:@protocol(WCTColumnCoding)], WCDB::String::formatted("Class %s should conforms to protocol WCTColumnCoding.", propertyName.c_str()), ;);
 }
 
-WCTRuntimeObjCAccessor::ValueGetter WCTRuntimeObjCAccessor::generateValueGetter(Class instanceClass, const std::string &propertyName)
+WCTRuntimeObjCAccessor::ValueGetter WCTRuntimeObjCAccessor::generateValueGetter(Class instanceClass, const WCDB::String &propertyName)
 {
     static const SEL archiveSelector = NSSelectorFromString(@"archivedWCTValue");
     Class propertyClass = getPropertyClass(instanceClass, propertyName);
@@ -53,7 +53,7 @@ WCTRuntimeObjCAccessor::ValueGetter WCTRuntimeObjCAccessor::generateValueGetter(
     return [block copy];
 }
 
-WCTRuntimeObjCAccessor::ValueSetter WCTRuntimeObjCAccessor::generateValueSetter(Class instanceClass, const std::string &propertyName)
+WCTRuntimeObjCAccessor::ValueSetter WCTRuntimeObjCAccessor::generateValueSetter(Class instanceClass, const WCDB::String &propertyName)
 {
     static const SEL unarchiveSelector = NSSelectorFromString(@"unarchiveWithWCTValue:");
     Class propertyClass = getPropertyClass(instanceClass, propertyName);
@@ -68,7 +68,7 @@ WCTRuntimeObjCAccessor::ValueSetter WCTRuntimeObjCAccessor::generateValueSetter(
     return [block copy];
 }
 
-WCDB::ColumnType WCTRuntimeObjCAccessor::GetColumnType(Class instanceClass, const std::string &propertyName)
+WCDB::ColumnType WCTRuntimeObjCAccessor::GetColumnType(Class instanceClass, const WCDB::String &propertyName)
 {
     static const SEL columnTypeSelector = NSSelectorFromString(@"columnType");
     Class propertyClass = getPropertyClass(instanceClass, propertyName);

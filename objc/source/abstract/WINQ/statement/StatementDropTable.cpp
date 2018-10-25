@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-StatementDropTable& StatementDropTable::dropTable(const SyntaxString& table)
+StatementDropTable& StatementDropTable::dropTable(const String& table)
 {
     syntax.table = table;
     return *this;

@@ -21,10 +21,10 @@
 #ifndef Error_hpp
 #define Error_hpp
 
+#include <WCDB/String.hpp>
 #include <functional>
 #include <map>
 #include <sstream>
-#include <string>
 
 namespace WCDB {
 
@@ -169,7 +169,7 @@ public:
     void setSQLiteCode(int code);
     void setSQLiteCode(int code, int extendedCode);
     void setCode(Code code);
-    void setCode(Code code, const std::string &source);
+    void setCode(Code code, const String &source);
 
 protected:
     Code m_code;
@@ -178,13 +178,13 @@ protected:
 public:
     Error();
     Error(Code code);
-    Error(Code code, const std::string &message);
+    Error(Code code, const String &message);
 
     void clear();
 
 #pragma mark - Info
 public:
-    std::string message;
+    String message;
 
     class Infos {
     public:
@@ -194,30 +194,30 @@ std::any is available since C++17.
 #endif
         template<typename T>
         typename std::enable_if<std::is_integral<T>::value, void>::type
-        set(const std::string &key, const T &value)
+        set(const String &key, const T &value)
         {
             m_integers[key] = (int64_t) value;
         }
         template<typename T>
         typename std::enable_if<std::is_floating_point<T>::value, void>::type
-        set(const std::string &key, const T &value)
+        set(const String &key, const T &value)
         {
             m_doubles[key] = (double) value;
         }
-        void set(const std::string &key, const std::string &value);
-        void unset(const std::string &key);
+        void set(const String &key, const String &value);
+        void unset(const String &key);
 
-        const std::map<std::string, int64_t> &getIntegers() const;
-        const std::map<std::string, std::string> &getStrings() const;
-        const std::map<std::string, double> &getDoubles() const;
+        const std::map<String, int64_t> &getIntegers() const;
+        const std::map<String, String> &getStrings() const;
+        const std::map<String, double> &getDoubles() const;
 
         void clear();
         bool empty() const;
 
     protected:
-        std::map<std::string, int64_t> m_integers;
-        std::map<std::string, double> m_doubles;
-        std::map<std::string, std::string> m_strings;
+        std::map<String, int64_t> m_integers;
+        std::map<String, double> m_doubles;
+        std::map<String, String> m_strings;
     };
     Infos infos;
 };

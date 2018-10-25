@@ -41,7 +41,7 @@ WCTTokenizer const WCTTokenizerWCDB = @"WCDB";
 - (void)setTokenizers:(NSArray<NSString *> *)tokenizerNames
 {
     WCTRemedialAssert(tokenizerNames, "Tokenizers can't be null.", return;)
-    std::list<std::string>
+    std::list<WCDB::String>
     theTokenizeNames;
     for (NSString *tokenizerName in tokenizerNames) {
         theTokenizeNames.push_back(tokenizerName.cppString);

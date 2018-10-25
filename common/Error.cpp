@@ -65,7 +65,7 @@ Error::Error(Code code) : level(Level::Error), m_code(code)
 {
 }
 
-Error::Error(Code code, const std::string &message_)
+Error::Error(Code code, const String &message_)
 : level(Level::Error), m_code(code), message(message_)
 {
 }
@@ -84,7 +84,7 @@ void Error::setCode(Code code)
     m_code = code;
 }
 
-void Error::setCode(Code code, const std::string &source)
+void Error::setCode(Code code, const String &source)
 {
     setCode(code);
     infos.set("Source", source);
@@ -154,29 +154,29 @@ bool Error::isCorruption() const
 }
 
 #pragma mark - Info
-void Error::Infos::set(const std::string &key, const std::string &value)
+void Error::Infos::set(const String &key, const String &value)
 {
     m_strings[key] = value;
 }
 
-void Error::Infos::unset(const std::string &key)
+void Error::Infos::unset(const String &key)
 {
     m_strings.erase(key);
     m_integers.erase(key);
     m_doubles.erase(key);
 }
 
-const std::map<std::string, int64_t> &Error::Infos::getIntegers() const
+const std::map<String, int64_t> &Error::Infos::getIntegers() const
 {
     return m_integers;
 }
 
-const std::map<std::string, std::string> &Error::Infos::getStrings() const
+const std::map<String, String> &Error::Infos::getStrings() const
 {
     return m_strings;
 }
 
-const std::map<std::string, double> &Error::Infos::getDoubles() const
+const std::map<String, double> &Error::Infos::getDoubles() const
 {
     return m_doubles;
 }

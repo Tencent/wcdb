@@ -31,7 +31,7 @@ Identifier::Type ReleaseSTMT::getType() const
     return type;
 }
 
-std::string ReleaseSTMT::getDescription() const
+String ReleaseSTMT::getDescription() const
 {
     std::ostringstream stream;
     stream << "RELEASE " << savepoint;

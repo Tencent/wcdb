@@ -27,10 +27,10 @@ namespace WCDB {
 
 class StatementAlterTable : public StatementSyntax<Syntax::AlterTableSTMT> {
 public:
-    StatementAlterTable& alterTable(const SyntaxString& table);
+    StatementAlterTable& alterTable(const String& table);
     StatementAlterTable& schema(const Schema& schema);
 
-    StatementAlterTable& renameToTable(const SyntaxString& newTable);
+    StatementAlterTable& renameToTable(const String& newTable);
     StatementAlterTable& renameColumn(const Column& oldColumn);
     StatementAlterTable& toColumn(const Column& newColumn);
     StatementAlterTable& addColumn(const ColumnDef& columnDef);

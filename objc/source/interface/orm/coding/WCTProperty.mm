@@ -54,7 +54,7 @@ WCDB::OrderingTerm WCTProperty::asOrder() const
     return WCDB::OrderingTerm(*this);
 }
 
-WCDB::Expression WCTProperty::table(const WCDB::SyntaxString& table) const
+WCDB::Expression WCTProperty::table(const WCDB::String& table) const
 {
     return WCDB::Expression((const WCDB::Column&) *this).table(table);
 }

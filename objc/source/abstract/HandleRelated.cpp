@@ -33,7 +33,7 @@ HandleRelated::~HandleRelated()
 {
 }
 
-void HandleRelated::setError(int rc, const std::string &sql)
+void HandleRelated::setError(int rc, const String &sql)
 {
     m_handle->setError(rc, sql);
 }

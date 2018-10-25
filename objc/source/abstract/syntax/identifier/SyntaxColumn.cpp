@@ -31,7 +31,7 @@ Identifier::Type Column::getType() const
     return type;
 }
 
-std::string Column::getDescription() const
+String Column::getDescription() const
 {
     return name;
 }

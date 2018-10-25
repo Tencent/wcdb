@@ -33,7 +33,7 @@ namespace Syntax {
 class ColumnConstraint : public Identifier {
 #pragma mark - Lang
 public:
-    std::string name;
+    String name;
     enum class Switch {
         PrimaryKey,
         NotNull,
@@ -55,14 +55,14 @@ public:
     } defaultType;
     Expression expression;
     LiteralValue literalValue;
-    std::string collation;
+    String collation;
     ForeignKeyClause foreignKeyClause;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::ColumnConstraint;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
     void iterate(const Iterator& iterator, void* parameter) override final;
 };
 

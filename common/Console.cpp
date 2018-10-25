@@ -124,7 +124,7 @@ void Console::breakpoint(const Error& error)
     }
 }
 
-void Console::fatal(const std::string& message, const char* file, int line)
+void Console::fatal(const String& message, const char* file, int line)
 {
     Error error;
     error.setCode(Error::Code::Misuse, "Assertion");

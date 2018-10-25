@@ -25,28 +25,39 @@
 
 namespace WCDB {
 
-namespace String {
+class String : public std::string {
+public:
+    using std::string::string;
+    String(std::string &&str);
+    String(const std::string &str);
 
-const std::string &empty();
+    template<typename T, typename Enable = void>
+    struct Convertible : public std::false_type {
+    public:
+        static std::string asString(const T &);
+    };
 
-struct CaseInsensiveComparator {
-    bool operator()(const std::string &lhs, const std::string &rhs) const;
+    template<typename T, typename Enable = typename std::enable_if<Convertible<T>::value>::type>
+    String(const T &t) : String(Convertible<T>::asString(t))
+    {
+    }
+
+    static String formatted(const char *format, ...);
+    static const String &null();
+
+    struct CaseInsensiveComparator {
+        bool operator()(const String &lhs, const String &rhs) const;
+    };
+    typedef struct CaseInsensiveComparator CaseInsensiveComparator;
+
+    bool isCaseInsensiveEqual(const String &target) const;
+    bool hasCaseInsensivePrefix(const String &target) const;
+    bool hasPrefix(const String &target) const;
+
+    String &replacingOccurrencesOfString(const String &target, const String &replacement);
+
+    uint32_t hash() const;
 };
-typedef struct CaseInsensiveComparator CaseInsensiveComparator;
-
-bool isCaseInsensiveEqual(const std::string &lhs, const std::string &rhs);
-bool hasCaseInsensivePrefix(const std::string &origin, const std::string &target);
-bool hasPrefix(const std::string &origin, const std::string &target);
-
-std::string replacingOccurrencesOfString(const std::string &origin,
-                                         const std::string &target,
-                                         const std::string &replacement);
-
-std::string formatted(const char *format, ...);
-
-uint32_t hash(const std::string &source);
-
-} //namespace String
 
 } //namespace WCDB
 

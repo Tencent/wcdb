@@ -37,7 +37,7 @@ class Wal final : public PagerRelated, public Initializeable {
 public:
     Wal(Pager *pager);
 
-    const std::string &getPath() const;
+    const String &getPath() const;
     static constexpr const int headerSize = 32;
 
 protected:
@@ -94,7 +94,7 @@ public:
     void hint() const;
 
 protected:
-    void markAsCorrupted(int frame, const std::string &message);
+    void markAsCorrupted(int frame, const String &message);
     void markAsError(Error::Code code);
 
 #pragma mark - Dispose

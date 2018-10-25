@@ -31,7 +31,7 @@ Identifier::Type FunctionInvocation::getType() const
     return type;
 }
 
-std::string FunctionInvocation::getDescription() const
+String FunctionInvocation::getDescription() const
 {
     std::ostringstream stream;
     stream << name << "(";

@@ -59,7 +59,7 @@ public:
     BindParameter bindParameter;
 
     Schema schema;
-    std::string table;
+    String table;
     Column column;
 
     enum class UnaryOperator {
@@ -98,13 +98,13 @@ public:
 
     std::list<Expression> expressions;
 
-    std::string function;
+    String function;
     bool distinct = false;
     bool useWildcard = false;
 
     ColumnType castType;
 
-    std::string collation;
+    String collation;
 
     bool isNot = false;
     bool escape = false;
@@ -125,7 +125,7 @@ public:
     RaiseFunction raiseFunction;
 
     WindowDef windowDef;
-    std::string windowName;
+    String windowName;
     bool useFilter = false;
     Filter filter;
 
@@ -133,7 +133,7 @@ public:
 public:
     static constexpr const Type type = Type::Expression;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
     void iterate(const Iterator& iterator, void* parameter) override final;
 };
 

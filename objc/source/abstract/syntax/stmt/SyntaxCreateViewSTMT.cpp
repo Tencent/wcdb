@@ -31,7 +31,7 @@ Identifier::Type CreateViewSTMT::getType() const
     return type;
 }
 
-std::string CreateViewSTMT::getDescription() const
+String CreateViewSTMT::getDescription() const
 {
     std::ostringstream stream;
     stream << "CREATE ";

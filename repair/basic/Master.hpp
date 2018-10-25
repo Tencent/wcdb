@@ -21,7 +21,7 @@
 #ifndef Master_hpp
 #define Master_hpp
 
-#include <string>
+#include <WCDB/String.hpp>
 
 namespace WCDB {
 
@@ -31,12 +31,12 @@ struct Master {
 public:
     Master();
 
-    static bool isReservedTableName(const std::string &tableName);
+    static bool isReservedTableName(const String &tableName);
 
-    std::string type;
-    std::string name;
-    std::string tableName;
-    std::string sql;
+    String type;
+    String name;
+    String tableName;
+    String sql;
     int rootpage;
 };
 

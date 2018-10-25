@@ -31,7 +31,7 @@ Identifier::Type ModuleArgument::getType() const
     return type;
 }
 
-std::string ModuleArgument::getDescription() const
+String ModuleArgument::getDescription() const
 {
     std::ostringstream stream;
     switch (switcher) {

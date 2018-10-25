@@ -87,7 +87,7 @@ StatementSelect& StatementSelect::having(const Expression& having)
     return *this;
 }
 
-StatementSelect& StatementSelect::window(const SyntaxString& window)
+StatementSelect& StatementSelect::window(const String& window)
 {
     currentCore().windows.push_back(window);
     return *this;

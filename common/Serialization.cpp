@@ -109,7 +109,7 @@ unsigned char *Serialization::base()
 }
 
 #pragma mark - Put
-bool Serialization::putSizedString(const std::string &string)
+bool Serialization::putSizedString(const String &string)
 {
     off_t cursor = m_cursor;
     bool succeed = false;
@@ -179,7 +179,7 @@ bool Serialization::put8BytesUInt(uint64_t value)
     return true;
 }
 
-bool Serialization::putString(const std::string &string)
+bool Serialization::putString(const String &string)
 {
     if (!expand(string.size() + 1)) {
         return false;
@@ -256,7 +256,7 @@ void Deserialization::reset(const UnsafeData &data)
 }
 
 #pragma mark - Advance
-std::pair<size_t, std::string> Deserialization::advanceSizedString()
+std::pair<size_t, String> Deserialization::advanceSizedString()
 {
     auto pair = getSizedString(m_cursor);
     if (pair.first > 0) {
@@ -339,13 +339,13 @@ uint32_t Deserialization::advance4BytesUInt()
     return value;
 }
 
-std::pair<size_t, std::string> Deserialization::getSizedString(off_t offset) const
+std::pair<size_t, String> Deserialization::getSizedString(off_t offset) const
 {
     size_t lengthOfSize;
     uint64_t size;
     std::tie(lengthOfSize, size) = getVarint(offset);
     if (lengthOfSize == 0 || !isEnough((size_t) offset + lengthOfSize + (size_t) size)) {
-        return { 0, String::empty() };
+        return { 0, String::null() };
     }
     return { lengthOfSize + size, getString((size_t) offset + lengthOfSize, (size_t) size) };
 }
@@ -531,11 +531,11 @@ std::pair<size_t, uint64_t> Deserialization::getVarint(off_t offset) const
     return { 9, ((uint64_t) s) << 32 | a };
 }
 
-std::string Deserialization::getString(off_t offset, size_t size) const
+String Deserialization::getString(off_t offset, size_t size) const
 {
     WCTInnerAssert(size > 0);
     WCTInnerAssert(isEnough((size_t) offset + size));
-    return std::string(reinterpret_cast<const char *>(base() + offset), size);
+    return String(reinterpret_cast<const char *>(base() + offset), size);
 }
 
 const UnsafeData Deserialization::getData(off_t offset, size_t size) const
@@ -618,7 +618,7 @@ Data Serializable::serialize() const
     return Data::emptyData();
 }
 
-bool Serializable::serialize(const std::string &path) const
+bool Serializable::serialize(const String &path) const
 {
     Data data = serialize();
     if (data.empty()) {
@@ -645,7 +645,7 @@ bool Deserializable::deserialize(const Data &data)
     return deserialize(deserialization);
 }
 
-bool Deserializable::deserialize(const std::string &path)
+bool Deserializable::deserialize(const String &path)
 {
     FileHandle fileHandle(path);
     if (!fileHandle.open(FileHandle::Mode::ReadOnly)) {

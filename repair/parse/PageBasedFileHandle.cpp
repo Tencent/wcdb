@@ -27,7 +27,7 @@
 namespace WCDB {
 
 #pragma mark - PageBasedFileHandle
-PageBasedFileHandle::PageBasedFileHandle(const std::string& path)
+PageBasedFileHandle::PageBasedFileHandle(const String& path)
 : FileHandle(path), m_pageSize(0), m_cachePageSize(0), m_cache(maxAllowedCacheMemory)
 {
     static_assert(maxAllowedCacheMemory % cacheMemoryPerRange == 0, "");

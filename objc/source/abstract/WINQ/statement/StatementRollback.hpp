@@ -28,7 +28,7 @@ namespace WCDB {
 class StatementRollback : public StatementSyntax<Syntax::RollbackSTMT> {
 public:
     StatementRollback& rollback();
-    StatementRollback& rollbackToSavepoint(const SyntaxString& savepoint);
+    StatementRollback& rollbackToSavepoint(const String& savepoint);
 };
 
 } // namespace WCDB

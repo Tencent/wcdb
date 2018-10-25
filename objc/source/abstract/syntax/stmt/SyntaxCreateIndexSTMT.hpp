@@ -34,8 +34,8 @@ public:
     bool unique = false;
     bool ifNotExists = false;
     Schema schema;
-    std::string index;
-    std::string table;
+    String index;
+    String table;
     std::list<IndexedColumn> indexedColumns;
     Expression condition;
     bool useCondition = false;
@@ -44,7 +44,7 @@ public:
 public:
     static constexpr const Type type = Type::CreateIndexSTMT;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
     void iterate(const Iterator& iterator, void* parameter) override final;
 };
 

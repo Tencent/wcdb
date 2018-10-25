@@ -24,7 +24,7 @@
 
 namespace WCDB {
 
-MigrationUserInfo::MigrationUserInfo(const std::string& migratedTable)
+MigrationUserInfo::MigrationUserInfo(const String& migratedTable)
 : m_migratedTable(migratedTable)
 {
     WCTInnerAssert(!migratedTable.empty());
@@ -40,29 +40,29 @@ bool MigrationUserInfo::isSameDatabaseMigration() const
     return m_originDatabase.empty();
 }
 
-const std::string& MigrationUserInfo::getMigratedTable() const
+const String& MigrationUserInfo::getMigratedTable() const
 {
     return m_migratedTable;
 }
 
-const std::string& MigrationUserInfo::getOriginTable() const
+const String& MigrationUserInfo::getOriginTable() const
 {
     return m_originTable;
 }
 
-const std::string& MigrationUserInfo::getOriginDatabase() const
+const String& MigrationUserInfo::getOriginDatabase() const
 {
     return m_originDatabase;
 }
 
-void MigrationUserInfo::setOrigin(const std::string& table, const std::string& database)
+void MigrationUserInfo::setOrigin(const String& table, const String& database)
 {
     WCTInnerAssert(!table.empty());
     m_originTable = table;
     m_originDatabase = database;
 }
 
-std::string MigrationUserInfo::getDebugDescription() const
+String MigrationUserInfo::getDebugDescription() const
 {
     std::ostringstream stream;
     stream << "Migrated: " << m_migratedTable;
@@ -76,8 +76,7 @@ std::string MigrationUserInfo::getDebugDescription() const
 }
 
 #pragma mark - Initialize
-MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
-                             const std::set<std::string>& columns)
+MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo, const std::set<String>& columns)
 : MigrationUserInfo(userInfo)
 {
     WCTInnerAssert(shouldMigrate());
@@ -159,23 +158,23 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
 }
 
 #pragma mark - Schema
-const std::string& MigrationInfo::getSchemaPrefix()
+const String& MigrationInfo::getSchemaPrefix()
 {
-    static const std::string* s_schemaPrefix = new std::string("WCDBMigration_");
+    static const String* s_schemaPrefix = new String("WCDBMigration_");
     return *s_schemaPrefix;
 }
 
-const std::string& MigrationInfo::getUnionedView() const
+const String& MigrationInfo::getUnionedView() const
 {
     return m_unionedView;
 }
 
-Schema MigrationInfo::getSchemaForDatabase(const std::string& database)
+Schema MigrationInfo::getSchemaForDatabase(const String& database)
 {
     if (database.empty()) {
         return Schema::main();
     }
-    return getSchemaPrefix() + std::to_string(String::hash(database));
+    return getSchemaPrefix() + std::to_string(database.hash());
 }
 
 const Schema& MigrationInfo::getSchemaForOriginDatabase() const
@@ -191,14 +190,14 @@ const StatementAttach& MigrationInfo::getStatementForAttachingSchema() const
 
 const StatementDetach MigrationInfo::getStatementForDetachingSchema(const Schema& schema)
 {
-    WCTInnerAssert(String::hasPrefix(schema.getDescription(), getSchemaPrefix()));
+    WCTInnerAssert(schema.getDescription().hasPrefix(getSchemaPrefix()));
     return StatementDetach().detach(schema);
 }
 
 #pragma mark - View
-const std::string& MigrationInfo::getUnionedViewPrefix()
+const String& MigrationInfo::getUnionedViewPrefix()
 {
-    static const std::string* s_viewPrefix = new std::string("WCDBUnioned_");
+    static const String* s_viewPrefix = new String("WCDBUnioned_");
     return *s_viewPrefix;
 }
 
@@ -208,9 +207,9 @@ const StatementCreateView& MigrationInfo::getStatementForCreatingUnionedView() c
 }
 
 const StatementDropView
-MigrationInfo::getStatementForDroppingUnionedView(const std::string& unionedView)
+MigrationInfo::getStatementForDroppingUnionedView(const String& unionedView)
 {
-    WCTInnerAssert(String::hasPrefix(unionedView, getUnionedViewPrefix()));
+    WCTInnerAssert(unionedView.hasPrefix(getUnionedViewPrefix()));
     return StatementDropView().dropView(unionedView).schema(Schema::temp()).ifExists();
 }
 

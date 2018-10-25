@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-StatementDropView& StatementDropView::dropView(const SyntaxString& view)
+StatementDropView& StatementDropView::dropView(const String& view)
 {
     syntax.view = view;
     return *this;

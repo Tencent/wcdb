@@ -28,9 +28,9 @@ DatabasePool::DatabasePool() : m_event(nullptr)
 {
 }
 
-RecyclableDatabase DatabasePool::getOrCreate(const std::string &path)
+RecyclableDatabase DatabasePool::getOrCreate(const String &path)
 {
-    std::string normalized = Path::normalize(path);
+    String normalized = Path::normalize(path);
     {
         SharedLockGuard lockGuard(m_lock);
         RecyclableDatabase database = get(normalized);
@@ -51,9 +51,9 @@ RecyclableDatabase DatabasePool::getOrCreate(const std::string &path)
     return get(result.first);
 }
 
-RecyclableDatabase DatabasePool::get(const std::string &path)
+RecyclableDatabase DatabasePool::get(const String &path)
 {
-    std::string normalized = Path::normalize(path);
+    String normalized = Path::normalize(path);
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_databases.find(normalized);
     return get(iter);
@@ -78,7 +78,7 @@ DatabasePool::ReferencedDatabase::ReferencedDatabase(std::shared_ptr<Database> &
 }
 
 RecyclableDatabase
-DatabasePool::get(const std::map<std::string, ReferencedDatabase>::iterator &iter)
+DatabasePool::get(const std::map<String, ReferencedDatabase>::iterator &iter)
 {
     WCTInnerAssert(m_lock.readSafety());
     if (iter == m_databases.end()) {

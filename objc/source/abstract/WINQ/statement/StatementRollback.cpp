@@ -28,7 +28,7 @@ StatementRollback& StatementRollback::rollback()
     return *this;
 }
 
-StatementRollback& StatementRollback::rollbackToSavepoint(const SyntaxString& savepoint)
+StatementRollback& StatementRollback::rollbackToSavepoint(const String& savepoint)
 {
     syntax.savepoint = savepoint;
     return *this;

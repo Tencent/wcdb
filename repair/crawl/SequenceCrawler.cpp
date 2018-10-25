@@ -64,7 +64,7 @@ void SequenceCrawler::onCellCrawled(const Cell &cell)
                                           cell.getValueType(1)));
         return;
     }
-    std::string name = cell.stringValue(0);
+    String name = cell.stringValue(0);
     if (name.empty()) {
         markAsCorrupted(cell.getPage().number, "Name in Sequence is empty.");
         return;

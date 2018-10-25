@@ -29,7 +29,7 @@ StatementInsert& StatementInsert::with(const With& with)
     return *this;
 }
 
-StatementInsert& StatementInsert::insertIntoTable(const SyntaxString& table)
+StatementInsert& StatementInsert::insertIntoTable(const String& table)
 {
     syntax.table = table;
     return *this;
@@ -71,7 +71,7 @@ StatementInsert& StatementInsert::orIgnore()
     return *this;
 }
 
-StatementInsert& StatementInsert::as(const SyntaxString& alias)
+StatementInsert& StatementInsert::as(const String& alias)
 {
     syntax.alias = alias;
     return *this;

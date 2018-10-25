@@ -32,7 +32,7 @@ class DatabasePool;
 
 class CorruptionQueue final : public AsyncQueue {
 public:
-    CorruptionQueue(const std::string& name, const std::shared_ptr<DatabasePool>& databasePool);
+    CorruptionQueue(const String& name, const std::shared_ptr<DatabasePool>& databasePool);
     ~CorruptionQueue();
 
 protected:
@@ -46,7 +46,7 @@ protected:
     std::condition_variable m_cond;
 
     // path -> identifier
-    std::map<std::string, uint32_t> m_corrupted;
+    std::map<String, uint32_t> m_corrupted;
 };
 
 } //namespace WCDB

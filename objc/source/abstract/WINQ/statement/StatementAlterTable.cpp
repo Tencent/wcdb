@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-StatementAlterTable& StatementAlterTable::alterTable(const SyntaxString& table)
+StatementAlterTable& StatementAlterTable::alterTable(const String& table)
 {
     syntax.table = table;
     return *this;
@@ -34,7 +34,7 @@ StatementAlterTable& StatementAlterTable::schema(const Schema& schema)
     return *this;
 }
 
-StatementAlterTable& StatementAlterTable::renameToTable(const SyntaxString& newTable)
+StatementAlterTable& StatementAlterTable::renameToTable(const String& newTable)
 {
     syntax.switcher = Syntax::AlterTableSTMT::Switch::RenameTable;
     syntax.newTable = newTable;

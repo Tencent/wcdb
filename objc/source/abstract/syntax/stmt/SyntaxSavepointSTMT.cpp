@@ -31,7 +31,7 @@ Identifier::Type SavepointSTMT::getType() const
     return type;
 }
 
-std::string SavepointSTMT::getDescription() const
+String SavepointSTMT::getDescription() const
 {
     std::ostringstream stream;
     stream << "SAVEPOINT " << savepoint;

@@ -33,9 +33,9 @@ public:
     const Error& getError() const override;
 
 protected:
-    std::pair<bool, std::set<std::string>> getAllExistingTables() override;
-    std::pair<bool, std::set<std::string>>
-    getAllColumns(const std::string& table, const std::string& database) override;
+    std::pair<bool, std::set<String>> getAllExistingTables() override;
+    std::pair<bool, std::set<String>>
+    getAllColumns(const String& table, const String& database) override;
 
     void setError(const Error& error) override;
 

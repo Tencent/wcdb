@@ -21,22 +21,22 @@
 #ifndef Path_hpp
 #define Path_hpp
 
-#include <string>
+#include <WCDB/String.hpp>
 
 namespace WCDB {
 
 namespace Path {
 
-std::string addExtention(const std::string &base, const std::string &extention);
-std::string addComponent(const std::string &base, const std::string &component);
-std::string getFileName(const std::string &base);
-std::string getDirectoryName(const std::string &base);
+String addExtention(const String &base, const String &extention);
+String addComponent(const String &base, const String &component);
+String getFileName(const String &base);
+String getDirectoryName(const String &base);
 
 #if __cplusplus > 201402L
 #warning TODO \
 std::filesystem::path is available since C++17
 #endif
-std::string normalize(const std::string &path);
+String normalize(const String &path);
 
 } //namespace Path
 

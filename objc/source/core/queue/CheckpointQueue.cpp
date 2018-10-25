@@ -24,7 +24,7 @@
 
 namespace WCDB {
 
-CheckpointQueue::CheckpointQueue(const std::string& name,
+CheckpointQueue::CheckpointQueue(const String& name,
                                  const std::shared_ptr<DatabasePool>& databasePool)
 : AsyncQueue(name)
 , m_databasePool(databasePool)
@@ -46,7 +46,7 @@ void CheckpointQueue::loop()
     &CheckpointQueue::onTimed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
-bool CheckpointQueue::onTimed(const std::string& path, const int& frames)
+bool CheckpointQueue::onTimed(const String& path, const int& frames)
 {
     if (exit()) {
         m_timedQueue.stop();
@@ -70,13 +70,13 @@ bool CheckpointQueue::onTimed(const std::string& path, const int& frames)
     return result;
 }
 
-void CheckpointQueue::put(const std::string& path, double delay, int frames)
+void CheckpointQueue::put(const String& path, double delay, int frames)
 {
     m_timedQueue.reQueue(path, delay, frames);
     lazyRun();
 }
 
-void CheckpointQueue::remove(const std::string& path)
+void CheckpointQueue::remove(const String& path)
 {
     m_timedQueue.remove(path);
 }

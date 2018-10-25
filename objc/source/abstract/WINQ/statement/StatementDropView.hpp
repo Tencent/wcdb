@@ -27,7 +27,7 @@ namespace WCDB {
 
 class StatementDropView : public StatementSyntax<Syntax::DropViewSTMT> {
 public:
-    StatementDropView& dropView(const SyntaxString& view);
+    StatementDropView& dropView(const String& view);
     StatementDropView& schema(const Schema& schema);
     StatementDropView& ifExists();
 };

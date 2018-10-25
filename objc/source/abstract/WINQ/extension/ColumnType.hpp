@@ -21,11 +21,11 @@
 #ifndef ColumnType_hpp
 #define ColumnType_hpp
 
+#include <WCDB/String.hpp>
 #include <WCDB/Syntax.h>
 #include <WCDB/SyntaxForwardDeclaration.h>
 #include <WCDB/UnsafeData.hpp>
 #include <cstdint>
-#include <string>
 #include <type_traits>
 #include <vector>
 
@@ -274,6 +274,13 @@ public:
     asUnderlyingType(const std::string &text);
 };
 
+template<>
+struct ColumnIsTextType<String> : public std::true_type {
+public:
+    static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
+    asUnderlyingType(const String &text);
+};
+
 //BLOB
 template<>
 struct ColumnIsBLOBType<std::vector<unsigned char>> : public std::true_type {
@@ -295,6 +302,27 @@ public:
 //    static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
 //    asUnderlyingType(const Data &blob);
 //};
+
+//    template<typename T>
+//    struct ColumnIsInteger64Type<T, typename std::enable_if<(std::is_integral<T>::value || std::is_enum<T>::value) && (sizeof(T) > 4)>::type>
+//    : public std::true_type {
+//    public:
+//        static ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType
+//        asUnderlyingType(const T &t)
+//        {
+//            return (ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType) t;
+//        }
+//    };
+
+template<typename T>
+struct String::Convertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>
+: public std::true_type {
+public:
+    static String asString(const T &t)
+    {
+        return String(std::string(ColumnIsTextType<T>::asUnderlyingType(t)));
+    }
+};
 
 } //namespace WCDB
 

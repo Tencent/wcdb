@@ -31,7 +31,7 @@ Identifier::Type UpsertClause::getType() const
     return type;
 }
 
-std::string UpsertClause::getDescription() const
+String UpsertClause::getDescription() const
 {
     std::ostringstream stream;
     stream << "ON CONFLICT";

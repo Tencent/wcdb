@@ -166,7 +166,7 @@ std::pair<int, const char *> Cell::textValue(int index) const
              reinterpret_cast<const char *>(m_payload.buffer() + cell.second) };
 }
 
-std::string Cell::stringValue(int index) const
+String Cell::stringValue(int index) const
 {
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(index < m_columns.size());

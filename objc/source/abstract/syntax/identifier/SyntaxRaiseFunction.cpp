@@ -46,7 +46,7 @@ Identifier::Type RaiseFunction::getType() const
     return type;
 }
 
-std::string RaiseFunction::getDescription() const
+String RaiseFunction::getDescription() const
 {
     std::ostringstream stream;
     stream << "RAISE(" << switcher;

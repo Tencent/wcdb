@@ -36,13 +36,13 @@ public:
         Abort,
         Fail,
     } switcher;
-    std::string errorMessage;
+    String errorMessage;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::RaiseFunction;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
 };
 
 } // namespace Syntax

@@ -31,7 +31,7 @@ Identifier::Type DropViewSTMT::getType() const
     return type;
 }
 
-std::string DropViewSTMT::getDescription() const
+String DropViewSTMT::getDescription() const
 {
     std::ostringstream stream;
     stream << "DROP VIEW ";

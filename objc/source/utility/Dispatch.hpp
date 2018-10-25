@@ -21,14 +21,14 @@
 #ifndef Dispatch_hpp
 #define Dispatch_hpp
 
+#include <WCDB/String.hpp>
 #include <functional>
-#include <string>
 
 namespace WCDB {
 
 class Dispatch {
 public:
-    static void async(const std::string &name, const std::function<void(void)> &callback);
+    static void async(const String &name, const std::function<void(void)> &callback);
 };
 
 } //namespace WCDB

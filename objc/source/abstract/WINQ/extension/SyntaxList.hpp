@@ -106,7 +106,7 @@ public:
         return *iter;
     }
 
-    std::string getDescription() const
+    String getDescription() const
     {
         std::ostringstream stream;
         bool comma = false;

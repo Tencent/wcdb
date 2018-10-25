@@ -32,13 +32,13 @@ class DropTriggerSTMT : public Identifier {
 public:
     bool ifExists = false;
     Schema schema;
-    std::string trigger;
+    String trigger;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::DropTriggerSTMT;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
     void iterate(const Iterator& iterator, void* parameter) override final;
 };
 

@@ -68,7 +68,7 @@ void HandleNotification::dispatchTraceNotification(unsigned int flag, void *P, v
         sqlite3_int64 *cost = (sqlite3_int64 *) X;
         sqlite3 *db = sqlite3_db_handle(stmt);
         dispatchPerformanceTraceNotification(
-        sql ? sql : String::empty(), *cost, !sqlite3_get_autocommit(db));
+        sql ? sql : String::null(), *cost, !sqlite3_get_autocommit(db));
     } break;
     default:
         break;
@@ -100,7 +100,7 @@ void HandleNotification::setupTraceNotification()
 }
 
 #pragma mark - SQL
-void HandleNotification::setNotificationWhenSQLTraced(const std::string &name,
+void HandleNotification::setNotificationWhenSQLTraced(const String &name,
                                                       const SQLNotification &onTraced)
 {
     bool stateBefore = isTraceNotificationSet();
@@ -115,7 +115,7 @@ void HandleNotification::setNotificationWhenSQLTraced(const std::string &name,
     }
 }
 
-void HandleNotification::dispatchSQLTraceNotification(const std::string &sql)
+void HandleNotification::dispatchSQLTraceNotification(const String &sql)
 {
     WCTInnerAssert(!m_sqlNotifications.empty());
     for (const auto &element : m_sqlNotifications) {
@@ -124,12 +124,12 @@ void HandleNotification::dispatchSQLTraceNotification(const std::string &sql)
 }
 
 #pragma mark - Performance
-HandleNotification::Footprint::Footprint(const std::string &sql_)
+HandleNotification::Footprint::Footprint(const String &sql_)
 : sql(sql_), frequency(1)
 {
 }
 
-void HandleNotification::setNotificationWhenPerformanceTraced(const std::string &name,
+void HandleNotification::setNotificationWhenPerformanceTraced(const String &name,
                                                               const PerformanceNotification &onTraced)
 {
     bool stateBefore = isTraceNotificationSet();
@@ -144,7 +144,7 @@ void HandleNotification::setNotificationWhenPerformanceTraced(const std::string 
     }
 }
 
-void HandleNotification::dispatchPerformanceTraceNotification(const std::string &sql,
+void HandleNotification::dispatchPerformanceTraceNotification(const String &sql,
                                                               const int64_t &cost,
                                                               bool isInTransaction)
 {
@@ -170,7 +170,7 @@ void HandleNotification::dispatchPerformanceTraceNotification(const std::string 
 
 #pragma mark - Committed
 void HandleNotification::setNotificationWhenCommitted(int order,
-                                                      const std::string &name,
+                                                      const String &name,
                                                       const CommittedNotification &onCommitted)
 {
     WCTInnerAssert(onCommitted);
@@ -182,7 +182,7 @@ void HandleNotification::setNotificationWhenCommitted(int order,
     }
 }
 
-void HandleNotification::unsetNotificationWhenCommitted(const std::string &name)
+void HandleNotification::unsetNotificationWhenCommitted(const String &name)
 {
     bool stateBefore = isCommittedNotificationSet();
     m_commitedNotifications.erase(name);
@@ -257,7 +257,7 @@ bool HandleNotification::setupCheckpointNotification(bool ignorable)
 }
 
 bool HandleNotification::setNotificationWhenWillCheckpoint(
-int order, const std::string &name, const WillCheckpointNotification &willCheckpoint, bool ignorable)
+int order, const String &name, const WillCheckpointNotification &willCheckpoint, bool ignorable)
 {
     WCTInnerAssert(willCheckpoint != nullptr);
     const auto *element = m_willCheckpointNotifications.find(name);
@@ -282,7 +282,7 @@ int order, const std::string &name, const WillCheckpointNotification &willCheckp
     return true;
 }
 
-bool HandleNotification::unsetNotificationWhenWillCheckpoint(const std::string &name, bool ignorable)
+bool HandleNotification::unsetNotificationWhenWillCheckpoint(const String &name, bool ignorable)
 {
     const auto *element = m_willCheckpointNotifications.find(name);
     int oldOrder = 0;
@@ -306,9 +306,8 @@ bool HandleNotification::unsetNotificationWhenWillCheckpoint(const std::string &
     return true;
 }
 
-bool HandleNotification::setNotificationWhenCheckpointed(const std::string &name,
-                                                         const CheckpointedNotification &checkpointed,
-                                                         bool ignorable)
+bool HandleNotification::setNotificationWhenCheckpointed(
+const String &name, const CheckpointedNotification &checkpointed, bool ignorable)
 {
     CheckpointedNotification oldNotification = nullptr;
     auto iter = m_checkpointedNotifications.find(name);

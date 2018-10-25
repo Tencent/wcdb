@@ -26,7 +26,6 @@
 #include <functional>
 #include <list>
 #include <sstream>
-#include <string>
 
 #include <WCDB/SyntaxColumnType.hpp>
 #include <WCDB/SyntaxCompoundOperator.hpp>
@@ -108,7 +107,7 @@ public:
     };
     virtual Type getType() const = 0;
 
-    virtual std::string getDescription() const = 0;
+    virtual String getDescription() const = 0;
 
     // Iterable
 public:

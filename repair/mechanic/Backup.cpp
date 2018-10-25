@@ -33,7 +33,7 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialize
-Backup::Backup(const std::string &path)
+Backup::Backup(const String &path)
 : m_pager(path), Crawlable(m_pager), m_masterCrawler(m_pager)
 {
 }
@@ -111,7 +111,7 @@ const Material &Backup::getMaterial() const
     return m_material;
 }
 
-Material::Content &Backup::getOrCreateContent(const std::string &tableName)
+Material::Content &Backup::getOrCreateContent(const String &tableName)
 {
     auto &contents = m_material.contents;
     auto iter = contents.find(tableName);
@@ -127,7 +127,7 @@ void Backup::filter(const Filter &tableShouldBeBackedUp)
     m_filter = tableShouldBeBackedUp;
 }
 
-bool Backup::filter(const std::string &tableName)
+bool Backup::filter(const String &tableName)
 {
     if (m_filter) {
         return m_filter(tableName);
@@ -174,8 +174,8 @@ void Backup::onMasterCellCrawled(const Cell &cell, const Master &master)
     } else if (filter(master.tableName) && !Master::isReservedTableName(master.tableName)
                && !Master::isReservedTableName(master.name)) {
         Material::Content &content = getOrCreateContent(master.tableName);
-        if (String::isCaseInsensiveEqual(master.type, "table")
-            && String::isCaseInsensiveEqual(master.name, master.tableName)) {
+        if (master.type.isCaseInsensiveEqual("table")
+            && master.name.isCaseInsensiveEqual(master.tableName)) {
             if (!crawl(master.rootpage)) {
                 return;
             }

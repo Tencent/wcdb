@@ -31,7 +31,7 @@ Identifier::Type CTETableName::getType() const
     return type;
 }
 
-std::string CTETableName::getDescription() const
+String CTETableName::getDescription() const
 {
     std::ostringstream stream;
     stream << name;

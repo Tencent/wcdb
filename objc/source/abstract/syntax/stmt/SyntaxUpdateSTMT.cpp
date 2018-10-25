@@ -50,7 +50,7 @@ Identifier::Type UpdateSTMT::getType() const
     return type;
 }
 
-std::string UpdateSTMT::getDescription() const
+String UpdateSTMT::getDescription() const
 {
     std::ostringstream stream;
     if (useWithClause) {

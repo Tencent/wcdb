@@ -31,7 +31,7 @@ Identifier::Type DropTriggerSTMT::getType() const
     return type;
 }
 
-std::string DropTriggerSTMT::getDescription() const
+String DropTriggerSTMT::getDescription() const
 {
     std::ostringstream stream;
     stream << "DROP TRIGGER ";

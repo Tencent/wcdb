@@ -36,12 +36,12 @@ SQLiteAssembler::SQLiteAssembler()
 }
 
 #pragma mark - Assemble
-void SQLiteAssembler::setPath(const std::string &path)
+void SQLiteAssembler::setPath(const String &path)
 {
     SQLiteBase::setPath(path);
 }
 
-const std::string &SQLiteAssembler::getPath() const
+const String &SQLiteAssembler::getPath() const
 {
     return SQLiteBase::getPath();
 }
@@ -73,7 +73,7 @@ bool SQLiteAssembler::markAsMilestone()
     return lazyCommitOrRollbackTransaction() && lazyBeginTransactionImmediate();
 }
 
-bool SQLiteAssembler::assembleTable(const std::string &tableName, const std::string &sql)
+bool SQLiteAssembler::assembleTable(const String &tableName, const String &sql)
 {
     finalize(&m_cellSTMT);
     m_table.clear();
@@ -130,7 +130,7 @@ bool SQLiteAssembler::assembleCell(const Cell &cell)
     return result;
 }
 
-bool SQLiteAssembler::assembleSQL(const std::string &sql)
+bool SQLiteAssembler::assembleSQL(const String &sql)
 {
     markErrorAsIgnorable(SQLITE_ERROR);
     bool succeed = execute(sql.c_str());
@@ -154,7 +154,7 @@ bool SQLiteAssembler::lazyPrepareCell()
     WCTInnerAssert(!m_table.empty());
     if (m_cellSTMT == nullptr) {
         bool succeed;
-        std::string sql;
+        String sql;
         std::tie(succeed, sql) = getAssembleSQL(m_table);
         if (!succeed) {
             return false;
@@ -164,13 +164,13 @@ bool SQLiteAssembler::lazyPrepareCell()
     return m_cellSTMT != nullptr;
 }
 
-std::pair<bool, std::string> SQLiteAssembler::getAssembleSQL(const std::string &tableName)
+std::pair<bool, String> SQLiteAssembler::getAssembleSQL(const String &tableName)
 {
     bool succeed;
-    std::list<std::string> columnNames;
+    std::list<String> columnNames;
     std::tie(succeed, columnNames) = getColumnNames(tableName);
     if (!succeed) {
-        return { false, String::empty() };
+        return { false, String::null() };
     }
 
     std::ostringstream firstHalfStream;
@@ -191,8 +191,7 @@ std::pair<bool, std::string> SQLiteAssembler::getAssembleSQL(const std::string &
     return { true, firstHalfStream.str() + lastHalfStream.str() };
 }
 
-std::pair<bool, std::list<std::string>>
-SQLiteAssembler::getColumnNames(const std::string &tableName)
+std::pair<bool, std::list<String>> SQLiteAssembler::getColumnNames(const String &tableName)
 {
     std::ostringstream stream;
     stream << "PRAGMA table_info(" << tableName << ")";
@@ -201,13 +200,13 @@ SQLiteAssembler::getColumnNames(const std::string &tableName)
         return { false, {} };
     }
     bool done;
-    std::list<std::string> columns;
+    std::list<String> columns;
     int primary = -1;
     int maxpk = 0;
     while (step(stmt, done) && !done) {
         const char *column
         = reinterpret_cast<const char *>(sqlite3_column_text((sqlite3_stmt *) stmt, 1));
-        columns.push_back(column ? column : String::empty());
+        columns.push_back(column ? column : String::null());
 
         //check if and only if single column is primary key
         int pk = sqlite3_column_int((sqlite3_stmt *) stmt, 5);
@@ -238,7 +237,7 @@ bool SQLiteAssembler::markSequenceAsAssembled()
 }
 
 std::pair<bool, bool>
-SQLiteAssembler::updateSequence(const std::string &tableName, int64_t sequence)
+SQLiteAssembler::updateSequence(const String &tableName, int64_t sequence)
 {
     void *stmt = prepare("UPDATE sqlite_sequence SET seq = ?1 WHERE name = ?2");
     sqlite3_bind_int64((sqlite3_stmt *) stmt, 1, sequence);
@@ -253,7 +252,7 @@ SQLiteAssembler::updateSequence(const std::string &tableName, int64_t sequence)
     return { true, changes > 0 };
 }
 
-bool SQLiteAssembler::insertSequence(const std::string &tableName, int64_t sequence)
+bool SQLiteAssembler::insertSequence(const String &tableName, int64_t sequence)
 {
     void *stmt = prepare("INSERT INTO sqlite_sequence(name, seq) VALUES(?1, ?2)");
     sqlite3_bind_text((sqlite3_stmt *) stmt, 1, tableName.c_str(), -1, SQLITE_TRANSIENT);
@@ -263,7 +262,7 @@ bool SQLiteAssembler::insertSequence(const std::string &tableName, int64_t seque
     return result;
 }
 
-bool SQLiteAssembler::assembleSequence(const std::string &tableName, int64_t sequence)
+bool SQLiteAssembler::assembleSequence(const String &tableName, int64_t sequence)
 {
     if (sequence <= 0) {
         return true;

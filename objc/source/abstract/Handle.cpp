@@ -30,7 +30,7 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-Handle::Handle(const std::string &path_)
+Handle::Handle(const String &path_)
 : path(path_)
 , m_handle(nullptr)
 , m_handleStatement(this)
@@ -74,17 +74,17 @@ void Handle::setNotificationWhenVFSOpened(const VFSOpen &vfsOpen)
 }
 
 #pragma mark - Path
-std::string Handle::getSHMSubfix()
+String Handle::getSHMSubfix()
 {
     return "-shm";
 }
 
-std::string Handle::getWALSubfix()
+String Handle::getWALSubfix()
 {
     return "-wal";
 }
 
-std::string Handle::getJournalSubfix()
+String Handle::getJournalSubfix()
 {
     return "-journal";
 }
@@ -340,27 +340,26 @@ std::pair<bool, bool> Handle::tableExists(const TableOrSubquery &table)
     return { result || getResultCode() == SQLITE_ERROR, result };
 }
 
-std::pair<bool, std::set<std::string>>
-Handle::getUnorderedColumnsWithTable(const Schema &schema, const std::string &table)
+std::pair<bool, std::set<String>>
+Handle::getUnorderedColumnsWithTable(const Schema &schema, const String &table)
 {
     WCDB::StatementPragma statement
     = StatementPragma().pragma(Pragma::tableInfo()).schema(schema).with(table);
     return getUnorderedValues(statement, 1);
 }
 
-std::pair<bool, std::set<std::string>>
-Handle::getUnorderedColumnsWithTable(const std::string &table)
+std::pair<bool, std::set<String>> Handle::getUnorderedColumnsWithTable(const String &table)
 {
     return getUnorderedColumnsWithTable(Schema::main(), table);
 }
 
-std::pair<bool, std::set<std::string>>
+std::pair<bool, std::set<String>>
 Handle::getUnorderedValues(const Statement &statement, int index)
 {
 #warning TODO - Prepare/Step/Execute/... within Handle.cpp should use their own implementation or use the overrided one?
     if (prepare(statement)) {
         bool done = false;
-        std::set<std::string> values;
+        std::set<String> values;
         while (step(done) && !done) {
             values.emplace(getText(index));
         }
@@ -372,9 +371,9 @@ Handle::getUnorderedValues(const Statement &statement, int index)
     return { false, {} };
 }
 
-const std::string &Handle::savepointPrefix()
+const String &Handle::savepointPrefix()
 {
-    static const std::string s_savepointPrefix("WCDBSavepoint_");
+    static const String s_savepointPrefix("WCDBSavepoint_");
     return s_savepointPrefix;
 }
 
@@ -383,7 +382,7 @@ bool Handle::beginNestedTransaction()
     if (!isInTransaction()) {
         return beginTransaction();
     }
-    std::string savepointName = savepointPrefix() + std::to_string(++m_nestedLevel);
+    String savepointName = savepointPrefix() + std::to_string(++m_nestedLevel);
     return execute(StatementSavepoint().savepoint(savepointName));
 }
 
@@ -392,7 +391,7 @@ bool Handle::commitOrRollbackNestedTransaction()
     if (m_nestedLevel == 0) {
         return commitOrRollbackTransaction();
     }
-    std::string savepointName = savepointPrefix() + std::to_string(m_nestedLevel--);
+    String savepointName = savepointPrefix() + std::to_string(m_nestedLevel--);
     if (!execute(StatementRelease().release(savepointName))) {
         markErrorAsIgnorable(-1);
         execute(StatementRollback().rollbackToSavepoint(savepointName));
@@ -407,7 +406,7 @@ void Handle::rollbackNestedTransaction()
     if (m_nestedLevel == 0) {
         return rollbackTransaction();
     }
-    std::string savepointName = savepointPrefix() + std::to_string(m_nestedLevel--);
+    String savepointName = savepointPrefix() + std::to_string(m_nestedLevel--);
     markErrorAsIgnorable(-1);
     execute(StatementRollback().rollbackToSavepoint(savepointName));
     markErrorAsUnignorable();
@@ -475,13 +474,13 @@ bool Handle::setCipherKey(const UnsafeData &data)
 }
 
 #pragma mark - Notification
-void Handle::setNotificationWhenSQLTraced(const std::string &name, const SQLNotification &onTraced)
+void Handle::setNotificationWhenSQLTraced(const String &name, const SQLNotification &onTraced)
 {
     WCTInnerAssert(isOpened());
     m_notification.setNotificationWhenSQLTraced(name, onTraced);
 }
 
-void Handle::setNotificationWhenPerformanceTraced(const std::string &name,
+void Handle::setNotificationWhenPerformanceTraced(const String &name,
                                                   const PerformanceNotification &onTraced)
 {
     WCTInnerAssert(isOpened());
@@ -489,34 +488,33 @@ void Handle::setNotificationWhenPerformanceTraced(const std::string &name,
 }
 
 void Handle::setNotificationWhenCommitted(int order,
-                                          const std::string &name,
+                                          const String &name,
                                           const CommittedNotification &onCommitted)
 {
     WCTInnerAssert(isOpened());
     m_notification.setNotificationWhenCommitted(order, name, onCommitted);
 }
 
-void Handle::unsetNotificationWhenCommitted(const std::string &name)
+void Handle::unsetNotificationWhenCommitted(const String &name)
 {
     WCTInnerAssert(isOpened());
     m_notification.unsetNotificationWhenCommitted(name);
 }
 
-bool Handle::setNotificationWhenWillCheckpoint(int order,
-                                               const std::string &name,
-                                               const WCDB::Handle::WillCheckpointNotification &willCheckpoint)
+bool Handle::setNotificationWhenWillCheckpoint(
+int order, const String &name, const WCDB::Handle::WillCheckpointNotification &willCheckpoint)
 {
     WCTInnerAssert(isOpened());
     return m_notification.setNotificationWhenWillCheckpoint(order, name, willCheckpoint);
 }
 
-bool Handle::unsetNotificationWhenWillCheckpoint(const std::string &name)
+bool Handle::unsetNotificationWhenWillCheckpoint(const String &name)
 {
     WCTInnerAssert(isOpened());
     return m_notification.unsetNotificationWhenWillCheckpoint(name);
 }
 
-bool Handle::setNotificationWhenCheckpointed(const std::string &name,
+bool Handle::setNotificationWhenCheckpointed(const String &name,
                                              const CheckpointedNotification &checkpointed)
 {
     WCTInnerAssert(isOpened());
@@ -524,7 +522,7 @@ bool Handle::setNotificationWhenCheckpointed(const std::string &name,
 }
 
 #pragma mark - Error
-void Handle::setError(int rc, const std::string &sql)
+void Handle::setError(int rc, const String &sql)
 {
     WCTInnerAssert(rc != SQLITE_OK);
     if (m_codeToBeIgnored >= 0 && rc != m_codeToBeIgnored) {
@@ -535,7 +533,7 @@ void Handle::setError(int rc, const std::string &sql)
     }
 }
 
-void Handle::doSetError(Error &error, int rc, const std::string &sql)
+void Handle::doSetError(Error &error, int rc, const String &sql)
 {
     if (rc != SQLITE_MISUSE) {
         // extended error code will not be set in some case for misuse error
@@ -552,7 +550,7 @@ void Handle::doSetError(Error &error, int rc, const std::string &sql)
     if (message) {
         error.message = message;
     } else {
-        error.message = String::empty();
+        error.message = String::null();
     }
     error.infos.set("SQL", sql);
     Notifier::shared()->notify(error);

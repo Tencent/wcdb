@@ -58,21 +58,21 @@ public:
     static Core* shared();
     ~Core();
 
-    RecyclableDatabase getOrCreateDatabase(const std::string& path);
-    RecyclableDatabase getExistingDatabase(const std::string& path);
+    RecyclableDatabase getOrCreateDatabase(const String& path);
+    RecyclableDatabase getExistingDatabase(const String& path);
     RecyclableDatabase getExistingDatabase(const Tag& tag);
 
     void purge();
 
     const std::shared_ptr<Configs>& configs();
 
-    void addTokenizer(const std::string& name, unsigned char* address);
+    void addTokenizer(const String& name, unsigned char* address);
     void setNotificationForGlobalSQLTrace(const ShareableSQLTraceConfig::Notification& notification);
     void setNotificationForGlobalPerformanceTrace(
     const ShareablePerformanceTraceConfig::Notification& notification);
 
     const std::shared_ptr<Config>& backupConfig();
-    std::shared_ptr<Config> tokenizeConfig(const std::list<std::string>& tokenizeNames);
+    std::shared_ptr<Config> tokenizeConfig(const std::list<String>& tokenizeNames);
     std::shared_ptr<Config> cipherConfig(const UnsafeData& cipher, int pageSize = 4096);
     std::shared_ptr<Config> sqlTraceConfig(const SQLTraceConfig::Notification& notification);
     std::shared_ptr<Config>

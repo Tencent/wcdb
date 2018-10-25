@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-StatementCreateView& StatementCreateView::createView(const SyntaxString& view)
+StatementCreateView& StatementCreateView::createView(const String& view)
 {
     syntax.view = view;
     return *this;

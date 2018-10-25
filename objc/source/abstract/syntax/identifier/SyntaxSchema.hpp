@@ -30,7 +30,7 @@ namespace Syntax {
 class Schema : public Identifier {
 #pragma mark - Syntax
 public:
-    std::string name;
+    String name;
 
     bool isMain() const;
 
@@ -38,7 +38,7 @@ public:
 public:
     static constexpr const Type type = Type::Schema;
     Type getType() const override final;
-    std::string getDescription() const override final;
+    String getDescription() const override final;
 };
 
 } // namespace Syntax

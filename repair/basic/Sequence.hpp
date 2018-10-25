@@ -21,7 +21,7 @@
 #ifndef Sequence_hpp
 #define Sequence_hpp
 
-#include <string>
+#include <WCDB/String.hpp>
 
 namespace WCDB {
 
@@ -29,9 +29,9 @@ namespace Repair {
 
 struct Sequence {
     Sequence();
-    static std::string tableName();
+    static String tableName();
 
-    std::string name;
+    String name;
     int64_t seq;
 };
 

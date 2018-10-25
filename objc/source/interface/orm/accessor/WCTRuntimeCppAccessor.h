@@ -44,7 +44,7 @@ protected:
     using ValueSetter = typename CppAccessor::Setter;
 
 public:
-    WCTRuntimeCppAccessor(Class cls, const std::string &propertyName)
+    WCTRuntimeCppAccessor(Class cls, const WCDB::String &propertyName)
     : RuntimeAccessor(cls, propertyName)
     , CppAccessor(generateValueGetter(), generateValueSetter())
     {
@@ -93,7 +93,7 @@ public:
     using ValueGetter = typename CppAccessor::Getter;
     using ValueSetter = typename CppAccessor::Setter;
 
-    WCTRuntimeCppAccessor(Class cls, const std::string &propertyName)
+    WCTRuntimeCppAccessor(Class cls, const WCDB::String &propertyName)
     : RuntimeAccessor(cls, propertyName)
     , CppAccessor(generateValueGetter(), generateValueSetter())
     {

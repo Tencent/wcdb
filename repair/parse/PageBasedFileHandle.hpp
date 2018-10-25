@@ -31,7 +31,7 @@ namespace WCDB {
 class PageBasedFileHandle : public FileHandle {
 #pragma mark - PageBasedFileHandle
 public:
-    PageBasedFileHandle(const std::string& path);
+    PageBasedFileHandle(const String& path);
 
     MappedData mapPage(int pageno, off_t offset, size_t size);
     MappedData mapPage(int pageno);

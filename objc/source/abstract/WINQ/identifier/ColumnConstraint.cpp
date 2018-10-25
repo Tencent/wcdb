@@ -26,7 +26,7 @@ ColumnConstraint::ColumnConstraint()
 {
 }
 
-ColumnConstraint::ColumnConstraint(const SyntaxString& name)
+ColumnConstraint::ColumnConstraint(const String& name)
 {
     syntax.name = name;
 }
@@ -92,7 +92,7 @@ ColumnConstraint& ColumnConstraint::default_(const Expression& defaultValue)
     return *this;
 }
 
-ColumnConstraint& ColumnConstraint::collate(const SyntaxString& collation)
+ColumnConstraint& ColumnConstraint::collate(const String& collation)
 {
     syntax.switcher = SyntaxType::Switch::Collate;
     syntax.collation = collation;

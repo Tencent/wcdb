@@ -31,7 +31,7 @@ Identifier::Type JoinClause::getType() const
     return type;
 }
 
-std::string JoinClause::getDescription() const
+String JoinClause::getDescription() const
 {
     std::ostringstream stream;
     auto tableOrSubquery = tableOrSubqueries.begin();

@@ -31,7 +31,7 @@ Identifier::Type PragmaSTMT::getType() const
     return type;
 }
 
-std::string PragmaSTMT::getDescription() const
+String PragmaSTMT::getDescription() const
 {
     std::ostringstream stream;
     stream << "PRAGMA " << schema << "." << pragma;

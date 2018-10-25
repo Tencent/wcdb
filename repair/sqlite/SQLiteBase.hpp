@@ -22,7 +22,7 @@
 #define SQLiteBase_hpp
 
 #include <WCDB/ErrorProne.hpp>
-#include <string>
+#include <WCDB/String.hpp>
 
 // repair/sqlite are optional. Ones can implement their own tools.
 
@@ -34,11 +34,11 @@ class SQLiteBase : public ErrorProne {
 public:
     SQLiteBase();
 
-    void setPath(const std::string &path);
-    const std::string &getPath() const;
+    void setPath(const String &path);
+    const String &getPath() const;
 
 protected:
-    std::string m_path;
+    String m_path;
 
 #pragma mark - Error
 protected:

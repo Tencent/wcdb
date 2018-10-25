@@ -26,7 +26,7 @@ namespace WCDB {
 
 namespace FTS {
 
-void Modules::addAddress(const std::string &name, unsigned char *address)
+void Modules::addAddress(const String &name, unsigned char *address)
 {
     WCTRemedialAssert(name.empty() && address != nullptr,
                       "Both name and address of tokenizer can't be null.",
@@ -35,7 +35,7 @@ void Modules::addAddress(const std::string &name, unsigned char *address)
     m_addresses[name] = UnsafeData(address, sizeof(unsigned char *));
 }
 
-const UnsafeData &Modules::getAddress(const std::string &name) const
+const UnsafeData &Modules::getAddress(const String &name) const
 {
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_addresses.find(name);
