@@ -27,27 +27,27 @@
 
 - (WCTInsert *)prepareInsert
 {
-    return [[[WCTInsert alloc] initWithDatabase:_database] intoTable:_tableName];
+    return [[[WCTInsert alloc] initWithCore:self] intoTable:_tableName];
 }
 
 - (WCTDelete *)prepareDelete
 {
-    return [[[WCTDelete alloc] initWithDatabase:_database] fromTable:_tableName];
+    return [[[WCTDelete alloc] initWithCore:self] fromTable:_tableName];
 }
 
 - (WCTUpdate *)prepareUpdate
 {
-    return [[[WCTUpdate alloc] initWithDatabase:_database] table:_tableName];
+    return [[[WCTUpdate alloc] initWithCore:self] table:_tableName];
 }
 
 - (WCTSelect *)prepareSelect
 {
-    return [[[[WCTSelect alloc] initWithDatabase:_database] fromTable:_tableName] ofClass:_class];
+    return [[[[WCTSelect alloc] initWithCore:self] fromTable:_tableName] ofClass:_class];
 }
 
 - (WCTRowSelect *)prepareRowSelect
 {
-    return [[[WCTRowSelect alloc] initWithDatabase:_database] fromTable:_tableName];
+    return [[[WCTRowSelect alloc] initWithCore:self] fromTable:_tableName];
 }
 
 @end

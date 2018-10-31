@@ -22,9 +22,13 @@
 
 @interface WCTCore () {
 @protected
-    WCDB::RecyclableDatabase _holder;
+    // Holder can be null in some case using temporary database object. e.g. inside the non-escape block
+    WCDB::RecyclableDatabase _databaseHolder;
     WCDB::Database *_database;
 }
+
+- (instancetype)init NS_DESIGNATED_INITIALIZER;
+;
 
 - (instancetype)initWithDatabase:(WCDB::Database *)database NS_DESIGNATED_INITIALIZER;
 

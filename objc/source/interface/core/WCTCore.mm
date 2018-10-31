@@ -25,14 +25,14 @@
 
 - (instancetype)init
 {
-    return [self initWithDatabase:nullptr];
+    return nil;
 }
 
 - (instancetype)initWithHolder:(const WCDB::RecyclableDatabase &)database
 {
     WCTInnerAssert(database != nullptr);
     if (self = [super init]) {
-        _holder = database;
+        _databaseHolder = database;
         _database = database.get();
     }
     return self;
@@ -40,10 +40,9 @@
 
 - (instancetype)initWithDatabase:(WCDB::Database *)database
 {
-    if (database == nullptr) {
-        return nil;
-    }
+    WCTInnerAssert(database != nullptr);
     if (self = [super init]) {
+        _databaseHolder = nullptr;
         _database = database;
     }
     return self;
@@ -53,7 +52,7 @@
 {
     WCTInnerAssert(core != nil);
     if (self = [super init]) {
-        _holder = core->_holder;
+        _databaseHolder = core->_databaseHolder;
         _database = core->_database;
     }
     return self;
@@ -71,7 +70,7 @@
 
 - (void)finalizeDatabase
 {
-    _holder = nullptr;
+    _databaseHolder = nullptr;
     _database = nullptr;
 }
 

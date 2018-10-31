@@ -48,7 +48,7 @@
 
 - (WCTDatabase *)getDatabase
 {
-    return [[WCTDatabase alloc] initWithDatabase:_database];
+    return [[WCTDatabase alloc] initWithCore:self];
 }
 
 - (WCTError *)error
