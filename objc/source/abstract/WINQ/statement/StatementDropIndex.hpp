@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class StatementDropIndex : public StatementSyntax<Syntax::DropIndexSTMT> {
+class StatementDropIndex : public TypedSyntax<Syntax::DropIndexSTMT, Statement> {
 public:
     StatementDropIndex& dropIndex(const String& index);
     StatementDropIndex& schema(const Schema& schema);

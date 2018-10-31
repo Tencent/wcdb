@@ -28,81 +28,81 @@ ColumnConstraint::ColumnConstraint()
 
 ColumnConstraint::ColumnConstraint(const String& name)
 {
-    syntax.name = name;
+    syntax().name = name;
 }
 
 ColumnConstraint& ColumnConstraint::primaryKey()
 {
-    syntax.switcher = SyntaxType::Switch::PrimaryKey;
+    syntax().switcher = SyntaxType::Switch::PrimaryKey;
     return *this;
 }
 
 ColumnConstraint& ColumnConstraint::order(const Order& order)
 {
-    syntax.useOrder = true;
-    syntax.order = order;
+    syntax().useOrder = true;
+    syntax().order = order;
     return *this;
 }
 
 ColumnConstraint& ColumnConstraint::conflict(const Conflict& conflict)
 {
-    syntax.useConflict = true;
-    syntax.conflict = conflict;
+    syntax().useConflict = true;
+    syntax().conflict = conflict;
     return *this;
 }
 
 ColumnConstraint& ColumnConstraint::autoIncrement()
 {
-    syntax.autoIncrement = true;
+    syntax().autoIncrement = true;
     return *this;
 }
 
 ColumnConstraint& ColumnConstraint::notNull()
 {
-    syntax.switcher = SyntaxType::Switch::NotNull;
+    syntax().switcher = SyntaxType::Switch::NotNull;
     return *this;
 }
 
 ColumnConstraint& ColumnConstraint::unique()
 {
-    syntax.switcher = SyntaxType::Switch::Unique;
+    syntax().switcher = SyntaxType::Switch::Unique;
     return *this;
 }
 
 ColumnConstraint& ColumnConstraint::check(const Expression& expression)
 {
-    syntax.switcher = SyntaxType::Switch::Check;
-    syntax.expression = expression;
+    syntax().switcher = SyntaxType::Switch::Check;
+    syntax().expression = expression;
     return *this;
 }
 
 ColumnConstraint& ColumnConstraint::default_(const LiteralValue& defaultValue)
 {
-    syntax.switcher = SyntaxType::Switch::Default;
-    syntax.defaultType = SyntaxType::DefaultType::LiteralValue;
-    syntax.literalValue = defaultValue;
+    syntax().switcher = SyntaxType::Switch::Default;
+    syntax().defaultType = SyntaxType::DefaultType::LiteralValue;
+    syntax().literalValue = defaultValue;
     return *this;
 }
 
 ColumnConstraint& ColumnConstraint::default_(const Expression& defaultValue)
 {
-    syntax.switcher = SyntaxType::Switch::Default;
-    syntax.defaultType = SyntaxType::DefaultType::Expression;
-    syntax.expression = defaultValue;
+    syntax().switcher = SyntaxType::Switch::Default;
+    syntax().defaultType = SyntaxType::DefaultType::Expression;
+    syntax().expression = defaultValue;
     return *this;
 }
 
 ColumnConstraint& ColumnConstraint::collate(const String& collation)
 {
-    syntax.switcher = SyntaxType::Switch::Collate;
-    syntax.collation = collation;
+    syntax().switcher = SyntaxType::Switch::Collate;
+    syntax().collation = collation;
     return *this;
 }
 
 ColumnConstraint& ColumnConstraint::foreignKey(const ForeignKey& foreignKey)
 {
-    syntax.switcher = SyntaxType::Switch::ForeignKey;
-    syntax.foreignKeyClause = foreignKey;
+    syntax().switcher = SyntaxType::Switch::ForeignKey;
+    syntax().foreignKeyClause = foreignKey;
     return *this;
 }
 

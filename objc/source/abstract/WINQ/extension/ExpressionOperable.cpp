@@ -54,14 +54,14 @@ Expression ExpressionUnaryOperable::operator~() const
 Expression ExpressionUnaryOperable::isNull() const
 {
     Expression expression = unaryOperate(Expression::SyntaxType::UnaryOperator::Null);
-    expression.syntax.isNot = false;
+    expression.syntax().isNot = false;
     return expression;
 }
 
 Expression ExpressionUnaryOperable::notNull() const
 {
     Expression expression = unaryOperate(Expression::SyntaxType::UnaryOperator::Null);
-    expression.syntax.isNot = true;
+    expression.syntax().isNot = true;
     return expression;
 }
 
@@ -69,9 +69,9 @@ Expression
 ExpressionUnaryOperable::unaryOperate(const Syntax::Expression::UnaryOperator &op) const
 {
     Expression expression;
-    expression.syntax.switcher = Expression::SyntaxType::Switch::UnaryOperation;
-    expression.syntax.unaryOperator = op;
-    expression.syntax.expressions.push_back(asExpressionOperand());
+    expression.syntax().switcher = Expression::SyntaxType::Switch::UnaryOperation;
+    expression.syntax().unaryOperator = op;
+    expression.syntax().expressions.push_back(asExpressionOperand());
     return expression;
 }
 
@@ -164,7 +164,7 @@ Expression ExpressionBinaryOperable::is(const Expression &operand) const
 {
     Expression expression
     = binaryOperate(operand, Expression::SyntaxType::BinaryOperator::Is);
-    expression.syntax.isNot = false;
+    expression.syntax().isNot = false;
     return expression;
 }
 
@@ -172,7 +172,7 @@ Expression ExpressionBinaryOperable::isNot(const Expression &operand) const
 {
     Expression expression
     = binaryOperate(operand, Expression::SyntaxType::BinaryOperator::Is);
-    expression.syntax.isNot = true;
+    expression.syntax().isNot = true;
     return expression;
 }
 
@@ -190,7 +190,7 @@ Expression ExpressionBinaryOperable::like(const Expression &operand) const
 {
     Expression expression
     = binaryOperate(operand, Expression::SyntaxType::BinaryOperator::Like);
-    expression.syntax.isNot = false;
+    expression.syntax().isNot = false;
     return expression;
 }
 
@@ -198,7 +198,7 @@ Expression ExpressionBinaryOperable::glob(const Expression &operand) const
 {
     Expression expression
     = binaryOperate(operand, Expression::SyntaxType::BinaryOperator::GLOB);
-    expression.syntax.isNot = false;
+    expression.syntax().isNot = false;
     return expression;
 }
 
@@ -206,7 +206,7 @@ Expression ExpressionBinaryOperable::regexp(const Expression &operand) const
 {
     Expression expression
     = binaryOperate(operand, Expression::SyntaxType::BinaryOperator::RegExp);
-    expression.syntax.isNot = false;
+    expression.syntax().isNot = false;
     return expression;
 }
 
@@ -214,7 +214,7 @@ Expression ExpressionBinaryOperable::match(const Expression &operand) const
 {
     Expression expression
     = binaryOperate(operand, Expression::SyntaxType::BinaryOperator::Match);
-    expression.syntax.isNot = false;
+    expression.syntax().isNot = false;
     return expression;
 }
 
@@ -222,7 +222,7 @@ Expression ExpressionBinaryOperable::notLike(const Expression &operand) const
 {
     Expression expression
     = binaryOperate(operand, Expression::SyntaxType::BinaryOperator::Like);
-    expression.syntax.isNot = true;
+    expression.syntax().isNot = true;
     return expression;
 }
 
@@ -230,7 +230,7 @@ Expression ExpressionBinaryOperable::notGlob(const Expression &operand) const
 {
     Expression expression
     = binaryOperate(operand, Expression::SyntaxType::BinaryOperator::GLOB);
-    expression.syntax.isNot = true;
+    expression.syntax().isNot = true;
     return expression;
 }
 
@@ -238,7 +238,7 @@ Expression ExpressionBinaryOperable::notRegexp(const Expression &operand) const
 {
     Expression expression
     = binaryOperate(operand, Expression::SyntaxType::BinaryOperator::RegExp);
-    expression.syntax.isNot = true;
+    expression.syntax().isNot = true;
     return expression;
 }
 
@@ -246,7 +246,7 @@ Expression ExpressionBinaryOperable::notMatch(const Expression &operand) const
 {
     Expression expression
     = binaryOperate(operand, Expression::SyntaxType::BinaryOperator::Match);
-    expression.syntax.isNot = true;
+    expression.syntax().isNot = true;
     return expression;
 }
 
@@ -255,10 +255,10 @@ ExpressionBinaryOperable::binaryOperate(const Expression &operand,
                                         const Syntax::Expression::BinaryOperator &op) const
 {
     Expression expression;
-    expression.syntax.switcher = Expression::SyntaxType::Switch::BinaryOperation;
-    expression.syntax.binaryOperator = op;
-    expression.syntax.expressions.push_back(asExpressionOperand());
-    expression.syntax.expressions.push_back(operand);
+    expression.syntax().switcher = Expression::SyntaxType::Switch::BinaryOperation;
+    expression.syntax().binaryOperator = op;
+    expression.syntax().expressions.push_back(asExpressionOperand());
+    expression.syntax().expressions.push_back(operand);
     return expression;
 }
 
@@ -271,7 +271,7 @@ Expression
 ExpressionBetweenOperable::between(const Expression &left, const Expression &right) const
 {
     Expression expression = betweenOperate(left, right);
-    expression.syntax.isNot = false;
+    expression.syntax().isNot = false;
     return expression;
 }
 
@@ -279,7 +279,7 @@ Expression ExpressionBetweenOperable::notBetween(const Expression &left,
                                                  const Expression &right) const
 {
     Expression expression = betweenOperate(left, right);
-    expression.syntax.isNot = true;
+    expression.syntax().isNot = true;
     return expression;
 }
 
@@ -287,10 +287,10 @@ Expression ExpressionBetweenOperable::betweenOperate(const Expression &left,
                                                      const Expression &right) const
 {
     Expression expression;
-    expression.syntax.switcher = Expression::SyntaxType::Switch::Between;
-    expression.syntax.expressions.push_back(asExpressionOperand());
-    expression.syntax.expressions.push_back(left);
-    expression.syntax.expressions.push_back(right);
+    expression.syntax().switcher = Expression::SyntaxType::Switch::Between;
+    expression.syntax().expressions.push_back(asExpressionOperand());
+    expression.syntax().expressions.push_back(left);
+    expression.syntax().expressions.push_back(right);
     return expression;
 }
 
@@ -302,90 +302,90 @@ ExpressionInOperable::~ExpressionInOperable()
 Expression ExpressionInOperable::in()
 {
     Expression expression;
-    expression.syntax.switcher = Expression::SyntaxType::Switch::In;
-    expression.syntax.isNot = false;
-    expression.syntax.expressions.push_back(asExpressionOperand());
-    expression.syntax.inSwitcher = Expression::SyntaxType::SwitchIn::Empty;
+    expression.syntax().switcher = Expression::SyntaxType::Switch::In;
+    expression.syntax().isNot = false;
+    expression.syntax().expressions.push_back(asExpressionOperand());
+    expression.syntax().inSwitcher = Expression::SyntaxType::SwitchIn::Empty;
     return expression;
 }
 
 Expression ExpressionInOperable::notIn()
 {
     Expression expression = in();
-    expression.syntax.isNot = true;
+    expression.syntax().isNot = true;
     return expression;
 }
 
 Expression ExpressionInOperable::inTable(const String &table)
 {
     Expression expression;
-    expression.syntax.switcher = Expression::SyntaxType::Switch::In;
-    expression.syntax.isNot = false;
-    expression.syntax.expressions.push_back(asExpressionOperand());
-    expression.syntax.inSwitcher = Expression::SyntaxType::SwitchIn::Table;
-    expression.syntax.table = table;
+    expression.syntax().switcher = Expression::SyntaxType::Switch::In;
+    expression.syntax().isNot = false;
+    expression.syntax().expressions.push_back(asExpressionOperand());
+    expression.syntax().inSwitcher = Expression::SyntaxType::SwitchIn::Table;
+    expression.syntax().table = table;
     return expression;
 }
 
 Expression ExpressionInOperable::notInTable(const String &table)
 {
     Expression expression = inTable(table);
-    expression.syntax.isNot = true;
+    expression.syntax().isNot = true;
     return expression;
 }
 
 Expression ExpressionInOperable::in(const StatementSelect &select)
 {
     Expression expression;
-    expression.syntax.switcher = Expression::SyntaxType::Switch::In;
-    expression.syntax.isNot = false;
-    expression.syntax.expressions.push_back(asExpressionOperand());
-    expression.syntax.inSwitcher = Expression::SyntaxType::SwitchIn::Select;
-    expression.syntax.select = select;
+    expression.syntax().switcher = Expression::SyntaxType::Switch::In;
+    expression.syntax().isNot = false;
+    expression.syntax().expressions.push_back(asExpressionOperand());
+    expression.syntax().inSwitcher = Expression::SyntaxType::SwitchIn::Select;
+    expression.syntax().select = select;
     return expression;
 }
 
 Expression ExpressionInOperable::notIn(const StatementSelect &select)
 {
     Expression expression = in(select);
-    expression.syntax.isNot = true;
+    expression.syntax().isNot = true;
     return expression;
 }
 
 Expression ExpressionInOperable::in(const Expressions &expressions)
 {
     Expression expression;
-    expression.syntax.switcher = Expression::SyntaxType::Switch::In;
-    expression.syntax.isNot = false;
-    expression.syntax.expressions.push_back(asExpressionOperand());
-    expression.syntax.inSwitcher = Expression::SyntaxType::SwitchIn::Expressions;
-    expression.syntax.expressions.insert(
-    expression.syntax.expressions.end(), expressions.begin(), expressions.end());
+    expression.syntax().switcher = Expression::SyntaxType::Switch::In;
+    expression.syntax().isNot = false;
+    expression.syntax().expressions.push_back(asExpressionOperand());
+    expression.syntax().inSwitcher = Expression::SyntaxType::SwitchIn::Expressions;
+    expression.syntax().expressions.insert(
+    expression.syntax().expressions.end(), expressions.begin(), expressions.end());
     return expression;
 }
 
 Expression ExpressionInOperable::notIn(const Expressions &expressions)
 {
     Expression expression = in(expressions);
-    expression.syntax.isNot = true;
+    expression.syntax().isNot = true;
     return expression;
 }
 
 Expression ExpressionInOperable::inFunction(const String &tableFunction)
 {
     Expression expression;
-    expression.syntax.switcher = Expression::SyntaxType::Switch::In;
-    expression.syntax.inSwitcher = Expression::SyntaxType::SwitchIn::Function;
-    expression.syntax.isNot = false;
-    expression.syntax.expressions.push_back(asExpressionOperand());
-    expression.syntax.function = tableFunction;
+    expression.syntax().switcher = Expression::SyntaxType::Switch::In;
+    expression.syntax().inSwitcher = Expression::SyntaxType::SwitchIn::Function;
+    expression.syntax().isNot = false;
+    expression.syntax().expressions.push_back(asExpressionOperand());
+    expression.syntax().function = tableFunction;
     return expression;
 }
 
 Expression ExpressionInOperable::notInFunction(const String &tableFunction)
 {
     Expression expression = inFunction(tableFunction);
-    expression.syntax.isNot = true;
+    expression.syntax().isNot = true;
     return expression;
 }
 
@@ -397,9 +397,9 @@ ExpressionCollateOperable::~ExpressionCollateOperable()
 Expression ExpressionCollateOperable::collate(const String &collation)
 {
     Expression expression;
-    expression.syntax.switcher = Expression::SyntaxType::Switch::Collate;
-    expression.syntax.expressions.push_back(asExpressionOperand());
-    expression.syntax.collation = collation;
+    expression.syntax().switcher = Expression::SyntaxType::Switch::Collate;
+    expression.syntax().expressions.push_back(asExpressionOperand());
+    expression.syntax().collation = collation;
     return expression;
 }
 

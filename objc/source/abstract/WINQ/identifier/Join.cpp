@@ -24,7 +24,7 @@ namespace WCDB {
 
 Join& Join::table(const TableOrSubquery& tableOrSubquery)
 {
-    syntax.tableOrSubqueries.push_back(tableOrSubquery);
+    syntax().tableOrSubqueries.push_back(tableOrSubquery);
     return *this;
 }
 
@@ -96,15 +96,15 @@ Join& Join::naturalCrossJoin(const TableOrSubquery& tableOrSubquery)
 
 Join& Join::constraint(const JoinConstraint& constraint)
 {
-    syntax.joinConstraints.back() = constraint;
+    syntax().joinConstraints.back() = constraint;
     return *this;
 }
 
 Join& Join::join(const Syntax::JoinOperator& joinOperator, const TableOrSubquery& tableOrSubquery)
 {
-    syntax.joinOperators.push_back(joinOperator);
-    syntax.tableOrSubqueries.push_back(tableOrSubquery);
-    syntax.joinConstraints.push_back(nullptr);
+    syntax().joinOperators.push_back(joinOperator);
+    syntax().tableOrSubqueries.push_back(tableOrSubquery);
+    syntax().joinConstraints.push_back(nullptr);
     return *this;
 }
 

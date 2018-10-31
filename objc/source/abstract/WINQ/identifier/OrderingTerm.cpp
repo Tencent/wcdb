@@ -24,19 +24,19 @@ namespace WCDB {
 
 OrderingTerm::OrderingTerm(const Expression& expression)
 {
-    syntax.expression = expression;
+    syntax().expression = expression;
 }
 
 OrderingTerm& OrderingTerm::collate(const String& collation)
 {
-    syntax.collation = collation;
+    syntax().collation = collation;
     return *this;
 }
 
 OrderingTerm& OrderingTerm::order(const Order& order)
 {
-    syntax.useOrder = true;
-    syntax.order = order;
+    syntax().useOrder = true;
+    syntax().order = order;
     return *this;
 }
 

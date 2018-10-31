@@ -24,95 +24,95 @@ namespace WCDB {
 
 StatementUpdate& StatementUpdate::with(const With& with)
 {
-    syntax.useWithClause = true;
-    syntax.withClause = with;
+    syntax().useWithClause = true;
+    syntax().withClause = with;
     return *this;
 }
 
 StatementUpdate& StatementUpdate::update(const QualifiedTable& table)
 {
-    syntax.switcher = SyntaxType::Switch::Update;
-    syntax.table = table;
+    syntax().switcher = SyntaxType::Switch::Update;
+    syntax().table = table;
     return *this;
 }
 
 StatementUpdate& StatementUpdate::orRollback()
 {
-    syntax.switcher = SyntaxType::Switch::UpdateOrRollback;
+    syntax().switcher = SyntaxType::Switch::UpdateOrRollback;
     return *this;
 }
 
 StatementUpdate& StatementUpdate::orAbort()
 {
-    syntax.switcher = SyntaxType::Switch::UpdateOrAbort;
+    syntax().switcher = SyntaxType::Switch::UpdateOrAbort;
     return *this;
 }
 
 StatementUpdate& StatementUpdate::orReplace()
 {
-    syntax.switcher = SyntaxType::Switch::UpdateOrReplace;
+    syntax().switcher = SyntaxType::Switch::UpdateOrReplace;
     return *this;
 }
 
 StatementUpdate& StatementUpdate::orFail()
 {
-    syntax.switcher = SyntaxType::Switch::UpdateOrFail;
+    syntax().switcher = SyntaxType::Switch::UpdateOrFail;
     return *this;
 }
 
 StatementUpdate& StatementUpdate::orIgnore()
 {
-    syntax.switcher = SyntaxType::Switch::UpdateOrIgnore;
+    syntax().switcher = SyntaxType::Switch::UpdateOrIgnore;
     return *this;
 }
 
 StatementUpdate& StatementUpdate::set(const Columns& columns)
 {
-    syntax.columnsList.push_back(columns);
+    syntax().columnsList.push_back(columns);
     return *this;
 }
 
 StatementUpdate& StatementUpdate::to(const Expression& value)
 {
-    syntax.expressions.push_back(value);
+    syntax().expressions.push_back(value);
     return *this;
 }
 
 StatementUpdate& StatementUpdate::where(const Expression& condition)
 {
-    syntax.useCondition = true;
-    syntax.condition = condition;
+    syntax().useCondition = true;
+    syntax().condition = condition;
     return *this;
 }
 
 StatementUpdate& StatementUpdate::order(const OrderingTerms& orders)
 {
-    syntax.orderingTerms = orders;
+    syntax().orderingTerms = orders;
     return *this;
 }
 
 StatementUpdate& StatementUpdate::limit(const Expression& from, const Expression& to)
 {
-    syntax.useLimit = true;
-    syntax.limitParameterType = SyntaxType::LimitParameterType::End;
-    syntax.limit = from;
-    syntax.limitParameter = to;
+    syntax().useLimit = true;
+    syntax().limitParameterType = SyntaxType::LimitParameterType::End;
+    syntax().limit = from;
+    syntax().limitParameter = to;
     return *this;
 }
 
 StatementUpdate& StatementUpdate::limit(const Expression& limit)
 {
-    syntax.useLimit = true;
-    syntax.limitParameterType = SyntaxType::LimitParameterType::NotSet;
-    syntax.limit = limit;
+    syntax().useLimit = true;
+    syntax().limitParameterType = SyntaxType::LimitParameterType::NotSet;
+    syntax().limit = limit;
     return *this;
 }
 
 StatementUpdate& StatementUpdate::offset(const Expression& offset)
 {
-    syntax.useLimit = true;
-    syntax.limitParameterType = SyntaxType::LimitParameterType::Offset;
-    syntax.limitParameter = offset;
+    syntax().useLimit = true;
+    syntax().limitParameterType = SyntaxType::LimitParameterType::Offset;
+    syntax().limitParameter = offset;
     return *this;
 }
 

@@ -24,124 +24,124 @@ namespace WCDB {
 
 ForeignKey& ForeignKey::references(const String& table)
 {
-    syntax.foreignTable = table;
-    syntax.columns.clear();
+    syntax().foreignTable = table;
+    syntax().columns.clear();
     return *this;
 }
 
 ForeignKey& ForeignKey::references(const String& table, const Columns& columns)
 {
-    syntax.foreignTable = table;
-    syntax.columns = columns;
+    syntax().foreignTable = table;
+    syntax().columns = columns;
     return *this;
 }
 
 ForeignKey& ForeignKey::onDeleteSetNull()
 {
-    syntax.switchers.push_back(SyntaxType::Switch::OnDeleteSetNull);
+    syntax().switchers.push_back(SyntaxType::Switch::OnDeleteSetNull);
     return *this;
 }
 
 ForeignKey& ForeignKey::onDeleteSetDefault()
 {
-    syntax.switchers.push_back(SyntaxType::Switch::OnDeleteSetDefault);
+    syntax().switchers.push_back(SyntaxType::Switch::OnDeleteSetDefault);
     return *this;
 }
 
 ForeignKey& ForeignKey::onDeleteCascade()
 {
-    syntax.switchers.push_back(SyntaxType::Switch::OnDeleteCascade);
+    syntax().switchers.push_back(SyntaxType::Switch::OnDeleteCascade);
     return *this;
 }
 
 ForeignKey& ForeignKey::onDeleteRestrict()
 {
-    syntax.switchers.push_back(SyntaxType::Switch::OnDeleteRestrict);
+    syntax().switchers.push_back(SyntaxType::Switch::OnDeleteRestrict);
     return *this;
 }
 
 ForeignKey& ForeignKey::onDeleteNoAction()
 {
-    syntax.switchers.push_back(SyntaxType::Switch::OnDeleteNoAction);
+    syntax().switchers.push_back(SyntaxType::Switch::OnDeleteNoAction);
     return *this;
 }
 
 ForeignKey& ForeignKey::onUpdateSetNull()
 {
-    syntax.switchers.push_back(SyntaxType::Switch::OnUpdateSetNull);
+    syntax().switchers.push_back(SyntaxType::Switch::OnUpdateSetNull);
     return *this;
 }
 
 ForeignKey& ForeignKey::onUpdateSetDefault()
 {
-    syntax.switchers.push_back(SyntaxType::Switch::OnUpdateSetDefault);
+    syntax().switchers.push_back(SyntaxType::Switch::OnUpdateSetDefault);
     return *this;
 }
 
 ForeignKey& ForeignKey::onUpdateCascade()
 {
-    syntax.switchers.push_back(SyntaxType::Switch::OnUpdateCascade);
+    syntax().switchers.push_back(SyntaxType::Switch::OnUpdateCascade);
     return *this;
 }
 
 ForeignKey& ForeignKey::onUpdateRestrict()
 {
-    syntax.switchers.push_back(SyntaxType::Switch::OnUpdateRestrict);
+    syntax().switchers.push_back(SyntaxType::Switch::OnUpdateRestrict);
     return *this;
 }
 
 ForeignKey& ForeignKey::onUpdateNoAction()
 {
-    syntax.switchers.push_back(SyntaxType::Switch::OnUpdateNoAction);
+    syntax().switchers.push_back(SyntaxType::Switch::OnUpdateNoAction);
     return *this;
 }
 
 ForeignKey& ForeignKey::match(const String& name)
 {
-    syntax.switchers.push_back(SyntaxType::Switch::Match);
-    syntax.matchings.push_back(name);
+    syntax().switchers.push_back(SyntaxType::Switch::Match);
+    syntax().matchings.push_back(name);
     return *this;
 }
 
 ForeignKey& ForeignKey::deferrable()
 {
-    syntax.useDeferrable = true;
-    syntax.deferrable = SyntaxType::Deferrable::Deferrable;
+    syntax().useDeferrable = true;
+    syntax().deferrable = SyntaxType::Deferrable::Deferrable;
     return *this;
 }
 
 ForeignKey& ForeignKey::deferrableInitiallyDeferred()
 {
-    syntax.useDeferrable = true;
-    syntax.deferrable = SyntaxType::Deferrable::DeferrableInitiallyDeferred;
+    syntax().useDeferrable = true;
+    syntax().deferrable = SyntaxType::Deferrable::DeferrableInitiallyDeferred;
     return *this;
 }
 
 ForeignKey& ForeignKey::deferrableInitiallyImmediate()
 {
-    syntax.useDeferrable = true;
-    syntax.deferrable = SyntaxType::Deferrable::DeferrableInitiallyImmediate;
+    syntax().useDeferrable = true;
+    syntax().deferrable = SyntaxType::Deferrable::DeferrableInitiallyImmediate;
     return *this;
 }
 
 ForeignKey& ForeignKey::notDeferrable()
 {
-    syntax.useDeferrable = true;
-    syntax.deferrable = SyntaxType::Deferrable::NotDeferrable;
+    syntax().useDeferrable = true;
+    syntax().deferrable = SyntaxType::Deferrable::NotDeferrable;
     return *this;
 }
 
 ForeignKey& ForeignKey::notDeferrableInitiallyDeferred()
 {
-    syntax.useDeferrable = true;
-    syntax.deferrable = SyntaxType::Deferrable::NotDeferrableInitiallyDeferred;
+    syntax().useDeferrable = true;
+    syntax().deferrable = SyntaxType::Deferrable::NotDeferrableInitiallyDeferred;
     return *this;
 }
 
 ForeignKey& ForeignKey::notDeferrableInitiallyImmediate()
 {
-    syntax.useDeferrable = true;
-    syntax.deferrable = SyntaxType::Deferrable::NotDeferrableInitiallyImmediate;
+    syntax().useDeferrable = true;
+    syntax().deferrable = SyntaxType::Deferrable::NotDeferrableInitiallyImmediate;
     return *this;
 }
 

@@ -25,9 +25,9 @@
 
 namespace WCDB {
 
-class Filter : public SQLSyntax<Syntax::Filter> {
+class Filter : public TypedSyntax<Syntax::Filter, SQL> {
 public:
-    using SQLSyntax<Syntax::Filter>::SQLSyntax;
+    using TypedSyntax<Syntax::Filter, SQL>::TypedSyntax;
     Filter& where(const Expression& expression);
 };
 

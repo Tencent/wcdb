@@ -132,7 +132,7 @@ WCTBinding::generateVirtualCreateTableStatement(const WCDB::String &tableName) c
 
 WCDB::ColumnDef &WCTBinding::getColumnDef(const WCTProperty &property)
 {
-    auto iter = m_columnBindings.find(property.getColumnBinding().columnDef.syntax.column.getDescription());
+    auto iter = m_columnBindings.find(property.getColumnBinding().columnDef.syntax().column.getDescription());
     WCTInnerAssert(iter != m_columnBindings.end());
     return iter->second.columnDef;
 }

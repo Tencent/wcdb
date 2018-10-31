@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class StatementBegin : public StatementSyntax<Syntax::BeginSTMT> {
+class StatementBegin : public TypedSyntax<Syntax::BeginSTMT, Statement> {
 public:
     StatementBegin& beginDeferred();
     StatementBegin& beginImmediate();

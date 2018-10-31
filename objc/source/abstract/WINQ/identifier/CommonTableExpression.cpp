@@ -24,18 +24,18 @@ namespace WCDB {
 
 CommonTableExpression::CommonTableExpression(const String& table)
 {
-    syntax.table = table;
+    syntax().table = table;
 }
 
 CommonTableExpression& CommonTableExpression::columns(const Columns& columns)
 {
-    syntax.columns = columns;
+    syntax().columns = columns;
     return *this;
 }
 
 CommonTableExpression& CommonTableExpression::as(const StatementSelect& select)
 {
-    syntax.select = select;
+    syntax().select = select;
     return *this;
 }
 

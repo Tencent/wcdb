@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class ColumnConstraint : public SQLSyntax<Syntax::ColumnConstraint> {
+class ColumnConstraint : public TypedSyntax<Syntax::ColumnConstraint, SQL> {
 public:
     ColumnConstraint();
     explicit ColumnConstraint(const String& name);

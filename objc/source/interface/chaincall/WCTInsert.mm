@@ -76,7 +76,7 @@
 
     WCDB::Expressions e = WCDB::BindParameters();
 
-    if (_statement.syntax.columns.empty()) {
+    if (_statement.syntax().columns.empty()) {
         _statement
         .columns(properties)
         .values(WCDB::BindParameter::bindParameters(properties.size()));
@@ -92,7 +92,7 @@
         const WCTColumnBinding &columnBinding = property.getColumnBinding();
         bool isAutoIncrement = false;
         if (!_replace) {
-            for (const auto &constraint : columnBinding.columnDef.syntax.constraints) {
+            for (const auto &constraint : columnBinding.columnDef.syntax().constraints) {
                 if (constraint.switcher == WCDB::ColumnConstraint::SyntaxType::Switch::PrimaryKey) {
                     isAutoIncrement = constraint.autoIncrement;
                     break;
@@ -143,7 +143,7 @@
     BOOL committed = handle->runNestedTransaction([self, objects](WCDB::Handle *handle) -> bool {
         const WCTProperties &properties = _properties.empty() ? [objects[0].class allProperties] : _properties;
 
-        if (_statement.syntax.columns.empty()) {
+        if (_statement.syntax().columns.empty()) {
             _statement
             .columns(properties)
             .values(WCDB::BindParameter::bindParameters(properties.size()));

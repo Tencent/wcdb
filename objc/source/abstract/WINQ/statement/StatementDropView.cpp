@@ -24,19 +24,19 @@ namespace WCDB {
 
 StatementDropView& StatementDropView::dropView(const String& view)
 {
-    syntax.view = view;
+    syntax().view = view;
     return *this;
 }
 
 StatementDropView& StatementDropView::schema(const Schema& schema)
 {
-    syntax.schema = schema;
+    syntax().schema = schema;
     return *this;
 }
 
 StatementDropView& StatementDropView::ifExists()
 {
-    syntax.ifExists = true;
+    syntax().ifExists = true;
     return *this;
 }
 

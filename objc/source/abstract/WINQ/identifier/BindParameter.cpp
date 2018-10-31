@@ -24,14 +24,14 @@ namespace WCDB {
 
 BindParameter::BindParameter(int n)
 {
-    syntax.switcher = SyntaxType::Switch::QuestionSign;
-    syntax.n = n;
+    syntax().switcher = SyntaxType::Switch::QuestionSign;
+    syntax().n = n;
 }
 
 BindParameter::BindParameter(const String& name)
 {
-    syntax.switcher = SyntaxType::Switch::QuestionSign;
-    syntax.name = name;
+    syntax().switcher = SyntaxType::Switch::QuestionSign;
+    syntax().name = name;
 }
 
 BindParameters BindParameter::bindParameters(size_t count)
@@ -62,8 +62,8 @@ BindParameter
 BindParameter::bindParameter(const String& name, const SyntaxType::Switch& switcher)
 {
     BindParameter bindParameter;
-    bindParameter.syntax.switcher = switcher;
-    bindParameter.syntax.name = name;
+    bindParameter.syntax().switcher = switcher;
+    bindParameter.syntax().name = name;
     return bindParameter;
 }
 

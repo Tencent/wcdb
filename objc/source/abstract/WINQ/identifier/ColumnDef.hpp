@@ -25,9 +25,9 @@
 
 namespace WCDB {
 
-class ColumnDef : public SQLSyntax<Syntax::ColumnDef> {
+class ColumnDef : public TypedSyntax<Syntax::ColumnDef, SQL> {
 public:
-    using SQLSyntax<Syntax::ColumnDef>::SQLSyntax;
+    using TypedSyntax<Syntax::ColumnDef, SQL>::TypedSyntax;
     ColumnDef(const Column& column);
     ColumnDef(const Column& column, const ColumnType& type);
 

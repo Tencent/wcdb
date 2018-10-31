@@ -24,13 +24,13 @@ namespace WCDB {
 
 StatementAttach& StatementAttach::attach(const Expression& expression)
 {
-    syntax.expression = expression;
+    syntax().expression = expression;
     return *this;
 }
 
 StatementAttach& StatementAttach::as(const Schema& schema)
 {
-    syntax.schema = schema;
+    syntax().schema = schema;
     return *this;
 }
 

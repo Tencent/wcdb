@@ -25,9 +25,9 @@
 
 namespace WCDB {
 
-class CommonTableExpression : public SQLSyntax<Syntax::CommonTableExpression> {
+class CommonTableExpression : public TypedSyntax<Syntax::CommonTableExpression, SQL> {
 public:
-    using SQLSyntax<Syntax::CommonTableExpression>::SQLSyntax;
+    using TypedSyntax<Syntax::CommonTableExpression, SQL>::TypedSyntax;
     explicit CommonTableExpression(const String& table);
     CommonTableExpression& columns(const Columns& columns);
     CommonTableExpression& as(const StatementSelect& select);

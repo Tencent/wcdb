@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class With : public SQLSyntax<Syntax::WithClause> {
+class With : public TypedSyntax<Syntax::WithClause, SQL> {
 public:
     With& table(const CTETable& table);
     With& as(const StatementSelect& select);

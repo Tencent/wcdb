@@ -24,46 +24,46 @@ namespace WCDB {
 
 WindowFunctionInvocation::WindowFunctionInvocation(const String& name)
 {
-    syntax.name = name;
+    syntax().name = name;
 }
 
 WindowFunctionInvocation& WindowFunctionInvocation::invoke(const Expressions& expressions)
 {
-    syntax.expressions = expressions;
-    syntax.wildcard = false;
+    syntax().expressions = expressions;
+    syntax().wildcard = false;
     return *this;
 }
 
 WindowFunctionInvocation& WindowFunctionInvocation::invoke()
 {
-    syntax.expressions.clear();
-    syntax.wildcard = false;
+    syntax().expressions.clear();
+    syntax().wildcard = false;
     return *this;
 }
 
 WindowFunctionInvocation& WindowFunctionInvocation::invokeAll()
 {
-    syntax.wildcard = true;
+    syntax().wildcard = true;
     return *this;
 }
 
 WindowFunctionInvocation& WindowFunctionInvocation::filter(const Filter& filter)
 {
-    syntax.useFilter = true;
-    syntax.filter = filter;
+    syntax().useFilter = true;
+    syntax().filter = filter;
     return *this;
 }
 
 WindowFunctionInvocation& WindowFunctionInvocation::over(const WindowDef& windowDef)
 {
-    syntax.window.clear();
-    syntax.windowDef = windowDef;
+    syntax().window.clear();
+    syntax().windowDef = windowDef;
     return *this;
 }
 
 WindowFunctionInvocation& WindowFunctionInvocation::over(const String& window)
 {
-    syntax.window = window;
+    syntax().window = window;
     return *this;
 }
 

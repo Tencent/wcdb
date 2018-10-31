@@ -26,9 +26,9 @@
 namespace WCDB {
 
 // BLOB is not supported since it may cause string truncation. Ones should use BindParameter instead.
-class LiteralValue : public SQLSyntax<Syntax::LiteralValue> {
+class LiteralValue : public TypedSyntax<Syntax::LiteralValue, SQL> {
 public:
-    using SQLSyntax<Syntax::LiteralValue>::SQLSyntax;
+    using TypedSyntax<Syntax::LiteralValue, SQL>::TypedSyntax;
 
     template<typename T, typename Enable = typename std::enable_if<LiteralValueConvertible<T>::value>::type>
     LiteralValue(const T& t)

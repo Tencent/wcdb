@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class StatementDetach : public StatementSyntax<Syntax::DetachSTMT> {
+class StatementDetach : public TypedSyntax<Syntax::DetachSTMT, Statement> {
 public:
     StatementDetach& detach(const Schema& schema);
 };

@@ -24,44 +24,44 @@ namespace WCDB {
 
 StatementCreateIndex& StatementCreateIndex::createIndex(const String& index)
 {
-    syntax.index = index;
+    syntax().index = index;
     return *this;
 }
 
 StatementCreateIndex& StatementCreateIndex::schema(const Schema& schema)
 {
-    syntax.schema = schema;
+    syntax().schema = schema;
     return *this;
 }
 
 StatementCreateIndex& StatementCreateIndex::unique()
 {
-    syntax.unique = true;
+    syntax().unique = true;
     return *this;
 }
 
 StatementCreateIndex& StatementCreateIndex::ifNotExists()
 {
-    syntax.ifNotExists = true;
+    syntax().ifNotExists = true;
     return *this;
 }
 
 StatementCreateIndex& StatementCreateIndex::onTable(const String& table)
 {
-    syntax.table = table;
+    syntax().table = table;
     return *this;
 }
 
 StatementCreateIndex& StatementCreateIndex::indexed(const IndexedColumns& indexedColumns)
 {
-    syntax.indexedColumns = indexedColumns;
+    syntax().indexedColumns = indexedColumns;
     return *this;
 }
 
 StatementCreateIndex& StatementCreateIndex::where(const Expression& condition)
 {
-    syntax.useCondition = true;
-    syntax.condition = condition;
+    syntax().useCondition = true;
+    syntax().condition = condition;
     return *this;
 }
 

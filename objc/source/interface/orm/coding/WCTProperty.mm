@@ -35,7 +35,7 @@ WCTProperty::WCTProperty(const WCTColumnBinding& columnBinding)
 : WCDB::Column()
 , WCTColumnBindingHolder(columnBinding)
 {
-    syntax = columnBinding.columnDef.syntax.column;
+    syntax() = columnBinding.columnDef.syntax().column;
 }
 
 WCTProperty::WCTProperty(const WCDB::Column& column, const WCTColumnBinding& columnBinding)

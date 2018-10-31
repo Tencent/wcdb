@@ -24,40 +24,40 @@ namespace WCDB {
 
 StatementAlterTable& StatementAlterTable::alterTable(const String& table)
 {
-    syntax.table = table;
+    syntax().table = table;
     return *this;
 }
 
 StatementAlterTable& StatementAlterTable::schema(const Schema& schema)
 {
-    syntax.schema = schema;
+    syntax().schema = schema;
     return *this;
 }
 
 StatementAlterTable& StatementAlterTable::renameToTable(const String& newTable)
 {
-    syntax.switcher = Syntax::AlterTableSTMT::Switch::RenameTable;
-    syntax.newTable = newTable;
+    syntax().switcher = Syntax::AlterTableSTMT::Switch::RenameTable;
+    syntax().newTable = newTable;
     return *this;
 }
 
 StatementAlterTable& StatementAlterTable::renameColumn(const Column& oldColumn)
 {
-    syntax.switcher = Syntax::AlterTableSTMT::Switch::RenameColumn;
-    syntax.column = oldColumn;
+    syntax().switcher = Syntax::AlterTableSTMT::Switch::RenameColumn;
+    syntax().column = oldColumn;
     return *this;
 }
 
 StatementAlterTable& StatementAlterTable::toColumn(const Column& newColumn)
 {
-    syntax.newColumn = newColumn;
+    syntax().newColumn = newColumn;
     return *this;
 }
 
 StatementAlterTable& StatementAlterTable::addColumn(const ColumnDef& columnDef)
 {
-    syntax.switcher = Syntax::AlterTableSTMT::Switch::AddColumn;
-    syntax.columnDef = columnDef;
+    syntax().switcher = Syntax::AlterTableSTMT::Switch::AddColumn;
+    syntax().columnDef = columnDef;
     return *this;
 }
 

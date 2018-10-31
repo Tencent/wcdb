@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class StatementDropTrigger : public StatementSyntax<Syntax::DropTriggerSTMT> {
+class StatementDropTrigger : public TypedSyntax<Syntax::DropTriggerSTMT, Statement> {
 public:
     StatementDropTrigger& dropTrigger(const String& trigger);
     StatementDropTrigger& schema(const Schema& schema);

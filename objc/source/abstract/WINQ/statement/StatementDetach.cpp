@@ -24,7 +24,7 @@ namespace WCDB {
 
 StatementDetach& StatementDetach::detach(const Schema& schema)
 {
-    syntax.schema = schema;
+    syntax().schema = schema;
     return *this;
 }
 

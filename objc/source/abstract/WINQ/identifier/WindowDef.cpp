@@ -24,20 +24,20 @@ namespace WCDB {
 
 WindowDef& WindowDef::partition(const Expressions& expressions)
 {
-    syntax.expressions = expressions;
+    syntax().expressions = expressions;
     return *this;
 }
 
 WindowDef& WindowDef::order(const OrderingTerms& orders)
 {
-    syntax.orderingTerms = orders;
+    syntax().orderingTerms = orders;
     return *this;
 }
 
 WindowDef& WindowDef::framespec(const FrameSpec& framespec)
 {
-    syntax.useFrameSpec = true;
-    syntax.frameSpec = framespec;
+    syntax().useFrameSpec = true;
+    syntax().frameSpec = framespec;
     return *this;
 }
 

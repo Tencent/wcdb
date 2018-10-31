@@ -24,19 +24,19 @@ namespace WCDB {
 
 StatementDropTable& StatementDropTable::dropTable(const String& table)
 {
-    syntax.table = table;
+    syntax().table = table;
     return *this;
 }
 
 StatementDropTable& StatementDropTable::schema(const Schema& schema)
 {
-    syntax.schema = schema;
+    syntax().schema = schema;
     return *this;
 }
 
 StatementDropTable& StatementDropTable::ifExists()
 {
-    syntax.ifExists = true;
+    syntax().ifExists = true;
     return *this;
 }
 

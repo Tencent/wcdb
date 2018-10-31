@@ -25,10 +25,10 @@
 
 namespace WCDB {
 
-class Pragma : public SQLSyntax<Syntax::Pragma> {
+class Pragma : public TypedSyntax<Syntax::Pragma, SQL> {
 #pragma mark - Initializer
 public:
-    using SQLSyntax<Syntax::Pragma>::SQLSyntax;
+    using TypedSyntax<Syntax::Pragma, SQL>::TypedSyntax;
 
     template<typename T, typename Enable = typename std::enable_if<ColumnIsTextType<T>::value>::type>
     Pragma(const T& t) : Pragma(ColumnIsTextType<T>::asUnderlyingType(t))

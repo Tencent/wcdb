@@ -24,13 +24,13 @@ namespace WCDB {
 
 StatementSelect& StatementSelect::with(const CommonTableExpressions& commonTableExpressions)
 {
-    syntax.commonTableExpressions = commonTableExpressions;
+    syntax().commonTableExpressions = commonTableExpressions;
     return *this;
 }
 
 StatementSelect& StatementSelect::recursive()
 {
-    syntax.recursive = true;
+    syntax().recursive = true;
     return *this;
 }
 
@@ -109,68 +109,68 @@ StatementSelect& StatementSelect::values(const Expressions& expressions)
 
 StatementSelect& StatementSelect::union_()
 {
-    syntax.compoundOperators.push_back(Syntax::CompoundOperator::Union);
-    syntax.cores.push_back({});
+    syntax().compoundOperators.push_back(Syntax::CompoundOperator::Union);
+    syntax().cores.push_back({});
     return *this;
 }
 
 StatementSelect& StatementSelect::unionAll()
 {
-    syntax.compoundOperators.push_back(Syntax::CompoundOperator::UnionAll);
-    syntax.cores.push_back({});
+    syntax().compoundOperators.push_back(Syntax::CompoundOperator::UnionAll);
+    syntax().cores.push_back({});
     return *this;
 }
 
 StatementSelect& StatementSelect::intersect()
 {
-    syntax.compoundOperators.push_back(Syntax::CompoundOperator::Intersect);
-    syntax.cores.push_back({});
+    syntax().compoundOperators.push_back(Syntax::CompoundOperator::Intersect);
+    syntax().cores.push_back({});
     return *this;
 }
 
 StatementSelect& StatementSelect::except()
 {
-    syntax.compoundOperators.push_back(Syntax::CompoundOperator::Except);
-    syntax.cores.push_back({});
+    syntax().compoundOperators.push_back(Syntax::CompoundOperator::Except);
+    syntax().cores.push_back({});
     return *this;
 }
 
 StatementSelect& StatementSelect::order(const OrderingTerms& orders)
 {
-    syntax.orderingTerms = orders;
+    syntax().orderingTerms = orders;
     return *this;
 }
 
 StatementSelect& StatementSelect::limit(const Expression& from, const Expression& to)
 {
-    syntax.useLimit = true;
-    syntax.limitParameterType = SyntaxType::LimitParameterType::End;
-    syntax.limit = from;
-    syntax.limitParameter = to;
+    syntax().useLimit = true;
+    syntax().limitParameterType = SyntaxType::LimitParameterType::End;
+    syntax().limit = from;
+    syntax().limitParameter = to;
     return *this;
 }
 
 StatementSelect& StatementSelect::limit(const Expression& limit)
 {
-    syntax.useLimit = true;
-    syntax.limitParameterType = SyntaxType::LimitParameterType::NotSet;
-    syntax.limit = limit;
+    syntax().useLimit = true;
+    syntax().limitParameterType = SyntaxType::LimitParameterType::NotSet;
+    syntax().limit = limit;
     return *this;
 }
 
 StatementSelect& StatementSelect::offset(const Expression& offset)
 {
-    syntax.limitParameterType = SyntaxType::LimitParameterType::Offset;
-    syntax.limitParameter = offset;
+    syntax().limitParameterType = SyntaxType::LimitParameterType::Offset;
+    syntax().limitParameter = offset;
     return *this;
 }
 
 Syntax::SelectCore& StatementSelect::currentCore()
 {
-    if (syntax.cores.empty()) {
-        return syntax.select;
+    if (syntax().cores.empty()) {
+        return syntax().select;
     } else {
-        return syntax.cores.back();
+        return syntax().cores.back();
     }
 }
 

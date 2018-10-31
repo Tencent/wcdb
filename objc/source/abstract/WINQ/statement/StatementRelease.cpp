@@ -24,7 +24,7 @@ namespace WCDB {
 
 StatementRelease& StatementRelease::release(const String& savepoint)
 {
-    syntax.savepoint = savepoint;
+    syntax().savepoint = savepoint;
     return *this;
 }
 

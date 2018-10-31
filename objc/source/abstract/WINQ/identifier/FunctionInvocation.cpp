@@ -24,32 +24,32 @@ namespace WCDB {
 
 FunctionInvocation::FunctionInvocation(const String& name)
 {
-    syntax.name = name;
+    syntax().name = name;
 }
 
 FunctionInvocation& FunctionInvocation::distinct()
 {
-    syntax.distinct = true;
+    syntax().distinct = true;
     return *this;
 }
 
 FunctionInvocation& FunctionInvocation::invoke(const Expressions& expressions)
 {
-    syntax.expressions = expressions;
-    syntax.wildcard = false;
+    syntax().expressions = expressions;
+    syntax().wildcard = false;
     return *this;
 }
 
 FunctionInvocation& FunctionInvocation::invoke()
 {
-    syntax.expressions.clear();
-    syntax.wildcard = false;
+    syntax().expressions.clear();
+    syntax().wildcard = false;
     return *this;
 }
 
 FunctionInvocation& FunctionInvocation::invokeAll()
 {
-    syntax.wildcard = true;
+    syntax().wildcard = true;
     return *this;
 }
 

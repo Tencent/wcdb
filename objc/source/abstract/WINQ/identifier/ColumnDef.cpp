@@ -24,19 +24,19 @@ namespace WCDB {
 
 ColumnDef::ColumnDef(const Column& column)
 {
-    syntax.column = column;
+    syntax().column = column;
 }
 
 ColumnDef::ColumnDef(const Column& column, const ColumnType& type)
 {
-    syntax.column = column;
-    syntax.typed = true;
-    syntax.columnType = type;
+    syntax().column = column;
+    syntax().typed = true;
+    syntax().columnType = type;
 }
 
 ColumnDef& ColumnDef::constraint(const ColumnConstraints& constraints)
 {
-    syntax.constraints = constraints;
+    syntax().constraints = constraints;
     return *this;
 }
 

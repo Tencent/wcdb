@@ -28,43 +28,43 @@ TableConstraint::TableConstraint()
 
 TableConstraint::TableConstraint(const String& name)
 {
-    syntax.name = name;
+    syntax().name = name;
 }
 
 TableConstraint& TableConstraint::primaryKey(const IndexedColumns& indexedColumns)
 {
-    syntax.switcher = SyntaxType::Switch::PrimaryKey;
-    syntax.indexedColumns = indexedColumns;
+    syntax().switcher = SyntaxType::Switch::PrimaryKey;
+    syntax().indexedColumns = indexedColumns;
     return *this;
 }
 
 TableConstraint& TableConstraint::unique(const IndexedColumns& indexedColumns)
 {
-    syntax.switcher = SyntaxType::Switch::Unique;
-    syntax.indexedColumns = indexedColumns;
+    syntax().switcher = SyntaxType::Switch::Unique;
+    syntax().indexedColumns = indexedColumns;
     return *this;
 }
 
 TableConstraint& TableConstraint::conflict(const Conflict& conflict)
 {
-    syntax.useConflict = true;
-    syntax.conflict = conflict;
+    syntax().useConflict = true;
+    syntax().conflict = conflict;
     return *this;
 }
 
 TableConstraint& TableConstraint::check(const Expression& condition)
 {
-    syntax.switcher = SyntaxType::Switch::Check;
-    syntax.expression = condition;
+    syntax().switcher = SyntaxType::Switch::Check;
+    syntax().expression = condition;
     return *this;
 }
 
 TableConstraint&
 TableConstraint::foreignKey(const Columns& columns, const ForeignKey& foreignKey)
 {
-    syntax.switcher = SyntaxType::Switch::ForeignKey;
-    syntax.columns = columns;
-    syntax.foreignKeyClause = foreignKey;
+    syntax().switcher = SyntaxType::Switch::ForeignKey;
+    syntax().columns = columns;
+    syntax().foreignKeyClause = foreignKey;
     return *this;
 }
 

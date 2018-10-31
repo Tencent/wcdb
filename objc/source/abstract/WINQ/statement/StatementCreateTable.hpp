@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class StatementCreateTable : public StatementSyntax<Syntax::CreateTableSTMT> {
+class StatementCreateTable : public TypedSyntax<Syntax::CreateTableSTMT, Statement> {
 public:
     StatementCreateTable& createTable(const String& table);
     StatementCreateTable& schema(const Schema& schema);

@@ -24,37 +24,37 @@ namespace WCDB {
 
 StatementCreateView& StatementCreateView::createView(const String& view)
 {
-    syntax.view = view;
+    syntax().view = view;
     return *this;
 }
 
 StatementCreateView& StatementCreateView::schema(const Schema& schema)
 {
-    syntax.schema = schema;
+    syntax().schema = schema;
     return *this;
 }
 
 StatementCreateView& StatementCreateView::temp()
 {
-    syntax.temp = true;
+    syntax().temp = true;
     return *this;
 }
 
 StatementCreateView& StatementCreateView::ifNotExists()
 {
-    syntax.ifNotExists = true;
+    syntax().ifNotExists = true;
     return *this;
 }
 
 StatementCreateView& StatementCreateView::columns(const Columns& columns)
 {
-    syntax.columns = columns;
+    syntax().columns = columns;
     return *this;
 }
 
 StatementCreateView& StatementCreateView::as(const StatementSelect& select)
 {
-    syntax.select = select;
+    syntax().select = select;
     return *this;
 }
 

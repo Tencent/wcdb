@@ -29,22 +29,22 @@ StatementAnalyze& StatementAnalyze::analyze()
 
 StatementAnalyze& StatementAnalyze::schema(const Schema& schema)
 {
-    syntax.useSchema = true;
-    syntax.schema = schema;
+    syntax().useSchema = true;
+    syntax().schema = schema;
     return *this;
 }
 
 StatementAnalyze& StatementAnalyze::table(const String& table)
 {
-    syntax.useSchema = true;
-    syntax.tableOrIndex = table;
+    syntax().useSchema = true;
+    syntax().tableOrIndex = table;
     return *this;
 }
 
 StatementAnalyze& StatementAnalyze::index(const String& index)
 {
-    syntax.useSchema = true;
-    syntax.tableOrIndex = index;
+    syntax().useSchema = true;
+    syntax().tableOrIndex = index;
     return *this;
 }
 

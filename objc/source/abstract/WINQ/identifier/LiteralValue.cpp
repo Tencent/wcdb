@@ -24,51 +24,51 @@ namespace WCDB {
 
 LiteralValue::LiteralValue(int32_t value)
 {
-    syntax.switcher = SyntaxType::Switch::Integer;
-    syntax.integerValue = value;
+    syntax().switcher = SyntaxType::Switch::Integer;
+    syntax().integerValue = value;
 }
 
 LiteralValue::LiteralValue(int64_t value)
 {
-    syntax.switcher = SyntaxType::Switch::Integer;
-    syntax.integerValue = value;
+    syntax().switcher = SyntaxType::Switch::Integer;
+    syntax().integerValue = value;
 }
 
 LiteralValue::LiteralValue(double value)
 {
-    syntax.switcher = SyntaxType::Switch::Float;
-    syntax.floatValue = value;
+    syntax().switcher = SyntaxType::Switch::Float;
+    syntax().floatValue = value;
 }
 
 LiteralValue::LiteralValue(std::nullptr_t)
 {
-    syntax.switcher = SyntaxType::Switch::Null;
+    syntax().switcher = SyntaxType::Switch::Null;
 }
 
 LiteralValue::LiteralValue(const char* value)
 {
-    syntax.switcher = SyntaxType::Switch::String;
-    syntax.stringValue = value;
+    syntax().switcher = SyntaxType::Switch::String;
+    syntax().stringValue = value;
 }
 
 LiteralValue LiteralValue::currentTime()
 {
     LiteralValue value;
-    value.syntax.switcher = SyntaxType::Switch::CurrentTime;
+    value.syntax().switcher = SyntaxType::Switch::CurrentTime;
     return value;
 }
 
 LiteralValue LiteralValue::currentDate()
 {
     LiteralValue value;
-    value.syntax.switcher = SyntaxType::Switch::CurrentDate;
+    value.syntax().switcher = SyntaxType::Switch::CurrentDate;
     return value;
 }
 
 LiteralValue LiteralValue::currentTimestamp()
 {
     LiteralValue value;
-    value.syntax.switcher = SyntaxType::Switch::CurrentTimestamp;
+    value.syntax().switcher = SyntaxType::Switch::CurrentTimestamp;
     return value;
 }
 

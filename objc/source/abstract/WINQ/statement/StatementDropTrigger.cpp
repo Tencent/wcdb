@@ -24,19 +24,19 @@ namespace WCDB {
 
 StatementDropTrigger& StatementDropTrigger::dropTrigger(const String& trigger)
 {
-    syntax.trigger = trigger;
+    syntax().trigger = trigger;
     return *this;
 }
 
 StatementDropTrigger& StatementDropTrigger::schema(const Schema& schema)
 {
-    syntax.schema = schema;
+    syntax().schema = schema;
     return *this;
 }
 
 StatementDropTrigger& StatementDropTrigger::ifExists()
 {
-    syntax.ifExists = true;
+    syntax().ifExists = true;
     return *this;
 }
 

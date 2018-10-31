@@ -29,45 +29,45 @@ Upsert& Upsert::conflict()
 
 Upsert& Upsert::conflict(const IndexedColumns& indexedColumns)
 {
-    syntax.indexedColumns = indexedColumns;
+    syntax().indexedColumns = indexedColumns;
     return *this;
 }
 
 Upsert& Upsert::where(const Expression& condition)
 {
-    if (syntax.columnsList.empty()) {
-        syntax.useCondition = true;
-        syntax.condition = condition;
+    if (syntax().columnsList.empty()) {
+        syntax().useCondition = true;
+        syntax().condition = condition;
     } else {
-        syntax.useUpdateCondition = true;
-        syntax.updateCondition = condition;
+        syntax().useUpdateCondition = true;
+        syntax().updateCondition = condition;
     }
     return *this;
 }
 
 Upsert& Upsert::doNothing()
 {
-    syntax.columnsList.clear();
-    syntax.expressions.clear();
+    syntax().columnsList.clear();
+    syntax().expressions.clear();
     return *this;
 }
 
 Upsert& Upsert::doUpdate()
 {
-    syntax.columnsList.clear();
-    syntax.expressions.clear();
+    syntax().columnsList.clear();
+    syntax().expressions.clear();
     return *this;
 }
 
 Upsert& Upsert::set(const Columns& columns)
 {
-    syntax.columnsList.push_back(columns);
+    syntax().columnsList.push_back(columns);
     return *this;
 }
 
 Upsert& Upsert::to(const Expression& value)
 {
-    syntax.expressions.push_back(value);
+    syntax().expressions.push_back(value);
     return *this;
 }
 

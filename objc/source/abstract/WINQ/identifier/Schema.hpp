@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class Schema : public SQLSyntax<Syntax::Schema> {
+class Schema : public TypedSyntax<Syntax::Schema, SQL> {
 public:
     Schema();
 

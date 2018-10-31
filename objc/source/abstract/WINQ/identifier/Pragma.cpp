@@ -24,7 +24,7 @@ namespace WCDB {
 
 Pragma::Pragma(const char* name)
 {
-    syntax.name = name;
+    syntax().name = name;
 }
 
 Pragma Pragma::applicationId()

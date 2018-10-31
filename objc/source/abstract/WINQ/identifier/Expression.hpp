@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class Expression : public SQLSyntax<Syntax::Expression>,
+class Expression : public TypedSyntax<Syntax::Expression, SQL>,
                    public ExpressionUnaryOperable,
                    public ExpressionBinaryOperable,
                    public ExpressionInOperable,
@@ -38,7 +38,7 @@ class Expression : public SQLSyntax<Syntax::Expression>,
                    public AggregateFunctionOperable,
                    public FTS3FunctionOperable {
 public:
-    using SQLSyntax<Syntax::Expression>::SQLSyntax;
+    using TypedSyntax<Syntax::Expression, SQL>::TypedSyntax;
 
     template<typename T, typename Enable = typename std::enable_if<ExpressionConvertible<T>::value>::type>
     Expression(const T& t)

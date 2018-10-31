@@ -24,12 +24,12 @@ namespace WCDB {
 
 CTETable::CTETable(const char* name)
 {
-    syntax.name = name;
+    syntax().name = name;
 }
 
 CTETable& CTETable::columns(const Columns& columns)
 {
-    syntax.columns = columns;
+    syntax().columns = columns;
     return *this;
 }
 

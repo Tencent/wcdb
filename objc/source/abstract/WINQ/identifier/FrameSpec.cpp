@@ -24,103 +24,103 @@ namespace WCDB {
 
 FrameSpec& FrameSpec::range()
 {
-    syntax.switcher = SyntaxType::Switch::Range;
+    syntax().switcher = SyntaxType::Switch::Range;
     return *this;
 }
 
 FrameSpec& FrameSpec::rows()
 {
-    syntax.switcher = SyntaxType::Switch::Rows;
+    syntax().switcher = SyntaxType::Switch::Rows;
     return *this;
 }
 
 FrameSpec& FrameSpec::unboundedPreceding()
 {
-    syntax.between = false;
-    syntax.firstEvent = SyntaxType::FirstEvent::UnboundedPreceding;
+    syntax().between = false;
+    syntax().firstEvent = SyntaxType::FirstEvent::UnboundedPreceding;
     return *this;
 }
 
 FrameSpec& FrameSpec::preceding(const Expression& expression)
 {
-    syntax.between = false;
-    syntax.firstEvent = SyntaxType::FirstEvent::Preceding;
-    syntax.expression1 = expression;
+    syntax().between = false;
+    syntax().firstEvent = SyntaxType::FirstEvent::Preceding;
+    syntax().expression1 = expression;
     return *this;
 }
 
 FrameSpec& FrameSpec::currentRow()
 {
-    syntax.between = false;
-    syntax.firstEvent = SyntaxType::FirstEvent::CurrentRow;
+    syntax().between = false;
+    syntax().firstEvent = SyntaxType::FirstEvent::CurrentRow;
     return *this;
 }
 
 FrameSpec& FrameSpec::following(const Expression& expression)
 {
-    syntax.between = false;
-    syntax.firstEvent = SyntaxType::FirstEvent::Following;
-    syntax.expression1 = expression;
+    syntax().between = false;
+    syntax().firstEvent = SyntaxType::FirstEvent::Following;
+    syntax().expression1 = expression;
     return *this;
 }
 
 FrameSpec& FrameSpec::betweenUnboundedPreceding()
 {
-    syntax.between = true;
-    syntax.firstEvent = SyntaxType::FirstEvent::UnboundedPreceding;
+    syntax().between = true;
+    syntax().firstEvent = SyntaxType::FirstEvent::UnboundedPreceding;
     return *this;
 }
 
 FrameSpec& FrameSpec::betweenPreceding(const Expression& expression)
 {
-    syntax.between = true;
-    syntax.firstEvent = SyntaxType::FirstEvent::Preceding;
-    syntax.expression1 = expression;
+    syntax().between = true;
+    syntax().firstEvent = SyntaxType::FirstEvent::Preceding;
+    syntax().expression1 = expression;
     return *this;
 }
 
 FrameSpec& FrameSpec::betweenCurrentRow()
 {
-    syntax.between = true;
-    syntax.firstEvent = SyntaxType::FirstEvent::CurrentRow;
+    syntax().between = true;
+    syntax().firstEvent = SyntaxType::FirstEvent::CurrentRow;
     return *this;
 }
 
 FrameSpec& FrameSpec::betweenFollowing(const Expression& expression)
 {
-    syntax.between = true;
-    syntax.firstEvent = SyntaxType::FirstEvent::Following;
-    syntax.expression1 = expression;
+    syntax().between = true;
+    syntax().firstEvent = SyntaxType::FirstEvent::Following;
+    syntax().expression1 = expression;
     return *this;
 }
 
 FrameSpec& FrameSpec::andPreceding(const Expression& expression)
 {
-    syntax.between = true;
-    syntax.secondEvent = SyntaxType::SecondEvent::Preceding;
-    syntax.expression2 = expression;
+    syntax().between = true;
+    syntax().secondEvent = SyntaxType::SecondEvent::Preceding;
+    syntax().expression2 = expression;
     return *this;
 }
 
 FrameSpec& FrameSpec::andCurrentRow()
 {
-    syntax.between = true;
-    syntax.secondEvent = SyntaxType::SecondEvent::CurrentRow;
+    syntax().between = true;
+    syntax().secondEvent = SyntaxType::SecondEvent::CurrentRow;
     return *this;
 }
 
 FrameSpec& FrameSpec::andFollowing(const Expression& expression)
 {
-    syntax.between = true;
-    syntax.secondEvent = SyntaxType::SecondEvent::Following;
-    syntax.expression2 = expression;
+    syntax().between = true;
+    syntax().secondEvent = SyntaxType::SecondEvent::Following;
+    syntax().expression2 = expression;
     return *this;
 }
 
 FrameSpec& FrameSpec::andUnboundedFollowing()
 {
-    syntax.between = true;
-    syntax.secondEvent = SyntaxType::SecondEvent::UnboundedFollowing;
+    syntax().between = true;
+    syntax().secondEvent = SyntaxType::SecondEvent::UnboundedFollowing;
     return *this;
 }
 } // namespace WCDB

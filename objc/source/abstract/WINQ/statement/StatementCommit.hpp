@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class StatementCommit : public StatementSyntax<Syntax::CommitSTMT> {
+class StatementCommit : public TypedSyntax<Syntax::CommitSTMT, Statement> {
 public:
     StatementCommit& commit();
 };

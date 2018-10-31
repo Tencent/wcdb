@@ -25,32 +25,32 @@ namespace WCDB {
 StatementCreateVirtualTable&
 StatementCreateVirtualTable::createVirtualTable(const String& table)
 {
-    syntax.table = table;
+    syntax().table = table;
     return *this;
 }
 
 StatementCreateVirtualTable& StatementCreateVirtualTable::schema(const Schema& schema)
 {
-    syntax.schema = schema;
+    syntax().schema = schema;
     return *this;
 }
 
 StatementCreateVirtualTable& StatementCreateVirtualTable::ifNotExists()
 {
-    syntax.ifNotExists = true;
+    syntax().ifNotExists = true;
     return *this;
 }
 
 StatementCreateVirtualTable& StatementCreateVirtualTable::usingModule(const String& module)
 {
-    syntax.module = module;
+    syntax().module = module;
     return *this;
 }
 
 StatementCreateVirtualTable&
 StatementCreateVirtualTable::arguments(const ModuleArguments& arguments)
 {
-    syntax.moduleArguments = arguments;
+    syntax().moduleArguments = arguments;
     return *this;
 }
 

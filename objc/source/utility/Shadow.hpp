@@ -25,39 +25,49 @@
 
 namespace WCDB {
 
-template<typename RealType>
+template<typename T>
 class Shadow;
 
-template<typename BaseType>
-class Shadow : public std::unique_ptr<BaseType> {
+template<typename T>
+class Cloneable {
 public:
-    using std::unique_ptr<BaseType>::unique_ptr;
+    virtual T* clone() const = 0;
+};
 
-    Shadow(BaseType* value) : std::unique_ptr<BaseType>(value) {}
+template<typename T>
+class Shadow : public std::unique_ptr<T> {
+public:
+    //    static_assert(std::is_base_of<Cloneable<T>, T>::value, "");
+    using std::unique_ptr<T>::unique_ptr;
 
-    Shadow(const BaseType& value)
-    : std::unique_ptr<BaseType>(new BaseType(value))
+    Shadow(const T& value) { value.clone(*this); }
+
+    Shadow& operator=(const T& value)
     {
-    }
-
-    Shadow& operator=(const BaseType& value)
-    {
-        this->reset(new BaseType(value));
+        this->reset(static_cast<T*>(value.clone()));
         return *this;
     }
 
-    Shadow(const Shadow<BaseType>& shadow)
-    : std::unique_ptr<BaseType>(shadow.get() != nullptr ? new BaseType(*shadow.get()) : nullptr)
+    Shadow(const Shadow<T>& other)
     {
+        if (other.get() != nullptr) {
+            this->reset(static_cast<T*>(other->clone()));
+        } else {
+            this->reset(nullptr);
+        }
     }
 
-    Shadow& operator=(const Shadow<BaseType>& shadow)
+    Shadow& operator=(const Shadow<T>& other)
     {
-        this->reset(shadow.get() != nullptr ? new BaseType(*shadow.get()) : nullptr);
+        if (other.get() != nullptr) {
+            this->reset(static_cast<T*>(other->clone()));
+        } else {
+            this->reset(nullptr);
+        }
         return *this;
     }
 
-    constexpr BaseType* operator->() const { return this->get(); }
+    constexpr T* operator->() const { return this->get(); }
 };
 
 } // namespace WCDB

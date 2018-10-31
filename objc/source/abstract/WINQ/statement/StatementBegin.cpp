@@ -24,19 +24,19 @@ namespace WCDB {
 
 StatementBegin& StatementBegin::beginDeferred()
 {
-    syntax.transaction = Syntax::BeginSTMT::Transaction::Deferred;
+    syntax().transaction = Syntax::BeginSTMT::Transaction::Deferred;
     return *this;
 }
 
 StatementBegin& StatementBegin::beginImmediate()
 {
-    syntax.transaction = Syntax::BeginSTMT::Transaction::Immediate;
+    syntax().transaction = Syntax::BeginSTMT::Transaction::Immediate;
     return *this;
 }
 
 StatementBegin& StatementBegin::beginExclusive()
 {
-    syntax.transaction = Syntax::BeginSTMT::Transaction::Exclusive;
+    syntax().transaction = Syntax::BeginSTMT::Transaction::Exclusive;
     return *this;
 }
 

@@ -32,52 +32,43 @@ namespace WCDB {
 
 class SQL {
 public:
+    SQL();
     virtual ~SQL();
 
     typedef Syntax::Identifier::Type Type;
-    virtual Type getType() const = 0;
+    Type getType() const;
 
     typedef Syntax::Identifier::Iterator Iterator;
-    virtual void iterate(const Iterator& iterator, void* parameter) = 0;
+    void iterate(const Iterator& iterator, void* parameter);
 
-    virtual String getDescription() const = 0;
+    String getDescription() const;
+
+protected:
+    template<typename T, typename Enable = typename std::enable_if<std::is_base_of<Syntax::Identifier, T>::value>::type>
+    SQL(T* dummy) : m_syntax(new T)
+    {
+    }
+
+    Shadow<Syntax::Identifier> m_syntax;
 };
 
-template<typename T>
-class TypedSyntax {
+template<typename T, typename U>
+class TypedSyntax : public U {
     static_assert(std::is_base_of<Syntax::Identifier, T>::value, "");
+    static_assert(std::is_base_of<SQL, U>::value, "");
 
 public:
     typedef T SyntaxType;
     static constexpr const SQL::Type type = SyntaxType::type;
 
+    TypedSyntax() : U((T*) nullptr) {}
+
     virtual ~TypedSyntax() {}
 
+    inline T& syntax() const { return *static_cast<T*>(U::m_syntax.get()); }
+
     // Convert SQL to Syntax implicitly
-    operator const T&() const { return syntax; }
-
-    T syntax;
-};
-
-template<typename T>
-class SQLSyntax : public SQL, public TypedSyntax<T> {
-public:
-    virtual ~SQLSyntax() {}
-
-    Type getType() const override final
-    {
-        return TypedSyntax<T>::syntax.getType();
-    }
-
-    void iterate(const Iterator& iterator, void* parameter) override final
-    {
-        return TypedSyntax<T>::syntax.iterate(iterator, parameter);
-    }
-
-    String getDescription() const override final
-    {
-        return TypedSyntax<T>::syntax.getDescription();
-    }
+    operator const T&() const { return *static_cast<T*>(U::m_syntax.get()); }
 };
 
 } // namespace WCDB

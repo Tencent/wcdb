@@ -27,28 +27,8 @@ namespace WCDB {
 
 class Statement : public SQL {
 public:
+    using SQL::SQL;
     virtual ~Statement();
-};
-
-template<typename T>
-class StatementSyntax : public Statement, public TypedSyntax<T> {
-public:
-    virtual ~StatementSyntax() {}
-
-    Type getType() const override final
-    {
-        return TypedSyntax<T>::syntax.getType();
-    }
-
-    void iterate(const Iterator& iterator, void* parameter) override final
-    {
-        return TypedSyntax<T>::syntax.iterate(iterator, parameter);
-    }
-
-    String getDescription() const override final
-    {
-        return TypedSyntax<T>::syntax.getDescription();
-    }
 };
 
 } // namespace WCDB

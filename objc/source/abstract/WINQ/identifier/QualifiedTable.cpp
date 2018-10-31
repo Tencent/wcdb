@@ -24,31 +24,31 @@ namespace WCDB {
 
 QualifiedTable::QualifiedTable(const char* table)
 {
-    syntax.table = table;
+    syntax().table = table;
 }
 
 QualifiedTable& QualifiedTable::schema(const Schema& schema)
 {
-    syntax.schema = schema;
+    syntax().schema = schema;
     return *this;
 }
 
 QualifiedTable& QualifiedTable::as(const String& alias)
 {
-    syntax.alias = alias;
+    syntax().alias = alias;
     return *this;
 }
 
 QualifiedTable& QualifiedTable::indexed(const String& index)
 {
-    syntax.switcher = SyntaxType::Switch::Indexed;
-    syntax.index = index;
+    syntax().switcher = SyntaxType::Switch::Indexed;
+    syntax().index = index;
     return *this;
 }
 
 QualifiedTable& QualifiedTable::notIndexed()
 {
-    syntax.switcher = SyntaxType::Switch::NotIndexed;
+    syntax().switcher = SyntaxType::Switch::NotIndexed;
     return *this;
 }
 

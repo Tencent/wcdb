@@ -29,8 +29,8 @@ StatementVacuum& StatementVacuum::vacuum()
 
 StatementVacuum& StatementVacuum::vacuum(const Schema& schema)
 {
-    syntax.specifySchema = true;
-    syntax.schema = schema;
+    syntax().specifySchema = true;
+    syntax().schema = schema;
     return *this;
 }
 

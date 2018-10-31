@@ -24,19 +24,19 @@ namespace WCDB {
 
 With& With::table(const CTETable& table)
 {
-    syntax.tables.push_back(table);
+    syntax().tables.push_back(table);
     return *this;
 }
 
 With& With::as(const StatementSelect& select)
 {
-    syntax.selects.push_back(select);
+    syntax().selects.push_back(select);
     return *this;
 }
 
 With& With::recursive()
 {
-    syntax.recursive = true;
+    syntax().recursive = true;
     return *this;
 }
 

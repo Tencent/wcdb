@@ -79,7 +79,7 @@ public:
     {
         std::list<SyntaxType> list;
         for (const auto& sql : *this) {
-            list.push_back(sql.syntax);
+            list.push_back(sql.syntax());
         }
         return list;
     }

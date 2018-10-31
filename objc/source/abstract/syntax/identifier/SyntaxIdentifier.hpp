@@ -43,7 +43,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class Identifier {
+class Identifier : public Cloneable<Identifier> {
 public:
     virtual ~Identifier();
 
@@ -108,6 +108,8 @@ public:
     virtual Type getType() const = 0;
 
     virtual String getDescription() const = 0;
+
+    Identifier* clone() const override final;
 
     // Iterable
 public:

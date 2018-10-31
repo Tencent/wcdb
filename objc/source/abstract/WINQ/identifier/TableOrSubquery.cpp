@@ -24,40 +24,40 @@ namespace WCDB {
 
 TableOrSubquery::TableOrSubquery(const char* table)
 {
-    syntax.switcher = SyntaxType::Switch::Table;
-    syntax.tableOrFunction = table;
+    syntax().switcher = SyntaxType::Switch::Table;
+    syntax().tableOrFunction = table;
 }
 
 TableOrSubquery& TableOrSubquery::schema(const Schema& schema)
 {
-    syntax.schema = schema;
+    syntax().schema = schema;
     return *this;
 }
 
 TableOrSubquery& TableOrSubquery::as(const String& alias)
 {
-    syntax.alias = alias;
+    syntax().alias = alias;
     return *this;
 }
 
 TableOrSubquery& TableOrSubquery::notIndexed()
 {
-    syntax.indexType = SyntaxType::IndexType::NotIndexed;
+    syntax().indexType = SyntaxType::IndexType::NotIndexed;
     return *this;
 }
 
 TableOrSubquery& TableOrSubquery::indexed(const String& index)
 {
-    syntax.indexType = SyntaxType::IndexType::Indexed;
-    syntax.index = index;
+    syntax().indexType = SyntaxType::IndexType::Indexed;
+    syntax().index = index;
     return *this;
 }
 
 TableOrSubquery TableOrSubquery::function(const String& function)
 {
     TableOrSubquery tableOrSubquery;
-    tableOrSubquery.syntax.switcher = SyntaxType::Switch::Function;
-    tableOrSubquery.syntax.tableOrFunction = function;
+    tableOrSubquery.syntax().switcher = SyntaxType::Switch::Function;
+    tableOrSubquery.syntax().tableOrFunction = function;
     return tableOrSubquery;
 }
 
@@ -68,26 +68,26 @@ TableOrSubquery& TableOrSubquery::invoke()
 
 TableOrSubquery& TableOrSubquery::invoke(const Expressions& expressions)
 {
-    syntax.expressions = expressions;
+    syntax().expressions = expressions;
     return *this;
 }
 
 TableOrSubquery::TableOrSubquery(const TablesOrSubqueries& tableOrSubqueries)
 {
-    syntax.switcher = SyntaxType::Switch::TableOrSubqueries;
-    syntax.tableOrSubqueries = tableOrSubqueries;
+    syntax().switcher = SyntaxType::Switch::TableOrSubqueries;
+    syntax().tableOrSubqueries = tableOrSubqueries;
 }
 
 TableOrSubquery::TableOrSubquery(const Join& join)
 {
-    syntax.switcher = SyntaxType::Switch::JoinClause;
-    syntax.joinClause = join;
+    syntax().switcher = SyntaxType::Switch::JoinClause;
+    syntax().joinClause = join;
 }
 
 TableOrSubquery::TableOrSubquery(const StatementSelect& select)
 {
-    syntax.switcher = SyntaxType::Switch::Select;
-    syntax.select = select;
+    syntax().switcher = SyntaxType::Switch::Select;
+    syntax().select = select;
 }
 
 TableOrSubquery TableOrSubquery::master()

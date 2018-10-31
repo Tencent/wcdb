@@ -24,34 +24,34 @@ namespace WCDB {
 
 StatementReindex& StatementReindex::reindex()
 {
-    syntax.switcher = SyntaxType::Switch::NotSet;
+    syntax().switcher = SyntaxType::Switch::NotSet;
     return *this;
 }
 
 StatementReindex& StatementReindex::collation(const String& collation)
 {
-    syntax.switcher = SyntaxType::Switch::Collation;
-    syntax.collationOrTableOrIndex = collation;
+    syntax().switcher = SyntaxType::Switch::Collation;
+    syntax().collationOrTableOrIndex = collation;
     return *this;
 }
 
 StatementReindex& StatementReindex::table(const String& table)
 {
-    syntax.switcher = SyntaxType::Switch::TableOrIndex;
-    syntax.collationOrTableOrIndex = table;
+    syntax().switcher = SyntaxType::Switch::TableOrIndex;
+    syntax().collationOrTableOrIndex = table;
     return *this;
 }
 
 StatementReindex& StatementReindex::schema(const Schema& schema)
 {
-    syntax.schema = schema;
+    syntax().schema = schema;
     return *this;
 }
 
 StatementReindex& StatementReindex::index(const String& index)
 {
-    syntax.switcher = SyntaxType::Switch::TableOrIndex;
-    syntax.collationOrTableOrIndex = index;
+    syntax().switcher = SyntaxType::Switch::TableOrIndex;
+    syntax().collationOrTableOrIndex = index;
     return *this;
 }
 

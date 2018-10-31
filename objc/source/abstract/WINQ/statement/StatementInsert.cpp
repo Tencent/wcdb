@@ -24,89 +24,89 @@ namespace WCDB {
 
 StatementInsert& StatementInsert::with(const With& with)
 {
-    syntax.useWithClause = true;
-    syntax.withClause = with;
+    syntax().useWithClause = true;
+    syntax().withClause = with;
     return *this;
 }
 
 StatementInsert& StatementInsert::insertIntoTable(const String& table)
 {
-    syntax.table = table;
+    syntax().table = table;
     return *this;
 }
 
 StatementInsert& StatementInsert::schema(const Schema& schema)
 {
-    syntax.schema = schema;
+    syntax().schema = schema;
     return *this;
 }
 
 StatementInsert& StatementInsert::orReplace()
 {
-    syntax.switcher = SyntaxType::Switch::InsertOrReplace;
+    syntax().switcher = SyntaxType::Switch::InsertOrReplace;
     return *this;
 }
 
 StatementInsert& StatementInsert::orRollback()
 {
-    syntax.switcher = SyntaxType::Switch::InsertOrRollback;
+    syntax().switcher = SyntaxType::Switch::InsertOrRollback;
     return *this;
 }
 
 StatementInsert& StatementInsert::orAbort()
 {
-    syntax.switcher = SyntaxType::Switch::InsertOrAbort;
+    syntax().switcher = SyntaxType::Switch::InsertOrAbort;
     return *this;
 }
 
 StatementInsert& StatementInsert::orFail()
 {
-    syntax.switcher = SyntaxType::Switch::InsertOrFail;
+    syntax().switcher = SyntaxType::Switch::InsertOrFail;
     return *this;
 }
 
 StatementInsert& StatementInsert::orIgnore()
 {
-    syntax.switcher = SyntaxType::Switch::InsertOrIgnore;
+    syntax().switcher = SyntaxType::Switch::InsertOrIgnore;
     return *this;
 }
 
 StatementInsert& StatementInsert::as(const String& alias)
 {
-    syntax.alias = alias;
+    syntax().alias = alias;
     return *this;
 }
 
 StatementInsert& StatementInsert::columns(const Columns& columns)
 {
-    syntax.columns = columns;
+    syntax().columns = columns;
     return *this;
 }
 
 StatementInsert& StatementInsert::values(const Expressions& expressions)
 {
-    syntax.valueSwitcher = SyntaxType::SwitchValue::Values;
-    syntax.expressionsValues.push_back(expressions);
+    syntax().valueSwitcher = SyntaxType::SwitchValue::Values;
+    syntax().expressionsValues.push_back(expressions);
     return *this;
 }
 
 StatementInsert& StatementInsert::values(const StatementSelect& select)
 {
-    syntax.valueSwitcher = SyntaxType::SwitchValue::Select;
-    syntax.select = select;
+    syntax().valueSwitcher = SyntaxType::SwitchValue::Select;
+    syntax().select = select;
     return *this;
 }
 
 StatementInsert& StatementInsert::defaultValues()
 {
-    syntax.valueSwitcher = SyntaxType::SwitchValue::Default;
+    syntax().valueSwitcher = SyntaxType::SwitchValue::Default;
     return *this;
 }
 
 StatementInsert& StatementInsert::upsert(const Upsert& upsert)
 {
-    syntax.useUpsertClause = true;
-    syntax.upsertClause = upsert;
+    syntax().useUpsertClause = true;
+    syntax().upsertClause = upsert;
     return *this;
 }
 

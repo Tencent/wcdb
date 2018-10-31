@@ -25,7 +25,6 @@
 
 namespace WCDB {
 
-#warning TODO make return type configurable
 class ExpressionOperable {
 public:
     virtual ~ExpressionOperable();

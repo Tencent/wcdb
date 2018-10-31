@@ -24,26 +24,26 @@ namespace WCDB {
 
 IndexedColumn::IndexedColumn(const Column& column)
 {
-    syntax.switcher = SyntaxType::Switch::Column;
-    syntax.column = column;
+    syntax().switcher = SyntaxType::Switch::Column;
+    syntax().column = column;
 }
 
 IndexedColumn::IndexedColumn(const Expression& expression)
 {
-    syntax.switcher = SyntaxType::Switch::Expression;
-    syntax.expression = expression;
+    syntax().switcher = SyntaxType::Switch::Expression;
+    syntax().expression = expression;
 }
 
 IndexedColumn& IndexedColumn::collate(const String& collation)
 {
-    syntax.collation = collation;
+    syntax().collation = collation;
     return *this;
 }
 
 IndexedColumn& IndexedColumn::order(const Order& order)
 {
-    syntax.useOrder = true;
-    syntax.order = order;
+    syntax().useOrder = true;
+    syntax().order = order;
     return *this;
 }
 

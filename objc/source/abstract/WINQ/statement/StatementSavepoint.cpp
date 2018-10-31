@@ -24,7 +24,7 @@ namespace WCDB {
 
 StatementSavepoint& StatementSavepoint::savepoint(const String& savepoint)
 {
-    syntax.savepoint = savepoint;
+    syntax().savepoint = savepoint;
     return *this;
 }
 

@@ -24,26 +24,26 @@ namespace WCDB {
 
 RecursiveCTE::RecursiveCTE(const CTETable& table)
 {
-    syntax.table = table;
+    syntax().table = table;
 }
 
 RecursiveCTE& RecursiveCTE::as(const StatementSelect& initialSelect)
 {
-    syntax.initialSelect = initialSelect;
+    syntax().initialSelect = initialSelect;
     return *this;
 }
 
 RecursiveCTE& RecursiveCTE::union_(const StatementSelect& recursiveSelect)
 {
-    syntax.combination = SyntaxType::Combination::Union;
-    syntax.recursiveSelect = recursiveSelect;
+    syntax().combination = SyntaxType::Combination::Union;
+    syntax().recursiveSelect = recursiveSelect;
     return *this;
 }
 
 RecursiveCTE& RecursiveCTE::unionAll(const StatementSelect& recursiveSelect)
 {
-    syntax.combination = SyntaxType::Combination::UnionAll;
-    syntax.recursiveSelect = recursiveSelect;
+    syntax().combination = SyntaxType::Combination::UnionAll;
+    syntax().recursiveSelect = recursiveSelect;
     return *this;
 }
 

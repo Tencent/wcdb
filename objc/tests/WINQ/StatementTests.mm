@@ -18,14 +18,30 @@
  * limitations under the License.
  */
 
-#include <WCDB/WINQ.h>
+#import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
 
-namespace WCDB {
+@interface StatementTests : WINQTestCase
 
-Filter& Filter::where(const Expression& expression)
-{
-    syntax().expression = expression;
-    return *this;
+@end
+
+@implementation StatementTests {
 }
 
-} // namespace WCDB
+- (void)setUp
+{
+    [super setUp];
+}
+
+- (void)test
+{
+    WCDB::StatementInsert insert = WCDB::StatementInsert().insertIntoTable(@"testTable").values(1);
+
+    WCDB::Statement statement = insert;
+    WINQAssertEqual(statement, @"INSERT INTO main.testTable VALUES(1)");
+
+    WCDB::Statement statement2 = statement;
+    WINQAssertEqual(statement2, @"INSERT INTO main.testTable VALUES(1)");
+}
+
+@end

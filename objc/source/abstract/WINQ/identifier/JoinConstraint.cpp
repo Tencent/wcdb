@@ -24,13 +24,13 @@ namespace WCDB {
 
 JoinConstraint& JoinConstraint::on(const Expression& expression)
 {
-    syntax.expression = expression;
+    syntax().expression = expression;
     return *this;
 }
 
 JoinConstraint& JoinConstraint::usingColumns(const Columns& columns)
 {
-    syntax.columns = columns;
+    syntax().columns = columns;
     return *this;
 }
 

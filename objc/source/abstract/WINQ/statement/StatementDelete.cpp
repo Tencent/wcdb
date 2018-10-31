@@ -24,51 +24,51 @@ namespace WCDB {
 
 StatementDelete& StatementDelete::with(const With& with)
 {
-    syntax.useWithClause = true;
-    syntax.withClause = with;
+    syntax().useWithClause = true;
+    syntax().withClause = with;
     return *this;
 }
 
 StatementDelete& StatementDelete::deleteFrom(const QualifiedTable& table)
 {
-    syntax.table = table;
+    syntax().table = table;
     return *this;
 }
 
 StatementDelete& StatementDelete::where(const Expression& condition)
 {
-    syntax.useCondition = true;
-    syntax.condition = condition;
+    syntax().useCondition = true;
+    syntax().condition = condition;
     return *this;
 }
 
 StatementDelete& StatementDelete::order(const OrderingTerms& orderingTerms)
 {
-    syntax.orderingTerms = orderingTerms;
+    syntax().orderingTerms = orderingTerms;
     return *this;
 }
 
 StatementDelete& StatementDelete::limit(const Expression& from, const Expression& to)
 {
-    syntax.useLimit = true;
-    syntax.limitParameterType = SyntaxType::LimitParameterType::End;
-    syntax.limit = from;
-    syntax.limitParameter = to;
+    syntax().useLimit = true;
+    syntax().limitParameterType = SyntaxType::LimitParameterType::End;
+    syntax().limit = from;
+    syntax().limitParameter = to;
     return *this;
 }
 
 StatementDelete& StatementDelete::limit(const Expression& limit)
 {
-    syntax.useLimit = true;
-    syntax.limitParameterType = SyntaxType::LimitParameterType::NotSet;
-    syntax.limit = limit;
+    syntax().useLimit = true;
+    syntax().limitParameterType = SyntaxType::LimitParameterType::NotSet;
+    syntax().limit = limit;
     return *this;
 }
 
 StatementDelete& StatementDelete::offset(const Expression& offset)
 {
-    syntax.limitParameterType = SyntaxType::LimitParameterType::Offset;
-    syntax.limitParameter = offset;
+    syntax().limitParameterType = SyntaxType::LimitParameterType::Offset;
+    syntax().limitParameter = offset;
     return *this;
 }
 

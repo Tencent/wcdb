@@ -28,24 +28,24 @@ ResultColumn::~ResultColumn()
 
 ResultColumn::ResultColumn(const Expression& expression)
 {
-    syntax.wildcard = false;
-    syntax.expression = expression;
+    syntax().wildcard = false;
+    syntax().expression = expression;
 }
 
 ResultColumn& ResultColumn::as(const String& alias)
 {
-    syntax.alias = alias;
+    syntax().alias = alias;
     return *this;
 }
 
 ResultColumnAll::ResultColumnAll()
 {
-    syntax.wildcard = true;
+    syntax().wildcard = true;
 }
 
 ResultColumnAll& ResultColumnAll::inTable(const String& table)
 {
-    syntax.table = table;
+    syntax().table = table;
     return *this;
 }
 

@@ -22,6 +22,25 @@
 
 namespace WCDB {
 
+SQL::SQL()
+{
+}
+
+SQL::Type SQL::getType() const
+{
+    return m_syntax->getType();
+}
+
+void SQL::iterate(const Iterator& iterator, void* parameter)
+{
+    return m_syntax->iterate(iterator, parameter);
+}
+
+String SQL::getDescription() const
+{
+    return m_syntax->getDescription();
+}
+
 SQL::~SQL()
 {
 }

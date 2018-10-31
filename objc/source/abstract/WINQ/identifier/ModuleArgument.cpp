@@ -24,21 +24,21 @@ namespace WCDB {
 
 ModuleArgument::ModuleArgument(const TableConstraint& tableConstraint)
 {
-    syntax.switcher = SyntaxType::Switcher::TableConstraint;
-    syntax.tableConstraint = tableConstraint;
+    syntax().switcher = SyntaxType::Switcher::TableConstraint;
+    syntax().tableConstraint = tableConstraint;
 }
 
 ModuleArgument::ModuleArgument(const ColumnDef& columnDef)
 {
-    syntax.switcher = SyntaxType::Switcher::ColumnDef;
-    syntax.columnDef = columnDef;
+    syntax().switcher = SyntaxType::Switcher::ColumnDef;
+    syntax().columnDef = columnDef;
 }
 
 ModuleArgument::ModuleArgument(const Expression& left, const Expression& right)
 {
-    syntax.switcher = SyntaxType::Switcher::LeftRight;
-    syntax.left = left;
-    syntax.right = right;
+    syntax().switcher = SyntaxType::Switcher::LeftRight;
+    syntax().left = left;
+    syntax().right = right;
 }
 
 } // namespace WCDB

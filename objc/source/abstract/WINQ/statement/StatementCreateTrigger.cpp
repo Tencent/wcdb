@@ -24,118 +24,118 @@ namespace WCDB {
 
 StatementCreateTrigger& StatementCreateTrigger::createTrigger(const String& trigger)
 {
-    syntax.trigger = trigger;
+    syntax().trigger = trigger;
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::schema(const Schema& schema)
 {
-    syntax.schema = schema;
+    syntax().schema = schema;
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::temp()
 {
-    syntax.temp = true;
+    syntax().temp = true;
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::ifNotExists()
 {
-    syntax.ifNotExists = true;
+    syntax().ifNotExists = true;
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::before()
 {
-    syntax.specifiedTiming = true;
-    syntax.timing = SyntaxType::Timing::Before;
+    syntax().specifiedTiming = true;
+    syntax().timing = SyntaxType::Timing::Before;
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::after()
 {
-    syntax.specifiedTiming = true;
-    syntax.timing = SyntaxType::Timing::After;
+    syntax().specifiedTiming = true;
+    syntax().timing = SyntaxType::Timing::After;
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::insteadOf()
 {
-    syntax.specifiedTiming = true;
-    syntax.timing = SyntaxType::Timing::InsteadOf;
+    syntax().specifiedTiming = true;
+    syntax().timing = SyntaxType::Timing::InsteadOf;
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::delete_()
 {
-    syntax.event = SyntaxType::Event::Delete;
+    syntax().event = SyntaxType::Event::Delete;
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::insert()
 {
-    syntax.event = SyntaxType::Event::Insert;
+    syntax().event = SyntaxType::Event::Insert;
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::update()
 {
-    syntax.event = SyntaxType::Event::Update;
+    syntax().event = SyntaxType::Event::Update;
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::updateOf(const Columns& columns)
 {
-    syntax.event = SyntaxType::Event::Update;
-    syntax.columns = columns;
+    syntax().event = SyntaxType::Event::Update;
+    syntax().columns = columns;
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::on(const String& table)
 {
-    syntax.table = table;
+    syntax().table = table;
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::forEachRow()
 {
-    syntax.forEachFow = true;
+    syntax().forEachFow = true;
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::when(const Expression& condition)
 {
-    syntax.useCondition = true;
-    syntax.condition = condition;
+    syntax().useCondition = true;
+    syntax().condition = condition;
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::execute(const StatementInsert& statement)
 {
-    syntax.stmts.push_back(SyntaxType::STMT::Insert);
-    syntax.inserts.push_back(statement);
+    syntax().stmts.push_back(SyntaxType::STMT::Insert);
+    syntax().inserts.push_back(statement);
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::execute(const StatementUpdate& statement)
 {
-    syntax.stmts.push_back(SyntaxType::STMT::Update);
-    syntax.updates.push_back(statement);
+    syntax().stmts.push_back(SyntaxType::STMT::Update);
+    syntax().updates.push_back(statement);
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::execute(const StatementDelete& statement)
 {
-    syntax.stmts.push_back(SyntaxType::STMT::Delete);
-    syntax.deletes.push_back(statement);
+    syntax().stmts.push_back(SyntaxType::STMT::Delete);
+    syntax().deletes.push_back(statement);
     return *this;
 }
 
 StatementCreateTrigger& StatementCreateTrigger::execute(const StatementSelect& statement)
 {
-    syntax.stmts.push_back(SyntaxType::STMT::Select);
-    syntax.selects.push_back(statement);
+    syntax().stmts.push_back(SyntaxType::STMT::Select);
+    syntax().selects.push_back(statement);
     return *this;
 }
 

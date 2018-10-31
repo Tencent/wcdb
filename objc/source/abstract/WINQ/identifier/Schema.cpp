@@ -28,7 +28,7 @@ Schema::Schema()
 
 Schema::Schema(const char* name)
 {
-    syntax.name = name;
+    syntax().name = name;
 }
 
 Schema Schema::main()

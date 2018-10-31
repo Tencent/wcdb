@@ -24,51 +24,51 @@ namespace WCDB {
 
 StatementCreateTable& StatementCreateTable::createTable(const String& table)
 {
-    syntax.table = table;
+    syntax().table = table;
     return *this;
 }
 
 StatementCreateTable& StatementCreateTable::schema(const Schema& schema)
 {
-    syntax.schema = schema;
+    syntax().schema = schema;
     return *this;
 }
 
 StatementCreateTable& StatementCreateTable::temp()
 {
-    syntax.temp = true;
+    syntax().temp = true;
     return *this;
 }
 
 StatementCreateTable& StatementCreateTable::ifNotExists()
 {
-    syntax.ifNotExists = true;
+    syntax().ifNotExists = true;
     return *this;
 }
 
 StatementCreateTable& StatementCreateTable::as(const StatementSelect& select)
 {
-    syntax.switcher = SyntaxType::Switch::Select;
-    syntax.select = select;
+    syntax().switcher = SyntaxType::Switch::Select;
+    syntax().select = select;
     return *this;
 }
 
 StatementCreateTable& StatementCreateTable::define(const ColumnDefs& columnDefs)
 {
-    syntax.switcher = SyntaxType::Switch::ColumnDefs;
-    syntax.columnDefs = columnDefs;
+    syntax().switcher = SyntaxType::Switch::ColumnDefs;
+    syntax().columnDefs = columnDefs;
     return *this;
 }
 
 StatementCreateTable& StatementCreateTable::constraint(const TableConstraints& constraints)
 {
-    syntax.tableConstraints = constraints;
+    syntax().tableConstraints = constraints;
     return *this;
 }
 
 StatementCreateTable& StatementCreateTable::withoutRowID()
 {
-    syntax.withoutRowid = true;
+    syntax().withoutRowid = true;
     return *this;
 }
 

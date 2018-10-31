@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class WindowDef : public SQLSyntax<Syntax::WindowDef> {
+class WindowDef : public TypedSyntax<Syntax::WindowDef, SQL> {
 public:
     WindowDef& partition(const Expressions& expressions);
     WindowDef& order(const OrderingTerms& orders);

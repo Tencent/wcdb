@@ -28,7 +28,7 @@ Column::Column()
 
 Column::Column(const String& name)
 {
-    syntax.name = name;
+    syntax().name = name;
 }
 
 Column Column::rowid()
