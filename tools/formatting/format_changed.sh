@@ -1,7 +1,7 @@
 #!/bin/bash
 
 root=`git rev-parse --show-toplevel`
-formatter=$root/tools/code_formatting/code_formatting_one.sh
+formatter=$root/tools/formatting/format.sh
 
 current=`pwd`
 git status -s | while read status
