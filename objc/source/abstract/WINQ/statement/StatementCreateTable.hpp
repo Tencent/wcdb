@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef StatementCreateTable_hpp
-#define StatementCreateTable_hpp
+#ifndef _WCDB_STATEMENTCREATETABLE_HPP
+#define _WCDB_STATEMENTCREATETABLE_HPP
 
 #include <WCDB/Statement.hpp>
 
@@ -42,4 +42,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* StatementCreateTable_hpp */
+#endif /* _WCDB_STATEMENTCREATETABLE_HPP */

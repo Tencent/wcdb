@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Range_hpp
-#define Range_hpp
+#ifndef _WCDB_RANGE_HPP
+#define _WCDB_RANGE_HPP
 
 #include <unistd.h>
 
@@ -53,4 +53,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* Range_hpp */
+#endif /* _WCDB_RANGE_HPP */

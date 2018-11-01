@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef JoinConstraint_hpp
-#define JoinConstraint_hpp
+#ifndef _WCDB_JOINCONSTRAINT_HPP
+#define _WCDB_JOINCONSTRAINT_HPP
 
 #include <WCDB/SQL.hpp>
 
@@ -33,4 +33,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* JoinConstraint_hpp */
+#endif /* _WCDB_JOINCONSTRAINT_HPP */

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Mechanic_hpp
-#define Mechanic_hpp
+#ifndef _WCDB_MECHANIC_HPP
+#define _WCDB_MECHANIC_HPP
 
 #include <WCDB/Assembler.hpp>
 #include <WCDB/Crawlable.hpp>
@@ -59,4 +59,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* Mechanic_hpp */
+#endif /* _WCDB_MECHANIC_HPP */

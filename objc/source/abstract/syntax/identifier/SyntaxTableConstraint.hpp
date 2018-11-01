@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxTableConstraint_hpp
-#define SyntaxTableConstraint_hpp
+#ifndef _WCDB_SYNTAXTABLECONSTRAINT_HPP
+#define _WCDB_SYNTAXTABLECONSTRAINT_HPP
 
 #include <WCDB/SyntaxColumn.hpp>
 #include <WCDB/SyntaxExpression.hpp>
@@ -63,4 +63,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxTableConstraint_hpp */
+#endif /* _WCDB_SYNTAXTABLECONSTRAINT_HPP */

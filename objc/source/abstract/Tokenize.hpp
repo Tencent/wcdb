@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Tokenize_hpp
-#define Tokenize_hpp
+#ifndef _WCDB_TOKENIZE_HPP
+#define _WCDB_TOKENIZE_HPP
 
 #warning Make it public and add template for this
 
@@ -203,4 +203,4 @@ public:
 
 } //namespace WCDB
 
-#endif /* Tokenize_hpp */
+#endif /* _WCDB_TOKENIZE_HPP */

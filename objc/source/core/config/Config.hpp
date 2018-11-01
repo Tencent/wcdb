@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Config_hpp
-#define Config_hpp
+#ifndef _WCDB_CONFIG_HPP
+#define _WCDB_CONFIG_HPP
 
 #include <WCDB/Abstract.h>
 
@@ -34,4 +34,4 @@ public:
 
 } //namespace WCDB
 
-#endif /* Config_hpp */
+#endif /* _WCDB_CONFIG_HPP */

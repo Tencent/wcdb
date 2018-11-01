@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxCreateIndexSTMT_hpp
-#define SyntaxCreateIndexSTMT_hpp
+#ifndef _WCDB_SYNTAXCREATEINDEXSTMT_HPP
+#define _WCDB_SYNTAXCREATEINDEXSTMT_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 #include <WCDB/SyntaxSchema.hpp>
@@ -52,4 +52,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxCreateIndexSTMT_hpp */
+#endif /* _WCDB_SYNTAXCREATEINDEXSTMT_HPP */

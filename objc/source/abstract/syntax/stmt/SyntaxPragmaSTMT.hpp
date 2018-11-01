@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxPragmaSTMT_hpp
-#define SyntaxPragmaSTMT_hpp
+#ifndef _WCDB_SYNTAXPRAGMASTMT_HPP
+#define _WCDB_SYNTAXPRAGMASTMT_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -52,4 +52,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxPragmaSTMT_hpp */
+#endif /* _WCDB_SYNTAXPRAGMASTMT_HPP */

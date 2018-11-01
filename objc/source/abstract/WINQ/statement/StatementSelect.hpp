@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef StatementSelect_hpp
-#define StatementSelect_hpp
+#ifndef _WCDB_STATEMENTSELECT_HPP
+#define _WCDB_STATEMENTSELECT_HPP
 
 #include <WCDB/Statement.hpp>
 
@@ -62,4 +62,4 @@ private:
 
 } // namespace WCDB
 
-#endif /* StatementSelect_hpp */
+#endif /* _WCDB_STATEMENTSELECT_HPP */

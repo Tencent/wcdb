@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef HandlePool_hpp
-#define HandlePool_hpp
+#ifndef _WCDB_HANDLEPOOL_HPP
+#define _WCDB_HANDLEPOOL_HPP
 
 #include <WCDB/Abstract.h>
 #include <WCDB/Config.hpp>
@@ -97,4 +97,4 @@ private:
 
 } //namespace WCDB
 
-#endif /* HandlePool_hpp */
+#endif /* _WCDB_HANDLEPOOL_HPP */

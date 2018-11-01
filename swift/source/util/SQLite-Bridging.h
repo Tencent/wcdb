@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SQLite_Bridging_h
-#define SQLite_Bridging_h
+#ifndef _WCDB_SQLITE_BRIDGING_H
+#define _WCDB_SQLITE_BRIDGING_H
 
 #import <sqlcipher/fts3_tokenizer.h>
 #import <sqlcipher/sqlite3.h>
@@ -50,4 +50,4 @@ typedef void (*sqlite3_global_log)(void *, int, const char *);
 
 int sqlite3_config_log(sqlite3_global_log, void *);
 
-#endif /* SQLite_Bridging_h */
+#endif /* _WCDB_SQLITE_BRIDGING_H */

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef StatementDetach_hpp
-#define StatementDetach_hpp
+#ifndef _WCDB_STATEMENTDETACH_HPP
+#define _WCDB_STATEMENTDETACH_HPP
 
 #include <WCDB/Statement.hpp>
 
@@ -32,4 +32,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* StatementDetach_hpp */
+#endif /* _WCDB_STATEMENTDETACH_HPP */

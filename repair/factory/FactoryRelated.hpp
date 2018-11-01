@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef FactoryRelated_hpp
-#define FactoryRelated_hpp
+#ifndef _WCDB_FACTORYRELATED_HPP
+#define _WCDB_FACTORYRELATED_HPP
 
 #include <mutex>
 
@@ -41,4 +41,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* FactoryRelated_hpp */
+#endif /* _WCDB_FACTORYRELATED_HPP */

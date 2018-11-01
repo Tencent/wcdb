@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Handle_hpp
-#define Handle_hpp
+#ifndef _WCDB_HANDLE_HPP
+#define _WCDB_HANDLE_HPP
 
 #include <WCDB/ErrorProne.hpp>
 #include <WCDB/HandleNotification.hpp>
@@ -207,4 +207,4 @@ private:
 
 } //namespace WCDB
 
-#endif /* Handle_hpp */
+#endif /* _WCDB_HANDLE_HPP */

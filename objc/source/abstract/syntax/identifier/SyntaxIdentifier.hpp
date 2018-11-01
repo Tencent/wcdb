@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxIdentifier_hpp
-#define SyntaxIdentifier_hpp
+#ifndef _WCDB_SYNTAXIDENTIFIER_HPP
+#define _WCDB_SYNTAXIDENTIFIER_HPP
 
 #include <WCDB/Shadow.hpp>
 #include <WCDB/String.hpp>
@@ -156,4 +156,4 @@ std::ostream& operator<<(std::ostream& stream, const T& value)
     return stream;
 }
 
-#endif /* SyntaxIdentifier_hpp */
+#endif /* _WCDB_SYNTAXIDENTIFIER_HPP */

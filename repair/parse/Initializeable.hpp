@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Initializeable_hpp
-#define Initializeable_hpp
+#ifndef _WCDB_INITIALIZEABLE_HPP
+#define _WCDB_INITIALIZEABLE_HPP
 
 namespace WCDB {
 
@@ -51,4 +51,4 @@ private:
 
 } //namespace WCDB
 
-#endif /* Initializeable_hpp */
+#endif /* _WCDB_INITIALIZEABLE_HPP */

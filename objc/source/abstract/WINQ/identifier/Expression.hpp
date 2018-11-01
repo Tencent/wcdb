@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Expression_hpp
-#define Expression_hpp
+#ifndef _WCDB_EXPRESSION_HPP
+#define _WCDB_EXPRESSION_HPP
 
 #include <WCDB/AggregateFunction.hpp>
 #include <WCDB/CoreFunction.hpp>
@@ -90,4 +90,4 @@ protected:
 
 } // namespace WCDB
 
-#endif /* Expression_hpp */
+#endif /* _WCDB_EXPRESSION_HPP */

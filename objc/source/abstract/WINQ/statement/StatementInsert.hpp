@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef StatementInsert_hpp
-#define StatementInsert_hpp
+#ifndef _WCDB_STATEMENTINSERT_HPP
+#define _WCDB_STATEMENTINSERT_HPP
 
 #include <WCDB/Statement.hpp>
 
@@ -50,4 +50,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* StatementInsert_hpp */
+#endif /* _WCDB_STATEMENTINSERT_HPP */

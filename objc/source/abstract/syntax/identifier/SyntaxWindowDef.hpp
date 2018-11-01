@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxWindowDef_hpp
-#define SyntaxWindowDef_hpp
+#ifndef _WCDB_SYNTAXWINDOWDEF_HPP
+#define _WCDB_SYNTAXWINDOWDEF_HPP
 
 #include <WCDB/SyntaxFrameSpec.hpp>
 #include <WCDB/SyntaxIdentifier.hpp>
@@ -51,4 +51,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxWindowDef_hpp */
+#endif /* _WCDB_SYNTAXWINDOWDEF_HPP */

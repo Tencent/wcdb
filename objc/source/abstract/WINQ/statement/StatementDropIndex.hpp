@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef StatementDropIndex_hpp
-#define StatementDropIndex_hpp
+#ifndef _WCDB_STATEMENTDROPINDEX_HPP
+#define _WCDB_STATEMENTDROPINDEX_HPP
 
 #include <WCDB/Statement.hpp>
 
@@ -34,4 +34,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* StatementDropIndex_hpp */
+#endif /* _WCDB_STATEMENTDROPINDEX_HPP */

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef CommonTableExpression_hpp
-#define CommonTableExpression_hpp
+#ifndef _WCDB_COMMONTABLEEXPRESSION_HPP
+#define _WCDB_COMMONTABLEEXPRESSION_HPP
 
 #include <WCDB/SQL.hpp>
 
@@ -35,4 +35,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* CommonTableExpression_hpp */
+#endif /* _WCDB_COMMONTABLEEXPRESSION_HPP */

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef StatementCreateView_hpp
-#define StatementCreateView_hpp
+#ifndef _WCDB_STATEMENTCREATEVIEW_HPP
+#define _WCDB_STATEMENTCREATEVIEW_HPP
 
 #include <WCDB/Statement.hpp>
 
@@ -40,4 +40,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* StatementCreateView_hpp */
+#endif /* _WCDB_STATEMENTCREATEVIEW_HPP */

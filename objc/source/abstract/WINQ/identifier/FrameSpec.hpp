@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef FrameSpec_hpp
-#define FrameSpec_hpp
+#ifndef _WCDB_FRAMESPEC_HPP
+#define _WCDB_FRAMESPEC_HPP
 
 #include <WCDB/SQL.hpp>
 
@@ -48,4 +48,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* FrameSpec_hpp */
+#endif /* _WCDB_FRAMESPEC_HPP */

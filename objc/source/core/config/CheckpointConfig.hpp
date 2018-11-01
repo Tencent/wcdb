@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef CheckpointConfig_hpp
-#define CheckpointConfig_hpp
+#ifndef _WCDB_CHECKPOINTCONFIG_HPP
+#define _WCDB_CHECKPOINTCONFIG_HPP
 
 #include <WCDB/Config.hpp>
 
@@ -45,4 +45,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* CheckpointConfig_hpp */
+#endif /* _WCDB_CHECKPOINTCONFIG_HPP */

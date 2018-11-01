@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef TableConstraint_hpp
-#define TableConstraint_hpp
+#ifndef _WCDB_TABLECONSTRAINT_HPP
+#define _WCDB_TABLECONSTRAINT_HPP
 
 #include <WCDB/SQL.hpp>
 
@@ -41,4 +41,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* TableConstraint_hpp */
+#endif /* _WCDB_TABLECONSTRAINT_HPP */

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef BackupQueue_hpp
-#define BackupQueue_hpp
+#ifndef _WCDB_BACKUPQUEUE_HPP
+#define _WCDB_BACKUPQUEUE_HPP
 
 #include <WCDB/AsyncQueue.hpp>
 #include <WCDB/Lock.hpp>
@@ -49,4 +49,4 @@ protected:
 
 } // namespace WCDB
 
-#endif /* BackupQueue_hpp */
+#endif /* _WCDB_BACKUPQUEUE_HPP */

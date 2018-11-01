@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef StatementAttach_hpp
-#define StatementAttach_hpp
+#ifndef _WCDB_STATEMENTATTACH_HPP
+#define _WCDB_STATEMENTATTACH_HPP
 
 #include <WCDB/Statement.hpp>
 
@@ -33,4 +33,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* StatementAttach_hpp */
+#endif /* _WCDB_STATEMENTATTACH_HPP */

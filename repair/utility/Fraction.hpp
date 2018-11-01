@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Fraction_hpp
-#define Fraction_hpp
+#ifndef _WCDB_FRACTION_HPP
+#define _WCDB_FRACTION_HPP
 
 namespace WCDB {
 
@@ -56,4 +56,4 @@ private:
 
 } //namespace WCDB
 
-#endif /* Fraction_hpp */
+#endif /* _WCDB_FRACTION_HPP */

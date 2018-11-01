@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxReleaseSTMT_hpp
-#define SyntaxReleaseSTMT_hpp
+#ifndef _WCDB_SYNTAXRELEASESTMT_HPP
+#define _WCDB_SYNTAXRELEASESTMT_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -43,4 +43,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxReleaseSTMT_hpp */
+#endif /* _WCDB_SYNTAXRELEASESTMT_HPP */

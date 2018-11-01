@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Assembler_hpp
-#define Assembler_hpp
+#ifndef _WCDB_ASSEMBLER_HPP
+#define _WCDB_ASSEMBLER_HPP
 
 #include <WCDB/String.hpp>
 #include <map>
@@ -66,4 +66,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* Assembler_hpp */
+#endif /* _WCDB_ASSEMBLER_HPP */

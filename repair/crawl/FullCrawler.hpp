@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef FullCrawler_hpp
-#define FullCrawler_hpp
+#ifndef _WCDB_FULLCRAWLER_HPP
+#define _WCDB_FULLCRAWLER_HPP
 
 #include <WCDB/Assembler.hpp>
 #include <WCDB/Crawlable.hpp>
@@ -75,4 +75,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* FullCrawler_hpp */
+#endif /* _WCDB_FULLCRAWLER_HPP */

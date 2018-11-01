@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef FactoryRenewer_hpp
-#define FactoryRenewer_hpp
+#ifndef _WCDB_FACTORYRENEWER_HPP
+#define _WCDB_FACTORYRENEWER_HPP
 
 #include <WCDB/Assembler.hpp>
 #include <WCDB/ErrorProne.hpp>
@@ -57,4 +57,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* FactoryRenewer_hpp */
+#endif /* _WCDB_FACTORYRENEWER_HPP */

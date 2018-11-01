@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxCreateVirtualTableSTMT_hpp
-#define SyntaxCreateVirtualTableSTMT_hpp
+#ifndef _WCDB_SYNTAXCREATEVIRTUALTABLESTMT_HPP
+#define _WCDB_SYNTAXCREATEVIRTUALTABLESTMT_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -48,4 +48,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxCreateVirtualTableSTMT_hpp */
+#endif /* _WCDB_SYNTAXCREATEVIRTUALTABLESTMT_HPP */

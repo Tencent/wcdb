@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef PerformanceTraceConfig_hpp
-#define PerformanceTraceConfig_hpp
+#ifndef _WCDB_PERFORMANCETRACECONFIG_HPP
+#define _WCDB_PERFORMANCETRACECONFIG_HPP
 
 #include <WCDB/Config.hpp>
 #include <WCDB/Lock.hpp>
@@ -65,4 +65,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* PerformanceTraceConfig_hpp */
+#endif /* _WCDB_PERFORMANCETRACECONFIG_HPP */

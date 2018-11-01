@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Error_hpp
-#define Error_hpp
+#ifndef _WCDB_ERROR_HPP
+#define _WCDB_ERROR_HPP
 
 #include <WCDB/String.hpp>
 #include <functional>
@@ -224,4 +224,4 @@ std::any is available since C++17.
 
 } //namespace WCDB
 
-#endif /* Error_hpp */
+#endif /* _WCDB_ERROR_HPP */

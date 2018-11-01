@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef ThreadedErrors_hpp
-#define ThreadedErrors_hpp
+#ifndef _WCDB_THREADEDERRORS_HPP
+#define _WCDB_THREADEDERRORS_HPP
 
 #include <WCDB/Error.hpp>
 #include <WCDB/ThreadLocal.hpp>
@@ -41,4 +41,4 @@ private:
 
 } //namespace WCDB
 
-#endif /* ThreadedErrors_hpp */
+#endif /* _WCDB_THREADEDERRORS_HPP */

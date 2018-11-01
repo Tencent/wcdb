@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SQLite_h
-#define SQLite_h
+#ifndef _WCDB_SQLITE_H
+#define _WCDB_SQLITE_H
 
 #if WCDB_BUILTIN_SQLCIPHER
 #include <sqlcipher/fts3_tokenizer.h>
@@ -28,4 +28,4 @@
 #include <sqlite3.h>
 #endif
 
-#endif /* SQLite_h */
+#endif /* _WCDB_SQLITE_H */

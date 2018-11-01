@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef StatementRollback_hpp
-#define StatementRollback_hpp
+#ifndef _WCDB_STATEMENTROLLBACK_HPP
+#define _WCDB_STATEMENTROLLBACK_HPP
 
 #include <WCDB/Statement.hpp>
 
@@ -33,4 +33,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* StatementRollback_hpp */
+#endif /* _WCDB_STATEMENTROLLBACK_HPP */

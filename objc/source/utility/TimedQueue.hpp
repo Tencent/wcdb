@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef TimedQueue_hpp
-#define TimedQueue_hpp
+#ifndef _WCDB_TIMEDQUEUE_HPP
+#define _WCDB_TIMEDQUEUE_HPP
 
 #include <WCDB/OrderedUniqueList.hpp>
 #include <WCDB/Time.hpp>
@@ -131,4 +131,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* TimedQueue_hpp */
+#endif /* _WCDB_TIMEDQUEUE_HPP */

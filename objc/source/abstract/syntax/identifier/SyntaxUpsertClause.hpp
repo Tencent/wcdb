@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxUpsertClause_hpp
-#define SyntaxUpsertClause_hpp
+#ifndef _WCDB_SYNTAXUPSERTCLAUSE_HPP
+#define _WCDB_SYNTAXUPSERTCLAUSE_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -50,4 +50,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxUpsertClause_hpp */
+#endif /* _WCDB_SYNTAXUPSERTCLAUSE_HPP */

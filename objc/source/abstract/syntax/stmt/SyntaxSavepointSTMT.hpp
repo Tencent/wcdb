@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxSavepointSTMT_hpp
-#define SyntaxSavepointSTMT_hpp
+#ifndef _WCDB_SYNTAXSAVEPOINTSTMT_HPP
+#define _WCDB_SYNTAXSAVEPOINTSTMT_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -43,4 +43,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxSavepointSTMT_hpp */
+#endif /* _WCDB_SYNTAXSAVEPOINTSTMT_HPP */

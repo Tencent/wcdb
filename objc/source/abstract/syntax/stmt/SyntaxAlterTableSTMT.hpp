@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxAlterTableSTMT_hpp
-#define SyntaxAlterTableSTMT_hpp
+#ifndef _WCDB_SYNTAXALTERTABLESTMT_HPP
+#define _WCDB_SYNTAXALTERTABLESTMT_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -55,4 +55,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxAlterTableSTMT_hpp */
+#endif /* _WCDB_SYNTAXALTERTABLESTMT_HPP */

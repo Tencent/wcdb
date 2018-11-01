@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef StatementBegin_hpp
-#define StatementBegin_hpp
+#ifndef _WCDB_STATEMENTBEGIN_HPP
+#define _WCDB_STATEMENTBEGIN_HPP
 
 #include <WCDB/Statement.hpp>
 
@@ -34,4 +34,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* StatementBegin_hpp */
+#endif /* _WCDB_STATEMENTBEGIN_HPP */

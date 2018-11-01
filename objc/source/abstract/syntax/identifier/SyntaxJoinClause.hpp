@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxJoinClause_hpp
-#define SyntaxJoinClause_hpp
+#ifndef _WCDB_SYNTAXJOINCLAUSE_HPP
+#define _WCDB_SYNTAXJOINCLAUSE_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -49,4 +49,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxJoinClause_hpp */
+#endif /* _WCDB_SYNTAXJOINCLAUSE_HPP */

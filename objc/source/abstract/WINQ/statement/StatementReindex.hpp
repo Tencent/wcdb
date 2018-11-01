@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef StatementReindex_hpp
-#define StatementReindex_hpp
+#ifndef _WCDB_STATEMENTREINDEX_HPP
+#define _WCDB_STATEMENTREINDEX_HPP
 
 #include <WCDB/Statement.hpp>
 
@@ -36,4 +36,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* StatementReindex_hpp */
+#endif /* _WCDB_STATEMENTREINDEX_HPP */

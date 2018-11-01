@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Progress_hpp
-#define Progress_hpp
+#ifndef _WCDB_PROGRESS_HPP
+#define _WCDB_PROGRESS_HPP
 
 #include <functional>
 
@@ -47,4 +47,4 @@ private:
 
 } //namespace WCDB
 
-#endif /* Progress_hpp */
+#endif /* _WCDB_PROGRESS_HPP */

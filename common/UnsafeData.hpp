@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef UnsafeData_hpp
-#define UnsafeData_hpp
+#ifndef _WCDB_UNSAFEDATA_HPP
+#define _WCDB_UNSAFEDATA_HPP
 
 #include <WCDB/SharedThreadedErrorProne.hpp>
 #include <stdio.h>
@@ -71,4 +71,4 @@ public:
 
 }; // namespace WCDB
 
-#endif /* UnsafeData_hpp */
+#endif /* _WCDB_UNSAFEDATA_HPP */

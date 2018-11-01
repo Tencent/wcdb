@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef StatementRelease_hpp
-#define StatementRelease_hpp
+#ifndef _WCDB_STATEMENTRELEASE_HPP
+#define _WCDB_STATEMENTRELEASE_HPP
 
 #include <WCDB/Statement.hpp>
 
@@ -32,4 +32,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* StatementRelease_hpp */
+#endif /* _WCDB_STATEMENTRELEASE_HPP */

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxVacuumSTMT_hpp
-#define SyntaxVacuumSTMT_hpp
+#ifndef _WCDB_SYNTAXVACUUMSTMT_HPP
+#define _WCDB_SYNTAXVACUUMSTMT_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -45,4 +45,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxVacuumSTMT_hpp */
+#endif /* _WCDB_SYNTAXVACUUMSTMT_HPP */

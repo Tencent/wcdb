@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef String_hpp
-#define String_hpp
+#ifndef _WCDB_STRING_HPP
+#define _WCDB_STRING_HPP
 
 #include <string>
 

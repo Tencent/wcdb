@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef CoreFunction_hpp
-#define CoreFunction_hpp
+#ifndef _WCDB_COREFUNCTION_HPP
+#define _WCDB_COREFUNCTION_HPP
 
 #include <WCDB/ExpressionOperable.hpp>
 #include <WCDB/SQL.hpp>
@@ -106,4 +106,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* CoreFunction_hpp */
+#endif /* _WCDB_COREFUNCTION_HPP */

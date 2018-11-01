@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef ConfiguredHandle_hpp
-#define ConfiguredHandle_hpp
+#ifndef _WCDB_CONFIGUREDHANDLE_HPP
+#define _WCDB_CONFIGUREDHANDLE_HPP
 
 #include <WCDB/Abstract.h>
 #include <WCDB/Configs.hpp>
@@ -46,4 +46,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* ConfiguredHandle_hpp */
+#endif /* _WCDB_CONFIGUREDHANDLE_HPP */

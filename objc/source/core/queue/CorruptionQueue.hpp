@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef CorruptionQueue_hpp
-#define CorruptionQueue_hpp
+#ifndef _WCDB_CORRUPTIONQUEUE_HPP
+#define _WCDB_CORRUPTIONQUEUE_HPP
 
 #include <WCDB/AsyncQueue.hpp>
 #include <WCDB/Lock.hpp>
@@ -51,4 +51,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* CorruptionQueue_hpp */
+#endif /* _WCDB_CORRUPTIONQUEUE_HPP */

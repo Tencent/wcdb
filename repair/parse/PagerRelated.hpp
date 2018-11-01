@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef PagerRelated_hpp
-#define PagerRelated_hpp
+#ifndef _WCDB_PAGERRELATED_HPP
+#define _WCDB_PAGERRELATED_HPP
 
 #include <WCDB/Error.hpp>
 
@@ -49,4 +49,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* PagerRelated_hpp */
+#endif /* _WCDB_PAGERRELATED_HPP */

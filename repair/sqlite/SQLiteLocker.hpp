@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SQLiteLocker_hpp
-#define SQLiteLocker_hpp
+#ifndef _WCDB_SQLITELOCKER_HPP
+#define _WCDB_SQLITELOCKER_HPP
 
 #include <WCDB/Locker.hpp>
 #include <WCDB/SQLiteBase.hpp>
@@ -52,4 +52,4 @@ public:
 
 } //namespace WCDB
 
-#endif /* SQLiteLocker_hpp */
+#endif /* _WCDB_SQLITELOCKER_HPP */

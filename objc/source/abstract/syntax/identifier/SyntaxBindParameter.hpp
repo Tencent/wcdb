@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxBindParameter_hpp
-#define SyntaxBindParameter_hpp
+#ifndef _WCDB_SYNTAXBINDPARAMETER_HPP
+#define _WCDB_SYNTAXBINDPARAMETER_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -50,4 +50,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxBindParameter_hpp */
+#endif /* _WCDB_SYNTAXBINDPARAMETER_HPP */

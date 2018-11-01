@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxResultColumn_hpp
-#define SyntaxResultColumn_hpp
+#ifndef _WCDB_SYNTAXRESULTCOLUMN_HPP
+#define _WCDB_SYNTAXRESULTCOLUMN_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -47,4 +47,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxResultColumn_hpp */
+#endif /* _WCDB_SYNTAXRESULTCOLUMN_HPP */

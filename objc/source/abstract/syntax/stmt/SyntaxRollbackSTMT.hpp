@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxRollbackSTMT_hpp
-#define SyntaxRollbackSTMT_hpp
+#ifndef _WCDB_SYNTAXROLLBACKSTMT_HPP
+#define _WCDB_SYNTAXROLLBACKSTMT_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -43,4 +43,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxRollbackSTMT_hpp */
+#endif /* _WCDB_SYNTAXROLLBACKSTMT_HPP */

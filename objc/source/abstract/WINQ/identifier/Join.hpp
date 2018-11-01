@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Join_hpp
-#define Join_hpp
+#ifndef _WCDB_JOIN_HPP
+#define _WCDB_JOIN_HPP
 
 #include <WCDB/SQL.hpp>
 
@@ -51,4 +51,4 @@ private:
 
 } // namespace WCDB
 
-#endif /* Join_hpp */
+#endif /* _WCDB_JOIN_HPP */

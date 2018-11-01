@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef RepairKit_h
-#define RepairKit_h
+#ifndef _WCDB_REPAIRKIT_H
+#define _WCDB_REPAIRKIT_H
 
 #include <WCDB/Factory.hpp>
 #include <WCDB/FactoryBackup.hpp>
@@ -29,4 +29,4 @@
 #include <WCDB/SQLiteAssembler.hpp>
 #include <WCDB/SQLiteLocker.hpp>
 
-#endif /* RepairKit_h */
+#endif /* _WCDB_REPAIRKIT_H */

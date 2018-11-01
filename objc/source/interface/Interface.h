@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Interface_h
-#define Interface_h
+#ifndef _WCDB_INTERFACE_H
+#define _WCDB_INTERFACE_H
 
 #import <WCDB/Abstract.h>
 #import <WCDB/Core.h>
@@ -82,4 +82,4 @@
 
 #import <WCDB/WCTDatabase+FTS.h>
 
-#endif /* Interface_h */
+#endif /* _WCDB_INTERFACE_H */

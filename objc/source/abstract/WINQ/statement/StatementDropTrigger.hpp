@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef StatementDropTrigger_hpp
-#define StatementDropTrigger_hpp
+#ifndef _WCDB_STATEMENTDROPTRIGGER_HPP
+#define _WCDB_STATEMENTDROPTRIGGER_HPP
 
 #include <WCDB/Statement.hpp>
 
@@ -34,4 +34,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* StatementDropTrigger_hpp */
+#endif /* _WCDB_STATEMENTDROPTRIGGER_HPP */

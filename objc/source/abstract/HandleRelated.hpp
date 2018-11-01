@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef HandleRelated_hpp
-#define HandleRelated_hpp
+#ifndef _WCDB_HANDLERELATED_HPP
+#define _WCDB_HANDLERELATED_HPP
 
 #include <WCDB/String.hpp>
 
@@ -40,4 +40,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* HandleRelated_hpp */
+#endif /* _WCDB_HANDLERELATED_HPP */

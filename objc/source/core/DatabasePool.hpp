@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef DatabasePool_hpp
-#define DatabasePool_hpp
+#ifndef _WCDB_DATABASEPOOL_HPP
+#define _WCDB_DATABASEPOOL_HPP
 
 #include <WCDB/Lock.hpp>
 #include <WCDB/Path.hpp>
@@ -69,4 +69,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* DatabasePool_hpp */
+#endif /* _WCDB_DATABASEPOOL_HPP */

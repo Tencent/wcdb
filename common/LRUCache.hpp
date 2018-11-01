@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef LRUCache_hpp
-#define LRUCache_hpp
+#ifndef _WCDB_LRUCACHE_HPP
+#define _WCDB_LRUCACHE_HPP
 
 #include <WCDB/Assertion.hpp>
 #include <list>
@@ -94,4 +94,4 @@ protected:
 
 } // namespace WCDB
 
-#endif /* LRUCache_hpp */
+#endif /* _WCDB_LRUCACHE_HPP */

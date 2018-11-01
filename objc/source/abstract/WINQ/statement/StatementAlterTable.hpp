@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef StatementAlterTable_hpp
-#define StatementAlterTable_hpp
+#ifndef _WCDB_STATEMENTALTERTABLE_HPP
+#define _WCDB_STATEMENTALTERTABLE_HPP
 
 #include <WCDB/Statement.hpp>
 
@@ -38,4 +38,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* StatementAlterTable_hpp */
+#endif /* _WCDB_STATEMENTALTERTABLE_HPP */

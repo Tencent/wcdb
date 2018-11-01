@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Locker_hpp
-#define Locker_hpp
+#ifndef _WCDB_LOCKER_HPP
+#define _WCDB_LOCKER_HPP
 
 #include <WCDB/String.hpp>
 
@@ -59,4 +59,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* Locker_hpp */
+#endif /* _WCDB_LOCKER_HPP */

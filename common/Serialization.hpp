@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Serialization_hpp
-#define Serialization_hpp
+#ifndef _WCDB_SERIALIZATION_HPP
+#define _WCDB_SERIALIZATION_HPP
 
 #include <WCDB/Data.hpp>
 
@@ -144,4 +144,4 @@ public:
 
 } //namespace WCDB
 
-#endif /* Serialization_hpp */
+#endif /* _WCDB_SERIALIZATION_HPP */

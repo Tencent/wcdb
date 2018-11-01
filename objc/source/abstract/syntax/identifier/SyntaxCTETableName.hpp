@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxCTETableName_hpp
-#define SyntaxCTETableName_hpp
+#ifndef _WCDB_SYNTAXCTETABLENAME_HPP
+#define _WCDB_SYNTAXCTETABLENAME_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -47,4 +47,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxCTETableName_hpp */
+#endif /* _WCDB_SYNTAXCTETABLENAME_HPP */

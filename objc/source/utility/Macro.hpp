@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Macro_hpp
-#define Macro_hpp
+#ifndef _WCDB_MACRO_HPP
+#define _WCDB_MACRO_HPP
 
 #define WCDB_BOOL_1 1
 #define WCDB_BOOL_0 0
@@ -76,4 +76,4 @@
 
 #define WCDB_NO_ESCAPE __attribute__((noescape))
 
-#endif /* Macro_hpp */
+#endif /* _WCDB_MACRO_HPP */

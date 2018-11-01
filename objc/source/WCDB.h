@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef WCDB_h
-#define WCDB_h
+#ifndef _WCDB_WCDB_H
+#define _WCDB_WCDB_H
 
 #ifndef __cplusplus
 #error Since WCDB is an Objective-C++ framework, for those files in your project that includes WCDB, you should rename their extension `.m` to `.mm`.
@@ -85,4 +85,4 @@
 
 #import <WCDB/WCTDatabase+FTS.h>
 
-#endif /* WCDB_h */
+#endif /* _WCDB_WCDB_H */

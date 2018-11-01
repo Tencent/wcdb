@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Master_hpp
-#define Master_hpp
+#ifndef _WCDB_MASTER_HPP
+#define _WCDB_MASTER_HPP
 
 #include <WCDB/String.hpp>
 
@@ -44,4 +44,4 @@ public:
 
 } //namespace WCDB
 
-#endif /* Master_hpp */
+#endif /* _WCDB_MASTER_HPP */

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxJoinOperator_hpp
-#define SyntaxJoinOperator_hpp
+#ifndef _WCDB_SYNTAXJOINOPERATOR_HPP
+#define _WCDB_SYNTAXJOINOPERATOR_HPP
 
 #include <WCDB/Enum.hpp>
 
@@ -74,4 +74,4 @@ constexpr const char* Enum::description(const Syntax::JoinOperator& joinOperator
 
 } // namespace WCDB
 
-#endif /* SyntaxJoinOperator_hpp */
+#endif /* _WCDB_SYNTAXJOINOPERATOR_HPP */

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxAttachSTMT_hpp
-#define SyntaxAttachSTMT_hpp
+#ifndef _WCDB_SYNTAXATTACHSTMT_HPP
+#define _WCDB_SYNTAXATTACHSTMT_HPP
 
 #include <WCDB/SyntaxExpression.hpp>
 #include <WCDB/SyntaxIdentifier.hpp>
@@ -47,4 +47,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxAttachSTMT_hpp */
+#endif /* _WCDB_SYNTAXATTACHSTMT_HPP */

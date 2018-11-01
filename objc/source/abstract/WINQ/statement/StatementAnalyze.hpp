@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef StatementAnalyze_hpp
-#define StatementAnalyze_hpp
+#ifndef _WCDB_STATEMENTANALYZE_HPP
+#define _WCDB_STATEMENTANALYZE_HPP
 
 #include <WCDB/Statement.hpp>
 
@@ -35,4 +35,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* StatementAnalyze_hpp */
+#endif /* _WCDB_STATEMENTANALYZE_HPP */

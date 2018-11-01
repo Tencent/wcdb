@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SQLiteAssembler_hpp
-#define SQLiteAssembler_hpp
+#ifndef _WCDB_SQLITEASSEMBLER_HPP
+#define _WCDB_SQLITEASSEMBLER_HPP
 
 #include <WCDB/Assembler.hpp>
 #include <WCDB/SQLiteBase.hpp>
@@ -84,4 +84,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* SQLiteAssembler_hpp */
+#endif /* _WCDB_SQLITEASSEMBLER_HPP */

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef HandleStatement_hpp
-#define HandleStatement_hpp
+#ifndef _WCDB_HANDLESTATEMENT_HPP
+#define _WCDB_HANDLESTATEMENT_HPP
 
 #include <WCDB/HandleRelated.hpp>
 #include <WCDB/WINQ.h>
@@ -74,4 +74,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* HandleStatement_hpp */
+#endif /* _WCDB_HANDLESTATEMENT_HPP */

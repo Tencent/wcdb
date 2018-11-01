@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxDeleteSTMT_hpp
-#define SyntaxDeleteSTMT_hpp
+#ifndef _WCDB_SYNTAXDELETESTMT_HPP
+#define _WCDB_SYNTAXDELETESTMT_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -58,4 +58,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxDeleteSTMT_hpp */
+#endif /* _WCDB_SYNTAXDELETESTMT_HPP */

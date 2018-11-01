@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef StatementCreateTrigger_hpp
-#define StatementCreateTrigger_hpp
+#ifndef _WCDB_STATEMENTCREATETRIGGER_HPP
+#define _WCDB_STATEMENTCREATETRIGGER_HPP
 
 #include <WCDB/Statement.hpp>
 
@@ -55,4 +55,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* StatementCreateTrigger_hpp */
+#endif /* _WCDB_STATEMENTCREATETRIGGER_HPP */

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Shm_hpp
-#define Shm_hpp
+#ifndef _WCDB_SHM_HPP
+#define _WCDB_SHM_HPP
 
 #include <WCDB/FileHandle.hpp>
 #include <WCDB/Initializeable.hpp>
@@ -81,4 +81,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* Shm_hpp */
+#endif /* _WCDB_SHM_HPP */

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SequenceCrawler_hpp
-#define SequenceCrawler_hpp
+#ifndef _WCDB_SEQUENCECRAWLER_HPP
+#define _WCDB_SEQUENCECRAWLER_HPP
 
 #include <WCDB/Crawlable.hpp>
 
@@ -62,4 +62,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* SequenceCrawler_hpp */
+#endif /* _WCDB_SEQUENCECRAWLER_HPP */

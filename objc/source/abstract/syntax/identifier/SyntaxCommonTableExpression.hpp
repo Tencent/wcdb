@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxCommonTableExpression_hpp
-#define SyntaxCommonTableExpression_hpp
+#ifndef _WCDB_SYNTAXCOMMONTABLEEXPRESSION_HPP
+#define _WCDB_SYNTAXCOMMONTABLEEXPRESSION_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -46,4 +46,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxCommonTableExpression_hpp */
+#endif /* _WCDB_SYNTAXCOMMONTABLEEXPRESSION_HPP */

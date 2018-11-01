@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef UpgradeableErrorProne_hpp
-#define UpgradeableErrorProne_hpp
+#ifndef _WCDB_UPGRADEABLEERRORPRONE_HPP
+#define _WCDB_UPGRADEABLEERRORPRONE_HPP
 
 #include <WCDB/ErrorProne.hpp>
 
@@ -64,4 +64,4 @@ private:
 
 } //namespace WCDB
 
-#endif /* UpgradeableErrorProne_hpp */
+#endif /* _WCDB_UPGRADEABLEERRORPRONE_HPP */

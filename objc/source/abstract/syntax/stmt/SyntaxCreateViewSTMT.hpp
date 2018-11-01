@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxCreateViewSTMT_hpp
-#define SyntaxCreateViewSTMT_hpp
+#ifndef _WCDB_SYNTAXCREATEVIEWSTMT_HPP
+#define _WCDB_SYNTAXCREATEVIEWSTMT_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -49,4 +49,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxCreateViewSTMT_hpp */
+#endif /* _WCDB_SYNTAXCREATEVIEWSTMT_HPP */

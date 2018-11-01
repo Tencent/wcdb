@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxInsertSTMT_hpp
-#define SyntaxInsertSTMT_hpp
+#ifndef _WCDB_SYNTAXINSERTSTMT_HPP
+#define _WCDB_SYNTAXINSERTSTMT_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -69,4 +69,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxInsertSTMT_hpp */
+#endif /* _WCDB_SYNTAXINSERTSTMT_HPP */

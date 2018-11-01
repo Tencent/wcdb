@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Abstract_h
-#define Abstract_h
+#ifndef _WCDB_ABSTRACT_H
+#define _WCDB_ABSTRACT_H
 
 #include <WCDB/Syntax.h>
 
@@ -30,4 +30,4 @@
 #include <WCDB/HandleStatement.hpp>
 #include <WCDB/Tokenize.hpp>
 
-#endif /* Abstract_h */
+#endif /* _WCDB_ABSTRACT_H */

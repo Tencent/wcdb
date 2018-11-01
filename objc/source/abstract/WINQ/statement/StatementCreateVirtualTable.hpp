@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef StatementCreateVirtualTable_hpp
-#define StatementCreateVirtualTable_hpp
+#ifndef _WCDB_STATEMENTCREATEVIRTUALTABLE_HPP
+#define _WCDB_STATEMENTCREATEVIRTUALTABLE_HPP
 
 #include <WCDB/Statement.hpp>
 
@@ -40,4 +40,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* StatementCreateVirtualTable_hpp */
+#endif /* _WCDB_STATEMENTCREATEVIRTUALTABLE_HPP */

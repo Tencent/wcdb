@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef ModuleArgument_hpp
-#define ModuleArgument_hpp
+#ifndef _WCDB_MODULEARGUMENT_HPP
+#define _WCDB_MODULEARGUMENT_HPP
 
 #include <WCDB/SQL.hpp>
 
@@ -35,4 +35,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* ModuleArgument_hpp */
+#endif /* _WCDB_MODULEARGUMENT_HPP */

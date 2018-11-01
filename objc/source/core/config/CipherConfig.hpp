@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef CipherConfig_hpp
-#define CipherConfig_hpp
+#ifndef _WCDB_CIPHERCONFIG_HPP
+#define _WCDB_CIPHERCONFIG_HPP
 
 #include <WCDB/Config.hpp>
 #include <WCDB/Data.hpp>
@@ -38,4 +38,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* CipherConfig_hpp */
+#endif /* _WCDB_CIPHERCONFIG_HPP */

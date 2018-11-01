@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxModuleArgument_hpp
-#define SyntaxModuleArgument_hpp
+#ifndef _WCDB_SYNTAXMODULEARGUMENT_HPP
+#define _WCDB_SYNTAXMODULEARGUMENT_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -55,4 +55,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxModuleArgument_hpp */
+#endif /* _WCDB_SYNTAXMODULEARGUMENT_HPP */

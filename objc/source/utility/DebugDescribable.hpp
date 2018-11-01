@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef DebugDescribable_hpp
-#define DebugDescribable_hpp
+#ifndef _WCDB_DEBUGDESCRIBABLE_HPP
+#define _WCDB_DEBUGDESCRIBABLE_HPP
 
 #include <WCDB/String.hpp>
 
@@ -32,4 +32,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* DebugDescribable_hpp */
+#endif /* _WCDB_DEBUGDESCRIBABLE_HPP */

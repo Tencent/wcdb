@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Assertion_hpp
-#define Assertion_hpp
+#ifndef _WCDB_ASSERTION_HPP
+#define _WCDB_ASSERTION_HPP
 
 #include <WCDB/Console.hpp>
 
@@ -47,4 +47,4 @@
         remedial                                                               \
     }
 
-#endif /* Assertion_hpp */
+#endif /* _WCDB_ASSERTION_HPP */

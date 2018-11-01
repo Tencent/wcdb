@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Dispatch_hpp
-#define Dispatch_hpp
+#ifndef _WCDB_DISPATCH_HPP
+#define _WCDB_DISPATCH_HPP
 
 #include <WCDB/String.hpp>
 #include <functional>
@@ -33,4 +33,4 @@ public:
 
 } //namespace WCDB
 
-#endif /* Dispatch_hpp */
+#endif /* _WCDB_DISPATCH_HPP */

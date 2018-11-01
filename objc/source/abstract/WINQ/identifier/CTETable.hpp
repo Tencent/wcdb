@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef CTETable_hpp
-#define CTETable_hpp
+#ifndef _WCDB_CTETABLE_HPP
+#define _WCDB_CTETABLE_HPP
 
 #include <WCDB/SQL.hpp>
 
@@ -40,4 +40,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* CTETable_hpp */
+#endif /* _WCDB_CTETABLE_HPP */

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Recyclable_hpp
-#define Recyclable_hpp
+#ifndef _WCDB_RECYCLABLE_HPP
+#define _WCDB_RECYCLABLE_HPP
 
 #include <functional>
 
@@ -108,4 +108,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* Recyclable_hpp */
+#endif /* _WCDB_RECYCLABLE_HPP */

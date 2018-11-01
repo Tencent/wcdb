@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef BindParameter_hpp
-#define BindParameter_hpp
+#ifndef _WCDB_BINDPARAMETER_HPP
+#define _WCDB_BINDPARAMETER_HPP
 
 #include <WCDB/SQL.hpp>
 
@@ -44,4 +44,4 @@ private:
 
 } // namespace WCDB
 
-#endif /* BindParameter_hpp */
+#endif /* _WCDB_BINDPARAMETER_HPP */

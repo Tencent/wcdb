@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef TableOrSubquery_hpp
-#define TableOrSubquery_hpp
+#ifndef _WCDB_TABLEORSUBQUERY_HPP
+#define _WCDB_TABLEORSUBQUERY_HPP
 
 #include <WCDB/SQL.hpp>
 
@@ -57,4 +57,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* TableOrSubquery_hpp */
+#endif /* _WCDB_TABLEORSUBQUERY_HPP */

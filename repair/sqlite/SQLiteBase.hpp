@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SQLiteBase_hpp
-#define SQLiteBase_hpp
+#ifndef _WCDB_SQLITEBASE_HPP
+#define _WCDB_SQLITEBASE_HPP
 
 #include <WCDB/ErrorProne.hpp>
 #include <WCDB/String.hpp>
@@ -82,4 +82,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* SQLiteBase_hpp */
+#endif /* _WCDB_SQLITEBASE_HPP */

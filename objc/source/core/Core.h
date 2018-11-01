@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Core_h
-#define Core_h
+#ifndef _WCDB_CORE_H
+#define _WCDB_CORE_H
 
 #include <WCDB/Abstract.h>
 
@@ -129,4 +129,4 @@ protected:
 
 } // namespace WCDB
 
-#endif /* Core_h */
+#endif /* _WCDB_CORE_H */

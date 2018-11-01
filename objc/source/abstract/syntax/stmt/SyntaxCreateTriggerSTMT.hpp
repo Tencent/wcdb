@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxCreateTriggerSTMT_hpp
-#define SyntaxCreateTriggerSTMT_hpp
+#ifndef _WCDB_SYNTAXCREATETRIGGERSTMT_HPP
+#define _WCDB_SYNTAXCREATETRIGGERSTMT_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -80,4 +80,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxCreateTriggerSTMT_hpp */
+#endif /* _WCDB_SYNTAXCREATETRIGGERSTMT_HPP */

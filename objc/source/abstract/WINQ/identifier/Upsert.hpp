@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Upsert_hpp
-#define Upsert_hpp
+#ifndef _WCDB_UPSERT_HPP
+#define _WCDB_UPSERT_HPP
 
 #include <WCDB/SQL.hpp>
 
@@ -38,4 +38,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* Upsert_hpp */
+#endif /* _WCDB_UPSERT_HPP */

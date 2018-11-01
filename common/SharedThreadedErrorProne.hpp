@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SharedThreadedErrorProne_hpp
-#define SharedThreadedErrorProne_hpp
+#ifndef _WCDB_SHAREDTHREADEDERRORPRONE_HPP
+#define _WCDB_SHAREDTHREADEDERRORPRONE_HPP
 
 namespace WCDB {
 
@@ -36,4 +36,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* SharedThreadedErrorProne_hpp */
+#endif /* _WCDB_SHAREDTHREADEDERRORPRONE_HPP */

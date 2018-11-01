@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxCreateTableSTMT_hpp
-#define SyntaxCreateTableSTMT_hpp
+#ifndef _WCDB_SYNTAXCREATETABLESTMT_HPP
+#define _WCDB_SYNTAXCREATETABLESTMT_HPP
 
 #include <WCDB/SyntaxColumnDef.hpp>
 #include <WCDB/SyntaxIdentifier.hpp>
@@ -60,4 +60,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxCreateTableSTMT_hpp */
+#endif /* _WCDB_SYNTAXCREATETABLESTMT_HPP */

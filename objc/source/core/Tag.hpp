@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Tag_hpp
-#define Tag_hpp
+#ifndef _WCDB_TAG_HPP
+#define _WCDB_TAG_HPP
 
 #include <cstdint>
 #include <type_traits>
@@ -49,4 +49,4 @@ struct is_integral<WCDB::Tag> : public std::true_type {
 };
 } // namespace std
 
-#endif /* Tag_hpp */
+#endif /* _WCDB_TAG_HPP */

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Migration_hpp
-#define Migration_hpp
+#ifndef _WCDB_MIGRATION_HPP
+#define _WCDB_MIGRATION_HPP
 
 #include <WCDB/MigrationInfo.hpp>
 #include <functional>
@@ -82,4 +82,4 @@ protected:
 
 } // namespace WCDB
 
-#endif /* Migration_hpp */
+#endif /* _WCDB_MIGRATION_HPP */

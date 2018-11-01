@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxDetachSTMT_hpp
-#define SyntaxDetachSTMT_hpp
+#ifndef _WCDB_SYNTAXDETACHSTMT_HPP
+#define _WCDB_SYNTAXDETACHSTMT_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -44,4 +44,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxDetachSTMT_hpp */
+#endif /* _WCDB_SYNTAXDETACHSTMT_HPP */

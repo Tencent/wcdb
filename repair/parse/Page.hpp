@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Page_hpp
-#define Page_hpp
+#ifndef _WCDB_PAGE_HPP
+#define _WCDB_PAGE_HPP
 
 #include <WCDB/Initializeable.hpp>
 #include <WCDB/MappedData.hpp>
@@ -89,4 +89,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* Page_hpp */
+#endif /* _WCDB_PAGE_HPP */

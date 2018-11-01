@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef StatementDropTable_hpp
-#define StatementDropTable_hpp
+#ifndef _WCDB_STATEMENTDROPTABLE_HPP
+#define _WCDB_STATEMENTDROPTABLE_HPP
 
 #include <WCDB/Statement.hpp>
 
@@ -34,4 +34,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* StatementDropTable_hpp */
+#endif /* _WCDB_STATEMENTDROPTABLE_HPP */

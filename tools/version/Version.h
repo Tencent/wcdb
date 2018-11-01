@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Version_h
-#define Version_h
+#ifndef _WCDB_VERSION_H
+#define _WCDB_VERSION_H
 
 /* This file is generated automatically by `tools/version/objc.sh`. */
 
@@ -28,4 +28,4 @@
 #define WCDB_BUILD_TIMESTAMP WCDB_BUILD_TIMESTAMP_PLACEHOLDER
 #define WCDB_BUILD_TIME "WCDB_BUILD_TIME_PLACEHOLDER"
 
-#endif /* Version_h */
+#endif /* _WCDB_VERSION_H */

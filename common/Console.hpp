@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Console_hpp
-#define Console_hpp
+#ifndef _WCDB_CONSOLE_HPP
+#define _WCDB_CONSOLE_HPP
 
 #include <WCDB/Notifier.hpp>
 #include <WCDB/String.hpp>
@@ -57,4 +57,4 @@ private:
 
 } // namespace WCDB
 
-#endif /* Console_hpp */
+#endif /* _WCDB_CONSOLE_HPP */

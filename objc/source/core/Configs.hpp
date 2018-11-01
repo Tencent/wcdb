@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Configs_hpp
-#define Configs_hpp
+#ifndef _WCDB_CONFIGS_HPP
+#define _WCDB_CONFIGS_HPP
 
 #include <WCDB/Config.hpp>
 #include <WCDB/OrderedUniqueList.hpp>
@@ -54,4 +54,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* Configs_hpp */
+#endif /* _WCDB_CONFIGS_HPP */

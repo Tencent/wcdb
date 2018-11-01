@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef TokenizeConfig_hpp
-#define TokenizeConfig_hpp
+#ifndef _WCDB_TOKENIZECONFIG_HPP
+#define _WCDB_TOKENIZECONFIG_HPP
 
 #include <WCDB/Config.hpp>
 
@@ -43,4 +43,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* TokenizeConfig_hpp */
+#endif /* _WCDB_TOKENIZECONFIG_HPP */

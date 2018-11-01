@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxFilter_hpp
-#define SyntaxFilter_hpp
+#ifndef _WCDB_SYNTAXFILTER_HPP
+#define _WCDB_SYNTAXFILTER_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -46,4 +46,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxFilter_hpp */
+#endif /* _WCDB_SYNTAXFILTER_HPP */

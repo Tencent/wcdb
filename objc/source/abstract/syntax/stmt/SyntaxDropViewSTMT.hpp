@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxDropViewSTMT_hpp
-#define SyntaxDropViewSTMT_hpp
+#ifndef _WCDB_SYNTAXDROPVIEWSTMT_HPP
+#define _WCDB_SYNTAXDROPVIEWSTMT_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -46,4 +46,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxDropViewSTMT_hpp */
+#endif /* _WCDB_SYNTAXDROPVIEWSTMT_HPP */

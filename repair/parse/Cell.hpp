@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Cell_hpp
-#define Cell_hpp
+#ifndef _WCDB_CELL_HPP
+#define _WCDB_CELL_HPP
 
 #include <WCDB/Initializeable.hpp>
 #include <WCDB/MappedData.hpp>
@@ -80,4 +80,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* Cell_hpp */
+#endif /* _WCDB_CELL_HPP */

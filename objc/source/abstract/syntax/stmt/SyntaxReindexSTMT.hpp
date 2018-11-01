@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxReindexSTMT_hpp
-#define SyntaxReindexSTMT_hpp
+#ifndef _WCDB_SYNTAXREINDEXSTMT_HPP
+#define _WCDB_SYNTAXREINDEXSTMT_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -50,4 +50,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxReindexSTMT_hpp */
+#endif /* _WCDB_SYNTAXREINDEXSTMT_HPP */

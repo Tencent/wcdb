@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef SyntaxSelectCore_hpp
-#define SyntaxSelectCore_hpp
+#ifndef _WCDB_SYNTAXSELECTCORE_HPP
+#define _WCDB_SYNTAXSELECTCORE_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 #include <WCDB/SyntaxJoinClause.hpp>
@@ -65,4 +65,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* SyntaxSelectCore_hpp */
+#endif /* _WCDB_SYNTAXSELECTCORE_HPP */
