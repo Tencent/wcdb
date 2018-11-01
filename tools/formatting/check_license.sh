@@ -38,7 +38,7 @@ if [ $extension = "h" ] || [ $extension = "hpp" ] || [ $extension = "c" ] || [ $
     content=`cat $file`
     if [[ $content != "$license"* ]];
     then
-        echo "License declaretion in ${file} is not correct."
+        echo "Error: License declaretion in ${file} is not correct."
         exit 1
     fi
 fi
