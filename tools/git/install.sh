@@ -1,13 +1,18 @@
 #!/bin/bash
 
 root=`git rev-parse --show-toplevel`
-hooks=$root/.git/hooks/
+hooks=$root/tools/git
+gitHooks=$root/.git/hooks
 
 install() {
-    cp $1 $hooks
-    chmod +x $hooks/$1
-    echo "$1 is installed at $hooks"
+    source=$1
+    filename=`basename $1`
+    target=$gitHooks/$filename
+    rm -f $target
+    ln $source $target
+    chmod +x $target
+    echo "$source is installed at $target"
 }
 
-install pre-commit
-install prepare-commit-msg
+install $hooks/pre-commit
+install $hooks/prepare-commit-msg

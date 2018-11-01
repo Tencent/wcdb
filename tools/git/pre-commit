@@ -1,8 +1,14 @@
 #!/bin/bash  
   
 root=`git rev-parse --show-toplevel`
-formatter=$root/tools/formatting/format_cached.sh
-if [ -f "$formatter" ]
-then
-    sh $formatter
-fi
+
+licenseChecker=$root/tools/formatting/check_license.sh
+formatter=$root/tools/formatting/format.sh
+for file in `git diff-index --cached --diff-filter=ACMRT --name-only HEAD` ; do  
+    fullpath=$root/$file
+    sh $formatter --add $fullpath
+    if [ ! $licenseChecker $file ]; 
+    then
+        exit 1
+    fi
+done  

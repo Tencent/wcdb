@@ -13,7 +13,6 @@ extension=${file##*.}
 
 # correct file macro
 if [ $extension = "h" ] || [ $extension = "hpp" ] || [ $extension = "c" ] || [ $extension = "cpp" ]; then
-    formatting=true
     fileMacro=`basename $file | sed "s/[^[:alnum:]_]/_/g"`
     awk -v fileMacro=${fileMacro} '''{ 
         output=$0
