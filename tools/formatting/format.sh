@@ -1,7 +1,7 @@
 #!/bin/bash
 
 usage() {    
-    echo "Usage: sh format.sh [--add/--noadd] [path]"
+    echo "Usage: sh $0 [--add/--noadd] [path]"
 }
 
 # check parameters
@@ -34,6 +34,7 @@ fi
 extension=${file##*.}
 formatting=false
 
+# clang-format
 if [ $extension = "h" ] || [ $extension = "hpp" ] || [ $extension = "c" ] || [ $extension = "cpp" ] || [ $extension = "m" ] || [ $extension = "mm" ]; then
     formatting=true
     echo "Formatting by clang-format for ${file}..."
@@ -43,6 +44,7 @@ if [ $extension = "h" ] || [ $extension = "hpp" ] || [ $extension = "c" ] || [ $
     fi
 fi
 
+# swiftlint
 if [ $extension = "swift" ]; then
     formatting=true
     echo "Formatting by swiftlint for ${file}..."
@@ -50,25 +52,6 @@ if [ $extension = "swift" ]; then
     if ($add) then
         git add $file
     fi
-fi
-
-if [ $extension = "h" ] || [ $extension = "hpp" ] || [ $extension = "c" ] || [ $extension = "cpp" ]; then
-    formatting=true
-    echo "Formatting by file-macro-formatter for ${file}..."
-    fileMacro=`basename $file | sed "s/[^[:alnum:]_]/_/g"`
-    awk -v fileMacro=${fileMacro} '''{ 
-        output=$0
-        newFileMacro="_WCDB_" toupper(fileMacro)
-        if ($0=="#ifndef " fileMacro) {
-            output="#ifndef " newFileMacro
-        }else if ($0=="#define " fileMacro) {
-            output="#define " newFileMacro
-        }else if ($0=="#endif \/\* " fileMacro " \*\/") {
-            output="#endif /* " newFileMacro " */"
-        }
-        print output
-    }''' $file > tmp
-    mv tmp $file
 fi
 
 if ( ! $formatting) then 
