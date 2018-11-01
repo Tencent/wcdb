@@ -2,8 +2,8 @@
 
 root=`git rev-parse --show-toplevel`
 
-paths=(common repair objc swift tools/templates)
-formatter=$root/tools/code_formatting/code_formatting_one.sh
+paths=(common repair objc swift tools/templates tools/version)
+formatter=$root/tools/formatting/format.sh
 
 for path in ${paths[@]}; do
     fullpath=$root/$path
