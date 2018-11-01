@@ -22,11 +22,11 @@ fi
 
 # check toolchains
 if ! type clang-format > /dev/null; then
-    echo "warning: clang-format not found. Install it by running 'brew install clang-format'."
+    echo "Error: clang-format not found. Install it by running 'brew install clang-format'."
     exit 1
 fi
 if ! type swiftlint > /dev/null; then
-    echo "warning: swiftLint not found. Install it by running 'brew install swiftlint'."
+    echo "Error: swiftLint not found. Install it by running 'brew install swiftlint'."
     exit 1
 fi
 

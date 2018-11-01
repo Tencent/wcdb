@@ -4,5 +4,5 @@ root=`git rev-parse --show-toplevel`
 formatter=$root/tools/formatting/format_cached.sh
 if [ -f "$formatter" ]
 then
-	sh $formatter
+    sh $formatter
 fi

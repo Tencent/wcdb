@@ -3,11 +3,11 @@
 message=`cat $1`
 
 if [ ${#message} == 0 ]; then
-    echo "Empty commit message is not allowed."
+    echo "Error: Empty commit message is not allowed."
     exit 1
 fi
 
 if [[ ${message:0:1} != [A-Z] ]]; then
-    echo "The first letter of the message must be capitalized."
+    echo "Error: The first letter of the message must be capitalized."
     exit 1
 fi
