@@ -19,7 +19,6 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/NSString+CppString.h>
 #import <WCDB/WCTCommon.h>
 #import <WCDB/WCTProperty.h>
 

@@ -31,7 +31,6 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
 
 - (void)setCipherKey:(NSData *)cipherKey
 {
-    WCTRemedialAssert(cipherKey, "Cipher key can't be null.", return;);
     _database->setConfig(WCDB::Core::cipherConfigName,
                          WCDB::Core::shared()->cipherConfig(WCDB::UnsafeData::immutable((const unsigned char *) cipherKey.bytes, (size_t) cipherKey.length)),
                          WCDB::Configs::Priority::Highest);
@@ -40,7 +39,6 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
 - (void)setCipherKey:(NSData *)cipherKey
    andCipherPageSize:(int)cipherPageSize
 {
-    WCTRemedialAssert(cipherKey, "Cipher key can't be null.", return;);
     _database->setConfig(WCDB::Core::cipherConfigName,
                          WCDB::Core::shared()->cipherConfig(WCDB::UnsafeData::immutable((const unsigned char *) cipherKey.bytes, (size_t) cipherKey.length), cipherPageSize),
                          WCDB::Configs::Priority::Highest);
@@ -51,7 +49,6 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
           forName:(NSString *)name
      withPriority:(int)priority
 {
-    WCTRemedialAssert(name, "Config name can't be null.", return;);
     WCTRemedialAssert(nsInvocation, "Use [removeConfigForName:] instead.", return;);
     WCDB::CustomConfig::Invocation invocation = [nsInvocation, self](WCDB::Handle *handle) -> bool {
         WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithCore:self andHandle:handle];
@@ -68,7 +65,7 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
             return result;
         };
     }
-    _database->setConfig(name.cppString, WCDB::Core::shared()->customConfig(invocation, uninvocation), priority);
+    _database->setConfig(name, WCDB::Core::shared()->customConfig(invocation, uninvocation), priority);
 }
 
 - (void)setConfig:(WCTConfigBlock)nsInvocation
@@ -80,8 +77,7 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
 
 - (void)removeConfigForName:(NSString *)name
 {
-    WCTRemedialAssert(name, "Config name can't be null.", return;);
-    _database->removeConfig(name.cppString);
+    _database->removeConfig(name);
 }
 
 @end

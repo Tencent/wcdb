@@ -31,7 +31,6 @@
 
 - (instancetype)fromTable:(NSString *)tableName
 {
-    WCTRemedialAssert(tableName, "Table name can't be null.", return self;);
     _statement.from(tableName);
     return self;
 }

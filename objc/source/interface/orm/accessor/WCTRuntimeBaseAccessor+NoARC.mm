@@ -20,7 +20,6 @@
 
 #import <WCDB/Assertion.hpp>
 #import <WCDB/Console.hpp>
-#import <WCDB/NSString+cppString.h>
 #import <WCDB/String.hpp>
 #import <WCDB/WCTRuntimeBaseAccessor.h>
 #import <objc/runtime.h>

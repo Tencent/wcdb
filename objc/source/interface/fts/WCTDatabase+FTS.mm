@@ -32,19 +32,17 @@ WCTTokenizer const WCTTokenizerWCDB = @"WCDB";
 
 - (void)setTokenizer:(NSString *)tokenizerName
 {
-    WCTRemedialAssert(tokenizerName, "Tokenizer name can't be null.", return;)
     _database->setConfig(WCDB::Core::tokenizeConfigName,
-                         WCDB::Core::shared()->tokenizeConfig({ tokenizerName.cppString }),
+                         WCDB::Core::shared()->tokenizeConfig({ tokenizerName }),
                          WCDB::Configs::Priority::Higher);
 }
 
 - (void)setTokenizers:(NSArray<NSString *> *)tokenizerNames
 {
-    WCTRemedialAssert(tokenizerNames, "Tokenizers can't be null.", return;)
     std::list<WCDB::String>
     theTokenizeNames;
     for (NSString *tokenizerName in tokenizerNames) {
-        theTokenizeNames.push_back(tokenizerName.cppString);
+        theTokenizeNames.push_back(tokenizerName);
     }
     _database->setConfig(WCDB::Core::tokenizeConfigName,
                          WCDB::Core::shared()->tokenizeConfig(theTokenizeNames),
@@ -53,9 +51,8 @@ WCTTokenizer const WCTTokenizerWCDB = @"WCDB";
 
 + (void)addTokenizer:(unsigned char *)address named:(NSString *)name
 {
-    WCTRemedialAssert(name, "Tokenizer's name can't be null.", return;)
     WCDB::Core::shared()
-    ->addTokenizer(name.cppString, address);
+    ->addTokenizer(name, address);
 }
 
 @end

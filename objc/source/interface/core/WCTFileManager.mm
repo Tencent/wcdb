@@ -20,7 +20,6 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/FileManager.hpp>
-#import <WCDB/NSString+cppString.h>
 #import <WCDB/Notifier.hpp>
 #import <WCDB/ThreadedErrors.hpp>
 
@@ -40,7 +39,7 @@ bool FileManager::setFileProtection(const WCDB::String &path, WCDB::FileProtecti
     WCDB::Error error;
     error.setCode(WCDB::Error::Code::IOError, "Native");
     if (nsError.description.length > 0) {
-        error.message = nsError.description.cppString;
+        error.message = nsError.description;
     } else {
         error.message = WCDB::Error::codeName(WCDB::Error::Code::IOError);
     }
@@ -76,7 +75,7 @@ std::pair<bool, WCDB::FileProtection> FileManager::getFileProtection(const WCDB:
     WCDB::Error error;
     error.setCode(WCDB::Error::Code::IOError, "Native");
     if (nsError.description.length > 0) {
-        error.message = nsError.description.cppString;
+        error.message = nsError.description;
     } else {
         error.message = WCDB::Error::codeName(WCDB::Error::Code::IOError);
     }

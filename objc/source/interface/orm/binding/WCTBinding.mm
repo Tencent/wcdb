@@ -201,7 +201,7 @@ WCTColumnNamed WCTBinding::getColumnGenerator()
 {
     static WCTColumnNamed s_columnNamed = ^WCDB::Column(NSString *name)
     {
-        return WCDB::Column(name ? name.cppString : WCDB::String::null());
+        return WCDB::Column(name ? name : WCDB::String::null());
     };
     return s_columnNamed;
 }

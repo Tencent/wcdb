@@ -46,14 +46,12 @@
 
 - (instancetype)fromTable:(NSString *)tableName
 {
-    WCTRemedialAssert(tableName, "Table name can't be null.", return self;);
     _statement.from(tableName);
     return self;
 }
 
 - (instancetype)fromTables:(NSArray<NSString *> *)tableNames
 {
-    WCTRemedialAssert(tableNames, "Table names can't be null.", return self;);
     WCDB::TablesOrSubqueries tables;
     for (NSString *tableName in tableNames) {
         tables.push_back(tableName);

@@ -178,7 +178,7 @@
 		2386B3C71ED442FE000B72F6 /* WCTError+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C41ED442FE000B72F6 /* WCTError+Private.h */; };
 		238845F02063912B006EAEC8 /* WCTPerformanceFootprint.h in Headers */ = {isa = PBXBuildFile; fileRef = 238845EE2063912B006EAEC8 /* WCTPerformanceFootprint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		238845F12063912B006EAEC8 /* WCTPerformanceFootprint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238845EF2063912B006EAEC8 /* WCTPerformanceFootprint.mm */; };
-		238A8FC5208B377300DDFDCB /* NSString+CppString.h in Headers */ = {isa = PBXBuildFile; fileRef = 238A8FC3208B377300DDFDCB /* NSString+CppString.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		238A8FC5208B377300DDFDCB /* NSString+CppString.h in Headers */ = {isa = PBXBuildFile; fileRef = 238A8FC3208B377300DDFDCB /* NSString+CppString.h */; };
 		238A8FC7208B377300DDFDCB /* NSString+CppString.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238A8FC4208B377300DDFDCB /* NSString+CppString.mm */; };
 		23906AB5215E4F4400C2B717 /* Version.h in Headers */ = {isa = PBXBuildFile; fileRef = 23906AB4215E4F4400C2B717 /* Version.h */; };
 		23906AB9215E500100C2B717 /* WCTDatabase+Statictics.h in Headers */ = {isa = PBXBuildFile; fileRef = 23906AB7215E500100C2B717 /* WCTDatabase+Statictics.h */; settings = {ATTRIBUTES = (Public, ); }; };

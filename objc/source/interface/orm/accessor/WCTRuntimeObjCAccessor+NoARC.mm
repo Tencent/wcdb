@@ -20,7 +20,6 @@
 
 #import <WCDB/Assertion.hpp>
 #import <WCDB/Error.hpp>
-#import <WCDB/NSString+CppString.h>
 #import <WCDB/Notifier.hpp>
 #import <WCDB/String.hpp>
 #import <WCDB/WCTRuntimeObjCAccessor.h>

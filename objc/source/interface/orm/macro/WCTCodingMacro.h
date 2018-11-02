@@ -141,7 +141,7 @@
     __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, "tokenize", tokenizeName)
 
 #define WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE_WCDB(className)                   \
-    __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, "tokenize", WCTTokenizerWCDB.cppString)
+    __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, "tokenize", WCTTokenizerWCDB)
 
 #define WCDB_VIRTUAL_TABLE_MODULE(className, moduleName)                       \
     __WCDB_VIRTUAL_TABLE_MODULE_IMP(className, moduleName)

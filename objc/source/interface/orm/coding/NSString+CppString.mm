@@ -29,10 +29,4 @@
     return string ? string : @"";
 }
 
-- (WCDB::String)cppString
-{
-    const char *utf8String = self.UTF8String;
-    return utf8String ? utf8String : WCDB::String::null();
-}
-
 @end

@@ -520,14 +520,13 @@
     if (!handle) {
         return NO;
     }
-    WCDB::String table = tableName.cppString;
     const WCTBinding &binding = [cls objectRelationalMapping];
-    std::pair<bool, bool> tableExists = handle->tableExists(table);
+    std::pair<bool, bool> tableExists = handle->tableExists(tableName);
     if (!tableExists.first) {
         return NO;
     }
     if (tableExists.second) {
-        auto pair = handle->getUnorderedColumnsWithTable(table);
+        auto pair = handle->getUnorderedColumnsWithTable(tableName);
         if (!pair.first) {
             return NO;
         }
@@ -548,23 +547,23 @@
             error.setCode(WCDB::Error::Code::Mismatch);
             error.level = WCDB::Error::Level::Notice;
             error.message = "Skip column";
-            error.infos.set("Table", tableName.cppString);
+            error.infos.set("Table", tableName);
             error.infos.set("Column", columnName);
-            error.infos.set("Path", self.path.cppString);
+            error.infos.set("Path", self.path);
             WCDB::Notifier::shared()->notify(error);
         }
         //Add new column
         for (const WCTColumnBinding *columnBinding : columnBindingsToAdded) {
-            if (!handle->execute(WCDB::StatementAlterTable().alterTable(table).addColumn(columnBinding->columnDef))) {
+            if (!handle->execute(WCDB::StatementAlterTable().alterTable(tableName).addColumn(columnBinding->columnDef))) {
                 return NO;
             }
         }
     } else {
-        if (!handle->execute(binding.generateCreateTableStatement(tableName.cppString))) {
+        if (!handle->execute(binding.generateCreateTableStatement(tableName))) {
             return NO;
         }
     }
-    for (const WCDB::StatementCreateIndex &statementCreateIndex : binding.generateCreateIndexStatements(table)) {
+    for (const WCDB::StatementCreateIndex &statementCreateIndex : binding.generateCreateIndexStatements(tableName)) {
         if (!handle->execute(statementCreateIndex)) {
             return NO;
         }

@@ -28,8 +28,7 @@
 
 - (instancetype)fromTable:(NSString *)tableName
 {
-    WCTRemedialAssert(tableName, "Table name can't be null.", return self;);
-    _statement.deleteFrom(tableName.cppString);
+    _statement.deleteFrom(tableName);
     return self;
 }
 

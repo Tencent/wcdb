@@ -19,6 +19,7 @@
  */
 
 #import <WCDB/Interface.h>
+#import <WCDB/NSString+CppString.h>
 #import <WCDB/WCTCore+Private.h>
 
 @implementation WCTCore

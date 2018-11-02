@@ -30,8 +30,7 @@
 
 - (instancetype)table:(NSString *)tableName
 {
-    WCTRemedialAssert(tableName, "Table name can't be null.", return self;);
-    _statement.update(tableName.cppString);
+    _statement.update(tableName);
     return self;
 }
 

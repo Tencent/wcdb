@@ -21,6 +21,7 @@
 #import <WCDB/Assertion.hpp>
 #import <WCDB/Console.hpp>
 #import <WCDB/Interface.h>
+#import <WCDB/NSString+CppString.h>
 #import <WCDB/Notifier.hpp>
 #import <WCDB/Version.h>
 #import <WCDB/WCTCore+Private.h>

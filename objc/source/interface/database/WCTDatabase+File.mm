@@ -19,6 +19,7 @@
  */
 
 #import <WCDB/Interface.h>
+#import <WCDB/NSString+CppString.h>
 #import <WCDB/WCTCore+Private.h>
 
 @implementation WCTDatabase (File)
@@ -33,14 +34,14 @@
 {
     std::list<WCDB::String> files;
     for (NSString *extraFile in extraFiles) {
-        files.push_back(extraFile.cppString);
+        files.push_back(extraFile);
     }
-    return _database->moveFilesToDirectoryWithExtraFiles(directory.cppString, files);
+    return _database->moveFilesToDirectoryWithExtraFiles(directory, files);
 }
 
 - (BOOL)moveFilesToDirectory:(NSString *)directory
 {
-    return _database->moveFiles(directory.cppString);
+    return _database->moveFiles(directory);
 }
 
 - (NSArray<NSString *> *)paths

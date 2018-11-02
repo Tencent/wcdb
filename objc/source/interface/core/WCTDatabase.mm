@@ -52,20 +52,18 @@
                                     }];
 #endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
 
-        WCDB::Core::shared()->addTokenizer(WCTTokenizerWCDB.cppString, WCDB::FTS::Module<void, WCTCursorInfo>::address());
+        WCDB::Core::shared()->addTokenizer(WCTTokenizerWCDB, WCDB::FTS::Module<void, WCTCursorInfo>::address());
     }
 }
 
 - (instancetype)initWithPath:(NSString *)path
 {
-    WCTRemedialAssert(path.length > 0, "Path can't be null.", return nil;);
-    return [super initWithHolder:WCDB::Core::shared()->getOrCreateDatabase(path.cppString)];
+    return [super initWithHolder:WCDB::Core::shared()->getOrCreateDatabase(path)];
 }
 
 - (instancetype)initWithExistingPath:(NSString *)path
 {
-    WCTRemedialAssert(path.length > 0, "Path can't be null.", return nil;);
-    return [super initWithHolder:WCDB::Core::shared()->getExistingDatabase(path.cppString)];
+    return [super initWithHolder:WCDB::Core::shared()->getExistingDatabase(path)];
 }
 
 - (instancetype)initWithExistingTag:(WCTTag)tag

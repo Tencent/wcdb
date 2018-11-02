@@ -29,22 +29,20 @@
 
 - (BOOL)tableExists:(NSString *)tableName
 {
-    WCTRemedialAssert(tableName, "Table name can't be null.", return NO;);
     WCDB::Handle *handle = [self getOrGenerateHandle];
     if (!handle) {
         return NO;
     }
-    return handle->tableExists(tableName.cppString).second;
+    return handle->tableExists(tableName).second;
 }
 
 - (BOOL)tableExists:(NSString *)tableName
           withError:(WCTError **)error
 {
-    WCTRemedialAssert(tableName, "Table name can't be null.", return NO;);
     WCDB::Handle *handle = [self getOrGenerateHandle];
     std::pair<bool, bool> result(true, false);
     if (handle) {
-        result = handle->tableExists(tableName.cppString);
+        result = handle->tableExists(tableName);
     }
     if (error) {
         if (result.first) {
@@ -82,27 +80,25 @@
     if (!handle) {
         return NO;
     }
-    return handle->execute([cls objectRelationalMapping].generateVirtualCreateTableStatement(tableName.cppString));
+    return handle->execute([cls objectRelationalMapping].generateVirtualCreateTableStatement(tableName));
 }
 
 - (BOOL)dropTable:(NSString *)tableName
 {
-    WCTRemedialAssert(tableName, "Table name can't be null.", return NO;);
     WCDB::Handle *handle = [self getOrGenerateHandle];
     if (!handle) {
         return NO;
     }
-    return handle->execute(WCDB::StatementDropTable().dropTable(tableName.cppString));
+    return handle->execute(WCDB::StatementDropTable().dropTable(tableName));
 }
 
 - (BOOL)dropIndex:(NSString *)indexName
 {
-    WCTRemedialAssert(indexName, "Index name can't be null.", return NO;);
     WCDB::Handle *handle = [self getOrGenerateHandle];
     if (!handle) {
         return NO;
     }
-    return handle->execute(WCDB::StatementDropIndex().dropIndex(indexName.cppString));
+    return handle->execute(WCDB::StatementDropIndex().dropIndex(indexName));
 }
 
 @end

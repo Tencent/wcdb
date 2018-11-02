@@ -27,8 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)stringWithCppString:(const WCDB::String &)cppString;
 
-- (WCDB::String)cppString;
-
 @end
 
 NS_ASSUME_NONNULL_END

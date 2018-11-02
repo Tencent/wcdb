@@ -29,15 +29,13 @@
 
 - (BOOL)tableExists:(NSString *)tableName
 {
-    WCTRemedialAssert(tableName, "Table name can't be null.", return NO;);
-    return _database->tableExists(tableName.cppString).second;
+    return _database->tableExists(tableName).second;
 }
 
 - (BOOL)tableExists:(NSString *)tableName
           withError:(WCTError **)error
 {
-    WCTRemedialAssert(tableName, "Table name can't be null.", return NO;);
-    auto result = _database->tableExists(tableName.cppString);
+    auto result = _database->tableExists(tableName);
     if (error) {
         if (result.first) {
             *error = nil;
@@ -70,19 +68,17 @@
                  withClass:(Class<WCTTableCoding>)cls
 {
     WCTRemedialAssert(tableName && cls, "Class or table name can't be null.", return NO;);
-    return _database->execute([cls objectRelationalMapping].generateVirtualCreateTableStatement(tableName.cppString));
+    return _database->execute([cls objectRelationalMapping].generateVirtualCreateTableStatement(tableName));
 }
 
 - (BOOL)dropTable:(NSString *)tableName
 {
-    WCTRemedialAssert(tableName, "Table name can't be null.", return NO;);
-    return _database->execute(WCDB::StatementDropTable().dropTable(tableName.cppString));
+    return _database->execute(WCDB::StatementDropTable().dropTable(tableName));
 }
 
 - (BOOL)dropIndex:(NSString *)indexName
 {
-    WCTRemedialAssert(indexName, "Index name can't be null.", return NO;);
-    return _database->execute(WCDB::StatementDropIndex().dropIndex(indexName.cppString));
+    return _database->execute(WCDB::StatementDropIndex().dropIndex(indexName));
 }
 
 @end
