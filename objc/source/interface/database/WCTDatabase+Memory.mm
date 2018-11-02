@@ -28,7 +28,7 @@
     _database->purge();
 }
 
-+ (void)purgeAllDatabases
++ (void)purgeAll
 {
     WCDB::Core::shared()->purge();
 }

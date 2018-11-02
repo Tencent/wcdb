@@ -48,7 +48,7 @@
                                         object:nil
                                          queue:nil
                                     usingBlock:^(NSNotification *) {
-                                        [WCTDatabase purgeAllDatabases];
+                                        [WCTDatabase purgeAll];
                                     }];
 #endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
 

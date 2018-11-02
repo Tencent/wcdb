@@ -35,6 +35,6 @@
  Note that WCDB will call this interface automatically while it receives memory warning on iOS.
  @see purge
  */
-+ (void)purgeAllDatabases;
++ (void)purgeAll;
 
 @end

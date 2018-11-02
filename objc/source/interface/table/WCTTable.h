@@ -54,7 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  The class binding to this table.
  */
-@property (nonatomic, readonly) Class _Nonnull cls;
+@property (nonatomic, readonly) Class cls;
 
 - (WCTDatabase *)getDatabase;
 
