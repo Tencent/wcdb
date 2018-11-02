@@ -28,7 +28,6 @@
 }
 
 - (instancetype)init NS_DESIGNATED_INITIALIZER;
-;
 
 - (instancetype)initWithDatabase:(WCDB::Database *)database NS_DESIGNATED_INITIALIZER;
 
