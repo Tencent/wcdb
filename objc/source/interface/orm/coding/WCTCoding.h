@@ -18,7 +18,6 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
 #import <WCDB/WCTCommon.h>
 #import <WCDB/WCTProperty.h>
 

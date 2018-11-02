@@ -19,6 +19,7 @@
  */
 
 #import <WCDB/WCTCommon.h>
+#import <WCDB/WCTError.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
 #import <WCDB/String.hpp>
+#import <WCDB/WCTCommon.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

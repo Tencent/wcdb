@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
 #import <WCDB/WCTBaseAccessor.h>
+#import <WCDB/WCTCommon.h>
 #import <functional>
 #import <type_traits>
 

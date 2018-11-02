@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
 #import <WCDB/FileManager.hpp>
 #import <WCDB/Notifier.hpp>
 #import <WCDB/ThreadedErrors.hpp>
+#import <WCDB/WCTCommon.h>
 #import <WCDB/WCTConvertible.h>
 
 namespace WCDB {

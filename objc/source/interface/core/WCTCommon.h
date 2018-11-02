@@ -19,7 +19,6 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTError.h>
 #import <WCDB/WINQ.h>
 
 #pragma mark - Chain Call
