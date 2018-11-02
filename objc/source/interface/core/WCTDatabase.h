@@ -27,8 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 typedef void (^WCTCloseBlock)(void);
 
-typedef void (^WCTBlockadeBlock)(WCTHandle *);
-
 @interface WCTDatabase : WCTCore
 
 /**

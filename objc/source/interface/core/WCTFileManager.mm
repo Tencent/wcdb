@@ -22,8 +22,26 @@
 #import <WCDB/FileManager.hpp>
 #import <WCDB/Notifier.hpp>
 #import <WCDB/ThreadedErrors.hpp>
+#import <WCDB/WCTConvertible.h>
 
 namespace WCDB {
+
+#if TARGET_OS_IPHONE
+template<>
+constexpr const char *Enum::description(const WCDB::FileProtection &fileProtection)
+{
+    switch (fileProtection) {
+    case WCDB::FileProtection::None:
+        return NSFileProtectionNone.UTF8String;
+    case WCDB::FileProtection::Complete:
+        return NSFileProtectionComplete.UTF8String;
+    case WCDB::FileProtection::CompleteUnlessOpen:
+        return NSFileProtectionCompleteUnlessOpen.UTF8String;
+    case WCDB::FileProtection::CompleteUntilFirstUserAuthentication:
+        return NSFileProtectionCompleteUntilFirstUserAuthentication.UTF8String;
+    }
+}
+#endif
 
 bool FileManager::setFileProtection(const WCDB::String &path, WCDB::FileProtection fileProtection)
 {
@@ -31,7 +49,7 @@ bool FileManager::setFileProtection(const WCDB::String &path, WCDB::FileProtecti
     NSError *nsError = nil;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *nsPath = [NSString stringWithUTF8String:path.c_str()];
-    if ([fileManager setAttributes:@{NSFileProtectionKey : @(FileManager::fileProtectionName(fileProtection))}
+    if ([fileManager setAttributes:@{NSFileProtectionKey : @(WCDB::Enum::description(fileProtection))}
                       ofItemAtPath:nsPath
                              error:&nsError]) {
         return true;
@@ -86,24 +104,6 @@ std::pair<bool, WCDB::FileProtection> FileManager::getFileProtection(const WCDB:
     return { false, WCDB::FileProtection::None };
 #else
     return { true, std::numeric_limits<WCDB::FileProtection>::min() };
-#endif
-}
-
-const char *FileManager::fileProtectionName(WCDB::FileProtection fileProtection)
-{
-#if TARGET_OS_IPHONE
-    switch (fileProtection) {
-    case WCDB::FileProtection::None:
-        return NSFileProtectionNone.UTF8String;
-    case WCDB::FileProtection::Complete:
-        return NSFileProtectionComplete.UTF8String;
-    case WCDB::FileProtection::CompleteUnlessOpen:
-        return NSFileProtectionCompleteUnlessOpen.UTF8String;
-    case WCDB::FileProtection::CompleteUntilFirstUserAuthentication:
-        return NSFileProtectionCompleteUntilFirstUserAuthentication.UTF8String;
-    }
-#else
-    return "";
 #endif
 }
 

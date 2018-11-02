@@ -63,8 +63,6 @@ public:
     static bool setFileProtection(const String &path, FileProtection fileProtection);
     static std::pair<bool, FileProtection> getFileProtection(const String &path);
 
-    static const char *fileProtectionName(FileProtection fileProtection);
-
 protected:
     static bool removeFile(const String &file);
     static bool removeDirectory(const String &directory);
