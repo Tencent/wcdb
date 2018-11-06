@@ -19,7 +19,6 @@
  */
 
 #import <WCDB/Assertion.hpp>
-#import <WCDB/Interface.h>
 #import <WCDB/WCTCursorInfo.h>
 
 WCTCursorInfo::WCTCursorInfo(const char *input,

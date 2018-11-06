@@ -18,21 +18,21 @@
  * limitations under the License.
  */
 
-#import <WCDB/Interface.h>
-#import <WCDB/WCTCore+Private.h>
+#import <WCDB/WCTChainCall+Private.h>
+#import <WCDB/WCTHandle.h>
 #import <WCDB/WCTSelectable+Private.h>
-#import <WCDB/WCTUnsafeHandle+Private.h>
 
 @implementation WCTSelectable
 
+- (WCDB::StatementSelect &)statement
+{
+    return _statement;
+}
+
 - (BOOL)lazyPrepare
 {
-    WCDB::Handle *handle = [self getOrGenerateHandle];
-    if (!handle) {
-        return NO;
-    }
-    if (!handle->isPrepared()) {
-        return handle->prepare(_statement);
+    if (![_handle isPrepared]) {
+        return [_handle prepare:_statement];
     }
     return YES;
 }
@@ -76,17 +76,6 @@
 - (instancetype)having:(const WCDB::Expression &)having
 {
     _statement.having(having);
-    return self;
-}
-
-- (WCDB::StatementSelect &)statement
-{
-    return _statement;
-}
-
-- (instancetype)autoFinalizeImmediately
-{
-    _finalizeImmediately = YES;
     return self;
 }
 

@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTCommon.h>
+#import <WCDB/WCTValue.h>
 
 @interface WCTValueForwarder : NSObject
 

@@ -21,6 +21,7 @@
 #ifndef _WCDB_STRING_HPP
 #define _WCDB_STRING_HPP
 
+#include <WCDB/UnsafeString.hpp>
 #include <string>
 
 namespace WCDB {
@@ -30,17 +31,20 @@ public:
     using std::string::string;
     String(std::string &&str);
     String(const std::string &str);
+    String(const UnsafeString &str);
 
     template<typename T, typename Enable = void>
     struct Convertible : public std::false_type {
     public:
-        static std::string asString(const T &);
+        static String asString(const T &);
     };
 
     template<typename T, typename Enable = typename std::enable_if<Convertible<T>::value>::type>
     String(const T &t) : String(Convertible<T>::asString(t))
     {
     }
+
+    operator UnsafeString() const;
 
     static String formatted(const char *format, ...);
     static const String &null();
@@ -57,6 +61,16 @@ public:
     String &replacingOccurrencesOfString(const String &target, const String &replacement);
 
     uint32_t hash() const;
+};
+
+template<typename T>
+struct String::Convertible<T, typename std::enable_if<UnsafeString::Convertible<T>::value>::type>
+: public std::true_type {
+public:
+    static String asString(const T &t)
+    {
+        return UnsafeString::Convertible<T>::asUnsafeString(t);
+    }
 };
 
 } //namespace WCDB

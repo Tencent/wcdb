@@ -21,8 +21,6 @@
 #import <WCDB/WCTChainCall.h>
 #import <WCDB/WCTDatabase.h>
 
-@interface WCTDatabase (ChainCall) <WCTChainCall>
-
-- (nonnull WCTMultiSelect *)prepareMultiSelect;
+@interface WCTDatabase (ChainCall) <WCTCrossTableChainCall>
 
 @end

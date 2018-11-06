@@ -18,15 +18,15 @@
  * limitations under the License.
  */
 
-#import <WCDB/Interface.h>
-#import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTUnsafeHandle+Private.h>
+#import <WCDB/WCTDatabase+Handle.h>
+#import <WCDB/WCTDatabase+Private.h>
+#import <WCDB/WCTHandle+Private.h>
 
 @implementation WCTDatabase (Handle)
 
 - (WCTHandle *)getHandle
 {
-    return [[WCTHandle alloc] initWithCore:self];
+    return [[WCTHandle alloc] initWithDatabase:self];
 }
 
 - (BOOL)execute:(const WCDB::Statement &)statement

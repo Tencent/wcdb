@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTUnsafeHandle.h>
+#import <WCDB/WCTChainCall.h>
 
 NS_ASSUME_NONNULL_BEGIN
 /**
  Not Thread-safe
  */
-@interface WCTSelectable : WCTUnsafeHandle
+@interface WCTSelectable : WCTChainCall
 
 - (instancetype)distinct;
 
@@ -77,8 +77,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)having:(const WCDB::Expression &)having;
 
 - (WCDB::StatementSelect &)statement;
-
-- (instancetype)autoFinalizeImmediately;
 
 @end
 

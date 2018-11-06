@@ -31,6 +31,15 @@ String::String(const std::string &str) : std::string(str)
 {
 }
 
+String::String(const UnsafeString &str) : std::string(str.cstring())
+{
+}
+
+String::operator UnsafeString() const
+{
+    return c_str();
+}
+
 const String &String::null()
 {
     static const String *s_empty = new String("");

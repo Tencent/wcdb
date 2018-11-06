@@ -18,36 +18,42 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTUnsafeHandle.h>
+#import <WCDB/WCTCommon.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCTHandle : WCTUnsafeHandle
+@interface WCTHandle : NSObject
 
-- (WCTDatabase *)getDatabase;
+#pragma mark - Handle
+@property (nonatomic, readonly) void *_Nonnull *_Nonnull rawHandle;
 
-#pragma mark - Info
-- (long long)getLastInsertedRowID;
+@property (nonatomic, readonly) WCTDatabase *database;
 
-- (int)getChanges;
+- (void)invalidate;
 
-- (BOOL)isStatementReadonly;
+#pragma mark - Execute
+- (BOOL)execute:(const WCDB::Statement &)statement;
 
-#pragma mark - Statement
+#pragma mark - Step
 - (BOOL)prepare:(const WCDB::Statement &)statement;
 
-- (void)finalizeStatement;
+- (BOOL)isPrepared;
 
-#pragma mark - Stepping
 - (BOOL)step:(BOOL &)done;
 
 - (BOOL)step;
 
 - (void)reset;
 
-#pragma mark - Bind row
-- (void)bindValue:(nullable WCTColumnCodingValue *)value toIndex:(int)index;
+- (long long)getLastInsertedRowID;
 
+- (int)getChanges;
+
+- (BOOL)isStatementReadonly;
+
+- (void)finalizeStatement;
+
+#pragma mark - Bind
 - (void)bindBool:(BOOL)value toIndex:(int)index;
 
 - (void)bindInteger32:(const int32_t &)value toIndex:(int)index;
@@ -56,68 +62,80 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)bindDouble:(const double &)value toIndex:(int)index;
 
-- (void)bindString:(NSString *)value toIndex:(int)index;
-
-- (void)bindBLOB:(NSData *)value toIndex:(int)index;
-
 - (void)bindNullToIndex:(int)index;
 
+- (void)bindString:(NSString *)string toIndex:(int)index;
+
+- (void)bindBLOB:(NSData *)data toIndex:(int)index;
+
+- (void)bindNumber:(NSNumber *)number toIndex:(int)index;
+
+- (void)bindValue:(nullable WCTColumnCodingValue *)value
+          toIndex:(int)index;
+
 - (void)bindProperty:(const WCTProperty &)property
-            ofObject:(nonnull WCTObject *)object
+            ofObject:(WCTObject *)object
              toIndex:(int)index;
 
 - (void)bindProperties:(const WCTProperties &)properties
-              ofObject:(nonnull WCTObject *)object;
+              ofObject:(WCTObject *)object;
 
-#pragma mark - Get row
-- (nullable WCTValue *)getValueAtIndex:(int)index;
-
-- (nullable WCTOneRow *)getRow;
-
-- (BOOL)getBoolAtIndex:(int)index;
-
+#pragma mark - Extract
 - (int32_t)getInteger32AtIndex:(int)index;
 
 - (int64_t)getInteger64AtIndex:(int)index;
 
-//TODO AtIndex subfix fixed. Add bindValue, bindNumber, getValue, getNumber. Refactor
-- (double)getDouble:(int)index;
+- (double)getDoubleAtIndex:(int)index;
 
-- (nullable NSString *)getTextAtIndex:(int)index;
+- (const char *)getTextAtIndex:(int)index;
 
-- (nullable NSData *)getBLOB:(int)index;
+- (const unsigned char *)getBLOBAtIndex:(int)index;
 
-- (WCDB::ColumnType)getColumnTypeAtIndex:(int)index;
+- (size_t)getSizeAtIndex:(int)index;
 
-- (void)extractValueAtIndex:(int)index
-                 toProperty:(const WCTProperty &)property
-                   ofObject:(nonnull WCTObject *)object;
+- (NSString *)getStringAtIndex:(int)index;
 
-- (nullable WCTObject *)getObjectOfClass:(nonnull Class)cls;
+- (NSNumber *)getNumberAtIndex:(int)index;
 
-- (nullable WCTObject *)getObjectOnResultColumns:(const WCDB::ResultColumns &)resultColumns;
+- (NSData *)getDataAtIndex:(int)index;
+
+- (nullable WCTValue *)getValueAtIndex:(int)index;
+
+- (WCTColumnType)getTypeAtIndex:(int)index;
 
 - (int)getColumnCount;
 
-- (nullable NSString *)getColumnNameAtIndex:(int)index;
+- (NSString *)getColumnNameAtIndex:(int)index;
 
-- (nullable NSString *)getColumnTableNameAtIndex:(int)index;
+- (NSString *)getTableNameAtIndex:(int)index;
 
-#pragma mark - Execute
-- (BOOL)execute:(const WCDB::Statement &)statement;
+- (WCTOneRow *)getRow;
 
-- (BOOL)execute:(const WCDB::Statement &)statement
-     withObject:(nonnull WCTObject *)object;
+- (WCTObject *)getObjectOfClass:(Class)cls;
 
-- (BOOL)execute:(const WCDB::Statement &)statement
-     withObject:(WCTObject *)object
-   onProperties:(const WCTProperties &)properties;
+- (WCTObject *)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns;
 
-- (BOOL)execute:(const WCDB::Statement &)statement
-      withValue:(nullable WCTColumnCodingValue *)value;
+- (WCTMultiObject *)getMultiObjectOnResultColumns:(const WCTResultColumns &)resultColumns;
 
-- (BOOL)execute:(const WCDB::Statement &)statement
-        withRow:(WCTOneRow *)row;
+- (void)extractValueAtIndex:(int)index
+                 toProperty:(const WCTProperty &)property
+                   ofObject:(WCTObject *)object;
+
+#pragma mark - Get All
+- (nullable WCTOneColumn *)allValues;
+
+- (nullable WCTOneColumn *)allValuesAtIndex:(int)index;
+
+- (nullable WCTColumnsXRows *)allRows;
+
+- (nullable NSArray /* <WCTObject*> */ *)allObjectsOnResultColumns:(const WCTResultColumns &)resultColumns;
+
+- (nullable NSArray /* <WCTObject*> */ *)allObjectsOfClass:(Class)cls;
+
+- (nullable NSArray<WCTMultiObject *> *)allMultiObjectsOnResultColumns:(const WCTResultColumns &)resultColumns;
+
+#pragma mark - Error
+- (WCTError *)error;
 
 @end
 

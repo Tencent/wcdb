@@ -124,7 +124,7 @@ MappedData PageBasedFileHandle::mapPage(int pageno, off_t offsetWithinPage, size
             break;
         }
     } while (true);
-    return MappedData::emptyData();
+    return MappedData::null();
 }
 
 #pragma mark - PageSize

@@ -61,8 +61,8 @@ public:
     ColumnType getType(int index);
 
     int getColumnCount();
-    const char *getColumnName(int index);
-    const char *getColumnTableName(int index);
+    const UnsafeString getColumnName(int index);
+    const UnsafeString getColumnTableName(int index);
 
     bool isReadonly();
     bool isPrepared();

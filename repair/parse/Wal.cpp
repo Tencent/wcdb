@@ -65,7 +65,7 @@ MappedData Wal::acquireData(off_t offset, size_t size)
         } else {
             assignWithSharedThreadedError();
         }
-        return MappedData::emptyData();
+        return MappedData::null();
     }
     return data;
 }

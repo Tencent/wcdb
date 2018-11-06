@@ -19,9 +19,9 @@
  */
 
 #import <WCDB/FileManager.hpp>
-#import <WCDB/Interface.h>
-#import <WCDB/NSString+CppString.h>
 #import <WCDB/Notifier.hpp>
+#import <WCDB/WCTError+Private.h>
+#import <WCDB/WCTError.h>
 
 typedef NSString *WCTErrorKey;
 WCTErrorKey const WCTErrorKeyPath = @"Path";
@@ -82,19 +82,19 @@ WCTErrorKey const WCTErrorKeySource = @"Source";
 {
     NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
     for (const auto &info : error.infos.getIntegers()) {
-        [userInfo setObject:[NSNumber numberWithLongLong:info.second] forKey:[NSString stringWithCppString:info.first]];
+        [userInfo setObject:[NSNumber numberWithLongLong:info.second] forKey:[NSString stringWithUTF8String:info.first.c_str()]];
     }
     for (const auto &info : error.infos.getStrings()) {
-        [userInfo setObject:[NSString stringWithCppString:info.second]
-                     forKey:[NSString stringWithCppString:info.first]];
+        [userInfo setObject:[NSString stringWithUTF8String:info.second.c_str()]
+                     forKey:[NSString stringWithUTF8String:info.first.c_str()]];
     }
     for (const auto &info : error.infos.getDoubles()) {
-        [userInfo setObject:[NSNumber numberWithDouble:info.second] forKey:[NSString stringWithCppString:info.first]];
+        [userInfo setObject:[NSNumber numberWithDouble:info.second] forKey:[NSString stringWithUTF8String:info.first.c_str()]];
     }
 
     NSString *message = nil;
     if (!error.message.empty()) {
-        message = [NSString stringWithCppString:error.message];
+        message = [NSString stringWithUTF8String:error.message.c_str()];
     }
     return [self initWithCode:(WCTErrorCode) error.code() level:(WCTErrorLevel) error.level message:message userInfo:userInfo];
 }

@@ -19,14 +19,15 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/Enum.hpp>
 #include <WCDB/Syntax.h>
 
 namespace WCDB {
 
 template<>
-constexpr const char* Enum::description(const Syntax::RaiseFunction::Switch& swticher)
+constexpr const char* Enum::description(const Syntax::RaiseFunction::Switch& switcher)
 {
-    switch (swticher) {
+    switch (switcher) {
     case Syntax::RaiseFunction::Switch::Ignore:
         return "IGNORE";
     case Syntax::RaiseFunction::Switch::Rollback:

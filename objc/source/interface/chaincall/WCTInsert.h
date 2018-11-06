@@ -18,16 +18,16 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTUnsafeHandle.h>
+#import <WCDB/WCTChainCall.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
  Not Thread-safe
  */
-@interface WCTInsert<ObjectType> : WCTUnsafeHandle
+@interface WCTInsert<ObjectType> : WCTChainCall
 
-@property (nonatomic, readonly) WCDB::StatementInsert &statement;
+- (WCDB::StatementInsert &)statement;
 
 - (instancetype)orReplace;
 
@@ -35,16 +35,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)onProperties:(const WCTProperties &)properties;
 
-/**
- @brief Execute the insert SQL with objects.
-        Note that it will run embedded transaction while objects.count>1 .
-        The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
- @param objects Objects to be inserted into WCDB.
- @return YES if no error occurs.
- */
-- (BOOL)executeWithObjects:(NSArray<ObjectType> *)objects;
+- (instancetype)values:(NSArray<ObjectType> *)objects;
 
-- (BOOL)executeWithObject:(ObjectType)object;
+- (instancetype)value:(ObjectType)object;
+
+- (BOOL)execute;
 
 @end
 

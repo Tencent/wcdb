@@ -39,7 +39,7 @@ class SyntaxList<WCTProperty> : public _SyntaxList<WCTProperty> {
 public:
     using _SyntaxList<WCTProperty>::_SyntaxList;
 
-    WCTResultColumns redirect(const WCDB::ResultColumns& resultColumns) const;
+    WCTResultColumns redirect(const WCTResultColumns& resultColumns) const;
 
     WCDB::Expression count() const;
 

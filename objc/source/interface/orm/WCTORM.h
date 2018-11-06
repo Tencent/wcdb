@@ -25,7 +25,6 @@
 #import <WCDB/WCTColumnBinding.h>
 
 #import <WCDB/WCTCoding.h>
-#import <WCDB/WCTConvertible.h>
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTResultColumn.h>
 

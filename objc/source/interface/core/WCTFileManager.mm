@@ -22,7 +22,6 @@
 #import <WCDB/Notifier.hpp>
 #import <WCDB/ThreadedErrors.hpp>
 #import <WCDB/WCTCommon.h>
-#import <WCDB/WCTConvertible.h>
 
 namespace WCDB {
 

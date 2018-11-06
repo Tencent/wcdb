@@ -26,7 +26,7 @@ Schema::Schema()
 {
 }
 
-Schema::Schema(const char* name)
+Schema::Schema(const UnsafeString& name)
 {
     syntax().name = name;
 }

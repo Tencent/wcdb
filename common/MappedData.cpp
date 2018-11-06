@@ -35,8 +35,7 @@ ShareableHighWater& MappedData::sharedHighWater()
     return *s_shared;
 }
 
-MappedData::MappedData()
-: UnsafeData(), m_mapped(UnsafeData::emptyData(), nullptr)
+MappedData::MappedData() : UnsafeData(), m_mapped(UnsafeData::null(), nullptr)
 {
 }
 
@@ -113,7 +112,7 @@ MappedData MappedData::subdata(off_t offset, size_t size) const
     return MappedData(UnsafeData::subdata(offset, size), m_mapped);
 }
 
-const MappedData& MappedData::emptyData()
+const MappedData& MappedData::null()
 {
     static const MappedData* s_empty = new MappedData;
     return *s_empty;

@@ -42,7 +42,7 @@ public:
     MappedData subdata(off_t offset, size_t size) const;
     void unmap();
 
-    static const MappedData& emptyData();
+    static const MappedData& null();
 
     static ssize_t getMappedHighWater();
 

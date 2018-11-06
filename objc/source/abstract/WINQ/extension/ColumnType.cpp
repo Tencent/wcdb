@@ -50,9 +50,15 @@ ColumnIsTextType<std::string>::asUnderlyingType(const std::string &text)
 }
 
 ColumnTypeInfo<ColumnType::Text>::UnderlyingType
+ColumnIsTextType<UnsafeString>::asUnderlyingType(const UnsafeString &text)
+{
+    return text;
+}
+
+ColumnTypeInfo<ColumnType::Text>::UnderlyingType
 ColumnIsTextType<String>::asUnderlyingType(const String &text)
 {
-    return text.c_str();
+    return text;
 }
 
 //BLOB
@@ -67,11 +73,5 @@ ColumnIsBLOBType<UnsafeData>::asUnderlyingType(const UnsafeData &blob)
 {
     return blob;
 }
-
-//ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
-//ColumnIsBLOBType<Data>::asUnderlyingType(const Data &blob)
-//{
-//    return blob;
-//}
 
 } //namespace WCDB

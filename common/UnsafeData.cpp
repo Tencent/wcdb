@@ -86,7 +86,7 @@ UnsafeData UnsafeData::subdata(off_t offset, size_t size) const
 }
 
 #pragma mark - Empty
-const UnsafeData &UnsafeData::emptyData()
+const UnsafeData &UnsafeData::null()
 {
     static const UnsafeData *s_empty = new UnsafeData;
     return *s_empty;

@@ -87,13 +87,13 @@ int HandleStatement::getColumnCount()
     return sqlite3_column_count((sqlite3_stmt *) m_stmt);
 }
 
-const char *HandleStatement::getColumnName(int index)
+const UnsafeString HandleStatement::getColumnName(int index)
 {
     WCTInnerAssert(isPrepared());
     return sqlite3_column_name((sqlite3_stmt *) m_stmt, index);
 }
 
-const char *HandleStatement::getColumnTableName(int index)
+const UnsafeString HandleStatement::getColumnTableName(int index)
 {
     WCTInnerAssert(isPrepared());
     return sqlite3_column_table_name((sqlite3_stmt *) m_stmt, index);
@@ -179,9 +179,8 @@ HandleStatement::Float HandleStatement::getDouble(int index)
 HandleStatement::Text HandleStatement::getText(int index)
 {
     WCTInnerAssert(isPrepared());
-    Text text
-    = reinterpret_cast<Text>(sqlite3_column_text((sqlite3_stmt *) m_stmt, index));
-    return text ? text : "";
+    return UnsafeString(reinterpret_cast<const char *>(
+    sqlite3_column_text((sqlite3_stmt *) m_stmt, index)));
 }
 
 const HandleStatement::BLOB HandleStatement::getBLOB(int index)

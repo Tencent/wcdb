@@ -35,7 +35,7 @@ public:
     {
     }
 
-    Schema(const char* name);
+    Schema(const UnsafeString& name);
 
     static Schema main();
     static Schema temp();

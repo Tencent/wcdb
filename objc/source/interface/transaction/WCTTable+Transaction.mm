@@ -18,64 +18,51 @@
  * limitations under the License.
  */
 
-#import <WCDB/Interface.h>
-#import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTUnsafeHandle+Private.h>
+#import <WCDB/Core.h>
+#import <WCDB/WCTDatabase+Transaction.h>
+#import <WCDB/WCTTable+Private.h>
+#import <WCDB/WCTTable+Transaction.h>
 
 @implementation WCTTable (Transaction)
 
 - (BOOL)beginTransaction
 {
-    return _database->beginTransaction();
+    return [_database beginTransaction];
 }
 
 - (BOOL)commitOrRollbackTransaction
 {
-    return _database->commitOrRollbackTransaction();
+    return [_database commitOrRollbackTransaction];
 }
 
 - (void)rollbackTransaction
 {
-    _database->rollbackTransaction();
+    [_database rollbackTransaction];
 }
 
 - (BOOL)runTransaction:(WCDB_NO_ESCAPE WCTTransactionBlock)inTransaction
 {
-    return _database->runTransaction([&inTransaction, self](WCDB::Handle *handle) -> bool {
-        @autoreleasepool {
-            WCTHandle *transactionHandle = [[WCTHandle alloc] initWithCore:self andHandle:handle];
-            BOOL result = inTransaction(transactionHandle);
-            [transactionHandle finalizeDatabase];
-            return result;
-        }
-    });
+    return [_database runTransaction:inTransaction];
 }
 
 - (BOOL)beginNestedTransaction
 {
-    return _database->beginNestedTransaction();
+    return [_database beginNestedTransaction];
 }
 
 - (BOOL)commitOrRollbackNestedTransaction
 {
-    return _database->commitOrRollbackNestedTransaction();
+    return [_database commitOrRollbackNestedTransaction];
 }
 
 - (void)rollbackNestedTransaction
 {
-    return _database->rollbackNestedTransaction();
+    [_database rollbackNestedTransaction];
 }
 
 - (BOOL)runNestedTransaction:(WCDB_NO_ESCAPE WCTTransactionBlock)inTransaction
 {
-    return _database->runNestedTransaction([&inTransaction, self](WCDB::Handle *handle) -> bool {
-        @autoreleasepool {
-            WCTHandle *transactionHandle = [[WCTHandle alloc] initWithCore:self andHandle:handle];
-            BOOL result = inTransaction(transactionHandle);
-            [transactionHandle finalizeDatabase];
-            return result;
-        }
-    });
+    return [_database runNestedTransaction:inTransaction];
 }
 
 @end

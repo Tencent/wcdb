@@ -18,41 +18,46 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
-#import <WCDB/Interface.h>
-#import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTUnsafeHandle+Private.h>
+#import <WCDB/WCTChainCall+Private.h>
+#import <WCDB/WCTDatabase+ChainCall.h>
+#import <WCDB/WCTDatabase+Handle.h>
+#import <WCDB/WCTDelete.h>
+#import <WCDB/WCTInsert.h>
+#import <WCDB/WCTMultiSelect.h>
+#import <WCDB/WCTRowSelect.h>
+#import <WCDB/WCTSelect.h>
+#import <WCDB/WCTUpdate.h>
 
 @implementation WCTDatabase (ChainCall)
 
 - (WCTInsert *)prepareInsert
 {
-    return [[WCTInsert alloc] initWithCore:self];
+    return [[WCTInsert alloc] initWithHandle:[self getHandle]];
 }
 
 - (WCTDelete *)prepareDelete
 {
-    return [[WCTDelete alloc] initWithCore:self];
+    return [[WCTDelete alloc] initWithHandle:[self getHandle]];
 }
 
 - (WCTUpdate *)prepareUpdate
 {
-    return [[WCTUpdate alloc] initWithCore:self];
+    return [[WCTUpdate alloc] initWithHandle:[self getHandle]];
 }
 
 - (WCTSelect *)prepareSelect
 {
-    return [[WCTSelect alloc] initWithCore:self];
+    return [[WCTSelect alloc] initWithHandle:[self getHandle]];
 }
 
 - (WCTRowSelect *)prepareRowSelect
 {
-    return [[WCTRowSelect alloc] initWithCore:self];
+    return [[WCTRowSelect alloc] initWithHandle:[self getHandle]];
 }
 
 - (WCTMultiSelect *)prepareMultiSelect
 {
-    return [[WCTMultiSelect alloc] initWithCore:self];
+    return [[WCTMultiSelect alloc] initWithHandle:[self getHandle]];
 }
 
 @end

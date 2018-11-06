@@ -21,6 +21,8 @@
 #import <WCDB/WCTConvenient.h>
 #import <WCDB/WCTHandle.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface WCTHandle (ConvenientSelect) <WCTConvenientSelect>
 
 @end
@@ -63,6 +65,4 @@ WCTConvenientPartialInsertOrReplace) <WCTConvenientPartialInsertOrReplace>
 
 @end
 
-@interface WCTHandle (ConvenientStatement) <WCTConvenientStatement>
-
-@end
+NS_ASSUME_NONNULL_END

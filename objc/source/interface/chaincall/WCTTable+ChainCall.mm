@@ -18,36 +18,42 @@
  * limitations under the License.
  */
 
-#import <WCDB/Interface.h>
-#import <WCDB/WCTCore+Private.h>
+#import <WCDB/WCTChainCall+Private.h>
+#import <WCDB/WCTDatabase+Handle.h>
+#import <WCDB/WCTDelete.h>
+#import <WCDB/WCTInsert.h>
+#import <WCDB/WCTMultiSelect.h>
+#import <WCDB/WCTRowSelect.h>
+#import <WCDB/WCTSelect.h>
+#import <WCDB/WCTTable+ChainCall.h>
 #import <WCDB/WCTTable+Private.h>
-#import <WCDB/WCTUnsafeHandle+Private.h>
+#import <WCDB/WCTUpdate.h>
 
 @implementation WCTTable (ChainCall)
 
 - (WCTInsert *)prepareInsert
 {
-    return [[[WCTInsert alloc] initWithCore:self] intoTable:_tableName];
+    return [[[WCTInsert alloc] initWithHandle:[self.database getHandle]] intoTable:_name];
 }
 
 - (WCTDelete *)prepareDelete
 {
-    return [[[WCTDelete alloc] initWithCore:self] fromTable:_tableName];
+    return [[[WCTDelete alloc] initWithHandle:[self.database getHandle]] fromTable:_name];
 }
 
 - (WCTUpdate *)prepareUpdate
 {
-    return [[[WCTUpdate alloc] initWithCore:self] table:_tableName];
+    return [[[WCTUpdate alloc] initWithHandle:[self.database getHandle]] table:_name];
 }
 
 - (WCTSelect *)prepareSelect
 {
-    return [[[[WCTSelect alloc] initWithCore:self] fromTable:_tableName] ofClass:_class];
+    return [[[[WCTSelect alloc] initWithHandle:[self.database getHandle]] fromTable:_name] ofClass:_class];
 }
 
 - (WCTRowSelect *)prepareRowSelect
 {
-    return [[[WCTRowSelect alloc] initWithCore:self] fromTable:_tableName];
+    return [[[WCTRowSelect alloc] initWithHandle:[self.database getHandle]] fromTable:_name];
 }
 
 @end

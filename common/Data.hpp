@@ -64,13 +64,13 @@ public:
 
 #pragma mark - Empty
 public:
-    static const Data& emptyData();
+    static const Data& null();
 
 #pragma mark - Opaque
 protected:
     using UnsafeData::subdata;
     using UnsafeData::immutable;
-    using UnsafeData::emptyData;
+    using UnsafeData::null;
 };
 
 } //namespace WCDB

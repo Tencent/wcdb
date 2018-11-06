@@ -19,7 +19,7 @@
  */
 
 #import <WCDB/Assertion.hpp>
-#import <WCDB/Interface.h>
+#import <WCDB/Core.h>
 #import <WCDB/WCTValue+Private.h>
 
 @implementation WCTValueForwarder {
@@ -83,7 +83,7 @@
 - (WCTColumnType)valueType
 {
     if (CFNumberIsFloatType((CFNumberRef) self)) {
-        return WCTColumnTypeFloat;
+        return WCTColumnTypeDouble;
     } else {
         if (CFNumberGetByteSize((CFNumberRef) self) <= 4) {
             return WCTColumnTypeInteger32;

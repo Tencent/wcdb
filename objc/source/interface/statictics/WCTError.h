@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCTMacro.h>
+#import <WCDB/WCTForwardDeclaration.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -31,9 +30,6 @@ typedef NS_ENUM(NSUInteger, WCTErrorLevel) {
     WCTErrorLevelError = 5,
     WCTErrorLevelFatal = 6,
 };
-
-typedef int32_t WCTTag;
-constexpr WCTTag const WCTInvalidTag = 0;
 
 typedef NS_ENUM(NSUInteger, WCTErrorCode) {
     WCTErrorCodeOK = 0,                  /* Successful result */

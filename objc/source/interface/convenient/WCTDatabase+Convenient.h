@@ -62,7 +62,3 @@ ConvenientPartialInsertOrReplace) <WCTConvenientPartialInsertOrReplace>
 @interface WCTDatabase (ConvenientDelete) <WCTConvenientDelete>
 
 @end
-
-@interface WCTDatabase (ConvenientStatement) <WCTConvenientStatement>
-
-@end

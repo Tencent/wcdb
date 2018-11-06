@@ -18,18 +18,18 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTUnsafeHandle.h>
+#import <WCDB/WCTChainCall.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
  Not Thread-safe
  */
-@interface WCTUpdate<ObjectType> : WCTUnsafeHandle
+@interface WCTUpdate<ObjectType> : WCTChainCall
 
 - (instancetype)table:(NSString *)tableName;
 
-- (instancetype)onProperties:(const WCTProperties &)properties;
+- (instancetype)set:(const WCTProperties &)properties;
 
 /**
  @brief WINQ interface for SQL.
@@ -59,16 +59,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (instancetype)offset:(const WCDB::Expression &)offset;
 
-/**
- @brief Execute the update SQL with objects.
- @param object Template object to be used to update table. 
- @return YES if no error occurs. See [error] also.
- */
-- (BOOL)executeWithObject:(ObjectType)object;
+- (instancetype)toObject:(ObjectType)object;
 
-- (BOOL)executeWithValue:(WCTColumnCodingValue *)value;
+- (instancetype)toValue:(WCTColumnCodingValue *)value;
 
-- (BOOL)executeWithRow:(WCTColumnCodingRow *)row;
+- (instancetype)toRow:(WCTColumnCodingRow *)row;
+
+- (BOOL)execute;
 
 - (WCDB::StatementUpdate &)statement;
 

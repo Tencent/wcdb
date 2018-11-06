@@ -24,12 +24,24 @@
 #include <WCDB/SharedThreadedErrorProne.hpp>
 #include <stdio.h>
 #include <stdlib.h>
+#include <type_traits>
 
 namespace WCDB {
 
 class UnsafeData : protected SharedThreadedErrorProne {
 #pragma mark - Initialize
 public:
+    template<typename T, typename Enable = void>
+    struct Convertible : public std::false_type {
+    public:
+        static UnsafeData asUnsafeData(const T &);
+    };
+
+    template<typename T, typename Enable = typename std::enable_if<Convertible<T>::value>::type>
+    UnsafeData(const T &t) : UnsafeData(Convertible<T>::asUnsafeData(t))
+    {
+    }
+
     UnsafeData();
     UnsafeData(UnsafeData &&other);
     UnsafeData(const UnsafeData &other);
@@ -53,10 +65,10 @@ public:
 
 #pragma mark - Empty
 public:
-    static const UnsafeData &emptyData();
+    static const UnsafeData &null();
     bool empty() const;
 
-protected:
+private:
     static unsigned char *emptyBuffer();
 
 #pragma mark - Basic

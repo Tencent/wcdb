@@ -356,7 +356,7 @@ std::pair<size_t, const UnsafeData> Deserialization::getSizedData(off_t offset) 
     uint64_t size;
     std::tie(lengthOfSize, size) = getVarint(offset);
     if (lengthOfSize == 0 || !isEnough((size_t) offset + lengthOfSize + (size_t) size)) {
-        return { 0, Data::emptyData() };
+        return { 0, Data::null() };
     }
     return { lengthOfSize + size, getData((size_t) offset + lengthOfSize, (size_t) size) };
 }
@@ -615,7 +615,7 @@ Data Serializable::serialize() const
     if (serialize(serialization)) {
         return serialization.finalize();
     }
-    return Data::emptyData();
+    return Data::null();
 }
 
 bool Serializable::serialize(const String &path) const

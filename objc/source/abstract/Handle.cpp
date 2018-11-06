@@ -226,13 +226,13 @@ int Handle::getColumnCount()
     return m_handleStatement.getColumnCount();
 }
 
-const char *Handle::getColumnName(int index)
+const UnsafeString Handle::getColumnName(int index)
 {
     WCTInnerAssert(isPrepared());
     return m_handleStatement.getColumnName(index);
 }
 
-const char *Handle::getColumnTableName(int index)
+const UnsafeString Handle::getColumnTableName(int index)
 {
     WCTInnerAssert(isPrepared());
     return m_handleStatement.getColumnTableName(index);
@@ -318,7 +318,6 @@ Handle::BLOB Handle::getBLOB(int index)
 
 void Handle::finalize()
 {
-    WCTInnerAssert(isPrepared());
     m_handleStatement.finalize();
 }
 

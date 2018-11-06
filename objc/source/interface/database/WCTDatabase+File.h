@@ -19,6 +19,7 @@
  */
 
 #import <WCDB/WCTDatabase.h>
+#import <WCDB/WCTOptional.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -60,9 +61,7 @@ NS_ASSUME_NONNULL_BEGIN
  @warning You should call it on a closed database. Otherwise you will get a warning.
  @return The sum of files size in bytes.
  */
-- (NSUInteger)getFilesSize;
-
-- (NSUInteger)getFilesSizeWithError:(WCTError *_Nullable *_Nullable)error;
+- (WCTOptional<NSUInteger, 0>)getFilesSize;
 
 @end
 

@@ -19,11 +19,17 @@
  */
 
 #import <WCDB/Assertion.hpp>
-#import <WCDB/Interface.h>
-#import <WCDB/WCTUnsafeHandle+Private.h>
+#import <WCDB/WCTChainCall+Private.h>
+#import <WCDB/WCTDelete.h>
+#import <WCDB/WCTHandle.h>
 
 @implementation WCTDelete {
     WCDB::StatementDelete _statement;
+}
+
+- (WCDB::StatementDelete &)statement
+{
+    return _statement;
 }
 
 - (instancetype)fromTable:(NSString *)tableName
@@ -58,14 +64,8 @@
 
 - (BOOL)execute
 {
-    BOOL result = [self execute:_statement];
-    [self doAutoFinalize:!result];
-    return result;
-}
-
-- (WCDB::StatementDelete &)statement
-{
-    return _statement;
+    WCTUsedUpInvalidateGuard usedUpInvalidateGuard(self);
+    return [_handle execute:_statement];
 }
 
 @end

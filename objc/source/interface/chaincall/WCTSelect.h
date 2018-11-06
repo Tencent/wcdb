@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)fromTable:(NSString *)tableName;
 
-- (instancetype)onResultColumns:(const WCDB::ResultColumns &)resultColumns;
+- (instancetype)onResultColumns:(const WCTResultColumns &)resultColumns;
 
 - (instancetype)ofClass:(Class<WCTTableCoding>)cls;
 

@@ -41,7 +41,7 @@ const UnsafeData &Modules::getAddress(const String &name) const
     auto iter = m_addresses.find(name);
     WCTRemedialAssert(iter != m_addresses.end(),
                       "Tokenize name is not registered.",
-                      return UnsafeData::emptyData(););
+                      return UnsafeData::null(););
     return iter->second;
 }
 

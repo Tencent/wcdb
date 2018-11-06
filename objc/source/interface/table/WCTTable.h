@@ -18,16 +18,14 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTCore.h>
+#import <WCDB/WCTCommon.h>
+#import <WCDB/WCTOptional.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol WCTTable
 
-- (BOOL)tableExists:(NSString *)tableName;
-
-- (BOOL)tableExists:(NSString *)tableName
-          withError:(WCTError *_Nullable *_Nullable)error;
+- (WCTOptional<BOOL, NO>)tableExists:(NSString *)tableName;
 
 - (BOOL)createTableAndIndexes:(NSString *)tableName
                     withClass:(Class<WCTTableCoding>)cls;
@@ -44,21 +42,23 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface WCTTable<ObjectType> : WCTCore
+@interface WCTTable<ObjectType> : NSObject
 
 /**
  The name of the table.
  */
-@property (nonatomic, readonly) NSString *tableName;
+@property (nonatomic, readonly) NSString *name;
 
 /**
  The class binding to this table.
  */
 @property (nonatomic, readonly) Class cls;
 
-- (WCTDatabase *)getDatabase;
+@property (nonatomic, readonly) WCTDatabase *database;
 
 - (WCTError *)error;
+
+- (void)invalidate;
 
 @end
 

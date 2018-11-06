@@ -19,7 +19,6 @@
  */
 
 #import <WCDB/WCTCommon.h>
-#import <WCDB/WCTConvertible.h>
 #import <WCDB/WCTRuntimeCppAccessor.h>
 #import <WCDB/WCTRuntimeObjCAccessor.h>
 

@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/Interface.h>
+#import <WCDB/WCTPerformanceFootprint.h>
 
 @implementation WCTPerformanceFootprint
 

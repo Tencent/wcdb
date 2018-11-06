@@ -19,27 +19,15 @@
  */
 
 #import <WCDB/Assertion.hpp>
-#import <WCDB/Interface.h>
-#import <WCDB/WCTCore+Private.h>
+#import <WCDB/WCTChainCall+Private.h>
+#import <WCDB/WCTHandle+Private.h>
+#import <WCDB/WCTHandle.h>
+#import <WCDB/WCTMultiSelect.h>
+#import <WCDB/WCTORM.h>
 #import <WCDB/WCTSelectable+Private.h>
-#import <WCDB/WCTUnsafeHandle+Private.h>
-
-struct MultiInfo {
-    WCTProperty property;
-    NSString *tableName;
-    Class cls;
-    MultiInfo(const WCTProperty &property_, NSString *tableName_, Class cls_)
-    : property(property_)
-    , tableName(tableName_)
-    , cls(cls_)
-    {
-    }
-};
-typedef struct MultiInfo MultiInfo;
 
 @implementation WCTMultiSelect {
-    WCDB::ResultColumns _resultColumns;
-    std::list<MultiInfo> _infos;
+    WCTResultColumns _resultColumns;
 }
 
 - (instancetype)fromTables:(NSArray<NSString *> *)tableNames
@@ -52,99 +40,35 @@ typedef struct MultiInfo MultiInfo;
     return self;
 }
 
-- (instancetype)onResultColumns:(const WCDB::ResultColumns &)resultColumns
+- (instancetype)onResultColumns:(const WCTResultColumns &)resultColumns
 {
     _resultColumns = resultColumns;
     _statement.select(resultColumns);
     return self;
 }
 
-- (void)lazyInitMultiInfo
-{
-    WCTInnerAssert(_handle != nullptr);
-    if (_infos.empty()) {
-        int index = 0;
-#warning TODO
-        //        for (const WCTProperty &property : _properties) {
-        //            const char *tableName = _handle->getColumnTableName(index);
-        //            NSString *nsTableName = nil;
-        //            if (tableName) {
-        //                nsTableName = [NSString stringWithUTF8String:tableName];
-        //            }
-        //            if (!nsTableName) {
-        //                nsTableName = @"";
-        //            }
-        //            Class cls = property.getColumnBinding().getClass();
-        //            _infos.push_back(MultiInfo(property, nsTableName, cls));
-        //            ++index;
-        //        }
-    }
-}
-
-- (WCTMultiObject *)extractMutliObject
-{
-    NSMutableDictionary<NSString *, WCTObject *> *multiObject = [[NSMutableDictionary<NSString *, WCTObject *> alloc] init]; // table name -> object
-    int index = 0;
-    for (const auto &info : _infos) {
-        WCTObject *object = [multiObject objectForKey:info.tableName];
-        if (!object) {
-            object = [[info.cls alloc] init];
-            [multiObject setObject:object forKey:info.tableName];
-        }
-        [self extractValueAtIndex:index
-                       toProperty:info.property
-                         ofObject:object];
-        ++index;
-    }
-    return multiObject;
-}
-
 - (WCTMultiObject *)nextMultiObject
 {
+    WCTUsedUpInvalidateGuard usedUpInvalidateGuard(self);
     if (![self lazyPrepare]) {
-        [self doAutoFinalize:YES];
         return nil;
     }
 
-    WCTInnerAssert(_handle != nullptr);
-    bool done = false;
-    if (!_handle->step(done) || done) {
-        [self doAutoFinalize:!done];
+    BOOL done = NO;
+    if (![_handle step:done] || done) {
+        [_handle finalizeStatement];
         return nil;
     }
-
-    [self lazyInitMultiInfo];
-
-    WCTMultiObject *object = [self extractMutliObject];
-    if (_finalizeImmediately) {
-        [self doAutoFinalize:NO];
-    }
-    return object;
+    return [_handle getMultiObjectOnResultColumns:_resultColumns];
 }
 
 - (NSArray<WCTMultiObject *> *)allMultiObjects
 {
+    WCTUsedUpInvalidateGuard usedUpInvalidateGuard(self);
     if (![self lazyPrepare]) {
-        [self doAutoFinalize:YES];
         return nil;
     }
-
-    WCTInnerAssert(_handle != nullptr);
-    bool done = false;
-    if (!_handle->step(done) || done) {
-        [self doAutoFinalize:!done];
-        return nil;
-    }
-
-    [self lazyInitMultiInfo];
-
-    NSMutableArray<WCTMultiObject *> *multiObjects = [[NSMutableArray alloc] init];
-    do {
-        [multiObjects addObject:[self extractMutliObject]];
-    } while (_handle->step(done) && !done);
-
-    [self doAutoFinalize:!done];
-    return done ? multiObjects : nil;
+    return [_handle allMultiObjectsOnResultColumns:_resultColumns];
 }
 
 @end

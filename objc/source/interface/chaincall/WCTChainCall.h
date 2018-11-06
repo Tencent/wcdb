@@ -31,4 +31,24 @@ NS_ASSUME_NONNULL_BEGIN
 - (WCTUpdate *)prepareUpdate;
 @end
 
+@protocol WCTCrossTableChainCall
+@required
+- (WCTInsert *)prepareInsert;
+- (WCTDelete *)prepareDelete;
+- (WCTSelect *)prepareSelect;
+- (WCTRowSelect *)prepareRowSelect;
+- (WCTUpdate *)prepareUpdate;
+- (WCTMultiSelect *)prepareMultiSelect;
+@end
+
+@interface WCTChainCall : NSObject
+
+- (WCTHandle *)handle;
+
+- (WCTError *)error;
+
+- (void)invalidate;
+
+@end
+
 NS_ASSUME_NONNULL_END

@@ -19,39 +19,28 @@
  */
 
 #import <WCDB/Assertion.hpp>
-#import <WCDB/Interface.h>
-#import <WCDB/WCTCore+Private.h>
+#import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTError+Private.h>
+#import <WCDB/WCTHandle+Private.h>
+#import <WCDB/WCTHandle+Table.h>
+#import <WCDB/WCTHandle+Transaction.h>
+#import <WCDB/WCTORM.h>
 #import <WCDB/WCTTable+Private.h>
-#import <WCDB/WCTUnsafeHandle+Private.h>
 
 @implementation WCTHandle (Table)
 
-- (BOOL)tableExists:(NSString *)tableName
+- (WCTOptional<BOOL, NO>)tableExists:(NSString *)tableName
 {
     WCDB::Handle *handle = [self getOrGenerateHandle];
     if (!handle) {
-        return NO;
+        return nullptr;
     }
-    return handle->tableExists(tableName).second;
-}
-
-- (BOOL)tableExists:(NSString *)tableName
-          withError:(WCTError **)error
-{
-    WCDB::Handle *handle = [self getOrGenerateHandle];
-    std::pair<bool, bool> result(true, false);
-    if (handle) {
-        result = handle->tableExists(tableName);
+    std::pair<bool, bool> result = handle->tableExists(tableName);
+    if (result.first) {
+        return result.second;
+    } else {
+        return nullptr;
     }
-    if (error) {
-        if (result.first) {
-            *error = nil;
-        } else {
-            *error = [self error];
-        }
-    }
-    return result.second;
 }
 
 - (BOOL)createTableAndIndexes:(NSString *)tableName
@@ -59,7 +48,7 @@
 {
     WCTRemedialAssert(tableName && cls, "Class or table name can't be null.", return NO;);
     return [self runNestedTransaction:^BOOL(WCTHandle *handle) {
-        return [handle rebindTable:tableName toClass:cls];
+        return [handle remapTable:tableName toClass:cls];
     }];
 }
 
@@ -67,9 +56,9 @@
              withClass:(Class<WCTTableCoding>)cls
 {
     WCTRemedialAssert(tableName && cls, "Class or table name can't be null.", return nil;);
-    return [[WCTTable alloc] initWithCore:self
-                             andTableName:tableName
-                                 andClass:cls];
+    return [[WCTTable alloc] initWithDatabase:self.database
+                                         name:tableName
+                                        class:cls];
 }
 
 - (BOOL)createVirtualTable:(NSString *)tableName
@@ -99,6 +88,64 @@
         return NO;
     }
     return handle->execute(WCDB::StatementDropIndex().dropIndex(indexName));
+}
+
+- (BOOL)remapTable:(NSString *)tableName toClass:(Class<WCTTableCoding>)cls
+{
+    WCTInnerAssert(tableName && cls);
+    WCDB::Handle *handle = [self getOrGenerateHandle];
+    if (!handle) {
+        return NO;
+    }
+    const WCTBinding &binding = [cls objectRelationalMapping];
+    std::pair<bool, bool> tableExists = handle->tableExists(tableName);
+    if (!tableExists.first) {
+        return NO;
+    }
+    if (tableExists.second) {
+        auto pair = handle->getUnorderedColumnsWithTable(tableName);
+        if (!pair.first) {
+            return NO;
+        }
+        std::set<WCDB::String> &columnNames = pair.second;
+        std::list<const WCTColumnBinding *> columnBindingsToAdded;
+        //Check whether the column names exists
+        const auto &columnBindings = binding.getColumnBindings();
+        for (const auto &columnBinding : columnBindings) {
+            auto iter = columnNames.find(columnBinding.first);
+            if (iter == columnNames.end()) {
+                columnBindingsToAdded.push_back(&columnBinding.second);
+            } else {
+                columnNames.erase(iter);
+            }
+        }
+        for (const WCDB::String &columnName : columnNames) {
+            WCDB::Error error;
+            error.setCode(WCDB::Error::Code::Mismatch);
+            error.level = WCDB::Error::Level::Notice;
+            error.message = "Skip column";
+            error.infos.set("Table", tableName);
+            error.infos.set("Column", columnName);
+            error.infos.set("Path", self.database.path);
+            WCDB::Notifier::shared()->notify(error);
+        }
+        //Add new column
+        for (const WCTColumnBinding *columnBinding : columnBindingsToAdded) {
+            if (!handle->execute(WCDB::StatementAlterTable().alterTable(tableName).addColumn(columnBinding->columnDef))) {
+                return NO;
+            }
+        }
+    } else {
+        if (!handle->execute(binding.generateCreateTableStatement(tableName))) {
+            return NO;
+        }
+    }
+    for (const WCDB::StatementCreateIndex &statementCreateIndex : binding.generateCreateIndexStatements(tableName)) {
+        if (!handle->execute(statementCreateIndex)) {
+            return NO;
+        }
+    }
+    return YES;
 }
 
 @end

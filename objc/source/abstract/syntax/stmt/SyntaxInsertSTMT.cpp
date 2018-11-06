@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/Enum.hpp>
 #include <WCDB/Syntax.h>
 
 namespace WCDB {

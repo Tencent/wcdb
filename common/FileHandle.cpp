@@ -111,7 +111,7 @@ Data FileHandle::read(off_t offset, size_t size)
     WCTInnerAssert(isOpened());
     Data data(size);
     if (data.empty()) {
-        return Data::emptyData();
+        return Data::null();
     }
     ssize_t got;
     size_t prior = 0;
@@ -191,7 +191,7 @@ MappedData FileHandle::map(off_t offset, size_t size)
 {
     WCTRemedialAssert(m_mode == Mode::ReadOnly,
                       "Map is only supported in Readonly mode.",
-                      return MappedData::emptyData(););
+                      return MappedData::null(););
     WCTInnerAssert(size > 0);
     static int s_pagesize = getpagesize();
     int alignment = offset % s_pagesize;
@@ -210,7 +210,7 @@ MappedData FileHandle::map(off_t offset, size_t size)
         error.infos.set("MmapSize", roundedSize);
         Notifier::shared()->notify(error);
         SharedThreadedErrorProne::setThreadedError(std::move(error));
-        return MappedData::emptyData();
+        return MappedData::null();
     }
     return MappedData(reinterpret_cast<unsigned char *>(mapped), roundedSize).subdata(alignment, size);
 }

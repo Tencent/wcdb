@@ -25,6 +25,7 @@
 #include <WCDB/Syntax.h>
 #include <WCDB/SyntaxForwardDeclaration.h>
 #include <WCDB/UnsafeData.hpp>
+#include <WCDB/UnsafeString.hpp>
 #include <cstdint>
 #include <type_traits>
 #include <vector>
@@ -96,7 +97,7 @@ struct ColumnTypeInfo<ColumnType::Text> {
     static constexpr const bool isText = true;
     static constexpr const bool isBLOB = false;
     static constexpr const bool isBaseType = true;
-    using UnderlyingType = const char *;
+    using UnderlyingType = UnsafeString;
     static constexpr const ColumnType type = ColumnType::Text;
 };
 //BLOB
@@ -275,6 +276,13 @@ public:
 };
 
 template<>
+struct ColumnIsTextType<UnsafeString> : public std::true_type {
+public:
+    static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
+    asUnderlyingType(const UnsafeString &text);
+};
+
+template<>
 struct ColumnIsTextType<String> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
@@ -296,31 +304,13 @@ public:
     asUnderlyingType(const UnsafeData &blob);
 };
 
-//template<>
-//struct ColumnIsBLOBType<Data> : public std::true_type {
-//public:
-//    static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
-//    asUnderlyingType(const Data &blob);
-//};
-
-//    template<typename T>
-//    struct ColumnIsInteger64Type<T, typename std::enable_if<(std::is_integral<T>::value || std::is_enum<T>::value) && (sizeof(T) > 4)>::type>
-//    : public std::true_type {
-//    public:
-//        static ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType
-//        asUnderlyingType(const T &t)
-//        {
-//            return (ColumnTypeInfo<ColumnType::Integer64>::UnderlyingType) t;
-//        }
-//    };
-
 template<typename T>
-struct String::Convertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>
+struct UnsafeString::Convertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>
 : public std::true_type {
 public:
-    static String asString(const T &t)
+    static UnsafeString asUnsafeString(const T &t)
     {
-        return String(std::string(ColumnIsTextType<T>::asUnderlyingType(t)));
+        return ColumnIsTextType<T>::asUnderlyingType(t);
     }
 };
 

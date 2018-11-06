@@ -19,31 +19,23 @@
  */
 
 #import <WCDB/Assertion.hpp>
-#import <WCDB/Interface.h>
-#import <WCDB/WCTCore+Private.h>
+#import <WCDB/WCTDatabase+Private.h>
+#import <WCDB/WCTDatabase+Transaction.h>
 #import <WCDB/WCTError+Private.h>
+#import <WCDB/WCTHandle+Table.h>
+#import <WCDB/WCTORM.h>
 #import <WCDB/WCTTable+Private.h>
-#import <WCDB/WCTUnsafeHandle+Private.h>
 
 @implementation WCTDatabase (Table)
 
-- (BOOL)tableExists:(NSString *)tableName
-{
-    return _database->tableExists(tableName).second;
-}
-
-- (BOOL)tableExists:(NSString *)tableName
-          withError:(WCTError **)error
+- (WCTOptional<BOOL, NO>)tableExists:(NSString *)tableName
 {
     auto result = _database->tableExists(tableName);
-    if (error) {
-        if (result.first) {
-            *error = nil;
-        } else {
-            *error = [[WCTError alloc] initWithError:_database->getThreadedError()];
-        }
+    if (result.first) {
+        return result.second;
+    } else {
+        return nullptr;
     }
-    return result.second;
 }
 
 - (BOOL)createTableAndIndexes:(NSString *)tableName
@@ -51,7 +43,7 @@
 {
     WCTRemedialAssert(tableName && cls, "Class or table name can't be null.", return NO;);
     return [self runNestedTransaction:^BOOL(WCTHandle *handle) {
-        return [handle rebindTable:tableName toClass:cls];
+        return [handle remapTable:tableName toClass:cls];
     }];
 }
 
@@ -59,9 +51,7 @@
              withClass:(Class<WCTTableCoding>)cls
 {
     WCTRemedialAssert(tableName && cls, "Class or table name can't be null.", return nil;);
-    return [[WCTTable alloc] initWithCore:self
-                             andTableName:tableName
-                                 andClass:cls];
+    return [[WCTTable alloc] initWithDatabase:self name:tableName class:cls];
 }
 
 - (BOOL)createVirtualTable:(NSString *)tableName

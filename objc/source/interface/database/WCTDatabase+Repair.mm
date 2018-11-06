@@ -19,9 +19,9 @@
  */
 
 #import <WCDB/Assertion.hpp>
-#import <WCDB/Interface.h>
-#import <WCDB/NSString+CppString.h>
-#import <WCDB/WCTCore+Private.h>
+#import <WCDB/Core.h>
+#import <WCDB/WCTDatabase+Private.h>
+#import <WCDB/WCTDatabase+Repair.h>
 
 @implementation WCTDatabase (Repair)
 
@@ -44,7 +44,7 @@ static_assert((int) WCTRecoveryModeDeposit == (int) WCDB::Database::RecoveryMode
     WCDB::Database::RecoverNotification notification = nullptr;
     if (onRecovering) {
         notification = [onRecovering](WCDB::Database *database) -> bool {
-            return onRecovering([[WCTDatabase alloc] initWithDatabase:database]);
+            return onRecovering([[WCTDatabase alloc] initWithUnsafeDatabase:database]);
         };
     }
     _database->setNotificationWhenRecovering(notification);
@@ -54,7 +54,7 @@ static_assert((int) WCTRecoveryModeDeposit == (int) WCDB::Database::RecoveryMode
 {
     if (tableShouldBeBackedUp) {
         _database->filterBackup([tableShouldBeBackedUp](const WCDB::String &tableName) -> bool {
-            return tableShouldBeBackedUp([NSString stringWithCppString:tableName]);
+            return tableShouldBeBackedUp([NSString stringWithUTF8String:tableName.c_str()]);
         });
     } else {
         _database->filterBackup(nullptr);

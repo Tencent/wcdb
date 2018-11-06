@@ -155,15 +155,15 @@ Data Data::subdata(size_t size) const
 Data Data::subdata(off_t offset, size_t size) const
 {
     if (size == 0) {
-        return emptyData();
+        return null();
     }
     WCTRemedialAssert(size > 0 && getCurrentOffset() + offset + size <= getSharedSize(),
                       "Memory cross-border.",
-                      return emptyData(););
+                      return null(););
     return Data(m_sharedBuffer, m_sharedSize, getCurrentOffset() + offset, size);
 }
 
-const Data& Data::emptyData()
+const Data& Data::null()
 {
     static const Data* s_empty = new Data;
     return *s_empty;

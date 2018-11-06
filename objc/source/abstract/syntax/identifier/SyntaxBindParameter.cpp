@@ -19,14 +19,15 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/Enum.hpp>
 #include <WCDB/Syntax.h>
 
 namespace WCDB {
 
 template<>
-constexpr const char* Enum::description(const Syntax::BindParameter::Switch& swticher)
+constexpr const char* Enum::description(const Syntax::BindParameter::Switch& switcher)
 {
-    switch (swticher) {
+    switch (switcher) {
     case Syntax::BindParameter::Switch::QuestionSign:
         return "?";
     case Syntax::BindParameter::Switch::ColonSign:

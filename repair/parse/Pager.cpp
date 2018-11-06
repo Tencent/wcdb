@@ -96,7 +96,7 @@ MappedData Pager::acquirePageData(int number, off_t offset, size_t size)
         number,
         String::formatted(
         "Acquired page number: %d exceeds the page count: %d.", number, m_pageCount));
-        return MappedData::emptyData();
+        return MappedData::null();
     } else {
         data = m_fileHandle.mapPage(number, offset, size);
     }
@@ -110,7 +110,7 @@ MappedData Pager::acquirePageData(int number, off_t offset, size_t size)
         } else {
             assignWithSharedThreadedError();
         }
-        return MappedData::emptyData();
+        return MappedData::null();
     }
     return data;
 }
@@ -128,7 +128,7 @@ MappedData Pager::acquireData(off_t offset, size_t size)
         } else {
             assignWithSharedThreadedError();
         }
-        return MappedData::emptyData();
+        return MappedData::null();
     }
     return data;
 }

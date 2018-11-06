@@ -19,20 +19,22 @@
  */
 
 #import <WCDB/Assertion.hpp>
-#import <WCDB/Interface.h>
-#import <WCDB/WCTCore+Private.h>
+#import <WCDB/WCTChainCall+Private.h>
+#import <WCDB/WCTHandle+Private.h>
+#import <WCDB/WCTHandle.h>
+#import <WCDB/WCTORM.h>
+#import <WCDB/WCTRowSelect.h>
 #import <WCDB/WCTSelectable+Private.h>
-#import <WCDB/WCTUnsafeHandle+Private.h>
 
 @implementation WCTRowSelect
 
-- (instancetype)onResultColumns:(const WCDB::ResultColumns &)resultColumns
+- (instancetype)onResultColumns:(const WCTResultColumns &)resultColumns
 {
     _statement.select(resultColumns);
     return self;
 }
 
-- (instancetype)onResultColumn:(const WCDB::ResultColumn &)resultColumn
+- (instancetype)onResultColumn:(const WCTResultColumn &)resultColumn
 {
     _statement.select(resultColumn);
     return self;
@@ -62,27 +64,27 @@
 
 - (WCTColumnsXRows *)allRows
 {
+    WCTUsedUpInvalidateGuard usedUpInvalidateGuard(self);
     if (![self lazyPrepare]) {
-        [self doAutoFinalize:YES];
         return nil;
     }
-    WCTColumnsXRows *rows = [super allRows];
-    [self doAutoFinalize:!rows];
+    WCTColumnsXRows *rows = [_handle allRows];
+    [_handle finalizeStatement];
     return rows;
 }
 
 - (WCTOneRow *)nextRow
 {
+    WCTUsedUpInvalidateGuard usedUpInvalidateGuard(self);
     if (![self lazyPrepare]) {
-        [self doAutoFinalize:YES];
         return nil;
     }
     BOOL done = NO;
-    WCTOneRow *row = [self nextRowOrDone:done];
-    if (!row || _finalizeImmediately) {
-        [self doAutoFinalize:!done];
+    if (![_handle step:done] || done) {
+        [_handle finalizeStatement];
+        return nil;
     }
-    return row;
+    return [_handle getRow];
 }
 
 - (WCTOneColumn *)allValues
@@ -92,12 +94,12 @@
 
 - (WCTOneColumn *)allValuesAtIndex:(int)index
 {
+    WCTUsedUpInvalidateGuard usedUpInvalidateGuard(self);
     if (![self lazyPrepare]) {
-        [self doAutoFinalize:YES];
         return nil;
     }
-    WCTOneColumn *column = [super allValuesAtIndex:index];
-    [self doAutoFinalize:!column];
+    WCTOneColumn *column = [_handle allValuesAtIndex:index];
+    [_handle finalizeStatement];
     return column;
 }
 
@@ -108,21 +110,16 @@
 
 - (WCTValue *)nextValueAtIndex:(int)index
 {
+    WCTUsedUpInvalidateGuard usedUpInvalidateGuard(self);
     if (![self lazyPrepare]) {
-        [self doAutoFinalize:YES];
         return nil;
     }
     BOOL done = NO;
-    WCTValue *value = [self nextValueAtIndex:index orDone:done];
-    if (!value || _finalizeImmediately) {
-        [self doAutoFinalize:!done];
+    if (![_handle step:done] || done) {
+        [_handle finalizeStatement];
+        return nil;
     }
-    return value;
-}
-
-- (BOOL)lazyPrepare
-{
-    return [super lazyPrepare];
+    return [_handle getValueAtIndex:index];
 }
 
 @end

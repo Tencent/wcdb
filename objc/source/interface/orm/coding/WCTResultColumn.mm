@@ -18,6 +18,8 @@
  * limitations under the License.
  */
 
+#import <WCDB/Core.h>
+#import <WCDB/WCTORM.h>
 #import <WCDB/WCTProperty.h>
 #import <WCDB/WCTResultColumn.h>
 

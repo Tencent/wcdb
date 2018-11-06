@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import <WCDB/Macro.hpp>
 #import <WCDB/WCTCommon.h>
 
 NS_ASSUME_NONNULL_BEGIN

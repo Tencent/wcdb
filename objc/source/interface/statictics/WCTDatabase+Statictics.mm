@@ -20,12 +20,12 @@
 
 #import <WCDB/Assertion.hpp>
 #import <WCDB/Console.hpp>
-#import <WCDB/Interface.h>
-#import <WCDB/NSString+CppString.h>
 #import <WCDB/Notifier.hpp>
 #import <WCDB/Version.h>
-#import <WCDB/WCTCore+Private.h>
+#import <WCDB/WCTDatabase+Private.h>
+#import <WCDB/WCTDatabase+Statictics.h>
 #import <WCDB/WCTError+Private.h>
+#import <WCDB/WCTPerformanceFootprint.h>
 
 @implementation WCTDatabase (Statictics)
 
@@ -78,7 +78,7 @@
         callback = [trace](const WCDB::HandleNotification::Footprints &footprints, const int64_t &cost) {
             NSMutableArray<WCTPerformanceFootprint *> *array = [[NSMutableArray<WCTPerformanceFootprint *> alloc] init];
             for (const auto &footprint : footprints) {
-                NSString *sql = [NSString stringWithCppString:footprint.sql];
+                NSString *sql = [NSString stringWithUTF8String:footprint.sql.c_str()];
                 [array addObject:[[WCTPerformanceFootprint alloc] initWithSQL:sql andFrequency:footprint.frequency]];
             }
             trace(array, (NSUInteger) cost);
@@ -92,7 +92,7 @@
     WCDB::Handle::SQLNotification callback = nullptr;
     if (trace) {
         callback = [trace](const WCDB::String &sql) {
-            trace([NSString stringWithCppString:sql]);
+            trace([NSString stringWithUTF8String:sql.c_str()]);
         };
     }
     WCDB::Core::shared()->setNotificationForGlobalSQLTrace(callback);
@@ -105,7 +105,7 @@
         callback = [trace](const WCDB::HandleNotification::Footprints &footprints, const int64_t &cost) {
             NSMutableArray<WCTPerformanceFootprint *> *array = [[NSMutableArray<WCTPerformanceFootprint *> alloc] init];
             for (const auto &footprint : footprints) {
-                NSString *sql = [NSString stringWithCppString:footprint.sql];
+                NSString *sql = [NSString stringWithUTF8String:footprint.sql.c_str()];
                 [array addObject:[[WCTPerformanceFootprint alloc] initWithSQL:sql andFrequency:footprint.frequency]];
             }
             trace(array, (NSUInteger) cost);
@@ -121,7 +121,7 @@
     WCDB::Handle::SQLNotification callback = nullptr;
     if (trace) {
         callback = [trace](const WCDB::String &sql) {
-            trace([NSString stringWithCppString:sql]);
+            trace([NSString stringWithUTF8String:sql.c_str()]);
         };
     }
     _database->setConfig(WCDB::Core::sqlTraceConfigName,

@@ -152,7 +152,7 @@ std::pair<bool, Data> Material::deserializeData(Deserialization &deserialization
         }
         succeed = true;
     } while (false);
-    return { succeed, succeed ? data : Data::emptyData() };
+    return { succeed, succeed ? data : Data::null() };
 }
 
 void Material::markAsCorrupt(const String &element)

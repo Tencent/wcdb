@@ -19,14 +19,20 @@
  */
 
 #import <WCDB/Assertion.hpp>
-#import <WCDB/Interface.h>
-#import <WCDB/WCTCore+Private.h>
+#import <WCDB/WCTChainCall+Private.h>
+#import <WCDB/WCTHandle.h>
+#import <WCDB/WCTORM.h>
+#import <WCDB/WCTSelect.h>
 #import <WCDB/WCTSelectable+Private.h>
-#import <WCDB/WCTUnsafeHandle+Private.h>
 
 @implementation WCTSelect {
-    WCDB::ResultColumns _resultColumns;
-    Class<WCTTableCoding> _class;
+    WCTResultColumns _resultColumns;
+}
+
+- (void)invalidate
+{
+    [super invalidate];
+    _resultColumns.clear();
 }
 
 - (instancetype)fromTable:(NSString *)tableName
@@ -35,54 +41,43 @@
     return self;
 }
 
-- (instancetype)onResultColumns:(const WCDB::ResultColumns &)resultColumns
+- (instancetype)onResultColumns:(const WCTResultColumns &)resultColumns
 {
     _resultColumns = resultColumns;
-#warning TODO
-    //    _class = resultColumns.front().getColumnBinding().getClass();
-    _statement.select(resultColumns);
+    _statement.select(_resultColumns);
     return self;
 }
 
 - (instancetype)ofClass:(Class<WCTTableCoding>)cls
 {
-    _class = cls;
-#warning TODO
-    //    _resultColumns = [cls allProperties];
+    _resultColumns = [cls allProperties];
     _statement.select(_resultColumns);
     return self;
 }
 
-- (BOOL)lazyPrepare
-{
-    WCTRemedialAssert(_class != nil || !_resultColumns.empty(), "Class or result columns is not specificed.", return NO;);
-    return [super lazyPrepare];
-}
-
 - (NSArray /* <WCTObject*> */ *)allObjects
 {
+    WCTUsedUpInvalidateGuard usedUpInvalidateGuard(self);
     if (![self lazyPrepare]) {
-        [self doAutoFinalize:YES];
         return nil;
     }
-#warning TODO
-    NSArray *objects; // = [self allObjectsOnResultColumns:_resultColumns];
-    [self doAutoFinalize:!objects];
+    NSArray *objects = [_handle allObjectsOnResultColumns:_resultColumns];
+    [_handle finalizeStatement];
     return objects;
 }
 
 - (id /* WCTObject* */)nextObject
 {
+    WCTUsedUpInvalidateGuard usedUpInvalidateGuard(self);
     if (![self lazyPrepare]) {
-        [self doAutoFinalize:YES];
         return nil;
     }
     BOOL done = NO;
-    id object = [self nextObjectOnResultColumns:_resultColumns orDone:done];
-    if (!object || _finalizeImmediately) {
-        [self doAutoFinalize:!done];
+    if (![_handle step:done] || done) {
+        [_handle finalizeStatement];
+        return nil;
     }
-    return object;
+    return [_handle getObjectOnResultColumns:_resultColumns];
 }
 
 @end

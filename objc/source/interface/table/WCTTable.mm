@@ -19,41 +19,43 @@
  */
 
 #import <WCDB/Assertion.hpp>
-#import <WCDB/WCDB.h>
-#import <WCDB/WCTCore+Private.h>
+#import <WCDB/Core.h>
+#import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTTable+Private.h>
 
 @implementation WCTTable
 
-@synthesize tableName = _tableName;
+@synthesize name = _name;
 @synthesize cls = _class;
 
-- (instancetype)initWithCore:(WCTCore *)core
-                andTableName:(NSString *)tableName
-                    andClass:(Class<WCTTableCoding>)cls
-{
-    WCTInnerAssert(cls && tableName);
-    if (self = [super initWithCore:core]) {
-        _tableName = tableName;
+- (instancetype)initWithDatabase:(WCTDatabase *)database
+                            name:(NSString *)name
+                           class:(Class<WCTTableCoding>)cls {
+    WCTInnerAssert(database != nil && cls != nil && name != nil);
+    if (self = [super init]) {
+        _database = database;
+        _name = name;
         _class = cls;
     }
     return self;
 }
 
-- (NSString *)tableName
+- (WCTDatabase *) database
 {
-    return _tableName;
-}
-
-- (WCTDatabase *)getDatabase
-{
-    return [[WCTDatabase alloc] initWithCore:self];
+    return _database;
 }
 
 - (WCTError *)error
 {
-    return [[WCTError alloc] initWithError:_database->getThreadedError()];
+    return _database.error;
+}
+
+- (void)invalidate
+{
+    [_database invalidate];
+    _class = nil;
+    _name = nil;
 }
 
 @end

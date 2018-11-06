@@ -19,8 +19,8 @@
  */
 
 #import <WCDB/Assertion.hpp>
-#import <WCDB/Interface.h>
-#import <WCDB/WCTCore+Private.h>
+#import <WCDB/WCTDatabase+FTS.h>
+#import <WCDB/WCTDatabase+Private.h>
 
 WCTTokenizer const WCTTokenizerSimple = @"simple";
 WCTTokenizer const WCTTokenizerPorter = @"porter";

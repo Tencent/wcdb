@@ -19,9 +19,10 @@
  */
 
 #import <WCDB/Assertion.hpp>
-#import <WCDB/Interface.h>
-#import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTUnsafeHandle+Private.h>
+#import <WCDB/Core.h>
+#import <WCDB/WCTDatabase+Config.h>
+#import <WCDB/WCTDatabase+Private.h>
+#import <WCDB/WCTHandle+Private.h>
 
 static_assert((int) WCTConfigPriorityHigh == (int) WCDB::Configs::Priority::High, "");
 static_assert((int) WCTConfigPriorityDefault == (int) WCDB::Configs::Priority::Default, "");
@@ -51,17 +52,17 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
 {
     WCTRemedialAssert(nsInvocation, "Use [removeConfigForName:] instead.", return;);
     WCDB::CustomConfig::Invocation invocation = [nsInvocation, self](WCDB::Handle *handle) -> bool {
-        WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithCore:self andHandle:handle];
+        WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithDatabase:self andUnsafeHandle:handle];
         BOOL result = nsInvocation(unsafeHandle);
-        [unsafeHandle finalizeDatabase];
+        [unsafeHandle invalidate];
         return result;
     };
     WCDB::CustomConfig::Invocation uninvocation = nullptr;
     if (nsUninvocation) {
         uninvocation = [nsUninvocation, self](WCDB::Handle *handle) -> bool {
-            WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithCore:self andHandle:handle];
+            WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithDatabase:self andUnsafeHandle:handle];
             BOOL result = nsUninvocation(unsafeHandle);
-            [unsafeHandle finalizeDatabase];
+            [unsafeHandle invalidate];
             return result;
         };
     }

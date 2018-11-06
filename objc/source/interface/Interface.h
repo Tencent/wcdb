@@ -18,27 +18,6 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_INTERFACE_H
-#define _WCDB_INTERFACE_H
-
-#import <WCDB/Abstract.h>
-#import <WCDB/Core.h>
-
-#warning TODO avoid including this file inside interface layer files
-#import <WCDB/NSData+WCTColumnCoding.h>
-#import <WCDB/NSDate+WCTColumnCoding.h>
-#import <WCDB/NSNull+WCTColumnCoding.h>
-#import <WCDB/NSNumber+WCTColumnCoding.h>
-#import <WCDB/NSObject+WCTColumnCoding.h>
-#import <WCDB/NSString+WCTColumnCoding.h>
-
-#import <WCDB/WCTValue.h>
-
-#import <WCDB/WCTMaster+WCTTableCoding.h>
-#import <WCDB/WCTMaster.h>
-#import <WCDB/WCTSequence+WCTTableCoding.h>
-#import <WCDB/WCTSequence.h>
-
 #import <WCDB/WCTDatabase+ChainCall.h>
 #import <WCDB/WCTHandle+ChainCall.h>
 #import <WCDB/WCTTable+ChainCall.h>
@@ -66,7 +45,6 @@
 #import <WCDB/WCTDatabase+Transaction.h>
 #import <WCDB/WCTHandle+Transaction.h>
 #import <WCDB/WCTTable+Transaction.h>
-#import <WCDB/WCTTransaction.h>
 
 #import <WCDB/WCTDatabase+Convenient.h>
 #import <WCDB/WCTHandle+Convenient.h>
@@ -81,5 +59,3 @@
 #import <WCDB/WCTPerformanceFootprint.h>
 
 #import <WCDB/WCTDatabase+FTS.h>
-
-#endif /* _WCDB_INTERFACE_H */

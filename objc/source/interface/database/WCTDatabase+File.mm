@@ -18,9 +18,8 @@
  * limitations under the License.
  */
 
-#import <WCDB/Interface.h>
-#import <WCDB/NSString+CppString.h>
-#import <WCDB/WCTCore+Private.h>
+#import <WCDB/WCTDatabase+File.h>
+#import <WCDB/WCTDatabase+Private.h>
 
 @implementation WCTDatabase (File)
 
@@ -48,27 +47,19 @@
 {
     NSMutableArray *paths = [NSMutableArray array];
     for (const auto &path : _database->getPaths()) {
-        [paths addObject:[NSString stringWithCppString:path]];
+        [paths addObject:[NSString stringWithUTF8String:path.c_str()]];
     }
     return paths;
 }
 
-- (NSUInteger)getFilesSize
-{
-    return _database->getFilesSize().second;
-}
-
-- (NSUInteger)getFilesSizeWithError:(WCTError **)error
+- (WCTOptional<NSUInteger, 0>)getFilesSize
 {
     auto result = _database->getFilesSize();
-    if (error) {
-        if (result.first) {
-            *error = nil;
-        } else {
-            *error = [self error];
-        }
+    if (result.first) {
+        return result.second;
+    } else {
+        return nullptr;
     }
-    return result.second;
 }
 
 @end

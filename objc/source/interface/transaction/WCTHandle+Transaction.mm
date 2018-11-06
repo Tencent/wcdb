@@ -19,9 +19,9 @@
  */
 
 #import <WCDB/Assertion.hpp>
-#import <WCDB/Interface.h>
-#import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTUnsafeHandle+Private.h>
+#import <WCDB/Macro.hpp>
+#import <WCDB/WCTHandle+Private.h>
+#import <WCDB/WCTHandle+Transaction.h>
 
 @implementation WCTHandle (Transaction)
 

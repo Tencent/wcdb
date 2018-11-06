@@ -18,14 +18,16 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTUnsafeHandle.h>
+#import <WCDB/WCTChainCall.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
  Not Thread-safe
  */
-@interface WCTDelete : WCTUnsafeHandle
+@interface WCTDelete : WCTChainCall
+
+- (WCDB::StatementDelete &)statement;
 
 - (instancetype)fromTable:(NSString *)tableName;
 
@@ -62,8 +64,6 @@ NS_ASSUME_NONNULL_BEGIN
  @return YES if no error occurs.
  */
 - (BOOL)execute;
-
-- (WCDB::StatementDelete &)statement;
 
 @end
 

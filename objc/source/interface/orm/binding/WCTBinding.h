@@ -18,9 +18,6 @@
  * limitations under the License.
  */
 
-#ifndef WCTBinding_hpp
-#define WCTBinding_hpp
-
 #import <WCDB/String.hpp>
 #import <WCDB/WCTCoding.h>
 #import <WCDB/WCTColumnBinding.h>
@@ -85,5 +82,3 @@ protected:
 
     Class m_cls;
 };
-
-#endif /* WCTBinding_hpp */

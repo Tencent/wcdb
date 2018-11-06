@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import <WCDB/Core.h>
 #import <WCDB/WCTError.h>
 
 @interface WCTError ()

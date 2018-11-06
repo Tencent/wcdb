@@ -19,13 +19,35 @@
  */
 
 #import <WCDB/Assertion.hpp>
-#import <WCDB/Interface.h>
-#import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTUnsafeHandle+Private.h>
+#import <WCDB/WCTChainCall+Private.h>
+#import <WCDB/WCTHandle.h>
+#import <WCDB/WCTORM.h>
+#import <WCDB/WCTUpdate.h>
+
+typedef NS_ENUM(NSUInteger, WCTUpdateType) {
+    WCTUpdateTypeObject,
+    WCTUpdateTypeValue,
+    WCTUpdateTypeRow,
+};
 
 @implementation WCTUpdate {
     WCDB::StatementUpdate _statement;
     WCTProperties _properties;
+
+    WCTUpdateType _type;
+    NSObject *_value;
+}
+
+- (void)invalidate
+{
+    [super invalidate];
+    _properties.clear();
+    _value = nil;
+}
+
+- (WCDB::StatementUpdate &)statement
+{
+    return _statement;
 }
 
 - (instancetype)table:(NSString *)tableName
@@ -34,12 +56,13 @@
     return self;
 }
 
-- (instancetype)onProperties:(const WCTProperties &)properties
+- (instancetype)set:(const WCTProperties &)properties
 {
     _properties = properties;
-    int bindParameterIndex = 0;
+    int bindParameterIndex = 1;
     for (const WCTProperty &property : properties) {
-        _statement.set(property).to(WCDB::BindParameter(++bindParameterIndex));
+        _statement.set(property).to(WCDB::BindParameter(bindParameterIndex));
+        ++bindParameterIndex;
     }
     return self;
 }
@@ -68,44 +91,59 @@
     return self;
 }
 
-- (BOOL)executeWithObject:(WCTObject *)object
+- (instancetype)toObject:(WCTObject *)object
 {
-    if (object == nil) {
-        return YES;
-    }
-    BOOL result;
-    if (_properties.empty()) {
-        result = [self execute:_statement withObject:object];
-    } else {
-        result = [self execute:_statement withObject:object onProperties:_properties];
-    }
-    [self doAutoFinalize:!result];
-    return result;
+    _type = WCTUpdateTypeObject;
+    _value = object;
+    return self;
 }
 
-- (BOOL)executeWithValue:(WCTColumnCodingValue *)value
+- (instancetype)toValue:(WCTColumnCodingValue *)value
 {
-    if (value == nil) {
-        return YES;
-    }
-    BOOL result = [self execute:_statement withValue:value];
-    [self doAutoFinalize:!result];
-    return result;
+    _type = WCTUpdateTypeValue;
+    _value = value;
+    return self;
 }
 
-- (BOOL)executeWithRow:(WCTOneRow *)row
+- (instancetype)toRow:(WCTColumnCodingRow *)row
 {
-    if (row.count == 0) {
-        return YES;
-    }
-    BOOL result = [self execute:_statement withRow:row];
-    [self doAutoFinalize:!result];
-    return result;
+    _type = WCTUpdateTypeRow;
+    _value = row;
+    return self;
 }
 
-- (WCDB::StatementUpdate &)statement
+- (BOOL)execute
 {
-    return _statement;
+    WCTUsedUpInvalidateGuard usedUpInvalidateGuard(self);
+    if (_value == nil) {
+        return YES;
+    }
+    if (![_handle prepare:_statement]) {
+        return NO;
+    }
+    switch (_type) {
+    case WCTUpdateTypeValue: {
+        WCTColumnCodingValue *value = (WCTColumnCodingValue *) _value;
+        [_handle bindValue:value toIndex:1];
+        break;
+    }
+    case WCTUpdateTypeObject: {
+        WCTObject *object = (WCTObject *) _value;
+        [_handle bindProperties:_properties ofObject:object];
+        break;
+    }
+    case WCTUpdateTypeRow: {
+        WCTColumnCodingRow *row = (WCTColumnCodingRow *) _value;
+        int index = 1;
+        for (WCTColumnCodingValue *value in row) {
+            [_handle bindValue:value toIndex:++index];
+        }
+        break;
+    }
+    }
+    BOOL result = [_handle step];
+    [_handle finalizeStatement];
+    return result;
 }
 
 @end

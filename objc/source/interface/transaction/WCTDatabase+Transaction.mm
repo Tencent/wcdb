@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import <WCDB/Interface.h>
-#import <WCDB/WCTCore+Private.h>
-#import <WCDB/WCTUnsafeHandle+Private.h>
+#import <WCDB/WCTDatabase+Private.h>
+#import <WCDB/WCTDatabase+Transaction.h>
+#import <WCDB/WCTHandle+Private.h>
 
 @implementation WCTDatabase (Transaction)
 
@@ -43,9 +43,9 @@
 {
     return _database->runTransaction([&inTransaction, self](WCDB::Handle *handle) -> bool {
         @autoreleasepool {
-            WCTHandle *transactionHandle = [[WCTHandle alloc] initWithCore:self andHandle:handle];
+            WCTHandle *transactionHandle = [[WCTHandle alloc] initWithDatabase:self];
             BOOL result = inTransaction(transactionHandle);
-            [transactionHandle finalizeDatabase];
+            [transactionHandle invalidate];
             return result;
         }
     });
@@ -70,9 +70,9 @@
 {
     return _database->runNestedTransaction([&inTransaction, self](WCDB::Handle *handle) -> bool {
         @autoreleasepool {
-            WCTHandle *transactionHandle = [[WCTHandle alloc] initWithCore:self andHandle:handle];
+            WCTHandle *transactionHandle = [[WCTHandle alloc] initWithDatabase:self];
             BOOL result = inTransaction(transactionHandle);
-            [transactionHandle finalizeDatabase];
+            [transactionHandle invalidate];
             return result;
         }
     });

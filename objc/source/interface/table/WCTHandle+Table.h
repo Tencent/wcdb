@@ -21,6 +21,12 @@
 #import <WCDB/WCTHandle.h>
 #import <WCDB/WCTTable.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface WCTHandle (Table) <WCTTable>
 
+- (BOOL)remapTable:(NSString *)tableName toClass:(Class<WCTTableCoding>)cls;
+
 @end
+
+NS_ASSUME_NONNULL_END

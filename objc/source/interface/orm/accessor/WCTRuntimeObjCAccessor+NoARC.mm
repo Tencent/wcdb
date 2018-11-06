@@ -19,6 +19,7 @@
  */
 
 #import <WCDB/Assertion.hpp>
+#import <WCDB/Core.h>
 #import <WCDB/Error.hpp>
 #import <WCDB/Notifier.hpp>
 #import <WCDB/String.hpp>

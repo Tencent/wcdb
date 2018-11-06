@@ -30,9 +30,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface WCTRowSelect : WCTSelectable
 
-- (instancetype)onResultColumns:(const WCDB::ResultColumns &)resultColumns;
+- (instancetype)onResultColumns:(const WCTResultColumns &)resultColumns;
 
-- (instancetype)onResultColumn:(const WCDB::ResultColumn &)resultColumn;
+- (instancetype)onResultColumn:(const WCTResultColumn &)resultColumn;
 
 - (instancetype)onAllResultColumns;
 
