@@ -77,4 +77,13 @@
     WINQAssertEqual(testingSQL, @"RANGE UNBOUNDED PRECEDING");
 }
 
+- (void)test_long
+{
+    auto testingSQL = WCDB::WindowDef().partition(expressions).order(orderingTerms).framespec(frameSpec);
+
+    auto testingTypes = { WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::FrameSpec };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"PARTITION BY 1, 2 ORDER BY 1, 2 RANGE UNBOUNDED PRECEDING");
+}
+
 @end

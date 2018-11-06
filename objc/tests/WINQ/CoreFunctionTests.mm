@@ -45,6 +45,7 @@
 {
     WINQAssertEqual(WCDB::CoreFunction::abs(expression1), @"abs(1)");
     WINQAssertEqual(WCDB::CoreFunction::changes(), @"changes()");
+    WINQAssertEqual(WCDB::CoreFunction::char_(expressions), @"char(1, 2)");
     WINQAssertEqual(WCDB::CoreFunction::coalesce(expressions), @"coalesce(1, 2)");
     WINQAssertEqual(WCDB::CoreFunction::glob(expression1, expression2), @"glob(1, 2)");
     WINQAssertEqual(WCDB::CoreFunction::hex(expression1), @"hex(1)");

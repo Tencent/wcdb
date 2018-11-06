@@ -38,12 +38,6 @@ WCTProperty::WCTProperty(const WCTColumnBinding& columnBinding)
     syntax() = columnBinding.columnDef.syntax().column;
 }
 
-WCTProperty::WCTProperty(const WCDB::Column& column, const WCTColumnBinding& columnBinding)
-: WCDB::Column(column)
-, WCTColumnBindingHolder(columnBinding)
-{
-}
-
 WCDB::IndexedColumn WCTProperty::asIndex() const
 {
     return WCDB::IndexedColumn(*this);

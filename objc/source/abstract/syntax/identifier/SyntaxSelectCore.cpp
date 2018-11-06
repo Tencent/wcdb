@@ -77,7 +77,7 @@ String SelectCore::getDescription() const
         }
         break;
     case Switch::Values:
-        stream << "VALUES(";
+        stream << "VALUES";
         bool comma = false;
         for (const auto& values : valuesList) {
             if (comma) {
@@ -85,9 +85,8 @@ String SelectCore::getDescription() const
             } else {
                 comma = true;
             }
-            stream << values;
+            stream << "(" << values << ")";
         }
-        stream << ")";
         break;
     }
     return stream.str();

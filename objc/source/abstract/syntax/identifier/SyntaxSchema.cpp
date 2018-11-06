@@ -25,12 +25,6 @@ namespace WCDB {
 
 namespace Syntax {
 
-#pragma mark - Syntax
-bool Schema::isMain() const
-{
-    return name.empty() || name.isCaseInsensiveEqual("main");
-}
-
 #pragma mark - Identifier
 Identifier::Type Schema::getType() const
 {

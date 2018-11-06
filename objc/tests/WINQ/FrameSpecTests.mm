@@ -107,7 +107,7 @@
 
 - (void)test_between_current_row_and_preceding
 {
-    auto testingSQL = WCDB::FrameSpec().range().currentRow().andPreceding(expression2);
+    auto testingSQL = WCDB::FrameSpec().range().betweenCurrentRow().andPreceding(expression2);
 
     auto testingTypes = { WCDB::SQL::Type::FrameSpec, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);

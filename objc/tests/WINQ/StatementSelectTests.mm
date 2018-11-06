@@ -194,6 +194,15 @@
     WINQAssertEqual(testingSQL, @"VALUES(1, 2)");
 }
 
+- (void)test_multi_values
+{
+    auto testingSQL = WCDB::StatementSelect().values(values).values(values);
+
+    auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"VALUES(1, 2), (1, 2)");
+}
+
 - (void)test_compound_multiple_select
 {
     auto testingSQL = WCDB::StatementSelect().select(resultColumns).group(groups).union_().select(resultColumns).where(condition);

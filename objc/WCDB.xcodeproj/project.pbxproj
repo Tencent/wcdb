@@ -142,6 +142,7 @@
 		2370B12A21914ED500D3227C /* NSNull+WCTColumnCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2370B11821914ED500D3227C /* NSNull+WCTColumnCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2370B12B21914ED500D3227C /* NSString+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2370B11921914ED500D3227C /* NSString+WCTColumnCoding.mm */; };
 		2370B1322191533C00D3227C /* WCTOptional.h in Headers */ = {isa = PBXBuildFile; fileRef = 2370B1302191533C00D3227C /* WCTOptional.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2370B13C21918DCC00D3227C /* ModuleArgumentTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2370B13B21918DCB00D3227C /* ModuleArgumentTests.mm */; };
 		2370F5B42181B2B7001C91B6 /* StatementTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2370F5B32181B2B7001C91B6 /* StatementTests.mm */; };
 		23759461210081AA00DBB721 /* UnsafeData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2375945F210081AA00DBB721 /* UnsafeData.cpp */; };
 		23759463210081AA00DBB721 /* UnsafeData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23759460210081AA00DBB721 /* UnsafeData.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -829,6 +830,7 @@
 		2370B11821914ED500D3227C /* NSNull+WCTColumnCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNull+WCTColumnCoding.h"; sourceTree = "<group>"; };
 		2370B11921914ED500D3227C /* NSString+WCTColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSString+WCTColumnCoding.mm"; sourceTree = "<group>"; };
 		2370B1302191533C00D3227C /* WCTOptional.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTOptional.h; sourceTree = "<group>"; };
+		2370B13B21918DCB00D3227C /* ModuleArgumentTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ModuleArgumentTests.mm; sourceTree = "<group>"; };
 		2370F5B32181B2B7001C91B6 /* StatementTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementTests.mm; sourceTree = "<group>"; };
 		2375945F210081AA00DBB721 /* UnsafeData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UnsafeData.cpp; sourceTree = "<group>"; };
 		23759460210081AA00DBB721 /* UnsafeData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UnsafeData.hpp; sourceTree = "<group>"; };
@@ -1899,6 +1901,7 @@
 				23989731217EC9E20014BF33 /* JoinConstraintTests.mm */,
 				23989732217EC9E20014BF33 /* JoinTests.mm */,
 				23989733217EC9E20014BF33 /* LiteralValueTests.mm */,
+				2370B13B21918DCB00D3227C /* ModuleArgumentTests.mm */,
 				23989734217EC9E20014BF33 /* OrderingTermTests.mm */,
 				23989735217EC9E20014BF33 /* OrderTests.mm */,
 				23989736217EC9E20014BF33 /* PragmaTests.mm */,
@@ -3207,6 +3210,7 @@
 				2398978B217EC9E30014BF33 /* StatementInsertTests.mm in Sources */,
 				2398976C217EC9E30014BF33 /* FrameSpecTests.mm in Sources */,
 				23989787217EC9E30014BF33 /* StatementDropIndexTests.mm in Sources */,
+				2370B13C21918DCC00D3227C /* ModuleArgumentTests.mm in Sources */,
 				23989786217EC9E30014BF33 /* StatementDetachTests.mm in Sources */,
 				23989776217EC9E30014BF33 /* QualifiedTableTests.mm in Sources */,
 				23989793217EC9E30014BF33 /* StatementVacuumTests.mm in Sources */,

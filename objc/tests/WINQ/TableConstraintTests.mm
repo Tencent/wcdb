@@ -89,6 +89,15 @@
     WINQAssertEqual(testingSQL, @"CONSTRAINT testTableConstraint UNIQUE(testColumn1, testColumn2)");
 }
 
+- (void)test_unique_with_conflict
+{
+    auto testingSQL = WCDB::TableConstraint(name).unique(indexedColumns).conflict(conflict);
+
+    auto testingTypes = { WCDB::SQL::Type::TableConstraint, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CONSTRAINT testTableConstraint UNIQUE(testColumn1, testColumn2) ON CONFLICT ABORT");
+}
+
 - (void)test_check
 {
     auto testingSQL = WCDB::TableConstraint(name).check(condition);

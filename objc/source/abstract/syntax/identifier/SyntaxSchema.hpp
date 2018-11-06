@@ -32,8 +32,6 @@ class Schema : public Identifier {
 public:
     String name;
 
-    bool isMain() const;
-
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::Schema;

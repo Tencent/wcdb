@@ -25,7 +25,6 @@ class WCTProperty : public WCDB::Column, public WCTColumnBindingHolder {
 public:
     WCTProperty();
     WCTProperty(const WCTColumnBinding& columnBinding);
-    WCTProperty(const WCDB::Column& column, const WCTColumnBinding& columnBinding);
 
     WCDB::IndexedColumn asIndex() const;
     WCDB::OrderingTerm asOrder() const;

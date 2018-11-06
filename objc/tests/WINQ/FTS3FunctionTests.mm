@@ -48,6 +48,7 @@
     WCDB::Column column(@"testColumn");
     WINQAssertEqual(column.snippet("testStart", "testEnd", "testEllipses", 0, 0), @"snippet(testColumn, 'testStart', 'testEnd', 'testEllipses', 0, 0)");
     WINQAssertEqual(column.snippet(), @"snippet(testColumn, '<b>', '</b>', '<b>...</b>', -1, -15)");
+    WINQAssertEqual(column.offsets(), @"offsets(testColumn)");
     WINQAssertEqual(column.matchinfo(), @"matchinfo(testColumn)");
 }
 
@@ -56,6 +57,7 @@
     WCDB::Expression column = WCDB::Column(@"testColumn");
     WINQAssertEqual(column.snippet("testStart", "testEnd", "testEllipses", 0, 0), @"snippet(testColumn, 'testStart', 'testEnd', 'testEllipses', 0, 0)");
     WINQAssertEqual(column.snippet(), @"snippet(testColumn, '<b>', '</b>', '<b>...</b>', -1, -15)");
+    WINQAssertEqual(column.offsets(), @"offsets(testColumn)");
     WINQAssertEqual(column.matchinfo(), @"matchinfo(testColumn)");
 }
 
