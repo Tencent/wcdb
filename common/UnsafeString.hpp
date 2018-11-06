@@ -29,7 +29,6 @@ class UnsafeString {
 public:
     UnsafeString();
     UnsafeString(const char* str);
-    UnsafeString(const std::string& str);
 
     template<typename T, typename Enable = void>
     struct Convertible : public std::false_type {

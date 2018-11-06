@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-QualifiedTable::QualifiedTable(const char* table)
+QualifiedTable::QualifiedTable(const UnsafeString& table)
 {
     syntax().table = table;
 }

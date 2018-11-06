@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-TableOrSubquery::TableOrSubquery(const char* table)
+TableOrSubquery::TableOrSubquery(const UnsafeString& table)
 {
     syntax().switcher = SyntaxType::Switch::Table;
     syntax().tableOrFunction = table;

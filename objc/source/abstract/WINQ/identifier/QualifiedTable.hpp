@@ -35,7 +35,7 @@ public:
     {
     }
 
-    QualifiedTable(const char* table);
+    QualifiedTable(const UnsafeString& table);
 
     QualifiedTable& schema(const Schema& schema);
     QualifiedTable& as(const String& alias);

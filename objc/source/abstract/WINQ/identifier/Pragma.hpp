@@ -35,7 +35,7 @@ public:
     {
     }
 
-    Pragma(const char* name);
+    Pragma(const UnsafeString& name);
 
 #pragma mark - SQLite
 public:

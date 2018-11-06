@@ -22,7 +22,7 @@
 
 namespace WCDB {
 
-CTETable::CTETable(const char* name)
+CTETable::CTETable(const UnsafeString& name)
 {
     syntax().name = name;
 }

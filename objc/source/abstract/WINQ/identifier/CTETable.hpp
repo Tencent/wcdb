@@ -34,7 +34,7 @@ public:
     {
     }
 
-    CTETable(const char* name);
+    CTETable(const UnsafeString& name);
     CTETable& columns(const Columns& columns);
 };
 

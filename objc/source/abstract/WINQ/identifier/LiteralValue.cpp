@@ -45,7 +45,7 @@ LiteralValue::LiteralValue(std::nullptr_t)
     syntax().switcher = SyntaxType::Switch::Null;
 }
 
-LiteralValue::LiteralValue(const char* value)
+LiteralValue::LiteralValue(const UnsafeString& value)
 {
     syntax().switcher = SyntaxType::Switch::String;
     syntax().stringValue = value;

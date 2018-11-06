@@ -35,7 +35,7 @@ public:
     {
     }
 
-    TableOrSubquery(const char* table);
+    TableOrSubquery(const UnsafeString& table);
     TableOrSubquery& schema(const Schema& schema);
 
     TableOrSubquery& as(const String& alias);

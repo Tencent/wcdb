@@ -65,7 +65,7 @@ WCDB::Expression WCTProperties::count() const
     return WCDB::ResultColumnAll().count();
 }
 
-WCTResultColumns WCTProperties::redirect(const WCTResultColumns& resultColumns) const
+WCTResultColumns WCTProperties::redirect(const WCDB::ResultColumns& resultColumns) const
 {
     WCTResultColumns result;
     auto property = begin();

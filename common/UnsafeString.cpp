@@ -31,10 +31,6 @@ UnsafeString::UnsafeString(const char* str) : m_cstring(str)
 {
 }
 
-UnsafeString::UnsafeString(const std::string& str) : m_cstring(str.c_str())
-{
-}
-
 const char* UnsafeString::cstring() const
 {
     return m_cstring ? m_cstring : emptyCString();

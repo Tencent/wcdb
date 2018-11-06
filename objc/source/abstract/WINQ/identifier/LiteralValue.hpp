@@ -40,7 +40,7 @@ public:
     LiteralValue(int64_t value);
     LiteralValue(double value);
     LiteralValue(std::nullptr_t);
-    LiteralValue(const char* value);
+    LiteralValue(const UnsafeString& value);
 
     static LiteralValue currentTime();
     static LiteralValue currentDate();
