@@ -557,4 +557,10 @@
     WINQConvertibleTest(WCDB::OrderingTerms, sqls, expected);
 }
 
+- (void)test_anti_injection
+{
+    NSString* injection = @";'DROP TABLE testInjection;--";
+    WINQAssertEqual(WCDB::StatementSelect().select(injection).where(1), @"SELECT ';''DROP TABLE testInjection;--' WHERE 1");
+}
+
 @end
