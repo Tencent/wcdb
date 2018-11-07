@@ -76,18 +76,9 @@ ColumnConstraint& ColumnConstraint::check(const Expression& expression)
     return *this;
 }
 
-ColumnConstraint& ColumnConstraint::default_(const LiteralValue& defaultValue)
-{
-    syntax().switcher = SyntaxType::Switch::Default;
-    syntax().defaultType = SyntaxType::DefaultType::LiteralValue;
-    syntax().literalValue = defaultValue;
-    return *this;
-}
-
 ColumnConstraint& ColumnConstraint::default_(const Expression& defaultValue)
 {
     syntax().switcher = SyntaxType::Switch::Default;
-    syntax().defaultType = SyntaxType::DefaultType::Expression;
     syntax().expression = defaultValue;
     return *this;
 }

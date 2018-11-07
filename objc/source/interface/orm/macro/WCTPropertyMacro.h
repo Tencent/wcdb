@@ -44,6 +44,6 @@
     +(void) WCDB_ORM(className, default)                                                 \
     {                                                                                    \
         const WCTProperty &property = binding.getProperty(WCDB_STRINGIFY(propertyName)); \
-        binding.getColumnDef(property).byAddingConstraint(                               \
-        WCDB::ColumnConstraint().withDefaultValue(defaultValue));                        \
+        binding.getColumnDef(property).constraint(                                       \
+        WCDB::ColumnConstraint().default_(defaultValue));                                \
     }

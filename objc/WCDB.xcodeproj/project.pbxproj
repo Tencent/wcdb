@@ -185,6 +185,13 @@
 		23790A53219298250098797F /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
 		23790A56219298680098797F /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
 		23790A57219298680098797F /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
+		23790A632192B0450098797F /* ORMTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A622192B0450098797F /* ORMTestCase.mm */; };
+		23790A662192B0A60098797F /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
+		23790A672192B0A60098797F /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
+		23790A692192BEF60098797F /* PropertyTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A682192BEF60098797F /* PropertyTests.mm */; };
+		23790A6A2192BEF60098797F /* PropertyTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A682192BEF60098797F /* PropertyTests.mm */; };
+		23790A6F2192BF140098797F /* PropertyObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A6B2192BF140098797F /* PropertyObject.mm */; };
+		23790A732192C0560098797F /* BuiltinTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A702192C0560098797F /* BuiltinTypesObject.mm */; };
 		237A65F520F731DF008B4771 /* OrderedUniqueList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */; };
 		2386B3C51ED442FE000B72F6 /* WCTError.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C21ED442FE000B72F6 /* WCTError.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2386B3C61ED442FE000B72F6 /* WCTError.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386B3C31ED442FE000B72F6 /* WCTError.mm */; };
@@ -900,11 +907,21 @@
 		23776CA5218C41E600E985DC /* WCTChainCall+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTChainCall+Private.h"; sourceTree = "<group>"; };
 		237908F621928C9F0098797F /* WCTObjCAccessor.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTObjCAccessor.mm; sourceTree = "<group>"; };
 		2379094D219295370098797F /* ORM tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ORM tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2379094E219295380098797F /* WINQ tests copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "WINQ tests copy-Info.plist"; path = "/Users/sanhuazhang/Developer/Github/wcdb/objc/WINQ tests copy-Info.plist"; sourceTree = "<absolute>"; };
 		23790A50219298250098797F /* TestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCase.mm; sourceTree = "<group>"; };
 		23790A51219298250098797F /* TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCase.h; sourceTree = "<group>"; };
 		23790A54219298680098797F /* SingleDatabaseTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SingleDatabaseTestCase.h; sourceTree = "<group>"; };
 		23790A55219298680098797F /* SingleDatabaseTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SingleDatabaseTestCase.mm; sourceTree = "<group>"; };
+		23790A612192B0450098797F /* ORMTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORMTestCase.h; sourceTree = "<group>"; };
+		23790A622192B0450098797F /* ORMTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ORMTestCase.mm; sourceTree = "<group>"; };
+		23790A642192B0A60098797F /* SingleTableTestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SingleTableTestCase.mm; sourceTree = "<group>"; };
+		23790A652192B0A60098797F /* SingleTableTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleTableTestCase.h; sourceTree = "<group>"; };
+		23790A682192BEF60098797F /* PropertyTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = PropertyTests.mm; sourceTree = "<group>"; };
+		23790A6B2192BF140098797F /* PropertyObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = PropertyObject.mm; sourceTree = "<group>"; };
+		23790A6C2192BF140098797F /* PropertyObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PropertyObject+WCTTableCoding.h"; sourceTree = "<group>"; };
+		23790A6D2192BF140098797F /* PropertyObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PropertyObject.h; sourceTree = "<group>"; };
+		23790A702192C0560098797F /* BuiltinTypesObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = BuiltinTypesObject.mm; sourceTree = "<group>"; };
+		23790A712192C0560098797F /* BuiltinTypesObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BuiltinTypesObject+WCTTableCoding.h"; sourceTree = "<group>"; };
+		23790A722192C0560098797F /* BuiltinTypesObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BuiltinTypesObject.h; sourceTree = "<group>"; };
 		237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OrderedUniqueList.hpp; sourceTree = "<group>"; };
 		2386B3C21ED442FE000B72F6 /* WCTError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTError.h; sourceTree = "<group>"; };
 		2386B3C31ED442FE000B72F6 /* WCTError.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTError.mm; sourceTree = "<group>"; };
@@ -1915,6 +1932,13 @@
 		23790A47219295B80098797F /* ORM */ = {
 			isa = PBXGroup;
 			children = (
+				23790A5C2192B03C0098797F /* column_constraint */,
+				23790A602192B03D0098797F /* index */,
+				23790A5D2192B03C0098797F /* property */,
+				23790A5F2192B03D0098797F /* table_constraint */,
+				23790A5E2192B03D0098797F /* virtual_table */,
+				23790A612192B0450098797F /* ORMTestCase.h */,
+				23790A622192B0450098797F /* ORMTestCase.mm */,
 			);
 			path = ORM;
 			sourceTree = "<group>";
@@ -1926,8 +1950,52 @@
 				23790A51219298250098797F /* TestCase.h */,
 				23790A54219298680098797F /* SingleDatabaseTestCase.h */,
 				23790A55219298680098797F /* SingleDatabaseTestCase.mm */,
+				23790A652192B0A60098797F /* SingleTableTestCase.h */,
+				23790A642192B0A60098797F /* SingleTableTestCase.mm */,
 			);
 			path = utility;
+			sourceTree = "<group>";
+		};
+		23790A5C2192B03C0098797F /* column_constraint */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = column_constraint;
+			sourceTree = "<group>";
+		};
+		23790A5D2192B03C0098797F /* property */ = {
+			isa = PBXGroup;
+			children = (
+				23790A682192BEF60098797F /* PropertyTests.mm */,
+				23790A6B2192BF140098797F /* PropertyObject.mm */,
+				23790A6C2192BF140098797F /* PropertyObject+WCTTableCoding.h */,
+				23790A6D2192BF140098797F /* PropertyObject.h */,
+				23790A702192C0560098797F /* BuiltinTypesObject.mm */,
+				23790A712192C0560098797F /* BuiltinTypesObject+WCTTableCoding.h */,
+				23790A722192C0560098797F /* BuiltinTypesObject.h */,
+			);
+			path = property;
+			sourceTree = "<group>";
+		};
+		23790A5E2192B03D0098797F /* virtual_table */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = virtual_table;
+			sourceTree = "<group>";
+		};
+		23790A5F2192B03D0098797F /* table_constraint */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = table_constraint;
+			sourceTree = "<group>";
+		};
+		23790A602192B03D0098797F /* index */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = index;
 			sourceTree = "<group>";
 		};
 		2386B3BD1ED442D9000B72F6 /* statictics */ = {
@@ -2078,7 +2146,6 @@
 				23F0FDEE215F266C008399FB /* support */,
 				23B5F93E1E111CB100E58396 /* Frameworks */,
 				23B5F7641E1111C100E58396 /* Products */,
-				2379094E219295380098797F /* WINQ tests copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2986,8 +3053,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23790A672192B0A60098797F /* SingleTableTestCase.mm in Sources */,
+				23790A632192B0450098797F /* ORMTestCase.mm in Sources */,
 				23790A53219298250098797F /* TestCase.mm in Sources */,
 				23790A57219298680098797F /* SingleDatabaseTestCase.mm in Sources */,
+				23790A732192C0560098797F /* BuiltinTypesObject.mm in Sources */,
+				23790A6A2192BEF60098797F /* PropertyTests.mm in Sources */,
+				23790A6F2192BF140098797F /* PropertyObject.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3273,6 +3345,7 @@
 				2396EB162180571B0079066C /* WCTPropertyTests.mm in Sources */,
 				23989765217EC9E30014BF33 /* ConflictTests.mm in Sources */,
 				23989772217EC9E30014BF33 /* LiteralValueTests.mm in Sources */,
+				23790A662192B0A60098797F /* SingleTableTestCase.mm in Sources */,
 				2398979C217EC9E30014BF33 /* WithTests.mm in Sources */,
 				23989773217EC9E30014BF33 /* OrderingTermTests.mm in Sources */,
 				23989760217EC9E30014BF33 /* ColumnConstraintTests.mm in Sources */,
@@ -3292,6 +3365,7 @@
 				2398977F217EC9E30014BF33 /* StatementCommitTests.mm in Sources */,
 				2398976E217EC9E30014BF33 /* FunctionInvocationTests.mm in Sources */,
 				23989799217EC9E30014BF33 /* WindowDefTests.mm in Sources */,
+				23790A692192BEF60098797F /* PropertyTests.mm in Sources */,
 				2398977E217EC9E30014BF33 /* StatementBeginTests.mm in Sources */,
 				23989768217EC9E30014BF33 /* ExpressionOperableTests.mm in Sources */,
 				2396EB11218054200079066C /* ColumnTests.mm in Sources */,

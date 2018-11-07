@@ -75,7 +75,6 @@ protected:
 
 #pragma mark - Handle
 public:
-    bool canFlowOut();
     RecyclableHandle flowOut();
     void purge();
     size_t aliveHandleCount() const;

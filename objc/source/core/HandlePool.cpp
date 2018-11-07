@@ -157,11 +157,6 @@ size_t HandlePool::aliveHandleCount() const
     return m_handles.size();
 }
 
-bool HandlePool::canFlowOut()
-{
-    return flowOut() != nullptr;
-}
-
 RecyclableHandle HandlePool::flowOut()
 {
     SharedLockGuard lockConcurrencyGuard(m_concurrency);

@@ -26,7 +26,7 @@
     {                                                                                     \
         WCDB_STATIC_ASSERT_EXISTS(className.propertyName);                                \
         const WCTProperty &property = binding.getProperty(WCDB_STRINGIFY(propertyName));  \
-        binding.getColumnDef(property).byAddingConstraint(                                \
+        binding.getColumnDef(property).constraint(                                        \
         WCDB::ColumnConstraint()                                                          \
         .withPrimaryKey(order, autoIncrement)                                             \
         .onConflict(conflictClause));                                                     \
@@ -37,7 +37,7 @@
     {                                                                                    \
         WCDB_STATIC_ASSERT_EXISTS(className.propertyName);                               \
         const WCTProperty &property = binding.getProperty(WCDB_STRINGIFY(propertyName)); \
-        binding.getColumnDef(property).byAddingConstraint(                               \
+        binding.getColumnDef(property).constraint(                                       \
         WCDB::ColumnConstraint().withNotNull());                                         \
     }
 
@@ -46,7 +46,7 @@
     {                                                                                    \
         WCDB_STATIC_ASSERT_EXISTS(className.propertyName);                               \
         const WCTProperty &property = binding.getProperty(WCDB_STRINGIFY(propertyName)); \
-        binding.getColumnDef(property).byAddingConstraint(                               \
+        binding.getColumnDef(property).constraint(                                       \
         WCDB::ColumnConstraint().withUnique());                                          \
     }
 

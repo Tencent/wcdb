@@ -137,6 +137,7 @@ void Handle::close()
 bool Handle::execute(const Statement &statement)
 {
     WCTInnerAssert(isOpened());
+    WCTInnerAssert(!isPrepared());
     int rc = sqlite3_exec(
     (sqlite3 *) m_handle, statement.getDescription().c_str(), nullptr, nullptr, nullptr);
     if (rc == SQLITE_OK) {

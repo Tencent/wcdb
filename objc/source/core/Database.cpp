@@ -56,7 +56,7 @@ Tag Database::getTag() const
 
 bool Database::canOpen()
 {
-    return canFlowOut();
+    return getHandle() != nullptr;
 }
 
 void Database::close(const ClosedCallback &onClosed)
@@ -76,7 +76,7 @@ uint32_t Database::getIdentifier() const
 }
 
 #pragma mark - Handle
-RecyclableHandle Database::getHandle()
+RecyclableHandle Database::flowOut()
 {
     do {
         {
@@ -126,7 +126,12 @@ RecyclableHandle Database::getHandle()
     } while (false);
     WCTInnerAssert(m_identifier != 0);
     checkIdentifier();
-    // additional shared lock is not needed since when it's blocked the threadedHandles is always empty.
+    return HandlePool::flowOut();
+}
+
+RecyclableHandle Database::getHandle()
+{
+    // additional shared lock is not needed since when it's blocked the threadedHandles is always empty and threaded handles is thread safe.
     ThreadedHandles *threadedHandle = Database::threadedHandles().getOrCreate();
     const auto iter = threadedHandle->find(this);
     if (iter != threadedHandle->end()) {
@@ -192,7 +197,11 @@ std::shared_ptr<Handle> Database::generateHandle()
 
 bool Database::handleWillConfigure(Handle *handle)
 {
-    return rebindMigration(handle);
+    SharedLockGuard lockGuard(m_lock);
+    if (m_migration.shouldMigrate()) {
+        rebindMigration(handle);
+    }
+    return true;
 }
 
 #pragma mark - Threaded
@@ -276,15 +285,16 @@ void Database::rollbackTransaction()
 
 bool Database::runTransaction(const TransactionCallback &transaction)
 {
-    RecyclableHandle handle = getHandle();
-    if (handle == nullptr) {
+    if (!beginTransaction()) {
         return false;
     }
-    ThreadedGuard threadedGuard(this, handle);
-    if (handle->runTransaction(transaction)) {
-        return true;
+    // get threaded handle
+    RecyclableHandle handle = getHandle();
+    WCTInnerAssert(handle != nullptr);
+    if (transaction(handle.get())) {
+        return commitOrRollbackTransaction();
     }
-    setThreadedError(handle->getError());
+    rollbackTransaction();
     return false;
 }
 
@@ -327,14 +337,16 @@ void Database::rollbackNestedTransaction()
 
 bool Database::runNestedTransaction(const TransactionCallback &transaction)
 {
-    RecyclableHandle handle = getHandle();
-    if (handle != nullptr) {
-        ThreadedGuard threadedGuard(this, handle);
-        if (handle->runNestedTransaction(transaction)) {
-            return true;
-        }
-        setThreadedError(handle->getError());
+    if (!beginNestedTransaction()) {
+        return false;
     }
+    // get threaded handle
+    RecyclableHandle handle = getHandle();
+    WCTInnerAssert(handle != nullptr) if (transaction(handle.get()))
+    {
+        return commitOrRollbackNestedTransaction();
+    }
+    rollbackNestedTransaction();
     return false;
 }
 

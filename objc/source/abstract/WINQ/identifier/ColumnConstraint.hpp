@@ -40,7 +40,6 @@ public:
 
     ColumnConstraint& check(const Expression& expression);
 
-    ColumnConstraint& default_(const LiteralValue& defaultValue);
     ColumnConstraint& default_(const Expression& defaultValue);
 
     ColumnConstraint& collate(const String& collation);

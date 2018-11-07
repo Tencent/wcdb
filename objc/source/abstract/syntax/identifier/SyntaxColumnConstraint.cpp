@@ -66,15 +66,7 @@ String ColumnConstraint::getDescription() const
         stream << "CHECK(" << expression << ")";
         break;
     case Switch::Default:
-        stream << "DEFAULT ";
-        switch (defaultType) {
-        case DefaultType::LiteralValue:
-            stream << literalValue;
-            break;
-        case DefaultType::Expression:
-            stream << expression;
-            break;
-        }
+        stream << "DEFAULT " << expression;
         break;
     case Switch::Collate:
         stream << "COLLATE " << collation;
@@ -99,14 +91,7 @@ void ColumnConstraint::iterate(const Iterator& iterator, void* parameter)
         expression.iterate(iterator, parameter);
         break;
     case Switch::Default:
-        switch (defaultType) {
-        case DefaultType::LiteralValue:
-            literalValue.iterate(iterator, parameter);
-            break;
-        case DefaultType::Expression:
-            expression.iterate(iterator, parameter);
-            break;
-        }
+        expression.iterate(iterator, parameter);
         break;
     case Switch::ForeignKey:
         foreignKeyClause.iterate(iterator, parameter);

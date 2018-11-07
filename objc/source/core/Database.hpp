@@ -30,7 +30,7 @@
 
 namespace WCDB {
 
-class Database final : protected HandlePool {
+class Database final : private HandlePool {
 #pragma mark - Initializer
 public:
     Database(const String &path);
@@ -67,6 +67,9 @@ public:
 protected:
     std::shared_ptr<Handle> generateHandle() override final;
     bool handleWillConfigure(Handle *handle) override final;
+
+private:
+    RecyclableHandle flowOut();
 
 #pragma mark - Threaded
 private:

@@ -40,6 +40,7 @@ public:
 
     WCTResultColumns redirect(const WCDB::ResultColumns& resultColumns) const;
 
+    // It's not the count of the list, but the SQL function `count(*)`.
     WCDB::Expression count() const;
 
     WCDB::Expressions table(NSString* table) const;

@@ -53,7 +53,7 @@
 
 - (void)invalidate
 {
-    [_database invalidate];
+    _database = nil;
     _class = nil;
     _name = nil;
 }

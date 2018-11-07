@@ -37,7 +37,8 @@
 
 + (void)initialize
 {
-    if (self == WCTDatabase.class) {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
 #if TARGET_OS_IPHONE && !TARGET_OS_WATCH
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
         //keep it the entire life cycle
@@ -52,7 +53,7 @@
 #endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
 
         WCDB::Core::shared()->addTokenizer(WCTTokenizerWCDB, WCDB::FTS::Module<void, WCTCursorInfo>::address());
-    }
+    });
 }
 
 - (instancetype)init

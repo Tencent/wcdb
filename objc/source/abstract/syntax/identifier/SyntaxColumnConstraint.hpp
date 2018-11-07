@@ -49,12 +49,7 @@ public:
     bool useConflict = false;
     Conflict conflict;
     bool autoIncrement = false;
-    enum class DefaultType {
-        LiteralValue,
-        Expression,
-    } defaultType;
     Expression expression;
-    LiteralValue literalValue;
     String collation;
     ForeignKeyClause foreignKeyClause;
 

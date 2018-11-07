@@ -75,7 +75,6 @@
 
 - (void)invalidate
 {
-    [_database invalidate];
     _database = nil;
     if (_handle) {
         _handle->finalize();
