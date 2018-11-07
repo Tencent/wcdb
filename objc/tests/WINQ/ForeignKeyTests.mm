@@ -47,6 +47,12 @@
     WCDB::ForeignKey constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::ForeignKey().getType(), WCDB::SQL::Type::ForeignKeyClause);
+    XCTAssertEqual(WCDB::ForeignKey::type, WCDB::SQL::Type::ForeignKeyClause);
+}
+
 - (void)test_foreign_table
 {
     auto testingSQL = WCDB::ForeignKey().references(name, columns).onDeleteSetNull().notDeferrableInitiallyDeferred();

@@ -55,6 +55,12 @@
     WCDB::Upsert constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::Upsert().getType(), WCDB::SQL::Type::UpsertClause);
+    XCTAssertEqual(WCDB::Upsert::type, WCDB::SQL::Type::UpsertClause);
+}
+
 - (void)test_upsert
 {
     auto testingSQL = WCDB::Upsert().conflict().doNothing();

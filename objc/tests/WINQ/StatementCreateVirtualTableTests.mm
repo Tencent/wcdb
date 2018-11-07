@@ -49,6 +49,12 @@
     WCDB::StatementCreateVirtualTable constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::StatementCreateVirtualTable().getType(), WCDB::SQL::Type::CreateVirtualTableSTMT);
+    XCTAssertEqual(WCDB::StatementCreateVirtualTable::type, WCDB::SQL::Type::CreateVirtualTableSTMT);
+}
+
 - (void)test_create_virtual_table
 {
     auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(table).schema(schema).usingModule(module).arguments(moduleArguments);

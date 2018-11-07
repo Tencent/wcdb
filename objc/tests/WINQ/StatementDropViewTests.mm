@@ -42,6 +42,12 @@
     WCDB::StatementDropView constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::StatementDropView().getType(), WCDB::SQL::Type::DropViewSTMT);
+    XCTAssertEqual(WCDB::StatementDropView::type, WCDB::SQL::Type::DropViewSTMT);
+}
+
 - (void)test_drop_view
 {
     auto testingSQL = WCDB::StatementDropView().dropView(view).schema(schema).ifExists();

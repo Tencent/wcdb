@@ -38,6 +38,12 @@
     WCDB::LiteralValue constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::LiteralValue().getType(), WCDB::SQL::Type::LiteralValue);
+    XCTAssertEqual(WCDB::LiteralValue::type, WCDB::SQL::Type::LiteralValue);
+}
+
 - (void)test_uint
 {
     auto testingSQL = WCDB::LiteralValue(1);

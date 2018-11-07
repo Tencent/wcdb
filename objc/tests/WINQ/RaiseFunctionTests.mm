@@ -40,6 +40,12 @@
     WCDB::RaiseFunction constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::RaiseFunction().getType(), WCDB::SQL::Type::RaiseFunction);
+    XCTAssertEqual(WCDB::RaiseFunction::type, WCDB::SQL::Type::RaiseFunction);
+}
+
 - (void)test_ignore
 {
     auto testingSQL = WCDB::RaiseFunction().ignore();

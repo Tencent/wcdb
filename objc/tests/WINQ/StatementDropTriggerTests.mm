@@ -42,6 +42,12 @@
     WCDB::StatementDropTrigger constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::StatementDropTrigger().getType(), WCDB::SQL::Type::DropTriggerSTMT);
+    XCTAssertEqual(WCDB::StatementDropTrigger::type, WCDB::SQL::Type::DropTriggerSTMT);
+}
+
 - (void)test_drop_trigger
 {
     auto testingSQL = WCDB::StatementDropTrigger().dropTrigger(trigger).schema(schema).ifExists();

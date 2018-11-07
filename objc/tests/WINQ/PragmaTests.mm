@@ -38,6 +38,12 @@
     WCDB::Pragma constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::Pragma().getType(), WCDB::SQL::Type::Pragma);
+    XCTAssertEqual(WCDB::Pragma::type, WCDB::SQL::Type::Pragma);
+}
+
 - (void)test
 {
     auto testingSQL = WCDB::Pragma(@"testPragma");

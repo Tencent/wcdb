@@ -45,6 +45,12 @@
     WCDB::FunctionInvocation constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::FunctionInvocation().getType(), WCDB::SQL::Type::FunctionInvocation);
+    XCTAssertEqual(WCDB::FunctionInvocation::type, WCDB::SQL::Type::FunctionInvocation);
+}
+
 - (void)test_function
 {
     auto testingSQL = WCDB::FunctionInvocation(function).distinct().invoke(expressions);

@@ -46,6 +46,12 @@
     WCDB::StatementReindex constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::StatementReindex().getType(), WCDB::SQL::Type::ReindexSTMT);
+    XCTAssertEqual(WCDB::StatementReindex::type, WCDB::SQL::Type::ReindexSTMT);
+}
+
 - (void)test_reindex
 {
     auto testingSQL = WCDB::StatementReindex().reindex();

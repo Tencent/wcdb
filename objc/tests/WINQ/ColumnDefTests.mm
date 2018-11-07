@@ -47,6 +47,12 @@
     WCDB::ColumnDef constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::ColumnDef().getType(), WCDB::SQL::Type::ColumnDef);
+    XCTAssertEqual(WCDB::ColumnDef::type, WCDB::SQL::Type::ColumnDef);
+}
+
 - (void)test_column_def
 {
     auto testingSQL = WCDB::ColumnDef(column, columnType);

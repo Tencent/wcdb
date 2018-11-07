@@ -44,6 +44,12 @@
     WCDB::RecursiveCTE constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::RecursiveCTE().getType(), WCDB::SQL::Type::RecursiveCTE);
+    XCTAssertEqual(WCDB::RecursiveCTE::type, WCDB::SQL::Type::RecursiveCTE);
+}
+
 - (void)test_recursive_cte
 {
     auto testingSQL = WCDB::RecursiveCTE(table).as(initialSelect).union_(recursiveSelect);

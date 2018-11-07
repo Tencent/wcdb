@@ -50,6 +50,12 @@
     WCDB::StatementAlterTable constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::StatementAlterTable().getType(), WCDB::SQL::Type::AlterTableSTMT);
+    XCTAssertEqual(WCDB::StatementAlterTable::type, WCDB::SQL::Type::AlterTableSTMT);
+}
+
 - (void)test_alter_table_rename_to
 {
     auto testingSQL = WCDB::StatementAlterTable().alterTable(table).schema(schema).renameToTable(newTable);

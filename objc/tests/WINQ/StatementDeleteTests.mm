@@ -53,6 +53,12 @@
     WCDB::StatementDelete constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::StatementDelete().getType(), WCDB::SQL::Type::DeleteSTMT);
+    XCTAssertEqual(WCDB::StatementDelete::type, WCDB::SQL::Type::DeleteSTMT);
+}
+
 - (void)test_delete
 {
     auto testingSQL = WCDB::StatementDelete().deleteFrom(table).where(condition).order(orderingTerms).limit(limit).offset(limitParameter);

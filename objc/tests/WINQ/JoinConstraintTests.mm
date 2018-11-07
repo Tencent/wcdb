@@ -45,6 +45,12 @@
     WCDB::JoinConstraint constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::JoinConstraint().getType(), WCDB::SQL::Type::JoinConstraint);
+    XCTAssertEqual(WCDB::JoinConstraint::type, WCDB::SQL::Type::JoinConstraint);
+}
+
 - (void)test_on
 {
     auto testingSQL = WCDB::JoinConstraint().on(expression);

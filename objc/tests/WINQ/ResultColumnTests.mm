@@ -44,6 +44,12 @@
     WCDB::ResultColumn constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::ResultColumn().getType(), WCDB::SQL::Type::ResultColumn);
+    XCTAssertEqual(WCDB::ResultColumn::type, WCDB::SQL::Type::ResultColumn);
+}
+
 - (void)test_result_column
 {
     auto testingSQL = WCDB::ResultColumn(expression);

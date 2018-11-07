@@ -40,6 +40,12 @@
     WCDB::StatementRollback constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::StatementRollback().getType(), WCDB::SQL::Type::RollbackSTMT);
+    XCTAssertEqual(WCDB::StatementRollback::type, WCDB::SQL::Type::RollbackSTMT);
+}
+
 - (void)test_rollback
 {
     auto testingSQL = WCDB::StatementRollback().rollback();

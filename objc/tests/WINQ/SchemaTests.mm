@@ -38,6 +38,12 @@
     WCDB::Schema constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::Schema().getType(), WCDB::SQL::Type::Schema);
+    XCTAssertEqual(WCDB::Schema::type, WCDB::SQL::Type::Schema);
+}
+
 - (void)test
 {
     auto testingSQL = WCDB::Schema(@"testSchema");

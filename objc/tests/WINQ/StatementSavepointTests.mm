@@ -40,6 +40,12 @@
     WCDB::StatementSavepoint constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::StatementSavepoint().getType(), WCDB::SQL::Type::SavepointSTMT);
+    XCTAssertEqual(WCDB::StatementSavepoint::type, WCDB::SQL::Type::SavepointSTMT);
+}
+
 - (void)test_savepoint
 {
     auto testingSQL = WCDB::StatementSavepoint().savepoint(savepoint);

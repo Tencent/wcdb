@@ -46,6 +46,12 @@
     WCDB::QualifiedTable constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::QualifiedTable().getType(), WCDB::SQL::Type::QualifiedTableName);
+    XCTAssertEqual(WCDB::QualifiedTable::type, WCDB::SQL::Type::QualifiedTableName);
+}
+
 - (void)test_qualified_table
 {
     auto testingSQL = WCDB::QualifiedTable(table).schema(schema);

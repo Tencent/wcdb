@@ -44,6 +44,12 @@
     WCDB::StatementAttach constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::StatementAttach().getType(), WCDB::SQL::Type::AttachSTMT);
+    XCTAssertEqual(WCDB::StatementAttach::type, WCDB::SQL::Type::AttachSTMT);
+}
+
 - (void)test_attach
 {
     auto testingSQL = WCDB::StatementAttach().attach(expression).as(schema);

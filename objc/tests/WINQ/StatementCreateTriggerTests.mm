@@ -59,6 +59,12 @@
     WCDB::StatementCreateTrigger constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::StatementCreateTrigger().getType(), WCDB::SQL::Type::CreateTriggerSTMT);
+    XCTAssertEqual(WCDB::StatementCreateTrigger::type, WCDB::SQL::Type::CreateTriggerSTMT);
+}
+
 - (void)test_create_trigger
 {
     auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(name).schema(schema).before().delete_().on(table).forEachRow().when(condition).execute(update);

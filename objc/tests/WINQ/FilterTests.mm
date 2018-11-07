@@ -40,6 +40,12 @@
     WCDB::Filter constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::Filter().getType(), WCDB::SQL::Type::Filter);
+    XCTAssertEqual(WCDB::Filter::type, WCDB::SQL::Type::Filter);
+}
+
 - (void)test_filter
 {
     auto testingSQL = WCDB::Filter().where(condition);

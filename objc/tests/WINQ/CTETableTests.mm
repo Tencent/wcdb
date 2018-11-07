@@ -45,6 +45,12 @@
     WCDB::CTETable constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::CTETable().getType(), WCDB::SQL::Type::CTETableName);
+    XCTAssertEqual(WCDB::CTETable::type, WCDB::SQL::Type::CTETableName);
+}
+
 - (void)test_cte_table
 {
     auto testingSQL = WCDB::CTETable(table).columns(columns);

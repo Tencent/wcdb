@@ -44,6 +44,12 @@
     WCDB::StatementAnalyze constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::StatementAnalyze().getType(), WCDB::SQL::Type::AnalyzeSTMT);
+    XCTAssertEqual(WCDB::StatementAnalyze::type, WCDB::SQL::Type::AnalyzeSTMT);
+}
+
 - (void)test_analyze
 {
     auto testingSQL = WCDB::StatementAnalyze().analyze();

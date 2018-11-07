@@ -38,6 +38,12 @@
     WCDB::StatementBegin constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::StatementBegin().getType(), WCDB::SQL::Type::BeginSTMT);
+    XCTAssertEqual(WCDB::StatementBegin::type, WCDB::SQL::Type::BeginSTMT);
+}
+
 - (void)test_begin_deferred
 {
     auto testingSQL = WCDB::StatementBegin().beginDeferred();

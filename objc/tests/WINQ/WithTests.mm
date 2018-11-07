@@ -46,6 +46,12 @@
     WCDB::With constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::With().getType(), WCDB::SQL::Type::WithClause);
+    XCTAssertEqual(WCDB::With::type, WCDB::SQL::Type::WithClause);
+}
+
 - (void)test_with
 {
     auto testingSQL = WCDB::With().table(table1).as(select1);

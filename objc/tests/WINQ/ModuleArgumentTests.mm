@@ -35,7 +35,13 @@
 
 - (void)test_default_constructible
 {
-    WCDB::ModuleArgument constructible;
+    WCDB::ModuleArgument constructible __attribute((unused));
+}
+
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::ModuleArgument().getType(), WCDB::SQL::Type::ModuleArgument);
+    XCTAssertEqual(WCDB::ModuleArgument::type, WCDB::SQL::Type::ModuleArgument);
 }
 
 - (void)test_module_argument_with_column_def

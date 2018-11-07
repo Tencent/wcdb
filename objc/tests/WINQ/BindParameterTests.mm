@@ -37,7 +37,13 @@
 
 - (void)test_default_constructible
 {
-    WCDB::BindParameter constructible;
+    WCDB::BindParameter constructible __attribute((unused));
+}
+
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::BindParameter().getType(), WCDB::SQL::Type::BindParameter);
+    XCTAssertEqual(WCDB::BindParameter::type, WCDB::SQL::Type::BindParameter);
 }
 
 - (void)test_number

@@ -40,6 +40,12 @@
     WCDB::StatementRelease constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::StatementRelease().getType(), WCDB::SQL::Type::ReleaseSTMT);
+    XCTAssertEqual(WCDB::StatementRelease::type, WCDB::SQL::Type::ReleaseSTMT);
+}
+
 - (void)test_release
 {
     auto testingSQL = WCDB::StatementRelease().release(savepoint);

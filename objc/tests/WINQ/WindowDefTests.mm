@@ -50,6 +50,12 @@
     WCDB::WindowDef constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::WindowDef().getType(), WCDB::SQL::Type::WindowDef);
+    XCTAssertEqual(WCDB::WindowDef::type, WCDB::SQL::Type::WindowDef);
+}
+
 - (void)test_partition
 {
     auto testingSQL = WCDB::WindowDef().partition(expressions);

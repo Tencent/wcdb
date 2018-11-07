@@ -65,6 +65,12 @@
     WCDB::StatementInsert constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::StatementInsert().getType(), WCDB::SQL::Type::InsertSTMT);
+    XCTAssertEqual(WCDB::StatementInsert::type, WCDB::SQL::Type::InsertSTMT);
+}
+
 - (void)test_insert
 {
     auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).columns(columns).values(expressions1);

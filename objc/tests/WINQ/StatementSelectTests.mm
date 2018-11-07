@@ -86,6 +86,12 @@
     WCDB::StatementSelect constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::StatementSelect().getType(), WCDB::SQL::Type::SelectSTMT);
+    XCTAssertEqual(WCDB::StatementSelect::type, WCDB::SQL::Type::SelectSTMT);
+}
+
 - (void)test_select
 {
     auto testingSQL = WCDB::StatementSelect().select(resultColumns);

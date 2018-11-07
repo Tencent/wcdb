@@ -42,6 +42,12 @@
     WCDB::StatementDropIndex constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::StatementDropIndex().getType(), WCDB::SQL::Type::DropIndexSTMT);
+    XCTAssertEqual(WCDB::StatementDropIndex::type, WCDB::SQL::Type::DropIndexSTMT);
+}
+
 - (void)test_drop_index
 {
     auto testingSQL = WCDB::StatementDropIndex().dropIndex(index).schema(schema).ifExists();

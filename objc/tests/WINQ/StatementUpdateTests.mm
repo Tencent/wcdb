@@ -64,6 +64,12 @@
     WCDB::StatementUpdate constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::StatementUpdate().getType(), WCDB::SQL::Type::UpdateSTMT);
+    XCTAssertEqual(WCDB::StatementUpdate::type, WCDB::SQL::Type::UpdateSTMT);
+}
+
 - (void)test_update
 {
     auto testingSQL = WCDB::StatementUpdate().update(table).set(column).to(expression1);

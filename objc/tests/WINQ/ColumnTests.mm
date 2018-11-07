@@ -35,7 +35,13 @@
 
 - (void)test_default_constructible
 {
-    WCDB::Column constructible;
+    WCDB::Column constructible __attribute((unused));
+}
+
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::Column().getType(), WCDB::SQL::Type::Column);
+    XCTAssertEqual(WCDB::Column::type, WCDB::SQL::Type::Column);
 }
 
 - (void)test_column

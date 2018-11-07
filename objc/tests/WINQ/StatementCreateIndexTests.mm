@@ -49,6 +49,12 @@
     WCDB::StatementCreateIndex constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::StatementCreateIndex().getType(), WCDB::SQL::Type::CreateIndexSTMT);
+    XCTAssertEqual(WCDB::StatementCreateIndex::type, WCDB::SQL::Type::CreateIndexSTMT);
+}
+
 - (void)test_create_index
 {
     auto testingSQL = WCDB::StatementCreateIndex().createIndex(index).schema(schema).onTable(table).indexed(indexedColumns);

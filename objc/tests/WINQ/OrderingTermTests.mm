@@ -42,6 +42,12 @@
     WCDB::OrderingTerm constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::OrderingTerm().getType(), WCDB::SQL::Type::OrderingTerm);
+    XCTAssertEqual(WCDB::OrderingTerm::type, WCDB::SQL::Type::OrderingTerm);
+}
+
 - (void)test
 {
     auto testingSQL = WCDB::OrderingTerm(expression);

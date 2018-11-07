@@ -47,6 +47,12 @@
     WCDB::CommonTableExpression constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::CommonTableExpression().getType(), WCDB::SQL::Type::CommonTableExpression);
+    XCTAssertEqual(WCDB::CommonTableExpression::type, WCDB::SQL::Type::CommonTableExpression);
+}
+
 - (void)test_common_table_expression
 {
     auto testingSQL = WCDB::CommonTableExpression(table).columns(columns).as(select);

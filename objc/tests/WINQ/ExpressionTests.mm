@@ -81,6 +81,12 @@
     WCDB::Expression constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::Expression().getType(), WCDB::SQL::Type::Expression);
+    XCTAssertEqual(WCDB::Expression::type, WCDB::SQL::Type::Expression);
+}
+
 - (void)test_literal_value
 {
     auto testingSQL = WCDB::Expression(literalValue);

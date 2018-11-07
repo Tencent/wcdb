@@ -46,6 +46,12 @@
     WCDB::IndexedColumn constructible __attribute((unused));
 }
 
+- (void)test_get_type
+{
+    XCTAssertEqual(WCDB::IndexedColumn().getType(), WCDB::SQL::Type::IndexedColumn);
+    XCTAssertEqual(WCDB::IndexedColumn::type, WCDB::SQL::Type::IndexedColumn);
+}
+
 - (void)test_column
 {
     auto testingSQL = WCDB::IndexedColumn(column);
