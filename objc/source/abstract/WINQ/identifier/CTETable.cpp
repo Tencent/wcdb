@@ -27,9 +27,9 @@ CTETable::CTETable(const UnsafeString& name)
     syntax().name = name;
 }
 
-CTETable& CTETable::columns(const Columns& columns)
+CTETable& CTETable::column(const Column& column)
 {
-    syntax().columns = columns;
+    syntax().columns.push_back(column);
     return *this;
 }
 

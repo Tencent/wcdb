@@ -27,7 +27,8 @@
 @implementation StatementCreateViewTests {
     WCDB::Schema schema;
     NSString* name;
-    WCDB::Columns columns;
+    WCDB::Column column1;
+    WCDB::Column column2;
     WCDB::StatementSelect select;
 }
 
@@ -36,10 +37,8 @@
     [super setUp];
     schema = @"testSchema";
     name = @"testView";
-    columns = {
-        WCDB::Column(@"testColumn1"),
-        WCDB::Column(@"testColumn2"),
-    };
+    column1 = WCDB::Column(@"testColumn1");
+    column2 = WCDB::Column(@"testColumn2");
     select = WCDB::StatementSelect().select(1);
 }
 
@@ -90,9 +89,18 @@
     WINQAssertEqual(testingSQL, @"CREATE VIEW testSchema.testView AS SELECT 1");
 }
 
+- (void)test_create_view_with_column
+{
+    auto testingSQL = WCDB::StatementCreateView().createView(name).column(column1).as(select);
+
+    auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE VIEW main.testView(testColumn1) AS SELECT 1");
+}
+
 - (void)test_create_view_with_columns
 {
-    auto testingSQL = WCDB::StatementCreateView().createView(name).columns(columns).as(select);
+    auto testingSQL = WCDB::StatementCreateView().createView(name).column(column1).column(column2).as(select);
 
     auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);

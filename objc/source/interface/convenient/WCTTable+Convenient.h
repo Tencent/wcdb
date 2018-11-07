@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable ObjectType)getObjectOffset:(const WCDB::Expression &)offset;
 
 - (nullable ObjectType)getObjectWhere:(const WCDB::Expression &)condition
-                                order:(const WCDB::OrderingTerms &)orders;
+                               orders:(const WCDB::OrderingTerms &)orders;
 
 - (nullable ObjectType)getObjectWhere:(const WCDB::Expression &)condition
                                offset:(const WCDB::Expression &)offset;
@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
                                  offset:(const WCDB::Expression &)offset;
 
 - (nullable ObjectType)getObjectWhere:(const WCDB::Expression &)condition
-                                order:(const WCDB::OrderingTerms &)orders
+                               orders:(const WCDB::OrderingTerms &)orders
                                offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get Objects
@@ -56,7 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSArray<ObjectType> *)getObjectsLimit:(const WCDB::Expression &)limit;
 
 - (nullable NSArray<ObjectType> *)getObjectsWhere:(const WCDB::Expression &)condition
-                                            order:(const WCDB::OrderingTerms &)orders;
+                                           orders:(const WCDB::OrderingTerms &)orders;
 
 - (nullable NSArray<ObjectType> *)getObjectsWhere:(const WCDB::Expression &)condition
                                             limit:(const WCDB::Expression &)limit;
@@ -68,7 +68,7 @@ NS_ASSUME_NONNULL_BEGIN
                                            offset:(const WCDB::Expression &)offset;
 
 - (nullable NSArray<ObjectType> *)getObjectsWhere:(const WCDB::Expression &)condition
-                                            order:(const WCDB::OrderingTerms &)orders
+                                           orders:(const WCDB::OrderingTerms &)orders
                                             limit:(const WCDB::Expression &)limit;
 
 - (nullable NSArray<ObjectType> *)getObjectsWhere:(const WCDB::Expression &)condition
@@ -80,7 +80,7 @@ NS_ASSUME_NONNULL_BEGIN
                                              offset:(const WCDB::Expression &)offset;
 
 - (nullable NSArray<ObjectType> *)getObjectsWhere:(const WCDB::Expression &)condition
-                                            order:(const WCDB::OrderingTerms &)orders
+                                           orders:(const WCDB::OrderingTerms &)orders
                                             limit:(const WCDB::Expression &)limit
                                            offset:(const WCDB::Expression &)offset;
 
@@ -91,26 +91,26 @@ NS_ASSUME_NONNULL_BEGIN
                                           where:(const WCDB::Expression &)condition;
 
 - (nullable ObjectType)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
-                                          order:(const WCDB::OrderingTerms &)orders;
+                                         orders:(const WCDB::OrderingTerms &)orders;
 
 - (nullable ObjectType)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
                                          offset:(const WCDB::Expression &)offset;
 
 - (nullable ObjectType)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
                                           where:(const WCDB::Expression &)condition
-                                          order:(const WCDB::OrderingTerms &)orders;
+                                         orders:(const WCDB::OrderingTerms &)orders;
 
 - (nullable ObjectType)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
                                           where:(const WCDB::Expression &)condition
                                          offset:(const WCDB::Expression &)offset;
 
 - (nullable ObjectType)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
-                                          order:(const WCDB::OrderingTerms &)orders
+                                         orders:(const WCDB::OrderingTerms &)orders
                                          offset:(const WCDB::Expression &)offset;
 
 - (nullable ObjectType)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
                                           where:(const WCDB::Expression &)condition
-                                          order:(const WCDB::OrderingTerms &)orders
+                                         orders:(const WCDB::OrderingTerms &)orders
                                          offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get Part Of Objects
@@ -120,21 +120,21 @@ NS_ASSUME_NONNULL_BEGIN
                                                       where:(const WCDB::Expression &)condition;
 
 - (nullable NSArray<ObjectType> *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                                      order:(const WCDB::OrderingTerms &)orders;
+                                                     orders:(const WCDB::OrderingTerms &)orders;
 
 - (nullable NSArray<ObjectType> *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
                                                       limit:(const WCDB::Expression &)limit;
 
 - (nullable NSArray<ObjectType> *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
                                                       where:(const WCDB::Expression &)condition
-                                                      order:(const WCDB::OrderingTerms &)orders;
+                                                     orders:(const WCDB::OrderingTerms &)orders;
 
 - (nullable NSArray<ObjectType> *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
                                                       where:(const WCDB::Expression &)condition
                                                       limit:(const WCDB::Expression &)limit;
 
 - (nullable NSArray<ObjectType> *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                                      order:(const WCDB::OrderingTerms &)orders
+                                                     orders:(const WCDB::OrderingTerms &)orders
                                                       limit:(const WCDB::Expression &)limit;
 
 - (nullable NSArray<ObjectType> *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
@@ -143,7 +143,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSArray<ObjectType> *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
                                                       where:(const WCDB::Expression &)condition
-                                                      order:(const WCDB::OrderingTerms &)orders
+                                                     orders:(const WCDB::OrderingTerms &)orders
                                                       limit:(const WCDB::Expression &)limit;
 
 - (nullable NSArray<ObjectType> *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
@@ -152,13 +152,13 @@ NS_ASSUME_NONNULL_BEGIN
                                                      offset:(const WCDB::Expression &)offset;
 
 - (nullable NSArray<ObjectType> *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                                      order:(const WCDB::OrderingTerms &)orders
+                                                     orders:(const WCDB::OrderingTerms &)orders
                                                       limit:(const WCDB::Expression &)limit
                                                      offset:(const WCDB::Expression &)offset;
 
 - (nullable NSArray<ObjectType> *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
                                                       where:(const WCDB::Expression &)condition
-                                                      order:(const WCDB::OrderingTerms &)orders
+                                                     orders:(const WCDB::OrderingTerms &)orders
                                                       limit:(const WCDB::Expression &)limit
                                                      offset:(const WCDB::Expression &)offset;
 
@@ -169,26 +169,26 @@ NS_ASSUME_NONNULL_BEGIN
                                   where:(const WCDB::Expression &)condition;
 
 - (nullable WCTOneRow *)getRowOnResults:(const WCTResultColumns &)resultColumns
-                                  order:(const WCDB::OrderingTerms &)orders;
+                                 orders:(const WCDB::OrderingTerms &)orders;
 
 - (nullable WCTOneRow *)getRowOnResults:(const WCTResultColumns &)resultColumns
                                  offset:(const WCDB::Expression &)offset;
 
 - (nullable WCTOneRow *)getRowOnResults:(const WCTResultColumns &)resultColumns
                                   where:(const WCDB::Expression &)condition
-                                  order:(const WCDB::OrderingTerms &)orders;
+                                 orders:(const WCDB::OrderingTerms &)orders;
 
 - (nullable WCTOneRow *)getRowOnResults:(const WCTResultColumns &)resultColumns
                                   where:(const WCDB::Expression &)condition
                                  offset:(const WCDB::Expression &)offset;
 
 - (nullable WCTOneRow *)getRowOnResults:(const WCTResultColumns &)resultColumns
-                                  order:(const WCDB::OrderingTerms &)orders
+                                 orders:(const WCDB::OrderingTerms &)orders
                                  offset:(const WCDB::Expression &)offset;
 
 - (nullable WCTOneRow *)getRowOnResults:(const WCTResultColumns &)resultColumns
                                   where:(const WCDB::Expression &)condition
-                                  order:(const WCDB::OrderingTerms &)orders
+                                 orders:(const WCDB::OrderingTerms &)orders
                                  offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get One Column
@@ -198,21 +198,21 @@ NS_ASSUME_NONNULL_BEGIN
                                        where:(const WCDB::Expression &)condition;
 
 - (nullable WCTOneColumn *)getColumnOnResult:(const WCTResultColumn &)resultColumn
-                                       order:(const WCDB::OrderingTerms &)orders;
+                                      orders:(const WCDB::OrderingTerms &)orders;
 
 - (nullable WCTOneColumn *)getColumnOnResult:(const WCTResultColumn &)resultColumn
                                        limit:(const WCDB::Expression &)limit;
 
 - (nullable WCTOneColumn *)getColumnOnResult:(const WCTResultColumn &)resultColumn
                                        where:(const WCDB::Expression &)condition
-                                       order:(const WCDB::OrderingTerms &)orders;
+                                      orders:(const WCDB::OrderingTerms &)orders;
 
 - (nullable WCTOneColumn *)getColumnOnResult:(const WCTResultColumn &)resultColumn
                                        where:(const WCDB::Expression &)condition
                                        limit:(const WCDB::Expression &)limit;
 
 - (nullable WCTOneColumn *)getColumnOnResult:(const WCTResultColumn &)resultColumn
-                                       order:(const WCDB::OrderingTerms &)orders
+                                      orders:(const WCDB::OrderingTerms &)orders
                                        limit:(const WCDB::Expression &)limit;
 
 - (nullable WCTOneColumn *)getColumnOnResult:(const WCTResultColumn &)resultColumn
@@ -221,7 +221,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable WCTOneColumn *)getColumnOnResult:(const WCTResultColumn &)resultColumn
                                        where:(const WCDB::Expression &)condition
-                                       order:(const WCDB::OrderingTerms &)orders
+                                      orders:(const WCDB::OrderingTerms &)orders
                                        limit:(const WCDB::Expression &)limit;
 
 - (nullable WCTOneColumn *)getColumnOnResult:(const WCTResultColumn &)resultColumn
@@ -230,13 +230,13 @@ NS_ASSUME_NONNULL_BEGIN
                                       offset:(const WCDB::Expression &)offset;
 
 - (nullable WCTOneColumn *)getColumnOnResult:(const WCTResultColumn &)resultColumn
-                                       order:(const WCDB::OrderingTerms &)orders
+                                      orders:(const WCDB::OrderingTerms &)orders
                                        limit:(const WCDB::Expression &)limit
                                       offset:(const WCDB::Expression &)offset;
 
 - (nullable WCTOneColumn *)getColumnOnResult:(const WCTResultColumn &)resultColumn
                                        where:(const WCDB::Expression &)condition
-                                       order:(const WCDB::OrderingTerms &)orders
+                                      orders:(const WCDB::OrderingTerms &)orders
                                        limit:(const WCDB::Expression &)limit
                                       offset:(const WCDB::Expression &)offset;
 
@@ -247,26 +247,26 @@ NS_ASSUME_NONNULL_BEGIN
                                   where:(const WCDB::Expression &)condition;
 
 - (nullable WCTValue *)getValueOnResult:(const WCTResultColumn &)resultColumn
-                                  order:(const WCDB::OrderingTerms &)orders;
+                                 orders:(const WCDB::OrderingTerms &)orders;
 
 - (nullable WCTValue *)getValueOnResult:(const WCTResultColumn &)resultColumn
                                  offset:(const WCDB::Expression &)offset;
 
 - (nullable WCTValue *)getValueOnResult:(const WCTResultColumn &)resultColumn
                                   where:(const WCDB::Expression &)condition
-                                  order:(const WCDB::OrderingTerms &)orders;
+                                 orders:(const WCDB::OrderingTerms &)orders;
 
 - (nullable WCTValue *)getValueOnResult:(const WCTResultColumn &)resultColumn
                                   where:(const WCDB::Expression &)condition
                                  offset:(const WCDB::Expression &)offset;
 
 - (nullable WCTValue *)getValueOnResult:(const WCTResultColumn &)resultColumn
-                                  order:(const WCDB::OrderingTerms &)orders
+                                 orders:(const WCDB::OrderingTerms &)orders
                                  offset:(const WCDB::Expression &)offset;
 
 - (nullable WCTValue *)getValueOnResult:(const WCTResultColumn &)resultColumn
                                   where:(const WCDB::Expression &)condition
-                                  order:(const WCDB::OrderingTerms &)orders
+                                 orders:(const WCDB::OrderingTerms &)orders
                                  offset:(const WCDB::Expression &)offset;
 
 #pragma mark - Get Rows
@@ -276,21 +276,21 @@ NS_ASSUME_NONNULL_BEGIN
                                          where:(const WCDB::Expression &)condition;
 
 - (nullable WCTColumnsXRows *)getRowsOnResults:(const WCTResultColumns &)resultColumns
-                                         order:(const WCDB::OrderingTerms &)orders;
+                                        orders:(const WCDB::OrderingTerms &)orders;
 
 - (nullable WCTColumnsXRows *)getRowsOnResults:(const WCTResultColumns &)resultColumns
                                          limit:(const WCDB::Expression &)limit;
 
 - (nullable WCTColumnsXRows *)getRowsOnResults:(const WCTResultColumns &)resultColumns
                                          where:(const WCDB::Expression &)condition
-                                         order:(const WCDB::OrderingTerms &)orders;
+                                        orders:(const WCDB::OrderingTerms &)orders;
 
 - (nullable WCTColumnsXRows *)getRowsOnResults:(const WCTResultColumns &)resultColumns
                                          where:(const WCDB::Expression &)condition
                                          limit:(const WCDB::Expression &)limit;
 
 - (nullable WCTColumnsXRows *)getRowsOnResults:(const WCTResultColumns &)resultColumns
-                                         order:(const WCDB::OrderingTerms &)orders
+                                        orders:(const WCDB::OrderingTerms &)orders
                                          limit:(const WCDB::Expression &)limit;
 
 - (nullable WCTColumnsXRows *)getRowsOnResults:(const WCTResultColumns &)resultColumns
@@ -299,7 +299,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable WCTColumnsXRows *)getRowsOnResults:(const WCTResultColumns &)resultColumns
                                          where:(const WCDB::Expression &)condition
-                                         order:(const WCDB::OrderingTerms &)orders
+                                        orders:(const WCDB::OrderingTerms &)orders
                                          limit:(const WCDB::Expression &)limit;
 
 - (nullable WCTColumnsXRows *)getRowsOnResults:(const WCTResultColumns &)resultColumns
@@ -308,13 +308,13 @@ NS_ASSUME_NONNULL_BEGIN
                                         offset:(const WCDB::Expression &)offset;
 
 - (nullable WCTColumnsXRows *)getRowsOnResults:(const WCTResultColumns &)resultColumns
-                                         order:(const WCDB::OrderingTerms &)orders
+                                        orders:(const WCDB::OrderingTerms &)orders
                                          limit:(const WCDB::Expression &)limit
                                         offset:(const WCDB::Expression &)offset;
 
 - (nullable WCTColumnsXRows *)getRowsOnResults:(const WCTResultColumns &)resultColumns
                                          where:(const WCDB::Expression &)condition
-                                         order:(const WCDB::OrderingTerms &)orders
+                                        orders:(const WCDB::OrderingTerms &)orders
                                          limit:(const WCDB::Expression &)limit
                                         offset:(const WCDB::Expression &)offset;
 
@@ -354,7 +354,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
                     withObject:(ObjectType)object
-                         order:(const WCDB::OrderingTerms &)orders
+                        orders:(const WCDB::OrderingTerms &)orders
                          limit:(const WCDB::Expression &)limit;
 
 - (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
@@ -365,7 +365,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
                     withObject:(ObjectType)object
                          where:(const WCDB::Expression &)condition
-                         order:(const WCDB::OrderingTerms &)orders
+                        orders:(const WCDB::OrderingTerms &)orders
                          limit:(const WCDB::Expression &)limit;
 
 - (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
@@ -376,14 +376,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
                     withObject:(ObjectType)object
-                         order:(const WCDB::OrderingTerms &)orders
+                        orders:(const WCDB::OrderingTerms &)orders
                          limit:(const WCDB::Expression &)limit
                         offset:(const WCDB::Expression &)offset;
 
 - (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
                     withObject:(ObjectType)object
                          where:(const WCDB::Expression &)condition
-                         order:(const WCDB::OrderingTerms &)orders
+                        orders:(const WCDB::OrderingTerms &)orders
                          limit:(const WCDB::Expression &)limit
                         offset:(const WCDB::Expression &)offset;
 
@@ -406,7 +406,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
                        withRow:(WCTColumnCodingRow *)row
-                         order:(const WCDB::OrderingTerms &)orders
+                        orders:(const WCDB::OrderingTerms &)orders
                          limit:(const WCDB::Expression &)limit;
 
 - (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
@@ -417,7 +417,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
                        withRow:(WCTColumnCodingRow *)row
                          where:(const WCDB::Expression &)condition
-                         order:(const WCDB::OrderingTerms &)orders
+                        orders:(const WCDB::OrderingTerms &)orders
                          limit:(const WCDB::Expression &)limit;
 
 - (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
@@ -428,14 +428,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
                        withRow:(WCTColumnCodingRow *)row
-                         order:(const WCDB::OrderingTerms &)orders
+                        orders:(const WCDB::OrderingTerms &)orders
                          limit:(const WCDB::Expression &)limit
                         offset:(const WCDB::Expression &)offset;
 
 - (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
                        withRow:(WCTColumnCodingRow *)row
                          where:(const WCDB::Expression &)condition
-                         order:(const WCDB::OrderingTerms &)orders
+                        orders:(const WCDB::OrderingTerms &)orders
                          limit:(const WCDB::Expression &)limit
                         offset:(const WCDB::Expression &)offset;
 
@@ -458,7 +458,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                    withValue:(WCTColumnCodingValue *)value
-                       order:(const WCDB::OrderingTerms &)orders
+                      orders:(const WCDB::OrderingTerms &)orders
                        limit:(const WCDB::Expression &)limit;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
@@ -469,7 +469,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                    withValue:(WCTColumnCodingValue *)value
                        where:(const WCDB::Expression &)condition
-                       order:(const WCDB::OrderingTerms &)orders
+                      orders:(const WCDB::OrderingTerms &)orders
                        limit:(const WCDB::Expression &)limit;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
@@ -480,14 +480,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                    withValue:(WCTColumnCodingValue *)value
-                       order:(const WCDB::OrderingTerms &)orders
+                      orders:(const WCDB::OrderingTerms &)orders
                        limit:(const WCDB::Expression &)limit
                       offset:(const WCDB::Expression &)offset;
 
 - (BOOL)updateRowsOnProperty:(const WCTProperty &)property
                    withValue:(WCTColumnCodingValue *)value
                        where:(const WCDB::Expression &)condition
-                       order:(const WCDB::OrderingTerms &)orders
+                      orders:(const WCDB::OrderingTerms &)orders
                        limit:(const WCDB::Expression &)limit
                       offset:(const WCDB::Expression &)offset;
 
@@ -512,7 +512,7 @@ NS_ASSUME_NONNULL_BEGIN
                     offset:(const WCDB::Expression &)offset;
 
 - (BOOL)deleteObjectsWhere:(const WCDB::Expression &)condition
-                     order:(const WCDB::OrderingTerms &)orders
+                    orders:(const WCDB::OrderingTerms &)orders
                      limit:(const WCDB::Expression &)limit;
 
 - (BOOL)deleteObjectsWhere:(const WCDB::Expression &)condition
@@ -524,7 +524,7 @@ NS_ASSUME_NONNULL_BEGIN
                       offset:(const WCDB::Expression &)offset;
 
 - (BOOL)deleteObjectsWhere:(const WCDB::Expression &)condition
-                     order:(const WCDB::OrderingTerms &)orders
+                    orders:(const WCDB::OrderingTerms &)orders
                      limit:(const WCDB::Expression &)limit
                     offset:(const WCDB::Expression &)offset;
 

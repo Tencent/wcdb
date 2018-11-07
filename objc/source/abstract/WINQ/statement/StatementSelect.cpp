@@ -73,9 +73,15 @@ StatementSelect& StatementSelect::where(const Expression& condition)
     return *this;
 }
 
-StatementSelect& StatementSelect::group(const Expressions& groups)
+StatementSelect& StatementSelect::groups(const Expressions& groups)
 {
     currentCore().groups = groups;
+    return *this;
+}
+
+StatementSelect& StatementSelect::group(const Expression& group)
+{
+    currentCore().groups.push_back(group);
     return *this;
 }
 
@@ -96,6 +102,17 @@ StatementSelect& StatementSelect::window(const String& window)
 StatementSelect& StatementSelect::as(const WindowDef& windowDef)
 {
     currentCore().windowDefs.push_back(windowDef);
+    return *this;
+}
+
+StatementSelect& StatementSelect::value(const Expression& expression)
+{
+    Syntax::SelectCore& core = currentCore();
+    core.switcher = Syntax::SelectCore::Switch::Values;
+    if (core.valuesList.empty()) {
+        core.valuesList.push_back({});
+    }
+    core.valuesList.begin()->push_back(expression);
     return *this;
 }
 
@@ -135,7 +152,13 @@ StatementSelect& StatementSelect::except()
     return *this;
 }
 
-StatementSelect& StatementSelect::order(const OrderingTerms& orders)
+StatementSelect& StatementSelect::order(const OrderingTerm& order)
+{
+    syntax().orderingTerms.push_back(order);
+    return *this;
+}
+
+StatementSelect& StatementSelect::orders(const OrderingTerms& orders)
 {
     syntax().orderingTerms = orders;
     return *this;

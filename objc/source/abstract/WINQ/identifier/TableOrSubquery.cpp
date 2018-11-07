@@ -66,7 +66,13 @@ TableOrSubquery& TableOrSubquery::invoke()
     return *this;
 }
 
-TableOrSubquery& TableOrSubquery::invoke(const Expressions& expressions)
+TableOrSubquery& TableOrSubquery::argument(const Expression& expression)
+{
+    syntax().expressions.push_back(expression);
+    return *this;
+}
+
+TableOrSubquery& TableOrSubquery::arguments(const Expressions& expressions)
 {
     syntax().expressions = expressions;
     return *this;

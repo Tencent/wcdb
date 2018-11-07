@@ -34,9 +34,9 @@ ColumnDef::ColumnDef(const Column& column, const ColumnType& type)
     syntax().columnType = type;
 }
 
-ColumnDef& ColumnDef::constraint(const ColumnConstraints& constraints)
+ColumnDef& ColumnDef::constraint(const ColumnConstraint& constraint)
 {
-    syntax().constraints = constraints;
+    syntax().constraints.push_back(constraint);
     return *this;
 }
 

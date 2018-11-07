@@ -133,7 +133,16 @@
 
 - (void)test_function
 {
-    auto testingSQL = WCDB::Expression::function(function).distinct().invoke(expressions);
+    auto testingSQL = WCDB::Expression::function(function).distinct().invoke().argument(expression1);
+
+    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testFunction(DISTINCT 1)");
+}
+
+- (void)test_function_with_arguments
+{
+    auto testingSQL = WCDB::Expression::function(function).distinct().invoke().argument(expression1).argument(expression2);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -142,11 +151,11 @@
 
 - (void)test_function_without_distinct
 {
-    auto testingSQL = WCDB::Expression::function(function).invoke(expressions);
+    auto testingSQL = WCDB::Expression::function(function).invoke().argument(expression1);
 
-    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testFunction(1, 2)");
+    WINQAssertEqual(testingSQL, @"testFunction(1)");
 }
 
 - (void)test_function_without_parameter
@@ -270,7 +279,16 @@
 
 - (void)test_window_function
 {
-    auto testingSQL = WCDB::Expression::windowFunction(windowFunction, expressions).over(windowDef);
+    auto testingSQL = WCDB::Expression::windowFunction(windowFunction).invoke().argument(expression1).over(windowDef);
+
+    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testWindowFunction(1) OVER()");
+}
+
+- (void)test_window_function_with_arguments
+{
+    auto testingSQL = WCDB::Expression::windowFunction(windowFunction).invoke().argument(expression1).argument(expression2).over(windowDef);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -279,7 +297,7 @@
 
 - (void)test_window_function_without_parameter
 {
-    auto testingSQL = WCDB::Expression::windowFunction(windowFunction).over(windowDef);
+    auto testingSQL = WCDB::Expression::windowFunction(windowFunction).invoke().over(windowDef);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::WindowDef };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -288,7 +306,7 @@
 
 - (void)test_window_function_all
 {
-    auto testingSQL = WCDB::Expression::windowFunctionAll(windowFunction).over(windowDef);
+    auto testingSQL = WCDB::Expression::windowFunction(windowFunction).invokeAll().over(windowDef);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::WindowDef };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -297,20 +315,20 @@
 
 - (void)test_window_function_with_filter
 {
-    auto testingSQL = WCDB::Expression::windowFunction(windowFunction, expressions).filter(filter).over(windowDef);
+    auto testingSQL = WCDB::Expression::windowFunction(windowFunction).invoke().argument(expression1).filter(filter).over(windowDef);
 
-    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Filter, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef };
+    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Filter, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testWindowFunction(1, 2) FILTER(WHERE 1) OVER()");
+    WINQAssertEqual(testingSQL, @"testWindowFunction(1) FILTER(WHERE 1) OVER()");
 }
 
 - (void)test_window_function_with_name
 {
-    auto testingSQL = WCDB::Expression::windowFunction(windowFunction, expressions).over(window);
+    auto testingSQL = WCDB::Expression::windowFunction(windowFunction).invoke().argument(expression1).over(window);
 
-    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testWindowFunction(1, 2) OVER testWindow");
+    WINQAssertEqual(testingSQL, @"testWindowFunction(1) OVER testWindow");
 }
 
 - (void)test_expression_convertible

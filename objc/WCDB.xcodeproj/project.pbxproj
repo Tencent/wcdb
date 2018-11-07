@@ -188,7 +188,6 @@
 		23790A632192B0450098797F /* ORMTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A622192B0450098797F /* ORMTestCase.mm */; };
 		23790A662192B0A60098797F /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
 		23790A672192B0A60098797F /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
-		23790A692192BEF60098797F /* PropertyTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A682192BEF60098797F /* PropertyTests.mm */; };
 		23790A6A2192BEF60098797F /* PropertyTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A682192BEF60098797F /* PropertyTests.mm */; };
 		23790A6F2192BF140098797F /* PropertyObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A6B2192BF140098797F /* PropertyObject.mm */; };
 		23790A732192C0560098797F /* BuiltinTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A702192C0560098797F /* BuiltinTypesObject.mm */; };
@@ -3365,7 +3364,6 @@
 				2398977F217EC9E30014BF33 /* StatementCommitTests.mm in Sources */,
 				2398976E217EC9E30014BF33 /* FunctionInvocationTests.mm in Sources */,
 				23989799217EC9E30014BF33 /* WindowDefTests.mm in Sources */,
-				23790A692192BEF60098797F /* PropertyTests.mm in Sources */,
 				2398977E217EC9E30014BF33 /* StatementBeginTests.mm in Sources */,
 				23989768217EC9E30014BF33 /* ExpressionOperableTests.mm in Sources */,
 				2396EB11218054200079066C /* ColumnTests.mm in Sources */,

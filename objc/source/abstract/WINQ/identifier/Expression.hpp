@@ -58,7 +58,8 @@ public:
 
     static Expression function(const String& function);
     Expression& invoke();
-    Expression& invoke(const Expressions& parameters);
+    Expression& argument(const Expression& parameter);
+    Expression& arguments(const Expressions& parameters);
     Expression& invokeAll();
 
     Expression& distinct();
@@ -78,8 +79,6 @@ public:
     Expression& escape(const Expression& operand);
 
     static Expression windowFunction(const String& function);
-    static Expression windowFunction(const String& function, const Expressions& parameter);
-    static Expression windowFunctionAll(const String& function);
     Expression& filter(const Filter& filter);
     Expression& over(const WindowDef& windowDef);
     Expression& over(const String& window);

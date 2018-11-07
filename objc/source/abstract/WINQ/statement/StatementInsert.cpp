@@ -77,9 +77,25 @@ StatementInsert& StatementInsert::as(const String& alias)
     return *this;
 }
 
+StatementInsert& StatementInsert::column(const Column& column)
+{
+    syntax().columns.push_back(column);
+    return *this;
+}
+
 StatementInsert& StatementInsert::columns(const Columns& columns)
 {
     syntax().columns = columns;
+    return *this;
+}
+
+StatementInsert& StatementInsert::value(const Expression& expression)
+{
+    syntax().valueSwitcher = SyntaxType::SwitchValue::Values;
+    if (syntax().expressionsValues.empty()) {
+        syntax().expressionsValues.push_back({});
+    }
+    syntax().expressionsValues.begin()->push_back(expression);
     return *this;
 }
 

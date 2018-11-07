@@ -31,9 +31,10 @@ public:
     using TypedSyntax<Syntax::WindowFunctionInvocation, SQL>::TypedSyntax;
     explicit WindowFunctionInvocation(const String& name);
 
-    WindowFunctionInvocation& invoke(const Expressions& expressions);
     WindowFunctionInvocation& invoke();
     WindowFunctionInvocation& invokeAll();
+    WindowFunctionInvocation& argument(const Expression& expression);
+    WindowFunctionInvocation& arguments(const Expressions& expressions);
 
     WindowFunctionInvocation& filter(const Filter& filter);
 

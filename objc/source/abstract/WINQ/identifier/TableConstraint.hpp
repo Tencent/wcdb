@@ -30,8 +30,10 @@ public:
     TableConstraint();
     explicit TableConstraint(const String& name);
 
-    TableConstraint& primaryKey(const IndexedColumns& indexedColumns);
-    TableConstraint& unique(const IndexedColumns& indexedColumns);
+    TableConstraint& primaryKey();
+    TableConstraint& unique();
+    TableConstraint& indexed(const IndexedColumn& indexedColumn);
+
     TableConstraint& conflict(const Conflict& conflict);
 
     TableConstraint& check(const Expression& condition);

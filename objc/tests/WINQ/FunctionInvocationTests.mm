@@ -26,6 +26,8 @@
 
 @implementation FunctionInvocationTests {
     NSString* function;
+    WCDB::Expression expression1;
+    WCDB::Expression expression2;
     WCDB::Expressions expressions;
 }
 
@@ -33,9 +35,11 @@
 {
     [super setUp];
     function = @"testFunction";
+    expression1 = 1;
+    expression2 = 2;
     expressions = {
-        1,
-        2,
+        expression1,
+        expression2,
     };
 }
 
@@ -52,7 +56,7 @@
 
 - (void)test_function
 {
-    auto testingSQL = WCDB::FunctionInvocation(function).distinct().invoke(expressions);
+    auto testingSQL = WCDB::FunctionInvocation(function).distinct().invoke().arguments(expressions);
 
     auto testingTypes = { WCDB::SQL::Type::FunctionInvocation, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
@@ -61,14 +65,32 @@
 
 - (void)test_function_without_distinct
 {
-    auto testingSQL = WCDB::FunctionInvocation(function).invoke(expressions);
+    auto testingSQL = WCDB::FunctionInvocation(function).invoke().arguments(expressions);
 
     auto testingTypes = { WCDB::SQL::Type::FunctionInvocation, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
     WINQAssertEqual(testingSQL, @"testFunction(1, 2)");
 }
 
-- (void)test_function_without_parameters
+- (void)test_function_with_parameter
+{
+    auto testingSQL = WCDB::FunctionInvocation(function).invoke().argument(expression1);
+
+    auto testingTypes = { WCDB::SQL::Type::FunctionInvocation, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testFunction(1)");
+}
+
+- (void)test_function_with_seperated_parameters
+{
+    auto testingSQL = WCDB::FunctionInvocation(function).invoke().argument(expression1).argument(expression2);
+
+    auto testingTypes = { WCDB::SQL::Type::FunctionInvocation, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testFunction(1, 2)");
+}
+
+- (void)test_function_without_parameter
 {
     auto testingSQL = WCDB::FunctionInvocation(function).invoke();
 

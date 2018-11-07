@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param orders order list
  @return self
  */
-- (instancetype)order:(const WCDB::OrderingTerms &)orders;
+- (instancetype)orders:(const WCDB::OrderingTerms &)orders;
 
 /**
  @brief WINQ interface for SQL.

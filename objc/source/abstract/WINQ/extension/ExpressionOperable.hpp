@@ -106,6 +106,7 @@ public:
     Expression notInTable(const String &table);
     Expression in(const StatementSelect &select);
     Expression notIn(const StatementSelect &select);
+    // in(arguments) usually accept multiple arguments, so the seperated method is not provided.
     Expression in(const Expressions &expressions);
     Expression notIn(const Expressions &expressions);
     Expression inFunction(const String &tableFunction);

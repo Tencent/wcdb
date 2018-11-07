@@ -32,6 +32,8 @@
     WCDB::Expression expression1;
     WCDB::Expression expression2;
     WCDB::Expression condition;
+    WCDB::OrderingTerm orderingTerm1;
+    WCDB::OrderingTerm orderingTerm2;
     WCDB::OrderingTerms orderingTerms;
     WCDB::Expression limit;
     WCDB::Expression limitParameter;
@@ -50,9 +52,11 @@
     expression1 = 1;
     expression2 = 2;
     condition = 3;
+    orderingTerm1 = 1;
+    orderingTerm2 = 2;
     orderingTerms = {
-        1,
-        2,
+        orderingTerm1,
+        orderingTerm2,
     };
     limit = 1;
     limitParameter = 2;
@@ -150,9 +154,18 @@
     WINQAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 WHERE 3");
 }
 
+- (void)test_update_with_seperated_orders
+{
+    auto testingSQL = WCDB::StatementUpdate().update(table).set(column).to(expression1).order(orderingTerm1).order(orderingTerm2).limit(limit);
+
+    auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 ORDER BY 1, 2 LIMIT 1");
+}
+
 - (void)test_update_with_orders
 {
-    auto testingSQL = WCDB::StatementUpdate().update(table).set(column).to(expression1).order(orderingTerms).limit(limit);
+    auto testingSQL = WCDB::StatementUpdate().update(table).set(column).to(expression1).orders(orderingTerms).limit(limit);
 
     auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);

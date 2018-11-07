@@ -24,7 +24,7 @@ namespace WCDB {
 
 Expression CoreFunction::abs(const Expression& expression)
 {
-    return Expression::function("abs").invoke(expression);
+    return Expression::function("abs").invoke().arguments(expression);
 }
 
 Expression CoreFunction::changes()
@@ -34,32 +34,32 @@ Expression CoreFunction::changes()
 
 Expression CoreFunction::char_(const Expressions& expressions)
 {
-    return Expression::function("char").invoke(expressions);
+    return Expression::function("char").invoke().arguments(expressions);
 }
 
 Expression CoreFunction::coalesce(const Expressions& expressions)
 {
-    return Expression::function("coalesce").invoke(expressions);
+    return Expression::function("coalesce").invoke().arguments(expressions);
 }
 
 Expression CoreFunction::glob(const Expression& pattern, const Expression& string)
 {
-    return Expression::function("glob").invoke({ pattern, string });
+    return Expression::function("glob").invoke().arguments({ pattern, string });
 }
 
 Expression CoreFunction::hex(const Expression& expression)
 {
-    return Expression::function("hex").invoke(expression);
+    return Expression::function("hex").invoke().arguments(expression);
 }
 
 Expression CoreFunction::ifNull(const Expression& expression1, const Expression& expression2)
 {
-    return Expression::function("ifnull").invoke({ expression1, expression2 });
+    return Expression::function("ifnull").invoke().arguments({ expression1, expression2 });
 }
 
 Expression CoreFunction::instr(const Expression& string, const Expression& occurrence)
 {
-    return Expression::function("instr").invoke({ string, occurrence });
+    return Expression::function("instr").invoke().arguments({ string, occurrence });
 }
 
 Expression CoreFunction::lastInsertRowID()
@@ -69,68 +69,68 @@ Expression CoreFunction::lastInsertRowID()
 
 Expression CoreFunction::length(const Expression& expression)
 {
-    return Expression::function("length").invoke(expression);
+    return Expression::function("length").invoke().arguments(expression);
 }
 
 Expression CoreFunction::like(const Expression& origin, const Expression& pattern)
 {
-    return Expression::function("like").invoke({ origin, pattern });
+    return Expression::function("like").invoke().arguments({ origin, pattern });
 }
 
 Expression
 CoreFunction::like(const Expression& origin, const Expression& pattern, const Expression& escape)
 {
-    return Expression::function("like").invoke({ origin, pattern, escape });
+    return Expression::function("like").invoke().arguments({ origin, pattern, escape });
 }
 
 Expression CoreFunction::likelihood(const Expression& unchanged, const Expression& floating)
 {
-    return Expression::function("likelihood").invoke({ unchanged, floating });
+    return Expression::function("likelihood").invoke().arguments({ unchanged, floating });
 }
 
 Expression CoreFunction::likely(const Expression& unchanged)
 {
-    return Expression::function("likely").invoke(unchanged);
+    return Expression::function("likely").invoke().arguments(unchanged);
 }
 
 Expression CoreFunction::lower(const Expression& expression)
 {
-    return Expression::function("lower").invoke(expression);
+    return Expression::function("lower").invoke().arguments(expression);
 }
 
 Expression CoreFunction::ltrim(const Expression& expression)
 {
-    return Expression::function("ltrim").invoke(expression);
+    return Expression::function("ltrim").invoke().arguments(expression);
 }
 
 Expression CoreFunction::ltrim(const Expression& expression, const Expression& removing)
 {
-    return Expression::function("ltrim").invoke({ expression, removing });
+    return Expression::function("ltrim").invoke().arguments({ expression, removing });
 }
 
 Expression CoreFunction::max(const Expressions& expressions)
 {
-    return Expression::function("max").invoke(expressions);
+    return Expression::function("max").invoke().arguments(expressions);
 }
 
 Expression CoreFunction::min(const Expressions& expressions)
 {
-    return Expression::function("min").invoke(expressions);
+    return Expression::function("min").invoke().arguments(expressions);
 }
 
 Expression CoreFunction::nullIf(const Expression& expression1, const Expression& expression2)
 {
-    return Expression::function("nullif").invoke({ expression1, expression2 });
+    return Expression::function("nullif").invoke().arguments({ expression1, expression2 });
 }
 
 Expression CoreFunction::printf(const Expressions& expressions)
 {
-    return Expression::function("printf").invoke(expressions);
+    return Expression::function("printf").invoke().arguments(expressions);
 }
 
 Expression CoreFunction::quote(const Expression& expression)
 {
-    return Expression::function("quote").invoke(expression);
+    return Expression::function("quote").invoke().arguments(expression);
 }
 
 Expression CoreFunction::random()
@@ -140,54 +140,54 @@ Expression CoreFunction::random()
 
 Expression CoreFunction::randomBLOB(const Expression& n)
 {
-    return Expression::function("randomblob").invoke(n);
+    return Expression::function("randomblob").invoke().arguments(n);
 }
 
 Expression CoreFunction::replace(const Expression& origin,
                                  const Expression& target,
                                  const Expression& replacement)
 {
-    return Expression::function("replace").invoke({ origin, target, replacement });
+    return Expression::function("replace").invoke().arguments({ origin, target, replacement });
 }
 
 Expression CoreFunction::round(const Expression& expression)
 {
-    return Expression::function("round").invoke(expression);
+    return Expression::function("round").invoke().arguments(expression);
 }
 
 Expression CoreFunction::round(const Expression& expression, const Expression& digits)
 {
-    return Expression::function("round").invoke({ expression, digits });
+    return Expression::function("round").invoke().arguments({ expression, digits });
 }
 
 Expression CoreFunction::rtrim(const Expression& expression)
 {
-    return Expression::function("rtrim").invoke(expression);
+    return Expression::function("rtrim").invoke().arguments(expression);
 }
 
 Expression CoreFunction::rtrim(const Expression& expression, const Expression& removing)
 {
-    return Expression::function("rtrim").invoke({ expression, removing });
+    return Expression::function("rtrim").invoke().arguments({ expression, removing });
 }
 
 Expression CoreFunction::soundex(const Expression& expression)
 {
-    return Expression::function("soundex").invoke(expression);
+    return Expression::function("soundex").invoke().arguments(expression);
 }
 
 Expression CoreFunction::sqliteCompileOptionGet(const Expression& n)
 {
-    return Expression::function("sqlite_compileoption_get").invoke(n);
+    return Expression::function("sqlite_compileoption_get").invoke().arguments(n);
 }
 
 Expression CoreFunction::sqliteCompileOptionUsed(const Expression& name)
 {
-    return Expression::function("sqlite_compileoption_used").invoke(name);
+    return Expression::function("sqlite_compileoption_used").invoke().arguments(name);
 }
 
 Expression CoreFunction::sqliteOffset(const Expression& expression)
 {
-    return Expression::function("sqlite_offset").invoke(expression);
+    return Expression::function("sqlite_offset").invoke().arguments(expression);
 }
 
 Expression CoreFunction::sqliteSourceID()
@@ -202,13 +202,13 @@ Expression CoreFunction::sqliteVersion()
 
 Expression CoreFunction::substr(const Expression& origin, const Expression& offset)
 {
-    return Expression::function("substr").invoke({ origin, offset });
+    return Expression::function("substr").invoke().arguments({ origin, offset });
 }
 
 Expression
 CoreFunction::substr(const Expression& origin, const Expression& offset, const Expression& length)
 {
-    return Expression::function("substr").invoke({ origin, offset, length });
+    return Expression::function("substr").invoke().arguments({ origin, offset, length });
 }
 
 Expression CoreFunction::totalChanges()
@@ -218,37 +218,37 @@ Expression CoreFunction::totalChanges()
 
 Expression CoreFunction::trim(const Expression& expression)
 {
-    return Expression::function("trim").invoke(expression);
+    return Expression::function("trim").invoke().arguments(expression);
 }
 
 Expression CoreFunction::trim(const Expression& expression, const Expression& removing)
 {
-    return Expression::function("trim").invoke({ expression, removing });
+    return Expression::function("trim").invoke().arguments({ expression, removing });
 }
 
 Expression CoreFunction::typeof_(const Expression& expression)
 {
-    return Expression::function("typeof").invoke(expression);
+    return Expression::function("typeof").invoke().arguments(expression);
 }
 
 Expression CoreFunction::unicode(const Expression& expression)
 {
-    return Expression::function("unicode").invoke(expression);
+    return Expression::function("unicode").invoke().arguments(expression);
 }
 
 Expression CoreFunction::unlikely(const Expression& expression)
 {
-    return Expression::function("unlikely").invoke(expression);
+    return Expression::function("unlikely").invoke().arguments(expression);
 }
 
 Expression CoreFunction::upper(const Expression& expression)
 {
-    return Expression::function("upper").invoke(expression);
+    return Expression::function("upper").invoke().arguments(expression);
 }
 
 Expression CoreFunction::zeroBLOB(const Expression& expression)
 {
-    return Expression::function("zeroblob").invoke(expression);
+    return Expression::function("zeroblob").invoke().arguments(expression);
 }
 
 CoreFunctionOperable::~CoreFunctionOperable()

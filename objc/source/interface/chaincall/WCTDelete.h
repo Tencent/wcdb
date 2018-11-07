@@ -33,17 +33,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  @brief WINQ interface for SQL.
- @param expr expr
+ @param condition condition
  @return self
  */
-- (instancetype)where:(const WCDB::Expression &)expr;
+- (instancetype)where:(const WCDB::Expression &)condition;
 
 /**
  @brief WINQ interface for SQL.
  @param orders order list
  @return self
  */
-- (instancetype)order:(const WCDB::OrderingTerms &)orders;
+- (instancetype)orders:(const WCDB::OrderingTerms &)orders;
 
 /**
  @brief WINQ interface for SQL.

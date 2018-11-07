@@ -33,7 +33,7 @@ public:
     StatementCreateIndex& ifNotExists();
     StatementCreateIndex& onTable(const String& table);
 
-    StatementCreateIndex& indexed(const IndexedColumns& indexedColumns);
+    StatementCreateIndex& indexed(const IndexedColumn& indexedColumn);
     StatementCreateIndex& where(const Expression& condition);
 };
 

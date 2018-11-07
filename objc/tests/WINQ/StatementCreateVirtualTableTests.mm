@@ -28,6 +28,8 @@
     WCDB::Schema schema;
     NSString* table;
     NSString* module;
+    WCDB::ModuleArgument moduleArgument1;
+    WCDB::ModuleArgument moduleArgument2;
     WCDB::ModuleArguments moduleArguments;
 }
 
@@ -37,9 +39,11 @@
     schema = @"testSchema";
     table = @"testTable";
     module = @"testModule";
+    moduleArgument1 = WCDB::ModuleArgument(1, 1);
+    moduleArgument2 = WCDB::ModuleArgument(2, 2);
     moduleArguments = {
-        WCDB::ModuleArgument(1, 1),
-        WCDB::ModuleArgument(2, 2),
+        moduleArgument1,
+        moduleArgument2,
     };
 }
 
@@ -56,6 +60,33 @@
 
 - (void)test_create_virtual_table
 {
+    auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(table).schema(schema).usingModule(module).argument(moduleArgument1);
+
+    auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ModuleArgument, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE VIRTUAL TABLE testSchema.testTable USING testModule(1 = 1)");
+}
+
+- (void)test_create_virtual_table_if_not_exists
+{
+    auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(table).schema(schema).ifNotExists().usingModule(module).argument(moduleArgument1);
+
+    auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ModuleArgument, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE VIRTUAL TABLE IF NOT EXISTS testSchema.testTable USING testModule(1 = 1)");
+}
+
+- (void)test_create_virtual_table_without_schema
+{
+    auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(table).usingModule(module).argument(moduleArgument1);
+
+    auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ModuleArgument, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE VIRTUAL TABLE main.testTable USING testModule(1 = 1)");
+}
+
+- (void)test_create_virtual_table_with_arguments
+{
     auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(table).schema(schema).usingModule(module).arguments(moduleArguments);
 
     auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ModuleArgument, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ModuleArgument, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
@@ -63,25 +94,16 @@
     WINQAssertEqual(testingSQL, @"CREATE VIRTUAL TABLE testSchema.testTable USING testModule(1 = 1, 2 = 2)");
 }
 
-- (void)test_create_virtual_table_if_not_exists
+- (void)test_create_virtual_table_with_seperated_arguments
 {
-    auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(table).schema(schema).ifNotExists().usingModule(module).arguments(moduleArguments);
+    auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(table).schema(schema).usingModule(module).argument(moduleArgument1).argument(moduleArgument2);
 
     auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ModuleArgument, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ModuleArgument, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CREATE VIRTUAL TABLE IF NOT EXISTS testSchema.testTable USING testModule(1 = 1, 2 = 2)");
+    WINQAssertEqual(testingSQL, @"CREATE VIRTUAL TABLE testSchema.testTable USING testModule(1 = 1, 2 = 2)");
 }
 
-- (void)test_create_virtual_table_without_schema
-{
-    auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(table).usingModule(module).arguments(moduleArguments);
-
-    auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ModuleArgument, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ModuleArgument, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CREATE VIRTUAL TABLE main.testTable USING testModule(1 = 1, 2 = 2)");
-}
-
-- (void)test_create_virtual_table_without_arguments
+- (void)test_create_virtual_table_without_argument
 {
     auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(table).schema(schema).usingModule(module);
 

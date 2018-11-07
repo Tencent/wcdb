@@ -27,6 +27,8 @@
 @implementation WindowFunctionInvocationTests {
     NSString* windowFunction;
     WCDB::Expressions expressions;
+    WCDB::Expression expression1;
+    WCDB::Expression expression2;
     WCDB::Filter filter;
     WCDB::WindowDef windowDef;
     NSString* window;
@@ -36,9 +38,11 @@
 {
     [super setUp];
     windowFunction = @"testWindowFunction";
+    expression1 = 1;
+    expression2 = 2;
     expressions = {
-        1,
-        2,
+        expression1,
+        expression2,
     };
     filter = WCDB::Filter().where(1);
     windowDef = WCDB::WindowDef().partition(expressions);
@@ -58,14 +62,32 @@
 
 - (void)test_window_function
 {
-    auto testingSQL = WCDB::WindowFunctionInvocation(windowFunction).invoke(expressions).over(windowDef);
+    auto testingSQL = WCDB::WindowFunctionInvocation(windowFunction).invoke().argument(expression1).over(windowDef);
+
+    auto testingTypes = { WCDB::SQL::Type::WindowFunctionInvocation, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testWindowFunction(1) OVER(PARTITION BY 1, 2)");
+}
+
+- (void)test_window_function_with_parameters
+{
+    auto testingSQL = WCDB::WindowFunctionInvocation(windowFunction).invoke().arguments(expressions).over(windowDef);
 
     auto testingTypes = { WCDB::SQL::Type::WindowFunctionInvocation, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
     WINQAssertEqual(testingSQL, @"testWindowFunction(1, 2) OVER(PARTITION BY 1, 2)");
 }
 
-- (void)test_window_function_without_parameters
+- (void)test_window_function_with_seperated_parameters
+{
+    auto testingSQL = WCDB::WindowFunctionInvocation(windowFunction).invoke().argument(expression1).argument(expression2).over(windowDef);
+
+    auto testingTypes = { WCDB::SQL::Type::WindowFunctionInvocation, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testWindowFunction(1, 2) OVER(PARTITION BY 1, 2)");
+}
+
+- (void)test_window_function_without_parameter
 {
     auto testingSQL = WCDB::WindowFunctionInvocation(windowFunction).invoke().over(windowDef);
 
@@ -85,20 +107,20 @@
 
 - (void)test_window_function_with_filter
 {
-    auto testingSQL = WCDB::WindowFunctionInvocation(windowFunction).invoke(expressions).filter(filter).over(windowDef);
+    auto testingSQL = WCDB::WindowFunctionInvocation(windowFunction).invoke().filter(filter).over(windowDef);
 
-    auto testingTypes = { WCDB::SQL::Type::WindowFunctionInvocation, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Filter, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::WindowFunctionInvocation, WCDB::SQL::Type::Filter, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testWindowFunction(1, 2) FILTER(WHERE 1) OVER(PARTITION BY 1, 2)");
+    WINQAssertEqual(testingSQL, @"testWindowFunction() FILTER(WHERE 1) OVER(PARTITION BY 1, 2)");
 }
 
 - (void)test_window_function_over_window
 {
-    auto testingSQL = WCDB::WindowFunctionInvocation(windowFunction).invoke(expressions).over(window);
+    auto testingSQL = WCDB::WindowFunctionInvocation(windowFunction).invoke().over(window);
 
-    auto testingTypes = { WCDB::SQL::Type::WindowFunctionInvocation, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::WindowFunctionInvocation };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testWindowFunction(1, 2) OVER testWindow");
+    WINQAssertEqual(testingSQL, @"testWindowFunction() OVER testWindow");
 }
 
 @end

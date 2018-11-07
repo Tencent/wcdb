@@ -27,7 +27,8 @@
 @implementation StatementCreateTriggerTests {
     WCDB::Schema schema;
     NSString* name;
-    WCDB::Columns columns;
+    WCDB::Column column1;
+    WCDB::Column column2;
     NSString* table;
     WCDB::Expression condition;
     WCDB::StatementUpdate update;
@@ -41,10 +42,8 @@
     [super setUp];
     schema = @"testSchema";
     name = @"testTrigger";
-    columns = {
-        WCDB::Column(@"testColumn1"),
-        WCDB::Column(@"testColumn2"),
-    };
+    column1 = WCDB::Column(@"testColumn1");
+    column2 = WCDB::Column(@"testColumn2");
     table = @"testTable";
     condition = 1;
     update = WCDB::StatementUpdate().update(table).set(WCDB::Column(@"testColumn")).to(1);
@@ -136,9 +135,18 @@
     WINQAssertEqual(testingSQL, @"CREATE TRIGGER testSchema.testTrigger BEFORE UPDATE ON testTable FOR EACH ROW WHEN 1 BEGIN UPDATE main.testTable SET testColumn = 1; END");
 }
 
+- (void)test_create_trigger_before_update_of_column
+{
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(name).schema(schema).before().update().column(column1).on(table).forEachRow().when(condition).execute(update);
+
+    auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"CREATE TRIGGER testSchema.testTrigger BEFORE UPDATE OF testColumn1 ON testTable FOR EACH ROW WHEN 1 BEGIN UPDATE main.testTable SET testColumn = 1; END");
+}
+
 - (void)test_create_trigger_before_update_of_columns
 {
-    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(name).schema(schema).before().updateOf(columns).on(table).forEachRow().when(condition).execute(update);
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(name).schema(schema).before().update().column(column1).column(column2).on(table).forEachRow().when(condition).execute(update);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);

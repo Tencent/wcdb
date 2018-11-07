@@ -85,10 +85,9 @@ StatementCreateTrigger& StatementCreateTrigger::update()
     return *this;
 }
 
-StatementCreateTrigger& StatementCreateTrigger::updateOf(const Columns& columns)
+StatementCreateTrigger& StatementCreateTrigger::column(const Column& column)
 {
-    syntax().event = SyntaxType::Event::Update;
-    syntax().columns = columns;
+    syntax().columns.push_back(column);
     return *this;
 }
 

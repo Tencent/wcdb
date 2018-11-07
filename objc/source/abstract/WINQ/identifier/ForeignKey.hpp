@@ -28,7 +28,7 @@ namespace WCDB {
 class ForeignKey final : public TypedSyntax<Syntax::ForeignKeyClause, SQL> {
 public:
     ForeignKey& references(const String& table);
-    ForeignKey& references(const String& table, const Columns& columns);
+    ForeignKey& column(const Column& column);
 
     ForeignKey& onDeleteSetNull();
     ForeignKey& onDeleteSetDefault();

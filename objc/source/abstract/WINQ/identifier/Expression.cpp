@@ -79,9 +79,16 @@ Expression& Expression::invoke()
     return *this;
 }
 
-Expression& Expression::invoke(const Expressions& parameters)
+Expression& Expression::argument(const Expression& parameter)
 {
-    for (const Expression& parameter : parameters) {
+    syntax().expressions.push_back(parameter);
+    syntax().useWildcard = false;
+    return *this;
+}
+
+Expression& Expression::arguments(const Expressions& parameters)
+{
+    for (const auto& parameter : parameters) {
         syntax().expressions.push_back(parameter);
     }
     syntax().useWildcard = false;
@@ -180,26 +187,6 @@ Expression Expression::windowFunction(const String& function)
     Expression expression;
     expression.syntax().switcher = SyntaxType::Switch::Window;
     expression.syntax().function = function;
-    expression.syntax().useWildcard = false;
-    return expression;
-}
-
-Expression Expression::windowFunction(const String& function, const Expressions& parameter)
-{
-    Expression expression;
-    expression.syntax().switcher = SyntaxType::Switch::Window;
-    expression.syntax().function = function;
-    expression.syntax().useWildcard = false;
-    expression.syntax().expressions = parameter;
-    return expression;
-}
-
-Expression Expression::windowFunctionAll(const String& function)
-{
-    Expression expression;
-    expression.syntax().switcher = SyntaxType::Switch::Window;
-    expression.syntax().function = function;
-    expression.syntax().useWildcard = true;
     return expression;
 }
 

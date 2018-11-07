@@ -53,16 +53,16 @@ StatementCreateTable& StatementCreateTable::as(const StatementSelect& select)
     return *this;
 }
 
-StatementCreateTable& StatementCreateTable::define(const ColumnDefs& columnDefs)
+StatementCreateTable& StatementCreateTable::define(const ColumnDef& columnDef)
 {
     syntax().switcher = SyntaxType::Switch::ColumnDefs;
-    syntax().columnDefs = columnDefs;
+    syntax().columnDefs.push_back(columnDef);
     return *this;
 }
 
-StatementCreateTable& StatementCreateTable::constraint(const TableConstraints& constraints)
+StatementCreateTable& StatementCreateTable::constraint(const TableConstraint& constraint)
 {
-    syntax().tableConstraints = constraints;
+    syntax().tableConstraints.push_back(constraint);
     return *this;
 }
 

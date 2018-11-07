@@ -28,7 +28,18 @@ JoinConstraint& JoinConstraint::on(const Expression& expression)
     return *this;
 }
 
-JoinConstraint& JoinConstraint::usingColumns(const Columns& columns)
+JoinConstraint& JoinConstraint::using_()
+{
+    return *this;
+}
+
+JoinConstraint& JoinConstraint::column(const Column& column)
+{
+    syntax().columns.push_back(column);
+    return *this;
+}
+
+JoinConstraint& JoinConstraint::columns(const Columns& columns)
 {
     syntax().columns = columns;
     return *this;

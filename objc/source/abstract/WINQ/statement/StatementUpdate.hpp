@@ -41,7 +41,8 @@ public:
 
     StatementUpdate& where(const Expression& condition);
 
-    StatementUpdate& order(const OrderingTerms& orders);
+    StatementUpdate& order(const OrderingTerm& order);
+    StatementUpdate& orders(const OrderingTerms& orders);
 
     StatementUpdate& limit(const Expression& from, const Expression& to);
 

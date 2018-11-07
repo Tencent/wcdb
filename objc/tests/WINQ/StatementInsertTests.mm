@@ -29,7 +29,11 @@
     WCDB::Schema schema;
     NSString* table;
     NSString* alias;
+    WCDB::Column column1;
+    WCDB::Column column2;
     WCDB::Columns columns;
+    WCDB::Expression expression1;
+    WCDB::Expression expression2;
     WCDB::Expressions expressions1;
     WCDB::Expressions expressions2;
     WCDB::Upsert upsert;
@@ -43,10 +47,14 @@
     schema = @"testSchema";
     table = @"testTable";
     alias = @"testAliasTable";
+    column1 = WCDB::Column(@"testColumn1");
+    column2 = WCDB::Column(@"testColumn2");
     columns = {
-        WCDB::Column(@"testColumn1"),
-        WCDB::Column(@"testColumn2"),
+        column1,
+        column2,
     };
+    expression1 = 1;
+    expression2 = 2;
     expressions1 = {
         1,
         2,
@@ -72,6 +80,24 @@
 
 - (void)test_insert
 {
+    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).column(column1).values(expressions1);
+
+    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"INSERT INTO testSchema.testTable(testColumn1) VALUES(1, 2)");
+}
+
+- (void)test_insert_with_seperated_columns
+{
+    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).column(column1).column(column2).values(expressions1);
+
+    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"INSERT INTO testSchema.testTable(testColumn1, testColumn2) VALUES(1, 2)");
+}
+
+- (void)test_insert_with_columns
+{
     auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).columns(columns).values(expressions1);
 
     auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
@@ -81,109 +107,118 @@
 
 - (void)test_insert_or_replace
 {
-    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).orReplace().columns(columns).values(expressions1);
+    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).orReplace().column(column1).values(expressions1);
 
-    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"INSERT OR REPLACE INTO testSchema.testTable(testColumn1, testColumn2) VALUES(1, 2)");
+    WINQAssertEqual(testingSQL, @"INSERT OR REPLACE INTO testSchema.testTable(testColumn1) VALUES(1, 2)");
 }
 
 - (void)test_insert_or_rollback
 {
-    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).orRollback().columns(columns).values(expressions1);
+    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).orRollback().column(column1).values(expressions1);
 
-    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"INSERT OR ROLLBACK INTO testSchema.testTable(testColumn1, testColumn2) VALUES(1, 2)");
+    WINQAssertEqual(testingSQL, @"INSERT OR ROLLBACK INTO testSchema.testTable(testColumn1) VALUES(1, 2)");
 }
 
 - (void)test_insert_or_abort
 {
-    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).orAbort().columns(columns).values(expressions1);
+    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).orAbort().column(column1).values(expressions1);
 
-    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"INSERT OR ABORT INTO testSchema.testTable(testColumn1, testColumn2) VALUES(1, 2)");
+    WINQAssertEqual(testingSQL, @"INSERT OR ABORT INTO testSchema.testTable(testColumn1) VALUES(1, 2)");
 }
 
 - (void)test_insert_or_fail
 {
-    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).orFail().columns(columns).values(expressions1);
+    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).orFail().column(column1).values(expressions1);
 
-    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"INSERT OR FAIL INTO testSchema.testTable(testColumn1, testColumn2) VALUES(1, 2)");
+    WINQAssertEqual(testingSQL, @"INSERT OR FAIL INTO testSchema.testTable(testColumn1) VALUES(1, 2)");
 }
 
 - (void)test_insert_or_ignore
 {
-    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).orIgnore().columns(columns).values(expressions1);
+    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).orIgnore().column(column1).values(expressions1);
 
-    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"INSERT OR IGNORE INTO testSchema.testTable(testColumn1, testColumn2) VALUES(1, 2)");
+    WINQAssertEqual(testingSQL, @"INSERT OR IGNORE INTO testSchema.testTable(testColumn1) VALUES(1, 2)");
 }
 
 - (void)test_insert_with
 {
-    auto testingSQL = WCDB::StatementInsert().with(with).insertIntoTable(table).schema(schema).columns(columns).values(expressions1);
+    auto testingSQL = WCDB::StatementInsert().with(with).insertIntoTable(table).schema(schema).column(column1).values(expressions1);
 
-    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::WithClause, WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::WithClause, WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"WITH testTable AS(SELECT 1) INSERT INTO testSchema.testTable(testColumn1, testColumn2) VALUES(1, 2)");
+    WINQAssertEqual(testingSQL, @"WITH testTable AS(SELECT 1) INSERT INTO testSchema.testTable(testColumn1) VALUES(1, 2)");
 }
 
 - (void)test_insert_without_schema
 {
-    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).columns(columns).values(expressions1);
+    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).column(column1).values(expressions1);
 
-    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"INSERT INTO main.testTable(testColumn1, testColumn2) VALUES(1, 2)");
+    WINQAssertEqual(testingSQL, @"INSERT INTO main.testTable(testColumn1) VALUES(1, 2)");
 }
 
 - (void)test_insert_with_alias
 {
-    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).as(alias).columns(columns).values(expressions1);
+    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).as(alias).column(column1).values(expressions1);
 
-    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"INSERT INTO testSchema.testTable AS testAliasTable(testColumn1, testColumn2) VALUES(1, 2)");
+    WINQAssertEqual(testingSQL, @"INSERT INTO testSchema.testTable AS testAliasTable(testColumn1) VALUES(1, 2)");
 }
 
 - (void)test_insert_with_multiple_values
 {
-    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).columns(columns).values(expressions1).values(expressions2);
+    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).column(column1).values(expressions1).values(expressions2);
 
-    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"INSERT INTO testSchema.testTable(testColumn1, testColumn2) VALUES(1, 2), (3, 4)");
+    WINQAssertEqual(testingSQL, @"INSERT INTO testSchema.testTable(testColumn1) VALUES(1, 2), (3, 4)");
+}
+
+- (void)test_insert_with_seperated_values
+{
+    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).column(column1).value(expression1).value(expression2);
+
+    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"INSERT INTO testSchema.testTable(testColumn1) VALUES(1, 2)");
 }
 
 - (void)test_insert_with_select
 {
-    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).columns(columns).values(select);
+    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).column(column1).values(select);
 
-    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"INSERT INTO testSchema.testTable(testColumn1, testColumn2) SELECT 1");
+    WINQAssertEqual(testingSQL, @"INSERT INTO testSchema.testTable(testColumn1) SELECT 1");
 }
 
 - (void)test_insert_with_default_values
 {
-    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).columns(columns).defaultValues();
+    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).column(column1).defaultValues();
 
-    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column };
+    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"INSERT INTO testSchema.testTable(testColumn1, testColumn2) DEFAULT VALUES");
+    WINQAssertEqual(testingSQL, @"INSERT INTO testSchema.testTable(testColumn1) DEFAULT VALUES");
 }
 
 - (void)test_insert_with_upsert
 {
-    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).columns(columns).values(expressions1).upsert(upsert);
+    auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).column(column1).values(expressions1).upsert(upsert);
 
-    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpsertClause };
+    auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpsertClause };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"INSERT INTO testSchema.testTable(testColumn1, testColumn2) VALUES(1, 2) ON CONFLICT DO NOTHING");
+    WINQAssertEqual(testingSQL, @"INSERT INTO testSchema.testTable(testColumn1) VALUES(1, 2) ON CONFLICT DO NOTHING");
 }
 @end

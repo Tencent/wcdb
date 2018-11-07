@@ -25,7 +25,8 @@
 @end
 
 @implementation UpsertTests {
-    WCDB::IndexedColumns indexedColumns;
+    WCDB::IndexedColumn indexedColumn1;
+    WCDB::IndexedColumn indexedColumn2;
     WCDB::Expression condition;
     WCDB::Columns column;
     WCDB::Columns columns;
@@ -42,7 +43,8 @@
         WCDB::Column(@"testColumn2"),
         WCDB::Column(@"testColumn3"),
     };
-    indexedColumns = columns;
+    indexedColumn1 = WCDB::Column(@"testColumn1");
+    indexedColumn2 = WCDB::Column(@"testColumn2");
     condition = 1;
     value1 = 2;
     value2 = 3;
@@ -71,20 +73,29 @@
 
 - (void)test_with_indexed_column
 {
-    auto testingSQL = WCDB::Upsert().conflict(indexedColumns).doNothing();
+    auto testingSQL = WCDB::Upsert().conflict().indexed(indexedColumn1).doNothing();
+
+    auto testingTypes = { WCDB::SQL::Type::UpsertClause, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"ON CONFLICT(testColumn1) DO NOTHING");
+}
+
+- (void)test_with_indexed_columns
+{
+    auto testingSQL = WCDB::Upsert().conflict().indexed(indexedColumn1).indexed(indexedColumn2).doNothing();
 
     auto testingTypes = { WCDB::SQL::Type::UpsertClause, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"ON CONFLICT(testColumn2, testColumn3) DO NOTHING");
+    WINQAssertEqual(testingSQL, @"ON CONFLICT(testColumn1, testColumn2) DO NOTHING");
 }
 
 - (void)test_with_indexed_column_and_condition
 {
-    auto testingSQL = WCDB::Upsert().conflict(indexedColumns).where(condition).doNothing();
+    auto testingSQL = WCDB::Upsert().conflict().indexed(indexedColumn1).where(condition).doNothing();
 
-    auto testingTypes = { WCDB::SQL::Type::UpsertClause, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto testingTypes = { WCDB::SQL::Type::UpsertClause, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"ON CONFLICT(testColumn2, testColumn3) WHERE 1 DO NOTHING");
+    WINQAssertEqual(testingSQL, @"ON CONFLICT(testColumn1) WHERE 1 DO NOTHING");
 }
 
 - (void)test_with_update

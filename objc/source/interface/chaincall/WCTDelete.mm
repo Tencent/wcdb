@@ -38,13 +38,13 @@
     return self;
 }
 
-- (instancetype)where:(const WCDB::Expression &)expr
+- (instancetype)where:(const WCDB::Expression &)condition
 {
-    _statement.where(expr);
+    _statement.where(condition);
     return self;
 }
 
-- (instancetype)order:(const WCDB::OrderingTerms &)orders
+- (instancetype)orders:(const WCDB::OrderingTerms &)orders
 {
     _statement.order(orders);
     return self;

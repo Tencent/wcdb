@@ -397,7 +397,7 @@
 
 - (void)test_in_function
 {
-    auto testingSQL = column.inFunction(function).schema(schema).invoke(expressions);
+    auto testingSQL = column.inFunction(function).schema(schema).invoke().arguments(expressions);
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
     WINQAssertEqual(testingSQL, @"testColumn IN testSchema.testFunction(1, 2)");
@@ -405,7 +405,7 @@
 
 - (void)test_in_function_without_schema
 {
-    auto testingSQL = column.inFunction(function).invoke(expressions);
+    auto testingSQL = column.inFunction(function).invoke().arguments(expressions);
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
     WINQAssertEqual(testingSQL, @"testColumn IN main.testFunction(1, 2)");

@@ -48,6 +48,13 @@ StatementCreateVirtualTable& StatementCreateVirtualTable::usingModule(const Stri
 }
 
 StatementCreateVirtualTable&
+StatementCreateVirtualTable::argument(const ModuleArgument& argument)
+{
+    syntax().moduleArguments.push_back(argument);
+    return *this;
+}
+
+StatementCreateVirtualTable&
 StatementCreateVirtualTable::arguments(const ModuleArguments& arguments)
 {
     syntax().moduleArguments = arguments;

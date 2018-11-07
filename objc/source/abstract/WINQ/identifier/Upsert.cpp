@@ -27,9 +27,9 @@ Upsert& Upsert::conflict()
     return *this;
 }
 
-Upsert& Upsert::conflict(const IndexedColumns& indexedColumns)
+Upsert& Upsert::indexed(const IndexedColumn& indexedColumn)
 {
-    syntax().indexedColumns = indexedColumns;
+    syntax().indexedColumns.push_back(indexedColumn);
     return *this;
 }
 

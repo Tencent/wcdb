@@ -85,7 +85,13 @@ StatementUpdate& StatementUpdate::where(const Expression& condition)
     return *this;
 }
 
-StatementUpdate& StatementUpdate::order(const OrderingTerms& orders)
+StatementUpdate& StatementUpdate::order(const OrderingTerm& order)
+{
+    syntax().orderingTerms.push_back(order);
+    return *this;
+}
+
+StatementUpdate& StatementUpdate::orders(const OrderingTerms& orders)
 {
     syntax().orderingTerms = orders;
     return *this;

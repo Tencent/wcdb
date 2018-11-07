@@ -31,17 +31,21 @@ TableConstraint::TableConstraint(const String& name)
     syntax().name = name;
 }
 
-TableConstraint& TableConstraint::primaryKey(const IndexedColumns& indexedColumns)
+TableConstraint& TableConstraint::primaryKey()
 {
     syntax().switcher = SyntaxType::Switch::PrimaryKey;
-    syntax().indexedColumns = indexedColumns;
     return *this;
 }
 
-TableConstraint& TableConstraint::unique(const IndexedColumns& indexedColumns)
+TableConstraint& TableConstraint::unique()
 {
     syntax().switcher = SyntaxType::Switch::Unique;
-    syntax().indexedColumns = indexedColumns;
+    return *this;
+}
+
+TableConstraint& TableConstraint::indexed(const IndexedColumn& indexedColumn)
+{
+    syntax().indexedColumns.push_back(indexedColumn);
     return *this;
 }
 

@@ -45,7 +45,8 @@ public:
 
     static TableOrSubquery function(const String& function);
     TableOrSubquery& invoke();
-    TableOrSubquery& invoke(const Expressions& expressions);
+    TableOrSubquery& argument(const Expression& expression);
+    TableOrSubquery& arguments(const Expressions& expressions);
 
     explicit TableOrSubquery(const TablesOrSubqueries& tableOrSubqueries);
     TableOrSubquery(const Join& join);

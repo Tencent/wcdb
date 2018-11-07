@@ -26,7 +26,8 @@
 
 @implementation CommonTableExpressionTests {
     NSString* table;
-    WCDB::Columns columns;
+    WCDB::Column column1;
+    WCDB::Column column2;
     WCDB::StatementSelect select;
 }
 
@@ -34,10 +35,8 @@
 {
     [super setUp];
     table = @"testTable";
-    columns = {
-        WCDB::Column(@"testColumn1"),
-        WCDB::Column(@"testColumn2"),
-    };
+    column1 = WCDB::Column(@"testColumn1");
+    column2 = WCDB::Column(@"testColumn2");
     select = WCDB::StatementSelect().select(1);
 }
 
@@ -54,14 +53,23 @@
 
 - (void)test_common_table_expression
 {
-    auto testingSQL = WCDB::CommonTableExpression(table).columns(columns).as(select);
+    auto testingSQL = WCDB::CommonTableExpression(table).column(column1).as(select);
+
+    auto testingTypes = { WCDB::SQL::Type::CommonTableExpression, WCDB::SQL::Type::Column, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testTable(testColumn1) AS(SELECT 1)");
+}
+
+- (void)test_common_table_expression_with_columns
+{
+    auto testingSQL = WCDB::CommonTableExpression(table).column(column1).column(column2).as(select);
 
     auto testingTypes = { WCDB::SQL::Type::CommonTableExpression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
     WINQAssertEqual(testingSQL, @"testTable(testColumn1, testColumn2) AS(SELECT 1)");
 }
 
-- (void)test_common_table_expression_without_columns
+- (void)test_common_table_expression_without_column
 {
     auto testingSQL = WCDB::CommonTableExpression(table).as(select);
 

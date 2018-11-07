@@ -30,6 +30,8 @@
     NSString* alias;
     NSString* index;
     NSString* function;
+    WCDB::Expression expression1;
+    WCDB::Expression expression2;
     WCDB::Expressions expressions;
     WCDB::TablesOrSubqueries tablesOrSubqueries;
     WCDB::Join join;
@@ -44,9 +46,11 @@
     alias = @"testAliasTable";
     index = @"testIndex";
     function = @"testFunction";
+    expression1 = 1;
+    expression2 = 2;
     expressions = {
-        1,
-        2,
+        expression1,
+        expression2,
     };
     tablesOrSubqueries = {
         @"testTable1",
@@ -130,9 +134,27 @@
     WINQAssertEqual(testingSQL, @"testSchema.testFunction()");
 }
 
+- (void)test_table_function_with_parameter
+{
+    auto testingSQL = WCDB::TableOrSubquery::function(function).invoke().argument(expression1);
+
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"main.testFunction(1)");
+}
+
+- (void)test_table_function_with_seperated_parameters
+{
+    auto testingSQL = WCDB::TableOrSubquery::function(function).invoke().argument(expression1).argument(expression2);
+
+    auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"main.testFunction(1, 2)");
+}
+
 - (void)test_table_function_with_parameters
 {
-    auto testingSQL = WCDB::TableOrSubquery::function(function).invoke(expressions);
+    auto testingSQL = WCDB::TableOrSubquery::function(function).invoke().arguments(expressions);
 
     auto testingTypes = { WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);

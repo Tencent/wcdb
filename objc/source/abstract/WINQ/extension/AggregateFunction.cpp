@@ -24,43 +24,43 @@ namespace WCDB {
 
 Expression AggregateFunction::avg(const Expression& expression)
 {
-    return Expression::function("avg").invoke(expression);
+    return Expression::function("avg").invoke().arguments(expression);
 }
 
 Expression AggregateFunction::count(const Expression& expression)
 {
-    return Expression::function("count").invoke(expression);
+    return Expression::function("count").invoke().arguments(expression);
 }
 
 Expression AggregateFunction::groupConcat(const Expression& expression)
 {
-    return Expression::function("group_concat").invoke(expression);
+    return Expression::function("group_concat").invoke().arguments(expression);
 }
 
 Expression
 AggregateFunction::groupConcat(const Expression& expression, const Expression& seperator)
 {
-    return Expression::function("group_concat").invoke({ expression, seperator });
+    return Expression::function("group_concat").invoke().arguments({ expression, seperator });
 }
 
 Expression AggregateFunction::max(const Expression& expression)
 {
-    return Expression::function("max").invoke(expression);
+    return Expression::function("max").invoke().arguments(expression);
 }
 
 Expression AggregateFunction::min(const Expression& expression)
 {
-    return Expression::function("min").invoke(expression);
+    return Expression::function("min").invoke().arguments(expression);
 }
 
 Expression AggregateFunction::sum(const Expression& expression)
 {
-    return Expression::function("sum").invoke(expression);
+    return Expression::function("sum").invoke().arguments(expression);
 }
 
 Expression AggregateFunction::total(const Expression& expression)
 {
-    return Expression::function("total").invoke(expression);
+    return Expression::function("total").invoke().arguments(expression);
 }
 
 AggregateFunctionOperable::~AggregateFunctionOperable()

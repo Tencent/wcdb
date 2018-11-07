@@ -39,8 +39,10 @@ public:
 
     StatementInsert& as(const String& alias);
 
+    StatementInsert& column(const Column& column);
     StatementInsert& columns(const Columns& columns);
 
+    StatementInsert& value(const Expression& expression);
     StatementInsert& values(const Expressions& expressions);
     StatementInsert& values(const StatementSelect& select);
     StatementInsert& defaultValues();

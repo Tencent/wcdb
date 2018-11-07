@@ -35,8 +35,8 @@ public:
 
     StatementCreateTable& as(const StatementSelect& select);
 
-    StatementCreateTable& define(const ColumnDefs& columnDefs);
-    StatementCreateTable& constraint(const TableConstraints& constraints);
+    StatementCreateTable& define(const ColumnDef& columnDef);
+    StatementCreateTable& constraint(const TableConstraint& constraint);
     StatementCreateTable& withoutRowID();
 };
 

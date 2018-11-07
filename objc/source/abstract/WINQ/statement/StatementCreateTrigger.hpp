@@ -40,7 +40,7 @@ public:
     StatementCreateTrigger& delete_();
     StatementCreateTrigger& insert();
     StatementCreateTrigger& update();
-    StatementCreateTrigger& updateOf(const Columns& columns);
+    StatementCreateTrigger& column(const Column& column);
 
     StatementCreateTrigger& on(const String& table);
 

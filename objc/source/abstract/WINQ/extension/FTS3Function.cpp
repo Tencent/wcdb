@@ -24,7 +24,7 @@ namespace WCDB {
 
 Expression FTS3Function::offsets(const Expression &expression)
 {
-    return Expression::function("offsets").invoke(expression);
+    return Expression::function("offsets").invoke().arguments(expression);
 }
 
 Expression FTS3Function::snippet(const Expression &expression,
@@ -34,13 +34,13 @@ Expression FTS3Function::snippet(const Expression &expression,
                                  int columnNumber,
                                  int approximateNumberOfTokens)
 {
-    return Expression::function("snippet").invoke(
+    return Expression::function("snippet").invoke().arguments(
     { expression, startMatchText, endMatchText, ellipses, columnNumber, approximateNumberOfTokens });
 }
 
 Expression FTS3Function::matchinfo(const Expression &expression)
 {
-    return Expression::function("matchinfo").invoke(expression);
+    return Expression::function("matchinfo").invoke().arguments(expression);
 }
 
 FTS3FunctionOperable::~FTS3FunctionOperable()

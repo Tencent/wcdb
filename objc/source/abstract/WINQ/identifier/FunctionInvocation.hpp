@@ -31,7 +31,9 @@ public:
     explicit FunctionInvocation(const String& name);
 
     FunctionInvocation& distinct();
-    FunctionInvocation& invoke(const Expressions& expressions);
+
+    FunctionInvocation& argument(const Expression& expression);
+    FunctionInvocation& arguments(const Expressions& expressions);
 
     FunctionInvocation& invoke();
 

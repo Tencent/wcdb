@@ -33,7 +33,14 @@ FunctionInvocation& FunctionInvocation::distinct()
     return *this;
 }
 
-FunctionInvocation& FunctionInvocation::invoke(const Expressions& expressions)
+FunctionInvocation& FunctionInvocation::argument(const Expression& expression)
+{
+    syntax().expressions.push_back(expression);
+    syntax().wildcard = false;
+    return *this;
+}
+
+FunctionInvocation& FunctionInvocation::arguments(const Expressions& expressions)
 {
     syntax().expressions = expressions;
     syntax().wildcard = false;

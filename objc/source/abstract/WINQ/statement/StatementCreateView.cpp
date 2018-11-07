@@ -46,9 +46,9 @@ StatementCreateView& StatementCreateView::ifNotExists()
     return *this;
 }
 
-StatementCreateView& StatementCreateView::columns(const Columns& columns)
+StatementCreateView& StatementCreateView::column(const Column& column)
 {
-    syntax().columns = columns;
+    syntax().columns.push_back(column);
     return *this;
 }
 

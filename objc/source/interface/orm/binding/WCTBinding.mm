@@ -98,16 +98,12 @@ void WCTBinding::initialize()
 WCDB::StatementCreateTable WCTBinding::generateCreateTableStatement(const WCDB::String &tableName) const
 {
     WCDB::StatementCreateTable statement = WCDB::StatementCreateTable().createTable(tableName);
-    WCDB::ColumnDefs columnDefs;
     for (const auto &columnBinding : m_columnBindings) {
-        columnDefs.push_back(columnBinding.second.columnDef);
+        statement.define(columnBinding.second.columnDef);
     }
-    statement.define(columnDefs);
-    WCDB::TableConstraints constraints;
     for (const auto &constraint : m_constraints) {
-        constraints.push_back(constraint.second);
+        statement.constraint(constraint.second);
     }
-    statement.constraint(constraints);
     return statement;
 }
 

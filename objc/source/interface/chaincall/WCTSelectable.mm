@@ -49,9 +49,9 @@
     return self;
 }
 
-- (instancetype)order:(const WCDB::OrderingTerms &)orders
+- (instancetype)orders:(const WCDB::OrderingTerms &)orders
 {
-    _statement.order(orders);
+    _statement.orders(orders);
     return self;
 }
 
@@ -67,9 +67,9 @@
     return self;
 }
 
-- (instancetype)group:(const WCDB::Expressions &)groups
+- (instancetype)groups:(const WCDB::Expressions &)groups
 {
-    _statement.group(groups);
+    _statement.groups(groups);
     return self;
 }
 

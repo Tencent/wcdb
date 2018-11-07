@@ -27,7 +27,8 @@
 @implementation ColumnDefTests {
     WCDB::Column column;
     WCDB::ColumnType columnType;
-    WCDB::ColumnConstraints columnConstraints;
+    WCDB::ColumnConstraint columnConstraint1;
+    WCDB::ColumnConstraint columnConstraint2;
 }
 
 - (void)setUp
@@ -35,10 +36,8 @@
     [super setUp];
     column = WCDB::Column(@"testColumn");
     columnType = WCDB::ColumnType::Integer32;
-    columnConstraints = {
-        WCDB::ColumnConstraint().check(1),
-        WCDB::ColumnConstraint().check(2),
-    };
+    columnConstraint1 = WCDB::ColumnConstraint().check(1);
+    columnConstraint2 = WCDB::ColumnConstraint().check(2);
 }
 
 - (void)test_default_constructible
@@ -70,9 +69,18 @@
     WINQAssertEqual(testingSQL, @"testColumn");
 }
 
+- (void)test_column_def_with_constraint
+{
+    auto testingSQL = WCDB::ColumnDef(column, columnType).constraint(columnConstraint1);
+
+    auto testingTypes = { WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column, WCDB::SQL::Type::ColumnConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testColumn INTEGER CHECK(1)");
+}
+
 - (void)test_column_def_with_constraints
 {
-    auto testingSQL = WCDB::ColumnDef(column, columnType).constraint(columnConstraints);
+    auto testingSQL = WCDB::ColumnDef(column, columnType).constraint(columnConstraint1).constraint(columnConstraint2);
 
     auto testingTypes = { WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column, WCDB::SQL::Type::ColumnConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ColumnConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);

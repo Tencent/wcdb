@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param orders order list
  @return self
  */
-- (instancetype)order:(const WCDB::OrderingTerms &)orders;
+- (instancetype)orders:(const WCDB::OrderingTerms &)orders;
 
 /**
  WINQ interface for SQL.
@@ -66,7 +66,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param groups group by list
  @return self
  */
-- (instancetype)group:(const WCDB::Expressions &)groups;
+- (instancetype)groups:(const WCDB::Expressions &)groups;
 
 /**
  WINQ interface for SQL.

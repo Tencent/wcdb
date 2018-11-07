@@ -73,9 +73,9 @@ typedef NS_ENUM(NSUInteger, WCTUpdateType) {
     return self;
 }
 
-- (instancetype)order:(const WCDB::OrderingTerms &)orders
+- (instancetype)orders:(const WCDB::OrderingTerms &)orders
 {
-    _statement.order(orders);
+    _statement.orders(orders);
     return self;
 }
 

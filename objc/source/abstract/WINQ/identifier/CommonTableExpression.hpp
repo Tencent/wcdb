@@ -30,7 +30,7 @@ class CommonTableExpression final
 public:
     using TypedSyntax<Syntax::CommonTableExpression, SQL>::TypedSyntax;
     explicit CommonTableExpression(const String& table);
-    CommonTableExpression& columns(const Columns& columns);
+    CommonTableExpression& column(const Column& column);
     CommonTableExpression& as(const StatementSelect& select);
 };
 

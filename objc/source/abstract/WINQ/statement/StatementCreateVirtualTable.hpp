@@ -35,6 +35,7 @@ public:
 
     StatementCreateVirtualTable& usingModule(const String& module);
 
+    StatementCreateVirtualTable& argument(const ModuleArgument& argument);
     StatementCreateVirtualTable& arguments(const ModuleArguments& arguments);
 };
 

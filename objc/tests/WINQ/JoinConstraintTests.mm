@@ -27,15 +27,19 @@
 @implementation JoinConstraintTests {
     WCDB::Expression expression;
     WCDB::Columns columns;
+    WCDB::Column column1;
+    WCDB::Column column2;
 }
 
 - (void)setUp
 {
     [super setUp];
     expression = 1;
+    column1 = WCDB::Column(@"testColumn1");
+    column2 = WCDB::Column(@"testColumn2");
     columns = {
-        WCDB::Column(@"testColumn1"),
-        WCDB::Column(@"testColumn2"),
+        column1,
+        column2,
     };
 }
 
@@ -59,9 +63,27 @@
     WINQAssertEqual(testingSQL, @"ON 1");
 }
 
-- (void)test_using
+- (void)test_using_column
 {
-    auto testingSQL = WCDB::JoinConstraint().usingColumns(columns);
+    auto testingSQL = WCDB::JoinConstraint().using_().column(column1);
+
+    auto testingTypes = { WCDB::SQL::Type::JoinConstraint, WCDB::SQL::Type::Column };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"USING(testColumn1)");
+}
+
+- (void)test_using_seperated_columns
+{
+    auto testingSQL = WCDB::JoinConstraint().using_().column(column1).column(column2);
+
+    auto testingTypes = { WCDB::SQL::Type::JoinConstraint, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"USING(testColumn1, testColumn2)");
+}
+
+- (void)test_using_columns
+{
+    auto testingSQL = WCDB::JoinConstraint().using_().columns(columns);
 
     auto testingTypes = { WCDB::SQL::Type::JoinConstraint, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);

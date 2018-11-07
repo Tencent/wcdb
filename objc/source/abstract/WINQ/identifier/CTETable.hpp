@@ -35,7 +35,7 @@ public:
     }
 
     CTETable(const UnsafeString& name);
-    CTETable& columns(const Columns& columns);
+    CTETable& column(const Column& column);
 };
 
 } // namespace WCDB

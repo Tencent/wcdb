@@ -52,9 +52,9 @@ StatementCreateIndex& StatementCreateIndex::onTable(const String& table)
     return *this;
 }
 
-StatementCreateIndex& StatementCreateIndex::indexed(const IndexedColumns& indexedColumns)
+StatementCreateIndex& StatementCreateIndex::indexed(const IndexedColumn& indexedColumn)
 {
-    syntax().indexedColumns = indexedColumns;
+    syntax().indexedColumns.push_back(indexedColumn);
     return *this;
 }
 

@@ -36,12 +36,14 @@ public:
     StatementSelect& from(const Join& join);
 
     StatementSelect& where(const Expression& condition);
-    StatementSelect& group(const Expressions& groups);
+    StatementSelect& group(const Expression& group);
+    StatementSelect& groups(const Expressions& groups);
     StatementSelect& having(const Expression& having);
 
     StatementSelect& window(const String& window);
     StatementSelect& as(const WindowDef& windowDef);
 
+    StatementSelect& value(const Expression& expression);
     StatementSelect& values(const Expressions& expressions);
 
     StatementSelect& union_();
@@ -49,7 +51,8 @@ public:
     StatementSelect& intersect();
     StatementSelect& except();
 
-    StatementSelect& order(const OrderingTerms& orders);
+    StatementSelect& order(const OrderingTerm& order);
+    StatementSelect& orders(const OrderingTerms& orders);
 
     StatementSelect& limit(const Expression& from, const Expression& to);
 

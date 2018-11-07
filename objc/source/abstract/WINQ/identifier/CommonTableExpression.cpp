@@ -27,9 +27,9 @@ CommonTableExpression::CommonTableExpression(const String& table)
     syntax().table = table;
 }
 
-CommonTableExpression& CommonTableExpression::columns(const Columns& columns)
+CommonTableExpression& CommonTableExpression::column(const Column& column)
 {
-    syntax().columns = columns;
+    syntax().columns.push_back(column);
     return *this;
 }
 

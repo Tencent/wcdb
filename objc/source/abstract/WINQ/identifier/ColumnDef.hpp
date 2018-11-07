@@ -31,7 +31,7 @@ public:
     ColumnDef(const Column& column);
     ColumnDef(const Column& column, const ColumnType& type);
 
-    ColumnDef& constraint(const ColumnConstraints& constraints);
+    ColumnDef& constraint(const ColumnConstraint& constraint);
 
     bool isPrimary() const;
 };

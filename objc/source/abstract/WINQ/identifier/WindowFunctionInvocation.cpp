@@ -27,9 +27,16 @@ WindowFunctionInvocation::WindowFunctionInvocation(const String& name)
     syntax().name = name;
 }
 
-WindowFunctionInvocation& WindowFunctionInvocation::invoke(const Expressions& expressions)
+WindowFunctionInvocation& WindowFunctionInvocation::arguments(const Expressions& expressions)
 {
     syntax().expressions = expressions;
+    syntax().wildcard = false;
+    return *this;
+}
+
+WindowFunctionInvocation& WindowFunctionInvocation::argument(const Expression& expression)
+{
+    syntax().expressions.push_back(expression);
     syntax().wildcard = false;
     return *this;
 }

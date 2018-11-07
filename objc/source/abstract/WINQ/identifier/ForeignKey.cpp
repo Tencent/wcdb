@@ -25,14 +25,12 @@ namespace WCDB {
 ForeignKey& ForeignKey::references(const String& table)
 {
     syntax().foreignTable = table;
-    syntax().columns.clear();
     return *this;
 }
 
-ForeignKey& ForeignKey::references(const String& table, const Columns& columns)
+ForeignKey& ForeignKey::column(const Column& column)
 {
-    syntax().foreignTable = table;
-    syntax().columns = columns;
+    syntax().columns.push_back(column);
     return *this;
 }
 

@@ -26,17 +26,16 @@
 
 @implementation CTETableTests {
     NSString* table;
-    WCDB::Columns columns;
+    WCDB::Column column1;
+    WCDB::Column column2;
 }
 
 - (void)setUp
 {
     [super setUp];
     table = @"testTable";
-    columns = {
-        WCDB::Column(@"testColumn1"),
-        WCDB::Column(@"testColumn2"),
-    };
+    column1 = WCDB::Column(@"testColumn1");
+    column2 = WCDB::Column(@"testColumn2");
 }
 
 - (void)test_default_constructible
@@ -52,14 +51,23 @@
 
 - (void)test_cte_table
 {
-    auto testingSQL = WCDB::CTETable(table).columns(columns);
+    auto testingSQL = WCDB::CTETable(table).column(column1);
+
+    auto testingTypes = { WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::Column };
+    IterateAssertEqual(testingSQL, testingTypes);
+    WINQAssertEqual(testingSQL, @"testTable(testColumn1)");
+}
+
+- (void)test_cte_table_with_columns
+{
+    auto testingSQL = WCDB::CTETable(table).column(column1).column(column2);
 
     auto testingTypes = { WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
     WINQAssertEqual(testingSQL, @"testTable(testColumn1, testColumn2)");
 }
 
-- (void)test_cte_table_without_columns
+- (void)test_cte_table_without_column
 {
     auto testingSQL = WCDB::CTETable(table);
 
