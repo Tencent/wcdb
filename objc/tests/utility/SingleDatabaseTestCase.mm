@@ -18,29 +18,26 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "SingleDatabaseTestCase.h"
 
-@interface StatementTests : WINQTestCase
-
-@end
-
-@implementation StatementTests {
-}
+@implementation SingleDatabaseTestCase
 
 - (void)setUp
 {
     [super setUp];
+    [self refreshDirectory];
+    _database = [[WCTDatabase alloc] initWithPath:self.path];
 }
 
-- (void)test
+- (void)tearDown
 {
-    WCDB::StatementInsert insert = WCDB::StatementInsert().insertIntoTable(@"testTable").values(1);
+    [super tearDown];
+    [self cleanDirectory];
+}
 
-    WCDB::Statement statement = insert;
-    WINQAssertEqual(statement, @"INSERT INTO main.testTable VALUES(1)");
-
-    WCDB::Statement statement2 = statement;
-    WINQAssertEqual(statement2, @"INSERT INTO main.testTable VALUES(1)");
+- (NSString*)path
+{
+    return [self.directory stringByAppendingPathComponent:@"database"];
 }
 
 @end

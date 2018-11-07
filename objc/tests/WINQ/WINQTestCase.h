@@ -18,10 +18,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WINQ.h>
-#import <XCTest/XCTest.h>
-
-#warning TODO anti-injection
+#import "TestCase.h"
 
 namespace WCDB {
 
@@ -144,7 +141,7 @@ constexpr const char *Enum::description(const Syntax::Identifier::Type &type)
 
 }
 
-@interface WINQTestCase : XCTestCase
+@interface WINQTestCase : TestCase
 
 + (std::list<WCDB::Syntax::Identifier::Type>)getTypes:(WCDB::SQL &)sql;
 

@@ -18,29 +18,23 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import <WCDB/WCDB.h>
+#import <XCTest/XCTest.h>
 
-@interface StatementTests : WINQTestCase
+@interface TestCase : XCTestCase
 
-@end
+@property (nonatomic, readonly) NSString* root;
 
-@implementation StatementTests {
-}
+@property (nonatomic, readonly) NSString* directory;
 
-- (void)setUp
-{
-    [super setUp];
-}
+@property (nonatomic, readonly) NSString* testName;
 
-- (void)test
-{
-    WCDB::StatementInsert insert = WCDB::StatementInsert().insertIntoTable(@"testTable").values(1);
+@property (nonatomic, readonly) NSString* className;
 
-    WCDB::Statement statement = insert;
-    WINQAssertEqual(statement, @"INSERT INTO main.testTable VALUES(1)");
+@property (nonatomic, readonly) NSFileManager* fileManager;
 
-    WCDB::Statement statement2 = statement;
-    WINQAssertEqual(statement2, @"INSERT INTO main.testTable VALUES(1)");
-}
+- (void)refreshDirectory;
+
+- (void)cleanDirectory;
 
 @end

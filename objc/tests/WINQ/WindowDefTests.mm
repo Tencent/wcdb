@@ -19,7 +19,6 @@
  */
 
 #import "WINQTestCase.h"
-#import <WCDB/WCDB.h>
 
 @interface WindowDefTests : WINQTestCase
 

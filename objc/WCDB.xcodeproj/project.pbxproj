@@ -178,6 +178,13 @@
 		23776CA4218C41DD00E985DC /* WCTChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23776CA3218C41DD00E985DC /* WCTChainCall.mm */; };
 		23776CA7218C41E600E985DC /* WCTChainCall+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 23776CA5218C41E600E985DC /* WCTChainCall+Private.h */; };
 		237908F721928C9F0098797F /* WCTObjCAccessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237908F621928C9F0098797F /* WCTObjCAccessor.mm */; };
+		23790944219295370098797F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
+		23790945219295370098797F /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
+		23790948219295370098797F /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		23790A52219298250098797F /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
+		23790A53219298250098797F /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
+		23790A56219298680098797F /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
+		23790A57219298680098797F /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
 		237A65F520F731DF008B4771 /* OrderedUniqueList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */; };
 		2386B3C51ED442FE000B72F6 /* WCTError.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C21ED442FE000B72F6 /* WCTError.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2386B3C61ED442FE000B72F6 /* WCTError.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386B3C31ED442FE000B72F6 /* WCTError.mm */; };
@@ -651,6 +658,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		237908FC219295370098797F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239326601E836D7300D677CC;
+			remoteInfo = WCDB;
+		};
+		237908FE219295370098797F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239E8A6F2160A5B100BCB308;
+			remoteInfo = Host;
+		};
 		239E8AAA2160B59C00BCB308 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
@@ -682,6 +703,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		23790947219295370098797F /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				23790948219295370098797F /* WCDB.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		239E8AAF2160B70400BCB308 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -867,6 +899,12 @@
 		23776CA3218C41DD00E985DC /* WCTChainCall.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTChainCall.mm; sourceTree = "<group>"; };
 		23776CA5218C41E600E985DC /* WCTChainCall+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTChainCall+Private.h"; sourceTree = "<group>"; };
 		237908F621928C9F0098797F /* WCTObjCAccessor.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTObjCAccessor.mm; sourceTree = "<group>"; };
+		2379094D219295370098797F /* ORM tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ORM tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2379094E219295380098797F /* WINQ tests copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "WINQ tests copy-Info.plist"; path = "/Users/sanhuazhang/Developer/Github/wcdb/objc/WINQ tests copy-Info.plist"; sourceTree = "<absolute>"; };
+		23790A50219298250098797F /* TestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCase.mm; sourceTree = "<group>"; };
+		23790A51219298250098797F /* TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCase.h; sourceTree = "<group>"; };
+		23790A54219298680098797F /* SingleDatabaseTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SingleDatabaseTestCase.h; sourceTree = "<group>"; };
+		23790A55219298680098797F /* SingleDatabaseTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SingleDatabaseTestCase.mm; sourceTree = "<group>"; };
 		237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OrderedUniqueList.hpp; sourceTree = "<group>"; };
 		2386B3C21ED442FE000B72F6 /* WCTError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTError.h; sourceTree = "<group>"; };
 		2386B3C31ED442FE000B72F6 /* WCTError.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTError.mm; sourceTree = "<group>"; };
@@ -1344,6 +1382,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		23790943219295370098797F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				23790944219295370098797F /* Foundation.framework in Frameworks */,
+				23790945219295370098797F /* WCDB.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2393265D1E836D7300D677CC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1865,6 +1912,24 @@
 			path = utility;
 			sourceTree = "<group>";
 		};
+		23790A47219295B80098797F /* ORM */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ORM;
+			sourceTree = "<group>";
+		};
+		23790A4F219298250098797F /* utility */ = {
+			isa = PBXGroup;
+			children = (
+				23790A50219298250098797F /* TestCase.mm */,
+				23790A51219298250098797F /* TestCase.h */,
+				23790A54219298680098797F /* SingleDatabaseTestCase.h */,
+				23790A55219298680098797F /* SingleDatabaseTestCase.mm */,
+			);
+			path = utility;
+			sourceTree = "<group>";
+		};
 		2386B3BD1ED442D9000B72F6 /* statictics */ = {
 			isa = PBXGroup;
 			children = (
@@ -1957,6 +2022,8 @@
 		239E8A8C2160A62F00BCB308 /* tests */ = {
 			isa = PBXGroup;
 			children = (
+				23790A4F219298250098797F /* utility */,
+				23790A47219295B80098797F /* ORM */,
 				2398971F217EC9E20014BF33 /* WINQ */,
 				239E8A8D2160A62F00BCB308 /* host */,
 			);
@@ -2011,6 +2078,7 @@
 				23F0FDEE215F266C008399FB /* support */,
 				23B5F93E1E111CB100E58396 /* Frameworks */,
 				23B5F7641E1111C100E58396 /* Products */,
+				2379094E219295380098797F /* WINQ tests copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2020,6 +2088,7 @@
 				239326611E836D7300D677CC /* WCDB.framework */,
 				239E8A702160A5B100BCB308 /* Host.app */,
 				239E8A9D2160B37600BCB308 /* WINQ tests.xctest */,
+				2379094D219295370098797F /* ORM tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2739,6 +2808,26 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		237908FA219295370098797F /* ORM tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 23790949219295370098797F /* Build configuration list for PBXNativeTarget "ORM tests" */;
+			buildPhases = (
+				237908FF219295370098797F /* Sources */,
+				23790943219295370098797F /* Frameworks */,
+				23790946219295370098797F /* Resources */,
+				23790947219295370098797F /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				237908FB219295370098797F /* PBXTargetDependency */,
+				237908FD219295370098797F /* PBXTargetDependency */,
+			);
+			name = "ORM tests";
+			productName = "WINQ tests";
+			productReference = 2379094D219295370098797F /* ORM tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		239326601E836D7300D677CC /* WCDB */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 239326661E836D7300D677CC /* Build configuration list for PBXNativeTarget "WCDB" */;
@@ -2804,6 +2893,10 @@
 				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = sanhuazhang;
 				TargetAttributes = {
+					237908FA219295370098797F = {
+						DevelopmentTeam = TCFDHFMX6R;
+						ProvisioningStyle = Automatic;
+					};
 					239326601E836D7300D677CC = {
 						CreatedOnToolsVersion = 8.2;
 						DevelopmentTeam = TCFDHFMX6R;
@@ -2842,6 +2935,7 @@
 				239326601E836D7300D677CC /* WCDB */,
 				239E8A6F2160A5B100BCB308 /* Host */,
 				239E8A9C2160B37600BCB308 /* WINQ tests */,
+				237908FA219295370098797F /* ORM tests */,
 			);
 		};
 /* End PBXProject section */
@@ -2857,6 +2951,13 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
+		23790946219295370098797F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2393265F1E836D7300D677CC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2881,6 +2982,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		237908FF219295370098797F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				23790A53219298250098797F /* TestCase.mm in Sources */,
+				23790A57219298680098797F /* SingleDatabaseTestCase.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2393265C1E836D7300D677CC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3202,6 +3312,7 @@
 				23989769217EC9E30014BF33 /* ExpressionTests.mm in Sources */,
 				2398978A217EC9E30014BF33 /* StatementDropViewTests.mm in Sources */,
 				23989777217EC9E30014BF33 /* RaiseFunctionTests.mm in Sources */,
+				23790A52219298250098797F /* TestCase.mm in Sources */,
 				2398975F217EC9E30014BF33 /* AggregateFunctionTests.mm in Sources */,
 				23989778217EC9E30014BF33 /* RecursiveCTETests.mm in Sources */,
 				23989775217EC9E30014BF33 /* PragmaTests.mm in Sources */,
@@ -3214,6 +3325,7 @@
 				2398978B217EC9E30014BF33 /* StatementInsertTests.mm in Sources */,
 				2398976C217EC9E30014BF33 /* FrameSpecTests.mm in Sources */,
 				23989787217EC9E30014BF33 /* StatementDropIndexTests.mm in Sources */,
+				23790A56219298680098797F /* SingleDatabaseTestCase.mm in Sources */,
 				2370B13C21918DCC00D3227C /* ModuleArgumentTests.mm in Sources */,
 				23989786217EC9E30014BF33 /* StatementDetachTests.mm in Sources */,
 				23989776217EC9E30014BF33 /* QualifiedTableTests.mm in Sources */,
@@ -3232,6 +3344,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		237908FB219295370098797F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239326601E836D7300D677CC /* WCDB */;
+			targetProxy = 237908FC219295370098797F /* PBXContainerItemProxy */;
+		};
+		237908FD219295370098797F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239E8A6F2160A5B100BCB308 /* Host */;
+			targetProxy = 237908FE219295370098797F /* PBXContainerItemProxy */;
+		};
 		239E8AAB2160B59C00BCB308 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 239E8A6F2160A5B100BCB308 /* Host */;
@@ -3250,6 +3372,95 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		2379094A219295370098797F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.ORM-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+			};
+			name = Debug;
+		};
+		2379094B219295370098797F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.ORM-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2379094C219295370098797F /* WithoutBitcode */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.ORM-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = WithoutBitcode;
+		};
 		239326671E836D7300D677CC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3779,6 +3990,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		23790949219295370098797F /* Build configuration list for PBXNativeTarget "ORM tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2379094A219295370098797F /* Debug */,
+				2379094B219295370098797F /* Release */,
+				2379094C219295370098797F /* WithoutBitcode */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		239326661E836D7300D677CC /* Build configuration list for PBXNativeTarget "WCDB" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
