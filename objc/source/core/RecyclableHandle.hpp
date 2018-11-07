@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class RecyclableHandle : public Recyclable<std::shared_ptr<ConfiguredHandle>> {
+class RecyclableHandle final : public Recyclable<std::shared_ptr<ConfiguredHandle>> {
 public:
     using Super = Recyclable<std::shared_ptr<ConfiguredHandle>>;
 

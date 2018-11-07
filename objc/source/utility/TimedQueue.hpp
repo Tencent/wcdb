@@ -32,7 +32,7 @@
 namespace WCDB {
 
 template<typename Key, typename Info>
-class TimedQueue {
+class TimedQueue final {
 public:
     TimedQueue() : m_stop(false), m_running(false){};
 

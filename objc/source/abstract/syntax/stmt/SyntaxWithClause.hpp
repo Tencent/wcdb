@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class WithClause : public Identifier {
+class WithClause final : public Identifier {
 #pragma mark - Lang
 public:
     bool recursive = false;

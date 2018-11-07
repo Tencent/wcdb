@@ -28,12 +28,15 @@
 namespace WCDB {
 
 class DatabasePoolEvent {
+public:
+    virtual ~DatabasePoolEvent();
+
 protected:
     virtual void onDatabaseCreated(Database* database) = 0;
     friend class DatabasePool;
 };
 
-class DatabasePool {
+class DatabasePool final {
 #pragma mark - DatabasePool
 public:
     DatabasePool();

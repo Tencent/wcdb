@@ -25,7 +25,7 @@ namespace WCDB {
 
 namespace Repair {
 
-class Fraction {
+class Fraction final {
 public:
     Fraction();
     Fraction(int64_t numerator, int64_t denominator);

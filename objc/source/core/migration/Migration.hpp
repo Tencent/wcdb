@@ -28,13 +28,14 @@
 
 namespace WCDB {
 
-class Migration {
+class Migration final {
 #pragma mark - Initialize
 public:
     Migration();
 
     class Initializer {
     public:
+        virtual ~Initializer();
         virtual const Error& getError() const = 0;
 
     protected:

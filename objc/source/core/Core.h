@@ -53,7 +53,7 @@
 
 namespace WCDB {
 
-class Core : public DatabasePoolEvent {
+class Core final : public DatabasePoolEvent {
 public:
     static Core* shared();
     ~Core();
@@ -110,7 +110,7 @@ protected:
     static int vfsOpen(const char* path, int flags, int mode);
     static void handleLog(void* unused, int code, const char* message);
     void preprocessError(const Error& error, Error::Infos& infos);
-    void onDatabaseCreated(Database* database) override;
+    void onDatabaseCreated(Database* database) override final;
 
     // The order of member variables here is important.
     std::shared_ptr<DatabasePool> m_databasePool;

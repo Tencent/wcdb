@@ -22,7 +22,7 @@
 #import <WCDB/Tokenizer.hpp>
 #import <WCDB/WCTCommon.h>
 
-class WCTCursorInfo : public WCDB::FTS::CursorInfo {
+class WCTCursorInfo final : public WCDB::FTS::CursorInfo {
 public:
     WCTCursorInfo(const char *input, int inputLength, WCDB::FTS::TokenizerInfoBase *tokenizerInfo);
 
@@ -35,5 +35,5 @@ protected:
     CFCharacterSetRef m_symbolCharacterSet;
     static CFCharacterSetRef generateSymbolCharacterSet();
 
-    int isSymbol(UnicodeChar theChar, bool *result) override;
+    int isSymbol(UnicodeChar theChar, bool *result) override final;
 };

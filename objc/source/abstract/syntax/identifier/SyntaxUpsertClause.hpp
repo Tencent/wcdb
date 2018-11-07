@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class UpsertClause : public Identifier {
+class UpsertClause final : public Identifier {
 #pragma mark - Lang
 public:
     std::list<IndexedColumn> indexedColumns;

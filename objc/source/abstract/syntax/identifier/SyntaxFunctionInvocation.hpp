@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class FunctionInvocation : public Identifier {
+class FunctionInvocation final : public Identifier {
 #pragma mark - Lang
 public:
     String name;

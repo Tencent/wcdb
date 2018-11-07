@@ -26,6 +26,10 @@ namespace WCDB {
 
 namespace Repair {
 
+PagerRelated::~PagerRelated()
+{
+}
+
 PagerRelated::PagerRelated(Pager *pager) : m_pager(pager)
 {
     WCTInnerAssert(m_pager != nullptr);

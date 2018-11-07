@@ -40,7 +40,7 @@ public:
     ResultColumn& as(const String& alias);
 };
 
-class ResultColumnAll : public ResultColumn {
+class ResultColumnAll final : public ResultColumn {
 public:
     ResultColumnAll();
 

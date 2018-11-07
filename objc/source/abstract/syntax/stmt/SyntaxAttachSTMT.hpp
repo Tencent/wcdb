@@ -29,7 +29,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class AttachSTMT : public Identifier {
+class AttachSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     Expression expression;

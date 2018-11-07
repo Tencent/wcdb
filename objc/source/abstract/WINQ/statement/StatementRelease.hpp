@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class StatementRelease : public TypedSyntax<Syntax::ReleaseSTMT, Statement> {
+class StatementRelease final : public TypedSyntax<Syntax::ReleaseSTMT, Statement> {
 public:
     StatementRelease& release(const String& savepoint);
 };

@@ -32,6 +32,7 @@ class Factory;
 class FactoryRelated {
 public:
     FactoryRelated(const Factory &factory);
+    virtual ~FactoryRelated();
 
 protected:
     const Factory &factory;

@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class HandleStatement : public HandleRelated {
+class HandleStatement final : public HandleRelated {
 public:
     HandleStatement(Handle *handle);
 

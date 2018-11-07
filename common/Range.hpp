@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class Range {
+class Range final {
 public:
     using Location = off_t;
     using Length = size_t;

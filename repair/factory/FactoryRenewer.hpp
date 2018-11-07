@@ -29,10 +29,10 @@ namespace WCDB {
 
 namespace Repair {
 
-class FactoryRenewer : public FactoryRelated,
-                       public ErrorProne,
-                       public AssemblerHolder,
-                       public LockerHolder {
+class FactoryRenewer final : public FactoryRelated,
+                             public ErrorProne,
+                             public AssemblerHolder,
+                             public LockerHolder {
 public:
     FactoryRenewer(const Factory &factory);
     const String directory;

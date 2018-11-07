@@ -87,6 +87,7 @@ protected:
             ++(*m_reference);
         }
     }
+
     void release()
     {
         if (m_reference) {

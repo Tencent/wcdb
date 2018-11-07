@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class PragmaSTMT : public Identifier {
+class PragmaSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     Schema schema;

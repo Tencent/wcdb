@@ -32,7 +32,7 @@ namespace Repair {
 
 class Material;
 
-class Mechanic : public Repairman {
+class Mechanic final : public Repairman {
 #pragma mark - Initialize
 public:
     Mechanic(const String &path);
@@ -51,8 +51,8 @@ protected:
 
 #pragma mark - Crawlable
 protected:
-    void onCellCrawled(const Cell &cell) override;
-    bool willCrawlPage(const Page &page, int) override;
+    void onCellCrawled(const Cell &cell) override final;
+    bool willCrawlPage(const Page &page, int) override final;
 };
 
 } //namespace Repair

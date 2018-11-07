@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class DetachSTMT : public Identifier {
+class DetachSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     Schema schema;

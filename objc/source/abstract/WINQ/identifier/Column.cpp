@@ -31,6 +31,10 @@ Column::Column(const String& name)
     syntax().name = name;
 }
 
+Column::~Column()
+{
+}
+
 Column Column::rowid()
 {
     return Column("rowid");

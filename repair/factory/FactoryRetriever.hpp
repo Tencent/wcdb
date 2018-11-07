@@ -33,12 +33,12 @@ namespace WCDB {
 
 namespace Repair {
 
-class FactoryRetriever : public FactoryRelated,
-                         public UpgradeableErrorProne,
-                         public Progress,
-                         public Scoreable,
-                         public AssemblerHolder,
-                         public LockerHolder {
+class FactoryRetriever final : public FactoryRelated,
+                               public UpgradeableErrorProne,
+                               public Progress,
+                               public Scoreable,
+                               public AssemblerHolder,
+                               public LockerHolder {
 #pragma mark - Retriever
 public:
     FactoryRetriever(const Factory &factory);

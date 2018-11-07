@@ -27,49 +27,49 @@
 namespace WCDB {
 
 template<typename T, typename Enable = void>
-class LiteralValueConvertible : public std::false_type {
+class LiteralValueConvertible final : public std::false_type {
 public:
     static LiteralValue asLiteralValue(const T&);
 };
 
 template<typename T, typename Enable = void>
-class ExpressionConvertible : public std::false_type {
+class ExpressionConvertible final : public std::false_type {
 public:
     static Expression asExpression(const T&);
 };
 
 template<typename T, typename Enable = void>
-class IndexedColumnConvertible : public std::false_type {
+class IndexedColumnConvertible final : public std::false_type {
 public:
     static IndexedColumn asIndexedColumn(const T&);
 };
 
 template<typename T, typename Enable = void>
-class ResultColumnConvertible : public std::false_type {
+class ResultColumnConvertible final : public std::false_type {
 public:
     static ResultColumn asResultColumn(const T&);
 };
 
 template<typename T, typename Enable = void>
-class QualifiedTableConvertible : public std::false_type {
+class QualifiedTableConvertible final : public std::false_type {
 public:
     static QualifiedTable asQualifiedTable(const T&);
 };
 
 template<typename T, typename Enable = void>
-class CTETableConvertible : public std::false_type {
+class CTETableConvertible final : public std::false_type {
 public:
     static CTETable asCTETable(const T&);
 };
 
 template<typename T, typename Enable = void>
-class OrderingTermConvertible : public std::false_type {
+class OrderingTermConvertible final : public std::false_type {
 public:
     static OrderingTerm asOrderingTerm(const T&);
 };
 
 template<typename T, typename Enable = void>
-class TableOrSubqueryConvertible : public std::false_type {
+class TableOrSubqueryConvertible final : public std::false_type {
 public:
     static TableOrSubquery asTableOrSubquery(const T&);
 };

@@ -28,7 +28,7 @@ namespace WCDB {
 
 class MigrationInfo;
 
-class MigrationHandle : public Handle {
+class MigrationHandle final : public Handle {
 #pragma mark - Initialize
 public:
     MigrationHandle(const String &path);
@@ -42,17 +42,17 @@ protected:
 
 #pragma mark - Override
 public:
-    bool execute(const Statement &statement) override;
-    bool prepare(const Statement &statement) override;
-    bool step(bool &done) override;
-    void reset() override;
-    void finalize() override;
-    void bindInteger32(const Integer32 &value, int index) override;
-    void bindInteger64(const Integer64 &value, int index) override;
-    void bindDouble(const Float &value, int index) override;
-    void bindText(const Text &value, int length, int index) override;
-    void bindBLOB(const BLOB &value, int index) override;
-    void bindNull(int index) override;
+    bool execute(const Statement &statement) override final;
+    bool prepare(const Statement &statement) override final;
+    bool step(bool &done) override final;
+    void reset() override final;
+    void finalize() override final;
+    void bindInteger32(const Integer32 &value, int index) override final;
+    void bindInteger64(const Integer64 &value, int index) override final;
+    void bindDouble(const Float &value, int index) override final;
+    void bindText(const Text &value, int length, int index) override final;
+    void bindBLOB(const BLOB &value, int index) override final;
+    void bindNull(int index) override final;
 };
 
 } //namespace WCDB

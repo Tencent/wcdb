@@ -36,6 +36,10 @@ Repairman::Repairman(const String &path)
 {
 }
 
+Repairman::~Repairman()
+{
+}
+
 const String &Repairman::getPath() const
 {
     return m_pager.getPath();

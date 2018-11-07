@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class BindParameter : public Identifier {
+class BindParameter final : public Identifier {
 #pragma mark - Lang
 public:
     enum class Switch {

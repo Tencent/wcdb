@@ -32,9 +32,13 @@ public:
     virtual ~PerformanceTracer();
 
     using Notification = Handle::PerformanceNotification;
-    virtual void setNotification(const Notification &notification);
 
 protected:
+    void setNotification(const Notification &notification);
+    bool invoke(Handle *handle);
+    bool uninvoke(Handle *handle);
+
+private:
     const String m_identifier;
     Notification m_notification;
 };
@@ -57,7 +61,7 @@ public:
     bool invoke(Handle *handle) override final;
     bool uninvoke(Handle *handle) override final;
 
-    void setNotification(const Notification &notification) override final;
+    void setNotification(const Notification &notification);
 
 protected:
     mutable SharedLock m_lock;

@@ -26,18 +26,18 @@
 
 namespace WCDB {
 
-class MigrationInitializerHandle : public Handle, public Migration::Initializer {
+class MigrationInitializerHandle final : public Handle, public Migration::Initializer {
 public:
     using Handle::Handle;
 
-    const Error& getError() const override;
+    const Error& getError() const override final;
 
 protected:
-    std::pair<bool, std::set<String>> getAllExistingTables() override;
+    std::pair<bool, std::set<String>> getAllExistingTables() override final;
     std::pair<bool, std::set<String>>
-    getAllColumns(const String& table, const String& database) override;
+    getAllColumns(const String& table, const String& database) override final;
 
-    void setError(const Error& error) override;
+    void setError(const Error& error) override final;
 
 protected:
     bool lazyOpen();

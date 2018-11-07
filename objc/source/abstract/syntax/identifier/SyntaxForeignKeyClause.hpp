@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class ForeignKeyClause : public Identifier {
+class ForeignKeyClause final : public Identifier {
 #pragma mark - Lang
 public:
     String foreignTable;

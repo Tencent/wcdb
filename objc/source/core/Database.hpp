@@ -30,7 +30,7 @@
 
 namespace WCDB {
 
-class Database : protected HandlePool {
+class Database final : protected HandlePool {
 #pragma mark - Initializer
 public:
     Database(const String &path);
@@ -65,8 +65,8 @@ public:
     std::pair<bool, bool> tableExists(const TableOrSubquery &table);
 
 protected:
-    std::shared_ptr<Handle> generateHandle() override;
-    bool handleWillConfigure(Handle *handle) override;
+    std::shared_ptr<Handle> generateHandle() override final;
+    bool handleWillConfigure(Handle *handle) override final;
 
 #pragma mark - Threaded
 private:
@@ -76,7 +76,7 @@ private:
     markHandleAsThreaded(const Database *database, const RecyclableHandle &handle);
     static void markHandleAsUnthreaded(const Database *database);
 
-    class ThreadedGuard {
+    class ThreadedGuard final {
     public:
         ThreadedGuard(const Database *database, const RecyclableHandle &handle);
         ~ThreadedGuard();

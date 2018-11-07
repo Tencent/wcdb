@@ -39,6 +39,7 @@ class Column : public TypedSyntax<Syntax::Column, SQL>,
 public:
     Column();
     explicit Column(const String& name);
+    virtual ~Column();
 
     static Column rowid();
 

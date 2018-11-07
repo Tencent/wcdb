@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class UpdateSTMT : public Identifier {
+class UpdateSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     bool useWithClause = false;

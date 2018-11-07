@@ -23,6 +23,10 @@
 
 namespace WCDB {
 
+DatabasePoolEvent::~DatabasePoolEvent()
+{
+}
+
 #pragma mark - DatabasePool
 DatabasePool::DatabasePool() : m_event(nullptr)
 {

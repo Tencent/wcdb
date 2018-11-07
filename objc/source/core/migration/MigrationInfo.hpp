@@ -32,6 +32,7 @@ namespace WCDB {
 class MigrationUserInfo : public DebugDescribable {
 public:
     MigrationUserInfo(const String& migratedTable);
+    virtual ~MigrationUserInfo();
 
     const String& getMigratedTable() const;
     const String& getOriginTable() const;
@@ -42,7 +43,7 @@ public:
 
     void setOrigin(const String& table, const String& database = "");
 
-    String getDebugDescription() const override;
+    String getDebugDescription() const override final;
 
 protected:
     const String m_migratedTable;
@@ -50,7 +51,7 @@ protected:
     String m_originDatabase;
 };
 
-class MigrationInfo : public MigrationUserInfo {
+class MigrationInfo final : public MigrationUserInfo {
 #pragma mark - Initialize
 public:
     MigrationInfo(const MigrationUserInfo& userInfo, const std::set<String>& columns);

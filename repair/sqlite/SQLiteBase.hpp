@@ -33,6 +33,7 @@ namespace Repair {
 class SQLiteBase : public ErrorProne {
 public:
     SQLiteBase();
+    virtual ~SQLiteBase();
 
     void setPath(const String &path);
     const String &getPath() const;

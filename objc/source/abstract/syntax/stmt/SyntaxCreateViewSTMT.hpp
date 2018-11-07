@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class CreateViewSTMT : public Identifier {
+class CreateViewSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     bool temp = false;

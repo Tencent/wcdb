@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class RaiseFunction : public Identifier {
+class RaiseFunction final : public Identifier {
 #pragma mark - Lang
 public:
     enum class Switch {

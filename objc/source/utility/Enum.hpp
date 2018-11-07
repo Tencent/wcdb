@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class Enum {
+class Enum final {
 public:
     template<typename T, typename Enable = typename std::enable_if<std::is_enum<T>::value>::type>
     static constexpr const char* description(const T& t);

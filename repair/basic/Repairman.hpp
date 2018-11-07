@@ -41,6 +41,7 @@ class Repairman : public Crawlable,
 #pragma mark - Initialize
 public:
     Repairman(const String &path);
+    virtual ~Repairman();
 
     const String &getPath() const;
 
@@ -51,7 +52,7 @@ protected:
 
 #pragma mark - Crawlable
 protected:
-    void onCrawlerError() override;
+    void onCrawlerError() override final;
     Pager m_pager;
 
 #pragma mark - Error
@@ -59,7 +60,7 @@ protected:
     int tryUpgrateAssemblerError();
     int tryUpgradeCrawlerError();
 
-    void onErrorCritical() override;
+    virtual void onErrorCritical() override;
 
 #pragma mark - Assembler
 protected:

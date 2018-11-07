@@ -34,7 +34,7 @@ class FileHandle : public SharedThreadedErrorProne {
 public:
     FileHandle(const String &path);
     FileHandle(FileHandle &&);
-    ~FileHandle();
+    virtual ~FileHandle();
     FileHandle &operator=(FileHandle &&);
     FileHandle() = delete;
     FileHandle(const FileHandle &) = delete;

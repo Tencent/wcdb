@@ -29,6 +29,10 @@ namespace WCDB {
 
 namespace Repair {
 
+MasterCrawlerDelegate::~MasterCrawlerDelegate()
+{
+}
+
 void MasterCrawlerDelegate::onMasterPageCrawled(const Page &page)
 {
 }

@@ -27,7 +27,7 @@ namespace WCDB {
 
 // Small order first
 template<typename Key, typename Value, typename Order = int>
-class OrderedUniqueList {
+class OrderedUniqueList final {
 public:
     struct Element {
         Order order;

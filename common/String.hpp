@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class String : public std::string {
+class String final : public std::string {
 public:
     using std::string::string;
     String(std::string &&str);

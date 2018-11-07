@@ -36,7 +36,7 @@ namespace Repair {
 
 class Assembler;
 
-class Factory {
+class Factory final {
 #pragma mark - Factory
 public:
     Factory(const String &database);

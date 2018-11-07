@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class Error {
+class Error final {
 #pragma mark - Level
 public:
     enum class Level : int {
@@ -186,7 +186,7 @@ public:
 public:
     String message;
 
-    class Infos {
+    class Infos final {
     public:
 #if __cplusplus > 201402L
 #warning TODO \

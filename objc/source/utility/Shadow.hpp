@@ -31,11 +31,12 @@ class Shadow;
 template<typename T>
 class Cloneable {
 public:
+    virtual ~Cloneable() {}
     virtual T* clone() const = 0;
 };
 
 template<typename T>
-class Shadow : public std::unique_ptr<T> {
+class Shadow final : public std::unique_ptr<T> {
 public:
     //    static_assert(std::is_base_of<Cloneable<T>, T>::value, "");
     using std::unique_ptr<T>::unique_ptr;

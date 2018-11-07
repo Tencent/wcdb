@@ -32,7 +32,7 @@ class DeleteSTMT;
 class UpdateSTMT;
 class SelectSTMT;
 
-class CreateTriggerSTMT : public Identifier {
+class CreateTriggerSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     bool temp = false;

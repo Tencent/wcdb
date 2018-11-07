@@ -21,7 +21,7 @@
 #import <WCDB/WCTColumnBinding.h>
 #import <WCDB/WCTCommon.h>
 
-class WCTResultColumn : public WCDB::ResultColumn, public WCTColumnBindingHolder {
+class WCTResultColumn final : public WCDB::ResultColumn, public WCTColumnBindingHolder {
 public:
     WCTResultColumn();
     WCTResultColumn(const WCTProperty& property);

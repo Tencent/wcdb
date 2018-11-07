@@ -28,7 +28,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class TableOrSubquery : public Identifier {
+class TableOrSubquery final : public Identifier {
 #pragma mark - Lang
 public:
     enum class Switch {

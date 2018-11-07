@@ -75,6 +75,8 @@ public:
         }
     }
 
+    virtual ~_SyntaxList() {}
+
     operator std::list<SyntaxType>() const
     {
         std::list<SyntaxType> list;
@@ -123,7 +125,7 @@ public:
 };
 
 template<typename T>
-class SyntaxList : public _SyntaxList<T> {
+class SyntaxList final : public _SyntaxList<T> {
 public:
     using _SyntaxList<T>::_SyntaxList;
 };

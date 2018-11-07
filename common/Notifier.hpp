@@ -27,7 +27,7 @@
 
 namespace WCDB {
 
-class Notifier {
+class Notifier final {
 public:
     static Notifier *shared();
     Notifier(const Notifier &) = delete;

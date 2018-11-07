@@ -45,7 +45,7 @@ private:
     typedef std::function<std::shared_ptr<void>(void)> Constructor;
 #pragma mark - Threaded Info
 private:
-    class Info {
+    class Info final {
     public:
         Info(const Recyclable<pthread_key_t> &key, std::shared_ptr<void> &&value);
 

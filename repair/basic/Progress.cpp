@@ -29,6 +29,10 @@ Progress::Progress() : m_progress(0), m_onProgressUpdate(nullptr)
 {
 }
 
+Progress::~Progress()
+{
+}
+
 void Progress::increaseProgress(double increment)
 {
     double progress = m_progress + increment;

@@ -65,6 +65,10 @@ void Migration::addUserInfo(const MigrationUserInfo& info)
 }
 
 #pragma mark - Infos
+Migration::Initializer::~Initializer()
+{
+}
+
 bool Migration::initialize(Initializer& initializer)
 {
     if (m_initialized) {

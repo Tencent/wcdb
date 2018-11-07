@@ -36,6 +36,10 @@ WCTColumnBindingHolder::WCTColumnBindingHolder(const WCTColumnBinding& columnBin
 {
 }
 
+WCTColumnBindingHolder::~WCTColumnBindingHolder()
+{
+}
+
 const WCTColumnBinding& WCTColumnBindingHolder::getColumnBinding() const
 {
     return *m_columnBinding;

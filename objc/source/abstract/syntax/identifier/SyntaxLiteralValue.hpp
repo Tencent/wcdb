@@ -28,7 +28,7 @@ namespace WCDB {
 namespace Syntax {
 
 // BLOB is not supported since it may cause string truncation. Ones should use BindParameter instead.
-class LiteralValue : public Identifier {
+class LiteralValue final : public Identifier {
 #pragma mark - Lang
 public:
     enum class Switch {

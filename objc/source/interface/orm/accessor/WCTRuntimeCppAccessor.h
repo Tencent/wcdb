@@ -22,7 +22,7 @@
 #import <WCDB/WCTRuntimeBaseAccessor.h>
 
 template<typename PropertyType, typename Enable = void>
-class WCTRuntimeCppAccessor {
+class WCTRuntimeCppAccessor final {
 };
 
 template<typename PropertyType>

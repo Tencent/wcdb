@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class BindParameter : public TypedSyntax<Syntax::BindParameter, SQL> {
+class BindParameter final : public TypedSyntax<Syntax::BindParameter, SQL> {
 public:
     using TypedSyntax<Syntax::BindParameter, SQL>::TypedSyntax;
     BindParameter(int n);

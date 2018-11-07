@@ -22,7 +22,7 @@
 #import <WCDB/WCTRuntimeCppAccessor.h>
 #import <WCDB/WCTRuntimeObjCAccessor.h>
 
-class WCTColumnBinding {
+class WCTColumnBinding final {
 public:
     template<typename T>
     WCTColumnBinding(Class cls,
@@ -64,6 +64,7 @@ class WCTColumnBindingHolder {
 public:
     WCTColumnBindingHolder();
     WCTColumnBindingHolder(const WCTColumnBinding& columnBinding);
+    virtual ~WCTColumnBindingHolder();
 
     WCTResultColumn redirect(const WCDB::ResultColumn& resultColumn) const;
 

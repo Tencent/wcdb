@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class Pragma : public Identifier {
+class Pragma final : public Identifier {
 #pragma mark - Lang
 public:
     String name;

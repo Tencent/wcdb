@@ -31,7 +31,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class CreateTableSTMT : public Identifier {
+class CreateTableSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     bool temp = false;

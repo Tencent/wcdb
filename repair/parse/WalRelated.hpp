@@ -34,6 +34,7 @@ class WalRelated {
 public:
     WalRelated(Wal *wal);
     WalRelated(WalRelated &&);
+    virtual ~WalRelated();
     WalRelated &operator=(WalRelated &&);
 
     const String &getWalPath() const;

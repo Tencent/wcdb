@@ -29,7 +29,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class IndexedColumn : public Identifier {
+class IndexedColumn final : public Identifier {
 #pragma mark - Lang
 public:
     enum class Switch { Column, Expression } switcher;

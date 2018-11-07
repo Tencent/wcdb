@@ -29,7 +29,7 @@ namespace Syntax {
 
 class Expression;
 
-class Filter : public Identifier {
+class Filter final : public Identifier {
 #pragma mark - Lang
 public:
     Shadow<Expression> expression;

@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class Pragma : public TypedSyntax<Syntax::Pragma, SQL> {
+class Pragma final : public TypedSyntax<Syntax::Pragma, SQL> {
 #pragma mark - Initializer
 public:
     using TypedSyntax<Syntax::Pragma, SQL>::TypedSyntax;

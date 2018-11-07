@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class Schema : public Identifier {
+class Schema final : public Identifier {
 #pragma mark - Syntax
 public:
     String name;

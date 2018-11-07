@@ -29,6 +29,7 @@ namespace Repair {
 
 class Scoreable {
 public:
+    virtual ~Scoreable();
     const Fraction &getScore() const;
 
 protected:
@@ -40,6 +41,7 @@ private:
 
 class SegmentedScoreable : public Scoreable {
 public:
+    virtual ~SegmentedScoreable();
     const Fraction &getScore() const;
 
 protected:

@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class RecyclableDatabase : public Recyclable<Database *> {
+class RecyclableDatabase final : public Recyclable<Database *> {
 public:
     using Super = Recyclable<Database *>;
 

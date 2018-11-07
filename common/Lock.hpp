@@ -85,7 +85,7 @@ protected:
     ThreadLocal<int> m_threadedReaders;
 };
 
-class SharedLockGuard {
+class SharedLockGuard final {
 public:
     SharedLockGuard(SharedLock &lock);
     ~SharedLockGuard();
@@ -98,7 +98,7 @@ protected:
     SharedLock &m_lock;
 };
 
-class LockGuard {
+class LockGuard final {
 public:
     LockGuard(Lockable &lock);
     ~LockGuard();

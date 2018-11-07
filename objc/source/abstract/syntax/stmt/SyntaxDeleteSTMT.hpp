@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class DeleteSTMT : public Identifier {
+class DeleteSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     bool useWithClause = false;

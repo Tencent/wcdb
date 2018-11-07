@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class CommitSTMT : public Identifier {
+class CommitSTMT final : public Identifier {
 #pragma mark - Lang
 public:
 #pragma mark - Identifier

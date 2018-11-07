@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class Configs {
+class Configs final {
 #pragma mark - Configs
 public:
     enum Priority : int {

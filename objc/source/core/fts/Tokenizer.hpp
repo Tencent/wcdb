@@ -43,8 +43,13 @@ public:
     };
 
     CursorInfo(const char *input, int inputLength, TokenizerInfoBase *tokenizerInfo);
+    virtual ~CursorInfo();
 
-    int step(const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *piPosition) override;
+    int step(const char **ppToken,
+             int *pnBytes,
+             int *piStartOffset,
+             int *piEndOffset,
+             int *piPosition) override final;
 
 protected:
     const char *m_input;

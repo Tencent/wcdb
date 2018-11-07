@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class ResultColumn : public Identifier {
+class ResultColumn final : public Identifier {
 #pragma mark - Lang
 public:
     Expression expression;

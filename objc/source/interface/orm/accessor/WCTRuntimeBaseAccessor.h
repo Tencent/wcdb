@@ -22,6 +22,9 @@
 #import <functional>
 
 class WCTRuntimeBaseAccessor {
+public:
+    virtual ~WCTRuntimeBaseAccessor();
+
 protected:
     using InstanceType = id;
     static SEL getGetterSelector(Class cls, const WCDB::String &propertyName);
@@ -42,6 +45,8 @@ public:
     , setProperty(GenerateSetter(cls, propertyName))
     {
     }
+
+    virtual ~WCTRuntimeAccessor() {}
 
     const Setter setProperty;
     const Getter getProperty;

@@ -41,12 +41,17 @@ public:
 };
 
 class ReadLocker : public Locker {
+public:
+    virtual ~ReadLocker();
 };
 class WriteLocker : public Locker {
+public:
+    virtual ~WriteLocker();
 };
 
 class LockerHolder {
 public:
+    virtual ~LockerHolder();
     void setReadLocker(const std::shared_ptr<ReadLocker> &readLocker);
     void setWriteLocker(const std::shared_ptr<WriteLocker> &writeLocker);
 

@@ -33,6 +33,10 @@ SQLiteBase::SQLiteBase() : m_handle(nullptr), m_codeToBeIgnored(SQLITE_OK)
 {
 }
 
+SQLiteBase::~SQLiteBase()
+{
+}
+
 void SQLiteBase::setPath(const String &path)
 {
     m_path = path;

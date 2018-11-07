@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class Dispatch {
+class Dispatch final {
 public:
     static void async(const String &name, const std::function<void(void)> &callback);
 };

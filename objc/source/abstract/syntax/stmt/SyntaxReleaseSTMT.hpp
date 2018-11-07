@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class ReleaseSTMT : public Identifier {
+class ReleaseSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     String savepoint;

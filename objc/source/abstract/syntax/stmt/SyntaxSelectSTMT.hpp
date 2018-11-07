@@ -32,7 +32,7 @@ namespace Syntax {
 class CommonTableExpression;
 class OrderingTerm;
 
-class SelectSTMT : public Identifier {
+class SelectSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     bool recursive = false;

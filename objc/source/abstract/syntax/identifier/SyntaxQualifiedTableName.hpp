@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class QualifiedTableName : public Identifier {
+class QualifiedTableName final : public Identifier {
 #pragma mark - Lang
 public:
     Schema schema;

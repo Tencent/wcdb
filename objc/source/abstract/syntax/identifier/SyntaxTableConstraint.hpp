@@ -31,7 +31,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class TableConstraint : public Identifier {
+class TableConstraint final : public Identifier {
 #pragma mark - Lang
 public:
     String name;

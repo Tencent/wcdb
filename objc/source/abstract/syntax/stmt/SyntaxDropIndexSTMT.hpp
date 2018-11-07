@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class DropIndexSTMT : public Identifier {
+class DropIndexSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     bool ifExists = false;

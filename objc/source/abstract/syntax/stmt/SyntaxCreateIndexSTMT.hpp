@@ -28,7 +28,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class CreateIndexSTMT : public Identifier {
+class CreateIndexSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     bool unique = false;

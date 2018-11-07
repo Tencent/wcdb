@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class HandleNotification : public HandleRelated {
+class HandleNotification final : public HandleRelated {
 public:
     using HandleRelated::HandleRelated;
 

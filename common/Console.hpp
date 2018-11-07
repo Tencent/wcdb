@@ -29,7 +29,7 @@ namespace WCDB {
 
 class Error;
 
-class Console {
+class Console final {
 public:
     static Console* shared();
 

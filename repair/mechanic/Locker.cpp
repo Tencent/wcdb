@@ -28,6 +28,10 @@ Locker::~Locker()
 {
 }
 
+LockerHolder::~LockerHolder()
+{
+}
+
 void LockerHolder::setReadLocker(const std::shared_ptr<ReadLocker> &readLocker)
 {
     m_readLocker = readLocker;
@@ -36,6 +40,14 @@ void LockerHolder::setReadLocker(const std::shared_ptr<ReadLocker> &readLocker)
 void LockerHolder::setWriteLocker(const std::shared_ptr<WriteLocker> &writeLocker)
 {
     m_writeLocker = writeLocker;
+}
+
+ReadLocker::~ReadLocker()
+{
+}
+
+WriteLocker::~WriteLocker()
+{
 }
 
 } //namespace Repair

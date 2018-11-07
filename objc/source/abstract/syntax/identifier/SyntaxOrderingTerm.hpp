@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class OrderingTerm : public Identifier {
+class OrderingTerm final : public Identifier {
 #pragma mark - Lang
 public:
     Expression expression;

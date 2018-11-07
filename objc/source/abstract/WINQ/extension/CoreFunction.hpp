@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class CoreFunction {
+class CoreFunction final {
 public:
     CoreFunction() = delete;
     CoreFunction(const CoreFunction&) = delete;

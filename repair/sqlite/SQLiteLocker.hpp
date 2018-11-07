@@ -28,24 +28,24 @@ namespace WCDB {
 
 namespace Repair {
 
-class SQLiteReadLocker : public ReadLocker, public SQLiteBase {
+class SQLiteReadLocker final : public ReadLocker, public SQLiteBase {
 public:
-    void setPath(const String &path) override;
-    const String &getPath() const override;
+    void setPath(const String &path) override final;
+    const String &getPath() const override final;
 
-    bool acquireLock() override;
-    bool releaseLock() override;
-    const Error &getError() const override;
+    bool acquireLock() override final;
+    bool releaseLock() override final;
+    const Error &getError() const override final;
 };
 
-class SQLiteWriteLocker : public WriteLocker, public SQLiteBase {
+class SQLiteWriteLocker final : public WriteLocker, public SQLiteBase {
 public:
-    void setPath(const String &path) override;
-    const String &getPath() const override;
+    void setPath(const String &path) override final;
+    const String &getPath() const override final;
 
-    bool acquireLock() override;
-    bool releaseLock() override;
-    const Error &getError() const override;
+    bool acquireLock() override final;
+    bool releaseLock() override final;
+    const Error &getError() const override final;
 };
 
 } //namespace Repair

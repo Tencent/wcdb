@@ -26,7 +26,7 @@
 namespace WCDB {
 
 // BLOB is not supported since it may cause string truncation. Ones should use BindParameter instead.
-class LiteralValue : public TypedSyntax<Syntax::LiteralValue, SQL> {
+class LiteralValue final : public TypedSyntax<Syntax::LiteralValue, SQL> {
 public:
     using TypedSyntax<Syntax::LiteralValue, SQL>::TypedSyntax;
 

@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class ThreadedErrors {
+class ThreadedErrors final {
 public:
     static ThreadedErrors *shared();
     const Error &getThreadedError();

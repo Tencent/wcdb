@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class RollbackSTMT : public Identifier {
+class RollbackSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     String savepoint;

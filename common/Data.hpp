@@ -27,7 +27,7 @@
 
 namespace WCDB {
 
-class Data : public UnsafeData {
+class Data final : public UnsafeData {
 #pragma mark - Initialize
 public:
     Data();

@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class StatementReindex : public TypedSyntax<Syntax::ReindexSTMT, Statement> {
+class StatementReindex final : public TypedSyntax<Syntax::ReindexSTMT, Statement> {
 public:
     StatementReindex& reindex();
     StatementReindex& collation(const String& collation);

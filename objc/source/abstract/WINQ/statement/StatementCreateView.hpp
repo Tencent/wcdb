@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class StatementCreateView : public TypedSyntax<Syntax::CreateViewSTMT, Statement> {
+class StatementCreateView final : public TypedSyntax<Syntax::CreateViewSTMT, Statement> {
 public:
     StatementCreateView& createView(const String& view);
     StatementCreateView& schema(const Schema& schema);

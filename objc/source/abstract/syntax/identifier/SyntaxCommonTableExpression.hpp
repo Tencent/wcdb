@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class CommonTableExpression : public Identifier {
+class CommonTableExpression final : public Identifier {
 #pragma mark - Lang
 public:
     String table;

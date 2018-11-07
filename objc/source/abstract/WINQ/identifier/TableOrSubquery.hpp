@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class TableOrSubquery : public TypedSyntax<Syntax::TableOrSubquery, SQL> {
+class TableOrSubquery final : public TypedSyntax<Syntax::TableOrSubquery, SQL> {
 public:
     using TypedSyntax<Syntax::TableOrSubquery, SQL>::TypedSyntax;
 

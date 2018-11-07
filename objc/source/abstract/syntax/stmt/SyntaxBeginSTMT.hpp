@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class BeginSTMT : public Identifier {
+class BeginSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     enum class Transaction {

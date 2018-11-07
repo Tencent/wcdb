@@ -29,7 +29,7 @@ namespace Syntax {
 
 class Column;
 
-class CTETableName : public Identifier {
+class CTETableName final : public Identifier {
 #pragma mark - Lang
 public:
     String name;

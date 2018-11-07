@@ -26,24 +26,36 @@
 
 namespace WCDB {
 
-class SQLTraceConfig : public Config {
+class SQLTracer {
 public:
+    SQLTracer();
+    virtual ~SQLTracer();
     using Notification = Handle::SQLNotification;
-    SQLTraceConfig(const Notification &notification);
-
-    bool invoke(Handle *handle) override;
-    bool uninvoke(Handle *handle) override;
 
 protected:
+    bool invoke(Handle *handle);
+    bool uninvoke(Handle *handle);
+    void setNotification(const Notification &notification);
+
+private:
     const String m_identifier;
     Notification m_notification;
 };
 
-class ShareableSQLTraceConfig : public SQLTraceConfig {
+class SQLTraceConfig final : public Config, public SQLTracer {
+public:
+    SQLTraceConfig(const Notification &notification);
+
+    bool invoke(Handle *handle) override final;
+    bool uninvoke(Handle *handle) override final;
+};
+
+class ShareableSQLTraceConfig final : public Config, public SQLTracer {
 public:
     ShareableSQLTraceConfig();
 
-    bool invoke(Handle *handle) override;
+    bool invoke(Handle *handle) override final;
+    bool uninvoke(Handle *handle) override final;
 
     void setNotification(const Notification &notification);
 

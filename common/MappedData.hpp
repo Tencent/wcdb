@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class MappedData : public UnsafeData {
+class MappedData final : public UnsafeData {
 public:
     MappedData();
     MappedData(unsigned char* mapped, size_t size);

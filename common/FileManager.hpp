@@ -37,7 +37,7 @@ enum FileProtection {
     CompleteUntilFirstUserAuthentication,
 };
 
-class FileManager : public SharedThreadedErrorProne {
+class FileManager final : public SharedThreadedErrorProne {
 public:
     FileManager() = delete;
     FileManager(const FileManager &) = delete;

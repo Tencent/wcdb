@@ -48,6 +48,10 @@ CursorInfo::CursorInfo(const char *input, int inputLength, TokenizerInfoBase *to
     static_assert(sizeof(UnicodeChar) == 2, "UnicodeChar must be 2 byte length.");
 }
 
+CursorInfo::~CursorInfo()
+{
+}
+
 //Inspired by zorrozhang
 int CursorInfo::step(const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *piPosition)
 {

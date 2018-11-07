@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class VacuumSTMT : public Identifier {
+class VacuumSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     bool specifySchema = false;

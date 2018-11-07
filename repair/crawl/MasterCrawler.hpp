@@ -31,6 +31,9 @@ class Master;
 class MasterCrawler;
 
 class MasterCrawlerDelegate {
+public:
+    virtual ~MasterCrawlerDelegate();
+
 protected:
     friend class MasterCrawler;
 
@@ -39,7 +42,7 @@ protected:
     virtual void onMasterCrawlerError() = 0;
 };
 
-class MasterCrawler : public Crawlable {
+class MasterCrawler final : public Crawlable {
 #pragma mark - Initialize
 public:
     MasterCrawler(Pager &pager);
@@ -53,9 +56,9 @@ protected:
 
 #pragma mark - Crawlable
 protected:
-    void onCellCrawled(const Cell &cell) override;
-    bool willCrawlPage(const Page &page, int height) override;
-    void onCrawlerError() override;
+    void onCellCrawled(const Cell &cell) override final;
+    bool willCrawlPage(const Page &page, int height) override final;
+    void onCrawlerError() override final;
 };
 
 } //namespace Repair

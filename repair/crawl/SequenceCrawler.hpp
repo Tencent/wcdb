@@ -31,6 +31,9 @@ class Sequence;
 class SequenceCrawler;
 
 class SequenceCrawlerDelegate {
+public:
+    virtual ~SequenceCrawlerDelegate();
+
 protected:
     friend class SequenceCrawler;
 
@@ -39,7 +42,7 @@ protected:
     virtual void onSequenceCrawlerError() = 0;
 };
 
-class SequenceCrawler : public Crawlable {
+class SequenceCrawler final : public Crawlable {
 #pragma mark - Initialize
 public:
     SequenceCrawler(Pager &pager);
@@ -53,9 +56,9 @@ protected:
 
 #pragma mark - Crawlable
 protected:
-    void onCellCrawled(const Cell &cell) override;
-    void onCrawlerError() override;
-    bool willCrawlPage(const Page &page, int height) override;
+    void onCellCrawled(const Cell &cell) override final;
+    void onCrawlerError() override final;
+    bool willCrawlPage(const Page &page, int height) override final;
 };
 
 } //namespace Repair

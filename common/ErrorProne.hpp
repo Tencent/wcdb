@@ -28,6 +28,7 @@ namespace WCDB {
 
 class ErrorProne {
 public:
+    virtual ~ErrorProne();
     const Error &getError() const;
 
 protected:
@@ -40,6 +41,7 @@ protected:
 
 class ThreadedErrorProne {
 public:
+    virtual ~ThreadedErrorProne();
     const Error &getThreadedError();
 
 protected:

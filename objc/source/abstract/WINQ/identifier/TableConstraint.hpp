@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class TableConstraint : public TypedSyntax<Syntax::TableConstraint, SQL> {
+class TableConstraint final : public TypedSyntax<Syntax::TableConstraint, SQL> {
 public:
     TableConstraint();
     explicit TableConstraint(const String& name);

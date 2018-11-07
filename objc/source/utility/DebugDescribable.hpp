@@ -27,6 +27,7 @@ namespace WCDB {
 
 class DebugDescribable {
 public:
+    virtual ~DebugDescribable() {}
     virtual String getDebugDescription() const = 0;
 };
 

@@ -30,7 +30,7 @@ namespace Syntax {
 class TableConstraint;
 
 // What's the true syntax of ModuleArgument?
-class ModuleArgument : public Identifier {
+class ModuleArgument final : public Identifier {
 #pragma mark - Lang
 public:
     enum class Switcher {

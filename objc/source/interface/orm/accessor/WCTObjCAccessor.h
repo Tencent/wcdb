@@ -29,12 +29,9 @@ public:
     using Setter = void (^)(InstanceType, OCType);
     using Getter = OCType (^)(InstanceType);
 
-    WCTObjCAccessor(Getter getter, Setter setter)
-    : getObject(getter), setObject(setter)
-    {
-    }
-
-    WCTAccessorType getAccessorType() const override { return WCTAccessorObjC; }
+    WCTObjCAccessor(Getter getter, Setter setter);
+    virtual ~WCTObjCAccessor();
+    WCTAccessorType getAccessorType() const override final;
 
     const Setter setObject;
     const Getter getObject;

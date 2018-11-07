@@ -30,7 +30,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class ColumnConstraint : public Identifier {
+class ColumnConstraint final : public Identifier {
 #pragma mark - Lang
 public:
     String name;

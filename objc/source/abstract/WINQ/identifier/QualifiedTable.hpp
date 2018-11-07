@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class QualifiedTable : public TypedSyntax<Syntax::QualifiedTableName, SQL> {
+class QualifiedTable final : public TypedSyntax<Syntax::QualifiedTableName, SQL> {
 public:
     using TypedSyntax<Syntax::QualifiedTableName, SQL>::TypedSyntax;
 

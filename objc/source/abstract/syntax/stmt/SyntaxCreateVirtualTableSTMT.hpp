@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class CreateVirtualTableSTMT : public Identifier {
+class CreateVirtualTableSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     bool ifNotExists = false;

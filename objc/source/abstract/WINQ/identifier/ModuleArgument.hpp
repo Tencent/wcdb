@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class ModuleArgument : public TypedSyntax<Syntax::ModuleArgument, SQL> {
+class ModuleArgument final : public TypedSyntax<Syntax::ModuleArgument, SQL> {
 public:
     using TypedSyntax<Syntax::ModuleArgument, SQL>::TypedSyntax;
     ModuleArgument(const TableConstraint& tableConstraint);

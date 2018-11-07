@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class ReindexSTMT : public Identifier {
+class ReindexSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     enum class Switch {

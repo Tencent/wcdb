@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class FTS3Function {
+class FTS3Function final {
 public:
     FTS3Function() = delete;
     FTS3Function(const FTS3Function &) = delete;

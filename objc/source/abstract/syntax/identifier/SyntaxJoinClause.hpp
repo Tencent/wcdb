@@ -30,7 +30,7 @@ namespace Syntax {
 class TableOrSubquery;
 class JoinConstraint;
 
-class JoinClause : public Identifier {
+class JoinClause final : public Identifier {
 #pragma mark - Lang
 public:
     std::list<JoinOperator> joinOperators;

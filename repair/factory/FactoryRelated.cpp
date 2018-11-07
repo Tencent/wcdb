@@ -29,6 +29,10 @@ FactoryRelated::FactoryRelated(const Factory &factory_) : factory(factory_)
 {
 }
 
+FactoryRelated::~FactoryRelated()
+{
+}
+
 } //namespace Repair
 
 } //namespace WCDB

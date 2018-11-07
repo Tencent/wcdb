@@ -28,15 +28,15 @@
 
 namespace WCDB {
 
-class Expression : public TypedSyntax<Syntax::Expression, SQL>,
-                   public ExpressionUnaryOperable,
-                   public ExpressionBinaryOperable,
-                   public ExpressionInOperable,
-                   public ExpressionBetweenOperable,
-                   public ExpressionCollateOperable,
-                   public CoreFunctionOperable,
-                   public AggregateFunctionOperable,
-                   public FTS3FunctionOperable {
+class Expression final : public TypedSyntax<Syntax::Expression, SQL>,
+                         public ExpressionUnaryOperable,
+                         public ExpressionBinaryOperable,
+                         public ExpressionInOperable,
+                         public ExpressionBetweenOperable,
+                         public ExpressionCollateOperable,
+                         public CoreFunctionOperable,
+                         public AggregateFunctionOperable,
+                         public FTS3FunctionOperable {
 public:
     using TypedSyntax<Syntax::Expression, SQL>::TypedSyntax;
 

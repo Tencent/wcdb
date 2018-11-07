@@ -28,7 +28,7 @@
 
 namespace WCDB {
 
-class PageBasedFileHandle : public FileHandle {
+class PageBasedFileHandle final : public FileHandle {
 #pragma mark - PageBasedFileHandle
 public:
     PageBasedFileHandle(const String& path);

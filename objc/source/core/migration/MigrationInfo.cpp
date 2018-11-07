@@ -30,6 +30,10 @@ MigrationUserInfo::MigrationUserInfo(const String& migratedTable)
     WCTInnerAssert(!migratedTable.empty());
 }
 
+MigrationUserInfo::~MigrationUserInfo()
+{
+}
+
 bool MigrationUserInfo::shouldMigrate() const
 {
     return !m_migratedTable.empty() && !m_originTable.empty();

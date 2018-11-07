@@ -29,28 +29,28 @@ namespace WCDB {
 
 namespace Repair {
 
-class SQLiteAssembler : public Assembler, public SQLiteBase {
+class SQLiteAssembler final : public Assembler, public SQLiteBase {
 #pragma mark - Initialize
 public:
     SQLiteAssembler();
 
 #pragma mark - Assembler
 public:
-    void setPath(const String &path) override;
-    const String &getPath() const override;
+    void setPath(const String &path) override final;
+    const String &getPath() const override final;
 
-    bool markAsAssembling() override;
-    bool markAsAssembled() override;
+    bool markAsAssembling() override final;
+    bool markAsAssembled() override final;
 
-    bool markAsMilestone() override;
+    bool markAsMilestone() override final;
 
-    bool assembleTable(const String &tableName, const String &sql) override;
-    bool assembleCell(const Cell &cell) override;
-    bool assembleSQL(const String &sql) override;
+    bool assembleTable(const String &tableName, const String &sql) override final;
+    bool assembleCell(const Cell &cell) override final;
+    bool assembleSQL(const String &sql) override final;
 
-    void markAsDuplicated(bool duplicated) override;
+    void markAsDuplicated(bool duplicated) override final;
 
-    const Error &getError() const override;
+    const Error &getError() const override final;
 
 protected:
     bool m_duplicated;
@@ -68,7 +68,7 @@ protected:
 #pragma mark - Sequence
 protected:
     bool markSequenceAsAssembling();
-    bool assembleSequence(const String &tableName, int64_t sequence) override;
+    bool assembleSequence(const String &tableName, int64_t sequence) override final;
     bool markSequenceAsAssembled();
 
     std::pair<bool, bool> updateSequence(const String &tableName, int64_t sequence);

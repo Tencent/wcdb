@@ -31,7 +31,7 @@ namespace Syntax {
 class Expression;
 class OrderingTerm;
 
-class WindowDef : public Identifier {
+class WindowDef final : public Identifier {
 #pragma mark - Lang
 public:
     std::list<Expression> expressions;

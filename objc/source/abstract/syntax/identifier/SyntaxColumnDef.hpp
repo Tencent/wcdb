@@ -28,7 +28,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class ColumnDef : public Identifier {
+class ColumnDef final : public Identifier {
 #pragma mark - Syntax
 public:
     Column column;

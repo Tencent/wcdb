@@ -33,7 +33,7 @@ namespace WCDB {
 
 namespace Repair {
 
-class FullCrawler : public Repairman, public MasterCrawlerDelegate, public SequenceCrawlerDelegate {
+class FullCrawler final : public Repairman, public MasterCrawlerDelegate, public SequenceCrawlerDelegate {
 #pragma mark - Initialize
 public:
     FullCrawler(const String &source);
@@ -47,26 +47,26 @@ protected:
 
 #pragma mark - Crawlable
 protected:
-    void onCellCrawled(const Cell &cell) override;
-    bool willCrawlPage(const Page &, int) override;
+    void onCellCrawled(const Cell &cell) override final;
+    bool willCrawlPage(const Page &, int) override final;
 
 #pragma mark - Error
 protected:
-    void onErrorCritical() override;
+    void onErrorCritical() override final;
 
 #pragma mark - MasterCrawlerDelegate
 protected:
-    void onMasterPageCrawled(const Page &page) override;
-    void onMasterCellCrawled(const Cell &cell, const Master &master) override;
-    void onMasterCrawlerError() override;
+    void onMasterPageCrawled(const Page &page) override final;
+    void onMasterCellCrawled(const Cell &cell, const Master &master) override final;
+    void onMasterCrawlerError() override final;
 
     MasterCrawler m_masterCrawler;
 
 #pragma mark - SequenceCrawlerDelegate
 protected:
-    void onSequencePageCrawled(const Page &page) override;
-    void onSequenceCellCrawled(const Cell &cell, const Sequence &sequence) override;
-    void onSequenceCrawlerError() override;
+    void onSequencePageCrawled(const Page &page) override final;
+    void onSequenceCellCrawled(const Cell &cell, const Sequence &sequence) override final;
+    void onSequenceCrawlerError() override final;
 
     SequenceCrawler m_sequenceCrawler;
 };

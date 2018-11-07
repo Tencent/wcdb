@@ -18,19 +18,18 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_STATEMENTVACUUM_HPP
-#define _WCDB_STATEMENTVACUUM_HPP
+#import <WCDB/WCTObjCAccessor.h>
 
-#include <WCDB/Statement.hpp>
+WCTObjCAccessor::WCTObjCAccessor(Getter getter, Setter setter)
+: getObject(getter), setObject(setter)
+{
+}
 
-namespace WCDB {
+WCTObjCAccessor::~WCTObjCAccessor()
+{
+}
 
-class StatementVacuum final : public TypedSyntax<Syntax::VacuumSTMT, Statement> {
-public:
-    StatementVacuum& vacuum();
-    StatementVacuum& vacuum(const Schema& schema);
-};
-
-} // namespace WCDB
-
-#endif /* _WCDB_STATEMENTVACUUM_HPP */
+WCTAccessorType WCTObjCAccessor::getAccessorType() const
+{
+    return WCTAccessorObjC;
+}

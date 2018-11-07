@@ -28,7 +28,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class RecursiveCTE : public Identifier {
+class RecursiveCTE final : public Identifier {
 #pragma mark - Lang
 public:
     CTETableName table;

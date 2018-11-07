@@ -29,7 +29,7 @@ namespace Syntax {
 
 class Expression;
 
-class FrameSpec : public Identifier {
+class FrameSpec final : public Identifier {
 #pragma mark - Lang
 public:
     enum class Switch {

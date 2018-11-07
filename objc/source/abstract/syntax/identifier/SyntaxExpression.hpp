@@ -35,7 +35,7 @@ namespace Syntax {
 
 class SelectSTMT;
 
-class Expression : public Identifier {
+class Expression final : public Identifier {
 #pragma mark - Lang
 public:
     enum class Switch {

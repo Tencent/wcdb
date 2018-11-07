@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class AggregateFunction {
+class AggregateFunction final {
 public:
     AggregateFunction() = delete;
     AggregateFunction(const AggregateFunction&) = delete;

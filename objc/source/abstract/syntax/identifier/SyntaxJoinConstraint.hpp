@@ -27,7 +27,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class JoinConstraint : public Identifier {
+class JoinConstraint final : public Identifier {
 #pragma mark - Lang
 public:
     Expression expression;

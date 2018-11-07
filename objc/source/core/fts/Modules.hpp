@@ -29,7 +29,7 @@ namespace WCDB {
 
 namespace FTS {
 
-class Modules {
+class Modules final {
 public:
     void addAddress(const String &name, unsigned char *address);
 

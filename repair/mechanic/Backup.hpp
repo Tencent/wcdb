@@ -32,11 +32,11 @@ namespace WCDB {
 
 namespace Repair {
 
-class Backup : public Crawlable,
-               public MasterCrawlerDelegate,
-               public SequenceCrawlerDelegate,
-               public LockerHolder,
-               public ErrorProne {
+class Backup final : public Crawlable,
+                     public MasterCrawlerDelegate,
+                     public SequenceCrawlerDelegate,
+                     public LockerHolder,
+                     public ErrorProne {
 #pragma mark - Initialize
 public:
     Backup(const String &path);
@@ -66,21 +66,21 @@ protected:
 
 #pragma mark - Crawlable
 protected:
-    void onCellCrawled(const Cell &cell) override;
-    bool willCrawlPage(const Page &page, int height) override;
-    void onCrawlerError() override;
+    void onCellCrawled(const Cell &cell) override final;
+    bool willCrawlPage(const Page &page, int height) override final;
+    void onCrawlerError() override final;
 
 #pragma mark - MasterCrawlerDelegate
 protected:
-    void onMasterCellCrawled(const Cell &cell, const Master &master) override;
-    void onMasterCrawlerError() override;
+    void onMasterCellCrawled(const Cell &cell, const Master &master) override final;
+    void onMasterCrawlerError() override final;
 
     MasterCrawler m_masterCrawler;
 
 #pragma mark - SequenceCrawlerDelegate
 protected:
-    void onSequenceCellCrawled(const Cell &cell, const Sequence &sequence) override;
-    void onSequenceCrawlerError() override;
+    void onSequenceCellCrawled(const Cell &cell, const Sequence &sequence) override final;
+    void onSequenceCrawlerError() override final;
 };
 
 } //namespace Repair

@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class StatementPragma : public TypedSyntax<Syntax::PragmaSTMT, Statement> {
+class StatementPragma final : public TypedSyntax<Syntax::PragmaSTMT, Statement> {
 public:
     StatementPragma& pragma(const Pragma& pragma);
     StatementPragma& schema(const Schema& Schema);

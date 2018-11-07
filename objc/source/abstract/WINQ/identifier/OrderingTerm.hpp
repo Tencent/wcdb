@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class OrderingTerm : public TypedSyntax<Syntax::OrderingTerm, SQL> {
+class OrderingTerm final : public TypedSyntax<Syntax::OrderingTerm, SQL> {
 public:
     using TypedSyntax<Syntax::OrderingTerm, SQL>::TypedSyntax;
 

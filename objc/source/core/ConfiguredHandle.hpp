@@ -26,7 +26,7 @@
 
 namespace WCDB {
 
-class ConfiguredHandle {
+class ConfiguredHandle final {
 public:
     ConfiguredHandle() = delete;
     ConfiguredHandle(const ConfiguredHandle &) = delete;

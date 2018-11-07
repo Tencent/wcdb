@@ -25,7 +25,7 @@
 #import <WCDB/WCTProperty.h>
 #import <map>
 
-class WCTBinding {
+class WCTBinding final {
 public:
     static const WCTBinding &bindingWithClass(Class cls);
 

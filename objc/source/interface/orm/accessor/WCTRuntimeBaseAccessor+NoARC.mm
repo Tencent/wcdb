@@ -29,6 +29,10 @@
 #error This file should be compiled without ARC to get better performance. Please use -fno-objc-arc flag on this file.
 #endif
 
+WCTRuntimeBaseAccessor::~WCTRuntimeBaseAccessor()
+{
+}
+
 SEL WCTRuntimeBaseAccessor::getGetterSelector(Class cls, const WCDB::String &propertyName)
 {
     objc_property_t objcProperty = class_getProperty(cls, propertyName.c_str());

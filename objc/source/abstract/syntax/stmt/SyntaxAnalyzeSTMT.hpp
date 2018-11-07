@@ -28,7 +28,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class AnalyzeSTMT : public Identifier {
+class AnalyzeSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     bool useSchema = false;

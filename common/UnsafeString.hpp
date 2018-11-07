@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class UnsafeString {
+class UnsafeString final {
 public:
     UnsafeString();
     UnsafeString(const char* str);

@@ -28,7 +28,7 @@ namespace WCDB {
 
 namespace Repair {
 
-class FactoryDepositor : public FactoryRelated, public ErrorProne {
+class FactoryDepositor final : public FactoryRelated, public ErrorProne {
 public:
     using FactoryRelated::FactoryRelated;
     bool work();

@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class CTETable : public TypedSyntax<Syntax::CTETableName, SQL> {
+class CTETable final : public TypedSyntax<Syntax::CTETableName, SQL> {
 public:
     using TypedSyntax<Syntax::CTETableName, SQL>::TypedSyntax;
 

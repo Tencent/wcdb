@@ -24,37 +24,66 @@
 
 namespace WCDB {
 
-SQLTraceConfig::SQLTraceConfig(const Notification &notification)
-: Config(), m_identifier(String::formatted("SQLTrace-%p", this)), m_notification(notification)
+SQLTracer::SQLTracer() : m_identifier(String::formatted("SQLTrace-%p", this))
 {
 }
 
-bool SQLTraceConfig::invoke(Handle *handle)
+SQLTracer::~SQLTracer()
+{
+}
+
+bool SQLTracer::invoke(Handle *handle)
 {
     handle->setNotificationWhenSQLTraced(m_identifier, m_notification);
     return true;
 }
 
-bool SQLTraceConfig::uninvoke(Handle *handle)
+bool SQLTracer::uninvoke(Handle *handle)
 {
     handle->setNotificationWhenSQLTraced(m_identifier, nullptr);
     return true;
 }
 
-ShareableSQLTraceConfig::ShareableSQLTraceConfig() : SQLTraceConfig(nullptr)
+void SQLTracer::setNotification(const Notification &notification)
+{
+    m_notification = notification;
+}
+
+SQLTraceConfig::SQLTraceConfig(const Notification &notification)
+{
+    setNotification(notification);
+}
+
+bool SQLTraceConfig::invoke(Handle *handle)
+{
+    return SQLTracer::invoke(handle);
+}
+
+bool SQLTraceConfig::uninvoke(Handle *handle)
+{
+    return SQLTracer::invoke(handle);
+}
+
+ShareableSQLTraceConfig::ShareableSQLTraceConfig()
 {
 }
 
 void ShareableSQLTraceConfig::setNotification(const Notification &notification)
 {
     LockGuard lockGuard(m_lock);
-    m_notification = notification;
+    SQLTracer::setNotification(notification);
 }
 
 bool ShareableSQLTraceConfig::invoke(Handle *handle)
 {
     SharedLockGuard lockGuard(m_lock);
-    return SQLTraceConfig::invoke(handle);
+    return SQLTracer::invoke(handle);
+}
+
+bool ShareableSQLTraceConfig::uninvoke(Handle *handle)
+{
+    SharedLockGuard lockGuard(m_lock);
+    return SQLTracer::uninvoke(handle);
 }
 
 } //namespace WCDB

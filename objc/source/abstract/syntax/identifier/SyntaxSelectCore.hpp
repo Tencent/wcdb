@@ -31,7 +31,7 @@ namespace Syntax {
 class ResultColumn;
 class TableOrSubquery;
 
-class SelectCore : public Identifier {
+class SelectCore final : public Identifier {
 #pragma mark - Lang
 public:
     enum class Switch {

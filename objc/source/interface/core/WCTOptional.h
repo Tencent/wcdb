@@ -22,7 +22,7 @@
 #import <type_traits>
 
 template<typename Value, Value defaultValue>
-class WCTOptional {
+class WCTOptional final {
 public:
     static_assert(std::is_default_constructible<Value>::value, "");
     static_assert(std::is_convertible<BOOL, Value>::value, "");

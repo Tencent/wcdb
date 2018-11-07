@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class FunctionInvocation : public TypedSyntax<Syntax::FunctionInvocation, SQL> {
+class FunctionInvocation final : public TypedSyntax<Syntax::FunctionInvocation, SQL> {
 public:
     using TypedSyntax<Syntax::FunctionInvocation, SQL>::TypedSyntax;
     explicit FunctionInvocation(const String& name);
