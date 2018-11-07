@@ -19,6 +19,7 @@
  */
 
 #import <WCDB/Assertion.hpp>
+#import <WCDB/Console.hpp>
 #import <WCDB/NSObject+WCTColumnCoding.h>
 
 @implementation NSObject (WCTColumnCoding)
@@ -26,7 +27,9 @@
 + (instancetype)unarchiveWithWCTValue:(NSData *)value
 {
     if (value) {
-        WCTRemedialAssert([self.class conformsToProtocol:@protocol(NSCoding)], "Class should conform to NSCoding or WCTColumnCoding.", return nil;);
+        if (WCDB::Console::debuggable()) {
+            WCTRemedialAssert([self.class conformsToProtocol:@protocol(NSCoding)], "Class should conform to NSCoding or WCTColumnCoding.", return nil;);
+        }
         return [NSKeyedUnarchiver unarchiveObjectWithData:value];
     }
     return nil;
@@ -34,7 +37,9 @@
 
 - (NSData *)archivedWCTValue
 {
-    WCTRemedialAssert([self.class conformsToProtocol:@protocol(NSCoding)], "Class should conform to NSCoding or WCTColumnCoding.", return nil;);
+    if (WCDB::Console::debuggable()) {
+        WCTRemedialAssert([self.class conformsToProtocol:@protocol(NSCoding)], "Class should conform to NSCoding or WCTColumnCoding.", return nil;);
+    }
     return [NSKeyedArchiver archivedDataWithRootObject:self];
 }
 

@@ -23,8 +23,8 @@
 
 #include <WCDB/Console.hpp>
 
-// Inner assert is for WCDB debugging only, which will be removed when released.
-// Remedial assertion will abort or result in error when it's Console::debuggable() accoding to the configuration
+// Inner assert is for WCDB debugging only, which will be removed when released. It ensures that the correctness of WCDB's code.
+// Remedial assertion will abort or result in error when it's Console::debuggable() accoding to the configuration. It is used to ensure that the app does not crash due to incorrect usage by developers.
 
 #ifdef DEBUG
 
@@ -40,7 +40,6 @@
 
 #endif // DEBUG
 
-#warning TODO check all assertion to confirm their correctness
 #define WCTRemedialAssert(cond, message, remedial)                             \
     if (!(cond)) {                                                             \
         WCDB::Console::fatal((message), __FILE__, __LINE__);                   \

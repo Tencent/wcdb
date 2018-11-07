@@ -65,7 +65,7 @@ RecyclableDatabase DatabasePool::get(const String &path)
 
 RecyclableDatabase DatabasePool::get(const Tag &tag)
 {
-    WCTRemedialAssert(tag != Tag::invalid(), "Tag invalid", return nullptr;);
+    WCTRemedialAssert(tag != Tag::invalid(), "Tag invalid.", return nullptr;);
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_databases.end();
     for (iter = m_databases.begin(); iter != m_databases.end(); ++iter) {

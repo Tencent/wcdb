@@ -44,7 +44,7 @@ FileHandle::FileHandle(FileHandle &&other)
 FileHandle::~FileHandle()
 {
     WCTRemedialAssert(!isOpened() || m_mode != Mode::OverWrite,
-                      "Close should be call manually to sync file.",
+                      "Close should be called manually to sync file.",
                       ;);
     close();
 }

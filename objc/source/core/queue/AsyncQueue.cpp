@@ -37,7 +37,8 @@ AsyncQueue::~AsyncQueue()
         // wait until done
         m_cond.wait_for(lockGuard, std::chrono::seconds(10));
     }
-    WCTRemedialAssert(!m_running, String::formatted("Queue: %s does not exit on time."), ;);
+    WCTRemedialAssert(
+    !m_running, String::formatted("Queue: %s does not exit on time.", name.c_str()), ;);
 }
 
 void AsyncQueue::run()
