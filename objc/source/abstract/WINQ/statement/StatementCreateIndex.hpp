@@ -31,7 +31,7 @@ public:
     StatementCreateIndex& schema(const Schema& schema);
     StatementCreateIndex& unique();
     StatementCreateIndex& ifNotExists();
-    StatementCreateIndex& onTable(const String& table);
+    StatementCreateIndex& table(const String& table);
 
     StatementCreateIndex& indexed(const IndexedColumn& indexedColumn);
     StatementCreateIndex& where(const Expression& condition);

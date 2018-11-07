@@ -46,7 +46,7 @@ StatementCreateIndex& StatementCreateIndex::ifNotExists()
     return *this;
 }
 
-StatementCreateIndex& StatementCreateIndex::onTable(const String& table)
+StatementCreateIndex& StatementCreateIndex::table(const String& table)
 {
     syntax().table = table;
     return *this;
