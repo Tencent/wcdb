@@ -31,13 +31,16 @@
 
 - (void)tearDown
 {
-    [super tearDown];
+    [_database close];
+    [_database invalidate];
+    _database = nil;
     [self cleanDirectory];
+    [super tearDown];
 }
 
 - (NSString*)path
 {
-    return [self.directory stringByAppendingPathComponent:@"database"];
+    return [self.directory stringByAppendingPathComponent:@"testDatabase"];
 }
 
 @end

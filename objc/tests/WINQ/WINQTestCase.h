@@ -145,8 +145,6 @@ constexpr const char *Enum::description(const Syntax::Identifier::Type &type)
 
 + (std::list<WCDB::Syntax::Identifier::Type>)getTypes:(WCDB::SQL &)sql;
 
-+ (NSString *)hint:(NSString *)description expecting:(NSString *)expected;
-
 + (NSString *)hintForTypes:(const std::list<WCDB::Syntax::Identifier::Type> &)types expecting:(const std::list<WCDB::Syntax::Identifier::Type> &)expected;
 
 @end

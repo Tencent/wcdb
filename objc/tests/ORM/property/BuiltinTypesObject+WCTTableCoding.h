@@ -18,25 +18,30 @@
  * limitations under the License.
  */
 
+#import "BuiltinTypesObject.h"
 #import <WCDB/WCDB.h>
-#import <XCTest/XCTest.h>
 
-@interface TestCase : XCTestCase
+@interface BuiltinTypesObject (WCTTableCoding) <WCTTableCoding>
 
-@property (nonatomic, readonly) NSString* root;
+WCDB_PROPERTY(intValue)
+WCDB_PROPERTY(unsignedIntValue)
+WCDB_PROPERTY(int32Value)
+WCDB_PROPERTY(int64Value)
+WCDB_PROPERTY(uint32Value)
+WCDB_PROPERTY(uint64Value)
+WCDB_PROPERTY(integerValue)
+WCDB_PROPERTY(uintegerValue)
 
-@property (nonatomic, readonly) NSString* directory;
+WCDB_PROPERTY(floatValue)
+WCDB_PROPERTY(doubleValue)
+WCDB_PROPERTY(numberValue)
+WCDB_PROPERTY(dateValue)
 
-@property (nonatomic, readonly) NSString* testName;
+WCDB_PROPERTY(cstringValue)
+WCDB_PROPERTY(cppStringValue)
+WCDB_PROPERTY(stringValue)
 
-@property (nonatomic, readonly) NSString* className;
-
-@property (nonatomic, readonly) NSFileManager* fileManager;
-
-- (void)refreshDirectory;
-
-- (void)cleanDirectory;
-
-+ (NSString*)hint:(NSString*)description expecting:(NSString*)expected;
+WCDB_PROPERTY(dataValue)
+WCDB_PROPERTY(codingValue)
 
 @end

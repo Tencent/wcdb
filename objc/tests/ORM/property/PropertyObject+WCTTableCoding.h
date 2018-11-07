@@ -18,25 +18,14 @@
  * limitations under the License.
  */
 
+#import "PropertyObject.h"
 #import <WCDB/WCDB.h>
-#import <XCTest/XCTest.h>
 
-@interface TestCase : XCTestCase
+@interface PropertyObject (WCTTableCoding) <WCTTableCoding>
 
-@property (nonatomic, readonly) NSString* root;
-
-@property (nonatomic, readonly) NSString* directory;
-
-@property (nonatomic, readonly) NSString* testName;
-
-@property (nonatomic, readonly) NSString* className;
-
-@property (nonatomic, readonly) NSFileManager* fileManager;
-
-- (void)refreshDirectory;
-
-- (void)cleanDirectory;
-
-+ (NSString*)hint:(NSString*)description expecting:(NSString*)expected;
+WCDB_PROPERTY(property)
+WCDB_PROPERTY(propertyWithDifferentName)
+WCDB_PROPERTY(propertyWithDefaultValue)
+WCDB_PROPERTY(propertyWithDifferentNameAndDefaultValue)
 
 @end

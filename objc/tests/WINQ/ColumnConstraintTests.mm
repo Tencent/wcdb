@@ -149,15 +149,6 @@
     WINQAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint CHECK(1)");
 }
 
-- (void)test_default_value
-{
-    auto testingSQL = WCDB::ColumnConstraint(name).default_(defaultValue);
-
-    auto testingTypes = { WCDB::SQL::Type::ColumnConstraint, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint DEFAULT 1");
-}
-
 - (void)test_default_expression
 {
     auto testingSQL = WCDB::ColumnConstraint(name).default_(defaultExpression);

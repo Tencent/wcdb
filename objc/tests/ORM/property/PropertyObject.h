@@ -18,25 +18,13 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDB.h>
-#import <XCTest/XCTest.h>
+#import <Foundation/Foundation.h>
 
-@interface TestCase : XCTestCase
+@interface PropertyObject : NSObject
 
-@property (nonatomic, readonly) NSString* root;
-
-@property (nonatomic, readonly) NSString* directory;
-
-@property (nonatomic, readonly) NSString* testName;
-
-@property (nonatomic, readonly) NSString* className;
-
-@property (nonatomic, readonly) NSFileManager* fileManager;
-
-- (void)refreshDirectory;
-
-- (void)cleanDirectory;
-
-+ (NSString*)hint:(NSString*)description expecting:(NSString*)expected;
+@property (nonatomic, assign) int property ;
+@property (nonatomic, assign) int propertyWithDifferentName;
+@property (nonatomic, assign) int propertyWithDefaultValue;
+@property (nonatomic, assign) int propertyWithDifferentNameAndDefaultValue;
 
 @end

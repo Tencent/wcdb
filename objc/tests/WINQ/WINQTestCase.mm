@@ -22,6 +22,12 @@
 
 @implementation WINQTestCase
 
+- (void)setUp
+{
+    [super setUp];
+    self.continueAfterFailure = YES;
+}
+
 + (std::list<WCDB::Syntax::Identifier::Type>)getTypes:(WCDB::SQL&)sql
 {
     std::list<WCDB::Syntax::Identifier::Type> types;
@@ -31,18 +37,6 @@
     },
                 &types);
     return types;
-}
-
-+ (NSString*)hint:(NSString*)description expecting:(NSString*)expected
-{
-    return [NSString stringWithFormat:
-                     @"\nexpect [%@]"
-                      "\n___but [%@]"
-                      "\n__from [%@]",
-                     expected,
-                     description,
-                     [description commonPrefixWithString:expected
-                                                 options:NSCaseInsensitiveSearch]];
 }
 
 + (NSString*)getTypesDescription:(const std::list<WCDB::Syntax::Identifier::Type>&)types

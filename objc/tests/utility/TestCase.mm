@@ -22,17 +22,6 @@
 
 @implementation TestCase
 
-+ (void)initialize
-{
-    srand((unsigned int) time(NULL));
-}
-
-- (void)setUp
-{
-    [super setUp];
-    self.continueAfterFailure = YES;
-}
-
 - (NSString *)testName
 {
     NSString *name = self.name;
@@ -75,6 +64,18 @@
 - (NSFileManager *)fileManager
 {
     return [NSFileManager defaultManager];
+}
+
++ (NSString *)hint:(NSString *)description expecting:(NSString *)expected
+{
+    return [NSString stringWithFormat:
+                     @"\nexpect [%@]"
+                      "\n___but [%@]"
+                      "\n__from [%@]",
+                     expected,
+                     description,
+                     [description commonPrefixWithString:expected
+                                                 options:NSCaseInsensitiveSearch]];
 }
 
 @end

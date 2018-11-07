@@ -18,25 +18,10 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDB.h>
-#import <XCTest/XCTest.h>
+#import "SingleTableTestCase.h"
 
-@interface TestCase : XCTestCase
+@interface ORMTestCase : SingleTableTestCase
 
-@property (nonatomic, readonly) NSString* root;
-
-@property (nonatomic, readonly) NSString* directory;
-
-@property (nonatomic, readonly) NSString* testName;
-
-@property (nonatomic, readonly) NSString* className;
-
-@property (nonatomic, readonly) NSFileManager* fileManager;
-
-- (void)refreshDirectory;
-
-- (void)cleanDirectory;
-
-+ (NSString*)hint:(NSString*)description expecting:(NSString*)expected;
+- (BOOL)checkCreateTableAndIndexSQLsAsExpected:(NSArray<NSString*>*)expected;
 
 @end
