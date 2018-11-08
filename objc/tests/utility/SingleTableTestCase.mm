@@ -44,7 +44,7 @@
     if (_tableClass == nil) {
         return nil;
     }
-    if ([self.database createVirtualTable:_tableName withClass:_tableClass]) {
+    if (![self.database createVirtualTable:_tableName withClass:_tableClass]) {
         return nil;
     }
     return [self.database getTable:_tableName withClass:_tableClass];
