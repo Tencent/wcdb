@@ -35,7 +35,7 @@
 - (id /* WCTObject* */)getObjectOfClass:(Class)cls
                               fromTable:(NSString *)tableName
 {
-    return [[[[[self prepareSelect] ofClass:cls] fromTable:tableName] invalidateWhenUsedUp] nextObject];
+    return [[[[[[self prepareSelect] ofClass:cls] fromTable:tableName] limit:1] invalidateWhenUsedUp] nextObject];
 }
 
 - (id /* WCTObject* */)getObjectOfClass:(Class)cls

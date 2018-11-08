@@ -443,7 +443,7 @@
     WCTHandleAssert(return nil;);
     Class cls = resultColumns.front().getColumnBinding().getClass();
     WCTObject *object = [[cls alloc] init];
-    int index = 1;
+    int index = 0;
     for (const auto &resultColumn : resultColumns) {
         [self extractValueAtIndex:index toColumnBindingHolder:resultColumn ofObject:object];
         ++index;

@@ -110,6 +110,10 @@
 
     WCTInnerAssert(autoIncrements.size() == properties.size());
     return [_handle runNestedTransaction:^BOOL(WCTHandle *handle) {
+        if (![handle prepare:self->_statement]) {
+            return NO;
+        }
+        BOOL failed = NO;
         int index = 1;
         BOOL canFillLastInsertedRowID = [self->_values.firstObject respondsToSelector:@selector(lastInsertedRowID)];
         for (WCTObject *value in self->_values) {
@@ -126,7 +130,8 @@
                 ++index;
             }
             if (![handle step]) {
-                return NO; // rollback
+                failed = NO; // rollback
+                break;
             }
             if (isAutoIncrement && canFillLastInsertedRowID) {
                 value.lastInsertedRowID = [handle getLastInsertedRowID];
@@ -134,7 +139,7 @@
             [handle reset];
         }
         [handle finalizeStatement];
-        return YES;
+        return !failed;
     }];
 }
 
