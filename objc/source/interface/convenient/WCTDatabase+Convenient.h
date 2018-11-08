@@ -21,44 +21,10 @@
 #import <WCDB/WCTConvenient.h>
 #import <WCDB/WCTDatabase.h>
 
-@interface WCTDatabase (ConvenientSelect) <WCTConvenientSelect>
+NS_ASSUME_NONNULL_BEGIN
+
+@interface WCTDatabase (Convenient) <WCTConvenient>
 
 @end
 
-@interface WCTDatabase (ConvenientPartialSelect) <WCTConvenientPartialSelect>
-
-@end
-
-@interface WCTDatabase (ConvenientRowSelect) <WCTConvenientRowSelect>
-
-@end
-
-@interface WCTDatabase (ConvenientInsert) <WCTConvenientInsert>
-
-@end
-
-@interface WCTDatabase (
-ConvenientInsertOrReplace) <WCTConvenientInsertOrReplace>
-
-@end
-
-@interface WCTDatabase (ConvenientPartialInsert) <WCTConvenientPartialInsert>
-
-@end
-
-@interface WCTDatabase (
-ConvenientPartialInsertOrReplace) <WCTConvenientPartialInsertOrReplace>
-
-@end
-
-@interface WCTDatabase (ConvenientUpdate) <WCTConvenientUpdate>
-
-@end
-
-@interface WCTDatabase (ConvenientRowUpdate) <WCTConvenientRowUpdate>
-
-@end
-
-@interface WCTDatabase (ConvenientDelete) <WCTConvenientDelete>
-
-@end
+NS_ASSUME_NONNULL_END

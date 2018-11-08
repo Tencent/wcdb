@@ -23,45 +23,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCTHandle (ConvenientSelect) <WCTConvenientSelect>
-
-@end
-
-@interface WCTHandle (ConvenientPartialSelect) <WCTConvenientPartialSelect>
-
-@end
-
-@interface WCTHandle (ConvenientRowSelect) <WCTConvenientRowSelect>
-
-@end
-
-@interface WCTHandle (ConvenientInsert) <WCTConvenientInsert>
-
-@end
-
-@interface WCTHandle (
-WCTConvenientInsertOrReplace) <WCTConvenientInsertOrReplace>
-
-@end
-
-@interface WCTHandle (ConvenientPartialInsert) <WCTConvenientPartialInsert>
-
-@end
-
-@interface WCTHandle (
-WCTConvenientPartialInsertOrReplace) <WCTConvenientPartialInsertOrReplace>
-
-@end
-
-@interface WCTHandle (ConvenientUpdate) <WCTConvenientUpdate>
-
-@end
-
-@interface WCTHandle (ConvenientRowUpdate) <WCTConvenientRowUpdate>
-
-@end
-
-@interface WCTHandle (ConvenientDelete) <WCTConvenientDelete>
+@interface WCTHandle (Convenient) <WCTConvenient>
 
 @end
 

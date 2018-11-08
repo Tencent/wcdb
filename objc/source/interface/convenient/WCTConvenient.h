@@ -22,7 +22,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol WCTConvenientSelect
+@protocol WCTConvenient
 #pragma mark - Get Object
 - (nullable id /* WCTObject* */)getObjectOfClass:(Class)cls
                                        fromTable:(NSString *)tableName;
@@ -120,10 +120,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                     orders:(const WCDB::OrderingTerms &)orders
                                                      limit:(const WCDB::Expression &)limit
                                                     offset:(const WCDB::Expression &)offset;
-@end
 
-#pragma mark -
-@protocol WCTConvenientPartialSelect
 #pragma mark - Get Part Of Object
 - (nullable id /* WCTObject* */)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
                                                fromTable:(NSString *)tableName;
@@ -221,9 +218,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                             orders:(const WCDB::OrderingTerms &)orders
                                                              limit:(const WCDB::Expression &)limit
                                                             offset:(const WCDB::Expression &)offset;
-@end
 
-@protocol WCTConvenientRowSelect
 #pragma mark - Get One Row
 - (nullable WCTOneRow *)getRowOnResults:(const WCTResultColumns &)resultColumns
                               fromTable:(NSString *)tableName;
@@ -420,30 +415,20 @@ NS_ASSUME_NONNULL_BEGIN
                                          limit:(const WCDB::Expression &)limit
                                         offset:(const WCDB::Expression &)offset;
 
-@end
-
-#pragma mark -
-@protocol WCTConvenientInsert
 #pragma mark - Insert
 - (BOOL)insertObject:(WCTObject *)object
            intoTable:(NSString *)tableName;
 
 - (BOOL)insertObjects:(NSArray<WCTObject *> *)objects
             intoTable:(NSString *)tableName;
-@end
 
-#pragma mark -
-@protocol WCTConvenientInsertOrReplace
 #pragma mark - Insert or Replace
 - (BOOL)insertOrReplaceObject:(WCTObject *)object
                     intoTable:(NSString *)tableName;
 
 - (BOOL)insertOrReplaceObjects:(NSArray<WCTObject *> *)objects
                      intoTable:(NSString *)tableName;
-@end
 
-#pragma mark -
-@protocol WCTConvenientPartialInsert
 #pragma mark - Partial Insert
 - (BOOL)insertObject:(WCTObject *)object
         onProperties:(const WCTProperties &)properties
@@ -452,10 +437,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)insertObjects:(NSArray<WCTObject *> *)objects
          onProperties:(const WCTProperties &)properties
             intoTable:(NSString *)tableName;
-@end
 
-#pragma mark -
-@protocol WCTConvenientPartialInsertOrReplace
 #pragma mark - Partial Insert or Replace
 - (BOOL)insertOrReplaceObject:(WCTObject *)object
                  onProperties:(const WCTProperties &)properties
@@ -464,10 +446,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)insertOrReplaceObjects:(NSArray<WCTObject *> *)objects
                   onProperties:(const WCTProperties &)properties
                      intoTable:(NSString *)tableName;
-@end
 
-#pragma mark -
-@protocol WCTConvenientUpdate
 #pragma mark - Update Properties With Object
 - (BOOL)updateTable:(NSString *)tableName
       setProperties:(const WCTProperties &)properties
@@ -529,10 +508,7 @@ NS_ASSUME_NONNULL_BEGIN
              orders:(const WCDB::OrderingTerms &)orders
               limit:(const WCDB::Expression &)limit
              offset:(const WCDB::Expression &)offset;
-@end
 
-#pragma mark -
-@protocol WCTConvenientRowUpdate
 #pragma mark - Update Properties With Row
 - (BOOL)updateTable:(NSString *)tableName
       setProperties:(const WCTProperties &)properties
@@ -656,10 +632,7 @@ NS_ASSUME_NONNULL_BEGIN
              orders:(const WCDB::OrderingTerms &)orders
               limit:(const WCDB::Expression &)limit
              offset:(const WCDB::Expression &)offset;
-@end
 
-#pragma mark -
-@protocol WCTConvenientDelete
 #pragma mark - Delete
 - (BOOL)deleteFromTable:(NSString *)tableName;
 
@@ -701,6 +674,7 @@ NS_ASSUME_NONNULL_BEGIN
                  orders:(const WCDB::OrderingTerms &)orders
                   limit:(const WCDB::Expression &)limit
                  offset:(const WCDB::Expression &)offset;
+
 @end
 
 NS_ASSUME_NONNULL_END
