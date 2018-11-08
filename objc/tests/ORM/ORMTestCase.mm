@@ -56,6 +56,13 @@
 #import "TableConstraintObject+WCTTableCoding.h"
 #import "TableConstraintObject.h"
 
+typedef NS_ENUM(NSUInteger, ORMTestCaseState) {
+    ORMTestCaseStateNotStarted,
+    ORMTestCaseStateTesting,
+    ORMTestCaseStateTested,
+    ORMTestCaseStateFailed,
+};
+
 @implementation ORMTestCase
 
 + (void)initialize
@@ -87,66 +94,80 @@
 
 - (BOOL)checkCreateTableAndIndexSQLsAsExpected:(NSArray<NSString*>*)expected
 {
-    if (expected.count == 0) {
-        return NO;
-    }
-    __block BOOL failed = NO;
-    __block BOOL start = NO;
+    __block ORMTestCaseState state = ORMTestCaseStateNotStarted;
+    do {
+        if (expected.count == 0) {
+            state = ORMTestCaseStateFailed;
+            break;
+        }
 
-    NSMutableArray* sqls = [NSMutableArray array];
-    [sqls addObject:@"BEGIN IMMEDIATE"];
-    [sqls addObjectsFromArray:expected];
-    [sqls addObject:@"COMMIT"];
+        NSMutableArray* sqls = [NSMutableArray array];
+        [sqls addObject:@"BEGIN IMMEDIATE"];
+        [sqls addObjectsFromArray:expected];
+        [sqls addObject:@"COMMIT"];
 
-    [self.database traceSQL:^(NSString* sql) {
-        if (start && !failed) {
+        [self.database traceSQL:^(NSString* sql) {
+            if (state != ORMTestCaseStateTesting) {
+                return;
+            }
             //Test sql and expect exactly the same, including order and count
             if ([sqls.firstObject isEqualToString:sql]) {
                 [sqls removeObjectAtIndex:0];
             } else {
                 NSLog(@"Failed: %@", [TestCase hint:sql expecting:sqls.firstObject]);
-                failed = YES;
+                state = ORMTestCaseStateFailed;
             }
+        }];
+        if (![self.database canOpen]) {
+            state = ORMTestCaseStateFailed;
+            break;
         }
-    }];
-    if (![self.database canOpen]) {
-        return NO;
-    }
-    start = YES;
-    if (![self createTable]) {
-        failed = YES;
-    }
-    return !failed && sqls.count == 0;
+        state = ORMTestCaseStateTesting;
+        if (![self createTable]) {
+            state = ORMTestCaseStateFailed;
+            break;
+        }
+        if (state == ORMTestCaseStateTesting
+            && sqls.count == 0) {
+            state = ORMTestCaseStateTested;
+        }
+    } while (false);
+    [self.database traceSQL:nil];
+    return state == ORMTestCaseStateTested;
 }
 
 - (BOOL)checkCreateVirtualTableSQLAsExpected:(NSString*)expected
 {
-    if (expected == nil) {
-        return NO;
-    }
-    __block BOOL failed = NO;
-    __block BOOL start = NO;
-    __block BOOL tested = NO;
-
-    [self.database traceSQL:^(NSString* sql) {
-        if (start && !failed && !tested) {
+    __block ORMTestCaseState state = ORMTestCaseStateNotStarted;
+    do {
+        if (expected.length == 0) {
+            state = ORMTestCaseStateFailed;
+            break;
+        }
+        [self.database traceSQL:^(NSString* sql) {
+            if (state != ORMTestCaseStateTesting) {
+                return;
+            }
             //Test sql and expect exactly the same, including order and count
             if ([expected isEqualToString:sql]) {
-                tested = YES;
+                state = ORMTestCaseStateTested;
             } else {
                 NSLog(@"Failed: %@", [TestCase hint:sql expecting:expected]);
-                failed = YES;
+                state = ORMTestCaseStateFailed;
             }
+        }];
+        if (![self.database canOpen]) {
+            state = ORMTestCaseStateFailed;
+            break;
         }
-    }];
-    if (![self.database canOpen]) {
-        return NO;
-    }
-    start = YES;
-    if (![self createVirtualTable]) {
-        failed = YES;
-    }
-    return !failed && tested;
+        state = ORMTestCaseStateTesting;
+        if (![self createVirtualTable]) {
+            state = ORMTestCaseStateFailed;
+            break;
+        }
+    } while (false);
+    [self.database traceSQL:nil];
+    return state == ORMTestCaseStateTested;
 }
 
 #pragma mark - property

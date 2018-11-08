@@ -26,8 +26,8 @@
 
 @property (retain, nonatomic) Class tableClass;
 
-- (BOOL)createTable;
+- (WCTTable*)createTable;
 
-- (BOOL)createVirtualTable;
+- (WCTTable*)createVirtualTable;
 
 @end
