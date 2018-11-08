@@ -1,0 +1,486 @@
+
+buildscript {
+    repositories { jcenter() }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+    }
+}
+
+def extensionClass
+
+// Detect supported plugin modules
+if (plugins.hasPlugin('com.android.library')) {
+    // Android library mode
+    extensionClass = WeChatAndroidLibraryPublishExtension.class
+} else if (plugins.hasPlugin('java')) {
+    // Java library mode
+    extensionClass = WeChatJavaLibraryPublishExtension.class
+} else {
+    // TODO: Support more languages
+    throw new GradleException('This plugin must be applied after "java" or "com.android.library" plugin')
+}
+
+// Register wechatPublish extension
+extensions.create('wechatPublish', extensionClass, project)
+ext.artifactId = name
+
+class WeChatPublishExtension {
+
+    boolean isSnapshot = true
+    private String versionSuffix = ''
+    boolean withJavadoc = true
+    boolean withSources = true
+    boolean withNativeSymbols = true
+
+    boolean publishToBintray = false
+
+    boolean publishAllVariants = false
+    HashSet<String> publishVariants = []
+
+    private final Project project
+    private boolean usedDefaultIsSnapshot = true
+
+    private final ArrayList<Closure> bintrayConfigureClosures = []
+    private final ArrayList<Closure> mavenPublishClosures = []
+
+
+    WeChatPublishExtension(Project proj) {
+        project = proj
+        fillDefaultConfiguration()
+        proj.afterEvaluate { this.publish() }
+    }
+
+    protected void publish() {
+        // Load local gradle script
+        def localScriptFile = project.file('local.gradle')
+        if (localScriptFile.file) {
+            project.apply from: localScriptFile
+        } else {
+            localScriptFile = project.rootProject.file('local.gradle')
+            if (localScriptFile.file)
+                project.apply from: localScriptFile
+        }
+
+        // Verify configuration values
+        verifyPublishConfiguration()
+
+        // Emit Maven and/or bintray DSL
+        // Apply plugins if not done already
+        if (!project.plugins.hasPlugin('maven-publish')) {
+            project.plugins.apply('maven-publish')
+        }
+        emitPublicationDSL(project)
+        emitRepositoryDSL(project)
+    }
+
+    void bintrayPackage(Closure cl) {
+        if (cl != null)
+            bintrayConfigureClosures << cl
+    }
+
+    void publishToMaven(Closure cl) {
+        if (cl != null)
+            mavenPublishClosures << cl
+    }
+
+    void publishToBintray(Closure cl) {
+        if (cl != null) {
+            publishToBintray = true
+            bintrayConfigureClosures << cl
+        }
+    }
+
+    protected void fillDefaultConfiguration() {
+        isSnapshot = !project.rootProject.hasProperty('release')
+        if (project.rootProject.hasProperty('versionSuffix'))
+            versionSuffix = project.rootProject.versionSuffix
+    }
+
+    private void verifyPublishConfiguration() {
+        // Warn default artifactId, groupId, version
+        if (groupId.empty) {
+            groupId = 'com.tencent.mm'
+            System.err.println "groupId not specified, used default value: ${groupId}"
+        }
+
+        if (version == 'unspecified') {
+            version = '0.1'
+            System.err.println "version not specified, used default value: ${version}"
+        }
+        version += versionSuffix
+        checkVersion()
+
+        if (!usedDefaultIsSnapshot) {
+            System.err.println 'isSnapshot should be avoided in build scripts.'
+        }
+
+        if (isSnapshot) {
+            // Bintray does not allow SNAPSHOT publish
+            publishToBintray = false
+
+            // Append '-SNAPSHOT' to snapshot version
+            if (!version.endsWith('-SNAPSHOT')) {
+                version += '-SNAPSHOT'
+            }
+        }
+    }
+
+    private void checkVersion() {
+        if (!(version ==~ /\d+\.\d+(?:\.\d+)?(?:\.\d+)?(?:-[\w-]+)?/)) {
+            def message = "Invalid version: ${version}"
+            if (!isSnapshot)
+                throw new GradleException(message)
+            System.err.println(message)
+        }
+    }
+
+    final protected String getPublicationName() {
+        String result = ""
+        artifactId.split("[-_]").each { result += it.capitalize() }
+        return result.uncapitalize()
+    }
+
+    protected void emitPublicationDSL(Project project) {}
+
+    private void emitRepositoryDSL(Project project) {
+        mavenPublishClosures.each { cl ->
+            project.publishing.repositories {
+                maven {
+                    cl.delegate = delegate
+                    cl()
+                }
+            }
+        }
+
+        if (publishToBintray) {
+            if (!project.plugins.hasPlugin('com.jfrog.bintray')) {
+                project.plugins.apply('com.jfrog.bintray')
+            }
+
+            if (!project.hasProperty('BINTRAY_USER') ||
+                    !project.hasProperty('BINTRAY_APIKEY')) {
+                throw new GradleException('BINTRAY_USER and BINTRAY_APIKEY must be specified')
+            }
+            def bintrayUser = project.property('BINTRAY_USER')
+            def bintrayKey = project.property('BINTRAY_APIKEY')
+
+            // Emit bintray DSL
+            project.bintray {
+                user = bintrayUser
+                key = bintrayKey
+                publications = [publicationName]
+
+                publish = true
+                override = true
+
+                pkg {
+                    // Default values, can be changed
+                    name = project.rootProject.name
+                    repo = project.artifactId
+                    vcsUrl = ''
+                    licenses = []
+
+                    version {
+                        name = project.version
+                        released = new Date()
+                    }
+
+                    bintrayConfigureClosures.each {
+                        it.delegate = delegate
+                        it()
+                    }
+                }
+            }
+        }
+    }
+
+    String getArtifactId() {
+        return project.artifactId
+    }
+
+    void setArtifactId(String id) {
+        project.artifactId = id
+    }
+
+    String getGroupId() {
+        return project.group
+    }
+
+    void setGroupId(String id) {
+        project.group = id
+    }
+
+    String getVersion() {
+        return project.version
+    }
+
+    void setVersion(String ver) {
+        project.version = ver
+    }
+
+    void setIsSnapshot(boolean v) {
+        isSnapshot = v
+        usedDefaultIsSnapshot = false
+    }
+}
+
+class WeChatJavaLibraryPublishExtension extends WeChatPublishExtension {
+
+    WeChatJavaLibraryPublishExtension(Project project) {
+        super(project)
+    }
+
+    @Override
+    protected void emitPublicationDSL(Project project) {
+        HashSet<Task> publishDepends = []
+
+        def sourcesJarTask = project.task('sourcesJar', type: Jar) {
+            classifier = 'sources'
+
+            def srcDirs = []
+            def sources = project.sourceSets.main
+            ['java', 'groovy', 'scala', 'kotlin'].each {
+                if (sources.hasProperty(it))
+                    srcDirs << sources[it].srcDirs
+            }
+
+            from srcDirs
+        }
+
+        def javadocTask = (project.tasks.findByName('javadoc') as Javadoc).tap {
+            dependsOn project.configurations.doclava
+
+            title = null
+            options {
+                memberLevel = JavadocMemberLevel.PUBLIC
+                doclet = 'com.google.doclava.Doclava'
+                docletpath = [project.rootProject.file('gradle/doclava-1.0.6.jar')]
+                //docletpath = project.configurations.doclava.files as List
+            }
+        }
+        def javadocJarTask = project.task('javadocJar', type: Jar) {
+            dependsOn javadocTask
+            classifier = 'javadoc'
+            from javadocTask.destinationDir
+        }
+        // TODO: upload javadoc to documentation site
+
+        project.publishing.publications {
+            "${publicationName}" (MavenPublication) {
+                from project.components.java
+                publishDepends << project.tasks.findByName('jar')
+
+                groupId this.groupId
+                artifactId this.artifactId
+                version this.version
+
+                // Emit sourcesJar task
+                if (withSources) {
+                    artifact sourcesJarTask
+                    publishDepends << sourcesJarTask
+                }
+
+                // Emit javadocJar task
+                if (withJavadoc) {
+                    artifact javadocJarTask
+                    publishDepends << javadocJarTask
+                }
+            }
+        }
+
+        project.afterEvaluate {
+            project.tasks.withType(AbstractPublishToMaven) {
+                if (publication.name == publicationName) {
+                    dependsOn publishDepends
+                }
+            }
+        }
+    }
+}
+
+class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
+
+    WeChatAndroidLibraryPublishExtension(Project project) {
+        super(project)
+    }
+
+    @Override
+    protected void emitPublicationDSL(Project project) {
+        HashSet<Task> publishDepends = new HashSet<>()
+        def android = project.android
+        def hasReleaseVariant = false
+        //def androidJarPath = "${android.sdkDirectory}/platforms/" +
+        //        "${android.compileSdkVersion}/android.jar"
+
+        project.publishing.publications {
+            "${publicationName}"(MavenPublication) {
+                groupId this.groupId
+                artifactId this.artifactId
+                version this.version
+
+                pom {
+                    packaging 'aar'
+
+                    withXml {
+                        // Resolve dependencies
+                        final depsNode = asNode().appendNode('dependencies')
+                        final addDep = { Dependency dep, String scope ->
+                            if (dep.group == null || dep.version == null || dep.name == null
+                                    || dep.name == "unspecified")
+                                return // ignore invalid dependencies
+
+                            // Determine actual artifactId for the dependency
+                            def artifactId = dep.name
+                            if (dep instanceof ProjectDependency) {
+                                def p = (dep as ProjectDependency).dependencyProject
+                                if (p.hasProperty('artifactId'))
+                                    artifactId = p.property('artifactId')
+                            }
+
+                            def node = depsNode.appendNode('dependency')
+                            node.appendNode('groupId', dep.group)
+                            node.appendNode('artifactId', artifactId)
+                            node.appendNode('version', dep.version)
+                            node.appendNode('scope', scope)
+
+                            if (!dep.transitive) {
+                                // If this dependency is transitive, we should force exclude all its dependencies them from the POM
+                                final exclusionNode = node.appendNode('exclusions').appendNode('exclusion')
+                                exclusionNode.appendNode('groupId', '*')
+                                exclusionNode.appendNode('artifactId', '*')
+                            } else if (!dep.properties.excludeRules.empty) {
+                                // Otherwise add specified exclude rules
+                                final exclusionNode = node.appendNode('exclusions').appendNode('exclusion')
+                                dep.properties.excludeRules.each { ExcludeRule rule ->
+                                    exclusionNode.appendNode('groupId', rule.group ?: '*')
+                                    exclusionNode.appendNode('artifactId', rule.module ?: '*')
+                                }
+                            }
+                        }
+
+                        [
+                                'compile':          'compile',
+                                'api':              'compile',
+                                'implementation':   'runtime',
+                                'compileOnly':      'compile',
+                                'runtimeOnly':      'runtime'
+                        ].each { conf, scope ->
+                            project.configurations[conf].allDependencies.each { addDep(it, scope) }
+                        }
+                    }
+                }
+            }
+        }
+
+        android.libraryVariants.all { variant ->
+            def variantName = variant.name
+            def cVariantName = variantName.capitalize()
+
+            def generateSourcesTask = project.tasks.findByName("generate${cVariantName}Sources")
+
+            def javadocTask = project.task("javadoc${cVariantName}", type: Javadoc) {
+                group = 'documentation'
+                title = null
+
+                def classpathFiles = project.files(android.getBootClasspath().join(File.pathSeparator))
+                classpathFiles += project.files(project.configurations.compile)
+                doFirst { classpath += classpathFiles }
+
+                source = variant.javaCompile.source
+                options {
+                    memberLevel = JavadocMemberLevel.PUBLIC
+                    doclet = 'com.google.doclava.Doclava'
+                    docletpath = [project.rootProject.file('gradle/doclava-1.0.6.jar')]
+                    //docletpath = project.configurations.doclava.files as List
+                }
+                destinationDir = project.file("${project.buildDir}/docs/javadoc")
+                exclude '**/BuildConfig.java'
+                exclude '**/R.java'
+                failOnError false
+
+                dependsOn generateSourcesTask
+            }
+
+            def javadocJarTask = project.task("javadocJar${cVariantName}", type: Jar) {
+                classifier = 'javadoc'
+                from javadocTask.destinationDir
+                dependsOn javadocTask
+            }
+
+            def sourcesJarTask = project.task("sourcesJar${cVariantName}", type: Jar) {
+                classifier = 'sources'
+
+                def srcDirs = []
+                variant.sourceSets.each { sources ->
+                    ['java', 'groovy', 'scala', 'kotlin'].each {
+                        if (sources.hasProperty(it))
+                            srcDirs << sources[it].srcDirs
+                    }
+                }
+
+                from srcDirs
+                dependsOn generateSourcesTask
+            }
+
+            def externalNativeBuildTask = project.tasks.findByName(
+                    "externalNativeBuild${cVariantName}")
+            def nativeSymbolZipTask = null
+            if (externalNativeBuildTask != null) {
+                nativeSymbolZipTask = project.task("nativeSymbolZip${cVariantName}", type: Zip) {
+                    classifier = 'symbols'
+                    from externalNativeBuildTask.objFolder
+                    include '**/*.so'
+                    dependsOn externalNativeBuildTask
+                }
+            }
+
+            def bundleTask = project.tasks.findByName("bundle${cVariantName}Aar")
+            if (bundleTask == null)
+                bundleTask = project.tasks.findByName("bundle${cVariantName}")
+
+            project.publishing.publications {
+                "${publicationName}"(MavenPublication) {
+                    if (variantName == 'release') {
+                        hasReleaseVariant = true
+
+                        artifact(source: bundleTask, classifier: null)
+                        publishDepends << bundleTask
+
+                        if (withSources) {
+                            artifact(source: sourcesJarTask, classifier: 'sources')
+                            publishDepends << sourcesJarTask
+                        }
+                        if (withJavadoc) {
+                            artifact(source: javadocJarTask, classifier: 'javadoc')
+                            publishDepends << javadocJarTask
+                        }
+                        if (withNativeSymbols && nativeSymbolZipTask != null) {
+                            artifact(source: nativeSymbolZipTask, classifier: 'symbols')
+                            publishDepends << nativeSymbolZipTask
+                        }
+                    } else if (publishAllVariants || publishVariants.contains(variantName)) {
+                        artifact(source: bundleTask, classifier: variantName)
+                        publishDepends << bundleTask
+
+                        if (withNativeSymbols && nativeSymbolZipTask != null) {
+                            artifact(source: nativeSymbolZipTask, classifier: "${variantName}Symbols")
+                            publishDepends << nativeSymbolZipTask
+                        }
+                    }
+                }
+            }
+        } // android.libraryVariants.all
+
+        // Check whether "release" variant is published
+        project.afterEvaluate {
+            if (!hasReleaseVariant)
+                throw new GradleException('Publishing Android library require "release" variant')
+
+            project.tasks.withType(AbstractPublishToMaven) {
+                if (publication.name == publicationName) {
+                    dependsOn publishDepends
+                }
+            }
+        }
+    }
+}

@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
-apply plugin: 'maven-publish'
+apply from: rootProject.file('gradle/WeChatPublish.gradle')
 
+artifactId = 'wcdb-android'
 
 android {
     compileSdkVersion 28
@@ -10,12 +11,12 @@ android {
         minSdkVersion 14
         targetSdkVersion 28
         versionCode 1
-        versionName rootProject.VERSION
+        versionName version
 
         externalNativeBuild {
             ndkBuild {
                 abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
-                arguments '-j2'
+                arguments '-j4'
 
                 if (rootProject.hasProperty("USE_GCC")) {
                     if (rootProject.USE_GCC == '1')
@@ -32,7 +33,7 @@ android {
                 if (rootProject.hasProperty("WX_BUILD_JOB"))
                     hasBuildInfo = arguments.add('WX_BUILD_JOB=\'' + rootProject.WX_BUILD_JOB + '\'')
                 if (hasBuildInfo) {
-                    arguments.add('WX_BUILD_VERSION=\'' + rootProject.VERSION_NAME + '\'')
+                    arguments.add('WX_BUILD_VERSION=\'' + version + '\'')
                     arguments.add('WITH_BUILD_INFO=1')
                 }
             }
@@ -73,67 +74,16 @@ android {
     }
 }
 
-android.libraryVariants.all { variant ->
+wechatPublish {
+    publishAllVariants true
 
-    def varName = variant.name
-    def cvarName = varName.capitalize()
-
-    // emit Javadoc generation task
-    def genJavadocTask = task("generate${cvarName}Javadoc", type: Javadoc) {
-        description "Generates Javadoc for ${varName}."
-        source = variant.javaCompile.source
-        ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
-
-        title = null
-
-        options {
-            memberLevel = JavadocMemberLevel.PUBLIC
-
-            doclet = 'com.google.doclava.Doclava'
-            docletpath = [rootProject.file('gradle/doclava-1.0.6.jar')]
-
-            addStringOption('title', 'WCDB for Android')
-            addStringOption('hdf project.name', 'WCDB for Android')
-            //addStringOption('federate Android', 'http://d.android.com/reference')
-            //addStringOption('federationxml Android', rootProject.file('gradle/android-10.xml').path)
-        }
-
-        exclude "**/BuildConfig.java"
-        exclude "**/R.java"
-
-        doFirst {
-            classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
-        }
-
-        dependsOn "generate${cvarName}Sources"
-    }
-
-    // emit Javadoc bundling task
-    task("bundle${cvarName}Javadoc", type: Jar) {
-        classifier = 'javadoc'
-        from genJavadocTask.destinationDir
-        dependsOn genJavadocTask
-    }
-
-    // emit source bundling task
-    task("bundle${cvarName}Sources", type: Jar) {
-        classifier = 'sources'
-        from variant.javaCompile.source
-        dependsOn "generate${cvarName}Sources"
-    }
-
-    // emit native symbols bundling task
-    task("bundle${cvarName}NativeSymbols", type: Zip) {
-        def nativeBuildTask = project.tasks.findByName("externalNativeBuild${cvarName}")
-
-        classifier = (varName == 'release') ? 'symbols' : "${varName}Symbols"
-        from nativeBuildTask.getObjFolder()
-        include '**/*.so'
-        dependsOn nativeBuildTask
+    publishToBintray {
+        repo = 'wcdb'
+        name = 'wcdb-android'
+        desc = ''
+        websiteUrl = 'https://github.com/Tencent/wcdb'
+        issueTrackerUrl = 'https://github.com/Tencent/wcdb/issues'
+        vcsUrl = 'https://github.com/Tencent/wcdb.git'
+        licenses = ['BSD 3-Clause']
     }
 }
-
-apply from: 'bintray.gradle'
-
-if (file('local.gradle').isFile())
-    apply from: 'local.gradle'
