@@ -25,25 +25,16 @@
 
 #define WCDB_SYNTHESIZE_PREFIX synthesize
 
-#define __WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)                                            \
-    +(void) WCDB_ORM(className, WCDB_SYNTHESIZE_PREFIX)                                                       \
-    {                                                                                                         \
-        binding                                                                                               \
-        .addColumnBinding<__WCDB_PROPERTY_TYPE(className, propertyName)>(                                     \
-        WCDB_STRINGIFY(propertyName), columnName);                                                            \
-    }                                                                                                         \
-    +(const WCTProperty &) propertyName                                                                       \
-    {                                                                                                         \
-        static const WCTProperty *s_property = new WCTProperty((WCTBinding::bindingWithClass(className.class) \
-                                                                .getColumnBinding(columnName)));              \
-        return *s_property;                                                                                   \
-    }
-
-#define __WCDB_SYNTHESIZE_DEFAULT_IMP(className, propertyName, columnName, defaultValue) \
-    __WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)                           \
-    +(void) WCDB_ORM(className, default)                                                 \
-    {                                                                                    \
-        const WCTProperty &property = binding.getProperty(WCDB_STRINGIFY(propertyName)); \
-        binding.getColumnDef(property).constraint(                                       \
-        WCDB::ColumnConstraint().default_(defaultValue));                                \
+#define __WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)                                                                      \
+    +(void) WCDB_ORM(className, WCDB_SYNTHESIZE_PREFIX)                                                                                 \
+    {                                                                                                                                   \
+        binding                                                                                                                         \
+        .addProperty<__WCDB_PROPERTY_TYPE(className, propertyName)>(                                                                    \
+        WCDB_STRINGIFY(propertyName), columnName);                                                                                      \
+    }                                                                                                                                   \
+    +(const WCTProperty &) propertyName                                                                                                 \
+    {                                                                                                                                   \
+        static const WCTProperty &s_property = WCTBinding::bindingWithClass(className.class).getProperty(WCDB_STRINGIFY(propertyName)); \
+        WCDB_ORM_CHECK_INHERITANCE(className);                                                                                          \
+        return s_property;                                                                                                              \
     }

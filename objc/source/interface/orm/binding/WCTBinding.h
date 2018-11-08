@@ -26,59 +26,66 @@
 #import <map>
 
 class WCTBinding final {
+#pragma mark - Binding
 public:
     static const WCTBinding &bindingWithClass(Class cls);
 
+    static void checkInheritance(Class left, Class right);
+
+private:
+    WCTBinding(Class cls);
+    void initialize();
+    Class m_cls;
+
+#pragma mark - Property
+public:
     template<typename T>
-    void addColumnBinding(const WCDB::String &propertyName, const WCDB::String &columnName)
+    void addProperty(const WCDB::String &propertyName, const WCDB::String &columnName)
     {
         WCTColumnBinding columnBinding(m_cls, propertyName, columnName, (T *) nullptr);
-        addColumnBinding(columnName, std::move(columnBinding));
+        addProperty(columnName, std::move(columnBinding));
     }
 
     const WCTProperty &getProperty(const WCDB::String &propertyName) const;
 
-    const WCTColumnBinding &getColumnBinding(const WCDB::String &columnName) const;
-
-    WCDB::ColumnDef &getColumnDef(const WCTProperty &property);
-
-    WCDB::TableConstraint &getOrCreateTableConstraint(const WCDB::String &name);
-
-    WCDB::StatementCreateIndex &getOrCreateIndex(const WCDB::String &subfix);
+    const WCTProperties &getAllProperties() const;
 
     const std::map<WCDB::String, WCTColumnBinding, WCDB::String::CaseInsensiveComparator> &
     getColumnBindings() const;
 
-    WCDB::StatementCreateVirtualTable statementVirtualTable;
+private:
+    void addProperty(const WCDB::String &columnName, const WCTColumnBinding &columnBinding);
 
-    WCDB::StatementCreateTable
-    generateCreateTableStatement(const WCDB::String &tableName) const;
-    WCDB::StatementCreateVirtualTable
-    generateVirtualCreateTableStatement(const WCDB::String &tableName) const;
-    std::list<WCDB::StatementCreateIndex>
-    generateCreateIndexStatements(const WCDB::String &tableName) const;
-
-    const WCTProperties &getAllProperties() const;
-
-    static WCTColumnNamed getColumnGenerator();
-
-    void checkSafeCall(Class cls) const;
-
-protected:
-    WCTBinding(Class cls);
-
-    void initialize();
-
-    void addColumnBinding(const WCDB::String &columnName, const WCTColumnBinding &columnBinding);
-
+    //TODO refactor using OrderedUniqueList. Note that column order should be tested.
     WCTProperties m_properties;
     std::map<WCDB::String, WCTProperties::iterator> m_mappedProperties;
 
     std::map<WCDB::String, WCTColumnBinding, WCDB::String::CaseInsensiveComparator> m_columnBindings;
 
+#pragma mark - Table
+public:
+    WCDB::StatementCreateVirtualTable statementVirtualTable;
+
+    WCDB::StatementCreateTable
+    generateCreateTableStatement(const WCDB::String &tableName) const;
+
+    WCDB::StatementCreateVirtualTable
+    generateVirtualCreateTableStatement(const WCDB::String &tableName) const;
+
+#pragma mark - Table Constraint
+public:
+    WCDB::TableConstraint &getOrCreateTableConstraint(const WCDB::String &name);
+
+private:
     std::map<WCDB::String, WCDB::TableConstraint> m_constraints;
 
-    std::map<WCDB::String, WCDB::StatementCreateIndex> m_indexes;
+#pragma mark - Index
+public:
+    WCDB::StatementCreateIndex &getOrCreateIndex(const WCDB::String &subfix);
 
-    Class m_cls;
+    std::list<WCDB::StatementCreateIndex>
+    generateCreateIndexStatements(const WCDB::String &tableName) const;
+
+private:
+    std::map<WCDB::String, WCDB::StatementCreateIndex> m_indexes;
 };

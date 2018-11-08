@@ -23,16 +23,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef WCDB::Column (^WCTColumnNamed)(NSString *_Nonnull);
-
 @protocol WCTTableCoding
 @required
 + (const WCTBinding &)objectRelationalMapping;
 + (const WCTProperties &)allProperties;
-+ (WCTColumnNamed)columnNamed;
 @optional
 @property (nonatomic, assign) long long lastInsertedRowID;
 @property (nonatomic, assign) BOOL isAutoIncrement;
++ (void)addtionalObjectRelationalMapping:(WCTBinding &)binding;
 @end
 
 @protocol WCTColumnCoding

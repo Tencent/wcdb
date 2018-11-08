@@ -18,15 +18,14 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTRuntimeCppAccessor.h>
-#import <WCDB/WCTRuntimeObjCAccessor.h>
+#define __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, left, right)              \
+    +(void) WCDB_ORM(className, virtual_table_argument)                        \
+    {                                                                          \
+        binding.statementVirtualTable.on(WCDB::ModuleArgument(left, right));   \
+    }
 
-#import <WCDB/WCTBinding.h>
-#import <WCDB/WCTColumnBinding.h>
-
-#import <WCDB/WCTCoding.h>
-
-#import <WCDB/WCTProperty.h>
-#import <WCDB/WCTResultColumn.h>
-
-#import <WCDB/WCTCodingMacro.h>
+#define __WCDB_VIRTUAL_TABLE_MODULE_IMP(className, moduleName)                 \
+    +(void) WCDB_ORM(className, virtual_table_module)                          \
+    {                                                                          \
+        binding.statementVirtualTable.usingModule(moduleName);                 \
+    }

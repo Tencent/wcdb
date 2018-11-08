@@ -18,23 +18,23 @@
  * limitations under the License.
  */
 
-#define __WCDB_INDEX_IMP(className, indexSubfixName, propertyName, order, isUnique)      \
+#define __WCDB_INDEX_BEGIN(className, indexSubfixName, propertyName)                     \
     +(void) WCDB_ORM(className, index)                                                   \
     {                                                                                    \
         WCDB_STATIC_ASSERT_EXISTS(className.propertyName);                               \
         const WCTProperty &property = binding.getProperty(WCDB_STRINGIFY(propertyName)); \
-        binding.getOrCreateIndex(indexSubfixName).indexedBy(property.asIndex(order));    \
-        WCDB_IF(isUnique, binding.getOrCreateIndex(indexSubfixName).unique();)           \
-    }
+        WCDB::StatementCreateIndex &index = binding.getOrCreateIndex(indexSubfixName);
 
-#define __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, left, right)              \
-    +(void) WCDB_ORM(className, virtual_table_argument)                        \
-    {                                                                          \
-        binding.statementVirtualTable.on(WCDB::ModuleArgument(left, right));   \
-    }
+#define __WCDB_INDEX_END(className, indexSubfixName, propertyName) }
 
-#define __WCDB_VIRTUAL_TABLE_MODULE_IMP(className, moduleName)                 \
-    +(void) WCDB_ORM(className, virtual_table_module)                          \
-    {                                                                          \
-        binding.statementVirtualTable.usingModule(moduleName);                 \
-    }
+#define __WCDB_ORDERED_INDEX_IMP(className, indexSubfixName, propertyName, order_, isUnique) \
+    __WCDB_INDEX_BEGIN(className, indexSubfixName, propertyName)                             \
+    WCDB_IF(isUnique, index.unique();)                                                       \
+    index.indexed(property.asIndex().order(order_));                                         \
+    __WCDB_INDEX_END(className, indexSubfixName, propertyName)
+
+#define __WCDB_INDEX_IMP(className, indexSubfixName, propertyName, isUnique)   \
+    __WCDB_INDEX_BEGIN(className, indexSubfixName, propertyName)               \
+    WCDB_IF(isUnique, index.unique();)                                         \
+    index.indexed(property.asIndex());                                         \
+    __WCDB_INDEX_END(className, indexSubfixName, propertyName)

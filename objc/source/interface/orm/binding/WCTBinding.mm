@@ -29,6 +29,7 @@
 #import <WCDB/WCTPropertyMacro.h>
 #import <objc/runtime.h>
 
+#pragma - Binding
 const WCTBinding &WCTBinding::bindingWithClass(Class cls)
 {
     static std::map<Class, WCTBinding> *s_bindings = new std::map<Class, WCTBinding>;
@@ -93,8 +94,48 @@ void WCTBinding::initialize()
         IMP imp = [m_cls methodForSelector:selector];
         ((void (*)(Class, SEL, WCTBinding &)) imp)(m_cls, selector, *this);
     }
+
+    // addtional object relational mapping
+    if ([m_cls respondsToSelector:@selector(addtionalObjectRelationalMapping:)]) {
+        [m_cls addtionalObjectRelationalMapping:*this];
+    }
 }
 
+void WCTBinding::checkInheritance(Class left, Class right)
+{
+    WCTRemedialAssert(left == right, "Inheritance is not supported for ORM.", ;);
+}
+
+#pragma - Property
+const std::map<WCDB::String, WCTColumnBinding, WCDB::String::CaseInsensiveComparator> &WCTBinding::getColumnBindings() const
+{
+    return m_columnBindings;
+}
+
+const WCTProperties &WCTBinding::getAllProperties() const
+{
+    return m_properties;
+}
+
+const WCTProperty &WCTBinding::getProperty(const WCDB::String &propertyName) const
+{
+    auto iter = m_mappedProperties.find(propertyName);
+    WCTInnerAssert(iter != m_mappedProperties.end());
+    return *iter->second;
+}
+
+void WCTBinding::addProperty(const WCDB::String &columnName,
+                             const WCTColumnBinding &columnBinding)
+{
+    WCTInnerAssert(m_columnBindings.find(columnName) == m_columnBindings.end());
+    auto iter = m_columnBindings.emplace(columnName, columnBinding).first;
+    m_properties.push_back(iter->second);
+    auto listIter = m_properties.end();
+    std::advance(listIter, -1);
+    m_mappedProperties.emplace(iter->second.propertyName, listIter);
+}
+
+#pragma mark - Table
 WCDB::StatementCreateTable WCTBinding::generateCreateTableStatement(const WCDB::String &tableName) const
 {
     WCDB::StatementCreateTable statement = WCDB::StatementCreateTable().createTable(tableName);
@@ -105,11 +146,6 @@ WCDB::StatementCreateTable WCTBinding::generateCreateTableStatement(const WCDB::
         statement.constraint(constraint.second);
     }
     return statement;
-}
-
-const std::map<WCDB::String, WCTColumnBinding, WCDB::String::CaseInsensiveComparator> &WCTBinding::getColumnBindings() const
-{
-    return m_columnBindings;
 }
 
 WCDB::StatementCreateVirtualTable
@@ -128,13 +164,7 @@ WCTBinding::generateVirtualCreateTableStatement(const WCDB::String &tableName) c
     return statement;
 }
 
-WCDB::ColumnDef &WCTBinding::getColumnDef(const WCTProperty &property)
-{
-    auto iter = m_columnBindings.find(property.getColumnBinding().columnDef.syntax().column.getDescription());
-    WCTInnerAssert(iter != m_columnBindings.end());
-    return iter->second.columnDef;
-}
-
+#pragma mark - Table Constraint
 WCDB::TableConstraint &WCTBinding::getOrCreateTableConstraint(const WCDB::String &name)
 {
     auto iter = m_constraints.find(name);
@@ -144,6 +174,7 @@ WCDB::TableConstraint &WCTBinding::getOrCreateTableConstraint(const WCDB::String
     return iter->second;
 }
 
+#pragma mark - Index
 WCDB::StatementCreateIndex &WCTBinding::getOrCreateIndex(const WCDB::String &subfix)
 {
     auto iter = m_indexes.find(subfix);
@@ -153,61 +184,14 @@ WCDB::StatementCreateIndex &WCTBinding::getOrCreateIndex(const WCDB::String &sub
     return iter->second;
 }
 
-const WCTColumnBinding &WCTBinding::getColumnBinding(const WCDB::String &columnName) const
-{
-    auto iter = m_columnBindings.find(columnName);
-    WCTInnerAssert(iter != m_columnBindings.end());
-    return iter->second;
-}
-
 std::list<WCDB::StatementCreateIndex>
 WCTBinding::generateCreateIndexStatements(const WCDB::String &tableName) const
 {
     std::list<WCDB::StatementCreateIndex> statementCreateIndexs;
     for (const auto &iter : m_indexes) {
         WCDB::StatementCreateIndex statementCreateIndex = iter.second;
-        statementCreateIndex.createIndex(tableName + iter.first).onTable(tableName);
+        statementCreateIndex.createIndex(tableName + iter.first).table(tableName);
         statementCreateIndexs.push_back(statementCreateIndex);
     }
     return statementCreateIndexs;
-}
-
-const WCTProperties &WCTBinding::getAllProperties() const
-{
-    return m_properties;
-}
-
-const WCTProperty &WCTBinding::getProperty(const WCDB::String &propertyName) const
-{
-    auto iter = m_mappedProperties.find(propertyName);
-    WCTInnerAssert(iter != m_mappedProperties.end());
-    return *iter->second;
-}
-
-void WCTBinding::addColumnBinding(const WCDB::String &columnName,
-                                  const WCTColumnBinding &columnBinding)
-{
-    WCTInnerAssert(m_columnBindings.find(columnName) == m_columnBindings.end());
-    auto iter = m_columnBindings.emplace(columnName, columnBinding).first;
-    m_properties.push_back(iter->second);
-    auto listIter = m_properties.end();
-    std::advance(listIter, -1);
-    m_mappedProperties.emplace(iter->second.propertyName, listIter);
-}
-
-WCTColumnNamed WCTBinding::getColumnGenerator()
-{
-    static WCTColumnNamed s_columnNamed = ^WCDB::Column(NSString *name)
-    {
-        return WCDB::Column(name ? name : WCDB::String::null());
-    };
-    return s_columnNamed;
-}
-
-void WCTBinding::checkSafeCall(Class cls) const
-{
-    if (WCDB::Console::debuggable()) {
-        // run only in debuggable mode since it's very frequent
-        WCTRemedialAssert(m_cls == cls, "Inheritance is not supported for ORM yet.", ;);
-    }
 }
