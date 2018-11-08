@@ -20,6 +20,6 @@
 
 #import "SingleTableTestCase.h"
 
-@interface ORMTestCase : SingleTableTestCase
+@interface ORMTests : SingleTableTestCase
 
 @end

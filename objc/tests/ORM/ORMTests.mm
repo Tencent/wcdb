@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import "ORMTestCase.h"
+#import "ORMTests.h"
 #import "AdditionalORMObject+WCTTableCoding.h"
 #import "AdditionalORMObject.h"
 #import "BuiltinTypesObject+WCTTableCoding.h"
@@ -56,14 +56,14 @@
 #import "TableConstraintObject+WCTTableCoding.h"
 #import "TableConstraintObject.h"
 
-typedef NS_ENUM(NSUInteger, ORMTestCaseState) {
-    ORMTestCaseStateNotStarted,
-    ORMTestCaseStateTesting,
-    ORMTestCaseStateTested,
-    ORMTestCaseStateFailed,
+typedef NS_ENUM(NSUInteger, ORMTestsState) {
+    ORMTestsStateNotStarted,
+    ORMTestsStateTesting,
+    ORMTestsStateTested,
+    ORMTestsStateFailed,
 };
 
-@implementation ORMTestCase
+@implementation ORMTests
 
 + (void)initialize
 {
@@ -94,10 +94,10 @@ typedef NS_ENUM(NSUInteger, ORMTestCaseState) {
 
 - (BOOL)checkCreateTableAndIndexSQLsAsExpected:(NSArray<NSString*>*)expected
 {
-    __block ORMTestCaseState state = ORMTestCaseStateNotStarted;
+    __block ORMTestsState state = ORMTestsStateNotStarted;
     do {
         if (expected.count == 0) {
-            state = ORMTestCaseStateFailed;
+            state = ORMTestsStateFailed;
             break;
         }
 
@@ -107,7 +107,7 @@ typedef NS_ENUM(NSUInteger, ORMTestCaseState) {
         [sqls addObject:@"COMMIT"];
 
         [self.database traceSQL:^(NSString* sql) {
-            if (state != ORMTestCaseStateTesting) {
+            if (state != ORMTestsStateTesting) {
                 return;
             }
             //Test sql and expect exactly the same, including order and count
@@ -115,59 +115,59 @@ typedef NS_ENUM(NSUInteger, ORMTestCaseState) {
                 [sqls removeObjectAtIndex:0];
             } else {
                 NSLog(@"Failed: %@", [TestCase hint:sql expecting:sqls.firstObject]);
-                state = ORMTestCaseStateFailed;
+                state = ORMTestsStateFailed;
             }
         }];
         if (![self.database canOpen]) {
-            state = ORMTestCaseStateFailed;
+            state = ORMTestsStateFailed;
             break;
         }
-        state = ORMTestCaseStateTesting;
+        state = ORMTestsStateTesting;
         if (![self createTable]) {
-            state = ORMTestCaseStateFailed;
+            state = ORMTestsStateFailed;
             break;
         }
-        if (state == ORMTestCaseStateTesting
+        if (state == ORMTestsStateTesting
             && sqls.count == 0) {
-            state = ORMTestCaseStateTested;
+            state = ORMTestsStateTested;
         }
     } while (false);
     [self.database traceSQL:nil];
-    return state == ORMTestCaseStateTested;
+    return state == ORMTestsStateTested;
 }
 
 - (BOOL)checkCreateVirtualTableSQLAsExpected:(NSString*)expected
 {
-    __block ORMTestCaseState state = ORMTestCaseStateNotStarted;
+    __block ORMTestsState state = ORMTestsStateNotStarted;
     do {
         if (expected.length == 0) {
-            state = ORMTestCaseStateFailed;
+            state = ORMTestsStateFailed;
             break;
         }
         [self.database traceSQL:^(NSString* sql) {
-            if (state != ORMTestCaseStateTesting) {
+            if (state != ORMTestsStateTesting) {
                 return;
             }
             //Test sql and expect exactly the same, including order and count
             if ([expected isEqualToString:sql]) {
-                state = ORMTestCaseStateTested;
+                state = ORMTestsStateTested;
             } else {
                 NSLog(@"Failed: %@", [TestCase hint:sql expecting:expected]);
-                state = ORMTestCaseStateFailed;
+                state = ORMTestsStateFailed;
             }
         }];
         if (![self.database canOpen]) {
-            state = ORMTestCaseStateFailed;
+            state = ORMTestsStateFailed;
             break;
         }
-        state = ORMTestCaseStateTesting;
+        state = ORMTestsStateTesting;
         if (![self createVirtualTable]) {
-            state = ORMTestCaseStateFailed;
+            state = ORMTestsStateFailed;
             break;
         }
     } while (false);
     [self.database traceSQL:nil];
-    return state == ORMTestCaseStateTested;
+    return state == ORMTestsStateTested;
 }
 
 #pragma mark - property
