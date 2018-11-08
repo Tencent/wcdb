@@ -703,46 +703,4 @@ NS_ASSUME_NONNULL_BEGIN
                  offset:(const WCDB::Expression &)offset;
 @end
 
-#pragma mark -
-@protocol WCTConvenientStatement
-#pragma mark - Statement
-- (nullable WCTValue *)getValueFromStatement:(const WCDB::Statement &)statement;
-
-- (nullable WCTValue *)getValueFromStatement:(const WCDB::Statement &)statement atIndex:(int)index;
-
-- (nullable WCTOneRow *)getRowFromStatement:(const WCDB::Statement &)statement;
-
-- (nullable WCTOneColumn *)getColumnFromStatement:(const WCDB::Statement &)statement;
-
-- (nullable WCTOneColumn *)getColumnFromStatement:(const WCDB::Statement &)statement atIndex:(int)index;
-
-- (nullable WCTColumnsXRows *)getRowsFromStatement:(const WCDB::Statement &)statement;
-
-- (nullable id /* WCTObject* */)getObjectOfClass:(Class)cls
-                                   fromStatement:(const WCDB::Statement &)statement;
-
-- (nullable NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                             fromStatement:(const WCDB::Statement &)statement;
-
-- (nullable id /* WCTObject* */)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
-                                           fromStatement:(const WCDB::Statement &)statement;
-
-- (nullable NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                                     fromStatement:(const WCDB::Statement &)statement;
-
-- (BOOL)execute:(const WCDB::Statement &)statement
-     withObject:(WCTObject *)object;
-
-- (BOOL)execute:(const WCDB::Statement &)statement
-     withObject:(WCTObject *)object
-   onProperties:(const WCTProperties &)properties;
-
-- (BOOL)execute:(const WCDB::Statement &)statement
-      withValue:(WCTColumnCodingValue *)value;
-
-- (BOOL)execute:(const WCDB::Statement &)statement
-        withRow:(WCTOneRow *)row;
-
-@end
-
 NS_ASSUME_NONNULL_END
