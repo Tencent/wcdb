@@ -43,9 +43,19 @@ WCDB::IndexedColumn WCTProperty::asIndex() const
     return WCDB::IndexedColumn(*this);
 }
 
+WCDB::IndexedColumn WCTProperty::asIndex(const WCTOrder& order) const
+{
+    return WCDB::IndexedColumn(*this).order(order);
+}
+
 WCDB::OrderingTerm WCTProperty::asOrder() const
 {
     return WCDB::OrderingTerm(*this);
+}
+
+WCDB::OrderingTerm WCTProperty::asOrder(const WCTOrder& order) const
+{
+    return WCDB::OrderingTerm(*this).order(order);
 }
 
 WCDB::Expression WCTProperty::table(const WCDB::String& table) const

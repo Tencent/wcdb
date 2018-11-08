@@ -95,14 +95,28 @@
 {
     WCTProperty property(*columnBinding1.get());
 
-    WINQAssertEqual(property.asIndex().order(WCTOrderedAscending), @"testProperty1 ASC");
+    WINQAssertEqual(property.asIndex(), @"testProperty1");
+}
+
+- (void)test_as_indexed_column_with_order
+{
+    WCTProperty property(*columnBinding1.get());
+
+    WINQAssertEqual(property.asIndex(WCTOrderedAscending), @"testProperty1 ASC");
 }
 
 - (void)test_as_ordering_term
 {
     WCTProperty property(*columnBinding1.get());
 
-    WINQAssertEqual(property.asOrder().order(WCTOrderedAscending), @"testProperty1 ASC");
+    WINQAssertEqual(property.asOrder(), @"testProperty1");
+}
+
+- (void)test_as_ordering_term_with_order
+{
+    WCTProperty property(*columnBinding1.get());
+
+    WINQAssertEqual(property.asOrder(WCTOrderedAscending), @"testProperty1 ASC");
 }
 
 - (void)test_properties_count
