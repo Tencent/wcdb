@@ -37,12 +37,6 @@
     return YES;
 }
 
-- (instancetype)distinct
-{
-    _statement.distinct();
-    return self;
-}
-
 - (instancetype)where:(const WCDB::Expression &)condition
 {
     _statement.where(condition);
@@ -64,18 +58,6 @@
 - (instancetype)offset:(const WCDB::Expression &)offset
 {
     _statement.offset(offset);
-    return self;
-}
-
-- (instancetype)groups:(const WCDB::Expressions &)groups
-{
-    _statement.groups(groups);
-    return self;
-}
-
-- (instancetype)having:(const WCDB::Expression &)having
-{
-    _statement.having(having);
     return self;
 }
 

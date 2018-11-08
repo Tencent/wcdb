@@ -26,8 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface WCTSelectable : WCTChainCall
 
-- (instancetype)distinct;
-
 /**
  WINQ interface for SQL.
 
@@ -59,22 +57,6 @@ NS_ASSUME_NONNULL_BEGIN
  @return self
  */
 - (instancetype)offset:(const WCDB::Expression &)offset;
-
-/**
- WINQ interface for SQL.
-
- @param groups group by list
- @return self
- */
-- (instancetype)groups:(const WCDB::Expressions &)groups;
-
-/**
- WINQ interface for SQL.
-
- @param having having
- @return self
- */
-- (instancetype)having:(const WCDB::Expression &)having;
 
 - (WCDB::StatementSelect &)statement;
 
