@@ -98,6 +98,7 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
     do {
         if (expected.count == 0) {
             state = ORMTestsStateFailed;
+            TESTCASE_FAILED
             break;
         }
 
@@ -116,15 +117,18 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
             } else {
                 NSLog(@"Failed: %@", [TestCase hint:sql expecting:sqls.firstObject]);
                 state = ORMTestsStateFailed;
+                TESTCASE_FAILED
             }
         }];
         if (![self.database canOpen]) {
             state = ORMTestsStateFailed;
+            TESTCASE_FAILED
             break;
         }
         state = ORMTestsStateTesting;
         if (![self createTable]) {
             state = ORMTestsStateFailed;
+            TESTCASE_FAILED
             break;
         }
         if (state == ORMTestsStateTesting
@@ -142,6 +146,7 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
     do {
         if (expected.length == 0) {
             state = ORMTestsStateFailed;
+            TESTCASE_FAILED
             break;
         }
         [self.database traceSQL:^(NSString* sql) {
@@ -154,15 +159,18 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
             } else {
                 NSLog(@"Failed: %@", [TestCase hint:sql expecting:expected]);
                 state = ORMTestsStateFailed;
+                TESTCASE_FAILED
             }
         }];
         if (![self.database canOpen]) {
             state = ORMTestsStateFailed;
+            TESTCASE_FAILED
             break;
         }
         state = ORMTestsStateTesting;
         if (![self createVirtualTable]) {
             state = ORMTestsStateFailed;
+            TESTCASE_FAILED
             break;
         }
     } while (false);

@@ -21,6 +21,12 @@
 #import <WCDB/WCDB.h>
 #import <XCTest/XCTest.h>
 
+#ifdef DEBUG
+#define TESTCASE_FAILED abort();
+#else
+#define TESTCASE_FAILED
+#endif
+
 @interface TestCase : XCTestCase
 
 @property (nonatomic, readonly) NSString* root;
