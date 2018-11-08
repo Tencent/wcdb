@@ -206,6 +206,8 @@
 		2384F6E9219412FA00E8B10A /* FTS3Object.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F6E6219412FA00E8B10A /* FTS3Object.mm */; };
 		2384F6ED219412FF00E8B10A /* FTS5Object.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F6EA219412FF00E8B10A /* FTS5Object.mm */; };
 		2384F6F82194185500E8B10A /* AdditionalORMObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F6F52194185500E8B10A /* AdditionalORMObject.mm */; };
+		2384F6FD21941BEA00E8B10A /* OldRebindObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F6FA21941BEA00E8B10A /* OldRebindObject.mm */; };
+		2384F70121941BF000E8B10A /* NewRebindObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F6FE21941BF000E8B10A /* NewRebindObject.mm */; };
 		2386B3C51ED442FE000B72F6 /* WCTError.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C21ED442FE000B72F6 /* WCTError.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2386B3C61ED442FE000B72F6 /* WCTError.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386B3C31ED442FE000B72F6 /* WCTError.mm */; };
 		2386B3C71ED442FE000B72F6 /* WCTError+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C41ED442FE000B72F6 /* WCTError+Private.h */; };
@@ -974,6 +976,12 @@
 		2384F6F52194185500E8B10A /* AdditionalORMObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AdditionalORMObject.mm; sourceTree = "<group>"; };
 		2384F6F62194185500E8B10A /* AdditionalORMObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AdditionalORMObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		2384F6F72194185500E8B10A /* AdditionalORMObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdditionalORMObject.h; sourceTree = "<group>"; };
+		2384F6FA21941BEA00E8B10A /* OldRebindObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OldRebindObject.mm; sourceTree = "<group>"; };
+		2384F6FB21941BEA00E8B10A /* OldRebindObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OldRebindObject+WCTTableCoding.h"; sourceTree = "<group>"; };
+		2384F6FC21941BEA00E8B10A /* OldRebindObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OldRebindObject.h; sourceTree = "<group>"; };
+		2384F6FE21941BF000E8B10A /* NewRebindObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NewRebindObject.mm; sourceTree = "<group>"; };
+		2384F6FF21941BF000E8B10A /* NewRebindObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NewRebindObject+WCTTableCoding.h"; sourceTree = "<group>"; };
+		2384F70021941BF000E8B10A /* NewRebindObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewRebindObject.h; sourceTree = "<group>"; };
 		2386B3C21ED442FE000B72F6 /* WCTError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTError.h; sourceTree = "<group>"; };
 		2386B3C31ED442FE000B72F6 /* WCTError.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTError.mm; sourceTree = "<group>"; };
 		2386B3C41ED442FE000B72F6 /* WCTError+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTError+Private.h"; sourceTree = "<group>"; };
@@ -1981,6 +1989,7 @@
 		23790A47219295B80098797F /* ORM */ = {
 			isa = PBXGroup;
 			children = (
+				2384F6F921941BDC00E8B10A /* rebind */,
 				2384F6EE2194182300E8B10A /* addtional */,
 				23790A5C2192B03C0098797F /* column_constraint */,
 				23790A602192B03D0098797F /* index */,
@@ -2094,6 +2103,19 @@
 				2384F6F72194185500E8B10A /* AdditionalORMObject.h */,
 			);
 			path = addtional;
+			sourceTree = "<group>";
+		};
+		2384F6F921941BDC00E8B10A /* rebind */ = {
+			isa = PBXGroup;
+			children = (
+				2384F6FA21941BEA00E8B10A /* OldRebindObject.mm */,
+				2384F6FB21941BEA00E8B10A /* OldRebindObject+WCTTableCoding.h */,
+				2384F6FC21941BEA00E8B10A /* OldRebindObject.h */,
+				2384F6FE21941BF000E8B10A /* NewRebindObject.mm */,
+				2384F6FF21941BF000E8B10A /* NewRebindObject+WCTTableCoding.h */,
+				2384F70021941BF000E8B10A /* NewRebindObject.h */,
+			);
+			path = rebind;
 			sourceTree = "<group>";
 		};
 		2386B3BD1ED442D9000B72F6 /* statictics */ = {
@@ -3163,9 +3185,11 @@
 				2384F6E9219412FA00E8B10A /* FTS3Object.mm in Sources */,
 				2384F6DB2193E2C200E8B10A /* ColumnConstraintCheck.mm in Sources */,
 				2384F6BF2193E08100E8B10A /* ColumnConstraintPrimaryDesc.mm in Sources */,
+				2384F70121941BF000E8B10A /* NewRebindObject.mm in Sources */,
 				2384F6CB2193E09A00E8B10A /* ColumnConstraintUnique.mm in Sources */,
 				2384F6A32193DC3400E8B10A /* TableConstraintObject.mm in Sources */,
 				23790A6F2192BF140098797F /* PropertyObject.mm in Sources */,
+				2384F6FD21941BEA00E8B10A /* OldRebindObject.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

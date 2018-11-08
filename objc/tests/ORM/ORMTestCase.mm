@@ -47,6 +47,10 @@
 #import "FTS5Object.h"
 #import "IndexObject+WCTTableCoding.h"
 #import "IndexObject.h"
+#import "NewRebindObject+WCTTableCoding.h"
+#import "NewRebindObject.h"
+#import "OldRebindObject+WCTTableCoding.h"
+#import "OldRebindObject.h"
 #import "PropertyObject+WCTTableCoding.h"
 #import "PropertyObject.h"
 #import "TableConstraintObject+WCTTableCoding.h"
@@ -286,6 +290,22 @@
     NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER PRIMARY KEY ON CONFLICT ABORT, CONSTRAINT testTable_constraint CHECK((value) > (10)))",
                                       @"CREATE INDEX IF NOT EXISTS main.testTable_index ON testTable(value ASC)" ];
     XCTAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
+}
+
+#pragma mark - rebind
+- (void)test_rebind
+{
+    {
+        self.tableClass = OldRebindObject.class;
+        NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER)" ];
+        XCTAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
+    }
+    // rebind
+    {
+        self.tableClass = NewRebindObject.class;
+        NSArray<NSString*>* expected = @[ @"SELECT 1 FROM main.testTable LIMIT 0", @"PRAGMA main.table_info('testTable')", @"ALTER TABLE main.testTable ADD COLUMN newValue INTEGER", @"CREATE INDEX IF NOT EXISTS main.testTable_index ON testTable(value)" ];
+        XCTAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
+    }
 }
 
 @end
