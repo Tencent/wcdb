@@ -39,8 +39,18 @@ String CreateVirtualTableSTMT::getDescription() const
         stream << "IF NOT EXISTS ";
     }
     stream << schema << "." << table << " USING " << module;
-    if (!moduleArguments.empty()) {
-        stream << "(" << moduleArguments << ")";
+    if (!arguments.empty()) {
+        stream << "(";
+        bool comma = false;
+        for (const auto& argument : arguments) {
+            if (comma) {
+                stream << ", ";
+            } else {
+                comma = true;
+            }
+            stream << argument;
+        }
+        stream << ")";
     }
     return stream.str();
 }
@@ -49,7 +59,6 @@ void CreateVirtualTableSTMT::iterate(const Iterator& iterator, void* parameter)
 {
     Identifier::iterate(iterator, parameter);
     schema.iterate(iterator, parameter);
-    listIterate(moduleArguments, iterator, parameter);
 }
 
 } // namespace Syntax

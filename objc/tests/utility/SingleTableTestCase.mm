@@ -36,4 +36,12 @@
     return [self.database createTableAndIndexes:_tableName withClass:_tableClass];
 }
 
+- (BOOL)createVirtualTable
+{
+    if (_tableClass == nil) {
+        return NO;
+    }
+    return [self.database createVirtualTable:_tableName withClass:_tableClass];
+}
+
 @end

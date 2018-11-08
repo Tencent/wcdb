@@ -35,8 +35,10 @@ public:
 
     StatementCreateVirtualTable& usingModule(const String& module);
 
-    StatementCreateVirtualTable& argument(const ModuleArgument& argument);
-    StatementCreateVirtualTable& arguments(const ModuleArguments& arguments);
+    StatementCreateVirtualTable& argument(const String& argument);
+    StatementCreateVirtualTable& argument(const SQL& argument);
+
+    static String tokenize(const String& name);
 };
 
 } // namespace WCDB

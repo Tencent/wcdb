@@ -24,25 +24,25 @@
         WCDB_STATIC_ASSERT_EXISTS(className.propertyName);      \
         WCDB::ColumnConstraint columnConstraint;
 
-#define __WCDB_COLUMN_CONSTRAINT_END(className, propertyName)                         \
-    className.propertyName.getColumnBinding().columnDef.constraint(columnConstraint); \
+#define __WCDB_COLUMN_CONSTRAINT_END(className, propertyName)                  \
+    binding.getColumnDef(className.propertyName).constraint(columnConstraint); \
     }
 
 // primary
-#define __WCDB_ORDERED_PRIMARY_IMP(className, propertyName, order_, autoIncrement) \
-    WCDB_IF(autoIncrement, @synthesize isAutoIncrement;)                           \
-    WCDB_IF(autoIncrement, @synthesize lastInsertedRowID;)                         \
-    __WCDB_COLUMN_CONSTRAINT_BEGIN(className, propertyName)                        \
-    columnConstraint.primaryKey().order(order_);                                   \
-    WCDB_IF(autoIncrement, columnConstraint.autoIncrement());                      \
+#define __WCDB_ORDERED_PRIMARY_IMP(className, propertyName, order_, autoIncrement_) \
+    WCDB_IF(autoIncrement_, @synthesize isAutoIncrement;)                           \
+    WCDB_IF(autoIncrement_, @synthesize lastInsertedRowID;)                         \
+    __WCDB_COLUMN_CONSTRAINT_BEGIN(className, propertyName)                         \
+    columnConstraint.primaryKey().order(order_);                                    \
+    WCDB_IF(autoIncrement_, columnConstraint.autoIncrement());                      \
     __WCDB_COLUMN_CONSTRAINT_END(className, propertyName)
 
-#define __WCDB_PRIMARY_IMP(className, propertyName, autoIncrement) \
-    WCDB_IF(autoIncrement, @synthesize isAutoIncrement;)           \
-    WCDB_IF(autoIncrement, @synthesize lastInsertedRowID;)         \
-    __WCDB_COLUMN_CONSTRAINT_BEGIN(className, propertyName)        \
-    columnConstraint.primaryKey();                                 \
-    WCDB_IF(autoIncrement, columnConstraint.autoIncrement());      \
+#define __WCDB_PRIMARY_IMP(className, propertyName, autoIncrement_) \
+    WCDB_IF(autoIncrement_, @synthesize isAutoIncrement;)           \
+    WCDB_IF(autoIncrement_, @synthesize lastInsertedRowID;)         \
+    __WCDB_COLUMN_CONSTRAINT_BEGIN(className, propertyName)         \
+    columnConstraint.primaryKey();                                  \
+    WCDB_IF(autoIncrement_, columnConstraint.autoIncrement());      \
     __WCDB_COLUMN_CONSTRAINT_END(className, propertyName)
 
 // not null
@@ -61,12 +61,6 @@
 #define __WCDB_DEFAULT_IMP(className, propertyName, defaultValue) \
     __WCDB_COLUMN_CONSTRAINT_BEGIN(className, propertyName)       \
     columnConstraint.default_(defaultValue);                      \
-    __WCDB_COLUMN_CONSTRAINT_END(className, propertyName)
-
-// collation
-#define __WCDB_COLLATION_IMP(className, propertyName, collation) \
-    __WCDB_COLUMN_CONSTRAINT_BEGIN(className, propertyName)      \
-    columnConstraint.collate(collation);                         \
     __WCDB_COLUMN_CONSTRAINT_END(className, propertyName)
 
 // check

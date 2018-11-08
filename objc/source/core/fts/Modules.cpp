@@ -28,7 +28,7 @@ namespace FTS {
 
 void Modules::addAddress(const String &name, unsigned char *address)
 {
-    WCTRemedialAssert(name.empty() && address != nullptr,
+    WCTRemedialAssert(!name.empty() && address != nullptr,
                       "Both name and address of tokenizer can't be null.",
                       return;);
     LockGuard lockGuard(m_lock);

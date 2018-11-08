@@ -18,21 +18,10 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_MODULEARGUMENT_HPP
-#define _WCDB_MODULEARGUMENT_HPP
+#import <Foundation/Foundation.h>
 
-#include <WCDB/SQL.hpp>
+@interface ColumnConstraintPrimaryAsc : NSObject
 
-namespace WCDB {
+@property (nonatomic, assign) int value;
 
-class ModuleArgument final : public TypedSyntax<Syntax::ModuleArgument, SQL> {
-public:
-    using TypedSyntax<Syntax::ModuleArgument, SQL>::TypedSyntax;
-    ModuleArgument(const TableConstraint& tableConstraint);
-    ModuleArgument(const ColumnDef& columnDef);
-    ModuleArgument(const Expression& left, const Expression& right);
-};
-
-} // namespace WCDB
-
-#endif /* _WCDB_MODULEARGUMENT_HPP */
+@end

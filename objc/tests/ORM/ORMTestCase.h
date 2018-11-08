@@ -22,6 +22,4 @@
 
 @interface ORMTestCase : SingleTableTestCase
 
-- (BOOL)checkCreateTableAndIndexSQLsAsExpected:(NSArray<NSString*>*)expected;
-
 @end

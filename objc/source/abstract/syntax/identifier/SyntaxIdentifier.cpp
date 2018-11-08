@@ -63,8 +63,6 @@ Identifier *Identifier::clone() const
         return new IndexedColumn(*static_cast<const IndexedColumn *>(this));
     case Type::TableConstraint:
         return new TableConstraint(*static_cast<const TableConstraint *>(this));
-    case Type::ModuleArgument:
-        return new ModuleArgument(*static_cast<const ModuleArgument *>(this));
     case Type::CTETableName:
         return new CTETableName(*static_cast<const CTETableName *>(this));
     case Type::WithClause:

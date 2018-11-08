@@ -28,6 +28,9 @@ WCTTokenizer const WCTTokenizerICU = @"icu";
 WCTTokenizer const WCTTokenizerUnicode61 = @"unicode61";
 WCTTokenizer const WCTTokenizerWCDB = @"WCDB";
 
+WCTModule const WCTModuleFTS3 = @"fts3";
+WCTModule const WCTModuleFTS5 = @"fts5";
+
 @implementation WCTDatabase (FTS)
 
 - (void)setTokenizer:(NSString *)tokenizerName

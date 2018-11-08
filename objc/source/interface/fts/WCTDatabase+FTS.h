@@ -30,6 +30,10 @@ extern WCTTokenizer const WCTTokenizerICU;
 extern WCTTokenizer const WCTTokenizerUnicode61;
 extern WCTTokenizer const WCTTokenizerWCDB;
 
+typedef NSString *WCTModule;
+extern WCTModule const WCTModuleFTS3;
+extern WCTModule const WCTModuleFTS5;
+
 @interface WCTDatabase (FTS)
 
 - (void)setTokenizer:(WCTTokenizer)tokenizerName;

@@ -47,18 +47,21 @@ StatementCreateVirtualTable& StatementCreateVirtualTable::usingModule(const Stri
     return *this;
 }
 
-StatementCreateVirtualTable&
-StatementCreateVirtualTable::argument(const ModuleArgument& argument)
+StatementCreateVirtualTable& StatementCreateVirtualTable::argument(const String& argument)
 {
-    syntax().moduleArguments.push_back(argument);
+    syntax().arguments.push_back(argument);
     return *this;
 }
 
-StatementCreateVirtualTable&
-StatementCreateVirtualTable::arguments(const ModuleArguments& arguments)
+StatementCreateVirtualTable& StatementCreateVirtualTable::argument(const SQL& argument)
 {
-    syntax().moduleArguments = arguments;
+    syntax().arguments.push_back(argument.getDescription());
     return *this;
+}
+
+String StatementCreateVirtualTable::tokenize(const String& name)
+{
+    return String::formatted("tokenize = %s", name.c_str());
 }
 
 } // namespace WCDB

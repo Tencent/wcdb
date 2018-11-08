@@ -44,7 +44,6 @@
 #include <WCDB/SyntaxJoinClause.hpp>
 #include <WCDB/SyntaxJoinConstraint.hpp>
 #include <WCDB/SyntaxLiteralValue.hpp>
-#include <WCDB/SyntaxModuleArgument.hpp>
 #include <WCDB/SyntaxOrderingTerm.hpp>
 #include <WCDB/SyntaxPragma.hpp>
 #include <WCDB/SyntaxQualifiedTableName.hpp>

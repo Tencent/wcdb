@@ -61,7 +61,6 @@ public:
         Filter,
         IndexedColumn,
         TableConstraint,
-        ModuleArgument,
         CTETableName,
         WithClause,
         RecursiveCTE,

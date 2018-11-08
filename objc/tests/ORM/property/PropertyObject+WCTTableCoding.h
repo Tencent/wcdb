@@ -25,7 +25,5 @@
 
 WCDB_PROPERTY(property)
 WCDB_PROPERTY(propertyWithDifferentName)
-WCDB_PROPERTY(propertyWithDefaultValue)
-WCDB_PROPERTY(propertyWithDifferentNameAndDefaultValue)
 
 @end

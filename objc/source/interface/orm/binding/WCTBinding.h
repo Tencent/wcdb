@@ -53,13 +53,17 @@ public:
     const std::map<WCDB::String, WCTColumnBinding, WCDB::String::CaseInsensiveComparator> &
     getColumnBindings() const;
 
+    WCDB::ColumnDef &getColumnDef(const WCTProperty &property);
+
 private:
     void addProperty(const WCDB::String &columnName, const WCTColumnBinding &columnBinding);
 
     //TODO refactor using OrderedUniqueList. Note that column order should be tested.
     WCTProperties m_properties;
+    // property name -> property iterator
     std::map<WCDB::String, WCTProperties::iterator> m_mappedProperties;
 
+    // column name -> column binding
     std::map<WCDB::String, WCTColumnBinding, WCDB::String::CaseInsensiveComparator> m_columnBindings;
 
 #pragma mark - Table
@@ -74,7 +78,7 @@ public:
 
 #pragma mark - Table Constraint
 public:
-    WCDB::TableConstraint &getOrCreateTableConstraint(const WCDB::String &name);
+    WCDB::TableConstraint &getOrCreateTableConstraint(const WCDB::String &subfix);
 
 private:
     std::map<WCDB::String, WCDB::TableConstraint> m_constraints;

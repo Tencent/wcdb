@@ -27,7 +27,5 @@
 WCDB_IMPLEMENTATION(PropertyObject)
 WCDB_SYNTHESIZE(PropertyObject, property)
 WCDB_SYNTHESIZE_COLUMN(PropertyObject, propertyWithDifferentName, @"differentName")
-WCDB_SYNTHESIZE_DEFAULT(PropertyObject, propertyWithDefaultValue, 1)
-WCDB_SYNTHESIZE_COLUMN_DEFAULT(PropertyObject, propertyWithDifferentNameAndDefaultValue, @"differentNameAndDefaultValue", 1)
 
 @end

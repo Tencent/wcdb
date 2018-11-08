@@ -18,27 +18,20 @@
  * limitations under the License.
  */
 
-#include <WCDB/WINQ.h>
+#import <Foundation/Foundation.h>
 
-namespace WCDB {
+@interface IndexObject : NSObject
 
-ModuleArgument::ModuleArgument(const TableConstraint& tableConstraint)
-{
-    syntax().switcher = SyntaxType::Switcher::TableConstraint;
-    syntax().tableConstraint = tableConstraint;
-}
+@property (nonatomic, assign) int index_;
+@property (nonatomic, assign) int indexAsc;
+@property (nonatomic, assign) int indexDesc;
 
-ModuleArgument::ModuleArgument(const ColumnDef& columnDef)
-{
-    syntax().switcher = SyntaxType::Switcher::ColumnDef;
-    syntax().columnDef = columnDef;
-}
+@property (nonatomic, assign) int uniqueIndex;
+@property (nonatomic, assign) int uniqueIndexAsc;
+@property (nonatomic, assign) int uniqueIndexDesc;
 
-ModuleArgument::ModuleArgument(const Expression& left, const Expression& right)
-{
-    syntax().switcher = SyntaxType::Switcher::LeftRight;
-    syntax().left = left;
-    syntax().right = right;
-}
+@property (nonatomic, assign) int multiIndex;
+@property (nonatomic, assign) int multiIndexAsc;
+@property (nonatomic, assign) int multiIndexDesc;
 
-} // namespace WCDB
+@end

@@ -52,8 +52,6 @@ constexpr const char *Enum::description(const Syntax::Identifier::Type &type)
         return "IndexedColumn";
     case Syntax::Identifier::Type::TableConstraint:
         return "TableConstraint";
-    case Syntax::Identifier::Type::ModuleArgument:
-        return "ModuleArgument";
     case Syntax::Identifier::Type::CTETableName:
         return "CTETableName";
     case Syntax::Identifier::Type::WithClause:

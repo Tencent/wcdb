@@ -34,6 +34,7 @@ Core* Core::shared()
 
 Core::Core()
 : m_databasePool(new DatabasePool)
+, m_modules(new FTS::Modules)
 , m_corruptionQueue(new CorruptionQueue(corruptionQueueName, m_databasePool))
 , m_checkpointQueue(new CheckpointQueue(checkpointQueueName, m_databasePool))
 , m_backupQueue(new BackupQueue(backupQueueName, m_databasePool))

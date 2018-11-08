@@ -47,7 +47,6 @@
 #include <WCDB/Join.hpp>
 #include <WCDB/JoinConstraint.hpp>
 #include <WCDB/LiteralValue.hpp>
-#include <WCDB/ModuleArgument.hpp>
 #include <WCDB/OrderingTerm.hpp>
 #include <WCDB/Pragma.hpp>
 #include <WCDB/QualifiedTable.hpp>

@@ -95,9 +95,9 @@ void WCTBinding::initialize()
         ((void (*)(Class, SEL, WCTBinding &)) imp)(m_cls, selector, *this);
     }
 
-    // addtional object relational mapping
-    if ([m_cls respondsToSelector:@selector(addtionalObjectRelationalMapping:)]) {
-        [m_cls addtionalObjectRelationalMapping:*this];
+    // additional object relational mapping
+    if ([m_cls respondsToSelector:@selector(additionalObjectRelationalMapping:)]) {
+        [m_cls additionalObjectRelationalMapping:*this];
     }
 }
 
@@ -107,6 +107,13 @@ void WCTBinding::checkInheritance(Class left, Class right)
 }
 
 #pragma - Property
+WCDB::ColumnDef &WCTBinding::getColumnDef(const WCTProperty &property)
+{
+    auto iter = m_columnBindings.find(property.getColumnBinding().columnDef.syntax().column.name);
+    WCTInnerAssert(iter != m_columnBindings.end());
+    return iter->second.columnDef;
+}
+
 const std::map<WCDB::String, WCTColumnBinding, WCDB::String::CaseInsensiveComparator> &WCTBinding::getColumnBindings() const
 {
     return m_columnBindings;
@@ -138,12 +145,14 @@ void WCTBinding::addProperty(const WCDB::String &columnName,
 #pragma mark - Table
 WCDB::StatementCreateTable WCTBinding::generateCreateTableStatement(const WCDB::String &tableName) const
 {
-    WCDB::StatementCreateTable statement = WCDB::StatementCreateTable().createTable(tableName);
+    WCDB::StatementCreateTable statement = WCDB::StatementCreateTable().createTable(tableName).ifNotExists();
     for (const auto &columnBinding : m_columnBindings) {
         statement.define(columnBinding.second.columnDef);
     }
     for (const auto &constraint : m_constraints) {
-        statement.constraint(constraint.second);
+        WCDB::TableConstraint c = constraint.second;
+        c.syntax().name = tableName + constraint.first;
+        statement.constraint(c);
     }
     return statement;
 }
@@ -152,24 +161,26 @@ WCDB::StatementCreateVirtualTable
 WCTBinding::generateVirtualCreateTableStatement(const WCDB::String &tableName) const
 {
     WCDB::StatementCreateVirtualTable statement = statementVirtualTable;
-    statement.createVirtualTable(tableName);
-    WCDB::ModuleArguments arguments;
+    statement.createVirtualTable(tableName).ifNotExists();
+    std::list<WCDB::String> &arguments = statement.syntax().arguments;
+    bool isFTS5 = statement.syntax().module.isCaseInsensiveEqual("fts5");
     for (const auto &columnBinding : m_columnBindings) {
-        arguments.push_back(columnBinding.second.columnDef);
+        if (isFTS5) {
+            // FTS5 does not need type
+            arguments.push_back(columnBinding.second.columnDef.syntax().column.getDescription());
+        } else {
+            arguments.push_back(columnBinding.second.columnDef.getDescription());
+        }
     }
-    for (const auto &constraint : m_constraints) {
-        arguments.push_back(constraint.second);
-    }
-    statement.arguments(arguments);
     return statement;
 }
 
 #pragma mark - Table Constraint
-WCDB::TableConstraint &WCTBinding::getOrCreateTableConstraint(const WCDB::String &name)
+WCDB::TableConstraint &WCTBinding::getOrCreateTableConstraint(const WCDB::String &subfix)
 {
-    auto iter = m_constraints.find(name);
+    auto iter = m_constraints.find(subfix);
     if (iter == m_constraints.end()) {
-        iter = m_constraints.emplace(name, WCDB::TableConstraint(name)).first;
+        iter = m_constraints.emplace(subfix, WCDB::TableConstraint()).first;
     }
     return iter->second;
 }
@@ -190,7 +201,7 @@ WCTBinding::generateCreateIndexStatements(const WCDB::String &tableName) const
     std::list<WCDB::StatementCreateIndex> statementCreateIndexs;
     for (const auto &iter : m_indexes) {
         WCDB::StatementCreateIndex statementCreateIndex = iter.second;
-        statementCreateIndex.createIndex(tableName + iter.first).table(tableName);
+        statementCreateIndex.createIndex(tableName + iter.first).ifNotExists().table(tableName);
         statementCreateIndexs.push_back(statementCreateIndex);
     }
     return statementCreateIndexs;

@@ -18,14 +18,19 @@
  * limitations under the License.
  */
 
-#define __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, left, right)              \
-    +(void) WCDB_ORM(className, virtual_table_argument)                        \
+#define __WCDB_VIRTUAL_TABLE_BEGIN(className)                                  \
+    +(void) WCDB_ORM(className, virtual_table)                                 \
     {                                                                          \
-        binding.statementVirtualTable.on(WCDB::ModuleArgument(left, right));   \
-    }
+        WCDB::StatementCreateVirtualTable& statement = binding.statementVirtualTable;
+
+#define __WCDB_VIRTUAL_TABLE_END(className) }
+
+#define __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, argument_)                \
+    __WCDB_VIRTUAL_TABLE_BEGIN(className)                                      \
+    statement.argument(argument_);                                             \
+    __WCDB_VIRTUAL_TABLE_END(className)
 
 #define __WCDB_VIRTUAL_TABLE_MODULE_IMP(className, moduleName)                 \
-    +(void) WCDB_ORM(className, virtual_table_module)                          \
-    {                                                                          \
-        binding.statementVirtualTable.usingModule(moduleName);                 \
-    }
+    __WCDB_VIRTUAL_TABLE_BEGIN(className)                                      \
+    statement.usingModule(moduleName);                                         \
+    __WCDB_VIRTUAL_TABLE_END(className)

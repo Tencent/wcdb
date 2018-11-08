@@ -24,7 +24,5 @@
 
 @property (nonatomic, assign) int property ;
 @property (nonatomic, assign) int propertyWithDifferentName;
-@property (nonatomic, assign) int propertyWithDefaultValue;
-@property (nonatomic, assign) int propertyWithDifferentNameAndDefaultValue;
 
 @end

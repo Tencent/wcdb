@@ -34,7 +34,7 @@ public:
     Schema schema;
     String table;
     String module;
-    std::list<ModuleArgument> moduleArguments;
+    std::list<String> arguments;
 
 #pragma mark - Identifier
 public:

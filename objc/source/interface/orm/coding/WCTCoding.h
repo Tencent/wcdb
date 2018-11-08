@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 @optional
 @property (nonatomic, assign) long long lastInsertedRowID;
 @property (nonatomic, assign) BOOL isAutoIncrement;
-+ (void)addtionalObjectRelationalMapping:(WCTBinding &)binding;
++ (void)additionalObjectRelationalMapping:(WCTBinding &)binding;
 @end
 
 @protocol WCTColumnCoding

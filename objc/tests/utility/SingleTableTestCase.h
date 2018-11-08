@@ -28,4 +28,6 @@
 
 - (BOOL)createTable;
 
+- (BOOL)createVirtualTable;
+
 @end
