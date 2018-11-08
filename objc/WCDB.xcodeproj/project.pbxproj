@@ -208,6 +208,14 @@
 		2384F6F82194185500E8B10A /* AdditionalORMObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F6F52194185500E8B10A /* AdditionalORMObject.mm */; };
 		2384F6FD21941BEA00E8B10A /* OldRebindObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F6FA21941BEA00E8B10A /* OldRebindObject.mm */; };
 		2384F70121941BF000E8B10A /* NewRebindObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F6FE21941BF000E8B10A /* NewRebindObject.mm */; };
+		2384F70F2194249200E8B10A /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
+		2384F71F2194249200E8B10A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
+		2384F7202194249200E8B10A /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
+		2384F7232194249200E8B10A /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2384F72D2194253900E8B10A /* ConvenientTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F72C2194253900E8B10A /* ConvenientTestCase.mm */; };
+		2384F72E2194255700E8B10A /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
+		2384F72F2194255700E8B10A /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
+		2384F7372194260400E8B10A /* ConvenientObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F7342194260400E8B10A /* ConvenientObject.mm */; };
 		2386B3C51ED442FE000B72F6 /* WCTError.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C21ED442FE000B72F6 /* WCTError.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2386B3C61ED442FE000B72F6 /* WCTError.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386B3C31ED442FE000B72F6 /* WCTError.mm */; };
 		2386B3C71ED442FE000B72F6 /* WCTError+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C41ED442FE000B72F6 /* WCTError+Private.h */; };
@@ -690,6 +698,20 @@
 			remoteGlobalIDString = 239E8A6F2160A5B100BCB308;
 			remoteInfo = Host;
 		};
+		2384F7042194249200E8B10A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239326601E836D7300D677CC;
+			remoteInfo = WCDB;
+		};
+		2384F7062194249200E8B10A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239E8A6F2160A5B100BCB308;
+			remoteInfo = Host;
+		};
 		239E8AAA2160B59C00BCB308 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
@@ -728,6 +750,17 @@
 			dstSubfolderSpec = 10;
 			files = (
 				23790948219295370098797F /* WCDB.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2384F7222194249200E8B10A /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				2384F7232194249200E8B10A /* WCDB.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -982,6 +1015,12 @@
 		2384F6FE21941BF000E8B10A /* NewRebindObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NewRebindObject.mm; sourceTree = "<group>"; };
 		2384F6FF21941BF000E8B10A /* NewRebindObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NewRebindObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		2384F70021941BF000E8B10A /* NewRebindObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewRebindObject.h; sourceTree = "<group>"; };
+		2384F7282194249200E8B10A /* Convenient tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Convenient tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2384F72B2194253900E8B10A /* ConvenientTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConvenientTestCase.h; sourceTree = "<group>"; };
+		2384F72C2194253900E8B10A /* ConvenientTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ConvenientTestCase.mm; sourceTree = "<group>"; };
+		2384F7342194260400E8B10A /* ConvenientObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ConvenientObject.mm; sourceTree = "<group>"; };
+		2384F7352194260400E8B10A /* ConvenientObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ConvenientObject+WCTTableCoding.h"; sourceTree = "<group>"; };
+		2384F7362194260400E8B10A /* ConvenientObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConvenientObject.h; sourceTree = "<group>"; };
 		2386B3C21ED442FE000B72F6 /* WCTError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTError.h; sourceTree = "<group>"; };
 		2386B3C31ED442FE000B72F6 /* WCTError.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTError.mm; sourceTree = "<group>"; };
 		2386B3C41ED442FE000B72F6 /* WCTError+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTError+Private.h"; sourceTree = "<group>"; };
@@ -1460,6 +1499,15 @@
 			files = (
 				23790944219295370098797F /* Foundation.framework in Frameworks */,
 				23790945219295370098797F /* WCDB.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2384F71E2194249200E8B10A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2384F71F2194249200E8B10A /* Foundation.framework in Frameworks */,
+				2384F7202194249200E8B10A /* WCDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2118,6 +2166,18 @@
 			path = rebind;
 			sourceTree = "<group>";
 		};
+		2384F72A219424FE00E8B10A /* convenient */ = {
+			isa = PBXGroup;
+			children = (
+				2384F72B2194253900E8B10A /* ConvenientTestCase.h */,
+				2384F72C2194253900E8B10A /* ConvenientTestCase.mm */,
+				2384F7342194260400E8B10A /* ConvenientObject.mm */,
+				2384F7352194260400E8B10A /* ConvenientObject+WCTTableCoding.h */,
+				2384F7362194260400E8B10A /* ConvenientObject.h */,
+			);
+			path = convenient;
+			sourceTree = "<group>";
+		};
 		2386B3BD1ED442D9000B72F6 /* statictics */ = {
 			isa = PBXGroup;
 			children = (
@@ -2209,6 +2269,7 @@
 		239E8A8C2160A62F00BCB308 /* tests */ = {
 			isa = PBXGroup;
 			children = (
+				2384F72A219424FE00E8B10A /* convenient */,
 				23790A4F219298250098797F /* utility */,
 				23790A47219295B80098797F /* ORM */,
 				2398971F217EC9E20014BF33 /* WINQ */,
@@ -2275,6 +2336,7 @@
 				239E8A702160A5B100BCB308 /* Host.app */,
 				239E8A9D2160B37600BCB308 /* WINQ tests.xctest */,
 				2379094D219295370098797F /* ORM tests.xctest */,
+				2384F7282194249200E8B10A /* Convenient tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3010,6 +3072,26 @@
 			productReference = 2379094D219295370098797F /* ORM tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		2384F7022194249200E8B10A /* Convenient tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2384F7242194249200E8B10A /* Build configuration list for PBXNativeTarget "Convenient tests" */;
+			buildPhases = (
+				2384F7072194249200E8B10A /* Sources */,
+				2384F71E2194249200E8B10A /* Frameworks */,
+				2384F7212194249200E8B10A /* Resources */,
+				2384F7222194249200E8B10A /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2384F7032194249200E8B10A /* PBXTargetDependency */,
+				2384F7052194249200E8B10A /* PBXTargetDependency */,
+			);
+			name = "Convenient tests";
+			productName = "WINQ tests";
+			productReference = 2384F7282194249200E8B10A /* Convenient tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		239326601E836D7300D677CC /* WCDB */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 239326661E836D7300D677CC /* Build configuration list for PBXNativeTarget "WCDB" */;
@@ -3079,6 +3161,10 @@
 						DevelopmentTeam = TCFDHFMX6R;
 						ProvisioningStyle = Automatic;
 					};
+					2384F7022194249200E8B10A = {
+						DevelopmentTeam = TCFDHFMX6R;
+						ProvisioningStyle = Automatic;
+					};
 					239326601E836D7300D677CC = {
 						CreatedOnToolsVersion = 8.2;
 						DevelopmentTeam = TCFDHFMX6R;
@@ -3118,6 +3204,7 @@
 				239E8A6F2160A5B100BCB308 /* Host */,
 				239E8A9C2160B37600BCB308 /* WINQ tests */,
 				237908FA219295370098797F /* ORM tests */,
+				2384F7022194249200E8B10A /* Convenient tests */,
 			);
 		};
 /* End PBXProject section */
@@ -3134,6 +3221,13 @@
 
 /* Begin PBXResourcesBuildPhase section */
 		23790946219295370098797F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2384F7212194249200E8B10A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3190,6 +3284,18 @@
 				2384F6A32193DC3400E8B10A /* TableConstraintObject.mm in Sources */,
 				23790A6F2192BF140098797F /* PropertyObject.mm in Sources */,
 				2384F6FD21941BEA00E8B10A /* OldRebindObject.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2384F7072194249200E8B10A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2384F72F2194255700E8B10A /* SingleTableTestCase.mm in Sources */,
+				2384F72D2194253900E8B10A /* ConvenientTestCase.mm in Sources */,
+				2384F72E2194255700E8B10A /* SingleDatabaseTestCase.mm in Sources */,
+				2384F70F2194249200E8B10A /* TestCase.mm in Sources */,
+				2384F7372194260400E8B10A /* ConvenientObject.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3554,6 +3660,16 @@
 			target = 239E8A6F2160A5B100BCB308 /* Host */;
 			targetProxy = 237908FE219295370098797F /* PBXContainerItemProxy */;
 		};
+		2384F7032194249200E8B10A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239326601E836D7300D677CC /* WCDB */;
+			targetProxy = 2384F7042194249200E8B10A /* PBXContainerItemProxy */;
+		};
+		2384F7052194249200E8B10A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239E8A6F2160A5B100BCB308 /* Host */;
+			targetProxy = 2384F7062194249200E8B10A /* PBXContainerItemProxy */;
+		};
 		239E8AAB2160B59C00BCB308 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 239E8A6F2160A5B100BCB308 /* Host */;
@@ -3652,6 +3768,95 @@
 					Cocoa,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.ORM-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = WithoutBitcode;
+		};
+		2384F7252194249200E8B10A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Convenient-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+			};
+			name = Debug;
+		};
+		2384F7262194249200E8B10A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Convenient-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2384F7272194249200E8B10A /* WithoutBitcode */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Convenient-tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
@@ -4196,6 +4401,16 @@
 				2379094A219295370098797F /* Debug */,
 				2379094B219295370098797F /* Release */,
 				2379094C219295370098797F /* WithoutBitcode */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2384F7242194249200E8B10A /* Build configuration list for PBXNativeTarget "Convenient tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2384F7252194249200E8B10A /* Debug */,
+				2384F7262194249200E8B10A /* Release */,
+				2384F7272194249200E8B10A /* WithoutBitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
