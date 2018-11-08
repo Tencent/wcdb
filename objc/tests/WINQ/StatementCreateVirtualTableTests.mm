@@ -38,7 +38,7 @@
     schema = @"testSchema";
     table = @"testTable";
     module = @"testModule";
-    argument1 = StatementCreateVirtualTable::tokenize(@"testTokenize");
+    argument1 = WCDB::StatementCreateVirtualTable::tokenize(@"testTokenize");
     argument2 = WCDB::ColumnDef(WCDB::Column(@"testColumn"), WCDB::ColumnType::Integer32);
 }
 
