@@ -42,12 +42,37 @@
       <Testables>
          <TestableReference
             skipped = "NO"
+            parallelizable = "YES"
             testExecutionOrdering = "random">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "239E8A9C2160B37600BCB308"
                BuildableName = "WINQ tests.xctest"
                BlueprintName = "WINQ tests"
+               ReferencedContainer = "container:WCDB.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES"
+            testExecutionOrdering = "random">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2384F7022194249200E8B10A"
+               BuildableName = "Convenient tests.xctest"
+               BlueprintName = "Convenient tests"
+               ReferencedContainer = "container:WCDB.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES"
+            testExecutionOrdering = "random">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "237908FA219295370098797F"
+               BuildableName = "ORM tests.xctest"
+               BlueprintName = "ORM tests"
                ReferencedContainer = "container:WCDB.xcodeproj">
             </BuildableReference>
          </TestableReference>
