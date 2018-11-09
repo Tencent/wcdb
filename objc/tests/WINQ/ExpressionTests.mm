@@ -358,4 +358,9 @@
     WINQConvertibleTest(WCDB::OrderingTerms, sqls, expected);
 }
 
+- (void)test_precedence
+{
+    WINQAssertEqual((!(((column && 1) > 2) - 3)).collate(@"testCollation"), @"(NOT (((testColumn AND 1) > 2) - 3)) COLLATE testCollation");
+}
+
 @end

@@ -56,7 +56,7 @@
     auto testingSQL = ~column;
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"~(testColumn)");
+    WINQAssertEqual(testingSQL, @"~testColumn");
 }
 
 - (void)test_unary_not
@@ -64,7 +64,7 @@
     auto testingSQL = !column;
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"NOT (testColumn)");
+    WINQAssertEqual(testingSQL, @"NOT testColumn");
 }
 
 - (void)test_unary_positive
@@ -72,7 +72,7 @@
     auto testingSQL = +column;
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"+(testColumn)");
+    WINQAssertEqual(testingSQL, @"+testColumn");
 }
 
 - (void)test_unary_negative
@@ -80,7 +80,7 @@
     auto testingSQL = -column;
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"-(testColumn)");
+    WINQAssertEqual(testingSQL, @"-testColumn");
 }
 
 - (void)test_unary_is_null
@@ -88,7 +88,7 @@
     auto testingSQL = column.isNull();
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) ISNULL");
+    WINQAssertEqual(testingSQL, @"testColumn ISNULL");
 }
 
 - (void)test_unary_not_null
@@ -96,7 +96,7 @@
     auto testingSQL = column.notNull();
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) NOTNULL");
+    WINQAssertEqual(testingSQL, @"testColumn NOTNULL");
 }
 
 - (void)test_binary_concat
@@ -104,7 +104,7 @@
     auto testingSQL = column.concat(operand);
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) || (1)");
+    WINQAssertEqual(testingSQL, @"testColumn || 1");
 }
 
 - (void)test_binary_multiply
@@ -112,7 +112,7 @@
     auto testingSQL = column * operand;
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) * (1)");
+    WINQAssertEqual(testingSQL, @"testColumn * 1");
 }
 
 - (void)test_binary_divide
@@ -120,7 +120,7 @@
     auto testingSQL = column / operand;
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) / (1)");
+    WINQAssertEqual(testingSQL, @"testColumn / 1");
 }
 
 - (void)test_binary_modulo
@@ -128,7 +128,7 @@
     auto testingSQL = column % operand;
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) % (1)");
+    WINQAssertEqual(testingSQL, @"testColumn % 1");
 }
 
 - (void)test_binary_plus
@@ -136,7 +136,7 @@
     auto testingSQL = column + operand;
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) + (1)");
+    WINQAssertEqual(testingSQL, @"testColumn + 1");
 }
 
 - (void)test_binary_minus
@@ -144,7 +144,7 @@
     auto testingSQL = column - operand;
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) - (1)");
+    WINQAssertEqual(testingSQL, @"testColumn - 1");
 }
 
 - (void)test_binary_left_shift
@@ -152,7 +152,7 @@
     auto testingSQL = column << operand;
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) << (1)");
+    WINQAssertEqual(testingSQL, @"testColumn << 1");
 }
 
 - (void)test_binary_right_shift
@@ -160,7 +160,7 @@
     auto testingSQL = column >> operand;
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) >> (1)");
+    WINQAssertEqual(testingSQL, @"testColumn >> 1");
 }
 
 - (void)test_binary_bitwise_and
@@ -168,7 +168,7 @@
     auto testingSQL = column & operand;
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) & (1)");
+    WINQAssertEqual(testingSQL, @"testColumn & 1");
 }
 
 - (void)test_binary_bitwise_or
@@ -176,7 +176,7 @@
     auto testingSQL = column | operand;
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) | (1)");
+    WINQAssertEqual(testingSQL, @"testColumn | 1");
 }
 
 - (void)test_binary_less
@@ -184,7 +184,7 @@
     auto testingSQL = column < operand;
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) < (1)");
+    WINQAssertEqual(testingSQL, @"testColumn < 1");
 }
 
 - (void)test_binary_less_or_equal
@@ -192,7 +192,7 @@
     auto testingSQL = column <= operand;
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) <= (1)");
+    WINQAssertEqual(testingSQL, @"testColumn <= 1");
 }
 
 - (void)test_binary_greater
@@ -200,7 +200,7 @@
     auto testingSQL = column > operand;
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) > (1)");
+    WINQAssertEqual(testingSQL, @"testColumn > 1");
 }
 
 - (void)test_binary_greater_or_equal
@@ -208,7 +208,7 @@
     auto testingSQL = column >= operand;
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) >= (1)");
+    WINQAssertEqual(testingSQL, @"testColumn >= 1");
 }
 
 - (void)test_binary_equal
@@ -216,7 +216,7 @@
     auto testingSQL = column == operand;
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) == (1)");
+    WINQAssertEqual(testingSQL, @"testColumn == 1");
 }
 
 - (void)test_binary_not_equal
@@ -224,7 +224,7 @@
     auto testingSQL = column != operand;
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) != (1)");
+    WINQAssertEqual(testingSQL, @"testColumn != 1");
 }
 
 - (void)test_binary_is
@@ -232,7 +232,7 @@
     auto testingSQL = column.is(operand);
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) IS (1)");
+    WINQAssertEqual(testingSQL, @"testColumn IS 1");
 }
 
 - (void)test_binary_is_not
@@ -240,7 +240,7 @@
     auto testingSQL = column.isNot(operand);
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) IS NOT (1)");
+    WINQAssertEqual(testingSQL, @"testColumn IS NOT 1");
 }
 
 - (void)test_binary_and
@@ -248,7 +248,7 @@
     auto testingSQL = column && operand;
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) AND (1)");
+    WINQAssertEqual(testingSQL, @"testColumn AND 1");
 }
 
 - (void)test_binary_or
@@ -256,7 +256,7 @@
     auto testingSQL = column || operand;
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) OR (1)");
+    WINQAssertEqual(testingSQL, @"testColumn OR 1");
 }
 
 - (void)test_binary_like
@@ -264,7 +264,7 @@
     auto testingSQL = column.like(operand);
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) LIKE (1)");
+    WINQAssertEqual(testingSQL, @"testColumn LIKE 1");
 }
 
 - (void)test_binary_not_like
@@ -272,7 +272,7 @@
     auto testingSQL = column.notLike(operand);
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) NOT LIKE (1)");
+    WINQAssertEqual(testingSQL, @"testColumn NOT LIKE 1");
 }
 
 - (void)test_binary_like_escape
@@ -280,7 +280,7 @@
     auto testingSQL = column.like(operand).escape(expression);
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) LIKE (1) ESCAPE (2)");
+    WINQAssertEqual(testingSQL, @"testColumn LIKE 1 ESCAPE 2");
 }
 
 - (void)test_binary_glob
@@ -288,7 +288,7 @@
     auto testingSQL = column.glob(operand);
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) GLOB (1)");
+    WINQAssertEqual(testingSQL, @"testColumn GLOB 1");
 }
 
 - (void)test_binary_not_glob
@@ -296,7 +296,7 @@
     auto testingSQL = column.notGlob(operand);
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) NOT GLOB (1)");
+    WINQAssertEqual(testingSQL, @"testColumn NOT GLOB 1");
 }
 
 - (void)test_binary_match
@@ -304,7 +304,7 @@
     auto testingSQL = column.match(operand);
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) MATCH (1)");
+    WINQAssertEqual(testingSQL, @"testColumn MATCH 1");
 }
 
 - (void)test_binary_not_match
@@ -312,7 +312,7 @@
     auto testingSQL = column.notMatch(operand);
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) NOT MATCH (1)");
+    WINQAssertEqual(testingSQL, @"testColumn NOT MATCH 1");
 }
 
 - (void)test_binary_regexp
@@ -320,7 +320,7 @@
     auto testingSQL = column.regexp(operand);
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) REGEXP (1)");
+    WINQAssertEqual(testingSQL, @"testColumn REGEXP 1");
 }
 
 - (void)test_binary_not_regexp
@@ -328,7 +328,7 @@
     auto testingSQL = column.notRegexp(operand);
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"(testColumn) NOT REGEXP (1)");
+    WINQAssertEqual(testingSQL, @"testColumn NOT REGEXP 1");
 }
 
 - (void)test_between

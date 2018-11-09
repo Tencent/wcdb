@@ -104,6 +104,40 @@ Identifier::Type Expression::getType() const
     return type;
 }
 
+static void
+streamAutoParenthesesExpression(std::ostringstream& stream, const Expression& expression)
+{
+    bool parentheses;
+    switch (expression.switcher) {
+    case Expression::Switch::LiteralValue:
+    case Expression::Switch::BindParameter:
+    case Expression::Switch::Column:
+    case Expression::Switch::Function:
+    case Expression::Switch::Cast:
+    case Expression::Switch::In:
+    case Expression::Switch::Exists:
+    case Expression::Switch::Case:
+    case Expression::Switch::RaiseFunction:
+    case Expression::Switch::Window:
+    case Expression::Switch::Expressions:
+        parentheses = false;
+        break;
+    case Expression::Switch::UnaryOperation:
+    case Expression::Switch::BinaryOperation:
+    case Expression::Switch::Collate:
+    case Expression::Switch::Between:
+        parentheses = true;
+        break;
+    }
+    if (parentheses) {
+        stream << "(";
+    }
+    stream << expression;
+    if (parentheses) {
+        stream << ")";
+    }
+}
+
 String Expression::getDescription() const
 {
     std::ostringstream stream;
@@ -120,11 +154,12 @@ String Expression::getDescription() const
         }
         stream << column;
         break;
-    case Switch::UnaryOperation:
+    case Switch::UnaryOperation: {
         SyntaxRemedialAssert(expressions.size() == 1);
         switch (unaryOperator) {
         case UnaryOperator::Null:
-            stream << "(" << *expressions.begin() << ") ";
+            streamAutoParenthesesExpression(stream, *expressions.begin());
+            stream << space;
             if (isNot) {
                 stream << "NOT";
             } else {
@@ -133,15 +168,18 @@ String Expression::getDescription() const
             stream << unaryOperator;
             break;
         case UnaryOperator::Not:
-            stream << unaryOperator << " (" << *expressions.begin() << ")";
+            stream << unaryOperator << space;
+            streamAutoParenthesesExpression(stream, *expressions.begin());
             break;
         case UnaryOperator::Positive:
         case UnaryOperator::Negative:
         case UnaryOperator::Tilde:
-            stream << unaryOperator << "(" << *expressions.begin() << ")";
+            stream << unaryOperator;
+            streamAutoParenthesesExpression(stream, *expressions.begin());
             break;
         }
         break;
+    }
     case Switch::BinaryOperation:
         switch (binaryOperator) {
         case Syntax::Expression::BinaryOperator::Concatenate:
@@ -163,18 +201,20 @@ String Expression::getDescription() const
         case Syntax::Expression::BinaryOperator::And:
         case Syntax::Expression::BinaryOperator::Or:
             SyntaxRemedialAssert(expressions.size() == 2);
-            // Extra parentheses to ensure the correctness of operator precedence
-            stream << "(" << *expressions.begin() << ") " << binaryOperator
-                   << " (" << *(++expressions.begin()) << ")";
+            streamAutoParenthesesExpression(stream, *expressions.begin());
+            stream << space << binaryOperator << space;
+            streamAutoParenthesesExpression(stream, *(++expressions.begin()));
             break;
         case Syntax::Expression::BinaryOperator::Is:
             SyntaxRemedialAssert(expressions.size() == 2);
             // Extra parentheses to ensure the correctness of operator precedence
-            stream << "(" << *expressions.begin() << ") " << binaryOperator;
+            streamAutoParenthesesExpression(stream, *expressions.begin());
+            stream << space << binaryOperator;
             if (isNot) {
                 stream << " NOT";
             }
-            stream << " (" << *(++expressions.begin()) << ")";
+            stream << space;
+            streamAutoParenthesesExpression(stream, *(++expressions.begin()));
             break;
         case Syntax::Expression::BinaryOperator::Like:
         case Syntax::Expression::BinaryOperator::GLOB:
@@ -182,13 +222,15 @@ String Expression::getDescription() const
         case Syntax::Expression::BinaryOperator::Match: {
             SyntaxRemedialAssert(expressions.size() == 2 + escape);
             auto iter = expressions.begin();
-            stream << "(" << *iter << ")";
+            streamAutoParenthesesExpression(stream, *iter);
             if (isNot) {
                 stream << " NOT";
             }
-            stream << space << binaryOperator << space << "(" << *(++iter) << ")";
+            stream << space << binaryOperator << space;
+            streamAutoParenthesesExpression(stream, *(++iter));
             if (escape) {
-                stream << " ESCAPE (" << *(++iter) << ")";
+                stream << " ESCAPE ";
+                streamAutoParenthesesExpression(stream, *(++iter));
             }
             break;
         }
@@ -215,16 +257,20 @@ String Expression::getDescription() const
         break;
     case Switch::Collate:
         SyntaxRemedialAssert(expressions.size() == 1);
-        stream << *expressions.begin() << " COLLATE " << collation;
+        streamAutoParenthesesExpression(stream, *expressions.begin());
+        stream << " COLLATE " << collation;
         break;
     case Switch::Between: {
         SyntaxRemedialAssert(expressions.size() == 3);
         auto iter = expressions.begin();
-        stream << *iter;
+        streamAutoParenthesesExpression(stream, *iter);
         if (isNot) {
             stream << " NOT";
         }
-        stream << " BETWEEN " << *++iter << " AND " << *++iter;
+        stream << " BETWEEN ";
+        streamAutoParenthesesExpression(stream, *++iter);
+        stream << " AND ";
+        streamAutoParenthesesExpression(stream, *++iter);
         break;
     }
     case Switch::In: {
