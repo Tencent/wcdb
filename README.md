@@ -108,7 +108,7 @@ Tutorials can be found [here][iOS-tutorial].
 * Repair toolkit for database corruption recovery.
 * Database backup and recovery utility optimized for small backup size.
 * Log redirection and various tracing facilities.
-* API 12 (Android 3.1) and above are supported.
+* API 14 (Android 4.0) and above are supported.
 
 ## Getting Started
 
@@ -121,12 +121,12 @@ app module:
 
 ```gradle
 dependencies {
-    compile 'com.tencent.wcdb:wcdb-android:1.0.5'
-    // Replace "1.0.2" to any available version.
+    compile 'com.tencent.wcdb:wcdb-android:1.0.8'
+    // Replace "1.0.8" to any available version.
 }
 ```
 
-This will cause Gradle to download AAR package from jcenter while building your application.
+This will cause Gradle to download AAR package from JCenter while building your application.
 
 If you want to use Room persistence library, you need to add the Google Maven repository to
 `build.gradle` to your **root project**.
@@ -135,8 +135,7 @@ If you want to use Room persistence library, you need to add the Google Maven re
 allprojects {
     repositories {
         jcenter()
-        // add the following line
-        maven { url 'https://maven.google.com' }
+        google()    // Add this line
     }
 }
 ```
@@ -145,10 +144,11 @@ Also add dependencies to module `build.gradle`.
 
 ```gradle
 dependencies {
-    compile 'com.tencent.wcdb:wcdb-room:1.0.3'
-    // Replace "1.0.3" to any available version.
+    compile 'com.tencent.wcdb:room:1.0.8'
+    // Replace "1.0.8" to any available version.
 
-    annotationProcessor 'android.arch.persistence.room:compiler:1.0.0-alpha5'
+    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
+    // Don't forget to include Room annotation compiler from Google.
 }
 ```
 
@@ -199,7 +199,8 @@ SQLiteCipherSpec cipherSpec = new SQLiteCipherSpec()
 WCDBOpenHelperFactory factory = new WCDBOpenHelperFactory()
         .passphrase("passphrase".getBytes())  // passphrase to the database, remove this line for plain-text
         .cipherSpec(cipherSpec)               // cipher to use, remove for default settings
-        .writeAheadLoggingEnabled(true);      // enable WAL mode, remove if not needed
+        .writeAheadLoggingEnabled(true)       // enable WAL mode, remove if not needed
+        .asyncCheckpointEnabled(true)         // enable asynchronous checkpoint, remove if not needed
 
 AppDatabase db = Room.databaseBuilder(this, AppDatabase.class, "app-db")
                 .allowMainThreadQueries()
