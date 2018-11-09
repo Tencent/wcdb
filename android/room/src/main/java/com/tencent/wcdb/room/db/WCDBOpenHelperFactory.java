@@ -22,7 +22,6 @@ package com.tencent.wcdb.room.db;
 
 import android.arch.persistence.db.SupportSQLiteOpenHelper;
 
-import com.tencent.wcdb.DatabaseErrorHandler;
 import com.tencent.wcdb.database.SQLiteCipherSpec;
 
 public class WCDBOpenHelperFactory implements SupportSQLiteOpenHelper.Factory {

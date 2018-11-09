@@ -200,7 +200,7 @@ WCDBOpenHelperFactory factory = new WCDBOpenHelperFactory()
         .passphrase("passphrase".getBytes())  // passphrase to the database, remove this line for plain-text
         .cipherSpec(cipherSpec)               // cipher to use, remove for default settings
         .writeAheadLoggingEnabled(true)       // enable WAL mode, remove if not needed
-        .asyncCheckpointEnabled(true)         // enable asynchronous checkpoint, remove if not needed
+        .asyncCheckpointEnabled(true);        // enable asynchronous checkpoint, remove if not needed
 
 AppDatabase db = Room.databaseBuilder(this, AppDatabase.class, "app-db")
                 .allowMainThreadQueries()
@@ -208,7 +208,12 @@ AppDatabase db = Room.databaseBuilder(this, AppDatabase.class, "app-db")
                 .build();
 ```
 
-See `sample-persistence` for sample using Room library.
+See `sample-persistence` for samples using Room library with WCDB.
+See `sample-room-with-a-view` for samples using Room library with WCDB and other architecture components from Google.
+
+> `sample-room-with-a-view` comes from Google's CodeLabs with modification of just a few rows. Search for *\[WCDB\]* keyword for the modification.
+>
+> See [here][room-codelabs] for the original tutorial.
 
 ### Corruption Recovery
 
@@ -275,7 +280,8 @@ If you are interested in contributing, check out the [CONTRIBUTING.md], also joi
 [wcdb-docs-ios]: https://tencent.github.io/wcdb/references/ios/index.html
 [wcdb-docs-android]: https://tencent.github.io/wcdb/references/android/index.html
 [sqlcipher]: https://github.com/sqlcipher/sqlcipher
-[room]: https://developer.android.com/topic/libraries/architecture/room.html
+[room]: https://developer.android.com/topic/libraries/architecture/room
+[room-codelabs]: https://codelabs.developers.google.com/codelabs/android-room-with-a-view
 [iOS-tutorial]: https://github.com/Tencent/wcdb/wiki/iOS-macOS-Tutorial
 [Benchmark-iOS]: https://github.com/Tencent/wcdb/wiki/WCDB-iOS-benchmark
 
