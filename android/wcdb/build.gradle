@@ -3,7 +3,25 @@ apply from: rootProject.file('gradle/WeChatPublish.gradle')
 
 artifactId = 'wcdb-android'
 
+int ndkVersion() {
+    if (android.ndkDirectory != null) {
+        def propFile = new File(android.ndkDirectory, 'source.properties')
+        if (propFile.exists()) {
+            def props = new Properties()
+            props.load(propFile.newInputStream())
+            def numericVersion = (props['Pkg.Revision'] =~ /^[0-9]+/)[0]
+            return numericVersion as int
+        }
+    }
+    return 0
+}
+
 android {
+    def ndkVer = ndkVersion()
+    def useGcc = rootProject.hasProperty('USE_GCC') &&
+            rootProject.USE_GCC == '1' &&
+            ndkVer < 16     // In NDK >= r16, universal header breaks mmap with _FILE_OFFSET_BITS=64
+
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
 
@@ -15,26 +33,25 @@ android {
 
         externalNativeBuild {
             ndkBuild {
-                abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
                 arguments '-j4'
-
-                if (rootProject.hasProperty("USE_GCC")) {
-                    if (rootProject.USE_GCC == '1')
-                        arguments.add('USE_GCC=1')
+                abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+                if (useGcc) {
+                    abiFilters 'armeabi'
+                    arguments 'USE_GCC=1'   // clang generates wrong code when targeting armeabi
                 }
 
                 def hasBuildInfo = false
                 if (rootProject.hasProperty("WX_BUILD_REVISION"))
-                    hasBuildInfo = arguments.add('WX_BUILD_REVISION=\'' + rootProject.WX_BUILD_REVISION + '\'')
+                    hasBuildInfo = arguments.add("WX_BUILD_REVISION='${rootProject.WX_BUILD_REVISION}'")
                 if (rootProject.hasProperty("WX_BUILD_BRANCH"))
-                    hasBuildInfo = arguments.add('WX_BUILD_BRANCH=\'' + rootProject.WX_BUILD_BRANCH + '\'')
+                    hasBuildInfo = arguments.add("WX_BUILD_BRANCH='${rootProject.WX_BUILD_BRANCH}'")
                 if (rootProject.hasProperty("WX_BUILD_TIME"))
-                    hasBuildInfo = arguments.add('WX_BUILD_TIME=\'' + rootProject.WX_BUILD_TIME + '\'')
+                    hasBuildInfo = arguments.add("WX_BUILD_TIME='${rootProject.WX_BUILD_TIME}'")
                 if (rootProject.hasProperty("WX_BUILD_JOB"))
-                    hasBuildInfo = arguments.add('WX_BUILD_JOB=\'' + rootProject.WX_BUILD_JOB + '\'')
+                    hasBuildInfo = arguments.add("WX_BUILD_JOB='${rootProject.WX_BUILD_JOB}'")
                 if (hasBuildInfo) {
-                    arguments.add('WX_BUILD_VERSION=\'' + version + '\'')
-                    arguments.add('WITH_BUILD_INFO=1')
+                    arguments "WX_BUILD_VERSION='$version'"
+                    arguments 'WITH_BUILD_INFO=1'
                 }
             }
         }

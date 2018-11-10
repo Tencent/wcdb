@@ -18,4 +18,9 @@ def myVersion = file('../VERSION').text
 allprojects {
     group 'com.tencent.wcdb'
     version myVersion
+
+    repositories {
+        jcenter()
+        google()
+    }
 }

@@ -26,7 +26,10 @@ dependencies {
 
     // Dependencies for working with Architecture components
     // You'll probably have to update the version numbers in guild.gradle (Project)
-    implementation 'com.tencent.wcdb:room:1.0.8-SNAPSHOT'
+
+    implementation project(':room')
+    // implementation 'com.tencent.wcdb:room:1.0.8'
+
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
     androidTestImplementation "android.arch.persistence.room:testing:1.1.1"
 
