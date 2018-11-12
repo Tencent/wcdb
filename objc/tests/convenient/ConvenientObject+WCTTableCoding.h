@@ -18,32 +18,12 @@
  * limitations under the License.
  */
 
-#import "NSArray+TestCase.h"
+#import "ConvenientObject.h"
 #import <WCDB/WCDB.h>
-#import <XCTest/XCTest.h>
 
-#ifdef DEBUG
-#define TESTCASE_FAILED abort();
-#else
-#define TESTCASE_FAILED
-#endif
+@interface ConvenientObject (WCTTableCoding) <WCTTableCoding>
 
-@interface TestCase : XCTestCase
-
-@property (nonatomic, readonly) NSString* root;
-
-@property (nonatomic, readonly) NSString* directory;
-
-@property (nonatomic, readonly) NSString* testName;
-
-@property (nonatomic, readonly) NSString* className;
-
-@property (nonatomic, readonly) NSFileManager* fileManager;
-
-- (void)refreshDirectory;
-
-- (void)cleanDirectory;
-
-+ (NSString*)hint:(NSString*)description expecting:(NSString*)expected;
+WCDB_PROPERTY(identifier)
+WCDB_PROPERTY(content)
 
 @end

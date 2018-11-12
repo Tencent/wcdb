@@ -114,9 +114,9 @@
             return NO;
         }
         BOOL failed = NO;
-        int index = 1;
         BOOL canFillLastInsertedRowID = [self->_values.firstObject respondsToSelector:@selector(lastInsertedRowID)];
         for (WCTObject *value in self->_values) {
+            int index = 1;
             BOOL isAutoIncrement = NO;
             for (const WCTProperty &property : properties) {
                 if (!autoIncrements[index - 1] || !value.isAutoIncrement) {

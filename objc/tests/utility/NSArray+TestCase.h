@@ -18,32 +18,14 @@
  * limitations under the License.
  */
 
-#import "NSArray+TestCase.h"
-#import <WCDB/WCDB.h>
-#import <XCTest/XCTest.h>
+#import <Foundation/Foundation.h>
 
-#ifdef DEBUG
-#define TESTCASE_FAILED abort();
-#else
-#define TESTCASE_FAILED
-#endif
+NS_ASSUME_NONNULL_BEGIN
 
-@interface TestCase : XCTestCase
+@interface NSArray (TestCase)
 
-@property (nonatomic, readonly) NSString* root;
-
-@property (nonatomic, readonly) NSString* directory;
-
-@property (nonatomic, readonly) NSString* testName;
-
-@property (nonatomic, readonly) NSString* className;
-
-@property (nonatomic, readonly) NSFileManager* fileManager;
-
-- (void)refreshDirectory;
-
-- (void)cleanDirectory;
-
-+ (NSString*)hint:(NSString*)description expecting:(NSString*)expected;
+- (NSArray*)reversedArray;
 
 @end
+
+NS_ASSUME_NONNULL_END

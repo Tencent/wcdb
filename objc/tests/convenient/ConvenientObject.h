@@ -18,28 +18,11 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTValue.h>
+#import <Foundation/Foundation.h>
 
-@interface WCTValueForwarder : NSObject
+@interface ConvenientObject : NSObject
 
-+ (WCTValueForwarder *)forwarder;
-
-- (BOOL)respondsToForwardSelector:(SEL)aSelector;
-
-@end
-
-@interface NSNumber (WCTValue) <WCTValueProtocol>
-
-@end
-
-@interface NSData (WCTValue) <WCTValueProtocol>
-
-@end
-
-@interface NSString (WCTValue) <WCTValueProtocol>
-
-@end
-
-@interface NSNull (WCTValue) <WCTValueProtocol>
+@property (nonatomic, assign) int identifier;
+@property (nonatomic, retain) NSString *content;
 
 @end

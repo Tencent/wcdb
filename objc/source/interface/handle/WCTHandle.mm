@@ -24,7 +24,6 @@
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTHandle+Private.h>
 #import <WCDB/WCTORM.h>
-#import <WCDB/WCTValue+Private.h>
 
 @implementation WCTHandle
 

@@ -19,31 +19,12 @@
  */
 
 #import "NSArray+TestCase.h"
-#import <WCDB/WCDB.h>
-#import <XCTest/XCTest.h>
 
-#ifdef DEBUG
-#define TESTCASE_FAILED abort();
-#else
-#define TESTCASE_FAILED
-#endif
+@implementation NSArray (TestCase)
 
-@interface TestCase : XCTestCase
-
-@property (nonatomic, readonly) NSString* root;
-
-@property (nonatomic, readonly) NSString* directory;
-
-@property (nonatomic, readonly) NSString* testName;
-
-@property (nonatomic, readonly) NSString* className;
-
-@property (nonatomic, readonly) NSFileManager* fileManager;
-
-- (void)refreshDirectory;
-
-- (void)cleanDirectory;
-
-+ (NSString*)hint:(NSString*)description expecting:(NSString*)expected;
+- (NSArray*)reversedArray
+{
+    return self.reverseObjectEnumerator.allObjects;
+}
 
 @end

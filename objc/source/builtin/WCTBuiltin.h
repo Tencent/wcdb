@@ -18,32 +18,14 @@
  * limitations under the License.
  */
 
-#import "NSArray+TestCase.h"
-#import <WCDB/WCDB.h>
-#import <XCTest/XCTest.h>
+#import <WCDB/NSData+WCTColumnCoding.h>
+#import <WCDB/NSDate+WCTColumnCoding.h>
+#import <WCDB/NSNull+WCTColumnCoding.h>
+#import <WCDB/NSNumber+WCTColumnCoding.h>
+#import <WCDB/NSObject+WCTColumnCoding.h>
+#import <WCDB/NSString+WCTColumnCoding.h>
 
-#ifdef DEBUG
-#define TESTCASE_FAILED abort();
-#else
-#define TESTCASE_FAILED
-#endif
-
-@interface TestCase : XCTestCase
-
-@property (nonatomic, readonly) NSString* root;
-
-@property (nonatomic, readonly) NSString* directory;
-
-@property (nonatomic, readonly) NSString* testName;
-
-@property (nonatomic, readonly) NSString* className;
-
-@property (nonatomic, readonly) NSFileManager* fileManager;
-
-- (void)refreshDirectory;
-
-- (void)cleanDirectory;
-
-+ (NSString*)hint:(NSString*)description expecting:(NSString*)expected;
-
-@end
+#import <WCDB/WCTMaster+WCTTableCoding.h>
+#import <WCDB/WCTMaster.h>
+#import <WCDB/WCTSequence+WCTTableCoding.h>
+#import <WCDB/WCTSequence.h>

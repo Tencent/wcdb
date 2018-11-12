@@ -18,32 +18,32 @@
  * limitations under the License.
  */
 
-#import "NSArray+TestCase.h"
+#import "ConvenientObject.h"
+#import "ConvenientObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
-#import <XCTest/XCTest.h>
 
-#ifdef DEBUG
-#define TESTCASE_FAILED abort();
-#else
-#define TESTCASE_FAILED
-#endif
+@implementation ConvenientObject
 
-@interface TestCase : XCTestCase
+WCDB_IMPLEMENTATION(ConvenientObject)
+WCDB_SYNTHESIZE(ConvenientObject, identifier)
+WCDB_SYNTHESIZE(ConvenientObject, content)
 
-@property (nonatomic, readonly) NSString* root;
+WCDB_PRIMARY_ASC_AUTO_INCREMENT(ConvenientObject, identifier)
 
-@property (nonatomic, readonly) NSString* directory;
-
-@property (nonatomic, readonly) NSString* testName;
-
-@property (nonatomic, readonly) NSString* className;
-
-@property (nonatomic, readonly) NSFileManager* fileManager;
-
-- (void)refreshDirectory;
-
-- (void)cleanDirectory;
-
-+ (NSString*)hint:(NSString*)description expecting:(NSString*)expected;
+- (BOOL)isEqual:(NSObject*)object
+{
+    if (object.class != self.class) {
+        return NO;
+    }
+    ConvenientObject* other = (ConvenientObject*) object;
+    if (self.identifier != other.identifier) {
+        return NO;
+    }
+    if (self.content != nil) {
+        return [other.content isEqualToString:self.content];
+    } else {
+        return other.content == nil;
+    }
+}
 
 @end

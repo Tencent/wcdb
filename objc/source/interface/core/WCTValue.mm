@@ -20,7 +20,15 @@
 
 #import <WCDB/Assertion.hpp>
 #import <WCDB/Core.h>
-#import <WCDB/WCTValue+Private.h>
+#import <WCDB/WCTValue.h>
+
+@interface WCTValueForwarder : NSObject
+
++ (WCTValueForwarder *)forwarder;
+
+- (BOOL)respondsToForwardSelector:(SEL)aSelector;
+
+@end
 
 @implementation WCTValueForwarder {
     NSString *_string;

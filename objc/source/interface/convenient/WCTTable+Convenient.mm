@@ -44,7 +44,7 @@
     return [[[[[self prepareSelect] where:condition] limit:1] invalidateWhenUsedUp] nextObject];
 }
 
-- (WCTObject *)getObjectOrderBy:(const WCDB::OrderingTerms &)orders
+- (WCTObject *)getObjectOrders:(const WCDB::OrderingTerms &)orders
 {
     return [[[[[self prepareSelect] orders:orders] limit:1] invalidateWhenUsedUp] nextObject];
 }
@@ -66,8 +66,8 @@
     return [[[[[[self prepareSelect] where:condition] limit:1] offset:offset] invalidateWhenUsedUp] nextObject];
 }
 
-- (WCTObject *)getObjectOrderBy:(const WCDB::OrderingTerms &)orders
-                         offset:(const WCDB::Expression &)offset
+- (WCTObject *)getObjectOrders:(const WCDB::OrderingTerms &)orders
+                        offset:(const WCDB::Expression &)offset
 {
     return [[[[[[self prepareSelect] orders:orders] limit:1] offset:offset] invalidateWhenUsedUp] nextObject];
 }
@@ -90,7 +90,7 @@
     return [[[[self prepareSelect] where:condition] invalidateWhenUsedUp] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOrderBy:(const WCDB::OrderingTerms &)orders
+- (NSArray /* <WCTObject*> */ *)getObjectsOrders:(const WCDB::OrderingTerms &)orders
 {
     return [[[[self prepareSelect] orders:orders] invalidateWhenUsedUp] allObjects];
 }
@@ -117,8 +117,8 @@
     return [[[[[self prepareSelect] where:condition] limit:limit] invalidateWhenUsedUp] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOrderBy:(const WCDB::OrderingTerms &)orders
-                                            limit:(const WCDB::Expression &)limit
+- (NSArray /* <WCTObject*> */ *)getObjectsOrders:(const WCDB::OrderingTerms &)orders
+                                           limit:(const WCDB::Expression &)limit
 {
     return [[[[[self prepareSelect] orders:orders] limit:limit] invalidateWhenUsedUp] allObjects];
 }
@@ -143,9 +143,9 @@
     return [[[[[[self prepareSelect] where:condition] limit:limit] offset:offset] invalidateWhenUsedUp] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOrderBy:(const WCDB::OrderingTerms &)orders
-                                            limit:(const WCDB::Expression &)limit
-                                           offset:(const WCDB::Expression &)offset
+- (NSArray /* <WCTObject*> */ *)getObjectsOrders:(const WCDB::OrderingTerms &)orders
+                                           limit:(const WCDB::Expression &)limit
+                                          offset:(const WCDB::Expression &)offset
 {
     return [[[[[[self prepareSelect] orders:orders] limit:limit] offset:offset] invalidateWhenUsedUp] allObjects];
 }
@@ -297,54 +297,54 @@
 }
 
 #pragma mark - Get One Row
-- (WCTOneRow *)getRowOnResults:(const WCTResultColumns &)resultColumns
+- (WCTOneRow *)getRowOnResultColumns:(const WCTResultColumns &)resultColumns
 {
     return [[[[[self prepareRowSelect] onResultColumns:resultColumns] limit:1] invalidateWhenUsedUp] nextRow];
 }
 
-- (WCTOneRow *)getRowOnResults:(const WCTResultColumns &)resultColumns
-                         where:(const WCDB::Expression &)condition
+- (WCTOneRow *)getRowOnResultColumns:(const WCTResultColumns &)resultColumns
+                               where:(const WCDB::Expression &)condition
 {
     return [[[[[[self prepareRowSelect] onResultColumns:resultColumns] where:condition] limit:1] invalidateWhenUsedUp] nextRow];
 }
 
-- (WCTOneRow *)getRowOnResults:(const WCTResultColumns &)resultColumns
-                        orders:(const WCDB::OrderingTerms &)orders
+- (WCTOneRow *)getRowOnResultColumns:(const WCTResultColumns &)resultColumns
+                              orders:(const WCDB::OrderingTerms &)orders
 {
     return [[[[[[self prepareRowSelect] onResultColumns:resultColumns] orders:orders] limit:1] invalidateWhenUsedUp] nextRow];
 }
 
-- (WCTOneRow *)getRowOnResults:(const WCTResultColumns &)resultColumns
-                        offset:(const WCDB::Expression &)offset
+- (WCTOneRow *)getRowOnResultColumns:(const WCTResultColumns &)resultColumns
+                              offset:(const WCDB::Expression &)offset
 {
     return [[[[[[self prepareRowSelect] onResultColumns:resultColumns] limit:1] offset:offset] invalidateWhenUsedUp] nextRow];
 }
 
-- (WCTOneRow *)getRowOnResults:(const WCTResultColumns &)resultColumns
-                         where:(const WCDB::Expression &)condition
-                        orders:(const WCDB::OrderingTerms &)orders
+- (WCTOneRow *)getRowOnResultColumns:(const WCTResultColumns &)resultColumns
+                               where:(const WCDB::Expression &)condition
+                              orders:(const WCDB::OrderingTerms &)orders
 {
     return [[[[[[[self prepareRowSelect] onResultColumns:resultColumns] where:condition] orders:orders] limit:1] invalidateWhenUsedUp] nextRow];
 }
 
-- (WCTOneRow *)getRowOnResults:(const WCTResultColumns &)resultColumns
-                         where:(const WCDB::Expression &)condition
-                        offset:(const WCDB::Expression &)offset
+- (WCTOneRow *)getRowOnResultColumns:(const WCTResultColumns &)resultColumns
+                               where:(const WCDB::Expression &)condition
+                              offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[self prepareRowSelect] onResultColumns:resultColumns] where:condition] limit:1] offset:offset] invalidateWhenUsedUp] nextRow];
 }
 
-- (WCTOneRow *)getRowOnResults:(const WCTResultColumns &)resultColumns
-                        orders:(const WCDB::OrderingTerms &)orders
-                        offset:(const WCDB::Expression &)offset
+- (WCTOneRow *)getRowOnResultColumns:(const WCTResultColumns &)resultColumns
+                              orders:(const WCDB::OrderingTerms &)orders
+                              offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[self prepareRowSelect] onResultColumns:resultColumns] orders:orders] limit:1] offset:offset] invalidateWhenUsedUp] nextRow];
 }
 
-- (WCTOneRow *)getRowOnResults:(const WCTResultColumns &)resultColumns
-                         where:(const WCDB::Expression &)condition
-                        orders:(const WCDB::OrderingTerms &)orders
-                        offset:(const WCDB::Expression &)offset
+- (WCTOneRow *)getRowOnResultColumns:(const WCTResultColumns &)resultColumns
+                               where:(const WCDB::Expression &)condition
+                              orders:(const WCDB::OrderingTerms &)orders
+                              offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[self prepareRowSelect] onResultColumns:resultColumns] where:condition] orders:orders] limit:1] offset:offset] invalidateWhenUsedUp] nextRow];
 }
@@ -435,139 +435,139 @@
 }
 
 #pragma mark - Get One Value
-- (WCTValue *)getValueOnResult:(const WCTResultColumn &)resultColumn
+- (WCTValue *)getValueOnResultColumn:(const WCTResultColumn &)resultColumn
 {
     return [[[[[self prepareRowSelect] onResultColumns:resultColumn] limit:1] invalidateWhenUsedUp] nextValue];
 }
 
-- (WCTValue *)getValueOnResult:(const WCTResultColumn &)resultColumn
-                         where:(const WCDB::Expression &)condition
+- (WCTValue *)getValueOnResultColumn:(const WCTResultColumn &)resultColumn
+                               where:(const WCDB::Expression &)condition
 {
     return [[[[[[self prepareRowSelect] onResultColumns:resultColumn] where:condition] limit:1] invalidateWhenUsedUp] nextValue];
 }
 
-- (WCTValue *)getValueOnResult:(const WCTResultColumn &)resultColumn
-                        orders:(const WCDB::OrderingTerms &)orders
+- (WCTValue *)getValueOnResultColumn:(const WCTResultColumn &)resultColumn
+                              orders:(const WCDB::OrderingTerms &)orders
 {
     return [[[[[[self prepareRowSelect] onResultColumns:resultColumn] orders:orders] limit:1] invalidateWhenUsedUp] nextValue];
 }
 
-- (WCTValue *)getValueOnResult:(const WCTResultColumn &)resultColumn
-                        offset:(const WCDB::Expression &)offset
+- (WCTValue *)getValueOnResultColumn:(const WCTResultColumn &)resultColumn
+                              offset:(const WCDB::Expression &)offset
 {
     return [[[[[[self prepareRowSelect] onResultColumns:resultColumn] limit:1] offset:offset] invalidateWhenUsedUp] nextValue];
 }
 
-- (WCTValue *)getValueOnResult:(const WCTResultColumn &)resultColumn
-                         where:(const WCDB::Expression &)condition
-                        orders:(const WCDB::OrderingTerms &)orders
+- (WCTValue *)getValueOnResultColumn:(const WCTResultColumn &)resultColumn
+                               where:(const WCDB::Expression &)condition
+                              orders:(const WCDB::OrderingTerms &)orders
 {
     return [[[[[[[self prepareRowSelect] onResultColumns:resultColumn] where:condition] orders:orders] limit:1] invalidateWhenUsedUp] nextValue];
 }
 
-- (WCTValue *)getValueOnResult:(const WCTResultColumn &)resultColumn
-                         where:(const WCDB::Expression &)condition
-                        offset:(const WCDB::Expression &)offset
+- (WCTValue *)getValueOnResultColumn:(const WCTResultColumn &)resultColumn
+                               where:(const WCDB::Expression &)condition
+                              offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[self prepareRowSelect] onResultColumns:resultColumn] where:condition] limit:1] offset:offset] invalidateWhenUsedUp] nextValue];
 }
 
-- (WCTValue *)getValueOnResult:(const WCTResultColumn &)resultColumn
-                        orders:(const WCDB::OrderingTerms &)orders
-                        offset:(const WCDB::Expression &)offset
+- (WCTValue *)getValueOnResultColumn:(const WCTResultColumn &)resultColumn
+                              orders:(const WCDB::OrderingTerms &)orders
+                              offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[self prepareRowSelect] onResultColumns:resultColumn] orders:orders] limit:1] offset:offset] invalidateWhenUsedUp] nextValue];
 }
 
-- (WCTValue *)getValueOnResult:(const WCTResultColumn &)resultColumn
-                         where:(const WCDB::Expression &)condition
-                        orders:(const WCDB::OrderingTerms &)orders
-                        offset:(const WCDB::Expression &)offset
+- (WCTValue *)getValueOnResultColumn:(const WCTResultColumn &)resultColumn
+                               where:(const WCDB::Expression &)condition
+                              orders:(const WCDB::OrderingTerms &)orders
+                              offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[self prepareRowSelect] onResultColumns:resultColumn] where:condition] orders:orders] limit:1] offset:offset] invalidateWhenUsedUp] nextValue];
 }
 
 #pragma mark - Get Rows
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultColumns &)resultColumns
+- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
 {
     return [[[[self prepareRowSelect] onResultColumns:resultColumns] invalidateWhenUsedUp] allRows];
 }
 
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultColumns &)resultColumns
-                                where:(const WCDB::Expression &)condition
+- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
+                                      where:(const WCDB::Expression &)condition
 {
     return [[[[[self prepareRowSelect] onResultColumns:resultColumns] where:condition] invalidateWhenUsedUp] allRows];
 }
 
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultColumns &)resultColumns
-                               orders:(const WCDB::OrderingTerms &)orders
+- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
+                                     orders:(const WCDB::OrderingTerms &)orders
 {
     return [[[[[self prepareRowSelect] onResultColumns:resultColumns] orders:orders] invalidateWhenUsedUp] allRows];
 }
 
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultColumns &)resultColumns
-                                limit:(const WCDB::Expression &)limit
+- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
+                                      limit:(const WCDB::Expression &)limit
 {
     return [[[[[self prepareRowSelect] onResultColumns:resultColumns] limit:limit] invalidateWhenUsedUp] allRows];
 }
 
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultColumns &)resultColumns
-                                where:(const WCDB::Expression &)condition
-                               orders:(const WCDB::OrderingTerms &)orders
+- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
+                                      where:(const WCDB::Expression &)condition
+                                     orders:(const WCDB::OrderingTerms &)orders
 {
     return [[[[[[self prepareRowSelect] onResultColumns:resultColumns] where:condition] orders:orders] invalidateWhenUsedUp] allRows];
 }
 
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultColumns &)resultColumns
-                                where:(const WCDB::Expression &)condition
-                                limit:(const WCDB::Expression &)limit
+- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
+                                      where:(const WCDB::Expression &)condition
+                                      limit:(const WCDB::Expression &)limit
 {
     return [[[[[[self prepareRowSelect] onResultColumns:resultColumns] where:condition] limit:limit] invalidateWhenUsedUp] allRows];
 }
 
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultColumns &)resultColumns
-                               orders:(const WCDB::OrderingTerms &)orders
-                                limit:(const WCDB::Expression &)limit
+- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
+                                     orders:(const WCDB::OrderingTerms &)orders
+                                      limit:(const WCDB::Expression &)limit
 {
     return [[[[[[self prepareRowSelect] onResultColumns:resultColumns] orders:orders] limit:limit] invalidateWhenUsedUp] allRows];
 }
 
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultColumns &)resultColumns
-                                limit:(const WCDB::Expression &)limit
-                               offset:(const WCDB::Expression &)offset
+- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
+                                      limit:(const WCDB::Expression &)limit
+                                     offset:(const WCDB::Expression &)offset
 {
     return [[[[[[self prepareRowSelect] onResultColumns:resultColumns] limit:limit] offset:offset] invalidateWhenUsedUp] allRows];
 }
 
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultColumns &)resultColumns
-                                where:(const WCDB::Expression &)condition
-                               orders:(const WCDB::OrderingTerms &)orders
-                                limit:(const WCDB::Expression &)limit
+- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
+                                      where:(const WCDB::Expression &)condition
+                                     orders:(const WCDB::OrderingTerms &)orders
+                                      limit:(const WCDB::Expression &)limit
 {
     return [[[[[[[self prepareRowSelect] onResultColumns:resultColumns] where:condition] orders:orders] limit:limit] invalidateWhenUsedUp] allRows];
 }
 
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultColumns &)resultColumns
-                                where:(const WCDB::Expression &)condition
-                                limit:(const WCDB::Expression &)limit
-                               offset:(const WCDB::Expression &)offset
+- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
+                                      where:(const WCDB::Expression &)condition
+                                      limit:(const WCDB::Expression &)limit
+                                     offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[self prepareRowSelect] onResultColumns:resultColumns] where:condition] limit:limit] offset:offset] invalidateWhenUsedUp] allRows];
 }
 
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultColumns &)resultColumns
-                               orders:(const WCDB::OrderingTerms &)orders
-                                limit:(const WCDB::Expression &)limit
-                               offset:(const WCDB::Expression &)offset
+- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
+                                     orders:(const WCDB::OrderingTerms &)orders
+                                      limit:(const WCDB::Expression &)limit
+                                     offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[self prepareRowSelect] onResultColumns:resultColumns] orders:orders] limit:limit] offset:offset] invalidateWhenUsedUp] allRows];
 }
 
-- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultColumns &)resultColumns
-                                where:(const WCDB::Expression &)condition
-                               orders:(const WCDB::OrderingTerms &)orders
-                                limit:(const WCDB::Expression &)limit
-                               offset:(const WCDB::Expression &)offset
+- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
+                                      where:(const WCDB::Expression &)condition
+                                     orders:(const WCDB::OrderingTerms &)orders
+                                      limit:(const WCDB::Expression &)limit
+                                     offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[self prepareRowSelect] onResultColumns:resultColumns] where:condition] orders:orders] limit:limit] offset:offset] invalidateWhenUsedUp] allRows];
 }
@@ -613,248 +613,248 @@
     return [[[[[[self prepareInsert] orReplace] onProperties:properties] values:objects] invalidateWhenUsedUp] execute];
 }
 
-#pragma mark - Update Properties With Object
-- (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
-                    withObject:(WCTObject *)object
+#pragma mark - Update Properties To Object
+- (BOOL)updateProperties:(const WCTProperties &)properties
+                toObject:(WCTObject *)object
 {
     return [[[[[self prepareUpdate] set:properties] toObject:object] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
-                    withObject:(WCTObject *)object
-                         where:(const WCDB::Expression &)condition
+- (BOOL)updateProperties:(const WCTProperties &)properties
+                toObject:(WCTObject *)object
+                   where:(const WCDB::Expression &)condition
 {
     return [[[[[[self prepareUpdate] set:properties] toObject:object] where:condition] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
-                    withObject:(WCTObject *)object
-                         limit:(const WCDB::Expression &)limit
+- (BOOL)updateProperties:(const WCTProperties &)properties
+                toObject:(WCTObject *)object
+                   limit:(const WCDB::Expression &)limit
 {
     return [[[[[[self prepareUpdate] set:properties] toObject:object] limit:limit] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
-                    withObject:(WCTObject *)object
-                         where:(const WCDB::Expression &)condition
-                         limit:(const WCDB::Expression &)limit
+- (BOOL)updateProperties:(const WCTProperties &)properties
+                toObject:(WCTObject *)object
+                   where:(const WCDB::Expression &)condition
+                   limit:(const WCDB::Expression &)limit
 {
     return [[[[[[[self prepareUpdate] set:properties] toObject:object] where:condition] limit:limit] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
-                    withObject:(WCTObject *)object
-                        orders:(const WCDB::OrderingTerms &)orders
-                         limit:(const WCDB::Expression &)limit
+- (BOOL)updateProperties:(const WCTProperties &)properties
+                toObject:(WCTObject *)object
+                  orders:(const WCDB::OrderingTerms &)orders
+                   limit:(const WCDB::Expression &)limit
 {
     return [[[[[[[self prepareUpdate] set:properties] toObject:object] orders:orders] limit:limit] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
-                    withObject:(WCTObject *)object
-                         limit:(const WCDB::Expression &)limit
-                        offset:(const WCDB::Expression &)offset
+- (BOOL)updateProperties:(const WCTProperties &)properties
+                toObject:(WCTObject *)object
+                   limit:(const WCDB::Expression &)limit
+                  offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[self prepareUpdate] set:properties] toObject:object] limit:limit] offset:offset] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
-                    withObject:(WCTObject *)object
-                         where:(const WCDB::Expression &)condition
-                        orders:(const WCDB::OrderingTerms &)orders
-                         limit:(const WCDB::Expression &)limit
+- (BOOL)updateProperties:(const WCTProperties &)properties
+                toObject:(WCTObject *)object
+                   where:(const WCDB::Expression &)condition
+                  orders:(const WCDB::OrderingTerms &)orders
+                   limit:(const WCDB::Expression &)limit
 {
     return [[[[[[[[self prepareUpdate] set:properties] toObject:object] where:condition] orders:orders] limit:limit] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
-                    withObject:(WCTObject *)object
-                         where:(const WCDB::Expression &)condition
-                         limit:(const WCDB::Expression &)limit
-                        offset:(const WCDB::Expression &)offset
+- (BOOL)updateProperties:(const WCTProperties &)properties
+                toObject:(WCTObject *)object
+                   where:(const WCDB::Expression &)condition
+                   limit:(const WCDB::Expression &)limit
+                  offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[self prepareUpdate] set:properties] toObject:object] where:condition] limit:limit] offset:offset] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
-                    withObject:(WCTObject *)object
-                        orders:(const WCDB::OrderingTerms &)orders
-                         limit:(const WCDB::Expression &)limit
-                        offset:(const WCDB::Expression &)offset
+- (BOOL)updateProperties:(const WCTProperties &)properties
+                toObject:(WCTObject *)object
+                  orders:(const WCDB::OrderingTerms &)orders
+                   limit:(const WCDB::Expression &)limit
+                  offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[self prepareUpdate] set:properties] toObject:object] orders:orders] limit:limit] offset:offset] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
-                    withObject:(WCTObject *)object
-                         where:(const WCDB::Expression &)condition
-                        orders:(const WCDB::OrderingTerms &)orders
-                         limit:(const WCDB::Expression &)limit
-                        offset:(const WCDB::Expression &)offset
+- (BOOL)updateProperties:(const WCTProperties &)properties
+                toObject:(WCTObject *)object
+                   where:(const WCDB::Expression &)condition
+                  orders:(const WCDB::OrderingTerms &)orders
+                   limit:(const WCDB::Expression &)limit
+                  offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[[self prepareUpdate] set:properties] toObject:object] where:condition] orders:orders] limit:limit] offset:offset] invalidateWhenUsedUp] execute];
 }
 
-#pragma mark - Update Properties With Row
-- (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
-                       withRow:(WCTColumnCodingRow *)row
+#pragma mark - Update Properties To Row
+- (BOOL)updateProperties:(const WCTProperties &)properties
+                   toRow:(WCTColumnCodingRow *)row
 {
     return [[[[[self prepareUpdate] set:properties] toRow:row] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
-                       withRow:(WCTColumnCodingRow *)row
-                         where:(const WCDB::Expression &)condition
+- (BOOL)updateProperties:(const WCTProperties &)properties
+                   toRow:(WCTColumnCodingRow *)row
+                   where:(const WCDB::Expression &)condition
 {
     return [[[[[[self prepareUpdate] set:properties] toRow:row] where:condition] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
-                       withRow:(WCTColumnCodingRow *)row
-                         limit:(const WCDB::Expression &)limit
+- (BOOL)updateProperties:(const WCTProperties &)properties
+                   toRow:(WCTColumnCodingRow *)row
+                   limit:(const WCDB::Expression &)limit
 {
     return [[[[[[self prepareUpdate] set:properties] toRow:row] limit:limit] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
-                       withRow:(WCTColumnCodingRow *)row
-                         where:(const WCDB::Expression &)condition
-                         limit:(const WCDB::Expression &)limit
+- (BOOL)updateProperties:(const WCTProperties &)properties
+                   toRow:(WCTColumnCodingRow *)row
+                   where:(const WCDB::Expression &)condition
+                   limit:(const WCDB::Expression &)limit
 {
     return [[[[[[[self prepareUpdate] set:properties] toRow:row] where:condition] limit:limit] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
-                       withRow:(WCTColumnCodingRow *)row
-                        orders:(const WCDB::OrderingTerms &)orders
-                         limit:(const WCDB::Expression &)limit
+- (BOOL)updateProperties:(const WCTProperties &)properties
+                   toRow:(WCTColumnCodingRow *)row
+                  orders:(const WCDB::OrderingTerms &)orders
+                   limit:(const WCDB::Expression &)limit
 {
     return [[[[[[[self prepareUpdate] set:properties] toRow:row] orders:orders] limit:limit] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
-                       withRow:(WCTColumnCodingRow *)row
-                         limit:(const WCDB::Expression &)limit
-                        offset:(const WCDB::Expression &)offset
+- (BOOL)updateProperties:(const WCTProperties &)properties
+                   toRow:(WCTColumnCodingRow *)row
+                   limit:(const WCDB::Expression &)limit
+                  offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[self prepareUpdate] set:properties] toRow:row] limit:limit] offset:offset] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
-                       withRow:(WCTColumnCodingRow *)row
-                         where:(const WCDB::Expression &)condition
-                        orders:(const WCDB::OrderingTerms &)orders
-                         limit:(const WCDB::Expression &)limit
+- (BOOL)updateProperties:(const WCTProperties &)properties
+                   toRow:(WCTColumnCodingRow *)row
+                   where:(const WCDB::Expression &)condition
+                  orders:(const WCDB::OrderingTerms &)orders
+                   limit:(const WCDB::Expression &)limit
 {
     return [[[[[[[[self prepareUpdate] set:properties] toRow:row] where:condition] orders:orders] limit:limit] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
-                       withRow:(WCTColumnCodingRow *)row
-                         where:(const WCDB::Expression &)condition
-                         limit:(const WCDB::Expression &)limit
-                        offset:(const WCDB::Expression &)offset
+- (BOOL)updateProperties:(const WCTProperties &)properties
+                   toRow:(WCTColumnCodingRow *)row
+                   where:(const WCDB::Expression &)condition
+                   limit:(const WCDB::Expression &)limit
+                  offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[self prepareUpdate] set:properties] toRow:row] where:condition] limit:limit] offset:offset] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
-                       withRow:(WCTColumnCodingRow *)row
-                        orders:(const WCDB::OrderingTerms &)orders
-                         limit:(const WCDB::Expression &)limit
-                        offset:(const WCDB::Expression &)offset
+- (BOOL)updateProperties:(const WCTProperties &)properties
+                   toRow:(WCTColumnCodingRow *)row
+                  orders:(const WCDB::OrderingTerms &)orders
+                   limit:(const WCDB::Expression &)limit
+                  offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[self prepareUpdate] set:properties] toRow:row] orders:orders] limit:limit] offset:offset] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperties:(const WCTProperties &)properties
-                       withRow:(WCTColumnCodingRow *)row
-                         where:(const WCDB::Expression &)condition
-                        orders:(const WCDB::OrderingTerms &)orders
-                         limit:(const WCDB::Expression &)limit
-                        offset:(const WCDB::Expression &)offset
+- (BOOL)updateProperties:(const WCTProperties &)properties
+                   toRow:(WCTColumnCodingRow *)row
+                   where:(const WCDB::Expression &)condition
+                  orders:(const WCDB::OrderingTerms &)orders
+                   limit:(const WCDB::Expression &)limit
+                  offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[[self prepareUpdate] set:properties] toRow:row] where:condition] orders:orders] limit:limit] offset:offset] invalidateWhenUsedUp] execute];
 }
 
 #pragma mark - Update Properties With Value
-- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
-                   withValue:(WCTColumnCodingValue *)value
+- (BOOL)updateProperty:(const WCTProperty &)property
+               toValue:(WCTColumnCodingValue *)value
 {
-    return [[[[self prepareUpdate] set:property] invalidateWhenUsedUp] execute];
+    return [[[[[self prepareUpdate] set:property] toValue:value] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
-                   withValue:(WCTColumnCodingValue *)value
-                       where:(const WCDB::Expression &)condition
+- (BOOL)updateProperty:(const WCTProperty &)property
+               toValue:(WCTColumnCodingValue *)value
+                 where:(const WCDB::Expression &)condition
 {
     return [[[[[[self prepareUpdate] set:property] toValue:value] where:condition] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
-                   withValue:(WCTColumnCodingValue *)value
-                       limit:(const WCDB::Expression &)limit
+- (BOOL)updateProperty:(const WCTProperty &)property
+               toValue:(WCTColumnCodingValue *)value
+                 limit:(const WCDB::Expression &)limit
 {
     return [[[[[[self prepareUpdate] set:property] toValue:value] limit:limit] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
-                   withValue:(WCTColumnCodingValue *)value
-                       where:(const WCDB::Expression &)condition
-                       limit:(const WCDB::Expression &)limit
+- (BOOL)updateProperty:(const WCTProperty &)property
+               toValue:(WCTColumnCodingValue *)value
+                 where:(const WCDB::Expression &)condition
+                 limit:(const WCDB::Expression &)limit
 {
     return [[[[[[[self prepareUpdate] set:property] toValue:value] where:condition] limit:limit] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
-                   withValue:(WCTColumnCodingValue *)value
-                      orders:(const WCDB::OrderingTerms &)orders
-                       limit:(const WCDB::Expression &)limit
+- (BOOL)updateProperty:(const WCTProperty &)property
+               toValue:(WCTColumnCodingValue *)value
+                orders:(const WCDB::OrderingTerms &)orders
+                 limit:(const WCDB::Expression &)limit
 {
     return [[[[[[[self prepareUpdate] set:property] toValue:value] orders:orders] limit:limit] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
-                   withValue:(WCTColumnCodingValue *)value
-                       limit:(const WCDB::Expression &)limit
-                      offset:(const WCDB::Expression &)offset
+- (BOOL)updateProperty:(const WCTProperty &)property
+               toValue:(WCTColumnCodingValue *)value
+                 limit:(const WCDB::Expression &)limit
+                offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[self prepareUpdate] set:property] toValue:value] limit:limit] offset:offset] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
-                   withValue:(WCTColumnCodingValue *)value
-                       where:(const WCDB::Expression &)condition
-                      orders:(const WCDB::OrderingTerms &)orders
-                       limit:(const WCDB::Expression &)limit
+- (BOOL)updateProperty:(const WCTProperty &)property
+               toValue:(WCTColumnCodingValue *)value
+                 where:(const WCDB::Expression &)condition
+                orders:(const WCDB::OrderingTerms &)orders
+                 limit:(const WCDB::Expression &)limit
 {
     return [[[[[[[[self prepareUpdate] set:property] toValue:value] where:condition] orders:orders] limit:limit] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
-                   withValue:(WCTColumnCodingValue *)value
-                       where:(const WCDB::Expression &)condition
-                       limit:(const WCDB::Expression &)limit
-                      offset:(const WCDB::Expression &)offset
+- (BOOL)updateProperty:(const WCTProperty &)property
+               toValue:(WCTColumnCodingValue *)value
+                 where:(const WCDB::Expression &)condition
+                 limit:(const WCDB::Expression &)limit
+                offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[self prepareUpdate] set:property] toValue:value] where:condition] limit:limit] offset:offset] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
-                   withValue:(WCTColumnCodingValue *)value
-                      orders:(const WCDB::OrderingTerms &)orders
-                       limit:(const WCDB::Expression &)limit
-                      offset:(const WCDB::Expression &)offset
+- (BOOL)updateProperty:(const WCTProperty &)property
+               toValue:(WCTColumnCodingValue *)value
+                orders:(const WCDB::OrderingTerms &)orders
+                 limit:(const WCDB::Expression &)limit
+                offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[self prepareUpdate] set:property] toValue:value] orders:orders] limit:limit] offset:offset] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)updateRowsOnProperty:(const WCTProperty &)property
-                   withValue:(WCTColumnCodingValue *)value
-                       where:(const WCDB::Expression &)condition
-                      orders:(const WCDB::OrderingTerms &)orders
-                       limit:(const WCDB::Expression &)limit
-                      offset:(const WCDB::Expression &)offset
+- (BOOL)updateProperty:(const WCTProperty &)property
+               toValue:(WCTColumnCodingValue *)value
+                 where:(const WCDB::Expression &)condition
+                orders:(const WCDB::OrderingTerms &)orders
+                 limit:(const WCDB::Expression &)limit
+                offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[[self prepareUpdate] set:property] toValue:value] where:condition] orders:orders] limit:limit] offset:offset] invalidateWhenUsedUp] execute];
 }
@@ -870,7 +870,7 @@
     return [[[[self prepareDelete] where:condition] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)deleteObjectsOrderBy:(const WCDB::OrderingTerms &)orders
+- (BOOL)deleteObjectsOrders:(const WCDB::OrderingTerms &)orders
 {
     return [[[[self prepareDelete] orders:orders] invalidateWhenUsedUp] execute];
 }
@@ -891,8 +891,8 @@
     return [[[[[self prepareDelete] where:condition] limit:limit] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)deleteObjectsOrderBy:(const WCDB::OrderingTerms &)orders
-                       limit:(const WCDB::Expression &)limit
+- (BOOL)deleteObjectsOrders:(const WCDB::OrderingTerms &)orders
+                      limit:(const WCDB::Expression &)limit
 {
     return [[[[[self prepareDelete] orders:orders] limit:limit] invalidateWhenUsedUp] execute];
 }
@@ -917,9 +917,9 @@
     return [[[[[[self prepareDelete] where:condition] limit:limit] offset:offset] invalidateWhenUsedUp] execute];
 }
 
-- (BOOL)deleteObjectsOrderBy:(const WCDB::OrderingTerms &)orders
-                       limit:(const WCDB::Expression &)limit
-                      offset:(const WCDB::Expression &)offset
+- (BOOL)deleteObjectsOrders:(const WCDB::OrderingTerms &)orders
+                      limit:(const WCDB::Expression &)limit
+                     offset:(const WCDB::Expression &)offset
 {
     return [[[[[[self prepareDelete] orders:orders] limit:limit] offset:offset] invalidateWhenUsedUp] execute];
 }

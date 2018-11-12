@@ -20,6 +20,6 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/WCTConvertible.h>
-#import <WCDB/WCTForwardDeclaration.h>
+#import <WCDB/WCTDeclaration.h>
 #import <WCDB/WCTValue.h>
 #import <WCDB/WINQ.h>

@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTForwardDeclaration.h>
+#import <WCDB/WCTDeclaration.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -18,7 +18,10 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTForwardDeclaration.h>
+#import <WCDB/WCTDeclaration.h>
+
+//It's tricky here. You can use `WCTValue` as any of `NSNumber`/`NSString`/`NSData`/`NSNull`, but it actually is a `NSProxy<WCTValueProtocol>` proxy.
+//Ones have no need to understand this difference unless he/she needs to go deep into these fundamental classes.
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -34,8 +37,22 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-//It's tricky here. You can use `WCTValue` as any of `NSNumber`/`NSString`/`NSData`/`NSNull`, but it actually is a `NSProxy<WCTValueProtocol>` proxy.
-//Ones have no need to understand this difference unless he/she needs to go deep into these fundamental classes.
+@interface NSNumber (WCTValue) <WCTValueProtocol>
+
+@end
+
+@interface NSData (WCTValue) <WCTValueProtocol>
+
+@end
+
+@interface NSString (WCTValue) <WCTValueProtocol>
+
+@end
+
+@interface NSNull (WCTValue) <WCTValueProtocol>
+
+@end
+
 typedef NSObject<WCTValueProtocol> WCTValue;
 typedef NSArray<WCTValue *> WCTOneRow;
 typedef NSArray<WCTValue *> WCTOneColumn;

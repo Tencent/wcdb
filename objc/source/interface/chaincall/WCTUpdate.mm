@@ -136,7 +136,8 @@ typedef NS_ENUM(NSUInteger, WCTUpdateType) {
         WCTColumnCodingRow *row = (WCTColumnCodingRow *) _value;
         int index = 1;
         for (WCTColumnCodingValue *value in row) {
-            [_handle bindValue:value toIndex:++index];
+            [_handle bindValue:value toIndex:index];
+            ++index;
         }
         break;
     }
