@@ -20,6 +20,7 @@
 
 #import <WCDB/Assertion.hpp>
 #import <WCDB/Core.h>
+#import <WCDB/WCTDatabase+Table.h>
 #import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTTable+Private.h>
@@ -41,7 +42,13 @@
     return self;
 }
 
-- (WCTDatabase *) database
+- (BOOL) dropIndexWithSubfix : (NSString *) indexSubfix
+{
+    WCTRemedialAssert(indexSubfix, "Index subfix can't be null.", return NO;);
+    return [_database dropIndex:[_name stringByAppendingString:indexSubfix]];
+}
+
+- (WCTDatabase *)database
 {
     return _database;
 }
