@@ -22,12 +22,12 @@
 
 @interface ConvenientUpdateTests : ConvenientTestCase
 
-@property (nonatomic, readonly) ConvenientObject* renewObject;
+@property (nonatomic, readonly) TestCaseObject* renewObject;
 @property (nonatomic, readonly) WCTColumnCodingRow* renewRow;
 @property (nonatomic, readonly) WCTColumnCodingValue* renewValue;
 
-@property (nonatomic, readonly) ConvenientObject* renewedObject1;
-@property (nonatomic, readonly) ConvenientObject* renewedObject2;
+@property (nonatomic, readonly) TestCaseObject* renewedObject1;
+@property (nonatomic, readonly) TestCaseObject* renewedObject2;
 
 @end
 
@@ -37,15 +37,15 @@
 {
     [super setUp];
 
-    _renewObject = [[ConvenientObject alloc] init];
+    _renewObject = [[TestCaseObject alloc] init];
     ;
     _renewObject.content = @"newObject";
 
-    _renewedObject1 = [[ConvenientObject alloc] init];
+    _renewedObject1 = [[TestCaseObject alloc] init];
     _renewedObject1.identifier = 1;
     _renewedObject1.content = _renewObject.content;
 
-    _renewedObject2 = [[ConvenientObject alloc] init];
+    _renewedObject2 = [[TestCaseObject alloc] init];
     _renewedObject2.identifier = 2;
     _renewedObject2.content = _renewObject.content;
 
@@ -59,7 +59,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:ConvenientObject.content toObject:self.renewObject];
+             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject];
          }];
     XCTAssertTrue(result);
 }
@@ -69,7 +69,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:ConvenientObject.content toObject:self.renewObject where:ConvenientObject.identifier == 1];
+             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1];
          }];
     XCTAssertTrue(result);
 }
@@ -79,7 +79,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:ConvenientObject.content toObject:self.renewObject limit:1];
+             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -89,7 +89,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:ConvenientObject.content toObject:self.renewObject where:ConvenientObject.identifier == 1 limit:1];
+             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1 limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -99,7 +99,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:ConvenientObject.content toObject:self.renewObject orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -109,7 +109,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:ConvenientObject.content toObject:self.renewObject limit:1 offset:1];
+             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -119,7 +119,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:ConvenientObject.content toObject:self.renewObject where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -129,7 +129,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:ConvenientObject.content toObject:self.renewObject where:ConvenientObject.identifier > 0 limit:1 offset:1];
+             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -139,7 +139,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:ConvenientObject.content toObject:self.renewObject orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -149,7 +149,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:ConvenientObject.content toObject:self.renewObject where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -160,7 +160,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:ConvenientObject.content toRow:self.renewRow];
+             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow];
          }];
     XCTAssertTrue(result);
 }
@@ -170,7 +170,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:ConvenientObject.content toRow:self.renewRow where:ConvenientObject.identifier == 1];
+             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1];
          }];
     XCTAssertTrue(result);
 }
@@ -180,7 +180,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:ConvenientObject.content toRow:self.renewRow limit:1];
+             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -190,7 +190,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:ConvenientObject.content toRow:self.renewRow where:ConvenientObject.identifier == 1 limit:1];
+             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1 limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -200,7 +200,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:ConvenientObject.content toRow:self.renewRow orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -210,7 +210,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:ConvenientObject.content toRow:self.renewRow limit:1 offset:1];
+             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -220,7 +220,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:ConvenientObject.content toRow:self.renewRow where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -230,7 +230,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:ConvenientObject.content toRow:self.renewRow where:ConvenientObject.identifier > 0 limit:1 offset:1];
+             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -240,7 +240,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:ConvenientObject.content toRow:self.renewRow orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -250,7 +250,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:ConvenientObject.content toRow:self.renewRow where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -261,7 +261,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperty:ConvenientObject.content toValue:self.renewValue];
+             return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue];
          }];
     XCTAssertTrue(result);
 }
@@ -271,7 +271,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperty:ConvenientObject.content toValue:self.renewValue where:ConvenientObject.identifier == 1];
+             return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1];
          }];
     XCTAssertTrue(result);
 }
@@ -281,7 +281,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperty:ConvenientObject.content toValue:self.renewValue limit:1];
+             return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -291,7 +291,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperty:ConvenientObject.content toValue:self.renewValue where:ConvenientObject.identifier == 1 limit:1];
+             return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1 limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -301,7 +301,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperty:ConvenientObject.content toValue:self.renewValue orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+             return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -311,7 +311,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperty:ConvenientObject.content toValue:self.renewValue limit:1 offset:1];
+             return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -321,7 +321,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperty:ConvenientObject.content toValue:self.renewValue where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+             return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -331,7 +331,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperty:ConvenientObject.content toValue:self.renewValue where:ConvenientObject.identifier > 0 limit:1 offset:1];
+             return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -341,7 +341,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperty:ConvenientObject.content toValue:self.renewValue orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+             return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -351,7 +351,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperty:ConvenientObject.content toValue:self.renewValue where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+             return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -362,7 +362,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:ConvenientObject.content toObject:self.renewObject];
+             return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject];
          }];
     XCTAssertTrue(result);
 }
@@ -372,7 +372,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:ConvenientObject.content toObject:self.renewObject where:ConvenientObject.identifier == 1];
+             return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1];
          }];
     XCTAssertTrue(result);
 }
@@ -382,7 +382,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:ConvenientObject.content toObject:self.renewObject limit:1];
+             return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -392,7 +392,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:ConvenientObject.content toObject:self.renewObject where:ConvenientObject.identifier == 1 limit:1];
+             return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1 limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -402,7 +402,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:ConvenientObject.content toObject:self.renewObject orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+             return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -412,7 +412,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:ConvenientObject.content toObject:self.renewObject limit:1 offset:1];
+             return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -422,7 +422,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:ConvenientObject.content toObject:self.renewObject where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+             return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -432,7 +432,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:ConvenientObject.content toObject:self.renewObject where:ConvenientObject.identifier > 0 limit:1 offset:1];
+             return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -442,7 +442,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:ConvenientObject.content toObject:self.renewObject orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+             return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -452,7 +452,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:ConvenientObject.content toObject:self.renewObject where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+             return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -463,7 +463,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:ConvenientObject.content toRow:self.renewRow];
+             return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow];
          }];
     XCTAssertTrue(result);
 }
@@ -473,7 +473,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:ConvenientObject.content toRow:self.renewRow where:ConvenientObject.identifier == 1];
+             return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1];
          }];
     XCTAssertTrue(result);
 }
@@ -483,7 +483,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:ConvenientObject.content toRow:self.renewRow limit:1];
+             return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -493,7 +493,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:ConvenientObject.content toRow:self.renewRow where:ConvenientObject.identifier == 1 limit:1];
+             return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1 limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -503,7 +503,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:ConvenientObject.content toRow:self.renewRow orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+             return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -513,7 +513,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:ConvenientObject.content toRow:self.renewRow limit:1 offset:1];
+             return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -523,7 +523,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:ConvenientObject.content toRow:self.renewRow where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+             return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -533,7 +533,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:ConvenientObject.content toRow:self.renewRow where:ConvenientObject.identifier > 0 limit:1 offset:1];
+             return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -543,7 +543,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:ConvenientObject.content toRow:self.renewRow orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+             return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -553,7 +553,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:ConvenientObject.content toRow:self.renewRow where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+             return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -564,7 +564,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperty:ConvenientObject.content toValue:self.renewValue];
+             return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue];
          }];
     XCTAssertTrue(result);
 }
@@ -574,7 +574,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperty:ConvenientObject.content toValue:self.renewValue where:ConvenientObject.identifier == 1];
+             return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1];
          }];
     XCTAssertTrue(result);
 }
@@ -584,7 +584,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperty:ConvenientObject.content toValue:self.renewValue limit:1];
+             return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -594,7 +594,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperty:ConvenientObject.content toValue:self.renewValue where:ConvenientObject.identifier == 1 limit:1];
+             return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1 limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -604,7 +604,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperty:ConvenientObject.content toValue:self.renewValue orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+             return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -614,7 +614,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperty:ConvenientObject.content toValue:self.renewValue limit:1 offset:1];
+             return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -624,7 +624,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperty:ConvenientObject.content toValue:self.renewValue where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+             return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -634,7 +634,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperty:ConvenientObject.content toValue:self.renewValue where:ConvenientObject.identifier > 0 limit:1 offset:1];
+             return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -644,7 +644,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperty:ConvenientObject.content toValue:self.renewValue orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+             return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -654,7 +654,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [self.table updateProperty:ConvenientObject.content toValue:self.renewValue where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+             return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -665,7 +665,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:ConvenientObject.content toObject:self.renewObject];
+             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject];
          }];
     XCTAssertTrue(result);
 }
@@ -675,7 +675,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:ConvenientObject.content toObject:self.renewObject where:ConvenientObject.identifier == 1];
+             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1];
          }];
     XCTAssertTrue(result);
 }
@@ -685,7 +685,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:ConvenientObject.content toObject:self.renewObject limit:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -695,7 +695,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:ConvenientObject.content toObject:self.renewObject where:ConvenientObject.identifier == 1 limit:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1 limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -705,7 +705,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:ConvenientObject.content toObject:self.renewObject orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -715,7 +715,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:ConvenientObject.content toObject:self.renewObject limit:1 offset:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -725,7 +725,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:ConvenientObject.content toObject:self.renewObject where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -735,7 +735,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:ConvenientObject.content toObject:self.renewObject where:ConvenientObject.identifier > 0 limit:1 offset:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -745,7 +745,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:ConvenientObject.content toObject:self.renewObject orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -755,7 +755,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:ConvenientObject.content toObject:self.renewObject where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -766,7 +766,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:ConvenientObject.content toRow:self.renewRow];
+             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow];
          }];
     XCTAssertTrue(result);
 }
@@ -776,7 +776,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:ConvenientObject.content toRow:self.renewRow where:ConvenientObject.identifier == 1];
+             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1];
          }];
     XCTAssertTrue(result);
 }
@@ -786,7 +786,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:ConvenientObject.content toRow:self.renewRow limit:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -796,7 +796,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:ConvenientObject.content toRow:self.renewRow where:ConvenientObject.identifier == 1 limit:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1 limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -806,7 +806,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:ConvenientObject.content toRow:self.renewRow orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -816,7 +816,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:ConvenientObject.content toRow:self.renewRow limit:1 offset:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -826,7 +826,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:ConvenientObject.content toRow:self.renewRow where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -836,7 +836,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:ConvenientObject.content toRow:self.renewRow where:ConvenientObject.identifier > 0 limit:1 offset:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -846,7 +846,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:ConvenientObject.content toRow:self.renewRow orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -856,7 +856,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:ConvenientObject.content toRow:self.renewRow where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -867,7 +867,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperty:ConvenientObject.content toValue:self.renewValue];
+             return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue];
          }];
     XCTAssertTrue(result);
 }
@@ -877,7 +877,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperty:ConvenientObject.content toValue:self.renewValue where:ConvenientObject.identifier == 1];
+             return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1];
          }];
     XCTAssertTrue(result);
 }
@@ -887,7 +887,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperty:ConvenientObject.content toValue:self.renewValue limit:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -897,7 +897,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperty:ConvenientObject.content toValue:self.renewValue where:ConvenientObject.identifier == 1 limit:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1 limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -907,7 +907,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperty:ConvenientObject.content toValue:self.renewValue orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -917,7 +917,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperty:ConvenientObject.content toValue:self.renewValue limit:1 offset:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -927,7 +927,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperty:ConvenientObject.content toValue:self.renewValue where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
     XCTAssertTrue(result);
 }
@@ -937,7 +937,7 @@
     BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperty:ConvenientObject.content toValue:self.renewValue where:ConvenientObject.identifier > 0 limit:1 offset:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -947,7 +947,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperty:ConvenientObject.content toValue:self.renewValue orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }
@@ -957,7 +957,7 @@
     BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
                               andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperty:ConvenientObject.content toValue:self.renewValue where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+             return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
     XCTAssertTrue(result);
 }

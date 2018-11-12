@@ -18,12 +18,11 @@
  * limitations under the License.
  */
 
-#import "ConvenientObject.h"
-#import <WCDB/WCDB.h>
+#import <Foundation/Foundation.h>
 
-@interface ConvenientObject (WCTTableCoding) <WCTTableCoding>
+@interface TestCaseObject : NSObject
 
-WCDB_PROPERTY(identifier)
-WCDB_PROPERTY(content)
+@property (nonatomic, assign) int identifier;
+@property (nonatomic, retain) NSString *content;
 
 @end

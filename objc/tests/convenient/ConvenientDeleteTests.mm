@@ -42,7 +42,7 @@
     BOOL result = [self checkObject:self.object1
                              andSQL:@"DELETE FROM main.testTable WHERE identifier == 2"
         asExpectedAfterModification:^BOOL {
-            return [self.database deleteFromTable:self.tableName where:ConvenientObject.identifier == 2];
+            return [self.database deleteFromTable:self.tableName where:TestCaseObject.identifier == 2];
         }];
     XCTAssertTrue(result);
 }
@@ -62,7 +62,7 @@
     BOOL result = [self checkObject:self.object2
                              andSQL:@"DELETE FROM main.testTable WHERE identifier > 0 LIMIT 1"
         asExpectedAfterModification:^BOOL {
-            return [self.database deleteFromTable:self.tableName where:ConvenientObject.identifier > 0 limit:1];
+            return [self.database deleteFromTable:self.tableName where:TestCaseObject.identifier > 0 limit:1];
         }];
     XCTAssertTrue(result);
 }
@@ -72,7 +72,7 @@
     BOOL result = [self checkObject:self.object1
                              andSQL:@"DELETE FROM main.testTable ORDER BY identifier DESC LIMIT 1"
         asExpectedAfterModification:^BOOL {
-            return [self.database deleteFromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+            return [self.database deleteFromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
         }];
     XCTAssertTrue(result);
 }
@@ -92,7 +92,7 @@
     BOOL result = [self checkObject:self.object1
                              andSQL:@"DELETE FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
         asExpectedAfterModification:^BOOL {
-            return [self.database deleteFromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+            return [self.database deleteFromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
         }];
     XCTAssertTrue(result);
 }
@@ -102,7 +102,7 @@
     BOOL result = [self checkObject:self.object2
                              andSQL:@"DELETE FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
         asExpectedAfterModification:^BOOL {
-            return [self.database deleteFromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+            return [self.database deleteFromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
         }];
     XCTAssertTrue(result);
 }
@@ -112,7 +112,7 @@
     BOOL result = [self checkObject:self.object2
                              andSQL:@"DELETE FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
         asExpectedAfterModification:^BOOL {
-            return [self.database deleteFromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+            return [self.database deleteFromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
         }];
     XCTAssertTrue(result);
 }
@@ -122,7 +122,7 @@
     BOOL result = [self checkObject:self.object2
                              andSQL:@"DELETE FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
         asExpectedAfterModification:^BOOL {
-            return [self.database deleteFromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+            return [self.database deleteFromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
         }];
     XCTAssertTrue(result);
 }
@@ -143,7 +143,7 @@
     BOOL result = [self checkObject:self.object1
                              andSQL:@"DELETE FROM main.testTable WHERE identifier == 2"
         asExpectedAfterModification:^BOOL {
-            return [self.table deleteObjectsWhere:ConvenientObject.identifier == 2];
+            return [self.table deleteObjectsWhere:TestCaseObject.identifier == 2];
         }];
     XCTAssertTrue(result);
 }
@@ -163,7 +163,7 @@
     BOOL result = [self checkObject:self.object2
                              andSQL:@"DELETE FROM main.testTable WHERE identifier > 0 LIMIT 1"
         asExpectedAfterModification:^BOOL {
-            return [self.table deleteObjectsWhere:ConvenientObject.identifier > 0 limit:1];
+            return [self.table deleteObjectsWhere:TestCaseObject.identifier > 0 limit:1];
         }];
     XCTAssertTrue(result);
 }
@@ -173,7 +173,7 @@
     BOOL result = [self checkObject:self.object1
                              andSQL:@"DELETE FROM main.testTable ORDER BY identifier DESC LIMIT 1"
         asExpectedAfterModification:^BOOL {
-            return [self.table deleteObjectsOrders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+            return [self.table deleteObjectsOrders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
         }];
     XCTAssertTrue(result);
 }
@@ -193,7 +193,7 @@
     BOOL result = [self checkObject:self.object1
                              andSQL:@"DELETE FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
         asExpectedAfterModification:^BOOL {
-            return [self.table deleteObjectsWhere:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+            return [self.table deleteObjectsWhere:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
         }];
     XCTAssertTrue(result);
 }
@@ -203,7 +203,7 @@
     BOOL result = [self checkObject:self.object2
                              andSQL:@"DELETE FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
         asExpectedAfterModification:^BOOL {
-            return [self.table deleteObjectsWhere:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+            return [self.table deleteObjectsWhere:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
         }];
     XCTAssertTrue(result);
 }
@@ -213,7 +213,7 @@
     BOOL result = [self checkObject:self.object2
                              andSQL:@"DELETE FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
         asExpectedAfterModification:^BOOL {
-            return [self.table deleteObjectsOrders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+            return [self.table deleteObjectsOrders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
         }];
     XCTAssertTrue(result);
 }
@@ -223,7 +223,7 @@
     BOOL result = [self checkObject:self.object2
                              andSQL:@"DELETE FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
         asExpectedAfterModification:^BOOL {
-            return [self.table deleteObjectsWhere:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+            return [self.table deleteObjectsWhere:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
         }];
     XCTAssertTrue(result);
 }
@@ -244,7 +244,7 @@
     BOOL result = [self checkObject:self.object1
                              andSQL:@"DELETE FROM main.testTable WHERE identifier == 2"
         asExpectedAfterModification:^BOOL {
-            return [[self.database getHandle] deleteFromTable:self.tableName where:ConvenientObject.identifier == 2];
+            return [[self.database getHandle] deleteFromTable:self.tableName where:TestCaseObject.identifier == 2];
         }];
     XCTAssertTrue(result);
 }
@@ -264,7 +264,7 @@
     BOOL result = [self checkObject:self.object2
                              andSQL:@"DELETE FROM main.testTable WHERE identifier > 0 LIMIT 1"
         asExpectedAfterModification:^BOOL {
-            return [[self.database getHandle] deleteFromTable:self.tableName where:ConvenientObject.identifier > 0 limit:1];
+            return [[self.database getHandle] deleteFromTable:self.tableName where:TestCaseObject.identifier > 0 limit:1];
         }];
     XCTAssertTrue(result);
 }
@@ -274,7 +274,7 @@
     BOOL result = [self checkObject:self.object1
                              andSQL:@"DELETE FROM main.testTable ORDER BY identifier DESC LIMIT 1"
         asExpectedAfterModification:^BOOL {
-            return [[self.database getHandle] deleteFromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+            return [[self.database getHandle] deleteFromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
         }];
     XCTAssertTrue(result);
 }
@@ -294,7 +294,7 @@
     BOOL result = [self checkObject:self.object1
                              andSQL:@"DELETE FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
         asExpectedAfterModification:^BOOL {
-            return [[self.database getHandle] deleteFromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+            return [[self.database getHandle] deleteFromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
         }];
     XCTAssertTrue(result);
 }
@@ -304,7 +304,7 @@
     BOOL result = [self checkObject:self.object2
                              andSQL:@"DELETE FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
         asExpectedAfterModification:^BOOL {
-            return [[self.database getHandle] deleteFromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+            return [[self.database getHandle] deleteFromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
         }];
     XCTAssertTrue(result);
 }
@@ -314,7 +314,7 @@
     BOOL result = [self checkObject:self.object2
                              andSQL:@"DELETE FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
         asExpectedAfterModification:^BOOL {
-            return [[self.database getHandle] deleteFromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+            return [[self.database getHandle] deleteFromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
         }];
     XCTAssertTrue(result);
 }
@@ -324,7 +324,7 @@
     BOOL result = [self checkObject:self.object2
                              andSQL:@"DELETE FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
         asExpectedAfterModification:^BOOL {
-            return [[self.database getHandle] deleteFromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+            return [[self.database getHandle] deleteFromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
         }];
     XCTAssertTrue(result);
 }

@@ -18,37 +18,37 @@
  * limitations under the License.
  */
 
-#import "ConvenientObject+WCTTableCoding.h"
-#import "ConvenientObject.h"
 #import "SingleTableTestCase.h"
+#import "TestCaseObject+WCTTableCoding.h"
+#import "TestCaseObject.h"
 
 @interface ConvenientTestCase : SingleTableTestCase
 
 @property (nonatomic, readonly) WCTTable* table;
 
-@property (nonatomic, readonly) ConvenientObject* object1;
-@property (nonatomic, readonly) ConvenientObject* object2;
-@property (nonatomic, readonly) NSArray<ConvenientObject*>* objects;
+@property (nonatomic, readonly) TestCaseObject* object1;
+@property (nonatomic, readonly) TestCaseObject* object2;
+@property (nonatomic, readonly) NSArray<TestCaseObject*>* objects;
 
-- (BOOL)checkObject:(ConvenientObject*)object
+- (BOOL)checkObject:(TestCaseObject*)object
                      andSQL:(NSString*)sql
 asExpectedAfterModification:(BOOL (^)())block;
 
-- (BOOL)checkObjects:(NSArray<ConvenientObject*>*)objects
+- (BOOL)checkObjects:(NSArray<TestCaseObject*>*)objects
                      andSQL:(NSString*)sql
 asExpectedAfterModification:(BOOL (^)())block;
 
-- (BOOL)checkObjects:(NSArray<ConvenientObject*>*)objects
+- (BOOL)checkObjects:(NSArray<TestCaseObject*>*)objects
                     andSQLs:(NSArray<NSString*>*)sqls
 asExpectedAfterModification:(BOOL (^)())block;
 
-- (BOOL)checkObject:(ConvenientObject*)object
+- (BOOL)checkObject:(TestCaseObject*)object
                andSQL:(NSString*)sql
-asExpectedBySelecting:(NSArray<ConvenientObject*>* (^)())block;
+asExpectedBySelecting:(NSArray<TestCaseObject*>* (^)())block;
 
-- (BOOL)checkObjects:(NSArray<ConvenientObject*>*)objects
+- (BOOL)checkObjects:(NSArray<TestCaseObject*>*)objects
                andSQL:(NSString*)sql
-asExpectedBySelecting:(NSArray<ConvenientObject*>* (^)())block;
+asExpectedBySelecting:(NSArray<TestCaseObject*>* (^)())block;
 
 - (BOOL)checkRow:(WCTOneRow*)row
                andSQL:(NSString*)sql

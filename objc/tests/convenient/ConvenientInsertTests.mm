@@ -22,17 +22,17 @@
 
 @interface ConvenientInsertTests : ConvenientTestCase
 
-@property (nonatomic, readonly) ConvenientObject* renewedObject1;
-@property (nonatomic, readonly) ConvenientObject* renewedObject2;
+@property (nonatomic, readonly) TestCaseObject* renewedObject1;
+@property (nonatomic, readonly) TestCaseObject* renewedObject2;
 
-@property (nonatomic, readonly) ConvenientObject* renewedPartialObject1;
-@property (nonatomic, readonly) ConvenientObject* renewedPartialObject2;
+@property (nonatomic, readonly) TestCaseObject* renewedPartialObject1;
+@property (nonatomic, readonly) TestCaseObject* renewedPartialObject2;
 
-@property (nonatomic, readonly) ConvenientObject* object3;
-@property (nonatomic, readonly) ConvenientObject* object4;
+@property (nonatomic, readonly) TestCaseObject* object3;
+@property (nonatomic, readonly) TestCaseObject* object4;
 
-@property (nonatomic, readonly) ConvenientObject* partialObject3;
-@property (nonatomic, readonly) ConvenientObject* partialObject4;
+@property (nonatomic, readonly) TestCaseObject* partialObject3;
+@property (nonatomic, readonly) TestCaseObject* partialObject4;
 
 @end
 
@@ -42,40 +42,40 @@
 {
     [super setUp];
 
-    _renewedObject1 = [[ConvenientObject alloc] init];
+    _renewedObject1 = [[TestCaseObject alloc] init];
     _renewedObject1.identifier = 1;
     _renewedObject1.content = @"newObject1";
 
-    _renewedObject2 = [[ConvenientObject alloc] init];
+    _renewedObject2 = [[TestCaseObject alloc] init];
     _renewedObject2.identifier = 2;
     _renewedObject2.content = @"newObject2";
 
-    _renewedPartialObject1 = [[ConvenientObject alloc] init];
+    _renewedPartialObject1 = [[TestCaseObject alloc] init];
     _renewedPartialObject1.identifier = 1;
     _renewedPartialObject1.content = nil;
 
-    _renewedPartialObject2 = [[ConvenientObject alloc] init];
+    _renewedPartialObject2 = [[TestCaseObject alloc] init];
     _renewedPartialObject2.identifier = 2;
     _renewedPartialObject2.content = nil;
 
-    _object3 = [[ConvenientObject alloc] init];
+    _object3 = [[TestCaseObject alloc] init];
     _object3.identifier = 3;
     _object3.content = @"object3";
 
-    _object4 = [[ConvenientObject alloc] init];
+    _object4 = [[TestCaseObject alloc] init];
     _object4.identifier = 4;
     _object4.content = @"object4";
 
-    _partialObject3 = [[ConvenientObject alloc] init];
+    _partialObject3 = [[TestCaseObject alloc] init];
     _partialObject3.identifier = 3;
     _partialObject3.content = nil;
 
-    _partialObject4 = [[ConvenientObject alloc] init];
+    _partialObject4 = [[TestCaseObject alloc] init];
     _partialObject4.identifier = 4;
     _partialObject4.content = nil;
 }
 
-- (BOOL)checkObjects:(NSArray<ConvenientObject*>*)objects
+- (BOOL)checkObjects:(NSArray<TestCaseObject*>*)objects
             andInsertSQL:(NSString*)insertSQL
                withCount:(int)count
 asExpectedAfterInsertion:(BOOL (^)())block
@@ -92,7 +92,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
 #pragma mark - Auto Increment
 - (void)test_auto_increment
 {
-    ConvenientObject* autoIncrementObject = [[ConvenientObject alloc] init];
+    TestCaseObject* autoIncrementObject = [[TestCaseObject alloc] init];
     autoIncrementObject.isAutoIncrement = YES;
     autoIncrementObject.content = self.object3.content;
     BOOL result = [self checkObjects:@[ self.object1, self.object2, self.object3 ]
@@ -162,7 +162,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
                         andInsertSQL:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
                            withCount:1
             asExpectedAfterInsertion:^BOOL {
-                return [self.database insertObject:self.object3 onProperties:ConvenientObject.identifier intoTable:self.tableName];
+                return [self.database insertObject:self.object3 onProperties:TestCaseObject.identifier intoTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -173,7 +173,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
                         andInsertSQL:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
                            withCount:2
             asExpectedAfterInsertion:^BOOL {
-                return [self.database insertObjects:@[ self.object3, self.object4 ] onProperties:ConvenientObject.identifier intoTable:self.tableName];
+                return [self.database insertObjects:@[ self.object3, self.object4 ] onProperties:TestCaseObject.identifier intoTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -185,7 +185,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
                         andInsertSQL:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
                            withCount:1
             asExpectedAfterInsertion:^BOOL {
-                return [self.database insertOrReplaceObject:self.object1 onProperties:ConvenientObject.identifier intoTable:self.tableName];
+                return [self.database insertOrReplaceObject:self.object1 onProperties:TestCaseObject.identifier intoTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -196,7 +196,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
                         andInsertSQL:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
                            withCount:2
             asExpectedAfterInsertion:^BOOL {
-                return [self.database insertOrReplaceObjects:@[ self.object1, self.object2 ] onProperties:ConvenientObject.identifier intoTable:self.tableName];
+                return [self.database insertOrReplaceObjects:@[ self.object1, self.object2 ] onProperties:TestCaseObject.identifier intoTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -254,7 +254,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
                         andInsertSQL:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
                            withCount:1
             asExpectedAfterInsertion:^BOOL {
-                return [self.table insertObject:self.object3 onProperties:ConvenientObject.identifier];
+                return [self.table insertObject:self.object3 onProperties:TestCaseObject.identifier];
             }];
     XCTAssertTrue(result);
 }
@@ -265,7 +265,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
                         andInsertSQL:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
                            withCount:2
             asExpectedAfterInsertion:^BOOL {
-                return [self.table insertObjects:@[ self.object3, self.object4 ] onProperties:ConvenientObject.identifier];
+                return [self.table insertObjects:@[ self.object3, self.object4 ] onProperties:TestCaseObject.identifier];
             }];
     XCTAssertTrue(result);
 }
@@ -277,7 +277,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
                         andInsertSQL:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
                            withCount:1
             asExpectedAfterInsertion:^BOOL {
-                return [self.table insertOrReplaceObject:self.object1 onProperties:ConvenientObject.identifier];
+                return [self.table insertOrReplaceObject:self.object1 onProperties:TestCaseObject.identifier];
             }];
     XCTAssertTrue(result);
 }
@@ -288,7 +288,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
                         andInsertSQL:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
                            withCount:2
             asExpectedAfterInsertion:^BOOL {
-                return [self.table insertOrReplaceObjects:@[ self.object1, self.object2 ] onProperties:ConvenientObject.identifier];
+                return [self.table insertOrReplaceObjects:@[ self.object1, self.object2 ] onProperties:TestCaseObject.identifier];
             }];
     XCTAssertTrue(result);
 }
@@ -346,7 +346,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
                         andInsertSQL:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
                            withCount:1
             asExpectedAfterInsertion:^BOOL {
-                return [[self.database getHandle] insertObject:self.object3 onProperties:ConvenientObject.identifier intoTable:self.tableName];
+                return [[self.database getHandle] insertObject:self.object3 onProperties:TestCaseObject.identifier intoTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -357,7 +357,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
                         andInsertSQL:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
                            withCount:2
             asExpectedAfterInsertion:^BOOL {
-                return [[self.database getHandle] insertObjects:@[ self.object3, self.object4 ] onProperties:ConvenientObject.identifier intoTable:self.tableName];
+                return [[self.database getHandle] insertObjects:@[ self.object3, self.object4 ] onProperties:TestCaseObject.identifier intoTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -369,7 +369,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
                         andInsertSQL:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
                            withCount:1
             asExpectedAfterInsertion:^BOOL {
-                return [[self.database getHandle] insertOrReplaceObject:self.object1 onProperties:ConvenientObject.identifier intoTable:self.tableName];
+                return [[self.database getHandle] insertOrReplaceObject:self.object1 onProperties:TestCaseObject.identifier intoTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -380,7 +380,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
                         andInsertSQL:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
                            withCount:2
             asExpectedAfterInsertion:^BOOL {
-                return [[self.database getHandle] insertOrReplaceObjects:@[ self.object1, self.object2 ] onProperties:ConvenientObject.identifier intoTable:self.tableName];
+                return [[self.database getHandle] insertOrReplaceObjects:@[ self.object1, self.object2 ] onProperties:TestCaseObject.identifier intoTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }

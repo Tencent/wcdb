@@ -22,6 +22,18 @@
 
 @implementation TestCase
 
++ (void)initialize
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+#ifdef DEBUG
+        WCTDatabase.debuggable = YES;
+#else
+        WCTDatabase.debuggable = NO;
+#endif
+    });
+}
+
 - (NSString *)testName
 {
     NSString *name = self.name;

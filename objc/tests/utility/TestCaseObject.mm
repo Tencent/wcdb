@@ -18,11 +18,32 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "TestCaseObject.h"
+#import "TestCaseObject+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
-@interface ConvenientObject : NSObject
+@implementation TestCaseObject
 
-@property (nonatomic, assign) int identifier;
-@property (nonatomic, retain) NSString *content;
+WCDB_IMPLEMENTATION(TestCaseObject)
+WCDB_SYNTHESIZE(TestCaseObject, identifier)
+WCDB_SYNTHESIZE(TestCaseObject, content)
+
+WCDB_PRIMARY_ASC_AUTO_INCREMENT(TestCaseObject, identifier)
+
+- (BOOL)isEqual:(NSObject*)object
+{
+    if (object.class != self.class) {
+        return NO;
+    }
+    TestCaseObject* other = (TestCaseObject*) object;
+    if (self.identifier != other.identifier) {
+        return NO;
+    }
+    if (self.content != nil) {
+        return [other.content isEqualToString:self.content];
+    } else {
+        return other.content == nil;
+    }
+}
 
 @end

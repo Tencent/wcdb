@@ -24,97 +24,70 @@
 		231C98BA219532AC0067B87C /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
 		231C98BB219532AC0067B87C /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
 		231C98BC219532AC0067B87C /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
-		231FEA1B21999E7D00DC3706 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
-		231FEA1C21999E7D00DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
-		231FEA1D21999E7D00DC3706 /* ConvenientSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E122F2195749C00BD488D /* ConvenientSelectTests.mm */; };
-		231FEA1E21999E7D00DC3706 /* ConvenientTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F72C2194253900E8B10A /* ConvenientTestCase.mm */; };
-		231FEA1F21999E7D00DC3706 /* ConvenientDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123F2195756B00BD488D /* ConvenientDeleteTests.mm */; };
-		231FEA2021999E7D00DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
-		231FEA2121999E7D00DC3706 /* ConvenientUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123D2195756400BD488D /* ConvenientUpdateTests.mm */; };
-		231FEA2221999E7D00DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
-		231FEA2321999E7D00DC3706 /* ConvenientInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E12392195755400BD488D /* ConvenientInsertTests.mm */; };
-		231FEA2421999E7D00DC3706 /* ConvenientObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F7342194260400E8B10A /* ConvenientObject.mm */; };
 		231FEA2621999E7D00DC3706 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		231FEA2721999E7D00DC3706 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		231FEA2A21999E7D00DC3706 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		231FEA3721999ECE00DC3706 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
-		231FEA3821999ECE00DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
-		231FEA3921999ECE00DC3706 /* ConvenientSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E122F2195749C00BD488D /* ConvenientSelectTests.mm */; };
-		231FEA3A21999ECE00DC3706 /* ConvenientTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F72C2194253900E8B10A /* ConvenientTestCase.mm */; };
-		231FEA3B21999ECE00DC3706 /* ConvenientDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123F2195756B00BD488D /* ConvenientDeleteTests.mm */; };
-		231FEA3C21999ECE00DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
-		231FEA3D21999ECE00DC3706 /* ConvenientUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123D2195756400BD488D /* ConvenientUpdateTests.mm */; };
-		231FEA3E21999ECE00DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
-		231FEA3F21999ECE00DC3706 /* ConvenientInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E12392195755400BD488D /* ConvenientInsertTests.mm */; };
-		231FEA4021999ECE00DC3706 /* ConvenientObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F7342194260400E8B10A /* ConvenientObject.mm */; };
 		231FEA4221999ECE00DC3706 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		231FEA4321999ECE00DC3706 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		231FEA4621999ECE00DC3706 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		231FEA5321999F0D00DC3706 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
-		231FEA5421999F0D00DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
-		231FEA5521999F0D00DC3706 /* ConvenientSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E122F2195749C00BD488D /* ConvenientSelectTests.mm */; };
-		231FEA5621999F0D00DC3706 /* ConvenientTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F72C2194253900E8B10A /* ConvenientTestCase.mm */; };
-		231FEA5721999F0D00DC3706 /* ConvenientDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123F2195756B00BD488D /* ConvenientDeleteTests.mm */; };
-		231FEA5821999F0D00DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
-		231FEA5921999F0D00DC3706 /* ConvenientUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123D2195756400BD488D /* ConvenientUpdateTests.mm */; };
-		231FEA5A21999F0D00DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
-		231FEA5B21999F0D00DC3706 /* ConvenientInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E12392195755400BD488D /* ConvenientInsertTests.mm */; };
-		231FEA5C21999F0D00DC3706 /* ConvenientObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F7342194260400E8B10A /* ConvenientObject.mm */; };
 		231FEA5E21999F0D00DC3706 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		231FEA5F21999F0D00DC3706 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		231FEA6221999F0D00DC3706 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		231FEA6F21999F2A00DC3706 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
-		231FEA7021999F2A00DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
-		231FEA7121999F2A00DC3706 /* ConvenientSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E122F2195749C00BD488D /* ConvenientSelectTests.mm */; };
-		231FEA7221999F2A00DC3706 /* ConvenientTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F72C2194253900E8B10A /* ConvenientTestCase.mm */; };
-		231FEA7321999F2A00DC3706 /* ConvenientDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123F2195756B00BD488D /* ConvenientDeleteTests.mm */; };
-		231FEA7421999F2A00DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
-		231FEA7521999F2A00DC3706 /* ConvenientUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123D2195756400BD488D /* ConvenientUpdateTests.mm */; };
-		231FEA7621999F2A00DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
-		231FEA7721999F2A00DC3706 /* ConvenientInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E12392195755400BD488D /* ConvenientInsertTests.mm */; };
-		231FEA7821999F2A00DC3706 /* ConvenientObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F7342194260400E8B10A /* ConvenientObject.mm */; };
 		231FEA7A21999F2A00DC3706 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		231FEA7B21999F2A00DC3706 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		231FEA7E21999F2A00DC3706 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		231FEA8B21999F7800DC3706 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
-		231FEA8C21999F7800DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
-		231FEA8D21999F7800DC3706 /* ConvenientSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E122F2195749C00BD488D /* ConvenientSelectTests.mm */; };
-		231FEA8E21999F7800DC3706 /* ConvenientTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F72C2194253900E8B10A /* ConvenientTestCase.mm */; };
-		231FEA8F21999F7800DC3706 /* ConvenientDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123F2195756B00BD488D /* ConvenientDeleteTests.mm */; };
-		231FEA9021999F7800DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
-		231FEA9121999F7800DC3706 /* ConvenientUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123D2195756400BD488D /* ConvenientUpdateTests.mm */; };
-		231FEA9221999F7800DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
-		231FEA9321999F7800DC3706 /* ConvenientInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E12392195755400BD488D /* ConvenientInsertTests.mm */; };
-		231FEA9421999F7800DC3706 /* ConvenientObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F7342194260400E8B10A /* ConvenientObject.mm */; };
 		231FEA9621999F7800DC3706 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		231FEA9721999F7800DC3706 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		231FEA9A21999F7800DC3706 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		231FEAA721999F8100DC3706 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
-		231FEAA821999F8100DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
-		231FEAA921999F8100DC3706 /* ConvenientSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E122F2195749C00BD488D /* ConvenientSelectTests.mm */; };
-		231FEAAA21999F8100DC3706 /* ConvenientTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F72C2194253900E8B10A /* ConvenientTestCase.mm */; };
-		231FEAAB21999F8100DC3706 /* ConvenientDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123F2195756B00BD488D /* ConvenientDeleteTests.mm */; };
-		231FEAAC21999F8100DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
-		231FEAAD21999F8100DC3706 /* ConvenientUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123D2195756400BD488D /* ConvenientUpdateTests.mm */; };
-		231FEAAE21999F8100DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
-		231FEAAF21999F8100DC3706 /* ConvenientInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E12392195755400BD488D /* ConvenientInsertTests.mm */; };
-		231FEAB021999F8100DC3706 /* ConvenientObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F7342194260400E8B10A /* ConvenientObject.mm */; };
 		231FEAB221999F8100DC3706 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		231FEAB321999F8100DC3706 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		231FEAB621999F8100DC3706 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		231FEAC321999F8D00DC3706 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
-		231FEAC421999F8D00DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
-		231FEAC521999F8D00DC3706 /* ConvenientSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E122F2195749C00BD488D /* ConvenientSelectTests.mm */; };
-		231FEAC621999F8D00DC3706 /* ConvenientTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F72C2194253900E8B10A /* ConvenientTestCase.mm */; };
-		231FEAC721999F8D00DC3706 /* ConvenientDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123F2195756B00BD488D /* ConvenientDeleteTests.mm */; };
-		231FEAC821999F8D00DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
-		231FEAC921999F8D00DC3706 /* ConvenientUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123D2195756400BD488D /* ConvenientUpdateTests.mm */; };
-		231FEACA21999F8D00DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
-		231FEACB21999F8D00DC3706 /* ConvenientInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E12392195755400BD488D /* ConvenientInsertTests.mm */; };
-		231FEACC21999F8D00DC3706 /* ConvenientObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F7342194260400E8B10A /* ConvenientObject.mm */; };
 		231FEACE21999F8D00DC3706 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		231FEACF21999F8D00DC3706 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		231FEAD221999F8D00DC3706 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		231FEAE52199A16700DC3706 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEAE32199A16700DC3706 /* TestCaseObject.mm */; };
+		231FEAE62199A16700DC3706 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEAE32199A16700DC3706 /* TestCaseObject.mm */; };
+		231FEAE72199A16700DC3706 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEAE32199A16700DC3706 /* TestCaseObject.mm */; };
+		231FEAEF2199A4D200DC3706 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEAE32199A16700DC3706 /* TestCaseObject.mm */; };
+		231FEAF02199A4D200DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
+		231FEAF12199A4D200DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
+		231FEAF22199A4D200DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
+		231FEAF32199A4D200DC3706 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
+		231FEAF42199A4D200DC3706 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEAE32199A16700DC3706 /* TestCaseObject.mm */; };
+		231FEAF52199A4D200DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
+		231FEAF62199A4D200DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
+		231FEAF72199A4D200DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
+		231FEAF82199A4D200DC3706 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
+		231FEAF92199A4D300DC3706 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEAE32199A16700DC3706 /* TestCaseObject.mm */; };
+		231FEAFA2199A4D300DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
+		231FEAFB2199A4D300DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
+		231FEAFC2199A4D300DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
+		231FEAFD2199A4D300DC3706 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
+		231FEAFE2199A4D400DC3706 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEAE32199A16700DC3706 /* TestCaseObject.mm */; };
+		231FEAFF2199A4D400DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
+		231FEB002199A4D400DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
+		231FEB012199A4D400DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
+		231FEB022199A4D400DC3706 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
+		231FEB032199A4D400DC3706 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEAE32199A16700DC3706 /* TestCaseObject.mm */; };
+		231FEB042199A4D400DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
+		231FEB052199A4D400DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
+		231FEB062199A4D400DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
+		231FEB072199A4D400DC3706 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
+		231FEB082199A4D500DC3706 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEAE32199A16700DC3706 /* TestCaseObject.mm */; };
+		231FEB092199A4D500DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
+		231FEB0A2199A4D500DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
+		231FEB0B2199A4D500DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
+		231FEB0C2199A4D500DC3706 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
+		231FEB0D2199A4D500DC3706 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEAE32199A16700DC3706 /* TestCaseObject.mm */; };
+		231FEB0E2199A4D500DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
+		231FEB0F2199A4D500DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
+		231FEB102199A4D500DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
+		231FEB112199A4D500DC3706 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
+		231FEB122199A4D600DC3706 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEAE32199A16700DC3706 /* TestCaseObject.mm */; };
+		231FEB132199A4D600DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
+		231FEB142199A4D600DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
+		231FEB152199A4D600DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
+		231FEB162199A4D600DC3706 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
 		232741501F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		232741521F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */; };
 		233A058B2062698E00F1A212 /* WCTHandle+ChainCall.h in Headers */ = {isa = PBXBuildFile; fileRef = 233A05892062698E00F1A212 /* WCTHandle+ChainCall.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -194,16 +167,6 @@
 		234DBD062064DE04000E31E8 /* WCTHandle+Transaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD022064DE04000E31E8 /* WCTHandle+Transaction.mm */; };
 		234DBD092064DE23000E31E8 /* WCTTransaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 234DBD072064DE23000E31E8 /* WCTTransaction.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234DBD0D2064E045000E31E8 /* WCTChainCall.h in Headers */ = {isa = PBXBuildFile; fileRef = 234DBD0B2064E045000E31E8 /* WCTChainCall.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		234E6F5221996EB600D006F2 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
-		234E6F5321996EB600D006F2 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
-		234E6F5421996EB600D006F2 /* ConvenientSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E122F2195749C00BD488D /* ConvenientSelectTests.mm */; };
-		234E6F5521996EB600D006F2 /* ConvenientTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F72C2194253900E8B10A /* ConvenientTestCase.mm */; };
-		234E6F5621996EB600D006F2 /* ConvenientDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123F2195756B00BD488D /* ConvenientDeleteTests.mm */; };
-		234E6F5721996EB600D006F2 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
-		234E6F5821996EB600D006F2 /* ConvenientUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123D2195756400BD488D /* ConvenientUpdateTests.mm */; };
-		234E6F5921996EB600D006F2 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
-		234E6F5A21996EB600D006F2 /* ConvenientInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E12392195755400BD488D /* ConvenientInsertTests.mm */; };
-		234E6F5B21996EB600D006F2 /* ConvenientObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F7342194260400E8B10A /* ConvenientObject.mm */; };
 		234E6F5D21996EB600D006F2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		234E6F5E21996EB600D006F2 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		234E6F6121996EB600D006F2 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -327,7 +290,6 @@
 		2384F72D2194253900E8B10A /* ConvenientTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F72C2194253900E8B10A /* ConvenientTestCase.mm */; };
 		2384F72E2194255700E8B10A /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
 		2384F72F2194255700E8B10A /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
-		2384F7372194260400E8B10A /* ConvenientObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F7342194260400E8B10A /* ConvenientObject.mm */; };
 		2386B3C51ED442FE000B72F6 /* WCTError.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C21ED442FE000B72F6 /* WCTError.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2386B3C61ED442FE000B72F6 /* WCTError.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386B3C31ED442FE000B72F6 /* WCTError.mm */; };
 		2386B3C71ED442FE000B72F6 /* WCTError+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C41ED442FE000B72F6 /* WCTError+Private.h */; };
@@ -1113,6 +1075,9 @@
 		231FEA9F21999F7800DC3706 /* Repair tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Repair tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		231FEABB21999F8100DC3706 /* FTS tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FTS tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		231FEAD721999F8D00DC3706 /* Migration tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Migration tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		231FEAE12199A16600DC3706 /* TestCaseObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCaseObject.h; sourceTree = "<group>"; };
+		231FEAE22199A16700DC3706 /* TestCaseObject+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestCaseObject+WCTTableCoding.h"; sourceTree = "<group>"; };
+		231FEAE32199A16700DC3706 /* TestCaseObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCaseObject.mm; sourceTree = "<group>"; };
 		2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+FTS.h"; sourceTree = "<group>"; };
 		2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+FTS.mm"; sourceTree = "<group>"; };
 		233A05892062698E00F1A212 /* WCTHandle+ChainCall.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTHandle+ChainCall.h"; sourceTree = "<group>"; };
@@ -1344,9 +1309,6 @@
 		2384F7282194249200E8B10A /* Convenient tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Convenient tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2384F72B2194253900E8B10A /* ConvenientTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConvenientTestCase.h; sourceTree = "<group>"; };
 		2384F72C2194253900E8B10A /* ConvenientTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ConvenientTestCase.mm; sourceTree = "<group>"; };
-		2384F7342194260400E8B10A /* ConvenientObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ConvenientObject.mm; sourceTree = "<group>"; };
-		2384F7352194260400E8B10A /* ConvenientObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ConvenientObject+WCTTableCoding.h"; sourceTree = "<group>"; };
-		2384F7362194260400E8B10A /* ConvenientObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConvenientObject.h; sourceTree = "<group>"; };
 		2386B3C21ED442FE000B72F6 /* WCTError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTError.h; sourceTree = "<group>"; };
 		2386B3C31ED442FE000B72F6 /* WCTError.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTError.mm; sourceTree = "<group>"; };
 		2386B3C41ED442FE000B72F6 /* WCTError+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTError+Private.h"; sourceTree = "<group>"; };
@@ -2506,6 +2468,9 @@
 		23790A4F219298250098797F /* utility */ = {
 			isa = PBXGroup;
 			children = (
+				231FEAE12199A16600DC3706 /* TestCaseObject.h */,
+				231FEAE32199A16700DC3706 /* TestCaseObject.mm */,
+				231FEAE22199A16700DC3706 /* TestCaseObject+WCTTableCoding.h */,
 				23790A50219298250098797F /* TestCase.mm */,
 				23790A51219298250098797F /* TestCase.h */,
 				23790A54219298680098797F /* SingleDatabaseTestCase.h */,
@@ -2626,9 +2591,6 @@
 			children = (
 				2384F72B2194253900E8B10A /* ConvenientTestCase.h */,
 				2384F72C2194253900E8B10A /* ConvenientTestCase.mm */,
-				2384F7342194260400E8B10A /* ConvenientObject.mm */,
-				2384F7352194260400E8B10A /* ConvenientObject+WCTTableCoding.h */,
-				2384F7362194260400E8B10A /* ConvenientObject.h */,
 				233E122F2195749C00BD488D /* ConvenientSelectTests.mm */,
 				233E12392195755400BD488D /* ConvenientInsertTests.mm */,
 				233E123D2195756400BD488D /* ConvenientUpdateTests.mm */,
@@ -2737,10 +2699,10 @@
 				231FEADD2199A0FF00DC3706 /* thread */,
 				231FEAD92199A0FD00DC3706 /* trace */,
 				2384F72A219424FE00E8B10A /* convenient */,
-				23790A4F219298250098797F /* utility */,
 				23790A47219295B80098797F /* ORM */,
 				2398971F217EC9E20014BF33 /* WINQ */,
 				239E8A8D2160A62F00BCB308 /* host */,
+				23790A4F219298250098797F /* utility */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -3993,16 +3955,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				231FEA1B21999E7D00DC3706 /* NSArray+TestCase.m in Sources */,
-				231FEA1C21999E7D00DC3706 /* SingleTableTestCase.mm in Sources */,
-				231FEA1D21999E7D00DC3706 /* ConvenientSelectTests.mm in Sources */,
-				231FEA1E21999E7D00DC3706 /* ConvenientTestCase.mm in Sources */,
-				231FEA1F21999E7D00DC3706 /* ConvenientDeleteTests.mm in Sources */,
-				231FEA2021999E7D00DC3706 /* SingleDatabaseTestCase.mm in Sources */,
-				231FEA2121999E7D00DC3706 /* ConvenientUpdateTests.mm in Sources */,
-				231FEA2221999E7D00DC3706 /* TestCase.mm in Sources */,
-				231FEA2321999E7D00DC3706 /* ConvenientInsertTests.mm in Sources */,
-				231FEA2421999E7D00DC3706 /* ConvenientObject.mm in Sources */,
+				231FEB152199A4D600DC3706 /* SingleTableTestCase.mm in Sources */,
+				231FEB122199A4D600DC3706 /* TestCaseObject.mm in Sources */,
+				231FEB162199A4D600DC3706 /* NSArray+TestCase.m in Sources */,
+				231FEB142199A4D600DC3706 /* SingleDatabaseTestCase.mm in Sources */,
+				231FEB132199A4D600DC3706 /* TestCase.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4010,16 +3967,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				231FEA3721999ECE00DC3706 /* NSArray+TestCase.m in Sources */,
-				231FEA3821999ECE00DC3706 /* SingleTableTestCase.mm in Sources */,
-				231FEA3921999ECE00DC3706 /* ConvenientSelectTests.mm in Sources */,
-				231FEA3A21999ECE00DC3706 /* ConvenientTestCase.mm in Sources */,
-				231FEA3B21999ECE00DC3706 /* ConvenientDeleteTests.mm in Sources */,
-				231FEA3C21999ECE00DC3706 /* SingleDatabaseTestCase.mm in Sources */,
-				231FEA3D21999ECE00DC3706 /* ConvenientUpdateTests.mm in Sources */,
-				231FEA3E21999ECE00DC3706 /* TestCase.mm in Sources */,
-				231FEA3F21999ECE00DC3706 /* ConvenientInsertTests.mm in Sources */,
-				231FEA4021999ECE00DC3706 /* ConvenientObject.mm in Sources */,
+				231FEAF72199A4D200DC3706 /* SingleTableTestCase.mm in Sources */,
+				231FEAF42199A4D200DC3706 /* TestCaseObject.mm in Sources */,
+				231FEAF82199A4D200DC3706 /* NSArray+TestCase.m in Sources */,
+				231FEAF62199A4D200DC3706 /* SingleDatabaseTestCase.mm in Sources */,
+				231FEAF52199A4D200DC3706 /* TestCase.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4027,16 +3979,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				231FEA5321999F0D00DC3706 /* NSArray+TestCase.m in Sources */,
-				231FEA5421999F0D00DC3706 /* SingleTableTestCase.mm in Sources */,
-				231FEA5521999F0D00DC3706 /* ConvenientSelectTests.mm in Sources */,
-				231FEA5621999F0D00DC3706 /* ConvenientTestCase.mm in Sources */,
-				231FEA5721999F0D00DC3706 /* ConvenientDeleteTests.mm in Sources */,
-				231FEA5821999F0D00DC3706 /* SingleDatabaseTestCase.mm in Sources */,
-				231FEA5921999F0D00DC3706 /* ConvenientUpdateTests.mm in Sources */,
-				231FEA5A21999F0D00DC3706 /* TestCase.mm in Sources */,
-				231FEA5B21999F0D00DC3706 /* ConvenientInsertTests.mm in Sources */,
-				231FEA5C21999F0D00DC3706 /* ConvenientObject.mm in Sources */,
+				231FEAFC2199A4D300DC3706 /* SingleTableTestCase.mm in Sources */,
+				231FEAF92199A4D300DC3706 /* TestCaseObject.mm in Sources */,
+				231FEAFD2199A4D300DC3706 /* NSArray+TestCase.m in Sources */,
+				231FEAFB2199A4D300DC3706 /* SingleDatabaseTestCase.mm in Sources */,
+				231FEAFA2199A4D300DC3706 /* TestCase.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4044,16 +3991,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				231FEA6F21999F2A00DC3706 /* NSArray+TestCase.m in Sources */,
-				231FEA7021999F2A00DC3706 /* SingleTableTestCase.mm in Sources */,
-				231FEA7121999F2A00DC3706 /* ConvenientSelectTests.mm in Sources */,
-				231FEA7221999F2A00DC3706 /* ConvenientTestCase.mm in Sources */,
-				231FEA7321999F2A00DC3706 /* ConvenientDeleteTests.mm in Sources */,
-				231FEA7421999F2A00DC3706 /* SingleDatabaseTestCase.mm in Sources */,
-				231FEA7521999F2A00DC3706 /* ConvenientUpdateTests.mm in Sources */,
-				231FEA7621999F2A00DC3706 /* TestCase.mm in Sources */,
-				231FEA7721999F2A00DC3706 /* ConvenientInsertTests.mm in Sources */,
-				231FEA7821999F2A00DC3706 /* ConvenientObject.mm in Sources */,
+				231FEB062199A4D400DC3706 /* SingleTableTestCase.mm in Sources */,
+				231FEB032199A4D400DC3706 /* TestCaseObject.mm in Sources */,
+				231FEB072199A4D400DC3706 /* NSArray+TestCase.m in Sources */,
+				231FEB052199A4D400DC3706 /* SingleDatabaseTestCase.mm in Sources */,
+				231FEB042199A4D400DC3706 /* TestCase.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4061,16 +4003,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				231FEA8B21999F7800DC3706 /* NSArray+TestCase.m in Sources */,
-				231FEA8C21999F7800DC3706 /* SingleTableTestCase.mm in Sources */,
-				231FEA8D21999F7800DC3706 /* ConvenientSelectTests.mm in Sources */,
-				231FEA8E21999F7800DC3706 /* ConvenientTestCase.mm in Sources */,
-				231FEA8F21999F7800DC3706 /* ConvenientDeleteTests.mm in Sources */,
-				231FEA9021999F7800DC3706 /* SingleDatabaseTestCase.mm in Sources */,
-				231FEA9121999F7800DC3706 /* ConvenientUpdateTests.mm in Sources */,
-				231FEA9221999F7800DC3706 /* TestCase.mm in Sources */,
-				231FEA9321999F7800DC3706 /* ConvenientInsertTests.mm in Sources */,
-				231FEA9421999F7800DC3706 /* ConvenientObject.mm in Sources */,
+				231FEB012199A4D400DC3706 /* SingleTableTestCase.mm in Sources */,
+				231FEAFE2199A4D400DC3706 /* TestCaseObject.mm in Sources */,
+				231FEB022199A4D400DC3706 /* NSArray+TestCase.m in Sources */,
+				231FEB002199A4D400DC3706 /* SingleDatabaseTestCase.mm in Sources */,
+				231FEAFF2199A4D400DC3706 /* TestCase.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4078,16 +4015,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				231FEAA721999F8100DC3706 /* NSArray+TestCase.m in Sources */,
-				231FEAA821999F8100DC3706 /* SingleTableTestCase.mm in Sources */,
-				231FEAA921999F8100DC3706 /* ConvenientSelectTests.mm in Sources */,
-				231FEAAA21999F8100DC3706 /* ConvenientTestCase.mm in Sources */,
-				231FEAAB21999F8100DC3706 /* ConvenientDeleteTests.mm in Sources */,
-				231FEAAC21999F8100DC3706 /* SingleDatabaseTestCase.mm in Sources */,
-				231FEAAD21999F8100DC3706 /* ConvenientUpdateTests.mm in Sources */,
-				231FEAAE21999F8100DC3706 /* TestCase.mm in Sources */,
-				231FEAAF21999F8100DC3706 /* ConvenientInsertTests.mm in Sources */,
-				231FEAB021999F8100DC3706 /* ConvenientObject.mm in Sources */,
+				231FEB0B2199A4D500DC3706 /* SingleTableTestCase.mm in Sources */,
+				231FEB082199A4D500DC3706 /* TestCaseObject.mm in Sources */,
+				231FEB0C2199A4D500DC3706 /* NSArray+TestCase.m in Sources */,
+				231FEB0A2199A4D500DC3706 /* SingleDatabaseTestCase.mm in Sources */,
+				231FEB092199A4D500DC3706 /* TestCase.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4095,16 +4027,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				231FEAC321999F8D00DC3706 /* NSArray+TestCase.m in Sources */,
-				231FEAC421999F8D00DC3706 /* SingleTableTestCase.mm in Sources */,
-				231FEAC521999F8D00DC3706 /* ConvenientSelectTests.mm in Sources */,
-				231FEAC621999F8D00DC3706 /* ConvenientTestCase.mm in Sources */,
-				231FEAC721999F8D00DC3706 /* ConvenientDeleteTests.mm in Sources */,
-				231FEAC821999F8D00DC3706 /* SingleDatabaseTestCase.mm in Sources */,
-				231FEAC921999F8D00DC3706 /* ConvenientUpdateTests.mm in Sources */,
-				231FEACA21999F8D00DC3706 /* TestCase.mm in Sources */,
-				231FEACB21999F8D00DC3706 /* ConvenientInsertTests.mm in Sources */,
-				231FEACC21999F8D00DC3706 /* ConvenientObject.mm in Sources */,
+				231FEB102199A4D500DC3706 /* SingleTableTestCase.mm in Sources */,
+				231FEB0D2199A4D500DC3706 /* TestCaseObject.mm in Sources */,
+				231FEB112199A4D500DC3706 /* NSArray+TestCase.m in Sources */,
+				231FEB0F2199A4D500DC3706 /* SingleDatabaseTestCase.mm in Sources */,
+				231FEB0E2199A4D500DC3706 /* TestCase.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4112,16 +4039,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				234E6F5221996EB600D006F2 /* NSArray+TestCase.m in Sources */,
-				234E6F5321996EB600D006F2 /* SingleTableTestCase.mm in Sources */,
-				234E6F5421996EB600D006F2 /* ConvenientSelectTests.mm in Sources */,
-				234E6F5521996EB600D006F2 /* ConvenientTestCase.mm in Sources */,
-				234E6F5621996EB600D006F2 /* ConvenientDeleteTests.mm in Sources */,
-				234E6F5721996EB600D006F2 /* SingleDatabaseTestCase.mm in Sources */,
-				234E6F5821996EB600D006F2 /* ConvenientUpdateTests.mm in Sources */,
-				234E6F5921996EB600D006F2 /* TestCase.mm in Sources */,
-				234E6F5A21996EB600D006F2 /* ConvenientInsertTests.mm in Sources */,
-				234E6F5B21996EB600D006F2 /* ConvenientObject.mm in Sources */,
+				231FEAF22199A4D200DC3706 /* SingleTableTestCase.mm in Sources */,
+				231FEAEF2199A4D200DC3706 /* TestCaseObject.mm in Sources */,
+				231FEAF32199A4D200DC3706 /* NSArray+TestCase.m in Sources */,
+				231FEAF12199A4D200DC3706 /* SingleDatabaseTestCase.mm in Sources */,
+				231FEAF02199A4D200DC3706 /* TestCase.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4132,6 +4054,7 @@
 				2384F6B72193E06D00E8B10A /* ColumnConstraintPrimary.mm in Sources */,
 				2384F6F82194185500E8B10A /* AdditionalORMObject.mm in Sources */,
 				231C98BB219532AC0067B87C /* NSArray+TestCase.m in Sources */,
+				231FEAE62199A16700DC3706 /* TestCaseObject.mm in Sources */,
 				2384F6C72193E09400E8B10A /* ColumnConstraintAutoIncrementAsc.mm in Sources */,
 				23790A672192B0A60098797F /* SingleTableTestCase.mm in Sources */,
 				2384F6C32193E08B00E8B10A /* ColumnConstraintAutoIncrement.mm in Sources */,
@@ -4168,7 +4091,7 @@
 				233E123E2195756400BD488D /* ConvenientUpdateTests.mm in Sources */,
 				2384F70F2194249200E8B10A /* TestCase.mm in Sources */,
 				233E123A2195755400BD488D /* ConvenientInsertTests.mm in Sources */,
-				2384F7372194260400E8B10A /* ConvenientObject.mm in Sources */,
+				231FEAE72199A16700DC3706 /* TestCaseObject.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4489,6 +4412,7 @@
 				23989764217EC9E30014BF33 /* CommonTableExpressionTests.mm in Sources */,
 				2398976A217EC9E30014BF33 /* FilterTests.mm in Sources */,
 				2396EB1B218066EC0079066C /* SyntaxListTests.mm in Sources */,
+				231FEAE52199A16700DC3706 /* TestCaseObject.mm in Sources */,
 				2396EB172180571B0079066C /* WCTResultColumnTests.mm in Sources */,
 				23989769217EC9E30014BF33 /* ExpressionTests.mm in Sources */,
 				2398978A217EC9E30014BF33 /* StatementDropViewTests.mm in Sources */,

@@ -18,32 +18,12 @@
  * limitations under the License.
  */
 
-#import "ConvenientObject.h"
-#import "ConvenientObject+WCTTableCoding.h"
+#import "TestCaseObject.h"
 #import <WCDB/WCDB.h>
 
-@implementation ConvenientObject
+@interface TestCaseObject (WCTTableCoding) <WCTTableCoding>
 
-WCDB_IMPLEMENTATION(ConvenientObject)
-WCDB_SYNTHESIZE(ConvenientObject, identifier)
-WCDB_SYNTHESIZE(ConvenientObject, content)
-
-WCDB_PRIMARY_ASC_AUTO_INCREMENT(ConvenientObject, identifier)
-
-- (BOOL)isEqual:(NSObject*)object
-{
-    if (object.class != self.class) {
-        return NO;
-    }
-    ConvenientObject* other = (ConvenientObject*) object;
-    if (self.identifier != other.identifier) {
-        return NO;
-    }
-    if (self.content != nil) {
-        return [other.content isEqualToString:self.content];
-    } else {
-        return other.content == nil;
-    }
-}
+WCDB_PROPERTY(identifier)
+WCDB_PROPERTY(content)
 
 @end

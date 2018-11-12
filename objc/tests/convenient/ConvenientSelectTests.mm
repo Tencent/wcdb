@@ -22,9 +22,9 @@
 
 @interface ConvenientSelectTests : ConvenientTestCase
 
-@property (nonatomic, readonly) ConvenientObject *partialObject1;
-@property (nonatomic, readonly) ConvenientObject *partialObject2;
-@property (nonatomic, readonly) NSArray<ConvenientObject *> *partialObjects;
+@property (nonatomic, readonly) TestCaseObject *partialObject1;
+@property (nonatomic, readonly) TestCaseObject *partialObject2;
+@property (nonatomic, readonly) NSArray<TestCaseObject *> *partialObjects;
 
 @property (nonatomic, readonly) WCTOneRow *partialRow1;
 @property (nonatomic, readonly) WCTOneRow *partialRow2;
@@ -42,11 +42,11 @@
 {
     [super setUp];
 
-    _partialObject1 = [[ConvenientObject alloc] init];
+    _partialObject1 = [[TestCaseObject alloc] init];
     _partialObject1.identifier = 1;
     _partialObject1.content = nil;
 
-    _partialObject2 = [[ConvenientObject alloc] init];
+    _partialObject2 = [[TestCaseObject alloc] init];
     _partialObject2.identifier = 2;
     _partialObject2.content = nil;
 
@@ -66,7 +66,7 @@
 {
     BOOL result = [self checkObject:self.object1
                              andSQL:@"SELECT identifier, content FROM main.testTable LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.database getObjectOfClass:self.tableClass fromTable:self.tableName] ];
               }];
     XCTAssertTrue(result);
@@ -76,8 +76,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier == 2 LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.database getObjectOfClass:self.tableClass fromTable:self.tableName where:ConvenientObject.identifier == 2] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.database getObjectOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier == 2] ];
               }];
     XCTAssertTrue(result);
 }
@@ -86,8 +86,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.database getObjectOfClass:self.tableClass fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.database getObjectOfClass:self.tableClass fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
     XCTAssertTrue(result);
 }
@@ -96,7 +96,7 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.database getObjectOfClass:self.tableClass fromTable:self.tableName offset:1] ];
               }];
     XCTAssertTrue(result);
@@ -106,8 +106,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.database getObjectOfClass:self.tableClass fromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.database getObjectOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
     XCTAssertTrue(result);
 }
@@ -116,8 +116,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.database getObjectOfClass:self.tableClass fromTable:self.tableName where:ConvenientObject.identifier > 0 offset:1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.database getObjectOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 offset:1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -126,8 +126,8 @@
 {
     BOOL result = [self checkObject:self.object1
                              andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.database getObjectOfClass:self.tableClass fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.database getObjectOfClass:self.tableClass fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -136,8 +136,8 @@
 {
     BOOL result = [self checkObject:self.object1
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.database getObjectOfClass:self.tableClass fromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.database getObjectOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -147,7 +147,7 @@
 {
     BOOL result = [self checkObjects:self.objects
                               andSQL:@"SELECT identifier, content FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName];
                }];
     XCTAssertTrue(result);
@@ -157,8 +157,8 @@
 {
     BOOL result = [self checkObject:self.object1
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier == 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName where:ConvenientObject.identifier == 1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier == 1];
               }];
     XCTAssertTrue(result);
 }
@@ -167,8 +167,8 @@
 {
     BOOL result = [self checkObjects:self.objects.reversedArray
                               andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
                }];
     XCTAssertTrue(result);
 }
@@ -177,7 +177,7 @@
 {
     BOOL result = [self checkObject:self.object1
                              andSQL:@"SELECT identifier, content FROM main.testTable LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName limit:1];
               }];
     XCTAssertTrue(result);
@@ -187,8 +187,8 @@
 {
     BOOL result = [self checkObjects:self.objects.reversedArray
                               andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
                }];
     XCTAssertTrue(result);
 }
@@ -197,8 +197,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 1 LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName where:ConvenientObject.identifier > 1 limit:1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 1 limit:1];
               }];
     XCTAssertTrue(result);
 }
@@ -207,8 +207,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
               }];
     XCTAssertTrue(result);
 }
@@ -217,7 +217,7 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName limit:1 offset:1];
               }];
     XCTAssertTrue(result);
@@ -227,8 +227,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
               }];
     XCTAssertTrue(result);
 }
@@ -237,8 +237,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName where:ConvenientObject.identifier > 0 limit:1 offset:1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 limit:1 offset:1];
               }];
     XCTAssertTrue(result);
 }
@@ -247,8 +247,8 @@
 {
     BOOL result = [self checkObject:self.object1
                              andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
               }];
     XCTAssertTrue(result);
 }
@@ -257,8 +257,8 @@
 {
     BOOL result = [self checkObject:self.object1
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
               }];
     XCTAssertTrue(result);
 }
@@ -268,8 +268,8 @@
 {
     BOOL result = [self checkObject:self.partialObject1
                              andSQL:@"SELECT identifier FROM main.testTable LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.database getObjectOnResultColumns:ConvenientObject.identifier fromTable:self.tableName] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.database getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName] ];
               }];
     XCTAssertTrue(result);
 }
@@ -278,8 +278,8 @@
 {
     BOOL result = [self checkObject:self.partialObject1
                              andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1 LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.database getObjectOnResultColumns:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier == 1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.database getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -288,8 +288,8 @@
 {
     BOOL result = [self checkObject:self.partialObject2
                              andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.database getObjectOnResultColumns:ConvenientObject.identifier fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.database getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
     XCTAssertTrue(result);
 }
@@ -298,8 +298,8 @@
 {
     BOOL result = [self checkObject:self.partialObject2
                              andSQL:@"SELECT identifier FROM main.testTable LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.database getObjectOnResultColumns:ConvenientObject.identifier fromTable:self.tableName offset:1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.database getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName offset:1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -308,8 +308,8 @@
 {
     BOOL result = [self checkObject:self.partialObject2
                              andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.database getObjectOnResultColumns:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.database getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
     XCTAssertTrue(result);
 }
@@ -318,8 +318,8 @@
 {
     BOOL result = [self checkObject:self.partialObject2
                              andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.database getObjectOnResultColumns:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier > 0 offset:1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.database getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 offset:1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -328,8 +328,8 @@
 {
     BOOL result = [self checkObject:self.partialObject1
                              andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.database getObjectOnResultColumns:ConvenientObject.identifier fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.database getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -338,8 +338,8 @@
 {
     BOOL result = [self checkObject:self.partialObject1
                              andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.database getObjectOnResultColumns:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.database getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -349,8 +349,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.database getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
     XCTAssertTrue(result);
 }
@@ -359,8 +359,8 @@
 {
     BOOL result = [self checkObject:self.partialObject1
                              andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [self.database getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier == 1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1];
               }];
     XCTAssertTrue(result);
 }
@@ -369,8 +369,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects.reversedArray
                               andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.database getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
                }];
     XCTAssertTrue(result);
 }
@@ -379,8 +379,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.database getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
     XCTAssertTrue(result);
 }
@@ -389,8 +389,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.database getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
     XCTAssertTrue(result);
 }
@@ -399,8 +399,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.database getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
     XCTAssertTrue(result);
 }
@@ -409,8 +409,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.database getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
     XCTAssertTrue(result);
 }
@@ -419,8 +419,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.database getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
     XCTAssertTrue(result);
 }
@@ -429,8 +429,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.database getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
     XCTAssertTrue(result);
 }
@@ -439,8 +439,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.database getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
     XCTAssertTrue(result);
 }
@@ -449,8 +449,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.database getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
     XCTAssertTrue(result);
 }
@@ -459,8 +459,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.database getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
     XCTAssertTrue(result);
 }
@@ -471,7 +471,7 @@
     BOOL result = [self checkRow:self.partialRow1
                           andSQL:@"SELECT identifier FROM main.testTable LIMIT 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [self.database getRowOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+               return [self.database getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
            }];
     XCTAssertTrue(result);
 }
@@ -481,7 +481,7 @@
     BOOL result = [self checkRow:self.partialRow1
                           andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1 LIMIT 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [self.database getRowOnResultColumns:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier == 1];
+               return [self.database getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1];
            }];
     XCTAssertTrue(result);
 }
@@ -491,7 +491,7 @@
     BOOL result = [self checkRow:self.partialRow2
                           andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC LIMIT 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [self.database getRowOnResultColumns:ConvenientObject.identifier fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+               return [self.database getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
            }];
     XCTAssertTrue(result);
 }
@@ -501,7 +501,7 @@
     BOOL result = [self checkRow:self.partialRow2
                           andSQL:@"SELECT identifier FROM main.testTable LIMIT 1 OFFSET 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [self.database getRowOnResultColumns:ConvenientObject.identifier fromTable:self.tableName offset:1];
+               return [self.database getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName offset:1];
            }];
     XCTAssertTrue(result);
 }
@@ -511,7 +511,7 @@
     BOOL result = [self checkRow:self.partialRow2
                           andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [self.database getRowOnResultColumns:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+               return [self.database getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
            }];
     XCTAssertTrue(result);
 }
@@ -521,7 +521,7 @@
     BOOL result = [self checkRow:self.partialRow2
                           andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 LIMIT 1 OFFSET 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [self.database getRowOnResultColumns:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier > 0 offset:1];
+               return [self.database getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 offset:1];
            }];
     XCTAssertTrue(result);
 }
@@ -531,7 +531,7 @@
     BOOL result = [self checkRow:self.partialRow1
                           andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [self.database getRowOnResultColumns:ConvenientObject.identifier fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1];
+               return [self.database getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
            }];
     XCTAssertTrue(result);
 }
@@ -541,7 +541,7 @@
     BOOL result = [self checkRow:self.partialRow1
                           andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [self.database getRowOnResultColumns:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1];
+               return [self.database getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
            }];
     XCTAssertTrue(result);
 }
@@ -552,7 +552,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.database getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName];
+                  return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
     XCTAssertTrue(result);
 }
@@ -562,7 +562,7 @@
     BOOL result = [self checkColumn:@[ self.value1 ]
                              andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.database getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier == 1];
+                  return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1];
               }];
     XCTAssertTrue(result);
 }
@@ -572,7 +572,7 @@
     BOOL result = [self checkColumn:self.column.reversedArray
                              andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.database getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+                  return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
               }];
     XCTAssertTrue(result);
 }
@@ -582,7 +582,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.database getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName];
+                  return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
     XCTAssertTrue(result);
 }
@@ -592,7 +592,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.database getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName];
+                  return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
     XCTAssertTrue(result);
 }
@@ -602,7 +602,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.database getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName];
+                  return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
     XCTAssertTrue(result);
 }
@@ -612,7 +612,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.database getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName];
+                  return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
     XCTAssertTrue(result);
 }
@@ -622,7 +622,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.database getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName];
+                  return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
     XCTAssertTrue(result);
 }
@@ -632,7 +632,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.database getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName];
+                  return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
     XCTAssertTrue(result);
 }
@@ -642,7 +642,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.database getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName];
+                  return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
     XCTAssertTrue(result);
 }
@@ -652,7 +652,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.database getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName];
+                  return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
     XCTAssertTrue(result);
 }
@@ -662,7 +662,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.database getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName];
+                  return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
     XCTAssertTrue(result);
 }
@@ -674,7 +674,7 @@
     BOOL result = [self checkValue:self.value1
                             andSQL:@"SELECT identifier FROM main.testTable LIMIT 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [self.database getValueOnResultColumn:ConvenientObject.identifier fromTable:self.tableName];
+                 return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName];
              }];
     XCTAssertTrue(result);
 }
@@ -684,7 +684,7 @@
     BOOL result = [self checkValue:self.value1
                             andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1 LIMIT 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [self.database getValueOnResultColumn:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier == 1];
+                 return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1];
              }];
     XCTAssertTrue(result);
 }
@@ -694,7 +694,7 @@
     BOOL result = [self checkValue:self.value2
                             andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC LIMIT 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [self.database getValueOnResultColumn:ConvenientObject.identifier fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+                 return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
              }];
     XCTAssertTrue(result);
 }
@@ -704,7 +704,7 @@
     BOOL result = [self checkValue:self.value2
                             andSQL:@"SELECT identifier FROM main.testTable LIMIT 1 OFFSET 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [self.database getValueOnResultColumn:ConvenientObject.identifier fromTable:self.tableName offset:1];
+                 return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName offset:1];
              }];
     XCTAssertTrue(result);
 }
@@ -714,7 +714,7 @@
     BOOL result = [self checkValue:self.value2
                             andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [self.database getValueOnResultColumn:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+                 return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
              }];
     XCTAssertTrue(result);
 }
@@ -724,7 +724,7 @@
     BOOL result = [self checkValue:self.value2
                             andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 LIMIT 1 OFFSET 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [self.database getValueOnResultColumn:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier > 0 offset:1];
+                 return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 offset:1];
              }];
     XCTAssertTrue(result);
 }
@@ -734,7 +734,7 @@
     BOOL result = [self checkValue:self.value1
                             andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [self.database getValueOnResultColumn:ConvenientObject.identifier fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1];
+                 return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
              }];
     XCTAssertTrue(result);
 }
@@ -744,7 +744,7 @@
     BOOL result = [self checkValue:self.value1
                             andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [self.database getValueOnResultColumn:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1];
+                 return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
              }];
     XCTAssertTrue(result);
 }
@@ -755,7 +755,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.database getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+                return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -765,7 +765,7 @@
     BOOL result = [self checkRows:@[ self.partialRow1 ]
                            andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.database getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier == 1];
+                return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1];
             }];
     XCTAssertTrue(result);
 }
@@ -775,7 +775,7 @@
     BOOL result = [self checkRows:self.partialRows.reversedArray
                            andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.database getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+                return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
             }];
     XCTAssertTrue(result);
 }
@@ -785,7 +785,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.database getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+                return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -795,7 +795,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.database getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+                return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -805,7 +805,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.database getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+                return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -815,7 +815,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.database getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+                return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -825,7 +825,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.database getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+                return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -835,7 +835,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.database getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+                return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -845,7 +845,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.database getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+                return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -855,7 +855,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.database getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+                return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -865,7 +865,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.database getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+                return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -875,7 +875,7 @@
 {
     BOOL result = [self checkObject:self.object1
                              andSQL:@"SELECT identifier, content FROM main.testTable LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.table getObject] ];
               }];
     XCTAssertTrue(result);
@@ -885,8 +885,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier == 2 LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.table getObjectWhere:ConvenientObject.identifier == 2] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.table getObjectWhere:TestCaseObject.identifier == 2] ];
               }];
     XCTAssertTrue(result);
 }
@@ -895,8 +895,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.table getObjectOrders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.table getObjectOrders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
     XCTAssertTrue(result);
 }
@@ -905,7 +905,7 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.table getObjectOffset:1] ];
               }];
     XCTAssertTrue(result);
@@ -915,8 +915,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.table getObjectWhere:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.table getObjectWhere:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
     XCTAssertTrue(result);
 }
@@ -925,8 +925,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.table getObjectWhere:ConvenientObject.identifier > 0 offset:1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.table getObjectWhere:TestCaseObject.identifier > 0 offset:1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -935,8 +935,8 @@
 {
     BOOL result = [self checkObject:self.object1
                              andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.table getObjectOrders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.table getObjectOrders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -945,8 +945,8 @@
 {
     BOOL result = [self checkObject:self.object1
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.table getObjectWhere:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.table getObjectWhere:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -956,7 +956,7 @@
 {
     BOOL result = [self checkObjects:self.objects
                               andSQL:@"SELECT identifier, content FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.table getObjects];
                }];
     XCTAssertTrue(result);
@@ -966,8 +966,8 @@
 {
     BOOL result = [self checkObject:self.object1
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier == 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [self.table getObjectsWhere:ConvenientObject.identifier == 1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [self.table getObjectsWhere:TestCaseObject.identifier == 1];
               }];
     XCTAssertTrue(result);
 }
@@ -976,8 +976,8 @@
 {
     BOOL result = [self checkObjects:self.objects.reversedArray
                               andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.table getObjectsOrders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.table getObjectsOrders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
                }];
     XCTAssertTrue(result);
 }
@@ -986,7 +986,7 @@
 {
     BOOL result = [self checkObject:self.object1
                              andSQL:@"SELECT identifier, content FROM main.testTable LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.table getObjectsLimit:1];
               }];
     XCTAssertTrue(result);
@@ -996,8 +996,8 @@
 {
     BOOL result = [self checkObjects:self.objects.reversedArray
                               andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.table getObjectsWhere:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.table getObjectsWhere:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
                }];
     XCTAssertTrue(result);
 }
@@ -1006,8 +1006,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 1 LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [self.table getObjectsWhere:ConvenientObject.identifier > 1 limit:1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [self.table getObjectsWhere:TestCaseObject.identifier > 1 limit:1];
               }];
     XCTAssertTrue(result);
 }
@@ -1016,8 +1016,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [self.table getObjectsOrders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [self.table getObjectsOrders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
               }];
     XCTAssertTrue(result);
 }
@@ -1026,7 +1026,7 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.table getObjectsLimit:1 offset:1];
               }];
     XCTAssertTrue(result);
@@ -1036,8 +1036,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [self.table getObjectsWhere:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [self.table getObjectsWhere:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
               }];
     XCTAssertTrue(result);
 }
@@ -1046,8 +1046,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [self.table getObjectsWhere:ConvenientObject.identifier > 0 limit:1 offset:1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [self.table getObjectsWhere:TestCaseObject.identifier > 0 limit:1 offset:1];
               }];
     XCTAssertTrue(result);
 }
@@ -1056,8 +1056,8 @@
 {
     BOOL result = [self checkObject:self.object1
                              andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [self.table getObjectsOrders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [self.table getObjectsOrders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
               }];
     XCTAssertTrue(result);
 }
@@ -1066,8 +1066,8 @@
 {
     BOOL result = [self checkObject:self.object1
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [self.table getObjectsWhere:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [self.table getObjectsWhere:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
               }];
     XCTAssertTrue(result);
 }
@@ -1077,8 +1077,8 @@
 {
     BOOL result = [self checkObject:self.partialObject1
                              andSQL:@"SELECT identifier FROM main.testTable LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.table getObjectOnResultColumns:ConvenientObject.identifier] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.table getObjectOnResultColumns:TestCaseObject.identifier] ];
               }];
     XCTAssertTrue(result);
 }
@@ -1087,8 +1087,8 @@
 {
     BOOL result = [self checkObject:self.partialObject1
                              andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1 LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.table getObjectOnResultColumns:ConvenientObject.identifier where:ConvenientObject.identifier == 1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.table getObjectOnResultColumns:TestCaseObject.identifier where:TestCaseObject.identifier == 1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -1097,8 +1097,8 @@
 {
     BOOL result = [self checkObject:self.partialObject2
                              andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.table getObjectOnResultColumns:ConvenientObject.identifier orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.table getObjectOnResultColumns:TestCaseObject.identifier orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
     XCTAssertTrue(result);
 }
@@ -1107,8 +1107,8 @@
 {
     BOOL result = [self checkObject:self.partialObject2
                              andSQL:@"SELECT identifier FROM main.testTable LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.table getObjectOnResultColumns:ConvenientObject.identifier offset:1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.table getObjectOnResultColumns:TestCaseObject.identifier offset:1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -1117,8 +1117,8 @@
 {
     BOOL result = [self checkObject:self.partialObject2
                              andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.table getObjectOnResultColumns:ConvenientObject.identifier where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.table getObjectOnResultColumns:TestCaseObject.identifier where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
     XCTAssertTrue(result);
 }
@@ -1127,8 +1127,8 @@
 {
     BOOL result = [self checkObject:self.partialObject2
                              andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.table getObjectOnResultColumns:ConvenientObject.identifier where:ConvenientObject.identifier > 0 offset:1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.table getObjectOnResultColumns:TestCaseObject.identifier where:TestCaseObject.identifier > 0 offset:1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -1137,8 +1137,8 @@
 {
     BOOL result = [self checkObject:self.partialObject1
                              andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.table getObjectOnResultColumns:ConvenientObject.identifier orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.table getObjectOnResultColumns:TestCaseObject.identifier orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -1147,8 +1147,8 @@
 {
     BOOL result = [self checkObject:self.partialObject1
                              andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [self.table getObjectOnResultColumns:ConvenientObject.identifier where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [self.table getObjectOnResultColumns:TestCaseObject.identifier where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -1158,8 +1158,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.table getObjectsOnResultColumns:ConvenientObject.identifier];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.table getObjectsOnResultColumns:TestCaseObject.identifier];
                }];
     XCTAssertTrue(result);
 }
@@ -1168,8 +1168,8 @@
 {
     BOOL result = [self checkObject:self.partialObject1
                              andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [self.table getObjectsOnResultColumns:ConvenientObject.identifier where:ConvenientObject.identifier == 1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [self.table getObjectsOnResultColumns:TestCaseObject.identifier where:TestCaseObject.identifier == 1];
               }];
     XCTAssertTrue(result);
 }
@@ -1178,8 +1178,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects.reversedArray
                               andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.table getObjectsOnResultColumns:ConvenientObject.identifier orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.table getObjectsOnResultColumns:TestCaseObject.identifier orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
                }];
     XCTAssertTrue(result);
 }
@@ -1188,8 +1188,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.table getObjectsOnResultColumns:ConvenientObject.identifier];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.table getObjectsOnResultColumns:TestCaseObject.identifier];
                }];
     XCTAssertTrue(result);
 }
@@ -1198,8 +1198,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.table getObjectsOnResultColumns:ConvenientObject.identifier];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.table getObjectsOnResultColumns:TestCaseObject.identifier];
                }];
     XCTAssertTrue(result);
 }
@@ -1208,8 +1208,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.table getObjectsOnResultColumns:ConvenientObject.identifier];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.table getObjectsOnResultColumns:TestCaseObject.identifier];
                }];
     XCTAssertTrue(result);
 }
@@ -1218,8 +1218,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.table getObjectsOnResultColumns:ConvenientObject.identifier];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.table getObjectsOnResultColumns:TestCaseObject.identifier];
                }];
     XCTAssertTrue(result);
 }
@@ -1228,8 +1228,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.table getObjectsOnResultColumns:ConvenientObject.identifier];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.table getObjectsOnResultColumns:TestCaseObject.identifier];
                }];
     XCTAssertTrue(result);
 }
@@ -1238,8 +1238,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.table getObjectsOnResultColumns:ConvenientObject.identifier];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.table getObjectsOnResultColumns:TestCaseObject.identifier];
                }];
     XCTAssertTrue(result);
 }
@@ -1248,8 +1248,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.table getObjectsOnResultColumns:ConvenientObject.identifier];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.table getObjectsOnResultColumns:TestCaseObject.identifier];
                }];
     XCTAssertTrue(result);
 }
@@ -1258,8 +1258,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.table getObjectsOnResultColumns:ConvenientObject.identifier];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.table getObjectsOnResultColumns:TestCaseObject.identifier];
                }];
     XCTAssertTrue(result);
 }
@@ -1268,8 +1268,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [self.table getObjectsOnResultColumns:ConvenientObject.identifier];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [self.table getObjectsOnResultColumns:TestCaseObject.identifier];
                }];
     XCTAssertTrue(result);
 }
@@ -1280,7 +1280,7 @@
     BOOL result = [self checkRow:self.partialRow1
                           andSQL:@"SELECT identifier FROM main.testTable LIMIT 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [self.table getRowOnResultColumns:ConvenientObject.identifier];
+               return [self.table getRowOnResultColumns:TestCaseObject.identifier];
            }];
     XCTAssertTrue(result);
 }
@@ -1290,7 +1290,7 @@
     BOOL result = [self checkRow:self.partialRow1
                           andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1 LIMIT 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [self.table getRowOnResultColumns:ConvenientObject.identifier where:ConvenientObject.identifier == 1];
+               return [self.table getRowOnResultColumns:TestCaseObject.identifier where:TestCaseObject.identifier == 1];
            }];
     XCTAssertTrue(result);
 }
@@ -1300,7 +1300,7 @@
     BOOL result = [self checkRow:self.partialRow2
                           andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC LIMIT 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [self.table getRowOnResultColumns:ConvenientObject.identifier orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+               return [self.table getRowOnResultColumns:TestCaseObject.identifier orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
            }];
     XCTAssertTrue(result);
 }
@@ -1310,7 +1310,7 @@
     BOOL result = [self checkRow:self.partialRow2
                           andSQL:@"SELECT identifier FROM main.testTable LIMIT 1 OFFSET 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [self.table getRowOnResultColumns:ConvenientObject.identifier offset:1];
+               return [self.table getRowOnResultColumns:TestCaseObject.identifier offset:1];
            }];
     XCTAssertTrue(result);
 }
@@ -1320,7 +1320,7 @@
     BOOL result = [self checkRow:self.partialRow2
                           andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [self.table getRowOnResultColumns:ConvenientObject.identifier where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+               return [self.table getRowOnResultColumns:TestCaseObject.identifier where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
            }];
     XCTAssertTrue(result);
 }
@@ -1330,7 +1330,7 @@
     BOOL result = [self checkRow:self.partialRow2
                           andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 LIMIT 1 OFFSET 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [self.table getRowOnResultColumns:ConvenientObject.identifier where:ConvenientObject.identifier > 0 offset:1];
+               return [self.table getRowOnResultColumns:TestCaseObject.identifier where:TestCaseObject.identifier > 0 offset:1];
            }];
     XCTAssertTrue(result);
 }
@@ -1340,7 +1340,7 @@
     BOOL result = [self checkRow:self.partialRow1
                           andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [self.table getRowOnResultColumns:ConvenientObject.identifier orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1];
+               return [self.table getRowOnResultColumns:TestCaseObject.identifier orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
            }];
     XCTAssertTrue(result);
 }
@@ -1350,7 +1350,7 @@
     BOOL result = [self checkRow:self.partialRow1
                           andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [self.table getRowOnResultColumns:ConvenientObject.identifier where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1];
+               return [self.table getRowOnResultColumns:TestCaseObject.identifier where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
            }];
     XCTAssertTrue(result);
 }
@@ -1361,7 +1361,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.table getColumnOnResult:ConvenientObject.identifier];
+                  return [self.table getColumnOnResult:TestCaseObject.identifier];
               }];
     XCTAssertTrue(result);
 }
@@ -1371,7 +1371,7 @@
     BOOL result = [self checkColumn:@[ self.value1 ]
                              andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.table getColumnOnResult:ConvenientObject.identifier where:ConvenientObject.identifier == 1];
+                  return [self.table getColumnOnResult:TestCaseObject.identifier where:TestCaseObject.identifier == 1];
               }];
     XCTAssertTrue(result);
 }
@@ -1381,7 +1381,7 @@
     BOOL result = [self checkColumn:self.column.reversedArray
                              andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.table getColumnOnResult:ConvenientObject.identifier orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+                  return [self.table getColumnOnResult:TestCaseObject.identifier orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
               }];
     XCTAssertTrue(result);
 }
@@ -1391,7 +1391,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.table getColumnOnResult:ConvenientObject.identifier];
+                  return [self.table getColumnOnResult:TestCaseObject.identifier];
               }];
     XCTAssertTrue(result);
 }
@@ -1401,7 +1401,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.table getColumnOnResult:ConvenientObject.identifier];
+                  return [self.table getColumnOnResult:TestCaseObject.identifier];
               }];
     XCTAssertTrue(result);
 }
@@ -1411,7 +1411,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.table getColumnOnResult:ConvenientObject.identifier];
+                  return [self.table getColumnOnResult:TestCaseObject.identifier];
               }];
     XCTAssertTrue(result);
 }
@@ -1421,7 +1421,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.table getColumnOnResult:ConvenientObject.identifier];
+                  return [self.table getColumnOnResult:TestCaseObject.identifier];
               }];
     XCTAssertTrue(result);
 }
@@ -1431,7 +1431,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.table getColumnOnResult:ConvenientObject.identifier];
+                  return [self.table getColumnOnResult:TestCaseObject.identifier];
               }];
     XCTAssertTrue(result);
 }
@@ -1441,7 +1441,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.table getColumnOnResult:ConvenientObject.identifier];
+                  return [self.table getColumnOnResult:TestCaseObject.identifier];
               }];
     XCTAssertTrue(result);
 }
@@ -1451,7 +1451,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.table getColumnOnResult:ConvenientObject.identifier];
+                  return [self.table getColumnOnResult:TestCaseObject.identifier];
               }];
     XCTAssertTrue(result);
 }
@@ -1461,7 +1461,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.table getColumnOnResult:ConvenientObject.identifier];
+                  return [self.table getColumnOnResult:TestCaseObject.identifier];
               }];
     XCTAssertTrue(result);
 }
@@ -1471,7 +1471,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [self.table getColumnOnResult:ConvenientObject.identifier];
+                  return [self.table getColumnOnResult:TestCaseObject.identifier];
               }];
     XCTAssertTrue(result);
 }
@@ -1483,7 +1483,7 @@
     BOOL result = [self checkValue:self.value1
                             andSQL:@"SELECT identifier FROM main.testTable LIMIT 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [self.table getValueOnResultColumn:ConvenientObject.identifier];
+                 return [self.table getValueOnResultColumn:TestCaseObject.identifier];
              }];
     XCTAssertTrue(result);
 }
@@ -1493,7 +1493,7 @@
     BOOL result = [self checkValue:self.value1
                             andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1 LIMIT 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [self.table getValueOnResultColumn:ConvenientObject.identifier where:ConvenientObject.identifier == 1];
+                 return [self.table getValueOnResultColumn:TestCaseObject.identifier where:TestCaseObject.identifier == 1];
              }];
     XCTAssertTrue(result);
 }
@@ -1503,7 +1503,7 @@
     BOOL result = [self checkValue:self.value2
                             andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC LIMIT 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [self.table getValueOnResultColumn:ConvenientObject.identifier orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+                 return [self.table getValueOnResultColumn:TestCaseObject.identifier orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
              }];
     XCTAssertTrue(result);
 }
@@ -1513,7 +1513,7 @@
     BOOL result = [self checkValue:self.value2
                             andSQL:@"SELECT identifier FROM main.testTable LIMIT 1 OFFSET 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [self.table getValueOnResultColumn:ConvenientObject.identifier offset:1];
+                 return [self.table getValueOnResultColumn:TestCaseObject.identifier offset:1];
              }];
     XCTAssertTrue(result);
 }
@@ -1523,7 +1523,7 @@
     BOOL result = [self checkValue:self.value2
                             andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [self.table getValueOnResultColumn:ConvenientObject.identifier where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+                 return [self.table getValueOnResultColumn:TestCaseObject.identifier where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
              }];
     XCTAssertTrue(result);
 }
@@ -1533,7 +1533,7 @@
     BOOL result = [self checkValue:self.value2
                             andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 LIMIT 1 OFFSET 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [self.table getValueOnResultColumn:ConvenientObject.identifier where:ConvenientObject.identifier > 0 offset:1];
+                 return [self.table getValueOnResultColumn:TestCaseObject.identifier where:TestCaseObject.identifier > 0 offset:1];
              }];
     XCTAssertTrue(result);
 }
@@ -1543,7 +1543,7 @@
     BOOL result = [self checkValue:self.value1
                             andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [self.table getValueOnResultColumn:ConvenientObject.identifier orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1];
+                 return [self.table getValueOnResultColumn:TestCaseObject.identifier orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
              }];
     XCTAssertTrue(result);
 }
@@ -1553,7 +1553,7 @@
     BOOL result = [self checkValue:self.value1
                             andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [self.table getValueOnResultColumn:ConvenientObject.identifier where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1];
+                 return [self.table getValueOnResultColumn:TestCaseObject.identifier where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
              }];
     XCTAssertTrue(result);
 }
@@ -1564,7 +1564,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.table getRowsOnResultColumns:ConvenientObject.identifier];
+                return [self.table getRowsOnResultColumns:TestCaseObject.identifier];
             }];
     XCTAssertTrue(result);
 }
@@ -1574,7 +1574,7 @@
     BOOL result = [self checkRows:@[ self.partialRow1 ]
                            andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.table getRowsOnResultColumns:ConvenientObject.identifier where:ConvenientObject.identifier == 1];
+                return [self.table getRowsOnResultColumns:TestCaseObject.identifier where:TestCaseObject.identifier == 1];
             }];
     XCTAssertTrue(result);
 }
@@ -1584,7 +1584,7 @@
     BOOL result = [self checkRows:self.partialRows.reversedArray
                            andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.table getRowsOnResultColumns:ConvenientObject.identifier orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+                return [self.table getRowsOnResultColumns:TestCaseObject.identifier orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
             }];
     XCTAssertTrue(result);
 }
@@ -1594,7 +1594,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.table getRowsOnResultColumns:ConvenientObject.identifier];
+                return [self.table getRowsOnResultColumns:TestCaseObject.identifier];
             }];
     XCTAssertTrue(result);
 }
@@ -1604,7 +1604,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.table getRowsOnResultColumns:ConvenientObject.identifier];
+                return [self.table getRowsOnResultColumns:TestCaseObject.identifier];
             }];
     XCTAssertTrue(result);
 }
@@ -1614,7 +1614,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.table getRowsOnResultColumns:ConvenientObject.identifier];
+                return [self.table getRowsOnResultColumns:TestCaseObject.identifier];
             }];
     XCTAssertTrue(result);
 }
@@ -1624,7 +1624,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.table getRowsOnResultColumns:ConvenientObject.identifier];
+                return [self.table getRowsOnResultColumns:TestCaseObject.identifier];
             }];
     XCTAssertTrue(result);
 }
@@ -1634,7 +1634,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.table getRowsOnResultColumns:ConvenientObject.identifier];
+                return [self.table getRowsOnResultColumns:TestCaseObject.identifier];
             }];
     XCTAssertTrue(result);
 }
@@ -1644,7 +1644,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.table getRowsOnResultColumns:ConvenientObject.identifier];
+                return [self.table getRowsOnResultColumns:TestCaseObject.identifier];
             }];
     XCTAssertTrue(result);
 }
@@ -1654,7 +1654,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.table getRowsOnResultColumns:ConvenientObject.identifier];
+                return [self.table getRowsOnResultColumns:TestCaseObject.identifier];
             }];
     XCTAssertTrue(result);
 }
@@ -1664,7 +1664,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.table getRowsOnResultColumns:ConvenientObject.identifier];
+                return [self.table getRowsOnResultColumns:TestCaseObject.identifier];
             }];
     XCTAssertTrue(result);
 }
@@ -1674,7 +1674,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [self.table getRowsOnResultColumns:ConvenientObject.identifier];
+                return [self.table getRowsOnResultColumns:TestCaseObject.identifier];
             }];
     XCTAssertTrue(result);
 }
@@ -1684,7 +1684,7 @@
 {
     BOOL result = [self checkObject:self.object1
                              andSQL:@"SELECT identifier, content FROM main.testTable LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [[self.database getHandle] getObjectOfClass:self.tableClass fromTable:self.tableName] ];
               }];
     XCTAssertTrue(result);
@@ -1694,8 +1694,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier == 2 LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [[self.database getHandle] getObjectOfClass:self.tableClass fromTable:self.tableName where:ConvenientObject.identifier == 2] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [[self.database getHandle] getObjectOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier == 2] ];
               }];
     XCTAssertTrue(result);
 }
@@ -1704,8 +1704,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [[self.database getHandle] getObjectOfClass:self.tableClass fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [[self.database getHandle] getObjectOfClass:self.tableClass fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
     XCTAssertTrue(result);
 }
@@ -1714,7 +1714,7 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [[self.database getHandle] getObjectOfClass:self.tableClass fromTable:self.tableName offset:1] ];
               }];
     XCTAssertTrue(result);
@@ -1724,8 +1724,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [[self.database getHandle] getObjectOfClass:self.tableClass fromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [[self.database getHandle] getObjectOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
     XCTAssertTrue(result);
 }
@@ -1734,8 +1734,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [[self.database getHandle] getObjectOfClass:self.tableClass fromTable:self.tableName where:ConvenientObject.identifier > 0 offset:1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [[self.database getHandle] getObjectOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 offset:1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -1744,8 +1744,8 @@
 {
     BOOL result = [self checkObject:self.object1
                              andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [[self.database getHandle] getObjectOfClass:self.tableClass fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [[self.database getHandle] getObjectOfClass:self.tableClass fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -1754,8 +1754,8 @@
 {
     BOOL result = [self checkObject:self.object1
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [[self.database getHandle] getObjectOfClass:self.tableClass fromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [[self.database getHandle] getObjectOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -1765,7 +1765,7 @@
 {
     BOOL result = [self checkObjects:self.objects
                               andSQL:@"SELECT identifier, content FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName];
                }];
     XCTAssertTrue(result);
@@ -1775,8 +1775,8 @@
 {
     BOOL result = [self checkObject:self.object1
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier == 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName where:ConvenientObject.identifier == 1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier == 1];
               }];
     XCTAssertTrue(result);
 }
@@ -1785,8 +1785,8 @@
 {
     BOOL result = [self checkObjects:self.objects.reversedArray
                               andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
                }];
     XCTAssertTrue(result);
 }
@@ -1795,7 +1795,7 @@
 {
     BOOL result = [self checkObject:self.object1
                              andSQL:@"SELECT identifier, content FROM main.testTable LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName limit:1];
               }];
     XCTAssertTrue(result);
@@ -1805,8 +1805,8 @@
 {
     BOOL result = [self checkObjects:self.objects.reversedArray
                               andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
                }];
     XCTAssertTrue(result);
 }
@@ -1815,8 +1815,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 1 LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName where:ConvenientObject.identifier > 1 limit:1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 1 limit:1];
               }];
     XCTAssertTrue(result);
 }
@@ -1825,8 +1825,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
               }];
     XCTAssertTrue(result);
 }
@@ -1835,7 +1835,7 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName limit:1 offset:1];
               }];
     XCTAssertTrue(result);
@@ -1845,8 +1845,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
               }];
     XCTAssertTrue(result);
 }
@@ -1855,8 +1855,8 @@
 {
     BOOL result = [self checkObject:self.object2
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName where:ConvenientObject.identifier > 0 limit:1 offset:1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 limit:1 offset:1];
               }];
     XCTAssertTrue(result);
 }
@@ -1865,8 +1865,8 @@
 {
     BOOL result = [self checkObject:self.object1
                              andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
               }];
     XCTAssertTrue(result);
 }
@@ -1875,8 +1875,8 @@
 {
     BOOL result = [self checkObject:self.object1
                              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
               }];
     XCTAssertTrue(result);
 }
@@ -1886,8 +1886,8 @@
 {
     BOOL result = [self checkObject:self.partialObject1
                              andSQL:@"SELECT identifier FROM main.testTable LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [[self.database getHandle] getObjectOnResultColumns:ConvenientObject.identifier fromTable:self.tableName] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [[self.database getHandle] getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName] ];
               }];
     XCTAssertTrue(result);
 }
@@ -1896,8 +1896,8 @@
 {
     BOOL result = [self checkObject:self.partialObject1
                              andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1 LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [[self.database getHandle] getObjectOnResultColumns:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier == 1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [[self.database getHandle] getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -1906,8 +1906,8 @@
 {
     BOOL result = [self checkObject:self.partialObject2
                              andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [[self.database getHandle] getObjectOnResultColumns:ConvenientObject.identifier fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [[self.database getHandle] getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
     XCTAssertTrue(result);
 }
@@ -1916,8 +1916,8 @@
 {
     BOOL result = [self checkObject:self.partialObject2
                              andSQL:@"SELECT identifier FROM main.testTable LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [[self.database getHandle] getObjectOnResultColumns:ConvenientObject.identifier fromTable:self.tableName offset:1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [[self.database getHandle] getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName offset:1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -1926,8 +1926,8 @@
 {
     BOOL result = [self checkObject:self.partialObject2
                              andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [[self.database getHandle] getObjectOnResultColumns:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [[self.database getHandle] getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
     XCTAssertTrue(result);
 }
@@ -1936,8 +1936,8 @@
 {
     BOOL result = [self checkObject:self.partialObject2
                              andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [[self.database getHandle] getObjectOnResultColumns:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier > 0 offset:1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [[self.database getHandle] getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 offset:1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -1946,8 +1946,8 @@
 {
     BOOL result = [self checkObject:self.partialObject1
                              andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [[self.database getHandle] getObjectOnResultColumns:ConvenientObject.identifier fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [[self.database getHandle] getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -1956,8 +1956,8 @@
 {
     BOOL result = [self checkObject:self.partialObject1
                              andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return @[ [[self.database getHandle] getObjectOnResultColumns:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return @[ [[self.database getHandle] getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
     XCTAssertTrue(result);
 }
@@ -1967,8 +1967,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [[self.database getHandle] getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
     XCTAssertTrue(result);
 }
@@ -1977,8 +1977,8 @@
 {
     BOOL result = [self checkObject:self.partialObject1
                              andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1"
-              asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                  return [[self.database getHandle] getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier == 1];
+              asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                  return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1];
               }];
     XCTAssertTrue(result);
 }
@@ -1987,8 +1987,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects.reversedArray
                               andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [[self.database getHandle] getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
                }];
     XCTAssertTrue(result);
 }
@@ -1997,8 +1997,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [[self.database getHandle] getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
     XCTAssertTrue(result);
 }
@@ -2007,8 +2007,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [[self.database getHandle] getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
     XCTAssertTrue(result);
 }
@@ -2017,8 +2017,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [[self.database getHandle] getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
     XCTAssertTrue(result);
 }
@@ -2027,8 +2027,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [[self.database getHandle] getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
     XCTAssertTrue(result);
 }
@@ -2037,8 +2037,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [[self.database getHandle] getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
     XCTAssertTrue(result);
 }
@@ -2047,8 +2047,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [[self.database getHandle] getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
     XCTAssertTrue(result);
 }
@@ -2057,8 +2057,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [[self.database getHandle] getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
     XCTAssertTrue(result);
 }
@@ -2067,8 +2067,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [[self.database getHandle] getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
     XCTAssertTrue(result);
 }
@@ -2077,8 +2077,8 @@
 {
     BOOL result = [self checkObjects:self.partialObjects
                               andSQL:@"SELECT identifier FROM main.testTable"
-               asExpectedBySelecting:^NSArray<ConvenientObject *> * {
-                   return [[self.database getHandle] getObjectsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
+                   return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
     XCTAssertTrue(result);
 }
@@ -2089,7 +2089,7 @@
     BOOL result = [self checkRow:self.partialRow1
                           andSQL:@"SELECT identifier FROM main.testTable LIMIT 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [[self.database getHandle] getRowOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+               return [[self.database getHandle] getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
            }];
     XCTAssertTrue(result);
 }
@@ -2099,7 +2099,7 @@
     BOOL result = [self checkRow:self.partialRow1
                           andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1 LIMIT 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [[self.database getHandle] getRowOnResultColumns:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier == 1];
+               return [[self.database getHandle] getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1];
            }];
     XCTAssertTrue(result);
 }
@@ -2109,7 +2109,7 @@
     BOOL result = [self checkRow:self.partialRow2
                           andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC LIMIT 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [[self.database getHandle] getRowOnResultColumns:ConvenientObject.identifier fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+               return [[self.database getHandle] getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
            }];
     XCTAssertTrue(result);
 }
@@ -2119,7 +2119,7 @@
     BOOL result = [self checkRow:self.partialRow2
                           andSQL:@"SELECT identifier FROM main.testTable LIMIT 1 OFFSET 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [[self.database getHandle] getRowOnResultColumns:ConvenientObject.identifier fromTable:self.tableName offset:1];
+               return [[self.database getHandle] getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName offset:1];
            }];
     XCTAssertTrue(result);
 }
@@ -2129,7 +2129,7 @@
     BOOL result = [self checkRow:self.partialRow2
                           andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [[self.database getHandle] getRowOnResultColumns:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+               return [[self.database getHandle] getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
            }];
     XCTAssertTrue(result);
 }
@@ -2139,7 +2139,7 @@
     BOOL result = [self checkRow:self.partialRow2
                           andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 LIMIT 1 OFFSET 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [[self.database getHandle] getRowOnResultColumns:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier > 0 offset:1];
+               return [[self.database getHandle] getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 offset:1];
            }];
     XCTAssertTrue(result);
 }
@@ -2149,7 +2149,7 @@
     BOOL result = [self checkRow:self.partialRow1
                           andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [[self.database getHandle] getRowOnResultColumns:ConvenientObject.identifier fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1];
+               return [[self.database getHandle] getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
            }];
     XCTAssertTrue(result);
 }
@@ -2159,7 +2159,7 @@
     BOOL result = [self checkRow:self.partialRow1
                           andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
            asExpectedBySelecting:^WCTOneRow * {
-               return [[self.database getHandle] getRowOnResultColumns:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1];
+               return [[self.database getHandle] getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
            }];
     XCTAssertTrue(result);
 }
@@ -2170,7 +2170,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [[self.database getHandle] getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName];
+                  return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
     XCTAssertTrue(result);
 }
@@ -2180,7 +2180,7 @@
     BOOL result = [self checkColumn:@[ self.value1 ]
                              andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [[self.database getHandle] getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier == 1];
+                  return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1];
               }];
     XCTAssertTrue(result);
 }
@@ -2190,7 +2190,7 @@
     BOOL result = [self checkColumn:self.column.reversedArray
                              andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [[self.database getHandle] getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+                  return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
               }];
     XCTAssertTrue(result);
 }
@@ -2200,7 +2200,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [[self.database getHandle] getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName];
+                  return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
     XCTAssertTrue(result);
 }
@@ -2210,7 +2210,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [[self.database getHandle] getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName];
+                  return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
     XCTAssertTrue(result);
 }
@@ -2220,7 +2220,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [[self.database getHandle] getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName];
+                  return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
     XCTAssertTrue(result);
 }
@@ -2230,7 +2230,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [[self.database getHandle] getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName];
+                  return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
     XCTAssertTrue(result);
 }
@@ -2240,7 +2240,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [[self.database getHandle] getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName];
+                  return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
     XCTAssertTrue(result);
 }
@@ -2250,7 +2250,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [[self.database getHandle] getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName];
+                  return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
     XCTAssertTrue(result);
 }
@@ -2260,7 +2260,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [[self.database getHandle] getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName];
+                  return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
     XCTAssertTrue(result);
 }
@@ -2270,7 +2270,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [[self.database getHandle] getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName];
+                  return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
     XCTAssertTrue(result);
 }
@@ -2280,7 +2280,7 @@
     BOOL result = [self checkColumn:self.column
                              andSQL:@"SELECT identifier FROM main.testTable"
               asExpectedBySelecting:^WCTOneColumn * {
-                  return [[self.database getHandle] getColumnOnResult:ConvenientObject.identifier fromTable:self.tableName];
+                  return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
     XCTAssertTrue(result);
 }
@@ -2292,7 +2292,7 @@
     BOOL result = [self checkValue:self.value1
                             andSQL:@"SELECT identifier FROM main.testTable LIMIT 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [[self.database getHandle] getValueOnResultColumn:ConvenientObject.identifier fromTable:self.tableName];
+                 return [[self.database getHandle] getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName];
              }];
     XCTAssertTrue(result);
 }
@@ -2302,7 +2302,7 @@
     BOOL result = [self checkValue:self.value1
                             andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1 LIMIT 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [[self.database getHandle] getValueOnResultColumn:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier == 1];
+                 return [[self.database getHandle] getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1];
              }];
     XCTAssertTrue(result);
 }
@@ -2312,7 +2312,7 @@
     BOOL result = [self checkValue:self.value2
                             andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC LIMIT 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [[self.database getHandle] getValueOnResultColumn:ConvenientObject.identifier fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+                 return [[self.database getHandle] getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
              }];
     XCTAssertTrue(result);
 }
@@ -2322,7 +2322,7 @@
     BOOL result = [self checkValue:self.value2
                             andSQL:@"SELECT identifier FROM main.testTable LIMIT 1 OFFSET 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [[self.database getHandle] getValueOnResultColumn:ConvenientObject.identifier fromTable:self.tableName offset:1];
+                 return [[self.database getHandle] getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName offset:1];
              }];
     XCTAssertTrue(result);
 }
@@ -2332,7 +2332,7 @@
     BOOL result = [self checkValue:self.value2
                             andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [[self.database getHandle] getValueOnResultColumn:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+                 return [[self.database getHandle] getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
              }];
     XCTAssertTrue(result);
 }
@@ -2342,7 +2342,7 @@
     BOOL result = [self checkValue:self.value2
                             andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 LIMIT 1 OFFSET 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [[self.database getHandle] getValueOnResultColumn:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier > 0 offset:1];
+                 return [[self.database getHandle] getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 offset:1];
              }];
     XCTAssertTrue(result);
 }
@@ -2352,7 +2352,7 @@
     BOOL result = [self checkValue:self.value1
                             andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [[self.database getHandle] getValueOnResultColumn:ConvenientObject.identifier fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1];
+                 return [[self.database getHandle] getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
              }];
     XCTAssertTrue(result);
 }
@@ -2362,7 +2362,7 @@
     BOOL result = [self checkValue:self.value1
                             andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
              asExpectedBySelecting:^WCTValue * {
-                 return [[self.database getHandle] getValueOnResultColumn:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier > 0 orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending) offset:1];
+                 return [[self.database getHandle] getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
              }];
     XCTAssertTrue(result);
 }
@@ -2373,7 +2373,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [[self.database getHandle] getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+                return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -2383,7 +2383,7 @@
     BOOL result = [self checkRows:@[ self.partialRow1 ]
                            andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 1"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [[self.database getHandle] getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName where:ConvenientObject.identifier == 1];
+                return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1];
             }];
     XCTAssertTrue(result);
 }
@@ -2393,7 +2393,7 @@
     BOOL result = [self checkRows:self.partialRows.reversedArray
                            andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [[self.database getHandle] getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName orders:ConvenientObject.identifier.asOrder(WCTOrderedDescending)];
+                return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
             }];
     XCTAssertTrue(result);
 }
@@ -2403,7 +2403,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [[self.database getHandle] getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+                return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -2413,7 +2413,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [[self.database getHandle] getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+                return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -2423,7 +2423,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [[self.database getHandle] getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+                return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -2433,7 +2433,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [[self.database getHandle] getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+                return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -2443,7 +2443,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [[self.database getHandle] getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+                return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -2453,7 +2453,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [[self.database getHandle] getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+                return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -2463,7 +2463,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [[self.database getHandle] getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+                return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -2473,7 +2473,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [[self.database getHandle] getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+                return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }
@@ -2483,7 +2483,7 @@
     BOOL result = [self checkRows:self.partialRows
                            andSQL:@"SELECT identifier FROM main.testTable"
             asExpectedBySelecting:^WCTColumnsXRows * {
-                return [[self.database getHandle] getRowsOnResultColumns:ConvenientObject.identifier fromTable:self.tableName];
+                return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
     XCTAssertTrue(result);
 }

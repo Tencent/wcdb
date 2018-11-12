@@ -30,51 +30,28 @@ typedef NS_ENUM(NSUInteger, ConvenientTestCaseState) {
 
 @implementation ConvenientTestCase
 
-+ (void)initialize
-{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-#ifdef DEBUG
-        WCTDatabase.debuggable = YES;
-#else
-        WCTDatabase.debuggable = NO;
-#endif
-    });
-}
-
 - (void)setUp
 {
     [super setUp];
-    self.continueAfterFailure = NO;
 
-    self.tableClass = ConvenientObject.class;
+    self.tableClass = TestCaseObject.class;
     _table = [self createTable];
     XCTAssertNotNil(_table);
 
-    _object1 = [[ConvenientObject alloc] init];
+    _object1 = [[TestCaseObject alloc] init];
     _object1.identifier = 1;
     _object1.content = @"object1";
 
-    _object2 = [[ConvenientObject alloc] init];
+    _object2 = [[TestCaseObject alloc] init];
     _object2.identifier = 2;
     _object2.content = @"object2";
 
     _objects = @[ _object1, _object2 ];
 
     XCTAssertTrue([_table insertObjects:_objects]);
-
-    [WCTDatabase globalTraceSQL:^(NSString* sql) {
-        NSLog(@"SQL: %@", sql);
-    }];
 }
 
-- (void)tearDown
-{
-    [WCTDatabase globalTraceSQL:nil];
-    [super tearDown];
-}
-
-- (BOOL)checkObject:(ConvenientObject*)object
+- (BOOL)checkObject:(TestCaseObject*)object
                      andSQL:(NSString*)sql
 asExpectedAfterModification:(BOOL (^)())block
 {
@@ -85,7 +62,7 @@ asExpectedAfterModification:(BOOL (^)())block
     return [self checkObjects:@[ object ] andSQLs:@[ sql ] asExpectedAfterModification:block];
 }
 
-- (BOOL)checkObjects:(NSArray<ConvenientObject*>*)objects
+- (BOOL)checkObjects:(NSArray<TestCaseObject*>*)objects
                      andSQL:(NSString*)sql
 asExpectedAfterModification:(BOOL (^)())block
 {
@@ -95,7 +72,7 @@ asExpectedAfterModification:(BOOL (^)())block
     return [self checkObjects:objects andSQLs:@[ sql ] asExpectedAfterModification:block];
 }
 
-- (BOOL)checkObjects:(NSArray<ConvenientObject*>*)expectedObjects
+- (BOOL)checkObjects:(NSArray<TestCaseObject*>*)expectedObjects
                     andSQLs:(NSArray<NSString*>*)expectedSQLs
 asExpectedAfterModification:(BOOL (^)())block
 {
@@ -134,7 +111,7 @@ asExpectedAfterModification:(BOOL (^)())block
         }
 
         state = ConvenientTestCaseStateTestingValues;
-        NSArray<ConvenientObject*>* allObjects = [self.table getObjects];
+        NSArray<TestCaseObject*>* allObjects = [self.table getObjects];
         if (![allObjects isEqualToArray:expectedObjects]) {
             state = ConvenientTestCaseStateFailed;
             TESTCASE_FAILED
@@ -146,9 +123,9 @@ asExpectedAfterModification:(BOOL (^)())block
     return state == ConvenientTestCaseStateTested;
 }
 
-- (BOOL)checkObject:(ConvenientObject*)object
+- (BOOL)checkObject:(TestCaseObject*)object
                andSQL:(NSString*)sql
-asExpectedBySelecting:(NSArray<ConvenientObject*>* (^)())block
+asExpectedBySelecting:(NSArray<TestCaseObject*>* (^)())block
 {
     if (object == nil
         || sql == nil) {
@@ -157,9 +134,9 @@ asExpectedBySelecting:(NSArray<ConvenientObject*>* (^)())block
     return [self checkObjects:@[ object ] andSQLs:@[ sql ] asExpectedBySelecting:block];
 }
 
-- (BOOL)checkObjects:(NSArray<ConvenientObject*>*)objects
+- (BOOL)checkObjects:(NSArray<TestCaseObject*>*)objects
                andSQL:(NSString*)sql
-asExpectedBySelecting:(NSArray<ConvenientObject*>* (^)())block
+asExpectedBySelecting:(NSArray<TestCaseObject*>* (^)())block
 {
     if (sql == nil) {
         return NO;
@@ -167,9 +144,9 @@ asExpectedBySelecting:(NSArray<ConvenientObject*>* (^)())block
     return [self checkObjects:objects andSQLs:@[ sql ] asExpectedBySelecting:block];
 }
 
-- (BOOL)checkObjects:(NSArray<ConvenientObject*>*)expectedObjects
+- (BOOL)checkObjects:(NSArray<TestCaseObject*>*)expectedObjects
               andSQLs:(NSArray<NSString*>*)expectedSQLs
-asExpectedBySelecting:(NSArray<ConvenientObject*>* (^)())block
+asExpectedBySelecting:(NSArray<TestCaseObject*>* (^)())block
 {
     __block ConvenientTestCaseState state = ConvenientTestCaseStateNotStarted;
     do {
@@ -200,7 +177,7 @@ asExpectedBySelecting:(NSArray<ConvenientObject*>* (^)())block
             break;
         }
         state = ConvenientTestCaseStateTestingSQL;
-        NSArray<ConvenientObject*>* selected = block();
+        NSArray<TestCaseObject*>* selected = block();
         if (state != ConvenientTestCaseStateTestingSQL) {
             state = ConvenientTestCaseStateFailed;
             TESTCASE_FAILED

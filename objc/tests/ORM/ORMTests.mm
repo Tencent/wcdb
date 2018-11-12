@@ -65,31 +65,10 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
 
 @implementation ORMTests
 
-+ (void)initialize
-{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-#ifdef DEBUG
-        WCTDatabase.debuggable = YES;
-#else
-        WCTDatabase.debuggable = NO;
-#endif
-    });
-}
-
 - (void)setUp
 {
     [super setUp];
     self.continueAfterFailure = NO;
-    [WCTDatabase globalTraceSQL:^(NSString* sql) {
-        NSLog(@"SQL: %@", sql);
-    }];
-}
-
-- (void)tearDown
-{
-    [WCTDatabase globalTraceSQL:nil];
-    [super tearDown];
 }
 
 - (BOOL)checkCreateTableAndIndexSQLsAsExpected:(NSArray<NSString*>*)expected
@@ -266,7 +245,7 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
 {
     self.tableClass = ColumnConstraintCheck.class;
     NSArray<NSString*>* expected = @[
-        @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER CHECK((value) > (1)))",
+        @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER CHECK(value > 1))",
     ];
     XCTAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
 }
@@ -316,7 +295,7 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
 - (void)test_additional_orm
 {
     self.tableClass = AdditionalORMObject.class;
-    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER PRIMARY KEY ON CONFLICT ABORT, CONSTRAINT testTable_constraint CHECK((value) > (10)))",
+    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER PRIMARY KEY ON CONFLICT ABORT, CONSTRAINT testTable_constraint CHECK(value > 10))",
                                       @"CREATE INDEX IF NOT EXISTS main.testTable_index ON testTable(value ASC)" ];
     XCTAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
 }

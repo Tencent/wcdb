@@ -22,12 +22,6 @@
 
 @implementation WINQTestCase
 
-- (void)setUp
-{
-    [super setUp];
-    self.continueAfterFailure = YES;
-}
-
 + (std::list<WCDB::Syntax::Identifier::Type>)getTypes:(WCDB::SQL&)sql
 {
     std::list<WCDB::Syntax::Identifier::Type> types;
