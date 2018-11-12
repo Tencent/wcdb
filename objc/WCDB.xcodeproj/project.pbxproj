@@ -24,6 +24,97 @@
 		231C98BA219532AC0067B87C /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
 		231C98BB219532AC0067B87C /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
 		231C98BC219532AC0067B87C /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
+		231FEA1B21999E7D00DC3706 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
+		231FEA1C21999E7D00DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
+		231FEA1D21999E7D00DC3706 /* ConvenientSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E122F2195749C00BD488D /* ConvenientSelectTests.mm */; };
+		231FEA1E21999E7D00DC3706 /* ConvenientTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F72C2194253900E8B10A /* ConvenientTestCase.mm */; };
+		231FEA1F21999E7D00DC3706 /* ConvenientDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123F2195756B00BD488D /* ConvenientDeleteTests.mm */; };
+		231FEA2021999E7D00DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
+		231FEA2121999E7D00DC3706 /* ConvenientUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123D2195756400BD488D /* ConvenientUpdateTests.mm */; };
+		231FEA2221999E7D00DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
+		231FEA2321999E7D00DC3706 /* ConvenientInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E12392195755400BD488D /* ConvenientInsertTests.mm */; };
+		231FEA2421999E7D00DC3706 /* ConvenientObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F7342194260400E8B10A /* ConvenientObject.mm */; };
+		231FEA2621999E7D00DC3706 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
+		231FEA2721999E7D00DC3706 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
+		231FEA2A21999E7D00DC3706 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		231FEA3721999ECE00DC3706 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
+		231FEA3821999ECE00DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
+		231FEA3921999ECE00DC3706 /* ConvenientSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E122F2195749C00BD488D /* ConvenientSelectTests.mm */; };
+		231FEA3A21999ECE00DC3706 /* ConvenientTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F72C2194253900E8B10A /* ConvenientTestCase.mm */; };
+		231FEA3B21999ECE00DC3706 /* ConvenientDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123F2195756B00BD488D /* ConvenientDeleteTests.mm */; };
+		231FEA3C21999ECE00DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
+		231FEA3D21999ECE00DC3706 /* ConvenientUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123D2195756400BD488D /* ConvenientUpdateTests.mm */; };
+		231FEA3E21999ECE00DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
+		231FEA3F21999ECE00DC3706 /* ConvenientInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E12392195755400BD488D /* ConvenientInsertTests.mm */; };
+		231FEA4021999ECE00DC3706 /* ConvenientObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F7342194260400E8B10A /* ConvenientObject.mm */; };
+		231FEA4221999ECE00DC3706 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
+		231FEA4321999ECE00DC3706 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
+		231FEA4621999ECE00DC3706 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		231FEA5321999F0D00DC3706 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
+		231FEA5421999F0D00DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
+		231FEA5521999F0D00DC3706 /* ConvenientSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E122F2195749C00BD488D /* ConvenientSelectTests.mm */; };
+		231FEA5621999F0D00DC3706 /* ConvenientTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F72C2194253900E8B10A /* ConvenientTestCase.mm */; };
+		231FEA5721999F0D00DC3706 /* ConvenientDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123F2195756B00BD488D /* ConvenientDeleteTests.mm */; };
+		231FEA5821999F0D00DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
+		231FEA5921999F0D00DC3706 /* ConvenientUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123D2195756400BD488D /* ConvenientUpdateTests.mm */; };
+		231FEA5A21999F0D00DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
+		231FEA5B21999F0D00DC3706 /* ConvenientInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E12392195755400BD488D /* ConvenientInsertTests.mm */; };
+		231FEA5C21999F0D00DC3706 /* ConvenientObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F7342194260400E8B10A /* ConvenientObject.mm */; };
+		231FEA5E21999F0D00DC3706 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
+		231FEA5F21999F0D00DC3706 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
+		231FEA6221999F0D00DC3706 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		231FEA6F21999F2A00DC3706 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
+		231FEA7021999F2A00DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
+		231FEA7121999F2A00DC3706 /* ConvenientSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E122F2195749C00BD488D /* ConvenientSelectTests.mm */; };
+		231FEA7221999F2A00DC3706 /* ConvenientTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F72C2194253900E8B10A /* ConvenientTestCase.mm */; };
+		231FEA7321999F2A00DC3706 /* ConvenientDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123F2195756B00BD488D /* ConvenientDeleteTests.mm */; };
+		231FEA7421999F2A00DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
+		231FEA7521999F2A00DC3706 /* ConvenientUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123D2195756400BD488D /* ConvenientUpdateTests.mm */; };
+		231FEA7621999F2A00DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
+		231FEA7721999F2A00DC3706 /* ConvenientInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E12392195755400BD488D /* ConvenientInsertTests.mm */; };
+		231FEA7821999F2A00DC3706 /* ConvenientObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F7342194260400E8B10A /* ConvenientObject.mm */; };
+		231FEA7A21999F2A00DC3706 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
+		231FEA7B21999F2A00DC3706 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
+		231FEA7E21999F2A00DC3706 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		231FEA8B21999F7800DC3706 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
+		231FEA8C21999F7800DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
+		231FEA8D21999F7800DC3706 /* ConvenientSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E122F2195749C00BD488D /* ConvenientSelectTests.mm */; };
+		231FEA8E21999F7800DC3706 /* ConvenientTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F72C2194253900E8B10A /* ConvenientTestCase.mm */; };
+		231FEA8F21999F7800DC3706 /* ConvenientDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123F2195756B00BD488D /* ConvenientDeleteTests.mm */; };
+		231FEA9021999F7800DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
+		231FEA9121999F7800DC3706 /* ConvenientUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123D2195756400BD488D /* ConvenientUpdateTests.mm */; };
+		231FEA9221999F7800DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
+		231FEA9321999F7800DC3706 /* ConvenientInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E12392195755400BD488D /* ConvenientInsertTests.mm */; };
+		231FEA9421999F7800DC3706 /* ConvenientObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F7342194260400E8B10A /* ConvenientObject.mm */; };
+		231FEA9621999F7800DC3706 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
+		231FEA9721999F7800DC3706 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
+		231FEA9A21999F7800DC3706 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		231FEAA721999F8100DC3706 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
+		231FEAA821999F8100DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
+		231FEAA921999F8100DC3706 /* ConvenientSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E122F2195749C00BD488D /* ConvenientSelectTests.mm */; };
+		231FEAAA21999F8100DC3706 /* ConvenientTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F72C2194253900E8B10A /* ConvenientTestCase.mm */; };
+		231FEAAB21999F8100DC3706 /* ConvenientDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123F2195756B00BD488D /* ConvenientDeleteTests.mm */; };
+		231FEAAC21999F8100DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
+		231FEAAD21999F8100DC3706 /* ConvenientUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123D2195756400BD488D /* ConvenientUpdateTests.mm */; };
+		231FEAAE21999F8100DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
+		231FEAAF21999F8100DC3706 /* ConvenientInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E12392195755400BD488D /* ConvenientInsertTests.mm */; };
+		231FEAB021999F8100DC3706 /* ConvenientObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F7342194260400E8B10A /* ConvenientObject.mm */; };
+		231FEAB221999F8100DC3706 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
+		231FEAB321999F8100DC3706 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
+		231FEAB621999F8100DC3706 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		231FEAC321999F8D00DC3706 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
+		231FEAC421999F8D00DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
+		231FEAC521999F8D00DC3706 /* ConvenientSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E122F2195749C00BD488D /* ConvenientSelectTests.mm */; };
+		231FEAC621999F8D00DC3706 /* ConvenientTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F72C2194253900E8B10A /* ConvenientTestCase.mm */; };
+		231FEAC721999F8D00DC3706 /* ConvenientDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123F2195756B00BD488D /* ConvenientDeleteTests.mm */; };
+		231FEAC821999F8D00DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
+		231FEAC921999F8D00DC3706 /* ConvenientUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123D2195756400BD488D /* ConvenientUpdateTests.mm */; };
+		231FEACA21999F8D00DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
+		231FEACB21999F8D00DC3706 /* ConvenientInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E12392195755400BD488D /* ConvenientInsertTests.mm */; };
+		231FEACC21999F8D00DC3706 /* ConvenientObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F7342194260400E8B10A /* ConvenientObject.mm */; };
+		231FEACE21999F8D00DC3706 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
+		231FEACF21999F8D00DC3706 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
+		231FEAD221999F8D00DC3706 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		232741501F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		232741521F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */; };
 		233A058B2062698E00F1A212 /* WCTHandle+ChainCall.h in Headers */ = {isa = PBXBuildFile; fileRef = 233A05892062698E00F1A212 /* WCTHandle+ChainCall.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -103,6 +194,19 @@
 		234DBD062064DE04000E31E8 /* WCTHandle+Transaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBD022064DE04000E31E8 /* WCTHandle+Transaction.mm */; };
 		234DBD092064DE23000E31E8 /* WCTTransaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 234DBD072064DE23000E31E8 /* WCTTransaction.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234DBD0D2064E045000E31E8 /* WCTChainCall.h in Headers */ = {isa = PBXBuildFile; fileRef = 234DBD0B2064E045000E31E8 /* WCTChainCall.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		234E6F5221996EB600D006F2 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
+		234E6F5321996EB600D006F2 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
+		234E6F5421996EB600D006F2 /* ConvenientSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E122F2195749C00BD488D /* ConvenientSelectTests.mm */; };
+		234E6F5521996EB600D006F2 /* ConvenientTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F72C2194253900E8B10A /* ConvenientTestCase.mm */; };
+		234E6F5621996EB600D006F2 /* ConvenientDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123F2195756B00BD488D /* ConvenientDeleteTests.mm */; };
+		234E6F5721996EB600D006F2 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
+		234E6F5821996EB600D006F2 /* ConvenientUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123D2195756400BD488D /* ConvenientUpdateTests.mm */; };
+		234E6F5921996EB600D006F2 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
+		234E6F5A21996EB600D006F2 /* ConvenientInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E12392195755400BD488D /* ConvenientInsertTests.mm */; };
+		234E6F5B21996EB600D006F2 /* ConvenientObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F7342194260400E8B10A /* ConvenientObject.mm */; };
+		234E6F5D21996EB600D006F2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
+		234E6F5E21996EB600D006F2 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
+		234E6F6121996EB600D006F2 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		234EF46E2015CFDE00B81929 /* WCTConvertible.h in Headers */ = {isa = PBXBuildFile; fileRef = 234EF46C2015CFDE00B81929 /* WCTConvertible.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234EF46F2015CFDE00B81929 /* WCTConvertible.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234EF46D2015CFDE00B81929 /* WCTConvertible.mm */; };
 		23567CFA20CA3889005F1C35 /* Frame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23567CF820CA3889005F1C35 /* Frame.cpp */; };
@@ -691,6 +795,118 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		231FEA1721999E7D00DC3706 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239326601E836D7300D677CC;
+			remoteInfo = WCDB;
+		};
+		231FEA1921999E7D00DC3706 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239E8A6F2160A5B100BCB308;
+			remoteInfo = Host;
+		};
+		231FEA3321999ECE00DC3706 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239326601E836D7300D677CC;
+			remoteInfo = WCDB;
+		};
+		231FEA3521999ECE00DC3706 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239E8A6F2160A5B100BCB308;
+			remoteInfo = Host;
+		};
+		231FEA4F21999F0D00DC3706 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239326601E836D7300D677CC;
+			remoteInfo = WCDB;
+		};
+		231FEA5121999F0D00DC3706 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239E8A6F2160A5B100BCB308;
+			remoteInfo = Host;
+		};
+		231FEA6B21999F2A00DC3706 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239326601E836D7300D677CC;
+			remoteInfo = WCDB;
+		};
+		231FEA6D21999F2A00DC3706 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239E8A6F2160A5B100BCB308;
+			remoteInfo = Host;
+		};
+		231FEA8721999F7800DC3706 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239326601E836D7300D677CC;
+			remoteInfo = WCDB;
+		};
+		231FEA8921999F7800DC3706 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239E8A6F2160A5B100BCB308;
+			remoteInfo = Host;
+		};
+		231FEAA321999F8100DC3706 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239326601E836D7300D677CC;
+			remoteInfo = WCDB;
+		};
+		231FEAA521999F8100DC3706 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239E8A6F2160A5B100BCB308;
+			remoteInfo = Host;
+		};
+		231FEABF21999F8D00DC3706 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239326601E836D7300D677CC;
+			remoteInfo = WCDB;
+		};
+		231FEAC121999F8D00DC3706 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239E8A6F2160A5B100BCB308;
+			remoteInfo = Host;
+		};
+		234E6F4E21996EB600D006F2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239326601E836D7300D677CC;
+			remoteInfo = WCDB;
+		};
+		234E6F5021996EB600D006F2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239E8A6F2160A5B100BCB308;
+			remoteInfo = Host;
+		};
 		237908FC219295370098797F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
@@ -750,6 +966,94 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		231FEA2921999E7D00DC3706 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				231FEA2A21999E7D00DC3706 /* WCDB.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEA4521999ECE00DC3706 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				231FEA4621999ECE00DC3706 /* WCDB.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEA6121999F0D00DC3706 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				231FEA6221999F0D00DC3706 /* WCDB.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEA7D21999F2A00DC3706 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				231FEA7E21999F2A00DC3706 /* WCDB.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEA9921999F7800DC3706 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				231FEA9A21999F7800DC3706 /* WCDB.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEAB521999F8100DC3706 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				231FEAB621999F8100DC3706 /* WCDB.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEAD121999F8D00DC3706 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				231FEAD221999F8D00DC3706 /* WCDB.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		234E6F6021996EB600D006F2 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				234E6F6121996EB600D006F2 /* WCDB.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		23790947219295370098797F /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -802,6 +1106,13 @@
 		2316D9482105D21500707AFC /* LRUCache.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LRUCache.hpp; sourceTree = "<group>"; };
 		231C98B8219532AC0067B87C /* NSArray+TestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSArray+TestCase.h"; sourceTree = "<group>"; };
 		231C98B9219532AC0067B87C /* NSArray+TestCase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSArray+TestCase.m"; sourceTree = "<group>"; };
+		231FEA2F21999E7D00DC3706 /* Basic tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Basic tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		231FEA4B21999ECE00DC3706 /* Thread tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Thread tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		231FEA6721999F0D00DC3706 /* Trace tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Trace tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		231FEA8321999F2A00DC3706 /* Config tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Config tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		231FEA9F21999F7800DC3706 /* Repair tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Repair tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		231FEABB21999F8100DC3706 /* FTS tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FTS tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		231FEAD721999F8D00DC3706 /* Migration tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Migration tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+FTS.h"; sourceTree = "<group>"; };
 		2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+FTS.mm"; sourceTree = "<group>"; };
 		233A05892062698E00F1A212 /* WCTHandle+ChainCall.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTHandle+ChainCall.h"; sourceTree = "<group>"; };
@@ -881,6 +1192,7 @@
 		234DBD022064DE04000E31E8 /* WCTHandle+Transaction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTHandle+Transaction.mm"; sourceTree = "<group>"; };
 		234DBD072064DE23000E31E8 /* WCTTransaction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTTransaction.h; sourceTree = "<group>"; };
 		234DBD0B2064E045000E31E8 /* WCTChainCall.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTChainCall.h; sourceTree = "<group>"; };
+		234E6F6621996EB600D006F2 /* Advance tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Advance tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		234EF46C2015CFDE00B81929 /* WCTConvertible.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTConvertible.h; sourceTree = "<group>"; };
 		234EF46D2015CFDE00B81929 /* WCTConvertible.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTConvertible.mm; sourceTree = "<group>"; };
 		23567CF820CA3889005F1C35 /* Frame.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Frame.cpp; sourceTree = "<group>"; };
@@ -1506,6 +1818,78 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		231FEA2521999E7D00DC3706 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				231FEA2621999E7D00DC3706 /* Foundation.framework in Frameworks */,
+				231FEA2721999E7D00DC3706 /* WCDB.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEA4121999ECE00DC3706 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				231FEA4221999ECE00DC3706 /* Foundation.framework in Frameworks */,
+				231FEA4321999ECE00DC3706 /* WCDB.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEA5D21999F0D00DC3706 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				231FEA5E21999F0D00DC3706 /* Foundation.framework in Frameworks */,
+				231FEA5F21999F0D00DC3706 /* WCDB.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEA7921999F2A00DC3706 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				231FEA7A21999F2A00DC3706 /* Foundation.framework in Frameworks */,
+				231FEA7B21999F2A00DC3706 /* WCDB.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEA9521999F7800DC3706 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				231FEA9621999F7800DC3706 /* Foundation.framework in Frameworks */,
+				231FEA9721999F7800DC3706 /* WCDB.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEAB121999F8100DC3706 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				231FEAB221999F8100DC3706 /* Foundation.framework in Frameworks */,
+				231FEAB321999F8100DC3706 /* WCDB.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEACD21999F8D00DC3706 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				231FEACE21999F8D00DC3706 /* Foundation.framework in Frameworks */,
+				231FEACF21999F8D00DC3706 /* WCDB.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		234E6F5C21996EB600D006F2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				234E6F5D21996EB600D006F2 /* Foundation.framework in Frameworks */,
+				234E6F5E21996EB600D006F2 /* WCDB.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		23790943219295370098797F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1554,6 +1938,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		231FEA1421999DDE00DC3706 /* chaincall_and_core */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = chaincall_and_core;
+			sourceTree = "<group>";
+		};
 		2321243920172865008146EF /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -2288,6 +2679,7 @@
 		239E8A8C2160A62F00BCB308 /* tests */ = {
 			isa = PBXGroup;
 			children = (
+				231FEA1421999DDE00DC3706 /* chaincall_and_core */,
 				2384F72A219424FE00E8B10A /* convenient */,
 				23790A4F219298250098797F /* utility */,
 				23790A47219295B80098797F /* ORM */,
@@ -2356,6 +2748,14 @@
 				239E8A9D2160B37600BCB308 /* WINQ tests.xctest */,
 				2379094D219295370098797F /* ORM tests.xctest */,
 				2384F7282194249200E8B10A /* Convenient tests.xctest */,
+				234E6F6621996EB600D006F2 /* Advance tests.xctest */,
+				231FEA2F21999E7D00DC3706 /* Basic tests.xctest */,
+				231FEA4B21999ECE00DC3706 /* Thread tests.xctest */,
+				231FEA6721999F0D00DC3706 /* Trace tests.xctest */,
+				231FEA8321999F2A00DC3706 /* Config tests.xctest */,
+				231FEA9F21999F7800DC3706 /* Repair tests.xctest */,
+				231FEABB21999F8100DC3706 /* FTS tests.xctest */,
+				231FEAD721999F8D00DC3706 /* Migration tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3071,6 +3471,166 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		231FEA1521999E7D00DC3706 /* Basic tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 231FEA2B21999E7D00DC3706 /* Build configuration list for PBXNativeTarget "Basic tests" */;
+			buildPhases = (
+				231FEA1A21999E7D00DC3706 /* Sources */,
+				231FEA2521999E7D00DC3706 /* Frameworks */,
+				231FEA2821999E7D00DC3706 /* Resources */,
+				231FEA2921999E7D00DC3706 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				231FEA1621999E7D00DC3706 /* PBXTargetDependency */,
+				231FEA1821999E7D00DC3706 /* PBXTargetDependency */,
+			);
+			name = "Basic tests";
+			productName = "WINQ tests";
+			productReference = 231FEA2F21999E7D00DC3706 /* Basic tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		231FEA3121999ECE00DC3706 /* Thread tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 231FEA4721999ECE00DC3706 /* Build configuration list for PBXNativeTarget "Thread tests" */;
+			buildPhases = (
+				231FEA3621999ECE00DC3706 /* Sources */,
+				231FEA4121999ECE00DC3706 /* Frameworks */,
+				231FEA4421999ECE00DC3706 /* Resources */,
+				231FEA4521999ECE00DC3706 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				231FEA3221999ECE00DC3706 /* PBXTargetDependency */,
+				231FEA3421999ECE00DC3706 /* PBXTargetDependency */,
+			);
+			name = "Thread tests";
+			productName = "WINQ tests";
+			productReference = 231FEA4B21999ECE00DC3706 /* Thread tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		231FEA4D21999F0D00DC3706 /* Trace tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 231FEA6321999F0D00DC3706 /* Build configuration list for PBXNativeTarget "Trace tests" */;
+			buildPhases = (
+				231FEA5221999F0D00DC3706 /* Sources */,
+				231FEA5D21999F0D00DC3706 /* Frameworks */,
+				231FEA6021999F0D00DC3706 /* Resources */,
+				231FEA6121999F0D00DC3706 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				231FEA4E21999F0D00DC3706 /* PBXTargetDependency */,
+				231FEA5021999F0D00DC3706 /* PBXTargetDependency */,
+			);
+			name = "Trace tests";
+			productName = "WINQ tests";
+			productReference = 231FEA6721999F0D00DC3706 /* Trace tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		231FEA6921999F2A00DC3706 /* Config tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 231FEA7F21999F2A00DC3706 /* Build configuration list for PBXNativeTarget "Config tests" */;
+			buildPhases = (
+				231FEA6E21999F2A00DC3706 /* Sources */,
+				231FEA7921999F2A00DC3706 /* Frameworks */,
+				231FEA7C21999F2A00DC3706 /* Resources */,
+				231FEA7D21999F2A00DC3706 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				231FEA6A21999F2A00DC3706 /* PBXTargetDependency */,
+				231FEA6C21999F2A00DC3706 /* PBXTargetDependency */,
+			);
+			name = "Config tests";
+			productName = "WINQ tests";
+			productReference = 231FEA8321999F2A00DC3706 /* Config tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		231FEA8521999F7800DC3706 /* Repair tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 231FEA9B21999F7800DC3706 /* Build configuration list for PBXNativeTarget "Repair tests" */;
+			buildPhases = (
+				231FEA8A21999F7800DC3706 /* Sources */,
+				231FEA9521999F7800DC3706 /* Frameworks */,
+				231FEA9821999F7800DC3706 /* Resources */,
+				231FEA9921999F7800DC3706 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				231FEA8621999F7800DC3706 /* PBXTargetDependency */,
+				231FEA8821999F7800DC3706 /* PBXTargetDependency */,
+			);
+			name = "Repair tests";
+			productName = "WINQ tests";
+			productReference = 231FEA9F21999F7800DC3706 /* Repair tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		231FEAA121999F8100DC3706 /* FTS tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 231FEAB721999F8100DC3706 /* Build configuration list for PBXNativeTarget "FTS tests" */;
+			buildPhases = (
+				231FEAA621999F8100DC3706 /* Sources */,
+				231FEAB121999F8100DC3706 /* Frameworks */,
+				231FEAB421999F8100DC3706 /* Resources */,
+				231FEAB521999F8100DC3706 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				231FEAA221999F8100DC3706 /* PBXTargetDependency */,
+				231FEAA421999F8100DC3706 /* PBXTargetDependency */,
+			);
+			name = "FTS tests";
+			productName = "WINQ tests";
+			productReference = 231FEABB21999F8100DC3706 /* FTS tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		231FEABD21999F8D00DC3706 /* Migration tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 231FEAD321999F8D00DC3706 /* Build configuration list for PBXNativeTarget "Migration tests" */;
+			buildPhases = (
+				231FEAC221999F8D00DC3706 /* Sources */,
+				231FEACD21999F8D00DC3706 /* Frameworks */,
+				231FEAD021999F8D00DC3706 /* Resources */,
+				231FEAD121999F8D00DC3706 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				231FEABE21999F8D00DC3706 /* PBXTargetDependency */,
+				231FEAC021999F8D00DC3706 /* PBXTargetDependency */,
+			);
+			name = "Migration tests";
+			productName = "WINQ tests";
+			productReference = 231FEAD721999F8D00DC3706 /* Migration tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		234E6F4C21996EB600D006F2 /* Advance tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 234E6F6221996EB600D006F2 /* Build configuration list for PBXNativeTarget "Advance tests" */;
+			buildPhases = (
+				234E6F5121996EB600D006F2 /* Sources */,
+				234E6F5C21996EB600D006F2 /* Frameworks */,
+				234E6F5F21996EB600D006F2 /* Resources */,
+				234E6F6021996EB600D006F2 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				234E6F4D21996EB600D006F2 /* PBXTargetDependency */,
+				234E6F4F21996EB600D006F2 /* PBXTargetDependency */,
+			);
+			name = "Advance tests";
+			productName = "WINQ tests";
+			productReference = 234E6F6621996EB600D006F2 /* Advance tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		237908FA219295370098797F /* ORM tests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 23790949219295370098797F /* Build configuration list for PBXNativeTarget "ORM tests" */;
@@ -3176,6 +3736,38 @@
 				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = sanhuazhang;
 				TargetAttributes = {
+					231FEA1521999E7D00DC3706 = {
+						DevelopmentTeam = TCFDHFMX6R;
+						ProvisioningStyle = Automatic;
+					};
+					231FEA3121999ECE00DC3706 = {
+						DevelopmentTeam = TCFDHFMX6R;
+						ProvisioningStyle = Automatic;
+					};
+					231FEA4D21999F0D00DC3706 = {
+						DevelopmentTeam = TCFDHFMX6R;
+						ProvisioningStyle = Automatic;
+					};
+					231FEA6921999F2A00DC3706 = {
+						DevelopmentTeam = TCFDHFMX6R;
+						ProvisioningStyle = Automatic;
+					};
+					231FEA8521999F7800DC3706 = {
+						DevelopmentTeam = TCFDHFMX6R;
+						ProvisioningStyle = Automatic;
+					};
+					231FEAA121999F8100DC3706 = {
+						DevelopmentTeam = TCFDHFMX6R;
+						ProvisioningStyle = Automatic;
+					};
+					231FEABD21999F8D00DC3706 = {
+						DevelopmentTeam = TCFDHFMX6R;
+						ProvisioningStyle = Automatic;
+					};
+					234E6F4C21996EB600D006F2 = {
+						DevelopmentTeam = TCFDHFMX6R;
+						ProvisioningStyle = Automatic;
+					};
 					237908FA219295370098797F = {
 						DevelopmentTeam = TCFDHFMX6R;
 						ProvisioningStyle = Automatic;
@@ -3221,9 +3813,17 @@
 			targets = (
 				239326601E836D7300D677CC /* WCDB */,
 				239E8A6F2160A5B100BCB308 /* Host */,
+				231FEA1521999E7D00DC3706 /* Basic tests */,
 				239E8A9C2160B37600BCB308 /* WINQ tests */,
 				237908FA219295370098797F /* ORM tests */,
 				2384F7022194249200E8B10A /* Convenient tests */,
+				234E6F4C21996EB600D006F2 /* Advance tests */,
+				231FEA3121999ECE00DC3706 /* Thread tests */,
+				231FEA4D21999F0D00DC3706 /* Trace tests */,
+				231FEA6921999F2A00DC3706 /* Config tests */,
+				231FEA8521999F7800DC3706 /* Repair tests */,
+				231FEAA121999F8100DC3706 /* FTS tests */,
+				231FEABD21999F8D00DC3706 /* Migration tests */,
 			);
 		};
 /* End PBXProject section */
@@ -3239,6 +3839,62 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
+		231FEA2821999E7D00DC3706 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEA4421999ECE00DC3706 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEA6021999F0D00DC3706 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEA7C21999F2A00DC3706 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEA9821999F7800DC3706 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEAB421999F8100DC3706 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEAD021999F8D00DC3706 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		234E6F5F21996EB600D006F2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		23790946219295370098797F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3277,6 +3933,142 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		231FEA1A21999E7D00DC3706 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				231FEA1B21999E7D00DC3706 /* NSArray+TestCase.m in Sources */,
+				231FEA1C21999E7D00DC3706 /* SingleTableTestCase.mm in Sources */,
+				231FEA1D21999E7D00DC3706 /* ConvenientSelectTests.mm in Sources */,
+				231FEA1E21999E7D00DC3706 /* ConvenientTestCase.mm in Sources */,
+				231FEA1F21999E7D00DC3706 /* ConvenientDeleteTests.mm in Sources */,
+				231FEA2021999E7D00DC3706 /* SingleDatabaseTestCase.mm in Sources */,
+				231FEA2121999E7D00DC3706 /* ConvenientUpdateTests.mm in Sources */,
+				231FEA2221999E7D00DC3706 /* TestCase.mm in Sources */,
+				231FEA2321999E7D00DC3706 /* ConvenientInsertTests.mm in Sources */,
+				231FEA2421999E7D00DC3706 /* ConvenientObject.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEA3621999ECE00DC3706 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				231FEA3721999ECE00DC3706 /* NSArray+TestCase.m in Sources */,
+				231FEA3821999ECE00DC3706 /* SingleTableTestCase.mm in Sources */,
+				231FEA3921999ECE00DC3706 /* ConvenientSelectTests.mm in Sources */,
+				231FEA3A21999ECE00DC3706 /* ConvenientTestCase.mm in Sources */,
+				231FEA3B21999ECE00DC3706 /* ConvenientDeleteTests.mm in Sources */,
+				231FEA3C21999ECE00DC3706 /* SingleDatabaseTestCase.mm in Sources */,
+				231FEA3D21999ECE00DC3706 /* ConvenientUpdateTests.mm in Sources */,
+				231FEA3E21999ECE00DC3706 /* TestCase.mm in Sources */,
+				231FEA3F21999ECE00DC3706 /* ConvenientInsertTests.mm in Sources */,
+				231FEA4021999ECE00DC3706 /* ConvenientObject.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEA5221999F0D00DC3706 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				231FEA5321999F0D00DC3706 /* NSArray+TestCase.m in Sources */,
+				231FEA5421999F0D00DC3706 /* SingleTableTestCase.mm in Sources */,
+				231FEA5521999F0D00DC3706 /* ConvenientSelectTests.mm in Sources */,
+				231FEA5621999F0D00DC3706 /* ConvenientTestCase.mm in Sources */,
+				231FEA5721999F0D00DC3706 /* ConvenientDeleteTests.mm in Sources */,
+				231FEA5821999F0D00DC3706 /* SingleDatabaseTestCase.mm in Sources */,
+				231FEA5921999F0D00DC3706 /* ConvenientUpdateTests.mm in Sources */,
+				231FEA5A21999F0D00DC3706 /* TestCase.mm in Sources */,
+				231FEA5B21999F0D00DC3706 /* ConvenientInsertTests.mm in Sources */,
+				231FEA5C21999F0D00DC3706 /* ConvenientObject.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEA6E21999F2A00DC3706 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				231FEA6F21999F2A00DC3706 /* NSArray+TestCase.m in Sources */,
+				231FEA7021999F2A00DC3706 /* SingleTableTestCase.mm in Sources */,
+				231FEA7121999F2A00DC3706 /* ConvenientSelectTests.mm in Sources */,
+				231FEA7221999F2A00DC3706 /* ConvenientTestCase.mm in Sources */,
+				231FEA7321999F2A00DC3706 /* ConvenientDeleteTests.mm in Sources */,
+				231FEA7421999F2A00DC3706 /* SingleDatabaseTestCase.mm in Sources */,
+				231FEA7521999F2A00DC3706 /* ConvenientUpdateTests.mm in Sources */,
+				231FEA7621999F2A00DC3706 /* TestCase.mm in Sources */,
+				231FEA7721999F2A00DC3706 /* ConvenientInsertTests.mm in Sources */,
+				231FEA7821999F2A00DC3706 /* ConvenientObject.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEA8A21999F7800DC3706 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				231FEA8B21999F7800DC3706 /* NSArray+TestCase.m in Sources */,
+				231FEA8C21999F7800DC3706 /* SingleTableTestCase.mm in Sources */,
+				231FEA8D21999F7800DC3706 /* ConvenientSelectTests.mm in Sources */,
+				231FEA8E21999F7800DC3706 /* ConvenientTestCase.mm in Sources */,
+				231FEA8F21999F7800DC3706 /* ConvenientDeleteTests.mm in Sources */,
+				231FEA9021999F7800DC3706 /* SingleDatabaseTestCase.mm in Sources */,
+				231FEA9121999F7800DC3706 /* ConvenientUpdateTests.mm in Sources */,
+				231FEA9221999F7800DC3706 /* TestCase.mm in Sources */,
+				231FEA9321999F7800DC3706 /* ConvenientInsertTests.mm in Sources */,
+				231FEA9421999F7800DC3706 /* ConvenientObject.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEAA621999F8100DC3706 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				231FEAA721999F8100DC3706 /* NSArray+TestCase.m in Sources */,
+				231FEAA821999F8100DC3706 /* SingleTableTestCase.mm in Sources */,
+				231FEAA921999F8100DC3706 /* ConvenientSelectTests.mm in Sources */,
+				231FEAAA21999F8100DC3706 /* ConvenientTestCase.mm in Sources */,
+				231FEAAB21999F8100DC3706 /* ConvenientDeleteTests.mm in Sources */,
+				231FEAAC21999F8100DC3706 /* SingleDatabaseTestCase.mm in Sources */,
+				231FEAAD21999F8100DC3706 /* ConvenientUpdateTests.mm in Sources */,
+				231FEAAE21999F8100DC3706 /* TestCase.mm in Sources */,
+				231FEAAF21999F8100DC3706 /* ConvenientInsertTests.mm in Sources */,
+				231FEAB021999F8100DC3706 /* ConvenientObject.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		231FEAC221999F8D00DC3706 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				231FEAC321999F8D00DC3706 /* NSArray+TestCase.m in Sources */,
+				231FEAC421999F8D00DC3706 /* SingleTableTestCase.mm in Sources */,
+				231FEAC521999F8D00DC3706 /* ConvenientSelectTests.mm in Sources */,
+				231FEAC621999F8D00DC3706 /* ConvenientTestCase.mm in Sources */,
+				231FEAC721999F8D00DC3706 /* ConvenientDeleteTests.mm in Sources */,
+				231FEAC821999F8D00DC3706 /* SingleDatabaseTestCase.mm in Sources */,
+				231FEAC921999F8D00DC3706 /* ConvenientUpdateTests.mm in Sources */,
+				231FEACA21999F8D00DC3706 /* TestCase.mm in Sources */,
+				231FEACB21999F8D00DC3706 /* ConvenientInsertTests.mm in Sources */,
+				231FEACC21999F8D00DC3706 /* ConvenientObject.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		234E6F5121996EB600D006F2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				234E6F5221996EB600D006F2 /* NSArray+TestCase.m in Sources */,
+				234E6F5321996EB600D006F2 /* SingleTableTestCase.mm in Sources */,
+				234E6F5421996EB600D006F2 /* ConvenientSelectTests.mm in Sources */,
+				234E6F5521996EB600D006F2 /* ConvenientTestCase.mm in Sources */,
+				234E6F5621996EB600D006F2 /* ConvenientDeleteTests.mm in Sources */,
+				234E6F5721996EB600D006F2 /* SingleDatabaseTestCase.mm in Sources */,
+				234E6F5821996EB600D006F2 /* ConvenientUpdateTests.mm in Sources */,
+				234E6F5921996EB600D006F2 /* TestCase.mm in Sources */,
+				234E6F5A21996EB600D006F2 /* ConvenientInsertTests.mm in Sources */,
+				234E6F5B21996EB600D006F2 /* ConvenientObject.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		237908FF219295370098797F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3676,6 +4468,86 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		231FEA1621999E7D00DC3706 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239326601E836D7300D677CC /* WCDB */;
+			targetProxy = 231FEA1721999E7D00DC3706 /* PBXContainerItemProxy */;
+		};
+		231FEA1821999E7D00DC3706 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239E8A6F2160A5B100BCB308 /* Host */;
+			targetProxy = 231FEA1921999E7D00DC3706 /* PBXContainerItemProxy */;
+		};
+		231FEA3221999ECE00DC3706 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239326601E836D7300D677CC /* WCDB */;
+			targetProxy = 231FEA3321999ECE00DC3706 /* PBXContainerItemProxy */;
+		};
+		231FEA3421999ECE00DC3706 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239E8A6F2160A5B100BCB308 /* Host */;
+			targetProxy = 231FEA3521999ECE00DC3706 /* PBXContainerItemProxy */;
+		};
+		231FEA4E21999F0D00DC3706 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239326601E836D7300D677CC /* WCDB */;
+			targetProxy = 231FEA4F21999F0D00DC3706 /* PBXContainerItemProxy */;
+		};
+		231FEA5021999F0D00DC3706 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239E8A6F2160A5B100BCB308 /* Host */;
+			targetProxy = 231FEA5121999F0D00DC3706 /* PBXContainerItemProxy */;
+		};
+		231FEA6A21999F2A00DC3706 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239326601E836D7300D677CC /* WCDB */;
+			targetProxy = 231FEA6B21999F2A00DC3706 /* PBXContainerItemProxy */;
+		};
+		231FEA6C21999F2A00DC3706 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239E8A6F2160A5B100BCB308 /* Host */;
+			targetProxy = 231FEA6D21999F2A00DC3706 /* PBXContainerItemProxy */;
+		};
+		231FEA8621999F7800DC3706 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239326601E836D7300D677CC /* WCDB */;
+			targetProxy = 231FEA8721999F7800DC3706 /* PBXContainerItemProxy */;
+		};
+		231FEA8821999F7800DC3706 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239E8A6F2160A5B100BCB308 /* Host */;
+			targetProxy = 231FEA8921999F7800DC3706 /* PBXContainerItemProxy */;
+		};
+		231FEAA221999F8100DC3706 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239326601E836D7300D677CC /* WCDB */;
+			targetProxy = 231FEAA321999F8100DC3706 /* PBXContainerItemProxy */;
+		};
+		231FEAA421999F8100DC3706 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239E8A6F2160A5B100BCB308 /* Host */;
+			targetProxy = 231FEAA521999F8100DC3706 /* PBXContainerItemProxy */;
+		};
+		231FEABE21999F8D00DC3706 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239326601E836D7300D677CC /* WCDB */;
+			targetProxy = 231FEABF21999F8D00DC3706 /* PBXContainerItemProxy */;
+		};
+		231FEAC021999F8D00DC3706 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239E8A6F2160A5B100BCB308 /* Host */;
+			targetProxy = 231FEAC121999F8D00DC3706 /* PBXContainerItemProxy */;
+		};
+		234E6F4D21996EB600D006F2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239326601E836D7300D677CC /* WCDB */;
+			targetProxy = 234E6F4E21996EB600D006F2 /* PBXContainerItemProxy */;
+		};
+		234E6F4F21996EB600D006F2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239E8A6F2160A5B100BCB308 /* Host */;
+			targetProxy = 234E6F5021996EB600D006F2 /* PBXContainerItemProxy */;
+		};
 		237908FB219295370098797F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 239326601E836D7300D677CC /* WCDB */;
@@ -3714,6 +4586,718 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		231FEA2C21999E7D00DC3706 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Basic-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+			};
+			name = Debug;
+		};
+		231FEA2D21999E7D00DC3706 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Basic-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		231FEA2E21999E7D00DC3706 /* WithoutBitcode */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Basic-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = WithoutBitcode;
+		};
+		231FEA4821999ECE00DC3706 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Thread-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+			};
+			name = Debug;
+		};
+		231FEA4921999ECE00DC3706 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Thread-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		231FEA4A21999ECE00DC3706 /* WithoutBitcode */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Thread-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = WithoutBitcode;
+		};
+		231FEA6421999F0D00DC3706 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Trace-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+			};
+			name = Debug;
+		};
+		231FEA6521999F0D00DC3706 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Trace-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		231FEA6621999F0D00DC3706 /* WithoutBitcode */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Trace-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = WithoutBitcode;
+		};
+		231FEA8021999F2A00DC3706 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Config-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+			};
+			name = Debug;
+		};
+		231FEA8121999F2A00DC3706 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Config-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		231FEA8221999F2A00DC3706 /* WithoutBitcode */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Config-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = WithoutBitcode;
+		};
+		231FEA9C21999F7800DC3706 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Repair-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+			};
+			name = Debug;
+		};
+		231FEA9D21999F7800DC3706 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Repair-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		231FEA9E21999F7800DC3706 /* WithoutBitcode */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Repair-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = WithoutBitcode;
+		};
+		231FEAB821999F8100DC3706 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.FTS-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+			};
+			name = Debug;
+		};
+		231FEAB921999F8100DC3706 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.FTS-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		231FEABA21999F8100DC3706 /* WithoutBitcode */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.FTS-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = WithoutBitcode;
+		};
+		231FEAD421999F8D00DC3706 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Migration-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+			};
+			name = Debug;
+		};
+		231FEAD521999F8D00DC3706 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Migration-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		231FEAD621999F8D00DC3706 /* WithoutBitcode */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Migration-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = WithoutBitcode;
+		};
+		234E6F6321996EB600D006F2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Advance-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+			};
+			name = Debug;
+		};
+		234E6F6421996EB600D006F2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Advance-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		234E6F6521996EB600D006F2 /* WithoutBitcode */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Advance-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = WithoutBitcode;
+		};
 		2379094A219295370098797F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4421,6 +6005,86 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		231FEA2B21999E7D00DC3706 /* Build configuration list for PBXNativeTarget "Basic tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				231FEA2C21999E7D00DC3706 /* Debug */,
+				231FEA2D21999E7D00DC3706 /* Release */,
+				231FEA2E21999E7D00DC3706 /* WithoutBitcode */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		231FEA4721999ECE00DC3706 /* Build configuration list for PBXNativeTarget "Thread tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				231FEA4821999ECE00DC3706 /* Debug */,
+				231FEA4921999ECE00DC3706 /* Release */,
+				231FEA4A21999ECE00DC3706 /* WithoutBitcode */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		231FEA6321999F0D00DC3706 /* Build configuration list for PBXNativeTarget "Trace tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				231FEA6421999F0D00DC3706 /* Debug */,
+				231FEA6521999F0D00DC3706 /* Release */,
+				231FEA6621999F0D00DC3706 /* WithoutBitcode */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		231FEA7F21999F2A00DC3706 /* Build configuration list for PBXNativeTarget "Config tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				231FEA8021999F2A00DC3706 /* Debug */,
+				231FEA8121999F2A00DC3706 /* Release */,
+				231FEA8221999F2A00DC3706 /* WithoutBitcode */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		231FEA9B21999F7800DC3706 /* Build configuration list for PBXNativeTarget "Repair tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				231FEA9C21999F7800DC3706 /* Debug */,
+				231FEA9D21999F7800DC3706 /* Release */,
+				231FEA9E21999F7800DC3706 /* WithoutBitcode */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		231FEAB721999F8100DC3706 /* Build configuration list for PBXNativeTarget "FTS tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				231FEAB821999F8100DC3706 /* Debug */,
+				231FEAB921999F8100DC3706 /* Release */,
+				231FEABA21999F8100DC3706 /* WithoutBitcode */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		231FEAD321999F8D00DC3706 /* Build configuration list for PBXNativeTarget "Migration tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				231FEAD421999F8D00DC3706 /* Debug */,
+				231FEAD521999F8D00DC3706 /* Release */,
+				231FEAD621999F8D00DC3706 /* WithoutBitcode */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		234E6F6221996EB600D006F2 /* Build configuration list for PBXNativeTarget "Advance tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				234E6F6321996EB600D006F2 /* Debug */,
+				234E6F6421996EB600D006F2 /* Release */,
+				234E6F6521996EB600D006F2 /* WithoutBitcode */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		23790949219295370098797F /* Build configuration list for PBXNativeTarget "ORM tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
