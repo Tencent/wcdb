@@ -1938,11 +1938,60 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		231FEA1421999DDE00DC3706 /* chaincall_and_core */ = {
+		231FEAD92199A0FD00DC3706 /* trace */ = {
 			isa = PBXGroup;
 			children = (
 			);
-			path = chaincall_and_core;
+			path = trace;
+			sourceTree = "<group>";
+		};
+		231FEADA2199A0FE00DC3706 /* config */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = config;
+			sourceTree = "<group>";
+		};
+		231FEADB2199A0FE00DC3706 /* basic */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = basic;
+			sourceTree = "<group>";
+		};
+		231FEADC2199A0FE00DC3706 /* FTS */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = FTS;
+			sourceTree = "<group>";
+		};
+		231FEADD2199A0FF00DC3706 /* thread */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = thread;
+			sourceTree = "<group>";
+		};
+		231FEADE2199A0FF00DC3706 /* migration */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = migration;
+			sourceTree = "<group>";
+		};
+		231FEADF2199A10000DC3706 /* repair */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = repair;
+			sourceTree = "<group>";
+		};
+		231FEAE02199A10000DC3706 /* advance */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = advance;
 			sourceTree = "<group>";
 		};
 		2321243920172865008146EF /* Products */ = {
@@ -2679,7 +2728,14 @@
 		239E8A8C2160A62F00BCB308 /* tests */ = {
 			isa = PBXGroup;
 			children = (
-				231FEA1421999DDE00DC3706 /* chaincall_and_core */,
+				231FEAE02199A10000DC3706 /* advance */,
+				231FEADB2199A0FE00DC3706 /* basic */,
+				231FEADA2199A0FE00DC3706 /* config */,
+				231FEADC2199A0FE00DC3706 /* FTS */,
+				231FEADE2199A0FF00DC3706 /* migration */,
+				231FEADF2199A10000DC3706 /* repair */,
+				231FEADD2199A0FF00DC3706 /* thread */,
+				231FEAD92199A0FD00DC3706 /* trace */,
 				2384F72A219424FE00E8B10A /* convenient */,
 				23790A4F219298250098797F /* utility */,
 				23790A47219295B80098797F /* ORM */,
