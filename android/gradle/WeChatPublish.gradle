@@ -1,11 +1,4 @@
 
-buildscript {
-    repositories { jcenter() }
-    dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
-    }
-}
-
 def extensionClass
 
 // Detect supported plugin modules
@@ -154,7 +147,7 @@ class WeChatPublishExtension {
 
         if (publishToBintray) {
             if (!project.plugins.hasPlugin('com.jfrog.bintray')) {
-                project.plugins.apply('com.jfrog.bintray')
+                project.apply plugin: 'com.jfrog.bintray'
             }
 
             if (!project.hasProperty('BINTRAY_USER') ||
@@ -165,6 +158,7 @@ class WeChatPublishExtension {
             def bintrayKey = project.property('BINTRAY_APIKEY')
 
             // Emit bintray DSL
+            def configureClosures = bintrayConfigureClosures
             project.bintray {
                 user = bintrayUser
                 key = bintrayKey
@@ -185,7 +179,7 @@ class WeChatPublishExtension {
                         released = new Date()
                     }
 
-                    bintrayConfigureClosures.each {
+                    configureClosures.each {
                         it.delegate = delegate
                         it()
                     }
@@ -427,7 +421,7 @@ class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
             def nativeSymbolZipTask = null
             if (externalNativeBuildTask != null) {
                 nativeSymbolZipTask = project.task("nativeSymbolZip${cVariantName}", type: Zip) {
-                    classifier = 'symbols'
+                    classifier = "${variantName}Symbols"
                     from externalNativeBuildTask.objFolder
                     include '**/*.so'
                     dependsOn externalNativeBuildTask
