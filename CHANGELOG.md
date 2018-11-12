@@ -1,3 +1,9 @@
+## v1.0.8
+
+#### Android
+
+* Support for [Room library](https://developer.android.com/topic/libraries/architecture/room) from Android Jetpack. See README and [Wiki](https://github.com/Tencent/wcdb/wiki/Android-WCDB-%E4%BD%BF%E7%94%A8-Room-ORM-%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A) for details.
+
 ## v1.0.7.5
 
 #### iOS/macOS
