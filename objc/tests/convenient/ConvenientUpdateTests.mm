@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "CRUDTestCase.h"
+#import "PreInsertedCRUDTestCase.h"
 
-@interface ConvenientUpdateTests : CRUDTestCase
+@interface ConvenientUpdateTests : PreInsertedCRUDTestCase
 
 @property (nonatomic, readonly) TestCaseObject* renewObject;
 @property (nonatomic, readonly) WCTColumnCodingRow* renewRow;

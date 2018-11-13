@@ -18,20 +18,9 @@
  * limitations under the License.
  */
 
-#import "SingleDatabaseTestCase.h"
+#import "Integer64CodingObject.h"
+#import <WCDB/WCDB.h>
 
-@interface SingleTableTestCase : SingleDatabaseTestCase
-
-@property (nonatomic, readonly) WCTTable* table;
-
-@property (readonly, nonatomic) NSString* tableName;
-
-@property (retain, nonatomic) Class tableClass;
-
-- (BOOL)createTable;
-
-- (BOOL)createVirtualTable;
-
-- (BOOL)dropTable;
+@interface Integer64CodingObject (WCTColumnCoding) <WCTColumnCoding>
 
 @end

@@ -18,20 +18,16 @@
  * limitations under the License.
  */
 
-#import "SingleDatabaseTestCase.h"
+#import <Foundation/Foundation.h>
 
-@interface SingleTableTestCase : SingleDatabaseTestCase
+NS_ASSUME_NONNULL_BEGIN
 
-@property (nonatomic, readonly) WCTTable* table;
+@interface Integer64CodingObject : NSObject
 
-@property (readonly, nonatomic) NSString* tableName;
+- (instancetype)initWithValue:(int64_t)value;
 
-@property (retain, nonatomic) Class tableClass;
-
-- (BOOL)createTable;
-
-- (BOOL)createVirtualTable;
-
-- (BOOL)dropTable;
+@property (nonatomic, assign) int64_t value;
 
 @end
+
+NS_ASSUME_NONNULL_END

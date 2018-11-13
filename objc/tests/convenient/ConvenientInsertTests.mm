@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "CRUDTestCase.h"
+#import "PreInsertedCRUDTestCase.h"
 
-@interface ConvenientInsertTests : CRUDTestCase
+@interface ConvenientInsertTests : PreInsertedCRUDTestCase
 
 @property (nonatomic, readonly) TestCaseObject* renewedObject1;
 @property (nonatomic, readonly) TestCaseObject* renewedObject2;
@@ -73,20 +73,6 @@
     _partialObject4 = [[TestCaseObject alloc] init];
     _partialObject4.identifier = 4;
     _partialObject4.content = nil;
-}
-
-- (BOOL)checkObjects:(NSArray<TestCaseObject*>*)objects
-            andInsertSQL:(NSString*)insertSQL
-               withCount:(int)count
-asExpectedAfterInsertion:(BOOL (^)())block
-{
-    NSMutableArray<NSString*>* sqls = [NSMutableArray array];
-    [sqls addObject:@"BEGIN IMMEDIATE"];
-    for (int i = 0; i < count; ++i) {
-        [sqls addObject:insertSQL];
-    }
-    [sqls addObject:@"COMMIT"];
-    return [self checkObjects:objects andSQLs:sqls asExpectedAfterModification:block];
 }
 
 #pragma mark - Auto Increment

@@ -48,16 +48,11 @@
 			<string>Objective-C</string>
 			<key>Values</key>
 			<array>
-				<string>Cpp</string>
 				<string>Objective-C</string>
 				<string>Swift</string>
 			</array>
 			<key>AllowedTypes</key>
 			<dict>
-				<key>Cpp</key>
-				<array>
-					<string>public.objective-c-plus-plus-source</string>
-				</array>
 				<key>Objective-C</key>
 				<array>
 					<string>public.objective-c-plus-plus-source</string>
@@ -87,7 +82,7 @@
 				<string>Integer64</string>
 				<string>Double</string>
 				<string>String</string>
-				<string>Binary</string>
+				<string>Data</string>
 			</array>
 		</dict>
 	</array>

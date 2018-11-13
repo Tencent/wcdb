@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "CRUDTestCase.h"
+#import "PreInsertedCRUDTestCase.h"
 
-@interface MultiSelectTests : CRUDTestCase
+@interface MultiSelectTests : PreInsertedCRUDTestCase
 
 @property (nonatomic, readonly) NSString* tableName2;
 

@@ -1,11 +1,6 @@
 //___FILEHEADER___
 
-#import "___VARIABLE_productName___.h"
-#import <Foundation/Foundation.h>
-#import <WCDB/WCDB.h>
-
-@interface ___VARIABLE_productName___ (WCTColumnCoding) <WCTColumnCoding>
-@end
+#import "___VARIABLE_productName___+WCTColumnCoding.h"
 
 @implementation ___VARIABLE_productName___ (WCTColumnCoding)
 
@@ -16,10 +11,10 @@
 
 - (NSNumber *)archivedWCTValue
 {
-    return /* <#Archive NSNumber * To ___VARIABLE_productName___#> */;
+    return /* <#Archive ___VARIABLE_productName___ To NSNumber *#> */;
 }
 
-+ (WCTColumnType)columnTypeForWCDB
++ (WCTColumnType)columnType
 {
     return WCTColumnTypeInteger32;
 }

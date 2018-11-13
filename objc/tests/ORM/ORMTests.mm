@@ -79,7 +79,7 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
     [sqls addObject:@"COMMIT"];
     return [self checkAllSQLs:sqls
         asExpectedByOperation:^BOOL {
-            return [self createTable] != nil;
+            return [self createTable];
         }];
 }
 
@@ -91,7 +91,7 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
     }
     return [self checkSomeSQLs:@[ expected ]
          asExpectedByOperation:^BOOL {
-             return [self createVirtualTable] != nil;
+             return [self createVirtualTable];
          }];
 }
 

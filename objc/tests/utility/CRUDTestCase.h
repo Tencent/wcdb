@@ -19,36 +19,33 @@
  */
 
 #import "SingleTableTestCase.h"
-#import "TestCaseObject+WCTTableCoding.h"
-#import "TestCaseObject.h"
 
 @interface CRUDTestCase : SingleTableTestCase
 
-@property (nonatomic, readonly) WCTTable* table;
-
-@property (nonatomic, readonly) TestCaseObject* object1;
-@property (nonatomic, readonly) TestCaseObject* object2;
-@property (nonatomic, readonly) NSArray<TestCaseObject*>* objects;
-
-- (BOOL)checkObject:(TestCaseObject*)object
+- (BOOL)checkObject:(NSObject<WCTTableCoding>*)object
                      andSQL:(NSString*)sql
 asExpectedAfterModification:(BOOL (^)())block;
 
-- (BOOL)checkObjects:(NSArray<TestCaseObject*>*)objects
+- (BOOL)checkObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
                      andSQL:(NSString*)sql
 asExpectedAfterModification:(BOOL (^)())block;
 
-- (BOOL)checkObjects:(NSArray<TestCaseObject*>*)objects
+- (BOOL)checkObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
                     andSQLs:(NSArray<NSString*>*)sqls
 asExpectedAfterModification:(BOOL (^)())block;
 
-- (BOOL)checkObject:(TestCaseObject*)object
-               andSQL:(NSString*)sql
-asExpectedBySelecting:(NSArray<TestCaseObject*>* (^)())block;
+- (BOOL)checkObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
+            andInsertSQL:(NSString*)insertSQL
+               withCount:(int)count
+asExpectedAfterInsertion:(BOOL (^)())block;
 
-- (BOOL)checkObjects:(NSArray<TestCaseObject*>*)objects
+- (BOOL)checkObject:(NSObject<WCTTableCoding>*)object
                andSQL:(NSString*)sql
-asExpectedBySelecting:(NSArray<TestCaseObject*>* (^)())block;
+asExpectedBySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block;
+
+- (BOOL)checkObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
+               andSQL:(NSString*)sql
+asExpectedBySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block;
 
 - (BOOL)checkRow:(WCTOneRow*)row
                andSQL:(NSString*)sql

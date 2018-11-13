@@ -18,20 +18,19 @@
  * limitations under the License.
  */
 
-#import "SingleDatabaseTestCase.h"
+#import "DataCodingObject.h"
+#import "DoubleCodingObject.h"
+#import "Integer32CodingObject.h"
+#import "Integer64CodingObject.h"
+#import "StringCodingObject.h"
+#import <Foundation/Foundation.h>
 
-@interface SingleTableTestCase : SingleDatabaseTestCase
+@interface ColumnCodingObject : NSObject
 
-@property (nonatomic, readonly) WCTTable* table;
-
-@property (readonly, nonatomic) NSString* tableName;
-
-@property (retain, nonatomic) Class tableClass;
-
-- (BOOL)createTable;
-
-- (BOOL)createVirtualTable;
-
-- (BOOL)dropTable;
+@property (nonatomic, retain) Integer32CodingObject* int32Object;
+@property (nonatomic, retain) Integer64CodingObject* int64Object;
+@property (nonatomic, retain) DoubleCodingObject* doubleObject;
+@property (nonatomic, retain) StringCodingObject* stringObject;
+@property (nonatomic, retain) DataCodingObject* dataObject;
 
 @end

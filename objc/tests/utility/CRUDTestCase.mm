@@ -30,35 +30,21 @@ typedef NS_ENUM(NSUInteger, CRUDTestCaseState) {
 
 @implementation CRUDTestCase
 
-- (void)setUp
+- (BOOL)checkObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
+            andInsertSQL:(NSString*)insertSQL
+               withCount:(int)count
+asExpectedAfterInsertion:(BOOL (^)())block
 {
-    [super setUp];
-
-    self.tableClass = TestCaseObject.class;
-    _table = [self createTable];
-
-    _object1 = [[TestCaseObject alloc] init];
-    _object1.identifier = 1;
-    _object1.content = [NSString randomString];
-
-    _object2 = [[TestCaseObject alloc] init];
-    _object2.identifier = 2;
-    _object2.content = [NSString randomString];
-
-    _objects = @[ _object1, _object2 ];
-
-    TestCaseAssertTrue([_table insertObjects:_objects]);
+    NSMutableArray<NSString*>* sqls = [NSMutableArray array];
+    [sqls addObject:@"BEGIN IMMEDIATE"];
+    for (int i = 0; i < count; ++i) {
+        [sqls addObject:insertSQL];
+    }
+    [sqls addObject:@"COMMIT"];
+    return [self checkObjects:objects andSQLs:sqls asExpectedAfterModification:block];
 }
 
-- (void)tearDown
-{
-    TestCaseAssertTrue([self.database dropTable:self.tableName]);
-    [_table invalidate];
-    _table = nil;
-    [super tearDown];
-}
-
-- (BOOL)checkObject:(TestCaseObject*)object
+- (BOOL)checkObject:(NSObject<WCTTableCoding>*)object
                      andSQL:(NSString*)sql
 asExpectedAfterModification:(BOOL (^)())block
 {
@@ -70,7 +56,7 @@ asExpectedAfterModification:(BOOL (^)())block
     return [self checkObjects:@[ object ] andSQLs:@[ sql ] asExpectedAfterModification:block];
 }
 
-- (BOOL)checkObjects:(NSArray<TestCaseObject*>*)objects
+- (BOOL)checkObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
                      andSQL:(NSString*)sql
 asExpectedAfterModification:(BOOL (^)())block
 {
@@ -81,7 +67,7 @@ asExpectedAfterModification:(BOOL (^)())block
     return [self checkObjects:objects andSQLs:@[ sql ] asExpectedAfterModification:block];
 }
 
-- (BOOL)checkObjects:(NSArray<TestCaseObject*>*)expectedObjects
+- (BOOL)checkObjects:(NSArray<NSObject<WCTTableCoding>*>*)expectedObjects
                     andSQLs:(NSArray<NSString*>*)expectedSQLs
 asExpectedAfterModification:(BOOL (^)())block
 {
@@ -91,7 +77,7 @@ asExpectedAfterModification:(BOOL (^)())block
         }]) {
         return NO;
     }
-    NSArray<TestCaseObject*>* allObjects = [self.table getObjects];
+    NSArray<NSObject<WCTTableCoding>*>* allObjects = [self.table getObjects];
     if (![allObjects isEqualToArray:expectedObjects]) {
         TESTCASE_FAILED
         return NO;
@@ -99,9 +85,9 @@ asExpectedAfterModification:(BOOL (^)())block
     return YES;
 }
 
-- (BOOL)checkObject:(TestCaseObject*)object
+- (BOOL)checkObject:(NSObject<WCTTableCoding>*)object
                andSQL:(NSString*)sql
-asExpectedBySelecting:(NSArray<TestCaseObject*>* (^)())block
+asExpectedBySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block
 {
     if (object == nil
         || sql == nil) {
@@ -111,9 +97,9 @@ asExpectedBySelecting:(NSArray<TestCaseObject*>* (^)())block
     return [self checkObjects:@[ object ] andSQLs:@[ sql ] asExpectedBySelecting:block];
 }
 
-- (BOOL)checkObjects:(NSArray<TestCaseObject*>*)objects
+- (BOOL)checkObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
                andSQL:(NSString*)sql
-asExpectedBySelecting:(NSArray<TestCaseObject*>* (^)())block
+asExpectedBySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block
 {
     if (sql == nil) {
         TESTCASE_FAILED
@@ -122,11 +108,11 @@ asExpectedBySelecting:(NSArray<TestCaseObject*>* (^)())block
     return [self checkObjects:objects andSQLs:@[ sql ] asExpectedBySelecting:block];
 }
 
-- (BOOL)checkObjects:(NSArray<TestCaseObject*>*)expectedObjects
+- (BOOL)checkObjects:(NSArray<NSObject<WCTTableCoding>*>*)expectedObjects
               andSQLs:(NSArray<NSString*>*)expectedSQLs
-asExpectedBySelecting:(NSArray<TestCaseObject*>* (^)())block
+asExpectedBySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block
 {
-    __block NSArray<TestCaseObject*>* selected;
+    __block NSArray<NSObject<WCTTableCoding>*>* selected;
     if (![self checkAllSQLs:expectedSQLs
         asExpectedByOperation:^BOOL {
             selected = block();

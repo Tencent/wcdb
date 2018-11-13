@@ -18,20 +18,23 @@
  * limitations under the License.
  */
 
-#import "SingleDatabaseTestCase.h"
+#import "Integer64CodingObject+WCTColumnCoding.h"
 
-@interface SingleTableTestCase : SingleDatabaseTestCase
+@implementation Integer64CodingObject (WCTColumnCoding)
 
-@property (nonatomic, readonly) WCTTable* table;
++ (instancetype)unarchiveWithWCTValue:(NSNumber *)value
+{
+    return [[Integer64CodingObject alloc] initWithValue:value.integerValue];
+}
 
-@property (readonly, nonatomic) NSString* tableName;
+- (NSNumber *)archivedWCTValue
+{
+    return [NSNumber numberWithInteger:self.value];
+}
 
-@property (retain, nonatomic) Class tableClass;
-
-- (BOOL)createTable;
-
-- (BOOL)createVirtualTable;
-
-- (BOOL)dropTable;
++ (WCTColumnType)columnType
+{
+    return WCTColumnTypeInteger64;
+}
 
 @end

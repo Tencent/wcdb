@@ -18,20 +18,15 @@
  * limitations under the License.
  */
 
-#import "SingleDatabaseTestCase.h"
+#import "ColumnCodingObject.h"
+#import <WCDB/WCDB.h>
 
-@interface SingleTableTestCase : SingleDatabaseTestCase
+@interface ColumnCodingObject (WCTTableCoding) <WCTTableCoding>
 
-@property (nonatomic, readonly) WCTTable* table;
-
-@property (readonly, nonatomic) NSString* tableName;
-
-@property (retain, nonatomic) Class tableClass;
-
-- (BOOL)createTable;
-
-- (BOOL)createVirtualTable;
-
-- (BOOL)dropTable;
+WCDB_PROPERTY(int32Object)
+WCDB_PROPERTY(int64Object)
+WCDB_PROPERTY(doubleObject)
+WCDB_PROPERTY(dataObject)
+WCDB_PROPERTY(stringObject)
 
 @end

@@ -45,7 +45,7 @@
 
 + (WCDB::ColumnType)columnType
 {
-    return WCDB::ColumnType::BLOB;
+    return WCTColumnTypeData;
 }
 
 @end

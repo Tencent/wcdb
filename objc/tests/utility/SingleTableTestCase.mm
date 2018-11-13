@@ -28,26 +28,38 @@
     _tableName = @"testTable";
 }
 
-- (WCTTable*)createTable
+- (BOOL)createTable
 {
     if (_tableClass == nil) {
-        return nil;
+        return NO;
     }
     if (![self.database createTableAndIndexes:_tableName withClass:_tableClass]) {
-        return nil;
+        return NO;
     }
-    return [self.database getTable:_tableName withClass:_tableClass];
+    _table = [self.database getTable:_tableName withClass:_tableClass];
+    return YES;
 }
 
-- (WCTTable*)createVirtualTable
+- (BOOL)createVirtualTable
 {
     if (_tableClass == nil) {
-        return nil;
+        return NO;
     }
     if (![self.database createVirtualTable:_tableName withClass:_tableClass]) {
-        return nil;
+        return NO;
     }
-    return [self.database getTable:_tableName withClass:_tableClass];
+    _table = [self.database getTable:_tableName withClass:_tableClass];
+    return YES;
+}
+
+- (BOOL)dropTable
+{
+    if (_table == nil) {
+        return YES;
+    }
+    BOOL result = [self.database dropTable:self.tableName];
+    _table = nil;
+    return result;
 }
 
 @end

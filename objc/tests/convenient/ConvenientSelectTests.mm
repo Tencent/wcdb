@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "CRUDTestCase.h"
+#import "PreInsertedCRUDTestCase.h"
 
-@interface ConvenientSelectTests : CRUDTestCase
+@interface ConvenientSelectTests : PreInsertedCRUDTestCase
 
 @property (nonatomic, readonly) TestCaseObject *partialObject1;
 @property (nonatomic, readonly) TestCaseObject *partialObject2;

@@ -24,17 +24,17 @@
 
 + (instancetype)unarchiveWithWCTValue:(NSData *)value
 {
-    return value ? [self dataWithData:value] : nil;
+    return value;
 }
 
 - (NSData *)archivedWCTValue
 {
-    return [NSData dataWithData:self];
+    return self;
 }
 
 + (WCDB::ColumnType)columnType
 {
-    return WCDB::ColumnType::BLOB;
+    return WCTColumnTypeData;
 }
 
 @end

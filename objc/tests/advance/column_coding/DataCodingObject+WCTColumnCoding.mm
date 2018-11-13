@@ -18,20 +18,23 @@
  * limitations under the License.
  */
 
-#import "SingleDatabaseTestCase.h"
+#import "DataCodingObject+WCTColumnCoding.h"
 
-@interface SingleTableTestCase : SingleDatabaseTestCase
+@implementation DataCodingObject (WCTColumnCoding)
 
-@property (nonatomic, readonly) WCTTable* table;
++ (instancetype)unarchiveWithWCTValue:(NSData *)value
+{
+    return [[DataCodingObject alloc] initWithValue:value];
+}
 
-@property (readonly, nonatomic) NSString* tableName;
+- (NSData *)archivedWCTValue
+{
+    return self.value;
+}
 
-@property (retain, nonatomic) Class tableClass;
-
-- (BOOL)createTable;
-
-- (BOOL)createVirtualTable;
-
-- (BOOL)dropTable;
++ (WCTColumnType)columnType
+{
+    return WCTColumnTypeData;
+}
 
 @end

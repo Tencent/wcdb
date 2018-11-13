@@ -18,20 +18,25 @@
  * limitations under the License.
  */
 
-#import "SingleDatabaseTestCase.h"
+#import "Integer64CodingObject.h"
 
-@interface SingleTableTestCase : SingleDatabaseTestCase
+@implementation Integer64CodingObject
 
-@property (nonatomic, readonly) WCTTable* table;
+- (instancetype)initWithValue:(int64_t)value
+{
+    if (self = [super init]) {
+        _value = value;
+    }
+    return self;
+}
 
-@property (readonly, nonatomic) NSString* tableName;
-
-@property (retain, nonatomic) Class tableClass;
-
-- (BOOL)createTable;
-
-- (BOOL)createVirtualTable;
-
-- (BOOL)dropTable;
+- (BOOL)isEqual:(NSObject*)object
+{
+    if (object.class != self.class) {
+        return NO;
+    }
+    Integer64CodingObject* other = (Integer64CodingObject*) object;
+    return other.value == self.value;
+}
 
 @end

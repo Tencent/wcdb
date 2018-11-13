@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "CRUDTestCase.h"
+#import "PreInsertedCRUDTestCase.h"
 
-@interface ChainCallTests : CRUDTestCase
+@interface ChainCallTests : PreInsertedCRUDTestCase
 
 @end
 

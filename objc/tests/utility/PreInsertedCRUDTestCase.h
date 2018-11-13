@@ -18,20 +18,18 @@
  * limitations under the License.
  */
 
-#import "SingleDatabaseTestCase.h"
+#import "CRUDTestCase.h"
+#import "TestCaseObject+WCTTableCoding.h"
+#import "TestCaseObject.h"
 
-@interface SingleTableTestCase : SingleDatabaseTestCase
+NS_ASSUME_NONNULL_BEGIN
 
-@property (nonatomic, readonly) WCTTable* table;
+@interface PreInsertedCRUDTestCase : CRUDTestCase
 
-@property (readonly, nonatomic) NSString* tableName;
-
-@property (retain, nonatomic) Class tableClass;
-
-- (BOOL)createTable;
-
-- (BOOL)createVirtualTable;
-
-- (BOOL)dropTable;
+@property (nonatomic, readonly) TestCaseObject* object1;
+@property (nonatomic, readonly) TestCaseObject* object2;
+@property (nonatomic, readonly) NSArray<TestCaseObject*>* objects;
 
 @end
+
+NS_ASSUME_NONNULL_END

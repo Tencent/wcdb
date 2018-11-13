@@ -18,20 +18,35 @@
  * limitations under the License.
  */
 
-#import "SingleDatabaseTestCase.h"
+#import "PreInsertedCRUDTestCase.h"
 
-@interface SingleTableTestCase : SingleDatabaseTestCase
+@implementation PreInsertedCRUDTestCase
 
-@property (nonatomic, readonly) WCTTable* table;
+- (void)setUp
+{
+    [super setUp];
 
-@property (readonly, nonatomic) NSString* tableName;
+    self.tableClass = TestCaseObject.class;
+    TestCaseAssertTrue([self createTable]);
 
-@property (retain, nonatomic) Class tableClass;
+    _object1 = [[TestCaseObject alloc] init];
+    _object1.identifier = 1;
+    _object1.content = [NSString randomString];
 
-- (BOOL)createTable;
+    _object2 = [[TestCaseObject alloc] init];
+    _object2.identifier = 2;
+    _object2.content = [NSString randomString];
 
-- (BOOL)createVirtualTable;
+    _objects = @[ _object1, _object2 ];
 
-- (BOOL)dropTable;
+    TestCaseAssertTrue([self.table insertObjects:_objects]);
+}
+
+- (void)tearDown
+{
+    TestCaseAssertTrue([self dropTable]);
+    [self.table invalidate];
+    [super tearDown];
+}
 
 @end

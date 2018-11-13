@@ -18,20 +18,25 @@
  * limitations under the License.
  */
 
-#import "SingleDatabaseTestCase.h"
+#import "StringCodingObject.h"
 
-@interface SingleTableTestCase : SingleDatabaseTestCase
+@implementation StringCodingObject
 
-@property (nonatomic, readonly) WCTTable* table;
+- (instancetype)initWithValue:(NSString*)value
+{
+    if (self = [super init]) {
+        _value = value;
+    }
+    return self;
+}
 
-@property (readonly, nonatomic) NSString* tableName;
-
-@property (retain, nonatomic) Class tableClass;
-
-- (BOOL)createTable;
-
-- (BOOL)createVirtualTable;
-
-- (BOOL)dropTable;
+- (BOOL)isEqual:(NSObject*)object
+{
+    if (object.class != self.class) {
+        return NO;
+    }
+    StringCodingObject* other = (StringCodingObject*) object;
+    return [other.value isEqualToString:self.value];
+}
 
 @end
