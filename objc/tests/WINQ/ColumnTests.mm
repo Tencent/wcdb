@@ -39,8 +39,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::Column().getType(), WCDB::SQL::Type::Column);
-    XCTAssertEqual(WCDB::Column::type, WCDB::SQL::Type::Column);
+    TestCaseAssertEqual(WCDB::Column().getType(), WCDB::SQL::Type::Column);
+    TestCaseAssertEqual(WCDB::Column::type, WCDB::SQL::Type::Column);
 }
 
 - (void)test_column

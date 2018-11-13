@@ -59,8 +59,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::StatementCreateTrigger().getType(), WCDB::SQL::Type::CreateTriggerSTMT);
-    XCTAssertEqual(WCDB::StatementCreateTrigger::type, WCDB::SQL::Type::CreateTriggerSTMT);
+    TestCaseAssertEqual(WCDB::StatementCreateTrigger().getType(), WCDB::SQL::Type::CreateTriggerSTMT);
+    TestCaseAssertEqual(WCDB::StatementCreateTrigger::type, WCDB::SQL::Type::CreateTriggerSTMT);
 }
 
 - (void)test_create_trigger

@@ -99,8 +99,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::StatementSelect().getType(), WCDB::SQL::Type::SelectSTMT);
-    XCTAssertEqual(WCDB::StatementSelect::type, WCDB::SQL::Type::SelectSTMT);
+    TestCaseAssertEqual(WCDB::StatementSelect().getType(), WCDB::SQL::Type::SelectSTMT);
+    TestCaseAssertEqual(WCDB::StatementSelect::type, WCDB::SQL::Type::SelectSTMT);
 }
 
 - (void)test_select

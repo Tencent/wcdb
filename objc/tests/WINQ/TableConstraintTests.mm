@@ -53,8 +53,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::TableConstraint().getType(), WCDB::SQL::Type::TableConstraint);
-    XCTAssertEqual(WCDB::TableConstraint::type, WCDB::SQL::Type::TableConstraint);
+    TestCaseAssertEqual(WCDB::TableConstraint().getType(), WCDB::SQL::Type::TableConstraint);
+    TestCaseAssertEqual(WCDB::TableConstraint::type, WCDB::SQL::Type::TableConstraint);
 }
 
 - (void)test_primary_key

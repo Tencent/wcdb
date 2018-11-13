@@ -45,8 +45,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::RecursiveCTE().getType(), WCDB::SQL::Type::RecursiveCTE);
-    XCTAssertEqual(WCDB::RecursiveCTE::type, WCDB::SQL::Type::RecursiveCTE);
+    TestCaseAssertEqual(WCDB::RecursiveCTE().getType(), WCDB::SQL::Type::RecursiveCTE);
+    TestCaseAssertEqual(WCDB::RecursiveCTE::type, WCDB::SQL::Type::RecursiveCTE);
 }
 
 - (void)test_recursive_cte

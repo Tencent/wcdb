@@ -41,8 +41,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::StatementRelease().getType(), WCDB::SQL::Type::ReleaseSTMT);
-    XCTAssertEqual(WCDB::StatementRelease::type, WCDB::SQL::Type::ReleaseSTMT);
+    TestCaseAssertEqual(WCDB::StatementRelease().getType(), WCDB::SQL::Type::ReleaseSTMT);
+    TestCaseAssertEqual(WCDB::StatementRelease::type, WCDB::SQL::Type::ReleaseSTMT);
 }
 
 - (void)test_release

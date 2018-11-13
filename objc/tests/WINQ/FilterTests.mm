@@ -41,8 +41,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::Filter().getType(), WCDB::SQL::Type::Filter);
-    XCTAssertEqual(WCDB::Filter::type, WCDB::SQL::Type::Filter);
+    TestCaseAssertEqual(WCDB::Filter().getType(), WCDB::SQL::Type::Filter);
+    TestCaseAssertEqual(WCDB::Filter::type, WCDB::SQL::Type::Filter);
 }
 
 - (void)test_filter

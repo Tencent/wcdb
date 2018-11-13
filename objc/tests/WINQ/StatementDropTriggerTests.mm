@@ -43,8 +43,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::StatementDropTrigger().getType(), WCDB::SQL::Type::DropTriggerSTMT);
-    XCTAssertEqual(WCDB::StatementDropTrigger::type, WCDB::SQL::Type::DropTriggerSTMT);
+    TestCaseAssertEqual(WCDB::StatementDropTrigger().getType(), WCDB::SQL::Type::DropTriggerSTMT);
+    TestCaseAssertEqual(WCDB::StatementDropTrigger::type, WCDB::SQL::Type::DropTriggerSTMT);
 }
 
 - (void)test_drop_trigger

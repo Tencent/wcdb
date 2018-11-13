@@ -48,9 +48,37 @@
 
 @end
 
-#define SQLAssertEqual(_sql, _expected)                                                                       \
-    {                                                                                                         \
-        NSString* __sql = @((_sql).getDescription().c_str());                                                 \
-        NSString* __expected = (_expected);                                                                   \
-        XCTAssertTrue([__expected isEqualToString:__sql], @"%@", [TestCase hint:__sql expecting:__expected]); \
+#define SQLAssertEqual(_sql, _expected)                                                                            \
+    {                                                                                                              \
+        NSString* __sql = @((_sql).getDescription().c_str());                                                      \
+        NSString* __expected = (_expected);                                                                        \
+        TestCaseAssertTrue([__expected isEqualToString:__sql], @"%@", [TestCase hint:__sql expecting:__expected]); \
+    }
+
+#define TestCaseAssertTrue(cond, ...)     \
+    {                                     \
+        BOOL test = (cond);               \
+        if (!(test)) {                    \
+            TESTCASE_FAILED               \
+        }                                 \
+        XCTAssertTrue(test, __VA_ARGS__); \
+    }
+
+#define TestCaseAssertFalse(cond, ...)     \
+    {                                      \
+        BOOL test = (cond);                \
+        if (test) {                        \
+            TESTCASE_FAILED                \
+        }                                  \
+        XCTAssertFalse(test, __VA_ARGS__); \
+    }
+
+#define TestCaseAssertEqual(left, right, ...)             \
+    {                                                     \
+        __typeof__(left) testLeft = (left);               \
+        __typeof__(right) testRight = (right);            \
+        if (testLeft != testRight) {                      \
+            TESTCASE_FAILED                               \
+        }                                                 \
+        XCTAssertEqual(testLeft, testRight, __VA_ARGS__); \
     }

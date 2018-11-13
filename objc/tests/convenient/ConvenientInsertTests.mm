@@ -105,8 +105,8 @@ asExpectedAfterInsertion:(BOOL (^)())block
                 }
                 return result;
             }];
-    XCTAssertTrue(result);
-    XCTAssertTrue([autoIncrementObject isEqual:self.object3]);
+    TestCaseAssertTrue(result);
+    TestCaseAssertTrue([autoIncrementObject isEqual:self.object3]);
 }
 
 #pragma mark - Database - Insert
@@ -118,7 +118,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [self.database insertObject:self.object3 intoTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_insert_objects
@@ -129,7 +129,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [self.database insertObjects:@[ self.object3, self.object4 ] intoTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Database - Insert or Replace
@@ -141,7 +141,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [self.database insertOrReplaceObject:self.renewedObject1 intoTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_insert_or_replace_objects
@@ -152,7 +152,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [self.database insertOrReplaceObjects:@[ self.renewedObject1, self.renewedObject2 ] intoTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Database - Partial Insert
@@ -164,7 +164,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [self.database insertObject:self.object3 onProperties:TestCaseObject.identifier intoTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_insert_objects_on_properties
@@ -175,7 +175,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [self.database insertObjects:@[ self.object3, self.object4 ] onProperties:TestCaseObject.identifier intoTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Database - Partial Insert or Replace
@@ -187,7 +187,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [self.database insertOrReplaceObject:self.object1 onProperties:TestCaseObject.identifier intoTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_insert_or_replace_objects_on_properties
@@ -198,7 +198,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [self.database insertOrReplaceObjects:@[ self.object1, self.object2 ] onProperties:TestCaseObject.identifier intoTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Table - Insert
@@ -210,7 +210,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [self.table insertObject:self.object3];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_insert_objects
@@ -221,7 +221,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [self.table insertObjects:@[ self.object3, self.object4 ]];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Table - Insert or Replace
@@ -233,7 +233,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [self.table insertOrReplaceObject:self.renewedObject1];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_insert_or_replace_objects
@@ -244,7 +244,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [self.table insertOrReplaceObjects:@[ self.renewedObject1, self.renewedObject2 ]];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Table - Partial Insert
@@ -256,7 +256,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [self.table insertObject:self.object3 onProperties:TestCaseObject.identifier];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_insert_objects_on_properties
@@ -267,7 +267,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [self.table insertObjects:@[ self.object3, self.object4 ] onProperties:TestCaseObject.identifier];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Table - Partial Insert or Replace
@@ -279,7 +279,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [self.table insertOrReplaceObject:self.object1 onProperties:TestCaseObject.identifier];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_insert_or_replace_objects_on_properties
@@ -290,7 +290,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [self.table insertOrReplaceObjects:@[ self.object1, self.object2 ] onProperties:TestCaseObject.identifier];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Handle - Insert
@@ -302,7 +302,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [[self.database getHandle] insertObject:self.object3 intoTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_insert_objects
@@ -313,7 +313,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [[self.database getHandle] insertObjects:@[ self.object3, self.object4 ] intoTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Handle - Insert or Replace
@@ -325,7 +325,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [[self.database getHandle] insertOrReplaceObject:self.renewedObject1 intoTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_insert_or_replace_objects
@@ -336,7 +336,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [[self.database getHandle] insertOrReplaceObjects:@[ self.renewedObject1, self.renewedObject2 ] intoTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Handle - Partial Insert
@@ -348,7 +348,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [[self.database getHandle] insertObject:self.object3 onProperties:TestCaseObject.identifier intoTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_insert_objects_on_properties
@@ -359,7 +359,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [[self.database getHandle] insertObjects:@[ self.object3, self.object4 ] onProperties:TestCaseObject.identifier intoTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Handle - Partial Insert or Replace
@@ -371,7 +371,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [[self.database getHandle] insertOrReplaceObject:self.object1 onProperties:TestCaseObject.identifier intoTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_insert_or_replace_objects_on_properties
@@ -382,7 +382,7 @@ asExpectedAfterInsertion:(BOOL (^)())block
             asExpectedAfterInsertion:^BOOL {
                 return [[self.database getHandle] insertOrReplaceObjects:@[ self.object1, self.object2 ] onProperties:TestCaseObject.identifier intoTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 @end

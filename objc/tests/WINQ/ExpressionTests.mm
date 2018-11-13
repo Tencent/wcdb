@@ -82,8 +82,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::Expression().getType(), WCDB::SQL::Type::Expression);
-    XCTAssertEqual(WCDB::Expression::type, WCDB::SQL::Type::Expression);
+    TestCaseAssertEqual(WCDB::Expression().getType(), WCDB::SQL::Type::Expression);
+    TestCaseAssertEqual(WCDB::Expression::type, WCDB::SQL::Type::Expression);
 }
 
 - (void)test_literal_value

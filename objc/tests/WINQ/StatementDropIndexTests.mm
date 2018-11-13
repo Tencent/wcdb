@@ -43,8 +43,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::StatementDropIndex().getType(), WCDB::SQL::Type::DropIndexSTMT);
-    XCTAssertEqual(WCDB::StatementDropIndex::type, WCDB::SQL::Type::DropIndexSTMT);
+    TestCaseAssertEqual(WCDB::StatementDropIndex().getType(), WCDB::SQL::Type::DropIndexSTMT);
+    TestCaseAssertEqual(WCDB::StatementDropIndex::type, WCDB::SQL::Type::DropIndexSTMT);
 }
 
 - (void)test_drop_index

@@ -41,8 +41,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::StatementRollback().getType(), WCDB::SQL::Type::RollbackSTMT);
-    XCTAssertEqual(WCDB::StatementRollback::type, WCDB::SQL::Type::RollbackSTMT);
+    TestCaseAssertEqual(WCDB::StatementRollback().getType(), WCDB::SQL::Type::RollbackSTMT);
+    TestCaseAssertEqual(WCDB::StatementRollback::type, WCDB::SQL::Type::RollbackSTMT);
 }
 
 - (void)test_rollback

@@ -47,8 +47,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::QualifiedTable().getType(), WCDB::SQL::Type::QualifiedTableName);
-    XCTAssertEqual(WCDB::QualifiedTable::type, WCDB::SQL::Type::QualifiedTableName);
+    TestCaseAssertEqual(WCDB::QualifiedTable().getType(), WCDB::SQL::Type::QualifiedTableName);
+    TestCaseAssertEqual(WCDB::QualifiedTable::type, WCDB::SQL::Type::QualifiedTableName);
 }
 
 - (void)test_qualified_table

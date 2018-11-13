@@ -56,8 +56,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::WindowFunctionInvocation().getType(), WCDB::SQL::Type::WindowFunctionInvocation);
-    XCTAssertEqual(WCDB::WindowFunctionInvocation::type, WCDB::SQL::Type::WindowFunctionInvocation);
+    TestCaseAssertEqual(WCDB::WindowFunctionInvocation().getType(), WCDB::SQL::Type::WindowFunctionInvocation);
+    TestCaseAssertEqual(WCDB::WindowFunctionInvocation::type, WCDB::SQL::Type::WindowFunctionInvocation);
 }
 
 - (void)test_window_function

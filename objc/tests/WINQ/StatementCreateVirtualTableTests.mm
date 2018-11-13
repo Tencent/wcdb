@@ -49,8 +49,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::StatementCreateVirtualTable().getType(), WCDB::SQL::Type::CreateVirtualTableSTMT);
-    XCTAssertEqual(WCDB::StatementCreateVirtualTable::type, WCDB::SQL::Type::CreateVirtualTableSTMT);
+    TestCaseAssertEqual(WCDB::StatementCreateVirtualTable().getType(), WCDB::SQL::Type::CreateVirtualTableSTMT);
+    TestCaseAssertEqual(WCDB::StatementCreateVirtualTable::type, WCDB::SQL::Type::CreateVirtualTableSTMT);
 }
 
 - (void)test_create_virtual_table

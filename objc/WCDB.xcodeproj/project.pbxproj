@@ -231,6 +231,7 @@
 		2370F5B42181B2B7001C91B6 /* StatementTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2370F5B32181B2B7001C91B6 /* StatementTests.mm */; };
 		23739D81219A743800A043BF /* MultiSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23739D80219A743800A043BF /* MultiSelectTests.mm */; };
 		23739D85219A794700A043BF /* ChainCallTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23739D84219A794700A043BF /* ChainCallTests.mm */; };
+		23739D8C219AA3C300A043BF /* HandleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23739D8B219AA3C300A043BF /* HandleTests.mm */; };
 		23759461210081AA00DBB721 /* UnsafeData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2375945F210081AA00DBB721 /* UnsafeData.cpp */; };
 		23759463210081AA00DBB721 /* UnsafeData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23759460210081AA00DBB721 /* UnsafeData.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2376CB1B20DA5D3B00A68DB5 /* Scoreable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2376CB1920DA5D3B00A68DB5 /* Scoreable.cpp */; };
@@ -1222,6 +1223,7 @@
 		2370F5B32181B2B7001C91B6 /* StatementTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementTests.mm; sourceTree = "<group>"; };
 		23739D80219A743800A043BF /* MultiSelectTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MultiSelectTests.mm; sourceTree = "<group>"; };
 		23739D84219A794700A043BF /* ChainCallTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ChainCallTests.mm; sourceTree = "<group>"; };
+		23739D8B219AA3C300A043BF /* HandleTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = HandleTests.mm; sourceTree = "<group>"; };
 		2375945F210081AA00DBB721 /* UnsafeData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UnsafeData.cpp; sourceTree = "<group>"; };
 		23759460210081AA00DBB721 /* UnsafeData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UnsafeData.hpp; sourceTree = "<group>"; };
 		2376CB1920DA5D3B00A68DB5 /* Scoreable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scoreable.cpp; sourceTree = "<group>"; };
@@ -1966,9 +1968,9 @@
 		231FEAE02199A10000DC3706 /* advance */ = {
 			isa = PBXGroup;
 			children = (
+				23739D8A219A8D0900A043BF /* handle */,
 				23739D71219A6E1500A043BF /* chaincall */,
 				23739D73219A6E1600A043BF /* column_coding */,
-				23739D72219A6E1500A043BF /* core */,
 			);
 			path = advance;
 			sourceTree = "<group>";
@@ -2307,18 +2309,19 @@
 			path = chaincall;
 			sourceTree = "<group>";
 		};
-		23739D72219A6E1500A043BF /* core */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = core;
-			sourceTree = "<group>";
-		};
 		23739D73219A6E1600A043BF /* column_coding */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			path = column_coding;
+			sourceTree = "<group>";
+		};
+		23739D8A219A8D0900A043BF /* handle */ = {
+			isa = PBXGroup;
+			children = (
+				23739D8B219AA3C300A043BF /* HandleTests.mm */,
+			);
+			path = handle;
 			sourceTree = "<group>";
 		};
 		23775B2E20AD666900E21AB0 /* common */ = {
@@ -4089,6 +4092,7 @@
 				231FEB1D2199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
 				231FEAF22199A4D200DC3706 /* SingleTableTestCase.mm in Sources */,
 				23739D85219A794700A043BF /* ChainCallTests.mm in Sources */,
+				23739D8C219AA3C300A043BF /* HandleTests.mm in Sources */,
 				23739D81219A743800A043BF /* MultiSelectTests.mm in Sources */,
 				231FEAEF2199A4D200DC3706 /* TestCaseObject.mm in Sources */,
 				231FEAF32199A4D200DC3706 /* NSObject+TestCase.m in Sources */,

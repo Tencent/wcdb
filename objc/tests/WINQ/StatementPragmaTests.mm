@@ -45,8 +45,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::StatementPragma().getType(), WCDB::SQL::Type::PragmaSTMT);
-    XCTAssertEqual(WCDB::StatementPragma::type, WCDB::SQL::Type::PragmaSTMT);
+    TestCaseAssertEqual(WCDB::StatementPragma().getType(), WCDB::SQL::Type::PragmaSTMT);
+    TestCaseAssertEqual(WCDB::StatementPragma::type, WCDB::SQL::Type::PragmaSTMT);
 }
 
 - (void)test_pragma

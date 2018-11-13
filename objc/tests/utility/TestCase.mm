@@ -46,16 +46,16 @@
 - (void)refreshDirectory
 {
     [self cleanDirectory];
-    XCTAssertTrue([self.fileManager createDirectoryAtPath:self.directory
-                              withIntermediateDirectories:YES
-                                               attributes:nil
-                                                    error:nil]);
+    TestCaseAssertTrue([self.fileManager createDirectoryAtPath:self.directory
+                                   withIntermediateDirectories:YES
+                                                    attributes:nil
+                                                         error:nil]);
 }
 
 - (void)cleanDirectory
 {
     if ([self.fileManager fileExistsAtPath:self.directory]) {
-        XCTAssertTrue([self.fileManager removeItemAtPath:self.directory error:nil]);
+        TestCaseAssertTrue([self.fileManager removeItemAtPath:self.directory error:nil]);
     }
 }
 

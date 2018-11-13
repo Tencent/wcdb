@@ -22,21 +22,46 @@
 
 @implementation NSNumber (TestCase)
 
-+ (int64_t)randomInt64
++ (NSInteger)randomInt64
 {
-    int64_t value = rand();
+    static_assert(sizeof(NSInteger) == 8, "");
+    NSInteger value = rand();
     value = (value << 32) | rand();
     return value;
 }
 
-+ (int)randomInt
++ (int)randomInt32
 {
+    static_assert(sizeof(int) == 4, "");
     return (int) [self randomInt64];
 }
 
 + (uint8_t)randomUInt8
 {
     return (uint8_t)[NSNumber randomInt64];
+}
+
++ (double)randomDouble
+{
+    int decimals = [NSNumber randomUInt8] % 3;
+    double value = [NSNumber randomInt32];
+    for (int i = 0; i < decimals; ++i) {
+        value /= 10;
+    }
+    return value;
+}
+
++ (NSNumber *)randomNumber
+{
+    switch ([NSNumber randomInt32] % 3) {
+    case 0:
+        return [NSNumber numberWithInt:[NSNumber randomInt32]];
+    case 1:
+        return [NSNumber numberWithInteger:[NSNumber randomInt64]];
+    case 2:
+        return [NSNumber numberWithDouble:[NSNumber randomDouble]];
+    }
+    return nil;
 }
 
 @end
@@ -58,6 +83,22 @@
         [randomString appendFormat:@"%c", alphanum[rand() % (sizeof(alphanum) - 1)]];
     }
     return [NSString stringWithString:randomString];
+}
+
+@end
+
+@implementation NSData (TestCase)
+
++ (NSData *)randomData
+{
+    static_assert(sizeof(unsigned char) == 1, "");
+    int length = [NSNumber randomUInt8];
+    NSMutableData *data = [NSMutableData dataWithCapacity:length];
+    for (NSUInteger i = 0; i < length; ++i) {
+        unsigned char random = [NSNumber randomInt32] & 0xff;
+        [data appendBytes:&random length:sizeof(unsigned char)];
+    }
+    return [NSData dataWithData:data];
 }
 
 @end

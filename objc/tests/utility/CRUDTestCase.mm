@@ -36,7 +36,6 @@ typedef NS_ENUM(NSUInteger, CRUDTestCaseState) {
 
     self.tableClass = TestCaseObject.class;
     _table = [self createTable];
-    XCTAssertNotNil(_table);
 
     _object1 = [[TestCaseObject alloc] init];
     _object1.identifier = 1;
@@ -48,12 +47,14 @@ typedef NS_ENUM(NSUInteger, CRUDTestCaseState) {
 
     _objects = @[ _object1, _object2 ];
 
-    XCTAssertTrue([_table insertObjects:_objects]);
+    TestCaseAssertTrue([_table insertObjects:_objects]);
 }
 
 - (void)tearDown
 {
-    XCTAssertTrue([self.database dropTable:self.tableName]);
+    TestCaseAssertTrue([self.database dropTable:self.tableName]);
+    [_table invalidate];
+    _table = nil;
     [super tearDown];
 }
 

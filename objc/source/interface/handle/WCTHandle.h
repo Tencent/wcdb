@@ -72,7 +72,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)bindString:(NSString *)string toIndex:(int)index;
 
-- (void)bindBLOB:(NSData *)data toIndex:(int)index;
+- (void)bindData:(NSData *)data toIndex:(int)index;
 
 - (void)bindNumber:(NSNumber *)number toIndex:(int)index;
 
@@ -92,12 +92,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (int64_t)getInteger64AtIndex:(int)index;
 
 - (double)getDoubleAtIndex:(int)index;
-
-- (const char *)getTextAtIndex:(int)index;
-
-- (const unsigned char *)getBLOBAtIndex:(int)index;
-
-- (size_t)getSizeAtIndex:(int)index;
 
 - (NSString *)getStringAtIndex:(int)index;
 

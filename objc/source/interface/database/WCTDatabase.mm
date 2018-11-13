@@ -114,6 +114,11 @@
     return _database->getTag();
 }
 
+- (NSString *)path
+{
+    return [NSString stringWithUTF8String:_database->getPath().c_str()];
+}
+
 - (BOOL)canOpen
 {
     return _database->canOpen();

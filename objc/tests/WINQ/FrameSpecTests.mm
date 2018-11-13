@@ -43,8 +43,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::FrameSpec().getType(), WCDB::SQL::Type::FrameSpec);
-    XCTAssertEqual(WCDB::FrameSpec::type, WCDB::SQL::Type::FrameSpec);
+    TestCaseAssertEqual(WCDB::FrameSpec().getType(), WCDB::SQL::Type::FrameSpec);
+    TestCaseAssertEqual(WCDB::FrameSpec::type, WCDB::SQL::Type::FrameSpec);
 }
 
 - (void)test_range

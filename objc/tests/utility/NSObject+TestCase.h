@@ -24,17 +24,27 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSNumber (TestCase)
 
-+ (int64_t)randomInt64;
++ (NSInteger)randomInt64;
 
-+ (int)randomInt;
++ (int)randomInt32;
 
 + (uint8_t)randomUInt8;
+
++ (double)randomDouble;
+
++ (NSNumber*)randomNumber;
 
 @end
 
 @interface NSString (TestCase)
 
 + (NSString*)randomString;
+
+@end
+
+@interface NSData (TestCase)
+
++ (NSData*)randomData;
 
 @end
 

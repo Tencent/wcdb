@@ -62,7 +62,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_properties_to_object_where
@@ -72,7 +72,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_properties_to_object_limit
@@ -82,7 +82,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_properties_to_object_where_limit
@@ -92,7 +92,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1 limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_properties_to_object_orders_limit
@@ -102,7 +102,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_properties_to_object_limit_offset
@@ -112,7 +112,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_properties_to_object_where_orders_limit
@@ -122,7 +122,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_properties_to_object_where_limit_offset
@@ -132,7 +132,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_properties_to_object_orders_limit_offset
@@ -142,7 +142,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_properties_to_object_where_orders_limit_offset
@@ -152,7 +152,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Database - Update Properties To Row
@@ -163,7 +163,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_properties_to_row_where
@@ -173,7 +173,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_properties_to_row_limit
@@ -183,7 +183,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_properties_to_row_where_limit
@@ -193,7 +193,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1 limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_properties_to_row_orders_limit
@@ -203,7 +203,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_properties_to_row_limit_offset
@@ -213,7 +213,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_properties_to_row_where_orders_limit
@@ -223,7 +223,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_properties_to_row_where_limit_offset
@@ -233,7 +233,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_properties_to_row_orders_limit_offset
@@ -243,7 +243,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_properties_to_row_where_orders_limit_offset
@@ -253,7 +253,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Database - Update Property To Value
@@ -264,7 +264,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_property_to_value_where
@@ -274,7 +274,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_property_to_value_limit
@@ -284,7 +284,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_property_to_value_where_limit
@@ -294,7 +294,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1 limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_property_to_value_orders_limit
@@ -304,7 +304,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_property_to_value_limit_offset
@@ -314,7 +314,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_property_to_value_where_orders_limit
@@ -324,7 +324,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_property_to_value_where_limit_offset
@@ -334,7 +334,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_property_to_value_orders_limit_offset
@@ -344,7 +344,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_update_table_set_property_to_value_where_orders_limit_offset
@@ -354,7 +354,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Table - Update Properties To Object
@@ -365,7 +365,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_properties_to_object_where
@@ -375,7 +375,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_properties_to_object_limit
@@ -385,7 +385,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_properties_to_object_where_limit
@@ -395,7 +395,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1 limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_properties_to_object_orders_limit
@@ -405,7 +405,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_properties_to_object_limit_offset
@@ -415,7 +415,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_properties_to_object_where_orders_limit
@@ -425,7 +425,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_properties_to_object_where_limit_offset
@@ -435,7 +435,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_properties_to_object_orders_limit_offset
@@ -445,7 +445,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_properties_to_object_where_orders_limit_offset
@@ -455,7 +455,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Table - Update Properties To Row
@@ -466,7 +466,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_properties_to_row_where
@@ -476,7 +476,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_properties_to_row_limit
@@ -486,7 +486,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_properties_to_row_where_limit
@@ -496,7 +496,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1 limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_properties_to_row_orders_limit
@@ -506,7 +506,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_properties_to_row_limit_offset
@@ -516,7 +516,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_properties_to_row_where_orders_limit
@@ -526,7 +526,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_properties_to_row_where_limit_offset
@@ -536,7 +536,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_properties_to_row_orders_limit_offset
@@ -546,7 +546,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_properties_to_row_where_orders_limit_offset
@@ -556,7 +556,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Table - Update Property To Value
@@ -567,7 +567,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_property_to_value_where
@@ -577,7 +577,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_property_to_value_limit
@@ -587,7 +587,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_property_to_value_where_limit
@@ -597,7 +597,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1 limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_property_to_value_orders_limit
@@ -607,7 +607,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_property_to_value_limit_offset
@@ -617,7 +617,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_property_to_value_where_orders_limit
@@ -627,7 +627,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_property_to_value_where_limit_offset
@@ -637,7 +637,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_property_to_value_orders_limit_offset
@@ -647,7 +647,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_update_property_to_value_where_orders_limit_offset
@@ -657,7 +657,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Handle - Update Properties To Object
@@ -668,7 +668,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_properties_to_object_where
@@ -678,7 +678,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_properties_to_object_limit
@@ -688,7 +688,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_properties_to_object_where_limit
@@ -698,7 +698,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1 limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_properties_to_object_orders_limit
@@ -708,7 +708,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_properties_to_object_limit_offset
@@ -718,7 +718,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_properties_to_object_where_orders_limit
@@ -728,7 +728,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_properties_to_object_where_limit_offset
@@ -738,7 +738,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_properties_to_object_orders_limit_offset
@@ -748,7 +748,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_properties_to_object_where_orders_limit_offset
@@ -758,7 +758,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Handle - Update Properties To Row
@@ -769,7 +769,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_properties_to_row_where
@@ -779,7 +779,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_properties_to_row_limit
@@ -789,7 +789,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_properties_to_row_where_limit
@@ -799,7 +799,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1 limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_properties_to_row_orders_limit
@@ -809,7 +809,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_properties_to_row_limit_offset
@@ -819,7 +819,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_properties_to_row_where_orders_limit
@@ -829,7 +829,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_properties_to_row_where_limit_offset
@@ -839,7 +839,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_properties_to_row_orders_limit_offset
@@ -849,7 +849,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_properties_to_row_where_orders_limit_offset
@@ -859,7 +859,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Handle - Update Property To Value
@@ -870,7 +870,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_property_to_value_where
@@ -880,7 +880,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_property_to_value_limit
@@ -890,7 +890,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_property_to_value_where_limit
@@ -900,7 +900,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1 limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_property_to_value_orders_limit
@@ -910,7 +910,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_property_to_value_limit_offset
@@ -920,7 +920,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_property_to_value_where_orders_limit
@@ -930,7 +930,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_property_to_value_where_limit_offset
@@ -940,7 +940,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_property_to_value_orders_limit_offset
@@ -950,7 +950,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_update_table_set_property_to_value_where_orders_limit_offset
@@ -960,7 +960,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 @end

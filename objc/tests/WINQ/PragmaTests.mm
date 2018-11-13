@@ -39,8 +39,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::Pragma().getType(), WCDB::SQL::Type::Pragma);
-    XCTAssertEqual(WCDB::Pragma::type, WCDB::SQL::Type::Pragma);
+    TestCaseAssertEqual(WCDB::Pragma().getType(), WCDB::SQL::Type::Pragma);
+    TestCaseAssertEqual(WCDB::Pragma::type, WCDB::SQL::Type::Pragma);
 }
 
 - (void)test

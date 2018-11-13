@@ -49,8 +49,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::StatementCreateView().getType(), WCDB::SQL::Type::CreateViewSTMT);
-    XCTAssertEqual(WCDB::StatementCreateView::type, WCDB::SQL::Type::CreateViewSTMT);
+    TestCaseAssertEqual(WCDB::StatementCreateView().getType(), WCDB::SQL::Type::CreateViewSTMT);
+    TestCaseAssertEqual(WCDB::StatementCreateView::type, WCDB::SQL::Type::CreateViewSTMT);
 }
 
 - (void)test_create_view

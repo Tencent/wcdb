@@ -39,8 +39,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::StatementBegin().getType(), WCDB::SQL::Type::BeginSTMT);
-    XCTAssertEqual(WCDB::StatementBegin::type, WCDB::SQL::Type::BeginSTMT);
+    TestCaseAssertEqual(WCDB::StatementBegin().getType(), WCDB::SQL::Type::BeginSTMT);
+    TestCaseAssertEqual(WCDB::StatementBegin::type, WCDB::SQL::Type::BeginSTMT);
 }
 
 - (void)test_begin_deferred

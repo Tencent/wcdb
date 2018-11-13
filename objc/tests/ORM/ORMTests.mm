@@ -100,19 +100,19 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
 {
     self.tableClass = PropertyObject.class;
     NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(differentName INTEGER, property INTEGER)" ];
-    XCTAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
+    TestCaseAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
 }
 
 - (void)test_builtin_types
 {
     self.tableClass = BuiltinTypesObject.class;
     NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(codingValue BLOB, cppStringValue TEXT, cstringValue TEXT, dataValue BLOB, dateValue REAL, doubleValue REAL, floatValue REAL, int32Value INTEGER, int64Value INTEGER, integerValue INTEGER, intValue INTEGER, numberValue REAL, stringValue TEXT, uint32Value INTEGER, uint64Value INTEGER, uintegerValue INTEGER, unsignedIntValue INTEGER)" ];
-    XCTAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
+    TestCaseAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
 }
 
 - (void)test_all_properties
 {
-    XCTAssertEqual(2, PropertyObject.allProperties.size());
+    TestCaseAssertEqual(2, PropertyObject.allProperties.size());
 }
 
 #pragma mark - column constraint
@@ -122,7 +122,7 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
     NSArray<NSString*>* expected = @[
         @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER PRIMARY KEY)",
     ];
-    XCTAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
+    TestCaseAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
 }
 
 - (void)test_column_constraint_primary_asc
@@ -131,7 +131,7 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
     NSArray<NSString*>* expected = @[
         @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER PRIMARY KEY ASC)",
     ];
-    XCTAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
+    TestCaseAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
 }
 
 - (void)test_column_constraint_primary_desc
@@ -140,7 +140,7 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
     NSArray<NSString*>* expected = @[
         @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER PRIMARY KEY DESC)",
     ];
-    XCTAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
+    TestCaseAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
 }
 
 - (void)test_column_constraint_auto_increment
@@ -149,7 +149,7 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
     NSArray<NSString*>* expected = @[
         @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER PRIMARY KEY AUTOINCREMENT)",
     ];
-    XCTAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
+    TestCaseAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
 }
 
 - (void)test_column_constraint_auto_increment_asc
@@ -158,7 +158,7 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
     NSArray<NSString*>* expected = @[
         @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER PRIMARY KEY ASC AUTOINCREMENT)",
     ];
-    XCTAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
+    TestCaseAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
 }
 
 - (void)test_column_constraint_unique
@@ -167,7 +167,7 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
     NSArray<NSString*>* expected = @[
         @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER UNIQUE)",
     ];
-    XCTAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
+    TestCaseAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
 }
 
 - (void)test_column_constraint_default
@@ -176,7 +176,7 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
     NSArray<NSString*>* expected = @[
         @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER DEFAULT 1)",
     ];
-    XCTAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
+    TestCaseAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
 }
 
 - (void)test_column_constraint_check
@@ -185,7 +185,7 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
     NSArray<NSString*>* expected = @[
         @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER CHECK(value > 1))",
     ];
-    XCTAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
+    TestCaseAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
 }
 
 #pragma mark - index
@@ -202,7 +202,7 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
         @"CREATE UNIQUE INDEX IF NOT EXISTS main.testTable_unique_index_asc ON testTable(uniqueIndexAsc)",
         @"CREATE UNIQUE INDEX IF NOT EXISTS main.testTable_unique_index_desc ON testTable(uniqueIndexDesc)",
     ];
-    XCTAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
+    TestCaseAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
 }
 
 #pragma mark - table constraint
@@ -210,7 +210,7 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
 {
     self.tableClass = TableConstraintObject.class;
     NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(multiPrimary INTEGER, multiPrimaryAsc INTEGER, multiPrimaryDesc INTEGER, multiUnique INTEGER, multiUniqueAsc INTEGER, multiUniqueDesc INTEGER, CONSTRAINT testTable_multi_primary PRIMARY KEY(multiPrimary, multiPrimaryAsc ASC, multiPrimaryDesc DESC), CONSTRAINT testTable_multi_unique UNIQUE(multiUnique, multiUniqueAsc ASC, multiUniqueDesc DESC))" ];
-    XCTAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
+    TestCaseAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
 }
 
 #pragma mark - virtual table
@@ -219,14 +219,14 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
     self.tableClass = FTS3Object.class;
     [self.database setTokenizer:WCTTokenizerWCDB];
     NSString* expected = @"CREATE VIRTUAL TABLE IF NOT EXISTS main.testTable USING fts3(tokenize = WCDB, value INTEGER)";
-    XCTAssertTrue([self checkCreateVirtualTableSQLAsExpected:expected]);
+    TestCaseAssertTrue([self checkCreateVirtualTableSQLAsExpected:expected]);
 }
 
 - (void)test_fts5
 {
     self.tableClass = FTS5Object.class;
     NSString* expected = @"CREATE VIRTUAL TABLE IF NOT EXISTS main.testTable USING fts5(tokenize = porter, value)";
-    XCTAssertTrue([self checkCreateVirtualTableSQLAsExpected:expected]);
+    TestCaseAssertTrue([self checkCreateVirtualTableSQLAsExpected:expected]);
 }
 
 #pragma mark - addtional object relational mapping
@@ -235,7 +235,7 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
     self.tableClass = AdditionalORMObject.class;
     NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER PRIMARY KEY ON CONFLICT ABORT, CONSTRAINT testTable_constraint CHECK(value > 10))",
                                       @"CREATE INDEX IF NOT EXISTS main.testTable_index ON testTable(value ASC)" ];
-    XCTAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
+    TestCaseAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
 }
 
 #pragma mark - rebind
@@ -244,13 +244,13 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
     {
         self.tableClass = OldRebindObject.class;
         NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER)" ];
-        XCTAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
+        TestCaseAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
     }
     // rebind
     {
         self.tableClass = NewRebindObject.class;
         NSArray<NSString*>* expected = @[ @"SELECT 1 FROM main.testTable LIMIT 0", @"PRAGMA main.table_info('testTable')", @"ALTER TABLE main.testTable ADD COLUMN newValue INTEGER", @"CREATE INDEX IF NOT EXISTS main.testTable_index ON testTable(value)" ];
-        XCTAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
+        TestCaseAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
     }
 }
 

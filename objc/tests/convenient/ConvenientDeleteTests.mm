@@ -34,7 +34,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.database deleteFromTable:self.tableName];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_delete_where
@@ -44,7 +44,7 @@
         asExpectedAfterModification:^BOOL {
             return [self.database deleteFromTable:self.tableName where:TestCaseObject.identifier == 2];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_delete_limit
@@ -54,7 +54,7 @@
         asExpectedAfterModification:^BOOL {
             return [self.database deleteFromTable:self.tableName limit:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_delete_where_limit
@@ -64,7 +64,7 @@
         asExpectedAfterModification:^BOOL {
             return [self.database deleteFromTable:self.tableName where:TestCaseObject.identifier > 0 limit:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_delete_orders_limit
@@ -74,7 +74,7 @@
         asExpectedAfterModification:^BOOL {
             return [self.database deleteFromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_delete_limit_offset
@@ -84,7 +84,7 @@
         asExpectedAfterModification:^BOOL {
             return [self.database deleteFromTable:self.tableName limit:1 offset:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_delete_where_orders_limit
@@ -94,7 +94,7 @@
         asExpectedAfterModification:^BOOL {
             return [self.database deleteFromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_delete_where_limit_offset
@@ -104,7 +104,7 @@
         asExpectedAfterModification:^BOOL {
             return [self.database deleteFromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_delete_orders_limit_offset
@@ -114,7 +114,7 @@
         asExpectedAfterModification:^BOOL {
             return [self.database deleteFromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_delete_where_orders_limit_offset
@@ -124,7 +124,7 @@
         asExpectedAfterModification:^BOOL {
             return [self.database deleteFromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Table - Delete
@@ -135,7 +135,7 @@
          asExpectedAfterModification:^BOOL {
              return [self.table deleteObjects];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_delete_where
@@ -145,7 +145,7 @@
         asExpectedAfterModification:^BOOL {
             return [self.table deleteObjectsWhere:TestCaseObject.identifier == 2];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_delete_limit
@@ -155,7 +155,7 @@
         asExpectedAfterModification:^BOOL {
             return [self.table deleteObjectsLimit:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_delete_where_limit
@@ -165,7 +165,7 @@
         asExpectedAfterModification:^BOOL {
             return [self.table deleteObjectsWhere:TestCaseObject.identifier > 0 limit:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_delete_orders_limit
@@ -175,7 +175,7 @@
         asExpectedAfterModification:^BOOL {
             return [self.table deleteObjectsOrders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_delete_limit_offset
@@ -185,7 +185,7 @@
         asExpectedAfterModification:^BOOL {
             return [self.table deleteObjectsLimit:1 offset:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_delete_where_orders_limit
@@ -195,7 +195,7 @@
         asExpectedAfterModification:^BOOL {
             return [self.table deleteObjectsWhere:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_delete_where_limit_offset
@@ -205,7 +205,7 @@
         asExpectedAfterModification:^BOOL {
             return [self.table deleteObjectsWhere:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_delete_orders_limit_offset
@@ -215,7 +215,7 @@
         asExpectedAfterModification:^BOOL {
             return [self.table deleteObjectsOrders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_delete_where_orders_limit_offset
@@ -225,7 +225,7 @@
         asExpectedAfterModification:^BOOL {
             return [self.table deleteObjectsWhere:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Handle - Delete
@@ -236,7 +236,7 @@
          asExpectedAfterModification:^BOOL {
              return [[self.database getHandle] deleteFromTable:self.tableName];
          }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_delete_where
@@ -246,7 +246,7 @@
         asExpectedAfterModification:^BOOL {
             return [[self.database getHandle] deleteFromTable:self.tableName where:TestCaseObject.identifier == 2];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_delete_limit
@@ -256,7 +256,7 @@
         asExpectedAfterModification:^BOOL {
             return [[self.database getHandle] deleteFromTable:self.tableName limit:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_delete_where_limit
@@ -266,7 +266,7 @@
         asExpectedAfterModification:^BOOL {
             return [[self.database getHandle] deleteFromTable:self.tableName where:TestCaseObject.identifier > 0 limit:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_delete_orders_limit
@@ -276,7 +276,7 @@
         asExpectedAfterModification:^BOOL {
             return [[self.database getHandle] deleteFromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_delete_limit_offset
@@ -286,7 +286,7 @@
         asExpectedAfterModification:^BOOL {
             return [[self.database getHandle] deleteFromTable:self.tableName limit:1 offset:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_delete_where_orders_limit
@@ -296,7 +296,7 @@
         asExpectedAfterModification:^BOOL {
             return [[self.database getHandle] deleteFromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_delete_where_limit_offset
@@ -306,7 +306,7 @@
         asExpectedAfterModification:^BOOL {
             return [[self.database getHandle] deleteFromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_delete_orders_limit_offset
@@ -316,7 +316,7 @@
         asExpectedAfterModification:^BOOL {
             return [[self.database getHandle] deleteFromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_delete_where_orders_limit_offset
@@ -326,7 +326,7 @@
         asExpectedAfterModification:^BOOL {
             return [[self.database getHandle] deleteFromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
         }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 @end

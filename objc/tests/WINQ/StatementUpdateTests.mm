@@ -69,8 +69,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::StatementUpdate().getType(), WCDB::SQL::Type::UpdateSTMT);
-    XCTAssertEqual(WCDB::StatementUpdate::type, WCDB::SQL::Type::UpdateSTMT);
+    TestCaseAssertEqual(WCDB::StatementUpdate().getType(), WCDB::SQL::Type::UpdateSTMT);
+    TestCaseAssertEqual(WCDB::StatementUpdate::type, WCDB::SQL::Type::UpdateSTMT);
 }
 
 - (void)test_update

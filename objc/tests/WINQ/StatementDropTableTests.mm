@@ -43,8 +43,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::StatementDropTable().getType(), WCDB::SQL::Type::DropTableSTMT);
-    XCTAssertEqual(WCDB::StatementDropTable::type, WCDB::SQL::Type::DropTableSTMT);
+    TestCaseAssertEqual(WCDB::StatementDropTable().getType(), WCDB::SQL::Type::DropTableSTMT);
+    TestCaseAssertEqual(WCDB::StatementDropTable::type, WCDB::SQL::Type::DropTableSTMT);
 }
 
 - (void)test_drop_table

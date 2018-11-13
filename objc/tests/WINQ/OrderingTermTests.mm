@@ -43,8 +43,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::OrderingTerm().getType(), WCDB::SQL::Type::OrderingTerm);
-    XCTAssertEqual(WCDB::OrderingTerm::type, WCDB::SQL::Type::OrderingTerm);
+    TestCaseAssertEqual(WCDB::OrderingTerm().getType(), WCDB::SQL::Type::OrderingTerm);
+    TestCaseAssertEqual(WCDB::OrderingTerm::type, WCDB::SQL::Type::OrderingTerm);
 }
 
 - (void)test

@@ -67,8 +67,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::TableOrSubquery().getType(), WCDB::SQL::Type::TableOrSubquery);
-    XCTAssertEqual(WCDB::TableOrSubquery::type, WCDB::SQL::Type::TableOrSubquery);
+    TestCaseAssertEqual(WCDB::TableOrSubquery().getType(), WCDB::SQL::Type::TableOrSubquery);
+    TestCaseAssertEqual(WCDB::TableOrSubquery::type, WCDB::SQL::Type::TableOrSubquery);
 }
 
 - (void)test_table

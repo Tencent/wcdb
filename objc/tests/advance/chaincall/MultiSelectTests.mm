@@ -48,14 +48,14 @@
 
     _tableName2 = @"testTable2";
 
-    XCTAssertTrue([self.database createTableAndIndexes:_tableName2 withClass:self.tableClass]);
+    TestCaseAssertTrue([self.database createTableAndIndexes:_tableName2 withClass:self.tableClass]);
 
-    XCTAssertTrue([self.database insertObjects:_objectsInTable2 intoTable:_tableName2]);
+    TestCaseAssertTrue([self.database insertObjects:_objectsInTable2 intoTable:_tableName2]);
 }
 
 - (void)tearDown
 {
-    XCTAssertTrue([self.database dropTable:self.tableName2]);
+    TestCaseAssertTrue([self.database dropTable:self.tableName2]);
     [super tearDown];
 }
 
@@ -111,7 +111,7 @@
                                    }
                                    return objects;
                                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_all
@@ -140,7 +140,7 @@
 
                                    return [select allMultiObjects];
                                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Handle
@@ -175,7 +175,7 @@
                                    }
                                    return objects;
                                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_all
@@ -204,7 +204,7 @@
 
                                    return [select allMultiObjects];
                                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 @end

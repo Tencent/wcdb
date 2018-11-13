@@ -49,8 +49,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::Join().getType(), WCDB::SQL::Type::JoinClause);
-    XCTAssertEqual(WCDB::Join::type, WCDB::SQL::Type::JoinClause);
+    TestCaseAssertEqual(WCDB::Join().getType(), WCDB::SQL::Type::JoinClause);
+    TestCaseAssertEqual(WCDB::Join::type, WCDB::SQL::Type::JoinClause);
 }
 
 - (void)test_join

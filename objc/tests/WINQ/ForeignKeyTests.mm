@@ -47,8 +47,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::ForeignKey().getType(), WCDB::SQL::Type::ForeignKeyClause);
-    XCTAssertEqual(WCDB::ForeignKey::type, WCDB::SQL::Type::ForeignKeyClause);
+    TestCaseAssertEqual(WCDB::ForeignKey().getType(), WCDB::SQL::Type::ForeignKeyClause);
+    TestCaseAssertEqual(WCDB::ForeignKey::type, WCDB::SQL::Type::ForeignKeyClause);
 }
 
 - (void)test_foreign_table

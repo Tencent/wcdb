@@ -39,8 +39,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::StatementCommit().getType(), WCDB::SQL::Type::CommitSTMT);
-    XCTAssertEqual(WCDB::StatementCommit::type, WCDB::SQL::Type::CommitSTMT);
+    TestCaseAssertEqual(WCDB::StatementCommit().getType(), WCDB::SQL::Type::CommitSTMT);
+    TestCaseAssertEqual(WCDB::StatementCommit::type, WCDB::SQL::Type::CommitSTMT);
 }
 
 - (void)test_commit

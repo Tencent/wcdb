@@ -41,8 +41,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::BindParameter().getType(), WCDB::SQL::Type::BindParameter);
-    XCTAssertEqual(WCDB::BindParameter::type, WCDB::SQL::Type::BindParameter);
+    TestCaseAssertEqual(WCDB::BindParameter().getType(), WCDB::SQL::Type::BindParameter);
+    TestCaseAssertEqual(WCDB::BindParameter::type, WCDB::SQL::Type::BindParameter);
 }
 
 - (void)test_number
@@ -88,7 +88,7 @@
 - (void)test_numbers
 {
     auto bindParameters = WCDB::BindParameter::bindParameters(2);
-    XCTAssertEqual(bindParameters.size(), 2);
+    TestCaseAssertEqual(bindParameters.size(), 2);
     SQLAssertEqual(bindParameters[0], @"?1");
     SQLAssertEqual(bindParameters[1], @"?2");
 }

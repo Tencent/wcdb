@@ -41,8 +41,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::StatementDetach().getType(), WCDB::SQL::Type::DetachSTMT);
-    XCTAssertEqual(WCDB::StatementDetach::type, WCDB::SQL::Type::DetachSTMT);
+    TestCaseAssertEqual(WCDB::StatementDetach().getType(), WCDB::SQL::Type::DetachSTMT);
+    TestCaseAssertEqual(WCDB::StatementDetach::type, WCDB::SQL::Type::DetachSTMT);
 }
 
 - (void)test_detach

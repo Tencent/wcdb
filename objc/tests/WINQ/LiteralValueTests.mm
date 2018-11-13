@@ -39,8 +39,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::LiteralValue().getType(), WCDB::SQL::Type::LiteralValue);
-    XCTAssertEqual(WCDB::LiteralValue::type, WCDB::SQL::Type::LiteralValue);
+    TestCaseAssertEqual(WCDB::LiteralValue().getType(), WCDB::SQL::Type::LiteralValue);
+    TestCaseAssertEqual(WCDB::LiteralValue::type, WCDB::SQL::Type::LiteralValue);
 }
 
 - (void)test_uint

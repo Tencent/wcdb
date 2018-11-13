@@ -41,8 +41,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::RaiseFunction().getType(), WCDB::SQL::Type::RaiseFunction);
-    XCTAssertEqual(WCDB::RaiseFunction::type, WCDB::SQL::Type::RaiseFunction);
+    TestCaseAssertEqual(WCDB::RaiseFunction().getType(), WCDB::SQL::Type::RaiseFunction);
+    TestCaseAssertEqual(WCDB::RaiseFunction::type, WCDB::SQL::Type::RaiseFunction);
 }
 
 - (void)test_ignore

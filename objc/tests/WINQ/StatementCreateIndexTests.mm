@@ -52,8 +52,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::StatementCreateIndex().getType(), WCDB::SQL::Type::CreateIndexSTMT);
-    XCTAssertEqual(WCDB::StatementCreateIndex::type, WCDB::SQL::Type::CreateIndexSTMT);
+    TestCaseAssertEqual(WCDB::StatementCreateIndex().getType(), WCDB::SQL::Type::CreateIndexSTMT);
+    TestCaseAssertEqual(WCDB::StatementCreateIndex::type, WCDB::SQL::Type::CreateIndexSTMT);
 }
 
 - (void)test_create_index

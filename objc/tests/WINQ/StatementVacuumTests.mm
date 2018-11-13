@@ -41,8 +41,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::StatementVacuum().getType(), WCDB::SQL::Type::VacuumSTMT);
-    XCTAssertEqual(WCDB::StatementVacuum::type, WCDB::SQL::Type::VacuumSTMT);
+    TestCaseAssertEqual(WCDB::StatementVacuum().getType(), WCDB::SQL::Type::VacuumSTMT);
+    TestCaseAssertEqual(WCDB::StatementVacuum::type, WCDB::SQL::Type::VacuumSTMT);
 }
 
 - (void)test_vacuum

@@ -74,8 +74,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::StatementInsert().getType(), WCDB::SQL::Type::InsertSTMT);
-    XCTAssertEqual(WCDB::StatementInsert::type, WCDB::SQL::Type::InsertSTMT);
+    TestCaseAssertEqual(WCDB::StatementInsert().getType(), WCDB::SQL::Type::InsertSTMT);
+    TestCaseAssertEqual(WCDB::StatementInsert::type, WCDB::SQL::Type::InsertSTMT);
 }
 
 - (void)test_insert

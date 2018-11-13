@@ -45,8 +45,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::CTETable().getType(), WCDB::SQL::Type::CTETableName);
-    XCTAssertEqual(WCDB::CTETable::type, WCDB::SQL::Type::CTETableName);
+    TestCaseAssertEqual(WCDB::CTETable().getType(), WCDB::SQL::Type::CTETableName);
+    TestCaseAssertEqual(WCDB::CTETable::type, WCDB::SQL::Type::CTETableName);
 }
 
 - (void)test_cte_table

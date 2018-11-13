@@ -69,7 +69,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.database getObjectOfClass:self.tableClass fromTable:self.tableName] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_object_where
@@ -79,7 +79,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.database getObjectOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier == 2] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_object_orders
@@ -89,7 +89,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.database getObjectOfClass:self.tableClass fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_object_offset
@@ -99,7 +99,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.database getObjectOfClass:self.tableClass fromTable:self.tableName offset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_object_where_orders
@@ -109,7 +109,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.database getObjectOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_object_where_offset
@@ -119,7 +119,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.database getObjectOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 offset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_object_orders_offset
@@ -129,7 +129,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.database getObjectOfClass:self.tableClass fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_object_where_orders_offset
@@ -139,7 +139,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.database getObjectOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Database - Get Objects
@@ -150,7 +150,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_objects_where
@@ -160,7 +160,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier == 1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_objects_orders
@@ -170,7 +170,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_objects_limit
@@ -180,7 +180,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName limit:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_objects_where_orders
@@ -190,7 +190,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_objects_where_limit
@@ -200,7 +200,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 1 limit:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_objects_orders_limit
@@ -210,7 +210,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_objects_limit_offset
@@ -220,7 +220,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName limit:1 offset:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_objects_where_orders_limit
@@ -230,7 +230,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_objects_where_limit_offset
@@ -240,7 +240,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 limit:1 offset:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_objects_orders_limit_offset
@@ -250,7 +250,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_objects_where_orders_limit_offset
@@ -260,7 +260,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.database getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Database - Get Part Of Object
@@ -271,7 +271,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.database getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_object_on_result_columns_where
@@ -281,7 +281,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.database getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_object_on_result_columns_orders
@@ -291,7 +291,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.database getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_object_on_result_columns_offset
@@ -301,7 +301,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.database getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName offset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_object_on_result_columns_where_orders
@@ -311,7 +311,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.database getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_object_on_result_columns_where_offset
@@ -321,7 +321,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.database getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 offset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_object_on_result_columns_orders_offset
@@ -331,7 +331,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.database getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_object_on_result_columns_where_orders_offset
@@ -341,7 +341,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.database getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Database - Get Part Of Objects
@@ -352,7 +352,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_objects_on_result_columns_where
@@ -362,7 +362,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_objects_on_result_columns_orders
@@ -372,7 +372,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_objects_on_result_columns_limit
@@ -382,7 +382,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_objects_on_result_columns_where_orders
@@ -392,7 +392,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_objects_on_result_columns_where_limit
@@ -402,7 +402,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_objects_on_result_columns_orders_limit
@@ -412,7 +412,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_objects_on_result_columns_limit_offset
@@ -422,7 +422,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_objects_on_result_columns_where_orders_limit
@@ -432,7 +432,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_objects_on_result_columns_where_limit_offset
@@ -442,7 +442,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_objects_on_result_columns_orders_limit_offset
@@ -452,7 +452,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_objects_on_result_columns_where_orders_limit_offset
@@ -462,7 +462,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.database getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Database - Get One Row
@@ -473,7 +473,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [self.database getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_row_on_result_columns_where
@@ -483,7 +483,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [self.database getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_row_on_result_columns_orders
@@ -493,7 +493,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [self.database getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_row_on_result_columns_offset
@@ -503,7 +503,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [self.database getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName offset:1];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_row_on_result_columns_where_orders
@@ -513,7 +513,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [self.database getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_row_on_result_columns_where_offset
@@ -523,7 +523,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [self.database getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 offset:1];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_row_on_result_columns_orders_offset
@@ -533,7 +533,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [self.database getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_row_on_result_columns_where_orders_offset
@@ -543,7 +543,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [self.database getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Database - Get One Column
@@ -554,7 +554,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_column_on_result_where
@@ -564,7 +564,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_column_on_result_orders
@@ -574,7 +574,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_column_on_result_limit
@@ -584,7 +584,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_column_on_result_where_orders
@@ -594,7 +594,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_column_on_result_where_limit
@@ -604,7 +604,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_column_on_result_orders_limit
@@ -614,7 +614,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_column_on_result_limit_offset
@@ -624,7 +624,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_column_on_result_where_orders_limit
@@ -634,7 +634,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_column_on_result_where_limit_offset
@@ -644,7 +644,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_column_on_result_orders_limit_offset
@@ -654,7 +654,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_column_on_result_where_orders_limit_offset
@@ -664,7 +664,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.database getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Database - Get One Value
@@ -676,7 +676,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_value_on_result_column_where
@@ -686,7 +686,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_value_on_result_column_orders
@@ -696,7 +696,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_value_on_result_column_offset
@@ -706,7 +706,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName offset:1];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_value_on_result_column_where_orders
@@ -716,7 +716,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_value_on_result_column_where_offset
@@ -726,7 +726,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 offset:1];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_value_on_result_column_orders_offset
@@ -736,7 +736,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_value_on_result_column_where_orders_offset
@@ -746,7 +746,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Database - Get Rows
@@ -757,7 +757,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_rows_on_result_columns_where
@@ -767,7 +767,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_rows_on_result_columns_orders
@@ -777,7 +777,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_rows_on_result_columns_limit
@@ -787,7 +787,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_rows_on_result_columns_where_orders
@@ -797,7 +797,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_rows_on_result_columns_where_limit
@@ -807,7 +807,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_rows_on_result_columns_orders_limit
@@ -817,7 +817,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_rows_on_result_columns_limit_offset
@@ -827,7 +827,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_rows_on_result_columns_where_orders_limit
@@ -837,7 +837,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_rows_on_result_columns_where_limit_offset
@@ -847,7 +847,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_rows_on_result_columns_orders_limit_offset
@@ -857,7 +857,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_get_rows_on_result_columns_where_orders_limit_offset
@@ -867,7 +867,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.database getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Table - Get Object
@@ -878,7 +878,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.table getObject] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_object_where
@@ -888,7 +888,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.table getObjectWhere:TestCaseObject.identifier == 2] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_object_orders
@@ -898,7 +898,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.table getObjectOrders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_object_offset
@@ -908,7 +908,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.table getObjectOffset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_object_where_orders
@@ -918,7 +918,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.table getObjectWhere:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_object_where_offset
@@ -928,7 +928,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.table getObjectWhere:TestCaseObject.identifier > 0 offset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_object_orders_offset
@@ -938,7 +938,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.table getObjectOrders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_object_where_orders_offset
@@ -948,7 +948,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.table getObjectWhere:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Table - Get Objects
@@ -959,7 +959,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.table getObjects];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_objects_where
@@ -969,7 +969,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.table getObjectsWhere:TestCaseObject.identifier == 1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_objects_orders
@@ -979,7 +979,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.table getObjectsOrders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_objects_limit
@@ -989,7 +989,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.table getObjectsLimit:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_objects_where_orders
@@ -999,7 +999,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.table getObjectsWhere:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_objects_where_limit
@@ -1009,7 +1009,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.table getObjectsWhere:TestCaseObject.identifier > 1 limit:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_objects_orders_limit
@@ -1019,7 +1019,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.table getObjectsOrders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_objects_limit_offset
@@ -1029,7 +1029,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.table getObjectsLimit:1 offset:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_objects_where_orders_limit
@@ -1039,7 +1039,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.table getObjectsWhere:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_objects_where_limit_offset
@@ -1049,7 +1049,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.table getObjectsWhere:TestCaseObject.identifier > 0 limit:1 offset:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_objects_orders_limit_offset
@@ -1059,7 +1059,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.table getObjectsOrders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_objects_where_orders_limit_offset
@@ -1069,7 +1069,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.table getObjectsWhere:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Table - Get Part Of Object
@@ -1080,7 +1080,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.table getObjectOnResultColumns:TestCaseObject.identifier] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_object_on_result_columns_where
@@ -1090,7 +1090,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.table getObjectOnResultColumns:TestCaseObject.identifier where:TestCaseObject.identifier == 1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_object_on_result_columns_orders
@@ -1100,7 +1100,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.table getObjectOnResultColumns:TestCaseObject.identifier orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_object_on_result_columns_offset
@@ -1110,7 +1110,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.table getObjectOnResultColumns:TestCaseObject.identifier offset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_object_on_result_columns_where_orders
@@ -1120,7 +1120,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.table getObjectOnResultColumns:TestCaseObject.identifier where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_object_on_result_columns_where_offset
@@ -1130,7 +1130,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.table getObjectOnResultColumns:TestCaseObject.identifier where:TestCaseObject.identifier > 0 offset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_object_on_result_columns_orders_offset
@@ -1140,7 +1140,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.table getObjectOnResultColumns:TestCaseObject.identifier orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_object_on_result_columns_where_orders_offset
@@ -1150,7 +1150,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [self.table getObjectOnResultColumns:TestCaseObject.identifier where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Table - Get Part Of Objects
@@ -1161,7 +1161,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.table getObjectsOnResultColumns:TestCaseObject.identifier];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_objects_on_result_columns_where
@@ -1171,7 +1171,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [self.table getObjectsOnResultColumns:TestCaseObject.identifier where:TestCaseObject.identifier == 1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_objects_on_result_columns_orders
@@ -1181,7 +1181,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.table getObjectsOnResultColumns:TestCaseObject.identifier orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_objects_on_result_columns_limit
@@ -1191,7 +1191,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.table getObjectsOnResultColumns:TestCaseObject.identifier];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_objects_on_result_columns_where_orders
@@ -1201,7 +1201,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.table getObjectsOnResultColumns:TestCaseObject.identifier];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_objects_on_result_columns_where_limit
@@ -1211,7 +1211,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.table getObjectsOnResultColumns:TestCaseObject.identifier];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_objects_on_result_columns_orders_limit
@@ -1221,7 +1221,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.table getObjectsOnResultColumns:TestCaseObject.identifier];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_objects_on_result_columns_limit_offset
@@ -1231,7 +1231,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.table getObjectsOnResultColumns:TestCaseObject.identifier];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_objects_on_result_columns_where_orders_limit
@@ -1241,7 +1241,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.table getObjectsOnResultColumns:TestCaseObject.identifier];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_objects_on_result_columns_where_limit_offset
@@ -1251,7 +1251,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.table getObjectsOnResultColumns:TestCaseObject.identifier];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_objects_on_result_columns_orders_limit_offset
@@ -1261,7 +1261,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.table getObjectsOnResultColumns:TestCaseObject.identifier];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_objects_on_result_columns_where_orders_limit_offset
@@ -1271,7 +1271,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [self.table getObjectsOnResultColumns:TestCaseObject.identifier];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Table - Get One Row
@@ -1282,7 +1282,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [self.table getRowOnResultColumns:TestCaseObject.identifier];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_row_on_result_columns_where
@@ -1292,7 +1292,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [self.table getRowOnResultColumns:TestCaseObject.identifier where:TestCaseObject.identifier == 1];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_row_on_result_columns_orders
@@ -1302,7 +1302,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [self.table getRowOnResultColumns:TestCaseObject.identifier orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_row_on_result_columns_offset
@@ -1312,7 +1312,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [self.table getRowOnResultColumns:TestCaseObject.identifier offset:1];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_row_on_result_columns_where_orders
@@ -1322,7 +1322,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [self.table getRowOnResultColumns:TestCaseObject.identifier where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_row_on_result_columns_where_offset
@@ -1332,7 +1332,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [self.table getRowOnResultColumns:TestCaseObject.identifier where:TestCaseObject.identifier > 0 offset:1];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_row_on_result_columns_orders_offset
@@ -1342,7 +1342,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [self.table getRowOnResultColumns:TestCaseObject.identifier orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_row_on_result_columns_where_orders_offset
@@ -1352,7 +1352,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [self.table getRowOnResultColumns:TestCaseObject.identifier where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Table - Get One Column
@@ -1363,7 +1363,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.table getColumnOnResult:TestCaseObject.identifier];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_column_on_result_where
@@ -1373,7 +1373,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.table getColumnOnResult:TestCaseObject.identifier where:TestCaseObject.identifier == 1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_column_on_result_orders
@@ -1383,7 +1383,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.table getColumnOnResult:TestCaseObject.identifier orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_column_on_result_limit
@@ -1393,7 +1393,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.table getColumnOnResult:TestCaseObject.identifier];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_column_on_result_where_orders
@@ -1403,7 +1403,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.table getColumnOnResult:TestCaseObject.identifier];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_column_on_result_where_limit
@@ -1413,7 +1413,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.table getColumnOnResult:TestCaseObject.identifier];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_column_on_result_orders_limit
@@ -1423,7 +1423,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.table getColumnOnResult:TestCaseObject.identifier];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_column_on_result_limit_offset
@@ -1433,7 +1433,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.table getColumnOnResult:TestCaseObject.identifier];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_column_on_result_where_orders_limit
@@ -1443,7 +1443,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.table getColumnOnResult:TestCaseObject.identifier];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_column_on_result_where_limit_offset
@@ -1453,7 +1453,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.table getColumnOnResult:TestCaseObject.identifier];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_column_on_result_orders_limit_offset
@@ -1463,7 +1463,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.table getColumnOnResult:TestCaseObject.identifier];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_column_on_result_where_orders_limit_offset
@@ -1473,7 +1473,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [self.table getColumnOnResult:TestCaseObject.identifier];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Table - Get One Value
@@ -1485,7 +1485,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [self.table getValueOnResultColumn:TestCaseObject.identifier];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_value_on_result_column_where
@@ -1495,7 +1495,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [self.table getValueOnResultColumn:TestCaseObject.identifier where:TestCaseObject.identifier == 1];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_value_on_result_column_orders
@@ -1505,7 +1505,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [self.table getValueOnResultColumn:TestCaseObject.identifier orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_value_on_result_column_offset
@@ -1515,7 +1515,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [self.table getValueOnResultColumn:TestCaseObject.identifier offset:1];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_value_on_result_column_where_orders
@@ -1525,7 +1525,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [self.table getValueOnResultColumn:TestCaseObject.identifier where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_value_on_result_column_where_offset
@@ -1535,7 +1535,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [self.table getValueOnResultColumn:TestCaseObject.identifier where:TestCaseObject.identifier > 0 offset:1];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_value_on_result_column_orders_offset
@@ -1545,7 +1545,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [self.table getValueOnResultColumn:TestCaseObject.identifier orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_value_on_result_column_where_orders_offset
@@ -1555,7 +1555,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [self.table getValueOnResultColumn:TestCaseObject.identifier where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Table - Get Rows
@@ -1566,7 +1566,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.table getRowsOnResultColumns:TestCaseObject.identifier];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_rows_on_result_columns_where
@@ -1576,7 +1576,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.table getRowsOnResultColumns:TestCaseObject.identifier where:TestCaseObject.identifier == 1];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_rows_on_result_columns_orders
@@ -1586,7 +1586,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.table getRowsOnResultColumns:TestCaseObject.identifier orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_rows_on_result_columns_limit
@@ -1596,7 +1596,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.table getRowsOnResultColumns:TestCaseObject.identifier];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_rows_on_result_columns_where_orders
@@ -1606,7 +1606,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.table getRowsOnResultColumns:TestCaseObject.identifier];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_rows_on_result_columns_where_limit
@@ -1616,7 +1616,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.table getRowsOnResultColumns:TestCaseObject.identifier];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_rows_on_result_columns_orders_limit
@@ -1626,7 +1626,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.table getRowsOnResultColumns:TestCaseObject.identifier];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_rows_on_result_columns_limit_offset
@@ -1636,7 +1636,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.table getRowsOnResultColumns:TestCaseObject.identifier];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_rows_on_result_columns_where_orders_limit
@@ -1646,7 +1646,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.table getRowsOnResultColumns:TestCaseObject.identifier];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_rows_on_result_columns_where_limit_offset
@@ -1656,7 +1656,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.table getRowsOnResultColumns:TestCaseObject.identifier];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_rows_on_result_columns_orders_limit_offset
@@ -1666,7 +1666,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.table getRowsOnResultColumns:TestCaseObject.identifier];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_table_get_rows_on_result_columns_where_orders_limit_offset
@@ -1676,7 +1676,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [self.table getRowsOnResultColumns:TestCaseObject.identifier];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Handle - Get Object
@@ -1687,7 +1687,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [[self.database getHandle] getObjectOfClass:self.tableClass fromTable:self.tableName] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_object_where
@@ -1697,7 +1697,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [[self.database getHandle] getObjectOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier == 2] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_object_orders
@@ -1707,7 +1707,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [[self.database getHandle] getObjectOfClass:self.tableClass fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_object_offset
@@ -1717,7 +1717,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [[self.database getHandle] getObjectOfClass:self.tableClass fromTable:self.tableName offset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_object_where_orders
@@ -1727,7 +1727,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [[self.database getHandle] getObjectOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_object_where_offset
@@ -1737,7 +1737,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [[self.database getHandle] getObjectOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 offset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_object_orders_offset
@@ -1747,7 +1747,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [[self.database getHandle] getObjectOfClass:self.tableClass fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_object_where_orders_offset
@@ -1757,7 +1757,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [[self.database getHandle] getObjectOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Handle - Get Objects
@@ -1768,7 +1768,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_objects_where
@@ -1778,7 +1778,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier == 1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_objects_orders
@@ -1788,7 +1788,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_objects_limit
@@ -1798,7 +1798,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName limit:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_objects_where_orders
@@ -1808,7 +1808,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_objects_where_limit
@@ -1818,7 +1818,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 1 limit:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_objects_orders_limit
@@ -1828,7 +1828,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_objects_limit_offset
@@ -1838,7 +1838,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName limit:1 offset:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_objects_where_orders_limit
@@ -1848,7 +1848,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_objects_where_limit_offset
@@ -1858,7 +1858,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 limit:1 offset:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_objects_orders_limit_offset
@@ -1868,7 +1868,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_objects_where_orders_limit_offset
@@ -1878,7 +1878,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [[self.database getHandle] getObjectsOfClass:self.tableClass fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Handle - Get Part Of Object
@@ -1889,7 +1889,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [[self.database getHandle] getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_object_on_result_columns_where
@@ -1899,7 +1899,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [[self.database getHandle] getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_object_on_result_columns_orders
@@ -1909,7 +1909,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [[self.database getHandle] getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_object_on_result_columns_offset
@@ -1919,7 +1919,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [[self.database getHandle] getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName offset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_object_on_result_columns_where_orders
@@ -1929,7 +1929,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [[self.database getHandle] getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_object_on_result_columns_where_offset
@@ -1939,7 +1939,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [[self.database getHandle] getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 offset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_object_on_result_columns_orders_offset
@@ -1949,7 +1949,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [[self.database getHandle] getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_object_on_result_columns_where_orders_offset
@@ -1959,7 +1959,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return @[ [[self.database getHandle] getObjectOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1] ];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Handle - Get Part Of Objects
@@ -1970,7 +1970,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_objects_on_result_columns_where
@@ -1980,7 +1980,7 @@
               asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                   return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_objects_on_result_columns_orders
@@ -1990,7 +1990,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_objects_on_result_columns_limit
@@ -2000,7 +2000,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_objects_on_result_columns_where_orders
@@ -2010,7 +2010,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_objects_on_result_columns_where_limit
@@ -2020,7 +2020,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_objects_on_result_columns_orders_limit
@@ -2030,7 +2030,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_objects_on_result_columns_limit_offset
@@ -2040,7 +2040,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_objects_on_result_columns_where_orders_limit
@@ -2050,7 +2050,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_objects_on_result_columns_where_limit_offset
@@ -2060,7 +2060,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_objects_on_result_columns_orders_limit_offset
@@ -2070,7 +2070,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_objects_on_result_columns_where_orders_limit_offset
@@ -2080,7 +2080,7 @@
                asExpectedBySelecting:^NSArray<TestCaseObject *> * {
                    return [[self.database getHandle] getObjectsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
                }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Handle - Get One Row
@@ -2091,7 +2091,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [[self.database getHandle] getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_row_on_result_columns_where
@@ -2101,7 +2101,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [[self.database getHandle] getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_row_on_result_columns_orders
@@ -2111,7 +2111,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [[self.database getHandle] getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_row_on_result_columns_offset
@@ -2121,7 +2121,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [[self.database getHandle] getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName offset:1];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_row_on_result_columns_where_orders
@@ -2131,7 +2131,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [[self.database getHandle] getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_row_on_result_columns_where_offset
@@ -2141,7 +2141,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [[self.database getHandle] getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 offset:1];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_row_on_result_columns_orders_offset
@@ -2151,7 +2151,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [[self.database getHandle] getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_row_on_result_columns_where_orders_offset
@@ -2161,7 +2161,7 @@
            asExpectedBySelecting:^WCTOneRow * {
                return [[self.database getHandle] getRowOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
            }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Handle - Get One Column
@@ -2172,7 +2172,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_column_on_result_where
@@ -2182,7 +2182,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_column_on_result_orders
@@ -2192,7 +2192,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_column_on_result_limit
@@ -2202,7 +2202,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_column_on_result_where_orders
@@ -2212,7 +2212,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_column_on_result_where_limit
@@ -2222,7 +2222,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_column_on_result_orders_limit
@@ -2232,7 +2232,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_column_on_result_limit_offset
@@ -2242,7 +2242,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_column_on_result_where_orders_limit
@@ -2252,7 +2252,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_column_on_result_where_limit_offset
@@ -2262,7 +2262,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_column_on_result_orders_limit_offset
@@ -2272,7 +2272,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_column_on_result_where_orders_limit_offset
@@ -2282,7 +2282,7 @@
               asExpectedBySelecting:^WCTOneColumn * {
                   return [[self.database getHandle] getColumnOnResult:TestCaseObject.identifier fromTable:self.tableName];
               }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Handle - Get One Value
@@ -2294,7 +2294,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [[self.database getHandle] getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_value_on_result_column_where
@@ -2304,7 +2304,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [[self.database getHandle] getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_value_on_result_column_orders
@@ -2314,7 +2314,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [[self.database getHandle] getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_value_on_result_column_offset
@@ -2324,7 +2324,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [[self.database getHandle] getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName offset:1];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_value_on_result_column_where_orders
@@ -2334,7 +2334,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [[self.database getHandle] getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_value_on_result_column_where_offset
@@ -2344,7 +2344,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [[self.database getHandle] getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 offset:1];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_value_on_result_column_orders_offset
@@ -2354,7 +2354,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [[self.database getHandle] getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_value_on_result_column_where_orders_offset
@@ -2364,7 +2364,7 @@
              asExpectedBySelecting:^WCTValue * {
                  return [[self.database getHandle] getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
              }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Handle - Get Rows
@@ -2375,7 +2375,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_rows_on_result_columns_where
@@ -2385,7 +2385,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 1];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_rows_on_result_columns_orders
@@ -2395,7 +2395,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_rows_on_result_columns_limit
@@ -2405,7 +2405,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_rows_on_result_columns_where_orders
@@ -2415,7 +2415,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_rows_on_result_columns_where_limit
@@ -2425,7 +2425,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_rows_on_result_columns_orders_limit
@@ -2435,7 +2435,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_rows_on_result_columns_limit_offset
@@ -2445,7 +2445,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_rows_on_result_columns_where_orders_limit
@@ -2455,7 +2455,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_rows_on_result_columns_where_limit_offset
@@ -2465,7 +2465,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_rows_on_result_columns_orders_limit_offset
@@ -2475,7 +2475,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_get_rows_on_result_columns_where_orders_limit_offset
@@ -2485,7 +2485,7 @@
             asExpectedBySelecting:^WCTColumnsXRows * {
                 return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.identifier fromTable:self.tableName];
             }];
-    XCTAssertTrue(result);
+    TestCaseAssertTrue(result);
 }
 
 @end

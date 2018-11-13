@@ -50,8 +50,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::FunctionInvocation().getType(), WCDB::SQL::Type::FunctionInvocation);
-    XCTAssertEqual(WCDB::FunctionInvocation::type, WCDB::SQL::Type::FunctionInvocation);
+    TestCaseAssertEqual(WCDB::FunctionInvocation().getType(), WCDB::SQL::Type::FunctionInvocation);
+    TestCaseAssertEqual(WCDB::FunctionInvocation::type, WCDB::SQL::Type::FunctionInvocation);
 }
 
 - (void)test_function

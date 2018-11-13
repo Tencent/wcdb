@@ -73,7 +73,7 @@
     WCTResultColumn redirected = resultColumn.redirect(1);
 
     SQLAssertEqual(redirected, @"1");
-    XCTAssertEqual(&redirected.getColumnBinding(), &resultColumn.getColumnBinding());
+    TestCaseAssertEqual(&redirected.getColumnBinding(), &resultColumn.getColumnBinding());
 }
 
 - (void)test_results_by_adding
@@ -83,8 +83,8 @@
         property2,
     };
     WCTResultColumns newResultColumns = resultColumns.addingNewResultColumns(resultColumns);
-    XCTAssertEqual(resultColumns.size(), 4);
-    XCTAssertEqual(newResultColumns.size(), 4);
+    TestCaseAssertEqual(resultColumns.size(), 4);
+    TestCaseAssertEqual(newResultColumns.size(), 4);
 }
 
 - (void)test_results_adding
@@ -94,8 +94,8 @@
         property2,
     };
     WCTResultColumns newResultColumns = resultColumns.resultColumnsByAddingNewResultColumns(resultColumns);
-    XCTAssertEqual(resultColumns.size(), 2);
-    XCTAssertEqual(newResultColumns.size(), 4);
+    TestCaseAssertEqual(resultColumns.size(), 2);
+    TestCaseAssertEqual(newResultColumns.size(), 4);
 }
 
 @end

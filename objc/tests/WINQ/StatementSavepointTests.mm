@@ -41,8 +41,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::StatementSavepoint().getType(), WCDB::SQL::Type::SavepointSTMT);
-    XCTAssertEqual(WCDB::StatementSavepoint::type, WCDB::SQL::Type::SavepointSTMT);
+    TestCaseAssertEqual(WCDB::StatementSavepoint().getType(), WCDB::SQL::Type::SavepointSTMT);
+    TestCaseAssertEqual(WCDB::StatementSavepoint::type, WCDB::SQL::Type::SavepointSTMT);
 }
 
 - (void)test_savepoint

@@ -53,8 +53,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::StatementCreateTable().getType(), WCDB::SQL::Type::CreateTableSTMT);
-    XCTAssertEqual(WCDB::StatementCreateTable::type, WCDB::SQL::Type::CreateTableSTMT);
+    TestCaseAssertEqual(WCDB::StatementCreateTable().getType(), WCDB::SQL::Type::CreateTableSTMT);
+    TestCaseAssertEqual(WCDB::StatementCreateTable::type, WCDB::SQL::Type::CreateTableSTMT);
 }
 
 - (void)test_create_table

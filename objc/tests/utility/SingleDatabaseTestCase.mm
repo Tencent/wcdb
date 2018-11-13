@@ -29,7 +29,7 @@
     _database = [[WCTDatabase alloc] initWithPath:self.path];
     int tag;
     do {
-        tag = [NSNumber randomInt];
+        tag = [NSNumber randomInt32];
     } while (tag == 0);
     _database.tag = tag;
 }
@@ -80,7 +80,11 @@ asExpectedByOperation:(BOOL (^)())block
         }
 
         trace = YES;
-        if (!block() || sqls.count != 0) {
+        if (!block()) {
+            TESTCASE_FAILED
+            break;
+        }
+        if (sqls.count != 0) {
             TESTCASE_FAILED
             break;
         }
@@ -123,7 +127,11 @@ asExpectedByOperation:(BOOL (^)())block
         }
 
         trace = YES;
-        if (!block() || sqls.count != 0) {
+        if (!block()) {
+            TESTCASE_FAILED
+            break;
+        }
+        if (sqls.count != 0) {
             TESTCASE_FAILED
             break;
         }

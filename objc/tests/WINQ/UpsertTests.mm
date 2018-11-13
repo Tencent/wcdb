@@ -58,8 +58,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::Upsert().getType(), WCDB::SQL::Type::UpsertClause);
-    XCTAssertEqual(WCDB::Upsert::type, WCDB::SQL::Type::UpsertClause);
+    TestCaseAssertEqual(WCDB::Upsert().getType(), WCDB::SQL::Type::UpsertClause);
+    TestCaseAssertEqual(WCDB::Upsert::type, WCDB::SQL::Type::UpsertClause);
 }
 
 - (void)test_upsert

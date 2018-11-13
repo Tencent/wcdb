@@ -54,8 +54,8 @@
 
 - (void)test_get_type
 {
-    XCTAssertEqual(WCDB::StatementDelete().getType(), WCDB::SQL::Type::DeleteSTMT);
-    XCTAssertEqual(WCDB::StatementDelete::type, WCDB::SQL::Type::DeleteSTMT);
+    TestCaseAssertEqual(WCDB::StatementDelete().getType(), WCDB::SQL::Type::DeleteSTMT);
+    TestCaseAssertEqual(WCDB::StatementDelete::type, WCDB::SQL::Type::DeleteSTMT);
 }
 
 - (void)test_delete

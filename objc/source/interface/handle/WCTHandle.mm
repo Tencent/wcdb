@@ -66,10 +66,9 @@
 }
 
 #pragma mark - Handle
-- (void **)getRawHandle
+- (void **)rawHandle
 {
-    WCTHandleAssert(return nullptr;);
-    return _handle->getRawHandle();
+    return [self getOrGenerateHandle] -> getRawHandle();
 }
 
 - (void)invalidate
@@ -191,7 +190,7 @@
     _handle->bindText(string ? string.UTF8String : WCDB::String::null().c_str(), index);
 }
 
-- (void)bindBLOB:(NSData *)data toIndex:(int)index
+- (void)bindData:(NSData *)data toIndex:(int)index
 {
     WCTHandleAssert(return;);
     _handle->bindBLOB(data, index);
@@ -200,7 +199,15 @@
 - (void)bindNumber:(NSNumber *)number toIndex:(int)index
 {
     WCTHandleAssert(return;);
-    _handle->bindDouble(number.doubleValue, index);
+    if (CFNumberIsFloatType((CFNumberRef) number)) {
+        _handle->bindDouble(number.doubleValue, index);
+    } else {
+        if (CFNumberGetByteSize((CFNumberRef) number) <= 4) {
+            _handle->bindInteger32(number.intValue, index);
+        } else {
+            _handle->bindInteger64(number.integerValue, index);
+        }
+    }
 }
 
 - (void)bindValue:(WCTColumnCodingValue *)value
@@ -335,24 +342,6 @@
     return _handle->getDouble(index);
 }
 
-- (const char *)getTextAtIndex:(int)index
-{
-    WCTHandleAssert(return nullptr;);
-    return _handle->getText(index).cstring();
-}
-
-- (const unsigned char *)getBLOBAtIndex:(int)index
-{
-    WCTHandleAssert(return nullptr;);
-    return _handle->getBLOB(index).buffer();
-}
-
-- (size_t)getSizeAtIndex:(int)index
-{
-    WCTHandleAssert(return 0;);
-    return _handle->getBLOB(index).size();
-}
-
 - (NSString *)getStringAtIndex:(int)index
 {
     WCTHandleAssert(return nil;);
@@ -362,7 +351,14 @@
 - (NSNumber *)getNumberAtIndex:(int)index
 {
     WCTHandleAssert(return nil;);
-    return [NSNumber numberWithDouble:_handle->getDouble(index)];
+    switch (_handle->getType(index)) {
+    case WCDB::ColumnType::Integer32:
+        return [NSNumber numberWithInt:_handle->getInteger32(index)];
+    case WCDB::ColumnType::Integer64:
+        return [NSNumber numberWithInteger:_handle->getInteger64(index)];
+    default:
+        return [NSNumber numberWithDouble:_handle->getDouble(index)];
+    }
 }
 
 - (NSData *)getDataAtIndex:(int)index
