@@ -97,7 +97,7 @@
     return handle->execute(statement);
 }
 
-#pragma mark - Step
+#pragma mark - Prepare
 - (BOOL)prepare:(const WCDB::Statement &)statement
 {
     WCDB::Handle *handle = [self getOrGenerateHandle];
@@ -116,6 +116,13 @@
     return handle->isPrepared();
 }
 
+- (void)finalizeStatement
+{
+    WCTHandleAssert(return;);
+    _handle->finalize();
+}
+
+#pragma mark - Step
 - (BOOL)step:(BOOL &)done
 {
     WCTHandleAssert(return NO;);
@@ -134,6 +141,7 @@
     _handle->reset();
 }
 
+#pragma mark - State
 - (long long)getLastInsertedRowID
 {
     WCTHandleAssert(return 0;);
@@ -152,19 +160,7 @@
     return _handle->isStatementReadonly();
 }
 
-- (void)finalizeStatement
-{
-    WCTHandleAssert(return;);
-    _handle->finalize();
-}
-
 #pragma mark - Bind
-- (void)bindBool:(BOOL)value toIndex:(int)index
-{
-    WCTHandleAssert(return;);
-    _handle->bindInteger32(value, index);
-}
-
 - (void)bindInteger32:(const int32_t &)value toIndex:(int)index
 {
     WCTHandleAssert(return;);
@@ -320,7 +316,7 @@
     }
 }
 
-#pragma mark - Extract
+#pragma mark - Get
 - (int32_t)getInteger32AtIndex:(int)index
 {
     WCTHandleAssert(return 0;);
@@ -429,12 +425,6 @@
         [row addObject:value ? value : [NSNull null]];
     }
     return row;
-}
-
-- (WCTObject *)getObjectOfClass:(Class)cls
-{
-    WCTHandleAssert(return nil;);
-    return [self getObjectOnResultColumns:[cls allProperties]];
 }
 
 - (WCTObject *)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
@@ -578,12 +568,6 @@
         [objects addObject:[self getObjectOnResultColumns:resultColumns]];
     }
     return done ? objects : nil;
-}
-
-- (NSArray /* <WCTObject*> */ *)allObjectsOfClass:(Class)cls
-{
-    WCTHandleAssert(return nil;);
-    return [self allObjectsOnResultColumns:[cls allProperties]];
 }
 
 - (NSArray<WCTMultiObject *> *)allMultiObjectsOnResultColumns:(const WCTResultColumns &)resultColumns

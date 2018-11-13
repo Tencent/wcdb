@@ -25,6 +25,12 @@ NS_ASSUME_NONNULL_BEGIN
 @interface WCTHandle : NSObject
 
 #pragma mark - Handle
+// Developers can call sqlite interfaces those WCDB does not provided currently by using this raw handle.
+// Note that this is not tested, which means that it may result in an unpredictable behavior.
+// Usage:
+//  e.g. 1. sqlite3** rawHandle = (sqlite3**)getRawHandle()
+//  e.g. 2. sqlite3_open(rawHandle, ...)
+//  e.g. 3. sqlite3_exec(*rawHandle, ...)
 @property (nonatomic, readonly) void *_Nonnull *_Nonnull rawHandle;
 
 @property (nonatomic, readonly) WCTDatabase *database;
@@ -34,28 +40,28 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Execute
 - (BOOL)execute:(const WCDB::Statement &)statement;
 
-#pragma mark - Step
+#pragma mark - Prepare
 - (BOOL)prepare:(const WCDB::Statement &)statement;
 
 - (BOOL)isPrepared;
 
+- (void)finalizeStatement;
+
+#pragma mark - Step
 - (BOOL)step:(BOOL &)done;
 
 - (BOOL)step;
 
 - (void)reset;
 
+#pragma mark - State
 - (long long)getLastInsertedRowID;
 
 - (int)getChanges;
 
 - (BOOL)isStatementReadonly;
 
-- (void)finalizeStatement;
-
 #pragma mark - Bind
-- (void)bindBool:(BOOL)value toIndex:(int)index;
-
 - (void)bindInteger32:(const int32_t &)value toIndex:(int)index;
 
 - (void)bindInteger64:(const int64_t &)value toIndex:(int)index;
@@ -80,7 +86,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)bindProperties:(const WCTProperties &)properties
               ofObject:(WCTObject *)object;
 
-#pragma mark - Extract
+#pragma mark - Get
 - (int32_t)getInteger32AtIndex:(int)index;
 
 - (int64_t)getInteger64AtIndex:(int)index;
@@ -111,8 +117,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (WCTOneRow *)getRow;
 
-- (WCTObject *)getObjectOfClass:(Class)cls;
-
 - (WCTObject *)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns;
 
 - (WCTMultiObject *)getMultiObjectOnResultColumns:(const WCTResultColumns &)resultColumns;
@@ -129,8 +133,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable WCTColumnsXRows *)allRows;
 
 - (nullable NSArray /* <WCTObject*> */ *)allObjectsOnResultColumns:(const WCTResultColumns &)resultColumns;
-
-- (nullable NSArray /* <WCTObject*> */ *)allObjectsOfClass:(Class)cls;
 
 - (nullable NSArray<WCTMultiObject *> *)allMultiObjectsOnResultColumns:(const WCTResultColumns &)resultColumns;
 
