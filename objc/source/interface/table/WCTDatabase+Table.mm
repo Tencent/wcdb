@@ -30,6 +30,7 @@
 
 - (WCTOptional<BOOL, NO>)tableExists:(NSString *)tableName
 {
+    WCTDatabaseAssert(return nullptr;);
     auto result = _database->tableExists(tableName);
     if (result.first) {
         return result.second;
@@ -41,6 +42,7 @@
 - (BOOL)createTableAndIndexes:(NSString *)tableName
                     withClass:(Class<WCTTableCoding>)cls
 {
+    WCTDatabaseAssert(return NO;);
     WCTRemedialAssert(tableName && cls, "Class or table name can't be null.", return NO;);
     return [self runNestedTransaction:^BOOL(WCTHandle *handle) {
         return [handle remapTable:tableName toClass:cls];
@@ -50,6 +52,7 @@
 - (WCTTable *)getTable:(NSString *)tableName
              withClass:(Class<WCTTableCoding>)cls
 {
+    WCTDatabaseAssert(return nil;);
     WCTRemedialAssert(tableName && cls, "Class or table name can't be null.", return nil;);
     return [[WCTTable alloc] initWithDatabase:self name:tableName class:cls];
 }
@@ -57,17 +60,20 @@
 - (BOOL)createVirtualTable:(NSString *)tableName
                  withClass:(Class<WCTTableCoding>)cls
 {
+    WCTDatabaseAssert(return NO;);
     WCTRemedialAssert(tableName && cls, "Class or table name can't be null.", return NO;);
     return _database->execute([cls objectRelationalMapping].generateVirtualCreateTableStatement(tableName));
 }
 
 - (BOOL)dropTable:(NSString *)tableName
 {
+    WCTDatabaseAssert(return NO;);
     return _database->execute(WCDB::StatementDropTable().dropTable(tableName));
 }
 
 - (BOOL)dropIndex:(NSString *)indexName
 {
+    WCTDatabaseAssert(return NO;);
     return _database->execute(WCDB::StatementDropIndex().dropIndex(indexName));
 }
 

@@ -49,6 +49,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)invalidate;
 
+- (BOOL)isValidated;
+
 @end
 
 NS_ASSUME_NONNULL_END

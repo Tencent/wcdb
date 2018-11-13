@@ -36,9 +36,11 @@
 
 - (void)tearDown
 {
-    [_database close];
-    [_database invalidate];
-    _database = nil;
+    if (_database.isValidated) {
+        [_database close];
+        [_database invalidate];
+        _database = nil;
+    }
     [self cleanDirectory];
     [super tearDown];
 }

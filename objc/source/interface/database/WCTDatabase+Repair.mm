@@ -31,16 +31,19 @@ static_assert((int) WCTRecoveryModeDeposit == (int) WCDB::Database::RecoveryMode
 
 - (void)setRecoveryMode:(WCTRecoveryMode)recoveryMode
 {
+    WCTDatabaseAssert(return;);
     _database->setRecoveryMode((WCDB::Database::RecoveryMode) recoveryMode);
 }
 
 - (WCTRecoveryMode)recoveryMode
 {
+    WCTDatabaseAssert(return WCTRecoveryModeCustom;);
     return (WCTRecoveryMode) _database->getRecoverMode();
 }
 
 - (void)setNotificationWhenRecovering:(WCTRecoverNotificationBlock)onRecovering
 {
+    WCTDatabaseAssert(return;);
     WCDB::Database::RecoverNotification notification = nullptr;
     if (onRecovering) {
         notification = [onRecovering](WCDB::Database *database) -> bool {
@@ -52,6 +55,7 @@ static_assert((int) WCTRecoveryModeDeposit == (int) WCDB::Database::RecoveryMode
 
 - (void)filterBackup:(WCTBackupFilterBlock)tableShouldBeBackedUp
 {
+    WCTDatabaseAssert(return;);
     if (tableShouldBeBackedUp) {
         _database->filterBackup([tableShouldBeBackedUp](const WCDB::String &tableName) -> bool {
             return tableShouldBeBackedUp([NSString stringWithUTF8String:tableName.c_str()]);
@@ -63,11 +67,13 @@ static_assert((int) WCTRecoveryModeDeposit == (int) WCDB::Database::RecoveryMode
 
 - (BOOL)deposit
 {
+    WCTDatabaseAssert(return NO;);
     return _database->deposit();
 }
 
 - (void)setAutoBackup:(BOOL)flag
 {
+    WCTDatabaseAssert(return;);
     if (flag) {
         _database->setConfig(WCDB::Core::backupConfigName, WCDB::Core::shared()->backupConfig(), WCDB::Configs::Priority::Low);
     } else {
@@ -77,11 +83,13 @@ static_assert((int) WCTRecoveryModeDeposit == (int) WCDB::Database::RecoveryMode
 
 - (BOOL)backup
 {
+    WCTDatabaseAssert(return NO;);
     return _database->backup();
 }
 
 - (double)retrieve:(WCTRetrieveProgressUpdateBlock)onProgressUpdate
 {
+    WCTDatabaseAssert(return 0;);
     if (onProgressUpdate) {
         return _database->retrieve([onProgressUpdate](double percentage, double increment) {
             onProgressUpdate(percentage, increment);
@@ -93,11 +101,13 @@ static_assert((int) WCTRecoveryModeDeposit == (int) WCDB::Database::RecoveryMode
 
 - (BOOL)removeDeposit
 {
+    WCTDatabaseAssert(return NO;);
     return _database->removeDeposit();
 }
 
 - (BOOL)canRetrieve
 {
+    WCTDatabaseAssert(return NO;);
     return _database->canRetrieve();
 }
 

@@ -23,6 +23,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+#define WCTDatabaseAssert(remedial) WCTRemedialAssert(_database != nullptr, "It's invalid to call on an invalidated database", remedial);
+
 @interface WCTDatabase () {
 @private
     // Holder can be null in some case using temporary database object. e.g. inside the non-escape block

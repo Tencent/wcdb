@@ -32,6 +32,7 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
 
 - (void)setCipherKey:(NSData *)cipherKey
 {
+    WCTDatabaseAssert(return;);
     _database->setConfig(WCDB::Core::cipherConfigName,
                          WCDB::Core::shared()->cipherConfig(WCDB::UnsafeData::immutable((const unsigned char *) cipherKey.bytes, (size_t) cipherKey.length)),
                          WCDB::Configs::Priority::Highest);
@@ -40,6 +41,7 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
 - (void)setCipherKey:(NSData *)cipherKey
    andCipherPageSize:(int)cipherPageSize
 {
+    WCTDatabaseAssert(return;);
     _database->setConfig(WCDB::Core::cipherConfigName,
                          WCDB::Core::shared()->cipherConfig(WCDB::UnsafeData::immutable((const unsigned char *) cipherKey.bytes, (size_t) cipherKey.length), cipherPageSize),
                          WCDB::Configs::Priority::Highest);
@@ -50,6 +52,7 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
           forName:(NSString *)name
      withPriority:(int)priority
 {
+    WCTDatabaseAssert(return;);
     WCTRemedialAssert(nsInvocation, "Use [removeConfigForName:] instead.", return;);
     WCDB::CustomConfig::Invocation invocation = [nsInvocation, self](WCDB::Handle *handle) -> bool {
         WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithDatabase:self andUnsafeHandle:handle];
@@ -78,6 +81,7 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
 
 - (void)removeConfigForName:(NSString *)name
 {
+    WCTDatabaseAssert(return;);
     _database->removeConfig(name);
 }
 

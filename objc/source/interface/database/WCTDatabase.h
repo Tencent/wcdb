@@ -57,6 +57,8 @@ typedef void (^WCTCloseBlock)(void);
 
 - (void)invalidate;
 
+- (BOOL)isValidated;
+
 /**
  @brief Since WCDB is using lazy initialization, [initWithPath:] never return nil even the database can't open. So you can call this to check whether the database can be opened. 
  @return NO if an error occurs during sqlite handle initialization.

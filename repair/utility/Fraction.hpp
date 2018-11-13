@@ -21,6 +21,8 @@
 #ifndef _WCDB_FRACTION_HPP
 #define _WCDB_FRACTION_HPP
 
+#include <cstdint>
+
 namespace WCDB {
 
 namespace Repair {

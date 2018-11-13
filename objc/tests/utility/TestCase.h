@@ -82,3 +82,13 @@
         }                                                 \
         XCTAssertEqual(testLeft, testRight, __VA_ARGS__); \
     }
+
+#define TestCaseAssertNotEqual(left, right, ...)             \
+    {                                                        \
+        __typeof__(left) testLeft = (left);                  \
+        __typeof__(right) testRight = (right);               \
+        if (testLeft == testRight) {                         \
+            TESTCASE_FAILED                                  \
+        }                                                    \
+        XCTAssertNotEqual(testLeft, testRight, __VA_ARGS__); \
+    }

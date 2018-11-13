@@ -65,4 +65,9 @@
     _name = nil;
 }
 
+- (BOOL)isValidated
+{
+    return _database != nil;
+}
+
 @end

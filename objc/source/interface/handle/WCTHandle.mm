@@ -81,6 +81,11 @@
     _handleHolder = nullptr;
 }
 
+- (BOOL)isValidated
+{
+    return _handle == nullptr;
+}
+
 - (WCTDatabase *)database
 {
     return _database;

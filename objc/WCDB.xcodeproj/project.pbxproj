@@ -255,6 +255,7 @@
 		23739DC4219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23739DBB219AD0C500A043BF /* PreInsertedCRUDTestCase.mm */; };
 		23739DC5219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23739DBB219AD0C500A043BF /* PreInsertedCRUDTestCase.mm */; };
 		23739DC6219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23739DBB219AD0C500A043BF /* PreInsertedCRUDTestCase.mm */; };
+		23739DC8219AEDE700A043BF /* DatabaseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23739DC7219AEDE700A043BF /* DatabaseTests.mm */; };
 		23759461210081AA00DBB721 /* UnsafeData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2375945F210081AA00DBB721 /* UnsafeData.cpp */; };
 		23759463210081AA00DBB721 /* UnsafeData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23759460210081AA00DBB721 /* UnsafeData.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2376CB1B20DA5D3B00A68DB5 /* Scoreable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2376CB1920DA5D3B00A68DB5 /* Scoreable.cpp */; };
@@ -1273,6 +1274,7 @@
 		23739DB8219ACD6000A043BF /* ColumnCodingTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ColumnCodingTests.mm; sourceTree = "<group>"; };
 		23739DBA219AD0C500A043BF /* PreInsertedCRUDTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PreInsertedCRUDTestCase.h; sourceTree = "<group>"; };
 		23739DBB219AD0C500A043BF /* PreInsertedCRUDTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = PreInsertedCRUDTestCase.mm; sourceTree = "<group>"; };
+		23739DC7219AEDE700A043BF /* DatabaseTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DatabaseTests.mm; sourceTree = "<group>"; };
 		2375945F210081AA00DBB721 /* UnsafeData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UnsafeData.cpp; sourceTree = "<group>"; };
 		23759460210081AA00DBB721 /* UnsafeData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UnsafeData.hpp; sourceTree = "<group>"; };
 		2376CB1920DA5D3B00A68DB5 /* Scoreable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scoreable.cpp; sourceTree = "<group>"; };
@@ -1982,6 +1984,7 @@
 		231FEADB2199A0FE00DC3706 /* basic */ = {
 			isa = PBXGroup;
 			children = (
+				23739DC7219AEDE700A043BF /* DatabaseTests.mm */,
 			);
 			path = basic;
 			sourceTree = "<group>";
@@ -4075,6 +4078,7 @@
 			files = (
 				231FEB192199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
 				231FEB152199A4D600DC3706 /* SingleTableTestCase.mm in Sources */,
+				23739DC8219AEDE700A043BF /* DatabaseTests.mm in Sources */,
 				23739DBC219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
 				231FEB122199A4D600DC3706 /* TestCaseObject.mm in Sources */,
 				231FEB162199A4D600DC3706 /* NSObject+TestCase.m in Sources */,

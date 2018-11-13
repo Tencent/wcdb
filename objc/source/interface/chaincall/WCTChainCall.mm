@@ -67,6 +67,11 @@ WCTUsedUpInvalidateGuard::~WCTUsedUpInvalidateGuard()
     [_handle invalidate];
 }
 
+- (BOOL)isValidated
+{
+    return [_handle isValidated];
+}
+
 - (instancetype)invalidateWhenUsedUp
 {
     _invalidateWhenUsedUp = YES;

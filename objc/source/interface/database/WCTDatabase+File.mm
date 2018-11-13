@@ -25,12 +25,14 @@
 
 - (BOOL)removeFiles
 {
+    WCTDatabaseAssert(return NO;);
     return _database->removeFiles();
 }
 
 - (BOOL)moveFilesToDirectory:(NSString *)directory
               withExtraFiles:(NSArray<NSString *> *)extraFiles
 {
+    WCTDatabaseAssert(return NO;);
     std::list<WCDB::String> files;
     for (NSString *extraFile in extraFiles) {
         files.push_back(extraFile);
@@ -40,11 +42,13 @@
 
 - (BOOL)moveFilesToDirectory:(NSString *)directory
 {
+    WCTDatabaseAssert(return NO;);
     return _database->moveFiles(directory);
 }
 
 - (NSArray<NSString *> *)paths
 {
+    WCTDatabaseAssert(return nil;);
     NSMutableArray *paths = [NSMutableArray array];
     for (const auto &path : _database->getPaths()) {
         [paths addObject:[NSString stringWithUTF8String:path.c_str()]];
@@ -54,6 +58,7 @@
 
 - (WCTOptional<NSUInteger, 0>)getFilesSize
 {
+    WCTDatabaseAssert(return nullptr;);
     auto result = _database->getFilesSize();
     if (result.first) {
         return result.second;

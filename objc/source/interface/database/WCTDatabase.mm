@@ -84,6 +84,9 @@
 {
     if (self = [super init]) {
         _databaseHolder = WCDB::Core::shared()->getExistingDatabase(path);
+        if (_databaseHolder == nullptr) {
+            return nil;
+        }
         _database = _databaseHolder.get();
     }
     return self;
@@ -93,6 +96,9 @@
 {
     if (self = [super init]) {
         _databaseHolder = WCDB::Core::shared()->getExistingDatabase(tag);
+        if (_databaseHolder == nullptr) {
+            return nil;
+        }
         _database = _databaseHolder.get();
     }
     return self;
@@ -104,38 +110,50 @@
     _database = nullptr;
 }
 
+- (BOOL)isValidated
+{
+    return _database != nullptr;
+}
+
 - (void)setTag:(WCTTag)tag
 {
+    WCTDatabaseAssert(return;);
     _database->setTag(tag);
 }
 
 - (WCTTag)tag
 {
+    WCTDatabaseAssert(return WCTInvalidTag;);
     return _database->getTag();
 }
 
 - (NSString *)path
 {
+    WCTDatabaseAssert(return nil;);
     return [NSString stringWithUTF8String:_database->getPath().c_str()];
 }
 
 - (BOOL)canOpen
 {
+    WCTDatabaseAssert(return NO;);
     return _database->canOpen();
 }
 
 - (BOOL)isOpened
 {
+    WCTDatabaseAssert(return NO;);
     return _database->isOpened();
 }
 
 - (void)close
 {
+    WCTDatabaseAssert(return;);
     _database->close(nullptr);
 }
 
 - (void)close:(WCDB_NO_ESCAPE WCTCloseBlock)onClosed
 {
+    WCTDatabaseAssert(return;);
     std::function<void(void)> callback = nullptr;
     if (onClosed) {
         callback = [onClosed]() {
@@ -147,21 +165,25 @@
 
 - (BOOL)isBlockaded
 {
+    WCTDatabaseAssert(return NO;);
     return _database->isBlockaded();
 }
 
 - (void)blockade
 {
+    WCTDatabaseAssert(return;);
     _database->blockade();
 }
 
 - (void)unblockade
 {
+    WCTDatabaseAssert(return;);
     _database->unblockade();
 }
 
 - (WCTError *)error
 {
+    WCTDatabaseAssert(return nil;);
     return [[WCTError alloc] initWithError:_database->getThreadedError()];
 }
 

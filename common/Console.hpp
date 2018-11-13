@@ -21,9 +21,9 @@
 #ifndef _WCDB_CONSOLE_HPP
 #define _WCDB_CONSOLE_HPP
 
-#include <WCDB/Notifier.hpp>
 #include <WCDB/String.hpp>
 #include <atomic>
+#include <functional>
 
 namespace WCDB {
 
@@ -35,7 +35,7 @@ public:
 
     void setDebuggable(bool debuggable);
     bool isDebuggable();
-    typedef Notifier::Callback Callback;
+    typedef std::function<void(const Error&)> Callback;
     void setLogger(const Callback& callback);
 
     static bool debuggable();

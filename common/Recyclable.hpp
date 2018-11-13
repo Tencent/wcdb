@@ -21,6 +21,8 @@
 #ifndef _WCDB_RECYCLABLE_HPP
 #define _WCDB_RECYCLABLE_HPP
 
+#include <WCDB/Assertion.hpp>
+#include <WCDB/Console.hpp>
 #include <functional>
 
 namespace WCDB {
@@ -36,15 +38,6 @@ public:
         retain();
     }
 
-    Recyclable(Recyclable &&other)
-    : m_value(std::move(other.m_value))
-    , m_onRecycled(std::move(other.m_onRecycled))
-    , m_reference(std::move(other.m_reference))
-    {
-        other.m_onRecycled = nullptr;
-        other.m_reference = nullptr;
-    }
-
     Recyclable(const Recyclable &other)
     : m_value(other.m_value)
     , m_onRecycled(other.m_onRecycled)
@@ -57,19 +50,18 @@ public:
     {
         other.retain();
         release();
+        m_value = other.m_value;
         m_onRecycled = other.m_onRecycled;
         m_reference = other.m_reference;
         return *this;
     }
 
-    Recyclable &operator=(Recyclable &&other)
+    Recyclable &operator=(const std::nullptr_t &)
     {
         release();
-        m_value = std::move(other.m_value);
-        m_onRecycled = std::move(other.m_onRecycled);
-        m_reference = std::move(other.m_reference);
-        other.m_onRecycled = nullptr;
-        other.m_reference = nullptr;
+        m_value = nullptr;
+        m_onRecycled = nullptr;
+        m_reference = nullptr;
         return *this;
     }
 
@@ -81,23 +73,16 @@ public:
     T &unsafeGet() { return m_value; }
 
 protected:
-    void retain() const
-    {
-        if (m_reference) {
-            ++(*m_reference);
-        }
-    }
+    void retain() const { ++(*m_reference); }
 
     void release()
     {
-        if (m_reference) {
-            if (--(*m_reference) == 0) {
-                delete m_reference;
-                m_reference = nullptr;
-                if (m_onRecycled) {
-                    m_onRecycled(m_value);
-                    m_onRecycled = nullptr;
-                }
+        printf("Release %d %p\n", m_reference->load(), this);
+        WCTInnerAssert((*m_reference) > 0);
+        if (--(*m_reference) == 0) {
+            if (m_onRecycled) {
+                m_onRecycled(m_value);
+                m_onRecycled = nullptr;
             }
         }
     }

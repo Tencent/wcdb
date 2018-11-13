@@ -19,6 +19,7 @@
  */
 
 #import <WCDB/Assertion.hpp>
+#import <WCDB/Notifier.hpp>
 #import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTHandle+Private.h>

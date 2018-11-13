@@ -35,6 +35,7 @@ WCTModule const WCTModuleFTS5 = @"fts5";
 
 - (void)setTokenizer:(NSString *)tokenizerName
 {
+    WCTDatabaseAssert(return;);
     _database->setConfig(WCDB::Core::tokenizeConfigName,
                          WCDB::Core::shared()->tokenizeConfig({ tokenizerName }),
                          WCDB::Configs::Priority::Higher);
@@ -42,6 +43,7 @@ WCTModule const WCTModuleFTS5 = @"fts5";
 
 - (void)setTokenizers:(NSArray<NSString *> *)tokenizerNames
 {
+    WCTDatabaseAssert(return;);
     std::list<WCDB::String>
     theTokenizeNames;
     for (NSString *tokenizerName in tokenizerNames) {

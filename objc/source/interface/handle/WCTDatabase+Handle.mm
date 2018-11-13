@@ -26,11 +26,13 @@
 
 - (WCTHandle *)getHandle
 {
+    WCTDatabaseAssert(return nil;);
     return [[WCTHandle alloc] initWithDatabase:self];
 }
 
 - (BOOL)execute:(const WCDB::Statement &)statement
 {
+    WCTDatabaseAssert(return NO;);
     return _database->execute(statement);
 }
 
