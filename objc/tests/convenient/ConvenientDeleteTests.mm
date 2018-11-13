@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "ConvenientTestCase.h"
+#import "CRUDTestCase.h"
 
-@interface ConvenientDeleteTests : ConvenientTestCase
+@interface ConvenientDeleteTests : CRUDTestCase
 
 @end
 

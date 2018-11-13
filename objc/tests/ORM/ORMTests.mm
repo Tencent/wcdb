@@ -73,88 +73,26 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
 
 - (BOOL)checkCreateTableAndIndexSQLsAsExpected:(NSArray<NSString*>*)expected
 {
-    __block ORMTestsState state = ORMTestsStateNotStarted;
-    do {
-        if (expected.count == 0) {
-            state = ORMTestsStateFailed;
-            TESTCASE_FAILED
-            break;
-        }
-
-        NSMutableArray* sqls = [NSMutableArray array];
-        [sqls addObject:@"BEGIN IMMEDIATE"];
-        [sqls addObjectsFromArray:expected];
-        [sqls addObject:@"COMMIT"];
-
-        [self.database traceSQL:^(NSString* sql) {
-            if (state != ORMTestsStateTesting) {
-                return;
-            }
-            //Test sql and expect exactly the same, including order and count
-            if ([sqls.firstObject isEqualToString:sql]) {
-                [sqls removeObjectAtIndex:0];
-            } else {
-                NSLog(@"Failed: %@", [TestCase hint:sql expecting:sqls.firstObject]);
-                state = ORMTestsStateFailed;
-                TESTCASE_FAILED
-            }
+    NSMutableArray* sqls = [NSMutableArray array];
+    [sqls addObject:@"BEGIN IMMEDIATE"];
+    [sqls addObjectsFromArray:expected];
+    [sqls addObject:@"COMMIT"];
+    return [self checkAllSQLs:sqls
+        asExpectedByOperation:^BOOL {
+            return [self createTable] != nil;
         }];
-        if (![self.database canOpen]) {
-            state = ORMTestsStateFailed;
-            TESTCASE_FAILED
-            break;
-        }
-        state = ORMTestsStateTesting;
-        if (![self createTable]) {
-            state = ORMTestsStateFailed;
-            TESTCASE_FAILED
-            break;
-        }
-        if (state == ORMTestsStateTesting
-            && sqls.count == 0) {
-            state = ORMTestsStateTested;
-        }
-    } while (false);
-    [self.database traceSQL:nil];
-    return state == ORMTestsStateTested;
 }
 
 - (BOOL)checkCreateVirtualTableSQLAsExpected:(NSString*)expected
 {
-    __block ORMTestsState state = ORMTestsStateNotStarted;
-    do {
-        if (expected.length == 0) {
-            state = ORMTestsStateFailed;
-            TESTCASE_FAILED
-            break;
-        }
-        [self.database traceSQL:^(NSString* sql) {
-            if (state != ORMTestsStateTesting) {
-                return;
-            }
-            //Test sql and expect exactly the same, including order and count
-            if ([expected isEqualToString:sql]) {
-                state = ORMTestsStateTested;
-            } else {
-                NSLog(@"Failed: %@", [TestCase hint:sql expecting:expected]);
-                state = ORMTestsStateFailed;
-                TESTCASE_FAILED
-            }
-        }];
-        if (![self.database canOpen]) {
-            state = ORMTestsStateFailed;
-            TESTCASE_FAILED
-            break;
-        }
-        state = ORMTestsStateTesting;
-        if (![self createVirtualTable]) {
-            state = ORMTestsStateFailed;
-            TESTCASE_FAILED
-            break;
-        }
-    } while (false);
-    [self.database traceSQL:nil];
-    return state == ORMTestsStateTested;
+    if (expected.length == 0) {
+        TESTCASE_FAILED
+        return NO;
+    }
+    return [self checkSomeSQLs:@[ expected ]
+         asExpectedByOperation:^BOOL {
+             return [self createVirtualTable] != nil;
+         }];
 }
 
 #pragma mark - property

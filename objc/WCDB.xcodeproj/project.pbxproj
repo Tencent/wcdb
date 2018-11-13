@@ -88,6 +88,17 @@
 		231FEB142199A4D600DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
 		231FEB152199A4D600DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
 		231FEB162199A4D600DC3706 /* NSArray+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSArray+TestCase.m */; };
+		231FEB192199A5A800DC3706 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEB182199A5A800DC3706 /* CRUDTestCase.mm */; };
+		231FEB1A2199A5A800DC3706 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEB182199A5A800DC3706 /* CRUDTestCase.mm */; };
+		231FEB1B2199A5A800DC3706 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEB182199A5A800DC3706 /* CRUDTestCase.mm */; };
+		231FEB1C2199A5A800DC3706 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEB182199A5A800DC3706 /* CRUDTestCase.mm */; };
+		231FEB1D2199A5A800DC3706 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEB182199A5A800DC3706 /* CRUDTestCase.mm */; };
+		231FEB1E2199A5A800DC3706 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEB182199A5A800DC3706 /* CRUDTestCase.mm */; };
+		231FEB1F2199A5A800DC3706 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEB182199A5A800DC3706 /* CRUDTestCase.mm */; };
+		231FEB202199A5A800DC3706 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEB182199A5A800DC3706 /* CRUDTestCase.mm */; };
+		231FEB212199A5A800DC3706 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEB182199A5A800DC3706 /* CRUDTestCase.mm */; };
+		231FEB222199A5A800DC3706 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEB182199A5A800DC3706 /* CRUDTestCase.mm */; };
+		231FEB232199A5A800DC3706 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEB182199A5A800DC3706 /* CRUDTestCase.mm */; };
 		232741501F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		232741521F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */; };
 		233A058B2062698E00F1A212 /* WCTHandle+ChainCall.h in Headers */ = {isa = PBXBuildFile; fileRef = 233A05892062698E00F1A212 /* WCTHandle+ChainCall.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -287,7 +298,6 @@
 		2384F71F2194249200E8B10A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		2384F7202194249200E8B10A /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		2384F7232194249200E8B10A /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		2384F72D2194253900E8B10A /* ConvenientTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F72C2194253900E8B10A /* ConvenientTestCase.mm */; };
 		2384F72E2194255700E8B10A /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
 		2384F72F2194255700E8B10A /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
 		2386B3C51ED442FE000B72F6 /* WCTError.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C21ED442FE000B72F6 /* WCTError.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1078,6 +1088,8 @@
 		231FEAE12199A16600DC3706 /* TestCaseObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCaseObject.h; sourceTree = "<group>"; };
 		231FEAE22199A16700DC3706 /* TestCaseObject+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestCaseObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		231FEAE32199A16700DC3706 /* TestCaseObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCaseObject.mm; sourceTree = "<group>"; };
+		231FEB172199A5A800DC3706 /* CRUDTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRUDTestCase.h; sourceTree = "<group>"; };
+		231FEB182199A5A800DC3706 /* CRUDTestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CRUDTestCase.mm; sourceTree = "<group>"; };
 		2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+FTS.h"; sourceTree = "<group>"; };
 		2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+FTS.mm"; sourceTree = "<group>"; };
 		233A05892062698E00F1A212 /* WCTHandle+ChainCall.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTHandle+ChainCall.h"; sourceTree = "<group>"; };
@@ -1307,8 +1319,6 @@
 		2384F6FF21941BF000E8B10A /* NewRebindObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NewRebindObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		2384F70021941BF000E8B10A /* NewRebindObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewRebindObject.h; sourceTree = "<group>"; };
 		2384F7282194249200E8B10A /* Convenient tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Convenient tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2384F72B2194253900E8B10A /* ConvenientTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConvenientTestCase.h; sourceTree = "<group>"; };
-		2384F72C2194253900E8B10A /* ConvenientTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ConvenientTestCase.mm; sourceTree = "<group>"; };
 		2386B3C21ED442FE000B72F6 /* WCTError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTError.h; sourceTree = "<group>"; };
 		2386B3C31ED442FE000B72F6 /* WCTError.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTError.mm; sourceTree = "<group>"; };
 		2386B3C41ED442FE000B72F6 /* WCTError+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTError+Private.h"; sourceTree = "<group>"; };
@@ -2468,6 +2478,8 @@
 		23790A4F219298250098797F /* utility */ = {
 			isa = PBXGroup;
 			children = (
+				231FEB172199A5A800DC3706 /* CRUDTestCase.h */,
+				231FEB182199A5A800DC3706 /* CRUDTestCase.mm */,
 				231FEAE12199A16600DC3706 /* TestCaseObject.h */,
 				231FEAE32199A16700DC3706 /* TestCaseObject.mm */,
 				231FEAE22199A16700DC3706 /* TestCaseObject+WCTTableCoding.h */,
@@ -2589,8 +2601,6 @@
 		2384F72A219424FE00E8B10A /* convenient */ = {
 			isa = PBXGroup;
 			children = (
-				2384F72B2194253900E8B10A /* ConvenientTestCase.h */,
-				2384F72C2194253900E8B10A /* ConvenientTestCase.mm */,
 				233E122F2195749C00BD488D /* ConvenientSelectTests.mm */,
 				233E12392195755400BD488D /* ConvenientInsertTests.mm */,
 				233E123D2195756400BD488D /* ConvenientUpdateTests.mm */,
@@ -3955,6 +3965,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				231FEB192199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
 				231FEB152199A4D600DC3706 /* SingleTableTestCase.mm in Sources */,
 				231FEB122199A4D600DC3706 /* TestCaseObject.mm in Sources */,
 				231FEB162199A4D600DC3706 /* NSArray+TestCase.m in Sources */,
@@ -3967,6 +3978,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				231FEB1E2199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
 				231FEAF72199A4D200DC3706 /* SingleTableTestCase.mm in Sources */,
 				231FEAF42199A4D200DC3706 /* TestCaseObject.mm in Sources */,
 				231FEAF82199A4D200DC3706 /* NSArray+TestCase.m in Sources */,
@@ -3979,6 +3991,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				231FEB1F2199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
 				231FEAFC2199A4D300DC3706 /* SingleTableTestCase.mm in Sources */,
 				231FEAF92199A4D300DC3706 /* TestCaseObject.mm in Sources */,
 				231FEAFD2199A4D300DC3706 /* NSArray+TestCase.m in Sources */,
@@ -3991,6 +4004,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				231FEB202199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
 				231FEB062199A4D400DC3706 /* SingleTableTestCase.mm in Sources */,
 				231FEB032199A4D400DC3706 /* TestCaseObject.mm in Sources */,
 				231FEB072199A4D400DC3706 /* NSArray+TestCase.m in Sources */,
@@ -4003,6 +4017,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				231FEB212199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
 				231FEB012199A4D400DC3706 /* SingleTableTestCase.mm in Sources */,
 				231FEAFE2199A4D400DC3706 /* TestCaseObject.mm in Sources */,
 				231FEB022199A4D400DC3706 /* NSArray+TestCase.m in Sources */,
@@ -4015,6 +4030,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				231FEB222199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
 				231FEB0B2199A4D500DC3706 /* SingleTableTestCase.mm in Sources */,
 				231FEB082199A4D500DC3706 /* TestCaseObject.mm in Sources */,
 				231FEB0C2199A4D500DC3706 /* NSArray+TestCase.m in Sources */,
@@ -4027,6 +4043,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				231FEB232199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
 				231FEB102199A4D500DC3706 /* SingleTableTestCase.mm in Sources */,
 				231FEB0D2199A4D500DC3706 /* TestCaseObject.mm in Sources */,
 				231FEB112199A4D500DC3706 /* NSArray+TestCase.m in Sources */,
@@ -4039,6 +4056,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				231FEB1D2199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
 				231FEAF22199A4D200DC3706 /* SingleTableTestCase.mm in Sources */,
 				231FEAEF2199A4D200DC3706 /* TestCaseObject.mm in Sources */,
 				231FEAF32199A4D200DC3706 /* NSArray+TestCase.m in Sources */,
@@ -4068,6 +4086,7 @@
 				2384F6BB2193E07600E8B10A /* ColumnConstraintPrimaryAsc.mm in Sources */,
 				2384F6D32193E0B600E8B10A /* ColumnConstraintDefault.mm in Sources */,
 				2384F6E9219412FA00E8B10A /* FTS3Object.mm in Sources */,
+				231FEB1B2199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
 				2384F6DB2193E2C200E8B10A /* ColumnConstraintCheck.mm in Sources */,
 				2384F6BF2193E08100E8B10A /* ColumnConstraintPrimaryDesc.mm in Sources */,
 				2384F70121941BF000E8B10A /* NewRebindObject.mm in Sources */,
@@ -4084,8 +4103,8 @@
 			files = (
 				231C98BC219532AC0067B87C /* NSArray+TestCase.m in Sources */,
 				2384F72F2194255700E8B10A /* SingleTableTestCase.mm in Sources */,
+				231FEB1C2199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
 				233E12302195749C00BD488D /* ConvenientSelectTests.mm in Sources */,
-				2384F72D2194253900E8B10A /* ConvenientTestCase.mm in Sources */,
 				233E12402195756B00BD488D /* ConvenientDeleteTests.mm in Sources */,
 				2384F72E2194255700E8B10A /* SingleDatabaseTestCase.mm in Sources */,
 				233E123E2195756400BD488D /* ConvenientUpdateTests.mm in Sources */,
@@ -4413,6 +4432,7 @@
 				2398976A217EC9E30014BF33 /* FilterTests.mm in Sources */,
 				2396EB1B218066EC0079066C /* SyntaxListTests.mm in Sources */,
 				231FEAE52199A16700DC3706 /* TestCaseObject.mm in Sources */,
+				231FEB1A2199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
 				2396EB172180571B0079066C /* WCTResultColumnTests.mm in Sources */,
 				23989769217EC9E30014BF33 /* ExpressionTests.mm in Sources */,
 				2398978A217EC9E30014BF33 /* StatementDropViewTests.mm in Sources */,

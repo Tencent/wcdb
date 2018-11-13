@@ -22,7 +22,7 @@
 #import "TestCaseObject+WCTTableCoding.h"
 #import "TestCaseObject.h"
 
-@interface ConvenientTestCase : SingleTableTestCase
+@interface CRUDTestCase : SingleTableTestCase
 
 @property (nonatomic, readonly) WCTTable* table;
 
