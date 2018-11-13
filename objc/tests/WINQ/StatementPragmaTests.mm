@@ -55,7 +55,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::PragmaSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Pragma };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"PRAGMA testSchema.testPragma");
+    SQLAssertEqual(testingSQL, @"PRAGMA testSchema.testPragma");
 }
 
 - (void)test_pragma_to
@@ -64,7 +64,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::PragmaSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Pragma, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"PRAGMA testSchema.testPragma = 1");
+    SQLAssertEqual(testingSQL, @"PRAGMA testSchema.testPragma = 1");
 }
 
 - (void)test_pragma_to_without_schema
@@ -73,7 +73,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::PragmaSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Pragma, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"PRAGMA main.testPragma = 1");
+    SQLAssertEqual(testingSQL, @"PRAGMA main.testPragma = 1");
 }
 
 - (void)test_pragma_with
@@ -82,7 +82,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::PragmaSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Pragma, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"PRAGMA testSchema.testPragma(1)");
+    SQLAssertEqual(testingSQL, @"PRAGMA testSchema.testPragma(1)");
 }
 
 @end

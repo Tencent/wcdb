@@ -66,7 +66,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::WindowFunctionInvocation, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testWindowFunction(1) OVER(PARTITION BY 1, 2)");
+    SQLAssertEqual(testingSQL, @"testWindowFunction(1) OVER(PARTITION BY 1, 2)");
 }
 
 - (void)test_window_function_with_parameters
@@ -75,7 +75,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::WindowFunctionInvocation, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testWindowFunction(1, 2) OVER(PARTITION BY 1, 2)");
+    SQLAssertEqual(testingSQL, @"testWindowFunction(1, 2) OVER(PARTITION BY 1, 2)");
 }
 
 - (void)test_window_function_with_seperated_parameters
@@ -84,7 +84,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::WindowFunctionInvocation, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testWindowFunction(1, 2) OVER(PARTITION BY 1, 2)");
+    SQLAssertEqual(testingSQL, @"testWindowFunction(1, 2) OVER(PARTITION BY 1, 2)");
 }
 
 - (void)test_window_function_without_parameter
@@ -93,7 +93,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::WindowFunctionInvocation, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testWindowFunction() OVER(PARTITION BY 1, 2)");
+    SQLAssertEqual(testingSQL, @"testWindowFunction() OVER(PARTITION BY 1, 2)");
 }
 
 - (void)test_window_function_all
@@ -102,7 +102,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::WindowFunctionInvocation, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testWindowFunction(*) OVER(PARTITION BY 1, 2)");
+    SQLAssertEqual(testingSQL, @"testWindowFunction(*) OVER(PARTITION BY 1, 2)");
 }
 
 - (void)test_window_function_with_filter
@@ -111,7 +111,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::WindowFunctionInvocation, WCDB::SQL::Type::Filter, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testWindowFunction() FILTER(WHERE 1) OVER(PARTITION BY 1, 2)");
+    SQLAssertEqual(testingSQL, @"testWindowFunction() FILTER(WHERE 1) OVER(PARTITION BY 1, 2)");
 }
 
 - (void)test_window_function_over_window
@@ -120,7 +120,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::WindowFunctionInvocation };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testWindowFunction() OVER testWindow");
+    SQLAssertEqual(testingSQL, @"testWindowFunction() OVER testWindow");
 }
 
 @end

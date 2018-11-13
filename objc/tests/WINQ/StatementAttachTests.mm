@@ -55,7 +55,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::AttachSTMT, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"ATTACH 'testPath' AS testSchema");
+    SQLAssertEqual(testingSQL, @"ATTACH 'testPath' AS testSchema");
 }
 
 @end

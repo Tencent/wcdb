@@ -59,7 +59,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"main.testTable JOIN main.testTable1");
+    SQLAssertEqual(testingSQL, @"main.testTable JOIN main.testTable1");
 }
 
 - (void)test_join_with
@@ -68,7 +68,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"main.testTable, main.testTable1");
+    SQLAssertEqual(testingSQL, @"main.testTable, main.testTable1");
 }
 
 - (void)test_left_join
@@ -77,7 +77,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"main.testTable LEFT JOIN main.testTable1");
+    SQLAssertEqual(testingSQL, @"main.testTable LEFT JOIN main.testTable1");
 }
 
 - (void)test_left_outer_join
@@ -86,7 +86,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"main.testTable LEFT OUTER JOIN main.testTable1");
+    SQLAssertEqual(testingSQL, @"main.testTable LEFT OUTER JOIN main.testTable1");
 }
 
 - (void)test_inner_join
@@ -95,7 +95,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"main.testTable INNER JOIN main.testTable1");
+    SQLAssertEqual(testingSQL, @"main.testTable INNER JOIN main.testTable1");
 }
 
 - (void)test_cross_join
@@ -104,7 +104,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"main.testTable CROSS JOIN main.testTable1");
+    SQLAssertEqual(testingSQL, @"main.testTable CROSS JOIN main.testTable1");
 }
 
 - (void)test_natural_join
@@ -113,7 +113,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"main.testTable NATURAL JOIN main.testTable1");
+    SQLAssertEqual(testingSQL, @"main.testTable NATURAL JOIN main.testTable1");
 }
 
 - (void)test_natural_left_join
@@ -122,7 +122,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"main.testTable NATURAL LEFT JOIN main.testTable1");
+    SQLAssertEqual(testingSQL, @"main.testTable NATURAL LEFT JOIN main.testTable1");
 }
 
 - (void)test_natural_left_outer_join
@@ -131,7 +131,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"main.testTable NATURAL LEFT OUTER JOIN main.testTable1");
+    SQLAssertEqual(testingSQL, @"main.testTable NATURAL LEFT OUTER JOIN main.testTable1");
 }
 
 - (void)test_natural_inner_join
@@ -140,7 +140,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"main.testTable NATURAL INNER JOIN main.testTable1");
+    SQLAssertEqual(testingSQL, @"main.testTable NATURAL INNER JOIN main.testTable1");
 }
 
 - (void)test_natural_cross_join
@@ -149,7 +149,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"main.testTable NATURAL CROSS JOIN main.testTable1");
+    SQLAssertEqual(testingSQL, @"main.testTable NATURAL CROSS JOIN main.testTable1");
 }
 
 - (void)test_join_with_constraint
@@ -158,7 +158,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::JoinConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"main.testTable JOIN main.testTable1 ON 1");
+    SQLAssertEqual(testingSQL, @"main.testTable JOIN main.testTable1 ON 1");
 }
 
 - (void)test_multiple_join
@@ -167,7 +167,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::JoinConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::JoinConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"main.testTable JOIN main.testTable1 ON 1 LEFT OUTER JOIN main.testTable2 ON 2");
+    SQLAssertEqual(testingSQL, @"main.testTable JOIN main.testTable1 ON 1 LEFT OUTER JOIN main.testTable2 ON 2");
 }
 
 - (void)test_join_convertible

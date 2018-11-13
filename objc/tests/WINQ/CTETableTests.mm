@@ -55,7 +55,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testTable(testColumn1)");
+    SQLAssertEqual(testingSQL, @"testTable(testColumn1)");
 }
 
 - (void)test_cte_table_with_columns
@@ -64,7 +64,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testTable(testColumn1, testColumn2)");
+    SQLAssertEqual(testingSQL, @"testTable(testColumn1, testColumn2)");
 }
 
 - (void)test_cte_table_without_column
@@ -73,7 +73,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CTETableName };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testTable");
+    SQLAssertEqual(testingSQL, @"testTable");
 }
 
 @end

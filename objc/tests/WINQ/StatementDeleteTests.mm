@@ -64,7 +64,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"DELETE FROM main.testTable WHERE 2 ORDER BY testColumn1, testColumn2 LIMIT 3 OFFSET 4");
+    SQLAssertEqual(testingSQL, @"DELETE FROM main.testTable WHERE 2 ORDER BY testColumn1, testColumn2 LIMIT 3 OFFSET 4");
 }
 
 - (void)test_delete_with
@@ -73,7 +73,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::WithClause, WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"WITH testTable AS(SELECT 1) DELETE FROM main.testTable WHERE 2 ORDER BY testColumn1, testColumn2 LIMIT 3 OFFSET 4");
+    SQLAssertEqual(testingSQL, @"WITH testTable AS(SELECT 1) DELETE FROM main.testTable WHERE 2 ORDER BY testColumn1, testColumn2 LIMIT 3 OFFSET 4");
 }
 
 - (void)test_delete_without_condition
@@ -82,7 +82,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"DELETE FROM main.testTable ORDER BY testColumn1, testColumn2 LIMIT 3 OFFSET 4");
+    SQLAssertEqual(testingSQL, @"DELETE FROM main.testTable ORDER BY testColumn1, testColumn2 LIMIT 3 OFFSET 4");
 }
 
 - (void)test_delete_without_orders
@@ -91,7 +91,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"DELETE FROM main.testTable WHERE 2 LIMIT 3 OFFSET 4");
+    SQLAssertEqual(testingSQL, @"DELETE FROM main.testTable WHERE 2 LIMIT 3 OFFSET 4");
 }
 
 - (void)test_delete_with_length
@@ -100,7 +100,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"DELETE FROM main.testTable WHERE 2 ORDER BY testColumn1, testColumn2 LIMIT 3, 4");
+    SQLAssertEqual(testingSQL, @"DELETE FROM main.testTable WHERE 2 ORDER BY testColumn1, testColumn2 LIMIT 3, 4");
 }
 
 - (void)test_delete_without_offset
@@ -109,7 +109,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::DeleteSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"DELETE FROM main.testTable WHERE 2 ORDER BY testColumn1, testColumn2 LIMIT 3");
+    SQLAssertEqual(testingSQL, @"DELETE FROM main.testTable WHERE 2 ORDER BY testColumn1, testColumn2 LIMIT 3");
 }
 
 @end

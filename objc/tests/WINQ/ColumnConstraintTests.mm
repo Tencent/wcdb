@@ -65,7 +65,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ColumnConstraint };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint PRIMARY KEY");
+    SQLAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint PRIMARY KEY");
 }
 
 - (void)test_primary_key_without_name
@@ -74,7 +74,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ColumnConstraint };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"PRIMARY KEY");
+    SQLAssertEqual(testingSQL, @"PRIMARY KEY");
 }
 
 - (void)test_primary_key_with_order
@@ -83,7 +83,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ColumnConstraint };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint PRIMARY KEY ASC");
+    SQLAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint PRIMARY KEY ASC");
 }
 
 - (void)test_primary_key_with_conflict
@@ -92,7 +92,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ColumnConstraint };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint PRIMARY KEY ON CONFLICT ABORT");
+    SQLAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint PRIMARY KEY ON CONFLICT ABORT");
 }
 
 - (void)test_primary_key_with_auto_increment
@@ -101,7 +101,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ColumnConstraint };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint PRIMARY KEY AUTOINCREMENT");
+    SQLAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint PRIMARY KEY AUTOINCREMENT");
 }
 
 - (void)test_not_null
@@ -110,7 +110,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ColumnConstraint };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint NOT NULL");
+    SQLAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint NOT NULL");
 }
 
 - (void)test_not_null_with_conflict
@@ -119,7 +119,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ColumnConstraint };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint NOT NULL ON CONFLICT ABORT");
+    SQLAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint NOT NULL ON CONFLICT ABORT");
 }
 
 - (void)test_unique
@@ -128,7 +128,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ColumnConstraint };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint UNIQUE");
+    SQLAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint UNIQUE");
 }
 
 - (void)test_unique_with_conflict
@@ -137,7 +137,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ColumnConstraint };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint UNIQUE ON CONFLICT ABORT");
+    SQLAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint UNIQUE ON CONFLICT ABORT");
 }
 
 - (void)test_check
@@ -146,7 +146,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ColumnConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint CHECK(1)");
+    SQLAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint CHECK(1)");
 }
 
 - (void)test_default_expression
@@ -155,7 +155,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ColumnConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint DEFAULT 1");
+    SQLAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint DEFAULT 1");
 }
 
 - (void)test_collate
@@ -164,7 +164,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ColumnConstraint };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint COLLATE testCollation");
+    SQLAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint COLLATE testCollation");
 }
 
 - (void)test_foreign_key
@@ -173,7 +173,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ColumnConstraint, WCDB::SQL::Type::ForeignKeyClause };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint REFERENCES testForeignTable");
+    SQLAssertEqual(testingSQL, @"CONSTRAINT testColumnConstraint REFERENCES testForeignTable");
 }
 
 @end

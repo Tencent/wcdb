@@ -37,10 +37,10 @@
     WCDB::StatementInsert insert = WCDB::StatementInsert().insertIntoTable(@"testTable").values(1);
 
     WCDB::Statement statement = insert;
-    WINQAssertEqual(statement, @"INSERT INTO main.testTable VALUES(1)");
+    SQLAssertEqual(statement, @"INSERT INTO main.testTable VALUES(1)");
 
     WCDB::Statement statement2 = statement;
-    WINQAssertEqual(statement2, @"INSERT INTO main.testTable VALUES(1)");
+    SQLAssertEqual(statement2, @"INSERT INTO main.testTable VALUES(1)");
 }
 
 @end

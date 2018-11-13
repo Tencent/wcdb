@@ -60,7 +60,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::FunctionInvocation, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testFunction(DISTINCT 1, 2)");
+    SQLAssertEqual(testingSQL, @"testFunction(DISTINCT 1, 2)");
 }
 
 - (void)test_function_without_distinct
@@ -69,7 +69,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::FunctionInvocation, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testFunction(1, 2)");
+    SQLAssertEqual(testingSQL, @"testFunction(1, 2)");
 }
 
 - (void)test_function_with_parameter
@@ -78,7 +78,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::FunctionInvocation, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testFunction(1)");
+    SQLAssertEqual(testingSQL, @"testFunction(1)");
 }
 
 - (void)test_function_with_seperated_parameters
@@ -87,7 +87,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::FunctionInvocation, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testFunction(1, 2)");
+    SQLAssertEqual(testingSQL, @"testFunction(1, 2)");
 }
 
 - (void)test_function_without_parameter
@@ -96,7 +96,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::FunctionInvocation };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testFunction()");
+    SQLAssertEqual(testingSQL, @"testFunction()");
 }
 
 - (void)test_function_all
@@ -105,7 +105,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::FunctionInvocation };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testFunction(*)");
+    SQLAssertEqual(testingSQL, @"testFunction(*)");
 }
 
 @end

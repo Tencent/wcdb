@@ -34,26 +34,15 @@
     return self;
 }
 
-- (instancetype)onResultColumn:(const WCTResultColumn &)resultColumn
-{
-    _statement.select(resultColumn);
-    return self;
-}
-
-- (instancetype)onAllResultColumns
-{
-    _statement.select(WCDB::ResultColumnAll());
-    return self;
-}
-
 - (instancetype)fromTable:(NSString *)tableName
 {
-    _statement.from(tableName);
-    return self;
+    WCTRemedialAssert(tableName != nil, @"Table name can't be null.", return self;);
+    return [self fromTables:@[ tableName ]];
 }
 
 - (instancetype)fromTables:(NSArray<NSString *> *)tableNames
 {
+    WCTRemedialAssert(tableNames != nil, @"Table names can't be null.", return self;);
     WCDB::TablesOrSubqueries tables;
     for (NSString *tableName in tableNames) {
         tables.push_back(tableName);

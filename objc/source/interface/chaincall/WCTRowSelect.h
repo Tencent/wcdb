@@ -32,10 +32,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)onResultColumns:(const WCTResultColumns &)resultColumns;
 
-- (instancetype)onResultColumn:(const WCTResultColumn &)resultColumn;
-
-- (instancetype)onAllResultColumns;
-
 - (instancetype)fromTable:(NSString *)tableName;
 
 - (instancetype)fromTables:(NSArray<NSString *> *)tableNames;

@@ -18,13 +18,30 @@
  * limitations under the License.
  */
 
-#import "NSArray+TestCase.h"
+#import <Foundation/Foundation.h>
 
-@implementation NSArray (TestCase)
+NS_ASSUME_NONNULL_BEGIN
 
-- (NSArray*)reversedArray
-{
-    return self.reverseObjectEnumerator.allObjects;
-}
+@interface NSNumber (TestCase)
+
++ (int64_t)randomInt64;
+
++ (int)randomInt;
+
++ (uint8_t)randomUInt8;
 
 @end
+
+@interface NSString (TestCase)
+
++ (NSString*)randomString;
+
+@end
+
+@interface NSArray (TestCase)
+
+- (NSArray*)reversedArray;
+
+@end
+
+NS_ASSUME_NONNULL_END

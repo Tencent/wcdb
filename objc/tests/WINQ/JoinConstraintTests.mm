@@ -60,7 +60,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::JoinConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"ON 1");
+    SQLAssertEqual(testingSQL, @"ON 1");
 }
 
 - (void)test_using_column
@@ -69,7 +69,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::JoinConstraint, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"USING(testColumn1)");
+    SQLAssertEqual(testingSQL, @"USING(testColumn1)");
 }
 
 - (void)test_using_seperated_columns
@@ -78,7 +78,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::JoinConstraint, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"USING(testColumn1, testColumn2)");
+    SQLAssertEqual(testingSQL, @"USING(testColumn1, testColumn2)");
 }
 
 - (void)test_using_columns
@@ -87,7 +87,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::JoinConstraint, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"USING(testColumn1, testColumn2)");
+    SQLAssertEqual(testingSQL, @"USING(testColumn1, testColumn2)");
 }
 
 @end

@@ -82,6 +82,15 @@ WCTResultColumns WCTProperties::redirect(const WCDB::ResultColumns& resultColumn
     return result;
 }
 
+WCTResultColumns WCTProperties::redirect(const WCTRedirectBlock& block) const
+{
+    WCTResultColumns results;
+    for (const auto& property : *this) {
+        results.push_back(WCTResultColumn(block(property), property.getColumnBinding()));
+    }
+    return results;
+}
+
 WCDB::Expressions WCTProperties::table(NSString* table) const
 {
     WCDB::Expressions expressions;

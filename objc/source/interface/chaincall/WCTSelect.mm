@@ -48,13 +48,6 @@
     return self;
 }
 
-- (instancetype)ofClass:(Class<WCTTableCoding>)cls
-{
-    _resultColumns = [cls allProperties];
-    _statement.select(_resultColumns);
-    return self;
-}
-
 - (NSArray /* <WCTObject*> */ *)allObjects
 {
     WCTUsedUpInvalidateGuard usedUpInvalidateGuard(self);

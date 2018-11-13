@@ -36,28 +36,28 @@
 
 - (void)test
 {
-    WINQAssertEqual(WCDB::FTS3Function::offsets(expression), @"offsets(testColumn)");
-    WINQAssertEqual(WCDB::FTS3Function::snippet(expression, "testStart", "testEnd", "testEllipses", 0, 0), @"snippet(testColumn, 'testStart', 'testEnd', 'testEllipses', 0, 0)");
-    WINQAssertEqual(WCDB::FTS3Function::snippet(expression), @"snippet(testColumn, '<b>', '</b>', '<b>...</b>', -1, -15)");
-    WINQAssertEqual(WCDB::FTS3Function::matchinfo(expression), @"matchinfo(testColumn)");
+    SQLAssertEqual(WCDB::FTS3Function::offsets(expression), @"offsets(testColumn)");
+    SQLAssertEqual(WCDB::FTS3Function::snippet(expression, "testStart", "testEnd", "testEllipses", 0, 0), @"snippet(testColumn, 'testStart', 'testEnd', 'testEllipses', 0, 0)");
+    SQLAssertEqual(WCDB::FTS3Function::snippet(expression), @"snippet(testColumn, '<b>', '</b>', '<b>...</b>', -1, -15)");
+    SQLAssertEqual(WCDB::FTS3Function::matchinfo(expression), @"matchinfo(testColumn)");
 }
 
 - (void)test_column_operable
 {
     WCDB::Column column(@"testColumn");
-    WINQAssertEqual(column.snippet("testStart", "testEnd", "testEllipses", 0, 0), @"snippet(testColumn, 'testStart', 'testEnd', 'testEllipses', 0, 0)");
-    WINQAssertEqual(column.snippet(), @"snippet(testColumn, '<b>', '</b>', '<b>...</b>', -1, -15)");
-    WINQAssertEqual(column.offsets(), @"offsets(testColumn)");
-    WINQAssertEqual(column.matchinfo(), @"matchinfo(testColumn)");
+    SQLAssertEqual(column.snippet("testStart", "testEnd", "testEllipses", 0, 0), @"snippet(testColumn, 'testStart', 'testEnd', 'testEllipses', 0, 0)");
+    SQLAssertEqual(column.snippet(), @"snippet(testColumn, '<b>', '</b>', '<b>...</b>', -1, -15)");
+    SQLAssertEqual(column.offsets(), @"offsets(testColumn)");
+    SQLAssertEqual(column.matchinfo(), @"matchinfo(testColumn)");
 }
 
 - (void)test_expression_operable
 {
     WCDB::Expression column = WCDB::Column(@"testColumn");
-    WINQAssertEqual(column.snippet("testStart", "testEnd", "testEllipses", 0, 0), @"snippet(testColumn, 'testStart', 'testEnd', 'testEllipses', 0, 0)");
-    WINQAssertEqual(column.snippet(), @"snippet(testColumn, '<b>', '</b>', '<b>...</b>', -1, -15)");
-    WINQAssertEqual(column.offsets(), @"offsets(testColumn)");
-    WINQAssertEqual(column.matchinfo(), @"matchinfo(testColumn)");
+    SQLAssertEqual(column.snippet("testStart", "testEnd", "testEllipses", 0, 0), @"snippet(testColumn, 'testStart', 'testEnd', 'testEllipses', 0, 0)");
+    SQLAssertEqual(column.snippet(), @"snippet(testColumn, '<b>', '</b>', '<b>...</b>', -1, -15)");
+    SQLAssertEqual(column.offsets(), @"offsets(testColumn)");
+    SQLAssertEqual(column.matchinfo(), @"matchinfo(testColumn)");
 }
 
 @end

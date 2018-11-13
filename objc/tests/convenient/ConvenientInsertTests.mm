@@ -44,11 +44,11 @@
 
     _renewedObject1 = [[TestCaseObject alloc] init];
     _renewedObject1.identifier = 1;
-    _renewedObject1.content = @"newObject1";
+    _renewedObject1.content = [NSString randomString];
 
     _renewedObject2 = [[TestCaseObject alloc] init];
     _renewedObject2.identifier = 2;
-    _renewedObject2.content = @"newObject2";
+    _renewedObject2.content = [NSString randomString];
 
     _renewedPartialObject1 = [[TestCaseObject alloc] init];
     _renewedPartialObject1.identifier = 1;
@@ -60,11 +60,11 @@
 
     _object3 = [[TestCaseObject alloc] init];
     _object3.identifier = 3;
-    _object3.content = @"object3";
+    _object3.content = [NSString randomString];
 
     _object4 = [[TestCaseObject alloc] init];
     _object4.identifier = 4;
-    _object4.content = @"object4";
+    _object4.content = [NSString randomString];
 
     _partialObject3 = [[TestCaseObject alloc] init];
     _partialObject3.identifier = 3;

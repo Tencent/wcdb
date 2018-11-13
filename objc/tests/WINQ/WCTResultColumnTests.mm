@@ -72,7 +72,7 @@
     WCTResultColumn resultColumn = property1;
     WCTResultColumn redirected = resultColumn.redirect(1);
 
-    WINQAssertEqual(redirected, @"1");
+    SQLAssertEqual(redirected, @"1");
     XCTAssertEqual(&redirected.getColumnBinding(), &resultColumn.getColumnBinding());
 }
 

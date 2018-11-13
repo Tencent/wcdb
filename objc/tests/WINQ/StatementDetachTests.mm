@@ -51,7 +51,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::DetachSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"DETACH testSchema");
+    SQLAssertEqual(testingSQL, @"DETACH testSchema");
 }
 
 @end

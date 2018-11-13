@@ -51,7 +51,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::RaiseFunction };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"RAISE(IGNORE)");
+    SQLAssertEqual(testingSQL, @"RAISE(IGNORE)");
 }
 
 - (void)test_rollback
@@ -60,7 +60,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::RaiseFunction };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"RAISE(ROLLBACK, testErrorMessage)");
+    SQLAssertEqual(testingSQL, @"RAISE(ROLLBACK, testErrorMessage)");
 }
 
 - (void)test_abort
@@ -69,7 +69,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::RaiseFunction };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"RAISE(ABORT, testErrorMessage)");
+    SQLAssertEqual(testingSQL, @"RAISE(ABORT, testErrorMessage)");
 }
 
 - (void)test_fail
@@ -78,7 +78,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::RaiseFunction };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"RAISE(FAIL, testErrorMessage)");
+    SQLAssertEqual(testingSQL, @"RAISE(FAIL, testErrorMessage)");
 }
 
 - (void)test_raise_function_convertible

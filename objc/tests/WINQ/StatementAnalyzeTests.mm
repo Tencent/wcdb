@@ -54,7 +54,7 @@
     auto testingSQL = WCDB::StatementAnalyze().analyze();
     auto testingTypes = { WCDB::SQL::Type::AnalyzeSTMT };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"ANALYZE");
+    SQLAssertEqual(testingSQL, @"ANALYZE");
 }
 
 - (void)test_analyze_schema
@@ -63,7 +63,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::AnalyzeSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"ANALYZE testSchema");
+    SQLAssertEqual(testingSQL, @"ANALYZE testSchema");
 }
 
 - (void)test_analyze_table
@@ -72,7 +72,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::AnalyzeSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"ANALYZE testSchema.testTable");
+    SQLAssertEqual(testingSQL, @"ANALYZE testSchema.testTable");
 }
 
 - (void)test_analyze_table_without_schema
@@ -81,7 +81,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::AnalyzeSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"ANALYZE main.testTable");
+    SQLAssertEqual(testingSQL, @"ANALYZE main.testTable");
 }
 
 - (void)test_analyze_index
@@ -90,7 +90,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::AnalyzeSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"ANALYZE testSchema.testIndex");
+    SQLAssertEqual(testingSQL, @"ANALYZE testSchema.testIndex");
 }
 
 @end

@@ -53,7 +53,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::DropViewSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"DROP VIEW IF EXISTS testSchema.testView");
+    SQLAssertEqual(testingSQL, @"DROP VIEW IF EXISTS testSchema.testView");
 }
 
 - (void)test_drop_view_without_if_exists
@@ -62,7 +62,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::DropViewSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"DROP VIEW testSchema.testView");
+    SQLAssertEqual(testingSQL, @"DROP VIEW testSchema.testView");
 }
 
 - (void)test_drop_view_without_schema
@@ -71,7 +71,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::DropViewSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"DROP VIEW IF EXISTS main.testView");
+    SQLAssertEqual(testingSQL, @"DROP VIEW IF EXISTS main.testView");
 }
 
 @end

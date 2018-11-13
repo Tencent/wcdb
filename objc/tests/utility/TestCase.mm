@@ -31,6 +31,7 @@
 #else
         WCTDatabase.debuggable = NO;
 #endif
+        srandom((unsigned int) time(nullptr));
     });
 }
 

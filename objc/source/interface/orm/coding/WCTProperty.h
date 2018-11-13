@@ -44,6 +44,9 @@ public:
 
     WCTResultColumns redirect(const WCDB::ResultColumns& resultColumns) const;
 
+    typedef WCDB::ResultColumn (^WCTRedirectBlock)(const WCTProperty&);
+    WCTResultColumns redirect(const WCTRedirectBlock& block) const;
+
     // It's not the count of the list, but the SQL function `count(*)`.
     WCDB::Expression count() const;
 

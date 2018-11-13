@@ -79,7 +79,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1");
+    SQLAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1");
 }
 
 - (void)test_update_with
@@ -88,7 +88,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::WithClause, WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"WITH testTable AS(SELECT 1) UPDATE main.testTable SET testColumn = 1");
+    SQLAssertEqual(testingSQL, @"WITH testTable AS(SELECT 1) UPDATE main.testTable SET testColumn = 1");
 }
 
 - (void)test_update_or_rollback
@@ -97,7 +97,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"UPDATE OR ROLLBACK main.testTable SET testColumn = 1");
+    SQLAssertEqual(testingSQL, @"UPDATE OR ROLLBACK main.testTable SET testColumn = 1");
 }
 
 - (void)test_update_or_abort
@@ -106,7 +106,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"UPDATE OR ABORT main.testTable SET testColumn = 1");
+    SQLAssertEqual(testingSQL, @"UPDATE OR ABORT main.testTable SET testColumn = 1");
 }
 
 - (void)test_update_or_replace
@@ -115,7 +115,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"UPDATE OR REPLACE main.testTable SET testColumn = 1");
+    SQLAssertEqual(testingSQL, @"UPDATE OR REPLACE main.testTable SET testColumn = 1");
 }
 
 - (void)test_update_or_fail
@@ -124,7 +124,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"UPDATE OR FAIL main.testTable SET testColumn = 1");
+    SQLAssertEqual(testingSQL, @"UPDATE OR FAIL main.testTable SET testColumn = 1");
 }
 
 - (void)test_update_or_ignore
@@ -133,7 +133,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"UPDATE OR IGNORE main.testTable SET testColumn = 1");
+    SQLAssertEqual(testingSQL, @"UPDATE OR IGNORE main.testTable SET testColumn = 1");
 }
 
 - (void)test_update_multiple
@@ -142,7 +142,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1, (testColumn1, testColumn2) = 2");
+    SQLAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1, (testColumn1, testColumn2) = 2");
 }
 
 - (void)test_update_with_condition
@@ -151,7 +151,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 WHERE 3");
+    SQLAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 WHERE 3");
 }
 
 - (void)test_update_with_seperated_orders
@@ -160,7 +160,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 ORDER BY 1, 2 LIMIT 1");
+    SQLAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 ORDER BY 1, 2 LIMIT 1");
 }
 
 - (void)test_update_with_orders
@@ -169,7 +169,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 ORDER BY 1, 2 LIMIT 1");
+    SQLAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 ORDER BY 1, 2 LIMIT 1");
 }
 
 - (void)test_update_with_limit
@@ -178,7 +178,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 LIMIT 1");
+    SQLAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 LIMIT 1");
 }
 
 - (void)test_update_with_limit_length
@@ -187,7 +187,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 LIMIT 1, 2");
+    SQLAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 LIMIT 1, 2");
 }
 
 - (void)test_update_with_limit_offset
@@ -196,7 +196,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 LIMIT 1 OFFSET 2");
+    SQLAssertEqual(testingSQL, @"UPDATE main.testTable SET testColumn = 1 LIMIT 1 OFFSET 2");
 }
 
 @end

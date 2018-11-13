@@ -38,41 +38,41 @@
 
 - (void)test
 {
-    WINQAssertEqual(WCDB::AggregateFunction::avg(expression1), @"avg(1)");
-    WINQAssertEqual(WCDB::AggregateFunction::count(expression1), @"count(1)");
-    WINQAssertEqual(WCDB::ResultColumnAll().count(), @"count(*)");
-    WINQAssertEqual(WCDB::AggregateFunction::groupConcat(expression1), @"group_concat(1)");
-    WINQAssertEqual(WCDB::AggregateFunction::groupConcat(expression1, expression2), @"group_concat(1, 2)");
-    WINQAssertEqual(WCDB::AggregateFunction::max(expression1), @"max(1)");
-    WINQAssertEqual(WCDB::AggregateFunction::min(expression1), @"min(1)");
-    WINQAssertEqual(WCDB::AggregateFunction::sum(expression1), @"sum(1)");
-    WINQAssertEqual(WCDB::AggregateFunction::total(expression1), @"total(1)");
+    SQLAssertEqual(WCDB::AggregateFunction::avg(expression1), @"avg(1)");
+    SQLAssertEqual(WCDB::AggregateFunction::count(expression1), @"count(1)");
+    SQLAssertEqual(WCDB::ResultColumnAll().count(), @"count(*)");
+    SQLAssertEqual(WCDB::AggregateFunction::groupConcat(expression1), @"group_concat(1)");
+    SQLAssertEqual(WCDB::AggregateFunction::groupConcat(expression1, expression2), @"group_concat(1, 2)");
+    SQLAssertEqual(WCDB::AggregateFunction::max(expression1), @"max(1)");
+    SQLAssertEqual(WCDB::AggregateFunction::min(expression1), @"min(1)");
+    SQLAssertEqual(WCDB::AggregateFunction::sum(expression1), @"sum(1)");
+    SQLAssertEqual(WCDB::AggregateFunction::total(expression1), @"total(1)");
 }
 
 - (void)test_column_operable
 {
     WCDB::Column column(@"testColumn");
-    WINQAssertEqual(column.avg(), @"avg(testColumn)");
-    WINQAssertEqual(column.count(), @"count(testColumn)");
-    WINQAssertEqual(column.groupConcat(), @"group_concat(testColumn)");
-    WINQAssertEqual(column.groupConcat(expression1), @"group_concat(testColumn, 1)");
-    WINQAssertEqual(column.max(), @"max(testColumn)");
-    WINQAssertEqual(column.min(), @"min(testColumn)");
-    WINQAssertEqual(column.sum(), @"sum(testColumn)");
-    WINQAssertEqual(column.total(), @"total(testColumn)");
+    SQLAssertEqual(column.avg(), @"avg(testColumn)");
+    SQLAssertEqual(column.count(), @"count(testColumn)");
+    SQLAssertEqual(column.groupConcat(), @"group_concat(testColumn)");
+    SQLAssertEqual(column.groupConcat(expression1), @"group_concat(testColumn, 1)");
+    SQLAssertEqual(column.max(), @"max(testColumn)");
+    SQLAssertEqual(column.min(), @"min(testColumn)");
+    SQLAssertEqual(column.sum(), @"sum(testColumn)");
+    SQLAssertEqual(column.total(), @"total(testColumn)");
 }
 
 - (void)test_expression_operable
 {
     WCDB::Expression column = WCDB::Column(@"testColumn");
-    WINQAssertEqual(column.avg(), @"avg(testColumn)");
-    WINQAssertEqual(column.count(), @"count(testColumn)");
-    WINQAssertEqual(column.groupConcat(), @"group_concat(testColumn)");
-    WINQAssertEqual(column.groupConcat(expression1), @"group_concat(testColumn, 1)");
-    WINQAssertEqual(column.max(), @"max(testColumn)");
-    WINQAssertEqual(column.min(), @"min(testColumn)");
-    WINQAssertEqual(column.sum(), @"sum(testColumn)");
-    WINQAssertEqual(column.total(), @"total(testColumn)");
+    SQLAssertEqual(column.avg(), @"avg(testColumn)");
+    SQLAssertEqual(column.count(), @"count(testColumn)");
+    SQLAssertEqual(column.groupConcat(), @"group_concat(testColumn)");
+    SQLAssertEqual(column.groupConcat(expression1), @"group_concat(testColumn, 1)");
+    SQLAssertEqual(column.max(), @"max(testColumn)");
+    SQLAssertEqual(column.min(), @"min(testColumn)");
+    SQLAssertEqual(column.sum(), @"sum(testColumn)");
+    SQLAssertEqual(column.total(), @"total(testColumn)");
 }
 
 @end

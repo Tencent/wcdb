@@ -44,12 +44,12 @@ WCTResultColumn::WCTResultColumn(const WCDB::ResultColumn& resultColumn, const W
 WCTResultColumns WCTResultColumns::resultColumnsByAddingNewResultColumns(const WCTResultColumns& resultColumns) const
 {
     WCTResultColumns newResultColumns = *this;
-    newResultColumns.insert(newResultColumns.begin(), resultColumns.begin(), resultColumns.end());
+    newResultColumns.insert(newResultColumns.end(), resultColumns.begin(), resultColumns.end());
     return newResultColumns;
 }
 
 WCTResultColumns& WCTResultColumns::addingNewResultColumns(const WCTResultColumns& resultColumns)
 {
-    insert(begin(), resultColumns.begin(), resultColumns.end());
+    insert(end(), resultColumns.begin(), resultColumns.end());
     return *this;
 }

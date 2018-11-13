@@ -57,7 +57,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testColumn");
+    SQLAssertEqual(testingSQL, @"testColumn");
 }
 
 - (void)test_expression
@@ -66,7 +66,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testColumn");
+    SQLAssertEqual(testingSQL, @"testColumn");
 }
 
 - (void)test_collate
@@ -75,7 +75,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testColumn COLLATE testCollation");
+    SQLAssertEqual(testingSQL, @"testColumn COLLATE testCollation");
 }
 
 - (void)test_order
@@ -84,7 +84,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testColumn ASC");
+    SQLAssertEqual(testingSQL, @"testColumn ASC");
 }
 
 @end

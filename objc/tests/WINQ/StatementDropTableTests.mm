@@ -53,7 +53,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::DropTableSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"DROP TABLE IF EXISTS testSchema.testTable");
+    SQLAssertEqual(testingSQL, @"DROP TABLE IF EXISTS testSchema.testTable");
 }
 
 - (void)test_drop_table_without_if_exists
@@ -62,7 +62,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::DropTableSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"DROP TABLE testSchema.testTable");
+    SQLAssertEqual(testingSQL, @"DROP TABLE testSchema.testTable");
 }
 
 - (void)test_drop_table_without_schema
@@ -71,7 +71,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::DropTableSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"DROP TABLE IF EXISTS main.testTable");
+    SQLAssertEqual(testingSQL, @"DROP TABLE IF EXISTS main.testTable");
 }
 
 @end

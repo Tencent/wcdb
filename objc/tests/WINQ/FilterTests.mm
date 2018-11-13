@@ -51,7 +51,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::Filter, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"FILTER(WHERE 1)");
+    SQLAssertEqual(testingSQL, @"FILTER(WHERE 1)");
 }
 
 @end

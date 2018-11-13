@@ -57,7 +57,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testSchema.testTable");
+    SQLAssertEqual(testingSQL, @"testSchema.testTable");
 }
 
 - (void)test_qualified_table_without_schema
@@ -66,7 +66,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"main.testTable");
+    SQLAssertEqual(testingSQL, @"main.testTable");
 }
 
 - (void)test_qualified_table_with_alias
@@ -75,7 +75,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testSchema.testTable AS testAlias");
+    SQLAssertEqual(testingSQL, @"testSchema.testTable AS testAlias");
 }
 
 - (void)test_qualified_table_with_indexed
@@ -84,7 +84,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testSchema.testTable INDEXED BY testIndex");
+    SQLAssertEqual(testingSQL, @"testSchema.testTable INDEXED BY testIndex");
 }
 
 - (void)test_qualified_table_without_index
@@ -93,7 +93,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testSchema.testTable NOT INDEXED");
+    SQLAssertEqual(testingSQL, @"testSchema.testTable NOT INDEXED");
 }
 
 @end

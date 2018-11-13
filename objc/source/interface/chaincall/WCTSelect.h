@@ -30,8 +30,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)onResultColumns:(const WCTResultColumns &)resultColumns;
 
-- (instancetype)ofClass:(Class<WCTTableCoding>)cls;
-
 /**
  @brief Get next selected object. You can do an iteration using it.
  

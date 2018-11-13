@@ -59,7 +59,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CREATE VIEW main.testView AS SELECT 1");
+    SQLAssertEqual(testingSQL, @"CREATE VIEW main.testView AS SELECT 1");
 }
 
 - (void)test_create_temp_view
@@ -68,7 +68,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CREATE TEMP VIEW main.testView AS SELECT 1");
+    SQLAssertEqual(testingSQL, @"CREATE TEMP VIEW main.testView AS SELECT 1");
 }
 
 - (void)test_create_view_if_not_exists
@@ -77,7 +77,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CREATE VIEW IF NOT EXISTS main.testView AS SELECT 1");
+    SQLAssertEqual(testingSQL, @"CREATE VIEW IF NOT EXISTS main.testView AS SELECT 1");
 }
 
 - (void)test_create_view_with_schema
@@ -86,7 +86,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CREATE VIEW testSchema.testView AS SELECT 1");
+    SQLAssertEqual(testingSQL, @"CREATE VIEW testSchema.testView AS SELECT 1");
 }
 
 - (void)test_create_view_with_column
@@ -95,7 +95,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CREATE VIEW main.testView(testColumn1) AS SELECT 1");
+    SQLAssertEqual(testingSQL, @"CREATE VIEW main.testView(testColumn1) AS SELECT 1");
 }
 
 - (void)test_create_view_with_columns
@@ -104,7 +104,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CREATE VIEW main.testView(testColumn1, testColumn2) AS SELECT 1");
+    SQLAssertEqual(testingSQL, @"CREATE VIEW main.testView(testColumn1, testColumn2) AS SELECT 1");
 }
 
 @end

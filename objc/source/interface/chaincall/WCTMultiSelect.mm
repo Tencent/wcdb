@@ -32,6 +32,7 @@
 
 - (instancetype)fromTables:(NSArray<NSString *> *)tableNames
 {
+    WCTRemedialAssert(tableNames != nil, @"Table names can't be null.", return self;);
     WCDB::TablesOrSubqueries tables;
     for (NSString *tableName in tableNames) {
         tables.push_back(tableName);
@@ -68,7 +69,9 @@
     if (![self lazyPrepare]) {
         return nil;
     }
-    return [_handle allMultiObjectsOnResultColumns:_resultColumns];
+    NSArray<WCTMultiObject *> *results = [_handle allMultiObjectsOnResultColumns:_resultColumns];
+    [_handle finalizeStatement];
+    return results;
 }
 
 @end

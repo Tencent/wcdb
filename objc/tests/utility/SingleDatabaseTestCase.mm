@@ -27,6 +27,11 @@
     [super setUp];
     [self refreshDirectory];
     _database = [[WCTDatabase alloc] initWithPath:self.path];
+    int tag;
+    do {
+        tag = [NSNumber randomInt];
+    } while (tag == 0);
+    _database.tag = tag;
 }
 
 - (void)tearDown

@@ -49,12 +49,12 @@
 
     auto testingTypes = { WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testColumn");
+    SQLAssertEqual(testingSQL, @"testColumn");
 }
 
 - (void)test_rowid
 {
-    WINQAssertEqual(WCDB::Column::rowid(), @"rowid");
+    SQLAssertEqual(WCDB::Column::rowid(), @"rowid");
 }
 
 - (void)test_column_convertible

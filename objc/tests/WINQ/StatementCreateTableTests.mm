@@ -63,7 +63,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER)");
+    SQLAssertEqual(testingSQL, @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER)");
 }
 
 - (void)test_create_table_with_multi_defines
@@ -72,7 +72,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER, testColumn2 TEXT)");
+    SQLAssertEqual(testingSQL, @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER, testColumn2 TEXT)");
 }
 
 - (void)test_create_temp_table
@@ -81,7 +81,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CREATE TEMP TABLE testSchema.testTable(testColumn1 INTEGER)");
+    SQLAssertEqual(testingSQL, @"CREATE TEMP TABLE testSchema.testTable(testColumn1 INTEGER)");
 }
 
 - (void)test_create_table_if_not_exists
@@ -90,7 +90,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CREATE TABLE IF NOT EXISTS testSchema.testTable(testColumn1 INTEGER)");
+    SQLAssertEqual(testingSQL, @"CREATE TABLE IF NOT EXISTS testSchema.testTable(testColumn1 INTEGER)");
 }
 
 - (void)test_create_table_without_schema
@@ -99,7 +99,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CREATE TABLE main.testTable(testColumn1 INTEGER)");
+    SQLAssertEqual(testingSQL, @"CREATE TABLE main.testTable(testColumn1 INTEGER)");
 }
 
 - (void)test_create_table_with_constraint
@@ -108,7 +108,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column, WCDB::SQL::Type::TableConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER, CHECK(1))");
+    SQLAssertEqual(testingSQL, @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER, CHECK(1))");
 }
 
 - (void)test_create_table_with_constraints
@@ -117,7 +117,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column, WCDB::SQL::Type::TableConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::TableConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER, CHECK(1), CHECK(2))");
+    SQLAssertEqual(testingSQL, @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER, CHECK(1), CHECK(2))");
 }
 
 - (void)test_create_table_without_rowid
@@ -126,7 +126,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER) WITHOUT ROWID");
+    SQLAssertEqual(testingSQL, @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER) WITHOUT ROWID");
 }
 
 - (void)test_create_table_as_select
@@ -135,7 +135,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CREATE TABLE testSchema.testTable AS SELECT 1");
+    SQLAssertEqual(testingSQL, @"CREATE TABLE testSchema.testTable AS SELECT 1");
 }
 
 @end

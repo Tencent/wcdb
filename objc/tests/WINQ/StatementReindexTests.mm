@@ -57,7 +57,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ReindexSTMT };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"REINDEX");
+    SQLAssertEqual(testingSQL, @"REINDEX");
 }
 
 - (void)test_reindex_collation
@@ -66,7 +66,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ReindexSTMT };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"REINDEX testCollation");
+    SQLAssertEqual(testingSQL, @"REINDEX testCollation");
 }
 
 - (void)test_reindex_table
@@ -75,7 +75,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ReindexSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"REINDEX testSchema.testTable");
+    SQLAssertEqual(testingSQL, @"REINDEX testSchema.testTable");
 }
 
 - (void)test_reindex_table_without_schema
@@ -84,7 +84,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ReindexSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"REINDEX main.testTable");
+    SQLAssertEqual(testingSQL, @"REINDEX main.testTable");
 }
 
 - (void)test_reindex_index
@@ -93,7 +93,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ReindexSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"REINDEX testSchema.testIndex");
+    SQLAssertEqual(testingSQL, @"REINDEX testSchema.testIndex");
 }
 
 - (void)test_reindex_index_without_schema
@@ -102,7 +102,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ReindexSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"REINDEX main.testIndex");
+    SQLAssertEqual(testingSQL, @"REINDEX main.testIndex");
 }
 
 @end

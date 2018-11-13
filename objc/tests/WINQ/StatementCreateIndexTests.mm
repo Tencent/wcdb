@@ -62,7 +62,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateIndexSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CREATE INDEX testSchema.testIndex ON testTable(testColumn1)");
+    SQLAssertEqual(testingSQL, @"CREATE INDEX testSchema.testIndex ON testTable(testColumn1)");
 }
 
 - (void)test_create_multi_index
@@ -71,7 +71,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateIndexSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CREATE INDEX testSchema.testIndex ON testTable(testColumn1, testColumn2)");
+    SQLAssertEqual(testingSQL, @"CREATE INDEX testSchema.testIndex ON testTable(testColumn1, testColumn2)");
 }
 
 - (void)test_create_unique_index
@@ -80,7 +80,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateIndexSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CREATE UNIQUE INDEX testSchema.testIndex ON testTable(testColumn1)");
+    SQLAssertEqual(testingSQL, @"CREATE UNIQUE INDEX testSchema.testIndex ON testTable(testColumn1)");
 }
 
 - (void)test_create_index_if_not_exists
@@ -89,7 +89,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateIndexSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CREATE INDEX IF NOT EXISTS testSchema.testIndex ON testTable(testColumn1)");
+    SQLAssertEqual(testingSQL, @"CREATE INDEX IF NOT EXISTS testSchema.testIndex ON testTable(testColumn1)");
 }
 
 - (void)test_create_index_without_schema
@@ -98,7 +98,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateIndexSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CREATE INDEX main.testIndex ON testTable(testColumn1)");
+    SQLAssertEqual(testingSQL, @"CREATE INDEX main.testIndex ON testTable(testColumn1)");
 }
 
 - (void)test_create_index_with_condition
@@ -107,7 +107,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateIndexSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"CREATE INDEX testSchema.testIndex ON testTable(testColumn1) WHERE 1");
+    SQLAssertEqual(testingSQL, @"CREATE INDEX testSchema.testIndex ON testTable(testColumn1) WHERE 1");
 }
 
 @end

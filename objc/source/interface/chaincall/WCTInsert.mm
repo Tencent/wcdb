@@ -59,7 +59,7 @@
 {
     _properties = properties;
     _statement.columns(properties)
-    .values(WCDB::BindParameter((int) properties.size()));
+    .values(WCDB::BindParameter::bindParameters(properties.size()));
     return self;
 }
 
@@ -71,8 +71,7 @@
 
 - (instancetype)value:(WCTObject *)object
 {
-    _values = object != nil ? @[ object ] : nil;
-    return self;
+    return [self values:object != nil ? @[ object ] : nil];
 }
 
 - (BOOL)execute

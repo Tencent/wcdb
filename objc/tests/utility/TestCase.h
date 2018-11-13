@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import "NSArray+TestCase.h"
+#import "NSObject+TestCase.h"
 #import <WCDB/WCDB.h>
 #import <XCTest/XCTest.h>
 
@@ -47,3 +47,10 @@
 + (NSString*)hint:(NSString*)description expecting:(NSString*)expected;
 
 @end
+
+#define SQLAssertEqual(_sql, _expected)                                                                       \
+    {                                                                                                         \
+        NSString* __sql = @((_sql).getDescription().c_str());                                                 \
+        NSString* __expected = (_expected);                                                                   \
+        XCTAssertTrue([__expected isEqualToString:__sql], @"%@", [TestCase hint:__sql expecting:__expected]); \
+    }

@@ -55,7 +55,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::RecursiveCTE, WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testTable AS(SELECT 1 UNION SELECT 2)");
+    SQLAssertEqual(testingSQL, @"testTable AS(SELECT 1 UNION SELECT 2)");
 }
 
 - (void)test_recursive_cte_union_all
@@ -64,7 +64,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::RecursiveCTE, WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testTable AS(SELECT 1 UNION ALL SELECT 2)");
+    SQLAssertEqual(testingSQL, @"testTable AS(SELECT 1 UNION ALL SELECT 2)");
 }
 
 @end

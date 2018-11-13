@@ -51,7 +51,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::VacuumSTMT };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"VACUUM");
+    SQLAssertEqual(testingSQL, @"VACUUM");
 }
 
 - (void)test_vacuum_with_schema
@@ -60,7 +60,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::VacuumSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"VACUUM testSchema");
+    SQLAssertEqual(testingSQL, @"VACUUM testSchema");
 }
 
 @end

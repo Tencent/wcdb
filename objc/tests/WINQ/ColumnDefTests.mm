@@ -57,7 +57,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testColumn INTEGER");
+    SQLAssertEqual(testingSQL, @"testColumn INTEGER");
 }
 
 - (void)test_column_def_without_type
@@ -66,7 +66,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testColumn");
+    SQLAssertEqual(testingSQL, @"testColumn");
 }
 
 - (void)test_column_def_with_constraint
@@ -75,7 +75,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column, WCDB::SQL::Type::ColumnConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testColumn INTEGER CHECK(1)");
+    SQLAssertEqual(testingSQL, @"testColumn INTEGER CHECK(1)");
 }
 
 - (void)test_column_def_with_constraints
@@ -84,7 +84,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column, WCDB::SQL::Type::ColumnConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ColumnConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"testColumn INTEGER CHECK(1) CHECK(2)");
+    SQLAssertEqual(testingSQL, @"testColumn INTEGER CHECK(1) CHECK(2)");
 }
 
 @end

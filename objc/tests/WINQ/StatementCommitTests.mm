@@ -49,7 +49,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CommitSTMT };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"COMMIT");
+    SQLAssertEqual(testingSQL, @"COMMIT");
 }
 
 @end

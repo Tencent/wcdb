@@ -37,9 +37,10 @@
 {
     [super setUp];
 
+    NSString* renewedContent = [NSString randomString];
+
     _renewObject = [[TestCaseObject alloc] init];
-    ;
-    _renewObject.content = @"newObject";
+    _renewObject.content = renewedContent;
 
     _renewedObject1 = [[TestCaseObject alloc] init];
     _renewedObject1.identifier = 1;
@@ -49,8 +50,8 @@
     _renewedObject2.identifier = 2;
     _renewedObject2.content = _renewObject.content;
 
-    _renewRow = @[ @"newObject" ];
-    _renewValue = @"newObject";
+    _renewRow = @[ renewedContent ];
+    _renewValue = renewedContent;
 }
 
 #pragma mark - Database - Update Properties To Object

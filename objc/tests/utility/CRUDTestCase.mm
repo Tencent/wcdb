@@ -40,15 +40,21 @@ typedef NS_ENUM(NSUInteger, CRUDTestCaseState) {
 
     _object1 = [[TestCaseObject alloc] init];
     _object1.identifier = 1;
-    _object1.content = @"object1";
+    _object1.content = [NSString randomString];
 
     _object2 = [[TestCaseObject alloc] init];
     _object2.identifier = 2;
-    _object2.content = @"object2";
+    _object2.content = [NSString randomString];
 
     _objects = @[ _object1, _object2 ];
 
     XCTAssertTrue([_table insertObjects:_objects]);
+}
+
+- (void)tearDown
+{
+    XCTAssertTrue([self.database dropTable:self.tableName]);
+    [super tearDown];
 }
 
 - (BOOL)checkObject:(TestCaseObject*)object
@@ -57,6 +63,7 @@ asExpectedAfterModification:(BOOL (^)())block
 {
     if (object == nil
         || sql == nil) {
+        TESTCASE_FAILED
         return NO;
     }
     return [self checkObjects:@[ object ] andSQLs:@[ sql ] asExpectedAfterModification:block];
@@ -67,6 +74,7 @@ asExpectedAfterModification:(BOOL (^)())block
 asExpectedAfterModification:(BOOL (^)())block
 {
     if (sql == nil) {
+        TESTCASE_FAILED
         return NO;
     }
     return [self checkObjects:objects andSQLs:@[ sql ] asExpectedAfterModification:block];
@@ -96,6 +104,7 @@ asExpectedBySelecting:(NSArray<TestCaseObject*>* (^)())block
 {
     if (object == nil
         || sql == nil) {
+        TESTCASE_FAILED
         return NO;
     }
     return [self checkObjects:@[ object ] andSQLs:@[ sql ] asExpectedBySelecting:block];
@@ -106,6 +115,7 @@ asExpectedBySelecting:(NSArray<TestCaseObject*>* (^)())block
 asExpectedBySelecting:(NSArray<TestCaseObject*>* (^)())block
 {
     if (sql == nil) {
+        TESTCASE_FAILED
         return NO;
     }
     return [self checkObjects:objects andSQLs:@[ sql ] asExpectedBySelecting:block];
@@ -137,6 +147,7 @@ asExpectedBySelecting:(WCTOneRow* (^)())block
 {
     if (row == nil
         || sql == nil) {
+        TESTCASE_FAILED
         return NO;
     }
     return [self checkRows:@[ row ]
@@ -156,6 +167,7 @@ asExpectedBySelecting:(WCTOneColumn* (^)())block
 {
     if (column == nil
         || sql == nil) {
+        TESTCASE_FAILED
         return NO;
     }
     NSMutableArray* rows = [NSMutableArray array];
@@ -183,6 +195,7 @@ asExpectedBySelecting:(WCTValue* (^)())block
 {
     if (value == nil
         || sql == nil) {
+        TESTCASE_FAILED
         return NO;
     }
     return [self checkRows:@[ @[ value ] ]
@@ -202,6 +215,7 @@ asExpectedBySelecting:(WCTColumnsXRows* (^)())block
 {
     if (rows == nil
         || sql == nil) {
+        TESTCASE_FAILED
         return NO;
     }
     return [self checkRows:rows andSQLs:@[ sql ] asExpectedBySelecting:block];

@@ -109,7 +109,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"SELECT 1, 2");
+    SQLAssertEqual(testingSQL, @"SELECT 1, 2");
 }
 
 - (void)test_with_select
@@ -118,7 +118,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::CommonTableExpression, WCDB::SQL::Type::Column, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::CommonTableExpression, WCDB::SQL::Type::Column, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"WITH testTable1(testColumn1) AS(SELECT 1), testTable2(testColumn2) AS(SELECT 2) SELECT 1, 2");
+    SQLAssertEqual(testingSQL, @"WITH testTable1(testColumn1) AS(SELECT 1), testTable2(testColumn2) AS(SELECT 2) SELECT 1, 2");
 }
 
 - (void)test_with_recursive_select
@@ -127,7 +127,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::CommonTableExpression, WCDB::SQL::Type::Column, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::CommonTableExpression, WCDB::SQL::Type::Column, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"WITH RECURSIVE testTable1(testColumn1) AS(SELECT 1), testTable2(testColumn2) AS(SELECT 2) SELECT 1, 2");
+    SQLAssertEqual(testingSQL, @"WITH RECURSIVE testTable1(testColumn1) AS(SELECT 1), testTable2(testColumn2) AS(SELECT 2) SELECT 1, 2");
 }
 
 - (void)test_distinct_select
@@ -136,7 +136,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"SELECT DISTINCT 1, 2");
+    SQLAssertEqual(testingSQL, @"SELECT DISTINCT 1, 2");
 }
 
 - (void)test_select_from_tables_or_subqueries
@@ -145,7 +145,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"SELECT 1, 2 FROM main.testTable1, main.testTable2");
+    SQLAssertEqual(testingSQL, @"SELECT 1, 2 FROM main.testTable1, main.testTable2");
 }
 
 - (void)test_select_from_join
@@ -154,7 +154,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"SELECT 1, 2 FROM main.testTable");
+    SQLAssertEqual(testingSQL, @"SELECT 1, 2 FROM main.testTable");
 }
 
 - (void)test_select_with_condition
@@ -163,7 +163,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"SELECT 1, 2 WHERE 1");
+    SQLAssertEqual(testingSQL, @"SELECT 1, 2 WHERE 1");
 }
 
 - (void)test_select_with_group
@@ -172,7 +172,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"SELECT 1, 2 GROUP BY 1");
+    SQLAssertEqual(testingSQL, @"SELECT 1, 2 GROUP BY 1");
 }
 
 - (void)test_select_with_seperated_groups
@@ -181,7 +181,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"SELECT 1, 2 GROUP BY 1, 2");
+    SQLAssertEqual(testingSQL, @"SELECT 1, 2 GROUP BY 1, 2");
 }
 
 - (void)test_select_with_groups
@@ -190,7 +190,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"SELECT 1, 2 GROUP BY 1, 2");
+    SQLAssertEqual(testingSQL, @"SELECT 1, 2 GROUP BY 1, 2");
 }
 
 - (void)test_select_with_having
@@ -199,7 +199,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"SELECT 1, 2 GROUP BY 1, 2 HAVING 1");
+    SQLAssertEqual(testingSQL, @"SELECT 1, 2 GROUP BY 1, 2 HAVING 1");
 }
 
 - (void)test_select_with_window
@@ -208,7 +208,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"SELECT 1, 2 WINDOW testWindow1 AS ORDER BY 1");
+    SQLAssertEqual(testingSQL, @"SELECT 1, 2 WINDOW testWindow1 AS ORDER BY 1");
 }
 
 - (void)test_select_with_windows
@@ -217,7 +217,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"SELECT 1, 2 WINDOW testWindow1 AS ORDER BY 1, testWindow2 AS ORDER BY 2");
+    SQLAssertEqual(testingSQL, @"SELECT 1, 2 WINDOW testWindow1 AS ORDER BY 1, testWindow2 AS ORDER BY 2");
 }
 
 - (void)test_values
@@ -226,7 +226,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"VALUES(1, 2)");
+    SQLAssertEqual(testingSQL, @"VALUES(1, 2)");
 }
 
 - (void)test_seperated_values
@@ -235,7 +235,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"VALUES(1, 2)");
+    SQLAssertEqual(testingSQL, @"VALUES(1, 2)");
 }
 
 - (void)test_multi_values
@@ -244,7 +244,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"VALUES(1, 2), (1, 2)");
+    SQLAssertEqual(testingSQL, @"VALUES(1, 2), (1, 2)");
 }
 
 - (void)test_compound_multiple_select
@@ -253,7 +253,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"SELECT 1, 2 GROUP BY 1, 2 UNION SELECT 1, 2 WHERE 1");
+    SQLAssertEqual(testingSQL, @"SELECT 1, 2 GROUP BY 1, 2 UNION SELECT 1, 2 WHERE 1");
 }
 
 - (void)test_compound_union
@@ -262,7 +262,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"SELECT 1, 2 UNION VALUES(1, 2)");
+    SQLAssertEqual(testingSQL, @"SELECT 1, 2 UNION VALUES(1, 2)");
 }
 
 - (void)test_compound_union_all
@@ -271,7 +271,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"SELECT 1, 2 UNION ALL VALUES(1, 2)");
+    SQLAssertEqual(testingSQL, @"SELECT 1, 2 UNION ALL VALUES(1, 2)");
 }
 
 - (void)test_compound_intersect
@@ -280,7 +280,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"SELECT 1, 2 INTERSECT VALUES(1, 2)");
+    SQLAssertEqual(testingSQL, @"SELECT 1, 2 INTERSECT VALUES(1, 2)");
 }
 
 - (void)test_compound_except
@@ -289,7 +289,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"SELECT 1, 2 EXCEPT VALUES(1, 2)");
+    SQLAssertEqual(testingSQL, @"SELECT 1, 2 EXCEPT VALUES(1, 2)");
 }
 
 - (void)test_order
@@ -298,7 +298,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"SELECT 1, 2 ORDER BY 1");
+    SQLAssertEqual(testingSQL, @"SELECT 1, 2 ORDER BY 1");
 }
 
 - (void)test_seperated_orders
@@ -307,7 +307,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"SELECT 1, 2 ORDER BY 1, 2");
+    SQLAssertEqual(testingSQL, @"SELECT 1, 2 ORDER BY 1, 2");
 }
 
 - (void)test_orders
@@ -316,7 +316,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"SELECT 1, 2 ORDER BY 1, 2");
+    SQLAssertEqual(testingSQL, @"SELECT 1, 2 ORDER BY 1, 2");
 }
 
 - (void)test_limit
@@ -325,7 +325,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"SELECT 1, 2 LIMIT 1");
+    SQLAssertEqual(testingSQL, @"SELECT 1, 2 LIMIT 1");
 }
 
 - (void)test_limit_length
@@ -334,7 +334,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"SELECT 1, 2 LIMIT 1, 2");
+    SQLAssertEqual(testingSQL, @"SELECT 1, 2 LIMIT 1, 2");
 }
 
 - (void)test_limit_offset
@@ -343,7 +343,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    WINQAssertEqual(testingSQL, @"SELECT 1, 2 LIMIT 1 OFFSET 2");
+    SQLAssertEqual(testingSQL, @"SELECT 1, 2 LIMIT 1 OFFSET 2");
 }
 
 - (void)test_select_convertible
