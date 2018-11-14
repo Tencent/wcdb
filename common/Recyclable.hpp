@@ -77,7 +77,6 @@ protected:
 
     void release()
     {
-        printf("Release %d %p\n", m_reference->load(), this);
         WCTInnerAssert((*m_reference) > 0);
         if (--(*m_reference) == 0) {
             if (m_onRecycled) {
