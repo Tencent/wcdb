@@ -62,16 +62,6 @@ WCTUsedUpInvalidateGuard::~WCTUsedUpInvalidateGuard()
     return _handle.error;
 }
 
-- (void)invalidate
-{
-    [_handle invalidate];
-}
-
-- (BOOL)isValidated
-{
-    return [_handle isValidated];
-}
-
 - (instancetype)invalidateWhenUsedUp
 {
     _invalidateWhenUsedUp = YES;
@@ -81,7 +71,7 @@ WCTUsedUpInvalidateGuard::~WCTUsedUpInvalidateGuard()
 - (void)tryAlreadyUsedUpInvalidate
 {
     if (_invalidateWhenUsedUp) {
-        [self invalidate];
+        [_handle invalidate];
     }
 }
 

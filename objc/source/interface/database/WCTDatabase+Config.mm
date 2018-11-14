@@ -55,18 +55,12 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
     WCTDatabaseAssert(return;);
     WCTRemedialAssert(nsInvocation, "Use [removeConfigForName:] instead.", return;);
     WCDB::CustomConfig::Invocation invocation = [nsInvocation, self](WCDB::Handle *handle) -> bool {
-        WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithDatabase:self andUnsafeHandle:handle];
-        BOOL result = nsInvocation(unsafeHandle);
-        [unsafeHandle invalidate];
-        return result;
+        return nsInvocation([[WCTHandle alloc] initWithDatabase:self andUnsafeHandle:handle]);
     };
     WCDB::CustomConfig::Invocation uninvocation = nullptr;
     if (nsUninvocation) {
         uninvocation = [nsUninvocation, self](WCDB::Handle *handle) -> bool {
-            WCTHandle *unsafeHandle = [[WCTHandle alloc] initWithDatabase:self andUnsafeHandle:handle];
-            BOOL result = nsUninvocation(unsafeHandle);
-            [unsafeHandle invalidate];
-            return result;
+            return nsUninvocation([[WCTHandle alloc] initWithDatabase:self andUnsafeHandle:handle]);
         };
     }
     _database->setConfig(name, WCDB::Core::shared()->customConfig(invocation, uninvocation), priority);

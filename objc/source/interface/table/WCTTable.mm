@@ -58,16 +58,4 @@
     return _database.error;
 }
 
-- (void)invalidate
-{
-    _database = nil;
-    _class = nil;
-    _name = nil;
-}
-
-- (BOOL)isValidated
-{
-    return _database != nil;
-}
-
 @end

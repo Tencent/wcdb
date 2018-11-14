@@ -34,8 +34,6 @@
 
 @property (nonatomic, readonly) NSString* directory;
 
-@property (nonatomic, readonly) NSString* testName;
-
 @property (nonatomic, readonly) NSString* className;
 
 @property (nonatomic, readonly) NSFileManager* fileManager;

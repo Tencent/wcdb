@@ -32,7 +32,14 @@
         WCTDatabase.debuggable = NO;
 #endif
         srandom((unsigned int) time(nullptr));
+        srand((unsigned int) time(nullptr));
     });
+}
+
+- (void)setUp
+{
+    [super setUp];
+    NSLog(@"%@ at %@", self.name, self.directory);
 }
 
 - (NSString *)testName
@@ -71,7 +78,7 @@
 
 - (NSString *)directory
 {
-    return [self.root stringByAppendingPathComponent:self.testName];
+    return [[self.root stringByAppendingPathComponent:self.className] stringByAppendingPathComponent:self.testName];
 }
 
 - (NSFileManager *)fileManager

@@ -119,8 +119,6 @@ public:
     std::list<String> getPaths() const;
 
     bool moveFiles(const String &directory);
-    bool moveFilesToDirectoryWithExtraFiles(const String &directory,
-                                            const std::list<String> &extraFiles);
     bool removeFiles();
     std::pair<bool, size_t> getFilesSize();
     std::pair<bool, uint32_t> getIdentifier();

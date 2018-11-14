@@ -396,22 +396,6 @@ bool Database::moveFiles(const String &directory)
     return false;
 }
 
-bool Database::moveFilesToDirectoryWithExtraFiles(const String &directory,
-                                                  const std::list<String> &extraFiles)
-{
-    LockGuard lockGuard(m_concurrency);
-    close(nullptr);
-    std::list<String> paths = extraFiles;
-    std::list<String> dbPaths = getPaths();
-    dbPaths.reverse();
-    paths.insert(paths.end(), dbPaths.begin(), dbPaths.end());
-    if (FileManager::moveItems(paths, directory)) {
-        return true;
-    }
-    assignWithSharedThreadedError();
-    return false;
-}
-
 const String &Database::getPath() const
 {
     return path;

@@ -20,6 +20,7 @@
 
 #import <WCDB/Notifier.hpp>
 #import <WCDB/ThreadedErrors.hpp>
+#import <WCDB/WCTDatabase+Memory.h>
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTHandle+Private.h>

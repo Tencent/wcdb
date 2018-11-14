@@ -47,10 +47,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (WCTError *)error;
 
-- (void)invalidate;
-
-- (BOOL)isValidated;
-
 @end
 
 NS_ASSUME_NONNULL_END

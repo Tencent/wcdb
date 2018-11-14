@@ -30,17 +30,6 @@
 }
 
 - (BOOL)moveFilesToDirectory:(NSString *)directory
-              withExtraFiles:(NSArray<NSString *> *)extraFiles
-{
-    WCTDatabaseAssert(return NO;);
-    std::list<WCDB::String> files;
-    for (NSString *extraFile in extraFiles) {
-        files.push_back(extraFile);
-    }
-    return _database->moveFilesToDirectoryWithExtraFiles(directory, files);
-}
-
-- (BOOL)moveFilesToDirectory:(NSString *)directory
 {
     WCTDatabaseAssert(return NO;);
     return _database->moveFiles(directory);

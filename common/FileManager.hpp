@@ -48,8 +48,8 @@ public:
     static std::tuple<bool, bool, bool> itemExists(const String &path);
     static std::pair<bool, size_t> getDirectorySize(const String &directory);
     static std::pair<bool, size_t> getFileSize(const String &file);
-    static bool createHardLink(const String &from, const String &to);
-    static bool removeHardLink(const String &path);
+    static bool createFileHardLink(const String &from, const String &to);
+    static bool removeFileHardLink(const String &path);
     static bool createDirectory(const String &path);
     static std::pair<bool, Time> getFileModifiedTime(const String &path);
     static std::pair<bool, Time> getFileCreatedTime(const String &path);
@@ -80,6 +80,7 @@ public:
     static bool createDirectoryWithIntermediateDirectories(const String &directory);
     static bool
     setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(const String &path);
+    static bool createDirectoryHardLink(const String &from, const String &to);
 
 #pragma mark - Error
 protected:

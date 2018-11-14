@@ -51,7 +51,9 @@
 
 - (void)tearDown
 {
-    [_handle invalidate];
+    if ([_handle isValidated]) {
+        [_handle invalidate];
+    }
     _handle = nil;
     [super tearDown];
 }

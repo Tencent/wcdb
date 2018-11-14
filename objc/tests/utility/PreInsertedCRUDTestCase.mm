@@ -45,7 +45,6 @@
 - (void)tearDown
 {
     TestCaseAssertTrue([self dropTable]);
-    [self.table invalidate];
     [super tearDown];
 }
 

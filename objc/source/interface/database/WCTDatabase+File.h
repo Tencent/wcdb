@@ -33,17 +33,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)removeFiles;
 
 /**
- @brief Move all database-related files and some extra files to directory safely.
-        You should call it on a closed database. Otherwise you will get a warning and you may get a corrupted database.
- @warning Since file operation is not atomic, There may be some accidents during this period. For example, app may crash while db file is moved to destination and wal file is not. Then none of destination and source contains the whole data. This interface can make sure all of your data is in source or destination. 
- @param directory destination
- @param extraFiles extraFiles
- @return YES if all files are moved.
- */
-- (BOOL)moveFilesToDirectory:(NSString *)directory
-              withExtraFiles:(nullable NSArray<NSString *> *)extraFiles;
-
-/**
  @brief This interface is equivalent to [database moveFilesToDirectory:directory withExtraFiles:nil andError:error].
  @param directory destination
  @return YES if all files are moved.

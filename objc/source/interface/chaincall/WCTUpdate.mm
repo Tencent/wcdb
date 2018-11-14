@@ -38,13 +38,6 @@ typedef NS_ENUM(NSUInteger, WCTUpdateType) {
     NSObject *_value;
 }
 
-- (void)invalidate
-{
-    [super invalidate];
-    _properties.clear();
-    _value = nil;
-}
-
 - (WCDB::StatementUpdate &)statement
 {
     return _statement;

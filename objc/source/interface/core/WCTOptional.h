@@ -31,18 +31,12 @@ public:
 
     WCTOptional(const std::nullptr_t& = nullptr) : m_failed(YES) {}
 
-    operator BOOL() const
-    {
-        if (m_failed) {
-            return NO;
-        }
-        return m_value;
-    }
+    operator const Value&() const { return value(); }
 
     const Value& value() const
     {
         if (m_failed) {
-            return defaultValue;
+            return m_defaultValue;
         }
         return m_value;
     }
@@ -50,6 +44,7 @@ public:
     BOOL failed() const { return m_failed; }
 
 private:
+    const Value m_defaultValue = defaultValue;
     Value m_value;
     BOOL m_failed;
 };

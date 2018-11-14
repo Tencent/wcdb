@@ -29,12 +29,6 @@
     WCTResultColumns _resultColumns;
 }
 
-- (void)invalidate
-{
-    [super invalidate];
-    _resultColumns.clear();
-}
-
 - (instancetype)fromTable:(NSString *)tableName
 {
     _statement.from(tableName);

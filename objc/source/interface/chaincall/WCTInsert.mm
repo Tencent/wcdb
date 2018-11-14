@@ -31,13 +31,6 @@
     NSArray<WCTObject *> *_values;
 }
 
-- (void)invalidate
-{
-    [super invalidate];
-    _properties.clear();
-    _values = nil;
-}
-
 - (WCDB::StatementInsert &)statement
 {
     return _statement;

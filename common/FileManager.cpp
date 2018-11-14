@@ -102,7 +102,7 @@ const std::function<bool(const String &, const String &, bool)> &enumeration)
     return true;
 }
 
-bool FileManager::createHardLink(const String &from, const String &to)
+bool FileManager::createFileHardLink(const String &from, const String &to)
 {
     if (link(from.c_str(), to.c_str()) == 0) {
         return true;
@@ -111,7 +111,7 @@ bool FileManager::createHardLink(const String &from, const String &to)
     return false;
 }
 
-bool FileManager::removeHardLink(const String &path)
+bool FileManager::removeFileHardLink(const String &path)
 {
     if (unlink(path.c_str()) == 0 || errno == ENOENT) {
         return true;
@@ -311,16 +311,27 @@ bool FileManager::moveItems(const std::list<std::pair<String, String>> &pairedPa
     bool result = true;
     std::list<String> recovers;
     for (const auto &pairedPath : pairedPaths) {
-        std::pair<bool, bool> ret = fileExists(pairedPath.first);
-        if (!ret.first) {
+        bool succeed, exists, isDirectory;
+        std::tie(succeed, exists, isDirectory) = itemExists(pairedPath.first);
+        if (!succeed) {
             break;
         }
-        if (ret.second) {
+        if (exists) {
             const String &newPath = pairedPath.second;
-            if (!removeItem(newPath)
-                || !createHardLink(pairedPath.first, pairedPath.second)) {
+            if (!removeItem(newPath)) {
                 result = false;
                 break;
+            }
+            if (isDirectory) {
+                if (!createDirectoryHardLink(pairedPath.first, newPath)) {
+                    result = false;
+                    break;
+                }
+            } else {
+                if (!createFileHardLink(pairedPath.first, newPath)) {
+                    result = false;
+                    break;
+                }
             }
             recovers.push_back(newPath);
         }
@@ -333,7 +344,7 @@ bool FileManager::moveItems(const std::list<std::pair<String, String>> &pairedPa
         }
     } else {
         for (const auto &recover : recovers) {
-            removeHardLink(recover.c_str());
+            removeItem(recover.c_str());
         }
     }
     return result;
@@ -365,6 +376,27 @@ bool FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(
         return setFileProtection(path, FileProtection::CompleteUntilFirstUserAuthentication);
     }
     return true;
+}
+
+bool FileManager::createDirectoryHardLink(const String &from, const String &to)
+{
+    if (!createDirectory(to)) {
+        return false;
+    }
+    if (enumerateDirectory(
+        from, [&to](const String &directory, const String &subpath, bool isDirectory) -> bool {
+            String oldPath = Path::addComponent(directory, subpath);
+            String newPath = Path::addComponent(to, subpath);
+            if (isDirectory) {
+                return createDirectoryHardLink(oldPath, newPath);
+            } else {
+                return createFileHardLink(oldPath, newPath);
+            }
+        })) {
+        return true;
+    }
+    removeItem(to);
+    return false;
 }
 
 #pragma mark - Error

@@ -64,11 +64,55 @@
     }
 }
 
-- (void)test_open
+- (void)test_open_and_close
 {
     TestCaseAssertFalse([self.database isOpened]);
     TestCaseAssertTrue([self.database canOpen]);
     TestCaseAssertTrue([self.database isOpened]);
+    [self.database close];
+    TestCaseAssertFalse([self.database isOpened]);
+}
+
+- (void)test_feature_close_will_not_checkpoint
+{
+    TestCaseAssertTrue([self.database canOpen]);
+    TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion()).to(1)]);
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:[self.path stringByAppendingString:@"-wal"]]);
+    [self.database close];
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:[self.path stringByAppendingString:@"-wal"]]);
+}
+
+- (void)test_blockade
+{
+    [self.database blockade];
+    __block NSDate* subthread;
+    dispatch_group_t group = dispatch_group_create();
+    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        XCTAssertTrue([self.database canOpen]);
+        subthread = [NSDate date];
+    });
+    [NSThread sleepForTimeInterval:1];
+    NSDate* main = [NSDate date];
+    [self.database unblockade];
+    dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+    XCTAssertTrue([main compare:subthread] == NSOrderedAscending);
+}
+
+- (void)test_blockaded_close
+{
+    __block NSDate* main;
+    __block NSDate* subthread;
+    dispatch_group_t group = dispatch_group_create();
+    [self.database close:^{
+        dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            XCTAssertTrue([self.database canOpen]);
+            subthread = [NSDate date];
+        });
+        [NSThread sleepForTimeInterval:1];
+        main = [NSDate date];
+    }];
+    dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+    XCTAssertTrue([main compare:subthread] == NSOrderedAscending);
 }
 
 @end
