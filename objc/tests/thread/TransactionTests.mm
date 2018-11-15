@@ -486,4 +486,108 @@
     TestCaseAssertTrue(result);
 }
 
+#pragma mark - Interspersed
+- (void)test_commit_and_commit_nested
+{
+    BOOL result = [self checkObjects:@[]
+                             andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"SAVEPOINT WCDBSavepoint_1", @"DELETE FROM main.testTable WHERE identifier == 2", @"RELEASE WCDBSavepoint_1", @"COMMIT" ]
+         asExpectedAfterModification:^BOOL {
+             return [self.database runTransaction:^BOOL(WCTHandle* handle) {
+                 return [handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]
+                        && [handle runNestedTransaction:^BOOL(WCTHandle* handle) {
+                               return [handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 2];
+                           }]; // commit, commit nested
+             }];
+         }];
+    TestCaseAssertTrue(result);
+}
+
+- (void)test_commit_and_rollback_nested
+{
+    BOOL result = [self checkObjects:@[ self.object2 ]
+                             andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"SAVEPOINT WCDBSavepoint_1", @"DELETE FROM main.testTable WHERE identifier == 2", @"ROLLBACK TO WCDBSavepoint_1", @"COMMIT" ]
+         asExpectedAfterModification:^BOOL {
+             __block BOOL unexpected = NO;
+             if (![self.database runTransaction:^BOOL(WCTHandle* handle) {
+                     if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
+                         unexpected = YES;
+                     }
+                     if ([handle runNestedTransaction:^BOOL(WCTHandle* handle) {
+                             if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 2]) {
+                                 TESTCASE_FAILED
+                                 unexpected = YES;
+                             }
+                             return NO; // rollback nested
+                         }]) {
+                         TESTCASE_FAILED
+                         unexpected = YES;
+                     }
+                     return YES; // commit
+                 }]) {
+                 TESTCASE_FAILED
+                 unexpected = YES;
+             }
+             return !unexpected;
+         }];
+    TestCaseAssertTrue(result);
+}
+
+- (void)test_rollback_and_commit_nested
+{
+    BOOL result = [self checkObjects:self.objects
+                             andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"SAVEPOINT WCDBSavepoint_1", @"DELETE FROM main.testTable WHERE identifier == 2", @"RELEASE WCDBSavepoint_1", @"ROLLBACK" ]
+         asExpectedAfterModification:^BOOL {
+             __block BOOL unexpected = NO;
+             if ([self.database runTransaction:^BOOL(WCTHandle* handle) {
+                     if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
+                         TESTCASE_FAILED
+                         unexpected = YES;
+                     }
+                     if (![handle runNestedTransaction:^BOOL(WCTHandle* handle) {
+                             return [handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 2]; // commit nested
+                         }]) {
+                         TESTCASE_FAILED
+                         unexpected = YES;
+                     }
+                     return NO; // rollback
+                 }]) {
+                 TESTCASE_FAILED
+                 unexpected = YES;
+             }
+             return !unexpected;
+         }];
+    TestCaseAssertTrue(result);
+}
+
+- (void)test_rollback_and_rollback_nested
+{
+    BOOL result = [self checkObjects:self.objects
+                             andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"SAVEPOINT WCDBSavepoint_1", @"DELETE FROM main.testTable WHERE identifier == 2", @"ROLLBACK TO WCDBSavepoint_1", @"ROLLBACK" ]
+         asExpectedAfterModification:^BOOL {
+             __block BOOL unexpected = NO;
+             if ([self.database runTransaction:^BOOL(WCTHandle* handle) {
+                     if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
+                         TESTCASE_FAILED
+                         unexpected = YES;
+                     }
+                     if ([handle runNestedTransaction:^BOOL(WCTHandle* handle) {
+                             if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 2]) {
+                                 TESTCASE_FAILED
+                                 unexpected = YES;
+                             }
+                             return NO; // rollback nested
+                         }]) {
+                         TESTCASE_FAILED
+                         unexpected = YES;
+                     }
+                     return NO; // rollback
+                 }]) {
+                 TESTCASE_FAILED
+                 unexpected = YES;
+             }
+             return !unexpected;
+         }];
+    TestCaseAssertTrue(result);
+}
+
 @end
