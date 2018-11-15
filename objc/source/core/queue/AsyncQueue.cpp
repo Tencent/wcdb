@@ -26,7 +26,8 @@
 
 namespace WCDB {
 
-AsyncQueue::AsyncQueue(const String& name_) : name(name_), m_running(false)
+AsyncQueue::AsyncQueue(const String& name_)
+: name(name_), m_running(false), m_started(false)
 {
 }
 

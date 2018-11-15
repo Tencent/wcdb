@@ -58,14 +58,14 @@ bool CheckpointQueue::onTimed(const String& path, const int& frames)
         return true;
     }
     bool result;
-    if (frames > framesForFull) {
+    if (frames > framesThresholdForTruncate) {
         result = database->execute(m_checkpointTruncate);
     } else {
         result = database->execute(m_checkpointPassive);
     }
     if (!result) {
         // retry after 10.0s if failed
-        m_timedQueue.reQueue(path, 10.0, frames);
+        m_timedQueue.reQueue(path, delayForRetryAfterFailure, frames);
     }
     return result;
 }

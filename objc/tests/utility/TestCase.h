@@ -37,6 +37,10 @@
 
 @property (nonatomic, readonly) NSString* className;
 
+@property (nonatomic, readonly) NSString* testName;
+
+@property (nonatomic, readonly) NSString* identifier;
+
 @property (nonatomic, readonly) NSFileManager* fileManager;
 
 @property (nonatomic, readonly) Console* console;

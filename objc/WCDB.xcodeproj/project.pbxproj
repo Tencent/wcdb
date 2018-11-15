@@ -99,6 +99,7 @@
 		231FEB212199A5A800DC3706 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEB182199A5A800DC3706 /* CRUDTestCase.mm */; };
 		231FEB222199A5A800DC3706 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEB182199A5A800DC3706 /* CRUDTestCase.mm */; };
 		231FEB232199A5A800DC3706 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEB182199A5A800DC3706 /* CRUDTestCase.mm */; };
+		23254FCB219D28BA00DE2435 /* ThreadTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23254FCA219D28BA00DE2435 /* ThreadTests.mm */; };
 		232741501F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		232741521F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */; };
 		233A058B2062698E00F1A212 /* WCTHandle+ChainCall.h in Headers */ = {isa = PBXBuildFile; fileRef = 233A05892062698E00F1A212 /* WCTHandle+ChainCall.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1129,6 +1130,7 @@
 		231FEAE32199A16700DC3706 /* TestCaseObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCaseObject.mm; sourceTree = "<group>"; };
 		231FEB172199A5A800DC3706 /* CRUDTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRUDTestCase.h; sourceTree = "<group>"; };
 		231FEB182199A5A800DC3706 /* CRUDTestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CRUDTestCase.mm; sourceTree = "<group>"; };
+		23254FCA219D28BA00DE2435 /* ThreadTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ThreadTests.mm; sourceTree = "<group>"; };
 		2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+FTS.h"; sourceTree = "<group>"; };
 		2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+FTS.mm"; sourceTree = "<group>"; };
 		233A05892062698E00F1A212 /* WCTHandle+ChainCall.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTHandle+ChainCall.h"; sourceTree = "<group>"; };
@@ -2017,6 +2019,7 @@
 			isa = PBXGroup;
 			children = (
 				23865640219C213200F7F6D2 /* TransactionTests.mm */,
+				23254FCA219D28BA00DE2435 /* ThreadTests.mm */,
 			);
 			path = thread;
 			sourceTree = "<group>";
@@ -4114,6 +4117,7 @@
 				231FEB1E2199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
 				231FEAF72199A4D200DC3706 /* SingleTableTestCase.mm in Sources */,
 				23739DC1219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
+				23254FCB219D28BA00DE2435 /* ThreadTests.mm in Sources */,
 				231FEAF42199A4D200DC3706 /* TestCaseObject.mm in Sources */,
 				231FEAF82199A4D200DC3706 /* NSObject+TestCase.m in Sources */,
 				231FEAF62199A4D200DC3706 /* SingleDatabaseTestCase.mm in Sources */,

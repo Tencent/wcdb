@@ -34,7 +34,8 @@ public:
     CheckpointQueue(const String& name, const std::shared_ptr<DatabasePool>& databasePool);
     ~CheckpointQueue();
 
-    static constexpr const int framesForFull = 10 * 1024;
+    static constexpr const int framesThresholdForTruncate = 10 * 1024;
+    static constexpr const double delayForRetryAfterFailure = 10.0;
 
     void put(const String& path, double delay, int frames);
     void remove(const String& path);

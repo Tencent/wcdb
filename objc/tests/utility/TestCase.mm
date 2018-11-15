@@ -50,6 +50,11 @@
     return [name substringWithRange:[match rangeAtIndex:1]];
 }
 
+- (NSString *)identifier
+{
+    return [NSString stringWithFormat:@"%@_%@", self.className, self.testName];
+}
+
 - (void)refreshDirectory
 {
     [self cleanDirectory];
