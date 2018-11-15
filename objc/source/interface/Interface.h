@@ -44,7 +44,6 @@
 
 #import <WCDB/WCTDatabase+Transaction.h>
 #import <WCDB/WCTHandle+Transaction.h>
-#import <WCDB/WCTTable+Transaction.h>
 
 #import <WCDB/WCTDatabase+Convenient.h>
 #import <WCDB/WCTHandle+Convenient.h>

@@ -197,8 +197,6 @@
 		23577F7A1F74F4E800D31C05 /* WCTCursorInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23577F781F74F4E800D31C05 /* WCTCursorInfo.mm */; };
 		23593B7D20D3ADF80058B416 /* WalRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23593B7B20D3ADF80058B416 /* WalRelated.cpp */; };
 		23593B7F20D3ADF80058B416 /* WalRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23593B7C20D3ADF80058B416 /* WalRelated.hpp */; };
-		235F5D5A207A377E00B440CA /* WCTTable+Transaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 235F5D58207A377E00B440CA /* WCTTable+Transaction.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		235F5D5B207A377E00B440CA /* WCTTable+Transaction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235F5D59207A377E00B440CA /* WCTTable+Transaction.mm */; };
 		2360A5F720D78F1B00E4A311 /* HandleRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2360A5F320D78F1B00E4A311 /* HandleRelated.cpp */; };
 		2360A5F920D78F1B00E4A311 /* HandleNotification.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2360A5F420D78F1B00E4A311 /* HandleNotification.cpp */; };
 		2360A5FB20D78F1B00E4A311 /* HandleNotification.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2360A5F520D78F1B00E4A311 /* HandleNotification.hpp */; };
@@ -329,6 +327,18 @@
 		2384F72F2194255700E8B10A /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
 		2386563D219C009E00F7F6D2 /* FileTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386563C219C009E00F7F6D2 /* FileTests.mm */; };
 		2386563F219C00A500F7F6D2 /* MemoryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386563E219C00A500F7F6D2 /* MemoryTests.mm */; };
+		23865641219C213200F7F6D2 /* TransactionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865640219C213200F7F6D2 /* TransactionTests.mm */; };
+		23865644219C47AC00F7F6D2 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
+		23865645219C47AC00F7F6D2 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
+		23865646219C47AC00F7F6D2 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
+		23865647219C47AC00F7F6D2 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
+		23865648219C47AC00F7F6D2 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
+		23865649219C47AC00F7F6D2 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
+		2386564A219C47AC00F7F6D2 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
+		2386564B219C47AC00F7F6D2 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
+		2386564C219C47AC00F7F6D2 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
+		2386564D219C47AC00F7F6D2 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
+		2386564E219C47AC00F7F6D2 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
 		2386B3C51ED442FE000B72F6 /* WCTError.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C21ED442FE000B72F6 /* WCTError.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2386B3C61ED442FE000B72F6 /* WCTError.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386B3C31ED442FE000B72F6 /* WCTError.mm */; };
 		2386B3C71ED442FE000B72F6 /* WCTError+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C41ED442FE000B72F6 /* WCTError+Private.h */; };
@@ -1215,8 +1225,6 @@
 		23577F781F74F4E800D31C05 /* WCTCursorInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTCursorInfo.mm; sourceTree = "<group>"; };
 		23593B7B20D3ADF80058B416 /* WalRelated.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WalRelated.cpp; sourceTree = "<group>"; };
 		23593B7C20D3ADF80058B416 /* WalRelated.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WalRelated.hpp; sourceTree = "<group>"; };
-		235F5D58207A377E00B440CA /* WCTTable+Transaction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTTable+Transaction.h"; sourceTree = "<group>"; };
-		235F5D59207A377E00B440CA /* WCTTable+Transaction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTTable+Transaction.mm"; sourceTree = "<group>"; };
 		2360A5F320D78F1B00E4A311 /* HandleRelated.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HandleRelated.cpp; sourceTree = "<group>"; };
 		2360A5F420D78F1B00E4A311 /* HandleNotification.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HandleNotification.cpp; sourceTree = "<group>"; };
 		2360A5F520D78F1B00E4A311 /* HandleNotification.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HandleNotification.hpp; sourceTree = "<group>"; };
@@ -1380,6 +1388,9 @@
 		2384F7282194249200E8B10A /* Convenient tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Convenient tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2386563C219C009E00F7F6D2 /* FileTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FileTests.mm; sourceTree = "<group>"; };
 		2386563E219C00A500F7F6D2 /* MemoryTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MemoryTests.mm; sourceTree = "<group>"; };
+		23865640219C213200F7F6D2 /* TransactionTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TransactionTests.mm; sourceTree = "<group>"; };
+		23865642219C47AC00F7F6D2 /* Console.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Console.h; sourceTree = "<group>"; };
+		23865643219C47AC00F7F6D2 /* Console.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Console.mm; sourceTree = "<group>"; };
 		2386B3C21ED442FE000B72F6 /* WCTError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTError.h; sourceTree = "<group>"; };
 		2386B3C31ED442FE000B72F6 /* WCTError.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTError.mm; sourceTree = "<group>"; };
 		2386B3C41ED442FE000B72F6 /* WCTError+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTError+Private.h"; sourceTree = "<group>"; };
@@ -2005,6 +2016,7 @@
 		231FEADD2199A0FF00DC3706 /* thread */ = {
 			isa = PBXGroup;
 			children = (
+				23865640219C213200F7F6D2 /* TransactionTests.mm */,
 			);
 			path = thread;
 			sourceTree = "<group>";
@@ -2323,8 +2335,6 @@
 			children = (
 				234DBCFF2064DE04000E31E8 /* WCTDatabase+Transaction.h */,
 				234DBD002064DE04000E31E8 /* WCTDatabase+Transaction.mm */,
-				235F5D58207A377E00B440CA /* WCTTable+Transaction.h */,
-				235F5D59207A377E00B440CA /* WCTTable+Transaction.mm */,
 				234DBD012064DE04000E31E8 /* WCTHandle+Transaction.h */,
 				234DBD022064DE04000E31E8 /* WCTHandle+Transaction.mm */,
 				234DBD072064DE23000E31E8 /* WCTTransaction.h */,
@@ -2608,6 +2618,8 @@
 				23790A642192B0A60098797F /* SingleTableTestCase.mm */,
 				231C98B8219532AC0067B87C /* NSObject+TestCase.h */,
 				231C98B9219532AC0067B87C /* NSObject+TestCase.m */,
+				23865642219C47AC00F7F6D2 /* Console.h */,
+				23865643219C47AC00F7F6D2 /* Console.mm */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -3352,7 +3364,6 @@
 				2370B12821914ED500D3227C /* WCTSequence.h in Headers */,
 				234DBD092064DE23000E31E8 /* WCTTransaction.h in Headers */,
 				23593B7F20D3ADF80058B416 /* WalRelated.hpp in Headers */,
-				235F5D5A207A377E00B440CA /* WCTTable+Transaction.h in Headers */,
 				23D0C36520C14ACC0001BFAE /* FactoryRelated.hpp in Headers */,
 				23EEDD56217DFADC006E9E73 /* SyntaxSelectSTMT.hpp in Headers */,
 				2360A60920D78F2C00E4A311 /* PerformanceTraceConfig.hpp in Headers */,
@@ -4090,6 +4101,7 @@
 				23739DBC219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
 				231FEB122199A4D600DC3706 /* TestCaseObject.mm in Sources */,
 				231FEB162199A4D600DC3706 /* NSObject+TestCase.m in Sources */,
+				23865644219C47AC00F7F6D2 /* Console.mm in Sources */,
 				231FEB142199A4D600DC3706 /* SingleDatabaseTestCase.mm in Sources */,
 				231FEB132199A4D600DC3706 /* TestCase.mm in Sources */,
 			);
@@ -4105,6 +4117,8 @@
 				231FEAF42199A4D200DC3706 /* TestCaseObject.mm in Sources */,
 				231FEAF82199A4D200DC3706 /* NSObject+TestCase.m in Sources */,
 				231FEAF62199A4D200DC3706 /* SingleDatabaseTestCase.mm in Sources */,
+				23865641219C213200F7F6D2 /* TransactionTests.mm in Sources */,
+				23865649219C47AC00F7F6D2 /* Console.mm in Sources */,
 				231FEAF52199A4D200DC3706 /* TestCase.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4120,6 +4134,7 @@
 				231FEAFD2199A4D300DC3706 /* NSObject+TestCase.m in Sources */,
 				231FEAFB2199A4D300DC3706 /* SingleDatabaseTestCase.mm in Sources */,
 				231FEAFA2199A4D300DC3706 /* TestCase.mm in Sources */,
+				2386564A219C47AC00F7F6D2 /* Console.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4134,6 +4149,7 @@
 				231FEB072199A4D400DC3706 /* NSObject+TestCase.m in Sources */,
 				231FEB052199A4D400DC3706 /* SingleDatabaseTestCase.mm in Sources */,
 				231FEB042199A4D400DC3706 /* TestCase.mm in Sources */,
+				2386564B219C47AC00F7F6D2 /* Console.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4148,6 +4164,7 @@
 				231FEB022199A4D400DC3706 /* NSObject+TestCase.m in Sources */,
 				231FEB002199A4D400DC3706 /* SingleDatabaseTestCase.mm in Sources */,
 				231FEAFF2199A4D400DC3706 /* TestCase.mm in Sources */,
+				2386564C219C47AC00F7F6D2 /* Console.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4162,6 +4179,7 @@
 				231FEB0C2199A4D500DC3706 /* NSObject+TestCase.m in Sources */,
 				231FEB0A2199A4D500DC3706 /* SingleDatabaseTestCase.mm in Sources */,
 				231FEB092199A4D500DC3706 /* TestCase.mm in Sources */,
+				2386564D219C47AC00F7F6D2 /* Console.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4176,6 +4194,7 @@
 				231FEB112199A4D500DC3706 /* NSObject+TestCase.m in Sources */,
 				231FEB0F2199A4D500DC3706 /* SingleDatabaseTestCase.mm in Sources */,
 				231FEB0E2199A4D500DC3706 /* TestCase.mm in Sources */,
+				2386564E219C47AC00F7F6D2 /* Console.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4202,6 +4221,7 @@
 				23739D9B219AC9A600A043BF /* Integer64CodingObject.m in Sources */,
 				23739D9E219AC9AD00A043BF /* DoubleCodingObject.m in Sources */,
 				23739DAD219AC9F200A043BF /* StringCodingObject+WCTColumnCoding.mm in Sources */,
+				23865648219C47AC00F7F6D2 /* Console.mm in Sources */,
 				23739DC0219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
 				231FEAF02199A4D200DC3706 /* TestCase.mm in Sources */,
 				23739D95219AC8A000A043BF /* Integer32CodingObject+WCTColumnCoding.mm in Sources */,
@@ -4228,6 +4248,7 @@
 				23790A772192D3D00098797F /* IndexObject.mm in Sources */,
 				2384F6CF2193E0AC00E8B10A /* ColumnConstraintNotNull.mm in Sources */,
 				2384F6BB2193E07600E8B10A /* ColumnConstraintPrimaryAsc.mm in Sources */,
+				23865646219C47AC00F7F6D2 /* Console.mm in Sources */,
 				2384F6D32193E0B600E8B10A /* ColumnConstraintDefault.mm in Sources */,
 				2384F6E9219412FA00E8B10A /* FTS3Object.mm in Sources */,
 				231FEB1B2199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
@@ -4252,6 +4273,7 @@
 				233E12402195756B00BD488D /* ConvenientDeleteTests.mm in Sources */,
 				2384F72E2194255700E8B10A /* SingleDatabaseTestCase.mm in Sources */,
 				233E123E2195756400BD488D /* ConvenientUpdateTests.mm in Sources */,
+				23865647219C47AC00F7F6D2 /* Console.mm in Sources */,
 				2384F70F2194249200E8B10A /* TestCase.mm in Sources */,
 				23739DBF219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
 				233E123A2195755400BD488D /* ConvenientInsertTests.mm in Sources */,
@@ -4322,7 +4344,6 @@
 				23EEDCC1217DFADC006E9E73 /* StatementCreateTable.cpp in Sources */,
 				2360A5F920D78F1B00E4A311 /* HandleNotification.cpp in Sources */,
 				23AD52DD20DB56D200664B62 /* Sequence.cpp in Sources */,
-				235F5D5B207A377E00B440CA /* WCTTable+Transaction.mm in Sources */,
 				23EEDCB3217DFADC006E9E73 /* Statement.cpp in Sources */,
 				234EF46F2015CFDE00B81929 /* WCTConvertible.mm in Sources */,
 				23EEDCB5217DFADC006E9E73 /* StatementAlterTable.cpp in Sources */,
@@ -4596,6 +4617,7 @@
 				2398978B217EC9E30014BF33 /* StatementInsertTests.mm in Sources */,
 				2398976C217EC9E30014BF33 /* FrameSpecTests.mm in Sources */,
 				23989787217EC9E30014BF33 /* StatementDropIndexTests.mm in Sources */,
+				23865645219C47AC00F7F6D2 /* Console.mm in Sources */,
 				23790A56219298680098797F /* SingleDatabaseTestCase.mm in Sources */,
 				23989786217EC9E30014BF33 /* StatementDetachTests.mm in Sources */,
 				23989776217EC9E30014BF33 /* QualifiedTableTests.mm in Sources */,

@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import "Console.h"
 #import "NSObject+TestCase.h"
 #import <WCDB/WCDB.h>
 #import <XCTest/XCTest.h>
@@ -37,6 +38,8 @@
 @property (nonatomic, readonly) NSString* className;
 
 @property (nonatomic, readonly) NSFileManager* fileManager;
+
+@property (nonatomic, readonly) Console* console;
 
 - (void)refreshDirectory;
 

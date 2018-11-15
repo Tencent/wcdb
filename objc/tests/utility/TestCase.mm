@@ -86,6 +86,11 @@
     return [NSFileManager defaultManager];
 }
 
+- (Console *)console
+{
+    return [Console shared];
+}
+
 + (NSString *)hint:(NSString *)description expecting:(NSString *)expected
 {
     return [NSString stringWithFormat:

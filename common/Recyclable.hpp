@@ -73,15 +73,22 @@ public:
     T &unsafeGet() { return m_value; }
 
 protected:
-    void retain() const { ++(*m_reference); }
+    void retain() const
+    {
+        if (m_reference) {
+            ++(*m_reference);
+        }
+    }
 
     void release()
     {
-        WCTInnerAssert((*m_reference) > 0);
-        if (--(*m_reference) == 0) {
-            if (m_onRecycled) {
-                m_onRecycled(m_value);
-                m_onRecycled = nullptr;
+        if (m_reference) {
+            WCTInnerAssert((*m_reference) > 0);
+            if (--(*m_reference) == 0) {
+                if (m_onRecycled) {
+                    m_onRecycled(m_value);
+                    m_onRecycled = nullptr;
+                }
             }
         }
     }

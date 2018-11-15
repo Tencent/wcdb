@@ -18,9 +18,17 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTTable.h>
-#import <WCDB/WCTTransaction.h>
+#import <Foundation/Foundation.h>
 
-@interface WCTTable (Transaction) <WCTTransaction>
+NS_ASSUME_NONNULL_BEGIN
+
+@interface Console : NSObject
+
++ (Console*)shared;
+
+- (void)enableSQLiteWrite;
+- (void)disableSQLiteWrite;
 
 @end
+
+NS_ASSUME_NONNULL_END
