@@ -27,6 +27,8 @@ typedef BOOL (^WCTTransactionBlock)(WCTHandle *);
 
 @protocol WCTTransaction
 @required
+- (BOOL)isInTransaction;
+
 - (BOOL)beginTransaction;
 - (BOOL)commitOrRollbackTransaction;
 - (void)rollbackTransaction;

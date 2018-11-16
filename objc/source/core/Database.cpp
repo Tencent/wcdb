@@ -245,6 +245,12 @@ Database::ThreadedGuard::~ThreadedGuard()
 }
 
 #pragma mark - Transaction
+bool Database::isInTransaction()
+{
+    ThreadedHandles *threadedHandles = Database::threadedHandles().getOrCreate();
+    return threadedHandles->find(this) != threadedHandles->end();
+}
+
 bool Database::beginTransaction()
 {
     RecyclableHandle handle = getHandle();

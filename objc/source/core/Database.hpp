@@ -94,6 +94,8 @@ private:
 public:
     using TransactionCallback = Handle::TransactionCallback;
 
+    bool isInTransaction();
+
     bool beginTransaction();
     bool commitOrRollbackTransaction();
     void rollbackTransaction();

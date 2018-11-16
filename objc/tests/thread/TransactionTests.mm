@@ -250,6 +250,25 @@
     TestCaseAssertTrue(result);
 }
 
+#pragma mark - Database - Is In Transaction
+- (void)test_database_is_in_transaction
+{
+    {
+        TestCaseAssertFalse(![self.database isInTransaction]);
+        TestCaseAssertTrue([self.database beginTransaction]);
+        TestCaseAssertTrue([self.database isInTransaction]);
+        TestCaseAssertTrue([self.database commitOrRollbackTransaction]);
+        TestCaseAssertFalse(![self.database isInTransaction]);
+    }
+    {
+        TestCaseAssertFalse(![self.database isInTransaction]);
+        TestCaseAssertTrue([self.database beginTransaction]);
+        TestCaseAssertTrue([self.database isInTransaction]);
+        [self.database rollbackTransaction];
+        TestCaseAssertFalse(![self.database isInTransaction]);
+    }
+}
+
 #pragma mark - Handle - Transaction
 - (void)test_handle_commit
 {
@@ -484,6 +503,26 @@
              return YES;
          }];
     TestCaseAssertTrue(result);
+}
+
+#pragma mark - Database - Is In Transaction
+- (void)test_handle_is_in_transaction
+{
+    WCTHandle* handle = [self.database getHandle];
+    {
+        TestCaseAssertFalse(![handle isInTransaction]);
+        TestCaseAssertTrue([handle beginTransaction]);
+        TestCaseAssertTrue([handle isInTransaction]);
+        TestCaseAssertTrue([handle commitOrRollbackTransaction]);
+        TestCaseAssertFalse(![handle isInTransaction]);
+    }
+    {
+        TestCaseAssertFalse(![handle isInTransaction]);
+        TestCaseAssertTrue([handle beginTransaction]);
+        TestCaseAssertTrue([handle isInTransaction]);
+        [handle rollbackTransaction];
+        TestCaseAssertFalse(![handle isInTransaction]);
+    }
 }
 
 #pragma mark - Interspersed

@@ -24,6 +24,12 @@
 
 @implementation WCTDatabase (Transaction)
 
+- (BOOL)isInTransaction
+{
+    WCTDatabaseAssert(return NO;);
+    return _database->isInTransaction();
+}
+
 - (BOOL)beginTransaction
 {
     WCTDatabaseAssert(return NO;);
