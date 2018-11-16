@@ -39,6 +39,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)isValidated;
 
+- (BOOL)validate;
+
 #pragma mark - Execute
 - (BOOL)execute:(const WCDB::Statement &)statement;
 

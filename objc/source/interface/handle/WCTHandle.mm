@@ -71,6 +71,11 @@
     return [self getOrGenerateHandle] -> getRawHandle();
 }
 
+- (BOOL)validate
+{
+    return [self getOrGenerateHandle] != nullptr;
+}
+
 - (void)invalidate
 {
     _database = nil;

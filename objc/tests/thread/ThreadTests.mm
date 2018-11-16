@@ -299,7 +299,32 @@
 
 - (void)test_feature_threaded_handle
 {
-#error TODO
+    __block int handleCount = 0;
+    [self.database
+           setConfig:^BOOL(WCTHandle*) {
+               ++handleCount;
+               return YES;
+           }
+    withUninvocation:nil
+             forName:self.testName];
+    {
+        WCTHandle* handle1 = [self.database getHandle];
+        TestCaseAssertTrue([handle1 validate]);
+        WCTHandle* handle2 = [self.database getHandle];
+        TestCaseAssertTrue([handle2 validate]);
+        WCTHandle* handle3 = [self.database getHandle];
+        TestCaseAssertTrue([handle3 validate]);
+
+        [handle1 invalidate];
+        [handle2 invalidate];
+        [handle3 invalidate];
+    }
+    TestCaseAssertEqual(handleCount, 3);
+
+    BOOL result = [self.database runTransaction:^BOOL(WCTHandle* _Nonnull) {
+        return [self.database isInTransaction];
+    }];
+    TestCaseAssertTrue(result);
 }
 
 @end
