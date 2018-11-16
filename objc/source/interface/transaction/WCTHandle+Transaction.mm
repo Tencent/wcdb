@@ -25,6 +25,15 @@
 
 @implementation WCTHandle (Transaction)
 
+- (BOOL)isInTransaction
+{
+    WCDB::Handle *handle = [self getOrGenerateHandle];
+    if (!handle) {
+        return NO;
+    }
+    return handle->isInTransaction();
+}
+
 - (BOOL)beginTransaction
 {
     WCDB::Handle *handle = [self getOrGenerateHandle];
