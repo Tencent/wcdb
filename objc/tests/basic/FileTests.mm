@@ -177,4 +177,29 @@
     TestCaseAssertEqual(fileSizeOptional.value(), 0);
 }
 
+- (void)test_feature_auto_create_immediate_directory
+{
+    NSString* directory = [[[[[[self.directory stringByAppendingPathComponent:@"immediate"] stringByAppendingPathComponent:@"directory"] stringByAppendingPathComponent:@"will"] stringByAppendingPathComponent:@"be"] stringByAppendingPathComponent:@"created"] stringByAppendingPathComponent:@"automatically"];
+    NSString* path = [directory stringByAppendingString:self.path.lastPathComponent];
+
+    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
+    TestCaseAssertTrue([database canOpen]);
+
+    BOOL isDirectory;
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:directory isDirectory:isDirectory] && isDirectory);
+}
+
+- (void)test_feature_path_normalized
+{
+    NSString* path = [self.directory stringByAppendingString:@"//directory//database"];
+    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
+    TestCaseAssertTrue([database canOpen]);
+
+    NSString* normalizedPath = [[[NSString stringWithFormat:@"%@"] stringByAppendingPathComponent:@"directory"] stringByAppendingPathComponent:@"database"];
+    TestCaseAssertTrue([database.path isEqualToString:normalizedPath]);
+}
+
+#warning TODO
+//- (void)test_feature_auto_set_file_protection
+
 @end
