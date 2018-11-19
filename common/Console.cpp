@@ -119,7 +119,7 @@ void Console::print(const Error& error)
 void Console::breakpoint(const Error& error)
 {
     if (error.level == Error::Level::Fatal) {
-        printf("Set breakpoint at Console::breakpoint to debug\n");
+        std::cout << "Set breakpoint at Console::breakpoint to debug\n";
         abort();
     }
 }
