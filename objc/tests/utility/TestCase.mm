@@ -28,6 +28,9 @@
     dispatch_once(&onceToken, ^{
 #ifdef DEBUG
         WCTDatabase.debuggable = YES;
+        [WCTDatabase globalTraceSQL:^(NSString *sql) {
+            NSLog(@"%@ SQL: %@", [NSThread currentThread].name, sql);
+        }];
 #else
         WCTDatabase.debuggable = NO;
 #endif

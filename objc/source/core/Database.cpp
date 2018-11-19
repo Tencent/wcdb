@@ -44,13 +44,13 @@ Database::Database(const String &path)
 #pragma mark - Basic
 void Database::setTag(const Tag &tag)
 {
-    LockGuard lockGuard(m_lock);
+    LockGuard memoryGuard(m_memory);
     m_tag = tag;
 }
 
 Tag Database::getTag() const
 {
-    SharedLockGuard lockGuard(m_lock);
+    SharedLockGuard memoryGuard(m_memory);
     return m_tag;
 }
 
@@ -71,48 +71,53 @@ bool Database::isOpened() const
 
 uint32_t Database::getIdentifier() const
 {
-    SharedLockGuard lockGuard(m_lock);
+    SharedLockGuard memoryGuard(m_memory);
     return m_identifier;
 }
 
 #pragma mark - Handle
 RecyclableHandle Database::flowOut()
 {
+    RecyclableHandle handle = nullptr;
     do {
         {
-            SharedLockGuard lockGuard(m_lock);
+            SharedLockGuard concurrencyGuard(m_concurrency);
             if (aliveHandleCount() > 0) {
+                checkIdentifier();
+                handle = HandlePool::flowOut();
                 break;
             }
         }
+
         // Blocked initialization
-        LockGuard lockConcurrencyGuard(m_concurrency);
-        LockGuard lockGuard(m_lock);
+        LockGuard concurrencyGuard(m_concurrency);
+        LockGuard memoryGuard(m_memory);
         if (aliveHandleCount() > 0) {
-            break;
+            // retry
+            continue;
         }
         if (!FileManager::createDirectoryWithIntermediateDirectories(
             Path::getDirectoryName(path))) {
             assignWithSharedThreadedError();
-            return nullptr;
+            break;
         }
         if (!retrieveRenewed()) {
-            return nullptr;
+            break;
         }
         bool succeed, exists;
         std::tie(succeed, exists) = FileManager::fileExists(path);
         if (!succeed) {
             assignWithSharedThreadedError();
-            return nullptr;
+            break;
         }
         if (!exists && !FileManager::createFile(path)) {
             assignWithSharedThreadedError();
-            return nullptr;
+            break;
         }
         std::tie(succeed, m_identifier) = FileManager::getFileIdentifier(path);
         if (!succeed) {
             assignWithSharedThreadedError();
-            return nullptr;
+            break;
         }
         // When migration associated is not set, the initialize state is default to true
         if (!m_migration.isInitialized()) {
@@ -120,13 +125,16 @@ RecyclableHandle Database::flowOut()
             // This temporary handle will be dropped since it's dirty.
             MigrationInitializerHandle handle(path);
             if (!m_migration.initialize(handle)) {
-                return nullptr;
+                break;
             }
         }
-    } while (false);
-    WCTInnerAssert(m_identifier != 0);
-    checkIdentifier();
-    return HandlePool::flowOut();
+        WCTInnerAssert(aliveHandleCount() == 0);
+        // acquire one handle to make pool not empty.
+        if (HandlePool::flowOut() == nullptr) {
+            break;
+        }
+    } while (true);
+    return handle;
 }
 
 RecyclableHandle Database::getHandle()
@@ -184,7 +192,7 @@ std::pair<bool, bool> Database::tableExists(const TableOrSubquery &table)
 
 std::shared_ptr<Handle> Database::generateHandle()
 {
-    SharedLockGuard lockGuard(m_lock);
+    SharedLockGuard memoryGuard(m_memory);
     std::shared_ptr<Handle> handle;
     WCTInnerAssert(m_migration.isInitialized());
     if (m_migration.shouldMigrate()) {
@@ -197,7 +205,7 @@ std::shared_ptr<Handle> Database::generateHandle()
 
 bool Database::handleWillConfigure(Handle *handle)
 {
-    SharedLockGuard lockGuard(m_lock);
+    SharedLockGuard memoryGuard(m_memory);
     if (m_migration.shouldMigrate()) {
         rebindMigration(handle);
     }
@@ -369,7 +377,7 @@ std::pair<bool, uint32_t> Database::getIdentifier()
 bool Database::removeFiles()
 {
     bool result = false;
-    LockGuard lockGuard(m_concurrency);
+    LockGuard concurrencyGuard(m_concurrency);
     close(nullptr);
     std::list<String> paths = getPaths();
     paths.reverse(); // reverse to remove the non-critical paths first avoiding app stopped between the removing
@@ -391,7 +399,7 @@ std::pair<bool, size_t> Database::getFilesSize()
 
 bool Database::moveFiles(const String &directory)
 {
-    LockGuard lockGuard(m_concurrency);
+    LockGuard cocurrencyGuard(m_concurrency);
     close(nullptr);
     std::list<String> paths = getPaths();
     paths.reverse();
@@ -448,20 +456,20 @@ String Database::getLastMaterialPath() const
 
 const String &Database::getFactoryDirectory() const
 {
-    SharedLockGuard lockGuard(m_lock);
+    SharedLockGuard memoryGuard(m_memory);
     return m_factory.directory;
 }
 
 void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
 {
-    LockGuard lockGuard(m_lock);
+    LockGuard memoryGuard(m_memory);
     m_factory.filter(tableShouldBeBackedup);
 }
 
 bool Database::backup()
 {
-    SharedLockGuard lockConcurrencyGuard(m_concurrency); // lock concurrency shared since backup is kind of handle operation
-    SharedLockGuard lockGuard(m_lock);
+    SharedLockGuard concurrencyGuard(m_concurrency); // lock concurrency shared since backup is kind of handle operation
+    SharedLockGuard memoryGuard(m_memory);
     Repair::FactoryBackup backup = m_factory.backup();
     if (backup.work(getPath())) {
         return true;
@@ -472,8 +480,8 @@ bool Database::backup()
 
 bool Database::deposit()
 {
-    LockGuard lockConcurrencyGuard(m_concurrency);
-    SharedLockGuard lockGuard(m_lock);
+    LockGuard concurrencyGuard(m_concurrency);
+    SharedLockGuard memoryGuard(m_memory);
     close(nullptr);
     Repair::FactoryRenewer renewer = m_factory.renewer();
     // Prepare a new database from material at renew directory and wait for moving
@@ -497,8 +505,8 @@ bool Database::deposit()
 
 double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
 {
-    LockGuard lockConcurrencyGuard(m_concurrency);
-    SharedLockGuard lockGuard(m_lock);
+    LockGuard concurrencyGuard(m_concurrency);
+    SharedLockGuard memoryGuard(m_memory);
     close(nullptr);
     Repair::FactoryRetriever retriever = m_factory.retriever();
     retriever.setProgressCallback(onProgressUpdate);
@@ -509,13 +517,15 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
 
 bool Database::canRetrieve() const
 {
-    SharedLockGuard lockGuard(m_lock);
+    SharedLockGuard concurrencyGuard(m_concurrency);
+    SharedLockGuard memoryGuard(m_memory);
     return m_factory.canRetrieve();
 }
 
 bool Database::removeDeposit()
 {
-    SharedLockGuard lockGuard(m_lock);
+    LockGuard concurrencyGuard(m_concurrency);
+    SharedLockGuard memoryGuard(m_memory);
     if (m_factory.removeDeposite()) {
         return true;
     }
@@ -535,7 +545,7 @@ bool Database::removeMaterials()
 bool Database::retrieveRenewed()
 {
     WCTInnerAssert(isBlockaded());
-    SharedLockGuard lockGuard(m_lock);
+    SharedLockGuard memoryGuard(m_memory);
     WCTInnerAssert(!isOpened());
     Repair::FactoryRenewer renewer = m_factory.renewer();
     if (renewer.work()) {
@@ -548,31 +558,31 @@ bool Database::retrieveRenewed()
 #pragma mark - Recovery
 void Database::setRecoveryMode(RecoveryMode mode)
 {
-    LockGuard lockGuard(m_lock);
+    LockGuard memoryGuard(m_memory);
     m_recoveryMode = mode;
 }
 
 Database::RecoveryMode Database::getRecoverMode() const
 {
-    SharedLockGuard lockGuard(m_lock);
+    SharedLockGuard memoryGuard(m_memory);
     return m_recoveryMode;
 }
 
 void Database::setNotificationWhenRecovering(const RecoverNotification &notification)
 {
-    LockGuard lockGuard(m_lock);
+    LockGuard memoryGuard(m_memory);
     m_recoverNotification = notification;
 }
 
 bool Database::containsRecoverScheme() const
 {
-    SharedLockGuard lockGuard(m_lock);
+    SharedLockGuard memoryGuard(m_memory);
     return m_recoveryMode != RecoveryMode::Custom || m_recoverNotification != nullptr;
 }
 
 bool Database::recover()
 {
-    LockGuard lockGuard(m_concurrency);
+    LockGuard cocurrencyGuard(m_concurrency);
     if (!containsRecoverScheme()) {
         return true;
     }
@@ -608,7 +618,7 @@ bool Database::rebindMigration(Handle *handle)
     WCTInnerAssert(dynamic_cast<MigrationHandle *>(handle) != nullptr);
     std::set<const MigrationInfo *> migratingInfos;
     {
-        SharedLockGuard lockGuard(m_lock);
+        SharedLockGuard memoryGuard(m_memory);
         migratingInfos = m_migration.getMigratingInfos();
     }
     return static_cast<MigrationHandle *>(handle)->rebindMigration(migratingInfos);
@@ -616,7 +626,7 @@ bool Database::rebindMigration(Handle *handle)
 
 void Database::addMigrationInfo(const MigrationUserInfo &userInfo)
 {
-    LockGuard lockGuard(m_lock);
+    LockGuard memoryGuard(m_memory);
     WCTRemedialAssert(aliveHandleCount() == 0,
                       "Migration method must be set before the very first operation.",
                       return;);
@@ -625,7 +635,7 @@ void Database::addMigrationInfo(const MigrationUserInfo &userInfo)
 
 void Database::filterMigration(const MigrationTableFilter &filter)
 {
-    LockGuard lockGuard(m_lock);
+    LockGuard memoryGuard(m_memory);
     WCTRemedialAssert(aliveHandleCount() == 0,
                       "Migration user info must be set before the very first operation.",
                       return;);

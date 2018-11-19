@@ -45,13 +45,13 @@ HandlePool::~HandlePool()
 #pragma mark - Config
 void HandlePool::setConfigs(const std::shared_ptr<Configs> &configs)
 {
-    LockGuard lockGuard(m_lock);
+    LockGuard memoryGuard(m_memory);
     m_configs = configs;
 }
 
 void HandlePool::setConfig(const String &name, const std::shared_ptr<Config> &config, int priority)
 {
-    LockGuard lockGuard(m_lock);
+    LockGuard memoryGuard(m_memory);
     std::shared_ptr<Configs> configs(new Configs(*m_configs.get()));
     configs->insert(name, config, priority);
     m_configs = configs;
@@ -59,7 +59,7 @@ void HandlePool::setConfig(const String &name, const std::shared_ptr<Config> &co
 
 void HandlePool::removeConfig(const String &name)
 {
-    LockGuard lockGuard(m_lock);
+    LockGuard memoryGuard(m_memory);
     std::shared_ptr<Configs> configs(new Configs(*m_configs.get()));
     configs->remove(name);
     m_configs = configs;
@@ -82,7 +82,7 @@ int HandlePool::maxConcurrency()
 bool HandlePool::allowedConcurrent()
 {
     WCTInnerAssert(m_concurrency.readSafety());
-    WCTInnerAssert(m_lock.readSafety());
+    WCTInnerAssert(m_memory.readSafety());
     if (m_handles.size() < maxConcurrency()) {
         return true;
     }
@@ -116,9 +116,9 @@ bool HandlePool::isBlockaded() const
 
 void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
 {
-    LockGuard lockConcurrencyGuard(m_concurrency);
+    LockGuard concurrencyGuard(m_concurrency);
     {
-        LockGuard lockGuard(m_lock);
+        LockGuard memoryGuard(m_memory);
         WCTInnerAssert(m_frees.size() == m_handles.size());
         for (const auto &handle : m_handles) {
             handle->get()->close();
@@ -133,16 +133,16 @@ void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
 
 bool HandlePool::isDrained() const
 {
-    SharedLockGuard lockConcurrencyGuard(m_concurrency);
-    SharedLockGuard lockGuard(m_lock);
+    SharedLockGuard concurrencyGuard(m_concurrency);
+    SharedLockGuard memoryGuard(m_memory);
     return m_handles.size() == 0;
 }
 
 #pragma mark - Handle
 void HandlePool::purge()
 {
-    SharedLockGuard lockConcurrencyGuard(m_concurrency);
-    LockGuard lockGuard(m_lock);
+    SharedLockGuard concurrencyGuard(m_concurrency);
+    LockGuard memoryGuard(m_memory);
     for (const auto &handle : m_frees) {
         handle->get()->close();
         m_handles.erase(handle);
@@ -152,17 +152,17 @@ void HandlePool::purge()
 
 size_t HandlePool::aliveHandleCount() const
 {
-    SharedLockGuard lockConcurrencyGuard(m_concurrency);
-    SharedLockGuard lockGuard(m_lock);
+    SharedLockGuard concurrencyGuard(m_concurrency);
+    SharedLockGuard memoryGuard(m_memory);
     return m_handles.size();
 }
 
 RecyclableHandle HandlePool::flowOut()
 {
-    SharedLockGuard lockConcurrencyGuard(m_concurrency);
+    SharedLockGuard concurrencyGuard(m_concurrency);
     std::shared_ptr<ConfiguredHandle> configuredHandle;
     {
-        LockGuard lockGuard(m_lock);
+        LockGuard memoryGuard(m_memory);
         if (!m_frees.empty()) {
             configuredHandle = m_frees.back();
             WCTInnerAssert(configuredHandle != nullptr);
@@ -197,7 +197,7 @@ RecyclableHandle HandlePool::flowOut()
 
     std::shared_ptr<Configs> configs;
     {
-        SharedLockGuard lockGuard(m_lock);
+        SharedLockGuard memoryGuard(m_memory);
         configs = m_configs;
     }
     if (!configuredHandle->configure(configs)) {
@@ -207,7 +207,7 @@ RecyclableHandle HandlePool::flowOut()
 
     if (configuredHandle != nullptr) {
         {
-            LockGuard lockGuard(m_lock);
+            LockGuard memoryGuard(m_memory);
             WCTInnerAssert(configuredHandle != nullptr);
             if (!allowedConcurrent()) {
                 return nullptr;
@@ -226,7 +226,7 @@ void HandlePool::flowBack(const std::shared_ptr<ConfiguredHandle> &configuredHan
     WCTInnerAssert(configuredHandle != nullptr);
     WCTInnerAssert(m_concurrency.readSafety());
     {
-        LockGuard lockGuard(m_lock);
+        LockGuard memoryGuard(m_memory);
         if (m_handles.size() < hardwareConcurrency()) {
             m_frees.push_back(configuredHandle);
         } else {

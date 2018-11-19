@@ -31,6 +31,16 @@
 
 namespace WCDB {
 
+/*
+ * There are two kind of locks in the pool.
+ * 1. Memory lock is to protect the memory order of the variable inside the pool.
+ * 2. Concurrency lock is to blockade all other operations while closing.
+ * Corcurrency is always locked before Memory.
+ *
+ * When you are writing and reading any variables, you should lock or shared lock memory.
+ * When you are operating m_handles, you should lock or shared lock concurrency in addition.
+ */
+
 class HandlePool : public ThreadedErrorProne {
 #pragma mark - Initialize
 public:
@@ -69,8 +79,6 @@ public:
 
 protected:
     bool allowedConcurrent();
-    // lock for blocked operations
-    // shared lock for all other operations with handles
     mutable SharedLock m_concurrency;
 
 #pragma mark - Handle
@@ -83,9 +91,7 @@ protected:
     virtual std::shared_ptr<Handle> generateHandle() = 0;
     virtual bool handleWillConfigure(Handle *handle) = 0;
 
-    // lock for all write operation
-    // shared lock for all read operation
-    mutable SharedLock m_lock;
+    mutable SharedLock m_memory;
 
 private:
     void flowBack(const std::shared_ptr<ConfiguredHandle> &configuredHandle);
