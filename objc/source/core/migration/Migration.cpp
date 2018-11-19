@@ -110,7 +110,6 @@ bool Migration::initialize(Initializer& initializer)
             auto origin = origins.find(key);
             if (origin != origins.end()) {
                 WCTInnerAssert(origin->second != nullptr);
-                succeed = false;
                 Error error;
                 error.setCode(Error::Code::Misuse);
                 error.message = "Duplicated origin table and database are found";

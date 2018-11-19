@@ -18,50 +18,17 @@
  * limitations under the License.
  */
 
-#import <WCDB/Assertion.hpp>
-#import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTChainCall.h>
-#import <WCDB/WCTHandle.h>
 
-@implementation WCTChainCall
+class WCTUsedUpInvalidateGuard final {
+public:
+    WCTUsedUpInvalidateGuard(WCTChainCall* chaincall);
+    ~WCTUsedUpInvalidateGuard();
 
-- (instancetype)init
-{
-    WCTRemedialAssert(false, "Init should not be called", ;);
-    return nil;
-}
+    WCTUsedUpInvalidateGuard() = delete;
+    WCTUsedUpInvalidateGuard(const WCTUsedUpInvalidateGuard&) = delete;
+    WCTUsedUpInvalidateGuard& operator=(const WCTUsedUpInvalidateGuard&) = delete;
 
-- (instancetype)initWithHandle:(WCTHandle*)handle
-{
-    WCTInnerAssert(handle != nil);
-    if (self = [super init]) {
-        _invalidateWhenUsedUp = NO;
-        _handle = handle;
-    }
-    return self;
-}
-
-- (WCTHandle*)handle
-{
-    return _handle;
-}
-
-- (WCTError*)error
-{
-    return _handle.error;
-}
-
-- (instancetype)invalidateWhenUsedUp
-{
-    _invalidateWhenUsedUp = YES;
-    return self;
-}
-
-- (void)tryAlreadyUsedUpInvalidate
-{
-    if (_invalidateWhenUsedUp) {
-        [_handle invalidate];
-    }
-}
-
-@end
+private:
+    WCTChainCall* m_chaincall;
+};

@@ -25,6 +25,7 @@
 #import <WCDB/WCTMultiSelect.h>
 #import <WCDB/WCTORM.h>
 #import <WCDB/WCTSelectable+Private.h>
+#import <WCDB/WCTUsedUpInvalidateGuard.h>
 
 @implementation WCTMultiSelect {
     WCTResultColumns _resultColumns;

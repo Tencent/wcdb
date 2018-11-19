@@ -157,7 +157,7 @@ void PageBasedFileHandle::setPageSize(size_t pageSize)
     }
     WCTInnerAssert(m_cachePageSize > 0 && m_cachePageSize % memoryPageSize() == 0);
     m_cachePageSize = std::max(memoryPageSize(), m_cachePageSize);
-    WCTInnerAssert(cacheMemoryPerRange % m_cachePageSize == 0);
+    WCTInnerAssert(m_cachePageSize > 0 && cacheMemoryPerRange % m_cachePageSize == 0);
 
     size_t fileSize = FileHandle::size();
     Range::Length restrictCachePageno

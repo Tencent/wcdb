@@ -24,6 +24,7 @@
 #import <WCDB/WCTORM.h>
 #import <WCDB/WCTSelect.h>
 #import <WCDB/WCTSelectable+Private.h>
+#import <WCDB/WCTUsedUpInvalidateGuard.h>
 
 @implementation WCTSelect {
     WCTResultColumns _resultColumns;

@@ -92,10 +92,7 @@ WCTErrorKey const WCTErrorKeySource = @"Source";
         [userInfo setObject:[NSNumber numberWithDouble:info.second] forKey:[NSString stringWithUTF8String:info.first.c_str()]];
     }
 
-    NSString *message = nil;
-    if (!error.message.empty()) {
-        message = [NSString stringWithUTF8String:error.message.c_str()];
-    }
+    NSString *message = [NSString stringWithUTF8String:error.message.c_str()];
     return [self initWithCode:(WCTErrorCode) error.code() level:(WCTErrorLevel) error.level message:message userInfo:userInfo];
 }
 

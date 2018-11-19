@@ -30,6 +30,7 @@
 #pragma mark - LifeCycle
 - (instancetype)init
 {
+    WCTRemedialAssert(false, "Init should not be called", ;);
     return nil;
 }
 

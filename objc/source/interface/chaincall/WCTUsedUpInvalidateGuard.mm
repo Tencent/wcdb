@@ -20,48 +20,16 @@
 
 #import <WCDB/Assertion.hpp>
 #import <WCDB/WCTChainCall+Private.h>
-#import <WCDB/WCTChainCall.h>
-#import <WCDB/WCTHandle.h>
+#import <WCDB/WCTUsedUpInvalidateGuard.h>
 
-@implementation WCTChainCall
-
-- (instancetype)init
+WCTUsedUpInvalidateGuard::WCTUsedUpInvalidateGuard(WCTChainCall* chaincall)
+: m_chaincall(chaincall)
 {
-    WCTRemedialAssert(false, "Init should not be called", ;);
-    return nil;
+    WCTInnerAssert(m_chaincall != nil);
 }
 
-- (instancetype)initWithHandle:(WCTHandle*)handle
+WCTUsedUpInvalidateGuard::~WCTUsedUpInvalidateGuard()
 {
-    WCTInnerAssert(handle != nil);
-    if (self = [super init]) {
-        _invalidateWhenUsedUp = NO;
-        _handle = handle;
-    }
-    return self;
+    [m_chaincall tryAlreadyUsedUpInvalidate];
+    m_chaincall = nil;
 }
-
-- (WCTHandle*)handle
-{
-    return _handle;
-}
-
-- (WCTError*)error
-{
-    return _handle.error;
-}
-
-- (instancetype)invalidateWhenUsedUp
-{
-    _invalidateWhenUsedUp = YES;
-    return self;
-}
-
-- (void)tryAlreadyUsedUpInvalidate
-{
-    if (_invalidateWhenUsedUp) {
-        [_handle invalidate];
-    }
-}
-
-@end

@@ -84,7 +84,6 @@ bool FactoryRetriever::work()
     }
 
     //3. Restore from all depositor db. It should be succeed without critical errors.
-    succeed = true;
     for (const auto &workshopDirectory : workshopDirectories) {
         if (!restore(Path::addComponent(workshopDirectory, databaseFileName))) {
             return exit(false);

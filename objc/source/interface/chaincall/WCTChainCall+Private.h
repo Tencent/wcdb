@@ -22,18 +22,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-class WCTUsedUpInvalidateGuard final {
-public:
-    WCTUsedUpInvalidateGuard(WCTChainCall* chaincall);
-    ~WCTUsedUpInvalidateGuard();
-    WCTUsedUpInvalidateGuard() = delete;
-    WCTUsedUpInvalidateGuard(const WCTUsedUpInvalidateGuard&) = delete;
-    WCTUsedUpInvalidateGuard& operator=(const WCTUsedUpInvalidateGuard&) = delete;
-
-private:
-    WCTChainCall* m_chaincall;
-};
-
 @interface WCTChainCall () {
 @protected
     WCTHandle* _handle;

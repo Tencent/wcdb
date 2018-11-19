@@ -22,6 +22,7 @@
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTDelete.h>
 #import <WCDB/WCTHandle.h>
+#import <WCDB/WCTUsedUpInvalidateGuard.h>
 
 @implementation WCTDelete {
     WCDB::StatementDelete _statement;

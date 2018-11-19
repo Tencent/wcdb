@@ -23,6 +23,7 @@
 #import <WCDB/WCTHandle.h>
 #import <WCDB/WCTORM.h>
 #import <WCDB/WCTUpdate.h>
+#import <WCDB/WCTUsedUpInvalidateGuard.h>
 
 typedef NS_ENUM(NSUInteger, WCTUpdateType) {
     WCTUpdateTypeObject,

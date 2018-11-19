@@ -24,6 +24,7 @@
 #import <WCDB/WCTHandle.h>
 #import <WCDB/WCTInsert.h>
 #import <WCDB/WCTORM.h>
+#import <WCDB/WCTUsedUpInvalidateGuard.h>
 
 @implementation WCTInsert {
     WCTProperties _properties;

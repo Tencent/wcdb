@@ -25,6 +25,7 @@
 #import <WCDB/WCTORM.h>
 #import <WCDB/WCTRowSelect.h>
 #import <WCDB/WCTSelectable+Private.h>
+#import <WCDB/WCTUsedUpInvalidateGuard.h>
 
 @implementation WCTRowSelect
 
