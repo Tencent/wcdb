@@ -203,7 +203,7 @@ std::shared_ptr<Handle> Database::generateHandle()
     return handle;
 }
 
-bool Database::handleWillConfigure(Handle *handle)
+bool Database::willConfigureHandle(Handle *handle)
 {
     SharedLockGuard memoryGuard(m_memory);
     if (m_migration.shouldMigrate()) {

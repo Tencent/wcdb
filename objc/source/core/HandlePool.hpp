@@ -89,7 +89,7 @@ public:
 
 protected:
     virtual std::shared_ptr<Handle> generateHandle() = 0;
-    virtual bool handleWillConfigure(Handle *handle) = 0;
+    virtual bool willConfigureHandle(Handle *handle) = 0;
 
     mutable SharedLock m_memory;
 

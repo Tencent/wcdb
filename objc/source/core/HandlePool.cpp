@@ -191,7 +191,7 @@ RecyclableHandle HandlePool::flowOut()
         }
     }
 
-    if (!handleWillConfigure(configuredHandle->get())) {
+    if (!willConfigureHandle(configuredHandle->get())) {
         return nullptr;
     }
 

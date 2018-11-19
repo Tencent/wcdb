@@ -66,7 +66,7 @@ public:
 
 protected:
     std::shared_ptr<Handle> generateHandle() override final;
-    bool handleWillConfigure(Handle *handle) override final;
+    bool willConfigureHandle(Handle *handle) override final;
 
 private:
     RecyclableHandle flowOut();
