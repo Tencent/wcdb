@@ -230,6 +230,7 @@
 		2370F5B42181B2B7001C91B6 /* StatementTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2370F5B32181B2B7001C91B6 /* StatementTests.mm */; };
 		2372E05921A2633800051D9A /* WCTUsedUpInvalidateGuard.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2372E05721A2633800051D9A /* WCTUsedUpInvalidateGuard.mm */; };
 		2372E05A21A2633800051D9A /* WCTUsedUpInvalidateGuard.h in Headers */ = {isa = PBXBuildFile; fileRef = 2372E05821A2633800051D9A /* WCTUsedUpInvalidateGuard.h */; };
+		2372E06221A2E13100051D9A /* ConfigTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2372E06121A2E13100051D9A /* ConfigTests.mm */; };
 		23739D81219A743800A043BF /* MultiSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23739D80219A743800A043BF /* MultiSelectTests.mm */; };
 		23739D85219A794700A043BF /* ChainCallTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23739D84219A794700A043BF /* ChainCallTests.mm */; };
 		23739D8C219AA3C300A043BF /* HandleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23739D8B219AA3C300A043BF /* HandleTests.mm */; };
@@ -1261,6 +1262,7 @@
 		2370F5B32181B2B7001C91B6 /* StatementTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementTests.mm; sourceTree = "<group>"; };
 		2372E05721A2633800051D9A /* WCTUsedUpInvalidateGuard.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTUsedUpInvalidateGuard.mm; sourceTree = "<group>"; };
 		2372E05821A2633800051D9A /* WCTUsedUpInvalidateGuard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTUsedUpInvalidateGuard.h; sourceTree = "<group>"; };
+		2372E06121A2E13100051D9A /* ConfigTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ConfigTests.mm; sourceTree = "<group>"; };
 		23739D80219A743800A043BF /* MultiSelectTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MultiSelectTests.mm; sourceTree = "<group>"; };
 		23739D84219A794700A043BF /* ChainCallTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ChainCallTests.mm; sourceTree = "<group>"; };
 		23739D8B219AA3C300A043BF /* HandleTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = HandleTests.mm; sourceTree = "<group>"; };
@@ -1998,6 +2000,7 @@
 		231FEADA2199A0FE00DC3706 /* config */ = {
 			isa = PBXGroup;
 			children = (
+				2372E06121A2E13100051D9A /* ConfigTests.mm */,
 			);
 			path = config;
 			sourceTree = "<group>";
@@ -4158,6 +4161,7 @@
 				23739DC3219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
 				231FEB032199A4D400DC3706 /* TestCaseObject.mm in Sources */,
 				231FEB072199A4D400DC3706 /* NSObject+TestCase.m in Sources */,
+				2372E06221A2E13100051D9A /* ConfigTests.mm in Sources */,
 				231FEB052199A4D400DC3706 /* SingleDatabaseTestCase.mm in Sources */,
 				231FEB042199A4D400DC3706 /* TestCase.mm in Sources */,
 				2386564B219C47AC00F7F6D2 /* Console.mm in Sources */,
