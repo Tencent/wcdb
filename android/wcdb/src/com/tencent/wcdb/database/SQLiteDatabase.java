@@ -70,7 +70,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
     private static final String TAG = "WCDB.SQLiteDatabase";
 
     static {
-        // Ensure libmmdb.so is loaded.
+        // Ensure libwcdb.so is loaded.
         SQLiteGlobal.loadLib();
     }
 
