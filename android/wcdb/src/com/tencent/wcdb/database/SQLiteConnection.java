@@ -18,6 +18,7 @@ package com.tencent.wcdb.database;
 
 
 import android.annotation.SuppressLint;
+import android.os.Process;
 import android.util.Pair;
 import android.util.Printer;
 
@@ -107,6 +108,8 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
     private final OperationLog mRecentOperations = new OperationLog();
     private Thread mAcquiredThread;
     private int mAcquiredTid;
+    private StackTraceElement[] mAcquiredStack;
+    private long mAcquiredTimestamp;
 
     // The native SQLiteConnection pointer.  (FOR INTERNAL USE ONLY)
     private long mConnectionPtr;
@@ -561,9 +564,23 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
 
     // Called by SQLiteSession only.
     // Mark acquisition state for debug purpose.
-    void setAcquisitionState(Thread thread, int tid) {
-        mAcquiredThread = thread;
-        mAcquiredTid = tid;
+    void setAcquisitionState(boolean acquired, boolean persist) {
+        if (acquired) {
+            mAcquiredThread = Thread.currentThread();
+            mAcquiredTid = Process.myTid();
+            if (persist) {
+                mAcquiredStack = mAcquiredThread.getStackTrace();
+                mAcquiredTimestamp = System.currentTimeMillis();
+            } else {
+                mAcquiredStack = null;
+                mAcquiredTimestamp = 0;
+            }
+        } else {
+            mAcquiredThread = null;
+            mAcquiredTid = 0;
+            mAcquiredStack = null;
+            mAcquiredTimestamp = 0;
+        }
     }
 
     // Called by SQLiteConnectionPool only.
@@ -643,11 +660,6 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
                 releasePreparedStatement(statement);
             }
         } catch (RuntimeException ex) {
-            if (ex instanceof SQLiteDatabaseLockedException || ex instanceof SQLiteTableLockedException) {
-                if (mPool != null) {
-                    mPool.logConnectionPoolBusy(sql);
-                }
-            }
             mRecentOperations.failOperation(cookie, ex);
             throw ex;
         } finally {
@@ -689,12 +701,6 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
                 releasePreparedStatement(statement);
             }
         } catch (RuntimeException ex) {
-            if (ex instanceof SQLiteDatabaseLockedException ||
-                    ex instanceof SQLiteTableLockedException) {
-                if (mPool != null) {
-                    mPool.logConnectionPoolBusy(sql);
-                }
-            }
             mRecentOperations.failOperation(cookie, ex);
             throw ex;
         } finally {
@@ -739,12 +745,6 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
                 releasePreparedStatement(statement);
             }
         } catch (RuntimeException ex) {
-            if (ex instanceof SQLiteDatabaseLockedException ||
-                    ex instanceof SQLiteTableLockedException) {
-                if (mPool != null) {
-                    mPool.logConnectionPoolBusy(sql);
-                }
-            }
             mRecentOperations.failOperation(cookie, ex);
             throw ex;
         } finally {
@@ -788,12 +788,6 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
                 releasePreparedStatement(statement);
             }
         } catch (RuntimeException ex) {
-            if (ex instanceof SQLiteDatabaseLockedException ||
-                    ex instanceof SQLiteTableLockedException) {
-                if (mPool != null) {
-                    mPool.logConnectionPoolBusy(sql);
-                }
-            }
             mRecentOperations.failOperation(cookie, ex);
             throw ex;
         } finally {
@@ -841,12 +835,6 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
                 releasePreparedStatement(statement);
             }
         } catch (RuntimeException ex) {
-            if (ex instanceof SQLiteDatabaseLockedException ||
-                    ex instanceof SQLiteTableLockedException) {
-                if (mPool != null) {
-                    mPool.logConnectionPoolBusy(sql);
-                }
-            }
             mRecentOperations.failOperation(cookie, ex);
             throw ex;
         } finally {
@@ -893,12 +881,6 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
                 releasePreparedStatement(statement);
             }
         } catch (RuntimeException ex) {
-            if (ex instanceof SQLiteDatabaseLockedException ||
-                    ex instanceof SQLiteTableLockedException) {
-                if (mPool != null) {
-                    mPool.logConnectionPoolBusy(sql);
-                }
-            }
             mRecentOperations.failOperation(cookie, ex);
             throw ex;
         } finally {
@@ -947,12 +929,6 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
                     releasePreparedStatement(statement);
                 }
             } catch (RuntimeException ex) {
-                if (ex instanceof SQLiteDatabaseLockedException ||
-                        ex instanceof SQLiteTableLockedException) {
-                    if (mPool != null) {
-                        mPool.logConnectionPoolBusy(sql);
-                    }
-                }
                 mRecentOperations.failOperation(cookie, ex);
                 throw ex;
             } finally {
@@ -1209,6 +1185,16 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
      */
     String describeCurrentOperationUnsafe() {
         return mRecentOperations.describeCurrentOperation();
+    }
+
+    SQLiteTrace.TraceInfo<String> traceCurrentOperationUnsafe() {
+        return mRecentOperations.traceCurrentOperation();
+    }
+
+    SQLiteTrace.TraceInfo<StackTraceElement[]> tracePersistAcquisitionUnsafe() {
+        StackTraceElement[] stack = mAcquiredStack;
+        return (stack == null) ? null :
+                new SQLiteTrace.TraceInfo<>(stack, mAcquiredTimestamp, mAcquiredTid);
     }
 
     /**
@@ -1635,6 +1621,17 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
             }
         }
 
+        SQLiteTrace.TraceInfo<String> traceCurrentOperation() {
+            synchronized (mOperations) {
+                final Operation operation = mOperations[mIndex];
+                if (operation != null && !operation.mFinished) {
+                    return new SQLiteTrace.TraceInfo<>(operation.mSql,
+                            operation.mStartTime, operation.mTid);
+                }
+                return null;
+            }
+        }
+
         public void dump(Printer printer, boolean verbose) {
             synchronized (mOperations) {
                 printer.println("  Most recently executed operations:");
@@ -1670,16 +1667,16 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         private static final SimpleDateFormat sDateFormat =
                 new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
-        public long mStartTime;
-        public long mEndTime;
-        public String mKind;
-        public String mSql;
-        public ArrayList<Object> mBindArgs;
-        public boolean mFinished;
-        public Exception mException;
-        public int mCookie;
-        public int mType;
-        public int mTid;
+        long mStartTime;
+        long mEndTime;
+        String mKind;
+        String mSql;
+        ArrayList<Object> mBindArgs;
+        boolean mFinished;
+        Exception mException;
+        int mCookie;
+        int mType;
+        int mTid;
 
         public void describe(StringBuilder msg, boolean verbose) {
             msg.append(mKind);
