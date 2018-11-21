@@ -109,18 +109,14 @@ asExpectedByOperation:(BOOL (^)())block
             TESTCASE_FAILED
             break;
         }
-        NSMutableArray<NSString*>* sqls = [NSMutableArray arrayWithArray:expectedSQLs];
+        NSMutableSet<NSString*>* sqls = [NSMutableSet setWithArray:expectedSQLs];
         [self.database traceSQL:^(NSString* sql) {
             if (!trace || sqls.count == 0) {
                 return;
             }
             //Test sql and expect exactly the same, including order and count
-            if ([sqls.firstObject isEqualToString:sql]) {
-                [sqls removeObjectAtIndex:0];
-            } else {
-                NSLog(@"Failed: %@", [TestCase hint:sql expecting:sqls.firstObject]);
-                trace = NO;
-                TESTCASE_FAILED
+            if ([sqls containsObject:sql]) {
+                [sqls removeObject:sql];
             }
         }];
         if (![self.database canOpen]) {
@@ -134,6 +130,7 @@ asExpectedByOperation:(BOOL (^)())block
             break;
         }
         if (sqls.count != 0) {
+            NSLog(@"Reminding: %@", sqls);
             TESTCASE_FAILED
             break;
         }
