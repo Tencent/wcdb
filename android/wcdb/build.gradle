@@ -40,19 +40,17 @@ android {
                     arguments 'USE_GCC=1'   // clang generates wrong code when targeting armeabi
                 }
 
-                def hasBuildInfo = false
                 if (rootProject.hasProperty("WX_BUILD_REVISION"))
-                    hasBuildInfo = arguments.add("WX_BUILD_REVISION='${rootProject.WX_BUILD_REVISION}'".toString())
+                    arguments "WX_BUILD_REVISION='${rootProject.WX_BUILD_REVISION}'".toString()
                 if (rootProject.hasProperty("WX_BUILD_BRANCH"))
-                    hasBuildInfo = arguments.add("WX_BUILD_BRANCH='${rootProject.WX_BUILD_BRANCH}'".toString())
+                    arguments "WX_BUILD_BRANCH='${rootProject.WX_BUILD_BRANCH}'".toString()
                 if (rootProject.hasProperty("WX_BUILD_TIME"))
-                    hasBuildInfo = arguments.add("WX_BUILD_TIME='${rootProject.WX_BUILD_TIME}'".toString())
+                    arguments "WX_BUILD_TIME='${rootProject.WX_BUILD_TIME}'".toString()
                 if (rootProject.hasProperty("WX_BUILD_JOB"))
-                    hasBuildInfo = arguments.add("WX_BUILD_JOB='${rootProject.WX_BUILD_JOB}'".toString())
-                if (hasBuildInfo) {
-                    arguments "WX_BUILD_VERSION='$version'".toString()
-                    arguments 'WITH_BUILD_INFO=1'
-                }
+                    arguments "WX_BUILD_JOB='${rootProject.WX_BUILD_JOB}'".toString()
+
+                arguments "WX_BUILD_VERSION='${wechatPublish.fullVersion}'".toString()
+                arguments 'WITH_BUILD_INFO=1'
             }
         }
     }

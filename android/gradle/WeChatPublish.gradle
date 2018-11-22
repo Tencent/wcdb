@@ -83,6 +83,13 @@ class WeChatPublishExtension {
         }
     }
 
+    String getFullVersion() {
+        def ver = version + versionSuffix
+        if (isSnapshot && !ver.endsWith('-SNAPSHOT'))
+            ver += '-SNAPSHOT'
+        return ver
+    }
+
     protected void fillDefaultConfiguration() {
         isSnapshot = !project.rootProject.hasProperty('release')
         if (project.rootProject.hasProperty('versionSuffix'))
@@ -100,7 +107,6 @@ class WeChatPublishExtension {
             version = '0.1'
             System.err.println "version not specified, used default value: ${version}"
         }
-        version += versionSuffix
         checkVersion()
 
         if (!usedDefaultIsSnapshot) {
@@ -110,17 +116,12 @@ class WeChatPublishExtension {
         if (isSnapshot) {
             // Bintray does not allow SNAPSHOT publish
             publishToBintray = false
-
-            // Append '-SNAPSHOT' to snapshot version
-            if (!version.endsWith('-SNAPSHOT')) {
-                version += '-SNAPSHOT'
-            }
         }
     }
 
     private void checkVersion() {
-        if (!(version ==~ /\d+\.\d+(?:\.\d+)?(?:\.\d+)?(?:-[\w-]+)?/)) {
-            def message = "Invalid version: ${version}"
+        if (!(fullVersion ==~ /\d+\.\d+(?:\.\d+)?(?:\.\d+)?(?:-[\w-]+)?/)) {
+            def message = "Invalid version: ${fullVersion}"
             if (!isSnapshot)
                 throw new GradleException(message)
             System.err.println(message)
@@ -175,7 +176,7 @@ class WeChatPublishExtension {
                     licenses = []
 
                     version {
-                        name = project.version
+                        name = fullVersion
                         released = new Date()
                     }
 
@@ -241,9 +242,7 @@ class WeChatJavaLibraryPublishExtension extends WeChatPublishExtension {
             from srcDirs
         }
 
-        def javadocTask = (project.tasks.findByName('javadoc') as Javadoc).tap {
-            dependsOn project.configurations.doclava
-
+        def javadocTask = (project.tasks.findByName('javadoc') as Javadoc).with {
             title = null
             options {
                 memberLevel = JavadocMemberLevel.PUBLIC
@@ -251,6 +250,7 @@ class WeChatJavaLibraryPublishExtension extends WeChatPublishExtension {
                 docletpath = [project.rootProject.file('gradle/doclava-1.0.6.jar')]
                 //docletpath = project.configurations.doclava.files as List
             }
+            it
         }
         def javadocJarTask = project.task('javadocJar', type: Jar) {
             dependsOn javadocTask
@@ -266,7 +266,7 @@ class WeChatJavaLibraryPublishExtension extends WeChatPublishExtension {
 
                 groupId this.groupId
                 artifactId this.artifactId
-                version this.version
+                version this.fullVersion
 
                 // Emit sourcesJar task
                 if (withSources) {
@@ -310,7 +310,7 @@ class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
             "${publicationName}"(MavenPublication) {
                 groupId this.groupId
                 artifactId this.artifactId
-                version this.version
+                version this.fullVersion
 
                 pom {
                     packaging 'aar'
