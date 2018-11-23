@@ -33,6 +33,10 @@ bool FactoryBackup::work(const String &database)
     backup.setWriteLocker(m_writeLocker);
     backup.filter(factory.getFilter());
     if (!backup.work()) {
+        // Treat database empty error as succeed
+        if (backup.getError().code() == Error::Code::Empty) {
+            return true;
+        }
         setError(backup.getError());
         return false;
     }
