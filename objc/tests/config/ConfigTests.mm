@@ -48,17 +48,9 @@
     [super tearDown];
 }
 
-- (void)removeAllConfig
-{
-    NSArray<NSString*>* configNames = @[ WCTConfigNameBasic, WCTConfigNameBackup, WCTConfigNameCheckpoint, WCTConfigNameTokenize, WCTConfigNameCipher, WCTConfigNameSQLTrace, WCTConfigNamePerformanceTrace, WCTConfigNameGlobalSQLTrace, WCTConfigNameGlobalPerformanceTrace ];
-    for (NSString* configName in configNames) {
-        [self.database removeConfigForName:configName];
-    }
-}
-
 - (void)test_config
 {
-    [self removeAllConfig];
+    [self removeSQLRelatedConfigs];
 
     __block BOOL uninvoked = NO;
     {

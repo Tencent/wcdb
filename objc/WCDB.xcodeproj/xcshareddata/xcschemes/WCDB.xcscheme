@@ -167,8 +167,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "231FEA4D21999F0D00DC3706"
-               BuildableName = "Trace tests.xctest"
-               BlueprintName = "Trace tests"
+               BuildableName = "Monitor tests.xctest"
+               BlueprintName = "Monitor tests"
                ReferencedContainer = "container:WCDB.xcodeproj">
             </BuildableReference>
          </TestableReference>

@@ -37,7 +37,7 @@ typedef void (^WCTPerformanceTraceBlock)(NSArray<WCTPerformanceFootprint *> *, N
  */
 typedef void (^WCTSQLTraceBlock)(NSString *);
 
-@interface WCTDatabase (Statictics)
+@interface WCTDatabase (Monitor)
 
 @property (class, readonly, nonatomic, assign) NSString *version;
 
@@ -66,7 +66,9 @@ typedef void (^WCTSQLTraceBlock)(NSString *);
  @param block block
  @see WCTErrorTraceBlock
  */
-+ (void)globalTraceError:(WCTErrorTraceBlock)block;
++ (void)globalTraceError:(nullable WCTErrorTraceBlock)block;
+
++ (void)resetGlobalErrorTracer;
 
 /**
  @brief You can register a tracer to monitor the performance of all SQLs.

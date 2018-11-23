@@ -36,7 +36,6 @@ public:
 
 #pragma mark - Trace
 protected:
-    bool isTraceNotificationSet() const;
     void dispatchTraceNotification(unsigned int flag, void *P, void *X);
     void setupTraceNotification();
 
@@ -46,6 +45,7 @@ public:
     void setNotificationWhenSQLTraced(const String &name, const SQLNotification &onTraced);
 
 protected:
+    bool isSQLTraceNotificationSet() const;
     void dispatchSQLTraceNotification(const String &sql);
     std::map<String, SQLNotification> m_sqlNotifications;
 
@@ -64,12 +64,13 @@ public:
                                               const PerformanceNotification &onTraced);
 
 protected:
+    bool isPerformanceTraceNotificationSet() const;
     void dispatchPerformanceTraceNotification(const String &sql,
                                               const int64_t &cost,
                                               bool isInTransaction);
 
     Footprints m_footprints;
-    int64_t m_cost;
+    int64_t m_cost = 0;
     std::map<String, PerformanceNotification> m_performanceNotifications;
 
 #pragma mark - Committed

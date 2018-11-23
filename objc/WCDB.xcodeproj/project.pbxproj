@@ -21,9 +21,9 @@
 		2316D9432105D19500707AFC /* PageBasedFileHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2316D9412105D19500707AFC /* PageBasedFileHandle.cpp */; };
 		2316D9452105D19500707AFC /* PageBasedFileHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D9422105D19500707AFC /* PageBasedFileHandle.hpp */; };
 		2316D94B2105D21500707AFC /* LRUCache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D9482105D21500707AFC /* LRUCache.hpp */; };
-		231C98BA219532AC0067B87C /* NSObject+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.m */; };
-		231C98BB219532AC0067B87C /* NSObject+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.m */; };
-		231C98BC219532AC0067B87C /* NSObject+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.m */; };
+		231C98BA219532AC0067B87C /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
+		231C98BB219532AC0067B87C /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
+		231C98BC219532AC0067B87C /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
 		231FEA2621999E7D00DC3706 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		231FEA2721999E7D00DC3706 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		231FEA2A21999E7D00DC3706 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -52,42 +52,42 @@
 		231FEAF02199A4D200DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
 		231FEAF12199A4D200DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
 		231FEAF22199A4D200DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
-		231FEAF32199A4D200DC3706 /* NSObject+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.m */; };
+		231FEAF32199A4D200DC3706 /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
 		231FEAF42199A4D200DC3706 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEAE32199A16700DC3706 /* TestCaseObject.mm */; };
 		231FEAF52199A4D200DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
 		231FEAF62199A4D200DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
 		231FEAF72199A4D200DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
-		231FEAF82199A4D200DC3706 /* NSObject+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.m */; };
+		231FEAF82199A4D200DC3706 /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
 		231FEAF92199A4D300DC3706 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEAE32199A16700DC3706 /* TestCaseObject.mm */; };
 		231FEAFA2199A4D300DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
 		231FEAFB2199A4D300DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
 		231FEAFC2199A4D300DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
-		231FEAFD2199A4D300DC3706 /* NSObject+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.m */; };
+		231FEAFD2199A4D300DC3706 /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
 		231FEAFE2199A4D400DC3706 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEAE32199A16700DC3706 /* TestCaseObject.mm */; };
 		231FEAFF2199A4D400DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
 		231FEB002199A4D400DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
 		231FEB012199A4D400DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
-		231FEB022199A4D400DC3706 /* NSObject+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.m */; };
+		231FEB022199A4D400DC3706 /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
 		231FEB032199A4D400DC3706 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEAE32199A16700DC3706 /* TestCaseObject.mm */; };
 		231FEB042199A4D400DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
 		231FEB052199A4D400DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
 		231FEB062199A4D400DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
-		231FEB072199A4D400DC3706 /* NSObject+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.m */; };
+		231FEB072199A4D400DC3706 /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
 		231FEB082199A4D500DC3706 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEAE32199A16700DC3706 /* TestCaseObject.mm */; };
 		231FEB092199A4D500DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
 		231FEB0A2199A4D500DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
 		231FEB0B2199A4D500DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
-		231FEB0C2199A4D500DC3706 /* NSObject+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.m */; };
+		231FEB0C2199A4D500DC3706 /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
 		231FEB0D2199A4D500DC3706 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEAE32199A16700DC3706 /* TestCaseObject.mm */; };
 		231FEB0E2199A4D500DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
 		231FEB0F2199A4D500DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
 		231FEB102199A4D500DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
-		231FEB112199A4D500DC3706 /* NSObject+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.m */; };
+		231FEB112199A4D500DC3706 /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
 		231FEB122199A4D600DC3706 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEAE32199A16700DC3706 /* TestCaseObject.mm */; };
 		231FEB132199A4D600DC3706 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
 		231FEB142199A4D600DC3706 /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
 		231FEB152199A4D600DC3706 /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
-		231FEB162199A4D600DC3706 /* NSObject+TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.m */; };
+		231FEB162199A4D600DC3706 /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
 		231FEB192199A5A800DC3706 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEB182199A5A800DC3706 /* CRUDTestCase.mm */; };
 		231FEB1A2199A5A800DC3706 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEB182199A5A800DC3706 /* CRUDTestCase.mm */; };
 		231FEB1B2199A5A800DC3706 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEB182199A5A800DC3706 /* CRUDTestCase.mm */; };
@@ -349,8 +349,8 @@
 		238845F02063912B006EAEC8 /* WCTPerformanceFootprint.h in Headers */ = {isa = PBXBuildFile; fileRef = 238845EE2063912B006EAEC8 /* WCTPerformanceFootprint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		238845F12063912B006EAEC8 /* WCTPerformanceFootprint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238845EF2063912B006EAEC8 /* WCTPerformanceFootprint.mm */; };
 		23906AB5215E4F4400C2B717 /* Version.h in Headers */ = {isa = PBXBuildFile; fileRef = 23906AB4215E4F4400C2B717 /* Version.h */; };
-		23906AB9215E500100C2B717 /* WCTDatabase+Statictics.h in Headers */ = {isa = PBXBuildFile; fileRef = 23906AB7215E500100C2B717 /* WCTDatabase+Statictics.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		23906ABB215E500100C2B717 /* WCTDatabase+Statictics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23906AB8215E500100C2B717 /* WCTDatabase+Statictics.mm */; };
+		23906AB9215E500100C2B717 /* WCTDatabase+Monitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 23906AB7215E500100C2B717 /* WCTDatabase+Monitor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23906ABB215E500100C2B717 /* WCTDatabase+Monitor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23906AB8215E500100C2B717 /* WCTDatabase+Monitor.mm */; };
 		2396EB0D21801BD60079066C /* WCTResultColumn.h in Headers */ = {isa = PBXBuildFile; fileRef = 2396EB0B21801BD60079066C /* WCTResultColumn.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2396EB0E21801BD60079066C /* WCTResultColumn.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2396EB0C21801BD60079066C /* WCTResultColumn.mm */; };
 		2396EB11218054200079066C /* ColumnTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2396EB0F218054080079066C /* ColumnTests.mm */; };
@@ -456,6 +456,7 @@
 		23B35C7820BFE39500425033 /* Path.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B35C7520BFE39500425033 /* Path.cpp */; };
 		23B35CCB20C0261A00425033 /* String.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B35CC920C0261900425033 /* String.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23B35CCD20C0261A00425033 /* String.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B35CCA20C0261A00425033 /* String.cpp */; };
+		23B4A77E21A7DFDA00BD6A32 /* TraceTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23B4A77D21A7DFDA00BD6A32 /* TraceTests.mm */; };
 		23B4DC7E2111B39200954D71 /* Tag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4DC7C2111B39100954D71 /* Tag.cpp */; };
 		23B4DC802111B39200954D71 /* Tag.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DC7D2111B39200954D71 /* Tag.hpp */; };
 		23B4DCBD2112A9C800954D71 /* Core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4DCBB2112A9C800954D71 /* Core.cpp */; };
@@ -1120,10 +1121,10 @@
 		2316D9422105D19500707AFC /* PageBasedFileHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PageBasedFileHandle.hpp; sourceTree = "<group>"; };
 		2316D9482105D21500707AFC /* LRUCache.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LRUCache.hpp; sourceTree = "<group>"; };
 		231C98B8219532AC0067B87C /* NSObject+TestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+TestCase.h"; sourceTree = "<group>"; };
-		231C98B9219532AC0067B87C /* NSObject+TestCase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+TestCase.m"; sourceTree = "<group>"; };
+		231C98B9219532AC0067B87C /* NSObject+TestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSObject+TestCase.mm"; sourceTree = "<group>"; };
 		231FEA2F21999E7D00DC3706 /* Basic tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Basic tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		231FEA4B21999ECE00DC3706 /* Thread tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Thread tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		231FEA6721999F0D00DC3706 /* Trace tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Trace tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		231FEA6721999F0D00DC3706 /* Monitor tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Monitor tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		231FEA8321999F2A00DC3706 /* Config tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Config tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		231FEA9F21999F7800DC3706 /* Repair tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Repair tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		231FEABB21999F8100DC3706 /* FTS tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FTS tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1405,8 +1406,8 @@
 		238845EE2063912B006EAEC8 /* WCTPerformanceFootprint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTPerformanceFootprint.h; sourceTree = "<group>"; };
 		238845EF2063912B006EAEC8 /* WCTPerformanceFootprint.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTPerformanceFootprint.mm; sourceTree = "<group>"; };
 		23906AB4215E4F4400C2B717 /* Version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Version.h; sourceTree = "<group>"; };
-		23906AB7215E500100C2B717 /* WCTDatabase+Statictics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Statictics.h"; sourceTree = "<group>"; };
-		23906AB8215E500100C2B717 /* WCTDatabase+Statictics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Statictics.mm"; sourceTree = "<group>"; };
+		23906AB7215E500100C2B717 /* WCTDatabase+Monitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Monitor.h"; sourceTree = "<group>"; };
+		23906AB8215E500100C2B717 /* WCTDatabase+Monitor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Monitor.mm"; sourceTree = "<group>"; };
 		239326611E836D7300D677CC /* WCDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2396EB0B21801BD60079066C /* WCTResultColumn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTResultColumn.h; sourceTree = "<group>"; };
 		2396EB0C21801BD60079066C /* WCTResultColumn.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTResultColumn.mm; sourceTree = "<group>"; };
@@ -1515,6 +1516,7 @@
 		23B35C7520BFE39500425033 /* Path.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Path.cpp; sourceTree = "<group>"; };
 		23B35CC920C0261900425033 /* String.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = String.hpp; sourceTree = "<group>"; };
 		23B35CCA20C0261A00425033 /* String.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = String.cpp; sourceTree = "<group>"; };
+		23B4A77D21A7DFDA00BD6A32 /* TraceTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TraceTests.mm; sourceTree = "<group>"; };
 		23B4DC7C2111B39100954D71 /* Tag.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tag.cpp; sourceTree = "<group>"; };
 		23B4DC7D2111B39200954D71 /* Tag.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Tag.hpp; sourceTree = "<group>"; };
 		23B4DCBB2112A9C800954D71 /* Core.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Core.cpp; sourceTree = "<group>"; };
@@ -1990,11 +1992,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		231FEAD92199A0FD00DC3706 /* trace */ = {
+		231FEAD92199A0FD00DC3706 /* monitor */ = {
 			isa = PBXGroup;
 			children = (
+				23B4A77D21A7DFDA00BD6A32 /* TraceTests.mm */,
 			);
-			path = trace;
+			path = monitor;
 			sourceTree = "<group>";
 		};
 		231FEADA2199A0FE00DC3706 /* config */ = {
@@ -2144,7 +2147,7 @@
 				234DBCFE2064DE04000E31E8 /* transaction */,
 				234DBCEB2064DD0B000E31E8 /* handle */,
 				232147001F6AAE6500BF7AF2 /* fts */,
-				2386B3BD1ED442D9000B72F6 /* statictics */,
+				2386B3BD1ED442D9000B72F6 /* monitor */,
 				2349F63B1EA0D6680021EFA7 /* chaincall */,
 				2349F6561EA0D6680021EFA7 /* convenient */,
 				2349F65B1EA0D6680021EFA7 /* core */,
@@ -2629,7 +2632,7 @@
 				23790A652192B0A60098797F /* SingleTableTestCase.h */,
 				23790A642192B0A60098797F /* SingleTableTestCase.mm */,
 				231C98B8219532AC0067B87C /* NSObject+TestCase.h */,
-				231C98B9219532AC0067B87C /* NSObject+TestCase.m */,
+				231C98B9219532AC0067B87C /* NSObject+TestCase.mm */,
 				23865642219C47AC00F7F6D2 /* Console.h */,
 				23865643219C47AC00F7F6D2 /* Console.mm */,
 			);
@@ -2750,18 +2753,18 @@
 			path = convenient;
 			sourceTree = "<group>";
 		};
-		2386B3BD1ED442D9000B72F6 /* statictics */ = {
+		2386B3BD1ED442D9000B72F6 /* monitor */ = {
 			isa = PBXGroup;
 			children = (
-				23906AB7215E500100C2B717 /* WCTDatabase+Statictics.h */,
-				23906AB8215E500100C2B717 /* WCTDatabase+Statictics.mm */,
+				23906AB7215E500100C2B717 /* WCTDatabase+Monitor.h */,
+				23906AB8215E500100C2B717 /* WCTDatabase+Monitor.mm */,
 				2386B3C21ED442FE000B72F6 /* WCTError.h */,
 				2386B3C31ED442FE000B72F6 /* WCTError.mm */,
 				2386B3C41ED442FE000B72F6 /* WCTError+Private.h */,
 				238845EE2063912B006EAEC8 /* WCTPerformanceFootprint.h */,
 				238845EF2063912B006EAEC8 /* WCTPerformanceFootprint.mm */,
 			);
-			path = statictics;
+			path = monitor;
 			sourceTree = "<group>";
 		};
 		2398971F217EC9E20014BF33 /* WINQ */ = {
@@ -2848,7 +2851,7 @@
 				231FEADE2199A0FF00DC3706 /* migration */,
 				231FEADF2199A10000DC3706 /* repair */,
 				231FEADD2199A0FF00DC3706 /* thread */,
-				231FEAD92199A0FD00DC3706 /* trace */,
+				231FEAD92199A0FD00DC3706 /* monitor */,
 				2384F72A219424FE00E8B10A /* convenient */,
 				23790A47219295B80098797F /* ORM */,
 				2398971F217EC9E20014BF33 /* WINQ */,
@@ -2920,7 +2923,7 @@
 				234E6F6621996EB600D006F2 /* Advance tests.xctest */,
 				231FEA2F21999E7D00DC3706 /* Basic tests.xctest */,
 				231FEA4B21999ECE00DC3706 /* Thread tests.xctest */,
-				231FEA6721999F0D00DC3706 /* Trace tests.xctest */,
+				231FEA6721999F0D00DC3706 /* Monitor tests.xctest */,
 				231FEA8321999F2A00DC3706 /* Config tests.xctest */,
 				231FEA9F21999F7800DC3706 /* Repair tests.xctest */,
 				231FEABB21999F8100DC3706 /* FTS tests.xctest */,
@@ -3399,7 +3402,7 @@
 				23EEDCE9217DFADC006E9E73 /* SyntaxCompoundOperator.hpp in Headers */,
 				23DF0A0B2190275B00F0B2B6 /* WCTDatabase.h in Headers */,
 				23775B6020AD666900E21AB0 /* Assertion.hpp in Headers */,
-				23906AB9215E500100C2B717 /* WCTDatabase+Statictics.h in Headers */,
+				23906AB9215E500100C2B717 /* WCTDatabase+Monitor.h in Headers */,
 				23EEDC86217DFADC006E9E73 /* Filter.hpp in Headers */,
 				23EEDD28217DFADC006E9E73 /* SyntaxWindowFunctionInvocation.hpp in Headers */,
 				23EEDD48217DFADC006E9E73 /* SyntaxDropViewSTMT.hpp in Headers */,
@@ -3680,9 +3683,9 @@
 			productReference = 231FEA4B21999ECE00DC3706 /* Thread tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		231FEA4D21999F0D00DC3706 /* Trace tests */ = {
+		231FEA4D21999F0D00DC3706 /* Monitor tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 231FEA6321999F0D00DC3706 /* Build configuration list for PBXNativeTarget "Trace tests" */;
+			buildConfigurationList = 231FEA6321999F0D00DC3706 /* Build configuration list for PBXNativeTarget "Monitor tests" */;
 			buildPhases = (
 				231FEA5221999F0D00DC3706 /* Sources */,
 				231FEA5D21999F0D00DC3706 /* Frameworks */,
@@ -3695,9 +3698,9 @@
 				231FEA4E21999F0D00DC3706 /* PBXTargetDependency */,
 				231FEA5021999F0D00DC3706 /* PBXTargetDependency */,
 			);
-			name = "Trace tests";
+			name = "Monitor tests";
 			productName = "WINQ tests";
-			productReference = 231FEA6721999F0D00DC3706 /* Trace tests.xctest */;
+			productReference = 231FEA6721999F0D00DC3706 /* Monitor tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		231FEA6921999F2A00DC3706 /* Config tests */ = {
@@ -3988,7 +3991,7 @@
 				2384F7022194249200E8B10A /* Convenient tests */,
 				234E6F4C21996EB600D006F2 /* Advance tests */,
 				231FEA3121999ECE00DC3706 /* Thread tests */,
-				231FEA4D21999F0D00DC3706 /* Trace tests */,
+				231FEA4D21999F0D00DC3706 /* Monitor tests */,
 				231FEA6921999F2A00DC3706 /* Config tests */,
 				231FEA8521999F7800DC3706 /* Repair tests */,
 				231FEAA121999F8100DC3706 /* FTS tests */,
@@ -4113,7 +4116,7 @@
 				23739DC8219AEDE700A043BF /* DatabaseTests.mm in Sources */,
 				23739DBC219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
 				231FEB122199A4D600DC3706 /* TestCaseObject.mm in Sources */,
-				231FEB162199A4D600DC3706 /* NSObject+TestCase.m in Sources */,
+				231FEB162199A4D600DC3706 /* NSObject+TestCase.mm in Sources */,
 				23865644219C47AC00F7F6D2 /* Console.mm in Sources */,
 				231FEB142199A4D600DC3706 /* SingleDatabaseTestCase.mm in Sources */,
 				231FEB132199A4D600DC3706 /* TestCase.mm in Sources */,
@@ -4129,7 +4132,7 @@
 				23739DC1219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
 				23254FCB219D28BA00DE2435 /* ThreadTests.mm in Sources */,
 				231FEAF42199A4D200DC3706 /* TestCaseObject.mm in Sources */,
-				231FEAF82199A4D200DC3706 /* NSObject+TestCase.m in Sources */,
+				231FEAF82199A4D200DC3706 /* NSObject+TestCase.mm in Sources */,
 				231FEAF62199A4D200DC3706 /* SingleDatabaseTestCase.mm in Sources */,
 				23865641219C213200F7F6D2 /* TransactionTests.mm in Sources */,
 				23865649219C47AC00F7F6D2 /* Console.mm in Sources */,
@@ -4145,8 +4148,9 @@
 				231FEAFC2199A4D300DC3706 /* SingleTableTestCase.mm in Sources */,
 				23739DC2219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
 				231FEAF92199A4D300DC3706 /* TestCaseObject.mm in Sources */,
-				231FEAFD2199A4D300DC3706 /* NSObject+TestCase.m in Sources */,
+				231FEAFD2199A4D300DC3706 /* NSObject+TestCase.mm in Sources */,
 				231FEAFB2199A4D300DC3706 /* SingleDatabaseTestCase.mm in Sources */,
+				23B4A77E21A7DFDA00BD6A32 /* TraceTests.mm in Sources */,
 				231FEAFA2199A4D300DC3706 /* TestCase.mm in Sources */,
 				2386564A219C47AC00F7F6D2 /* Console.mm in Sources */,
 			);
@@ -4160,7 +4164,7 @@
 				231FEB062199A4D400DC3706 /* SingleTableTestCase.mm in Sources */,
 				23739DC3219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
 				231FEB032199A4D400DC3706 /* TestCaseObject.mm in Sources */,
-				231FEB072199A4D400DC3706 /* NSObject+TestCase.m in Sources */,
+				231FEB072199A4D400DC3706 /* NSObject+TestCase.mm in Sources */,
 				2372E06221A2E13100051D9A /* ConfigTests.mm in Sources */,
 				231FEB052199A4D400DC3706 /* SingleDatabaseTestCase.mm in Sources */,
 				231FEB042199A4D400DC3706 /* TestCase.mm in Sources */,
@@ -4176,7 +4180,7 @@
 				231FEB012199A4D400DC3706 /* SingleTableTestCase.mm in Sources */,
 				23739DC4219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
 				231FEAFE2199A4D400DC3706 /* TestCaseObject.mm in Sources */,
-				231FEB022199A4D400DC3706 /* NSObject+TestCase.m in Sources */,
+				231FEB022199A4D400DC3706 /* NSObject+TestCase.mm in Sources */,
 				231FEB002199A4D400DC3706 /* SingleDatabaseTestCase.mm in Sources */,
 				231FEAFF2199A4D400DC3706 /* TestCase.mm in Sources */,
 				2386564C219C47AC00F7F6D2 /* Console.mm in Sources */,
@@ -4191,7 +4195,7 @@
 				231FEB0B2199A4D500DC3706 /* SingleTableTestCase.mm in Sources */,
 				23739DC5219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
 				231FEB082199A4D500DC3706 /* TestCaseObject.mm in Sources */,
-				231FEB0C2199A4D500DC3706 /* NSObject+TestCase.m in Sources */,
+				231FEB0C2199A4D500DC3706 /* NSObject+TestCase.mm in Sources */,
 				231FEB0A2199A4D500DC3706 /* SingleDatabaseTestCase.mm in Sources */,
 				231FEB092199A4D500DC3706 /* TestCase.mm in Sources */,
 				2386564D219C47AC00F7F6D2 /* Console.mm in Sources */,
@@ -4206,7 +4210,7 @@
 				231FEB102199A4D500DC3706 /* SingleTableTestCase.mm in Sources */,
 				23739DC6219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
 				231FEB0D2199A4D500DC3706 /* TestCaseObject.mm in Sources */,
-				231FEB112199A4D500DC3706 /* NSObject+TestCase.m in Sources */,
+				231FEB112199A4D500DC3706 /* NSObject+TestCase.mm in Sources */,
 				231FEB0F2199A4D500DC3706 /* SingleDatabaseTestCase.mm in Sources */,
 				231FEB0E2199A4D500DC3706 /* TestCase.mm in Sources */,
 				2386564E219C47AC00F7F6D2 /* Console.mm in Sources */,
@@ -4229,7 +4233,7 @@
 				231FEAEF2199A4D200DC3706 /* TestCaseObject.mm in Sources */,
 				23739DA7219AC9DA00A043BF /* Integer64CodingObject+WCTColumnCoding.mm in Sources */,
 				23739DB9219ACD6000A043BF /* ColumnCodingTests.mm in Sources */,
-				231FEAF32199A4D200DC3706 /* NSObject+TestCase.m in Sources */,
+				231FEAF32199A4D200DC3706 /* NSObject+TestCase.mm in Sources */,
 				23739DA1219AC9B500A043BF /* StringCodingObject.m in Sources */,
 				231FEAF12199A4D200DC3706 /* SingleDatabaseTestCase.mm in Sources */,
 				23739D90219AC6AB00A043BF /* ColumnCodingObject.mm in Sources */,
@@ -4249,7 +4253,7 @@
 			files = (
 				2384F6B72193E06D00E8B10A /* ColumnConstraintPrimary.mm in Sources */,
 				2384F6F82194185500E8B10A /* AdditionalORMObject.mm in Sources */,
-				231C98BB219532AC0067B87C /* NSObject+TestCase.m in Sources */,
+				231C98BB219532AC0067B87C /* NSObject+TestCase.mm in Sources */,
 				231FEAE62199A16700DC3706 /* TestCaseObject.mm in Sources */,
 				2384F6C72193E09400E8B10A /* ColumnConstraintAutoIncrementAsc.mm in Sources */,
 				23790A672192B0A60098797F /* SingleTableTestCase.mm in Sources */,
@@ -4281,7 +4285,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				231C98BC219532AC0067B87C /* NSObject+TestCase.m in Sources */,
+				231C98BC219532AC0067B87C /* NSObject+TestCase.mm in Sources */,
 				2384F72F2194255700E8B10A /* SingleTableTestCase.mm in Sources */,
 				231FEB1C2199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
 				233E12302195749C00BD488D /* ConvenientSelectTests.mm in Sources */,
@@ -4426,7 +4430,7 @@
 				23EEDD25217DFADC006E9E73 /* SyntaxWindowDef.cpp in Sources */,
 				23F70F7D209FF0EC00CCE3CD /* WCTValue.mm in Sources */,
 				2349F7491EA0D6680021EFA7 /* WCTDatabase+File.mm in Sources */,
-				23906ABB215E500100C2B717 /* WCTDatabase+Statictics.mm in Sources */,
+				23906ABB215E500100C2B717 /* WCTDatabase+Monitor.mm in Sources */,
 				23567D5920CA823C005F1C35 /* PagerRelated.cpp in Sources */,
 				23EEDCF3217DFADC006E9E73 /* SyntaxColumnDef.cpp in Sources */,
 				23EEDCAD217DFADC006E9E73 /* WindowDef.cpp in Sources */,
@@ -4585,7 +4589,7 @@
 				23739DBD219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
 				23989782217EC9E30014BF33 /* StatementCreateTriggerTests.mm in Sources */,
 				23989791217EC9E30014BF33 /* StatementSelectTests.mm in Sources */,
-				231C98BA219532AC0067B87C /* NSObject+TestCase.m in Sources */,
+				231C98BA219532AC0067B87C /* NSObject+TestCase.mm in Sources */,
 				2370F5B42181B2B7001C91B6 /* StatementTests.mm in Sources */,
 				23989761217EC9E30014BF33 /* ColumnDefTests.mm in Sources */,
 				2398978E217EC9E30014BF33 /* StatementReleaseTests.mm in Sources */,
@@ -4968,7 +4972,7 @@
 					"-framework",
 					Cocoa,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Trace-tests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Monitor-tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
@@ -4997,7 +5001,7 @@
 					"-framework",
 					Cocoa,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Trace-tests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Monitor-tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
@@ -5027,7 +5031,7 @@
 					"-framework",
 					Cocoa,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Trace-tests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Monitor-tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
@@ -6209,7 +6213,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		231FEA6321999F0D00DC3706 /* Build configuration list for PBXNativeTarget "Trace tests" */ = {
+		231FEA6321999F0D00DC3706 /* Build configuration list for PBXNativeTarget "Monitor tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				231FEA6421999F0D00DC3706 /* Debug */,

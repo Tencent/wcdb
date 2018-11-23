@@ -120,3 +120,23 @@
 }
 
 @end
+
+@implementation WCTPerformanceFootprint (TestCase)
+
+- (BOOL)isEqual:(NSObject *)object
+{
+    if (object.class != self.class) {
+        return NO;
+    }
+    WCTPerformanceFootprint *other = (WCTPerformanceFootprint *) object;
+    if (self.frequency != other.frequency) {
+        return NO;
+    }
+    if (self.sql != nil) {
+        return [other.sql isEqualToString:self.sql];
+    } else {
+        return other.sql == nil;
+    }
+}
+
+@end

@@ -32,4 +32,9 @@
     return self;
 }
 
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"SQL: %@, Frequency: %u", self.sql, self.frequency];
+}
+
 @end

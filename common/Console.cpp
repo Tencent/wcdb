@@ -42,13 +42,6 @@ Console::Console() : m_debugable(false)
 void Console::setDebuggable(bool debuggable)
 {
     m_debugable = debuggable;
-    constexpr const char* breakpointIdentifier = "com.Tencent.WCDB.Notifier.Console.Breakpoint";
-    if (m_debugable) {
-        Notifier::shared()->setNotification(
-        std::numeric_limits<int>::max(), breakpointIdentifier, Console::breakpoint);
-    } else {
-        Notifier::shared()->unsetNotification(breakpointIdentifier);
-    }
 }
 
 bool Console::debuggable()
@@ -74,25 +67,15 @@ void Console::setLogger(const Callback& callback)
 
 void Console::log(const Error& error)
 {
-    switch (error.level) {
-    case Error::Level::Ignore:
-        break;
-    case Error::Level::Debug:
-        if (!debuggable()) {
-            break;
-        }
-        // fallthrough
-    case Error::Level::Warning:
-    case Error::Level::Notice:
-    case Error::Level::Error:
-    case Error::Level::Fatal:
-        print(error);
-        break;
+    if (error.level == Error::Level::Ignore) {
+        return;
     }
-}
 
-void Console::print(const Error& error)
-{
+    bool isDebuggable = debuggable();
+    if (error.level == Error::Level::Debug && !isDebuggable) {
+        return;
+    }
+
     std::ostringstream stream;
     stream << "[" << Error::levelName(error.level) << ": ";
     stream << (int) error.code();
@@ -113,13 +96,12 @@ void Console::print(const Error& error)
         stream << ", " << info.first << ": " << info.second;
     }
     stream << std::endl;
-    std::cout << stream.str();
-}
-
-void Console::breakpoint(const Error& error)
-{
     if (error.level == Error::Level::Fatal) {
-        std::cout << "Set breakpoint at Console::breakpoint to debug\n";
+        stream << "Set breakpoint at Console::breakpoint to debug." << std::endl;
+    }
+    std::cout << stream.str();
+
+    if (error.level == Error::Level::Fatal && isDebuggable) {
         abort();
     }
 }

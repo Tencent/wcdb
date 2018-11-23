@@ -42,7 +42,6 @@ public:
 
     static void log(const Error& error);
     static void fatal(const String& message, const char* file, int line);
-    static void breakpoint(const Error& error);
 
     Console(const Console&) = delete;
     Console& operator=(const Console&) = delete;
@@ -52,7 +51,6 @@ protected:
 
 private:
     std::atomic<bool> m_debugable;
-    static void print(const Error& error);
 };
 
 } // namespace WCDB

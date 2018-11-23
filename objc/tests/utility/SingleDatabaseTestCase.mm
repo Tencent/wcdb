@@ -45,6 +45,14 @@
     [super tearDown];
 }
 
+- (void)removeSQLRelatedConfigs
+{
+    NSArray<NSString*>* configNames = @[ WCTConfigNameBasic, WCTConfigNameBackup, WCTConfigNameCheckpoint, WCTConfigNameTokenize, WCTConfigNameCipher ];
+    for (NSString* configName in configNames) {
+        [self.database removeConfigForName:configName];
+    }
+}
+
 - (NSString*)path
 {
     return [self.directory stringByAppendingPathComponent:@"testDatabase"];

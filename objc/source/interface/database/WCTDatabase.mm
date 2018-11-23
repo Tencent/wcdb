@@ -53,6 +53,18 @@
                                     }];
 #endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
 
+        WCDB::Notifier::shared()->setNotificationForPreprocessing("com.Tencent.WCDB.Notifier.PreprocessPath", [](const WCDB::Error &error, WCDB::Error::Infos &infos) {
+            const auto &strings = error.infos.getStrings();
+            auto iter = strings.find(WCTErrorKeyPath);
+            if (iter == strings.end()) {
+                return;
+            }
+            NSString *path = [NSString stringWithUTF8String:iter->second.c_str()].stringByAbbreviatingWithTildeInPath;
+            if (path.length > 0) {
+                infos.set(WCTErrorKeyPath, path.UTF8String);
+            }
+        });
+
         WCDB::Core::shared()->addTokenizer(WCTTokenizerWCDB, WCDB::FTS::Module<void, WCTCursorInfo>::address());
     });
 }

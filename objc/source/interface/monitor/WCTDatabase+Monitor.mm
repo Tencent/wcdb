@@ -22,12 +22,12 @@
 #import <WCDB/Console.hpp>
 #import <WCDB/Notifier.hpp>
 #import <WCDB/Version.h>
+#import <WCDB/WCTDatabase+Monitor.h>
 #import <WCDB/WCTDatabase+Private.h>
-#import <WCDB/WCTDatabase+Statictics.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTPerformanceFootprint.h>
 
-@implementation WCTDatabase (Statictics)
+@implementation WCTDatabase (Monitor)
 
 + (NSString *)version
 {
@@ -69,6 +69,11 @@
         };
     }
     WCDB::Console::shared()->setLogger(callback);
+}
+
++ (void)resetGlobalErrorTracer
+{
+    WCDB::Console::shared()->setLogger(WCDB::Console::log);
 }
 
 + (void)globalTracePerformance:(WCTPerformanceTraceBlock)trace

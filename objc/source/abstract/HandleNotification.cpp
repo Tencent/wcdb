@@ -27,7 +27,7 @@ namespace WCDB {
 
 void HandleNotification::purge()
 {
-    bool set = isTraceNotificationSet();
+    bool set = isSQLTraceNotificationSet() || isPerformanceTraceNotificationSet();
     m_sqlNotifications.clear();
     m_performanceNotifications.clear();
     if (set) {
@@ -49,11 +49,6 @@ void HandleNotification::purge()
 }
 
 #pragma mark - Trace
-bool HandleNotification::isTraceNotificationSet() const
-{
-    return !m_sqlNotifications.empty() || !m_performanceNotifications.empty();
-}
-
 void HandleNotification::dispatchTraceNotification(unsigned int flag, void *P, void *X)
 {
     sqlite3_stmt *stmt = (sqlite3_stmt *) P;
@@ -100,16 +95,21 @@ void HandleNotification::setupTraceNotification()
 }
 
 #pragma mark - SQL
+bool HandleNotification::isSQLTraceNotificationSet() const
+{
+    return !m_sqlNotifications.empty();
+}
+
 void HandleNotification::setNotificationWhenSQLTraced(const String &name,
                                                       const SQLNotification &onTraced)
 {
-    bool stateBefore = isTraceNotificationSet();
+    bool stateBefore = isSQLTraceNotificationSet();
     if (onTraced) {
         m_sqlNotifications[name] = onTraced;
     } else {
         m_sqlNotifications.erase(name);
     }
-    bool stateAfter = isTraceNotificationSet();
+    bool stateAfter = isSQLTraceNotificationSet();
     if (stateBefore != stateAfter) {
         setupTraceNotification();
     }
@@ -129,16 +129,21 @@ HandleNotification::Footprint::Footprint(const String &sql_)
 {
 }
 
+bool HandleNotification::isPerformanceTraceNotificationSet() const
+{
+    return !m_performanceNotifications.empty();
+}
+
 void HandleNotification::setNotificationWhenPerformanceTraced(const String &name,
                                                               const PerformanceNotification &onTraced)
 {
-    bool stateBefore = isTraceNotificationSet();
+    bool stateBefore = isPerformanceTraceNotificationSet();
     if (onTraced) {
         m_performanceNotifications[name] = onTraced;
     } else {
         m_performanceNotifications.erase(name);
     }
-    bool stateAfter = isTraceNotificationSet();
+    bool stateAfter = isPerformanceTraceNotificationSet();
     if (stateAfter != stateBefore) {
         setupTraceNotification();
     }
