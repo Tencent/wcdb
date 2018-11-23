@@ -117,7 +117,7 @@ bool HandlePool::isBlockaded() const
 void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
 {
     WCTRemedialAssert(m_concurrency.level() == SharedLock::Level::None,
-                      "Threaded handles are still remaining.",
+                      "There are some threaded handles not invalidated.",
                       return;);
     LockGuard concurrencyGuard(m_concurrency);
     {
