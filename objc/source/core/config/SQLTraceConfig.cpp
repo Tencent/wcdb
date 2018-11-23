@@ -61,7 +61,7 @@ bool SQLTraceConfig::invoke(Handle *handle)
 
 bool SQLTraceConfig::uninvoke(Handle *handle)
 {
-    return SQLTracer::invoke(handle);
+    return SQLTracer::uninvoke(handle);
 }
 
 ShareableSQLTraceConfig::ShareableSQLTraceConfig()
