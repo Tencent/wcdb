@@ -51,7 +51,7 @@
 }
 
 - (BOOL)checkAllSQLs:(NSArray<NSString*>*)expectedSQLs
-asExpectedByOperation:(BOOL (^)())block
+asExpectedInOperation:(BOOL (^)())block
 {
     BOOL result = NO;
     do {
@@ -87,6 +87,7 @@ asExpectedByOperation:(BOOL (^)())block
             break;
         }
         if (sqls.count != 0) {
+            NSLog(@"Reminding: %@", sqls);
             TESTCASE_FAILED
             break;
         }
@@ -97,8 +98,8 @@ asExpectedByOperation:(BOOL (^)())block
     return result;
 }
 
-- (BOOL)checkSomeSQLs:(NSArray<NSString*>*)expectedSQLs
-asExpectedByOperation:(BOOL (^)())block
+- (BOOL)checkBeginningSQLs:(NSArray<NSString*>*)expectedSQLs
+     asExpectedInOperation:(BOOL (^)())block
 {
     BOOL result = NO;
     do {
@@ -109,14 +110,14 @@ asExpectedByOperation:(BOOL (^)())block
             TESTCASE_FAILED
             break;
         }
-        NSMutableSet<NSString*>* sqls = [NSMutableSet setWithArray:expectedSQLs];
+        NSMutableArray<NSString*>* sqls = [NSMutableArray arrayWithArray:expectedSQLs];
         [self.database traceSQL:^(NSString* sql) {
             if (!trace || sqls.count == 0) {
                 return;
             }
             //Test sql and expect exactly the same, including order and count
-            if ([sqls containsObject:sql]) {
-                [sqls removeObject:sql];
+            if ([sqls.firstObject isEqualToString:sql]) {
+                [sqls removeObjectAtIndex:0];
             }
         }];
         if (![self.database canOpen]) {

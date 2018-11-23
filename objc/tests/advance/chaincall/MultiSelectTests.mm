@@ -70,7 +70,7 @@
     }
     __block NSArray<WCTMultiObject*>* results;
     if (![self checkAllSQLs:@[ sql ]
-        asExpectedByOperation:^BOOL {
+        asExpectedInOperation:^BOOL {
             results = block();
             return results != nil;
         }]) {

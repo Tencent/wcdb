@@ -48,45 +48,88 @@
     [super tearDown];
 }
 
+- (void)removeAllConfig
+{
+    NSArray<NSString*>* configNames = @[ WCTConfigNameBasic, WCTConfigNameBackup, WCTConfigNameCheckpoint, WCTConfigNameTokenize, WCTConfigNameCipher, WCTConfigNameSQLTrace, WCTConfigNamePerformanceTrace, WCTConfigNameGlobalSQLTrace, WCTConfigNameGlobalPerformanceTrace ];
+    for (NSString* configName in configNames) {
+        [self.database removeConfigForName:configName];
+    }
+}
+
 - (void)test_config
 {
+    [self removeAllConfig];
+
+    __block BOOL uninvoked = NO;
     {
+        // invocation
         [self.database
         setConfig:^BOOL(WCTHandle* handle) {
             return [handle execute:self.setSecureDelete];
         }
         withUninvocation:^BOOL(WCTHandle* handle) {
+            // customlized check uninvocation since traceSQL will be unset in the test function
+            uninvoked = YES;
             return [handle execute:self.unsetSecureDelete];
         }
         forName:self.configName];
 
-        BOOL result = [self checkSomeSQLs:@[ @"PRAGMA main.secure_delete = 1" ]
-                    asExpectedByOperation:^BOOL {
-                        [self.database close];
-                        return [self.database canOpen];
-                    }];
+        BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.secure_delete = 1" ]
+                   asExpectedInOperation:^BOOL {
+                       [self.database close];
+                       return [self.database canOpen];
+                   }];
         TestCaseAssertTrue(result);
 
         WCTHandle* handle = [self.database getHandle];
         TestCaseAssertTrue([handle prepare:self.getSecureDelete] && [handle step]);
         TestCaseAssertTrue([handle getNumberAtIndex:0].boolValue);
         [handle finalizeStatement];
+        [handle invalidate];
     }
     {
+        // uninvocation
         [self.database removeConfigForName:self.configName];
 
-        BOOL result = [self checkSomeSQLs:@[ @"PRAGMA main.secure_delete = 0" ]
-                    asExpectedByOperation:^BOOL {
-                        [self.database close];
-                        return [self.database canOpen];
-                    }];
-        TestCaseAssertTrue(result);
+        TestCaseAssertTrue([self.database canOpen]);
+        TestCaseAssertTrue(uninvoked);
 
         WCTHandle* handle = [self.database getHandle];
         TestCaseAssertTrue([handle prepare:self.getSecureDelete] && [handle step]);
         TestCaseAssertFalse([handle getNumberAtIndex:0].boolValue);
         [handle finalizeStatement];
+        [handle invalidate];
     }
+}
+
+- (void)test_config_failed
+{
+    [self.database
+           setConfig:^BOOL(WCTHandle* _Nonnull) {
+               return NO;
+           }
+    withUninvocation:nil
+             forName:self.configName];
+
+    TestCaseAssertFalse([self.database canOpen]);
+}
+
+- (void)test_uninvoke_failed
+{
+    [self.database
+    setConfig:^BOOL(WCTHandle* _Nonnull) {
+        return YES;
+    }
+    withUninvocation:^BOOL(WCTHandle* _Nonnull) {
+        return NO;
+    }
+    forName:self.configName];
+
+    TestCaseAssertTrue([self.database canOpen]);
+
+    [self.database removeConfigForName:self.configName];
+
+    TestCaseAssertFalse([self.database canOpen]);
 }
 
 @end

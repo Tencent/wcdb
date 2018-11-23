@@ -28,9 +28,9 @@
 @property (readonly, nonatomic) WCTDatabase* database;
 
 - (BOOL)checkAllSQLs:(NSArray<NSString*>*)expectedSQLs
-asExpectedByOperation:(BOOL (^)())block;
+asExpectedInOperation:(BOOL (^)())block;
 
-- (BOOL)checkSomeSQLs:(NSArray<NSString*>*)expectedSQLs
-asExpectedByOperation:(BOOL (^)())block;
+- (BOOL)checkBeginningSQLs:(NSArray<NSString*>*)expectedSQLs
+     asExpectedInOperation:(BOOL (^)())block;
 
 @end

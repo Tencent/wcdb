@@ -186,7 +186,7 @@
     TestCaseAssertTrue([self createTable]);
 
     BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.wal_checkpoint = 'PASSIVE'" ]
-               asExpectedByOperation:^BOOL {
+               asExpectedInOperation:^BOOL {
                    [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + 1];
                    return YES;
                }];
@@ -221,7 +221,7 @@
     } while (YES);
 
     BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.wal_checkpoint = 'PASSIVE'" ]
-               asExpectedByOperation:^BOOL {
+               asExpectedInOperation:^BOOL {
                    [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
                    return YES;
                }];
@@ -256,7 +256,7 @@
     } while (YES);
 
     BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.wal_checkpoint = 'TRUNCATE'" ]
-               asExpectedByOperation:^BOOL {
+               asExpectedInOperation:^BOOL {
                    [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
                    return YES;
                }];
@@ -291,7 +291,7 @@
     } while (YES);
 
     BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.wal_checkpoint = 'PASSIVE'", @"PRAGMA main.wal_checkpoint = 'PASSIVE'" ]
-               asExpectedByOperation:^BOOL {
+               asExpectedInOperation:^BOOL {
                    [self.console disableSQLiteWrite];
                    [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
                    [self.console enableSQLiteWrite];

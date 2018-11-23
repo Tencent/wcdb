@@ -186,7 +186,8 @@
     TestCaseAssertTrue([database canOpen]);
 
     BOOL isDirectory;
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:directory isDirectory:isDirectory] && isDirectory);
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:directory isDirectory:&isDirectory]);
+    TestCaseAssertTrue(isDirectory);
 }
 
 - (void)test_feature_path_normalized

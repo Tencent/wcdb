@@ -78,7 +78,7 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
     [sqls addObjectsFromArray:expected];
     [sqls addObject:@"COMMIT"];
     return [self checkAllSQLs:sqls
-        asExpectedByOperation:^BOOL {
+        asExpectedInOperation:^BOOL {
             return [self createTable];
         }];
 }
@@ -89,10 +89,10 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
         TESTCASE_FAILED
         return NO;
     }
-    return [self checkSomeSQLs:@[ expected ]
-         asExpectedByOperation:^BOOL {
-             return [self createVirtualTable];
-         }];
+    return [self checkBeginningSQLs:@[ expected ]
+              asExpectedInOperation:^BOOL {
+                  return [self createVirtualTable];
+              }];
 }
 
 #pragma mark - property

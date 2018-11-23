@@ -76,7 +76,7 @@
 - (void)test_execute
 {
     BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.user_version = 123" ]
-               asExpectedByOperation:^BOOL {
+               asExpectedInOperation:^BOOL {
                    return [self.handle execute:WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion()).to(123)];
                }];
     TestCaseAssertTrue(result);
@@ -97,7 +97,7 @@
 - (void)test_step
 {
     BOOL result = [self checkAllSQLs:@[ @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)", @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)" ]
-               asExpectedByOperation:^BOOL {
+               asExpectedInOperation:^BOOL {
                    WCDB::StatementInsert statement = WCDB::StatementInsert().insertIntoTable(self.tableName).column(WCDB::Column(@"identifier")).column(WCDB::Column(@"content")).values(WCDB::BindParameter::bindParameters(2));
                    if (![self.handle prepare:statement]) {
                        return NO;

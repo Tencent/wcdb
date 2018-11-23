@@ -72,7 +72,7 @@ asExpectedAfterModification:(BOOL (^)())block
 asExpectedAfterModification:(BOOL (^)())block
 {
     if (![self checkAllSQLs:expectedSQLs
-        asExpectedByOperation:^BOOL {
+        asExpectedInOperation:^BOOL {
             return block();
         }]) {
         return NO;
@@ -114,7 +114,7 @@ asExpectedBySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block
 {
     __block NSArray<NSObject<WCTTableCoding>*>* selected;
     if (![self checkAllSQLs:expectedSQLs
-        asExpectedByOperation:^BOOL {
+        asExpectedInOperation:^BOOL {
             selected = block();
             return selected != nil;
         }]) {
@@ -214,7 +214,7 @@ asExpectedBySelecting:(WCTColumnsXRows* (^)())block
 {
     __block WCTColumnsXRows* selected;
     if (![self checkAllSQLs:expectedSQLs
-        asExpectedByOperation:^BOOL {
+        asExpectedInOperation:^BOOL {
             selected = block();
             return selected != nil;
         }]) {
