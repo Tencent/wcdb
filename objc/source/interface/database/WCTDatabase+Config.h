@@ -28,10 +28,20 @@ typedef NS_ENUM(NSInteger, WCTConfigPriority) {
     WCTConfigPriorityLow = 100,
 };
 
+WCDB_EXTERN NSString* const WCTConfigNameBasic;
+WCDB_EXTERN NSString* const WCTConfigNameBackup;
+WCDB_EXTERN NSString* const WCTConfigNameTokenize;
+WCDB_EXTERN NSString* const WCTConfigNameCheckpoint;
+WCDB_EXTERN NSString* const WCTConfigNameCipher;
+WCDB_EXTERN NSString* const WCTConfigNameSQLTrace;
+WCDB_EXTERN NSString* const WCTConfigNamePerformanceTrace;
+WCDB_EXTERN NSString* const WCTConfigNameGlobalSQLTrace;
+WCDB_EXTERN NSString* const WCTConfigNameGlobalPerformanceTrace;
+
 /**
  Configuration
  */
-typedef BOOL (^WCTConfigBlock)(WCTHandle *_Nonnull);
+typedef BOOL (^WCTConfigBlock)(WCTHandle* _Nonnull);
 
 @interface WCTDatabase (Config)
 
@@ -39,7 +49,7 @@ typedef BOOL (^WCTConfigBlock)(WCTHandle *_Nonnull);
  @brief This interface is equivalent to [database setCipherKey:cipherKey andCipherPageSize:4096];
  @param cipherKey Cipher key.
  */
-- (void)setCipherKey:(NSData *)cipherKey;
+- (void)setCipherKey:(NSData*)cipherKey;
 
 /**
  @brief Set cipher key for a database. 
@@ -48,7 +58,7 @@ typedef BOOL (^WCTConfigBlock)(WCTHandle *_Nonnull);
  @param cipherKey Cipher key.
  @param cipherPageSize Cipher Page Size
  */
-- (void)setCipherKey:(NSData *)cipherKey
+- (void)setCipherKey:(NSData*)cipherKey
    andCipherPageSize:(int)cipherPageSize;
 
 /**
@@ -61,7 +71,7 @@ typedef BOOL (^WCTConfigBlock)(WCTHandle *_Nonnull);
  */
 - (void)setConfig:(WCTConfigBlock)invocation
  withUninvocation:(nullable WCTConfigBlock)uninvocation
-          forName:(NSString *)name
+          forName:(NSString*)name
      withPriority:(int)priority;
 
 /**
@@ -69,9 +79,9 @@ typedef BOOL (^WCTConfigBlock)(WCTHandle *_Nonnull);
  */
 - (void)setConfig:(WCTConfigBlock)invocation
  withUninvocation:(nullable WCTConfigBlock)uninvocation
-          forName:(NSString *)name;
+          forName:(NSString*)name;
 
-- (void)removeConfigForName:(NSString *)name;
+- (void)removeConfigForName:(NSString*)name;
 
 @end
 

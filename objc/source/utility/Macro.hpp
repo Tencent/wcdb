@@ -76,4 +76,10 @@
 
 #define WCDB_NO_ESCAPE __attribute__((noescape))
 
+#if defined(__cplusplus)
+#define WCDB_EXTERN extern "C"
+#else
+#define WCDB_EXTERN extern
+#endif
+
 #endif /* _WCDB_MACRO_HPP */

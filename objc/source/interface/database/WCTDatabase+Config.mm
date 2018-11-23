@@ -28,38 +28,48 @@ static_assert((int) WCTConfigPriorityHigh == (int) WCDB::Configs::Priority::High
 static_assert((int) WCTConfigPriorityDefault == (int) WCDB::Configs::Priority::Default, "");
 static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, "");
 
+NSString* const WCTConfigNameBasic = @WCDB_BASIC_CONFIG_NAME;
+NSString* const WCTConfigNameBackup = @WCDB_BACKUP_CONFIG_NAME;
+NSString* const WCTConfigNameCheckpoint = @WCDB_CHECKPOINT_CONFIG_NAME;
+NSString* const WCTConfigNameTokenize = @WCDB_TOKENIZE_CONFIG_NAME;
+NSString* const WCTConfigNameCipher = @WCDB_CIPHER_CONFIG_NAME;
+NSString* const WCTConfigNameSQLTrace = @WCDB_SQL_TRACE_CONFIG_NAME;
+NSString* const WCTConfigNamePerformanceTrace = @WCDB_PERFORMANCE_TRACE_CONFIG_NAME;
+NSString* const WCTConfigNameGlobalSQLTrace = @WCDB_GLOBAL_SQL_TRACE_CONFIG_NAME;
+NSString* const WCTConfigNameGlobalPerformanceTrace = @WCDB_GLOBAL_PERFORMANCE_TRACE_CONFIG_NAME;
+
 @implementation WCTDatabase (Config)
 
-- (void)setCipherKey:(NSData *)cipherKey
+- (void)setCipherKey:(NSData*)cipherKey
 {
     WCTDatabaseAssert(return;);
     _database->setConfig(WCDB::Core::cipherConfigName,
-                         WCDB::Core::shared()->cipherConfig(WCDB::UnsafeData::immutable((const unsigned char *) cipherKey.bytes, (size_t) cipherKey.length)),
+                         WCDB::Core::shared()->cipherConfig(WCDB::UnsafeData::immutable((const unsigned char*) cipherKey.bytes, (size_t) cipherKey.length)),
                          WCDB::Configs::Priority::Highest);
 }
 
-- (void)setCipherKey:(NSData *)cipherKey
+- (void)setCipherKey:(NSData*)cipherKey
    andCipherPageSize:(int)cipherPageSize
 {
     WCTDatabaseAssert(return;);
     _database->setConfig(WCDB::Core::cipherConfigName,
-                         WCDB::Core::shared()->cipherConfig(WCDB::UnsafeData::immutable((const unsigned char *) cipherKey.bytes, (size_t) cipherKey.length), cipherPageSize),
+                         WCDB::Core::shared()->cipherConfig(WCDB::UnsafeData::immutable((const unsigned char*) cipherKey.bytes, (size_t) cipherKey.length), cipherPageSize),
                          WCDB::Configs::Priority::Highest);
 }
 
 - (void)setConfig:(WCTConfigBlock)nsInvocation
  withUninvocation:(WCTConfigBlock)nsUninvocation
-          forName:(NSString *)name
+          forName:(NSString*)name
      withPriority:(int)priority
 {
     WCTDatabaseAssert(return;);
     WCTRemedialAssert(nsInvocation, "Use [removeConfigForName:] instead.", return;);
-    WCDB::CustomConfig::Invocation invocation = [nsInvocation, self](WCDB::Handle *handle) -> bool {
+    WCDB::CustomConfig::Invocation invocation = [nsInvocation, self](WCDB::Handle* handle) -> bool {
         return nsInvocation([[WCTHandle alloc] initWithDatabase:self andUnsafeHandle:handle]);
     };
     WCDB::CustomConfig::Invocation uninvocation = nullptr;
     if (nsUninvocation) {
-        uninvocation = [nsUninvocation, self](WCDB::Handle *handle) -> bool {
+        uninvocation = [nsUninvocation, self](WCDB::Handle* handle) -> bool {
             return nsUninvocation([[WCTHandle alloc] initWithDatabase:self andUnsafeHandle:handle]);
         };
     }
@@ -68,12 +78,12 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
 
 - (void)setConfig:(WCTConfigBlock)nsInvocation
  withUninvocation:(WCTConfigBlock)nsUninvocation
-          forName:(NSString *)name
+          forName:(NSString*)name
 {
     return [self setConfig:nsInvocation withUninvocation:nsUninvocation forName:name withPriority:WCTConfigPriorityDefault];
 }
 
-- (void)removeConfigForName:(NSString *)name
+- (void)removeConfigForName:(NSString*)name
 {
     WCTDatabaseAssert(return;);
     _database->removeConfig(name);

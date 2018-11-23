@@ -19,6 +19,7 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <WCDB/Macro.hpp>
 #import <WCDB/WINQ.h>
 
 #pragma mark - Chain Call

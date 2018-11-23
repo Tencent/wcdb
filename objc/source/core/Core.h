@@ -51,6 +51,19 @@
 
 #include <WCDB/MigrationHandle.hpp>
 
+#define WCDB_BASIC_CONFIG_NAME "com.Tencent.WCDB.Config.Basic"
+#define WCDB_BACKUP_CONFIG_NAME "com.Tencent.WCDB.Config.Backup"
+#define WCDB_CHECKPOINT_CONFIG_NAME "com.Tencent.WCDB.Config.Checkpoint"
+#define WCDB_TOKENIZE_CONFIG_NAME "com.Tencent.WCDB.Config.Tokenize"
+#define WCDB_CIPHER_CONFIG_NAME "com.Tencent.WCDB.Config.Cipher"
+#define WCDB_SQL_TRACE_CONFIG_NAME "com.Tencent.WCDB.Config.SQLTrace"
+#define WCDB_PERFORMANCE_TRACE_CONFIG_NAME                                     \
+    "com.Tencent.WCDB.Config.PerformanceTrace"
+#define WCDB_GLOBAL_SQL_TRACE_CONFIG_NAME                                      \
+    "com.Tencent.WCDB.Config.GlobalSQLTrace"
+#define WCDB_GLOBAL_PERFORMANCE_TRACE_CONFIG_NAME                              \
+    "com.Tencent.WCDB.Config.GlobalPerformanceTrace"
+
 namespace WCDB {
 
 class Core final : public DatabasePoolEvent {
@@ -71,15 +84,38 @@ public:
     void setNotificationForGlobalPerformanceTrace(
     const ShareablePerformanceTraceConfig::Notification& notification);
 
+    static constexpr const char* backupConfigName = WCDB_BACKUP_CONFIG_NAME;
     const std::shared_ptr<Config>& backupConfig();
+
+    static constexpr const char* tokenizeConfigName = WCDB_TOKENIZE_CONFIG_NAME;
     std::shared_ptr<Config> tokenizeConfig(const std::list<String>& tokenizeNames);
+
+    static constexpr const char* cipherConfigName = WCDB_CIPHER_CONFIG_NAME;
     std::shared_ptr<Config> cipherConfig(const UnsafeData& cipher, int pageSize = 4096);
+
+    static constexpr const char* sqlTraceConfigName = WCDB_SQL_TRACE_CONFIG_NAME;
     std::shared_ptr<Config> sqlTraceConfig(const SQLTraceConfig::Notification& notification);
+
+    static constexpr const char* performanceTraceConfigName = WCDB_PERFORMANCE_TRACE_CONFIG_NAME;
     std::shared_ptr<Config>
     performanceTraceConfig(const PerformanceTraceConfig::Notification& notification);
+
     std::shared_ptr<Config>
     customConfig(const CustomConfig::Invocation& invocation,
                  const CustomConfig::Invocation& uninvocation = nullptr);
+
+    Core(const Core&) = delete;
+    Core& operator=(const Core&) = delete;
+
+protected:
+    Core();
+
+    static constexpr const char* basicConfigName = WCDB_BASIC_CONFIG_NAME;
+    static constexpr const char* checkpointConfigName = WCDB_CHECKPOINT_CONFIG_NAME;
+
+    static constexpr const char* globalSQLTraceConfigName = WCDB_GLOBAL_SQL_TRACE_CONFIG_NAME;
+    static constexpr const char* globalPerformanceTraceConfigName
+    = WCDB_GLOBAL_PERFORMANCE_TRACE_CONFIG_NAME;
 
     static constexpr const char* notifierPreprocessorName
     = "com.Tencent.WCDB.Notifier.PreprocessTag";
@@ -87,25 +123,6 @@ public:
     static constexpr const char* corruptionQueueName = "com.Tencent.WCDB.Queue.Corruption";
     static constexpr const char* checkpointQueueName = "com.Tencent.WCDB.Queue.Checkpoint";
     static constexpr const char* backupQueueName = "com.Tencent.WCDB.Queue.Backup";
-
-    static constexpr const char* basicConfigName = "com.Tencent.WCDB.Config.Basic";
-    static constexpr const char* backupConfigName = "com.Tencent.WCDB.Config.Backup";
-    static constexpr const char* checkpointConfigName = "com.Tencent.WCDB.Config.Checkpoint";
-    static constexpr const char* tokenizeConfigName = "com.Tencent.WCDB.Config.Tokenize";
-    static constexpr const char* cipherConfigName = "com.Tencent.WCDB.Config.Cipher";
-    static constexpr const char* sqlTraceConfigName = "com.Tencent.WCDB.Config.SQLTrace";
-    static constexpr const char* performanceTraceConfigName
-    = "com.Tencent.WCDB.Config.PerformanceTrace";
-    static constexpr const char* globalSQLTraceConfigName
-    = "com.Tencent.WCDB.Config.GlobalSQLTrace";
-    static constexpr const char* globalPerformanceTraceConfigName
-    = "com.Tencent.WCDB.Config.GlobalPerformanceTrace";
-
-    Core(const Core&) = delete;
-    Core& operator=(const Core&) = delete;
-
-protected:
-    Core();
 
     static int vfsOpen(const char* path, int flags, int mode);
     static void handleLog(void* unused, int code, const char* message);

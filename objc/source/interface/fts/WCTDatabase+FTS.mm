@@ -22,18 +22,18 @@
 #import <WCDB/WCTDatabase+FTS.h>
 #import <WCDB/WCTDatabase+Private.h>
 
-WCTTokenizer const WCTTokenizerSimple = @"simple";
-WCTTokenizer const WCTTokenizerPorter = @"porter";
-WCTTokenizer const WCTTokenizerICU = @"icu";
-WCTTokenizer const WCTTokenizerUnicode61 = @"unicode61";
-WCTTokenizer const WCTTokenizerWCDB = @"WCDB";
+NSString* const WCTTokenizerSimple = @"simple";
+NSString* const WCTTokenizerPorter = @"porter";
+NSString* const WCTTokenizerICU = @"icu";
+NSString* const WCTTokenizerUnicode61 = @"unicode61";
+NSString* const WCTTokenizerWCDB = @"WCDB";
 
-WCTModule const WCTModuleFTS3 = @"fts3";
-WCTModule const WCTModuleFTS5 = @"fts5";
+NSString* const WCTModuleFTS3 = @"fts3";
+NSString* const WCTModuleFTS5 = @"fts5";
 
 @implementation WCTDatabase (FTS)
 
-- (void)setTokenizer:(NSString *)tokenizerName
+- (void)setTokenizer:(NSString*)tokenizerName
 {
     WCTDatabaseAssert(return;);
     _database->setConfig(WCDB::Core::tokenizeConfigName,
@@ -41,12 +41,12 @@ WCTModule const WCTModuleFTS5 = @"fts5";
                          WCDB::Configs::Priority::Higher);
 }
 
-- (void)setTokenizers:(NSArray<NSString *> *)tokenizerNames
+- (void)setTokenizers:(NSArray<NSString*>*)tokenizerNames
 {
     WCTDatabaseAssert(return;);
     std::list<WCDB::String>
     theTokenizeNames;
-    for (NSString *tokenizerName in tokenizerNames) {
+    for (NSString* tokenizerName in tokenizerNames) {
         theTokenizeNames.push_back(tokenizerName);
     }
     _database->setConfig(WCDB::Core::tokenizeConfigName,
@@ -54,7 +54,7 @@ WCTModule const WCTModuleFTS5 = @"fts5";
                          WCDB::Configs::Priority::Higher);
 }
 
-+ (void)addTokenizer:(unsigned char *)address named:(NSString *)name
++ (void)addTokenizer:(unsigned char*)address named:(NSString*)name
 {
     WCDB::Core::shared()
     ->addTokenizer(name, address);

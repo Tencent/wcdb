@@ -23,24 +23,22 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NSString *WCTTokenizer;
-extern WCTTokenizer const WCTTokenizerSimple;
-extern WCTTokenizer const WCTTokenizerPorter;
-extern WCTTokenizer const WCTTokenizerICU;
-extern WCTTokenizer const WCTTokenizerUnicode61;
-extern WCTTokenizer const WCTTokenizerWCDB;
+WCDB_EXTERN NSString* const WCTTokenizerSimple;
+WCDB_EXTERN NSString* const WCTTokenizerPorter;
+WCDB_EXTERN NSString* const WCTTokenizerICU;
+WCDB_EXTERN NSString* const WCTTokenizerUnicode61;
+WCDB_EXTERN NSString* const WCTTokenizerWCDB;
 
-typedef NSString *WCTModule;
-extern WCTModule const WCTModuleFTS3;
-extern WCTModule const WCTModuleFTS5;
+WCDB_EXTERN NSString* const WCTModuleFTS3;
+WCDB_EXTERN NSString* const WCTModuleFTS5;
 
 @interface WCTDatabase (FTS)
 
-- (void)setTokenizer:(WCTTokenizer)tokenizerName;
+- (void)setTokenizer:(NSString*)tokenizerName;
 
-- (void)setTokenizers:(NSArray<WCTTokenizer> *)tokenizerNames;
+- (void)setTokenizers:(NSArray<NSString*>*)tokenizerNames;
 
-+ (void)addTokenizer:(unsigned char *)address named:(NSString *)name;
++ (void)addTokenizer:(unsigned char*)address named:(NSString*)name;
 
 @end
 

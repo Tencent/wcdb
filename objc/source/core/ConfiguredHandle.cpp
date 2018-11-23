@@ -28,9 +28,9 @@ ConfiguredHandle::ConfiguredHandle(const std::shared_ptr<Handle> &handle)
 {
 }
 
-bool ConfiguredHandle::configure(const std::shared_ptr<Configs> &configs)
+bool ConfiguredHandle::reconfigure(const std::shared_ptr<Configs> &newConfigs)
 {
-    if (m_configs == configs) {
+    if (m_configs == newConfigs) {
         return true;
     }
     if (m_configs) {
@@ -38,12 +38,12 @@ bool ConfiguredHandle::configure(const std::shared_ptr<Configs> &configs)
             return false;
         }
     }
-    if (configs) {
-        if (!configs->invoke(m_handle.get())) {
+    if (newConfigs) {
+        if (!newConfigs->invoke(m_handle.get())) {
             return false;
         }
     }
-    m_configs = configs;
+    m_configs = newConfigs;
     return true;
 }
 

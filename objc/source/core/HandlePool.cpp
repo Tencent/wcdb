@@ -79,7 +79,7 @@ int HandlePool::maxConcurrency()
     return s_maxConcurrency;
 }
 
-bool HandlePool::allowedConcurrent()
+bool HandlePool::allowedConcurrency()
 {
     WCTInnerAssert(m_concurrency.readSafety());
     WCTInnerAssert(m_memory.readSafety());
@@ -116,6 +116,9 @@ bool HandlePool::isBlockaded() const
 
 void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
 {
+    WCTRemedialAssert(m_concurrency.level() == SharedLock::Level::None,
+                      "Threaded handles are still remaining.",
+                      return;);
     LockGuard concurrencyGuard(m_concurrency);
     {
         LockGuard memoryGuard(m_memory);
@@ -160,6 +163,7 @@ size_t HandlePool::aliveHandleCount() const
 RecyclableHandle HandlePool::flowOut()
 {
     SharedLockGuard concurrencyGuard(m_concurrency);
+    bool isGenerated = false;
     std::shared_ptr<ConfiguredHandle> configuredHandle;
     {
         LockGuard memoryGuard(m_memory);
@@ -167,12 +171,14 @@ RecyclableHandle HandlePool::flowOut()
             configuredHandle = m_frees.back();
             WCTInnerAssert(configuredHandle != nullptr);
             m_frees.pop_back();
-        } else if (!allowedConcurrent()) {
+        } else if (!allowedConcurrency()) {
             // no free handle and concurrency reach the limitation.
             return nullptr;
         }
     }
+
     if (configuredHandle == nullptr) {
+        // generate new handle
         // lock free
         std::shared_ptr<Handle> handle = generateHandle();
         if (handle == nullptr) {
@@ -186,39 +192,57 @@ RecyclableHandle HandlePool::flowOut()
 
         configuredHandle.reset(new ConfiguredHandle(handle));
         if (configuredHandle == nullptr) {
+            handle->close();
             setThreadedError(Error(Error::Code::NoMemory));
             return nullptr;
         }
+        isGenerated = true;
     }
 
-    if (!willConfigureHandle(configuredHandle->get())) {
-        return nullptr;
-    }
-
-    std::shared_ptr<Configs> configs;
-    {
-        SharedLockGuard memoryGuard(m_memory);
-        configs = m_configs;
-    }
-    if (!configuredHandle->configure(configs)) {
-        setThreadedError(configuredHandle->get()->getError());
-        return nullptr;
-    }
-
-    if (configuredHandle != nullptr) {
-        {
-            LockGuard memoryGuard(m_memory);
-            WCTInnerAssert(configuredHandle != nullptr);
-            if (!allowedConcurrent()) {
-                return nullptr;
-            }
-            m_handles.emplace(configuredHandle);
+    WCTInnerAssert(configuredHandle != nullptr);
+    bool failed = false;
+    do {
+        // configuration
+        if (!willConfigureHandle(configuredHandle->get())) {
+            failed = true;
+            break;
         }
-        m_concurrency.lockShared();
-        return RecyclableHandle(
-        configuredHandle, std::bind(&HandlePool::flowBack, this, std::placeholders::_1));
+
+        std::shared_ptr<Configs> configs;
+        {
+            SharedLockGuard memoryGuard(m_memory);
+            configs = m_configs;
+        }
+        if (!configuredHandle->reconfigure(configs)) {
+            failed = true;
+            setThreadedError(configuredHandle->get()->getError());
+            break;
+        }
+
+        if (isGenerated) {
+            LockGuard memoryGuard(m_memory);
+            // re-check concurrency limitation since all lock free code above
+            if (!allowedConcurrency()) {
+                failed = true;
+                break;
+            }
+            auto result = m_handles.emplace(configuredHandle);
+            WCTInnerAssert(result.second);
+        }
+    } while (false);
+    if (failed) {
+        configuredHandle->get()->close();
+        if (!isGenerated) {
+            // remove if it already exists in handles
+            m_handles.erase(configuredHandle);
+        }
+        WCTInnerAssert(m_handles.find(configuredHandle) == m_handles.end());
+        return nullptr;
     }
-    return nullptr;
+
+    m_concurrency.lockShared();
+    return RecyclableHandle(
+    configuredHandle, std::bind(&HandlePool::flowBack, this, std::placeholders::_1));
 }
 
 void HandlePool::flowBack(const std::shared_ptr<ConfiguredHandle> &configuredHandle)
@@ -232,7 +256,8 @@ void HandlePool::flowBack(const std::shared_ptr<ConfiguredHandle> &configuredHan
         } else {
             // drop it
             configuredHandle->get()->close();
-            m_handles.erase(configuredHandle);
+            size_t erased = m_handles.erase(configuredHandle);
+            WCTInnerAssert(erased == 1);
         }
     }
     m_concurrency.unlockShared();

@@ -78,7 +78,7 @@ public:
     static int maxConcurrency();
 
 protected:
-    bool allowedConcurrent();
+    bool allowedConcurrency();
     mutable SharedLock m_concurrency;
 
 #pragma mark - Handle

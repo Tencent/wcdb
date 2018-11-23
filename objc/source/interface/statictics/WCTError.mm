@@ -23,32 +23,31 @@
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTError.h>
 
-typedef NSString *WCTErrorKey;
-WCTErrorKey const WCTErrorKeyPath = @"Path";
-WCTErrorKey const WCTErrorKeySQL = @"SQL";
-WCTErrorKey const WCTErrorKeyOperation = @"Op";
-WCTErrorKey const WCTErrorKeyTag = @"Tag";
-WCTErrorKey const WCTErrorKeyExtendedCode = @"ExtCode";
-WCTErrorKey const WCTErrorKeySource = @"Source";
+NSErrorUserInfoKey const WCTErrorKeyPath = @"Path";
+NSErrorUserInfoKey const WCTErrorKeySQL = @"SQL";
+NSErrorUserInfoKey const WCTErrorKeyOperation = @"Op";
+NSErrorUserInfoKey const WCTErrorKeyTag = @"Tag";
+NSErrorUserInfoKey const WCTErrorKeyExtendedCode = @"ExtCode";
+NSErrorUserInfoKey const WCTErrorKeySource = @"Source";
 
 @implementation WCTError
 
 + (void)initialize
 {
-    if (self == WCTError.class) {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         WCDB::Notifier::shared()->setNotificationForPreprocessing("com.Tencent.WCDB.Notifier.PreprocessPath", [](const WCDB::Error &error, WCDB::Error::Infos &infos) {
             const auto &strings = error.infos.getStrings();
             auto iter = strings.find("Path");
             if (iter == strings.end()) {
                 return;
             }
-            NSString *path = [NSString stringWithUTF8String:iter->second.c_str()];
-            path = [path stringByExpandingTildeInPath];
+            NSString *path = [NSString stringWithUTF8String:iter->second.c_str()].stringByAbbreviatingWithTildeInPath;
             if (path.length > 0) {
                 infos.set("Path", path.UTF8String);
             }
         });
-    }
+    });
 }
 
 + (NSErrorDomain)domain
@@ -106,7 +105,7 @@ WCTErrorKey const WCTErrorKeySource = @"Source";
     return self.code == WCTErrorCodeCorrupt || self.code == WCTErrorCodeNotADatabase;
 }
 
-- (NSString *)stringForKey:(WCTErrorKey)key
+- (NSString *)stringForKey:(NSErrorUserInfoKey)key
 {
     id value = [self.userInfo objectForKey:key];
     if (value && [value isKindOfClass:NSString.class]) {
@@ -115,7 +114,7 @@ WCTErrorKey const WCTErrorKeySource = @"Source";
     return nil;
 }
 
-- (NSNumber *)numberForKey:(WCTErrorKey)key
+- (NSNumber *)numberForKey:(NSErrorUserInfoKey)key
 {
     id value = [self.userInfo objectForKey:key];
     if (value && [value isKindOfClass:NSNumber.class]) {
