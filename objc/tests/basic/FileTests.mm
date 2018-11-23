@@ -180,12 +180,12 @@
 - (void)test_feature_auto_create_immediate_directory
 {
     NSString* directory = [[[[[[self.directory stringByAppendingPathComponent:@"immediate"] stringByAppendingPathComponent:@"directory"] stringByAppendingPathComponent:@"will"] stringByAppendingPathComponent:@"be"] stringByAppendingPathComponent:@"created"] stringByAppendingPathComponent:@"automatically"];
-    NSString* path = [directory stringByAppendingString:self.path.lastPathComponent];
+    NSString* path = [directory stringByAppendingPathComponent:self.path.lastPathComponent];
 
     WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
     TestCaseAssertTrue([database canOpen]);
 
-    BOOL isDirectory;
+    BOOL isDirectory = NO;
     TestCaseAssertTrue([self.fileManager fileExistsAtPath:directory isDirectory:&isDirectory]);
     TestCaseAssertTrue(isDirectory);
 }
@@ -196,7 +196,7 @@
     WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
     TestCaseAssertTrue([database canOpen]);
 
-    NSString* normalizedPath = [[[NSString stringWithFormat:@"%@"] stringByAppendingPathComponent:@"directory"] stringByAppendingPathComponent:@"database"];
+    NSString* normalizedPath = [[[NSString stringWithFormat:@"%@", self.directory] stringByAppendingPathComponent:@"directory"] stringByAppendingPathComponent:@"database"];
     TestCaseAssertTrue([database.path isEqualToString:normalizedPath]);
 }
 

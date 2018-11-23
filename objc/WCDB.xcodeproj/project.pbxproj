@@ -228,8 +228,8 @@
 		2370B12B21914ED500D3227C /* NSString+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2370B11921914ED500D3227C /* NSString+WCTColumnCoding.mm */; };
 		2370B1322191533C00D3227C /* WCTOptional.h in Headers */ = {isa = PBXBuildFile; fileRef = 2370B1302191533C00D3227C /* WCTOptional.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2370F5B42181B2B7001C91B6 /* StatementTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2370F5B32181B2B7001C91B6 /* StatementTests.mm */; };
-		2372E05921A2633800051D9A /* WCTUsedUpInvalidateGuard.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2372E05721A2633800051D9A /* WCTUsedUpInvalidateGuard.mm */; };
-		2372E05A21A2633800051D9A /* WCTUsedUpInvalidateGuard.h in Headers */ = {isa = PBXBuildFile; fileRef = 2372E05821A2633800051D9A /* WCTUsedUpInvalidateGuard.h */; };
+		2372E05921A2633800051D9A /* WCTTryDisposeGuard.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2372E05721A2633800051D9A /* WCTTryDisposeGuard.mm */; };
+		2372E05A21A2633800051D9A /* WCTTryDisposeGuard.h in Headers */ = {isa = PBXBuildFile; fileRef = 2372E05821A2633800051D9A /* WCTTryDisposeGuard.h */; };
 		2372E06221A2E13100051D9A /* ConfigTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2372E06121A2E13100051D9A /* ConfigTests.mm */; };
 		23739D81219A743800A043BF /* MultiSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23739D80219A743800A043BF /* MultiSelectTests.mm */; };
 		23739D85219A794700A043BF /* ChainCallTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23739D84219A794700A043BF /* ChainCallTests.mm */; };
@@ -1260,8 +1260,8 @@
 		2370B11921914ED500D3227C /* NSString+WCTColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSString+WCTColumnCoding.mm"; sourceTree = "<group>"; };
 		2370B1302191533C00D3227C /* WCTOptional.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTOptional.h; sourceTree = "<group>"; };
 		2370F5B32181B2B7001C91B6 /* StatementTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = StatementTests.mm; sourceTree = "<group>"; };
-		2372E05721A2633800051D9A /* WCTUsedUpInvalidateGuard.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTUsedUpInvalidateGuard.mm; sourceTree = "<group>"; };
-		2372E05821A2633800051D9A /* WCTUsedUpInvalidateGuard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTUsedUpInvalidateGuard.h; sourceTree = "<group>"; };
+		2372E05721A2633800051D9A /* WCTTryDisposeGuard.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTTryDisposeGuard.mm; sourceTree = "<group>"; };
+		2372E05821A2633800051D9A /* WCTTryDisposeGuard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTTryDisposeGuard.h; sourceTree = "<group>"; };
 		2372E06121A2E13100051D9A /* ConfigTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ConfigTests.mm; sourceTree = "<group>"; };
 		23739D80219A743800A043BF /* MultiSelectTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MultiSelectTests.mm; sourceTree = "<group>"; };
 		23739D84219A794700A043BF /* ChainCallTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ChainCallTests.mm; sourceTree = "<group>"; };
@@ -2183,8 +2183,8 @@
 				234DBD0B2064E045000E31E8 /* WCTChainCall.h */,
 				23776CA3218C41DD00E985DC /* WCTChainCall.mm */,
 				23776CA5218C41E600E985DC /* WCTChainCall+Private.h */,
-				2372E05721A2633800051D9A /* WCTUsedUpInvalidateGuard.mm */,
-				2372E05821A2633800051D9A /* WCTUsedUpInvalidateGuard.h */,
+				2372E05721A2633800051D9A /* WCTTryDisposeGuard.mm */,
+				2372E05821A2633800051D9A /* WCTTryDisposeGuard.h */,
 			);
 			path = chaincall;
 			sourceTree = "<group>";
@@ -3369,7 +3369,7 @@
 				23F70FD820A07CEC00CCE3CD /* CustomConfig.hpp in Headers */,
 				23EEDCC2217DFADC006E9E73 /* StatementCreateTable.hpp in Headers */,
 				23EEDC88217DFADC006E9E73 /* ForeignKey.hpp in Headers */,
-				2372E05A21A2633800051D9A /* WCTUsedUpInvalidateGuard.h in Headers */,
+				2372E05A21A2633800051D9A /* WCTTryDisposeGuard.h in Headers */,
 				23A3CFB5205FB1A800692F94 /* WCTHandle+Convenient.h in Headers */,
 				23EEDCD2217DFADC006E9E73 /* StatementDropTrigger.hpp in Headers */,
 				23EEDC72217DFADC006E9E73 /* FTS3Function.hpp in Headers */,
@@ -4327,7 +4327,7 @@
 				23EEDC97217DFADC006E9E73 /* OrderingTerm.cpp in Sources */,
 				23EEDC68217DFADC006E9E73 /* ColumnType.cpp in Sources */,
 				23B4DCDA2112AC5600954D71 /* Modules.cpp in Sources */,
-				2372E05921A2633800051D9A /* WCTUsedUpInvalidateGuard.mm in Sources */,
+				2372E05921A2633800051D9A /* WCTTryDisposeGuard.mm in Sources */,
 				23B4DCF32112B32D00954D71 /* BackupQueue.cpp in Sources */,
 				23EEDCB9217DFADC006E9E73 /* StatementAttach.cpp in Sources */,
 				23AD52E620DB852B00664B62 /* Fraction.cpp in Sources */,

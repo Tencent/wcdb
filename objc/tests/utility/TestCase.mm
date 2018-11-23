@@ -29,7 +29,12 @@
 #ifdef DEBUG
         WCTDatabase.debuggable = YES;
         [WCTDatabase globalTraceSQL:^(NSString *sql) {
-            NSLog(@"%@ SQL: %@", [NSThread currentThread].name, sql);
+            NSThread *currentThread = [NSThread currentThread];
+            NSString *threadName = currentThread.name;
+            if (threadName.length == 0) {
+                threadName = [NSString stringWithFormat:@"%p", currentThread];
+            }
+            NSLog(@"%@ Thread %@: %@", currentThread.isMainThread ? @"*" : @"-", threadName, sql);
         }];
 #else
         WCTDatabase.debuggable = NO;

@@ -201,6 +201,8 @@
     TestCaseAssertTrue([handle step]);
     int pagesize = [handle getInteger32AtIndex:0];
     TestCaseAssertTrue(pagesize == self.expectedPageSize);
+    [handle finalizeStatement];
+    [handle invalidate];
 
     TestCaseAssertTrue([self createTable]);
     NSString* wal = [self.path stringByAppendingString:@"-wal"];
@@ -236,21 +238,25 @@
     TestCaseAssertTrue([handle step]);
     int pagesize = [handle getInteger32AtIndex:0];
     TestCaseAssertTrue(pagesize == self.expectedPageSize);
+    [handle finalizeStatement];
+    [handle invalidate];
 
     TestCaseAssertTrue([self createTable]);
     NSString* wal = [self.path stringByAppendingString:@"-wal"];
+
+    NSMutableArray<TestCaseObject*>* objects = [[NSMutableArray<TestCaseObject*> alloc] init];
+    for (int i = 0; i < 10000; ++i) {
+        TestCaseObject* object = [[TestCaseObject alloc] init];
+        object.isAutoIncrement = YES;
+        object.content = [NSString randomString];
+        [objects addObject:object];
+    }
+
     do {
         NSNumber* walSize = [self getFileSize:wal];
         TestCaseAssertTrue(walSize != nil);
         if (walSize.integerValue > self.checkpointFramesThresholdForTruncate * (pagesize + self.sizeOfWalFrameHeader) + self.sizeOfWalHeader) {
             break;
-        }
-        NSMutableArray<TestCaseObject*>* objects = [[NSMutableArray<TestCaseObject*> alloc] init];
-        for (int i = 0; i < 1000; ++i) {
-            TestCaseObject* object = [[TestCaseObject alloc] init];
-            object.isAutoIncrement = YES;
-            object.content = [NSString randomString];
-            [objects addObject:object];
         }
         TestCaseAssertTrue([self.table insertObjects:objects]);
     } while (YES);
@@ -271,6 +277,8 @@
     TestCaseAssertTrue([handle step]);
     int pagesize = [handle getInteger32AtIndex:0];
     TestCaseAssertTrue(pagesize == self.expectedPageSize);
+    [handle finalizeStatement];
+    [handle invalidate];
 
     TestCaseAssertTrue([self createTable]);
     NSString* wal = [self.path stringByAppendingString:@"-wal"];
