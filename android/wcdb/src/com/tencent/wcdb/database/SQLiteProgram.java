@@ -63,7 +63,14 @@ public abstract class SQLiteProgram extends SQLiteClosable {
                 db.getThreadSession().prepare(mSql,
                         db.getThreadDefaultConnectionFlags(assumeReadOnly),
                         cancellationSignalForPrepare, info);
-                mReadOnly = info.readOnly;
+
+                // Always treat CREATE/DROP/ALTER statements as read-write.
+                // This fixes read-only exceptions while running CREATE xxx IF NOT EXISTS statements
+                // because we assume these statements to be read-write and prepare them using the
+                // primary connection but the results are read-only and run on non-primary connections.
+                // The non-primary connections may be using outdated cache and treat the statement as
+                // read-write.
+                mReadOnly = (n != DatabaseUtils.STATEMENT_DDL) && info.readOnly;
                 mColumnNames = info.columnNames;
                 mNumParameters = info.numParameters;
                 break;
