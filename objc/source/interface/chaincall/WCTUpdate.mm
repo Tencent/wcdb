@@ -22,8 +22,8 @@
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTHandle.h>
 #import <WCDB/WCTORM.h>
+#import <WCDB/WCTTryDisposeGuard.h>
 #import <WCDB/WCTUpdate.h>
-#import <WCDB/WCTUsedUpInvalidateGuard.h>
 
 typedef NS_ENUM(NSUInteger, WCTUpdateType) {
     WCTUpdateTypeObject,
@@ -108,7 +108,7 @@ typedef NS_ENUM(NSUInteger, WCTUpdateType) {
 
 - (BOOL)execute
 {
-    WCTUsedUpInvalidateGuard usedUpInvalidateGuard(self);
+    WCTTryDisposeGuard tryDisposeGuard(self);
     if (_value == nil) {
         return YES;
     }

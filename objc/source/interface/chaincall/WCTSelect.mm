@@ -24,7 +24,7 @@
 #import <WCDB/WCTORM.h>
 #import <WCDB/WCTSelect.h>
 #import <WCDB/WCTSelectable+Private.h>
-#import <WCDB/WCTUsedUpInvalidateGuard.h>
+#import <WCDB/WCTTryDisposeGuard.h>
 
 @implementation WCTSelect {
     WCTResultColumns _resultColumns;
@@ -45,7 +45,7 @@
 
 - (NSArray /* <WCTObject*> */ *)allObjects
 {
-    WCTUsedUpInvalidateGuard usedUpInvalidateGuard(self);
+    WCTTryDisposeGuard tryDisposeGuard(self);
     if (![self lazyPrepare]) {
         return nil;
     }
@@ -56,7 +56,7 @@
 
 - (id /* WCTObject* */)nextObject
 {
-    WCTUsedUpInvalidateGuard usedUpInvalidateGuard(self);
+    WCTTryDisposeGuard tryDisposeGuard(self);
     if (![self lazyPrepare]) {
         return nil;
     }

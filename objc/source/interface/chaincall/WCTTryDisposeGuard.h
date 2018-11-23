@@ -20,14 +20,14 @@
 
 #import <WCDB/WCTChainCall.h>
 
-class WCTUsedUpInvalidateGuard final {
+class WCTTryDisposeGuard final {
 public:
-    WCTUsedUpInvalidateGuard(WCTChainCall* chaincall);
-    ~WCTUsedUpInvalidateGuard();
+    WCTTryDisposeGuard(WCTChainCall* chaincall);
+    ~WCTTryDisposeGuard();
 
-    WCTUsedUpInvalidateGuard() = delete;
-    WCTUsedUpInvalidateGuard(const WCTUsedUpInvalidateGuard&) = delete;
-    WCTUsedUpInvalidateGuard& operator=(const WCTUsedUpInvalidateGuard&) = delete;
+    WCTTryDisposeGuard() = delete;
+    WCTTryDisposeGuard(const WCTTryDisposeGuard&) = delete;
+    WCTTryDisposeGuard& operator=(const WCTTryDisposeGuard&) = delete;
 
 private:
     WCTChainCall* m_chaincall;

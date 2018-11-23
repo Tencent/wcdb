@@ -25,7 +25,7 @@
 #import <WCDB/WCTORM.h>
 #import <WCDB/WCTRowSelect.h>
 #import <WCDB/WCTSelectable+Private.h>
-#import <WCDB/WCTUsedUpInvalidateGuard.h>
+#import <WCDB/WCTTryDisposeGuard.h>
 
 @implementation WCTRowSelect
 
@@ -54,7 +54,7 @@
 
 - (WCTColumnsXRows *)allRows
 {
-    WCTUsedUpInvalidateGuard usedUpInvalidateGuard(self);
+    WCTTryDisposeGuard tryDisposeGuard(self);
     if (![self lazyPrepare]) {
         return nil;
     }
@@ -65,7 +65,7 @@
 
 - (WCTOneRow *)nextRow
 {
-    WCTUsedUpInvalidateGuard usedUpInvalidateGuard(self);
+    WCTTryDisposeGuard tryDisposeGuard(self);
     if (![self lazyPrepare]) {
         return nil;
     }
@@ -84,7 +84,7 @@
 
 - (WCTOneColumn *)allValuesAtIndex:(int)index
 {
-    WCTUsedUpInvalidateGuard usedUpInvalidateGuard(self);
+    WCTTryDisposeGuard tryDisposeGuard(self);
     if (![self lazyPrepare]) {
         return nil;
     }
@@ -100,7 +100,7 @@
 
 - (WCTValue *)nextValueAtIndex:(int)index
 {
-    WCTUsedUpInvalidateGuard usedUpInvalidateGuard(self);
+    WCTTryDisposeGuard tryDisposeGuard(self);
     if (![self lazyPrepare]) {
         return nil;
     }

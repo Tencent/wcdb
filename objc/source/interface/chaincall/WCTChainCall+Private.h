@@ -22,20 +22,28 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, WCTChainCallDisposeAction) {
+    WCTChainCallDisposeNoAction,
+    WCTChainCallDisposeActionFinalizeStatement,
+    WCTChainCallDisposeActionInvalidate,
+};
+
 @interface WCTChainCall () {
 @protected
     WCTHandle* _handle;
 @private
-    BOOL _invalidateWhenUsedUp;
+    WCTChainCallDisposeAction _disposeAction;
 }
 
 - (instancetype)init NS_DESIGNATED_INITIALIZER;
 
 - (instancetype)initWithHandle:(WCTHandle*)handle NS_DESIGNATED_INITIALIZER;
 
-- (instancetype)invalidateWhenUsedUp;
+- (instancetype)invalidateWhenDispose;
 
-- (void)tryAlreadyUsedUpInvalidate;
+- (instancetype)finalizeStatementWhenDispose;
+
+- (void)tryDispose;
 
 @end
 

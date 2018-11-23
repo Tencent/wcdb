@@ -35,7 +35,7 @@
 {
     WCTInnerAssert(handle != nil);
     if (self = [super init]) {
-        _invalidateWhenUsedUp = NO;
+        _disposeAction = WCTChainCallDisposeNoAction;
         _handle = handle;
     }
     return self;
@@ -51,16 +51,29 @@
     return _handle.error;
 }
 
-- (instancetype)invalidateWhenUsedUp
+- (instancetype)invalidateWhenDispose
 {
-    _invalidateWhenUsedUp = YES;
+    _disposeAction = WCTChainCallDisposeActionInvalidate;
     return self;
 }
 
-- (void)tryAlreadyUsedUpInvalidate
+- (instancetype)finalizeStatementWhenDispose
 {
-    if (_invalidateWhenUsedUp) {
+    _disposeAction = WCTChainCallDisposeActionFinalizeStatement;
+    return self;
+}
+
+- (void)tryDispose
+{
+    switch (_disposeAction) {
+    case WCTChainCallDisposeNoAction:
+        break;
+    case WCTChainCallDisposeActionFinalizeStatement:
+        [_handle finalizeStatement];
+        break;
+    case WCTChainCallDisposeActionInvalidate:
         [_handle invalidate];
+        break;
     }
 }
 

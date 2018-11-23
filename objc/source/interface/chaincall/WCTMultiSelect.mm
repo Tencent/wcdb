@@ -25,7 +25,7 @@
 #import <WCDB/WCTMultiSelect.h>
 #import <WCDB/WCTORM.h>
 #import <WCDB/WCTSelectable+Private.h>
-#import <WCDB/WCTUsedUpInvalidateGuard.h>
+#import <WCDB/WCTTryDisposeGuard.h>
 
 @implementation WCTMultiSelect {
     WCTResultColumns _resultColumns;
@@ -51,7 +51,7 @@
 
 - (WCTMultiObject *)nextMultiObject
 {
-    WCTUsedUpInvalidateGuard usedUpInvalidateGuard(self);
+    WCTTryDisposeGuard tryDisposeGuard(self);
     if (![self lazyPrepare]) {
         return nil;
     }
@@ -66,7 +66,7 @@
 
 - (NSArray<WCTMultiObject *> *)allMultiObjects
 {
-    WCTUsedUpInvalidateGuard usedUpInvalidateGuard(self);
+    WCTTryDisposeGuard tryDisposeGuard(self);
     if (![self lazyPrepare]) {
         return nil;
     }

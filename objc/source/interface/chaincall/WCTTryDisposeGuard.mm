@@ -20,16 +20,16 @@
 
 #import <WCDB/Assertion.hpp>
 #import <WCDB/WCTChainCall+Private.h>
-#import <WCDB/WCTUsedUpInvalidateGuard.h>
+#import <WCDB/WCTTryDisposeGuard.h>
 
-WCTUsedUpInvalidateGuard::WCTUsedUpInvalidateGuard(WCTChainCall* chaincall)
+WCTTryDisposeGuard::WCTTryDisposeGuard(WCTChainCall* chaincall)
 : m_chaincall(chaincall)
 {
     WCTInnerAssert(m_chaincall != nil);
 }
 
-WCTUsedUpInvalidateGuard::~WCTUsedUpInvalidateGuard()
+WCTTryDisposeGuard::~WCTTryDisposeGuard()
 {
-    [m_chaincall tryAlreadyUsedUpInvalidate];
+    [m_chaincall tryDispose];
     m_chaincall = nil;
 }

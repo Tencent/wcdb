@@ -24,7 +24,7 @@
 #import <WCDB/WCTHandle.h>
 #import <WCDB/WCTInsert.h>
 #import <WCDB/WCTORM.h>
-#import <WCDB/WCTUsedUpInvalidateGuard.h>
+#import <WCDB/WCTTryDisposeGuard.h>
 
 @implementation WCTInsert {
     WCTProperties _properties;
@@ -70,7 +70,7 @@
 
 - (BOOL)execute
 {
-    WCTUsedUpInvalidateGuard usedUpInvalidateGuard(self);
+    WCTTryDisposeGuard tryDisposeGuard(self);
     if (_values.count == 0) {
         return YES;
     }

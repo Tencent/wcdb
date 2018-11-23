@@ -22,7 +22,7 @@
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTDelete.h>
 #import <WCDB/WCTHandle.h>
-#import <WCDB/WCTUsedUpInvalidateGuard.h>
+#import <WCDB/WCTTryDisposeGuard.h>
 
 @implementation WCTDelete {
     WCDB::StatementDelete _statement;
@@ -65,7 +65,7 @@
 
 - (BOOL)execute
 {
-    WCTUsedUpInvalidateGuard usedUpInvalidateGuard(self);
+    WCTTryDisposeGuard tryDisposeGuard(self);
     return [_handle execute:_statement];
 }
 
