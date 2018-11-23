@@ -89,7 +89,7 @@
 
 - (BOOL)isValidated
 {
-    return _handle == nullptr;
+    return _handle != nullptr;
 }
 
 - (WCTDatabase *)database
