@@ -132,4 +132,70 @@
     TestCaseAssertFalse([self.database canOpen]);
 }
 
+- (void)test_ordered_config
+{
+    NSString* config1 = [self.configName stringByAppendingString:@"_1"];
+    NSString* config2 = [self.configName stringByAppendingString:@"_2"];
+    NSString* config3 = [self.configName stringByAppendingString:@"_3"];
+
+    __block int step = 0;
+
+    [self.database
+           setConfig:^BOOL(WCTHandle* handle) {
+               ++step;
+               return step == 2;
+           }
+    withUninvocation:nil
+             forName:config1
+        withPriority:WCTConfigPriorityDefault];
+
+    [self.database
+           setConfig:^BOOL(WCTHandle* handle) {
+               ++step;
+               return step == 3;
+           }
+    withUninvocation:nil
+             forName:config2
+        withPriority:WCTConfigPriorityLow];
+    [self.database
+           setConfig:^BOOL(WCTHandle* handle) {
+               ++step;
+               return step == 1;
+           }
+    withUninvocation:nil
+             forName:config3
+        withPriority:WCTConfigPriorityHigh];
+
+    XCTAssertTrue([self.database canOpen]);
+
+    XCTAssertEqual(step, 3);
+}
+
+- (void)test_cipher
+{
+    NSData* cipher = [NSData randomData];
+    NSData* wrongCipher = [NSData randomDataOtherThan:cipher];
+
+    [self.database setCipherKey:cipher];
+    TestCaseAssertTrue([self.database canOpen]);
+
+    [self.database close];
+    [self.database setCipherKey:wrongCipher];
+    TestCaseAssertFalse([self.database canOpen]);
+}
+
+- (void)test_cipher_with_page_size
+{
+    NSData* cipher = [NSData randomData];
+    int pageSize = 8 * 1024;
+    int wrongPageSize = 16 * 1024;
+
+    [self.database setCipherKey:cipher andCipherPageSize:pageSize];
+    TestCaseAssertTrue([self.database canOpen]);
+
+    [self.database close];
+    [self.database setCipherKey:cipher andCipherPageSize:wrongPageSize];
+    TestCaseAssertFalse([self.database canOpen]);
+}
+
 @end

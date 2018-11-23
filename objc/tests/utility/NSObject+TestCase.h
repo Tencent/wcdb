@@ -46,6 +46,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSData*)randomData;
 
++ (NSData*)randomDataOtherThan:(NSData*)other;
+
 @end
 
 @interface NSArray (TestCase)

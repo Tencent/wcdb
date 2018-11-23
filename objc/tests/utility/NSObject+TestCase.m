@@ -101,6 +101,15 @@
     return [NSData dataWithData:data];
 }
 
++ (NSData *)randomDataOtherThan:(NSData *)other
+{
+    NSData *data;
+    do {
+        data = [NSData randomData];
+    } while ([other isEqualToData:data]);
+    return data;
+}
+
 @end
 
 @implementation NSArray (TestCase)
