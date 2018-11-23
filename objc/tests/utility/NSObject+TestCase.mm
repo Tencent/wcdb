@@ -44,9 +44,9 @@
 + (double)randomDouble
 {
     int decimals = [NSNumber randomUInt8] % 3;
-    double value = [NSNumber randomInt32];
+    double value = [NSNumber randomInt32] % 10000;
     for (int i = 0; i < decimals; ++i) {
-        value /= 10;
+        value /= 10.0;
     }
     return value;
 }
