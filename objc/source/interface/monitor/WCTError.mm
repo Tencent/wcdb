@@ -110,9 +110,11 @@ NSErrorUserInfoKey const WCTErrorKeySource = @"Source";
     if (self.code == WCTErrorCodeOK) {
         return nil;
     }
-    NSMutableString *description = [[NSMutableString alloc] initWithFormat:@"[%s: %ld", WCDB::Error::levelName((WCDB::Error::Level) self.level), (long) self.code];
+    NSMutableString *description = [[NSMutableString alloc] initWithFormat:@"[%s: %ld, ", WCDB::Error::levelName((WCDB::Error::Level) self.level), (long) self.code];
     if (self.message.length > 0) {
-        [description appendFormat:@", %@", self.message];
+        [description appendFormat:@"%@", self.message];
+    } else {
+        [description appendFormat:@"%s", WCDB::Error::codeName((WCDB::Error::Code) self.code)];
     }
     [description appendString:@"]"];
     [self.userInfo enumerateKeysAndObjectsUsingBlock:^(NSErrorUserInfoKey key, id obj, BOOL *) {

@@ -79,8 +79,11 @@ void Console::log(const Error& error)
     std::ostringstream stream;
     stream << "[" << Error::levelName(error.level) << ": ";
     stream << (int) error.code();
+    stream << ", ";
     if (!error.message.empty()) {
-        stream << ", " << error.message;
+        stream << error.message;
+    } else {
+        stream << error.codeName(error.code());
     }
     stream << "]";
 
