@@ -140,9 +140,9 @@ void SharedLock::unlock()
 SharedLock::Level SharedLock::level() const
 {
     std::lock_guard<std::mutex> lockGuard(m_mutex);
-    if (m_writers > 0) {
+    if (m_locking == std::this_thread::get_id()) {
         return Level::Write;
-    } else if (m_readers > 0) {
+    } else if ((*m_threadedReaders.getOrCreate()) > 0) {
         return Level::Read;
     }
     return Level::None;

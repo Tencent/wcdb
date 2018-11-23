@@ -82,7 +82,8 @@ protected:
     int m_pendingReaders;
     int m_pendingWriters;
     std::thread::id m_locking;
-    ThreadLocal<int> m_threadedReaders;
+    // mutable since it can be only modified threaded
+    mutable ThreadLocal<int> m_threadedReaders;
 };
 
 class SharedLockGuard final {
