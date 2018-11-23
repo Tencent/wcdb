@@ -377,14 +377,14 @@ std::pair<bool, uint32_t> Database::getIdentifier()
 bool Database::removeFiles()
 {
     bool result = false;
-    LockGuard concurrencyGuard(m_concurrency);
-    close(nullptr);
-    std::list<String> paths = getPaths();
-    paths.reverse(); // reverse to remove the non-critical paths first avoiding app stopped between the removing
-    result = FileManager::removeItems(paths);
-    if (!result) {
-        assignWithSharedThreadedError();
-    }
+    close([&result, this]() {
+        std::list<String> paths = getPaths();
+        paths.reverse(); // reverse to remove the non-critical paths first avoiding app stopped between the removing
+        result = FileManager::removeItems(paths);
+        if (!result) {
+            assignWithSharedThreadedError();
+        }
+    });
     return result;
 }
 
@@ -399,15 +399,16 @@ std::pair<bool, size_t> Database::getFilesSize()
 
 bool Database::moveFiles(const String &directory)
 {
-    LockGuard cocurrencyGuard(m_concurrency);
-    close(nullptr);
-    std::list<String> paths = getPaths();
-    paths.reverse();
-    if (FileManager::moveItems(paths, directory)) {
-        return true;
-    }
-    assignWithSharedThreadedError();
-    return false;
+    bool result = false;
+    close([&result, &directory, this]() {
+        std::list<String> paths = getPaths();
+        paths.reverse();
+        result = FileManager::moveItems(paths, directory);
+        if (!result) {
+            assignWithSharedThreadedError();
+        }
+    });
+    return result;
 }
 
 const String &Database::getPath() const
@@ -480,39 +481,42 @@ bool Database::backup()
 
 bool Database::deposit()
 {
-    LockGuard concurrencyGuard(m_concurrency);
-    SharedLockGuard memoryGuard(m_memory);
-    close(nullptr);
-    Repair::FactoryRenewer renewer = m_factory.renewer();
-    // Prepare a new database from material at renew directory and wait for moving
-    if (!renewer.prepare()) {
-        setThreadedError(renewer.getError());
-        return false;
-    }
-    Repair::FactoryDepositor depositor = m_factory.depositor();
-    if (!depositor.work()) {
-        setThreadedError(depositor.getError());
-        return false;
-    }
-    // If app stop here, it results that the old database is moved to deposited directory and the renewed one is not moved to the origin directory.
-    // At next time this database launchs, the retrieveRenewed method will do the remaining work. So data will not lost.
-    if (!renewer.work()) {
-        setThreadedError(renewer.getError());
-        return false;
-    }
-    return true;
+    bool result = false;
+    close([&result, this]() {
+        Repair::FactoryRenewer renewer = m_factory.renewer();
+        // Prepare a new database from material at renew directory and wait for moving
+        if (!renewer.prepare()) {
+            setThreadedError(renewer.getError());
+            return;
+        }
+        Repair::FactoryDepositor depositor = m_factory.depositor();
+        if (!depositor.work()) {
+            setThreadedError(depositor.getError());
+            return;
+        }
+        // If app stop here, it results that the old database is moved to deposited directory and the renewed one is not moved to the origin directory.
+        // At next time this database launchs, the retrieveRenewed method will do the remaining work. So data will not lost.
+        if (!renewer.work()) {
+            setThreadedError(renewer.getError());
+            return;
+        }
+        result = true;
+    });
+    return result;
 }
 
 double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
 {
-    LockGuard concurrencyGuard(m_concurrency);
-    SharedLockGuard memoryGuard(m_memory);
-    close(nullptr);
-    Repair::FactoryRetriever retriever = m_factory.retriever();
-    retriever.setProgressCallback(onProgressUpdate);
-    bool result = retriever.work();
-    setThreadedError(retriever.getError()); // retriever may have non-critical error even if it succeeds.
-    return result ? retriever.getScore().value() : -1;
+    double result = -1;
+    close([&result, &onProgressUpdate, this]() {
+        Repair::FactoryRetriever retriever = m_factory.retriever();
+        retriever.setProgressCallback(onProgressUpdate);
+        if (retriever.work()) {
+            result = retriever.getScore().value();
+        }
+        setThreadedError(retriever.getError()); // retriever may have non-critical error even if it succeeds.
+    });
+    return result;
 }
 
 bool Database::canRetrieve() const
@@ -524,22 +528,27 @@ bool Database::canRetrieve() const
 
 bool Database::removeDeposit()
 {
-    LockGuard concurrencyGuard(m_concurrency);
-    SharedLockGuard memoryGuard(m_memory);
-    if (m_factory.removeDeposite()) {
-        return true;
-    }
-    assignWithSharedThreadedError();
-    return false;
+    bool result = false;
+    close([&result, this]() {
+        result = m_factory.removeDeposite();
+        if (!result) {
+            assignWithSharedThreadedError();
+        }
+    });
+    return result;
 }
 
 bool Database::removeMaterials()
 {
-    if (FileManager::removeItems({ getFirstMaterialPath(), getLastMaterialPath() })) {
-        return true;
-    }
-    assignWithSharedThreadedError();
-    return false;
+    bool result = false;
+    close([&result, this]() {
+        result
+        = FileManager::removeItems({ getFirstMaterialPath(), getLastMaterialPath() });
+        if (!result) {
+            assignWithSharedThreadedError();
+        }
+    });
+    return result;
 }
 
 bool Database::retrieveRenewed()
@@ -582,26 +591,26 @@ bool Database::containsRecoverScheme() const
 
 bool Database::recover()
 {
-    LockGuard cocurrencyGuard(m_concurrency);
-    if (!containsRecoverScheme()) {
-        return true;
-    }
-    close(nullptr);
-    bool succeed = true;
-    switch (m_recoveryMode) {
-    case RecoveryMode::Remove:
-        succeed = removeFiles();
-        break;
-    case RecoveryMode::Deposit:
-        succeed = deposit();
-        break;
-    default:
-        break;
-    }
-    if (succeed && m_recoverNotification != nullptr) {
-        succeed = m_recoverNotification(this);
-    }
-    return succeed;
+    bool result = true;
+    close([&result, this]() {
+        if (!containsRecoverScheme()) {
+            return;
+        }
+        switch (m_recoveryMode) {
+        case RecoveryMode::Remove:
+            result = removeFiles();
+            break;
+        case RecoveryMode::Deposit:
+            result = deposit();
+            break;
+        default:
+            break;
+        }
+        if (result && m_recoverNotification != nullptr) {
+            result = m_recoverNotification(this);
+        }
+    });
+    return result;
 }
 
 bool Database::isCorrupted() const

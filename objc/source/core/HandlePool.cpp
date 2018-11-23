@@ -120,15 +120,13 @@ void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
                       "There are some threaded handles not invalidated.",
                       return;);
     LockGuard concurrencyGuard(m_concurrency);
-    {
-        LockGuard memoryGuard(m_memory);
-        WCTInnerAssert(m_frees.size() == m_handles.size());
-        for (const auto &handle : m_handles) {
-            handle->get()->close();
-        }
-        m_handles.clear();
-        m_frees.clear();
+    LockGuard memoryGuard(m_memory);
+    WCTInnerAssert(m_frees.size() == m_handles.size());
+    for (const auto &handle : m_handles) {
+        handle->get()->close();
     }
+    m_handles.clear();
+    m_frees.clear();
     if (onDrained) {
         onDrained();
     }
@@ -249,6 +247,9 @@ void HandlePool::flowBack(const std::shared_ptr<ConfiguredHandle> &configuredHan
 {
     WCTInnerAssert(configuredHandle != nullptr);
     WCTInnerAssert(m_concurrency.readSafety());
+    WCTRemedialAssert(!configuredHandle->get()->isPrepared(),
+                      "Statement is not finalized.",
+                      configuredHandle->get()->finalize(););
     {
         LockGuard memoryGuard(m_memory);
         if (m_handles.size() < hardwareConcurrency()) {
