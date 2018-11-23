@@ -201,7 +201,8 @@
         TestCaseAssertTrue([self.handle prepare:self.statementSelect]);
         TestCaseAssertTrue([self.handle step]);
 
-        TestCaseAssertTrue(fabs([self.handle getDoubleAtIndex:0] - value) < std::numeric_limits<double>::epsilon());
+        double epsilon = std::numeric_limits<double>::epsilon();
+        TestCaseAssertTrue(fabs([self.handle getDoubleAtIndex:0] - value) < epsilon);
         [self.handle finalizeStatement];
     }
 }
@@ -254,7 +255,8 @@
     {
         TestCaseAssertTrue([self.handle prepare:self.statementSelect]);
         TestCaseAssertTrue([self.handle step]);
-        TestCaseAssertTrue(fabs([self.handle getNumberAtIndex:0].doubleValue - value.doubleValue) < std::numeric_limits<double>::epsilon());
+        double epsilon = std::numeric_limits<double>::epsilon();
+        TestCaseAssertTrue(fabs([self.handle getNumberAtIndex:0].doubleValue - value.doubleValue) < epsilon);
         [self.handle finalizeStatement];
     }
 }
