@@ -115,7 +115,7 @@ bool Handle::isOpened() const
 
 void Handle::close()
 {
-    finalize();
+    WCTRemedialAssert(!isPrepared(), "Statement is not finalized.", finalize(););
     if (m_handle) {
         WCTRemedialAssert(m_nestedLevel == 0 && !isInTransaction(),
                           "Unpaired transaction.",
