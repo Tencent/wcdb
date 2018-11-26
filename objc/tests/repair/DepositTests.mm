@@ -26,4 +26,44 @@
 
 @implementation DepositTests
 
+- (void)test_deposite
+{
+    TestCaseObject* object = [[TestCaseObject alloc] init];
+    object.isAutoIncrement = YES;
+    object.content = [NSString randomString];
+    int rowId = (int) self.objects.count;
+
+    {
+        // 1.
+        TestCaseAssertTrue([self.database backup]);
+        TestCaseAssertTrue([self.database deposit]);
+
+        NSNumber* count = [self.database getValueFromStatement:WCDB::StatementSelect().select(TestCaseObject.allProperties.count()).from(self.tableName)].numberValue;
+        TestCaseAssertTrue(count != nil);
+        TestCaseAssertTrue(count.integerValue == 0);
+
+        TestCaseAssertTrue([self.table insertObject:object]);
+        ++rowId;
+        TestCaseAssertTrue(object.lastInsertedRowID == rowId);
+    }
+
+    {
+        // 2.
+        TestCaseAssertTrue([self.database backup]);
+        TestCaseAssertTrue([self.database deposit]);
+
+        NSNumber* count = [self.database getValueFromStatement:WCDB::StatementSelect().select(TestCaseObject.allProperties.count()).from(self.tableName)].numberValue;
+        TestCaseAssertTrue(count != nil);
+        TestCaseAssertTrue(count.integerValue == 0);
+
+        TestCaseAssertTrue([self.table insertObject:object]);
+        ++rowId;
+        TestCaseAssertTrue(object.lastInsertedRowID == rowId);
+    }
+
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.factory]);
+    TestCaseAssertTrue([self.database removeDeposit]);
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.factory]);
+}
+
 @end
