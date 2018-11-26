@@ -18,40 +18,13 @@
  * limitations under the License.
  */
 
-#import "PreInsertedCRUDTestCase.h"
+#import "BackupTestCase.h"
 
-@interface BackupTests : PreInsertedCRUDTestCase
-
-@property (nonatomic, readonly) NSString *firstMaterial;
-@property (nonatomic, readonly) NSString *lastMaterial;
-
-@property (nonatomic, readonly) int backupFramesIntervalForNonCritical;
-@property (nonatomic, readonly) int backupFramesIntervalForCritical;
-
-@property (nonatomic, readonly) NSTimeInterval backupDelayForCritical;
-@property (nonatomic, readonly) NSTimeInterval backupDelayForNonCritical;
-
-@property (nonatomic, readonly) NSTimeInterval delayForTolerance;
-@property (nonatomic, readonly) int framesForTolerance;
+@interface BackupTests : BackupTestCase
 
 @end
 
 @implementation BackupTests
-
-- (void)setUp
-{
-    [super setUp];
-    _firstMaterial = [NSString stringWithFormat:@"%@-first.material", self.path];
-    _lastMaterial = [NSString stringWithFormat:@"%@-last.material", self.path];
-
-    _backupFramesIntervalForNonCritical = 100;
-    _backupFramesIntervalForCritical = 300;
-    _backupDelayForCritical = 0;
-    _backupDelayForNonCritical = 1.0;
-
-    _delayForTolerance = 1.0;
-    _framesForTolerance = 10;
-}
 
 - (void)test_backup
 {
