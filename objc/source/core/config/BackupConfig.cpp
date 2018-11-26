@@ -64,21 +64,20 @@ bool BackupConfig::onCommitted(Handle *handle, int frames)
 {
     const auto &path = handle->path;
     int backedUp = m_queue->getBackedUpFrames(path);
-    if (frames > backedUp + framesIntervalForDelayAutoBackup) {
-        m_queue->put(path, 1.0, frames);
-    } else if (frames > backedUp + framesIntervalForAutoBackup || frames < backedUp) {
-        m_queue->put(path, 0, frames);
-    } else {
-        // backed up will happen after 15s if no more write operationtoBackup) {
-        m_queue->put(path, 15.0, frames);
+    if (frames >= backedUp + framesIntervalForCritical || frames < backedUp) {
+        m_queue->put(path, delayForCritical, frames);
+    } else if (frames >= backedUp + framesIntervalForNonCritical) {
+        m_queue->put(path, delayForNonCritical, frames);
     }
+    // it's no need to backup when idled since a checkpoint will happen by checkpoint queue when idled, which will trigger backup immediately
     return true;
 }
 
 void BackupConfig::checkpointed(Handle *handle, int rc)
 {
     if (rc == SQLITE_OK) {
-        m_queue->put(handle->path, 0, 0);
+        // back up immediately if checkpointed
+        m_queue->put(handle->path, delayForCritical, 0);
     }
 }
 

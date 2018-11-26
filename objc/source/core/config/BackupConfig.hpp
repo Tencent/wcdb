@@ -36,8 +36,10 @@ public:
     bool invoke(Handle* handle) override final;
     bool uninvoke(Handle* handle) override final;
 
-    static constexpr const int framesIntervalForAutoBackup = 300;
-    static constexpr const int framesIntervalForDelayAutoBackup = 100;
+    static constexpr const int framesIntervalForNonCritical = 100;
+    static constexpr const int framesIntervalForCritical = 300;
+    static constexpr const double delayForCritical = 0;
+    static constexpr const double delayForNonCritical = 1.0;
 
 protected:
     const String m_identifier;

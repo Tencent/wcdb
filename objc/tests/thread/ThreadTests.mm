@@ -34,11 +34,6 @@
 @property (nonatomic, readonly) int checkpointFramesThresholdForTruncate;
 @property (nonatomic, readonly) int checkpointFramesThresholdForCritical;
 
-@property (nonatomic, readonly) int sizeOfWalHeader;
-@property (nonatomic, readonly) int sizeOfWalFrameHeader;
-
-@property (nonatomic, readonly) int expectedPageSize;
-
 @property (nonatomic, readonly) NSTimeInterval delayForTolerance;
 
 @property (nonatomic, readonly) int maxConcurrency;
@@ -61,24 +56,9 @@
     _checkpointFramesThresholdForCritical = 100;
     _checkpointFramesThresholdForTruncate = 10 * 1024;
 
-    _sizeOfWalHeader = 32;
-    _sizeOfWalFrameHeader = 24;
-
-    _expectedPageSize = 4096;
-
     _delayForTolerance = 2;
 
     _maxConcurrency = 64;
-}
-
-- (NSNumber*)getFileSize:(NSString*)path
-{
-    NSError* error = nil;
-    NSUInteger fileSize = [[self.fileManager attributesOfItemAtPath:path error:&error] fileSize];
-    if (error) {
-        return nil;
-    }
-    return @(fileSize);
 }
 
 - (void)test_feature_read_concurrency
@@ -187,7 +167,7 @@
 
     BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.wal_checkpoint = 'PASSIVE'" ]
                asExpectedInOperation:^BOOL {
-                   [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + 1];
+                   [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + self.delayForTolerance];
                    return YES;
                }];
     TestCaseAssertTrue(result);
@@ -195,32 +175,15 @@
 
 - (void)test_feature_subthread_checkpoint_when_meet_frames_threshold
 {
-    // get page size
-    WCTHandle* handle = [self.database getHandle];
-    TestCaseAssertTrue([handle prepare:WCDB::StatementPragma().pragma(WCDB::Pragma::pageSize())]);
-    TestCaseAssertTrue([handle step]);
-    int pagesize = [handle getInteger32AtIndex:0];
-    TestCaseAssertTrue(pagesize == self.expectedPageSize);
-    [handle finalizeStatement];
-    [handle invalidate];
-
     TestCaseAssertTrue([self createTable]);
-    NSString* wal = [self.path stringByAppendingString:@"-wal"];
-    do {
-        NSNumber* walSize = [self getFileSize:wal];
-        TestCaseAssertTrue(walSize != nil);
-        if (walSize.integerValue > self.checkpointFramesThresholdForCritical * (pagesize + self.sizeOfWalFrameHeader) + self.sizeOfWalHeader) {
-            break;
-        }
-        NSMutableArray<TestCaseObject*>* objects = [[NSMutableArray<TestCaseObject*> alloc] init];
-        for (int i = 0; i < 100; ++i) {
-            TestCaseObject* object = [[TestCaseObject alloc] init];
-            object.isAutoIncrement = YES;
-            object.content = [NSString randomString];
-            [objects addObject:object];
-        }
-        TestCaseAssertTrue([self.table insertObjects:objects]);
-    } while (YES);
+
+    TestCaseObject* object = [[TestCaseObject alloc] init];
+    object.isAutoIncrement = YES;
+    object.content = [NSString randomString];
+
+    while ([self getWalFrameCount] < self.checkpointFramesThresholdForCritical) {
+        TestCaseAssertTrue([self.table insertObject:object]);
+    }
 
     BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.wal_checkpoint = 'PASSIVE'" ]
                asExpectedInOperation:^BOOL {
@@ -232,34 +195,15 @@
 
 - (void)test_feature_subthread_checkpoint_when_meet_truncate_threshold
 {
-    // get page size
-    WCTHandle* handle = [self.database getHandle];
-    TestCaseAssertTrue([handle prepare:WCDB::StatementPragma().pragma(WCDB::Pragma::pageSize())]);
-    TestCaseAssertTrue([handle step]);
-    int pagesize = [handle getInteger32AtIndex:0];
-    TestCaseAssertTrue(pagesize == self.expectedPageSize);
-    [handle finalizeStatement];
-    [handle invalidate];
-
     TestCaseAssertTrue([self createTable]);
-    NSString* wal = [self.path stringByAppendingString:@"-wal"];
 
-    NSMutableArray<TestCaseObject*>* objects = [[NSMutableArray<TestCaseObject*> alloc] init];
-    for (int i = 0; i < 10000; ++i) {
-        TestCaseObject* object = [[TestCaseObject alloc] init];
-        object.isAutoIncrement = YES;
-        object.content = [NSString randomString];
-        [objects addObject:object];
+    TestCaseObject* object = [[TestCaseObject alloc] init];
+    object.isAutoIncrement = YES;
+    object.content = [NSString randomString];
+
+    while ([self getWalFrameCount] < self.checkpointFramesThresholdForTruncate) {
+        TestCaseAssertTrue([self.table insertObject:object]);
     }
-
-    do {
-        NSNumber* walSize = [self getFileSize:wal];
-        TestCaseAssertTrue(walSize != nil);
-        if (walSize.integerValue > self.checkpointFramesThresholdForTruncate * (pagesize + self.sizeOfWalFrameHeader) + self.sizeOfWalHeader) {
-            break;
-        }
-        TestCaseAssertTrue([self.table insertObjects:objects]);
-    } while (YES);
 
     BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.wal_checkpoint = 'TRUNCATE'" ]
                asExpectedInOperation:^BOOL {
@@ -271,32 +215,15 @@
 
 - (void)test_feature_retry_subthread_checkpoint_when_failed
 {
-    // get page size
-    WCTHandle* handle = [self.database getHandle];
-    TestCaseAssertTrue([handle prepare:WCDB::StatementPragma().pragma(WCDB::Pragma::pageSize())]);
-    TestCaseAssertTrue([handle step]);
-    int pagesize = [handle getInteger32AtIndex:0];
-    TestCaseAssertTrue(pagesize == self.expectedPageSize);
-    [handle finalizeStatement];
-    [handle invalidate];
-
     TestCaseAssertTrue([self createTable]);
-    NSString* wal = [self.path stringByAppendingString:@"-wal"];
-    do {
-        NSNumber* walSize = [self getFileSize:wal];
-        TestCaseAssertTrue(walSize != nil);
-        if (walSize.integerValue > self.checkpointFramesThresholdForCritical * (pagesize + self.sizeOfWalFrameHeader) + self.sizeOfWalHeader) {
-            break;
-        }
-        NSMutableArray<TestCaseObject*>* objects = [[NSMutableArray<TestCaseObject*> alloc] init];
-        for (int i = 0; i < 100; ++i) {
-            TestCaseObject* object = [[TestCaseObject alloc] init];
-            object.isAutoIncrement = YES;
-            object.content = [NSString randomString];
-            [objects addObject:object];
-        }
-        TestCaseAssertTrue([self.table insertObjects:objects]);
-    } while (YES);
+
+    TestCaseObject* object = [[TestCaseObject alloc] init];
+    object.isAutoIncrement = YES;
+    object.content = [NSString randomString];
+
+    while ([self getWalFrameCount] < self.checkpointFramesThresholdForCritical) {
+        TestCaseAssertTrue([self.table insertObject:object]);
+    }
 
     BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.wal_checkpoint = 'PASSIVE'", @"PRAGMA main.wal_checkpoint = 'PASSIVE'" ]
                asExpectedInOperation:^BOOL {
@@ -336,7 +263,8 @@
     BOOL result = [self.database runTransaction:^BOOL(WCTHandle* _Nonnull) {
         TestCaseAssertTrue([self.database isInTransaction]);
         WCTHandle* handle = [self.database getHandle];
-        TestCaseAssertTrue([handle isInTransaction]) return YES;
+        TestCaseAssertTrue([handle isInTransaction]);
+        return YES;
     }];
     TestCaseAssertTrue(result);
 }

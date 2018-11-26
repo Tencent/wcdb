@@ -471,6 +471,7 @@ bool Database::backup()
 {
     SharedLockGuard concurrencyGuard(m_concurrency); // lock concurrency shared since backup is kind of handle operation
     SharedLockGuard memoryGuard(m_memory);
+    // TODO: get backed up frame and update backup queue
     Repair::FactoryBackup backup = m_factory.backup();
     if (backup.work(getPath())) {
         return true;

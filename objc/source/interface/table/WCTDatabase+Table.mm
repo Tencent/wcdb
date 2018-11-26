@@ -68,13 +68,13 @@
 - (BOOL)dropTable:(NSString *)tableName
 {
     WCTDatabaseAssert(return NO;);
-    return _database->execute(WCDB::StatementDropTable().dropTable(tableName));
+    return _database->execute(WCDB::StatementDropTable().dropTable(tableName).ifExists());
 }
 
 - (BOOL)dropIndex:(NSString *)indexName
 {
     WCTDatabaseAssert(return NO;);
-    return _database->execute(WCDB::StatementDropIndex().dropIndex(indexName));
+    return _database->execute(WCDB::StatementDropIndex().dropIndex(indexName).ifExists());
 }
 
 @end

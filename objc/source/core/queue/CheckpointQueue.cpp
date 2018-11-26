@@ -58,7 +58,7 @@ bool CheckpointQueue::onTimed(const String& path, const int& frames)
         return true;
     }
     bool result;
-    if (frames > framesThresholdForTruncate) {
+    if (frames >= framesThresholdForTruncate) {
         result = database->execute(m_checkpointTruncate);
     } else {
         result = database->execute(m_checkpointPassive);

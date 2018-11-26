@@ -26,12 +26,21 @@
 {
     [super setUp];
     [self refreshDirectory];
-    _database = [[WCTDatabase alloc] initWithPath:self.path];
+    _path = [self.directory stringByAppendingPathComponent:@"testDatabase"];
+    _walPath = [_path stringByAppendingString:@"-wal"];
+
+    _database = [[WCTDatabase alloc] initWithPath:_path];
+
     int tag;
     do {
         tag = [NSNumber randomInt32];
     } while (tag == 0);
     _database.tag = tag;
+
+    _sizeOfWalHeader = 32;
+    _sizeOfWalFrameHeader = 24;
+
+    _pageSize = 4096;
 }
 
 - (void)tearDown
@@ -45,17 +54,31 @@
     [super tearDown];
 }
 
+- (NSNumber*)getFileSize:(NSString*)path
+{
+    NSError* error = nil;
+    NSUInteger fileSize = [[self.fileManager attributesOfItemAtPath:path error:&error] fileSize];
+    if (error) {
+        return nil;
+    }
+    return @(fileSize);
+}
+
+- (int)getWalFrameCount
+{
+    NSInteger walSize = [self getFileSize:self.walPath].integerValue;
+    if (walSize < self.sizeOfWalHeader) {
+        return 0;
+    }
+    return (int) ((walSize - self.sizeOfWalHeader) / (self.sizeOfWalFrameHeader + self.pageSize));
+}
+
 - (void)removeSQLRelatedConfigs
 {
     NSArray<NSString*>* configNames = @[ WCTConfigNameBasic, WCTConfigNameBackup, WCTConfigNameCheckpoint, WCTConfigNameTokenize, WCTConfigNameCipher ];
     for (NSString* configName in configNames) {
         [self.database removeConfigForName:configName];
     }
-}
-
-- (NSString*)path
-{
-    return [self.directory stringByAppendingPathComponent:@"testDatabase"];
 }
 
 - (BOOL)checkAllSQLs:(NSArray<NSString*>*)expectedSQLs

@@ -24,8 +24,18 @@
 @interface SingleDatabaseTestCase : TestCase
 
 @property (readonly, nonatomic) NSString* path;
+@property (readonly, nonatomic) NSString* walPath;
 
 @property (readonly, nonatomic) WCTDatabase* database;
+
+@property (nonatomic, readonly) int sizeOfWalHeader;
+@property (nonatomic, readonly) int sizeOfWalFrameHeader;
+
+@property (nonatomic, readonly) int pageSize;
+
+- (NSNumber*)getFileSize:(NSString*)path;
+
+- (int)getWalFrameCount;
 
 - (void)removeSQLRelatedConfigs;
 
