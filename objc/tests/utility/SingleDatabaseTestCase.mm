@@ -113,9 +113,11 @@ asExpectedInOperation:(BOOL (^)())block
         }
 
         trace = YES;
-        if (!block()) {
-            TESTCASE_FAILED
-            break;
+        @autoreleasepool {
+            if (!block()) {
+                TESTCASE_FAILED
+                break;
+            }
         }
         if (sqls.count != 0) {
             NSLog(@"Reminding: %@", sqls);
@@ -157,9 +159,11 @@ asExpectedInOperation:(BOOL (^)())block
         }
 
         trace = YES;
-        if (!block()) {
-            TESTCASE_FAILED
-            break;
+        @autoreleasepool {
+            if (!block()) {
+                TESTCASE_FAILED
+                break;
+            }
         }
         if (sqls.count != 0) {
             NSLog(@"Reminding: %@", sqls);
