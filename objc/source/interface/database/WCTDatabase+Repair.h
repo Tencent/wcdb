@@ -23,7 +23,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef BOOL (^WCTBackupFilterBlock)(NSString *);
-typedef void (^WCTRetrieveProgressUpdateBlock)(double, double);
+typedef void (^WCTRetrieveProgressUpdateBlock)(double, double); // percentage, increment
 typedef BOOL (^WCTRecoverNotificationBlock)(WCTDatabase *);
 
 typedef NS_ENUM(NSInteger, WCTRecoveryMode) {
