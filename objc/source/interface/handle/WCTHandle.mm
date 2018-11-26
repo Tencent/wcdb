@@ -335,31 +335,31 @@
 }
 
 #pragma mark - Get
-- (int32_t)getInteger32AtIndex:(int)index
+- (int32_t)extractInteger32AtIndex:(int)index
 {
     WCTHandleAssert(return 0;);
     return _handle->getInteger32(index);
 }
 
-- (int64_t)getInteger64AtIndex:(int)index
+- (int64_t)extractInteger64AtIndex:(int)index
 {
     WCTHandleAssert(return 0;);
     return _handle->getInteger64(index);
 }
 
-- (double)getDoubleAtIndex:(int)index
+- (double)extractDoubleAtIndex:(int)index
 {
     WCTHandleAssert(return 0;);
     return _handle->getDouble(index);
 }
 
-- (NSString *)getStringAtIndex:(int)index
+- (NSString *)extractStringAtIndex:(int)index
 {
     WCTHandleAssert(return nil;);
     return [NSString stringWithUTF8String:_handle->getText(index)];
 }
 
-- (NSNumber *)getNumberAtIndex:(int)index
+- (NSNumber *)extractNumberAtIndex:(int)index
 {
     WCTHandleAssert(return nil;);
     switch (_handle->getType(index)) {
@@ -372,69 +372,69 @@
     }
 }
 
-- (NSData *)getDataAtIndex:(int)index
+- (NSData *)extractDataAtIndex:(int)index
 {
     WCTHandleAssert(return nil;);
     const WCDB::UnsafeData blob = _handle->getBLOB(index);
     return [NSData dataWithBytes:blob.buffer() length:blob.size()];
 }
 
-- (WCTValue *)getValueAtIndex:(int)index
+- (WCTValue *)extractValueAtIndex:(int)index
 {
     WCTHandleAssert(return nil;);
-    switch ([self getTypeAtIndex:index]) {
+    switch ([self extractTypeAtIndex:index]) {
     case WCTColumnTypeInteger32:
-        return [NSNumber numberWithInt:[self getInteger32AtIndex:index]];
+        return [NSNumber numberWithInt:[self extractInteger32AtIndex:index]];
     case WCTColumnTypeInteger64:
-        return [NSNumber numberWithLongLong:[self getInteger64AtIndex:index]];
+        return [NSNumber numberWithLongLong:[self extractInteger64AtIndex:index]];
     case WCTColumnTypeDouble:
-        return [NSNumber numberWithDouble:[self getDoubleAtIndex:index]];
+        return [NSNumber numberWithDouble:[self extractDoubleAtIndex:index]];
     case WCTColumnTypeString:
-        return [self getStringAtIndex:index];
+        return [self extractStringAtIndex:index];
     case WCTColumnTypeData:
-        return [self getDataAtIndex:index];
+        return [self extractDataAtIndex:index];
     case WCTColumnTypeNil:
         return nil;
     }
 }
 
-- (WCTColumnType)getTypeAtIndex:(int)index
+- (WCTColumnType)extractTypeAtIndex:(int)index
 {
     WCTHandleAssert(return WCTColumnTypeNil;);
     return _handle->getType(index);
 }
 
-- (int)getColumnCount
+- (int)extractColumnCount
 {
     WCTHandleAssert(return 0;);
     return _handle->getColumnCount();
 }
 
-- (NSString *)getColumnNameAtIndex:(int)index
+- (NSString *)extractColumnNameAtIndex:(int)index
 {
     WCTHandleAssert(return nil;);
     return [NSString stringWithUTF8String:_handle->getColumnName(index)];
 }
 
-- (NSString *)getTableNameAtIndex:(int)index
+- (NSString *)extractTableNameAtIndex:(int)index
 {
     WCTHandleAssert(return nil;);
     return [NSString stringWithUTF8String:_handle->getColumnTableName(index)];
 }
 
-- (WCTOneRow *)getRow
+- (WCTOneRow *)extractRow
 {
     WCTHandleAssert(return nil;);
-    int count = [self getColumnCount];
+    int count = [self extractColumnCount];
     NSMutableArray *row = [NSMutableArray arrayWithCapacity:count];
     for (int index = 0; index < count; ++index) {
-        WCTValue *value = [self getValueAtIndex:index];
+        WCTValue *value = [self extractValueAtIndex:index];
         [row addObject:value ? value : [NSNull null]];
     }
     return row;
 }
 
-- (WCTObject *)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
+- (WCTObject *)extractObjectOnResultColumns:(const WCTResultColumns &)resultColumns
 {
     WCTHandleAssert(return nil;);
     Class cls = resultColumns.front().getColumnBinding().getClass();
@@ -447,7 +447,7 @@
     return object;
 }
 
-- (WCTMultiObject *)getMultiObjectOnResultColumns:(const WCTResultColumns &)resultColumns
+- (WCTMultiObject *)extractMultiObjectOnResultColumns:(const WCTResultColumns &)resultColumns
 {
     NSMutableDictionary *multiObject = [NSMutableDictionary dictionary];
     int index = 0;
@@ -549,7 +549,7 @@
     NSMutableArray *column = [NSMutableArray array];
     BOOL done = NO;
     while ([self step:done] && !done) {
-        WCTValue *value = [self getValueAtIndex:index];
+        WCTValue *value = [self extractValueAtIndex:index];
         [column addObject:value ? value : [NSNull null]];
     }
     return done ? column : nil;
@@ -561,7 +561,7 @@
     NSMutableArray *rows = [NSMutableArray array];
     BOOL done = NO;
     while ([self step:done] && !done) {
-        [rows addObject:[self getRow]];
+        [rows addObject:[self extractRow]];
     }
     return done ? rows : nil;
 }
@@ -572,7 +572,7 @@
     NSMutableArray *objects = [NSMutableArray array];
     BOOL done = NO;
     while ([self step:done] && !done) {
-        [objects addObject:[self getObjectOnResultColumns:resultColumns]];
+        [objects addObject:[self extractObjectOnResultColumns:resultColumns]];
     }
     return done ? objects : nil;
 }
@@ -583,7 +583,7 @@
     NSMutableArray *multiObjects = [NSMutableArray array];
     BOOL done = NO;
     while ([self step:done] && !done) {
-        [multiObjects addObject:[self getMultiObjectOnResultColumns:resultColumns]];
+        [multiObjects addObject:[self extractMultiObjectOnResultColumns:resultColumns]];
     }
     return done ? multiObjects : nil;
 }

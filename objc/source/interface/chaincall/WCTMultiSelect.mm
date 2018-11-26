@@ -61,7 +61,7 @@
         [_handle finalizeStatement];
         return nil;
     }
-    return [_handle getMultiObjectOnResultColumns:_resultColumns];
+    return [_handle extractMultiObjectOnResultColumns:_resultColumns];
 }
 
 - (NSArray<WCTMultiObject *> *)allMultiObjects

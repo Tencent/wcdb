@@ -75,7 +75,7 @@
 
         WCTHandle* handle = [self.database getHandle];
         TestCaseAssertTrue([handle prepare:self.getSecureDelete] && [handle step]);
-        TestCaseAssertTrue([handle getNumberAtIndex:0].boolValue);
+        TestCaseAssertTrue([handle extractNumberAtIndex:0].boolValue);
         [handle finalizeStatement];
         [handle invalidate];
     }
@@ -88,7 +88,7 @@
 
         WCTHandle* handle = [self.database getHandle];
         TestCaseAssertTrue([handle prepare:self.getSecureDelete] && [handle step]);
-        TestCaseAssertFalse([handle getNumberAtIndex:0].boolValue);
+        TestCaseAssertFalse([handle extractNumberAtIndex:0].boolValue);
         [handle finalizeStatement];
         [handle invalidate];
     }

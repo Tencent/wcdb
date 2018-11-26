@@ -90,40 +90,40 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)bindProperties:(const WCTProperties &)properties
               ofObject:(WCTObject *)object;
 
-#pragma mark - Get
-- (int32_t)getInteger32AtIndex:(int)index;
+#pragma mark - Extract Row Data
+- (int)extractColumnCount;
 
-- (int64_t)getInteger64AtIndex:(int)index;
+- (NSString *)extractColumnNameAtIndex:(int)index;
 
-- (double)getDoubleAtIndex:(int)index;
+- (NSString *)extractTableNameAtIndex:(int)index;
 
-- (NSString *)getStringAtIndex:(int)index;
+- (int32_t)extractInteger32AtIndex:(int)index;
 
-- (NSNumber *)getNumberAtIndex:(int)index;
+- (int64_t)extractInteger64AtIndex:(int)index;
 
-- (NSData *)getDataAtIndex:(int)index;
+- (double)extractDoubleAtIndex:(int)index;
 
-- (nullable WCTValue *)getValueAtIndex:(int)index;
+- (NSString *)extractStringAtIndex:(int)index;
 
-- (WCTColumnType)getTypeAtIndex:(int)index;
+- (NSNumber *)extractNumberAtIndex:(int)index;
 
-- (int)getColumnCount;
+- (NSData *)extractDataAtIndex:(int)index;
 
-- (NSString *)getColumnNameAtIndex:(int)index;
+- (nullable WCTValue *)extractValueAtIndex:(int)index;
 
-- (NSString *)getTableNameAtIndex:(int)index;
+- (WCTColumnType)extractTypeAtIndex:(int)index;
 
-- (WCTOneRow *)getRow;
+- (WCTOneRow *)extractRow;
 
-- (WCTObject *)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns;
+- (WCTObject *)extractObjectOnResultColumns:(const WCTResultColumns &)resultColumns;
 
-- (WCTMultiObject *)getMultiObjectOnResultColumns:(const WCTResultColumns &)resultColumns;
+- (WCTMultiObject *)extractMultiObjectOnResultColumns:(const WCTResultColumns &)resultColumns;
 
 - (void)extractValueAtIndex:(int)index
                  toProperty:(const WCTProperty &)property
                    ofObject:(WCTObject *)object;
 
-#pragma mark - Get All
+#pragma mark - Step And Extract All Data
 - (nullable WCTOneColumn *)allValues;
 
 - (nullable WCTOneColumn *)allValuesAtIndex:(int)index;

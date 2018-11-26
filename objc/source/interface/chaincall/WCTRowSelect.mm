@@ -29,7 +29,7 @@
 
 @implementation WCTRowSelect
 
-- (instancetype)onResultColumns:(const WCTResultColumns &)resultColumns
+- (instancetype)onResultColumns:(const WCDB::ResultColumns &)resultColumns
 {
     _statement.select(resultColumns);
     return self;
@@ -74,7 +74,7 @@
         [_handle finalizeStatement];
         return nil;
     }
-    return [_handle getRow];
+    return [_handle extractRow];
 }
 
 - (WCTOneColumn *)allValues
@@ -109,7 +109,7 @@
         [_handle finalizeStatement];
         return nil;
     }
-    return [_handle getValueAtIndex:index];
+    return [_handle extractValueAtIndex:index];
 }
 
 @end

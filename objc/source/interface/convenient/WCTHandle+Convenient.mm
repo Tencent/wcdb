@@ -347,322 +347,6 @@
     return [[[[[[[[[self prepareSelect] onResultColumns:resultColumns] fromTable:tableName] where:condition] orders:orders] limit:limit] offset:offset] finalizeStatementWhenDispose] allObjects];
 }
 
-#pragma mark - Get One Row
-- (WCTOneRow *)getRowOnResultColumns:(const WCTResultColumns &)resultColumns
-                           fromTable:(NSString *)tableName
-{
-    return [[[[[[self prepareRowSelect] onResultColumns:resultColumns] fromTable:tableName] limit:1] finalizeStatementWhenDispose] nextRow];
-}
-
-- (WCTOneRow *)getRowOnResultColumns:(const WCTResultColumns &)resultColumns
-                           fromTable:(NSString *)tableName
-                               where:(const WCDB::Expression &)condition
-{
-    return [[[[[[[self prepareRowSelect] onResultColumns:resultColumns] fromTable:tableName] where:condition] limit:1] finalizeStatementWhenDispose] nextRow];
-}
-
-- (WCTOneRow *)getRowOnResultColumns:(const WCTResultColumns &)resultColumns
-                           fromTable:(NSString *)tableName
-                              orders:(const WCDB::OrderingTerms &)orders
-{
-    return [[[[[[[self prepareRowSelect] onResultColumns:resultColumns] fromTable:tableName] orders:orders] limit:1] finalizeStatementWhenDispose] nextRow];
-}
-
-- (WCTOneRow *)getRowOnResultColumns:(const WCTResultColumns &)resultColumns
-                           fromTable:(NSString *)tableName
-                              offset:(const WCDB::Expression &)offset
-{
-    return [[[[[[[self prepareRowSelect] onResultColumns:resultColumns] fromTable:tableName] limit:1] offset:offset] finalizeStatementWhenDispose] nextRow];
-}
-
-- (WCTOneRow *)getRowOnResultColumns:(const WCTResultColumns &)resultColumns
-                           fromTable:(NSString *)tableName
-                               where:(const WCDB::Expression &)condition
-                              orders:(const WCDB::OrderingTerms &)orders
-{
-    return [[[[[[[[self prepareRowSelect] onResultColumns:resultColumns] fromTable:tableName] where:condition] orders:orders] limit:1] finalizeStatementWhenDispose] nextRow];
-}
-
-- (WCTOneRow *)getRowOnResultColumns:(const WCTResultColumns &)resultColumns
-                           fromTable:(NSString *)tableName
-                               where:(const WCDB::Expression &)condition
-                              offset:(const WCDB::Expression &)offset
-{
-    return [[[[[[[[self prepareRowSelect] onResultColumns:resultColumns] fromTable:tableName] where:condition] limit:1] offset:offset] finalizeStatementWhenDispose] nextRow];
-}
-
-- (WCTOneRow *)getRowOnResultColumns:(const WCTResultColumns &)resultColumns
-                           fromTable:(NSString *)tableName
-                              orders:(const WCDB::OrderingTerms &)orders
-                              offset:(const WCDB::Expression &)offset
-{
-    return [[[[[[[[self prepareRowSelect] onResultColumns:resultColumns] fromTable:tableName] orders:orders] limit:1] offset:offset] finalizeStatementWhenDispose] nextRow];
-}
-
-- (WCTOneRow *)getRowOnResultColumns:(const WCTResultColumns &)resultColumns
-                           fromTable:(NSString *)tableName
-                               where:(const WCDB::Expression &)condition
-                              orders:(const WCDB::OrderingTerms &)orders
-                              offset:(const WCDB::Expression &)offset
-{
-    return [[[[[[[[[self prepareRowSelect] onResultColumns:resultColumns] fromTable:tableName] where:condition] orders:orders] limit:1] offset:offset] finalizeStatementWhenDispose] nextRow];
-}
-
-#pragma mark - Get One Column
-- (WCTOneColumn *)getColumnOnResult:(const WCTResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName
-{
-    return [[[[[self prepareRowSelect] onResultColumns:resultColumn] fromTable:tableName] finalizeStatementWhenDispose] allValues];
-}
-
-- (WCTOneColumn *)getColumnOnResult:(const WCTResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName
-                              where:(const WCDB::Expression &)condition
-{
-    return [[[[[[self prepareRowSelect] onResultColumns:resultColumn] fromTable:tableName] where:condition] finalizeStatementWhenDispose] allValues];
-}
-
-- (WCTOneColumn *)getColumnOnResult:(const WCTResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName
-                             orders:(const WCDB::OrderingTerms &)orders
-{
-    return [[[[[[self prepareRowSelect] onResultColumns:resultColumn] fromTable:tableName] orders:orders] finalizeStatementWhenDispose] allValues];
-}
-
-- (WCTOneColumn *)getColumnOnResult:(const WCTResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName
-                              limit:(const WCDB::Expression &)limit
-{
-    return [[[[[[self prepareRowSelect] onResultColumns:resultColumn] fromTable:tableName] limit:limit] finalizeStatementWhenDispose] allValues];
-}
-
-- (WCTOneColumn *)getColumnOnResult:(const WCTResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName
-                              where:(const WCDB::Expression &)condition
-                             orders:(const WCDB::OrderingTerms &)orders
-{
-    return [[[[[[[self prepareRowSelect] onResultColumns:resultColumn] fromTable:tableName] where:condition] orders:orders] finalizeStatementWhenDispose] allValues];
-}
-
-- (WCTOneColumn *)getColumnOnResult:(const WCTResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName
-                              where:(const WCDB::Expression &)condition
-                              limit:(const WCDB::Expression &)limit
-{
-    return [[[[[[[self prepareRowSelect] onResultColumns:resultColumn] fromTable:tableName] where:condition] limit:limit] finalizeStatementWhenDispose] allValues];
-}
-
-- (WCTOneColumn *)getColumnOnResult:(const WCTResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName
-                             orders:(const WCDB::OrderingTerms &)orders
-                              limit:(const WCDB::Expression &)limit
-{
-    return [[[[[[[self prepareRowSelect] onResultColumns:resultColumn] fromTable:tableName] orders:orders] limit:limit] finalizeStatementWhenDispose] allValues];
-}
-
-- (WCTOneColumn *)getColumnOnResult:(const WCTResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName
-                              limit:(const WCDB::Expression &)limit
-                             offset:(const WCDB::Expression &)offset
-{
-    return [[[[[[[self prepareRowSelect] onResultColumns:resultColumn] fromTable:tableName] limit:limit] offset:offset] finalizeStatementWhenDispose] allValues];
-}
-
-- (WCTOneColumn *)getColumnOnResult:(const WCTResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName
-                              where:(const WCDB::Expression &)condition
-                             orders:(const WCDB::OrderingTerms &)orders
-                              limit:(const WCDB::Expression &)limit
-{
-    return [[[[[[[[self prepareRowSelect] onResultColumns:resultColumn] fromTable:tableName] where:condition] orders:orders] limit:limit] finalizeStatementWhenDispose] allValues];
-}
-
-- (WCTOneColumn *)getColumnOnResult:(const WCTResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName
-                              where:(const WCDB::Expression &)condition
-                              limit:(const WCDB::Expression &)limit
-                             offset:(const WCDB::Expression &)offset
-{
-    return [[[[[[[[self prepareRowSelect] onResultColumns:resultColumn] fromTable:tableName] where:condition] limit:limit] offset:offset] finalizeStatementWhenDispose] allValues];
-}
-
-- (WCTOneColumn *)getColumnOnResult:(const WCTResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName
-                             orders:(const WCDB::OrderingTerms &)orders
-                              limit:(const WCDB::Expression &)limit
-                             offset:(const WCDB::Expression &)offset
-{
-    return [[[[[[[[self prepareRowSelect] onResultColumns:resultColumn] fromTable:tableName] orders:orders] limit:limit] offset:offset] finalizeStatementWhenDispose] allValues];
-}
-
-- (WCTOneColumn *)getColumnOnResult:(const WCTResultColumn &)resultColumn
-                          fromTable:(NSString *)tableName
-                              where:(const WCDB::Expression &)condition
-                             orders:(const WCDB::OrderingTerms &)orders
-                              limit:(const WCDB::Expression &)limit
-                             offset:(const WCDB::Expression &)offset
-{
-    return [[[[[[[[[self prepareRowSelect] onResultColumns:resultColumn] fromTable:tableName] where:condition] orders:orders] limit:limit] offset:offset] finalizeStatementWhenDispose] allValues];
-}
-
-#pragma mark - Get One Value
-- (WCTValue *)getValueOnResultColumn:(const WCTResultColumn &)resultColumn
-                           fromTable:(NSString *)tableName
-{
-    return [[[[[[self prepareRowSelect] onResultColumns:resultColumn] fromTable:tableName] limit:1] finalizeStatementWhenDispose] nextValue];
-}
-
-- (WCTValue *)getValueOnResultColumn:(const WCTResultColumn &)resultColumn
-                           fromTable:(NSString *)tableName
-                               where:(const WCDB::Expression &)condition
-{
-    return [[[[[[[self prepareRowSelect] onResultColumns:resultColumn] fromTable:tableName] where:condition] limit:1] finalizeStatementWhenDispose] nextValue];
-}
-
-- (WCTValue *)getValueOnResultColumn:(const WCTResultColumn &)resultColumn
-                           fromTable:(NSString *)tableName
-                              orders:(const WCDB::OrderingTerms &)orders
-{
-    return [[[[[[[self prepareRowSelect] onResultColumns:resultColumn] fromTable:tableName] orders:orders] limit:1] finalizeStatementWhenDispose] nextValue];
-}
-
-- (WCTValue *)getValueOnResultColumn:(const WCTResultColumn &)resultColumn
-                           fromTable:(NSString *)tableName
-                              offset:(const WCDB::Expression &)offset
-{
-    return [[[[[[[self prepareRowSelect] onResultColumns:resultColumn] fromTable:tableName] limit:1] offset:offset] finalizeStatementWhenDispose] nextValue];
-}
-
-- (WCTValue *)getValueOnResultColumn:(const WCTResultColumn &)resultColumn
-                           fromTable:(NSString *)tableName
-                               where:(const WCDB::Expression &)condition
-                              orders:(const WCDB::OrderingTerms &)orders
-{
-    return [[[[[[[[self prepareRowSelect] onResultColumns:resultColumn] fromTable:tableName] where:condition] orders:orders] limit:1] finalizeStatementWhenDispose] nextValue];
-}
-
-- (WCTValue *)getValueOnResultColumn:(const WCTResultColumn &)resultColumn
-                           fromTable:(NSString *)tableName
-                               where:(const WCDB::Expression &)condition
-                              offset:(const WCDB::Expression &)offset
-{
-    return [[[[[[[[self prepareRowSelect] onResultColumns:resultColumn] fromTable:tableName] where:condition] limit:1] offset:offset] finalizeStatementWhenDispose] nextValue];
-}
-
-- (WCTValue *)getValueOnResultColumn:(const WCTResultColumn &)resultColumn
-                           fromTable:(NSString *)tableName
-                              orders:(const WCDB::OrderingTerms &)orders
-                              offset:(const WCDB::Expression &)offset
-{
-    return [[[[[[[[self prepareRowSelect] onResultColumns:resultColumn] fromTable:tableName] orders:orders] limit:1] offset:offset] finalizeStatementWhenDispose] nextValue];
-}
-
-- (WCTValue *)getValueOnResultColumn:(const WCTResultColumn &)resultColumn
-                           fromTable:(NSString *)tableName
-                               where:(const WCDB::Expression &)condition
-                              orders:(const WCDB::OrderingTerms &)orders
-                              offset:(const WCDB::Expression &)offset
-{
-    return [[[[[[[[[self prepareRowSelect] onResultColumns:resultColumn] fromTable:tableName] where:condition] orders:orders] limit:1] offset:offset] finalizeStatementWhenDispose] nextValue];
-}
-
-#pragma mark - Get Rows
-- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                  fromTable:(NSString *)tableName
-{
-    return [[[[[self prepareRowSelect] onResultColumns:resultColumns] fromTable:tableName] finalizeStatementWhenDispose] allRows];
-}
-
-- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                  fromTable:(NSString *)tableName
-                                      where:(const WCDB::Expression &)condition
-{
-    return [[[[[[self prepareRowSelect] onResultColumns:resultColumns] fromTable:tableName] where:condition] finalizeStatementWhenDispose] allRows];
-}
-
-- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                  fromTable:(NSString *)tableName
-                                     orders:(const WCDB::OrderingTerms &)orders
-{
-    return [[[[[[self prepareRowSelect] onResultColumns:resultColumns] fromTable:tableName] orders:orders] finalizeStatementWhenDispose] allRows];
-}
-
-- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                  fromTable:(NSString *)tableName
-                                      limit:(const WCDB::Expression &)limit
-{
-    return [[[[[[self prepareRowSelect] onResultColumns:resultColumns] fromTable:tableName] limit:limit] finalizeStatementWhenDispose] allRows];
-}
-
-- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                  fromTable:(NSString *)tableName
-                                      where:(const WCDB::Expression &)condition
-                                     orders:(const WCDB::OrderingTerms &)orders
-{
-    return [[[[[[[self prepareRowSelect] onResultColumns:resultColumns] fromTable:tableName] where:condition] orders:orders] finalizeStatementWhenDispose] allRows];
-}
-
-- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                  fromTable:(NSString *)tableName
-                                      where:(const WCDB::Expression &)condition
-                                      limit:(const WCDB::Expression &)limit
-{
-    return [[[[[[[self prepareRowSelect] onResultColumns:resultColumns] fromTable:tableName] where:condition] limit:limit] finalizeStatementWhenDispose] allRows];
-}
-
-- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                  fromTable:(NSString *)tableName
-                                     orders:(const WCDB::OrderingTerms &)orders
-                                      limit:(const WCDB::Expression &)limit
-{
-    return [[[[[[[self prepareRowSelect] onResultColumns:resultColumns] fromTable:tableName] orders:orders] limit:limit] finalizeStatementWhenDispose] allRows];
-}
-
-- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                  fromTable:(NSString *)tableName
-                                      limit:(const WCDB::Expression &)limit
-                                     offset:(const WCDB::Expression &)offset
-{
-    return [[[[[[[self prepareRowSelect] onResultColumns:resultColumns] fromTable:tableName] limit:limit] offset:offset] finalizeStatementWhenDispose] allRows];
-}
-
-- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                  fromTable:(NSString *)tableName
-                                      where:(const WCDB::Expression &)condition
-                                     orders:(const WCDB::OrderingTerms &)orders
-                                      limit:(const WCDB::Expression &)limit
-{
-    return [[[[[[[[self prepareRowSelect] onResultColumns:resultColumns] fromTable:tableName] where:condition] orders:orders] limit:limit] finalizeStatementWhenDispose] allRows];
-}
-
-- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                  fromTable:(NSString *)tableName
-                                      where:(const WCDB::Expression &)condition
-                                      limit:(const WCDB::Expression &)limit
-                                     offset:(const WCDB::Expression &)offset
-{
-    return [[[[[[[[self prepareRowSelect] onResultColumns:resultColumns] fromTable:tableName] where:condition] limit:limit] offset:offset] finalizeStatementWhenDispose] allRows];
-}
-
-- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                  fromTable:(NSString *)tableName
-                                     orders:(const WCDB::OrderingTerms &)orders
-                                      limit:(const WCDB::Expression &)limit
-                                     offset:(const WCDB::Expression &)offset
-{
-    return [[[[[[[[self prepareRowSelect] onResultColumns:resultColumns] fromTable:tableName] orders:orders] limit:limit] offset:offset] finalizeStatementWhenDispose] allRows];
-}
-
-- (WCTColumnsXRows *)getRowsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                  fromTable:(NSString *)tableName
-                                      where:(const WCDB::Expression &)condition
-                                     orders:(const WCDB::OrderingTerms &)orders
-                                      limit:(const WCDB::Expression &)limit
-                                     offset:(const WCDB::Expression &)offset
-{
-    return [[[[[[[[[self prepareRowSelect] onResultColumns:resultColumns] fromTable:tableName] where:condition] orders:orders] limit:limit] offset:offset] finalizeStatementWhenDispose] allRows];
-}
-
 #pragma mark - Insert
 - (BOOL)insertObject:(WCTObject *)object
            intoTable:(NSString *)tableName
@@ -1059,6 +743,61 @@
                  offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[self prepareDelete] fromTable:tableName] where:condition] orders:orders] limit:limit] offset:offset] finalizeStatementWhenDispose] execute];
+}
+
+#pragma mark - Get From Statement
+- (WCTValue *)getValueFromStatement:(const WCDB::Statement &)statement
+{
+    WCTValue *result = nil;
+    do {
+        if (![self prepare:statement]
+            || ![self step]) {
+            break;
+        }
+        result = [self extractValueAtIndex:0];
+    } while (false);
+    [self finalizeStatement];
+    return result;
+}
+
+- (WCTOneRow *)getRowFromStatement:(const WCDB::Statement &)statement
+{
+    WCTOneRow *result = nil;
+    do {
+        if (![self prepare:statement]
+            || ![self step]) {
+            break;
+        }
+        result = [self extractRow];
+    } while (false);
+    [self finalizeStatement];
+    return result;
+}
+
+- (WCTOneColumn *)getColumnFromStatement:(const WCDB::Statement &)statement
+{
+    WCTOneColumn *result = nil;
+    do {
+        if (![self prepare:statement]) {
+            break;
+        }
+        result = [self allValues];
+    } while (false);
+    [self finalizeStatement];
+    return result;
+}
+
+- (WCTColumnsXRows *)getRowsFromStatement:(const WCDB::Statement &)statement
+{
+    WCTColumnsXRows *result = nil;
+    do {
+        if (![self prepare:statement]) {
+            break;
+        }
+        result = [self allRows];
+    } while (false);
+    [self finalizeStatement];
+    return result;
 }
 
 @end

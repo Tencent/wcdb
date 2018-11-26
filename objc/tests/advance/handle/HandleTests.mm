@@ -164,7 +164,7 @@
     {
         TestCaseAssertTrue([self.handle prepare:self.statementSelect]);
         TestCaseAssertTrue([self.handle step]);
-        TestCaseAssertEqual([self.handle getInteger32AtIndex:0], value);
+        TestCaseAssertEqual([self.handle extractInteger32AtIndex:0], value);
         [self.handle finalizeStatement];
     }
 }
@@ -182,7 +182,7 @@
     {
         TestCaseAssertTrue([self.handle prepare:self.statementSelect]);
         TestCaseAssertTrue([self.handle step]);
-        TestCaseAssertEqual([self.handle getInteger64AtIndex:0], value);
+        TestCaseAssertEqual([self.handle extractInteger64AtIndex:0], value);
         [self.handle finalizeStatement];
     }
 }
@@ -202,7 +202,7 @@
         TestCaseAssertTrue([self.handle step]);
 
         double epsilon = std::numeric_limits<double>::epsilon();
-        TestCaseAssertTrue(fabs([self.handle getDoubleAtIndex:0] - value) < epsilon);
+        TestCaseAssertTrue(fabs([self.handle extractDoubleAtIndex:0] - value) < epsilon);
         [self.handle finalizeStatement];
     }
 }
@@ -219,7 +219,7 @@
     {
         TestCaseAssertTrue([self.handle prepare:self.statementSelect]);
         TestCaseAssertTrue([self.handle step]);
-        TestCaseAssertEqual([self.handle getTypeAtIndex:0], WCTColumnTypeNil);
+        TestCaseAssertEqual([self.handle extractTypeAtIndex:0], WCTColumnTypeNil);
         [self.handle finalizeStatement];
     }
 }
@@ -237,7 +237,7 @@
     {
         TestCaseAssertTrue([self.handle prepare:self.statementSelect]);
         TestCaseAssertTrue([self.handle step]);
-        TestCaseAssertTrue([[self.handle getStringAtIndex:0] isEqualToString:value]);
+        TestCaseAssertTrue([[self.handle extractStringAtIndex:0] isEqualToString:value]);
         [self.handle finalizeStatement];
     }
 }
@@ -256,7 +256,7 @@
         TestCaseAssertTrue([self.handle prepare:self.statementSelect]);
         TestCaseAssertTrue([self.handle step]);
         double epsilon = std::numeric_limits<double>::epsilon();
-        TestCaseAssertTrue(fabs([self.handle getNumberAtIndex:0].doubleValue - value.doubleValue) < epsilon);
+        TestCaseAssertTrue(fabs([self.handle extractNumberAtIndex:0].doubleValue - value.doubleValue) < epsilon);
         [self.handle finalizeStatement];
     }
 }
@@ -274,7 +274,7 @@
     {
         TestCaseAssertTrue([self.handle prepare:self.statementSelect]);
         TestCaseAssertTrue([self.handle step]);
-        TestCaseAssertTrue([[self.handle getDataAtIndex:0] isEqualToData:value]);
+        TestCaseAssertTrue([[self.handle extractDataAtIndex:0] isEqualToData:value]);
         [self.handle finalizeStatement];
     }
 }
@@ -292,9 +292,9 @@
     {
         TestCaseAssertTrue([self.handle prepare:self.statementSelect]);
         TestCaseAssertTrue([self.handle step]);
-        TestCaseAssertEqual([self.handle getColumnCount], 1);
-        TestCaseAssertTrue([[self.handle getColumnNameAtIndex:0] isEqualToString:@"content"]);
-        TestCaseAssertTrue([[self.handle getTableNameAtIndex:0] isEqualToString:self.tableName]);
+        TestCaseAssertEqual([self.handle extractColumnCount], 1);
+        TestCaseAssertTrue([[self.handle extractColumnNameAtIndex:0] isEqualToString:@"content"]);
+        TestCaseAssertTrue([[self.handle extractTableNameAtIndex:0] isEqualToString:self.tableName]);
         [self.handle finalizeStatement];
     }
 }

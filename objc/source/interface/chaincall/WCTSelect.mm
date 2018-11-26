@@ -65,7 +65,7 @@
         [_handle finalizeStatement];
         return nil;
     }
-    return [_handle getObjectOnResultColumns:_resultColumns];
+    return [_handle extractObjectOnResultColumns:_resultColumns];
 }
 
 @end
