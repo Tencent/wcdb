@@ -100,7 +100,7 @@ void Console::log(const Error& error)
     }
     stream << std::endl;
     if (error.level == Error::Level::Fatal) {
-        stream << "Set breakpoint at Console::breakpoint to debug." << std::endl;
+        stream << "Set breakpoint at Console::log to debug." << std::endl;
     }
     std::cout << stream.str();
 
