@@ -231,7 +231,7 @@ void FactoryRetriever::reportMechanic(const Fraction &score,
     Error error;
     error.setCode(Error::Code::Notice, "Repair");
     error.level = Error::Level::Notice;
-    error.message = "Retriever Report.";
+    error.message = "Mechanic Retrieve Report.";
     error.infos.set("Path", path);
     error.infos.set("Score", score.value());
     error.infos.set("Material", material.stringify());
@@ -247,7 +247,7 @@ void FactoryRetriever::reportFullCrawler(const Fraction &score,
     Error error;
     error.setCode(Error::Code::Notice, "Repair");
     error.level = Error::Level::Notice;
-    error.message = "Retriever Report.";
+    error.message = "Crawler Retrieve Report.";
     error.infos.set("Path", path);
     error.infos.set("Score", score.value());
     finishReportOfPerformance(error, path, cost);
@@ -260,7 +260,7 @@ void FactoryRetriever::reportSummary(const SteadyClock &cost)
     Error error;
     error.setCode(Error::Code::Notice, "Repair");
     error.level = Error::Level::Notice;
-    error.message = "Retriever Summary Report.";
+    error.message = "Retrieve Report Summary.";
     error.infos.set("Path", database);
     error.infos.set("Cost", cost.seconds());
     error.infos.set("Score", getScore().value());
