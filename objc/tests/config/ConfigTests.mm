@@ -24,10 +24,6 @@
 
 @property (nonatomic, readonly) NSString* configName;
 
-@property (nonatomic, readonly) WCDB::StatementPragma setSecureDelete;
-@property (nonatomic, readonly) WCDB::StatementPragma unsetSecureDelete;
-@property (nonatomic, readonly) WCDB::StatementPragma getSecureDelete;
-
 @end
 
 @implementation ConfigTests
@@ -36,10 +32,6 @@
 {
     [super setUp];
     _configName = [NSString randomString];
-
-    _setSecureDelete = WCDB::StatementPragma().pragma(WCDB::Pragma::secureDelete()).to(YES);
-    _unsetSecureDelete = WCDB::StatementPragma().pragma(WCDB::Pragma::secureDelete()).to(NO);
-    _getSecureDelete = WCDB::StatementPragma().pragma(WCDB::Pragma::secureDelete());
 }
 
 - (void)tearDown
@@ -51,18 +43,21 @@
 - (void)test_config
 {
     [self removeSQLRelatedConfigs];
+    WCDB::StatementPragma setSecureDelete = WCDB::StatementPragma().pragma(WCDB::Pragma::secureDelete()).to(YES);
+    WCDB::StatementPragma unsetSecureDelete = WCDB::StatementPragma().pragma(WCDB::Pragma::secureDelete()).to(NO);
+    WCDB::StatementPragma getSecureDelete = WCDB::StatementPragma().pragma(WCDB::Pragma::secureDelete());
 
     __block BOOL uninvoked = NO;
     {
         // invocation
         [self.database
         setConfig:^BOOL(WCTHandle* handle) {
-            return [handle execute:self.setSecureDelete];
+            return [handle execute:setSecureDelete];
         }
         withUninvocation:^BOOL(WCTHandle* handle) {
             // customlized check uninvocation since traceSQL will be unset in the test function
             uninvoked = YES;
-            return [handle execute:self.unsetSecureDelete];
+            return [handle execute:unsetSecureDelete];
         }
         forName:self.configName];
 
@@ -73,11 +68,7 @@
                    }];
         TestCaseAssertTrue(result);
 
-        WCTHandle* handle = [self.database getHandle];
-        TestCaseAssertTrue([handle prepare:self.getSecureDelete] && [handle step]);
-        TestCaseAssertTrue([handle extractNumberAtIndex:0].boolValue);
-        [handle finalizeStatement];
-        [handle invalidate];
+        TestCaseAssertTrue([self.database getValueFromStatement:getSecureDelete].numberValue.boolValue);
     }
     {
         // uninvocation
@@ -86,11 +77,7 @@
         TestCaseAssertTrue([self.database canOpen]);
         TestCaseAssertTrue(uninvoked);
 
-        WCTHandle* handle = [self.database getHandle];
-        TestCaseAssertTrue([handle prepare:self.getSecureDelete] && [handle step]);
-        TestCaseAssertFalse([handle extractNumberAtIndex:0].boolValue);
-        [handle finalizeStatement];
-        [handle invalidate];
+        TestCaseAssertFalse([self.database getValueFromStatement:getSecureDelete].numberValue.boolValue);
     }
 }
 
