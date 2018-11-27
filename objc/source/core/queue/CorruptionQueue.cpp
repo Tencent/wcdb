@@ -51,7 +51,7 @@ void CorruptionQueue::handleError(const Error& error)
         return;
     }
     auto database = m_databasePool->get(iter->second);
-    if (!database->containsRecoverScheme()) {
+    if (database == nullptr || !database->containsRecoverScheme()) {
         return;
     }
     bool succeed;
