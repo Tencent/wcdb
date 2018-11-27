@@ -192,16 +192,15 @@ private:
 
 #pragma mark - Error
 protected:
-    void setError(int rc, const String &sql = "");
-
     // if code >= 0, then the level of error with the specified code will be marked as ignored
     // if code < 0, then the level of all errors will be marked as ignored
-    // when the error is marked as ignored, it will not be set to m_error
+    // when the error is marked as ignored, it will not be set to m_error and error() will return true
+    bool error(int rc, const String &sql = "");
     void markErrorAsIgnorable(int codeToBeIgnored);
     void markErrorAsUnignorable();
 
 private:
-    void doSetError(Error &error, int rc, const String &sql);
+    void setupAndNotifyError(Error &error, int rc, const String &sql);
     int m_codeToBeIgnored;
 };
 

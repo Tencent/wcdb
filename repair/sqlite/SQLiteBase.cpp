@@ -93,13 +93,16 @@ void SQLiteBase::markErrorAsUnignorable()
     m_codeToBeIgnored = SQLITE_OK;
 }
 
-void SQLiteBase::setError(int rc, const char *sql)
+bool SQLiteBase::error(int rc, const char *sql)
 {
+    bool result;
     Error error;
     if (m_codeToBeIgnored >= 0 && rc != m_codeToBeIgnored) {
         error.level = Error::Level::Error;
+        result = false;
     } else {
         error.level = Error::Level::Ignore;
+        result = true;
     }
     error.setSQLiteCode(rc, sqlite3_extended_errcode((sqlite3 *) m_handle));
     const char *message = sqlite3_errmsg((sqlite3 *) m_handle);
@@ -112,6 +115,7 @@ void SQLiteBase::setError(int rc, const char *sql)
     error.infos.set("Path", m_path);
     Notifier::shared()->notify(error);
     ErrorProne::setError(std::move(error));
+    return result;
 }
 
 #pragma mark - SQLite Handle
@@ -121,8 +125,7 @@ bool SQLiteBase::open()
     if (!m_handle) {
         int rc = sqlite3_open(m_path.c_str(), (sqlite3 **) &m_handle);
         if (rc != SQLITE_OK) {
-            setError(rc);
-            return false;
+            return error(rc);
         }
     }
     return true;
@@ -152,8 +155,7 @@ bool SQLiteBase::execute(const char *sql)
     WCTInnerAssert(sql != nullptr);
     int rc = sqlite3_exec((sqlite3 *) m_handle, sql, nullptr, nullptr, nullptr);
     if (rc != SQLITE_OK) {
-        setError(rc, sql);
-        return false;
+        return error(rc, sql);
     }
     return true;
 }
@@ -168,7 +170,7 @@ void *SQLiteBase::prepare(const char *sql)
     if (rc == SQLITE_OK) {
         return stmt;
     }
-    setError(rc, sql);
+    error(rc, sql);
     return nullptr;
 }
 
@@ -188,12 +190,7 @@ bool SQLiteBase::step(void *stmt, bool &done)
         return true;
     };
     const char *sql = sqlite3_sql((sqlite3_stmt *) stmt);
-    if (sql) {
-        setError(rc, sql);
-    } else {
-        setError(rc);
-    }
-    return false;
+    return error(rc, sql ? sql : nullptr);
 }
 
 void SQLiteBase::finalize(void **stmt)

@@ -43,7 +43,7 @@ protected:
 
 #pragma mark - Error
 protected:
-    void setError(int rc, const char *sql = nullptr);
+    bool error(int rc, const char *sql = nullptr);
 
     // if code >= 0, then the level of error with the specified code will be marked as ignored
     // if code < 0, then the level of all errors will be marked as ignored

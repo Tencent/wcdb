@@ -102,8 +102,7 @@ bool Handle::open()
     }
     int rc = sqlite3_open(path.c_str(), (sqlite3 **) &m_handle);
     if (rc != SQLITE_OK) {
-        setError(rc);
-        return false;
+        return error(rc);
     }
     return true;
 }
@@ -143,8 +142,7 @@ bool Handle::execute(const Statement &statement)
     if (rc == SQLITE_OK) {
         return true;
     }
-    setError(rc, statement.getDescription());
-    return false;
+    return error(rc, statement.getDescription());
 }
 
 int Handle::getExtendedErrorCode()
@@ -474,8 +472,7 @@ bool Handle::setCipherKey(const UnsafeData &data)
     if (rc == SQLITE_OK) {
         return true;
     }
-    setError(rc);
-    return false;
+    return error(rc);
 }
 
 #pragma mark - Notification
@@ -527,18 +524,22 @@ bool Handle::setNotificationWhenCheckpointed(const String &name,
 }
 
 #pragma mark - Error
-void Handle::setError(int rc, const String &sql)
+bool Handle::error(int rc, const String &sql)
 {
     WCTInnerAssert(rc != SQLITE_OK);
     if (m_codeToBeIgnored >= 0 && rc != m_codeToBeIgnored) {
-        doSetError(m_error, rc, sql);
+        // non-ignorable
+        setupAndNotifyError(m_error, rc, sql);
+        return false;
     } else {
+        // ignorable
         Error error = m_error;
-        doSetError(error, rc, sql);
+        setupAndNotifyError(error, rc, sql);
+        return true;
     }
 }
 
-void Handle::doSetError(Error &error, int rc, const String &sql)
+void Handle::setupAndNotifyError(Error &error, int rc, const String &sql)
 {
     if (rc != SQLITE_MISUSE) {
         // extended error code will not be set in some case for misuse error

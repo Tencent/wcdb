@@ -35,7 +35,7 @@ HandleRelated::~HandleRelated()
 
 void HandleRelated::setError(int rc, const String &sql)
 {
-    m_handle->setError(rc, sql);
+    m_handle->error(rc, sql);
 }
 
 void *HandleRelated::getRawHandle()
