@@ -25,8 +25,8 @@
 + (NSInteger)randomInt64
 {
     static_assert(sizeof(NSInteger) == 8, "");
-    NSInteger value = rand();
-    value = (value << 32) | rand();
+    NSInteger value = arc4random();
+    value = (value << 32) | arc4random();
     return value;
 }
 
@@ -80,7 +80,7 @@
     "abcdefghijklmnopqrstuvwxyz";
     NSMutableString *randomString = [NSMutableString string];
     for (int i = 0; i < length; ++i) {
-        [randomString appendFormat:@"%c", alphanum[rand() % (sizeof(alphanum) - 1)]];
+        [randomString appendFormat:@"%c", alphanum[arc4random() % (sizeof(alphanum) - 1)]];
     }
     return [NSString stringWithString:randomString];
 }
@@ -91,8 +91,12 @@
 
 + (NSData *)randomData
 {
+    return [NSData randomDataWithLength:[NSNumber randomUInt8]];
+}
+
++ (NSData *)randomDataWithLength:(NSInteger)length
+{
     static_assert(sizeof(unsigned char) == 1, "");
-    int length = [NSNumber randomUInt8];
     NSMutableData *data = [NSMutableData dataWithCapacity:length];
     for (NSUInteger i = 0; i < length; ++i) {
         unsigned char random = [NSNumber randomInt32] & 0xff;

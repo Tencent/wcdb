@@ -47,6 +47,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSData*)randomData;
 
++ (NSData*)randomDataWithLength:(NSInteger)length;
+
 + (NSData*)randomDataOtherThan:(NSData*)other;
 
 @end

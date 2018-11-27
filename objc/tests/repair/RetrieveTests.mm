@@ -26,4 +26,139 @@
 
 @implementation RetrieveTests
 
+- (BOOL)checkObjectsRetrieved
+{
+    return [self checkObjects:self.objects
+                       andSQL:@"SELECT identifier, content FROM main.testTable"
+        asExpectedBySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
+            return [self.table getObjects];
+        }];
+}
+
+- (BOOL)checkObjectsNotRetrieved
+{
+    return [self checkObjects:@[]
+                       andSQL:@"SELECT type, name, tbl_name, rootpage, sql FROM main.sqlite_master WHERE name == 'testTable'"
+        asExpectedBySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
+            return [self.database getObjectsOfClass:WCTMaster.class fromTable:WCTMaster.tableName where:WCTMaster.name == self.tableName];
+        }];
+}
+
+- (BOOL)checkRetrieve
+{
+    __block double lastPercentage = 0;
+    __block BOOL sanity = YES;
+    BOOL result = [self.database retrieve:^(double percentage, double increment) {
+        if (percentage - lastPercentage != increment
+            || increment <= 0) {
+            sanity = NO;
+        }
+        lastPercentage = percentage;
+    }];
+    return sanity && result && lastPercentage == 1.0;
+}
+
+- (BOOL)checkRetrieveFailed
+{
+    __block double lastPercentage = 0;
+    __block BOOL sanity = YES;
+    BOOL result = [self.database retrieve:^(double percentage, double increment) {
+        if (percentage - lastPercentage != increment
+            || increment <= 0) {
+            sanity = NO;
+        }
+        lastPercentage = percentage;
+    }];
+    return sanity && !result && lastPercentage == 1.0;
+}
+
+- (BOOL)tryToMakeHeaderCorrupted
+{
+    if (![self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]) {
+        return NO;
+    }
+    __block BOOL result = NO;
+    [self.database close:^{
+        result = [self attackHeader];
+    }];
+    return result;
+}
+
+#pragma mark - Non-Corrupted
+- (void)test_retrieve_with_backup_and_deposit
+{
+    TestCaseAssertTrue([self.database backup]);
+    TestCaseAssertTrue([self.database deposit]);
+
+    TestCaseAssertTrue([self checkRetrieve]);
+    TestCaseAssertTrue([self checkObjectsRetrieved]);
+}
+
+- (void)test_retrieve_with_backup_and_without_deposit
+{
+    TestCaseAssertTrue([self.database backup]);
+
+    TestCaseAssertTrue([self checkRetrieve]);
+    TestCaseAssertTrue([self checkObjectsRetrieved]);
+}
+
+- (void)test_retrieve_without_backup_and_with_deposit
+{
+    TestCaseAssertTrue([self.database deposit]);
+
+    TestCaseAssertTrue([self checkRetrieve]);
+    TestCaseAssertTrue([self checkObjectsRetrieved]);
+}
+
+- (void)test_retrieve_without_backup_and_deposite
+{
+    TestCaseAssertTrue([self checkRetrieve]);
+    TestCaseAssertTrue([self checkObjectsRetrieved]);
+}
+
+#pragma mark - Corrupted
+- (void)test_retrieve_corrupted_with_backup_and_deposit
+{
+    TestCaseAssertTrue([self.database backup]);
+
+    TestCaseAssertTrue([self tryToMakeHeaderCorrupted]);
+
+    TestCaseAssertTrue([self.database deposit]);
+
+    TestCaseAssertTrue([self checkRetrieve]);
+
+    TestCaseAssertTrue([self checkObjectsRetrieved]);
+}
+
+- (void)test_retrieve_corrupted_with_backup_and_without_deposit
+{
+    TestCaseAssertTrue([self.database backup]);
+
+    TestCaseAssertTrue([self tryToMakeHeaderCorrupted]);
+
+    TestCaseAssertTrue([self checkRetrieve]);
+
+    TestCaseAssertTrue([self checkObjectsRetrieved]);
+}
+
+- (void)test_retrieve_corrupted_without_backup_and_with_deposit
+{
+    TestCaseAssertTrue([self tryToMakeHeaderCorrupted]);
+
+    TestCaseAssertTrue([self.database deposit]);
+
+    TestCaseAssertTrue([self checkRetrieveFailed]);
+
+    TestCaseAssertTrue([self checkObjectsNotRetrieved]);
+}
+
+- (void)test_retrieve_corrupted_without_backup_and_deposite
+{
+    TestCaseAssertTrue([self tryToMakeHeaderCorrupted]);
+
+    TestCaseAssertTrue([self checkRetrieveFailed]);
+
+    TestCaseAssertTrue([self checkObjectsNotRetrieved]);
+}
+
 @end

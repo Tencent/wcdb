@@ -28,6 +28,7 @@
 
 @property (readonly, nonatomic) WCTDatabase* database;
 
+@property (nonatomic, readonly) int sizeOfHeader;
 @property (nonatomic, readonly) int sizeOfWalHeader;
 @property (nonatomic, readonly) int sizeOfWalFrameHeader;
 

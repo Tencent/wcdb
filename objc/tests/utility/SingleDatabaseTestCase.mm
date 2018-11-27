@@ -37,6 +37,7 @@
     } while (tag == 0);
     _database.tag = tag;
 
+    _sizeOfHeader = 100;
     _sizeOfWalHeader = 32;
     _sizeOfWalFrameHeader = 24;
 
