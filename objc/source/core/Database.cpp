@@ -520,11 +520,11 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
     return result;
 }
 
-bool Database::canRetrieve() const
+bool Database::hasDeposited() const
 {
     SharedLockGuard concurrencyGuard(m_concurrency);
     SharedLockGuard memoryGuard(m_memory);
-    return m_factory.canRetrieve();
+    return m_factory.hasDeposited();
 }
 
 bool Database::removeDeposit()

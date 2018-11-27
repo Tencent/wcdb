@@ -56,13 +56,13 @@ static_assert((int) WCTRecoveryModeDeposit == (int) WCDB::Database::RecoveryMode
 - (void)filterBackup:(WCTBackupFilterBlock)tableShouldBeBackedUp
 {
     WCTDatabaseAssert(return;);
+    WCDB::Database::BackupFilter filter = nullptr;
     if (tableShouldBeBackedUp) {
-        _database->filterBackup([tableShouldBeBackedUp](const WCDB::String &tableName) -> bool {
+        filter = [tableShouldBeBackedUp](const WCDB::String &tableName) -> bool {
             return tableShouldBeBackedUp([NSString stringWithUTF8String:tableName.c_str()]);
-        });
-    } else {
-        _database->filterBackup(nullptr);
+        };
     }
+    _database->filterBackup(filter);
 }
 
 - (BOOL)deposit
@@ -90,13 +90,13 @@ static_assert((int) WCTRecoveryModeDeposit == (int) WCDB::Database::RecoveryMode
 - (double)retrieve:(WCTRetrieveProgressUpdateBlock)onProgressUpdate
 {
     WCTDatabaseAssert(return 0;);
+    WCDB::Database::RetrieveProgressCallback callback = nullptr;
     if (onProgressUpdate) {
-        return _database->retrieve([onProgressUpdate](double percentage, double increment) {
+        callback = [onProgressUpdate](double percentage, double increment) {
             onProgressUpdate(percentage, increment);
-        });
-    } else {
-        return _database->retrieve(nullptr);
+        };
     }
+    return _database->retrieve(callback);
 }
 
 - (BOOL)removeDeposit
@@ -105,10 +105,10 @@ static_assert((int) WCTRecoveryModeDeposit == (int) WCDB::Database::RecoveryMode
     return _database->removeDeposit();
 }
 
-- (BOOL)canRetrieve
+- (BOOL)hasDeposited
 {
     WCTDatabaseAssert(return NO;);
-    return _database->canRetrieve();
+    return _database->hasDeposited();
 }
 
 @end

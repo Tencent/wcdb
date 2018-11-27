@@ -75,7 +75,7 @@ std::pair<bool, String> Factory::getUniqueWorkshopDiectory() const
     return { succeed, succeed ? path : String::null() };
 }
 
-bool Factory::canRetrieve() const
+bool Factory::hasDeposited() const
 {
     bool result = false;
     String databaseName = getDatabaseName();

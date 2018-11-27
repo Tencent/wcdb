@@ -59,6 +59,7 @@
 
 - (BOOL)runTransaction:(WCDB_NO_ESCAPE WCTTransactionBlock)inTransaction
 {
+    WCTRemedialAssert(inTransaction, "Transaction block can't be null.", return NO;);
     WCDB::Handle *handle = [self getOrGenerateHandle];
     if (!handle) {
         return NO;
@@ -95,6 +96,7 @@
 
 - (BOOL)runNestedTransaction:(WCDB_NO_ESCAPE WCTTransactionBlock)inTransaction
 {
+    WCTRemedialAssert(inTransaction, "Transaction block can't be null.", return NO;);
     WCDB::Handle *handle = [self getOrGenerateHandle];
     if (!handle) {
         return NO;
