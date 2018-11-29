@@ -93,6 +93,12 @@ bool Frame::doInitialize()
     WCTInnerAssert(deserialization.canAdvance(4));
     salt.second = deserialization.advance4BytesUInt();
     if (salt != m_wal->getSalt()) {
+        markWalAsCorrupted(frameno,
+                           String::formatted("Mismatched frame salt: %u, %u to %u, %u.",
+                                             salt.first,
+                                             salt.second,
+                                             m_wal->getSalt().first,
+                                             m_wal->getSalt().second));
         return false;
     }
 

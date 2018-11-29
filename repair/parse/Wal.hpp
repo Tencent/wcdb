@@ -61,7 +61,6 @@ public:
     void setShmLegality(bool flag);
     void setMaxAllowedFrame(int maxFrame);
     int getFrameCount() const;
-    bool isNativeChecksum() const;
     const std::pair<uint32_t, uint32_t> &getSalt() const;
     int getPageSize() const;
 
@@ -99,7 +98,7 @@ protected:
 
 #pragma mark - Dispose
 public:
-    int getDisposedPage() const;
+    int getDisposedPages() const;
     void dispose();
 
 protected:

@@ -66,15 +66,16 @@ protected:
 
 #pragma mark - Wal
 public:
-    void setShmLegality(bool flag);
+    void setWalImportance(bool flag);
     int getWalFrameCount() const;
     void setMaxWalFrame(int maxWalFrame);
-    int getDisposedWalPage() const;
+    int getDisposedWalPages() const;
     void disposeWal();
     const std::pair<uint32_t, uint32_t> &getWalSalt() const;
 
 protected:
     Wal m_wal;
+    bool m_walImportance;
 
 #pragma mark - Error
 public:

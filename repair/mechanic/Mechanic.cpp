@@ -48,7 +48,7 @@ bool Mechanic::work()
         return exit(true);
     }
 
-    m_pager.setShmLegality(false);
+    m_pager.setWalImportance(false);
     m_pager.setMaxWalFrame(m_material->info.walFrame);
     m_pager.setPageSize(m_material->info.pageSize);
     m_pager.setReservedBytes(m_material->info.reservedBytes);
@@ -87,7 +87,7 @@ bool Mechanic::work()
     if (pageCount == 0) {
         return exit(true);
     }
-    setPageWeight(Fraction(1, pageCount + m_pager.getDisposedWalPage()));
+    setPageWeight(Fraction(1, pageCount + m_pager.getDisposedWalPages()));
 
     if (markAsAssembling()) {
         for (const auto &element : m_material->contents) {

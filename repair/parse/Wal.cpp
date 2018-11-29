@@ -73,7 +73,6 @@ MappedData Wal::acquireData(off_t offset, size_t size)
 #pragma mark - Page
 bool Wal::containsPage(int pageno) const
 {
-    WCTInnerAssert(isInitialized());
     return m_pages2Frames.find(pageno) != m_pages2Frames.end();
 }
 
@@ -121,7 +120,6 @@ void Wal::setMaxAllowedFrame(int maxAllowedFrame)
 
 int Wal::getFrameCount() const
 {
-    WCTInnerAssert(isInitialized());
     return m_maxFrame;
 }
 
@@ -135,15 +133,8 @@ int Wal::getFrameSize() const
     return Frame::headerSize + getPageSize();
 }
 
-bool Wal::isNativeChecksum() const
-{
-    WCTInnerAssert(isInitializing() || isInitialized());
-    return m_isNativeChecksum;
-}
-
 const std::pair<uint32_t, uint32_t> &Wal::getSalt() const
 {
-    WCTInnerAssert(isInitializing() || isInitialized());
     return m_salt;
 }
 
@@ -169,7 +160,7 @@ Wal::calculateChecksum(const MappedData &data, const std::pair<uint32_t, uint32_
 
     std::pair<uint32_t, uint32_t> result = checksum;
 
-    if (isNativeChecksum()) {
+    if (m_isNativeChecksum) {
         do {
             result.first += *iter++ + result.second;
             result.second += *iter++ + result.first;
@@ -229,7 +220,8 @@ bool Wal::doInitialize()
     uint32_t magic = deserialization.advance4BytesUInt();
     if ((magic & 0xFFFFFFFE) != 0x377F0682) {
         // ignore wal
-        return true;
+        markAsCorrupted(0, String::formatted("Incorrect wal magic: 0x%x.", magic));
+        return false;
     }
     m_isNativeChecksum = (magic & 0x00000001) == isBigEndian();
     deserialization.seek(16);
@@ -261,6 +253,7 @@ bool Wal::doInitialize()
     for (int frameno = 1; frameno <= maxWalFrame; ++frameno) {
         Frame frame(frameno, this);
         if (!frame.initialize()) {
+            dispose();
             return false;
         }
         checksum = frame.calculateChecksum(checksum);
@@ -396,15 +389,13 @@ void Wal::markAsError(Error::Code code)
 }
 
 #pragma mark - Dispose
-int Wal::getDisposedPage() const
+int Wal::getDisposedPages() const
 {
-    WCTInnerAssert(isInitialized());
     return (int) m_disposedPages.size();
 }
 
 void Wal::dispose()
 {
-    WCTInnerAssert(isInitialized() || isInitializeFalied());
     for (const auto &element : m_pages2Frames) {
         m_disposedPages.emplace(element.first);
     }
@@ -412,6 +403,7 @@ void Wal::dispose()
     m_truncate = std::numeric_limits<uint32_t>::max();
     m_fileSize = 0;
     m_maxFrame = 0;
+    m_salt = { 0, 0 };
 }
 
 } //namespace Repair

@@ -32,7 +32,13 @@ namespace Repair {
 
 #pragma mark - Initialize
 Pager::Pager(const String &path)
-: m_fileHandle(path), m_pageSize(-1), m_reservedBytes(-1), m_pageCount(0), m_wal(this), m_fileSize(0)
+: m_fileHandle(path)
+, m_pageSize(-1)
+, m_reservedBytes(-1)
+, m_pageCount(0)
+, m_wal(this)
+, m_fileSize(0)
+, m_walImportance(true)
 {
 }
 
@@ -134,8 +140,9 @@ MappedData Pager::acquireData(off_t offset, size_t size)
 }
 
 #pragma mark - Wal
-void Pager::setShmLegality(bool flag)
+void Pager::setWalImportance(bool flag)
 {
+    m_walImportance = flag;
     m_wal.setShmLegality(flag);
 }
 
@@ -144,9 +151,9 @@ void Pager::setMaxWalFrame(int maxWalFrame)
     m_wal.setMaxAllowedFrame(maxWalFrame);
 }
 
-int Pager::getDisposedWalPage() const
+int Pager::getDisposedWalPages() const
 {
-    return m_wal.getDisposedPage();
+    return m_wal.getDisposedPages();
 }
 
 void Pager::disposeWal()
@@ -246,7 +253,7 @@ bool Pager::doInitialize()
     if (m_wal.initialize()) {
         return true;
     }
-    if (!m_error.isCorruption()) {
+    if (m_walImportance || !m_error.isCorruption()) {
         return false;
     }
     disposeWal();
