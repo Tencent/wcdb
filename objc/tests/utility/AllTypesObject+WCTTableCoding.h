@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
-#import "BuiltinTypesObject.h"
+#import "AllTypesObject.h"
 #import <WCDB/WCDB.h>
 
-@interface BuiltinTypesObject (WCTTableCoding) <WCTTableCoding>
+@interface AllTypesObject (WCTTableCoding) <WCTTableCoding>
 
 WCDB_PROPERTY(intValue)
 WCDB_PROPERTY(unsignedIntValue)

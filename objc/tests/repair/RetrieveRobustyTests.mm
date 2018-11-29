@@ -54,7 +54,7 @@
 
 - (int)getRealStep
 {
-    return self.step + ([NSNumber randomInt32] % self.shuffle) * [NSNumber randomBool] ? 1 : -1;
+    return self.step + ([NSNumber randomUInt32] % self.shuffle) * [NSNumber randomBool] ? 1 : -1;
 }
 
 - (BOOL)shouldAttack

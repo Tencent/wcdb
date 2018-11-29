@@ -227,6 +227,7 @@
 - (void)test_string
 {
     NSString* value = [NSString randomString];
+    TestCaseAssertTrue(value != nil);
     {
         TestCaseAssertTrue([self.handle prepare:self.statementInsert]);
         [self.handle bindString:value toIndex:1];
@@ -245,6 +246,7 @@
 - (void)test_number
 {
     NSNumber* value = [NSNumber randomNumber];
+    TestCaseAssertTrue(value != nil);
     {
         TestCaseAssertTrue([self.handle prepare:self.statementInsert]);
         [self.handle bindNumber:value toIndex:1];
@@ -264,6 +266,7 @@
 - (void)test_data
 {
     NSData* value = [NSData randomData];
+    TestCaseAssertTrue(value != nil);
     {
         TestCaseAssertTrue([self.handle prepare:self.statementInsert]);
         [self.handle bindData:value toIndex:1];

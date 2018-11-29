@@ -21,8 +21,8 @@
 #import "ORMTests.h"
 #import "AdditionalORMObject+WCTTableCoding.h"
 #import "AdditionalORMObject.h"
-#import "BuiltinTypesObject+WCTTableCoding.h"
-#import "BuiltinTypesObject.h"
+#import "AllTypesObject+WCTTableCoding.h"
+#import "AllTypesObject.h"
 #import "ColumnConstraintAutoIncrement+WCTTableCoding.h"
 #import "ColumnConstraintAutoIncrement.h"
 #import "ColumnConstraintAutoIncrementAsc+WCTTableCoding.h"
@@ -105,7 +105,7 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
 
 - (void)test_builtin_types
 {
-    self.tableClass = BuiltinTypesObject.class;
+    self.tableClass = AllTypesObject.class;
     NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(codingValue BLOB, cppStringValue TEXT, cstringValue TEXT, dataValue BLOB, dateValue REAL, doubleValue REAL, floatValue REAL, int32Value INTEGER, int64Value INTEGER, integerValue INTEGER, intValue INTEGER, numberValue REAL, stringValue TEXT, uint32Value INTEGER, uint64Value INTEGER, uintegerValue INTEGER, unsignedIntValue INTEGER)" ];
     TestCaseAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
 }

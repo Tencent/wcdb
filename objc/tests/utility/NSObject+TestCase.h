@@ -29,6 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (int)randomInt32;
 
++ (uint32_t)randomUInt32;
+
 + (uint8_t)randomUInt8;
 
 + (double)randomDouble;

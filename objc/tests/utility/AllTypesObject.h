@@ -21,7 +21,7 @@
 #import <Foundation/Foundation.h>
 #import <string>
 
-@interface BuiltinTypesObject : NSObject
+@interface AllTypesObject : NSObject
 
 // Integer
 @property (nonatomic, assign) int intValue;

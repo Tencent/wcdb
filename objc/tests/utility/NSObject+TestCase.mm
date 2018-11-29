@@ -36,6 +36,11 @@
     return (int) [self randomInt64];
 }
 
++ (uint32_t)randomUInt32
+{
+    return (uint32_t)[self randomInt64];
+}
+
 + (uint8_t)randomUInt8
 {
     return (uint8_t)[NSNumber randomInt64];
@@ -44,7 +49,7 @@
 + (double)randomDouble
 {
     int decimals = [NSNumber randomUInt8] % 3;
-    double value = [NSNumber randomInt32] % 10000;
+    double value = [NSNumber randomUInt32] % 10000;
     for (int i = 0; i < decimals; ++i) {
         value /= 10.0;
     }
@@ -53,7 +58,7 @@
 
 + (NSNumber *)randomNumber
 {
-    switch ([NSNumber randomInt32] % 3) {
+    switch ([NSNumber randomUInt8] % 3) {
     case 0:
         return [NSNumber numberWithInt:[NSNumber randomInt32]];
     case 1:
@@ -71,7 +76,7 @@
 
 + (BOOL)randomBool
 {
-    return [NSNumber randomInt32] % 2;
+    return [NSNumber randomUInt8] % 2;
 }
 
 @end
