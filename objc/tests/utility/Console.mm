@@ -19,7 +19,8 @@
  */
 
 #import "Console.h"
-#import <sqlcipher/sqlite3.h>
+#import <WCDB/SQLite.h>
+#import <WCDB/WCDB.h>
 
 ssize_t illPwrite(int, const void *, size_t, off_t)
 {
@@ -43,8 +44,28 @@ ssize_t illPwrite(int, const void *, size_t, off_t)
         sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
         _vfsPwrite = vfs->xGetSystemCall(vfs, "pwrite");
         _vfsIllPwrite = (void (*)(void)) illPwrite;
+#ifdef DEBUG
+        [self enableSQLTrace];
+#endif
     }
     return self;
+}
+
+- (void)enableSQLTrace
+{
+    [WCTDatabase globalTraceSQL:^(NSString *sql) {
+        NSThread *currentThread = [NSThread currentThread];
+        NSString *threadName = currentThread.name;
+        if (threadName.length == 0) {
+            threadName = [NSString stringWithFormat:@"%p", currentThread];
+        }
+        NSLog(@"%@ Thread %@: %@", currentThread.isMainThread ? @"*" : @"-", threadName, sql);
+    }];
+}
+
+- (void)disableSQLTrace
+{
+    [WCTDatabase globalTraceSQL:nil];
 }
 
 - (void)enableSQLiteWrite

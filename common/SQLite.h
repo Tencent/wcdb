@@ -21,6 +21,9 @@
 #ifndef _WCDB_SQLITE_H
 #define _WCDB_SQLITE_H
 
+// This file is public, but not included by default.
+// Developer can include it for some specific needs.
+
 #if WCDB_BUILTIN_SQLCIPHER
 #include <sqlcipher/fts3_tokenizer.h>
 #include <sqlcipher/sqlite3.h>

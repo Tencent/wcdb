@@ -64,6 +64,16 @@
     return nil;
 }
 
++ (float)random_0_1
+{
+    return (float) rand() / RAND_MAX;
+}
+
++ (BOOL)randomBool
+{
+    return [NSNumber randomInt32] % 2;
+}
+
 @end
 
 @implementation NSString (TestCase)

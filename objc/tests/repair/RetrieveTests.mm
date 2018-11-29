@@ -48,38 +48,48 @@
 {
     __block double lastPercentage = 0;
     __block BOOL sanity = YES;
-    BOOL result = [self.database retrieve:^(double percentage, double increment) {
+    double score = [self.database retrieve:^(double percentage, double increment) {
         if (percentage - lastPercentage != increment
             || increment <= 0) {
+            TESTCASE_FAILED
             sanity = NO;
         }
         lastPercentage = percentage;
     }];
-    return sanity && result && lastPercentage == 1.0;
+    return sanity && score == 1.0 && lastPercentage == 1.0;
 }
 
 - (BOOL)checkRetrieveFailed
 {
     __block double lastPercentage = 0;
     __block BOOL sanity = YES;
-    BOOL result = [self.database retrieve:^(double percentage, double increment) {
+    double score = [self.database retrieve:^(double percentage, double increment) {
         if (percentage - lastPercentage != increment
             || increment <= 0) {
+            TESTCASE_FAILED
             sanity = NO;
         }
         lastPercentage = percentage;
     }];
-    return sanity && !result && lastPercentage == 1.0;
+    return sanity && score != 1.0 && lastPercentage == 1.0;
 }
 
 - (BOOL)tryToMakeHeaderCorrupted
 {
     if (![self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]) {
+        TESTCASE_FAILED
         return NO;
     }
     __block BOOL result = NO;
     [self.database close:^{
-        result = [self attackHeader];
+        NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.path];
+        if (!fileHandle) {
+            TESTCASE_FAILED
+            return;
+        }
+        [fileHandle writeData:[NSData randomDataWithLength:self.headerSize]];
+        [fileHandle closeFile];
+        result = YES;
     }];
     return result;
 }

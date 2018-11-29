@@ -37,11 +37,12 @@
     } while (tag == 0);
     _database.tag = tag;
 
-    _sizeOfHeader = 100;
-    _sizeOfWalHeader = 32;
-    _sizeOfWalFrameHeader = 24;
+    _headerSize = 100;
+    _walHeaderSize = 32;
+    _walFrameHeaderSize = 24;
 
     _pageSize = 4096;
+    _walFrameSize = _walFrameHeaderSize + _pageSize;
 }
 
 - (void)tearDown
@@ -68,10 +69,10 @@
 - (int)getWalFrameCount
 {
     NSInteger walSize = [self getFileSize:self.walPath].integerValue;
-    if (walSize < self.sizeOfWalHeader) {
+    if (walSize < self.walHeaderSize) {
         return 0;
     }
-    return (int) ((walSize - self.sizeOfWalHeader) / (self.sizeOfWalFrameHeader + self.pageSize));
+    return (int) ((walSize - self.walHeaderSize) / (self.walFrameHeaderSize + self.pageSize));
 }
 
 - (void)removeSQLRelatedConfigs

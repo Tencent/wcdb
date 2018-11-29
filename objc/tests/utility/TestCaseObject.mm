@@ -30,20 +30,26 @@ WCDB_SYNTHESIZE(TestCaseObject, content)
 
 WCDB_PRIMARY_ASC_AUTO_INCREMENT(TestCaseObject, identifier)
 
+BOOL nilEqual(id a, id b)
+{
+    return (a == nil && b == nil) || [a isEqual:b];
+}
+
 - (BOOL)isEqual:(NSObject*)object
 {
     if (object.class != self.class) {
         return NO;
     }
     TestCaseObject* other = (TestCaseObject*) object;
-    if (self.identifier != other.identifier) {
-        return NO;
-    }
-    if (self.content != nil) {
-        return [other.content isEqualToString:self.content];
-    } else {
-        return other.content == nil;
-    }
+    return self.identifier == other.identifier && nilEqual(self.content, other.content);
+}
+
+- (NSUInteger)hash
+{
+    NSMutableData* data = [NSMutableData data];
+    [data appendBytes:&(_identifier) length:sizeof(_identifier)];
+    [data appendData:[_content dataUsingEncoding:NSUTF8StringEncoding]];
+    return data.hash;
 }
 
 @end

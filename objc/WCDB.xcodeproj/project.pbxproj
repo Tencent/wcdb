@@ -312,6 +312,7 @@
 		23790A7F219315E50098797F /* WCTColumnConstraintMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 23790A7D219315D50098797F /* WCTColumnConstraintMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23790A80219315E50098797F /* WCTVirtualTableMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 23790A7E219315DE0098797F /* WCTVirtualTableMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		237A65F520F731DF008B4771 /* OrderedUniqueList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */; };
+		23846FCF21AF8427005B868F /* RetrieveRobustyTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23846FCE21AF8427005B868F /* RetrieveRobustyTests.mm */; };
 		2384F6A32193DC3400E8B10A /* TableConstraintObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F6A02193DC3400E8B10A /* TableConstraintObject.mm */; };
 		2384F6B72193E06D00E8B10A /* ColumnConstraintPrimary.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F6B42193E06D00E8B10A /* ColumnConstraintPrimary.mm */; };
 		2384F6BB2193E07600E8B10A /* ColumnConstraintPrimaryAsc.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F6B82193E07600E8B10A /* ColumnConstraintPrimaryAsc.mm */; };
@@ -442,7 +443,7 @@
 		23AB891C215A28F700554DF1 /* DebugDescribable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AB8919215A28F700554DF1 /* DebugDescribable.hpp */; };
 		23AB8970215B73F700554DF1 /* MigrationInitializerHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AB896E215B73F700554DF1 /* MigrationInitializerHandle.cpp */; };
 		23AB8972215B73F700554DF1 /* MigrationInitializerHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AB896F215B73F700554DF1 /* MigrationInitializerHandle.hpp */; };
-		23AB898E215BA81300554DF1 /* SQLite.h in Headers */ = {isa = PBXBuildFile; fileRef = 23AB898D215BA6DB00554DF1 /* SQLite.h */; };
+		23AB898E215BA81300554DF1 /* SQLite.h in Headers */ = {isa = PBXBuildFile; fileRef = 23AB898D215BA6DB00554DF1 /* SQLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23AD52D620DB4A3C00664B62 /* Master.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52D420DB4A3C00664B62 /* Master.cpp */; };
 		23AD52D820DB4A3C00664B62 /* Master.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AD52D520DB4A3C00664B62 /* Master.hpp */; };
 		23AD52DD20DB56D200664B62 /* Sequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52DB20DB56D200664B62 /* Sequence.cpp */; };
@@ -1360,6 +1361,7 @@
 		23790A7D219315D50098797F /* WCTColumnConstraintMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTColumnConstraintMacro.h; sourceTree = "<group>"; };
 		23790A7E219315DE0098797F /* WCTVirtualTableMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTVirtualTableMacro.h; sourceTree = "<group>"; };
 		237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OrderedUniqueList.hpp; sourceTree = "<group>"; };
+		23846FCE21AF8427005B868F /* RetrieveRobustyTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RetrieveRobustyTests.mm; sourceTree = "<group>"; };
 		2384F6A02193DC3400E8B10A /* TableConstraintObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TableConstraintObject.mm; sourceTree = "<group>"; };
 		2384F6A12193DC3400E8B10A /* TableConstraintObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TableConstraintObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		2384F6A22193DC3400E8B10A /* TableConstraintObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TableConstraintObject.h; sourceTree = "<group>"; };
@@ -2062,6 +2064,7 @@
 				2304121721AB9EF700CB2318 /* DepositTests.mm */,
 				2304121921AB9F1600CB2318 /* RecoverTests.mm */,
 				2304121B21AB9F2000CB2318 /* RetrieveTests.mm */,
+				23846FCE21AF8427005B868F /* RetrieveRobustyTests.mm */,
 				2304121D21ABA23C00CB2318 /* BackupTestCase.h */,
 				2304121E21ABA23C00CB2318 /* BackupTestCase.mm */,
 			);
@@ -4205,6 +4208,7 @@
 				2304121821AB9EF700CB2318 /* DepositTests.mm in Sources */,
 				231FEAFE2199A4D400DC3706 /* TestCaseObject.mm in Sources */,
 				231FEB022199A4D400DC3706 /* NSObject+TestCase.mm in Sources */,
+				23846FCF21AF8427005B868F /* RetrieveRobustyTests.mm in Sources */,
 				231FEB002199A4D400DC3706 /* SingleDatabaseTestCase.mm in Sources */,
 				231FEAFF2199A4D400DC3706 /* TestCase.mm in Sources */,
 				2304121A21AB9F1600CB2318 /* RecoverTests.mm in Sources */,

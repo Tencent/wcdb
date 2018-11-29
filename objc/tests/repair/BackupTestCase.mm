@@ -38,32 +38,4 @@
     _framesForTolerance = 10;
 }
 
-- (BOOL)attackHeader
-{
-    __block BOOL result = NO;
-    [self.database close:^{
-        NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.path];
-        if (fileHandle) {
-            [fileHandle writeData:[NSData randomDataWithLength:self.sizeOfHeader]];
-            [fileHandle closeFile];
-            result = YES;
-        }
-    }];
-    return result;
-}
-
-- (BOOL)attackWalHeader
-{
-    __block BOOL result = NO;
-    [self.database close:^{
-        NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.walPath];
-        if (fileHandle) {
-            [fileHandle writeData:[NSData randomDataWithLength:self.sizeOfWalHeader]];
-            [fileHandle closeFile];
-            result = YES;
-        }
-    }];
-    return result;
-}
-
 @end

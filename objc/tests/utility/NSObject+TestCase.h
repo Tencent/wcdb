@@ -35,6 +35,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSNumber*)randomNumber;
 
++ (float)random_0_1;
+
++ (BOOL)randomBool;
+
 @end
 
 @interface NSString (TestCase)

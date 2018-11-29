@@ -26,7 +26,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (Console*)shared;
 
+- (void)enableSQLTrace;
+
+- (void)disableSQLTrace;
+
 - (void)enableSQLiteWrite;
+
 - (void)disableSQLiteWrite;
 
 @end

@@ -28,11 +28,12 @@
 
 @property (readonly, nonatomic) WCTDatabase* database;
 
-@property (nonatomic, readonly) int sizeOfHeader;
-@property (nonatomic, readonly) int sizeOfWalHeader;
-@property (nonatomic, readonly) int sizeOfWalFrameHeader;
+@property (nonatomic, readonly) int headerSize;
+@property (nonatomic, readonly) int walHeaderSize;
+@property (nonatomic, readonly) int walFrameHeaderSize;
 
 @property (nonatomic, readonly) int pageSize;
+@property (nonatomic, readonly) int walFrameSize;
 
 - (NSNumber*)getFileSize:(NSString*)path;
 

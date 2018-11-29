@@ -40,17 +40,6 @@
 {
     [super setUp];
 
-#ifdef DEBUG
-    [WCTDatabase globalTraceSQL:^(NSString *sql) {
-        NSThread *currentThread = [NSThread currentThread];
-        NSString *threadName = currentThread.name;
-        if (threadName.length == 0) {
-            threadName = [NSString stringWithFormat:@"%p", currentThread];
-        }
-        NSLog(@"%@ Thread %@: %@", currentThread.isMainThread ? @"*" : @"-", threadName, sql);
-    }];
-#endif
-
     NSLog(@"%@ at %@", self.name, self.directory);
 }
 
