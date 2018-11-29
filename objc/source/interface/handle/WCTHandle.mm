@@ -210,7 +210,7 @@
 - (void)bindNumber:(NSNumber *)number toIndex:(int)index
 {
     WCTHandleAssert(return;);
-    if (CFNumberIsFloatType((CFNumberRef) number)) {
+    if (number == nil || CFNumberIsFloatType((CFNumberRef) number)) {
         _handle->bindDouble(number.doubleValue, index);
     } else {
         if (CFNumberGetByteSize((CFNumberRef) number) <= 4) {
