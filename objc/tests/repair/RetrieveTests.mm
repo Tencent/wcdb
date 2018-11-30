@@ -18,6 +18,8 @@
  * limitations under the License.
  */
 
+#import "AllTypesObject+WCTTableCoding.h"
+#import "AllTypesObject.h"
 #import "BackupTestCase.h"
 
 @interface RetrieveTests : BackupTestCase
@@ -30,7 +32,7 @@
 {
     return [self checkObjects:self.objects
                        andSQL:@"SELECT identifier, content FROM main.testTable"
-        asExpectedBySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
+        asExpectedBySelecting:^NSArray<NSObject<WCTTableCoding>*>* {
             return [self.table getObjects];
         }];
 }
@@ -39,7 +41,7 @@
 {
     return [self checkObjects:@[]
                        andSQL:@"SELECT type, name, tbl_name, rootpage, sql FROM main.sqlite_master WHERE name == 'testTable'"
-        asExpectedBySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
+        asExpectedBySelecting:^NSArray<NSObject<WCTTableCoding>*>* {
             return [self.database getObjectsOfClass:WCTMaster.class fromTable:WCTMaster.tableName where:WCTMaster.name == self.tableName];
         }];
 }
@@ -82,7 +84,7 @@
     }
     __block BOOL result = NO;
     [self.database close:^{
-        NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.path];
+        NSFileHandle* fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.path];
         if (!fileHandle) {
             TESTCASE_FAILED
             return;
@@ -169,6 +171,39 @@
     TestCaseAssertTrue([self checkRetrieveFailed]);
 
     TestCaseAssertTrue([self checkObjectsNotRetrieved]);
+}
+
+- (void)test_retrieve_all_types
+{
+    self.tableClass = AllTypesObject.class;
+    self.tableName = [NSString stringWithFormat:@"t_%@", [NSString randomString]];
+    TestCaseAssertTrue([self createTable]);
+
+    AllTypesObject* maxObject = [AllTypesObject maxObject];
+    TestCaseAssertTrue([self.table insertObject:maxObject]);
+
+    AllTypesObject* minObject = [AllTypesObject minObject];
+    TestCaseAssertTrue([self.table insertObject:minObject]);
+
+    AllTypesObject* emptyObject = [AllTypesObject emptyObject];
+    TestCaseAssertTrue([self.table insertObject:emptyObject]);
+
+    AllTypesObject* nilObject = [AllTypesObject nilObject];
+    TestCaseAssertTrue([self.table insertObject:nilObject]);
+
+    TestCaseAssertTrue([self.database retrieve:nullptr] == 1.0f);
+
+    AllTypesObject* selectedMaxObject = [self.table getObjectWhere:AllTypesObject.type == maxObject.type];
+    TestCaseAssertTrue([selectedMaxObject isEqual:maxObject]);
+
+    AllTypesObject* selectedMinObject = [self.table getObjectWhere:AllTypesObject.type == minObject.type];
+    TestCaseAssertTrue([selectedMinObject isEqual:minObject]);
+
+    AllTypesObject* selectedEmptyObject = [self.table getObjectWhere:AllTypesObject.type == emptyObject.type];
+    TestCaseAssertTrue([selectedEmptyObject isEqual:emptyObject]);
+
+    AllTypesObject* selectedNilObject = [self.table getObjectWhere:AllTypesObject.type == nilObject.type];
+    TestCaseAssertTrue([selectedNilObject isEqual:nilObject]);
 }
 
 @end

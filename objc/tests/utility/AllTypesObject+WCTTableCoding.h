@@ -23,6 +23,8 @@
 
 @interface AllTypesObject (WCTTableCoding) <WCTTableCoding>
 
+WCDB_PROPERTY(type)
+
 WCDB_PROPERTY(intValue)
 WCDB_PROPERTY(unsignedIntValue)
 WCDB_PROPERTY(int32Value)
@@ -37,8 +39,6 @@ WCDB_PROPERTY(doubleValue)
 WCDB_PROPERTY(numberValue)
 WCDB_PROPERTY(dateValue)
 
-WCDB_PROPERTY(cstringValue)
-WCDB_PROPERTY(cppStringValue)
 WCDB_PROPERTY(stringValue)
 
 WCDB_PROPERTY(dataValue)

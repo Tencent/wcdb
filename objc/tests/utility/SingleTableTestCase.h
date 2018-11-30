@@ -24,7 +24,7 @@
 
 @property (nonatomic, readonly) WCTTable* table;
 
-@property (readonly, nonatomic) NSString* tableName;
+@property (retain, nonatomic) NSString* tableName;
 
 @property (retain, nonatomic) Class tableClass;
 

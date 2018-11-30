@@ -18,7 +18,6 @@
  * limitations under the License.
  */
 
-#import "ORMTests.h"
 #import "AdditionalORMObject+WCTTableCoding.h"
 #import "AdditionalORMObject.h"
 #import "AllTypesObject+WCTTableCoding.h"
@@ -53,8 +52,13 @@
 #import "OldRebindObject.h"
 #import "PropertyObject+WCTTableCoding.h"
 #import "PropertyObject.h"
+#import "SingleTableTestCase.h"
 #import "TableConstraintObject+WCTTableCoding.h"
 #import "TableConstraintObject.h"
+
+@interface ORMTests : SingleTableTestCase
+
+@end
 
 typedef NS_ENUM(NSUInteger, ORMTestsState) {
     ORMTestsStateNotStarted,
@@ -103,11 +107,35 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
     TestCaseAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
 }
 
-- (void)test_builtin_types
+- (void)test_all_types
 {
     self.tableClass = AllTypesObject.class;
-    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(codingValue BLOB, cppStringValue TEXT, cstringValue TEXT, dataValue BLOB, dateValue REAL, doubleValue REAL, floatValue REAL, int32Value INTEGER, int64Value INTEGER, integerValue INTEGER, intValue INTEGER, numberValue REAL, stringValue TEXT, uint32Value INTEGER, uint64Value INTEGER, uintegerValue INTEGER, unsignedIntValue INTEGER)" ];
+    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(codingValue BLOB, dataValue BLOB, dateValue REAL, doubleValue REAL, floatValue REAL, int32Value INTEGER, int64Value INTEGER, integerValue INTEGER, intValue INTEGER, numberValue REAL, stringValue TEXT, type TEXT PRIMARY KEY, uint32Value INTEGER, uint64Value INTEGER, uintegerValue INTEGER, unsignedIntValue INTEGER)" ];
     TestCaseAssertTrue([self checkCreateTableAndIndexSQLsAsExpected:expected]);
+
+    AllTypesObject* maxObject = [AllTypesObject maxObject];
+    TestCaseAssertTrue([self.table insertObject:maxObject]);
+
+    AllTypesObject* minObject = [AllTypesObject minObject];
+    TestCaseAssertTrue([self.table insertObject:minObject]);
+
+    AllTypesObject* emptyObject = [AllTypesObject emptyObject];
+    TestCaseAssertTrue([self.table insertObject:emptyObject]);
+
+    AllTypesObject* nilObject = [AllTypesObject nilObject];
+    TestCaseAssertTrue([self.table insertObject:nilObject]);
+
+    AllTypesObject* selectedMaxObject = [self.table getObjectWhere:AllTypesObject.type == maxObject.type];
+    TestCaseAssertTrue([selectedMaxObject isEqual:maxObject]);
+
+    AllTypesObject* selectedMinObject = [self.table getObjectWhere:AllTypesObject.type == minObject.type];
+    TestCaseAssertTrue([selectedMinObject isEqual:minObject]);
+
+    AllTypesObject* selectedEmptyObject = [self.table getObjectWhere:AllTypesObject.type == emptyObject.type];
+    TestCaseAssertTrue([selectedEmptyObject isEqual:emptyObject]);
+
+    AllTypesObject* selectedNilObject = [self.table getObjectWhere:AllTypesObject.type == nilObject.type];
+    TestCaseAssertTrue([selectedNilObject isEqual:nilObject]);
 }
 
 - (void)test_all_properties

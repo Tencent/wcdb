@@ -1355,7 +1355,6 @@
 		23790A51219298250098797F /* TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCase.h; sourceTree = "<group>"; };
 		23790A54219298680098797F /* SingleDatabaseTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SingleDatabaseTestCase.h; sourceTree = "<group>"; };
 		23790A55219298680098797F /* SingleDatabaseTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SingleDatabaseTestCase.mm; sourceTree = "<group>"; };
-		23790A612192B0450098797F /* ORMTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORMTests.h; sourceTree = "<group>"; };
 		23790A622192B0450098797F /* ORMTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ORMTests.mm; sourceTree = "<group>"; };
 		23790A642192B0A60098797F /* SingleTableTestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SingleTableTestCase.mm; sourceTree = "<group>"; };
 		23790A652192B0A60098797F /* SingleTableTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleTableTestCase.h; sourceTree = "<group>"; };
@@ -2642,7 +2641,6 @@
 				23790A5D2192B03C0098797F /* property */,
 				23790A5F2192B03D0098797F /* table_constraint */,
 				23790A5E2192B03D0098797F /* virtual_table */,
-				23790A612192B0450098797F /* ORMTests.h */,
 				23790A622192B0450098797F /* ORMTests.mm */,
 			);
 			path = ORM;

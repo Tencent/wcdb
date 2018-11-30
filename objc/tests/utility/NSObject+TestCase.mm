@@ -20,6 +20,15 @@
 
 #import "NSObject+TestCase.h"
 
+@implementation NSObject (TestCase)
+
++ (BOOL)isObject:(NSObject *)left nilEqualToObject:(NSObject *)right
+{
+    return (left == nil && right == nil) || [left isEqual:right];
+}
+
+@end
+
 @implementation NSNumber (TestCase)
 
 + (NSInteger)randomInt64

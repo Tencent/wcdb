@@ -19,6 +19,7 @@
  */
 
 #import "TestCaseObject.h"
+#import "NSObject+TestCase.h"
 #import "TestCaseObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
@@ -30,18 +31,13 @@ WCDB_SYNTHESIZE(TestCaseObject, content)
 
 WCDB_PRIMARY_ASC_AUTO_INCREMENT(TestCaseObject, identifier)
 
-BOOL nilEqual(id a, id b)
-{
-    return (a == nil && b == nil) || [a isEqual:b];
-}
-
 - (BOOL)isEqual:(NSObject*)object
 {
     if (object.class != self.class) {
         return NO;
     }
     TestCaseObject* other = (TestCaseObject*) object;
-    return self.identifier == other.identifier && nilEqual(self.content, other.content);
+    return self.identifier == other.identifier && [NSObject isObject:self.content nilEqualToObject:other.content];
 }
 
 - (NSUInteger)hash

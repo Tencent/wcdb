@@ -23,6 +23,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@interface NSObject (TestCase)
+
++ (BOOL)isObject:(NSObject*)left nilEqualToObject:(NSObject*)right;
+
+@end
+
 @interface NSNumber (TestCase)
 
 + (NSInteger)randomInt64;

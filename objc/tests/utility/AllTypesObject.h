@@ -23,6 +23,8 @@
 
 @interface AllTypesObject : NSObject
 
+@property (nonatomic, assign) NSString* type;
+
 // Integer
 @property (nonatomic, assign) int intValue;
 @property (nonatomic, assign) unsigned int unsignedIntValue;
@@ -40,12 +42,15 @@
 @property (nonatomic, assign) NSDate* dateValue;
 
 // String
-@property (nonatomic, assign) const char* cstringValue;
-@property (nonatomic, assign) std::string cppStringValue;
 @property (nonatomic, retain) NSString* stringValue;
 
 // BLOB
 @property (nonatomic, retain) NSData* dataValue;
 @property (nonatomic, retain) NSURL* codingValue; // all other class based NSCoding
+
++ (AllTypesObject*)maxObject;
++ (AllTypesObject*)minObject;
++ (AllTypesObject*)nilObject;
++ (AllTypesObject*)emptyObject;
 
 @end
