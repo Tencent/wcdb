@@ -26,7 +26,7 @@
 
 @implementation DepositTests
 
-- (void)test_deposite
+- (void)test_deposit
 {
     TestCaseObject* object = [[TestCaseObject alloc] init];
     object.isAutoIncrement = YES;
@@ -62,7 +62,9 @@
     }
 
     TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.factory]);
-    TestCaseAssertTrue([self.database removeDeposit]);
+    TestCaseAssertTrue([self.database containsDeposited]);
+    TestCaseAssertTrue([self.database removeDeposited]);
+    TestCaseAssertFalse([self.database containsDeposited]);
     TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.factory]);
 }
 

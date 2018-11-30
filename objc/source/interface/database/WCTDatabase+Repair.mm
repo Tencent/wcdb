@@ -99,10 +99,10 @@ static_assert((int) WCTRecoveryModeDeposit == (int) WCDB::Database::RecoveryMode
     return _database->retrieve(callback);
 }
 
-- (BOOL)removeDeposit
+- (BOOL)removeDeposited
 {
     WCTDatabaseAssert(return NO;);
-    return _database->removeDeposit();
+    return _database->removeDeposited();
 }
 
 - (BOOL)containsDeposited

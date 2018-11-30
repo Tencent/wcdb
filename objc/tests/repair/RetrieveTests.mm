@@ -76,26 +76,6 @@
     return sanity && score != 1.0 && lastPercentage == 1.0;
 }
 
-- (BOOL)tryToMakeHeaderCorrupted
-{
-    if (![self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]) {
-        TESTCASE_FAILED
-        return NO;
-    }
-    __block BOOL result = NO;
-    [self.database close:^{
-        NSFileHandle* fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.path];
-        if (!fileHandle) {
-            TESTCASE_FAILED
-            return;
-        }
-        [fileHandle writeData:[NSData randomDataWithLength:self.headerSize]];
-        [fileHandle closeFile];
-        result = YES;
-    }];
-    return result;
-}
-
 #pragma mark - Non-Corrupted
 - (void)test_retrieve_with_backup_and_deposit
 {

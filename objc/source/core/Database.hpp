@@ -133,7 +133,7 @@ public:
     bool removeMaterials();
 
     bool deposit();
-    bool removeDeposit();
+    bool removeDeposited();
 
     typedef Repair::FactoryRetriever::ProgressUpdateCallback RetrieveProgressCallback;
     double retrieve(const RetrieveProgressCallback &onProgressUpdate);
@@ -159,8 +159,6 @@ public:
     bool containsRecoverScheme() const;
 
     bool recover();
-
-    bool isCorrupted() const;
 
 private:
     RecoveryMode m_recoveryMode;

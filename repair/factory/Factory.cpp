@@ -84,9 +84,10 @@ bool Factory::containsDeposited() const
     [&result, &databaseName](
     const String &directory, const String &subpath, bool isDirectory) -> bool {
         if (isDirectory && subpath != restoreDirectoryName && subpath != renewDirectoryName) {
+            String database
+            = Path::addComponent(Path::addComponent(directory, subpath), databaseName);
             bool succeed, exists;
-            std::tie(succeed, exists)
-            = FileManager::fileExists(Path::addComponent(subpath, databaseName));
+            std::tie(succeed, exists) = FileManager::fileExists(database);
             if (exists) {
                 result = true;
                 return false;
@@ -129,7 +130,7 @@ FactoryRenewer Factory::renewer() const
 }
 
 #pragma mark - Helper
-bool Factory::removeDeposite() const
+bool Factory::removeDeposited() const
 {
     std::list<String> depositedPath;
     FileManager::enumerateDirectory(

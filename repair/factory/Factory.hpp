@@ -50,7 +50,7 @@ public:
     String getRenewDirectory() const;
     String getDatabaseName() const;
     bool removeDirectoryIfEmpty() const;
-    bool removeDeposite() const;
+    bool removeDeposited() const;
     std::pair<bool, std::list<String>> getWorkshopDirectories() const;
     std::pair<bool, String> getUniqueWorkshopDiectory() const;
     bool containsDeposited() const;

@@ -500,11 +500,11 @@ bool Database::containsDeposited() const
     return m_factory.containsDeposited();
 }
 
-bool Database::removeDeposit()
+bool Database::removeDeposited()
 {
     bool result = false;
     close([&result, this]() {
-        result = m_factory.removeDeposite();
+        result = m_factory.removeDeposited();
         if (!result) {
             assignWithSharedThreadedError();
         }
@@ -585,12 +585,6 @@ bool Database::recover()
         }
     });
     return result;
-}
-
-bool Database::isCorrupted() const
-{
-#warning TODO
-    return false;
 }
 
 #pragma mark - Migration
