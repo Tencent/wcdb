@@ -48,7 +48,7 @@ typedef NS_ENUM(NSInteger, WCTRecoveryMode) {
 
 - (BOOL)removeDeposit;
 
-- (BOOL)hasDeposited;
+- (BOOL)containsDeposited;
 
 - (double)retrieve:(nullable WCTRetrieveProgressUpdateBlock)onProgressUpdate;
 

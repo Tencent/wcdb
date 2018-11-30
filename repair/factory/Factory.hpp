@@ -53,7 +53,7 @@ public:
     bool removeDeposite() const;
     std::pair<bool, std::list<String>> getWorkshopDirectories() const;
     std::pair<bool, String> getUniqueWorkshopDiectory() const;
-    bool hasDeposited() const;
+    bool containsDeposited() const;
 
 #pragma - Factory Related
 public:

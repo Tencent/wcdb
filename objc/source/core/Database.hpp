@@ -141,7 +141,7 @@ public:
 
     typedef Repair::FactoryRetriever::ProgressUpdateCallback RetrieveProgressCallback;
     double retrieve(const RetrieveProgressCallback &onProgressUpdate);
-    bool hasDeposited() const;
+    bool containsDeposited() const;
 
 private:
     bool retrieveRenewed();
