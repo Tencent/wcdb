@@ -28,12 +28,22 @@
 
 namespace WCDB {
 
-class DatabasePool;
+class BackupEvent {
+public:
+    virtual ~BackupEvent();
+
+protected:
+    virtual bool databaseShouldBackup(const String& path) = 0;
+    friend class BackupQueue;
+};
 
 class BackupQueue final : public AsyncQueue {
 public:
-    BackupQueue(const String& name, const std::shared_ptr<DatabasePool>& databasePool);
+    BackupQueue(const String& name);
     ~BackupQueue();
+
+    void setEvent(BackupEvent* event);
+
     void put(const String& path, double delay, int frames);
     int getBackedUpFrames(const String& path);
 
@@ -41,7 +51,7 @@ protected:
     bool onTimed(const String& path, const int& frames);
     void loop() override final;
 
-    std::shared_ptr<DatabasePool> m_databasePool;
+    BackupEvent* m_event;
     TimedQueue<String, int> m_timedQueue;
     SharedLock m_lock;
     std::map<String, int> m_backedUp;

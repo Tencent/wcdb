@@ -27,15 +27,26 @@
 
 namespace WCDB {
 
-class DatabasePool;
+class CheckpointEvent {
+public:
+    virtual ~CheckpointEvent();
+
+protected:
+    virtual bool
+    databaseShouldCheckpoint(const String& path, const StatementPragma& checkpointStatement)
+    = 0;
+    friend class CheckpointQueue;
+};
 
 class CheckpointQueue final : public AsyncQueue {
 public:
-    CheckpointQueue(const String& name, const std::shared_ptr<DatabasePool>& databasePool);
+    CheckpointQueue(const String& name);
     ~CheckpointQueue();
 
     static constexpr const int framesThresholdForTruncate = 10 * 1024;
     static constexpr const double delayForRetryAfterFailure = 10.0;
+
+    void setEvent(CheckpointEvent* event);
 
     void put(const String& path, double delay, int frames);
     void remove(const String& path);
@@ -44,7 +55,7 @@ protected:
     bool onTimed(const String& path, const int& frames);
     void loop() override final;
 
-    std::shared_ptr<DatabasePool> m_databasePool;
+    CheckpointEvent* m_event;
     TimedQueue<String, int> m_timedQueue;
     const StatementPragma m_checkpointPassive;
     const StatementPragma m_checkpointTruncate;

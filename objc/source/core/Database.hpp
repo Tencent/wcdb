@@ -51,12 +51,8 @@ public:
     using HandlePool::unblockade;
     using HandlePool::isBlockaded;
 
-    uint32_t getIdentifier() const;
-
 protected:
-    void checkIdentifier() const;
     Tag m_tag;
-    uint32_t m_identifier;
 
 #pragma mark - Handle
 public:

@@ -111,4 +111,10 @@ static_assert((int) WCTRecoveryModeDeposit == (int) WCDB::Database::RecoveryMode
     return _database->containsDeposited();
 }
 
+- (BOOL)isCorrupted
+{
+    WCTDatabaseAssert(return NO;);
+    return WCDB::Core::shared()->isDatabaseCorrupted(_database->getPath());
+}
+
 @end

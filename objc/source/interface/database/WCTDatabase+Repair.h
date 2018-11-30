@@ -52,6 +52,8 @@ typedef NS_ENUM(NSInteger, WCTRecoveryMode) {
 
 - (double)retrieve:(nullable WCTRetrieveProgressUpdateBlock)onProgressUpdate;
 
+- (BOOL)isCorrupted;
+
 @end
 
 NS_ASSUME_NONNULL_END

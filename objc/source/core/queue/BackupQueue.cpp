@@ -20,20 +20,27 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/BackupQueue.hpp>
-#include <WCDB/DatabasePool.hpp>
 
 namespace WCDB {
 
-BackupQueue::BackupQueue(const String& name, const std::shared_ptr<DatabasePool>& databasePool)
-: AsyncQueue(name), m_databasePool(databasePool)
+BackupEvent::~BackupEvent()
 {
-    WCTInnerAssert(m_databasePool);
+}
+
+BackupQueue::BackupQueue(const String& name)
+: AsyncQueue(name), m_event(nullptr)
+{
 }
 
 BackupQueue::~BackupQueue()
 {
     m_timedQueue.stop();
     m_timedQueue.waitUntilDone();
+}
+
+void BackupQueue::setEvent(BackupEvent* event)
+{
+    m_event = event;
 }
 
 void BackupQueue::loop()
@@ -61,11 +68,11 @@ bool BackupQueue::onTimed(const String& path, const int& frames)
         return true;
     }
 
-    auto database = m_databasePool->get(path);
-    if (database == nullptr) {
+    if (m_event == nullptr) {
         return true;
     }
-    bool result = database->backup();
+
+    bool result = m_event->databaseShouldBackup(path);
     if (!result) {
         // retry after 15.0s if failed
         m_timedQueue.reQueue(path, 15.0, frames);

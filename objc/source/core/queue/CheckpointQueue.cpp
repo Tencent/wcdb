@@ -20,24 +20,30 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/CheckpointQueue.hpp>
-#include <WCDB/DatabasePool.hpp>
 
 namespace WCDB {
 
-CheckpointQueue::CheckpointQueue(const String& name,
-                                 const std::shared_ptr<DatabasePool>& databasePool)
+CheckpointEvent::~CheckpointEvent()
+{
+}
+
+CheckpointQueue::CheckpointQueue(const String& name)
 : AsyncQueue(name)
-, m_databasePool(databasePool)
+, m_event(nullptr)
 , m_checkpointPassive(StatementPragma().pragma(Pragma::walCheckpoint()).to("PASSIVE"))
 , m_checkpointTruncate(StatementPragma().pragma(Pragma::walCheckpoint()).to("TRUNCATE"))
 {
-    WCTInnerAssert(m_databasePool != nullptr);
 }
 
 CheckpointQueue::~CheckpointQueue()
 {
     m_timedQueue.stop();
     m_timedQueue.waitUntilDone();
+}
+
+void CheckpointQueue::setEvent(CheckpointEvent* event)
+{
+    m_event = event;
 }
 
 void CheckpointQueue::loop()
@@ -53,15 +59,15 @@ bool CheckpointQueue::onTimed(const String& path, const int& frames)
         return true;
     }
 
-    auto database = m_databasePool->get(path);
-    if (database == nullptr) {
+    if (m_event == nullptr) {
         return true;
     }
+
     bool result;
     if (frames >= framesThresholdForTruncate) {
-        result = database->execute(m_checkpointTruncate);
+        result = m_event->databaseShouldCheckpoint(path, m_checkpointTruncate);
     } else {
-        result = database->execute(m_checkpointPassive);
+        result = m_event->databaseShouldCheckpoint(path, m_checkpointPassive);
     }
     if (!result) {
         // retry after 10.0s if failed

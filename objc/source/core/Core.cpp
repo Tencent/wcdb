@@ -33,11 +33,10 @@ Core* Core::shared()
 }
 
 Core::Core()
-: m_databasePool(new DatabasePool)
-, m_modules(new FTS::Modules)
-, m_corruptionQueue(new CorruptionQueue(corruptionQueueName, m_databasePool))
-, m_checkpointQueue(new CheckpointQueue(checkpointQueueName, m_databasePool))
-, m_backupQueue(new BackupQueue(backupQueueName, m_databasePool))
+: m_modules(new FTS::Modules)
+, m_corruptionQueue(new CorruptionQueue(corruptionQueueName))
+, m_checkpointQueue(new CheckpointQueue(checkpointQueueName))
+, m_backupQueue(new BackupQueue(backupQueueName))
 // Configs
 , m_backupConfig(new BackupConfig(m_backupQueue))
 , m_globalSQLTraceConfig(new ShareableSQLTraceConfig)
@@ -49,7 +48,10 @@ Core::Core()
   { Configs::Priority::Low, checkpointConfigName, std::shared_ptr<Config>(new CheckpointConfig(m_checkpointQueue)) },
   })))
 {
-    m_databasePool->setEvent(this);
+    m_databasePool.setEvent(this);
+    m_corruptionQueue->setEvent(this);
+    m_checkpointQueue->setEvent(this);
+    m_backupQueue->setEvent(this);
 
     Handle::enableMultithread();
     Handle::enableMemoryStatus(false);
@@ -64,34 +66,84 @@ Core::Core()
 
 Core::~Core()
 {
-    m_databasePool->setEvent(nullptr);
+    m_corruptionQueue->setEvent(nullptr);
+    m_checkpointQueue->setEvent(nullptr);
+    m_databasePool.setEvent(nullptr);
+    m_backupQueue->setEvent(nullptr);
     Notifier::shared()->setNotificationForPreprocessing(notifierPreprocessorName, nullptr);
 }
 
 RecyclableDatabase Core::getOrCreateDatabase(const String& path)
 {
-    return m_databasePool->getOrCreate(path);
+    return m_databasePool.getOrCreate(path);
 }
 
 RecyclableDatabase Core::getExistingDatabase(const String& path)
 {
-    return m_databasePool->get(path);
+    return m_databasePool.get(path);
 }
 
 RecyclableDatabase Core::getExistingDatabase(const Tag& tag)
 {
-    return m_databasePool->get(tag);
+    return m_databasePool.get(tag);
 }
 
 void Core::purge()
 {
-    m_databasePool->purge();
+    m_databasePool.purge();
 }
 
 void Core::onDatabaseCreated(Database* database)
 {
     WCTInnerAssert(database != nullptr);
     database->setConfigs(m_configs);
+}
+
+bool Core::isDatabaseCorrupted(const String& path)
+{
+    return m_corruptionQueue->containsDatabase(path);
+}
+
+bool Core::onDatabaseCorrupted(const String& path)
+{
+    return m_databasePool.get(path) != nullptr;
+}
+
+void Core::databaseShouldRecover(const String& path, uint32_t corruptedIdentifier)
+{
+    RecyclableDatabase database = m_databasePool.get(path);
+    if (database == nullptr || !database->containsRecoverScheme()) {
+        return;
+    }
+    database->blockade();
+    do {
+        bool succeed;
+        uint32_t identifier;
+        std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
+        if (!succeed || identifier != corruptedIdentifier) {
+            break;
+        }
+        database->recover();
+    } while (false);
+    database->unblockade();
+}
+
+bool Core::databaseShouldCheckpoint(const String& path, const StatementPragma& checkpointStatement)
+{
+    RecyclableDatabase database = m_databasePool.get(path);
+    if (database == nullptr) {
+        return true;
+    }
+    return database->execute(checkpointStatement);
+}
+
+bool Core::databaseShouldBackup(const String& path)
+{
+    RecyclableDatabase database = m_databasePool.get(path);
+    if (database == nullptr) {
+        return true;
+    }
+    return database->backup();
 }
 
 const std::shared_ptr<Configs>& Core::configs()
@@ -182,7 +234,7 @@ void Core::preprocessError(const Error& error, Error::Infos& infos)
     if (iter == strings.end()) {
         return;
     }
-    auto database = m_databasePool->get(iter->second);
+    auto database = m_databasePool.get(iter->second);
     if (database == nullptr) {
         return;
     }

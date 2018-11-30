@@ -37,7 +37,6 @@ Database::Database(const String &path)
 , m_tag(Tag::invalid())
 , m_recoveryMode(RecoveryMode::Custom)
 , m_recoverNotification(nullptr)
-, m_identifier(0)
 {
 }
 
@@ -69,12 +68,6 @@ bool Database::isOpened() const
     return !isDrained();
 }
 
-uint32_t Database::getIdentifier() const
-{
-    SharedLockGuard memoryGuard(m_memory);
-    return m_identifier;
-}
-
 #pragma mark - Handle
 RecyclableHandle Database::flowOut()
 {
@@ -83,7 +76,6 @@ RecyclableHandle Database::flowOut()
         {
             SharedLockGuard concurrencyGuard(m_concurrency);
             if (aliveHandleCount() > 0) {
-                checkIdentifier();
                 handle = HandlePool::flowOut();
                 break;
             }
@@ -111,11 +103,6 @@ RecyclableHandle Database::flowOut()
             break;
         }
         if (!exists && !FileManager::createFile(path)) {
-            assignWithSharedThreadedError();
-            break;
-        }
-        std::tie(succeed, m_identifier) = FileManager::getFileIdentifier(path);
-        if (!succeed) {
             assignWithSharedThreadedError();
             break;
         }
@@ -147,20 +134,6 @@ RecyclableHandle Database::getHandle()
         return iter->second;
     }
     return flowOut();
-}
-
-void Database::checkIdentifier() const
-{
-    if (Console::debuggable()) {
-        // run only in debuggable mode since it's expensive
-        WCTInnerAssert(m_identifier != 0);
-        bool succeed;
-        uint32_t identifier;
-        std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
-        WCTRemedialAssert(succeed && identifier == m_identifier,
-                          "Database should be closed before it's removed.",
-                          ;);
-    }
 }
 
 bool Database::execute(const Statement &statement)

@@ -66,7 +66,10 @@
 
 namespace WCDB {
 
-class Core final : public DatabasePoolEvent {
+class Core final : public DatabasePoolEvent,
+                   public CorruptionEvent,
+                   public CheckpointEvent,
+                   public BackupEvent {
 public:
     static Core* shared();
     ~Core();
@@ -74,6 +77,8 @@ public:
     RecyclableDatabase getOrCreateDatabase(const String& path);
     RecyclableDatabase getExistingDatabase(const String& path);
     RecyclableDatabase getExistingDatabase(const Tag& tag);
+
+    bool isDatabaseCorrupted(const String& path);
 
     void purge();
 
@@ -128,9 +133,14 @@ protected:
     static void handleLog(void* unused, int code, const char* message);
     void preprocessError(const Error& error, Error::Infos& infos);
     void onDatabaseCreated(Database* database) override final;
+    bool onDatabaseCorrupted(const String& path) override final;
+    void databaseShouldRecover(const String& path, uint32_t identifier) override final;
+    bool databaseShouldCheckpoint(const String& path,
+                                  const StatementPragma& checkpointStatement) override final;
+    bool databaseShouldBackup(const String& path) override final;
 
     // The order of member variables here is important.
-    std::shared_ptr<DatabasePool> m_databasePool;
+    DatabasePool m_databasePool;
     std::shared_ptr<FTS::Modules> m_modules;
 
     std::shared_ptr<CorruptionQueue> m_corruptionQueue;

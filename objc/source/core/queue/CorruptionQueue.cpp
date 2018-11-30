@@ -20,17 +20,18 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/CorruptionQueue.hpp>
-#include <WCDB/DatabasePool.hpp>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Notifier.hpp>
 
 namespace WCDB {
 
-CorruptionQueue::CorruptionQueue(const String& name,
-                                 const std::shared_ptr<DatabasePool>& databasePool)
-: AsyncQueue(name), m_databasePool(databasePool)
+CorruptionEvent::~CorruptionEvent()
 {
-    WCTInnerAssert(m_databasePool != nullptr);
+}
+
+CorruptionQueue::CorruptionQueue(const String& name)
+: AsyncQueue(name), m_event(nullptr)
+{
     Notifier::shared()->setNotification(
     0, name, std::bind(&CorruptionQueue::handleError, this, std::placeholders::_1));
 }
@@ -40,9 +41,20 @@ CorruptionQueue::~CorruptionQueue()
     Notifier::shared()->unsetNotification(name);
 }
 
+void CorruptionQueue::setEvent(CorruptionEvent* event)
+{
+    m_event = event;
+}
+
+bool CorruptionQueue::containsDatabase(const String& database) const
+{
+    std::lock_guard<std::mutex> lockGuard(m_mutex);
+    return m_corrupted.find(database) != m_corrupted.end();
+}
+
 void CorruptionQueue::handleError(const Error& error)
 {
-    if (!error.isCorruption()) {
+    if (m_event == nullptr || !error.isCorruption()) {
         return;
     }
     const auto& infos = error.infos.getStrings();
@@ -50,8 +62,7 @@ void CorruptionQueue::handleError(const Error& error)
     if (iter == infos.end()) {
         return;
     }
-    auto database = m_databasePool->get(iter->second);
-    if (database == nullptr || !database->containsRecoverScheme()) {
+    if (!m_event->onDatabaseCorrupted(iter->second)) {
         return;
     }
     bool succeed;
@@ -87,23 +98,7 @@ void CorruptionQueue::loop()
             path = iter->first;
             corruptedIdentifier = iter->second;
         }
-        auto database = m_databasePool->get(path);
-        if (database != nullptr) {
-            database->blockade();
-            do {
-                bool succeed;
-                uint32_t identifier;
-                std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
-                if (!succeed) {
-                    break;
-                }
-                if (identifier != corruptedIdentifier) {
-                    break;
-                }
-                database->recover();
-            } while (false);
-            database->unblockade();
-        }
+        m_event->databaseShouldRecover(path, corruptedIdentifier);
         std::lock_guard<std::mutex> lockGuard(m_mutex);
         m_corrupted.erase(path);
     }

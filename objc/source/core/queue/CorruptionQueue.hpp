@@ -28,21 +28,33 @@
 
 namespace WCDB {
 
-class DatabasePool;
+class CorruptionEvent {
+public:
+    virtual ~CorruptionEvent();
+
+protected:
+    virtual bool onDatabaseCorrupted(const String& path) = 0; // return false to skip this path
+    virtual void databaseShouldRecover(const String& path, uint32_t identifier) = 0;
+    friend class CorruptionQueue;
+};
 
 class CorruptionQueue final : public AsyncQueue {
 public:
-    CorruptionQueue(const String& name, const std::shared_ptr<DatabasePool>& databasePool);
+    CorruptionQueue(const String& name);
     ~CorruptionQueue();
+
+    void setEvent(CorruptionEvent* event);
+
+    bool containsDatabase(const String& database) const;
 
 protected:
     void handleError(const Error& error);
 
     void loop() override final;
 
-    std::shared_ptr<DatabasePool> m_databasePool;
+    CorruptionEvent* m_event;
 
-    std::mutex m_mutex;
+    mutable std::mutex m_mutex;
     std::condition_variable m_cond;
 
     // path -> identifier
