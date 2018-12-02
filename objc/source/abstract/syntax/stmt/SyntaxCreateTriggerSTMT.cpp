@@ -69,7 +69,10 @@ String CreateTriggerSTMT::getDescription() const
     if (ifNotExists) {
         stream << "IF NOT EXISTS ";
     }
-    stream << schema << "." << trigger << space;
+    if (!temp) {
+        stream << schema << "."
+    }
+    stream << trigger << space;
     if (specifiedTiming) {
         stream << timing << space;
     }

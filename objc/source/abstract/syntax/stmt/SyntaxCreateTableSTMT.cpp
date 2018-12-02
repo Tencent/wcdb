@@ -42,7 +42,10 @@ String CreateTableSTMT::getDescription() const
     if (ifNotExists) {
         stream << "IF NOT EXISTS ";
     }
-    stream << schema << "." << table;
+    if (!temp) {
+        stream << schema << ".";
+    }
+    stream << table;
     switch (switcher) {
     case Switch::ColumnDefs:
         stream << "(" << columnDefs;
