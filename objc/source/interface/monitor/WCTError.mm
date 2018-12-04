@@ -20,6 +20,7 @@
 
 #import <WCDB/FileManager.hpp>
 #import <WCDB/Notifier.hpp>
+#import <WCDB/WCTConvertible.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTError.h>
 
@@ -31,6 +32,23 @@ NSErrorUserInfoKey const WCTErrorKeyExtendedCode = @"ExtCode";
 NSErrorUserInfoKey const WCTErrorKeySource = @"Source";
 
 @implementation WCTError
+
++ (void)initialize
+{
+    if (self.class == WCTError.class) {
+        WCDB::Notifier::shared()->setNotificationForPreprocessing("com.Tencent.WCDB.Notifier.PreprocessPath", [](const WCDB::Error &error, WCDB::Error::Infos &infos) {
+            const auto &strings = error.infos.getStrings();
+            auto iter = strings.find(WCTErrorKeyPath);
+            if (iter == strings.end()) {
+                return;
+            }
+            NSString *path = [NSString stringWithUTF8String:iter->second.c_str()].stringByAbbreviatingWithTildeInPath;
+            if (path.length > 0) {
+                infos.set(WCTErrorKeyPath, path.UTF8String);
+            }
+        });
+    }
+}
 
 + (NSErrorDomain)domain
 {
