@@ -196,8 +196,7 @@ ThreadLocal<Database::ThreadedHandles> &Database::threadedHandles()
 void Database::markHandleAsThreaded(const Database *database, const RecyclableHandle &handle)
 {
     ThreadedHandles *threadedHandles = Database::threadedHandles().getOrCreate();
-    auto iter = threadedHandles->find(database);
-    WCTInnerAssert(iter == threadedHandles->end());
+    WCTInnerAssert(threadedHandles->find(database) == threadedHandles->end());
     threadedHandles->emplace(database, handle);
 }
 

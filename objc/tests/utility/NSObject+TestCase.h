@@ -31,9 +31,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSNumber (TestCase)
 
-+ (NSInteger)randomInt64;
++ (uint64_t)randomUInt64;
 
-+ (int)randomInt32;
++ (int64_t)randomInt64;
+
++ (int32_t)randomInt32;
 
 + (uint32_t)randomUInt32;
 

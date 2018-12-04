@@ -59,7 +59,7 @@
 - (NSNumber*)getFileSize:(NSString*)path
 {
     NSError* error = nil;
-    NSUInteger fileSize = [[self.fileManager attributesOfItemAtPath:path error:&error] fileSize];
+    unsigned long long fileSize = [[self.fileManager attributesOfItemAtPath:path error:&error] fileSize];
     if (error) {
         return nil;
     }

@@ -366,7 +366,7 @@
     case WCDB::ColumnType::Integer32:
         return [NSNumber numberWithInt:_handle->getInteger32(index)];
     case WCDB::ColumnType::Integer64:
-        return [NSNumber numberWithInteger:_handle->getInteger64(index)];
+        return [NSNumber numberWithLongLong:_handle->getInteger64(index)];
     default:
         return [NSNumber numberWithDouble:_handle->getDouble(index)];
     }

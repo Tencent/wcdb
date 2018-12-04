@@ -217,8 +217,8 @@ RecyclableHandle HandlePool::flowOut()
                 failed = true;
                 break;
             }
-            auto result = m_handles.emplace(configuredHandle);
-            WCTInnerAssert(result.second);
+            WCTInnerAssert(m_handles.find(configuredHandle) == m_handles.end());
+            m_handles.emplace(configuredHandle);
         }
     } while (false);
     if (failed) {
@@ -250,8 +250,8 @@ void HandlePool::flowBack(const std::shared_ptr<ConfiguredHandle> &configuredHan
         } else {
             // drop it
             configuredHandle->get()->close();
-            size_t erased = m_handles.erase(configuredHandle);
-            WCTInnerAssert(erased == 1);
+            WCTInnerAssert(m_handles.find(configuredHandle) != m_handles.end());
+            m_handles.erase(configuredHandle);
         }
     }
     m_concurrency.unlockShared();
