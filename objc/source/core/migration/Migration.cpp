@@ -35,33 +35,13 @@ bool Migration::isInitialized() const
     return m_initialized;
 }
 
-void Migration::onStateChanged()
-{
-    m_initialized = m_tableFilter == nullptr && m_userInfos.empty();
-    m_holder.clear();
-    m_migrating.clear();
-}
-
 #pragma mark - Filter
 void Migration::filterTable(const TableFilter& tableFilter)
 {
     m_tableFilter = tableFilter;
-    onStateChanged();
-}
-
-#pragma mark - UserInfo
-void Migration::addUserInfo(const MigrationUserInfo& info)
-{
-    WCTRemedialAssert(
-    !info.shouldMigrate(), "Adding a unspecified migration info makes no sense.", return;);
-    auto iter = m_userInfos.emplace(info.getMigratedTable(), info);
-    WCTRemedialAssert(
-    iter.second,
-    String::formatted("Migration user info: [%s] is duplicated with [%s].",
-                      info.getDebugDescription().c_str(),
-                      iter.first->second.getDebugDescription().c_str()),
-    ;);
-    onStateChanged();
+    m_initialized = (m_tableFilter == nullptr);
+    m_holder.clear();
+    m_migrating.clear();
 }
 
 #pragma mark - Infos
@@ -81,42 +61,47 @@ bool Migration::initialize(Initializer& initializer)
     bool succeed;
 
     std::set<String> tables;
-    std::tie(succeed, tables) = initializer.getAllExistingTables();
+    std::tie(succeed, tables) = initializer.getTables();
     if (!succeed) {
         return false;
     }
-    std::map<String, const MigrationUserInfo> uninitialized = m_userInfos;
-    if (m_tableFilter) {
-        for (const auto& table : tables) {
-            MigrationUserInfo userInfo(table);
-            if (uninitialized.find(userInfo.getMigratedTable()) == uninitialized.end()) {
-                // It's already set manually.
-                continue;
-            }
-            m_tableFilter(userInfo);
-            if (userInfo.shouldMigrate()) {
-                uninitialized.emplace(userInfo.getMigratedTable(), userInfo);
-            }
+    std::list<const MigrationUserInfo> userInfos;
+    WCTInnerAssert(m_tableFilter != nullptr);
+    for (const auto& table : tables) {
+        MigrationUserInfo userInfo(table);
+        m_tableFilter(userInfo);
+        if (userInfo.shouldMigrate()) {
+            userInfos.push_back(userInfo);
         }
     }
 
     {
-        // check if some of the infos contain same origin table
+        // check sanity
+        // 1. duplicated {origin table, origin database} is not allowed.
+        // 2. origin table == migrated table && origin database == current database is not allowed.
+        String databasePath = initializer.getDatabasePath();
         std::map<std::pair<String, String>, const MigrationUserInfo*> origins;
-        for (const auto& iter : uninitialized) {
-            const MigrationUserInfo& userInfo = iter.second;
+        for (const auto& userInfo : userInfos) {
+            if (userInfo.getOriginTable() == userInfo.getMigratedTable()
+                && (userInfo.getOriginDatabase() == databasePath
+                    || userInfo.isSameDatabaseMigration())) {
+                Error error;
+                error.setCode(Error::Code::Misuse);
+                error.message = "Migrating to same table makes no sense.";
+                error.infos.set("Info", userInfo.getDebugDescription());
+                initializer.setError(error);
+                return false;
+            }
+
             auto key
             = std::make_pair(userInfo.getOriginDatabase(), userInfo.getOriginTable());
-            auto origin = origins.find(key);
-            if (origin != origins.end()) {
-                WCTInnerAssert(origin->second != nullptr);
+            auto iter = origins.find(key);
+            if (iter != origins.end()) {
                 Error error;
                 error.setCode(Error::Code::Misuse);
                 error.message = "Duplicated origin table and database are found";
-                error.infos.set("Migrated_1", userInfo.getMigratedTable());
-                error.infos.set("Migrated_2", origin->second->getMigratedTable());
-                error.infos.set("OriginTable", userInfo.getOriginTable());
-                error.infos.set("OriginDatabase", userInfo.getOriginDatabase());
+                error.infos.set("Info1", userInfo.getDebugDescription());
+                error.infos.set("Info2", iter->second->getDebugDescription());
                 initializer.setError(error);
                 return false;
             }
@@ -124,12 +109,11 @@ bool Migration::initialize(Initializer& initializer)
         }
     }
 
-    for (const auto& iter : uninitialized) {
-        const MigrationUserInfo& userInfo = iter.second;
+    for (const auto& userInfo : userInfos) {
         WCTInnerAssert(userInfo.shouldMigrate());
 
         std::set<String> columns;
-        std::tie(succeed, columns) = initializer.getAllColumns(
+        std::tie(succeed, columns) = initializer.getColumns(
         userInfo.getOriginTable(), userInfo.getOriginDatabase());
         if (!succeed) {
             return false;

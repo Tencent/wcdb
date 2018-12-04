@@ -76,6 +76,11 @@ public:
      */
     static const StatementDetach getStatementForDetachingSchema(const Schema& schema);
 
+    /*
+     PRAGMA main.database_list
+     */
+    static const StatementPragma getStatementForSelectingDatabaseList();
+
 protected:
     // WCDBMigration_ + hash([originDatabase])
     Schema m_schemaForOriginDatabase;
@@ -89,7 +94,7 @@ public:
     const String& getUnionedView() const;
 
     /*
-     CREATE VIEW IF NOT EXISTS [unionedView]
+     CREATE TEMP VIEW IF NOT EXISTS [unionedView]
      SELECT rowid, [columns]
      FROM [schemaForOriginDatabase].[originTable]
      UNION/UNION ALL
@@ -103,6 +108,13 @@ public:
      */
     static const StatementDropView
     getStatementForDroppingUnionedView(const String& unionedView);
+
+    /*
+     SELECT name
+     FROM temp.sqlite_master
+     WHERE type == "view" AND name LIKE "WCDBUnioned_%"
+     */
+    static const StatementSelect getStatementForSelectingUnionedView();
 
 protected:
     // WCDBUnioned_ + [migratedTable] + _ + [originTable]

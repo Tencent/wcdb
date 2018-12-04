@@ -65,7 +65,7 @@ void Database::close(const ClosedCallback &onClosed)
 
 bool Database::isOpened() const
 {
-    return !isDrained();
+    return aliveHandleCount() > 0;
 }
 
 #pragma mark - Handle
@@ -75,7 +75,7 @@ RecyclableHandle Database::flowOut()
     do {
         {
             SharedLockGuard concurrencyGuard(m_concurrency);
-            if (aliveHandleCount() > 0) {
+            if (isOpened()) {
                 handle = HandlePool::flowOut();
                 break;
             }
@@ -84,7 +84,7 @@ RecyclableHandle Database::flowOut()
         // Blocked initialization
         LockGuard concurrencyGuard(m_concurrency);
         LockGuard memoryGuard(m_memory);
-        if (aliveHandleCount() > 0) {
+        if (isOpened()) {
             // retry
             continue;
         }
@@ -115,7 +115,7 @@ RecyclableHandle Database::flowOut()
                 break;
             }
         }
-        WCTInnerAssert(aliveHandleCount() == 0);
+        WCTInnerAssert(!isOpened());
         // acquire one handle to make pool not empty.
         if (HandlePool::flowOut() == nullptr) {
             break;
@@ -601,21 +601,11 @@ bool Database::rebindMigration(Handle *handle)
     return static_cast<MigrationHandle *>(handle)->rebindMigration(migratingInfos);
 }
 
-void Database::addMigrationInfo(const MigrationUserInfo &userInfo)
-{
-    LockGuard memoryGuard(m_memory);
-    WCTRemedialAssert(aliveHandleCount() == 0,
-                      "Migration method must be set before the very first operation.",
-                      return;);
-    m_migration.addUserInfo(userInfo);
-}
-
 void Database::filterMigration(const MigrationTableFilter &filter)
 {
     LockGuard memoryGuard(m_memory);
-    WCTRemedialAssert(aliveHandleCount() == 0,
-                      "Migration user info must be set before the very first operation.",
-                      return;);
+    WCTRemedialAssert(
+    !isOpened(), "Migration user info must be set before the very first operation.", return;);
     m_migration.filterTable(filter);
 }
 

@@ -28,6 +28,7 @@
 
 namespace WCDB {
 
+// There are two ways to set up Migration. Set the user info for those existing tables or set a filter.
 class Migration final {
 #pragma mark - Initialize
 public:
@@ -36,16 +37,18 @@ public:
     class Initializer {
     public:
         virtual ~Initializer();
-        virtual const Error& getError() const = 0;
 
-    protected:
-        friend class Migration;
-        virtual std::pair<bool, std::set<String>> getAllExistingTables() = 0;
-        // When succeed, if the empty columns means that table is already migrated.
+        virtual const String& getDatabasePath() const = 0;
+
+        virtual std::pair<bool, std::set<String>> getTables() = 0;
+        // When succeed, the empty column means that table does not exist.
         virtual std::pair<bool, std::set<String>>
-        getAllColumns(const String& table, const String& database) = 0;
+        getColumns(const String& table, const String& database) = 0;
+
         virtual void setError(const Error& error) = 0;
+        virtual const Error& getError() const = 0;
     };
+    // Resolve user infos and get the column names of origin table
     bool initialize(Initializer& initializer);
     bool isInitialized() const;
 
@@ -60,13 +63,6 @@ public:
 
 protected:
     TableFilter m_tableFilter;
-
-#pragma mark - UserInfos
-public:
-    void addUserInfo(const MigrationUserInfo& info);
-
-protected:
-    std::map<String, const MigrationUserInfo> m_userInfos;
 
 #pragma mark - Infos
 public:

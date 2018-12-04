@@ -72,7 +72,6 @@ public:
 
     typedef std::function<void(void)> DrainedCallback;
     void drain(const HandlePool::DrainedCallback &onDrained);
-    bool isDrained() const;
 
     static int hardwareConcurrency();
     static int maxConcurrency();

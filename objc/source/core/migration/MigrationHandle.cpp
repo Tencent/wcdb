@@ -26,14 +26,7 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-MigrationHandle::MigrationHandle(const String& path)
-: Handle(path)
-, m_statementForGettingDatabaseList(StatementPragma().pragma(Pragma::databaseList()))
-, m_statementForGettingTempViews(
-  StatementSelect()
-  .select(Column("name"))
-  .from(TableOrSubquery("sqlite_master").schema(Schema::temp()))
-  .where(Column("type") == "view"))
+MigrationHandle::MigrationHandle(const String& path) : Handle(path)
 {
 }
 
@@ -53,21 +46,20 @@ bool MigrationHandle::rebindMigration(const std::set<const MigrationInfo*>& migr
 
     std::set<String> createdViews;
     std::tie(succeed, createdViews)
-    = getUnorderedValues(m_statementForGettingTempViews, 0);
+    = getUnorderedValues(MigrationInfo::getStatementForSelectingUnionedView(), 0);
     if (!succeed) {
         return false;
     }
     for (const auto& createdView : createdViews) {
-        if (createdView.hasPrefix(MigrationInfo::getUnionedViewPrefix())) {
-            auto iter = infosToCreateView.find(createdView);
-            if (iter != infosToCreateView.end()) {
-                // it is already created
-                infosToCreateView.erase(iter);
-            } else {
-                // it is no longer needed
-                if (!execute(MigrationInfo::getStatementForDroppingUnionedView(createdView))) {
-                    return false;
-                }
+        WCTInnerAssert(createdView.hasPrefix(MigrationInfo::getUnionedViewPrefix()));
+        auto iter = infosToCreateView.find(createdView);
+        if (iter != infosToCreateView.end()) {
+            // it is already created
+            infosToCreateView.erase(iter);
+        } else {
+            // it is no longer needed
+            if (!execute(MigrationInfo::getStatementForDroppingUnionedView(createdView))) {
+                return false;
             }
         }
     }
@@ -90,7 +82,7 @@ bool MigrationHandle::rebindMigration(const std::set<const MigrationInfo*>& migr
 
     std::set<String> attachedSchemas;
     std::tie(succeed, attachedSchemas)
-    = getUnorderedValues(m_statementForGettingDatabaseList, 1);
+    = getUnorderedValues(MigrationInfo::getStatementForSelectingDatabaseList(), 1);
     if (!succeed) {
         return false;
     }

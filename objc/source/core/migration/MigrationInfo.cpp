@@ -121,11 +121,8 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo, const std::set<S
 
         select.select(resultColumns).from(TableOrSubquery(m_originTable).schema(m_schemaForOriginDatabase));
 
-        m_statementForCreatingUnionedView = StatementCreateView()
-                                            .createView(m_unionedView)
-                                            .schema(Schema::main())
-                                            .ifNotExists()
-                                            .as(select);
+        m_statementForCreatingUnionedView
+        = StatementCreateView().createView(m_unionedView).temp().ifNotExists().as(select);
     }
 
     // Migrate
@@ -198,6 +195,11 @@ const StatementDetach MigrationInfo::getStatementForDetachingSchema(const Schema
     return StatementDetach().detach(schema);
 }
 
+const StatementPragma MigrationInfo::getStatementForSelectingDatabaseList()
+{
+    return StatementPragma().pragma(Pragma::databaseList());
+}
+
 #pragma mark - View
 const String& MigrationInfo::getUnionedViewPrefix()
 {
@@ -215,6 +217,17 @@ MigrationInfo::getStatementForDroppingUnionedView(const String& unionedView)
 {
     WCTInnerAssert(unionedView.hasPrefix(getUnionedViewPrefix()));
     return StatementDropView().dropView(unionedView).schema(Schema::temp()).ifExists();
+}
+
+const StatementSelect MigrationInfo::getStatementForSelectingUnionedView()
+{
+    Column name("name");
+    Column type("type");
+    String pattern = String::formatted("%s%%", getUnionedViewPrefix().c_str());
+    return StatementSelect()
+    .select(name)
+    .from(TableOrSubquery("sqlite_master").schema(Schema::temp()))
+    .where(type == "view" && name.like(pattern));
 }
 
 #pragma mark - Migrate

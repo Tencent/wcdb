@@ -23,12 +23,17 @@
 
 namespace WCDB {
 
+const String& MigrationInitializerHandle::getDatabasePath() const
+{
+    return Handle::path;
+}
+
 const Error& MigrationInitializerHandle::getError() const
 {
     return Handle::getError();
 }
 
-std::pair<bool, std::set<String>> MigrationInitializerHandle::getAllExistingTables()
+std::pair<bool, std::set<String>> MigrationInitializerHandle::getTables()
 {
     WCTInnerAssert(!isPrepared());
     WCTInnerAssert(!isInTransaction());
@@ -43,7 +48,7 @@ std::pair<bool, std::set<String>> MigrationInitializerHandle::getAllExistingTabl
 }
 
 std::pair<bool, std::set<String>>
-MigrationInitializerHandle::getAllColumns(const String& table, const String& database)
+MigrationInitializerHandle::getColumns(const String& table, const String& database)
 {
     WCTInnerAssert(!isPrepared());
     WCTInnerAssert(!isInTransaction());

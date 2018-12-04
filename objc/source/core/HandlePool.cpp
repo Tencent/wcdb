@@ -132,13 +132,6 @@ void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
     }
 }
 
-bool HandlePool::isDrained() const
-{
-    SharedLockGuard concurrencyGuard(m_concurrency);
-    SharedLockGuard memoryGuard(m_memory);
-    return m_handles.size() == 0;
-}
-
 #pragma mark - Handle
 void HandlePool::purge()
 {

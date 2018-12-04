@@ -36,8 +36,6 @@ public:
     bool rebindMigration(const std::set<const MigrationInfo *> &migratingInfos);
 
 protected:
-    const StatementPragma m_statementForGettingDatabaseList;
-    const StatementSelect m_statementForGettingTempViews;
     std::set<const MigrationInfo *> m_migrating;
 
 #pragma mark - Override
