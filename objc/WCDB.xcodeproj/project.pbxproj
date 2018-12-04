@@ -824,6 +824,22 @@
 		23F70FC620A0618100CCE3CD /* Configs.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FC320A0618100CCE3CD /* Configs.hpp */; };
 		23F70FD620A07CEC00CCE3CD /* CustomConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F70FD420A07CEC00CCE3CD /* CustomConfig.cpp */; };
 		23F70FD820A07CEC00CCE3CD /* CustomConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FD520A07CEC00CCE3CD /* CustomConfig.hpp */; };
+		23FC43CB21B6631200FA1A0F /* FileTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386563C219C009E00F7F6D2 /* FileTests.mm */; };
+		23FC43CC21B6631200FA1A0F /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEB182199A5A800DC3706 /* CRUDTestCase.mm */; };
+		23FC43CD21B6631200FA1A0F /* MemoryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386563E219C00A500F7F6D2 /* MemoryTests.mm */; };
+		23FC43CE21B6631200FA1A0F /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
+		23FC43CF21B6631200FA1A0F /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23846FD421AFF215005B868F /* AllTypesObject.mm */; };
+		23FC43D021B6631200FA1A0F /* DatabaseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23739DC7219AEDE700A043BF /* DatabaseTests.mm */; };
+		23FC43D121B6631200FA1A0F /* PreInsertedCRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23739DBB219AD0C500A043BF /* PreInsertedCRUDTestCase.mm */; };
+		23FC43D221B6631200FA1A0F /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEAE32199A16700DC3706 /* TestCaseObject.mm */; };
+		23FC43D321B6631200FA1A0F /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
+		23FC43D421B6631200FA1A0F /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
+		23FC43D521B6631200FA1A0F /* SingleDatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A55219298680098797F /* SingleDatabaseTestCase.mm */; };
+		23FC43D621B6631200FA1A0F /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A50219298250098797F /* TestCase.mm */; };
+		23FC43D821B6631200FA1A0F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
+		23FC43D921B6631200FA1A0F /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
+		23FC43DC21B6631200FA1A0F /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		23FC43E821B6644B00FA1A0F /* Benchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FC43E621B6644B00FA1A0F /* Benchmark.mm */; };
 		23FEC463206B3032001E7A3B /* WCTConvenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 23FEC461206B3032001E7A3B /* WCTConvenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
@@ -996,6 +1012,20 @@
 			remoteGlobalIDString = 23F5BBCF20887FAB000CCD37;
 			remoteInfo = "sqlcipher static";
 		};
+		23FC43C721B6631200FA1A0F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239326601E836D7300D677CC;
+			remoteInfo = WCDB;
+		};
+		23FC43C921B6631200FA1A0F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239E8A6F2160A5B100BCB308;
+			remoteInfo = Host;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1116,6 +1146,17 @@
 			dstSubfolderSpec = 10;
 			files = (
 				239E8AB02160B71200BCB308 /* WCDB.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		23FC43DB21B6631200FA1A0F /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				23FC43DC21B6631200FA1A0F /* WCDB.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1892,6 +1933,9 @@
 		23F70FC320A0618100CCE3CD /* Configs.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Configs.hpp; sourceTree = "<group>"; };
 		23F70FD420A07CEC00CCE3CD /* CustomConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CustomConfig.cpp; sourceTree = "<group>"; };
 		23F70FD520A07CEC00CCE3CD /* CustomConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CustomConfig.hpp; sourceTree = "<group>"; };
+		23FC43E121B6631200FA1A0F /* Benchmark.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Benchmark.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		23FC43E621B6644B00FA1A0F /* Benchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Benchmark.mm; sourceTree = "<group>"; };
+		23FC43E721B6644B00FA1A0F /* Benchmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Benchmark.h; sourceTree = "<group>"; };
 		23FEC461206B3032001E7A3B /* WCTConvenient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTConvenient.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2010,6 +2054,15 @@
 			files = (
 				239E8AB42160B7D200BCB308 /* Foundation.framework in Frameworks */,
 				239E8AAE2160B70000BCB308 /* WCDB.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		23FC43D721B6631200FA1A0F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				23FC43D821B6631200FA1A0F /* Foundation.framework in Frameworks */,
+				23FC43D921B6631200FA1A0F /* WCDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2875,6 +2928,7 @@
 		239E8A8C2160A62F00BCB308 /* tests */ = {
 			isa = PBXGroup;
 			children = (
+				23FC43E521B6644B00FA1A0F /* benchmark */,
 				231FEAE02199A10000DC3706 /* advance */,
 				231FEADB2199A0FE00DC3706 /* basic */,
 				231FEADA2199A0FE00DC3706 /* config */,
@@ -2959,6 +3013,7 @@
 				231FEA9F21999F7800DC3706 /* Repair tests.xctest */,
 				231FEABB21999F8100DC3706 /* FTS tests.xctest */,
 				231FEAD721999F8D00DC3706 /* Migration tests.xctest */,
+				23FC43E121B6631200FA1A0F /* Benchmark.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3352,6 +3407,15 @@
 				23DD772F20D13E8E00E9B451 /* BackupConfig.hpp */,
 			);
 			path = config;
+			sourceTree = "<group>";
+		};
+		23FC43E521B6644B00FA1A0F /* benchmark */ = {
+			isa = PBXGroup;
+			children = (
+				23FC43E621B6644B00FA1A0F /* Benchmark.mm */,
+				23FC43E721B6644B00FA1A0F /* Benchmark.h */,
+			);
+			path = benchmark;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -3930,6 +3994,26 @@
 			productReference = 239E8A9D2160B37600BCB308 /* WINQ tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		23FC43C521B6631200FA1A0F /* Benchmark */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 23FC43DD21B6631200FA1A0F /* Build configuration list for PBXNativeTarget "Benchmark" */;
+			buildPhases = (
+				23FC43CA21B6631200FA1A0F /* Sources */,
+				23FC43D721B6631200FA1A0F /* Frameworks */,
+				23FC43DA21B6631200FA1A0F /* Resources */,
+				23FC43DB21B6631200FA1A0F /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				23FC43C621B6631200FA1A0F /* PBXTargetDependency */,
+				23FC43C821B6631200FA1A0F /* PBXTargetDependency */,
+			);
+			name = Benchmark;
+			productName = "WINQ tests";
+			productReference = 23FC43E121B6631200FA1A0F /* Benchmark.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -3993,6 +4077,10 @@
 						DevelopmentTeam = TCFDHFMX6R;
 						ProvisioningStyle = Automatic;
 					};
+					23FC43C521B6631200FA1A0F = {
+						DevelopmentTeam = TCFDHFMX6R;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = 23B5F75E1E1111C100E58396 /* Build configuration list for PBXProject "WCDB" */;
@@ -4027,6 +4115,7 @@
 				231FEA8521999F7800DC3706 /* Repair tests */,
 				231FEAA121999F8100DC3706 /* FTS tests */,
 				231FEABD21999F8D00DC3706 /* Migration tests */,
+				23FC43C521B6631200FA1A0F /* Benchmark */,
 			);
 		};
 /* End PBXProject section */
@@ -4127,6 +4216,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		239E8A9B2160B37600BCB308 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		23FC43DA21B6631200FA1A0F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -4701,6 +4797,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		23FC43CA21B6631200FA1A0F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				23FC43CB21B6631200FA1A0F /* FileTests.mm in Sources */,
+				23FC43CC21B6631200FA1A0F /* CRUDTestCase.mm in Sources */,
+				23FC43CD21B6631200FA1A0F /* MemoryTests.mm in Sources */,
+				23FC43CE21B6631200FA1A0F /* SingleTableTestCase.mm in Sources */,
+				23FC43CF21B6631200FA1A0F /* AllTypesObject.mm in Sources */,
+				23FC43D021B6631200FA1A0F /* DatabaseTests.mm in Sources */,
+				23FC43D121B6631200FA1A0F /* PreInsertedCRUDTestCase.mm in Sources */,
+				23FC43E821B6644B00FA1A0F /* Benchmark.mm in Sources */,
+				23FC43D221B6631200FA1A0F /* TestCaseObject.mm in Sources */,
+				23FC43D321B6631200FA1A0F /* NSObject+TestCase.mm in Sources */,
+				23FC43D421B6631200FA1A0F /* Console.mm in Sources */,
+				23FC43D521B6631200FA1A0F /* SingleDatabaseTestCase.mm in Sources */,
+				23FC43D621B6631200FA1A0F /* TestCase.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -4818,6 +4934,16 @@
 			isa = PBXTargetDependency;
 			name = "sqlcipher static";
 			targetProxy = 23F5BE0D20887FFF000CCD37 /* PBXContainerItemProxy */;
+		};
+		23FC43C621B6631200FA1A0F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239326601E836D7300D677CC /* WCDB */;
+			targetProxy = 23FC43C721B6631200FA1A0F /* PBXContainerItemProxy */;
+		};
+		23FC43C821B6631200FA1A0F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239E8A6F2160A5B100BCB308 /* Host */;
+			targetProxy = 23FC43C921B6631200FA1A0F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -6120,7 +6246,6 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = NO;
-				"ENABLE_BITCODE[sdk=iphoneos*]" = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -6237,6 +6362,95 @@
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
+		};
+		23FC43DE21B6631200FA1A0F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.Benchmark;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+			};
+			name = Debug;
+		};
+		23FC43DF21B6631200FA1A0F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.Benchmark;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		23FC43E021B6631200FA1A0F /* WithoutBitcode */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TCFDHFMX6R;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.Benchmark;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = WithoutBitcode;
 		};
 /* End XCBuildConfiguration section */
 
@@ -6377,6 +6591,16 @@
 				23B5F7681E1111C100E58396 /* Debug */,
 				23B5F7691E1111C100E58396 /* Release */,
 				23A2C8BF208CDC1500C6BB6B /* WithoutBitcode */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		23FC43DD21B6631200FA1A0F /* Build configuration list for PBXNativeTarget "Benchmark" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				23FC43DE21B6631200FA1A0F /* Debug */,
+				23FC43DF21B6631200FA1A0F /* Release */,
+				23FC43E021B6631200FA1A0F /* WithoutBitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
