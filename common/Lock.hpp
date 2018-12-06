@@ -37,6 +37,7 @@ public:
     virtual void unlock() = 0;
 };
 
+// TODO: use Lock instead of SpinLock for single-core device.
 class SpinLock final : public Lockable {
 public:
     SpinLock();
