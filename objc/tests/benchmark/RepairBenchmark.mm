@@ -44,7 +44,7 @@
 
     _tolerablePercentageForFileSize = 0.01f;
 
-    _fillStep = 1000;
+    _fillStep = 10000;
 
     _firstMaterial = [self.database.path stringByAppendingString:@"-first.material"];
     _lastMaterial = [self.database.path stringByAppendingString:@"-last.material"];
@@ -100,12 +100,13 @@
 
 - (void)test_backup
 {
+    TestCaseAssertTrue([self fillDatabaseUntilReachingExpectedSize]);
+
     [self
     measure:^{
         TestCaseAssertTrue([self.database backup]);
     }
     setUp:^{
-        TestCaseAssertTrue([self fillDatabaseUntilReachingExpectedSize]);
         [NSThread sleepForTimeInterval:1.0f];
     }
     tearDown:^{
