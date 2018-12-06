@@ -20,6 +20,9 @@
 
 #import "Console.h"
 #import "NSObject+TestCase.h"
+#import "TestCaseObject+WCTTableCoding.h"
+#import "TestCaseObject.h"
+#import "TestLog.h"
 #import <WCDB/WCDB.h>
 #import <XCTest/XCTest.h>
 
@@ -50,6 +53,8 @@
 - (void)cleanDirectory;
 
 + (NSString*)hint:(NSString*)description expecting:(NSString*)expected;
+
+- (void)log:(NSString*)format, ...;
 
 @end
 

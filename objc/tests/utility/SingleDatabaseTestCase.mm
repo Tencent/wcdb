@@ -104,7 +104,7 @@ asExpectedInOperation:(BOOL (^)())block
             if ([sqls.firstObject isEqualToString:sql]) {
                 [sqls removeObjectAtIndex:0];
             } else {
-                NSLog(@"Failed: %@", [TestCase hint:sql expecting:sqls.firstObject]);
+                TestLog(@"Failed: %@", [TestCase hint:sql expecting:sqls.firstObject]);
                 trace = NO;
                 TESTCASE_FAILED
             }
@@ -122,7 +122,7 @@ asExpectedInOperation:(BOOL (^)())block
             }
         }
         if (sqls.count != 0) {
-            NSLog(@"Reminding: %@", sqls);
+            TestLog(@"Reminding: %@", sqls);
             TESTCASE_FAILED
             break;
         }
@@ -168,7 +168,7 @@ asExpectedInOperation:(BOOL (^)())block
             }
         }
         if (sqls.count != 0) {
-            NSLog(@"Reminding: %@", sqls);
+            TestLog(@"Reminding: %@", sqls);
             TESTCASE_FAILED
             break;
         }

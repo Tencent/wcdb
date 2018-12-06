@@ -22,4 +22,49 @@
 
 @implementation Benchmark
 
++ (void)initialize
+{
+    if (self.class == Benchmark.class) {
+        [[Console shared] disableSQLTrace];
+        WCTDatabase.debuggable = NO;
+#if DEBUG || TARGET_IPHONE_SIMULATOR
+        TestLog(@"Benchmark in run in debug mode or simulator. The result may be untrusted.");
+#endif
+    }
+}
+
+- (void)measure:(void (^)(void))block
+           setUp:(void (^)(void))setUpBlock
+        tearDown:(void (^)(void))tearDownBlock
+checkCorrectness:(void (^)(void))correctnessBlock
+{
+    [self measureMetrics:self.class.defaultPerformanceMetrics
+    automaticallyStartMeasuring:false
+                       forBlock:^{
+                           if (tearDownBlock) {
+                               tearDownBlock();
+                           }
+
+                           if (setUpBlock) {
+                               setUpBlock();
+                           }
+
+                           [NSThread sleepForTimeInterval:1];
+
+                           [self startMeasuring];
+
+                           block();
+
+                           [self stopMeasuring];
+
+                           [NSThread sleepForTimeInterval:1];
+
+                           correctnessBlock();
+
+                           if (tearDownBlock) {
+                               tearDownBlock();
+                           }
+                       }];
+}
+
 @end

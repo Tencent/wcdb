@@ -279,7 +279,7 @@
             TestCaseAssertTrue([handle validate]);
             [condition lock];
             ++currentConcurrency;
-            NSLog(@"currentConcurrency %d", currentConcurrency);
+            TestLog(@"currentConcurrency %d", currentConcurrency);
             [condition wait];
             [condition unlock];
             [handle invalidate];

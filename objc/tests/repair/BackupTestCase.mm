@@ -25,9 +25,9 @@
 - (void)setUp
 {
     [super setUp];
-    _firstMaterial = [NSString stringWithFormat:@"%@-first.material", self.path];
-    _lastMaterial = [NSString stringWithFormat:@"%@-last.material", self.path];
-    _factory = [NSString stringWithFormat:@"%@.factory", self.path];
+    _firstMaterial = [self.path stringByAppendingString:@"-first.material"];
+    _lastMaterial = [self.path stringByAppendingString:@"-last.material"];
+    _factory = [self.path stringByAppendingString:@".factory"];
 
     _backupFramesIntervalForNonCritical = 100;
     _backupFramesIntervalForCritical = 300;

@@ -18,16 +18,17 @@
  * limitations under the License.
  */
 
-#import "CRUDTestCase.h"
+#import "TestLog.h"
 
-NS_ASSUME_NONNULL_BEGIN
+void TestLog(NSString *format, ...)
+{
+    va_list ap;
+    va_start(ap, format);
+    TestLogv(format, ap);
+    va_end(ap);
+}
 
-@interface PreInsertedCRUDTestCase : CRUDTestCase
-
-@property (nonatomic, readonly) TestCaseObject* object1;
-@property (nonatomic, readonly) TestCaseObject* object2;
-@property (nonatomic, readonly) NSArray<TestCaseObject*>* objects;
-
-@end
-
-NS_ASSUME_NONNULL_END
+void TestLogv(NSString *format, va_list args)
+{
+    printf("%s\n", [[NSString alloc] initWithFormat:format arguments:args].UTF8String);
+}

@@ -363,6 +363,18 @@
 		2386B3C71ED442FE000B72F6 /* WCTError+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C41ED442FE000B72F6 /* WCTError+Private.h */; };
 		238845F02063912B006EAEC8 /* WCTPerformanceFootprint.h in Headers */ = {isa = PBXBuildFile; fileRef = 238845EE2063912B006EAEC8 /* WCTPerformanceFootprint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		238845F12063912B006EAEC8 /* WCTPerformanceFootprint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238845EF2063912B006EAEC8 /* WCTPerformanceFootprint.mm */; };
+		238C73A521B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
+		238C73A621B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
+		238C73A721B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
+		238C73A821B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
+		238C73A921B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
+		238C73AA21B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
+		238C73AB21B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
+		238C73AC21B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
+		238C73AD21B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
+		238C73AE21B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
+		238C73AF21B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
+		238C73B021B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
 		23906AB5215E4F4400C2B717 /* Version.h in Headers */ = {isa = PBXBuildFile; fileRef = 23906AB4215E4F4400C2B717 /* Version.h */; };
 		23906AB9215E500100C2B717 /* WCTDatabase+Monitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 23906AB7215E500100C2B717 /* WCTDatabase+Monitor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23906ABB215E500100C2B717 /* WCTDatabase+Monitor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23906AB8215E500100C2B717 /* WCTDatabase+Monitor.mm */; };
@@ -824,12 +836,10 @@
 		23F70FC620A0618100CCE3CD /* Configs.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FC320A0618100CCE3CD /* Configs.hpp */; };
 		23F70FD620A07CEC00CCE3CD /* CustomConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F70FD420A07CEC00CCE3CD /* CustomConfig.cpp */; };
 		23F70FD820A07CEC00CCE3CD /* CustomConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FD520A07CEC00CCE3CD /* CustomConfig.hpp */; };
-		23FC43CB21B6631200FA1A0F /* FileTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386563C219C009E00F7F6D2 /* FileTests.mm */; };
+		23FC01DD21B8B716002C7F87 /* RepairBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FC01DC21B8B716002C7F87 /* RepairBenchmark.mm */; };
 		23FC43CC21B6631200FA1A0F /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEB182199A5A800DC3706 /* CRUDTestCase.mm */; };
-		23FC43CD21B6631200FA1A0F /* MemoryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386563E219C00A500F7F6D2 /* MemoryTests.mm */; };
 		23FC43CE21B6631200FA1A0F /* SingleTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23790A642192B0A60098797F /* SingleTableTestCase.mm */; };
 		23FC43CF21B6631200FA1A0F /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23846FD421AFF215005B868F /* AllTypesObject.mm */; };
-		23FC43D021B6631200FA1A0F /* DatabaseTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23739DC7219AEDE700A043BF /* DatabaseTests.mm */; };
 		23FC43D121B6631200FA1A0F /* PreInsertedCRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23739DBB219AD0C500A043BF /* PreInsertedCRUDTestCase.mm */; };
 		23FC43D221B6631200FA1A0F /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231FEAE32199A16700DC3706 /* TestCaseObject.mm */; };
 		23FC43D321B6631200FA1A0F /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
@@ -1468,6 +1478,8 @@
 		2386B3C41ED442FE000B72F6 /* WCTError+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTError+Private.h"; sourceTree = "<group>"; };
 		238845EE2063912B006EAEC8 /* WCTPerformanceFootprint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTPerformanceFootprint.h; sourceTree = "<group>"; };
 		238845EF2063912B006EAEC8 /* WCTPerformanceFootprint.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTPerformanceFootprint.mm; sourceTree = "<group>"; };
+		238C73A321B8B50F006B59C2 /* TestLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestLog.h; sourceTree = "<group>"; };
+		238C73A421B8B510006B59C2 /* TestLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestLog.m; sourceTree = "<group>"; };
 		23906AB4215E4F4400C2B717 /* Version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Version.h; sourceTree = "<group>"; };
 		23906AB7215E500100C2B717 /* WCTDatabase+Monitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Monitor.h"; sourceTree = "<group>"; };
 		23906AB8215E500100C2B717 /* WCTDatabase+Monitor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Monitor.mm"; sourceTree = "<group>"; };
@@ -1933,6 +1945,7 @@
 		23F70FC320A0618100CCE3CD /* Configs.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Configs.hpp; sourceTree = "<group>"; };
 		23F70FD420A07CEC00CCE3CD /* CustomConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CustomConfig.cpp; sourceTree = "<group>"; };
 		23F70FD520A07CEC00CCE3CD /* CustomConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CustomConfig.hpp; sourceTree = "<group>"; };
+		23FC01DC21B8B716002C7F87 /* RepairBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RepairBenchmark.mm; sourceTree = "<group>"; };
 		23FC43E121B6631200FA1A0F /* Benchmark.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Benchmark.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		23FC43E621B6644B00FA1A0F /* Benchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Benchmark.mm; sourceTree = "<group>"; };
 		23FC43E721B6644B00FA1A0F /* Benchmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Benchmark.h; sourceTree = "<group>"; };
@@ -2722,6 +2735,8 @@
 				231C98B9219532AC0067B87C /* NSObject+TestCase.mm */,
 				23865642219C47AC00F7F6D2 /* Console.h */,
 				23865643219C47AC00F7F6D2 /* Console.mm */,
+				238C73A321B8B50F006B59C2 /* TestLog.h */,
+				238C73A421B8B510006B59C2 /* TestLog.m */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -3414,6 +3429,7 @@
 			children = (
 				23FC43E621B6644B00FA1A0F /* Benchmark.mm */,
 				23FC43E721B6644B00FA1A0F /* Benchmark.h */,
+				23FC01DC21B8B716002C7F87 /* RepairBenchmark.mm */,
 			);
 			path = benchmark;
 			sourceTree = "<group>";
@@ -4239,6 +4255,7 @@
 			files = (
 				2386563D219C009E00F7F6D2 /* FileTests.mm in Sources */,
 				231FEB192199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
+				238C73A521B8B510006B59C2 /* TestLog.m in Sources */,
 				2386563F219C00A500F7F6D2 /* MemoryTests.mm in Sources */,
 				231FEB152199A4D600DC3706 /* SingleTableTestCase.mm in Sources */,
 				23846FD621AFF216005B868F /* AllTypesObject.mm in Sources */,
@@ -4262,6 +4279,7 @@
 				23739DC1219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
 				23254FCB219D28BA00DE2435 /* ThreadTests.mm in Sources */,
 				231FEAF42199A4D200DC3706 /* TestCaseObject.mm in Sources */,
+				238C73AA21B8B510006B59C2 /* TestLog.m in Sources */,
 				231FEAF82199A4D200DC3706 /* NSObject+TestCase.mm in Sources */,
 				231FEAF62199A4D200DC3706 /* SingleDatabaseTestCase.mm in Sources */,
 				23865641219C213200F7F6D2 /* TransactionTests.mm in Sources */,
@@ -4280,6 +4298,7 @@
 				23739DC2219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
 				231FEAF92199A4D300DC3706 /* TestCaseObject.mm in Sources */,
 				231FEAFD2199A4D300DC3706 /* NSObject+TestCase.mm in Sources */,
+				238C73AB21B8B510006B59C2 /* TestLog.m in Sources */,
 				231FEAFB2199A4D300DC3706 /* SingleDatabaseTestCase.mm in Sources */,
 				23B4A77E21A7DFDA00BD6A32 /* TraceTests.mm in Sources */,
 				231FEAFA2199A4D300DC3706 /* TestCase.mm in Sources */,
@@ -4299,6 +4318,7 @@
 				231FEB032199A4D400DC3706 /* TestCaseObject.mm in Sources */,
 				231FEB072199A4D400DC3706 /* NSObject+TestCase.mm in Sources */,
 				2372E06221A2E13100051D9A /* ConfigTests.mm in Sources */,
+				238C73AC21B8B510006B59C2 /* TestLog.m in Sources */,
 				231FEB052199A4D400DC3706 /* SingleDatabaseTestCase.mm in Sources */,
 				231FEB042199A4D400DC3706 /* TestCase.mm in Sources */,
 				2386564B219C47AC00F7F6D2 /* Console.mm in Sources */,
@@ -4315,6 +4335,7 @@
 				23739DC4219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
 				2304121F21ABA23C00CB2318 /* BackupTestCase.mm in Sources */,
 				2304121821AB9EF700CB2318 /* DepositTests.mm in Sources */,
+				238C73AD21B8B510006B59C2 /* TestLog.m in Sources */,
 				231FEAFE2199A4D400DC3706 /* TestCaseObject.mm in Sources */,
 				23846FDE21AFF216005B868F /* AllTypesObject.mm in Sources */,
 				231FEB022199A4D400DC3706 /* NSObject+TestCase.mm in Sources */,
@@ -4333,6 +4354,7 @@
 			files = (
 				231FEB222199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
 				231FEB0B2199A4D500DC3706 /* SingleTableTestCase.mm in Sources */,
+				238C73AE21B8B510006B59C2 /* TestLog.m in Sources */,
 				23739DC5219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
 				231FEB082199A4D500DC3706 /* TestCaseObject.mm in Sources */,
 				231FEB0C2199A4D500DC3706 /* NSObject+TestCase.mm in Sources */,
@@ -4349,6 +4371,7 @@
 			files = (
 				231FEB232199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
 				231FEB102199A4D500DC3706 /* SingleTableTestCase.mm in Sources */,
+				238C73AF21B8B510006B59C2 /* TestLog.m in Sources */,
 				23739DC6219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
 				231FEB0D2199A4D500DC3706 /* TestCaseObject.mm in Sources */,
 				231FEB112199A4D500DC3706 /* NSObject+TestCase.mm in Sources */,
@@ -4380,6 +4403,7 @@
 				231FEAF12199A4D200DC3706 /* SingleDatabaseTestCase.mm in Sources */,
 				23739D90219AC6AB00A043BF /* ColumnCodingObject.mm in Sources */,
 				23846FDA21AFF216005B868F /* AllTypesObject.mm in Sources */,
+				238C73A921B8B510006B59C2 /* TestLog.m in Sources */,
 				23739D9B219AC9A600A043BF /* Integer64CodingObject.m in Sources */,
 				23739D9E219AC9AD00A043BF /* DoubleCodingObject.m in Sources */,
 				23739DAD219AC9F200A043BF /* StringCodingObject+WCTColumnCoding.mm in Sources */,
@@ -4408,6 +4432,7 @@
 				23790A57219298680098797F /* SingleDatabaseTestCase.mm in Sources */,
 				23739DBE219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
 				23790A772192D3D00098797F /* IndexObject.mm in Sources */,
+				238C73A721B8B510006B59C2 /* TestLog.m in Sources */,
 				2384F6CF2193E0AC00E8B10A /* ColumnConstraintNotNull.mm in Sources */,
 				2384F6BB2193E07600E8B10A /* ColumnConstraintPrimaryAsc.mm in Sources */,
 				23865646219C47AC00F7F6D2 /* Console.mm in Sources */,
@@ -4428,6 +4453,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				238C73A821B8B510006B59C2 /* TestLog.m in Sources */,
 				23846FD921AFF216005B868F /* AllTypesObject.mm in Sources */,
 				231C98BC219532AC0067B87C /* NSObject+TestCase.mm in Sources */,
 				2384F72F2194255700E8B10A /* SingleTableTestCase.mm in Sources */,
@@ -4750,6 +4776,7 @@
 				2398977E217EC9E30014BF33 /* StatementBeginTests.mm in Sources */,
 				23989768217EC9E30014BF33 /* ExpressionOperableTests.mm in Sources */,
 				2396EB11218054200079066C /* ColumnTests.mm in Sources */,
+				238C73A621B8B510006B59C2 /* TestLog.m in Sources */,
 				23989788217EC9E30014BF33 /* StatementDropTableTests.mm in Sources */,
 				2398979A217EC9E30014BF33 /* WindowFunctionInvocationTests.mm in Sources */,
 				23989797217EC9E30014BF33 /* TableOrSubqueryTests.mm in Sources */,
@@ -4802,16 +4829,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23FC43CB21B6631200FA1A0F /* FileTests.mm in Sources */,
 				23FC43CC21B6631200FA1A0F /* CRUDTestCase.mm in Sources */,
-				23FC43CD21B6631200FA1A0F /* MemoryTests.mm in Sources */,
 				23FC43CE21B6631200FA1A0F /* SingleTableTestCase.mm in Sources */,
+				23FC01DD21B8B716002C7F87 /* RepairBenchmark.mm in Sources */,
 				23FC43CF21B6631200FA1A0F /* AllTypesObject.mm in Sources */,
-				23FC43D021B6631200FA1A0F /* DatabaseTests.mm in Sources */,
 				23FC43D121B6631200FA1A0F /* PreInsertedCRUDTestCase.mm in Sources */,
 				23FC43E821B6644B00FA1A0F /* Benchmark.mm in Sources */,
 				23FC43D221B6631200FA1A0F /* TestCaseObject.mm in Sources */,
 				23FC43D321B6631200FA1A0F /* NSObject+TestCase.mm in Sources */,
+				238C73B021B8B510006B59C2 /* TestLog.m in Sources */,
 				23FC43D421B6631200FA1A0F /* Console.mm in Sources */,
 				23FC43D521B6631200FA1A0F /* SingleDatabaseTestCase.mm in Sources */,
 				23FC43D621B6631200FA1A0F /* TestCase.mm in Sources */,

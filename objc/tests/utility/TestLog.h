@@ -18,16 +18,15 @@
  * limitations under the License.
  */
 
-#import "CRUDTestCase.h"
+#import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-@interface PreInsertedCRUDTestCase : CRUDTestCase
+void TestLog(NSString *format, ...);
+void TestLogv(NSString *format, va_list args);
 
-@property (nonatomic, readonly) TestCaseObject* object1;
-@property (nonatomic, readonly) TestCaseObject* object2;
-@property (nonatomic, readonly) NSArray<TestCaseObject*>* objects;
-
-@end
-
-NS_ASSUME_NONNULL_END
+#ifdef __cplusplus
+}
+#endif

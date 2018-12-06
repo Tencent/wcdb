@@ -24,8 +24,7 @@
 
 + (void)initialize
 {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+    if (self.class == TestCase.class) {
 #ifdef DEBUG
         WCTDatabase.debuggable = YES;
 #else
@@ -33,14 +32,34 @@
 #endif
         srandom((unsigned int) time(nullptr));
         srand((unsigned int) time(nullptr));
-    });
+
+#ifdef DEBUG
+        [[Console shared] enableSQLTrace];
+#endif
+    }
+}
+
+- (void)log:(NSString *)format, ...
+{
+    va_list ap;
+    va_start(ap, format);
+    NSString *description = [[NSString alloc] initWithFormat:format arguments:ap];
+    va_end(ap);
+    NSString *log = [NSString stringWithFormat:@"Test Case '%@' %@", self.name, description];
+    TestLog(@"%@", log);
 }
 
 - (void)setUp
 {
     [super setUp];
 
-    NSLog(@"%@ at %@", self.name, self.directory);
+    NSString *directory = self.directory;
+    NSString *abbreviatedPath = directory.stringByAbbreviatingWithTildeInPath;
+    if (abbreviatedPath.length > 0) {
+        directory = abbreviatedPath;
+    }
+
+    [self log:@"run at %@", self.directory];
 }
 
 - (void)tearDown
