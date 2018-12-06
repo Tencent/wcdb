@@ -279,7 +279,6 @@
             TestCaseAssertTrue([handle validate]);
             [condition lock];
             ++currentConcurrency;
-            TestLog(@"currentConcurrency %d", currentConcurrency);
             [condition wait];
             [condition unlock];
             [handle invalidate];

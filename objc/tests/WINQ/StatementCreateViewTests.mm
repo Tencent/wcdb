@@ -68,7 +68,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateViewSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"CREATE TEMP VIEW main.testView AS SELECT 1");
+    SQLAssertEqual(testingSQL, @"CREATE TEMP VIEW testView AS SELECT 1");
 }
 
 - (void)test_create_view_if_not_exists

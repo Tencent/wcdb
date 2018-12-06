@@ -77,11 +77,11 @@
 
 - (void)test_create_temp_table
 {
-    auto testingSQL = WCDB::StatementCreateTable().createTable(table).schema(schema).temp().define(columnDef1);
+    auto testingSQL = WCDB::StatementCreateTable().createTable(table).temp().define(columnDef1);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"CREATE TEMP TABLE testSchema.testTable(testColumn1 INTEGER)");
+    SQLAssertEqual(testingSQL, @"CREATE TEMP TABLE testTable(testColumn1 INTEGER)");
 }
 
 - (void)test_create_table_if_not_exists

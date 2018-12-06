@@ -74,11 +74,11 @@
 
 - (void)test_create_temp_trigger
 {
-    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(name).schema(schema).temp().before().delete_().on(table).forEachRow().when(condition).execute(update);
+    auto testingSQL = WCDB::StatementCreateTrigger().createTrigger(name).temp().before().delete_().on(table).forEachRow().when(condition).execute(update);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTriggerSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpdateSTMT, WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"CREATE TEMP TRIGGER testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN 1 BEGIN UPDATE main.testTable SET testColumn = 1; END");
+    SQLAssertEqual(testingSQL, @"CREATE TEMP TRIGGER testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN 1 BEGIN UPDATE main.testTable SET testColumn = 1; END");
 }
 
 - (void)test_create_trigger_if_not_exists
