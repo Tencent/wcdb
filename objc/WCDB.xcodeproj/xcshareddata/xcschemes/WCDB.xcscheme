@@ -172,6 +172,18 @@
                ReferencedContainer = "container:WCDB.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "YES"
+            parallelizable = "YES"
+            testExecutionOrdering = "random">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "23FC43C521B6631200FA1A0F"
+               BuildableName = "Benchmark.xctest"
+               BlueprintName = "Benchmark"
+               ReferencedContainer = "container:WCDB.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
