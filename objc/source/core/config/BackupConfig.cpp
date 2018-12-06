@@ -21,6 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/BackupConfig.hpp>
 #include <WCDB/BackupQueue.hpp>
+#include <WCDB/Handle.hpp>
 #include <WCDB/String.hpp>
 
 namespace WCDB {
@@ -75,7 +76,7 @@ bool BackupConfig::onCommitted(Handle *handle, int frames)
 
 void BackupConfig::checkpointed(Handle *handle, int rc)
 {
-    if (rc == SQLITE_OK) {
+    if (rc == (int) Error::Code::OK) {
         // back up immediately if checkpointed
         m_queue->put(handle->path, delayForCritical, 0);
     }

@@ -534,7 +534,6 @@
 		23D0C38D20C17CAE0001BFAE /* FactoryBackup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D0C38B20C17CAE0001BFAE /* FactoryBackup.cpp */; };
 		23D0C38F20C17CAE0001BFAE /* FactoryBackup.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D0C38C20C17CAE0001BFAE /* FactoryBackup.hpp */; };
 		23D4DA452085A40A00AE6D90 /* Interface.h in Headers */ = {isa = PBXBuildFile; fileRef = 23D4DA442085A3D300AE6D90 /* Interface.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		23D920C72009B534000634CB /* Abstract.h in Headers */ = {isa = PBXBuildFile; fileRef = 23D920422009B52E000634CB /* Abstract.h */; };
 		23D96B922050DED700DB5E93 /* DatabasePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D96B902050DED700DB5E93 /* DatabasePool.cpp */; };
 		23D96B932050DED700DB5E93 /* DatabasePool.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D96B912050DED700DB5E93 /* DatabasePool.hpp */; };
 		23D96B972050E53600DB5E93 /* RecyclableDatabase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D96B952050E53600DB5E93 /* RecyclableDatabase.cpp */; };
@@ -1643,7 +1642,6 @@
 		23D0C38B20C17CAE0001BFAE /* FactoryBackup.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FactoryBackup.cpp; sourceTree = "<group>"; };
 		23D0C38C20C17CAE0001BFAE /* FactoryBackup.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FactoryBackup.hpp; sourceTree = "<group>"; };
 		23D4DA442085A3D300AE6D90 /* Interface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Interface.h; sourceTree = "<group>"; };
-		23D920422009B52E000634CB /* Abstract.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Abstract.h; sourceTree = "<group>"; };
 		23D96B902050DED700DB5E93 /* DatabasePool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DatabasePool.cpp; sourceTree = "<group>"; };
 		23D96B912050DED700DB5E93 /* DatabasePool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DatabasePool.hpp; sourceTree = "<group>"; };
 		23D96B952050E53600DB5E93 /* RecyclableDatabase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RecyclableDatabase.cpp; sourceTree = "<group>"; };
@@ -2082,6 +2080,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		23176A8E21B915660051ACF9 /* handle */ = {
+			isa = PBXGroup;
+			children = (
+				23DC306D202AFF8B000F7895 /* Handle.cpp */,
+				23DC306E202AFF8B000F7895 /* Handle.hpp */,
+				2360A5F420D78F1B00E4A311 /* HandleNotification.cpp */,
+				2360A5F520D78F1B00E4A311 /* HandleNotification.hpp */,
+				2360A5F320D78F1B00E4A311 /* HandleRelated.cpp */,
+				2360A5F620D78F1B00E4A311 /* HandleRelated.hpp */,
+				2370980820590CA700E768B4 /* HandleStatement.cpp */,
+				2370980920590CA700E768B4 /* HandleStatement.hpp */,
+			);
+			path = handle;
+			sourceTree = "<group>";
+		};
 		231FEAD92199A0FD00DC3706 /* monitor */ = {
 			isa = PBXGroup;
 			children = (
@@ -2181,7 +2194,7 @@
 				2370B0E321914EC200D3227C /* builtin */,
 				23775B2E20AD666900E21AB0 /* common */,
 				23775B3420AD666900E21AB0 /* repair */,
-				2349F5D61EA0D6680021EFA7 /* abstract */,
+				2349F5D61EA0D6680021EFA7 /* winq */,
 				2349F6151EA0D6680021EFA7 /* core */,
 				2349F62A1EA0D6680021EFA7 /* interface */,
 				2349F6A71EA0D6680021EFA7 /* utility */,
@@ -2190,29 +2203,23 @@
 			path = source;
 			sourceTree = "<group>";
 		};
-		2349F5D61EA0D6680021EFA7 /* abstract */ = {
+		2349F5D61EA0D6680021EFA7 /* winq */ = {
 			isa = PBXGroup;
 			children = (
+				23EEDB67217DFADC006E9E73 /* extension */,
+				23EEDB79217DFADC006E9E73 /* identifier */,
+				23EEDBB6217DFADC006E9E73 /* statement */,
+				23EEDBEB217DFADC006E9E73 /* WINQ.h */,
 				23EEDBEC217DFADC006E9E73 /* syntax */,
 				23EEDB66217DFADC006E9E73 /* winq */,
-				23D920422009B52E000634CB /* Abstract.h */,
-				23DC3077202B0066000F7895 /* Tokenize.cpp */,
-				23DC3078202B0066000F7895 /* Tokenize.hpp */,
-				23DC306D202AFF8B000F7895 /* Handle.cpp */,
-				23DC306E202AFF8B000F7895 /* Handle.hpp */,
-				2360A5F420D78F1B00E4A311 /* HandleNotification.cpp */,
-				2360A5F520D78F1B00E4A311 /* HandleNotification.hpp */,
-				2360A5F320D78F1B00E4A311 /* HandleRelated.cpp */,
-				2360A5F620D78F1B00E4A311 /* HandleRelated.hpp */,
-				2370980820590CA700E768B4 /* HandleStatement.cpp */,
-				2370980920590CA700E768B4 /* HandleStatement.hpp */,
 			);
-			path = abstract;
+			path = winq;
 			sourceTree = "<group>";
 		};
 		2349F6151EA0D6680021EFA7 /* core */ = {
 			isa = PBXGroup;
 			children = (
+				23176A8E21B915660051ACF9 /* handle */,
 				23A09D632146204300F62EE8 /* migration */,
 				23B4DCDE2112B03200954D71 /* queue */,
 				23E163CA20FDDD6900C3F910 /* fts */,
@@ -3078,6 +3085,8 @@
 		23E163CA20FDDD6900C3F910 /* fts */ = {
 			isa = PBXGroup;
 			children = (
+				23DC3077202B0066000F7895 /* Tokenize.cpp */,
+				23DC3078202B0066000F7895 /* Tokenize.hpp */,
 				23E163CB20FDDD6900C3F910 /* Tokenizer.cpp */,
 				23E163CC20FDDD6900C3F910 /* Tokenizer.hpp */,
 				23E163D120FDDD8500C3F910 /* PorterStemming.c */,
@@ -3090,10 +3099,6 @@
 		23EEDB66217DFADC006E9E73 /* winq */ = {
 			isa = PBXGroup;
 			children = (
-				23EEDB67217DFADC006E9E73 /* extension */,
-				23EEDB79217DFADC006E9E73 /* identifier */,
-				23EEDBB6217DFADC006E9E73 /* statement */,
-				23EEDBEB217DFADC006E9E73 /* WINQ.h */,
 			);
 			path = winq;
 			sourceTree = "<group>";
@@ -3640,7 +3645,6 @@
 				23DC307A202B0066000F7895 /* Tokenize.hpp in Headers */,
 				23EEDCE0217DFADC006E9E73 /* StatementSavepoint.hpp in Headers */,
 				23775B6C20AD666900E21AB0 /* FullCrawler.hpp in Headers */,
-				23D920C72009B534000634CB /* Abstract.h in Headers */,
 				2349F7701EA0D6680021EFA7 /* WCTDatabase+Table.h in Headers */,
 				23D0C31020C125420001BFAE /* SQLiteAssembler.hpp in Headers */,
 				2349F72F1EA0D6680021EFA7 /* WCTSelectable.h in Headers */,

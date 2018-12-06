@@ -20,6 +20,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/BasicConfig.hpp>
+#include <WCDB/Handle.hpp>
 #include <WCDB/Macro.hpp>
 
 namespace WCDB {

@@ -21,7 +21,6 @@
 #ifndef _WCDB_TOKENIZER_HPP
 #define _WCDB_TOKENIZER_HPP
 
-#include <WCDB/Abstract.h>
 #include <WCDB/Tokenize.hpp>
 #include <cstddef>
 #include <vector>

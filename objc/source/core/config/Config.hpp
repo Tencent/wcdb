@@ -21,9 +21,9 @@
 #ifndef _WCDB_CONFIG_HPP
 #define _WCDB_CONFIG_HPP
 
-#include <WCDB/Abstract.h>
-
 namespace WCDB {
+
+class Handle;
 
 class Config {
 public:

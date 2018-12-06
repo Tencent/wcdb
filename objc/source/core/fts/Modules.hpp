@@ -21,7 +21,6 @@
 #ifndef _WCDB_MODULES_HPP
 #define _WCDB_MODULES_HPP
 
-#include <WCDB/Abstract.h>
 #include <WCDB/Lock.hpp>
 #include <WCDB/UnsafeData.hpp>
 

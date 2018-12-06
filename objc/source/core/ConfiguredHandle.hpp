@@ -21,8 +21,8 @@
 #ifndef _WCDB_CONFIGUREDHANDLE_HPP
 #define _WCDB_CONFIGUREDHANDLE_HPP
 
-#include <WCDB/Abstract.h>
 #include <WCDB/Configs.hpp>
+#include <WCDB/Handle.hpp>
 
 namespace WCDB {
 

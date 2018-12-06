@@ -21,8 +21,6 @@
 #ifndef _WCDB_CORE_H
 #define _WCDB_CORE_H
 
-#include <WCDB/Abstract.h>
-
 #include <WCDB/AsyncQueue.hpp>
 #include <WCDB/BackupQueue.hpp>
 #include <WCDB/CheckpointQueue.hpp>

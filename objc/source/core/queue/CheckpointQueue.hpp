@@ -21,9 +21,9 @@
 #ifndef _WCDB_CHECKPOINTQUEUE_HPP
 #define _WCDB_CHECKPOINTQUEUE_HPP
 
-#include <WCDB/Abstract.h>
 #include <WCDB/AsyncQueue.hpp>
 #include <WCDB/TimedQueue.hpp>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 

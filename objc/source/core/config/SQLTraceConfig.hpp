@@ -22,6 +22,7 @@
 #define _WCDB_SQLTRACECONFIG_HPP
 
 #include <WCDB/Config.hpp>
+#include <WCDB/Handle.hpp>
 #include <WCDB/Lock.hpp>
 
 namespace WCDB {

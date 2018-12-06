@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/Handle.hpp>
 #include <WCDB/Modules.hpp>
 #include <WCDB/TokenizeConfig.hpp>
 

@@ -21,7 +21,7 @@
 #ifndef _WCDB_MIGRATIONINITIALIZERHANDLE_HPP
 #define _WCDB_MIGRATIONINITIALIZERHANDLE_HPP
 
-#include <WCDB/Abstract.h>
+#include <WCDB/Handle.hpp>
 #include <WCDB/Migration.hpp>
 
 namespace WCDB {

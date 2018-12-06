@@ -21,8 +21,6 @@
 #ifndef _WCDB_HANDLE_HPP
 #define _WCDB_HANDLE_HPP
 
-#warning TODO - it should be moved to Core
-
 #include <WCDB/ErrorProne.hpp>
 #include <WCDB/HandleNotification.hpp>
 #include <WCDB/HandleStatement.hpp>

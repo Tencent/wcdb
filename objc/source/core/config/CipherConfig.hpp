@@ -23,6 +23,7 @@
 
 #include <WCDB/Config.hpp>
 #include <WCDB/Data.hpp>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 

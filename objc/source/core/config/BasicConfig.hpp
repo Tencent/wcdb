@@ -22,6 +22,7 @@
 #define _WCDB_BASICCONFIG_HPP
 
 #include <WCDB/Config.hpp>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 

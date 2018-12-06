@@ -20,6 +20,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/CipherConfig.hpp>
+#include <WCDB/Handle.hpp>
 
 namespace WCDB {
 

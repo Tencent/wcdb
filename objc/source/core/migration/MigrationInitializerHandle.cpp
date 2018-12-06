@@ -61,10 +61,10 @@ MigrationInitializerHandle::getColumns(const String& table, const String& databa
 
     Schema schema = MigrationInfo::getSchemaForDatabase(database);
     if (!database.empty()) {
-        markErrorAsIgnorable(SQLITE_ERROR);
+        markErrorAsIgnorable((int) Error::Code::Error);
         // Adoptable for duplicate attach
         if (!execute(StatementAttach().attach(database).as(schema))
-            && getResultCode() != SQLITE_ERROR) {
+            && getResultCode() != (int) Error::Code::Error) {
             return { false, {} };
         }
         markErrorAsUnignorable();

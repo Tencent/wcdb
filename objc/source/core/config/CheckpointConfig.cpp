@@ -21,6 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/CheckpointConfig.hpp>
 #include <WCDB/CheckpointQueue.hpp>
+#include <WCDB/Handle.hpp>
 #include <WCDB/String.hpp>
 #include <mutex>
 

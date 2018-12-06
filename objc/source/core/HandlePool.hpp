@@ -21,7 +21,6 @@
 #ifndef _WCDB_HANDLEPOOL_HPP
 #define _WCDB_HANDLEPOOL_HPP
 
-#include <WCDB/Abstract.h>
 #include <WCDB/Config.hpp>
 #include <WCDB/ErrorProne.hpp>
 #include <WCDB/Lock.hpp>

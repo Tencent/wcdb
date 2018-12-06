@@ -21,12 +21,12 @@
 #ifndef _WCDB_DATABASE_HPP
 #define _WCDB_DATABASE_HPP
 
-#include <WCDB/Abstract.h>
 #include <WCDB/Factory.hpp>
 #include <WCDB/HandlePool.hpp>
 #include <WCDB/Migration.hpp>
 #include <WCDB/Tag.hpp>
 #include <WCDB/ThreadLocal.hpp>
+#include <WCDB/WINQ.h>
 
 namespace WCDB {
 
