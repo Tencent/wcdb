@@ -70,7 +70,7 @@
     int percentage = 0;
     for (NSUInteger size = [self.database getFilesSize]; size < self.expectedFileSize; size = [self.database getFilesSize]) {
         int gap = (double) size / self.expectedFileSize * 100 - percentage;
-        if (gap > 0) {
+        if (gap >= 5) {
             percentage += gap;
             TestLog(@"Preparing %d%%", percentage);
         }
