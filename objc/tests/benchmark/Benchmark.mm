@@ -38,6 +38,7 @@
         tearDown:(void (^)(void))tearDownBlock
 checkCorrectness:(void (^)(void))correctnessBlock
 {
+    __block int i = 1;
     [self measureMetrics:self.class.defaultPerformanceMetrics
     automaticallyStartMeasuring:false
                        forBlock:^{
@@ -49,7 +50,9 @@ checkCorrectness:(void (^)(void))correctnessBlock
                                setUpBlock();
                            }
 
-                           [NSThread sleepForTimeInterval:1];
+                           [NSThread sleepForTimeInterval:0.5f];
+
+                           [self log:@"%d started.", i];
 
                            [self startMeasuring];
 
@@ -57,13 +60,17 @@ checkCorrectness:(void (^)(void))correctnessBlock
 
                            [self stopMeasuring];
 
-                           [NSThread sleepForTimeInterval:1];
+                           [self log:@"%d passed.", i];
+
+                           [NSThread sleepForTimeInterval:0.5f];
 
                            correctnessBlock();
 
                            if (tearDownBlock) {
                                tearDownBlock();
                            }
+
+                           ++i;
                        }];
 }
 
