@@ -21,11 +21,12 @@
 #ifndef _WCDB_TOKENIZE_HPP
 #define _WCDB_TOKENIZE_HPP
 
-#warning Make it public and add template for this
+#warning Add a objc wrapper and make it private
 
 #include <WCDB/SQLite.h>
 #include <WCDB/String.hpp>
 #include <map>
+#include <sqlcipher/fts3_tokenizer.h>
 #include <stdlib.h>
 #include <vector>
 
