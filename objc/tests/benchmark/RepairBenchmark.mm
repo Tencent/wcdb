@@ -22,8 +22,6 @@
 
 @interface RepairBenchmark : Benchmark
 
-@property (nonatomic, readonly) unsigned long long expectedFileSize;
-
 @property (nonatomic, readonly) double tolerablePercentageForFileSize;
 
 @property (nonatomic, readonly) int fillStep;
@@ -31,6 +29,9 @@
 @property (nonatomic, readonly) NSString* firstMaterial;
 
 @property (nonatomic, readonly) NSString* lastMaterial;
+
+@property (nonatomic, readonly) NSUInteger configForSizeToBackup;
+@property (nonatomic, readonly) NSUInteger configForSizeToRepair;
 
 @end
 
@@ -40,7 +41,8 @@
 {
     [super setUp];
 
-    _expectedFileSize = 500 * 1024 * 1024;
+    _configForSizeToBackup = 500 * 1024 * 1024; // 500MB
+    _configForSizeToRepair = 100 * 1024 * 1024; // 100MB
 
     _tolerablePercentageForFileSize = 0.01f;
 
@@ -52,9 +54,9 @@
     [self.database removeConfigForName:WCTConfigNameCheckpoint];
 }
 
-- (BOOL)fillDatabaseUntilReachingExpectedSize
+- (BOOL)fillDatabase:(NSUInteger)expectedSize
 {
-    if ([self.database getFilesSize] > self.expectedFileSize * (1.0f + self.tolerablePercentageForFileSize)) {
+    if ([self.database getFilesSize] > expectedSize * (1.0f + self.tolerablePercentageForFileSize)) {
         XCTAssertTrue([self.database removeFiles]);
     }
 
@@ -66,31 +68,30 @@
         [objects addObject:object];
     }
 
-    NSString* currentTable = nil;
+    __block NSString* currentTable = nil;
     int percentage = 0;
-    for (NSUInteger size = [self.database getFilesSize]; size < self.expectedFileSize; size = [self.database getFilesSize]) {
-        int gap = (double) size / self.expectedFileSize * 100 - percentage;
+    for (NSUInteger size = [self.database getFilesSize]; size < expectedSize; size = [self.database getFilesSize]) {
+        int gap = (double) size / expectedSize * 100 - percentage;
         if (gap >= 5) {
             percentage += gap;
             TestLog(@"Preparing %d%%", percentage);
         }
 
-        if (currentTable == nil
-            || [NSNumber randomBool]) {
-            currentTable = [NSString stringWithFormat:@"t_%@", [NSString randomString]];
-            if (![self.database createTableAndIndexes:currentTable withClass:TestCaseObject.class]) {
-                return NO;
-            }
-        }
-
-        if (![self.database insertObjects:objects intoTable:currentTable]) {
+        if (![self.database runTransaction:^BOOL(WCTHandle* handle) {
+                if (currentTable == nil
+                    || [NSNumber randomBool]) {
+                    currentTable = [NSString stringWithFormat:@"t_%@", [NSString randomString]];
+                    if (![self.database createTableAndIndexes:currentTable withClass:TestCaseObject.class]) {
+                        return NO;
+                    }
+                }
+                return [self.database insertObjects:objects intoTable:currentTable];
+            }]) {
             return NO;
         }
 
-        if ([NSNumber randomBool]) {
-            if (![self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]) {
-                return NO;
-            }
+        if (![self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]) {
+            return NO;
         }
     }
 
@@ -100,14 +101,13 @@
 
 - (void)test_backup
 {
-    TestCaseAssertTrue([self fillDatabaseUntilReachingExpectedSize]);
-
     [self
     measure:^{
         TestCaseAssertTrue([self.database backup]);
     }
     setUp:^{
-        [NSThread sleepForTimeInterval:1.0f];
+        // 500MB
+        TestCaseAssertTrue([self fillDatabase:self.configForSizeToBackup]);
     }
     tearDown:^{
         if ([self.fileManager fileExistsAtPath:self.firstMaterial]) {
@@ -119,6 +119,37 @@
     }
     checkCorrectness:^{
         XCTAssertTrue([self.fileManager fileExistsAtPath:self.firstMaterial]);
+    }];
+}
+
+- (void)test_repair
+{
+    [self
+    measure:^{
+        TestCaseAssertTrue([self.database retrieve:nil] == 1.0f);
+    }
+    setUp:^{
+        TestCaseAssertTrue([self fillDatabase:self.configForSizeToRepair]);
+        TestCaseAssertTrue([self.database backup]);
+    }
+    tearDown:^{
+    }
+    checkCorrectness:^{
+    }];
+}
+
+- (void)test_repair_without_backup
+{
+    [self
+    measure:^{
+        TestCaseAssertTrue([self.database retrieve:nil] == 1.0f);
+    }
+    setUp:^{
+        TestCaseAssertTrue([self fillDatabase:self.configForSizeToRepair]);
+    }
+    tearDown:^{
+    }
+    checkCorrectness:^{
     }];
 }
 
