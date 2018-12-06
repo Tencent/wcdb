@@ -40,7 +40,7 @@
 {
     [super setUp];
 
-    _expectedFileSize = 100 * 1024 * 1024;
+    _expectedFileSize = 500 * 1024 * 1024;
 
     _tolerablePercentageForFileSize = 0.01f;
 
