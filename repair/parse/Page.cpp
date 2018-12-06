@@ -172,6 +172,7 @@ bool Page::doInitialize()
         number, String::formatted("Unexpected CellCount: %d.", cellCount));
         return false;
     }
+    m_cellPointers.reserve(cellCount);
     for (int i = 0; i < cellCount; ++i) {
         int offset = getOffsetOfHeader() + getOffsetOfCellPointer() + i * 2;
         if (!m_deserialization.isEnough(offset + 2)) {
@@ -183,6 +184,7 @@ bool Page::doInitialize()
     }
     if (m_type == Type::InteriorTable) {
         int subPageCount = (int) m_cellPointers.size() + hasRightMostPageNo();
+        m_subPagenos.reserve(subPageCount);
         for (int i = 0; i < subPageCount; ++i) {
             int offset = i < m_cellPointers.size() ? m_cellPointers[i] :
                                                      8 + getOffsetOfHeader();
