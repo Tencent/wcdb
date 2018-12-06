@@ -25,6 +25,7 @@
 		2316D9432105D19500707AFC /* PageBasedFileHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2316D9412105D19500707AFC /* PageBasedFileHandle.cpp */; };
 		2316D9452105D19500707AFC /* PageBasedFileHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D9422105D19500707AFC /* PageBasedFileHandle.hpp */; };
 		2316D94B2105D21500707AFC /* LRUCache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D9482105D21500707AFC /* LRUCache.hpp */; };
+		23176A8C21B912B10051ACF9 /* Version.h in Headers */ = {isa = PBXBuildFile; fileRef = 23176A8B21B912B10051ACF9 /* Version.h */; };
 		231C98BA219532AC0067B87C /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
 		231C98BB219532AC0067B87C /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
 		231C98BC219532AC0067B87C /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
@@ -375,7 +376,6 @@
 		238C73AE21B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
 		238C73AF21B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
 		238C73B021B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
-		23906AB5215E4F4400C2B717 /* Version.h in Headers */ = {isa = PBXBuildFile; fileRef = 23906AB4215E4F4400C2B717 /* Version.h */; };
 		23906AB9215E500100C2B717 /* WCTDatabase+Monitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 23906AB7215E500100C2B717 /* WCTDatabase+Monitor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23906ABB215E500100C2B717 /* WCTDatabase+Monitor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23906AB8215E500100C2B717 /* WCTDatabase+Monitor.mm */; };
 		2396EB0D21801BD60079066C /* WCTResultColumn.h in Headers */ = {isa = PBXBuildFile; fileRef = 2396EB0B21801BD60079066C /* WCTResultColumn.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1193,6 +1193,7 @@
 		2316D9412105D19500707AFC /* PageBasedFileHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PageBasedFileHandle.cpp; sourceTree = "<group>"; };
 		2316D9422105D19500707AFC /* PageBasedFileHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PageBasedFileHandle.hpp; sourceTree = "<group>"; };
 		2316D9482105D21500707AFC /* LRUCache.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LRUCache.hpp; sourceTree = "<group>"; };
+		23176A8B21B912B10051ACF9 /* Version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Version.h; sourceTree = "<group>"; };
 		231C98B8219532AC0067B87C /* NSObject+TestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+TestCase.h"; sourceTree = "<group>"; };
 		231C98B9219532AC0067B87C /* NSObject+TestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSObject+TestCase.mm"; sourceTree = "<group>"; };
 		231FEA2F21999E7D00DC3706 /* Basic tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Basic tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1480,7 +1481,6 @@
 		238845EF2063912B006EAEC8 /* WCTPerformanceFootprint.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTPerformanceFootprint.mm; sourceTree = "<group>"; };
 		238C73A321B8B50F006B59C2 /* TestLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestLog.h; sourceTree = "<group>"; };
 		238C73A421B8B510006B59C2 /* TestLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestLog.m; sourceTree = "<group>"; };
-		23906AB4215E4F4400C2B717 /* Version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Version.h; sourceTree = "<group>"; };
 		23906AB7215E500100C2B717 /* WCTDatabase+Monitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Monitor.h"; sourceTree = "<group>"; };
 		23906AB8215E500100C2B717 /* WCTDatabase+Monitor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Monitor.mm"; sourceTree = "<group>"; };
 		239326611E836D7300D677CC /* WCDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2419,6 +2419,7 @@
 		2349F6A71EA0D6680021EFA7 /* utility */ = {
 			isa = PBXGroup;
 			children = (
+				23176A8B21B912B10051ACF9 /* Version.h */,
 				23EEDD5E217DFB16006E9E73 /* Enum.hpp */,
 				23EEDD5F217DFB17006E9E73 /* Shadow.hpp */,
 				239776D0202AF2E2000A681C /* Macro.hpp */,
@@ -2536,7 +2537,6 @@
 				23F0FEB1215F5E9A008399FB /* Lock.hpp */,
 				23F0FEB0215F5E99008399FB /* ThreadLocal.cpp */,
 				23F0FEB2215F5E9A008399FB /* ThreadLocal.hpp */,
-				23906AB4215E4F4400C2B717 /* Version.h */,
 				2316D92E21057CA700707AFC /* MappedData.cpp */,
 				2316D92B21057CA600707AFC /* MappedData.hpp */,
 				2316D92D21057CA700707AFC /* Recyclable.hpp */,
@@ -3484,6 +3484,7 @@
 				23EEDCC2217DFADC006E9E73 /* StatementCreateTable.hpp in Headers */,
 				23EEDC88217DFADC006E9E73 /* ForeignKey.hpp in Headers */,
 				2372E05A21A2633800051D9A /* WCTTryDisposeGuard.h in Headers */,
+				23176A8C21B912B10051ACF9 /* Version.h in Headers */,
 				23A3CFB5205FB1A800692F94 /* WCTHandle+Convenient.h in Headers */,
 				23EEDCD2217DFADC006E9E73 /* StatementDropTrigger.hpp in Headers */,
 				23EEDC72217DFADC006E9E73 /* FTS3Function.hpp in Headers */,
@@ -3499,7 +3500,6 @@
 				23A6D4C120BFD7F9004F2DAA /* Progress.hpp in Headers */,
 				23EEDCFE217DFADC006E9E73 /* SyntaxForeignKeyClause.hpp in Headers */,
 				23EEDD1E217DFADC006E9E73 /* SyntaxSelectCore.hpp in Headers */,
-				23906AB5215E4F4400C2B717 /* Version.h in Headers */,
 				23EEDD20217DFADC006E9E73 /* SyntaxTableConstraint.hpp in Headers */,
 				23F1698A20B6638F009B5C47 /* ThreadedErrors.hpp in Headers */,
 				23EEDCA8217DFADC006E9E73 /* TableConstraint.hpp in Headers */,

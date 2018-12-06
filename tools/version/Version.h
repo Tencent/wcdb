@@ -21,7 +21,7 @@
 #ifndef _WCDB_VERSION_H
 #define _WCDB_VERSION_H
 
-/* This file is generated automatically by `tools/version/objc.sh`. */
+/* This file is generated automatically by `WCDB_VERSION_TOOL_PLACEHOLDER`. */
 
 #define WCDB_VERSION "WCDB_VERSION_PLACEHOLDER"
 #define WCDB_COMMIT_HASH "WCDB_COMMIT_HASH_PLACEHOLDER"

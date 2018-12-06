@@ -24,8 +24,8 @@
 /* This file is generated automatically by `tools/version/objc.sh`. */
 
 #define WCDB_VERSION "1.1.0"
-#define WCDB_COMMIT_HASH "bec52437d55f1ff4464b40f01ec4eebd4e52fda1"
-#define WCDB_BUILD_TIMESTAMP 1538296378
-#define WCDB_BUILD_TIME "2018-09-30 16:32:58 UTC+0800"
+#define WCDB_COMMIT_HASH "02fce794781188c6db6d0f6381a432ec58d8f51a"
+#define WCDB_BUILD_TIMESTAMP 1544084835
+#define WCDB_BUILD_TIME "2018-12-06 16:27:15 UTC+0800"
 
 #endif /* _WCDB_VERSION_H */
