@@ -17,12 +17,12 @@
 #include <jni.h>
 #include <sqlite3.h>
 #include <stdio.h>
+#include <assert.h>
 
 #include "JNIHelp.h"
 #include "Logger.h"
 #include "ModuleLoader.h"
 #include "SQLiteCommon.h"
-#include "fts/mm_fts.h"
 
 // Forward declarations
 extern "C" void sqlcipher_set_default_pagesize(int);
@@ -30,6 +30,8 @@ extern "C" int sqlite3_register_vfslog(const char *);
 extern volatile uint32_t vlogDefaultLogFlags;
 
 namespace wcdb {
+
+static JavaVM *gVM = nullptr;
 
 // Limit heap to 8MB for now.  This is 4 times the maximum cursor window
 // size, as has been used by the original code in SQLiteDatabase for
@@ -78,6 +80,35 @@ static void sqliteLogCallback(void *data, int iErrCode, const char *zMsg)
                    iErrCode, zMsg);
 }
 
+static int sqliteExtensionApiStealer(sqlite3 *db, const char **pzErrMsg,
+                                     const sqlite3_api_routines *pThunk)
+{
+    // Set the global API environment pointer then exit.
+    // XXX: Currently SQLite calls extension entry point with a static global sqlite3_api_routines
+    // structure that never change. We can safely store and reuse this structure.
+    JNIEnv *env = nullptr;
+    bool attached = false;
+    jint ret = gVM->GetEnv((void **) &env, JNI_VERSION_1_6);
+    if (ret == JNI_EDETACHED) {
+        jint ret = gVM->AttachCurrentThread(&env, nullptr);
+        assert(ret == JNI_OK);
+        (void) ret;
+        attached = true;
+    }
+
+    jclass clazz;
+    FIND_CLASS(clazz, "com/tencent/wcdb/database/WCDBInitializationProbe");
+
+    jfieldID fidApiEnv = env->GetStaticFieldID(clazz, "apiEnv", "J");
+    env->SetStaticLongField(clazz, fidApiEnv, (jlong)(intptr_t) pThunk);
+    env->DeleteLocalRef(clazz);
+
+    if (attached) {
+        gVM->DetachCurrentThread();
+    }
+    return SQLITE_OK;
+}
+
 // Sets the global SQLite configuration.
 // This must be called before any other SQLite functions are called.
 static void sqliteInitialize()
@@ -100,6 +131,9 @@ static void sqliteInitialize()
 
     // Initialize SQLite.
     sqlite3_initialize();
+
+    // Register the API environment stealer as the auto-loaded extension.
+    sqlite3_auto_extension((void (*)(void)) sqliteExtensionApiStealer);
 }
 
 static jint nativeReleaseMemory(JNIEnv *env, jclass clazz)
@@ -120,6 +154,7 @@ static JNINativeMethod sMethods[] = {
 
 static int register_wcdb_SQLiteGlobal(JavaVM *vm, JNIEnv *env)
 {
+    gVM = vm;
     sqliteInitialize();
 
     jclass clazz;
@@ -134,6 +169,5 @@ static int register_wcdb_SQLiteGlobal(JavaVM *vm, JNIEnv *env)
                                     sMethods, NELEM(sMethods));
 }
 WCDB_JNI_INIT(SQLiteGlobal, register_wcdb_SQLiteGlobal)
-WCDB_DBCONN_INIT(MMFTS, sqlite3_mmftsext_init)
 
 } // namespace wcdb

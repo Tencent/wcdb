@@ -439,21 +439,13 @@ static jlong nativeOpen(JNIEnv *env,
         return 0;
     }
 
+    // Reset the API stealer auto extension, it is only needed to be called once.
+    sqlite3_reset_auto_extension();
+
     // Set the default busy handler to retry automatically before returning SQLITE_BUSY.
     err = sqlite3_busy_timeout(db, BUSY_TIMEOUT_MS);
     if (err != SQLITE_OK) {
         throw_sqlite3_exception(env, db, "Could not set busy timeout");
-        sqlite3_close(db);
-        return 0;
-    }
-
-    // Call connection initializers, which register custom SQLite functions.
-    char *errmsg = nullptr;
-    err = run_dbconn_initializers(db, &errmsg);
-    if (err != SQLITE_OK) {
-        throw_sqlite3_exception(env, err, errmsg ? errmsg : "Unknown error",
-                                "Database connection initializer failed.");
-        sqlite3_free(errmsg);
         sqlite3_close(db);
         return 0;
     }

@@ -16,9 +16,10 @@
 
 package com.tencent.wcdb.database;
 
-import java.util.ArrayList;
+import com.tencent.wcdb.extension.SQLiteExtension;
+
+import java.util.LinkedHashSet;
 import java.util.Locale;
-import java.util.regex.Pattern;
 
 /**
  * Describes how to configure a database.
@@ -106,10 +107,9 @@ public final class SQLiteDatabaseConfiguration {
     public boolean updateNotificationRowID;
 
     /**
-     * The custom functions to register.
+     * Extensions to register.
      */
-    public final ArrayList<SQLiteCustomFunction> customFunctions =
-            new ArrayList<SQLiteCustomFunction>();
+    public final LinkedHashSet<SQLiteExtension> extensions = new LinkedHashSet<>();
 
     /**
      * Creates a database configuration with the required parameters for opening a
@@ -173,8 +173,9 @@ public final class SQLiteDatabaseConfiguration {
         updateNotificationRowID = other.updateNotificationRowID;
         synchronousMode = other.synchronousMode;
         vfsName = other.vfsName;
-        customFunctions.clear();
-        customFunctions.addAll(other.customFunctions);
+
+        extensions.clear();
+        extensions.addAll(other.extensions);
     }
 
     /**

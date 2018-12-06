@@ -19,8 +19,6 @@ package com.tencent.wcdb.database;
 import android.os.Environment;
 import android.os.StatFs;
 
-import java.lang.reflect.Method;
-
 /**
  * Provides access to SQLite functions that affect all database connection,
  * such as memory management.
@@ -102,5 +100,6 @@ public final class SQLiteGlobal {
  */
 class WCDBInitializationProbe {
     static boolean libLoaded = false;
+    static volatile long apiEnv = 0L;
     private WCDBInitializationProbe() {}
 }

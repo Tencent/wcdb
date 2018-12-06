@@ -27,6 +27,7 @@ import com.tencent.wcdb.Cursor;
 import com.tencent.wcdb.CursorWindow;
 import com.tencent.wcdb.DatabaseUtils;
 import com.tencent.wcdb.database.SQLiteDebug.DbStats;
+import com.tencent.wcdb.extension.SQLiteExtension;
 import com.tencent.wcdb.support.CancellationSignal;
 import com.tencent.wcdb.support.Log;
 import com.tencent.wcdb.support.LruCache;
@@ -278,14 +279,19 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         setJournalSizeLimit();
         setCheckpointStrategy();
         setLocaleFromConfiguration();
-        setUpdateNotificationFromConfiguration();
 
-        // Register custom functions.
-        final int functionCount = mConfiguration.customFunctions.size();
-        for (int i = 0; i < functionCount; i++) {
-            SQLiteCustomFunction function = mConfiguration.customFunctions.get(i);
-            nativeRegisterCustomFunction(mConnectionPtr, function);
+        // 5. Register extensions.
+        long apiEnv = WCDBInitializationProbe.apiEnv;
+        long dbPtr = nativeSQLiteHandle(mConnectionPtr, true);
+        try {
+            for (SQLiteExtension ext : mConfiguration.extensions) {
+                ext.initialize(dbPtr, apiEnv);
+            }
+        } finally {
+            nativeSQLiteHandle(mConnectionPtr, false);
         }
+
+        setUpdateNotificationFromConfiguration();
     }
 
     private void dispose(boolean finalized) {
@@ -495,13 +501,17 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
     void reconfigure(SQLiteDatabaseConfiguration configuration) {
         mOnlyAllowReadOnlyOperations = false;
 
-        // Register custom functions.
-        final int functionCount = configuration.customFunctions.size();
-        for (int i = 0; i < functionCount; i++) {
-            SQLiteCustomFunction function = configuration.customFunctions.get(i);
-            if (!mConfiguration.customFunctions.contains(function)) {
-                nativeRegisterCustomFunction(mConnectionPtr, function);
+        // Register extensions.
+        long apiEnv = WCDBInitializationProbe.apiEnv;
+        long dbPtr = nativeSQLiteHandle(mConnectionPtr, true);
+        try {
+            for (SQLiteExtension ext : configuration.extensions) {
+                if (!mConfiguration.extensions.contains(ext)) {
+                    ext.initialize(dbPtr, apiEnv);
+                }
             }
+        } finally {
+            nativeSQLiteHandle(mConnectionPtr, false);
         }
 
         // Remember what changed.

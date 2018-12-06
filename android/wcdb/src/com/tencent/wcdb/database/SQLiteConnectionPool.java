@@ -316,7 +316,8 @@ public final class SQLiteConnectionPool implements Closeable {
             }
 
             if (((mConfiguration.openFlags ^ configuration.openFlags) & OPEN_FLAG_REOPEN_MASK) != 0 ||
-                    !DatabaseUtils.objectEquals(mConfiguration.vfsName, configuration.vfsName)) {
+                    !DatabaseUtils.objectEquals(mConfiguration.vfsName, configuration.vfsName) ||
+                    !configuration.extensions.containsAll(mConfiguration.extensions)) {
                 // If we are changing open flags and WAL mode at the same time, then
                 // we have no choice but to close the primary connection beforehand
                 // because there can only be one connection open when we change WAL mode.

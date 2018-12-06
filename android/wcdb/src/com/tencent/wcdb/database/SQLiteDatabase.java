@@ -30,6 +30,7 @@ import com.tencent.wcdb.DatabaseUtils;
 import com.tencent.wcdb.DefaultDatabaseErrorHandler;
 import com.tencent.wcdb.SQLException;
 import com.tencent.wcdb.database.SQLiteDebug.DbStats;
+import com.tencent.wcdb.extension.SQLiteExtension;
 import com.tencent.wcdb.support.CancellationSignal;
 import com.tencent.wcdb.support.Log;
 import com.tencent.wcdb.support.OperationCanceledException;
@@ -1020,28 +1021,17 @@ public final class SQLiteDatabase extends SQLiteClosable {
                 factory, CREATE_IF_NECESSARY);
     }
 
-    /**
-     * Registers a CustomFunction callback as a function that can be called from
-     * SQLite database triggers.
-     *
-     * @param name     the name of the sqlite3 function
-     * @param numArgs  the number of arguments for the function
-     * @param function callback to call when the function is executed
-     * @hide
-     */
-    public void addCustomFunction(String name, int numArgs, CustomFunction function) {
-        // Create wrapper (also validates arguments).
-        SQLiteCustomFunction wrapper = new SQLiteCustomFunction(name, numArgs, function);
-
+    public void addExtension(SQLiteExtension extension) {
         synchronized (mLock) {
             throwIfNotOpenLocked();
 
-            mConfigurationLocked.customFunctions.add(wrapper);
-            try {
-                mConnectionPoolLocked.reconfigure(mConfigurationLocked);
-            } catch (RuntimeException ex) {
-                mConfigurationLocked.customFunctions.remove(wrapper);
-                throw ex;
+            if (mConfigurationLocked.extensions.add(extension)) {
+                try {
+                    mConnectionPoolLocked.reconfigure(mConfigurationLocked);
+                } catch (RuntimeException ex) {
+                    mConfigurationLocked.extensions.remove(extension);
+                    throw ex;
+                }
             }
         }
     }
