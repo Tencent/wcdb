@@ -26,6 +26,7 @@
 		2316D9452105D19500707AFC /* PageBasedFileHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D9422105D19500707AFC /* PageBasedFileHandle.hpp */; };
 		2316D94B2105D21500707AFC /* LRUCache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D9482105D21500707AFC /* LRUCache.hpp */; };
 		23176A8C21B912B10051ACF9 /* Version.h in Headers */ = {isa = PBXBuildFile; fileRef = 23176A8B21B912B10051ACF9 /* Version.h */; };
+		23176A9121BA02590051ACF9 /* MigrationTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23176A9021BA02590051ACF9 /* MigrationTestCase.mm */; };
 		231C98BA219532AC0067B87C /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
 		231C98BB219532AC0067B87C /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
 		231C98BC219532AC0067B87C /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
@@ -1193,6 +1194,8 @@
 		2316D9422105D19500707AFC /* PageBasedFileHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PageBasedFileHandle.hpp; sourceTree = "<group>"; };
 		2316D9482105D21500707AFC /* LRUCache.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LRUCache.hpp; sourceTree = "<group>"; };
 		23176A8B21B912B10051ACF9 /* Version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Version.h; sourceTree = "<group>"; };
+		23176A8F21BA02590051ACF9 /* MigrationTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MigrationTestCase.h; sourceTree = "<group>"; };
+		23176A9021BA02590051ACF9 /* MigrationTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MigrationTestCase.mm; sourceTree = "<group>"; };
 		231C98B8219532AC0067B87C /* NSObject+TestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+TestCase.h"; sourceTree = "<group>"; };
 		231C98B9219532AC0067B87C /* NSObject+TestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSObject+TestCase.mm"; sourceTree = "<group>"; };
 		231FEA2F21999E7D00DC3706 /* Basic tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Basic tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2141,6 +2144,8 @@
 		231FEADE2199A0FF00DC3706 /* migration */ = {
 			isa = PBXGroup;
 			children = (
+				23176A8F21BA02590051ACF9 /* MigrationTestCase.h */,
+				23176A9021BA02590051ACF9 /* MigrationTestCase.mm */,
 			);
 			path = migration;
 			sourceTree = "<group>";
@@ -2206,10 +2211,10 @@
 		2349F5D61EA0D6680021EFA7 /* winq */ = {
 			isa = PBXGroup;
 			children = (
+				23EEDBEB217DFADC006E9E73 /* WINQ.h */,
 				23EEDB67217DFADC006E9E73 /* extension */,
 				23EEDB79217DFADC006E9E73 /* identifier */,
 				23EEDBB6217DFADC006E9E73 /* statement */,
-				23EEDBEB217DFADC006E9E73 /* WINQ.h */,
 				23EEDBEC217DFADC006E9E73 /* syntax */,
 				23EEDB66217DFADC006E9E73 /* winq */,
 			);
@@ -4382,6 +4387,7 @@
 				231FEB0F2199A4D500DC3706 /* SingleDatabaseTestCase.mm in Sources */,
 				231FEB0E2199A4D500DC3706 /* TestCase.mm in Sources */,
 				23846FE021AFF216005B868F /* AllTypesObject.mm in Sources */,
+				23176A9121BA02590051ACF9 /* MigrationTestCase.mm in Sources */,
 				2386564E219C47AC00F7F6D2 /* Console.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
