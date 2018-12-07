@@ -24,13 +24,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WCTDatabase (Version)
 
-@property (class, readonly, nonatomic, assign) NSString *version;
+@property (class, readonly, nonatomic) NSString *identifier;
 
-@property (class, readonly, nonatomic, assign) NSString *commitHash;
+@property (class, readonly, nonatomic) NSString *version;
 
-@property (class, readonly, nonatomic, assign) NSUInteger buildTimestamp;
+@property (class, readonly, nonatomic) NSString *commitHash;
 
-@property (class, readonly, nonatomic, assign) NSDate *buildTime;
+@property (class, readonly, nonatomic) NSUInteger buildTimestamp;
+
+@property (class, readonly, nonatomic) NSDate *buildTime;
 
 @end
 

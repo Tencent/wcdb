@@ -33,7 +33,7 @@
     TestCaseAssertTrue(WCTDatabase.buildTimestamp > 0);
     TestCaseAssertEqual(WCTDatabase.buildTime.timeIntervalSince1970, WCTDatabase.buildTimestamp);
 
-    NSString *identifier = [NSString stringWithFormat:@"%@_%@_%llu", @"bfd56a1a2d98b0b21babd84fcf6db4ac", WCTDatabase.version, WCTDatabase.buildTimestamp];
+    NSString *identifier = [NSString stringWithFormat:@"%@_%@_%lu", @"bfd56a1a2d98b0b21babd84fcf6db4ac", WCTDatabase.version, (unsigned long) WCTDatabase.buildTimestamp];
     TestCaseAssertTrue([WCTDatabase.identifier isEqualToString:identifier]);
 }
 
