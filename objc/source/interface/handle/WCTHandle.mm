@@ -410,6 +410,12 @@
     return _handle->getColumnCount();
 }
 
+- (NSString *)extractOriginColumnNameAtIndex:(int)index
+{
+    WCTHandleAssert(return nil;);
+    return [NSString stringWithUTF8String:_handle->getOriginColumnName(index)];
+}
+
 - (NSString *)extractColumnNameAtIndex:(int)index
 {
     WCTHandleAssert(return nil;);

@@ -225,6 +225,12 @@ int Handle::getColumnCount()
     return m_handleStatement.getColumnCount();
 }
 
+const UnsafeString Handle::getOriginColumnName(int index)
+{
+    WCTInnerAssert(isPrepared());
+    return m_handleStatement.getOriginColumnName(index);
+}
+
 const UnsafeString Handle::getColumnName(int index)
 {
     WCTInnerAssert(isPrepared());

@@ -87,6 +87,12 @@ int HandleStatement::getColumnCount()
     return sqlite3_column_count((sqlite3_stmt *) m_stmt);
 }
 
+const UnsafeString HandleStatement::getOriginColumnName(int index)
+{
+    WCTInnerAssert(isPrepared());
+    return sqlite3_column_origin_name((sqlite3_stmt *) m_stmt, index);
+}
+
 const UnsafeString HandleStatement::getColumnName(int index)
 {
     WCTInnerAssert(isPrepared());

@@ -126,6 +126,7 @@ public:
 
     ColumnType getType(int index);
     int getColumnCount();
+    const UnsafeString getOriginColumnName(int index);
     const UnsafeString getColumnName(int index);
     const UnsafeString getColumnTableName(int index);
 

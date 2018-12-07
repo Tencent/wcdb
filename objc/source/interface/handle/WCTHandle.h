@@ -93,6 +93,8 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Extract Row Data
 - (int)extractColumnCount;
 
+- (NSString *)extractOriginColumnNameAtIndex:(int)index;
+
 - (NSString *)extractColumnNameAtIndex:(int)index;
 
 - (NSString *)extractTableNameAtIndex:(int)index;

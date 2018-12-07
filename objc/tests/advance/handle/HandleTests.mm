@@ -293,10 +293,15 @@
         [self.handle finalizeStatement];
     }
     {
-        TestCaseAssertTrue([self.handle prepare:self.statementSelect]);
+        NSString* alias = @"testAlias";
+        TestCaseAssertTrue([self.handle prepare:WCDB::StatementSelect()
+                                                .select(WCDB::ResultColumn(TestCaseObject.content)
+                                                        .as(alias))
+                                                .from(self.tableName)]);
         TestCaseAssertTrue([self.handle step]);
         TestCaseAssertEqual([self.handle extractColumnCount], 1);
-        TestCaseAssertTrue([[self.handle extractColumnNameAtIndex:0] isEqualToString:@"content"]);
+        TestCaseAssertTrue([[self.handle extractOriginColumnNameAtIndex:0] isEqualToString:@"content"]);
+        TestCaseAssertTrue([[self.handle extractColumnNameAtIndex:0] isEqualToString:alias]);
         TestCaseAssertTrue([[self.handle extractTableNameAtIndex:0] isEqualToString:self.tableName]);
         [self.handle finalizeStatement];
     }
