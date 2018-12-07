@@ -22,7 +22,6 @@
 #define _WCDB_MIGRATIONINFO_HPP
 
 #include <WCDB/DebugDescribable.hpp>
-#include <WCDB/Lock.hpp>
 #include <WCDB/String.hpp>
 #include <WCDB/WINQ.h>
 #include <set>

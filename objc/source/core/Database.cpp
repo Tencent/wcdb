@@ -169,7 +169,7 @@ std::shared_ptr<Handle> Database::generateHandle()
     std::shared_ptr<Handle> handle;
     WCTInnerAssert(m_migration.isInitialized());
     if (m_migration.shouldMigrate()) {
-        handle.reset(new MigrationHandle(path));
+        handle.reset(new MigrationHandle(path, m_migration));
     } else {
         handle.reset(new Handle(path));
     }
@@ -592,12 +592,7 @@ bool Database::rebindMigration(Handle *handle)
     WCTInnerAssert(handle != nullptr);
     WCTInnerAssert(m_migration.shouldMigrate());
     WCTInnerAssert(dynamic_cast<MigrationHandle *>(handle) != nullptr);
-    std::set<const MigrationInfo *> migratingInfos;
-    {
-        SharedLockGuard memoryGuard(m_memory);
-        migratingInfos = m_migration.getMigratingInfos();
-    }
-    return static_cast<MigrationHandle *>(handle)->rebindMigration(migratingInfos);
+    return static_cast<MigrationHandle *>(handle)->rebindMigration();
 }
 
 void Database::filterMigration(const MigrationTableFilter &filter)

@@ -32,16 +32,20 @@ Migration::Migration() : m_tableFilter(nullptr), m_initialized(true)
 
 bool Migration::isInitialized() const
 {
+    SharedLockGuard lockGuard(m_lock);
     return m_initialized;
 }
 
 #pragma mark - Filter
 void Migration::filterTable(const TableFilter& tableFilter)
 {
+    LockGuard lockGuard(m_lock);
     m_tableFilter = tableFilter;
     m_initialized = (m_tableFilter == nullptr);
     m_holder.clear();
-    m_migrating.clear();
+    m_migratings.clear();
+    m_dumpster.clear();
+    m_references.clear();
 }
 
 #pragma mark - Infos
@@ -51,12 +55,15 @@ Migration::Initializer::~Initializer()
 
 bool Migration::initialize(Initializer& initializer)
 {
+    LockGuard lockGuard(m_lock);
     if (m_initialized) {
         return true;
     }
 
     m_holder.clear();
-    m_migrating.clear();
+    m_migratings.clear();
+    m_dumpster.clear();
+    m_references.clear();
 
     bool succeed;
 
@@ -78,7 +85,7 @@ bool Migration::initialize(Initializer& initializer)
     {
         // check sanity
         // 1. duplicated {origin table, origin database} is not allowed.
-        // 2. origin table == migrated table && origin database == current database is not allowed.
+        // 2. migrating to same table with same database is not allowed.
         String databasePath = initializer.getDatabasePath();
         std::map<std::pair<String, String>, const MigrationUserInfo*> origins;
         for (const auto& userInfo : userInfos) {
@@ -118,13 +125,12 @@ bool Migration::initialize(Initializer& initializer)
         if (!succeed) {
             return false;
         }
-        // When [columns] is empty, it usually means that the origin table had been migrated before the database is opened. At this case, it will be discarded but not marked as migrated.
+        // When [columns] is empty, it means that the origin table had been migrated before the database is opened. At this case, it will be discarded but not marked as migrated.
         if (!columns.empty()) {
-            auto inserted = m_holder.emplace(userInfo.getMigratedTable(),
-                                             MigrationInfo(userInfo, columns));
-            WCTInnerAssert(inserted.second);
-            const MigrationInfo* info = &inserted.first->second;
-            m_migrating.emplace(info);
+            m_holder.push_back(MigrationInfo(userInfo, columns));
+            const MigrationInfo* info = &m_holder.back();
+            m_migratings.emplace(info);
+            m_references.emplace(info, 0);
         }
     }
 
@@ -134,22 +140,84 @@ bool Migration::initialize(Initializer& initializer)
 
 bool Migration::shouldMigrate() const
 {
+    SharedLockGuard lockGuard(m_lock);
     WCTInnerAssert(isInitialized());
-    return !m_holder.empty();
+    return !m_migratings.empty();
 }
 
-const std::set<const MigrationInfo*>& Migration::getMigratingInfos() const
+#pragma mark - Bind
+Migration::Binder::Binder(Migration& migration) : m_migration(migration)
 {
-    WCTInnerAssert(isInitialized());
-    return m_migrating;
 }
 
-void Migration::markInfoAsMigrated(const MigrationInfo* info)
+Migration::Binder::~Binder()
 {
-    WCTInnerAssert(isInitialized());
-    WCTInnerAssert(info != nullptr);
-    WCTInnerAssert(m_migrating.find(info) != m_migrating.end());
-    m_migrating.erase(info);
+    m_migration.markAsRebound({}, m_bounds);
+}
+
+bool Migration::Binder::rebindMigration()
+{
+    if (!m_migration.shouldRebind(m_bounds)) {
+        return true;
+    }
+
+    std::set<const MigrationInfo*> migratings = m_migration.getMigratingInfos();
+    if (!rebind(migratings)) {
+        return false;
+    }
+
+    m_migration.markAsRebound(migratings, m_bounds);
+    m_bounds = migratings;
+    return true;
+}
+
+const std::set<const MigrationInfo*>& Migration::Binder::getBounds() const
+{
+    return m_bounds;
+}
+
+bool Migration::shouldRebind(const std::set<const MigrationInfo*>& bounds) const
+{
+    SharedLockGuard lockGuard(m_lock);
+    return m_migratings != bounds;
+}
+
+void Migration::markAsRebound(const std::set<const MigrationInfo*>& oldBounds,
+                              const std::set<const MigrationInfo*>& newBounds)
+{
+    LockGuard lockGuard(m_lock);
+    for (const auto& newBound : newBounds) {
+        auto iter = m_references.find(newBound);
+        WCTInnerAssert(iter != m_references.end());
+        ++iter->second;
+    }
+    for (const auto& oldBound : oldBounds) {
+        auto iter = m_references.find(oldBound);
+        WCTInnerAssert(iter != m_references.end());
+        WCTInnerAssert(iter->second > 0);
+        if (--iter->second == 0) {
+            if (m_migratings.find(iter->first) == m_migratings.end()) {
+                // already migrated
+                m_dumpster.emplace(iter->first);
+                m_references.erase(iter->first);
+            }
+        }
+    }
+}
+
+std::set<const MigrationInfo*> Migration::getMigratingInfos() const
+{
+    SharedLockGuard lockGuard(m_lock);
+    return m_migratings;
+}
+
+#pragma mark - Step
+Migration::Stepper::~Stepper()
+{
+}
+
+void Migration::step()
+{
 }
 
 } // namespace WCDB

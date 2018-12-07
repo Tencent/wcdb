@@ -26,22 +26,19 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-MigrationHandle::MigrationHandle(const String& path) : Handle(path)
+MigrationHandle::MigrationHandle(const String& path, Migration& migration)
+: Handle(path), Migration::Binder(migration)
 {
 }
 
-bool MigrationHandle::rebindMigration(const std::set<const MigrationInfo*>& migratingInfos)
+bool MigrationHandle::rebind(const std::set<const MigrationInfo*>& migratings)
 {
-    if (m_migrating == migratingInfos) {
-        return true;
-    }
-
     bool succeed;
 
     // views
     std::map<String, const MigrationInfo*> infosToCreateView; // view -> info
-    for (const auto& migratingInfo : migratingInfos) {
-        infosToCreateView.emplace(migratingInfo->getUnionedView(), migratingInfo);
+    for (const auto& migrating : migratings) {
+        infosToCreateView.emplace(migrating->getUnionedView(), migrating);
     }
 
     std::set<String> createdViews;
@@ -73,10 +70,10 @@ bool MigrationHandle::rebindMigration(const std::set<const MigrationInfo*>& migr
 
     // schemas
     std::map<String, const MigrationInfo*> infosToAttachSchema; // schema -> info
-    for (const auto& migratingInfo : migratingInfos) {
-        if (!migratingInfo->isSameDatabaseMigration()) {
+    for (const auto& migrating : migratings) {
+        if (!migrating->isSameDatabaseMigration()) {
             infosToAttachSchema.emplace(
-            migratingInfo->getSchemaForOriginDatabase().getDescription(), migratingInfo);
+            migrating->getSchemaForOriginDatabase().getDescription(), migrating);
         }
     }
 

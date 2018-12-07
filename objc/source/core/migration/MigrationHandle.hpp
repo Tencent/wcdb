@@ -22,21 +22,21 @@
 #define _WCDB_MIGRATIONHANDLE_HPP
 
 #include <WCDB/Handle.hpp>
+#include <WCDB/Migration.hpp>
 #include <set>
 
 namespace WCDB {
 
 class MigrationInfo;
 
-class MigrationHandle final : public Handle {
+class MigrationHandle final : public Handle, public Migration::Binder {
 #pragma mark - Initialize
 public:
-    MigrationHandle(const String &path);
+    MigrationHandle(const String &path, Migration &migration);
 
-    bool rebindMigration(const std::set<const MigrationInfo *> &migratingInfos);
-
+#pragma mark - Bind
 protected:
-    std::set<const MigrationInfo *> m_migrating;
+    bool rebind(const std::set<const MigrationInfo *> &toRebinds) override final;
 
 #pragma mark - Override
 public:

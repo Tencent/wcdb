@@ -21,23 +21,29 @@
 #ifndef _WCDB_MIGRATION_HPP
 #define _WCDB_MIGRATION_HPP
 
+#include <WCDB/Lock.hpp>
 #include <WCDB/MigrationInfo.hpp>
+#include <WCDB/Recyclable.hpp>
 #include <functional>
 #include <map>
 #include <set>
 
 namespace WCDB {
 
-// There are two ways to set up Migration. Set the user info for those existing tables or set a filter.
 class Migration final {
 #pragma mark - Initialize
 public:
     Migration();
 
     class Initializer {
+        friend class Migration;
+
     public:
         virtual ~Initializer();
 
+        virtual const Error& getError() const = 0;
+
+    protected:
         virtual const String& getDatabasePath() const = 0;
 
         virtual std::pair<bool, std::set<String>> getTables() = 0;
@@ -46,15 +52,27 @@ public:
         getColumns(const String& table, const String& database) = 0;
 
         virtual void setError(const Error& error) = 0;
-        virtual const Error& getError() const = 0;
     };
     // Resolve user infos and get the column names of origin table
     bool initialize(Initializer& initializer);
     bool isInitialized() const;
+    bool shouldMigrate() const;
 
-protected:
-    void onStateChanged();
+private:
     bool m_initialized;
+
+    // Those infos needed to be migrate will be held by m_migrating after initialized. (Other infos that already migrated or have no need to migrate will be dropped when initializing.)
+    // And when all the columns inside original table is migrated, the info will not be dropped immedially but mark as migrated. The reasone is that ther might be some handles still holding it. At the same time, the original table will not be dropped too.
+    // When it's marked as migrated, no one will try to hold them anymore. Until there is really no one holding them, it will be moved to dumpster and wait to be dropped.
+
+    // migrated -> info
+    std::set<const MigrationInfo*> m_migratings;
+    std::set<const MigrationInfo*> m_dumpster;
+
+    std::map<const MigrationInfo*, std::atomic<int>> m_references;
+    std::list<MigrationInfo> m_holder;
+
+    mutable SharedLock m_lock;
 
 #pragma mark - Filter
 public:
@@ -64,17 +82,38 @@ public:
 protected:
     TableFilter m_tableFilter;
 
-#pragma mark - Infos
+#pragma mark - Bind
 public:
-    bool shouldMigrate() const;
-    void markInfoAsMigrated(const MigrationInfo* info);
+    class Binder {
+    public:
+        Binder(Migration& migration);
+        virtual ~Binder();
+        bool rebindMigration();
 
-    const std::set<const MigrationInfo*>& getMigratingInfos() const;
+    protected:
+        const std::set<const MigrationInfo*>& getBounds() const;
+        virtual bool rebind(const std::set<const MigrationInfo*>& toRebinds) = 0;
+
+    private:
+        Migration& m_migration;
+        std::set<const MigrationInfo*> m_bounds;
+    };
+
+    std::set<const MigrationInfo*> getMigratingInfos() const;
+    bool shouldRebind(const std::set<const MigrationInfo*>& bounds) const;
 
 protected:
-    std::set<const MigrationInfo*> m_migrating;
+    void markAsRebound(const std::set<const MigrationInfo*>& oldBounds,
+                       const std::set<const MigrationInfo*>& newBounds);
 
-    std::map<String, const MigrationInfo> m_holder; // infos will never be deleted.
+#pragma mark - Step
+public:
+    class Stepper {
+    public:
+        virtual ~Stepper();
+    };
+
+    void step();
 };
 
 } // namespace WCDB
