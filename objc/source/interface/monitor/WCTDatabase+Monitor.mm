@@ -21,18 +21,12 @@
 #import <WCDB/Assertion.hpp>
 #import <WCDB/Console.hpp>
 #import <WCDB/Notifier.hpp>
-#import <WCDB/Version.h>
 #import <WCDB/WCTDatabase+Monitor.h>
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTPerformanceFootprint.h>
 
 @implementation WCTDatabase (Monitor)
-
-+ (NSString *)version
-{
-    return @WCDB_VERSION;
-}
 
 + (BOOL)debuggable
 {
@@ -42,21 +36,6 @@
 + (void)setDebuggable:(BOOL)debuggable
 {
     WCDB::Console::shared()->setDebuggable(debuggable);
-}
-
-+ (NSString *)commitHash
-{
-    return @WCDB_COMMIT_HASH;
-}
-
-+ (NSUInteger)buildTimestamp
-{
-    return WCDB_BUILD_TIMESTAMP;
-}
-
-+ (NSDate *)buildTime
-{
-    return [NSDate dateWithTimeIntervalSince1970:WCDB_BUILD_TIMESTAMP];
 }
 
 + (void)globalTraceError:(WCTErrorTraceBlock)block

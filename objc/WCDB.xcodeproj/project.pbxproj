@@ -27,6 +27,8 @@
 		2316D94B2105D21500707AFC /* LRUCache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D9482105D21500707AFC /* LRUCache.hpp */; };
 		23176A8C21B912B10051ACF9 /* Version.h in Headers */ = {isa = PBXBuildFile; fileRef = 23176A8B21B912B10051ACF9 /* Version.h */; };
 		23176A9121BA02590051ACF9 /* MigrationTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23176A9021BA02590051ACF9 /* MigrationTestCase.mm */; };
+		23176A9B21BA7D460051ACF9 /* WCTDatabase+Version.h in Headers */ = {isa = PBXBuildFile; fileRef = 23176A9921BA7D460051ACF9 /* WCTDatabase+Version.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23176A9C21BA7D460051ACF9 /* WCTDatabase+Version.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23176A9A21BA7D460051ACF9 /* WCTDatabase+Version.mm */; };
 		231C98BA219532AC0067B87C /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
 		231C98BB219532AC0067B87C /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
 		231C98BC219532AC0067B87C /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
@@ -1196,6 +1198,8 @@
 		23176A8B21B912B10051ACF9 /* Version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Version.h; sourceTree = "<group>"; };
 		23176A8F21BA02590051ACF9 /* MigrationTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MigrationTestCase.h; sourceTree = "<group>"; };
 		23176A9021BA02590051ACF9 /* MigrationTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MigrationTestCase.mm; sourceTree = "<group>"; };
+		23176A9921BA7D460051ACF9 /* WCTDatabase+Version.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Version.h"; sourceTree = "<group>"; };
+		23176A9A21BA7D460051ACF9 /* WCTDatabase+Version.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Version.mm"; sourceTree = "<group>"; };
 		231C98B8219532AC0067B87C /* NSObject+TestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+TestCase.h"; sourceTree = "<group>"; };
 		231C98B9219532AC0067B87C /* NSObject+TestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSObject+TestCase.mm"; sourceTree = "<group>"; };
 		231FEA2F21999E7D00DC3706 /* Basic tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Basic tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2327,6 +2331,8 @@
 				2370B1302191533C00D3227C /* WCTOptional.h */,
 				23F70F79209FF0EC00CCE3CD /* WCTValue.h */,
 				23F70F7A209FF0EC00CCE3CD /* WCTValue.mm */,
+				23176A9921BA7D460051ACF9 /* WCTDatabase+Version.h */,
+				23176A9A21BA7D460051ACF9 /* WCTDatabase+Version.mm */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -3559,6 +3565,7 @@
 				234DBCF82064DD0C000E31E8 /* WCTHandle.h in Headers */,
 				23EEDD2A217DFADC006E9E73 /* SyntaxAlterTableSTMT.hpp in Headers */,
 				23EEDC8E217DFADC006E9E73 /* IndexedColumn.hpp in Headers */,
+				23176A9B21BA7D460051ACF9 /* WCTDatabase+Version.h in Headers */,
 				23EEDC82217DFADC006E9E73 /* CTETable.hpp in Headers */,
 				23D0C35320C149D80001BFAE /* Factory.hpp in Headers */,
 				23FEC463206B3032001E7A3B /* WCTConvenient.h in Headers */,
@@ -4626,6 +4633,7 @@
 				23DC3079202B0066000F7895 /* Tokenize.cpp in Sources */,
 				23EEDC99217DFADC006E9E73 /* Pragma.cpp in Sources */,
 				23AD52F220DBAC4C00664B62 /* UpgradeableErrorProne.cpp in Sources */,
+				23176A9C21BA7D460051ACF9 /* WCTDatabase+Version.mm in Sources */,
 				23567D7520CA9200005F1C35 /* SharedThreadedErrorProne.cpp in Sources */,
 				23EEDC93217DFADC006E9E73 /* LiteralValue.cpp in Sources */,
 				23EEDD33217DFADC006E9E73 /* SyntaxCreateIndexSTMT.cpp in Sources */,

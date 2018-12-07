@@ -36,6 +36,7 @@
 #import <WCDB/WCTDatabase+Monitor.h>
 #import <WCDB/WCTDatabase+Repair.h>
 #import <WCDB/WCTDatabase+Transaction.h>
+#import <WCDB/WCTDatabase+Version.h>
 
 #import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTHandle.h>

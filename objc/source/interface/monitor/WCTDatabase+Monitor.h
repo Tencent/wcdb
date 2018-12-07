@@ -39,8 +39,6 @@ typedef void (^WCTSQLTraceBlock)(NSString *);
 
 @interface WCTDatabase (Monitor)
 
-@property (class, readonly, nonatomic, assign) NSString *version;
-
 /* It's recommended to add the following code at the beginning of your project
  * ```
  * #ifdef DEBUG
@@ -49,12 +47,6 @@ typedef void (^WCTSQLTraceBlock)(NSString *);
  * ```
  */
 @property (class, readwrite, nonatomic, assign) BOOL debuggable;
-
-@property (class, readonly, nonatomic, assign) NSString *commitHash;
-
-@property (class, readonly, nonatomic, assign) NSUInteger buildTimestamp;
-
-@property (class, readonly, nonatomic, assign) NSDate *buildTime;
 
 /**
  @brief You can register a reporter to monitor all errors.

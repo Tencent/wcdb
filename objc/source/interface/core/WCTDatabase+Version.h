@@ -18,23 +18,20 @@
  * limitations under the License.
  */
 
-#import "TestCase.h"
+#import <WCDB/WCTDatabase.h>
 
-@interface VersionTests : TestCase
+NS_ASSUME_NONNULL_BEGIN
 
-@end
+@interface WCTDatabase (Version)
 
-@implementation VersionTests
+@property (class, readonly, nonatomic, assign) NSString *version;
 
-- (void)test
-{
-    TestCaseAssertTrue([WCTDatabase.version isEqualToString:@"1.1.0"]);
-    TestCaseAssertTrue(WCTDatabase.commitHash.length > 0);
-    TestCaseAssertTrue(WCTDatabase.buildTimestamp > 0);
-    TestCaseAssertEqual(WCTDatabase.buildTime.timeIntervalSince1970, WCTDatabase.buildTimestamp);
+@property (class, readonly, nonatomic, assign) NSString *commitHash;
 
-    NSString *identifier = [NSString stringWithFormat:@"%@_%@_%llu", @"bfd56a1a2d98b0b21babd84fcf6db4ac", WCTDatabase.version, WCTDatabase.buildTimestamp];
-    TestCaseAssertTrue([WCTDatabase.identifier isEqualToString:identifier]);
-}
+@property (class, readonly, nonatomic, assign) NSUInteger buildTimestamp;
+
+@property (class, readonly, nonatomic, assign) NSDate *buildTime;
 
 @end
+
+NS_ASSUME_NONNULL_END

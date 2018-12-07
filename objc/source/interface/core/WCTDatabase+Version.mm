@@ -18,23 +18,35 @@
  * limitations under the License.
  */
 
-#import "TestCase.h"
+#import <WCDB/Macro.hpp>
+#import <WCDB/Version.h>
+#import <WCDB/WCTDatabase+Version.h>
 
-@interface VersionTests : TestCase
+@implementation WCTDatabase (Version)
 
-@end
-
-@implementation VersionTests
-
-- (void)test
++ (NSString *)identifier
 {
-    TestCaseAssertTrue([WCTDatabase.version isEqualToString:@"1.1.0"]);
-    TestCaseAssertTrue(WCTDatabase.commitHash.length > 0);
-    TestCaseAssertTrue(WCTDatabase.buildTimestamp > 0);
-    TestCaseAssertEqual(WCTDatabase.buildTime.timeIntervalSince1970, WCTDatabase.buildTimestamp);
+    return @(WCDB_IDENTIFIER "_" WCDB_VERSION "_" WCDB_STRINGIFY(WCDB_BUILD_TIMESTAMP));
+}
 
-    NSString *identifier = [NSString stringWithFormat:@"%@_%@_%llu", @"bfd56a1a2d98b0b21babd84fcf6db4ac", WCTDatabase.version, WCTDatabase.buildTimestamp];
-    TestCaseAssertTrue([WCTDatabase.identifier isEqualToString:identifier]);
++ (NSString *)version
+{
+    return @WCDB_VERSION;
+}
+
++ (NSString *)commitHash
+{
+    return @WCDB_COMMIT_HASH;
+}
+
++ (NSUInteger)buildTimestamp
+{
+    return WCDB_BUILD_TIMESTAMP;
+}
+
++ (NSDate *)buildTime
+{
+    return [NSDate dateWithTimeIntervalSince1970:WCDB_BUILD_TIMESTAMP];
 }
 
 @end
