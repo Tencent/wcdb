@@ -135,7 +135,7 @@ void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
 #pragma mark - Handle
 void HandlePool::purge()
 {
-    SharedLockGuard concurrencyGuard(m_concurrency);
+    LockGuard concurrencyGuard(m_concurrency);
     LockGuard memoryGuard(m_memory);
     for (const auto &handle : m_frees) {
         handle->get()->close();
