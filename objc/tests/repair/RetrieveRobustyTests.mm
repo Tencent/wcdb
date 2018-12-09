@@ -45,7 +45,7 @@
     _expectedAttackRadio = 0.01;
     _tablePrefix = @"t_";
     _expectedDatabaseSize = 10 * 1024 * 1024;
-    _deviationForTolerance = 0.01;
+    _deviationForTolerance = 0.02;
 
     _shuffle = 3;
     _step = 3;
