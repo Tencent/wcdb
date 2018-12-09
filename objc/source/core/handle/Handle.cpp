@@ -187,6 +187,12 @@ bool Handle::isInTransaction()
     return sqlite3_get_autocommit((sqlite3 *) m_handle) == 0;
 }
 
+void Handle::interrupt()
+{
+    WCTInnerAssert(isOpened());
+    sqlite3_interrupt((sqlite3 *) m_handle);
+}
+
 #pragma mark - Statement
 bool Handle::prepare(const Statement &statement)
 {

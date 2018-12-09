@@ -91,6 +91,8 @@ public:
     bool isReadonly();
     bool isInTransaction();
 
+    void interrupt();
+
 #pragma mark - Statement
 public:
     virtual bool prepare(const Statement &statement);
