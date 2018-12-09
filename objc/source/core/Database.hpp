@@ -38,6 +38,10 @@ public:
     Database(const Database &) = delete;
     Database &operator=(const Database &) = delete;
 
+protected:
+    typedef SharedLockGuard OpenedGuard;
+    OpenedGuard open();
+
 #pragma mark - Basic
 public:
     void setTag(const Tag &tag);
@@ -63,9 +67,6 @@ public:
 protected:
     std::shared_ptr<Handle> generateHandle() override final;
     bool willConfigureHandle(Handle *handle) override final;
-
-private:
-    RecyclableHandle flowOut();
 
 #pragma mark - Threaded
 private:

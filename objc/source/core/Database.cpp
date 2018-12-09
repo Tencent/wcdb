@@ -68,16 +68,13 @@ bool Database::isOpened() const
     return aliveHandleCount() > 0;
 }
 
-#pragma mark - Handle
-RecyclableHandle Database::flowOut()
+Database::OpenedGuard Database::open()
 {
-    RecyclableHandle handle = nullptr;
     do {
         {
             SharedLockGuard concurrencyGuard(m_concurrency);
             if (isOpened()) {
-                handle = HandlePool::flowOut();
-                break;
+                return concurrencyGuard;
             }
         }
 
@@ -121,11 +118,16 @@ RecyclableHandle Database::flowOut()
             break;
         }
     } while (true);
-    return handle;
+    return nullptr;
 }
 
+#pragma mark - Handle
 RecyclableHandle Database::getHandle()
 {
+    OpenedGuard openedGuard = open();
+    if (!openedGuard.valid()) {
+        return nullptr;
+    }
     // additional shared lock is not needed since when it's blocked the threadedHandles is always empty and threaded handles is thread safe.
     ThreadedHandles *threadedHandle = Database::threadedHandles().getOrCreate();
     const auto iter = threadedHandle->find(this);
@@ -441,7 +443,10 @@ void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
 
 bool Database::backup()
 {
-    SharedLockGuard concurrencyGuard(m_concurrency); // lock concurrency shared since backup is kind of handle operation
+    OpenedGuard openedGuard = open();
+    if (!openedGuard.valid()) {
+        return nullptr;
+    }
     SharedLockGuard memoryGuard(m_memory);
     // TODO: get backed up frame and update backup queue
     Repair::FactoryBackup backup = m_factory.backup();

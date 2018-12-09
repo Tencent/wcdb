@@ -90,27 +90,35 @@ protected:
 class SharedLockGuard final {
 public:
     SharedLockGuard(SharedLock &lock);
+    SharedLockGuard(SharedLockGuard &&guard);
+    SharedLockGuard(const std::nullptr_t &);
     ~SharedLockGuard();
 
     SharedLockGuard() = delete;
     SharedLockGuard(const SharedLockGuard &) = delete;
     SharedLockGuard &operator=(const SharedLockGuard &) = delete;
 
+    bool valid() const;
+
 protected:
-    SharedLock &m_lock;
+    SharedLock *m_lock;
 };
 
 class LockGuard final {
 public:
     LockGuard(Lockable &lock);
+    LockGuard(LockGuard &&guard);
+    LockGuard(const std::nullptr_t &);
     ~LockGuard();
 
     LockGuard() = delete;
     LockGuard(const LockGuard &) = delete;
     LockGuard &operator=(const LockGuard &) = delete;
 
+    bool valid() const;
+
 protected:
-    Lockable &m_lock;
+    Lockable *m_lock;
 };
 
 } //namespace WCDB

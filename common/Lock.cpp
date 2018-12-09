@@ -167,24 +167,56 @@ SharedLock::~SharedLock()
     WCTRemedialAssert(m_readers == 0 && m_pendingReaders == 0, "Unpaired shared lock", ;);
 }
 
-LockGuard::LockGuard(Lockable &lock) : m_lock(lock)
+LockGuard::LockGuard(const std::nullptr_t &) : m_lock(nullptr)
 {
-    m_lock.lock();
+}
+
+LockGuard::LockGuard(Lockable &lock) : m_lock(&lock)
+{
+    m_lock->lock();
+}
+
+LockGuard::LockGuard(LockGuard &&guard) : m_lock(guard.m_lock)
+{
+    guard.m_lock = nullptr;
 }
 
 LockGuard::~LockGuard()
 {
-    m_lock.unlock();
+    if (m_lock) {
+        m_lock->unlock();
+    }
 }
 
-SharedLockGuard::SharedLockGuard(SharedLock &lock) : m_lock(lock)
+bool LockGuard::valid() const
 {
-    m_lock.lockShared();
+    return m_lock != nullptr;
+}
+
+SharedLockGuard::SharedLockGuard(SharedLockGuard &&guard) : m_lock(guard.m_lock)
+{
+    guard.m_lock = nullptr;
+}
+
+SharedLockGuard::SharedLockGuard(const std::nullptr_t &) : m_lock(nullptr)
+{
+}
+
+SharedLockGuard::SharedLockGuard(SharedLock &lock) : m_lock(&lock)
+{
+    m_lock->lockShared();
+}
+
+bool SharedLockGuard::valid() const
+{
+    return m_lock != nullptr;
 }
 
 SharedLockGuard::~SharedLockGuard()
 {
-    m_lock.unlockShared();
+    if (m_lock) {
+        m_lock->unlockShared();
+    }
 }
 
 } //namespace WCDB
