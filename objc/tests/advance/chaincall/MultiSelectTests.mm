@@ -51,6 +51,8 @@
     TestCaseAssertTrue([self.database createTableAndIndexes:_tableName2 withClass:self.tableClass]);
 
     TestCaseAssertTrue([self.database insertObjects:_objectsInTable2 intoTable:_tableName2]);
+
+    [self.database close];
 }
 
 - (void)tearDown

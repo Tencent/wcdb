@@ -40,6 +40,8 @@
     _objects = @[ _object1, _object2 ];
 
     TestCaseAssertTrue([self.table insertObjects:_objects]);
+
+    [self.database close];
 }
 
 - (void)tearDown

@@ -34,6 +34,7 @@
     self.tableClass = ColumnCodingObject.class;
 
     TestCaseAssertTrue([self createTable]);
+    [self.database close];
 }
 
 - (void)test
