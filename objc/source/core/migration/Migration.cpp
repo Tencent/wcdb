@@ -26,7 +26,8 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-Migration::Migration() : m_tableFilter(nullptr), m_initialized(true)
+Migration::Migration()
+: m_tableFilter(nullptr), m_initialized(true), m_migratedNotification(nullptr)
 {
 }
 
@@ -45,7 +46,7 @@ void Migration::filterTable(const TableFilter& tableFilter)
     m_holder.clear();
     m_migratings.clear();
     m_dumpster.clear();
-    m_references.clear();
+    m_referenceds.clear();
 }
 
 #pragma mark - Infos
@@ -63,7 +64,7 @@ bool Migration::initialize(Initializer& initializer)
     m_holder.clear();
     m_migratings.clear();
     m_dumpster.clear();
-    m_references.clear();
+    m_referenceds.clear();
 
     bool succeed;
 
@@ -130,7 +131,9 @@ bool Migration::initialize(Initializer& initializer)
             m_holder.push_back(MigrationInfo(userInfo, columns));
             const MigrationInfo* info = &m_holder.back();
             m_migratings.emplace(info);
-            m_references.emplace(info, 0);
+            m_referenceds.emplace(info, 0);
+        } else {
+            m_migratedNotification(&userInfo);
         }
     }
 
@@ -179,6 +182,7 @@ const std::set<const MigrationInfo*>& Migration::Binder::getBounds() const
 bool Migration::shouldRebind(const std::set<const MigrationInfo*>& bounds) const
 {
     SharedLockGuard lockGuard(m_lock);
+    WCTInnerAssert(isInitialized());
     return m_migratings != bounds;
 }
 
@@ -186,20 +190,21 @@ void Migration::markAsRebound(const std::set<const MigrationInfo*>& oldBounds,
                               const std::set<const MigrationInfo*>& newBounds)
 {
     LockGuard lockGuard(m_lock);
+    WCTInnerAssert(isInitialized());
     for (const auto& newBound : newBounds) {
-        auto iter = m_references.find(newBound);
-        WCTInnerAssert(iter != m_references.end());
+        auto iter = m_referenceds.find(newBound);
+        WCTInnerAssert(iter != m_referenceds.end());
         ++iter->second;
     }
     for (const auto& oldBound : oldBounds) {
-        auto iter = m_references.find(oldBound);
-        WCTInnerAssert(iter != m_references.end());
+        auto iter = m_referenceds.find(oldBound);
+        WCTInnerAssert(iter != m_referenceds.end());
         WCTInnerAssert(iter->second > 0);
         if (--iter->second == 0) {
             if (m_migratings.find(iter->first) == m_migratings.end()) {
                 // already migrated
                 m_dumpster.emplace(iter->first);
-                m_references.erase(iter->first);
+                m_referenceds.erase(iter->first);
             }
         }
     }
@@ -208,6 +213,7 @@ void Migration::markAsRebound(const std::set<const MigrationInfo*>& oldBounds,
 std::set<const MigrationInfo*> Migration::getMigratingInfos() const
 {
     SharedLockGuard lockGuard(m_lock);
+    WCTInnerAssert(isInitialized());
     return m_migratings;
 }
 
@@ -216,8 +222,93 @@ Migration::Stepper::~Stepper()
 {
 }
 
-void Migration::step()
+std::pair<bool, bool> Migration::step(Migration::Stepper& stepper)
 {
+    bool succeed, worked, done;
+    std::tie(succeed, worked, done) = dropOriginTable(stepper);
+    if (!succeed) {
+        return { false, false };
+    }
+    if (done) {
+        return { true, true };
+    }
+    if (worked) {
+        return { true, false };
+    }
+    return { migrateRows(stepper), false };
+}
+
+std::tuple<bool, bool, bool> Migration::dropOriginTable(Migration::Stepper& stepper)
+{
+    const MigrationInfo* info = nullptr;
+    MigratedCallback migratedNotification = nullptr;
+    bool lastOne = false;
+    {
+        SharedLockGuard lockGuard(m_lock);
+        if (m_dumpster.empty()) {
+            if (m_referenceds.empty()) {
+                // done
+                return { true, false, true };
+            } else {
+                return { true, false, false };
+            }
+        }
+        info = *m_dumpster.begin();
+        migratedNotification = m_migratedNotification;
+        // last one
+        lastOne = m_dumpster.size() == 1 && m_referenceds.empty();
+    }
+    WCTInnerAssert(info != nullptr);
+    if (!stepper.dropOriginTable(info)) {
+        return { false, false, false };
+    }
+    {
+        LockGuard lockGuard(m_lock);
+        m_dumpster.erase(info);
+    }
+    if (migratedNotification) {
+        migratedNotification(info);
+        if (lastOne) {
+            migratedNotification(nullptr);
+        }
+    }
+    return { true, true, lastOne };
+}
+
+bool Migration::migrateRows(Migration::Stepper& stepper)
+{
+    const MigrationInfo* info = nullptr;
+    {
+        SharedLockGuard lockGuard(m_lock);
+        if (m_migratings.empty()) {
+            return true;
+        }
+        for (const auto& migrating : m_migratings) {
+            if (!migrating->isSameDatabaseMigration()) {
+                // cross database migration first to avoid additional database lock.
+                info = migrating;
+            }
+        }
+        if (info == nullptr) {
+            info = *m_migratings.begin();
+        }
+    }
+    WCTInnerAssert(info != nullptr);
+    bool done = false;
+    if (!stepper.migrateRows(info, done)) {
+        return false;
+    }
+    if (done) {
+        LockGuard lockGuard(m_lock);
+        m_migratings.erase(info);
+    }
+    return true;
+}
+
+void Migration::setNotificationWhenMigrated(const MigratedCallback& callback)
+{
+    LockGuard lockGuard(m_lock);
+    m_migratedNotification = callback;
 }
 
 } // namespace WCDB

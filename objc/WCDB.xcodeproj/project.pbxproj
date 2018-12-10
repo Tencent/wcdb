@@ -459,6 +459,8 @@
 		23A09D7F2146204400F62EE8 /* MigrationHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A09D6A2146204300F62EE8 /* MigrationHandle.hpp */; };
 		23A3CFB5205FB1A800692F94 /* WCTHandle+Convenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 23A3CFB3205FB1A800692F94 /* WCTHandle+Convenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23A3CFB6205FB1A800692F94 /* WCTHandle+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3CFB4205FB1A800692F94 /* WCTHandle+Convenient.mm */; };
+		23A4703C21BE0940005B9C09 /* MigrationStepperHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A4703A21BE0940005B9C09 /* MigrationStepperHandle.cpp */; };
+		23A4703D21BE0940005B9C09 /* MigrationStepperHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A4703B21BE0940005B9C09 /* MigrationStepperHandle.hpp */; };
 		23A64D09214A458A00ED28BB /* MigrationInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A64D07214A458A00ED28BB /* MigrationInfo.cpp */; };
 		23A64D0B214A458A00ED28BB /* MigrationInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A64D08214A458A00ED28BB /* MigrationInfo.hpp */; };
 		23A64D0F214A4A7000ED28BB /* Migration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A64D0D214A4A7000ED28BB /* Migration.cpp */; };
@@ -1569,6 +1571,8 @@
 		23A09D6A2146204300F62EE8 /* MigrationHandle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MigrationHandle.hpp; sourceTree = "<group>"; };
 		23A3CFB3205FB1A800692F94 /* WCTHandle+Convenient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTHandle+Convenient.h"; sourceTree = "<group>"; };
 		23A3CFB4205FB1A800692F94 /* WCTHandle+Convenient.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTHandle+Convenient.mm"; sourceTree = "<group>"; };
+		23A4703A21BE0940005B9C09 /* MigrationStepperHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationStepperHandle.cpp; sourceTree = "<group>"; };
+		23A4703B21BE0940005B9C09 /* MigrationStepperHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrationStepperHandle.hpp; sourceTree = "<group>"; };
 		23A64D07214A458A00ED28BB /* MigrationInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationInfo.cpp; sourceTree = "<group>"; };
 		23A64D08214A458A00ED28BB /* MigrationInfo.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrationInfo.hpp; sourceTree = "<group>"; };
 		23A64D0D214A4A7000ED28BB /* Migration.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Migration.cpp; sourceTree = "<group>"; };
@@ -2999,6 +3003,8 @@
 				23A64D0E214A4A7000ED28BB /* Migration.hpp */,
 				23AB896E215B73F700554DF1 /* MigrationInitializerHandle.cpp */,
 				23AB896F215B73F700554DF1 /* MigrationInitializerHandle.hpp */,
+				23A4703A21BE0940005B9C09 /* MigrationStepperHandle.cpp */,
+				23A4703B21BE0940005B9C09 /* MigrationStepperHandle.hpp */,
 			);
 			path = migration;
 			sourceTree = "<group>";
@@ -3486,6 +3492,7 @@
 				23EEDD5C217DFADC006E9E73 /* SyntaxWithClause.hpp in Headers */,
 				23775B8420AD666900E21AB0 /* Cell.hpp in Headers */,
 				23C40CFF208DBCDF007B1648 /* Dispatch.hpp in Headers */,
+				23A4703D21BE0940005B9C09 /* MigrationStepperHandle.hpp in Headers */,
 				23F70FA820A055BE00CCE3CD /* BasicConfig.hpp in Headers */,
 				23EEDCCE217DFADC006E9E73 /* StatementDropIndex.hpp in Headers */,
 				23B4DCEF2112B32400954D71 /* CheckpointQueue.hpp in Headers */,
@@ -4749,6 +4756,7 @@
 				23F0FEB7215F5E9A008399FB /* Lock.cpp in Sources */,
 				23EEDD1D217DFADC006E9E73 /* SyntaxSelectCore.cpp in Sources */,
 				23EEDCDB217DFADC006E9E73 /* StatementRelease.cpp in Sources */,
+				23A4703C21BE0940005B9C09 /* MigrationStepperHandle.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

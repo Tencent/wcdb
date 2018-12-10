@@ -137,6 +137,8 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo, const std::set<S
             specificResultColumns.push_back(specificColumn);
         }
 
+        OrderingTerm descendingRowid = OrderingTerm(Column::rowid()).order(Order::DESC);
+
         m_statementForMigratingRow
         = StatementInsert()
           .insertIntoTable(m_migratedTable)
@@ -144,11 +146,14 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo, const std::set<S
           .columns(specificColumns)
           .values(StatementSelect()
                   .select(specificResultColumns)
-                  .from(TableOrSubquery(m_originTable).schema(m_schemaForOriginDatabase)));
+                  .from(TableOrSubquery(m_originTable).schema(m_schemaForOriginDatabase))
+                  .order(descendingRowid)
+                  .limit(BindParameter(1)));
 
         m_statementForDeletingMigratedRow
         = StatementDelete()
           .deleteFrom(QualifiedTable(m_originTable).schema(m_schemaForOriginDatabase))
+          .order(descendingRowid)
           .limit(BindParameter(1));
 
         m_statementForDroppingOriginTable = StatementDropTable()

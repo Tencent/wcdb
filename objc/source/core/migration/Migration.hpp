@@ -62,14 +62,21 @@ private:
     bool m_initialized;
 
     // Those infos needed to be migrate will be held by m_migrating after initialized. (Other infos that already migrated or have no need to migrate will be dropped when initializing.)
-    // And when all the columns inside original table is migrated, the info will not be dropped immedially but mark as migrated. The reasone is that ther might be some handles still holding it. At the same time, the original table will not be dropped too.
-    // When it's marked as migrated, no one will try to hold them anymore. Until there is really no one holding them, it will be moved to dumpster and wait to be dropped.
-
-    // migrated -> info
+    // And when all the columns inside original table is migrated, the info will not be dropped immedially but removed from m_migratings. The reason is that there might be some handles still holding it. At the same time, the original table will not be dropped too.
+    // Until there is really no one holding them, it will be moved to dumpster and wait to be dropped.
+    // During these routine, info will not be removed from holder to avoid memory issue.
+    //        ┌──────┐                                ┌────────┐
+    // ┌────┐ │Inited│  ┌───────────────────────────┐ │Migrated│ ┌─────────────┐
+    // │Info│─┴──────┴─▶│m_migratings, m_referenceds│─┴────────┴▶│m_referenceds│─▶
+    // └────┘           └───────────────────────────┘            └─────────────┘
+    //    ┌──────────────────┐              ┌───────┐
+    //    │Until Unreferenced│ ┌──────────┐ │Dropped│ ┌───────┐
+    //  ──┴──────────────────┴▶│m_dumpster│─┴───────┴▶│Removed│
+    //                         └──────────┘           └───────┘
     std::set<const MigrationInfo*> m_migratings;
     std::set<const MigrationInfo*> m_dumpster;
 
-    std::map<const MigrationInfo*, std::atomic<int>> m_references;
+    std::map<const MigrationInfo*, std::atomic<int>> m_referenceds;
     std::list<MigrationInfo> m_holder;
 
     mutable SharedLock m_lock;
@@ -109,11 +116,30 @@ protected:
 #pragma mark - Step
 public:
     class Stepper {
+        friend class Migration;
+
     public:
         virtual ~Stepper();
+
+    protected:
+        virtual bool dropOriginTable(const MigrationInfo* info) = 0;
+        virtual bool migrateRows(const MigrationInfo* info, bool& done) = 0;
     };
 
-    void step();
+    // succeed, done
+    std::pair<bool, bool> step(Migration::Stepper& stepper);
+
+    // parameter will be nullptr when all tables migrated.
+    typedef std::function<void(const MigrationUserInfo*)> MigratedCallback;
+    void setNotificationWhenMigrated(const MigratedCallback& callback);
+
+protected:
+    // succeed, worked, done
+    std::tuple<bool, bool, bool> dropOriginTable(Migration::Stepper& stepper);
+
+    bool migrateRows(Migration::Stepper& stepper);
+
+    MigratedCallback m_migratedNotification;
 };
 
 } // namespace WCDB

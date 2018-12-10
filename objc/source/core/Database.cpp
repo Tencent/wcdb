@@ -182,7 +182,8 @@ bool Database::willConfigureHandle(Handle *handle)
 {
     SharedLockGuard memoryGuard(m_memory);
     if (m_migration.shouldMigrate()) {
-        rebindMigration(handle);
+        WCTInnerAssert(dynamic_cast<MigrationHandle *>(handle) != nullptr);
+        return static_cast<MigrationHandle *>(handle)->rebindMigration();
     }
     return true;
 }
@@ -592,12 +593,10 @@ bool Database::recover()
 }
 
 #pragma mark - Migration
-bool Database::rebindMigration(Handle *handle)
+void Database::setNotificationWhenMigrated(const MigratedCallback &callback)
 {
-    WCTInnerAssert(handle != nullptr);
-    WCTInnerAssert(m_migration.shouldMigrate());
-    WCTInnerAssert(dynamic_cast<MigrationHandle *>(handle) != nullptr);
-    return static_cast<MigrationHandle *>(handle)->rebindMigration();
+    LockGuard memoryGuard(m_memory);
+    m_migration.setNotificationWhenMigrated(callback);
 }
 
 void Database::filterMigration(const MigrationTableFilter &filter)
@@ -606,16 +605,6 @@ void Database::filterMigration(const MigrationTableFilter &filter)
     WCTRemedialAssert(
     !isOpened(), "Migration user info must be set before the very first operation.", return;);
     m_migration.filterTable(filter);
-}
-
-void Database::asyncMigration()
-{
-#warning TODO
-}
-
-void Database::stepMigration()
-{
-#warning TODO
 }
 
 } //namespace WCDB

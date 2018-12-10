@@ -31,6 +31,7 @@ MigrationHandle::MigrationHandle(const String& path, Migration& migration)
 {
 }
 
+#pragma mark - Bind
 bool MigrationHandle::rebind(const std::set<const MigrationInfo*>& migratings)
 {
     bool succeed;

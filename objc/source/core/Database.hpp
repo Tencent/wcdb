@@ -170,11 +170,10 @@ public:
     typedef Migration::TableFilter MigrationTableFilter;
     void filterMigration(const MigrationTableFilter &filter);
 
-    void asyncMigration();
-    void stepMigration();
+    typedef Migration::MigratedCallback MigratedCallback;
+    void setNotificationWhenMigrated(const MigratedCallback &callback);
 
 protected:
-    bool rebindMigration(Handle *handle);
     Migration m_migration;
 
 #pragma mark - Memory
