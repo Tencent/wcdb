@@ -28,7 +28,7 @@ namespace WCDB {
 class UnsafeString final {
 public:
     UnsafeString();
-    UnsafeString(const char* str);
+    UnsafeString(const char* str, ssize_t length);
 
     template<typename T, typename Enable = void>
     struct Convertible : public std::false_type {
@@ -44,11 +44,13 @@ public:
     static const UnsafeString& null();
 
     const char* cstring() const;
+    size_t length() const;
 
     operator const char*() const;
 
 protected:
     const char* m_cstring;
+    ssize_t m_length;
 
 private:
     static const char* emptyCString();

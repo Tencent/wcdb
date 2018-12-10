@@ -25,7 +25,7 @@ namespace WCDB {
 ColumnTypeInfo<ColumnType::Text>::UnderlyingType
 ColumnIsTextType<NSString*>::asUnderlyingType(NSString* text)
 {
-    return WCDB::UnsafeString(text.UTF8String);
+    return WCDB::UnsafeString(text.UTF8String, [text lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
 }
 
 ColumnTypeInfo<ColumnType::Float>::UnderlyingType

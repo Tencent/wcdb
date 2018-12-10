@@ -48,7 +48,6 @@ public:
     void bindInteger64(const Integer64 &value, int index);
     void bindDouble(const Float &value, int index);
     void bindText(const Text &value, int index);
-    void bindText(const Text &value, int length, int index);
     void bindBLOB(const BLOB &value, int index);
     void bindNull(int index);
 

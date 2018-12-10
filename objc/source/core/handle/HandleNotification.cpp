@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/Handle.hpp>
 #include <WCDB/HandleNotification.hpp>
 #include <WCDB/SQLite.h>
 #include <WCDB/String.hpp>
@@ -27,23 +28,24 @@ namespace WCDB {
 
 void HandleNotification::purge()
 {
+    bool isOpened = m_handle->isOpened();
     bool set = isSQLTraceNotificationSet() || isPerformanceTraceNotificationSet();
     m_sqlNotifications.clear();
     m_performanceNotifications.clear();
-    if (set) {
+    if (set && isOpened) {
         setupTraceNotification();
     }
 
     set = isCommittedNotificationSet();
     m_commitedNotifications.clear();
-    if (set) {
+    if (set && isOpened) {
         setupCommittedNotification();
     }
 
     set = isCheckpointNotificationSet();
     m_willCheckpointNotifications.clear();
     m_checkpointedNotifications.clear();
-    if (set) {
+    if (set && isOpened) {
         setupCheckpointNotification();
     }
 }

@@ -145,13 +145,9 @@ void HandleStatement::bindDouble(const Float &value, int index)
 
 void HandleStatement::bindText(const Text &value, int index)
 {
-    bindText(value, -1, index);
-}
-
-void HandleStatement::bindText(const Text &value, int length, int index)
-{
     WCTInnerAssert(isPrepared());
-    sqlite3_bind_text((sqlite3_stmt *) m_stmt, index, value, length, SQLITE_TRANSIENT);
+    sqlite3_bind_text(
+    (sqlite3_stmt *) m_stmt, index, value.cstring(), (int) value.length(), SQLITE_TRANSIENT);
 }
 
 void HandleStatement::bindBLOB(const BLOB &value, int index)
@@ -188,17 +184,17 @@ HandleStatement::Float HandleStatement::getDouble(int index)
 HandleStatement::Text HandleStatement::getText(int index)
 {
     WCTInnerAssert(isPrepared());
-    return UnsafeString(reinterpret_cast<const char *>(
-    sqlite3_column_text((sqlite3_stmt *) m_stmt, index)));
+    return UnsafeString(
+    reinterpret_cast<const char *>(sqlite3_column_text((sqlite3_stmt *) m_stmt, index)),
+    sqlite3_column_bytes((sqlite3_stmt *) m_stmt, index));
 }
 
 const HandleStatement::BLOB HandleStatement::getBLOB(int index)
 {
     WCTInnerAssert(isPrepared());
-    int size = sqlite3_column_bytes((sqlite3_stmt *) m_stmt, index);
-    const unsigned char *data
-    = (const unsigned char *) sqlite3_column_blob((sqlite3_stmt *) m_stmt, index);
-    return BLOB::immutable(data, size);
+    return BLOB::immutable(reinterpret_cast<const unsigned char *>(
+                           sqlite3_column_blob((sqlite3_stmt *) m_stmt, index)),
+                           sqlite3_column_bytes((sqlite3_stmt *) m_stmt, index));
 }
 
 bool HandleStatement::isReadonly()

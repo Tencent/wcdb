@@ -37,6 +37,7 @@ AssemblerHandle::AssemblerHandle()
                                .set(Column("seq"))
                                .to(BindParameter(1))
                                .where(Column("name") == BindParameter(2)))
+, m_cellStatement(this)
 {
 }
 
@@ -63,7 +64,7 @@ bool AssemblerHandle::markAsAssembled()
 {
     m_table.clear();
     finalize();
-    bool succeed = markSequenceAsAssembling();
+    bool succeed = markSequenceAsAssembled();
     if (isInTransaction()) {
         succeed = commitOrRollbackTransaction() && succeed;
     }
@@ -97,7 +98,7 @@ const Error &AssemblerHandle::getError() const
 #pragma mark - Table
 bool AssemblerHandle::assembleTable(const String &tableName, const String &sql)
 {
-    finalize();
+    m_cellStatement.finalize();
     m_table.clear();
     markErrorAsIgnorable((int) Error::Code::Error);
     bool succeed = execute(sql);
@@ -114,42 +115,42 @@ bool AssemblerHandle::assembleCell(const Repair::Cell &cell)
     if (!lazyPrepareCell()) {
         return false;
     }
-    WCTInnerAssert(isPrepared());
-    bindInteger64(cell.getRowID(), 1);
+    WCTInnerAssert(m_cellStatement.isPrepared());
+    m_cellStatement.bindInteger64(cell.getRowID(), 1);
     for (int i = 0; i < cell.getCount(); ++i) {
         int bindIndex = i + 2;
         switch (cell.getValueType(i)) {
         case Repair::Cell::Integer:
-            bindInteger64(cell.integerValue(i), bindIndex);
+            m_cellStatement.bindInteger64(cell.integerValue(i), bindIndex);
             break;
         case Repair::Cell::Text: {
-            bindText(cell.textValue(i), bindIndex);
+            m_cellStatement.bindText(cell.textValue(i), bindIndex);
             break;
         }
         case Repair::Cell::BLOB: {
-            bindBLOB(cell.blobValue(i), bindIndex);
+            m_cellStatement.bindBLOB(cell.blobValue(i), bindIndex);
             break;
         }
         case Repair::Cell::Real:
-            bindDouble(cell.doubleValue(i), bindIndex);
+            m_cellStatement.bindDouble(cell.doubleValue(i), bindIndex);
             break;
         case Repair::Cell::Null:
             if (i == m_primary) {
-                bindInteger64(cell.getRowID(), bindIndex);
+                m_cellStatement.bindInteger64(cell.getRowID(), bindIndex);
             } else {
-                bindNull(bindIndex);
+                m_cellStatement.bindNull(bindIndex);
             }
             break;
         }
     }
-    bool succeed = step();
-    reset();
+    bool succeed = m_cellStatement.step();
+    m_cellStatement.reset();
     return succeed;
 }
 
 bool AssemblerHandle::lazyPrepareCell()
 {
-    if (isPrepared()) {
+    if (m_cellStatement.isPrepared()) {
         return true;
     }
 
@@ -187,7 +188,7 @@ bool AssemblerHandle::lazyPrepareCell()
     }
     statement.columns(columns).values(BindParameter::bindParameters(columns.size()));
 
-    return prepare(statement);
+    return m_cellStatement.prepare(statement);
 }
 
 #pragma mark - Sequence
@@ -224,7 +225,8 @@ bool AssemblerHandle::insertSequence(const String &tableName, int64_t sequence)
     if (!prepare(m_statementForInsertSequence)) {
         return false;
     }
-    bindInteger64(sequence, 1);
+    bindText(tableName, 1);
+    bindInteger64(sequence, 2);
     bool succeed = step();
     finalize();
     return succeed;

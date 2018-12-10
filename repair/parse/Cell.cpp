@@ -162,7 +162,8 @@ UnsafeString Cell::textValue(int index) const
     WCTInnerAssert(index < m_columns.size());
     WCTInnerAssert(getValueType(index) == Type::Text);
     const auto &cell = m_columns[index];
-    return UnsafeString(reinterpret_cast<const char *>(m_payload.buffer() + cell.second));
+    return UnsafeString(reinterpret_cast<const char *>(m_payload.buffer() + cell.second),
+                        getLengthOfSerialType(cell.first));
 }
 
 String Cell::stringValue(int index) const

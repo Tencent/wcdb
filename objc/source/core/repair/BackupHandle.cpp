@@ -48,16 +48,15 @@ const Error &BackupReadHandle::getError() const
 
 bool BackupReadHandle::acquireLock()
 {
-    if (!execute(m_statementForReadTransaction)) {
-        return false;
-    }
-    //execute read sql to acquire read lock
-    return execute(m_statementForAcquireReadLock);
+    return open() && execute(m_statementForReadTransaction)
+           && execute(m_statementForAcquireReadLock);
 }
 
 bool BackupReadHandle::releaseLock()
 {
-    return execute(m_statementForEndTransaction);
+    bool succeed = execute(m_statementForEndTransaction);
+    close();
+    return succeed;
 }
 
 void BackupWriteHandle::setPath(const String &path)
@@ -77,12 +76,13 @@ const Error &BackupWriteHandle::getError() const
 
 bool BackupWriteHandle::acquireLock()
 {
-    return beginTransaction();
+    return open() && beginTransaction();
 }
 
 bool BackupWriteHandle::releaseLock()
 {
     rollbackTransaction();
+    close();
     return true;
 }
 } // namespace WCDB

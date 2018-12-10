@@ -259,7 +259,7 @@ bool Database::willConfigureHandle(const Slot &slot, ConfiguredHandle *handle)
     default:
         break;
     }
-    return true;
+    return succeed;
 }
 
 #pragma mark - Threaded
@@ -648,23 +648,24 @@ bool Database::removeMaterials()
 
 bool Database::retrieveRenewed()
 {
+    WCTInnerAssert(!m_initialized);
     WCTInnerAssert(isBlockaded());
-    SharedLockGuard memoryGuard(m_memory);
     WCTInnerAssert(!isOpened());
 
-    RecyclableHandle backupReadHandle = getSlotHandle((Slot) BackupReadSlot);
+    RecyclableHandle backupReadHandle = flowOut((Slot) BackupReadSlot);
     if (backupReadHandle == nullptr) {
         return false;
     }
-    RecyclableHandle backupWriteHandle = getSlotHandle((Slot) BackupWriteSlot);
+    RecyclableHandle backupWriteHandle = flowOut((Slot) BackupWriteSlot);
     if (backupWriteHandle == nullptr) {
         return false;
     }
-    RecyclableHandle assemblerHandle = getSlotHandle((Slot) AssemblerSlot);
+    RecyclableHandle assemblerHandle = flowOut((Slot) AssemblerSlot);
     if (assemblerHandle == nullptr) {
         return false;
     }
 
+    SharedLockGuard memoryGuard(m_memory);
     Repair::FactoryRenewer renewer = m_factory.renewer();
     renewer.setReadLocker(static_cast<BackupReadHandle *>(backupReadHandle.get()));
     renewer.setWriteLocker(static_cast<BackupWriteHandle *>(backupWriteHandle.get()));

@@ -23,11 +23,12 @@
 
 namespace WCDB {
 
-UnsafeString::UnsafeString() : m_cstring(nullptr)
+UnsafeString::UnsafeString() : m_cstring(nullptr), m_length(0)
 {
 }
 
-UnsafeString::UnsafeString(const char* str) : m_cstring(str)
+UnsafeString::UnsafeString(const char* str, ssize_t length)
+: m_cstring(str), m_length(length)
 {
 }
 
@@ -41,9 +42,17 @@ UnsafeString::operator const char*() const
     return cstring();
 }
 
+size_t UnsafeString::length() const
+{
+    if (m_length >= 0) {
+        return m_length;
+    }
+    return strlen(m_cstring);
+}
+
 const UnsafeString& UnsafeString::null()
 {
-    static const UnsafeString s_null(emptyCString());
+    static const UnsafeString s_null;
     return s_null;
 }
 

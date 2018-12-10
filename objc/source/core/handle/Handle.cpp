@@ -140,6 +140,7 @@ void Handle::close()
         true);
         sqlite3_close_v2((sqlite3 *) m_handle);
         m_handle = nullptr;
+        m_notification.purge();
     }
 }
 
@@ -151,7 +152,6 @@ bool Handle::execute(const Statement &statement)
 bool Handle::execute(const String &sql)
 {
     WCTInnerAssert(isOpened());
-    WCTInnerAssert(!isPrepared());
     int rc = sqlite3_exec((sqlite3 *) m_handle, sql.c_str(), nullptr, nullptr, nullptr);
     if (rc == SQLITE_OK) {
         return true;
@@ -295,7 +295,7 @@ void Handle::bindDouble(const Float &value, int index)
 void Handle::bindText(const Text &value, int index)
 {
     WCTInnerAssert(isPrepared());
-    m_handleStatement.bindText(value, -1, index);
+    m_handleStatement.bindText(value, index);
 }
 
 void Handle::bindBLOB(const BLOB &value, int index)

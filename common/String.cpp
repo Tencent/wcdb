@@ -37,7 +37,7 @@ String::String(const UnsafeString &str) : std::string(str.cstring())
 
 String::operator UnsafeString() const
 {
-    return c_str();
+    return UnsafeString(c_str(), length());
 }
 
 const String &String::null()
