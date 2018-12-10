@@ -29,7 +29,6 @@
 #include <WCDB/Mechanic.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Path.hpp>
-#include <WCDB/SQLiteAssembler.hpp>
 #include <WCDB/ThreadedErrors.hpp>
 #include <numeric>
 
@@ -48,9 +47,7 @@ FactoryRetriever::FactoryRetriever(const Factory &factory_)
 #pragma mark - Retriever
 bool FactoryRetriever::work()
 {
-    if (m_assembler == nullptr) {
-        m_assembler.reset(new SQLiteAssembler);
-    }
+    WCTRemedialAssert(m_assembler != nullptr, "Assembler is not available.", return false;);
     m_assembler->setPath(database);
 
     bool succeed;

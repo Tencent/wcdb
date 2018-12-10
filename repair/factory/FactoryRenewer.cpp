@@ -25,7 +25,6 @@
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Path.hpp>
-#include <WCDB/SQLiteAssembler.hpp>
 
 namespace WCDB {
 
@@ -85,9 +84,7 @@ bool FactoryRenewer::work()
 
 bool FactoryRenewer::prepare()
 {
-    if (m_assembler == nullptr) {
-        m_assembler.reset(new SQLiteAssembler);
-    }
+    WCTRemedialAssert(m_assembler != nullptr, "Assembler is not available.", return false;);
 
     // 1. create temp directory for acquisition
     String tempDirectory = Path::addComponent(directory, "temp");
