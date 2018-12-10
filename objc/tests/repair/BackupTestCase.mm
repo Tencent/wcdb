@@ -40,7 +40,7 @@
 
 - (BOOL)tryToMakeHeaderCorrupted
 {
-    if (![self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]) {
+    if (![self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("TRUNCATE")]) {
         TESTCASE_FAILED
         return NO;
     }

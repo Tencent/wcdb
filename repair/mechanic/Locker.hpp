@@ -51,13 +51,14 @@ public:
 
 class LockerHolder {
 public:
+    LockerHolder();
     virtual ~LockerHolder();
-    void setReadLocker(const std::shared_ptr<ReadLocker> &readLocker);
-    void setWriteLocker(const std::shared_ptr<WriteLocker> &writeLocker);
+    void setReadLocker(ReadLocker *readLocker);
+    void setWriteLocker(WriteLocker *writeLocker);
 
 protected:
-    std::shared_ptr<ReadLocker> m_readLocker;
-    std::shared_ptr<WriteLocker> m_writeLocker;
+    ReadLocker *m_readLocker;
+    WriteLocker *m_writeLocker;
 };
 
 } //namespace Repair

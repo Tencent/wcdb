@@ -39,8 +39,9 @@ public:
     Database &operator=(const Database &) = delete;
 
 protected:
-    typedef SharedLockGuard OpenedGuard;
-    OpenedGuard open();
+    typedef SharedLockGuard InitializedGuard;
+    InitializedGuard initialize();
+    bool m_initialized;
 
 #pragma mark - Basic
 public:
@@ -65,8 +66,18 @@ public:
     std::pair<bool, bool> tableExists(const TableOrSubquery &table);
 
 protected:
-    std::shared_ptr<Handle> generateHandle() override final;
-    bool willConfigureHandle(Handle *handle) override final;
+    RecyclableHandle getSlotHandle(const Slot &slot);
+
+protected:
+    static const Slot HandleSlot = 0;
+    static const Slot MigrationHandleSlot = 1;
+    static constexpr const Slot MigrationInitializerSlot = 2;
+    static constexpr const Slot MigrationStepperSlot = 3;
+    static constexpr const Slot BackupReadSlot = 4;
+    static constexpr const Slot BackupWriteSlot = 5;
+    static constexpr const Slot AssemblerSlot = 6;
+    std::shared_ptr<Handle> generateHandle(const Slot &slot) override final;
+    bool willConfigureHandle(const Slot &slot, ConfiguredHandle *handle) override final;
 
 #pragma mark - Threaded
 private:

@@ -34,6 +34,7 @@ class Cell;
 
 class Assembler {
 public:
+    Assembler();
     virtual ~Assembler();
 
     virtual void setPath(const String &path) = 0;
@@ -46,20 +47,27 @@ public:
     virtual bool assembleTable(const String &tableName, const String &sql) = 0;
     virtual bool assembleSequence(const String &tableName, int64_t sequence) = 0;
     virtual bool assembleCell(const Cell &cell) = 0;
-    virtual void markAsDuplicated(bool duplicated) = 0;
+    void markDuplicatedAsIgnorable(bool ignorable);
 
     virtual bool assembleSQL(const String &sql) = 0;
 
     virtual const Error &getError() const = 0;
+
+protected:
+    bool isDuplicatedIgnorable() const;
+
+private:
+    bool m_duplicatedIgnorable;
 };
 
 class AssemblerHolder {
 public:
+    AssemblerHolder();
     virtual ~AssemblerHolder();
-    void setAssembler(const std::shared_ptr<Assembler> &assembler);
+    void setAssembler(Assembler *assembler);
 
 protected:
-    std::shared_ptr<Assembler> m_assembler;
+    Assembler *m_assembler;
 };
 
 } //namespace Repair

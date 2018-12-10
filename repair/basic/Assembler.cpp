@@ -26,11 +26,29 @@ namespace WCDB {
 
 namespace Repair {
 
+Assembler::Assembler() : m_duplicatedIgnorable(false)
+{
+}
+
 Assembler::~Assembler()
 {
 }
 
-void AssemblerHolder::setAssembler(const std::shared_ptr<Assembler> &assembler)
+void Assembler::markDuplicatedAsIgnorable(bool ignorable)
+{
+    m_duplicatedIgnorable = ignorable;
+}
+
+bool Assembler::isDuplicatedIgnorable() const
+{
+    return m_duplicatedIgnorable;
+}
+
+AssemblerHolder::AssemblerHolder() : m_assembler(nullptr)
+{
+}
+
+void AssemblerHolder::setAssembler(Assembler* assembler)
 {
     m_assembler = assembler;
 }

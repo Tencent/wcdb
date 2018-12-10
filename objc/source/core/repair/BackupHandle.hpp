@@ -18,42 +18,41 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SQLITELOCKER_HPP
-#define _WCDB_SQLITELOCKER_HPP
+#ifndef _WCDB_BACKUPHANDLE_HPP
+#define _WCDB_BACKUPHANDLE_HPP
 
-#if WCDB_USE_BUILTIN_SQLITE_REPAIR
-
-#include <WCDB/Locker.hpp>
-#include <WCDB/SQLiteBase.hpp>
+#include <WCDB/Handle.hpp>
+#include <WCDB/RepairKit.h>
 
 namespace WCDB {
 
-namespace Repair {
-
-class SQLiteReadLocker final : public ReadLocker, public SQLiteBase {
+class BackupReadHandle final : public Handle, public Repair::ReadLocker {
 public:
+    BackupReadHandle();
+
     void setPath(const String &path) override final;
     const String &getPath() const override final;
+    const Error &getError() const override final;
 
     bool acquireLock() override final;
     bool releaseLock() override final;
-    const Error &getError() const override final;
+
+protected:
+    StatementBegin m_statementForReadTransaction;
+    StatementSelect m_statementForAcquireReadLock;
+    StatementRollback m_statementForEndTransaction;
 };
 
-class SQLiteWriteLocker final : public WriteLocker, public SQLiteBase {
+class BackupWriteHandle final : public Handle, public Repair::WriteLocker {
 public:
     void setPath(const String &path) override final;
     const String &getPath() const override final;
+    const Error &getError() const override final;
 
     bool acquireLock() override final;
     bool releaseLock() override final;
-    const Error &getError() const override final;
 };
 
-} //namespace Repair
+} // namespace WCDB
 
-} //namespace WCDB
-
-#endif /* WCDB_USE_BUILTIN_SQLITE_REPAIR */
-
-#endif /* _WCDB_SQLITELOCKER_HPP */
+#endif /* _WCDB_BACKUPHANDLE_HPP */

@@ -25,7 +25,7 @@ namespace WCDB {
 
 const String& MigrationInitializerHandle::getDatabasePath() const
 {
-    return Handle::path;
+    return Handle::getPath();
 }
 
 const Error& MigrationInitializerHandle::getError() const
@@ -74,7 +74,7 @@ MigrationInitializerHandle::getColumns(const String& table, const String& databa
         // return {true, {}} if the schema.table does not exist.
         return { succeed, {} };
     }
-    return getUnorderedColumnsWithTable(schema, table);
+    return getUnorderedColumns(schema, table);
 }
 
 void MigrationInitializerHandle::setError(const Error& error)

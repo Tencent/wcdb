@@ -125,7 +125,7 @@
             return NO;
         }
         if ([NSNumber randomUInt8] % 10 == 0) {
-            if (![self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]) {
+            if (![self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("TRUNCATE")]) {
                 TESTCASE_FAILED
                 return NO;
             }

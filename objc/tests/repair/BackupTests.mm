@@ -85,7 +85,7 @@
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     TestCaseAssertTrue([[fileManager attributesOfItemAtPath:self.walPath error:nil] fileSize] > 0);
-    TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
+    TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("TRUNCATE")]);
     TestCaseAssertTrue([[fileManager attributesOfItemAtPath:self.walPath error:nil] fileSize] == 0);
     TestCaseAssertTrue([self.database backup]);
 }

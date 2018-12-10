@@ -32,7 +32,7 @@ class MigrationInfo;
 class MigrationHandle final : public Handle, public Migration::Binder {
 #pragma mark - Initialize
 public:
-    MigrationHandle(const String &path, Migration &migration);
+    MigrationHandle(Migration &migration);
 
 #pragma mark - Bind
 protected:
@@ -48,7 +48,7 @@ public:
     void bindInteger32(const Integer32 &value, int index) override final;
     void bindInteger64(const Integer64 &value, int index) override final;
     void bindDouble(const Float &value, int index) override final;
-    void bindText(const Text &value, int length, int index) override final;
+    void bindText(const Text &value, int index) override final;
     void bindBLOB(const BLOB &value, int index) override final;
     void bindNull(int index) override final;
 };

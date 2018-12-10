@@ -21,6 +21,8 @@
 #ifndef _WCDB_SQLITEBASE_HPP
 #define _WCDB_SQLITEBASE_HPP
 
+#if WCDB_USE_BUILTIN_SQLITE_REPAIR
+
 #include <WCDB/ErrorProne.hpp>
 #include <WCDB/String.hpp>
 
@@ -82,5 +84,7 @@ protected:
 } //namespace Repair
 
 } //namespace WCDB
+
+#endif /* WCDB_USE_BUILTIN_SQLITE_REPAIR */
 
 #endif /* _WCDB_SQLITEBASE_HPP */

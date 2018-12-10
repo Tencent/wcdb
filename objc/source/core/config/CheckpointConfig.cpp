@@ -51,9 +51,9 @@ bool CheckpointConfig::uninvoke(Handle* handle)
 bool CheckpointConfig::onCommitted(Handle* handle, int frames)
 {
     if (frames >= framesThresholdForCritical) {
-        m_queue->put(handle->path, delayForCritical, frames);
+        m_queue->put(handle->getPath(), delayForCritical, frames);
     } else {
-        m_queue->put(handle->path, delayForNonCritical, frames);
+        m_queue->put(handle->getPath(), delayForNonCritical, frames);
     }
     return true;
 }

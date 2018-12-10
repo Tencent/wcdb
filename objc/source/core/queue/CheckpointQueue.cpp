@@ -30,8 +30,8 @@ CheckpointEvent::~CheckpointEvent()
 CheckpointQueue::CheckpointQueue(const String& name)
 : AsyncQueue(name)
 , m_event(nullptr)
-, m_checkpointPassive(StatementPragma().pragma(Pragma::walCheckpoint()).to("PASSIVE"))
-, m_checkpointTruncate(StatementPragma().pragma(Pragma::walCheckpoint()).to("TRUNCATE"))
+, m_checkpointPassive(StatementPragma().pragma(Pragma::walCheckpoint()).with("PASSIVE"))
+, m_checkpointTruncate(StatementPragma().pragma(Pragma::walCheckpoint()).with("TRUNCATE"))
 {
 }
 

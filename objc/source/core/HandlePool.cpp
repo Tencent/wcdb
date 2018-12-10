@@ -32,7 +32,7 @@ namespace WCDB {
 
 #pragma mark - Initialize
 HandlePool::HandlePool(const String &thePath)
-: path(thePath), m_configs(nullptr)
+: path(thePath), m_configs(nullptr), m_currentConcurrency(0)
 {
 }
 
@@ -75,15 +75,21 @@ int HandlePool::hardwareConcurrency()
 
 int HandlePool::maxConcurrency()
 {
-    static int s_maxConcurrency = std::max<int>(hardwareConcurrency(), 64);
+    static int s_maxConcurrency = std::max<int>(hardwareConcurrency(), 8);
     return s_maxConcurrency;
+}
+
+int HandlePool::maxHandleCount()
+{
+    static int s_maxHandleCount = std::max<int>(maxConcurrency(), 64);
+    return s_maxHandleCount;
 }
 
 bool HandlePool::allowedConcurrency()
 {
     WCTInnerAssert(m_concurrency.readSafety());
     WCTInnerAssert(m_memory.readSafety());
-    if (m_handles.size() < maxConcurrency()) {
+    if (m_currentConcurrency < maxConcurrency()) {
         return true;
     }
     Error error;
@@ -91,10 +97,16 @@ bool HandlePool::allowedConcurrency()
     error.message = "The concurrency of database exceeds the maximum allowed.";
     error.infos.set("Path", path);
     error.infos.set("MaxConcurrency", maxConcurrency());
-    error.infos.set("Concurrency", m_handles.size());
+    error.infos.set("Concurrency", m_currentConcurrency);
     Notifier::shared()->notify(error);
     setThreadedError(std::move(error));
     return false;
+}
+
+bool HandlePool::allowedHandleCount()
+{
+#warning TODO
+    return true;
 }
 
 void HandlePool::blockade()
@@ -121,25 +133,38 @@ void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
                       return;);
     LockGuard concurrencyGuard(m_concurrency);
     LockGuard memoryGuard(m_memory);
-    WCTInnerAssert(m_frees.size() == m_handles.size());
-    for (const auto &handle : m_handles) {
-        handle->get()->close();
+    clearAllHandles();
+    if (onDrained) {
+        onDrained();
+        // double-clear since there might be some operation inside the drained block.
+        clearAllHandles();
+    }
+}
+
+void HandlePool::clearAllHandles()
+{
+    WCTInnerAssert(m_concurrency.writeSafety());
+    WCTInnerAssert(m_memory.writeSafety());
+    for (const auto &iter : m_handles) {
+        for (const auto &handle : iter.second) {
+            handle->get()->close();
+        }
     }
     m_handles.clear();
     m_frees.clear();
-    if (onDrained) {
-        onDrained();
-    }
 }
 
 #pragma mark - Handle
 void HandlePool::purge()
 {
-    LockGuard concurrencyGuard(m_concurrency);
+    SharedLockGuard concurrencyGuard(m_concurrency);
     LockGuard memoryGuard(m_memory);
-    for (const auto &handle : m_frees) {
-        handle->get()->close();
-        m_handles.erase(handle);
+    for (const auto &iter : m_frees) {
+        auto &handles = m_handles[iter.first];
+        for (const auto &handle : iter.second) {
+            handle->get()->close();
+            handles.erase(handle);
+        }
     }
     m_frees.clear();
 }
@@ -148,42 +173,49 @@ size_t HandlePool::aliveHandleCount() const
 {
     SharedLockGuard concurrencyGuard(m_concurrency);
     SharedLockGuard memoryGuard(m_memory);
-    return m_handles.size();
+    int count = 0;
+    for (const auto &iter : m_handles) {
+        count += iter.second.size();
+    }
+    return count;
 }
 
-RecyclableHandle HandlePool::flowOut()
+RecyclableHandle HandlePool::flowOut(const Slot &slot)
 {
     SharedLockGuard concurrencyGuard(m_concurrency);
     bool isGenerated = false;
     std::shared_ptr<ConfiguredHandle> configuredHandle;
     {
         LockGuard memoryGuard(m_memory);
-        if (!m_frees.empty()) {
-            configuredHandle = m_frees.back();
-            WCTInnerAssert(configuredHandle != nullptr);
-            m_frees.pop_back();
-        } else if (!allowedConcurrency()) {
-            // no free handle and concurrency reach the limitation.
+        if (!allowedConcurrency()) {
+            // concurrency reachs the limitation.
             return nullptr;
+        }
+        auto &freeSlot = m_frees[slot];
+        if (!freeSlot.empty()) {
+            configuredHandle = freeSlot.back();
+            WCTInnerAssert(configuredHandle != nullptr);
+            freeSlot.pop_back();
+        } else if (!allowedHandleCount()) {
+            // auto purge to remove unused handles
+            purge();
+            if (!allowedHandleCount()) {
+                // handle count reachs the limitation.
+                return nullptr;
+            }
         }
     }
 
     if (configuredHandle == nullptr) {
         // generate new handle
         // lock free
-        std::shared_ptr<Handle> handle = generateHandle();
+        std::shared_ptr<Handle> handle = generateHandle(slot);
         if (handle == nullptr) {
-            setThreadedError(Error(Error::Code::NoMemory));
-            return nullptr;
-        }
-        if (!handle->open()) {
-            setThreadedError(handle->getError());
             return nullptr;
         }
 
         configuredHandle.reset(new ConfiguredHandle(handle));
         if (configuredHandle == nullptr) {
-            handle->close();
             setThreadedError(Error(Error::Code::NoMemory));
             return nullptr;
         }
@@ -194,49 +226,60 @@ RecyclableHandle HandlePool::flowOut()
     bool failed = false;
     do {
         // configuration
-        if (!willConfigureHandle(configuredHandle->get())) {
+        if (!willConfigureHandle(slot, configuredHandle.get())) {
             failed = true;
-            break;
-        }
-
-        std::shared_ptr<Configs> configs;
-        {
-            SharedLockGuard memoryGuard(m_memory);
-            configs = m_configs;
-        }
-        if (!configuredHandle->reconfigure(configs)) {
-            failed = true;
-            setThreadedError(configuredHandle->get()->getError());
             break;
         }
 
         if (isGenerated) {
             LockGuard memoryGuard(m_memory);
-            // re-check concurrency limitation since all lock free code above
+            // re-check concurrency/handle count limitation since all lock free code above
             if (!allowedConcurrency()) {
                 failed = true;
                 break;
             }
-            WCTInnerAssert(m_handles.find(configuredHandle) == m_handles.end());
-            m_handles.emplace(configuredHandle);
+            if (!allowedHandleCount()) {
+                purge();
+                if (!allowedHandleCount()) {
+                    failed = true;
+                    break;
+                }
+            }
+            WCTInnerAssert(m_handles[slot].find(configuredHandle)
+                           == m_handles[slot].end());
+            m_handles[slot].emplace(configuredHandle);
         }
     } while (false);
     if (failed) {
         configuredHandle->get()->close();
         if (!isGenerated) {
             // remove if it already exists in handles
-            m_handles.erase(configuredHandle);
+            m_handles[slot].erase(configuredHandle);
         }
-        WCTInnerAssert(m_handles.find(configuredHandle) == m_handles.end());
+        WCTInnerAssert(m_handles[slot].find(configuredHandle) == m_handles[slot].end());
         return nullptr;
     }
 
     m_concurrency.lockShared();
     return RecyclableHandle(
-    configuredHandle, std::bind(&HandlePool::flowBack, this, std::placeholders::_1));
+    configuredHandle, std::bind(&HandlePool::flowBack, this, slot, std::placeholders::_1));
 }
 
-void HandlePool::flowBack(const std::shared_ptr<ConfiguredHandle> &configuredHandle)
+bool HandlePool::willConfigureHandle(const Slot &slot, ConfiguredHandle *handle)
+{
+    std::shared_ptr<Configs> configs;
+    {
+        SharedLockGuard memoryGuard(m_memory);
+        configs = m_configs;
+    }
+    if (handle->reconfigure(configs)) {
+        return true;
+    }
+    setThreadedError(handle->get()->getError());
+    return false;
+}
+
+void HandlePool::flowBack(const Slot &slot, const std::shared_ptr<ConfiguredHandle> &configuredHandle)
 {
     WCTInnerAssert(configuredHandle != nullptr);
     WCTInnerAssert(m_concurrency.readSafety());
@@ -245,13 +288,14 @@ void HandlePool::flowBack(const std::shared_ptr<ConfiguredHandle> &configuredHan
                       configuredHandle->get()->finalize(););
     {
         LockGuard memoryGuard(m_memory);
-        if (m_handles.size() < hardwareConcurrency()) {
-            m_frees.push_back(configuredHandle);
+        if (aliveHandleCount() < hardwareConcurrency()) {
+            m_frees[slot].push_back(configuredHandle);
         } else {
             // drop it
             configuredHandle->get()->close();
-            WCTInnerAssert(m_handles.find(configuredHandle) != m_handles.end());
-            m_handles.erase(configuredHandle);
+            WCTInnerAssert(m_handles[slot].find(configuredHandle)
+                           != m_handles[slot].end());
+            m_handles[slot].erase(configuredHandle);
         }
     }
     m_concurrency.unlockShared();

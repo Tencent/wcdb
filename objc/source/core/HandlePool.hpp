@@ -74,28 +74,35 @@ public:
 
     static int hardwareConcurrency();
     static int maxConcurrency();
+    static int maxHandleCount();
+
+private:
+    void clearAllHandles();
 
 protected:
     bool allowedConcurrency();
+    bool allowedHandleCount();
+    int m_currentConcurrency;
     mutable SharedLock m_concurrency;
 
 #pragma mark - Handle
 public:
-    RecyclableHandle flowOut();
+    typedef int Slot;
+    RecyclableHandle flowOut(const Slot &slot);
     void purge();
     size_t aliveHandleCount() const;
 
 protected:
-    virtual std::shared_ptr<Handle> generateHandle() = 0;
-    virtual bool willConfigureHandle(Handle *handle) = 0;
+    virtual std::shared_ptr<Handle> generateHandle(const Slot &slot) = 0;
+    virtual bool willConfigureHandle(const Slot &slot, ConfiguredHandle *handle);
 
     mutable SharedLock m_memory;
 
 private:
-    void flowBack(const std::shared_ptr<ConfiguredHandle> &configuredHandle);
+    void flowBack(const Slot &slot, const std::shared_ptr<ConfiguredHandle> &configuredHandle);
 
-    std::set<std::shared_ptr<ConfiguredHandle>> m_handles;
-    std::list<std::shared_ptr<ConfiguredHandle>> m_frees;
+    std::map<Slot, std::set<std::shared_ptr<ConfiguredHandle>>> m_handles;
+    std::map<Slot, std::list<std::shared_ptr<ConfiguredHandle>>> m_frees;
 };
 
 } //namespace WCDB

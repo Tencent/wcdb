@@ -18,7 +18,9 @@
  * limitations under the License.
  */
 
+#include <WCDB/AssemblerHandle.hpp>
 #include <WCDB/Assertion.hpp>
+#include <WCDB/BackupHandle.hpp>
 #include <WCDB/Database.hpp>
 #include <WCDB/Error.hpp>
 #include <WCDB/FileManager.hpp>
@@ -37,6 +39,7 @@ Database::Database(const String &path)
 , m_tag(Tag::invalid())
 , m_recoveryMode(RecoveryMode::Custom)
 , m_recoverNotification(nullptr)
+, m_initialized(false)
 {
 }
 
@@ -60,7 +63,12 @@ bool Database::canOpen()
 
 void Database::close(const ClosedCallback &onClosed)
 {
-    drain(onClosed);
+    drain([&onClosed, this]() {
+        if (onClosed) {
+            onClosed();
+        }
+        m_initialized = false;
+    });
 }
 
 bool Database::isOpened() const
@@ -68,12 +76,12 @@ bool Database::isOpened() const
     return aliveHandleCount() > 0;
 }
 
-Database::OpenedGuard Database::open()
+Database::InitializedGuard Database::initialize()
 {
     do {
         {
             SharedLockGuard concurrencyGuard(m_concurrency);
-            if (isOpened()) {
+            if (m_initialized) {
                 return concurrencyGuard;
             }
         }
@@ -81,7 +89,7 @@ Database::OpenedGuard Database::open()
         // Blocked initialization
         LockGuard concurrencyGuard(m_concurrency);
         LockGuard memoryGuard(m_memory);
-        if (isOpened()) {
+        if (m_initialized) {
             // retry
             continue;
         }
@@ -106,17 +114,22 @@ Database::OpenedGuard Database::open()
         // When migration associated is not set, the initialize state is default to true
         if (!m_migration.isInitialized()) {
             WCTInnerAssert(m_concurrency.readSafety());
-            // This temporary handle will be dropped since it's dirty.
-            MigrationInitializerHandle handle(path);
-            if (!m_migration.initialize(handle)) {
+            {
+                // This temporary handle will be dropped since it's dirty.
+                RecyclableHandle handle = flowOut((Slot) MigrationInitializerSlot);
+                WCTInnerAssert(
+                dynamic_cast<MigrationInitializerHandle *>(handle.get()) != nullptr);
+                MigrationInitializerHandle *initializer
+                = static_cast<MigrationInitializerHandle *>(handle.get());
+                succeed = m_migration.initialize(*initializer);
+            }
+            purge();
+            WCTInnerAssert(aliveHandleCount() == 0); // check it's already purged.
+            if (!succeed) {
                 break;
             }
         }
-        WCTInnerAssert(!isOpened());
-        // acquire one handle to make pool not empty.
-        if (HandlePool::flowOut() == nullptr) {
-            break;
-        }
+        m_initialized = true;
     } while (true);
     return nullptr;
 }
@@ -124,10 +137,6 @@ Database::OpenedGuard Database::open()
 #pragma mark - Handle
 RecyclableHandle Database::getHandle()
 {
-    OpenedGuard openedGuard = open();
-    if (!openedGuard.valid()) {
-        return nullptr;
-    }
     // additional shared lock is not needed since when it's blocked the threadedHandles is always empty and threaded handles is thread safe.
     ThreadedHandles *threadedHandle = Database::threadedHandles().getOrCreate();
     const auto iter = threadedHandle->find(this);
@@ -135,7 +144,21 @@ RecyclableHandle Database::getHandle()
         WCTInnerAssert(m_concurrency.readSafety());
         return iter->second;
     }
-    return flowOut();
+    InitializedGuard initializedGuard = initialize();
+    if (!initializedGuard.valid()) {
+        return nullptr;
+    }
+    return flowOut(m_migration.shouldMigrate() ? (Slot) MigrationHandleSlot : (Slot) HandleSlot);
+}
+
+RecyclableHandle Database::getSlotHandle(const Slot &slot)
+{
+    WCTInnerAssert(slot != MigrationHandleSlot && slot != HandleSlot);
+    InitializedGuard initializedGuard = initialize();
+    if (!initializedGuard.valid()) {
+        return nullptr;
+    }
+    return flowOut(slot);
 }
 
 bool Database::execute(const Statement &statement)
@@ -165,25 +188,73 @@ std::pair<bool, bool> Database::tableExists(const TableOrSubquery &table)
     return { false, false };
 }
 
-std::shared_ptr<Handle> Database::generateHandle()
+std::shared_ptr<Handle> Database::generateHandle(const Slot &slot)
 {
-    SharedLockGuard memoryGuard(m_memory);
     std::shared_ptr<Handle> handle;
-    WCTInnerAssert(m_migration.isInitialized());
-    if (m_migration.shouldMigrate()) {
-        handle.reset(new MigrationHandle(path, m_migration));
-    } else {
-        handle.reset(new Handle(path));
+    bool open = false;
+    switch (slot) {
+    case MigrationHandleSlot:
+        WCTInnerAssert(m_migration.isInitialized());
+        handle.reset(new MigrationHandle(m_migration));
+        open = true;
+        break;
+    case MigrationInitializerSlot:
+        WCTInnerAssert(!m_migration.isInitialized());
+        handle.reset(new MigrationInitializerHandle);
+        open = true;
+        break;
+    case MigrationStepperSlot:
+#warning TODO
+        open = true;
+        break;
+    case BackupReadSlot:
+        handle.reset(new BackupReadHandle);
+        break;
+    case BackupWriteSlot:
+        handle.reset(new BackupWriteHandle);
+        break;
+    case AssemblerSlot:
+        handle.reset(new AssemblerHandle);
+        break;
+    default:
+        WCTInnerAssert(slot == HandleSlot);
+        handle.reset(new Handle);
+        open = true;
+        break;
+    }
+    if (handle == nullptr) {
+        setThreadedError(Error(Error::Code::NoMemory));
+        return nullptr;
+    }
+    if (open) {
+        handle->setPath(path);
+        if (!handle->open()) {
+            setThreadedError(handle->getError());
+            return nullptr;
+        }
     }
     return handle;
 }
 
-bool Database::willConfigureHandle(Handle *handle)
+bool Database::willConfigureHandle(const Slot &slot, ConfiguredHandle *handle)
 {
-    SharedLockGuard memoryGuard(m_memory);
-    if (m_migration.shouldMigrate()) {
-        WCTInnerAssert(dynamic_cast<MigrationHandle *>(handle) != nullptr);
-        return static_cast<MigrationHandle *>(handle)->rebindMigration();
+    bool succeed = true;
+    switch (slot) {
+    case HandleSlot:
+        succeed = HandlePool::willConfigureHandle(slot, handle);
+        break;
+    case MigrationHandleSlot:
+        WCTInnerAssert(dynamic_cast<MigrationHandle *>(handle->get()) != nullptr);
+        if (m_migration.shouldMigrate()) {
+            if (!static_cast<MigrationHandle *>(handle->get())->rebindMigration()) {
+                succeed = false;
+                break;
+            }
+        }
+        succeed = HandlePool::willConfigureHandle(slot, handle);
+        break;
+    default:
+        break;
     }
     return true;
 }
@@ -444,13 +515,21 @@ void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
 
 bool Database::backup()
 {
-    OpenedGuard openedGuard = open();
-    if (!openedGuard.valid()) {
-        return nullptr;
+    RecyclableHandle backupReadHandle = getSlotHandle((Slot) BackupReadSlot);
+    if (backupReadHandle == nullptr) {
+        return false;
     }
+
+    RecyclableHandle backupWriteHandle = getSlotHandle((Slot) BackupWriteSlot);
+    if (backupWriteHandle == nullptr) {
+        return false;
+    }
+
     SharedLockGuard memoryGuard(m_memory);
-    // TODO: get backed up frame, update backup queue, use backup handle instead
+    // TODO: get backed up frame, update backup queue
     Repair::FactoryBackup backup = m_factory.backup();
+    backup.setReadLocker(static_cast<BackupReadHandle *>(backupReadHandle.get()));
+    backup.setWriteLocker(static_cast<BackupWriteHandle *>(backupWriteHandle.get()));
     if (backup.work(getPath())) {
         return true;
     }
@@ -462,7 +541,24 @@ bool Database::deposit()
 {
     bool result = false;
     close([&result, this]() {
+        RecyclableHandle backupReadHandle = getSlotHandle((Slot) BackupReadSlot);
+        if (backupReadHandle == nullptr) {
+            return;
+        }
+        RecyclableHandle backupWriteHandle = getSlotHandle((Slot) BackupWriteSlot);
+        if (backupWriteHandle == nullptr) {
+            return;
+        }
+        RecyclableHandle assemblerHandle = getSlotHandle((Slot) AssemblerSlot);
+        if (assemblerHandle == nullptr) {
+            return;
+        }
+
         Repair::FactoryRenewer renewer = m_factory.renewer();
+        renewer.setReadLocker(static_cast<BackupReadHandle *>(backupReadHandle.get()));
+        renewer.setWriteLocker(
+        static_cast<BackupWriteHandle *>(backupWriteHandle.get()));
+        renewer.setAssembler(static_cast<AssemblerHandle *>(assemblerHandle.get()));
         // Prepare a new database from material at renew directory and wait for moving
         if (!renewer.prepare()) {
             setThreadedError(renewer.getError());
@@ -488,7 +584,24 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
 {
     double result = -1;
     close([&result, &onProgressUpdate, this]() {
+        RecyclableHandle backupReadHandle = getSlotHandle((Slot) BackupReadSlot);
+        if (backupReadHandle == nullptr) {
+            return;
+        }
+        RecyclableHandle backupWriteHandle = getSlotHandle((Slot) BackupWriteSlot);
+        if (backupWriteHandle == nullptr) {
+            return;
+        }
+        RecyclableHandle assemblerHandle = getSlotHandle((Slot) AssemblerSlot);
+        if (assemblerHandle == nullptr) {
+            return;
+        }
+
         Repair::FactoryRetriever retriever = m_factory.retriever();
+        retriever.setReadLocker(static_cast<BackupReadHandle *>(backupReadHandle.get()));
+        retriever.setWriteLocker(
+        static_cast<BackupWriteHandle *>(backupWriteHandle.get()));
+        retriever.setAssembler(static_cast<AssemblerHandle *>(assemblerHandle.get()));
         retriever.setProgressCallback(onProgressUpdate);
         if (retriever.work()) {
             result = retriever.getScore().value();
@@ -535,7 +648,24 @@ bool Database::retrieveRenewed()
     WCTInnerAssert(isBlockaded());
     SharedLockGuard memoryGuard(m_memory);
     WCTInnerAssert(!isOpened());
+
+    RecyclableHandle backupReadHandle = getSlotHandle((Slot) BackupReadSlot);
+    if (backupReadHandle == nullptr) {
+        return false;
+    }
+    RecyclableHandle backupWriteHandle = getSlotHandle((Slot) BackupWriteSlot);
+    if (backupWriteHandle == nullptr) {
+        return false;
+    }
+    RecyclableHandle assemblerHandle = getSlotHandle((Slot) AssemblerSlot);
+    if (assemblerHandle == nullptr) {
+        return false;
+    }
+
     Repair::FactoryRenewer renewer = m_factory.renewer();
+    renewer.setReadLocker(static_cast<BackupReadHandle *>(backupReadHandle.get()));
+    renewer.setWriteLocker(static_cast<BackupWriteHandle *>(backupWriteHandle.get()));
+    renewer.setAssembler(static_cast<AssemblerHandle *>(assemblerHandle.get()));
     if (renewer.work()) {
         return true;
     }
@@ -595,13 +725,11 @@ bool Database::recover()
 #pragma mark - Migration
 void Database::setNotificationWhenMigrated(const MigratedCallback &callback)
 {
-    LockGuard memoryGuard(m_memory);
     m_migration.setNotificationWhenMigrated(callback);
 }
 
 void Database::filterMigration(const MigrationTableFilter &filter)
 {
-    LockGuard memoryGuard(m_memory);
     WCTRemedialAssert(
     !isOpened(), "Migration user info must be set before the very first operation.", return;);
     m_migration.filterTable(filter);

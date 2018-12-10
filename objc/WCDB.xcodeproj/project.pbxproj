@@ -115,6 +115,10 @@
 		233A25D3219933DB00054EC4 /* WCTBuiltin.h in Headers */ = {isa = PBXBuildFile; fileRef = 233A25D2219933D800054EC4 /* WCTBuiltin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		233A8532215E7CFE00BB8D4F /* Console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233A8530215E7CFE00BB8D4F /* Console.cpp */; };
 		233A8534215E7CFE00BB8D4F /* Console.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233A8531215E7CFE00BB8D4F /* Console.hpp */; };
+		233B097D21BE50CA005AD534 /* BackupHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233B097B21BE50CA005AD534 /* BackupHandle.cpp */; };
+		233B097E21BE50CA005AD534 /* BackupHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233B097C21BE50CA005AD534 /* BackupHandle.hpp */; };
+		233B098121BE50D2005AD534 /* AssemblerHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233B097F21BE50D2005AD534 /* AssemblerHandle.cpp */; };
+		233B098221BE50D2005AD534 /* AssemblerHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233B098021BE50D2005AD534 /* AssemblerHandle.hpp */; };
 		233E12302195749C00BD488D /* ConvenientSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E122F2195749C00BD488D /* ConvenientSelectTests.mm */; };
 		233E123A2195755400BD488D /* ConvenientInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E12392195755400BD488D /* ConvenientInsertTests.mm */; };
 		233E123E2195756400BD488D /* ConvenientUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123D2195756400BD488D /* ConvenientUpdateTests.mm */; };
@@ -1224,6 +1228,10 @@
 		233A25D2219933D800054EC4 /* WCTBuiltin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTBuiltin.h; sourceTree = "<group>"; };
 		233A8530215E7CFE00BB8D4F /* Console.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Console.cpp; sourceTree = "<group>"; };
 		233A8531215E7CFE00BB8D4F /* Console.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Console.hpp; sourceTree = "<group>"; };
+		233B097B21BE50CA005AD534 /* BackupHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BackupHandle.cpp; sourceTree = "<group>"; };
+		233B097C21BE50CA005AD534 /* BackupHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BackupHandle.hpp; sourceTree = "<group>"; };
+		233B097F21BE50D2005AD534 /* AssemblerHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AssemblerHandle.cpp; sourceTree = "<group>"; };
+		233B098021BE50D2005AD534 /* AssemblerHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AssemblerHandle.hpp; sourceTree = "<group>"; };
 		233E122F2195749C00BD488D /* ConvenientSelectTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ConvenientSelectTests.mm; sourceTree = "<group>"; };
 		233E12392195755400BD488D /* ConvenientInsertTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ConvenientInsertTests.mm; sourceTree = "<group>"; };
 		233E123D2195756400BD488D /* ConvenientUpdateTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ConvenientUpdateTests.mm; sourceTree = "<group>"; };
@@ -2201,6 +2209,17 @@
 			path = fts;
 			sourceTree = "<group>";
 		};
+		233B097A21BE50C0005AD534 /* repair */ = {
+			isa = PBXGroup;
+			children = (
+				233B097B21BE50CA005AD534 /* BackupHandle.cpp */,
+				233B097C21BE50CA005AD534 /* BackupHandle.hpp */,
+				233B097F21BE50D2005AD534 /* AssemblerHandle.cpp */,
+				233B098021BE50D2005AD534 /* AssemblerHandle.hpp */,
+			);
+			path = repair;
+			sourceTree = "<group>";
+		};
 		2349F5D51EA0D6680021EFA7 /* source */ = {
 			isa = PBXGroup;
 			children = (
@@ -2232,6 +2251,7 @@
 		2349F6151EA0D6680021EFA7 /* core */ = {
 			isa = PBXGroup;
 			children = (
+				233B097A21BE50C0005AD534 /* repair */,
 				23176A8E21B915660051ACF9 /* handle */,
 				23A09D632146204300F62EE8 /* migration */,
 				23B4DCDE2112B03200954D71 /* queue */,
@@ -3573,6 +3593,7 @@
 				23EEDD2A217DFADC006E9E73 /* SyntaxAlterTableSTMT.hpp in Headers */,
 				23EEDC8E217DFADC006E9E73 /* IndexedColumn.hpp in Headers */,
 				23176A9B21BA7D460051ACF9 /* WCTDatabase+Version.h in Headers */,
+				233B097E21BE50CA005AD534 /* BackupHandle.hpp in Headers */,
 				23EEDC82217DFADC006E9E73 /* CTETable.hpp in Headers */,
 				23D0C35320C149D80001BFAE /* Factory.hpp in Headers */,
 				23FEC463206B3032001E7A3B /* WCTConvenient.h in Headers */,
@@ -3697,6 +3718,7 @@
 				2349F7561EA0D6680021EFA7 /* WCTCppAccessor.h in Headers */,
 				2308F85120E32A51001CD9C3 /* FileHandle.hpp in Headers */,
 				23EEDCCA217DFADC006E9E73 /* StatementDelete.hpp in Headers */,
+				233B098221BE50D2005AD534 /* AssemblerHandle.hpp in Headers */,
 				23EEDCAE217DFADC006E9E73 /* WindowDef.hpp in Headers */,
 				232741501F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */,
 				2349F76B1EA0D6680021EFA7 /* WCTPropertyMacro.h in Headers */,
@@ -4573,7 +4595,9 @@
 				23EEDD4B217DFADC006E9E73 /* SyntaxPragmaSTMT.cpp in Sources */,
 				23EEDC91217DFADC006E9E73 /* JoinConstraint.cpp in Sources */,
 				2349F75C1EA0D6680021EFA7 /* WCTRuntimeObjCAccessor+NoARC.mm in Sources */,
+				233B097D21BE50CA005AD534 /* BackupHandle.cpp in Sources */,
 				23EEDCA9217DFADC006E9E73 /* TableOrSubquery.cpp in Sources */,
+				233B098121BE50D2005AD534 /* AssemblerHandle.cpp in Sources */,
 				23593B7D20D3ADF80058B416 /* WalRelated.cpp in Sources */,
 				23EEDD2F217DFADC006E9E73 /* SyntaxBeginSTMT.cpp in Sources */,
 				23EEDCF5217DFADC006E9E73 /* SyntaxCommonTableExpression.cpp in Sources */,

@@ -18,6 +18,8 @@
  * limitations under the License.
  */
 
+#if WCDB_USE_BUILTIN_SQLITE_REPAIR
+
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/SQLite.h>
@@ -204,3 +206,5 @@ void SQLiteBase::finalize(void **stmt)
 } //namespace Repair
 
 } //namespace WCDB
+
+#endif /* WCDB_USE_BUILTIN_SQLITE_REPAIR */

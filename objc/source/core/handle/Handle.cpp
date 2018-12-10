@@ -30,15 +30,13 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-Handle::Handle(const String &path_)
-: path(path_)
-, m_handle(nullptr)
+Handle::Handle()
+: m_handle(nullptr)
 , m_handleStatement(this)
 , m_notification(this)
 , m_nestedLevel(0)
 , m_codeToBeIgnored(SQLITE_OK)
 {
-    m_error.infos.set("Path", path);
 }
 
 Handle::~Handle()
@@ -79,6 +77,18 @@ void Handle::setNotificationWhenVFSOpened(const VFSOpen &vfsOpen)
 }
 
 #pragma mark - Path
+void Handle::setPath(const String &path)
+{
+    WCTRemedialAssert(!isOpened(), "Path can't be changed after opened.", return;);
+    m_path = path;
+    m_error.infos.set("Path", path);
+}
+
+const String &Handle::getPath() const
+{
+    return m_path;
+}
+
 String Handle::getSHMSubfix()
 {
     return "-shm";
@@ -100,7 +110,7 @@ bool Handle::open()
     if (isOpened()) {
         return true;
     }
-    int rc = sqlite3_open(path.c_str(), (sqlite3 **) &m_handle);
+    int rc = sqlite3_open(m_path.c_str(), (sqlite3 **) &m_handle);
     if (rc != SQLITE_OK) {
         return error(rc);
     }
@@ -285,13 +295,7 @@ void Handle::bindDouble(const Float &value, int index)
 void Handle::bindText(const Text &value, int index)
 {
     WCTInnerAssert(isPrepared());
-    bindText(value, -1, index);
-}
-
-void Handle::bindText(const Text &value, int length, int index)
-{
-    WCTInnerAssert(isPrepared());
-    m_handleStatement.bindText(value, length, index);
+    m_handleStatement.bindText(value, -1, index);
 }
 
 void Handle::bindBLOB(const BLOB &value, int index)
@@ -365,22 +369,16 @@ std::pair<bool, bool> Handle::tableExists(const TableOrSubquery &table)
 }
 
 std::pair<bool, std::set<String>>
-Handle::getUnorderedColumnsWithTable(const Schema &schema, const String &table)
+Handle::getUnorderedColumns(const Schema &schema, const String &table)
 {
     WCDB::StatementPragma statement
     = StatementPragma().pragma(Pragma::tableInfo()).schema(schema).with(table);
     return getUnorderedValues(statement, 1);
 }
 
-std::pair<bool, std::set<String>> Handle::getUnorderedColumnsWithTable(const String &table)
-{
-    return getUnorderedColumnsWithTable(Schema::main(), table);
-}
-
 std::pair<bool, std::set<String>>
 Handle::getUnorderedValues(const Statement &statement, int index)
 {
-#warning TODO - Prepare/Step/Execute/... within Handle.cpp should use their own implementation or use the overrided one?
     if (prepare(statement)) {
         bool done = false;
         std::set<String> values;

@@ -18,6 +18,8 @@
  * limitations under the License.
  */
 
+#if WCDB_USE_BUILTIN_SQLITE_REPAIR
+
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Cell.hpp>
 #include <WCDB/SQLite.h>
@@ -30,8 +32,7 @@ namespace WCDB {
 namespace Repair {
 
 #pragma mark - Initialize
-SQLiteAssembler::SQLiteAssembler()
-: m_cellSTMT(nullptr), m_primary(-1), m_duplicated(false)
+SQLiteAssembler::SQLiteAssembler() : m_cellSTMT(nullptr), m_primary(-1)
 {
 }
 
@@ -101,9 +102,8 @@ bool SQLiteAssembler::assembleCell(const Cell &cell)
             (sqlite3_stmt *) m_cellSTMT, bindIndex, cell.integerValue(i));
             break;
         case Cell::Text: {
-            auto pair = cell.textValue(i);
             sqlite3_bind_text(
-            (sqlite3_stmt *) m_cellSTMT, bindIndex, pair.second, pair.first, SQLITE_TRANSIENT);
+            (sqlite3_stmt *) m_cellSTMT, bindIndex, cell.textValue(i).cstring(), -1, SQLITE_TRANSIENT);
             break;
         }
         case Cell::BLOB: {
@@ -138,11 +138,6 @@ bool SQLiteAssembler::assembleSQL(const String &sql)
     return succeed;
 }
 
-void SQLiteAssembler::markAsDuplicated(bool duplicated)
-{
-    m_duplicated = duplicated;
-}
-
 const Error &SQLiteAssembler::getError() const
 {
     return ErrorProne::getError();
@@ -175,10 +170,10 @@ std::pair<bool, String> SQLiteAssembler::getAssembleSQL(const String &tableName)
 
     std::ostringstream firstHalfStream;
     std::ostringstream lastHalfStream;
-    if (!m_duplicated) {
-        firstHalfStream << "INSERT INTO ";
-    } else {
+    if (isDuplicatedIgnorable()) {
         firstHalfStream << "INSERT OR IGNORE INTO ";
+    } else {
+        firstHalfStream << "INSERT INTO ";
     }
     firstHalfStream << tableName << "(rowid";
     lastHalfStream << ") VALUES(?";
@@ -300,3 +295,5 @@ void SQLiteAssembler::close()
 } //namespace Repair
 
 } //namespace WCDB
+
+#endif /* WCDB_USE_BUILTIN_SQLITE_REPAIR */

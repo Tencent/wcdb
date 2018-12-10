@@ -18,26 +18,18 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SQLITEASSEMBLER_HPP
-#define _WCDB_SQLITEASSEMBLER_HPP
+#ifndef _WCDB_ASSEMBLERHANDLE_HPP
+#define _WCDB_ASSEMBLERHANDLE_HPP
 
-#if WCDB_USE_BUILTIN_SQLITE_REPAIR
-
-#include <WCDB/Assembler.hpp>
-#include <WCDB/SQLiteBase.hpp>
-#include <list>
+#include <WCDB/Handle.hpp>
+#include <WCDB/RepairKit.h>
 
 namespace WCDB {
 
-namespace Repair {
-
-class SQLiteAssembler final : public Assembler, public SQLiteBase {
-#pragma mark - Initialize
+class AssemblerHandle final : public Handle, public Repair::Assembler {
 public:
-    SQLiteAssembler();
+    AssemblerHandle();
 
-#pragma mark - Assembler
-public:
     void setPath(const String &path) override final;
     const String &getPath() const override final;
 
@@ -46,41 +38,39 @@ public:
 
     bool markAsMilestone() override final;
 
-    bool assembleTable(const String &tableName, const String &sql) override final;
-    bool assembleCell(const Cell &cell) override final;
     bool assembleSQL(const String &sql) override final;
 
     const Error &getError() const override final;
 
-#pragma mark - Cell
+protected:
+    StatementPragma m_statementForDisableJounral;
+    StatementPragma m_statementForEnableMMap;
+
+#pragma mark - Table
+public:
+    bool assembleTable(const String &tableName, const String &sql) override final;
+    bool assembleCell(const Repair::Cell &cell) override final;
+
 protected:
     bool lazyPrepareCell();
-    std::pair<bool, String> getAssembleSQL(const String &tableName);
-    std::pair<bool, std::list<String>> getColumnNames(const String &tableName);
-
-    String m_table;
     int m_primary;
-    void *m_cellSTMT;
+    String m_table;
 
 #pragma mark - Sequence
-protected:
-    bool markSequenceAsAssembling();
+public:
     bool assembleSequence(const String &tableName, int64_t sequence) override final;
-    bool markSequenceAsAssembled();
 
+protected:
     std::pair<bool, bool> updateSequence(const String &tableName, int64_t sequence);
     bool insertSequence(const String &tableName, int64_t sequence);
+    static constexpr const char *s_dummySequence = "wcdb_dummy_sqlite_sequence";
+    bool markSequenceAsAssembling();
+    bool markSequenceAsAssembled();
 
-#pragma mark - SQLite Base
-protected:
-    bool open();
-    void close();
+    StatementUpdate m_statementForUpdateSequence;
+    StatementInsert m_statementForInsertSequence;
 };
 
-} //namespace Repair
+} // namespace WCDB
 
-} //namespace WCDB
-
-#endif /* WCDB_USE_BUILTIN_SQLITE_REPAIR */
-
-#endif /* _WCDB_SQLITEASSEMBLER_HPP */
+#endif /* _WCDB_ASSEMBLERHANDLE_HPP */

@@ -18,6 +18,8 @@
  * limitations under the License.
  */
 
+#if WCDB_USE_BUILTIN_SQLITE_REPAIR
+
 #include <WCDB/Assertion.hpp>
 #include <WCDB/SQLite.h>
 #include <WCDB/SQLiteLocker.hpp>
@@ -97,3 +99,5 @@ bool SQLiteWriteLocker::releaseLock()
 } //namespace Repair
 
 } //namespace WCDB
+
+#endif /* WCDB_USE_BUILTIN_SQLITE_REPAIR */

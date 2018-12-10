@@ -163,7 +163,7 @@ bool FactoryRetriever::restore(const String &database)
         }
         if (useMaterial) {
             Mechanic mechanic(database);
-            m_assembler->markAsDuplicated(false);
+            m_assembler->markDuplicatedAsIgnorable(false);
             mechanic.setAssembler(m_assembler);
             mechanic.setMaterial(&material);
             mechanic.setProgressCallback(std::bind(&FactoryRetriever::increaseProgress,
@@ -195,7 +195,7 @@ bool FactoryRetriever::restore(const String &database)
     }
 
     FullCrawler fullCrawler(database);
-    m_assembler->markAsDuplicated(useMaterial);
+    m_assembler->markDuplicatedAsIgnorable(useMaterial);
     fullCrawler.setAssembler(m_assembler);
     fullCrawler.setProgressCallback(std::bind(&FactoryRetriever::increaseProgress,
                                               this,

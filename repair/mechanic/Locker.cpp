@@ -28,16 +28,20 @@ Locker::~Locker()
 {
 }
 
+LockerHolder::LockerHolder() : m_readLocker(nullptr), m_writeLocker(nullptr)
+{
+}
+
 LockerHolder::~LockerHolder()
 {
 }
 
-void LockerHolder::setReadLocker(const std::shared_ptr<ReadLocker> &readLocker)
+void LockerHolder::setReadLocker(ReadLocker* readLocker)
 {
     m_readLocker = readLocker;
 }
 
-void LockerHolder::setWriteLocker(const std::shared_ptr<WriteLocker> &writeLocker)
+void LockerHolder::setWriteLocker(WriteLocker* writeLocker)
 {
     m_writeLocker = writeLocker;
 }

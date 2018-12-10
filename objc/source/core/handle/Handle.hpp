@@ -36,9 +36,8 @@ namespace WCDB {
 class Handle : public ErrorProne {
 #pragma mark - Initialize
 public:
-    Handle(const String &path);
+    Handle();
 
-    Handle() = delete;
     Handle(const Handle &) = delete;
     Handle &operator=(const Handle &) = delete;
     virtual ~Handle();
@@ -69,11 +68,15 @@ public:
 
 #pragma mark - Path
 public:
-    const String path;
+    void setPath(const String &path);
+    const String &getPath() const;
 
     static String getSHMSubfix();
     static String getWALSubfix();
     static String getJournalSubfix();
+
+private:
+    String m_path;
 
 #pragma mark - Basic
 public:
@@ -118,8 +121,7 @@ public:
     virtual void bindInteger32(const Integer32 &value, int index);
     virtual void bindInteger64(const Integer64 &value, int index);
     virtual void bindDouble(const Float &value, int index);
-    void bindText(const Text &value, int index);
-    virtual void bindText(const Text &value, int length, int index);
+    virtual void bindText(const Text &value, int index);
     virtual void bindBLOB(const BLOB &value, int index);
     virtual void bindNull(int index);
 
@@ -143,8 +145,7 @@ protected:
 public:
     std::pair<bool, bool> tableExists(const TableOrSubquery &table);
     std::pair<bool, std::set<String>>
-    getUnorderedColumnsWithTable(const Schema &schema, const String &tableName);
-    std::pair<bool, std::set<String>> getUnorderedColumnsWithTable(const String &tableName);
+    getUnorderedColumns(const Schema &schema, const String &table);
 
     typedef std::function<bool(Handle *)> TransactionCallback;
 

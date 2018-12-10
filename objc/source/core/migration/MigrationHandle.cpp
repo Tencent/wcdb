@@ -26,8 +26,8 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-MigrationHandle::MigrationHandle(const String& path, Migration& migration)
-: Handle(path), Migration::Binder(migration)
+MigrationHandle::MigrationHandle(Migration& migration)
+: Handle(), Migration::Binder(migration)
 {
 }
 
@@ -146,9 +146,9 @@ void MigrationHandle::bindDouble(const Float& value, int index)
     Handle::bindDouble(value, index);
 }
 
-void MigrationHandle::bindText(const Text& value, int length, int index)
+void MigrationHandle::bindText(const Text& value, int index)
 {
-    Handle::bindText(value, length, index);
+    Handle::bindText(value, index);
 }
 
 void MigrationHandle::bindBLOB(const BLOB& value, int index)
