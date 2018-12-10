@@ -165,7 +165,7 @@
     // trigger subthread checkpoint
     TestCaseAssertTrue([self createTable]);
 
-    BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.wal_checkpoint = 'PASSIVE'" ]
+    BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
                asExpectedInOperation:^BOOL {
                    [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + self.delayForTolerance];
                    return YES;
@@ -185,7 +185,7 @@
         TestCaseAssertTrue([self.table insertObject:object]);
     }
 
-    BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.wal_checkpoint = 'PASSIVE'" ]
+    BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
                asExpectedInOperation:^BOOL {
                    [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
                    return YES;
@@ -205,7 +205,7 @@
         TestCaseAssertTrue([self.table insertObject:object]);
     }
 
-    BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.wal_checkpoint = 'TRUNCATE'" ]
+    BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.wal_checkpoint('TRUNCATE')" ]
                asExpectedInOperation:^BOOL {
                    [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
                    return YES;
@@ -225,7 +225,7 @@
         TestCaseAssertTrue([self.table insertObject:object]);
     }
 
-    BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.wal_checkpoint = 'PASSIVE'", @"PRAGMA main.wal_checkpoint = 'PASSIVE'" ]
+    BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')", @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
                asExpectedInOperation:^BOOL {
                    [self.console disableSQLiteWrite];
                    [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
@@ -269,35 +269,36 @@
     TestCaseAssertTrue(result);
 }
 
-- (void)test_feature_max_concurrency
-{
-    NSCondition* condition = [[NSCondition alloc] init];
-    __block int currentConcurrency = 0;
-    for (int i = 0; i < self.maxConcurrency; ++i) {
-        dispatch_group_async(self.group, self.queue, ^{
-            WCTHandle* handle = [self.database getHandle];
-            TestCaseAssertTrue([handle validate]);
-            [condition lock];
-            ++currentConcurrency;
-            [condition wait];
-            [condition unlock];
-            [handle invalidate];
-        });
-    }
-
-    do {
-        BOOL prepared = NO;
-        [condition lock];
-        prepared = currentConcurrency == self.maxConcurrency;
-        [condition unlock];
-        if (prepared) {
-            break;
-        }
-    } while (YES);
-
-    TestCaseAssertFalse([[self.database getHandle] validate]);
-    [condition broadcast];
-    dispatch_group_wait(self.group, DISPATCH_TIME_FOREVER);
-}
+#warning TODO concurrency tests
+//- (void)test_feature_max_concurrency
+//{
+//    NSCondition* condition = [[NSCondition alloc] init];
+//    __block int currentConcurrency = 0;
+//    for (int i = 0; i < self.maxConcurrency; ++i) {
+//        dispatch_group_async(self.group, self.queue, ^{
+//            WCTHandle* handle = [self.database getHandle];
+//            TestCaseAssertTrue([handle validate]);
+//            [condition lock];
+//            ++currentConcurrency;
+//            [condition wait];
+//            [condition unlock];
+//            [handle invalidate];
+//        });
+//    }
+//
+//    do {
+//        BOOL prepared = NO;
+//        [condition lock];
+//        prepared = currentConcurrency == self.maxConcurrency;
+//        [condition unlock];
+//        if (prepared) {
+//            break;
+//        }
+//    } while (YES);
+//
+//    TestCaseAssertFalse([[self.database getHandle] validate]);
+//    [condition broadcast];
+//    dispatch_group_wait(self.group, DISPATCH_TIME_FOREVER);
+//}
 
 @end
