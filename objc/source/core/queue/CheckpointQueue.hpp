@@ -49,7 +49,6 @@ public:
     void setEvent(CheckpointEvent* event);
 
     void put(const String& path, double delay, int frames);
-    void remove(const String& path);
 
 protected:
     bool onTimed(const String& path, const int& frames);

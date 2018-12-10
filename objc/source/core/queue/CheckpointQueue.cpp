@@ -82,9 +82,4 @@ void CheckpointQueue::put(const String& path, double delay, int frames)
     lazyRun();
 }
 
-void CheckpointQueue::remove(const String& path)
-{
-    m_timedQueue.remove(path);
-}
-
 } // namespace WCDB
