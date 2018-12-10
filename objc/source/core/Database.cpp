@@ -26,6 +26,7 @@
 #include <WCDB/FileManager.hpp>
 #include <WCDB/MigrationHandle.hpp>
 #include <WCDB/MigrationInitializerHandle.hpp>
+#include <WCDB/MigrationStepperHandle.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/RepairKit.h>
 #include <WCDB/String.hpp>
@@ -204,7 +205,8 @@ std::shared_ptr<Handle> Database::generateHandle(const Slot &slot)
         open = true;
         break;
     case MigrationStepperSlot:
-#warning TODO
+        WCTInnerAssert(m_migration.isInitialized());
+        handle.reset(new MigrationStepperHandle);
         open = true;
         break;
     case BackupReadSlot:
@@ -241,6 +243,7 @@ bool Database::willConfigureHandle(const Slot &slot, ConfiguredHandle *handle)
     bool succeed = true;
     switch (slot) {
     case HandleSlot:
+    case MigrationStepperSlot:
         succeed = HandlePool::willConfigureHandle(slot, handle);
         break;
     case MigrationHandleSlot:

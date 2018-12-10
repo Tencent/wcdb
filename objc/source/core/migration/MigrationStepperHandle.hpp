@@ -26,11 +26,7 @@
 
 namespace WCDB {
 
-class MigrationStepperHandle final : protected Handle, public Migration::Stepper {
-public:
-    using Handle::Handle;
-    using Handle::getError;
-
+class MigrationStepperHandle final : public Handle, public Migration::Stepper {
 protected:
     bool dropOriginTable(const MigrationInfo* info);
     bool migrateRows(const MigrationInfo* info, bool& done);
