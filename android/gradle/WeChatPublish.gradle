@@ -28,7 +28,11 @@ class WeChatPublishExtension {
     boolean publishToBintray = false
 
     boolean publishAllVariants = false
-    HashSet<String> publishVariants = []
+    Set<String> publishVariants = []
+
+    boolean publishAllFlavors = true
+    Set<String> publishFlavors = []
+    String defaultFlavor
 
     private final Project project
     private boolean usedDefaultIsSnapshot = true
@@ -227,7 +231,6 @@ class WeChatJavaLibraryPublishExtension extends WeChatPublishExtension {
 
     @Override
     protected void emitPublicationDSL(Project project) {
-        HashSet<Task> publishDepends = []
 
         def sourcesJarTask = project.task('sourcesJar', type: Jar) {
             classifier = 'sources'
@@ -262,7 +265,7 @@ class WeChatJavaLibraryPublishExtension extends WeChatPublishExtension {
         project.publishing.publications {
             "${publicationName}" (MavenPublication) {
                 from project.components.java
-                publishDepends << project.tasks.findByName('jar')
+                //publishDepends << project.tasks.findByName('jar')
 
                 groupId this.groupId
                 artifactId this.artifactId
@@ -271,21 +274,11 @@ class WeChatJavaLibraryPublishExtension extends WeChatPublishExtension {
                 // Emit sourcesJar task
                 if (withSources) {
                     artifact sourcesJarTask
-                    publishDepends << sourcesJarTask
                 }
 
                 // Emit javadocJar task
                 if (withJavadoc) {
                     artifact javadocJarTask
-                    publishDepends << javadocJarTask
-                }
-            }
-        }
-
-        project.afterEvaluate {
-            project.tasks.withType(AbstractPublishToMaven) {
-                if (publication.name == publicationName) {
-                    dependsOn publishDepends
                 }
             }
         }
@@ -300,75 +293,24 @@ class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
 
     @Override
     protected void emitPublicationDSL(Project project) {
-        HashSet<Task> publishDepends = new HashSet<>()
+        HashSet<String> emittedFlavors = new HashSet<>()
         def android = project.android
         def hasReleaseVariant = false
-        //def androidJarPath = "${android.sdkDirectory}/platforms/" +
-        //        "${android.compileSdkVersion}/android.jar"
-
-        project.publishing.publications {
-            "${publicationName}"(MavenPublication) {
-                groupId this.groupId
-                artifactId this.artifactId
-                version this.fullVersion
-
-                pom {
-                    packaging 'aar'
-
-                    withXml {
-                        // Resolve dependencies
-                        final depsNode = asNode().appendNode('dependencies')
-                        final addDep = { Dependency dep, String scope ->
-                            if (dep.group == null || dep.version == null || dep.name == null
-                                    || dep.name == "unspecified")
-                                return // ignore invalid dependencies
-
-                            // Determine actual artifactId for the dependency
-                            def artifactId = dep.name
-                            if (dep instanceof ProjectDependency) {
-                                def p = (dep as ProjectDependency).dependencyProject
-                                if (p.hasProperty('artifactId'))
-                                    artifactId = p.property('artifactId')
-                            }
-
-                            def node = depsNode.appendNode('dependency')
-                            node.appendNode('groupId', dep.group)
-                            node.appendNode('artifactId', artifactId)
-                            node.appendNode('version', dep.version)
-                            node.appendNode('scope', scope)
-
-                            if (!dep.transitive) {
-                                // If this dependency is transitive, we should force exclude all its dependencies them from the POM
-                                final exclusionNode = node.appendNode('exclusions').appendNode('exclusion')
-                                exclusionNode.appendNode('groupId', '*')
-                                exclusionNode.appendNode('artifactId', '*')
-                            } else if (!dep.properties.excludeRules.empty) {
-                                // Otherwise add specified exclude rules
-                                final exclusionNode = node.appendNode('exclusions').appendNode('exclusion')
-                                dep.properties.excludeRules.each { ExcludeRule rule ->
-                                    exclusionNode.appendNode('groupId', rule.group ?: '*')
-                                    exclusionNode.appendNode('artifactId', rule.module ?: '*')
-                                }
-                            }
-                        }
-
-                        [
-                                'compile':          'compile',
-                                'api':              'compile',
-                                'implementation':   'runtime',
-                                'compileOnly':      'compile',
-                                'runtimeOnly':      'runtime'
-                        ].each { conf, scope ->
-                            project.configurations[conf].allDependencies.each { addDep(it, scope) }
-                        }
-                    }
-                }
-            }
-        }
 
         android.libraryVariants.all { variant ->
             def variantName = variant.name
             def cVariantName = variantName.capitalize()
+
+            def flavorName = variant.flavorName
+            def variantOnlyName = variantName.substring(flavorName.length(), variantName.length())
+                    .uncapitalize()
+
+            if (flavorName == defaultFlavor)
+                flavorName = ''
+            def cFlavorName = flavorName.capitalize()
+
+            if (!publishAllFlavors && !flavorName.empty && !publishFlavors.contains(flavorName))
+                return
 
             def generateSourcesTask = project.tasks.findByName("generate${cVariantName}Sources")
 
@@ -384,7 +326,11 @@ class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
                 options {
                     memberLevel = JavadocMemberLevel.PUBLIC
                     doclet = 'com.google.doclava.Doclava'
-                    docletpath = [project.rootProject.file('gradle/doclava-1.0.6.jar')]
+
+                    def doclavaJar = project.rootProject.file('gradle/doclava-1.0.6.jar')
+                    if (doclavaJar.exists()) {
+                        docletpath = [doclavaJar]
+                    }
                     //docletpath = project.configurations.doclava.files as List
                 }
                 destinationDir = project.file("${project.buildDir}/docs/javadoc")
@@ -421,7 +367,7 @@ class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
             def nativeSymbolZipTask = null
             if (externalNativeBuildTask != null) {
                 nativeSymbolZipTask = project.task("nativeSymbolZip${cVariantName}", type: Zip) {
-                    classifier = "${variantName}Symbols"
+                    classifier = "${variantOnlyName}Symbols"
                     from externalNativeBuildTask.objFolder
                     include '**/*.so'
                     dependsOn externalNativeBuildTask
@@ -433,32 +379,87 @@ class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
                 bundleTask = project.tasks.findByName("bundle${cVariantName}")
 
             project.publishing.publications {
-                "${publicationName}"(MavenPublication) {
-                    if (variantName == 'release') {
+                "${publicationName}${cFlavorName}"(MavenPublication) {
+                    if (variantOnlyName == 'release') {
                         hasReleaseVariant = true
 
                         artifact(source: bundleTask, classifier: null)
-                        publishDepends << bundleTask
 
                         if (withSources) {
                             artifact(source: sourcesJarTask, classifier: 'sources')
-                            publishDepends << sourcesJarTask
                         }
                         if (withJavadoc) {
                             artifact(source: javadocJarTask, classifier: 'javadoc')
-                            publishDepends << javadocJarTask
                         }
                         if (withNativeSymbols && nativeSymbolZipTask != null) {
                             artifact(source: nativeSymbolZipTask, classifier: 'symbols')
-                            publishDepends << nativeSymbolZipTask
                         }
-                    } else if (publishAllVariants || publishVariants.contains(variantName)) {
-                        artifact(source: bundleTask, classifier: variantName)
-                        publishDepends << bundleTask
+                    } else if (publishAllVariants || publishVariants.contains(variantOnlyName)) {
+                        artifact(source: bundleTask, classifier: variantOnlyName)
 
                         if (withNativeSymbols && nativeSymbolZipTask != null) {
-                            artifact(source: nativeSymbolZipTask, classifier: "${variantName}Symbols")
-                            publishDepends << nativeSymbolZipTask
+                            artifact(source: nativeSymbolZipTask, classifier: "${variantOnlyName}Symbols")
+                        }
+                    }
+
+                    if (!emittedFlavors.contains(flavorName)) {
+                        emittedFlavors << flavorName
+
+                        groupId this.groupId
+                        version this.fullVersion
+                        artifactId flavorName.empty ?
+                                this.artifactId : "${this.artifactId}-${flavorName}"
+
+                        pom {
+                            packaging 'aar'
+
+                            withXml {
+                                // Resolve dependencies
+                                final depsNode = asNode().appendNode('dependencies')
+                                final addDep = { Dependency dep, String scope ->
+                                    if (dep.group == null || dep.version == null || dep.name == null
+                                            || dep.name == "unspecified")
+                                        return // ignore invalid dependencies
+
+                                    // Determine actual artifactId for the dependency
+                                    def artifactId = dep.name
+                                    if (dep instanceof ProjectDependency) {
+                                        def p = (dep as ProjectDependency).dependencyProject
+                                        if (p.hasProperty('artifactId'))
+                                            artifactId = p.property('artifactId')
+                                    }
+
+                                    def node = depsNode.appendNode('dependency')
+                                    node.appendNode('groupId', dep.group)
+                                    node.appendNode('artifactId', artifactId)
+                                    node.appendNode('version', dep.version)
+                                    node.appendNode('scope', scope)
+
+                                    if (!dep.transitive) {
+                                        // If this dependency is transitive, we should force exclude all its dependencies them from the POM
+                                        final exclusionNode = node.appendNode('exclusions').appendNode('exclusion')
+                                        exclusionNode.appendNode('groupId', '*')
+                                        exclusionNode.appendNode('artifactId', '*')
+                                    } else if (!dep.properties.excludeRules.empty) {
+                                        // Otherwise add specified exclude rules
+                                        final exclusionNode = node.appendNode('exclusions').appendNode('exclusion')
+                                        dep.properties.excludeRules.each { ExcludeRule rule ->
+                                            exclusionNode.appendNode('groupId', rule.group ?: '*')
+                                            exclusionNode.appendNode('artifactId', rule.module ?: '*')
+                                        }
+                                    }
+                                }
+
+                                [
+                                        'compile':          'compile',
+                                        'api':              'compile',
+                                        'implementation':   'runtime',
+                                        'compileOnly':      'compile',
+                                        'runtimeOnly':      'runtime'
+                                ].each { conf, scope ->
+                                    project.configurations[conf].allDependencies.each { addDep(it, scope) }
+                                }
+                            }
                         }
                     }
                 }
