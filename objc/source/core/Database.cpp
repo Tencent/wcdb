@@ -449,7 +449,7 @@ bool Database::backup()
         return nullptr;
     }
     SharedLockGuard memoryGuard(m_memory);
-    // TODO: get backed up frame and update backup queue
+    // TODO: get backed up frame, update backup queue, use backup handle instead
     Repair::FactoryBackup backup = m_factory.backup();
     if (backup.work(getPath())) {
         return true;

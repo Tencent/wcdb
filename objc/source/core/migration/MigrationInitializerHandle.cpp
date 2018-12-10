@@ -42,17 +42,15 @@ std::pair<bool, std::set<String>> MigrationInitializerHandle::getTables()
         return { false, {} };
     }
 
-    return getUnorderedValues(
-    StatementSelect().select(Column("table")).from("sqlite_master").where(Column("type") == "table"),
-    0);
+    WCDB::StatementSelect statement
+    = StatementSelect().select(Column("table")).from("sqlite_master").where(Column("type") == "table");
+
+    return getUnorderedValues(statement, 0);
 }
 
 std::pair<bool, std::set<String>>
 MigrationInitializerHandle::getColumns(const String& table, const String& database)
 {
-    WCTInnerAssert(!isPrepared());
-    WCTInnerAssert(!isInTransaction());
-
     WCTInnerAssert(!table.empty());
 
     if (!lazyOpen()) {
