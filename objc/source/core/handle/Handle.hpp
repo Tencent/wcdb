@@ -93,6 +93,9 @@ public:
 
     void interrupt();
 
+protected:
+    bool execute(const String &sql);
+
 #pragma mark - Statement
 public:
     virtual bool prepare(const Statement &statement);
@@ -133,6 +136,7 @@ public:
     const UnsafeString getColumnTableName(int index);
 
 protected:
+    bool prepare(const String &sql);
     HandleStatement m_handleStatement;
 
 #pragma mark - Convenient

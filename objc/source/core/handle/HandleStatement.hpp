@@ -69,7 +69,8 @@ public:
     bool isPrepared();
 
 protected:
-    Statement m_statement;
+    bool prepare(const String &sql);
+    friend class Handle;
     void *m_stmt;
 };
 

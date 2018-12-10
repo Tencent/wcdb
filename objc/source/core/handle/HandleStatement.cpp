@@ -31,9 +31,12 @@ HandleStatement::HandleStatement(Handle *handle)
 
 bool HandleStatement::prepare(const Statement &statement)
 {
+    return prepare(statement.getDescription());
+}
+
+bool HandleStatement::prepare(const String &sql)
+{
     WCTInnerAssert(!isPrepared());
-    m_statement = statement;
-    const String &sql = m_statement.getDescription();
     int rc = sqlite3_prepare_v2(
     (sqlite3 *) getRawHandle(), sql.c_str(), -1, (sqlite3_stmt **) &m_stmt, nullptr);
     if (rc == SQLITE_OK) {
@@ -62,7 +65,7 @@ bool HandleStatement::step(bool &done)
     if (rc == SQLITE_OK || rc == SQLITE_ROW || rc == SQLITE_DONE) {
         return true;
     }
-    setError(rc, m_statement.getDescription());
+    setError(rc, sqlite3_sql((sqlite3_stmt *) m_stmt));
     return false;
 }
 

@@ -135,14 +135,18 @@ void Handle::close()
 
 bool Handle::execute(const Statement &statement)
 {
+    return execute(statement.getDescription());
+}
+
+bool Handle::execute(const String &sql)
+{
     WCTInnerAssert(isOpened());
     WCTInnerAssert(!isPrepared());
-    int rc = sqlite3_exec(
-    (sqlite3 *) m_handle, statement.getDescription().c_str(), nullptr, nullptr, nullptr);
+    int rc = sqlite3_exec((sqlite3 *) m_handle, sql.c_str(), nullptr, nullptr, nullptr);
     if (rc == SQLITE_OK) {
         return true;
     }
-    return error(rc, statement.getDescription());
+    return error(rc, sql);
 }
 
 int Handle::getExtendedErrorCode()
@@ -196,9 +200,14 @@ void Handle::interrupt()
 #pragma mark - Statement
 bool Handle::prepare(const Statement &statement)
 {
+    return m_handleStatement.prepare(statement.getDescription());
+}
+
+bool Handle::prepare(const String &sql)
+{
     WCTInnerAssert(isOpened());
     WCTInnerAssert(!isPrepared());
-    return m_handleStatement.prepare(statement);
+    return m_handleStatement.prepare(sql);
 }
 
 bool Handle::isPrepared() const
