@@ -127,6 +127,21 @@ size_t HandlePool::aliveHandleCount() const
     return count;
 }
 
+size_t HandlePool::activeHandleCount(Slot slot) const
+{
+    SharedLockGuard concurrencyGuard(m_concurrency);
+    SharedLockGuard memoryGuard(m_memory);
+    auto handlesIter = m_handles.find(slot);
+    if (handlesIter == m_handles.end()) {
+        return 0;
+    }
+    auto freesIter = m_frees.find(slot);
+    if (freesIter == m_frees.end()) {
+        return handlesIter->second.size();
+    }
+    return handlesIter->second.size() - freesIter->second.size();
+}
+
 RecyclableHandle HandlePool::flowOut(Slot slot)
 {
     SharedLockGuard concurrencyGuard(m_concurrency);

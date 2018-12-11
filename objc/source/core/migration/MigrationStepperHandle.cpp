@@ -22,6 +22,18 @@
 
 namespace WCDB {
 
+void MigrationStepperHandle::setInterruptible(bool interruptible)
+{
+    m_interruptible = interruptible;
+}
+
+void MigrationStepperHandle::interrupt()
+{
+    if (m_interruptible.load()) {
+        ConfiguredHandle::interrupt();
+    }
+}
+
 bool MigrationStepperHandle::lazyOpen()
 {
     if (isOpened()) {

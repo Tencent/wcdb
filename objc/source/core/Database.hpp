@@ -137,7 +137,6 @@ public:
     bool moveFiles(const String &directory);
     bool removeFiles();
     std::pair<bool, size_t> getFilesSize();
-    std::pair<bool, uint32_t> getIdentifier();
 
 #pragma mark - Repair
 public:
@@ -179,7 +178,7 @@ public:
     typedef Migration::MigratedCallback MigratedCallback;
     void setNotificationWhenMigrated(const MigratedCallback &callback);
 
-    std::pair<bool, bool> stepMigration();
+    std::pair<bool, bool> stepMigration(bool force);
 
     void interruptMigration();
 

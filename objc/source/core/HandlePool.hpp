@@ -74,6 +74,7 @@ public:
     RecyclableHandle flowOut(Slot slot);
     void purge();
     size_t aliveHandleCount() const;
+    size_t activeHandleCount(Slot slot) const;
 
 protected:
     virtual std::shared_ptr<Handle> generateHandle(Slot slot) = 0;

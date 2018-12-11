@@ -27,6 +27,14 @@
 namespace WCDB {
 
 class MigrationStepperHandle final : public ConfiguredHandle, public Migration::Stepper {
+public:
+    void setInterruptible(bool interruptible);
+    void interrupt();
+
+protected:
+    using ConfiguredHandle::interrupt;
+    std::atomic<bool> m_interruptible;
+
 protected:
     bool dropOriginTable(const MigrationInfo* info);
     bool migrateRows(const MigrationInfo* info, bool& done);
