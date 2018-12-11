@@ -33,8 +33,7 @@ public:
     virtual ~CorruptionEvent();
 
 protected:
-    virtual bool onDatabaseCorrupted(const String& path) = 0; // return false to skip this path
-    virtual void databaseShouldRecover(const String& path, uint32_t identifier) = 0;
+    virtual void databaseDidBecomeCorrupted(const String& path, uint32_t identifier) = 0;
     friend class CorruptionQueue;
 };
 
@@ -45,7 +44,7 @@ public:
 
     void setEvent(CorruptionEvent* event);
 
-    bool containsDatabase(const String& database) const;
+    static constexpr const double timeIntervalForInvokingEvent = 5.0f;
 
 protected:
     void handleError(const Error& error);

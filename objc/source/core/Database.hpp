@@ -157,23 +157,14 @@ private:
 
 #pragma mark - Recovery
 public:
-    enum RecoveryMode {
-        Custom = 0,
-        Remove = 1,
-        Deposit = 2,
-    };
-    void setRecoveryMode(RecoveryMode mode);
-    RecoveryMode getRecoverMode() const;
-
     typedef std::function<bool(Database *)> RecoverNotification;
-    void setNotificationWhenRecovering(const RecoverNotification &notification);
+    void setNotificationWhenCorrupted(const RecoverNotification &notification);
 
     bool containsRecoverScheme() const;
 
-    bool recover();
+    bool recover(uint32_t corruptedIdentifier);
 
 private:
-    RecoveryMode m_recoveryMode;
     RecoverNotification m_recoverNotification;
 
 #pragma mark - Migration

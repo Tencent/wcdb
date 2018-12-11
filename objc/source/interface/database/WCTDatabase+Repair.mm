@@ -25,23 +25,7 @@
 
 @implementation WCTDatabase (Repair)
 
-static_assert((int) WCTRecoveryModeCustom == (int) WCDB::Database::RecoveryMode::Custom, "");
-static_assert((int) WCTRecoveryModeRemove == (int) WCDB::Database::RecoveryMode::Remove, "");
-static_assert((int) WCTRecoveryModeDeposit == (int) WCDB::Database::RecoveryMode::Deposit, "");
-
-- (void)setRecoveryMode:(WCTRecoveryMode)recoveryMode
-{
-    WCTDatabaseAssert(return;);
-    _database->setRecoveryMode((WCDB::Database::RecoveryMode) recoveryMode);
-}
-
-- (WCTRecoveryMode)recoveryMode
-{
-    WCTDatabaseAssert(return WCTRecoveryModeCustom;);
-    return (WCTRecoveryMode) _database->getRecoverMode();
-}
-
-- (void)setNotificationWhenRecovering:(WCTRecoverNotificationBlock)onRecovering
+- (void)setNotificationWhenCorrupted:(WCTRecoverNotificationBlock)onRecovering
 {
     WCTDatabaseAssert(return;);
     WCDB::Database::RecoverNotification notification = nullptr;
@@ -50,7 +34,7 @@ static_assert((int) WCTRecoveryModeDeposit == (int) WCDB::Database::RecoveryMode
             return onRecovering([[WCTDatabase alloc] initWithUnsafeDatabase:database]);
         };
     }
-    _database->setNotificationWhenRecovering(notification);
+    _database->setNotificationWhenCorrupted(notification);
 }
 
 - (void)filterBackup:(WCTBackupFilterBlock)tableShouldBeBackedUp
@@ -109,12 +93,6 @@ static_assert((int) WCTRecoveryModeDeposit == (int) WCDB::Database::RecoveryMode
 {
     WCTDatabaseAssert(return NO;);
     return _database->containsDeposited();
-}
-
-- (BOOL)isCorrupted
-{
-    WCTDatabaseAssert(return NO;);
-    return WCDB::Core::shared()->isDatabaseCorrupted(_database->getPath());
 }
 
 @end

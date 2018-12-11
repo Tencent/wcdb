@@ -38,7 +38,6 @@ Database::Database(const String &path)
 : HandlePool(path)
 , m_factory(path)
 , m_tag(Tag::invalid())
-, m_recoveryMode(RecoveryMode::Custom)
 , m_recoverNotification(nullptr)
 , m_initialized(false)
 {
@@ -678,19 +677,7 @@ bool Database::retrieveRenewed()
 }
 
 #pragma mark - Recovery
-void Database::setRecoveryMode(RecoveryMode mode)
-{
-    LockGuard memoryGuard(m_memory);
-    m_recoveryMode = mode;
-}
-
-Database::RecoveryMode Database::getRecoverMode() const
-{
-    SharedLockGuard memoryGuard(m_memory);
-    return m_recoveryMode;
-}
-
-void Database::setNotificationWhenRecovering(const RecoverNotification &notification)
+void Database::setNotificationWhenCorrupted(const RecoverNotification &notification)
 {
     LockGuard memoryGuard(m_memory);
     m_recoverNotification = notification;
@@ -699,31 +686,23 @@ void Database::setNotificationWhenRecovering(const RecoverNotification &notifica
 bool Database::containsRecoverScheme() const
 {
     SharedLockGuard memoryGuard(m_memory);
-    return m_recoveryMode != RecoveryMode::Custom || m_recoverNotification != nullptr;
+    return m_recoverNotification != nullptr;
 }
 
-bool Database::recover()
+bool Database::recover(uint32_t corruptedIdentifier)
 {
-    bool result = true;
-    close([&result, this]() {
-        if (!containsRecoverScheme()) {
-            return;
-        }
-        switch (m_recoveryMode) {
-        case RecoveryMode::Remove:
-            result = removeFiles();
-            break;
-        case RecoveryMode::Deposit:
-            result = deposit();
-            break;
-        default:
-            break;
-        }
-        if (result && m_recoverNotification != nullptr) {
-            result = m_recoverNotification(this);
-        }
-    });
-    return result;
+    blockade();
+    bool succeed;
+    uint32_t identifier;
+    std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
+    if (!succeed || identifier != corruptedIdentifier) {
+        return true;
+    }
+    if (m_recoverNotification != nullptr) {
+        succeed = m_recoverNotification(this);
+    }
+    unblockade();
+    return succeed;
 }
 
 #pragma mark - Migration

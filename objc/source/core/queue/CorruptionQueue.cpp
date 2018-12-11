@@ -46,12 +46,6 @@ void CorruptionQueue::setEvent(CorruptionEvent* event)
     m_event = event;
 }
 
-bool CorruptionQueue::containsDatabase(const String& database) const
-{
-    std::lock_guard<std::mutex> lockGuard(m_mutex);
-    return m_corrupted.find(database) != m_corrupted.end();
-}
-
 void CorruptionQueue::handleError(const Error& error)
 {
     if (m_event == nullptr || !error.isCorruption()) {
@@ -60,9 +54,6 @@ void CorruptionQueue::handleError(const Error& error)
     const auto& infos = error.infos.getStrings();
     auto iter = infos.find("Path");
     if (iter == infos.end()) {
-        return;
-    }
-    if (!m_event->onDatabaseCorrupted(iter->second)) {
         return;
     }
     bool succeed;
@@ -98,9 +89,13 @@ void CorruptionQueue::loop()
             path = iter->first;
             corruptedIdentifier = iter->second;
         }
-        m_event->databaseShouldRecover(path, corruptedIdentifier);
-        std::lock_guard<std::mutex> lockGuard(m_mutex);
-        m_corrupted.erase(path);
+        m_event->databaseDidBecomeCorrupted(path, corruptedIdentifier);
+        {
+            std::lock_guard<std::mutex> lockGuard(m_mutex);
+            m_corrupted.erase(path);
+        }
+        std::this_thread::sleep_for(std::chrono::microseconds(
+        (long long) (timeIntervalForInvokingEvent * 1000000)));
     }
 }
 

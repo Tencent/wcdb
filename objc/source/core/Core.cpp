@@ -99,33 +99,13 @@ void Core::onDatabaseCreated(Database* database)
     database->setConfigs(m_configs);
 }
 
-bool Core::isDatabaseCorrupted(const String& path)
-{
-    return m_corruptionQueue->containsDatabase(path);
-}
-
-bool Core::onDatabaseCorrupted(const String& path)
-{
-    return m_databasePool.get(path) != nullptr;
-}
-
-void Core::databaseShouldRecover(const String& path, uint32_t corruptedIdentifier)
+void Core::databaseDidBecomeCorrupted(const String& path, uint32_t corruptedIdentifier)
 {
     RecyclableDatabase database = m_databasePool.get(path);
     if (database == nullptr || !database->containsRecoverScheme()) {
         return;
     }
-    database->blockade();
-    do {
-        bool succeed;
-        uint32_t identifier;
-        std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
-        if (!succeed || identifier != corruptedIdentifier) {
-            break;
-        }
-        database->recover();
-    } while (false);
-    database->unblockade();
+    database->recover(corruptedIdentifier);
 }
 
 bool Core::databaseShouldCheckpoint(const String& path, const StatementPragma& checkpointStatement)

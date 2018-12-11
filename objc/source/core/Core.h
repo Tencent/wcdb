@@ -76,8 +76,6 @@ public:
     RecyclableDatabase getExistingDatabase(const String& path);
     RecyclableDatabase getExistingDatabase(const Tag& tag);
 
-    bool isDatabaseCorrupted(const String& path);
-
     void purge();
 
     const std::shared_ptr<Configs>& configs();
@@ -131,8 +129,7 @@ protected:
     static void handleLog(void* unused, int code, const char* message);
     void preprocessError(const Error& error, Error::Infos& infos);
     void onDatabaseCreated(Database* database) override final;
-    bool onDatabaseCorrupted(const String& path) override final;
-    void databaseShouldRecover(const String& path, uint32_t identifier) override final;
+    void databaseDidBecomeCorrupted(const String& path, uint32_t identifier) override final;
     bool databaseShouldCheckpoint(const String& path,
                                   const StatementPragma& checkpointStatement) override final;
     bool databaseShouldBackup(const String& path) override final;

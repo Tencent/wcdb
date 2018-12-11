@@ -34,9 +34,7 @@ typedef NS_ENUM(NSInteger, WCTRecoveryMode) {
 
 @interface WCTDatabase (Repair)
 
-@property (nonatomic, assign) WCTRecoveryMode recoveryMode;
-
-- (void)setNotificationWhenRecovering:(nullable WCTRecoverNotificationBlock)onRecovering;
+- (void)setNotificationWhenCorrupted:(nullable WCTRecoverNotificationBlock)onRecovering;
 
 - (void)setAutoBackup:(BOOL)flag;
 
@@ -51,8 +49,6 @@ typedef NS_ENUM(NSInteger, WCTRecoveryMode) {
 - (BOOL)containsDeposited;
 
 - (double)retrieve:(nullable WCTRetrieveProgressUpdateBlock)onProgressUpdate;
-
-- (BOOL)isCorrupted;
 
 @end
 
