@@ -64,7 +64,7 @@
     int decimals = [NSNumber randomUInt8] % 3;
     double value = [NSNumber randomUInt64] % 10000;
     for (int i = 0; i < decimals; ++i) {
-        value /= 10.0;
+        value /= 10.0f;
     }
     return value;
 }
