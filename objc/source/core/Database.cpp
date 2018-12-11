@@ -691,24 +691,8 @@ bool Database::retrieveRenewed()
     WCTInnerAssert(isBlockaded());
     WCTInnerAssert(!isOpened());
 
-    RecyclableHandle backupReadHandle = getSlotHandle(BackupReadSlot);
-    if (backupReadHandle == nullptr) {
-        return false;
-    }
-    RecyclableHandle backupWriteHandle = getSlotHandle(BackupWriteSlot);
-    if (backupWriteHandle == nullptr) {
-        return false;
-    }
-    RecyclableHandle assemblerHandle = getSlotHandle(AssemblerSlot);
-    if (assemblerHandle == nullptr) {
-        return false;
-    }
-
     SharedLockGuard memoryGuard(m_memory);
     Repair::FactoryRenewer renewer = m_factory.renewer();
-    renewer.setReadLocker(static_cast<BackupReadHandle *>(backupReadHandle.get()));
-    renewer.setWriteLocker(static_cast<BackupWriteHandle *>(backupWriteHandle.get()));
-    renewer.setAssembler(static_cast<AssemblerHandle *>(assemblerHandle.get()));
     if (renewer.work()) {
         return true;
     }
@@ -735,7 +719,7 @@ bool Database::recover(uint32_t corruptedIdentifier)
         }
     }
     blockade();
-    SharedLockGuard memoryGuard(m_memory);
+    LockGuard memoryGuard(m_memory);
     bool succeed = true;
     if (m_recoverNotification != nullptr) {
         uint32_t identifier;
