@@ -41,8 +41,9 @@ bool BasicConfig::invoke(Handle* handle)
     do {
         if (handle->isReadonly()) {
             //Get Journal Mode
-            WCDB_BREAK_IF_NOT(handle->prepare(m_getJournalMode));
-            WCDB_BREAK_IF_NOT(handle->step());
+            if (!handle->prepare(m_getJournalMode) || !handle->step()) {
+                break;
+            }
             String journalMode = handle->getText(0);
             handle->finalize();
 
@@ -54,30 +55,54 @@ bool BasicConfig::invoke(Handle* handle)
         }
 
         //Get Locking Mode
-        WCDB_BREAK_IF_NOT(handle->prepare(m_getLockingMode));
-        WCDB_BREAK_IF_NOT(handle->step());
+        if (!handle->prepare(m_getLockingMode) || !handle->step()) {
+            break;
+        }
         String lockingMode = handle->getText(0);
         handle->finalize();
         if (strcasecmp(lockingMode.c_str(), "NORMAL") != 0) {
             //Set Locking Mode Normal
-            WCDB_BREAK_IF_NOT(handle->execute(m_setLockingModeNormal));
+            if (!handle->execute(m_setLockingModeNormal)) {
+                break;
+            }
         }
 
         //Set Synchronous Normal
-        WCDB_BREAK_IF_NOT(handle->execute(m_setSynchronousNormal));
+        if (!handle->execute(m_setSynchronousNormal)) {
+            break;
+        }
 
         //Get Journal Mode
-        WCDB_BREAK_IF_NOT(handle->prepare(m_getJournalMode));
-        WCDB_BREAK_IF_NOT(handle->step());
-        String journalMode = handle->getText(0);
-        handle->finalize();
-        if (strcasecmp(journalMode.c_str(), "WAL") != 0) {
-            //Set Journal Mode WAL
-            WCDB_BREAK_IF_NOT(handle->execute(m_setJournalModeWAL));
+        bool retry = false;
+        bool succeed = true;
+        do {
+            retry = false;
+            if (!handle->prepare(m_getJournalMode) || !handle->step()) {
+                succeed = false;
+                break;
+            }
+            String journalMode = handle->getText(0);
+            handle->finalize();
+            if (strcasecmp(journalMode.c_str(), "WAL") != 0) {
+                //Set Journal Mode WAL
+                if (!handle->execute(m_setJournalModeWAL)) {
+                    if (handle->getResultCode() == (int) Error::Code::Busy) {
+                        retry = true;
+                    } else {
+                        succeed = false;
+                        break;
+                    }
+                }
+            }
+        } while (retry);
+        if (!succeed) {
+            break;
         }
 
         //Enable Fullfsync
-        WCDB_BREAK_IF_NOT(handle->execute(m_setFullFSync));
+        if (!handle->execute(m_setFullFSync)) {
+            break;
+        }
 
         return true;
     } while (false);
