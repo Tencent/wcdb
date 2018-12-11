@@ -172,8 +172,8 @@ private:
 
 #pragma mark - Migration
 public:
-    typedef Migration::TableFilter MigrationTableFilter;
-    void filterMigration(const MigrationTableFilter &filter);
+    typedef Migration::Filter MigrationFilter;
+    void filterMigration(const MigrationFilter &filter);
 
     typedef Migration::MigratedCallback MigratedCallback;
     void setNotificationWhenMigrated(const MigratedCallback &callback);

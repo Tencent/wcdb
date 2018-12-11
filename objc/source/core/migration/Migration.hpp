@@ -83,11 +83,11 @@ private:
 
 #pragma mark - Filter
 public:
-    typedef std::function<void(MigrationUserInfo&)> TableFilter;
-    void filterTable(const TableFilter& tableFilter);
+    typedef std::function<void(MigrationUserInfo&)> Filter;
+    void filterTable(const Filter& filter);
 
 protected:
-    TableFilter m_tableFilter;
+    Filter m_filter;
 
 #pragma mark - Bind
 public:

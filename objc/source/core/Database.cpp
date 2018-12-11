@@ -783,7 +783,7 @@ void Database::setNotificationWhenMigrated(const MigratedCallback &callback)
     m_migration.setNotificationWhenMigrated(callback);
 }
 
-void Database::filterMigration(const MigrationTableFilter &filter)
+void Database::filterMigration(const MigrationFilter &filter)
 {
     WCTRemedialAssert(
     !isOpened(), "Migration user info must be set before the very first operation.", return;);

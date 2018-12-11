@@ -27,7 +27,7 @@ namespace WCDB {
 
 #pragma mark - Initialize
 Migration::Migration()
-: m_tableFilter(nullptr), m_initialized(true), m_migratedNotification(nullptr)
+: m_filter(nullptr), m_initialized(true), m_migratedNotification(nullptr)
 {
 }
 
@@ -38,11 +38,11 @@ bool Migration::isInitialized() const
 }
 
 #pragma mark - Filter
-void Migration::filterTable(const TableFilter& tableFilter)
+void Migration::filterTable(const Filter& filter)
 {
     LockGuard lockGuard(m_lock);
-    m_tableFilter = tableFilter;
-    m_initialized = (m_tableFilter == nullptr);
+    m_filter = filter;
+    m_initialized = (m_filter == nullptr);
     m_holder.clear();
     m_migratings.clear();
     m_dumpster.clear();
@@ -74,10 +74,10 @@ bool Migration::initialize(Initializer& initializer)
         return false;
     }
     std::list<const MigrationUserInfo> userInfos;
-    WCTInnerAssert(m_tableFilter != nullptr);
+    WCTInnerAssert(m_filter != nullptr);
     for (const auto& table : tables) {
         MigrationUserInfo userInfo(table);
-        m_tableFilter(userInfo);
+        m_filter(userInfo);
         if (userInfo.shouldMigrate()) {
             userInfos.push_back(userInfo);
         }
