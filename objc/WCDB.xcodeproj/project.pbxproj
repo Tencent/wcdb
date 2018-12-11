@@ -6112,6 +6112,9 @@
 					"-framework",
 					Cocoa,
 				);
+				"PRINCIPAL_CLASS[sdk=iphoneos*]" = UIApplication;
+				"PRINCIPAL_CLASS[sdk=iphonesimulator*]" = UIApplication;
+				"PRINCIPAL_CLASS[sdk=macosx*]" = NSApplication;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.Host;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
