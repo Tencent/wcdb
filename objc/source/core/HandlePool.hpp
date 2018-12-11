@@ -72,18 +72,13 @@ public:
     typedef std::function<void(void)> DrainedCallback;
     void drain(const HandlePool::DrainedCallback &onDrained);
 
-    static int hardwareConcurrency();
-    static int maxConcurrency();
-    static int maxHandleCount();
+protected:
+    mutable SharedLock m_concurrency;
 
 private:
-    void clearAllHandles();
-
-protected:
-    bool allowedConcurrency();
+    static int maxHandleCount();
     bool allowedHandleCount();
-    int m_currentConcurrency;
-    mutable SharedLock m_concurrency;
+    void clearAllHandles();
 
 #pragma mark - Handle
 public:

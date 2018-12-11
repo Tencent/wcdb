@@ -32,7 +32,7 @@ namespace WCDB {
 
 #pragma mark - Initialize
 HandlePool::HandlePool(const String &thePath)
-: path(thePath), m_configs(nullptr), m_currentConcurrency(0)
+: path(thePath), m_configs(nullptr)
 {
 }
 
@@ -66,47 +66,18 @@ void HandlePool::removeConfig(const String &name)
 }
 
 #pragma mark - Concurrency
-int HandlePool::hardwareConcurrency()
-{
-    static const int s_hardwareConcurrency
-    = std::thread::hardware_concurrency() > 0 ? std::thread::hardware_concurrency() : 8;
-    return s_hardwareConcurrency;
-}
-
-int HandlePool::maxConcurrency()
-{
-    static int s_maxConcurrency = std::max<int>(hardwareConcurrency(), 8);
-    return s_maxConcurrency;
-}
-
 int HandlePool::maxHandleCount()
 {
-    static int s_maxHandleCount = std::max<int>(maxConcurrency(), 64);
+    static const int s_maxHandleCount
+    = std::max<int>(16, std::thread::hardware_concurrency());
     return s_maxHandleCount;
-}
-
-bool HandlePool::allowedConcurrency()
-{
-    WCTInnerAssert(m_concurrency.readSafety());
-    WCTInnerAssert(m_memory.readSafety());
-    if (m_currentConcurrency < maxConcurrency()) {
-        return true;
-    }
-    Error error;
-    error.setCode(Error::Code::Exceed);
-    error.message = "The concurrency of database exceeds the maximum allowed.";
-    error.infos.set("Path", path);
-    error.infos.set("MaxConcurrency", maxConcurrency());
-    error.infos.set("Concurrency", m_currentConcurrency);
-    Notifier::shared()->notify(error);
-    setThreadedError(std::move(error));
-    return false;
 }
 
 bool HandlePool::allowedHandleCount()
 {
-#warning TODO
-    return true;
+    WCTInnerAssert(m_concurrency.readSafety());
+    WCTInnerAssert(m_memory.readSafety());
+    return aliveHandleCount() < maxHandleCount();
 }
 
 void HandlePool::blockade()
@@ -187,10 +158,6 @@ RecyclableHandle HandlePool::flowOut(const Slot &slot)
     std::shared_ptr<ConfiguredHandle> configuredHandle;
     {
         LockGuard memoryGuard(m_memory);
-        if (!allowedConcurrency()) {
-            // concurrency reachs the limitation.
-            return nullptr;
-        }
         auto &freeSlot = m_frees[slot];
         if (!freeSlot.empty()) {
             configuredHandle = freeSlot.back();
@@ -201,6 +168,12 @@ RecyclableHandle HandlePool::flowOut(const Slot &slot)
             purge();
             if (!allowedHandleCount()) {
                 // handle count reachs the limitation.
+                Error error;
+                error.setCode(Error::Code::Exceed);
+                error.message = "The operating count of database exceeds the maximum allowed.";
+                error.infos.set("Path", path);
+                Notifier::shared()->notify(error);
+                setThreadedError(std::move(error));
                 return nullptr;
             }
         }
@@ -233,15 +206,18 @@ RecyclableHandle HandlePool::flowOut(const Slot &slot)
 
         if (isGenerated) {
             LockGuard memoryGuard(m_memory);
-            // re-check concurrency/handle count limitation since all lock free code above
-            if (!allowedConcurrency()) {
-                failed = true;
-                break;
-            }
+            // re-check handle count limitation since all lock free code above
             if (!allowedHandleCount()) {
                 purge();
                 if (!allowedHandleCount()) {
+                    // handle count reachs the limitation.
                     failed = true;
+                    Error error;
+                    error.setCode(Error::Code::Exceed);
+                    error.message = "The operating count of database exceeds the maximum allowed.";
+                    error.infos.set("Path", path);
+                    Notifier::shared()->notify(error);
+                    setThreadedError(std::move(error));
                     break;
                 }
             }
@@ -288,15 +264,7 @@ void HandlePool::flowBack(const Slot &slot, const std::shared_ptr<ConfiguredHand
                       configuredHandle->get()->finalize(););
     {
         LockGuard memoryGuard(m_memory);
-        if (aliveHandleCount() < hardwareConcurrency()) {
-            m_frees[slot].push_back(configuredHandle);
-        } else {
-            // drop it
-            configuredHandle->get()->close();
-            WCTInnerAssert(m_handles[slot].find(configuredHandle)
-                           != m_handles[slot].end());
-            m_handles[slot].erase(configuredHandle);
-        }
+        m_frees[slot].push_back(configuredHandle);
     }
     m_concurrency.unlockShared();
 }
