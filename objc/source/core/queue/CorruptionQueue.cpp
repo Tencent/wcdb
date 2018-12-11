@@ -22,6 +22,7 @@
 #include <WCDB/CorruptionQueue.hpp>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Notifier.hpp>
+#include <vector>
 
 namespace WCDB {
 
@@ -56,6 +57,7 @@ void CorruptionQueue::handleError(const Error& error)
     if (iter == infos.end()) {
         return;
     }
+    const String& path = iter->second;
     bool succeed;
     uint32_t identifier;
     std::tie(succeed, identifier) = FileManager::getFileIdentifier(iter->second);
@@ -65,8 +67,11 @@ void CorruptionQueue::handleError(const Error& error)
     bool notify = false;
     {
         std::lock_guard<std::mutex> lockGuard(m_mutex);
-        notify = m_corrupted.empty();
-        m_corrupted[iter->second] = identifier;
+        auto iter = m_refractories.find(identifier);
+        if (iter == m_refractories.end() || SteadyClock::now() > iter->second) {
+            notify = m_corrupted.empty();
+            m_corrupted[path] = identifier;
+        }
     }
     lazyRun();
     if (notify) {
@@ -92,10 +97,22 @@ void CorruptionQueue::loop()
         m_event->databaseDidBecomeCorrupted(path, corruptedIdentifier);
         {
             std::lock_guard<std::mutex> lockGuard(m_mutex);
+            std::vector<uint32_t> toRemoves;
+            SteadyClock now = SteadyClock::now();
+            for (const auto& refractory : m_refractories) {
+                if (now > refractory.second) {
+                    toRemoves.push_back(refractory.first);
+                }
+            }
+            for (const auto& toRemove : toRemoves) {
+                m_refractories.erase(toRemove);
+            }
+
             m_corrupted.erase(path);
+            m_refractories.emplace(
+            corruptedIdentifier,
+            now + std::chrono::microseconds((long long) (timeIntervalForInvokingEvent * 1000000)));
         }
-        std::this_thread::sleep_for(std::chrono::microseconds(
-        (long long) (timeIntervalForInvokingEvent * 1000000)));
     }
 }
 

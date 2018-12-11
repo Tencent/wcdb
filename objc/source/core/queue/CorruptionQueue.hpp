@@ -23,6 +23,7 @@
 
 #include <WCDB/AsyncQueue.hpp>
 #include <WCDB/Lock.hpp>
+#include <WCDB/Time.hpp>
 #include <map>
 #include <mutex>
 
@@ -58,6 +59,7 @@ protected:
 
     // path -> identifier
     std::map<String, uint32_t> m_corrupted;
+    std::map<uint32_t, SteadyClock> m_refractories;
 };
 
 } //namespace WCDB

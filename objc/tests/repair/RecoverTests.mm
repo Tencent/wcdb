@@ -44,4 +44,32 @@
     TestCaseAssertTrue(tested);
 }
 
+- (void)test_avoid_frequency
+{
+    __block BOOL tested = NO;
+    [self.database setNotificationWhenCorrupted:^BOOL(WCTDatabase* database) {
+        tested = YES;
+        return true;
+    }];
+
+    TestCaseAssertTrue([self tryToMakeHeaderCorrupted]);
+
+    TestCaseAssertTrue([self.table getObjects] == nil);
+    [NSThread sleepForTimeInterval:1.0];
+    TestCaseAssertTrue(tested);
+
+    tested = NO;
+    TestCaseAssertTrue([self.table getObjects] == nil);
+    [NSThread sleepForTimeInterval:1.0];
+    TestCaseAssertFalse(tested);
+
+    tested = NO;
+    [NSThread sleepForTimeInterval:5.0];
+    TestCaseAssertTrue([self.table getObjects] == nil);
+    [NSThread sleepForTimeInterval:1.0];
+    TestCaseAssertTrue(tested);
+
+    TestCaseAssertTrue([self.database removeFiles]);
+}
+
 @end
