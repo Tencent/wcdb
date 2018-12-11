@@ -30,8 +30,7 @@
 
 @property (nonatomic, readonly) NSString* lastMaterial;
 
-@property (nonatomic, readonly) NSUInteger configForSizeToBackup;
-@property (nonatomic, readonly) NSUInteger configForSizeToRepair;
+@property (nonatomic, readonly) NSUInteger configForSize;
 
 @end
 
@@ -41,8 +40,7 @@
 {
     [super setUp];
 
-    _configForSizeToBackup = 500 * 1024 * 1024; // 500MB
-    _configForSizeToRepair = 100 * 1024 * 1024; // 100MB
+    _configForSize = 100 * 1024 * 1024; // 100MB
 
     _tolerablePercentageForFileSize = 0.01f;
 
@@ -107,7 +105,7 @@
     }
     setUp:^{
         // 500MB
-        TestCaseAssertTrue([self fillDatabase:self.configForSizeToBackup]);
+        TestCaseAssertTrue([self fillDatabase:self.configForSize]);
     }
     tearDown:^{
         if ([self.fileManager fileExistsAtPath:self.firstMaterial]) {
@@ -129,7 +127,7 @@
         TestCaseAssertTrue([self.database retrieve:nil] == 1.0f);
     }
     setUp:^{
-        TestCaseAssertTrue([self fillDatabase:self.configForSizeToRepair]);
+        TestCaseAssertTrue([self fillDatabase:self.configForSize]);
         TestCaseAssertTrue([self.database backup]);
     }
     tearDown:^{
@@ -145,7 +143,7 @@
         TestCaseAssertTrue([self.database retrieve:nil] == 1.0f);
     }
     setUp:^{
-        TestCaseAssertTrue([self fillDatabase:self.configForSizeToRepair]);
+        TestCaseAssertTrue([self fillDatabase:self.configForSize]);
     }
     tearDown:^{
     }
