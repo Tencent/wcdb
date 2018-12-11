@@ -58,7 +58,7 @@
 
     _delayForTolerance = 2;
 
-    _maxConcurrency = 64;
+    _maxConcurrency = 16;
 }
 
 - (void)test_feature_read_concurrency
@@ -269,36 +269,35 @@
     TestCaseAssertTrue(result);
 }
 
-#warning TODO concurrency tests
-//- (void)test_feature_max_concurrency
-//{
-//    NSCondition* condition = [[NSCondition alloc] init];
-//    __block int currentConcurrency = 0;
-//    for (int i = 0; i < self.maxConcurrency; ++i) {
-//        dispatch_group_async(self.group, self.queue, ^{
-//            WCTHandle* handle = [self.database getHandle];
-//            TestCaseAssertTrue([handle validate]);
-//            [condition lock];
-//            ++currentConcurrency;
-//            [condition wait];
-//            [condition unlock];
-//            [handle invalidate];
-//        });
-//    }
-//
-//    do {
-//        BOOL prepared = NO;
-//        [condition lock];
-//        prepared = currentConcurrency == self.maxConcurrency;
-//        [condition unlock];
-//        if (prepared) {
-//            break;
-//        }
-//    } while (YES);
-//
-//    TestCaseAssertFalse([[self.database getHandle] validate]);
-//    [condition broadcast];
-//    dispatch_group_wait(self.group, DISPATCH_TIME_FOREVER);
-//}
+- (void)test_feature_max_concurrency
+{
+    NSCondition* condition = [[NSCondition alloc] init];
+    __block int currentConcurrency = 0;
+    for (int i = 0; i < self.maxConcurrency; ++i) {
+        dispatch_group_async(self.group, self.queue, ^{
+            WCTHandle* handle = [self.database getHandle];
+            TestCaseAssertTrue([handle validate]);
+            [condition lock];
+            ++currentConcurrency;
+            [condition wait];
+            [condition unlock];
+            [handle invalidate];
+        });
+    }
+
+    do {
+        BOOL prepared = NO;
+        [condition lock];
+        prepared = currentConcurrency == self.maxConcurrency;
+        [condition unlock];
+        if (prepared) {
+            break;
+        }
+    } while (YES);
+
+    TestCaseAssertFalse([[self.database getHandle] validate]);
+    [condition broadcast];
+    dispatch_group_wait(self.group, DISPATCH_TIME_FOREVER);
+}
 
 @end
