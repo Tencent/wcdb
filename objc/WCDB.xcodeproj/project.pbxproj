@@ -218,6 +218,8 @@
 		2360A60520D78F2C00E4A311 /* SQLTraceConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2360A60020D78F2B00E4A311 /* SQLTraceConfig.hpp */; };
 		2360A60720D78F2C00E4A311 /* PerformanceTraceConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2360A60120D78F2B00E4A311 /* PerformanceTraceConfig.cpp */; };
 		2360A60920D78F2C00E4A311 /* PerformanceTraceConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2360A60220D78F2B00E4A311 /* PerformanceTraceConfig.hpp */; };
+		236BACC021BF6C8500C8B4D9 /* MigrationQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 236BACBE21BF6C8500C8B4D9 /* MigrationQueue.cpp */; };
+		236BACC121BF6C8500C8B4D9 /* MigrationQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 236BACBF21BF6C8500C8B4D9 /* MigrationQueue.hpp */; };
 		2370980A20590CA700E768B4 /* HandleStatement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2370980820590CA700E768B4 /* HandleStatement.cpp */; };
 		2370980B20590CA700E768B4 /* HandleStatement.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2370980920590CA700E768B4 /* HandleStatement.hpp */; };
 		2370B11A21914ED500D3227C /* NSDate+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2370B10821914ED400D3227C /* NSDate+WCTColumnCoding.mm */; };
@@ -1329,6 +1331,8 @@
 		2360A60020D78F2B00E4A311 /* SQLTraceConfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SQLTraceConfig.hpp; sourceTree = "<group>"; };
 		2360A60120D78F2B00E4A311 /* PerformanceTraceConfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PerformanceTraceConfig.cpp; sourceTree = "<group>"; };
 		2360A60220D78F2B00E4A311 /* PerformanceTraceConfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PerformanceTraceConfig.hpp; sourceTree = "<group>"; };
+		236BACBE21BF6C8500C8B4D9 /* MigrationQueue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationQueue.cpp; sourceTree = "<group>"; };
+		236BACBF21BF6C8500C8B4D9 /* MigrationQueue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrationQueue.hpp; sourceTree = "<group>"; };
 		2370980820590CA700E768B4 /* HandleStatement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HandleStatement.cpp; sourceTree = "<group>"; };
 		2370980920590CA700E768B4 /* HandleStatement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HandleStatement.hpp; sourceTree = "<group>"; };
 		2370B10821914ED400D3227C /* NSDate+WCTColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSDate+WCTColumnCoding.mm"; sourceTree = "<group>"; };
@@ -3038,6 +3042,8 @@
 				23B4DCEC2112B32400954D71 /* CheckpointQueue.hpp */,
 				23B4DCF12112B32D00954D71 /* BackupQueue.cpp */,
 				23B4DCF22112B32D00954D71 /* BackupQueue.hpp */,
+				236BACBE21BF6C8500C8B4D9 /* MigrationQueue.cpp */,
+				236BACBF21BF6C8500C8B4D9 /* MigrationQueue.hpp */,
 			);
 			path = queue;
 			sourceTree = "<group>";
@@ -3616,6 +3622,7 @@
 				23EEDCFA217DFADC006E9E73 /* SyntaxExpression.hpp in Headers */,
 				23D07CE620BE87360043F4D4 /* MasterCrawler.hpp in Headers */,
 				23790A7F219315E50098797F /* WCTColumnConstraintMacro.h in Headers */,
+				236BACC121BF6C8500C8B4D9 /* MigrationQueue.hpp in Headers */,
 				23EEDC9C217DFADC006E9E73 /* QualifiedTable.hpp in Headers */,
 				23EEDCA0217DFADC006E9E73 /* RecursiveCTE.hpp in Headers */,
 				23F70FA220A055B400CCE3CD /* Config.hpp in Headers */,
@@ -4632,6 +4639,7 @@
 				23A64D0F214A4A7000ED28BB /* Migration.cpp in Sources */,
 				23EEDD37217DFADC006E9E73 /* SyntaxCreateTriggerSTMT.cpp in Sources */,
 				23EEDC79217DFADC006E9E73 /* Column.cpp in Sources */,
+				236BACC021BF6C8500C8B4D9 /* MigrationQueue.cpp in Sources */,
 				23EEDCE1217DFADC006E9E73 /* StatementSelect.cpp in Sources */,
 				2370B12621914ED500D3227C /* WCTMaster.mm in Sources */,
 				2370B11B21914ED500D3227C /* WCTSequence.mm in Sources */,

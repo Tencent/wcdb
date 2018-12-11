@@ -729,8 +729,8 @@ bool Database::recover(uint32_t corruptedIdentifier)
     }
     blockade();
     SharedLockGuard memoryGuard(m_memory);
+    bool succeed = true;
     if (m_recoverNotification != nullptr) {
-        bool succeed;
         uint32_t identifier;
         std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
         if (!succeed) {

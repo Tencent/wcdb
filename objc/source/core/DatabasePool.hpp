@@ -39,7 +39,7 @@ protected:
 class DatabasePool final {
 #pragma mark - DatabasePool
 public:
-    DatabasePool();
+    DatabasePool(DatabasePoolEvent* event);
 
     RecyclableDatabase getOrCreate(const String& path);
     RecyclableDatabase get(const String& path);
@@ -61,13 +61,7 @@ protected:
     std::map<String, ReferencedDatabase> m_databases; //path->{database, reference}
     SharedLock m_lock;
 
-#pragma mark - Event
-public:
-    void setEvent(DatabasePoolEvent* event);
-
-protected:
     DatabasePoolEvent* m_event;
-    void onDatabaseCreated(Database* database);
 };
 
 } //namespace WCDB

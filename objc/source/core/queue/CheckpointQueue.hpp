@@ -27,7 +27,7 @@
 
 namespace WCDB {
 
-class CheckpointEvent {
+class CheckpointEvent : public AsyncQueue::Event {
 public:
     virtual ~CheckpointEvent();
 
@@ -40,13 +40,11 @@ protected:
 
 class CheckpointQueue final : public AsyncQueue {
 public:
-    CheckpointQueue(const String& name);
+    CheckpointQueue(const String& name, CheckpointEvent* event);
     ~CheckpointQueue();
 
     static constexpr const int framesThresholdForTruncate = 10 * 1024;
     static constexpr const double delayForRetryAfterFailure = 10.0;
-
-    void setEvent(CheckpointEvent* event);
 
     void put(const String& path, double delay, int frames);
 
@@ -54,7 +52,6 @@ protected:
     bool onTimed(const String& path, const int& frames);
     void loop() override final;
 
-    CheckpointEvent* m_event;
     TimedQueue<String, int> m_timedQueue;
     const StatementPragma m_checkpointPassive;
     const StatementPragma m_checkpointTruncate;

@@ -18,42 +18,42 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_BACKUPQUEUE_HPP
-#define _WCDB_BACKUPQUEUE_HPP
+#ifndef _WCDB_MIGRATIONQUEUE_HPP
+#define _WCDB_MIGRATIONQUEUE_HPP
 
 #include <WCDB/AsyncQueue.hpp>
 #include <WCDB/Lock.hpp>
-#include <WCDB/TimedQueue.hpp>
-#include <map>
+#include <set>
 
 namespace WCDB {
 
-class BackupEvent : public AsyncQueue::Event {
+class MigrationEvent : public AsyncQueue::Event {
 public:
-    virtual ~BackupEvent();
+    virtual ~MigrationEvent();
 
 protected:
-    virtual bool databaseShouldBackup(const String& path) = 0;
-    friend class BackupQueue;
+    virtual std::pair<bool, bool> databaseShouldMigrate(const String& path) = 0;
+    friend class MigrationQueue;
 };
 
-class BackupQueue final : public AsyncQueue {
+class MigrationQueue final : public AsyncQueue {
 public:
-    BackupQueue(const String& name, BackupEvent* event);
-    ~BackupQueue();
+    MigrationQueue(const String& name, MigrationEvent* event);
 
-    void put(const String& path, double delay, int frames);
-    int getBackedUpFrames(const String& path);
+    void put(const String& path);
+
+    static constexpr const double timeIntervalForMigration = 1.0f;
+    static constexpr const int toleranceFailedCount = 3;
 
 protected:
-    bool onTimed(const String& path, const int& frames);
     void loop() override final;
 
-    TimedQueue<String, int> m_timedQueue;
-    SharedLock m_lock;
-    std::map<String, int> m_backedUp;
+    std::mutex m_mutex;
+    std::condition_variable m_cond;
+    std::set<String> m_migratings;
+    std::map<String, int> m_faileds;
 };
 
 } // namespace WCDB
 
-#endif /* _WCDB_BACKUPQUEUE_HPP */
+#endif /* _WCDB_MIGRATIONQUEUE_HPP */

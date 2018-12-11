@@ -30,8 +30,8 @@ CorruptionEvent::~CorruptionEvent()
 {
 }
 
-CorruptionQueue::CorruptionQueue(const String& name)
-: AsyncQueue(name), m_event(nullptr)
+CorruptionQueue::CorruptionQueue(const String& name, CorruptionEvent* event)
+: AsyncQueue(name, event)
 {
     Notifier::shared()->setNotification(
     0, name, std::bind(&CorruptionQueue::handleError, this, std::placeholders::_1));
@@ -42,14 +42,9 @@ CorruptionQueue::~CorruptionQueue()
     Notifier::shared()->unsetNotification(name);
 }
 
-void CorruptionQueue::setEvent(CorruptionEvent* event)
-{
-    m_event = event;
-}
-
 void CorruptionQueue::handleError(const Error& error)
 {
-    if (m_event == nullptr || !error.isCorruption()) {
+    if (!error.isCorruption() || exit()) {
         return;
     }
     const auto& infos = error.infos.getStrings();
@@ -94,7 +89,8 @@ void CorruptionQueue::loop()
             path = iter->first;
             corruptedIdentifier = iter->second;
         }
-        m_event->databaseDidBecomeCorrupted(path, corruptedIdentifier);
+        static_cast<CorruptionEvent*>(m_event)->databaseDidBecomeCorrupted(
+        path, corruptedIdentifier);
         {
             std::lock_guard<std::mutex> lockGuard(m_mutex);
             std::vector<uint32_t> toRemoves;

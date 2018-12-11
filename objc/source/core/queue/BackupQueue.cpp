@@ -27,8 +27,8 @@ BackupEvent::~BackupEvent()
 {
 }
 
-BackupQueue::BackupQueue(const String& name)
-: AsyncQueue(name), m_event(nullptr)
+BackupQueue::BackupQueue(const String& name, BackupEvent* event)
+: AsyncQueue(name, event)
 {
 }
 
@@ -36,11 +36,6 @@ BackupQueue::~BackupQueue()
 {
     m_timedQueue.stop();
     m_timedQueue.waitUntilDone();
-}
-
-void BackupQueue::setEvent(BackupEvent* event)
-{
-    m_event = event;
 }
 
 void BackupQueue::loop()
@@ -51,8 +46,10 @@ void BackupQueue::loop()
 
 void BackupQueue::put(const String& path, double delay, int frames)
 {
-    m_timedQueue.reQueue(path, delay, frames);
-    lazyRun();
+    if (!exit()) {
+        m_timedQueue.reQueue(path, delay, frames);
+        lazyRun();
+    }
 }
 
 int BackupQueue::getBackedUpFrames(const String& path)
@@ -68,11 +65,7 @@ bool BackupQueue::onTimed(const String& path, const int& frames)
         return true;
     }
 
-    if (m_event == nullptr) {
-        return true;
-    }
-
-    bool result = m_event->databaseShouldBackup(path);
+    bool result = static_cast<BackupEvent*>(m_event)->databaseShouldBackup(path);
     if (!result) {
         // retry after 15.0s if failed
         m_timedQueue.reQueue(path, 15.0, frames);

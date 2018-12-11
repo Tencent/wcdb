@@ -28,8 +28,9 @@ DatabasePoolEvent::~DatabasePoolEvent()
 }
 
 #pragma mark - DatabasePool
-DatabasePool::DatabasePool() : m_event(nullptr)
+DatabasePool::DatabasePool(DatabasePoolEvent *event) : m_event(event)
 {
+    WCTInnerAssert(m_event != nullptr);
 }
 
 RecyclableDatabase DatabasePool::getOrCreate(const String &path)
@@ -50,7 +51,7 @@ RecyclableDatabase DatabasePool::getOrCreate(const String &path)
     ReferencedDatabase referencedDatabase(std::shared_ptr<Database>(new Database(normalized)));
     auto result = m_databases.emplace(normalized, std::move(referencedDatabase));
     WCTInnerAssert(result.second);
-    onDatabaseCreated(result.first->second.database.get());
+    m_event->onDatabaseCreated(result.first->second.database.get());
     return get(result.first);
 }
 
@@ -109,21 +110,6 @@ void DatabasePool::purge()
     SharedLockGuard lockGuard(m_lock);
     for (const auto &iter : m_databases) {
         iter.second.database->purge();
-    }
-}
-
-#pragma mark - Event
-void DatabasePool::setEvent(DatabasePoolEvent *event)
-{
-    LockGuard lockGuard(m_lock);
-    m_event = event;
-}
-
-void DatabasePool::onDatabaseCreated(Database *database)
-{
-    WCTInnerAssert(m_lock.readSafety());
-    if (m_event != nullptr) {
-        m_event->onDatabaseCreated(database);
     }
 }
 

@@ -25,6 +25,7 @@
 #include <WCDB/BackupQueue.hpp>
 #include <WCDB/CheckpointQueue.hpp>
 #include <WCDB/CorruptionQueue.hpp>
+#include <WCDB/MigrationQueue.hpp>
 
 #include <WCDB/BackupConfig.hpp>
 #include <WCDB/BasicConfig.hpp>
@@ -63,7 +64,8 @@ namespace WCDB {
 class Core final : public DatabasePoolEvent,
                    public CorruptionEvent,
                    public CheckpointEvent,
-                   public BackupEvent {
+                   public BackupEvent,
+                   public MigrationEvent {
 public:
     static Core* shared();
     ~Core();
@@ -122,6 +124,7 @@ protected:
     static constexpr const char* corruptionQueueName = "com.Tencent.WCDB.Queue.Corruption";
     static constexpr const char* checkpointQueueName = "com.Tencent.WCDB.Queue.Checkpoint";
     static constexpr const char* backupQueueName = "com.Tencent.WCDB.Queue.Backup";
+    static constexpr const char* migrationQueueName = "com.Tencent.WCDB.Queue.Migration";
 
     static int vfsOpen(const char* path, int flags, int mode);
     static void handleLog(void* unused, int code, const char* message);
@@ -131,6 +134,7 @@ protected:
     bool databaseShouldCheckpoint(const String& path,
                                   const StatementPragma& checkpointStatement) override final;
     bool databaseShouldBackup(const String& path) override final;
+    std::pair<bool, bool> databaseShouldMigrate(const String& path) override final;
 
     // The order of member variables here is important.
     DatabasePool m_databasePool;
@@ -139,6 +143,7 @@ protected:
     std::shared_ptr<CorruptionQueue> m_corruptionQueue;
     std::shared_ptr<CheckpointQueue> m_checkpointQueue;
     std::shared_ptr<BackupQueue> m_backupQueue;
+    std::shared_ptr<MigrationQueue> m_migrationQueue;
 
     std::shared_ptr<Config> m_backupConfig;
     std::shared_ptr<Config> m_checkpointConfig;

@@ -27,9 +27,8 @@ CheckpointEvent::~CheckpointEvent()
 {
 }
 
-CheckpointQueue::CheckpointQueue(const String& name)
-: AsyncQueue(name)
-, m_event(nullptr)
+CheckpointQueue::CheckpointQueue(const String& name, CheckpointEvent* event)
+: AsyncQueue(name, event)
 , m_checkpointPassive(StatementPragma().pragma(Pragma::walCheckpoint()).with("PASSIVE"))
 , m_checkpointTruncate(StatementPragma().pragma(Pragma::walCheckpoint()).with("TRUNCATE"))
 {
@@ -39,11 +38,6 @@ CheckpointQueue::~CheckpointQueue()
 {
     m_timedQueue.stop();
     m_timedQueue.waitUntilDone();
-}
-
-void CheckpointQueue::setEvent(CheckpointEvent* event)
-{
-    m_event = event;
 }
 
 void CheckpointQueue::loop()
@@ -59,15 +53,13 @@ bool CheckpointQueue::onTimed(const String& path, const int& frames)
         return true;
     }
 
-    if (m_event == nullptr) {
-        return true;
-    }
-
     bool result;
     if (frames >= framesThresholdForTruncate) {
-        result = m_event->databaseShouldCheckpoint(path, m_checkpointTruncate);
+        result = static_cast<CheckpointEvent*>(m_event)->databaseShouldCheckpoint(
+        path, m_checkpointTruncate);
     } else {
-        result = m_event->databaseShouldCheckpoint(path, m_checkpointPassive);
+        result = static_cast<CheckpointEvent*>(m_event)->databaseShouldCheckpoint(
+        path, m_checkpointPassive);
     }
     if (!result) {
         // retry after 10.0s if failed
@@ -78,8 +70,10 @@ bool CheckpointQueue::onTimed(const String& path, const int& frames)
 
 void CheckpointQueue::put(const String& path, double delay, int frames)
 {
-    m_timedQueue.reQueue(path, delay, frames);
-    lazyRun();
+    if (!exit()) {
+        m_timedQueue.reQueue(path, delay, frames);
+        lazyRun();
+    }
 }
 
 } // namespace WCDB

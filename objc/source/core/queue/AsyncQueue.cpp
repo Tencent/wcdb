@@ -26,14 +26,19 @@
 
 namespace WCDB {
 
-AsyncQueue::AsyncQueue(const String& name_)
-: name(name_), m_running(false), m_started(false)
+AsyncQueue::Event::~Event()
 {
+}
+
+AsyncQueue::AsyncQueue(const String& name_, Event* event)
+: name(name_), m_running(false), m_started(false), m_event(event)
+{
+    WCTInnerAssert(event != nullptr);
 }
 
 AsyncQueue::~AsyncQueue()
 {
-    std::unique_lock<std::mutex> lockGuard(m_lock);
+    std::unique_lock<std::mutex> lockGuard(m_mutex);
     while (m_running) {
         // wait until done
         m_cond.wait_for(lockGuard, std::chrono::seconds(10));
@@ -44,7 +49,7 @@ AsyncQueue::~AsyncQueue()
 
 void AsyncQueue::run()
 {
-    std::lock_guard<std::mutex> lockGuard(m_lock);
+    std::lock_guard<std::mutex> lockGuard(m_mutex);
     if (!m_started) {
         m_started = true;
         Dispatch::async(name, std::bind(&AsyncQueue::willRun, this));
@@ -55,7 +60,7 @@ void AsyncQueue::willRun()
 {
     m_running.store(true);
     loop();
-    std::lock_guard<std::mutex> lockGuard(m_lock);
+    std::lock_guard<std::mutex> lockGuard(m_mutex);
     m_running.store(false);
     m_cond.notify_one();
 }

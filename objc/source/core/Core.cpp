@@ -34,9 +34,11 @@ Core* Core::shared()
 
 Core::Core()
 : m_modules(new FTS::Modules)
-, m_corruptionQueue(new CorruptionQueue(corruptionQueueName))
-, m_checkpointQueue(new CheckpointQueue(checkpointQueueName))
-, m_backupQueue(new BackupQueue(backupQueueName))
+, m_databasePool(this)
+, m_corruptionQueue(new CorruptionQueue(corruptionQueueName, this))
+, m_checkpointQueue(new CheckpointQueue(checkpointQueueName, this))
+, m_backupQueue(new BackupQueue(backupQueueName, this))
+, m_migrationQueue(new MigrationQueue(migrationQueueName, this))
 // Configs
 , m_backupConfig(new BackupConfig(m_backupQueue))
 , m_globalSQLTraceConfig(new ShareableSQLTraceConfig)
@@ -48,11 +50,6 @@ Core::Core()
   { Configs::Priority::Low, checkpointConfigName, std::shared_ptr<Config>(new CheckpointConfig(m_checkpointQueue)) },
   })))
 {
-    m_databasePool.setEvent(this);
-    m_corruptionQueue->setEvent(this);
-    m_checkpointQueue->setEvent(this);
-    m_backupQueue->setEvent(this);
-
     Handle::enableMultithread();
     Handle::enableMemoryStatus(false);
     //        Handle::setMemoryMapSize(0x7fff0000, 0x7fff0000);
@@ -66,10 +63,6 @@ Core::Core()
 
 Core::~Core()
 {
-    m_corruptionQueue->setEvent(nullptr);
-    m_checkpointQueue->setEvent(nullptr);
-    m_databasePool.setEvent(nullptr);
-    m_backupQueue->setEvent(nullptr);
     Notifier::shared()->setNotificationForPreprocessing(notifierPreprocessorName, nullptr);
 }
 
@@ -95,6 +88,7 @@ void Core::purge()
 
 void Core::asyncMigration(const String& path)
 {
+    m_migrationQueue->put(path);
 }
 
 void Core::onDatabaseCreated(Database* database)
@@ -128,6 +122,15 @@ bool Core::databaseShouldBackup(const String& path)
         return true;
     }
     return database->backup();
+}
+
+std::pair<bool, bool> Core::databaseShouldMigrate(const String& path)
+{
+    RecyclableDatabase database = m_databasePool.getOrCreate(path);
+    if (database == nullptr) {
+        return { false, false };
+    }
+    return database->stepMigration();
 }
 
 const std::shared_ptr<Configs>& Core::configs()

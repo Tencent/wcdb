@@ -29,7 +29,7 @@
 
 namespace WCDB {
 
-class CorruptionEvent {
+class CorruptionEvent : public AsyncQueue::Event {
 public:
     virtual ~CorruptionEvent();
 
@@ -40,10 +40,8 @@ protected:
 
 class CorruptionQueue final : public AsyncQueue {
 public:
-    CorruptionQueue(const String& name);
+    CorruptionQueue(const String& name, CorruptionEvent* event);
     ~CorruptionQueue();
-
-    void setEvent(CorruptionEvent* event);
 
     static constexpr const double timeIntervalForInvokingEvent = 5.0f;
 
@@ -51,8 +49,6 @@ protected:
     void handleError(const Error& error);
 
     void loop() override final;
-
-    CorruptionEvent* m_event;
 
     mutable std::mutex m_mutex;
     std::condition_variable m_cond;
