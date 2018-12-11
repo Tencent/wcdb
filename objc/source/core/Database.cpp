@@ -40,6 +40,7 @@ Database::Database(const String &path)
 , m_tag(Tag::invalid())
 , m_recoverNotification(nullptr)
 , m_initialized(false)
+, m_configs(nullptr)
 {
 }
 
@@ -134,6 +135,29 @@ Database::InitializedGuard Database::initialize()
     return nullptr;
 }
 
+#pragma mark - Config
+void Database::setConfigs(const std::shared_ptr<Configs> &configs)
+{
+    LockGuard memoryGuard(m_memory);
+    m_configs = configs;
+}
+
+void Database::setConfig(const String &name, const std::shared_ptr<Config> &config, int priority)
+{
+    LockGuard memoryGuard(m_memory);
+    std::shared_ptr<Configs> configs(new Configs(*m_configs.get()));
+    configs->insert(name, config, priority);
+    m_configs = configs;
+}
+
+void Database::removeConfig(const String &name)
+{
+    LockGuard memoryGuard(m_memory);
+    std::shared_ptr<Configs> configs(new Configs(*m_configs.get()));
+    configs->remove(name);
+    m_configs = configs;
+}
+
 #pragma mark - Handle
 RecyclableHandle Database::getHandle()
 {
@@ -148,12 +172,13 @@ RecyclableHandle Database::getHandle()
     if (!initializedGuard.valid()) {
         return nullptr;
     }
-    return flowOut(m_migration.shouldMigrate() ? (Slot) MigrationHandleSlot : (Slot) HandleSlot);
+    return flowOut(m_migration.shouldMigrate() ? (Slot) MigrationHandleSlot :
+                                                 (Slot) ConfiguredHandleSlot);
 }
 
 RecyclableHandle Database::getSlotHandle(const Slot &slot)
 {
-    WCTInnerAssert(slot != MigrationHandleSlot && slot != HandleSlot);
+    WCTInnerAssert(slot != MigrationHandleSlot && slot != ConfiguredHandleSlot);
     InitializedGuard initializedGuard = initialize();
     if (!initializedGuard.valid()) {
         return nullptr;
@@ -218,8 +243,8 @@ std::shared_ptr<Handle> Database::generateHandle(const Slot &slot)
         handle.reset(new AssemblerHandle);
         break;
     default:
-        WCTInnerAssert(slot == HandleSlot);
-        handle.reset(new Handle);
+        WCTInnerAssert(slot == ConfiguredHandleSlot);
+        handle.reset(new ConfiguredHandle);
         open = true;
         break;
     }
@@ -237,24 +262,35 @@ std::shared_ptr<Handle> Database::generateHandle(const Slot &slot)
     return handle;
 }
 
-bool Database::willConfigureHandle(const Slot &slot, ConfiguredHandle *handle)
+bool Database::willConfigureHandle(const Slot &slot, Handle *handle)
 {
     bool succeed = true;
     switch (slot) {
-    case HandleSlot:
-    case MigrationStepperSlot:
-        succeed = HandlePool::willConfigureHandle(slot, handle);
-        break;
     case MigrationHandleSlot:
-        WCTInnerAssert(dynamic_cast<MigrationHandle *>(handle->get()) != nullptr);
+        WCTInnerAssert(dynamic_cast<MigrationHandle *>(handle) != nullptr);
         if (m_migration.shouldMigrate()) {
-            if (!static_cast<MigrationHandle *>(handle->get())->rebindMigration()) {
+            if (!static_cast<MigrationHandle *>(handle)->rebindMigration()) {
                 succeed = false;
+                setThreadedError(handle->getError());
                 break;
             }
         }
-        succeed = HandlePool::willConfigureHandle(slot, handle);
-        break;
+        // fallthought
+    case ConfiguredHandleSlot:
+        // fallthought
+    case MigrationStepperSlot: {
+        std::shared_ptr<Configs> configs;
+        {
+            SharedLockGuard memoryGuard(m_memory);
+            configs = m_configs;
+        }
+        WCTInnerAssert(dynamic_cast<ConfiguredHandle *>(handle) != nullptr);
+        if (!static_cast<ConfiguredHandle *>(handle)->reconfigure(configs)) {
+            succeed = false;
+            setThreadedError(handle->getError());
+            break;
+        }
+    } break;
     default:
         break;
     }

@@ -21,7 +21,7 @@
 #ifndef _WCDB_MIGRATIONHANDLE_HPP
 #define _WCDB_MIGRATIONHANDLE_HPP
 
-#include <WCDB/Handle.hpp>
+#include <WCDB/ConfiguredHandle.hpp>
 #include <WCDB/Migration.hpp>
 #include <set>
 
@@ -29,7 +29,7 @@ namespace WCDB {
 
 class MigrationInfo;
 
-class MigrationHandle final : public Handle, public Migration::Binder {
+class MigrationHandle final : public ConfiguredHandle, public Migration::Binder {
 #pragma mark - Initialize
 public:
     MigrationHandle(Migration &migration);

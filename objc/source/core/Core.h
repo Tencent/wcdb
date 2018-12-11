@@ -37,17 +37,13 @@
 #include <WCDB/SQLTraceConfig.hpp>
 #include <WCDB/TokenizeConfig.hpp>
 
-#include <WCDB/ConfiguredHandle.hpp>
 #include <WCDB/Database.hpp>
 #include <WCDB/DatabasePool.hpp>
-#include <WCDB/HandlePool.hpp>
 #include <WCDB/RecyclableDatabase.hpp>
 #include <WCDB/RecyclableHandle.hpp>
 
 #include <WCDB/Modules.hpp>
 #include <WCDB/Tokenizer.hpp>
-
-#include <WCDB/MigrationHandle.hpp>
 
 #define WCDB_BASIC_CONFIG_NAME "com.Tencent.WCDB.Config.Basic"
 #define WCDB_BACKUP_CONFIG_NAME "com.Tencent.WCDB.Config.Backup"

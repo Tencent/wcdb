@@ -27,7 +27,7 @@ namespace WCDB {
 
 #pragma mark - Initialize
 MigrationHandle::MigrationHandle(Migration& migration)
-: Handle(), Migration::Binder(migration)
+: ConfiguredHandle(), Migration::Binder(migration)
 {
 }
 

@@ -23,6 +23,7 @@
 
 #include <WCDB/Config.hpp>
 #include <WCDB/OrderedUniqueList.hpp>
+#include <WCDB/String.hpp>
 
 namespace WCDB {
 

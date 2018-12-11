@@ -21,17 +21,16 @@
 #ifndef _WCDB_RECYCLABLEHANDLE_HPP
 #define _WCDB_RECYCLABLEHANDLE_HPP
 
-#include <WCDB/ConfiguredHandle.hpp>
+#include <WCDB/Handle.hpp>
 #include <WCDB/Recyclable.hpp>
 
 namespace WCDB {
 
-class RecyclableHandle final : public Recyclable<std::shared_ptr<ConfiguredHandle>> {
+class RecyclableHandle final : public Recyclable<std::shared_ptr<Handle>> {
 public:
-    using Super = Recyclable<std::shared_ptr<ConfiguredHandle>>;
+    using Super = Recyclable<std::shared_ptr<Handle>>;
 
-    RecyclableHandle(const std::shared_ptr<ConfiguredHandle> &value,
-                     const Super::OnRecycled &onRecycled);
+    RecyclableHandle(const std::shared_ptr<Handle> &value, const Super::OnRecycled &onRecycled);
     RecyclableHandle(const std::nullptr_t &);
     RecyclableHandle();
 

@@ -21,12 +21,12 @@
 #ifndef _WCDB_MIGRATIONSTEPPERHANDLE_HPP
 #define _WCDB_MIGRATIONSTEPPERHANDLE_HPP
 
-#include <WCDB/Handle.hpp>
+#include <WCDB/ConfiguredHandle.hpp>
 #include <WCDB/Migration.hpp>
 
 namespace WCDB {
 
-class MigrationStepperHandle final : public Handle, public Migration::Stepper {
+class MigrationStepperHandle final : public ConfiguredHandle, public Migration::Stepper {
 protected:
     bool dropOriginTable(const MigrationInfo* info);
     bool migrateRows(const MigrationInfo* info, bool& done);

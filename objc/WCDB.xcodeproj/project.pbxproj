@@ -2269,8 +2269,6 @@
 				23D96B912050DED700DB5E93 /* DatabasePool.hpp */,
 				2349F6241EA0D6680021EFA7 /* RecyclableHandle.cpp */,
 				2349F6251EA0D6680021EFA7 /* RecyclableHandle.hpp */,
-				23B0071A2047ED4800045245 /* ConfiguredHandle.cpp */,
-				23B0071B2047ED4800045245 /* ConfiguredHandle.hpp */,
 				23B4DC7C2111B39100954D71 /* Tag.cpp */,
 				23B4DC7D2111B39200954D71 /* Tag.hpp */,
 				234591F5204432E400DC7D34 /* Core.h */,
@@ -3445,6 +3443,8 @@
 		23F70F9D20A055A400CCE3CD /* config */ = {
 			isa = PBXGroup;
 			children = (
+				23B0071A2047ED4800045245 /* ConfiguredHandle.cpp */,
+				23B0071B2047ED4800045245 /* ConfiguredHandle.hpp */,
 				23F70F9F20A055B400CCE3CD /* Config.hpp */,
 				23F70FA420A055BD00CCE3CD /* BasicConfig.cpp */,
 				23F70FA520A055BD00CCE3CD /* BasicConfig.hpp */,

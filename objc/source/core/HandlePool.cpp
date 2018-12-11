@@ -31,8 +31,7 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-HandlePool::HandlePool(const String &thePath)
-: path(thePath), m_configs(nullptr)
+HandlePool::HandlePool(const String &thePath) : path(thePath)
 {
 }
 
@@ -40,29 +39,6 @@ HandlePool::~HandlePool()
 {
     //wait until all handles back.
     drain(nullptr);
-}
-
-#pragma mark - Config
-void HandlePool::setConfigs(const std::shared_ptr<Configs> &configs)
-{
-    LockGuard memoryGuard(m_memory);
-    m_configs = configs;
-}
-
-void HandlePool::setConfig(const String &name, const std::shared_ptr<Config> &config, int priority)
-{
-    LockGuard memoryGuard(m_memory);
-    std::shared_ptr<Configs> configs(new Configs(*m_configs.get()));
-    configs->insert(name, config, priority);
-    m_configs = configs;
-}
-
-void HandlePool::removeConfig(const String &name)
-{
-    LockGuard memoryGuard(m_memory);
-    std::shared_ptr<Configs> configs(new Configs(*m_configs.get()));
-    configs->remove(name);
-    m_configs = configs;
 }
 
 #pragma mark - Concurrency
@@ -118,7 +94,7 @@ void HandlePool::clearAllHandles()
     WCTInnerAssert(m_memory.writeSafety());
     for (const auto &iter : m_handles) {
         for (const auto &handle : iter.second) {
-            handle->get()->close();
+            handle->close();
         }
     }
     m_handles.clear();
@@ -133,7 +109,7 @@ void HandlePool::purge()
     for (const auto &iter : m_frees) {
         auto &handles = m_handles[iter.first];
         for (const auto &handle : iter.second) {
-            handle->get()->close();
+            handle->close();
             handles.erase(handle);
         }
     }
@@ -154,14 +130,13 @@ size_t HandlePool::aliveHandleCount() const
 RecyclableHandle HandlePool::flowOut(const Slot &slot)
 {
     SharedLockGuard concurrencyGuard(m_concurrency);
-    bool isGenerated = false;
-    std::shared_ptr<ConfiguredHandle> configuredHandle;
+    std::shared_ptr<Handle> handle;
     {
         LockGuard memoryGuard(m_memory);
         auto &freeSlot = m_frees[slot];
         if (!freeSlot.empty()) {
-            configuredHandle = freeSlot.back();
-            WCTInnerAssert(configuredHandle != nullptr);
+            handle = freeSlot.back();
+            WCTInnerAssert(handle != nullptr);
             freeSlot.pop_back();
         } else if (!allowedHandleCount()) {
             // auto purge to remove unused handles
@@ -179,27 +154,22 @@ RecyclableHandle HandlePool::flowOut(const Slot &slot)
         }
     }
 
-    if (configuredHandle == nullptr) {
+    bool isGenerated = false;
+    if (handle == nullptr) {
         // generate new handle
         // lock free
-        std::shared_ptr<Handle> handle = generateHandle(slot);
+        handle = generateHandle(slot);
         if (handle == nullptr) {
-            return nullptr;
-        }
-
-        configuredHandle.reset(new ConfiguredHandle(handle));
-        if (configuredHandle == nullptr) {
-            setThreadedError(Error(Error::Code::NoMemory));
             return nullptr;
         }
         isGenerated = true;
     }
 
-    WCTInnerAssert(configuredHandle != nullptr);
+    WCTInnerAssert(handle != nullptr);
     bool failed = false;
     do {
         // configuration
-        if (!willConfigureHandle(slot, configuredHandle.get())) {
+        if (!willConfigureHandle(slot, handle.get())) {
             failed = true;
             break;
         }
@@ -221,50 +191,34 @@ RecyclableHandle HandlePool::flowOut(const Slot &slot)
                     break;
                 }
             }
-            WCTInnerAssert(m_handles[slot].find(configuredHandle)
-                           == m_handles[slot].end());
-            m_handles[slot].emplace(configuredHandle);
+            WCTInnerAssert(m_handles[slot].find(handle) == m_handles[slot].end());
+            m_handles[slot].emplace(handle);
         }
     } while (false);
     if (failed) {
-        configuredHandle->get()->close();
+        handle->close();
         if (!isGenerated) {
             // remove if it already exists in handles
-            m_handles[slot].erase(configuredHandle);
+            m_handles[slot].erase(handle);
         }
-        WCTInnerAssert(m_handles[slot].find(configuredHandle) == m_handles[slot].end());
+        WCTInnerAssert(m_handles[slot].find(handle) == m_handles[slot].end());
         return nullptr;
     }
 
     m_concurrency.lockShared();
     return RecyclableHandle(
-    configuredHandle, std::bind(&HandlePool::flowBack, this, slot, std::placeholders::_1));
+    handle, std::bind(&HandlePool::flowBack, this, slot, std::placeholders::_1));
 }
 
-bool HandlePool::willConfigureHandle(const Slot &slot, ConfiguredHandle *handle)
+void HandlePool::flowBack(const Slot &slot, const std::shared_ptr<Handle> &handle)
 {
-    std::shared_ptr<Configs> configs;
-    {
-        SharedLockGuard memoryGuard(m_memory);
-        configs = m_configs;
-    }
-    if (handle->reconfigure(configs)) {
-        return true;
-    }
-    setThreadedError(handle->get()->getError());
-    return false;
-}
-
-void HandlePool::flowBack(const Slot &slot, const std::shared_ptr<ConfiguredHandle> &configuredHandle)
-{
-    WCTInnerAssert(configuredHandle != nullptr);
+    WCTInnerAssert(handle != nullptr);
     WCTInnerAssert(m_concurrency.readSafety());
-    WCTRemedialAssert(!configuredHandle->get()->isPrepared(),
-                      "Statement is not finalized.",
-                      configuredHandle->get()->finalize(););
+    WCTRemedialAssert(
+    !handle->isPrepared(), "Statement is not finalized.", handle->finalize(););
     {
         LockGuard memoryGuard(m_memory);
-        m_frees[slot].push_back(configuredHandle);
+        m_frees[slot].push_back(handle);
     }
     m_concurrency.unlockShared();
 }

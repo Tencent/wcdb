@@ -21,7 +21,6 @@
 #ifndef _WCDB_HANDLEPOOL_HPP
 #define _WCDB_HANDLEPOOL_HPP
 
-#include <WCDB/Config.hpp>
 #include <WCDB/ErrorProne.hpp>
 #include <WCDB/Lock.hpp>
 #include <WCDB/RecyclableHandle.hpp>
@@ -52,17 +51,6 @@ public:
 
     virtual ~HandlePool();
 
-#pragma mark - Config
-public:
-    void setConfigs(const std::shared_ptr<Configs> &configs);
-    void setConfig(const String &name,
-                   const std::shared_ptr<Config> &config,
-                   int priority = Configs::Priority::Default);
-    void removeConfig(const String &name);
-
-private:
-    std::shared_ptr<Configs> m_configs;
-
 #pragma mark - Concurrency
 public:
     void blockade();
@@ -89,15 +77,15 @@ public:
 
 protected:
     virtual std::shared_ptr<Handle> generateHandle(const Slot &slot) = 0;
-    virtual bool willConfigureHandle(const Slot &slot, ConfiguredHandle *handle);
+    virtual bool willConfigureHandle(const Slot &slot, Handle *handle) = 0;
 
     mutable SharedLock m_memory;
 
 private:
-    void flowBack(const Slot &slot, const std::shared_ptr<ConfiguredHandle> &configuredHandle);
+    void flowBack(const Slot &slot, const std::shared_ptr<Handle> &handle);
 
-    std::map<Slot, std::set<std::shared_ptr<ConfiguredHandle>>> m_handles;
-    std::map<Slot, std::list<std::shared_ptr<ConfiguredHandle>>> m_frees;
+    std::map<Slot, std::set<std::shared_ptr<Handle>>> m_handles;
+    std::map<Slot, std::list<std::shared_ptr<Handle>>> m_frees;
 };
 
 } //namespace WCDB

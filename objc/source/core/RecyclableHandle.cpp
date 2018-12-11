@@ -23,9 +23,9 @@
 
 namespace WCDB {
 
-RecyclableHandle::RecyclableHandle(const std::shared_ptr<ConfiguredHandle> &value,
+RecyclableHandle::RecyclableHandle(const std::shared_ptr<Handle> &value,
                                    const Super::OnRecycled &onRecycled)
-: Super(value, onRecycled), m_handle(value->get())
+: Super(value, onRecycled), m_handle(value.get())
 {
 }
 

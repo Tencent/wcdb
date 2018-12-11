@@ -21,6 +21,7 @@
 #ifndef _WCDB_DATABASE_HPP
 #define _WCDB_DATABASE_HPP
 
+#include <WCDB/Configs.hpp>
 #include <WCDB/Factory.hpp>
 #include <WCDB/HandlePool.hpp>
 #include <WCDB/Migration.hpp>
@@ -69,7 +70,7 @@ protected:
     RecyclableHandle getSlotHandle(const Slot &slot);
 
 protected:
-    static const Slot HandleSlot = 0;
+    static const Slot ConfiguredHandleSlot = 0;
     static const Slot MigrationHandleSlot = 1;
     static constexpr const Slot MigrationInitializerSlot = 2;
     static constexpr const Slot MigrationStepperSlot = 3;
@@ -77,7 +78,18 @@ protected:
     static constexpr const Slot BackupWriteSlot = 5;
     static constexpr const Slot AssemblerSlot = 6;
     std::shared_ptr<Handle> generateHandle(const Slot &slot) override final;
-    bool willConfigureHandle(const Slot &slot, ConfiguredHandle *handle) override final;
+    bool willConfigureHandle(const Slot &slot, Handle *handle) override final;
+
+#pragma mark - Config
+public:
+    void setConfigs(const std::shared_ptr<Configs> &configs);
+    void setConfig(const String &name,
+                   const std::shared_ptr<Config> &config,
+                   int priority = Configs::Priority::Default);
+    void removeConfig(const String &name);
+
+private:
+    std::shared_ptr<Configs> m_configs;
 
 #pragma mark - Threaded
 private:
@@ -113,12 +125,6 @@ public:
     bool commitOrRollbackNestedTransaction();
     void rollbackNestedTransaction();
     bool runNestedTransaction(const TransactionCallback &transaction);
-
-#pragma mark - Config
-public:
-    using HandlePool::setConfigs;
-    using HandlePool::setConfig;
-    using HandlePool::removeConfig;
 
 #pragma mark - File
 public:
