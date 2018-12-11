@@ -117,7 +117,7 @@ Database::InitializedGuard Database::initialize()
             WCTInnerAssert(m_concurrency.readSafety());
             {
                 // This temporary handle will be dropped since it's dirty.
-                RecyclableHandle handle = flowOut((Slot) MigrationInitializerSlot);
+                RecyclableHandle handle = flowOut(MigrationInitializerSlot);
                 WCTInnerAssert(
                 dynamic_cast<MigrationInitializerHandle *>(handle.get()) != nullptr);
                 MigrationInitializerHandle *initializer
@@ -161,6 +161,8 @@ void Database::removeConfig(const String &name)
 #pragma mark - Handle
 RecyclableHandle Database::getHandle()
 {
+    // interrupt migration to do the real operation
+    interruptMigration();
     // additional shared lock is not needed since when it's blocked the threadedHandles is always empty and threaded handles is thread safe.
     ThreadedHandles *threadedHandle = Database::threadedHandles().getOrCreate();
     const auto iter = threadedHandle->find(this);
@@ -172,11 +174,10 @@ RecyclableHandle Database::getHandle()
     if (!initializedGuard.valid()) {
         return nullptr;
     }
-    return flowOut(m_migration.shouldMigrate() ? (Slot) MigrationHandleSlot :
-                                                 (Slot) ConfiguredHandleSlot);
+    return flowOut(m_migration.shouldMigrate() ? MigrationHandleSlot : ConfiguredHandleSlot);
 }
 
-RecyclableHandle Database::getSlotHandle(const Slot &slot)
+RecyclableHandle Database::getSlotHandle(Slot slot)
 {
     WCTInnerAssert(slot != MigrationHandleSlot && slot != ConfiguredHandleSlot);
     InitializedGuard initializedGuard = initialize();
@@ -213,7 +214,7 @@ std::pair<bool, bool> Database::tableExists(const TableOrSubquery &table)
     return { false, false };
 }
 
-std::shared_ptr<Handle> Database::generateHandle(const Slot &slot)
+std::shared_ptr<Handle> Database::generateHandle(Slot slot)
 {
     std::shared_ptr<Handle> handle;
     bool open = false;
@@ -262,7 +263,7 @@ std::shared_ptr<Handle> Database::generateHandle(const Slot &slot)
     return handle;
 }
 
-bool Database::willConfigureHandle(const Slot &slot, Handle *handle)
+bool Database::willConfigureHandle(Slot slot, Handle *handle)
 {
     bool succeed = true;
     switch (slot) {
@@ -553,12 +554,12 @@ void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
 
 bool Database::backup()
 {
-    RecyclableHandle backupReadHandle = getSlotHandle((Slot) BackupReadSlot);
+    RecyclableHandle backupReadHandle = getSlotHandle(BackupReadSlot);
     if (backupReadHandle == nullptr) {
         return false;
     }
 
-    RecyclableHandle backupWriteHandle = getSlotHandle((Slot) BackupWriteSlot);
+    RecyclableHandle backupWriteHandle = getSlotHandle(BackupWriteSlot);
     if (backupWriteHandle == nullptr) {
         return false;
     }
@@ -579,15 +580,15 @@ bool Database::deposit()
 {
     bool result = false;
     close([&result, this]() {
-        RecyclableHandle backupReadHandle = getSlotHandle((Slot) BackupReadSlot);
+        RecyclableHandle backupReadHandle = getSlotHandle(BackupReadSlot);
         if (backupReadHandle == nullptr) {
             return;
         }
-        RecyclableHandle backupWriteHandle = getSlotHandle((Slot) BackupWriteSlot);
+        RecyclableHandle backupWriteHandle = getSlotHandle(BackupWriteSlot);
         if (backupWriteHandle == nullptr) {
             return;
         }
-        RecyclableHandle assemblerHandle = getSlotHandle((Slot) AssemblerSlot);
+        RecyclableHandle assemblerHandle = getSlotHandle(AssemblerSlot);
         if (assemblerHandle == nullptr) {
             return;
         }
@@ -622,15 +623,15 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
 {
     double result = -1;
     close([&result, &onProgressUpdate, this]() {
-        RecyclableHandle backupReadHandle = getSlotHandle((Slot) BackupReadSlot);
+        RecyclableHandle backupReadHandle = getSlotHandle(BackupReadSlot);
         if (backupReadHandle == nullptr) {
             return;
         }
-        RecyclableHandle backupWriteHandle = getSlotHandle((Slot) BackupWriteSlot);
+        RecyclableHandle backupWriteHandle = getSlotHandle(BackupWriteSlot);
         if (backupWriteHandle == nullptr) {
             return;
         }
-        RecyclableHandle assemblerHandle = getSlotHandle((Slot) AssemblerSlot);
+        RecyclableHandle assemblerHandle = getSlotHandle(AssemblerSlot);
         if (assemblerHandle == nullptr) {
             return;
         }
@@ -687,15 +688,15 @@ bool Database::retrieveRenewed()
     WCTInnerAssert(isBlockaded());
     WCTInnerAssert(!isOpened());
 
-    RecyclableHandle backupReadHandle = flowOut((Slot) BackupReadSlot);
+    RecyclableHandle backupReadHandle = flowOut(BackupReadSlot);
     if (backupReadHandle == nullptr) {
         return false;
     }
-    RecyclableHandle backupWriteHandle = flowOut((Slot) BackupWriteSlot);
+    RecyclableHandle backupWriteHandle = flowOut(BackupWriteSlot);
     if (backupWriteHandle == nullptr) {
         return false;
     }
-    RecyclableHandle assemblerHandle = flowOut((Slot) AssemblerSlot);
+    RecyclableHandle assemblerHandle = flowOut(AssemblerSlot);
     if (assemblerHandle == nullptr) {
         return false;
     }
@@ -748,9 +749,15 @@ bool Database::recover(uint32_t corruptedIdentifier)
 #pragma mark - Migration
 std::pair<bool, bool> Database::stepMigration()
 {
-    RecyclableHandle handle = getSlotHandle((Slot) MigrationStepperSlot);
+    RecyclableHandle handle = getSlotHandle(MigrationStepperSlot);
     WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()));
-    return m_migration.step(*(static_cast<MigrationStepperHandle *>(handle.get())));
+    bool succeed, done;
+    std::tie(succeed, done)
+    = m_migration.step(*(static_cast<MigrationStepperHandle *>(handle.get())));
+    if (!succeed && handle->getResultCode() == (int) Error::Code::Interrupt) {
+        succeed = true;
+    }
+    return { succeed, done };
 }
 
 void Database::setNotificationWhenMigrated(const MigratedCallback &callback)
@@ -763,6 +770,15 @@ void Database::filterMigration(const MigrationTableFilter &filter)
     WCTRemedialAssert(
     !isOpened(), "Migration user info must be set before the very first operation.", return;);
     m_migration.filterTable(filter);
+}
+
+void Database::interruptMigration()
+{
+    SharedLockGuard concurrencyGuard(m_concurrency);
+    SharedLockGuard memoryGuard(m_memory);
+    for (const auto &handle : getAllHandles(MigrationStepperSlot)) {
+        handle->interrupt();
+    }
 }
 
 } //namespace WCDB

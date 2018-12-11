@@ -127,7 +127,7 @@ size_t HandlePool::aliveHandleCount() const
     return count;
 }
 
-RecyclableHandle HandlePool::flowOut(const Slot &slot)
+RecyclableHandle HandlePool::flowOut(Slot slot)
 {
     SharedLockGuard concurrencyGuard(m_concurrency);
     std::shared_ptr<Handle> handle;
@@ -210,7 +210,14 @@ RecyclableHandle HandlePool::flowOut(const Slot &slot)
     handle, std::bind(&HandlePool::flowBack, this, slot, std::placeholders::_1));
 }
 
-void HandlePool::flowBack(const Slot &slot, const std::shared_ptr<Handle> &handle)
+const std::set<std::shared_ptr<Handle>> &HandlePool::getAllHandles(Slot slot)
+{
+    WCTInnerAssert(m_concurrency.readSafety());
+    WCTInnerAssert(m_memory.readSafety());
+    return m_handles[slot];
+}
+
+void HandlePool::flowBack(Slot slot, const std::shared_ptr<Handle> &handle)
 {
     WCTInnerAssert(handle != nullptr);
     WCTInnerAssert(m_concurrency.readSafety());

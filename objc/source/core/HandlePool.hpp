@@ -71,18 +71,20 @@ private:
 #pragma mark - Handle
 public:
     typedef int Slot;
-    RecyclableHandle flowOut(const Slot &slot);
+    RecyclableHandle flowOut(Slot slot);
     void purge();
     size_t aliveHandleCount() const;
 
 protected:
-    virtual std::shared_ptr<Handle> generateHandle(const Slot &slot) = 0;
-    virtual bool willConfigureHandle(const Slot &slot, Handle *handle) = 0;
+    virtual std::shared_ptr<Handle> generateHandle(Slot slot) = 0;
+    virtual bool willConfigureHandle(Slot slot, Handle *handle) = 0;
 
     mutable SharedLock m_memory;
 
+    const std::set<std::shared_ptr<Handle>> &getAllHandles(Slot slot);
+
 private:
-    void flowBack(const Slot &slot, const std::shared_ptr<Handle> &handle);
+    void flowBack(Slot slot, const std::shared_ptr<Handle> &handle);
 
     std::map<Slot, std::set<std::shared_ptr<Handle>>> m_handles;
     std::map<Slot, std::list<std::shared_ptr<Handle>>> m_frees;

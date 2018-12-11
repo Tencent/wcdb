@@ -67,7 +67,7 @@ public:
     std::pair<bool, bool> tableExists(const TableOrSubquery &table);
 
 protected:
-    RecyclableHandle getSlotHandle(const Slot &slot);
+    RecyclableHandle getSlotHandle(Slot slot);
 
 protected:
     static const Slot ConfiguredHandleSlot = 0;
@@ -77,8 +77,8 @@ protected:
     static constexpr const Slot BackupReadSlot = 4;
     static constexpr const Slot BackupWriteSlot = 5;
     static constexpr const Slot AssemblerSlot = 6;
-    std::shared_ptr<Handle> generateHandle(const Slot &slot) override final;
-    bool willConfigureHandle(const Slot &slot, Handle *handle) override final;
+    std::shared_ptr<Handle> generateHandle(Slot slot) override final;
+    bool willConfigureHandle(Slot slot, Handle *handle) override final;
 
 #pragma mark - Config
 public:
@@ -180,6 +180,8 @@ public:
     void setNotificationWhenMigrated(const MigratedCallback &callback);
 
     std::pair<bool, bool> stepMigration();
+
+    void interruptMigration();
 
 protected:
     Migration m_migration;

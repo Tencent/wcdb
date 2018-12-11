@@ -94,7 +94,7 @@ public:
     bool isReadonly();
     bool isInTransaction();
 
-    void interrupt();
+    void interrupt(); // It's thread safe.
 
 protected:
     bool execute(const String &sql);
