@@ -166,8 +166,6 @@ public:
     typedef std::function<bool(Database *)> RecoverNotification;
     void setNotificationWhenCorrupted(const RecoverNotification &notification);
 
-    bool containsRecoverScheme() const;
-
     bool recover(uint32_t corruptedIdentifier);
 
 private:
@@ -180,6 +178,8 @@ public:
 
     typedef Migration::MigratedCallback MigratedCallback;
     void setNotificationWhenMigrated(const MigratedCallback &callback);
+
+    std::pair<bool, bool> stepMigration();
 
 protected:
     Migration m_migration;

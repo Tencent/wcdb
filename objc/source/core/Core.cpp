@@ -93,6 +93,10 @@ void Core::purge()
     m_databasePool.purge();
 }
 
+void Core::asyncMigration(const String& path)
+{
+}
+
 void Core::onDatabaseCreated(Database* database)
 {
     WCTInnerAssert(database != nullptr);
@@ -102,7 +106,7 @@ void Core::onDatabaseCreated(Database* database)
 void Core::databaseDidBecomeCorrupted(const String& path, uint32_t corruptedIdentifier)
 {
     RecyclableDatabase database = m_databasePool.get(path);
-    if (database == nullptr || !database->containsRecoverScheme()) {
+    if (database == nullptr) {
         return;
     }
     database->recover(corruptedIdentifier);

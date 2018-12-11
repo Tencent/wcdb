@@ -719,22 +719,26 @@ void Database::setNotificationWhenCorrupted(const RecoverNotification &notificat
     m_recoverNotification = notification;
 }
 
-bool Database::containsRecoverScheme() const
-{
-    SharedLockGuard memoryGuard(m_memory);
-    return m_recoverNotification != nullptr;
-}
-
 bool Database::recover(uint32_t corruptedIdentifier)
 {
-    blockade();
-    bool succeed;
-    uint32_t identifier;
-    std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
-    if (!succeed || identifier != corruptedIdentifier) {
-        return true;
+    {
+        SharedLockGuard memoryGuard(m_memory);
+        if (m_recoverNotification == nullptr) {
+            return true;
+        }
     }
+    blockade();
+    SharedLockGuard memoryGuard(m_memory);
     if (m_recoverNotification != nullptr) {
+        bool succeed;
+        uint32_t identifier;
+        std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
+        if (!succeed) {
+            return false;
+        }
+        if (identifier != corruptedIdentifier) {
+            return true;
+        }
         succeed = m_recoverNotification(this);
     }
     unblockade();
@@ -742,6 +746,13 @@ bool Database::recover(uint32_t corruptedIdentifier)
 }
 
 #pragma mark - Migration
+std::pair<bool, bool> Database::stepMigration()
+{
+    RecyclableHandle handle = getSlotHandle((Slot) MigrationStepperSlot);
+    WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()));
+    return m_migration.step(*(static_cast<MigrationStepperHandle *>(handle.get())));
+}
+
 void Database::setNotificationWhenMigrated(const MigratedCallback &callback)
 {
     m_migration.setNotificationWhenMigrated(callback);

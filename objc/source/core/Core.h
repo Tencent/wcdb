@@ -72,6 +72,8 @@ public:
     RecyclableDatabase getExistingDatabase(const String& path);
     RecyclableDatabase getExistingDatabase(const Tag& tag);
 
+    void asyncMigration(const String& path);
+
     void purge();
 
     const std::shared_ptr<Configs>& configs();
