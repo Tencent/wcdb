@@ -61,12 +61,8 @@
 
 + (double)randomDouble
 {
-    int decimals = [NSNumber randomUInt8] % 3;
-    double value = [NSNumber randomUInt64] % 10000;
-    for (int i = 0; i < decimals; ++i) {
-        value /= 10.0f;
-    }
-    return value;
+#define ARC4RANDOM_MAX 0x100000000
+    return [NSString stringWithFormat:@"%g", ((double) arc4random() / ARC4RANDOM_MAX) * [NSNumber randomInt32]].numberValue.doubleValue;
 }
 
 + (NSNumber *)randomNumber
