@@ -40,7 +40,6 @@
 
     [NSThread sleepForTimeInterval:1.0];
 
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.path]);
     TestCaseAssertTrue(tested);
 }
 
