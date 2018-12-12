@@ -18,18 +18,20 @@
  * limitations under the License.
  */
 
-#include <WCDB/AssemblerHandle.hpp>
 #include <WCDB/Assertion.hpp>
-#include <WCDB/BackupHandle.hpp>
 #include <WCDB/Database.hpp>
 #include <WCDB/Error.hpp>
 #include <WCDB/FileManager.hpp>
-#include <WCDB/MigrationHandle.hpp>
-#include <WCDB/MigrationInitializerHandle.hpp>
-#include <WCDB/MigrationStepperHandle.hpp>
 #include <WCDB/Path.hpp>
 #include <WCDB/RepairKit.h>
 #include <WCDB/String.hpp>
+
+#include <WCDB/AssemblerHandle.hpp>
+#include <WCDB/BackupHandle.hpp>
+#include <WCDB/ConfiguredHandle.hpp>
+#include <WCDB/MigrationHandle.hpp>
+#include <WCDB/MigrationInitializerHandle.hpp>
+#include <WCDB/MigrationStepperHandle.hpp>
 
 namespace WCDB {
 

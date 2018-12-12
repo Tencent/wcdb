@@ -2269,8 +2269,6 @@
 				23B4DCDE2112B03200954D71 /* queue */,
 				23E163CA20FDDD6900C3F910 /* fts */,
 				23F70F9D20A055A400CCE3CD /* config */,
-				23F70FC220A0618100CCE3CD /* Configs.cpp */,
-				23F70FC320A0618100CCE3CD /* Configs.hpp */,
 				2349F61B1EA0D6680021EFA7 /* Database.cpp */,
 				2349F61C1EA0D6680021EFA7 /* Database.hpp */,
 				2349F6221EA0D6680021EFA7 /* HandlePool.cpp */,
@@ -3469,6 +3467,8 @@
 		23F70F9D20A055A400CCE3CD /* config */ = {
 			isa = PBXGroup;
 			children = (
+				23F70FC220A0618100CCE3CD /* Configs.cpp */,
+				23F70FC320A0618100CCE3CD /* Configs.hpp */,
 				23B0071A2047ED4800045245 /* ConfiguredHandle.cpp */,
 				23B0071B2047ED4800045245 /* ConfiguredHandle.hpp */,
 				23F70F9F20A055B400CCE3CD /* Config.hpp */,

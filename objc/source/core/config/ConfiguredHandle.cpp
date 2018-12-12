@@ -18,28 +18,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
 #include <WCDB/ConfiguredHandle.hpp>
 
 namespace WCDB {
 
-bool ConfiguredHandle::reconfigure(const std::shared_ptr<Configs> &newConfigs)
+Handle* ConfiguredHandle::getConfigurator()
 {
-    if (m_configs == newConfigs) {
-        return true;
-    }
-    if (m_configs) {
-        if (!m_configs->uninvoke(this)) {
-            return false;
-        }
-    }
-    if (newConfigs) {
-        if (!newConfigs->invoke(this)) {
-            return false;
-        }
-    }
-    m_configs = newConfigs;
-    return true;
+    return this;
 }
 
 } //namespace WCDB

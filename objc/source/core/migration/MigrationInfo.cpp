@@ -24,49 +24,43 @@
 
 namespace WCDB {
 
-MigrationUserInfo::MigrationUserInfo(const String& migratedTable)
+#pragma mark - MigrationBaseInfo
+MigrationBaseInfo::MigrationBaseInfo(const String& migratedTable)
 : m_migratedTable(migratedTable)
 {
     WCTInnerAssert(!migratedTable.empty());
 }
 
-MigrationUserInfo::~MigrationUserInfo()
+MigrationBaseInfo::~MigrationBaseInfo()
 {
 }
 
-bool MigrationUserInfo::shouldMigrate() const
+bool MigrationBaseInfo::shouldMigrate() const
 {
     return !m_migratedTable.empty() && !m_originTable.empty();
 }
 
-bool MigrationUserInfo::isSameDatabaseMigration() const
+bool MigrationBaseInfo::isSameDatabaseMigration() const
 {
     return m_originDatabase.empty();
 }
 
-const String& MigrationUserInfo::getMigratedTable() const
+const String& MigrationBaseInfo::getMigratedTable() const
 {
     return m_migratedTable;
 }
 
-const String& MigrationUserInfo::getOriginTable() const
+const String& MigrationBaseInfo::getOriginTable() const
 {
     return m_originTable;
 }
 
-const String& MigrationUserInfo::getOriginDatabase() const
+const String& MigrationBaseInfo::getOriginDatabase() const
 {
     return m_originDatabase;
 }
 
-void MigrationUserInfo::setOrigin(const String& table, const String& database)
-{
-    WCTInnerAssert(!table.empty());
-    m_originTable = table;
-    m_originDatabase = database;
-}
-
-String MigrationUserInfo::getDebugDescription() const
+String MigrationBaseInfo::getDebugDescription() const
 {
     std::ostringstream stream;
     stream << "Migrated: " << m_migratedTable;
@@ -79,9 +73,17 @@ String MigrationUserInfo::getDebugDescription() const
     return stream.str();
 }
 
-#pragma mark - Initialize
+#pragma mark - MigrationUserInfo
+void MigrationUserInfo::setOrigin(const String& table, const String& database)
+{
+    WCTInnerAssert(!table.empty());
+    m_originTable = table;
+    m_originDatabase = database;
+}
+
+#pragma mark - MigrationInfo
 MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo, const std::set<String>& columns)
-: MigrationUserInfo(userInfo)
+: MigrationBaseInfo(userInfo)
 {
     WCTInnerAssert(shouldMigrate());
 

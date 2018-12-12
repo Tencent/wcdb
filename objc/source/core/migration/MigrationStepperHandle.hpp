@@ -21,23 +21,32 @@
 #ifndef _WCDB_MIGRATIONSTEPPERHANDLE_HPP
 #define _WCDB_MIGRATIONSTEPPERHANDLE_HPP
 
-#include <WCDB/ConfiguredHandle.hpp>
+#include <WCDB/Configs.hpp>
+#include <WCDB/Handle.hpp>
 #include <WCDB/Migration.hpp>
 
 namespace WCDB {
 
-class MigrationStepperHandle final : public ConfiguredHandle, public Migration::Stepper {
+class MigrationStepperHandle final : public Handle,
+                                     public Configurable,
+                                     public Migration::Stepper {
+#pragma mark - Interrupt
 public:
     void setInterruptible(bool interruptible);
     void interrupt();
 
 protected:
-    using ConfiguredHandle::interrupt;
+    using Handle::interrupt;
     std::atomic<bool> m_interruptible;
 
+#pragma mark - Configurable
 protected:
-    bool dropOriginTable(const MigrationInfo* info);
-    bool migrateRows(const MigrationInfo* info, bool& done);
+    Handle* getConfigurator() override final;
+
+#pragma mark - Stepper
+protected:
+    bool dropOriginTable(const MigrationInfo* info) override final;
+    bool migrateRows(const MigrationInfo* info, bool& done) override final;
 
 private:
     bool lazyOpen();

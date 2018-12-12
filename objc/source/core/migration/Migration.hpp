@@ -130,7 +130,7 @@ public:
     std::pair<bool, bool> step(Migration::Stepper& stepper);
 
     // parameter will be nullptr when all tables migrated.
-    typedef std::function<void(const MigrationUserInfo*)> MigratedCallback;
+    typedef std::function<void(const MigrationBaseInfo*)> MigratedCallback;
     void setNotificationWhenMigrated(const MigratedCallback& callback);
 
 protected:

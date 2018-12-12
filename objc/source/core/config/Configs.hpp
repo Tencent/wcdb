@@ -28,7 +28,6 @@
 namespace WCDB {
 
 class Configs final {
-#pragma mark - Configs
 public:
     enum Priority : int {
         Highest = std::numeric_limits<int>::min(),
@@ -51,6 +50,19 @@ public:
 
 protected:
     OrderedUniqueList<String, std::shared_ptr<Config>> m_list;
+};
+
+class Configurable {
+public:
+    virtual ~Configurable();
+
+    bool reconfigure(const std::shared_ptr<Configs> &newConfigs);
+
+protected:
+    virtual Handle *getConfigurator() = 0;
+
+private:
+    std::shared_ptr<Configs> m_configs;
 };
 
 } //namespace WCDB

@@ -27,7 +27,7 @@ namespace WCDB {
 
 #pragma mark - Initialize
 MigrationHandle::MigrationHandle(Migration& migration)
-: ConfiguredHandle(), Migration::Binder(migration)
+: Handle(), Migration::Binder(migration)
 {
 }
 
@@ -108,6 +108,12 @@ bool MigrationHandle::rebind(const std::set<const MigrationInfo*>& migratings)
     }
 
     return true;
+}
+
+#pragma mark - Configurable
+Handle* MigrationHandle::getConfigurator()
+{
+    return this;
 }
 
 #pragma mark - Override

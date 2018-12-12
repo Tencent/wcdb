@@ -26,14 +26,12 @@
 
 namespace WCDB {
 
-class ConfiguredHandle : public Handle {
+class ConfiguredHandle final : public Handle, public Configurable {
 public:
     using Handle::Handle;
 
-    bool reconfigure(const std::shared_ptr<Configs> &newConfigs);
-
 protected:
-    std::shared_ptr<Configs> m_configs;
+    Handle* getConfigurator() override final;
 };
 
 } //namespace WCDB

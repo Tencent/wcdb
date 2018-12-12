@@ -27,8 +27,6 @@
 
 namespace WCDB {
 
-#pragma mark - Configs
-
 void Configs::insert(const String &name, const std::shared_ptr<Config> &config, int priority)
 {
     WCTInnerAssert(config != nullptr);
@@ -68,6 +66,30 @@ Configs::Configs(const OrderedUniqueList<String, std::shared_ptr<Config>> &list)
 Configs::Configs(OrderedUniqueList<String, std::shared_ptr<Config>> &&list)
 : m_list(std::move(list))
 {
+}
+
+Configurable::~Configurable()
+{
+}
+
+bool Configurable::reconfigure(const std::shared_ptr<Configs> &newConfigs)
+{
+    if (m_configs == newConfigs) {
+        return true;
+    }
+    Handle *configurator = getConfigurator();
+    if (m_configs) {
+        if (!m_configs->uninvoke(configurator)) {
+            return false;
+        }
+    }
+    if (newConfigs) {
+        if (!newConfigs->invoke(configurator)) {
+            return false;
+        }
+    }
+    m_configs = newConfigs;
+    return true;
 }
 
 } //namespace WCDB

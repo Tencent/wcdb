@@ -22,6 +22,7 @@
 
 namespace WCDB {
 
+#pragma mark - Interrupt
 void MigrationStepperHandle::setInterruptible(bool interruptible)
 {
     m_interruptible = interruptible;
@@ -30,10 +31,17 @@ void MigrationStepperHandle::setInterruptible(bool interruptible)
 void MigrationStepperHandle::interrupt()
 {
     if (m_interruptible.load()) {
-        ConfiguredHandle::interrupt();
+        Handle::interrupt();
     }
 }
 
+#pragma mark - Configurable
+Handle* MigrationStepperHandle::getConfigurator()
+{
+    return this;
+}
+
+#pragma mark - Stepper
 bool MigrationStepperHandle::lazyOpen()
 {
     if (isOpened()) {

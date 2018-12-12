@@ -28,10 +28,11 @@
 
 namespace WCDB {
 
-class MigrationUserInfo : public DebugDescribable {
+#pragma mark - MigrationBaseInfo
+class MigrationBaseInfo : public DebugDescribable {
 public:
-    MigrationUserInfo(const String& migratedTable);
-    virtual ~MigrationUserInfo();
+    MigrationBaseInfo(const String& migratedTable);
+    virtual ~MigrationBaseInfo();
 
     const String& getMigratedTable() const;
     const String& getOriginTable() const;
@@ -39,8 +40,6 @@ public:
 
     bool shouldMigrate() const;
     bool isSameDatabaseMigration() const;
-
-    void setOrigin(const String& table, const String& database = "");
 
     String getDebugDescription() const override final;
 
@@ -50,8 +49,16 @@ protected:
     String m_originDatabase;
 };
 
-class MigrationInfo final : public MigrationUserInfo {
-#pragma mark - Initialize
+#pragma mark - MigrationUserInfo
+class MigrationUserInfo final : public MigrationBaseInfo {
+public:
+    using MigrationBaseInfo::MigrationBaseInfo;
+
+    void setOrigin(const String& table, const String& database = "");
+};
+
+#pragma mark - MigrationInfo
+class MigrationInfo final : public MigrationBaseInfo {
 public:
     MigrationInfo(const MigrationUserInfo& userInfo, const std::set<String>& columns);
 
