@@ -46,6 +46,8 @@
 #include <WCDB/Modules.hpp>
 #include <WCDB/Tokenizer.hpp>
 
+#include <WCDB/MigrationInfo.hpp>
+
 #define WCDB_BASIC_CONFIG_NAME "com.Tencent.WCDB.Config.Basic"
 #define WCDB_BACKUP_CONFIG_NAME "com.Tencent.WCDB.Config.Backup"
 #define WCDB_CHECKPOINT_CONFIG_NAME "com.Tencent.WCDB.Config.Checkpoint"

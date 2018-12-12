@@ -25,6 +25,10 @@
 namespace WCDB {
 
 #pragma mark - MigrationBaseInfo
+MigrationBaseInfo::MigrationBaseInfo()
+{
+}
+
 MigrationBaseInfo::MigrationBaseInfo(const String& migratedTable)
 : m_migratedTable(migratedTable)
 {

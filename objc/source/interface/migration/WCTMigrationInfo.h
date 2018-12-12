@@ -18,24 +18,23 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDatabase.h>
-#import <WCDB/WCTMigrationInfo.h>
+#import <WCDB/WCTCommon.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void (^WCTMigrationFilterBlock)(WCTMigrationUserInfo*);
+@interface WCTMigrationBaseInfo : NSObject
 
-typedef void (^WCTMigratedNotificationBlock)(WCTMigrationBaseInfo*);
+@property (nonatomic, readonly) NSString* migratedTable;
+@property (nonatomic, readonly) NSString* originTable;
+@property (nonatomic, readonly) NSString* originDatabase;
 
-@interface WCTDatabase (Migration)
+@end
 
-- (void)filterMigration:(nullable WCTMigrationFilterBlock)filter;
+@interface WCTMigrationUserInfo : WCTMigrationBaseInfo
 
-- (BOOL)stepMigration:(BOOL)force isDone:(BOOL&)done;
+- (void)setOriginTable:(NSString*)table;
 
-- (void)asyncMigration;
-
-- (void)setNotificationWhenMigrated:(nullable WCTMigratedNotificationBlock)onMigrated;
+- (void)setOriginDatabase:(NSString*)database;
 
 @end
 

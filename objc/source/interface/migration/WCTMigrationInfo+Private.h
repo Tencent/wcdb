@@ -18,16 +18,19 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTMigrationUserInfo.h>
+#import <WCDB/Core.h>
+#import <WCDB/WCTMigrationInfo.h>
 
-@implementation WCTMigrationUserInfo
+NS_ASSUME_NONNULL_BEGIN
 
-- (instancetype)initWithMigratedTable:(NSString*)migratedTable
-{
-    if (self = [super init]) {
-        _migratedTable = migratedTable;
-    }
-    return self;
+@interface WCTMigrationBaseInfo () {
+@protected
+    NSString* _originTable;
+    NSString* _originDatabase;
 }
 
+- (instancetype)initWithBaseInfo:(const WCDB::MigrationBaseInfo&)info;
+
 @end
+
+NS_ASSUME_NONNULL_END

@@ -18,18 +18,33 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTCommon.h>
+#import <WCDB/WCTMigrationInfo+Private.h>
+#import <WCDB/WCTMigrationInfo.h>
 
-NS_ASSUME_NONNULL_BEGIN
+@implementation WCTMigrationBaseInfo
 
-@interface WCTMigrationUserInfo : NSObject
-
-- (instancetype)initWithMigratedTable:(NSString*)migratedTable;
-
-@property (nonatomic, readonly) NSString* migratedTable;
-@property (nonatomic, retain) NSString* originTable;
-@property (nonatomic, retain) NSString* originDatabase;
+- (instancetype)initWithBaseInfo:(const WCDB::MigrationBaseInfo &)info
+{
+    if (self = [super init]) {
+        _migratedTable = [NSString stringWithUTF8String:info.getMigratedTable().c_str()];
+        _originTable = [NSString stringWithUTF8String:info.getOriginTable().c_str()];
+        _originDatabase = [NSString stringWithUTF8String:info.getOriginDatabase().c_str()];
+    }
+    return self;
+}
 
 @end
 
-NS_ASSUME_NONNULL_END
+@implementation WCTMigrationUserInfo
+
+- (void)setOriginTable:(NSString *)table
+{
+    _originTable = table;
+}
+
+- (void)setOriginDatabase:(NSString *)database
+{
+    _originDatabase = database;
+}
+
+@end

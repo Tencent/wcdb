@@ -31,6 +31,7 @@ namespace WCDB {
 #pragma mark - MigrationBaseInfo
 class MigrationBaseInfo : public DebugDescribable {
 public:
+    MigrationBaseInfo();
     MigrationBaseInfo(const String& migratedTable);
     virtual ~MigrationBaseInfo();
 
@@ -44,7 +45,7 @@ public:
     String getDebugDescription() const override final;
 
 protected:
-    const String m_migratedTable;
+    String m_migratedTable;
     String m_originTable;
     String m_originDatabase;
 };

@@ -20,6 +20,7 @@
 
 #import <WCDB/WCTDatabase+Migration.h>
 #import <WCDB/WCTDatabase+Private.h>
+#import <WCDB/WCTMigrationInfo+Private.h>
 
 @implementation WCTDatabase (Migration)
 
@@ -29,7 +30,7 @@
     WCDB::Database::MigrationFilter callback = nullptr;
     if (filter != nil) {
         callback = [filter](WCDB::MigrationUserInfo& userInfo) {
-            WCTMigrationUserInfo* nsUserInfo = [[WCTMigrationUserInfo alloc] initWithMigratedTable:[NSString stringWithUTF8String:userInfo.getMigratedTable().c_str()]];
+            WCTMigrationUserInfo* nsUserInfo = [[WCTMigrationUserInfo alloc] initWithBaseInfo:userInfo];
             filter(nsUserInfo);
             if (nsUserInfo.originTable.length > 0) {
                 if (nsUserInfo.originDatabase.length > 0) {
@@ -55,6 +56,18 @@
 {
     WCTDatabaseAssert(return;);
     WCDB::Core::shared()->asyncMigration(_database->getPath());
+}
+
+- (void)setNotificationWhenMigrated:(nullable WCTMigratedNotificationBlock)onMigrated
+{
+    WCTDatabaseAssert(return;);
+    WCDB::Database::MigratedCallback callback = nullptr;
+    if (onMigrated) {
+        callback = [onMigrated](const WCDB::MigrationBaseInfo* info) {
+            return onMigrated([[WCTMigrationBaseInfo alloc] initWithBaseInfo:*info]);
+        };
+    }
+    _database->setNotificationWhenMigrated(callback);
 }
 
 @end
