@@ -690,9 +690,8 @@ bool Database::removeMaterials()
 
 bool Database::retrieveRenewed()
 {
-    WCTInnerAssert(!m_initialized);
     WCTInnerAssert(isBlockaded());
-    WCTInnerAssert(!isOpened());
+    WCTInnerAssert(!m_initialized);
 
     SharedLockGuard memoryGuard(m_memory);
     Repair::FactoryRenewer renewer = m_factory.renewer();
@@ -771,9 +770,10 @@ void Database::setNotificationWhenMigrated(const MigratedCallback &callback)
 
 void Database::filterMigration(const MigrationFilter &filter)
 {
-    WCTRemedialAssert(
-    !isOpened(), "Migration user info must be set before the very first operation.", return;);
     LockGuard lockGuard(m_memory);
+    WCTRemedialAssert(!m_initialized,
+                      "Migration user info must be set before the very first operation.",
+                      return;);
     m_migration.filterTable(filter);
 }
 
