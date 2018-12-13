@@ -42,6 +42,12 @@ protected:
 protected:
     Handle *getConfigurator() override final;
 
+#pragma mark - Migration
+public:
+protected:
+    bool tamper(Statement &statement);
+    std::map<String, const MigrationInfo *> m_migratings;
+
 #pragma mark - Override
 public:
     bool execute(const Statement &statement) override final;

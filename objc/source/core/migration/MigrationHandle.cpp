@@ -107,6 +107,11 @@ bool MigrationHandle::rebind(const std::set<const MigrationInfo*>& migratings)
         }
     }
 
+    m_migratings.clear();
+    for (const auto& migrating : migratings) {
+        m_migratings.emplace(migrating->getMigratedTable(), migrating);
+    }
+
     return true;
 }
 
@@ -114,6 +119,45 @@ bool MigrationHandle::rebind(const std::set<const MigrationInfo*>& migratings)
 Handle* MigrationHandle::getConfigurator()
 {
     return this;
+}
+
+#pragma mark - Migration
+bool MigrationHandle::tamper(Statement& statement)
+{
+    bool tampered = false;
+#warning TODO - fix limited UPDATE/DELETE
+    statement.iterate([&tampered, this](Syntax::Identifier& identifier, bool& stop) {
+        switch (identifier.getType()) {
+        case Syntax::Identifier::Type::TableOrSubquery: {
+            // main.migratedTable -> schemaForOriginDatabase.unionedView
+            Syntax::TableOrSubquery& syntax = (Syntax::TableOrSubquery&) identifier;
+            if (syntax.switcher == Syntax::TableOrSubquery::Switch::Table
+                && syntax.schema.name == Schema::main().getDescription()) {
+                auto iter = m_migratings.find(syntax.tableOrFunction);
+                if (iter != m_migratings.end()) {
+                    syntax.schema = iter->second->getSchemaForOriginDatabase();
+                    syntax.tableOrFunction = iter->second->getUnionedView();
+                    tampered = true;
+                }
+            }
+        } break;
+        case Syntax::Identifier::Type::QualifiedTableName: {
+            // main.migratedTable -> schemForOriginDatabase.originTable
+            Syntax::QualifiedTableName& syntax = (Syntax::QualifiedTableName&) identifier;
+            if (syntax.schema.name == Schema::main().getDescription()) {
+                auto iter = m_migratings.find(syntax.table);
+                if (iter != m_migratings.end()) {
+                    syntax.schema = iter->second->getSchemaForOriginDatabase();
+                    syntax.table = iter->second->getOriginTable();
+                    tampered = true;
+                }
+            }
+        } break;
+        default:
+            break;
+        }
+    });
+    return tampered;
 }
 
 #pragma mark - Override
