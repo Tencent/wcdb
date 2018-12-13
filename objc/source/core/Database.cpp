@@ -223,6 +223,7 @@ std::shared_ptr<Handle> Database::generateHandle(Slot slot)
     switch (slot) {
     case MigrationHandleSlot:
         WCTInnerAssert(m_migration.isInitialized());
+        // It's safe since m_migration never change.
         handle.reset(new MigrationHandle(m_migration));
         open = true;
         break;
@@ -269,15 +270,15 @@ bool Database::willConfigureHandle(Slot slot, Handle *handle)
 {
     bool succeed = true;
     switch (slot) {
-    case MigrationHandleSlot:
+    case MigrationHandleSlot: {
+        SharedLockGuard lockGuard(m_memory);
         WCTInnerAssert(dynamic_cast<MigrationHandle *>(handle) != nullptr);
-        if (m_migration.shouldMigrate()) {
-            if (!static_cast<MigrationHandle *>(handle)->rebindMigration()) {
-                succeed = false;
-                setThreadedError(handle->getError());
-                break;
-            }
+        if (!static_cast<MigrationHandle *>(handle)->rebindMigration()) {
+            succeed = false;
+            setThreadedError(handle->getError());
+            break;
         }
+    }
         // fallthought
     case ConfiguredHandleSlot:
         // fallthought
@@ -741,16 +742,14 @@ bool Database::recover(uint32_t corruptedIdentifier)
 #pragma mark - Migration
 std::pair<bool, bool> Database::stepMigration(bool force)
 {
-    {
-        InitializedGuard initializedGuard = initialize();
-        if (!initializedGuard.valid()) {
-            return { false, false };
-        }
-        if (!force
-            && (activeHandleCount(ConfiguredHandleSlot) > 0
-                || activeHandleCount(MigrationHandleSlot) > 0)) {
-            return { true, false };
-        }
+    InitializedGuard initializedGuard = initialize();
+    if (!initializedGuard.valid()) {
+        return { false, false };
+    }
+    if (!force
+        && (activeHandleCount(ConfiguredHandleSlot) > 0
+            || activeHandleCount(MigrationHandleSlot) > 0)) {
+        return { true, false };
     }
     RecyclableHandle handle = getSlotHandle(MigrationStepperSlot);
     WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()));
@@ -766,6 +765,7 @@ std::pair<bool, bool> Database::stepMigration(bool force)
 
 void Database::setNotificationWhenMigrated(const MigratedCallback &callback)
 {
+    LockGuard lockGuard(m_memory);
     m_migration.setNotificationWhenMigrated(callback);
 }
 
@@ -773,6 +773,7 @@ void Database::filterMigration(const MigrationFilter &filter)
 {
     WCTRemedialAssert(
     !isOpened(), "Migration user info must be set before the very first operation.", return;);
+    LockGuard lockGuard(m_memory);
     m_migration.filterTable(filter);
 }
 
