@@ -78,9 +78,9 @@ String ColumnConstraint::getDescription() const
     return stream.str();
 }
 
-void ColumnConstraint::iterate(const Iterator& iterator, void* parameter)
+void ColumnConstraint::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
     switch (switcher) {
     case Switch::PrimaryKey:
     case Switch::NotNull:
@@ -88,13 +88,13 @@ void ColumnConstraint::iterate(const Iterator& iterator, void* parameter)
     case Switch::Collate:
         break;
     case Switch::Check:
-        expression.iterate(iterator, parameter);
+        recursiveIterate(expression, iterator, stop);
         break;
     case Switch::Default:
-        expression.iterate(iterator, parameter);
+        recursiveIterate(expression, iterator, stop);
         break;
     case Switch::ForeignKey:
-        foreignKeyClause.iterate(iterator, parameter);
+        recursiveIterate(foreignKeyClause, iterator, stop);
         break;
     }
 }

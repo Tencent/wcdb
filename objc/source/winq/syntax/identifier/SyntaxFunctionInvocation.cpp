@@ -47,11 +47,11 @@ String FunctionInvocation::getDescription() const
     return stream.str();
 }
 
-void FunctionInvocation::iterate(const Iterator& iterator, void* parameter)
+void FunctionInvocation::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
     if (!expressions.empty()) {
-        listIterate(expressions, iterator, parameter);
+        listIterate(expressions, iterator, stop);
     }
 }
 

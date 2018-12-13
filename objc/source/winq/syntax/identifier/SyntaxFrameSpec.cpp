@@ -106,13 +106,13 @@ String FrameSpec::getDescription() const
     return stream.str();
 }
 
-void FrameSpec::iterate(const Iterator& iterator, void* parameter)
+void FrameSpec::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
     switch (firstEvent) {
     case FirstEvent::Preceding:
     case FirstEvent::Following:
-        expression1->iterate(iterator, parameter);
+        expression1->iterate(iterator, stop);
         // fallthrough
     case FirstEvent::UnboundedPreceding:
     case FirstEvent::CurrentRow:
@@ -122,7 +122,7 @@ void FrameSpec::iterate(const Iterator& iterator, void* parameter)
         switch (secondEvent) {
         case SecondEvent::Preceding:
         case SecondEvent::Following:
-            expression2->iterate(iterator, parameter);
+            expression2->iterate(iterator, stop);
             // fallthrough
         case SecondEvent::UnboundedFollowing:
         case SecondEvent::CurrentRow:

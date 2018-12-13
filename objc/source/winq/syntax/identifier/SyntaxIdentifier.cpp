@@ -29,9 +29,22 @@ Identifier::~Identifier()
 {
 }
 
-void Identifier::iterate(const Iterator &iterator, void *parameter)
+void Identifier::iterate(const Iterator &iterator)
 {
-    iterator(*this, parameter);
+    bool stop = false;
+    iterate(iterator, stop);
+}
+
+void Identifier::recursiveIterate(Identifier &identifier, const Iterator &iterator, bool &stop)
+{
+    identifier.iterate(iterator, stop);
+}
+
+void Identifier::iterate(const Iterator &iterator, bool &stop)
+{
+    if (!stop) {
+        iterator(*this, stop);
+    }
 }
 
 Identifier *Identifier::clone() const

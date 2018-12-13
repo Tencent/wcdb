@@ -40,7 +40,7 @@ public:
     static constexpr const Type type = Type::FunctionInvocation;
     Type getType() const override final;
     String getDescription() const override final;
-    void iterate(const Iterator& iterator, void* parameter) override final;
+    void iterate(const Iterator& iterator, bool& stop) override final;
 };
 
 } // namespace Syntax

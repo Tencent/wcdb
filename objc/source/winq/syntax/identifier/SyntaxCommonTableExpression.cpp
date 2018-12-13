@@ -42,11 +42,11 @@ String CommonTableExpression::getDescription() const
     return stream.str();
 }
 
-void CommonTableExpression::iterate(const Iterator& iterator, void* parameter)
+void CommonTableExpression::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
-    listIterate(columns, iterator, parameter);
-    select->iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
+    listIterate(columns, iterator, stop);
+    select->iterate(iterator, stop);
 }
 
 } // namespace Syntax

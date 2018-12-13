@@ -100,37 +100,37 @@ String UpdateSTMT::getDescription() const
     return stream.str();
 }
 
-void UpdateSTMT::iterate(const Iterator& iterator, void* parameter)
+void UpdateSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
     if (useWithClause) {
-        withClause.iterate(iterator, parameter);
+        recursiveIterate(withClause, iterator, stop);
     }
-    table.iterate(iterator, parameter);
+    recursiveIterate(table, iterator, stop);
     if (!columnsList.empty()) {
         IterateRemedialAssert(columnsList.size() == expressions.size());
         auto columns = columnsList.begin();
         auto expression = expressions.begin();
         while (columns != columnsList.end() && expression != expressions.end()) {
-            listIterate(*columns, iterator, parameter);
-            expression->iterate(iterator, parameter);
+            listIterate(*columns, iterator, stop);
+            expression->iterate(iterator, stop);
             ++columns;
             ++expression;
         }
         if (useCondition) {
-            condition.iterate(iterator, parameter);
+            recursiveIterate(condition, iterator, stop);
         }
         if (!orderingTerms.empty()) {
-            listIterate(orderingTerms, iterator, parameter);
+            listIterate(orderingTerms, iterator, stop);
         }
         if (useLimit) {
-            limit.iterate(iterator, parameter);
+            recursiveIterate(limit, iterator, stop);
             switch (limitParameterType) {
             case LimitParameterType::NotSet:
                 break;
             case LimitParameterType::Offset:
             case LimitParameterType::End:
-                limitParameter.iterate(iterator, parameter);
+                recursiveIterate(limitParameter, iterator, stop);
                 break;
             }
         }

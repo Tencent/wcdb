@@ -53,12 +53,12 @@ String CreateViewSTMT::getDescription() const
     return stream.str();
 }
 
-void CreateViewSTMT::iterate(const Iterator& iterator, void* parameter)
+void CreateViewSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
-    schema.iterate(iterator, parameter);
-    listIterate(columns, iterator, parameter);
-    select.iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
+    recursiveIterate(schema, iterator, stop);
+    listIterate(columns, iterator, stop);
+    recursiveIterate(select, iterator, stop);
 }
 
 } // namespace Syntax

@@ -51,15 +51,15 @@ String IndexedColumn::getDescription() const
     return stream.str();
 }
 
-void IndexedColumn::iterate(const Iterator& iterator, void* parameter)
+void IndexedColumn::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
     switch (switcher) {
     case Switch::Column:
-        column.iterate(iterator, parameter);
+        recursiveIterate(column, iterator, stop);
         break;
     case Switch::Expression:
-        expression.iterate(iterator, parameter);
+        recursiveIterate(expression, iterator, stop);
     }
 }
 

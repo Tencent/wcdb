@@ -31,9 +31,9 @@ SQL::Type SQL::getType() const
     return m_syntax->getType();
 }
 
-void SQL::iterate(const Iterator& iterator, void* parameter)
+void SQL::iterate(const Iterator& iterator)
 {
-    return m_syntax->iterate(iterator, parameter);
+    return m_syntax->iterate(iterator);
 }
 
 String SQL::getDescription() const

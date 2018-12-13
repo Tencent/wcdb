@@ -48,17 +48,17 @@ String PragmaSTMT::getDescription() const
     return stream.str();
 }
 
-void PragmaSTMT::iterate(const Iterator& iterator, void* parameter)
+void PragmaSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
-    schema.iterate(iterator, parameter);
-    pragma.iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
+    recursiveIterate(schema, iterator, stop);
+    recursiveIterate(pragma, iterator, stop);
     switch (switcher) {
     case Switch::NotSet:
         break;
     case Switch::To:
     case Switch::With:
-        value.iterate(iterator, parameter);
+        recursiveIterate(value, iterator, stop);
         break;
     }
 }

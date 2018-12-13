@@ -73,25 +73,25 @@ String TableOrSubquery::getDescription() const
     return stream.str();
 }
 
-void TableOrSubquery::iterate(const Iterator& iterator, void* parameter)
+void TableOrSubquery::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
     switch (switcher) {
     case Switch::Table:
-        schema.iterate(iterator, parameter);
+        recursiveIterate(schema, iterator, stop);
         break;
     case Switch::Function:
-        schema.iterate(iterator, parameter);
-        listIterate(expressions, iterator, parameter);
+        recursiveIterate(schema, iterator, stop);
+        listIterate(expressions, iterator, stop);
         break;
     case Switch::TableOrSubqueries:
-        listIterate(tableOrSubqueries, iterator, parameter);
+        listIterate(tableOrSubqueries, iterator, stop);
         break;
     case Switch::JoinClause:
-        joinClause.iterate(iterator, parameter);
+        recursiveIterate(joinClause, iterator, stop);
         break;
     case Switch::Select:
-        select.iterate(iterator, parameter);
+        recursiveIterate(select, iterator, stop);
         break;
     }
 }

@@ -42,10 +42,10 @@ String DropTableSTMT::getDescription() const
     return stream.str();
 }
 
-void DropTableSTMT::iterate(const Iterator& iterator, void* parameter)
+void DropTableSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
-    schema.iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
+    recursiveIterate(schema, iterator, stop);
 }
 
 } // namespace Syntax

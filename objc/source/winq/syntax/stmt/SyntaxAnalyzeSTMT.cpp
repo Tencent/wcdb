@@ -44,11 +44,11 @@ String AnalyzeSTMT::getDescription() const
     return stream.str();
 }
 
-void AnalyzeSTMT::iterate(const Iterator& iterator, void* parameter)
+void AnalyzeSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
     if (useSchema) {
-        schema.iterate(iterator, parameter);
+        recursiveIterate(schema, iterator, stop);
     }
 }
 

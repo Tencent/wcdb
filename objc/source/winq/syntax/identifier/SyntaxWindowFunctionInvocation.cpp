@@ -53,17 +53,17 @@ String WindowFunctionInvocation::getDescription() const
     return stream.str();
 }
 
-void WindowFunctionInvocation::iterate(const Iterator& iterator, void* parameter)
+void WindowFunctionInvocation::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
     if (!expressions.empty()) {
-        listIterate(expressions, iterator, parameter);
+        listIterate(expressions, iterator, stop);
     }
     if (useFilter) {
-        filter.iterate(iterator, parameter);
+        recursiveIterate(filter, iterator, stop);
     }
     if (window.empty()) {
-        windowDef.iterate(iterator, parameter);
+        recursiveIterate(windowDef, iterator, stop);
     }
 }
 

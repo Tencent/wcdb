@@ -64,17 +64,17 @@ String CreateTableSTMT::getDescription() const
     return stream.str();
 }
 
-void CreateTableSTMT::iterate(const Iterator& iterator, void* parameter)
+void CreateTableSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
-    schema.iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
+    recursiveIterate(schema, iterator, stop);
     switch (switcher) {
     case Switch::ColumnDefs:
-        listIterate(columnDefs, iterator, parameter);
-        listIterate(tableConstraints, iterator, parameter);
+        listIterate(columnDefs, iterator, stop);
+        listIterate(tableConstraints, iterator, stop);
         break;
     case Switch::Select:
-        select.iterate(iterator, parameter);
+        recursiveIterate(select, iterator, stop);
         break;
     }
 }

@@ -376,15 +376,15 @@ String Expression::getDescription() const
     return stream.str();
 }
 
-void Expression::iterate(const Iterator& iterator, void* parameter)
+void Expression::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
     switch (switcher) {
     // one expression
     case Switch::UnaryOperation:
     case Switch::Collate:
         IterateRemedialAssert(expressions.size() == 1);
-        expressions.begin()->iterate(iterator, parameter);
+        expressions.begin()->iterate(iterator, stop);
         break;
 
     // two expressions
@@ -410,14 +410,14 @@ void Expression::iterate(const Iterator& iterator, void* parameter)
         case Syntax::Expression::BinaryOperator::And:
         case Syntax::Expression::BinaryOperator::Or:
             IterateRemedialAssert(expressions.size() == 2);
-            listIterate(expressions, iterator, parameter);
+            listIterate(expressions, iterator, stop);
             break;
         case Syntax::Expression::BinaryOperator::Like:
         case Syntax::Expression::BinaryOperator::GLOB:
         case Syntax::Expression::BinaryOperator::RegExp:
         case Syntax::Expression::BinaryOperator::Match: {
             IterateRemedialAssert(expressions.size() == 2 + escape);
-            listIterate(expressions, iterator, parameter);
+            listIterate(expressions, iterator, stop);
             break;
         }
         }
@@ -425,7 +425,7 @@ void Expression::iterate(const Iterator& iterator, void* parameter)
     // three expressions
     case Switch::Between: {
         IterateRemedialAssert(expressions.size() == 3);
-        listIterate(expressions, iterator, parameter);
+        listIterate(expressions, iterator, stop);
         break;
     }
     // expression list
@@ -433,45 +433,45 @@ void Expression::iterate(const Iterator& iterator, void* parameter)
     case Switch::Expressions:
     case Switch::Cast:
     case Switch::Case:
-        listIterate(expressions, iterator, parameter);
+        listIterate(expressions, iterator, stop);
         break;
     // others
     case Switch::LiteralValue:
-        literalValue.iterate(iterator, parameter);
+        recursiveIterate(literalValue, iterator, stop);
         break;
     case Switch::BindParameter:
-        bindParameter.iterate(iterator, parameter);
+        recursiveIterate(bindParameter, iterator, stop);
         break;
     case Switch::Column:
         if (!table.empty()) {
-            schema.iterate(iterator, parameter);
+            recursiveIterate(schema, iterator, stop);
         }
-        column.iterate(iterator, parameter);
+        recursiveIterate(column, iterator, stop);
         break;
     case Switch::In: {
         IterateRemedialAssert(expressions.size() >= 1);
         auto iter = expressions.begin();
-        iter->iterate(iterator, parameter);
+        iter->iterate(iterator, stop);
         switch (inSwitcher) {
         case SwitchIn::Empty:
             break;
         case SwitchIn::Select:
             IterateRemedialAssert(select != nullptr);
-            select->iterate(iterator, parameter);
+            select->iterate(iterator, stop);
             break;
         case SwitchIn::Expressions: {
             while (++iter != expressions.end()) {
-                iter->iterate(iterator, parameter);
+                iter->iterate(iterator, stop);
             }
             break;
         }
         case SwitchIn::Table:
-            schema.iterate(iterator, parameter);
+            recursiveIterate(schema, iterator, stop);
             break;
         case SwitchIn::Function: {
-            schema.iterate(iterator, parameter);
+            recursiveIterate(schema, iterator, stop);
             while (++iter != expressions.end()) {
-                iter->iterate(iterator, parameter);
+                iter->iterate(iterator, stop);
             }
             break;
         }
@@ -480,18 +480,18 @@ void Expression::iterate(const Iterator& iterator, void* parameter)
     }
     case Switch::Exists:
         IterateRemedialAssert(select != nullptr);
-        select->iterate(iterator, parameter);
+        select->iterate(iterator, stop);
         break;
     case Switch::RaiseFunction:
-        raiseFunction.iterate(iterator, parameter);
+        recursiveIterate(raiseFunction, iterator, stop);
         break;
     case Switch::Window:
-        listIterate(expressions, iterator, parameter);
+        listIterate(expressions, iterator, stop);
         if (useFilter) {
-            filter.iterate(iterator, parameter);
+            recursiveIterate(filter, iterator, stop);
         }
         if (windowName.empty()) {
-            windowDef.iterate(iterator, parameter);
+            recursiveIterate(windowDef, iterator, stop);
         }
         break;
     }

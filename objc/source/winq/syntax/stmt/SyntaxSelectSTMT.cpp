@@ -71,21 +71,21 @@ String SelectSTMT::getDescription() const
     return stream.str();
 }
 
-void SelectSTMT::iterate(const Iterator& iterator, void* parameter)
+void SelectSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
-    listIterate(commonTableExpressions, iterator, parameter);
-    select.iterate(iterator, parameter);
-    listIterate(cores, iterator, parameter);
-    listIterate(orderingTerms, iterator, parameter);
+    Identifier::iterate(iterator, stop);
+    listIterate(commonTableExpressions, iterator, stop);
+    recursiveIterate(select, iterator, stop);
+    listIterate(cores, iterator, stop);
+    listIterate(orderingTerms, iterator, stop);
     if (useLimit) {
-        limit.iterate(iterator, parameter);
+        recursiveIterate(limit, iterator, stop);
         switch (limitParameterType) {
         case LimitParameterType::NotSet:
             break;
         case LimitParameterType::Offset:
         case LimitParameterType::End:
-            limitParameter.iterate(iterator, parameter);
+            recursiveIterate(limitParameter, iterator, stop);
             break;
         }
     }

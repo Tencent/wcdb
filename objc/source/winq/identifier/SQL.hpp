@@ -40,7 +40,7 @@ public:
     Type getType() const;
 
     typedef Syntax::Identifier::Iterator Iterator;
-    void iterate(const Iterator& iterator, void* parameter);
+    void iterate(const Iterator& iterator);
 
     String getDescription() const;
 

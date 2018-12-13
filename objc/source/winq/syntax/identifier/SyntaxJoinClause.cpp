@@ -59,11 +59,11 @@ String JoinClause::getDescription() const
     return stream.str();
 }
 
-void JoinClause::iterate(const Iterator& iterator, void* parameter)
+void JoinClause::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
     auto tableOrSubquery = tableOrSubqueries.begin();
-    tableOrSubquery->iterate(iterator, parameter);
+    tableOrSubquery->iterate(iterator, stop);
     if (++tableOrSubquery != tableOrSubqueries.end()) {
         auto joinOperator = joinOperators.begin();
         auto joinConstraint = joinConstraints.begin();
@@ -72,9 +72,9 @@ void JoinClause::iterate(const Iterator& iterator, void* parameter)
         while (joinOperator != joinOperators.end()
                && tableOrSubquery != tableOrSubqueries.end()
                && joinConstraint != joinConstraints.end()) {
-            tableOrSubquery->iterate(iterator, parameter);
+            tableOrSubquery->iterate(iterator, stop);
             if (joinConstraint->get() != nullptr) {
-                joinConstraint->get()->iterate(iterator, parameter);
+                joinConstraint->get()->iterate(iterator, stop);
             }
             ++joinOperator;
             ++tableOrSubquery;

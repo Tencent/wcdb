@@ -38,11 +38,11 @@ String AttachSTMT::getDescription() const
     return stream.str();
 }
 
-void AttachSTMT::iterate(const Iterator& iterator, void* parameter)
+void AttachSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
-    expression.iterate(iterator, parameter);
-    schema.iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
+    recursiveIterate(expression, iterator, stop);
+    recursiveIterate(schema, iterator, stop);
 }
 
 } // namespace Syntax

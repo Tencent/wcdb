@@ -48,15 +48,15 @@ String ReindexSTMT::getDescription() const
     return stream.str();
 }
 
-void ReindexSTMT::iterate(const Iterator& iterator, void* parameter)
+void ReindexSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
     switch (switcher) {
     case Switch::NotSet:
     case Switch::Collation:
         break;
     case Switch::TableOrIndex:
-        schema.iterate(iterator, parameter);
+        recursiveIterate(schema, iterator, stop);
         break;
     }
 }

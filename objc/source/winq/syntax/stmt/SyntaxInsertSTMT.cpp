@@ -92,29 +92,29 @@ String InsertSTMT::getDescription() const
     return stream.str();
 }
 
-void InsertSTMT::iterate(const Iterator& iterator, void* parameter)
+void InsertSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
     if (useWithClause) {
-        withClause.iterate(iterator, parameter);
+        recursiveIterate(withClause, iterator, stop);
     }
-    schema.iterate(iterator, parameter);
-    listIterate(columns, iterator, parameter);
+    recursiveIterate(schema, iterator, stop);
+    listIterate(columns, iterator, stop);
     switch (valueSwitcher) {
     case SwitchValue::Values: {
         for (auto& expressionsValue : expressionsValues) {
-            listIterate(expressionsValue, iterator, parameter);
+            listIterate(expressionsValue, iterator, stop);
         }
         break;
     }
     case SwitchValue::Select:
-        select.iterate(iterator, parameter);
+        recursiveIterate(select, iterator, stop);
         break;
     case SwitchValue::Default:
         break;
     }
     if (useUpsertClause) {
-        upsertClause.iterate(iterator, parameter);
+        recursiveIterate(upsertClause, iterator, stop);
     }
 }
 

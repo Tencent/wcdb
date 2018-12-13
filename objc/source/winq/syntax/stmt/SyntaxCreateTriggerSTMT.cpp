@@ -120,15 +120,15 @@ String CreateTriggerSTMT::getDescription() const
     return stream.str();
 }
 
-void CreateTriggerSTMT::iterate(const Iterator& iterator, void* parameter)
+void CreateTriggerSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
-    schema.iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
+    recursiveIterate(schema, iterator, stop);
     if (event == Event::Update) {
-        listIterate(columns, iterator, parameter);
+        listIterate(columns, iterator, stop);
     }
     if (useCondition) {
-        condition.iterate(iterator, parameter);
+        recursiveIterate(condition, iterator, stop);
     }
     auto insert = inserts.begin();
     auto delete_ = deletes.begin();
@@ -138,22 +138,22 @@ void CreateTriggerSTMT::iterate(const Iterator& iterator, void* parameter)
         switch (stmt) {
         case STMT::Insert:
             IterateRemedialAssert(insert != inserts.end());
-            insert->iterate(iterator, parameter);
+            insert->iterate(iterator, stop);
             ++insert;
             break;
         case STMT::Update:
             IterateRemedialAssert(update != updates.end());
-            update->iterate(iterator, parameter);
+            update->iterate(iterator, stop);
             ++update;
             break;
         case STMT::Delete:
             IterateRemedialAssert(delete_ != deletes.end());
-            delete_->iterate(iterator, parameter);
+            delete_->iterate(iterator, stop);
             ++delete_;
             break;
         case STMT::Select:
             IterateRemedialAssert(select != selects.end());
-            select->iterate(iterator, parameter);
+            select->iterate(iterator, stop);
             ++select;
             break;
         }

@@ -42,10 +42,10 @@ String DropTriggerSTMT::getDescription() const
     return stream.str();
 }
 
-void DropTriggerSTMT::iterate(const Iterator& iterator, void* parameter)
+void DropTriggerSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
-    schema.iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
+    recursiveIterate(schema, iterator, stop);
 }
 
 } // namespace Syntax

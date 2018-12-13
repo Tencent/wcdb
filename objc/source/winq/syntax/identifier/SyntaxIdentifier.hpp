@@ -112,16 +112,22 @@ public:
 
     // Iterable
 public:
-    typedef std::function<void(Identifier&, void*)> Iterator;
-    virtual void iterate(const Iterator& iterator, void* parameter);
+    typedef std::function<void(Identifier&, bool&)> Iterator;
+    void iterate(const Iterator& iterator);
 
 protected:
+    virtual void iterate(const Iterator& iterator, bool& stop);
+    static void
+    recursiveIterate(Identifier& identifier, const Iterator& iterator, bool& stop);
+
     template<typename T, typename Enable = typename std::enable_if<std::is_base_of<Identifier, T>::value>>
     static void
-    listIterate(std::list<T>& identifiers, const Iterator& iterator, void* parameter)
+    listIterate(std::list<T>& identifiers, const Iterator& iterator, bool& stop)
     {
-        for (auto& identifier : identifiers) {
-            identifier.iterate(iterator, parameter);
+        if (!stop) {
+            for (auto& identifier : identifiers) {
+                recursiveIterate(identifier, iterator, stop);
+            }
         }
     }
     static constexpr const char* space = " ";

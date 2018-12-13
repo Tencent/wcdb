@@ -44,11 +44,11 @@ String ColumnDef::getDescription() const
     return stream.str();
 }
 
-void ColumnDef::iterate(const Iterator& iterator, void* parameter)
+void ColumnDef::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
-    column.iterate(iterator, parameter);
-    listIterate(constraints, iterator, parameter);
+    Identifier::iterate(iterator, stop);
+    recursiveIterate(column, iterator, stop);
+    listIterate(constraints, iterator, stop);
 }
 
 } // namespace Syntax

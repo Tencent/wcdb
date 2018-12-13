@@ -44,10 +44,10 @@ String OrderingTerm::getDescription() const
     return stream.str();
 }
 
-void OrderingTerm::iterate(const Iterator& iterator, void* parameter)
+void OrderingTerm::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
-    expression.iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
+    recursiveIterate(expression, iterator, stop);
 }
 
 } // namespace Syntax

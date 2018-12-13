@@ -103,10 +103,10 @@ String ForeignKeyClause::getDescription() const
     return stream.str();
 }
 
-void ForeignKeyClause::iterate(const Iterator& iterator, void* parameter)
+void ForeignKeyClause::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
-    listIterate(columns, iterator, parameter);
+    Identifier::iterate(iterator, stop);
+    listIterate(columns, iterator, stop);
 }
 
 } // namespace Syntax

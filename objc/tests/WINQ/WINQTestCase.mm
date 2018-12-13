@@ -25,11 +25,9 @@
 + (std::list<WCDB::Syntax::Identifier::Type>)getTypes:(WCDB::SQL&)sql
 {
     std::list<WCDB::Syntax::Identifier::Type> types;
-    sql.iterate([](WCDB::Syntax::Identifier& identifier, void* parameter) {
-        std::list<WCDB::Syntax::Identifier::Type>* types = (std::list<WCDB::Syntax::Identifier::Type>*) parameter;
-        types->push_back(identifier.getType());
-    },
-                &types);
+    sql.iterate([&types](WCDB::Syntax::Identifier& identifier, bool& stop) {
+        types.push_back(identifier.getType());
+    });
     return types;
 }
 

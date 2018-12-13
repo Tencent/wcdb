@@ -72,13 +72,13 @@ String UpsertClause::getDescription() const
     return stream.str();
 }
 
-void UpsertClause::iterate(const Iterator& iterator, void* parameter)
+void UpsertClause::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
     if (!indexedColumns.empty()) {
-        listIterate(indexedColumns, iterator, parameter);
+        listIterate(indexedColumns, iterator, stop);
         if (useCondition) {
-            condition.iterate(iterator, parameter);
+            recursiveIterate(condition, iterator, stop);
         }
     }
     if (!columnsList.empty()) {
@@ -86,13 +86,13 @@ void UpsertClause::iterate(const Iterator& iterator, void* parameter)
         auto columns = columnsList.begin();
         auto expression = expressions.begin();
         while (columns != columnsList.end() && expression != expressions.end()) {
-            listIterate(*columns, iterator, parameter);
-            expression->iterate(iterator, parameter);
+            listIterate(*columns, iterator, stop);
+            expression->iterate(iterator, stop);
             ++columns;
             ++expression;
         }
         if (useUpdateCondition) {
-            updateCondition.iterate(iterator, parameter);
+            recursiveIterate(updateCondition, iterator, stop);
         }
     }
 }

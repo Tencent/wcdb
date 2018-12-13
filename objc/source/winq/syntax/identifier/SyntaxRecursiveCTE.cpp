@@ -52,12 +52,12 @@ String RecursiveCTE::getDescription() const
     return stream.str();
 }
 
-void RecursiveCTE::iterate(const Iterator& iterator, void* parameter)
+void RecursiveCTE::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
-    table.iterate(iterator, parameter);
-    initialSelect.iterate(iterator, parameter);
-    recursiveSelect.iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
+    recursiveIterate(table, iterator, stop);
+    recursiveIterate(initialSelect, iterator, stop);
+    recursiveIterate(recursiveSelect, iterator, stop);
 }
 
 } // namespace Syntax

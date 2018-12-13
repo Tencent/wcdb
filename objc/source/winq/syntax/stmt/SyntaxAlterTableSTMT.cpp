@@ -49,19 +49,19 @@ String AlterTableSTMT::getDescription() const
     return stream.str();
 }
 
-void AlterTableSTMT::iterate(const Iterator& iterator, void* parameter)
+void AlterTableSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
-    schema.iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
+    recursiveIterate(schema, iterator, stop);
     switch (switcher) {
     case Switch::RenameTable:
         break;
     case Switch::AddColumn:
-        columnDef.iterate(iterator, parameter);
+        recursiveIterate(columnDef, iterator, stop);
         break;
     case Switch::RenameColumn:
-        column.iterate(iterator, parameter);
-        newColumn.iterate(iterator, parameter);
+        recursiveIterate(column, iterator, stop);
+        recursiveIterate(newColumn, iterator, stop);
         break;
     }
 }

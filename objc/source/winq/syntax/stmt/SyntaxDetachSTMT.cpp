@@ -38,10 +38,10 @@ String DetachSTMT::getDescription() const
     return stream.str();
 }
 
-void DetachSTMT::iterate(const Iterator& iterator, void* parameter)
+void DetachSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
-    schema.iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
+    recursiveIterate(schema, iterator, stop);
 }
 
 } // namespace Syntax

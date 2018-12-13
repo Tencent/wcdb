@@ -48,11 +48,11 @@ String ResultColumn::getDescription() const
     return stream.str();
 }
 
-void ResultColumn::iterate(const Iterator& iterator, void* parameter)
+void ResultColumn::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
     if (!wildcard) {
-        expression.iterate(iterator, parameter);
+        recursiveIterate(expression, iterator, stop);
     }
 }
 

@@ -41,11 +41,11 @@ String VacuumSTMT::getDescription() const
     return stream.str();
 }
 
-void VacuumSTMT::iterate(const Iterator& iterator, void* parameter)
+void VacuumSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
     if (specifySchema) {
-        schema.iterate(iterator, parameter);
+        recursiveIterate(schema, iterator, stop);
     }
 }
 

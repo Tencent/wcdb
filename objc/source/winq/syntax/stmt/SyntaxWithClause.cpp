@@ -55,14 +55,14 @@ String WithClause::getDescription() const
     return stream.str();
 }
 
-void WithClause::iterate(const Iterator& iterator, void* parameter)
+void WithClause::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
     auto table = tables.begin();
     auto select = selects.begin();
     while (table != tables.end() && select != selects.end()) {
-        table->iterate(iterator, parameter);
-        select->iterate(iterator, parameter);
+        table->iterate(iterator, stop);
+        select->iterate(iterator, stop);
         ++table;
         ++select;
     }

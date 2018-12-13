@@ -42,13 +42,13 @@ String JoinConstraint::getDescription() const
     return stream.str();
 }
 
-void JoinConstraint::iterate(const Iterator& iterator, void* parameter)
+void JoinConstraint::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
     if (!columns.empty()) {
-        listIterate(columns, iterator, parameter);
+        listIterate(columns, iterator, stop);
     } else {
-        expression.iterate(iterator, parameter);
+        recursiveIterate(expression, iterator, stop);
     }
 }
 

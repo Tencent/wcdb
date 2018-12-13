@@ -60,20 +60,20 @@ String TableConstraint::getDescription() const
     return stream.str();
 }
 
-void TableConstraint::iterate(const Iterator& iterator, void* parameter)
+void TableConstraint::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
     switch (switcher) {
     case Switch::PrimaryKey:
     case Switch::Unique:
-        listIterate(indexedColumns, iterator, parameter);
+        listIterate(indexedColumns, iterator, stop);
         break;
     case Switch::Check:
-        expression.iterate(iterator, parameter);
+        recursiveIterate(expression, iterator, stop);
         break;
     case Switch::ForeignKey:
-        listIterate(columns, iterator, parameter);
-        foreignKeyClause.iterate(iterator, parameter);
+        listIterate(columns, iterator, stop);
+        recursiveIterate(foreignKeyClause, iterator, stop);
         break;
     }
 }

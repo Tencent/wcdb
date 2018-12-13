@@ -60,25 +60,25 @@ String DeleteSTMT::getDescription() const
     return stream.str();
 }
 
-void DeleteSTMT::iterate(const Iterator& iterator, void* parameter)
+void DeleteSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
     if (useWithClause) {
-        withClause.iterate(iterator, parameter);
+        recursiveIterate(withClause, iterator, stop);
     }
-    table.iterate(iterator, parameter);
+    recursiveIterate(table, iterator, stop);
     if (useCondition) {
-        condition.iterate(iterator, parameter);
+        recursiveIterate(condition, iterator, stop);
     }
-    listIterate(orderingTerms, iterator, parameter);
+    listIterate(orderingTerms, iterator, stop);
     if (useLimit) {
-        limit.iterate(iterator, parameter);
+        recursiveIterate(limit, iterator, stop);
         switch (limitParameterType) {
         case LimitParameterType::NotSet:
             break;
         case LimitParameterType::Offset:
         case LimitParameterType::End:
-            limitParameter.iterate(iterator, parameter);
+            recursiveIterate(limitParameter, iterator, stop);
             break;
         }
     }

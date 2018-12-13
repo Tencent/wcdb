@@ -39,11 +39,11 @@ String Filter::getDescription() const
     return stream.str();
 }
 
-void Filter::iterate(const Iterator& iterator, void* parameter)
+void Filter::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
     IterateRemedialAssert(expression != nullptr);
-    expression->iterate(iterator, parameter);
+    expression->iterate(iterator, stop);
 }
 
 } // namespace Syntax

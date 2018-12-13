@@ -41,10 +41,10 @@ String CTETableName::getDescription() const
     return stream.str();
 }
 
-void CTETableName::iterate(const Iterator& iterator, void* parameter)
+void CTETableName::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
-    listIterate(columns, iterator, parameter);
+    Identifier::iterate(iterator, stop);
+    listIterate(columns, iterator, stop);
 }
 
 } // namespace Syntax

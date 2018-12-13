@@ -92,36 +92,36 @@ String SelectCore::getDescription() const
     return stream.str();
 }
 
-void SelectCore::iterate(const Iterator& iterator, void* parameter)
+void SelectCore::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
+    Identifier::iterate(iterator, stop);
     switch (switcher) {
     case Switch::Select:
-        listIterate(resultColumns, iterator, parameter);
+        listIterate(resultColumns, iterator, stop);
         if (useFrom) {
             if (!tableOrSubqueries.empty()) {
-                listIterate(tableOrSubqueries, iterator, parameter);
+                listIterate(tableOrSubqueries, iterator, stop);
             } else {
-                joinClause.iterate(iterator, parameter);
+                recursiveIterate(joinClause, iterator, stop);
             }
         }
         if (useCondition) {
-            condition.iterate(iterator, parameter);
+            recursiveIterate(condition, iterator, stop);
         }
         if (!groups.empty()) {
-            listIterate(groups, iterator, parameter);
+            listIterate(groups, iterator, stop);
             if (useHaving) {
-                having.iterate(iterator, parameter);
+                recursiveIterate(having, iterator, stop);
             }
         }
         if (!windows.empty()) {
             IterateRemedialAssert(windows.size() == windowDefs.size());
-            listIterate(windowDefs, iterator, parameter);
+            listIterate(windowDefs, iterator, stop);
         }
         break;
     case Switch::Values:
         for (auto& values : valuesList) {
-            listIterate(values, iterator, parameter);
+            listIterate(values, iterator, stop);
         }
         break;
     }

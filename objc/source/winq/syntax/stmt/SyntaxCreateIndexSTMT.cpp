@@ -49,13 +49,13 @@ String CreateIndexSTMT::getDescription() const
     return stream.str();
 }
 
-void CreateIndexSTMT::iterate(const Iterator& iterator, void* parameter)
+void CreateIndexSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
-    schema.iterate(iterator, parameter);
-    listIterate(indexedColumns, iterator, parameter);
+    Identifier::iterate(iterator, stop);
+    recursiveIterate(schema, iterator, stop);
+    listIterate(indexedColumns, iterator, stop);
     if (useCondition) {
-        condition.iterate(iterator, parameter);
+        recursiveIterate(condition, iterator, stop);
     }
 }
 

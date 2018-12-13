@@ -54,13 +54,13 @@ String WindowDef::getDescription() const
     return stream.str();
 }
 
-void WindowDef::iterate(const Iterator& iterator, void* parameter)
+void WindowDef::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, parameter);
-    listIterate(expressions, iterator, parameter);
-    listIterate(orderingTerms, iterator, parameter);
+    Identifier::iterate(iterator, stop);
+    listIterate(expressions, iterator, stop);
+    listIterate(orderingTerms, iterator, stop);
     if (useFrameSpec) {
-        frameSpec.iterate(iterator, parameter);
+        recursiveIterate(frameSpec, iterator, stop);
     }
 }
 
