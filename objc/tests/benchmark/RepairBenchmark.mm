@@ -104,7 +104,6 @@
         TestCaseAssertTrue([self.database backup]);
     }
     setUp:^{
-        // 500MB
         TestCaseAssertTrue([self fillDatabase:self.configForSize]);
     }
     tearDown:^{
