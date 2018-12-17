@@ -279,9 +279,9 @@ bool Database::willConfigureHandle(Slot slot, Handle *handle)
             break;
         }
     }
-        // fallthought
+        // fallthrough
     case ConfiguredHandleSlot:
-        // fallthought
+        // fallthrough
     case MigrationStepperSlot: {
         std::shared_ptr<Configs> configs;
         {
