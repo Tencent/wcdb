@@ -84,8 +84,6 @@ public:
     void close();
     bool isOpened() const;
 
-    virtual bool execute(const Statement &statement);
-
     long long getLastInsertedRowID();
     const char *getErrorMessage();
     int getExtendedErrorCode();
@@ -101,16 +99,16 @@ protected:
 
 #pragma mark - Statement
 public:
+    virtual bool execute(const Statement &statement);
     virtual bool prepare(const Statement &statement);
     virtual void finalize();
     virtual bool step(bool &done);
-    bool isPrepared() const;
+    virtual bool isPrepared();
 
     bool step();
     virtual void reset();
 
-    bool isStatementReadonly();
-    bool isPrepared();
+    virtual bool isStatementReadonly();
 
     using Integer32 = HandleStatement::Integer32;
     using Integer64 = HandleStatement::Integer64;
@@ -125,21 +123,25 @@ public:
     virtual void bindBLOB(const BLOB &value, int index);
     virtual void bindNull(int index);
 
-    Integer32 getInteger32(int index);
-    Integer64 getInteger64(int index);
-    Float getDouble(int index);
-    Text getText(int index);
-    BLOB getBLOB(int index);
+    virtual Integer32 getInteger32(int index);
+    virtual Integer64 getInteger64(int index);
+    virtual Float getDouble(int index);
+    virtual Text getText(int index);
+    virtual BLOB getBLOB(int index);
 
-    ColumnType getType(int index);
-    int getColumnCount();
-    const UnsafeString getOriginColumnName(int index);
-    const UnsafeString getColumnName(int index);
-    const UnsafeString getColumnTableName(int index);
+    virtual ColumnType getType(int index);
+    virtual int getColumnCount();
+    virtual const UnsafeString getOriginColumnName(int index);
+    virtual const UnsafeString getColumnName(int index);
+    virtual const UnsafeString getColumnTableName(int index);
 
 protected:
-    bool prepare(const String &sql);
-    HandleStatement m_handleStatement;
+    HandleStatement *getStatement();
+    void returnStatement(HandleStatement *handleStatement);
+    HandleStatement *m_mainStatement;
+
+private:
+    std::list<HandleStatement> m_handleStatements;
 
 #pragma mark - Convenient
 public:

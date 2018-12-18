@@ -32,7 +32,7 @@ namespace WCDB {
 #pragma mark - Initialize
 Handle::Handle()
 : m_handle(nullptr)
-, m_handleStatement(this)
+, m_mainStatement(getStatement())
 , m_notification(this)
 , m_nestedLevel(0)
 , m_codeToBeIgnored(SQLITE_OK)
@@ -144,11 +144,6 @@ void Handle::close()
     }
 }
 
-bool Handle::execute(const Statement &statement)
-{
-    return execute(statement.getDescription());
-}
-
 bool Handle::execute(const String &sql)
 {
     WCTInnerAssert(isOpened());
@@ -208,38 +203,36 @@ void Handle::interrupt()
 }
 
 #pragma mark - Statement
+bool Handle::execute(const Statement &statement)
+{
+    return execute(statement.getDescription());
+}
+
 bool Handle::prepare(const Statement &statement)
 {
-    return m_handleStatement.prepare(statement.getDescription());
+    WCTRemedialAssert(isPrepared(), "Last statement is not finalized.", finalize(););
+    return m_mainStatement->prepare(statement);
 }
 
-bool Handle::prepare(const String &sql)
+bool Handle::isPrepared()
 {
-    WCTInnerAssert(isOpened());
-    WCTInnerAssert(!isPrepared());
-    return m_handleStatement.prepare(sql);
-}
-
-bool Handle::isPrepared() const
-{
-    return m_handleStatement.isPrepared();
+    return m_mainStatement->isPrepared();
 }
 
 void Handle::reset()
 {
     WCTInnerAssert(isPrepared());
-    m_handleStatement.reset();
+    m_mainStatement->reset();
 }
 
 bool Handle::step(bool &done)
 {
     WCTInnerAssert(isPrepared());
-    return m_handleStatement.step(done);
+    return m_mainStatement->step(done);
 }
 
 bool Handle::step()
 {
-    WCTInnerAssert(isPrepared());
     bool unused;
     return step(unused);
 }
@@ -247,113 +240,126 @@ bool Handle::step()
 int Handle::getColumnCount()
 {
     WCTInnerAssert(isPrepared());
-    return m_handleStatement.getColumnCount();
+    return m_mainStatement->getColumnCount();
 }
 
 const UnsafeString Handle::getOriginColumnName(int index)
 {
     WCTInnerAssert(isPrepared());
-    return m_handleStatement.getOriginColumnName(index);
+    return m_mainStatement->getOriginColumnName(index);
 }
 
 const UnsafeString Handle::getColumnName(int index)
 {
     WCTInnerAssert(isPrepared());
-    return m_handleStatement.getColumnName(index);
+    return m_mainStatement->getColumnName(index);
 }
 
 const UnsafeString Handle::getColumnTableName(int index)
 {
     WCTInnerAssert(isPrepared());
-    return m_handleStatement.getColumnTableName(index);
+    return m_mainStatement->getColumnTableName(index);
 }
 
 ColumnType Handle::getType(int index)
 {
     WCTInnerAssert(isPrepared());
-    return m_handleStatement.getType(index);
+    return m_mainStatement->getType(index);
 }
 
 void Handle::bindInteger32(const Integer32 &value, int index)
 {
     WCTInnerAssert(isPrepared());
-    m_handleStatement.bindInteger32(value, index);
+    m_mainStatement->bindInteger32(value, index);
 }
 
 void Handle::bindInteger64(const Integer64 &value, int index)
 {
     WCTInnerAssert(isPrepared());
-    m_handleStatement.bindInteger64(value, index);
+    m_mainStatement->bindInteger64(value, index);
 }
 
 void Handle::bindDouble(const Float &value, int index)
 {
     WCTInnerAssert(isPrepared());
-    m_handleStatement.bindDouble(value, index);
+    m_mainStatement->bindDouble(value, index);
 }
 
 void Handle::bindText(const Text &value, int index)
 {
     WCTInnerAssert(isPrepared());
-    m_handleStatement.bindText(value, index);
+    m_mainStatement->bindText(value, index);
 }
 
 void Handle::bindBLOB(const BLOB &value, int index)
 {
     WCTInnerAssert(isPrepared());
-    m_handleStatement.bindBLOB(value, index);
+    m_mainStatement->bindBLOB(value, index);
 }
 
 void Handle::bindNull(int index)
 {
     WCTInnerAssert(isPrepared());
-    m_handleStatement.bindNull(index);
+    m_mainStatement->bindNull(index);
 }
 
 Handle::Integer32 Handle::getInteger32(int index)
 {
     WCTInnerAssert(isPrepared());
-    return m_handleStatement.getInteger32(index);
+    return m_mainStatement->getInteger32(index);
 }
 
 Handle::Integer64 Handle::getInteger64(int index)
 {
     WCTInnerAssert(isPrepared());
-    return m_handleStatement.getInteger64(index);
+    return m_mainStatement->getInteger64(index);
 }
 
 Handle::Float Handle::getDouble(int index)
 {
     WCTInnerAssert(isPrepared());
-    return m_handleStatement.getDouble(index);
+    return m_mainStatement->getDouble(index);
 }
 
 Handle::Text Handle::getText(int index)
 {
     WCTInnerAssert(isPrepared());
-    return m_handleStatement.getText(index);
+    return m_mainStatement->getText(index);
 }
 
 Handle::BLOB Handle::getBLOB(int index)
 {
     WCTInnerAssert(isPrepared());
-    return m_handleStatement.getBLOB(index);
+    return m_mainStatement->getBLOB(index);
 }
 
 void Handle::finalize()
 {
-    m_handleStatement.finalize();
+    m_mainStatement->finalize();
 }
 
 bool Handle::isStatementReadonly()
 {
     WCTInnerAssert(isPrepared());
-    return m_handleStatement.isReadonly();
+    return m_mainStatement->isReadonly();
 }
 
-bool Handle::isPrepared()
+HandleStatement *Handle::getStatement()
 {
-    return m_handleStatement.isPrepared();
+    m_handleStatements.push_front(HandleStatement(this));
+    return &m_handleStatements.front();
+}
+
+void Handle::returnStatement(HandleStatement *handleStatement)
+{
+    if (handleStatement) {
+        for (auto iter = m_handleStatements.begin(); iter != m_handleStatements.end(); ++iter) {
+            if (&(*iter) == handleStatement) {
+                m_handleStatements.erase(iter);
+                return;
+            }
+        }
+    }
 }
 
 #pragma mark - Convenient
