@@ -68,37 +68,17 @@
 #define TestCaseAssertTrue(cond, ...)     \
     {                                     \
         BOOL test = (cond);               \
+        XCTAssertTrue(test, __VA_ARGS__); \
         if (!(test)) {                    \
             TESTCASE_FAILED               \
         }                                 \
-        XCTAssertTrue(test, __VA_ARGS__); \
     }
 
-#define TestCaseAssertFalse(cond, ...)     \
-    {                                      \
-        BOOL test = (cond);                \
-        if (test) {                        \
-            TESTCASE_FAILED                \
-        }                                  \
-        XCTAssertFalse(test, __VA_ARGS__); \
-    }
+#define TestCaseAssertFalse(cond, ...) \
+    TestCaseAssertTrue(!(cond), __VA_ARGS__)
 
-#define TestCaseAssertEqual(left, right, ...)             \
-    {                                                     \
-        __typeof__(left) testLeft = (left);               \
-        __typeof__(right) testRight = (right);            \
-        if (testLeft != testRight) {                      \
-            TESTCASE_FAILED                               \
-        }                                                 \
-        XCTAssertEqual(testLeft, testRight, __VA_ARGS__); \
-    }
+#define TestCaseAssertEqual(left, right, ...) \
+    TestCaseAssertTrue((left) == (right))
 
-#define TestCaseAssertNotEqual(left, right, ...)             \
-    {                                                        \
-        __typeof__(left) testLeft = (left);                  \
-        __typeof__(right) testRight = (right);               \
-        if (testLeft == testRight) {                         \
-            TESTCASE_FAILED                                  \
-        }                                                    \
-        XCTAssertNotEqual(testLeft, testRight, __VA_ARGS__); \
-    }
+#define TestCaseAssertNotEqual(left, right, ...) \
+    TestCaseAssertTrue((left) != (right))
