@@ -29,6 +29,11 @@ HandleStatement::HandleStatement(Handle *handle)
 {
 }
 
+HandleStatement::~HandleStatement()
+{
+    finalize();
+}
+
 bool HandleStatement::prepare(const Statement &statement)
 {
     return prepare(statement.getDescription());

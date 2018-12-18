@@ -29,6 +29,7 @@ namespace WCDB {
 class HandleStatement final : public HandleRelated {
 public:
     HandleStatement(Handle *handle);
+    ~HandleStatement();
 
     bool prepare(const Statement &statement);
     bool isPrepared() const;
