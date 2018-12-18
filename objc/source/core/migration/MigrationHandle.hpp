@@ -37,6 +37,8 @@ public:
 #pragma mark - Bind
 protected:
     bool rebind(const std::set<const MigrationInfo *> &toRebinds) override final;
+    std::pair<bool, std::set<String>>
+    getColumns(const String &table, const String &database) override final;
 
 #pragma mark - Configurable
 protected:
@@ -45,8 +47,8 @@ protected:
 #pragma mark - Migration
 public:
 protected:
-    bool tamper(Statement &statement);
-    std::map<String, const MigrationInfo *> m_migratings;
+    std::pair<bool, bool> tamper(Statement &statement);
+    bool preprocess(Statement &statement);
 
 #pragma mark - Override
 public:

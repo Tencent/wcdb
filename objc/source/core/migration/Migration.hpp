@@ -35,32 +35,13 @@ class Migration final {
 public:
     Migration();
 
-    class Initializer {
-        friend class Migration;
+    typedef std::function<void(MigrationUserInfo&)> Filter;
+    // filter should be called at the very beginning.
+    void filterTable(const Filter& filter);
 
-    public:
-        virtual ~Initializer();
-
-        virtual const Error& getError() const = 0;
-
-    protected:
-        virtual const String& getDatabasePath() const = 0;
-
-        virtual std::pair<bool, std::set<String>> getTables() = 0;
-        // When succeed, the empty column means that table does not exist.
-        virtual std::pair<bool, std::set<String>>
-        getColumns(const String& table, const String& database) = 0;
-
-        virtual void setError(const Error& error) = 0;
-    };
-    // Resolve user infos and get the column names of origin table
-    bool initialize(Initializer& initializer);
-    bool isInitialized() const;
     bool shouldMigrate() const;
 
 private:
-    bool m_initialized;
-
     // Those infos needed to be migrate will be held by m_migrating after initialized. (Other infos that already migrated or have no need to migrate will be dropped when initializing.)
     // And when all the columns inside original table is migrated, the info will not be dropped immedially but removed from m_migratings. The reason is that there might be some handles still holding it. At the same time, the original table will not be dropped too.
     // Until there is really no one holding them, it will be moved to dumpster and wait to be dropped.
@@ -76,42 +57,51 @@ private:
     std::set<const MigrationInfo*> m_migratings;
     std::set<const MigrationInfo*> m_dumpster;
 
-    std::map<const MigrationInfo*, std::atomic<int>> m_referenceds;
+    std::map<const MigrationInfo*, int> m_referenceds;
     std::list<MigrationInfo> m_holder;
+    std::map<String, const MigrationInfo*> m_filted;
 
     mutable SharedLock m_lock;
 
-#pragma mark - Filter
-public:
-    typedef std::function<void(MigrationUserInfo&)> Filter;
-    void filterTable(const Filter& filter);
-
-protected:
     Filter m_filter;
 
 #pragma mark - Bind
 public:
     class Binder {
+        friend class Migration;
+
     public:
         Binder(Migration& migration);
         virtual ~Binder();
-        bool rebindMigration();
 
     protected:
-        const std::set<const MigrationInfo*>& getBounds() const;
+        bool rebind();
+        std::pair<bool, const MigrationInfo*> getOrInitBoundInfo(const String& table);
+        void clearCycledBounds();
+
         virtual bool rebind(const std::set<const MigrationInfo*>& toRebinds) = 0;
+        // When succeed, the empty column means that table does not exist.
+        virtual std::pair<bool, std::set<String>>
+        getColumns(const String& table, const String& database) = 0;
 
     private:
         Migration& m_migration;
+        std::set<const MigrationInfo*> m_cycledBounds; // all infos need to be bound during this rebind cycle
         std::set<const MigrationInfo*> m_bounds;
+        std::set<const MigrationInfo*> m_applys;
     };
 
-    std::set<const MigrationInfo*> getMigratingInfos() const;
-    bool shouldRebind(const std::set<const MigrationInfo*>& bounds) const;
-
 protected:
-    void markAsRebound(const std::set<const MigrationInfo*>& oldBounds,
-                       const std::set<const MigrationInfo*>& newBounds);
+    std::pair<bool, const MigrationInfo*>
+    getOrInitBoundInfo(Binder& binder, const String& table);
+    // {get, info}
+    std::pair<bool, const MigrationInfo*> getBoundInfoForTable(const String& table);
+    void tryReduceBounds(std::set<const MigrationInfo*>& bounds);
+    void unbind(const std::set<const MigrationInfo*>& bounds);
+
+private:
+    void retainInfo(const MigrationInfo* info);
+    void releaseInfo(const MigrationInfo* info);
 
 #pragma mark - Step
 public:

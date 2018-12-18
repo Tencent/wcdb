@@ -480,8 +480,6 @@
 		23A6D4BF20BFD7F9004F2DAA /* Progress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A6D4BD20BFD7F9004F2DAA /* Progress.cpp */; };
 		23A6D4C120BFD7F9004F2DAA /* Progress.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A6D4BE20BFD7F9004F2DAA /* Progress.hpp */; };
 		23AB891C215A28F700554DF1 /* DebugDescribable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AB8919215A28F700554DF1 /* DebugDescribable.hpp */; };
-		23AB8970215B73F700554DF1 /* MigrationInitializerHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AB896E215B73F700554DF1 /* MigrationInitializerHandle.cpp */; };
-		23AB8972215B73F700554DF1 /* MigrationInitializerHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AB896F215B73F700554DF1 /* MigrationInitializerHandle.hpp */; };
 		23AB898E215BA81300554DF1 /* SQLite.h in Headers */ = {isa = PBXBuildFile; fileRef = 23AB898D215BA6DB00554DF1 /* SQLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23AD52D620DB4A3C00664B62 /* Master.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52D420DB4A3C00664B62 /* Master.cpp */; };
 		23AD52D820DB4A3C00664B62 /* Master.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AD52D520DB4A3C00664B62 /* Master.hpp */; };
@@ -1605,8 +1603,6 @@
 		23A6D4BE20BFD7F9004F2DAA /* Progress.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Progress.hpp; sourceTree = "<group>"; };
 		23A747BE20039675003CECFA /* sqlcipher.preprocessed.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqlcipher.preprocessed.xcodeproj; path = ../sqlcipher/sqlcipher.preprocessed.xcodeproj; sourceTree = "<group>"; };
 		23AB8919215A28F700554DF1 /* DebugDescribable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DebugDescribable.hpp; sourceTree = "<group>"; };
-		23AB896E215B73F700554DF1 /* MigrationInitializerHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationInitializerHandle.cpp; sourceTree = "<group>"; };
-		23AB896F215B73F700554DF1 /* MigrationInitializerHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrationInitializerHandle.hpp; sourceTree = "<group>"; };
 		23AB898D215BA6DB00554DF1 /* SQLite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SQLite.h; sourceTree = "<group>"; };
 		23AD52D420DB4A3C00664B62 /* Master.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Master.cpp; sourceTree = "<group>"; };
 		23AD52D520DB4A3C00664B62 /* Master.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Master.hpp; sourceTree = "<group>"; };
@@ -3047,8 +3043,6 @@
 				23A64D08214A458A00ED28BB /* MigrationInfo.hpp */,
 				23A64D0D214A4A7000ED28BB /* Migration.cpp */,
 				23A64D0E214A4A7000ED28BB /* Migration.hpp */,
-				23AB896E215B73F700554DF1 /* MigrationInitializerHandle.cpp */,
-				23AB896F215B73F700554DF1 /* MigrationInitializerHandle.hpp */,
 				23A4703A21BE0940005B9C09 /* MigrationStepperHandle.cpp */,
 				23A4703B21BE0940005B9C09 /* MigrationStepperHandle.hpp */,
 			);
@@ -3580,7 +3574,6 @@
 				23EEDCA8217DFADC006E9E73 /* TableConstraint.hpp in Headers */,
 				23EEDCA6217DFADC006E9E73 /* SQL.hpp in Headers */,
 				23775B7020AD666900E21AB0 /* DeprecatedBackup.hpp in Headers */,
-				23AB8972215B73F700554DF1 /* MigrationInitializerHandle.hpp in Headers */,
 				23D07CEC20BE873E0043F4D4 /* SequenceCrawler.hpp in Headers */,
 				2316D9452105D19500707AFC /* PageBasedFileHandle.hpp in Headers */,
 				2360A60520D78F2C00E4A311 /* SQLTraceConfig.hpp in Headers */,
@@ -4753,7 +4746,6 @@
 				236BACE321BF9F6400C8B4D9 /* WCTDatabase+Migration.mm in Sources */,
 				23567CFA20CA3889005F1C35 /* Frame.cpp in Sources */,
 				23B35C7820BFE39500425033 /* Path.cpp in Sources */,
-				23AB8970215B73F700554DF1 /* MigrationInitializerHandle.cpp in Sources */,
 				23EEDC7F217DFADC006E9E73 /* CommonTableExpression.cpp in Sources */,
 				23EEDD27217DFADC006E9E73 /* SyntaxWindowFunctionInvocation.cpp in Sources */,
 				2360A60720D78F2C00E4A311 /* PerformanceTraceConfig.cpp in Sources */,

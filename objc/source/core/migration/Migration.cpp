@@ -26,126 +26,25 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-Migration::Migration()
-: m_filter(nullptr), m_initialized(true), m_migratedNotification(nullptr)
+Migration::Migration() : m_filter(nullptr), m_migratedNotification(nullptr)
 {
 }
 
-bool Migration::isInitialized() const
-{
-    SharedLockGuard lockGuard(m_lock);
-    return m_initialized;
-}
-
-#pragma mark - Filter
 void Migration::filterTable(const Filter& filter)
 {
     LockGuard lockGuard(m_lock);
     m_filter = filter;
-    m_initialized = (m_filter == nullptr);
+    m_filted.clear();
     m_holder.clear();
     m_migratings.clear();
     m_dumpster.clear();
     m_referenceds.clear();
-}
-
-#pragma mark - Infos
-Migration::Initializer::~Initializer()
-{
-}
-
-bool Migration::initialize(Initializer& initializer)
-{
-    LockGuard lockGuard(m_lock);
-    if (m_initialized) {
-        return true;
-    }
-
-    m_holder.clear();
-    m_migratings.clear();
-    m_dumpster.clear();
-    m_referenceds.clear();
-
-    bool succeed;
-
-    std::set<String> tables;
-    std::tie(succeed, tables) = initializer.getTables();
-    if (!succeed) {
-        return false;
-    }
-    std::list<const MigrationUserInfo> userInfos;
-    WCTInnerAssert(m_filter != nullptr);
-    for (const auto& table : tables) {
-        MigrationUserInfo userInfo(table);
-        m_filter(userInfo);
-        if (userInfo.shouldMigrate()) {
-            userInfos.push_back(userInfo);
-        }
-    }
-
-    {
-        // check sanity
-        // 1. duplicated {origin table, origin database} is not allowed.
-        // 2. migrating to same table with same database is not allowed.
-        String databasePath = initializer.getDatabasePath();
-        std::map<std::pair<String, String>, const MigrationUserInfo*> origins;
-        for (const auto& userInfo : userInfos) {
-            if (userInfo.getOriginTable() == userInfo.getMigratedTable()
-                && (userInfo.getOriginDatabase() == databasePath
-                    || userInfo.isSameDatabaseMigration())) {
-                Error error;
-                error.setCode(Error::Code::Misuse);
-                error.message = "Migrating to same table makes no sense.";
-                error.infos.set("Info", userInfo.getDebugDescription());
-                initializer.setError(error);
-                return false;
-            }
-
-            auto key
-            = std::make_pair(userInfo.getOriginDatabase(), userInfo.getOriginTable());
-            auto iter = origins.find(key);
-            if (iter != origins.end()) {
-                Error error;
-                error.setCode(Error::Code::Misuse);
-                error.message = "Duplicated origin table and database are found";
-                error.infos.set("Info1", userInfo.getDebugDescription());
-                error.infos.set("Info2", iter->second->getDebugDescription());
-                initializer.setError(error);
-                return false;
-            }
-            origins.emplace(key, &userInfo);
-        }
-    }
-
-    for (const auto& userInfo : userInfos) {
-        WCTInnerAssert(userInfo.shouldMigrate());
-
-        std::set<String> columns;
-        std::tie(succeed, columns) = initializer.getColumns(
-        userInfo.getOriginTable(), userInfo.getOriginDatabase());
-        if (!succeed) {
-            return false;
-        }
-        // When [columns] is empty, it means that the origin table had been migrated before the database is opened. At this case, it will be discarded but not marked as migrated.
-        if (!columns.empty()) {
-            m_holder.push_back(MigrationInfo(userInfo, columns));
-            const MigrationInfo* info = &m_holder.back();
-            m_migratings.emplace(info);
-            m_referenceds.emplace(info, 0);
-        } else {
-            m_migratedNotification(&userInfo);
-        }
-    }
-
-    m_initialized = true;
-    return m_initialized;
 }
 
 bool Migration::shouldMigrate() const
 {
     SharedLockGuard lockGuard(m_lock);
-    WCTInnerAssert(isInitialized());
-    return !m_migratings.empty();
+    return m_filter != nullptr;
 }
 
 #pragma mark - Bind
@@ -155,66 +54,161 @@ Migration::Binder::Binder(Migration& migration) : m_migration(migration)
 
 Migration::Binder::~Binder()
 {
-    m_migration.markAsRebound({}, m_bounds);
+    m_migration.unbind(m_bounds);
 }
 
-bool Migration::Binder::rebindMigration()
+bool Migration::Binder::rebind()
 {
-    if (!m_migration.shouldRebind(m_bounds)) {
+    m_migration.tryReduceBounds(m_bounds);
+    m_bounds.insert(m_cycledBounds.begin(), m_cycledBounds.end());
+    m_cycledBounds.clear();
+    if (m_bounds == m_applys) {
         return true;
     }
-
-    std::set<const MigrationInfo*> migratings = m_migration.getMigratingInfos();
-    if (!rebind(migratings)) {
+    if (!rebind(m_bounds)) {
         return false;
     }
-
-    m_migration.markAsRebound(migratings, m_bounds);
-    m_bounds = migratings;
+    m_applys = m_bounds;
     return true;
 }
 
-const std::set<const MigrationInfo*>& Migration::Binder::getBounds() const
+std::pair<bool, const MigrationInfo*>
+Migration::Binder::getOrInitBoundInfo(const String& table)
 {
-    return m_bounds;
-}
-
-bool Migration::shouldRebind(const std::set<const MigrationInfo*>& bounds) const
-{
-    SharedLockGuard lockGuard(m_lock);
-    WCTInnerAssert(isInitialized());
-    return m_migratings != bounds;
-}
-
-void Migration::markAsRebound(const std::set<const MigrationInfo*>& oldBounds,
-                              const std::set<const MigrationInfo*>& newBounds)
-{
-    LockGuard lockGuard(m_lock);
-    WCTInnerAssert(isInitialized());
-    for (const auto& newBound : newBounds) {
-        auto iter = m_referenceds.find(newBound);
-        WCTInnerAssert(iter != m_referenceds.end());
-        ++iter->second;
+    auto result = m_migration.getOrInitBoundInfo(*this, table);
+    if (result.first && result.second != nullptr) {
+        m_cycledBounds.emplace(result.second);
     }
-    for (const auto& oldBound : oldBounds) {
-        auto iter = m_referenceds.find(oldBound);
+    return result;
+}
+
+void Migration::Binder::clearCycledBounds()
+{
+    m_cycledBounds.clear();
+}
+
+void Migration::tryReduceBounds(std::set<const MigrationInfo*>& bounds)
+{
+    {
+        SharedLockGuard lockGuard(m_lock);
+        if (m_migratings == bounds) {
+            return;
+        }
+    }
+    std::set<const MigrationInfo*> toUnbinds;
+    {
+        LockGuard lockGuard(m_lock);
+        for (const auto& bound : bounds) {
+            if (m_migratings.find(bound) == m_migratings.end()) {
+                toUnbinds.emplace(bound);
+                releaseInfo(bound);
+            }
+        }
+    }
+    bounds.erase(toUnbinds.begin(), toUnbinds.end());
+}
+
+void Migration::unbind(const std::set<const MigrationInfo*>& bounds)
+{
+    for (const auto& bound : bounds) {
+        auto iter = m_referenceds.find(bound);
         WCTInnerAssert(iter != m_referenceds.end());
         WCTInnerAssert(iter->second > 0);
         if (--iter->second == 0) {
-            if (m_migratings.find(iter->first) == m_migratings.end()) {
-                // already migrated
-                m_dumpster.emplace(iter->first);
-                m_referenceds.erase(iter->first);
-            }
+            // unreference
+            m_dumpster.emplace(bound);
+            m_referenceds.erase(bound);
         }
     }
 }
 
-std::set<const MigrationInfo*> Migration::getMigratingInfos() const
+std::pair<bool, const MigrationInfo*>
+Migration::getOrInitBoundInfo(Binder& binder, const String& table)
 {
-    SharedLockGuard lockGuard(m_lock);
-    WCTInnerAssert(isInitialized());
-    return m_migratings;
+    bool get;
+    const MigrationInfo* info = nullptr;
+    {
+        LockGuard lockGuard(m_lock);
+        std::tie(get, info) = getBoundInfoForTable(table);
+        if (get) {
+            return { true, info };
+        }
+    }
+    MigrationUserInfo userInfo(table);
+    m_filter(userInfo);
+    if (userInfo.shouldMigrate()) {
+        bool succeed;
+        std::set<String> columns;
+        std::tie(succeed, columns)
+        = binder.getColumns(userInfo.getOriginTable(), userInfo.getOriginDatabase());
+        if (!succeed) {
+            return { false, nullptr };
+        }
+        LockGuard lockGuard(m_lock);
+        // retry due to the lockfree code above
+        std::tie(get, info) = getBoundInfoForTable(table);
+        if (get) {
+            return { true, info };
+        }
+
+        if (!columns.empty()) {
+            m_holder.push_back(MigrationInfo(userInfo, columns));
+            info = &m_holder.back();
+            m_migratings.emplace(info);
+            m_referenceds.emplace(info, 0);
+            retainInfo(info);
+        }
+        m_filted.emplace(table, info);
+        return { true, info };
+    } else {
+        LockGuard lockGuard(m_lock);
+        // retry due to the lockfree code above
+        std::tie(get, info) = getBoundInfoForTable(table);
+        if (get) {
+            return { true, info };
+        }
+
+        m_filted.emplace(table, nullptr);
+        return { true, nullptr };
+    }
+}
+
+std::pair<bool, const MigrationInfo*> Migration::getBoundInfoForTable(const String& table)
+{
+    WCTInnerAssert(m_lock.writeSafety());
+    auto iter = m_filted.find(table);
+    if (iter != m_filted.end()) {
+        const MigrationInfo* info = iter->second;
+        if (m_migratings.find(info) == m_migratings.end()) {
+            info = nullptr;
+        } else {
+            retainInfo(info);
+        }
+        return { true, info };
+    }
+    return { false, nullptr };
+}
+
+void Migration::retainInfo(const MigrationInfo* info)
+{
+    WCTInnerAssert(info != nullptr);
+    WCTInnerAssert(m_lock.writeSafety());
+    ++m_referenceds.find(info)->second;
+    WCTInnerAssert(m_referenceds.find(info) != m_referenceds.end());
+}
+
+void Migration::releaseInfo(const MigrationInfo* info)
+{
+    WCTInnerAssert(info != nullptr);
+    WCTInnerAssert(m_lock.writeSafety());
+    auto iter = m_referenceds.find(info);
+    WCTInnerAssert(iter != m_referenceds.end());
+    WCTInnerAssert(iter->second > 0);
+    if (--iter->second == 0) {
+        // unreference
+        m_dumpster.emplace(info);
+        m_referenceds.erase(info);
+    }
 }
 
 #pragma mark - Step

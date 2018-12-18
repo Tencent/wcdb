@@ -72,11 +72,10 @@ protected:
 protected:
     static const Slot ConfiguredHandleSlot = 0;
     static const Slot MigrationHandleSlot = 1;
-    static constexpr const Slot MigrationInitializerSlot = 2;
-    static constexpr const Slot MigrationStepperSlot = 3;
-    static constexpr const Slot BackupReadSlot = 4;
-    static constexpr const Slot BackupWriteSlot = 5;
-    static constexpr const Slot AssemblerSlot = 6;
+    static constexpr const Slot BackupReadSlot = 2;
+    static constexpr const Slot BackupWriteSlot = 3;
+    static constexpr const Slot AssemblerSlot = 4;
+    static constexpr const Slot MigrationStepperSlot = 5;
     std::shared_ptr<Handle> generateHandle(Slot slot) override final;
     bool willConfigureHandle(Slot slot, Handle *handle) override final;
 

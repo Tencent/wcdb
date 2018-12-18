@@ -30,7 +30,6 @@
 #include <WCDB/BackupHandle.hpp>
 #include <WCDB/ConfiguredHandle.hpp>
 #include <WCDB/MigrationHandle.hpp>
-#include <WCDB/MigrationInitializerHandle.hpp>
 #include <WCDB/MigrationStepperHandle.hpp>
 
 namespace WCDB {
@@ -113,24 +112,6 @@ Database::InitializedGuard Database::initialize()
         if (!exists && !FileManager::createFile(path)) {
             assignWithSharedThreadedError();
             break;
-        }
-        // When migration associated is not set, the initialize state is default to true
-        if (!m_migration.isInitialized()) {
-            WCTInnerAssert(m_concurrency.readSafety());
-            {
-                // This temporary handle will be dropped since it's dirty.
-                RecyclableHandle handle = flowOut(MigrationInitializerSlot);
-                WCTInnerAssert(
-                dynamic_cast<MigrationInitializerHandle *>(handle.get()) != nullptr);
-                MigrationInitializerHandle *initializer
-                = static_cast<MigrationInitializerHandle *>(handle.get());
-                succeed = m_migration.initialize(*initializer);
-            }
-            purge();
-            WCTInnerAssert(aliveHandleCount() == 0); // check it's already purged.
-            if (!succeed) {
-                break;
-            }
         }
         m_initialized = true;
     } while (true);
@@ -222,18 +203,11 @@ std::shared_ptr<Handle> Database::generateHandle(Slot slot)
     bool open = false;
     switch (slot) {
     case MigrationHandleSlot:
-        WCTInnerAssert(m_migration.isInitialized());
         // It's safe since m_migration never change.
         handle.reset(new MigrationHandle(m_migration));
         open = true;
         break;
-    case MigrationInitializerSlot:
-        WCTInnerAssert(!m_migration.isInitialized());
-        handle.reset(new MigrationInitializerHandle);
-        open = true;
-        break;
     case MigrationStepperSlot:
-        WCTInnerAssert(m_migration.isInitialized());
         handle.reset(new MigrationStepperHandle);
         open = true;
         break;
@@ -270,18 +244,8 @@ bool Database::willConfigureHandle(Slot slot, Handle *handle)
 {
     bool succeed = true;
     switch (slot) {
-    case MigrationHandleSlot: {
-        SharedLockGuard lockGuard(m_memory);
-        WCTInnerAssert(dynamic_cast<MigrationHandle *>(handle) != nullptr);
-        if (!static_cast<MigrationHandle *>(handle)->rebindMigration()) {
-            succeed = false;
-            setThreadedError(handle->getError());
-            break;
-        }
-    }
-        // fallthrough
+    case MigrationHandleSlot:
     case ConfiguredHandleSlot:
-        // fallthrough
     case MigrationStepperSlot: {
         std::shared_ptr<Configs> configs;
         {

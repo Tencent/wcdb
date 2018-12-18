@@ -107,12 +107,13 @@ bool MigrationHandle::rebind(const std::set<const MigrationInfo*>& migratings)
         }
     }
 
-    m_migratings.clear();
-    for (const auto& migrating : migratings) {
-        m_migratings.emplace(migrating->getMigratedTable(), migrating);
-    }
-
     return true;
+}
+
+std::pair<bool, std::set<String>>
+MigrationHandle::getColumns(const String& table, const String& database)
+{
+    return getUnorderedColumns(MigrationInfo::getSchemaForDatabase(database), table);
 }
 
 #pragma mark - Configurable
@@ -122,21 +123,28 @@ Handle* MigrationHandle::getConfigurator()
 }
 
 #pragma mark - Migration
-bool MigrationHandle::tamper(Statement& statement)
+std::pair<bool, bool> MigrationHandle::tamper(Statement& statement)
 {
     bool tampered = false;
+    bool succeed = true;
 #warning TODO - fix limited UPDATE/DELETE
-    statement.iterate([&tampered, this](Syntax::Identifier& identifier, bool& stop) {
+    statement.iterate([&tampered, &succeed, this](Syntax::Identifier& identifier, bool& stop) {
         switch (identifier.getType()) {
         case Syntax::Identifier::Type::TableOrSubquery: {
             // main.migratedTable -> schemaForOriginDatabase.unionedView
             Syntax::TableOrSubquery& syntax = (Syntax::TableOrSubquery&) identifier;
             if (syntax.switcher == Syntax::TableOrSubquery::Switch::Table
                 && syntax.schema.name == Schema::main().getDescription()) {
-                auto iter = m_migratings.find(syntax.tableOrFunction);
-                if (iter != m_migratings.end()) {
-                    syntax.schema = iter->second->getSchemaForOriginDatabase();
-                    syntax.tableOrFunction = iter->second->getUnionedView();
+                const MigrationInfo* info;
+                std::tie(succeed, info) = getOrInitBoundInfo(syntax.tableOrFunction);
+                if (!succeed) {
+                    stop = true;
+                    clearCycledBounds();
+                    return;
+                }
+                if (info) {
+                    syntax.schema = info->getSchemaForOriginDatabase();
+                    syntax.tableOrFunction = info->getUnionedView();
                     tampered = true;
                 }
             }
@@ -145,10 +153,16 @@ bool MigrationHandle::tamper(Statement& statement)
             // main.migratedTable -> schemForOriginDatabase.originTable
             Syntax::QualifiedTableName& syntax = (Syntax::QualifiedTableName&) identifier;
             if (syntax.schema.name == Schema::main().getDescription()) {
-                auto iter = m_migratings.find(syntax.table);
-                if (iter != m_migratings.end()) {
-                    syntax.schema = iter->second->getSchemaForOriginDatabase();
-                    syntax.table = iter->second->getOriginTable();
+                const MigrationInfo* info;
+                std::tie(succeed, info) = getOrInitBoundInfo(syntax.table);
+                if (!succeed) {
+                    stop = true;
+                    clearCycledBounds();
+                    return;
+                }
+                if (info) {
+                    syntax.schema = info->getSchemaForOriginDatabase();
+                    syntax.table = info->getOriginTable();
                     tampered = true;
                 }
             }
@@ -157,10 +171,17 @@ bool MigrationHandle::tamper(Statement& statement)
             break;
         }
     });
-    return tampered;
+    return { succeed, succeed ? tampered : false };
 }
 
 #pragma mark - Override
+bool MigrationHandle::preprocess(Statement& statement)
+{
+    bool succeed, tampered;
+    std::tie(succeed, tampered) = tamper(statement);
+    return succeed && Migration::Binder::rebind();
+}
+
 bool MigrationHandle::execute(const Statement& statement)
 {
     return Handle::execute(statement);
