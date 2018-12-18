@@ -50,7 +50,15 @@ protected:
     {
     }
 
+    template<typename T, typename Enable = typename std::enable_if<std::is_base_of<Syntax::Identifier, T>::value>::type>
+    SQL(T* dummy, const SQL& sql) : SQL(T::type, sql)
+    {
+    }
+
     Shadow<Syntax::Identifier> m_syntax;
+
+private:
+    SQL(Type type, const SQL& sql);
 };
 
 template<typename T, typename U>
@@ -63,6 +71,8 @@ public:
     static constexpr const SQL::Type type = SyntaxType::type;
 
     TypedSyntax() : U((T*) nullptr) {}
+
+    explicit TypedSyntax(const U& other) : U((T*) nullptr, other) {}
 
     virtual ~TypedSyntax() {}
 

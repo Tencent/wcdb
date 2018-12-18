@@ -27,6 +27,8 @@ namespace WCDB {
 
 class StatementDelete final : public TypedSyntax<Syntax::DeleteSTMT, Statement> {
 public:
+    using TypedSyntax<Syntax::DeleteSTMT, Statement>::TypedSyntax;
+
     StatementDelete& with(const With& with);
     StatementDelete& deleteFrom(const QualifiedTable& table);
     StatementDelete& where(const Expression& condition);

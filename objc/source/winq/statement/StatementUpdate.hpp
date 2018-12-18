@@ -27,6 +27,8 @@ namespace WCDB {
 
 class StatementUpdate final : public TypedSyntax<Syntax::UpdateSTMT, Statement> {
 public:
+    using TypedSyntax<Syntax::UpdateSTMT, Statement>::TypedSyntax;
+
     StatementUpdate& with(const With& with);
 
     StatementUpdate& update(const QualifiedTable& table);

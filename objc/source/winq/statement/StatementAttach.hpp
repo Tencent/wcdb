@@ -27,6 +27,8 @@ namespace WCDB {
 
 class StatementAttach final : public TypedSyntax<Syntax::AttachSTMT, Statement> {
 public:
+    using TypedSyntax<Syntax::AttachSTMT, Statement>::TypedSyntax;
+
     StatementAttach& attach(const Expression& expression);
     StatementAttach& as(const Schema& schema);
 };

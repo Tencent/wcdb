@@ -41,6 +41,9 @@
 
     WCDB::Statement statement2 = statement;
     SQLAssertEqual(statement2, @"INSERT INTO main.testTable VALUES(1)");
+
+    WCDB::StatementInsert statement3 = WCDB::StatementInsert(statement);
+    SQLAssertEqual(statement3, @"INSERT INTO main.testTable VALUES(1)");
 }
 
 @end

@@ -28,6 +28,8 @@ namespace WCDB {
 class StatementCreateVirtualTable
 : public TypedSyntax<Syntax::CreateVirtualTableSTMT, Statement> {
 public:
+    using TypedSyntax<Syntax::CreateVirtualTableSTMT, Statement>::TypedSyntax;
+
     StatementCreateVirtualTable& createVirtualTable(const String& table);
     StatementCreateVirtualTable& schema(const Schema& schema);
 

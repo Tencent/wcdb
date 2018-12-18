@@ -27,6 +27,8 @@ namespace WCDB {
 
 class StatementRollback final : public TypedSyntax<Syntax::RollbackSTMT, Statement> {
 public:
+    using TypedSyntax<Syntax::RollbackSTMT, Statement>::TypedSyntax;
+
     StatementRollback& rollback();
     StatementRollback& rollbackToSavepoint(const String& savepoint);
 };

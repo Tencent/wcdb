@@ -28,6 +28,8 @@ namespace WCDB {
 class StatementCreateTrigger final
 : public TypedSyntax<Syntax::CreateTriggerSTMT, Statement> {
 public:
+    using TypedSyntax<Syntax::CreateTriggerSTMT, Statement>::TypedSyntax;
+
     StatementCreateTrigger& createTrigger(const String& trigger);
     StatementCreateTrigger& schema(const Schema& schema);
     StatementCreateTrigger& temp();

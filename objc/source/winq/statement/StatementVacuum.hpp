@@ -27,6 +27,8 @@ namespace WCDB {
 
 class StatementVacuum final : public TypedSyntax<Syntax::VacuumSTMT, Statement> {
 public:
+    using TypedSyntax<Syntax::VacuumSTMT, Statement>::TypedSyntax;
+
     StatementVacuum& vacuum();
     StatementVacuum& vacuum(const Schema& schema);
 };

@@ -18,12 +18,20 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/SQL.hpp>
 
 namespace WCDB {
 
 SQL::SQL()
 {
+}
+
+SQL::SQL(Type type, const SQL& sql)
+{
+    WCTRemedialAssert(
+    type == sql.getType(), String::formatted("Invalid WINQ assignment."), return;);
+    m_syntax = sql.m_syntax;
 }
 
 SQL::Type SQL::getType() const

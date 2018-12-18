@@ -27,6 +27,8 @@ namespace WCDB {
 
 class StatementAnalyze final : public TypedSyntax<Syntax::AnalyzeSTMT, Statement> {
 public:
+    using TypedSyntax<Syntax::AnalyzeSTMT, Statement>::TypedSyntax;
+
     StatementAnalyze& analyze();
     StatementAnalyze& schema(const Schema& schema);
     StatementAnalyze& table(const String& table);

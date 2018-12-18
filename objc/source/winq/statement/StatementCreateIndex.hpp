@@ -27,6 +27,8 @@ namespace WCDB {
 
 class StatementCreateIndex final : public TypedSyntax<Syntax::CreateIndexSTMT, Statement> {
 public:
+    using TypedSyntax<Syntax::CreateIndexSTMT, Statement>::TypedSyntax;
+
     StatementCreateIndex& createIndex(const String& index);
     StatementCreateIndex& schema(const Schema& schema);
     StatementCreateIndex& unique();

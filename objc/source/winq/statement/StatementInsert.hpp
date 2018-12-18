@@ -27,6 +27,8 @@ namespace WCDB {
 
 class StatementInsert final : public TypedSyntax<Syntax::InsertSTMT, Statement> {
 public:
+    using TypedSyntax<Syntax::InsertSTMT, Statement>::TypedSyntax;
+
     StatementInsert& with(const With& with);
     StatementInsert& insertIntoTable(const String& table);
     StatementInsert& schema(const Schema& schema);

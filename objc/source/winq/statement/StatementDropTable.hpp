@@ -27,6 +27,8 @@ namespace WCDB {
 
 class StatementDropTable final : public TypedSyntax<Syntax::DropTableSTMT, Statement> {
 public:
+    using TypedSyntax<Syntax::DropTableSTMT, Statement>::TypedSyntax;
+
     StatementDropTable& dropTable(const String& table);
     StatementDropTable& schema(const Schema& schema);
     StatementDropTable& ifExists();
