@@ -27,7 +27,7 @@ namespace WCDB {
 
 #pragma mark - Initialize
 MigrationHandle::MigrationHandle(Migration& migration)
-: Handle(), Migration::Binder(migration)
+: ConfigurableHandle(), Migration::Binder(migration)
 {
 }
 
@@ -114,12 +114,6 @@ std::pair<bool, std::set<String>>
 MigrationHandle::getColumns(const String& table, const String& database)
 {
     return getUnorderedColumns(MigrationInfo::getSchemaForDatabase(database), table);
-}
-
-#pragma mark - Configurable
-Handle* MigrationHandle::getConfigurator()
-{
-    return this;
 }
 
 #pragma mark - Migration

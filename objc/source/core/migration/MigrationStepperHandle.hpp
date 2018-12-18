@@ -27,9 +27,7 @@
 
 namespace WCDB {
 
-class MigrationStepperHandle final : public Handle,
-                                     public Configurable,
-                                     public Migration::Stepper {
+class MigrationStepperHandle final : public ConfigurableHandle, public Migration::Stepper {
 #pragma mark - Interrupt
 public:
     void setInterruptible(bool interruptible);
@@ -38,10 +36,6 @@ public:
 protected:
     using Handle::interrupt;
     std::atomic<bool> m_interruptible;
-
-#pragma mark - Configurable
-protected:
-    Handle* getConfigurator() override final;
 
 #pragma mark - Stepper
 protected:

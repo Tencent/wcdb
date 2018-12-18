@@ -31,12 +31,9 @@ namespace WCDB {
 
 #pragma mark - Initialize
 Handle::Handle()
-: m_handle(nullptr)
-, m_mainStatement(getStatement())
-, m_notification(this)
-, m_nestedLevel(0)
-, m_codeToBeIgnored(SQLITE_OK)
+: m_handle(nullptr), m_notification(this), m_nestedLevel(0), m_codeToBeIgnored(SQLITE_OK)
 {
+    m_mainStatement = getStatement();
 }
 
 Handle::~Handle()
@@ -210,7 +207,7 @@ bool Handle::execute(const Statement &statement)
 
 bool Handle::prepare(const Statement &statement)
 {
-    WCTRemedialAssert(isPrepared(), "Last statement is not finalized.", finalize(););
+    WCTRemedialAssert(!isPrepared(), "Last statement is not finalized.", finalize(););
     return m_mainStatement->prepare(statement);
 }
 
@@ -346,8 +343,8 @@ bool Handle::isStatementReadonly()
 
 HandleStatement *Handle::getStatement()
 {
-    m_handleStatements.push_front(HandleStatement(this));
-    return &m_handleStatements.front();
+    m_handleStatements.push_back(HandleStatement(this));
+    return &m_handleStatements.back();
 }
 
 void Handle::returnStatement(HandleStatement *handleStatement)

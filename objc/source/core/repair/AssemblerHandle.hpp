@@ -55,7 +55,7 @@ protected:
     bool lazyPrepareCell();
     int m_primary;
     String m_table;
-    HandleStatement m_cellStatement;
+    HandleStatement *m_cellStatement;
 
 #pragma mark - Sequence
 public:

@@ -26,12 +26,9 @@
 
 namespace WCDB {
 
-class ConfiguredHandle final : public Handle, public Configurable {
+class ConfiguredHandle final : public ConfigurableHandle {
 public:
-    using Handle::Handle;
-
-protected:
-    Handle* getConfigurator() override final;
+    using ConfigurableHandle::ConfigurableHandle;
 };
 
 } //namespace WCDB

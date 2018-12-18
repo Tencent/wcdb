@@ -491,7 +491,6 @@
 		23AD52F420DBAC4C00664B62 /* UpgradeableErrorProne.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AD52F120DBAC4C00664B62 /* UpgradeableErrorProne.hpp */; };
 		23AF4E1E20CD04E20050033C /* Initializeable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AF4E1C20CD04E20050033C /* Initializeable.cpp */; };
 		23AF4E2020CD04E20050033C /* Initializeable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AF4E1D20CD04E20050033C /* Initializeable.hpp */; };
-		23B0071C2047ED4800045245 /* ConfiguredHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B0071A2047ED4800045245 /* ConfiguredHandle.cpp */; };
 		23B0071D2047ED4800045245 /* ConfiguredHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B0071B2047ED4800045245 /* ConfiguredHandle.hpp */; };
 		23B101E92090667E005D9DD3 /* WCTMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 23B101E82090667B005D9DD3 /* WCTMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23B35C7620BFE39500425033 /* Path.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B35C7420BFE39400425033 /* Path.hpp */; };
@@ -1614,7 +1613,6 @@
 		23AD52F120DBAC4C00664B62 /* UpgradeableErrorProne.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UpgradeableErrorProne.hpp; sourceTree = "<group>"; };
 		23AF4E1C20CD04E20050033C /* Initializeable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Initializeable.cpp; sourceTree = "<group>"; };
 		23AF4E1D20CD04E20050033C /* Initializeable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Initializeable.hpp; sourceTree = "<group>"; };
-		23B0071A2047ED4800045245 /* ConfiguredHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ConfiguredHandle.cpp; sourceTree = "<group>"; };
 		23B0071B2047ED4800045245 /* ConfiguredHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ConfiguredHandle.hpp; sourceTree = "<group>"; };
 		23B101E82090667B005D9DD3 /* WCTMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTMacro.h; sourceTree = "<group>"; };
 		23B35C7420BFE39400425033 /* Path.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Path.hpp; sourceTree = "<group>"; };
@@ -3469,7 +3467,6 @@
 			children = (
 				23F70FC220A0618100CCE3CD /* Configs.cpp */,
 				23F70FC320A0618100CCE3CD /* Configs.hpp */,
-				23B0071A2047ED4800045245 /* ConfiguredHandle.cpp */,
 				23B0071B2047ED4800045245 /* ConfiguredHandle.hpp */,
 				23F70F9F20A055B400CCE3CD /* Config.hpp */,
 				23F70FA420A055BD00CCE3CD /* BasicConfig.cpp */,
@@ -4570,7 +4567,6 @@
 				23EEDD53217DFADC006E9E73 /* SyntaxSavepointSTMT.cpp in Sources */,
 				23EEDD3D217DFADC006E9E73 /* SyntaxDeleteSTMT.cpp in Sources */,
 				23EEDD31217DFADC006E9E73 /* SyntaxCommitSTMT.cpp in Sources */,
-				23B0071C2047ED4800045245 /* ConfiguredHandle.cpp in Sources */,
 				23775B6620AD666900E21AB0 /* Notifier.cpp in Sources */,
 				23EEDD47217DFADC006E9E73 /* SyntaxDropViewSTMT.cpp in Sources */,
 				23EEDC97217DFADC006E9E73 /* OrderingTerm.cpp in Sources */,

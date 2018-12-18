@@ -22,6 +22,7 @@
 #define _WCDB_CONFIGS_HPP
 
 #include <WCDB/Config.hpp>
+#include <WCDB/Handle.hpp>
 #include <WCDB/OrderedUniqueList.hpp>
 #include <WCDB/String.hpp>
 
@@ -52,14 +53,11 @@ protected:
     OrderedUniqueList<String, std::shared_ptr<Config>> m_list;
 };
 
-class Configurable {
+class ConfigurableHandle : public Handle {
 public:
-    virtual ~Configurable();
+    virtual ~ConfigurableHandle();
 
     bool reconfigure(const std::shared_ptr<Configs> &newConfigs);
-
-protected:
-    virtual Handle *getConfigurator() = 0;
 
 private:
     std::shared_ptr<Configs> m_configs;

@@ -35,12 +35,6 @@ void MigrationStepperHandle::interrupt()
     }
 }
 
-#pragma mark - Configurable
-Handle* MigrationStepperHandle::getConfigurator()
-{
-    return this;
-}
-
 #pragma mark - Stepper
 bool MigrationStepperHandle::lazyOpen()
 {

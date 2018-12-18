@@ -22,14 +22,13 @@
 #define _WCDB_MIGRATIONHANDLE_HPP
 
 #include <WCDB/Configs.hpp>
-#include <WCDB/Handle.hpp>
 #include <WCDB/Migration.hpp>
 
 namespace WCDB {
 
 class MigrationInfo;
 
-class MigrationHandle final : public Handle, public Configurable, public Migration::Binder {
+class MigrationHandle final : public ConfigurableHandle, public Migration::Binder {
 #pragma mark - Initialize
 public:
     MigrationHandle(Migration &migration);
@@ -39,10 +38,6 @@ protected:
     bool rebind(const std::set<const MigrationInfo *> &toRebinds) override final;
     std::pair<bool, std::set<String>>
     getColumns(const String &table, const String &database) override final;
-
-#pragma mark - Configurable
-protected:
-    Handle *getConfigurator() override final;
 
 #pragma mark - Migration
 public:

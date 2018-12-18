@@ -68,23 +68,22 @@ Configs::Configs(OrderedUniqueList<String, std::shared_ptr<Config>> &&list)
 {
 }
 
-Configurable::~Configurable()
+ConfigurableHandle::~ConfigurableHandle()
 {
 }
 
-bool Configurable::reconfigure(const std::shared_ptr<Configs> &newConfigs)
+bool ConfigurableHandle::reconfigure(const std::shared_ptr<Configs> &newConfigs)
 {
     if (m_configs == newConfigs) {
         return true;
     }
-    Handle *configurator = getConfigurator();
     if (m_configs) {
-        if (!m_configs->uninvoke(configurator)) {
+        if (!m_configs->uninvoke(this)) {
             return false;
         }
     }
     if (newConfigs) {
-        if (!newConfigs->invoke(configurator)) {
+        if (!newConfigs->invoke(this)) {
             return false;
         }
     }

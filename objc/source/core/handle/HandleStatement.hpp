@@ -28,7 +28,6 @@ namespace WCDB {
 
 class HandleStatement final : public HandleRelated {
 public:
-    HandleStatement(Handle *handle);
     ~HandleStatement();
 
     bool prepare(const Statement &statement);
@@ -69,6 +68,8 @@ public:
     bool isPrepared();
 
 protected:
+    HandleStatement(Handle *handle);
+
     bool prepare(const String &sql);
     friend class Handle;
     void *m_stmt;
