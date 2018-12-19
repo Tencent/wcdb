@@ -100,15 +100,14 @@ protected:
 #pragma mark - Statement
 public:
     virtual bool execute(const Statement &statement);
-    virtual bool prepare(const Statement &statement);
-    virtual void finalize();
-    virtual bool step(bool &done);
-    virtual bool isPrepared();
 
+    virtual bool prepare(const Statement &statement);
+    virtual bool isPrepared();
+    virtual void finalize();
+
+    virtual bool step(bool &done);
     bool step();
     virtual void reset();
-
-    virtual bool isStatementReadonly();
 
     using Integer32 = HandleStatement::Integer32;
     using Integer64 = HandleStatement::Integer64;
@@ -130,10 +129,12 @@ public:
     virtual BLOB getBLOB(int index);
 
     virtual ColumnType getType(int index);
-    virtual int getColumnCount();
     virtual const UnsafeString getOriginColumnName(int index);
     virtual const UnsafeString getColumnName(int index);
     virtual const UnsafeString getColumnTableName(int index);
+
+    virtual bool isStatementReadonly();
+    virtual int getColumnCount();
 
 protected:
     HandleStatement *getStatement();
