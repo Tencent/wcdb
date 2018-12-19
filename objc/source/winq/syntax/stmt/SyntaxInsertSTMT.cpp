@@ -24,25 +24,6 @@
 
 namespace WCDB {
 
-template<>
-constexpr const char* Enum::description(const Syntax::InsertSTMT::Switch& switcher)
-{
-    switch (switcher) {
-    case Syntax::InsertSTMT::Switch::Insert:
-        return "INSERT";
-    case Syntax::InsertSTMT::Switch::InsertOrReplace:
-        return "INSERT OR REPLACE";
-    case Syntax::InsertSTMT::Switch::InsertOrRollback:
-        return "INSERT OR ROLLBACK";
-    case Syntax::InsertSTMT::Switch::InsertOrAbort:
-        return "INSERT OR ABORT";
-    case Syntax::InsertSTMT::Switch::InsertOrFail:
-        return "INSERT OR FAIL";
-    case Syntax::InsertSTMT::Switch::InsertOrIgnore:
-        return "INSERT OR IGNORE";
-    }
-}
-
 namespace Syntax {
 
 #pragma mark - Identifier
@@ -57,7 +38,11 @@ String InsertSTMT::getDescription() const
     if (useWithClause) {
         stream << withClause << space;
     }
-    stream << switcher << " INTO " << schema << "." << table;
+    stream << "INSERT ";
+    if (useConflictAction) {
+        stream << conflictAction << space;
+    }
+    stream << "INTO " << schema << "." << table;
     if (!alias.empty()) {
         stream << " AS " << alias;
     }

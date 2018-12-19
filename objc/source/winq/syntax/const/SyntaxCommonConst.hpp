@@ -18,39 +18,48 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SYNTAXDELETESTMT_HPP
-#define _WCDB_SYNTAXDELETESTMT_HPP
+#ifndef _WCDB_SYNTAXCOMMONCONST_HPP
+#define _WCDB_SYNTAXCOMMONCONST_HPP
 
-#include <WCDB/SyntaxIdentifier.hpp>
+#include <WCDB/Enum.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
 
-class DeleteSTMT final : public Identifier {
-#pragma mark - Lang
-public:
-    bool useWithClause = false;
-    WithClause withClause;
-    QualifiedTableName table;
-    bool useCondition = false;
-    Expression condition;
-    std::list<OrderingTerm> orderingTerms;
-    bool useLimit = false;
-    Expression limit;
-    LimitParameterType limitParameterType = LimitParameterType::NotSet;
-    Expression limitParameter;
+enum class LimitParameterType {
+    NotSet,
+    Offset,
+    End,
+};
 
-#pragma mark - Identifier
-public:
-    static constexpr const Type type = Type::DeleteSTMT;
-    Type getType() const override final;
-    String getDescription() const override final;
-    void iterate(const Iterator& iterator, bool& stop) override final;
+enum class ConflictAction {
+    Replace,
+    Rollback,
+    Abort,
+    Fail,
+    Ignore,
 };
 
 } // namespace Syntax
 
+template<>
+constexpr const char* Enum::description(const Syntax::ConflictAction& action)
+{
+    switch (action) {
+    case Syntax::ConflictAction::Replace:
+        return "OR REPLACE";
+    case Syntax::ConflictAction::Rollback:
+        return "OR ROLLBACK";
+    case Syntax::ConflictAction::Abort:
+        return "OR ABORT";
+    case Syntax::ConflictAction::Fail:
+        return "OR FAIL";
+    case Syntax::ConflictAction::Ignore:
+        return "OR IGNORE";
+    }
+}
+
 } // namespace WCDB
 
-#endif /* _WCDB_SYNTAXDELETESTMT_HPP */
+#endif /* _WCDB_SYNTAXCOMMONCONST_HPP */

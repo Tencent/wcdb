@@ -43,31 +43,36 @@ StatementInsert& StatementInsert::schema(const Schema& schema)
 
 StatementInsert& StatementInsert::orReplace()
 {
-    syntax().switcher = SyntaxType::Switch::InsertOrReplace;
+    syntax().useConflictAction = true;
+    syntax().conflictAction = Syntax::ConflictAction::Replace;
     return *this;
 }
 
 StatementInsert& StatementInsert::orRollback()
 {
-    syntax().switcher = SyntaxType::Switch::InsertOrRollback;
+    syntax().useConflictAction = true;
+    syntax().conflictAction = Syntax::ConflictAction::Rollback;
     return *this;
 }
 
 StatementInsert& StatementInsert::orAbort()
 {
-    syntax().switcher = SyntaxType::Switch::InsertOrAbort;
+    syntax().useConflictAction = true;
+    syntax().conflictAction = Syntax::ConflictAction::Abort;
     return *this;
 }
 
 StatementInsert& StatementInsert::orFail()
 {
-    syntax().switcher = SyntaxType::Switch::InsertOrFail;
+    syntax().useConflictAction = true;
+    syntax().conflictAction = Syntax::ConflictAction::Fail;
     return *this;
 }
 
 StatementInsert& StatementInsert::orIgnore()
 {
-    syntax().switcher = SyntaxType::Switch::InsertOrIgnore;
+    syntax().useConflictAction = true;
+    syntax().conflictAction = Syntax::ConflictAction::Ignore;
     return *this;
 }
 

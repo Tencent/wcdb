@@ -51,7 +51,7 @@ StatementDelete& StatementDelete::order(const OrderingTerms& orderingTerms)
 StatementDelete& StatementDelete::limit(const Expression& from, const Expression& to)
 {
     syntax().useLimit = true;
-    syntax().limitParameterType = SyntaxType::LimitParameterType::End;
+    syntax().limitParameterType = Syntax::LimitParameterType::End;
     syntax().limit = from;
     syntax().limitParameter = to;
     return *this;
@@ -60,14 +60,14 @@ StatementDelete& StatementDelete::limit(const Expression& from, const Expression
 StatementDelete& StatementDelete::limit(const Expression& limit)
 {
     syntax().useLimit = true;
-    syntax().limitParameterType = SyntaxType::LimitParameterType::NotSet;
+    syntax().limitParameterType = Syntax::LimitParameterType::NotSet;
     syntax().limit = limit;
     return *this;
 }
 
 StatementDelete& StatementDelete::offset(const Expression& offset)
 {
-    syntax().limitParameterType = SyntaxType::LimitParameterType::Offset;
+    syntax().limitParameterType = Syntax::LimitParameterType::Offset;
     syntax().limitParameter = offset;
     return *this;
 }

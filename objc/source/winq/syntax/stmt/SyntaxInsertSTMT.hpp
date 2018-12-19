@@ -32,15 +32,8 @@ class InsertSTMT final : public Identifier {
 public:
     bool useWithClause = false;
     WithClause withClause;
-    enum class Switch {
-        Insert,
-        InsertOrReplace,
-        InsertOrRollback,
-        InsertOrAbort,
-        InsertOrFail,
-        InsertOrIgnore,
-    } switcher
-    = Switch::Insert;
+    bool useConflictAction = false;
+    ConflictAction conflictAction;
     Schema schema;
     String table;
     String alias;

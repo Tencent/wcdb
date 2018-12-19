@@ -45,12 +45,7 @@ public:
     std::list<OrderingTerm> orderingTerms;
     bool useLimit = false;
     Expression limit;
-    enum class LimitParameterType {
-        NotSet,
-        Offset,
-        End,
-    } limitParameterType
-    = LimitParameterType::NotSet;
+    LimitParameterType limitParameterType = LimitParameterType::NotSet;
     Expression limitParameter;
 
 #pragma mark - Identifier

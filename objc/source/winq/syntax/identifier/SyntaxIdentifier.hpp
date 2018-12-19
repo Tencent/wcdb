@@ -28,6 +28,7 @@
 #include <sstream>
 
 #include <WCDB/SyntaxColumnType.hpp>
+#include <WCDB/SyntaxCommonConst.hpp>
 #include <WCDB/SyntaxCompoundOperator.hpp>
 #include <WCDB/SyntaxConflict.hpp>
 #include <WCDB/SyntaxJoinOperator.hpp>

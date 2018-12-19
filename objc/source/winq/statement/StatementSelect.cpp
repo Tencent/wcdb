@@ -167,7 +167,7 @@ StatementSelect& StatementSelect::orders(const OrderingTerms& orders)
 StatementSelect& StatementSelect::limit(const Expression& from, const Expression& to)
 {
     syntax().useLimit = true;
-    syntax().limitParameterType = SyntaxType::LimitParameterType::End;
+    syntax().limitParameterType = Syntax::LimitParameterType::End;
     syntax().limit = from;
     syntax().limitParameter = to;
     return *this;
@@ -176,14 +176,14 @@ StatementSelect& StatementSelect::limit(const Expression& from, const Expression
 StatementSelect& StatementSelect::limit(const Expression& limit)
 {
     syntax().useLimit = true;
-    syntax().limitParameterType = SyntaxType::LimitParameterType::NotSet;
+    syntax().limitParameterType = Syntax::LimitParameterType::NotSet;
     syntax().limit = limit;
     return *this;
 }
 
 StatementSelect& StatementSelect::offset(const Expression& offset)
 {
-    syntax().limitParameterType = SyntaxType::LimitParameterType::Offset;
+    syntax().limitParameterType = Syntax::LimitParameterType::Offset;
     syntax().limitParameter = offset;
     return *this;
 }

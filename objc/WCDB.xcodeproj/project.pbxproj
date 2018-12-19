@@ -378,6 +378,7 @@
 		2386B3C71ED442FE000B72F6 /* WCTError+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C41ED442FE000B72F6 /* WCTError+Private.h */; };
 		238845F02063912B006EAEC8 /* WCTPerformanceFootprint.h in Headers */ = {isa = PBXBuildFile; fileRef = 238845EE2063912B006EAEC8 /* WCTPerformanceFootprint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		238845F12063912B006EAEC8 /* WCTPerformanceFootprint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238845EF2063912B006EAEC8 /* WCTPerformanceFootprint.mm */; };
+		238C177E21CA2190003B6D26 /* SyntaxCommonConst.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 238C177C21CA2190003B6D26 /* SyntaxCommonConst.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		238C73A521B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
 		238C73A621B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
 		238C73A721B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
@@ -1507,6 +1508,7 @@
 		2386B3C41ED442FE000B72F6 /* WCTError+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTError+Private.h"; sourceTree = "<group>"; };
 		238845EE2063912B006EAEC8 /* WCTPerformanceFootprint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTPerformanceFootprint.h; sourceTree = "<group>"; };
 		238845EF2063912B006EAEC8 /* WCTPerformanceFootprint.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTPerformanceFootprint.mm; sourceTree = "<group>"; };
+		238C177C21CA2190003B6D26 /* SyntaxCommonConst.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SyntaxCommonConst.hpp; sourceTree = "<group>"; };
 		238C73A321B8B50F006B59C2 /* TestLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestLog.h; sourceTree = "<group>"; };
 		238C73A421B8B510006B59C2 /* TestLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestLog.m; sourceTree = "<group>"; };
 		23906AB7215E500100C2B717 /* WCTDatabase+Monitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Monitor.h"; sourceTree = "<group>"; };
@@ -3325,6 +3327,7 @@
 				23EEDBF0217DFADC006E9E73 /* SyntaxConflict.hpp */,
 				23EEDBF1217DFADC006E9E73 /* SyntaxJoinOperator.hpp */,
 				23EEDBF2217DFADC006E9E73 /* SyntaxOrder.hpp */,
+				238C177C21CA2190003B6D26 /* SyntaxCommonConst.hpp */,
 			);
 			path = const;
 			sourceTree = "<group>";
@@ -3756,6 +3759,7 @@
 				23EEDCE8217DFADC006E9E73 /* SyntaxColumnType.hpp in Headers */,
 				23EEDD38217DFADC006E9E73 /* SyntaxCreateTriggerSTMT.hpp in Headers */,
 				23EEDD06217DFADC006E9E73 /* SyntaxIndexedColumn.hpp in Headers */,
+				238C177E21CA2190003B6D26 /* SyntaxCommonConst.hpp in Headers */,
 				23EEDCE4217DFADC006E9E73 /* StatementUpdate.hpp in Headers */,
 				23C7559C20DD17B100031A93 /* SQLiteBase.hpp in Headers */,
 				23EEDC84217DFADC006E9E73 /* Expression.hpp in Headers */,

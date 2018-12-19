@@ -89,7 +89,8 @@
 
         // auto increment?
         bool isAutoIncrement = false;
-        if (_statement.syntax().switcher != WCDB::StatementInsert::SyntaxType::Switch::InsertOrReplace // not replace
+        if (!_statement.syntax().useConflictAction
+            || _statement.syntax().conflictAction != WCDB::Syntax::ConflictAction::Replace // not replace
         ) {
             for (const auto &constraint : columnBinding.columnDef.syntax().constraints) {
                 if (constraint.switcher == WCDB::ColumnConstraint::SyntaxType::Switch::PrimaryKey) {

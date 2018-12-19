@@ -31,38 +31,42 @@ StatementUpdate& StatementUpdate::with(const With& with)
 
 StatementUpdate& StatementUpdate::update(const QualifiedTable& table)
 {
-    syntax().switcher = SyntaxType::Switch::Update;
     syntax().table = table;
     return *this;
 }
 
 StatementUpdate& StatementUpdate::orRollback()
 {
-    syntax().switcher = SyntaxType::Switch::UpdateOrRollback;
+    syntax().useConflictAction = true;
+    syntax().conflictAction = Syntax::ConflictAction::Rollback;
     return *this;
 }
 
 StatementUpdate& StatementUpdate::orAbort()
 {
-    syntax().switcher = SyntaxType::Switch::UpdateOrAbort;
+    syntax().useConflictAction = true;
+    syntax().conflictAction = Syntax::ConflictAction::Abort;
     return *this;
 }
 
 StatementUpdate& StatementUpdate::orReplace()
 {
-    syntax().switcher = SyntaxType::Switch::UpdateOrReplace;
+    syntax().useConflictAction = true;
+    syntax().conflictAction = Syntax::ConflictAction::Replace;
     return *this;
 }
 
 StatementUpdate& StatementUpdate::orFail()
 {
-    syntax().switcher = SyntaxType::Switch::UpdateOrFail;
+    syntax().useConflictAction = true;
+    syntax().conflictAction = Syntax::ConflictAction::Fail;
     return *this;
 }
 
 StatementUpdate& StatementUpdate::orIgnore()
 {
-    syntax().switcher = SyntaxType::Switch::UpdateOrIgnore;
+    syntax().useConflictAction = true;
+    syntax().conflictAction = Syntax::ConflictAction::Ignore;
     return *this;
 }
 
@@ -100,7 +104,7 @@ StatementUpdate& StatementUpdate::orders(const OrderingTerms& orders)
 StatementUpdate& StatementUpdate::limit(const Expression& from, const Expression& to)
 {
     syntax().useLimit = true;
-    syntax().limitParameterType = SyntaxType::LimitParameterType::End;
+    syntax().limitParameterType = Syntax::LimitParameterType::End;
     syntax().limit = from;
     syntax().limitParameter = to;
     return *this;
@@ -109,7 +113,7 @@ StatementUpdate& StatementUpdate::limit(const Expression& from, const Expression
 StatementUpdate& StatementUpdate::limit(const Expression& limit)
 {
     syntax().useLimit = true;
-    syntax().limitParameterType = SyntaxType::LimitParameterType::NotSet;
+    syntax().limitParameterType = Syntax::LimitParameterType::NotSet;
     syntax().limit = limit;
     return *this;
 }
@@ -117,7 +121,7 @@ StatementUpdate& StatementUpdate::limit(const Expression& limit)
 StatementUpdate& StatementUpdate::offset(const Expression& offset)
 {
     syntax().useLimit = true;
-    syntax().limitParameterType = SyntaxType::LimitParameterType::Offset;
+    syntax().limitParameterType = Syntax::LimitParameterType::Offset;
     syntax().limitParameter = offset;
     return *this;
 }

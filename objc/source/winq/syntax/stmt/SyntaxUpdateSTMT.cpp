@@ -23,25 +23,6 @@
 
 namespace WCDB {
 
-template<>
-constexpr const char* Enum::description(const Syntax::UpdateSTMT::Switch& switcher)
-{
-    switch (switcher) {
-    case Syntax::UpdateSTMT::Switch::Update:
-        return "UPDATE";
-    case Syntax::UpdateSTMT::Switch::UpdateOrRollback:
-        return "UPDATE OR ROLLBACK";
-    case Syntax::UpdateSTMT::Switch::UpdateOrAbort:
-        return "UPDATE OR ABORT";
-    case Syntax::UpdateSTMT::Switch::UpdateOrReplace:
-        return "UPDATE OR REPLACE";
-    case Syntax::UpdateSTMT::Switch::UpdateOrFail:
-        return "UPDATE OR FAIL";
-    case Syntax::UpdateSTMT::Switch::UpdateOrIgnore:
-        return "UPDATE OR IGNORE";
-    }
-}
-
 namespace Syntax {
 
 #pragma mark - Identifier
@@ -56,7 +37,11 @@ String UpdateSTMT::getDescription() const
     if (useWithClause) {
         stream << withClause << space;
     }
-    stream << switcher << space << table << " SET ";
+    stream << "UPDATE ";
+    if (useConflictAction) {
+        stream << conflictAction << space;
+    }
+    stream << table << " SET ";
     if (!columnsList.empty()) {
         SyntaxRemedialAssert(columnsList.size() == expressions.size());
         auto columns = columnsList.begin();
