@@ -48,7 +48,7 @@ public:
     virtual ~Identifier();
 
     enum class Type {
-        Column,
+        Column = 0x00000001,
         Schema,
         ColumnDef,
         ColumnConstraint,
@@ -78,7 +78,7 @@ public:
         FunctionInvocation,
         WindowFunctionInvocation,
 
-        AlterTableSTMT,
+        AlterTableSTMT = 0x00000101,
         AnalyzeSTMT,
         AttachSTMT,
         BeginSTMT,
