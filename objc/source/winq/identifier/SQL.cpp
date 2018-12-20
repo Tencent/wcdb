@@ -49,6 +49,11 @@ String SQL::getDescription() const
     return m_syntax->getDescription();
 }
 
+Syntax::Identifier* SQL::getSyntaxIdentifier() const
+{
+    return m_syntax.get();
+}
+
 SQL::~SQL()
 {
 }

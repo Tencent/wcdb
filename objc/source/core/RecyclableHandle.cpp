@@ -29,29 +29,9 @@ RecyclableHandle::RecyclableHandle(const std::shared_ptr<Handle> &value,
 {
 }
 
-RecyclableHandle::RecyclableHandle(const std::nullptr_t &)
-: Super(nullptr, nullptr), m_handle(nullptr)
-{
-}
-
-RecyclableHandle::RecyclableHandle()
-: Super(nullptr, nullptr), m_handle(nullptr)
-{
-}
-
 Handle *RecyclableHandle::get() const
 {
     return m_handle;
-}
-
-bool RecyclableHandle::operator==(const std::nullptr_t &) const
-{
-    return m_value == nullptr;
-}
-
-bool RecyclableHandle::operator!=(const std::nullptr_t &) const
-{
-    return m_value != nullptr;
 }
 
 } //namespace WCDB

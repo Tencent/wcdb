@@ -32,32 +32,65 @@ class MigrationHandle final : public ConfigurableHandle, public Migration::Binde
 #pragma mark - Initialize
 public:
     MigrationHandle(Migration &migration);
+    ~MigrationHandle();
 
 #pragma mark - Bind
 protected:
-    bool rebind(const std::set<const MigrationInfo *> &toRebinds) override final;
+    bool rebind(const std::map<String, RecyclableMigrationInfo> &toRebinds) override final;
     std::pair<bool, std::set<String>>
     getColumns(const String &table, const String &database) override final;
 
 #pragma mark - Migration
 public:
-protected:
-    std::pair<bool, bool> tamper(Statement &statement);
-    bool preprocess(Statement &statement);
-
-#pragma mark - Override
-public:
     bool execute(const Statement &statement) override final;
+
     bool prepare(const Statement &statement) override final;
+    bool isPrepared() override final;
+    void finalize() override final;
+
     bool step(bool &done) override final;
     void reset() override final;
-    void finalize() override final;
+
     void bindInteger32(const Integer32 &value, int index) override final;
     void bindInteger64(const Integer64 &value, int index) override final;
     void bindDouble(const Float &value, int index) override final;
     void bindText(const Text &value, int index) override final;
     void bindBLOB(const BLOB &value, int index) override final;
     void bindNull(int index) override final;
+
+    Integer32 getInteger32(int index) override final;
+    Integer64 getInteger64(int index) override final;
+    Float getDouble(int index) override final;
+    Text getText(int index) override final;
+    BLOB getBLOB(int index) override final;
+
+    ColumnType getType(int index) override final;
+    const UnsafeString getOriginColumnName(int index) override final;
+    const UnsafeString getColumnName(int index) override final;
+    const UnsafeString getColumnTableName(int index) override final;
+
+    bool isStatementReadonly() override final;
+    int getColumnCount() override final;
+
+protected:
+    bool realExecute(const std::list<Statement> &statements);
+    bool realStep(bool &done);
+    std::pair<bool, std::list<Statement>> process(const Statement &statement);
+
+    HandleStatement *m_additionalStatement;
+
+#pragma mark - Migrate
+protected:
+    // For Insert Statement Only
+    bool isMigratedPrepared();
+    bool prepareMigrate(const Statement &statement);
+    bool stepMigrate(const int64_t &rowid);
+    void finalizeMigrate();
+    void resetMigrate();
+
+private:
+    HandleStatement *m_migrateStatement;
+    HandleStatement *m_removeMigratedStatement;
 };
 
 } //namespace WCDB

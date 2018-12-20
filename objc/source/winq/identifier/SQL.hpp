@@ -44,6 +44,8 @@ public:
 
     String getDescription() const;
 
+    Syntax::Identifier* getSyntaxIdentifier() const;
+
 protected:
     template<typename T, typename Enable = typename std::enable_if<std::is_base_of<Syntax::Identifier, T>::value>::type>
     SQL(T* dummy) : m_syntax(new T)

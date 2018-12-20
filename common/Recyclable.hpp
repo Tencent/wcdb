@@ -32,6 +32,12 @@ class Recyclable {
 public:
     typedef std::function<void(T &)> OnRecycled;
 
+    Recyclable() : m_value(nullptr), m_onRecycled(nullptr), m_reference(nullptr)
+    {
+    }
+
+    Recyclable(const std::nullptr_t &) : Recyclable() {}
+
     Recyclable(const T &value, const Recyclable::OnRecycled &onRecycled)
     : m_value(value), m_onRecycled(onRecycled), m_reference(new std::atomic<int>(0))
     {
@@ -64,6 +70,14 @@ public:
         m_reference = nullptr;
         return *this;
     }
+
+    bool operator==(const Recyclable &other) const
+    {
+        return m_value == other.m_value;
+    }
+
+    bool operator==(const std::nullptr_t &) const { return m_value == nullptr; }
+    bool operator!=(const std::nullptr_t &) const { return m_value != nullptr; }
 
     virtual ~Recyclable() { release(); }
 

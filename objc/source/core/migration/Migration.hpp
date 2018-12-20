@@ -26,9 +26,11 @@
 #include <WCDB/Recyclable.hpp>
 #include <functional>
 #include <map>
-#include <set>
+#include <unordered_set>
 
 namespace WCDB {
+
+typedef Recyclable<const MigrationInfo*> RecyclableMigrationInfo;
 
 class Migration final {
 #pragma mark - Initialize
@@ -54,8 +56,8 @@ private:
     //    │Until Unreferenced│ ┌──────────┐ │Dropped│ ┌───────┐
     //  ──┴──────────────────┴▶│m_dumpster│─┴───────┴▶│Removed│
     //                         └──────────┘           └───────┘
-    std::set<const MigrationInfo*> m_migratings;
-    std::set<const MigrationInfo*> m_dumpster;
+    std::unordered_set<const MigrationInfo*> m_migratings;
+    std::unordered_set<const MigrationInfo*> m_dumpster;
 
     std::map<const MigrationInfo*, int> m_referenceds;
     std::list<MigrationInfo> m_holder;
@@ -76,30 +78,30 @@ public:
 
     protected:
         bool rebind();
-        std::pair<bool, const MigrationInfo*> getOrInitBoundInfo(const String& table);
-        void clearCycledBounds();
+        std::pair<bool, const MigrationInfo*> prepareInfo(const String& table);
+        const MigrationInfo* getBoundInfo(const String& table);
+        void clearPrepared();
 
-        virtual bool rebind(const std::set<const MigrationInfo*>& toRebinds) = 0;
+        virtual bool rebind(const std::map<String, RecyclableMigrationInfo>& toRebinds) = 0;
         // When succeed, the empty column means that table does not exist.
         virtual std::pair<bool, std::set<String>>
         getColumns(const String& table, const String& database) = 0;
 
     private:
         Migration& m_migration;
-        std::set<const MigrationInfo*> m_cycledBounds; // all infos need to be bound during this rebind cycle
-        std::set<const MigrationInfo*> m_bounds;
-        std::set<const MigrationInfo*> m_applys;
+        std::map<String, RecyclableMigrationInfo> m_prepareds; // all infos need to be bound during this rebind cycle
+        std::map<String, RecyclableMigrationInfo> m_bounds;
+        std::map<String, RecyclableMigrationInfo> m_applys;
     };
 
 protected:
-    std::pair<bool, const MigrationInfo*>
-    getOrInitBoundInfo(Binder& binder, const String& table);
+    std::pair<bool, RecyclableMigrationInfo>
+    getOrBindInfo(Binder& binder, const String& table);
     // {get, info}
-    std::pair<bool, const MigrationInfo*> getBoundInfoForTable(const String& table);
-    void tryReduceBounds(std::set<const MigrationInfo*>& bounds);
-    void unbind(const std::set<const MigrationInfo*>& bounds);
+    void tryReduceBounds(std::map<String, RecyclableMigrationInfo>& bounds);
 
 private:
+    std::pair<bool, RecyclableMigrationInfo> getBoundInfo(const String& table);
     void retainInfo(const MigrationInfo* info);
     void releaseInfo(const MigrationInfo* info);
 

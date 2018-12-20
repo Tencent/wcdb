@@ -30,15 +30,10 @@ class RecyclableDatabase final : public Recyclable<Database *> {
 public:
     using Super = Recyclable<Database *>;
 
-    RecyclableDatabase();
+    using Super::Recyclable;
     RecyclableDatabase(Database *value, const Super::OnRecycled &onRecycled);
-    RecyclableDatabase(const std::nullptr_t &);
-
-    bool operator==(const std::nullptr_t &) const;
-    bool operator!=(const std::nullptr_t &) const;
 
     constexpr Database *operator->() const { return m_value; }
-    Database *get() const;
 
 protected:
     using Recyclable::unsafeGet;

@@ -41,7 +41,7 @@ bool HandleStatement::prepare(const Statement &statement)
 
 bool HandleStatement::prepare(const String &sql)
 {
-    WCTInnerAssert(!isPrepared());
+    WCTRemedialAssert(!isPrepared(), "Last statement is not finalized.", finalize(););
     int rc = sqlite3_prepare_v2(
     (sqlite3 *) getRawHandle(), sql.c_str(), -1, (sqlite3_stmt **) &m_stmt, nullptr);
     if (rc == SQLITE_OK) {

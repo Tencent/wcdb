@@ -27,19 +27,31 @@ namespace WCDB {
 
 #pragma mark - Initialize
 MigrationHandle::MigrationHandle(Migration& migration)
-: ConfigurableHandle(), Migration::Binder(migration)
+: ConfigurableHandle()
+, Migration::Binder(migration)
+, m_additionalStatement(getStatement())
+, m_migrateStatement(getStatement())
+, m_removeMigratedStatement(getStatement())
 {
 }
 
+MigrationHandle::~MigrationHandle()
+{
+    returnStatement(m_additionalStatement);
+    returnStatement(m_migrateStatement);
+    returnStatement(m_removeMigratedStatement);
+}
+
 #pragma mark - Bind
-bool MigrationHandle::rebind(const std::set<const MigrationInfo*>& migratings)
+bool MigrationHandle::rebind(const std::map<String, RecyclableMigrationInfo>& migratings)
 {
     bool succeed;
 
     // views
     std::map<String, const MigrationInfo*> infosToCreateView; // view -> info
-    for (const auto& migrating : migratings) {
-        infosToCreateView.emplace(migrating->getUnionedView(), migrating);
+    for (const auto& iter : migratings) {
+        const MigrationInfo* info = iter.second.get();
+        infosToCreateView.emplace(info->getUnionedView(), info);
     }
 
     std::set<String> createdViews;
@@ -71,10 +83,11 @@ bool MigrationHandle::rebind(const std::set<const MigrationInfo*>& migratings)
 
     // schemas
     std::map<String, const MigrationInfo*> infosToAttachSchema; // schema -> info
-    for (const auto& migrating : migratings) {
-        if (!migrating->isSameDatabaseMigration()) {
+    for (const auto& iter : migratings) {
+        const MigrationInfo* info = iter.second.get();
+        if (!info->isSameDatabaseMigration()) {
             infosToAttachSchema.emplace(
-            migrating->getSchemaForOriginDatabase().getDescription(), migrating);
+            info->getSchemaForOriginDatabase().getDescription(), info);
         }
     }
 
@@ -117,118 +130,382 @@ MigrationHandle::getColumns(const String& table, const String& database)
 }
 
 #pragma mark - Migration
-std::pair<bool, bool> MigrationHandle::tamper(Statement& statement)
+std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& statement)
 {
-    bool tampered = false;
     bool succeed = true;
-#warning TODO - fix limited UPDATE/DELETE
-    statement.iterate([&tampered, &succeed, this](Syntax::Identifier& identifier, bool& stop) {
-        switch (identifier.getType()) {
-        case Syntax::Identifier::Type::TableOrSubquery: {
-            // main.migratedTable -> schemaForOriginDatabase.unionedView
-            Syntax::TableOrSubquery& syntax = (Syntax::TableOrSubquery&) identifier;
-            if (syntax.switcher == Syntax::TableOrSubquery::Switch::Table
-                && syntax.schema.name == Schema::main().getDescription()) {
-                const MigrationInfo* info;
-                std::tie(succeed, info) = getOrInitBoundInfo(syntax.tableOrFunction);
-                if (!succeed) {
-                    stop = true;
-                    clearCycledBounds();
-                    return;
+    std::list<Statement> statements;
+    do {
+        Statement falledBackStatement = statement;
+        // fallback
+        falledBackStatement.iterate(
+        [&succeed, this](Syntax::Identifier& identifier, bool& stop) {
+            switch (identifier.getType()) {
+            case Syntax::Identifier::Type::TableOrSubquery: {
+                // main.migratedTable -> temp.unionedView
+                Syntax::TableOrSubquery& syntax = (Syntax::TableOrSubquery&) identifier;
+                if (syntax.switcher == Syntax::TableOrSubquery::Switch::Table
+                    && syntax.schema.name == Schema::main().getDescription()) {
+                    const MigrationInfo* info;
+                    std::tie(succeed, info) = prepareInfo(syntax.tableOrFunction);
+                    if (succeed && info) {
+                        syntax.schema = Schema::temp();
+                        syntax.tableOrFunction = info->getUnionedView();
+                    }
                 }
-                if (info) {
-                    syntax.schema = info->getSchemaForOriginDatabase();
-                    syntax.tableOrFunction = info->getUnionedView();
-                    tampered = true;
+            } break;
+            case Syntax::Identifier::Type::QualifiedTableName: {
+                // main.migratedTable -> schemaForOriginDatabase.originTable
+                Syntax::QualifiedTableName& syntax = (Syntax::QualifiedTableName&) identifier;
+                if (syntax.schema.name == Schema::main().getDescription()) {
+                    const MigrationInfo* info;
+                    std::tie(succeed, info) = prepareInfo(syntax.table);
+                    if (succeed && info) {
+                        syntax.schema = info->getSchemaForOriginDatabase();
+                        syntax.table = info->getOriginTable();
+                    }
                 }
+            } break;
+            case Syntax::Identifier::Type::DropTableSTMT: {
+                // main.migratedTable -> schemaForOriginDatabase.originTable
+                Syntax::DropTableSTMT& syntax = (Syntax::DropTableSTMT&) identifier;
+                if (syntax.schema.name == Schema::main().getDescription()) {
+                    const MigrationInfo* info;
+                    std::tie(succeed, info) = prepareInfo(syntax.table);
+                    if (succeed && info) {
+                        syntax.schema = info->getSchemaForOriginDatabase();
+                        syntax.table = info->getOriginTable();
+                    }
+                }
+            } break;
+            default:
+                break;
+            }
+            if (!succeed) {
+                stop = true;
+            }
+        });
+        if (succeed) {
+            // rebind
+            succeed = Migration::Binder::rebind();
+        }
+        if (!succeed) {
+            break;
+        }
+
+        switch (statement.getType()) {
+        case Syntax::Identifier::Type::InsertSTMT: {
+            statements.push_back(falledBackStatement);
+            const Syntax::InsertSTMT* originSyntax
+            = static_cast<const Syntax::InsertSTMT*>(statement.getSyntaxIdentifier());
+            const Syntax::InsertSTMT* falledBackSyntax
+            = static_cast<const Syntax::InsertSTMT*>(falledBackStatement.getSyntaxIdentifier());
+            if (originSyntax->table != falledBackSyntax->table) {
+                succeed = prepareMigrate(falledBackStatement);
             }
         } break;
-        case Syntax::Identifier::Type::QualifiedTableName: {
-            // main.migratedTable -> schemForOriginDatabase.originTable
-            Syntax::QualifiedTableName& syntax = (Syntax::QualifiedTableName&) identifier;
-            if (syntax.schema.name == Schema::main().getDescription()) {
-                const MigrationInfo* info;
-                std::tie(succeed, info) = getOrInitBoundInfo(syntax.table);
-                if (!succeed) {
-                    stop = true;
-                    clearCycledBounds();
-                    return;
-                }
-                if (info) {
-                    syntax.schema = info->getSchemaForOriginDatabase();
-                    syntax.table = info->getOriginTable();
-                    tampered = true;
-                }
+        case Syntax::Identifier::Type::UpdateSTMT: {
+            const Syntax::UpdateSTMT* originSyntax
+            = static_cast<const Syntax::UpdateSTMT*>(statement.getSyntaxIdentifier());
+            const Syntax::UpdateSTMT* falledBackSyntax
+            = static_cast<const Syntax::UpdateSTMT*>(falledBackStatement.getSyntaxIdentifier());
+            if (originSyntax->table.table == falledBackSyntax->table.table) {
+                statements.push_back(falledBackStatement);
+            } else {
+                const MigrationInfo* info = getBoundInfo(originSyntax->table.table);
+                WCTInnerAssert(info != nullptr);
+                statements.push_back(
+                info->getStatementForLimitedUpdatingTable(falledBackStatement));
+                statements.push_back(info->getStatementForLimitedUpdatingTable(statement));
+            }
+        } break;
+        case Syntax::Identifier::Type::DeleteSTMT: {
+            const Syntax::DeleteSTMT* originSyntax
+            = static_cast<const Syntax::DeleteSTMT*>(statement.getSyntaxIdentifier());
+            const Syntax::DeleteSTMT* falledBackSyntax
+            = static_cast<const Syntax::DeleteSTMT*>(falledBackStatement.getSyntaxIdentifier());
+            if (originSyntax->table.table == falledBackSyntax->table.table) {
+                statements.push_back(falledBackStatement);
+            } else {
+                const MigrationInfo* info = getBoundInfo(originSyntax->table.table);
+                WCTInnerAssert(info != nullptr);
+                statements.push_back(
+                info->getStatementForLimitedDeletingFromTable(falledBackStatement));
+                statements.push_back(info->getStatementForLimitedDeletingFromTable(statement));
+            }
+        }
+        case Syntax::Identifier::Type::DropTableSTMT: {
+            const Syntax::DropTableSTMT* originSyntax
+            = static_cast<const Syntax::DropTableSTMT*>(statement.getSyntaxIdentifier());
+            const Syntax::DropTableSTMT* falledBackSyntax
+            = static_cast<const Syntax::DropTableSTMT*>(
+            falledBackStatement.getSyntaxIdentifier());
+            statements.push_back(statement);
+            if (originSyntax->table != falledBackSyntax->table) {
+                statements.push_back(falledBackStatement);
             }
         } break;
         default:
+            statements.push_back(falledBackStatement);
             break;
         }
-    });
-    return { succeed, succeed ? tampered : false };
+    } while (false);
+    if (!succeed) {
+        clearPrepared();
+        statements.clear();
+    }
+    return { succeed, std::move(statements) };
 }
 
 #pragma mark - Override
-bool MigrationHandle::preprocess(Statement& statement)
-{
-    bool succeed, tampered;
-    std::tie(succeed, tampered) = tamper(statement);
-    return succeed && Migration::Binder::rebind();
-}
-
 bool MigrationHandle::execute(const Statement& statement)
 {
-    return Handle::execute(statement);
+    bool succeed;
+    std::list<Statement> statements;
+    std::tie(succeed, statements) = process(statement);
+    if (!succeed) {
+        return false;
+    }
+    if (statements.size() > 1 || isMigratedPrepared()) {
+        succeed = runNestedTransaction([this, &statements](Handle*) -> bool {
+            return realExecute(statements);
+        });
+    } else {
+        succeed = realExecute(statements);
+    }
+    if (!succeed && isMigratedPrepared()) {
+        finalizeMigrate();
+    }
+    return succeed;
+}
+
+bool MigrationHandle::realExecute(const std::list<Statement>& statements)
+{
+    WCTInnerAssert(!statements.empty());
+    for (const auto& statement : statements) {
+        if (!Handle::execute(statement)) {
+            return false;
+        }
+    }
+    bool succeed = true;
+    if (isMigratedPrepared()) {
+        WCTInnerAssert(statements.size() == 1);
+        succeed = stepMigrate(getLastInsertedRowID());
+        finalizeMigrate();
+    }
+    return succeed;
 }
 
 bool MigrationHandle::prepare(const Statement& statement)
 {
-    return Handle::prepare(statement);
+    WCTRemedialAssert(!isPrepared(), "Last statement is not finalized.", finalize(););
+    bool succeed;
+    std::list<Statement> statements;
+    std::tie(succeed, statements) = process(statement);
+    if (!succeed) {
+        return false;
+    }
+    WCTInnerAssert(statements.size() <= 2);
+    if (m_mainStatement->prepare(statements.front())
+        && (statements.size() == 1 || m_additionalStatement->prepare(statements.back()))) {
+        return true;
+    }
+    finalize();
+    return false;
 }
 
-bool MigrationHandle::step(bool& done)
+bool MigrationHandle::isPrepared()
 {
-    return Handle::step(done);
-}
-
-void MigrationHandle::reset()
-{
-    Handle::reset();
-}
-
-void MigrationHandle::bindInteger32(const Integer32& value, int index)
-{
-    Handle::bindInteger32(value, index);
-}
-
-void MigrationHandle::bindInteger64(const Integer64& value, int index)
-{
-    Handle::bindInteger64(value, index);
-}
-
-void MigrationHandle::bindDouble(const Float& value, int index)
-{
-    Handle::bindDouble(value, index);
-}
-
-void MigrationHandle::bindText(const Text& value, int index)
-{
-    Handle::bindText(value, index);
-}
-
-void MigrationHandle::bindBLOB(const BLOB& value, int index)
-{
-    Handle::bindBLOB(value, index);
-}
-
-void MigrationHandle::bindNull(int index)
-{
-    Handle::bindNull(index);
+    return m_mainStatement->isPrepared();
 }
 
 void MigrationHandle::finalize()
 {
-    Handle::finalize();
+    m_mainStatement->finalize();
+    m_additionalStatement->finalize();
+    finalizeMigrate();
+}
+
+bool MigrationHandle::step(bool& done)
+{
+    if (m_additionalStatement->isPrepared() || isMigratedPrepared()) {
+        return runNestedTransaction(
+        [this, &done](Handle*) -> bool { return realStep(done); });
+    }
+    return realStep(done);
+}
+
+bool MigrationHandle::realStep(bool& done)
+{
+    WCTInnerAssert(m_additionalStatement->isPrepared() ^ isMigratedPrepared());
+    return m_mainStatement->step(done)
+           && (!m_additionalStatement->isPrepared() || m_additionalStatement->step())
+           && (!isMigratedPrepared() || stepMigrate(getLastInsertedRowID()));
+}
+
+void MigrationHandle::reset()
+{
+    m_mainStatement->reset();
+    WCTInnerAssert(m_additionalStatement->isPrepared() ^ isMigratedPrepared());
+    if (m_additionalStatement->isPrepared()) {
+        m_additionalStatement->reset();
+    }
+    if (isMigratedPrepared()) {
+        resetMigrate();
+    }
+}
+
+void MigrationHandle::bindInteger32(const Integer32& value, int index)
+{
+    m_mainStatement->bindInteger32(value, index);
+    if (m_additionalStatement->isPrepared()) {
+        m_additionalStatement->bindInteger32(value, index);
+    }
+}
+
+void MigrationHandle::bindInteger64(const Integer64& value, int index)
+{
+    m_mainStatement->bindInteger64(value, index);
+    if (m_additionalStatement->isPrepared()) {
+        m_additionalStatement->bindInteger64(value, index);
+    }
+}
+
+void MigrationHandle::bindDouble(const Float& value, int index)
+{
+    m_mainStatement->bindDouble(value, index);
+    if (m_additionalStatement->isPrepared()) {
+        m_additionalStatement->bindDouble(value, index);
+    }
+}
+
+void MigrationHandle::bindText(const Text& value, int index)
+{
+    m_mainStatement->bindText(value, index);
+    if (m_additionalStatement->isPrepared()) {
+        m_additionalStatement->bindText(value, index);
+    }
+}
+
+void MigrationHandle::bindBLOB(const BLOB& value, int index)
+{
+    m_mainStatement->bindBLOB(value, index);
+    if (m_additionalStatement->isPrepared()) {
+        m_additionalStatement->bindBLOB(value, index);
+    }
+}
+
+void MigrationHandle::bindNull(int index)
+{
+    m_mainStatement->bindNull(index);
+    if (m_additionalStatement->isPrepared()) {
+        m_additionalStatement->bindNull(index);
+    }
+}
+
+MigrationHandle::Integer32 MigrationHandle::getInteger32(int index)
+{
+    WCTInnerAssert(!m_additionalStatement->isPrepared());
+    return m_mainStatement->getInteger32(index);
+}
+
+MigrationHandle::Integer64 MigrationHandle::getInteger64(int index)
+{
+    WCTInnerAssert(!m_additionalStatement->isPrepared());
+    return m_mainStatement->getInteger64(index);
+}
+
+MigrationHandle::Float MigrationHandle::getDouble(int index)
+{
+    WCTInnerAssert(!m_additionalStatement->isPrepared());
+    return m_mainStatement->getDouble(index);
+}
+
+MigrationHandle::Text MigrationHandle::getText(int index)
+{
+    WCTInnerAssert(!m_additionalStatement->isPrepared());
+    return m_mainStatement->getText(index);
+}
+
+MigrationHandle::BLOB MigrationHandle::getBLOB(int index)
+{
+    WCTInnerAssert(!m_additionalStatement->isPrepared());
+    return m_mainStatement->getBLOB(index);
+}
+
+ColumnType MigrationHandle::getType(int index)
+{
+    WCTInnerAssert(!m_additionalStatement->isPrepared());
+    return m_mainStatement->getType(index);
+}
+
+const UnsafeString MigrationHandle::getOriginColumnName(int index)
+{
+    WCTInnerAssert(!m_additionalStatement->isPrepared());
+    return m_mainStatement->getOriginColumnName(index);
+}
+
+const UnsafeString MigrationHandle::getColumnName(int index)
+{
+    WCTInnerAssert(!m_additionalStatement->isPrepared());
+    return m_mainStatement->getColumnName(index);
+}
+
+const UnsafeString MigrationHandle::getColumnTableName(int index)
+{
+    WCTInnerAssert(!m_additionalStatement->isPrepared());
+    return m_mainStatement->getColumnTableName(index);
+}
+
+bool MigrationHandle::isStatementReadonly()
+{
+    WCTInnerAssert(!m_additionalStatement->isPrepared());
+    return m_mainStatement->isReadonly();
+}
+
+int MigrationHandle::getColumnCount()
+{
+    WCTInnerAssert(!m_additionalStatement->isPrepared());
+    return m_mainStatement->getColumnCount();
+}
+
+#pragma mark - Migrate
+bool MigrationHandle::isMigratedPrepared()
+{
+    WCTInnerAssert(m_migrateStatement->isPrepared()
+                   == m_removeMigratedStatement->isPrepared());
+    return m_migrateStatement->isPrepared() /* || m_removeMigratedStatement->isPrepared() */;
+}
+
+bool MigrationHandle::stepMigrate(const int64_t& rowid)
+{
+    WCTInnerAssert(isMigratedPrepared());
+    m_migrateStatement->bindInteger64(rowid, 1);
+    m_removeMigratedStatement->bindInteger64(rowid, 1);
+    return m_migrateStatement->step() && m_removeMigratedStatement->step();
+}
+
+void MigrationHandle::finalizeMigrate()
+{
+    m_migrateStatement->finalize();
+    m_additionalStatement->finalize();
+}
+
+void MigrationHandle::resetMigrate()
+{
+    WCTInnerAssert(isMigratedPrepared());
+    m_migrateStatement->reset();
+    m_additionalStatement->reset();
+}
+
+bool MigrationHandle::prepareMigrate(const Statement& statement)
+{
+    WCTInnerAssert(statement.getType() == Syntax::Identifier::Type::InsertSTMT);
+    WCTInnerAssert(!isMigratedPrepared());
+    const MigrationInfo* info = getBoundInfo(
+    static_cast<Syntax::InsertSTMT*>(statement.getSyntaxIdentifier())->table);
+    WCTInnerAssert(info != nullptr);
+    return m_migrateStatement->prepare(info->getStatementForMigratingSpecifiedRow(statement))
+           && m_migrateStatement->prepare(info->getStatementForDeletingSpecifiedRow());
 }
 
 } //namespace WCDB

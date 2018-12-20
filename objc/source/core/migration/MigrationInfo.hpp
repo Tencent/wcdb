@@ -81,12 +81,12 @@ public:
     /*
      DETACH [schemaForOriginDatabase]
      */
-    static const StatementDetach getStatementForDetachingSchema(const Schema& schema);
+    static StatementDetach getStatementForDetachingSchema(const Schema& schema);
 
     /*
      PRAGMA main.database_list
      */
-    static const StatementPragma getStatementForSelectingDatabaseList();
+    static StatementPragma getStatementForSelectingDatabaseList();
 
 protected:
     // WCDBMigration_ + hash([originDatabase])
@@ -111,7 +111,7 @@ public:
     const StatementCreateView& getStatementForCreatingUnionedView() const;
 
     /*
-     DROP VIEW IF EXISTS [unionedView]
+     DROP VIEW IF EXISTS temp.[unionedView]
      */
     static const StatementDropView
     getStatementForDroppingUnionedView(const String& unionedView);
@@ -121,7 +121,7 @@ public:
      FROM temp.sqlite_master
      WHERE type == "view" AND name LIKE "WCDBUnioned_%"
      */
-    static const StatementSelect getStatementForSelectingUnionedView();
+    static StatementSelect getStatementForSelectingUnionedView();
 
 protected:
     // WCDBUnioned_ + [migratedTable] + _ + [originTable]
@@ -131,27 +131,65 @@ protected:
 #pragma mark - Migrate
 public:
     /*
-     DELETE FROM [originTable] WHERE rowid = ?1
+     DELETE FROM [schemaForOriginDatabase].[originTable] ORDER BY rowid DESC LIMIT ?1
      */
     const StatementDelete& getStatementForDeletingMigratedRow() const;
 
     /*
      INSERT rowid, [columns]
-     INTO [migratedTable]
+     INTO main.[migratedTable]
      SELECT rowid, [columns]
-     FROM [originTable]
+     FROM [schemaForOriginDatabase].[originTable]
+     ORDER BY rowid DESC
      LIMIT ?1
      */
     const StatementInsert& getStatementForMigratingRow() const;
 
     /*
-     DROP TABLE IF EXISTS [originTable]
+     DELETE FROM [schemaForOriginDatabase].[originTable] WHERE rowid == ?1
+     */
+    const StatementDelete& getStatementForDeletingSpecifiedRow() const;
+
+    /*
+     INSERT rowid, [columns]
+     INTO main.[migratedTable]
+     [OR ONCONFLICT ACTION]
+     SELECT rowid, [columns]
+     FROM [schemaForOriginDatabase].[originTable]
+     WHERE rowid == ?1
+     */
+    StatementInsert
+    getStatementForMigratingSpecifiedRow(const Statement& originStatement) const;
+
+    /*
+     DROP TABLE IF EXISTS [schemaForOriginDatabase].[originTable]
      */
     const StatementDropTable& getStatementForDroppingOriginTable() const;
+
+    /*
+     UPDATE ...
+     SET ...
+     WHERE rowid IN(
+        SELECT rowid FROM temp.[unionedView] WHERE ... ORDER BY ... LIMIT ... OFFSET ...
+     )
+     */
+    StatementUpdate
+    getStatementForLimitedUpdatingTable(const Statement& originStatement) const;
+
+    /*
+     DELETE FROM ...
+     WHERE rowid IN(
+        SELECT rowid FROM temp.[unionedView] WHERE ... ORDER BY ... LIMIT ... OFFSET ...
+     )
+     */
+    StatementDelete
+    getStatementForLimitedDeletingFromTable(const Statement& originStatement) const;
 
 protected:
     StatementInsert m_statementForMigratingRow;
     StatementDelete m_statementForDeletingMigratedRow;
+    StatementInsert m_statementForMigratingSpecifiedRowTemplate;
+    StatementDelete m_statementForDeletingSpecifiedRow;
     StatementDropTable m_statementForDroppingOriginTable;
 };
 

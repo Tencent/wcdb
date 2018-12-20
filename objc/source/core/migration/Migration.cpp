@@ -54,139 +54,150 @@ Migration::Binder::Binder(Migration& migration) : m_migration(migration)
 
 Migration::Binder::~Binder()
 {
-    m_migration.unbind(m_bounds);
 }
 
 bool Migration::Binder::rebind()
 {
     m_migration.tryReduceBounds(m_bounds);
-    m_bounds.insert(m_cycledBounds.begin(), m_cycledBounds.end());
-    m_cycledBounds.clear();
-    if (m_bounds == m_applys) {
-        return true;
+    for (const auto& iter : m_prepareds) {
+        if (iter.second != nullptr) {
+            m_bounds.emplace(iter.first, iter.second);
+        }
     }
-    if (!rebind(m_bounds)) {
-        return false;
+    m_prepareds.clear();
+    if (m_bounds != m_applys) {
+        if (!rebind(m_bounds)) {
+            return false;
+        }
+        m_applys = m_bounds;
     }
-    m_applys = m_bounds;
     return true;
 }
 
-std::pair<bool, const MigrationInfo*>
-Migration::Binder::getOrInitBoundInfo(const String& table)
+std::pair<bool, const MigrationInfo*> Migration::Binder::prepareInfo(const String& table)
 {
-    auto result = m_migration.getOrInitBoundInfo(*this, table);
-    if (result.first && result.second != nullptr) {
-        m_cycledBounds.emplace(result.second);
+    bool succeed = true;
+    RecyclableMigrationInfo info = nullptr;
+    std::tie(succeed, info) = m_migration.getOrBindInfo(*this, table);
+    if (succeed) {
+        m_prepareds.emplace(table, info);
     }
-    return result;
+    return { succeed, info.get() };
 }
 
-void Migration::Binder::clearCycledBounds()
+const MigrationInfo* Migration::Binder::getBoundInfo(const String& table)
 {
-    m_cycledBounds.clear();
+    const MigrationInfo* info = nullptr;
+    auto iter = m_applys.find(table);
+    if (iter != m_applys.end()) {
+        info = iter->second.get();
+    }
+    return info;
 }
 
-void Migration::tryReduceBounds(std::set<const MigrationInfo*>& bounds)
+void Migration::Binder::clearPrepared()
 {
+    m_prepareds.clear();
+}
+
+void Migration::tryReduceBounds(std::map<String, RecyclableMigrationInfo>& bounds)
+{
+    bool reduce = false;
     {
         SharedLockGuard lockGuard(m_lock);
-        if (m_migratings == bounds) {
-            return;
-        }
-    }
-    std::set<const MigrationInfo*> toUnbinds;
-    {
-        LockGuard lockGuard(m_lock);
-        for (const auto& bound : bounds) {
-            if (m_migratings.find(bound) == m_migratings.end()) {
-                toUnbinds.emplace(bound);
-                releaseInfo(bound);
+        for (const auto& iter : bounds) {
+            if (m_migratings.find(iter.second.get()) == m_migratings.end()) {
+                reduce = true;
+                break;
             }
         }
     }
-    bounds.erase(toUnbinds.begin(), toUnbinds.end());
-}
-
-void Migration::unbind(const std::set<const MigrationInfo*>& bounds)
-{
-    for (const auto& bound : bounds) {
-        auto iter = m_referenceds.find(bound);
-        WCTInnerAssert(iter != m_referenceds.end());
-        WCTInnerAssert(iter->second > 0);
-        if (--iter->second == 0) {
-            // unreference
-            m_dumpster.emplace(bound);
-            m_referenceds.erase(bound);
+    if (reduce) {
+        LockGuard lockGuard(m_lock);
+        for (auto iter = bounds.begin(); iter != bounds.end();) {
+            const MigrationInfo* info = iter->second.get();
+            if (m_migratings.find(info) == m_migratings.end()) {
+                iter = bounds.erase(iter);
+            } else {
+                ++iter;
+            }
         }
     }
 }
 
-std::pair<bool, const MigrationInfo*>
-Migration::getOrInitBoundInfo(Binder& binder, const String& table)
+std::pair<bool, RecyclableMigrationInfo>
+Migration::getOrBindInfo(Binder& binder, const String& table)
 {
     bool get;
-    const MigrationInfo* info = nullptr;
+    RecyclableMigrationInfo info = nullptr;
     {
         LockGuard lockGuard(m_lock);
-        std::tie(get, info) = getBoundInfoForTable(table);
+        std::tie(get, info) = getBoundInfo(table);
         if (get) {
             return { true, info };
         }
     }
     MigrationUserInfo userInfo(table);
     m_filter(userInfo);
-    if (userInfo.shouldMigrate()) {
-        bool succeed;
-        std::set<String> columns;
-        std::tie(succeed, columns)
-        = binder.getColumns(userInfo.getOriginTable(), userInfo.getOriginDatabase());
-        if (!succeed) {
-            return { false, nullptr };
-        }
-        LockGuard lockGuard(m_lock);
-        // retry due to the lockfree code above
-        std::tie(get, info) = getBoundInfoForTable(table);
-        if (get) {
-            return { true, info };
-        }
+    do {
+        if (userInfo.shouldMigrate()) {
+            bool succeed;
+            std::set<String> columns;
+            std::tie(succeed, columns) = binder.getColumns(
+            userInfo.getOriginTable(), userInfo.getOriginDatabase());
+            if (!succeed) {
+                break;
+            }
+            LockGuard lockGuard(m_lock);
+            // retry due to the lockfree code above
+            std::tie(get, info) = getBoundInfo(table);
+            if (get) {
+                break;
+            }
 
-        if (!columns.empty()) {
-            m_holder.push_back(MigrationInfo(userInfo, columns));
-            info = &m_holder.back();
-            m_migratings.emplace(info);
-            m_referenceds.emplace(info, 0);
-            retainInfo(info);
-        }
-        m_filted.emplace(table, info);
-        return { true, info };
-    } else {
-        LockGuard lockGuard(m_lock);
-        // retry due to the lockfree code above
-        std::tie(get, info) = getBoundInfoForTable(table);
-        if (get) {
-            return { true, info };
-        }
+            m_filted.emplace(table, info.get());
+            if (!columns.empty()) {
+                m_holder.push_back(MigrationInfo(userInfo, columns));
+                const MigrationInfo* hold = &m_holder.back();
+                m_migratings.emplace(hold);
+                m_referenceds.emplace(hold, 0);
+            }
 
-        m_filted.emplace(table, nullptr);
-        return { true, nullptr };
-    }
+            std::tie(get, info) = getBoundInfo(table);
+            WCTInnerAssert(get);
+        } else {
+            LockGuard lockGuard(m_lock);
+            // retry due to the lockfree code above
+            std::tie(get, info) = getBoundInfo(table);
+            if (get) {
+                break;
+            }
+
+            m_filted.emplace(table, nullptr);
+            std::tie(get, info) = getBoundInfo(table);
+            WCTInnerAssert(get);
+            WCTInnerAssert(info == nullptr);
+        }
+    } while (false);
+    return { get, info };
 }
 
-std::pair<bool, const MigrationInfo*> Migration::getBoundInfoForTable(const String& table)
+std::pair<bool, RecyclableMigrationInfo> Migration::getBoundInfo(const String& table)
 {
     WCTInnerAssert(m_lock.writeSafety());
+    bool filted = false;
     auto iter = m_filted.find(table);
     if (iter != m_filted.end()) {
+        filted = true;
         const MigrationInfo* info = iter->second;
-        if (m_migratings.find(info) == m_migratings.end()) {
-            info = nullptr;
-        } else {
+        if (m_migratings.find(info) != m_migratings.end()) {
             retainInfo(info);
+            return { true,
+                     RecyclableMigrationInfo(
+                     info, std::bind(&Migration::releaseInfo, this, std::placeholders::_1)) };
         }
-        return { true, info };
     }
-    return { false, nullptr };
+    return { filted, nullptr };
 }
 
 void Migration::retainInfo(const MigrationInfo* info)

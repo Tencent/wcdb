@@ -23,33 +23,9 @@
 
 namespace WCDB {
 
-RecyclableDatabase::RecyclableDatabase() : Super(nullptr, nullptr)
-{
-}
-
 RecyclableDatabase::RecyclableDatabase(Database *value, const Super::OnRecycled &onRecycled)
 : Super(value, onRecycled)
 {
-}
-
-RecyclableDatabase::RecyclableDatabase(const std::nullptr_t &)
-: Super(nullptr, nullptr)
-{
-}
-
-bool RecyclableDatabase::operator==(const std::nullptr_t &) const
-{
-    return m_value == nullptr;
-}
-
-bool RecyclableDatabase::operator!=(const std::nullptr_t &) const
-{
-    return m_value != nullptr;
-}
-
-Database *RecyclableDatabase::get() const
-{
-    return m_value;
 }
 
 } //namespace WCDB

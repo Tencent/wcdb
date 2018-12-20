@@ -207,7 +207,6 @@ bool Handle::execute(const Statement &statement)
 
 bool Handle::prepare(const Statement &statement)
 {
-    WCTRemedialAssert(!isPrepared(), "Last statement is not finalized.", finalize(););
     return m_mainStatement->prepare(statement);
 }
 

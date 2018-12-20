@@ -162,6 +162,21 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo, const std::set<S
           .order(descendingRowid)
           .limit(BindParameter(1));
 
+        m_statementForMigratingSpecifiedRowTemplate
+        = StatementInsert()
+          .insertIntoTable(m_migratedTable)
+          .schema(Schema::main())
+          .columns(specificColumns)
+          .values(StatementSelect()
+                  .select(specificResultColumns)
+                  .from(TableOrSubquery(m_originTable).schema(m_schemaForOriginDatabase))
+                  .where(Column::rowid() == BindParameter(1)));
+
+        m_statementForDeletingSpecifiedRow
+        = StatementDelete()
+          .deleteFrom(QualifiedTable(m_originTable).schema(m_schemaForOriginDatabase))
+          .where(Column::rowid() == BindParameter(1));
+
         m_statementForDroppingOriginTable = StatementDropTable()
                                             .dropTable(m_originTable)
                                             .schema(m_schemaForOriginDatabase)
@@ -200,15 +215,15 @@ const StatementAttach& MigrationInfo::getStatementForAttachingSchema() const
     return m_statementForAttachingSchema;
 }
 
-const StatementDetach MigrationInfo::getStatementForDetachingSchema(const Schema& schema)
+StatementDetach MigrationInfo::getStatementForDetachingSchema(const Schema& schema)
 {
     WCTInnerAssert(schema.getDescription().hasPrefix(getSchemaPrefix()));
     return StatementDetach().detach(schema);
 }
 
-const StatementPragma MigrationInfo::getStatementForSelectingDatabaseList()
+StatementPragma MigrationInfo::getStatementForSelectingDatabaseList()
 {
-    return StatementPragma().pragma(Pragma::databaseList());
+    return StatementPragma().pragma(Pragma::databaseList()).schema(Schema::main());
 }
 
 #pragma mark - View
@@ -230,7 +245,7 @@ MigrationInfo::getStatementForDroppingUnionedView(const String& unionedView)
     return StatementDropView().dropView(unionedView).schema(Schema::temp()).ifExists();
 }
 
-const StatementSelect MigrationInfo::getStatementForSelectingUnionedView()
+StatementSelect MigrationInfo::getStatementForSelectingUnionedView()
 {
     Column name("name");
     Column type("type");
@@ -250,6 +265,87 @@ const StatementDelete& MigrationInfo::getStatementForDeletingMigratedRow() const
 const StatementInsert& MigrationInfo::getStatementForMigratingRow() const
 {
     return m_statementForMigratingRow;
+}
+
+const StatementDelete& MigrationInfo::getStatementForDeletingSpecifiedRow() const
+{
+    return m_statementForDeletingSpecifiedRow;
+}
+
+StatementInsert
+MigrationInfo::getStatementForMigratingSpecifiedRow(const Statement& originStatement) const
+{
+    WCTInnerAssert(originStatement.getType() == Syntax::Identifier::Type::InsertSTMT);
+    StatementInsert statement = m_statementForMigratingSpecifiedRowTemplate;
+    const Syntax::InsertSTMT* syntax
+    = static_cast<Syntax::InsertSTMT*>(originStatement.getSyntaxIdentifier());
+    statement.syntax().useConflictAction = syntax->useConflictAction;
+    statement.syntax().conflictAction = syntax->conflictAction;
+    return statement;
+}
+
+StatementUpdate
+MigrationInfo::getStatementForLimitedUpdatingTable(const Statement& originStatement) const
+{
+    WCTInnerAssert(originStatement.getType() == Syntax::Identifier::Type::UpdateSTMT);
+    StatementUpdate statementUpdate(originStatement);
+
+    Syntax::UpdateSTMT& updateSyntax = statementUpdate.syntax();
+    StatementSelect select
+    = StatementSelect().select(Column::rowid()).from(updateSyntax.table.table);
+
+    Syntax::SelectSTMT& selectSyntax = select.syntax();
+    WCTInnerAssert(!selectSyntax.cores.empty());
+    Syntax::SelectCore& coreSyntax = selectSyntax.cores.back();
+
+    coreSyntax.useCondition = updateSyntax.useCondition;
+    coreSyntax.condition = updateSyntax.condition;
+    updateSyntax.useCondition = false;
+
+    selectSyntax.orderingTerms = updateSyntax.orderingTerms;
+    updateSyntax.orderingTerms.clear();
+
+    selectSyntax.useLimit = updateSyntax.useLimit;
+    selectSyntax.limit = updateSyntax.limit;
+    selectSyntax.limitParameterType = updateSyntax.limitParameterType;
+    selectSyntax.limitParameter = updateSyntax.limitParameter;
+    updateSyntax.useLimit = false;
+
+    statementUpdate.where(Column::rowid().in(select));
+
+    return statementUpdate;
+}
+
+StatementDelete
+MigrationInfo::getStatementForLimitedDeletingFromTable(const Statement& originStatement) const
+{
+    WCTInnerAssert(originStatement.getType() == Syntax::Identifier::Type::DeleteSTMT);
+    StatementDelete statementDelete(originStatement);
+
+    Syntax::DeleteSTMT& deleteSyntax = statementDelete.syntax();
+    StatementSelect select
+    = StatementSelect().select(Column::rowid()).from(deleteSyntax.table.table);
+
+    Syntax::SelectSTMT& selectSyntax = select.syntax();
+    WCTInnerAssert(!selectSyntax.cores.empty());
+    Syntax::SelectCore& coreSyntax = selectSyntax.cores.back();
+
+    coreSyntax.useCondition = deleteSyntax.useCondition;
+    coreSyntax.condition = deleteSyntax.condition;
+    deleteSyntax.useCondition = false;
+
+    selectSyntax.orderingTerms = deleteSyntax.orderingTerms;
+    deleteSyntax.orderingTerms.clear();
+
+    selectSyntax.useLimit = deleteSyntax.useLimit;
+    selectSyntax.limit = deleteSyntax.limit;
+    selectSyntax.limitParameterType = deleteSyntax.limitParameterType;
+    selectSyntax.limitParameter = deleteSyntax.limitParameter;
+    deleteSyntax.useLimit = false;
+
+    statementDelete.where(Column::rowid().in(select));
+
+    return statementDelete;
 }
 
 const StatementDropTable& MigrationInfo::getStatementForDroppingOriginTable() const
