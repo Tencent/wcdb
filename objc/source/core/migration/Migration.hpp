@@ -26,7 +26,7 @@
 #include <WCDB/Recyclable.hpp>
 #include <functional>
 #include <map>
-#include <unordered_set>
+#include <set>
 
 namespace WCDB {
 
@@ -56,8 +56,8 @@ private:
     //    │Until Unreferenced│ ┌──────────┐ │Dropped│ ┌───────┐
     //  ──┴──────────────────┴▶│m_dumpster│─┴───────┴▶│Removed│
     //                         └──────────┘           └───────┘
-    std::unordered_set<const MigrationInfo*> m_migratings;
-    std::unordered_set<const MigrationInfo*> m_dumpster;
+    std::set<const MigrationInfo*> m_migratings;
+    std::set<const MigrationInfo*> m_dumpster;
 
     std::map<const MigrationInfo*, int> m_referenceds;
     std::list<MigrationInfo> m_holder;
