@@ -2257,7 +2257,6 @@
 				23EEDB79217DFADC006E9E73 /* identifier */,
 				23EEDBB6217DFADC006E9E73 /* statement */,
 				23EEDBEC217DFADC006E9E73 /* syntax */,
-				23EEDB66217DFADC006E9E73 /* winq */,
 			);
 			path = winq;
 			sourceTree = "<group>";
@@ -3153,13 +3152,6 @@
 				23B4DCD92112AC5600954D71 /* Modules.hpp */,
 			);
 			path = fts;
-			sourceTree = "<group>";
-		};
-		23EEDB66217DFADC006E9E73 /* winq */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = winq;
 			sourceTree = "<group>";
 		};
 		23EEDB67217DFADC006E9E73 /* extension */ = {
