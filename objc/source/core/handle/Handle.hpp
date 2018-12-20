@@ -40,7 +40,7 @@ public:
 
     Handle(const Handle &) = delete;
     Handle &operator=(const Handle &) = delete;
-    virtual ~Handle();
+    virtual ~Handle() = 0;
 
     // Developers can call sqlite interfaces those WCDB does not provided currently by using this raw handle.
     // Note that this is not tested, which means that it may result in an unpredictable behavior.
