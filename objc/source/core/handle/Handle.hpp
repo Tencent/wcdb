@@ -146,9 +146,9 @@ private:
 
 #pragma mark - Convenient
 public:
-    std::pair<bool, bool> tableExists(const TableOrSubquery &table);
+    std::pair<bool, bool> tableExists(const String &table);
     std::pair<bool, std::set<String>>
-    getUnorderedColumns(const Schema &schema, const String &table);
+    getColumns(const Schema &schema, const String &table);
 
     typedef std::function<bool(Handle *)> TransactionCallback;
 
@@ -163,8 +163,7 @@ public:
     bool runNestedTransaction(const TransactionCallback &transaction);
 
 protected:
-    std::pair<bool, std::set<String>>
-    getUnorderedValues(const Statement &statement, int index);
+    std::pair<bool, std::set<String>> getValues(const Statement &statement, int index);
 
 private:
     static const String &savepointPrefix();

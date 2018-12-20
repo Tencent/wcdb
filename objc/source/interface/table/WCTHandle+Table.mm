@@ -104,7 +104,7 @@
         return NO;
     }
     if (tableExists.second) {
-        auto pair = handle->getUnorderedColumns(WCDB::Schema::main(), tableName);
+        auto pair = handle->getColumns(WCDB::Schema::main(), tableName);
         if (!pair.first) {
             return NO;
         }

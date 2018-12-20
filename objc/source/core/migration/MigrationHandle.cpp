@@ -56,7 +56,7 @@ bool MigrationHandle::rebind(const std::map<String, RecyclableMigrationInfo>& mi
 
     std::set<String> createdViews;
     std::tie(succeed, createdViews)
-    = getUnorderedValues(MigrationInfo::getStatementForSelectingUnionedView(), 0);
+    = getValues(MigrationInfo::getStatementForSelectingUnionedView(), 0);
     if (!succeed) {
         return false;
     }
@@ -93,7 +93,7 @@ bool MigrationHandle::rebind(const std::map<String, RecyclableMigrationInfo>& mi
 
     std::set<String> attachedSchemas;
     std::tie(succeed, attachedSchemas)
-    = getUnorderedValues(MigrationInfo::getStatementForSelectingDatabaseList(), 1);
+    = getValues(MigrationInfo::getStatementForSelectingDatabaseList(), 1);
     if (!succeed) {
         return false;
     }
@@ -126,7 +126,7 @@ bool MigrationHandle::rebind(const std::map<String, RecyclableMigrationInfo>& mi
 std::pair<bool, std::set<String>>
 MigrationHandle::getColumns(const String& table, const String& database)
 {
-    return getUnorderedColumns(MigrationInfo::getSchemaForDatabase(database), table);
+    return Handle::getColumns(MigrationInfo::getSchemaForDatabase(database), table);
 }
 
 #pragma mark - Migration

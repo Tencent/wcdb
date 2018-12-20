@@ -359,40 +359,50 @@ void Handle::returnStatement(HandleStatement *handleStatement)
 }
 
 #pragma mark - Convenient
-std::pair<bool, bool> Handle::tableExists(const TableOrSubquery &table)
+std::pair<bool, bool> Handle::tableExists(const String &table)
 {
-    StatementSelect statementSelect = StatementSelect().select(1).from(table).limit(0);
-    markErrorAsIgnorable(SQLITE_ERROR);
-    bool unused;
-    bool result = prepare(statementSelect) && step(unused);
-    markErrorAsUnignorable();
-    finalize();
+    HandleStatement *handleStatement = getStatement();
+    bool result = false;
+    do {
+        StatementSelect statementSelect
+        = StatementSelect().select(1).from(table).limit(0);
+        markErrorAsIgnorable(SQLITE_ERROR);
+        if (handleStatement->prepare(statementSelect)) {
+            result = handleStatement->step();
+            finalize();
+        }
+        markErrorAsUnignorable();
+    } while (false);
+    returnStatement(handleStatement);
     return { result || getResultCode() == SQLITE_ERROR, result };
 }
 
 std::pair<bool, std::set<String>>
-Handle::getUnorderedColumns(const Schema &schema, const String &table)
+Handle::getColumns(const Schema &schema, const String &table)
 {
     WCDB::StatementPragma statement
     = StatementPragma().pragma(Pragma::tableInfo()).schema(schema).with(table);
-    return getUnorderedValues(statement, 1);
+    return getValues(statement, 1);
 }
 
-std::pair<bool, std::set<String>>
-Handle::getUnorderedValues(const Statement &statement, int index)
+std::pair<bool, std::set<String>> Handle::getValues(const Statement &statement, int index)
 {
-    if (prepare(statement)) {
-        bool done = false;
-        std::set<String> values;
-        while (step(done) && !done) {
-            values.emplace(getText(index));
+    HandleStatement *handleStatement = getStatement();
+    bool done = false;
+    std::set<String> values;
+    do {
+        if (handleStatement->prepare(statement)) {
+            while (handleStatement->step(done) && !done) {
+                values.emplace(handleStatement->getText(index));
+            }
+            handleStatement->finalize();
         }
-        finalize();
-        if (done) {
-            return { true, std::move(values) };
-        }
+    } while (false);
+    returnStatement(handleStatement);
+    if (!done) {
+        values.clear();
     }
-    return { false, {} };
+    return { done, std::move(values) };
 }
 
 const String &Handle::savepointPrefix()

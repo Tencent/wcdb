@@ -64,7 +64,7 @@ protected:
 public:
     RecyclableHandle getHandle();
     bool execute(const Statement &statement);
-    std::pair<bool, bool> tableExists(const TableOrSubquery &table);
+    std::pair<bool, bool> tableExists(const String &table);
 
 protected:
     RecyclableHandle getSlotHandle(Slot slot);

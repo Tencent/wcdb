@@ -183,7 +183,7 @@ bool Database::execute(const Statement &statement)
     return false;
 }
 
-std::pair<bool, bool> Database::tableExists(const TableOrSubquery &table)
+std::pair<bool, bool> Database::tableExists(const String &table)
 {
     RecyclableHandle handle = getHandle();
     if (handle != nullptr) {
