@@ -27,7 +27,6 @@ BackupReadHandle::BackupReadHandle()
 , m_statementForAcquireReadLock(
   StatementSelect().select(1).from("sqlite_master").limit(0))
 , m_statementForReadTransaction(StatementBegin().beginDeferred())
-, m_statementForEndTransaction(StatementRollback().rollback())
 {
 }
 
@@ -54,9 +53,9 @@ bool BackupReadHandle::acquireLock()
 
 bool BackupReadHandle::releaseLock()
 {
-    bool succeed = execute(m_statementForEndTransaction);
+    rollbackTransaction();
     close();
-    return succeed;
+    return true;
 }
 
 void BackupWriteHandle::setPath(const String &path)

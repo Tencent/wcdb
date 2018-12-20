@@ -40,7 +40,6 @@ public:
 protected:
     StatementBegin m_statementForReadTransaction;
     StatementSelect m_statementForAcquireReadLock;
-    StatementRollback m_statementForEndTransaction;
 };
 
 class BackupWriteHandle final : public Handle, public Repair::WriteLocker {

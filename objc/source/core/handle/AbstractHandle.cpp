@@ -315,18 +315,20 @@ void AbstractHandle::rollbackNestedTransaction()
 
 bool AbstractHandle::beginTransaction()
 {
-    return execute(StatementBegin().beginImmediate().getDescription());
+    static const String *s_beginImmediate
+    = new String(StatementBegin().beginImmediate().getDescription());
+    return execute(*s_beginImmediate);
 }
 
 bool AbstractHandle::commitOrRollbackTransaction()
 {
-    m_nestedLevel = 0;
-    if (!execute(StatementCommit().commit().getDescription())) {
-        markErrorAsIgnorable(-1);
-        execute(StatementRollback().rollback().getDescription());
-        markErrorAsUnignorable();
+    static const String *s_commit
+    = new String(StatementCommit().commit().getDescription());
+    if (!execute(*s_commit)) {
+        rollbackTransaction();
         return false;
     }
+    m_nestedLevel = 0;
     return true;
 }
 
@@ -334,7 +336,9 @@ void AbstractHandle::rollbackTransaction()
 {
     m_nestedLevel = 0;
     markErrorAsIgnorable(-1);
-    execute(StatementRollback().rollback().getDescription());
+    static const String *s_rollback
+    = new String(StatementRollback().rollback().getDescription());
+    execute(*s_rollback);
     markErrorAsUnignorable();
 }
 
