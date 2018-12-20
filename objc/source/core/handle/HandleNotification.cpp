@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
+#include <WCDB/AbstractHandle.hpp>
 #include <WCDB/Assertion.hpp>
-#include <WCDB/Handle.hpp>
 #include <WCDB/HandleNotification.hpp>
 #include <WCDB/SQLite.h>
 #include <WCDB/String.hpp>
@@ -224,7 +224,7 @@ void HandleNotification::dispatchCommittedNotification(int frames)
 {
     WCTInnerAssert(!m_commitedNotifications.elements().empty());
     for (const auto &element : m_commitedNotifications.elements()) {
-        if (!element.value(m_handle, frames)) {
+        if (!element.value(m_handle->getPath(), frames)) {
             break;
         }
     }
@@ -346,14 +346,14 @@ bool HandleNotification::dispatchCheckpointNotification(int rc)
     if (rc < 0) {
         // will checkpoint
         for (const auto &element : m_willCheckpointNotifications.elements()) {
-            if (!element.value(m_handle)) {
+            if (!element.value(m_handle->getPath())) {
                 return false;
             }
         }
     } else {
         // checkpointed
         for (const auto &element : m_checkpointedNotifications) {
-            element.second(m_handle, rc);
+            element.second(m_handle->getPath(), rc);
         }
     }
     return true;

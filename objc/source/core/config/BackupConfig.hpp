@@ -43,8 +43,8 @@ public:
 
 protected:
     const String m_identifier;
-    bool onCommitted(Handle* handle, int frames);
-    void checkpointed(Handle* handle, int rc);
+    bool onCommitted(const String& path, int frames);
+    void checkpointed(const String& path, int rc);
 
     std::shared_ptr<BackupQueue> m_queue;
 };

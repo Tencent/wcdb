@@ -76,7 +76,7 @@ protected:
 #pragma mark - Committed
 public:
     //commited dispatch will abort if any notification return false
-    typedef std::function<bool(Handle *, int)> CommittedNotification;
+    typedef std::function<bool(const String &, int)> CommittedNotification;
     void setNotificationWhenCommitted(int order,
                                       const String &name,
                                       const CommittedNotification &onCommitted);
@@ -92,14 +92,14 @@ protected:
 #pragma mark - Checkpoint
 public:
     //checkpoint will abort if any notification return false
-    typedef std::function<bool(Handle *)> WillCheckpointNotification;
+    typedef std::function<bool(const String &)> WillCheckpointNotification;
     bool setNotificationWhenWillCheckpoint(int order,
                                            const String &name,
                                            const WillCheckpointNotification &willCheckpoint,
                                            bool ignorable = false);
     bool unsetNotificationWhenWillCheckpoint(const String &name, bool ignorable = false);
 
-    typedef std::function<void(Handle *, int)> CheckpointedNotification;
+    typedef std::function<void(const String &, int)> CheckpointedNotification;
     bool setNotificationWhenCheckpointed(const String &name,
                                          const CheckpointedNotification &checkpointed,
                                          bool ignorable = false);

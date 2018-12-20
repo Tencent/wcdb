@@ -43,6 +43,8 @@ public:
     const Error &getError() const override final;
 
 protected:
+    using AbstractHandle::execute;
+    using Handle::execute;
     StatementPragma m_statementForDisableJounral;
     StatementPragma m_statementForEnableMMap;
 

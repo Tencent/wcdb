@@ -40,7 +40,7 @@ public:
 
 protected:
     const String m_identifier;
-    bool onCommitted(Handle *handle, int pages);
+    bool onCommitted(const String &path, int pages);
 
     std::shared_ptr<CheckpointQueue> m_queue;
 };

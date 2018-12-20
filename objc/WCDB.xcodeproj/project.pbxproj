@@ -127,6 +127,8 @@
 		23408F0F211897AA0071E5A7 /* Shm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23408F0D211897AA0071E5A7 /* Shm.cpp */; };
 		23408F11211897AA0071E5A7 /* Shm.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23408F0E211897AA0071E5A7 /* Shm.hpp */; };
 		234591F6204433E200DC7D34 /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 234591F5204432E400DC7D34 /* Core.h */; };
+		2347378F21CBB3A800AD5E41 /* AbstractHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2347378D21CBB3A800AD5E41 /* AbstractHandle.cpp */; };
+		2347379021CBB3A800AD5E41 /* AbstractHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2347378E21CBB3A800AD5E41 /* AbstractHandle.hpp */; };
 		2349F6FE1EA0D6680021EFA7 /* Database.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F61B1EA0D6680021EFA7 /* Database.cpp */; };
 		2349F6FF1EA0D6680021EFA7 /* Database.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2349F61C1EA0D6680021EFA7 /* Database.hpp */; };
 		2349F7051EA0D6680021EFA7 /* HandlePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6221EA0D6680021EFA7 /* HandlePool.cpp */; };
@@ -1244,6 +1246,8 @@
 		23408F0D211897AA0071E5A7 /* Shm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Shm.cpp; sourceTree = "<group>"; };
 		23408F0E211897AA0071E5A7 /* Shm.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Shm.hpp; sourceTree = "<group>"; };
 		234591F5204432E400DC7D34 /* Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
+		2347378D21CBB3A800AD5E41 /* AbstractHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AbstractHandle.cpp; sourceTree = "<group>"; };
+		2347378E21CBB3A800AD5E41 /* AbstractHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AbstractHandle.hpp; sourceTree = "<group>"; };
 		2349F61B1EA0D6680021EFA7 /* Database.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Database.cpp; sourceTree = "<group>"; };
 		2349F61C1EA0D6680021EFA7 /* Database.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Database.hpp; sourceTree = "<group>"; };
 		2349F6221EA0D6680021EFA7 /* HandlePool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HandlePool.cpp; sourceTree = "<group>"; };
@@ -2118,6 +2122,8 @@
 				2360A5F620D78F1B00E4A311 /* HandleRelated.hpp */,
 				2370980820590CA700E768B4 /* HandleStatement.cpp */,
 				2370980920590CA700E768B4 /* HandleStatement.hpp */,
+				2347378D21CBB3A800AD5E41 /* AbstractHandle.cpp */,
+				2347378E21CBB3A800AD5E41 /* AbstractHandle.hpp */,
 			);
 			path = handle;
 			sourceTree = "<group>";
@@ -3615,6 +3621,7 @@
 				23176A9B21BA7D460051ACF9 /* WCTDatabase+Version.h in Headers */,
 				233B097E21BE50CA005AD534 /* BackupHandle.hpp in Headers */,
 				23EEDC82217DFADC006E9E73 /* CTETable.hpp in Headers */,
+				2347379021CBB3A800AD5E41 /* AbstractHandle.hpp in Headers */,
 				23D0C35320C149D80001BFAE /* Factory.hpp in Headers */,
 				23FEC463206B3032001E7A3B /* WCTConvenient.h in Headers */,
 				23EEDD00217DFADC006E9E73 /* SyntaxFrameSpec.hpp in Headers */,
@@ -4718,6 +4725,7 @@
 				23775B6E20AD666900E21AB0 /* DeprecatedBackup.cpp in Sources */,
 				234DBD062064DE04000E31E8 /* WCTHandle+Transaction.mm in Sources */,
 				23EEDCE5217DFADC006E9E73 /* StatementVacuum.cpp in Sources */,
+				2347378F21CBB3A800AD5E41 /* AbstractHandle.cpp in Sources */,
 				23776CA4218C41DD00E985DC /* WCTChainCall.mm in Sources */,
 				23EABBE7206D08EC00241F3B /* WCTHandle+Table.mm in Sources */,
 				2349F7351EA0D6680021EFA7 /* WCTUpdate.mm in Sources */,

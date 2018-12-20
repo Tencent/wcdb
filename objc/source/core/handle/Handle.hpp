@@ -21,81 +21,15 @@
 #ifndef _WCDB_HANDLE_HPP
 #define _WCDB_HANDLE_HPP
 
-#include <WCDB/ErrorProne.hpp>
-#include <WCDB/HandleNotification.hpp>
-#include <WCDB/HandleStatement.hpp>
-#include <WCDB/String.hpp>
-#include <WCDB/WINQ.h>
-#include <array>
-#include <memory>
-#include <mutex>
-#include <set>
+#include <WCDB/AbstractHandle.hpp>
 
 namespace WCDB {
 
-class Handle : public ErrorProne {
+class Handle : public AbstractHandle {
 #pragma mark - Initialize
 public:
     Handle();
-
-    Handle(const Handle &) = delete;
-    Handle &operator=(const Handle &) = delete;
     virtual ~Handle() = 0;
-
-    // Developers can call sqlite interfaces those WCDB does not provided currently by using this raw handle.
-    // Note that this is not tested, which means that it may result in an unpredictable behavior.
-    // Usage:
-    //  e.g. 1. sqlite3** rawHandle = (sqlite3**)getRawHandle()
-    //  e.g. 2. sqlite3_open(rawHandle, ...)
-    //  e.g. 3. sqlite3_exec(*rawHandle, ...)
-    void **getRawHandle();
-
-protected:
-    friend class HandleRelated;
-    void *m_handle;
-
-#pragma mark - Global
-public:
-    static void enableMultithread();
-    static void enableMemoryStatus(bool enable);
-    static void setMemoryMapSize(int64_t defaultSizeLimit, int64_t maximumAllowedSizeLimit);
-
-    typedef void (*Log)(void *, int, const char *);
-    static void setNotificationForLog(const Log &log);
-
-    typedef int (*VFSOpen)(const char *, int, int);
-    static void setNotificationWhenVFSOpened(const VFSOpen &vfsOpen);
-
-#pragma mark - Path
-public:
-    void setPath(const String &path);
-    const String &getPath() const;
-
-    static String getSHMSubfix();
-    static String getWALSubfix();
-    static String getJournalSubfix();
-
-private:
-    String m_path;
-
-#pragma mark - Basic
-public:
-    bool open();
-    void close();
-    bool isOpened() const;
-
-    long long getLastInsertedRowID();
-    const char *getErrorMessage();
-    int getExtendedErrorCode();
-    int getResultCode();
-    int getChanges();
-    bool isReadonly();
-    bool isInTransaction();
-
-    void interrupt(); // It's thread safe.
-
-protected:
-    bool execute(const String &sql);
 
 #pragma mark - Statement
 public:
@@ -137,81 +71,13 @@ public:
     virtual int getColumnCount();
 
 protected:
-    HandleStatement *getStatement();
-    void returnStatement(HandleStatement *handleStatement);
     HandleStatement *m_mainStatement;
 
-private:
-    std::list<HandleStatement> m_handleStatements;
-
-#pragma mark - Convenient
+#pragma mark - Transaction
 public:
-    std::pair<bool, bool> tableExists(const String &table);
-    std::pair<bool, std::set<String>>
-    getColumns(const Schema &schema, const String &table);
-
     typedef std::function<bool(Handle *)> TransactionCallback;
-
-    bool beginTransaction();
-    bool commitOrRollbackTransaction();
-    void rollbackTransaction();
     bool runTransaction(const TransactionCallback &transaction);
-
-    bool beginNestedTransaction();
-    bool commitOrRollbackNestedTransaction();
-    void rollbackNestedTransaction();
     bool runNestedTransaction(const TransactionCallback &transaction);
-
-protected:
-    std::pair<bool, std::set<String>> getValues(const Statement &statement, int index);
-
-private:
-    static const String &savepointPrefix();
-    int m_nestedLevel;
-
-#pragma mark - Cipher
-public:
-    bool setCipherKey(const UnsafeData &data);
-
-#pragma mark - Notification
-public:
-    typedef HandleNotification::PerformanceNotification PerformanceNotification;
-    void setNotificationWhenPerformanceTraced(const String &name,
-                                              const PerformanceNotification &onTraced);
-
-    typedef HandleNotification::SQLNotification SQLNotification;
-    void setNotificationWhenSQLTraced(const String &name, const SQLNotification &onTraced);
-
-    typedef HandleNotification::CommittedNotification CommittedNotification;
-    void setNotificationWhenCommitted(int order,
-                                      const String &name,
-                                      const CommittedNotification &onCommitted);
-
-    typedef HandleNotification::WillCheckpointNotification WillCheckpointNotification;
-    bool setNotificationWhenWillCheckpoint(int order,
-                                           const String &name,
-                                           const WillCheckpointNotification &willCheckpoint);
-    bool unsetNotificationWhenWillCheckpoint(const String &name);
-    typedef HandleNotification::CheckpointedNotification CheckpointedNotification;
-    bool setNotificationWhenCheckpointed(const String &name,
-                                         const CheckpointedNotification &checkpointed);
-    void unsetNotificationWhenCommitted(const String &name);
-
-private:
-    HandleNotification m_notification;
-
-#pragma mark - Error
-protected:
-    // if code >= 0, then the level of error with the specified code will be marked as ignored
-    // if code < 0, then the level of all errors will be marked as ignored
-    // when the error is marked as ignored, it will not be set to m_error and error() will return true
-    bool error(int rc, const String &sql = "");
-    void markErrorAsIgnorable(int codeToBeIgnored);
-    void markErrorAsUnignorable();
-
-private:
-    void setupAndNotifyError(Error &error, int rc, const String &sql);
-    int m_codeToBeIgnored;
 };
 
 } //namespace WCDB

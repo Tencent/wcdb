@@ -68,10 +68,10 @@ public:
     bool isPrepared();
 
 protected:
-    HandleStatement(Handle *handle);
+    HandleStatement(AbstractHandle *handle);
 
     bool prepare(const String &sql);
-    friend class Handle;
+    friend class AbstractHandle;
     void *m_stmt;
 };
 

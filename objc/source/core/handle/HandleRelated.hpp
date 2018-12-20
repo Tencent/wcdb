@@ -25,17 +25,17 @@
 
 namespace WCDB {
 
-class Handle;
+class AbstractHandle;
 
 class HandleRelated {
 public:
-    HandleRelated(Handle *handle);
+    HandleRelated(AbstractHandle *handle);
     virtual ~HandleRelated();
 
 protected:
     void *getRawHandle();
     void setError(int rc, const String &sql = "");
-    Handle *m_handle;
+    AbstractHandle *m_handle;
 };
 
 } //namespace WCDB

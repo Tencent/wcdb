@@ -24,7 +24,7 @@
 
 namespace WCDB {
 
-HandleStatement::HandleStatement(Handle *handle)
+HandleStatement::HandleStatement(AbstractHandle *handle)
 : HandleRelated(handle), m_stmt(nullptr)
 {
 }

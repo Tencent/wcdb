@@ -61,9 +61,8 @@ bool BackupConfig::uninvoke(Handle *handle)
     return result;
 }
 
-bool BackupConfig::onCommitted(Handle *handle, int frames)
+bool BackupConfig::onCommitted(const String &path, int frames)
 {
-    const auto &path = handle->getPath();
     int backedUp = m_queue->getBackedUpFrames(path);
     if (frames >= backedUp + framesIntervalForCritical || frames < backedUp) {
         m_queue->put(path, delayForCritical, frames);
@@ -74,11 +73,11 @@ bool BackupConfig::onCommitted(Handle *handle, int frames)
     return true;
 }
 
-void BackupConfig::checkpointed(Handle *handle, int rc)
+void BackupConfig::checkpointed(const String &path, int rc)
 {
     if (rc == (int) Error::Code::OK) {
         // back up immediately if checkpointed
-        m_queue->put(handle->getPath(), delayForCritical, 0);
+        m_queue->put(path, delayForCritical, 0);
     }
 }
 
