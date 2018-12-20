@@ -37,8 +37,13 @@ AssemblerHandle::AssemblerHandle()
                                .set(Column("seq"))
                                .to(BindParameter(1))
                                .where(Column("name") == BindParameter(2)))
+, m_cellStatement(getStatement())
 {
-    m_cellStatement = getStatement();
+}
+
+AssemblerHandle::~AssemblerHandle()
+{
+    returnStatement(m_cellStatement);
 }
 
 void AssemblerHandle::setPath(const String &path)

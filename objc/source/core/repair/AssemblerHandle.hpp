@@ -29,6 +29,7 @@ namespace WCDB {
 class AssemblerHandle final : public Handle, public Repair::Assembler {
 public:
     AssemblerHandle();
+    ~AssemblerHandle();
 
     void setPath(const String &path) override final;
     const String &getPath() const override final;
