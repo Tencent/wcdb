@@ -551,8 +551,6 @@
 		23D4DA452085A40A00AE6D90 /* Interface.h in Headers */ = {isa = PBXBuildFile; fileRef = 23D4DA442085A3D300AE6D90 /* Interface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23D96B922050DED700DB5E93 /* DatabasePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D96B902050DED700DB5E93 /* DatabasePool.cpp */; };
 		23D96B932050DED700DB5E93 /* DatabasePool.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D96B912050DED700DB5E93 /* DatabasePool.hpp */; };
-		23D96B972050E53600DB5E93 /* RecyclableDatabase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D96B952050E53600DB5E93 /* RecyclableDatabase.cpp */; };
-		23D96B982050E53600DB5E93 /* RecyclableDatabase.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D96B962050E53600DB5E93 /* RecyclableDatabase.hpp */; };
 		23DC306F202AFF8B000F7895 /* Handle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23DC306D202AFF8B000F7895 /* Handle.cpp */; };
 		23DC3070202AFF8B000F7895 /* Handle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23DC306E202AFF8B000F7895 /* Handle.hpp */; };
 		23DC3079202B0066000F7895 /* Tokenize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23DC3077202B0066000F7895 /* Tokenize.cpp */; };
@@ -1675,8 +1673,6 @@
 		23D4DA442085A3D300AE6D90 /* Interface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Interface.h; sourceTree = "<group>"; };
 		23D96B902050DED700DB5E93 /* DatabasePool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DatabasePool.cpp; sourceTree = "<group>"; };
 		23D96B912050DED700DB5E93 /* DatabasePool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DatabasePool.hpp; sourceTree = "<group>"; };
-		23D96B952050E53600DB5E93 /* RecyclableDatabase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RecyclableDatabase.cpp; sourceTree = "<group>"; };
-		23D96B962050E53600DB5E93 /* RecyclableDatabase.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RecyclableDatabase.hpp; sourceTree = "<group>"; };
 		23DC306D202AFF8B000F7895 /* Handle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Handle.cpp; sourceTree = "<group>"; };
 		23DC306E202AFF8B000F7895 /* Handle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Handle.hpp; sourceTree = "<group>"; };
 		23DC3077202B0066000F7895 /* Tokenize.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Tokenize.cpp; sourceTree = "<group>"; };
@@ -2273,8 +2269,6 @@
 				2349F61C1EA0D6680021EFA7 /* Database.hpp */,
 				2349F6221EA0D6680021EFA7 /* HandlePool.cpp */,
 				2349F6231EA0D6680021EFA7 /* HandlePool.hpp */,
-				23D96B952050E53600DB5E93 /* RecyclableDatabase.cpp */,
-				23D96B962050E53600DB5E93 /* RecyclableDatabase.hpp */,
 				23D96B902050DED700DB5E93 /* DatabasePool.cpp */,
 				23D96B912050DED700DB5E93 /* DatabasePool.hpp */,
 				2349F6241EA0D6680021EFA7 /* RecyclableHandle.cpp */,
@@ -3727,7 +3721,6 @@
 				2370980B20590CA700E768B4 /* HandleStatement.hpp in Headers */,
 				23BBE2A8204955CE00C4CBB6 /* WCTCommon.h in Headers */,
 				23C7559320DCF90F00031A93 /* SQLiteLocker.hpp in Headers */,
-				23D96B982050E53600DB5E93 /* RecyclableDatabase.hpp in Headers */,
 				2370B12721914ED500D3227C /* NSData+WCTColumnCoding.h in Headers */,
 				2349F7381EA0D6680021EFA7 /* WCTTable+Convenient.h in Headers */,
 				23EEDC6C217DFADC006E9E73 /* ConvertibleImplementation.hpp in Headers */,
@@ -4582,7 +4575,6 @@
 				23AD52E620DB852B00664B62 /* Fraction.cpp in Sources */,
 				23EEDD1F217DFADC006E9E73 /* SyntaxTableConstraint.cpp in Sources */,
 				23D07CEA20BE873E0043F4D4 /* SequenceCrawler.cpp in Sources */,
-				23D96B972050E53600DB5E93 /* RecyclableDatabase.cpp in Sources */,
 				23EEDCD1217DFADC006E9E73 /* StatementDropTrigger.cpp in Sources */,
 				23EEDC6F217DFADC006E9E73 /* ExpressionOperable.cpp in Sources */,
 				23C7559120DCF90F00031A93 /* SQLiteLocker.cpp in Sources */,

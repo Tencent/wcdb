@@ -40,7 +40,6 @@
 
 #include <WCDB/Database.hpp>
 #include <WCDB/DatabasePool.hpp>
-#include <WCDB/RecyclableDatabase.hpp>
 #include <WCDB/RecyclableHandle.hpp>
 
 #include <WCDB/Modules.hpp>

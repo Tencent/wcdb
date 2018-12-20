@@ -37,9 +37,6 @@ public:
     Handle *get() const;
 
 protected:
-    using Recyclable::get;
-    using Recyclable::unsafeGet;
-
     Handle *m_handle;
 };
 

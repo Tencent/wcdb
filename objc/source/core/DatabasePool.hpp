@@ -21,11 +21,13 @@
 #ifndef _WCDB_DATABASEPOOL_HPP
 #define _WCDB_DATABASEPOOL_HPP
 
+#include <WCDB/Database.hpp>
 #include <WCDB/Lock.hpp>
 #include <WCDB/Path.hpp>
-#include <WCDB/RecyclableDatabase.hpp>
 
 namespace WCDB {
+
+typedef Recyclable<Database*> RecyclableDatabase;
 
 class DatabasePoolEvent {
 public:

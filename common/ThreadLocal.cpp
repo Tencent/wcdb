@@ -48,10 +48,10 @@ UntypedThreadLocal::UntypedThreadLocal()
 
 void* UntypedThreadLocal::getOrCreate()
 {
-    Infos* infos = (Infos*) pthread_getspecific(m_key.unsafeGet());
+    Infos* infos = (Infos*) pthread_getspecific(m_key.get());
     if (infos == nullptr) {
         infos = new Infos;
-        pthread_setspecific(m_key.unsafeGet(), infos);
+        pthread_setspecific(m_key.get(), infos);
     }
     auto iter = infos->find(m_identifier);
     if (iter == infos->end()) {
