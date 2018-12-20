@@ -93,6 +93,7 @@
 
 - (BOOL)remapTable:(NSString *)tableName toClass:(Class<WCTTableCoding>)cls
 {
+    // TODO: check the constraints are as expected here.
     WCTInnerAssert(tableName && cls);
     WCDB::Handle *handle = [self getOrGenerateHandle];
     if (!handle) {

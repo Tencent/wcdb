@@ -46,6 +46,7 @@ void SQL::iterate(const Iterator& iterator)
 
 String SQL::getDescription() const
 {
+    // TODO: check SQLite keyword here.
     return m_syntax->getDescription();
 }
 
