@@ -60,11 +60,6 @@
 
 #define WCDB_UNIQUE_ID __COUNTER__
 
-#define WCDB_BREAK_IF(cond)                                                    \
-    if (cond) {                                                                \
-        break;                                                                 \
-    }
-
 #define WCDB_STATIC_ASSERT_EXISTS(type_or_expression)                          \
     static_assert(sizeof(type_or_expression) > 0,                              \
                   WCDB_STRINGIFY(type_or_expression) "does not exist.")
