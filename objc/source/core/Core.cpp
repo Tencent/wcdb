@@ -126,7 +126,7 @@ bool Core::databaseShouldBackup(const String& path)
 
 std::pair<bool, bool> Core::databaseShouldMigrate(const String& path)
 {
-    RecyclableDatabase database = m_databasePool.getOrCreate(path);
+    RecyclableDatabase database = m_databasePool.get(path);
     if (database == nullptr) {
         return { false, false };
     }
