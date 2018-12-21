@@ -137,6 +137,7 @@ size_t HandlePool::activeHandleCount(Slot slot) const
         handleCount = handlesIter->second.size();
     }
     size_t freeCount = 0;
+    auto freesIter = m_frees.find(slot);
     if (freesIter != m_frees.end()) {
         freeCount = handlesIter->second.size();
     }
