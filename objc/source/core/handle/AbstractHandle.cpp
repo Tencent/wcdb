@@ -34,7 +34,7 @@ AbstractHandle::AbstractHandle()
 
 AbstractHandle::~AbstractHandle()
 {
-    close();
+    WCTRemedialAssert(!isOpened(), "Database is not closed.", close(););
 }
 
 void **AbstractHandle::getRawHandle()
