@@ -68,7 +68,7 @@ bool AssemblerHandle::markAsAssembling()
 bool AssemblerHandle::markAsAssembled()
 {
     m_table.clear();
-    finalize();
+    m_cellStatement->finalize();
     bool succeed = markSequenceAsAssembled();
     if (isInTransaction()) {
         succeed = commitOrRollbackTransaction() && succeed;
