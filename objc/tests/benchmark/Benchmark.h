@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "SingleDatabaseTestCase.h"
+#import "DatabaseTestCase.h"
 
-@interface Benchmark : SingleDatabaseTestCase
+@interface Benchmark : DatabaseTestCase
 
 // tear down - set up - measure - check correctness - tear down
 - (void)measure:(void (^)(void))block

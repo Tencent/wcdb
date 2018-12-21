@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "SingleTableTestCase.h"
+#import "TableTestCase.h"
 
-@interface CRUDTestCase : SingleTableTestCase
+@interface CRUDTestCase : TableTestCase
 
 - (BOOL)checkObject:(NSObject<WCTTableCoding>*)object
                      andSQL:(NSString*)sql

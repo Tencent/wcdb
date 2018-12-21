@@ -18,11 +18,11 @@
  * limitations under the License.
  */
 
-#import "SingleTableTestCase.h"
+#import "TableTestCase.h"
 #import "TestCaseObject+WCTTableCoding.h"
 #import "TestCaseObject.h"
 
-@interface TraceTests : SingleTableTestCase
+@interface TraceTests : TableTestCase
 
 @end
 

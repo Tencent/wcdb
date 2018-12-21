@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "SingleDatabaseTestCase.h"
+#import "DatabaseTestCase.h"
 
-@interface SingleTableTestCase : SingleDatabaseTestCase
+@interface TableTestCase : DatabaseTestCase
 
 @property (nonatomic, readonly) WCTTable* table;
 

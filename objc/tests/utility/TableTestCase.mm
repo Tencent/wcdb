@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "SingleTableTestCase.h"
+#import "TableTestCase.h"
 
-@implementation SingleTableTestCase
+@implementation TableTestCase
 
 - (void)setUp
 {

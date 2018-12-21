@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "SingleDatabaseTestCase.h"
+#import "DatabaseTestCase.h"
 
-@interface ConfigTests : SingleDatabaseTestCase
+@interface ConfigTests : DatabaseTestCase
 
 @property (nonatomic, readonly) NSString* configName;
 

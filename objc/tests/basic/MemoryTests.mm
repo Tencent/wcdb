@@ -18,12 +18,12 @@
  * limitations under the License.
  */
 
-#import "SingleDatabaseTestCase.h"
+#import "DatabaseTestCase.h"
 #if TARGET_OS_IPHONE && !TARGET_OS_WATCH
 #import <UIKit/UIKit.h>
 #endif
 
-@interface MemoryTests : SingleDatabaseTestCase
+@interface MemoryTests : DatabaseTestCase
 
 @end
 

@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "SingleDatabaseTestCase.h"
+#import "DatabaseTestCase.h"
 
-@interface MigrationTestCase : SingleDatabaseTestCase
+@interface MigrationTestCase : DatabaseTestCase
 
 @property (readonly, nonatomic) NSString* migratedPath;
 

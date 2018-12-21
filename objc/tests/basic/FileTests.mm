@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "SingleDatabaseTestCase.h"
+#import "DatabaseTestCase.h"
 
-@interface FileTests : SingleDatabaseTestCase
+@interface FileTests : DatabaseTestCase
 
 @property (nonatomic, readonly) NSArray<NSString*>* paths;
 

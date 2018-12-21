@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "SingleDatabaseTestCase.h"
+#import "DatabaseTestCase.h"
 
-@interface DatabaseTests : SingleDatabaseTestCase
+@interface DatabaseTests : DatabaseTestCase
 
 @end
 

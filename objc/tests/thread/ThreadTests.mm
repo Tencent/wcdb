@@ -18,11 +18,11 @@
  * limitations under the License.
  */
 
-#import "SingleTableTestCase.h"
+#import "TableTestCase.h"
 #import "TestCaseObject+WCTTableCoding.h"
 #import "TestCaseObject.h"
 
-@interface ThreadTests : SingleTableTestCase
+@interface ThreadTests : TableTestCase
 
 @property (nonatomic, readonly) dispatch_group_t group;
 @property (nonatomic, readonly) dispatch_queue_t queue;

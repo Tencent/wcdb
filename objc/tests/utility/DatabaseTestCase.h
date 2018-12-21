@@ -21,7 +21,7 @@
 #import "TestCase.h"
 #import <WCDB/WCDB.h>
 
-@interface SingleDatabaseTestCase : TestCase
+@interface DatabaseTestCase : TestCase
 
 @property (readonly, nonatomic) NSString* path;
 @property (readonly, nonatomic) NSString* walPath;

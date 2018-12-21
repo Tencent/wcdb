@@ -52,11 +52,11 @@
 #import "OldRebindObject.h"
 #import "PropertyObject+WCTTableCoding.h"
 #import "PropertyObject.h"
-#import "SingleTableTestCase.h"
 #import "TableConstraintObject+WCTTableCoding.h"
 #import "TableConstraintObject.h"
+#import "TableTestCase.h"
 
-@interface ORMTests : SingleTableTestCase
+@interface ORMTests : TableTestCase
 
 @end
 
