@@ -27,7 +27,15 @@
 
 namespace WCDB {
 
+// Migration step should as least as possible to avoid blocking user operations.
+// However, it's very wasteful for those resource(CPU, IO...) when the step is too tiny.
+// So stepper will try to migrate one by one until the count of dirty pages(to be written) is changed.
+// In addition, stepper can/will be interrupted when database is not idled.
 class MigrationStepperHandle final : public ConfigurableHandle, public Migration::Stepper {
+public:
+    MigrationStepperHandle();
+    ~MigrationStepperHandle();
+
 #pragma mark - Interrupt
 public:
     void setInterruptible(bool interruptible);
@@ -41,11 +49,13 @@ protected:
 protected:
     bool dropOriginTable(const MigrationInfo* info) override final;
     bool migrateRows(const MigrationInfo* info, bool& done) override final;
+    bool migrateRow(bool& migrated);
 
 private:
-    bool lazyOpen();
     bool switchMigrating(const MigrationInfo* newInfo);
-    Schema m_attached;
+    const MigrationInfo* m_migratingInfo;
+    HandleStatement* m_migrateStatement;
+    HandleStatement* m_removeMigratedStatement;
 };
 
 } // namespace WCDB

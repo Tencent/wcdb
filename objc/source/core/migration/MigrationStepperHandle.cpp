@@ -22,6 +22,21 @@
 
 namespace WCDB {
 
+MigrationStepperHandle::MigrationStepperHandle()
+: m_migratingInfo(nullptr)
+, m_migrateStatement(getStatement())
+, m_removeMigratedStatement(getStatement())
+{
+}
+
+MigrationStepperHandle::~MigrationStepperHandle()
+{
+    m_migrateStatement->finalize();
+    returnStatement(m_migrateStatement);
+    m_removeMigratedStatement->finalize();
+    returnStatement(m_removeMigratedStatement);
+}
+
 #pragma mark - Interrupt
 void MigrationStepperHandle::setInterruptible(bool interruptible)
 {
@@ -36,82 +51,94 @@ void MigrationStepperHandle::interrupt()
 }
 
 #pragma mark - Stepper
-bool MigrationStepperHandle::lazyOpen()
+bool MigrationStepperHandle::switchMigrating(const MigrationInfo* newInfo)
 {
-    if (isOpened()) {
+    WCTInnerAssert(newInfo != nullptr);
+    if (newInfo == m_migratingInfo) {
         return true;
     }
-    return open();
-}
-
-bool MigrationStepperHandle::switchMigrating(const MigrationInfo* migrating)
-{
-    String newSchema = migrating->getSchemaForOriginDatabase().getDescription();
-    String oldSchema = m_attached.getDescription();
-    if (oldSchema == newSchema) {
-        return true;
+    String oldSchema;
+    if (m_migratingInfo) {
+        oldSchema = m_migratingInfo->getSchemaForOriginDatabase().getDescription();
     }
-    String main = Schema::main().getDescription();
-    if (oldSchema != main) {
-        if (!execute(MigrationInfo::getStatementForDetachingSchema(m_attached))) {
-            return false;
+    String newSchema = newInfo->getSchemaForOriginDatabase().getDescription();
+    if (oldSchema != newSchema) {
+        String main = Schema::main().getDescription();
+        if (!oldSchema.empty() && oldSchema != main) {
+            if (!execute(MigrationInfo::getStatementForDetachingSchema(oldSchema))) {
+                return false;
+            }
+        }
+        if (newSchema != main) {
+            if (!execute(newInfo->getStatementForAttachingSchema())) {
+                return false;
+            }
         }
     }
-    if (newSchema != main) {
-        if (!execute(migrating->getStatementForAttachingSchema())) {
-            return false;
-        }
-    }
-    m_attached = migrating->getSchemaForOriginDatabase();
+    m_migratingInfo = newInfo;
+    m_migrateStatement->finalize();
+    m_removeMigratedStatement->finalize();
     return true;
 }
 
 bool MigrationStepperHandle::dropOriginTable(const MigrationInfo* info)
 {
-    if (!lazyOpen() || !switchMigrating(info)) {
+    if (!switchMigrating(info)) {
         return false;
     }
 
-    return execute(info->getStatementForDroppingOriginTable());
+    return execute(m_migratingInfo->getStatementForDroppingOriginTable());
 }
 
 bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
 {
     done = false;
 
-    if (!lazyOpen() || !switchMigrating(info)) {
+    if (!switchMigrating(info)) {
+        return false;
+    }
+
+    if (!m_migrateStatement->isPrepared()
+        && !m_migrateStatement->prepare(m_migratingInfo->getStatementForMigratingOneRow())) {
+        return false;
+    }
+
+    if (!m_removeMigratedStatement->isPrepared()
+        && !m_removeMigratedStatement->prepare(
+           m_migratingInfo->getStatementForDeletingSpecifiedRow())) {
         return false;
     }
 
     bool migrated = false;
-    if (!runNestedTransaction([info, &migrated](Handle* handle) -> bool {
-            int step = 10;
-
-            if (!handle->prepare(info->getStatementForMigratingRow())) {
-                return false;
-            }
-            handle->bindInteger32(step, 1);
-            bool succeed = handle->step();
-            handle->finalize();
-            if (!succeed) {
+    if (!runNestedTransaction([&migrated, this](Handle*) -> bool {
+            // migrate one at least
+            if (!migrateRow(migrated)) {
                 return false;
             }
 
-            if (!handle->prepare(info->getStatementForMigratingRow())) {
-                return false;
+            const int dirtyPageCount = getDirtyPageCount();
+            WCTInnerAssert(dirtyPageCount != 0);
+            bool step = true;
+            bool succeed = true;
+            while (succeed && step && !migrated) {
+                // try migrate one, or rollback to savepoint if the count of dirty pages is increased.
+                succeed = runNestedTransaction(
+                [&migrated, &step, dirtyPageCount, this](Handle*) -> bool {
+                    if (!migrateRow(migrated)) {
+                        return false;
+                    }
+                    step = getDirtyPageCount() > dirtyPageCount && !migrated;
+                    return step;
+                });
+                if (!succeed) {
+                    migrated = false;
+                    if (!step) {
+                        // failed since manual rollback
+                        succeed = true;
+                    }
+                }
             }
-            handle->bindInteger32(step, 1);
-            succeed = handle->step();
-            handle->finalize();
-            if (!succeed) {
-                return false;
-            }
-
-            if (handle->getChanges() < step) {
-                // nothing more to migrate
-                migrated = true;
-            }
-            return true;
+            return succeed;
         })) {
         return false;
     }
@@ -123,6 +150,18 @@ bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
     // detach should be executed when origin table is dropped.
 
     return true;
+}
+
+bool MigrationStepperHandle::migrateRow(bool& migrated)
+{
+    WCTInnerAssert(m_migrateStatement->isPrepared()
+                   && m_removeMigratedStatement->isPrepared());
+    WCTInnerAssert(isInTransaction());
+    m_removeMigratedStatement->reset();
+    m_removeMigratedStatement->bindInteger64(getLastInsertedRowID(), 1);
+    bool succeed = m_migrateStatement->step() && m_removeMigratedStatement->step();
+    migrated = succeed ? getChanges() == 0 : false;
+    return succeed;
 }
 
 } // namespace WCDB

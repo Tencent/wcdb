@@ -131,19 +131,14 @@ protected:
 #pragma mark - Migrate
 public:
     /*
-     DELETE FROM [schemaForOriginDatabase].[originTable] ORDER BY rowid DESC LIMIT ?1
-     */
-    const StatementDelete& getStatementForDeletingMigratedRow() const;
-
-    /*
      INSERT rowid, [columns]
      INTO main.[migratedTable]
      SELECT rowid, [columns]
      FROM [schemaForOriginDatabase].[originTable]
      ORDER BY rowid DESC
-     LIMIT ?1
+     LIMIT 1
      */
-    const StatementInsert& getStatementForMigratingRow() const;
+    const StatementInsert& getStatementForMigratingOneRow() const;
 
     /*
      DELETE FROM [schemaForOriginDatabase].[originTable] WHERE rowid == ?1
@@ -186,8 +181,7 @@ public:
     getStatementForLimitedDeletingFromTable(const Statement& originStatement) const;
 
 protected:
-    StatementInsert m_statementForMigratingRow;
-    StatementDelete m_statementForDeletingMigratedRow;
+    StatementInsert m_statementForMigratingOneRow;
     StatementInsert m_statementForMigratingSpecifiedRowTemplate;
     StatementDelete m_statementForDeletingSpecifiedRow;
     StatementDropTable m_statementForDroppingOriginTable;

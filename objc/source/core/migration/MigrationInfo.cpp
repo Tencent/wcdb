@@ -145,7 +145,7 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo, const std::set<S
 
         OrderingTerm descendingRowid = OrderingTerm(Column::rowid()).order(Order::DESC);
 
-        m_statementForMigratingRow
+        m_statementForMigratingOneRow
         = StatementInsert()
           .insertIntoTable(m_migratedTable)
           .schema(Schema::main())
@@ -154,13 +154,7 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo, const std::set<S
                   .select(specificResultColumns)
                   .from(TableOrSubquery(m_originTable).schema(m_schemaForOriginDatabase))
                   .order(descendingRowid)
-                  .limit(BindParameter(1)));
-
-        m_statementForDeletingMigratedRow
-        = StatementDelete()
-          .deleteFrom(QualifiedTable(m_originTable).schema(m_schemaForOriginDatabase))
-          .order(descendingRowid)
-          .limit(BindParameter(1));
+                  .limit(1));
 
         m_statementForMigratingSpecifiedRowTemplate
         = StatementInsert()
@@ -257,14 +251,9 @@ StatementSelect MigrationInfo::getStatementForSelectingUnionedView()
 }
 
 #pragma mark - Migrate
-const StatementDelete& MigrationInfo::getStatementForDeletingMigratedRow() const
+const StatementInsert& MigrationInfo::getStatementForMigratingOneRow() const
 {
-    return m_statementForDeletingMigratedRow;
-}
-
-const StatementInsert& MigrationInfo::getStatementForMigratingRow() const
-{
-    return m_statementForMigratingRow;
+    return m_statementForMigratingOneRow;
 }
 
 const StatementDelete& MigrationInfo::getStatementForDeletingSpecifiedRow() const

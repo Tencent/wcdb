@@ -703,20 +703,20 @@ bool Database::recover(uint32_t corruptedIdentifier)
 }
 
 #pragma mark - Migration
-std::pair<bool, bool> Database::stepMigration(bool force)
+std::pair<bool, bool> Database::stepMigration(bool interruptible)
 {
     InitializedGuard initializedGuard = initialize();
     if (!initializedGuard.valid()) {
         return { false, false };
     }
-    if (!force
+    if (interruptible
         && (activeHandleCount(ConfiguredHandleSlot) > 0
             || activeHandleCount(MigrationHandleSlot) > 0)) {
         return { true, false };
     }
     RecyclableHandle handle = getSlotHandle(MigrationStepperSlot);
     WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()));
-    static_cast<MigrationStepperHandle *>(handle.get())->setInterruptible(!force);
+    static_cast<MigrationStepperHandle *>(handle.get())->setInterruptible(interruptible);
     bool succeed, done;
     std::tie(succeed, done)
     = m_migration.step(*(static_cast<MigrationStepperHandle *>(handle.get())));
