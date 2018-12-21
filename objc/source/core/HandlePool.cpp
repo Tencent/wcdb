@@ -131,15 +131,17 @@ size_t HandlePool::activeHandleCount(Slot slot) const
 {
     SharedLockGuard concurrencyGuard(m_concurrency);
     SharedLockGuard memoryGuard(m_memory);
+    size_t handleCount = 0;
     auto handlesIter = m_handles.find(slot);
-    if (handlesIter == m_handles.end()) {
-        return 0;
+    if (handlesIter != m_handles.end()) {
+        handleCount = handlesIter->second.size();
     }
-    auto freesIter = m_frees.find(slot);
-    if (freesIter == m_frees.end()) {
-        return handlesIter->second.size();
+    size_t freeCount = 0;
+    if (freesIter != m_frees.end()) {
+        freeCount = handlesIter->second.size();
     }
-    return handlesIter->second.size() - freesIter->second.size();
+    WCTInnerAssert(handleCount >= freeCount);
+    return handleCount - freeCount;
 }
 
 RecyclableHandle HandlePool::flowOut(Slot slot)
