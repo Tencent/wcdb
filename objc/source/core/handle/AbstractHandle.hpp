@@ -92,6 +92,8 @@ public:
     bool isReadonly();
     bool isInTransaction();
 
+    int getDirtyPageCount();
+
     void interrupt(); // It's thread safe.
 
 protected:
