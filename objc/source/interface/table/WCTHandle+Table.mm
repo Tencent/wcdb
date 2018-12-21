@@ -96,58 +96,56 @@
     // TODO: check the constraints are as expected here.
     WCTInnerAssert(tableName && cls);
     WCDB::Handle *handle = [self getOrGenerateHandle];
+    WCTInnerAssert(handle->isInTransaction());
     if (!handle) {
         return NO;
     }
-    const WCTBinding &binding = [cls objectRelationalMapping];
-    std::pair<bool, bool> tableExists = handle->tableExists(tableName);
-    if (!tableExists.first) {
-        return NO;
+    bool succeed, exists;
+    std::tie(succeed, exists) = handle->tableExists(tableName);
+    if (!succeed) {
+        return false;
     }
-    if (tableExists.second) {
-        auto pair = handle->getColumns(WCDB::Schema::main(), tableName);
-        if (!pair.first) {
-            return NO;
+    const WCTBinding &binding = [cls objectRelationalMapping];
+    if (exists) {
+        std::set<WCDB::String> columnNames;
+        std::tie(succeed, columnNames) = handle->getColumns(WCDB::Schema::main(), tableName);
+        if (!succeed) {
+            return false;
         }
-        std::set<WCDB::String> &columnNames = pair.second;
-        std::list<const WCTColumnBinding *> columnBindingsToAdded;
         //Check whether the column names exists
         const auto &columnBindings = binding.getColumnBindings();
         for (const auto &columnBinding : columnBindings) {
             auto iter = columnNames.find(columnBinding.first);
             if (iter == columnNames.end()) {
-                columnBindingsToAdded.push_back(&columnBinding.second);
+                //Add new column
+                if (!handle->execute(WCDB::StatementAlterTable().alterTable(tableName).addColumn(columnBinding.second.columnDef))) {
+                    return false;
+                }
             } else {
                 columnNames.erase(iter);
             }
         }
-        for (const WCDB::String &columnName : columnNames) {
+        for (const auto &columnName : columnNames) {
             WCDB::Error error;
             error.setCode(WCDB::Error::Code::Mismatch);
             error.level = WCDB::Error::Level::Notice;
             error.message = "Skip column";
             error.infos.set("Table", tableName);
             error.infos.set("Column", columnName);
-            error.infos.set("Path", self.database.path);
+            error.infos.set("Path", handle->getPath());
             WCDB::Notifier::shared()->notify(error);
-        }
-        //Add new column
-        for (const WCTColumnBinding *columnBinding : columnBindingsToAdded) {
-            if (!handle->execute(WCDB::StatementAlterTable().alterTable(tableName).addColumn(columnBinding->columnDef))) {
-                return NO;
-            }
         }
     } else {
         if (!handle->execute(binding.generateCreateTableStatement(tableName))) {
-            return NO;
+            return false;
         }
     }
     for (const WCDB::StatementCreateIndex &statementCreateIndex : binding.generateCreateIndexStatements(tableName)) {
         if (!handle->execute(statementCreateIndex)) {
-            return NO;
+            return false;
         }
     }
-    return YES;
+    return true;
 }
 
 @end
