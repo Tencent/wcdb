@@ -74,6 +74,7 @@ bool AssemblerHandle::markAsAssembled()
     if (isInTransaction()) {
         succeed = commitOrRollbackTransaction() && succeed;
     }
+    // TODO: check integrity after assembled?
     close();
     return succeed;
 }
