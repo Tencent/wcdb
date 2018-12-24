@@ -30,14 +30,14 @@
 #import <WCDB/WCTUpdate.h>
 
 #import <WCDB/WCTDatabase+Config.h>
+#import <WCDB/WCTDatabase+FTS.h>
 #import <WCDB/WCTDatabase+File.h>
-#import <WCDB/WCTDatabase+Handle.h>
 #import <WCDB/WCTDatabase+Memory.h>
-#import <WCDB/WCTDatabase+Monitor.h>
+#import <WCDB/WCTDatabase+Migration.h>
 #import <WCDB/WCTDatabase+Repair.h>
-#import <WCDB/WCTDatabase+Transaction.h>
 #import <WCDB/WCTDatabase+Version.h>
 
+#import <WCDB/WCTDatabase+Handle.h>
 #import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTHandle.h>
 
@@ -54,8 +54,6 @@
 #import <WCDB/WCTHandle+Table.h>
 #import <WCDB/WCTTable.h>
 
+#import <WCDB/WCTDatabase+Monitor.h>
 #import <WCDB/WCTError.h>
-
 #import <WCDB/WCTPerformanceFootprint.h>
-
-#import <WCDB/WCTDatabase+FTS.h>
