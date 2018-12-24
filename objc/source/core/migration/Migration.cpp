@@ -78,9 +78,11 @@ std::pair<bool, const MigrationInfo*> Migration::Binder::prepareInfo(const Strin
 {
     bool succeed = true;
     RecyclableMigrationInfo info = nullptr;
-    std::tie(succeed, info) = m_migration.getOrBindInfo(*this, table);
-    if (succeed) {
-        m_prepareds.emplace(table, info);
+    if (!table.empty()) {
+        std::tie(succeed, info) = m_migration.getOrBindInfo(*this, table);
+        if (succeed) {
+            m_prepareds.emplace(table, info);
+        }
     }
     return { succeed, info.get() };
 }
