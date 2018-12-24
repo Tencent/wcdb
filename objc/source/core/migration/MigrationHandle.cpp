@@ -204,6 +204,34 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
                     }
                 }
             } break;
+            case Syntax::Identifier::Type::Expression: {
+                Syntax::Expression& syntax = (Syntax::Expression&) identifier;
+                switch (syntax.switcher) {
+                case Syntax::Expression::Switch::Column:
+                    if (syntax.schema.isMain()) {
+                        const MigrationInfo* info;
+                        std::tie(succeed, info) = prepareInfo(syntax.table);
+                        if (succeed && info) {
+                            syntax.schema = Schema::temp();
+                            syntax.table = info->getUnionedView();
+                        }
+                    }
+                    break;
+                case Syntax::Expression::Switch::In:
+                    if (syntax.inSwitcher == Syntax::Expression::SwitchIn::Table
+                        && syntax.schema.isMain()) {
+                        const MigrationInfo* info;
+                        std::tie(succeed, info) = prepareInfo(syntax.table);
+                        if (succeed && info) {
+                            syntax.schema = Schema::temp();
+                            syntax.table = info->getUnionedView();
+                        }
+                    }
+                    break;
+                default:
+                    break;
+                }
+            } break;
             default:
                 break;
             }
