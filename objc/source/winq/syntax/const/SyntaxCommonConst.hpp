@@ -41,6 +41,10 @@ enum class ConflictAction {
     Ignore,
 };
 
+static const char* masterTable = "sqlite_master";
+static const char* mainSchema = "main";
+static const char* tempSchema = "temp";
+
 } // namespace Syntax
 
 template<>

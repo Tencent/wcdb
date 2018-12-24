@@ -32,12 +32,7 @@ WCDB_SYNTHESIZE(WCTMaster, sql)
 
 + (NSString *)tableName
 {
-    return @"sqlite_master";
-}
-
-+ (NSString *)tempTableName
-{
-    return @"sqlite_temp_master";
+    return [NSString stringWithUTF8String:WCDB::Syntax::masterTable];
 }
 
 @end

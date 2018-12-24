@@ -37,6 +37,10 @@ public:
     static constexpr const Type type = Type::Schema;
     Type getType() const override final;
     String getDescription() const override final;
+
+#pragma mark - Utility
+public:
+    bool isMain() const;
 };
 
 } // namespace Syntax

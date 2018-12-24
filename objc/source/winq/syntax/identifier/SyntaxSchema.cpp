@@ -35,9 +35,14 @@ String Schema::getDescription() const
 {
     if (name.empty()) {
         // Empty schema is not allowed in WCDB. It must be explicitly specified.
-        return "main";
+        return mainSchema;
     }
     return name;
+}
+
+bool Schema::isMain() const
+{
+    return name.empty() || name == mainSchema;
 }
 
 } // namespace Syntax

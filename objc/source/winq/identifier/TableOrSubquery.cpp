@@ -98,7 +98,7 @@ TableOrSubquery::TableOrSubquery(const StatementSelect& select)
 
 TableOrSubquery TableOrSubquery::master()
 {
-    return "sqlite_master";
+    return WCDB::Syntax::masterTable;
 }
 
 } // namespace WCDB

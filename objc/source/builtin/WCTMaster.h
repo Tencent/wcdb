@@ -25,7 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface WCTMaster : NSObject
 
 @property (class, nonatomic, readonly) NSString *tableName;
-@property (class, nonatomic, readonly) NSString *tempTableName;
 
 @property (nonatomic, retain, nullable) NSString *type;
 @property (nonatomic, retain, nullable) NSString *name;

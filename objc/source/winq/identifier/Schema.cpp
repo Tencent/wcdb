@@ -33,12 +33,12 @@ Schema::Schema(const UnsafeString& name)
 
 Schema Schema::main()
 {
-    return Schema("main");
+    return Schema(Syntax::mainSchema);
 }
 
 Schema Schema::temp()
 {
-    return Schema("temp");
+    return Schema(Syntax::tempSchema);
 }
 
 } // namespace WCDB
