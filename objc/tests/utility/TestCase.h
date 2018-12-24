@@ -74,8 +74,14 @@
         }                                 \
     }
 
-#define TestCaseAssertFalse(cond, ...) \
-    TestCaseAssertTrue(!(cond), __VA_ARGS__)
+#define TestCaseAssertFalse(cond, ...)     \
+    {                                      \
+        BOOL test = (cond);                \
+        XCTAssertFalse(test, __VA_ARGS__); \
+        if (test) {                        \
+            TESTCASE_FAILED                \
+        }                                  \
+    }
 
 #define TestCaseAssertEqual(left, right, ...) \
     TestCaseAssertTrue((left) == (right))

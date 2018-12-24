@@ -22,4 +22,61 @@
 
 @implementation MigrationTestCase
 
+- (void)setUp
+{
+    [super setUp];
+
+    self.tableClass = TestCaseObject.class;
+
+    if (self.isCrossDatabaseMigration) {
+        _originPath = [self.path stringByAppendingString:@"_origin"];
+    } else {
+        _originPath = self.path;
+    }
+    _originDatabase = [[WCTDatabase alloc] initWithPath:_originPath];
+    _originTable = @"testOriginTable";
+
+    TestCaseAssertTrue([_originDatabase createTableAndIndexes:_originTable withClass:TestCaseObject.class]);
+    NSMutableArray<TestCaseObject*>* objects = [NSMutableArray array];
+    for (int i = 0; i < 100; ++i) {
+        TestCaseObject* object = [[TestCaseObject alloc] init];
+        object.identifier = i + 1;
+        object.content = [NSString randomString];
+        [objects addObject:object];
+    }
+    _objects = objects;
+    TestCaseAssertTrue([_originDatabase insertObjects:_objects intoTable:_originTable]);
+
+    [_originDatabase close];
+
+    NSString* originTable = self.originTable;
+    NSString* originPath = self.originPath;
+    NSString* migratedTable = self.tableName;
+    [self.database removeConfigForName:WCTConfigNameCheckpoint];
+    [self.database filterMigration:^(WCTMigrationUserInfo* userInfo) {
+        if ([userInfo.migratedTable isEqualToString:migratedTable]) {
+            userInfo.originTable = originTable;
+            userInfo.originDatabase = originPath;
+        }
+    }];
+    TestCaseAssertTrue([self createTable]);
+    [self.database close];
+}
+
+- (void)tearDown
+{
+    if (_originDatabase.isValidated) {
+        [_originDatabase close];
+        [_originDatabase invalidate];
+    }
+    _originDatabase = nil;
+    [super tearDown];
+}
+
+- (BOOL)isMigrating
+{
+    int count = [self.database getValueFromStatement:WCDB::StatementSelect().select(TestCaseObject.allProperties.count()).from(self.tableName)].numberValue.intValue;
+    return count > 0 && count < self.objects.count;
+}
+
 @end

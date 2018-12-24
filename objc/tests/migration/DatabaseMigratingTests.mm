@@ -18,20 +18,36 @@
  * limitations under the License.
  */
 
-#import "CRUDTestCase.h"
+#import "MigrationTestCase.h"
 
-@interface MigrationTestCase : CRUDTestCase
+@interface DatabaseMigratingTests : MigrationTestCase
 
-@property (assign, nonatomic) BOOL isCrossDatabaseMigration;
+@end
 
-@property (readonly, nonatomic) NSString* originTable;
+@implementation DatabaseMigratingTests
 
-@property (readonly, nonatomic) NSString* originPath;
+- (void)setUp
+{
+    // Put setup code here. This method is called before the invocation of each test method in the class.
+}
 
-@property (readonly, nonatomic) WCTDatabase* originDatabase;
+- (void)tearDown
+{
+    // Put teardown code here. This method is called after the invocation of each test method in the class.
+}
 
-@property (readonly, nonatomic) NSArray<TestCaseObject*>* objects;
+- (void)testExample
+{
+    // This is an example of a functional test case.
+    // Use XCTAssert and related functions to verify your tests produce the correct results.
+}
 
-- (BOOL)isMigrating;
+- (void)testPerformanceExample
+{
+    // This is an example of a performance test case.
+    [self measureBlock:^{
+    // Put the code you want to measure the time of here.
+    }];
+}
 
 @end

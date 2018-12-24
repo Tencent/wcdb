@@ -47,6 +47,10 @@ asExpectedBySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block;
                andSQL:(NSString*)sql
 asExpectedBySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block;
 
+- (BOOL)checkObjects:(NSArray<NSObject<WCTTableCoding>*>*)expectedObjects
+              andSQLs:(NSArray<NSString*>*)expectedSQLs
+asExpectedBySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block;
+
 - (BOOL)checkRow:(WCTOneRow*)row
                andSQL:(NSString*)sql
 asExpectedBySelecting:(WCTOneRow* (^)())block;
