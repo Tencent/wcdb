@@ -133,7 +133,7 @@
             ++index;
         }
         if (![handle step]) {
-            failed = NO; // rollback
+            failed = YES;
             break;
         }
         if (isAutoIncrement && canFillLastInsertedRowID) {
