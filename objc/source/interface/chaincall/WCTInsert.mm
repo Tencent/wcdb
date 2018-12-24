@@ -103,38 +103,46 @@
     }
 
     WCTInnerAssert(autoIncrements.size() == properties.size());
-    return [_handle runNestedTransaction:^BOOL(WCTHandle *handle) {
-        if (![handle prepare:self->_statement]) {
-            return NO;
+    if (_values.count > 1) {
+        return [_handle runNestedTransaction:^BOOL(WCTHandle *handle) {
+            return [self realExecute:handle properties:properties autoIncrements:autoIncrements];
+        }];
+    }
+    return [self realExecute:_handle properties:properties autoIncrements:autoIncrements];
+}
+
+- (BOOL)realExecute:(WCTHandle *)handle properties:(const WCTProperties &)properties autoIncrements:(const std::vector<bool> &)autoIncrements
+{
+    if (![handle prepare:_statement]) {
+        return NO;
+    }
+    BOOL failed = NO;
+    BOOL canFillLastInsertedRowID = [_values.firstObject respondsToSelector:@selector(lastInsertedRowID)];
+    for (WCTObject *value in _values) {
+        int index = 1;
+        BOOL isAutoIncrement = NO;
+        for (const WCTProperty &property : properties) {
+            if (!autoIncrements[index - 1] || !value.isAutoIncrement) {
+                [handle bindProperty:property
+                            ofObject:value
+                             toIndex:index];
+            } else {
+                [handle bindNullToIndex:index];
+                isAutoIncrement = YES;
+            }
+            ++index;
         }
-        BOOL failed = NO;
-        BOOL canFillLastInsertedRowID = [self->_values.firstObject respondsToSelector:@selector(lastInsertedRowID)];
-        for (WCTObject *value in self->_values) {
-            int index = 1;
-            BOOL isAutoIncrement = NO;
-            for (const WCTProperty &property : properties) {
-                if (!autoIncrements[index - 1] || !value.isAutoIncrement) {
-                    [handle bindProperty:property
-                                ofObject:value
-                                 toIndex:index];
-                } else {
-                    [handle bindNullToIndex:index];
-                    isAutoIncrement = YES;
-                }
-                ++index;
-            }
-            if (![handle step]) {
-                failed = NO; // rollback
-                break;
-            }
-            if (isAutoIncrement && canFillLastInsertedRowID) {
-                value.lastInsertedRowID = [handle getLastInsertedRowID];
-            }
-            [handle reset];
+        if (![handle step]) {
+            failed = NO; // rollback
+            break;
         }
-        [handle finalizeStatement];
-        return !failed;
-    }];
+        if (isAutoIncrement && canFillLastInsertedRowID) {
+            value.lastInsertedRowID = [handle getLastInsertedRowID];
+        }
+        [handle reset];
+    }
+    [handle finalizeStatement];
+    return !failed;
 }
 
 @end
