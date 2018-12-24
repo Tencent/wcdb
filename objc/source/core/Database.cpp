@@ -252,8 +252,8 @@ bool Database::willConfigureHandle(Slot slot, Handle *handle)
             SharedLockGuard memoryGuard(m_memory);
             configs = m_configs;
         }
-        WCTInnerAssert(dynamic_cast<ConfiguredHandle *>(handle) != nullptr);
-        if (!static_cast<ConfiguredHandle *>(handle)->reconfigure(configs)) {
+        WCTInnerAssert(dynamic_cast<ConfigurableHandle *>(handle) != nullptr);
+        if (!static_cast<ConfigurableHandle *>(handle)->reconfigure(configs)) {
             succeed = false;
             setThreadedError(handle->getError());
             break;
