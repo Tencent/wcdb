@@ -170,62 +170,35 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
             case Syntax::Identifier::Type::TableOrSubquery: {
                 // main.migratedTable -> temp.unionedView
                 Syntax::TableOrSubquery& syntax = (Syntax::TableOrSubquery&) identifier;
-                if (syntax.switcher == Syntax::TableOrSubquery::Switch::Table
-                    && syntax.schema.isMain()) {
-                    const MigrationInfo* info;
-                    std::tie(succeed, info) = prepareInfo(syntax.tableOrFunction);
-                    if (succeed && info) {
-                        syntax.schema = Schema::temp();
-                        syntax.tableOrFunction = info->getUnionedView();
-                    }
+                if (syntax.switcher == Syntax::TableOrSubquery::Switch::Table) {
+                    succeed = tryFallbackToUnionedView(syntax.schema, syntax.tableOrFunction);
                 }
             } break;
             case Syntax::Identifier::Type::QualifiedTableName: {
                 // main.migratedTable -> schemaForOriginDatabase.originTable
                 Syntax::QualifiedTableName& syntax = (Syntax::QualifiedTableName&) identifier;
-                if (syntax.schema.isMain()) {
-                    const MigrationInfo* info;
-                    std::tie(succeed, info) = prepareInfo(syntax.table);
-                    if (succeed && info) {
-                        syntax.schema = info->getSchemaForOriginDatabase();
-                        syntax.table = info->getOriginTable();
-                    }
-                }
+                succeed = tryFallbackToOriginTable(syntax.schema, syntax.table);
+            } break;
+            case Syntax::Identifier::Type::InsertSTMT: {
+                // main.migratedTable -> schemaForOriginDatabase.originTable
+                Syntax::InsertSTMT& syntax = (Syntax::InsertSTMT&) identifier;
+                succeed = tryFallbackToOriginTable(syntax.schema, syntax.table);
             } break;
             case Syntax::Identifier::Type::DropTableSTMT: {
                 // main.migratedTable -> schemaForOriginDatabase.originTable
                 Syntax::DropTableSTMT& syntax = (Syntax::DropTableSTMT&) identifier;
-                if (syntax.schema.isMain()) {
-                    const MigrationInfo* info;
-                    std::tie(succeed, info) = prepareInfo(syntax.table);
-                    if (succeed && info) {
-                        syntax.schema = info->getSchemaForOriginDatabase();
-                        syntax.table = info->getOriginTable();
-                    }
-                }
+                succeed = tryFallbackToOriginTable(syntax.schema, syntax.table);
             } break;
             case Syntax::Identifier::Type::Expression: {
+                // main.migratedTable -> temp.unionedView
                 Syntax::Expression& syntax = (Syntax::Expression&) identifier;
                 switch (syntax.switcher) {
                 case Syntax::Expression::Switch::Column:
-                    if (syntax.schema.isMain()) {
-                        const MigrationInfo* info;
-                        std::tie(succeed, info) = prepareInfo(syntax.table);
-                        if (succeed && info) {
-                            syntax.schema = Schema::temp();
-                            syntax.table = info->getUnionedView();
-                        }
-                    }
+                    succeed = tryFallbackToUnionedView(syntax.schema, syntax.table);
                     break;
                 case Syntax::Expression::Switch::In:
-                    if (syntax.inSwitcher == Syntax::Expression::SwitchIn::Table
-                        && syntax.schema.isMain()) {
-                        const MigrationInfo* info;
-                        std::tie(succeed, info) = prepareInfo(syntax.table);
-                        if (succeed && info) {
-                            syntax.schema = Schema::temp();
-                            syntax.table = info->getUnionedView();
-                        }
+                    if (syntax.inSwitcher == Syntax::Expression::SwitchIn::Table) {
+                        succeed = tryFallbackToUnionedView(syntax.schema, syntax.table);
                     }
                     break;
                 default:
@@ -255,7 +228,7 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
             const Syntax::InsertSTMT* falledBackSyntax
             = static_cast<const Syntax::InsertSTMT*>(falledBackStatement.getSyntaxIdentifier());
             if (originSyntax->table != falledBackSyntax->table) {
-                succeed = prepareMigrate(falledBackStatement);
+                succeed = prepareMigrate(statement);
             }
         } break;
         case Syntax::Identifier::Type::UpdateSTMT: {
@@ -312,6 +285,34 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
     m_processing = false;
 #endif
     return { succeed, std::move(statements) };
+}
+
+bool MigrationHandle::tryFallbackToUnionedView(Syntax::Schema& schema, String& table)
+{
+    bool succeed = true;
+    if (schema.isMain()) {
+        const MigrationInfo* info;
+        std::tie(succeed, info) = prepareInfo(table);
+        if (succeed && info != nullptr) {
+            schema = Schema::temp();
+            table = info->getUnionedView();
+        }
+    }
+    return succeed;
+}
+
+bool MigrationHandle::tryFallbackToOriginTable(Syntax::Schema& schema, String& table)
+{
+    bool succeed = true;
+    if (schema.isMain()) {
+        const MigrationInfo* info;
+        std::tie(succeed, info) = prepareInfo(table);
+        if (succeed && info != nullptr) {
+            schema = info->getSchemaForOriginDatabase();
+            table = info->getOriginTable();
+        }
+    }
+    return succeed;
 }
 
 #pragma mark - Override
@@ -547,14 +548,14 @@ bool MigrationHandle::stepMigrate(const int64_t& rowid)
 void MigrationHandle::finalizeMigrate()
 {
     m_migrateStatement->finalize();
-    m_additionalStatement->finalize();
+    m_removeMigratedStatement->finalize();
 }
 
 void MigrationHandle::resetMigrate()
 {
     WCTInnerAssert(isMigratedPrepared());
     m_migrateStatement->reset();
-    m_additionalStatement->reset();
+    m_removeMigratedStatement->reset();
 }
 
 bool MigrationHandle::prepareMigrate(const Statement& statement)
@@ -565,7 +566,7 @@ bool MigrationHandle::prepareMigrate(const Statement& statement)
     static_cast<Syntax::InsertSTMT*>(statement.getSyntaxIdentifier())->table);
     WCTInnerAssert(info != nullptr);
     return m_migrateStatement->prepare(info->getStatementForMigratingSpecifiedRow(statement))
-           && m_migrateStatement->prepare(info->getStatementForDeletingSpecifiedRow());
+           && m_removeMigratedStatement->prepare(info->getStatementForDeletingSpecifiedRow());
 }
 
 } //namespace WCDB

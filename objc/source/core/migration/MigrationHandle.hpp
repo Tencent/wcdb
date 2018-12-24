@@ -77,6 +77,8 @@ protected:
     bool realExecute(const std::list<Statement> &statements);
     bool realStep(bool &done);
     std::pair<bool, std::list<Statement>> process(const Statement &statement);
+    bool tryFallbackToUnionedView(Syntax::Schema &schema, String &table);
+    bool tryFallbackToOriginTable(Syntax::Schema &schema, String &table);
 
 #ifdef DEBUG
     bool m_processing;
@@ -87,6 +89,7 @@ protected:
 protected:
     // For Insert Statement Only
     bool isMigratedPrepared();
+    // only conflict clause will be used
     bool prepareMigrate(const Statement &statement);
     bool stepMigrate(const int64_t &rowid);
     void finalizeMigrate();
