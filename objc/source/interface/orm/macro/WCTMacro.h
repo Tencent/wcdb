@@ -35,9 +35,5 @@
 #define WCDB_EXTERN extern
 #endif
 
-#ifdef DEBUG
 #define WCDB_ORM_CHECK_INHERITANCE(className)                                  \
     WCTBinding::checkInheritance(className.class, self)
-#else
-#define WCDB_ORM_CHECK_INHERITANCE(className)
-#endif
