@@ -96,7 +96,11 @@ asExpectedInOperation:(BOOL (^)())block
             break;
         }
         NSMutableArray<NSString*>* sqls = [NSMutableArray arrayWithArray:expectedSQLs];
+        NSThread* tracedThread = [NSThread currentThread];
         [self.database traceSQL:^(NSString* sql) {
+            if (tracedThread != [NSThread currentThread]) {
+                return;
+            }
             if (!trace) {
                 return;
             }
