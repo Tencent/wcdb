@@ -155,7 +155,9 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo, const std::set<S
             select.union_();
         }
 
-        select.select(resultColumns).from(TableOrSubquery(m_originTable).schema(m_schemaForOriginDatabase));
+        select.select(resultColumns)
+        .from(TableOrSubquery(m_originTable).schema(m_schemaForOriginDatabase))
+        .order(OrderingTerm(Column::rowid()).order(Order::ASC));
 
         m_statementForCreatingUnionedView
         = StatementCreateView().createView(m_unionedView).temp().ifNotExists().as(select);

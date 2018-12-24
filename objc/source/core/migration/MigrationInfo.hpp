@@ -118,6 +118,7 @@ public:
      UNION/UNION ALL
      SELECT rowid, [columns]
      FROM main.[migratedTable]
+     ORDER BY rowid ASC
      */
     const StatementCreateView& getStatementForCreatingUnionedView() const;
 
