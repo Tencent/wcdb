@@ -32,20 +32,27 @@ namespace WCDB {
 class MigrationBaseInfo : public DebugDescribable {
 public:
     MigrationBaseInfo();
-    MigrationBaseInfo(const String& migratedTable);
+    MigrationBaseInfo(const String& migratedDatabase, const String& migratedTable);
     virtual ~MigrationBaseInfo();
 
     const String& getMigratedTable() const;
+    const String& getMigratedDatabase() const;
     const String& getOriginTable() const;
     const String& getOriginDatabase() const;
 
     bool shouldMigrate() const;
     bool isSameDatabaseMigration() const;
 
+    // WCDBMigration_
+    static const char* getSchemaPrefix();
+
     String getDebugDescription() const override final;
 
 protected:
+    static Schema getSchemaForDatabase(const String& database);
+
     String m_migratedTable;
+    String m_migratedDatabase;
     String m_originTable;
     String m_originDatabase;
 };
@@ -56,6 +63,14 @@ public:
     using MigrationBaseInfo::MigrationBaseInfo;
 
     void setOrigin(const String& table, const String& database = "");
+
+    /*
+     ATTACH [originDatabase]
+     AS [schemaForOriginDatabase]
+     */
+    StatementAttach getStatementForAttachingSchema() const;
+
+    Schema getSchemaForOriginDatabase() const;
 };
 
 #pragma mark - MigrationInfo
@@ -65,12 +80,8 @@ public:
 
 #pragma mark - Schema
 public:
+    // Schema
     const Schema& getSchemaForOriginDatabase() const;
-
-    // WCDBMigration_
-    static const String& getSchemaPrefix();
-
-    static Schema getSchemaForDatabase(const String& database);
 
     /*
      ATTACH [originDatabase]

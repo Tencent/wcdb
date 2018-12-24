@@ -137,14 +137,13 @@ Migration::getOrBindInfo(Binder& binder, const String& table)
             return { true, info };
         }
     }
-    MigrationUserInfo userInfo(table);
+    MigrationUserInfo userInfo(binder.getMigratedDatabasePath(), table);
     m_filter(userInfo);
     do {
         if (userInfo.shouldMigrate()) {
             bool succeed;
             std::set<String> columns;
-            std::tie(succeed, columns) = binder.getColumns(
-            userInfo.getOriginTable(), userInfo.getOriginDatabase());
+            std::tie(succeed, columns) = binder.getOriginColumns(userInfo);
             if (!succeed) {
                 break;
             }
@@ -155,12 +154,14 @@ Migration::getOrBindInfo(Binder& binder, const String& table)
                 break;
             }
 
-            m_filted.emplace(table, info.get());
             if (!columns.empty()) {
                 m_holder.push_back(MigrationInfo(userInfo, columns));
                 const MigrationInfo* hold = &m_holder.back();
                 m_migratings.emplace(hold);
                 m_referenceds.emplace(hold, 0);
+                m_filted.emplace(table, hold);
+            } else {
+                m_filted.emplace(table, nullptr);
             }
 
             std::tie(get, info) = getBoundInfo(table);
@@ -203,7 +204,7 @@ std::pair<bool, RecyclableMigrationInfo> Migration::getBoundInfo(const String& t
 void Migration::retainInfo(const MigrationInfo* info)
 {
     WCTInnerAssert(info != nullptr);
-    WCTInnerAssert(m_lock.writeSafety());
+    LockGuard lockGuard(m_lock);
     ++m_referenceds.find(info)->second;
     WCTInnerAssert(m_referenceds.find(info) != m_referenceds.end());
 }
@@ -211,7 +212,7 @@ void Migration::retainInfo(const MigrationInfo* info)
 void Migration::releaseInfo(const MigrationInfo* info)
 {
     WCTInnerAssert(info != nullptr);
-    WCTInnerAssert(m_lock.writeSafety());
+    LockGuard lockGuard(m_lock);
     auto iter = m_referenceds.find(info);
     WCTInnerAssert(iter != m_referenceds.end());
     WCTInnerAssert(iter->second > 0);

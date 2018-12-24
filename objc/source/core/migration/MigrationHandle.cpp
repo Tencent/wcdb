@@ -32,6 +32,9 @@ MigrationHandle::MigrationHandle(Migration& migration)
 , m_additionalStatement(getStatement())
 , m_migrateStatement(getStatement())
 , m_removeMigratedStatement(getStatement())
+#ifdef DEBUG
+, m_processing(false)
+#endif
 {
 }
 
@@ -55,11 +58,20 @@ bool MigrationHandle::rebind(const std::map<String, RecyclableMigrationInfo>& mi
     }
 
     std::set<String> createdViews;
-    std::tie(succeed, createdViews)
-    = getValues(MigrationInfo::getStatementForSelectingUnionedView(), 0);
+
+    bool exists;
+    std::tie(succeed, exists) = tableExists(Schema::temp(), Syntax::masterTable);
     if (!succeed) {
         return false;
     }
+    if (exists) {
+        std::tie(succeed, createdViews)
+        = getValues(MigrationInfo::getStatementForSelectingUnionedView(), 0);
+        if (!succeed) {
+            return false;
+        }
+    }
+
     for (const auto& createdView : createdViews) {
         WCTInnerAssert(createdView.hasPrefix(MigrationInfo::getUnionedViewPrefix()));
         auto iter = infosToCreateView.find(createdView);
@@ -68,7 +80,7 @@ bool MigrationHandle::rebind(const std::map<String, RecyclableMigrationInfo>& mi
             infosToCreateView.erase(iter);
         } else {
             // it is no longer needed
-            if (!execute(MigrationInfo::getStatementForDroppingUnionedView(createdView))) {
+            if (!executeStatement(MigrationInfo::getStatementForDroppingUnionedView(createdView))) {
                 return false;
             }
         }
@@ -76,7 +88,7 @@ bool MigrationHandle::rebind(const std::map<String, RecyclableMigrationInfo>& mi
     // create all needed views
     for (const auto& iter : infosToCreateView) {
         const MigrationInfo* infoToCreateView = iter.second;
-        if (!execute(infoToCreateView->getStatementForCreatingUnionedView())) {
+        if (!executeStatement(infoToCreateView->getStatementForCreatingUnionedView())) {
             return false;
         }
     }
@@ -106,7 +118,8 @@ bool MigrationHandle::rebind(const std::map<String, RecyclableMigrationInfo>& mi
                 infosToAttachSchema.erase(iter);
             } else {
                 // it is not longer needed
-                if (!execute(MigrationInfo::getStatementForDetachingSchema(attachedSchema))) {
+                if (!executeStatement(
+                    MigrationInfo::getStatementForDetachingSchema(attachedSchema))) {
                     return false;
                 }
             }
@@ -115,7 +128,7 @@ bool MigrationHandle::rebind(const std::map<String, RecyclableMigrationInfo>& mi
     // attach all needed schemas
     for (const auto& iter : infosToAttachSchema) {
         const MigrationInfo* infoToAttachSchema = iter.second;
-        if (!execute(infoToAttachSchema->getStatementForAttachingSchema())) {
+        if (!executeStatement(infoToAttachSchema->getStatementForAttachingSchema())) {
             return false;
         }
     }
@@ -124,14 +137,28 @@ bool MigrationHandle::rebind(const std::map<String, RecyclableMigrationInfo>& mi
 }
 
 std::pair<bool, std::set<String>>
-MigrationHandle::getColumns(const String& table, const String& database)
+MigrationHandle::getOriginColumns(const MigrationUserInfo& userInfo)
 {
-    return Handle::getColumns(MigrationInfo::getSchemaForDatabase(database), table);
+    // schema has no need to be detached since schema will be managed automatically when rebind.
+    if (!userInfo.isSameDatabaseMigration()
+        && !executeStatement(userInfo.getStatementForAttachingSchema())) {
+        return { false, {} };
+    }
+    return getColumns(userInfo.getSchemaForOriginDatabase(), userInfo.getOriginTable());
+}
+
+String MigrationHandle::getMigratedDatabasePath() const
+{
+    return getPath();
 }
 
 #pragma mark - Migration
 std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& statement)
 {
+#ifdef DEBUG
+    m_processing = true;
+#endif
+
     bool succeed = true;
     std::list<Statement> statements;
     do {
@@ -144,7 +171,7 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
                 // main.migratedTable -> temp.unionedView
                 Syntax::TableOrSubquery& syntax = (Syntax::TableOrSubquery&) identifier;
                 if (syntax.switcher == Syntax::TableOrSubquery::Switch::Table
-                    && syntax.schema.name == Schema::main().getDescription()) {
+                    && syntax.schema.isMain()) {
                     const MigrationInfo* info;
                     std::tie(succeed, info) = prepareInfo(syntax.tableOrFunction);
                     if (succeed && info) {
@@ -156,7 +183,7 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
             case Syntax::Identifier::Type::QualifiedTableName: {
                 // main.migratedTable -> schemaForOriginDatabase.originTable
                 Syntax::QualifiedTableName& syntax = (Syntax::QualifiedTableName&) identifier;
-                if (syntax.schema.name == Schema::main().getDescription()) {
+                if (syntax.schema.isMain()) {
                     const MigrationInfo* info;
                     std::tie(succeed, info) = prepareInfo(syntax.table);
                     if (succeed && info) {
@@ -168,7 +195,7 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
             case Syntax::Identifier::Type::DropTableSTMT: {
                 // main.migratedTable -> schemaForOriginDatabase.originTable
                 Syntax::DropTableSTMT& syntax = (Syntax::DropTableSTMT&) identifier;
-                if (syntax.schema.name == Schema::main().getDescription()) {
+                if (syntax.schema.isMain()) {
                     const MigrationInfo* info;
                     std::tie(succeed, info) = prepareInfo(syntax.table);
                     if (succeed && info) {
@@ -253,12 +280,16 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
         clearPrepared();
         statements.clear();
     }
+#ifdef DEBUG
+    m_processing = false;
+#endif
     return { succeed, std::move(statements) };
 }
 
 #pragma mark - Override
 bool MigrationHandle::execute(const Statement& statement)
 {
+    WCTInnerAssert(!m_processing);
     bool succeed;
     std::list<Statement> statements;
     std::tie(succeed, statements) = process(statement);
@@ -297,6 +328,7 @@ bool MigrationHandle::realExecute(const std::list<Statement>& statements)
 
 bool MigrationHandle::prepare(const Statement& statement)
 {
+    WCTInnerAssert(!m_processing);
     WCTRemedialAssert(!isPrepared(), "Last statement is not finalized.", finalize(););
     bool succeed;
     std::list<Statement> statements;
@@ -336,7 +368,7 @@ bool MigrationHandle::step(bool& done)
 
 bool MigrationHandle::realStep(bool& done)
 {
-    WCTInnerAssert(m_additionalStatement->isPrepared() ^ isMigratedPrepared());
+    WCTInnerAssert(!(m_additionalStatement->isPrepared() && isMigratedPrepared()));
     return m_mainStatement->step(done)
            && (!m_additionalStatement->isPrepared() || m_additionalStatement->step())
            && (!isMigratedPrepared() || stepMigrate(getLastInsertedRowID()));
@@ -345,7 +377,7 @@ bool MigrationHandle::realStep(bool& done)
 void MigrationHandle::reset()
 {
     m_mainStatement->reset();
-    WCTInnerAssert(m_additionalStatement->isPrepared() ^ isMigratedPrepared());
+    WCTInnerAssert(!(m_additionalStatement->isPrepared() && isMigratedPrepared()));
     if (m_additionalStatement->isPrepared()) {
         m_additionalStatement->reset();
     }

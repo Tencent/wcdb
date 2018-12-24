@@ -57,19 +57,18 @@ bool MigrationStepperHandle::switchMigrating(const MigrationInfo* newInfo)
     if (newInfo == m_migratingInfo) {
         return true;
     }
-    String oldSchema;
+    Schema oldSchema;
     if (m_migratingInfo) {
-        oldSchema = m_migratingInfo->getSchemaForOriginDatabase().getDescription();
+        oldSchema = m_migratingInfo->getSchemaForOriginDatabase();
     }
-    String newSchema = newInfo->getSchemaForOriginDatabase().getDescription();
-    if (oldSchema != newSchema) {
-        String main = Schema::main().getDescription();
-        if (!oldSchema.empty() && oldSchema != main) {
+    Schema newSchema = newInfo->getSchemaForOriginDatabase();
+    if (oldSchema.getDescription() != newSchema.getDescription()) {
+        if (!oldSchema.syntax().isMain()) {
             if (!execute(MigrationInfo::getStatementForDetachingSchema(oldSchema))) {
                 return false;
             }
         }
-        if (newSchema != main) {
+        if (!newSchema.syntax().isMain()) {
             if (!execute(newInfo->getStatementForAttachingSchema())) {
                 return false;
             }

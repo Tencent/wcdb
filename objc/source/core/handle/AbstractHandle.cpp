@@ -137,7 +137,7 @@ void AbstractHandle::close()
     }
 }
 
-bool AbstractHandle::execute(const String &sql)
+bool AbstractHandle::executeSQL(const String &sql)
 {
     WCTInnerAssert(isOpened());
     int rc = sqlite3_exec((sqlite3 *) m_handle, sql.c_str(), nullptr, nullptr, nullptr);
@@ -145,6 +145,11 @@ bool AbstractHandle::execute(const String &sql)
         return true;
     }
     return error(rc, sql);
+}
+
+bool AbstractHandle::executeStatement(const Statement &statement)
+{
+    return executeSQL(statement.getDescription());
 }
 
 int AbstractHandle::getExtendedErrorCode()
@@ -232,11 +237,18 @@ void AbstractHandle::finalizeStatements()
 #pragma mark - Meta
 std::pair<bool, bool> AbstractHandle::tableExists(const String &table)
 {
+    return tableExists(Schema::main(), table);
+}
+
+std::pair<bool, bool> AbstractHandle::tableExists(const Schema &schema, const String &table)
+{
     HandleStatement *handleStatement = getStatement();
     bool result = false;
     do {
-        StatementSelect statementSelect
-        = StatementSelect().select(1).from(table).limit(0);
+        StatementSelect statementSelect = StatementSelect()
+                                          .select(1)
+                                          .from(TableOrSubquery(table).schema(schema))
+                                          .limit(0);
         markErrorAsIgnorable(SQLITE_ERROR);
         if (handleStatement->prepare(statementSelect)) {
             result = handleStatement->step();
@@ -246,6 +258,11 @@ std::pair<bool, bool> AbstractHandle::tableExists(const String &table)
     } while (false);
     returnStatement(handleStatement);
     return { result || getResultCode() == SQLITE_ERROR, result };
+}
+
+std::pair<bool, std::set<String>> AbstractHandle::getColumns(const String &table)
+{
+    return getColumns(Schema::main(), table);
 }
 
 std::pair<bool, std::set<String>>
@@ -290,7 +307,7 @@ bool AbstractHandle::beginNestedTransaction()
         return beginTransaction();
     }
     String savepointName = savepointPrefix() + std::to_string(++m_nestedLevel);
-    return execute(StatementSavepoint().savepoint(savepointName).getDescription());
+    return executeStatement(StatementSavepoint().savepoint(savepointName));
 }
 
 bool AbstractHandle::commitOrRollbackNestedTransaction()
@@ -299,9 +316,9 @@ bool AbstractHandle::commitOrRollbackNestedTransaction()
         return commitOrRollbackTransaction();
     }
     String savepointName = savepointPrefix() + std::to_string(m_nestedLevel--);
-    if (!execute(StatementRelease().release(savepointName).getDescription())) {
+    if (!executeStatement(StatementRelease().release(savepointName))) {
         markErrorAsIgnorable(-1);
-        execute(StatementRollback().rollbackToSavepoint(savepointName).getDescription());
+        executeStatement(StatementRollback().rollbackToSavepoint(savepointName));
         markErrorAsUnignorable();
         return false;
     }
@@ -315,7 +332,7 @@ void AbstractHandle::rollbackNestedTransaction()
     }
     String savepointName = savepointPrefix() + std::to_string(m_nestedLevel--);
     markErrorAsIgnorable(-1);
-    execute(StatementRollback().rollbackToSavepoint(savepointName).getDescription());
+    executeStatement(StatementRollback().rollbackToSavepoint(savepointName));
     markErrorAsUnignorable();
 }
 
@@ -323,14 +340,14 @@ bool AbstractHandle::beginTransaction()
 {
     static const String *s_beginImmediate
     = new String(StatementBegin().beginImmediate().getDescription());
-    return execute(*s_beginImmediate);
+    return executeSQL(*s_beginImmediate);
 }
 
 bool AbstractHandle::commitOrRollbackTransaction()
 {
     static const String *s_commit
     = new String(StatementCommit().commit().getDescription());
-    if (!execute(*s_commit)) {
+    if (!executeSQL(*s_commit)) {
         rollbackTransaction();
         return false;
     }
@@ -344,7 +361,7 @@ void AbstractHandle::rollbackTransaction()
     markErrorAsIgnorable(-1);
     static const String *s_rollback
     = new String(StatementRollback().rollback().getDescription());
-    execute(*s_rollback);
+    executeSQL(*s_rollback);
     markErrorAsUnignorable();
 }
 

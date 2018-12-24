@@ -38,7 +38,8 @@ public:
 protected:
     bool rebind(const std::map<String, RecyclableMigrationInfo> &toRebinds) override final;
     std::pair<bool, std::set<String>>
-    getColumns(const String &table, const String &database) override final;
+    getOriginColumns(const MigrationUserInfo &userInfo) override final;
+    String getMigratedDatabasePath() const override final;
 
 #pragma mark - Migration
 public:
@@ -77,6 +78,9 @@ protected:
     bool realStep(bool &done);
     std::pair<bool, std::list<Statement>> process(const Statement &statement);
 
+#ifdef DEBUG
+    bool m_processing;
+#endif
     HandleStatement *m_additionalStatement;
 
 #pragma mark - Migrate

@@ -97,7 +97,8 @@ public:
     void interrupt(); // It's thread safe.
 
 protected:
-    bool execute(const String &sql);
+    bool executeSQL(const String &sql);
+    bool executeStatement(const Statement &statement);
 
 #pragma mark - Statement
 protected:
@@ -111,10 +112,12 @@ private:
 #pragma mark - Meta
 public:
     std::pair<bool, bool> tableExists(const String &table);
-    std::pair<bool, std::set<String>>
-    getColumns(const Schema &schema, const String &table);
+    std::pair<bool, std::set<String>> getColumns(const String &table);
 
 protected:
+    std::pair<bool, bool> tableExists(const Schema &schema, const String &table);
+    std::pair<bool, std::set<String>>
+    getColumns(const Schema &schema, const String &table);
     std::pair<bool, std::set<String>> getValues(const Statement &statement, int index);
 
 #pragma mark - Transaction

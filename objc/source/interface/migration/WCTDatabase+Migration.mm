@@ -34,9 +34,9 @@
             filter(nsUserInfo);
             if (nsUserInfo.originTable.length > 0) {
                 if (nsUserInfo.originDatabase.length > 0) {
-                    userInfo.setOrigin(nsUserInfo.originTable);
-                } else {
                     userInfo.setOrigin(nsUserInfo.originTable, nsUserInfo.originDatabase);
+                } else {
+                    userInfo.setOrigin(nsUserInfo.originTable);
                 }
             }
         };

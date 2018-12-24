@@ -108,7 +108,7 @@
     const WCTBinding &binding = [cls objectRelationalMapping];
     if (exists) {
         std::set<WCDB::String> columnNames;
-        std::tie(succeed, columnNames) = handle->getColumns(WCDB::Schema::main(), tableName);
+        std::tie(succeed, columnNames) = handle->getColumns(tableName);
         if (!succeed) {
             return false;
         }

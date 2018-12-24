@@ -92,7 +92,7 @@ bool AssemblerHandle::markAsMilestone()
 bool AssemblerHandle::assembleSQL(const String &sql)
 {
     markErrorAsIgnorable((int) Error::Code::Error);
-    bool succeed = execute(sql);
+    bool succeed = executeSQL(sql);
     markErrorAsUnignorable();
     return succeed;
 }
@@ -108,7 +108,7 @@ bool AssemblerHandle::assembleTable(const String &tableName, const String &sql)
     m_cellStatement->finalize();
     m_table.clear();
     markErrorAsIgnorable((int) Error::Code::Error);
-    bool succeed = execute(sql);
+    bool succeed = executeSQL(sql);
     markErrorAsUnignorable();
     if (succeed) {
         m_table = tableName;
@@ -241,16 +241,17 @@ bool AssemblerHandle::insertSequence(const String &tableName, int64_t sequence)
 
 bool AssemblerHandle::markSequenceAsAssembling()
 {
-    return execute(StatementCreateTable()
-                   .createTable(s_dummySequence)
-                   .ifNotExists()
-                   .define(ColumnDef(Column("i"), ColumnType::Integer32)
-                           .constraint(ColumnConstraint().primaryKey().autoIncrement())));
+    return executeStatement(
+    StatementCreateTable()
+    .createTable(s_dummySequence)
+    .ifNotExists()
+    .define(ColumnDef(Column("i"), ColumnType::Integer32)
+            .constraint(ColumnConstraint().primaryKey().autoIncrement())));
 }
 
 bool AssemblerHandle::markSequenceAsAssembled()
 {
-    return execute(StatementDropTable().dropTable(s_dummySequence).ifExists());
+    return executeStatement(StatementDropTable().dropTable(s_dummySequence).ifExists());
 }
 
 } // namespace WCDB

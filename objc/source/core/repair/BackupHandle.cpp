@@ -25,7 +25,7 @@ namespace WCDB {
 BackupReadHandle::BackupReadHandle()
 : Handle()
 , m_statementForAcquireReadLock(
-  StatementSelect().select(1).from("sqlite_master").limit(0))
+  StatementSelect().select(1).from(Syntax::masterTable).limit(0))
 , m_statementForReadTransaction(StatementBegin().beginDeferred())
 {
 }

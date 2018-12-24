@@ -85,7 +85,8 @@ public:
         virtual bool rebind(const std::map<String, RecyclableMigrationInfo>& toRebinds) = 0;
         // When succeed, the empty column means that table does not exist.
         virtual std::pair<bool, std::set<String>>
-        getColumns(const String& table, const String& database) = 0;
+        getOriginColumns(const MigrationUserInfo& userInfo) = 0;
+        virtual String getMigratedDatabasePath() const = 0;
 
     private:
         Migration& m_migration;

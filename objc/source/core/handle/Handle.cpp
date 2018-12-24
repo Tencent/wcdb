@@ -35,7 +35,7 @@ Handle::~Handle()
 #pragma mark - Statement
 bool Handle::execute(const Statement &statement)
 {
-    return AbstractHandle::execute(statement.getDescription());
+    return executeStatement(statement);
 }
 
 bool Handle::prepare(const Statement &statement)

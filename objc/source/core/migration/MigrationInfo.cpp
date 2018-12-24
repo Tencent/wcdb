@@ -29,10 +29,11 @@ MigrationBaseInfo::MigrationBaseInfo()
 {
 }
 
-MigrationBaseInfo::MigrationBaseInfo(const String& migratedTable)
-: m_migratedTable(migratedTable)
+MigrationBaseInfo::MigrationBaseInfo(const String& migratedDatabase, const String& migratedTable)
+: m_migratedDatabase(migratedDatabase), m_migratedTable(migratedTable)
 {
-    WCTInnerAssert(!migratedTable.empty());
+    WCTInnerAssert(!m_migratedDatabase.empty());
+    WCTInnerAssert(!m_migratedTable.empty());
 }
 
 MigrationBaseInfo::~MigrationBaseInfo()
@@ -46,7 +47,7 @@ bool MigrationBaseInfo::shouldMigrate() const
 
 bool MigrationBaseInfo::isSameDatabaseMigration() const
 {
-    return m_originDatabase.empty();
+    return m_originDatabase == m_migratedDatabase;
 }
 
 const String& MigrationBaseInfo::getMigratedTable() const
@@ -62,6 +63,17 @@ const String& MigrationBaseInfo::getOriginTable() const
 const String& MigrationBaseInfo::getOriginDatabase() const
 {
     return m_originDatabase;
+}
+
+const char* MigrationBaseInfo::getSchemaPrefix()
+{
+    static const char* s_schemaPrefix = "WCDBMigration_";
+    return s_schemaPrefix;
+}
+
+Schema MigrationBaseInfo::getSchemaForDatabase(const String& database)
+{
+    return getSchemaPrefix() + std::to_string(database.hash());
 }
 
 String MigrationBaseInfo::getDebugDescription() const
@@ -82,7 +94,25 @@ void MigrationUserInfo::setOrigin(const String& table, const String& database)
 {
     WCTInnerAssert(!table.empty());
     m_originTable = table;
-    m_originDatabase = database;
+    if (!database.empty()) {
+        m_originDatabase = database;
+    } else {
+        m_originDatabase = m_migratedDatabase;
+    }
+}
+
+StatementAttach MigrationUserInfo::getStatementForAttachingSchema() const
+{
+    WCTInnerAssert(!isSameDatabaseMigration());
+    return StatementAttach().attach(m_originDatabase).as(getSchemaForDatabase(m_originDatabase));
+}
+
+Schema MigrationUserInfo::getSchemaForOriginDatabase() const
+{
+    if (isSameDatabaseMigration()) {
+        return Schema::main();
+    }
+    return getSchemaForDatabase(m_originDatabase);
 }
 
 #pragma mark - MigrationInfo
@@ -179,28 +209,14 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo, const std::set<S
 }
 
 #pragma mark - Schema
-const String& MigrationInfo::getSchemaPrefix()
+const Schema& MigrationInfo::getSchemaForOriginDatabase() const
 {
-    static const String* s_schemaPrefix = new String("WCDBMigration_");
-    return *s_schemaPrefix;
+    return m_schemaForOriginDatabase;
 }
 
 const String& MigrationInfo::getUnionedView() const
 {
     return m_unionedView;
-}
-
-Schema MigrationInfo::getSchemaForDatabase(const String& database)
-{
-    if (database.empty()) {
-        return Schema::main();
-    }
-    return getSchemaPrefix() + std::to_string(database.hash());
-}
-
-const Schema& MigrationInfo::getSchemaForOriginDatabase() const
-{
-    return m_schemaForOriginDatabase;
 }
 
 const StatementAttach& MigrationInfo::getStatementForAttachingSchema() const
@@ -246,7 +262,7 @@ StatementSelect MigrationInfo::getStatementForSelectingUnionedView()
     String pattern = String::formatted("%s%%", getUnionedViewPrefix().c_str());
     return StatementSelect()
     .select(name)
-    .from(TableOrSubquery("sqlite_master").schema(Schema::temp()))
+    .from(TableOrSubquery::master().schema(Schema::temp()))
     .where(type == "view" && name.like(pattern));
 }
 
