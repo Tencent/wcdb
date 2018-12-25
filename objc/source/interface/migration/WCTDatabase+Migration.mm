@@ -32,11 +32,11 @@
         callback = [filter](WCDB::MigrationUserInfo& userInfo) {
             WCTMigrationUserInfo* nsUserInfo = [[WCTMigrationUserInfo alloc] initWithBaseInfo:userInfo];
             filter(nsUserInfo);
-            if (nsUserInfo.originTable.length > 0) {
-                if (nsUserInfo.originDatabase.length > 0) {
-                    userInfo.setOrigin(nsUserInfo.originTable, nsUserInfo.originDatabase);
+            if (nsUserInfo.sourceTable.length > 0) {
+                if (nsUserInfo.sourceDatabase.length > 0) {
+                    userInfo.setSource(nsUserInfo.sourceTable, nsUserInfo.sourceDatabase);
                 } else {
-                    userInfo.setOrigin(nsUserInfo.originTable);
+                    userInfo.setSource(nsUserInfo.sourceTable);
                 }
             }
         };

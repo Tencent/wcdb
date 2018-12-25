@@ -38,7 +38,7 @@ public:
 protected:
     bool rebind(const std::map<String, RecyclableMigrationInfo> &toRebinds) override final;
     std::pair<bool, std::set<String>>
-    getOriginColumns(const MigrationUserInfo &userInfo) override final;
+    getColumnsForSourceTable(const MigrationUserInfo &userInfo) override final;
     String getMigratedDatabasePath() const override final;
 
 #pragma mark - Migration
@@ -78,7 +78,7 @@ protected:
     bool realStep(bool &done);
     std::pair<bool, std::list<Statement>> process(const Statement &statement);
     bool tryFallbackToUnionedView(Syntax::Schema &schema, String &table);
-    bool tryFallbackToOriginTable(Syntax::Schema &schema, String &table);
+    bool tryFallbackToSourceTable(Syntax::Schema &schema, String &table);
 
 #ifdef DEBUG
     bool m_processing;

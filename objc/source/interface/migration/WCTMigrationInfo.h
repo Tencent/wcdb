@@ -24,17 +24,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WCTMigrationBaseInfo : NSObject
 
-@property (nonatomic, readonly) NSString* migratedTable;
-@property (nonatomic, readonly) NSString* originTable;
-@property (nonatomic, readonly) NSString* originDatabase;
+@property (nonatomic, readonly) NSString* table;
+@property (nonatomic, readonly) NSString* database;
+@property (nonatomic, readonly) NSString* sourceTable;
+@property (nonatomic, readonly) NSString* sourceDatabase;
 
 @end
 
 @interface WCTMigrationUserInfo : WCTMigrationBaseInfo
 
-- (void)setOriginTable:(NSString*)table;
+- (void)setSourceTable:(NSString*)table;
 
-- (void)setOriginDatabase:(NSString*)database;
+- (void)setSourceDatabase:(NSString*)database;
 
 @end
 

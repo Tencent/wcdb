@@ -145,7 +145,7 @@ Migration::getOrBindInfo(Binder& binder, const String& table)
         if (userInfo.shouldMigrate()) {
             bool succeed;
             std::set<String> columns;
-            std::tie(succeed, columns) = binder.getOriginColumns(userInfo);
+            std::tie(succeed, columns) = binder.getColumnsForSourceTable(userInfo);
             if (!succeed) {
                 break;
             }
@@ -264,7 +264,7 @@ std::tuple<bool, bool, bool> Migration::tryDropUnreferencedTable(Migration::Step
         }
     }
     if (info) {
-        succeed = stepper.dropOriginTable(info);
+        succeed = stepper.dropSourceTable(info);
         dropped = succeed;
         LockGuard lockGuard(m_lock);
         m_dumpster.erase(info);
@@ -286,8 +286,8 @@ bool Migration::tryMigrateRows(Migration::Stepper& stepper)
             return true;
         }
         for (const auto& migrating : m_migratings) {
-            if (!migrating->isSameDatabaseMigration()) {
-                // cross database migration first to avoid additional database lock.
+            if (migrating->isCrossDatabase()) {
+                // cross database migration first to reduce additional database lock.
                 info = migrating;
             }
         }

@@ -47,7 +47,7 @@ protected:
 
 #pragma mark - Stepper
 protected:
-    bool dropOriginTable(const MigrationInfo* info) override final;
+    bool dropSourceTable(const MigrationInfo* info) override final;
     bool migrateRows(const MigrationInfo* info, bool& done) override final;
     bool migrateRow(bool& migrated);
 

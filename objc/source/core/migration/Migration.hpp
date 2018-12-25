@@ -45,7 +45,7 @@ public:
 
 private:
     // Those infos needed to be migrate will be held by m_migrating after initialized. (Other infos that already migrated or have no need to migrate will be dropped when initializing.)
-    // And when all the columns inside original table is migrated, the info will not be dropped immedially but removed from m_migratings. The reason is that there might be some handles still holding it. At the same time, the original table will not be dropped too.
+    // And when all the columns inside source table is migrated, the info will not be dropped immedially but removed from m_migratings. The reason is that there might be some handles still holding it. At the same time, the source table will not be dropped too.
     // Until there is really no one holding them, it will be moved to dumpster and wait to be dropped.
     // During these routine, info will not be erased from holder to avoid memory issue.
     //        ┌──────┐                                ┌────────┐
@@ -85,7 +85,7 @@ public:
         virtual bool rebind(const std::map<String, RecyclableMigrationInfo>& toRebinds) = 0;
         // When succeed, the empty column means that table does not exist.
         virtual std::pair<bool, std::set<String>>
-        getOriginColumns(const MigrationUserInfo& userInfo) = 0;
+        getColumnsForSourceTable(const MigrationUserInfo& userInfo) = 0;
         virtual String getMigratedDatabasePath() const = 0;
 
     private:
@@ -115,7 +115,7 @@ public:
         virtual ~Stepper();
 
     protected:
-        virtual bool dropOriginTable(const MigrationInfo* info) = 0;
+        virtual bool dropSourceTable(const MigrationInfo* info) = 0;
         virtual bool migrateRows(const MigrationInfo* info, bool& done) = 0;
     };
 

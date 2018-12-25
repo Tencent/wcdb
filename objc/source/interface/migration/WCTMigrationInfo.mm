@@ -26,9 +26,10 @@
 - (instancetype)initWithBaseInfo:(const WCDB::MigrationBaseInfo &)info
 {
     if (self = [super init]) {
-        _migratedTable = [NSString stringWithUTF8String:info.getMigratedTable().c_str()];
-        _originTable = [NSString stringWithUTF8String:info.getOriginTable().c_str()];
-        _originDatabase = [NSString stringWithUTF8String:info.getOriginDatabase().c_str()];
+        _table = [NSString stringWithUTF8String:info.getTable().c_str()];
+        _database = [NSString stringWithUTF8String:info.getDatabase().c_str()];
+        _sourceTable = [NSString stringWithUTF8String:info.getSourceTable().c_str()];
+        _sourceDatabase = [NSString stringWithUTF8String:info.getSourceDatabase().c_str()];
     }
     return self;
 }
@@ -37,14 +38,14 @@
 
 @implementation WCTMigrationUserInfo
 
-- (void)setOriginTable:(NSString *)table
+- (void)setSourceTable:(NSString *)table
 {
-    _originTable = table;
+    _sourceTable = table;
 }
 
-- (void)setOriginDatabase:(NSString *)database
+- (void)setSourceDatabase:(NSString *)database
 {
-    _originDatabase = database;
+    _sourceDatabase = database;
 }
 
 @end

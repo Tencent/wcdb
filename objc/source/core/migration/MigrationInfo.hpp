@@ -21,7 +21,6 @@
 #ifndef _WCDB_MIGRATIONINFO_HPP
 #define _WCDB_MIGRATIONINFO_HPP
 
-#include <WCDB/DebugDescribable.hpp>
 #include <WCDB/String.hpp>
 #include <WCDB/WINQ.h>
 #include <set>
@@ -29,32 +28,30 @@
 namespace WCDB {
 
 #pragma mark - MigrationBaseInfo
-class MigrationBaseInfo : public DebugDescribable {
+class MigrationBaseInfo {
 public:
     MigrationBaseInfo();
-    MigrationBaseInfo(const String& migratedDatabase, const String& migratedTable);
-    virtual ~MigrationBaseInfo();
+    MigrationBaseInfo(const String& database, const String& table);
+    virtual ~MigrationBaseInfo() = 0;
 
-    const String& getMigratedTable() const;
-    const String& getMigratedDatabase() const;
-    const String& getOriginTable() const;
-    const String& getOriginDatabase() const;
+    const String& getTable() const;
+    const String& getDatabase() const;
+    const String& getSourceTable() const;
+    const String& getSourceDatabase() const;
 
     bool shouldMigrate() const;
-    bool isSameDatabaseMigration() const;
+    bool isCrossDatabase() const;
 
     // WCDBMigration_
     static const char* getSchemaPrefix();
 
-    String getDebugDescription() const override final;
-
 protected:
     static Schema getSchemaForDatabase(const String& database);
 
-    String m_migratedTable;
-    String m_migratedDatabase;
-    String m_originTable;
-    String m_originDatabase;
+    String m_table;
+    String m_database;
+    String m_sourceTable;
+    String m_sourceDatabase;
 };
 
 #pragma mark - MigrationUserInfo
@@ -62,15 +59,15 @@ class MigrationUserInfo final : public MigrationBaseInfo {
 public:
     using MigrationBaseInfo::MigrationBaseInfo;
 
-    void setOrigin(const String& table, const String& database = "");
+    void setSource(const String& table, const String& database = "");
 
     /*
-     ATTACH [originDatabase]
-     AS [schemaForOriginDatabase]
+     ATTACH [sourceDatabase]
+     AS [schemaForSourceDatabase]
      */
     StatementAttach getStatementForAttachingSchema() const;
 
-    Schema getSchemaForOriginDatabase() const;
+    Schema getSchemaForSourceDatabase() const;
 };
 
 #pragma mark - MigrationInfo
@@ -81,16 +78,16 @@ public:
 #pragma mark - Schema
 public:
     // Schema
-    const Schema& getSchemaForOriginDatabase() const;
+    const Schema& getSchemaForSourceDatabase() const;
 
     /*
-     ATTACH [originDatabase]
-     AS [schemaForOriginDatabase]
+     ATTACH [sourceDatabase]
+     AS [schemaForSourceDatabase]
      */
     const StatementAttach& getStatementForAttachingSchema() const;
 
     /*
-     DETACH [schemaForOriginDatabase]
+     DETACH [schemaForSourceDatabase]
      */
     static StatementDetach getStatementForDetachingSchema(const Schema& schema);
 
@@ -100,8 +97,8 @@ public:
     static StatementPragma getStatementForSelectingDatabaseList();
 
 protected:
-    // WCDBMigration_ + hash([originDatabase])
-    Schema m_schemaForOriginDatabase;
+    // WCDBMigration_ + hash([sourceDatabase])
+    Schema m_schemaForSourceDatabase;
     StatementAttach m_statementForAttachingSchema;
 
 #pragma mark - View
@@ -114,7 +111,7 @@ public:
     /*
      CREATE TEMP VIEW IF NOT EXISTS [unionedView]
      SELECT rowid, [columns]
-     FROM [schemaForOriginDatabase].[originTable]
+     FROM [schemaForSourceDatabase].[sourceTable]
      UNION/UNION ALL
      SELECT rowid, [columns]
      FROM main.[migratedTable]
@@ -136,7 +133,7 @@ public:
     static StatementSelect getStatementForSelectingUnionedView();
 
 protected:
-    // WCDBUnioned_ + [migratedTable] + _ + [originTable]
+    // WCDBUnioned_ + [migratedTable] + _ + [sourceTable]
     String m_unionedView;
     StatementCreateView m_statementForCreatingUnionedView;
 
@@ -146,14 +143,14 @@ public:
      INSERT rowid, [columns]
      INTO main.[migratedTable]
      SELECT rowid, [columns]
-     FROM [schemaForOriginDatabase].[originTable]
+     FROM [schemaForSourceDatabase].[sourceTable]
      ORDER BY rowid DESC
      LIMIT 1
      */
     const StatementInsert& getStatementForMigratingOneRow() const;
 
     /*
-     DELETE FROM [schemaForOriginDatabase].[originTable] WHERE rowid == ?1
+     DELETE FROM [schemaForSourceDatabase].[sourceTable] WHERE rowid == ?1
      */
     const StatementDelete& getStatementForDeletingSpecifiedRow() const;
 
@@ -162,7 +159,7 @@ public:
      INTO main.[migratedTable]
      [OR ONCONFLICT ACTION]
      SELECT rowid, [columns]
-     FROM [schemaForOriginDatabase].[originTable]
+     FROM [schemaForSourceDatabase].[sourceTable]
      WHERE rowid == ?1
      */
     StatementInsert
@@ -170,9 +167,9 @@ public:
                                          Syntax::ConflictAction conflictAction) const;
 
     /*
-     DROP TABLE IF EXISTS [schemaForOriginDatabase].[originTable]
+     DROP TABLE IF EXISTS [schemaForSourceDatabase].[sourceTable]
      */
-    const StatementDropTable& getStatementForDroppingOriginTable() const;
+    const StatementDropTable& getStatementForDroppingSourceTable() const;
 
     /*
      UPDATE ...
@@ -182,7 +179,7 @@ public:
      )
      */
     StatementUpdate
-    getStatementForLimitedUpdatingTable(const Statement& originStatement) const;
+    getStatementForLimitedUpdatingTable(const Statement& sourceStatement) const;
 
     /*
      DELETE FROM ...
@@ -191,13 +188,13 @@ public:
      )
      */
     StatementDelete
-    getStatementForLimitedDeletingFromTable(const Statement& originStatement) const;
+    getStatementForLimitedDeletingFromTable(const Statement& sourceStatement) const;
 
 protected:
     StatementInsert m_statementForMigratingOneRow;
     StatementInsert m_statementForMigratingSpecifiedRowTemplate;
     StatementDelete m_statementForDeletingSpecifiedRow;
-    StatementDropTable m_statementForDroppingOriginTable;
+    StatementDropTable m_statementForDroppingSourceTable;
 };
 
 } // namespace WCDB

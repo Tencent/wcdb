@@ -29,11 +29,11 @@ MigrationBaseInfo::MigrationBaseInfo()
 {
 }
 
-MigrationBaseInfo::MigrationBaseInfo(const String& migratedDatabase, const String& migratedTable)
-: m_migratedDatabase(migratedDatabase), m_migratedTable(migratedTable)
+MigrationBaseInfo::MigrationBaseInfo(const String& database, const String& table)
+: m_database(database), m_table(table)
 {
-    WCTInnerAssert(!m_migratedDatabase.empty());
-    WCTInnerAssert(!m_migratedTable.empty());
+    WCTInnerAssert(!m_database.empty());
+    WCTInnerAssert(!m_table.empty());
 }
 
 MigrationBaseInfo::~MigrationBaseInfo()
@@ -42,27 +42,32 @@ MigrationBaseInfo::~MigrationBaseInfo()
 
 bool MigrationBaseInfo::shouldMigrate() const
 {
-    return !m_migratedTable.empty() && !m_originTable.empty();
+    return !m_table.empty() && !m_sourceTable.empty();
 }
 
-bool MigrationBaseInfo::isSameDatabaseMigration() const
+bool MigrationBaseInfo::isCrossDatabase() const
 {
-    return m_originDatabase == m_migratedDatabase;
+    return m_sourceDatabase == m_database;
 }
 
-const String& MigrationBaseInfo::getMigratedTable() const
+const String& MigrationBaseInfo::getTable() const
 {
-    return m_migratedTable;
+    return m_table;
 }
 
-const String& MigrationBaseInfo::getOriginTable() const
+const String& MigrationBaseInfo::getDatabase() const
 {
-    return m_originTable;
+    return m_database;
 }
 
-const String& MigrationBaseInfo::getOriginDatabase() const
+const String& MigrationBaseInfo::getSourceTable() const
 {
-    return m_originDatabase;
+    return m_sourceTable;
+}
+
+const String& MigrationBaseInfo::getSourceDatabase() const
+{
+    return m_sourceDatabase;
 }
 
 const char* MigrationBaseInfo::getSchemaPrefix()
@@ -76,43 +81,30 @@ Schema MigrationBaseInfo::getSchemaForDatabase(const String& database)
     return getSchemaPrefix() + std::to_string(database.hash());
 }
 
-String MigrationBaseInfo::getDebugDescription() const
-{
-    std::ostringstream stream;
-    stream << "Migrated: " << m_migratedTable;
-    if (!m_originTable.empty()) {
-        stream << ", Origin: " << m_originTable;
-    }
-    if (!m_originDatabase.empty()) {
-        stream << ", Database: " << m_originDatabase;
-    }
-    return stream.str();
-}
-
 #pragma mark - MigrationUserInfo
-void MigrationUserInfo::setOrigin(const String& table, const String& database)
+void MigrationUserInfo::setSource(const String& table, const String& database)
 {
     WCTInnerAssert(!table.empty());
-    m_originTable = table;
+    m_sourceTable = table;
     if (!database.empty()) {
-        m_originDatabase = database;
+        m_sourceDatabase = database;
     } else {
-        m_originDatabase = m_migratedDatabase;
+        m_sourceDatabase = m_database;
     }
 }
 
 StatementAttach MigrationUserInfo::getStatementForAttachingSchema() const
 {
-    WCTInnerAssert(!isSameDatabaseMigration());
-    return StatementAttach().attach(m_originDatabase).as(getSchemaForDatabase(m_originDatabase));
+    WCTInnerAssert(isCrossDatabase());
+    return StatementAttach().attach(m_sourceDatabase).as(getSchemaForDatabase(m_sourceDatabase));
 }
 
-Schema MigrationUserInfo::getSchemaForOriginDatabase() const
+Schema MigrationUserInfo::getSchemaForSourceDatabase() const
 {
-    if (isSameDatabaseMigration()) {
-        return Schema::main();
+    if (isCrossDatabase()) {
+        return getSchemaForDatabase(m_sourceDatabase);
     }
-    return getSchemaForDatabase(m_originDatabase);
+    return Schema::main();
 }
 
 #pragma mark - MigrationInfo
@@ -122,20 +114,20 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo, const std::set<S
     WCTInnerAssert(shouldMigrate());
 
     // Schema
-    if (!isSameDatabaseMigration()) {
-        m_schemaForOriginDatabase = getSchemaForDatabase(m_originDatabase);
+    if (isCrossDatabase()) {
+        m_schemaForSourceDatabase = getSchemaForDatabase(m_sourceDatabase);
 
         m_statementForAttachingSchema
-        = StatementAttach().attach(m_originDatabase).as(m_schemaForOriginDatabase);
+        = StatementAttach().attach(m_sourceDatabase).as(m_schemaForSourceDatabase);
     } else {
-        m_schemaForOriginDatabase = Schema::main();
+        m_schemaForSourceDatabase = Schema::main();
     }
 
     WCTInnerAssert(!columns.empty());
 
     // View
     {
-        m_unionedView = getUnionedViewPrefix() + m_migratedTable + "_" + m_originTable;
+        m_unionedView = getUnionedViewPrefix() + m_table + "_" + m_sourceTable;
 
         std::list<ResultColumn> resultColumns;
         resultColumns.push_back(ResultColumn(Column::rowid()).as("rowid"));
@@ -144,19 +136,17 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo, const std::set<S
         }
 
         StatementSelect select
-        = StatementSelect()
-          .select(resultColumns)
-          .from(TableOrSubquery(m_migratedTable).schema(Schema::main()));
+        = StatementSelect().select(resultColumns).from(TableOrSubquery(m_table).schema(Schema::main()));
 
-        if (isSameDatabaseMigration()) {
+        if (isCrossDatabase()) {
             // UNION ALL has better performance, but it will trigger a bug of SQLite. See https://github.com/RingoD/SQLiteBugOfUnionAll for further information.
-            select.unionAll();
-        } else {
             select.union_();
+        } else {
+            select.unionAll();
         }
 
         select.select(resultColumns)
-        .from(TableOrSubquery(m_originTable).schema(m_schemaForOriginDatabase))
+        .from(TableOrSubquery(m_sourceTable).schema(m_schemaForSourceDatabase))
         .order(OrderingTerm(Column::rowid()).order(Order::ASC));
 
         m_statementForCreatingUnionedView
@@ -179,41 +169,41 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo, const std::set<S
 
         m_statementForMigratingOneRow
         = StatementInsert()
-          .insertIntoTable(m_migratedTable)
+          .insertIntoTable(m_table)
           .schema(Schema::main())
           .columns(specificColumns)
           .values(StatementSelect()
                   .select(specificResultColumns)
-                  .from(TableOrSubquery(m_originTable).schema(m_schemaForOriginDatabase))
+                  .from(TableOrSubquery(m_sourceTable).schema(m_schemaForSourceDatabase))
                   .order(descendingRowid)
                   .limit(1));
 
         m_statementForMigratingSpecifiedRowTemplate
         = StatementInsert()
-          .insertIntoTable(m_migratedTable)
+          .insertIntoTable(m_table)
           .schema(Schema::main())
           .columns(specificColumns)
           .values(StatementSelect()
                   .select(specificResultColumns)
-                  .from(TableOrSubquery(m_originTable).schema(m_schemaForOriginDatabase))
+                  .from(TableOrSubquery(m_sourceTable).schema(m_schemaForSourceDatabase))
                   .where(Column::rowid() == BindParameter(1)));
 
         m_statementForDeletingSpecifiedRow
         = StatementDelete()
-          .deleteFrom(QualifiedTable(m_originTable).schema(m_schemaForOriginDatabase))
+          .deleteFrom(QualifiedTable(m_sourceTable).schema(m_schemaForSourceDatabase))
           .where(Column::rowid() == BindParameter(1));
 
-        m_statementForDroppingOriginTable = StatementDropTable()
-                                            .dropTable(m_originTable)
-                                            .schema(m_schemaForOriginDatabase)
+        m_statementForDroppingSourceTable = StatementDropTable()
+                                            .dropTable(m_sourceTable)
+                                            .schema(m_schemaForSourceDatabase)
                                             .ifExists();
     }
 }
 
 #pragma mark - Schema
-const Schema& MigrationInfo::getSchemaForOriginDatabase() const
+const Schema& MigrationInfo::getSchemaForSourceDatabase() const
 {
-    return m_schemaForOriginDatabase;
+    return m_schemaForSourceDatabase;
 }
 
 const String& MigrationInfo::getUnionedView() const
@@ -223,7 +213,7 @@ const String& MigrationInfo::getUnionedView() const
 
 const StatementAttach& MigrationInfo::getStatementForAttachingSchema() const
 {
-    WCTInnerAssert(!isSameDatabaseMigration());
+    WCTInnerAssert(isCrossDatabase());
     return m_statementForAttachingSchema;
 }
 
@@ -290,10 +280,10 @@ MigrationInfo::getStatementForMigratingSpecifiedRow(bool useConflictAction,
 }
 
 StatementUpdate
-MigrationInfo::getStatementForLimitedUpdatingTable(const Statement& originStatement) const
+MigrationInfo::getStatementForLimitedUpdatingTable(const Statement& sourceStatement) const
 {
-    WCTInnerAssert(originStatement.getType() == Syntax::Identifier::Type::UpdateSTMT);
-    StatementUpdate statementUpdate(originStatement);
+    WCTInnerAssert(sourceStatement.getType() == Syntax::Identifier::Type::UpdateSTMT);
+    StatementUpdate statementUpdate(sourceStatement);
 
     Syntax::UpdateSTMT& updateSyntax = statementUpdate.syntax();
     StatementSelect select
@@ -323,10 +313,10 @@ MigrationInfo::getStatementForLimitedUpdatingTable(const Statement& originStatem
 }
 
 StatementDelete
-MigrationInfo::getStatementForLimitedDeletingFromTable(const Statement& originStatement) const
+MigrationInfo::getStatementForLimitedDeletingFromTable(const Statement& sourceStatement) const
 {
-    WCTInnerAssert(originStatement.getType() == Syntax::Identifier::Type::DeleteSTMT);
-    StatementDelete statementDelete(originStatement);
+    WCTInnerAssert(sourceStatement.getType() == Syntax::Identifier::Type::DeleteSTMT);
+    StatementDelete statementDelete(sourceStatement);
 
     Syntax::DeleteSTMT& deleteSyntax = statementDelete.syntax();
     StatementSelect select
@@ -355,9 +345,9 @@ MigrationInfo::getStatementForLimitedDeletingFromTable(const Statement& originSt
     return statementDelete;
 }
 
-const StatementDropTable& MigrationInfo::getStatementForDroppingOriginTable() const
+const StatementDropTable& MigrationInfo::getStatementForDroppingSourceTable() const
 {
-    return m_statementForDroppingOriginTable;
+    return m_statementForDroppingSourceTable;
 }
 
 } // namespace WCDB

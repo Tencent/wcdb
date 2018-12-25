@@ -59,9 +59,9 @@ bool MigrationStepperHandle::switchMigrating(const MigrationInfo* newInfo)
     }
     Schema oldSchema;
     if (m_migratingInfo) {
-        oldSchema = m_migratingInfo->getSchemaForOriginDatabase();
+        oldSchema = m_migratingInfo->getSchemaForSourceDatabase();
     }
-    Schema newSchema = newInfo->getSchemaForOriginDatabase();
+    Schema newSchema = newInfo->getSchemaForSourceDatabase();
     if (oldSchema.getDescription() != newSchema.getDescription()) {
         if (!oldSchema.syntax().isMain()) {
             if (!execute(MigrationInfo::getStatementForDetachingSchema(oldSchema))) {
@@ -80,13 +80,13 @@ bool MigrationStepperHandle::switchMigrating(const MigrationInfo* newInfo)
     return true;
 }
 
-bool MigrationStepperHandle::dropOriginTable(const MigrationInfo* info)
+bool MigrationStepperHandle::dropSourceTable(const MigrationInfo* info)
 {
     if (!switchMigrating(info)) {
         return false;
     }
 
-    return execute(m_migratingInfo->getStatementForDroppingOriginTable());
+    return execute(m_migratingInfo->getStatementForDroppingSourceTable());
 }
 
 bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
@@ -146,7 +146,7 @@ bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
         done = true;
     }
 
-    // detach should be executed when origin table is dropped.
+    // detach should be executed when source table is dropped.
 
     return true;
 }

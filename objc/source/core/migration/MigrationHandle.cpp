@@ -97,9 +97,9 @@ bool MigrationHandle::rebind(const std::map<String, RecyclableMigrationInfo>& mi
     std::map<String, const MigrationInfo*> infosToAttachSchema; // schema -> info
     for (const auto& iter : migratings) {
         const MigrationInfo* info = iter.second.get();
-        if (!info->isSameDatabaseMigration()) {
+        if (info->isCrossDatabase()) {
             infosToAttachSchema.emplace(
-            info->getSchemaForOriginDatabase().getDescription(), info);
+            info->getSchemaForSourceDatabase().getDescription(), info);
         }
     }
 
@@ -137,14 +137,14 @@ bool MigrationHandle::rebind(const std::map<String, RecyclableMigrationInfo>& mi
 }
 
 std::pair<bool, std::set<String>>
-MigrationHandle::getOriginColumns(const MigrationUserInfo& userInfo)
+MigrationHandle::getColumnsForSourceTable(const MigrationUserInfo& userInfo)
 {
     // schema has no need to be detached since schema will be managed automatically when rebind.
-    if (!userInfo.isSameDatabaseMigration()
+    if (userInfo.isCrossDatabase()
         && !executeStatement(userInfo.getStatementForAttachingSchema())) {
         return { false, {} };
     }
-    return getColumns(userInfo.getSchemaForOriginDatabase(), userInfo.getOriginTable());
+    return getColumns(userInfo.getSchemaForSourceDatabase(), userInfo.getSourceTable());
 }
 
 String MigrationHandle::getMigratedDatabasePath() const
@@ -176,19 +176,19 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
                 }
             } break;
             case Syntax::Identifier::Type::QualifiedTableName: {
-                // main.migratedTable -> schemaForOriginDatabase.originTable
+                // main.migratedTable -> schemaForSourceDatabase.sourceTable
                 Syntax::QualifiedTableName& syntax = (Syntax::QualifiedTableName&) identifier;
-                succeed = tryFallbackToOriginTable(syntax.schema, syntax.table);
+                succeed = tryFallbackToSourceTable(syntax.schema, syntax.table);
             } break;
             case Syntax::Identifier::Type::InsertSTMT: {
-                // main.migratedTable -> schemaForOriginDatabase.originTable
+                // main.migratedTable -> schemaForSourceDatabase.sourceTable
                 Syntax::InsertSTMT& syntax = (Syntax::InsertSTMT&) identifier;
-                succeed = tryFallbackToOriginTable(syntax.schema, syntax.table);
+                succeed = tryFallbackToSourceTable(syntax.schema, syntax.table);
             } break;
             case Syntax::Identifier::Type::DropTableSTMT: {
-                // main.migratedTable -> schemaForOriginDatabase.originTable
+                // main.migratedTable -> schemaForSourceDatabase.sourceTable
                 Syntax::DropTableSTMT& syntax = (Syntax::DropTableSTMT&) identifier;
-                succeed = tryFallbackToOriginTable(syntax.schema, syntax.table);
+                succeed = tryFallbackToSourceTable(syntax.schema, syntax.table);
             } break;
             case Syntax::Identifier::Type::Expression: {
                 // main.migratedTable -> temp.unionedView
@@ -248,7 +248,7 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
             } else {
                 const MigrationInfo* info = getBoundInfo(migratedTableName);
                 WCTInnerAssert(info != nullptr);
-                // statement for origin table
+                // statement for source table
                 statements.push_back(
                 info->getStatementForLimitedUpdatingTable(falledBackStatement));
                 // statement for migrated table
@@ -271,7 +271,7 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
             } else {
                 const MigrationInfo* info = getBoundInfo(migratedTableName);
                 WCTInnerAssert(info != nullptr);
-                // statement for origin table
+                // statement for source table
                 statements.push_back(
                 info->getStatementForLimitedDeletingFromTable(falledBackStatement));
                 // statement for migrated table
@@ -327,15 +327,15 @@ bool MigrationHandle::tryFallbackToUnionedView(Syntax::Schema& schema, String& t
     return succeed;
 }
 
-bool MigrationHandle::tryFallbackToOriginTable(Syntax::Schema& schema, String& table)
+bool MigrationHandle::tryFallbackToSourceTable(Syntax::Schema& schema, String& table)
 {
     bool succeed = true;
     if (schema.isMain()) {
         const MigrationInfo* info;
         std::tie(succeed, info) = prepareInfo(table);
         if (succeed && info != nullptr) {
-            schema = info->getSchemaForOriginDatabase();
-            table = info->getOriginTable();
+            schema = info->getSchemaForSourceDatabase();
+            table = info->getSourceTable();
         }
     }
     return succeed;

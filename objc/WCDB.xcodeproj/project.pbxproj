@@ -488,7 +488,6 @@
 		23A64D11214A4A7000ED28BB /* Migration.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A64D0E214A4A7000ED28BB /* Migration.hpp */; };
 		23A6D4BF20BFD7F9004F2DAA /* Progress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A6D4BD20BFD7F9004F2DAA /* Progress.cpp */; };
 		23A6D4C120BFD7F9004F2DAA /* Progress.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A6D4BE20BFD7F9004F2DAA /* Progress.hpp */; };
-		23AB891C215A28F700554DF1 /* DebugDescribable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AB8919215A28F700554DF1 /* DebugDescribable.hpp */; };
 		23AB898E215BA81300554DF1 /* SQLite.h in Headers */ = {isa = PBXBuildFile; fileRef = 23AB898D215BA6DB00554DF1 /* SQLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23AD52D620DB4A3C00664B62 /* Master.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52D420DB4A3C00664B62 /* Master.cpp */; };
 		23AD52D820DB4A3C00664B62 /* Master.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AD52D520DB4A3C00664B62 /* Master.hpp */; };
@@ -1618,7 +1617,6 @@
 		23A6D4BD20BFD7F9004F2DAA /* Progress.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Progress.cpp; sourceTree = "<group>"; };
 		23A6D4BE20BFD7F9004F2DAA /* Progress.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Progress.hpp; sourceTree = "<group>"; };
 		23A747BE20039675003CECFA /* sqlcipher.preprocessed.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqlcipher.preprocessed.xcodeproj; path = ../sqlcipher/sqlcipher.preprocessed.xcodeproj; sourceTree = "<group>"; };
-		23AB8919215A28F700554DF1 /* DebugDescribable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DebugDescribable.hpp; sourceTree = "<group>"; };
 		23AB898D215BA6DB00554DF1 /* SQLite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SQLite.h; sourceTree = "<group>"; };
 		23AD52D420DB4A3C00664B62 /* Master.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Master.cpp; sourceTree = "<group>"; };
 		23AD52D520DB4A3C00664B62 /* Master.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Master.hpp; sourceTree = "<group>"; };
@@ -2505,7 +2503,6 @@
 				237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */,
 				23C40CF4208DBCDD007B1648 /* Dispatch.cpp */,
 				23C40CF8208DBCDF007B1648 /* Dispatch.hpp */,
-				23AB8919215A28F700554DF1 /* DebugDescribable.hpp */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -3623,7 +3620,6 @@
 				23EEDD24217DFADC006E9E73 /* SyntaxUpsertClause.hpp in Headers */,
 				23408F11211897AA0071E5A7 /* Shm.hpp in Headers */,
 				23EEDCCC217DFADC006E9E73 /* StatementDetach.hpp in Headers */,
-				23AB891C215A28F700554DF1 /* DebugDescribable.hpp in Headers */,
 				23EEDD30217DFADC006E9E73 /* SyntaxBeginSTMT.hpp in Headers */,
 				23EEDD58217DFADC006E9E73 /* SyntaxUpdateSTMT.hpp in Headers */,
 				23EEDCA2217DFADC006E9E73 /* ResultColumn.hpp in Headers */,
