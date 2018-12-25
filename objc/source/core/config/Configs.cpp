@@ -29,7 +29,7 @@ namespace WCDB {
 
 void Configs::insert(const String &name, const std::shared_ptr<Config> &config, int priority)
 {
-    WCTInnerAssert(config != nullptr);
+    WCTRemedialAssert(config != nullptr, "Empty config make not sense.", return;);
     m_list.insert(priority, name, config);
 }
 
@@ -41,7 +41,7 @@ void Configs::remove(const String &name)
 bool Configs::invoke(Handle *handle)
 {
     for (const auto &element : m_list.elements()) {
-        if (!element.value->invoke(handle)) {
+        if (element.value && !element.value->invoke(handle)) {
             return false;
         }
     }
@@ -51,7 +51,7 @@ bool Configs::invoke(Handle *handle)
 bool Configs::uninvoke(Handle *handle)
 {
     for (const auto &element : m_list.elements()) {
-        if (!element.value->uninvoke(handle)) {
+        if (element.value && !element.value->uninvoke(handle)) {
             return false;
         }
     }
