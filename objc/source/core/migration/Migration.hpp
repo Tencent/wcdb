@@ -47,7 +47,7 @@ private:
     // Those infos needed to be migrate will be held by m_migrating after initialized. (Other infos that already migrated or have no need to migrate will be dropped when initializing.)
     // And when all the columns inside original table is migrated, the info will not be dropped immedially but removed from m_migratings. The reason is that there might be some handles still holding it. At the same time, the original table will not be dropped too.
     // Until there is really no one holding them, it will be moved to dumpster and wait to be dropped.
-    // During these routine, info will not be removed from holder to avoid memory issue.
+    // During these routine, info will not be erased from holder to avoid memory issue.
     //        ┌──────┐                                ┌────────┐
     // ┌────┐ │Inited│  ┌───────────────────────────┐ │Migrated│ ┌─────────────┐
     // │Info│─┴──────┴─▶│m_migratings, m_referenceds│─┴────────┴▶│m_referenceds│─▶
@@ -127,10 +127,10 @@ public:
     void setNotificationWhenMigrated(const MigratedCallback& callback);
 
 protected:
-    // succeed, worked, done
-    std::tuple<bool, bool, bool> dropOriginTable(Migration::Stepper& stepper);
+    // succeed, dropped, done
+    std::tuple<bool, bool, bool> tryDropUnreferencedTable(Migration::Stepper& stepper);
 
-    bool migrateRows(Migration::Stepper& stepper);
+    bool tryMigrateRows(Migration::Stepper& stepper);
 
     MigratedCallback m_migratedNotification;
 };

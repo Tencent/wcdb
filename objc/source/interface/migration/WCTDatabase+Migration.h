@@ -29,11 +29,11 @@ typedef void (^WCTMigratedNotificationBlock)(WCTMigrationBaseInfo*);
 
 @interface WCTDatabase (Migration)
 
-- (void)filterMigration:(nullable WCTMigrationFilterBlock)filter;
+- (void)filterMigration:(WCTMigrationFilterBlock)filter;
 
-- (BOOL)stepMigration:(BOOL)interruptible isDone:(BOOL&)done;
+- (BOOL)stepMigration:(BOOL)interruptible done:(BOOL&)done;
 
-- (void)asyncMigration;
+- (void)setAutoMigrate:(BOOL)flag;
 
 - (void)setNotificationWhenMigrated:(nullable WCTMigratedNotificationBlock)onMigrated;
 

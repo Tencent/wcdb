@@ -24,7 +24,7 @@
 
 @implementation WCTDatabase (Migration)
 
-- (void)filterMigration:(nullable WCTMigrationFilterBlock)filter
+- (void)filterMigration:(WCTMigrationFilterBlock)filter
 {
     WCTDatabaseAssert(return;);
     WCDB::Database::MigrationFilter callback = nullptr;
@@ -44,7 +44,7 @@
     _database->filterMigration(callback);
 }
 
-- (BOOL)stepMigration:(BOOL)interruptible isDone:(BOOL&)done
+- (BOOL)stepMigration:(BOOL)interruptible done:(BOOL&)done
 {
     WCTDatabaseAssert(return NO;);
     bool succeed;
@@ -52,19 +52,23 @@
     return succeed;
 }
 
-- (void)asyncMigration
+- (void)setAutoMigrate:(BOOL)flag
 {
     WCTDatabaseAssert(return;);
-    WCDB::Core::shared()->asyncMigration(_database->getPath());
+    WCDB::Core::shared()->setAutoMigration(_database->getPath(), flag);
 }
 
-- (void)setNotificationWhenMigrated:(nullable WCTMigratedNotificationBlock)onMigrated
+- (void)setNotificationWhenMigrated:(WCTMigratedNotificationBlock)onMigrated
 {
     WCTDatabaseAssert(return;);
     WCDB::Database::MigratedCallback callback = nullptr;
     if (onMigrated) {
         callback = [onMigrated](const WCDB::MigrationBaseInfo* info) {
-            return onMigrated([[WCTMigrationBaseInfo alloc] initWithBaseInfo:*info]);
+            WCTMigrationBaseInfo* nsInfo = nil;
+            if (info) {
+                nsInfo = [[WCTMigrationBaseInfo alloc] initWithBaseInfo:*info];
+            }
+            onMigrated(nsInfo);
         };
     }
     _database->setNotificationWhenMigrated(callback);

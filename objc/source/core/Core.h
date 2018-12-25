@@ -75,7 +75,7 @@ public:
     RecyclableDatabase getExistingDatabase(const String& path);
     RecyclableDatabase getExistingDatabase(const Tag& tag);
 
-    void asyncMigration(const String& path);
+    void setAutoMigration(const String& path, bool flag);
 
     void purge();
 

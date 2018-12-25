@@ -27,7 +27,7 @@ MigrationEvent::~MigrationEvent()
 }
 
 MigrationQueue::MigrationQueue(const String& name, MigrationEvent* event)
-: AsyncQueue(name, event)
+: AsyncQueue(name, event), m_dirty(false)
 {
 }
 
@@ -43,6 +43,14 @@ void MigrationQueue::put(const String& path)
         if (notify) {
             m_cond.notify_all();
         }
+    }
+}
+
+void MigrationQueue::remove(const String& path)
+{
+    std::lock_guard<std::mutex> lockGuard(m_mutex);
+    if (m_migratings.erase(path) > 0) {
+        m_dirty = true;
     }
 }
 
@@ -67,6 +75,14 @@ void MigrationQueue::loop()
             = static_cast<MigrationEvent*>(m_event)->databaseShouldMigrate(path);
             if ((!succeed && ++failedCount >= toleranceFailedCount) || done) {
                 break;
+            }
+            if (m_dirty) {
+                std::lock_guard<std::mutex> lockGuard(m_mutex);
+                bool stop = m_migratings.find(path) == m_migratings.end();
+                m_dirty = false;
+                if (stop) {
+                    break;
+                }
             }
         }
         std::unique_lock<std::mutex> lockGuard(m_mutex);

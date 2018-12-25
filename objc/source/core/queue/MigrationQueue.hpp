@@ -41,6 +41,7 @@ public:
     MigrationQueue(const String& name, MigrationEvent* event);
 
     void put(const String& path);
+    void remove(const String& path);
 
     static constexpr const double timeIntervalForMigration = 1.0f;
     static constexpr const int toleranceFailedCount = 3;
@@ -50,6 +51,7 @@ protected:
 
     std::mutex m_mutex;
     std::condition_variable m_cond;
+    std::atomic<bool> m_dirty;
     std::set<String> m_migratings;
     std::map<String, int> m_faileds;
 };

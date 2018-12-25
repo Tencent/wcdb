@@ -233,7 +233,7 @@ Migration::Stepper::~Stepper()
 std::pair<bool, bool> Migration::step(Migration::Stepper& stepper)
 {
     bool succeed, worked, done;
-    std::tie(succeed, worked, done) = dropOriginTable(stepper);
+    std::tie(succeed, worked, done) = tryDropUnreferencedTable(stepper);
     if (!succeed) {
         return { false, false };
     }
@@ -243,47 +243,41 @@ std::pair<bool, bool> Migration::step(Migration::Stepper& stepper)
     if (worked) {
         return { true, false };
     }
-    return { migrateRows(stepper), false };
+    return { tryMigrateRows(stepper), false };
 }
 
-std::tuple<bool, bool, bool> Migration::dropOriginTable(Migration::Stepper& stepper)
+std::tuple<bool, bool, bool> Migration::tryDropUnreferencedTable(Migration::Stepper& stepper)
 {
+    bool succeed = true;
+    bool dropped = false;
+    bool done = false;
     const MigrationInfo* info = nullptr;
-    MigratedCallback migratedNotification = nullptr;
-    bool lastOne = false;
+    MigratedCallback migratedNotification;
     {
         SharedLockGuard lockGuard(m_lock);
-        if (m_dumpster.empty()) {
-            if (m_referenceds.empty()) {
-                // done
-                return { true, false, true };
-            } else {
-                return { true, false, false };
-            }
-        }
-        info = *m_dumpster.begin();
         migratedNotification = m_migratedNotification;
-        // last one
-        lastOne = m_dumpster.size() == 1 && m_referenceds.empty();
+        if (m_dumpster.empty()) {
+            dropped = false;
+            done = m_referenceds.empty();
+        } else {
+            info = *m_dumpster.begin();
+        }
     }
-    WCTInnerAssert(info != nullptr);
-    if (!stepper.dropOriginTable(info)) {
-        return { false, false, false };
-    }
-    {
+    if (info) {
+        succeed = stepper.dropOriginTable(info);
+        dropped = succeed;
         LockGuard lockGuard(m_lock);
         m_dumpster.erase(info);
-    }
-    if (migratedNotification) {
         migratedNotification(info);
-        if (lastOne) {
-            migratedNotification(nullptr);
-        }
+        done = m_dumpster.empty() && m_referenceds.empty();
     }
-    return { true, true, lastOne };
+    if (done && migratedNotification != nullptr) {
+        migratedNotification(nullptr);
+    }
+    return { succeed, dropped, done };
 }
 
-bool Migration::migrateRows(Migration::Stepper& stepper)
+bool Migration::tryMigrateRows(Migration::Stepper& stepper)
 {
     const MigrationInfo* info = nullptr;
     {

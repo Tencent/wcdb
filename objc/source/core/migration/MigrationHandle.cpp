@@ -375,7 +375,7 @@ bool MigrationHandle::realExecute(const std::list<Statement>& statements)
     bool succeed = true;
     if (isMigratedPrepared()) {
         WCTInnerAssert(statements.size() == 1);
-        succeed = stepMigrate(getLastInsertedRowID());
+        succeed = stepMigration(getLastInsertedRowID());
         finalizeMigrate();
     }
     return succeed;
@@ -426,7 +426,7 @@ bool MigrationHandle::realStep(bool& done)
     WCTInnerAssert(!(m_additionalStatement->isPrepared() && isMigratedPrepared()));
     return m_mainStatement->step(done)
            && (!m_additionalStatement->isPrepared() || m_additionalStatement->step())
-           && (!isMigratedPrepared() || stepMigrate(getLastInsertedRowID()));
+           && (!isMigratedPrepared() || stepMigration(getLastInsertedRowID()));
 }
 
 void MigrationHandle::reset()
@@ -563,7 +563,7 @@ bool MigrationHandle::isMigratedPrepared()
     return m_migrateStatement->isPrepared() /* || m_removeMigratedStatement->isPrepared() */;
 }
 
-bool MigrationHandle::stepMigrate(const int64_t& rowid)
+bool MigrationHandle::stepMigration(const int64_t& rowid)
 {
     WCTInnerAssert(isMigratedPrepared());
     m_migrateStatement->bindInteger64(rowid, 1);

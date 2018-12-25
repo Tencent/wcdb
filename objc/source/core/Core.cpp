@@ -86,9 +86,13 @@ void Core::purge()
     m_databasePool.purge();
 }
 
-void Core::asyncMigration(const String& path)
+void Core::setAutoMigration(const String& path, bool flag)
 {
-    m_migrationQueue->put(path);
+    if (flag) {
+        m_migrationQueue->put(path);
+    } else {
+        m_migrationQueue->remove(path);
+    }
 }
 
 void Core::onDatabaseCreated(Database* database)

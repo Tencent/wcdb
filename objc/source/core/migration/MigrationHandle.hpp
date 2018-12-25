@@ -93,7 +93,7 @@ protected:
     bool prepareMigrate(const String &migratedTable,
                         bool useConflictAction,
                         Syntax::ConflictAction conflictAction);
-    bool stepMigrate(const int64_t &rowid);
+    bool stepMigration(const int64_t &rowid);
     void finalizeMigrate();
     void resetMigrate();
 
