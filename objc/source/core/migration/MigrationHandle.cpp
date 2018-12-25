@@ -153,7 +153,7 @@ String MigrationHandle::getMigratedDatabasePath() const
 }
 
 #pragma mark - Migration
-std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& statement)
+std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& originStatement)
 {
 #ifdef DEBUG
     m_processing = true;
@@ -162,7 +162,8 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
     bool succeed = true;
     std::list<Statement> statements;
     do {
-        Statement falledBackStatement = statement;
+        // It's dangerous to use statement after tampering since all the tokens are not fit.
+        Statement falledBackStatement = originStatement;
         // fallback
         falledBackStatement.iterate(
         [&succeed, this](Syntax::Identifier& identifier, bool& stop) {
@@ -220,56 +221,81 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
             break;
         }
 
-        switch (statement.getType()) {
+        switch (originStatement.getType()) {
         case Syntax::Identifier::Type::InsertSTMT: {
             statements.push_back(falledBackStatement);
-            const Syntax::InsertSTMT* originSyntax
-            = static_cast<const Syntax::InsertSTMT*>(statement.getSyntaxIdentifier());
-            const Syntax::InsertSTMT* falledBackSyntax
-            = static_cast<const Syntax::InsertSTMT*>(falledBackStatement.getSyntaxIdentifier());
-            if (originSyntax->table != falledBackSyntax->table) {
-                succeed = prepareMigrate(statement);
+            const Syntax::InsertSTMT* migratedInsertSTMT
+            = static_cast<const Syntax::InsertSTMT*>(originStatement.getSyntaxIdentifier());
+            const String& falledBackTableName
+            = static_cast<const Syntax::InsertSTMT*>(falledBackStatement.getSyntaxIdentifier())
+              ->table;
+            if (migratedInsertSTMT->table != falledBackTableName) {
+                // it's safe to use origin statement since Conflict Action will not be changed during tampering.
+                succeed = prepareMigrate(migratedInsertSTMT->table,
+                                         migratedInsertSTMT->useConflictAction,
+                                         migratedInsertSTMT->conflictAction);
             }
         } break;
         case Syntax::Identifier::Type::UpdateSTMT: {
-            const Syntax::UpdateSTMT* originSyntax
-            = static_cast<const Syntax::UpdateSTMT*>(statement.getSyntaxIdentifier());
-            const Syntax::UpdateSTMT* falledBackSyntax
-            = static_cast<const Syntax::UpdateSTMT*>(falledBackStatement.getSyntaxIdentifier());
-            if (originSyntax->table.table == falledBackSyntax->table.table) {
+            const String& migratedTableName
+            = static_cast<const Syntax::UpdateSTMT*>(originStatement.getSyntaxIdentifier())
+              ->table.table;
+            const String& falledBackTableName
+            = static_cast<const Syntax::UpdateSTMT*>(falledBackStatement.getSyntaxIdentifier())
+              ->table.table;
+            if (migratedTableName == falledBackTableName) {
                 statements.push_back(falledBackStatement);
             } else {
-                const MigrationInfo* info = getBoundInfo(originSyntax->table.table);
+                const MigrationInfo* info = getBoundInfo(migratedTableName);
                 WCTInnerAssert(info != nullptr);
+                // statement for origin table
                 statements.push_back(
                 info->getStatementForLimitedUpdatingTable(falledBackStatement));
-                statements.push_back(info->getStatementForLimitedUpdatingTable(statement));
+                // statement for migrated table
+                statements.push_back(statements.back());
+                Syntax::UpdateSTMT* stmt = static_cast<Syntax::UpdateSTMT*>(
+                statements.back().getSyntaxIdentifier());
+                stmt->table.table = migratedTableName;
+                stmt->table.schema = Schema::main();
             }
         } break;
         case Syntax::Identifier::Type::DeleteSTMT: {
-            const Syntax::DeleteSTMT* originSyntax
-            = static_cast<const Syntax::DeleteSTMT*>(statement.getSyntaxIdentifier());
-            const Syntax::DeleteSTMT* falledBackSyntax
-            = static_cast<const Syntax::DeleteSTMT*>(falledBackStatement.getSyntaxIdentifier());
-            if (originSyntax->table.table == falledBackSyntax->table.table) {
+            const String& migratedTableName
+            = static_cast<const Syntax::DeleteSTMT*>(originStatement.getSyntaxIdentifier())
+              ->table.table;
+            const String& falledBackTableName
+            = static_cast<const Syntax::DeleteSTMT*>(falledBackStatement.getSyntaxIdentifier())
+              ->table.table;
+            if (migratedTableName == falledBackTableName) {
                 statements.push_back(falledBackStatement);
             } else {
-                const MigrationInfo* info = getBoundInfo(originSyntax->table.table);
+                const MigrationInfo* info = getBoundInfo(migratedTableName);
                 WCTInnerAssert(info != nullptr);
+                // statement for origin table
                 statements.push_back(
                 info->getStatementForLimitedDeletingFromTable(falledBackStatement));
-                statements.push_back(info->getStatementForLimitedDeletingFromTable(statement));
+                // statement for migrated table
+                statements.push_back(statements.back());
+                Syntax::DeleteSTMT* stmt = static_cast<Syntax::DeleteSTMT*>(
+                statements.back().getSyntaxIdentifier());
+                stmt->table.table = migratedTableName;
+                stmt->table.schema = Schema::main();
             }
-        }
+        } break;
         case Syntax::Identifier::Type::DropTableSTMT: {
-            const Syntax::DropTableSTMT* originSyntax
-            = static_cast<const Syntax::DropTableSTMT*>(statement.getSyntaxIdentifier());
-            const Syntax::DropTableSTMT* falledBackSyntax
-            = static_cast<const Syntax::DropTableSTMT*>(
-            falledBackStatement.getSyntaxIdentifier());
-            statements.push_back(statement);
-            if (originSyntax->table != falledBackSyntax->table) {
-                statements.push_back(falledBackStatement);
+            const String& migratedTableName
+            = static_cast<const Syntax::DropTableSTMT*>(originStatement.getSyntaxIdentifier())
+              ->table;
+            const String& falledBackTableName
+            = static_cast<const Syntax::DropTableSTMT*>(falledBackStatement.getSyntaxIdentifier())
+              ->table;
+            statements.push_back(falledBackStatement);
+            if (migratedTableName != falledBackTableName) {
+                statements.push_back(statements.back());
+                Syntax::DropTableSTMT* stmt = static_cast<Syntax::DropTableSTMT*>(
+                statements.back().getSyntaxIdentifier());
+                stmt->table = migratedTableName;
+                stmt->schema = Schema::main();
             }
         } break;
         default:
@@ -558,14 +584,15 @@ void MigrationHandle::resetMigrate()
     m_removeMigratedStatement->reset();
 }
 
-bool MigrationHandle::prepareMigrate(const Statement& statement)
+bool MigrationHandle::prepareMigrate(const String& migratedTable,
+                                     bool useConflictAction,
+                                     Syntax::ConflictAction conflictAction)
 {
-    WCTInnerAssert(statement.getType() == Syntax::Identifier::Type::InsertSTMT);
     WCTInnerAssert(!isMigratedPrepared());
-    const MigrationInfo* info = getBoundInfo(
-    static_cast<Syntax::InsertSTMT*>(statement.getSyntaxIdentifier())->table);
+    const MigrationInfo* info = getBoundInfo(migratedTable);
     WCTInnerAssert(info != nullptr);
-    return m_migrateStatement->prepare(info->getStatementForMigratingSpecifiedRow(statement))
+    return m_migrateStatement->prepare(info->getStatementForMigratingSpecifiedRow(
+           useConflictAction, conflictAction))
            && m_removeMigratedStatement->prepare(info->getStatementForDeletingSpecifiedRow());
 }
 

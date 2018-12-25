@@ -90,7 +90,9 @@ protected:
     // For Insert Statement Only
     bool isMigratedPrepared();
     // only conflict clause will be used
-    bool prepareMigrate(const Statement &statement);
+    bool prepareMigrate(const String &migratedTable,
+                        bool useConflictAction,
+                        Syntax::ConflictAction conflictAction);
     bool stepMigrate(const int64_t &rowid);
     void finalizeMigrate();
     void resetMigrate();

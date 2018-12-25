@@ -166,7 +166,8 @@ public:
      WHERE rowid == ?1
      */
     StatementInsert
-    getStatementForMigratingSpecifiedRow(const Statement& originStatement) const;
+    getStatementForMigratingSpecifiedRow(bool useConflictAction,
+                                         Syntax::ConflictAction conflictAction) const;
 
     /*
      DROP TABLE IF EXISTS [schemaForOriginDatabase].[originTable]

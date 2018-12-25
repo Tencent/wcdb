@@ -138,7 +138,7 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo, const std::set<S
         m_unionedView = getUnionedViewPrefix() + m_migratedTable + "_" + m_originTable;
 
         std::list<ResultColumn> resultColumns;
-        resultColumns.push_back(Column::rowid());
+        resultColumns.push_back(ResultColumn(Column::rowid()).as("rowid"));
         for (const auto& column : columns) {
             resultColumns.push_back(Column(column));
         }
@@ -280,14 +280,12 @@ const StatementDelete& MigrationInfo::getStatementForDeletingSpecifiedRow() cons
 }
 
 StatementInsert
-MigrationInfo::getStatementForMigratingSpecifiedRow(const Statement& originStatement) const
+MigrationInfo::getStatementForMigratingSpecifiedRow(bool useConflictAction,
+                                                    Syntax::ConflictAction conflictAction) const
 {
-    WCTInnerAssert(originStatement.getType() == Syntax::Identifier::Type::InsertSTMT);
     StatementInsert statement = m_statementForMigratingSpecifiedRowTemplate;
-    const Syntax::InsertSTMT* syntax
-    = static_cast<Syntax::InsertSTMT*>(originStatement.getSyntaxIdentifier());
-    statement.syntax().useConflictAction = syntax->useConflictAction;
-    statement.syntax().conflictAction = syntax->conflictAction;
+    statement.syntax().useConflictAction = useConflictAction;
+    statement.syntax().conflictAction = conflictAction;
     return statement;
 }
 
@@ -299,11 +297,12 @@ MigrationInfo::getStatementForLimitedUpdatingTable(const Statement& originStatem
 
     Syntax::UpdateSTMT& updateSyntax = statementUpdate.syntax();
     StatementSelect select
-    = StatementSelect().select(Column::rowid()).from(updateSyntax.table.table);
+    = StatementSelect()
+      .select(Column::rowid())
+      .from(TableOrSubquery(getUnionedView()).schema(Schema::temp()));
 
     Syntax::SelectSTMT& selectSyntax = select.syntax();
-    WCTInnerAssert(!selectSyntax.cores.empty());
-    Syntax::SelectCore& coreSyntax = selectSyntax.cores.back();
+    Syntax::SelectCore& coreSyntax = selectSyntax.select;
 
     coreSyntax.useCondition = updateSyntax.useCondition;
     coreSyntax.condition = updateSyntax.condition;
@@ -331,11 +330,12 @@ MigrationInfo::getStatementForLimitedDeletingFromTable(const Statement& originSt
 
     Syntax::DeleteSTMT& deleteSyntax = statementDelete.syntax();
     StatementSelect select
-    = StatementSelect().select(Column::rowid()).from(deleteSyntax.table.table);
+    = StatementSelect()
+      .select(Column::rowid())
+      .from(TableOrSubquery(getUnionedView()).schema(Schema::temp()));
 
     Syntax::SelectSTMT& selectSyntax = select.syntax();
-    WCTInnerAssert(!selectSyntax.cores.empty());
-    Syntax::SelectCore& coreSyntax = selectSyntax.cores.back();
+    Syntax::SelectCore& coreSyntax = selectSyntax.select;
 
     coreSyntax.useCondition = deleteSyntax.useCondition;
     coreSyntax.condition = deleteSyntax.condition;
