@@ -26,7 +26,8 @@
 namespace WCDB {
 
 #pragma mark - Initialize
-Migration::Migration() : m_filter(nullptr), m_migratedNotification(nullptr)
+Migration::Migration()
+: m_filter(nullptr), m_migratedNotification(nullptr), m_tableAcquired(false)
 {
 }
 
@@ -34,11 +35,6 @@ void Migration::filterTable(const Filter& filter)
 {
     WCTInnerAssert(m_filted.empty());
     m_filter = filter;
-    m_filted.clear();
-    m_holder.clear();
-    m_migratings.clear();
-    m_dumpster.clear();
-    m_referenceds.clear();
 }
 
 bool Migration::shouldMigrate() const
@@ -47,35 +43,54 @@ bool Migration::shouldMigrate() const
     return m_filter != nullptr;
 }
 
+Migration::InfoInitializer::~InfoInitializer()
+{
+}
+
 bool Migration::initInfo(InfoInitializer& initializer, const String& table)
 {
     bool succeed = true;
-    MigrationUserInfo userInfo(initializer.getDatabasePath(), table);
-    m_filter(userInfo);
-    if (userInfo.shouldMigrate()) {
-        std::set<String> columns;
-        std::tie(succeed, columns) = initializer.getColumnsForSourceTable(userInfo);
-        if (succeed) {
-            LockGuard lockGuard(m_lock);
-            if (m_filted.find(table) == m_filted.end()) {
-                if (!columns.empty()) {
-                    m_holder.push_back(MigrationInfo(userInfo, columns));
-                    const MigrationInfo* hold = &m_holder.back();
-                    m_migratings.emplace(hold);
-                    m_referenceds.emplace(hold, 0);
-                    m_filted.emplace(table, hold);
-                } else {
-                    m_filted.emplace(table, nullptr);
+    bool skip = true;
+    // do not migrate sqlite builtin table
+    if (!table.hasPrefix(Syntax::builtinTablePrefix)) {
+        MigrationUserInfo userInfo(initializer.getDatabasePath(), table);
+        m_filter(userInfo);
+        if (userInfo.shouldMigrate()) {
+            std::set<String> columns;
+            std::tie(succeed, columns) = initializer.getColumnsForSourceTable(userInfo);
+            if (succeed) {
+                LockGuard lockGuard(m_lock);
+                if (m_filted.find(table) == m_filted.end()) {
+                    if (!columns.empty()) {
+                        m_holder.push_back(MigrationInfo(userInfo, columns));
+                        const MigrationInfo* hold = &m_holder.back();
+                        m_migratings.emplace(hold);
+                        m_referenceds.emplace(hold, 0);
+                        m_filted.emplace(table, hold);
+                        skip = false;
+                    }
                 }
             }
         }
-    } else {
+    }
+    if (skip) {
         LockGuard lockGuard(m_lock);
         if (m_filted.find(table) == m_filted.end()) {
             m_filted.emplace(table, nullptr);
         }
     }
     return succeed;
+}
+
+bool Migration::lazyInitInfo(InfoInitializer& initializer, const String& table)
+{
+    {
+        SharedLockGuard lockGuard(m_lock);
+        if (m_filted.find(table) != m_filted.end()) {
+            return true;
+        }
+    }
+    return initInfo(initializer, table);
 }
 
 void Migration::markAsUnreferenced(const MigrationInfo* info)
@@ -220,9 +235,9 @@ std::pair<bool, const MigrationInfo*> Migration::Binder::bindTable(const String&
     return { succeed, info.get() };
 }
 
-void Migration::Binder::hintTable(const String& table)
+bool Migration::Binder::hintTable(const String& table)
 {
-    m_migration.getOrInitInfo(*this, table);
+    return m_migration.lazyInitInfo(*this, table);
 }
 
 const MigrationInfo* Migration::Binder::getBoundInfo(const String& table)
@@ -280,58 +295,62 @@ Migration::Stepper::~Stepper()
 
 std::pair<bool, bool> Migration::step(Migration::Stepper& stepper)
 {
-    bool succeed, worked, done;
-    std::tie(succeed, worked, done) = tryDropUnreferencedTable(stepper);
-    if (!succeed) {
-        return { false, false };
-    }
-    if (done) {
-        return { true, true };
-    }
-    if (worked) {
-        return { true, false };
-    }
-    return { tryMigrateRows(stepper), false };
+    bool succeed = true;
+    bool done = false;
+    bool worked = false;
+    bool retry = false;
+    do {
+        retry = false;
+        std::tie(succeed, worked) = tryDropUnreferencedTable(stepper);
+        if (!succeed || worked) {
+            break;
+        }
+        std::tie(succeed, worked) = tryMigrateRows(stepper);
+        if (!succeed || worked) {
+            break;
+        }
+        std::tie(succeed, worked) = tryAcquireTables(stepper);
+        if (!succeed) {
+            break;
+        }
+        if (worked) {
+            retry = true;
+        } else {
+            done = true;
+            triggerMigratedNotification();
+        }
+    } while (retry);
+    return { succeed, done };
 }
 
-std::tuple<bool, bool, bool> Migration::tryDropUnreferencedTable(Migration::Stepper& stepper)
+std::pair<bool, bool> Migration::tryDropUnreferencedTable(Migration::Stepper& stepper)
 {
     bool succeed = true;
-    bool dropped = false;
-    bool done = false;
+    bool worked = false;
     const MigrationInfo* info = nullptr;
-    MigratedCallback migratedNotification;
     {
         SharedLockGuard lockGuard(m_lock);
-        migratedNotification = m_migratedNotification;
-        if (m_dumpster.empty()) {
-            dropped = false;
-            done = m_referenceds.empty();
-        } else {
+        if (!m_dumpster.empty()) {
             info = *m_dumpster.begin();
+            WCTInnerAssert(info != nullptr);
         }
     }
     if (info) {
         succeed = stepper.dropSourceTable(info);
-        dropped = succeed;
-        LockGuard lockGuard(m_lock);
-        m_dumpster.erase(info);
-        migratedNotification(info);
-        done = m_dumpster.empty() && m_referenceds.empty();
+        worked = succeed;
+        markAsDropped(info);
+        triggerTableMigratedNotification(info);
     }
-    if (done && migratedNotification != nullptr) {
-        migratedNotification(nullptr);
-    }
-    return { succeed, dropped, done };
+    return { succeed, worked };
 }
 
-bool Migration::tryMigrateRows(Migration::Stepper& stepper)
+std::pair<bool, bool> Migration::tryMigrateRows(Migration::Stepper& stepper)
 {
     const MigrationInfo* info = nullptr;
     {
         SharedLockGuard lockGuard(m_lock);
         if (m_migratings.empty()) {
-            return true;
+            return { true, false };
         }
         for (const auto& migrating : m_migratings) {
             if (migrating->isCrossDatabase()) {
@@ -346,19 +365,73 @@ bool Migration::tryMigrateRows(Migration::Stepper& stepper)
     WCTInnerAssert(info != nullptr);
     bool done = false;
     if (!stepper.migrateRows(info, done)) {
-        return false;
+        return { false, false };
     }
     if (done) {
-        LockGuard lockGuard(m_lock);
-        m_migratings.erase(info);
+        markAsMigrated(info);
     }
-    return true;
+    return { true, true };
+}
+
+std::pair<bool, bool> Migration::tryAcquireTables(Migration::Stepper& stepper)
+{
+    {
+        SharedLockGuard lockGuard(m_lock);
+        if (m_tableAcquired) {
+            return { true, false };
+        }
+    }
+    bool succeed;
+    std::set<String> tables;
+    std::tie(succeed, tables) = stepper.getAllTables();
+    if (succeed) {
+        for (const auto& table : tables) {
+            WCTInnerAssert(!table.hasPrefix(Syntax::builtinTablePrefix));
+            if (!initInfo(stepper, table)) {
+                return { false, false };
+            }
+        }
+        LockGuard lockGuard(m_lock);
+        m_tableAcquired = true;
+    }
+    return { succeed, succeed };
 }
 
 void Migration::setNotificationWhenMigrated(const MigratedCallback& callback)
 {
     LockGuard lockGuard(m_lock);
     m_migratedNotification = callback;
+}
+
+void Migration::triggerMigratedNotification()
+{
+    MigratedCallback callback = nullptr;
+    {
+        SharedLockGuard lockGuard(m_lock);
+        WCTInnerAssert(m_tableAcquired);
+        WCTInnerAssert(m_dumpster.empty());
+        WCTInnerAssert(m_migratings.empty());
+        WCTInnerAssert(m_referenceds.empty());
+        callback = m_migratedNotification;
+    }
+    if (callback) {
+        callback(nullptr);
+    }
+}
+
+void Migration::triggerTableMigratedNotification(const MigrationInfo* info)
+{
+    MigratedCallback callback = nullptr;
+    {
+        SharedLockGuard lockGuard(m_lock);
+        WCTInnerAssert(m_migratings.find(info) == m_migratings.end());
+        WCTInnerAssert(m_referenceds.find(info) == m_referenceds.end());
+        WCTInnerAssert(m_dumpster.find(info) == m_dumpster.end());
+        callback = m_migratedNotification;
+    }
+    if (callback) {
+        callback(info);
+    }
 }
 
 } // namespace WCDB

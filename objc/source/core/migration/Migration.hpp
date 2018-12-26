@@ -45,7 +45,12 @@ public:
 
 protected:
     class InfoInitializer {
+        friend class Migration;
+
     public:
+        virtual ~InfoInitializer();
+
+    protected:
         // When succeed, the empty column means that table does not exist.
         virtual std::pair<bool, std::set<String>>
         getColumnsForSourceTable(const MigrationUserInfo& userInfo) = 0;
@@ -53,6 +58,7 @@ protected:
     };
 
     bool initInfo(InfoInitializer& initializer, const String& table);
+    bool lazyInitInfo(InfoInitializer& initializer, const String& table);
     void markAsUnreferenced(const MigrationInfo* info);
     void markAsDropped(const MigrationInfo* info);
     void markAsMigrated(const MigrationInfo* info);
@@ -99,7 +105,7 @@ public:
         bool stopBinding(bool failed);
 
         std::pair<bool, const MigrationInfo*> bindTable(const String& table);
-        void hintTable(const String& table);
+        bool hintTable(const String& table);
         const MigrationInfo* getBoundInfo(const String& table);
 
         virtual bool bindInfos(const std::map<String, RecyclableMigrationInfo>& infos) = 0;
@@ -120,13 +126,14 @@ protected:
 private:
 #pragma mark - Step
 public:
-    class Stepper {
+    class Stepper : public InfoInitializer {
         friend class Migration;
 
     public:
         virtual ~Stepper();
 
     protected:
+        virtual std::pair<bool, std::set<String>> getAllTables() = 0;
         virtual bool dropSourceTable(const MigrationInfo* info) = 0;
         virtual bool migrateRows(const MigrationInfo* info, bool& done) = 0;
     };
@@ -139,11 +146,16 @@ public:
     void setNotificationWhenMigrated(const MigratedCallback& callback);
 
 protected:
-    // succeed, dropped, done
-    std::tuple<bool, bool, bool> tryDropUnreferencedTable(Migration::Stepper& stepper);
+    // succeed, worked
+    std::pair<bool, bool> tryDropUnreferencedTable(Migration::Stepper& stepper);
+    std::pair<bool, bool> tryMigrateRows(Migration::Stepper& stepper);
+    std::pair<bool, bool> tryAcquireTables(Migration::Stepper& stepper);
 
-    bool tryMigrateRows(Migration::Stepper& stepper);
+    void triggerMigratedNotification();
+    void triggerTableMigratedNotification(const MigrationInfo* info);
 
+private:
+    bool m_tableAcquired;
     MigratedCallback m_migratedNotification;
 };
 

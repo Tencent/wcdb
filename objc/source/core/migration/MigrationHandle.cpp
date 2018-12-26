@@ -45,7 +45,25 @@ MigrationHandle::~MigrationHandle()
     returnStatement(m_removeMigratedStatement);
 }
 
-#pragma mark - Bind
+#pragma mark - Info Initializer
+std::pair<bool, std::set<String>>
+MigrationHandle::getColumnsForSourceTable(const MigrationUserInfo& userInfo)
+{
+    // schema has no need to be detached since schema will be managed automatically when rebind.
+#warning TODO reattach
+    if (userInfo.isCrossDatabase()
+        && !executeStatement(userInfo.getStatementForAttachingSchema())) {
+        return { false, {} };
+    }
+    return getColumns(userInfo.getSchemaForSourceDatabase(), userInfo.getSourceTable());
+}
+
+String MigrationHandle::getDatabasePath() const
+{
+    return getPath();
+}
+
+#pragma mark - Binder
 bool MigrationHandle::bindInfos(const std::map<String, RecyclableMigrationInfo>& infos)
 {
     bool succeed;
@@ -136,22 +154,6 @@ bool MigrationHandle::bindInfos(const std::map<String, RecyclableMigrationInfo>&
     return true;
 }
 
-std::pair<bool, std::set<String>>
-MigrationHandle::getColumnsForSourceTable(const MigrationUserInfo& userInfo)
-{
-    // schema has no need to be detached since schema will be managed automatically when rebind.
-    if (userInfo.isCrossDatabase()
-        && !executeStatement(userInfo.getStatementForAttachingSchema())) {
-        return { false, {} };
-    }
-    return getColumns(userInfo.getSchemaForSourceDatabase(), userInfo.getSourceTable());
-}
-
-String MigrationHandle::getDatabasePath() const
-{
-    return getPath();
-}
-
 #pragma mark - Migration
 std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& originStatement)
 {
@@ -210,7 +212,9 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
             } break;
             case Syntax::Identifier::Type::CreateTableSTMT: {
                 Syntax::CreateTableSTMT& syntax = (Syntax::CreateTableSTMT&) identifier;
-                hintTable(syntax.table);
+                if (!hintTable(syntax.table)) {
+                    succeed = false;
+                }
             } break;
             default:
                 break;

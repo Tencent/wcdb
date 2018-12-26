@@ -31,10 +31,51 @@ MigrationStepperHandle::MigrationStepperHandle()
 
 MigrationStepperHandle::~MigrationStepperHandle()
 {
-    m_migrateStatement->finalize();
+    finalizeMigrationStatement();
     returnStatement(m_migrateStatement);
-    m_removeMigratedStatement->finalize();
     returnStatement(m_removeMigratedStatement);
+}
+
+bool MigrationStepperHandle::reAttach(const String& newPath, const Schema& newSchema)
+{
+    bool succeed = true;
+    bool detached = false;
+    bool attached = false;
+    do {
+        if (m_attached.getDescription() != newSchema.getDescription()) {
+            if (!m_attached.syntax().isMain()) {
+                if (!execute(WCDB::StatementDetach().detach(m_attached))) {
+                    succeed = false;
+                    break;
+                }
+                detached = true;
+            }
+            if (!newSchema.syntax().isMain()) {
+                if (!execute(WCDB::StatementAttach().attach(newPath).as(newSchema))) {
+                    succeed = false;
+                    break;
+                }
+                attached = true;
+            }
+        }
+    } while (false);
+    if (succeed) {
+        if (detached) {
+            if (attached) {
+                m_attached = newSchema;
+            } else {
+                m_attached = Schema::main();
+            }
+            if (m_migratingInfo != nullptr
+                && m_attached.getDescription()
+                   != m_migratingInfo->getSchemaForSourceDatabase().getDescription()) {
+                // migrating info out of date
+                m_migratingInfo = nullptr;
+                finalizeMigrationStatement();
+            }
+        }
+    }
+    return succeed;
 }
 
 #pragma mark - Interrupt
@@ -51,50 +92,35 @@ void MigrationStepperHandle::interrupt()
 }
 
 #pragma mark - Stepper
-bool MigrationStepperHandle::switchMigrating(const MigrationInfo* newInfo)
+std::pair<bool, std::set<String>> MigrationStepperHandle::getAllTables()
 {
-    WCTInnerAssert(newInfo != nullptr);
-    if (newInfo == m_migratingInfo) {
-        return true;
-    }
-    Schema oldSchema;
-    if (m_migratingInfo) {
-        oldSchema = m_migratingInfo->getSchemaForSourceDatabase();
-    }
-    Schema newSchema = newInfo->getSchemaForSourceDatabase();
-    if (oldSchema.getDescription() != newSchema.getDescription()) {
-        if (!oldSchema.syntax().isMain()) {
-            if (!execute(MigrationInfo::getStatementForDetachingSchema(oldSchema))) {
-                return false;
-            }
-        }
-        if (!newSchema.syntax().isMain()) {
-            if (!execute(newInfo->getStatementForAttachingSchema())) {
-                return false;
-            }
-        }
-    }
-    m_migratingInfo = newInfo;
-    m_migrateStatement->finalize();
-    m_removeMigratedStatement->finalize();
-    return true;
+    Column name("name");
+    Column type("type");
+    String pattern = String::formatted("%s%%", Syntax::builtinTablePrefix);
+    return getValues(StatementSelect()
+                     .select(name)
+                     .from(TableOrSubquery::master())
+                     .where(type == "table" && name.like(pattern)),
+                     1);
 }
 
 bool MigrationStepperHandle::dropSourceTable(const MigrationInfo* info)
 {
-    if (!switchMigrating(info)) {
-        return false;
-    }
-
-    return execute(m_migratingInfo->getStatementForDroppingSourceTable());
+    WCTInnerAssert(info != nullptr);
+    return reAttach(info->getSourceDatabase(), info->getSchemaForSourceDatabase())
+           && execute(m_migratingInfo->getStatementForDroppingSourceTable());
 }
 
 bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
 {
+    WCTInnerAssert(info != nullptr);
     done = false;
 
-    if (!switchMigrating(info)) {
-        return false;
+    if (m_migratingInfo != info) {
+        if (!reAttach(info->getSourceDatabase(), info->getSchemaForSourceDatabase())) {
+            return false;
+        }
+        m_migratingInfo = info;
     }
 
     if (!m_migrateStatement->isPrepared()
@@ -146,8 +172,6 @@ bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
         done = true;
     }
 
-    // detach should be executed when source table is dropped.
-
     return true;
 }
 
@@ -161,6 +185,27 @@ bool MigrationStepperHandle::migrateRow(bool& migrated)
     bool succeed = m_migrateStatement->step() && m_removeMigratedStatement->step();
     migrated = succeed ? getChanges() == 0 : false;
     return succeed;
+}
+
+void MigrationStepperHandle::finalizeMigrationStatement()
+{
+    m_migrateStatement->finalize();
+    m_removeMigratedStatement->finalize();
+}
+
+#pragma mark - Info Initializer
+std::pair<bool, std::set<String>>
+MigrationStepperHandle::getColumnsForSourceTable(const MigrationUserInfo& userInfo)
+{
+    if (!reAttach(userInfo.getSourceDatabase(), userInfo.getSchemaForSourceDatabase())) {
+        return { false, {} };
+    }
+    return getColumns(userInfo.getSchemaForSourceDatabase(), userInfo.getSourceTable());
+}
+
+String MigrationStepperHandle::getDatabasePath() const
+{
+    return getPath();
 }
 
 } // namespace WCDB

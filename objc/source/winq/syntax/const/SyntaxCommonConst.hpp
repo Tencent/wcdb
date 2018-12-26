@@ -44,6 +44,7 @@ enum class ConflictAction {
 static const char* masterTable = "sqlite_master";
 static const char* mainSchema = "main";
 static const char* tempSchema = "temp";
+static const char* builtinTablePrefix = "sqlite_";
 
 } // namespace Syntax
 

@@ -34,9 +34,12 @@ public:
     MigrationHandle(Migration &migration);
     ~MigrationHandle();
 
-#pragma mark - Bind
+#pragma mark - Binder
 protected:
     bool bindInfos(const std::map<String, RecyclableMigrationInfo> &migratings) override final;
+
+#pragma mark - Info Initializer
+protected:
     std::pair<bool, std::set<String>>
     getColumnsForSourceTable(const MigrationUserInfo &userInfo) override final;
     String getDatabasePath() const override final;

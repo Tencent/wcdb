@@ -36,6 +36,13 @@ public:
     MigrationStepperHandle();
     ~MigrationStepperHandle();
 
+#pragma mark - Schema
+protected:
+    bool reAttach(const String& newPath, const Schema& newSchema);
+
+private:
+    Schema m_attached;
+
 #pragma mark - Interrupt
 public:
     void setInterruptible(bool interruptible);
@@ -47,15 +54,24 @@ protected:
 
 #pragma mark - Stepper
 protected:
+    std::pair<bool, std::set<String>> getAllTables() override final;
     bool dropSourceTable(const MigrationInfo* info) override final;
     bool migrateRows(const MigrationInfo* info, bool& done) override final;
     bool migrateRow(bool& migrated);
 
+    bool reAttachMigrationInfo(const MigrationInfo* info);
+    void finalizeMigrationStatement();
+
 private:
-    bool switchMigrating(const MigrationInfo* newInfo);
     const MigrationInfo* m_migratingInfo;
     HandleStatement* m_migrateStatement;
     HandleStatement* m_removeMigratedStatement;
+
+#pragma mark - Info Initializer
+protected:
+    std::pair<bool, std::set<String>>
+    getColumnsForSourceTable(const MigrationUserInfo& userInfo) override final;
+    String getDatabasePath() const override final;
 };
 
 } // namespace WCDB
