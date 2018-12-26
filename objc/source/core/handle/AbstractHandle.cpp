@@ -124,16 +124,8 @@ void AbstractHandle::close()
                           m_nestedLevel = 0;
                           rollbackTransaction(););
         m_notification.purge();
-        // disable checkpoint when closing. If ones need a checkpoint, they should do it manually.
-        constexpr const char *name = "close";
-        m_notification.setNotificationWhenWillCheckpoint(
-        std::numeric_limits<int>::min(),
-        name,
-        [](const String &) -> bool { return false; },
-        true);
         sqlite3_close_v2((sqlite3 *) m_handle);
         m_handle = nullptr;
-        m_notification.purge();
     }
 }
 
