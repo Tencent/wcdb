@@ -214,7 +214,7 @@ void Core::handleLog(void* unused, int code, const char* message)
         break;
     }
     error.setSQLiteCode(code);
-    error.message = message ? message : String::null();
+    error.message = message;
     Notifier::shared()->notify(error);
 }
 

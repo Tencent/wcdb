@@ -192,12 +192,10 @@ void Migration::Binder::startBinding()
     WCTInnerAssert(m_cache.empty());
 }
 
-bool Migration::Binder::stopBinding(bool failed)
+bool Migration::Binder::stopBinding(bool succeed)
 {
     WCTInnerAssert(m_binding);
-
-    bool succeed = false;
-    if (!failed) {
+    if (succeed) {
         m_migration.tryReduceBounds(m_boundsCache);
         for (const auto& iter : m_cache) {
             if (iter.second != nullptr) {

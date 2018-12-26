@@ -102,7 +102,7 @@ public:
 
     protected:
         void startBinding();
-        bool stopBinding(bool failed);
+        bool stopBinding(bool succeed);
 
         std::pair<bool, const MigrationInfo*> bindTable(const String& table);
         bool hintTable(const String& table);

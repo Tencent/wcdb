@@ -114,7 +114,7 @@ public:
      FROM [schemaForSourceDatabase].[sourceTable]
      UNION/UNION ALL
      SELECT rowid, [columns]
-     FROM main.[migratedTable]
+     FROM main.[table]
      ORDER BY rowid ASC
      */
     const StatementCreateView& getStatementForCreatingUnionedView() const;
@@ -133,7 +133,7 @@ public:
     static StatementSelect getStatementForSelectingUnionedView();
 
 protected:
-    // WCDBUnioned_ + [migratedTable] + _ + [sourceTable]
+    // WCDBUnioned_ + [table] + _ + [sourceTable]
     String m_unionedView;
     StatementCreateView m_statementForCreatingUnionedView;
 
@@ -141,7 +141,7 @@ protected:
 public:
     /*
      INSERT rowid, [columns]
-     INTO main.[migratedTable]
+     INTO main.[table]
      SELECT rowid, [columns]
      FROM [schemaForSourceDatabase].[sourceTable]
      ORDER BY rowid DESC
@@ -156,7 +156,7 @@ public:
 
     /*
      INSERT rowid, [columns]
-     INTO main.[migratedTable]
+     INTO main.[table]
      [OR ONCONFLICT ACTION]
      SELECT rowid, [columns]
      FROM [schemaForSourceDatabase].[sourceTable]

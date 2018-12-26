@@ -173,29 +173,29 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
         [&succeed, this](Syntax::Identifier& identifier, bool& stop) {
             switch (identifier.getType()) {
             case Syntax::Identifier::Type::TableOrSubquery: {
-                // main.migratedTable -> temp.unionedView
+                // main.table -> temp.unionedView
                 Syntax::TableOrSubquery& syntax = (Syntax::TableOrSubquery&) identifier;
                 if (syntax.switcher == Syntax::TableOrSubquery::Switch::Table) {
                     succeed = tryFallbackToUnionedView(syntax.schema, syntax.tableOrFunction);
                 }
             } break;
             case Syntax::Identifier::Type::QualifiedTableName: {
-                // main.migratedTable -> schemaForSourceDatabase.sourceTable
+                // main.table -> schemaForSourceDatabase.sourceTable
                 Syntax::QualifiedTableName& syntax = (Syntax::QualifiedTableName&) identifier;
                 succeed = tryFallbackToSourceTable(syntax.schema, syntax.table);
             } break;
             case Syntax::Identifier::Type::InsertSTMT: {
-                // main.migratedTable -> schemaForSourceDatabase.sourceTable
+                // main.table -> schemaForSourceDatabase.sourceTable
                 Syntax::InsertSTMT& syntax = (Syntax::InsertSTMT&) identifier;
                 succeed = tryFallbackToSourceTable(syntax.schema, syntax.table);
             } break;
             case Syntax::Identifier::Type::DropTableSTMT: {
-                // main.migratedTable -> schemaForSourceDatabase.sourceTable
+                // main.table -> schemaForSourceDatabase.sourceTable
                 Syntax::DropTableSTMT& syntax = (Syntax::DropTableSTMT&) identifier;
                 succeed = tryFallbackToSourceTable(syntax.schema, syntax.table);
             } break;
             case Syntax::Identifier::Type::Expression: {
-                // main.migratedTable -> temp.unionedView
+                // main.table -> temp.unionedView
                 Syntax::Expression& syntax = (Syntax::Expression&) identifier;
                 switch (syntax.switcher) {
                 case Syntax::Expression::Switch::Column:
@@ -590,12 +590,12 @@ void MigrationHandle::resetMigrate()
     m_removeMigratedStatement->reset();
 }
 
-bool MigrationHandle::prepareMigrate(const String& migratedTable,
+bool MigrationHandle::prepareMigrate(const String& table,
                                      bool useConflictAction,
                                      Syntax::ConflictAction conflictAction)
 {
     WCTInnerAssert(!isMigratedPrepared());
-    const MigrationInfo* info = getBoundInfo(migratedTable);
+    const MigrationInfo* info = getBoundInfo(table);
     WCTInnerAssert(info != nullptr);
     return m_migrateStatement->prepare(info->getStatementForMigratingSpecifiedRow(
            useConflictAction, conflictAction))
