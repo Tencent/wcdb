@@ -43,6 +43,21 @@ public:
 
     bool shouldMigrate() const;
 
+protected:
+    class InfoInitializer {
+    public:
+        // When succeed, the empty column means that table does not exist.
+        virtual std::pair<bool, std::set<String>>
+        getColumnsForSourceTable(const MigrationUserInfo& userInfo) = 0;
+        virtual String getDatabasePath() const = 0;
+    };
+
+    bool initInfo(InfoInitializer& initializer, const String& table);
+    void markAsUnreferenced(const MigrationInfo* info);
+    void markAsDropped(const MigrationInfo* info);
+    void markAsMigrated(const MigrationInfo* info);
+    std::pair<bool, RecyclableMigrationInfo> getInfo(const String& table);
+
 private:
     // Those infos needed to be migrate will be held by m_migrating after initialized. (Other infos that already migrated or have no need to migrate will be dropped when initializing.)
     // And when all the columns inside source table is migrated, the info will not be dropped immedially but removed from m_migratings. The reason is that there might be some handles still holding it. At the same time, the source table will not be dropped too.
@@ -63,13 +78,16 @@ private:
     std::list<MigrationInfo> m_holder;
     std::map<String, const MigrationInfo*> m_filted;
 
+    void retainInfo(const MigrationInfo* info);
+    void releaseInfo(const MigrationInfo* info);
+
     mutable SharedLock m_lock;
 
     Filter m_filter;
 
 #pragma mark - Bind
 public:
-    class Binder {
+    class Binder : public InfoInitializer {
         friend class Migration;
 
     public:
@@ -77,35 +95,29 @@ public:
         virtual ~Binder();
 
     protected:
-        bool rebind();
-        std::pair<bool, const MigrationInfo*> prepareInfo(const String& table);
-        const MigrationInfo* getBoundInfo(const String& table);
-        void clearPrepared();
+        void startBinding();
+        bool stopBinding(bool failed);
 
-        virtual bool rebind(const std::map<String, RecyclableMigrationInfo>& toRebinds) = 0;
-        // When succeed, the empty column means that table does not exist.
-        virtual std::pair<bool, std::set<String>>
-        getColumnsForSourceTable(const MigrationUserInfo& userInfo) = 0;
-        virtual String getMigratedDatabasePath() const = 0;
+        std::pair<bool, const MigrationInfo*> bindTable(const String& table);
+        void hintTable(const String& table);
+        const MigrationInfo* getBoundInfo(const String& table);
+
+        virtual bool bindInfos(const std::map<String, RecyclableMigrationInfo>& infos) = 0;
 
     private:
+        bool m_binding;
         Migration& m_migration;
-        std::map<String, RecyclableMigrationInfo> m_prepareds; // all infos need to be bound during this rebind cycle
+        std::map<String, RecyclableMigrationInfo> m_cache; // all infos need to be bound during this cycle
+        std::map<String, RecyclableMigrationInfo> m_boundsCache;
         std::map<String, RecyclableMigrationInfo> m_bounds;
-        std::map<String, RecyclableMigrationInfo> m_applys;
     };
 
 protected:
     std::pair<bool, RecyclableMigrationInfo>
-    getOrBindInfo(Binder& binder, const String& table);
-    // {get, info}
+    getOrInitInfo(InfoInitializer& initializer, const String& table);
     void tryReduceBounds(std::map<String, RecyclableMigrationInfo>& bounds);
 
 private:
-    std::pair<bool, RecyclableMigrationInfo> getBoundInfo(const String& table);
-    void retainInfo(const MigrationInfo* info);
-    void releaseInfo(const MigrationInfo* info);
-
 #pragma mark - Step
 public:
     class Stepper {

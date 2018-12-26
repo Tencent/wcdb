@@ -36,10 +36,10 @@ public:
 
 #pragma mark - Bind
 protected:
-    bool rebind(const std::map<String, RecyclableMigrationInfo> &toRebinds) override final;
+    bool bindInfos(const std::map<String, RecyclableMigrationInfo> &migratings) override final;
     std::pair<bool, std::set<String>>
     getColumnsForSourceTable(const MigrationUserInfo &userInfo) override final;
-    String getMigratedDatabasePath() const override final;
+    String getDatabasePath() const override final;
 
 #pragma mark - Migration
 public:

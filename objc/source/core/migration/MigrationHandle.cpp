@@ -46,13 +46,13 @@ MigrationHandle::~MigrationHandle()
 }
 
 #pragma mark - Bind
-bool MigrationHandle::rebind(const std::map<String, RecyclableMigrationInfo>& migratings)
+bool MigrationHandle::bindInfos(const std::map<String, RecyclableMigrationInfo>& infos)
 {
     bool succeed;
 
     // views
     std::map<String, const MigrationInfo*> infosToCreateView; // view -> info
-    for (const auto& iter : migratings) {
+    for (const auto& iter : infos) {
         const MigrationInfo* info = iter.second.get();
         infosToCreateView.emplace(info->getUnionedView(), info);
     }
@@ -95,7 +95,7 @@ bool MigrationHandle::rebind(const std::map<String, RecyclableMigrationInfo>& mi
 
     // schemas
     std::map<String, const MigrationInfo*> infosToAttachSchema; // schema -> info
-    for (const auto& iter : migratings) {
+    for (const auto& iter : infos) {
         const MigrationInfo* info = iter.second.get();
         if (info->isCrossDatabase()) {
             infosToAttachSchema.emplace(
@@ -147,7 +147,7 @@ MigrationHandle::getColumnsForSourceTable(const MigrationUserInfo& userInfo)
     return getColumns(userInfo.getSchemaForSourceDatabase(), userInfo.getSourceTable());
 }
 
-String MigrationHandle::getMigratedDatabasePath() const
+String MigrationHandle::getDatabasePath() const
 {
     return getPath();
 }
@@ -162,6 +162,8 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
     bool succeed = true;
     std::list<Statement> statements;
     do {
+        startBinding();
+
         // It's dangerous to use statement after tampering since all the tokens are not fit.
         Statement falledBackStatement = originStatement;
         // fallback
@@ -206,6 +208,10 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
                     break;
                 }
             } break;
+            case Syntax::Identifier::Type::CreateTableSTMT: {
+                Syntax::CreateTableSTMT& syntax = (Syntax::CreateTableSTMT&) identifier;
+                hintTable(syntax.table);
+            } break;
             default:
                 break;
             }
@@ -213,10 +219,7 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
                 stop = true;
             }
         });
-        if (succeed) {
-            // rebind
-            succeed = Migration::Binder::rebind();
-        }
+        succeed = Migration::Binder::stopBinding(succeed);
         if (!succeed) {
             break;
         }
@@ -304,7 +307,6 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
         }
     } while (false);
     if (!succeed) {
-        clearPrepared();
         statements.clear();
     }
 #ifdef DEBUG
@@ -318,7 +320,7 @@ bool MigrationHandle::tryFallbackToUnionedView(Syntax::Schema& schema, String& t
     bool succeed = true;
     if (schema.isMain()) {
         const MigrationInfo* info;
-        std::tie(succeed, info) = prepareInfo(table);
+        std::tie(succeed, info) = bindTable(table);
         if (succeed && info != nullptr) {
             schema = Schema::temp();
             table = info->getUnionedView();
@@ -332,7 +334,7 @@ bool MigrationHandle::tryFallbackToSourceTable(Syntax::Schema& schema, String& t
     bool succeed = true;
     if (schema.isMain()) {
         const MigrationInfo* info;
-        std::tie(succeed, info) = prepareInfo(table);
+        std::tie(succeed, info) = bindTable(table);
         if (succeed && info != nullptr) {
             schema = info->getSchemaForSourceDatabase();
             table = info->getSourceTable();
