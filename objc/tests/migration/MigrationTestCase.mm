@@ -29,14 +29,14 @@
     self.tableClass = TestCaseObject.class;
 
     if (self.isCrossDatabaseMigration) {
-        _originPath = [self.path stringByAppendingString:@"_origin"];
+        _sourcePath = [self.path stringByAppendingString:@"_source"];
     } else {
-        _originPath = self.path;
+        _sourcePath = self.path;
     }
-    _originDatabase = [[WCTDatabase alloc] initWithPath:_originPath];
-    _originTable = @"testOriginTable";
+    _sourceDatabase = [[WCTDatabase alloc] initWithPath:_sourcePath];
+    _sourceTable = @"testSourceTable";
 
-    TestCaseAssertTrue([_originDatabase createTableAndIndexes:_originTable withClass:TestCaseObject.class]);
+    TestCaseAssertTrue([_sourceDatabase createTableAndIndexes:_sourceTable withClass:TestCaseObject.class]);
     NSMutableArray<TestCaseObject*>* objects = [NSMutableArray array];
     for (int i = 0; i < 100; ++i) {
         TestCaseObject* object = [[TestCaseObject alloc] init];
@@ -45,18 +45,18 @@
         [objects addObject:object];
     }
     _objects = objects;
-    TestCaseAssertTrue([_originDatabase insertObjects:_objects intoTable:_originTable]);
+    TestCaseAssertTrue([_sourceDatabase insertObjects:_objects intoTable:_sourceTable]);
 
-    [_originDatabase close];
+    [_sourceDatabase close];
 
-    NSString* originTable = self.originTable;
-    NSString* originPath = self.originPath;
-    NSString* migratedTable = self.tableName;
+    NSString* sourceTable = self.sourceTable;
+    NSString* sourcePath = self.sourcePath;
+    NSString* table = self.tableName;
     [self.database removeConfigForName:WCTConfigNameCheckpoint];
     [self.database filterMigration:^(WCTMigrationUserInfo* userInfo) {
-        if ([userInfo.migratedTable isEqualToString:migratedTable]) {
-            userInfo.originTable = originTable;
-            userInfo.originDatabase = originPath;
+        if ([userInfo.table isEqualToString:table]) {
+            userInfo.sourceTable = sourceTable;
+            userInfo.sourceDatabase = sourcePath;
         }
     }];
     TestCaseAssertTrue([self createTable]);
@@ -65,11 +65,11 @@
 
 - (void)tearDown
 {
-    if (_originDatabase.isValidated) {
-        [_originDatabase close];
-        [_originDatabase invalidate];
+    if (_sourceDatabase.isValidated) {
+        [_sourceDatabase close];
+        [_sourceDatabase invalidate];
     }
-    _originDatabase = nil;
+    _sourceDatabase = nil;
     [super tearDown];
 }
 

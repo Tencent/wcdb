@@ -24,11 +24,11 @@
 
 @property (assign, nonatomic) BOOL isCrossDatabaseMigration;
 
-@property (readonly, nonatomic) NSString* originTable;
+@property (readonly, nonatomic) NSString* sourceTable;
 
-@property (readonly, nonatomic) NSString* originPath;
+@property (readonly, nonatomic) NSString* sourcePath;
 
-@property (readonly, nonatomic) WCTDatabase* originDatabase;
+@property (readonly, nonatomic) WCTDatabase* sourceDatabase;
 
 @property (readonly, nonatomic) NSArray<TestCaseObject*>* objects;
 

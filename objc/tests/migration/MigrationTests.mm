@@ -28,26 +28,49 @@
 
 - (void)setUp
 {
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+    self.isCrossDatabaseMigration = NO;
+    [super setUp];
 }
 
-- (void)tearDown
+- (void)test_filter
 {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-}
-
-- (void)testExample
-{
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
-
-- (void)testPerformanceExample
-{
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-    // Put the code you want to measure the time of here.
+    WCTDatabase *filter = [[WCTDatabase alloc] initWithPath:[self.path stringByAppendingString:@"_filter"]];
+    __block int tested = 0;
+    NSString *expectedTableName = self.tableName;
+    [filter filterMigration:^(WCTMigrationUserInfo *userInfo) {
+        if ([userInfo.table isEqualToString:expectedTableName]) {
+            ++tested;
+        }
     }];
+    TestCaseAssertTrue([filter getObjectOfClass:TestCaseObject.class fromTable:self.tableName] == nil);
+    TestCaseAssertTrue([filter getObjectOfClass:TestCaseObject.class fromTable:self.tableName] == nil);
+    TestCaseAssertTrue(tested == 1);
+}
+
+- (void)test_notification
+{
+    __block BOOL tableMigrated = NO;
+    __block BOOL migrated = NO;
+    NSString *expectedTableName = self.tableName;
+    [self.database setNotificationWhenMigrated:^(WCTMigrationBaseInfo *info) {
+        if (info == nil) {
+            migrated = YES;
+        } else if ([info.table isEqualToString:expectedTableName]) {
+            tableMigrated = YES;
+        }
+    }];
+
+    BOOL done = NO;
+    BOOL succeed;
+    do {
+        TestCaseAssertFalse(tableMigrated);
+        TestCaseAssertFalse(migrated);
+        succeed = [self.database stepMigration:YES done:done];
+    } while (succeed && !done);
+    TestCaseAssertTrue(succeed);
+    TestCaseAssertTrue(done);
+    TestCaseAssertTrue(tableMigrated);
+    TestCaseAssertTrue(migrated);
 }
 
 @end
