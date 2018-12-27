@@ -706,23 +706,34 @@ bool Database::recover(uint32_t corruptedIdentifier)
 std::pair<bool, bool> Database::stepMigration(bool interruptible)
 {
     InitializedGuard initializedGuard = initialize();
-    if (!initializedGuard.valid()) {
-        return { false, false };
-    }
-    if (interruptible
-        && (activeHandleCount(ConfiguredHandleSlot) > 0
-            || activeHandleCount(MigrationHandleSlot) > 0)) {
-        return { true, false };
-    }
-    RecyclableHandle handle = getSlotHandle(MigrationStepperSlot);
-    WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()));
-    static_cast<MigrationStepperHandle *>(handle.get())->setInterruptible(interruptible);
-    bool succeed, done;
-    std::tie(succeed, done)
-    = m_migration.step(*(static_cast<MigrationStepperHandle *>(handle.get())));
-    if (!succeed && handle->getResultCode() == (int) Error::Code::Interrupt) {
-        succeed = true;
-    }
+    bool succeed = false;
+    bool done = false;
+    do {
+        if (!initializedGuard.valid()) {
+            break;
+        }
+        if (interruptible
+            && (activeHandleCount(ConfiguredHandleSlot) > 0
+                || activeHandleCount(MigrationHandleSlot) > 0)) {
+            succeed = true;
+        }
+
+        RecyclableHandle handle = getSlotHandle(MigrationStepperSlot);
+        if (handle == nullptr) {
+            break;
+        }
+
+        WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()) != nullptr);
+        static_cast<MigrationStepperHandle *>(handle.get())->setInterruptible(interruptible);
+        std::tie(succeed, done)
+        = m_migration.step(*(static_cast<MigrationStepperHandle *>(handle.get())));
+        if (!succeed) {
+            if (handle->getResultCode() == (int) Error::Code::Interrupt
+                || handle->getResultCode() == (int) Error::Code::Busy) {
+                succeed = true;
+            }
+        }
+    } while (false);
     return { succeed, done };
 }
 
