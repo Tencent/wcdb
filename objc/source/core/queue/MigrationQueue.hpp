@@ -43,9 +43,6 @@ public:
     void put(const String& path);
     void remove(const String& path);
 
-    static constexpr const double timeIntervalForMigration = 1.0f;
-    static constexpr const int toleranceFailedCount = 3;
-
 protected:
     void loop() override final;
 

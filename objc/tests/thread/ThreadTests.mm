@@ -21,6 +21,7 @@
 #import "TableTestCase.h"
 #import "TestCaseObject+WCTTableCoding.h"
 #import "TestCaseObject.h"
+#import <WCDB/CoreConst.h>
 
 @interface ThreadTests : TableTestCase
 
@@ -29,9 +30,9 @@
 
 @property (nonatomic, readonly) NSTimeInterval checkpointDelayForCritical;
 @property (nonatomic, readonly) NSTimeInterval checkpointDelayForNonCritical;
-@property (nonatomic, readonly) NSTimeInterval checkpointDelayForRetryAfterFailure;
+@property (nonatomic, readonly) NSTimeInterval checkpointDelayForRetryingAfterFailure;
 
-@property (nonatomic, readonly) int checkpointFramesThresholdForTruncate;
+@property (nonatomic, readonly) int checkpointFramesThresholdForTruncating;
 @property (nonatomic, readonly) int checkpointFramesThresholdForCritical;
 
 @property (nonatomic, readonly) NSTimeInterval delayForTolerance;
@@ -49,16 +50,17 @@
     _queue = dispatch_queue_create([[NSBundle mainBundle].bundleIdentifier stringByAppendingFormat:@".%@", self.identifier].UTF8String, DISPATCH_QUEUE_CONCURRENT);
     self.tableClass = TestCaseObject.class;
 
-    _checkpointDelayForCritical = 1.0;
-    _checkpointDelayForNonCritical = 10.0;
-    _checkpointDelayForRetryAfterFailure = 10.0;
+    _checkpointDelayForCritical = WCDB::CheckpointConfigDelayForCritical;
+    _checkpointDelayForNonCritical = WCDB::CheckpointConfigDelayForNonCritical;
+    _checkpointDelayForRetryingAfterFailure = WCDB::CheckpointQueueDelayForRetryingAfterFailure;
 
-    _checkpointFramesThresholdForCritical = 100;
-    _checkpointFramesThresholdForTruncate = 10 * 1024;
+    _checkpointFramesThresholdForCritical = WCDB::CheckpointConfigFramesThresholdForCritical;
+    _checkpointFramesThresholdForTruncating = WCDB::CheckpointQueueFramesThresholdForTruncating;
 
     _delayForTolerance = 2;
 
-    _maxConcurrency = 16;
+    _maxConcurrency = std::max<int>(HandlePoolHandleCountThreshold, std::thread::hardware_concurrency());
+    ;
 }
 
 - (void)test_feature_read_concurrency
@@ -201,7 +203,7 @@
     object.isAutoIncrement = YES;
     object.content = [NSString randomString];
 
-    while ([self getWalFrameCount] < self.checkpointFramesThresholdForTruncate) {
+    while ([self getWalFrameCount] < self.checkpointFramesThresholdForTruncating) {
         TestCaseAssertTrue([self.table insertObject:object]);
     }
 
@@ -230,7 +232,7 @@
                    [self.console disableSQLiteWrite];
                    [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
                    [self.console enableSQLiteWrite];
-                   [NSThread sleepForTimeInterval:self.checkpointDelayForRetryAfterFailure + self.delayForTolerance];
+                   [NSThread sleepForTimeInterval:self.checkpointDelayForRetryingAfterFailure + self.delayForTolerance];
                    return YES;
                }];
     TestCaseAssertTrue(result);

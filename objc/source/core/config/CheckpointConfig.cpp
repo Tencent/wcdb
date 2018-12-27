@@ -21,6 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/CheckpointConfig.hpp>
 #include <WCDB/CheckpointQueue.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/Handle.hpp>
 #include <WCDB/String.hpp>
 #include <mutex>
@@ -50,10 +51,10 @@ bool CheckpointConfig::uninvoke(Handle* handle)
 
 bool CheckpointConfig::onCommitted(const String& path, int frames)
 {
-    if (frames >= framesThresholdForCritical) {
-        m_queue->put(path, delayForCritical, frames);
+    if (frames >= CheckpointConfigFramesThresholdForCritical) {
+        m_queue->put(path, CheckpointConfigDelayForCritical, frames);
     } else {
-        m_queue->put(path, delayForNonCritical, frames);
+        m_queue->put(path, CheckpointConfigDelayForNonCritical, frames);
     }
     return true;
 }

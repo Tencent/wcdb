@@ -47,18 +47,7 @@
 
 #include <WCDB/MigrationInfo.hpp>
 
-#define WCDB_BASIC_CONFIG_NAME "com.Tencent.WCDB.Config.Basic"
-#define WCDB_BACKUP_CONFIG_NAME "com.Tencent.WCDB.Config.Backup"
-#define WCDB_CHECKPOINT_CONFIG_NAME "com.Tencent.WCDB.Config.Checkpoint"
-#define WCDB_TOKENIZE_CONFIG_NAME "com.Tencent.WCDB.Config.Tokenize"
-#define WCDB_CIPHER_CONFIG_NAME "com.Tencent.WCDB.Config.Cipher"
-#define WCDB_SQL_TRACE_CONFIG_NAME "com.Tencent.WCDB.Config.SQLTrace"
-#define WCDB_PERFORMANCE_TRACE_CONFIG_NAME                                     \
-    "com.Tencent.WCDB.Config.PerformanceTrace"
-#define WCDB_GLOBAL_SQL_TRACE_CONFIG_NAME                                      \
-    "com.Tencent.WCDB.Config.GlobalSQLTrace"
-#define WCDB_GLOBAL_PERFORMANCE_TRACE_CONFIG_NAME                              \
-    "com.Tencent.WCDB.Config.GlobalPerformanceTrace"
+#include <WCDB/CoreConst.h>
 
 namespace WCDB {
 
@@ -86,19 +75,14 @@ public:
     void setNotificationForGlobalPerformanceTrace(
     const ShareablePerformanceTraceConfig::Notification& notification);
 
-    static constexpr const char* backupConfigName = WCDB_BACKUP_CONFIG_NAME;
     const std::shared_ptr<Config>& backupConfig();
 
-    static constexpr const char* tokenizeConfigName = WCDB_TOKENIZE_CONFIG_NAME;
     std::shared_ptr<Config> tokenizeConfig(const std::list<String>& tokenizeNames);
 
-    static constexpr const char* cipherConfigName = WCDB_CIPHER_CONFIG_NAME;
     std::shared_ptr<Config> cipherConfig(const UnsafeData& cipher, int pageSize = 4096);
 
-    static constexpr const char* sqlTraceConfigName = WCDB_SQL_TRACE_CONFIG_NAME;
     std::shared_ptr<Config> sqlTraceConfig(const SQLTraceConfig::Notification& notification);
 
-    static constexpr const char* performanceTraceConfigName = WCDB_PERFORMANCE_TRACE_CONFIG_NAME;
     std::shared_ptr<Config>
     performanceTraceConfig(const PerformanceTraceConfig::Notification& notification);
 
@@ -111,21 +95,6 @@ public:
 
 protected:
     Core();
-
-    static constexpr const char* basicConfigName = WCDB_BASIC_CONFIG_NAME;
-    static constexpr const char* checkpointConfigName = WCDB_CHECKPOINT_CONFIG_NAME;
-
-    static constexpr const char* globalSQLTraceConfigName = WCDB_GLOBAL_SQL_TRACE_CONFIG_NAME;
-    static constexpr const char* globalPerformanceTraceConfigName
-    = WCDB_GLOBAL_PERFORMANCE_TRACE_CONFIG_NAME;
-
-    static constexpr const char* notifierPreprocessorName
-    = "com.Tencent.WCDB.Notifier.PreprocessTag";
-
-    static constexpr const char* corruptionQueueName = "com.Tencent.WCDB.Queue.Corruption";
-    static constexpr const char* checkpointQueueName = "com.Tencent.WCDB.Queue.Checkpoint";
-    static constexpr const char* backupQueueName = "com.Tencent.WCDB.Queue.Backup";
-    static constexpr const char* migrationQueueName = "com.Tencent.WCDB.Queue.Migration";
 
     static int vfsOpen(const char* path, int flags, int mode);
     static void handleLog(void* unused, int code, const char* message);

@@ -21,6 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/BackupConfig.hpp>
 #include <WCDB/BackupQueue.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/Handle.hpp>
 #include <WCDB/String.hpp>
 
@@ -64,10 +65,10 @@ bool BackupConfig::uninvoke(Handle *handle)
 bool BackupConfig::onCommitted(const String &path, int frames)
 {
     int backedUp = m_queue->getBackedUpFrames(path);
-    if (frames >= backedUp + framesIntervalForCritical || frames < backedUp) {
-        m_queue->put(path, delayForCritical, frames);
-    } else if (frames >= backedUp + framesIntervalForNonCritical) {
-        m_queue->put(path, delayForNonCritical, frames);
+    if (frames >= backedUp + BackupConfigFramesIntervalForCritical || frames < backedUp) {
+        m_queue->put(path, BackupConfigDelayForCritical, frames);
+    } else if (frames >= backedUp + BackupConfigFramesIntervalForNonCritical) {
+        m_queue->put(path, BackupConfigDelayForNonCritical, frames);
     }
     // it's no need to backup when idled since a checkpoint will happen by checkpoint queue when idled, which will trigger backup immediately
     return true;
@@ -77,7 +78,7 @@ void BackupConfig::checkpointed(const String &path, int rc)
 {
     if (rc == (int) Error::Code::OK) {
         // back up immediately if checkpointed
-        m_queue->put(path, delayForCritical, 0);
+        m_queue->put(path, BackupConfigDelayForCritical, 0);
     }
 }
 

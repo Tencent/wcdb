@@ -20,6 +20,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/BackupQueue.hpp>
+#include <WCDB/CoreConst.h>
 
 namespace WCDB {
 
@@ -67,8 +68,8 @@ bool BackupQueue::onTimed(const String& path, const int& frames)
 
     bool result = static_cast<BackupEvent*>(m_event)->databaseShouldBackup(path);
     if (!result) {
-        // retry after 15.0s if failed
-        m_timedQueue.reQueue(path, 15.0, frames);
+        // retry if failed
+        m_timedQueue.reQueue(path, BackupQueueDelayForRetryingAfterFailure, frames);
     }
     LockGuard lockGuard(m_lock);
     m_backedUp[path] = frames;

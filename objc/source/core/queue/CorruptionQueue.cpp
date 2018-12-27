@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/CorruptionQueue.hpp>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Notifier.hpp>
@@ -107,7 +108,9 @@ void CorruptionQueue::loop()
             m_corrupted.erase(path);
             m_refractories.emplace(
             corruptedIdentifier,
-            now + std::chrono::microseconds((long long) (timeIntervalForInvokingEvent * 1000000)));
+            now
+            + std::chrono::microseconds(
+              (long long) (CorruptionQueueTimeIntervalForInvokingEvent * 1000000)));
         }
     }
 }

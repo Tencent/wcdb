@@ -20,6 +20,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/CheckpointQueue.hpp>
+#include <WCDB/CoreConst.h>
 
 namespace WCDB {
 
@@ -54,7 +55,7 @@ bool CheckpointQueue::onTimed(const String& path, const int& frames)
     }
 
     bool result;
-    if (frames >= framesThresholdForTruncate) {
+    if (frames >= CheckpointQueueFramesThresholdForTruncating) {
         result = static_cast<CheckpointEvent*>(m_event)->databaseShouldCheckpoint(
         path, m_checkpointTruncate);
     } else {
@@ -63,7 +64,7 @@ bool CheckpointQueue::onTimed(const String& path, const int& frames)
     }
     if (!result) {
         // retry after 10.0s if failed
-        m_timedQueue.reQueue(path, delayForRetryAfterFailure, frames);
+        m_timedQueue.reQueue(path, CheckpointQueueDelayForRetryingAfterFailure, frames);
     }
     return result;
 }

@@ -34,10 +34,6 @@ public:
     bool invoke(Handle *handle) override final;
     bool uninvoke(Handle *handle) override final;
 
-    static constexpr const int framesThresholdForCritical = 100;
-    static constexpr const double delayForCritical = 1.0;
-    static constexpr const double delayForNonCritical = 10.0;
-
 protected:
     const String m_identifier;
     bool onCommitted(const String &path, int pages);

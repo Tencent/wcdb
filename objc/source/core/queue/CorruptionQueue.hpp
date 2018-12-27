@@ -43,8 +43,6 @@ public:
     CorruptionQueue(const String& name, CorruptionEvent* event);
     ~CorruptionQueue();
 
-    static constexpr const double timeIntervalForInvokingEvent = 5.0f;
-
 protected:
     void handleError(const Error& error);
 

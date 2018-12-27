@@ -43,9 +43,6 @@ public:
     CheckpointQueue(const String& name, CheckpointEvent* event);
     ~CheckpointQueue();
 
-    static constexpr const int framesThresholdForTruncate = 10 * 1024;
-    static constexpr const double delayForRetryAfterFailure = 10.0;
-
     void put(const String& path, double delay, int frames);
 
 protected:

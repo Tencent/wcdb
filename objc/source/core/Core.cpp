@@ -35,19 +35,19 @@ Core* Core::shared()
 Core::Core()
 : m_modules(new FTS::Modules)
 , m_databasePool(this)
-, m_corruptionQueue(new CorruptionQueue(corruptionQueueName, this))
-, m_checkpointQueue(new CheckpointQueue(checkpointQueueName, this))
-, m_backupQueue(new BackupQueue(backupQueueName, this))
-, m_migrationQueue(new MigrationQueue(migrationQueueName, this))
+, m_corruptionQueue(new CorruptionQueue(CorruptionQueueName, this))
+, m_checkpointQueue(new CheckpointQueue(CheckpointQueueName, this))
+, m_backupQueue(new BackupQueue(BackupQueueName, this))
+, m_migrationQueue(new MigrationQueue(MigrationQueueName, this))
 // Configs
 , m_backupConfig(new BackupConfig(m_backupQueue))
 , m_globalSQLTraceConfig(new ShareableSQLTraceConfig)
 , m_globalPerformanceTraceConfig(new ShareablePerformanceTraceConfig)
 , m_configs(new Configs(OrderedUniqueList<String, std::shared_ptr<Config>>({
-  { Configs::Priority::Highest, globalSQLTraceConfigName, m_globalSQLTraceConfig },
-  { Configs::Priority::Highest, globalPerformanceTraceConfigName, m_globalPerformanceTraceConfig },
-  { Configs::Priority::Higher, basicConfigName, std::shared_ptr<Config>(new BasicConfig) },
-  { Configs::Priority::Low, checkpointConfigName, std::shared_ptr<Config>(new CheckpointConfig(m_checkpointQueue)) },
+  { Configs::Priority::Highest, GlobalSQLTraceConfigName, m_globalSQLTraceConfig },
+  { Configs::Priority::Highest, GlobalPerformanceTraceConfigName, m_globalPerformanceTraceConfig },
+  { Configs::Priority::Higher, BasicConfigName, std::shared_ptr<Config>(new BasicConfig) },
+  { Configs::Priority::Low, CheckpointConfigName, std::shared_ptr<Config>(new CheckpointConfig(m_checkpointQueue)) },
   })))
 {
     Handle::enableMultithread();
@@ -57,13 +57,13 @@ Core::Core()
     Handle::setNotificationWhenVFSOpened(Core::vfsOpen);
 
     Notifier::shared()->setNotificationForPreprocessing(
-    notifierPreprocessorName,
+    NotifierTagPreprocessorName,
     std::bind(&Core::preprocessError, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 Core::~Core()
 {
-    Notifier::shared()->setNotificationForPreprocessing(notifierPreprocessorName, nullptr);
+    Notifier::shared()->setNotificationForPreprocessing(NotifierTagPreprocessorName, nullptr);
 }
 
 RecyclableDatabase Core::getOrCreateDatabase(const String& path)

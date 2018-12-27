@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/CoreConst.h>
 #include <WCDB/MigrationQueue.hpp>
 
 namespace WCDB {
@@ -69,11 +70,11 @@ void MigrationQueue::loop()
         int failedCount = 0;
         while (!exit()) {
             std::this_thread::sleep_for(std::chrono::microseconds(
-            (long long) (timeIntervalForMigration * 1000000)));
+            (long long) (MigrationQueueTimeIntervalForMigrating * 1000000)));
             bool succeed, done;
             std::tie(succeed, done)
             = static_cast<MigrationEvent*>(m_event)->databaseShouldMigrate(path);
-            if ((!succeed && ++failedCount >= toleranceFailedCount) || done) {
+            if ((!succeed && ++failedCount >= MigrationQueueTolerableFailures) || done) {
                 break;
             }
             if (m_dirty) {

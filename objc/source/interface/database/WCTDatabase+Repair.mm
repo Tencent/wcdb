@@ -59,9 +59,9 @@
 {
     WCTDatabaseAssert(return;);
     if (flag) {
-        _database->setConfig(WCDB::Core::backupConfigName, WCDB::Core::shared()->backupConfig(), WCDB::Configs::Priority::Low);
+        _database->setConfig(WCDB::BackupConfigName, WCDB::Core::shared()->backupConfig(), WCDB::Configs::Priority::Low);
     } else {
-        _database->removeConfig(WCDB::Core::backupConfigName);
+        _database->removeConfig(WCDB::BackupConfigName);
     }
 }
 

@@ -95,11 +95,11 @@
             }
             trace(array, (NSUInteger) cost);
         };
-        _database->setConfig(WCDB::Core::performanceTraceConfigName,
+        _database->setConfig(WCDB::PerformanceTraceConfigName,
                              WCDB::Core::shared()->performanceTraceConfig(callback),
                              WCDB::Configs::Priority::Highest);
     } else {
-        _database->removeConfig(WCDB::Core::performanceTraceConfigName);
+        _database->removeConfig(WCDB::PerformanceTraceConfigName);
     }
 }
 
@@ -111,11 +111,11 @@
         callback = [trace](const WCDB::String &sql) {
             trace([NSString stringWithUTF8String:sql.c_str()]);
         };
-        _database->setConfig(WCDB::Core::sqlTraceConfigName,
+        _database->setConfig(WCDB::SQLTraceConfigName,
                              WCDB::Core::shared()->sqlTraceConfig(callback),
                              WCDB::Configs::Priority::Highest);
     } else {
-        _database->removeConfig(WCDB::Core::sqlTraceConfigName);
+        _database->removeConfig(WCDB::SQLTraceConfigName);
     }
 }
 

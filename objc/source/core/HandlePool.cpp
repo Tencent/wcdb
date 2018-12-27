@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/HandlePool.hpp>
 #include <WCDB/Notifier.hpp>
@@ -44,8 +45,8 @@ HandlePool::~HandlePool()
 #pragma mark - Concurrency
 int HandlePool::maxHandleCount()
 {
-    static const int s_maxHandleCount
-    = std::max<int>(16, std::thread::hardware_concurrency());
+    static const int s_maxHandleCount = std::max<int>(
+    HandlePoolHandleCountThreshold, std::thread::hardware_concurrency());
     return s_maxHandleCount;
 }
 

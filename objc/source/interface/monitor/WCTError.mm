@@ -36,7 +36,7 @@ NSErrorUserInfoKey const WCTErrorKeySource = @"Source";
 + (void)initialize
 {
     if (self.class == WCTError.class) {
-        WCDB::Notifier::shared()->setNotificationForPreprocessing("com.Tencent.WCDB.Notifier.PreprocessPath", [](const WCDB::Error &error, WCDB::Error::Infos &infos) {
+        WCDB::Notifier::shared()->setNotificationForPreprocessing(WCDB::NotifierPathPreprocessorName, [](const WCDB::Error &error, WCDB::Error::Infos &infos) {
             const auto &strings = error.infos.getStrings();
             auto iter = strings.find(WCTErrorKeyPath);
             if (iter == strings.end()) {

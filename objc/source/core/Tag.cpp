@@ -18,17 +18,23 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/Tag.hpp>
 
 namespace WCDB {
 
 const Tag& Tag::invalid()
 {
-    static const Tag* s_invalid = new Tag(invalidValue);
+    static const Tag* s_invalid = new Tag(nullptr);
     return *s_invalid;
 }
 
 Tag::Tag(int32_t tag) : m_value(tag)
+{
+    WCTRemedialAssert(m_value != 0, "Tag can't be 0.", return;);
+}
+
+Tag::Tag(const std::nullptr_t&) : m_value(invalidValue)
 {
 }
 
@@ -43,6 +49,11 @@ bool Tag::operator!=(const Tag& other) const
 }
 
 Tag::operator int32_t() const
+{
+    return value();
+}
+
+int32_t Tag::value() const
 {
     return m_value;
 }

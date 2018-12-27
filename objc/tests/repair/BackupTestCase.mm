@@ -19,6 +19,7 @@
  */
 
 #import "BackupTestCase.h"
+#import <WCDB/CoreConst.h>
 
 @implementation BackupTestCase
 
@@ -29,10 +30,10 @@
     _lastMaterial = [self.path stringByAppendingString:@"-last.material"];
     _factory = [self.path stringByAppendingString:@".factory"];
 
-    _backupFramesIntervalForNonCritical = 100;
-    _backupFramesIntervalForCritical = 300;
-    _backupDelayForCritical = 0;
-    _backupDelayForNonCritical = 1.0;
+    _backupFramesIntervalForNonCritical = WCDB::BackupConfigFramesIntervalForNonCritical;
+    _backupFramesIntervalForCritical = WCDB::BackupConfigFramesIntervalForCritical;
+    _backupDelayForCritical = WCDB::BackupConfigDelayForCritical;
+    _backupDelayForNonCritical = WCDB::BackupConfigDelayForNonCritical;
 
     _delayForTolerance = 1.0;
     _framesForTolerance = 10;

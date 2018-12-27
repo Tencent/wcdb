@@ -36,8 +36,10 @@ public:
     bool operator==(const Tag& other) const;
     bool operator!=(const Tag& other) const;
     operator int32_t() const;
+    int32_t value() const;
 
 private:
+    Tag(const std::nullptr_t&);
     int32_t m_value;
 };
 

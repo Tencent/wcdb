@@ -333,6 +333,7 @@
 		23790A7F219315E50098797F /* WCTColumnConstraintMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 23790A7D219315D50098797F /* WCTColumnConstraintMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23790A80219315E50098797F /* WCTVirtualTableMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 23790A7E219315DE0098797F /* WCTVirtualTableMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		237A65F520F731DF008B4771 /* OrderedUniqueList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */; };
+		237C900721D45E6700EE6E44 /* CoreConst.h in Headers */ = {isa = PBXBuildFile; fileRef = 237C900621D45E6700EE6E44 /* CoreConst.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23846FCF21AF8427005B868F /* RetrieveRobustyTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23846FCE21AF8427005B868F /* RetrieveRobustyTests.mm */; };
 		23846FD621AFF216005B868F /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23846FD421AFF215005B868F /* AllTypesObject.mm */; };
 		23846FD721AFF216005B868F /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23846FD421AFF215005B868F /* AllTypesObject.mm */; };
@@ -1461,6 +1462,7 @@
 		23790A7D219315D50098797F /* WCTColumnConstraintMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTColumnConstraintMacro.h; sourceTree = "<group>"; };
 		23790A7E219315DE0098797F /* WCTVirtualTableMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTVirtualTableMacro.h; sourceTree = "<group>"; };
 		237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OrderedUniqueList.hpp; sourceTree = "<group>"; };
+		237C900621D45E6700EE6E44 /* CoreConst.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreConst.h; sourceTree = "<group>"; };
 		23846FCE21AF8427005B868F /* RetrieveRobustyTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RetrieveRobustyTests.mm; sourceTree = "<group>"; };
 		23846FD321AFF215005B868F /* AllTypesObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTypesObject.h; sourceTree = "<group>"; };
 		23846FD421AFF215005B868F /* AllTypesObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AllTypesObject.mm; sourceTree = "<group>"; };
@@ -2308,6 +2310,7 @@
 				23B4DC7D2111B39200954D71 /* Tag.hpp */,
 				234591F5204432E400DC7D34 /* Core.h */,
 				23B4DCBB2112A9C800954D71 /* Core.cpp */,
+				237C900621D45E6700EE6E44 /* CoreConst.h */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -3553,6 +3556,7 @@
 				23AF4E2020CD04E20050033C /* Initializeable.hpp in Headers */,
 				2316D93121057CA700707AFC /* Recyclable.hpp in Headers */,
 				23EEDD5C217DFADC006E9E73 /* SyntaxWithClause.hpp in Headers */,
+				237C900721D45E6700EE6E44 /* CoreConst.h in Headers */,
 				23775B8420AD666900E21AB0 /* Cell.hpp in Headers */,
 				23C40CFF208DBCDF007B1648 /* Dispatch.hpp in Headers */,
 				23A4703D21BE0940005B9C09 /* MigrationStepperHandle.hpp in Headers */,
