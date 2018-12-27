@@ -100,8 +100,8 @@ std::pair<bool, std::set<String>> MigrationStepperHandle::getAllTables()
     return getValues(StatementSelect()
                      .select(name)
                      .from(TableOrSubquery::master())
-                     .where(type == "table" && name.like(pattern)),
-                     1);
+                     .where(type == "table" && name.notLike(pattern)),
+                     0);
 }
 
 bool MigrationStepperHandle::dropSourceTable(const MigrationInfo* info)
