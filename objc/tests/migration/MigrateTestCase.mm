@@ -192,12 +192,27 @@
     TestCaseAssertTrue(tested);
 }
 
+- (int)getUnmigratedCount
+{
+    // get count of unmigrated rows
+    // It's not a good practice.
+    return [self.sourceDatabase getValueFromStatement:WCDB::StatementSelect().select(TestCaseObject.allProperties.count()).from(self.sourceTable)].numberValue.intValue;
+}
+
 - (void)doTestFeatureStepAsLeastAsPossibleButNotWaste
 {
+    [self.database removeConfigForName:WCTConfigNameCheckpoint];
+
     BOOL done = NO;
     BOOL succeed;
+    int lastWalFrameCount = [self getWalFrameCount];
     do {
         succeed = [self.database stepMigration:YES done:done];
+
+        int walFrameCount = [self getWalFrameCount];
+        // <=3: 1. sqlite_sequence 2. source table 3. table
+        TestCaseAssertTrue(walFrameCount - lastWalFrameCount <= 3);
+        lastWalFrameCount = walFrameCount;
     } while (succeed && !done);
     TestCaseAssertTrue(succeed);
     TestCaseAssertTrue(done);
