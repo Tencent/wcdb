@@ -39,6 +39,14 @@ ssize_t illPwrite(int, const void *, size_t, off_t)
     return s_console;
 }
 
++ (void)initialize
+{
+    if (self.class == Console.class
+        && [NSThread currentThread].isMainThread) {
+        pthread_setname_np("com.Tencent.WCDB.Queue.Main");
+    }
+}
+
 - (instancetype)init
 {
     if (self = [super init]) {
