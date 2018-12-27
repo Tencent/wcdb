@@ -19,7 +19,9 @@
  */
 
 #include <WCDB/CoreConst.h>
+#include <WCDB/Error.hpp>
 #include <WCDB/MigrationQueue.hpp>
+#include <WCDB/Notifier.hpp>
 
 namespace WCDB {
 
@@ -44,6 +46,7 @@ void MigrationQueue::put(const String& path)
         if (notify) {
             m_cond.notify_all();
         }
+        lazyRun();
     }
 }
 
@@ -75,6 +78,12 @@ void MigrationQueue::loop()
             std::tie(succeed, done)
             = static_cast<MigrationEvent*>(m_event)->databaseShouldMigrate(path);
             if ((!succeed && ++failedCount >= MigrationQueueTolerableFailures) || done) {
+                Error error;
+                error.level = Error::Level::Notice;
+                error.setCode(Error::Code::Notice);
+                error.message = "Async migration stopped due to the error.";
+                error.infos.set("Path", path);
+                Notifier::shared()->notify(error);
                 break;
             }
             if (m_dirty) {
