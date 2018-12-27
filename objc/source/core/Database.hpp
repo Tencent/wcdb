@@ -70,12 +70,12 @@ protected:
     RecyclableHandle getSlotHandle(Slot slot);
 
 protected:
-    static const Slot ConfiguredHandleSlot = 0;
-    static const Slot MigrationHandleSlot = 1;
-    static constexpr const Slot BackupReadSlot = 2;
-    static constexpr const Slot BackupWriteSlot = 3;
-    static constexpr const Slot AssemblerSlot = 4;
-    static constexpr const Slot MigrationStepperSlot = 5;
+    static const Slot ConfiguredHandleSlot = 1;
+    static const Slot MigrationHandleSlot = 2;
+    static constexpr const Slot BackupReadSlot = 3;
+    static constexpr const Slot BackupWriteSlot = 4;
+    static constexpr const Slot AssemblerSlot = 5;
+    static constexpr const Slot MigrationStepperSlot = 6;
     std::shared_ptr<Handle> generateHandle(Slot slot) override final;
     bool willConfigureHandle(Slot slot, Handle *handle) override final;
 
