@@ -140,6 +140,9 @@ bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
             if (!migrateRow(migrated)) {
                 return false;
             }
+            if (migrated) {
+                return true;
+            }
 
             const int dirtyPageCount = getDirtyPageCount();
             WCTInnerAssert(dirtyPageCount != 0);
@@ -180,11 +183,18 @@ bool MigrationStepperHandle::migrateRow(bool& migrated)
     WCTInnerAssert(m_migrateStatement->isPrepared()
                    && m_removeMigratedStatement->isPrepared());
     WCTInnerAssert(isInTransaction());
+    migrated = false;
+    m_migrateStatement->reset();
+    if (!m_migrateStatement->step()) {
+        return false;
+    }
+    if (getChanges() == 0) {
+        migrated = true;
+        return true;
+    }
     m_removeMigratedStatement->reset();
     m_removeMigratedStatement->bindInteger64(getLastInsertedRowID(), 1);
-    bool succeed = m_migrateStatement->step() && m_removeMigratedStatement->step();
-    migrated = succeed ? getChanges() == 0 : false;
-    return succeed;
+    return m_removeMigratedStatement->step();
 }
 
 void MigrationStepperHandle::finalizeMigrationStatement()
