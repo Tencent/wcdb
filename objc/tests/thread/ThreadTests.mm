@@ -22,6 +22,7 @@
 #import "TestCaseObject+WCTTableCoding.h"
 #import "TestCaseObject.h"
 #import <WCDB/CoreConst.h>
+#import <thread>
 
 @interface ThreadTests : TableTestCase
 
@@ -59,7 +60,7 @@
 
     _delayForTolerance = 2;
 
-    _maxConcurrency = std::max<int>(HandlePoolHandleCountThreshold, std::thread::hardware_concurrency());
+    _maxConcurrency = std::max<int>(WCDB::HandlePoolHandleCountThreshold, std::thread::hardware_concurrency());
     ;
 }
 
