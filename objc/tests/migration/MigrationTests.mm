@@ -51,6 +51,18 @@
 - (void)test_step_migrate
 {
     BOOL done = NO;
+    BOOL succeed = [self.database stepMigration:YES done:done];
+    TestCaseAssertTrue(succeed);
+    TestCaseAssertFalse(done);
+
+    // check source table migration is not started
+    // It's not a good practice.
+    TestCaseAssertFalse([[self.table getObjects] isEqualToArray:self.objects]);
+}
+
+- (void)test_migrate
+{
+    BOOL done = NO;
     BOOL succeed;
     do {
         succeed = [self.database stepMigration:YES done:done];
@@ -78,8 +90,6 @@
     BOOL done = NO;
     BOOL succeed;
     do {
-        TestCaseAssertFalse(tableMigrated);
-        TestCaseAssertFalse(migrated);
         succeed = [self.database stepMigration:YES done:done];
     } while (succeed && !done);
     TestCaseAssertTrue(succeed);
@@ -93,17 +103,14 @@
     WCTHandle *handle = [self.database getHandle];
     TestCaseAssertTrue([handle validate]);
 
-    __block BOOL tested = NO;
-    [WCTDatabase globalTraceError:^(WCTError *error) {
-        if (error.code == WCTErrorCodeInterrupt) {
-            tested = YES;
-        }
-    }];
-
     BOOL done;
-    TestCaseAssertTrue([self.database stepMigration:NO done:done]);
-    TestCaseAssertTrue(tested);
-    [WCTDatabase resetGlobalErrorTracer];
+    TestCaseAssertTrue([self.database stepMigration:YES done:done]);
+    TestCaseAssertFalse(done);
+
+    // check source table migration is not started.
+    // It's not a good practice.
+    TestCaseAssertTrue([[self.table getObjects] isEqualToArray:self.objects]);
+    [handle invalidate];
 }
 
 - (void)test_feature_force_migrate
@@ -111,18 +118,13 @@
     WCTHandle *handle = [self.database getHandle];
     TestCaseAssertTrue([handle validate]);
 
-    __block BOOL tested = YES;
-    [WCTDatabase globalTraceError:^(WCTError *error) {
-        if (error.code == WCTErrorCodeInterrupt) {
-            tested = NO;
-        }
-    }];
-
     BOOL done;
-    TestCaseAssertTrue([self.database stepMigration:YES done:done]);
-    TestCaseAssertTrue(tested);
+    TestCaseAssertTrue([self.database stepMigration:NO done:done]);
+    TestCaseAssertFalse(done);
 
-    [WCTDatabase resetGlobalErrorTracer];
+    // check source table migration is started.
+    // It's not a good practice.
+    TestCaseAssertFalse([[self.table getObjects] isEqualToArray:self.objects]);
     [handle invalidate];
 }
 
@@ -131,13 +133,6 @@
     TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
     NSUInteger fileSize = [self.database getFilesSize];
     int pages = int(fileSize / 4096);
-
-    __block BOOL tested = NO;
-    [WCTDatabase globalTraceError:^(WCTError *error) {
-        if (error.code == WCTErrorCodeInterrupt) {
-            tested = YES;
-        }
-    }];
 
     __block BOOL tableMigrated = NO;
     __block BOOL migrated = NO;
@@ -156,8 +151,6 @@
 
     TestCaseAssertTrue(tableMigrated);
     TestCaseAssertTrue(migrated);
-
-    [WCTDatabase resetGlobalErrorTracer];
 }
 
 - (void)test_feature_auto_migrate_will_stop_due_to_error
@@ -191,23 +184,16 @@
     WCTHandle *handle = [self.database getHandle];
     TestCaseAssertTrue([handle validate]);
 
-    __block int failures = 0;
-    [WCTDatabase globalTraceError:^(WCTError *error) {
-        if (error.code == WCTErrorCodeInterrupt) {
-            OSAtomicIncrement32(&failures);
-        }
-    }];
-
     self.database.autoMigrate = YES;
 
-    // wait until auto migrate reach the normal failure threshold
-    while (failures < WCDB::MigrationQueueTolerableFailures)
-        ;
+    [NSThread sleepForTimeInterval:2 * WCDB::MigrationQueueTimeIntervalForMigrating];
 
     __block BOOL tested = NO;
     [self.database traceSQL:^(NSString *sql) {
         tested = YES;
     }];
+    [handle invalidate];
+
     // wait to confirm migration still running.
     [NSThread sleepForTimeInterval:2 * WCDB::MigrationQueueTimeIntervalForMigrating];
     TestCaseAssertTrue(tested);
