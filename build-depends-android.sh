@@ -15,8 +15,7 @@ SQLCIPHER_CFLAGS="-DSQLITE_DEFAULT_WORKER_THREADS=2 \
   -DSQLITE_ENABLE_FTS3_TOKENIZER \
   -DSQLITE_ENABLE_STAT4 \
   -DSQLITE_ENABLE_EXPLAIN_COMMENTS \
-  -DSQLITE_HAS_CODEC -DOMIT_MEMLOCK -DOMIT_CONSTTIME_MEM \
-  -DSQLCIPHER_CRYPTO_CUSTOM -DSQLCIPHER_CRYPTO_XXTEA -DSQLCIPHER_CRYPTO_DEVLOCK"
+  -DSQLITE_HAS_CODEC -DOMIT_MEMLOCK -DOMIT_CONSTTIME_MEM"
 
 SQLCIPHER_CONFIG="--disable-shared --enable-static \
   --enable-fts3 --enable-fts4 --enable-fts5 --enable-json1 --enable-session \
@@ -184,7 +183,7 @@ for android_arch in $BUILD_ARCHS; do
     x86_64)
       android_eabi=x86_64
       gcc_prefix=x86_64-linux-android
-      clang-target=x86_64-none-linux-android
+      clang_target=x86_64-none-linux-android
       android_api=21
       android_cflags="-O2 -fPIC"
       openssl_conf="linux-x86_64"

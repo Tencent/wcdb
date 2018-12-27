@@ -49,7 +49,6 @@ int sqliterk_register_notify(sqliterk *rk, sqliterk_notify notify);
 typedef struct sqliterk_cipher_conf {
     const void *key;
     int key_len;
-    const char *cipher_name;
     int page_size;
     int kdf_iter;
     int use_hmac;

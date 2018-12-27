@@ -37,12 +37,9 @@ static jmethodID sMID_onProgress = nullptr;
 static sqliterk_cipher_conf *parseCipherSpec(JNIEnv *env, jobject cipherSpec)
 {
     sqliterk_cipher_conf *result = nullptr;
-    jfieldID fidCipher;
     jfieldID fidKdfIteration;
     jfieldID fidHmacEnabled;
     jfieldID fidPageSize;
-    jstring cipherStr;
-    int cipher_len;
 
     if (!cipherSpec) {
         result = (sqliterk_cipher_conf *) malloc(sizeof(sqliterk_cipher_conf));
@@ -58,9 +55,6 @@ static sqliterk_cipher_conf *parseCipherSpec(JNIEnv *env, jobject cipherSpec)
     if (!clsCipherSpec)
         goto bail;
 
-    fidCipher = env->GetFieldID(clsCipherSpec, "cipher", "Ljava/lang/String;");
-    if (!fidCipher)
-        goto bail;
     fidKdfIteration = env->GetFieldID(clsCipherSpec, "kdfIteration", "I");
     if (!fidKdfIteration)
         goto bail;
@@ -71,26 +65,9 @@ static sqliterk_cipher_conf *parseCipherSpec(JNIEnv *env, jobject cipherSpec)
     if (!fidPageSize)
         goto bail;
 
-    cipher_len = 0;
-    cipherStr = (jstring) env->GetObjectField(cipherSpec, fidCipher);
-    if (cipherStr) {
-        cipher_len = env->GetStringUTFLength(cipherStr) + 1;
-    }
-    result = (sqliterk_cipher_conf *) malloc(sizeof(sqliterk_cipher_conf) +
-                                             cipher_len);
+    result = (sqliterk_cipher_conf *) malloc(sizeof(sqliterk_cipher_conf));
     if (!result) return nullptr;
-    memset(result, 0, sizeof(sqliterk_cipher_conf) + cipher_len);
-
-    if (cipherStr) {
-        const char *cipher = env->GetStringUTFChars(cipherStr, nullptr);
-        if (!cipher) goto bail;
-
-        result->cipher_name = (const char *) &result[1];
-        strlcpy((char *) result->cipher_name, cipher, cipher_len + 1);
-        env->ReleaseStringUTFChars(cipherStr, cipher);
-    } else {
-        result->cipher_name = nullptr;
-    }
+    memset(result, 0, sizeof(sqliterk_cipher_conf));
 
     result->page_size = env->GetIntField(cipherSpec, fidPageSize);
     result->kdf_iter = env->GetIntField(cipherSpec, fidKdfIteration);

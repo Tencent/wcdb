@@ -164,14 +164,6 @@ int sqliterkCryptoSetCipher(sqliterk_pager *pager,
         if (rc != SQLITE_OK)
             goto bail_sqlite_errstr;
 
-        // Set cipher.
-        if (conf->cipher_name) {
-            rc = sqlcipher_codec_ctx_set_cipher(codec, conf->cipher_name,
-                                                CIPHER_READWRITE_CTX);
-            if (rc != SQLITE_OK)
-                goto bail_sqlite_errstr;
-        }
-
         // Set page size.
         if (conf->page_size > 0) {
             rc = sqlcipher_codec_ctx_set_pagesize(codec, conf->page_size);
