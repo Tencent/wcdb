@@ -47,7 +47,7 @@ bool MigrationBaseInfo::shouldMigrate() const
 
 bool MigrationBaseInfo::isCrossDatabase() const
 {
-    return m_sourceDatabase == m_database;
+    return m_sourceDatabase != m_database;
 }
 
 const String& MigrationBaseInfo::getTable() const
