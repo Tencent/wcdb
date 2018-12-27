@@ -57,7 +57,9 @@ protected:
     std::pair<bool, std::set<String>> getAllTables() override final;
     bool dropSourceTable(const MigrationInfo* info) override final;
     bool migrateRows(const MigrationInfo* info, bool& done) override final;
-    bool migrateRow(bool& migrated);
+    std::pair<bool, bool> migrateRow();
+    // succeed, worked, migrated
+    std::tuple<bool, bool, bool> tryMigrateRowWithoutIncreasingDirtyPage();
 
     bool reAttachMigrationInfo(const MigrationInfo* info);
     void finalizeMigrationStatement();

@@ -135,66 +135,79 @@ bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
     }
 
     bool migrated = false;
-    if (!runNestedTransaction([&migrated, this](Handle*) -> bool {
-            // migrate one at least
-            if (!migrateRow(migrated)) {
-                return false;
-            }
-            if (migrated) {
-                return true;
-            }
+    bool succeed = runNestedTransaction([&migrated, this](Handle*) -> bool {
+        // migrate one at least
+        bool succeed;
+        std::tie(succeed, migrated) = migrateRow();
+        if (!succeed) {
+            return false;
+        }
+        WCTInnerAssert(getDirtyPageCount() != 0);
+        if (migrated) {
+            return true;
+        }
 
-            const int dirtyPageCount = getDirtyPageCount();
-            WCTInnerAssert(dirtyPageCount != 0);
-            bool step = true;
-            bool succeed = true;
-            while (succeed && step && !migrated) {
-                // try migrate one, or rollback to savepoint if the count of dirty pages is increased.
-                succeed = runNestedTransaction(
-                [&migrated, &step, dirtyPageCount, this](Handle*) -> bool {
-                    if (!migrateRow(migrated)) {
-                        return false;
-                    }
-                    step = getDirtyPageCount() > dirtyPageCount && !migrated;
-                    return step;
-                });
-                if (!succeed) {
-                    migrated = false;
-                    if (!step) {
-                        // failed since manual rollback
-                        succeed = true;
-                    }
-                }
-            }
-            return succeed;
-        })) {
-        return false;
-    }
-
-    if (migrated) {
+        bool worked = false;
+        do {
+            std::tie(succeed, worked, migrated)
+            = tryMigrateRowWithoutIncreasingDirtyPage();
+        } while (succeed && worked && !migrated);
+        return succeed;
+    });
+    if (succeed && migrated) {
         done = true;
     }
-
-    return true;
+    return succeed;
 }
 
-bool MigrationStepperHandle::migrateRow(bool& migrated)
+std::pair<bool, bool> MigrationStepperHandle::migrateRow()
 {
     WCTInnerAssert(m_migrateStatement->isPrepared()
                    && m_removeMigratedStatement->isPrepared());
     WCTInnerAssert(isInTransaction());
-    migrated = false;
+    bool succeed = false;
+    bool migrated = false;
     m_migrateStatement->reset();
-    if (!m_migrateStatement->step()) {
-        return false;
+    if (m_migrateStatement->step()) {
+        if (getChanges() != 0) {
+            m_removeMigratedStatement->reset();
+            m_removeMigratedStatement->bindInteger64(getLastInsertedRowID(), 1);
+            succeed = m_removeMigratedStatement->step();
+        } else {
+            succeed = true;
+            migrated = true;
+        }
     }
-    if (getChanges() == 0) {
-        migrated = true;
-        return true;
+    return { succeed, migrated };
+}
+
+std::tuple<bool, bool, bool>
+MigrationStepperHandle::tryMigrateRowWithoutIncreasingDirtyPage()
+{
+    WCTInnerAssert(m_migrateStatement->isPrepared()
+                   && m_removeMigratedStatement->isPrepared());
+    WCTInnerAssert(isInTransaction());
+    int dirtyPageCount = getDirtyPageCount();
+    bool needToWork = true;
+    bool migrated = false;
+    bool succeed
+    = runNestedTransaction([dirtyPageCount, &needToWork, &migrated, this](Handle*) -> bool {
+          bool succeed;
+          std::tie(succeed, migrated) = migrateRow();
+          if (!succeed) {
+              return false;
+          }
+          needToWork = getDirtyPageCount() <= dirtyPageCount;
+          return needToWork;
+      });
+    if (!succeed) {
+        migrated = false;
+        if (!needToWork) {
+            // rollback manually
+            succeed = true;
+        }
     }
-    m_removeMigratedStatement->reset();
-    m_removeMigratedStatement->bindInteger64(getLastInsertedRowID(), 1);
-    return m_removeMigratedStatement->step();
+    return { succeed, needToWork, migrated };
 }
 
 void MigrationStepperHandle::finalizeMigrationStatement()
