@@ -512,6 +512,8 @@ void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
 
 bool Database::backup()
 {
+    WCTRemedialAssert(
+    !isInTransaction(), "Backup can't be run in transaction.", return false;);
     RecyclableHandle backupReadHandle = getSlotHandle(BackupReadSlot);
     if (backupReadHandle == nullptr) {
         return false;
@@ -709,6 +711,8 @@ std::pair<bool, bool> Database::stepMigration(bool interruptible)
     bool succeed = false;
     bool done = false;
     do {
+        WCTRemedialAssert(
+        !isInTransaction(), "Step migration can't be run in transaction.", break;);
         if (!initializedGuard.valid()) {
             break;
         }
