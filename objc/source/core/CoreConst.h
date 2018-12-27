@@ -96,7 +96,7 @@ static constexpr const char* NotifierPathPreprocessorName
 = "com.Tencent.WCDB.Notifier.PreprocessPath";
 
 // Handle Pool
-static constexpr const int HandlePoolHandleCountThreshold = 64;
+static constexpr const int HandlePoolHandleCountThreshold = 16;
 
 } // namespace WCDB
 
