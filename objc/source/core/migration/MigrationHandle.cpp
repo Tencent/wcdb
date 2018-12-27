@@ -49,14 +49,14 @@ MigrationHandle::~MigrationHandle()
 std::pair<bool, std::set<String>>
 MigrationHandle::getColumnsForSourceTable(const MigrationUserInfo& userInfo)
 {
-    if (userInfo.isCrossDatabase()) {
+    Schema schema = userInfo.getSchemaForSourceDatabase();
+    if (!schema.syntax().isMain()) {
         bool succeed;
         std::set<String> attacheds;
         std::tie(succeed, attacheds)
         = getValues(MigrationInfo::getStatementForSelectingDatabaseList(), 1);
         if (succeed) {
-            if (attacheds.find(userInfo.getSchemaForSourceDatabase().getDescription())
-                == attacheds.end()) {
+            if (attacheds.find(schema.getDescription()) == attacheds.end()) {
                 succeed = executeStatement(userInfo.getStatementForAttachingSchema());
             }
         }
@@ -64,7 +64,7 @@ MigrationHandle::getColumnsForSourceTable(const MigrationUserInfo& userInfo)
             return { false, {} };
         }
     }
-    return getColumns(userInfo.getSchemaForSourceDatabase(), userInfo.getSourceTable());
+    return getColumns(schema, userInfo.getSourceTable());
 }
 
 String MigrationHandle::getDatabasePath() const

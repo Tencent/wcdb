@@ -67,22 +67,21 @@ bool BasicConfig::invoke(Handle* handle)
         int retry = 3;
         bool succeed = false;
         do {
-            if (handle->prepare(m_getJournalMode) && handle->step()))
-                {
-                    String journalMode = handle->getText(0);
-                    handle->finalize();
-                    if (journalMode.isCaseInsensiveEqual("WAL")
-                        || handle->execute(m_setJournalModeWAL)) {
-                        //Set Journal Mode WAL
-                        succeed = true;
+            if (handle->prepare(m_getJournalMode) && handle->step()) {
+                String journalMode = handle->getText(0);
+                handle->finalize();
+                if (journalMode.isCaseInsensiveEqual("WAL")
+                    || handle->execute(m_setJournalModeWAL)) {
+                    //Set Journal Mode WAL
+                    succeed = true;
+                } else {
+                    if (handle->getResultCode() == (int) Error::Code::Busy) {
+                        --retry;
                     } else {
-                        if (handle->getResultCode() == (int) Error::Code::Busy) {
-                            --retry;
-                        } else {
-                            retry = 0;
-                        }
+                        retry = 0;
                     }
                 }
+            }
         } while (!succeed && retry > 0);
         if (!succeed) {
             break;
