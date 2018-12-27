@@ -43,6 +43,8 @@ bool BasicConfig::invoke(Handle* handle)
             return true;
         }
 
+        handle->enableCheckpointWhenClosing(false);
+
         //Get Locking Mode
         if (!handle->prepare(m_getLockingMode) || !handle->step()) {
             break;
@@ -62,28 +64,26 @@ bool BasicConfig::invoke(Handle* handle)
         }
 
         //Get Journal Mode
-        bool retry = false;
-        bool succeed = true;
+        int retry = 3;
+        bool succeed = false;
         do {
-            retry = false;
-            if (!handle->prepare(m_getJournalMode) || !handle->step()) {
-                succeed = false;
-                break;
-            }
-            String journalMode = handle->getText(0);
-            handle->finalize();
-            if (strcasecmp(journalMode.c_str(), "WAL") != 0) {
-                //Set Journal Mode WAL
-                if (!handle->execute(m_setJournalModeWAL)) {
-                    if (handle->getResultCode() == (int) Error::Code::Busy) {
-                        retry = true;
+            if (handle->prepare(m_getJournalMode) && handle->step()))
+                {
+                    String journalMode = handle->getText(0);
+                    handle->finalize();
+                    if (journalMode.isCaseInsensiveEqual("WAL")
+                        || handle->execute(m_setJournalModeWAL)) {
+                        //Set Journal Mode WAL
+                        succeed = true;
                     } else {
-                        succeed = false;
-                        break;
+                        if (handle->getResultCode() == (int) Error::Code::Busy) {
+                            --retry;
+                        } else {
+                            retry = 0;
+                        }
                     }
                 }
-            }
-        } while (retry);
+        } while (!succeed && retry > 0);
         if (!succeed) {
             break;
         }

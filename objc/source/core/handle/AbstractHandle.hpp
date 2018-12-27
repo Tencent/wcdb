@@ -96,6 +96,8 @@ public:
 
     void interrupt(); // It's thread safe.
 
+    void enableCheckpointWhenClosing(bool enable);
+
 protected:
     bool executeSQL(const String &sql);
     bool executeStatement(const Statement &statement);

@@ -198,6 +198,10 @@ int AbstractHandle::getDirtyPageCount()
     return sqlite3_dirty_page_count((sqlite3 *) m_handle);
 }
 
+void AbstractHandle::enableCheckpointWhenClosing(bool enable)
+{
+}
+
 #pragma mark - Statement
 HandleStatement *AbstractHandle::getStatement()
 {
