@@ -227,9 +227,7 @@ void AbstractHandle::returnStatement(HandleStatement *handleStatement)
 void AbstractHandle::finalizeStatements()
 {
     for (auto &handleStatement : m_handleStatements) {
-        WCTRemedialAssert(!handleStatement.isPrepared(),
-                          "Statement is not finalized.",
-                          handleStatement.finalize(););
+        handleStatement.finalize();
     }
 }
 
