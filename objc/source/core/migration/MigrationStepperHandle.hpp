@@ -59,7 +59,7 @@ protected:
     bool migrateRows(const MigrationInfo* info, bool& done) override final;
     std::pair<bool, bool> migrateRow();
     // succeed, worked, migrated
-    std::tuple<bool, bool, bool> tryMigrateRowWithoutIncreasingDirtyPage();
+    std::tuple<bool, bool, bool> tryMigrateRowWithoutIncreasingDirtyPage(int dirtyPageCount);
 
     bool reAttachMigrationInfo(const MigrationInfo* info);
     void finalizeMigrationStatement();

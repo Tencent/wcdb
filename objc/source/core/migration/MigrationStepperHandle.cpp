@@ -135,7 +135,7 @@ bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
     }
 
     bool migrated = false;
-    bool succeed = runNestedTransaction([&migrated, this](Handle*) -> bool {
+    bool succeed = runTransaction([&migrated, this](Handle*) -> bool {
         // migrate one at least
         bool succeed;
         std::tie(succeed, migrated) = migrateRow();
@@ -147,11 +147,13 @@ bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
             return true;
         }
 
+        int dirtyPageCount = getDirtyPageCount();
         bool worked = false;
         do {
             std::tie(succeed, worked, migrated)
-            = tryMigrateRowWithoutIncreasingDirtyPage();
+            = tryMigrateRowWithoutIncreasingDirtyPage(dirtyPageCount);
         } while (succeed && worked && !migrated);
+        WCTInnerAssert(dirtyPageCount == getDirtyPageCount());
         return succeed;
     });
     if (succeed && migrated) {
@@ -182,12 +184,11 @@ std::pair<bool, bool> MigrationStepperHandle::migrateRow()
 }
 
 std::tuple<bool, bool, bool>
-MigrationStepperHandle::tryMigrateRowWithoutIncreasingDirtyPage()
+MigrationStepperHandle::tryMigrateRowWithoutIncreasingDirtyPage(int dirtyPageCount)
 {
     WCTInnerAssert(m_migrateStatement->isPrepared()
                    && m_removeMigratedStatement->isPrepared());
     WCTInnerAssert(isInTransaction());
-    int dirtyPageCount = getDirtyPageCount();
     bool needToWork = true;
     bool migrated = false;
     bool succeed
