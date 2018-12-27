@@ -49,11 +49,20 @@ MigrationHandle::~MigrationHandle()
 std::pair<bool, std::set<String>>
 MigrationHandle::getColumnsForSourceTable(const MigrationUserInfo& userInfo)
 {
-    // schema has no need to be detached since schema will be managed automatically when rebind.
-#warning TODO reattach
-    if (userInfo.isCrossDatabase()
-        && !executeStatement(userInfo.getStatementForAttachingSchema())) {
-        return { false, {} };
+    if (userInfo.isCrossDatabase()) {
+        bool succeed;
+        std::set<String> attacheds;
+        std::tie(succeed, attacheds)
+        = getValues(MigrationInfo::getStatementForSelectingDatabaseList(), 1);
+        if (succeed) {
+            if (attacheds.find(userInfo.getSchemaForSourceDatabase().getDescription())
+                == attacheds.end()) {
+                succeed = executeStatement(userInfo.getStatementForAttachingSchema());
+            }
+        }
+        if (!succeed) {
+            return { false, {} };
+        }
     }
     return getColumns(userInfo.getSchemaForSourceDatabase(), userInfo.getSourceTable());
 }
