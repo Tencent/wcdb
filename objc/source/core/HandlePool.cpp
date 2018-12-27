@@ -140,7 +140,7 @@ size_t HandlePool::activeHandleCount(Slot slot) const
     size_t freeCount = 0;
     auto freesIter = m_frees.find(slot);
     if (freesIter != m_frees.end()) {
-        freeCount = handlesIter->second.size();
+        freeCount = freesIter->second.size();
     }
     WCTInnerAssert(handleCount >= freeCount);
     return handleCount - freeCount;
