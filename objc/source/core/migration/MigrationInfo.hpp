@@ -133,7 +133,7 @@ public:
     static StatementSelect getStatementForSelectingUnionedView();
 
 protected:
-    // WCDBUnioned_ + [table] + _ + [sourceTable]
+    // WCDBUnioned_ + [table]
     String m_unionedView;
     StatementCreateView m_statementForCreatingUnionedView;
 

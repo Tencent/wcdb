@@ -106,8 +106,8 @@
     [expectedObjects removeObjectAtIndex:2];
 
     NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
-                                  [NSString stringWithFormat:@"DELETE FROM %@.testSourceTable WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable_testSourceTable WHERE identifier > 1 ORDER BY identifier ASC LIMIT 1 OFFSET 1)", self.schemaName],
-                                  @"DELETE FROM main.testTable WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable_testSourceTable WHERE identifier > 1 ORDER BY identifier ASC LIMIT 1 OFFSET 1)",
+                                  [NSString stringWithFormat:@"DELETE FROM %@.testSourceTable WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE identifier > 1 ORDER BY identifier ASC LIMIT 1 OFFSET 1)", self.schemaName],
+                                  @"DELETE FROM main.testTable WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE identifier > 1 ORDER BY identifier ASC LIMIT 1 OFFSET 1)",
                                   @"COMMIT" ];
 
     BOOL result = [self checkObjects:expectedObjects
@@ -128,8 +128,8 @@
     [expectedObjects setObject:newSecondObject atIndexedSubscript:2];
 
     NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
-                                  [NSString stringWithFormat:@"UPDATE %@.testSourceTable SET content = ?1 WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable_testSourceTable WHERE identifier > 1 ORDER BY identifier ASC LIMIT 1 OFFSET 1)", self.schemaName],
-                                  @"UPDATE main.testTable SET content = ?1 WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable_testSourceTable WHERE identifier > 1 ORDER BY identifier ASC LIMIT 1 OFFSET 1)",
+                                  [NSString stringWithFormat:@"UPDATE %@.testSourceTable SET content = ?1 WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE identifier > 1 ORDER BY identifier ASC LIMIT 1 OFFSET 1)", self.schemaName],
+                                  @"UPDATE main.testTable SET content = ?1 WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE identifier > 1 ORDER BY identifier ASC LIMIT 1 OFFSET 1)",
                                   @"COMMIT" ];
 
     BOOL result = [self checkObjects:expectedObjects
@@ -142,7 +142,7 @@
 
 - (void)doTestSelect
 {
-    NSString* sql = @"SELECT identifier, content FROM temp.WCDBUnioned_testTable_testSourceTable WHERE identifier == 1";
+    NSString* sql = @"SELECT identifier, content FROM temp.WCDBUnioned_testTable WHERE identifier == 1";
 
     BOOL result = [self checkObjects:@[ self.objects.firstObject ]
                               andSQL:sql
@@ -172,8 +172,8 @@
     [expectedObjects removeLastObject];
 
     NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
-                                  [NSString stringWithFormat:@"DELETE FROM %@.testSourceTable WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable_testSourceTable WHERE temp.WCDBUnioned_testTable_testSourceTable.identifier IN(SELECT max(identifier) FROM temp.WCDBUnioned_testTable_testSourceTable))", self.schemaName],
-                                  @"DELETE FROM main.testTable WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable_testSourceTable WHERE temp.WCDBUnioned_testTable_testSourceTable.identifier IN(SELECT max(identifier) FROM temp.WCDBUnioned_testTable_testSourceTable))",
+                                  [NSString stringWithFormat:@"DELETE FROM %@.testSourceTable WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE temp.WCDBUnioned_testTable.identifier IN(SELECT max(identifier) FROM temp.WCDBUnioned_testTable))", self.schemaName],
+                                  @"DELETE FROM main.testTable WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE temp.WCDBUnioned_testTable.identifier IN(SELECT max(identifier) FROM temp.WCDBUnioned_testTable))",
                                   @"COMMIT" ];
 
     BOOL result = [self checkObjects:expectedObjects
@@ -194,8 +194,8 @@
     [expectedObjects addObject:newObject];
 
     NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
-                                  [NSString stringWithFormat:@"UPDATE %@.testSourceTable SET content = ?1 WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable_testSourceTable WHERE temp.WCDBUnioned_testTable_testSourceTable.identifier IN(SELECT max(identifier) FROM temp.WCDBUnioned_testTable_testSourceTable))", self.schemaName],
-                                  @"UPDATE main.testTable SET content = ?1 WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable_testSourceTable WHERE temp.WCDBUnioned_testTable_testSourceTable.identifier IN(SELECT max(identifier) FROM temp.WCDBUnioned_testTable_testSourceTable))",
+                                  [NSString stringWithFormat:@"UPDATE %@.testSourceTable SET content = ?1 WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE temp.WCDBUnioned_testTable.identifier IN(SELECT max(identifier) FROM temp.WCDBUnioned_testTable))", self.schemaName],
+                                  @"UPDATE main.testTable SET content = ?1 WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE temp.WCDBUnioned_testTable.identifier IN(SELECT max(identifier) FROM temp.WCDBUnioned_testTable))",
                                   @"COMMIT" ];
 
     BOOL result = [self checkObjects:expectedObjects

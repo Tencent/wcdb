@@ -127,7 +127,7 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo, const std::set<S
 
     // View
     {
-        m_unionedView = getUnionedViewPrefix() + m_table + "_" + m_sourceTable;
+        m_unionedView = getUnionedViewPrefix() + m_table;
 
         std::list<ResultColumn> resultColumns;
         resultColumns.push_back(ResultColumn(Column::rowid()).as("rowid"));
