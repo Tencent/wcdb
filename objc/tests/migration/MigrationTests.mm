@@ -19,6 +19,7 @@
  */
 
 #import "MigrationTestCase.h"
+#import <WCDB/CoreConst.h>
 
 @interface MigrationTests : MigrationTestCase
 
@@ -47,6 +48,20 @@
     TestCaseAssertTrue(tested == 1);
 }
 
+- (void)test_step_migrate
+{
+    BOOL done = NO;
+    BOOL succeed;
+    do {
+        succeed = [self.database stepMigration:YES done:done];
+    } while (succeed && !done);
+    TestCaseAssertTrue(succeed);
+    TestCaseAssertTrue(done);
+    // check source table is already dropped.
+    // It's not a good practice.
+    TestCaseAssertFalse([self.database tableExists:self.sourceTable]);
+}
+
 - (void)test_notification
 {
     __block BOOL tableMigrated = NO;
@@ -71,6 +86,131 @@
     TestCaseAssertTrue(done);
     TestCaseAssertTrue(tableMigrated);
     TestCaseAssertTrue(migrated);
+}
+
+- (void)test_feature_interrupt_migrate
+{
+    WCTHandle *handle = [self.database getHandle];
+    TestCaseAssertTrue([handle validate]);
+
+    __block BOOL tested = NO;
+    [WCTDatabase globalTraceError:^(WCTError *error) {
+        if (error.code == WCTErrorCodeInterrupt) {
+            tested = YES;
+        }
+    }];
+
+    BOOL done;
+    TestCaseAssertTrue([self.database stepMigration:NO done:done]);
+    TestCaseAssertTrue(tested);
+    [WCTDatabase resetGlobalErrorTracer];
+}
+
+- (void)test_feature_force_migrate
+{
+    WCTHandle *handle = [self.database getHandle];
+    TestCaseAssertTrue([handle validate]);
+
+    __block BOOL tested = YES;
+    [WCTDatabase globalTraceError:^(WCTError *error) {
+        if (error.code == WCTErrorCodeInterrupt) {
+            tested = NO;
+        }
+    }];
+
+    BOOL done;
+    TestCaseAssertTrue([self.database stepMigration:YES done:done]);
+    TestCaseAssertTrue(tested);
+
+    [WCTDatabase resetGlobalErrorTracer];
+    [handle invalidate];
+}
+
+- (void)test_auto_migrate
+{
+    TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
+    NSUInteger fileSize = [self.database getFilesSize];
+    int pages = int(fileSize / 4096);
+
+    __block BOOL tested = NO;
+    [WCTDatabase globalTraceError:^(WCTError *error) {
+        if (error.code == WCTErrorCodeInterrupt) {
+            tested = YES;
+        }
+    }];
+
+    __block BOOL tableMigrated = NO;
+    __block BOOL migrated = NO;
+    NSString *expectedTableName = self.tableName;
+    [self.database setNotificationWhenMigrated:^(WCTMigrationBaseInfo *info) {
+        if (info == nil) {
+            migrated = YES;
+        } else if ([info.table isEqualToString:expectedTableName]) {
+            tableMigrated = YES;
+        }
+    }];
+    self.database.autoMigrate = YES;
+
+    // wait until auto migrate done
+    [NSThread sleepForTimeInterval:(pages + 2) * WCDB::MigrationQueueTimeIntervalForMigrating];
+
+    TestCaseAssertTrue(tableMigrated);
+    TestCaseAssertTrue(migrated);
+
+    [WCTDatabase resetGlobalErrorTracer];
+}
+
+- (void)test_feature_auto_migrate_will_stop_due_to_error
+{
+    __block int failures = 0;
+    [WCTDatabase globalTraceError:^(WCTError *error) {
+        if (error.code == WCTErrorCodeIOError) {
+            OSAtomicIncrement32(&failures);
+        }
+    }];
+
+    [self.console disableSQLiteWrite];
+    self.database.autoMigrate = YES;
+
+    // wait until auto migrate stopped
+    while (failures < WCDB::MigrationQueueTolerableFailures)
+        ;
+    [self.console enableSQLiteWrite];
+
+    __block BOOL tested = YES;
+    [self.database traceSQL:^(NSString *sql) {
+        tested = NO;
+    }];
+    // wait to confirm migration is stopped.
+    [NSThread sleepForTimeInterval:2 * WCDB::MigrationQueueTimeIntervalForMigrating];
+    TestCaseAssertTrue(tested);
+}
+
+- (void)test_feature_auto_migrate_will_not_stop_due_to_interrupt
+{
+    WCTHandle *handle = [self.database getHandle];
+    TestCaseAssertTrue([handle validate]);
+
+    __block int failures = 0;
+    [WCTDatabase globalTraceError:^(WCTError *error) {
+        if (error.code == WCTErrorCodeInterrupt) {
+            OSAtomicIncrement32(&failures);
+        }
+    }];
+
+    self.database.autoMigrate = YES;
+
+    // wait until auto migrate reach the normal failure threshold
+    while (failures < WCDB::MigrationQueueTolerableFailures)
+        ;
+
+    __block BOOL tested = NO;
+    [self.database traceSQL:^(NSString *sql) {
+        tested = YES;
+    }];
+    // wait to confirm migration still running.
+    [NSThread sleepForTimeInterval:2 * WCDB::MigrationQueueTimeIntervalForMigrating];
+    TestCaseAssertTrue(tested);
 }
 
 @end
