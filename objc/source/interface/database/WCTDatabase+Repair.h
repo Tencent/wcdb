@@ -34,13 +34,13 @@ typedef NS_ENUM(NSInteger, WCTRecoveryMode) {
 
 @interface WCTDatabase (Repair)
 
-- (void)setNotificationWhenCorrupted:(nullable WCTRecoverNotificationBlock)onRecovering;
+- (void)setNotificationWhenCorrupted:(nullable WCDB_ESCAPE WCTRecoverNotificationBlock)onRecovering;
 
 - (void)setAutoBackup:(BOOL)flag;
 
 - (BOOL)backup;
 
-- (void)filterBackup:(nullable WCTBackupFilterBlock)tableShouldBeBackedUp;
+- (void)filterBackup:(nullable WCDB_ESCAPE WCTBackupFilterBlock)tableShouldBeBackedUp;
 
 - (BOOL)deposit;
 
@@ -48,7 +48,7 @@ typedef NS_ENUM(NSInteger, WCTRecoveryMode) {
 
 - (BOOL)containsDeposited;
 
-- (double)retrieve:(nullable WCTRetrieveProgressUpdateBlock)onProgressUpdate;
+- (double)retrieve:(nullable WCDB_NO_ESCAPE WCTRetrieveProgressUpdateBlock)onProgressUpdate;
 
 @end
 

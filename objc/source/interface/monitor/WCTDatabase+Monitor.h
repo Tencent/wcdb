@@ -58,7 +58,7 @@ typedef void (^WCTSQLTraceBlock)(NSString *);
  @param block block
  @see WCTErrorTraceBlock
  */
-+ (void)globalTraceError:(nullable WCTErrorTraceBlock)block;
++ (void)globalTraceError:(nullable WCDB_ESCAPE WCTErrorTraceBlock)block;
 
 + (void)resetGlobalErrorTracer;
 
@@ -85,7 +85,7 @@ typedef void (^WCTSQLTraceBlock)(NSString *);
  @see WCTPerformanceTraceBlock
  @see [WCTDatabase setNotification:]
  */
-+ (void)globalTracePerformance:(nullable WCTPerformanceTraceBlock)trace;
++ (void)globalTracePerformance:(nullable WCDB_ESCAPE WCTPerformanceTraceBlock)trace;
 
 /**
  @brief You can register a tracer to monitor the execution of all SQLs.
@@ -100,11 +100,11 @@ typedef void (^WCTSQLTraceBlock)(NSString *);
  @see WCTSQLTraceBlock
  @param trace trace
  */
-+ (void)globalTraceSQL:(nullable WCTSQLTraceBlock)trace;
++ (void)globalTraceSQL:(nullable WCDB_ESCAPE WCTSQLTraceBlock)trace;
 
-- (void)traceSQL:(nullable WCTSQLTraceBlock)trace;
+- (void)traceSQL:(nullable WCDB_ESCAPE WCTSQLTraceBlock)trace;
 
-- (void)tracePerformance:(nullable WCTPerformanceTraceBlock)trace;
+- (void)tracePerformance:(nullable WCDB_ESCAPE WCTPerformanceTraceBlock)trace;
 
 @end
 

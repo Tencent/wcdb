@@ -71,7 +71,7 @@
     return _database->backup();
 }
 
-- (double)retrieve:(WCTRetrieveProgressUpdateBlock)onProgressUpdate
+- (double)retrieve:(WCDB_NO_ESCAPE WCTRetrieveProgressUpdateBlock)onProgressUpdate
 {
     WCTDatabaseAssert(return 0;);
     WCDB::Database::RetrieveProgressCallback callback = nullptr;

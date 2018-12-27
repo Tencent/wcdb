@@ -65,6 +65,7 @@
                   WCDB_STRINGIFY(type_or_expression) "does not exist.")
 
 #define WCDB_NO_ESCAPE __attribute__((noescape))
+#define WCDB_ESCAPE
 
 #if defined(__cplusplus)
 #define WCDB_EXTERN extern "C"

@@ -69,16 +69,16 @@ typedef BOOL (^WCTConfigBlock)(WCTHandle* _Nonnull);
  return handle->execute(WCDB::StatementPragma().pragma(WCDB::Pragma::SecureDelete, YES));
  } forName:@"demo" withPriority:1];
  */
-- (void)setConfig:(WCTConfigBlock)invocation
- withUninvocation:(nullable WCTConfigBlock)uninvocation
+- (void)setConfig:(WCDB_ESCAPE WCTConfigBlock)invocation
+ withUninvocation:(nullable WCDB_ESCAPE WCTConfigBlock)uninvocation
           forName:(NSString*)name
      withPriority:(int)priority;
 
 /**
  @brief This interface is equivalent to [database setConfig:config forName:name withPriority:INT_MAX];
  */
-- (void)setConfig:(WCTConfigBlock)invocation
- withUninvocation:(nullable WCTConfigBlock)uninvocation
+- (void)setConfig:(WCDB_ESCAPE WCTConfigBlock)invocation
+ withUninvocation:(nullable WCDB_ESCAPE WCTConfigBlock)uninvocation
           forName:(NSString*)name;
 
 - (void)removeConfigForName:(NSString*)name;
