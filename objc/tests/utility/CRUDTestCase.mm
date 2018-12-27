@@ -36,11 +36,15 @@ typedef NS_ENUM(NSUInteger, CRUDTestCaseState) {
 asExpectedAfterInsertion:(BOOL (^)())block
 {
     NSMutableArray<NSString*>* sqls = [NSMutableArray array];
-    [sqls addObject:@"BEGIN IMMEDIATE"];
+    if (count > 1) {
+        [sqls addObject:@"BEGIN IMMEDIATE"];
+    }
     for (int i = 0; i < count; ++i) {
         [sqls addObject:insertSQL];
     }
-    [sqls addObject:@"COMMIT"];
+    if (count > 1) {
+        [sqls addObject:@"COMMIT"];
+    }
     return [self checkObjects:objects andSQLs:sqls asExpectedAfterModification:block];
 }
 

@@ -44,6 +44,9 @@
 - (BOOL)checkAllSQLs:(NSArray<NSString*>*)expectedSQLs
 asExpectedInOperation:(BOOL (^)())block;
 
+- (BOOL)checkAllSQLsInAllThreads:(NSArray<NSString*>*)expectedSQLs
+           asExpectedInOperation:(BOOL (^)())block;
+
 - (BOOL)checkBeginningSQLs:(NSArray<NSString*>*)expectedSQLs
      asExpectedInOperation:(BOOL (^)())block;
 

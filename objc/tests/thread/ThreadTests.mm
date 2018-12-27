@@ -168,11 +168,11 @@
     // trigger subthread checkpoint
     TestCaseAssertTrue([self createTable]);
 
-    BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
-               asExpectedInOperation:^BOOL {
-                   [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + self.delayForTolerance];
-                   return YES;
-               }];
+    BOOL result = [self checkAllSQLsInAllThreads:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
+                           asExpectedInOperation:^BOOL {
+                               [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + self.delayForTolerance];
+                               return YES;
+                           }];
     TestCaseAssertTrue(result);
 }
 
@@ -188,11 +188,11 @@
         TestCaseAssertTrue([self.table insertObject:object]);
     }
 
-    BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
-               asExpectedInOperation:^BOOL {
-                   [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
-                   return YES;
-               }];
+    BOOL result = [self checkAllSQLsInAllThreads:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
+                           asExpectedInOperation:^BOOL {
+                               [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
+                               return YES;
+                           }];
     TestCaseAssertTrue(result);
 }
 
@@ -208,11 +208,11 @@
         TestCaseAssertTrue([self.table insertObject:object]);
     }
 
-    BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.wal_checkpoint('TRUNCATE')" ]
-               asExpectedInOperation:^BOOL {
-                   [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
-                   return YES;
-               }];
+    BOOL result = [self checkAllSQLsInAllThreads:@[ @"PRAGMA main.wal_checkpoint('TRUNCATE')" ]
+                           asExpectedInOperation:^BOOL {
+                               [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
+                               return YES;
+                           }];
     TestCaseAssertTrue(result);
 }
 
@@ -228,14 +228,14 @@
         TestCaseAssertTrue([self.table insertObject:object]);
     }
 
-    BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')", @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
-               asExpectedInOperation:^BOOL {
-                   [self.console disableSQLiteWrite];
-                   [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
-                   [self.console enableSQLiteWrite];
-                   [NSThread sleepForTimeInterval:self.checkpointDelayForRetryingAfterFailure + self.delayForTolerance];
-                   return YES;
-               }];
+    BOOL result = [self checkAllSQLsInAllThreads:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')", @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
+                           asExpectedInOperation:^BOOL {
+                               [self.console disableSQLiteWrite];
+                               [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
+                               [self.console enableSQLiteWrite];
+                               [NSThread sleepForTimeInterval:self.checkpointDelayForRetryingAfterFailure + self.delayForTolerance];
+                               return YES;
+                           }];
     TestCaseAssertTrue(result);
 }
 

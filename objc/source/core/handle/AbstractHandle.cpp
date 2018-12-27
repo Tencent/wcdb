@@ -200,6 +200,9 @@ int AbstractHandle::getDirtyPageCount()
 
 void AbstractHandle::enableCheckpointWhenClosing(bool enable)
 {
+    WCTInnerAssert(isOpened());
+    sqlite3_db_config(
+    (sqlite3 *) m_handle, SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE, enable ? 0 : 1);
 }
 
 #pragma mark - Statement

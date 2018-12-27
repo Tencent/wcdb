@@ -83,8 +83,21 @@
     }
 }
 
+- (BOOL)checkAllSQLsInAllThreads:(NSArray<NSString*>*)expectedSQLs
+           asExpectedInOperation:(BOOL (^)())block
+{
+    return [self checkAllSQLs:expectedSQLs asExpectedInOperation:block threaded:NO];
+}
+
 - (BOOL)checkAllSQLs:(NSArray<NSString*>*)expectedSQLs
 asExpectedInOperation:(BOOL (^)())block
+{
+    return [self checkAllSQLs:expectedSQLs asExpectedInOperation:block threaded:YES];
+}
+
+- (BOOL)checkAllSQLs:(NSArray<NSString*>*)expectedSQLs
+asExpectedInOperation:(BOOL (^)())block
+             threaded:(BOOL)threaded
 {
     BOOL result = NO;
     do {
@@ -98,7 +111,7 @@ asExpectedInOperation:(BOOL (^)())block
         NSMutableArray<NSString*>* sqls = [NSMutableArray arrayWithArray:expectedSQLs];
         NSThread* tracedThread = [NSThread currentThread];
         [self.database traceSQL:^(NSString* sql) {
-            if (tracedThread != [NSThread currentThread]) {
+            if (threaded && tracedThread != [NSThread currentThread]) {
                 return;
             }
             if (!trace) {
