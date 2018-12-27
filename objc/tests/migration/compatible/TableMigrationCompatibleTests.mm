@@ -34,47 +34,47 @@
 
 - (void)test_insert_auto_increment
 {
-    [super doTestInsertAutoIncrement];
+    [self doTestInsertAutoIncrement];
 }
 
 - (void)test_insert_or_replace
 {
-    [super doTestInsertOrReplace];
+    [self doTestInsertOrReplace];
 }
 
 - (void)test_insert_failed_with_conflict
 {
-    [super doTestInsertFailedWithConflict];
+    [self doTestInsertFailedWithConflict];
 }
 
 - (void)test_limited_delete
 {
-    [super doTestLimitedDelete];
+    [self doTestLimitedDelete];
 }
 
 - (void)test_limited_update
 {
-    [super doTestLimitedUpdate];
+    [self doTestLimitedUpdate];
 }
 
 - (void)test_select
 {
-    [super doTestSelect];
+    [self doTestSelect];
 }
 
 - (void)test_drop_table
 {
-    [super doTestDropTable];
+    [self doTestDropTable];
 }
 
 - (void)test_subquery_within_delete
 {
-    [super doTestSubqueryWithinDelete];
+    [self doTestSubqueryWithinDelete];
 }
 
 - (void)test_subquery_within_update
 {
-    [super doTestSubqueryWithinUpdate];
+    [self doTestSubqueryWithinUpdate];
 }
 
 @end

@@ -334,6 +334,9 @@
 		23790A80219315E50098797F /* WCTVirtualTableMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 23790A7E219315DE0098797F /* WCTVirtualTableMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		237A65F520F731DF008B4771 /* OrderedUniqueList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */; };
 		237C900721D45E6700EE6E44 /* CoreConst.h in Headers */ = {isa = PBXBuildFile; fileRef = 237C900621D45E6700EE6E44 /* CoreConst.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		237C901321D4C56500EE6E44 /* MigrateTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237C901221D4C56500EE6E44 /* MigrateTestCase.mm */; };
+		237C901521D4C5C400EE6E44 /* TableMigrateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237C901421D4C5C400EE6E44 /* TableMigrateTests.mm */; };
+		237C901721D4C5CA00EE6E44 /* DatabaseMigrateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237C901621D4C5CA00EE6E44 /* DatabaseMigrateTests.mm */; };
 		23846FCF21AF8427005B868F /* RetrieveRobustyTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23846FCE21AF8427005B868F /* RetrieveRobustyTests.mm */; };
 		23846FD621AFF216005B868F /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23846FD421AFF215005B868F /* AllTypesObject.mm */; };
 		23846FD721AFF216005B868F /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23846FD421AFF215005B868F /* AllTypesObject.mm */; };
@@ -401,7 +404,6 @@
 		238C73B021B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
 		23906AB9215E500100C2B717 /* WCTDatabase+Monitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 23906AB7215E500100C2B717 /* WCTDatabase+Monitor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23906ABB215E500100C2B717 /* WCTDatabase+Monitor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23906AB8215E500100C2B717 /* WCTDatabase+Monitor.mm */; };
-		2393D57821D073FC00B5F7B7 /* MigrationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2393D57721D073FC00B5F7B7 /* MigrationTests.mm */; };
 		2395582621C143BB000C85E1 /* WCTMigrationInfo+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2395582421C143BB000C85E1 /* WCTMigrationInfo+Private.h */; };
 		2396EB0D21801BD60079066C /* WCTResultColumn.h in Headers */ = {isa = PBXBuildFile; fileRef = 2396EB0B21801BD60079066C /* WCTResultColumn.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2396EB0E21801BD60079066C /* WCTResultColumn.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2396EB0C21801BD60079066C /* WCTResultColumn.mm */; };
@@ -1463,6 +1465,10 @@
 		23790A7E219315DE0098797F /* WCTVirtualTableMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTVirtualTableMacro.h; sourceTree = "<group>"; };
 		237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OrderedUniqueList.hpp; sourceTree = "<group>"; };
 		237C900621D45E6700EE6E44 /* CoreConst.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreConst.h; sourceTree = "<group>"; };
+		237C901121D4C56500EE6E44 /* MigrateTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MigrateTestCase.h; sourceTree = "<group>"; };
+		237C901221D4C56500EE6E44 /* MigrateTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MigrateTestCase.mm; sourceTree = "<group>"; };
+		237C901421D4C5C400EE6E44 /* TableMigrateTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TableMigrateTests.mm; sourceTree = "<group>"; };
+		237C901621D4C5CA00EE6E44 /* DatabaseMigrateTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DatabaseMigrateTests.mm; sourceTree = "<group>"; };
 		23846FCE21AF8427005B868F /* RetrieveRobustyTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RetrieveRobustyTests.mm; sourceTree = "<group>"; };
 		23846FD321AFF215005B868F /* AllTypesObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTypesObject.h; sourceTree = "<group>"; };
 		23846FD421AFF215005B868F /* AllTypesObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AllTypesObject.mm; sourceTree = "<group>"; };
@@ -1529,7 +1535,6 @@
 		23906AB7215E500100C2B717 /* WCTDatabase+Monitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Monitor.h"; sourceTree = "<group>"; };
 		23906AB8215E500100C2B717 /* WCTDatabase+Monitor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Monitor.mm"; sourceTree = "<group>"; };
 		239326611E836D7300D677CC /* WCDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		2393D57721D073FC00B5F7B7 /* MigrationTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MigrationTests.mm; sourceTree = "<group>"; };
 		2395582421C143BB000C85E1 /* WCTMigrationInfo+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTMigrationInfo+Private.h"; sourceTree = "<group>"; };
 		2396EB0B21801BD60079066C /* WCTResultColumn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTResultColumn.h; sourceTree = "<group>"; };
 		2396EB0C21801BD60079066C /* WCTResultColumn.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTResultColumn.mm; sourceTree = "<group>"; };
@@ -2190,7 +2195,10 @@
 				2321FE3021D20A81008BB722 /* compatible */,
 				23176A8F21BA02590051ACF9 /* MigrationTestCase.h */,
 				23176A9021BA02590051ACF9 /* MigrationTestCase.mm */,
-				2393D57721D073FC00B5F7B7 /* MigrationTests.mm */,
+				237C901121D4C56500EE6E44 /* MigrateTestCase.h */,
+				237C901221D4C56500EE6E44 /* MigrateTestCase.mm */,
+				237C901421D4C5C400EE6E44 /* TableMigrateTests.mm */,
+				237C901621D4C5CA00EE6E44 /* DatabaseMigrateTests.mm */,
 			);
 			path = migration;
 			sourceTree = "<group>";
@@ -4469,13 +4477,15 @@
 				238C73AF21B8B510006B59C2 /* TestLog.m in Sources */,
 				23739DC6219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
 				231FEB0D2199A4D500DC3706 /* TestCaseObject.mm in Sources */,
-				2393D57821D073FC00B5F7B7 /* MigrationTests.mm in Sources */,
 				2321FE2F21D206B6008BB722 /* MigrationCompatibleTestCase.mm in Sources */,
 				231FEB112199A4D500DC3706 /* NSObject+TestCase.mm in Sources */,
 				231FEB0F2199A4D500DC3706 /* DatabaseTestCase.mm in Sources */,
 				2321FE3821D20AB7008BB722 /* DatabaseMigratingCompatibleTests.mm in Sources */,
 				2321FE3421D20AA9008BB722 /* TableMigratingCompatibleTests.mm in Sources */,
+				237C901521D4C5C400EE6E44 /* TableMigrateTests.mm in Sources */,
+				237C901321D4C56500EE6E44 /* MigrateTestCase.mm in Sources */,
 				2321FE3221D20A9D008BB722 /* TableMigrationCompatibleTests.mm in Sources */,
+				237C901721D4C5CA00EE6E44 /* DatabaseMigrateTests.mm in Sources */,
 				2321FE3621D20AB1008BB722 /* DatabaseMigrationCompatibleTests.mm in Sources */,
 				231FEB0E2199A4D500DC3706 /* TestCase.mm in Sources */,
 				23846FE021AFF216005B868F /* AllTypesObject.mm in Sources */,

@@ -18,22 +18,12 @@
  * limitations under the License.
  */
 
-#import "MigrationTestCase.h"
+#import "MigrateTestCase.h"
 #import <WCDB/CoreConst.h>
 
-@interface MigrationTests : MigrationTestCase
+@implementation MigrateTestCase
 
-@end
-
-@implementation MigrationTests
-
-- (void)setUp
-{
-    self.isCrossDatabaseMigration = NO;
-    [super setUp];
-}
-
-- (void)test_filter
+- (void)doTestFilter
 {
     WCTDatabase *filter = [[WCTDatabase alloc] initWithPath:[self.path stringByAppendingString:@"_filter"]];
     __block int tested = 0;
@@ -48,7 +38,7 @@
     TestCaseAssertTrue(tested == 1);
 }
 
-- (void)test_step_migrate
+- (void)doTestStepMigrate
 {
     BOOL done = NO;
     BOOL succeed = [self.database stepMigration:YES done:done];
@@ -60,7 +50,7 @@
     TestCaseAssertFalse([[self.table getObjects] isEqualToArray:self.objects]);
 }
 
-- (void)test_migrate
+- (void)doTestMigrate
 {
     BOOL done = NO;
     BOOL succeed;
@@ -69,12 +59,15 @@
     } while (succeed && !done);
     TestCaseAssertTrue(succeed);
     TestCaseAssertTrue(done);
+
+    TestCaseAssertTrue([[self.table getObjects] isEqualToArray:self.objects]);
+
     // check source table is already dropped.
     // It's not a good practice.
     TestCaseAssertFalse([self.database tableExists:self.sourceTable]);
 }
 
-- (void)test_notification
+- (void)doTestNotification
 {
     __block BOOL tableMigrated = NO;
     __block BOOL migrated = NO;
@@ -98,7 +91,7 @@
     TestCaseAssertTrue(migrated);
 }
 
-- (void)test_feature_interrupt_migrate
+- (void)doTestFeatureInterruptMigrate
 {
     WCTHandle *handle = [self.database getHandle];
     TestCaseAssertTrue([handle validate]);
@@ -113,7 +106,7 @@
     [handle invalidate];
 }
 
-- (void)test_feature_force_migrate
+- (void)doTestFeatureForceMigrate
 {
     WCTHandle *handle = [self.database getHandle];
     TestCaseAssertTrue([handle validate]);
@@ -128,7 +121,7 @@
     [handle invalidate];
 }
 
-- (void)test_auto_migrate
+- (void)doTestAutoMigrate
 {
     TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
     NSUInteger fileSize = [self.database getFilesSize];
@@ -153,7 +146,7 @@
     TestCaseAssertTrue(migrated);
 }
 
-- (void)test_feature_auto_migrate_will_stop_due_to_error
+- (void)doTestFeatureAutoMigrateWillStopDueToError
 {
     __block int failures = 0;
     [WCTDatabase globalTraceError:^(WCTError *error) {
@@ -179,7 +172,7 @@
     TestCaseAssertTrue(tested);
 }
 
-- (void)test_feature_auto_migrate_will_not_stop_due_to_interrupt
+- (void)doTestFeatureAutoMigrateWillNotStopDueToInterrupt
 {
     WCTHandle *handle = [self.database getHandle];
     TestCaseAssertTrue([handle validate]);
@@ -197,6 +190,17 @@
     // wait to confirm migration still running.
     [NSThread sleepForTimeInterval:2 * WCDB::MigrationQueueTimeIntervalForMigrating];
     TestCaseAssertTrue(tested);
+}
+
+- (void)doTestFeatureStepAsLeastAsPossibleButNotWaste
+{
+    BOOL done = NO;
+    BOOL succeed;
+    do {
+        succeed = [self.database stepMigration:YES done:done];
+    } while (succeed && !done);
+    TestCaseAssertTrue(succeed);
+    TestCaseAssertTrue(done);
 }
 
 @end
