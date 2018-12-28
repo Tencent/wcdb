@@ -40,8 +40,7 @@ MigrationStepperHandle::~MigrationStepperHandle()
 bool MigrationStepperHandle::reAttach(const String& newPath, const Schema& newSchema)
 {
     bool succeed = true;
-    bool detached = false;
-    bool attached = false;
+    bool schemaChanged = false;
     do {
         if (m_attached.getDescription() != newSchema.getDescription()) {
             if (!m_attached.syntax().isMain()) {
@@ -49,31 +48,26 @@ bool MigrationStepperHandle::reAttach(const String& newPath, const Schema& newSc
                     succeed = false;
                     break;
                 }
-                detached = true;
+                m_attached = Schema::main();
+                schemaChanged = true;
             }
             if (!newSchema.syntax().isMain()) {
                 if (!execute(WCDB::StatementAttach().attach(newPath).as(newSchema))) {
                     succeed = false;
                     break;
                 }
-                attached = true;
+                m_attached = newSchema;
+                schemaChanged = true;
             }
         }
     } while (false);
-    if (succeed) {
-        if (detached) {
-            if (attached) {
-                m_attached = newSchema;
-            } else {
-                m_attached = Schema::main();
-            }
-            if (m_migratingInfo != nullptr
-                && m_attached.getDescription()
-                   != m_migratingInfo->getSchemaForSourceDatabase().getDescription()) {
-                // migrating info out of date
-                m_migratingInfo = nullptr;
-                finalizeMigrationStatement();
-            }
+    if (schemaChanged) {
+        if (m_migratingInfo != nullptr
+            && m_attached.getDescription()
+               != m_migratingInfo->getSchemaForSourceDatabase().getDescription()) {
+            // migrating info out of date
+            m_migratingInfo = nullptr;
+            finalizeMigrationStatement();
         }
     }
     return succeed;
