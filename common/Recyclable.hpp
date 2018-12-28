@@ -21,53 +21,64 @@
 #ifndef _WCDB_RECYCLABLE_HPP
 #define _WCDB_RECYCLABLE_HPP
 
-#include <WCDB/Assertion.hpp>
-#include <WCDB/Console.hpp>
 #include <functional>
 
 namespace WCDB {
 
+class Referenced {
+public:
+    Referenced();
+    Referenced(const std::nullptr_t &);
+    virtual ~Referenced();
+
+protected:
+    void reset(const Referenced &other);
+    void reset(const std::nullptr_t &);
+
+    void retain() const;
+    void release();
+    virtual void onUnreferenced() = 0;
+
+private:
+    mutable std::shared_ptr<std::atomic<int>> m_reference;
+};
+
 template<typename T>
-class Recyclable {
+class Recyclable : public Referenced {
 public:
     typedef std::function<void(T &)> OnRecycled;
 
-    Recyclable() : m_value(nullptr), m_onRecycled(nullptr), m_reference(nullptr)
+    Recyclable() : Referenced(nullptr), m_value(nullptr), m_onRecycled(nullptr)
     {
     }
 
     Recyclable(const std::nullptr_t &) : Recyclable() {}
 
     Recyclable(const T &value, const Recyclable::OnRecycled &onRecycled)
-    : m_value(value), m_onRecycled(onRecycled), m_reference(new std::atomic<int>(0))
+    : Referenced(), m_value(value), m_onRecycled(onRecycled)
     {
         retain();
     }
 
     Recyclable(const Recyclable &other)
-    : m_value(other.m_value)
-    , m_onRecycled(other.m_onRecycled)
-    , m_reference(other.m_reference)
+    : Referenced(other), m_value(other.m_value), m_onRecycled(other.m_onRecycled)
     {
         retain();
     }
 
     Recyclable &operator=(const Recyclable &other)
     {
-        other.retain();
-        release();
+        reset(other);
         m_value = other.m_value;
         m_onRecycled = other.m_onRecycled;
-        m_reference = other.m_reference;
         return *this;
     }
 
     Recyclable &operator=(const std::nullptr_t &)
     {
-        release();
+        reset(nullptr);
         m_value = nullptr;
         m_onRecycled = nullptr;
-        m_reference = nullptr;
         return *this;
     }
 
@@ -87,28 +98,15 @@ public:
     const T &get() const { return m_value; }
 
 protected:
-    void retain() const
+    void onUnreferenced() override final
     {
-        if (m_reference) {
-            ++(*m_reference);
-        }
-    }
-
-    void release()
-    {
-        if (m_reference) {
-            WCTInnerAssert((*m_reference) > 0);
-            if (--(*m_reference) == 0) {
-                if (m_onRecycled) {
-                    m_onRecycled(m_value);
-                    m_onRecycled = nullptr;
-                }
-            }
+        if (m_onRecycled) {
+            m_onRecycled(m_value);
+            m_onRecycled = nullptr;
         }
     }
 
     T m_value;
-    mutable std::atomic<int> *m_reference;
     Recyclable::OnRecycled m_onRecycled;
 };
 

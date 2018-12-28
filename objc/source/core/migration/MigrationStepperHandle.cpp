@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/MigrationStepperHandle.hpp>
 
 namespace WCDB {
