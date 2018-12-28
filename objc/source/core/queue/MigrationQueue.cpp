@@ -77,13 +77,16 @@ void MigrationQueue::loop()
             bool succeed, done;
             std::tie(succeed, done)
             = static_cast<MigrationEvent*>(m_event)->databaseShouldMigrate(path);
-            if ((!succeed && ++failedCount >= MigrationQueueTolerableFailures) || done) {
+            if ((!succeed && ++failedCount >= MigrationQueueTolerableFailures)) {
                 Error error;
                 error.level = Error::Level::Notice;
                 error.setCode(Error::Code::Notice);
                 error.message = "Async migration stopped due to the error.";
                 error.infos.set("Path", path);
                 Notifier::shared()->notify(error);
+                break;
+            }
+            if (done) {
                 break;
             }
             if (m_dirty) {
