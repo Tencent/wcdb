@@ -121,7 +121,7 @@
     TestCaseAssertFalse([self.database backup]);
 }
 
-- (void)test_auto_backup_when_checkpointed
+- (void)doTestAutoBackupWhenCheckpointed
 {
     [self.database removeConfigForName:WCTConfigNameCheckpoint];
     self.database.autoBackup = YES;
@@ -136,6 +136,11 @@
 
     [NSThread sleepForTimeInterval:self.delayForTolerance];
     TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.firstMaterial]);
+}
+
+- (void)test_auto_backup_when_checkpointed
+{
+    [self doTestAutoBackupWhenCheckpointed];
 }
 
 - (void)test_auto_backup_when_meet_non_critical_frames_interval
@@ -181,6 +186,25 @@
     }
     [NSThread sleepForTimeInterval:self.backupDelayForCritical + self.delayForTolerance];
     TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.firstMaterial]);
+}
+
+- (void)test_cancel_auto_backup
+{
+    [self doTestAutoBackupWhenCheckpointed];
+
+    TestCaseAssertTrue([self.fileManager removeItemAtPath:self.firstMaterial error:nil]);
+
+    self.database.autoBackup = NO;
+
+    TestCaseObject *object = [[TestCaseObject alloc] init];
+    object.isAutoIncrement = YES;
+    object.content = [NSString randomString];
+    TestCaseAssertTrue([self.table insertObject:object]);
+
+    TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint())]);
+
+    [NSThread sleepForTimeInterval:self.delayForTolerance];
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.firstMaterial]);
 }
 
 @end
