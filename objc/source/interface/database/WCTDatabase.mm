@@ -39,6 +39,28 @@
 + (void)initialize
 {
     if (self.class == WCTDatabase.class) {
+#if DEBUG
+        WCDB::Console::shared()->setDebuggable(true);
+#endif
+
+        WCDB::Notifier::shared()->setNotificationForPreprocessing(WCDB::NotifierPathPreprocessorName, [](const WCDB::Error &error, WCDB::Error::Infos &infos) {
+            const auto &strings = error.infos.getStrings();
+            auto iter = strings.find(WCTErrorKeyPath);
+            if (iter == strings.end()) {
+                return;
+            }
+            NSString *path = [NSString stringWithUTF8String:iter->second.c_str()].stringByAbbreviatingWithTildeInPath;
+            if (path.length > 0) {
+                infos.set(WCTErrorKeyPath, path.UTF8String);
+            }
+        });
+
+        WCDB::Console::shared()->setPrinter([](const WCDB::String &message) {
+            NSLog(@"%s", message.c_str());
+        });
+
+        WCDB::Core::shared()->addTokenizer(WCTTokenizerWCDB, WCDB::FTS::Module<void, WCTCursorInfo>::address());
+
 #if TARGET_OS_IPHONE && !TARGET_OS_WATCH
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
         //keep it the entire life cycle
@@ -51,8 +73,6 @@
                                         [WCTDatabase purgeAll];
                                     }];
 #endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
-
-        WCDB::Core::shared()->addTokenizer(WCTTokenizerWCDB, WCDB::FTS::Module<void, WCTCursorInfo>::address());
     }
 }
 

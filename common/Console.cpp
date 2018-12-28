@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Console.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/Error.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Version.h>
@@ -34,10 +35,8 @@ Console* Console::shared()
 
 Console::Console() : m_debugable(false)
 {
-#if DEBUG
-    setDebuggable(true);
-#endif
-    setLogger(Console::log);
+    setLogger(Console::logger);
+    setPrinter(Console::printer);
 }
 
 void Console::setDebuggable(bool debuggable)
@@ -55,18 +54,27 @@ bool Console::isDebuggable()
     return m_debugable;
 }
 
-void Console::setLogger(const Callback& callback)
+void Console::setLogger(const Logger& logger)
 {
-    constexpr const char* logIdentifier = "com.Tencent.WCDB.Notifier.Console.Log";
-    if (callback) {
+    if (logger) {
         Notifier::shared()->setNotification(
-        std::numeric_limits<int>::min(), logIdentifier, callback);
+        std::numeric_limits<int>::min(), NotifierLoggerName, logger);
     } else {
-        Notifier::shared()->unsetNotification(logIdentifier);
+        Notifier::shared()->unsetNotification(NotifierLoggerName);
     }
 }
 
-void Console::log(const Error& error)
+void Console::setPrinter(const Printer& printer)
+{
+    m_printer = printer;
+}
+
+void Console::printer(const String& message)
+{
+    std::cout << message;
+}
+
+void Console::logger(const Error& error)
 {
     if (error.level == Error::Level::Ignore) {
         return;
@@ -103,10 +111,14 @@ void Console::log(const Error& error)
     if (error.level == Error::Level::Fatal) {
         stream << "Set breakpoint at Console::log to debug." << std::endl;
     }
-    std::cout << stream.str();
 
-    if (error.level == Error::Level::Fatal && isDebuggable) {
-        abort();
+    Console::shared()->print(stream.str());
+}
+
+void Console::print(const String& message)
+{
+    if (m_printer) {
+        m_printer(message);
     }
 }
 

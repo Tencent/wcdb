@@ -52,7 +52,7 @@
 
 + (void)resetGlobalErrorTracer
 {
-    WCDB::Console::shared()->setLogger(WCDB::Console::log);
+    WCDB::Console::shared()->setLogger(WCDB::Console::logger);
 }
 
 + (void)globalTracePerformance:(WCTPerformanceTraceBlock)trace

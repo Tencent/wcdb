@@ -35,12 +35,16 @@ public:
 
     void setDebuggable(bool debuggable);
     bool isDebuggable();
-    typedef std::function<void(const Error&)> Callback;
-    void setLogger(const Callback& callback);
+
+    typedef std::function<void(const Error&)> Logger;
+    void setLogger(const Logger& logger);
+    static void logger(const Error& error);
+
+    typedef std::function<void(const String&)> Printer;
+    void setPrinter(const Printer& printer);
+    static void printer(const String& message);
 
     static bool debuggable();
-
-    static void log(const Error& error);
     static void fatal(const String& message, const char* file, int line);
 
     Console(const Console&) = delete;
@@ -49,8 +53,11 @@ public:
 protected:
     Console();
 
+    void print(const String& message);
+
 private:
-    std::atomic<bool> m_debugable;
+    Printer m_printer;
+    bool m_debugable;
 };
 
 } // namespace WCDB
