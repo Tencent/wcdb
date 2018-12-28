@@ -45,22 +45,38 @@ void **AbstractHandle::getRawHandle()
 #pragma mark - Global
 void AbstractHandle::enableMultithread()
 {
+#ifdef DEBUG
+    int rc =
+#endif
     sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
+    WCTInnerAssert(rc == SQLITE_OK);
 }
 
 void AbstractHandle::setMemoryMapSize(int64_t defaultSizeLimit, int64_t maximumAllowedSizeLimit)
 {
+#ifdef DEBUG
+    int rc =
+#endif
     sqlite3_config(SQLITE_CONFIG_MMAP_SIZE, defaultSizeLimit, maximumAllowedSizeLimit);
+    WCTInnerAssert(rc == SQLITE_OK);
 }
 
 void AbstractHandle::enableMemoryStatus(bool enable)
 {
+#ifdef DEBUG
+    int rc =
+#endif
     sqlite3_config(SQLITE_CONFIG_MEMSTATUS, enable);
+    WCTInnerAssert(rc == SQLITE_OK);
 }
 
 void AbstractHandle::setNotificationForLog(const Log &log)
 {
+#ifdef DEBUG
+    int rc =
+#endif
     sqlite3_config(SQLITE_CONFIG_LOG, log, nullptr);
+    WCTInnerAssert(rc == SQLITE_OK);
 }
 
 void AbstractHandle::setNotificationWhenVFSOpened(const VFSOpen &vfsOpen)
