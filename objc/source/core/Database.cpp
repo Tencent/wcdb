@@ -720,6 +720,7 @@ std::pair<bool, bool> Database::stepMigration(bool interruptible)
             && (activeHandleCount(ConfiguredHandleSlot) > 0
                 || activeHandleCount(MigrationHandleSlot) > 0)) {
             succeed = true;
+            break;
         }
 
         RecyclableHandle handle = getSlotHandle(MigrationStepperSlot);
