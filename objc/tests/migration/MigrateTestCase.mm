@@ -47,7 +47,7 @@
 
     // check source table migration is not started
     // It's not a good practice.
-    TestCaseAssertFalse([[self.table getObjects] isEqualToArray:self.objects]);
+    TestCaseAssertFalse([[self.sourceDatabase getObjectsOfClass:TestCaseObject.class fromTable:self.sourceTable] isEqualToArray:self.objects]);
 }
 
 - (void)doTestMigrate
@@ -102,7 +102,7 @@
 
     // check source table migration is not started.
     // It's not a good practice.
-    TestCaseAssertTrue([[self.table getObjects] isEqualToArray:self.objects]);
+    TestCaseAssertTrue([[self.sourceDatabase getObjectsOfClass:TestCaseObject.class fromTable:self.sourceTable] isEqualToArray:self.objects]);
     [handle invalidate];
 }
 
@@ -117,7 +117,7 @@
 
     // check source table migration is started.
     // It's not a good practice.
-    TestCaseAssertFalse([[self.table getObjects] isEqualToArray:self.objects]);
+    TestCaseAssertFalse([[self.sourceDatabase getObjectsOfClass:TestCaseObject.class fromTable:self.sourceTable] isEqualToArray:self.objects]);
     [handle invalidate];
 }
 
@@ -125,6 +125,9 @@
 {
     TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
     NSUInteger fileSize = [self.database getFilesSize];
+    if (self.isCrossDatabaseMigration) {
+        fileSize += [self.sourceDatabase getFilesSize];
+    }
     int pages = int(fileSize / 4096);
 
     __block BOOL tableMigrated = NO;
