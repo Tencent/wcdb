@@ -502,6 +502,7 @@
 		23AF4E2020CD04E20050033C /* Initializeable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AF4E1D20CD04E20050033C /* Initializeable.hpp */; };
 		23B0071D2047ED4800045245 /* ConfiguredHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B0071B2047ED4800045245 /* ConfiguredHandle.hpp */; };
 		23B101E92090667E005D9DD3 /* WCTMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 23B101E82090667B005D9DD3 /* WCTMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23B1910A21D61848005480C7 /* TableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23B1910921D61848005480C7 /* TableTests.mm */; };
 		23B35C7620BFE39500425033 /* Path.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B35C7420BFE39400425033 /* Path.hpp */; };
 		23B35C7820BFE39500425033 /* Path.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B35C7520BFE39500425033 /* Path.cpp */; };
 		23B35CCB20C0261A00425033 /* String.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B35CC920C0261900425033 /* String.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1633,6 +1634,7 @@
 		23AF4E1D20CD04E20050033C /* Initializeable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Initializeable.hpp; sourceTree = "<group>"; };
 		23B0071B2047ED4800045245 /* ConfiguredHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ConfiguredHandle.hpp; sourceTree = "<group>"; };
 		23B101E82090667B005D9DD3 /* WCTMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTMacro.h; sourceTree = "<group>"; };
+		23B1910921D61848005480C7 /* TableTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableTests.mm; sourceTree = "<group>"; };
 		23B35C7420BFE39400425033 /* Path.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Path.hpp; sourceTree = "<group>"; };
 		23B35C7520BFE39500425033 /* Path.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Path.cpp; sourceTree = "<group>"; };
 		23B35CC920C0261900425033 /* String.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = String.hpp; sourceTree = "<group>"; };
@@ -2165,6 +2167,7 @@
 				23739DC7219AEDE700A043BF /* DatabaseTests.mm */,
 				2386563C219C009E00F7F6D2 /* FileTests.mm */,
 				2386563E219C00A500F7F6D2 /* MemoryTests.mm */,
+				23B1910921D61848005480C7 /* TableTests.mm */,
 			);
 			path = basic;
 			sourceTree = "<group>";
@@ -4358,6 +4361,7 @@
 				23739DBC219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
 				231FEB122199A4D600DC3706 /* TestCaseObject.mm in Sources */,
 				231FEB162199A4D600DC3706 /* NSObject+TestCase.mm in Sources */,
+				23B1910A21D61848005480C7 /* TableTests.mm in Sources */,
 				23865644219C47AC00F7F6D2 /* Console.mm in Sources */,
 				231FEB142199A4D600DC3706 /* DatabaseTestCase.mm in Sources */,
 				231FEB132199A4D600DC3706 /* TestCase.mm in Sources */,
