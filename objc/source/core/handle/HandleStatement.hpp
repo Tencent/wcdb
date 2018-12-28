@@ -31,7 +31,7 @@ public:
     ~HandleStatement();
 
     bool prepare(const Statement &statement);
-    bool isPrepared() const;
+    bool isPrepared();
 
     bool step(bool &done);
     bool step();
@@ -65,7 +65,6 @@ public:
     const UnsafeString getColumnTableName(int index);
 
     bool isReadonly();
-    bool isPrepared();
 
 protected:
     HandleStatement(AbstractHandle *handle);

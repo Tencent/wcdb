@@ -51,11 +51,6 @@ bool HandleStatement::prepare(const String &sql)
     return false;
 }
 
-bool HandleStatement::isPrepared() const
-{
-    return m_stmt != nullptr;
-}
-
 void HandleStatement::reset()
 {
     WCTInnerAssert(isPrepared());
