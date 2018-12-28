@@ -176,25 +176,25 @@ bool Handle::isStatementReadonly()
 #pragma mark - Transaction
 bool Handle::runNestedTransaction(const TransactionCallback &transaction)
 {
-    if (!beginNestedTransaction()) {
-        return false;
+    if (beginNestedTransaction()) {
+        if (transaction(this)) {
+            return commitOrRollbackNestedTransaction();
+        } else {
+            rollbackNestedTransaction();
+        }
     }
-    if (transaction(this)) {
-        return commitOrRollbackNestedTransaction();
-    }
-    rollbackNestedTransaction();
     return false;
 }
 
 bool Handle::runTransaction(const TransactionCallback &transaction)
 {
-    if (!beginTransaction()) {
-        return false;
+    if (beginTransaction()) {
+        if (transaction(this)) {
+            return commitOrRollbackTransaction();
+        } else {
+            rollbackTransaction();
+        }
     }
-    if (transaction(this)) {
-        return commitOrRollbackTransaction();
-    }
-    rollbackTransaction();
     return false;
 }
 
