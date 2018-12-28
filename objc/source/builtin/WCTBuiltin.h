@@ -27,5 +27,3 @@
 
 #import <WCDB/WCTMaster+WCTTableCoding.h>
 #import <WCDB/WCTMaster.h>
-#import <WCDB/WCTSequence+WCTTableCoding.h>
-#import <WCDB/WCTSequence.h>
