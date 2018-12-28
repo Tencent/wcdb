@@ -26,10 +26,18 @@
 {
     if (self.class == Benchmark.class) {
         [[Console shared] disableSQLTrace];
-        WCTDatabase.debuggable = NO;
+    }
+}
+
+- (void)setUp
+{
+    [super setUp];
+    BOOL trusted = WCTDatabase.debuggable;
 #if DEBUG || TARGET_IPHONE_SIMULATOR
-        TestLog(@"Benchmark in run in debug mode or simulator. The result may be untrusted.");
+    trusted = YES;
 #endif
+    if (!trusted) {
+        TestLog(@"Benchmark is run in debug mode or simulator. The result may be untrusted.");
     }
 }
 
