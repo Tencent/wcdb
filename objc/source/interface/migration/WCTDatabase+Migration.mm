@@ -33,11 +33,7 @@
             WCTMigrationUserInfo* nsUserInfo = [[WCTMigrationUserInfo alloc] initWithBaseInfo:userInfo];
             filter(nsUserInfo);
             if (nsUserInfo.sourceTable.length > 0) {
-                if (nsUserInfo.sourceDatabase.length > 0) {
-                    userInfo.setSource(nsUserInfo.sourceTable, nsUserInfo.sourceDatabase);
-                } else {
-                    userInfo.setSource(nsUserInfo.sourceTable);
-                }
+                userInfo.setSource(nsUserInfo.sourceTable, nsUserInfo.sourceDatabase);
             }
         };
     }
