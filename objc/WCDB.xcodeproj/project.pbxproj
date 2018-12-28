@@ -236,8 +236,6 @@
 		2370980A20590CA700E768B4 /* HandleStatement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2370980820590CA700E768B4 /* HandleStatement.cpp */; };
 		2370980B20590CA700E768B4 /* HandleStatement.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2370980920590CA700E768B4 /* HandleStatement.hpp */; };
 		2370B11A21914ED500D3227C /* NSDate+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2370B10821914ED400D3227C /* NSDate+WCTColumnCoding.mm */; };
-		2370B11B21914ED500D3227C /* WCTSequence.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2370B10921914ED400D3227C /* WCTSequence.mm */; };
-		2370B11C21914ED500D3227C /* WCTSequence+WCTTableCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2370B10A21914ED400D3227C /* WCTSequence+WCTTableCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2370B11D21914ED500D3227C /* NSString+WCTColumnCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2370B10B21914ED400D3227C /* NSString+WCTColumnCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2370B11E21914ED500D3227C /* NSNumber+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2370B10C21914ED400D3227C /* NSNumber+WCTColumnCoding.mm */; };
 		2370B11F21914ED500D3227C /* NSObject+WCTColumnCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2370B10D21914ED400D3227C /* NSObject+WCTColumnCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -249,7 +247,6 @@
 		2370B12521914ED500D3227C /* NSData+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2370B11321914ED500D3227C /* NSData+WCTColumnCoding.mm */; };
 		2370B12621914ED500D3227C /* WCTMaster.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2370B11421914ED500D3227C /* WCTMaster.mm */; };
 		2370B12721914ED500D3227C /* NSData+WCTColumnCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2370B11521914ED500D3227C /* NSData+WCTColumnCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2370B12821914ED500D3227C /* WCTSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 2370B11621914ED500D3227C /* WCTSequence.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2370B12921914ED500D3227C /* NSNull+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2370B11721914ED500D3227C /* NSNull+WCTColumnCoding.mm */; };
 		2370B12A21914ED500D3227C /* NSNull+WCTColumnCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2370B11821914ED500D3227C /* NSNull+WCTColumnCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2370B12B21914ED500D3227C /* NSString+WCTColumnCoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2370B11921914ED500D3227C /* NSString+WCTColumnCoding.mm */; };
@@ -1363,8 +1360,6 @@
 		2370980820590CA700E768B4 /* HandleStatement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HandleStatement.cpp; sourceTree = "<group>"; };
 		2370980920590CA700E768B4 /* HandleStatement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HandleStatement.hpp; sourceTree = "<group>"; };
 		2370B10821914ED400D3227C /* NSDate+WCTColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSDate+WCTColumnCoding.mm"; sourceTree = "<group>"; };
-		2370B10921914ED400D3227C /* WCTSequence.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTSequence.mm; sourceTree = "<group>"; };
-		2370B10A21914ED400D3227C /* WCTSequence+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTSequence+WCTTableCoding.h"; sourceTree = "<group>"; };
 		2370B10B21914ED400D3227C /* NSString+WCTColumnCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+WCTColumnCoding.h"; sourceTree = "<group>"; };
 		2370B10C21914ED400D3227C /* NSNumber+WCTColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSNumber+WCTColumnCoding.mm"; sourceTree = "<group>"; };
 		2370B10D21914ED400D3227C /* NSObject+WCTColumnCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+WCTColumnCoding.h"; sourceTree = "<group>"; };
@@ -1376,7 +1371,6 @@
 		2370B11321914ED500D3227C /* NSData+WCTColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSData+WCTColumnCoding.mm"; sourceTree = "<group>"; };
 		2370B11421914ED500D3227C /* WCTMaster.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTMaster.mm; sourceTree = "<group>"; };
 		2370B11521914ED500D3227C /* NSData+WCTColumnCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+WCTColumnCoding.h"; sourceTree = "<group>"; };
-		2370B11621914ED500D3227C /* WCTSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTSequence.h; sourceTree = "<group>"; };
 		2370B11721914ED500D3227C /* NSNull+WCTColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSNull+WCTColumnCoding.mm"; sourceTree = "<group>"; };
 		2370B11821914ED500D3227C /* NSNull+WCTColumnCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNull+WCTColumnCoding.h"; sourceTree = "<group>"; };
 		2370B11921914ED500D3227C /* NSString+WCTColumnCoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSString+WCTColumnCoding.mm"; sourceTree = "<group>"; };
@@ -2574,9 +2568,6 @@
 				2370B11021914ED400D3227C /* WCTMaster.h */,
 				2370B11421914ED500D3227C /* WCTMaster.mm */,
 				2370B11121914ED400D3227C /* WCTMaster+WCTTableCoding.h */,
-				2370B11621914ED500D3227C /* WCTSequence.h */,
-				2370B10921914ED400D3227C /* WCTSequence.mm */,
-				2370B10A21914ED400D3227C /* WCTSequence+WCTTableCoding.h */,
 				233A25D2219933D800054EC4 /* WCTBuiltin.h */,
 			);
 			path = builtin;
@@ -3579,7 +3570,6 @@
 				23B101E92090667E005D9DD3 /* WCTMacro.h in Headers */,
 				23D0C31620C125570001BFAE /* Assembler.hpp in Headers */,
 				23775B9820AD666900E21AB0 /* Crawlable.hpp in Headers */,
-				2370B11C21914ED500D3227C /* WCTSequence+WCTTableCoding.h in Headers */,
 				23EEDC94217DFADC006E9E73 /* LiteralValue.hpp in Headers */,
 				23F70FD820A07CEC00CCE3CD /* CustomConfig.hpp in Headers */,
 				23EEDCC2217DFADC006E9E73 /* StatementCreateTable.hpp in Headers */,
@@ -3590,7 +3580,6 @@
 				23EEDCD2217DFADC006E9E73 /* StatementDropTrigger.hpp in Headers */,
 				23EEDC72217DFADC006E9E73 /* FTS3Function.hpp in Headers */,
 				23EEDD02217DFADC006E9E73 /* SyntaxFunctionInvocation.hpp in Headers */,
-				2370B12821914ED500D3227C /* WCTSequence.h in Headers */,
 				234DBD092064DE23000E31E8 /* WCTTransaction.h in Headers */,
 				23593B7F20D3ADF80058B416 /* WalRelated.hpp in Headers */,
 				23D0C36520C14ACC0001BFAE /* FactoryRelated.hpp in Headers */,
@@ -4704,7 +4693,6 @@
 				236BACC021BF6C8500C8B4D9 /* MigrationQueue.cpp in Sources */,
 				23EEDCE1217DFADC006E9E73 /* StatementSelect.cpp in Sources */,
 				2370B12621914ED500D3227C /* WCTMaster.mm in Sources */,
-				2370B11B21914ED500D3227C /* WCTSequence.mm in Sources */,
 				23EEDD4D217DFADC006E9E73 /* SyntaxReindexSTMT.cpp in Sources */,
 				23EEDD39217DFADC006E9E73 /* SyntaxCreateViewSTMT.cpp in Sources */,
 				23EEDC77217DFADC006E9E73 /* BindParameter.cpp in Sources */,
