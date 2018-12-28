@@ -59,6 +59,9 @@
         directory = abbreviatedPath;
     }
 
+    if (WCTDatabase.debuggable) {
+        [self log:@"Debug"];
+    }
     [self log:@"run at %@", self.directory];
 }
 
