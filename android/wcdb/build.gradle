@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply from: rootProject.file('gradle/WeChatPublish.gradle')
+apply from: rootProject.file('gradle/WeChatNativeDepend.gradle')
 
 artifactId = 'wcdb-android'
 
@@ -33,7 +34,7 @@ android {
 
         externalNativeBuild {
             ndkBuild {
-                arguments '-j4'
+                arguments "-j${Runtime.getRuntime().availableProcessors()}".toString()
                 abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
                 if (useGcc) {
                     abiFilters 'armeabi'
@@ -52,6 +53,13 @@ android {
                 if (hasBuildInfo) {
                     arguments "WX_BUILD_VERSION='${wechatPublish.fullVersion}'".toString()
                     arguments 'WITH_BUILD_INFO=1'
+                }
+            }
+
+            // Native dependencies
+            exportHeaders {
+                from(rootProject.file('sqlcipher')) {
+                    include '*.h'
                 }
             }
         }
