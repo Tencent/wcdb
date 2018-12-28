@@ -71,78 +71,79 @@
 - (BOOL)execute
 {
     WCTTryDisposeGuard tryDisposeGuard(self);
-    if (_values.count == 0) {
-        return YES;
-    }
+    BOOL succeed = YES;
+    if (_values.count > 0) {
+        const WCTProperties &properties = _properties.empty() ? [_values.firstObject.class allProperties] : _properties;
 
-    const WCTProperties &properties = _properties.empty() ? [_values.firstObject.class allProperties] : _properties;
+        if (_statement.syntax().columns.empty()) {
+            _statement
+            .columns(properties)
+            .values(WCDB::BindParameter::bindParameters(properties.size()));
+        }
 
-    if (_statement.syntax().columns.empty()) {
-        _statement
-        .columns(properties)
-        .values(WCDB::BindParameter::bindParameters(properties.size()));
-    }
+        std::vector<bool> autoIncrements;
+        for (const WCTProperty &property : properties) {
+            const WCTColumnBinding &columnBinding = property.getColumnBinding();
 
-    std::vector<bool> autoIncrements;
-    for (const WCTProperty &property : properties) {
-        const WCTColumnBinding &columnBinding = property.getColumnBinding();
-
-        // auto increment?
-        bool isAutoIncrement = false;
-        if (!_statement.syntax().useConflictAction
-            || _statement.syntax().conflictAction != WCDB::Syntax::ConflictAction::Replace // not replace
-        ) {
-            for (const auto &constraint : columnBinding.columnDef.syntax().constraints) {
-                if (constraint.switcher == WCDB::ColumnConstraint::SyntaxType::Switch::PrimaryKey) {
-                    isAutoIncrement = constraint.autoIncrement;
-                    break;
+            // auto increment?
+            bool isAutoIncrement = false;
+            if (!_statement.syntax().useConflictAction
+                || _statement.syntax().conflictAction != WCDB::Syntax::ConflictAction::Replace // not replace
+            ) {
+                for (const auto &constraint : columnBinding.columnDef.syntax().constraints) {
+                    if (constraint.switcher == WCDB::ColumnConstraint::SyntaxType::Switch::PrimaryKey) {
+                        isAutoIncrement = constraint.autoIncrement;
+                        break;
+                    }
                 }
             }
+            autoIncrements.push_back(isAutoIncrement);
         }
-        autoIncrements.push_back(isAutoIncrement);
-    }
 
-    WCTInnerAssert(autoIncrements.size() == properties.size());
-    if (_values.count > 1) {
-        return [_handle runNestedTransaction:^BOOL(WCTHandle *handle) {
-            return [self realExecute:handle properties:properties autoIncrements:autoIncrements];
-        }];
+        WCTInnerAssert(autoIncrements.size() == properties.size());
+        if (_values.count > 1) {
+            succeed = [_handle runNestedTransaction:^BOOL(WCTHandle *handle) {
+                return [self realExecute:handle properties:properties autoIncrements:autoIncrements];
+            }];
+        } else {
+            succeed = [self realExecute:_handle properties:properties autoIncrements:autoIncrements];
+        }
     }
-    return [self realExecute:_handle properties:properties autoIncrements:autoIncrements];
+    return succeed;
 }
 
 - (BOOL)realExecute:(WCTHandle *)handle properties:(const WCTProperties &)properties autoIncrements:(const std::vector<bool> &)autoIncrements
 {
-    if (![handle prepare:_statement]) {
-        return NO;
-    }
-    BOOL failed = NO;
-    BOOL canFillLastInsertedRowID = [_values.firstObject respondsToSelector:@selector(lastInsertedRowID)];
-    for (WCTObject *value in _values) {
-        int index = 1;
-        BOOL isAutoIncrement = NO;
-        for (const WCTProperty &property : properties) {
-            if (!autoIncrements[index - 1] || !value.isAutoIncrement) {
-                [handle bindProperty:property
-                            ofObject:value
-                             toIndex:index];
-            } else {
-                [handle bindNullToIndex:index];
-                isAutoIncrement = YES;
+    BOOL succeed = NO;
+    if ([handle prepare:_statement]) {
+        BOOL canFillLastInsertedRowID = [_values.firstObject respondsToSelector:@selector(lastInsertedRowID)];
+        succeed = YES;
+        for (WCTObject *value in _values) {
+            int index = 1;
+            BOOL isAutoIncrement = NO;
+            for (const WCTProperty &property : properties) {
+                if (!autoIncrements[index - 1] || !value.isAutoIncrement) {
+                    [handle bindProperty:property
+                                ofObject:value
+                                 toIndex:index];
+                } else {
+                    [handle bindNullToIndex:index];
+                    isAutoIncrement = YES;
+                }
+                ++index;
             }
-            ++index;
+            if (![handle step]) {
+                succeed = NO;
+                break;
+            }
+            if (isAutoIncrement && canFillLastInsertedRowID) {
+                value.lastInsertedRowID = [handle getLastInsertedRowID];
+            }
+            [handle reset];
         }
-        if (![handle step]) {
-            failed = YES;
-            break;
-        }
-        if (isAutoIncrement && canFillLastInsertedRowID) {
-            value.lastInsertedRowID = [handle getLastInsertedRowID];
-        }
-        [handle reset];
+        [handle finalizeStatement];
     }
-    [handle finalizeStatement];
-    return !failed;
+    return succeed;
 }
 
 @end
