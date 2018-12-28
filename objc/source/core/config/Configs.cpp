@@ -58,11 +58,6 @@ bool Configs::uninvoke(Handle *handle)
     return true;
 }
 
-Configs::Configs(const OrderedUniqueList<String, std::shared_ptr<Config>> &list)
-: m_list(list)
-{
-}
-
 Configs::Configs(OrderedUniqueList<String, std::shared_ptr<Config>> &&list)
 : m_list(std::move(list))
 {

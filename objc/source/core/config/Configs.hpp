@@ -38,7 +38,6 @@ public:
         Low = 100,
     };
 
-    Configs(const OrderedUniqueList<String, std::shared_ptr<Config>> &list);
     Configs(OrderedUniqueList<String, std::shared_ptr<Config>> &&list);
 
     void insert(const String &name,
