@@ -21,6 +21,7 @@
 #ifndef _WCDB_CONSOLE_HPP
 #define _WCDB_CONSOLE_HPP
 
+#include <WCDB/Macro.hpp>
 #include <WCDB/String.hpp>
 #include <atomic>
 #include <functional>
@@ -53,6 +54,7 @@ public:
 protected:
     Console();
 
+    static void breakpoint() WCDB_USED WCDB_NO_INLINE;
     void print(const String& message);
 
 private:

@@ -67,6 +67,9 @@
 #define WCDB_NO_ESCAPE __attribute__((noescape))
 #define WCDB_ESCAPE
 
+#define WCDB_NO_INLINE __attribute((noinline))
+#define WCDB_USED __used
+
 #if defined(__cplusplus)
 #define WCDB_EXTERN extern "C"
 #else

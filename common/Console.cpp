@@ -108,11 +108,24 @@ void Console::logger(const Error& error)
         stream << ", " << info.first << ": " << info.second;
     }
     stream << std::endl;
-    if (error.level == Error::Level::Fatal) {
-        stream << "Set breakpoint at Console::log to debug." << std::endl;
+
+    if (!isDebuggable && error.level == Error::Level::Fatal) {
+        stream << "Enable [debuggable] to debug." << std::endl;
     }
+    // Is this hint important?
+    //    else if (isDebuggable && error.level >= Error::Level::Error) {
+    //        stream << "Set breakpoint at Console::breakpoint to debug." << std::endl;
+    //    }
 
     Console::shared()->print(stream.str());
+
+    if (isDebuggable && error.level >= Error::Level::Error) {
+        breakpoint();
+    }
+}
+
+void Console::breakpoint()
+{
 }
 
 void Console::print(const String& message)
