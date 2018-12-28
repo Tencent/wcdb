@@ -66,17 +66,17 @@
                  withClass:(Class<WCTTableCoding>)cls
 {
     WCTRemedialAssert(tableName && cls, "Class or table name can't be null.", return NO;);
-    return [self execute:[cls objectRelationalMapping].generateVirtualCreateTableStatement(tableName)]
+    return [self execute:[cls objectRelationalMapping].generateVirtualCreateTableStatement(tableName)];
 }
 
 - (BOOL)dropTable:(NSString *)tableName
 {
-    return [self execute:WCDB::StatementDropTable().dropTable(tableName)];
+    return [self execute:WCDB::StatementDropTable().dropTable(tableName).ifExists()];
 }
 
 - (BOOL)dropIndex:(NSString *)indexName
 {
-    return [self execute:WCDB::StatementDropIndex().dropIndex(indexName)];
+    return [self execute:WCDB::StatementDropIndex().dropIndex(indexName).ifExists()];
 }
 
 - (BOOL)remapTable:(NSString *)tableName toClass:(Class<WCTTableCoding>)cls
