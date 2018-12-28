@@ -154,7 +154,8 @@ bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
             std::tie(succeed, worked, migrated)
             = tryMigrateRowWithoutIncreasingDirtyPage(dirtyPageCount);
         } while (succeed && worked && !migrated);
-        WCTInnerAssert(dirtyPageCount == getDirtyPageCount());
+#warning TODO - wait for the answer of SQLite staff about the dirty page of ROLLBACK TO stmt.
+        //        WCTInnerAssert(dirtyPageCount == getDirtyPageCount());
         return succeed;
     });
     if (succeed && migrated) {
