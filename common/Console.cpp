@@ -21,6 +21,7 @@
 #include <WCDB/Console.hpp>
 #include <WCDB/Error.hpp>
 #include <WCDB/Notifier.hpp>
+#include <WCDB/Version.h>
 #include <iostream>
 
 namespace WCDB {
@@ -119,6 +120,10 @@ void Console::fatal(const String& message, const char* file, int line)
         error.infos.set("File", file);
     }
     error.infos.set("Line", line);
+    error.infos.set("Version", WCDB_VERSION);
+    error.infos.set("BuildTime", WCDB_BUILD_TIME);
+    error.infos.set("BuildTimestamp", WCDB_BUILD_TIMESTAMP);
+    error.infos.set("CommitHash", WCDB_COMMIT_HASH);
     Notifier::shared()->notify(error);
 }
 
