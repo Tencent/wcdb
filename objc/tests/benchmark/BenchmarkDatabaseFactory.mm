@@ -49,7 +49,7 @@
     return [self.directory stringByAppendingPathComponent:fileName];
 }
 
-- (BOOL)isFileSizeTolerable:(NSUInteger)fileSize
+- (BOOL)isFileSizeTolerable:(unsigned long long)fileSize
 {
     return fileSize > self.fileSize * (1.0f - self.tolerance)
            && fileSize < self.fileSize * (1.0f + self.tolerance);
