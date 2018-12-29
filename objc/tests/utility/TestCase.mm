@@ -30,12 +30,11 @@
 #else
         WCTDatabase.debuggable = NO;
 #endif
-        srandom((unsigned int) time(nullptr));
-        srand((unsigned int) time(nullptr));
 
 #ifdef DEBUG
         [[Console shared] enableSQLTrace];
 #endif
+        [[Console shared] resetRandomSeedByCurrentTime];
     }
 }
 

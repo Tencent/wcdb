@@ -34,6 +34,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)disableSQLiteWrite;
 
+- (void)resetRandomSeed:(unsigned int)seed;
+
+- (void)resetRandomSeedByCurrentTime;
+
+- (uint32_t)random;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -86,4 +86,19 @@ ssize_t illPwrite(int, const void *, size_t, off_t)
     vfs->xSetSystemCall(vfs, "pwrite", _vfsIllPwrite);
 }
 
+- (void)resetRandomSeed:(unsigned int)seed
+{
+    srandom(seed);
+}
+
+- (void)resetRandomSeedByCurrentTime
+{
+    srandom((unsigned int) time(nullptr));
+}
+
+- (uint32_t)random
+{
+    return arc4random();
+}
+
 @end

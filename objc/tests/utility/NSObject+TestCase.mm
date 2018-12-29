@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import "Console.h"
 #import "NSObject+TestCase.h"
 
 @implementation NSObject (TestCase)
@@ -38,8 +39,8 @@
 
 + (uint64_t)randomUInt64
 {
-    uint64_t value = arc4random();
-    value = (value << 32) | arc4random();
+    uint64_t value = [Console shared].random;
+    value = (value << 32) | [Console shared].random;
     return value;
 }
 
@@ -62,7 +63,7 @@
 + (double)randomDouble
 {
 #define ARC4RANDOM_MAX 0x100000000
-    return [NSString stringWithFormat:@"%g", ((double) arc4random() / ARC4RANDOM_MAX) * [NSNumber randomInt32]].numberValue.doubleValue;
+    return [NSString stringWithFormat:@"%g", ((double) [Console shared].random / ARC4RANDOM_MAX) * [NSNumber randomInt32]].numberValue.doubleValue;
 }
 
 + (NSNumber *)randomNumber
@@ -80,7 +81,7 @@
 
 + (float)random_0_1
 {
-    return (float) rand() / RAND_MAX;
+    return (float) [Console shared].random / RAND_MAX;
 }
 
 + (BOOL)randomBool
@@ -104,7 +105,7 @@
     "abcdefghijklmnopqrstuvwxyz";
     NSMutableString *randomString = [NSMutableString string];
     for (int i = 0; i < length; ++i) {
-        [randomString appendFormat:@"%c", alphanum[arc4random() % (sizeof(alphanum) - 1)]];
+        [randomString appendFormat:@"%c", alphanum[[Console shared].random % (sizeof(alphanum) - 1)]];
     }
     return [NSString stringWithString:randomString];
 }
