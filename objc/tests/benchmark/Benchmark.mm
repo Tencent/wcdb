@@ -26,6 +26,7 @@
 {
     [super setUp];
 
+    WCTDatabase.debuggable = NO;
     [Console disableSQLTrace];
 
     BOOL trusted = WCTDatabase.debuggable;
@@ -35,6 +36,8 @@
     if (!trusted) {
         TestLog(@"Benchmark is run in debug mode or simulator. The result may be untrusted.");
     }
+
+    _factory = [[BenchmarkDatabaseFactory alloc] initWithDirectory:[self.root stringByAppendingPathComponent:@"factory"]];
 }
 
 - (void)measure:(void (^)(void))block

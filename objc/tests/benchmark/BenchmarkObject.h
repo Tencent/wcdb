@@ -18,17 +18,11 @@
  * limitations under the License.
  */
 
-#import "BenchmarkDatabaseFactory.h"
-#import "DatabaseTestCase.h"
+#import <Foundation/Foundation.h>
 
-@interface Benchmark : DatabaseTestCase
+@interface BenchmarkObject : NSObject
 
-@property (nonatomic, readonly) BenchmarkDatabaseFactory* factory;
-
-// tear down - set up - measure - check correctness - tear down
-- (void)measure:(void (^)(void))block
-           setUp:(void (^)(void))setUpBlock
-        tearDown:(void (^)(void))tearDownBlock
-checkCorrectness:(void (^)(void))correctnessBlock;
+@property (nonatomic, assign) int identifier;
+@property (nonatomic, retain) NSString *content;
 
 @end

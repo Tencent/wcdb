@@ -18,17 +18,12 @@
  * limitations under the License.
  */
 
-#import "BenchmarkDatabaseFactory.h"
-#import "DatabaseTestCase.h"
+#import "BenchmarkObject.h"
+#import <WCDB/WCDB.h>
 
-@interface Benchmark : DatabaseTestCase
+@interface BenchmarkObject (WCTTableCoding) <WCTTableCoding>
 
-@property (nonatomic, readonly) BenchmarkDatabaseFactory* factory;
-
-// tear down - set up - measure - check correctness - tear down
-- (void)measure:(void (^)(void))block
-           setUp:(void (^)(void))setUpBlock
-        tearDown:(void (^)(void))tearDownBlock
-checkCorrectness:(void (^)(void))correctnessBlock;
+WCDB_PROPERTY(identifier)
+WCDB_PROPERTY(content)
 
 @end

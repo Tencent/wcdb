@@ -216,6 +216,8 @@
 		235144F721D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
 		235144F821D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
 		235144F921D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
+		2351450021D7564700FF639C /* BenchmarkObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144FE21D7564700FF639C /* BenchmarkObject.mm */; };
+		2351450121D7564700FF639C /* BenchmarkDatabaseFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144FF21D7564700FF639C /* BenchmarkDatabaseFactory.mm */; };
 		23567CFA20CA3889005F1C35 /* Frame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23567CF820CA3889005F1C35 /* Frame.cpp */; };
 		23567CFC20CA3889005F1C35 /* Frame.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567CF920CA3889005F1C35 /* Frame.hpp */; };
 		23567D4720CA7DBC005F1C35 /* ErrorProne.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567D4520CA7DBC005F1C35 /* ErrorProne.hpp */; };
@@ -1343,6 +1345,11 @@
 		234EF46D2015CFDE00B81929 /* WCTConvertible.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTConvertible.mm; sourceTree = "<group>"; };
 		235144EC21D710C900FF639C /* Random.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Random.h; sourceTree = "<group>"; };
 		235144ED21D710C900FF639C /* Random.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Random.mm; sourceTree = "<group>"; };
+		235144FB21D7564700FF639C /* BenchmarkDatabaseFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BenchmarkDatabaseFactory.h; sourceTree = "<group>"; };
+		235144FC21D7564700FF639C /* BenchmarkObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BenchmarkObject.h; sourceTree = "<group>"; };
+		235144FD21D7564700FF639C /* BenchmarkObject+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BenchmarkObject+WCTTableCoding.h"; sourceTree = "<group>"; };
+		235144FE21D7564700FF639C /* BenchmarkObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BenchmarkObject.mm; sourceTree = "<group>"; };
+		235144FF21D7564700FF639C /* BenchmarkDatabaseFactory.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BenchmarkDatabaseFactory.mm; sourceTree = "<group>"; };
 		23567CF820CA3889005F1C35 /* Frame.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Frame.cpp; sourceTree = "<group>"; };
 		23567CF920CA3889005F1C35 /* Frame.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Frame.hpp; sourceTree = "<group>"; };
 		23567D4520CA7DBC005F1C35 /* ErrorProne.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ErrorProne.hpp; sourceTree = "<group>"; };
@@ -3536,6 +3543,11 @@
 		23FC43E521B6644B00FA1A0F /* benchmark */ = {
 			isa = PBXGroup;
 			children = (
+				235144FB21D7564700FF639C /* BenchmarkDatabaseFactory.h */,
+				235144FF21D7564700FF639C /* BenchmarkDatabaseFactory.mm */,
+				235144FC21D7564700FF639C /* BenchmarkObject.h */,
+				235144FE21D7564700FF639C /* BenchmarkObject.mm */,
+				235144FD21D7564700FF639C /* BenchmarkObject+WCTTableCoding.h */,
 				23FC43E621B6644B00FA1A0F /* Benchmark.mm */,
 				23FC43E721B6644B00FA1A0F /* Benchmark.h */,
 				23FC01DC21B8B716002C7F87 /* RepairBenchmark.mm */,
@@ -4970,8 +4982,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2351450021D7564700FF639C /* BenchmarkObject.mm in Sources */,
 				235144F921D710C900FF639C /* Random.mm in Sources */,
 				23FC43CC21B6631200FA1A0F /* CRUDTestCase.mm in Sources */,
+				2351450121D7564700FF639C /* BenchmarkDatabaseFactory.mm in Sources */,
 				23FC43CE21B6631200FA1A0F /* TableTestCase.mm in Sources */,
 				23FC01DD21B8B716002C7F87 /* RepairBenchmark.mm in Sources */,
 				23FC43CF21B6631200FA1A0F /* AllTypesObject.mm in Sources */,

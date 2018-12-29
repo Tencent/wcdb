@@ -18,17 +18,24 @@
  * limitations under the License.
  */
 
-#import "BenchmarkDatabaseFactory.h"
-#import "DatabaseTestCase.h"
+#import "BenchmarkObject+WCTTableCoding.h"
+#import "BenchmarkObject.h"
 
-@interface Benchmark : DatabaseTestCase
+NS_ASSUME_NONNULL_BEGIN
 
-@property (nonatomic, readonly) BenchmarkDatabaseFactory* factory;
+@interface BenchmarkDatabaseFactory : NSObject
 
-// tear down - set up - measure - check correctness - tear down
-- (void)measure:(void (^)(void))block
-           setUp:(void (^)(void))setUpBlock
-        tearDown:(void (^)(void))tearDownBlock
-checkCorrectness:(void (^)(void))correctnessBlock;
+- (instancetype)initWithDirectory:(NSString*)directory;
+
+@property (nonatomic, readonly) NSString* directory;
+@property (nonatomic, assign) double tolerance;
+@property (nonatomic, assign) BOOL multiTables;
+
+- (void)setFileSizeInMB:(NSUInteger)fileSizeInMB;
+@property (nonatomic, assign) NSUInteger fileSize;
+
+- (BOOL)production:(NSString*)destination;
 
 @end
+
+NS_ASSUME_NONNULL_END
