@@ -29,15 +29,20 @@
     WCTDatabase.debuggable = NO;
     [Console disableSQLTrace];
 
-    BOOL trusted = WCTDatabase.debuggable;
+    _factory = [[BenchmarkDatabaseFactory alloc] initWithDirectory:[self.root stringByAppendingPathComponent:@"factory"]];
+}
+
+- (void)tearDown
+{
+    BOOL untrusted = WCTDatabase.debuggable;
 #if DEBUG || TARGET_IPHONE_SIMULATOR
-    trusted = YES;
+    untrusted = YES;
 #endif
-    if (!trusted) {
+    if (untrusted) {
         TestLog(@"Benchmark is run in debug mode or simulator. The result may be untrusted.");
     }
 
-    _factory = [[BenchmarkDatabaseFactory alloc] initWithDirectory:[self.root stringByAppendingPathComponent:@"factory"]];
+    [super tearDown];
 }
 
 - (void)measure:(void (^)(void))block
