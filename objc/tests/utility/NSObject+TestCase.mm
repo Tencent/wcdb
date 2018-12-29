@@ -30,122 +30,33 @@
 
 @end
 
-@implementation NSNumber (TestCase)
-
-+ (int64_t)randomInt64
-{
-    return (int64_t)[self randomUInt64];
-}
-
-+ (uint64_t)randomUInt64
-{
-    uint64_t value = [Console shared].random;
-    value = (value << 32) | [Console shared].random;
-    return value;
-}
-
-+ (int32_t)randomInt32
-{
-    static_assert(sizeof(int) == 4, "");
-    return (int32_t)[self randomUInt64];
-}
-
-+ (uint32_t)randomUInt32
-{
-    return (uint32_t)[self randomUInt64];
-}
-
-+ (uint8_t)randomUInt8
-{
-    return (uint8_t)[NSNumber randomUInt64];
-}
-
-+ (double)randomDouble
-{
-#define ARC4RANDOM_MAX 0x100000000
-    return [NSString stringWithFormat:@"%g", ((double) [Console shared].random / ARC4RANDOM_MAX) * [NSNumber randomInt32]].numberValue.doubleValue;
-}
-
-+ (NSNumber *)randomNumber
-{
-    switch ([NSNumber randomUInt8] % 3) {
-    case 0:
-        return [NSNumber numberWithInt:[NSNumber randomInt32]];
-    case 1:
-        return [NSNumber numberWithLongLong:[NSNumber randomInt64]];
-    case 2:
-        return [NSNumber numberWithDouble:[NSNumber randomDouble]];
-    }
-    return nil;
-}
-
-+ (float)random_0_1
-{
-    return (float) [Console shared].random / RAND_MAX;
-}
-
-+ (BOOL)randomBool
-{
-    return [NSNumber randomUInt64] % 2;
-}
-
-@end
-
-@implementation NSString (TestCase)
-
-+ (NSString *)randomString
-{
-    int length;
-    do {
-        length = [NSNumber randomUInt8];
-    } while (length < 8);
-    static const char alphanum[] =
-    "0123456789"
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    "abcdefghijklmnopqrstuvwxyz";
-    NSMutableString *randomString = [NSMutableString string];
-    for (int i = 0; i < length; ++i) {
-        [randomString appendFormat:@"%c", alphanum[[Console shared].random % (sizeof(alphanum) - 1)]];
-    }
-    return [NSString stringWithString:randomString];
-}
-
-@end
-
-@implementation NSData (TestCase)
-
-+ (NSData *)randomData
-{
-    return [NSData randomDataWithLength:[NSNumber randomUInt8]];
-}
-
-+ (NSData *)randomDataWithLength:(NSInteger)length
-{
-    static_assert(sizeof(unsigned char) == 1, "");
-    NSMutableData *data = [NSMutableData dataWithCapacity:length];
-    for (NSUInteger i = 0; i < length; ++i) {
-        unsigned char random = [NSNumber randomUInt64] & 0xff;
-        [data appendBytes:&random length:sizeof(unsigned char)];
-    }
-    return [NSData dataWithData:data];
-}
-
-+ (NSData *)randomDataOtherThan:(NSData *)other
-{
-    NSData *data;
-    do {
-        data = [NSData randomData];
-    } while ([other isEqualToData:data]);
-    return data;
-}
-
-@end
-
 @implementation NSArray (TestCase)
 
 - (NSArray *)reversedArray
 {
     return self.reverseObjectEnumerator.allObjects;
+}
+
+@end
+
+@implementation NSNumber (TestCase)
+
++ (BOOL)value:(double)left almostEqual:(double)right
+{
+    // ulp == 2
+    return std::abs(left - right) < std::numeric_limits<double>::epsilon() * std::abs(left + right) * 2
+           || std::abs(left - right) < std::numeric_limits<double>::min();
+}
+
+- (BOOL)almostEqual:(NSNumber *)other
+{
+    if (other == nil) {
+        return NO;
+    }
+    if (CFNumberIsFloatType((CFNumberRef) self)) {
+        return [NSNumber value:self.doubleValue almostEqual:other.doubleValue];
+    }
+    return [self isEqualToNumber:other];
 }
 
 @end

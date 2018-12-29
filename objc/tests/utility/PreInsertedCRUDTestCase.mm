@@ -31,11 +31,11 @@
 
     _object1 = [[TestCaseObject alloc] init];
     _object1.identifier = 1;
-    _object1.content = [NSString randomString];
+    _object1.content = self.random.string;
 
     _object2 = [[TestCaseObject alloc] init];
     _object2.identifier = 2;
-    _object2.content = [NSString randomString];
+    _object2.content = self.random.string;
 
     _objects = @[ _object1, _object2 ];
 

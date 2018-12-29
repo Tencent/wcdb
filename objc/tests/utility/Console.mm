@@ -28,16 +28,7 @@ ssize_t illPwrite(int, const void *, size_t, off_t)
     return -1;
 }
 
-@implementation Console {
-    sqlite3_syscall_ptr _vfsPwrite;
-    sqlite3_syscall_ptr _vfsIllPwrite;
-}
-
-+ (Console *)shared
-{
-    static Console *s_console = [[Console alloc] init];
-    return s_console;
-}
+@implementation Console
 
 + (void)initialize
 {
@@ -47,17 +38,7 @@ ssize_t illPwrite(int, const void *, size_t, off_t)
     }
 }
 
-- (instancetype)init
-{
-    if (self = [super init]) {
-        sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
-        _vfsPwrite = vfs->xGetSystemCall(vfs, "pwrite");
-        _vfsIllPwrite = (void (*)(void)) illPwrite;
-    }
-    return self;
-}
-
-- (void)enableSQLTrace
++ (void)enableSQLTrace
 {
     [WCTDatabase globalTraceSQL:^(NSString *sql) {
         NSThread *currentThread = [NSThread currentThread];
@@ -69,36 +50,21 @@ ssize_t illPwrite(int, const void *, size_t, off_t)
     }];
 }
 
-- (void)disableSQLTrace
++ (void)disableSQLTrace
 {
     [WCTDatabase globalTraceSQL:nil];
 }
 
-- (void)enableSQLiteWrite
++ (void)enableSQLiteWrite
 {
     sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
-    vfs->xSetSystemCall(vfs, "pwrite", _vfsPwrite);
+    vfs->xSetSystemCall(vfs, "pwrite", (sqlite3_syscall_ptr) pwrite);
 }
 
-- (void)disableSQLiteWrite
++ (void)disableSQLiteWrite
 {
     sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
-    vfs->xSetSystemCall(vfs, "pwrite", _vfsIllPwrite);
-}
-
-- (void)resetRandomSeed:(unsigned int)seed
-{
-    srandom(seed);
-}
-
-- (void)resetRandomSeedByCurrentTime
-{
-    srandom((unsigned int) time(nullptr));
-}
-
-- (uint32_t)random
-{
-    return arc4random();
+    vfs->xSetSystemCall(vfs, "pwrite", (sqlite3_syscall_ptr) illPwrite);
 }
 
 @end

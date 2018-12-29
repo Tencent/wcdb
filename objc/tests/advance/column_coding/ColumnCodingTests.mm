@@ -40,11 +40,11 @@
 - (void)test
 {
     ColumnCodingObject* object = [[ColumnCodingObject alloc] init];
-    object.int32Object = [[Integer32CodingObject alloc] initWithValue:[NSNumber randomInt32]];
-    object.int64Object = [[Integer64CodingObject alloc] initWithValue:[NSNumber randomInt64]];
-    object.doubleObject = [[DoubleCodingObject alloc] initWithValue:[NSNumber randomDouble]];
-    object.stringObject = [[StringCodingObject alloc] initWithValue:[NSString randomString]];
-    object.dataObject = [[DataCodingObject alloc] initWithValue:[NSData randomData]];
+    object.int32Object = [[Integer32CodingObject alloc] initWithValue:self.random.int32];
+    object.int64Object = [[Integer64CodingObject alloc] initWithValue:self.random.int64];
+    object.doubleObject = [[DoubleCodingObject alloc] initWithValue:self.random.double_];
+    object.stringObject = [[StringCodingObject alloc] initWithValue:self.random.string];
+    object.dataObject = [[DataCodingObject alloc] initWithValue:self.random.data];
 
     BOOL result = [self checkObjects:@[ object ]
                         andInsertSQL:@"INSERT INTO main.testTable(int32Object, int64Object, doubleObject, stringObject, dataObject) VALUES(?1, ?2, ?3, ?4, ?5)"

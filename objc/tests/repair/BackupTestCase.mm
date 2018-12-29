@@ -52,7 +52,7 @@
             TESTCASE_FAILED
             return;
         }
-        [fileHandle writeData:[NSData randomDataWithLength:self.headerSize]];
+        [fileHandle writeData:[self.random dataWithLength:self.headerSize]];
         [fileHandle closeFile];
         result = YES;
     }];

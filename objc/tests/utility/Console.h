@@ -24,21 +24,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Console : NSObject
 
-+ (Console*)shared;
++ (void)enableSQLTrace;
++ (void)disableSQLTrace;
 
-- (void)enableSQLTrace;
-
-- (void)disableSQLTrace;
-
-- (void)enableSQLiteWrite;
-
-- (void)disableSQLiteWrite;
-
-- (void)resetRandomSeed:(unsigned int)seed;
-
-- (void)resetRandomSeedByCurrentTime;
-
-- (uint32_t)random;
++ (void)enableSQLiteWrite;
++ (void)disableSQLiteWrite;
 
 @end
 

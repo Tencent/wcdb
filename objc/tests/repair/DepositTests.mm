@@ -30,7 +30,7 @@
 {
     TestCaseObject* object = [[TestCaseObject alloc] init];
     object.isAutoIncrement = YES;
-    object.content = [NSString randomString];
+    object.content = self.random.string;
     int rowId = (int) self.objects.count;
 
     {

@@ -204,6 +204,18 @@
 		234E6F6121996EB600D006F2 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		234EF46E2015CFDE00B81929 /* WCTConvertible.h in Headers */ = {isa = PBXBuildFile; fileRef = 234EF46C2015CFDE00B81929 /* WCTConvertible.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234EF46F2015CFDE00B81929 /* WCTConvertible.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234EF46D2015CFDE00B81929 /* WCTConvertible.mm */; };
+		235144EE21D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
+		235144EF21D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
+		235144F021D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
+		235144F121D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
+		235144F221D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
+		235144F321D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
+		235144F421D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
+		235144F521D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
+		235144F621D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
+		235144F721D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
+		235144F821D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
+		235144F921D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
 		23567CFA20CA3889005F1C35 /* Frame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23567CF820CA3889005F1C35 /* Frame.cpp */; };
 		23567CFC20CA3889005F1C35 /* Frame.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567CF920CA3889005F1C35 /* Frame.hpp */; };
 		23567D4720CA7DBC005F1C35 /* ErrorProne.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567D4520CA7DBC005F1C35 /* ErrorProne.hpp */; };
@@ -1329,6 +1341,8 @@
 		234E6F6621996EB600D006F2 /* Advance tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Advance tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		234EF46C2015CFDE00B81929 /* WCTConvertible.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTConvertible.h; sourceTree = "<group>"; };
 		234EF46D2015CFDE00B81929 /* WCTConvertible.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTConvertible.mm; sourceTree = "<group>"; };
+		235144EC21D710C900FF639C /* Random.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Random.h; sourceTree = "<group>"; };
+		235144ED21D710C900FF639C /* Random.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Random.mm; sourceTree = "<group>"; };
 		23567CF820CA3889005F1C35 /* Frame.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Frame.cpp; sourceTree = "<group>"; };
 		23567CF920CA3889005F1C35 /* Frame.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Frame.hpp; sourceTree = "<group>"; };
 		23567D4520CA7DBC005F1C35 /* ErrorProne.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ErrorProne.hpp; sourceTree = "<group>"; };
@@ -2830,6 +2844,8 @@
 				231C98B9219532AC0067B87C /* NSObject+TestCase.mm */,
 				23865642219C47AC00F7F6D2 /* Console.h */,
 				23865643219C47AC00F7F6D2 /* Console.mm */,
+				235144EC21D710C900FF639C /* Random.h */,
+				235144ED21D710C900FF639C /* Random.mm */,
 				238C73A321B8B50F006B59C2 /* TestLog.h */,
 				238C73A421B8B510006B59C2 /* TestLog.m */,
 			);
@@ -4355,6 +4371,7 @@
 				231FEB192199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
 				238C73A521B8B510006B59C2 /* TestLog.m in Sources */,
 				2386563F219C00A500F7F6D2 /* MemoryTests.mm in Sources */,
+				235144EE21D710C900FF639C /* Random.mm in Sources */,
 				231FEB152199A4D600DC3706 /* TableTestCase.mm in Sources */,
 				23846FD621AFF216005B868F /* AllTypesObject.mm in Sources */,
 				23739DC8219AEDE700A043BF /* DatabaseTests.mm in Sources */,
@@ -4372,6 +4389,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				235144F321D710C900FF639C /* Random.mm in Sources */,
 				23846FDB21AFF216005B868F /* AllTypesObject.mm in Sources */,
 				231FEB1E2199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
 				231FEAF72199A4D200DC3706 /* TableTestCase.mm in Sources */,
@@ -4391,6 +4409,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				235144F421D710C900FF639C /* Random.mm in Sources */,
 				23846FDC21AFF216005B868F /* AllTypesObject.mm in Sources */,
 				231FEB1F2199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
 				231FEAFC2199A4D300DC3706 /* TableTestCase.mm in Sources */,
@@ -4414,6 +4433,7 @@
 				231FEB062199A4D400DC3706 /* TableTestCase.mm in Sources */,
 				23846FDD21AFF216005B868F /* AllTypesObject.mm in Sources */,
 				23739DC3219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
+				235144F521D710C900FF639C /* Random.mm in Sources */,
 				231FEB032199A4D400DC3706 /* TestCaseObject.mm in Sources */,
 				231FEB072199A4D400DC3706 /* NSObject+TestCase.mm in Sources */,
 				2372E06221A2E13100051D9A /* ConfigTests.mm in Sources */,
@@ -4431,6 +4451,7 @@
 				23B4A78221A7FBB500BD6A32 /* BackupTests.mm in Sources */,
 				231FEB212199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
 				231FEB012199A4D400DC3706 /* TableTestCase.mm in Sources */,
+				235144F621D710C900FF639C /* Random.mm in Sources */,
 				23739DC4219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
 				2304121F21ABA23C00CB2318 /* BackupTestCase.mm in Sources */,
 				2304121821AB9EF700CB2318 /* DepositTests.mm in Sources */,
@@ -4455,6 +4476,7 @@
 				231FEB0B2199A4D500DC3706 /* TableTestCase.mm in Sources */,
 				238C73AE21B8B510006B59C2 /* TestLog.m in Sources */,
 				23739DC5219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
+				235144F721D710C900FF639C /* Random.mm in Sources */,
 				231FEB082199A4D500DC3706 /* TestCaseObject.mm in Sources */,
 				231FEB0C2199A4D500DC3706 /* NSObject+TestCase.mm in Sources */,
 				231FEB0A2199A4D500DC3706 /* DatabaseTestCase.mm in Sources */,
@@ -4472,6 +4494,7 @@
 				231FEB102199A4D500DC3706 /* TableTestCase.mm in Sources */,
 				238C73AF21B8B510006B59C2 /* TestLog.m in Sources */,
 				23739DC6219AD0C500A043BF /* PreInsertedCRUDTestCase.mm in Sources */,
+				235144F821D710C900FF639C /* Random.mm in Sources */,
 				231FEB0D2199A4D500DC3706 /* TestCaseObject.mm in Sources */,
 				2321FE2F21D206B6008BB722 /* MigrationCompatibleTestCase.mm in Sources */,
 				231FEB112199A4D500DC3706 /* NSObject+TestCase.mm in Sources */,
@@ -4494,6 +4517,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				235144F221D710C900FF639C /* Random.mm in Sources */,
 				23739DAA219AC9E500A043BF /* DoubleCodingObject+WCTColumnCoding.mm in Sources */,
 				23739D98219AC8C300A043BF /* Integer32CodingObject.m in Sources */,
 				231FEB1D2199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
@@ -4547,6 +4571,7 @@
 				2384F6D32193E0B600E8B10A /* ColumnConstraintDefault.mm in Sources */,
 				2384F6E9219412FA00E8B10A /* FTS3Object.mm in Sources */,
 				231FEB1B2199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
+				235144F021D710C900FF639C /* Random.mm in Sources */,
 				2384F6DB2193E2C200E8B10A /* ColumnConstraintCheck.mm in Sources */,
 				2384F6BF2193E08100E8B10A /* ColumnConstraintPrimaryDesc.mm in Sources */,
 				2384F70121941BF000E8B10A /* NewRebindObject.mm in Sources */,
@@ -4565,6 +4590,7 @@
 				23846FD921AFF216005B868F /* AllTypesObject.mm in Sources */,
 				231C98BC219532AC0067B87C /* NSObject+TestCase.mm in Sources */,
 				2384F72F2194255700E8B10A /* TableTestCase.mm in Sources */,
+				235144F121D710C900FF639C /* Random.mm in Sources */,
 				231FEB1C2199A5A800DC3706 /* CRUDTestCase.mm in Sources */,
 				233E12302195749C00BD488D /* ConvenientSelectTests.mm in Sources */,
 				233E12402195756B00BD488D /* ConvenientDeleteTests.mm in Sources */,
@@ -4911,6 +4937,7 @@
 				2398978A217EC9E30014BF33 /* StatementDropViewTests.mm in Sources */,
 				23989777217EC9E30014BF33 /* RaiseFunctionTests.mm in Sources */,
 				23790A52219298250098797F /* TestCase.mm in Sources */,
+				235144EF21D710C900FF639C /* Random.mm in Sources */,
 				2398975F217EC9E30014BF33 /* AggregateFunctionTests.mm in Sources */,
 				23989778217EC9E30014BF33 /* RecursiveCTETests.mm in Sources */,
 				23989775217EC9E30014BF33 /* PragmaTests.mm in Sources */,
@@ -4943,6 +4970,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				235144F921D710C900FF639C /* Random.mm in Sources */,
 				23FC43CC21B6631200FA1A0F /* CRUDTestCase.mm in Sources */,
 				23FC43CE21B6631200FA1A0F /* TableTestCase.mm in Sources */,
 				23FC01DD21B8B716002C7F87 /* RepairBenchmark.mm in Sources */,

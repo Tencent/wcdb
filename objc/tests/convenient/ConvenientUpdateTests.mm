@@ -37,7 +37,7 @@
 {
     [super setUp];
 
-    NSString* renewedContent = [NSString randomString];
+    NSString* renewedContent = self.random.string;
 
     _renewObject = [[TestCaseObject alloc] init];
     _renewObject.content = renewedContent;

@@ -22,16 +22,12 @@
 
 @implementation Benchmark
 
-+ (void)initialize
-{
-    if (self.class == Benchmark.class) {
-        [[Console shared] disableSQLTrace];
-    }
-}
-
 - (void)setUp
 {
     [super setUp];
+
+    [Console disableSQLTrace];
+
     BOOL trusted = WCTDatabase.debuggable;
 #if DEBUG || TARGET_IPHONE_SIMULATOR
     trusted = YES;

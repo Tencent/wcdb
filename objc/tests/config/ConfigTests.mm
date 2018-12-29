@@ -31,7 +31,7 @@
 - (void)setUp
 {
     [super setUp];
-    _configName = [NSString randomString];
+    _configName = self.random.string;
 }
 
 - (void)tearDown
@@ -152,8 +152,8 @@
 
 - (void)test_cipher
 {
-    NSData* cipher = [NSData randomData];
-    NSData* wrongCipher = [NSData randomDataOtherThan:cipher];
+    NSData* cipher = self.random.data;
+    NSData* wrongCipher = [self.random dataOtherThan:cipher];
 
     [self.database setCipherKey:cipher];
     TestCaseAssertTrue([self.database canOpen]);
@@ -165,7 +165,7 @@
 
 - (void)test_cipher_with_page_size
 {
-    NSData* cipher = [NSData randomData];
+    NSData* cipher = self.random.data;
     int pageSize = 8 * 1024;
     int wrongPageSize = 16 * 1024;
 

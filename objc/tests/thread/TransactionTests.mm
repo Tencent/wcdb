@@ -66,7 +66,7 @@
                              andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT", @"ROLLBACK" ]
          asExpectedAfterModification:^BOOL {
              __block BOOL unexpected = NO;
-             [self.console disableSQLiteWrite];
+             [Console disableSQLiteWrite];
              if ([self.database runTransaction:^BOOL(WCTHandle* handle) {
                      if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
                          TESTCASE_FAILED
@@ -77,7 +77,7 @@
                  TESTCASE_FAILED
                  unexpected = YES;
              }
-             [self.console enableSQLiteWrite];
+             [Console enableSQLiteWrite];
              return !unexpected;
          }];
     TestCaseAssertTrue(result);
@@ -102,7 +102,7 @@
                              andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT", @"ROLLBACK" ]
          asExpectedAfterModification:^BOOL {
              BOOL unexpected = NO;
-             [self.console disableSQLiteWrite];
+             [Console disableSQLiteWrite];
              if ([self.database beginTransaction]) {
                  if (![self.database deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
                      TESTCASE_FAILED
@@ -116,7 +116,7 @@
                  TESTCASE_FAILED
                  unexpected = YES;
              }
-             [self.console enableSQLiteWrite];
+             [Console enableSQLiteWrite];
              return !unexpected;
          }];
     TestCaseAssertTrue(result);
@@ -178,7 +178,7 @@
                              andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT", @"ROLLBACK" ]
          asExpectedAfterModification:^BOOL {
              __block BOOL unexpected = NO;
-             [self.console disableSQLiteWrite];
+             [Console disableSQLiteWrite];
              if ([self.database runNestedTransaction:^BOOL(WCTHandle* handle) {
                      if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
                          TESTCASE_FAILED
@@ -189,7 +189,7 @@
                  TESTCASE_FAILED
                  unexpected = YES;
              }
-             [self.console enableSQLiteWrite];
+             [Console enableSQLiteWrite];
              return !unexpected;
          }];
     TestCaseAssertTrue(result);
@@ -214,7 +214,7 @@
                              andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT", @"ROLLBACK" ]
          asExpectedAfterModification:^BOOL {
              BOOL unexpected = NO;
-             [self.console disableSQLiteWrite];
+             [Console disableSQLiteWrite];
              if ([self.database beginNestedTransaction]) {
                  if (![self.database deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
                      TESTCASE_FAILED
@@ -228,7 +228,7 @@
                  TESTCASE_FAILED
                  unexpected = YES;
              }
-             [self.console enableSQLiteWrite];
+             [Console enableSQLiteWrite];
              return !unexpected;
          }];
     TestCaseAssertTrue(result);
@@ -312,7 +312,7 @@
          asExpectedAfterModification:^BOOL {
              WCTHandle* handle = [self.database getHandle];
              __block BOOL unexpected = NO;
-             [self.console disableSQLiteWrite];
+             [Console disableSQLiteWrite];
              if ([handle runTransaction:^BOOL(WCTHandle* handle) {
                      if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
                          TESTCASE_FAILED
@@ -323,7 +323,7 @@
                  TESTCASE_FAILED
                  unexpected = YES;
              }
-             [self.console enableSQLiteWrite];
+             [Console enableSQLiteWrite];
              return !unexpected;
          }];
     TestCaseAssertTrue(result);
@@ -350,7 +350,7 @@
          asExpectedAfterModification:^BOOL {
              WCTHandle* handle = [self.database getHandle];
              BOOL unexpected = NO;
-             [self.console disableSQLiteWrite];
+             [Console disableSQLiteWrite];
              if ([handle beginTransaction]) {
                  if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
                      TESTCASE_FAILED
@@ -364,7 +364,7 @@
                  TESTCASE_FAILED
                  unexpected = YES;
              }
-             [self.console enableSQLiteWrite];
+             [Console enableSQLiteWrite];
              return !unexpected;
          }];
     TestCaseAssertTrue(result);
@@ -430,7 +430,7 @@
          asExpectedAfterModification:^BOOL {
              WCTHandle* handle = [self.database getHandle];
              __block BOOL unexpected = NO;
-             [self.console disableSQLiteWrite];
+             [Console disableSQLiteWrite];
              if ([handle runNestedTransaction:^BOOL(WCTHandle* handle) {
                      if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
                          TESTCASE_FAILED
@@ -441,7 +441,7 @@
                  TESTCASE_FAILED
                  unexpected = YES;
              }
-             [self.console enableSQLiteWrite];
+             [Console enableSQLiteWrite];
              return !unexpected;
          }];
     TestCaseAssertTrue(result);
@@ -468,7 +468,7 @@
          asExpectedAfterModification:^BOOL {
              WCTHandle* handle = [self.database getHandle];
              BOOL unexpected = NO;
-             [self.console disableSQLiteWrite];
+             [Console disableSQLiteWrite];
              if ([handle beginNestedTransaction]) {
                  if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
                      TESTCASE_FAILED
@@ -482,7 +482,7 @@
                  TESTCASE_FAILED
                  unexpected = YES;
              }
-             [self.console enableSQLiteWrite];
+             [Console enableSQLiteWrite];
              return !unexpected;
          }];
     TestCaseAssertTrue(result);

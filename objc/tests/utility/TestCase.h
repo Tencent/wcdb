@@ -20,6 +20,7 @@
 
 #import "Console.h"
 #import "NSObject+TestCase.h"
+#import "Random.h"
 #import "TestCaseObject+WCTTableCoding.h"
 #import "TestCaseObject.h"
 #import "TestLog.h"
@@ -46,7 +47,7 @@
 
 @property (nonatomic, readonly) NSFileManager* fileManager;
 
-@property (nonatomic, readonly) Console* console;
+@property (nonatomic, readonly) Random* random;
 
 - (void)refreshDirectory;
 

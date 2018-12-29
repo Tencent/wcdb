@@ -62,7 +62,7 @@
     for (int i = 0; i < self.fillStep; ++i) {
         TestCaseObject* object = [[TestCaseObject alloc] init];
         object.isAutoIncrement = YES;
-        object.content = [NSString randomString];
+        object.content = self.random.string;
         [objects addObject:object];
     }
 
@@ -77,8 +77,8 @@
 
         if (![self.database runTransaction:^BOOL(WCTHandle* handle) {
                 if (currentTable == nil
-                    || [NSNumber randomBool]) {
-                    currentTable = [NSString stringWithFormat:@"t_%@", [NSString randomString]];
+                    || self.random.boolean) {
+                    currentTable = [NSString stringWithFormat:@"t_%@", self.random.string];
                     if (![self.database createTableAndIndexes:currentTable withClass:TestCaseObject.class]) {
                         return NO;
                     }

@@ -104,14 +104,14 @@
                    }
 
                    [self.handle bindInteger32:3 toIndex:1];
-                   [self.handle bindString:[NSString randomString] toIndex:2];
+                   [self.handle bindString:self.random.string toIndex:2];
                    if (![self.handle step]) {
                        return NO;
                    }
 
                    [self.handle reset];
                    [self.handle bindInteger32:4 toIndex:1];
-                   [self.handle bindString:[NSString randomString] toIndex:2];
+                   [self.handle bindString:self.random.string toIndex:2];
                    BOOL done;
                    BOOL result = [self.handle step:done];
                    [self.handle finalizeStatement];
@@ -145,7 +145,7 @@
 
 - (void)test_get_last_inserted
 {
-    WCDB::StatementInsert statement = WCDB::StatementInsert().insertIntoTable(self.tableName).column(WCDB::Column(@"identifier")).column(WCDB::Column(@"content")).value(nullptr).value([NSString randomString]);
+    WCDB::StatementInsert statement = WCDB::StatementInsert().insertIntoTable(self.tableName).column(WCDB::Column(@"identifier")).column(WCDB::Column(@"content")).value(nullptr).value(self.random.string);
     TestCaseAssertTrue([self.handle execute:statement]);
     TestCaseAssertEqual([self.handle getLastInsertedRowID], 3);
 }
@@ -153,7 +153,7 @@
 #pragma mark - Bind && Get
 - (void)test_integer32
 {
-    int32_t value = [NSNumber randomInt32];
+    int32_t value = self.random.int32;
     {
         TestCaseAssertTrue([self.handle prepare:self.statementInsert]);
         [self.handle bindInteger32:value toIndex:1];
@@ -171,7 +171,7 @@
 
 - (void)test_integer64
 {
-    int64_t value = [NSNumber randomInt64];
+    int64_t value = self.random.int64;
     {
         TestCaseAssertTrue([self.handle prepare:self.statementInsert]);
         [self.handle bindInteger64:value toIndex:1];
@@ -189,7 +189,7 @@
 
 - (void)test_double
 {
-    double value = [NSNumber randomDouble];
+    double value = self.random.double_;
     {
         TestCaseAssertTrue([self.handle prepare:self.statementInsert]);
         [self.handle bindDouble:value toIndex:1];
@@ -201,8 +201,7 @@
         TestCaseAssertTrue([self.handle prepare:self.statementSelect]);
         TestCaseAssertTrue([self.handle step]);
 
-        double epsilon = std::numeric_limits<double>::epsilon();
-        TestCaseAssertTrue(fabs([self.handle extractDoubleAtIndex:0] - value) < epsilon);
+        TestCaseAssertTrue([NSNumber value:[self.handle extractDoubleAtIndex:0] almostEqual:value]);
         [self.handle finalizeStatement];
     }
 }
@@ -226,7 +225,7 @@
 
 - (void)test_string
 {
-    NSString* value = [NSString randomString];
+    NSString* value = self.random.string;
     TestCaseAssertTrue(value != nil);
     {
         TestCaseAssertTrue([self.handle prepare:self.statementInsert]);
@@ -245,7 +244,7 @@
 
 - (void)test_number
 {
-    NSNumber* value = [NSNumber randomNumber];
+    NSNumber* value = self.random.number;
     TestCaseAssertTrue(value != nil);
     {
         TestCaseAssertTrue([self.handle prepare:self.statementInsert]);
@@ -257,15 +256,15 @@
     {
         TestCaseAssertTrue([self.handle prepare:self.statementSelect]);
         TestCaseAssertTrue([self.handle step]);
-        double epsilon = std::numeric_limits<double>::epsilon();
-        TestCaseAssertTrue(fabs([self.handle extractNumberAtIndex:0].doubleValue - value.doubleValue) < epsilon);
+
+        TestCaseAssertTrue([value almostEqual:[self.handle extractNumberAtIndex:0]]);
         [self.handle finalizeStatement];
     }
 }
 
 - (void)test_data
 {
-    NSData* value = [NSData randomData];
+    NSData* value = self.random.data;
     TestCaseAssertTrue(value != nil);
     {
         TestCaseAssertTrue([self.handle prepare:self.statementInsert]);
@@ -284,7 +283,7 @@
 
 - (void)test_meta
 {
-    NSData* value = [NSData randomData];
+    NSData* value = self.random.data;
     {
         TestCaseAssertTrue([self.handle prepare:self.statementInsert]);
         [self.handle bindData:value toIndex:1];

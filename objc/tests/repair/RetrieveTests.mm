@@ -156,7 +156,7 @@
 - (void)test_retrieve_all_types
 {
     self.tableClass = AllTypesObject.class;
-    self.tableName = [NSString stringWithFormat:@"t_%@", [NSString randomString]];
+    self.tableName = [NSString stringWithFormat:@"t_%@", self.random.string];
     TestCaseAssertTrue([self createTable]);
 
     AllTypesObject* maxObject = [AllTypesObject maxObject];

@@ -182,7 +182,7 @@
 
     TestCaseObject* object = [[TestCaseObject alloc] init];
     object.isAutoIncrement = YES;
-    object.content = [NSString randomString];
+    object.content = self.random.string;
 
     while ([self getWalFrameCount] < self.checkpointFramesThresholdForCritical) {
         TestCaseAssertTrue([self.table insertObject:object]);
@@ -202,7 +202,7 @@
 
     TestCaseObject* object = [[TestCaseObject alloc] init];
     object.isAutoIncrement = YES;
-    object.content = [NSString randomString];
+    object.content = self.random.string;
 
     while ([self getWalFrameCount] < self.checkpointFramesThresholdForTruncating) {
         TestCaseAssertTrue([self.table insertObject:object]);
@@ -222,7 +222,7 @@
 
     TestCaseObject* object = [[TestCaseObject alloc] init];
     object.isAutoIncrement = YES;
-    object.content = [NSString randomString];
+    object.content = self.random.string;
 
     while ([self getWalFrameCount] < self.checkpointFramesThresholdForCritical) {
         TestCaseAssertTrue([self.table insertObject:object]);
@@ -230,9 +230,9 @@
 
     BOOL result = [self checkAllSQLsInAllThreads:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')", @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
                            asExpectedInOperation:^BOOL {
-                               [self.console disableSQLiteWrite];
+                               [Console disableSQLiteWrite];
                                [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
-                               [self.console enableSQLiteWrite];
+                               [Console enableSQLiteWrite];
                                [NSThread sleepForTimeInterval:self.checkpointDelayForRetryingAfterFailure + self.delayForTolerance];
                                return YES;
                            }];

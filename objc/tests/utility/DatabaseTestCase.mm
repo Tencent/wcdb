@@ -33,7 +33,7 @@
 
     int tag;
     do {
-        tag = [NSNumber randomInt32];
+        tag = self.random.int32;
     } while (tag == 0);
     _database.tag = tag;
 

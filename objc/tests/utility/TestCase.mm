@@ -22,22 +22,6 @@
 
 @implementation TestCase
 
-+ (void)initialize
-{
-    if (self.class == TestCase.class) {
-#ifdef DEBUG
-        WCTDatabase.debuggable = YES;
-#else
-        WCTDatabase.debuggable = NO;
-#endif
-
-#ifdef DEBUG
-        [[Console shared] enableSQLTrace];
-#endif
-        [[Console shared] resetRandomSeedByCurrentTime];
-    }
-}
-
 - (void)log:(NSString *)format, ...
 {
     va_list ap;
@@ -52,6 +36,16 @@
 {
     [super setUp];
 
+#ifdef DEBUG
+    WCTDatabase.debuggable = YES;
+#else
+    WCTDatabase.debuggable = NO;
+#endif
+
+    _random = [[Random alloc] init];
+
+    [Console enableSQLTrace];
+
     NSString *directory = self.directory;
     NSString *abbreviatedPath = directory.stringByAbbreviatingWithTildeInPath;
     if (abbreviatedPath.length > 0) {
@@ -59,16 +53,9 @@
     }
 
     if (WCTDatabase.debuggable) {
-        [self log:@"Debug"];
+        [self log:@"Debuggable"];
     }
     [self log:@"run at %@", self.directory];
-}
-
-- (void)tearDown
-{
-    [WCTDatabase globalTraceSQL:nil];
-
-    [super tearDown];
 }
 
 - (NSString *)testName
@@ -118,11 +105,6 @@
 - (NSFileManager *)fileManager
 {
     return [NSFileManager defaultManager];
-}
-
-- (Console *)console
-{
-    return [Console shared];
 }
 
 + (NSString *)hint:(NSString *)description expecting:(NSString *)expected

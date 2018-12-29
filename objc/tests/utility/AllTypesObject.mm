@@ -70,9 +70,9 @@ WCDB_PRIMARY(AllTypesObject, type)
     object.numberValue = [NSNumber numberWithDouble:std::numeric_limits<double>::max()];
     object.dateValue = [NSDate dateWithTimeIntervalSince1970:std::numeric_limits<double>::max()];
 
-    object.stringValue = [NSString randomString];
+    object.stringValue = @"";
 
-    object.dataValue = [NSData randomData];
+    object.dataValue = [NSData data];
     object.codingValue = [NSURL URLWithString:NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0]];
 
     return object;
@@ -98,9 +98,9 @@ WCDB_PRIMARY(AllTypesObject, type)
     object.numberValue = [NSNumber numberWithDouble:std::numeric_limits<double>::min()];
     object.dateValue = [NSDate dateWithTimeIntervalSince1970:std::numeric_limits<double>::min()];
 
-    object.stringValue = [NSString randomString];
+    object.stringValue = @"";
 
-    object.dataValue = [NSData randomData];
+    object.dataValue = [NSData data];
     object.codingValue = [NSURL URLWithString:NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0]];
 
     return object;

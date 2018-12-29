@@ -125,7 +125,7 @@
 {
     TestCaseObject *object = [[TestCaseObject alloc] init];
     object.isAutoIncrement = YES;
-    object.content = [NSString randomString];
+    object.content = self.random.string;
     TestCaseAssertTrue([self.table insertObject:object]);
 
     TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.firstMaterial]);
@@ -149,7 +149,7 @@
 
     TestCaseObject *object = [[TestCaseObject alloc] init];
     object.isAutoIncrement = YES;
-    object.content = [NSString randomString];
+    object.content = self.random.string;
 
     while ([self getWalFrameCount] < self.backupFramesIntervalForNonCritical - self.framesForTolerance) {
         TestCaseAssertTrue([self.table insertObject:object]);
@@ -171,7 +171,7 @@
 
     TestCaseObject *object = [[TestCaseObject alloc] init];
     object.isAutoIncrement = YES;
-    object.content = [NSString randomString];
+    object.content = self.random.string;
 
     while ([self getWalFrameCount] < self.backupFramesIntervalForCritical - self.framesForTolerance) {
         TestCaseAssertTrue([self.table insertObject:object]);

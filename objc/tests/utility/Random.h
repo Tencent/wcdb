@@ -19,31 +19,32 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCDB.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface NSObject (TestCase)
+@interface Random : NSObject
 
-+ (BOOL)isObject:(NSObject*)left nilEqualToObject:(NSObject*)right;
+@property (nonatomic, assign) uint32_t seed;
 
-@end
+- (uint64_t)uint64;
+- (uint32_t)uint32;
+- (uint8_t)uint8;
 
-@interface NSArray (TestCase)
+- (int64_t)int64;
+- (int32_t)int32;
 
-- (NSArray*)reversedArray;
+- (double)double_;
+- (float)float_;
+- (float)float_0_1;
 
-@end
+- (BOOL)boolean;
 
-@interface NSNumber (TestCase)
+- (NSNumber*)number;
+- (NSString*)string;
+- (NSData*)data;
 
-+ (BOOL)value:(double)left almostEqual:(double)right;
-
-- (BOOL)almostEqual:(NSNumber*)number;
-
-@end
-
-@interface WCTPerformanceFootprint (TestCase)
+- (NSData*)dataWithLength:(NSInteger)length;
+- (NSData*)dataOtherThan:(NSData*)other;
 
 @end
 

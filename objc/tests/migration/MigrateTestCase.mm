@@ -158,13 +158,13 @@
         }
     }];
 
-    [self.console disableSQLiteWrite];
+    [Console disableSQLiteWrite];
     self.database.autoMigrate = YES;
 
     // wait until auto migrate stopped
     while (failures < WCDB::MigrationQueueTolerableFailures)
         ;
-    [self.console enableSQLiteWrite];
+    [Console enableSQLiteWrite];
 
     __block BOOL tested = YES;
     [self.database traceSQL:^(NSString *sql) {

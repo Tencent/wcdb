@@ -41,7 +41,7 @@
     for (int i = 0; i < 100; ++i) {
         TestCaseObject* object = [[TestCaseObject alloc] init];
         object.identifier = i + 1;
-        object.content = [NSString randomString];
+        object.content = self.random.string;
         [objects addObject:object];
     }
     _objects = objects;

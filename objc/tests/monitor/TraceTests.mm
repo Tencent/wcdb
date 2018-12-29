@@ -61,7 +61,7 @@
     for (int i = 0; i < 10000; ++i) {
         TestCaseObject* object = [[TestCaseObject alloc] init];
         object.isAutoIncrement = YES;
-        object.content = [NSString randomString];
+        object.content = self.random.string;
         [objects addObject:object];
     }
 
@@ -107,9 +107,9 @@
     TestCaseAssertTrue([self.database canOpen]);
 
     start = YES;
-    [self.console disableSQLiteWrite];
+    [Console disableSQLiteWrite];
     TestCaseAssertFalse([self createTable]);
-    [self.console enableSQLiteWrite];
+    [Console enableSQLiteWrite];
 
     TestCaseAssertTrue(tested);
     [WCTDatabase resetGlobalErrorTracer];
@@ -140,7 +140,7 @@
     for (int i = 0; i < 10000; ++i) {
         TestCaseObject* object = [[TestCaseObject alloc] init];
         object.isAutoIncrement = YES;
-        object.content = [NSString randomString];
+        object.content = self.random.string;
         [objects addObject:object];
     }
 

@@ -56,12 +56,12 @@
 
 - (int)getRealStep
 {
-    return self.step + ([NSNumber randomUInt32] % self.shuffle) * [NSNumber randomBool] ? 1 : -1;
+    return self.step + (self.random.uint32 % self.shuffle) * self.random.boolean ? 1 : -1;
 }
 
 - (BOOL)shouldAttack
 {
-    return [NSNumber random_0_1] < self.expectedAttackRadio;
+    return self.random.float_0_1 < self.expectedAttackRadio;
 }
 
 - (BOOL)isToleranceForRetrieveScore:(double)retrieveScore
@@ -99,10 +99,10 @@
 {
     NSString* currentTable = nil;
     BOOL checkpointed = NO; // leave wal exists
-    [self.console disableSQLTrace];
+    [Console disableSQLTrace];
     while (checkpointed || [self.database getFilesSize] < self.expectedDatabaseSize) {
-        if (currentTable == nil || [NSNumber randomUInt8] % 10 == 0) {
-            currentTable = [NSString stringWithFormat:@"%@%@", self.tablePrefix, [NSString randomString]];
+        if (currentTable == nil || self.random.uint8 % 10 == 0) {
+            currentTable = [NSString stringWithFormat:@"%@%@", self.tablePrefix, self.random.string];
             if (![self.database createTableAndIndexes:currentTable withClass:TestCaseObject.class]) {
                 TESTCASE_FAILED
                 return NO;
@@ -112,19 +112,19 @@
         NSMutableArray<TestCaseObject*>* objects = [NSMutableArray<TestCaseObject*> array];
         int count = 0;
         do {
-            count = [NSNumber randomUInt8];
+            count = self.random.uint8;
         } while (count == 0);
         for (int i = 0; i < count; ++i) {
             TestCaseObject* object = [[TestCaseObject alloc] init];
             object.isAutoIncrement = YES;
-            object.content = [NSString randomString];
+            object.content = self.random.string;
             [objects addObject:object];
         }
         if (![self.database insertObjects:objects intoTable:currentTable]) {
             TESTCASE_FAILED
             return NO;
         }
-        if ([NSNumber randomUInt8] % 10 == 0) {
+        if (self.random.uint8 % 10 == 0) {
             if (![self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("TRUNCATE")]) {
                 TESTCASE_FAILED
                 return NO;
@@ -134,7 +134,7 @@
             checkpointed = NO;
         }
     }
-    [self.console enableSQLTrace];
+    [Console enableSQLTrace];
     if (![self.fileManager fileExistsAtPath:self.walPath]) {
         TESTCASE_FAILED
         return NO;
@@ -189,7 +189,7 @@
             {
                 if ([self shouldAttack]) {
                     [fileHandle seekToFileOffset:i * self.pageSize];
-                    [fileHandle writeData:[NSData randomDataWithLength:self.pageSize]];
+                    [fileHandle writeData:[self.random dataWithLength:self.pageSize]];
                     ++totalAttackedCount;
                 }
             }
@@ -214,7 +214,7 @@
             {
                 if ([self shouldAttack]) {
                     [fileHandle seekToFileOffset:i * self.walFrameSize + self.walHeaderSize];
-                    [fileHandle writeData:[NSData randomDataWithLength:self.walFrameSize]];
+                    [fileHandle writeData:[self.random dataWithLength:self.walFrameSize]];
                     ++totalAttackedCount;
                 }
             }

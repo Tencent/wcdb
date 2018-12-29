@@ -38,11 +38,11 @@
 
     _object1InTable2 = [[TestCaseObject alloc] init];
     _object1InTable2.identifier = 1;
-    _object1InTable2.content = [NSString randomString];
+    _object1InTable2.content = self.random.string;
 
     _object2InTable2 = [[TestCaseObject alloc] init];
     _object2InTable2.identifier = 2;
-    _object2InTable2.content = [NSString randomString];
+    _object2InTable2.content = self.random.string;
 
     _objectsInTable2 = @[ _object1InTable2, _object2InTable2 ];
 

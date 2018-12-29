@@ -46,7 +46,7 @@
     TestCaseObject* newObject = [[TestCaseObject alloc] init];
     newObject.isAutoIncrement = YES;
     newObject.identifier = self.objects.lastObject.identifier + 1;
-    newObject.content = [NSString randomString];
+    newObject.content = self.random.string;
     NSMutableArray<TestCaseObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
     [expectedObjects addObject:newObject];
 
@@ -70,7 +70,7 @@
 {
     TestCaseObject* newObject = [[TestCaseObject alloc] init];
     newObject.identifier = self.objects.lastObject.identifier;
-    newObject.content = [NSString randomString];
+    newObject.content = self.random.string;
     NSMutableArray<TestCaseObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
     [expectedObjects removeLastObject];
     [expectedObjects addObject:newObject];
@@ -95,7 +95,7 @@
 {
     TestCaseObject* newObject = [[TestCaseObject alloc] init];
     newObject.identifier = self.objects.lastObject.identifier;
-    newObject.content = [NSString randomString];
+    newObject.content = self.random.string;
 
     TestCaseAssertFalse([self.table insertObject:newObject]);
 }
@@ -124,7 +124,7 @@
     TestCaseObject* secondObject = [expectedObjects objectAtIndex:2];
     TestCaseObject* newSecondObject = [[TestCaseObject alloc] init];
     newSecondObject.identifier = secondObject.identifier;
-    newSecondObject.content = [NSString randomString];
+    newSecondObject.content = self.random.string;
     [expectedObjects setObject:newSecondObject atIndexedSubscript:2];
 
     NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
@@ -189,7 +189,7 @@
     NSMutableArray<TestCaseObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
     TestCaseObject* newObject = [[TestCaseObject alloc] init];
     newObject.identifier = expectedObjects.lastObject.identifier;
-    newObject.content = [NSString randomString];
+    newObject.content = self.random.string;
     [expectedObjects removeLastObject];
     [expectedObjects addObject:newObject];
 
