@@ -42,7 +42,7 @@
 
     _configForSize = 100 * 1024 * 1024; // 100MB
 
-    _tolerablePercentageForFileSize = 0.01f;
+    _tolerablePercentageForFileSize = 0.03f;
 
     _fillStep = 10000;
 
