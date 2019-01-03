@@ -38,7 +38,6 @@
     _lastMaterial = [self.database.path stringByAppendingString:@"-last.material"];
 
     [self.factory setProductionLineFileSizeInMB:100];
-    [self.database removeConfigForName:WCTConfigNameCheckpoint];
 }
 
 - (void)test_backup
