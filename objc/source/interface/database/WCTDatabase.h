@@ -43,7 +43,7 @@ typedef void (^WCTCloseBlock)(void);
  */
 - (instancetype)initWithPath:(NSString *)path NS_DESIGNATED_INITIALIZER;
 
-- (nullable instancetype)initWithExistingPath:(NSString *)path NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithExistingDatabaseByPath:(NSString *)path NS_DESIGNATED_INITIALIZER;
 
 /**
  
@@ -53,7 +53,7 @@ typedef void (^WCTCloseBlock)(void);
  @param tag a tag already exists. Note that 0 is not a valid tag.
  @return nil if the tag do not exists
  */
-- (nullable instancetype)initWithExistingTag:(WCTTag)tag NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithExistingDatabaseByTag:(WCTTag)tag NS_DESIGNATED_INITIALIZER;
 
 - (void)invalidate;
 

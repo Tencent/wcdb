@@ -101,7 +101,7 @@
     return self;
 }
 
-- (instancetype)initWithExistingPath:(NSString *)path
+- (instancetype)initWithExistingDatabaseByPath:(NSString *)path
 {
     if (self = [super init]) {
         _databaseHolder = WCDB::Core::shared()->getExistingDatabase(path);
@@ -113,7 +113,7 @@
     return self;
 }
 
-- (instancetype)initWithExistingTag:(WCTTag)tag
+- (instancetype)initWithExistingDatabaseByTag:(WCTTag)tag
 {
     if (self = [super init]) {
         _databaseHolder = WCDB::Core::shared()->getExistingDatabase(tag);
