@@ -115,4 +115,35 @@
     TestCaseAssertTrue([main compare:subthread] == NSOrderedAscending);
 }
 
+- (void)test_readonly
+{
+    NSString* tableName = @"testTable";
+
+    TestCaseObject* object = [[TestCaseObject alloc] init];
+    object.isAutoIncrement = YES;
+    object.content = self.random.string;
+
+    TestCaseAssertTrue([self.database createTableAndIndexes:tableName withClass:TestCaseObject.class]);
+    TestCaseAssertTrue([self.database insertObject:object intoTable:tableName]);
+
+    [self.database close:^{
+        for (NSString* path in self.database.paths) {
+            if ([self.fileManager fileExistsAtPath:path]) {
+                TestCaseAssertTrue([self.fileManager setAttributes:@{NSFileImmutable : @(YES)} ofItemAtPath:path error:nil]);
+            }
+        }
+    }];
+
+    TestCaseAssertTrue([self.database canOpen]);
+    TestCaseAssertTrue([self.database getObjectOfClass:TestCaseObject.class fromTable:tableName] != nil);
+    TestCaseAssertFalse([self.database insertObject:object intoTable:tableName]);
+
+    // reset attribute
+    for (NSString* path in self.database.paths) {
+        if ([self.fileManager fileExistsAtPath:path]) {
+            TestCaseAssertTrue([self.fileManager setAttributes:@{NSFileImmutable : @(NO)} ofItemAtPath:path error:nil]);
+        }
+    }
+}
+
 @end
