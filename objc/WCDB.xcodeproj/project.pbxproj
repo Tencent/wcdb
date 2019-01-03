@@ -217,7 +217,7 @@
 		235144F821D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
 		235144F921D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
 		2351450021D7564700FF639C /* BenchmarkObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144FE21D7564700FF639C /* BenchmarkObject.mm */; };
-		2351450121D7564700FF639C /* BenchmarkDatabaseFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144FF21D7564700FF639C /* BenchmarkDatabaseFactory.mm */; };
+		2351450121D7564700FF639C /* BenchmarkFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144FF21D7564700FF639C /* BenchmarkFactory.mm */; };
 		23567CFA20CA3889005F1C35 /* Frame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23567CF820CA3889005F1C35 /* Frame.cpp */; };
 		23567CFC20CA3889005F1C35 /* Frame.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567CF920CA3889005F1C35 /* Frame.hpp */; };
 		23567D4720CA7DBC005F1C35 /* ErrorProne.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567D4520CA7DBC005F1C35 /* ErrorProne.hpp */; };
@@ -1350,11 +1350,11 @@
 		234EF46D2015CFDE00B81929 /* WCTConvertible.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTConvertible.mm; sourceTree = "<group>"; };
 		235144EC21D710C900FF639C /* Random.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Random.h; sourceTree = "<group>"; };
 		235144ED21D710C900FF639C /* Random.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Random.mm; sourceTree = "<group>"; };
-		235144FB21D7564700FF639C /* BenchmarkDatabaseFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BenchmarkDatabaseFactory.h; sourceTree = "<group>"; };
+		235144FB21D7564700FF639C /* BenchmarkFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BenchmarkFactory.h; sourceTree = "<group>"; };
 		235144FC21D7564700FF639C /* BenchmarkObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BenchmarkObject.h; sourceTree = "<group>"; };
 		235144FD21D7564700FF639C /* BenchmarkObject+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BenchmarkObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		235144FE21D7564700FF639C /* BenchmarkObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BenchmarkObject.mm; sourceTree = "<group>"; };
-		235144FF21D7564700FF639C /* BenchmarkDatabaseFactory.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BenchmarkDatabaseFactory.mm; sourceTree = "<group>"; };
+		235144FF21D7564700FF639C /* BenchmarkFactory.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BenchmarkFactory.mm; sourceTree = "<group>"; };
 		23567CF820CA3889005F1C35 /* Frame.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Frame.cpp; sourceTree = "<group>"; };
 		23567CF920CA3889005F1C35 /* Frame.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Frame.hpp; sourceTree = "<group>"; };
 		23567D4520CA7DBC005F1C35 /* ErrorProne.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ErrorProne.hpp; sourceTree = "<group>"; };
@@ -1547,6 +1547,7 @@
 		2385468B21DD918600C619B4 /* ThreadBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ThreadBenchmark.mm; sourceTree = "<group>"; };
 		2385468D21DD918D00C619B4 /* MigrationBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MigrationBenchmark.mm; sourceTree = "<group>"; };
 		2385468F21DD91A200C619B4 /* OtherBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OtherBenchmark.mm; sourceTree = "<group>"; };
+		238546AA21DDA54100C619B4 /* BaselineBenchmark.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaselineBenchmark.h; sourceTree = "<group>"; };
 		2386563C219C009E00F7F6D2 /* FileTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FileTests.mm; sourceTree = "<group>"; };
 		2386563E219C00A500F7F6D2 /* MemoryTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MemoryTests.mm; sourceTree = "<group>"; };
 		23865640219C213200F7F6D2 /* TransactionTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TransactionTests.mm; sourceTree = "<group>"; };
@@ -3553,8 +3554,8 @@
 		23FC43E521B6644B00FA1A0F /* benchmark */ = {
 			isa = PBXGroup;
 			children = (
-				235144FB21D7564700FF639C /* BenchmarkDatabaseFactory.h */,
-				235144FF21D7564700FF639C /* BenchmarkDatabaseFactory.mm */,
+				235144FB21D7564700FF639C /* BenchmarkFactory.h */,
+				235144FF21D7564700FF639C /* BenchmarkFactory.mm */,
 				235144FC21D7564700FF639C /* BenchmarkObject.h */,
 				235144FE21D7564700FF639C /* BenchmarkObject.mm */,
 				235144FD21D7564700FF639C /* BenchmarkObject+WCTTableCoding.h */,
@@ -3562,6 +3563,7 @@
 				23FC43E721B6644B00FA1A0F /* Benchmark.h */,
 				23FC01DC21B8B716002C7F87 /* RepairBenchmark.mm */,
 				2385468721DD917500C619B4 /* BaselineBenchmark.mm */,
+				238546AA21DDA54100C619B4 /* BaselineBenchmark.h */,
 				2385468921DD917F00C619B4 /* CipherBenchmark.mm */,
 				2385468B21DD918600C619B4 /* ThreadBenchmark.mm */,
 				2385468D21DD918D00C619B4 /* MigrationBenchmark.mm */,
@@ -5000,7 +5002,7 @@
 				2351450021D7564700FF639C /* BenchmarkObject.mm in Sources */,
 				235144F921D710C900FF639C /* Random.mm in Sources */,
 				23FC43CC21B6631200FA1A0F /* CRUDTestCase.mm in Sources */,
-				2351450121D7564700FF639C /* BenchmarkDatabaseFactory.mm in Sources */,
+				2351450121D7564700FF639C /* BenchmarkFactory.mm in Sources */,
 				23FC43CE21B6631200FA1A0F /* TableTestCase.mm in Sources */,
 				23FC01DD21B8B716002C7F87 /* RepairBenchmark.mm in Sources */,
 				23FC43CF21B6631200FA1A0F /* AllTypesObject.mm in Sources */,

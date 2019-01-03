@@ -18,24 +18,14 @@
  * limitations under the License.
  */
 
-#import "BenchmarkObject+WCTTableCoding.h"
-#import "BenchmarkObject.h"
+#import "Benchmark.h"
 
-NS_ASSUME_NONNULL_BEGIN
+@interface BaselineBenchmark : Benchmark
 
-@interface BenchmarkDatabaseFactory : NSObject
+- (void)doTestWrite;
 
-- (instancetype)initWithDirectory:(NSString*)directory;
+- (void)doTestRead;
 
-@property (nonatomic, readonly) NSString* directory;
-@property (nonatomic, assign) double tolerance;
-@property (nonatomic, assign) BOOL multiTables;
-
-- (void)setFileSizeInMB:(NSUInteger)fileSizeInMB;
-@property (nonatomic, assign) NSUInteger fileSize;
-
-- (BOOL)production:(NSString*)destination;
+- (void)doTestBatchWrite;
 
 @end
-
-NS_ASSUME_NONNULL_END

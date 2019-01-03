@@ -119,17 +119,14 @@
 
 - (BOOL)isPrepared
 {
-    WCDB::Handle *handle = [self getOrGenerateHandle];
-    if (!handle) {
-        return NO;
-    }
-    return handle->isPrepared();
+    return _handle != nullptr && _handle->isPrepared();
 }
 
 - (void)finalizeStatement
 {
-    WCTHandleAssert(return;);
-    _handle->finalize();
+    if (_handle) {
+        _handle->finalize();
+    }
 }
 
 #pragma mark - Step

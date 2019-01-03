@@ -18,12 +18,12 @@
  * limitations under the License.
  */
 
-#import "BenchmarkDatabaseFactory.h"
+#import "BenchmarkFactory.h"
 #import "DatabaseTestCase.h"
 
 @interface Benchmark : DatabaseTestCase
 
-@property (nonatomic, readonly) BenchmarkDatabaseFactory* factory;
+@property (nonatomic, readonly) BenchmarkFactory* factory;
 
 // tear down - set up - measure - check correctness - tear down
 - (void)measure:(void (^)(void))block

@@ -37,10 +37,8 @@
     _firstMaterial = [self.database.path stringByAppendingString:@"-first.material"];
     _lastMaterial = [self.database.path stringByAppendingString:@"-last.material"];
 
+    [self.factory setProductionLineFileSizeInMB:100];
     [self.database removeConfigForName:WCTConfigNameCheckpoint];
-
-    self.factory.multiTables = YES;
-    [self.factory setFileSizeInMB:100];
 }
 
 - (void)test_backup

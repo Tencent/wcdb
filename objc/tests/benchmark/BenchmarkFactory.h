@@ -18,12 +18,29 @@
  * limitations under the License.
  */
 
-#import "Benchmark.h"
+#import "BenchmarkObject+WCTTableCoding.h"
+#import "BenchmarkObject.h"
 
-@interface MigrationBenchmark : Benchmark
-
+@protocol BenchmarkFactoryPreparation <NSObject>
+@optional
+- (void)databaseWillStartPreparing:(WCTDatabase*)database;
 @end
 
-@implementation MigrationBenchmark
+@interface BenchmarkFactory : NSObject
+
+- (instancetype)initWithDirectory:(NSString*)directory;
+@property (nonatomic, readonly) NSString* directory;
+
+@property (nonatomic, assign) id<BenchmarkFactoryPreparation> delegate;
+
+@property (nonatomic, assign) double tolerance;
+
+@property (nonatomic, assign) BOOL renew;
+
+- (void)setProductionLineFileSizeInMB:(NSUInteger)fileSizeInMB;
+- (void)setProductionLineObjects:(NSUInteger)numberOfObjects;
+- (void)setProductionLineTables:(NSUInteger)numberOfTables;
+
+- (BOOL)production:(NSString*)destination;
 
 @end

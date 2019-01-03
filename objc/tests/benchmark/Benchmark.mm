@@ -29,7 +29,7 @@
     WCTDatabase.debuggable = NO;
     [Console disableSQLTrace];
 
-    _factory = [[BenchmarkDatabaseFactory alloc] initWithDirectory:[self.root stringByAppendingPathComponent:@"factory"]];
+    _factory = [[BenchmarkFactory alloc] initWithDirectory:[self.root stringByAppendingPathComponent:@"factory"]];
 }
 
 - (void)tearDown
