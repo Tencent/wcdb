@@ -418,19 +418,6 @@ void AbstractHandle::unsetNotificationWhenCommitted(const String &name)
     m_notification.unsetNotificationWhenCommitted(name);
 }
 
-bool AbstractHandle::setNotificationWhenWillCheckpoint(
-int order, const String &name, const WCDB::AbstractHandle::WillCheckpointNotification &willCheckpoint)
-{
-    WCTInnerAssert(isOpened());
-    return m_notification.setNotificationWhenWillCheckpoint(order, name, willCheckpoint);
-}
-
-bool AbstractHandle::unsetNotificationWhenWillCheckpoint(const String &name)
-{
-    WCTInnerAssert(isOpened());
-    return m_notification.unsetNotificationWhenWillCheckpoint(name);
-}
-
 bool AbstractHandle::setNotificationWhenCheckpointed(const String &name,
                                                      const CheckpointedNotification &checkpointed)
 {

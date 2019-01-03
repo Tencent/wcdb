@@ -43,7 +43,6 @@ void HandleNotification::purge()
     }
 
     set = isCheckpointNotificationSet();
-    m_willCheckpointNotifications.clear();
     m_checkpointedNotifications.clear();
     if (set && isOpened) {
         setupCheckpointNotification();
@@ -233,24 +232,19 @@ void HandleNotification::dispatchCommittedNotification(int frames)
 #pragma mark - Checkpoint
 bool HandleNotification::isCheckpointNotificationSet() const
 {
-    return !m_willCheckpointNotifications.elements().empty()
-           || !m_checkpointedNotifications.empty();
+    return !m_checkpointedNotifications.empty();
 }
 
 bool HandleNotification::setupCheckpointNotification(bool ignorable)
 {
     int rc = SQLITE_OK;
-    if (!m_willCheckpointNotifications.elements().empty()
-        || !m_checkpointedNotifications.empty()) {
+    if (!m_checkpointedNotifications.empty()) {
         rc = sqlite3_wal_checkpoint_handler(
         (sqlite3 *) getRawHandle(),
-        [](void *p, int rc) -> int {
+        [](void *p) -> void {
             HandleNotification *notification
             = reinterpret_cast<HandleNotification *>(p);
-            if (notification->dispatchCheckpointNotification(rc)) {
-                return SQLITE_OK;
-            }
-            return SQLITE_ABORT;
+            notification->dispatchCheckpointNotification();
         },
         this);
     } else {
@@ -261,56 +255,6 @@ bool HandleNotification::setupCheckpointNotification(bool ignorable)
     }
     setError(rc);
     return false;
-}
-
-bool HandleNotification::setNotificationWhenWillCheckpoint(
-int order, const String &name, const WillCheckpointNotification &willCheckpoint, bool ignorable)
-{
-    WCTInnerAssert(willCheckpoint != nullptr);
-    const auto *element = m_willCheckpointNotifications.find(name);
-    int oldOrder = 0;
-    WillCheckpointNotification oldNotification = nullptr;
-    if (element != nullptr) {
-        oldOrder = element->order;
-        oldNotification = element->value;
-    }
-    bool stateBefore = isCheckpointNotificationSet();
-    m_willCheckpointNotifications.insert(order, name, willCheckpoint);
-    bool stateAfter = isCheckpointNotificationSet();
-    if (stateBefore != stateAfter) {
-        if (!setupCheckpointNotification(ignorable)) {
-            //recover
-            if (oldNotification) {
-                m_willCheckpointNotifications.insert(oldOrder, name, oldNotification);
-            }
-            return false;
-        }
-    }
-    return true;
-}
-
-bool HandleNotification::unsetNotificationWhenWillCheckpoint(const String &name, bool ignorable)
-{
-    const auto *element = m_willCheckpointNotifications.find(name);
-    int oldOrder = 0;
-    WillCheckpointNotification oldNotification = nullptr;
-    if (element != nullptr) {
-        oldOrder = element->order;
-        oldNotification = element->value;
-    }
-    bool stateBefore = isCheckpointNotificationSet();
-    m_willCheckpointNotifications.erase(name);
-    bool stateAfter = isCheckpointNotificationSet();
-    if (stateBefore != stateAfter) {
-        if (!setupCheckpointNotification(ignorable)) {
-            //recover
-            if (oldNotification) {
-                m_willCheckpointNotifications.insert(oldOrder, name, oldNotification);
-            }
-            return false;
-        }
-    }
-    return true;
 }
 
 bool HandleNotification::setNotificationWhenCheckpointed(
@@ -340,23 +284,12 @@ const String &name, const CheckpointedNotification &checkpointed, bool ignorable
     return true;
 }
 
-bool HandleNotification::dispatchCheckpointNotification(int rc)
+void HandleNotification::dispatchCheckpointNotification()
 {
     WCTInnerAssert(isCheckpointNotificationSet());
-    if (rc < 0) {
-        // will checkpoint
-        for (const auto &element : m_willCheckpointNotifications.elements()) {
-            if (!element.value(m_handle->getPath())) {
-                return false;
-            }
-        }
-    } else {
-        // checkpointed
-        for (const auto &element : m_checkpointedNotifications) {
-            element.second(m_handle->getPath(), rc);
-        }
+    for (const auto &element : m_checkpointedNotifications) {
+        element.second(m_handle->getPath());
     }
-    return true;
 }
 
 } //namespace WCDB

@@ -154,11 +154,6 @@ public:
                                       const String &name,
                                       const CommittedNotification &onCommitted);
 
-    typedef HandleNotification::WillCheckpointNotification WillCheckpointNotification;
-    bool setNotificationWhenWillCheckpoint(int order,
-                                           const String &name,
-                                           const WillCheckpointNotification &willCheckpoint);
-    bool unsetNotificationWhenWillCheckpoint(const String &name);
     typedef HandleNotification::CheckpointedNotification CheckpointedNotification;
     bool setNotificationWhenCheckpointed(const String &name,
                                          const CheckpointedNotification &checkpointed);

@@ -77,4 +77,9 @@ void CheckpointQueue::put(const String& path, double delay, int frames)
     }
 }
 
+void CheckpointQueue::remove(const String& path)
+{
+    m_timedQueue.remove(path);
+}
+
 } // namespace WCDB

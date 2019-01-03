@@ -39,8 +39,7 @@ bool BackupConfig::invoke(Handle *handle)
         return false;
     }
     bool result = handle->setNotificationWhenCheckpointed(
-    m_identifier,
-    std::bind(&BackupConfig::checkpointed, this, std::placeholders::_1, std::placeholders::_2));
+    m_identifier, std::bind(&BackupConfig::onCheckpointed, this, std::placeholders::_1));
     handle->rollbackTransaction();
     if (result) {
         handle->setNotificationWhenCommitted(
@@ -74,12 +73,10 @@ bool BackupConfig::onCommitted(const String &path, int frames)
     return true;
 }
 
-void BackupConfig::checkpointed(const String &path, int rc)
+void BackupConfig::onCheckpointed(const String &path)
 {
-    if (rc == (int) Error::Code::OK) {
-        // back up immediately if checkpointed
-        m_queue->put(path, BackupConfigDelayForCritical, 0);
-    }
+    // back up immediately if checkpointed
+    m_queue->put(path, BackupConfigDelayForCritical, 0);
 }
 
 } //namespace WCDB

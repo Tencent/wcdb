@@ -239,6 +239,22 @@
     TestCaseAssertTrue(result);
 }
 
+- (void)test_feature_stop_subthread_checkpoint_when_manual_checkpoint
+{
+    // trigger subthread checkpoint
+    TestCaseAssertTrue([self createTable]);
+
+    BOOL result = [self checkAllSQLsInAllThreads:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
+                           asExpectedInOperation:^BOOL {
+                               if (![self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with(@"PASSIVE")]) {
+                                   return NO;
+                               }
+                               [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + self.delayForTolerance];
+                               return YES;
+                           }];
+    TestCaseAssertTrue(result);
+}
+
 - (void)test_feature_threaded_handle
 {
     __block int handleCount = 0;

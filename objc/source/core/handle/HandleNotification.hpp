@@ -91,15 +91,7 @@ protected:
 
 #pragma mark - Checkpoint
 public:
-    //checkpoint will abort if any notification return false
-    typedef std::function<bool(const String &)> WillCheckpointNotification;
-    bool setNotificationWhenWillCheckpoint(int order,
-                                           const String &name,
-                                           const WillCheckpointNotification &willCheckpoint,
-                                           bool ignorable = false);
-    bool unsetNotificationWhenWillCheckpoint(const String &name, bool ignorable = false);
-
-    typedef std::function<void(const String &, int)> CheckpointedNotification;
+    typedef std::function<void(const String &)> CheckpointedNotification;
     bool setNotificationWhenCheckpointed(const String &name,
                                          const CheckpointedNotification &checkpointed,
                                          bool ignorable = false);
@@ -107,8 +99,7 @@ public:
 protected:
     bool isCheckpointNotificationSet() const;
     bool setupCheckpointNotification(bool ignorable = false);
-    bool dispatchCheckpointNotification(int rc);
-    OrderedUniqueList<String, WillCheckpointNotification> m_willCheckpointNotifications;
+    void dispatchCheckpointNotification();
     std::map<String, CheckpointedNotification> m_checkpointedNotifications;
 };
 
