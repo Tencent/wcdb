@@ -21,6 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/CoreConst.h>
 #include <WCDB/CorruptionQueue.hpp>
+#include <WCDB/Exiting.hpp>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Notifier.hpp>
 #include <vector>
@@ -45,7 +46,7 @@ CorruptionQueue::~CorruptionQueue()
 
 void CorruptionQueue::handleError(const Error& error)
 {
-    if (!error.isCorruption() || exit()) {
+    if (!error.isCorruption() || exiting()) {
         return;
     }
     const auto& infos = error.infos.getStrings();
@@ -77,7 +78,7 @@ void CorruptionQueue::handleError(const Error& error)
 
 void CorruptionQueue::loop()
 {
-    while (!exit()) {
+    while (!exiting()) {
         String path;
         uint32_t corruptedIdentifier;
         {

@@ -22,10 +22,8 @@
 #define _WCDB_CORRUPTIONQUEUE_HPP
 
 #include <WCDB/AsyncQueue.hpp>
-#include <WCDB/Lock.hpp>
-#include <WCDB/Time.hpp>
 #include <map>
-#include <mutex>
+#include <WCDB/
 
 namespace WCDB {
 
@@ -48,11 +46,9 @@ protected:
 
     void loop() override final;
 
-    mutable std::mutex m_mutex;
-    std::condition_variable m_cond;
+    void onTimed(const String& path);
 
     // path -> identifier
-    std::map<String, uint32_t> m_corrupted;
     std::map<uint32_t, SteadyClock> m_refractories;
 };
 

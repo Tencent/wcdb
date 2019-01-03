@@ -35,12 +35,6 @@ CheckpointQueue::CheckpointQueue(const String& name, CheckpointEvent* event)
 {
 }
 
-CheckpointQueue::~CheckpointQueue()
-{
-    m_timedQueue.stop();
-    m_timedQueue.waitUntilDone();
-}
-
 void CheckpointQueue::loop()
 {
     m_timedQueue.loop(std::bind(
@@ -49,11 +43,6 @@ void CheckpointQueue::loop()
 
 bool CheckpointQueue::onTimed(const String& path, const int& frames)
 {
-    if (exit()) {
-        m_timedQueue.stop();
-        return true;
-    }
-
     bool result;
     if (frames >= CheckpointQueueFramesThresholdForTruncating) {
         result = static_cast<CheckpointEvent*>(m_event)->databaseShouldCheckpoint(
@@ -71,10 +60,8 @@ bool CheckpointQueue::onTimed(const String& path, const int& frames)
 
 void CheckpointQueue::put(const String& path, double delay, int frames)
 {
-    if (!exit()) {
-        m_timedQueue.reQueue(path, delay, frames);
-        lazyRun();
-    }
+    m_timedQueue.reQueue(path, delay, frames);
+    lazyRun();
 }
 
 void CheckpointQueue::remove(const String& path)

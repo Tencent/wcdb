@@ -18,37 +18,13 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_MIGRATIONQUEUE_HPP
-#define _WCDB_MIGRATIONQUEUE_HPP
-
-#include <WCDB/AsyncQueue.hpp>
-#include <WCDB/TimedQueue.hpp>
+#ifndef _WCDB_EXITING_HPP
+#define _WCDB_EXITING_HPP
 
 namespace WCDB {
 
-class MigrationEvent : public AsyncQueue::Event {
-public:
-    virtual ~MigrationEvent();
+bool exiting();
 
-protected:
-    virtual std::pair<bool, bool> databaseShouldMigrate(const String& path) = 0;
-    friend class MigrationQueue;
-};
+}
 
-class MigrationQueue final : public AsyncQueue {
-public:
-    MigrationQueue(const String& name, MigrationEvent* event);
-
-    void put(const String& path);
-    void remove(const String& path);
-
-protected:
-    void loop() override final;
-
-    bool onTimed(const String& path, const int& numberOfFailures);
-    TimedQueue<String, int> m_timedQueue;
-};
-
-} // namespace WCDB
-
-#endif /* _WCDB_MIGRATIONQUEUE_HPP */
+#endif /* _WCDB_EXITING_HPP */

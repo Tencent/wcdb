@@ -34,18 +34,10 @@ MigrationQueue::MigrationQueue(const String& name, MigrationEvent* event)
 {
 }
 
-MigrationQueue::~MigrationQueue()
-{
-    m_timedQueue.stop();
-    m_timedQueue.waitUntilDone();
-}
-
 void MigrationQueue::put(const String& path)
 {
-    if (!exit()) {
-        m_timedQueue.reQueue(path, MigrationQueueTimeIntervalForMigrating, 0);
-        lazyRun();
-    }
+    m_timedQueue.reQueue(path, MigrationQueueTimeIntervalForMigrating, 0);
+    lazyRun();
 }
 
 void MigrationQueue::remove(const String& path)
@@ -61,11 +53,6 @@ void MigrationQueue::loop()
 
 bool MigrationQueue::onTimed(const String& path, const int& numberOfFailures)
 {
-    if (exit()) {
-        m_timedQueue.stop();
-        return true;
-    }
-
     bool succeed, done;
     std::tie(succeed, done)
     = static_cast<MigrationEvent*>(m_event)->databaseShouldMigrate(path);

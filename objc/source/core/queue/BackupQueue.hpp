@@ -40,7 +40,6 @@ protected:
 class BackupQueue final : public AsyncQueue {
 public:
     BackupQueue(const String& name, BackupEvent* event);
-    ~BackupQueue();
 
     void put(const String& path, double delay, int frames);
     int getBackedUpFrames(const String& path);

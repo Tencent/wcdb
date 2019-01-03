@@ -116,6 +116,8 @@
 		231C35D121DDEFAB00B5D3D2 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357C21DDEFAB00B5D3D2 /* TestCase.mm */; };
 		231C35E621DDF60600B5D3D2 /* StableRandom.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C35E521DDF60600B5D3D2 /* StableRandom.m */; };
 		231C35E821DDF95F00B5D3D2 /* TableMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C35E721DDF95F00B5D3D2 /* TableMigrationBenchmark.mm */; };
+		231C35EE21DE09E800B5D3D2 /* Exiting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 231C35EC21DE09E400B5D3D2 /* Exiting.cpp */; };
+		231C35EF21DE09EC00B5D3D2 /* Exiting.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 231C35EA21DE090500B5D3D2 /* Exiting.hpp */; };
 		231C98BA219532AC0067B87C /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
 		231C98BB219532AC0067B87C /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
 		231C98BC219532AC0067B87C /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
@@ -1260,6 +1262,8 @@
 		231C35E421DDF60600B5D3D2 /* StableRandom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StableRandom.h; sourceTree = "<group>"; };
 		231C35E521DDF60600B5D3D2 /* StableRandom.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StableRandom.m; sourceTree = "<group>"; };
 		231C35E721DDF95F00B5D3D2 /* TableMigrationBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TableMigrationBenchmark.mm; sourceTree = "<group>"; };
+		231C35EA21DE090500B5D3D2 /* Exiting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Exiting.hpp; sourceTree = "<group>"; };
+		231C35EC21DE09E400B5D3D2 /* Exiting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Exiting.cpp; sourceTree = "<group>"; };
 		231C98B8219532AC0067B87C /* NSObject+TestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+TestCase.h"; sourceTree = "<group>"; };
 		231C98B9219532AC0067B87C /* NSObject+TestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSObject+TestCase.mm"; sourceTree = "<group>"; };
 		231FEA2F21999E7D00DC3706 /* Basic tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Basic tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2580,6 +2584,8 @@
 				237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */,
 				23C40CF4208DBCDD007B1648 /* Dispatch.cpp */,
 				23C40CF8208DBCDF007B1648 /* Dispatch.hpp */,
+				231C35EA21DE090500B5D3D2 /* Exiting.hpp */,
+				231C35EC21DE09E400B5D3D2 /* Exiting.cpp */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -3738,6 +3744,7 @@
 				236BACC121BF6C8500C8B4D9 /* MigrationQueue.hpp in Headers */,
 				23EEDC9C217DFADC006E9E73 /* QualifiedTable.hpp in Headers */,
 				23EEDCA0217DFADC006E9E73 /* RecursiveCTE.hpp in Headers */,
+				231C35EF21DE09EC00B5D3D2 /* Exiting.hpp in Headers */,
 				23F70FA220A055B400CCE3CD /* Config.hpp in Headers */,
 				234DBCF32064DD0C000E31E8 /* WCTDatabase+Handle.h in Headers */,
 				2349F76A1EA0D6680021EFA7 /* WCTCodingMacro.h in Headers */,
@@ -4768,6 +4775,7 @@
 				23D0C35D20C149D80001BFAE /* FactoryRetriever.cpp in Sources */,
 				23EEDCDD217DFADC006E9E73 /* StatementRollback.cpp in Sources */,
 				23C7559620DCFA0B00031A93 /* Locker.cpp in Sources */,
+				231C35EE21DE09E800B5D3D2 /* Exiting.cpp in Sources */,
 				23B35CCD20C0261A00425033 /* String.cpp in Sources */,
 				2370B12921914ED500D3227C /* NSNull+WCTColumnCoding.mm in Sources */,
 				23A64D0F214A4A7000ED28BB /* Migration.cpp in Sources */,

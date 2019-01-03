@@ -46,7 +46,6 @@ protected:
     AsyncQueue(const String &name, Event *event);
     void lazyRun();
     virtual void loop() = 0;
-    static bool exit();
     Event *m_event;
 
 private:

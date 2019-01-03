@@ -41,7 +41,6 @@ protected:
 class CheckpointQueue final : public AsyncQueue {
 public:
     CheckpointQueue(const String& name, CheckpointEvent* event);
-    ~CheckpointQueue();
 
     void put(const String& path, double delay, int frames);
     void remove(const String& path);

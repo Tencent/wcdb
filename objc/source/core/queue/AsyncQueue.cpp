@@ -21,6 +21,7 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/AsyncQueue.hpp>
 #include <WCDB/Dispatch.hpp>
+#include <WCDB/Exiting.hpp>
 #include <WCDB/String.hpp>
 #include <atomic>
 
@@ -50,7 +51,7 @@ AsyncQueue::~AsyncQueue()
 void AsyncQueue::run()
 {
     std::lock_guard<std::mutex> lockGuard(m_mutex);
-    if (!m_started) {
+    if (!m_started && !exiting()) {
         m_started = true;
         Dispatch::async(name, std::bind(&AsyncQueue::willRun, this));
     }
@@ -58,11 +59,13 @@ void AsyncQueue::run()
 
 void AsyncQueue::willRun()
 {
-    m_running.store(true);
-    loop();
-    std::lock_guard<std::mutex> lockGuard(m_mutex);
-    m_running.store(false);
-    m_cond.notify_one();
+    if (!exiting()) {
+        m_running.store(true);
+        loop();
+        std::lock_guard<std::mutex> lockGuard(m_mutex);
+        m_running.store(false);
+        m_cond.notify_one();
+    }
 }
 
 void AsyncQueue::lazyRun()
@@ -71,16 +74,6 @@ void AsyncQueue::lazyRun()
     if (!m_running.load()) {
         run();
     }
-}
-
-bool AsyncQueue::exit()
-{
-    static std::atomic<bool>* s_exit = new std::atomic<bool>(false);
-    static auto s_dummy __attribute__((unused)) = []() -> std::nullptr_t {
-        atexit([]() { s_exit->store(true); });
-        return nullptr;
-    }();
-    return s_exit->load();
 }
 
 } // namespace WCDB

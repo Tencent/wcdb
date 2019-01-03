@@ -21,6 +21,7 @@
 #ifndef _WCDB_TIMEDQUEUE_HPP
 #define _WCDB_TIMEDQUEUE_HPP
 
+#include <WCDB/Exiting.hpp>
 #include <WCDB/OrderedUniqueList.hpp>
 #include <WCDB/Time.hpp>
 #include <chrono>
@@ -35,11 +36,20 @@ template<typename Key, typename Info>
 class TimedQueue final {
 public:
     TimedQueue() : m_stop(false), m_running(false){};
+    ~TimedQueue()
+    {
+        stop();
+        waitUntilDone();
+    }
 
     typedef std::function<bool(const Key &, const Info &)> ExpiredCallback;
 
     void reQueue(const Key &key, double delay, const Info &info)
     {
+        if (exiting()) {
+            stop();
+            return;
+        }
         bool notify = false;
         {
             std::lock_guard<std::mutex> lockGuard(m_mutex);
@@ -68,11 +78,17 @@ public:
 
     void remove(const Key &key)
     {
-        std::lock_guard<std::mutex> lockGuard(m_mutex);
-        if (m_stop) {
+        {
+            std::lock_guard<std::mutex> lockGuard(m_mutex);
+            if (m_stop) {
+                return;
+            }
+            m_list.erase(key);
+        }
+        if (exiting()) {
+            stop();
             return;
         }
-        m_list.erase(key);
     }
 
     void stop()
@@ -94,25 +110,28 @@ public:
     void loop(const ExpiredCallback &onElementExpired)
     {
         m_running.store(true);
-        while (true) {
+        while (!exiting()) {
             std::unique_lock<std::mutex> lockGuard(m_mutex);
             if (m_stop) {
                 break;
             }
-            if (m_list.elements().empty()) {
+            if (m_list.elements().empty() && !exiting()) {
                 m_cond.wait(lockGuard);
                 continue;
             }
             SteadyClock now = SteadyClock::now();
             const auto &shortest = m_list.elements().begin();
-            if (now < shortest->order) {
+            if (now < shortest->order && !exiting()) {
                 m_cond.wait_for(lockGuard, shortest->order - now);
                 continue;
             }
             Key key = shortest->key;
             Info info = shortest->value;
             lockGuard.unlock();
-            bool erase = onElementExpired(key, info);
+            bool erase = false;
+            if (!exiting()) {
+                erase = onElementExpired(key, info);
+            }
             lockGuard.lock();
             if (erase) {
                 m_list.erase(key);
