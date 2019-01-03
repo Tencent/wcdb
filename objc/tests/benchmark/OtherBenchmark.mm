@@ -26,4 +26,47 @@
 
 @implementation OtherBenchmark
 
+- (void)test_create_index
+{
+    int numberOfObjects = 100000;
+
+    WCDB::StatementCreateIndex statement = WCDB::StatementCreateIndex().createIndex(@"testTable_index").table(@"testTable").indexed(BenchmarkObject.identifier);
+    __block BOOL result;
+    [self
+    measure:^{
+        result = [self.database execute:statement];
+    }
+    setUp:^{
+        [self.factory setProductionLineObjects:numberOfObjects];
+        TestCaseAssertTrue([self.factory production:self.path]);
+    }
+    tearDown:^{
+        result = NO;
+    }
+    checkCorrectness:^{
+        TestCaseAssertTrue(result);
+    }];
+}
+
+- (void)test_initialization
+{
+    int numberOfTables = 100000;
+
+    __block BOOL result;
+    [self
+    measure:^{
+        result = [self.database canOpen];
+    }
+    setUp:^{
+        [self.factory setProductionLineTables:numberOfTables];
+        TestCaseAssertTrue([self.factory production:self.path]);
+    }
+    tearDown:^{
+        result = NO;
+    }
+    checkCorrectness:^{
+        TestCaseAssertTrue(result);
+    }];
+}
+
 @end

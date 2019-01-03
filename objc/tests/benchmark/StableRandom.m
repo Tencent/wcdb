@@ -18,16 +18,26 @@
  * limitations under the License.
  */
 
-#import "Benchmark.h"
+#import "StableRandom.h"
 
-@interface BaselineBenchmark : Benchmark
+@implementation StableRandom
 
-@property (nonatomic, retain) NSString* destination;
+- (instancetype)init
+{
+    if (self = [super init]) {
+        super.seed = 0;
+    }
+    return self;
+}
 
-- (void)doTestWrite;
+- (int)length
+{
+    return 100;
+}
 
-- (void)doTestRead;
-
-- (void)doTestBatchWrite;
+- (void)setSeed:(uint32_t)seed
+{
+    // fixed seed.
+}
 
 @end

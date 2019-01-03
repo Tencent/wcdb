@@ -145,9 +145,9 @@
              forName:config3
         withPriority:WCTConfigPriorityHigh];
 
-    XCTAssertTrue([self.database canOpen]);
+    TestCaseAssertTrue([self.database canOpen]);
 
-    XCTAssertEqual(step, 3);
+    TestCaseAssertEqual(step, 3);
 }
 
 - (void)test_cipher

@@ -40,9 +40,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)boolean;
 
 - (NSNumber*)number;
-- (NSString*)string;
-- (NSData*)data;
 
+- (NSString*)string;
+
+- (NSData*)data;
 - (NSData*)dataWithLength:(NSInteger)length;
 - (NSData*)dataOtherThan:(NSData*)other;
 

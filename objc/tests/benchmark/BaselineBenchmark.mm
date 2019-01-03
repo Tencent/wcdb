@@ -19,19 +19,107 @@
  */
 
 #import "BaselineBenchmark.h"
+#import "StableRandom.h"
 
 @implementation BaselineBenchmark
 
+- (void)setUp
+{
+    [super setUp];
+    self.factory.tolerance = 0.0f;
+    self.destination = self.path;
+}
+
 - (void)doTestWrite
 {
+    int numberOfObjects = 10000;
+
+    NSMutableArray* objects = [NSMutableArray arrayWithCapacity:numberOfObjects];
+    Random* random = [[StableRandom alloc] init];
+    random.seed = 0;
+    for (int i = 0; i < numberOfObjects; ++i) {
+        BenchmarkObject* object = [[BenchmarkObject alloc] init];
+        object.identifier = i;
+        object.content = random.data;
+        [objects addObject:object];
+    }
+
+    __block BOOL result;
+    [self
+    measure:^{
+        for (BenchmarkObject* object in objects) {
+            if (![self.database insertObject:object intoTable:@"testTable"]) {
+                result = NO;
+                return;
+            }
+        }
+        result = YES;
+    }
+    setUp:^{
+        [self.factory setProductionLineObjects:0];
+        TestCaseAssertTrue([self.factory production:self.destination]);
+    }
+    tearDown:^{
+        result = NO;
+    }
+    checkCorrectness:^{
+        TestCaseAssertTrue(result);
+    }];
 }
 
 - (void)doTestRead
 {
+    int numberOfObjects = 1000000;
+    NSString* tableName = @"testTable";
+
+    __block NSArray<BenchmarkObject*>* result;
+    [self
+    measure:^{
+        result = [self.database getObjectsOfClass:BenchmarkObject.class fromTable:tableName];
+    }
+    setUp:^{
+        [self.factory setProductionLineObjects:numberOfObjects];
+        TestCaseAssertTrue([self.factory production:self.destination]);
+        TestCaseAssertTrue([self.database createTableAndIndexes:@"testTable" withClass:BenchmarkObject.class]);
+    }
+    tearDown:^{
+        result = nil;
+    }
+    checkCorrectness:^{
+        TestCaseAssertEqual(result.count, numberOfObjects);
+    }];
 }
 
 - (void)doTestBatchWrite
 {
+    int numberOfObjects = 1000000;
+
+    NSMutableArray* objects = [NSMutableArray arrayWithCapacity:numberOfObjects];
+    Random* random = [[StableRandom alloc] init];
+    random.seed = 0;
+    for (int i = 0; i < numberOfObjects; ++i) {
+        BenchmarkObject* object = [[BenchmarkObject alloc] init];
+        object.identifier = i;
+        object.content = random.data;
+        [objects addObject:object];
+    }
+
+    __block BOOL result;
+    [self
+    measure:^{
+        result = [self.database insertObjects:objects intoTable:@"testTable"];
+    }
+    setUp:^{
+        [self.factory setProductionLineObjects:0];
+        TestCaseAssertTrue([self.factory production:self.destination]);
+        TestCaseAssertTrue([self.database createTableAndIndexes:@"testTable" withClass:BenchmarkObject.class]);
+    }
+    tearDown:^{
+        result = NO;
+    }
+    checkCorrectness:^{
+        TestCaseAssertTrue(result);
+    }];
 }
 
 - (void)test_write

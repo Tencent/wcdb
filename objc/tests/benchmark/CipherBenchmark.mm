@@ -20,11 +20,23 @@
 
 #import "BaselineBenchmark.h"
 
-@interface CipherBenchmark : BaselineBenchmark
+@interface CipherBenchmark : BaselineBenchmark <BenchmarkFactoryPreparation>
 
 @end
 
 @implementation CipherBenchmark
+
+- (void)setUp
+{
+    [super setUp];
+    self.destination = self.path;
+    self.factory.delegate = self;
+}
+
+- (void)databaseWillStartPreparing:(WCTDatabase*)database
+{
+    [database setCipherKey:[@"benchmark" dataUsingEncoding:NSUTF8StringEncoding]];
+}
 
 - (void)test_write
 {

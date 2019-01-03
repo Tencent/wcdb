@@ -18,12 +18,12 @@
  * limitations under the License.
  */
 
-#import "Benchmark.h"
+#import "BaselineBenchmark.h"
 
-@interface MigrationBenchmark : Benchmark
+@interface TableMigrationBenchmark : BaselineBenchmark
 
 @end
 
-@implementation MigrationBenchmark
+@implementation TableMigrationBenchmark
 
 @end

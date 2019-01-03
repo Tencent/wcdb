@@ -88,14 +88,14 @@
     __block NSDate* subthread;
     dispatch_group_t group = dispatch_group_create();
     dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        XCTAssertTrue([self.database canOpen]);
+        TestCaseAssertTrue([self.database canOpen]);
         subthread = [NSDate date];
     });
     [NSThread sleepForTimeInterval:1];
     NSDate* main = [NSDate date];
     [self.database unblockade];
     dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
-    XCTAssertTrue([main compare:subthread] == NSOrderedAscending);
+    TestCaseAssertTrue([main compare:subthread] == NSOrderedAscending);
 }
 
 - (void)test_blockaded_close
@@ -105,14 +105,14 @@
     dispatch_group_t group = dispatch_group_create();
     [self.database close:^{
         dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            XCTAssertTrue([self.database canOpen]);
+            TestCaseAssertTrue([self.database canOpen]);
             subthread = [NSDate date];
         });
         [NSThread sleepForTimeInterval:1];
         main = [NSDate date];
     }];
     dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
-    XCTAssertTrue([main compare:subthread] == NSOrderedAscending);
+    TestCaseAssertTrue([main compare:subthread] == NSOrderedAscending);
 }
 
 @end

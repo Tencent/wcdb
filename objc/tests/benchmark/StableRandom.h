@@ -18,16 +18,8 @@
  * limitations under the License.
  */
 
-#import "Benchmark.h"
+#import "Random.h"
 
-@interface BaselineBenchmark : Benchmark
-
-@property (nonatomic, retain) NSString* destination;
-
-- (void)doTestWrite;
-
-- (void)doTestRead;
-
-- (void)doTestBatchWrite;
+@interface StableRandom : Random
 
 @end

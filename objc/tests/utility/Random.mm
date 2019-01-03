@@ -148,7 +148,6 @@
 
 - (NSData *)dataWithLength:(NSInteger)length
 {
-    static_assert(sizeof(unsigned char) == 1, "");
     NSMutableData *data = [NSMutableData data];
     [data increaseLengthBy:length];
     unsigned char *bytes = (unsigned char *) data.mutableBytes;

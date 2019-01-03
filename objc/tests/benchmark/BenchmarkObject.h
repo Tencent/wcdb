@@ -23,6 +23,6 @@
 @interface BenchmarkObject : NSObject
 
 @property (nonatomic, assign) int identifier;
-@property (nonatomic, retain) NSString *content;
+@property (nonatomic, retain) NSData *content;
 
 @end

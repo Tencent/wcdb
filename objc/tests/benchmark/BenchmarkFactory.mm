@@ -21,6 +21,7 @@
 #import "BenchmarkFactory.h"
 #import "Console.h"
 #import "Random.h"
+#import "StableRandom.h"
 #import "TestLog.h"
 
 typedef NS_ENUM(NSUInteger, BenchmarkFactoryProductionLine) {
@@ -41,7 +42,6 @@ typedef NS_ENUM(NSUInteger, BenchmarkFactoryProductionLine) {
 {
     if (self = [super init]) {
         _directory = directory;
-        _tolerance = 0.02;
         _renew = NO;
     }
     return self;
@@ -52,14 +52,26 @@ typedef NS_ENUM(NSUInteger, BenchmarkFactoryProductionLine) {
     return [[[self.directory stringByAppendingPathComponent:[self getSlotedKey]] stringByAppendingPathComponent:self.parameter.stringValue] stringByAppendingPathComponent:@"database"];
 }
 
+- (BOOL)isProductExpired:(NSString*)path
+{
+    BOOL expired = self.renew;
+    if (!expired) {
+        expired = ![[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil].fileIsImmutable;
+    }
+    if (!expired) {
+        double slotedValue = [self getSlotedValue:path].doubleValue;
+        double parameter = self.parameter.doubleValue;
+        expired = slotedValue > parameter * (1.0f + self.tolerance) || slotedValue < parameter * (1.0f - self.tolerance);
+    }
+    return expired;
+}
+
 - (BOOL)production:(NSString*)destination
 {
     NSString* path = [self getSlotedPath];
     NSFileManager* fileManager = [NSFileManager defaultManager];
 
-    if (![fileManager attributesOfItemAtPath:path error:nil].fileIsImmutable || self.renew) {
-        // renew
-
+    if ([self isProductExpired:path]) {
         // reset immutable
         if ([fileManager fileExistsAtPath:path]
             && ![fileManager setAttributes:@{NSFileImmutable : @(NO)} ofItemAtPath:path error:nil]) {
@@ -100,8 +112,7 @@ typedef NS_ENUM(NSUInteger, BenchmarkFactoryProductionLine) {
         if (![database removeFiles]) {
             return NO;
         }
-        self.random = [[Random alloc] init];
-        self.random.seed = 0; // make sure the production is always same.
+        self.random = [[StableRandom alloc] init];
         if (self.delegate && [self.delegate respondsToSelector:@selector(databaseWillStartPreparing:)]) {
             [self.delegate databaseWillStartPreparing:database];
         }
@@ -183,7 +194,7 @@ typedef NS_ENUM(NSUInteger, BenchmarkFactoryProductionLine) {
     for (int i = 0; i < step; ++i) {
         BenchmarkObject* object = [[BenchmarkObject alloc] init];
         object.identifier = i;
-        object.content = self.random.string;
+        object.content = self.random.data;
         [objects addObject:object];
     }
 
@@ -198,31 +209,87 @@ typedef NS_ENUM(NSUInteger, BenchmarkFactoryProductionLine) {
 #pragma mark - Objects
 - (void)setProductionLineObjects:(NSUInteger)numberOfObjects
 {
+    self.line = BenchmarkFactoryProductionLineObjects;
+    self.parameter = @(numberOfObjects);
 }
 
 - (NSNumber*)getSlotedValueForObjects:(NSString*)path
 {
+    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
+    if ([database tableExists:@"testTable"]) {
+        return [database getValueFromStatement:WCDB::StatementSelect().select(BenchmarkObject.allProperties.count()).from(@"testTable")].numberValue;
+    }
     return nil;
 }
 
 - (BOOL)stepPrepareForObjects:(WCTDatabase*)database
 {
-    return NO;
+    int numberOfObjects = [self getSlotedValue:database.path].intValue;
+    int maxNumberOfObjects = self.parameter.intValue;
+    int step = maxNumberOfObjects / 100;
+    if (step > maxNumberOfObjects - numberOfObjects) {
+        step = maxNumberOfObjects - numberOfObjects;
+    }
+
+    NSString* tableName = @"testTable";
+
+    int startIdentifier = [database getValueFromStatement:WCDB::StatementSelect().select(BenchmarkObject.identifier.max()).from(tableName)].numberValue.intValue + 1;
+    NSMutableArray* objects = [NSMutableArray arrayWithCapacity:step];
+    for (int i = 0; i < step; ++i) {
+        BenchmarkObject* object = [[BenchmarkObject alloc] init];
+        object.identifier = startIdentifier + i;
+        object.content = self.random.data;
+        [objects addObject:object];
+    }
+
+    return [database runTransaction:^BOOL(WCTHandle* handle) {
+               return [database createTableAndIndexes:tableName withClass:BenchmarkObject.class]
+                      && [handle insertObjects:objects intoTable:tableName];
+           }]
+           && [database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("TRUNCATE")];
 }
 
 #pragma mark - Tables
 - (void)setProductionLineTables:(NSUInteger)numberOfTables
 {
+    self.line = BenchmarkFactoryProductionLineTables;
+    self.parameter = @(numberOfTables);
 }
 
 - (NSNumber*)getSlotedValueForTables:(NSString*)path
 {
-    return nil;
+    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
+    return [database getValueFromStatement:WCDB::StatementSelect().select(WCTMaster.allProperties.count()).from(WCTMaster.tableName).where(WCTMaster.type == "table")].numberValue;
 }
 
 - (BOOL)stepPrepareForTables:(WCTDatabase*)database
 {
-    return NO;
+    int numberOfTables = [self getSlotedValue:database.path].intValue;
+    int maxNumberOfTables = self.parameter.intValue;
+    int step = maxNumberOfTables / 100;
+    if (step > maxNumberOfTables - numberOfTables) {
+        step = maxNumberOfTables - numberOfTables;
+    }
+
+    NSMutableArray* objects = [NSMutableArray arrayWithCapacity:step];
+    for (int i = 0; i < step; ++i) {
+        BenchmarkObject* object = [[BenchmarkObject alloc] init];
+        object.identifier = 1;
+        object.content = self.random.data;
+        [objects addObject:object];
+    }
+
+    return [database runTransaction:^BOOL(WCTHandle* handle) {
+               for (BenchmarkObject* object in objects) {
+                   NSString* tableName = [NSString stringWithFormat:@"t_%@", self.random.string];
+                   if (![database createTableAndIndexes:tableName withClass:BenchmarkObject.class]
+                       || ![handle insertObject:object intoTable:tableName]) {
+                       return NO;
+                   }
+               }
+               return YES;
+           }]
+           && [database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("TRUNCATE")];
 }
 
 @end

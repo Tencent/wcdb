@@ -18,16 +18,33 @@
  * limitations under the License.
  */
 
-#import "Benchmark.h"
+#import "BaselineBenchmark.h"
 
-@interface BaselineBenchmark : Benchmark
+@interface DatabaseMigrationBenchmark : BaselineBenchmark
 
-@property (nonatomic, retain) NSString* destination;
+@end
 
-- (void)doTestWrite;
+@implementation DatabaseMigrationBenchmark
 
-- (void)doTestRead;
+- (void)setUp
+{
+    [super setUp];
+    self.destination = [self.path stringByAppendingString:@"_source"];
+}
 
-- (void)doTestBatchWrite;
+- (void)test_read
+{
+    [self doTestRead];
+}
+
+- (void)test_write
+{
+    [self doTestWrite];
+}
+
+- (void)test_batch_write
+{
+    [self doTestBatchWrite];
+}
 
 @end

@@ -21,6 +21,8 @@
 #import "BenchmarkFactory.h"
 #import "DatabaseTestCase.h"
 
+// TODO: refactor to time based benchmark
+
 @interface Benchmark : DatabaseTestCase
 
 @property (nonatomic, readonly) BenchmarkFactory* factory;

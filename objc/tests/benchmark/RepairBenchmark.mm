@@ -21,11 +21,8 @@
 #import "Benchmark.h"
 
 @interface RepairBenchmark : Benchmark
-
 @property (nonatomic, readonly) NSString* firstMaterial;
-
 @property (nonatomic, readonly) NSString* lastMaterial;
-
 @end
 
 @implementation RepairBenchmark
@@ -34,19 +31,20 @@
 {
     [super setUp];
 
+    self.factory.tolerance = 0.02;
     _firstMaterial = [self.database.path stringByAppendingString:@"-first.material"];
     _lastMaterial = [self.database.path stringByAppendingString:@"-last.material"];
-
-    [self.factory setProductionLineFileSizeInMB:100];
 }
 
 - (void)test_backup
 {
+    __block BOOL result;
     [self
     measure:^{
-        TestCaseAssertTrue([self.database backup]);
+        result = [self.database backup];
     }
     setUp:^{
+        [self.factory setProductionLineFileSizeInMB:100];
         TestCaseAssertTrue([self.factory production:self.path]);
     }
     tearDown:^{
@@ -56,40 +54,50 @@
         if ([self.fileManager fileExistsAtPath:self.lastMaterial]) {
             TestCaseAssertTrue([self.fileManager removeItemAtPath:self.lastMaterial error:nil]);
         }
+        result = NO;
     }
     checkCorrectness:^{
-        XCTAssertTrue([self.fileManager fileExistsAtPath:self.firstMaterial]);
+        TestCaseAssertTrue(result);
+        TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.firstMaterial]);
     }];
 }
 
 - (void)test_repair
 {
+    __block double score;
     [self
     measure:^{
-        TestCaseAssertTrue([self.database retrieve:nil] == 1.0f);
+        score = [self.database retrieve:nil];
     }
     setUp:^{
+        [self.factory setProductionLineFileSizeInMB:100];
         TestCaseAssertTrue([self.factory production:self.path]);
         TestCaseAssertTrue([self.database backup]);
     }
     tearDown:^{
+        score = 0.0f;
     }
     checkCorrectness:^{
+        TestCaseAssertEqual(score, 1.0f);
     }];
 }
 
 - (void)test_repair_without_backup
 {
+    __block double score;
     [self
     measure:^{
-        TestCaseAssertTrue([self.database retrieve:nil] == 1.0f);
+        score = [self.database retrieve:nil];
     }
     setUp:^{
+        [self.factory setProductionLineFileSizeInMB:100];
         TestCaseAssertTrue([self.factory production:self.path]);
     }
     tearDown:^{
+        score = 0.0f;
     }
     checkCorrectness:^{
+        TestCaseAssertEqual(score, 1.0f);
     }];
 }
 
