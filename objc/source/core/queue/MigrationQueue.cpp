@@ -30,77 +30,66 @@ MigrationEvent::~MigrationEvent()
 }
 
 MigrationQueue::MigrationQueue(const String& name, MigrationEvent* event)
-: AsyncQueue(name, event), m_dirty(false)
+: AsyncQueue(name, event)
 {
+}
+
+MigrationQueue::~MigrationQueue()
+{
+    m_timedQueue.stop();
+    m_timedQueue.waitUntilDone();
 }
 
 void MigrationQueue::put(const String& path)
 {
     if (!exit()) {
-        bool notify = false;
-        {
-            std::lock_guard<std::mutex> lockGuard(m_mutex);
-            notify = m_migratings.empty();
-            m_migratings.emplace(path);
-        }
-        if (notify) {
-            m_cond.notify_all();
-        }
+        m_timedQueue.reQueue(path, MigrationQueueTimeIntervalForMigrating, 0);
         lazyRun();
     }
 }
 
 void MigrationQueue::remove(const String& path)
 {
-    std::lock_guard<std::mutex> lockGuard(m_mutex);
-    if (m_migratings.erase(path) > 0) {
-        m_dirty = true;
-    }
+    m_timedQueue.remove(path);
 }
 
 void MigrationQueue::loop()
 {
-    while (!exit()) {
-        String path;
-        {
-            std::unique_lock<std::mutex> lockGuard(m_mutex);
-            if (m_migratings.empty()) {
-                m_cond.wait(lockGuard);
-                continue;
-            }
-            path = *m_migratings.begin();
-        }
-        int numberOfFailures = 0;
-        while (!exit()) {
-            std::this_thread::sleep_for(std::chrono::microseconds(
-            (long long) (MigrationQueueTimeIntervalForMigrating * 1000000)));
-            bool succeed, done;
-            std::tie(succeed, done)
-            = static_cast<MigrationEvent*>(m_event)->databaseShouldMigrate(path);
-            if ((!succeed && ++numberOfFailures >= MigrationQueueTolerableFailures)) {
-                Error error;
-                error.level = Error::Level::Notice;
-                error.setCode(Error::Code::Notice);
-                error.message = "Async migration stopped due to the error.";
-                error.infos.set("Path", path);
-                Notifier::shared()->notify(error);
-                break;
-            }
-            if (done) {
-                break;
-            }
-            if (m_dirty) {
-                std::lock_guard<std::mutex> lockGuard(m_mutex);
-                bool stop = m_migratings.find(path) == m_migratings.end();
-                m_dirty = false;
-                if (stop) {
-                    break;
-                }
-            }
-        }
-        std::unique_lock<std::mutex> lockGuard(m_mutex);
-        m_migratings.erase(path);
+    m_timedQueue.loop(std::bind(
+    &MigrationQueue::onTimed, this, std::placeholders::_1, std::placeholders::_2));
+}
+
+bool MigrationQueue::onTimed(const String& path, const int& numberOfFailures)
+{
+    if (exit()) {
+        m_timedQueue.stop();
+        return true;
     }
+
+    bool succeed, done;
+    std::tie(succeed, done)
+    = static_cast<MigrationEvent*>(m_event)->databaseShouldMigrate(path);
+    bool erase = true;
+    if (succeed) {
+        if (!done) {
+            m_timedQueue.reQueue(path, MigrationQueueTimeIntervalForMigrating, numberOfFailures);
+            erase = false;
+        }
+    } else {
+        if (numberOfFailures < MigrationQueueTolerableFailures) {
+            m_timedQueue.reQueue(
+            path, MigrationQueueTolerableFailures, numberOfFailures + 1);
+            erase = false;
+        } else {
+            Error error;
+            error.level = Error::Level::Notice;
+            error.setCode(Error::Code::Notice);
+            error.message = "Async migration stopped due to the error.";
+            error.infos.set("Path", path);
+            Notifier::shared()->notify(error);
+        }
+    }
+    return erase;
 }
 
 } // namespace WCDB

@@ -22,8 +22,7 @@
 #define _WCDB_MIGRATIONQUEUE_HPP
 
 #include <WCDB/AsyncQueue.hpp>
-#include <WCDB/Lock.hpp>
-#include <set>
+#include <WCDB/TimedQueue.hpp>
 
 namespace WCDB {
 
@@ -39,6 +38,7 @@ protected:
 class MigrationQueue final : public AsyncQueue {
 public:
     MigrationQueue(const String& name, MigrationEvent* event);
+    ~MigrationQueue();
 
     void put(const String& path);
     void remove(const String& path);
@@ -46,11 +46,8 @@ public:
 protected:
     void loop() override final;
 
-    std::mutex m_mutex;
-    std::condition_variable m_cond;
-    std::atomic<bool> m_dirty;
-    std::set<String> m_migratings;
-    std::map<String, int> m_faileds;
+    bool onTimed(const String& path, const int& numberOfFailures);
+    TimedQueue<String, int> m_timedQueue;
 };
 
 } // namespace WCDB
