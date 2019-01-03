@@ -22,8 +22,9 @@
 #define _WCDB_CORRUPTIONQUEUE_HPP
 
 #include <WCDB/AsyncQueue.hpp>
+#include <WCDB/Lock.hpp>
+#include <WCDB/TimedQueue.hpp>
 #include <map>
-#include <WCDB/
 
 namespace WCDB {
 
@@ -46,9 +47,12 @@ protected:
 
     void loop() override final;
 
-    void onTimed(const String& path);
+    bool onTimed(const String& path, const uint32_t& identifier);
 
-    // path -> identifier
+    TimedQueue<String, uint32_t> m_timedQueue;
+
+    // identifier -> notify time
+    SharedLock m_lock;
     std::map<uint32_t, SteadyClock> m_refractories;
 };
 

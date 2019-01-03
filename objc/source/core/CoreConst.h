@@ -64,8 +64,8 @@ static constexpr const double CheckpointConfigDelayForNonCritical = 10.0;
 static constexpr const char* BackupConfigName = WCDB_BACKUP_CONFIG_NAME;
 static constexpr const int BackupConfigFramesIntervalForNonCritical = 100;
 static constexpr const int BackupConfigFramesIntervalForCritical = 300;
-static constexpr const double BackupConfigDelayForCritical = 0;
-static constexpr const double BackupConfigDelayForNonCritical = 1.0;
+static constexpr const double BackupQueueDelayForCritical = 0;
+static constexpr const double BackupQueueDelayForNonCritical = 5.0;
 
 // Basic Config
 static constexpr const char* BasicConfigName = WCDB_BASIC_CONFIG_NAME;

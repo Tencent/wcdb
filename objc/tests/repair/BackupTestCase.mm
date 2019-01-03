@@ -32,8 +32,8 @@
 
     _backupFramesIntervalForNonCritical = WCDB::BackupConfigFramesIntervalForNonCritical;
     _backupFramesIntervalForCritical = WCDB::BackupConfigFramesIntervalForCritical;
-    _backupDelayForCritical = WCDB::BackupConfigDelayForCritical;
-    _backupDelayForNonCritical = WCDB::BackupConfigDelayForNonCritical;
+    _backupDelayForCritical = WCDB::BackupQueueDelayForCritical;
+    _backupDelayForNonCritical = WCDB::BackupQueueDelayForNonCritical;
 
     _delayForTolerance = 1.0;
     _framesForTolerance = 10;

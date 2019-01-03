@@ -24,7 +24,6 @@
 #include <WCDB/Exiting.hpp>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Notifier.hpp>
-#include <vector>
 
 namespace WCDB {
 
@@ -61,59 +60,31 @@ void CorruptionQueue::handleError(const Error& error)
     if (!succeed) {
         return;
     }
-    bool notify = false;
     {
-        std::lock_guard<std::mutex> lockGuard(m_mutex);
+        SharedLockGuard lockGuard(m_lock);
         auto iter = m_refractories.find(identifier);
-        if (iter == m_refractories.end() || SteadyClock::now() > iter->second) {
-            notify = m_corrupted.empty();
-            m_corrupted[path] = identifier;
+        if (iter == m_refractories.end()
+            || SteadyClock::now() > iter->second
+                                    + std::chrono::microseconds((long long) (CorruptionQueueTimeIntervalForInvokingEvent
+                                                                             * 1000000))) {
+            m_timedQueue.reQueue(path, 0, identifier);
         }
     }
     lazyRun();
-    if (notify) {
-        m_cond.notify_all();
-    }
 }
 
 void CorruptionQueue::loop()
 {
-    while (!exiting()) {
-        String path;
-        uint32_t corruptedIdentifier;
-        {
-            std::unique_lock<std::mutex> lockGuard(m_mutex);
-            if (m_corrupted.empty()) {
-                m_cond.wait(lockGuard);
-                continue;
-            }
-            auto iter = m_corrupted.begin();
-            path = iter->first;
-            corruptedIdentifier = iter->second;
-        }
-        static_cast<CorruptionEvent*>(m_event)->databaseDidBecomeCorrupted(
-        path, corruptedIdentifier);
-        {
-            std::lock_guard<std::mutex> lockGuard(m_mutex);
-            std::vector<uint32_t> toRemoves;
-            SteadyClock now = SteadyClock::now();
-            for (const auto& refractory : m_refractories) {
-                if (now > refractory.second) {
-                    toRemoves.push_back(refractory.first);
-                }
-            }
-            for (const auto& toRemove : toRemoves) {
-                m_refractories.erase(toRemove);
-            }
+    m_timedQueue.loop(std::bind(
+    &CorruptionQueue::onTimed, this, std::placeholders::_1, std::placeholders::_2));
+}
 
-            m_corrupted.erase(path);
-            m_refractories.emplace(
-            corruptedIdentifier,
-            now
-            + std::chrono::microseconds(
-              (long long) (CorruptionQueueTimeIntervalForInvokingEvent * 1000000)));
-        }
-    }
+bool CorruptionQueue::onTimed(const String& path, const uint32_t& identifier)
+{
+    static_cast<CorruptionEvent*>(m_event)->databaseDidBecomeCorrupted(path, identifier);
+    LockGuard lockGuard(m_lock);
+    m_refractories.emplace(identifier, SteadyClock::now());
+    return true;
 }
 
 } //namespace WCDB

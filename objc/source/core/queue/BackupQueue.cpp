@@ -39,16 +39,23 @@ void BackupQueue::loop()
     &BackupQueue::onTimed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
-void BackupQueue::put(const String& path, double delay, int frames)
-{
-    m_timedQueue.reQueue(path, delay, frames);
-    lazyRun();
-}
-
-int BackupQueue::getBackedUpFrames(const String& path)
+void BackupQueue::put(const String& path, int frames)
 {
     SharedLockGuard lockGuard(m_lock);
-    return m_backedUp[path];
+    int backedUpFrames = m_backedUp[path];
+    bool reQueue = false;
+    if (frames >= backedUpFrames + BackupConfigFramesIntervalForCritical // expired too much
+        || frames < backedUpFrames // restarted
+    ) {
+        m_timedQueue.reQueue(path, BackupQueueDelayForCritical, frames);
+        reQueue = true;
+    } else if (frames >= backedUpFrames + BackupConfigFramesIntervalForNonCritical) {
+        m_timedQueue.reQueue(path, BackupQueueDelayForNonCritical, frames);
+        reQueue = true;
+    }
+    if (reQueue) {
+        lazyRun();
+    }
 }
 
 bool BackupQueue::onTimed(const String& path, const int& frames)

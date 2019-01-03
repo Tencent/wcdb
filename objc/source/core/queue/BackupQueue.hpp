@@ -41,8 +41,7 @@ class BackupQueue final : public AsyncQueue {
 public:
     BackupQueue(const String& name, BackupEvent* event);
 
-    void put(const String& path, double delay, int frames);
-    int getBackedUpFrames(const String& path);
+    void put(const String& path, int frames);
 
 protected:
     bool onTimed(const String& path, const int& frames);
