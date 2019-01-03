@@ -190,17 +190,17 @@ void Repairman::onErrorCritical()
 #pragma mark - Evaluation
 void Repairman::markCellAsCounted(const Cell &cell)
 {
-    int cellCount = cell.getPage().getCellCount();
-    WCTInnerAssert(cellCount != 0);
-    if (cellCount > 0) {
-        Fraction cellWeight(1, cellCount);
+    int numberOfCells = cell.getPage().getNumberOfCells();
+    WCTInnerAssert(numberOfCells != 0);
+    if (numberOfCells > 0) {
+        Fraction cellWeight(1, numberOfCells);
         increaseScore(m_pageWeight * cellWeight);
     }
 }
 
 void Repairman::markPageAsCounted(const Page &page)
 {
-    if (page.getType() == Page::Type::LeafTable && page.getCellCount() == 0) {
+    if (page.getType() == Page::Type::LeafTable && page.getNumberOfCells() == 0) {
         increaseScore(m_pageWeight);
     }
 }

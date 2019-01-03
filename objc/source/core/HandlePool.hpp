@@ -64,8 +64,8 @@ protected:
     mutable SharedLock m_concurrency;
 
 private:
-    static int maxHandleCount();
-    bool allowedHandleCount();
+    static int maxAllowedNumberOfHandles();
+    bool isNumberOfHandlesAllowed();
     void clearAllHandles();
 
 #pragma mark - Handle
@@ -73,8 +73,8 @@ public:
     typedef int Slot;
     RecyclableHandle flowOut(Slot slot);
     void purge();
-    size_t aliveHandleCount() const;
-    size_t activeHandleCount(Slot slot) const;
+    size_t numberOfAliveHandles() const;
+    size_t numberOfActiveHandles(Slot slot) const;
 
 protected:
     virtual std::shared_ptr<Handle> generateHandle(Slot slot) = 0;

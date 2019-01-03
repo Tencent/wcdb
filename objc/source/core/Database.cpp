@@ -75,7 +75,7 @@ void Database::close(const ClosedCallback &onClosed)
 
 bool Database::isOpened() const
 {
-    return aliveHandleCount() > 0;
+    return numberOfAliveHandles() > 0;
 }
 
 Database::InitializedGuard Database::initialize()
@@ -717,8 +717,8 @@ std::pair<bool, bool> Database::stepMigration(bool interruptible)
             break;
         }
         if (interruptible
-            && (activeHandleCount(ConfiguredHandleSlot) > 0
-                || activeHandleCount(MigrationHandleSlot) > 0)) {
+            && (numberOfActiveHandles(ConfiguredHandleSlot) > 0
+                || numberOfActiveHandles(MigrationHandleSlot) > 0)) {
             succeed = true;
             break;
         }

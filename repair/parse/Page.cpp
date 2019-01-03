@@ -79,31 +79,31 @@ Page::Type Page::getType() const
 }
 
 #pragma mark - Interior Table
-int Page::getSubPageno(int index) const
+int Page::getSubpageno(int index) const
 {
     WCTInnerAssert(isInitialized());
-    WCTInnerAssert(index < getSubPageCount());
+    WCTInnerAssert(index < getNumberOfSubpages());
     WCTInnerAssert(m_type == Type::InteriorTable);
-    return m_subPagenos[index];
+    return m_subpagenos[index];
 }
 
-int Page::getSubPageCount() const
+int Page::getNumberOfSubpages() const
 {
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(m_type == Type::InteriorTable);
-    return (int) m_subPagenos.size();
+    return (int) m_subpagenos.size();
 }
 
 #pragma mark - Leaf Table
 Cell Page::getCell(int index)
 {
     WCTInnerAssert(isInitialized());
-    WCTInnerAssert(index < getCellCount());
+    WCTInnerAssert(index < getNumberOfCells());
     WCTInnerAssert(m_type == Type::LeafTable);
     return Cell(m_cellPointers[index], this, m_pager);
 }
 
-int Page::getCellCount() const
+int Page::getNumberOfCells() const
 {
     WCTInnerAssert(isInitialized());
     WCTInnerAssert(m_type == Type::LeafTable);
@@ -166,14 +166,14 @@ bool Page::doInitialize()
     }
     WCTInnerAssert(m_deserialization.canAdvance(4));
     m_deserialization.advance(2);
-    int cellCount = m_deserialization.advance2BytesInt();
-    if (cellCount < 0) {
+    int numberOfCells = m_deserialization.advance2BytesInt();
+    if (numberOfCells < 0) {
         markPagerAsCorrupted(
-        number, String::formatted("Unexpected CellCount: %d.", cellCount));
+        number, String::formatted("Unexpected CellCount: %d.", numberOfCells));
         return false;
     }
-    m_cellPointers.reserve(cellCount);
-    for (int i = 0; i < cellCount; ++i) {
+    m_cellPointers.reserve(numberOfCells);
+    for (int i = 0; i < numberOfCells; ++i) {
         int offset = getOffsetOfHeader() + getOffsetOfCellPointer() + i * 2;
         if (!m_deserialization.isEnough(offset + 2)) {
             markPagerAsCorrupted(number, "Unable to deserialize CellPointer.");
@@ -183,21 +183,21 @@ bool Page::doInitialize()
         m_cellPointers.push_back(cellPointer);
     }
     if (m_type == Type::InteriorTable) {
-        int subPageCount = (int) m_cellPointers.size() + hasRightMostPageNo();
-        m_subPagenos.reserve(subPageCount);
-        for (int i = 0; i < subPageCount; ++i) {
+        int numberOfSubpage = (int) m_cellPointers.size() + hasRightMostPageNo();
+        m_subpagenos.reserve(numberOfSubpage);
+        for (int i = 0; i < numberOfSubpage; ++i) {
             int offset = i < m_cellPointers.size() ? m_cellPointers[i] :
                                                      8 + getOffsetOfHeader();
             if (!m_deserialization.isEnough(offset + 4)) {
-                markPagerAsCorrupted(number, "Unable to deserialize SubPageno.");
+                markPagerAsCorrupted(number, "Unable to deserialize Subpageno.");
                 return false;
             }
             int pageno = m_deserialization.get4BytesInt(offset);
-            if (pageno > m_pager->getPageCount()) {
+            if (pageno > m_pager->getNumberOfPages()) {
                 markPagerAsCorrupted(number,
                                      String::formatted("Page number: %d exceeds the page count: %d.",
                                                        pageno,
-                                                       m_pager->getPageCount()));
+                                                       m_pager->getNumberOfPages()));
                 return false;
             }
             if (pageno <= 0) {
@@ -205,7 +205,7 @@ bool Page::doInitialize()
                 number, String::formatted("Pageno: %d is less than or equal to 0.", pageno));
                 return false;
             }
-            m_subPagenos.push_back(pageno);
+            m_subpagenos.push_back(pageno);
         }
     }
     return true;

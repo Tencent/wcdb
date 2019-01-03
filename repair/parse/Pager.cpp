@@ -35,7 +35,7 @@ Pager::Pager(const String &path)
 : m_fileHandle(path)
 , m_pageSize(-1)
 , m_reservedBytes(-1)
-, m_pageCount(0)
+, m_numberOfPages(0)
 , m_wal(this)
 , m_fileSize(0)
 , m_walImportance(true)
@@ -60,10 +60,10 @@ const String &Pager::getPath() const
 }
 
 #pragma mark - Page
-int Pager::getPageCount() const
+int Pager::getNumberOfPages() const
 {
     WCTInnerAssert(isInitialized());
-    return std::max(m_wal.getMaxPageno(), m_pageCount);
+    return std::max(m_wal.getMaxPageno(), m_numberOfPages);
 }
 
 int Pager::getUsableSize() const
@@ -97,11 +97,11 @@ MappedData Pager::acquirePageData(int number, off_t offset, size_t size)
     MappedData data;
     if (m_wal.containsPage(number)) {
         data = m_wal.acquirePageData(number, offset, size);
-    } else if (number > m_pageCount) {
+    } else if (number > m_numberOfPages) {
         markAsCorrupted(
         number,
         String::formatted(
-        "Acquired page number: %d exceeds the page count: %d.", number, m_pageCount));
+        "Acquired page number: %d exceeds the page count: %d.", number, m_numberOfPages));
         return MappedData::null();
     } else {
         data = m_fileHandle.mapPage(number, offset, size);
@@ -166,9 +166,9 @@ const std::pair<uint32_t, uint32_t> &Pager::getWalSalt() const
     return m_wal.getSalt();
 }
 
-int Pager::getWalFrameCount() const
+int Pager::getNumberOfWalFrames() const
 {
-    return m_wal.getFrameCount();
+    return m_wal.getNumberOfFrames();
 }
 
 #pragma mark - Error
@@ -248,7 +248,7 @@ bool Pager::doInitialize()
 
     m_fileHandle.setPageSize(m_pageSize);
 
-    m_pageCount = (int) ((m_fileSize + m_pageSize - 1) / m_pageSize);
+    m_numberOfPages = (int) ((m_fileSize + m_pageSize - 1) / m_pageSize);
 
     if (m_wal.initialize()) {
         return true;
@@ -269,7 +269,7 @@ void Pager::hint() const
     error.level = Error::Level::Notice;
     error.setCode(Error::Code::Notice, "Repair");
     error.message = "Pager hint.";
-    error.infos.set("PageCount", m_pageCount);
+    error.infos.set("NumberOfPages", m_numberOfPages);
     error.infos.set("OriginFileSize", m_fileSize);
     bool succeed;
     size_t fileSize;

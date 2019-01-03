@@ -70,14 +70,14 @@ void MigrationQueue::loop()
             }
             path = *m_migratings.begin();
         }
-        int failedCount = 0;
+        int numberOfFailures = 0;
         while (!exit()) {
             std::this_thread::sleep_for(std::chrono::microseconds(
             (long long) (MigrationQueueTimeIntervalForMigrating * 1000000)));
             bool succeed, done;
             std::tie(succeed, done)
             = static_cast<MigrationEvent*>(m_event)->databaseShouldMigrate(path);
-            if ((!succeed && ++failedCount >= MigrationQueueTolerableFailures)) {
+            if ((!succeed && ++numberOfFailures >= MigrationQueueTolerableFailures)) {
                 Error error;
                 error.level = Error::Level::Notice;
                 error.setCode(Error::Code::Notice);

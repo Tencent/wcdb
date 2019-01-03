@@ -91,7 +91,7 @@ NS_ASSUME_NONNULL_BEGIN
               ofObject:(WCTObject *)object;
 
 #pragma mark - Extract Row Data
-- (int)extractColumnCount;
+- (int)extractNumberOfColumns;
 
 - (NSString *)extractOriginColumnNameAtIndex:(int)index;
 

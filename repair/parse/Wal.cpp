@@ -118,7 +118,7 @@ void Wal::setMaxAllowedFrame(int maxAllowedFrame)
     m_maxAllowedFrame = maxAllowedFrame;
 }
 
-int Wal::getFrameCount() const
+int Wal::getNumberOfFrames() const
 {
     return m_maxFrame;
 }
@@ -203,8 +203,8 @@ bool Wal::doInitialize()
         }
         return succeed;
     }
-    const int frameCountInFile = ((int) m_fileSize - headerSize) / getFrameSize();
-    maxWalFrame = std::min(frameCountInFile, maxWalFrame);
+    const int numberOfFramesInFile = ((int) m_fileSize - headerSize) / getFrameSize();
+    maxWalFrame = std::min(numberOfFramesInFile, maxWalFrame);
 
     if (!m_fileHandle.open(FileHandle::Mode::ReadOnly)) {
         assignWithSharedThreadedError();

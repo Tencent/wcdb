@@ -119,7 +119,6 @@ public:
     Shadow<SelectSTMT> select;
 
     bool hasCase = false;
-    int whenThenLoopCount;
     bool hasElse = false;
 
     RaiseFunction raiseFunction;

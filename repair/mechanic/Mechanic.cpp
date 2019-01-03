@@ -49,7 +49,7 @@ bool Mechanic::work()
     }
 
     m_pager.setWalImportance(false);
-    m_pager.setMaxWalFrame(m_material->info.walFrame);
+    m_pager.setMaxWalFrame(m_material->info.numberOfWalFrames);
     m_pager.setPageSize(m_material->info.pageSize);
     m_pager.setReservedBytes(m_material->info.reservedBytes);
 
@@ -64,7 +64,7 @@ bool Mechanic::work()
         }
     }
 
-    if (m_pager.getWalFrameCount() > 0) {
+    if (m_pager.getNumberOfWalFrames() > 0) {
         if (m_pager.getWalSalt() != m_material->info.walSalt) {
             m_pager.disposeWal();
             Error error;
@@ -80,14 +80,14 @@ bool Mechanic::work()
         }
     }
 
-    int pageCount = 0;
+    int numberOfPages = 0;
     for (const auto &element : m_material->contents) {
-        pageCount += element.second.verifiedPagenos.size();
+        numberOfPages += element.second.verifiedPagenos.size();
     }
-    if (pageCount == 0) {
+    if (numberOfPages == 0) {
         return exit(true);
     }
-    setPageWeight(Fraction(1, pageCount + m_pager.getDisposedWalPages()));
+    setPageWeight(Fraction(1, numberOfPages + m_pager.getDisposedWalPages()));
 
     if (markAsAssembling()) {
         for (const auto &element : m_material->contents) {

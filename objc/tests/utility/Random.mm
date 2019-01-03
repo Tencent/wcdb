@@ -132,7 +132,7 @@
     "0123456789"
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "abcdefghijklmnopqrstuvwxyz";
-    char result[std::numeric_limits<uint8_t>::max()];
+    char result[std::numeric_limits<uint8_t>::max() + 1];
     int length = self.length;
     for (int i = 0; i < length; ++i) {
         result[i] = alphanum[self.uint8 % (sizeof(alphanum) - 1)];

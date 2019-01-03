@@ -401,10 +401,10 @@
     return _handle->getType(index);
 }
 
-- (int)extractColumnCount
+- (int)extractNumberOfColumns
 {
     WCTHandleAssert(return 0;);
-    return _handle->getColumnCount();
+    return _handle->getNumberOfColumns();
 }
 
 - (NSString *)extractOriginColumnNameAtIndex:(int)index
@@ -428,7 +428,7 @@
 - (WCTOneRow *)extractRow
 {
     WCTHandleAssert(return nil;);
-    int count = [self extractColumnCount];
+    int count = [self extractNumberOfColumns];
     NSMutableArray *row = [NSMutableArray arrayWithCapacity:count];
     for (int index = 0; index < count; ++index) {
         WCTValue *value = [self extractValueAtIndex:index];

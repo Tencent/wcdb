@@ -55,19 +55,19 @@ bool FullCrawler::work()
     }
 
     //calculate score
-    int leafTablePageCount = 0;
-    for (int i = 1; i <= m_pager.getPageCount(); ++i) {
+    int numbersOfLeafTablePages = 0;
+    for (int i = 1; i <= m_pager.getNumberOfPages(); ++i) {
         Page page(i, &m_pager);
         auto pair = page.acquireType();
         if (!pair.first // treat as leaf table
             || pair.second == Page::Type::LeafTable) {
-            ++leafTablePageCount;
+            ++numbersOfLeafTablePages;
         }
     }
-    if (leafTablePageCount == 0) {
+    if (numbersOfLeafTablePages == 0) {
         return exit(true);
     }
-    setPageWeight(Fraction(1, leafTablePageCount));
+    setPageWeight(Fraction(1, numbersOfLeafTablePages));
 
     if (markAsAssembling()) {
         m_masterCrawler.work(this);

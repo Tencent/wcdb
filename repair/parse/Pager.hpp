@@ -49,7 +49,7 @@ protected:
 
 #pragma mark - Page
 public:
-    int getPageCount() const;
+    int getNumberOfPages() const;
     MappedData acquirePageData(int number);
     MappedData acquirePageData(int number, off_t offset, size_t size);
 
@@ -61,13 +61,13 @@ protected:
     MappedData acquireData(off_t offset, size_t size);
     int m_pageSize;
     int m_reservedBytes;
-    int m_pageCount;
+    int m_numberOfPages;
     size_t m_fileSize;
 
 #pragma mark - Wal
 public:
     void setWalImportance(bool flag);
-    int getWalFrameCount() const;
+    int getNumberOfWalFrames() const;
     void setMaxWalFrame(int maxWalFrame);
     int getDisposedWalPages() const;
     void disposeWal();

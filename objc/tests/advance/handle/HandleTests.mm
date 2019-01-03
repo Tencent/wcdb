@@ -298,7 +298,7 @@
                                                         .as(alias))
                                                 .from(self.tableName)]);
         TestCaseAssertTrue([self.handle step]);
-        TestCaseAssertEqual([self.handle extractColumnCount], 1);
+        TestCaseAssertEqual([self.handle extractNumberOfColumns], 1);
         TestCaseAssertTrue([[self.handle extractOriginColumnNameAtIndex:0] isEqualToString:@"content"]);
         TestCaseAssertTrue([[self.handle extractColumnNameAtIndex:0] isEqualToString:alias]);
         TestCaseAssertTrue([[self.handle extractTableNameAtIndex:0] isEqualToString:self.tableName]);

@@ -167,7 +167,7 @@ void Material::markAsCorrupt(const String &element)
 
 #pragma mark - Info
 Material::Info::Info()
-: pageSize(0), walFrame(0), walSalt({ 0, 0 }), reservedBytes(0)
+: pageSize(0), numberOfWalFrames(0), walSalt({ 0, 0 }), reservedBytes(0)
 {
     static_assert(size == 20, "");
 }
@@ -182,7 +182,7 @@ bool Material::Info::serialize(Serialization &serialization) const
     serialization.put4BytesUInt(reservedBytes);
     serialization.put4BytesUInt(walSalt.first);
     serialization.put4BytesUInt(walSalt.second);
-    serialization.put4BytesUInt(walFrame);
+    serialization.put4BytesUInt(numberOfWalFrames);
     return true;
 }
 
@@ -197,7 +197,7 @@ bool Material::Info::deserialize(Deserialization &deserialization)
     reservedBytes = deserialization.advance4BytesUInt();
     walSalt.first = deserialization.advance4BytesUInt();
     walSalt.second = deserialization.advance4BytesUInt();
-    walFrame = deserialization.advance4BytesUInt();
+    numberOfWalFrames = deserialization.advance4BytesUInt();
     return true;
 }
 
@@ -258,9 +258,9 @@ bool Material::Content::deserialize(Deserialization &deserialization)
         markAsCorrupt("SQLs");
         return false;
     }
-    int associatedSQLCount = (int) varint;
+    int numberOfAssociatedSQLs = (int) varint;
     associatedSQLs.clear();
-    for (int i = 0; i < associatedSQLCount; ++i) {
+    for (int i = 0; i < numberOfAssociatedSQLs; ++i) {
         String sql;
         std::tie(lengthOfSizedString, sql) = deserialization.advanceSizedString();
         if (lengthOfSizedString == 0 || sql.empty()) {
@@ -272,16 +272,16 @@ bool Material::Content::deserialize(Deserialization &deserialization)
 
     std::tie(lengthOfVarint, varint) = deserialization.advanceVarint();
     if (lengthOfVarint == 0) {
-        markAsCorrupt("PageCount");
+        markAsCorrupt("NumberOfPages");
         return false;
     }
-    int pageCount = (int) varint;
-    if (pageCount == 0) {
-        markAsCorrupt("PageCount");
+    int numberOfPages = (int) varint;
+    if (numberOfPages == 0) {
+        markAsCorrupt("NumberOfPages");
         return false;
     }
     verifiedPagenos.clear();
-    for (int i = 0; i < pageCount; ++i) {
+    for (int i = 0; i < numberOfPages; ++i) {
         std::tie(lengthOfVarint, varint) = deserialization.advanceVarint();
         if (lengthOfVarint == 0) {
             markAsCorrupt("Pageno");

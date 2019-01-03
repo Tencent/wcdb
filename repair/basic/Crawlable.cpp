@@ -91,16 +91,16 @@ void Crawlable::safeCrawl(int rootpageno, std::set<int> &crawledInteriorPages, i
             return;
         }
         crawledInteriorPages.emplace(rootpageno);
-        for (int i = 0; i < rootpage.getSubPageCount(); ++i) {
+        for (int i = 0; i < rootpage.getNumberOfSubpages(); ++i) {
             if (m_stop) {
                 break;
             }
-            int pageno = rootpage.getSubPageno(i);
+            int pageno = rootpage.getSubpageno(i);
             safeCrawl(pageno, crawledInteriorPages, height + 1);
         }
         break;
     case Page::Type::LeafTable:
-        for (int i = 0; i < rootpage.getCellCount(); ++i) {
+        for (int i = 0; i < rootpage.getNumberOfCells(); ++i) {
             if (m_stop) {
                 break;
             }

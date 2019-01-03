@@ -92,7 +92,7 @@ public:
     bool isReadonly();
     bool isInTransaction();
 
-    int getDirtyPageCount();
+    int getNumberOfDirtyPages();
 
     void interrupt(); // It's thread safe.
 

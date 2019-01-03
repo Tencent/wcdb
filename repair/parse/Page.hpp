@@ -60,16 +60,16 @@ protected:
 
 #pragma mark - Interior Table
 public:
-    int getSubPageno(int index) const;
-    int getSubPageCount() const;
+    int getSubpageno(int index) const;
+    int getNumberOfSubpages() const;
 
 protected:
-    std::vector<int> m_subPagenos;
+    std::vector<int> m_subpagenos;
 
 #pragma mark - Leaf Table
 public:
     Cell getCell(int index);
-    int getCellCount() const;
+    int getNumberOfCells() const;
     int getMaxLocal() const;
     int getMinLocal() const;
 

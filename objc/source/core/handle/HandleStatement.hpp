@@ -59,7 +59,7 @@ public:
 
     ColumnType getType(int index);
 
-    int getColumnCount();
+    int getNumberOfColumns();
     const UnsafeString getOriginColumnName(int index);
     const UnsafeString getColumnName(int index);
     const UnsafeString getColumnTableName(int index);

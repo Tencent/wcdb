@@ -564,10 +564,10 @@ bool MigrationHandle::isStatementReadonly()
     return m_mainStatement->isReadonly();
 }
 
-int MigrationHandle::getColumnCount()
+int MigrationHandle::getNumberOfColumns()
 {
     WCTInnerAssert(!m_additionalStatement->isPrepared());
-    return m_mainStatement->getColumnCount();
+    return m_mainStatement->getNumberOfColumns();
 }
 
 #pragma mark - Migrate

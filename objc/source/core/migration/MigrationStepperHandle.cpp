@@ -137,19 +137,19 @@ bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
         if (!succeed) {
             return false;
         }
-        WCTInnerAssert(getDirtyPageCount() != 0);
+        WCTInnerAssert(getNumberOfDirtyPages() != 0);
         if (migrated) {
             return true;
         }
 
-        int dirtyPageCount = getDirtyPageCount();
+        int numberOfDirtyPages = getNumberOfDirtyPages();
         bool worked = false;
         do {
             std::tie(succeed, worked, migrated)
-            = tryMigrateRowWithoutIncreasingDirtyPage(dirtyPageCount);
+            = tryMigrateRowWithoutIncreasingDirtyPage(numberOfDirtyPages);
         } while (succeed && worked && !migrated);
 #warning TODO - wait for the answer of SQLite staff about the dirty page of ROLLBACK TO stmt.
-        //        WCTInnerAssert(dirtyPageCount == getDirtyPageCount());
+        //        WCTInnerAssert(numberOfDirtyPages == getNumberOfDirtyPages());
         return succeed;
     });
     if (succeed && migrated) {
@@ -180,23 +180,23 @@ std::pair<bool, bool> MigrationStepperHandle::migrateRow()
 }
 
 std::tuple<bool, bool, bool>
-MigrationStepperHandle::tryMigrateRowWithoutIncreasingDirtyPage(int dirtyPageCount)
+MigrationStepperHandle::tryMigrateRowWithoutIncreasingDirtyPage(int numberOfDirtyPages)
 {
     WCTInnerAssert(m_migrateStatement->isPrepared()
                    && m_removeMigratedStatement->isPrepared());
     WCTInnerAssert(isInTransaction());
     bool needToWork = true;
     bool migrated = false;
-    bool succeed
-    = runNestedTransaction([dirtyPageCount, &needToWork, &migrated, this](Handle*) -> bool {
-          bool succeed;
-          std::tie(succeed, migrated) = migrateRow();
-          if (!succeed) {
-              return false;
-          }
-          needToWork = getDirtyPageCount() <= dirtyPageCount;
-          return needToWork;
-      });
+    bool succeed = runNestedTransaction(
+    [numberOfDirtyPages, &needToWork, &migrated, this](Handle*) -> bool {
+        bool succeed;
+        std::tie(succeed, migrated) = migrateRow();
+        if (!succeed) {
+            return false;
+        }
+        needToWork = getNumberOfDirtyPages() <= numberOfDirtyPages;
+        return needToWork;
+    });
     if (!succeed) {
         migrated = false;
         if (!needToWork) {

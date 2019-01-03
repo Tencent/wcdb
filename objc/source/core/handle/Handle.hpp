@@ -68,7 +68,7 @@ public:
     virtual const UnsafeString getColumnTableName(int index);
 
     virtual bool isStatementReadonly();
-    virtual int getColumnCount();
+    virtual int getNumberOfColumns();
 
 protected:
     HandleStatement *m_mainStatement;

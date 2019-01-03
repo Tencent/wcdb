@@ -84,7 +84,7 @@ void HandleStatement::finalize()
     }
 }
 
-int HandleStatement::getColumnCount()
+int HandleStatement::getNumberOfColumns()
 {
     WCTInnerAssert(isPrepared());
     return sqlite3_column_count((sqlite3_stmt *) m_stmt);

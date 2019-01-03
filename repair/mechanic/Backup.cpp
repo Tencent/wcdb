@@ -76,9 +76,9 @@ bool Backup::work()
 
         m_material.info.pageSize = m_pager.getPageSize();
         m_material.info.reservedBytes = m_pager.getReservedBytes();
-        if (m_pager.getWalFrameCount() > 0) {
+        if (m_pager.getNumberOfWalFrames() > 0) {
             m_material.info.walSalt = m_pager.getWalSalt();
-            m_material.info.walFrame = m_pager.getWalFrameCount();
+            m_material.info.numberOfWalFrames = m_pager.getNumberOfWalFrames();
         }
         succeed = m_masterCrawler.work(this);
     } while (false);

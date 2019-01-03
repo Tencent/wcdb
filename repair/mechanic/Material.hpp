@@ -70,7 +70,7 @@ public:
         uint32_t pageSize;
         uint32_t reservedBytes;
         std::pair<uint32_t, uint32_t> walSalt;
-        uint32_t walFrame;
+        uint32_t numberOfWalFrames;
 #pragma mark - Serializable
     public:
         bool serialize(Serialization &serialization) const override final;

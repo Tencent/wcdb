@@ -74,7 +74,7 @@ public:
     const UnsafeString getColumnTableName(int index) override final;
 
     bool isStatementReadonly() override final;
-    int getColumnCount() override final;
+    int getNumberOfColumns() override final;
 
 protected:
     bool realExecute(const std::list<Statement> &statements);

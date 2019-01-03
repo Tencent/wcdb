@@ -66,10 +66,10 @@ bool Handle::step()
     return step(unused);
 }
 
-int Handle::getColumnCount()
+int Handle::getNumberOfColumns()
 {
     WCTInnerAssert(isPrepared());
-    return m_mainStatement->getColumnCount();
+    return m_mainStatement->getNumberOfColumns();
 }
 
 const UnsafeString Handle::getOriginColumnName(int index)

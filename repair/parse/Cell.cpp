@@ -247,12 +247,12 @@ bool Cell::doInitialize()
                 String::formatted("Overflow page: %d is redundant.", overflowPageno));
                 return false;
             }
-            if (overflowPageno > m_pager->getPageCount()) {
+            if (overflowPageno > m_pager->getNumberOfPages()) {
                 m_pager->markAsCorrupted(
                 m_page->number,
                 String::formatted("Overflow page number: %d exceeds the page count: %d.",
                                   overflowPageno,
-                                  m_pager->getPageCount()));
+                                  m_pager->getNumberOfPages()));
                 return false;
             }
             overflowPagenos.emplace(overflowPageno);

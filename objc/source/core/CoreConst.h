@@ -97,7 +97,7 @@ static constexpr const char* NotifierPathPreprocessorName
 constexpr const char* NotifierLoggerName = "com.Tencent.WCDB.Notifier.Log";
 
 // Handle Pool
-static constexpr const int HandlePoolHandleCountThreshold = 16;
+static constexpr const int HandlePooMaxAllowedNumberOfHandles = 16;
 
 } // namespace WCDB
 

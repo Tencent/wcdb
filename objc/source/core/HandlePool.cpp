@@ -43,18 +43,18 @@ HandlePool::~HandlePool()
 }
 
 #pragma mark - Concurrency
-int HandlePool::maxHandleCount()
+int HandlePool::maxAllowedNumberOfHandles()
 {
-    static const int s_maxHandleCount = std::max<int>(
-    HandlePoolHandleCountThreshold, std::thread::hardware_concurrency());
-    return s_maxHandleCount;
+    static const int s_maxAllowedNumberOfHandles = std::max<int>(
+    HandlePooMaxAllowedNumberOfHandles, std::thread::hardware_concurrency());
+    return s_maxAllowedNumberOfHandles;
 }
 
-bool HandlePool::allowedHandleCount()
+bool HandlePool::isNumberOfHandlesAllowed()
 {
     WCTInnerAssert(m_concurrency.readSafety());
     WCTInnerAssert(m_memory.readSafety());
-    return aliveHandleCount() < maxHandleCount();
+    return numberOfAliveHandles() < maxAllowedNumberOfHandles();
 }
 
 void HandlePool::blockade()
@@ -117,7 +117,7 @@ void HandlePool::purge()
     m_frees.clear();
 }
 
-size_t HandlePool::aliveHandleCount() const
+size_t HandlePool::numberOfAliveHandles() const
 {
     SharedLockGuard concurrencyGuard(m_concurrency);
     SharedLockGuard memoryGuard(m_memory);
@@ -128,22 +128,26 @@ size_t HandlePool::aliveHandleCount() const
     return count;
 }
 
-size_t HandlePool::activeHandleCount(Slot slot) const
+size_t HandlePool::numberOfActiveHandles(Slot slot) const
 {
     SharedLockGuard concurrencyGuard(m_concurrency);
     SharedLockGuard memoryGuard(m_memory);
-    size_t handleCount = 0;
-    auto handlesIter = m_handles.find(slot);
-    if (handlesIter != m_handles.end()) {
-        handleCount = handlesIter->second.size();
+    size_t numberOfHandles = 0;
+    size_t numberOfFreeHandles = 0;
+    {
+        auto iter = m_handles.find(slot);
+        if (iter != m_handles.end()) {
+            numberOfHandles = iter->second.size();
+        }
     }
-    size_t freeCount = 0;
-    auto freesIter = m_frees.find(slot);
-    if (freesIter != m_frees.end()) {
-        freeCount = freesIter->second.size();
+    {
+        auto iter = m_frees.find(slot);
+        if (iter != m_frees.end()) {
+            numberOfFreeHandles = iter->second.size();
+        }
     }
-    WCTInnerAssert(handleCount >= freeCount);
-    return handleCount - freeCount;
+    WCTInnerAssert(numberOfHandles >= numberOfFreeHandles);
+    return numberOfHandles - numberOfFreeHandles;
 }
 
 RecyclableHandle HandlePool::flowOut(Slot slot)
@@ -157,10 +161,10 @@ RecyclableHandle HandlePool::flowOut(Slot slot)
             handle = freeSlot.back();
             WCTInnerAssert(handle != nullptr);
             freeSlot.pop_back();
-        } else if (!allowedHandleCount()) {
+        } else if (!isNumberOfHandlesAllowed()) {
             // auto purge to remove unused handles
             purge();
-            if (!allowedHandleCount()) {
+            if (!isNumberOfHandlesAllowed()) {
                 // handle count reachs the limitation.
                 Error error;
                 error.setCode(Error::Code::Exceed);
@@ -196,9 +200,9 @@ RecyclableHandle HandlePool::flowOut(Slot slot)
         if (isGenerated) {
             LockGuard memoryGuard(m_memory);
             // re-check handle count limitation since all lock free code above
-            if (!allowedHandleCount()) {
+            if (!isNumberOfHandlesAllowed()) {
                 purge();
-                if (!allowedHandleCount()) {
+                if (!isNumberOfHandlesAllowed()) {
                     // handle count reachs the limitation.
                     failed = true;
                     Error error;

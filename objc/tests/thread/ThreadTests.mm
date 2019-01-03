@@ -60,7 +60,7 @@
 
     _delayForTolerance = 2;
 
-    _maxConcurrency = std::max<int>(WCDB::HandlePoolHandleCountThreshold, std::thread::hardware_concurrency());
+    _maxConcurrency = std::max<int>(WCDB::HandlePooMaxAllowedNumberOfHandles, std::thread::hardware_concurrency());
     ;
 }
 

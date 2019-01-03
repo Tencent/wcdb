@@ -208,7 +208,7 @@ void AbstractHandle::interrupt()
     sqlite3_interrupt((sqlite3 *) m_handle);
 }
 
-int AbstractHandle::getDirtyPageCount()
+int AbstractHandle::getNumberOfDirtyPages()
 {
     WCTInnerAssert(isOpened());
     return sqlite3_dirty_page_count((sqlite3 *) m_handle);

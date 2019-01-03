@@ -57,10 +57,10 @@ void WCTBinding::initialize()
     NSMutableArray<NSString *> *synthesizations = [NSMutableArray<NSString *> array];
     NSMutableArray<NSString *> *others = [NSMutableArray<NSString *> array];
 
-    unsigned int methodCount = 0;
-    Method *methods = class_copyMethodList(object_getClass(m_cls), &methodCount);
+    unsigned int numberOfMethods = 0;
+    Method *methods = class_copyMethodList(object_getClass(m_cls), &numberOfMethods);
 
-    for (unsigned int i = 0; i < methodCount; i++) {
+    for (unsigned int i = 0; i < numberOfMethods; i++) {
         Method method = methods[i];
         NSString *selName = NSStringFromSelector(method_getName(method));
         if (![selName hasPrefix:prefix]) {
