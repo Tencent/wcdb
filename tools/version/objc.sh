@@ -1,7 +1,7 @@
 #!/bin/bash
 
 root=`git rev-parse --show-toplevel`
-version=`defaults read ${root}/objc/support/Info.plist CFBundleShortVersionString`
+version=`cat ${root}/VERSION`
 commitHash=`git rev-parse HEAD`
 buildTimestamp=`date +%s`
 buildTime=`date -r ${buildTimestamp} +"%Y-%m-%d %H:%M:%S UTC%z"`
