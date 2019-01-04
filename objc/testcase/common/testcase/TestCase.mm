@@ -29,7 +29,7 @@
     NSString *description = [[NSString alloc] initWithFormat:format arguments:ap];
     va_end(ap);
     NSString *log = [NSString stringWithFormat:@"Test Case '%@' %@", self.name, description];
-    TestLog(@"%@", log);
+    TestCaseLog(@"%@", log);
 }
 
 - (void)setUp

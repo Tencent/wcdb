@@ -39,7 +39,7 @@
     untrusted = YES;
 #endif
     if (untrusted) {
-        TestLog(@"Benchmark is run in debug mode or simulator. The result may be untrusted.");
+        TestCaseLog(@"Benchmark is run in debug mode or simulator. The result may be untrusted.");
     }
 
     [super tearDown];

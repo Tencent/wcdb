@@ -121,7 +121,7 @@ asExpectedInOperation:(BOOL (^)())block
             if ([sqls.firstObject isEqualToString:sql]) {
                 [sqls removeObjectAtIndex:0];
             } else {
-                TestLog(@"Failed: %@", [TestCase hint:sql expecting:sqls.firstObject]);
+                TestCaseLog(@"Failed: %@", [TestCase hint:sql expecting:sqls.firstObject]);
                 trace = NO;
                 TESTCASE_FAILED
             }
@@ -139,7 +139,7 @@ asExpectedInOperation:(BOOL (^)())block
             }
         }
         if (sqls.count != 0) {
-            TestLog(@"Reminding: %@", sqls);
+            TestCaseLog(@"Reminding: %@", sqls);
             TESTCASE_FAILED
             break;
         }
@@ -185,7 +185,7 @@ asExpectedInOperation:(BOOL (^)())block
             }
         }
         if (sqls.count != 0) {
-            TestLog(@"Reminding: %@", sqls);
+            TestCaseLog(@"Reminding: %@", sqls);
             TESTCASE_FAILED
             break;
         }

@@ -22,7 +22,7 @@
 #import "Console.h"
 #import "Random.h"
 #import "StableRandom.h"
-#import "TestLog.h"
+#import "TestCaseLog.h"
 
 typedef NS_ENUM(NSUInteger, BenchmarkFactoryProductionLine) {
     BenchmarkFactoryProductionLineFileSize,
@@ -98,7 +98,7 @@ typedef NS_ENUM(NSUInteger, BenchmarkFactoryProductionLine) {
     }
 
     // reuse prepared database
-    TestLog(@"Production: %@ %@", [self getSlotedKey], [self getSlotedValue:destination]);
+    TestCaseLog(@"Production: %@ %@", [self getSlotedKey], [self getSlotedValue:destination]);
     return YES;
 }
 
@@ -129,7 +129,7 @@ typedef NS_ENUM(NSUInteger, BenchmarkFactoryProductionLine) {
                     newProgress = 1.0f;
                 }
                 progress = newProgress;
-                TestLog(@"Preparing %.2f%%", progress * 100.0f);
+                TestCaseLog(@"Preparing %.2f%%", progress * 100.0f);
             }
 
         } while (slotedValue < parameter * (1.0f - self.tolerance));

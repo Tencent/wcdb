@@ -418,18 +418,18 @@
 		238845F02063912B006EAEC8 /* WCTPerformanceFootprint.h in Headers */ = {isa = PBXBuildFile; fileRef = 238845EE2063912B006EAEC8 /* WCTPerformanceFootprint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		238845F12063912B006EAEC8 /* WCTPerformanceFootprint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238845EF2063912B006EAEC8 /* WCTPerformanceFootprint.mm */; };
 		238C177E21CA2190003B6D26 /* SyntaxCommonConst.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 238C177C21CA2190003B6D26 /* SyntaxCommonConst.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		238C73A521B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
-		238C73A621B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
-		238C73A721B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
-		238C73A821B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
-		238C73A921B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
-		238C73AA21B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
-		238C73AB21B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
-		238C73AC21B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
-		238C73AD21B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
-		238C73AE21B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
-		238C73AF21B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
-		238C73B021B8B510006B59C2 /* TestLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestLog.m */; };
+		238C73A521B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
+		238C73A621B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
+		238C73A721B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
+		238C73A821B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
+		238C73A921B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
+		238C73AA21B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
+		238C73AB21B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
+		238C73AC21B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
+		238C73AD21B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
+		238C73AE21B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
+		238C73AF21B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
+		238C73B021B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
 		23906AB9215E500100C2B717 /* WCTDatabase+Monitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 23906AB7215E500100C2B717 /* WCTDatabase+Monitor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23906ABB215E500100C2B717 /* WCTDatabase+Monitor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23906AB8215E500100C2B717 /* WCTDatabase+Monitor.mm */; };
 		2395582621C143BB000C85E1 /* WCTMigrationInfo+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2395582421C143BB000C85E1 /* WCTMigrationInfo+Private.h */; };
@@ -1568,8 +1568,8 @@
 		238845EE2063912B006EAEC8 /* WCTPerformanceFootprint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTPerformanceFootprint.h; sourceTree = "<group>"; };
 		238845EF2063912B006EAEC8 /* WCTPerformanceFootprint.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTPerformanceFootprint.mm; sourceTree = "<group>"; };
 		238C177C21CA2190003B6D26 /* SyntaxCommonConst.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SyntaxCommonConst.hpp; sourceTree = "<group>"; };
-		238C73A321B8B50F006B59C2 /* TestLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestLog.h; sourceTree = "<group>"; };
-		238C73A421B8B510006B59C2 /* TestLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestLog.m; sourceTree = "<group>"; };
+		238C73A321B8B50F006B59C2 /* TestCaseLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCaseLog.h; sourceTree = "<group>"; };
+		238C73A421B8B510006B59C2 /* TestCaseLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestCaseLog.m; sourceTree = "<group>"; };
 		23906AB7215E500100C2B717 /* WCTDatabase+Monitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Monitor.h"; sourceTree = "<group>"; };
 		23906AB8215E500100C2B717 /* WCTDatabase+Monitor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Monitor.mm"; sourceTree = "<group>"; };
 		239326611E836D7300D677CC /* WCDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2188,12 +2188,12 @@
 		231C356C21DDEFAB00B5D3D2 /* object */ = {
 			isa = PBXGroup;
 			children = (
-				231C356D21DDEFAB00B5D3D2 /* AllTypesObject.mm */,
-				231C356E21DDEFAB00B5D3D2 /* TestCaseObject.mm */,
-				231C356F21DDEFAB00B5D3D2 /* AllTypesObject+WCTTableCoding.h */,
 				231C357021DDEFAB00B5D3D2 /* AllTypesObject.h */,
-				231C357121DDEFAB00B5D3D2 /* TestCaseObject+WCTTableCoding.h */,
+				231C356F21DDEFAB00B5D3D2 /* AllTypesObject+WCTTableCoding.h */,
+				231C356D21DDEFAB00B5D3D2 /* AllTypesObject.mm */,
 				231C357221DDEFAB00B5D3D2 /* TestCaseObject.h */,
+				231C357121DDEFAB00B5D3D2 /* TestCaseObject+WCTTableCoding.h */,
+				231C356E21DDEFAB00B5D3D2 /* TestCaseObject.mm */,
 			);
 			path = object;
 			sourceTree = "<group>";
@@ -2880,7 +2880,7 @@
 			path = ORM;
 			sourceTree = "<group>";
 		};
-		23790A4F219298250098797F /* utility */ = {
+		23790A4F219298250098797F /* common */ = {
 			isa = PBXGroup;
 			children = (
 				231C356C21DDEFAB00B5D3D2 /* object */,
@@ -2891,10 +2891,10 @@
 				23865643219C47AC00F7F6D2 /* Console.mm */,
 				235144EC21D710C900FF639C /* Random.h */,
 				235144ED21D710C900FF639C /* Random.mm */,
-				238C73A321B8B50F006B59C2 /* TestLog.h */,
-				238C73A421B8B510006B59C2 /* TestLog.m */,
+				238C73A321B8B50F006B59C2 /* TestCaseLog.h */,
+				238C73A421B8B510006B59C2 /* TestCaseLog.m */,
 			);
-			path = utility;
+			path = common;
 			sourceTree = "<group>";
 		};
 		23790A5C2192B03C0098797F /* column_constraint */ = {
@@ -3097,7 +3097,7 @@
 			path = WINQ;
 			sourceTree = "<group>";
 		};
-		239E8A8C2160A62F00BCB308 /* tests */ = {
+		239E8A8C2160A62F00BCB308 /* testcase */ = {
 			isa = PBXGroup;
 			children = (
 				23FC43E521B6644B00FA1A0F /* benchmark */,
@@ -3113,9 +3113,9 @@
 				23790A47219295B80098797F /* ORM */,
 				2398971F217EC9E20014BF33 /* WINQ */,
 				239E8A8D2160A62F00BCB308 /* host */,
-				23790A4F219298250098797F /* utility */,
+				23790A4F219298250098797F /* common */,
 			);
-			path = tests;
+			path = testcase;
 			sourceTree = "<group>";
 		};
 		239E8A8D2160A62F00BCB308 /* host */ = {
@@ -3163,7 +3163,7 @@
 			isa = PBXGroup;
 			children = (
 				23A747BE20039675003CECFA /* sqlcipher.preprocessed.xcodeproj */,
-				239E8A8C2160A62F00BCB308 /* tests */,
+				239E8A8C2160A62F00BCB308 /* testcase */,
 				2349F5D51EA0D6680021EFA7 /* source */,
 				23F0FDEE215F266C008399FB /* support */,
 				23B5F93E1E111CB100E58396 /* Frameworks */,
@@ -4428,7 +4428,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2386563D219C009E00F7F6D2 /* FileTests.mm in Sources */,
-				238C73A521B8B510006B59C2 /* TestLog.m in Sources */,
+				238C73A521B8B510006B59C2 /* TestCaseLog.m in Sources */,
 				231C359621DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */,
 				231C35AE21DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */,
 				231C357E21DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */,
@@ -4452,7 +4452,7 @@
 				231C358321DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */,
 				235144F321D710C900FF639C /* Random.mm in Sources */,
 				23254FCB219D28BA00DE2435 /* ThreadTests.mm in Sources */,
-				238C73AA21B8B510006B59C2 /* TestLog.m in Sources */,
+				238C73AA21B8B510006B59C2 /* TestCaseLog.m in Sources */,
 				231C359B21DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */,
 				231C35CB21DDEFAB00B5D3D2 /* TestCase.mm in Sources */,
 				231C35BF21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */,
@@ -4472,7 +4472,7 @@
 				231C358421DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */,
 				235144F421D710C900FF639C /* Random.mm in Sources */,
 				231FEAFD2199A4D300DC3706 /* NSObject+TestCase.mm in Sources */,
-				238C73AB21B8B510006B59C2 /* TestLog.m in Sources */,
+				238C73AB21B8B510006B59C2 /* TestCaseLog.m in Sources */,
 				231C359C21DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */,
 				231C35CC21DDEFAB00B5D3D2 /* TestCase.mm in Sources */,
 				231C35C021DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */,
@@ -4499,7 +4499,7 @@
 				2372E06221A2E13100051D9A /* ConfigTests.mm in Sources */,
 				231C35C121DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */,
 				231C35B521DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */,
-				238C73AC21B8B510006B59C2 /* TestLog.m in Sources */,
+				238C73AC21B8B510006B59C2 /* TestCaseLog.m in Sources */,
 				2386564B219C47AC00F7F6D2 /* Console.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4518,7 +4518,7 @@
 				231C35AA21DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */,
 				231C359221DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */,
 				2304121821AB9EF700CB2318 /* DepositTests.mm in Sources */,
-				238C73AD21B8B510006B59C2 /* TestLog.m in Sources */,
+				238C73AD21B8B510006B59C2 /* TestCaseLog.m in Sources */,
 				231FEB022199A4D400DC3706 /* NSObject+TestCase.mm in Sources */,
 				23846FCF21AF8427005B868F /* RetrieveRobustyTests.mm in Sources */,
 				2304121A21AB9F1600CB2318 /* RecoverTests.mm in Sources */,
@@ -4532,7 +4532,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				238C73AE21B8B510006B59C2 /* TestLog.m in Sources */,
+				238C73AE21B8B510006B59C2 /* TestCaseLog.m in Sources */,
 				235144F721D710C900FF639C /* Random.mm in Sources */,
 				231FEB0C2199A4D500DC3706 /* NSObject+TestCase.mm in Sources */,
 				2386564D219C47AC00F7F6D2 /* Console.mm in Sources */,
@@ -4552,7 +4552,7 @@
 			files = (
 				231C358821DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */,
 				231C35AC21DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */,
-				238C73AF21B8B510006B59C2 /* TestLog.m in Sources */,
+				238C73AF21B8B510006B59C2 /* TestCaseLog.m in Sources */,
 				235144F821D710C900FF639C /* Random.mm in Sources */,
 				2321FE2F21D206B6008BB722 /* MigrationCompatibleTestCase.mm in Sources */,
 				231C35B821DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */,
@@ -4594,7 +4594,7 @@
 				23739DA1219AC9B500A043BF /* StringCodingObject.m in Sources */,
 				23739D90219AC6AB00A043BF /* ColumnCodingObject.mm in Sources */,
 				231C35BE21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */,
-				238C73A921B8B510006B59C2 /* TestLog.m in Sources */,
+				238C73A921B8B510006B59C2 /* TestCaseLog.m in Sources */,
 				231C358221DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */,
 				231C35B221DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */,
 				23739D9B219AC9A600A043BF /* Integer64CodingObject.m in Sources */,
@@ -4620,7 +4620,7 @@
 				23790A632192B0450098797F /* ORMTests.mm in Sources */,
 				2384F6ED219412FF00E8B10A /* FTS5Object.mm in Sources */,
 				23790A772192D3D00098797F /* IndexObject.mm in Sources */,
-				238C73A721B8B510006B59C2 /* TestLog.m in Sources */,
+				238C73A721B8B510006B59C2 /* TestCaseLog.m in Sources */,
 				2384F6CF2193E0AC00E8B10A /* ColumnConstraintNotNull.mm in Sources */,
 				2384F6BB2193E07600E8B10A /* ColumnConstraintPrimaryAsc.mm in Sources */,
 				23865646219C47AC00F7F6D2 /* Console.mm in Sources */,
@@ -4646,7 +4646,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				238C73A821B8B510006B59C2 /* TestLog.m in Sources */,
+				238C73A821B8B510006B59C2 /* TestCaseLog.m in Sources */,
 				231C98BC219532AC0067B87C /* NSObject+TestCase.mm in Sources */,
 				231C359921DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */,
 				231C35B121DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */,
@@ -4976,7 +4976,7 @@
 				2398977E217EC9E30014BF33 /* StatementBeginTests.mm in Sources */,
 				23989768217EC9E30014BF33 /* ExpressionOperableTests.mm in Sources */,
 				2396EB11218054200079066C /* ColumnTests.mm in Sources */,
-				238C73A621B8B510006B59C2 /* TestLog.m in Sources */,
+				238C73A621B8B510006B59C2 /* TestCaseLog.m in Sources */,
 				2319D8BF21C2504C00F5B8C0 /* StoppableIterationTests.mm in Sources */,
 				23989788217EC9E30014BF33 /* StatementDropTableTests.mm in Sources */,
 				2398979A217EC9E30014BF33 /* WindowFunctionInvocationTests.mm in Sources */,
@@ -5047,7 +5047,7 @@
 				231C35D121DDEFAB00B5D3D2 /* TestCase.mm in Sources */,
 				2385468E21DD918D00C619B4 /* DatabaseMigrationBenchmark.mm in Sources */,
 				2385468C21DD918600C619B4 /* ThreadBenchmark.mm in Sources */,
-				238C73B021B8B510006B59C2 /* TestLog.m in Sources */,
+				238C73B021B8B510006B59C2 /* TestCaseLog.m in Sources */,
 				2385468821DD917500C619B4 /* BaselineBenchmark.mm in Sources */,
 				231C35A121DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */,
 				23FC43D421B6631200FA1A0F /* Console.mm in Sources */,

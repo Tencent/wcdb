@@ -21,9 +21,9 @@
 #import "Console.h"
 #import "NSObject+TestCase.h"
 #import "Random.h"
+#import "TestCaseLog.h"
 #import "TestCaseObject+WCTTableCoding.h"
 #import "TestCaseObject.h"
-#import "TestLog.h"
 #import <WCDB/WCDB.h>
 #import <XCTest/XCTest.h>
 

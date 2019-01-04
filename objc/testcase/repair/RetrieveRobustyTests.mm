@@ -244,8 +244,8 @@
 
     double objectsScore = [self getObjectsScoreFromRetrievedTableObjects:retrievedTableObjects andExpectedTableObjects:expectedTableObjects];
 
-    TestLog(@"Radio: attacked: %.8f, expected %.8f", attackedRadio, self.expectedAttackRadio);
-    TestLog(@"Score: retrieve: %.8f, objects: %.8f", retrievedScore, objectsScore);
+    TestCaseLog(@"Radio: attacked: %.8f, expected %.8f", attackedRadio, self.expectedAttackRadio);
+    TestCaseLog(@"Score: retrieve: %.8f, objects: %.8f", retrievedScore, objectsScore);
 
     TestCaseAssertTrue([self isToleranceForRetrieveScore:retrievedScore andObjectsScore:objectsScore]);
 }

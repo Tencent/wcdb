@@ -18,17 +18,15 @@
  * limitations under the License.
  */
 
-#import "TestLog.h"
+#import <Foundation/Foundation.h>
 
-void TestLog(NSString *format, ...)
-{
-    va_list ap;
-    va_start(ap, format);
-    TestLogv(format, ap);
-    va_end(ap);
-}
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-void TestLogv(NSString *format, va_list args)
-{
-    printf("%s\n", [[NSString alloc] initWithFormat:format arguments:args].UTF8String);
+void TestCaseLog(NSString *format, ...);
+void TestCaseLogv(NSString *format, va_list args);
+
+#ifdef __cplusplus
 }
+#endif

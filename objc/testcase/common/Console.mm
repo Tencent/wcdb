@@ -19,7 +19,7 @@
  */
 
 #import "Console.h"
-#import "TestLog.h"
+#import "TestCaseLog.h"
 #import <WCDB/SQLite.h>
 #import <WCDB/WCDB.h>
 
@@ -46,7 +46,7 @@ ssize_t illPwrite(int, const void *, size_t, off_t)
         if (threadName.length == 0) {
             threadName = [NSString stringWithFormat:@"%p", currentThread];
         }
-        TestLog(@"%@ Thread %@: %@", currentThread.isMainThread ? @"*" : @"-", threadName, sql);
+        TestCaseLog(@"%@ Thread %@: %@", currentThread.isMainThread ? @"*" : @"-", threadName, sql);
     }];
 }
 
