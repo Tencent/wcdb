@@ -30,97 +30,10 @@
 		23176A9B21BA7D460051ACF9 /* WCTDatabase+Version.h in Headers */ = {isa = PBXBuildFile; fileRef = 23176A9921BA7D460051ACF9 /* WCTDatabase+Version.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23176A9C21BA7D460051ACF9 /* WCTDatabase+Version.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23176A9A21BA7D460051ACF9 /* WCTDatabase+Version.mm */; };
 		2319D8BF21C2504C00F5B8C0 /* StoppableIterationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2319D8BE21C2504C00F5B8C0 /* StoppableIterationTests.mm */; };
-		231C357E21DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356D21DDEFAB00B5D3D2 /* AllTypesObject.mm */; };
-		231C357F21DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356D21DDEFAB00B5D3D2 /* AllTypesObject.mm */; };
-		231C358021DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356D21DDEFAB00B5D3D2 /* AllTypesObject.mm */; };
-		231C358121DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356D21DDEFAB00B5D3D2 /* AllTypesObject.mm */; };
-		231C358221DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356D21DDEFAB00B5D3D2 /* AllTypesObject.mm */; };
-		231C358321DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356D21DDEFAB00B5D3D2 /* AllTypesObject.mm */; };
-		231C358421DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356D21DDEFAB00B5D3D2 /* AllTypesObject.mm */; };
-		231C358521DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356D21DDEFAB00B5D3D2 /* AllTypesObject.mm */; };
-		231C358621DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356D21DDEFAB00B5D3D2 /* AllTypesObject.mm */; };
-		231C358721DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356D21DDEFAB00B5D3D2 /* AllTypesObject.mm */; };
-		231C358821DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356D21DDEFAB00B5D3D2 /* AllTypesObject.mm */; };
-		231C358921DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356D21DDEFAB00B5D3D2 /* AllTypesObject.mm */; };
-		231C358A21DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356E21DDEFAB00B5D3D2 /* TestCaseObject.mm */; };
-		231C358B21DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356E21DDEFAB00B5D3D2 /* TestCaseObject.mm */; };
-		231C358C21DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356E21DDEFAB00B5D3D2 /* TestCaseObject.mm */; };
-		231C358D21DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356E21DDEFAB00B5D3D2 /* TestCaseObject.mm */; };
-		231C358E21DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356E21DDEFAB00B5D3D2 /* TestCaseObject.mm */; };
-		231C358F21DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356E21DDEFAB00B5D3D2 /* TestCaseObject.mm */; };
-		231C359021DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356E21DDEFAB00B5D3D2 /* TestCaseObject.mm */; };
-		231C359121DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356E21DDEFAB00B5D3D2 /* TestCaseObject.mm */; };
-		231C359221DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356E21DDEFAB00B5D3D2 /* TestCaseObject.mm */; };
-		231C359321DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356E21DDEFAB00B5D3D2 /* TestCaseObject.mm */; };
-		231C359421DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356E21DDEFAB00B5D3D2 /* TestCaseObject.mm */; };
-		231C359521DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C356E21DDEFAB00B5D3D2 /* TestCaseObject.mm */; };
-		231C359621DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357521DDEFAB00B5D3D2 /* DatabaseTestCase.mm */; };
-		231C359721DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357521DDEFAB00B5D3D2 /* DatabaseTestCase.mm */; };
-		231C359821DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357521DDEFAB00B5D3D2 /* DatabaseTestCase.mm */; };
-		231C359921DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357521DDEFAB00B5D3D2 /* DatabaseTestCase.mm */; };
-		231C359A21DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357521DDEFAB00B5D3D2 /* DatabaseTestCase.mm */; };
-		231C359B21DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357521DDEFAB00B5D3D2 /* DatabaseTestCase.mm */; };
-		231C359C21DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357521DDEFAB00B5D3D2 /* DatabaseTestCase.mm */; };
-		231C359D21DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357521DDEFAB00B5D3D2 /* DatabaseTestCase.mm */; };
-		231C359E21DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357521DDEFAB00B5D3D2 /* DatabaseTestCase.mm */; };
-		231C359F21DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357521DDEFAB00B5D3D2 /* DatabaseTestCase.mm */; };
-		231C35A021DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357521DDEFAB00B5D3D2 /* DatabaseTestCase.mm */; };
-		231C35A121DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357521DDEFAB00B5D3D2 /* DatabaseTestCase.mm */; };
-		231C35A221DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357621DDEFAB00B5D3D2 /* TableTestCase.mm */; };
-		231C35A321DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357621DDEFAB00B5D3D2 /* TableTestCase.mm */; };
-		231C35A421DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357621DDEFAB00B5D3D2 /* TableTestCase.mm */; };
-		231C35A521DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357621DDEFAB00B5D3D2 /* TableTestCase.mm */; };
-		231C35A621DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357621DDEFAB00B5D3D2 /* TableTestCase.mm */; };
-		231C35A721DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357621DDEFAB00B5D3D2 /* TableTestCase.mm */; };
-		231C35A821DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357621DDEFAB00B5D3D2 /* TableTestCase.mm */; };
-		231C35A921DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357621DDEFAB00B5D3D2 /* TableTestCase.mm */; };
-		231C35AA21DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357621DDEFAB00B5D3D2 /* TableTestCase.mm */; };
-		231C35AB21DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357621DDEFAB00B5D3D2 /* TableTestCase.mm */; };
-		231C35AC21DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357621DDEFAB00B5D3D2 /* TableTestCase.mm */; };
-		231C35AD21DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357621DDEFAB00B5D3D2 /* TableTestCase.mm */; };
-		231C35AE21DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357821DDEFAB00B5D3D2 /* CRUDTestCase.mm */; };
-		231C35AF21DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357821DDEFAB00B5D3D2 /* CRUDTestCase.mm */; };
-		231C35B021DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357821DDEFAB00B5D3D2 /* CRUDTestCase.mm */; };
-		231C35B121DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357821DDEFAB00B5D3D2 /* CRUDTestCase.mm */; };
-		231C35B221DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357821DDEFAB00B5D3D2 /* CRUDTestCase.mm */; };
-		231C35B321DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357821DDEFAB00B5D3D2 /* CRUDTestCase.mm */; };
-		231C35B421DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357821DDEFAB00B5D3D2 /* CRUDTestCase.mm */; };
-		231C35B521DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357821DDEFAB00B5D3D2 /* CRUDTestCase.mm */; };
-		231C35B621DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357821DDEFAB00B5D3D2 /* CRUDTestCase.mm */; };
-		231C35B721DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357821DDEFAB00B5D3D2 /* CRUDTestCase.mm */; };
-		231C35B821DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357821DDEFAB00B5D3D2 /* CRUDTestCase.mm */; };
-		231C35B921DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357821DDEFAB00B5D3D2 /* CRUDTestCase.mm */; };
-		231C35BA21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357A21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm */; };
-		231C35BB21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357A21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm */; };
-		231C35BC21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357A21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm */; };
-		231C35BD21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357A21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm */; };
-		231C35BE21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357A21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm */; };
-		231C35BF21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357A21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm */; };
-		231C35C021DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357A21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm */; };
-		231C35C121DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357A21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm */; };
-		231C35C221DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357A21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm */; };
-		231C35C321DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357A21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm */; };
-		231C35C421DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357A21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm */; };
-		231C35C521DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357A21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm */; };
-		231C35C621DDEFAB00B5D3D2 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357C21DDEFAB00B5D3D2 /* TestCase.mm */; };
-		231C35C721DDEFAB00B5D3D2 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357C21DDEFAB00B5D3D2 /* TestCase.mm */; };
-		231C35C821DDEFAB00B5D3D2 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357C21DDEFAB00B5D3D2 /* TestCase.mm */; };
-		231C35C921DDEFAB00B5D3D2 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357C21DDEFAB00B5D3D2 /* TestCase.mm */; };
-		231C35CA21DDEFAB00B5D3D2 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357C21DDEFAB00B5D3D2 /* TestCase.mm */; };
-		231C35CB21DDEFAB00B5D3D2 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357C21DDEFAB00B5D3D2 /* TestCase.mm */; };
-		231C35CC21DDEFAB00B5D3D2 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357C21DDEFAB00B5D3D2 /* TestCase.mm */; };
-		231C35CD21DDEFAB00B5D3D2 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357C21DDEFAB00B5D3D2 /* TestCase.mm */; };
-		231C35CE21DDEFAB00B5D3D2 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357C21DDEFAB00B5D3D2 /* TestCase.mm */; };
-		231C35CF21DDEFAB00B5D3D2 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357C21DDEFAB00B5D3D2 /* TestCase.mm */; };
-		231C35D021DDEFAB00B5D3D2 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357C21DDEFAB00B5D3D2 /* TestCase.mm */; };
-		231C35D121DDEFAB00B5D3D2 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C357C21DDEFAB00B5D3D2 /* TestCase.mm */; };
 		231C35E621DDF60600B5D3D2 /* StableRandom.m in Sources */ = {isa = PBXBuildFile; fileRef = 231C35E521DDF60600B5D3D2 /* StableRandom.m */; };
 		231C35E821DDF95F00B5D3D2 /* TableMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C35E721DDF95F00B5D3D2 /* TableMigrationBenchmark.mm */; };
 		231C35EE21DE09E800B5D3D2 /* Exiting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 231C35EC21DE09E400B5D3D2 /* Exiting.cpp */; };
 		231C35EF21DE09EC00B5D3D2 /* Exiting.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 231C35EA21DE090500B5D3D2 /* Exiting.hpp */; };
-		231C98BA219532AC0067B87C /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
-		231C98BB219532AC0067B87C /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
-		231C98BC219532AC0067B87C /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
 		231FEA2621999E7D00DC3706 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		231FEA2721999E7D00DC3706 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		231FEA2A21999E7D00DC3706 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -142,14 +55,6 @@
 		231FEACE21999F8D00DC3706 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		231FEACF21999F8D00DC3706 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		231FEAD221999F8D00DC3706 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		231FEAF32199A4D200DC3706 /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
-		231FEAF82199A4D200DC3706 /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
-		231FEAFD2199A4D300DC3706 /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
-		231FEB022199A4D400DC3706 /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
-		231FEB072199A4D400DC3706 /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
-		231FEB0C2199A4D500DC3706 /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
-		231FEB112199A4D500DC3706 /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
-		231FEB162199A4D600DC3706 /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
 		2321FE2F21D206B6008BB722 /* MigrationCompatibleTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2321FE2E21D206B6008BB722 /* MigrationCompatibleTestCase.mm */; };
 		2321FE3221D20A9D008BB722 /* TableMigrationCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2321FE3121D20A9D008BB722 /* TableMigrationCompatibleTests.mm */; };
 		2321FE3421D20AA9008BB722 /* TableMigratingCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2321FE3321D20AA9008BB722 /* TableMigratingCompatibleTests.mm */; };
@@ -246,18 +151,6 @@
 		234E6F6121996EB600D006F2 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		234EF46E2015CFDE00B81929 /* WCTConvertible.h in Headers */ = {isa = PBXBuildFile; fileRef = 234EF46C2015CFDE00B81929 /* WCTConvertible.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234EF46F2015CFDE00B81929 /* WCTConvertible.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234EF46D2015CFDE00B81929 /* WCTConvertible.mm */; };
-		235144EE21D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
-		235144EF21D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
-		235144F021D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
-		235144F121D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
-		235144F221D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
-		235144F321D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
-		235144F421D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
-		235144F521D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
-		235144F621D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
-		235144F721D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
-		235144F821D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
-		235144F921D710C900FF639C /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144ED21D710C900FF639C /* Random.mm */; };
 		2351450021D7564700FF639C /* BenchmarkObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144FE21D7564700FF639C /* BenchmarkObject.mm */; };
 		2351450121D7564700FF639C /* BenchmarkFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144FF21D7564700FF639C /* BenchmarkFactory.mm */; };
 		23567CFA20CA3889005F1C35 /* Frame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23567CF820CA3889005F1C35 /* Frame.cpp */; };
@@ -401,35 +294,63 @@
 		2386563D219C009E00F7F6D2 /* FileTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386563C219C009E00F7F6D2 /* FileTests.mm */; };
 		2386563F219C00A500F7F6D2 /* MemoryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386563E219C00A500F7F6D2 /* MemoryTests.mm */; };
 		23865641219C213200F7F6D2 /* TransactionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865640219C213200F7F6D2 /* TransactionTests.mm */; };
-		23865644219C47AC00F7F6D2 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
-		23865645219C47AC00F7F6D2 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
-		23865646219C47AC00F7F6D2 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
-		23865647219C47AC00F7F6D2 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
-		23865648219C47AC00F7F6D2 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
-		23865649219C47AC00F7F6D2 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
-		2386564A219C47AC00F7F6D2 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
-		2386564B219C47AC00F7F6D2 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
-		2386564C219C47AC00F7F6D2 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
-		2386564D219C47AC00F7F6D2 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
-		2386564E219C47AC00F7F6D2 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
 		2386B3C51ED442FE000B72F6 /* WCTError.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C21ED442FE000B72F6 /* WCTError.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2386B3C61ED442FE000B72F6 /* WCTError.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386B3C31ED442FE000B72F6 /* WCTError.mm */; };
 		2386B3C71ED442FE000B72F6 /* WCTError+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C41ED442FE000B72F6 /* WCTError+Private.h */; };
+		2387D75521DF07790028ADB9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
+		2387D8A521DF0B160028ADB9 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
+		2387D8A721DF0B190028ADB9 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D8A621DF0B190028ADB9 /* XCTest.framework */; };
+		2387D8F321DF0B880028ADB9 /* Console.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8DA21DF0B870028ADB9 /* Console.h */; };
+		2387D8F421DF0B880028ADB9 /* TableTestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8DB21DF0B870028ADB9 /* TableTestCase.h */; };
+		2387D8F521DF0B880028ADB9 /* DatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D8DC21DF0B870028ADB9 /* DatabaseTestCase.mm */; };
+		2387D8F621DF0B880028ADB9 /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D8DD21DF0B870028ADB9 /* NSObject+TestCase.mm */; };
+		2387D8F721DF0B880028ADB9 /* TableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D8DE21DF0B870028ADB9 /* TableTestCase.mm */; };
+		2387D8F821DF0B880028ADB9 /* PreInsertedCRUDTestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8DF21DF0B870028ADB9 /* PreInsertedCRUDTestCase.h */; };
+		2387D8F921DF0B880028ADB9 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D8E021DF0B870028ADB9 /* CRUDTestCase.mm */; };
+		2387D8FA21DF0B880028ADB9 /* NSObject+TestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8E121DF0B870028ADB9 /* NSObject+TestCase.h */; };
+		2387D8FB21DF0B880028ADB9 /* DatabaseTestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8E221DF0B870028ADB9 /* DatabaseTestCase.h */; };
+		2387D8FC21DF0B880028ADB9 /* PreInsertedCRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D8E321DF0B870028ADB9 /* PreInsertedCRUDTestCase.mm */; };
+		2387D8FD21DF0B880028ADB9 /* TestCaseLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8E421DF0B870028ADB9 /* TestCaseLog.h */; };
+		2387D8FE21DF0B880028ADB9 /* TestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8E521DF0B870028ADB9 /* TestCase.h */; };
+		2387D8FF21DF0B880028ADB9 /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D8E721DF0B870028ADB9 /* AllTypesObject.mm */; };
+		2387D90021DF0B880028ADB9 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D8E821DF0B870028ADB9 /* TestCaseObject.mm */; };
+		2387D90121DF0B880028ADB9 /* AllTypesObject+WCTTableCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8E921DF0B870028ADB9 /* AllTypesObject+WCTTableCoding.h */; };
+		2387D90221DF0B880028ADB9 /* AllTypesObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8EA21DF0B870028ADB9 /* AllTypesObject.h */; };
+		2387D90321DF0B880028ADB9 /* TestCaseObject+WCTTableCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8EB21DF0B870028ADB9 /* TestCaseObject+WCTTableCoding.h */; };
+		2387D90421DF0B880028ADB9 /* TestCaseObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8EC21DF0B870028ADB9 /* TestCaseObject.h */; };
+		2387D90521DF0B880028ADB9 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D8ED21DF0B870028ADB9 /* TestCase.mm */; };
+		2387D90621DF0B880028ADB9 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D8EE21DF0B870028ADB9 /* Console.mm */; };
+		2387D90721DF0B880028ADB9 /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D8EF21DF0B870028ADB9 /* Random.mm */; };
+		2387D90821DF0B880028ADB9 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 2387D8F021DF0B870028ADB9 /* TestCaseLog.m */; };
+		2387D90921DF0B880028ADB9 /* CRUDTestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8F121DF0B870028ADB9 /* CRUDTestCase.h */; };
+		2387D90A21DF0B880028ADB9 /* Random.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8F221DF0B870028ADB9 /* Random.h */; };
+		2387D90E21DF0C4B0028ADB9 /* TestCase.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2387D91121DF0C5C0028ADB9 /* TestCase.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2387D91421DF0C660028ADB9 /* TestCase.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2387D91721DF0C6F0028ADB9 /* TestCase.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2387D91A21DF0C780028ADB9 /* TestCase.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2387D91D21DF0C800028ADB9 /* TestCase.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2387D92021DF0C8F0028ADB9 /* TestCase.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2387D92321DF0C960028ADB9 /* TestCase.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2387D92621DF0C9D0028ADB9 /* TestCase.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2387D92921DF0CA60028ADB9 /* TestCase.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2387D92C21DF0CAD0028ADB9 /* TestCase.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2387D92F21DF0CB60028ADB9 /* TestCase.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2387D93021DF0D070028ADB9 /* TestCase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; };
+		2387D93121DF0D290028ADB9 /* TestCase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; };
+		2387D93221DF0D2C0028ADB9 /* TestCase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; };
+		2387D93321DF0D300028ADB9 /* TestCase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; };
+		2387D93421DF0D330028ADB9 /* TestCase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; };
+		2387D93521DF0D360028ADB9 /* TestCase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; };
+		2387D93621DF0D3A0028ADB9 /* TestCase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; };
+		2387D93721DF0D3D0028ADB9 /* TestCase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; };
+		2387D93821DF0D410028ADB9 /* TestCase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; };
+		2387D93921DF0D440028ADB9 /* TestCase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; };
+		2387D93A21DF0D4A0028ADB9 /* TestCase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; };
+		2387D93B21DF0D4D0028ADB9 /* TestCase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; };
 		238845F02063912B006EAEC8 /* WCTPerformanceFootprint.h in Headers */ = {isa = PBXBuildFile; fileRef = 238845EE2063912B006EAEC8 /* WCTPerformanceFootprint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		238845F12063912B006EAEC8 /* WCTPerformanceFootprint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238845EF2063912B006EAEC8 /* WCTPerformanceFootprint.mm */; };
 		238C177E21CA2190003B6D26 /* SyntaxCommonConst.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 238C177C21CA2190003B6D26 /* SyntaxCommonConst.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		238C73A521B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
-		238C73A621B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
-		238C73A721B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
-		238C73A821B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
-		238C73A921B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
-		238C73AA21B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
-		238C73AB21B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
-		238C73AC21B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
-		238C73AD21B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
-		238C73AE21B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
-		238C73AF21B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
-		238C73B021B8B510006B59C2 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 238C73A421B8B510006B59C2 /* TestCaseLog.m */; };
 		23906AB9215E500100C2B717 /* WCTDatabase+Monitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 23906AB7215E500100C2B717 /* WCTDatabase+Monitor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23906ABB215E500100C2B717 /* WCTDatabase+Monitor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23906AB8215E500100C2B717 /* WCTDatabase+Monitor.mm */; };
 		2395582621C143BB000C85E1 /* WCTMigrationInfo+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2395582421C143BB000C85E1 /* WCTMigrationInfo+Private.h */; };
@@ -888,8 +809,6 @@
 		23F70FD620A07CEC00CCE3CD /* CustomConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F70FD420A07CEC00CCE3CD /* CustomConfig.cpp */; };
 		23F70FD820A07CEC00CCE3CD /* CustomConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FD520A07CEC00CCE3CD /* CustomConfig.hpp */; };
 		23FC01DD21B8B716002C7F87 /* RepairBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FC01DC21B8B716002C7F87 /* RepairBenchmark.mm */; };
-		23FC43D321B6631200FA1A0F /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C98B9219532AC0067B87C /* NSObject+TestCase.mm */; };
-		23FC43D421B6631200FA1A0F /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865643219C47AC00F7F6D2 /* Console.mm */; };
 		23FC43D821B6631200FA1A0F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		23FC43D921B6631200FA1A0F /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		23FC43DC21B6631200FA1A0F /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -1038,6 +957,97 @@
 			remoteGlobalIDString = 239E8A6F2160A5B100BCB308;
 			remoteInfo = Host;
 		};
+		2387D8A321DF0B0B0028ADB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239326601E836D7300D677CC;
+			remoteInfo = WCDB;
+		};
+		2387D90C21DF0C380028ADB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2387D64921DF07790028ADB9;
+			remoteInfo = TestCase;
+		};
+		2387D90F21DF0C550028ADB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2387D64921DF07790028ADB9;
+			remoteInfo = TestCase;
+		};
+		2387D91221DF0C620028ADB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2387D64921DF07790028ADB9;
+			remoteInfo = TestCase;
+		};
+		2387D91521DF0C6A0028ADB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2387D64921DF07790028ADB9;
+			remoteInfo = TestCase;
+		};
+		2387D91821DF0C730028ADB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2387D64921DF07790028ADB9;
+			remoteInfo = TestCase;
+		};
+		2387D91B21DF0C7C0028ADB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2387D64921DF07790028ADB9;
+			remoteInfo = TestCase;
+		};
+		2387D91E21DF0C8C0028ADB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2387D64921DF07790028ADB9;
+			remoteInfo = TestCase;
+		};
+		2387D92121DF0C930028ADB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2387D64921DF07790028ADB9;
+			remoteInfo = TestCase;
+		};
+		2387D92421DF0C9A0028ADB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2387D64921DF07790028ADB9;
+			remoteInfo = TestCase;
+		};
+		2387D92721DF0CA10028ADB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2387D64921DF07790028ADB9;
+			remoteInfo = TestCase;
+		};
+		2387D92A21DF0CAA0028ADB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2387D64921DF07790028ADB9;
+			remoteInfo = TestCase;
+		};
+		2387D92D21DF0CB20028ADB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2387D64921DF07790028ADB9;
+			remoteInfo = TestCase;
+		};
 		239E8AAA2160B59C00BCB308 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
@@ -1089,6 +1099,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				2387D90E21DF0C4B0028ADB9 /* TestCase.framework in Embed Frameworks */,
 				231FEA2A21999E7D00DC3706 /* WCDB.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -1100,6 +1111,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				2387D91D21DF0C800028ADB9 /* TestCase.framework in Embed Frameworks */,
 				231FEA4621999ECE00DC3706 /* WCDB.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -1111,6 +1123,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				2387D92021DF0C8F0028ADB9 /* TestCase.framework in Embed Frameworks */,
 				231FEA6221999F0D00DC3706 /* WCDB.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -1122,6 +1135,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				2387D92321DF0C960028ADB9 /* TestCase.framework in Embed Frameworks */,
 				231FEA7E21999F2A00DC3706 /* WCDB.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -1133,6 +1147,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				2387D92621DF0C9D0028ADB9 /* TestCase.framework in Embed Frameworks */,
 				231FEA9A21999F7800DC3706 /* WCDB.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -1144,6 +1159,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				2387D92921DF0CA60028ADB9 /* TestCase.framework in Embed Frameworks */,
 				231FEAB621999F8100DC3706 /* WCDB.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -1155,6 +1171,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				2387D92C21DF0CAD0028ADB9 /* TestCase.framework in Embed Frameworks */,
 				231FEAD221999F8D00DC3706 /* WCDB.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -1166,6 +1183,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				2387D91A21DF0C780028ADB9 /* TestCase.framework in Embed Frameworks */,
 				234E6F6121996EB600D006F2 /* WCDB.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -1177,6 +1195,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				2387D91421DF0C660028ADB9 /* TestCase.framework in Embed Frameworks */,
 				23790948219295370098797F /* WCDB.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -1188,6 +1207,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				2387D91721DF0C6F0028ADB9 /* TestCase.framework in Embed Frameworks */,
 				2384F7232194249200E8B10A /* WCDB.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -1199,6 +1219,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				2387D91121DF0C5C0028ADB9 /* TestCase.framework in Embed Frameworks */,
 				239E8AB02160B71200BCB308 /* WCDB.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -1210,6 +1231,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				2387D92F21DF0CB60028ADB9 /* TestCase.framework in Embed Frameworks */,
 				23FC43DC21B6631200FA1A0F /* WCDB.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -1243,29 +1265,11 @@
 		23176A9921BA7D460051ACF9 /* WCTDatabase+Version.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Version.h"; sourceTree = "<group>"; };
 		23176A9A21BA7D460051ACF9 /* WCTDatabase+Version.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Version.mm"; sourceTree = "<group>"; };
 		2319D8BE21C2504C00F5B8C0 /* StoppableIterationTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = StoppableIterationTests.mm; sourceTree = "<group>"; };
-		231C356D21DDEFAB00B5D3D2 /* AllTypesObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AllTypesObject.mm; sourceTree = "<group>"; };
-		231C356E21DDEFAB00B5D3D2 /* TestCaseObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCaseObject.mm; sourceTree = "<group>"; };
-		231C356F21DDEFAB00B5D3D2 /* AllTypesObject+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AllTypesObject+WCTTableCoding.h"; sourceTree = "<group>"; };
-		231C357021DDEFAB00B5D3D2 /* AllTypesObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTypesObject.h; sourceTree = "<group>"; };
-		231C357121DDEFAB00B5D3D2 /* TestCaseObject+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestCaseObject+WCTTableCoding.h"; sourceTree = "<group>"; };
-		231C357221DDEFAB00B5D3D2 /* TestCaseObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCaseObject.h; sourceTree = "<group>"; };
-		231C357421DDEFAB00B5D3D2 /* TableTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableTestCase.h; sourceTree = "<group>"; };
-		231C357521DDEFAB00B5D3D2 /* DatabaseTestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DatabaseTestCase.mm; sourceTree = "<group>"; };
-		231C357621DDEFAB00B5D3D2 /* TableTestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableTestCase.mm; sourceTree = "<group>"; };
-		231C357721DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreInsertedCRUDTestCase.h; sourceTree = "<group>"; };
-		231C357821DDEFAB00B5D3D2 /* CRUDTestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CRUDTestCase.mm; sourceTree = "<group>"; };
-		231C357921DDEFAB00B5D3D2 /* DatabaseTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseTestCase.h; sourceTree = "<group>"; };
-		231C357A21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PreInsertedCRUDTestCase.mm; sourceTree = "<group>"; };
-		231C357B21DDEFAB00B5D3D2 /* TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCase.h; sourceTree = "<group>"; };
-		231C357C21DDEFAB00B5D3D2 /* TestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCase.mm; sourceTree = "<group>"; };
-		231C357D21DDEFAB00B5D3D2 /* CRUDTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRUDTestCase.h; sourceTree = "<group>"; };
 		231C35E421DDF60600B5D3D2 /* StableRandom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StableRandom.h; sourceTree = "<group>"; };
 		231C35E521DDF60600B5D3D2 /* StableRandom.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StableRandom.m; sourceTree = "<group>"; };
 		231C35E721DDF95F00B5D3D2 /* TableMigrationBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TableMigrationBenchmark.mm; sourceTree = "<group>"; };
 		231C35EA21DE090500B5D3D2 /* Exiting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Exiting.hpp; sourceTree = "<group>"; };
 		231C35EC21DE09E400B5D3D2 /* Exiting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Exiting.cpp; sourceTree = "<group>"; };
-		231C98B8219532AC0067B87C /* NSObject+TestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+TestCase.h"; sourceTree = "<group>"; };
-		231C98B9219532AC0067B87C /* NSObject+TestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSObject+TestCase.mm"; sourceTree = "<group>"; };
 		231FEA2F21999E7D00DC3706 /* Basic.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Basic.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		231FEA4B21999ECE00DC3706 /* Thread.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Thread.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		231FEA6721999F0D00DC3706 /* Monitor.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Monitor.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1368,8 +1372,6 @@
 		234E6F6621996EB600D006F2 /* Advance.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Advance.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		234EF46C2015CFDE00B81929 /* WCTConvertible.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTConvertible.h; sourceTree = "<group>"; };
 		234EF46D2015CFDE00B81929 /* WCTConvertible.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTConvertible.mm; sourceTree = "<group>"; };
-		235144EC21D710C900FF639C /* Random.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Random.h; sourceTree = "<group>"; };
-		235144ED21D710C900FF639C /* Random.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Random.mm; sourceTree = "<group>"; };
 		235144FB21D7564700FF639C /* BenchmarkFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BenchmarkFactory.h; sourceTree = "<group>"; };
 		235144FC21D7564700FF639C /* BenchmarkObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BenchmarkObject.h; sourceTree = "<group>"; };
 		235144FD21D7564700FF639C /* BenchmarkObject+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BenchmarkObject+WCTTableCoding.h"; sourceTree = "<group>"; };
@@ -1560,8 +1562,6 @@
 		2386563C219C009E00F7F6D2 /* FileTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FileTests.mm; sourceTree = "<group>"; };
 		2386563E219C00A500F7F6D2 /* MemoryTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MemoryTests.mm; sourceTree = "<group>"; };
 		23865640219C213200F7F6D2 /* TransactionTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TransactionTests.mm; sourceTree = "<group>"; };
-		23865642219C47AC00F7F6D2 /* Console.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Console.h; sourceTree = "<group>"; };
-		23865643219C47AC00F7F6D2 /* Console.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Console.mm; sourceTree = "<group>"; };
 		2386B3C21ED442FE000B72F6 /* WCTError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTError.h; sourceTree = "<group>"; };
 		2386B3C31ED442FE000B72F6 /* WCTError.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTError.mm; sourceTree = "<group>"; };
 		2386B3C41ED442FE000B72F6 /* WCTError+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTError+Private.h"; sourceTree = "<group>"; };
@@ -1575,14 +1575,42 @@
 		2387D64321DF03FF0028ADB9 /* WCDB.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = WCDB.modulemap; sourceTree = "<group>"; };
 		2387D64421DF03FF0028ADB9 /* Project_bitcode.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Project_bitcode.xcconfig; sourceTree = "<group>"; };
 		2387D64521DF03FF0028ADB9 /* Project_release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Project_release.xcconfig; sourceTree = "<group>"; };
-		2387D64621DF04620028ADB9 /* TestCase_Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = TestCase_Info.plist; sourceTree = "<group>"; };
-		2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TestCase_debug.xcconfig; sourceTree = "<group>"; };
-		2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TestCase_release.xcconfig; sourceTree = "<group>"; };
+		2387D89821DF07790028ADB9 /* TestCase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TestCase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2387D89A21DF087C0028ADB9 /* Tests_Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Tests_Info.plist; sourceTree = "<group>"; };
+		2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Tests_debug.xcconfig; sourceTree = "<group>"; };
+		2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Tests_release.xcconfig; sourceTree = "<group>"; };
+		2387D8A021DF09E60028ADB9 /* TestCase_Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = TestCase_Info.plist; sourceTree = "<group>"; };
+		2387D8A121DF09E60028ADB9 /* TestCase_debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TestCase_debug.xcconfig; sourceTree = "<group>"; };
+		2387D8A221DF09E60028ADB9 /* TestCase_release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TestCase_release.xcconfig; sourceTree = "<group>"; };
+		2387D8A621DF0B190028ADB9 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/MacOSX.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		2387D8DA21DF0B870028ADB9 /* Console.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Console.h; sourceTree = "<group>"; };
+		2387D8DB21DF0B870028ADB9 /* TableTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableTestCase.h; sourceTree = "<group>"; };
+		2387D8DC21DF0B870028ADB9 /* DatabaseTestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DatabaseTestCase.mm; sourceTree = "<group>"; };
+		2387D8DD21DF0B870028ADB9 /* NSObject+TestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSObject+TestCase.mm"; sourceTree = "<group>"; };
+		2387D8DE21DF0B870028ADB9 /* TableTestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableTestCase.mm; sourceTree = "<group>"; };
+		2387D8DF21DF0B870028ADB9 /* PreInsertedCRUDTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreInsertedCRUDTestCase.h; sourceTree = "<group>"; };
+		2387D8E021DF0B870028ADB9 /* CRUDTestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CRUDTestCase.mm; sourceTree = "<group>"; };
+		2387D8E121DF0B870028ADB9 /* NSObject+TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+TestCase.h"; sourceTree = "<group>"; };
+		2387D8E221DF0B870028ADB9 /* DatabaseTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseTestCase.h; sourceTree = "<group>"; };
+		2387D8E321DF0B870028ADB9 /* PreInsertedCRUDTestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PreInsertedCRUDTestCase.mm; sourceTree = "<group>"; };
+		2387D8E421DF0B870028ADB9 /* TestCaseLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCaseLog.h; sourceTree = "<group>"; };
+		2387D8E521DF0B870028ADB9 /* TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCase.h; sourceTree = "<group>"; };
+		2387D8E721DF0B870028ADB9 /* AllTypesObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AllTypesObject.mm; sourceTree = "<group>"; };
+		2387D8E821DF0B870028ADB9 /* TestCaseObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCaseObject.mm; sourceTree = "<group>"; };
+		2387D8E921DF0B870028ADB9 /* AllTypesObject+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AllTypesObject+WCTTableCoding.h"; sourceTree = "<group>"; };
+		2387D8EA21DF0B870028ADB9 /* AllTypesObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTypesObject.h; sourceTree = "<group>"; };
+		2387D8EB21DF0B870028ADB9 /* TestCaseObject+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestCaseObject+WCTTableCoding.h"; sourceTree = "<group>"; };
+		2387D8EC21DF0B870028ADB9 /* TestCaseObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCaseObject.h; sourceTree = "<group>"; };
+		2387D8ED21DF0B870028ADB9 /* TestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCase.mm; sourceTree = "<group>"; };
+		2387D8EE21DF0B870028ADB9 /* Console.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Console.mm; sourceTree = "<group>"; };
+		2387D8EF21DF0B870028ADB9 /* Random.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Random.mm; sourceTree = "<group>"; };
+		2387D8F021DF0B870028ADB9 /* TestCaseLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestCaseLog.m; sourceTree = "<group>"; };
+		2387D8F121DF0B870028ADB9 /* CRUDTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRUDTestCase.h; sourceTree = "<group>"; };
+		2387D8F221DF0B870028ADB9 /* Random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Random.h; sourceTree = "<group>"; };
+		2387D90B21DF0BBA0028ADB9 /* TestCase.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = TestCase.modulemap; sourceTree = "<group>"; };
 		238845EE2063912B006EAEC8 /* WCTPerformanceFootprint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTPerformanceFootprint.h; sourceTree = "<group>"; };
 		238845EF2063912B006EAEC8 /* WCTPerformanceFootprint.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTPerformanceFootprint.mm; sourceTree = "<group>"; };
 		238C177C21CA2190003B6D26 /* SyntaxCommonConst.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SyntaxCommonConst.hpp; sourceTree = "<group>"; };
-		238C73A321B8B50F006B59C2 /* TestCaseLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCaseLog.h; sourceTree = "<group>"; };
-		238C73A421B8B510006B59C2 /* TestCaseLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestCaseLog.m; sourceTree = "<group>"; };
 		23906AB7215E500100C2B717 /* WCTDatabase+Monitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Monitor.h"; sourceTree = "<group>"; };
 		23906AB8215E500100C2B717 /* WCTDatabase+Monitor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Monitor.mm"; sourceTree = "<group>"; };
 		239326611E836D7300D677CC /* WCDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2054,6 +2082,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2387D93021DF0D070028ADB9 /* TestCase.framework in Frameworks */,
 				231FEA2621999E7D00DC3706 /* Foundation.framework in Frameworks */,
 				231FEA2721999E7D00DC3706 /* WCDB.framework in Frameworks */,
 			);
@@ -2064,6 +2093,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				231FEA4221999ECE00DC3706 /* Foundation.framework in Frameworks */,
+				2387D93521DF0D360028ADB9 /* TestCase.framework in Frameworks */,
 				231FEA4321999ECE00DC3706 /* WCDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2072,6 +2102,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2387D93621DF0D3A0028ADB9 /* TestCase.framework in Frameworks */,
 				231FEA5E21999F0D00DC3706 /* Foundation.framework in Frameworks */,
 				231FEA5F21999F0D00DC3706 /* WCDB.framework in Frameworks */,
 			);
@@ -2081,6 +2112,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2387D93721DF0D3D0028ADB9 /* TestCase.framework in Frameworks */,
 				231FEA7A21999F2A00DC3706 /* Foundation.framework in Frameworks */,
 				231FEA7B21999F2A00DC3706 /* WCDB.framework in Frameworks */,
 			);
@@ -2091,6 +2123,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				231FEA9621999F7800DC3706 /* Foundation.framework in Frameworks */,
+				2387D93821DF0D410028ADB9 /* TestCase.framework in Frameworks */,
 				231FEA9721999F7800DC3706 /* WCDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2100,6 +2133,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				231FEAB221999F8100DC3706 /* Foundation.framework in Frameworks */,
+				2387D93921DF0D440028ADB9 /* TestCase.framework in Frameworks */,
 				231FEAB321999F8100DC3706 /* WCDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2109,6 +2143,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				231FEACE21999F8D00DC3706 /* Foundation.framework in Frameworks */,
+				2387D93A21DF0D4A0028ADB9 /* TestCase.framework in Frameworks */,
 				231FEACF21999F8D00DC3706 /* WCDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2118,6 +2153,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				234E6F5D21996EB600D006F2 /* Foundation.framework in Frameworks */,
+				2387D93421DF0D330028ADB9 /* TestCase.framework in Frameworks */,
 				234E6F5E21996EB600D006F2 /* WCDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2127,6 +2163,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23790944219295370098797F /* Foundation.framework in Frameworks */,
+				2387D93221DF0D2C0028ADB9 /* TestCase.framework in Frameworks */,
 				23790945219295370098797F /* WCDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2136,7 +2173,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				2384F71F2194249200E8B10A /* Foundation.framework in Frameworks */,
+				2387D93321DF0D300028ADB9 /* TestCase.framework in Frameworks */,
 				2384F7202194249200E8B10A /* WCDB.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2387D75421DF07790028ADB9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2387D8A721DF0B190028ADB9 /* XCTest.framework in Frameworks */,
+				2387D8A521DF0B160028ADB9 /* WCDB.framework in Frameworks */,
+				2387D75521DF07790028ADB9 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2162,6 +2210,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2387D93121DF0D290028ADB9 /* TestCase.framework in Frameworks */,
 				239E8AB42160B7D200BCB308 /* Foundation.framework in Frameworks */,
 				239E8AAE2160B70000BCB308 /* WCDB.framework in Frameworks */,
 			);
@@ -2172,6 +2221,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23FC43D821B6631200FA1A0F /* Foundation.framework in Frameworks */,
+				2387D93B21DF0D4D0028ADB9 /* TestCase.framework in Frameworks */,
 				23FC43D921B6631200FA1A0F /* WCDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2194,36 +2244,6 @@
 				2347378E21CBB3A800AD5E41 /* AbstractHandle.hpp */,
 			);
 			path = handle;
-			sourceTree = "<group>";
-		};
-		231C356C21DDEFAB00B5D3D2 /* object */ = {
-			isa = PBXGroup;
-			children = (
-				231C357021DDEFAB00B5D3D2 /* AllTypesObject.h */,
-				231C356F21DDEFAB00B5D3D2 /* AllTypesObject+WCTTableCoding.h */,
-				231C356D21DDEFAB00B5D3D2 /* AllTypesObject.mm */,
-				231C357221DDEFAB00B5D3D2 /* TestCaseObject.h */,
-				231C357121DDEFAB00B5D3D2 /* TestCaseObject+WCTTableCoding.h */,
-				231C356E21DDEFAB00B5D3D2 /* TestCaseObject.mm */,
-			);
-			path = object;
-			sourceTree = "<group>";
-		};
-		231C357321DDEFAB00B5D3D2 /* testcase */ = {
-			isa = PBXGroup;
-			children = (
-				231C357421DDEFAB00B5D3D2 /* TableTestCase.h */,
-				231C357621DDEFAB00B5D3D2 /* TableTestCase.mm */,
-				231C357921DDEFAB00B5D3D2 /* DatabaseTestCase.h */,
-				231C357521DDEFAB00B5D3D2 /* DatabaseTestCase.mm */,
-				231C357721DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.h */,
-				231C357A21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm */,
-				231C357B21DDEFAB00B5D3D2 /* TestCase.h */,
-				231C357C21DDEFAB00B5D3D2 /* TestCase.mm */,
-				231C357D21DDEFAB00B5D3D2 /* CRUDTestCase.h */,
-				231C357821DDEFAB00B5D3D2 /* CRUDTestCase.mm */,
-			);
-			path = testcase;
 			sourceTree = "<group>";
 		};
 		231FEAD92199A0FD00DC3706 /* monitor */ = {
@@ -2891,23 +2911,6 @@
 			path = orm;
 			sourceTree = "<group>";
 		};
-		23790A4F219298250098797F /* common */ = {
-			isa = PBXGroup;
-			children = (
-				231C356C21DDEFAB00B5D3D2 /* object */,
-				231C357321DDEFAB00B5D3D2 /* testcase */,
-				231C98B8219532AC0067B87C /* NSObject+TestCase.h */,
-				231C98B9219532AC0067B87C /* NSObject+TestCase.mm */,
-				23865642219C47AC00F7F6D2 /* Console.h */,
-				23865643219C47AC00F7F6D2 /* Console.mm */,
-				235144EC21D710C900FF639C /* Random.h */,
-				235144ED21D710C900FF639C /* Random.mm */,
-				238C73A321B8B50F006B59C2 /* TestCaseLog.h */,
-				238C73A421B8B510006B59C2 /* TestCaseLog.m */,
-			);
-			path = common;
-			sourceTree = "<group>";
-		};
 		23790A5C2192B03C0098797F /* column_constraint */ = {
 			isa = PBXGroup;
 			children = (
@@ -3033,6 +3036,45 @@
 			path = monitor;
 			sourceTree = "<group>";
 		};
+		2387D8D921DF0B870028ADB9 /* testcase */ = {
+			isa = PBXGroup;
+			children = (
+				2387D8DA21DF0B870028ADB9 /* Console.h */,
+				2387D8DB21DF0B870028ADB9 /* TableTestCase.h */,
+				2387D8DC21DF0B870028ADB9 /* DatabaseTestCase.mm */,
+				2387D8DD21DF0B870028ADB9 /* NSObject+TestCase.mm */,
+				2387D8DE21DF0B870028ADB9 /* TableTestCase.mm */,
+				2387D8DF21DF0B870028ADB9 /* PreInsertedCRUDTestCase.h */,
+				2387D8E021DF0B870028ADB9 /* CRUDTestCase.mm */,
+				2387D8E121DF0B870028ADB9 /* NSObject+TestCase.h */,
+				2387D8E221DF0B870028ADB9 /* DatabaseTestCase.h */,
+				2387D8E321DF0B870028ADB9 /* PreInsertedCRUDTestCase.mm */,
+				2387D8E421DF0B870028ADB9 /* TestCaseLog.h */,
+				2387D8E521DF0B870028ADB9 /* TestCase.h */,
+				2387D8E621DF0B870028ADB9 /* object */,
+				2387D8ED21DF0B870028ADB9 /* TestCase.mm */,
+				2387D8EE21DF0B870028ADB9 /* Console.mm */,
+				2387D8EF21DF0B870028ADB9 /* Random.mm */,
+				2387D8F021DF0B870028ADB9 /* TestCaseLog.m */,
+				2387D8F121DF0B870028ADB9 /* CRUDTestCase.h */,
+				2387D8F221DF0B870028ADB9 /* Random.h */,
+			);
+			path = testcase;
+			sourceTree = "<group>";
+		};
+		2387D8E621DF0B870028ADB9 /* object */ = {
+			isa = PBXGroup;
+			children = (
+				2387D8E721DF0B870028ADB9 /* AllTypesObject.mm */,
+				2387D8E821DF0B870028ADB9 /* TestCaseObject.mm */,
+				2387D8E921DF0B870028ADB9 /* AllTypesObject+WCTTableCoding.h */,
+				2387D8EA21DF0B870028ADB9 /* AllTypesObject.h */,
+				2387D8EB21DF0B870028ADB9 /* TestCaseObject+WCTTableCoding.h */,
+				2387D8EC21DF0B870028ADB9 /* TestCaseObject.h */,
+			);
+			path = object;
+			sourceTree = "<group>";
+		};
 		2398971F217EC9E20014BF33 /* winq */ = {
 			isa = PBXGroup;
 			children = (
@@ -3111,6 +3153,7 @@
 		239E8A8C2160A62F00BCB308 /* testcase */ = {
 			isa = PBXGroup;
 			children = (
+				2387D8D921DF0B870028ADB9 /* testcase */,
 				23FC43E521B6644B00FA1A0F /* benchmark */,
 				231FEAE02199A10000DC3706 /* advance */,
 				231FEADB2199A0FE00DC3706 /* basic */,
@@ -3124,7 +3167,6 @@
 				23790A47219295B80098797F /* orm */,
 				2398971F217EC9E20014BF33 /* winq */,
 				239E8A8D2160A62F00BCB308 /* host */,
-				23790A4F219298250098797F /* common */,
 			);
 			path = testcase;
 			sourceTree = "<group>";
@@ -3199,6 +3241,7 @@
 				231FEABB21999F8100DC3706 /* FTS.xctest */,
 				231FEAD721999F8D00DC3706 /* Migration.xctest */,
 				23FC43E121B6631200FA1A0F /* Benchmark.xctest */,
+				2387D89821DF07790028ADB9 /* TestCase.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3206,6 +3249,7 @@
 		23B5F93E1E111CB100E58396 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2387D8A621DF0B190028ADB9 /* XCTest.framework */,
 				239E8A922160A81600BCB308 /* Foundation.framework */,
 				23F0FD7C215F1C92008399FB /* Security.framework */,
 				23C43BCC2087435800AB186D /* libz.tbd */,
@@ -3563,12 +3607,16 @@
 				2387D63921DF03FE0028ADB9 /* WCDB_Info.plist */,
 				2387D64121DF03FF0028ADB9 /* WCDB_debug.xcconfig */,
 				2387D63C21DF03FE0028ADB9 /* WCDB_release.xcconfig */,
+				2387D90B21DF0BBA0028ADB9 /* TestCase.modulemap */,
+				2387D8A021DF09E60028ADB9 /* TestCase_Info.plist */,
+				2387D8A121DF09E60028ADB9 /* TestCase_debug.xcconfig */,
+				2387D8A221DF09E60028ADB9 /* TestCase_release.xcconfig */,
 				2387D63F21DF03FF0028ADB9 /* Host_Info.plist */,
 				2387D64221DF03FF0028ADB9 /* Host_debug.xcconfig */,
 				2387D63A21DF03FE0028ADB9 /* Host_release.xcconfig */,
-				2387D64621DF04620028ADB9 /* TestCase_Info.plist */,
-				2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */,
-				2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */,
+				2387D89A21DF087C0028ADB9 /* Tests_Info.plist */,
+				2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */,
+				2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */,
 			);
 			path = support;
 			sourceTree = "<group>";
@@ -3627,6 +3675,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		2387D75921DF07790028ADB9 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2387D8FA21DF0B880028ADB9 /* NSObject+TestCase.h in Headers */,
+				2387D8F321DF0B880028ADB9 /* Console.h in Headers */,
+				2387D90A21DF0B880028ADB9 /* Random.h in Headers */,
+				2387D8F821DF0B880028ADB9 /* PreInsertedCRUDTestCase.h in Headers */,
+				2387D8FD21DF0B880028ADB9 /* TestCaseLog.h in Headers */,
+				2387D90221DF0B880028ADB9 /* AllTypesObject.h in Headers */,
+				2387D90321DF0B880028ADB9 /* TestCaseObject+WCTTableCoding.h in Headers */,
+				2387D8FB21DF0B880028ADB9 /* DatabaseTestCase.h in Headers */,
+				2387D90421DF0B880028ADB9 /* TestCaseObject.h in Headers */,
+				2387D8FE21DF0B880028ADB9 /* TestCase.h in Headers */,
+				2387D8F421DF0B880028ADB9 /* TableTestCase.h in Headers */,
+				2387D90921DF0B880028ADB9 /* CRUDTestCase.h in Headers */,
+				2387D90121DF0B880028ADB9 /* AllTypesObject+WCTTableCoding.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2393265E1E836D7300D677CC /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -3962,6 +4030,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				2387D90D21DF0C380028ADB9 /* PBXTargetDependency */,
 				231FEA1621999E7D00DC3706 /* PBXTargetDependency */,
 				231FEA1821999E7D00DC3706 /* PBXTargetDependency */,
 			);
@@ -3982,6 +4051,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				2387D91C21DF0C7C0028ADB9 /* PBXTargetDependency */,
 				231FEA3221999ECE00DC3706 /* PBXTargetDependency */,
 				231FEA3421999ECE00DC3706 /* PBXTargetDependency */,
 			);
@@ -4002,6 +4072,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				2387D91F21DF0C8C0028ADB9 /* PBXTargetDependency */,
 				231FEA4E21999F0D00DC3706 /* PBXTargetDependency */,
 				231FEA5021999F0D00DC3706 /* PBXTargetDependency */,
 			);
@@ -4022,6 +4093,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				2387D92221DF0C930028ADB9 /* PBXTargetDependency */,
 				231FEA6A21999F2A00DC3706 /* PBXTargetDependency */,
 				231FEA6C21999F2A00DC3706 /* PBXTargetDependency */,
 			);
@@ -4042,6 +4114,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				2387D92521DF0C9A0028ADB9 /* PBXTargetDependency */,
 				231FEA8621999F7800DC3706 /* PBXTargetDependency */,
 				231FEA8821999F7800DC3706 /* PBXTargetDependency */,
 			);
@@ -4062,6 +4135,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				2387D92821DF0CA10028ADB9 /* PBXTargetDependency */,
 				231FEAA221999F8100DC3706 /* PBXTargetDependency */,
 				231FEAA421999F8100DC3706 /* PBXTargetDependency */,
 			);
@@ -4082,6 +4156,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				2387D92B21DF0CAA0028ADB9 /* PBXTargetDependency */,
 				231FEABE21999F8D00DC3706 /* PBXTargetDependency */,
 				231FEAC021999F8D00DC3706 /* PBXTargetDependency */,
 			);
@@ -4102,6 +4177,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				2387D91921DF0C730028ADB9 /* PBXTargetDependency */,
 				234E6F4D21996EB600D006F2 /* PBXTargetDependency */,
 				234E6F4F21996EB600D006F2 /* PBXTargetDependency */,
 			);
@@ -4122,6 +4198,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				2387D91321DF0C620028ADB9 /* PBXTargetDependency */,
 				237908FB219295370098797F /* PBXTargetDependency */,
 				237908FD219295370098797F /* PBXTargetDependency */,
 			);
@@ -4142,6 +4219,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				2387D91621DF0C6A0028ADB9 /* PBXTargetDependency */,
 				2384F7032194249200E8B10A /* PBXTargetDependency */,
 				2384F7052194249200E8B10A /* PBXTargetDependency */,
 			);
@@ -4149,6 +4227,25 @@
 			productName = "WINQ tests";
 			productReference = 2384F7282194249200E8B10A /* Convenient.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		2387D64921DF07790028ADB9 /* TestCase */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2387D89421DF07790028ADB9 /* Build configuration list for PBXNativeTarget "TestCase" */;
+			buildPhases = (
+				2387D64C21DF07790028ADB9 /* Sources */,
+				2387D75421DF07790028ADB9 /* Frameworks */,
+				2387D75921DF07790028ADB9 /* Headers */,
+				2387D89321DF07790028ADB9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2387D8A421DF0B0B0028ADB9 /* PBXTargetDependency */,
+			);
+			name = TestCase;
+			productName = "WCDB framework";
+			productReference = 2387D89821DF07790028ADB9 /* TestCase.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 		239326601E836D7300D677CC /* WCDB */ = {
 			isa = PBXNativeTarget;
@@ -4198,6 +4295,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				2387D91021DF0C550028ADB9 /* PBXTargetDependency */,
 				239E8AAD2160B6F300BCB308 /* PBXTargetDependency */,
 				239E8AAB2160B59C00BCB308 /* PBXTargetDependency */,
 			);
@@ -4218,6 +4316,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				2387D92E21DF0CB20028ADB9 /* PBXTargetDependency */,
 				23FC43C621B6631200FA1A0F /* PBXTargetDependency */,
 				23FC43C821B6631200FA1A0F /* PBXTargetDependency */,
 			);
@@ -4275,6 +4374,9 @@
 						DevelopmentTeam = TCFDHFMX6R;
 						ProvisioningStyle = Automatic;
 					};
+					2387D64921DF07790028ADB9 = {
+						DevelopmentTeam = TCFDHFMX6R;
+					};
 					239326601E836D7300D677CC = {
 						CreatedOnToolsVersion = 8.2;
 						DevelopmentTeam = TCFDHFMX6R;
@@ -4316,6 +4418,7 @@
 			projectRoot = "";
 			targets = (
 				239326601E836D7300D677CC /* WCDB */,
+				2387D64921DF07790028ADB9 /* TestCase */,
 				239E8A6F2160A5B100BCB308 /* Host */,
 				231FEA1521999E7D00DC3706 /* Basic */,
 				239E8A9C2160B37600BCB308 /* WINQ */,
@@ -4414,6 +4517,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2387D89321DF07790028ADB9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2393265F1E836D7300D677CC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4450,20 +4560,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				2386563D219C009E00F7F6D2 /* FileTests.mm in Sources */,
-				238C73A521B8B510006B59C2 /* TestCaseLog.m in Sources */,
-				231C359621DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */,
-				231C35AE21DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */,
-				231C357E21DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */,
-				231C35A221DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */,
-				231C35C621DDEFAB00B5D3D2 /* TestCase.mm in Sources */,
 				2386563F219C00A500F7F6D2 /* MemoryTests.mm in Sources */,
-				231C35BA21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */,
-				235144EE21D710C900FF639C /* Random.mm in Sources */,
 				23739DC8219AEDE700A043BF /* DatabaseTests.mm in Sources */,
-				231FEB162199A4D600DC3706 /* NSObject+TestCase.mm in Sources */,
 				23B1910A21D61848005480C7 /* TableTests.mm in Sources */,
-				231C358A21DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */,
-				23865644219C47AC00F7F6D2 /* Console.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4471,19 +4570,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				231C358321DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */,
-				235144F321D710C900FF639C /* Random.mm in Sources */,
 				23254FCB219D28BA00DE2435 /* ThreadTests.mm in Sources */,
-				238C73AA21B8B510006B59C2 /* TestCaseLog.m in Sources */,
-				231C359B21DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */,
-				231C35CB21DDEFAB00B5D3D2 /* TestCase.mm in Sources */,
-				231C35BF21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */,
-				231C358F21DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */,
-				231FEAF82199A4D200DC3706 /* NSObject+TestCase.mm in Sources */,
 				23865641219C213200F7F6D2 /* TransactionTests.mm in Sources */,
-				231C35A721DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */,
-				23865649219C47AC00F7F6D2 /* Console.mm in Sources */,
-				231C35B321DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4491,19 +4579,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				231C358421DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */,
-				235144F421D710C900FF639C /* Random.mm in Sources */,
-				231FEAFD2199A4D300DC3706 /* NSObject+TestCase.mm in Sources */,
-				238C73AB21B8B510006B59C2 /* TestCaseLog.m in Sources */,
-				231C359C21DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */,
-				231C35CC21DDEFAB00B5D3D2 /* TestCase.mm in Sources */,
-				231C35C021DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */,
-				231C359021DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */,
 				23B4A77E21A7DFDA00BD6A32 /* TraceTests.mm in Sources */,
 				23B4A78021A7F2A900BD6A32 /* VersionTests.mm in Sources */,
-				231C35A821DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */,
-				2386564A219C47AC00F7F6D2 /* Console.mm in Sources */,
-				231C35B421DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4511,18 +4588,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				235144F521D710C900FF639C /* Random.mm in Sources */,
-				231C35A921DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */,
-				231C359121DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */,
-				231C35CD21DDEFAB00B5D3D2 /* TestCase.mm in Sources */,
-				231FEB072199A4D400DC3706 /* NSObject+TestCase.mm in Sources */,
-				231C358521DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */,
-				231C359D21DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */,
 				2372E06221A2E13100051D9A /* ConfigTests.mm in Sources */,
-				231C35C121DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */,
-				231C35B521DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */,
-				238C73AC21B8B510006B59C2 /* TestCaseLog.m in Sources */,
-				2386564B219C47AC00F7F6D2 /* Console.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4530,23 +4596,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				231C358621DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */,
-				231C35C221DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */,
 				23B4A78221A7FBB500BD6A32 /* BackupTests.mm in Sources */,
-				231C35B621DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */,
-				231C35CE21DDEFAB00B5D3D2 /* TestCase.mm in Sources */,
-				235144F621D710C900FF639C /* Random.mm in Sources */,
 				2304121F21ABA23C00CB2318 /* BackupTestCase.mm in Sources */,
-				231C35AA21DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */,
-				231C359221DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */,
 				2304121821AB9EF700CB2318 /* DepositTests.mm in Sources */,
-				238C73AD21B8B510006B59C2 /* TestCaseLog.m in Sources */,
-				231FEB022199A4D400DC3706 /* NSObject+TestCase.mm in Sources */,
 				23846FCF21AF8427005B868F /* RetrieveRobustyTests.mm in Sources */,
 				2304121A21AB9F1600CB2318 /* RecoverTests.mm in Sources */,
-				2386564C219C47AC00F7F6D2 /* Console.mm in Sources */,
 				2304121C21AB9F2000CB2318 /* RetrieveTests.mm in Sources */,
-				231C359E21DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4554,17 +4609,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				238C73AE21B8B510006B59C2 /* TestCaseLog.m in Sources */,
-				235144F721D710C900FF639C /* Random.mm in Sources */,
-				231FEB0C2199A4D500DC3706 /* NSObject+TestCase.mm in Sources */,
-				2386564D219C47AC00F7F6D2 /* Console.mm in Sources */,
-				231C35AB21DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */,
-				231C35C321DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */,
-				231C35B721DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */,
-				231C359321DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */,
-				231C358721DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */,
-				231C359F21DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */,
-				231C35CF21DDEFAB00B5D3D2 /* TestCase.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4572,26 +4616,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				231C358821DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */,
-				231C35AC21DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */,
-				238C73AF21B8B510006B59C2 /* TestCaseLog.m in Sources */,
-				235144F821D710C900FF639C /* Random.mm in Sources */,
 				2321FE2F21D206B6008BB722 /* MigrationCompatibleTestCase.mm in Sources */,
-				231C35B821DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */,
-				231FEB112199A4D500DC3706 /* NSObject+TestCase.mm in Sources */,
 				2321FE3821D20AB7008BB722 /* DatabaseMigratingCompatibleTests.mm in Sources */,
 				2321FE3421D20AA9008BB722 /* TableMigratingCompatibleTests.mm in Sources */,
-				231C35C421DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */,
 				237C901521D4C5C400EE6E44 /* TableMigrateTests.mm in Sources */,
-				231C35D021DDEFAB00B5D3D2 /* TestCase.mm in Sources */,
 				237C901321D4C56500EE6E44 /* MigrateTestCase.mm in Sources */,
 				2321FE3221D20A9D008BB722 /* TableMigrationCompatibleTests.mm in Sources */,
 				237C901721D4C5CA00EE6E44 /* DatabaseMigrateTests.mm in Sources */,
 				2321FE3621D20AB1008BB722 /* DatabaseMigrationCompatibleTests.mm in Sources */,
-				231C35A021DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */,
 				23176A9121BA02590051ACF9 /* MigrationTestCase.mm in Sources */,
-				231C359421DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */,
-				2386564E219C47AC00F7F6D2 /* Console.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4599,12 +4632,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				235144F221D710C900FF639C /* Random.mm in Sources */,
-				231C358E21DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */,
-				231C359A21DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */,
 				23739DAA219AC9E500A043BF /* DoubleCodingObject+WCTColumnCoding.mm in Sources */,
 				23739D98219AC8C300A043BF /* Integer32CodingObject.m in Sources */,
-				231C35CA21DDEFAB00B5D3D2 /* TestCase.mm in Sources */,
 				23739DB3219ACA5900A043BF /* DataCodingObject+WCTColumnCoding.mm in Sources */,
 				23739DA4219AC9BC00A043BF /* DataCodingObject.m in Sources */,
 				23739D85219A794700A043BF /* ChainCallTests.mm in Sources */,
@@ -4612,18 +4641,11 @@
 				23739D81219A743800A043BF /* MultiSelectTests.mm in Sources */,
 				23739DA7219AC9DA00A043BF /* Integer64CodingObject+WCTColumnCoding.mm in Sources */,
 				23739DB9219ACD6000A043BF /* ColumnCodingTests.mm in Sources */,
-				231FEAF32199A4D200DC3706 /* NSObject+TestCase.mm in Sources */,
 				23739DA1219AC9B500A043BF /* StringCodingObject.m in Sources */,
 				23739D90219AC6AB00A043BF /* ColumnCodingObject.mm in Sources */,
-				231C35BE21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */,
-				238C73A921B8B510006B59C2 /* TestCaseLog.m in Sources */,
-				231C358221DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */,
-				231C35B221DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */,
 				23739D9B219AC9A600A043BF /* Integer64CodingObject.m in Sources */,
 				23739D9E219AC9AD00A043BF /* DoubleCodingObject.m in Sources */,
 				23739DAD219AC9F200A043BF /* StringCodingObject+WCTColumnCoding.mm in Sources */,
-				231C35A621DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */,
-				23865648219C47AC00F7F6D2 /* Console.mm in Sources */,
 				23739D95219AC8A000A043BF /* Integer32CodingObject+WCTColumnCoding.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4634,32 +4656,21 @@
 			files = (
 				2384F6B72193E06D00E8B10A /* ColumnConstraintPrimary.mm in Sources */,
 				2384F6F82194185500E8B10A /* AdditionalORMObject.mm in Sources */,
-				231C98BB219532AC0067B87C /* NSObject+TestCase.mm in Sources */,
 				2384F6C72193E09400E8B10A /* ColumnConstraintAutoIncrementAsc.mm in Sources */,
-				231C358C21DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */,
 				2384F6C32193E08B00E8B10A /* ColumnConstraintAutoIncrement.mm in Sources */,
-				231C358021DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */,
 				23790A632192B0450098797F /* ORMTests.mm in Sources */,
 				2384F6ED219412FF00E8B10A /* FTS5Object.mm in Sources */,
 				23790A772192D3D00098797F /* IndexObject.mm in Sources */,
-				238C73A721B8B510006B59C2 /* TestCaseLog.m in Sources */,
 				2384F6CF2193E0AC00E8B10A /* ColumnConstraintNotNull.mm in Sources */,
 				2384F6BB2193E07600E8B10A /* ColumnConstraintPrimaryAsc.mm in Sources */,
-				23865646219C47AC00F7F6D2 /* Console.mm in Sources */,
-				231C35B021DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */,
 				2384F6D32193E0B600E8B10A /* ColumnConstraintDefault.mm in Sources */,
 				2384F6E9219412FA00E8B10A /* FTS3Object.mm in Sources */,
-				231C359821DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */,
-				231C35C821DDEFAB00B5D3D2 /* TestCase.mm in Sources */,
-				235144F021D710C900FF639C /* Random.mm in Sources */,
 				2384F6DB2193E2C200E8B10A /* ColumnConstraintCheck.mm in Sources */,
 				2384F6BF2193E08100E8B10A /* ColumnConstraintPrimaryDesc.mm in Sources */,
-				231C35BC21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */,
 				2384F70121941BF000E8B10A /* NewRebindObject.mm in Sources */,
 				2384F6CB2193E09A00E8B10A /* ColumnConstraintUnique.mm in Sources */,
 				2384F6A32193DC3400E8B10A /* TableConstraintObject.mm in Sources */,
 				23790A6F2192BF140098797F /* PropertyObject.mm in Sources */,
-				231C35A421DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */,
 				2384F6FD21941BEA00E8B10A /* OldRebindObject.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4668,21 +4679,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				238C73A821B8B510006B59C2 /* TestCaseLog.m in Sources */,
-				231C98BC219532AC0067B87C /* NSObject+TestCase.mm in Sources */,
-				231C359921DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */,
-				231C35B121DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */,
-				231C358121DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */,
-				231C35A521DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */,
-				231C35C921DDEFAB00B5D3D2 /* TestCase.mm in Sources */,
-				235144F121D710C900FF639C /* Random.mm in Sources */,
-				231C35BD21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */,
 				233E12302195749C00BD488D /* ConvenientSelectTests.mm in Sources */,
 				233E12402195756B00BD488D /* ConvenientDeleteTests.mm in Sources */,
 				233E123E2195756400BD488D /* ConvenientUpdateTests.mm in Sources */,
-				23865647219C47AC00F7F6D2 /* Console.mm in Sources */,
-				231C358D21DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */,
 				233E123A2195755400BD488D /* ConvenientInsertTests.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2387D64C21DF07790028ADB9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2387D90821DF0B880028ADB9 /* TestCaseLog.m in Sources */,
+				2387D90721DF0B880028ADB9 /* Random.mm in Sources */,
+				2387D8FC21DF0B880028ADB9 /* PreInsertedCRUDTestCase.mm in Sources */,
+				2387D90021DF0B880028ADB9 /* TestCaseObject.mm in Sources */,
+				2387D8F521DF0B880028ADB9 /* DatabaseTestCase.mm in Sources */,
+				2387D8FF21DF0B880028ADB9 /* AllTypesObject.mm in Sources */,
+				2387D90621DF0B880028ADB9 /* Console.mm in Sources */,
+				2387D8F921DF0B880028ADB9 /* CRUDTestCase.mm in Sources */,
+				2387D8F721DF0B880028ADB9 /* TableTestCase.mm in Sources */,
+				2387D8F621DF0B880028ADB9 /* NSObject+TestCase.mm in Sources */,
+				2387D90521DF0B880028ADB9 /* TestCase.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4972,17 +4990,13 @@
 				2396EB162180571B0079066C /* WCTPropertyTests.mm in Sources */,
 				23989765217EC9E30014BF33 /* ConflictTests.mm in Sources */,
 				23989772217EC9E30014BF33 /* LiteralValueTests.mm in Sources */,
-				231C359721DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */,
 				2398979C217EC9E30014BF33 /* WithTests.mm in Sources */,
 				23989773217EC9E30014BF33 /* OrderingTermTests.mm in Sources */,
-				231C35BB21DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */,
 				23989760217EC9E30014BF33 /* ColumnConstraintTests.mm in Sources */,
 				23989770217EC9E30014BF33 /* JoinConstraintTests.mm in Sources */,
 				23989762217EC9E30014BF33 /* ColumnOperableTests.mm in Sources */,
 				23989782217EC9E30014BF33 /* StatementCreateTriggerTests.mm in Sources */,
 				23989791217EC9E30014BF33 /* StatementSelectTests.mm in Sources */,
-				231C98BA219532AC0067B87C /* NSObject+TestCase.mm in Sources */,
-				231C35AF21DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */,
 				2370F5B42181B2B7001C91B6 /* StatementTests.mm in Sources */,
 				23989761217EC9E30014BF33 /* ColumnDefTests.mm in Sources */,
 				2398978E217EC9E30014BF33 /* StatementReleaseTests.mm in Sources */,
@@ -4998,7 +5012,6 @@
 				2398977E217EC9E30014BF33 /* StatementBeginTests.mm in Sources */,
 				23989768217EC9E30014BF33 /* ExpressionOperableTests.mm in Sources */,
 				2396EB11218054200079066C /* ColumnTests.mm in Sources */,
-				238C73A621B8B510006B59C2 /* TestCaseLog.m in Sources */,
 				2319D8BF21C2504C00F5B8C0 /* StoppableIterationTests.mm in Sources */,
 				23989788217EC9E30014BF33 /* StatementDropTableTests.mm in Sources */,
 				2398979A217EC9E30014BF33 /* WindowFunctionInvocationTests.mm in Sources */,
@@ -5009,7 +5022,6 @@
 				23989796217EC9E30014BF33 /* TableConstraintTests.mm in Sources */,
 				2398976D217EC9E30014BF33 /* FTS3FunctionTests.mm in Sources */,
 				23989790217EC9E30014BF33 /* StatementSavepointTests.mm in Sources */,
-				231C357F21DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */,
 				23989780217EC9E30014BF33 /* StatementCreateIndexTests.mm in Sources */,
 				23989764217EC9E30014BF33 /* CommonTableExpressionTests.mm in Sources */,
 				2398976A217EC9E30014BF33 /* FilterTests.mm in Sources */,
@@ -5018,21 +5030,18 @@
 				23989769217EC9E30014BF33 /* ExpressionTests.mm in Sources */,
 				2398978A217EC9E30014BF33 /* StatementDropViewTests.mm in Sources */,
 				23989777217EC9E30014BF33 /* RaiseFunctionTests.mm in Sources */,
-				235144EF21D710C900FF639C /* Random.mm in Sources */,
 				2398975F217EC9E30014BF33 /* AggregateFunctionTests.mm in Sources */,
 				23989778217EC9E30014BF33 /* RecursiveCTETests.mm in Sources */,
 				23989775217EC9E30014BF33 /* PragmaTests.mm in Sources */,
 				2398976F217EC9E30014BF33 /* IndexedColumnTests.mm in Sources */,
 				23989766217EC9E30014BF33 /* CoreFunctionTests.mm in Sources */,
 				2398978F217EC9E30014BF33 /* StatementRollbackTests.mm in Sources */,
-				231C35C721DDEFAB00B5D3D2 /* TestCase.mm in Sources */,
 				23989784217EC9E30014BF33 /* StatementCreateVirtualTableTests.mm in Sources */,
 				23989792217EC9E30014BF33 /* StatementUpdateTests.mm in Sources */,
 				2398976B217EC9E30014BF33 /* ForeignKeyTests.mm in Sources */,
 				2398978B217EC9E30014BF33 /* StatementInsertTests.mm in Sources */,
 				2398976C217EC9E30014BF33 /* FrameSpecTests.mm in Sources */,
 				23989787217EC9E30014BF33 /* StatementDropIndexTests.mm in Sources */,
-				23865645219C47AC00F7F6D2 /* Console.mm in Sources */,
 				23989786217EC9E30014BF33 /* StatementDetachTests.mm in Sources */,
 				23989776217EC9E30014BF33 /* QualifiedTableTests.mm in Sources */,
 				23989793217EC9E30014BF33 /* StatementVacuumTests.mm in Sources */,
@@ -5042,9 +5051,7 @@
 				2398977A217EC9E30014BF33 /* SchemaTests.mm in Sources */,
 				23989763217EC9E30014BF33 /* ColumnTypeTests.mm in Sources */,
 				2398977B217EC9E30014BF33 /* StatementAlterTableTests.mm in Sources */,
-				231C358B21DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */,
 				23989781217EC9E30014BF33 /* StatementCreateTableTests.mm in Sources */,
-				231C35A321DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */,
 				2398978C217EC9E30014BF33 /* StatementPragmaTests.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5053,27 +5060,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				231C358921DDEFAB00B5D3D2 /* AllTypesObject.mm in Sources */,
 				231C35E821DDF95F00B5D3D2 /* TableMigrationBenchmark.mm in Sources */,
-				231C35AD21DDEFAB00B5D3D2 /* TableTestCase.mm in Sources */,
 				2351450021D7564700FF639C /* BenchmarkObject.mm in Sources */,
-				235144F921D710C900FF639C /* Random.mm in Sources */,
 				2351450121D7564700FF639C /* BenchmarkFactory.mm in Sources */,
-				231C35B921DDEFAB00B5D3D2 /* CRUDTestCase.mm in Sources */,
 				23FC01DD21B8B716002C7F87 /* RepairBenchmark.mm in Sources */,
 				2385469021DD91A200C619B4 /* OtherBenchmark.mm in Sources */,
 				23FC43E821B6644B00FA1A0F /* Benchmark.mm in Sources */,
-				231C35C521DDEFAB00B5D3D2 /* PreInsertedCRUDTestCase.mm in Sources */,
-				23FC43D321B6631200FA1A0F /* NSObject+TestCase.mm in Sources */,
 				231C35E621DDF60600B5D3D2 /* StableRandom.m in Sources */,
-				231C35D121DDEFAB00B5D3D2 /* TestCase.mm in Sources */,
 				2385468E21DD918D00C619B4 /* DatabaseMigrationBenchmark.mm in Sources */,
 				2385468C21DD918600C619B4 /* ThreadBenchmark.mm in Sources */,
-				238C73B021B8B510006B59C2 /* TestCaseLog.m in Sources */,
 				2385468821DD917500C619B4 /* BaselineBenchmark.mm in Sources */,
-				231C35A121DDEFAB00B5D3D2 /* DatabaseTestCase.mm in Sources */,
-				23FC43D421B6631200FA1A0F /* Console.mm in Sources */,
-				231C359521DDEFAB00B5D3D2 /* TestCaseObject.mm in Sources */,
 				2385468A21DD917F00C619B4 /* CipherBenchmark.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5181,6 +5177,71 @@
 			target = 239E8A6F2160A5B100BCB308 /* Host */;
 			targetProxy = 2384F7062194249200E8B10A /* PBXContainerItemProxy */;
 		};
+		2387D8A421DF0B0B0028ADB9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239326601E836D7300D677CC /* WCDB */;
+			targetProxy = 2387D8A321DF0B0B0028ADB9 /* PBXContainerItemProxy */;
+		};
+		2387D90D21DF0C380028ADB9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2387D64921DF07790028ADB9 /* TestCase */;
+			targetProxy = 2387D90C21DF0C380028ADB9 /* PBXContainerItemProxy */;
+		};
+		2387D91021DF0C550028ADB9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2387D64921DF07790028ADB9 /* TestCase */;
+			targetProxy = 2387D90F21DF0C550028ADB9 /* PBXContainerItemProxy */;
+		};
+		2387D91321DF0C620028ADB9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2387D64921DF07790028ADB9 /* TestCase */;
+			targetProxy = 2387D91221DF0C620028ADB9 /* PBXContainerItemProxy */;
+		};
+		2387D91621DF0C6A0028ADB9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2387D64921DF07790028ADB9 /* TestCase */;
+			targetProxy = 2387D91521DF0C6A0028ADB9 /* PBXContainerItemProxy */;
+		};
+		2387D91921DF0C730028ADB9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2387D64921DF07790028ADB9 /* TestCase */;
+			targetProxy = 2387D91821DF0C730028ADB9 /* PBXContainerItemProxy */;
+		};
+		2387D91C21DF0C7C0028ADB9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2387D64921DF07790028ADB9 /* TestCase */;
+			targetProxy = 2387D91B21DF0C7C0028ADB9 /* PBXContainerItemProxy */;
+		};
+		2387D91F21DF0C8C0028ADB9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2387D64921DF07790028ADB9 /* TestCase */;
+			targetProxy = 2387D91E21DF0C8C0028ADB9 /* PBXContainerItemProxy */;
+		};
+		2387D92221DF0C930028ADB9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2387D64921DF07790028ADB9 /* TestCase */;
+			targetProxy = 2387D92121DF0C930028ADB9 /* PBXContainerItemProxy */;
+		};
+		2387D92521DF0C9A0028ADB9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2387D64921DF07790028ADB9 /* TestCase */;
+			targetProxy = 2387D92421DF0C9A0028ADB9 /* PBXContainerItemProxy */;
+		};
+		2387D92821DF0CA10028ADB9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2387D64921DF07790028ADB9 /* TestCase */;
+			targetProxy = 2387D92721DF0CA10028ADB9 /* PBXContainerItemProxy */;
+		};
+		2387D92B21DF0CAA0028ADB9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2387D64921DF07790028ADB9 /* TestCase */;
+			targetProxy = 2387D92A21DF0CAA0028ADB9 /* PBXContainerItemProxy */;
+		};
+		2387D92E21DF0CB20028ADB9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2387D64921DF07790028ADB9 /* TestCase */;
+			targetProxy = 2387D92D21DF0CB20028ADB9 /* PBXContainerItemProxy */;
+		};
 		239E8AAB2160B59C00BCB308 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 239E8A6F2160A5B100BCB308 /* Host */;
@@ -5211,7 +5272,7 @@
 /* Begin XCBuildConfiguration section */
 		231FEA2C21999E7D00DC3706 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
+			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5220,7 +5281,7 @@
 		};
 		231FEA2D21999E7D00DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5229,7 +5290,7 @@
 		};
 		231FEA2E21999E7D00DC3706 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5238,91 +5299,91 @@
 		};
 		231FEA4821999ECE00DC3706 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
+			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		231FEA4921999ECE00DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
 		231FEA4A21999ECE00DC3706 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 			};
 			name = Bitcode;
 		};
 		231FEA6421999F0D00DC3706 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
+			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		231FEA6521999F0D00DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
 		231FEA6621999F0D00DC3706 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 			};
 			name = Bitcode;
 		};
 		231FEA8021999F2A00DC3706 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
+			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		231FEA8121999F2A00DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
 		231FEA8221999F2A00DC3706 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 			};
 			name = Bitcode;
 		};
 		231FEA9C21999F7800DC3706 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
+			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		231FEA9D21999F7800DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
 		231FEA9E21999F7800DC3706 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 			};
 			name = Bitcode;
 		};
 		231FEAB821999F8100DC3706 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
+			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5331,7 +5392,7 @@
 		};
 		231FEAB921999F8100DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5340,7 +5401,7 @@
 		};
 		231FEABA21999F8100DC3706 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5349,7 +5410,7 @@
 		};
 		231FEAD421999F8D00DC3706 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
+			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5358,7 +5419,7 @@
 		};
 		231FEAD521999F8D00DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5367,7 +5428,7 @@
 		};
 		231FEAD621999F8D00DC3706 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5376,7 +5437,7 @@
 		};
 		234E6F6321996EB600D006F2 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
+			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5385,7 +5446,7 @@
 		};
 		234E6F6421996EB600D006F2 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5394,7 +5455,7 @@
 		};
 		234E6F6521996EB600D006F2 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5403,7 +5464,7 @@
 		};
 		2379094A219295370098797F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
+			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5412,7 +5473,7 @@
 		};
 		2379094B219295370098797F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5421,7 +5482,7 @@
 		};
 		2379094C219295370098797F /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5430,7 +5491,7 @@
 		};
 		2384F7252194249200E8B10A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
+			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5439,7 +5500,7 @@
 		};
 		2384F7262194249200E8B10A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5448,10 +5509,34 @@
 		};
 		2384F7272194249200E8B10A /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Bitcode;
+		};
+		2387D89521DF07790028ADB9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D8A121DF09E60028ADB9 /* TestCase_debug.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		2387D89621DF07790028ADB9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D8A221DF09E60028ADB9 /* TestCase_release.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		2387D89721DF07790028ADB9 /* Bitcode */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D8A221DF09E60028ADB9 /* TestCase_release.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Bitcode;
 		};
@@ -5485,7 +5570,7 @@
 		};
 		239E8A842160A5B200BCB308 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				MTL_FAST_MATH = YES;
@@ -5512,7 +5597,7 @@
 		};
 		239E8AA32160B37600BCB308 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
+			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5521,7 +5606,7 @@
 		};
 		239E8AA42160B37600BCB308 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5530,7 +5615,7 @@
 		};
 		239E8AA52160B37600BCB308 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5567,7 +5652,7 @@
 		};
 		23FC43DE21B6631200FA1A0F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
+			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5576,7 +5661,7 @@
 		};
 		23FC43DF21B6631200FA1A0F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5585,7 +5670,7 @@
 		};
 		23FC43E021B6631200FA1A0F /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 				MTL_FAST_MATH = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5691,6 +5776,16 @@
 				2384F7252194249200E8B10A /* Debug */,
 				2384F7262194249200E8B10A /* Release */,
 				2384F7272194249200E8B10A /* Bitcode */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2387D89421DF07790028ADB9 /* Build configuration list for PBXNativeTarget "TestCase" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2387D89521DF07790028ADB9 /* Debug */,
+				2387D89621DF07790028ADB9 /* Release */,
+				2387D89721DF07790028ADB9 /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

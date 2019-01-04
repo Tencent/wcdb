@@ -1,0 +1,6 @@
+framework module TestCase {
+    umbrella header "TestCase.h"
+
+    export *
+    module * { export * }
+}
