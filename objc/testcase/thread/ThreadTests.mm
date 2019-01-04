@@ -61,7 +61,6 @@
     _delayForTolerance = 2;
 
     _maxConcurrency = std::max<int>(WCDB::HandlePooMaxAllowedNumberOfHandles, std::thread::hardware_concurrency());
-    ;
 }
 
 - (void)test_feature_read_concurrency
