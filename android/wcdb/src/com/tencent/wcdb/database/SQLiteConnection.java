@@ -329,16 +329,26 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         }
     }
 
+    private static final String[] HMAC_ALGO_MAPPING = new String[] {
+        "HMAC_SHA1", "HMAC_SHA256", "HMAC_SHA512"
+    };
+    private static final String[] PBKDF2_ALGO_MAPPING = new String[] {
+        "PBKDF2_HMAC_SHA1", "PBKDF2_HMAC_SHA256", "PBKDF2_HMAC_SHA512"
+    };
     private void setCipherSpec() {
         if (mCipher != null) {
-            if (mCipher.cipher != null)
-                execute("PRAGMA cipher=" + DatabaseUtils.sqlEscapeString(mCipher.cipher),
-                        null, null);
-
             if (mCipher.kdfIteration != 0)
                 execute("PRAGMA kdf_iter=" + mCipher.kdfIteration, null, null);
 
             execute("PRAGMA cipher_use_hmac=" + mCipher.hmacEnabled, null, null);
+
+            if (mCipher.hmacAlgorithm != SQLiteCipherSpec.HMAC_DEFAULT)
+                execute("PRAGMA cipher_hmac_algorithm=" + HMAC_ALGO_MAPPING[mCipher.hmacAlgorithm],
+                        null, null);
+
+            if (mCipher.kdfAlgorithm != SQLiteCipherSpec.HMAC_DEFAULT)
+                execute("PRAGMA cipher_kdf_algorithm=" + PBKDF2_ALGO_MAPPING[mCipher.kdfAlgorithm],
+                        null, null);
         }
     }
 

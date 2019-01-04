@@ -25,8 +25,15 @@
 #include "SQLiteCommon.h"
 
 // Forward declarations
-extern "C" void sqlcipher_set_default_pagesize(int);
-extern "C" int sqlite3_register_vfslog(const char *);
+extern "C" {
+    void sqlcipher_set_default_pagesize(int page_size);
+    void sqlcipher_set_default_kdf_iter(int iter);
+    void sqlcipher_set_default_use_hmac(int use);
+    int sqlcipher_set_default_hmac_algorithm(int algorithm);
+    int sqlcipher_set_default_kdf_algorithm(int algorithm);
+    void sqlcipher_set_mem_security(int);
+    int sqlite3_register_vfslog(const char *);
+}
 extern volatile uint32_t vlogDefaultLogFlags;
 
 namespace wcdb {
@@ -141,15 +148,22 @@ static jint nativeReleaseMemory(JNIEnv *env, jclass clazz)
     return sqlite3_release_memory(SOFT_HEAP_LIMIT);
 }
 
-static void nativeSetDefaultPageSize(JNIEnv *env, jclass clazz, jint pageSize)
+static void nativeSetDefaultCipherSettings(JNIEnv *env, jclass clazz, jint pageSize)
 {
     sqlcipher_set_default_pagesize(pageSize);
+
+    // Keep compatibility to WCDB version 1.0, mainly the same as SQLCipher 3.
+    sqlcipher_set_default_kdf_iter(64000);
+    sqlcipher_set_default_use_hmac(1);
+    sqlcipher_set_default_hmac_algorithm(0);    // SHA1
+    sqlcipher_set_default_kdf_algorithm(0);     // SHA1
+    sqlcipher_set_mem_security(0);
 }
 
 static JNINativeMethod sMethods[] = {
     /* name, signature, funcPtr */
     {"nativeReleaseMemory", "()I", (void *) nativeReleaseMemory},
-    {"nativeSetDefaultPageSize", "(I)V", (void *) nativeSetDefaultPageSize},
+    {"nativeSetDefaultCipherSettings", "(I)V", (void *) nativeSetDefaultCipherSettings},
 };
 
 static int register_wcdb_SQLiteGlobal(JavaVM *vm, JNIEnv *env)

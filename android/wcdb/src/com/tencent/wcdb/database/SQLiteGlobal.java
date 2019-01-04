@@ -37,7 +37,7 @@ public final class SQLiteGlobal {
     private static final String TAG = "WCDB.SQLiteGlobal";
 
     private static native int nativeReleaseMemory();
-    private static native void nativeSetDefaultPageSize(int pageSize);
+    private static native void nativeSetDefaultCipherSettings(int pageSize);
 
     /** Default page size to use when creating a database. */
     public static final int defaultPageSize;
@@ -74,7 +74,7 @@ public final class SQLiteGlobal {
             pageSize = 4096;
         }
         defaultPageSize = pageSize;
-        nativeSetDefaultPageSize(pageSize);
+        nativeSetDefaultCipherSettings(pageSize);
     }
     // Dummy static method to trigger class initialization.
     // See [JLS 12.4.1](http://docs.oracle.com/javase/specs/jls/se7/html/jls-12.html#jls-12.4.1)
