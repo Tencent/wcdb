@@ -1266,13 +1266,13 @@
 		231C35EC21DE09E400B5D3D2 /* Exiting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Exiting.cpp; sourceTree = "<group>"; };
 		231C98B8219532AC0067B87C /* NSObject+TestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+TestCase.h"; sourceTree = "<group>"; };
 		231C98B9219532AC0067B87C /* NSObject+TestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSObject+TestCase.mm"; sourceTree = "<group>"; };
-		231FEA2F21999E7D00DC3706 /* Basic tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Basic tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		231FEA4B21999ECE00DC3706 /* Thread tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Thread tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		231FEA6721999F0D00DC3706 /* Monitor tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Monitor tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		231FEA8321999F2A00DC3706 /* Config tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Config tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		231FEA9F21999F7800DC3706 /* Repair tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Repair tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		231FEABB21999F8100DC3706 /* FTS tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FTS tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		231FEAD721999F8D00DC3706 /* Migration tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Migration tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		231FEA2F21999E7D00DC3706 /* Basic.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Basic.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		231FEA4B21999ECE00DC3706 /* Thread.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Thread.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		231FEA6721999F0D00DC3706 /* Monitor.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Monitor.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		231FEA8321999F2A00DC3706 /* Config.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Config.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		231FEA9F21999F7800DC3706 /* Repair.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Repair.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		231FEABB21999F8100DC3706 /* FTS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FTS.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		231FEAD721999F8D00DC3706 /* Migration.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Migration.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2321FE2D21D206B6008BB722 /* MigrationCompatibleTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MigrationCompatibleTestCase.h; sourceTree = "<group>"; };
 		2321FE2E21D206B6008BB722 /* MigrationCompatibleTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MigrationCompatibleTestCase.mm; sourceTree = "<group>"; };
 		2321FE3121D20A9D008BB722 /* TableMigrationCompatibleTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TableMigrationCompatibleTests.mm; sourceTree = "<group>"; };
@@ -1365,7 +1365,7 @@
 		234DBD022064DE04000E31E8 /* WCTHandle+Transaction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTHandle+Transaction.mm"; sourceTree = "<group>"; };
 		234DBD072064DE23000E31E8 /* WCTTransaction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTTransaction.h; sourceTree = "<group>"; };
 		234DBD0B2064E045000E31E8 /* WCTChainCall.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTChainCall.h; sourceTree = "<group>"; };
-		234E6F6621996EB600D006F2 /* Advance tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Advance tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		234E6F6621996EB600D006F2 /* Advance.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Advance.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		234EF46C2015CFDE00B81929 /* WCTConvertible.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTConvertible.h; sourceTree = "<group>"; };
 		234EF46D2015CFDE00B81929 /* WCTConvertible.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTConvertible.mm; sourceTree = "<group>"; };
 		235144EC21D710C900FF639C /* Random.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Random.h; sourceTree = "<group>"; };
@@ -1488,7 +1488,7 @@
 		23776CA3218C41DD00E985DC /* WCTChainCall.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTChainCall.mm; sourceTree = "<group>"; };
 		23776CA5218C41E600E985DC /* WCTChainCall+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTChainCall+Private.h"; sourceTree = "<group>"; };
 		237908F621928C9F0098797F /* WCTObjCAccessor.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTObjCAccessor.mm; sourceTree = "<group>"; };
-		2379094D219295370098797F /* ORM tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ORM tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2379094D219295370098797F /* ORM.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ORM.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		23790A622192B0450098797F /* ORMTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ORMTests.mm; sourceTree = "<group>"; };
 		23790A6B2192BF140098797F /* PropertyObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = PropertyObject.mm; sourceTree = "<group>"; };
 		23790A6C2192BF140098797F /* PropertyObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PropertyObject+WCTTableCoding.h"; sourceTree = "<group>"; };
@@ -1550,7 +1550,7 @@
 		2384F6FE21941BF000E8B10A /* NewRebindObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NewRebindObject.mm; sourceTree = "<group>"; };
 		2384F6FF21941BF000E8B10A /* NewRebindObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NewRebindObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		2384F70021941BF000E8B10A /* NewRebindObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewRebindObject.h; sourceTree = "<group>"; };
-		2384F7282194249200E8B10A /* Convenient tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Convenient tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2384F7282194249200E8B10A /* Convenient.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Convenient.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2385468721DD917500C619B4 /* BaselineBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = BaselineBenchmark.mm; sourceTree = "<group>"; };
 		2385468921DD917F00C619B4 /* CipherBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CipherBenchmark.mm; sourceTree = "<group>"; };
 		2385468B21DD918600C619B4 /* ThreadBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ThreadBenchmark.mm; sourceTree = "<group>"; };
@@ -1565,6 +1565,19 @@
 		2386B3C21ED442FE000B72F6 /* WCTError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTError.h; sourceTree = "<group>"; };
 		2386B3C31ED442FE000B72F6 /* WCTError.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTError.mm; sourceTree = "<group>"; };
 		2386B3C41ED442FE000B72F6 /* WCTError+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTError+Private.h"; sourceTree = "<group>"; };
+		2387D63921DF03FE0028ADB9 /* WCDB_Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = WCDB_Info.plist; sourceTree = "<group>"; };
+		2387D63A21DF03FE0028ADB9 /* Host_release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Host_release.xcconfig; sourceTree = "<group>"; };
+		2387D63C21DF03FE0028ADB9 /* WCDB_release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = WCDB_release.xcconfig; sourceTree = "<group>"; };
+		2387D63F21DF03FF0028ADB9 /* Host_Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Host_Info.plist; sourceTree = "<group>"; };
+		2387D64021DF03FF0028ADB9 /* Project_debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Project_debug.xcconfig; sourceTree = "<group>"; };
+		2387D64121DF03FF0028ADB9 /* WCDB_debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = WCDB_debug.xcconfig; sourceTree = "<group>"; };
+		2387D64221DF03FF0028ADB9 /* Host_debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Host_debug.xcconfig; sourceTree = "<group>"; };
+		2387D64321DF03FF0028ADB9 /* WCDB.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = WCDB.modulemap; sourceTree = "<group>"; };
+		2387D64421DF03FF0028ADB9 /* Project_bitcode.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Project_bitcode.xcconfig; sourceTree = "<group>"; };
+		2387D64521DF03FF0028ADB9 /* Project_release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Project_release.xcconfig; sourceTree = "<group>"; };
+		2387D64621DF04620028ADB9 /* TestCase_Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = TestCase_Info.plist; sourceTree = "<group>"; };
+		2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TestCase_debug.xcconfig; sourceTree = "<group>"; };
+		2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TestCase_release.xcconfig; sourceTree = "<group>"; };
 		238845EE2063912B006EAEC8 /* WCTPerformanceFootprint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTPerformanceFootprint.h; sourceTree = "<group>"; };
 		238845EF2063912B006EAEC8 /* WCTPerformanceFootprint.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTPerformanceFootprint.mm; sourceTree = "<group>"; };
 		238C177C21CA2190003B6D26 /* SyntaxCommonConst.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SyntaxCommonConst.hpp; sourceTree = "<group>"; };
@@ -1648,7 +1661,7 @@
 		239E8A8E2160A62F00BCB308 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		239E8A8F2160A62F00BCB308 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		239E8A922160A81600BCB308 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		239E8A9D2160B37600BCB308 /* WINQ tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "WINQ tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		239E8A9D2160B37600BCB308 /* WINQ.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WINQ.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		23A09D692146204300F62EE8 /* MigrationHandle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationHandle.cpp; sourceTree = "<group>"; };
 		23A09D6A2146204300F62EE8 /* MigrationHandle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MigrationHandle.hpp; sourceTree = "<group>"; };
 		23A3CFB3205FB1A800692F94 /* WCTHandle+Convenient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTHandle+Convenient.h"; sourceTree = "<group>"; };
@@ -2004,8 +2017,6 @@
 		23EEDD5E217DFB16006E9E73 /* Enum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Enum.hpp; sourceTree = "<group>"; };
 		23EEDD5F217DFB17006E9E73 /* Shadow.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Shadow.hpp; sourceTree = "<group>"; };
 		23F0FD7C215F1C92008399FB /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		23F0FDEF215F266C008399FB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		23F0FDF0215F266C008399FB /* WCDB.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = WCDB.modulemap; sourceTree = "<group>"; };
 		23F0FEB0215F5E99008399FB /* ThreadLocal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadLocal.cpp; sourceTree = "<group>"; };
 		23F0FEB1215F5E9A008399FB /* Lock.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Lock.hpp; sourceTree = "<group>"; };
 		23F0FEB2215F5E9A008399FB /* ThreadLocal.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ThreadLocal.hpp; sourceTree = "<group>"; };
@@ -2243,11 +2254,11 @@
 			path = basic;
 			sourceTree = "<group>";
 		};
-		231FEADC2199A0FE00DC3706 /* FTS */ = {
+		231FEADC2199A0FE00DC3706 /* fts */ = {
 			isa = PBXGroup;
 			children = (
 			);
-			path = FTS;
+			path = fts;
 			sourceTree = "<group>";
 		};
 		231FEADD2199A0FF00DC3706 /* thread */ = {
@@ -2865,7 +2876,7 @@
 			path = utility;
 			sourceTree = "<group>";
 		};
-		23790A47219295B80098797F /* ORM */ = {
+		23790A47219295B80098797F /* orm */ = {
 			isa = PBXGroup;
 			children = (
 				2384F6F921941BDC00E8B10A /* rebind */,
@@ -2877,7 +2888,7 @@
 				23790A5E2192B03D0098797F /* virtual_table */,
 				23790A622192B0450098797F /* ORMTests.mm */,
 			);
-			path = ORM;
+			path = orm;
 			sourceTree = "<group>";
 		};
 		23790A4F219298250098797F /* common */ = {
@@ -3022,7 +3033,7 @@
 			path = monitor;
 			sourceTree = "<group>";
 		};
-		2398971F217EC9E20014BF33 /* WINQ */ = {
+		2398971F217EC9E20014BF33 /* winq */ = {
 			isa = PBXGroup;
 			children = (
 				23989720217EC9E20014BF33 /* AggregateFunctionTests.mm */,
@@ -3094,7 +3105,7 @@
 				2396EB19218066EC0079066C /* SyntaxListTests.mm */,
 				2319D8BE21C2504C00F5B8C0 /* StoppableIterationTests.mm */,
 			);
-			path = WINQ;
+			path = winq;
 			sourceTree = "<group>";
 		};
 		239E8A8C2160A62F00BCB308 /* testcase */ = {
@@ -3104,14 +3115,14 @@
 				231FEAE02199A10000DC3706 /* advance */,
 				231FEADB2199A0FE00DC3706 /* basic */,
 				231FEADA2199A0FE00DC3706 /* config */,
-				231FEADC2199A0FE00DC3706 /* FTS */,
+				231FEADC2199A0FE00DC3706 /* fts */,
 				231FEADE2199A0FF00DC3706 /* migration */,
 				231FEADF2199A10000DC3706 /* repair */,
 				231FEADD2199A0FF00DC3706 /* thread */,
 				231FEAD92199A0FD00DC3706 /* monitor */,
 				2384F72A219424FE00E8B10A /* convenient */,
-				23790A47219295B80098797F /* ORM */,
-				2398971F217EC9E20014BF33 /* WINQ */,
+				23790A47219295B80098797F /* orm */,
+				2398971F217EC9E20014BF33 /* winq */,
 				239E8A8D2160A62F00BCB308 /* host */,
 				23790A4F219298250098797F /* common */,
 			);
@@ -3176,17 +3187,17 @@
 			children = (
 				239326611E836D7300D677CC /* WCDB.framework */,
 				239E8A702160A5B100BCB308 /* Host.app */,
-				239E8A9D2160B37600BCB308 /* WINQ tests.xctest */,
-				2379094D219295370098797F /* ORM tests.xctest */,
-				2384F7282194249200E8B10A /* Convenient tests.xctest */,
-				234E6F6621996EB600D006F2 /* Advance tests.xctest */,
-				231FEA2F21999E7D00DC3706 /* Basic tests.xctest */,
-				231FEA4B21999ECE00DC3706 /* Thread tests.xctest */,
-				231FEA6721999F0D00DC3706 /* Monitor tests.xctest */,
-				231FEA8321999F2A00DC3706 /* Config tests.xctest */,
-				231FEA9F21999F7800DC3706 /* Repair tests.xctest */,
-				231FEABB21999F8100DC3706 /* FTS tests.xctest */,
-				231FEAD721999F8D00DC3706 /* Migration tests.xctest */,
+				239E8A9D2160B37600BCB308 /* WINQ.xctest */,
+				2379094D219295370098797F /* ORM.xctest */,
+				2384F7282194249200E8B10A /* Convenient.xctest */,
+				234E6F6621996EB600D006F2 /* Advance.xctest */,
+				231FEA2F21999E7D00DC3706 /* Basic.xctest */,
+				231FEA4B21999ECE00DC3706 /* Thread.xctest */,
+				231FEA6721999F0D00DC3706 /* Monitor.xctest */,
+				231FEA8321999F2A00DC3706 /* Config.xctest */,
+				231FEA9F21999F7800DC3706 /* Repair.xctest */,
+				231FEABB21999F8100DC3706 /* FTS.xctest */,
+				231FEAD721999F8D00DC3706 /* Migration.xctest */,
 				23FC43E121B6631200FA1A0F /* Benchmark.xctest */,
 			);
 			name = Products;
@@ -3545,8 +3556,19 @@
 		23F0FDEE215F266C008399FB /* support */ = {
 			isa = PBXGroup;
 			children = (
-				23F0FDEF215F266C008399FB /* Info.plist */,
-				23F0FDF0215F266C008399FB /* WCDB.modulemap */,
+				2387D64421DF03FF0028ADB9 /* Project_bitcode.xcconfig */,
+				2387D64021DF03FF0028ADB9 /* Project_debug.xcconfig */,
+				2387D64521DF03FF0028ADB9 /* Project_release.xcconfig */,
+				2387D64321DF03FF0028ADB9 /* WCDB.modulemap */,
+				2387D63921DF03FE0028ADB9 /* WCDB_Info.plist */,
+				2387D64121DF03FF0028ADB9 /* WCDB_debug.xcconfig */,
+				2387D63C21DF03FE0028ADB9 /* WCDB_release.xcconfig */,
+				2387D63F21DF03FF0028ADB9 /* Host_Info.plist */,
+				2387D64221DF03FF0028ADB9 /* Host_debug.xcconfig */,
+				2387D63A21DF03FE0028ADB9 /* Host_release.xcconfig */,
+				2387D64621DF04620028ADB9 /* TestCase_Info.plist */,
+				2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */,
+				2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */,
 			);
 			path = support;
 			sourceTree = "<group>";
@@ -3928,9 +3950,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		231FEA1521999E7D00DC3706 /* Basic tests */ = {
+		231FEA1521999E7D00DC3706 /* Basic */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 231FEA2B21999E7D00DC3706 /* Build configuration list for PBXNativeTarget "Basic tests" */;
+			buildConfigurationList = 231FEA2B21999E7D00DC3706 /* Build configuration list for PBXNativeTarget "Basic" */;
 			buildPhases = (
 				231FEA1A21999E7D00DC3706 /* Sources */,
 				231FEA2521999E7D00DC3706 /* Frameworks */,
@@ -3943,14 +3965,14 @@
 				231FEA1621999E7D00DC3706 /* PBXTargetDependency */,
 				231FEA1821999E7D00DC3706 /* PBXTargetDependency */,
 			);
-			name = "Basic tests";
+			name = Basic;
 			productName = "WINQ tests";
-			productReference = 231FEA2F21999E7D00DC3706 /* Basic tests.xctest */;
+			productReference = 231FEA2F21999E7D00DC3706 /* Basic.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		231FEA3121999ECE00DC3706 /* Thread tests */ = {
+		231FEA3121999ECE00DC3706 /* Thread */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 231FEA4721999ECE00DC3706 /* Build configuration list for PBXNativeTarget "Thread tests" */;
+			buildConfigurationList = 231FEA4721999ECE00DC3706 /* Build configuration list for PBXNativeTarget "Thread" */;
 			buildPhases = (
 				231FEA3621999ECE00DC3706 /* Sources */,
 				231FEA4121999ECE00DC3706 /* Frameworks */,
@@ -3963,14 +3985,14 @@
 				231FEA3221999ECE00DC3706 /* PBXTargetDependency */,
 				231FEA3421999ECE00DC3706 /* PBXTargetDependency */,
 			);
-			name = "Thread tests";
+			name = Thread;
 			productName = "WINQ tests";
-			productReference = 231FEA4B21999ECE00DC3706 /* Thread tests.xctest */;
+			productReference = 231FEA4B21999ECE00DC3706 /* Thread.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		231FEA4D21999F0D00DC3706 /* Monitor tests */ = {
+		231FEA4D21999F0D00DC3706 /* Monitor */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 231FEA6321999F0D00DC3706 /* Build configuration list for PBXNativeTarget "Monitor tests" */;
+			buildConfigurationList = 231FEA6321999F0D00DC3706 /* Build configuration list for PBXNativeTarget "Monitor" */;
 			buildPhases = (
 				231FEA5221999F0D00DC3706 /* Sources */,
 				231FEA5D21999F0D00DC3706 /* Frameworks */,
@@ -3983,14 +4005,14 @@
 				231FEA4E21999F0D00DC3706 /* PBXTargetDependency */,
 				231FEA5021999F0D00DC3706 /* PBXTargetDependency */,
 			);
-			name = "Monitor tests";
+			name = Monitor;
 			productName = "WINQ tests";
-			productReference = 231FEA6721999F0D00DC3706 /* Monitor tests.xctest */;
+			productReference = 231FEA6721999F0D00DC3706 /* Monitor.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		231FEA6921999F2A00DC3706 /* Config tests */ = {
+		231FEA6921999F2A00DC3706 /* Config */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 231FEA7F21999F2A00DC3706 /* Build configuration list for PBXNativeTarget "Config tests" */;
+			buildConfigurationList = 231FEA7F21999F2A00DC3706 /* Build configuration list for PBXNativeTarget "Config" */;
 			buildPhases = (
 				231FEA6E21999F2A00DC3706 /* Sources */,
 				231FEA7921999F2A00DC3706 /* Frameworks */,
@@ -4003,14 +4025,14 @@
 				231FEA6A21999F2A00DC3706 /* PBXTargetDependency */,
 				231FEA6C21999F2A00DC3706 /* PBXTargetDependency */,
 			);
-			name = "Config tests";
+			name = Config;
 			productName = "WINQ tests";
-			productReference = 231FEA8321999F2A00DC3706 /* Config tests.xctest */;
+			productReference = 231FEA8321999F2A00DC3706 /* Config.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		231FEA8521999F7800DC3706 /* Repair tests */ = {
+		231FEA8521999F7800DC3706 /* Repair */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 231FEA9B21999F7800DC3706 /* Build configuration list for PBXNativeTarget "Repair tests" */;
+			buildConfigurationList = 231FEA9B21999F7800DC3706 /* Build configuration list for PBXNativeTarget "Repair" */;
 			buildPhases = (
 				231FEA8A21999F7800DC3706 /* Sources */,
 				231FEA9521999F7800DC3706 /* Frameworks */,
@@ -4023,14 +4045,14 @@
 				231FEA8621999F7800DC3706 /* PBXTargetDependency */,
 				231FEA8821999F7800DC3706 /* PBXTargetDependency */,
 			);
-			name = "Repair tests";
+			name = Repair;
 			productName = "WINQ tests";
-			productReference = 231FEA9F21999F7800DC3706 /* Repair tests.xctest */;
+			productReference = 231FEA9F21999F7800DC3706 /* Repair.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		231FEAA121999F8100DC3706 /* FTS tests */ = {
+		231FEAA121999F8100DC3706 /* FTS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 231FEAB721999F8100DC3706 /* Build configuration list for PBXNativeTarget "FTS tests" */;
+			buildConfigurationList = 231FEAB721999F8100DC3706 /* Build configuration list for PBXNativeTarget "FTS" */;
 			buildPhases = (
 				231FEAA621999F8100DC3706 /* Sources */,
 				231FEAB121999F8100DC3706 /* Frameworks */,
@@ -4043,14 +4065,14 @@
 				231FEAA221999F8100DC3706 /* PBXTargetDependency */,
 				231FEAA421999F8100DC3706 /* PBXTargetDependency */,
 			);
-			name = "FTS tests";
+			name = FTS;
 			productName = "WINQ tests";
-			productReference = 231FEABB21999F8100DC3706 /* FTS tests.xctest */;
+			productReference = 231FEABB21999F8100DC3706 /* FTS.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		231FEABD21999F8D00DC3706 /* Migration tests */ = {
+		231FEABD21999F8D00DC3706 /* Migration */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 231FEAD321999F8D00DC3706 /* Build configuration list for PBXNativeTarget "Migration tests" */;
+			buildConfigurationList = 231FEAD321999F8D00DC3706 /* Build configuration list for PBXNativeTarget "Migration" */;
 			buildPhases = (
 				231FEAC221999F8D00DC3706 /* Sources */,
 				231FEACD21999F8D00DC3706 /* Frameworks */,
@@ -4063,14 +4085,14 @@
 				231FEABE21999F8D00DC3706 /* PBXTargetDependency */,
 				231FEAC021999F8D00DC3706 /* PBXTargetDependency */,
 			);
-			name = "Migration tests";
+			name = Migration;
 			productName = "WINQ tests";
-			productReference = 231FEAD721999F8D00DC3706 /* Migration tests.xctest */;
+			productReference = 231FEAD721999F8D00DC3706 /* Migration.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		234E6F4C21996EB600D006F2 /* Advance tests */ = {
+		234E6F4C21996EB600D006F2 /* Advance */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 234E6F6221996EB600D006F2 /* Build configuration list for PBXNativeTarget "Advance tests" */;
+			buildConfigurationList = 234E6F6221996EB600D006F2 /* Build configuration list for PBXNativeTarget "Advance" */;
 			buildPhases = (
 				234E6F5121996EB600D006F2 /* Sources */,
 				234E6F5C21996EB600D006F2 /* Frameworks */,
@@ -4083,14 +4105,14 @@
 				234E6F4D21996EB600D006F2 /* PBXTargetDependency */,
 				234E6F4F21996EB600D006F2 /* PBXTargetDependency */,
 			);
-			name = "Advance tests";
+			name = Advance;
 			productName = "WINQ tests";
-			productReference = 234E6F6621996EB600D006F2 /* Advance tests.xctest */;
+			productReference = 234E6F6621996EB600D006F2 /* Advance.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		237908FA219295370098797F /* ORM tests */ = {
+		237908FA219295370098797F /* ORM */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 23790949219295370098797F /* Build configuration list for PBXNativeTarget "ORM tests" */;
+			buildConfigurationList = 23790949219295370098797F /* Build configuration list for PBXNativeTarget "ORM" */;
 			buildPhases = (
 				237908FF219295370098797F /* Sources */,
 				23790943219295370098797F /* Frameworks */,
@@ -4103,14 +4125,14 @@
 				237908FB219295370098797F /* PBXTargetDependency */,
 				237908FD219295370098797F /* PBXTargetDependency */,
 			);
-			name = "ORM tests";
+			name = ORM;
 			productName = "WINQ tests";
-			productReference = 2379094D219295370098797F /* ORM tests.xctest */;
+			productReference = 2379094D219295370098797F /* ORM.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		2384F7022194249200E8B10A /* Convenient tests */ = {
+		2384F7022194249200E8B10A /* Convenient */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2384F7242194249200E8B10A /* Build configuration list for PBXNativeTarget "Convenient tests" */;
+			buildConfigurationList = 2384F7242194249200E8B10A /* Build configuration list for PBXNativeTarget "Convenient" */;
 			buildPhases = (
 				2384F7072194249200E8B10A /* Sources */,
 				2384F71E2194249200E8B10A /* Frameworks */,
@@ -4123,9 +4145,9 @@
 				2384F7032194249200E8B10A /* PBXTargetDependency */,
 				2384F7052194249200E8B10A /* PBXTargetDependency */,
 			);
-			name = "Convenient tests";
+			name = Convenient;
 			productName = "WINQ tests";
-			productReference = 2384F7282194249200E8B10A /* Convenient tests.xctest */;
+			productReference = 2384F7282194249200E8B10A /* Convenient.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		239326601E836D7300D677CC /* WCDB */ = {
@@ -4164,9 +4186,9 @@
 			productReference = 239E8A702160A5B100BCB308 /* Host.app */;
 			productType = "com.apple.product-type.application";
 		};
-		239E8A9C2160B37600BCB308 /* WINQ tests */ = {
+		239E8A9C2160B37600BCB308 /* WINQ */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 239E8AA22160B37600BCB308 /* Build configuration list for PBXNativeTarget "WINQ tests" */;
+			buildConfigurationList = 239E8AA22160B37600BCB308 /* Build configuration list for PBXNativeTarget "WINQ" */;
 			buildPhases = (
 				239E8A992160B37600BCB308 /* Sources */,
 				239E8A9A2160B37600BCB308 /* Frameworks */,
@@ -4179,9 +4201,9 @@
 				239E8AAD2160B6F300BCB308 /* PBXTargetDependency */,
 				239E8AAB2160B59C00BCB308 /* PBXTargetDependency */,
 			);
-			name = "WINQ tests";
+			name = WINQ;
 			productName = "WINQ tests";
-			productReference = 239E8A9D2160B37600BCB308 /* WINQ tests.xctest */;
+			productReference = 239E8A9D2160B37600BCB308 /* WINQ.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		23FC43C521B6631200FA1A0F /* Benchmark */ = {
@@ -4295,17 +4317,17 @@
 			targets = (
 				239326601E836D7300D677CC /* WCDB */,
 				239E8A6F2160A5B100BCB308 /* Host */,
-				231FEA1521999E7D00DC3706 /* Basic tests */,
-				239E8A9C2160B37600BCB308 /* WINQ tests */,
-				237908FA219295370098797F /* ORM tests */,
-				2384F7022194249200E8B10A /* Convenient tests */,
-				234E6F4C21996EB600D006F2 /* Advance tests */,
-				231FEA3121999ECE00DC3706 /* Thread tests */,
-				231FEA4D21999F0D00DC3706 /* Monitor tests */,
-				231FEA6921999F2A00DC3706 /* Config tests */,
-				231FEA8521999F7800DC3706 /* Repair tests */,
-				231FEAA121999F8100DC3706 /* FTS tests */,
-				231FEABD21999F8D00DC3706 /* Migration tests */,
+				231FEA1521999E7D00DC3706 /* Basic */,
+				239E8A9C2160B37600BCB308 /* WINQ */,
+				237908FA219295370098797F /* ORM */,
+				2384F7022194249200E8B10A /* Convenient */,
+				234E6F4C21996EB600D006F2 /* Advance */,
+				231FEA3121999ECE00DC3706 /* Thread */,
+				231FEA4D21999F0D00DC3706 /* Monitor */,
+				231FEA6921999F2A00DC3706 /* Config */,
+				231FEA8521999F7800DC3706 /* Repair */,
+				231FEAA121999F8100DC3706 /* FTS */,
+				231FEABD21999F8D00DC3706 /* Migration */,
 				23FC43C521B6631200FA1A0F /* Benchmark */,
 			);
 		};
@@ -5189,1615 +5211,486 @@
 /* Begin XCBuildConfiguration section */
 		231FEA2C21999E7D00DC3706 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Basic-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
 			};
 			name = Debug;
 		};
 		231FEA2D21999E7D00DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Basic-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		231FEA2E21999E7D00DC3706 /* WithoutBitcode */ = {
+		231FEA2E21999E7D00DC3706 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Basic-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = WithoutBitcode;
+			name = Bitcode;
 		};
 		231FEA4821999ECE00DC3706 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Thread-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
 			};
 			name = Debug;
 		};
 		231FEA4921999ECE00DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Thread-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		231FEA4A21999ECE00DC3706 /* WithoutBitcode */ = {
+		231FEA4A21999ECE00DC3706 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Thread-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = WithoutBitcode;
+			name = Bitcode;
 		};
 		231FEA6421999F0D00DC3706 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Monitor-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
 			};
 			name = Debug;
 		};
 		231FEA6521999F0D00DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Monitor-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		231FEA6621999F0D00DC3706 /* WithoutBitcode */ = {
+		231FEA6621999F0D00DC3706 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Monitor-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = WithoutBitcode;
+			name = Bitcode;
 		};
 		231FEA8021999F2A00DC3706 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Config-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
 			};
 			name = Debug;
 		};
 		231FEA8121999F2A00DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Config-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		231FEA8221999F2A00DC3706 /* WithoutBitcode */ = {
+		231FEA8221999F2A00DC3706 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Config-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = WithoutBitcode;
+			name = Bitcode;
 		};
 		231FEA9C21999F7800DC3706 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Repair-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
 			};
 			name = Debug;
 		};
 		231FEA9D21999F7800DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Repair-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		231FEA9E21999F7800DC3706 /* WithoutBitcode */ = {
+		231FEA9E21999F7800DC3706 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Repair-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = WithoutBitcode;
+			name = Bitcode;
 		};
 		231FEAB821999F8100DC3706 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.FTS-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
 			};
 			name = Debug;
 		};
 		231FEAB921999F8100DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.FTS-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		231FEABA21999F8100DC3706 /* WithoutBitcode */ = {
+		231FEABA21999F8100DC3706 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.FTS-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = WithoutBitcode;
+			name = Bitcode;
 		};
 		231FEAD421999F8D00DC3706 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Migration-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
 			};
 			name = Debug;
 		};
 		231FEAD521999F8D00DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Migration-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		231FEAD621999F8D00DC3706 /* WithoutBitcode */ = {
+		231FEAD621999F8D00DC3706 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Migration-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = WithoutBitcode;
+			name = Bitcode;
 		};
 		234E6F6321996EB600D006F2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Advance-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
 			};
 			name = Debug;
 		};
 		234E6F6421996EB600D006F2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Advance-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		234E6F6521996EB600D006F2 /* WithoutBitcode */ = {
+		234E6F6521996EB600D006F2 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Advance-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = WithoutBitcode;
+			name = Bitcode;
 		};
 		2379094A219295370098797F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.ORM-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
 			};
 			name = Debug;
 		};
 		2379094B219295370098797F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.ORM-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		2379094C219295370098797F /* WithoutBitcode */ = {
+		2379094C219295370098797F /* Bitcode */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.ORM-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = WithoutBitcode;
+			name = Bitcode;
 		};
 		2384F7252194249200E8B10A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Convenient-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
 			};
 			name = Debug;
 		};
 		2384F7262194249200E8B10A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Convenient-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		2384F7272194249200E8B10A /* WithoutBitcode */ = {
+		2384F7272194249200E8B10A /* Bitcode */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.Convenient-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = WithoutBitcode;
+			name = Bitcode;
 		};
 		239326671E836D7300D677CC /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64121DF03FF0028ADB9 /* WCDB_debug.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = NO;
-				DEFINES_MODULE = YES;
-				DEPLOYMENT_POSTPROCESSING = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_VERSION = A;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				"LIBRARY_SEARCH_PATHS[sdk=macosx*]" = (
-					"$(inherited)",
-					"$(SDKROOT)/usr/lib/system",
-				);
-				MACH_O_TYPE = mh_dylib;
-				MODULEMAP_FILE = "$(SRCROOT)/support/WCDB.modulemap";
-				OTHER_CFLAGS = "$(inherited)";
-				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
-					"-framework",
-					UIKit,
-				);
-				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
-					"-framework",
-					UIKit,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB;
-				PRODUCT_MODULE_NAME = WCDB;
-				PRODUCT_NAME = WCDB;
-				SKIP_INSTALL = YES;
-				STRIP_STYLE = debugging;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
 		239326681E836D7300D677CC /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D63C21DF03FE0028ADB9 /* WCDB_release.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
-				DEFINES_MODULE = YES;
-				DEPLOYMENT_POSTPROCESSING = YES;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_VERSION = A;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				"LIBRARY_SEARCH_PATHS[sdk=macosx*]" = (
-					"$(inherited)",
-					"$(SDKROOT)/usr/lib/system",
-				);
-				MACH_O_TYPE = mh_dylib;
-				MODULEMAP_FILE = "$(SRCROOT)/support/WCDB.modulemap";
-				OTHER_CFLAGS = "$(inherited)";
-				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
-					"-framework",
-					UIKit,
-				);
-				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
-					"-framework",
-					UIKit,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB;
-				PRODUCT_MODULE_NAME = WCDB;
-				PRODUCT_NAME = WCDB;
-				SKIP_INSTALL = YES;
-				STRIP_STYLE = "non-global";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
 		239E8A832160A5B200BCB308 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64221DF03FF0028ADB9 /* Host_debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "$(SRCROOT)/tests/host/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../Frameworks";
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
 				PRINCIPAL_CLASS = "";
 				"PRINCIPAL_CLASS[sdk=iphoneos*]" = UIApplication;
 				"PRINCIPAL_CLASS[sdk=iphonesimulator*]" = UIApplication;
 				"PRINCIPAL_CLASS[sdk=macosx*]" = NSApplication;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.Host;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
 		239E8A842160A5B200BCB308 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = "";
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "$(SRCROOT)/tests/host/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../Frameworks";
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
 				PRINCIPAL_CLASS = "";
 				"PRINCIPAL_CLASS[sdk=iphoneos*]" = UIApplication;
 				"PRINCIPAL_CLASS[sdk=iphonesimulator*]" = UIApplication;
 				"PRINCIPAL_CLASS[sdk=macosx*]" = NSApplication;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.Host;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		239E8A852160A5B200BCB308 /* WithoutBitcode */ = {
+		239E8A852160A5B200BCB308 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D63A21DF03FE0028ADB9 /* Host_release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = "";
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "$(SRCROOT)/tests/host/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../Frameworks";
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
 				"PRINCIPAL_CLASS[sdk=iphoneos*]" = UIApplication;
 				"PRINCIPAL_CLASS[sdk=iphonesimulator*]" = UIApplication;
 				"PRINCIPAL_CLASS[sdk=macosx*]" = NSApplication;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.Host;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = WithoutBitcode;
+			name = Bitcode;
 		};
 		239E8AA32160B37600BCB308 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.WINQ-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
 			};
 			name = Debug;
 		};
 		239E8AA42160B37600BCB308 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.WINQ-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		239E8AA52160B37600BCB308 /* WithoutBitcode */ = {
+		239E8AA52160B37600BCB308 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Tencent.WCDB.WINQ-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = WithoutBitcode;
+			name = Bitcode;
 		};
-		23A2C8BF208CDC1500C6BB6B /* WithoutBitcode */ = {
+		23A2C8BF208CDC1500C6BB6B /* Bitcode */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64421DF03FF0028ADB9 /* Project_bitcode.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_CODE_COVERAGE = NO;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_MODULES_AUTOLINK = NO;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_BITCODE = NO;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_ENABLE_CPP_EXCEPTIONS = NO;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					SQLITE_HAS_CODEC,
-					ZLIB_CONST,
-					SQLITE_WCDB_CHECKPOINT_HANDLER,
-					WCDB_BUILTIN_SQLCIPHER,
-					SQLITE_WCDB_DIRTY_PAGE_COUNT,
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/support/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_CFLAGS = "-Wglobal-constructors";
-				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
-					"-framework",
-					UIKit,
-				);
-				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
-					"-framework",
-					UIKit,
-				);
-				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos watchos watchsimulator appletvos appletvsimulator";
-				TVOS_DEPLOYMENT_TARGET = 9.0;
-				VALID_ARCHS = "x86_64 arm64 armv7";
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
-			name = WithoutBitcode;
+			name = Bitcode;
 		};
-		23A2C8C0208CDC1500C6BB6B /* WithoutBitcode */ = {
+		23A2C8C0208CDC1500C6BB6B /* Bitcode */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D63C21DF03FE0028ADB9 /* WCDB_release.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
-				DEFINES_MODULE = YES;
-				DEPLOYMENT_POSTPROCESSING = YES;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_VERSION = A;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				"LIBRARY_SEARCH_PATHS[sdk=macosx*]" = (
-					"$(inherited)",
-					"$(SDKROOT)/usr/lib/system",
-				);
-				MACH_O_TYPE = mh_dylib;
-				MODULEMAP_FILE = "$(SRCROOT)/support/WCDB.modulemap";
-				OTHER_CFLAGS = "$(inherited)";
-				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
-					"-framework",
-					UIKit,
-				);
-				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
-					"-framework",
-					UIKit,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB;
-				PRODUCT_MODULE_NAME = WCDB;
-				PRODUCT_NAME = WCDB;
-				SKIP_INSTALL = YES;
-				STRIP_STYLE = "non-global";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
 			};
-			name = WithoutBitcode;
+			name = Bitcode;
 		};
 		23B5F7681E1111C100E58396 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64021DF03FF0028ADB9 /* Project_debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_MODULES_AUTOLINK = NO;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_BITCODE = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_CPP_EXCEPTIONS = NO;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-					SQLITE_HAS_CODEC,
-					ZLIB_CONST,
-					SQLITE_WCDB_CHECKPOINT_HANDLER,
-					WCDB_BUILTIN_SQLCIPHER,
-					SQLITE_WCDB_DIRTY_PAGE_COUNT,
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/support/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = "-Wglobal-constructors";
-				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
-					"-framework",
-					UIKit,
-				);
-				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
-					"-framework",
-					UIKit,
-				);
-				STRIP_INSTALLED_PRODUCT = NO;
-				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos watchos watchsimulator appletvos appletvsimulator";
-				TVOS_DEPLOYMENT_TARGET = 9.0;
-				VALID_ARCHS = "x86_64 arm64 armv7";
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
 		};
 		23B5F7691E1111C100E58396 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64521DF03FF0028ADB9 /* Project_release.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_CODE_COVERAGE = NO;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_MODULES_AUTOLINK = NO;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_BITCODE = NO;
-				"ENABLE_BITCODE[sdk=iphoneos*]" = YES;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_ENABLE_CPP_EXCEPTIONS = NO;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					SQLITE_HAS_CODEC,
-					ZLIB_CONST,
-					SQLITE_WCDB_CHECKPOINT_HANDLER,
-					WCDB_BUILTIN_SQLCIPHER,
-					SQLITE_WCDB_DIRTY_PAGE_COUNT,
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/support/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_CFLAGS = "-Wglobal-constructors";
-				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
-					"-framework",
-					UIKit,
-				);
-				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
-					"-framework",
-					UIKit,
-				);
-				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos watchos watchsimulator appletvos appletvsimulator";
-				TVOS_DEPLOYMENT_TARGET = 9.0;
-				VALID_ARCHS = "x86_64 arm64 armv7";
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
 		};
 		23FC43DE21B6631200FA1A0F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64721DF04620028ADB9 /* TestCase_debug.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.Benchmark;
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
 			};
 			name = Debug;
 		};
 		23FC43DF21B6631200FA1A0F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.Benchmark;
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		23FC43E021B6631200FA1A0F /* WithoutBitcode */ = {
+		23FC43E021B6631200FA1A0F /* Bitcode */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2387D64821DF04630028ADB9 /* TestCase_release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TCFDHFMX6R;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_FAST_MATH = YES;
-				"OTHER_LDFLAGS[sdk=macosx*]" = (
-					"-framework",
-					Cocoa,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.Benchmark;
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"TEST_HOST[sdk=iphoneos*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=iphonesimulator*]" = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host";
-				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = WithoutBitcode;
+			name = Bitcode;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		231FEA2B21999E7D00DC3706 /* Build configuration list for PBXNativeTarget "Basic tests" */ = {
+		231FEA2B21999E7D00DC3706 /* Build configuration list for PBXNativeTarget "Basic" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				231FEA2C21999E7D00DC3706 /* Debug */,
 				231FEA2D21999E7D00DC3706 /* Release */,
-				231FEA2E21999E7D00DC3706 /* WithoutBitcode */,
+				231FEA2E21999E7D00DC3706 /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		231FEA4721999ECE00DC3706 /* Build configuration list for PBXNativeTarget "Thread tests" */ = {
+		231FEA4721999ECE00DC3706 /* Build configuration list for PBXNativeTarget "Thread" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				231FEA4821999ECE00DC3706 /* Debug */,
 				231FEA4921999ECE00DC3706 /* Release */,
-				231FEA4A21999ECE00DC3706 /* WithoutBitcode */,
+				231FEA4A21999ECE00DC3706 /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		231FEA6321999F0D00DC3706 /* Build configuration list for PBXNativeTarget "Monitor tests" */ = {
+		231FEA6321999F0D00DC3706 /* Build configuration list for PBXNativeTarget "Monitor" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				231FEA6421999F0D00DC3706 /* Debug */,
 				231FEA6521999F0D00DC3706 /* Release */,
-				231FEA6621999F0D00DC3706 /* WithoutBitcode */,
+				231FEA6621999F0D00DC3706 /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		231FEA7F21999F2A00DC3706 /* Build configuration list for PBXNativeTarget "Config tests" */ = {
+		231FEA7F21999F2A00DC3706 /* Build configuration list for PBXNativeTarget "Config" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				231FEA8021999F2A00DC3706 /* Debug */,
 				231FEA8121999F2A00DC3706 /* Release */,
-				231FEA8221999F2A00DC3706 /* WithoutBitcode */,
+				231FEA8221999F2A00DC3706 /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		231FEA9B21999F7800DC3706 /* Build configuration list for PBXNativeTarget "Repair tests" */ = {
+		231FEA9B21999F7800DC3706 /* Build configuration list for PBXNativeTarget "Repair" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				231FEA9C21999F7800DC3706 /* Debug */,
 				231FEA9D21999F7800DC3706 /* Release */,
-				231FEA9E21999F7800DC3706 /* WithoutBitcode */,
+				231FEA9E21999F7800DC3706 /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		231FEAB721999F8100DC3706 /* Build configuration list for PBXNativeTarget "FTS tests" */ = {
+		231FEAB721999F8100DC3706 /* Build configuration list for PBXNativeTarget "FTS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				231FEAB821999F8100DC3706 /* Debug */,
 				231FEAB921999F8100DC3706 /* Release */,
-				231FEABA21999F8100DC3706 /* WithoutBitcode */,
+				231FEABA21999F8100DC3706 /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		231FEAD321999F8D00DC3706 /* Build configuration list for PBXNativeTarget "Migration tests" */ = {
+		231FEAD321999F8D00DC3706 /* Build configuration list for PBXNativeTarget "Migration" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				231FEAD421999F8D00DC3706 /* Debug */,
 				231FEAD521999F8D00DC3706 /* Release */,
-				231FEAD621999F8D00DC3706 /* WithoutBitcode */,
+				231FEAD621999F8D00DC3706 /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		234E6F6221996EB600D006F2 /* Build configuration list for PBXNativeTarget "Advance tests" */ = {
+		234E6F6221996EB600D006F2 /* Build configuration list for PBXNativeTarget "Advance" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				234E6F6321996EB600D006F2 /* Debug */,
 				234E6F6421996EB600D006F2 /* Release */,
-				234E6F6521996EB600D006F2 /* WithoutBitcode */,
+				234E6F6521996EB600D006F2 /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		23790949219295370098797F /* Build configuration list for PBXNativeTarget "ORM tests" */ = {
+		23790949219295370098797F /* Build configuration list for PBXNativeTarget "ORM" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2379094A219295370098797F /* Debug */,
 				2379094B219295370098797F /* Release */,
-				2379094C219295370098797F /* WithoutBitcode */,
+				2379094C219295370098797F /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2384F7242194249200E8B10A /* Build configuration list for PBXNativeTarget "Convenient tests" */ = {
+		2384F7242194249200E8B10A /* Build configuration list for PBXNativeTarget "Convenient" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2384F7252194249200E8B10A /* Debug */,
 				2384F7262194249200E8B10A /* Release */,
-				2384F7272194249200E8B10A /* WithoutBitcode */,
+				2384F7272194249200E8B10A /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -6807,7 +5700,7 @@
 			buildConfigurations = (
 				239326671E836D7300D677CC /* Debug */,
 				239326681E836D7300D677CC /* Release */,
-				23A2C8C0208CDC1500C6BB6B /* WithoutBitcode */,
+				23A2C8C0208CDC1500C6BB6B /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -6817,17 +5710,17 @@
 			buildConfigurations = (
 				239E8A832160A5B200BCB308 /* Debug */,
 				239E8A842160A5B200BCB308 /* Release */,
-				239E8A852160A5B200BCB308 /* WithoutBitcode */,
+				239E8A852160A5B200BCB308 /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		239E8AA22160B37600BCB308 /* Build configuration list for PBXNativeTarget "WINQ tests" */ = {
+		239E8AA22160B37600BCB308 /* Build configuration list for PBXNativeTarget "WINQ" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				239E8AA32160B37600BCB308 /* Debug */,
 				239E8AA42160B37600BCB308 /* Release */,
-				239E8AA52160B37600BCB308 /* WithoutBitcode */,
+				239E8AA52160B37600BCB308 /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -6837,7 +5730,7 @@
 			buildConfigurations = (
 				23B5F7681E1111C100E58396 /* Debug */,
 				23B5F7691E1111C100E58396 /* Release */,
-				23A2C8BF208CDC1500C6BB6B /* WithoutBitcode */,
+				23A2C8BF208CDC1500C6BB6B /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -6847,7 +5740,7 @@
 			buildConfigurations = (
 				23FC43DE21B6631200FA1A0F /* Debug */,
 				23FC43DF21B6631200FA1A0F /* Release */,
-				23FC43E021B6631200FA1A0F /* WithoutBitcode */,
+				23FC43E021B6631200FA1A0F /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

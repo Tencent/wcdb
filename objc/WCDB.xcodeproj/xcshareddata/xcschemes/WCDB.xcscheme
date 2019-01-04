@@ -47,8 +47,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "239E8A9C2160B37600BCB308"
-               BuildableName = "WINQ tests.xctest"
-               BlueprintName = "WINQ tests"
+               BuildableName = ".xctest"
+               BlueprintName = "WINQ"
                ReferencedContainer = "container:WCDB.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -59,8 +59,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2384F7022194249200E8B10A"
-               BuildableName = "Convenient tests.xctest"
-               BlueprintName = "Convenient tests"
+               BuildableName = ".xctest"
+               BlueprintName = "Convenient"
                ReferencedContainer = "container:WCDB.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -71,8 +71,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "237908FA219295370098797F"
-               BuildableName = "ORM tests.xctest"
-               BlueprintName = "ORM tests"
+               BuildableName = ".xctest"
+               BlueprintName = "ORM"
                ReferencedContainer = "container:WCDB.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -83,8 +83,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "234E6F4C21996EB600D006F2"
-               BuildableName = "Advance tests.xctest"
-               BlueprintName = "Advance tests"
+               BuildableName = ".xctest"
+               BlueprintName = "Advance"
                ReferencedContainer = "container:WCDB.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -95,8 +95,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "231FEA1521999E7D00DC3706"
-               BuildableName = "Basic tests.xctest"
-               BlueprintName = "Basic tests"
+               BuildableName = ".xctest"
+               BlueprintName = "Basic"
                ReferencedContainer = "container:WCDB.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -107,8 +107,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "231FEA6921999F2A00DC3706"
-               BuildableName = "Config tests.xctest"
-               BlueprintName = "Config tests"
+               BuildableName = ".xctest"
+               BlueprintName = "Config"
                ReferencedContainer = "container:WCDB.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -119,8 +119,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "231FEAA121999F8100DC3706"
-               BuildableName = "FTS tests.xctest"
-               BlueprintName = "FTS tests"
+               BuildableName = ".xctest"
+               BlueprintName = "FTS"
                ReferencedContainer = "container:WCDB.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -131,8 +131,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "231FEABD21999F8D00DC3706"
-               BuildableName = "Migration tests.xctest"
-               BlueprintName = "Migration tests"
+               BuildableName = ".xctest"
+               BlueprintName = "Migration"
                ReferencedContainer = "container:WCDB.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -143,8 +143,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "231FEA8521999F7800DC3706"
-               BuildableName = "Repair tests.xctest"
-               BlueprintName = "Repair tests"
+               BuildableName = ".xctest"
+               BlueprintName = "Repair"
                ReferencedContainer = "container:WCDB.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -155,8 +155,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "231FEA3121999ECE00DC3706"
-               BuildableName = "Thread tests.xctest"
-               BlueprintName = "Thread tests"
+               BuildableName = ".xctest"
+               BlueprintName = "Thread"
                ReferencedContainer = "container:WCDB.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -167,8 +167,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "231FEA4D21999F0D00DC3706"
-               BuildableName = "Monitor tests.xctest"
-               BlueprintName = "Monitor tests"
+               BuildableName = ".xctest"
+               BlueprintName = "Monitor"
                ReferencedContainer = "container:WCDB.xcodeproj">
             </BuildableReference>
          </TestableReference>
