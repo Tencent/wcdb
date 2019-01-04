@@ -104,7 +104,7 @@
         if (currentTable == nil || self.random.uint8 % 10 == 0) {
             currentTable = [NSString stringWithFormat:@"%@%@", self.tablePrefix, self.random.string];
             if (![self.database createTableAndIndexes:currentTable withClass:TestCaseObject.class]) {
-                TESTCASE_FAILED
+                TestCaseFailure();
                 return NO;
             }
         }
@@ -121,12 +121,12 @@
             [objects addObject:object];
         }
         if (![self.database insertObjects:objects intoTable:currentTable]) {
-            TESTCASE_FAILED
+            TestCaseFailure();
             return NO;
         }
         if (self.random.uint8 % 10 == 0) {
             if (![self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("TRUNCATE")]) {
-                TESTCASE_FAILED
+                TestCaseFailure();
                 return NO;
             }
             checkpointed = YES;
@@ -136,7 +136,7 @@
     }
     [Console enableSQLTrace];
     if (![self.fileManager fileExistsAtPath:self.walPath]) {
-        TESTCASE_FAILED
+        TestCaseFailure();
         return NO;
     }
     return YES;
@@ -150,7 +150,7 @@
         NSString* likeExpressions = [NSString stringWithFormat:@"%@%%", self.tablePrefix];
         NSArray* tableNames = [self.database getColumnFromStatement:WCDB::StatementSelect().select(WCTMaster.name).from(WCTMaster.tableName).where(WCTMaster.name.like(likeExpressions))];
         if (tableNames.count == 0) {
-            TESTCASE_FAILED
+            TestCaseFailure();
             return nil;
         }
         for (NSString* tableName in tableNames) {
@@ -175,12 +175,12 @@
             // database
             NSFileHandle* fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.path];
             if (!fileHandle) {
-                TESTCASE_FAILED
+                TestCaseFailure();
                 return;
             }
             NSInteger fileSize = [fileHandle seekToEndOfFile];
             if (fileSize == 0) {
-                TESTCASE_FAILED
+                TestCaseFailure();
                 return;
             }
             int pageCount = (int) (fileSize / self.pageSize);
@@ -200,12 +200,12 @@
             // wal
             NSFileHandle* fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.walPath];
             if (!fileHandle) {
-                TESTCASE_FAILED
+                TestCaseFailure();
                 return;
             }
             NSInteger fileSize = [fileHandle seekToEndOfFile];
             if (fileSize == 0) {
-                TESTCASE_FAILED
+                TestCaseFailure();
                 return;
             }
             int frameCount = (int) ((fileSize - self.walHeaderSize) / self.walFrameSize);

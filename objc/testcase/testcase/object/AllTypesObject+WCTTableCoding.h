@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import "AllTypesObject.h"
+#import <TestCase/AllTypesObject.h>
 #import <WCDB/WCDB.h>
 
 @interface AllTypesObject (WCTTableCoding) <WCTTableCoding>

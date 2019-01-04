@@ -18,16 +18,7 @@
  * limitations under the License.
  */
 
-#import "CRUDTestCase.h"
+#import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
-@interface PreInsertedCRUDTestCase : CRUDTestCase
-
-@property (nonatomic, readonly) TestCaseObject* object1;
-@property (nonatomic, readonly) TestCaseObject* object2;
-@property (nonatomic, readonly) NSArray<TestCaseObject*>* objects;
-
-@end
-
-NS_ASSUME_NONNULL_END
+void TestCaseLog(NSString *format, ...);
+void TestCaseLogv(NSString *format, va_list args);

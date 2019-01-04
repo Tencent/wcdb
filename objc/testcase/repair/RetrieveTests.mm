@@ -53,7 +53,7 @@
     double score = [self.database retrieve:^(double percentage, double increment) {
         if (percentage - lastPercentage != increment
             || increment <= 0) {
-            TESTCASE_FAILED
+            TestCaseFailure();
             sanity = NO;
         }
         lastPercentage = percentage;
@@ -68,7 +68,7 @@
     double score = [self.database retrieve:^(double percentage, double increment) {
         if (percentage - lastPercentage != increment
             || increment <= 0) {
-            TESTCASE_FAILED
+            TestCaseFailure();
             sanity = NO;
         }
         lastPercentage = percentage;

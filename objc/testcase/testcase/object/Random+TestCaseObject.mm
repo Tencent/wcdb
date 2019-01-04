@@ -18,18 +18,8 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import <TestCase/Random+TestCaseObject.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
-@interface Console : NSObject
-
-+ (void)enableSQLTrace;
-+ (void)disableSQLTrace;
-
-+ (void)enableSQLiteWrite;
-+ (void)disableSQLiteWrite;
+@implementation Random (TestCaseObject)
 
 @end
-
-NS_ASSUME_NONNULL_END

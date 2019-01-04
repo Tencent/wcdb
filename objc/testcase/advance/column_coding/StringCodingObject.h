@@ -20,8 +20,6 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
 @interface StringCodingObject : NSObject
 
 - (instancetype)initWithValue:(NSString*)value;
@@ -29,5 +27,3 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, retain) NSString* value;
 
 @end
-
-NS_ASSUME_NONNULL_END

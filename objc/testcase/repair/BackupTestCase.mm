@@ -42,14 +42,14 @@
 - (BOOL)tryToMakeHeaderCorrupted
 {
     if (![self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("TRUNCATE")]) {
-        TESTCASE_FAILED
+        TestCaseFailure();
         return NO;
     }
     __block BOOL result = NO;
     [self.database close:^{
         NSFileHandle* fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.path];
         if (!fileHandle) {
-            TESTCASE_FAILED
+            TestCaseFailure();
             return;
         }
         [fileHandle writeData:[self.random dataWithLength:self.headerSize]];

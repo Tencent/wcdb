@@ -90,7 +90,7 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
 - (BOOL)checkCreateVirtualTableSQLAsExpected:(NSString*)expected
 {
     if (expected.length == 0) {
-        TESTCASE_FAILED
+        TestCaseFailure();
         return NO;
     }
     return [self checkBeginningSQLs:@[ expected ]

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#import "Console.h"
-#import "NSObject+TestCase.h"
+#import <TestCase/NSObject+TestCase.h>
+#import <WCDB/SQLite.h>
 
 @implementation NSObject (TestCase)
 
@@ -76,6 +76,48 @@
         return [other.sql isEqualToString:self.sql];
     } else {
         return other.sql == nil;
+    }
+}
+
+@end
+
+@implementation NSFileManager (TestCase)
+
+- (unsigned long long)getFileSize:(NSString *)path
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:path]) {
+        return [[fileManager attributesOfItemAtPath:path error:nil] fileSize];
+    }
+    return 0;
+}
+
+@end
+
+ssize_t illPwrite(int, const void *, size_t, off_t)
+{
+    return -1;
+}
+
+@implementation WCTDatabase (TestCase)
+
++ (void)enableSQLiteWrite
+{
+    sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
+    vfs->xSetSystemCall(vfs, "pwrite", (sqlite3_syscall_ptr) pwrite);
+}
+
++ (void)disableSQLiteWrite
+{
+    sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
+    vfs->xSetSystemCall(vfs, "pwrite", (sqlite3_syscall_ptr) illPwrite);
+}
+
+- (void)removeSQLRelatedConfigs
+{
+    NSArray<NSString *> *configNames = @[ WCTConfigNameBasic, WCTConfigNameBackup, WCTConfigNameCheckpoint, WCTConfigNameTokenize, WCTConfigNameCipher ];
+    for (NSString *configName in configNames) {
+        [self removeConfigForName:configName];
     }
 }
 

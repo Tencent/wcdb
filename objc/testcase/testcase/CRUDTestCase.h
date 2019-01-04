@@ -18,9 +18,15 @@
  * limitations under the License.
  */
 
-#import "TableTestCase.h"
+#import <TestCase/TableTestCase.h>
+#import <TestCase/TestCaseObject+WCTTableCoding.h>
+#import <TestCase/TestCaseObject.h>
 
 @interface CRUDTestCase : TableTestCase
+
+@property (nonatomic, readonly) TestCaseObject* object1;
+@property (nonatomic, readonly) TestCaseObject* object2;
+@property (nonatomic, readonly) NSArray<TestCaseObject*>* objects;
 
 - (BOOL)checkObject:(NSObject<WCTTableCoding>*)object
                      andSQL:(NSString*)sql

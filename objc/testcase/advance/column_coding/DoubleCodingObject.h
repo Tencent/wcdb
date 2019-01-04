@@ -20,8 +20,6 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
 @interface DoubleCodingObject : NSObject
 
 - (instancetype)initWithValue:(double)value;
@@ -29,5 +27,3 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) double value;
 
 @end
-
-NS_ASSUME_NONNULL_END

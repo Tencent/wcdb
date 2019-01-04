@@ -47,12 +47,12 @@
              __block BOOL unexpected = NO;
              if ([self.database runTransaction:^BOOL(WCTHandle* handle) {
                      if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
-                         TESTCASE_FAILED
+                         TestCaseFailure();
                          unexpected = YES;
                      }
                      return NO; // rollback
                  }]) {
-                 TESTCASE_FAILED
+                 TestCaseFailure();
                  unexpected = YES;
              }
              return !unexpected;
@@ -69,12 +69,12 @@
              [Console disableSQLiteWrite];
              if ([self.database runTransaction:^BOOL(WCTHandle* handle) {
                      if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
-                         TESTCASE_FAILED
+                         TestCaseFailure();
                          unexpected = YES;
                      }
                      return YES; // commit failed
                  }]) {
-                 TESTCASE_FAILED
+                 TestCaseFailure();
                  unexpected = YES;
              }
              [Console enableSQLiteWrite];
@@ -105,15 +105,15 @@
              [Console disableSQLiteWrite];
              if ([self.database beginTransaction]) {
                  if (![self.database deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
-                     TESTCASE_FAILED
+                     TestCaseFailure();
                      unexpected = YES;
                  }
                  if ([self.database commitOrRollbackTransaction]) { // commit failed
-                     TESTCASE_FAILED
+                     TestCaseFailure();
                      unexpected = YES;
                  }
              } else {
-                 TESTCASE_FAILED
+                 TestCaseFailure();
                  unexpected = YES;
              }
              [Console enableSQLiteWrite];
@@ -129,7 +129,7 @@
          asExpectedAfterModification:^BOOL {
              if (![self.database beginTransaction]
                  || ![self.database deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
-                 TESTCASE_FAILED
+                 TestCaseFailure();
                  return NO;
              }
              [self.database rollbackTransaction];
@@ -159,12 +159,12 @@
              __block BOOL unexpected = NO;
              if ([self.database runNestedTransaction:^BOOL(WCTHandle* handle) {
                      if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
-                         TESTCASE_FAILED
+                         TestCaseFailure();
                          unexpected = YES;
                      }
                      return NO; // rollback
                  }]) {
-                 TESTCASE_FAILED
+                 TestCaseFailure();
                  unexpected = YES;
              }
              return !unexpected;
@@ -181,12 +181,12 @@
              [Console disableSQLiteWrite];
              if ([self.database runNestedTransaction:^BOOL(WCTHandle* handle) {
                      if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
-                         TESTCASE_FAILED
+                         TestCaseFailure();
                          unexpected = YES;
                      }
                      return YES; // commit failed
                  }]) {
-                 TESTCASE_FAILED
+                 TestCaseFailure();
                  unexpected = YES;
              }
              [Console enableSQLiteWrite];
@@ -217,15 +217,15 @@
              [Console disableSQLiteWrite];
              if ([self.database beginNestedTransaction]) {
                  if (![self.database deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
-                     TESTCASE_FAILED
+                     TestCaseFailure();
                      unexpected = YES;
                  }
                  if ([self.database commitOrRollbackNestedTransaction]) { // commit failed
-                     TESTCASE_FAILED
+                     TestCaseFailure();
                      unexpected = YES;
                  }
              } else {
-                 TESTCASE_FAILED
+                 TestCaseFailure();
                  unexpected = YES;
              }
              [Console enableSQLiteWrite];
@@ -241,7 +241,7 @@
          asExpectedAfterModification:^BOOL {
              if (![self.database beginNestedTransaction]
                  || ![self.database deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
-                 TESTCASE_FAILED
+                 TestCaseFailure();
                  return NO;
              }
              [self.database rollbackNestedTransaction];
@@ -292,12 +292,12 @@
              __block BOOL unexpected = NO;
              if ([handle runTransaction:^BOOL(WCTHandle* handle) {
                      if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
-                         TESTCASE_FAILED
+                         TestCaseFailure();
                          unexpected = YES;
                      }
                      return NO; // rollback
                  }]) {
-                 TESTCASE_FAILED
+                 TestCaseFailure();
                  unexpected = YES;
              }
              return !unexpected;
@@ -315,12 +315,12 @@
              [Console disableSQLiteWrite];
              if ([handle runTransaction:^BOOL(WCTHandle* handle) {
                      if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
-                         TESTCASE_FAILED
+                         TestCaseFailure();
                          unexpected = YES;
                      }
                      return YES; // commit failed
                  }]) {
-                 TESTCASE_FAILED
+                 TestCaseFailure();
                  unexpected = YES;
              }
              [Console enableSQLiteWrite];
@@ -353,15 +353,15 @@
              [Console disableSQLiteWrite];
              if ([handle beginTransaction]) {
                  if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
-                     TESTCASE_FAILED
+                     TestCaseFailure();
                      unexpected = YES;
                  }
                  if ([handle commitOrRollbackTransaction]) { // commit failed
-                     TESTCASE_FAILED
+                     TestCaseFailure();
                      unexpected = YES;
                  }
              } else {
-                 TESTCASE_FAILED
+                 TestCaseFailure();
                  unexpected = YES;
              }
              [Console enableSQLiteWrite];
@@ -378,7 +378,7 @@
              WCTHandle* handle = [self.database getHandle];
              if (![handle beginTransaction]
                  || ![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
-                 TESTCASE_FAILED
+                 TestCaseFailure();
                  return NO;
              }
              [handle rollbackTransaction];
@@ -410,12 +410,12 @@
              __block BOOL unexpected = NO;
              if ([handle runNestedTransaction:^BOOL(WCTHandle* handle) {
                      if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
-                         TESTCASE_FAILED
+                         TestCaseFailure();
                          unexpected = YES;
                      }
                      return NO; // rollback
                  }]) {
-                 TESTCASE_FAILED
+                 TestCaseFailure();
                  unexpected = YES;
              }
              return !unexpected;
@@ -433,12 +433,12 @@
              [Console disableSQLiteWrite];
              if ([handle runNestedTransaction:^BOOL(WCTHandle* handle) {
                      if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
-                         TESTCASE_FAILED
+                         TestCaseFailure();
                          unexpected = YES;
                      }
                      return YES; // commit failed
                  }]) {
-                 TESTCASE_FAILED
+                 TestCaseFailure();
                  unexpected = YES;
              }
              [Console enableSQLiteWrite];
@@ -471,15 +471,15 @@
              [Console disableSQLiteWrite];
              if ([handle beginNestedTransaction]) {
                  if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
-                     TESTCASE_FAILED
+                     TestCaseFailure();
                      unexpected = YES;
                  }
                  if ([handle commitOrRollbackNestedTransaction]) { // commit failed
-                     TESTCASE_FAILED
+                     TestCaseFailure();
                      unexpected = YES;
                  }
              } else {
-                 TESTCASE_FAILED
+                 TestCaseFailure();
                  unexpected = YES;
              }
              [Console enableSQLiteWrite];
@@ -496,7 +496,7 @@
              WCTHandle* handle = [self.database getHandle];
              if (![handle beginNestedTransaction]
                  || ![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
-                 TESTCASE_FAILED
+                 TestCaseFailure();
                  return NO;
              }
              [handle rollbackNestedTransaction];
@@ -553,17 +553,17 @@
                      }
                      if ([handle runNestedTransaction:^BOOL(WCTHandle* handle) {
                              if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 2]) {
-                                 TESTCASE_FAILED
+                                 TestCaseFailure();
                                  unexpected = YES;
                              }
                              return NO; // rollback nested
                          }]) {
-                         TESTCASE_FAILED
+                         TestCaseFailure();
                          unexpected = YES;
                      }
                      return YES; // commit
                  }]) {
-                 TESTCASE_FAILED
+                 TestCaseFailure();
                  unexpected = YES;
              }
              return !unexpected;
@@ -579,18 +579,18 @@
              __block BOOL unexpected = NO;
              if ([self.database runTransaction:^BOOL(WCTHandle* handle) {
                      if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
-                         TESTCASE_FAILED
+                         TestCaseFailure();
                          unexpected = YES;
                      }
                      if (![handle runNestedTransaction:^BOOL(WCTHandle* handle) {
                              return [handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 2]; // commit nested
                          }]) {
-                         TESTCASE_FAILED
+                         TestCaseFailure();
                          unexpected = YES;
                      }
                      return NO; // rollback
                  }]) {
-                 TESTCASE_FAILED
+                 TestCaseFailure();
                  unexpected = YES;
              }
              return !unexpected;
@@ -606,22 +606,22 @@
              __block BOOL unexpected = NO;
              if ([self.database runTransaction:^BOOL(WCTHandle* handle) {
                      if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
-                         TESTCASE_FAILED
+                         TestCaseFailure();
                          unexpected = YES;
                      }
                      if ([handle runNestedTransaction:^BOOL(WCTHandle* handle) {
                              if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 2]) {
-                                 TESTCASE_FAILED
+                                 TestCaseFailure();
                                  unexpected = YES;
                              }
                              return NO; // rollback nested
                          }]) {
-                         TESTCASE_FAILED
+                         TestCaseFailure();
                          unexpected = YES;
                      }
                      return NO; // rollback
                  }]) {
-                 TESTCASE_FAILED
+                 TestCaseFailure();
                  unexpected = YES;
              }
              return !unexpected;

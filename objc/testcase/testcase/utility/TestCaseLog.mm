@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import "TestCaseLog.h"
+#import <TestCase/TestCaseLog.h>
 
 void TestCaseLog(NSString *format, ...)
 {

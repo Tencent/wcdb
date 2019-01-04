@@ -20,8 +20,6 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
 @interface Integer64CodingObject : NSObject
 
 - (instancetype)initWithValue:(int64_t)value;
@@ -29,5 +27,3 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) int64_t value;
 
 @end
-
-NS_ASSUME_NONNULL_END

@@ -18,33 +18,9 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCDB.h>
+#import <TestCase/Random.h>
+#import <TestCase/TestCaseObject.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
-@interface NSObject (TestCase)
-
-+ (BOOL)isObject:(NSObject*)left nilEqualToObject:(NSObject*)right;
+@interface Random (TestCaseObject)
 
 @end
-
-@interface NSArray (TestCase)
-
-- (NSArray*)reversedArray;
-
-@end
-
-@interface NSNumber (TestCase)
-
-+ (BOOL)value:(double)left almostEqual:(double)right;
-
-- (BOOL)almostEqual:(NSNumber*)number;
-
-@end
-
-@interface WCTPerformanceFootprint (TestCase)
-
-@end
-
-NS_ASSUME_NONNULL_END

@@ -18,35 +18,20 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import <TestCase/Random.h>
+#import <XCTest/XCTest.h>
 
-NS_ASSUME_NONNULL_BEGIN
+@interface BaseTestCase : XCTestCase
 
-@interface Random : NSObject
+@property (class, nonatomic, readonly) NSString* root;
+@property (nonatomic, readonly) NSString* directory;
 
-@property (nonatomic, assign) uint32_t seed;
+@property (nonatomic, readonly) NSString* className;
+@property (nonatomic, readonly) NSString* testName;
 
-- (uint64_t)uint64;
-- (uint32_t)uint32;
-- (uint8_t)uint8;
+@property (nonatomic, readonly) NSFileManager* fileManager;
+@property (nonatomic, readonly) Random* random;
 
-- (int64_t)int64;
-- (int32_t)int32;
-
-- (double)double_;
-- (float)float_;
-- (float)float_0_1;
-
-- (BOOL)boolean;
-
-- (NSNumber*)number;
-
-- (NSString*)string;
-
-- (NSData*)data;
-- (NSData*)dataWithLength:(NSInteger)length;
-- (NSData*)dataOtherThan:(NSData*)other;
+- (void)log:(NSString*)format, ...;
 
 @end
-
-NS_ASSUME_NONNULL_END

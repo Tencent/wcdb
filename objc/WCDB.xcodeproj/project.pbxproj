@@ -300,30 +300,16 @@
 		2387D75521DF07790028ADB9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		2387D8A521DF0B160028ADB9 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		2387D8A721DF0B190028ADB9 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D8A621DF0B190028ADB9 /* XCTest.framework */; };
-		2387D8F321DF0B880028ADB9 /* Console.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8DA21DF0B870028ADB9 /* Console.h */; };
-		2387D8F421DF0B880028ADB9 /* TableTestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8DB21DF0B870028ADB9 /* TableTestCase.h */; };
 		2387D8F521DF0B880028ADB9 /* DatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D8DC21DF0B870028ADB9 /* DatabaseTestCase.mm */; };
-		2387D8F621DF0B880028ADB9 /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D8DD21DF0B870028ADB9 /* NSObject+TestCase.mm */; };
-		2387D8F721DF0B880028ADB9 /* TableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D8DE21DF0B870028ADB9 /* TableTestCase.mm */; };
-		2387D8F821DF0B880028ADB9 /* PreInsertedCRUDTestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8DF21DF0B870028ADB9 /* PreInsertedCRUDTestCase.h */; };
-		2387D8F921DF0B880028ADB9 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D8E021DF0B870028ADB9 /* CRUDTestCase.mm */; };
-		2387D8FA21DF0B880028ADB9 /* NSObject+TestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8E121DF0B870028ADB9 /* NSObject+TestCase.h */; };
-		2387D8FB21DF0B880028ADB9 /* DatabaseTestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8E221DF0B870028ADB9 /* DatabaseTestCase.h */; };
-		2387D8FC21DF0B880028ADB9 /* PreInsertedCRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D8E321DF0B870028ADB9 /* PreInsertedCRUDTestCase.mm */; };
-		2387D8FD21DF0B880028ADB9 /* TestCaseLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8E421DF0B870028ADB9 /* TestCaseLog.h */; };
-		2387D8FE21DF0B880028ADB9 /* TestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8E521DF0B870028ADB9 /* TestCase.h */; };
+		2387D8FB21DF0B880028ADB9 /* DatabaseTestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8E221DF0B870028ADB9 /* DatabaseTestCase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2387D8FE21DF0B880028ADB9 /* BaseTestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8E521DF0B870028ADB9 /* BaseTestCase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2387D8FF21DF0B880028ADB9 /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D8E721DF0B870028ADB9 /* AllTypesObject.mm */; };
 		2387D90021DF0B880028ADB9 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D8E821DF0B870028ADB9 /* TestCaseObject.mm */; };
-		2387D90121DF0B880028ADB9 /* AllTypesObject+WCTTableCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8E921DF0B870028ADB9 /* AllTypesObject+WCTTableCoding.h */; };
-		2387D90221DF0B880028ADB9 /* AllTypesObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8EA21DF0B870028ADB9 /* AllTypesObject.h */; };
-		2387D90321DF0B880028ADB9 /* TestCaseObject+WCTTableCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8EB21DF0B870028ADB9 /* TestCaseObject+WCTTableCoding.h */; };
-		2387D90421DF0B880028ADB9 /* TestCaseObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8EC21DF0B870028ADB9 /* TestCaseObject.h */; };
-		2387D90521DF0B880028ADB9 /* TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D8ED21DF0B870028ADB9 /* TestCase.mm */; };
-		2387D90621DF0B880028ADB9 /* Console.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D8EE21DF0B870028ADB9 /* Console.mm */; };
-		2387D90721DF0B880028ADB9 /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D8EF21DF0B870028ADB9 /* Random.mm */; };
-		2387D90821DF0B880028ADB9 /* TestCaseLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 2387D8F021DF0B870028ADB9 /* TestCaseLog.m */; };
-		2387D90921DF0B880028ADB9 /* CRUDTestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8F121DF0B870028ADB9 /* CRUDTestCase.h */; };
-		2387D90A21DF0B880028ADB9 /* Random.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8F221DF0B870028ADB9 /* Random.h */; };
+		2387D90121DF0B880028ADB9 /* AllTypesObject+WCTTableCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8E921DF0B870028ADB9 /* AllTypesObject+WCTTableCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2387D90221DF0B880028ADB9 /* AllTypesObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8EA21DF0B870028ADB9 /* AllTypesObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2387D90321DF0B880028ADB9 /* TestCaseObject+WCTTableCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8EB21DF0B870028ADB9 /* TestCaseObject+WCTTableCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2387D90421DF0B880028ADB9 /* TestCaseObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D8EC21DF0B870028ADB9 /* TestCaseObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2387D90521DF0B880028ADB9 /* BaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D8ED21DF0B870028ADB9 /* BaseTestCase.mm */; };
 		2387D90E21DF0C4B0028ADB9 /* TestCase.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2387D91121DF0C5C0028ADB9 /* TestCase.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2387D91421DF0C660028ADB9 /* TestCase.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -348,6 +334,20 @@
 		2387D93921DF0D440028ADB9 /* TestCase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; };
 		2387D93A21DF0D4A0028ADB9 /* TestCase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; };
 		2387D93B21DF0D4D0028ADB9 /* TestCase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2387D89821DF07790028ADB9 /* TestCase.framework */; };
+		2387D94821DF5C890028ADB9 /* Random+TestCaseObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D94621DF5C890028ADB9 /* Random+TestCaseObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2387D94921DF5C890028ADB9 /* Random+TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D94721DF5C890028ADB9 /* Random+TestCaseObject.mm */; };
+		2387D95021DF61C30028ADB9 /* TableTestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D94A21DF61C20028ADB9 /* TableTestCase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2387D95221DF61C30028ADB9 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D94C21DF61C20028ADB9 /* CRUDTestCase.mm */; };
+		2387D95321DF61C30028ADB9 /* CRUDTestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D94D21DF61C20028ADB9 /* CRUDTestCase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2387D95521DF61C30028ADB9 /* TableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D94F21DF61C20028ADB9 /* TableTestCase.mm */; };
+		2387D95821DF635A0028ADB9 /* TestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D95621DF635A0028ADB9 /* TestCase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2387D96221DF651D0028ADB9 /* TestCaseLog.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D95B21DF651C0028ADB9 /* TestCaseLog.mm */; };
+		2387D96321DF651D0028ADB9 /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D95C21DF651C0028ADB9 /* NSObject+TestCase.mm */; };
+		2387D96421DF651D0028ADB9 /* NSObject+TestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D95D21DF651C0028ADB9 /* NSObject+TestCase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2387D96521DF651D0028ADB9 /* TestCaseLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D95E21DF651C0028ADB9 /* TestCaseLog.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2387D96621DF651D0028ADB9 /* TestCaseAssertion.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D95F21DF651C0028ADB9 /* TestCaseAssertion.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2387D96721DF651D0028ADB9 /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2387D96021DF651C0028ADB9 /* Random.mm */; };
+		2387D96821DF651D0028ADB9 /* Random.h in Headers */ = {isa = PBXBuildFile; fileRef = 2387D96121DF651C0028ADB9 /* Random.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		238845F02063912B006EAEC8 /* WCTPerformanceFootprint.h in Headers */ = {isa = PBXBuildFile; fileRef = 238845EE2063912B006EAEC8 /* WCTPerformanceFootprint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		238845F12063912B006EAEC8 /* WCTPerformanceFootprint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238845EF2063912B006EAEC8 /* WCTPerformanceFootprint.mm */; };
 		238C177E21CA2190003B6D26 /* SyntaxCommonConst.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 238C177C21CA2190003B6D26 /* SyntaxCommonConst.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1583,31 +1583,31 @@
 		2387D8A121DF09E60028ADB9 /* TestCase_debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TestCase_debug.xcconfig; sourceTree = "<group>"; };
 		2387D8A221DF09E60028ADB9 /* TestCase_release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TestCase_release.xcconfig; sourceTree = "<group>"; };
 		2387D8A621DF0B190028ADB9 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/MacOSX.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		2387D8DA21DF0B870028ADB9 /* Console.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Console.h; sourceTree = "<group>"; };
-		2387D8DB21DF0B870028ADB9 /* TableTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableTestCase.h; sourceTree = "<group>"; };
 		2387D8DC21DF0B870028ADB9 /* DatabaseTestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DatabaseTestCase.mm; sourceTree = "<group>"; };
-		2387D8DD21DF0B870028ADB9 /* NSObject+TestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSObject+TestCase.mm"; sourceTree = "<group>"; };
-		2387D8DE21DF0B870028ADB9 /* TableTestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableTestCase.mm; sourceTree = "<group>"; };
-		2387D8DF21DF0B870028ADB9 /* PreInsertedCRUDTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreInsertedCRUDTestCase.h; sourceTree = "<group>"; };
-		2387D8E021DF0B870028ADB9 /* CRUDTestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CRUDTestCase.mm; sourceTree = "<group>"; };
-		2387D8E121DF0B870028ADB9 /* NSObject+TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+TestCase.h"; sourceTree = "<group>"; };
 		2387D8E221DF0B870028ADB9 /* DatabaseTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseTestCase.h; sourceTree = "<group>"; };
-		2387D8E321DF0B870028ADB9 /* PreInsertedCRUDTestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PreInsertedCRUDTestCase.mm; sourceTree = "<group>"; };
-		2387D8E421DF0B870028ADB9 /* TestCaseLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCaseLog.h; sourceTree = "<group>"; };
-		2387D8E521DF0B870028ADB9 /* TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCase.h; sourceTree = "<group>"; };
+		2387D8E521DF0B870028ADB9 /* BaseTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseTestCase.h; sourceTree = "<group>"; };
 		2387D8E721DF0B870028ADB9 /* AllTypesObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AllTypesObject.mm; sourceTree = "<group>"; };
 		2387D8E821DF0B870028ADB9 /* TestCaseObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCaseObject.mm; sourceTree = "<group>"; };
 		2387D8E921DF0B870028ADB9 /* AllTypesObject+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AllTypesObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		2387D8EA21DF0B870028ADB9 /* AllTypesObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTypesObject.h; sourceTree = "<group>"; };
 		2387D8EB21DF0B870028ADB9 /* TestCaseObject+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestCaseObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		2387D8EC21DF0B870028ADB9 /* TestCaseObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCaseObject.h; sourceTree = "<group>"; };
-		2387D8ED21DF0B870028ADB9 /* TestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCase.mm; sourceTree = "<group>"; };
-		2387D8EE21DF0B870028ADB9 /* Console.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Console.mm; sourceTree = "<group>"; };
-		2387D8EF21DF0B870028ADB9 /* Random.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Random.mm; sourceTree = "<group>"; };
-		2387D8F021DF0B870028ADB9 /* TestCaseLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestCaseLog.m; sourceTree = "<group>"; };
-		2387D8F121DF0B870028ADB9 /* CRUDTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRUDTestCase.h; sourceTree = "<group>"; };
-		2387D8F221DF0B870028ADB9 /* Random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Random.h; sourceTree = "<group>"; };
+		2387D8ED21DF0B870028ADB9 /* BaseTestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BaseTestCase.mm; sourceTree = "<group>"; };
 		2387D90B21DF0BBA0028ADB9 /* TestCase.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = TestCase.modulemap; sourceTree = "<group>"; };
+		2387D94621DF5C890028ADB9 /* Random+TestCaseObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Random+TestCaseObject.h"; sourceTree = "<group>"; };
+		2387D94721DF5C890028ADB9 /* Random+TestCaseObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "Random+TestCaseObject.mm"; sourceTree = "<group>"; };
+		2387D94A21DF61C20028ADB9 /* TableTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableTestCase.h; sourceTree = "<group>"; };
+		2387D94C21DF61C20028ADB9 /* CRUDTestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CRUDTestCase.mm; sourceTree = "<group>"; };
+		2387D94D21DF61C20028ADB9 /* CRUDTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRUDTestCase.h; sourceTree = "<group>"; };
+		2387D94F21DF61C20028ADB9 /* TableTestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableTestCase.mm; sourceTree = "<group>"; };
+		2387D95621DF635A0028ADB9 /* TestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestCase.h; sourceTree = "<group>"; };
+		2387D95B21DF651C0028ADB9 /* TestCaseLog.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCaseLog.mm; sourceTree = "<group>"; };
+		2387D95C21DF651C0028ADB9 /* NSObject+TestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSObject+TestCase.mm"; sourceTree = "<group>"; };
+		2387D95D21DF651C0028ADB9 /* NSObject+TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+TestCase.h"; sourceTree = "<group>"; };
+		2387D95E21DF651C0028ADB9 /* TestCaseLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCaseLog.h; sourceTree = "<group>"; };
+		2387D95F21DF651C0028ADB9 /* TestCaseAssertion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCaseAssertion.h; sourceTree = "<group>"; };
+		2387D96021DF651C0028ADB9 /* Random.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Random.mm; sourceTree = "<group>"; };
+		2387D96121DF651C0028ADB9 /* Random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Random.h; sourceTree = "<group>"; };
 		238845EE2063912B006EAEC8 /* WCTPerformanceFootprint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTPerformanceFootprint.h; sourceTree = "<group>"; };
 		238845EF2063912B006EAEC8 /* WCTPerformanceFootprint.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTPerformanceFootprint.mm; sourceTree = "<group>"; };
 		238C177C21CA2190003B6D26 /* SyntaxCommonConst.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SyntaxCommonConst.hpp; sourceTree = "<group>"; };
@@ -3039,25 +3039,17 @@
 		2387D8D921DF0B870028ADB9 /* testcase */ = {
 			isa = PBXGroup;
 			children = (
-				2387D8DA21DF0B870028ADB9 /* Console.h */,
-				2387D8DB21DF0B870028ADB9 /* TableTestCase.h */,
-				2387D8DC21DF0B870028ADB9 /* DatabaseTestCase.mm */,
-				2387D8DD21DF0B870028ADB9 /* NSObject+TestCase.mm */,
-				2387D8DE21DF0B870028ADB9 /* TableTestCase.mm */,
-				2387D8DF21DF0B870028ADB9 /* PreInsertedCRUDTestCase.h */,
-				2387D8E021DF0B870028ADB9 /* CRUDTestCase.mm */,
-				2387D8E121DF0B870028ADB9 /* NSObject+TestCase.h */,
+				2387D94D21DF61C20028ADB9 /* CRUDTestCase.h */,
+				2387D94C21DF61C20028ADB9 /* CRUDTestCase.mm */,
+				2387D94A21DF61C20028ADB9 /* TableTestCase.h */,
+				2387D94F21DF61C20028ADB9 /* TableTestCase.mm */,
 				2387D8E221DF0B870028ADB9 /* DatabaseTestCase.h */,
-				2387D8E321DF0B870028ADB9 /* PreInsertedCRUDTestCase.mm */,
-				2387D8E421DF0B870028ADB9 /* TestCaseLog.h */,
-				2387D8E521DF0B870028ADB9 /* TestCase.h */,
+				2387D8DC21DF0B870028ADB9 /* DatabaseTestCase.mm */,
+				2387D8E521DF0B870028ADB9 /* BaseTestCase.h */,
+				2387D8ED21DF0B870028ADB9 /* BaseTestCase.mm */,
 				2387D8E621DF0B870028ADB9 /* object */,
-				2387D8ED21DF0B870028ADB9 /* TestCase.mm */,
-				2387D8EE21DF0B870028ADB9 /* Console.mm */,
-				2387D8EF21DF0B870028ADB9 /* Random.mm */,
-				2387D8F021DF0B870028ADB9 /* TestCaseLog.m */,
-				2387D8F121DF0B870028ADB9 /* CRUDTestCase.h */,
-				2387D8F221DF0B870028ADB9 /* Random.h */,
+				2387D95A21DF651C0028ADB9 /* utility */,
+				2387D95621DF635A0028ADB9 /* TestCase.h */,
 			);
 			path = testcase;
 			sourceTree = "<group>";
@@ -3065,14 +3057,30 @@
 		2387D8E621DF0B870028ADB9 /* object */ = {
 			isa = PBXGroup;
 			children = (
-				2387D8E721DF0B870028ADB9 /* AllTypesObject.mm */,
-				2387D8E821DF0B870028ADB9 /* TestCaseObject.mm */,
-				2387D8E921DF0B870028ADB9 /* AllTypesObject+WCTTableCoding.h */,
 				2387D8EA21DF0B870028ADB9 /* AllTypesObject.h */,
-				2387D8EB21DF0B870028ADB9 /* TestCaseObject+WCTTableCoding.h */,
+				2387D8E921DF0B870028ADB9 /* AllTypesObject+WCTTableCoding.h */,
+				2387D8E721DF0B870028ADB9 /* AllTypesObject.mm */,
 				2387D8EC21DF0B870028ADB9 /* TestCaseObject.h */,
+				2387D8EB21DF0B870028ADB9 /* TestCaseObject+WCTTableCoding.h */,
+				2387D8E821DF0B870028ADB9 /* TestCaseObject.mm */,
+				2387D94621DF5C890028ADB9 /* Random+TestCaseObject.h */,
+				2387D94721DF5C890028ADB9 /* Random+TestCaseObject.mm */,
 			);
 			path = object;
+			sourceTree = "<group>";
+		};
+		2387D95A21DF651C0028ADB9 /* utility */ = {
+			isa = PBXGroup;
+			children = (
+				2387D95B21DF651C0028ADB9 /* TestCaseLog.mm */,
+				2387D95C21DF651C0028ADB9 /* NSObject+TestCase.mm */,
+				2387D95D21DF651C0028ADB9 /* NSObject+TestCase.h */,
+				2387D95E21DF651C0028ADB9 /* TestCaseLog.h */,
+				2387D95F21DF651C0028ADB9 /* TestCaseAssertion.h */,
+				2387D96021DF651C0028ADB9 /* Random.mm */,
+				2387D96121DF651C0028ADB9 /* Random.h */,
+			);
+			path = utility;
 			sourceTree = "<group>";
 		};
 		2398971F217EC9E20014BF33 /* winq */ = {
@@ -3679,19 +3687,20 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2387D8FA21DF0B880028ADB9 /* NSObject+TestCase.h in Headers */,
-				2387D8F321DF0B880028ADB9 /* Console.h in Headers */,
-				2387D90A21DF0B880028ADB9 /* Random.h in Headers */,
-				2387D8F821DF0B880028ADB9 /* PreInsertedCRUDTestCase.h in Headers */,
-				2387D8FD21DF0B880028ADB9 /* TestCaseLog.h in Headers */,
 				2387D90221DF0B880028ADB9 /* AllTypesObject.h in Headers */,
 				2387D90321DF0B880028ADB9 /* TestCaseObject+WCTTableCoding.h in Headers */,
+				2387D95021DF61C30028ADB9 /* TableTestCase.h in Headers */,
 				2387D8FB21DF0B880028ADB9 /* DatabaseTestCase.h in Headers */,
+				2387D95821DF635A0028ADB9 /* TestCase.h in Headers */,
+				2387D94821DF5C890028ADB9 /* Random+TestCaseObject.h in Headers */,
+				2387D95321DF61C30028ADB9 /* CRUDTestCase.h in Headers */,
 				2387D90421DF0B880028ADB9 /* TestCaseObject.h in Headers */,
-				2387D8FE21DF0B880028ADB9 /* TestCase.h in Headers */,
-				2387D8F421DF0B880028ADB9 /* TableTestCase.h in Headers */,
-				2387D90921DF0B880028ADB9 /* CRUDTestCase.h in Headers */,
+				2387D8FE21DF0B880028ADB9 /* BaseTestCase.h in Headers */,
+				2387D96521DF651D0028ADB9 /* TestCaseLog.h in Headers */,
 				2387D90121DF0B880028ADB9 /* AllTypesObject+WCTTableCoding.h in Headers */,
+				2387D96821DF651D0028ADB9 /* Random.h in Headers */,
+				2387D96621DF651D0028ADB9 /* TestCaseAssertion.h in Headers */,
+				2387D96421DF651D0028ADB9 /* NSObject+TestCase.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4690,17 +4699,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2387D90821DF0B880028ADB9 /* TestCaseLog.m in Sources */,
-				2387D90721DF0B880028ADB9 /* Random.mm in Sources */,
-				2387D8FC21DF0B880028ADB9 /* PreInsertedCRUDTestCase.mm in Sources */,
+				2387D96721DF651D0028ADB9 /* Random.mm in Sources */,
+				2387D94921DF5C890028ADB9 /* Random+TestCaseObject.mm in Sources */,
 				2387D90021DF0B880028ADB9 /* TestCaseObject.mm in Sources */,
 				2387D8F521DF0B880028ADB9 /* DatabaseTestCase.mm in Sources */,
+				2387D95221DF61C30028ADB9 /* CRUDTestCase.mm in Sources */,
+				2387D96321DF651D0028ADB9 /* NSObject+TestCase.mm in Sources */,
+				2387D96221DF651D0028ADB9 /* TestCaseLog.mm in Sources */,
 				2387D8FF21DF0B880028ADB9 /* AllTypesObject.mm in Sources */,
-				2387D90621DF0B880028ADB9 /* Console.mm in Sources */,
-				2387D8F921DF0B880028ADB9 /* CRUDTestCase.mm in Sources */,
-				2387D8F721DF0B880028ADB9 /* TableTestCase.mm in Sources */,
-				2387D8F621DF0B880028ADB9 /* NSObject+TestCase.mm in Sources */,
-				2387D90521DF0B880028ADB9 /* TestCase.mm in Sources */,
+				2387D90521DF0B880028ADB9 /* BaseTestCase.mm in Sources */,
+				2387D95521DF61C30028ADB9 /* TableTestCase.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

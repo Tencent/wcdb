@@ -18,18 +18,16 @@
  * limitations under the License.
  */
 
-#import "TestCase.h"
+#import <TestCase/BaseTestCase.h>
+#import <TestCase/TestCaseAssertion.h>
+#import <TestCase/TestCaseLog.h>
+#import <WCDB/WCDB.h>
 
-@implementation TestCase
-
-- (void)log:(NSString *)format, ...
-{
-    va_list ap;
-    va_start(ap, format);
-    NSString *description = [[NSString alloc] initWithFormat:format arguments:ap];
-    va_end(ap);
-    NSString *log = [NSString stringWithFormat:@"Test Case '%@' %@", self.name, description];
-    TestCaseLog(@"%@", log);
+@implementation BaseTestCase {
+    Random *_random;
+    NSString *_className;
+    NSString *_testName;
+    NSString *_directory;
 }
 
 - (void)setUp
@@ -42,9 +40,9 @@
     WCTDatabase.debuggable = NO;
 #endif
 
-    _random = [[Random alloc] init];
-
-    [Console enableSQLTrace];
+    if (WCTDatabase.debuggable) {
+        [self log:@"debuggable"];
+    }
 
     NSString *directory = self.directory;
     NSString *abbreviatedPath = directory.stringByAbbreviatingWithTildeInPath;
@@ -52,23 +50,26 @@
         directory = abbreviatedPath;
     }
 
-    if (WCTDatabase.debuggable) {
-        [self log:@"Debuggable"];
+    [self log:@"run at %@", directory];
+}
+
+- (Random *)random
+{
+    if (_random) {
+        _random = [[Random alloc] init];
     }
-    [self log:@"run at %@", self.directory];
+    return _random;
 }
 
 - (NSString *)testName
 {
-    NSString *name = self.name;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\[\\w+ (\\w+).*\\]" options:NSRegularExpressionCaseInsensitive error:nil];
-    NSTextCheckingResult *match = [regex firstMatchInString:name options:0 range:NSMakeRange(0, [name length])];
-    return [name substringWithRange:[match rangeAtIndex:1]];
-}
-
-- (NSString *)identifier
-{
-    return [NSString stringWithFormat:@"%@_%@", self.className, self.testName];
+    if (!_testName) {
+        NSString *name = self.name;
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\[\\w+ (\\w+).*\\]" options:NSRegularExpressionCaseInsensitive error:nil];
+        NSTextCheckingResult *match = [regex firstMatchInString:name options:0 range:NSMakeRange(0, [name length])];
+        _testName = [name substringWithRange:[match rangeAtIndex:1]];
+    }
+    return _testName;
 }
 
 - (void)refreshDirectory
@@ -89,17 +90,23 @@
 
 - (NSString *)className
 {
-    return NSStringFromClass(self.class);
+    if (_className) {
+        _className = NSStringFromClass(self.class);
+    }
+    return _className;
 }
 
-- (NSString *)root
++ (NSString *)root
 {
     return [NSTemporaryDirectory() stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier];
 }
 
 - (NSString *)directory
 {
-    return [[self.root stringByAppendingPathComponent:self.className] stringByAppendingPathComponent:self.testName];
+    if (!_directory) {
+        _directory = [[self.class.root stringByAppendingPathComponent:self.className] stringByAppendingPathComponent:self.testName];
+    }
+    return _directory;
 }
 
 - (NSFileManager *)fileManager
@@ -107,16 +114,14 @@
     return [NSFileManager defaultManager];
 }
 
-+ (NSString *)hint:(NSString *)description expecting:(NSString *)expected
+- (void)log:(NSString *)format, ...
 {
-    return [NSString stringWithFormat:
-                     @"\nexpect [%@]"
-                      "\n___but [%@]"
-                      "\n__from [%@]",
-                     expected,
-                     description,
-                     [description commonPrefixWithString:expected
-                                                 options:NSCaseInsensitiveSearch]];
+    va_list ap;
+    va_start(ap, format);
+    NSString *description = [[NSString alloc] initWithFormat:format arguments:ap];
+    va_end(ap);
+    NSString *log = [NSString stringWithFormat:@"Test Case '%@' %@", self.name, description];
+    TestCaseLog(@"%@", log);
 }
 
 @end

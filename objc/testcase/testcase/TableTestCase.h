@@ -18,20 +18,17 @@
  * limitations under the License.
  */
 
-#import "DatabaseTestCase.h"
+#import <TestCase/DatabaseTestCase.h>
 
 @interface TableTestCase : DatabaseTestCase
 
 @property (nonatomic, readonly) WCTTable* table;
-
-@property (retain, nonatomic) NSString* tableName;
-
-@property (retain, nonatomic) Class tableClass;
+@property (nonatomic, retain) NSString* tableName;
+@property (nonatomic, retain) Class tableClass;
+@property (nonatomic, assign) BOOL isVirtualTable;
 
 - (BOOL)createTable;
-
 - (BOOL)createVirtualTable;
-
 - (BOOL)dropTable;
 
 @end

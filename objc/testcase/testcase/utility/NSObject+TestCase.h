@@ -18,36 +18,44 @@
  * limitations under the License.
  */
 
-#import "PreInsertedCRUDTestCase.h"
+#import <Foundation/Foundation.h>
+#import <WCDB/WCDB.h>
 
-@implementation PreInsertedCRUDTestCase
+@interface NSObject (TestCase)
 
-- (void)setUp
-{
-    [super setUp];
++ (BOOL)isObject:(NSObject*)left nilEqualToObject:(NSObject*)right;
 
-    self.tableClass = TestCaseObject.class;
-    TestCaseAssertTrue([self createTable]);
+@end
 
-    _object1 = [[TestCaseObject alloc] init];
-    _object1.identifier = 1;
-    _object1.content = self.random.string;
+@interface NSArray (TestCase)
 
-    _object2 = [[TestCaseObject alloc] init];
-    _object2.identifier = 2;
-    _object2.content = self.random.string;
+- (NSArray*)reversedArray;
 
-    _objects = @[ _object1, _object2 ];
+@end
 
-    TestCaseAssertTrue([self.table insertObjects:_objects]);
+@interface NSNumber (TestCase)
 
-    [self.database close];
-}
++ (BOOL)value:(double)left almostEqual:(double)right;
 
-- (void)tearDown
-{
-    TestCaseAssertTrue([self dropTable]);
-    [super tearDown];
-}
+- (BOOL)almostEqual:(NSNumber*)number;
+
+@end
+
+@interface WCTPerformanceFootprint (TestCase)
+
+@end
+
+@interface NSFileManager (TestCase)
+
+- (unsigned long long)getFileSize:(NSString*)path;
+
+@end
+
+@interface WCTDatabase (TestCase)
+
++ (void)enableSQLiteWrite;
++ (void)disableSQLiteWrite;
+
+- (void)removeSQLRelatedConfigs;
 
 @end

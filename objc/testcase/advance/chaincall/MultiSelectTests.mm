@@ -67,7 +67,7 @@
 {
     if (multiObjects == nil
         || sql == nil) {
-        TESTCASE_FAILED
+        TestCaseFailure();
         return NO;
     }
     __block NSArray<WCTMultiObject*>* results;

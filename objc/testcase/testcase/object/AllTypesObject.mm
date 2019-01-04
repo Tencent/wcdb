@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "AllTypesObject.h"
-#import "AllTypesObject+WCTTableCoding.h"
-#import "NSObject+TestCase.h"
+#import <TestCase/AllTypesObject+WCTTableCoding.h>
+#import <TestCase/AllTypesObject.h>
+#import <TestCase/NSObject+TestCase.h>
 #import <WCDB/WCDB.h>
 
 @implementation AllTypesObject

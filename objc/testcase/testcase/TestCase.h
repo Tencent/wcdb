@@ -18,74 +18,16 @@
  * limitations under the License.
  */
 
-#import "Console.h"
-#import "NSObject+TestCase.h"
-#import "Random.h"
-#import "TestCaseLog.h"
-#import "TestCaseObject+WCTTableCoding.h"
-#import "TestCaseObject.h"
-#import <WCDB/WCDB.h>
-#import <XCTest/XCTest.h>
+#import <TestCase/BaseTestCase.h>
+#import <TestCase/CRUDTestCase.h>
+#import <TestCase/DatabaseTestCase.h>
+#import <TestCase/TableTestCase.h>
 
-#ifdef DEBUG
-#define TESTCASE_FAILED abort();
-#else
-#define TESTCASE_FAILED
-#endif
+#import <TestCase/Random.h>
 
-@interface TestCase : XCTestCase
+#import <TestCase/Random+TestCaseObject.h>
+#import <TestCase/TestCaseObject+WCTTableCoding.h>
+#import <TestCase/TestCaseObject.h>
 
-@property (nonatomic, readonly) NSString* root;
-
-@property (nonatomic, readonly) NSString* directory;
-
-@property (nonatomic, readonly) NSString* className;
-
-@property (nonatomic, readonly) NSString* testName;
-
-@property (nonatomic, readonly) NSString* identifier;
-
-@property (nonatomic, readonly) NSFileManager* fileManager;
-
-@property (nonatomic, readonly) Random* random;
-
-- (void)refreshDirectory;
-
-- (void)cleanDirectory;
-
-+ (NSString*)hint:(NSString*)description expecting:(NSString*)expected;
-
-- (void)log:(NSString*)format, ...;
-
-@end
-
-#define SQLAssertEqual(_sql, _expected)                                                                            \
-    {                                                                                                              \
-        NSString* __sql = @((_sql).getDescription().c_str());                                                      \
-        NSString* __expected = (_expected);                                                                        \
-        TestCaseAssertTrue([__expected isEqualToString:__sql], @"%@", [TestCase hint:__sql expecting:__expected]); \
-    }
-
-#define TestCaseAssertTrue(cond, ...)     \
-    {                                     \
-        BOOL test = (cond);               \
-        XCTAssertTrue(test, __VA_ARGS__); \
-        if (!(test)) {                    \
-            TESTCASE_FAILED               \
-        }                                 \
-    }
-
-#define TestCaseAssertFalse(cond, ...)     \
-    {                                      \
-        BOOL test = (cond);                \
-        XCTAssertFalse(test, __VA_ARGS__); \
-        if (test) {                        \
-            TESTCASE_FAILED                \
-        }                                  \
-    }
-
-#define TestCaseAssertEqual(left, right, ...) \
-    TestCaseAssertTrue((left) == (right))
-
-#define TestCaseAssertNotEqual(left, right, ...) \
-    TestCaseAssertTrue((left) != (right))
+#import <TestCase/AllTypesObject+WCTTableCoding.h>
+#import <TestCase/AllTypesObject.h>

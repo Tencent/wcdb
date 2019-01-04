@@ -18,17 +18,29 @@
  * limitations under the License.
  */
 
-#import "CRUDTestCase.h"
-
-typedef NS_ENUM(NSUInteger, CRUDTestCaseState) {
-    CRUDTestCaseStateNotStarted,
-    CRUDTestCaseStateTestingSQL,
-    CRUDTestCaseStateTestingValues,
-    CRUDTestCaseStateTested,
-    CRUDTestCaseStateFailed,
-};
+#import <TestCase/CRUDTestCase.h>
+#import <TestCase/TestCaseAssertion.h>
 
 @implementation CRUDTestCase
+
+- (void)setUp
+{
+    [super setUp];
+
+    _object1 = [[TestCaseObject alloc] init];
+    _object1.identifier = 1;
+    _object1.content = self.random.string;
+
+    _object2 = [[TestCaseObject alloc] init];
+    _object2.identifier = 2;
+    _object2.content = self.random.string;
+
+    _objects = @[ _object1, _object2 ];
+
+    TestCaseAssertTrue([self.table insertObjects:_objects]);
+
+    [self.database close];
+}
 
 - (BOOL)checkObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
             andInsertSQL:(NSString*)insertSQL
@@ -54,7 +66,7 @@ asExpectedAfterModification:(BOOL (^)())block
 {
     if (object == nil
         || sql == nil) {
-        TESTCASE_FAILED
+        TestCaseFailure();
         return NO;
     }
     return [self checkObjects:@[ object ] andSQLs:@[ sql ] asExpectedAfterModification:block];
@@ -65,7 +77,7 @@ asExpectedAfterModification:(BOOL (^)())block
 asExpectedAfterModification:(BOOL (^)())block
 {
     if (sql == nil) {
-        TESTCASE_FAILED
+        TestCaseFailure();
         return NO;
     }
     return [self checkObjects:objects andSQLs:@[ sql ] asExpectedAfterModification:block];
@@ -83,7 +95,7 @@ asExpectedAfterModification:(BOOL (^)())block
     }
     NSArray<NSObject<WCTTableCoding>*>* allObjects = [self.table getObjects];
     if (![allObjects isEqualToArray:expectedObjects]) {
-        TESTCASE_FAILED
+        TestCaseFailure();
         return NO;
     }
     return YES;
@@ -95,7 +107,7 @@ asExpectedBySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block
 {
     if (object == nil
         || sql == nil) {
-        TESTCASE_FAILED
+        TestCaseFailure();
         return NO;
     }
     return [self checkObjects:@[ object ] andSQLs:@[ sql ] asExpectedBySelecting:block];
@@ -106,7 +118,7 @@ asExpectedBySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block
 asExpectedBySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block
 {
     if (sql == nil) {
-        TESTCASE_FAILED
+        TestCaseFailure();
         return NO;
     }
     return [self checkObjects:objects andSQLs:@[ sql ] asExpectedBySelecting:block];
@@ -126,7 +138,7 @@ asExpectedBySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block
     }
     if (![selected isKindOfClass:NSArray.class]
         || ![selected isEqualToArray:expectedObjects]) {
-        TESTCASE_FAILED
+        TestCaseFailure();
         return NO;
     }
     return YES;
@@ -138,7 +150,7 @@ asExpectedBySelecting:(WCTOneRow* (^)())block
 {
     if (row == nil
         || sql == nil) {
-        TESTCASE_FAILED
+        TestCaseFailure();
         return NO;
     }
     return [self checkRows:@[ row ]
@@ -158,7 +170,7 @@ asExpectedBySelecting:(WCTOneColumn* (^)())block
 {
     if (column == nil
         || sql == nil) {
-        TESTCASE_FAILED
+        TestCaseFailure();
         return NO;
     }
     NSMutableArray* rows = [NSMutableArray array];
@@ -186,7 +198,7 @@ asExpectedBySelecting:(WCTValue* (^)())block
 {
     if (value == nil
         || sql == nil) {
-        TESTCASE_FAILED
+        TestCaseFailure();
         return NO;
     }
     return [self checkRows:@[ @[ value ] ]
@@ -206,7 +218,7 @@ asExpectedBySelecting:(WCTColumnsXRows* (^)())block
 {
     if (rows == nil
         || sql == nil) {
-        TESTCASE_FAILED
+        TestCaseFailure();
         return NO;
     }
     return [self checkRows:rows andSQLs:@[ sql ] asExpectedBySelecting:block];
@@ -226,7 +238,7 @@ asExpectedBySelecting:(WCTColumnsXRows* (^)())block
     }
     if (![selected isKindOfClass:NSArray.class]
         || ![selected isEqualToArray:expectedRows]) {
-        TESTCASE_FAILED
+        TestCaseFailure();
         return NO;
     }
     return YES;

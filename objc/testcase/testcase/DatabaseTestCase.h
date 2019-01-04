@@ -18,29 +18,27 @@
  * limitations under the License.
  */
 
-#import "TestCase.h"
+#import <TestCase/BaseTestCase.h>
 #import <WCDB/WCDB.h>
 
-@interface DatabaseTestCase : TestCase
+@interface DatabaseTestCase : BaseTestCase
 
+#pragma mark - File
 @property (readonly, nonatomic) NSString* path;
-@property (readonly, nonatomic) NSString* walPath;
+@property (nonatomic, readonly) int headerSize;
+@property (nonatomic, readonly) int pageSize;
 
+#pragma mark - Database
 @property (readonly, nonatomic) WCTDatabase* database;
 
-@property (nonatomic, readonly) int headerSize;
+#pragma mark - WAL File
+@property (readonly, nonatomic) NSString* walPath;
 @property (nonatomic, readonly) int walHeaderSize;
 @property (nonatomic, readonly) int walFrameHeaderSize;
-
-@property (nonatomic, readonly) int pageSize;
 @property (nonatomic, readonly) int walFrameSize;
-
-- (NSNumber*)getFileSize:(NSString*)path;
-
 - (int)getWalFrameCount;
 
-- (void)removeSQLRelatedConfigs;
-
+#pragma mark - SQL
 - (BOOL)checkAllSQLs:(NSArray<NSString*>*)expectedSQLs
 asExpectedInOperation:(BOOL (^)())block;
 
@@ -49,5 +47,8 @@ asExpectedInOperation:(BOOL (^)())block;
 
 - (BOOL)checkBeginningSQLs:(NSArray<NSString*>*)expectedSQLs
      asExpectedInOperation:(BOOL (^)())block;
+
++ (void)enableSQLTrace;
++ (void)disableSQLTrace;
 
 @end

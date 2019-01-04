@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import "Random.h"
+#import <TestCase/Random.h>
 #import <random>
 
 @implementation Random {
@@ -33,75 +33,145 @@
     std::shared_ptr<std::uniform_real_distribution<float>> _uniformFloat;
     std::shared_ptr<std::uniform_real_distribution<float>> _uniformFloat_0_1;
     std::shared_ptr<std::uniform_int_distribution<unsigned char>> _uniformUChar;
+    std::shared_ptr<std::uniform_int_distribution<int>> _uniformLength;
 }
 
-- (instancetype)init
+- (void)setStable:(BOOL)stable
 {
-    if (self = [super init]) {
+    _engine.reset(new std::default_random_engine(0));
+    _uniformLength.reset(new std::uniform_int_distribution<int>(100, 100));
+}
+
+- (std::shared_ptr<std::default_random_engine> &)engine
+{
+    if (!_engine) {
         std::random_device rd;
         _engine.reset(new std::default_random_engine(rd()));
+    }
+    return _engine;
+}
+- (std::shared_ptr<std::uniform_int_distribution<uint64_t>> &)uniformUInt64
+{
+    if (!_uniformUInt64) {
         _uniformUInt64.reset(new std::uniform_int_distribution<uint64_t>(std::numeric_limits<uint64_t>::min(), std::numeric_limits<uint64_t>::max()));
+    }
+    return _uniformUInt64;
+}
+- (std::shared_ptr<std::uniform_int_distribution<uint32_t>> &)uniformUInt32
+{
+    if (!_uniformUInt32) {
         _uniformUInt32.reset(new std::uniform_int_distribution<uint32_t>(std::numeric_limits<uint32_t>::min(), std::numeric_limits<uint32_t>::max()));
+    }
+    return _uniformUInt32;
+}
+- (std::shared_ptr<std::uniform_int_distribution<uint8_t>> &)uniformUInt8
+{
+    if (!_uniformUInt8) {
         _uniformUInt8.reset(new std::uniform_int_distribution<uint8_t>(std::numeric_limits<uint8_t>::min(), std::numeric_limits<uint8_t>::max()));
+    }
+    return _uniformUInt8;
+}
+- (std::shared_ptr<std::uniform_int_distribution<int64_t>> &)uniformInt64
+{
+    if (!_uniformInt64) {
         _uniformInt64.reset(new std::uniform_int_distribution<int64_t>(std::numeric_limits<int64_t>::min(), std::numeric_limits<int64_t>::max()));
+    }
+    return _uniformInt64;
+}
+- (std::shared_ptr<std::uniform_int_distribution<int32_t>> &)uniformInt32
+{
+    if (!_uniformInt32) {
         _uniformInt32.reset(new std::uniform_int_distribution<int32_t>(std::numeric_limits<int32_t>::min(), std::numeric_limits<int32_t>::max()));
+    }
+    return _uniformInt32;
+}
+- (std::shared_ptr<std::uniform_int_distribution<bool>> &)uniformBool
+{
+    if (!_uniformBool) {
         _uniformBool.reset(new std::uniform_int_distribution<bool>(std::numeric_limits<bool>::min(), std::numeric_limits<bool>::max()));
+    }
+    return _uniformBool;
+}
+- (std::shared_ptr<std::uniform_real_distribution<double>> &)uniformDouble
+{
+    if (!_uniformDouble) {
         _uniformDouble.reset(new std::uniform_real_distribution<double>(std::numeric_limits<double>::min(), std::numeric_limits<double>::max()));
+    }
+    return _uniformDouble;
+}
+- (std::shared_ptr<std::uniform_real_distribution<float>> &)uniformFloat
+{
+    if (!_uniformFloat) {
         _uniformFloat.reset(new std::uniform_real_distribution<float>(std::numeric_limits<float>::min(), std::numeric_limits<float>::max()));
+    }
+    return _uniformFloat;
+}
+- (std::shared_ptr<std::uniform_real_distribution<float>> &)uniformFloat_0_1
+{
+    if (!_uniformFloat_0_1) {
         _uniformFloat_0_1.reset(new std::uniform_real_distribution<float>(0, 1));
+    }
+    return _uniformFloat_0_1;
+}
+- (std::shared_ptr<std::uniform_int_distribution<unsigned char>> &)uniformUChar
+{
+    if (!_uniformUChar) {
         _uniformUChar.reset(new std::uniform_int_distribution<unsigned char>(std::numeric_limits<unsigned char>::min(), std::numeric_limits<unsigned char>::max()));
     }
-    return self;
+    return _uniformUChar;
 }
 
-- (void)setSeed:(uint32_t)seed
+- (std::shared_ptr<std::uniform_int_distribution<int>> &)uniformLength
 {
-    _engine->seed(seed);
+    if (!_uniformLength) {
+        _uniformLength.reset(new std::uniform_int_distribution<int>(1, 100));
+    }
+    return _uniformLength;
 }
 
 - (uint64_t)uint64
 {
-    return (*_uniformUInt64.get())(*_engine.get());
+    return (*self.uniformUInt64.get())(*self.engine.get());
 }
 
 - (uint32_t)uint32
 {
-    return (*_uniformUInt32.get())(*_engine.get());
+    return (*self.uniformUInt32.get())(*self.engine.get());
 }
 
 - (uint8_t)uint8
 {
-    return (*_uniformUInt8.get())(*_engine.get());
+    return (*self.uniformUInt8.get())(*self.engine.get());
 }
 
 - (int64_t)int64
 {
-    return (*_uniformInt64.get())(*_engine.get());
+    return (*self.uniformInt64.get())(*self.engine.get());
 }
 
 - (int32_t)int32
 {
-    return (*_uniformInt32.get())(*_engine.get());
+    return (*self.uniformInt32.get())(*self.engine.get());
 }
 
 - (double)double_
 {
-    return (*_uniformDouble.get())(*_engine.get());
+    return (*self.uniformDouble.get())(*self.engine.get());
 }
 
 - (float)float_
 {
-    return (*_uniformFloat.get())(*_engine.get());
+    return (*self.uniformFloat.get())(*self.engine.get());
 }
 
 - (float)float_0_1
 {
-    return (*_uniformFloat_0_1.get())(*_engine.get());
+    return (*self.uniformFloat_0_1.get())(*self.engine.get());
 }
 
 - (BOOL)boolean
 {
-    return (*_uniformBool.get())(*_engine.get());
+    return (*self.uniformBool.get())(*self.engine.get());
 }
 
 - (NSNumber *)number
@@ -119,11 +189,7 @@
 
 - (int)length
 {
-    int length;
-    do {
-        length = self.uint8;
-    } while (length < 8);
-    return length;
+    return (*self.uniformLength.get())(*self.engine.get());
 }
 
 - (NSString *)string
@@ -152,7 +218,7 @@
     [data increaseLengthBy:length];
     unsigned char *bytes = (unsigned char *) data.mutableBytes;
     for (NSUInteger i = 0; i < length; ++i) {
-        bytes[i] = (*_uniformUChar.get())(*_engine.get());
+        bytes[i] = (*self.uniformUChar.get())(*self.engine.get());
     }
     return [NSData dataWithData:data];
 }

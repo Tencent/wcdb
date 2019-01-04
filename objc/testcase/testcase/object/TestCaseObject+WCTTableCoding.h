@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import "TestCaseObject.h"
+#import <TestCase/TestCaseObject.h>
 #import <WCDB/WCDB.h>
 
 @interface TestCaseObject (WCTTableCoding) <WCTTableCoding>

@@ -67,19 +67,19 @@
 - (BOOL)createDummyFiles:(NSData*)data
 {
     if (data == nil) {
-        TESTCASE_FAILED
+        TestCaseFailure();
         return NO;
     }
     for (NSString* path in self.dummyPaths) {
         if (![self.fileManager createDirectoryAtPath:path.stringByDeletingLastPathComponent withIntermediateDirectories:YES attributes:nil error:nil]) {
-            TESTCASE_FAILED
+            TestCaseFailure();
             return NO;
         }
         if ([self.fileManager fileExistsAtPath:path]) {
             continue;
         }
         if (![self.fileManager createFileAtPath:path contents:data attributes:nil]) {
-            TESTCASE_FAILED
+            TestCaseFailure();
             return NO;
         }
     }
@@ -95,7 +95,7 @@
 {
     for (NSString* path in paths) {
         if (![self.fileManager fileExistsAtPath:path]) {
-            TESTCASE_FAILED
+            TestCaseFailure();
             return NO;
         }
     }
@@ -111,7 +111,7 @@
 {
     for (NSString* path in paths) {
         if ([self.fileManager fileExistsAtPath:path]) {
-            TESTCASE_FAILED
+            TestCaseFailure();
             return NO;
         }
     }

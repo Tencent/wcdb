@@ -18,37 +18,60 @@
  * limitations under the License.
  */
 
-#import "TableTestCase.h"
+#import <TestCase/TableTestCase.h>
+#import <TestCase/TestCaseAssertion.h>
+#import <TestCase/TestCaseObject+WCTTableCoding.h>
+#import <TestCase/TestCaseObject.h>
 
 @implementation TableTestCase
 
 - (void)setUp
 {
     [super setUp];
-    _tableName = @"testTable";
+    if (self.isVirtualTable) {
+        TestCaseAssertTrue([self createVirtualTable]);
+    } else {
+        TestCaseAssertTrue([self createTable]);
+    }
+}
+
+- (NSString*)tableName
+{
+    if (!_tableName) {
+        _tableName = @"testTable";
+    }
+    return _tableName;
+}
+
+- (Class)tableClass
+{
+    if (!_tableClass) {
+        _tableClass = TestCaseObject.class;
+    }
+    return _tableClass;
+}
+
+- (void)tearDown
+{
+    TestCaseAssertTrue([self dropTable]);
+    [super tearDown];
 }
 
 - (BOOL)createTable
 {
-    if (_tableClass == nil) {
+    if (![self.database createTableAndIndexes:self.tableName withClass:self.tableClass]) {
         return NO;
     }
-    if (![self.database createTableAndIndexes:_tableName withClass:_tableClass]) {
-        return NO;
-    }
-    _table = [self.database getTable:_tableName withClass:_tableClass];
+    _table = [self.database getTable:self.tableName withClass:self.tableClass];
     return YES;
 }
 
 - (BOOL)createVirtualTable
 {
-    if (_tableClass == nil) {
+    if (![self.database createVirtualTable:self.tableName withClass:self.tableClass]) {
         return NO;
     }
-    if (![self.database createVirtualTable:_tableName withClass:_tableClass]) {
-        return NO;
-    }
-    _table = [self.database getTable:_tableName withClass:_tableClass];
+    _table = [self.database getTable:self.tableName withClass:self.tableClass];
     return YES;
 }
 

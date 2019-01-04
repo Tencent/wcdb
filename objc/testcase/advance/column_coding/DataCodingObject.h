@@ -20,8 +20,6 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
 @interface DataCodingObject : NSObject
 
 - (instancetype)initWithValue:(NSData*)value;
@@ -29,5 +27,3 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, retain) NSData* value;
 
 @end
-
-NS_ASSUME_NONNULL_END

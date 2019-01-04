@@ -20,13 +20,29 @@
 
 #import <Foundation/Foundation.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+@interface Random : NSObject
 
-void TestCaseLog(NSString *format, ...);
-void TestCaseLogv(NSString *format, va_list args);
+- (void)setStable:(BOOL)stable;
 
-#ifdef __cplusplus
-}
-#endif
+- (uint64_t)uint64;
+- (uint32_t)uint32;
+- (uint8_t)uint8;
+
+- (int64_t)int64;
+- (int32_t)int32;
+
+- (double)double_;
+- (float)float_;
+- (float)float_0_1;
+
+- (BOOL)boolean;
+
+- (NSNumber*)number;
+
+- (NSString*)string;
+
+- (NSData*)data;
+- (NSData*)dataWithLength:(NSInteger)length;
+- (NSData*)dataOtherThan:(NSData*)other;
+
+@end

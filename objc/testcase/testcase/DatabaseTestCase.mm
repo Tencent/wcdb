@@ -18,31 +18,31 @@
  * limitations under the License.
  */
 
-#import "DatabaseTestCase.h"
+#import <TestCase/DatabaseTestCase.h>
+#import <TestCase/NSObject+TestCase.h>
+#import <TestCase/TestCaseAssertion.h>
+#import <TestCase/TestCaseLog.h>
 
-@implementation DatabaseTestCase
+@implementation DatabaseTestCase {
+    int _headerSize;
+    int _walHeaderSize;
+    int _walFrameHeaderSize;
+    int _pageSize;
+    int _walFrameSize;
+    WCTDatabase* _database;
+    NSString* _path;
+    NSString* _walPath;
+}
 
 - (void)setUp
 {
     [super setUp];
-    [self refreshDirectory];
-    _path = [self.directory stringByAppendingPathComponent:@"testDatabase"];
-    _walPath = [_path stringByAppendingString:@"-wal"];
 
-    _database = [[WCTDatabase alloc] initWithPath:_path];
-
-    int tag;
+    WCTTag tag;
     do {
         tag = self.random.int32;
     } while (tag == 0);
-    _database.tag = tag;
-
-    _headerSize = 100;
-    _walHeaderSize = 32;
-    _walFrameHeaderSize = 24;
-
-    _pageSize = 4096;
-    _walFrameSize = _walFrameHeaderSize + _pageSize;
+    self.database.tag = tag;
 }
 
 - (void)tearDown
@@ -52,35 +52,91 @@
         [_database invalidate];
     }
     _database = nil;
-    [self cleanDirectory];
     [super tearDown];
 }
 
-- (NSNumber*)getFileSize:(NSString*)path
+#pragma mark - File
+- (NSString*)path
 {
-    NSError* error = nil;
-    unsigned long long fileSize = [[self.fileManager attributesOfItemAtPath:path error:&error] fileSize];
-    if (error) {
-        return nil;
+    if (!_path) {
+        _path = [self.directory stringByAppendingPathComponent:@"testDatabase"];
     }
-    return @(fileSize);
+    return _path;
+}
+
+- (int)headerSize
+{
+    return 100;
+}
+
+- (int)pageSize
+{
+    return 4096;
+}
+
+#pragma mark - Database
+- (WCTDatabase*)database
+{
+    if (!_database) {
+        _database = [[WCTDatabase alloc] initWithPath:self.path];
+    }
+    return _database;
+}
+
+#pragma mark - WAL File
+- (NSString*)walPath
+{
+    if (!_walPath) {
+        _walPath = [self.path stringByAppendingString:@"-wal"];
+    }
+    return self.walPath;
+}
+
+- (int)walHeaderSize
+{
+    return 32;
+}
+
+- (int)walFrameHeaderSize
+{
+    return 24;
+}
+
+- (int)walFrameSize
+{
+    return self.walFrameHeaderSize + self.pageSize;
 }
 
 - (int)getWalFrameCount
 {
-    NSInteger walSize = [self getFileSize:self.walPath].integerValue;
+    NSInteger walSize = [[NSFileManager defaultManager] getFileSize:self.walPath];
     if (walSize < self.walHeaderSize) {
         return 0;
     }
     return (int) ((walSize - self.walHeaderSize) / (self.walFrameHeaderSize + self.pageSize));
 }
 
-- (void)removeSQLRelatedConfigs
++ (void)enableSQLTrace
 {
-    NSArray<NSString*>* configNames = @[ WCTConfigNameBasic, WCTConfigNameBackup, WCTConfigNameCheckpoint, WCTConfigNameTokenize, WCTConfigNameCipher ];
-    for (NSString* configName in configNames) {
-        [self.database removeConfigForName:configName];
-    }
+    [WCTDatabase globalTraceSQL:^(NSString* sql) {
+        NSThread* currentThread = [NSThread currentThread];
+        if (currentThread.isMainThread) {
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                pthread_setname_np("com.Tencent.WCDB.Queue.Main");
+            });
+        }
+        NSString* threadName = currentThread.name;
+        if (threadName.length == 0) {
+            threadName = [NSString stringWithFormat:@"%p", currentThread];
+        }
+        TestCaseLog(@"%@ Thread %@: %@", currentThread.isMainThread ? @"*" : @"-", threadName, sql);
+    }];
+}
+
++ (void)disableSQLTrace
+{
+    [WCTDatabase globalTraceSQL:nil];
 }
 
 - (BOOL)checkAllSQLsInAllThreads:(NSArray<NSString*>*)expectedSQLs
@@ -105,7 +161,7 @@ asExpectedInOperation:(BOOL (^)())block
         if (![expectedSQLs isKindOfClass:NSArray.class]
             || expectedSQLs.count == 0
             || block == nil) {
-            TESTCASE_FAILED
+            TestCaseFailure();
             break;
         }
         NSMutableArray<NSString*>* sqls = [NSMutableArray arrayWithArray:expectedSQLs];
@@ -121,26 +177,26 @@ asExpectedInOperation:(BOOL (^)())block
             if ([sqls.firstObject isEqualToString:sql]) {
                 [sqls removeObjectAtIndex:0];
             } else {
-                TestCaseLog(@"Failed: %@", [TestCase hint:sql expecting:sqls.firstObject]);
+                TestCaseLog(@"Failed: %@", TestCaseHint(sql, sqls.firstObject));
                 trace = NO;
-                TESTCASE_FAILED
+                TestCaseFailure();
             }
         }];
         if (![self.database canOpen]) {
-            TESTCASE_FAILED
+            TestCaseFailure();
             break;
         }
 
         trace = YES;
         @autoreleasepool {
             if (!block()) {
-                TESTCASE_FAILED
+                TestCaseFailure();
                 break;
             }
         }
         if (sqls.count != 0) {
             TestCaseLog(@"Reminding: %@", sqls);
-            TESTCASE_FAILED
+            TestCaseFailure();
             break;
         }
         trace = NO;
@@ -159,7 +215,7 @@ asExpectedInOperation:(BOOL (^)())block
         if (![expectedSQLs isKindOfClass:NSArray.class]
             || expectedSQLs.count == 0
             || block == nil) {
-            TESTCASE_FAILED
+            TestCaseFailure();
             break;
         }
         NSMutableArray<NSString*>* sqls = [NSMutableArray arrayWithArray:expectedSQLs];
@@ -173,20 +229,20 @@ asExpectedInOperation:(BOOL (^)())block
             }
         }];
         if (![self.database canOpen]) {
-            TESTCASE_FAILED
+            TestCaseFailure();
             break;
         }
 
         trace = YES;
         @autoreleasepool {
             if (!block()) {
-                TESTCASE_FAILED
+                TestCaseFailure();
                 break;
             }
         }
         if (sqls.count != 0) {
             TestCaseLog(@"Reminding: %@", sqls);
-            TESTCASE_FAILED
+            TestCaseFailure();
             break;
         }
         trace = NO;
