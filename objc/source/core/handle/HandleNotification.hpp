@@ -75,7 +75,7 @@ protected:
 
 #pragma mark - Committed
 public:
-    //commited dispatch will abort if any notification return false
+    //committed dispatch will abort if any notification return false
     typedef std::function<bool(const String &, int)> CommittedNotification;
     void setNotificationWhenCommitted(int order,
                                       const String &name,
@@ -87,7 +87,7 @@ protected:
     void setupCommittedNotification();
 
     void dispatchCommittedNotification(int frames);
-    OrderedUniqueList<String, CommittedNotification> m_commitedNotifications;
+    OrderedUniqueList<String, CommittedNotification> m_committedNotifications;
 
 #pragma mark - Checkpoint
 public:

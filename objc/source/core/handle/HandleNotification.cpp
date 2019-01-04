@@ -37,7 +37,7 @@ void HandleNotification::purge()
     }
 
     set = isCommittedNotificationSet();
-    m_commitedNotifications.clear();
+    m_committedNotifications.clear();
     if (set && isOpened) {
         setupCommittedNotification();
     }
@@ -181,7 +181,7 @@ void HandleNotification::setNotificationWhenCommitted(int order,
 {
     WCTInnerAssert(onCommitted);
     bool stateBefore = isCommittedNotificationSet();
-    m_commitedNotifications.insert(order, name, onCommitted);
+    m_committedNotifications.insert(order, name, onCommitted);
     bool stateAfter = isCommittedNotificationSet();
     if (stateBefore != stateAfter) {
         setupCommittedNotification();
@@ -191,7 +191,7 @@ void HandleNotification::setNotificationWhenCommitted(int order,
 void HandleNotification::unsetNotificationWhenCommitted(const String &name)
 {
     bool stateBefore = isCommittedNotificationSet();
-    m_commitedNotifications.erase(name);
+    m_committedNotifications.erase(name);
     bool stateAfter = isCommittedNotificationSet();
     if (stateBefore != stateAfter) {
         setupCommittedNotification();
@@ -200,7 +200,7 @@ void HandleNotification::unsetNotificationWhenCommitted(const String &name)
 
 void HandleNotification::setupCommittedNotification()
 {
-    if (!m_commitedNotifications.elements().empty()) {
+    if (!m_committedNotifications.elements().empty()) {
         sqlite3_wal_hook((sqlite3 *) getRawHandle(),
                          [](void *p, sqlite3 *, const char *, int frames) -> int {
                              HandleNotification *notification
@@ -216,13 +216,13 @@ void HandleNotification::setupCommittedNotification()
 
 bool HandleNotification::isCommittedNotificationSet() const
 {
-    return !m_commitedNotifications.elements().empty();
+    return !m_committedNotifications.elements().empty();
 }
 
 void HandleNotification::dispatchCommittedNotification(int frames)
 {
-    WCTInnerAssert(!m_commitedNotifications.elements().empty());
-    for (const auto &element : m_commitedNotifications.elements()) {
+    WCTInnerAssert(!m_committedNotifications.elements().empty());
+    for (const auto &element : m_committedNotifications.elements()) {
         if (!element.value(m_handle->getPath(), frames)) {
             break;
         }
