@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "TestCase.h"
+#import <TestCase/TestCase.h>
 
-@interface VersionTests : TestCase
+@interface VersionTests : BaseTestCase
 
 @end
 

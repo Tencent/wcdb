@@ -54,7 +54,7 @@
 #import "PropertyObject.h"
 #import "TableConstraintObject+WCTTableCoding.h"
 #import "TableConstraintObject.h"
-#import "TableTestCase.h"
+#import <TestCase/TestCase.h>
 
 @interface ORMTests : TableTestCase
 
@@ -81,10 +81,10 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
     [sqls addObject:@"BEGIN IMMEDIATE"];
     [sqls addObjectsFromArray:expected];
     [sqls addObject:@"COMMIT"];
-    return [self checkAllSQLs:sqls
-        asExpectedInOperation:^BOOL {
-            return [self createTable];
-        }];
+    return [self doTestSQLs:sqls
+                inOperation:^BOOL {
+                    return [self createTable];
+                }];
 }
 
 - (BOOL)checkCreateVirtualTableSQLAsExpected:(NSString*)expected
@@ -94,9 +94,9 @@ typedef NS_ENUM(NSUInteger, ORMTestsState) {
         return NO;
     }
     return [self checkBeginningSQLs:@[ expected ]
-              asExpectedInOperation:^BOOL {
-                  return [self createVirtualTable];
-              }];
+                        inOperation:^BOOL {
+                            return [self createVirtualTable];
+                        }];
 }
 
 #pragma mark - property

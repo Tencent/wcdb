@@ -19,10 +19,7 @@
  */
 
 #import "BenchmarkFactory.h"
-#import "Console.h"
-#import "Random.h"
-#import "StableRandom.h"
-#import "TestCaseLog.h"
+#import <TestCase/TestCase.h>
 
 typedef NS_ENUM(NSUInteger, BenchmarkFactoryProductionLine) {
     BenchmarkFactoryProductionLineFileSize,

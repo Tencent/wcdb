@@ -19,7 +19,6 @@
  */
 
 #import "BaselineBenchmark.h"
-#import "StableRandom.h"
 
 @implementation BaselineBenchmark
 

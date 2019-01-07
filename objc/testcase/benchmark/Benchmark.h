@@ -19,7 +19,7 @@
  */
 
 #import "BenchmarkFactory.h"
-#import "DatabaseTestCase.h"
+#import <TestCase/TestCase.h>
 
 // TODO: refactor to time based benchmark
 

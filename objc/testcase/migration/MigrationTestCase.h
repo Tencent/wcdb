@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import "CRUDTestCase.h"
+#import <TestCase/TestCase.h>
 
 @interface MigrationTestCase : CRUDTestCase
 

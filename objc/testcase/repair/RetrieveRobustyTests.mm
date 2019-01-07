@@ -18,11 +18,7 @@
  * limitations under the License.
  */
 
-#import "AllTypesObject+WCTTableCoding.h"
-#import "AllTypesObject.h"
-#import "CRUDTestCase.h"
-#import "TestCaseObject+WCTTableCoding.h"
-#import "TestCaseObject.h"
+#import <TestCase/TestCase.h>
 
 @interface RetrieveRobustyTests : CRUDTestCase
 

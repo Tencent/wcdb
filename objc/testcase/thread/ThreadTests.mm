@@ -18,9 +18,7 @@
  * limitations under the License.
  */
 
-#import "TableTestCase.h"
-#import "TestCaseObject+WCTTableCoding.h"
-#import "TestCaseObject.h"
+#import <TestCase/TestCase.h>
 #import <WCDB/CoreConst.h>
 #import <thread>
 
@@ -168,10 +166,10 @@
     TestCaseAssertTrue([self createTable]);
 
     BOOL result = [self checkAllSQLsInAllThreads:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
-                           asExpectedInOperation:^BOOL {
-                               [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + self.delayForTolerance];
-                               return YES;
-                           }];
+                                     inOperation:^BOOL {
+                                         [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + self.delayForTolerance];
+                                         return YES;
+                                     }];
     TestCaseAssertTrue(result);
 }
 
@@ -188,10 +186,10 @@
     }
 
     BOOL result = [self checkAllSQLsInAllThreads:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
-                           asExpectedInOperation:^BOOL {
-                               [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
-                               return YES;
-                           }];
+                                     inOperation:^BOOL {
+                                         [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
+                                         return YES;
+                                     }];
     TestCaseAssertTrue(result);
 }
 
@@ -208,10 +206,10 @@
     }
 
     BOOL result = [self checkAllSQLsInAllThreads:@[ @"PRAGMA main.wal_checkpoint('TRUNCATE')" ]
-                           asExpectedInOperation:^BOOL {
-                               [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
-                               return YES;
-                           }];
+                                     inOperation:^BOOL {
+                                         [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
+                                         return YES;
+                                     }];
     TestCaseAssertTrue(result);
 }
 
@@ -228,13 +226,13 @@
     }
 
     BOOL result = [self checkAllSQLsInAllThreads:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')", @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
-                           asExpectedInOperation:^BOOL {
-                               [Console disableSQLiteWrite];
-                               [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
-                               [Console enableSQLiteWrite];
-                               [NSThread sleepForTimeInterval:self.checkpointDelayForRetryingAfterFailure + self.delayForTolerance];
-                               return YES;
-                           }];
+                                     inOperation:^BOOL {
+                                         [Console disableSQLiteWrite];
+                                         [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
+                                         [Console enableSQLiteWrite];
+                                         [NSThread sleepForTimeInterval:self.checkpointDelayForRetryingAfterFailure + self.delayForTolerance];
+                                         return YES;
+                                     }];
     TestCaseAssertTrue(result);
 }
 
@@ -244,13 +242,13 @@
     TestCaseAssertTrue([self createTable]);
 
     BOOL result = [self checkAllSQLsInAllThreads:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
-                           asExpectedInOperation:^BOOL {
-                               if (![self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with(@"PASSIVE")]) {
-                                   return NO;
-                               }
-                               [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + self.delayForTolerance];
-                               return YES;
-                           }];
+                                     inOperation:^BOOL {
+                                         if (![self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with(@"PASSIVE")]) {
+                                             return NO;
+                                         }
+                                         [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + self.delayForTolerance];
+                                         return YES;
+                                     }];
     TestCaseAssertTrue(result);
 }
 

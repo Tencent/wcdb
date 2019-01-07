@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import "DatabaseTestCase.h"
+#import <TestCase/TestCase.h>
 #if TARGET_OS_IPHONE && !TARGET_OS_WATCH
 #import <UIKit/UIKit.h>
 #endif

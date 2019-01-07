@@ -75,10 +75,10 @@
 #pragma mark - Execute
 - (void)test_execute
 {
-    BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.user_version = 123" ]
-               asExpectedInOperation:^BOOL {
-                   return [self.handle execute:WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion()).to(123)];
-               }];
+    [self doTestSQLs:@[ @"PRAGMA main.user_version = 123" ]
+         inOperation:^BOOL {
+             return [self.handle execute:WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion()).to(123)];
+         }];
     TestCaseAssertTrue(result);
 }
 
@@ -96,27 +96,27 @@
 #pragma mark - Step
 - (void)test_step
 {
-    BOOL result = [self checkAllSQLs:@[ @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)", @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)" ]
-               asExpectedInOperation:^BOOL {
-                   WCDB::StatementInsert statement = WCDB::StatementInsert().insertIntoTable(self.tableName).column(WCDB::Column(@"identifier")).column(WCDB::Column(@"content")).values(WCDB::BindParameter::bindParameters(2));
-                   if (![self.handle prepare:statement]) {
-                       return NO;
-                   }
+    [self doTestSQLs:@[ @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)", @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)" ]
+         inOperation:^BOOL {
+             WCDB::StatementInsert statement = WCDB::StatementInsert().insertIntoTable(self.tableName).column(WCDB::Column(@"identifier")).column(WCDB::Column(@"content")).values(WCDB::BindParameter::bindParameters(2));
+             if (![self.handle prepare:statement]) {
+                 return NO;
+             }
 
-                   [self.handle bindInteger32:3 toIndex:1];
-                   [self.handle bindString:self.random.string toIndex:2];
-                   if (![self.handle step]) {
-                       return NO;
-                   }
+             [self.handle bindInteger32:3 toIndex:1];
+             [self.handle bindString:self.random.string toIndex:2];
+             if (![self.handle step]) {
+                 return NO;
+             }
 
-                   [self.handle reset];
-                   [self.handle bindInteger32:4 toIndex:1];
-                   [self.handle bindString:self.random.string toIndex:2];
-                   BOOL done;
-                   BOOL result = [self.handle step:done];
-                   [self.handle finalizeStatement];
-                   return result && done;
-               }];
+             [self.handle reset];
+             [self.handle bindInteger32:4 toIndex:1];
+             [self.handle bindString:self.random.string toIndex:2];
+             BOOL done;
+             BOOL result = [self.handle step:done];
+             [self.handle finalizeStatement];
+             return result && done;
+         }];
     TestCaseAssertTrue(result);
 }
 

@@ -159,10 +159,10 @@
                                   @"DROP TABLE IF EXISTS main.testTable",
                                   @"COMMIT" ];
 
-    BOOL result = [self checkAllSQLs:sqls
-               asExpectedInOperation:^BOOL {
-                   return [self.database dropTable:self.tableName];
-               }];
+    [self doTestSQLs:sqls
+         inOperation:^BOOL {
+             return [self.database dropTable:self.tableName];
+         }];
     TestCaseAssertTrue(result);
 }
 

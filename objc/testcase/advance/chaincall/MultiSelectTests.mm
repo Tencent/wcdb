@@ -71,11 +71,11 @@
         return NO;
     }
     __block NSArray<WCTMultiObject*>* results;
-    if (![self checkAllSQLs:@[ sql ]
-        asExpectedInOperation:^BOOL {
-            results = block();
-            return results != nil;
-        }]) {
+    if (![self doTestSQLs:@[ sql ]
+              inOperation:^BOOL {
+                  results = block();
+                  return results != nil;
+              }]) {
         return NO;
     }
     return [results isEqualToArray:multiObjects];

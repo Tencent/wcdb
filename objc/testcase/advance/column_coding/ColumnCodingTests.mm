@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "CRUDTestCase.h"
 #import "ColumnCodingObject+WCTTableCoding.h"
 #import "ColumnCodingObject.h"
+#import <TestCase/TestCase.h>
 
 @interface ColumnCodingTests : CRUDTestCase
 

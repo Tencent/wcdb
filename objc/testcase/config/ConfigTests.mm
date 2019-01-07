@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import "DatabaseTestCase.h"
+#import <TestCase/TestCase.h>
 
 @interface ConfigTests : DatabaseTestCase
 
@@ -61,11 +61,11 @@
         }
         forName:self.configName];
 
-        BOOL result = [self checkAllSQLs:@[ @"PRAGMA main.secure_delete = 1" ]
-                   asExpectedInOperation:^BOOL {
-                       [self.database close];
-                       return [self.database canOpen];
-                   }];
+        [self doTestSQLs:@[ @"PRAGMA main.secure_delete = 1" ]
+             inOperation:^BOOL {
+                 [self.database close];
+                 return [self.database canOpen];
+             }];
         TestCaseAssertTrue(result);
 
         TestCaseAssertTrue([self.database getValueFromStatement:getSecureDelete].numberValue.boolValue);

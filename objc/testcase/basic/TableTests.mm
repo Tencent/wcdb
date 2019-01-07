@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import "TableTestCase.h"
+#import <TestCase/TestCase.h>
 
 @interface TableTests : TableTestCase
 
@@ -46,22 +46,19 @@
 
 - (void)test_database_drop_table
 {
-    BOOL result = [self checkAllSQLs:@[ @"DROP TABLE IF EXISTS main.testTable" ]
-               asExpectedInOperation:^BOOL {
-                   return [self.database dropTable:self.tableName];
-               }];
-    TestCaseAssertTrue(result);
-
+    [self doTestSQLs:@[ @"DROP TABLE IF EXISTS main.testTable" ]
+         inOperation:^BOOL {
+             return [self.database dropTable:self.tableName];
+         }];
     TestCaseAssertFalse([self.database tableExists:self.tableName]);
 }
 
 - (void)test_database_drop_index
 {
-    BOOL result = [self checkAllSQLs:@[ @"DROP INDEX IF EXISTS main.testTable_index" ]
-               asExpectedInOperation:^BOOL {
-                   return [self.database dropIndex:@"testTable_index"];
-               }];
-    TestCaseAssertTrue(result);
+    [self doTestSQLs:@[ @"DROP INDEX IF EXISTS main.testTable_index" ]
+         inOperation:^BOOL {
+             return [self.database dropIndex:@"testTable_index"];
+         }];
 }
 
 #pragma mark - Handle
@@ -81,23 +78,20 @@
 - (void)test_handle_drop_table
 {
     WCTHandle* handle = [self.database getHandle];
-    BOOL result = [self checkAllSQLs:@[ @"DROP TABLE IF EXISTS main.testTable" ]
-               asExpectedInOperation:^BOOL {
-                   return [handle dropTable:self.tableName];
-               }];
-    TestCaseAssertTrue(result);
-
+    [self doTestSQLs:@[ @"DROP TABLE IF EXISTS main.testTable" ]
+         inOperation:^BOOL {
+             return [handle dropTable:self.tableName];
+         }];
     TestCaseAssertFalse([handle tableExists:self.tableName]);
 }
 
 - (void)test_handle_drop_index
 {
     WCTHandle* handle = [self.database getHandle];
-    BOOL result = [self checkAllSQLs:@[ @"DROP INDEX IF EXISTS main.testTable_index" ]
-               asExpectedInOperation:^BOOL {
-                   return [handle dropIndex:@"testTable_index"];
-               }];
-    TestCaseAssertTrue(result);
+    [self doTestSQLs:@[ @"DROP INDEX IF EXISTS main.testTable_index" ]
+         inOperation:^BOOL {
+             return [handle dropIndex:@"testTable_index"];
+         }];
 }
 
 @end
