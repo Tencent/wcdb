@@ -89,7 +89,7 @@
     if (!_walPath) {
         _walPath = [self.path stringByAppendingString:@"-wal"];
     }
-    return self.walPath;
+    return _walPath;
 }
 
 - (int)walHeaderSize

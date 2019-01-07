@@ -44,18 +44,25 @@
         [self log:@"debuggable"];
     }
 
+    [self refreshDirectory];
+
     NSString *directory = self.directory;
     NSString *abbreviatedPath = directory.stringByAbbreviatingWithTildeInPath;
     if (abbreviatedPath.length > 0) {
         directory = abbreviatedPath;
     }
-
     [self log:@"run at %@", directory];
+}
+
+- (void)tearDown
+{
+    [self cleanDirectory];
+    [super tearDown];
 }
 
 - (Random *)random
 {
-    if (_random) {
+    if (!_random) {
         _random = [[Random alloc] init];
     }
     return _random;
