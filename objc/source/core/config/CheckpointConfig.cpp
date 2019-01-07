@@ -36,29 +36,23 @@ CheckpointConfig::CheckpointConfig(const std::shared_ptr<CheckpointQueue>& queue
 
 bool CheckpointConfig::invoke(Handle* handle)
 {
-    handle->setNotificationWhenCommitted(
-    0,
-    m_identifier,
-    std::bind(&CheckpointConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
-    if (!handle->beginTransaction()) {
-        return false;
+    bool succeed = false;
+    if (handle->setNotificationWhenCheckpointed(
+        m_identifier,
+        std::bind(&CheckpointConfig::onCheckpointed, this, std::placeholders::_1))) {
+        handle->setNotificationWhenCommitted(
+        0,
+        m_identifier,
+        std::bind(&CheckpointConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
+        succeed = true;
     }
-    bool result = handle->setNotificationWhenCheckpointed(
-    m_identifier,
-    std::bind(&CheckpointConfig::onCheckpointed, this, std::placeholders::_1));
-    handle->rollbackTransaction();
-    return result;
+    return succeed;
 }
 
 bool CheckpointConfig::uninvoke(Handle* handle)
 {
     handle->unsetNotificationWhenCommitted(m_identifier);
-    if (!handle->beginTransaction()) {
-        return false;
-    }
-    bool result = handle->setNotificationWhenCheckpointed(m_identifier, nullptr);
-    handle->rollbackTransaction();
-    return result;
+    return handle->setNotificationWhenCheckpointed(m_identifier, nullptr);
 }
 
 bool CheckpointConfig::onCommitted(const String& path, int frames)

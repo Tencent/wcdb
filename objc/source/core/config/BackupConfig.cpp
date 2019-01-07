@@ -34,30 +34,22 @@ BackupConfig::BackupConfig(const std::shared_ptr<BackupQueue> &queue)
 
 bool BackupConfig::invoke(Handle *handle)
 {
-    if (!handle->beginTransaction()) {
-        return false;
-    }
-    bool result = handle->setNotificationWhenCheckpointed(
-    m_identifier, std::bind(&BackupConfig::onCheckpointed, this, std::placeholders::_1));
-    handle->rollbackTransaction();
-    if (result) {
+    bool succeed = false;
+    if (handle->setNotificationWhenCheckpointed(
+        m_identifier, std::bind(&BackupConfig::onCheckpointed, this, std::placeholders::_1))) {
         handle->setNotificationWhenCommitted(
         0,
         m_identifier,
         std::bind(&BackupConfig::onCommitted, this, std::placeholders::_1, std::placeholders::_2));
+        succeed = true;
     }
-    return result;
+    return succeed;
 }
 
 bool BackupConfig::uninvoke(Handle *handle)
 {
-    if (!handle->beginTransaction()) {
-        return false;
-    }
-    bool result = handle->setNotificationWhenCheckpointed(m_identifier, nullptr);
-    handle->rollbackTransaction();
     handle->unsetNotificationWhenCommitted(m_identifier);
-    return result;
+    return handle->setNotificationWhenCheckpointed(m_identifier, nullptr);
 }
 
 bool BackupConfig::onCommitted(const String &path, int frames)
