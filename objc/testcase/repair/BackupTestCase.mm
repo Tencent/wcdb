@@ -26,17 +26,37 @@
 - (void)setUp
 {
     [super setUp];
-    _firstMaterial = [self.path stringByAppendingString:@"-first.material"];
-    _lastMaterial = [self.path stringByAppendingString:@"-last.material"];
-    _factory = [self.path stringByAppendingString:@".factory"];
+    [self insertPresetObjects];
+}
 
-    _backupFramesIntervalForNonCritical = WCDB::BackupConfigFramesIntervalForNonCritical;
-    _backupFramesIntervalForCritical = WCDB::BackupConfigFramesIntervalForCritical;
-    _backupDelayForCritical = WCDB::BackupQueueDelayForCritical;
-    _backupDelayForNonCritical = WCDB::BackupQueueDelayForNonCritical;
+- (int)backupFramesIntervalForNonCritical
+{
+    return WCDB::BackupConfigFramesIntervalForNonCritical;
+}
 
-    _delayForTolerance = 1.0;
-    _framesForTolerance = 10;
+- (int)backupFramesIntervalForCritical
+{
+    return WCDB::BackupConfigFramesIntervalForCritical;
+}
+
+- (NSTimeInterval)backupDelayForCritical
+{
+    return WCDB::BackupQueueDelayForCritical;
+}
+
+- (NSTimeInterval)backupDelayForNonCritical
+{
+    return WCDB::BackupQueueDelayForNonCritical;
+}
+
+- (NSTimeInterval)delayForTolerance
+{
+    return 1.0;
+}
+
+- (int)framesForTolerance
+{
+    return 10;
 }
 
 - (BOOL)tryToMakeHeaderCorrupted

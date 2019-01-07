@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "PreInsertedCRUDTestCase.h"
+#import <TestCase/TestCase.h>
 
-@interface MultiSelectTests : PreInsertedCRUDTestCase
+@interface MultiSelectTests : CRUDTestCase
 
 @property (nonatomic, readonly) NSString* tableName2;
 
@@ -30,29 +30,60 @@
 
 @end
 
-@implementation MultiSelectTests
+@implementation MultiSelectTests {
+    NSString* _tableName2;
+
+    TestCaseObject* _object1InTable2;
+    TestCaseObject* _object2InTable2;
+    NSArray<TestCaseObject*>* _objectsInTable2;
+}
 
 - (void)setUp
 {
     [super setUp];
 
-    _object1InTable2 = [[TestCaseObject alloc] init];
-    _object1InTable2.identifier = 1;
-    _object1InTable2.content = self.random.string;
-
-    _object2InTable2 = [[TestCaseObject alloc] init];
-    _object2InTable2.identifier = 2;
-    _object2InTable2.content = self.random.string;
-
-    _objectsInTable2 = @[ _object1InTable2, _object2InTable2 ];
-
-    _tableName2 = @"testTable2";
-
-    TestCaseAssertTrue([self.database createTableAndIndexes:_tableName2 withClass:self.tableClass]);
-
-    TestCaseAssertTrue([self.database insertObjects:_objectsInTable2 intoTable:_tableName2]);
-
+    [self insertPresetObjects];
+    TestCaseAssertTrue([self.database createTableAndIndexes:self.tableName2 withClass:self.tableClass]);
+    TestCaseAssertTrue([self.database insertObjects:self.objectsInTable2 intoTable:self.tableName2]);
     [self.database close];
+}
+
+- (NSString*)tableName2
+{
+    if (!_tableName2) {
+        _tableName2 = @"testTable2";
+    }
+    return _tableName2;
+}
+
+- (TestCaseObject*)object1InTable2
+{
+    if (!_object1InTable2) {
+        TestCaseObject* object = [[TestCaseObject alloc] init];
+        object.identifier = 1;
+        object.content = self.random.string;
+        _object1InTable2 = object;
+    }
+    return _object1InTable2;
+}
+
+- (TestCaseObject*)object2InTable2
+{
+    if (!_object2InTable2) {
+        TestCaseObject* object = [[TestCaseObject alloc] init];
+        object.identifier = 2;
+        object.content = self.random.string;
+        _object2InTable2 = object;
+    }
+    return _object2InTable2;
+}
+
+- (NSArray<TestCaseObject*>*)objectsInTable2
+{
+    if (!_objectsInTable2) {
+        _objectsInTable2 = @[ self.object1InTable2, self.object2InTable2 ];
+    }
+    return _objectsInTable2;
 }
 
 - (void)tearDown
@@ -71,13 +102,11 @@
         return NO;
     }
     __block NSArray<WCTMultiObject*>* results;
-    if (![self doTestSQLs:@[ sql ]
-              inOperation:^BOOL {
-                  results = block();
-                  return results != nil;
-              }]) {
-        return NO;
-    }
+    [self doTestSQLs:@[ sql ]
+         inOperation:^BOOL {
+             results = block();
+             return results != nil;
+         }];
     return [results isEqualToArray:multiObjects];
 }
 
@@ -113,7 +142,6 @@
                                    }
                                    return objects;
                                }];
-    TestCaseAssertTrue(result);
 }
 
 - (void)test_database_all
@@ -142,7 +170,6 @@
 
                                    return [select allMultiObjects];
                                }];
-    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Handle
@@ -177,7 +204,6 @@
                                    }
                                    return objects;
                                }];
-    TestCaseAssertTrue(result);
 }
 
 - (void)test_handle_all
@@ -206,7 +232,6 @@
 
                                    return [select allMultiObjects];
                                }];
-    TestCaseAssertTrue(result);
 }
 
 @end

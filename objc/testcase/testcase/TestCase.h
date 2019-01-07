@@ -33,3 +33,6 @@
 #import <TestCase/AllTypesObject.h>
 
 #import <TestCase/TestCaseAssertion.h>
+#import <TestCase/TestCaseLog.h>
+
+#import <TestCase/NSObject+TestCase.h>

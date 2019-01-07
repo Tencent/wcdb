@@ -26,12 +26,6 @@
 
 @implementation TableTests
 
-- (void)setUp
-{
-    [super setUp];
-    self.tableClass = TestCaseObject.class;
-}
-
 #pragma mark - Database
 - (void)test_database_table_exists
 {

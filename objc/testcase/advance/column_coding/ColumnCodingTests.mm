@@ -46,13 +46,12 @@
     object.stringObject = [[StringCodingObject alloc] initWithValue:self.random.string];
     object.dataObject = [[DataCodingObject alloc] initWithValue:self.random.data];
 
-    BOOL result = [self checkObjects:@[ object ]
-                        andInsertSQL:@"INSERT INTO main.testTable(int32Object, int64Object, doubleObject, stringObject, dataObject) VALUES(?1, ?2, ?3, ?4, ?5)"
-                           withCount:1
-            asExpectedAfterInsertion:^BOOL {
-                return [self.database insertObject:object intoTable:self.tableName];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ object ]
+              andNumber:1
+           ofInsertSQLs:@"INSERT INTO main.testTable(int32Object, int64Object, doubleObject, stringObject, dataObject) VALUES(?1, ?2, ?3, ?4, ?5)"
+         afterInsertion:^BOOL {
+             return [self.database insertObject:object intoTable:self.tableName];
+         }];
 }
 
 @end

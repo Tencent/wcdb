@@ -59,7 +59,9 @@
 
 - (void)insertPresetObjects
 {
+    TestCaseAssertTrue([self createTable]);
     TestCaseAssertTrue([self.table insertObjects:self.objects]);
+    [self.database close];
 }
 
 - (void)doTestObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects

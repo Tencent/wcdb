@@ -40,25 +40,51 @@
 
 @end
 
-@implementation ThreadTests
+@implementation ThreadTests {
+    dispatch_group_t _group;
+    dispatch_queue_t _queue;
+}
 
 - (void)setUp
 {
     [super setUp];
     _group = dispatch_group_create();
-    _queue = dispatch_queue_create([[NSBundle mainBundle].bundleIdentifier stringByAppendingFormat:@".%@", self.identifier].UTF8String, DISPATCH_QUEUE_CONCURRENT);
-    self.tableClass = TestCaseObject.class;
+    _queue = dispatch_queue_create([[NSBundle mainBundle].bundleIdentifier stringByAppendingFormat:@".%@.%@", self.className, self.testName].UTF8String, DISPATCH_QUEUE_CONCURRENT);
+}
 
-    _checkpointDelayForCritical = WCDB::CheckpointConfigDelayForCritical;
-    _checkpointDelayForNonCritical = WCDB::CheckpointConfigDelayForNonCritical;
-    _checkpointDelayForRetryingAfterFailure = WCDB::CheckpointQueueDelayForRetryingAfterFailure;
+- (NSTimeInterval)checkpointDelayForCritical
+{
+    return WCDB::CheckpointConfigDelayForCritical;
+}
 
-    _checkpointFramesThresholdForCritical = WCDB::CheckpointConfigFramesThresholdForCritical;
-    _checkpointFramesThresholdForTruncating = WCDB::CheckpointQueueFramesThresholdForTruncating;
+- (NSTimeInterval)checkpointDelayForNonCritical
+{
+    return WCDB::CheckpointConfigDelayForNonCritical;
+}
 
-    _delayForTolerance = 2;
+- (NSTimeInterval)checkpointDelayForRetryingAfterFailure
+{
+    return WCDB::CheckpointQueueDelayForRetryingAfterFailure;
+}
 
-    _maxConcurrency = std::max<int>(WCDB::HandlePooMaxAllowedNumberOfHandles, std::thread::hardware_concurrency());
+- (int)checkpointFramesThresholdForTruncating
+{
+    return WCDB::CheckpointQueueFramesThresholdForTruncating;
+}
+
+- (int)checkpointFramesThresholdForCritical
+{
+    return WCDB::CheckpointConfigFramesThresholdForCritical;
+}
+
+- (NSTimeInterval)delayForTolerance
+{
+    return 2;
+}
+
+- (int)maxConcurrency
+{
+    return std::max<int>(WCDB::HandlePooMaxAllowedNumberOfHandles, std::thread::hardware_concurrency());
 }
 
 - (void)test_feature_read_concurrency
@@ -165,12 +191,12 @@
     // trigger subthread checkpoint
     TestCaseAssertTrue([self createTable]);
 
-    BOOL result = [self checkAllSQLsInAllThreads:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
-                                     inOperation:^BOOL {
-                                         [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + self.delayForTolerance];
-                                         return YES;
-                                     }];
-    TestCaseAssertTrue(result);
+    self.expectSQLsInAllThreads = YES;
+    [self doTestSQLs:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
+         inOperation:^BOOL {
+             [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + self.delayForTolerance];
+             return YES;
+         }];
 }
 
 - (void)test_feature_subthread_checkpoint_when_meet_frames_threshold
@@ -185,12 +211,12 @@
         TestCaseAssertTrue([self.table insertObject:object]);
     }
 
-    BOOL result = [self checkAllSQLsInAllThreads:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
-                                     inOperation:^BOOL {
-                                         [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
-                                         return YES;
-                                     }];
-    TestCaseAssertTrue(result);
+    self.expectSQLsInAllThreads = YES;
+    [self doTestSQLs:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
+         inOperation:^BOOL {
+             [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
+             return YES;
+         }];
 }
 
 - (void)test_feature_subthread_checkpoint_when_meet_truncate_threshold
@@ -205,12 +231,12 @@
         TestCaseAssertTrue([self.table insertObject:object]);
     }
 
-    BOOL result = [self checkAllSQLsInAllThreads:@[ @"PRAGMA main.wal_checkpoint('TRUNCATE')" ]
-                                     inOperation:^BOOL {
-                                         [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
-                                         return YES;
-                                     }];
-    TestCaseAssertTrue(result);
+    self.expectSQLsInAllThreads = YES;
+    [self doTestSQLs:@[ @"PRAGMA main.wal_checkpoint('TRUNCATE')" ]
+         inOperation:^BOOL {
+             [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
+             return YES;
+         }];
 }
 
 - (void)test_feature_retry_subthread_checkpoint_when_failed
@@ -221,19 +247,19 @@
     object.isAutoIncrement = YES;
     object.content = self.random.string;
 
-    while ([self getWalFrameCount] < self.checkpointFramesThresholdForCritical) {
-        TestCaseAssertTrue([self.table insertObject:object]);
-    }
+    TestCaseAssertTrue([self.table insertObject:object]);
+    TestCaseAssertTrue([self getWalFrameCount] < self.checkpointFramesThresholdForCritical)
 
-    BOOL result = [self checkAllSQLsInAllThreads:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')", @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
-                                     inOperation:^BOOL {
-                                         [Console disableSQLiteWrite];
-                                         [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
-                                         [Console enableSQLiteWrite];
-                                         [NSThread sleepForTimeInterval:self.checkpointDelayForRetryingAfterFailure + self.delayForTolerance];
-                                         return YES;
-                                     }];
-    TestCaseAssertTrue(result);
+    self.expectSQLsInAllThreads
+    = YES;
+    [self doTestSQLs:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')", @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
+         inOperation:^BOOL {
+             [WCTDatabase disableSQLiteWrite];
+             [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + self.delayForTolerance];
+             [WCTDatabase enableSQLiteWrite];
+             [NSThread sleepForTimeInterval:self.checkpointDelayForRetryingAfterFailure + self.delayForTolerance];
+             return YES;
+         }];
 }
 
 - (void)test_feature_stop_subthread_checkpoint_when_manual_checkpoint
@@ -241,15 +267,15 @@
     // trigger subthread checkpoint
     TestCaseAssertTrue([self createTable]);
 
-    BOOL result = [self checkAllSQLsInAllThreads:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
-                                     inOperation:^BOOL {
-                                         if (![self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with(@"PASSIVE")]) {
-                                             return NO;
-                                         }
-                                         [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + self.delayForTolerance];
-                                         return YES;
-                                     }];
-    TestCaseAssertTrue(result);
+    self.expectSQLsInAllThreads = YES;
+    [self doTestSQLs:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
+         inOperation:^BOOL {
+             if (![self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with(@"PASSIVE")]) {
+                 return NO;
+             }
+             [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + self.delayForTolerance];
+             return YES;
+         }];
 }
 
 - (void)test_feature_threaded_handle
@@ -282,7 +308,6 @@
         TestCaseAssertTrue([handle isInTransaction]);
         return YES;
     }];
-    TestCaseAssertTrue(result);
 }
 
 - (void)test_feature_max_concurrency

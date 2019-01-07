@@ -22,8 +22,6 @@
 
 @interface FileTests : DatabaseTestCase
 
-@property (nonatomic, readonly) NSArray<NSString*>* paths;
-
 @property (nonatomic, readonly) NSArray<NSString*>* dummyPaths;
 
 @end
@@ -33,16 +31,6 @@
 - (void)setUp
 {
     [super setUp];
-    _paths = @[
-        self.path,
-        [self.path stringByAppendingString:@"-wal"],
-        [self.path stringByAppendingString:@"-first.material"],
-        [self.path stringByAppendingString:@"-last.material"],
-        [self.path stringByAppendingString:@".factory"],
-        [self.path stringByAppendingString:@"-journal"],
-        [self.path stringByAppendingString:@"-shm"],
-    ];
-
     _dummyPaths = [self allDummyPaths:self.path];
 }
 

@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
-#import "PreInsertedCRUDTestCase.h"
-#import <sqlcipher/sqlite3.h>
+#import <TestCase/TestCase.h>
+#import <WCDB/SQLite.h>
 
-@interface HandleTests : PreInsertedCRUDTestCase
+@interface HandleTests : CRUDTestCase
 
 @property (nonatomic, readonly) WCTHandle* handle;
 
@@ -31,12 +31,13 @@
 
 @end
 
-@implementation HandleTests
+@implementation HandleTests {
+    WCTHandle* _handle;
+}
 
 - (void)setUp
 {
     [super setUp];
-    _handle = [self.database getHandle];
 
     _statementInsert = WCDB::StatementInsert()
                        .insertIntoTable(self.tableName)
@@ -47,6 +48,16 @@
                        .select(TestCaseObject.content)
                        .from(self.tableName)
                        .where(TestCaseObject.identifier == 3);
+
+    [self insertPresetObjects];
+}
+
+- (WCTHandle*)handle
+{
+    if (!_handle) {
+        _handle = [self.database getHandle];
+    }
+    return _handle;
 }
 
 - (void)tearDown
@@ -79,7 +90,6 @@
          inOperation:^BOOL {
              return [self.handle execute:WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion()).to(123)];
          }];
-    TestCaseAssertTrue(result);
 }
 
 #pragma mark - Prepare
@@ -117,7 +127,6 @@
              [self.handle finalizeStatement];
              return result && done;
          }];
-    TestCaseAssertTrue(result);
 }
 
 #pragma mark - State

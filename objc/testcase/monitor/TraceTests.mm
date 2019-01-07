@@ -26,15 +26,9 @@
 
 @implementation TraceTests
 
-- (void)setUp
-{
-    [super setUp];
-    self.tableClass = TestCaseObject.class;
-}
-
 - (void)test_trace_sql
 {
-    [self removeSQLRelatedConfigs];
+    [self.database removeSQLRelatedConfigs];
     WCDB::StatementPragma statement = WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion());
 
     __block BOOL tested = NO;
@@ -53,7 +47,7 @@
 {
     TestCaseAssertTrue([self createTable]);
 
-    [self removeSQLRelatedConfigs];
+    [self.database removeSQLRelatedConfigs];
 
     NSMutableArray<TestCaseObject*>* objects = [[NSMutableArray<TestCaseObject*> alloc] init];
     for (int i = 0; i < 10000; ++i) {
@@ -97,7 +91,7 @@
             && error.tag == self.database.tag
             && [error.source isEqualToString:@"SQLite"]
             && error.code == WCTErrorCodeIOError
-            && [error.sql isEqualToString:@"BEGIN IMMEDIATE"]) {
+            && [error.sql isEqualToString:@"COMMIT"]) {
             tested = YES;
         }
     }];
@@ -105,9 +99,9 @@
     TestCaseAssertTrue([self.database canOpen]);
 
     start = YES;
-    [Console disableSQLiteWrite];
+    [WCTDatabase disableSQLiteWrite];
     TestCaseAssertFalse([self createTable]);
-    [Console enableSQLiteWrite];
+    [WCTDatabase enableSQLiteWrite];
 
     TestCaseAssertTrue(tested);
     [WCTDatabase resetGlobalErrorTracer];
@@ -115,7 +109,7 @@
 
 - (void)test_global_trace_sql
 {
-    [self removeSQLRelatedConfigs];
+    [self.database removeSQLRelatedConfigs];
     WCDB::StatementPragma statement = WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion());
 
     __block BOOL tested = NO;
@@ -132,7 +126,7 @@
 
 - (void)test_global_trace_performance
 {
-    [self removeSQLRelatedConfigs];
+    [self.database removeSQLRelatedConfigs];
 
     NSMutableArray<TestCaseObject*>* objects = [[NSMutableArray<TestCaseObject*> alloc] init];
     for (int i = 0; i < 10000; ++i) {

@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "PreInsertedCRUDTestCase.h"
+#import <TestCase/TestCase.h>
 
-@interface ConvenientInsertTests : PreInsertedCRUDTestCase
+@interface ConvenientInsertTests : CRUDTestCase
 
 @property (nonatomic, readonly) TestCaseObject* renewedObject1;
 @property (nonatomic, readonly) TestCaseObject* renewedObject2;
@@ -36,43 +36,112 @@
 
 @end
 
-@implementation ConvenientInsertTests
+@implementation ConvenientInsertTests {
+    TestCaseObject* _renewedObject1;
+    TestCaseObject* _renewedObject2;
+
+    TestCaseObject* _renewedPartialObject1;
+    TestCaseObject* _renewedPartialObject2;
+
+    TestCaseObject* _object3;
+    TestCaseObject* _object4;
+
+    TestCaseObject* _partialObject3;
+    TestCaseObject* _partialObject4;
+}
 
 - (void)setUp
 {
     [super setUp];
+    [self insertPresetObjects];
+}
 
-    _renewedObject1 = [[TestCaseObject alloc] init];
-    _renewedObject1.identifier = 1;
-    _renewedObject1.content = self.random.string;
+- (TestCaseObject*)renewedObject1
+{
+    if (!_renewedObject1) {
+        TestCaseObject* object = [[TestCaseObject alloc] init];
+        object.identifier = 1;
+        object.content = self.random.string;
+        _renewedObject1 = object;
+    }
+    return _renewedObject1;
+}
 
-    _renewedObject2 = [[TestCaseObject alloc] init];
-    _renewedObject2.identifier = 2;
-    _renewedObject2.content = self.random.string;
+- (TestCaseObject*)renewedObject2
+{
+    if (!_renewedObject2) {
+        TestCaseObject* object = [[TestCaseObject alloc] init];
+        object.identifier = 2;
+        object.content = self.random.string;
+        _renewedObject2 = object;
+    }
+    return _renewedObject2;
+}
 
-    _renewedPartialObject1 = [[TestCaseObject alloc] init];
-    _renewedPartialObject1.identifier = 1;
-    _renewedPartialObject1.content = nil;
+- (TestCaseObject*)renewedPartialObject1
+{
+    if (!_renewedPartialObject1) {
+        TestCaseObject* object = [[TestCaseObject alloc] init];
+        object.identifier = 1;
+        object.content = nil;
+        _renewedPartialObject1 = object;
+    }
+    return _renewedPartialObject1;
+}
 
-    _renewedPartialObject2 = [[TestCaseObject alloc] init];
-    _renewedPartialObject2.identifier = 2;
-    _renewedPartialObject2.content = nil;
+- (TestCaseObject*)renewedPartialObject2
+{
+    if (!_renewedPartialObject2) {
+        TestCaseObject* object = [[TestCaseObject alloc] init];
+        object.identifier = 2;
+        object.content = nil;
+        _renewedPartialObject2 = object;
+    }
+    return _renewedPartialObject2;
+}
 
-    _object3 = [[TestCaseObject alloc] init];
-    _object3.identifier = 3;
-    _object3.content = self.random.string;
+- (TestCaseObject*)object3
+{
+    if (!_object3) {
+        TestCaseObject* object = [[TestCaseObject alloc] init];
+        object.identifier = 3;
+        object.content = self.random.string;
+        _object3 = object;
+    }
+    return _object3;
+}
 
-    _object4 = [[TestCaseObject alloc] init];
-    _object4.identifier = 4;
-    _object4.content = self.random.string;
+- (TestCaseObject*)object4
+{
+    if (!_object4) {
+        TestCaseObject* object = [[TestCaseObject alloc] init];
+        object.identifier = 4;
+        object.content = self.random.string;
+        _object4 = object;
+    }
+    return _object4;
+}
 
-    _partialObject3 = [[TestCaseObject alloc] init];
-    _partialObject3.identifier = 3;
-    _partialObject3.content = nil;
+- (TestCaseObject*)partialObject3
+{
+    if (!_partialObject3) {
+        TestCaseObject* object = [[TestCaseObject alloc] init];
+        object.identifier = 3;
+        object.content = nil;
+        _partialObject3 = object;
+    }
+    return _partialObject3;
+}
 
-    _partialObject4 = [[TestCaseObject alloc] init];
-    _partialObject4.identifier = 4;
-    _partialObject4.content = nil;
+- (TestCaseObject*)partialObject4
+{
+    if (!_partialObject4) {
+        TestCaseObject* object = [[TestCaseObject alloc] init];
+        object.identifier = 4;
+        object.content = nil;
+        _partialObject4 = object;
+    }
+    return _partialObject4;
 }
 
 #pragma mark - Auto Increment
@@ -81,294 +150,269 @@
     TestCaseObject* autoIncrementObject = [[TestCaseObject alloc] init];
     autoIncrementObject.isAutoIncrement = YES;
     autoIncrementObject.content = self.object3.content;
-    BOOL result = [self checkObjects:@[ self.object1, self.object2, self.object3 ]
-                        andInsertSQL:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
-                           withCount:1
-            asExpectedAfterInsertion:^BOOL {
-                BOOL result = [self.database insertObject:autoIncrementObject intoTable:self.tableName];
-                if (result) {
-                    autoIncrementObject.identifier = (int) autoIncrementObject.lastInsertedRowID;
-                }
-                return result;
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.object2, self.object3 ]
+              andNumber:1
+           ofInsertSQLs:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             BOOL result = [self.database insertObject:autoIncrementObject intoTable:self.tableName];
+             if (result) {
+                 autoIncrementObject.identifier = (int) autoIncrementObject.lastInsertedRowID;
+             }
+             return result;
+         }];
     TestCaseAssertTrue([autoIncrementObject isEqual:self.object3]);
 }
 
 #pragma mark - Database - Insert
 - (void)test_database_insert_object
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.object2, self.object3 ]
-                        andInsertSQL:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
-                           withCount:1
-            asExpectedAfterInsertion:^BOOL {
-                return [self.database insertObject:self.object3 intoTable:self.tableName];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.object2, self.object3 ]
+              andNumber:1
+           ofInsertSQLs:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return [self.database insertObject:self.object3 intoTable:self.tableName];
+         }];
 }
 
 - (void)test_database_insert_objects
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.object2, self.object3, self.object4 ]
-                        andInsertSQL:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
-                           withCount:2
-            asExpectedAfterInsertion:^BOOL {
-                return [self.database insertObjects:@[ self.object3, self.object4 ] intoTable:self.tableName];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.object2, self.object3, self.object4 ]
+              andNumber:2
+           ofInsertSQLs:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return [self.database insertObjects:@[ self.object3, self.object4 ] intoTable:self.tableName];
+         }];
 }
 
 #pragma mark - Database - Insert or Replace
 - (void)test_database_insert_or_replace_object
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                        andInsertSQL:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
-                           withCount:1
-            asExpectedAfterInsertion:^BOOL {
-                return [self.database insertOrReplaceObject:self.renewedObject1 intoTable:self.tableName];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+              andNumber:1
+           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return [self.database insertOrReplaceObject:self.renewedObject1 intoTable:self.tableName];
+         }];
 }
 
 - (void)test_database_insert_or_replace_objects
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.renewedObject2 ]
-                        andInsertSQL:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
-                           withCount:2
-            asExpectedAfterInsertion:^BOOL {
-                return [self.database insertOrReplaceObjects:@[ self.renewedObject1, self.renewedObject2 ] intoTable:self.tableName];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.renewedObject2 ]
+              andNumber:2
+           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return [self.database insertOrReplaceObjects:@[ self.renewedObject1, self.renewedObject2 ] intoTable:self.tableName];
+         }];
 }
 
 #pragma mark - Database - Partial Insert
 - (void)test_database_insert_object_on_properties
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.object2, self.partialObject3 ]
-                        andInsertSQL:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
-                           withCount:1
-            asExpectedAfterInsertion:^BOOL {
-                return [self.database insertObject:self.object3 onProperties:TestCaseObject.identifier intoTable:self.tableName];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.object2, self.partialObject3 ]
+              andNumber:1
+           ofInsertSQLs:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
+         afterInsertion:^BOOL {
+             return [self.database insertObject:self.object3 onProperties:TestCaseObject.identifier intoTable:self.tableName];
+         }];
 }
 
 - (void)test_database_insert_objects_on_properties
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.object2, self.partialObject3, self.partialObject4 ]
-                        andInsertSQL:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
-                           withCount:2
-            asExpectedAfterInsertion:^BOOL {
-                return [self.database insertObjects:@[ self.object3, self.object4 ] onProperties:TestCaseObject.identifier intoTable:self.tableName];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.object2, self.partialObject3, self.partialObject4 ]
+              andNumber:2
+           ofInsertSQLs:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
+         afterInsertion:^BOOL {
+             return [self.database insertObjects:@[ self.object3, self.object4 ] onProperties:TestCaseObject.identifier intoTable:self.tableName];
+         }];
 }
 
 #pragma mark - Database - Partial Insert or Replace
 - (void)test_database_insert_or_replace_object_on_properties
 {
-    BOOL result = [self checkObjects:@[ self.renewedPartialObject1, self.object2 ]
-                        andInsertSQL:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
-                           withCount:1
-            asExpectedAfterInsertion:^BOOL {
-                return [self.database insertOrReplaceObject:self.object1 onProperties:TestCaseObject.identifier intoTable:self.tableName];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedPartialObject1, self.object2 ]
+              andNumber:1
+           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
+         afterInsertion:^BOOL {
+             return [self.database insertOrReplaceObject:self.object1 onProperties:TestCaseObject.identifier intoTable:self.tableName];
+         }];
 }
 
 - (void)test_database_insert_or_replace_objects_on_properties
 {
-    BOOL result = [self checkObjects:@[ self.renewedPartialObject1, self.renewedPartialObject2 ]
-                        andInsertSQL:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
-                           withCount:2
-            asExpectedAfterInsertion:^BOOL {
-                return [self.database insertOrReplaceObjects:@[ self.object1, self.object2 ] onProperties:TestCaseObject.identifier intoTable:self.tableName];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedPartialObject1, self.renewedPartialObject2 ]
+              andNumber:2
+           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
+         afterInsertion:^BOOL {
+             return [self.database insertOrReplaceObjects:@[ self.object1, self.object2 ] onProperties:TestCaseObject.identifier intoTable:self.tableName];
+         }];
 }
 
 #pragma mark - Table - Insert
 - (void)test_table_insert_object
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.object2, self.object3 ]
-                        andInsertSQL:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
-                           withCount:1
-            asExpectedAfterInsertion:^BOOL {
-                return [self.table insertObject:self.object3];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.object2, self.object3 ]
+              andNumber:1
+           ofInsertSQLs:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return [self.table insertObject:self.object3];
+         }];
 }
 
 - (void)test_table_insert_objects
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.object2, self.object3, self.object4 ]
-                        andInsertSQL:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
-                           withCount:2
-            asExpectedAfterInsertion:^BOOL {
-                return [self.table insertObjects:@[ self.object3, self.object4 ]];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.object2, self.object3, self.object4 ]
+              andNumber:2
+           ofInsertSQLs:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return [self.table insertObjects:@[ self.object3, self.object4 ]];
+         }];
 }
 
 #pragma mark - Table - Insert or Replace
 - (void)test_table_insert_or_replace_object
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                        andInsertSQL:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
-                           withCount:1
-            asExpectedAfterInsertion:^BOOL {
-                return [self.table insertOrReplaceObject:self.renewedObject1];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+              andNumber:1
+           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return [self.table insertOrReplaceObject:self.renewedObject1];
+         }];
 }
 
 - (void)test_table_insert_or_replace_objects
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.renewedObject2 ]
-                        andInsertSQL:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
-                           withCount:2
-            asExpectedAfterInsertion:^BOOL {
-                return [self.table insertOrReplaceObjects:@[ self.renewedObject1, self.renewedObject2 ]];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.renewedObject2 ]
+              andNumber:2
+           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return [self.table insertOrReplaceObjects:@[ self.renewedObject1, self.renewedObject2 ]];
+         }];
 }
 
 #pragma mark - Table - Partial Insert
 - (void)test_table_insert_object_on_properties
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.object2, self.partialObject3 ]
-                        andInsertSQL:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
-                           withCount:1
-            asExpectedAfterInsertion:^BOOL {
-                return [self.table insertObject:self.object3 onProperties:TestCaseObject.identifier];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.object2, self.partialObject3 ]
+              andNumber:1
+           ofInsertSQLs:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
+         afterInsertion:^BOOL {
+             return [self.table insertObject:self.object3 onProperties:TestCaseObject.identifier];
+         }];
 }
 
 - (void)test_table_insert_objects_on_properties
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.object2, self.partialObject3, self.partialObject4 ]
-                        andInsertSQL:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
-                           withCount:2
-            asExpectedAfterInsertion:^BOOL {
-                return [self.table insertObjects:@[ self.object3, self.object4 ] onProperties:TestCaseObject.identifier];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.object2, self.partialObject3, self.partialObject4 ]
+              andNumber:2
+           ofInsertSQLs:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
+         afterInsertion:^BOOL {
+             return [self.table insertObjects:@[ self.object3, self.object4 ] onProperties:TestCaseObject.identifier];
+         }];
 }
 
 #pragma mark - Table - Partial Insert or Replace
 - (void)test_table_insert_or_replace_object_on_properties
 {
-    BOOL result = [self checkObjects:@[ self.renewedPartialObject1, self.object2 ]
-                        andInsertSQL:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
-                           withCount:1
-            asExpectedAfterInsertion:^BOOL {
-                return [self.table insertOrReplaceObject:self.object1 onProperties:TestCaseObject.identifier];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedPartialObject1, self.object2 ]
+              andNumber:1
+           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
+         afterInsertion:^BOOL {
+             return [self.table insertOrReplaceObject:self.object1 onProperties:TestCaseObject.identifier];
+         }];
 }
 
 - (void)test_table_insert_or_replace_objects_on_properties
 {
-    BOOL result = [self checkObjects:@[ self.renewedPartialObject1, self.renewedPartialObject2 ]
-                        andInsertSQL:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
-                           withCount:2
-            asExpectedAfterInsertion:^BOOL {
-                return [self.table insertOrReplaceObjects:@[ self.object1, self.object2 ] onProperties:TestCaseObject.identifier];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedPartialObject1, self.renewedPartialObject2 ]
+              andNumber:2
+           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
+         afterInsertion:^BOOL {
+             return [self.table insertOrReplaceObjects:@[ self.object1, self.object2 ] onProperties:TestCaseObject.identifier];
+         }];
 }
 
 #pragma mark - Handle - Insert
 - (void)test_handle_insert_object
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.object2, self.object3 ]
-                        andInsertSQL:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
-                           withCount:1
-            asExpectedAfterInsertion:^BOOL {
-                return [[self.database getHandle] insertObject:self.object3 intoTable:self.tableName];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.object2, self.object3 ]
+              andNumber:1
+           ofInsertSQLs:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return [[self.database getHandle] insertObject:self.object3 intoTable:self.tableName];
+         }];
 }
 
 - (void)test_handle_insert_objects
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.object2, self.object3, self.object4 ]
-                        andInsertSQL:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
-                           withCount:2
-            asExpectedAfterInsertion:^BOOL {
-                return [[self.database getHandle] insertObjects:@[ self.object3, self.object4 ] intoTable:self.tableName];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.object2, self.object3, self.object4 ]
+              andNumber:2
+           ofInsertSQLs:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return [[self.database getHandle] insertObjects:@[ self.object3, self.object4 ] intoTable:self.tableName];
+         }];
 }
 
 #pragma mark - Handle - Insert or Replace
 - (void)test_handle_insert_or_replace_object
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                        andInsertSQL:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
-                           withCount:1
-            asExpectedAfterInsertion:^BOOL {
-                return [[self.database getHandle] insertOrReplaceObject:self.renewedObject1 intoTable:self.tableName];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+              andNumber:1
+           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return [[self.database getHandle] insertOrReplaceObject:self.renewedObject1 intoTable:self.tableName];
+         }];
 }
 
 - (void)test_handle_insert_or_replace_objects
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.renewedObject2 ]
-                        andInsertSQL:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
-                           withCount:2
-            asExpectedAfterInsertion:^BOOL {
-                return [[self.database getHandle] insertOrReplaceObjects:@[ self.renewedObject1, self.renewedObject2 ] intoTable:self.tableName];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.renewedObject2 ]
+              andNumber:2
+           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return [[self.database getHandle] insertOrReplaceObjects:@[ self.renewedObject1, self.renewedObject2 ] intoTable:self.tableName];
+         }];
 }
 
 #pragma mark - Handle - Partial Insert
 - (void)test_handle_insert_object_on_properties
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.object2, self.partialObject3 ]
-                        andInsertSQL:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
-                           withCount:1
-            asExpectedAfterInsertion:^BOOL {
-                return [[self.database getHandle] insertObject:self.object3 onProperties:TestCaseObject.identifier intoTable:self.tableName];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.object2, self.partialObject3 ]
+              andNumber:1
+           ofInsertSQLs:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
+         afterInsertion:^BOOL {
+             return [[self.database getHandle] insertObject:self.object3 onProperties:TestCaseObject.identifier intoTable:self.tableName];
+         }];
 }
 
 - (void)test_handle_insert_objects_on_properties
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.object2, self.partialObject3, self.partialObject4 ]
-                        andInsertSQL:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
-                           withCount:2
-            asExpectedAfterInsertion:^BOOL {
-                return [[self.database getHandle] insertObjects:@[ self.object3, self.object4 ] onProperties:TestCaseObject.identifier intoTable:self.tableName];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.object2, self.partialObject3, self.partialObject4 ]
+              andNumber:2
+           ofInsertSQLs:@"INSERT INTO main.testTable(identifier) VALUES(?1)"
+         afterInsertion:^BOOL {
+             return [[self.database getHandle] insertObjects:@[ self.object3, self.object4 ] onProperties:TestCaseObject.identifier intoTable:self.tableName];
+         }];
 }
 
 #pragma mark - Handle - Partial Insert or Replace
 - (void)test_handle_insert_or_replace_object_on_properties
 {
-    BOOL result = [self checkObjects:@[ self.renewedPartialObject1, self.object2 ]
-                        andInsertSQL:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
-                           withCount:1
-            asExpectedAfterInsertion:^BOOL {
-                return [[self.database getHandle] insertOrReplaceObject:self.object1 onProperties:TestCaseObject.identifier intoTable:self.tableName];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedPartialObject1, self.object2 ]
+              andNumber:1
+           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
+         afterInsertion:^BOOL {
+             return [[self.database getHandle] insertOrReplaceObject:self.object1 onProperties:TestCaseObject.identifier intoTable:self.tableName];
+         }];
 }
 
 - (void)test_handle_insert_or_replace_objects_on_properties
 {
-    BOOL result = [self checkObjects:@[ self.renewedPartialObject1, self.renewedPartialObject2 ]
-                        andInsertSQL:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
-                           withCount:2
-            asExpectedAfterInsertion:^BOOL {
-                return [[self.database getHandle] insertOrReplaceObjects:@[ self.object1, self.object2 ] onProperties:TestCaseObject.identifier intoTable:self.tableName];
-            }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedPartialObject1, self.renewedPartialObject2 ]
+              andNumber:2
+           ofInsertSQLs:@"INSERT OR REPLACE INTO main.testTable(identifier) VALUES(?1)"
+         afterInsertion:^BOOL {
+             return [[self.database getHandle] insertOrReplaceObjects:@[ self.object1, self.object2 ] onProperties:TestCaseObject.identifier intoTable:self.tableName];
+         }];
 }
 
 @end

@@ -32,6 +32,10 @@
     WCTDatabase* _database;
     NSString* _path;
     NSString* _walPath;
+    NSString* _factory;
+    NSString* _firstMaterial;
+    NSString* _lastMaterial;
+    NSArray<NSString*>* _paths;
 }
 
 - (void)setUp
@@ -40,8 +44,8 @@
 
     WCTTag tag;
     do {
-        tag = self.random.int32;
-    } while (tag == 0);
+        tag = 1;
+    } while (tag == WCTInvalidTag);
     self.database.tag = tag;
 
     self.expectSQLsInAllThreads = NO;
@@ -58,7 +62,7 @@
     [super tearDown];
 }
 
-#pragma mark - File
+#pragma mark - Path
 - (NSString*)path
 {
     if (!_path) {
@@ -67,14 +71,52 @@
     return _path;
 }
 
-- (int)headerSize
+- (NSString*)walPath
 {
-    return 100;
+    if (!_walPath) {
+        _walPath = [self.path stringByAppendingString:@"-wal"];
+    }
+    return _walPath;
 }
 
-- (int)pageSize
+- (NSString*)firstMaterial
 {
-    return 4096;
+    if (!_firstMaterial) {
+        _firstMaterial = [self.path stringByAppendingString:@"-first.material"];
+    }
+    return _firstMaterial;
+}
+
+- (NSString*)lastMaterial
+{
+    if (!_lastMaterial) {
+        _lastMaterial = [self.path stringByAppendingString:@"-last.material"];
+    }
+    return _lastMaterial;
+}
+
+- (NSString*)factory
+{
+    if (!_factory) {
+        _factory = [self.path stringByAppendingString:@".factory"];
+    }
+    return _factory;
+}
+
+- (NSArray<NSString*>*)paths
+{
+    if (!_paths) {
+        _paths = @[
+            self.path,
+            self.walPath,
+            self.firstMaterial,
+            self.lastMaterial,
+            self.factory,
+            [self.path stringByAppendingString:@"-journal"],
+            [self.path stringByAppendingString:@"-shm"],
+        ];
+    }
+    return _paths;
 }
 
 #pragma mark - Database
@@ -86,13 +128,15 @@
     return _database;
 }
 
-#pragma mark - WAL File
-- (NSString*)walPath
+#pragma mark - File
+- (int)headerSize
 {
-    if (!_walPath) {
-        _walPath = [self.path stringByAppendingString:@"-wal"];
-    }
-    return _walPath;
+    return 100;
+}
+
+- (int)pageSize
+{
+    return 4096;
 }
 
 - (int)walHeaderSize

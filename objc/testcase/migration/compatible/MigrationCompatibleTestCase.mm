@@ -26,19 +26,27 @@
 
 @end
 
-@implementation MigrationCompatibleTestCase
+@implementation MigrationCompatibleTestCase {
+    NSString* _schemaName;
+}
 
 - (void)setUp
 {
     [super setUp];
 
-    if (self.isCrossDatabaseMigration) {
-        _schemaName = [NSString stringWithFormat:@"WCDBMigration_%u", WCDB::String(self.sourcePath).hash()];
-    } else {
-        _schemaName = @"main";
-    }
-
     TestCaseAssertTrue([[self.table getObjects] isEqualToArray:self.objects]);
+}
+
+- (NSString*)schemaName
+{
+    if (!_schemaName) {
+        if (self.isCrossDatabaseMigration) {
+            _schemaName = [NSString stringWithFormat:@"WCDBMigration_%u", WCDB::String(self.sourcePath).hash()];
+        } else {
+            _schemaName = @"main";
+        }
+    }
+    return _schemaName;
 }
 
 - (void)doTestInsertAutoIncrement
@@ -58,12 +66,11 @@
         @"COMMIT"
     ];
 
-    BOOL result = [self checkObjects:expectedObjects
-                             andSQLs:sqls
-         asExpectedAfterModification:^BOOL {
-             return [self.table insertObject:newObject];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:expectedObjects
+                andSQLs:sqls
+      afterModification:^BOOL {
+          return [self.table insertObject:newObject];
+      }];
 }
 
 - (void)doTestInsertOrReplace
@@ -83,12 +90,11 @@
         @"COMMIT"
     ];
 
-    BOOL result = [self checkObjects:expectedObjects
-                             andSQLs:sqls
-         asExpectedAfterModification:^BOOL {
-             return [self.table insertOrReplaceObject:newObject];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:expectedObjects
+                andSQLs:sqls
+      afterModification:^BOOL {
+          return [self.table insertOrReplaceObject:newObject];
+      }];
 }
 
 - (void)doTestInsertFailedWithConflict
@@ -110,12 +116,11 @@
                                   @"DELETE FROM main.testTable WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE identifier > 1 ORDER BY identifier ASC LIMIT 1 OFFSET 1)",
                                   @"COMMIT" ];
 
-    BOOL result = [self checkObjects:expectedObjects
-                             andSQLs:sqls
-         asExpectedAfterModification:^BOOL {
-             return [self.table deleteObjectsWhere:TestCaseObject.identifier > 1 orders:TestCaseObject.identifier.asOrder(WCTOrderedAscending) limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:expectedObjects
+                andSQLs:sqls
+      afterModification:^BOOL {
+          return [self.table deleteObjectsWhere:TestCaseObject.identifier > 1 orders:TestCaseObject.identifier.asOrder(WCTOrderedAscending) limit:1 offset:1];
+      }];
 }
 
 - (void)doTestLimitedUpdate
@@ -132,24 +137,22 @@
                                   @"UPDATE main.testTable SET content = ?1 WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE identifier > 1 ORDER BY identifier ASC LIMIT 1 OFFSET 1)",
                                   @"COMMIT" ];
 
-    BOOL result = [self checkObjects:expectedObjects
-                             andSQLs:sqls
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:TestCaseObject.content toObject:newSecondObject where:TestCaseObject.identifier > 1 orders:TestCaseObject.identifier.asOrder(WCTOrderedAscending) limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:expectedObjects
+                andSQLs:sqls
+      afterModification:^BOOL {
+          return [self.table updateProperties:TestCaseObject.content toObject:newSecondObject where:TestCaseObject.identifier > 1 orders:TestCaseObject.identifier.asOrder(WCTOrderedAscending) limit:1 offset:1];
+      }];
 }
 
 - (void)doTestSelect
 {
     NSString* sql = @"SELECT identifier, content FROM temp.WCDBUnioned_testTable WHERE identifier == 1";
 
-    BOOL result = [self checkObjects:@[ self.objects.firstObject ]
-                              andSQL:sql
-               asExpectedBySelecting:^NSArray<NSObject<WCTTableCoding>*>* {
-                   return [self.table getObjectsWhere:TestCaseObject.identifier == 1];
-               }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.objects.firstObject ]
+                 andSQL:sql
+            bySelecting:^NSArray<NSObject<WCTTableCoding>*>* {
+                return [self.table getObjectsWhere:TestCaseObject.identifier == 1];
+            }];
 }
 
 - (void)doTestDropTable
@@ -163,7 +166,6 @@
          inOperation:^BOOL {
              return [self.database dropTable:self.tableName];
          }];
-    TestCaseAssertTrue(result);
 }
 
 - (void)doTestSubqueryWithinDelete
@@ -176,12 +178,11 @@
                                   @"DELETE FROM main.testTable WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE temp.WCDBUnioned_testTable.identifier IN(SELECT max(identifier) FROM temp.WCDBUnioned_testTable))",
                                   @"COMMIT" ];
 
-    BOOL result = [self checkObjects:expectedObjects
-                             andSQLs:sqls
-         asExpectedAfterModification:^BOOL {
-             return [self.table deleteObjectsWhere:TestCaseObject.identifier.table(self.tableName).schema(WCDB::Schema::main()).in(WCDB::StatementSelect().select(TestCaseObject.identifier.max()).from(self.tableName))];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:expectedObjects
+                andSQLs:sqls
+      afterModification:^BOOL {
+          return [self.table deleteObjectsWhere:TestCaseObject.identifier.table(self.tableName).schema(WCDB::Schema::main()).in(WCDB::StatementSelect().select(TestCaseObject.identifier.max()).from(self.tableName))];
+      }];
 }
 
 - (void)doTestSubqueryWithinUpdate
@@ -198,12 +199,11 @@
                                   @"UPDATE main.testTable SET content = ?1 WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE temp.WCDBUnioned_testTable.identifier IN(SELECT max(identifier) FROM temp.WCDBUnioned_testTable))",
                                   @"COMMIT" ];
 
-    BOOL result = [self checkObjects:expectedObjects
-                             andSQLs:sqls
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:TestCaseObject.content toObject:newObject where:TestCaseObject.identifier.table(self.tableName).schema(WCDB::Schema::main()).in(WCDB::StatementSelect().select(TestCaseObject.identifier.max()).from(self.tableName))];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:expectedObjects
+                andSQLs:sqls
+      afterModification:^BOOL {
+          return [self.table updateProperties:TestCaseObject.content toObject:newObject where:TestCaseObject.identifier.table(self.tableName).schema(WCDB::Schema::main()).in(WCDB::StatementSelect().select(TestCaseObject.identifier.max()).from(self.tableName))];
+      }];
 }
 
 @end

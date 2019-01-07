@@ -18,13 +18,19 @@
  * limitations under the License.
  */
 
-#import "PreInsertedCRUDTestCase.h"
+#import <TestCase/TestCase.h>
 
-@interface ChainCallTests : PreInsertedCRUDTestCase
+@interface ChainCallTests : CRUDTestCase
 
 @end
 
 @implementation ChainCallTests
+
+- (void)setUp
+{
+    [super setUp];
+    [self insertPresetObjects];
+}
 
 #pragma mark - Delete
 - (void)test_database_delete

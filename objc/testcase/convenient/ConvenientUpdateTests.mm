@@ -18,9 +18,11 @@
  * limitations under the License.
  */
 
-#import "PreInsertedCRUDTestCase.h"
+#import <TestCase/TestCase.h>
 
-@interface ConvenientUpdateTests : PreInsertedCRUDTestCase
+@interface ConvenientUpdateTests : CRUDTestCase
+
+@property (nonatomic, readonly) NSString* renewedContent;
 
 @property (nonatomic, readonly) TestCaseObject* renewObject;
 @property (nonatomic, readonly) WCTColumnCodingRow* renewRow;
@@ -31,936 +33,897 @@
 
 @end
 
-@implementation ConvenientUpdateTests
+@implementation ConvenientUpdateTests {
+    NSString* _renewedContent;
+
+    TestCaseObject* _renewObject;
+    WCTColumnCodingRow* _renewRow;
+    WCTColumnCodingValue* _renewValue;
+
+    TestCaseObject* _renewedObject1;
+    TestCaseObject* _renewedObject2;
+}
 
 - (void)setUp
 {
     [super setUp];
 
-    NSString* renewedContent = self.random.string;
+    [self insertPresetObjects];
+}
 
-    _renewObject = [[TestCaseObject alloc] init];
-    _renewObject.content = renewedContent;
+- (NSString*)renewedContent
+{
+    if (!_renewedContent) {
+        _renewedContent = self.random.string;
+    }
+    return _renewedContent;
+}
 
-    _renewedObject1 = [[TestCaseObject alloc] init];
-    _renewedObject1.identifier = 1;
-    _renewedObject1.content = _renewObject.content;
+- (TestCaseObject*)renewObject
+{
+    if (!_renewObject) {
+        TestCaseObject* object = [[TestCaseObject alloc] init];
+        object.content = self.renewedContent;
+        _renewObject = object;
+    }
+    return _renewObject;
+}
 
-    _renewedObject2 = [[TestCaseObject alloc] init];
-    _renewedObject2.identifier = 2;
-    _renewedObject2.content = _renewObject.content;
+- (WCTColumnCodingRow*)renewRow
+{
+    if (!_renewRow) {
+        _renewRow = @[ self.renewedContent ];
+    }
+    return _renewRow;
+}
 
-    _renewRow = @[ renewedContent ];
-    _renewValue = renewedContent;
+- (WCTColumnCodingValue*)renewValue
+{
+    if (!_renewValue) {
+        _renewValue = self.renewedContent;
+    }
+    return _renewValue;
+}
+
+- (TestCaseObject*)renewedObject1
+{
+    if (!_renewedObject1) {
+        TestCaseObject* object = [[TestCaseObject alloc] init];
+        object.identifier = 1;
+        object.content = self.renewedContent;
+        _renewedObject1 = object;
+    }
+    return _renewedObject1;
+}
+
+- (TestCaseObject*)renewedObject2
+{
+    if (!_renewedObject2) {
+        TestCaseObject* object = [[TestCaseObject alloc] init];
+        object.identifier = 2;
+        object.content = self.renewedContent;
+        _renewedObject2 = object;
+    }
+    return _renewedObject2;
 }
 
 #pragma mark - Database - Update Properties To Object
 - (void)test_database_update_table_set_properties_to_object
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject];
+      }];
 }
 
 - (void)test_database_update_table_set_properties_to_object_where
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1];
+      }];
 }
 
 - (void)test_database_update_table_set_properties_to_object_limit
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject limit:1];
+      }];
 }
 
 - (void)test_database_update_table_set_properties_to_object_where_limit
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1 limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1 limit:1];
+      }];
 }
 
 - (void)test_database_update_table_set_properties_to_object_orders_limit
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+      }];
 }
 
 - (void)test_database_update_table_set_properties_to_object_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject limit:1 offset:1];
+      }];
 }
 
 - (void)test_database_update_table_set_properties_to_object_where_orders_limit
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+      }];
 }
 
 - (void)test_database_update_table_set_properties_to_object_where_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 limit:1 offset:1];
+      }];
 }
 
 - (void)test_database_update_table_set_properties_to_object_orders_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+      }];
 }
 
 - (void)test_database_update_table_set_properties_to_object_where_orders_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+      }];
 }
 
 #pragma mark - Database - Update Properties To Row
 - (void)test_database_update_table_set_properties_to_row
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow];
+      }];
 }
 
 - (void)test_database_update_table_set_properties_to_row_where
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1];
+      }];
 }
 
 - (void)test_database_update_table_set_properties_to_row_limit
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow limit:1];
+      }];
 }
 
 - (void)test_database_update_table_set_properties_to_row_where_limit
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1 limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1 limit:1];
+      }];
 }
 
 - (void)test_database_update_table_set_properties_to_row_orders_limit
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+      }];
 }
 
 - (void)test_database_update_table_set_properties_to_row_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow limit:1 offset:1];
+      }];
 }
 
 - (void)test_database_update_table_set_properties_to_row_where_orders_limit
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+      }];
 }
 
 - (void)test_database_update_table_set_properties_to_row_where_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 limit:1 offset:1];
+      }];
 }
 
 - (void)test_database_update_table_set_properties_to_row_orders_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+      }];
 }
 
 - (void)test_database_update_table_set_properties_to_row_where_orders_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+      }];
 }
 
 #pragma mark - Database - Update Property To Value
 - (void)test_database_update_table_set_property_to_value
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue];
+      }];
 }
 
 - (void)test_database_update_table_set_property_to_value_where
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1];
+      }];
 }
 
 - (void)test_database_update_table_set_property_to_value_limit
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue limit:1];
+      }];
 }
 
 - (void)test_database_update_table_set_property_to_value_where_limit
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1 limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1 limit:1];
+      }];
 }
 
 - (void)test_database_update_table_set_property_to_value_orders_limit
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+      }];
 }
 
 - (void)test_database_update_table_set_property_to_value_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue limit:1 offset:1];
+      }];
 }
 
 - (void)test_database_update_table_set_property_to_value_where_orders_limit
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+      }];
 }
 
 - (void)test_database_update_table_set_property_to_value_where_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 limit:1 offset:1];
+      }];
 }
 
 - (void)test_database_update_table_set_property_to_value_orders_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+      }];
 }
 
 - (void)test_database_update_table_set_property_to_value_where_orders_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+      }];
 }
 
 #pragma mark - Table - Update Properties To Object
 - (void)test_table_update_properties_to_object
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1"
+      afterModification:^BOOL {
+          return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject];
+      }];
 }
 
 - (void)test_table_update_properties_to_object_where
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
+      afterModification:^BOOL {
+          return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1];
+      }];
 }
 
 - (void)test_table_update_properties_to_object_limit
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
+      afterModification:^BOOL {
+          return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject limit:1];
+      }];
 }
 
 - (void)test_table_update_properties_to_object_where_limit
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1 limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
+      afterModification:^BOOL {
+          return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1 limit:1];
+      }];
 }
 
 - (void)test_table_update_properties_to_object_orders_limit
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
+      afterModification:^BOOL {
+          return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+      }];
 }
 
 - (void)test_table_update_properties_to_object_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject limit:1 offset:1];
+      }];
 }
 
 - (void)test_table_update_properties_to_object_where_orders_limit
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
+      afterModification:^BOOL {
+          return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+      }];
 }
 
 - (void)test_table_update_properties_to_object_where_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 limit:1 offset:1];
+      }];
 }
 
 - (void)test_table_update_properties_to_object_orders_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+      }];
 }
 
 - (void)test_table_update_properties_to_object_where_orders_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.table updateProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+      }];
 }
 
 #pragma mark - Table - Update Properties To Row
 - (void)test_table_update_properties_to_row
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1"
+      afterModification:^BOOL {
+          return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow];
+      }];
 }
 
 - (void)test_table_update_properties_to_row_where
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
+      afterModification:^BOOL {
+          return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1];
+      }];
 }
 
 - (void)test_table_update_properties_to_row_limit
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
+      afterModification:^BOOL {
+          return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow limit:1];
+      }];
 }
 
 - (void)test_table_update_properties_to_row_where_limit
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1 limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
+      afterModification:^BOOL {
+          return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1 limit:1];
+      }];
 }
 
 - (void)test_table_update_properties_to_row_orders_limit
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
+      afterModification:^BOOL {
+          return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+      }];
 }
 
 - (void)test_table_update_properties_to_row_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow limit:1 offset:1];
+      }];
 }
 
 - (void)test_table_update_properties_to_row_where_orders_limit
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
+      afterModification:^BOOL {
+          return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+      }];
 }
 
 - (void)test_table_update_properties_to_row_where_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 limit:1 offset:1];
+      }];
 }
 
 - (void)test_table_update_properties_to_row_orders_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+      }];
 }
 
 - (void)test_table_update_properties_to_row_where_orders_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.table updateProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+      }];
 }
 
 #pragma mark - Table - Update Property To Value
 - (void)test_table_update_property_to_value
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1"
+      afterModification:^BOOL {
+          return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue];
+      }];
 }
 
 - (void)test_table_update_property_to_value_where
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
+      afterModification:^BOOL {
+          return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1];
+      }];
 }
 
 - (void)test_table_update_property_to_value_limit
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
+      afterModification:^BOOL {
+          return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue limit:1];
+      }];
 }
 
 - (void)test_table_update_property_to_value_where_limit
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1 limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
+      afterModification:^BOOL {
+          return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1 limit:1];
+      }];
 }
 
 - (void)test_table_update_property_to_value_orders_limit
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
+      afterModification:^BOOL {
+          return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+      }];
 }
 
 - (void)test_table_update_property_to_value_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue limit:1 offset:1];
+      }];
 }
 
 - (void)test_table_update_property_to_value_where_orders_limit
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
+      afterModification:^BOOL {
+          return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+      }];
 }
 
 - (void)test_table_update_property_to_value_where_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 limit:1 offset:1];
+      }];
 }
 
 - (void)test_table_update_property_to_value_orders_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+      }];
 }
 
 - (void)test_table_update_property_to_value_where_orders_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [self.table updateProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+      }];
 }
 
 #pragma mark - Handle - Update Properties To Object
 - (void)test_handle_update_table_set_properties_to_object
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject];
+      }];
 }
 
 - (void)test_handle_update_table_set_properties_to_object_where
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1];
+      }];
 }
 
 - (void)test_handle_update_table_set_properties_to_object_limit
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject limit:1];
+      }];
 }
 
 - (void)test_handle_update_table_set_properties_to_object_where_limit
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1 limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier == 1 limit:1];
+      }];
 }
 
 - (void)test_handle_update_table_set_properties_to_object_orders_limit
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+      }];
 }
 
 - (void)test_handle_update_table_set_properties_to_object_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject limit:1 offset:1];
+      }];
 }
 
 - (void)test_handle_update_table_set_properties_to_object_where_orders_limit
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+      }];
 }
 
 - (void)test_handle_update_table_set_properties_to_object_where_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 limit:1 offset:1];
+      }];
 }
 
 - (void)test_handle_update_table_set_properties_to_object_orders_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+      }];
 }
 
 - (void)test_handle_update_table_set_properties_to_object_where_orders_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toObject:self.renewObject where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+      }];
 }
 
 #pragma mark - Handle - Update Properties To Row
 - (void)test_handle_update_table_set_properties_to_row
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow];
+      }];
 }
 
 - (void)test_handle_update_table_set_properties_to_row_where
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1];
+      }];
 }
 
 - (void)test_handle_update_table_set_properties_to_row_limit
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow limit:1];
+      }];
 }
 
 - (void)test_handle_update_table_set_properties_to_row_where_limit
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1 limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier == 1 limit:1];
+      }];
 }
 
 - (void)test_handle_update_table_set_properties_to_row_orders_limit
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+      }];
 }
 
 - (void)test_handle_update_table_set_properties_to_row_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow limit:1 offset:1];
+      }];
 }
 
 - (void)test_handle_update_table_set_properties_to_row_where_orders_limit
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+      }];
 }
 
 - (void)test_handle_update_table_set_properties_to_row_where_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 limit:1 offset:1];
+      }];
 }
 
 - (void)test_handle_update_table_set_properties_to_row_orders_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+      }];
 }
 
 - (void)test_handle_update_table_set_properties_to_row_where_orders_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperties:TestCaseObject.content toRow:self.renewRow where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+      }];
 }
 
 #pragma mark - Handle - Update Property To Value
 - (void)test_handle_update_table_set_property_to_value
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue];
+      }];
 }
 
 - (void)test_handle_update_table_set_property_to_value_where
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1];
+      }];
 }
 
 - (void)test_handle_update_table_set_property_to_value_limit
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue limit:1];
+      }];
 }
 
 - (void)test_handle_update_table_set_property_to_value_where_limit
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1 limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier == 1 LIMIT 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier == 1 limit:1];
+      }];
 }
 
 - (void)test_handle_update_table_set_property_to_value_orders_limit
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+      }];
 }
 
 - (void)test_handle_update_table_set_property_to_value_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue limit:1 offset:1];
+      }];
 }
 
 - (void)test_handle_update_table_set_property_to_value_where_orders_limit
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
+      }];
 }
 
 - (void)test_handle_update_table_set_property_to_value_where_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.object1, self.renewedObject2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.object1, self.renewedObject2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 limit:1 offset:1];
+      }];
 }
 
 - (void)test_handle_update_table_set_property_to_value_orders_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+      }];
 }
 
 - (void)test_handle_update_table_set_property_to_value_where_orders_limit_offset
 {
-    BOOL result = [self checkObjects:@[ self.renewedObject1, self.object2 ]
-                              andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-         asExpectedAfterModification:^BOOL {
-             return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
-         }];
-    TestCaseAssertTrue(result);
+    [self doTestObjects:@[ self.renewedObject1, self.object2 ]
+                 andSQL:@"UPDATE main.testTable SET content = ?1 WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+      afterModification:^BOOL {
+          return [[self.database getHandle] updateTable:self.tableName setProperty:TestCaseObject.content toValue:self.renewValue where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
+      }];
 }
 
 @end

@@ -19,6 +19,7 @@
  */
 
 #import <TestCase/NSObject+TestCase.h>
+#import <TestCase/TestCaseLog.h>
 #import <WCDB/SQLite.h>
 
 @implementation NSObject (TestCase)
@@ -103,14 +104,18 @@ ssize_t illPwrite(int, const void *, size_t, off_t)
 
 + (void)enableSQLiteWrite
 {
+    NSLog(@"Will enable SQLite write");
     sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
     vfs->xSetSystemCall(vfs, "pwrite", (sqlite3_syscall_ptr) pwrite);
+    NSLog(@"Did enable SQLite write");
 }
 
 + (void)disableSQLiteWrite
 {
+    NSLog(@"Will disable SQLite write");
     sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
     vfs->xSetSystemCall(vfs, "pwrite", (sqlite3_syscall_ptr) illPwrite);
+    NSLog(@"Did disable SQLite write");
 }
 
 - (void)removeSQLRelatedConfigs

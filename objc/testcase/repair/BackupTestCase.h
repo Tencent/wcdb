@@ -18,13 +18,9 @@
  * limitations under the License.
  */
 
-#import "PreInsertedCRUDTestCase.h"
+#import <TestCase/TestCase.h>
 
-@interface BackupTestCase : PreInsertedCRUDTestCase
-
-@property (nonatomic, readonly) NSString *firstMaterial;
-@property (nonatomic, readonly) NSString *lastMaterial;
-@property (nonatomic, readonly) NSString *factory;
+@interface BackupTestCase : CRUDTestCase
 
 @property (nonatomic, readonly) int backupFramesIntervalForNonCritical;
 @property (nonatomic, readonly) int backupFramesIntervalForCritical;

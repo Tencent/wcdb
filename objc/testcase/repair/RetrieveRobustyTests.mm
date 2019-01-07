@@ -38,16 +38,39 @@
 {
     [super setUp];
 
-    _expectedAttackRadio = 0.01;
-    _tablePrefix = @"t_";
-    _expectedDatabaseSize = 10 * 1024 * 1024;
-    _deviationForTolerance = 0.05;
-
-    _shuffle = 3;
-    _step = 3;
-    TestCaseAssertTrue(_step >= _shuffle);
+    TestCaseAssertTrue(self.step >= self.shuffle);
 
     [self.database removeConfigForName:WCTConfigNameCheckpoint];
+}
+
+- (double)expectedAttackRadio
+{
+    return 0.01;
+}
+
+- (NSString*)tablePrefix
+{
+    return @"t_";
+}
+
+- (NSInteger)expectedDatabaseSize
+{
+    return 10 * 1024 * 1024;
+}
+
+- (double)deviationForTolerance
+{
+    return 0.05;
+}
+
+- (int)step
+{
+    return 3;
+}
+
+- (int)shuffle
+{
+    return 3;
 }
 
 - (int)getRealStep
@@ -95,7 +118,7 @@
 {
     NSString* currentTable = nil;
     BOOL checkpointed = NO; // leave wal exists
-    [Console disableSQLTrace];
+    [self.class disableSQLTrace];
     while (checkpointed || [self.database getFilesSize] < self.expectedDatabaseSize) {
         if (currentTable == nil || self.random.uint8 % 10 == 0) {
             currentTable = [NSString stringWithFormat:@"%@%@", self.tablePrefix, self.random.string];
@@ -130,7 +153,7 @@
             checkpointed = NO;
         }
     }
-    [Console enableSQLTrace];
+    [self.class enableSQLTrace];
     if (![self.fileManager fileExistsAtPath:self.walPath]) {
         TestCaseFailure();
         return NO;

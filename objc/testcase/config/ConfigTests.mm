@@ -26,12 +26,16 @@
 
 @end
 
-@implementation ConfigTests
+@implementation ConfigTests {
+    NSString* _configName;
+}
 
-- (void)setUp
+- (NSString*)configName
 {
-    [super setUp];
-    _configName = self.random.string;
+    if (!_configName) {
+        _configName = self.random.string;
+    }
+    return _configName;
 }
 
 - (void)tearDown
@@ -42,7 +46,7 @@
 
 - (void)test_config
 {
-    [self removeSQLRelatedConfigs];
+    [self.database removeSQLRelatedConfigs];
     WCDB::StatementPragma setSecureDelete = WCDB::StatementPragma().pragma(WCDB::Pragma::secureDelete()).to(YES);
     WCDB::StatementPragma unsetSecureDelete = WCDB::StatementPragma().pragma(WCDB::Pragma::secureDelete()).to(NO);
     WCDB::StatementPragma getSecureDelete = WCDB::StatementPragma().pragma(WCDB::Pragma::secureDelete());
@@ -66,7 +70,6 @@
                  [self.database close];
                  return [self.database canOpen];
              }];
-        TestCaseAssertTrue(result);
 
         TestCaseAssertTrue([self.database getValueFromStatement:getSecureDelete].numberValue.boolValue);
     }

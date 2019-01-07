@@ -20,11 +20,6 @@
 
 #import "Benchmark.h"
 
-@interface RepairBenchmark : Benchmark
-@property (nonatomic, readonly) NSString* firstMaterial;
-@property (nonatomic, readonly) NSString* lastMaterial;
-@end
-
 @implementation RepairBenchmark
 
 - (void)setUp
@@ -32,8 +27,6 @@
     [super setUp];
 
     self.factory.tolerance = 0.02;
-    _firstMaterial = [self.database.path stringByAppendingString:@"-first.material"];
-    _lastMaterial = [self.database.path stringByAppendingString:@"-last.material"];
 }
 
 - (void)test_backup

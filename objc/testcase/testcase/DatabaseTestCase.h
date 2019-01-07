@@ -23,16 +23,20 @@
 
 @interface DatabaseTestCase : BaseTestCase
 
-#pragma mark - File
+#pragma mark - Path
 @property (readonly, nonatomic) NSString* path;
-@property (nonatomic, readonly) int headerSize;
-@property (nonatomic, readonly) int pageSize;
+@property (readonly, nonatomic) NSString* walPath;
+@property (nonatomic, readonly) NSString* factory;
+@property (nonatomic, readonly) NSString* firstMaterial;
+@property (nonatomic, readonly) NSString* lastMaterial;
+@property (nonatomic, readonly) NSArray<NSString*>* paths;
 
 #pragma mark - Database
 @property (readonly, nonatomic) WCTDatabase* database;
 
-#pragma mark - WAL File
-@property (readonly, nonatomic) NSString* walPath;
+#pragma mark - File
+@property (nonatomic, readonly) int headerSize;
+@property (nonatomic, readonly) int pageSize;
 @property (nonatomic, readonly) int walHeaderSize;
 @property (nonatomic, readonly) int walFrameHeaderSize;
 @property (nonatomic, readonly) int walFrameSize;
