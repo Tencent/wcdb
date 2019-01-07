@@ -31,3 +31,5 @@
 
 #import <TestCase/AllTypesObject+WCTTableCoding.h>
 #import <TestCase/AllTypesObject.h>
+
+#import <TestCase/TestCaseAssertion.h>
