@@ -52,7 +52,7 @@ bool CheckpointQueue::onTimed(const String& path, const int& frames)
         path, m_checkpointPassive);
     }
     if (!result) {
-        // retry after 10.0s if failed
+        // delay retry if failed
         m_timedQueue.reQueue(path, CheckpointQueueDelayForRetryingAfterFailure, frames);
     }
     return result;
