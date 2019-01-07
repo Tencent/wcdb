@@ -53,7 +53,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::FrameSpec };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"RANGE UNBOUNDED PRECEDING");
+    TestCaseAssertSQLEqual(testingSQL, @"RANGE UNBOUNDED PRECEDING");
 }
 
 - (void)test_rows
@@ -62,7 +62,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::FrameSpec };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"ROWS UNBOUNDED PRECEDING");
+    TestCaseAssertSQLEqual(testingSQL, @"ROWS UNBOUNDED PRECEDING");
 }
 
 - (void)test_preceding
@@ -71,7 +71,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::FrameSpec, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"RANGE 1 PRECEDING");
+    TestCaseAssertSQLEqual(testingSQL, @"RANGE 1 PRECEDING");
 }
 
 - (void)test_current_row
@@ -80,7 +80,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::FrameSpec };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"RANGE CURRENT ROW");
+    TestCaseAssertSQLEqual(testingSQL, @"RANGE CURRENT ROW");
 }
 
 - (void)test_following
@@ -89,7 +89,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::FrameSpec, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"RANGE 2 FOLLOWING");
+    TestCaseAssertSQLEqual(testingSQL, @"RANGE 2 FOLLOWING");
 }
 
 - (void)test_between_unbounded_preceding_and_preceding
@@ -98,7 +98,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::FrameSpec, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"RANGE BETWEEN UNBOUNDED PRECEDING AND 2 PRECEDING");
+    TestCaseAssertSQLEqual(testingSQL, @"RANGE BETWEEN UNBOUNDED PRECEDING AND 2 PRECEDING");
 }
 
 - (void)test_between_preceding_and_preceding
@@ -107,7 +107,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::FrameSpec, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"RANGE BETWEEN 1 PRECEDING AND 2 PRECEDING");
+    TestCaseAssertSQLEqual(testingSQL, @"RANGE BETWEEN 1 PRECEDING AND 2 PRECEDING");
 }
 
 - (void)test_between_current_row_and_preceding
@@ -116,7 +116,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::FrameSpec, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"RANGE BETWEEN CURRENT ROW AND 2 PRECEDING");
+    TestCaseAssertSQLEqual(testingSQL, @"RANGE BETWEEN CURRENT ROW AND 2 PRECEDING");
 }
 
 - (void)test_between_following_and_preceding
@@ -125,7 +125,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::FrameSpec, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"RANGE BETWEEN 1 FOLLOWING AND 2 PRECEDING");
+    TestCaseAssertSQLEqual(testingSQL, @"RANGE BETWEEN 1 FOLLOWING AND 2 PRECEDING");
 }
 
 - (void)test_between_unbounded_preceding_and_current_row
@@ -134,7 +134,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::FrameSpec };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW");
+    TestCaseAssertSQLEqual(testingSQL, @"RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW");
 }
 
 - (void)test_between_unbounded_preceding_and_following
@@ -143,7 +143,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::FrameSpec, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"RANGE BETWEEN UNBOUNDED PRECEDING AND 2 FOLLOWING");
+    TestCaseAssertSQLEqual(testingSQL, @"RANGE BETWEEN UNBOUNDED PRECEDING AND 2 FOLLOWING");
 }
 
 - (void)test_between_unbounded_preceding_and_unbounded_preceding
@@ -152,7 +152,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::FrameSpec };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING");
+    TestCaseAssertSQLEqual(testingSQL, @"RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING");
 }
 
 @end

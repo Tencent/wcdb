@@ -53,7 +53,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::DropTriggerSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"DROP TRIGGER IF EXISTS testSchema.testTrigger");
+    TestCaseAssertSQLEqual(testingSQL, @"DROP TRIGGER IF EXISTS testSchema.testTrigger");
 }
 
 - (void)test_drop_trigger_without_if_exists
@@ -62,7 +62,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::DropTriggerSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"DROP TRIGGER testSchema.testTrigger");
+    TestCaseAssertSQLEqual(testingSQL, @"DROP TRIGGER testSchema.testTrigger");
 }
 
 - (void)test_drop_trigger_without_schema
@@ -71,7 +71,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::DropTriggerSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"DROP TRIGGER IF EXISTS main.testTrigger");
+    TestCaseAssertSQLEqual(testingSQL, @"DROP TRIGGER IF EXISTS main.testTrigger");
 }
 
 @end

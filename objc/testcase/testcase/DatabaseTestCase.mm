@@ -116,6 +116,7 @@
     return (int) ((walSize - self.walHeaderSize) / (self.walFrameHeaderSize + self.pageSize));
 }
 
+#pragma mark - SQL
 + (void)enableSQLTrace
 {
     [WCTDatabase globalTraceSQL:^(NSString* sql) {
@@ -139,47 +140,35 @@
     [WCTDatabase globalTraceSQL:nil];
 }
 
-- (BOOL)checkAllSQLsInAllThreads:(NSArray<NSString*>*)expectedSQLs
-           asExpectedInOperation:(BOOL (^)())block
+- (void)doTestSQLs:(NSArray<NSString*>*)testSQLs inOperation:(BOOL (^)())block
 {
-    return [self checkAllSQLs:expectedSQLs asExpectedInOperation:block threaded:NO];
-}
-
-- (BOOL)checkAllSQLs:(NSArray<NSString*>*)expectedSQLs
-asExpectedInOperation:(BOOL (^)())block
-{
-    return [self checkAllSQLs:expectedSQLs asExpectedInOperation:block threaded:YES];
-}
-
-- (BOOL)checkAllSQLs:(NSArray<NSString*>*)expectedSQLs
-asExpectedInOperation:(BOOL (^)())block
-             threaded:(BOOL)threaded
-{
-    BOOL result = NO;
+    TestCaseAssertTrue(testSQLs != nil);
+    TestCaseAssertTrue(block != nil);
+    TestCaseAssertTrue([testSQLs isKindOfClass:NSArray.class]);
     do {
         __block BOOL trace = NO;
-        if (![expectedSQLs isKindOfClass:NSArray.class]
-            || expectedSQLs.count == 0
-            || block == nil) {
-            TestCaseFailure();
-            break;
-        }
-        NSMutableArray<NSString*>* sqls = [NSMutableArray arrayWithArray:expectedSQLs];
+        NSMutableArray<NSString*>* expectedSQLs = [NSMutableArray arrayWithArray:testSQLs];
         NSThread* tracedThread = [NSThread currentThread];
         [self.database traceSQL:^(NSString* sql) {
-            if (threaded && tracedThread != [NSThread currentThread]) {
+            if (!self.expectSQLsInAllThreads && tracedThread != [NSThread currentThread]) {
+                // skip other thread sqls due to the setting
                 return;
             }
             if (!trace) {
                 return;
             }
-            //Test sql and expect exactly the same, including order and count
-            if ([sqls.firstObject isEqualToString:sql]) {
-                [sqls removeObjectAtIndex:0];
+            NSString* expectedSQL = expectedSQLs.firstObject;
+            if ([expectedSQL isEqualToString:sql]) {
+                [expectedSQLs removeObjectAtIndex:0];
             } else {
-                TestCaseLog(@"Failed: %@", TestCaseHint(sql, sqls.firstObject));
                 trace = NO;
-                TestCaseFailure();
+                if (expectedSQL == nil) {
+                    if (self.expectFirstFewSQLsOnly) {
+                        return;
+                    }
+                    expectedSQL = @"";
+                }
+                TestCaseAssertStringEqual(sql, expectedSQL);
             }
         }];
         if (![self.database canOpen]) {
@@ -194,62 +183,14 @@ asExpectedInOperation:(BOOL (^)())block
                 break;
             }
         }
-        if (sqls.count != 0) {
-            TestCaseLog(@"Reminding: %@", sqls);
+        if (expectedSQLs.count != 0) {
+            TestCaseLog(@"Reminding: %@", expectedSQLs);
             TestCaseFailure();
             break;
         }
         trace = NO;
-        result = YES;
     } while (false);
     [self.database traceSQL:nil];
-    return result;
-}
-
-- (BOOL)checkBeginningSQLs:(NSArray<NSString*>*)expectedSQLs
-     asExpectedInOperation:(BOOL (^)())block
-{
-    BOOL result = NO;
-    do {
-        __block BOOL trace = NO;
-        if (![expectedSQLs isKindOfClass:NSArray.class]
-            || expectedSQLs.count == 0
-            || block == nil) {
-            TestCaseFailure();
-            break;
-        }
-        NSMutableArray<NSString*>* sqls = [NSMutableArray arrayWithArray:expectedSQLs];
-        [self.database traceSQL:^(NSString* sql) {
-            if (!trace || sqls.count == 0) {
-                return;
-            }
-            //Test sql and expect exactly the same, including order and count
-            if ([sqls.firstObject isEqualToString:sql]) {
-                [sqls removeObjectAtIndex:0];
-            }
-        }];
-        if (![self.database canOpen]) {
-            TestCaseFailure();
-            break;
-        }
-
-        trace = YES;
-        @autoreleasepool {
-            if (!block()) {
-                TestCaseFailure();
-                break;
-            }
-        }
-        if (sqls.count != 0) {
-            TestCaseLog(@"Reminding: %@", sqls);
-            TestCaseFailure();
-            break;
-        }
-        trace = NO;
-        result = YES;
-    } while (false);
-    [self.database traceSQL:nil];
-    return result;
 }
 
 @end

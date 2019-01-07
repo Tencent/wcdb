@@ -57,7 +57,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::WithClause, WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"WITH testTable1 AS(SELECT 1)");
+    TestCaseAssertSQLEqual(testingSQL, @"WITH testTable1 AS(SELECT 1)");
 }
 
 - (void)test_with_recursive
@@ -66,7 +66,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::WithClause, WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"WITH RECURSIVE testTable1 AS(SELECT 1)");
+    TestCaseAssertSQLEqual(testingSQL, @"WITH RECURSIVE testTable1 AS(SELECT 1)");
 }
 
 - (void)test_with_multiple
@@ -75,7 +75,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::WithClause, WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"WITH testTable1 AS(SELECT 1), testTable2 AS(SELECT 2)");
+    TestCaseAssertSQLEqual(testingSQL, @"WITH testTable1 AS(SELECT 1), testTable2 AS(SELECT 2)");
 }
 
 @end

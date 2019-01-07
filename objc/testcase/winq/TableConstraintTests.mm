@@ -63,7 +63,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::TableConstraint, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"CONSTRAINT testTableConstraint PRIMARY KEY(testColumn1)");
+    TestCaseAssertSQLEqual(testingSQL, @"CONSTRAINT testTableConstraint PRIMARY KEY(testColumn1)");
 }
 
 - (void)test_primary_key_with_indexes
@@ -72,7 +72,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::TableConstraint, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"CONSTRAINT testTableConstraint PRIMARY KEY(testColumn1, testColumn2)");
+    TestCaseAssertSQLEqual(testingSQL, @"CONSTRAINT testTableConstraint PRIMARY KEY(testColumn1, testColumn2)");
 }
 
 - (void)test_primary_key_without_name
@@ -81,7 +81,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::TableConstraint, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"PRIMARY KEY(testColumn1)");
+    TestCaseAssertSQLEqual(testingSQL, @"PRIMARY KEY(testColumn1)");
 }
 
 - (void)test_primary_key_with_conflict
@@ -90,7 +90,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::TableConstraint, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"CONSTRAINT testTableConstraint PRIMARY KEY(testColumn1) ON CONFLICT ABORT");
+    TestCaseAssertSQLEqual(testingSQL, @"CONSTRAINT testTableConstraint PRIMARY KEY(testColumn1) ON CONFLICT ABORT");
 }
 
 - (void)test_unique
@@ -99,7 +99,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::TableConstraint, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"CONSTRAINT testTableConstraint UNIQUE(testColumn1)");
+    TestCaseAssertSQLEqual(testingSQL, @"CONSTRAINT testTableConstraint UNIQUE(testColumn1)");
 }
 
 - (void)test_unique_with_indexes
@@ -108,7 +108,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::TableConstraint, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"CONSTRAINT testTableConstraint UNIQUE(testColumn1, testColumn2)");
+    TestCaseAssertSQLEqual(testingSQL, @"CONSTRAINT testTableConstraint UNIQUE(testColumn1, testColumn2)");
 }
 
 - (void)test_unique_with_conflict
@@ -117,7 +117,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::TableConstraint, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"CONSTRAINT testTableConstraint UNIQUE(testColumn1) ON CONFLICT ABORT");
+    TestCaseAssertSQLEqual(testingSQL, @"CONSTRAINT testTableConstraint UNIQUE(testColumn1) ON CONFLICT ABORT");
 }
 
 - (void)test_check
@@ -126,7 +126,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::TableConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"CONSTRAINT testTableConstraint CHECK(1)");
+    TestCaseAssertSQLEqual(testingSQL, @"CONSTRAINT testTableConstraint CHECK(1)");
 }
 
 - (void)test_foreign_key
@@ -135,7 +135,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::TableConstraint, WCDB::SQL::Type::Column, WCDB::SQL::Type::ForeignKeyClause };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"CONSTRAINT testTableConstraint FOREIGN KEY(testColumn) REFERENCES testForeignTable");
+    TestCaseAssertSQLEqual(testingSQL, @"CONSTRAINT testTableConstraint FOREIGN KEY(testColumn) REFERENCES testForeignTable");
 }
 
 @end

@@ -20,15 +20,15 @@
 
 #import <Foundation/Foundation.h>
 
-#define TestCaseHint(result, expected)                \
-    [NSString stringWithFormat:                       \
-              @"\nexpect [%@]"                        \
-               "\n___but [%@]"                        \
-               "\n__from [%@]",                       \
-              expected,                               \
-              result,                                 \
-              [result commonPrefixWithString:expected \
-                                     options:NSCaseInsensitiveSearch]]
+#define __TestCaseHint(left, right)                \
+    [NSString stringWithFormat:                    \
+              @"\n_left [%@]"                      \
+               "\nright [%@]"                      \
+               "\n_comm [%@]",                     \
+              left,                                \
+              right,                               \
+              [_left commonPrefixWithString:_right \
+                                    options:NSCaseInsensitiveSearch]]
 
 #ifdef DEBUG
 #define TestCaseFailure() abort()
@@ -36,11 +36,18 @@
 #define TestCaseFailure()
 #endif
 
-#define SQLAssertEqual(_sql, _expected)                                                                 \
-    {                                                                                                   \
-        NSString* __sql = @((_sql).getDescription().c_str());                                           \
-        NSString* __expected = (_expected);                                                             \
-        TestCaseAssertTrue([__expected isEqualToString:__sql], @"%@", TestCaseHint(__sql, __expected)); \
+#define TestCaseAssertSQLEqual(_sql, _expected)               \
+    {                                                         \
+        NSString* __sql = @((_sql).getDescription().c_str()); \
+        NSString* __expected = (_expected);                   \
+        TestCaseAssertStringEqual(__sql, _expected);          \
+    }
+
+#define TestCaseAssertStringEqual(left, right)                                                    \
+    {                                                                                             \
+        NSString* _left = (left);                                                                 \
+        NSString* _right = (right);                                                               \
+        TestCaseAssertTrue([_left isEqualToString:_right], @"%@", __TestCaseHint(_left, _right)); \
     }
 
 #define TestCaseAssertTrue(cond, ...)     \

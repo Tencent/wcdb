@@ -55,7 +55,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"1");
+    TestCaseAssertSQLEqual(testingSQL, @"1");
 }
 
 - (void)test_result_column_with_alias
@@ -64,7 +64,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"1 AS testAlias");
+    TestCaseAssertSQLEqual(testingSQL, @"1 AS testAlias");
 }
 
 - (void)test_all
@@ -73,7 +73,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ResultColumn };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"*");
+    TestCaseAssertSQLEqual(testingSQL, @"*");
 }
 
 - (void)test_all_with_table
@@ -82,7 +82,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::ResultColumn };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"testTable.*");
+    TestCaseAssertSQLEqual(testingSQL, @"testTable.*");
 }
 
 @end

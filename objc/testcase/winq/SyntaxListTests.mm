@@ -44,42 +44,42 @@ WCDB::SyntaxList<WCDB::Expression> acceptable(const WCDB::SyntaxList<WCDB::Expre
 
 - (void)test_single_construct
 {
-    SQLAssertEqual(acceptable(WCDB::Expression(1)), @"1");
+    TestCaseAssertSQLEqual(acceptable(WCDB::Expression(1)), @"1");
 }
 
 - (void)test_initial_list_construct
 {
     std::initializer_list<WCDB::Expression> expressions = { 1, 2 };
-    SQLAssertEqual(acceptable(expressions), @"1, 2");
+    TestCaseAssertSQLEqual(acceptable(expressions), @"1, 2");
 }
 
 - (void)test_list_construct
 {
     std::list<WCDB::Expression> expressions = { 1, 2 };
-    SQLAssertEqual(acceptable(expressions), @"1, 2");
+    TestCaseAssertSQLEqual(acceptable(expressions), @"1, 2");
 }
 
 - (void)test_construct_convertible
 {
-    SQLAssertEqual(acceptable(1), @"1");
+    TestCaseAssertSQLEqual(acceptable(1), @"1");
 }
 
 - (void)test_initial_list_construct_convertible
 {
     std::initializer_list<WCDB::Expression> expressions = { 1, 2 };
-    SQLAssertEqual(acceptable(expressions), @"1, 2");
+    TestCaseAssertSQLEqual(acceptable(expressions), @"1, 2");
 }
 
 - (void)test_list_construct_convertible
 {
     std::list<WCDB::Expression> expressions = { 1, 2 };
-    SQLAssertEqual(acceptable(expressions), @"1, 2");
+    TestCaseAssertSQLEqual(acceptable(expressions), @"1, 2");
 }
 
 - (void)test_syntax_list_construct_convertible
 {
     WCDB::SyntaxList<WCDB::LiteralValue> values = { 1, 2 };
-    SQLAssertEqual(acceptable(values), @"1, 2");
+    TestCaseAssertSQLEqual(acceptable(values), @"1, 2");
 }
 
 @end

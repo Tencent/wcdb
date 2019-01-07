@@ -48,7 +48,7 @@
     auto testingSQL = WCDB::LiteralValue(1);
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"1");
+    TestCaseAssertSQLEqual(testingSQL, @"1");
 }
 
 - (void)test_int
@@ -56,7 +56,7 @@
     auto testingSQL = WCDB::LiteralValue(-1);
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"-1");
+    TestCaseAssertSQLEqual(testingSQL, @"-1");
 }
 
 - (void)test_ns_number
@@ -64,7 +64,7 @@
     auto testingSQL = WCDB::LiteralValue(@(1));
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"1");
+    TestCaseAssertSQLEqual(testingSQL, @"1");
 }
 
 - (void)test_true
@@ -72,7 +72,7 @@
     auto testingSQL = WCDB::LiteralValue(true);
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"1");
+    TestCaseAssertSQLEqual(testingSQL, @"1");
 }
 
 - (void)test_false
@@ -80,7 +80,7 @@
     auto testingSQL = WCDB::LiteralValue(false);
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"0");
+    TestCaseAssertSQLEqual(testingSQL, @"0");
 }
 
 - (void)test_yes
@@ -88,7 +88,7 @@
     auto testingSQL = WCDB::LiteralValue(YES);
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"1");
+    TestCaseAssertSQLEqual(testingSQL, @"1");
 }
 
 - (void)test_no
@@ -96,7 +96,7 @@
     auto testingSQL = WCDB::LiteralValue(NO);
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"0");
+    TestCaseAssertSQLEqual(testingSQL, @"0");
 }
 
 - (void)test_int32_max
@@ -104,7 +104,7 @@
     auto testingSQL = WCDB::LiteralValue(std::numeric_limits<int32_t>::max());
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"2147483647");
+    TestCaseAssertSQLEqual(testingSQL, @"2147483647");
 }
 
 - (void)test_int32_min
@@ -112,7 +112,7 @@
     auto testingSQL = WCDB::LiteralValue(std::numeric_limits<int32_t>::min());
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"-2147483648");
+    TestCaseAssertSQLEqual(testingSQL, @"-2147483648");
 }
 
 - (void)test_int64_max
@@ -120,7 +120,7 @@
     auto testingSQL = WCDB::LiteralValue(std::numeric_limits<int64_t>::max());
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"9223372036854775807");
+    TestCaseAssertSQLEqual(testingSQL, @"9223372036854775807");
 }
 
 - (void)test_int64_min
@@ -128,7 +128,7 @@
     auto testingSQL = WCDB::LiteralValue(std::numeric_limits<int64_t>::min());
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"-9223372036854775808");
+    TestCaseAssertSQLEqual(testingSQL, @"-9223372036854775808");
 }
 
 - (void)test_float
@@ -136,7 +136,7 @@
     auto testingSQL = WCDB::LiteralValue((float) 0.1);
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"0.1");
+    TestCaseAssertSQLEqual(testingSQL, @"0.1");
 }
 
 - (void)test_double
@@ -144,7 +144,7 @@
     auto testingSQL = WCDB::LiteralValue((float) 0.1);
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"0.1");
+    TestCaseAssertSQLEqual(testingSQL, @"0.1");
 }
 
 - (void)test_string
@@ -152,7 +152,7 @@
     auto testingSQL = WCDB::LiteralValue("test");
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"'test'");
+    TestCaseAssertSQLEqual(testingSQL, @"'test'");
 }
 
 - (void)test_cpp_string
@@ -160,7 +160,7 @@
     auto testingSQL = WCDB::LiteralValue(std::string("test"));
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"'test'");
+    TestCaseAssertSQLEqual(testingSQL, @"'test'");
 }
 
 - (void)test_ns_string
@@ -168,7 +168,7 @@
     auto testingSQL = WCDB::LiteralValue(@"test");
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"'test'");
+    TestCaseAssertSQLEqual(testingSQL, @"'test'");
 }
 
 - (void)test_null
@@ -176,7 +176,7 @@
     auto testingSQL = WCDB::LiteralValue(nullptr);
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"NULL");
+    TestCaseAssertSQLEqual(testingSQL, @"NULL");
 }
 
 - (void)test_nil
@@ -184,7 +184,7 @@
     auto testingSQL = WCDB::LiteralValue(nil);
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"NULL");
+    TestCaseAssertSQLEqual(testingSQL, @"NULL");
 }
 
 - (void)test_current_time
@@ -192,7 +192,7 @@
     auto testingSQL = WCDB::LiteralValue::currentTime();
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"CURRENT_TIME");
+    TestCaseAssertSQLEqual(testingSQL, @"CURRENT_TIME");
 }
 
 - (void)test_current_date
@@ -200,7 +200,7 @@
     auto testingSQL = WCDB::LiteralValue::currentDate();
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"CURRENT_DATE");
+    TestCaseAssertSQLEqual(testingSQL, @"CURRENT_DATE");
 }
 
 - (void)test_current_timestamp
@@ -208,7 +208,7 @@
     auto testingSQL = WCDB::LiteralValue::currentTimestamp();
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"CURRENT_TIMESTAMP");
+    TestCaseAssertSQLEqual(testingSQL, @"CURRENT_TIMESTAMP");
 }
 
 - (void)test_null_convertible
@@ -559,7 +559,7 @@
 - (void)test_anti_injection
 {
     NSString* injection = @";'DROP TABLE testInjection;--";
-    SQLAssertEqual(WCDB::StatementSelect().select(injection).where(1), @"SELECT ';''DROP TABLE testInjection;--' WHERE 1");
+    TestCaseAssertSQLEqual(WCDB::StatementSelect().select(injection).where(1), @"SELECT ';''DROP TABLE testInjection;--' WHERE 1");
 }
 
 @end

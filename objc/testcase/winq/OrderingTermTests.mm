@@ -53,7 +53,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"testColumn");
+    TestCaseAssertSQLEqual(testingSQL, @"testColumn");
 }
 
 - (void)test_with_collation
@@ -62,7 +62,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"testColumn COLLATE testCollation");
+    TestCaseAssertSQLEqual(testingSQL, @"testColumn COLLATE testCollation");
 }
 
 - (void)test_with_order
@@ -71,7 +71,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"testColumn ASC");
+    TestCaseAssertSQLEqual(testingSQL, @"testColumn ASC");
 }
 
 @end

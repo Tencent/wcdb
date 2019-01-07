@@ -53,7 +53,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::DropIndexSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"DROP INDEX IF EXISTS testSchema.testIndex");
+    TestCaseAssertSQLEqual(testingSQL, @"DROP INDEX IF EXISTS testSchema.testIndex");
 }
 
 - (void)test_drop_index_without_if_exists
@@ -62,7 +62,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::DropIndexSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"DROP INDEX testSchema.testIndex");
+    TestCaseAssertSQLEqual(testingSQL, @"DROP INDEX testSchema.testIndex");
 }
 
 - (void)test_drop_index_without_schema
@@ -71,7 +71,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::DropIndexSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"DROP INDEX IF EXISTS main.testIndex");
+    TestCaseAssertSQLEqual(testingSQL, @"DROP INDEX IF EXISTS main.testIndex");
 }
 
 @end

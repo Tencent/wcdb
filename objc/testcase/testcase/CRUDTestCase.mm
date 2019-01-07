@@ -21,227 +21,204 @@
 #import <TestCase/CRUDTestCase.h>
 #import <TestCase/TestCaseAssertion.h>
 
-@implementation CRUDTestCase
-
-- (void)setUp
-{
-    [super setUp];
-
-    _object1 = [[TestCaseObject alloc] init];
-    _object1.identifier = 1;
-    _object1.content = self.random.string;
-
-    _object2 = [[TestCaseObject alloc] init];
-    _object2.identifier = 2;
-    _object2.content = self.random.string;
-
-    _objects = @[ _object1, _object2 ];
-
-    TestCaseAssertTrue([self.table insertObjects:_objects]);
-
-    [self.database close];
+@implementation CRUDTestCase {
+    TestCaseObject* _object1;
+    TestCaseObject* _object2;
+    NSArray<TestCaseObject*>* _objects;
 }
 
-- (BOOL)checkObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
-            andInsertSQL:(NSString*)insertSQL
-               withCount:(int)count
-asExpectedAfterInsertion:(BOOL (^)())block
+- (TestCaseObject*)object1
 {
+    if (!_object1) {
+        TestCaseObject* object = [[TestCaseObject alloc] init];
+        object.identifier = 1;
+        object.content = self.random.string;
+        _object1 = object;
+    }
+    return _object1;
+}
+
+- (TestCaseObject*)object2
+{
+    if (!_object2) {
+        TestCaseObject* object = [[TestCaseObject alloc] init];
+        object.identifier = 2;
+        object.content = self.random.string;
+        _object2 = object;
+    }
+    return _object2;
+}
+
+- (NSArray<TestCaseObject*>*)objects
+{
+    if (!_objects) {
+        _objects = @[ self.object1, self.object2 ];
+    }
+    return _objects;
+}
+
+- (void)insertPresetObjects
+{
+    TestCaseAssertTrue([self.table insertObjects:self.objects]);
+}
+
+- (void)doTestObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
+            andNumber:(int)numberOfInsertSQLs
+         ofInsertSQLs:(NSString*)insertSQL
+       afterInsertion:(BOOL (^)())block
+{
+    TestCaseAssertTrue(numberOfInsertSQLs > 0);
+    TestCaseAssertTrue(insertSQL != nil);
     NSMutableArray<NSString*>* sqls = [NSMutableArray array];
-    if (count > 1) {
+    if (numberOfInsertSQLs > 1) {
         [sqls addObject:@"BEGIN IMMEDIATE"];
     }
-    for (int i = 0; i < count; ++i) {
+    for (int i = 0; i < numberOfInsertSQLs; ++i) {
         [sqls addObject:insertSQL];
     }
-    if (count > 1) {
+    if (numberOfInsertSQLs > 1) {
         [sqls addObject:@"COMMIT"];
     }
-    return [self checkObjects:objects andSQLs:sqls asExpectedAfterModification:block];
+    [self doTestObjects:objects andSQLs:sqls afterModification:block];
 }
 
-- (BOOL)checkObject:(NSObject<WCTTableCoding>*)object
-                     andSQL:(NSString*)sql
-asExpectedAfterModification:(BOOL (^)())block
+- (void)doTestObject:(NSObject<WCTTableCoding>*)object
+              andSQL:(NSString*)sql
+   afterModification:(BOOL (^)())block
 {
-    if (object == nil
-        || sql == nil) {
-        TestCaseFailure();
-        return NO;
-    }
-    return [self checkObjects:@[ object ] andSQLs:@[ sql ] asExpectedAfterModification:block];
+    TestCaseAssertTrue(object != nil);
+    TestCaseAssertTrue(sql != nil);
+    [self doTestObjects:@[ object ] andSQLs:@[ sql ] afterModification:block];
 }
 
-- (BOOL)checkObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
-                     andSQL:(NSString*)sql
-asExpectedAfterModification:(BOOL (^)())block
-{
-    if (sql == nil) {
-        TestCaseFailure();
-        return NO;
-    }
-    return [self checkObjects:objects andSQLs:@[ sql ] asExpectedAfterModification:block];
-}
-
-- (BOOL)checkObjects:(NSArray<NSObject<WCTTableCoding>*>*)expectedObjects
-                    andSQLs:(NSArray<NSString*>*)expectedSQLs
-asExpectedAfterModification:(BOOL (^)())block
-{
-    if (![self checkAllSQLs:expectedSQLs
-        asExpectedInOperation:^BOOL {
-            return block();
-        }]) {
-        return NO;
-    }
-    NSArray<NSObject<WCTTableCoding>*>* allObjects = [self.table getObjects];
-    if (![allObjects isEqualToArray:expectedObjects]) {
-        TestCaseFailure();
-        return NO;
-    }
-    return YES;
-}
-
-- (BOOL)checkObject:(NSObject<WCTTableCoding>*)object
+- (void)doTestObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
                andSQL:(NSString*)sql
-asExpectedBySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block
+    afterModification:(BOOL (^)())block
 {
-    if (object == nil
-        || sql == nil) {
-        TestCaseFailure();
-        return NO;
-    }
-    return [self checkObjects:@[ object ] andSQLs:@[ sql ] asExpectedBySelecting:block];
+    TestCaseAssertTrue(sql != nil);
+    [self doTestObjects:objects andSQLs:@[ sql ] afterModification:block];
 }
 
-- (BOOL)checkObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
-               andSQL:(NSString*)sql
-asExpectedBySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block
-{
-    if (sql == nil) {
-        TestCaseFailure();
-        return NO;
-    }
-    return [self checkObjects:objects andSQLs:@[ sql ] asExpectedBySelecting:block];
-}
-
-- (BOOL)checkObjects:(NSArray<NSObject<WCTTableCoding>*>*)expectedObjects
+- (void)doTestObjects:(NSArray<NSObject<WCTTableCoding>*>*)expectedObjects
               andSQLs:(NSArray<NSString*>*)expectedSQLs
-asExpectedBySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block
+    afterModification:(BOOL (^)())block
+{
+    [self doTestSQLs:expectedSQLs inOperation:block];
+    NSArray<NSObject<WCTTableCoding>*>* allObjects = [self.table getObjects];
+    TestCaseAssertTrue([allObjects isEqualToArray:expectedObjects]);
+}
+
+- (void)doTestObject:(NSObject<WCTTableCoding>*)object
+              andSQL:(NSString*)sql
+         bySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block
+{
+    TestCaseAssertTrue(object != nil);
+    TestCaseAssertTrue(sql != nil);
+    [self doTestObjects:@[ object ] andSQLs:@[ sql ] bySelecting:block];
+}
+
+- (void)doTestObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
+               andSQL:(NSString*)sql
+          bySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block
+{
+    TestCaseAssertTrue(sql != nil);
+    [self doTestObjects:objects andSQLs:@[ sql ] bySelecting:block];
+}
+
+- (void)doTestObjects:(NSArray<NSObject<WCTTableCoding>*>*)expectedObjects
+              andSQLs:(NSArray<NSString*>*)expectedSQLs
+          bySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block
 {
     __block NSArray<NSObject<WCTTableCoding>*>* selected;
-    if (![self checkAllSQLs:expectedSQLs
-        asExpectedInOperation:^BOOL {
-            selected = block();
-            return selected != nil;
-        }]) {
-        return NO;
-    }
-    if (![selected isKindOfClass:NSArray.class]
-        || ![selected isEqualToArray:expectedObjects]) {
-        TestCaseFailure();
-        return NO;
-    }
-    return YES;
+    [self doTestSQLs:expectedSQLs
+         inOperation:^BOOL {
+             selected = block();
+             return selected != nil;
+         }];
+    TestCaseAssertTrue([selected isKindOfClass:NSArray.class]);
+    TestCaseAssertTrue([selected isEqualToArray:expectedObjects]);
 }
 
-- (BOOL)checkRow:(WCTOneRow*)row
-               andSQL:(NSString*)sql
-asExpectedBySelecting:(WCTOneRow* (^)())block
+- (void)doTestRow:(WCTOneRow*)row
+           andSQL:(NSString*)sql
+      bySelecting:(WCTOneRow* (^)())block
 {
-    if (row == nil
-        || sql == nil) {
-        TestCaseFailure();
-        return NO;
-    }
-    return [self checkRows:@[ row ]
-                   andSQLs:@[ sql ]
-     asExpectedBySelecting:^WCTColumnsXRows* {
-         WCTOneRow* result = block();
-         if (result != nil) {
-             return @[ result ];
-         }
-         return nil;
-     }];
+    TestCaseAssertTrue(row != nil);
+    TestCaseAssertTrue(sql != nil);
+    [self doTestRows:@[ row ]
+             andSQLs:@[ sql ]
+         bySelecting:^WCTColumnsXRows* {
+             WCTOneRow* result = block();
+             if (result != nil) {
+                 return @[ result ];
+             }
+             return nil;
+         }];
 }
 
-- (BOOL)checkColumn:(WCTOneColumn*)column
-               andSQL:(NSString*)sql
-asExpectedBySelecting:(WCTOneColumn* (^)())block
+- (void)doTestColumn:(WCTOneColumn*)column
+              andSQL:(NSString*)sql
+         bySelecting:(WCTOneColumn* (^)())block
 {
-    if (column == nil
-        || sql == nil) {
-        TestCaseFailure();
-        return NO;
-    }
+    TestCaseAssertTrue(sql != nil);
+    TestCaseAssertTrue(column != nil);
     NSMutableArray* rows = [NSMutableArray array];
     for (WCTValue* value in column) {
         [rows addObject:@[ value ]];
     }
-    return [self checkRows:rows
-                   andSQLs:@[ sql ]
-     asExpectedBySelecting:^WCTColumnsXRows* {
-         WCTOneColumn* result = block();
-         if (result != nil) {
-             NSMutableArray* results = [NSMutableArray array];
-             for (WCTValue* value in column) {
-                 [results addObject:@[ value ]];
+    [self doTestRows:rows
+             andSQLs:@[ sql ]
+         bySelecting:^WCTColumnsXRows* {
+             WCTOneColumn* result = block();
+             if (result != nil) {
+                 NSMutableArray* results = [NSMutableArray array];
+                 for (WCTValue* value in column) {
+                     [results addObject:@[ value ]];
+                 }
+                 return results;
              }
-             return results;
-         }
-         return nil;
-     }];
+             return nil;
+         }];
 }
 
-- (BOOL)checkValue:(WCTValue*)value
-               andSQL:(NSString*)sql
-asExpectedBySelecting:(WCTValue* (^)())block
+- (void)doTestValue:(WCTValue*)value
+             andSQL:(NSString*)sql
+        bySelecting:(WCTValue* (^)())block
 {
-    if (value == nil
-        || sql == nil) {
-        TestCaseFailure();
-        return NO;
-    }
-    return [self checkRows:@[ @[ value ] ]
-                   andSQLs:@[ sql ]
-     asExpectedBySelecting:^WCTColumnsXRows* {
-         WCTValue* result = block();
-         if (result != nil) {
-             return @[ @[ value ] ];
-         }
-         return nil;
-     }];
+    TestCaseAssertTrue(value != nil);
+    TestCaseAssertTrue(sql != nil);
+    [self doTestRows:@[ @[ value ] ]
+             andSQLs:@[ sql ]
+         bySelecting:^WCTColumnsXRows* {
+             WCTValue* result = block();
+             if (result != nil) {
+                 return @[ @[ value ] ];
+             }
+             return nil;
+         }];
 }
 
-- (BOOL)checkRows:(WCTColumnsXRows*)rows
-               andSQL:(NSString*)sql
-asExpectedBySelecting:(WCTColumnsXRows* (^)())block
+- (void)doTestRows:(WCTColumnsXRows*)rows
+            andSQL:(NSString*)sql
+       bySelecting:(WCTColumnsXRows* (^)())block
 {
-    if (rows == nil
-        || sql == nil) {
-        TestCaseFailure();
-        return NO;
-    }
-    return [self checkRows:rows andSQLs:@[ sql ] asExpectedBySelecting:block];
+    TestCaseAssertTrue(rows != nil);
+    TestCaseAssertTrue(sql != nil);
+    [self doTestRows:rows andSQLs:@[ sql ] bySelecting:block];
 }
 
-- (BOOL)checkRows:(WCTColumnsXRows*)expectedRows
-              andSQLs:(NSArray<NSString*>*)expectedSQLs
-asExpectedBySelecting:(WCTColumnsXRows* (^)())block
+- (void)doTestRows:(WCTColumnsXRows*)expectedRows
+           andSQLs:(NSArray<NSString*>*)expectedSQLs
+       bySelecting:(WCTColumnsXRows* (^)())block
 {
     __block WCTColumnsXRows* selected;
-    if (![self checkAllSQLs:expectedSQLs
-        asExpectedInOperation:^BOOL {
-            selected = block();
-            return selected != nil;
-        }]) {
-        return NO;
-    }
-    if (![selected isKindOfClass:NSArray.class]
-        || ![selected isEqualToArray:expectedRows]) {
-        TestCaseFailure();
-        return NO;
-    }
-    return YES;
+    [self doTestSQLs:expectedSQLs
+         inOperation:^BOOL {
+             selected = block();
+             return selected != nil;
+         }];
+    TestCaseAssertTrue([selected isKindOfClass:NSArray.class]);
+    TestCaseAssertTrue([selected isEqualToArray:expectedRows]);
 }
 
 @end

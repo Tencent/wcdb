@@ -27,54 +27,55 @@
 @property (nonatomic, readonly) TestCaseObject* object1;
 @property (nonatomic, readonly) TestCaseObject* object2;
 @property (nonatomic, readonly) NSArray<TestCaseObject*>* objects;
+- (void)insertPresetObjects;
 
-- (BOOL)checkObject:(NSObject<WCTTableCoding>*)object
-                     andSQL:(NSString*)sql
-asExpectedAfterModification:(BOOL (^)())block;
+- (void)doTestObject:(NSObject<WCTTableCoding>*)object
+              andSQL:(NSString*)sql
+   afterModification:(BOOL (^)())block;
 
-- (BOOL)checkObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
-                     andSQL:(NSString*)sql
-asExpectedAfterModification:(BOOL (^)())block;
-
-- (BOOL)checkObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
-                    andSQLs:(NSArray<NSString*>*)sqls
-asExpectedAfterModification:(BOOL (^)())block;
-
-- (BOOL)checkObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
-            andInsertSQL:(NSString*)insertSQL
-               withCount:(int)count
-asExpectedAfterInsertion:(BOOL (^)())block;
-
-- (BOOL)checkObject:(NSObject<WCTTableCoding>*)object
+- (void)doTestObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
                andSQL:(NSString*)sql
-asExpectedBySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block;
+    afterModification:(BOOL (^)())block;
 
-- (BOOL)checkObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
-               andSQL:(NSString*)sql
-asExpectedBySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block;
-
-- (BOOL)checkObjects:(NSArray<NSObject<WCTTableCoding>*>*)expectedObjects
-              andSQLs:(NSArray<NSString*>*)expectedSQLs
-asExpectedBySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block;
-
-- (BOOL)checkRow:(WCTOneRow*)row
-               andSQL:(NSString*)sql
-asExpectedBySelecting:(WCTOneRow* (^)())block;
-
-- (BOOL)checkColumn:(WCTOneColumn*)column
-               andSQL:(NSString*)sql
-asExpectedBySelecting:(WCTOneColumn* (^)())block;
-
-- (BOOL)checkValue:(WCTValue*)value
-               andSQL:(NSString*)sql
-asExpectedBySelecting:(WCTValue* (^)())block;
-
-- (BOOL)checkRows:(WCTColumnsXRows*)rows
-               andSQL:(NSString*)sql
-asExpectedBySelecting:(WCTColumnsXRows* (^)())block;
-
-- (BOOL)checkRows:(WCTColumnsXRows*)rows
+- (void)doTestObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
               andSQLs:(NSArray<NSString*>*)sqls
-asExpectedBySelecting:(WCTColumnsXRows* (^)())block;
+    afterModification:(BOOL (^)())block;
+
+- (void)doTestObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
+            andNumber:(int)numberOfInsertSQLs
+         ofInsertSQLs:(NSString*)insertSQL
+       afterInsertion:(BOOL (^)())block;
+
+- (void)doTestObject:(NSObject<WCTTableCoding>*)object
+              andSQL:(NSString*)sql
+         bySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block;
+
+- (void)doTestObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
+               andSQL:(NSString*)sql
+          bySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block;
+
+- (void)doTestObjects:(NSArray<NSObject<WCTTableCoding>*>*)expectedObjects
+              andSQLs:(NSArray<NSString*>*)expectedSQLs
+          bySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block;
+
+- (void)doTestRow:(WCTOneRow*)row
+           andSQL:(NSString*)sql
+      bySelecting:(WCTOneRow* (^)())block;
+
+- (void)doTestColumn:(WCTOneColumn*)column
+              andSQL:(NSString*)sql
+         bySelecting:(WCTOneColumn* (^)())block;
+
+- (void)doTestValue:(WCTValue*)value
+             andSQL:(NSString*)sql
+        bySelecting:(WCTValue* (^)())block;
+
+- (void)doTestRows:(WCTColumnsXRows*)rows
+            andSQL:(NSString*)sql
+       bySelecting:(WCTColumnsXRows* (^)())block;
+
+- (void)doTestRows:(WCTColumnsXRows*)rows
+           andSQLs:(NSArray<NSString*>*)sqls
+       bySelecting:(WCTColumnsXRows* (^)())block;
 
 @end

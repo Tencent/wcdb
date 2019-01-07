@@ -49,7 +49,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::BeginSTMT };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"BEGIN DEFERRED");
+    TestCaseAssertSQLEqual(testingSQL, @"BEGIN DEFERRED");
 }
 
 - (void)test_begin_immediate
@@ -58,7 +58,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::BeginSTMT };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"BEGIN IMMEDIATE");
+    TestCaseAssertSQLEqual(testingSQL, @"BEGIN IMMEDIATE");
 }
 
 - (void)test_begin_exclusive
@@ -67,7 +67,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::BeginSTMT };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"BEGIN EXCLUSIVE");
+    TestCaseAssertSQLEqual(testingSQL, @"BEGIN EXCLUSIVE");
 }
 
 @end

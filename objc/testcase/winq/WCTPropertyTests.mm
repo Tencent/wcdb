@@ -87,7 +87,7 @@
     WCTProperty property(*columnBinding1.get());
     WCTResultColumn resultColumn = property.redirect(1);
 
-    SQLAssertEqual(resultColumn, @"1");
+    TestCaseAssertSQLEqual(resultColumn, @"1");
     TestCaseAssertEqual(&resultColumn.getColumnBinding(), &property.getColumnBinding());
 }
 
@@ -95,28 +95,28 @@
 {
     WCTProperty property(*columnBinding1.get());
 
-    SQLAssertEqual(property.asIndex(), @"testProperty1");
+    TestCaseAssertSQLEqual(property.asIndex(), @"testProperty1");
 }
 
 - (void)test_as_indexed_column_with_order
 {
     WCTProperty property(*columnBinding1.get());
 
-    SQLAssertEqual(property.asIndex(WCTOrderedAscending), @"testProperty1 ASC");
+    TestCaseAssertSQLEqual(property.asIndex(WCTOrderedAscending), @"testProperty1 ASC");
 }
 
 - (void)test_as_ordering_term
 {
     WCTProperty property(*columnBinding1.get());
 
-    SQLAssertEqual(property.asOrder(), @"testProperty1");
+    TestCaseAssertSQLEqual(property.asOrder(), @"testProperty1");
 }
 
 - (void)test_as_ordering_term_with_order
 {
     WCTProperty property(*columnBinding1.get());
 
-    SQLAssertEqual(property.asOrder(WCTOrderedAscending), @"testProperty1 ASC");
+    TestCaseAssertSQLEqual(property.asOrder(WCTOrderedAscending), @"testProperty1 ASC");
 }
 
 - (void)test_properties_count
@@ -125,7 +125,7 @@
         WCTProperty(*columnBinding1.get()),
         WCTProperty(*columnBinding2.get()),
     };
-    SQLAssertEqual(properties.count(), @"count(*)");
+    TestCaseAssertSQLEqual(properties.count(), @"count(*)");
 }
 
 - (void)test_properties_redirect
@@ -135,8 +135,8 @@
         WCTProperty(*columnBinding2.get()),
     };
     WCTResultColumns resultColumns = properties.redirect({ 1, 2 });
-    SQLAssertEqual(resultColumns[0], @"1");
-    SQLAssertEqual(resultColumns[1], @"2");
+    TestCaseAssertSQLEqual(resultColumns[0], @"1");
+    TestCaseAssertSQLEqual(resultColumns[1], @"2");
     TestCaseAssertEqual(&(resultColumns[0].getColumnBinding()), &(properties[0].getColumnBinding()));
     TestCaseAssertEqual(&(resultColumns[1].getColumnBinding()), &(properties[1].getColumnBinding()));
 }
@@ -150,8 +150,8 @@
     WCTResultColumns resultColumns = properties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
         return property.table(@"testTable");
     });
-    SQLAssertEqual(resultColumns[0], @"main.testTable.testProperty1");
-    SQLAssertEqual(resultColumns[1], @"main.testTable.testProperty2");
+    TestCaseAssertSQLEqual(resultColumns[0], @"main.testTable.testProperty1");
+    TestCaseAssertSQLEqual(resultColumns[1], @"main.testTable.testProperty2");
     TestCaseAssertEqual(&(resultColumns[0].getColumnBinding()), &(properties[0].getColumnBinding()));
     TestCaseAssertEqual(&(resultColumns[1].getColumnBinding()), &(properties[1].getColumnBinding()));
 }
@@ -180,7 +180,7 @@
     WCTProperty property(*columnBinding1.get());
     NSString* table = @"testTable";
     WCDB::Expression expression = property.table(table);
-    SQLAssertEqual(expression, @"main.testTable.testProperty1");
+    TestCaseAssertSQLEqual(expression, @"main.testTable.testProperty1");
 }
 
 - (void)test_properties_table
@@ -192,8 +192,8 @@
     NSString* table = @"testTable";
     WCDB::Expressions expressions = properties.table(table);
     TestCaseAssertEqual(expressions.size(), properties.size());
-    SQLAssertEqual(expressions[0], @"main.testTable.testProperty1");
-    SQLAssertEqual(expressions[1], @"main.testTable.testProperty2");
+    TestCaseAssertSQLEqual(expressions[0], @"main.testTable.testProperty1");
+    TestCaseAssertSQLEqual(expressions[1], @"main.testTable.testProperty2");
 }
 
 - (void)test_properties_by_adding

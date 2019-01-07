@@ -39,14 +39,11 @@
 - (int)getWalFrameCount;
 
 #pragma mark - SQL
-- (BOOL)checkAllSQLs:(NSArray<NSString*>*)expectedSQLs
-asExpectedInOperation:(BOOL (^)())block;
+@property (nonatomic, assign) BOOL expectSQLsInAllThreads;
+@property (nonatomic, assign) BOOL expectFirstFewSQLsOnly;
 
-- (BOOL)checkAllSQLsInAllThreads:(NSArray<NSString*>*)expectedSQLs
-           asExpectedInOperation:(BOOL (^)())block;
-
-- (BOOL)checkBeginningSQLs:(NSArray<NSString*>*)expectedSQLs
-     asExpectedInOperation:(BOOL (^)())block;
+- (void)doTestSQLs:(NSArray<NSString*>*)expectedSQLs
+       inOperation:(BOOL (^)())block;
 
 + (void)enableSQLTrace;
 + (void)disableSQLTrace;

@@ -50,7 +50,7 @@
     auto testingSQL = WCDB::BindParameter(1);
     auto testingTypes = { WCDB::SQL::Type::BindParameter };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"?1");
+    TestCaseAssertSQLEqual(testingSQL, @"?1");
 }
 
 - (void)test_name
@@ -58,7 +58,7 @@
     auto testingSQL = WCDB::BindParameter(name);
     auto testingTypes = { WCDB::SQL::Type::BindParameter };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"?testName");
+    TestCaseAssertSQLEqual(testingSQL, @"?testName");
 }
 
 - (void)test_colon
@@ -66,7 +66,7 @@
     auto testingSQL = WCDB::BindParameter::colon(name);
     auto testingTypes = { WCDB::SQL::Type::BindParameter };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @":testName");
+    TestCaseAssertSQLEqual(testingSQL, @":testName");
 }
 
 - (void)test_at
@@ -74,7 +74,7 @@
     auto testingSQL = WCDB::BindParameter::at(name);
     auto testingTypes = { WCDB::SQL::Type::BindParameter };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"@testName");
+    TestCaseAssertSQLEqual(testingSQL, @"@testName");
 }
 
 - (void)test_dollar
@@ -82,15 +82,15 @@
     auto testingSQL = WCDB::BindParameter::dollar(name);
     auto testingTypes = { WCDB::SQL::Type::BindParameter };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"$testName");
+    TestCaseAssertSQLEqual(testingSQL, @"$testName");
 }
 
 - (void)test_numbers
 {
     auto bindParameters = WCDB::BindParameter::bindParameters(2);
     TestCaseAssertEqual(bindParameters.size(), 2);
-    SQLAssertEqual(bindParameters[0], @"?1");
-    SQLAssertEqual(bindParameters[1], @"?2");
+    TestCaseAssertSQLEqual(bindParameters[0], @"?1");
+    TestCaseAssertSQLEqual(bindParameters[1], @"?2");
 }
 
 @end

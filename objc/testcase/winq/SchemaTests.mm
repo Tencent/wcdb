@@ -49,22 +49,22 @@
 
     auto testingTypes = { WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"testSchema");
+    TestCaseAssertSQLEqual(testingSQL, @"testSchema");
 }
 
 - (void)test_default
 {
-    SQLAssertEqual(WCDB::Schema(), @"main");
+    TestCaseAssertSQLEqual(WCDB::Schema(), @"main");
 }
 
 - (void)test_main
 {
-    SQLAssertEqual(WCDB::Schema::main(), @"main");
+    TestCaseAssertSQLEqual(WCDB::Schema::main(), @"main");
 }
 
 - (void)test_temp
 {
-    SQLAssertEqual(WCDB::Schema::temp(), @"temp");
+    TestCaseAssertSQLEqual(WCDB::Schema::temp(), @"temp");
 }
 
 @end

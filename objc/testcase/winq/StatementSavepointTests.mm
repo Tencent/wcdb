@@ -51,7 +51,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SavepointSTMT };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"SAVEPOINT testSavepoint");
+    TestCaseAssertSQLEqual(testingSQL, @"SAVEPOINT testSavepoint");
 }
 
 @end

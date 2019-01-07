@@ -161,4 +161,4 @@ constexpr const char *Enum::description(const Syntax::Identifier::Type &type)
         TestCaseAssertTrue(__types == __expected, @"%@", [WINQTestCase hintForTypes:__types expecting:__expected]); \
     }
 
-#define WINQConvertibleTest(_Type, _parameter, _sql) SQLAssertEqual([](const _Type &_value) -> _Type { return _value; }(_parameter), _sql)
+#define WINQConvertibleTest(_Type, _parameter, _sql) TestCaseAssertSQLEqual([](const _Type &_value) -> _Type { return _value; }(_parameter), _sql)

@@ -68,7 +68,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::UpsertClause };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"ON CONFLICT DO NOTHING");
+    TestCaseAssertSQLEqual(testingSQL, @"ON CONFLICT DO NOTHING");
 }
 
 - (void)test_with_indexed_column
@@ -77,7 +77,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::UpsertClause, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"ON CONFLICT(testColumn1) DO NOTHING");
+    TestCaseAssertSQLEqual(testingSQL, @"ON CONFLICT(testColumn1) DO NOTHING");
 }
 
 - (void)test_with_indexed_columns
@@ -86,7 +86,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::UpsertClause, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"ON CONFLICT(testColumn1, testColumn2) DO NOTHING");
+    TestCaseAssertSQLEqual(testingSQL, @"ON CONFLICT(testColumn1, testColumn2) DO NOTHING");
 }
 
 - (void)test_with_indexed_column_and_condition
@@ -95,7 +95,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::UpsertClause, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"ON CONFLICT(testColumn1) WHERE 1 DO NOTHING");
+    TestCaseAssertSQLEqual(testingSQL, @"ON CONFLICT(testColumn1) WHERE 1 DO NOTHING");
 }
 
 - (void)test_with_update
@@ -104,7 +104,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::UpsertClause, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"ON CONFLICT DO UPDATE SET testColumn1 = 2");
+    TestCaseAssertSQLEqual(testingSQL, @"ON CONFLICT DO UPDATE SET testColumn1 = 2");
 }
 
 - (void)test_with_update_multiple
@@ -113,7 +113,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::UpsertClause, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"ON CONFLICT DO UPDATE SET testColumn1 = 2, (testColumn2, testColumn3) = 3");
+    TestCaseAssertSQLEqual(testingSQL, @"ON CONFLICT DO UPDATE SET testColumn1 = 2, (testColumn2, testColumn3) = 3");
 }
 
 - (void)test_with_update_condition
@@ -122,7 +122,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::UpsertClause, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"ON CONFLICT DO UPDATE SET testColumn1 = 2 WHERE 4");
+    TestCaseAssertSQLEqual(testingSQL, @"ON CONFLICT DO UPDATE SET testColumn1 = 2 WHERE 4");
 }
 
 @end

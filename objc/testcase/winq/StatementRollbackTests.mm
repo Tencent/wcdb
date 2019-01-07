@@ -51,7 +51,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::RollbackSTMT };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"ROLLBACK");
+    TestCaseAssertSQLEqual(testingSQL, @"ROLLBACK");
 }
 
 - (void)test_rollback_savepoint
@@ -60,7 +60,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::RollbackSTMT };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"ROLLBACK TO testSavepoint");
+    TestCaseAssertSQLEqual(testingSQL, @"ROLLBACK TO testSavepoint");
 }
 
 @end

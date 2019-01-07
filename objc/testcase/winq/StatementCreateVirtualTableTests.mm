@@ -59,7 +59,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"CREATE VIRTUAL TABLE testSchema.testTable USING testModule(tokenize = testTokenize)");
+    TestCaseAssertSQLEqual(testingSQL, @"CREATE VIRTUAL TABLE testSchema.testTable USING testModule(tokenize = testTokenize)");
 }
 
 - (void)test_create_virtual_table_if_not_exists
@@ -68,7 +68,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"CREATE VIRTUAL TABLE IF NOT EXISTS testSchema.testTable USING testModule(tokenize = testTokenize)");
+    TestCaseAssertSQLEqual(testingSQL, @"CREATE VIRTUAL TABLE IF NOT EXISTS testSchema.testTable USING testModule(tokenize = testTokenize)");
 }
 
 - (void)test_create_virtual_table_without_schema
@@ -77,7 +77,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"CREATE VIRTUAL TABLE main.testTable USING testModule(tokenize = testTokenize)");
+    TestCaseAssertSQLEqual(testingSQL, @"CREATE VIRTUAL TABLE main.testTable USING testModule(tokenize = testTokenize)");
 }
 
 - (void)test_create_virtual_table_with_arguments
@@ -86,7 +86,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"CREATE VIRTUAL TABLE testSchema.testTable USING testModule(tokenize = testTokenize, testColumn INTEGER)");
+    TestCaseAssertSQLEqual(testingSQL, @"CREATE VIRTUAL TABLE testSchema.testTable USING testModule(tokenize = testTokenize, testColumn INTEGER)");
 }
 
 - (void)test_create_virtual_table_without_argument
@@ -95,7 +95,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"CREATE VIRTUAL TABLE testSchema.testTable USING testModule");
+    TestCaseAssertSQLEqual(testingSQL, @"CREATE VIRTUAL TABLE testSchema.testTable USING testModule");
 }
 
 @end

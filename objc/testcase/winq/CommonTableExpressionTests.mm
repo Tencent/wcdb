@@ -57,7 +57,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CommonTableExpression, WCDB::SQL::Type::Column, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"testTable(testColumn1) AS(SELECT 1)");
+    TestCaseAssertSQLEqual(testingSQL, @"testTable(testColumn1) AS(SELECT 1)");
 }
 
 - (void)test_common_table_expression_with_columns
@@ -66,7 +66,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CommonTableExpression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"testTable(testColumn1, testColumn2) AS(SELECT 1)");
+    TestCaseAssertSQLEqual(testingSQL, @"testTable(testColumn1, testColumn2) AS(SELECT 1)");
 }
 
 - (void)test_common_table_expression_without_column
@@ -75,7 +75,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::CommonTableExpression, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     IterateAssertEqual(testingSQL, testingTypes);
-    SQLAssertEqual(testingSQL, @"testTable AS(SELECT 1)");
+    TestCaseAssertSQLEqual(testingSQL, @"testTable AS(SELECT 1)");
 }
 
 @end
