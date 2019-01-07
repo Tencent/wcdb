@@ -444,21 +444,21 @@ bool AbstractHandle::error(int rc, const String &sql)
 void AbstractHandle::setupAndNotifyError(Error &error, int rc, const String &sql)
 {
     if (rc != SQLITE_MISUSE) {
-        // extended error code will not be set in some case for misuse error
         error.setSQLiteCode(rc, getExtendedErrorCode());
+        const char *message = getErrorMessage();
+        if (message) {
+            error.message = message;
+        } else {
+            error.message = String::null();
+        }
     } else {
+        // extended error code/message will not be set in some case for misuse error
         error.setSQLiteCode(rc);
     }
     if (m_codeToBeIgnored >= 0 && rc != m_codeToBeIgnored) {
         error.level = Error::Level::Error;
     } else {
         error.level = Error::Level::Ignore;
-    }
-    const char *message = getErrorMessage();
-    if (message) {
-        error.message = message;
-    } else {
-        error.message = String::null();
     }
     error.infos.set("SQL", sql);
     Notifier::shared()->notify(error);
