@@ -221,10 +221,10 @@ RecyclableHandle HandlePool::flowOut(Slot slot)
     if (failed) {
         handle->close();
         if (!isGenerated) {
+            LockGuard memoryGuard(m_memory);
             // remove if it already exists in handles
             m_handles[slot].erase(handle);
         }
-        WCTInnerAssert(m_handles[slot].find(handle) == m_handles[slot].end());
         return nullptr;
     }
 
