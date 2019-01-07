@@ -34,6 +34,8 @@
 {
     [super setUp];
 
+    self.continueAfterFailure = YES;
+
 #ifdef DEBUG
     WCTDatabase.debuggable = YES;
 #else

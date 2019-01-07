@@ -25,16 +25,6 @@
 
 @implementation TableTestCase
 
-- (void)setUp
-{
-    [super setUp];
-    if (self.isVirtualTable) {
-        TestCaseAssertTrue([self createVirtualTable]);
-    } else {
-        TestCaseAssertTrue([self createTable]);
-    }
-}
-
 - (NSString*)tableName
 {
     if (!_tableName) {
@@ -59,8 +49,14 @@
 
 - (BOOL)createTable
 {
-    if (![self.database createTableAndIndexes:self.tableName withClass:self.tableClass]) {
-        return NO;
+    if (self.isVirtualTable) {
+        if (![self.database createVirtualTable:self.tableName withClass:self.tableClass]) {
+            return NO;
+        }
+    } else {
+        if (![self.database createTableAndIndexes:self.tableName withClass:self.tableClass]) {
+            return NO;
+        }
     }
     _table = [self.database getTable:self.tableName withClass:self.tableClass];
     return YES;

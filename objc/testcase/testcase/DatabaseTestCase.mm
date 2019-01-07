@@ -43,6 +43,9 @@
         tag = self.random.int32;
     } while (tag == 0);
     self.database.tag = tag;
+
+    self.expectSQLsInAllThreads = NO;
+    self.expectFirstFewSQLsOnly = NO;
 }
 
 - (void)tearDown
