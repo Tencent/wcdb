@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface SyntaxListTests : WINQTestCase
+@interface SyntaxListTests : BaseTestCase
 
 @end
 

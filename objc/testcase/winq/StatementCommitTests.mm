@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface StatementCommitTests : WINQTestCase
+@interface StatementCommitTests : BaseTestCase
 
 @end
 
@@ -48,7 +48,7 @@
     auto testingSQL = WCDB::StatementCommit().commit();
 
     auto testingTypes = { WCDB::SQL::Type::CommitSTMT };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"COMMIT");
 }
 

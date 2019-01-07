@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface WCTResultColumnTests : WINQTestCase
+@interface WCTResultColumnTests : BaseTestCase
 
 @property int testProperty1;
 @property double testProperty2;
@@ -48,11 +48,11 @@
 {
     WCTResultColumn sql(property1);
     NSString* expected = @"testProperty1";
-    WINQConvertibleTest(WCDB::ResultColumn, sql, expected);
-    WINQConvertibleTest(WCDB::ResultColumns, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::ResultColumn, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::ResultColumns, sql, expected);
 
-    WINQConvertibleTest(WCTResultColumn, sql, expected);
-    WINQConvertibleTest(WCTResultColumns, sql, expected);
+    TestCaseAssertWINQConvertible(WCTResultColumn, sql, expected);
+    TestCaseAssertWINQConvertible(WCTResultColumns, sql, expected);
 }
 
 - (void)test_properties_convertible
@@ -62,9 +62,9 @@
         property2,
     };
     NSString* expected = @"testProperty1, testProperty2";
-    WINQConvertibleTest(WCDB::ResultColumns, sqls, expected);
+    TestCaseAssertWINQConvertible(WCDB::ResultColumns, sqls, expected);
 
-    WINQConvertibleTest(WCTResultColumns, sqls, expected);
+    TestCaseAssertWINQConvertible(WCTResultColumns, sqls, expected);
 }
 
 - (void)test_redirect

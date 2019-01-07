@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface IndexedColumnTests : WINQTestCase
+@interface IndexedColumnTests : BaseTestCase
 
 @end
 
@@ -56,7 +56,7 @@
     auto testingSQL = WCDB::IndexedColumn(column);
 
     auto testingTypes = { WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testColumn");
 }
 
@@ -65,7 +65,7 @@
     auto testingSQL = WCDB::IndexedColumn(expression);
 
     auto testingTypes = { WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testColumn");
 }
 
@@ -74,7 +74,7 @@
     auto testingSQL = WCDB::IndexedColumn(column).collate(collation);
 
     auto testingTypes = { WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testColumn COLLATE testCollation");
 }
 
@@ -83,7 +83,7 @@
     auto testingSQL = WCDB::IndexedColumn(column).order(order);
 
     auto testingTypes = { WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testColumn ASC");
 }
 

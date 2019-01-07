@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface WithTests : WINQTestCase
+@interface WithTests : BaseTestCase
 
 @end
 
@@ -56,7 +56,7 @@
     auto testingSQL = WCDB::With().table(table1).as(select1);
 
     auto testingTypes = { WCDB::SQL::Type::WithClause, WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"WITH testTable1 AS(SELECT 1)");
 }
 
@@ -65,7 +65,7 @@
     auto testingSQL = WCDB::With().recursive().table(table1).as(select1);
 
     auto testingTypes = { WCDB::SQL::Type::WithClause, WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"WITH RECURSIVE testTable1 AS(SELECT 1)");
 }
 
@@ -74,7 +74,7 @@
     auto testingSQL = WCDB::With().table(table1).as(select1).table(table2).as(select2);
 
     auto testingTypes = { WCDB::SQL::Type::WithClause, WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"WITH testTable1 AS(SELECT 1), testTable2 AS(SELECT 2)");
 }
 

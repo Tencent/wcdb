@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface OrderingTermTests : WINQTestCase
+@interface OrderingTermTests : BaseTestCase
 
 @end
 
@@ -52,7 +52,7 @@
     auto testingSQL = WCDB::OrderingTerm(expression);
 
     auto testingTypes = { WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testColumn");
 }
 
@@ -61,7 +61,7 @@
     auto testingSQL = WCDB::OrderingTerm(expression).collate(collation);
 
     auto testingTypes = { WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testColumn COLLATE testCollation");
 }
 
@@ -70,7 +70,7 @@
     auto testingSQL = WCDB::OrderingTerm(expression).order(WCDB::Order::ASC);
 
     auto testingTypes = { WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testColumn ASC");
 }
 

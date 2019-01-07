@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface QualifiedTableTests : WINQTestCase
+@interface QualifiedTableTests : BaseTestCase
 
 @end
 
@@ -56,7 +56,7 @@
     auto testingSQL = WCDB::QualifiedTable(table).schema(schema);
 
     auto testingTypes = { WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testSchema.testTable");
 }
 
@@ -65,7 +65,7 @@
     auto testingSQL = WCDB::QualifiedTable(table);
 
     auto testingTypes = { WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"main.testTable");
 }
 
@@ -74,7 +74,7 @@
     auto testingSQL = WCDB::QualifiedTable(table).schema(schema).as(alias);
 
     auto testingTypes = { WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testSchema.testTable AS testAlias");
 }
 
@@ -83,7 +83,7 @@
     auto testingSQL = WCDB::QualifiedTable(table).schema(schema).indexed(index);
 
     auto testingTypes = { WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testSchema.testTable INDEXED BY testIndex");
 }
 
@@ -92,7 +92,7 @@
     auto testingSQL = WCDB::QualifiedTable(table).schema(schema).notIndexed();
 
     auto testingTypes = { WCDB::SQL::Type::QualifiedTableName, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testSchema.testTable NOT INDEXED");
 }
 

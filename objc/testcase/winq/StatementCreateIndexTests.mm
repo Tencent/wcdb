@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface StatementCreateIndexTests : WINQTestCase
+@interface StatementCreateIndexTests : BaseTestCase
 
 @end
 
@@ -61,7 +61,7 @@
     auto testingSQL = WCDB::StatementCreateIndex().createIndex(index).schema(schema).table(table).indexed(indexedColumn1);
 
     auto testingTypes = { WCDB::SQL::Type::CreateIndexSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CREATE INDEX testSchema.testIndex ON testTable(testColumn1)");
 }
 
@@ -70,7 +70,7 @@
     auto testingSQL = WCDB::StatementCreateIndex().createIndex(index).schema(schema).table(table).indexed(indexedColumn1).indexed(indexedColumn2);
 
     auto testingTypes = { WCDB::SQL::Type::CreateIndexSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CREATE INDEX testSchema.testIndex ON testTable(testColumn1, testColumn2)");
 }
 
@@ -79,7 +79,7 @@
     auto testingSQL = WCDB::StatementCreateIndex().createIndex(index).schema(schema).unique().table(table).indexed(indexedColumn1);
 
     auto testingTypes = { WCDB::SQL::Type::CreateIndexSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CREATE UNIQUE INDEX testSchema.testIndex ON testTable(testColumn1)");
 }
 
@@ -88,7 +88,7 @@
     auto testingSQL = WCDB::StatementCreateIndex().createIndex(index).schema(schema).ifNotExists().table(table).indexed(indexedColumn1);
 
     auto testingTypes = { WCDB::SQL::Type::CreateIndexSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CREATE INDEX IF NOT EXISTS testSchema.testIndex ON testTable(testColumn1)");
 }
 
@@ -97,7 +97,7 @@
     auto testingSQL = WCDB::StatementCreateIndex().createIndex(index).table(table).indexed(indexedColumn1);
 
     auto testingTypes = { WCDB::SQL::Type::CreateIndexSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CREATE INDEX main.testIndex ON testTable(testColumn1)");
 }
 
@@ -106,7 +106,7 @@
     auto testingSQL = WCDB::StatementCreateIndex().createIndex(index).schema(schema).table(table).indexed(indexedColumn1).where(condition);
 
     auto testingTypes = { WCDB::SQL::Type::CreateIndexSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CREATE INDEX testSchema.testIndex ON testTable(testColumn1) WHERE 1");
 }
 

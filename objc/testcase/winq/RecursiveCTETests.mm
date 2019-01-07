@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface RecursiveCTETests : WINQTestCase
+@interface RecursiveCTETests : BaseTestCase
 
 @end
 
@@ -54,7 +54,7 @@
     auto testingSQL = WCDB::RecursiveCTE(table).as(initialSelect).union_(recursiveSelect);
 
     auto testingTypes = { WCDB::SQL::Type::RecursiveCTE, WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testTable AS(SELECT 1 UNION SELECT 2)");
 }
 
@@ -63,7 +63,7 @@
     auto testingSQL = WCDB::RecursiveCTE(table).as(initialSelect).unionAll(recursiveSelect);
 
     auto testingTypes = { WCDB::SQL::Type::RecursiveCTE, WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testTable AS(SELECT 1 UNION ALL SELECT 2)");
 }
 

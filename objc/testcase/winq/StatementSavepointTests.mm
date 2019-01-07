@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface StatementSavepointTests : WINQTestCase
+@interface StatementSavepointTests : BaseTestCase
 
 @end
 
@@ -50,7 +50,7 @@
     auto testingSQL = WCDB::StatementSavepoint().savepoint(savepoint);
 
     auto testingTypes = { WCDB::SQL::Type::SavepointSTMT };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"SAVEPOINT testSavepoint");
 }
 

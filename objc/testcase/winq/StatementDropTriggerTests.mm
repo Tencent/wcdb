@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface StatementDropTriggerTests : WINQTestCase
+@interface StatementDropTriggerTests : BaseTestCase
 
 @end
 
@@ -52,7 +52,7 @@
     auto testingSQL = WCDB::StatementDropTrigger().dropTrigger(trigger).schema(schema).ifExists();
 
     auto testingTypes = { WCDB::SQL::Type::DropTriggerSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"DROP TRIGGER IF EXISTS testSchema.testTrigger");
 }
 
@@ -61,7 +61,7 @@
     auto testingSQL = WCDB::StatementDropTrigger().dropTrigger(trigger).schema(schema);
 
     auto testingTypes = { WCDB::SQL::Type::DropTriggerSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"DROP TRIGGER testSchema.testTrigger");
 }
 
@@ -70,7 +70,7 @@
     auto testingSQL = WCDB::StatementDropTrigger().dropTrigger(trigger).ifExists();
 
     auto testingTypes = { WCDB::SQL::Type::DropTriggerSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"DROP TRIGGER IF EXISTS main.testTrigger");
 }
 

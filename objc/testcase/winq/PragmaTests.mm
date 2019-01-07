@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface PragmaTests : WINQTestCase
+@interface PragmaTests : BaseTestCase
 
 @end
 
@@ -47,7 +47,7 @@
 {
     auto testingSQL = WCDB::Pragma(@"testPragma");
     auto testingTypes = { WCDB::SQL::Type::Pragma };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testPragma");
 }
 

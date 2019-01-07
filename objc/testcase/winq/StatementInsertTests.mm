@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface StatementInsertTests : WINQTestCase
+@interface StatementInsertTests : BaseTestCase
 
 @end
 
@@ -83,7 +83,7 @@
     auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).column(column1).values(expressions1);
 
     auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"INSERT INTO testSchema.testTable(testColumn1) VALUES(1, 2)");
 }
 
@@ -92,7 +92,7 @@
     auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).column(column1).column(column2).values(expressions1);
 
     auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"INSERT INTO testSchema.testTable(testColumn1, testColumn2) VALUES(1, 2)");
 }
 
@@ -101,7 +101,7 @@
     auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).columns(columns).values(expressions1);
 
     auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"INSERT INTO testSchema.testTable(testColumn1, testColumn2) VALUES(1, 2)");
 }
 
@@ -110,7 +110,7 @@
     auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).orReplace().column(column1).values(expressions1);
 
     auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"INSERT OR REPLACE INTO testSchema.testTable(testColumn1) VALUES(1, 2)");
 }
 
@@ -119,7 +119,7 @@
     auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).orRollback().column(column1).values(expressions1);
 
     auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"INSERT OR ROLLBACK INTO testSchema.testTable(testColumn1) VALUES(1, 2)");
 }
 
@@ -128,7 +128,7 @@
     auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).orAbort().column(column1).values(expressions1);
 
     auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"INSERT OR ABORT INTO testSchema.testTable(testColumn1) VALUES(1, 2)");
 }
 
@@ -137,7 +137,7 @@
     auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).orFail().column(column1).values(expressions1);
 
     auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"INSERT OR FAIL INTO testSchema.testTable(testColumn1) VALUES(1, 2)");
 }
 
@@ -146,7 +146,7 @@
     auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).orIgnore().column(column1).values(expressions1);
 
     auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"INSERT OR IGNORE INTO testSchema.testTable(testColumn1) VALUES(1, 2)");
 }
 
@@ -155,7 +155,7 @@
     auto testingSQL = WCDB::StatementInsert().with(with).insertIntoTable(table).schema(schema).column(column1).values(expressions1);
 
     auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::WithClause, WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"WITH testTable AS(SELECT 1) INSERT INTO testSchema.testTable(testColumn1) VALUES(1, 2)");
 }
 
@@ -164,7 +164,7 @@
     auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).column(column1).values(expressions1);
 
     auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"INSERT INTO main.testTable(testColumn1) VALUES(1, 2)");
 }
 
@@ -173,7 +173,7 @@
     auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).as(alias).column(column1).values(expressions1);
 
     auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"INSERT INTO testSchema.testTable AS testAliasTable(testColumn1) VALUES(1, 2)");
 }
 
@@ -182,7 +182,7 @@
     auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).column(column1).values(expressions1).values(expressions2);
 
     auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"INSERT INTO testSchema.testTable(testColumn1) VALUES(1, 2), (3, 4)");
 }
 
@@ -191,7 +191,7 @@
     auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).column(column1).value(expression1).value(expression2);
 
     auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"INSERT INTO testSchema.testTable(testColumn1) VALUES(1, 2)");
 }
 
@@ -200,7 +200,7 @@
     auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).column(column1).values(select);
 
     auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"INSERT INTO testSchema.testTable(testColumn1) SELECT 1");
 }
 
@@ -209,7 +209,7 @@
     auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).column(column1).defaultValues();
 
     auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"INSERT INTO testSchema.testTable(testColumn1) DEFAULT VALUES");
 }
 
@@ -218,7 +218,7 @@
     auto testingSQL = WCDB::StatementInsert().insertIntoTable(table).schema(schema).column(column1).values(expressions1).upsert(upsert);
 
     auto testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::UpsertClause };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"INSERT INTO testSchema.testTable(testColumn1) VALUES(1, 2) ON CONFLICT DO NOTHING");
 }
 @end

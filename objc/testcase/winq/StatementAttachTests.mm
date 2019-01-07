@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface StatementAttachTests : WINQTestCase
+@interface StatementAttachTests : BaseTestCase
 
 @end
 
@@ -54,7 +54,7 @@
     auto testingSQL = WCDB::StatementAttach().attach(expression).as(schema);
 
     auto testingTypes = { WCDB::SQL::Type::AttachSTMT, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"ATTACH 'testPath' AS testSchema");
 }
 

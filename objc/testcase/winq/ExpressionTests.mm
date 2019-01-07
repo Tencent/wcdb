@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface ExpressionTests : WINQTestCase
+@interface ExpressionTests : BaseTestCase
 
 @end
 
@@ -91,7 +91,7 @@
     auto testingSQL = WCDB::Expression(literalValue);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"1");
 }
 
@@ -100,7 +100,7 @@
     auto testingSQL = WCDB::Expression(bindParameter);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::BindParameter };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"?1");
 }
 
@@ -109,7 +109,7 @@
     auto testingSQL = WCDB::Expression(column).table(table).schema(schema);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testSchema.testTable.testColumn");
 }
 
@@ -118,7 +118,7 @@
     auto testingSQL = WCDB::Expression(column).table(table);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"main.testTable.testColumn");
 }
 
@@ -127,7 +127,7 @@
     auto testingSQL = WCDB::Expression(column);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testColumn");
 }
 
@@ -136,7 +136,7 @@
     auto testingSQL = WCDB::Expression::function(function).distinct().invoke().argument(expression1);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testFunction(DISTINCT 1)");
 }
 
@@ -145,7 +145,7 @@
     auto testingSQL = WCDB::Expression::function(function).distinct().invoke().argument(expression1).argument(expression2);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testFunction(DISTINCT 1, 2)");
 }
 
@@ -154,7 +154,7 @@
     auto testingSQL = WCDB::Expression::function(function).invoke().argument(expression1);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testFunction(1)");
 }
 
@@ -163,7 +163,7 @@
     auto testingSQL = WCDB::Expression::function(function);
 
     auto testingTypes = { WCDB::SQL::Type::Expression };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testFunction()");
 }
 
@@ -172,7 +172,7 @@
     auto testingSQL = WCDB::Expression::function(function).invokeAll();
 
     auto testingTypes = { WCDB::SQL::Type::Expression };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testFunction(*)");
 }
 
@@ -201,7 +201,7 @@
     auto testingSQL = WCDB::Expression(expressions);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"(1, 2)");
 }
 
@@ -210,7 +210,7 @@
     auto testingSQL = WCDB::Expression::cast(expression1).as(columnType);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CAST(1 AS INTEGER)");
 }
 
@@ -219,7 +219,7 @@
     auto testingSQL = WCDB::Expression::exists(select);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"EXISTS(SELECT 1)");
 }
 
@@ -228,7 +228,7 @@
     auto testingSQL = WCDB::Expression::notExists(select);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"NOT EXISTS(SELECT 1)");
 }
 
@@ -237,7 +237,7 @@
     auto testingSQL = WCDB::Expression::case_(expression1).when(expression2).then(expression3).else_(expression4);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CASE 1 WHEN 2 THEN 3 ELSE 4 END");
 }
 
@@ -246,7 +246,7 @@
     auto testingSQL = WCDB::Expression::case_().when(expression2).then(expression3).else_(expression4);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CASE WHEN 2 THEN 3 ELSE 4 END");
 }
 
@@ -255,7 +255,7 @@
     auto testingSQL = WCDB::Expression::case_(expression1).when(expression2).then(expression3).when(expression4).then(expression5).else_(expression6);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CASE 1 WHEN 2 THEN 3 WHEN 4 THEN 5 ELSE 6 END");
 }
 
@@ -264,7 +264,7 @@
     auto testingSQL = WCDB::Expression::case_(expression1).when(expression2).then(expression3);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CASE 1 WHEN 2 THEN 3 END");
 }
 
@@ -273,7 +273,7 @@
     auto testingSQL = WCDB::Expression(raiseFunction);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::RaiseFunction };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"RAISE(IGNORE)");
 }
 
@@ -282,7 +282,7 @@
     auto testingSQL = WCDB::Expression::windowFunction(windowFunction).invoke().argument(expression1).over(windowDef);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testWindowFunction(1) OVER()");
 }
 
@@ -291,7 +291,7 @@
     auto testingSQL = WCDB::Expression::windowFunction(windowFunction).invoke().argument(expression1).argument(expression2).over(windowDef);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testWindowFunction(1, 2) OVER()");
 }
 
@@ -300,7 +300,7 @@
     auto testingSQL = WCDB::Expression::windowFunction(windowFunction).invoke().over(windowDef);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::WindowDef };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testWindowFunction() OVER()");
 }
 
@@ -309,7 +309,7 @@
     auto testingSQL = WCDB::Expression::windowFunction(windowFunction).invokeAll().over(windowDef);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::WindowDef };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testWindowFunction(*) OVER()");
 }
 
@@ -318,7 +318,7 @@
     auto testingSQL = WCDB::Expression::windowFunction(windowFunction).invoke().argument(expression1).filter(filter).over(windowDef);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Filter, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testWindowFunction(1) FILTER(WHERE 1) OVER()");
 }
 
@@ -327,7 +327,7 @@
     auto testingSQL = WCDB::Expression::windowFunction(windowFunction).invoke().argument(expression1).over(window);
 
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testWindowFunction(1) OVER testWindow");
 }
 
@@ -335,14 +335,14 @@
 {
     WCDB::Expression sql(1);
     NSString* expected = @"1";
-    WINQConvertibleTest(WCDB::Expression, sql, expected);
-    WINQConvertibleTest(WCDB::Expressions, sql, expected);
-    WINQConvertibleTest(WCDB::IndexedColumn, sql, expected);
-    WINQConvertibleTest(WCDB::IndexedColumns, sql, expected);
-    WINQConvertibleTest(WCDB::ResultColumn, sql, expected);
-    WINQConvertibleTest(WCDB::ResultColumns, sql, expected);
-    WINQConvertibleTest(WCDB::OrderingTerm, sql, expected);
-    WINQConvertibleTest(WCDB::OrderingTerms, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::Expression, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::Expressions, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::IndexedColumn, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::IndexedColumns, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::ResultColumn, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::ResultColumns, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::OrderingTerm, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::OrderingTerms, sql, expected);
 }
 
 - (void)test_expressions_convertible
@@ -352,10 +352,10 @@
         WCDB::Column(@"testColumn"),
     };
     NSString* expected = @"1, testColumn";
-    WINQConvertibleTest(WCDB::Expressions, sqls, expected);
-    WINQConvertibleTest(WCDB::IndexedColumns, sqls, expected);
-    WINQConvertibleTest(WCDB::ResultColumns, sqls, expected);
-    WINQConvertibleTest(WCDB::OrderingTerms, sqls, expected);
+    TestCaseAssertWINQConvertible(WCDB::Expressions, sqls, expected);
+    TestCaseAssertWINQConvertible(WCDB::IndexedColumns, sqls, expected);
+    TestCaseAssertWINQConvertible(WCDB::ResultColumns, sqls, expected);
+    TestCaseAssertWINQConvertible(WCDB::OrderingTerms, sqls, expected);
 }
 
 - (void)test_precedence

@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface OrderTests : WINQTestCase
+@interface OrderTests : BaseTestCase
 
 @end
 
@@ -39,8 +39,8 @@
 
 - (void)test
 {
-    WINQEnumAssertEqual(WCDB::Order::ASC, @"ASC");
-    WINQEnumAssertEqual(WCDB::Order::DESC, @"DESC");
+    TestCaseAssertWINQEnumEqual(WCDB::Order::ASC, @"ASC");
+    TestCaseAssertWINQEnumEqual(WCDB::Order::DESC, @"DESC");
 }
 
 @end

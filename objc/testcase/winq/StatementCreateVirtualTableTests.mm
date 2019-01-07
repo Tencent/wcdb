@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface StatementCreateVirtualTableTests : WINQTestCase
+@interface StatementCreateVirtualTableTests : BaseTestCase
 
 @end
 
@@ -58,7 +58,7 @@
     auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(table).schema(schema).usingModule(module).argument(argument1);
 
     auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CREATE VIRTUAL TABLE testSchema.testTable USING testModule(tokenize = testTokenize)");
 }
 
@@ -67,7 +67,7 @@
     auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(table).schema(schema).ifNotExists().usingModule(module).argument(argument1);
 
     auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CREATE VIRTUAL TABLE IF NOT EXISTS testSchema.testTable USING testModule(tokenize = testTokenize)");
 }
 
@@ -76,7 +76,7 @@
     auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(table).usingModule(module).argument(argument1);
 
     auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CREATE VIRTUAL TABLE main.testTable USING testModule(tokenize = testTokenize)");
 }
 
@@ -85,7 +85,7 @@
     auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(table).schema(schema).usingModule(module).argument(argument1).argument(argument2);
 
     auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CREATE VIRTUAL TABLE testSchema.testTable USING testModule(tokenize = testTokenize, testColumn INTEGER)");
 }
 
@@ -94,7 +94,7 @@
     auto testingSQL = WCDB::StatementCreateVirtualTable().createVirtualTable(table).schema(schema).usingModule(module);
 
     auto testingTypes = { WCDB::SQL::Type::CreateVirtualTableSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CREATE VIRTUAL TABLE testSchema.testTable USING testModule");
 }
 

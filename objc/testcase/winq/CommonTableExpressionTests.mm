@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface CommonTableExpressionTests : WINQTestCase
+@interface CommonTableExpressionTests : BaseTestCase
 
 @end
 
@@ -56,7 +56,7 @@
     auto testingSQL = WCDB::CommonTableExpression(table).column(column1).as(select);
 
     auto testingTypes = { WCDB::SQL::Type::CommonTableExpression, WCDB::SQL::Type::Column, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testTable(testColumn1) AS(SELECT 1)");
 }
 
@@ -65,7 +65,7 @@
     auto testingSQL = WCDB::CommonTableExpression(table).column(column1).column(column2).as(select);
 
     auto testingTypes = { WCDB::SQL::Type::CommonTableExpression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testTable(testColumn1, testColumn2) AS(SELECT 1)");
 }
 
@@ -74,7 +74,7 @@
     auto testingSQL = WCDB::CommonTableExpression(table).as(select);
 
     auto testingTypes = { WCDB::SQL::Type::CommonTableExpression, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testTable AS(SELECT 1)");
 }
 

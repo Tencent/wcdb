@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface ResultColumnTests : WINQTestCase
+@interface ResultColumnTests : BaseTestCase
 
 @end
 
@@ -54,7 +54,7 @@
     auto testingSQL = WCDB::ResultColumn(expression);
 
     auto testingTypes = { WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"1");
 }
 
@@ -63,7 +63,7 @@
     auto testingSQL = WCDB::ResultColumn(expression).as(alias);
 
     auto testingTypes = { WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"1 AS testAlias");
 }
 
@@ -72,7 +72,7 @@
     auto testingSQL = WCDB::ResultColumnAll();
 
     auto testingTypes = { WCDB::SQL::Type::ResultColumn };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"*");
 }
 
@@ -81,7 +81,7 @@
     auto testingSQL = WCDB::ResultColumnAll().inTable(table);
 
     auto testingTypes = { WCDB::SQL::Type::ResultColumn };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testTable.*");
 }
 

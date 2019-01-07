@@ -63,6 +63,7 @@
 		23254FCB219D28BA00DE2435 /* ThreadTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23254FCA219D28BA00DE2435 /* ThreadTests.mm */; };
 		232741501F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		232741521F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */; };
+		23298E5321E2F92300D18B16 /* WINQAssertion.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23298E5221E2F92300D18B16 /* WINQAssertion.mm */; };
 		233A058B2062698E00F1A212 /* WCTHandle+ChainCall.h in Headers */ = {isa = PBXBuildFile; fileRef = 233A05892062698E00F1A212 /* WCTHandle+ChainCall.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		233A058C2062698E00F1A212 /* WCTHandle+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233A058A2062698E00F1A212 /* WCTHandle+ChainCall.mm */; };
 		233A25D3219933DB00054EC4 /* WCTBuiltin.h in Headers */ = {isa = PBXBuildFile; fileRef = 233A25D2219933D800054EC4 /* WCTBuiltin.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -421,7 +422,6 @@
 		23989798217EC9E30014BF33 /* UpsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23989759217EC9E20014BF33 /* UpsertTests.mm */; };
 		23989799217EC9E30014BF33 /* WindowDefTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2398975A217EC9E20014BF33 /* WindowDefTests.mm */; };
 		2398979A217EC9E30014BF33 /* WindowFunctionInvocationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2398975B217EC9E20014BF33 /* WindowFunctionInvocationTests.mm */; };
-		2398979B217EC9E30014BF33 /* WINQTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2398975D217EC9E20014BF33 /* WINQTestCase.mm */; };
 		2398979C217EC9E30014BF33 /* WithTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2398975E217EC9E20014BF33 /* WithTests.mm */; };
 		239E8A912160A62F00BCB308 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 239E8A8F2160A62F00BCB308 /* main.m */; };
 		239E8AAE2160B70000BCB308 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
@@ -1286,6 +1286,8 @@
 		23254FCA219D28BA00DE2435 /* ThreadTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ThreadTests.mm; sourceTree = "<group>"; };
 		2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+FTS.h"; sourceTree = "<group>"; };
 		2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+FTS.mm"; sourceTree = "<group>"; };
+		23298E4F21E2F82600D18B16 /* WINQAssertion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WINQAssertion.h; sourceTree = "<group>"; };
+		23298E5221E2F92300D18B16 /* WINQAssertion.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WINQAssertion.mm; sourceTree = "<group>"; };
 		233A05892062698E00F1A212 /* WCTHandle+ChainCall.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTHandle+ChainCall.h"; sourceTree = "<group>"; };
 		233A058A2062698E00F1A212 /* WCTHandle+ChainCall.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTHandle+ChainCall.mm"; sourceTree = "<group>"; };
 		233A25D2219933D800054EC4 /* WCTBuiltin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTBuiltin.h; sourceTree = "<group>"; };
@@ -1682,8 +1684,6 @@
 		23989759217EC9E20014BF33 /* UpsertTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UpsertTests.mm; sourceTree = "<group>"; };
 		2398975A217EC9E20014BF33 /* WindowDefTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WindowDefTests.mm; sourceTree = "<group>"; };
 		2398975B217EC9E20014BF33 /* WindowFunctionInvocationTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WindowFunctionInvocationTests.mm; sourceTree = "<group>"; };
-		2398975C217EC9E20014BF33 /* WINQTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WINQTestCase.h; sourceTree = "<group>"; };
-		2398975D217EC9E20014BF33 /* WINQTestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WINQTestCase.mm; sourceTree = "<group>"; };
 		2398975E217EC9E20014BF33 /* WithTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WithTests.mm; sourceTree = "<group>"; };
 		239E8A702160A5B100BCB308 /* Host.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Host.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		239E8A8E2160A62F00BCB308 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -3147,8 +3147,8 @@
 				23989759217EC9E20014BF33 /* UpsertTests.mm */,
 				2398975A217EC9E20014BF33 /* WindowDefTests.mm */,
 				2398975B217EC9E20014BF33 /* WindowFunctionInvocationTests.mm */,
-				2398975C217EC9E20014BF33 /* WINQTestCase.h */,
-				2398975D217EC9E20014BF33 /* WINQTestCase.mm */,
+				23298E4F21E2F82600D18B16 /* WINQAssertion.h */,
+				23298E5221E2F92300D18B16 /* WINQAssertion.mm */,
 				2398975E217EC9E20014BF33 /* WithTests.mm */,
 				2396EB12218057100079066C /* WCTPropertyTests.mm */,
 				2396EB14218057170079066C /* WCTResultColumnTests.mm */,
@@ -5055,7 +5055,7 @@
 				23989793217EC9E30014BF33 /* StatementVacuumTests.mm in Sources */,
 				23989774217EC9E30014BF33 /* OrderTests.mm in Sources */,
 				23989779217EC9E30014BF33 /* ResultColumnTests.mm in Sources */,
-				2398979B217EC9E30014BF33 /* WINQTestCase.mm in Sources */,
+				23298E5321E2F92300D18B16 /* WINQAssertion.mm in Sources */,
 				2398977A217EC9E30014BF33 /* SchemaTests.mm in Sources */,
 				23989763217EC9E30014BF33 /* ColumnTypeTests.mm in Sources */,
 				2398977B217EC9E30014BF33 /* StatementAlterTableTests.mm in Sources */,

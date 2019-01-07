@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface FTS3FunctionTests : WINQTestCase
+@interface FTS3FunctionTests : BaseTestCase
 
 @end
 

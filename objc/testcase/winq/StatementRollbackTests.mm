@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface StatementRollbackTests : WINQTestCase
+@interface StatementRollbackTests : BaseTestCase
 
 @end
 
@@ -50,7 +50,7 @@
     auto testingSQL = WCDB::StatementRollback().rollback();
 
     auto testingTypes = { WCDB::SQL::Type::RollbackSTMT };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"ROLLBACK");
 }
 
@@ -59,7 +59,7 @@
     auto testingSQL = WCDB::StatementRollback().rollbackToSavepoint(savepoint);
 
     auto testingTypes = { WCDB::SQL::Type::RollbackSTMT };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"ROLLBACK TO testSavepoint");
 }
 

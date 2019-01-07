@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface WindowFunctionInvocationTests : WINQTestCase
+@interface WindowFunctionInvocationTests : BaseTestCase
 
 @end
 
@@ -65,7 +65,7 @@
     auto testingSQL = WCDB::WindowFunctionInvocation(windowFunction).invoke().argument(expression1).over(windowDef);
 
     auto testingTypes = { WCDB::SQL::Type::WindowFunctionInvocation, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testWindowFunction(1) OVER(PARTITION BY 1, 2)");
 }
 
@@ -74,7 +74,7 @@
     auto testingSQL = WCDB::WindowFunctionInvocation(windowFunction).invoke().arguments(expressions).over(windowDef);
 
     auto testingTypes = { WCDB::SQL::Type::WindowFunctionInvocation, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testWindowFunction(1, 2) OVER(PARTITION BY 1, 2)");
 }
 
@@ -83,7 +83,7 @@
     auto testingSQL = WCDB::WindowFunctionInvocation(windowFunction).invoke().argument(expression1).argument(expression2).over(windowDef);
 
     auto testingTypes = { WCDB::SQL::Type::WindowFunctionInvocation, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testWindowFunction(1, 2) OVER(PARTITION BY 1, 2)");
 }
 
@@ -92,7 +92,7 @@
     auto testingSQL = WCDB::WindowFunctionInvocation(windowFunction).invoke().over(windowDef);
 
     auto testingTypes = { WCDB::SQL::Type::WindowFunctionInvocation, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testWindowFunction() OVER(PARTITION BY 1, 2)");
 }
 
@@ -101,7 +101,7 @@
     auto testingSQL = WCDB::WindowFunctionInvocation(windowFunction).invokeAll().over(windowDef);
 
     auto testingTypes = { WCDB::SQL::Type::WindowFunctionInvocation, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testWindowFunction(*) OVER(PARTITION BY 1, 2)");
 }
 
@@ -110,7 +110,7 @@
     auto testingSQL = WCDB::WindowFunctionInvocation(windowFunction).invoke().filter(filter).over(windowDef);
 
     auto testingTypes = { WCDB::SQL::Type::WindowFunctionInvocation, WCDB::SQL::Type::Filter, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testWindowFunction() FILTER(WHERE 1) OVER(PARTITION BY 1, 2)");
 }
 
@@ -119,7 +119,7 @@
     auto testingSQL = WCDB::WindowFunctionInvocation(windowFunction).invoke().over(window);
 
     auto testingTypes = { WCDB::SQL::Type::WindowFunctionInvocation };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testWindowFunction() OVER testWindow");
 }
 

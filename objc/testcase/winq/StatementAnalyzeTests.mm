@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface StatementAnalyzeTests : WINQTestCase
+@interface StatementAnalyzeTests : BaseTestCase
 
 @end
 
@@ -53,7 +53,7 @@
 {
     auto testingSQL = WCDB::StatementAnalyze().analyze();
     auto testingTypes = { WCDB::SQL::Type::AnalyzeSTMT };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"ANALYZE");
 }
 
@@ -62,7 +62,7 @@
     auto testingSQL = WCDB::StatementAnalyze().analyze().schema(schema);
 
     auto testingTypes = { WCDB::SQL::Type::AnalyzeSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"ANALYZE testSchema");
 }
 
@@ -71,7 +71,7 @@
     auto testingSQL = WCDB::StatementAnalyze().analyze().schema(schema).table(table);
 
     auto testingTypes = { WCDB::SQL::Type::AnalyzeSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"ANALYZE testSchema.testTable");
 }
 
@@ -80,7 +80,7 @@
     auto testingSQL = WCDB::StatementAnalyze().analyze().table(table);
 
     auto testingTypes = { WCDB::SQL::Type::AnalyzeSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"ANALYZE main.testTable");
 }
 
@@ -89,7 +89,7 @@
     auto testingSQL = WCDB::StatementAnalyze().analyze().schema(schema).index(index);
 
     auto testingTypes = { WCDB::SQL::Type::AnalyzeSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"ANALYZE testSchema.testIndex");
 }
 

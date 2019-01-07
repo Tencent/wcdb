@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface StatementPragmaTests : WINQTestCase
+@interface StatementPragmaTests : BaseTestCase
 
 @end
 
@@ -54,7 +54,7 @@
     auto testingSQL = WCDB::StatementPragma().pragma(pragma).schema(schema);
 
     auto testingTypes = { WCDB::SQL::Type::PragmaSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Pragma };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"PRAGMA testSchema.testPragma");
 }
 
@@ -63,7 +63,7 @@
     auto testingSQL = WCDB::StatementPragma().pragma(pragma).schema(schema).to(value);
 
     auto testingTypes = { WCDB::SQL::Type::PragmaSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Pragma, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"PRAGMA testSchema.testPragma = 1");
 }
 
@@ -72,7 +72,7 @@
     auto testingSQL = WCDB::StatementPragma().pragma(pragma).to(value);
 
     auto testingTypes = { WCDB::SQL::Type::PragmaSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Pragma, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"PRAGMA main.testPragma = 1");
 }
 
@@ -81,7 +81,7 @@
     auto testingSQL = WCDB::StatementPragma().pragma(pragma).schema(schema).with(value);
 
     auto testingTypes = { WCDB::SQL::Type::PragmaSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Pragma, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"PRAGMA testSchema.testPragma(1)");
 }
 

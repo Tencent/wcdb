@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface ConflictTests : WINQTestCase
+@interface ConflictTests : BaseTestCase
 
 @end
 
@@ -39,11 +39,11 @@
 
 - (void)test_conflict
 {
-    WINQEnumAssertEqual(WCDB::Conflict::Abort, @"ON CONFLICT ABORT");
-    WINQEnumAssertEqual(WCDB::Conflict::Fail, @"ON CONFLICT FAIL");
-    WINQEnumAssertEqual(WCDB::Conflict::Rollback, @"ON CONFLICT ROLLBACK");
-    WINQEnumAssertEqual(WCDB::Conflict::Ignore, @"ON CONFLICT IGNORE");
-    WINQEnumAssertEqual(WCDB::Conflict::Replace, @"ON CONFLICT REPLACE");
+    TestCaseAssertWINQEnumEqual(WCDB::Conflict::Abort, @"ON CONFLICT ABORT");
+    TestCaseAssertWINQEnumEqual(WCDB::Conflict::Fail, @"ON CONFLICT FAIL");
+    TestCaseAssertWINQEnumEqual(WCDB::Conflict::Rollback, @"ON CONFLICT ROLLBACK");
+    TestCaseAssertWINQEnumEqual(WCDB::Conflict::Ignore, @"ON CONFLICT IGNORE");
+    TestCaseAssertWINQEnumEqual(WCDB::Conflict::Replace, @"ON CONFLICT REPLACE");
 }
 
 @end

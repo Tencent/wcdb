@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface BindParameterTests : WINQTestCase
+@interface BindParameterTests : BaseTestCase
 
 @end
 
@@ -49,7 +49,7 @@
 {
     auto testingSQL = WCDB::BindParameter(1);
     auto testingTypes = { WCDB::SQL::Type::BindParameter };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"?1");
 }
 
@@ -57,7 +57,7 @@
 {
     auto testingSQL = WCDB::BindParameter(name);
     auto testingTypes = { WCDB::SQL::Type::BindParameter };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"?testName");
 }
 
@@ -65,7 +65,7 @@
 {
     auto testingSQL = WCDB::BindParameter::colon(name);
     auto testingTypes = { WCDB::SQL::Type::BindParameter };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @":testName");
 }
 
@@ -73,7 +73,7 @@
 {
     auto testingSQL = WCDB::BindParameter::at(name);
     auto testingTypes = { WCDB::SQL::Type::BindParameter };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"@testName");
 }
 
@@ -81,7 +81,7 @@
 {
     auto testingSQL = WCDB::BindParameter::dollar(name);
     auto testingTypes = { WCDB::SQL::Type::BindParameter };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"$testName");
 }
 

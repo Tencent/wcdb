@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface StatementAlterTableTests : WINQTestCase
+@interface StatementAlterTableTests : BaseTestCase
 
 @end
 
@@ -59,7 +59,7 @@
 {
     auto testingSQL = WCDB::StatementAlterTable().alterTable(table).schema(schema).renameToTable(newTable);
     auto testingTypes = { WCDB::SQL::Type::AlterTableSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"ALTER TABLE testSchema.testTable RENAME TO testNewTable");
 }
 
@@ -69,7 +69,7 @@
                       .alterTable(table)
                       .renameToTable(newTable);
     auto testingTypes = { WCDB::SQL::Type::AlterTableSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL,
                            @"ALTER TABLE main.testTable RENAME TO testNewTable");
 }
@@ -82,7 +82,7 @@
                       .renameColumn(column)
                       .toColumn(newColumn);
     auto testingTypes = { WCDB::SQL::Type::AlterTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"ALTER TABLE testSchema.testTable RENAME COLUMN testColumn TO testNewColumn");
 }
 
@@ -93,7 +93,7 @@
                       .schema(schema)
                       .addColumn(columnDef);
     auto testingTypes = { WCDB::SQL::Type::AlterTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL,
                            @"ALTER TABLE testSchema.testTable ADD COLUMN testNewColumn");
 }

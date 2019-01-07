@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface ColumnTests : WINQTestCase
+@interface ColumnTests : BaseTestCase
 
 @end
 
@@ -48,7 +48,7 @@
     auto testingSQL = WCDB::Column(@"testColumn");
 
     auto testingTypes = { WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testColumn");
 }
 
@@ -61,16 +61,16 @@
 {
     WCDB::Column sql(@"testColumn");
     NSString* expected = @"testColumn";
-    WINQConvertibleTest(WCDB::Column, sql, expected);
-    WINQConvertibleTest(WCDB::Columns, sql, expected);
-    WINQConvertibleTest(WCDB::Expression, sql, expected);
-    WINQConvertibleTest(WCDB::Expressions, sql, expected);
-    WINQConvertibleTest(WCDB::IndexedColumn, sql, expected);
-    WINQConvertibleTest(WCDB::IndexedColumns, sql, expected);
-    WINQConvertibleTest(WCDB::ResultColumn, sql, expected);
-    WINQConvertibleTest(WCDB::ResultColumns, sql, expected);
-    WINQConvertibleTest(WCDB::OrderingTerm, sql, expected);
-    WINQConvertibleTest(WCDB::OrderingTerms, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::Column, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::Columns, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::Expression, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::Expressions, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::IndexedColumn, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::IndexedColumns, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::ResultColumn, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::ResultColumns, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::OrderingTerm, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::OrderingTerms, sql, expected);
 }
 
 - (void)test_columns_convertible
@@ -80,11 +80,11 @@
         WCDB::Column(@"testColumn2"),
     };
     NSString* expected = @"testColumn1, testColumn2";
-    WINQConvertibleTest(WCDB::Columns, sqls, expected);
-    WINQConvertibleTest(WCDB::Expressions, sqls, expected);
-    WINQConvertibleTest(WCDB::IndexedColumns, sqls, expected);
-    WINQConvertibleTest(WCDB::ResultColumns, sqls, expected);
-    WINQConvertibleTest(WCDB::OrderingTerms, sqls, expected);
+    TestCaseAssertWINQConvertible(WCDB::Columns, sqls, expected);
+    TestCaseAssertWINQConvertible(WCDB::Expressions, sqls, expected);
+    TestCaseAssertWINQConvertible(WCDB::IndexedColumns, sqls, expected);
+    TestCaseAssertWINQConvertible(WCDB::ResultColumns, sqls, expected);
+    TestCaseAssertWINQConvertible(WCDB::OrderingTerms, sqls, expected);
 }
 
 @end

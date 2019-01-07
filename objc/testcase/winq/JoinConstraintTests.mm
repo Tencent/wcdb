@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface JoinConstraintTests : WINQTestCase
+@interface JoinConstraintTests : BaseTestCase
 
 @end
 
@@ -59,7 +59,7 @@
     auto testingSQL = WCDB::JoinConstraint().on(expression);
 
     auto testingTypes = { WCDB::SQL::Type::JoinConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"ON 1");
 }
 
@@ -68,7 +68,7 @@
     auto testingSQL = WCDB::JoinConstraint().using_().column(column1);
 
     auto testingTypes = { WCDB::SQL::Type::JoinConstraint, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"USING(testColumn1)");
 }
 
@@ -77,7 +77,7 @@
     auto testingSQL = WCDB::JoinConstraint().using_().column(column1).column(column2);
 
     auto testingTypes = { WCDB::SQL::Type::JoinConstraint, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"USING(testColumn1, testColumn2)");
 }
 
@@ -86,7 +86,7 @@
     auto testingSQL = WCDB::JoinConstraint().using_().columns(columns);
 
     auto testingTypes = { WCDB::SQL::Type::JoinConstraint, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"USING(testColumn1, testColumn2)");
 }
 

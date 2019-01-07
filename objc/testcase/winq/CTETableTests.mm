@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface CTETableTests : WINQTestCase
+@interface CTETableTests : BaseTestCase
 
 @end
 
@@ -54,7 +54,7 @@
     auto testingSQL = WCDB::CTETable(table).column(column1);
 
     auto testingTypes = { WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testTable(testColumn1)");
 }
 
@@ -63,7 +63,7 @@
     auto testingSQL = WCDB::CTETable(table).column(column1).column(column2);
 
     auto testingTypes = { WCDB::SQL::Type::CTETableName, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testTable(testColumn1, testColumn2)");
 }
 
@@ -72,7 +72,7 @@
     auto testingSQL = WCDB::CTETable(table);
 
     auto testingTypes = { WCDB::SQL::Type::CTETableName };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testTable");
 }
 

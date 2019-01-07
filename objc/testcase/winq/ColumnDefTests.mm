@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface ColumnDefTests : WINQTestCase
+@interface ColumnDefTests : BaseTestCase
 
 @end
 
@@ -56,7 +56,7 @@
     auto testingSQL = WCDB::ColumnDef(column, columnType);
 
     auto testingTypes = { WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testColumn INTEGER");
 }
 
@@ -65,7 +65,7 @@
     auto testingSQL = WCDB::ColumnDef(column);
 
     auto testingTypes = { WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testColumn");
 }
 
@@ -74,7 +74,7 @@
     auto testingSQL = WCDB::ColumnDef(column, columnType).constraint(columnConstraint1);
 
     auto testingTypes = { WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column, WCDB::SQL::Type::ColumnConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testColumn INTEGER CHECK(1)");
 }
 
@@ -83,7 +83,7 @@
     auto testingSQL = WCDB::ColumnDef(column, columnType).constraint(columnConstraint1).constraint(columnConstraint2);
 
     auto testingTypes = { WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column, WCDB::SQL::Type::ColumnConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ColumnConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testColumn INTEGER CHECK(1) CHECK(2)");
 }
 

@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface StatementDropViewTests : WINQTestCase
+@interface StatementDropViewTests : BaseTestCase
 
 @end
 
@@ -52,7 +52,7 @@
     auto testingSQL = WCDB::StatementDropView().dropView(view).schema(schema).ifExists();
 
     auto testingTypes = { WCDB::SQL::Type::DropViewSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"DROP VIEW IF EXISTS testSchema.testView");
 }
 
@@ -61,7 +61,7 @@
     auto testingSQL = WCDB::StatementDropView().dropView(view).schema(schema);
 
     auto testingTypes = { WCDB::SQL::Type::DropViewSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"DROP VIEW testSchema.testView");
 }
 
@@ -70,7 +70,7 @@
     auto testingSQL = WCDB::StatementDropView().dropView(view).ifExists();
 
     auto testingTypes = { WCDB::SQL::Type::DropViewSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"DROP VIEW IF EXISTS main.testView");
 }
 

@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface StoppableIterationTests : WINQTestCase
+@interface StoppableIterationTests : BaseTestCase
 
 @end
 
@@ -40,7 +40,7 @@
 
     std::list<WCDB::Syntax::Identifier::Type> testingTypes = { WCDB::SQL::Type::InsertSTMT, WCDB::SQL::Type::Schema };
 
-    TestCaseAssertTrue(types == testingTypes, @"%@", [WINQTestCase hintForTypes:types expecting:testingTypes]);
+    TestCaseAssertTypesEqual(types, testingTypes);
 }
 
 @end

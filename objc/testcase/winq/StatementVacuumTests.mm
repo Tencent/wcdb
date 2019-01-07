@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface StatementVacuumTests : WINQTestCase
+@interface StatementVacuumTests : BaseTestCase
 
 @end
 
@@ -50,7 +50,7 @@
     auto testingSQL = WCDB::StatementVacuum().vacuum();
 
     auto testingTypes = { WCDB::SQL::Type::VacuumSTMT };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"VACUUM");
 }
 
@@ -59,7 +59,7 @@
     auto testingSQL = WCDB::StatementVacuum().vacuum(schema);
 
     auto testingTypes = { WCDB::SQL::Type::VacuumSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"VACUUM testSchema");
 }
 

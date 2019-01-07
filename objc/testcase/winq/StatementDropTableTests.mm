@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface StatementDropTableTests : WINQTestCase
+@interface StatementDropTableTests : BaseTestCase
 
 @end
 
@@ -52,7 +52,7 @@
     auto testingSQL = WCDB::StatementDropTable().dropTable(table).schema(schema).ifExists();
 
     auto testingTypes = { WCDB::SQL::Type::DropTableSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"DROP TABLE IF EXISTS testSchema.testTable");
 }
 
@@ -61,7 +61,7 @@
     auto testingSQL = WCDB::StatementDropTable().dropTable(table).schema(schema);
 
     auto testingTypes = { WCDB::SQL::Type::DropTableSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"DROP TABLE testSchema.testTable");
 }
 
@@ -70,7 +70,7 @@
     auto testingSQL = WCDB::StatementDropTable().dropTable(table).ifExists();
 
     auto testingTypes = { WCDB::SQL::Type::DropTableSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"DROP TABLE IF EXISTS main.testTable");
 }
 

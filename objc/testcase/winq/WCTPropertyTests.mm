@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface WCTPropertyTests : WINQTestCase
+@interface WCTPropertyTests : BaseTestCase
 
 @property int testProperty1;
 @property double testProperty2;
@@ -48,21 +48,21 @@
 {
     WCTProperty sql(*columnBinding1.get());
     NSString* expected = @"testProperty1";
-    WINQConvertibleTest(WCDB::Column, sql, expected);
-    WINQConvertibleTest(WCDB::Columns, sql, expected);
-    WINQConvertibleTest(WCDB::Expression, sql, expected);
-    WINQConvertibleTest(WCDB::Expressions, sql, expected);
-    WINQConvertibleTest(WCDB::IndexedColumn, sql, expected);
-    WINQConvertibleTest(WCDB::IndexedColumns, sql, expected);
-    WINQConvertibleTest(WCDB::ResultColumn, sql, expected);
-    WINQConvertibleTest(WCDB::ResultColumns, sql, expected);
-    WINQConvertibleTest(WCDB::OrderingTerm, sql, expected);
-    WINQConvertibleTest(WCDB::OrderingTerms, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::Column, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::Columns, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::Expression, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::Expressions, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::IndexedColumn, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::IndexedColumns, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::ResultColumn, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::ResultColumns, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::OrderingTerm, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::OrderingTerms, sql, expected);
 
-    WINQConvertibleTest(WCTProperty, sql, expected);
-    WINQConvertibleTest(WCTProperties, sql, expected);
-    WINQConvertibleTest(WCTResultColumn, sql, expected);
-    WINQConvertibleTest(WCTResultColumns, sql, expected);
+    TestCaseAssertWINQConvertible(WCTProperty, sql, expected);
+    TestCaseAssertWINQConvertible(WCTProperties, sql, expected);
+    TestCaseAssertWINQConvertible(WCTResultColumn, sql, expected);
+    TestCaseAssertWINQConvertible(WCTResultColumns, sql, expected);
 }
 
 - (void)test_properties_convertible
@@ -72,14 +72,14 @@
         WCTProperty(*columnBinding2.get()),
     };
     NSString* expected = @"testProperty1, testProperty2";
-    WINQConvertibleTest(WCDB::Columns, sqls, expected);
-    WINQConvertibleTest(WCDB::Expressions, sqls, expected);
-    WINQConvertibleTest(WCDB::IndexedColumns, sqls, expected);
-    WINQConvertibleTest(WCDB::ResultColumns, sqls, expected);
-    WINQConvertibleTest(WCDB::OrderingTerms, sqls, expected);
+    TestCaseAssertWINQConvertible(WCDB::Columns, sqls, expected);
+    TestCaseAssertWINQConvertible(WCDB::Expressions, sqls, expected);
+    TestCaseAssertWINQConvertible(WCDB::IndexedColumns, sqls, expected);
+    TestCaseAssertWINQConvertible(WCDB::ResultColumns, sqls, expected);
+    TestCaseAssertWINQConvertible(WCDB::OrderingTerms, sqls, expected);
 
-    WINQConvertibleTest(WCTProperties, sqls, expected);
-    WINQConvertibleTest(WCTResultColumns, sqls, expected);
+    TestCaseAssertWINQConvertible(WCTProperties, sqls, expected);
+    TestCaseAssertWINQConvertible(WCTResultColumns, sqls, expected);
 }
 
 - (void)test_redirect

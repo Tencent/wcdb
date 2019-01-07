@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface JoinTests : WINQTestCase
+@interface JoinTests : BaseTestCase
 
 @end
 
@@ -58,7 +58,7 @@
     auto testingSQL = WCDB::Join().table(tableOrSubquery).join(tableOrSubquery1);
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"main.testTable JOIN main.testTable1");
 }
 
@@ -67,7 +67,7 @@
     auto testingSQL = WCDB::Join().table(tableOrSubquery).with(tableOrSubquery1);
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"main.testTable, main.testTable1");
 }
 
@@ -76,7 +76,7 @@
     auto testingSQL = WCDB::Join().table(tableOrSubquery).leftJoin(tableOrSubquery1);
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"main.testTable LEFT JOIN main.testTable1");
 }
 
@@ -85,7 +85,7 @@
     auto testingSQL = WCDB::Join().table(tableOrSubquery).leftOuterJoin(tableOrSubquery1);
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"main.testTable LEFT OUTER JOIN main.testTable1");
 }
 
@@ -94,7 +94,7 @@
     auto testingSQL = WCDB::Join().table(tableOrSubquery).innerJoin(tableOrSubquery1);
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"main.testTable INNER JOIN main.testTable1");
 }
 
@@ -103,7 +103,7 @@
     auto testingSQL = WCDB::Join().table(tableOrSubquery).crossJoin(tableOrSubquery1);
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"main.testTable CROSS JOIN main.testTable1");
 }
 
@@ -112,7 +112,7 @@
     auto testingSQL = WCDB::Join().table(tableOrSubquery).naturalJoin(tableOrSubquery1);
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"main.testTable NATURAL JOIN main.testTable1");
 }
 
@@ -121,7 +121,7 @@
     auto testingSQL = WCDB::Join().table(tableOrSubquery).naturalLeftJoin(tableOrSubquery1);
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"main.testTable NATURAL LEFT JOIN main.testTable1");
 }
 
@@ -130,7 +130,7 @@
     auto testingSQL = WCDB::Join().table(tableOrSubquery).naturalLeftOuterJoin(tableOrSubquery1);
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"main.testTable NATURAL LEFT OUTER JOIN main.testTable1");
 }
 
@@ -139,7 +139,7 @@
     auto testingSQL = WCDB::Join().table(tableOrSubquery).naturalInnerJoin(tableOrSubquery1);
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"main.testTable NATURAL INNER JOIN main.testTable1");
 }
 
@@ -148,7 +148,7 @@
     auto testingSQL = WCDB::Join().table(tableOrSubquery).naturalCrossJoin(tableOrSubquery1);
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"main.testTable NATURAL CROSS JOIN main.testTable1");
 }
 
@@ -157,7 +157,7 @@
     auto testingSQL = WCDB::Join().table(tableOrSubquery).join(tableOrSubquery1).constraint(joinConstraint1);
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::JoinConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"main.testTable JOIN main.testTable1 ON 1");
 }
 
@@ -166,7 +166,7 @@
     auto testingSQL = WCDB::Join().table(tableOrSubquery).join(tableOrSubquery1).constraint(joinConstraint1).leftOuterJoin(tableOrSubquery2).constraint(joinConstraint2);
 
     auto testingTypes = { WCDB::SQL::Type::JoinClause, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::JoinConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::TableOrSubquery, WCDB::SQL::Type::Schema, WCDB::SQL::Type::JoinConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"main.testTable JOIN main.testTable1 ON 1 LEFT OUTER JOIN main.testTable2 ON 2");
 }
 
@@ -174,8 +174,8 @@
 {
     WCDB::Join sql(WCDB::Join().table(@"testTable"));
     NSString* expected = @"(main.testTable)";
-    WINQConvertibleTest(WCDB::TableOrSubquery, sql, expected);
-    WINQConvertibleTest(WCDB::TablesOrSubqueries, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::TableOrSubquery, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::TablesOrSubqueries, sql, expected);
 }
 
 @end

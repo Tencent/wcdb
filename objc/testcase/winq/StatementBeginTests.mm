@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface StatementBeginTests : WINQTestCase
+@interface StatementBeginTests : BaseTestCase
 
 @end
 
@@ -48,7 +48,7 @@
     auto testingSQL = WCDB::StatementBegin().beginDeferred();
 
     auto testingTypes = { WCDB::SQL::Type::BeginSTMT };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"BEGIN DEFERRED");
 }
 
@@ -57,7 +57,7 @@
     auto testingSQL = WCDB::StatementBegin().beginImmediate();
 
     auto testingTypes = { WCDB::SQL::Type::BeginSTMT };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"BEGIN IMMEDIATE");
 }
 
@@ -66,7 +66,7 @@
     auto testingSQL = WCDB::StatementBegin().beginExclusive();
 
     auto testingTypes = { WCDB::SQL::Type::BeginSTMT };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"BEGIN EXCLUSIVE");
 }
 

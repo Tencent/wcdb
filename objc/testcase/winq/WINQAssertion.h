@@ -18,7 +18,8 @@
  * limitations under the License.
  */
 
-#import "TestCase.h"
+#import <Foundation/Foundation.h>
+#import <TestCase/TestCase.h>
 
 namespace WCDB {
 
@@ -137,28 +138,26 @@ constexpr const char *Enum::description(const Syntax::Identifier::Type &type)
     }
 }
 
+NSString *getDescriptionOfTypes(const std::list<WCDB::Syntax::Identifier::Type> &);
+std::list<WCDB::Syntax::Identifier::Type> getTypesOfSQL(WCDB::SQL &sql);
+
 }
 
-@interface WINQTestCase : TestCase
-
-+ (std::list<WCDB::Syntax::Identifier::Type>)getTypes:(WCDB::SQL &)sql;
-
-+ (NSString *)hintForTypes:(const std::list<WCDB::Syntax::Identifier::Type> &)types expecting:(const std::list<WCDB::Syntax::Identifier::Type> &)expected;
-
-@end
-
-#define WINQEnumAssertEqual(_enum, _expected)                                                                      \
-    {                                                                                                              \
-        NSString *__sql = @(WCDB::Enum::description(_enum));                                                       \
-        NSString *__expected = (_expected);                                                                        \
-        TestCaseAssertTrue([__expected isEqualToString:__sql], @"%@", [TestCase hint:__sql expecting:__expected]); \
+#define TestCaseAssertWINQEnumEqual(_enum, _expected)        \
+    {                                                        \
+        NSString *__sql = @(WCDB::Enum::description(_enum)); \
+        NSString *__expected = (_expected);                  \
+        TestCaseAssertStringEqual(__sql, __expected);        \
     }
 
-#define IterateAssertEqual(_sql, _expected)                                                                         \
-    {                                                                                                               \
-        std::list<WCDB::Syntax::Identifier::Type> __types = ([WINQTestCase getTypes:_sql]);                         \
-        std::list<WCDB::Syntax::Identifier::Type> __expected = (_expected);                                         \
-        TestCaseAssertTrue(__types == __expected, @"%@", [WINQTestCase hintForTypes:__types expecting:__expected]); \
+#define TestCaseAssertIterateEqual(_sql, _expected)                                    \
+    {                                                                                  \
+        std::list<WCDB::Syntax::Identifier::Type> __types = WCDB::getTypesOfSQL(_sql); \
+        std::list<WCDB::Syntax::Identifier::Type> __expected = (_expected);            \
+        TestCaseAssertTypesEqual(__types, __expected);                                 \
     }
 
-#define WINQConvertibleTest(_Type, _parameter, _sql) TestCaseAssertSQLEqual([](const _Type &_value) -> _Type { return _value; }(_parameter), _sql)
+#define TestCaseAssertWINQConvertible(_Type, _parameter, _sql) TestCaseAssertSQLEqual([](const _Type &_value) -> _Type { return _value; }(_parameter), _sql)
+
+#define TestCaseAssertTypesEqual(_left, _right) \
+    TestCaseAssertStringEqual(WCDB::getDescriptionOfTypes(_left), WCDB::getDescriptionOfTypes(_right))

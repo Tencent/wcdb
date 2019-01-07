@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface StatementReindexTests : WINQTestCase
+@interface StatementReindexTests : BaseTestCase
 
 @end
 
@@ -56,7 +56,7 @@
     auto testingSQL = WCDB::StatementReindex().reindex();
 
     auto testingTypes = { WCDB::SQL::Type::ReindexSTMT };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REINDEX");
 }
 
@@ -65,7 +65,7 @@
     auto testingSQL = WCDB::StatementReindex().reindex().collation(collation);
 
     auto testingTypes = { WCDB::SQL::Type::ReindexSTMT };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REINDEX testCollation");
 }
 
@@ -74,7 +74,7 @@
     auto testingSQL = WCDB::StatementReindex().reindex().schema(schema).table(table);
 
     auto testingTypes = { WCDB::SQL::Type::ReindexSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REINDEX testSchema.testTable");
 }
 
@@ -83,7 +83,7 @@
     auto testingSQL = WCDB::StatementReindex().reindex().table(table);
 
     auto testingTypes = { WCDB::SQL::Type::ReindexSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REINDEX main.testTable");
 }
 
@@ -92,7 +92,7 @@
     auto testingSQL = WCDB::StatementReindex().reindex().schema(schema).index(index);
 
     auto testingTypes = { WCDB::SQL::Type::ReindexSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REINDEX testSchema.testIndex");
 }
 
@@ -101,7 +101,7 @@
     auto testingSQL = WCDB::StatementReindex().reindex().index(index);
 
     auto testingTypes = { WCDB::SQL::Type::ReindexSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REINDEX main.testIndex");
 }
 

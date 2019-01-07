@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface FilterTests : WINQTestCase
+@interface FilterTests : BaseTestCase
 
 @end
 
@@ -50,7 +50,7 @@
     auto testingSQL = WCDB::Filter().where(condition);
 
     auto testingTypes = { WCDB::SQL::Type::Filter, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"FILTER(WHERE 1)");
 }
 

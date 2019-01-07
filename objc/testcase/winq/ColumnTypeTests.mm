@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface ColumnTypeTests : WINQTestCase
+@interface ColumnTypeTests : BaseTestCase
 
 @end
 
@@ -39,12 +39,12 @@
 
 - (void)test_type
 {
-    WINQEnumAssertEqual(WCDB::ColumnType::Integer32, @"INTEGER");
-    WINQEnumAssertEqual(WCDB::ColumnType::Integer64, @"INTEGER");
-    WINQEnumAssertEqual(WCDB::ColumnType::Text, @"TEXT");
-    WINQEnumAssertEqual(WCDB::ColumnType::BLOB, @"BLOB");
-    WINQEnumAssertEqual(WCDB::ColumnType::Float, @"REAL");
-    WINQEnumAssertEqual(WCDB::ColumnType::Null, @"NULL");
+    TestCaseAssertWINQEnumEqual(WCDB::ColumnType::Integer32, @"INTEGER");
+    TestCaseAssertWINQEnumEqual(WCDB::ColumnType::Integer64, @"INTEGER");
+    TestCaseAssertWINQEnumEqual(WCDB::ColumnType::Text, @"TEXT");
+    TestCaseAssertWINQEnumEqual(WCDB::ColumnType::BLOB, @"BLOB");
+    TestCaseAssertWINQEnumEqual(WCDB::ColumnType::Float, @"REAL");
+    TestCaseAssertWINQEnumEqual(WCDB::ColumnType::Null, @"NULL");
 }
 
 @end

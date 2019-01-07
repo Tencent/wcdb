@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface FunctionInvocationTests : WINQTestCase
+@interface FunctionInvocationTests : BaseTestCase
 
 @end
 
@@ -59,7 +59,7 @@
     auto testingSQL = WCDB::FunctionInvocation(function).distinct().invoke().arguments(expressions);
 
     auto testingTypes = { WCDB::SQL::Type::FunctionInvocation, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testFunction(DISTINCT 1, 2)");
 }
 
@@ -68,7 +68,7 @@
     auto testingSQL = WCDB::FunctionInvocation(function).invoke().arguments(expressions);
 
     auto testingTypes = { WCDB::SQL::Type::FunctionInvocation, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testFunction(1, 2)");
 }
 
@@ -77,7 +77,7 @@
     auto testingSQL = WCDB::FunctionInvocation(function).invoke().argument(expression1);
 
     auto testingTypes = { WCDB::SQL::Type::FunctionInvocation, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testFunction(1)");
 }
 
@@ -86,7 +86,7 @@
     auto testingSQL = WCDB::FunctionInvocation(function).invoke().argument(expression1).argument(expression2);
 
     auto testingTypes = { WCDB::SQL::Type::FunctionInvocation, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testFunction(1, 2)");
 }
 
@@ -95,7 +95,7 @@
     auto testingSQL = WCDB::FunctionInvocation(function).invoke();
 
     auto testingTypes = { WCDB::SQL::Type::FunctionInvocation };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testFunction()");
 }
 
@@ -104,7 +104,7 @@
     auto testingSQL = WCDB::FunctionInvocation(function).invokeAll();
 
     auto testingTypes = { WCDB::SQL::Type::FunctionInvocation };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testFunction(*)");
 }
 

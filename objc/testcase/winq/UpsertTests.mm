@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface UpsertTests : WINQTestCase
+@interface UpsertTests : BaseTestCase
 
 @end
 
@@ -67,7 +67,7 @@
     auto testingSQL = WCDB::Upsert().conflict().doNothing();
 
     auto testingTypes = { WCDB::SQL::Type::UpsertClause };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"ON CONFLICT DO NOTHING");
 }
 
@@ -76,7 +76,7 @@
     auto testingSQL = WCDB::Upsert().conflict().indexed(indexedColumn1).doNothing();
 
     auto testingTypes = { WCDB::SQL::Type::UpsertClause, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"ON CONFLICT(testColumn1) DO NOTHING");
 }
 
@@ -85,7 +85,7 @@
     auto testingSQL = WCDB::Upsert().conflict().indexed(indexedColumn1).indexed(indexedColumn2).doNothing();
 
     auto testingTypes = { WCDB::SQL::Type::UpsertClause, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"ON CONFLICT(testColumn1, testColumn2) DO NOTHING");
 }
 
@@ -94,7 +94,7 @@
     auto testingSQL = WCDB::Upsert().conflict().indexed(indexedColumn1).where(condition).doNothing();
 
     auto testingTypes = { WCDB::SQL::Type::UpsertClause, WCDB::SQL::Type::IndexedColumn, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"ON CONFLICT(testColumn1) WHERE 1 DO NOTHING");
 }
 
@@ -103,7 +103,7 @@
     auto testingSQL = WCDB::Upsert().conflict().doUpdate().set(column).to(value1);
 
     auto testingTypes = { WCDB::SQL::Type::UpsertClause, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"ON CONFLICT DO UPDATE SET testColumn1 = 2");
 }
 
@@ -112,7 +112,7 @@
     auto testingSQL = WCDB::Upsert().conflict().doUpdate().set(column).to(value1).set(columns).to(value2);
 
     auto testingTypes = { WCDB::SQL::Type::UpsertClause, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"ON CONFLICT DO UPDATE SET testColumn1 = 2, (testColumn2, testColumn3) = 3");
 }
 
@@ -121,7 +121,7 @@
     auto testingSQL = WCDB::Upsert().conflict().doUpdate().set(column).to(value1).where(updateCondition);
 
     auto testingTypes = { WCDB::SQL::Type::UpsertClause, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"ON CONFLICT DO UPDATE SET testColumn1 = 2 WHERE 4");
 }
 

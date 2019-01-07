@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface SchemaTests : WINQTestCase
+@interface SchemaTests : BaseTestCase
 
 @end
 
@@ -48,7 +48,7 @@
     auto testingSQL = WCDB::Schema(@"testSchema");
 
     auto testingTypes = { WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"testSchema");
 }
 

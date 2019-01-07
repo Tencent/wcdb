@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface WindowDefTests : WINQTestCase
+@interface WindowDefTests : BaseTestCase
 
 @end
 
@@ -60,7 +60,7 @@
     auto testingSQL = WCDB::WindowDef().partition(expressions);
 
     auto testingTypes = { WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"PARTITION BY 1, 2");
 }
 
@@ -69,7 +69,7 @@
     auto testingSQL = WCDB::WindowDef().order(orderingTerms);
 
     auto testingTypes = { WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"ORDER BY 1, 2");
 }
 
@@ -78,7 +78,7 @@
     auto testingSQL = WCDB::WindowDef().framespec(frameSpec);
 
     auto testingTypes = { WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::FrameSpec };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"RANGE UNBOUNDED PRECEDING");
 }
 
@@ -87,7 +87,7 @@
     auto testingSQL = WCDB::WindowDef().partition(expressions).order(orderingTerms).framespec(frameSpec);
 
     auto testingTypes = { WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::FrameSpec };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"PARTITION BY 1, 2 ORDER BY 1, 2 RANGE UNBOUNDED PRECEDING");
 }
 

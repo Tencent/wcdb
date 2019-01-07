@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface ForeignKeyTests : WINQTestCase
+@interface ForeignKeyTests : BaseTestCase
 
 @end
 
@@ -56,7 +56,7 @@
     auto testingSQL = WCDB::ForeignKey().references(name).onDeleteSetNull().notDeferrableInitiallyDeferred();
 
     auto testingTypes = { WCDB::SQL::Type::ForeignKeyClause };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REFERENCES testForeignTable ON DELETE SET NULL NOT DEFERRABLE INITIALLY DEFERRED");
 }
 
@@ -65,7 +65,7 @@
     auto testingSQL = WCDB::ForeignKey().references(name).column(column1).onDeleteSetNull().notDeferrableInitiallyDeferred();
 
     auto testingTypes = { WCDB::SQL::Type::ForeignKeyClause, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REFERENCES testForeignTable(testColumn1) ON DELETE SET NULL NOT DEFERRABLE INITIALLY DEFERRED");
 }
 
@@ -74,7 +74,7 @@
     auto testingSQL = WCDB::ForeignKey().references(name).column(column1).column(column2).onDeleteSetNull().notDeferrableInitiallyDeferred();
 
     auto testingTypes = { WCDB::SQL::Type::ForeignKeyClause, WCDB::SQL::Type::Column, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REFERENCES testForeignTable(testColumn1, testColumn2) ON DELETE SET NULL NOT DEFERRABLE INITIALLY DEFERRED");
 }
 
@@ -83,7 +83,7 @@
     auto testingSQL = WCDB::ForeignKey().references(name).onDeleteSetDefault().notDeferrableInitiallyDeferred();
 
     auto testingTypes = { WCDB::SQL::Type::ForeignKeyClause };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REFERENCES testForeignTable ON DELETE SET DEFAULT NOT DEFERRABLE INITIALLY DEFERRED");
 }
 
@@ -92,7 +92,7 @@
     auto testingSQL = WCDB::ForeignKey().references(name).onDeleteCascade().notDeferrableInitiallyDeferred();
 
     auto testingTypes = { WCDB::SQL::Type::ForeignKeyClause };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REFERENCES testForeignTable ON DELETE CASCADE NOT DEFERRABLE INITIALLY DEFERRED");
 }
 
@@ -101,7 +101,7 @@
     auto testingSQL = WCDB::ForeignKey().references(name).onDeleteRestrict().notDeferrableInitiallyDeferred();
 
     auto testingTypes = { WCDB::SQL::Type::ForeignKeyClause };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REFERENCES testForeignTable ON DELETE RESTRICT NOT DEFERRABLE INITIALLY DEFERRED");
 }
 
@@ -110,7 +110,7 @@
     auto testingSQL = WCDB::ForeignKey().references(name).onDeleteNoAction().notDeferrableInitiallyDeferred();
 
     auto testingTypes = { WCDB::SQL::Type::ForeignKeyClause };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REFERENCES testForeignTable ON DELETE NO ACTION NOT DEFERRABLE INITIALLY DEFERRED");
 }
 
@@ -119,7 +119,7 @@
     auto testingSQL = WCDB::ForeignKey().references(name).onUpdateSetNull().notDeferrableInitiallyDeferred();
 
     auto testingTypes = { WCDB::SQL::Type::ForeignKeyClause };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REFERENCES testForeignTable ON UPDATE SET NULL NOT DEFERRABLE INITIALLY DEFERRED");
 }
 
@@ -128,7 +128,7 @@
     auto testingSQL = WCDB::ForeignKey().references(name).onUpdateSetDefault().notDeferrableInitiallyDeferred();
 
     auto testingTypes = { WCDB::SQL::Type::ForeignKeyClause };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REFERENCES testForeignTable ON UPDATE SET DEFAULT NOT DEFERRABLE INITIALLY DEFERRED");
 }
 
@@ -137,7 +137,7 @@
     auto testingSQL = WCDB::ForeignKey().references(name).onUpdateCascade().notDeferrableInitiallyDeferred();
 
     auto testingTypes = { WCDB::SQL::Type::ForeignKeyClause };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REFERENCES testForeignTable ON UPDATE CASCADE NOT DEFERRABLE INITIALLY DEFERRED");
 }
 
@@ -146,7 +146,7 @@
     auto testingSQL = WCDB::ForeignKey().references(name).onUpdateRestrict().notDeferrableInitiallyDeferred();
 
     auto testingTypes = { WCDB::SQL::Type::ForeignKeyClause };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REFERENCES testForeignTable ON UPDATE RESTRICT NOT DEFERRABLE INITIALLY DEFERRED");
 }
 
@@ -155,7 +155,7 @@
     auto testingSQL = WCDB::ForeignKey().references(name).onUpdateNoAction().notDeferrableInitiallyDeferred();
 
     auto testingTypes = { WCDB::SQL::Type::ForeignKeyClause };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REFERENCES testForeignTable ON UPDATE NO ACTION NOT DEFERRABLE INITIALLY DEFERRED");
 }
 
@@ -164,7 +164,7 @@
     auto testingSQL = WCDB::ForeignKey().references(name).match(match).notDeferrableInitiallyDeferred();
 
     auto testingTypes = { WCDB::SQL::Type::ForeignKeyClause };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REFERENCES testForeignTable MATCH testMatch NOT DEFERRABLE INITIALLY DEFERRED");
 }
 
@@ -173,7 +173,7 @@
     auto testingSQL = WCDB::ForeignKey().references(name).notDeferrableInitiallyDeferred();
 
     auto testingTypes = { WCDB::SQL::Type::ForeignKeyClause };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REFERENCES testForeignTable NOT DEFERRABLE INITIALLY DEFERRED");
 }
 
@@ -182,7 +182,7 @@
     auto testingSQL = WCDB::ForeignKey().references(name).onDeleteSetNull().onUpdateSetDefault().notDeferrableInitiallyDeferred();
 
     auto testingTypes = { WCDB::SQL::Type::ForeignKeyClause };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REFERENCES testForeignTable ON DELETE SET NULL ON UPDATE SET DEFAULT NOT DEFERRABLE INITIALLY DEFERRED");
 }
 
@@ -191,7 +191,7 @@
     auto testingSQL = WCDB::ForeignKey().references(name).onDeleteSetNull().notDeferrableInitiallyImmediate();
 
     auto testingTypes = { WCDB::SQL::Type::ForeignKeyClause };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REFERENCES testForeignTable ON DELETE SET NULL NOT DEFERRABLE INITIALLY IMMEDIATE");
 }
 
@@ -200,7 +200,7 @@
     auto testingSQL = WCDB::ForeignKey().references(name).onDeleteSetNull().notDeferrable();
 
     auto testingTypes = { WCDB::SQL::Type::ForeignKeyClause };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REFERENCES testForeignTable ON DELETE SET NULL NOT DEFERRABLE");
 }
 
@@ -209,7 +209,7 @@
     auto testingSQL = WCDB::ForeignKey().references(name).onDeleteSetNull().deferrableInitiallyDeferred();
 
     auto testingTypes = { WCDB::SQL::Type::ForeignKeyClause };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REFERENCES testForeignTable ON DELETE SET NULL DEFERRABLE INITIALLY DEFERRED");
 }
 
@@ -218,7 +218,7 @@
     auto testingSQL = WCDB::ForeignKey().references(name).onDeleteSetNull().deferrableInitiallyImmediate();
 
     auto testingTypes = { WCDB::SQL::Type::ForeignKeyClause };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REFERENCES testForeignTable ON DELETE SET NULL DEFERRABLE INITIALLY IMMEDIATE");
 }
 
@@ -227,7 +227,7 @@
     auto testingSQL = WCDB::ForeignKey().references(name).onDeleteSetNull().deferrable();
 
     auto testingTypes = { WCDB::SQL::Type::ForeignKeyClause };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"REFERENCES testForeignTable ON DELETE SET NULL DEFERRABLE");
 }
 

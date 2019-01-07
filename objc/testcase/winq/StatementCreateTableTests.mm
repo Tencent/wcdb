@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface StatementCreateTableTests : WINQTestCase
+@interface StatementCreateTableTests : BaseTestCase
 
 @end
 
@@ -62,7 +62,7 @@
     auto testingSQL = WCDB::StatementCreateTable().createTable(table).schema(schema).define(columnDef1);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER)");
 }
 
@@ -71,7 +71,7 @@
     auto testingSQL = WCDB::StatementCreateTable().createTable(table).schema(schema).define(columnDef1).define(columnDef2);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER, testColumn2 TEXT)");
 }
 
@@ -80,7 +80,7 @@
     auto testingSQL = WCDB::StatementCreateTable().createTable(table).temp().define(columnDef1);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CREATE TEMP TABLE testTable(testColumn1 INTEGER)");
 }
 
@@ -89,7 +89,7 @@
     auto testingSQL = WCDB::StatementCreateTable().createTable(table).schema(schema).ifNotExists().define(columnDef1);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CREATE TABLE IF NOT EXISTS testSchema.testTable(testColumn1 INTEGER)");
 }
 
@@ -98,7 +98,7 @@
     auto testingSQL = WCDB::StatementCreateTable().createTable(table).define(columnDef1);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CREATE TABLE main.testTable(testColumn1 INTEGER)");
 }
 
@@ -107,7 +107,7 @@
     auto testingSQL = WCDB::StatementCreateTable().createTable(table).schema(schema).define(columnDef1).constraint(tableConstraint1);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column, WCDB::SQL::Type::TableConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER, CHECK(1))");
 }
 
@@ -116,7 +116,7 @@
     auto testingSQL = WCDB::StatementCreateTable().createTable(table).schema(schema).define(columnDef1).constraint(tableConstraint1).constraint(tableConstraint2);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column, WCDB::SQL::Type::TableConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::TableConstraint, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER, CHECK(1), CHECK(2))");
 }
 
@@ -125,7 +125,7 @@
     auto testingSQL = WCDB::StatementCreateTable().createTable(table).schema(schema).define(columnDef1).withoutRowID();
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::ColumnDef, WCDB::SQL::Type::Column };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CREATE TABLE testSchema.testTable(testColumn1 INTEGER) WITHOUT ROWID");
 }
 
@@ -134,7 +134,7 @@
     auto testingSQL = WCDB::StatementCreateTable().createTable(table).schema(schema).as(select);
 
     auto testingTypes = { WCDB::SQL::Type::CreateTableSTMT, WCDB::SQL::Type::Schema, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CREATE TABLE testSchema.testTable AS SELECT 1");
 }
 

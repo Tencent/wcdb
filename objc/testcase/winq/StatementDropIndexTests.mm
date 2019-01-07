@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "WINQTestCase.h"
+#import "WINQAssertion.h"
 
-@interface StatementDropIndexTests : WINQTestCase
+@interface StatementDropIndexTests : BaseTestCase
 
 @end
 
@@ -52,7 +52,7 @@
     auto testingSQL = WCDB::StatementDropIndex().dropIndex(index).schema(schema).ifExists();
 
     auto testingTypes = { WCDB::SQL::Type::DropIndexSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"DROP INDEX IF EXISTS testSchema.testIndex");
 }
 
@@ -61,7 +61,7 @@
     auto testingSQL = WCDB::StatementDropIndex().dropIndex(index).schema(schema);
 
     auto testingTypes = { WCDB::SQL::Type::DropIndexSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"DROP INDEX testSchema.testIndex");
 }
 
@@ -70,7 +70,7 @@
     auto testingSQL = WCDB::StatementDropIndex().dropIndex(index).ifExists();
 
     auto testingTypes = { WCDB::SQL::Type::DropIndexSTMT, WCDB::SQL::Type::Schema };
-    IterateAssertEqual(testingSQL, testingTypes);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"DROP INDEX IF EXISTS main.testIndex");
 }
 
