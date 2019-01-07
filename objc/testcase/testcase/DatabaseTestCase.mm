@@ -44,7 +44,7 @@
 
     WCTTag tag;
     do {
-        tag = 1;
+        tag = self.random.int32;
     } while (tag == WCTInvalidTag);
     self.database.tag = tag;
 
