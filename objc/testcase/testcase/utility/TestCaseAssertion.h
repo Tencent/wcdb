@@ -40,7 +40,7 @@
     {                                                         \
         NSString* __sql = @((_sql).getDescription().c_str()); \
         NSString* __expected = (_expected);                   \
-        TestCaseAssertStringEqual(__sql, _expected);          \
+        TestCaseAssertStringEqual(__sql, __expected);         \
     }
 
 #define TestCaseAssertStringEqual(left, right)                                                    \
