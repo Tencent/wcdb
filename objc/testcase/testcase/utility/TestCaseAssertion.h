@@ -36,6 +36,27 @@
 #define TestCaseFailure()
 #endif
 
+#define TestCaseAssertTrue(cond, ...)     \
+    {                                     \
+        BOOL test = (cond);               \
+        XCTAssertTrue(test, __VA_ARGS__); \
+        if (!(test)) {                    \
+            TestCaseFailure();            \
+        }                                 \
+    }
+
+#define TestCaseAssertFalse(cond) \
+    TestCaseAssertTrue(!(cond))
+
+#define TestCaseAssertEqual(left, right) \
+    TestCaseAssertTrue((left) == (right))
+
+#define TestCaseAssertNotEqual(left, right) \
+    TestCaseAssertTrue((left) != (right))
+
+#define TestCaseAssertObjectEqual(left, right) \
+    TestCaseAssertTrue([(left) isEqual:(right)])
+
 #define TestCaseAssertSQLEqual(_sql, _expected)               \
     {                                                         \
         NSString* __sql = @((_sql).getDescription().c_str()); \
@@ -49,27 +70,3 @@
         NSString* _right = (right);                                                               \
         TestCaseAssertTrue([_left isEqualToString:_right], @"%@", __TestCaseHint(_left, _right)); \
     }
-
-#define TestCaseAssertTrue(cond, ...)     \
-    {                                     \
-        BOOL test = (cond);               \
-        XCTAssertTrue(test, __VA_ARGS__); \
-        if (!(test)) {                    \
-            TestCaseFailure();            \
-        }                                 \
-    }
-
-#define TestCaseAssertFalse(cond, ...)     \
-    {                                      \
-        BOOL test = (cond);                \
-        XCTAssertFalse(test, __VA_ARGS__); \
-        if (test) {                        \
-            TestCaseFailure();             \
-        }                                  \
-    }
-
-#define TestCaseAssertEqual(left, right, ...) \
-    TestCaseAssertTrue((left) == (right))
-
-#define TestCaseAssertNotEqual(left, right, ...) \
-    TestCaseAssertTrue((left) != (right))
