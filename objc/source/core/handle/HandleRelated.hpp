@@ -34,7 +34,7 @@ public:
 
 protected:
     void *getRawHandle();
-    void setError(int rc, const String &sql = "");
+    bool exitAPI(int rc, const String &sql = "");
     AbstractHandle *m_handle;
 };
 

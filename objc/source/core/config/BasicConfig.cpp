@@ -43,7 +43,7 @@ bool BasicConfig::invoke(Handle* handle)
             return true;
         }
 
-        handle->enableCheckpointWhenClosing(false);
+        handle->disableCheckpointWhenClosing(true);
 
         //Get Locking Mode
         if (!handle->prepare(m_getLockingMode) || !handle->step()) {

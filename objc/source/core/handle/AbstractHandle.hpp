@@ -96,7 +96,7 @@ public:
 
     void interrupt(); // It's thread safe.
 
-    void enableCheckpointWhenClosing(bool enable);
+    void disableCheckpointWhenClosing(bool disable);
 
 protected:
     bool executeSQL(const String &sql);
@@ -155,7 +155,7 @@ public:
                                       const CommittedNotification &onCommitted);
 
     typedef HandleNotification::CheckpointedNotification CheckpointedNotification;
-    bool setNotificationWhenCheckpointed(const String &name,
+    void setNotificationWhenCheckpointed(const String &name,
                                          const CheckpointedNotification &checkpointed);
     void unsetNotificationWhenCommitted(const String &name);
 
@@ -163,16 +163,16 @@ private:
     HandleNotification m_notification;
 
 #pragma mark - Error
-protected:
-    // if code >= 0, then the level of error with the specified code will be marked as ignored
-    // if code < 0, then the level of all errors will be marked as ignored
-    // when the error is marked as ignored, it will not be set to m_error and error() will return true
-    bool error(int rc, const String &sql = "");
+public:
     void markErrorAsIgnorable(int codeToBeIgnored);
     void markErrorAsUnignorable();
 
+protected:
+    // if code >= 0, then the level of error with the specified code will be marked as ignored
+    // if code < 0, then the level of all errors will be marked as ignored
+    bool exitAPI(int rc, const String &sql = "");
+
 private:
-    void setupAndNotifyError(Error &error, int rc, const String &sql);
     int m_codeToBeIgnored;
 };
 

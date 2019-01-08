@@ -116,14 +116,11 @@ String AbstractHandle::getJournalSubfix()
 #pragma mark - Basic
 bool AbstractHandle::open()
 {
-    if (isOpened()) {
-        return true;
+    bool result = true;
+    if (!isOpened()) {
+        result = exitAPI(sqlite3_open(m_path.c_str(), (sqlite3 **) &m_handle));
     }
-    int rc = sqlite3_open(m_path.c_str(), (sqlite3 **) &m_handle);
-    if (rc != SQLITE_OK) {
-        return error(rc);
-    }
-    return true;
+    return result;
 }
 
 bool AbstractHandle::isOpened() const
@@ -140,7 +137,7 @@ void AbstractHandle::close()
                           m_nestedLevel = 0;
                           rollbackTransaction(););
         m_notification.purge();
-        sqlite3_close_v2((sqlite3 *) m_handle);
+        exitAPI(sqlite3_close_v2((sqlite3 *) m_handle));
         m_handle = nullptr;
     }
 }
@@ -148,11 +145,7 @@ void AbstractHandle::close()
 bool AbstractHandle::executeSQL(const String &sql)
 {
     WCTInnerAssert(isOpened());
-    int rc = sqlite3_exec((sqlite3 *) m_handle, sql.c_str(), nullptr, nullptr, nullptr);
-    if (rc == SQLITE_OK) {
-        return true;
-    }
-    return error(rc, sql);
+    return exitAPI(sqlite3_exec((sqlite3 *) m_handle, sql.c_str(), nullptr, nullptr, nullptr));
 }
 
 bool AbstractHandle::executeStatement(const Statement &statement)
@@ -214,11 +207,10 @@ int AbstractHandle::getNumberOfDirtyPages()
     return sqlite3_dirty_page_count((sqlite3 *) m_handle);
 }
 
-void AbstractHandle::enableCheckpointWhenClosing(bool enable)
+void AbstractHandle::disableCheckpointWhenClosing(bool disable)
 {
     WCTInnerAssert(isOpened());
-    sqlite3_db_config(
-    (sqlite3 *) m_handle, SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE, enable ? 0 : 1);
+    exitAPI(sqlite3_db_config((sqlite3 *) m_handle, SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE, disable));
 }
 
 #pragma mark - Statement
@@ -256,21 +248,22 @@ std::pair<bool, bool> AbstractHandle::tableExists(const String &table)
 std::pair<bool, bool> AbstractHandle::tableExists(const Schema &schema, const String &table)
 {
     HandleStatement *handleStatement = getStatement();
-    bool result = false;
-    do {
-        StatementSelect statementSelect = StatementSelect()
-                                          .select(1)
-                                          .from(TableOrSubquery(table).schema(schema))
-                                          .limit(0);
-        markErrorAsIgnorable(SQLITE_ERROR);
-        if (handleStatement->prepare(statementSelect)) {
-            result = handleStatement->step();
-            handleStatement->finalize();
+    StatementSelect statementSelect
+    = StatementSelect().select(1).from(TableOrSubquery(table).schema(schema)).limit(0);
+    markErrorAsIgnorable(SQLITE_ERROR);
+    bool exists = false;
+    bool succeed = handleStatement->prepare(statementSelect);
+    if (succeed) {
+        exists = true;
+        finalizeStatements();
+    } else {
+        if (getResultCode() == SQLITE_ERROR) {
+            succeed = true;
         }
-        markErrorAsUnignorable();
-    } while (false);
+    }
+    markErrorAsUnignorable();
     returnStatement(handleStatement);
-    return { result || getResultCode() == SQLITE_ERROR, result };
+    return { succeed, exists };
 }
 
 std::pair<bool, std::set<String>> AbstractHandle::getColumns(const String &table)
@@ -382,11 +375,7 @@ void AbstractHandle::rollbackTransaction()
 bool AbstractHandle::setCipherKey(const UnsafeData &data)
 {
     WCTInnerAssert(isOpened());
-    int rc = sqlite3_key((sqlite3 *) m_handle, data.buffer(), (int) data.size());
-    if (rc == SQLITE_OK) {
-        return true;
-    }
-    return error(rc);
+    return exitAPI(sqlite3_key((sqlite3 *) m_handle, data.buffer(), (int) data.size()));
 }
 
 #pragma mark - Notification
@@ -418,50 +407,39 @@ void AbstractHandle::unsetNotificationWhenCommitted(const String &name)
     m_notification.unsetNotificationWhenCommitted(name);
 }
 
-bool AbstractHandle::setNotificationWhenCheckpointed(const String &name,
+void AbstractHandle::setNotificationWhenCheckpointed(const String &name,
                                                      const CheckpointedNotification &checkpointed)
 {
     WCTInnerAssert(isOpened());
-    return m_notification.setNotificationWhenCheckpointed(name, checkpointed);
+    m_notification.setNotificationWhenCheckpointed(name, checkpointed);
 }
 
 #pragma mark - Error
-bool AbstractHandle::error(int rc, const String &sql)
+bool AbstractHandle::exitAPI(int rc, const String &sql)
 {
-    WCTInnerAssert(rc != SQLITE_OK);
-    if (m_codeToBeIgnored >= 0 && rc != m_codeToBeIgnored) {
-        // non-ignorable
-        setupAndNotifyError(m_error, rc, sql);
-        return false;
-    } else {
-        // ignorable
-        Error error = m_error;
-        setupAndNotifyError(error, rc, sql);
-        return true;
-    }
-}
-
-void AbstractHandle::setupAndNotifyError(Error &error, int rc, const String &sql)
-{
-    if (rc != SQLITE_MISUSE) {
-        error.setSQLiteCode(rc, getExtendedErrorCode());
-        const char *message = getErrorMessage();
-        if (message) {
-            error.message = message;
+    if (rc != SQLITE_OK && rc != SQLITE_ROW && rc != SQLITE_DONE) {
+        if (rc != SQLITE_MISUSE) {
+            m_error.setSQLiteCode(rc, getExtendedErrorCode());
+            const char *message = getErrorMessage();
+            if (message) {
+                m_error.message = message;
+            } else {
+                m_error.message = String::null();
+            }
         } else {
-            error.message = String::null();
+            // extended error code/message will not be set in some case for misuse error
+            m_error.setSQLiteCode(rc);
         }
-    } else {
-        // extended error code/message will not be set in some case for misuse error
-        error.setSQLiteCode(rc);
+        if (m_codeToBeIgnored >= 0 && rc != m_codeToBeIgnored) {
+            m_error.level = Error::Level::Error;
+        } else {
+            m_error.level = Error::Level::Ignore;
+        }
+        m_error.infos.set("SQL", sql);
+        Notifier::shared()->notify(m_error);
+        return false;
     }
-    if (m_codeToBeIgnored >= 0 && rc != m_codeToBeIgnored) {
-        error.level = Error::Level::Error;
-    } else {
-        error.level = Error::Level::Ignore;
-    }
-    error.infos.set("SQL", sql);
-    Notifier::shared()->notify(error);
+    return true;
 }
 
 void AbstractHandle::markErrorAsIgnorable(int codeToBeIgnored)

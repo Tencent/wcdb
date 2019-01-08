@@ -92,13 +92,12 @@ protected:
 #pragma mark - Checkpoint
 public:
     typedef std::function<void(const String &)> CheckpointedNotification;
-    bool setNotificationWhenCheckpointed(const String &name,
-                                         const CheckpointedNotification &checkpointed,
-                                         bool ignorable = false);
+    void setNotificationWhenCheckpointed(const String &name,
+                                         const CheckpointedNotification &checkpointed);
 
 protected:
     bool isCheckpointNotificationSet() const;
-    bool setupCheckpointNotification(bool ignorable = false);
+    void setupCheckpointNotification();
     void dispatchCheckpointNotification();
     std::map<String, CheckpointedNotification> m_checkpointedNotifications;
 };

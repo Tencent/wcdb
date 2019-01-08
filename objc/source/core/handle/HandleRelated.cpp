@@ -33,9 +33,9 @@ HandleRelated::~HandleRelated()
 {
 }
 
-void HandleRelated::setError(int rc, const String &sql)
+bool HandleRelated::exitAPI(int rc, const String &sql)
 {
-    m_handle->error(rc, sql);
+    return m_handle->exitAPI(rc, sql);
 }
 
 void *HandleRelated::getRawHandle()

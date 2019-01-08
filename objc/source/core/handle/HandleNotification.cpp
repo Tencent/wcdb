@@ -81,17 +81,17 @@ void HandleNotification::setupTraceNotification()
         flag |= SQLITE_TRACE_PROFILE;
     }
     if (flag != 0) {
-        sqlite3_trace_v2((sqlite3 *) getRawHandle(),
-                         flag,
-                         [](unsigned int T, void *C, void *P, void *X) {
-                             HandleNotification *notification
-                             = reinterpret_cast<HandleNotification *>(C);
-                             notification->dispatchTraceNotification(T, P, X);
-                             return SQLITE_OK;
-                         },
-                         this);
+        exitAPI(sqlite3_trace_v2((sqlite3 *) getRawHandle(),
+                                 flag,
+                                 [](unsigned int T, void *C, void *P, void *X) {
+                                     HandleNotification *notification
+                                     = reinterpret_cast<HandleNotification *>(C);
+                                     notification->dispatchTraceNotification(T, P, X);
+                                     return SQLITE_OK;
+                                 },
+                                 this));
     } else {
-        sqlite3_trace_v2((sqlite3 *) getRawHandle(), 0, nullptr, nullptr);
+        exitAPI(sqlite3_trace_v2((sqlite3 *) getRawHandle(), 0, nullptr, nullptr));
     }
 }
 
@@ -235,36 +235,25 @@ bool HandleNotification::isCheckpointNotificationSet() const
     return !m_checkpointedNotifications.empty();
 }
 
-bool HandleNotification::setupCheckpointNotification(bool ignorable)
+void HandleNotification::setupCheckpointNotification()
 {
-    int rc = SQLITE_OK;
     if (!m_checkpointedNotifications.empty()) {
-        rc = sqlite3_wal_checkpoint_handler(
+        exitAPI(sqlite3_wal_checkpoint_handler(
         (sqlite3 *) getRawHandle(),
         [](void *p) -> void {
             HandleNotification *notification
             = reinterpret_cast<HandleNotification *>(p);
             notification->dispatchCheckpointNotification();
         },
-        this);
+        this));
     } else {
-        rc = sqlite3_wal_checkpoint_handler((sqlite3 *) getRawHandle(), nullptr, nullptr);
+        exitAPI(sqlite3_wal_checkpoint_handler((sqlite3 *) getRawHandle(), nullptr, nullptr));
     }
-    if (rc == SQLITE_OK || ignorable) {
-        return true;
-    }
-    setError(rc);
-    return false;
 }
 
-bool HandleNotification::setNotificationWhenCheckpointed(
-const String &name, const CheckpointedNotification &checkpointed, bool ignorable)
+void HandleNotification::setNotificationWhenCheckpointed(const String &name,
+                                                         const CheckpointedNotification &checkpointed)
 {
-    CheckpointedNotification oldNotification = nullptr;
-    auto iter = m_checkpointedNotifications.find(name);
-    if (iter != m_checkpointedNotifications.end()) {
-        oldNotification = iter->second;
-    }
     bool stateBefore = isCheckpointNotificationSet();
     if (checkpointed) {
         m_checkpointedNotifications.emplace(name, checkpointed);
@@ -273,15 +262,8 @@ const String &name, const CheckpointedNotification &checkpointed, bool ignorable
     }
     bool stateAfter = isCheckpointNotificationSet();
     if (stateBefore != stateAfter) {
-        if (!setupCheckpointNotification(ignorable)) {
-            //recover
-            if (oldNotification) {
-                m_checkpointedNotifications.emplace(name, oldNotification);
-            }
-            return false;
-        }
+        setupCheckpointNotification();
     }
-    return true;
 }
 
 void HandleNotification::dispatchCheckpointNotification()
