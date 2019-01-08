@@ -204,6 +204,8 @@
 		2372E05921A2633800051D9A /* WCTTryDisposeGuard.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2372E05721A2633800051D9A /* WCTTryDisposeGuard.mm */; };
 		2372E05A21A2633800051D9A /* WCTTryDisposeGuard.h in Headers */ = {isa = PBXBuildFile; fileRef = 2372E05821A2633800051D9A /* WCTTryDisposeGuard.h */; };
 		2372E06221A2E13100051D9A /* ConfigTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2372E06121A2E13100051D9A /* ConfigTests.mm */; };
+		2372F7D721E435D700562F9D /* FTS3Tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2372F7D621E435D700562F9D /* FTS3Tests.mm */; };
+		2372F7DB21E4366900562F9D /* FTS3Object.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2372F7D821E4366900562F9D /* FTS3Object.mm */; };
 		23739D81219A743800A043BF /* MultiSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23739D80219A743800A043BF /* MultiSelectTests.mm */; };
 		23739D85219A794700A043BF /* ChainCallTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23739D84219A794700A043BF /* ChainCallTests.mm */; };
 		23739D8C219AA3C300A043BF /* HandleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23739D8B219AA3C300A043BF /* HandleTests.mm */; };
@@ -1427,6 +1429,10 @@
 		2372E05721A2633800051D9A /* WCTTryDisposeGuard.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTTryDisposeGuard.mm; sourceTree = "<group>"; };
 		2372E05821A2633800051D9A /* WCTTryDisposeGuard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTTryDisposeGuard.h; sourceTree = "<group>"; };
 		2372E06121A2E13100051D9A /* ConfigTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ConfigTests.mm; sourceTree = "<group>"; };
+		2372F7D621E435D700562F9D /* FTS3Tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FTS3Tests.mm; sourceTree = "<group>"; };
+		2372F7D821E4366900562F9D /* FTS3Object.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FTS3Object.mm; sourceTree = "<group>"; };
+		2372F7D921E4366900562F9D /* FTS3Object+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FTS3Object+WCTTableCoding.h"; sourceTree = "<group>"; };
+		2372F7DA21E4366900562F9D /* FTS3Object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FTS3Object.h; sourceTree = "<group>"; };
 		23739D80219A743800A043BF /* MultiSelectTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MultiSelectTests.mm; sourceTree = "<group>"; };
 		23739D84219A794700A043BF /* ChainCallTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ChainCallTests.mm; sourceTree = "<group>"; };
 		23739D8B219AA3C300A043BF /* HandleTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = HandleTests.mm; sourceTree = "<group>"; };
@@ -2274,6 +2280,10 @@
 		231FEADC2199A0FE00DC3706 /* fts */ = {
 			isa = PBXGroup;
 			children = (
+				2372F7D621E435D700562F9D /* FTS3Tests.mm */,
+				2372F7D821E4366900562F9D /* FTS3Object.mm */,
+				2372F7D921E4366900562F9D /* FTS3Object+WCTTableCoding.h */,
+				2372F7DA21E4366900562F9D /* FTS3Object.h */,
 			);
 			path = fts;
 			sourceTree = "<group>";
@@ -4613,6 +4623,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2372F7DB21E4366900562F9D /* FTS3Object.mm in Sources */,
+				2372F7D721E435D700562F9D /* FTS3Tests.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
