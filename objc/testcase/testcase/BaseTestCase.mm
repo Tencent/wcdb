@@ -99,7 +99,7 @@
 
 - (NSString *)className
 {
-    if (_className) {
+    if (!_className) {
         _className = NSStringFromClass(self.class);
     }
     return _className;
@@ -107,7 +107,7 @@
 
 + (NSString *)root
 {
-    return [NSTemporaryDirectory() stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier];
+    return [[NSTemporaryDirectory() stringByAppendingPathComponent:@"WCDB"] stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier];
 }
 
 - (NSString *)directory
