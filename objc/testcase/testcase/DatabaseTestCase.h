@@ -43,13 +43,14 @@
 - (int)getWalFrameCount;
 
 #pragma mark - SQL
++ (void)enableSQLTrace;
++ (void)disableSQLTrace;
+
+#pragma mark - Test
 @property (nonatomic, assign) BOOL expectSQLsInAllThreads;
 @property (nonatomic, assign) BOOL expectFirstFewSQLsOnly;
 
 - (void)doTestSQLs:(NSArray<NSString*>*)expectedSQLs
        inOperation:(BOOL (^)())block;
-
-+ (void)enableSQLTrace;
-+ (void)disableSQLTrace;
 
 @end

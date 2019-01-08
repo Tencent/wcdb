@@ -187,6 +187,7 @@
     [WCTDatabase globalTraceSQL:nil];
 }
 
+#pragma mark - Test
 - (void)doTestSQLs:(NSArray<NSString*>*)testSQLs inOperation:(BOOL (^)())block
 {
     TestCaseAssertTrue(testSQLs != nil);

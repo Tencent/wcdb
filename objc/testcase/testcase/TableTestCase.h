@@ -30,4 +30,53 @@
 - (BOOL)createTable;
 - (BOOL)dropTable;
 
+- (void)doTestObject:(NSObject<WCTTableCoding>*)object
+              andSQL:(NSString*)sql
+   afterModification:(BOOL (^)())block;
+
+- (void)doTestObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
+               andSQL:(NSString*)sql
+    afterModification:(BOOL (^)())block;
+
+- (void)doTestObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
+              andSQLs:(NSArray<NSString*>*)sqls
+    afterModification:(BOOL (^)())block;
+
+- (void)doTestObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
+            andNumber:(int)numberOfInsertSQLs
+         ofInsertSQLs:(NSString*)insertSQL
+       afterInsertion:(BOOL (^)())block;
+
+- (void)doTestObject:(NSObject<WCTTableCoding>*)object
+              andSQL:(NSString*)sql
+         bySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block;
+
+- (void)doTestObjects:(NSArray<NSObject<WCTTableCoding>*>*)objects
+               andSQL:(NSString*)sql
+          bySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block;
+
+- (void)doTestObjects:(NSArray<NSObject<WCTTableCoding>*>*)expectedObjects
+              andSQLs:(NSArray<NSString*>*)expectedSQLs
+          bySelecting:(NSArray<NSObject<WCTTableCoding>*>* (^)())block;
+
+- (void)doTestRow:(WCTOneRow*)row
+           andSQL:(NSString*)sql
+      bySelecting:(WCTOneRow* (^)())block;
+
+- (void)doTestColumn:(WCTOneColumn*)column
+              andSQL:(NSString*)sql
+         bySelecting:(WCTOneColumn* (^)())block;
+
+- (void)doTestValue:(WCTValue*)value
+             andSQL:(NSString*)sql
+        bySelecting:(WCTValue* (^)())block;
+
+- (void)doTestRows:(WCTColumnsXRows*)rows
+            andSQL:(NSString*)sql
+       bySelecting:(WCTColumnsXRows* (^)())block;
+
+- (void)doTestRows:(WCTColumnsXRows*)rows
+           andSQLs:(NSArray<NSString*>*)sqls
+       bySelecting:(WCTColumnsXRows* (^)())block;
+
 @end
