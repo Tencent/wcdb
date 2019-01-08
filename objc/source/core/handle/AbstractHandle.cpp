@@ -240,6 +240,23 @@ void AbstractHandle::finalizeStatements()
 }
 
 #pragma mark - Meta
+std::pair<bool, bool> AbstractHandle::ft3TokenizerExists(const String &tokenizer)
+{
+    bool exists = false;
+    markErrorAsIgnorable(SQLITE_ERROR);
+    bool succeed = executeStatement(StatementSelect().select(
+    Expression::function("fts3_tokenizer").invoke().arguments(tokenizer)));
+    markErrorAsUnignorable();
+    if (succeed) {
+        exists = true;
+    } else {
+        if (getResultCode() == SQLITE_ERROR) {
+            succeed = true;
+        }
+    }
+    return { succeed, exists };
+}
+
 std::pair<bool, bool> AbstractHandle::tableExists(const String &table)
 {
     return tableExists(Schema::main(), table);

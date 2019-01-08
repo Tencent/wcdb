@@ -36,22 +36,28 @@ TokenizeConfig::TokenizeConfig(const std::list<String> &tokenizeNames,
 
 bool TokenizeConfig::invoke(Handle *handle)
 {
+    bool succeed = true;
     for (const String &name : m_tokenizeNames) {
         const UnsafeData &address = m_modules->getAddress(name);
-
         if (address.empty()) {
             continue;
         }
-        //Setup Tokenize
-        if (handle->prepare(m_fts3Tokenizer)) {
-            handle->bindText(name.c_str(), 1);
-            handle->bindBLOB(address, 2);
-            bool result = handle->step();
-            handle->finalize();
-            return result;
+        succeed = false;
+        bool exists;
+        std::tie(succeed, exists) = handle->ft3TokenizerExists(name);
+        if (succeed && !exists) {
+            if (handle->prepare(m_fts3Tokenizer)) {
+                handle->bindText(name.c_str(), 1);
+                handle->bindBLOB(address, 2);
+                succeed = handle->step();
+                handle->finalize();
+            }
+        }
+        if (!succeed) {
+            break;
         }
     }
-    return true;
+    return succeed;
 }
 
 } //namespace WCDB

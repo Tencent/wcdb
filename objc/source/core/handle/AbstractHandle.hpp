@@ -113,6 +113,7 @@ private:
 
 #pragma mark - Meta
 public:
+    std::pair<bool, bool> ft3TokenizerExists(const String &tokenizer);
     std::pair<bool, bool> tableExists(const String &table);
     std::pair<bool, std::set<String>> getColumns(const String &table);
 
