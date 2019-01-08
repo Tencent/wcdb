@@ -41,12 +41,6 @@
     return _tableClass;
 }
 
-- (void)tearDown
-{
-    TestCaseAssertTrue([self dropTable]);
-    [super tearDown];
-}
-
 - (BOOL)createTable
 {
     if (self.isVirtualTable) {
