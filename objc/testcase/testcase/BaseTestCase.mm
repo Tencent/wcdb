@@ -43,7 +43,7 @@
 #endif
 
     if (WCTDatabase.debuggable) {
-        [self log:@"debuggable"];
+        [self log:@"debuggable."];
     }
 
     [self refreshDirectory];
