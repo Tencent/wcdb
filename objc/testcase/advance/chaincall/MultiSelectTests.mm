@@ -92,22 +92,19 @@
     [super tearDown];
 }
 
-- (BOOL)checkMultiObjects:(NSArray<WCTMultiObject*>*)multiObjects
-                   andSQL:(NSString*)sql
-               asExpected:(NSArray<WCTMultiObject*>* (^)())block
+- (void)doTestMultiObjects:(NSArray<WCTMultiObject*>*)multiObjects
+                    andSQL:(NSString*)sql
+               bySelecting:(NSArray<WCTMultiObject*>* (^)())block
 {
-    if (multiObjects == nil
-        || sql == nil) {
-        TestCaseFailure();
-        return NO;
-    }
+    TestCaseAssertTrue(multiObjects != nil);
+    TestCaseAssertTrue(sql != nil);
     __block NSArray<WCTMultiObject*>* results;
     [self doTestSQLs:@[ sql ]
          inOperation:^BOOL {
              results = block();
              return results != nil;
          }];
-    return [results isEqualToArray:multiObjects];
+    TestCaseAssertTrue([results isEqualToArray:multiObjects]);
 }
 
 #pragma mark - Database
@@ -123,25 +120,25 @@
             self.tableName2 : self.object2InTable2,
         },
     ];
-    BOOL result = [self checkMultiObjects:objects
-                                   andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
-                               asExpected:^NSArray<WCTMultiObject*>* {
-                                   WCTResultColumns resultColumns = TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
-                                                                                                    return property.table(self.tableName);
-                                                                                                })
-                                                                    .addingNewResultColumns(TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
-                                                                        return property.table(self.tableName2);
-                                                                    }));
+    [self doTestMultiObjects:objects
+                      andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
+                 bySelecting:^NSArray<WCTMultiObject*>* {
+                     WCTResultColumns resultColumns = TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
+                                                                                      return property.table(self.tableName);
+                                                                                  })
+                                                      .addingNewResultColumns(TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
+                                                          return property.table(self.tableName2);
+                                                      }));
 
-                                   WCTMultiSelect* select = [[[[self.database prepareMultiSelect] onResultColumns:resultColumns] fromTables:@[ self.tableName, self.tableName2 ]] where:TestCaseObject.identifier.table(self.tableName) == TestCaseObject.identifier.table(self.tableName2)];
+                     WCTMultiSelect* select = [[[[self.database prepareMultiSelect] onResultColumns:resultColumns] fromTables:@[ self.tableName, self.tableName2 ]] where:TestCaseObject.identifier.table(self.tableName) == TestCaseObject.identifier.table(self.tableName2)];
 
-                                   NSMutableArray<WCTMultiObject*>* objects = [NSMutableArray<WCTMultiObject*> array];
-                                   WCTMultiObject* object;
-                                   while ((object = [select nextMultiObject])) {
-                                       [objects addObject:object];
-                                   }
-                                   return objects;
-                               }];
+                     NSMutableArray<WCTMultiObject*>* objects = [NSMutableArray<WCTMultiObject*> array];
+                     WCTMultiObject* object;
+                     while ((object = [select nextMultiObject])) {
+                         [objects addObject:object];
+                     }
+                     return objects;
+                 }];
 }
 
 - (void)test_database_all
@@ -156,20 +153,20 @@
             self.tableName2 : self.object2InTable2,
         },
     ];
-    BOOL result = [self checkMultiObjects:objects
-                                   andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
-                               asExpected:^NSArray<WCTMultiObject*>* {
-                                   WCTResultColumns resultColumns = TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
-                                                                                                    return property.table(self.tableName);
-                                                                                                })
-                                                                    .addingNewResultColumns(TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
-                                                                        return property.table(self.tableName2);
-                                                                    }));
+    [self doTestMultiObjects:objects
+                      andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
+                 bySelecting:^NSArray<WCTMultiObject*>* {
+                     WCTResultColumns resultColumns = TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
+                                                                                      return property.table(self.tableName);
+                                                                                  })
+                                                      .addingNewResultColumns(TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
+                                                          return property.table(self.tableName2);
+                                                      }));
 
-                                   WCTMultiSelect* select = [[[[self.database prepareMultiSelect] onResultColumns:resultColumns] fromTables:@[ self.tableName, self.tableName2 ]] where:TestCaseObject.identifier.table(self.tableName) == TestCaseObject.identifier.table(self.tableName2)];
+                     WCTMultiSelect* select = [[[[self.database prepareMultiSelect] onResultColumns:resultColumns] fromTables:@[ self.tableName, self.tableName2 ]] where:TestCaseObject.identifier.table(self.tableName) == TestCaseObject.identifier.table(self.tableName2)];
 
-                                   return [select allMultiObjects];
-                               }];
+                     return [select allMultiObjects];
+                 }];
 }
 
 #pragma mark - Handle
@@ -185,25 +182,25 @@
             self.tableName2 : self.object2InTable2,
         },
     ];
-    BOOL result = [self checkMultiObjects:objects
-                                   andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
-                               asExpected:^NSArray<WCTMultiObject*>* {
-                                   WCTResultColumns resultColumns = TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
-                                                                                                    return property.table(self.tableName);
-                                                                                                })
-                                                                    .addingNewResultColumns(TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
-                                                                        return property.table(self.tableName2);
-                                                                    }));
+    [self doTestMultiObjects:objects
+                      andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
+                 bySelecting:^NSArray<WCTMultiObject*>* {
+                     WCTResultColumns resultColumns = TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
+                                                                                      return property.table(self.tableName);
+                                                                                  })
+                                                      .addingNewResultColumns(TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
+                                                          return property.table(self.tableName2);
+                                                      }));
 
-                                   WCTMultiSelect* select = [[[[[self.database getHandle] prepareMultiSelect] onResultColumns:resultColumns] fromTables:@[ self.tableName, self.tableName2 ]] where:TestCaseObject.identifier.table(self.tableName) == TestCaseObject.identifier.table(self.tableName2)];
+                     WCTMultiSelect* select = [[[[[self.database getHandle] prepareMultiSelect] onResultColumns:resultColumns] fromTables:@[ self.tableName, self.tableName2 ]] where:TestCaseObject.identifier.table(self.tableName) == TestCaseObject.identifier.table(self.tableName2)];
 
-                                   NSMutableArray<WCTMultiObject*>* objects = [NSMutableArray<WCTMultiObject*> array];
-                                   WCTMultiObject* object;
-                                   while ((object = [select nextMultiObject])) {
-                                       [objects addObject:object];
-                                   }
-                                   return objects;
-                               }];
+                     NSMutableArray<WCTMultiObject*>* objects = [NSMutableArray<WCTMultiObject*> array];
+                     WCTMultiObject* object;
+                     while ((object = [select nextMultiObject])) {
+                         [objects addObject:object];
+                     }
+                     return objects;
+                 }];
 }
 
 - (void)test_handle_all
@@ -218,20 +215,20 @@
             self.tableName2 : self.object2InTable2,
         },
     ];
-    BOOL result = [self checkMultiObjects:objects
-                                   andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
-                               asExpected:^NSArray<WCTMultiObject*>* {
-                                   WCTResultColumns resultColumns = TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
-                                                                                                    return property.table(self.tableName);
-                                                                                                })
-                                                                    .addingNewResultColumns(TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
-                                                                        return property.table(self.tableName2);
-                                                                    }));
+    [self doTestMultiObjects:objects
+                      andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
+                 bySelecting:^NSArray<WCTMultiObject*>* {
+                     WCTResultColumns resultColumns = TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
+                                                                                      return property.table(self.tableName);
+                                                                                  })
+                                                      .addingNewResultColumns(TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
+                                                          return property.table(self.tableName2);
+                                                      }));
 
-                                   WCTMultiSelect* select = [[[[[self.database getHandle] prepareMultiSelect] onResultColumns:resultColumns] fromTables:@[ self.tableName, self.tableName2 ]] where:TestCaseObject.identifier.table(self.tableName) == TestCaseObject.identifier.table(self.tableName2)];
+                     WCTMultiSelect* select = [[[[[self.database getHandle] prepareMultiSelect] onResultColumns:resultColumns] fromTables:@[ self.tableName, self.tableName2 ]] where:TestCaseObject.identifier.table(self.tableName) == TestCaseObject.identifier.table(self.tableName2)];
 
-                                   return [select allMultiObjects];
-                               }];
+                     return [select allMultiObjects];
+                 }];
 }
 
 @end
