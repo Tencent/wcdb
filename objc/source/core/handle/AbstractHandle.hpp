@@ -138,7 +138,7 @@ private:
 
 #pragma mark - Cipher
 public:
-    bool setCipherKey(const UnsafeData &data);
+    void setCipherKey(const UnsafeData &data);
 
 #pragma mark - Notification
 public:

@@ -33,7 +33,8 @@ CipherConfig::CipherConfig(const UnsafeData &cipher, int pageSize)
 
 bool CipherConfig::invoke(Handle *handle)
 {
-    return handle->setCipherKey(m_key) && handle->execute(m_statement);
+    handle->setCipherKey(m_key);
+    return handle->execute(m_statement);
 }
 
 } //namespace WCDB

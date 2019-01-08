@@ -372,10 +372,10 @@ void AbstractHandle::rollbackTransaction()
 }
 
 #pragma mark - Cipher
-bool AbstractHandle::setCipherKey(const UnsafeData &data)
+void AbstractHandle::setCipherKey(const UnsafeData &data)
 {
     WCTInnerAssert(isOpened());
-    return exitAPI(sqlite3_key((sqlite3 *) m_handle, data.buffer(), (int) data.size()));
+    exitAPI(sqlite3_key((sqlite3 *) m_handle, data.buffer(), (int) data.size()));
 }
 
 #pragma mark - Notification
