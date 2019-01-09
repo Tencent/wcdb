@@ -28,8 +28,6 @@
 
     WCTDatabase.debuggable = NO;
     [self.class disableSQLTrace];
-
-    _factory = [[BenchmarkFactory alloc] initWithDirectory:[self.root stringByAppendingPathComponent:@"factory"]];
 }
 
 @end

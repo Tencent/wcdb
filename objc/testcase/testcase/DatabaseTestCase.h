@@ -19,16 +19,17 @@
  */
 
 #import <TestCase/BaseTestCase.h>
+#import <TestCase/ReusableFactory.h>
 #import <WCDB/WCDB.h>
 
-@interface DatabaseTestCase : BaseTestCase
+@interface DatabaseTestCase : BaseTestCase <ReusableFactoryPreparation>
 
 #pragma mark - Path
-@property (readonly, nonatomic) NSString* path;
-@property (readonly, nonatomic) NSString* walPath;
-@property (nonatomic, readonly) NSString* factory;
-@property (nonatomic, readonly) NSString* firstMaterial;
-@property (nonatomic, readonly) NSString* lastMaterial;
+@property (nonatomic, retain) NSString* path;
+@property (nonatomic, readonly) NSString* walPath;
+@property (nonatomic, readonly) NSString* factoryPath;
+@property (nonatomic, readonly) NSString* firstMaterialPath;
+@property (nonatomic, readonly) NSString* lastMaterialPath;
 @property (nonatomic, readonly) NSArray<NSString*>* paths;
 
 #pragma mark - Database
@@ -41,6 +42,9 @@
 @property (nonatomic, readonly) int walFrameHeaderSize;
 @property (nonatomic, readonly) int walFrameSize;
 - (int)getWalFrameCount;
+
+#pragma mark - Factory
+@property (nonatomic, readonly) ReusableFactory* factory;
 
 #pragma mark - SQL
 + (void)enableSQLTrace;

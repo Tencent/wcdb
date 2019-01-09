@@ -20,6 +20,7 @@
 
 #import <TestCase/BaseTestCase.h>
 #import <TestCase/Random.h>
+#import <TestCase/ReusableFactory.h>
 #import <TestCase/Signpost.h>
 #import <TestCase/TestCaseAssertion.h>
 #import <TestCase/TestCaseLog.h>
@@ -119,6 +120,11 @@
 + (NSString *)root
 {
     return [[NSTemporaryDirectory() stringByAppendingPathComponent:@"WCDB"] stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier];
+}
+
++ (NSString *)cacheRoot
+{
+    return [[[NSTemporaryDirectory() stringByAppendingPathComponent:@"WCDB"] stringByAppendingPathComponent:@"Cache"] stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier];
 }
 
 - (NSString *)directory

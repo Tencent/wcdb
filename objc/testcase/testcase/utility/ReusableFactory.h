@@ -18,29 +18,33 @@
  * limitations under the License.
  */
 
-#import "BenchmarkObject+WCTTableCoding.h"
-#import "BenchmarkObject.h"
+#import <Foundation/Foundation.h>
 
-@protocol BenchmarkFactoryPreparation <NSObject>
+@protocol ReusableFactoryPreparation <NSObject>
+@required
+- (BOOL)stepPreparePrototype:(NSString*)path;
+- (double)getQuality:(NSString*)path;
+- (NSString*)category;
 @optional
-- (void)databaseWillStartPreparing:(WCTDatabase*)database;
+- (BOOL)willStartPreparing:(NSString*)path;
+- (BOOL)willEndPreparing:(NSString*)path;
+- (NSDictionary<NSString*, NSString*>*)additionalParameters;
+- (NSArray<NSString*>*)additionalPrototypes:(NSString*)prototype;
 @end
 
-@interface BenchmarkFactory : NSObject
+@interface ReusableFactory : NSObject
 
 - (instancetype)initWithDirectory:(NSString*)directory;
 @property (nonatomic, readonly) NSString* directory;
 
-@property (nonatomic, assign) id<BenchmarkFactoryPreparation> delegate;
+@property (nonatomic, assign) id<ReusableFactoryPreparation> delegate;
 
 @property (nonatomic, assign) double tolerance;
 
 @property (nonatomic, assign) BOOL renew;
 
-- (void)setProductionLineFileSizeInMB:(NSUInteger)fileSizeInMB;
-- (void)setProductionLineObjects:(NSUInteger)numberOfObjects;
-- (void)setProductionLineTables:(NSUInteger)numberOfTables;
+@property (nonatomic, assign) double expectedQuality;
 
-- (BOOL)production:(NSString*)destination;
+- (NSString*)production:(NSString*)destination;
 
 @end

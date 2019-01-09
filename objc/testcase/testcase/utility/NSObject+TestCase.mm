@@ -62,6 +62,24 @@
 
 @end
 
+@implementation NSString (TestCase)
+
++ (NSString *)pathByReplacingPath:(NSString *)path withDirectory:(NSString *)directory
+{
+    return [directory stringByAppendingPathComponent:path.lastPathComponent];
+}
+
++ (NSArray<NSString *> *)pathsByReplacingPaths:(NSArray<NSString *> *)paths withDirectory:(NSString *)directory
+{
+    NSMutableArray<NSString *> *newPaths = [NSMutableArray arrayWithCapacity:paths.count];
+    for (NSString *path in paths) {
+        [newPaths addObject:[NSString pathByReplacingPath:path withDirectory:directory]];
+    }
+    return newPaths;
+}
+
+@end
+
 @implementation WCTPerformanceFootprint (TestCase)
 
 - (BOOL)isEqual:(NSObject *)object
@@ -84,13 +102,63 @@
 
 @implementation NSFileManager (TestCase)
 
-- (unsigned long long)getFileSize:(NSString *)path
+- (unsigned long long)getFileSizeIfExists:(NSString *)path
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if ([fileManager fileExistsAtPath:path]) {
         return [[fileManager attributesOfItemAtPath:path error:nil] fileSize];
     }
     return 0;
+}
+
+- (BOOL)copyItemsIfExistsAtPaths:(NSArray<NSString *> *)paths toDirectory:(NSString *)directory error:(NSError **)error
+{
+    for (NSString *path in paths.reversedArray) {
+        if ([self fileExistsAtPath:path]) {
+            NSString *newPath = [NSString pathByReplacingPath:path withDirectory:directory];
+            // remove existing file
+            if ([self fileExistsAtPath:newPath]) {
+                if (![self removeItemAtPath:newPath error:error]) {
+                    return NO;
+                }
+            }
+
+            if (![self copyItemAtPath:path toPath:newPath error:error]) {
+                return NO;
+            }
+        }
+    }
+    return YES;
+}
+
+- (BOOL)removeItemsIfExistsAtPaths:(NSArray<NSString *> *)paths error:(NSError **)error
+{
+    for (NSString *path in paths.reversedArray) {
+        if (![self removeItemAtPath:path error:error]) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
+- (BOOL)setFileImmutable:(BOOL)immutable ofItemsIfExistsAtPaths:(NSArray<NSString *> *)paths error:(NSError **)error
+{
+    for (NSString *path in paths.reversedArray) {
+        if ([self fileExistsAtPath:path]) {
+            if (![self setAttributes:@{NSFileImmutable : @(immutable)} ofItemAtPath:path error:error]) {
+                return NO;
+            }
+        }
+    }
+    return YES;
+}
+
+- (BOOL)isFileImmutableOfItemAtPath:(NSString *)path error:(NSError **)error
+{
+    if ([self fileExistsAtPath:path]) {
+        return [self attributesOfItemAtPath:path error:error].fileIsImmutable;
+    }
+    return NO;
 }
 
 @end

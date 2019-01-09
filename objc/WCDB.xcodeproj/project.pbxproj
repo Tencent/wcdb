@@ -152,7 +152,6 @@
 		234EF46E2015CFDE00B81929 /* WCTConvertible.h in Headers */ = {isa = PBXBuildFile; fileRef = 234EF46C2015CFDE00B81929 /* WCTConvertible.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234EF46F2015CFDE00B81929 /* WCTConvertible.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234EF46D2015CFDE00B81929 /* WCTConvertible.mm */; };
 		2351450021D7564700FF639C /* BenchmarkObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144FE21D7564700FF639C /* BenchmarkObject.mm */; };
-		2351450121D7564700FF639C /* BenchmarkFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144FF21D7564700FF639C /* BenchmarkFactory.mm */; };
 		23567CFA20CA3889005F1C35 /* Frame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23567CF820CA3889005F1C35 /* Frame.cpp */; };
 		23567CFC20CA3889005F1C35 /* Frame.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567CF920CA3889005F1C35 /* Frame.hpp */; };
 		23567D4720CA7DBC005F1C35 /* ErrorProne.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567D4520CA7DBC005F1C35 /* ErrorProne.hpp */; };
@@ -813,6 +812,8 @@
 		23F903FE21E58941008701B7 /* Signpost.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23F903FC21E58941008701B7 /* Signpost.mm */; };
 		23F9040121E5CE20008701B7 /* Random+WCDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 23F903FF21E5CE20008701B7 /* Random+WCDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F9040221E5CE20008701B7 /* Random+WCDB.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23F9040021E5CE20008701B7 /* Random+WCDB.mm */; };
+		23F9040521E5D453008701B7 /* ReusableFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 23F9040321E5D453008701B7 /* ReusableFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F9040621E5D453008701B7 /* ReusableFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23F9040421E5D453008701B7 /* ReusableFactory.mm */; };
 		23FC01DD21B8B716002C7F87 /* RepairBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FC01DC21B8B716002C7F87 /* RepairBenchmark.mm */; };
 		23FC43D821B6631200FA1A0F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		23FC43D921B6631200FA1A0F /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
@@ -1377,11 +1378,9 @@
 		234E6F6621996EB600D006F2 /* Advance.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Advance.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		234EF46C2015CFDE00B81929 /* WCTConvertible.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTConvertible.h; sourceTree = "<group>"; };
 		234EF46D2015CFDE00B81929 /* WCTConvertible.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTConvertible.mm; sourceTree = "<group>"; };
-		235144FB21D7564700FF639C /* BenchmarkFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BenchmarkFactory.h; sourceTree = "<group>"; };
 		235144FC21D7564700FF639C /* BenchmarkObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BenchmarkObject.h; sourceTree = "<group>"; };
 		235144FD21D7564700FF639C /* BenchmarkObject+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BenchmarkObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		235144FE21D7564700FF639C /* BenchmarkObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BenchmarkObject.mm; sourceTree = "<group>"; };
-		235144FF21D7564700FF639C /* BenchmarkFactory.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BenchmarkFactory.mm; sourceTree = "<group>"; };
 		23567CF820CA3889005F1C35 /* Frame.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Frame.cpp; sourceTree = "<group>"; };
 		23567CF920CA3889005F1C35 /* Frame.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Frame.hpp; sourceTree = "<group>"; };
 		23567D4520CA7DBC005F1C35 /* ErrorProne.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ErrorProne.hpp; sourceTree = "<group>"; };
@@ -2081,6 +2080,8 @@
 		23F903FC21E58941008701B7 /* Signpost.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Signpost.mm; sourceTree = "<group>"; };
 		23F903FF21E5CE20008701B7 /* Random+WCDB.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Random+WCDB.h"; sourceTree = "<group>"; };
 		23F9040021E5CE20008701B7 /* Random+WCDB.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "Random+WCDB.mm"; sourceTree = "<group>"; };
+		23F9040321E5D453008701B7 /* ReusableFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReusableFactory.h; sourceTree = "<group>"; };
+		23F9040421E5D453008701B7 /* ReusableFactory.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ReusableFactory.mm; sourceTree = "<group>"; };
 		23FC01DC21B8B716002C7F87 /* RepairBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RepairBenchmark.mm; sourceTree = "<group>"; };
 		23FC43E121B6631200FA1A0F /* Benchmark.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Benchmark.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		23FC43E621B6644B00FA1A0F /* Benchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Benchmark.mm; sourceTree = "<group>"; };
@@ -3098,6 +3099,8 @@
 				23F9040021E5CE20008701B7 /* Random+WCDB.mm */,
 				23F903FB21E58941008701B7 /* Signpost.h */,
 				23F903FC21E58941008701B7 /* Signpost.mm */,
+				23F9040321E5D453008701B7 /* ReusableFactory.h */,
+				23F9040421E5D453008701B7 /* ReusableFactory.mm */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -3678,8 +3681,6 @@
 		23FC43E521B6644B00FA1A0F /* benchmark */ = {
 			isa = PBXGroup;
 			children = (
-				235144FB21D7564700FF639C /* BenchmarkFactory.h */,
-				235144FF21D7564700FF639C /* BenchmarkFactory.mm */,
 				235144FC21D7564700FF639C /* BenchmarkObject.h */,
 				235144FE21D7564700FF639C /* BenchmarkObject.mm */,
 				235144FD21D7564700FF639C /* BenchmarkObject+WCTTableCoding.h */,
@@ -3714,6 +3715,7 @@
 				23F903FD21E58941008701B7 /* Signpost.h in Headers */,
 				2387D90421DF0B880028ADB9 /* TestCaseObject.h in Headers */,
 				2387D8FE21DF0B880028ADB9 /* BaseTestCase.h in Headers */,
+				23F9040521E5D453008701B7 /* ReusableFactory.h in Headers */,
 				2387D96521DF651D0028ADB9 /* TestCaseLog.h in Headers */,
 				2387D90121DF0B880028ADB9 /* AllTypesObject+WCTTableCoding.h in Headers */,
 				2387D96821DF651D0028ADB9 /* Random.h in Headers */,
@@ -4726,6 +4728,7 @@
 				2387D8F521DF0B880028ADB9 /* DatabaseTestCase.mm in Sources */,
 				2387D95221DF61C30028ADB9 /* CRUDTestCase.mm in Sources */,
 				2387D96321DF651D0028ADB9 /* NSObject+TestCase.mm in Sources */,
+				23F9040621E5D453008701B7 /* ReusableFactory.mm in Sources */,
 				2387D96221DF651D0028ADB9 /* TestCaseLog.mm in Sources */,
 				23F903FE21E58941008701B7 /* Signpost.mm in Sources */,
 				23F9040221E5CE20008701B7 /* Random+WCDB.mm in Sources */,
@@ -5093,7 +5096,6 @@
 			files = (
 				231C35E821DDF95F00B5D3D2 /* TableMigrationBenchmark.mm in Sources */,
 				2351450021D7564700FF639C /* BenchmarkObject.mm in Sources */,
-				2351450121D7564700FF639C /* BenchmarkFactory.mm in Sources */,
 				23FC01DD21B8B716002C7F87 /* RepairBenchmark.mm in Sources */,
 				2385469021DD91A200C619B4 /* OtherBenchmark.mm in Sources */,
 				23FC43E821B6644B00FA1A0F /* Benchmark.mm in Sources */,

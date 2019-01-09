@@ -26,6 +26,9 @@
 @interface BaseTestCase : XCTestCase
 
 @property (class, nonatomic, readonly) NSString* root;
+@property (class, nonatomic, readonly) NSString* cacheRoot;
+
+@property (nonatomic, readonly) NSString* cacheDirectory;
 @property (nonatomic, readonly) NSString* directory;
 
 @property (nonatomic, readonly) NSString* className;

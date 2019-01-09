@@ -25,12 +25,4 @@
 
 @interface Benchmark : DatabaseTestCase
 
-@property (nonatomic, readonly) BenchmarkFactory* factory;
-
-// tear down - set up - measure - check correctness - tear down
-- (void)measure:(void (^)(void))block
-           setUp:(void (^)(void))setUpBlock
-        tearDown:(void (^)(void))tearDownBlock
-checkCorrectness:(void (^)(void))correctnessBlock;
-
 @end

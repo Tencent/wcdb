@@ -34,17 +34,16 @@
     WCTDatabase* _database;
     NSString* _path;
     NSString* _walPath;
-    NSString* _factory;
-    NSString* _firstMaterial;
-    NSString* _lastMaterial;
+    NSString* _factoryPath;
+    NSString* _firstMaterialPath;
+    NSString* _lastMaterialPath;
     NSArray<NSString*>* _paths;
+    ReusableFactory* _factory;
 }
 
 - (void)setUp
 {
     [super setUp];
-
-    self.database.tag = self.random.tag;
 
     self.expectSQLsInAllThreads = NO;
     self.expectFirstFewSQLsOnly = NO;
@@ -61,6 +60,12 @@
 }
 
 #pragma mark - Path
+- (void)setPath:(NSString*)path
+{
+    TestCaseAssertTrue(_path == nil);
+    _path = path;
+}
+
 - (NSString*)path
 {
     if (!_path) {
@@ -77,28 +82,28 @@
     return _walPath;
 }
 
-- (NSString*)firstMaterial
+- (NSString*)firstMaterialPath
 {
-    if (!_firstMaterial) {
-        _firstMaterial = [self.path stringByAppendingString:@"-first.material"];
+    if (!_firstMaterialPath) {
+        _firstMaterialPath = [self.path stringByAppendingString:@"-first.material"];
     }
-    return _firstMaterial;
+    return _firstMaterialPath;
 }
 
 - (NSString*)lastMaterial
 {
-    if (!_lastMaterial) {
-        _lastMaterial = [self.path stringByAppendingString:@"-last.material"];
+    if (!_lastMaterialPath) {
+        _lastMaterialPath = [self.path stringByAppendingString:@"-last.material"];
     }
-    return _lastMaterial;
+    return _lastMaterialPath;
 }
 
-- (NSString*)factory
+- (NSString*)factoryPath
 {
-    if (!_factory) {
-        _factory = [self.path stringByAppendingString:@".factory"];
+    if (!_factoryPath) {
+        _factoryPath = [self.path stringByAppendingString:@".factory"];
     }
-    return _factory;
+    return _factoryPath;
 }
 
 - (NSArray<NSString*>*)paths
@@ -107,9 +112,9 @@
         _paths = @[
             self.path,
             self.walPath,
-            self.firstMaterial,
-            self.lastMaterial,
-            self.factory,
+            self.firstMaterialPath,
+            self.lastMaterialPath,
+            self.factoryPath,
             [self.path stringByAppendingString:@"-journal"],
             [self.path stringByAppendingString:@"-shm"],
         ];
@@ -122,6 +127,7 @@
 {
     if (!_database) {
         _database = [[WCTDatabase alloc] initWithPath:self.path];
+        _database.tag = self.random.tag;
     }
     return _database;
 }
@@ -154,11 +160,63 @@
 
 - (int)getWalFrameCount
 {
-    NSInteger walSize = [[NSFileManager defaultManager] getFileSize:self.walPath];
+    NSInteger walSize = [[NSFileManager defaultManager] getFileSizeIfExists:self.walPath];
     if (walSize < self.walHeaderSize) {
         return 0;
     }
     return (int) ((walSize - self.walHeaderSize) / (self.walFrameHeaderSize + self.pageSize));
+}
+
+#pragma mark - Factory
+- (ReusableFactory*)factory
+{
+    if (!_factory) {
+        _factory = [[ReusableFactory alloc] initWithDirectory:self.class.cacheRoot];
+        _factory.delegate = self;
+    }
+    return _factory;
+}
+
+- (BOOL)stepPreparePrototype:(NSString*)path
+{
+    TestCaseFailure();
+}
+
+- (double)getQuality:(NSString*)path
+{
+    TestCaseFailure();
+}
+
+- (NSString*)category
+{
+    TestCaseFailure();
+}
+
+- (BOOL)willStartPreparing:(NSString*)path
+{
+    TestCaseFailure();
+}
+
+- (BOOL)willEndPreparing:(NSString*)path
+{
+    TestCaseFailure();
+}
+
+- (NSDictionary<NSString*, NSString*>*)additionalParameters
+{
+    TestCaseFailure();
+}
+
+- (NSArray<NSString*>*)additionalPrototypes:(NSString*)prototype
+{
+    return @[
+        [prototype stringByAppendingString:@"-wal"],
+        [prototype stringByAppendingString:@"-first.material"],
+        [prototype stringByAppendingString:@"-last.material"],
+        [prototype stringByAppendingString:@"-factory"],
+        [prototype stringByAppendingString:@"-journal"],
+        [prototype stringByAppendingString:@"-shm"],
+    ];
 }
 
 #pragma mark - SQL
