@@ -124,7 +124,7 @@
 
 + (NSString *)cacheRoot
 {
-    return [[[NSTemporaryDirectory() stringByAppendingPathComponent:@"WCDB"] stringByAppendingPathComponent:@"Cache"] stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier];
+    return [[NSTemporaryDirectory() stringByAppendingPathComponent:@"WCDB"] stringByAppendingPathComponent:[[NSBundle mainBundle].bundleIdentifier stringByAppendingString:@".Cache"]];
 }
 
 - (NSString *)directory
