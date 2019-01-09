@@ -264,7 +264,7 @@
     // rebind
     {
         self.tableClass = NewRebindObject.class;
-        NSArray<NSString*>* expected = @[ @"SELECT 1 FROM main.testTable LIMIT 0", @"PRAGMA main.table_info('testTable')", @"ALTER TABLE main.testTable ADD COLUMN newValue INTEGER", @"CREATE INDEX IF NOT EXISTS main.testTable_index ON testTable(value)" ];
+        NSArray<NSString*>* expected = @[ @"PRAGMA main.table_info('testTable')", @"ALTER TABLE main.testTable ADD COLUMN newValue INTEGER", @"CREATE INDEX IF NOT EXISTS main.testTable_index ON testTable(value)" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected];
     }
 }
