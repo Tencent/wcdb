@@ -100,7 +100,7 @@
     }
 
     NSString* product = [NSString pathByReplacingPath:self.prototype withDirectory:destination];
-    TestCaseLog(@"Production: %@ %@", self.delegate.category, [self.delegate getQuality:product]);
+    TestCaseLog(@"Production: %@ %@", self.delegate.category, @([self.delegate getQuality:product]));
     return product;
 }
 
