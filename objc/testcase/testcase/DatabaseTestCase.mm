@@ -62,8 +62,13 @@
 #pragma mark - Path
 - (void)setPath:(NSString*)path
 {
-    TestCaseAssertTrue(_path == nil);
     _path = path;
+    _walPath = nil;
+    _factoryPath = nil;
+    _firstMaterialPath = nil;
+    _lastMaterialPath = nil;
+    _paths = nil;
+    _database = nil;
 }
 
 - (NSString*)path
@@ -173,6 +178,7 @@
     if (!_factory) {
         _factory = [[ReusableFactory alloc] initWithDirectory:self.class.cacheRoot];
         _factory.delegate = self;
+        [self log:@"cache at %@", self.class.cacheRoot];
     }
     return _factory;
 }
@@ -188,21 +194,6 @@
 }
 
 - (NSString*)category
-{
-    TestCaseFailure();
-}
-
-- (BOOL)willStartPreparing:(NSString*)path
-{
-    TestCaseFailure();
-}
-
-- (BOOL)willEndPreparing:(NSString*)path
-{
-    TestCaseFailure();
-}
-
-- (NSDictionary<NSString*, NSString*>*)additionalParameters
 {
     TestCaseFailure();
 }
