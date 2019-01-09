@@ -118,7 +118,6 @@
 {
     NSString* currentTable = nil;
     BOOL checkpointed = NO; // leave wal exists
-    [self.class disableSQLTrace];
     while (checkpointed || [self.database getFilesSize] < self.expectedDatabaseSize) {
         if (currentTable == nil || self.random.uint8 % 10 == 0) {
             currentTable = [NSString stringWithFormat:@"%@%@", self.tablePrefix, self.random.string];
@@ -153,7 +152,6 @@
             checkpointed = NO;
         }
     }
-    [self.class enableSQLTrace];
     if (![self.fileManager fileExistsAtPath:self.walPath]) {
         TestCaseFailure();
         return NO;
