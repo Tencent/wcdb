@@ -811,7 +811,7 @@
 		23F70FD820A07CEC00CCE3CD /* CustomConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FD520A07CEC00CCE3CD /* CustomConfig.hpp */; };
 		23F903FD21E58941008701B7 /* Signpost.h in Headers */ = {isa = PBXBuildFile; fileRef = 23F903FB21E58941008701B7 /* Signpost.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F903FE21E58941008701B7 /* Signpost.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23F903FC21E58941008701B7 /* Signpost.mm */; };
-		23F9040121E5CE20008701B7 /* Random+WCDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 23F903FF21E5CE20008701B7 /* Random+WCDB.h */; };
+		23F9040121E5CE20008701B7 /* Random+WCDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 23F903FF21E5CE20008701B7 /* Random+WCDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F9040221E5CE20008701B7 /* Random+WCDB.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23F9040021E5CE20008701B7 /* Random+WCDB.mm */; };
 		23FC01DD21B8B716002C7F87 /* RepairBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FC01DC21B8B716002C7F87 /* RepairBenchmark.mm */; };
 		23FC43D821B6631200FA1A0F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };

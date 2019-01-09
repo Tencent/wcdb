@@ -18,6 +18,9 @@
  * limitations under the License.
  */
 
+#import <TestCase/TestCaseAssertion.h>
+#import <TestCase/TestCaseLog.h>
+
 #import <TestCase/BaseTestCase.h>
 #import <TestCase/CRUDTestCase.h>
 #import <TestCase/DatabaseTestCase.h>
@@ -27,13 +30,12 @@
 #import <TestCase/Signpost.h>
 
 #import <TestCase/Random+TestCaseObject.h>
+#import <TestCase/Random+WCDB.h>
+
 #import <TestCase/TestCaseObject+WCTTableCoding.h>
 #import <TestCase/TestCaseObject.h>
 
 #import <TestCase/AllTypesObject+WCTTableCoding.h>
 #import <TestCase/AllTypesObject.h>
-
-#import <TestCase/TestCaseAssertion.h>
-#import <TestCase/TestCaseLog.h>
 
 #import <TestCase/NSObject+TestCase.h>
