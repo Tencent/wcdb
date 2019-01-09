@@ -18,22 +18,19 @@
  * limitations under the License.
  */
 
-#import <TestCase/BaseTestCase.h>
-#import <TestCase/CRUDTestCase.h>
-#import <TestCase/DatabaseTestCase.h>
-#import <TestCase/TableTestCase.h>
-
-#import <TestCase/Random.h>
 #import <TestCase/Signpost.h>
 
-#import <TestCase/Random+TestCaseObject.h>
-#import <TestCase/TestCaseObject+WCTTableCoding.h>
-#import <TestCase/TestCaseObject.h>
+@implementation Signpost
 
-#import <TestCase/AllTypesObject+WCTTableCoding.h>
-#import <TestCase/AllTypesObject.h>
+- (instancetype)initWithSystem:(NSString *)system andCategory:(NSString *)category
+{
+    if (self = [super init]) {
+        _system = system;
+        _category = category;
+        _log = os_log_create(system.UTF8String, category.UTF8String);
+        _identifier = os_signpost_id_generate(_log);
+    }
+    return self;
+}
 
-#import <TestCase/TestCaseAssertion.h>
-#import <TestCase/TestCaseLog.h>
-
-#import <TestCase/NSObject+TestCase.h>
+@end

@@ -19,12 +19,15 @@
  */
 
 #import <TestCase/BaseTestCase.h>
+#import <TestCase/Random.h>
+#import <TestCase/Signpost.h>
 #import <TestCase/TestCaseAssertion.h>
 #import <TestCase/TestCaseLog.h>
 #import <WCDB/WCDB.h>
 
 @implementation BaseTestCase {
     Random *_random;
+    Signpost *_signpost;
     NSString *_className;
     NSString *_testName;
     NSString *_directory;
@@ -68,6 +71,14 @@
         _random = [[Random alloc] init];
     }
     return _random;
+}
+
+- (Signpost *)signpost
+{
+    if (!_signpost) {
+        _signpost = [[Signpost alloc] initWithSystem:[NSBundle mainBundle].bundleIdentifier andCategory:self.className];
+    }
+    return _signpost;
 }
 
 - (NSString *)testName
@@ -131,6 +142,55 @@
     va_end(ap);
     NSString *log = [NSString stringWithFormat:@"Test Case '%@' %@", self.name, description];
     TestCaseLog(@"%@", log);
+}
+
+- (void)doMeasure:(void (^)(void))block
+            setUp:(void (^)(void))setUpBlock
+         tearDown:(void (^)(void))tearDownBlock
+ checkCorrectness:(void (^)(void))correctnessBlock
+{
+    __block int i = 1;
+    [self measureMetrics:self.class.defaultPerformanceMetrics
+    automaticallyStartMeasuring:false
+                       forBlock:^{
+                           if (tearDownBlock) {
+                               tearDownBlock();
+                           }
+
+                           if (setUpBlock) {
+                               setUpBlock();
+                           }
+
+                           TestCaseSignpostBegin("measure");
+
+                           [self log:@"%d started.", i];
+
+                           [self startMeasuring];
+
+                           block();
+
+                           [self stopMeasuring];
+
+                           [self log:@"%d passed.", i];
+
+                           TestCaseSignpostEnd("measure");
+
+                           correctnessBlock();
+
+                           if (tearDownBlock) {
+                               tearDownBlock();
+                           }
+
+                           ++i;
+                       }];
+
+    BOOL untrusted = WCTDatabase.debuggable;
+#if DEBUG || TARGET_IPHONE_SIMULATOR
+    untrusted = YES;
+#endif
+    if (untrusted) {
+        TestCaseLog(@"Benchmark is run in debug mode or simulator. The result may be untrusted.");
+    }
 }
 
 @end

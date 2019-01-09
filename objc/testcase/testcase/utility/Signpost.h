@@ -18,22 +18,22 @@
  * limitations under the License.
  */
 
-#import <TestCase/BaseTestCase.h>
-#import <TestCase/CRUDTestCase.h>
-#import <TestCase/DatabaseTestCase.h>
-#import <TestCase/TableTestCase.h>
+#import <Foundation/Foundation.h>
+#import <os/signpost.h>
 
-#import <TestCase/Random.h>
-#import <TestCase/Signpost.h>
+@interface Signpost : NSObject
 
-#import <TestCase/Random+TestCaseObject.h>
-#import <TestCase/TestCaseObject+WCTTableCoding.h>
-#import <TestCase/TestCaseObject.h>
+- (instancetype)initWithSystem:(NSString*)system andCategory:(NSString*)category;
+@property (nonatomic, readonly) NSString* system;
+@property (nonatomic, readonly) NSString* category;
 
-#import <TestCase/AllTypesObject+WCTTableCoding.h>
-#import <TestCase/AllTypesObject.h>
+@property (nonatomic, readonly) os_log_t log;
+@property (nonatomic, readonly) os_signpost_id_t identifier;
 
-#import <TestCase/TestCaseAssertion.h>
-#import <TestCase/TestCaseLog.h>
+@end
 
-#import <TestCase/NSObject+TestCase.h>
+#define SignpostBegin(signpost, task) \
+    os_signpost_interval_begin(signpost.log, signpost.identifier, task)
+
+#define SignpostEnd(signpost, task) \
+    os_signpost_interval_end(signpost.log, signpost.identifier, task)

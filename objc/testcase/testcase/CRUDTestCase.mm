@@ -19,6 +19,7 @@
  */
 
 #import <TestCase/CRUDTestCase.h>
+#import <TestCase/Random.h>
 #import <TestCase/TestCaseAssertion.h>
 
 @implementation CRUDTestCase {

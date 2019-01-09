@@ -809,6 +809,8 @@
 		23F70FC620A0618100CCE3CD /* Configs.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FC320A0618100CCE3CD /* Configs.hpp */; };
 		23F70FD620A07CEC00CCE3CD /* CustomConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F70FD420A07CEC00CCE3CD /* CustomConfig.cpp */; };
 		23F70FD820A07CEC00CCE3CD /* CustomConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FD520A07CEC00CCE3CD /* CustomConfig.hpp */; };
+		23F903FD21E58941008701B7 /* Signpost.h in Headers */ = {isa = PBXBuildFile; fileRef = 23F903FB21E58941008701B7 /* Signpost.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23F903FE21E58941008701B7 /* Signpost.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23F903FC21E58941008701B7 /* Signpost.mm */; };
 		23FC01DD21B8B716002C7F87 /* RepairBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FC01DC21B8B716002C7F87 /* RepairBenchmark.mm */; };
 		23FC43D821B6631200FA1A0F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		23FC43D921B6631200FA1A0F /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
@@ -2073,6 +2075,8 @@
 		23F70FC320A0618100CCE3CD /* Configs.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Configs.hpp; sourceTree = "<group>"; };
 		23F70FD420A07CEC00CCE3CD /* CustomConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CustomConfig.cpp; sourceTree = "<group>"; };
 		23F70FD520A07CEC00CCE3CD /* CustomConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CustomConfig.hpp; sourceTree = "<group>"; };
+		23F903FB21E58941008701B7 /* Signpost.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Signpost.h; sourceTree = "<group>"; };
+		23F903FC21E58941008701B7 /* Signpost.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Signpost.mm; sourceTree = "<group>"; };
 		23FC01DC21B8B716002C7F87 /* RepairBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RepairBenchmark.mm; sourceTree = "<group>"; };
 		23FC43E121B6631200FA1A0F /* Benchmark.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Benchmark.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		23FC43E621B6644B00FA1A0F /* Benchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Benchmark.mm; sourceTree = "<group>"; };
@@ -3086,6 +3090,8 @@
 				2387D95F21DF651C0028ADB9 /* TestCaseAssertion.h */,
 				2387D96021DF651C0028ADB9 /* Random.mm */,
 				2387D96121DF651C0028ADB9 /* Random.h */,
+				23F903FB21E58941008701B7 /* Signpost.h */,
+				23F903FC21E58941008701B7 /* Signpost.mm */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -3699,6 +3705,7 @@
 				2387D95821DF635A0028ADB9 /* TestCase.h in Headers */,
 				2387D94821DF5C890028ADB9 /* Random+TestCaseObject.h in Headers */,
 				2387D95321DF61C30028ADB9 /* CRUDTestCase.h in Headers */,
+				23F903FD21E58941008701B7 /* Signpost.h in Headers */,
 				2387D90421DF0B880028ADB9 /* TestCaseObject.h in Headers */,
 				2387D8FE21DF0B880028ADB9 /* BaseTestCase.h in Headers */,
 				2387D96521DF651D0028ADB9 /* TestCaseLog.h in Headers */,
@@ -4713,6 +4720,7 @@
 				2387D95221DF61C30028ADB9 /* CRUDTestCase.mm in Sources */,
 				2387D96321DF651D0028ADB9 /* NSObject+TestCase.mm in Sources */,
 				2387D96221DF651D0028ADB9 /* TestCaseLog.mm in Sources */,
+				23F903FE21E58941008701B7 /* Signpost.mm in Sources */,
 				2387D8FF21DF0B880028ADB9 /* AllTypesObject.mm in Sources */,
 				2387D90521DF0B880028ADB9 /* BaseTestCase.mm in Sources */,
 				2387D95521DF61C30028ADB9 /* TableTestCase.mm in Sources */,

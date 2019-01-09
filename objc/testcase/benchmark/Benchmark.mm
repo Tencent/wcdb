@@ -27,63 +27,9 @@
     [super setUp];
 
     WCTDatabase.debuggable = NO;
-    [self disableSQLTrace];
+    [self.class disableSQLTrace];
 
     _factory = [[BenchmarkFactory alloc] initWithDirectory:[self.root stringByAppendingPathComponent:@"factory"]];
-}
-
-- (void)tearDown
-{
-    BOOL untrusted = WCTDatabase.debuggable;
-#if DEBUG || TARGET_IPHONE_SIMULATOR
-    untrusted = YES;
-#endif
-    if (untrusted) {
-        TestCaseLog(@"Benchmark is run in debug mode or simulator. The result may be untrusted.");
-    }
-
-    [super tearDown];
-}
-
-- (void)measure:(void (^)(void))block
-           setUp:(void (^)(void))setUpBlock
-        tearDown:(void (^)(void))tearDownBlock
-checkCorrectness:(void (^)(void))correctnessBlock
-{
-    __block int i = 1;
-    [self measureMetrics:self.class.defaultPerformanceMetrics
-    automaticallyStartMeasuring:false
-                       forBlock:^{
-                           if (tearDownBlock) {
-                               tearDownBlock();
-                           }
-
-                           if (setUpBlock) {
-                               setUpBlock();
-                           }
-
-                           [NSThread sleepForTimeInterval:0.5f];
-
-                           [self log:@"%d started.", i];
-
-                           [self startMeasuring];
-
-                           block();
-
-                           [self stopMeasuring];
-
-                           [self log:@"%d passed.", i];
-
-                           [NSThread sleepForTimeInterval:0.5f];
-
-                           correctnessBlock();
-
-                           if (tearDownBlock) {
-                               tearDownBlock();
-                           }
-
-                           ++i;
-                       }];
 }
 
 @end

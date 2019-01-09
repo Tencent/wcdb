@@ -26,3 +26,4 @@ VERSIONING_SYSTEM = apple-generic
 OTHER_CFLAGS = $(inherited)
 INFOPLIST_FILE = $(SRCROOT)/support/$(PRODUCT_NAME)_Info.plist
 FRAMEWORK_SEARCH_PATHS = $(PLATFORM_DIR)/Developer/Library/Frameworks
+MACOSX_DEPLOYMENT_TARGET = 10.14

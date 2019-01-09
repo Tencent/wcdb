@@ -20,6 +20,7 @@
 
 #import <TestCase/DatabaseTestCase.h>
 #import <TestCase/NSObject+TestCase.h>
+#import <TestCase/Random.h>
 #import <TestCase/TestCaseAssertion.h>
 #import <TestCase/TestCaseLog.h>
 
