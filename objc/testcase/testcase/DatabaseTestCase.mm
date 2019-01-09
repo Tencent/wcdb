@@ -20,6 +20,7 @@
 
 #import <TestCase/DatabaseTestCase.h>
 #import <TestCase/NSObject+TestCase.h>
+#import <TestCase/Random+WCDB.h>
 #import <TestCase/Random.h>
 #import <TestCase/TestCaseAssertion.h>
 #import <TestCase/TestCaseLog.h>
@@ -43,11 +44,7 @@
 {
     [super setUp];
 
-    WCTTag tag;
-    do {
-        tag = self.random.int32;
-    } while (tag == WCTInvalidTag);
-    self.database.tag = tag;
+    self.database.tag = self.random.tag;
 
     self.expectSQLsInAllThreads = NO;
     self.expectFirstFewSQLsOnly = NO;
