@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#import "BenchmarkFactory.h"
+#import "BenchmarkObject+WCTTableCoding.h"
+#import "BenchmarkObject.h"
 #import <TestCase/TestCase.h>
-
-// TODO: refactor to time based benchmark
 
 @interface Benchmark : DatabaseTestCase
 

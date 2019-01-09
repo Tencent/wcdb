@@ -25,9 +25,8 @@
 - (void)setUp
 {
     [super setUp];
-
     WCTDatabase.debuggable = NO;
-    [self.class disableSQLTrace];
+    self.random.stable = YES;
 }
 
 @end
