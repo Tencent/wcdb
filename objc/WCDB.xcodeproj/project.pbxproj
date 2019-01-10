@@ -167,8 +167,7 @@
 		23585B6821E6F83B00EE0334 /* CipherBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23585B6521E6F83A00EE0334 /* CipherBenchmark.mm */; };
 		23585B7621E7231400EE0334 /* DatabaseMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23585B7421E7231300EE0334 /* DatabaseMigrationBenchmark.mm */; };
 		23585B7721E7231400EE0334 /* TableMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23585B7521E7231400EE0334 /* TableMigrationBenchmark.mm */; };
-		23585B7F21E742A500EE0334 /* OtherBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23585B7D21E742A400EE0334 /* OtherBenchmark.mm */; };
-		23585B8021E742A500EE0334 /* ThreadBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23585B7E21E742A400EE0334 /* ThreadBenchmark.mm */; };
+		23585B7F21E742A500EE0334 /* InitializationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23585B7D21E742A400EE0334 /* InitializationBenchmark.mm */; };
 		23593B7D20D3ADF80058B416 /* WalRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23593B7B20D3ADF80058B416 /* WalRelated.cpp */; };
 		23593B7F20D3ADF80058B416 /* WalRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23593B7C20D3ADF80058B416 /* WalRelated.hpp */; };
 		2360A5F720D78F1B00E4A311 /* HandleRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2360A5F320D78F1B00E4A311 /* HandleRelated.cpp */; };
@@ -1397,8 +1396,7 @@
 		23585B6521E6F83A00EE0334 /* CipherBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CipherBenchmark.mm; sourceTree = "<group>"; };
 		23585B7421E7231300EE0334 /* DatabaseMigrationBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DatabaseMigrationBenchmark.mm; sourceTree = "<group>"; };
 		23585B7521E7231400EE0334 /* TableMigrationBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableMigrationBenchmark.mm; sourceTree = "<group>"; };
-		23585B7D21E742A400EE0334 /* OtherBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OtherBenchmark.mm; sourceTree = "<group>"; };
-		23585B7E21E742A400EE0334 /* ThreadBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ThreadBenchmark.mm; sourceTree = "<group>"; };
+		23585B7D21E742A400EE0334 /* InitializationBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = InitializationBenchmark.mm; sourceTree = "<group>"; };
 		23593B7B20D3ADF80058B416 /* WalRelated.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WalRelated.cpp; sourceTree = "<group>"; };
 		23593B7C20D3ADF80058B416 /* WalRelated.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WalRelated.hpp; sourceTree = "<group>"; };
 		2360A5F320D78F1B00E4A311 /* HandleRelated.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HandleRelated.cpp; sourceTree = "<group>"; };
@@ -3692,8 +3690,7 @@
 				23585B6521E6F83A00EE0334 /* CipherBenchmark.mm */,
 				23585B7421E7231300EE0334 /* DatabaseMigrationBenchmark.mm */,
 				23585B7521E7231400EE0334 /* TableMigrationBenchmark.mm */,
-				23585B7D21E742A400EE0334 /* OtherBenchmark.mm */,
-				23585B7E21E742A400EE0334 /* ThreadBenchmark.mm */,
+				23585B7D21E742A400EE0334 /* InitializationBenchmark.mm */,
 			);
 			path = benchmark;
 			sourceTree = "<group>";
@@ -5097,11 +5094,10 @@
 				23F9045C21E5FA95008701B7 /* Benchmark.mm in Sources */,
 				2351450021D7564700FF639C /* BenchmarkObject.mm in Sources */,
 				23585B6821E6F83B00EE0334 /* CipherBenchmark.mm in Sources */,
-				23585B8021E742A500EE0334 /* ThreadBenchmark.mm in Sources */,
 				23585B5721E6E72C00EE0334 /* BaselineBenchmark.mm in Sources */,
 				23585B7721E7231400EE0334 /* TableMigrationBenchmark.mm in Sources */,
 				23FC01DD21B8B716002C7F87 /* RepairBenchmark.mm in Sources */,
-				23585B7F21E742A500EE0334 /* OtherBenchmark.mm in Sources */,
+				23585B7F21E742A500EE0334 /* InitializationBenchmark.mm in Sources */,
 				23585B7621E7231400EE0334 /* DatabaseMigrationBenchmark.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
