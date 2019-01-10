@@ -26,26 +26,25 @@
 
 @implementation OtherBenchmark
 
-- (void)test_create_index
+- (void)setUp
 {
-    int numberOfObjects = 100000;
+    [super setUp];
+    self.factory.tolerance = 0.0f;
+    self.factory.expectedQuality = 1000000;
+}
 
-    WCDB::StatementCreateIndex statement = WCDB::StatementCreateIndex().createIndex(@"testTable_index").table(@"testTable").indexed(BenchmarkObject.identifier);
-    __block BOOL result;
-    [self
-    measure:^{
-        result = [self.database execute:statement];
-    }
-    setUp:^{
-        [self.factory setProductionLineObjects:numberOfObjects];
-        TestCaseAssertTrue([self.factory production:self.path]);
-    }
-    tearDown:^{
-        result = NO;
-    }
-    checkCorrectness:^{
-        TestCaseAssertTrue(result);
-    }];
+- (void)setUpDatabase
+{
+    NSString* path = [self.factory production:self.directory];
+    TestCaseAssertTrue(path != nil);
+    self.path = path;
+
+    [self.database close]; // reset cache
+}
+
+- (void)tearDownDatabase
+{
+    [self.database removeFiles];
 }
 
 - (void)test_initialization
@@ -54,19 +53,52 @@
 
     __block BOOL result;
     [self
-    measure:^{
+    doMeasure:^{
         result = [self.database canOpen];
     }
     setUp:^{
-        [self.factory setProductionLineTables:numberOfTables];
-        TestCaseAssertTrue([self.factory production:self.path]);
+        [self setUpDatabase];
     }
     tearDown:^{
+        [self tearDownDatabase];
         result = NO;
     }
     checkCorrectness:^{
         TestCaseAssertTrue(result);
     }];
+}
+
+#pragma mark - ReusableFactoryPreparation
+- (BOOL)stepPreparePrototype:(NSString*)path
+{
+    int numberOfTables = [self getQuality:path];
+    int maxNumberOfTables = self.factory.expectedQuality;
+    int step = maxNumberOfTables / 100;
+    if (step > maxNumberOfTables - numberOfTables) {
+        step = maxNumberOfTables - numberOfTables;
+    }
+
+    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
+    return [database runTransaction:^BOOL(WCTHandle* handle) {
+               for (int i = 0; i < step; ++i) {
+                   if (![database createTableAndIndexes:[NSString stringWithFormat:@"t_%@", self.random.string] withClass:BenchmarkObject.class]) {
+                       return NO;
+                   }
+               }
+               return YES;
+           }]
+           && [database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("TRUNCATE")];
+}
+
+- (double)getQuality:(NSString*)path
+{
+    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
+    return [database getValueFromStatement:WCDB::StatementSelect().select(WCTMaster.allProperties.count()).from(WCTMaster.tableName).where(WCTMaster.type == @"table")].numberValue.doubleValue;
+}
+
+- (NSString*)category
+{
+    return @"Initialiazation";
 }
 
 @end

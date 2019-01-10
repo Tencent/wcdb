@@ -24,13 +24,21 @@
     NSString* _tableName;
 }
 
-- (void)setUpDatabase
+- (void)setUp
 {
+    [super setUp];
     self.factory.tolerance = 0.0f;
     self.factory.expectedQuality = 1000000;
+}
+
+- (void)setUpDatabase
+{
     NSString* path = [self.factory production:self.directory];
     TestCaseAssertTrue(path != nil);
     self.path = path;
+
+    [self doSetUpDatabase];
+
     [self.database close]; // reset cache
     TestCaseAssertTrue([self.database canOpen]);
 }
@@ -38,12 +46,22 @@
 - (void)tearDownDatabase
 {
     [self.database removeFiles];
+    [self doTearDownDatabase];
+}
+
+- (void)doSetUpDatabase
+{
+}
+
+- (void)doTearDownDatabase
+{
 }
 
 - (NSString*)tableName
 {
     if (!_tableName) {
         _tableName = [NSString stringWithFormat:@"t_%@", self.random.string];
+        NSLog(@"Table name %@", _tableName);
     }
     return _tableName;
 }
@@ -52,14 +70,7 @@
 {
     int numberOfObjects = 10000;
 
-    NSMutableArray* objects = [NSMutableArray arrayWithCapacity:numberOfObjects];
-    for (int i = self.factory.expectedQuality; i < self.factory.expectedQuality + numberOfObjects; ++i) {
-        BenchmarkObject* object = [[BenchmarkObject alloc] init];
-        object.identifier = i;
-        object.content = self.random.data;
-        [objects addObject:object];
-    }
-
+    __block NSMutableArray* objects = nil;
     __block BOOL result;
     [self
     doMeasure:^{
@@ -73,6 +84,16 @@
     }
     setUp:^{
         [self setUpDatabase];
+
+        if (objects == nil) {
+            objects = [NSMutableArray arrayWithCapacity:numberOfObjects];
+            for (int i = self.factory.expectedQuality; i < self.factory.expectedQuality + numberOfObjects; ++i) {
+                BenchmarkObject* object = [[BenchmarkObject alloc] init];
+                object.identifier = i;
+                object.content = self.random.data;
+                [objects addObject:object];
+            }
+        }
     }
     tearDown:^{
         [self tearDownDatabase];
@@ -106,14 +127,7 @@
 {
     int numberOfObjects = 1000000;
 
-    NSMutableArray* objects = [NSMutableArray arrayWithCapacity:numberOfObjects];
-    for (int i = self.factory.expectedQuality; i < self.factory.expectedQuality + numberOfObjects; ++i) {
-        BenchmarkObject* object = [[BenchmarkObject alloc] init];
-        object.identifier = i;
-        object.content = self.random.data;
-        [objects addObject:object];
-    }
-
+    __block NSMutableArray* objects = nil;
     __block BOOL result;
     [self
     doMeasure:^{
@@ -121,6 +135,16 @@
     }
     setUp:^{
         [self setUpDatabase];
+
+        if (objects == nil) {
+            objects = [NSMutableArray arrayWithCapacity:numberOfObjects];
+            for (int i = self.factory.expectedQuality; i < self.factory.expectedQuality + numberOfObjects; ++i) {
+                BenchmarkObject* object = [[BenchmarkObject alloc] init];
+                object.identifier = i;
+                object.content = self.random.data;
+                [objects addObject:object];
+            }
+        }
     }
     tearDown:^{
         [self tearDownDatabase];
@@ -144,6 +168,27 @@
 - (void)test_batch_write
 {
     [self doTestBatchWrite];
+}
+
+- (void)test_create_index
+{
+    WCDB::StatementCreateIndex statement = WCDB::StatementCreateIndex().createIndex(@"testTable_index").table(@"testTable").indexed(BenchmarkObject.identifier);
+
+    __block BOOL result;
+    [self
+    doMeasure:^{
+        result = [self.database execute:statement];
+    }
+    setUp:^{
+        [self setUpDatabase];
+    }
+    tearDown:^{
+        [self tearDownDatabase];
+        result = NO;
+    }
+    checkCorrectness:^{
+        TestCaseAssertTrue(result);
+    }];
 }
 
 #pragma mark - ReusableFactoryPreparation

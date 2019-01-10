@@ -20,23 +20,11 @@
 
 #import "BaselineBenchmark.h"
 
-@interface CipherBenchmark : BaselineBenchmark <BenchmarkFactoryPreparation>
+@interface CipherBenchmark : BaselineBenchmark
 
 @end
 
 @implementation CipherBenchmark
-
-- (void)setUp
-{
-    [super setUp];
-    self.destination = self.path;
-    self.factory.delegate = self;
-}
-
-- (void)databaseWillStartPreparing:(WCTDatabase*)database
-{
-    [database setCipherKey:[@"benchmark" dataUsingEncoding:NSUTF8StringEncoding]];
-}
 
 - (void)test_write
 {
@@ -51,6 +39,18 @@
 - (void)test_batch_write
 {
     [self doTestBatchWrite];
+}
+
+#pragma mark - ReusableFactoryPreparation
+- (BOOL)willStartPreparing:(NSString *)path
+{
+    [[[WCTDatabase alloc] initWithPath:path] setCipherKey:self.random.data];
+    return YES;
+}
+
+- (NSString *)category
+{
+    return @"Cipher";
 }
 
 @end

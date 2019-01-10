@@ -26,4 +26,37 @@
 
 @implementation TableMigrationBenchmark
 
+- (void)doSetUpDatabase
+{
+    NSString* sourceTable = self.tableName;
+    self.tableName = [NSString stringWithFormat:@"t_%@", self.random.string];
+
+    [self.database filterMigration:^(WCTMigrationUserInfo* info) {
+        if ([info.table isEqualToString:self.tableName]) {
+            info.sourceTable = sourceTable;
+        }
+    }];
+
+    TestCaseAssertTrue([self.database createTableAndIndexes:self.tableName withClass:BenchmarkObject.class]);
+
+    BOOL done;
+    TestCaseAssertTrue([self.database stepMigration:YES done:done]);
+    TestCaseAssertFalse(done);
+}
+
+- (void)test_read
+{
+    [self doTestRead];
+}
+
+- (void)test_write
+{
+    [self doTestWrite];
+}
+
+- (void)test_batch_write
+{
+    [self doTestBatchWrite];
+}
+
 @end

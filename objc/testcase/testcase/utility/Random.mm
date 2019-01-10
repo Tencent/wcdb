@@ -39,6 +39,16 @@
 - (void)setStable:(BOOL)stable
 {
     _engine.reset(new std::default_random_engine(0));
+    _uniformUInt64 = nullptr;
+    _uniformUInt32 = nullptr;
+    _uniformUInt8 = nullptr;
+    _uniformInt64 = nullptr;
+    _uniformInt32 = nullptr;
+    _uniformBool = nullptr;
+    _uniformDouble = nullptr;
+    _uniformFloat = nullptr;
+    _uniformFloat_0_1 = nullptr;
+    _uniformUChar = nullptr;
     _uniformLength.reset(new std::uniform_int_distribution<int>(100, 100));
 }
 

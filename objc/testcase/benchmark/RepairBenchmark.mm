@@ -35,6 +35,18 @@
     self.factory.tolerance = 0.02;
 }
 
+- (void)setUpDatabase
+{
+    NSString* path = [self.factory production:self.directory];
+    TestCaseAssertTrue(path != nil);
+    self.path = path;
+}
+
+- (void)tearDownDatabase
+{
+    TestCaseAssertTrue([self.database removeFiles]);
+}
+
 - (void)test_backup
 {
     __block BOOL result;
@@ -43,17 +55,10 @@
         result = [self.database backup];
     }
     setUp:^{
-        NSString* path = [self.factory production:self.directory];
-        TestCaseAssertTrue(path != nil);
-        self.path = path;
+        [self setUpDatabase];
     }
     tearDown:^{
-        if ([self.fileManager fileExistsAtPath:self.firstMaterialPath]) {
-            TestCaseAssertTrue([self.fileManager removeItemAtPath:self.firstMaterialPath error:nil]);
-        }
-        if ([self.fileManager fileExistsAtPath:self.lastMaterialPath]) {
-            TestCaseAssertTrue([self.fileManager removeItemAtPath:self.lastMaterialPath error:nil]);
-        }
+        [self tearDownDatabase];
         result = NO;
     }
     checkCorrectness:^{
@@ -70,12 +75,11 @@
         score = [self.database retrieve:nil];
     }
     setUp:^{
-        NSString* path = [self.factory production:self.directory];
-        TestCaseAssertTrue(path != nil);
-        self.path = path;
+        [self setUpDatabase];
         TestCaseAssertTrue([self.database backup]);
     }
     tearDown:^{
+        [self tearDownDatabase];
         score = 0.0f;
     }
     checkCorrectness:^{
@@ -91,11 +95,10 @@
         score = [self.database retrieve:nil];
     }
     setUp:^{
-        NSString* path = [self.factory production:self.directory];
-        TestCaseAssertTrue(path != nil);
-        self.path = path;
+        [self setUpDatabase];
     }
     tearDown:^{
+        [self tearDownDatabase];
         score = 0.0f;
     }
     checkCorrectness:^{

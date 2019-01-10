@@ -21,15 +21,38 @@
 #import "BaselineBenchmark.h"
 
 @interface DatabaseMigrationBenchmark : BaselineBenchmark
-
+@property (nonatomic, retain) NSString* sourceDatabase;
 @end
 
 @implementation DatabaseMigrationBenchmark
 
-- (void)setUp
+- (void)doSetUpDatabase
 {
-    [super setUp];
-    self.destination = [self.path stringByAppendingString:@"_source"];
+    self.sourceDatabase = self.path;
+    self.path = [NSString stringWithFormat:@"%@_migrated", self.sourceDatabase];
+
+    NSString* sourceTable = self.tableName;
+    NSString* sourceDatabase = self.sourceDatabase;
+    [self.database filterMigration:^(WCTMigrationUserInfo* info) {
+        if ([info.table isEqualToString:sourceTable]) {
+            info.sourceTable = sourceTable;
+            info.sourceDatabase = sourceDatabase;
+        }
+    }];
+
+    TestCaseAssertTrue([self.database createTableAndIndexes:self.tableName withClass:BenchmarkObject.class]);
+
+    BOOL done;
+    TestCaseAssertTrue([self.database stepMigration:YES done:done]);
+    TestCaseAssertFalse(done);
+}
+
+- (void)doTearDownDatabase
+{
+    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:self.sourceDatabase];
+    TestCaseAssertTrue([database removeFiles]);
+    self.sourceDatabase = nil;
+    [super doTearDownDatabase];
 }
 
 - (void)test_read

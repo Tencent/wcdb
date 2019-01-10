@@ -22,7 +22,10 @@
 
 @interface BaselineBenchmark : Benchmark
 
-@property (nonatomic, readonly) NSString* tableName;
+@property (nonatomic, retain) NSString* tableName;
+
+- (void)doSetUpDatabase;
+- (void)doTearDownDatabase;
 
 - (void)doTestWrite;
 

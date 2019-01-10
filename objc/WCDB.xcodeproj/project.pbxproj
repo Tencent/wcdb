@@ -30,7 +30,6 @@
 		23176A9B21BA7D460051ACF9 /* WCTDatabase+Version.h in Headers */ = {isa = PBXBuildFile; fileRef = 23176A9921BA7D460051ACF9 /* WCTDatabase+Version.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23176A9C21BA7D460051ACF9 /* WCTDatabase+Version.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23176A9A21BA7D460051ACF9 /* WCTDatabase+Version.mm */; };
 		2319D8BF21C2504C00F5B8C0 /* StoppableIterationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2319D8BE21C2504C00F5B8C0 /* StoppableIterationTests.mm */; };
-		231C35E821DDF95F00B5D3D2 /* TableMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231C35E721DDF95F00B5D3D2 /* TableMigrationBenchmark.mm */; };
 		231C35EE21DE09E800B5D3D2 /* Exiting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 231C35EC21DE09E400B5D3D2 /* Exiting.cpp */; };
 		231C35EF21DE09EC00B5D3D2 /* Exiting.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 231C35EA21DE090500B5D3D2 /* Exiting.hpp */; };
 		231FEA2621999E7D00DC3706 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
@@ -164,6 +163,12 @@
 		23567D7D20CA93C5005F1C35 /* Time.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567D7A20CA93C5005F1C35 /* Time.hpp */; };
 		23577F791F74F4E800D31C05 /* WCTCursorInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 23577F771F74F4E800D31C05 /* WCTCursorInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23577F7A1F74F4E800D31C05 /* WCTCursorInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23577F781F74F4E800D31C05 /* WCTCursorInfo.mm */; };
+		23585B5721E6E72C00EE0334 /* BaselineBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23585B5621E6E72C00EE0334 /* BaselineBenchmark.mm */; };
+		23585B6821E6F83B00EE0334 /* CipherBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23585B6521E6F83A00EE0334 /* CipherBenchmark.mm */; };
+		23585B7621E7231400EE0334 /* DatabaseMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23585B7421E7231300EE0334 /* DatabaseMigrationBenchmark.mm */; };
+		23585B7721E7231400EE0334 /* TableMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23585B7521E7231400EE0334 /* TableMigrationBenchmark.mm */; };
+		23585B7F21E742A500EE0334 /* OtherBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23585B7D21E742A400EE0334 /* OtherBenchmark.mm */; };
+		23585B8021E742A500EE0334 /* ThreadBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23585B7E21E742A400EE0334 /* ThreadBenchmark.mm */; };
 		23593B7D20D3ADF80058B416 /* WalRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23593B7B20D3ADF80058B416 /* WalRelated.cpp */; };
 		23593B7F20D3ADF80058B416 /* WalRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23593B7C20D3ADF80058B416 /* WalRelated.hpp */; };
 		2360A5F720D78F1B00E4A311 /* HandleRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2360A5F320D78F1B00E4A311 /* HandleRelated.cpp */; };
@@ -287,11 +292,6 @@
 		2384F71F2194249200E8B10A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		2384F7202194249200E8B10A /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		2384F7232194249200E8B10A /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		2385468821DD917500C619B4 /* BaselineBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2385468721DD917500C619B4 /* BaselineBenchmark.mm */; };
-		2385468A21DD917F00C619B4 /* CipherBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2385468921DD917F00C619B4 /* CipherBenchmark.mm */; };
-		2385468C21DD918600C619B4 /* ThreadBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2385468B21DD918600C619B4 /* ThreadBenchmark.mm */; };
-		2385468E21DD918D00C619B4 /* DatabaseMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2385468D21DD918D00C619B4 /* DatabaseMigrationBenchmark.mm */; };
-		2385469021DD91A200C619B4 /* OtherBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2385468F21DD91A200C619B4 /* OtherBenchmark.mm */; };
 		2386563D219C009E00F7F6D2 /* FileTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386563C219C009E00F7F6D2 /* FileTests.mm */; };
 		2386563F219C00A500F7F6D2 /* MemoryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386563E219C00A500F7F6D2 /* MemoryTests.mm */; };
 		23865641219C213200F7F6D2 /* TransactionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865640219C213200F7F6D2 /* TransactionTests.mm */; };
@@ -814,11 +814,11 @@
 		23F9040221E5CE20008701B7 /* Random+WCDB.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23F9040021E5CE20008701B7 /* Random+WCDB.mm */; };
 		23F9040521E5D453008701B7 /* ReusableFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 23F9040321E5D453008701B7 /* ReusableFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F9040621E5D453008701B7 /* ReusableFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23F9040421E5D453008701B7 /* ReusableFactory.mm */; };
+		23F9045C21E5FA95008701B7 /* Benchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23F9045B21E5FA95008701B7 /* Benchmark.mm */; };
 		23FC01DD21B8B716002C7F87 /* RepairBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FC01DC21B8B716002C7F87 /* RepairBenchmark.mm */; };
 		23FC43D821B6631200FA1A0F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		23FC43D921B6631200FA1A0F /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		23FC43DC21B6631200FA1A0F /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		23FC43E821B6644B00FA1A0F /* Benchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FC43E621B6644B00FA1A0F /* Benchmark.mm */; };
 		23FEC463206B3032001E7A3B /* WCTConvenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 23FEC461206B3032001E7A3B /* WCTConvenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
@@ -1271,7 +1271,6 @@
 		23176A9921BA7D460051ACF9 /* WCTDatabase+Version.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Version.h"; sourceTree = "<group>"; };
 		23176A9A21BA7D460051ACF9 /* WCTDatabase+Version.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Version.mm"; sourceTree = "<group>"; };
 		2319D8BE21C2504C00F5B8C0 /* StoppableIterationTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = StoppableIterationTests.mm; sourceTree = "<group>"; };
-		231C35E721DDF95F00B5D3D2 /* TableMigrationBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TableMigrationBenchmark.mm; sourceTree = "<group>"; };
 		231C35EA21DE090500B5D3D2 /* Exiting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Exiting.hpp; sourceTree = "<group>"; };
 		231C35EC21DE09E400B5D3D2 /* Exiting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Exiting.cpp; sourceTree = "<group>"; };
 		231FEA2F21999E7D00DC3706 /* Basic.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Basic.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1393,6 +1392,13 @@
 		23567D7A20CA93C5005F1C35 /* Time.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Time.hpp; sourceTree = "<group>"; };
 		23577F771F74F4E800D31C05 /* WCTCursorInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTCursorInfo.h; sourceTree = "<group>"; };
 		23577F781F74F4E800D31C05 /* WCTCursorInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTCursorInfo.mm; sourceTree = "<group>"; };
+		23585B5521E6E72C00EE0334 /* BaselineBenchmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaselineBenchmark.h; sourceTree = "<group>"; };
+		23585B5621E6E72C00EE0334 /* BaselineBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BaselineBenchmark.mm; sourceTree = "<group>"; };
+		23585B6521E6F83A00EE0334 /* CipherBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CipherBenchmark.mm; sourceTree = "<group>"; };
+		23585B7421E7231300EE0334 /* DatabaseMigrationBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DatabaseMigrationBenchmark.mm; sourceTree = "<group>"; };
+		23585B7521E7231400EE0334 /* TableMigrationBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableMigrationBenchmark.mm; sourceTree = "<group>"; };
+		23585B7D21E742A400EE0334 /* OtherBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OtherBenchmark.mm; sourceTree = "<group>"; };
+		23585B7E21E742A400EE0334 /* ThreadBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ThreadBenchmark.mm; sourceTree = "<group>"; };
 		23593B7B20D3ADF80058B416 /* WalRelated.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WalRelated.cpp; sourceTree = "<group>"; };
 		23593B7C20D3ADF80058B416 /* WalRelated.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WalRelated.hpp; sourceTree = "<group>"; };
 		2360A5F320D78F1B00E4A311 /* HandleRelated.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HandleRelated.cpp; sourceTree = "<group>"; };
@@ -1561,12 +1567,6 @@
 		2384F6FF21941BF000E8B10A /* NewRebindObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NewRebindObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		2384F70021941BF000E8B10A /* NewRebindObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewRebindObject.h; sourceTree = "<group>"; };
 		2384F7282194249200E8B10A /* Convenient.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Convenient.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		2385468721DD917500C619B4 /* BaselineBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = BaselineBenchmark.mm; sourceTree = "<group>"; };
-		2385468921DD917F00C619B4 /* CipherBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CipherBenchmark.mm; sourceTree = "<group>"; };
-		2385468B21DD918600C619B4 /* ThreadBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ThreadBenchmark.mm; sourceTree = "<group>"; };
-		2385468D21DD918D00C619B4 /* DatabaseMigrationBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DatabaseMigrationBenchmark.mm; sourceTree = "<group>"; };
-		2385468F21DD91A200C619B4 /* OtherBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OtherBenchmark.mm; sourceTree = "<group>"; };
-		238546AA21DDA54100C619B4 /* BaselineBenchmark.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaselineBenchmark.h; sourceTree = "<group>"; };
 		2386563C219C009E00F7F6D2 /* FileTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FileTests.mm; sourceTree = "<group>"; };
 		2386563E219C00A500F7F6D2 /* MemoryTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MemoryTests.mm; sourceTree = "<group>"; };
 		23865640219C213200F7F6D2 /* TransactionTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TransactionTests.mm; sourceTree = "<group>"; };
@@ -2082,10 +2082,10 @@
 		23F9040021E5CE20008701B7 /* Random+WCDB.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "Random+WCDB.mm"; sourceTree = "<group>"; };
 		23F9040321E5D453008701B7 /* ReusableFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReusableFactory.h; sourceTree = "<group>"; };
 		23F9040421E5D453008701B7 /* ReusableFactory.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ReusableFactory.mm; sourceTree = "<group>"; };
+		23F9045A21E5FA95008701B7 /* Benchmark.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Benchmark.h; sourceTree = "<group>"; };
+		23F9045B21E5FA95008701B7 /* Benchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Benchmark.mm; sourceTree = "<group>"; };
 		23FC01DC21B8B716002C7F87 /* RepairBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RepairBenchmark.mm; sourceTree = "<group>"; };
 		23FC43E121B6631200FA1A0F /* Benchmark.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Benchmark.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		23FC43E621B6644B00FA1A0F /* Benchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Benchmark.mm; sourceTree = "<group>"; };
-		23FC43E721B6644B00FA1A0F /* Benchmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Benchmark.h; sourceTree = "<group>"; };
 		23FEC461206B3032001E7A3B /* WCTConvenient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTConvenient.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -3684,16 +3684,16 @@
 				235144FC21D7564700FF639C /* BenchmarkObject.h */,
 				235144FE21D7564700FF639C /* BenchmarkObject.mm */,
 				235144FD21D7564700FF639C /* BenchmarkObject+WCTTableCoding.h */,
-				23FC43E621B6644B00FA1A0F /* Benchmark.mm */,
-				23FC43E721B6644B00FA1A0F /* Benchmark.h */,
 				23FC01DC21B8B716002C7F87 /* RepairBenchmark.mm */,
-				2385468721DD917500C619B4 /* BaselineBenchmark.mm */,
-				238546AA21DDA54100C619B4 /* BaselineBenchmark.h */,
-				2385468921DD917F00C619B4 /* CipherBenchmark.mm */,
-				2385468B21DD918600C619B4 /* ThreadBenchmark.mm */,
-				2385468D21DD918D00C619B4 /* DatabaseMigrationBenchmark.mm */,
-				231C35E721DDF95F00B5D3D2 /* TableMigrationBenchmark.mm */,
-				2385468F21DD91A200C619B4 /* OtherBenchmark.mm */,
+				23F9045A21E5FA95008701B7 /* Benchmark.h */,
+				23F9045B21E5FA95008701B7 /* Benchmark.mm */,
+				23585B5521E6E72C00EE0334 /* BaselineBenchmark.h */,
+				23585B5621E6E72C00EE0334 /* BaselineBenchmark.mm */,
+				23585B6521E6F83A00EE0334 /* CipherBenchmark.mm */,
+				23585B7421E7231300EE0334 /* DatabaseMigrationBenchmark.mm */,
+				23585B7521E7231400EE0334 /* TableMigrationBenchmark.mm */,
+				23585B7D21E742A400EE0334 /* OtherBenchmark.mm */,
+				23585B7E21E742A400EE0334 /* ThreadBenchmark.mm */,
 			);
 			path = benchmark;
 			sourceTree = "<group>";
@@ -5094,15 +5094,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				231C35E821DDF95F00B5D3D2 /* TableMigrationBenchmark.mm in Sources */,
+				23F9045C21E5FA95008701B7 /* Benchmark.mm in Sources */,
 				2351450021D7564700FF639C /* BenchmarkObject.mm in Sources */,
+				23585B6821E6F83B00EE0334 /* CipherBenchmark.mm in Sources */,
+				23585B8021E742A500EE0334 /* ThreadBenchmark.mm in Sources */,
+				23585B5721E6E72C00EE0334 /* BaselineBenchmark.mm in Sources */,
+				23585B7721E7231400EE0334 /* TableMigrationBenchmark.mm in Sources */,
 				23FC01DD21B8B716002C7F87 /* RepairBenchmark.mm in Sources */,
-				2385469021DD91A200C619B4 /* OtherBenchmark.mm in Sources */,
-				23FC43E821B6644B00FA1A0F /* Benchmark.mm in Sources */,
-				2385468E21DD918D00C619B4 /* DatabaseMigrationBenchmark.mm in Sources */,
-				2385468C21DD918600C619B4 /* ThreadBenchmark.mm in Sources */,
-				2385468821DD917500C619B4 /* BaselineBenchmark.mm in Sources */,
-				2385468A21DD917F00C619B4 /* CipherBenchmark.mm in Sources */,
+				23585B7F21E742A500EE0334 /* OtherBenchmark.mm in Sources */,
+				23585B7621E7231400EE0334 /* DatabaseMigrationBenchmark.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

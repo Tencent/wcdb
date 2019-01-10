@@ -26,7 +26,6 @@
 @property (nonatomic, readonly) NSFileManager* fileManager;
 @property (nonatomic, readonly) NSString* prototype;
 @property (nonatomic, readonly) NSArray<NSString*>* prototypes;
-@property (nonatomic, readonly) NSDictionary<NSString*, NSString*>* parameters;
 @end
 
 @implementation ReusableFactory
@@ -44,10 +43,7 @@
 {
     _delegate = delegate;
 
-    _parameters = [NSDictionary dictionaryWithObjectsAndKeys:
-                                self.delegate.category, @"category", @(self.expectedQuality), @"quality", nil];
-
-    _prototype = [self.directory stringByAppendingPathComponent:[NSString stringWithFormat:@"%lu", _parameters.description.hash]];
+    _prototype = [[self.directory stringByAppendingPathComponent:self.delegate.category] stringByAppendingPathComponent:[NSString stringWithFormat:@"%f", self.expectedQuality]];
 
     NSMutableArray* prototypes = [NSMutableArray arrayWithObject:_prototype];
     if ([self.delegate respondsToSelector:@selector(additionalPrototypes:)]) {
