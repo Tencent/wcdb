@@ -200,6 +200,9 @@
     if (step > maxNumberOfObjects - numberOfObjects) {
         step = maxNumberOfObjects - numberOfObjects;
     }
+    if (step < 1) {
+        step = 1;
+    }
 
     WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
 
