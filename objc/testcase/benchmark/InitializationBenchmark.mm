@@ -20,17 +20,17 @@
 
 #import "Benchmark.h"
 
-@interface OtherBenchmark : Benchmark
+@interface InitializationBenchmark : Benchmark
 
 @end
 
-@implementation OtherBenchmark
+@implementation InitializationBenchmark
 
 - (void)setUp
 {
     [super setUp];
     self.factory.tolerance = 0.0f;
-    self.factory.expectedQuality = 1000000;
+    self.factory.expectedQuality = 100000;
 }
 
 - (void)setUpDatabase
@@ -49,8 +49,6 @@
 
 - (void)test_initialization
 {
-    int numberOfTables = 100000;
-
     __block BOOL result;
     [self
     doMeasure:^{
@@ -77,6 +75,9 @@
     if (step > maxNumberOfTables - numberOfTables) {
         step = maxNumberOfTables - numberOfTables;
     }
+    if (step < 1) {
+        step = 1;
+    }
 
     WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
     return [database runTransaction:^BOOL(WCTHandle* handle) {
@@ -98,7 +99,7 @@
 
 - (NSString*)category
 {
-    return @"Initialiazation";
+    return @"Tables";
 }
 
 @end
