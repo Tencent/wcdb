@@ -114,15 +114,12 @@
 - (BOOL)copyItemsIfExistsAtPaths:(NSArray<NSString *> *)paths toDirectory:(NSString *)directory error:(NSError **)error
 {
     for (NSString *path in paths.reversedArray) {
+        NSString *newPath = [NSString pathByReplacingPath:path withDirectory:directory];
+        // remove existing file
+        if (![self removeItemIfExistsAtPath:newPath error:error]) {
+            return NO;
+        }
         if ([self fileExistsAtPath:path]) {
-            NSString *newPath = [NSString pathByReplacingPath:path withDirectory:directory];
-            // remove existing file
-            if ([self fileExistsAtPath:newPath]) {
-                if (![self removeItemAtPath:newPath error:error]) {
-                    return NO;
-                }
-            }
-
             if (![self copyItemAtPath:path toPath:newPath error:error]) {
                 return NO;
             }
@@ -131,10 +128,18 @@
     return YES;
 }
 
+- (BOOL)removeItemIfExistsAtPath:(NSString *)path error:(NSError **)error
+{
+    if ([self fileExistsAtPath:path]) {
+        return [self removeItemAtPath:path error:error];
+    }
+    return YES;
+}
+
 - (BOOL)removeItemsIfExistsAtPaths:(NSArray<NSString *> *)paths error:(NSError **)error
 {
     for (NSString *path in paths.reversedArray) {
-        if (![self removeItemAtPath:path error:error]) {
+        if (![self removeItemIfExistsAtPath:path error:error]) {
             return NO;
         }
     }

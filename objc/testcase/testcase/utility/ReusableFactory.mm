@@ -23,10 +23,10 @@
 #import <TestCase/TestCaseLog.h>
 
 @interface ReusableFactory ()
+@property (nonatomic, readonly) NSFileManager* fileManager;
 @property (nonatomic, readonly) NSString* prototype;
 @property (nonatomic, readonly) NSArray<NSString*>* prototypes;
 @property (nonatomic, readonly) NSDictionary<NSString*, NSString*>* parameters;
-
 @end
 
 @implementation ReusableFactory
@@ -35,7 +35,7 @@
 {
     if (self = [super init]) {
         _directory = directory;
-        _renew = NO;
+        _fileManager = [NSFileManager defaultManager];
     }
     return self;
 }
@@ -44,17 +44,8 @@
 {
     _delegate = delegate;
 
-    NSMutableDictionary* parameters = [NSMutableDictionary dictionary];
-    [parameters setObject:self.delegate.category forKey:@"category"];
-    [parameters setObject:@(self.expectedQuality) forKey:@"quality"];
-    ;
-    if ([self.delegate respondsToSelector:@selector(additionalParameters)]) {
-        NSDictionary<NSString*, NSString*>* additionalParameters = self.delegate.additionalParameters;
-        for (NSString* key in parameters.allKeys) {
-            [parameters setObject:additionalParameters[key] forKey:key];
-        }
-    }
-    _parameters = [NSDictionary dictionaryWithDictionary:parameters];
+    _parameters = [NSDictionary dictionaryWithObjectsAndKeys:
+                                self.delegate.category, @"category", @(self.expectedQuality), @"quality", nil];
 
     _prototype = [self.directory stringByAppendingPathComponent:[NSString stringWithFormat:@"%lu", _parameters.description.hash]];
 
@@ -62,18 +53,19 @@
     if ([self.delegate respondsToSelector:@selector(additionalPrototypes:)]) {
         [prototypes addObjectsFromArray:[self.delegate additionalPrototypes:_prototype]];
     }
-    _prototypes = [NSArray arrayWithArray:_prototypes];
+    _prototypes = [NSArray arrayWithArray:prototypes];
+}
+
+- (BOOL)removePrototypes
+{
+    return [self.fileManager setFileImmutable:NO ofItemsIfExistsAtPaths:self.prototypes error:nil] && [self.fileManager removeItemsIfExistsAtPaths:self.prototypes error:nil];
 }
 
 - (BOOL)isPrototypeExpired
 {
-    NSString* prototype = self.prototype;
-    BOOL expired = self.renew;
+    BOOL expired = ![self.fileManager isFileImmutableOfItemAtPath:self.prototype error:nil];
     if (!expired) {
-        expired = ![[NSFileManager defaultManager] isFileImmutableOfItemAtPath:prototype error:nil];
-    }
-    if (!expired) {
-        double quality = [self.delegate getQuality:prototype];
+        double quality = [self.delegate getQuality:self.prototype];
         expired = quality > self.expectedQuality * (1.0f + self.tolerance) || quality < self.expectedQuality * (1.0f - self.tolerance);
     }
     return expired;
@@ -81,21 +73,29 @@
 
 - (NSString*)production:(NSString*)destination
 {
-    NSFileManager* fileManager = [NSFileManager defaultManager];
-
     if ([self isPrototypeExpired]) {
-        // reset immutable
-        if (![fileManager setFileImmutable:NO ofItemsIfExistsAtPaths:self.prototypes error:nil]) {
+        // remove old prototypes
+        if (![self.fileManager setFileImmutable:NO ofItemsIfExistsAtPaths:self.prototypes error:nil]) {
             return nil;
         }
 
-        if (![self prepare]
-            || ![fileManager setFileImmutable:YES ofItemsIfExistsAtPaths:self.prototypes error:nil]) {
+        if (![self prepare]) {
+            return nil;
+        }
+
+        // prepare and set immutable
+        if (![self.fileManager setFileImmutable:YES ofItemsIfExistsAtPaths:self.prototypes error:nil]) {
             return nil;
         }
     }
 
-    if (![fileManager copyItemsIfExistsAtPaths:self.prototypes toDirectory:destination error:nil]) {
+    NSArray<NSString*>* products = [NSString pathsByReplacingPaths:self.prototypes withDirectory:destination];
+    // reset immutable for dirty files
+    if (![self.fileManager setFileImmutable:NO ofItemsIfExistsAtPaths:products error:nil]) {
+        return nil;
+    }
+    if (![self.fileManager copyItemsIfExistsAtPaths:self.prototypes toDirectory:destination error:nil]
+        || ![self.fileManager setFileImmutable:NO ofItemsIfExistsAtPaths:products error:nil]) {
         return nil;
     }
 
@@ -106,13 +106,12 @@
 
 - (BOOL)prepare
 {
-    if (![[NSFileManager defaultManager] removeItemsIfExistsAtPaths:self.prototypes error:nil]) {
-        return NO;
-    }
-
     double progress = 0;
     double quality = 0;
     do {
+        if (![self.fileManager removeItemsIfExistsAtPaths:self.prototypes error:nil]) {
+            return NO;
+        }
         if (self.delegate && [self.delegate respondsToSelector:@selector(willStartPreparing:)]) {
             [self.delegate willStartPreparing:self.prototype];
         }
@@ -131,8 +130,10 @@
                 progress = newProgress;
                 TestCaseLog(@"Preparing %.2f%%", progress * 100.0f);
             }
-
         } while (quality < self.expectedQuality * (1.0f - self.tolerance));
+        if (self.delegate && [self.delegate respondsToSelector:@selector(willEndPreparing:)]) {
+            [self.delegate willEndPreparing:self.prototype];
+        }
     } while (quality > self.expectedQuality * (1.0f + self.tolerance));
     return YES;
 }

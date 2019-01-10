@@ -20,12 +20,18 @@
 
 #import "Benchmark.h"
 
+@interface RepairBenchmark : Benchmark
+@property (nonatomic, readonly) int step;
+@end
+
 @implementation RepairBenchmark
 
 - (void)setUp
 {
     [super setUp];
 
+    self.factory.expectedQuality = 100.0; // file size in MB
+    _step = self.factory.expectedQuality * 100;
     self.factory.tolerance = 0.02;
 }
 
@@ -33,25 +39,26 @@
 {
     __block BOOL result;
     [self
-    measure:^{
+    doMeasure:^{
         result = [self.database backup];
     }
     setUp:^{
-        [self.factory setProductionLineFileSizeInMB:100];
-        TestCaseAssertTrue([self.factory production:self.path]);
+        NSString* path = [self.factory production:self.directory];
+        TestCaseAssertTrue(path != nil);
+        self.path = path;
     }
     tearDown:^{
-        if ([self.fileManager fileExistsAtPath:self.firstMaterial]) {
-            TestCaseAssertTrue([self.fileManager removeItemAtPath:self.firstMaterial error:nil]);
+        if ([self.fileManager fileExistsAtPath:self.firstMaterialPath]) {
+            TestCaseAssertTrue([self.fileManager removeItemAtPath:self.firstMaterialPath error:nil]);
         }
-        if ([self.fileManager fileExistsAtPath:self.lastMaterial]) {
-            TestCaseAssertTrue([self.fileManager removeItemAtPath:self.lastMaterial error:nil]);
+        if ([self.fileManager fileExistsAtPath:self.lastMaterialPath]) {
+            TestCaseAssertTrue([self.fileManager removeItemAtPath:self.lastMaterialPath error:nil]);
         }
         result = NO;
     }
     checkCorrectness:^{
         TestCaseAssertTrue(result);
-        TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.firstMaterial]);
+        TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
     }];
 }
 
@@ -59,12 +66,13 @@
 {
     __block double score;
     [self
-    measure:^{
+    doMeasure:^{
         score = [self.database retrieve:nil];
     }
     setUp:^{
-        [self.factory setProductionLineFileSizeInMB:100];
-        TestCaseAssertTrue([self.factory production:self.path]);
+        NSString* path = [self.factory production:self.directory];
+        TestCaseAssertTrue(path != nil);
+        self.path = path;
         TestCaseAssertTrue([self.database backup]);
     }
     tearDown:^{
@@ -79,12 +87,13 @@
 {
     __block double score;
     [self
-    measure:^{
+    doMeasure:^{
         score = [self.database retrieve:nil];
     }
     setUp:^{
-        [self.factory setProductionLineFileSizeInMB:100];
-        TestCaseAssertTrue([self.factory production:self.path]);
+        NSString* path = [self.factory production:self.directory];
+        TestCaseAssertTrue(path != nil);
+        self.path = path;
     }
     tearDown:^{
         score = 0.0f;
@@ -92,6 +101,37 @@
     checkCorrectness:^{
         TestCaseAssertEqual(score, 1.0f);
     }];
+}
+
+#pragma mark - ReusableFactoryPreparation
+- (BOOL)stepPreparePrototype:(NSString*)path
+{
+    NSMutableArray* objects = [NSMutableArray arrayWithCapacity:self.step];
+    for (int i = 0; i < self.step; ++i) {
+        BenchmarkObject* object = [[BenchmarkObject alloc] init];
+        object.identifier = i;
+        object.content = self.random.data;
+        [objects addObject:object];
+    }
+
+    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
+    return [database runTransaction:^BOOL(WCTHandle* handle) {
+               NSString* tableName = [NSString stringWithFormat:@"t_%@", self.random.string];
+               return [database createTableAndIndexes:tableName withClass:BenchmarkObject.class]
+                      && [handle insertObjects:objects intoTable:tableName];
+           }]
+           && [database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("TRUNCATE")];
+}
+
+- (double)getQuality:(NSString*)path
+{
+    NSUInteger fileSize = [[[WCTDatabase alloc] initWithPath:path] getFilesSize].value();
+    return (double) fileSize / 1024 / 1024;
+}
+
+- (NSString*)category
+{
+    return @"Repair";
 }
 
 @end

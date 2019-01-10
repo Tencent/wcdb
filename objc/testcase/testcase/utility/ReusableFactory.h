@@ -28,7 +28,6 @@
 @optional
 - (BOOL)willStartPreparing:(NSString*)path;
 - (BOOL)willEndPreparing:(NSString*)path;
-- (NSDictionary<NSString*, NSString*>*)additionalParameters;
 - (NSArray<NSString*>*)additionalPrototypes:(NSString*)prototype;
 @end
 
@@ -41,10 +40,10 @@
 
 @property (nonatomic, assign) double tolerance;
 
-@property (nonatomic, assign) BOOL renew;
-
 @property (nonatomic, assign) double expectedQuality;
 
 - (NSString*)production:(NSString*)destination;
+
+- (BOOL)removePrototypes;
 
 @end

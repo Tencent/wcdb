@@ -56,6 +56,7 @@
 
 - (unsigned long long)getFileSizeIfExists:(NSString*)path;
 - (BOOL)copyItemsIfExistsAtPaths:(NSArray<NSString*>*)paths toDirectory:(NSString*)directory error:(NSError**)error;
+- (BOOL)removeItemIfExistsAtPath:(NSString*)path error:(NSError**)error;
 - (BOOL)removeItemsIfExistsAtPaths:(NSArray<NSString*>*)paths error:(NSError**)error;
 - (BOOL)setFileImmutable:(BOOL)immutable ofItemsIfExistsAtPaths:(NSArray<NSString*>*)paths error:(NSError**)error;
 - (BOOL)isFileImmutableOfItemAtPath:(NSString*)path error:(NSError**)error;

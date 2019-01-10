@@ -22,7 +22,7 @@
 
 @interface BaselineBenchmark : Benchmark
 
-@property (nonatomic, retain) NSString* destination;
+@property (nonatomic, readonly) NSString* tableName;
 
 - (void)doTestWrite;
 

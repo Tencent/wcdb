@@ -20,13 +20,32 @@
 
 #import "BaselineBenchmark.h"
 
-@implementation BaselineBenchmark
+@implementation BaselineBenchmark {
+    NSString* _tableName;
+}
 
-- (void)setUp
+- (void)setUpDatabase
 {
-    [super setUp];
     self.factory.tolerance = 0.0f;
-    self.destination = self.path;
+    self.factory.expectedQuality = 1000000;
+    NSString* path = [self.factory production:self.directory];
+    TestCaseAssertTrue(path != nil);
+    self.path = path;
+    [self.database close]; // reset cache
+    TestCaseAssertTrue([self.database canOpen]);
+}
+
+- (void)tearDownDatabase
+{
+    [self.database removeFiles];
+}
+
+- (NSString*)tableName
+{
+    if (!_tableName) {
+        _tableName = [NSString stringWithFormat:@"t_%@", self.random.string];
+    }
+    return _tableName;
 }
 
 - (void)doTestWrite
@@ -34,20 +53,18 @@
     int numberOfObjects = 10000;
 
     NSMutableArray* objects = [NSMutableArray arrayWithCapacity:numberOfObjects];
-    Random* random = [[StableRandom alloc] init];
-    random.seed = 0;
-    for (int i = 0; i < numberOfObjects; ++i) {
+    for (int i = self.factory.expectedQuality; i < self.factory.expectedQuality + numberOfObjects; ++i) {
         BenchmarkObject* object = [[BenchmarkObject alloc] init];
         object.identifier = i;
-        object.content = random.data;
+        object.content = self.random.data;
         [objects addObject:object];
     }
 
     __block BOOL result;
     [self
-    measure:^{
+    doMeasure:^{
         for (BenchmarkObject* object in objects) {
-            if (![self.database insertObject:object intoTable:@"testTable"]) {
+            if (![self.database insertObject:object intoTable:self.tableName]) {
                 result = NO;
                 return;
             }
@@ -55,10 +72,10 @@
         result = YES;
     }
     setUp:^{
-        [self.factory setProductionLineObjects:0];
-        TestCaseAssertTrue([self.factory production:self.destination]);
+        [self setUpDatabase];
     }
     tearDown:^{
+        [self tearDownDatabase];
         result = NO;
     }
     checkCorrectness:^{
@@ -68,24 +85,20 @@
 
 - (void)doTestRead
 {
-    int numberOfObjects = 1000000;
-    NSString* tableName = @"testTable";
-
     __block NSArray<BenchmarkObject*>* result;
     [self
-    measure:^{
-        result = [self.database getObjectsOfClass:BenchmarkObject.class fromTable:tableName];
+    doMeasure:^{
+        result = [self.database getObjectsOfClass:BenchmarkObject.class fromTable:self.tableName];
     }
     setUp:^{
-        [self.factory setProductionLineObjects:numberOfObjects];
-        TestCaseAssertTrue([self.factory production:self.destination]);
-        TestCaseAssertTrue([self.database createTableAndIndexes:@"testTable" withClass:BenchmarkObject.class]);
+        [self setUpDatabase];
     }
     tearDown:^{
+        [self tearDownDatabase];
         result = nil;
     }
     checkCorrectness:^{
-        TestCaseAssertEqual(result.count, numberOfObjects);
+        TestCaseAssertEqual(result.count, self.factory.expectedQuality);
     }];
 }
 
@@ -94,26 +107,23 @@
     int numberOfObjects = 1000000;
 
     NSMutableArray* objects = [NSMutableArray arrayWithCapacity:numberOfObjects];
-    Random* random = [[StableRandom alloc] init];
-    random.seed = 0;
-    for (int i = 0; i < numberOfObjects; ++i) {
+    for (int i = self.factory.expectedQuality; i < self.factory.expectedQuality + numberOfObjects; ++i) {
         BenchmarkObject* object = [[BenchmarkObject alloc] init];
         object.identifier = i;
-        object.content = random.data;
+        object.content = self.random.data;
         [objects addObject:object];
     }
 
     __block BOOL result;
     [self
-    measure:^{
-        result = [self.database insertObjects:objects intoTable:@"testTable"];
+    doMeasure:^{
+        result = [self.database insertObjects:objects intoTable:self.tableName];
     }
     setUp:^{
-        [self.factory setProductionLineObjects:0];
-        TestCaseAssertTrue([self.factory production:self.destination]);
-        TestCaseAssertTrue([self.database createTableAndIndexes:@"testTable" withClass:BenchmarkObject.class]);
+        [self setUpDatabase];
     }
     tearDown:^{
+        [self tearDownDatabase];
         result = NO;
     }
     checkCorrectness:^{
@@ -134,6 +144,51 @@
 - (void)test_batch_write
 {
     [self doTestBatchWrite];
+}
+
+#pragma mark - ReusableFactoryPreparation
+- (BOOL)stepPreparePrototype:(NSString*)path
+{
+    int numberOfObjects = [self getQuality:path];
+    int maxNumberOfObjects = self.factory.expectedQuality;
+    int step = maxNumberOfObjects / 100;
+    if (step > maxNumberOfObjects - numberOfObjects) {
+        step = maxNumberOfObjects - numberOfObjects;
+    }
+
+    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
+
+    int startIdentifier = 0;
+    if ([database tableExists:self.tableName]) {
+        startIdentifier = [database getValueFromStatement:WCDB::StatementSelect().select(BenchmarkObject.identifier.max()).from(self.tableName)].numberValue.intValue;
+    }
+    NSMutableArray* objects = [NSMutableArray arrayWithCapacity:step];
+    for (int i = 0; i < step; ++i) {
+        BenchmarkObject* object = [[BenchmarkObject alloc] init];
+        object.identifier = startIdentifier + i;
+        object.content = self.random.data;
+        [objects addObject:object];
+    }
+
+    return [database runTransaction:^BOOL(WCTHandle* handle) {
+               return [database createTableAndIndexes:self.tableName withClass:BenchmarkObject.class]
+                      && [handle insertObjects:objects intoTable:self.tableName];
+           }]
+           && [database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("TRUNCATE")];
+}
+
+- (double)getQuality:(NSString*)path
+{
+    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
+    if ([database tableExists:self.tableName]) {
+        return [database getValueFromStatement:WCDB::StatementSelect().select(BenchmarkObject.allProperties.count()).from(self.tableName)].numberValue.doubleValue;
+    }
+    return 0;
+}
+
+- (NSString*)category
+{
+    return @"Baseline";
 }
 
 @end
