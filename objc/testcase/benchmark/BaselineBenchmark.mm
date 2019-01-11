@@ -61,7 +61,6 @@
 {
     if (!_tableName) {
         _tableName = [NSString stringWithFormat:@"t_%@", self.random.string];
-        NSLog(@"Table name %@", _tableName);
     }
     return _tableName;
 }
@@ -206,23 +205,31 @@
 
     WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
 
-    int startIdentifier = 0;
+    int start = 0;
+    BOOL create = NO;
     if ([database tableExists:self.tableName]) {
-        startIdentifier = [database getValueFromStatement:WCDB::StatementSelect().select(BenchmarkObject.identifier.max()).from(self.tableName)].numberValue.intValue;
+        start = [database getValueFromStatement:WCDB::StatementSelect().select(BenchmarkObject.identifier.count()).from(self.tableName)].numberValue.intValue;
+    } else {
+        create = YES;
     }
     NSMutableArray* objects = [NSMutableArray arrayWithCapacity:step];
-    for (int i = 0; i < step; ++i) {
+    for (int i = start; i < start + step; ++i) {
         BenchmarkObject* object = [[BenchmarkObject alloc] init];
-        object.identifier = startIdentifier + i;
+        object.identifier = i;
         object.content = self.random.data;
         [objects addObject:object];
     }
 
-    return [database runTransaction:^BOOL(WCTHandle* handle) {
-               return [database createTableAndIndexes:self.tableName withClass:BenchmarkObject.class]
-                      && [handle insertObjects:objects intoTable:self.tableName];
-           }]
-           && [database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("TRUNCATE")];
+    BOOL committed = [database runTransaction:^BOOL(WCTHandle* handle) {
+        if (create) {
+            TestCaseAssertTrue([database createTableAndIndexes:self.tableName withClass:BenchmarkObject.class]);
+        }
+        TestCaseAssertTrue([handle insertObjects:objects intoTable:self.tableName]);
+        return YES;
+    }];
+    TestCaseAssertTrue(committed);
+    TestCaseAssertTrue([database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("TRUNCATE")]);
+    return YES;
 }
 
 - (double)getQuality:(NSString*)path
