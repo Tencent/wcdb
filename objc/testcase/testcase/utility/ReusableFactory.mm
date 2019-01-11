@@ -28,7 +28,10 @@
 @property (nonatomic, readonly) NSArray<NSString*>* prototypes;
 @end
 
-@implementation ReusableFactory
+@implementation ReusableFactory {
+    NSString* _prototype;
+    NSArray<NSString*>* _prototypes;
+}
 
 - (instancetype)initWithDirectory:(NSString*)directory
 {
@@ -39,17 +42,43 @@
     return self;
 }
 
+- (void)reset
+{
+    _prototype = nil;
+    _prototypes = nil;
+}
+
 - (void)setDelegate:(id<ReusableFactoryPreparation>)delegate
 {
     _delegate = delegate;
+    [self reset];
+}
 
-    _prototype = [[self.directory stringByAppendingPathComponent:self.delegate.category] stringByAppendingPathComponent:[NSString stringWithFormat:@"%f", self.expectedQuality]];
+- (void)setExpectedQuality:(double)expectedQuality
+{
+    _expectedQuality = expectedQuality;
+    [self reset];
+}
 
-    NSMutableArray* prototypes = [NSMutableArray arrayWithObject:_prototype];
-    if ([self.delegate respondsToSelector:@selector(additionalPrototypes:)]) {
-        [prototypes addObjectsFromArray:[self.delegate additionalPrototypes:_prototype]];
+- (NSString*)prototype
+{
+    if (!_prototype) {
+        NSString* fileName = [NSString stringWithFormat:@"%@_%@", self.delegate.category, [NSNumber numberWithDouble:self.expectedQuality]];
+        _prototype = [self.directory stringByAppendingPathComponent:fileName];
     }
-    _prototypes = [NSArray arrayWithArray:prototypes];
+    return _prototype;
+}
+
+- (NSArray<NSString*>*)prototypes
+{
+    if (!_prototypes) {
+        NSMutableArray* prototypes = [NSMutableArray arrayWithObject:_prototype];
+        if ([self.delegate respondsToSelector:@selector(additionalPrototypes:)]) {
+            [prototypes addObjectsFromArray:[self.delegate additionalPrototypes:_prototype]];
+        }
+        _prototypes = [NSArray arrayWithArray:prototypes];
+    }
+    return _prototypes;
 }
 
 - (BOOL)removePrototypes
@@ -85,6 +114,8 @@
         }
     }
 
+    TestCaseLog(@"Prototype at %@", self.prototype);
+
     NSArray<NSString*>* products = [NSString pathsByReplacingPaths:self.prototypes withDirectory:destination];
     // reset immutable for dirty files
     if (![self.fileManager setFileImmutable:NO ofItemsIfExistsAtPaths:products error:nil]) {
@@ -96,7 +127,7 @@
     }
 
     NSString* product = [NSString pathByReplacingPath:self.prototype withDirectory:destination];
-    TestCaseLog(@"Production: %@ %@", self.delegate.category, @([self.delegate getQuality:product]));
+    TestCaseLog(@"Production at %@", product);
     return product;
 }
 
@@ -108,8 +139,8 @@
         if (![self.fileManager removeItemsIfExistsAtPaths:self.prototypes error:nil]) {
             return NO;
         }
-        if (self.delegate && [self.delegate respondsToSelector:@selector(willStartPreparing:)]) {
-            [self.delegate willStartPreparing:self.prototype];
+        if (![self willStartPreparing]) {
+            return NO;
         }
         do {
             if (![self.delegate stepPreparePrototype:self.prototype]) {
@@ -127,10 +158,30 @@
                 TestCaseLog(@"Preparing %.2f%%", progress * 100.0f);
             }
         } while (quality < self.expectedQuality * (1.0f - self.tolerance));
-        if (self.delegate && [self.delegate respondsToSelector:@selector(willEndPreparing:)]) {
-            [self.delegate willEndPreparing:self.prototype];
+        if (![self willEndPreparing]) {
+            return NO;
         }
     } while (quality > self.expectedQuality * (1.0f + self.tolerance));
+    return YES;
+}
+
+- (BOOL)willStartPreparing
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(willStartPreparing:)]) {
+        if (![self.delegate willStartPreparing:self.prototype]) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
+- (BOOL)willEndPreparing
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(willEndPreparing:)]) {
+        if (![self.delegate willEndPreparing:self.prototype]) {
+            return NO;
+        }
+    }
     return YES;
 }
 
