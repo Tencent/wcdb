@@ -146,4 +146,14 @@
     }
 }
 
+- (void)test_feature_run_while_closing
+{
+    TestCaseAssertTrue([self.database canOpen]);
+    TestCaseAssertTrue([self.database isOpened]);
+    [self.database close:^{
+        TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion()).to(123)]);
+    }];
+    TestCaseAssertFalse([self.database isOpened]);
+}
+
 @end
