@@ -33,23 +33,23 @@
 
 - (void)test_dual_backup
 {
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.firstMaterial]);
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.lastMaterial]);
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.lastMaterialPath]);
 
     TestCaseAssertTrue([self.database backup]);
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.firstMaterial]);
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.lastMaterial]);
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.lastMaterialPath]);
 
     [NSThread sleepForTimeInterval:1];
     TestCaseAssertTrue([self.database backup]);
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.firstMaterial]);
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.lastMaterial]);
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.lastMaterialPath]);
 
     {
         // old one will be replaced
-        NSDate *firstBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.firstMaterial error:nil][NSFileModificationDate];
+        NSDate *firstBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.firstMaterialPath error:nil][NSFileModificationDate];
         TestCaseAssertTrue(firstBackupModifiedDate != nil);
-        NSDate *lastBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.lastMaterial error:nil][NSFileModificationDate];
+        NSDate *lastBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.lastMaterialPath error:nil][NSFileModificationDate];
         TestCaseAssertTrue(lastBackupModifiedDate != nil);
         TestCaseAssertTrue([firstBackupModifiedDate compare:lastBackupModifiedDate] == NSOrderedAscending);
     }
@@ -59,9 +59,9 @@
 
     {
         // old one will be replaced
-        NSDate *firstBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.firstMaterial error:nil][NSFileModificationDate];
+        NSDate *firstBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.firstMaterialPath error:nil][NSFileModificationDate];
         TestCaseAssertTrue(firstBackupModifiedDate != nil);
-        NSDate *lastBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.lastMaterial error:nil][NSFileModificationDate];
+        NSDate *lastBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.lastMaterialPath error:nil][NSFileModificationDate];
         TestCaseAssertTrue(lastBackupModifiedDate != nil);
         TestCaseAssertTrue([firstBackupModifiedDate compare:lastBackupModifiedDate] == NSOrderedDescending);
     }
@@ -71,8 +71,8 @@
 {
     TestCaseAssertTrue([self.database removeFiles]);
     TestCaseAssertTrue([self.database backup]);
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.firstMaterial]);
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.lastMaterial]);
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.lastMaterialPath]);
 }
 
 - (void)test_wal
@@ -94,19 +94,19 @@
 - (void)test_filter
 {
     TestCaseAssertTrue([self.database backup]);
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.firstMaterial]);
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.lastMaterial]);
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.lastMaterialPath]);
 
     [self.database filterBackup:^BOOL(NSString *tableName) {
         return NO;
     }];
     [NSThread sleepForTimeInterval:1];
     TestCaseAssertTrue([self.database backup]);
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.firstMaterial]);
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.lastMaterial]);
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.lastMaterialPath]);
 
-    NSInteger firstMaterialSize = [self.fileManager getFileSizeIfExists:self.firstMaterial];
-    NSInteger lastMaterialSize = [self.fileManager getFileSizeIfExists:self.lastMaterial];
+    NSInteger firstMaterialSize = [self.fileManager getFileSizeIfExists:self.firstMaterialPath];
+    NSInteger lastMaterialSize = [self.fileManager getFileSizeIfExists:self.lastMaterialPath];
     TestCaseAssertTrue(firstMaterialSize > lastMaterialSize);
 }
 
@@ -128,11 +128,11 @@
     object.content = self.random.string;
     TestCaseAssertTrue([self.table insertObject:object]);
 
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.firstMaterial]);
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
     TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint())]);
 
     [NSThread sleepForTimeInterval:self.delayForTolerance];
-    return [self.fileManager fileExistsAtPath:self.firstMaterial];
+    return [self.fileManager fileExistsAtPath:self.firstMaterialPath];
 }
 
 - (void)test_auto_backup_when_checkpointed
@@ -155,13 +155,13 @@
         TestCaseAssertTrue([self.table insertObject:object]);
     }
     [NSThread sleepForTimeInterval:self.backupDelayForNonCritical + self.delayForTolerance];
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.firstMaterial]);
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
 
     while ([self getWalFrameCount] < self.backupFramesIntervalForNonCritical) {
         TestCaseAssertTrue([self.table insertObject:object]);
     }
     [NSThread sleepForTimeInterval:self.backupDelayForNonCritical + self.delayForTolerance];
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.firstMaterial]);
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
 }
 
 - (void)test_auto_backup_when_meet_critical_frames_interval
@@ -178,13 +178,13 @@
     }
 
     [NSThread sleepForTimeInterval:self.backupDelayForCritical + self.delayForTolerance];
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.firstMaterial]);
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
 
     while ([self getWalFrameCount] < self.backupFramesIntervalForCritical) {
         TestCaseAssertTrue([self.table insertObject:object]);
     }
     [NSThread sleepForTimeInterval:self.backupDelayForCritical + self.delayForTolerance];
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.firstMaterial]);
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
 }
 
 - (void)test_cancel_auto_backup
@@ -194,7 +194,7 @@
     self.database.autoBackup = YES;
     TestCaseAssertTrue([self checkAutoBackedup]);
 
-    TestCaseAssertTrue([self.fileManager removeItemAtPath:self.firstMaterial error:nil]);
+    TestCaseAssertTrue([self.fileManager removeItemAtPath:self.firstMaterialPath error:nil]);
     self.database.autoBackup = NO;
     TestCaseAssertFalse([self checkAutoBackedup]);
 }

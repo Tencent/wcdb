@@ -61,11 +61,11 @@
         TestCaseAssertTrue(object.lastInsertedRowID == rowId);
     }
 
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.factory]);
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.factoryPath]);
     TestCaseAssertTrue([self.database containsDeposited]);
     TestCaseAssertTrue([self.database removeDeposited]);
     TestCaseAssertFalse([self.database containsDeposited]);
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.factory]);
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.factoryPath]);
 }
 
 @end
