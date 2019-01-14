@@ -180,11 +180,11 @@
            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
                return [self.table getObjectsWhere:FTS3Object.content.match("語")];
            }];
-    [self doTestObjects:@[]
-                 andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '123'"
-            bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
-                return [self.table getObjectsWhere:FTS3Object.content.match("123")];
-            }];
+    [self doTestObject:object
+                andSQL:@"SELECT content, extension FROM main.testTable WHERE content MATCH '123'"
+           bySelecting:^NSArray<NSObject<WCTTableCoding> *> * {
+               return [self.table getObjectsWhere:FTS3Object.content.match("123")];
+           }];
 }
 
 - (void)test_column_match

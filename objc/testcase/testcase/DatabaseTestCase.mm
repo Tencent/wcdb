@@ -95,7 +95,7 @@
     return _firstMaterialPath;
 }
 
-- (NSString*)lastMaterial
+- (NSString*)lastMaterialPath
 {
     if (!_lastMaterialPath) {
         _lastMaterialPath = [self.path stringByAppendingString:@"-last.material"];
