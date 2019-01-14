@@ -44,8 +44,8 @@
 
 + (BOOL)value:(double)left almostEqual:(double)right
 {
-    // ulp == 3
-    return std::abs(left - right) < std::numeric_limits<double>::epsilon() * std::abs(left + right) * 3
+    // ulp == 10
+    return std::abs(left - right) < std::numeric_limits<double>::epsilon() * std::abs(left + right) * 10
            || std::abs(left - right) < std::numeric_limits<double>::min();
 }
 
