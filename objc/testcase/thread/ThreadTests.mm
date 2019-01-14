@@ -316,7 +316,10 @@
     __block int currentConcurrency = 0;
     for (int i = 0; i < self.maxConcurrency; ++i) {
         dispatch_group_async(self.group, self.queue, ^{
-            WCTHandle* handle = [self.database getHandle];
+            WCTHandle* handle = nil;
+            @synchronized(self) {
+                handle = [self.database getHandle];
+            }
             TestCaseAssertTrue([handle validate]);
             [condition lock];
             ++currentConcurrency;
