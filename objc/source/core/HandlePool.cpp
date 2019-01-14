@@ -233,11 +233,19 @@ RecyclableHandle HandlePool::flowOut(Slot slot)
     handle, std::bind(&HandlePool::flowBack, this, slot, std::placeholders::_1));
 }
 
-const std::set<std::shared_ptr<Handle>> &HandlePool::getAllHandles(Slot slot)
+bool HandlePool::handlesExist(Slot slot) const
 {
     WCTInnerAssert(m_concurrency.readSafety());
     WCTInnerAssert(m_memory.readSafety());
-    return m_handles[slot];
+    return m_handles.find(slot) != m_handles.end();
+}
+
+const std::set<std::shared_ptr<Handle>> &HandlePool::getHandles(Slot slot) const
+{
+    WCTInnerAssert(m_concurrency.readSafety());
+    WCTInnerAssert(m_memory.readSafety());
+    WCTInnerAssert(handlesExist(slot));
+    return m_handles.find(slot)->second;
 }
 
 void HandlePool::flowBack(Slot slot, const std::shared_ptr<Handle> &handle)

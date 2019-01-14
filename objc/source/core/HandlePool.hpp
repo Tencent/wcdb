@@ -82,7 +82,8 @@ protected:
 
     mutable SharedLock m_memory;
 
-    const std::set<std::shared_ptr<Handle>> &getAllHandles(Slot slot);
+    bool handlesExist(Slot slot) const;
+    const std::set<std::shared_ptr<Handle>> &getHandles(Slot slot) const;
 
 private:
     void flowBack(Slot slot, const std::shared_ptr<Handle> &handle);

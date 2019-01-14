@@ -764,9 +764,11 @@ void Database::interruptMigration()
     if (!m_initialized) {
         return;
     }
-    for (const auto &handle : getAllHandles(MigrationStepperSlot)) {
-        WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()) != nullptr);
-        static_cast<MigrationStepperHandle *>(handle.get())->interrupt();
+    if (handlesExist(MigrationStepperSlot)) {
+        for (const auto &handle : getHandles(MigrationStepperSlot)) {
+            WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()) != nullptr);
+            static_cast<MigrationStepperHandle *>(handle.get())->interrupt();
+        }
     }
 }
 
