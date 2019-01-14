@@ -57,7 +57,9 @@ void AbstractHandle::setMemoryMapSize(int64_t defaultSizeLimit, int64_t maximumA
 #ifdef DEBUG
     int rc =
 #endif
-    sqlite3_config(SQLITE_CONFIG_MMAP_SIZE, defaultSizeLimit, maximumAllowedSizeLimit);
+    sqlite3_config(SQLITE_CONFIG_MMAP_SIZE,
+                   (sqlite3_int64) defaultSizeLimit,
+                   (sqlite3_int64) maximumAllowedSizeLimit);
     WCTInnerAssert(rc == SQLITE_OK);
 }
 
@@ -66,7 +68,7 @@ void AbstractHandle::enableMemoryStatus(bool enable)
 #ifdef DEBUG
     int rc =
 #endif
-    sqlite3_config(SQLITE_CONFIG_MEMSTATUS, enable);
+    sqlite3_config(SQLITE_CONFIG_MEMSTATUS, (int) enable);
     WCTInnerAssert(rc == SQLITE_OK);
 }
 
@@ -210,7 +212,8 @@ int AbstractHandle::getNumberOfDirtyPages()
 void AbstractHandle::disableCheckpointWhenClosing(bool disable)
 {
     WCTInnerAssert(isOpened());
-    exitAPI(sqlite3_db_config((sqlite3 *) m_handle, SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE, disable));
+    exitAPI(sqlite3_db_config(
+    (sqlite3 *) m_handle, SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE, (int) disable, nullptr));
 }
 
 #pragma mark - Statement
