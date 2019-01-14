@@ -60,7 +60,7 @@
 - (NSString*)tableName
 {
     if (!_tableName) {
-        _tableName = [NSString stringWithFormat:@"t_%@", self.random.string];
+        _tableName = @"benchmark";
     }
     return _tableName;
 }

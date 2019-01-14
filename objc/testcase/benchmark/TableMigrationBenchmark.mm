@@ -29,7 +29,7 @@
 - (void)doSetUpDatabase
 {
     NSString* sourceTable = self.tableName;
-    self.tableName = [NSString stringWithFormat:@"t_%@", self.random.string];
+    self.tableName = @"migrated";
 
     [self.database filterMigration:^(WCTMigrationUserInfo* info) {
         if ([info.table isEqualToString:self.tableName]) {
