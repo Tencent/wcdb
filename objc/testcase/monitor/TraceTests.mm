@@ -91,7 +91,7 @@
             && error.tag == self.database.tag
             && [error.source isEqualToString:@"SQLite"]
             && error.code == WCTErrorCodeIOError
-            && [error.sql isEqualToString:@"COMMIT"]) {
+            && [error.sql isEqualToString:@"BEGIN IMMEDIATE"]) {
             tested = YES;
         }
     }];

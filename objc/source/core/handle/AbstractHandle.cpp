@@ -147,7 +147,8 @@ void AbstractHandle::close()
 bool AbstractHandle::executeSQL(const String &sql)
 {
     WCTInnerAssert(isOpened());
-    return exitAPI(sqlite3_exec((sqlite3 *) m_handle, sql.c_str(), nullptr, nullptr, nullptr));
+    return exitAPI(
+    sqlite3_exec((sqlite3 *) m_handle, sql.c_str(), nullptr, nullptr, nullptr), sql);
 }
 
 bool AbstractHandle::executeStatement(const Statement &statement)
