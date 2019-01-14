@@ -81,6 +81,12 @@ DatabasePool::ReferencedDatabase::ReferencedDatabase(std::shared_ptr<Database> &
 {
 }
 
+DatabasePool::ReferencedDatabase::ReferencedDatabase(ReferencedDatabase &&other)
+: database(std::move(other.database)), reference(other.reference.load())
+{
+    other.reference = 0;
+}
+
 RecyclableDatabase
 DatabasePool::get(const std::map<String, ReferencedDatabase>::iterator &iter)
 {

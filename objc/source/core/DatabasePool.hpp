@@ -52,8 +52,9 @@ public:
 protected:
     struct ReferencedDatabase {
         ReferencedDatabase(std::shared_ptr<Database>&& database);
+        ReferencedDatabase(ReferencedDatabase&& other);
         std::shared_ptr<Database> database;
-        int reference;
+        std::atomic<int> reference;
     };
     typedef struct ReferencedDatabase ReferencedDatabase;
 
