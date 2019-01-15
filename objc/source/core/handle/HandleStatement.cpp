@@ -64,7 +64,6 @@ bool HandleStatement::step(bool &done)
 
 bool HandleStatement::step()
 {
-    WCTInnerAssert(isPrepared());
     bool unused;
     return step(unused);
 }
