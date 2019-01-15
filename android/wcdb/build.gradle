@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply from: rootProject.file('gradle/WeChatPublish.gradle')
+apply from: rootProject.file('gradle/WeChatArmeabiCompat.gradle')
 apply from: rootProject.file('gradle/WeChatNativeDepend.gradle')
 
 artifactId = 'wcdb-android'

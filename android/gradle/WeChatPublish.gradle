@@ -174,14 +174,18 @@ class WeChatPublishExtension {
         }
 
         if (publishToBintray) {
+            if (!project.hasProperty('BINTRAY_USER') ||
+                    !project.hasProperty('BINTRAY_APIKEY')) {
+                System.err.println 'BINTRAY_USER and BINTRAY_APIKEY not specified, skip Bintray upload.'
+                publishToBintray = false
+            }
+        }
+
+        if (publishToBintray) {
             if (!project.plugins.hasPlugin('com.jfrog.bintray')) {
                 project.apply plugin: 'com.jfrog.bintray'
             }
 
-            if (!project.hasProperty('BINTRAY_USER') ||
-                    !project.hasProperty('BINTRAY_APIKEY')) {
-                throw new GradleException('BINTRAY_USER and BINTRAY_APIKEY must be specified')
-            }
             def bintrayUser = project.property('BINTRAY_USER')
             def bintrayKey = project.property('BINTRAY_APIKEY')
 

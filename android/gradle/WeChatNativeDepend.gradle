@@ -71,6 +71,7 @@ if (project.pluginManager.hasPlugin(ANDROID_APP_PLUGIN_ID)) {
 
 def handleAndroidApplication() {
     injectNativeDependenciesPath()
+    //generateAndInjectBuildInfoModule()
     project.afterEvaluate {
         extractNativeDependencies(project.android.applicationVariants)
     }
@@ -79,6 +80,7 @@ def handleAndroidApplication() {
 def handleAndroidLibrary() {
     mountExtension()
     injectNativeDependenciesPath()
+    //generateAndInjectBuildInfoModule()
     project.afterEvaluate {
         def libVariants = project.android.libraryVariants
         libVariants.each { variant ->
@@ -299,6 +301,65 @@ def extractNativeDependencies(targetVariants) {
                 }
             }
         }
+    }
+}
+
+def generateAndInjectBuildInfoModule() {
+    def hasBuildRevision = project.hasProperty('WX_BUILD_REVISION')
+    def hasBuildBranch = project.hasProperty('WX_BUILD_BRANCH')
+    def hasBuildTime = project.hasProperty('WX_BUILD_TIME')
+    def hasBuildJob = project.hasProperty('WX_BUILD_JOB')
+    
+    if (!hasBuildRevision && !hasBuildBranch && !hasBuildTime && !hasBuildJob) {
+        System.err.println("[!] There's no any build-info values, skip generating build-info module.")
+        return
+    }
+    
+    def nativeModuleDir = new File(project.buildDir, "generated/native-modules/")
+    def buildInfoModuleDir = new File(nativeModuleDir, 'build-info')
+    if (!buildInfoModuleDir.exists()) {
+        buildInfoModuleDir.mkdirs()
+    } else {
+        GFileUtils.cleanDirectory(buildInfoModuleDir)
+    }
+    def makeFilePath = new File(buildInfoModuleDir, 'Android.mk')
+    def cmakeInitFilePath = new File(buildInfoModuleDir, 'Init.cmake')
+
+    def ndkBuildOpts = project.android.defaultConfig.externalNativeBuildOptions.ndkBuild
+    ndkBuildOpts.arguments "BUILD_SHARED_LIBRARY=${makeFilePath.absolutePath}"
+
+    def cmakeBuildOpts = project.android.defaultConfig.externalNativeBuildOptions.cmake
+    cmakeBuildOpts.arguments "-DCMAKE_USER_MAKE_RULES_OVERRIDE=${cmakeInitFilePath.absolutePath}"
+
+    def assemblyFilePath = new File(buildInfoModuleDir, 'build-info.S')
+    assemblyFilePath.withPrintWriter { pw ->
+        pw.println('.section .comment')
+        pw.println('.global WX_BUILD_INFO')
+        pw.println('WX_BUILD_INFO:')
+        pw.println(".string \"WX_BUILD_REVISION: ${hasBuildRevision ? WX_BUILD_REVISION : '(Unknown)'}\"")
+        pw.println(".string \"WX_BUILD_BRANCH: ${hasBuildBranch ? WX_BUILD_BRANCH : '(Unknown)'}\"")
+        pw.println(".string \"WX_BUILD_TIME: ${hasBuildTime ? WX_BUILD_TIME : '(Unknown)'}\"")
+        pw.println(".string \"WX_BUILD_JOB: ${hasBuildJob ? WX_BUILD_JOB : '(Unknown)'}\"")
+    }
+
+    makeFilePath.withPrintWriter { pw ->
+        pw.println("BUILD_INFO_SRC := ")
+        pw.println("LOCAL_SRC_FILES += ${assemblyFilePath.absolutePath.replace('\\', '/')}")
+        pw.println('include $(BUILD_SYSTEM)/build-shared-library.mk')
+    }
+
+    cmakeInitFilePath.withPrintWriter { pw ->
+        pw.println('if(NOT RUN)')
+        pw.println('  set(RUN 1)')
+        pw.println('  enable_language(ASM)')
+        pw.println('  function(add_library name type)')
+        pw.println('    if(type STREQUAL "SHARED")')
+        pw.println("      _add_library(\${ARGV} ${assemblyFilePath.absolutePath.replace('\\', '/')})")
+        pw.println('    else()')
+        pw.println('      _add_library(${ARGV})')
+        pw.println('    endif()')
+        pw.println('  endfunction(add_library)')
+        pw.println('endif()')
     }
 }
 
