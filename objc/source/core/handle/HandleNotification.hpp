@@ -43,7 +43,7 @@ private:
 
 #pragma mark - SQL
 public:
-    typedef std::function<void(const String & /* sql */)> SQLNotification;
+    typedef std::function<void(const String &sql)> SQLNotification;
     void setNotificationWhenSQLTraced(const String &name, const SQLNotification &onTraced);
 
 private:
@@ -61,7 +61,7 @@ public:
     typedef struct Footprint Footprint;
 
     using Footprints = std::list<Footprint>;
-    typedef std::function<void(const Footprints &, const int64_t & /* cost */)> PerformanceNotification;
+    typedef std::function<void(const Footprints &, const int64_t &cost)> PerformanceNotification;
     void setNotificationWhenPerformanceTraced(const String &name,
                                               const PerformanceNotification &onTraced);
 
@@ -78,7 +78,7 @@ private:
 #pragma mark - Committed
 public:
     //committed dispatch will abort if any notification return false
-    typedef std::function<bool(const String & /* path */, int /* number of frames */)> CommittedNotification;
+    typedef std::function<bool(const String &path, int numberOfFrames)> CommittedNotification;
     void setNotificationWhenCommitted(int order,
                                       const String &name,
                                       const CommittedNotification &onCommitted);
@@ -95,7 +95,7 @@ private:
 
 #pragma mark - Checkpoint
 public:
-    typedef std::function<void(const String & /* path */)> CheckpointedNotification;
+    typedef std::function<void(const String &path)> CheckpointedNotification;
     void setNotificationWhenCheckpointed(const String &name,
                                          const CheckpointedNotification &checkpointed);
 
@@ -109,7 +109,7 @@ private:
 
 #pragma mark - Busy
 public:
-    typedef std::function<void(const String &path, int /* number of times */)> BusyNotification;
+    typedef std::function<void(const String &path, int numberOfTimes)> BusyNotification;
     void setNotificationWhenBusy(const BusyNotification &busyNotification);
 
 private:

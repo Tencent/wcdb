@@ -57,7 +57,7 @@ protected:
 
 #pragma mark - Filter
 public:
-    typedef std::function<bool(const String & /* table */)> Filter;
+    typedef std::function<bool(const String &table)> Filter;
     void filter(const Filter &tableShouldBeBackedUp);
 
 protected:
