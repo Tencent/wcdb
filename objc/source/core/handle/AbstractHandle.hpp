@@ -30,15 +30,6 @@
 
 namespace WCDB {
 
-class HandleEvent {
-public:
-    virtual ~HandleEvent();
-
-    virtual void
-    handleDidPrepared(AbstractHandle *handle, HandleStatement *handleStatement)
-    = 0;
-};
-
 class AbstractHandle : public ErrorProne {
 #pragma mark - Initialize
 public:

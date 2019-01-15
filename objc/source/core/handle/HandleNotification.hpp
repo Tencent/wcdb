@@ -29,7 +29,7 @@
 
 namespace WCDB {
 
-class HandleNotification final : public HandleRelated {
+class HandleNotification final : public HandleRelated, public HandleStatementEvent {
 public:
     using HandleRelated::HandleRelated;
 
@@ -116,6 +116,12 @@ private:
     static int busy(void *p, int numberOfTimes);
     void dispatchBusyNotification(int numberOfTimes);
     BusyNotification m_busyNotification;
+
+#pragma mark - Statement
+public:
+private:
+    void statementDidPrepare(HandleStatement *) override final;
+    void statementDidStep(HandleStatement *) override final;
 };
 
 } //namespace WCDB

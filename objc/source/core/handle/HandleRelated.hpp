@@ -27,18 +27,28 @@
 namespace WCDB {
 
 class AbstractHandle;
+class HandleStatement;
 
 class HandleRelated {
 public:
     HandleRelated(AbstractHandle *handle);
     virtual ~HandleRelated() = 0;
 
+    AbstractHandle *getHandle() const;
+
 protected:
-    sqlite3 *getRawHandle();
     bool exitAPI(int rc);
     bool exitAPI(int rc, const String &sql);
     bool exitAPI(int rc, const char *sql);
     AbstractHandle *m_handle;
+};
+
+class HandleStatementEvent {
+public:
+    virtual ~HandleStatementEvent();
+
+    virtual void statementDidPrepare(HandleStatement *) = 0;
+    virtual void statementDidStep(HandleStatement *) = 0;
 };
 
 } //namespace WCDB

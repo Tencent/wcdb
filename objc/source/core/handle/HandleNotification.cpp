@@ -92,9 +92,10 @@ void HandleNotification::setupTraceNotifications()
         flag |= SQLITE_TRACE_PROFILE;
     }
     if (flag != 0) {
-        exitAPI(sqlite3_trace_v2(getRawHandle(), flag, HandleNotification::traced, this));
+        exitAPI(sqlite3_trace_v2(
+        m_handle->getRawHandle(), flag, HandleNotification::traced, this));
     } else {
-        exitAPI(sqlite3_trace_v2(getRawHandle(), 0, nullptr, nullptr));
+        exitAPI(sqlite3_trace_v2(m_handle->getRawHandle(), 0, nullptr, nullptr));
     }
 }
 
@@ -211,9 +212,9 @@ void HandleNotification::unsetNotificationWhenCommitted(const String &name)
 void HandleNotification::setupCommittedNotification()
 {
     if (!m_committedNotifications.elements().empty()) {
-        sqlite3_wal_hook(getRawHandle(), HandleNotification::committed, this);
+        sqlite3_wal_hook(m_handle->getRawHandle(), HandleNotification::committed, this);
     } else {
-        sqlite3_wal_hook(getRawHandle(), nullptr, nullptr);
+        sqlite3_wal_hook(m_handle->getRawHandle(), nullptr, nullptr);
     }
 }
 
@@ -248,9 +249,9 @@ void HandleNotification::setupCheckpointNotifications()
 {
     if (!m_checkpointedNotifications.empty()) {
         exitAPI(sqlite3_wal_checkpoint_handler(
-        getRawHandle(), HandleNotification::checkpointed, this));
+        m_handle->getRawHandle(), HandleNotification::checkpointed, this));
     } else {
-        exitAPI(sqlite3_wal_checkpoint_handler(getRawHandle(), nullptr, nullptr));
+        exitAPI(sqlite3_wal_checkpoint_handler(m_handle->getRawHandle(), nullptr, nullptr));
     }
 }
 
@@ -289,9 +290,10 @@ void HandleNotification::setNotificationWhenBusy(const BusyNotification &busyNot
 {
     m_busyNotification = busyNotification;
     if (m_busyNotification) {
-        exitAPI(sqlite3_busy_handler(getRawHandle(), HandleNotification::busy, this));
+        exitAPI(sqlite3_busy_handler(
+        m_handle->getRawHandle(), HandleNotification::busy, this));
     } else {
-        sqlite3_busy_handler(getRawHandle(), nullptr, nullptr);
+        sqlite3_busy_handler(m_handle->getRawHandle(), nullptr, nullptr);
     }
 }
 
@@ -301,6 +303,15 @@ void HandleNotification::dispatchBusyNotification(int numberOfTimes)
     if (m_busyNotification) {
         m_busyNotification(m_handle->getPath(), numberOfTimes);
     }
+}
+
+#pragma mark - Handle Statement
+void HandleNotification::statementDidPrepare(HandleStatement *handleStatement)
+{
+}
+
+void HandleNotification::statementDidStep(HandleStatement *handleStatement)
+{
 }
 
 } //namespace WCDB

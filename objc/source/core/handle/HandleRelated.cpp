@@ -48,9 +48,13 @@ bool HandleRelated::exitAPI(int rc, const char *sql)
     return m_handle->exitAPI(rc, sql);
 }
 
-sqlite3 *HandleRelated::getRawHandle()
+AbstractHandle *HandleRelated::getHandle() const
 {
-    return m_handle->m_handle;
+    return m_handle;
+}
+
+HandleStatementEvent::~HandleStatementEvent()
+{
 }
 
 } //namespace WCDB

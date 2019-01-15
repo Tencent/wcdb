@@ -18,14 +18,15 @@
  * limitations under the License.
  */
 
+#include <WCDB/AbstractHandle.hpp>
 #include <WCDB/Assertion.hpp>
 #include <WCDB/HandleStatement.hpp>
 #include <WCDB/SQLite.h>
 
 namespace WCDB {
 
-HandleStatement::HandleStatement(AbstractHandle *handle)
-: HandleRelated(handle), m_stmt(nullptr)
+HandleStatement::HandleStatement(AbstractHandle *handle, HandleStatementEvent *event)
+: HandleRelated(handle), m_stmt(nullptr), m_event(event)
 {
 }
 
@@ -42,8 +43,12 @@ bool HandleStatement::prepare(const Statement &statement)
 bool HandleStatement::prepare(const String &sql)
 {
     WCTRemedialAssert(!isPrepared(), "Last statement is not finalized.", finalize(););
-    return exitAPI(
-    sqlite3_prepare_v2(getRawHandle(), sql.c_str(), -1, &m_stmt, nullptr), sql);
+    bool succeed = exitAPI(
+    sqlite3_prepare_v2(m_handle->getRawHandle(), sql.c_str(), -1, &m_stmt, nullptr), sql);
+    if (succeed && m_event != nullptr) {
+        m_event->statementDidPrepare(this);
+    }
+    return succeed;
 }
 
 void HandleStatement::reset()
@@ -57,8 +62,16 @@ bool HandleStatement::step(bool &done)
     WCTInnerAssert(isPrepared());
     int rc = sqlite3_step(m_stmt);
     done = rc == SQLITE_DONE;
+    const char *sql = nullptr;
+    if (isPrepared()) {
+        sql = sqlite3_sql(m_stmt);
+    }
+    bool succeed = exitAPI(rc);
     // There will be privacy issues if use sqlite3_expanded_sql
-    return exitAPI(rc, sqlite3_sql(m_stmt));
+    if (succeed && m_event != nullptr) {
+        m_event->statementDidStep(this);
+    }
+    return succeed;
 }
 
 bool HandleStatement::step()

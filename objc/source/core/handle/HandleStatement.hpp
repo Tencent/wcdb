@@ -70,11 +70,12 @@ public:
     bool isReadonly();
 
 protected:
-    HandleStatement(AbstractHandle *handle);
+    HandleStatement(AbstractHandle *handle, HandleStatementEvent *event);
 
 private:
     bool prepare(const String &sql);
     sqlite3_stmt *m_stmt;
+    HandleStatementEvent *m_event;
 };
 
 } //namespace WCDB

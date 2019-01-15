@@ -148,7 +148,7 @@ bool AbstractHandle::executeSQL(const String &sql)
 {
     // use seperated sqlite3_exec to get more information
     WCTInnerAssert(isOpened());
-    HandleStatement handleStatement(this);
+    HandleStatement handleStatement(this, &m_notification);
     bool succeed = handleStatement.prepare(sql) && handleStatement.step();
     handleStatement.finalize();
     return succeed;
@@ -223,7 +223,7 @@ void AbstractHandle::disableCheckpointWhenClosing(bool disable)
 #pragma mark - Statement
 HandleStatement *AbstractHandle::getStatement()
 {
-    m_handleStatements.push_back(HandleStatement(this));
+    m_handleStatements.push_back(HandleStatement(this, &m_notification));
     return &m_handleStatements.back();
 }
 
