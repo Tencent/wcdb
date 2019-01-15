@@ -135,7 +135,9 @@ void FullCrawler::onMasterCellCrawled(const Cell &cell, const Master &master)
                 crawl(master.rootpage);
             }
         } else {
-            m_associatedSQLs[master.tableName].push_back(master.sql);
+            if (!master.sql.empty()) {
+                m_associatedSQLs[master.tableName].push_back(master.sql);
+            }
         }
     }
 }
