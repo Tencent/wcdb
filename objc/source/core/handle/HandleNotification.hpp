@@ -23,6 +23,7 @@
 
 #include <WCDB/HandleRelated.hpp>
 #include <WCDB/OrderedUniqueList.hpp>
+#include <WCDB/SQLiteDeclaration.h>
 #include <functional>
 #include <map>
 
@@ -35,16 +36,17 @@ public:
     void purge();
 
 #pragma mark - Trace
-protected:
+private:
     void dispatchTraceNotification(unsigned int flag, void *P, void *X);
     void setupTraceNotification();
+    static int traced(unsigned int T, void *C, void *P, void *X);
 
 #pragma mark - SQL
 public:
     typedef std::function<void(const String & /* sql */)> SQLNotification;
     void setNotificationWhenSQLTraced(const String &name, const SQLNotification &onTraced);
 
-protected:
+private:
     bool isSQLTraceNotificationSet() const;
     void dispatchSQLTraceNotification(const String &sql);
     std::map<String, SQLNotification> m_sqlNotifications;
@@ -63,7 +65,7 @@ public:
     void setNotificationWhenPerformanceTraced(const String &name,
                                               const PerformanceNotification &onTraced);
 
-protected:
+private:
     bool isPerformanceTraceNotificationSet() const;
     void dispatchPerformanceTraceNotification(const String &sql,
                                               const int64_t &cost,
@@ -82,7 +84,9 @@ public:
                                       const CommittedNotification &onCommitted);
     void unsetNotificationWhenCommitted(const String &name);
 
-protected:
+private:
+    static int committed(void *p, sqlite3 *, const char *, int frames);
+
     bool isCommittedNotificationSet() const;
     void setupCommittedNotification();
 
@@ -95,7 +99,9 @@ public:
     void setNotificationWhenCheckpointed(const String &name,
                                          const CheckpointedNotification &checkpointed);
 
-protected:
+private:
+    static void checkpointed(void *p);
+
     bool isCheckpointNotificationSet() const;
     void setupCheckpointNotification();
     void dispatchCheckpointNotification();

@@ -77,9 +77,8 @@
 
 - (void)test_raw_handle
 {
-    sqlite3** rawHandle = (sqlite3**) self.handle.rawHandle;
-    sqlite3* sqliteHandle = *rawHandle;
-    const char* filename = sqlite3_db_filename(sqliteHandle, "main");
+    sqlite3* rawHandle = self.handle.rawHandle;
+    const char* filename = sqlite3_db_filename(rawHandle, "main");
     TestCaseAssertTrue([self.database.path isEqualToString:@(filename)]);
 }
 

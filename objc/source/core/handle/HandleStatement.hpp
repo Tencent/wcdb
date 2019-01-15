@@ -22,11 +22,14 @@
 #define _WCDB_HANDLESTATEMENT_HPP
 
 #include <WCDB/HandleRelated.hpp>
+#include <WCDB/SQLiteDeclaration.h>
 #include <WCDB/WINQ.h>
 
 namespace WCDB {
 
 class HandleStatement final : public HandleRelated {
+    friend class AbstractHandle;
+
 public:
     ~HandleStatement();
 
@@ -69,9 +72,9 @@ public:
 protected:
     HandleStatement(AbstractHandle *handle);
 
+private:
     bool prepare(const String &sql);
-    friend class AbstractHandle;
-    void *m_stmt;
+    sqlite3_stmt *m_stmt;
 };
 
 } //namespace WCDB

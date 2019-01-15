@@ -67,7 +67,7 @@
 }
 
 #pragma mark - Handle
-- (void **)rawHandle
+- (sqlite3 *)rawHandle
 {
     return [self getOrGenerateHandle] -> getRawHandle();
 }

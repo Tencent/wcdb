@@ -48,7 +48,7 @@ bool HandleRelated::exitAPI(int rc, const char *sql)
     return m_handle->exitAPI(rc, sql);
 }
 
-void *HandleRelated::getRawHandle()
+sqlite3 *HandleRelated::getRawHandle()
 {
     return m_handle->m_handle;
 }

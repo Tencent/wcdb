@@ -37,9 +37,9 @@ AbstractHandle::~AbstractHandle()
     WCTRemedialAssert(!isOpened(), "Database is not closed.", close(););
 }
 
-void **AbstractHandle::getRawHandle()
+sqlite3 *AbstractHandle::getRawHandle()
 {
-    return &m_handle;
+    return m_handle;
 }
 
 #pragma mark - Global
@@ -120,7 +120,7 @@ bool AbstractHandle::open()
 {
     bool result = true;
     if (!isOpened()) {
-        result = exitAPI(sqlite3_open(m_path.c_str(), (sqlite3 **) &m_handle));
+        result = exitAPI(sqlite3_open(m_path.c_str(), &m_handle));
     }
     return result;
 }
@@ -132,14 +132,14 @@ bool AbstractHandle::isOpened() const
 
 void AbstractHandle::close()
 {
-    if (m_handle) {
+    if (m_handle != nullptr) {
         finalizeStatements();
         WCTRemedialAssert(m_nestedLevel == 0 && !isInTransaction(),
                           "Unpaired transaction.",
                           m_nestedLevel = 0;
                           rollbackTransaction(););
         m_notification.purge();
-        exitAPI(sqlite3_close_v2((sqlite3 *) m_handle));
+        exitAPI(sqlite3_close_v2(m_handle));
         m_handle = nullptr;
     }
 }
@@ -162,62 +162,62 @@ bool AbstractHandle::executeStatement(const Statement &statement)
 int AbstractHandle::getExtendedErrorCode()
 {
     WCTInnerAssert(isOpened());
-    return sqlite3_extended_errcode((sqlite3 *) m_handle);
+    return sqlite3_extended_errcode(m_handle);
 }
 
 long long AbstractHandle::getLastInsertedRowID()
 {
     WCTInnerAssert(isOpened());
-    return sqlite3_last_insert_rowid((sqlite3 *) m_handle);
+    return sqlite3_last_insert_rowid(m_handle);
 }
 
 int AbstractHandle::getResultCode()
 {
     WCTInnerAssert(isOpened());
-    return sqlite3_errcode((sqlite3 *) m_handle);
+    return sqlite3_errcode(m_handle);
 }
 
 const char *AbstractHandle::getErrorMessage()
 {
     WCTInnerAssert(isOpened());
-    return sqlite3_errmsg((sqlite3 *) m_handle);
+    return sqlite3_errmsg(m_handle);
 }
 
 int AbstractHandle::getChanges()
 {
     WCTInnerAssert(isOpened());
-    return sqlite3_changes((sqlite3 *) m_handle);
+    return sqlite3_changes(m_handle);
 }
 
 bool AbstractHandle::isReadonly()
 {
     WCTInnerAssert(isOpened());
-    return sqlite3_db_readonly((sqlite3 *) m_handle, NULL) == 1;
+    return sqlite3_db_readonly(m_handle, NULL) == 1;
 }
 
 bool AbstractHandle::isInTransaction()
 {
     WCTInnerAssert(isOpened());
-    return sqlite3_get_autocommit((sqlite3 *) m_handle) == 0;
+    return sqlite3_get_autocommit(m_handle) == 0;
 }
 
 void AbstractHandle::interrupt()
 {
     WCTInnerAssert(isOpened());
-    sqlite3_interrupt((sqlite3 *) m_handle);
+    sqlite3_interrupt(m_handle);
 }
 
 int AbstractHandle::getNumberOfDirtyPages()
 {
     WCTInnerAssert(isOpened());
-    return sqlite3_dirty_page_count((sqlite3 *) m_handle);
+    return sqlite3_dirty_page_count(m_handle);
 }
 
 void AbstractHandle::disableCheckpointWhenClosing(bool disable)
 {
     WCTInnerAssert(isOpened());
     exitAPI(sqlite3_db_config(
-    (sqlite3 *) m_handle, SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE, (int) disable, nullptr));
+    m_handle, SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE, (int) disable, nullptr));
 }
 
 #pragma mark - Statement
@@ -399,7 +399,7 @@ void AbstractHandle::rollbackTransaction()
 void AbstractHandle::setCipherKey(const UnsafeData &data)
 {
     WCTInnerAssert(isOpened());
-    exitAPI(sqlite3_key((sqlite3 *) m_handle, data.buffer(), (int) data.size()));
+    exitAPI(sqlite3_key(m_handle, data.buffer(), (int) data.size()));
 }
 
 #pragma mark - Notification

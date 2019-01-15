@@ -20,6 +20,7 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/Macro.hpp>
+#import <WCDB/SQLiteDeclaration.h>
 #import <WCDB/WINQ.h>
 
 #pragma mark - Chain Call

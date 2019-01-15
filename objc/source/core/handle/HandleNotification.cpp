@@ -50,6 +50,13 @@ void HandleNotification::purge()
 }
 
 #pragma mark - Trace
+int HandleNotification::traced(unsigned int T, void *C, void *P, void *X)
+{
+    HandleNotification *notification = reinterpret_cast<HandleNotification *>(C);
+    notification->dispatchTraceNotification(T, P, X);
+    return SQLITE_OK;
+}
+
 void HandleNotification::dispatchTraceNotification(unsigned int flag, void *P, void *X)
 {
     sqlite3_stmt *stmt = (sqlite3_stmt *) P;
@@ -81,17 +88,9 @@ void HandleNotification::setupTraceNotification()
         flag |= SQLITE_TRACE_PROFILE;
     }
     if (flag != 0) {
-        exitAPI(sqlite3_trace_v2((sqlite3 *) getRawHandle(),
-                                 flag,
-                                 [](unsigned int T, void *C, void *P, void *X) {
-                                     HandleNotification *notification
-                                     = reinterpret_cast<HandleNotification *>(C);
-                                     notification->dispatchTraceNotification(T, P, X);
-                                     return SQLITE_OK;
-                                 },
-                                 this));
+        exitAPI(sqlite3_trace_v2(getRawHandle(), flag, HandleNotification::traced, this));
     } else {
-        exitAPI(sqlite3_trace_v2((sqlite3 *) getRawHandle(), 0, nullptr, nullptr));
+        exitAPI(sqlite3_trace_v2(getRawHandle(), 0, nullptr, nullptr));
     }
 }
 
@@ -175,6 +174,13 @@ void HandleNotification::dispatchPerformanceTraceNotification(const String &sql,
 }
 
 #pragma mark - Committed
+int HandleNotification::committed(void *p, sqlite3 *, const char *, int frames)
+{
+    HandleNotification *notification = reinterpret_cast<HandleNotification *>(p);
+    notification->dispatchCommittedNotification(frames);
+    return SQLITE_OK;
+}
+
 void HandleNotification::setNotificationWhenCommitted(int order,
                                                       const String &name,
                                                       const CommittedNotification &onCommitted)
@@ -201,16 +207,9 @@ void HandleNotification::unsetNotificationWhenCommitted(const String &name)
 void HandleNotification::setupCommittedNotification()
 {
     if (!m_committedNotifications.elements().empty()) {
-        sqlite3_wal_hook((sqlite3 *) getRawHandle(),
-                         [](void *p, sqlite3 *, const char *, int frames) -> int {
-                             HandleNotification *notification
-                             = reinterpret_cast<HandleNotification *>(p);
-                             notification->dispatchCommittedNotification(frames);
-                             return SQLITE_OK;
-                         },
-                         this);
+        sqlite3_wal_hook(getRawHandle(), HandleNotification::committed, this);
     } else {
-        sqlite3_wal_hook((sqlite3 *) getRawHandle(), nullptr, nullptr);
+        sqlite3_wal_hook(getRawHandle(), nullptr, nullptr);
     }
 }
 
@@ -230,6 +229,12 @@ void HandleNotification::dispatchCommittedNotification(int frames)
 }
 
 #pragma mark - Checkpoint
+void HandleNotification::checkpointed(void *p)
+{
+    HandleNotification *notification = reinterpret_cast<HandleNotification *>(p);
+    notification->dispatchCheckpointNotification();
+}
+
 bool HandleNotification::isCheckpointNotificationSet() const
 {
     return !m_checkpointedNotifications.empty();
@@ -239,15 +244,9 @@ void HandleNotification::setupCheckpointNotification()
 {
     if (!m_checkpointedNotifications.empty()) {
         exitAPI(sqlite3_wal_checkpoint_handler(
-        (sqlite3 *) getRawHandle(),
-        [](void *p) -> void {
-            HandleNotification *notification
-            = reinterpret_cast<HandleNotification *>(p);
-            notification->dispatchCheckpointNotification();
-        },
-        this));
+        getRawHandle(), HandleNotification::checkpointed, this));
     } else {
-        exitAPI(sqlite3_wal_checkpoint_handler((sqlite3 *) getRawHandle(), nullptr, nullptr));
+        exitAPI(sqlite3_wal_checkpoint_handler(getRawHandle(), nullptr, nullptr));
     }
 }
 

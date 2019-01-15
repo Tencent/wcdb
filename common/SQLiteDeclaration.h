@@ -18,29 +18,12 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_HANDLERELATED_HPP
-#define _WCDB_HANDLERELATED_HPP
+#ifndef _WCDB_SQLITEDECLARATION_H
+#define _WCDB_SQLITEDECLARATION_H
 
-#include <WCDB/SQLiteDeclaration.h>
-#include <WCDB/String.hpp>
+extern "C" {
+typedef struct sqlite3 sqlite3;
+typedef struct sqlite3_stmt sqlite3_stmt;
+}
 
-namespace WCDB {
-
-class AbstractHandle;
-
-class HandleRelated {
-public:
-    HandleRelated(AbstractHandle *handle);
-    virtual ~HandleRelated() = 0;
-
-protected:
-    sqlite3 *getRawHandle();
-    bool exitAPI(int rc);
-    bool exitAPI(int rc, const String &sql);
-    bool exitAPI(int rc, const char *sql);
-    AbstractHandle *m_handle;
-};
-
-} //namespace WCDB
-
-#endif /* _WCDB_HANDLERELATED_HPP */
+#endif /* _WCDB_SQLITEDECLARATION_H */

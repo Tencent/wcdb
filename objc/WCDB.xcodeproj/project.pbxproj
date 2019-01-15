@@ -268,6 +268,7 @@
 		23790A7F219315E50098797F /* WCTColumnConstraintMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 23790A7D219315D50098797F /* WCTColumnConstraintMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23790A80219315E50098797F /* WCTVirtualTableMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 23790A7E219315DE0098797F /* WCTVirtualTableMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		237A65F520F731DF008B4771 /* OrderedUniqueList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */; };
+		237A8D5821ED88DF003AF5BB /* SQLiteDeclaration.h in Headers */ = {isa = PBXBuildFile; fileRef = 237A8D5721ED88DF003AF5BB /* SQLiteDeclaration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		237C900721D45E6700EE6E44 /* CoreConst.h in Headers */ = {isa = PBXBuildFile; fileRef = 237C900621D45E6700EE6E44 /* CoreConst.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		237C901321D4C56500EE6E44 /* MigrateTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237C901221D4C56500EE6E44 /* MigrateTestCase.mm */; };
 		237C901521D4C5C400EE6E44 /* TableMigrateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237C901421D4C5C400EE6E44 /* TableMigrateTests.mm */; };
@@ -1513,6 +1514,7 @@
 		23790A7D219315D50098797F /* WCTColumnConstraintMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTColumnConstraintMacro.h; sourceTree = "<group>"; };
 		23790A7E219315DE0098797F /* WCTVirtualTableMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTVirtualTableMacro.h; sourceTree = "<group>"; };
 		237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OrderedUniqueList.hpp; sourceTree = "<group>"; };
+		237A8D5721ED88DF003AF5BB /* SQLiteDeclaration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SQLiteDeclaration.h; sourceTree = "<group>"; };
 		237C900621D45E6700EE6E44 /* CoreConst.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreConst.h; sourceTree = "<group>"; };
 		237C901121D4C56500EE6E44 /* MigrateTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MigrateTestCase.h; sourceTree = "<group>"; };
 		237C901221D4C56500EE6E44 /* MigrateTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MigrateTestCase.mm; sourceTree = "<group>"; };
@@ -2788,6 +2790,7 @@
 				2314AE6F21070A1700244D39 /* Range.cpp */,
 				2314AE7021070A1700244D39 /* Range.hpp */,
 				23AB898D215BA6DB00554DF1 /* SQLite.h */,
+				237A8D5721ED88DF003AF5BB /* SQLiteDeclaration.h */,
 				233A8530215E7CFE00BB8D4F /* Console.cpp */,
 				233A8531215E7CFE00BB8D4F /* Console.hpp */,
 			);
@@ -3879,6 +3882,7 @@
 				23EEDC74217DFADC006E9E73 /* SyntaxList.hpp in Headers */,
 				2349F76C1EA0D6680021EFA7 /* WCTTableConstraintMacro.h in Headers */,
 				23EEDC7C217DFADC006E9E73 /* ColumnConstraint.hpp in Headers */,
+				237A8D5821ED88DF003AF5BB /* SQLiteDeclaration.h in Headers */,
 				23EEDCC6217DFADC006E9E73 /* StatementCreateView.hpp in Headers */,
 				23EEDD3C217DFADC006E9E73 /* SyntaxCreateVirtualTableSTMT.hpp in Headers */,
 				23EEDD61217DFB17006E9E73 /* Shadow.hpp in Headers */,
