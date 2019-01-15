@@ -444,18 +444,25 @@ void AbstractHandle::setNotificationWhenBusy(const BusyNotification &busyNotific
     m_notification.setNotificationWhenBusy(busyNotification);
 }
 
-void AbstractHandle::setNotificationWhenStatementPrepared(const String &name,
-                                                          const StatementPreparedNotification &notification)
+void AbstractHandle::setNotificationWhenStatementDidPrepare(const String &name,
+                                                            const StatementDidPrepareNotification &notification)
 {
     WCTInnerAssert(isOpened());
-    m_notification.setNotificationWhenStatementPrepared(name, notification);
+    m_notification.setNotificationWhenStatementDidPrepare(name, notification);
 }
 
-void AbstractHandle::setNotificationWhenStatementStepped(const String &name,
-                                                         const StatementSteppedNotification &notification)
+void AbstractHandle::setNotificationWhenStatementDidStep(const String &name,
+                                                         const StatementDidStepNotification &notification)
 {
     WCTInnerAssert(isOpened());
-    m_notification.setNotificationWhenStatementStepped(name, notification);
+    m_notification.setNotificationWhenStatementDidStep(name, notification);
+}
+
+void AbstractHandle::setNotificationWhenStatementWillStep(const String &name,
+                                                          const StatementWillStepNotification &notification)
+{
+    WCTInnerAssert(isOpened());
+    m_notification.setNotificationWhenStatementWillStep(name, notification);
 }
 
 #pragma mark - Error

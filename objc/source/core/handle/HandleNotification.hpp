@@ -117,25 +117,35 @@ private:
     bool dispatchBusyNotification(int numberOfTimes);
     BusyNotification m_busyNotification;
 
-#pragma mark - Statement Prepare
+#pragma mark - Did Prepare
 public:
-    typedef std::function<void(HandleStatement *)> StatementPreparedNotification;
-    void setNotificationWhenStatementPrepared(const String &name,
-                                              const StatementPreparedNotification &notification);
+    typedef std::function<void(HandleStatement *)> StatementDidPrepareNotification;
+    void setNotificationWhenStatementDidPrepare(const String &name,
+                                                const StatementDidPrepareNotification &notification);
 
 private:
-    std::map<String, StatementPreparedNotification> m_preparedNotifications;
+    std::map<String, StatementDidPrepareNotification> m_didPrepareNotifications;
     void statementDidPrepare(HandleStatement *) override final;
 
-#pragma mark - Statement Step
+#pragma mark - Did Step
 public:
-    typedef std::function<void(HandleStatement *)> StatementSteppedNotification;
-    void setNotificationWhenStatementStepped(const String &name,
-                                             const StatementSteppedNotification &notification);
+    typedef std::function<void(HandleStatement *, bool result)> StatementDidStepNotification;
+    void setNotificationWhenStatementDidStep(const String &name,
+                                             const StatementDidStepNotification &notification);
 
 private:
-    std::map<String, StatementSteppedNotification> m_steppedNotifications;
-    void statementDidStep(HandleStatement *) override final;
+    std::map<String, StatementDidStepNotification> m_didStepNotifications;
+    void statementDidStep(HandleStatement *, bool result) override final;
+
+#pragma mark - Will Step
+public:
+    typedef std::function<void(HandleStatement *)> StatementWillStepNotification;
+    void setNotificationWhenStatementWillStep(const String &name,
+                                              const StatementWillStepNotification &notification);
+
+private:
+    std::map<String, StatementWillStepNotification> m_willStepNotifications;
+    void statementWillStep(HandleStatement *) override final;
 };
 
 } //namespace WCDB

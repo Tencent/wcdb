@@ -18,40 +18,35 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_HANDLERELATED_HPP
-#define _WCDB_HANDLERELATED_HPP
+#ifndef _WCDB_BUSYRETRYCONFIG_HPP
+#define _WCDB_BUSYRETRYCONFIG_HPP
 
-#include <WCDB/SQLiteDeclaration.h>
+#include <WCDB/Config.hpp>
 #include <WCDB/String.hpp>
+#include <mutex>
 
 namespace WCDB {
 
-class AbstractHandle;
 class HandleStatement;
 
-class HandleRelated {
+class BusyRetryConfig final : public Config {
 public:
-    HandleRelated(AbstractHandle *handle);
-    virtual ~HandleRelated() = 0;
+    BusyRetryConfig();
 
-    AbstractHandle *getHandle() const;
+    bool invoke(Handle* handle) override final;
+    bool uninvoke(Handle* handle) override final;
 
 protected:
-    bool exitAPI(int rc);
-    bool exitAPI(int rc, const String &sql);
-    bool exitAPI(int rc, const char *sql);
-    AbstractHandle *m_handle;
-};
-
-class HandleStatementEvent {
-public:
-    virtual ~HandleStatementEvent();
-
-    virtual void statementDidPrepare(HandleStatement *) = 0;
-    virtual void statementWillStep(HandleStatement *) = 0;
-    virtual void statementDidStep(HandleStatement *, bool) = 0;
+    void willStep(HandleStatement* handleStatement);
+    void didStep(HandleStatement* handleStatement, bool result);
+    bool onBusy(const String& path, int numberOfTimes);
+    const String m_identifier;
+    std::condition_variable m_cond;
+    std::mutex m_mutex;
+    int m_numberOfWaitingHandles;
+    int m_numberOfSteppingHandles;
 };
 
 } //namespace WCDB
 
-#endif /* _WCDB_HANDLERELATED_HPP */
+#endif /* _WCDB_BUSYRETRYCONFIG_HPP */

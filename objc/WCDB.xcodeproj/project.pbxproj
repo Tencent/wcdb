@@ -269,6 +269,8 @@
 		23790A80219315E50098797F /* WCTVirtualTableMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 23790A7E219315DE0098797F /* WCTVirtualTableMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		237A65F520F731DF008B4771 /* OrderedUniqueList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */; };
 		237A8D5821ED88DF003AF5BB /* SQLiteDeclaration.h in Headers */ = {isa = PBXBuildFile; fileRef = 237A8D5721ED88DF003AF5BB /* SQLiteDeclaration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		237A8D5F21EDBB2E003AF5BB /* BusyRetryConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237A8D5D21EDBB2E003AF5BB /* BusyRetryConfig.cpp */; };
+		237A8D6021EDBB2E003AF5BB /* BusyRetryConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237A8D5E21EDBB2E003AF5BB /* BusyRetryConfig.hpp */; };
 		237C900721D45E6700EE6E44 /* CoreConst.h in Headers */ = {isa = PBXBuildFile; fileRef = 237C900621D45E6700EE6E44 /* CoreConst.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		237C901321D4C56500EE6E44 /* MigrateTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237C901221D4C56500EE6E44 /* MigrateTestCase.mm */; };
 		237C901521D4C5C400EE6E44 /* TableMigrateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237C901421D4C5C400EE6E44 /* TableMigrateTests.mm */; };
@@ -1515,6 +1517,8 @@
 		23790A7E219315DE0098797F /* WCTVirtualTableMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTVirtualTableMacro.h; sourceTree = "<group>"; };
 		237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OrderedUniqueList.hpp; sourceTree = "<group>"; };
 		237A8D5721ED88DF003AF5BB /* SQLiteDeclaration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SQLiteDeclaration.h; sourceTree = "<group>"; };
+		237A8D5D21EDBB2E003AF5BB /* BusyRetryConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BusyRetryConfig.cpp; sourceTree = "<group>"; };
+		237A8D5E21EDBB2E003AF5BB /* BusyRetryConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BusyRetryConfig.hpp; sourceTree = "<group>"; };
 		237C900621D45E6700EE6E44 /* CoreConst.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreConst.h; sourceTree = "<group>"; };
 		237C901121D4C56500EE6E44 /* MigrateTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MigrateTestCase.h; sourceTree = "<group>"; };
 		237C901221D4C56500EE6E44 /* MigrateTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MigrateTestCase.mm; sourceTree = "<group>"; };
@@ -3675,6 +3679,8 @@
 				23F70FD520A07CEC00CCE3CD /* CustomConfig.hpp */,
 				23DD772E20D13E8E00E9B451 /* BackupConfig.cpp */,
 				23DD772F20D13E8E00E9B451 /* BackupConfig.hpp */,
+				237A8D5D21EDBB2E003AF5BB /* BusyRetryConfig.cpp */,
+				237A8D5E21EDBB2E003AF5BB /* BusyRetryConfig.hpp */,
 			);
 			path = config;
 			sourceTree = "<group>";
@@ -3785,6 +3791,7 @@
 				2360A60920D78F2C00E4A311 /* PerformanceTraceConfig.hpp in Headers */,
 				23EABBE6206D08EC00241F3B /* WCTHandle+Table.h in Headers */,
 				239776FE202AF2E3000A681C /* Macro.hpp in Headers */,
+				237A8D6021EDBB2E003AF5BB /* BusyRetryConfig.hpp in Headers */,
 				23A6D4C120BFD7F9004F2DAA /* Progress.hpp in Headers */,
 				23EEDCFE217DFADC006E9E73 /* SyntaxForeignKeyClause.hpp in Headers */,
 				23EEDD1E217DFADC006E9E73 /* SyntaxSelectCore.hpp in Headers */,
@@ -4999,6 +5006,7 @@
 				23577F7A1F74F4E800D31C05 /* WCTCursorInfo.mm in Sources */,
 				23775B7220AD666900E21AB0 /* DeprecatedRepairKit.cpp in Sources */,
 				2349F7211EA0D6680021EFA7 /* WCTDelete.mm in Sources */,
+				237A8D5F21EDBB2E003AF5BB /* BusyRetryConfig.cpp in Sources */,
 				23EEDD55217DFADC006E9E73 /* SyntaxSelectSTMT.cpp in Sources */,
 				23EEDC8B217DFADC006E9E73 /* FunctionInvocation.cpp in Sources */,
 				23F340DF204D3482007DB8AB /* WCTDatabase+ChainCall.mm in Sources */,

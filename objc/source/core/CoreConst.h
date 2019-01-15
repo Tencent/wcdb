@@ -33,6 +33,7 @@
     "com.Tencent.WCDB.Config.GlobalSQLTrace"
 #define WCDB_GLOBAL_PERFORMANCE_TRACE_CONFIG_NAME                              \
     "com.Tencent.WCDB.Config.GlobalPerformanceTrace"
+#define WCDB_BUSY_RETRY_CONFIG_NAME "com.Tencent.WCDB.Config.BusyRetry"
 
 namespace WCDB {
 
@@ -88,6 +89,12 @@ static constexpr const char* GlobalSQLTraceConfigName = WCDB_GLOBAL_SQL_TRACE_CO
 // Global Performance Trace Config
 static constexpr const char* GlobalPerformanceTraceConfigName
 = WCDB_GLOBAL_PERFORMANCE_TRACE_CONFIG_NAME;
+
+// Busy Retry Config
+static constexpr const char* BusyRetryConfigName = WCDB_BUSY_RETRY_CONFIG_NAME;
+static constexpr const double BusyRetryIntervalForMainThread = 2.0;
+static constexpr const double BusyRetryIntervalForOtherThread = 10.0;
+static constexpr const int BusyRetryMaxAllowedNumberOfTimes = 20;
 
 // Notifier
 static constexpr const char* NotifierTagPreprocessorName

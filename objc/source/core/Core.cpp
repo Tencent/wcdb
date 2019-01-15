@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/BusyRetryConfig.hpp>
 #include <WCDB/Core.h>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Notifier.hpp>
@@ -99,6 +100,10 @@ void Core::onDatabaseCreated(Database* database)
 {
     WCTInnerAssert(database != nullptr);
     database->setConfigs(m_configs);
+
+    database->setConfig(BusyRetryConfigName,
+                        std::shared_ptr<Config>(new BusyRetryConfig),
+                        Configs::Priority::Highest);
 }
 
 void Core::databaseDidBecomeCorrupted(const String& path, uint32_t corruptedIdentifier)

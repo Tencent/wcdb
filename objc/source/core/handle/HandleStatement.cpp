@@ -60,6 +60,9 @@ void HandleStatement::reset()
 bool HandleStatement::step(bool &done)
 {
     WCTInnerAssert(isPrepared());
+    if (m_event != nullptr) {
+        m_event->statementWillStep(this);
+    }
     int rc = sqlite3_step(m_stmt);
     done = rc == SQLITE_DONE;
     const char *sql = nullptr;
@@ -69,7 +72,7 @@ bool HandleStatement::step(bool &done)
     bool succeed = exitAPI(rc, sql);
     // There will be privacy issues if use sqlite3_expanded_sql
     if (succeed && m_event != nullptr) {
-        m_event->statementDidStep(this);
+        m_event->statementDidStep(this, succeed);
     }
     return succeed;
 }

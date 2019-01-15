@@ -312,15 +312,15 @@ bool HandleNotification::dispatchBusyNotification(int numberOfTimes)
 }
 
 #pragma mark - Statement Prepare
-void HandleNotification::setNotificationWhenStatementPrepared(
-const String &name, const StatementPreparedNotification &notification)
+void HandleNotification::setNotificationWhenStatementDidPrepare(
+const String &name, const StatementDidPrepareNotification &notification)
 {
-    m_preparedNotifications.emplace(name, notification);
+    m_didPrepareNotifications.emplace(name, notification);
 }
 
 void HandleNotification::statementDidPrepare(HandleStatement *handleStatement)
 {
-    for (const auto &iter : m_preparedNotifications) {
+    for (const auto &iter : m_didPrepareNotifications) {
         WCTInnerAssert(iter.second != nullptr);
         if (iter.second != nullptr) {
             iter.second(handleStatement);
@@ -328,16 +328,33 @@ void HandleNotification::statementDidPrepare(HandleStatement *handleStatement)
     }
 }
 
-#pragma mark - Statement Step
-void HandleNotification::setNotificationWhenStatementStepped(const String &name,
-                                                             const StatementSteppedNotification &notification)
+#pragma mark - Did Step
+void HandleNotification::setNotificationWhenStatementDidStep(const String &name,
+                                                             const StatementDidStepNotification &notification)
 {
-    m_steppedNotifications.emplace(name, notification);
+    m_didStepNotifications.emplace(name, notification);
 }
 
-void HandleNotification::statementDidStep(HandleStatement *handleStatement)
+void HandleNotification::statementDidStep(HandleStatement *handleStatement, bool result)
 {
-    for (const auto &iter : m_steppedNotifications) {
+    for (const auto &iter : m_didStepNotifications) {
+        WCTInnerAssert(iter.second != nullptr);
+        if (iter.second != nullptr) {
+            iter.second(handleStatement, result);
+        }
+    }
+}
+
+#pragma mark - Will Step
+void HandleNotification::setNotificationWhenStatementWillStep(
+const String &name, const StatementWillStepNotification &notification)
+{
+    m_willStepNotifications.emplace(name, notification);
+}
+
+void HandleNotification::statementWillStep(HandleStatement *handleStatement)
+{
+    for (const auto &iter : m_willStepNotifications) {
         WCTInnerAssert(iter.second != nullptr);
         if (iter.second != nullptr) {
             iter.second(handleStatement);
