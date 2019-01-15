@@ -26,12 +26,18 @@
 #include <WCDB/HandleStatement.hpp>
 #include <WCDB/String.hpp>
 #include <WCDB/WINQ.h>
-#include <array>
-#include <memory>
-#include <mutex>
 #include <set>
 
 namespace WCDB {
+
+class HandleEvent {
+public:
+    virtual ~HandleEvent();
+
+    virtual void
+    handleDidPrepared(AbstractHandle *handle, HandleStatement *handleStatement)
+    = 0;
+};
 
 class AbstractHandle : public ErrorProne {
 #pragma mark - Initialize
@@ -171,7 +177,13 @@ public:
 protected:
     // if code >= 0, then the level of error with the specified code will be marked as ignored
     // if code < 0, then the level of all errors will be marked as ignored
-    bool exitAPI(int rc, const String &sql = "");
+    bool exitAPI(int rc);
+    bool exitAPI(int rc, const String &sql);
+    bool exitAPI(int rc, const char *sql);
+
+private:
+    static bool isError(int rc);
+    void notifyError(int rc, const char *sql);
 
 private:
     int m_codeToBeIgnored;

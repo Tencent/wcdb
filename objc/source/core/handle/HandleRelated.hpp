@@ -30,11 +30,13 @@ class AbstractHandle;
 class HandleRelated {
 public:
     HandleRelated(AbstractHandle *handle);
-    virtual ~HandleRelated();
+    virtual ~HandleRelated() = 0;
 
 protected:
     void *getRawHandle();
-    bool exitAPI(int rc, const String &sql = "");
+    bool exitAPI(int rc);
+    bool exitAPI(int rc, const String &sql);
+    bool exitAPI(int rc, const char *sql);
     AbstractHandle *m_handle;
 };
 

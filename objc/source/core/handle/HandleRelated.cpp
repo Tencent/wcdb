@@ -33,7 +33,17 @@ HandleRelated::~HandleRelated()
 {
 }
 
+bool HandleRelated::exitAPI(int rc)
+{
+    return m_handle->exitAPI(rc);
+}
+
 bool HandleRelated::exitAPI(int rc, const String &sql)
+{
+    return m_handle->exitAPI(rc, sql);
+}
+
+bool HandleRelated::exitAPI(int rc, const char *sql)
 {
     return m_handle->exitAPI(rc, sql);
 }

@@ -146,9 +146,12 @@ void AbstractHandle::close()
 
 bool AbstractHandle::executeSQL(const String &sql)
 {
+    // use seperated sqlite3_exec to get more information
     WCTInnerAssert(isOpened());
-    return exitAPI(
-    sqlite3_exec((sqlite3 *) m_handle, sql.c_str(), nullptr, nullptr, nullptr), sql);
+    HandleStatement handleStatement(this);
+    bool succeed = handleStatement.prepare(sql) && handleStatement.step();
+    handleStatement.finalize();
+    return succeed;
 }
 
 bool AbstractHandle::executeStatement(const Statement &statement)
@@ -436,31 +439,62 @@ void AbstractHandle::setNotificationWhenCheckpointed(const String &name,
 }
 
 #pragma mark - Error
+bool AbstractHandle::isError(int rc)
+{
+    return rc != SQLITE_OK && rc != SQLITE_ROW && rc != SQLITE_DONE;
+}
+
+bool AbstractHandle::exitAPI(int rc)
+{
+    if (!isError(rc)) {
+        return true;
+    }
+    notifyError(rc, nullptr);
+    return false;
+}
+
 bool AbstractHandle::exitAPI(int rc, const String &sql)
 {
-    if (rc != SQLITE_OK && rc != SQLITE_ROW && rc != SQLITE_DONE) {
-        if (rc != SQLITE_MISUSE) {
-            m_error.setSQLiteCode(rc, getExtendedErrorCode());
-            const char *message = getErrorMessage();
-            if (message) {
-                m_error.message = message;
-            } else {
-                m_error.message = String::null();
-            }
-        } else {
-            // extended error code/message will not be set in some case for misuse error
-            m_error.setSQLiteCode(rc);
-        }
-        if (m_codeToBeIgnored >= 0 && rc != m_codeToBeIgnored) {
-            m_error.level = Error::Level::Error;
-        } else {
-            m_error.level = Error::Level::Ignore;
-        }
-        m_error.infos.set("SQL", sql);
-        Notifier::shared()->notify(m_error);
-        return false;
+    if (!isError(rc)) {
+        return true;
     }
-    return true;
+    notifyError(rc, sql.c_str());
+    return false;
+}
+
+bool AbstractHandle::exitAPI(int rc, const char *sql)
+{
+    if (!isError(rc)) {
+        return true;
+    }
+    notifyError(rc, sql);
+    return false;
+}
+
+void AbstractHandle::notifyError(int rc, const char *sql)
+{
+    WCTInnerAssert(isError(rc));
+    if (rc != SQLITE_MISUSE) {
+        m_error.setSQLiteCode(rc, getExtendedErrorCode());
+        const char *message = getErrorMessage();
+        if (message) {
+            m_error.message = message;
+        } else {
+            m_error.message = String::null();
+        }
+    } else {
+        // extended error code/message will not be set in some case for misuse error
+        m_error.setSQLiteCode(rc);
+    }
+    if (m_codeToBeIgnored >= 0 && rc != m_codeToBeIgnored) {
+        m_error.level = Error::Level::Error;
+    } else {
+        m_error.level = Error::Level::Ignore;
+    }
+    if (sql != nullptr) {
+        m_error.infos.set("SQL", sql);
+    }
+    Notifier::shared()->notify(m_error);
 }
 
 void AbstractHandle::markErrorAsIgnorable(int codeToBeIgnored)

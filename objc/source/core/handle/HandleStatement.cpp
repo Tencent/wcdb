@@ -59,7 +59,8 @@ bool HandleStatement::step(bool &done)
     WCTInnerAssert(isPrepared());
     int rc = sqlite3_step((sqlite3_stmt *) m_stmt);
     done = rc == SQLITE_DONE;
-    return exitAPI(rc);
+    // There will be privacy issues if use sqlite3_expanded_sql
+    return exitAPI(rc, sqlite3_sql((sqlite3_stmt *) m_stmt));
 }
 
 bool HandleStatement::step()
