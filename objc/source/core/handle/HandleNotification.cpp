@@ -282,8 +282,12 @@ void HandleNotification::dispatchCheckpointNotifications()
 int HandleNotification::busy(void *p, int numberOfTimes)
 {
     HandleNotification *notification = reinterpret_cast<HandleNotification *>(p);
-    notification->dispatchBusyNotification(numberOfTimes);
-    return SQLITE_OK;
+    int rc = SQLITE_OK;
+    if (notification->dispatchBusyNotification(numberOfTimes)) {
+        // return any non-zero value to retry
+        rc = SQLITE_BUSY;
+    }
+    return rc;
 }
 
 void HandleNotification::setNotificationWhenBusy(const BusyNotification &busyNotification)
@@ -297,12 +301,14 @@ void HandleNotification::setNotificationWhenBusy(const BusyNotification &busyNot
     }
 }
 
-void HandleNotification::dispatchBusyNotification(int numberOfTimes)
+bool HandleNotification::dispatchBusyNotification(int numberOfTimes)
 {
     WCTInnerAssert(m_busyNotification != nullptr);
+    bool retry = false;
     if (m_busyNotification != nullptr) {
-        m_busyNotification(m_handle->getPath(), numberOfTimes);
+        retry = m_busyNotification(m_handle->getPath(), numberOfTimes);
     }
+    return retry;
 }
 
 #pragma mark - Statement Prepare

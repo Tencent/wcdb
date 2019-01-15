@@ -156,6 +156,17 @@ public:
                                          const CheckpointedNotification &checkpointed);
     void unsetNotificationWhenCommitted(const String &name);
 
+    typedef HandleNotification::BusyNotification BusyNotification;
+    void setNotificationWhenBusy(const BusyNotification &busyNotification);
+
+    typedef HandleNotification::StatementPreparedNotification StatementPreparedNotification;
+    void setNotificationWhenStatementPrepared(const String &name,
+                                              const StatementPreparedNotification &notification);
+
+    typedef HandleNotification::StatementSteppedNotification StatementSteppedNotification;
+    void setNotificationWhenStatementStepped(const String &name,
+                                             const StatementSteppedNotification &notification);
+
 private:
     HandleNotification m_notification;
 

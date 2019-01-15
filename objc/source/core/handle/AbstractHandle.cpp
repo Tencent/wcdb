@@ -438,6 +438,26 @@ void AbstractHandle::setNotificationWhenCheckpointed(const String &name,
     m_notification.setNotificationWhenCheckpointed(name, checkpointed);
 }
 
+void AbstractHandle::setNotificationWhenBusy(const BusyNotification &busyNotification)
+{
+    WCTInnerAssert(isOpened());
+    m_notification.setNotificationWhenBusy(busyNotification);
+}
+
+void AbstractHandle::setNotificationWhenStatementPrepared(const String &name,
+                                                          const StatementPreparedNotification &notification)
+{
+    WCTInnerAssert(isOpened());
+    m_notification.setNotificationWhenStatementPrepared(name, notification);
+}
+
+void AbstractHandle::setNotificationWhenStatementStepped(const String &name,
+                                                         const StatementSteppedNotification &notification)
+{
+    WCTInnerAssert(isOpened());
+    m_notification.setNotificationWhenStatementStepped(name, notification);
+}
+
 #pragma mark - Error
 bool AbstractHandle::isError(int rc)
 {

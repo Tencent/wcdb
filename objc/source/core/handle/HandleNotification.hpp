@@ -109,12 +109,12 @@ private:
 
 #pragma mark - Busy
 public:
-    typedef std::function<void(const String &path, int numberOfTimes)> BusyNotification;
+    typedef std::function<bool(const String &path, int numberOfTimes)> BusyNotification;
     void setNotificationWhenBusy(const BusyNotification &busyNotification);
 
 private:
     static int busy(void *p, int numberOfTimes);
-    void dispatchBusyNotification(int numberOfTimes);
+    bool dispatchBusyNotification(int numberOfTimes);
     BusyNotification m_busyNotification;
 
 #pragma mark - Statement Prepare
