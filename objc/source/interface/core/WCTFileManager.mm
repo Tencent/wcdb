@@ -77,7 +77,7 @@ std::pair<bool, WCDB::FileProtection> FileManager::getFileProtection(const WCDB:
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *nsPath = [NSString stringWithUTF8String:path.c_str()];
     NSDictionary *attributes = [fileManager attributesOfItemAtPath:nsPath error:&nsError];
-    if (attributes) {
+    if (attributes != nil) {
         WCDB::FileProtection fileProtection = WCDB::FileProtection::None;
         NSString *nsFileProtection = [attributes objectForKey:NSFileProtectionKey];
         if ([nsFileProtection isEqualToString:NSFileProtectionComplete]) {

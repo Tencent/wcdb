@@ -109,7 +109,7 @@ void HandleNotification::setNotificationWhenSQLTraced(const String &name,
                                                       const SQLNotification &onTraced)
 {
     bool stateBefore = areSQLTraceNotificationsSet();
-    if (onTraced) {
+    if (onTraced != nullptr) {
         m_sqlNotifications[name] = onTraced;
     } else {
         m_sqlNotifications.erase(name);
@@ -143,7 +143,7 @@ void HandleNotification::setNotificationWhenPerformanceTraced(const String &name
                                                               const PerformanceNotification &onTraced)
 {
     bool stateBefore = arePerformanceTraceNotificationsSet();
-    if (onTraced) {
+    if (onTraced != nullptr) {
         m_performanceNotifications[name] = onTraced;
     } else {
         m_performanceNotifications.erase(name);
@@ -259,7 +259,7 @@ void HandleNotification::setNotificationWhenCheckpointed(const String &name,
                                                          const CheckpointedNotification &checkpointed)
 {
     bool stateBefore = areCheckpointNotificationsSet();
-    if (checkpointed) {
+    if (checkpointed != nullptr) {
         m_checkpointedNotifications.emplace(name, checkpointed);
     } else {
         m_checkpointedNotifications.erase(name);
@@ -289,7 +289,7 @@ int HandleNotification::busy(void *p, int numberOfTimes)
 void HandleNotification::setNotificationWhenBusy(const BusyNotification &busyNotification)
 {
     m_busyNotification = busyNotification;
-    if (m_busyNotification) {
+    if (m_busyNotification != nullptr) {
         exitAPI(sqlite3_busy_handler(
         m_handle->getRawHandle(), HandleNotification::busy, this));
     } else {
@@ -300,7 +300,7 @@ void HandleNotification::setNotificationWhenBusy(const BusyNotification &busyNot
 void HandleNotification::dispatchBusyNotification(int numberOfTimes)
 {
     WCTInnerAssert(m_busyNotification != nullptr);
-    if (m_busyNotification) {
+    if (m_busyNotification != nullptr) {
         m_busyNotification(m_handle->getPath(), numberOfTimes);
     }
 }

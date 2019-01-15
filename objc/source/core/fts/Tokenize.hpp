@@ -90,7 +90,7 @@ public:
 
     static int destroy(sqlite3_tokenizer *pTokenizer)
     {
-        if (pTokenizer) {
+        if (pTokenizer != nullptr) {
             Tokenizer *tokenizer = (Tokenizer *) pTokenizer;
             destroyTokenizerInfo<TokenizerInfo>(tokenizer);
             sqlite3_free(pTokenizer);
@@ -103,7 +103,7 @@ public:
     createTokenizerInfo(Tokenizer *tokenizer, int argc, const char *const *argv)
     {
         tokenizer->info = new TokenizerInfo(argc, argv);
-        if (!tokenizer->info) {
+        if (tokenizer->info == nullptr) {
             return SQLITE_NOMEM;
         }
         return SQLITE_OK;
@@ -120,7 +120,7 @@ public:
     static typename std::enable_if<!std::is_same<T, void>::value, void>::type
     destroyTokenizerInfo(Tokenizer *tokenizer)
     {
-        if (tokenizer->info) {
+        if (tokenizer->info != nullptr) {
             delete tokenizer->info;
             tokenizer->info = nullptr;
         }
@@ -144,14 +144,14 @@ public:
             nBytes = (int) strlen(pInput);
         }
         Cursor *cursor = (Cursor *) sqlite3_malloc(sizeof(Cursor));
-        if (!cursor) {
+        if (cursor == nullptr) {
             return SQLITE_NOMEM;
         }
         memset(cursor, 0, sizeof(Cursor));
         Tokenizer *tokenizer = (Tokenizer *) pTokenizer;
         cursor->info
         = new CursorInfo(pInput, nBytes, (TokenizerInfoBase *) tokenizer->info);
-        if (!cursor->info) {
+        if (cursor->info == nullptr) {
             return SQLITE_NOMEM;
         }
         *ppCursor = &cursor->base;
@@ -160,9 +160,9 @@ public:
 
     static int close(sqlite3_tokenizer_cursor *pCursor)
     {
-        if (pCursor) {
+        if (pCursor != nullptr) {
             Cursor *cursor = (Cursor *) pCursor;
-            if (cursor->info) {
+            if (cursor->info != nullptr) {
                 delete cursor->info;
                 cursor->info = nullptr;
             }
@@ -178,9 +178,9 @@ public:
                     int *piEndOffset,
                     int *piPosition)
     {
-        if (pCursor) {
+        if (pCursor != nullptr) {
             CursorInfo *info = ((Cursor *) pCursor)->info;
-            if (info) {
+            if (info != nullptr) {
                 return info->step(ppToken, pnBytes, piStartOffset, piEndOffset, piPosition);
             }
         }

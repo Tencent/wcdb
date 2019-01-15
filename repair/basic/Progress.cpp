@@ -50,7 +50,7 @@ void Progress::updateProgress(double progress)
     WCTInnerAssert(increment >= 0);
     if (increment > 0) {
         m_progress = progress;
-        if (m_onProgressUpdate) {
+        if (m_onProgressUpdate != nullptr) {
             m_onProgressUpdate(m_progress, increment);
         }
     }

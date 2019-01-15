@@ -229,7 +229,7 @@ HandleStatement *AbstractHandle::getStatement()
 
 void AbstractHandle::returnStatement(HandleStatement *handleStatement)
 {
-    if (handleStatement) {
+    if (handleStatement != nullptr) {
         for (auto iter = m_handleStatements.begin(); iter != m_handleStatements.end(); ++iter) {
             if (&(*iter) == handleStatement) {
                 m_handleStatements.erase(iter);
@@ -477,7 +477,7 @@ void AbstractHandle::notifyError(int rc, const char *sql)
     if (rc != SQLITE_MISUSE) {
         m_error.setSQLiteCode(rc, getExtendedErrorCode());
         const char *message = getErrorMessage();
-        if (message) {
+        if (message != nullptr) {
             m_error.message = message;
         } else {
             m_error.message = String::null();

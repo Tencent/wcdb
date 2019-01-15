@@ -58,10 +58,10 @@
 {
     WCTDatabaseAssert(return;);
     WCDB::Database::MigratedCallback callback = nullptr;
-    if (onMigrated) {
+    if (onMigrated != nil) {
         callback = [onMigrated](const WCDB::MigrationBaseInfo* info) {
             WCTMigrationBaseInfo* nsInfo = nil;
-            if (info) {
+            if (info != nil) {
                 nsInfo = [[WCTMigrationBaseInfo alloc] initWithBaseInfo:*info];
             }
             onMigrated(nsInfo);

@@ -26,7 +26,7 @@
 
 + (instancetype)unarchiveWithWCTValue:(NSData *)value
 {
-    if (value) {
+    if (value != nil) {
         if (WCDB::Console::debuggable()) {
             WCTRemedialAssert([self.class conformsToProtocol:@protocol(NSCoding)], "Class should conform to NSCoding or WCTColumnCoding.", return nil;);
         }

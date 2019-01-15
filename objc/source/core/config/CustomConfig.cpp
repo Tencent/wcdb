@@ -37,10 +37,11 @@ bool CustomConfig::invoke(Handle *handle)
 
 bool CustomConfig::uninvoke(Handle *handle)
 {
-    if (m_uninvocation) {
-        return m_uninvocation(handle);
+    bool succeed = true;
+    if (m_uninvocation != nullptr) {
+        succeed = m_uninvocation(handle);
     }
-    return true;
+    return succeed;
 }
 
 } //namespace WCDB

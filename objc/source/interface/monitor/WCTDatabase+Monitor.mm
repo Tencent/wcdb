@@ -41,7 +41,7 @@
 + (void)globalTraceError:(WCTErrorTraceBlock)block
 {
     WCDB::Notifier::Callback callback = nullptr;
-    if (block) {
+    if (block != nullptr) {
         callback = [block](const WCDB::Error &error) {
             WCTError *nsError = [[WCTError alloc] initWithError:error];
             block(nsError);
@@ -58,7 +58,7 @@
 + (void)globalTracePerformance:(WCTPerformanceTraceBlock)trace
 {
     WCDB::Handle::PerformanceNotification callback = nullptr;
-    if (trace) {
+    if (trace != nullptr) {
         callback = [trace](const WCDB::HandleNotification::Footprints &footprints, const int64_t &cost) {
             NSMutableArray<WCTPerformanceFootprint *> *array = [[NSMutableArray<WCTPerformanceFootprint *> alloc] init];
             for (const auto &footprint : footprints) {
@@ -74,7 +74,7 @@
 + (void)globalTraceSQL:(WCTSQLTraceBlock)trace
 {
     WCDB::Handle::SQLNotification callback = nullptr;
-    if (trace) {
+    if (trace != nullptr) {
         callback = [trace](const WCDB::String &sql) {
             trace([NSString stringWithUTF8String:sql.c_str()]);
         };
@@ -86,7 +86,7 @@
 {
     WCTDatabaseAssert(return;);
     WCDB::Handle::PerformanceNotification callback = nullptr;
-    if (trace) {
+    if (trace != nullptr) {
         callback = [trace](const WCDB::HandleNotification::Footprints &footprints, const int64_t &cost) {
             NSMutableArray<WCTPerformanceFootprint *> *array = [[NSMutableArray<WCTPerformanceFootprint *> alloc] init];
             for (const auto &footprint : footprints) {
@@ -107,7 +107,7 @@
 {
     WCTDatabaseAssert(return;);
     WCDB::Handle::SQLNotification callback = nullptr;
-    if (trace) {
+    if (trace != nullptr) {
         callback = [trace](const WCDB::String &sql) {
             trace([NSString stringWithUTF8String:sql.c_str()]);
         };

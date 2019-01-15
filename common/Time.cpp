@@ -70,7 +70,7 @@ String Time::stringify() const
     = (std::time_t) std::chrono::duration_cast<std::chrono::seconds>(time_since_epoch())
       .count();
     struct tm tm;
-    if (!localtime_r(&seconds, &tm)) {
+    if (localtime_r(&seconds, &tm) == nullptr) {
         Error error;
         error.setSystemCode(errno, Error::Code::Error);
         Notifier::shared()->notify(error);

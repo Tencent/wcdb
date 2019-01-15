@@ -176,7 +176,7 @@
 {
     WCTDatabaseAssert(return;);
     std::function<void(void)> callback = nullptr;
-    if (onClosed) {
+    if (onClosed != nil) {
         callback = [onClosed]() {
             onClosed();
         };

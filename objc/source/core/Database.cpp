@@ -66,7 +66,7 @@ bool Database::canOpen()
 void Database::close(const ClosedCallback &onClosed)
 {
     drain([&onClosed, this]() {
-        if (onClosed) {
+        if (onClosed != nullptr) {
             onClosed();
         }
         m_initialized = false;

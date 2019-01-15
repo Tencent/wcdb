@@ -80,10 +80,10 @@
 - (void)invalidate
 {
     _database = nil;
-    if (_handle) {
+    if (_handle != nullptr) {
         _handle->finalize();
+        _handle = nullptr;
     }
-    _handle = nullptr;
     _handleHolder = nullptr;
 }
 
@@ -100,21 +100,23 @@
 #pragma mark - Execute
 - (BOOL)execute:(const WCDB::Statement &)statement
 {
+    BOOL succeed = NO;
     WCDB::Handle *handle = [self getOrGenerateHandle];
-    if (!handle) {
-        return NO;
+    if (handle != nullptr) {
+        succeed = handle->execute(statement);
     }
-    return handle->execute(statement);
+    return succeed;
 }
 
 #pragma mark - Prepare
 - (BOOL)prepare:(const WCDB::Statement &)statement
 {
+    BOOL succeed = NO;
     WCDB::Handle *handle = [self getOrGenerateHandle];
-    if (!handle) {
-        return NO;
+    if (handle != nullptr) {
+        succeed = handle->prepare(statement);
     }
-    return handle->prepare(statement);
+    return succeed;
 }
 
 - (BOOL)isPrepared
@@ -124,7 +126,7 @@
 
 - (void)finalizeStatement
 {
-    if (_handle) {
+    if (_handle != nullptr) {
         _handle->finalize();
     }
 }
@@ -287,7 +289,7 @@
     case WCTAccessorObjC: {
         WCTObjCAccessor *objcAccessor = (WCTObjCAccessor *) accessor.get();
         NSObject *value = objcAccessor->getObject(object);
-        if (value) {
+        if (value != nil) {
             switch (accessor->getColumnType()) {
             case WCDB::ColumnType::Integer32: {
                 _handle->bindInteger32(((NSNumber *) value).intValue, index);
@@ -457,7 +459,7 @@
     for (const WCTResultColumn &resultColumn : resultColumns) {
         NSString *tableName = [NSString stringWithUTF8String:_handle->getColumnTableName(index)];
         WCTObject *object = [multiObject objectForKey:tableName];
-        if (!object) {
+        if (object == nil) {
             object = [[resultColumn.getColumnBinding().getClass() alloc] init];
             [multiObject setObject:object forKey:tableName];
         }

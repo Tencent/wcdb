@@ -41,7 +41,7 @@ void Configs::remove(const String &name)
 bool Configs::invoke(Handle *handle)
 {
     for (const auto &element : m_list.elements()) {
-        if (element.value && !element.value->invoke(handle)) {
+        if (element.value != nullptr && !element.value->invoke(handle)) {
             return false;
         }
     }
@@ -51,7 +51,7 @@ bool Configs::invoke(Handle *handle)
 bool Configs::uninvoke(Handle *handle)
 {
     for (const auto &element : m_list.elements()) {
-        if (element.value && !element.value->uninvoke(handle)) {
+        if (element.value != nullptr && !element.value->uninvoke(handle)) {
             return false;
         }
     }
@@ -73,12 +73,12 @@ bool ConfigurableHandle::reconfigure(const std::shared_ptr<Configs> &newConfigs)
     if (m_configs == newConfigs) {
         return true;
     }
-    if (m_configs) {
+    if (m_configs != nullptr) {
         if (!m_configs->uninvoke(this)) {
             return false;
         }
     }
-    if (newConfigs) {
+    if (newConfigs != nullptr) {
         if (!newConfigs->invoke(this)) {
             return false;
         }

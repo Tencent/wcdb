@@ -108,10 +108,10 @@ bool SQLiteBase::error(int rc, const char *sql)
     }
     error.setSQLiteCode(rc, sqlite3_extended_errcode((sqlite3 *) m_handle));
     const char *message = sqlite3_errmsg((sqlite3 *) m_handle);
-    if (message) {
+    if (message != nullptr) {
         error.message = message;
     }
-    if (sql) {
+    if (sql != nullptr) {
         error.infos.set("SQL", sql);
     }
     error.infos.set("Path", m_path);
@@ -124,7 +124,7 @@ bool SQLiteBase::error(int rc, const char *sql)
 bool SQLiteBase::open()
 {
     WCTInnerAssert(!m_path.empty());
-    if (!m_handle) {
+    if (m_handle == nullptr) {
         int rc = sqlite3_open(m_path.c_str(), (sqlite3 **) &m_handle);
         if (rc != SQLITE_OK) {
             return error(rc);
@@ -140,7 +140,7 @@ bool SQLiteBase::isOpened() const
 
 void SQLiteBase::close()
 {
-    if (m_handle) {
+    if (m_handle != nullptr) {
         sqlite3_close_v2((sqlite3 *) m_handle);
         m_handle = nullptr;
     }

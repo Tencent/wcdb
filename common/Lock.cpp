@@ -183,7 +183,7 @@ LockGuard::LockGuard(LockGuard &&guard) : m_lock(guard.m_lock)
 
 LockGuard::~LockGuard()
 {
-    if (m_lock) {
+    if (m_lock != nullptr) {
         m_lock->unlock();
     }
 }
@@ -214,7 +214,7 @@ bool SharedLockGuard::valid() const
 
 SharedLockGuard::~SharedLockGuard()
 {
-    if (m_lock) {
+    if (m_lock != nullptr) {
         m_lock->unlockShared();
     }
 }

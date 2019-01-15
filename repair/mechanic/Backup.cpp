@@ -125,10 +125,11 @@ void Backup::filter(const Filter &tableShouldBeBackedUp)
 
 bool Backup::filter(const String &tableName)
 {
-    if (m_filter) {
-        return m_filter(tableName);
+    bool result = true;
+    if (m_filter != nullptr) {
+        result = m_filter(tableName);
     }
-    return true;
+    return result;
 }
 
 #pragma mark - Crawlable

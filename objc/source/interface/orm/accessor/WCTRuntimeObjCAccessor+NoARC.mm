@@ -62,7 +62,7 @@ WCTRuntimeObjCAccessor::ValueSetter WCTRuntimeObjCAccessor::generateValueSetter(
     IMP implementation = getClassMethodImplementation(propertyClass, unarchiveSelector);
     auto block = ^(InstanceType instance, OCType value) {
         using Unarchiver = PropertyType (*)(Class, SEL, OCType);
-        if (instance) {
+        if (instance != nil) {
             PropertyType property = ((Unarchiver) implementation)(propertyClass, unarchiveSelector, value);
             setProperty(instance, property);
         }

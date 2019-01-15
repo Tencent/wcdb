@@ -91,7 +91,7 @@ NSErrorUserInfoKey const WCTErrorKeySource = @"Source";
 - (NSString *)stringForKey:(NSErrorUserInfoKey)key
 {
     id value = [self.userInfo objectForKey:key];
-    if (value && [value isKindOfClass:NSString.class]) {
+    if (value != nil && [value isKindOfClass:NSString.class]) {
         return value;
     }
     return nil;
@@ -100,7 +100,7 @@ NSErrorUserInfoKey const WCTErrorKeySource = @"Source";
 - (NSNumber *)numberForKey:(NSErrorUserInfoKey)key
 {
     id value = [self.userInfo objectForKey:key];
-    if (value && [value isKindOfClass:NSNumber.class]) {
+    if (value != nil && [value isKindOfClass:NSNumber.class]) {
         return value;
     }
     return nil;

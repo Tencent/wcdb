@@ -37,7 +37,7 @@ SEL WCTRuntimeBaseAccessor::getGetterSelector(Class cls, const WCDB::String &pro
 {
     objc_property_t objcProperty = class_getProperty(cls, propertyName.c_str());
     const char *getter = property_copyAttributeValue(objcProperty, "G");
-    if (!getter) {
+    if (getter == nullptr) {
         getter = propertyName.c_str();
     }
     return sel_registerName(getter);
@@ -47,7 +47,7 @@ SEL WCTRuntimeBaseAccessor::getSetterSelector(Class cls, const WCDB::String &pro
 {
     objc_property_t objcProperty = class_getProperty(cls, propertyName.c_str());
     const char *setter = property_copyAttributeValue(objcProperty, "S");
-    if (setter) {
+    if (setter != nullptr) {
         return sel_registerName(setter);
     }
     WCDB::String defaultSetter = "set" + propertyName + ":";

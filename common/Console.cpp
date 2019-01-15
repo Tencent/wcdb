@@ -56,7 +56,7 @@ bool Console::isDebuggable()
 
 void Console::setLogger(const Logger& logger)
 {
-    if (logger) {
+    if (logger != nullptr) {
         Notifier::shared()->setNotification(
         std::numeric_limits<int>::min(), NotifierLoggerName, logger);
     } else {
@@ -130,7 +130,7 @@ void Console::breakpoint()
 
 void Console::print(const String& message)
 {
-    if (m_printer) {
+    if (m_printer != nullptr) {
         m_printer(message);
     }
 }

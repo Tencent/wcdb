@@ -50,14 +50,14 @@ void Referenced::reset(const std::nullptr_t&)
 
 void Referenced::retain() const
 {
-    if (m_reference) {
+    if (m_reference != nullptr) {
         ++(*m_reference);
     }
 }
 
 void Referenced::release()
 {
-    if (m_reference) {
+    if (m_reference != nullptr) {
         WCTInnerAssert((*m_reference) > 0);
         if (--(*m_reference) == 0) {
             onUnreferenced();

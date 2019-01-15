@@ -100,7 +100,7 @@ public:
 protected:
     void onUnreferenced() override final
     {
-        if (m_onRecycled) {
+        if (m_onRecycled != nullptr) {
             m_onRecycled(m_value);
             m_onRecycled = nullptr;
         }

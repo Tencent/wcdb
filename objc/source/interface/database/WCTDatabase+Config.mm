@@ -68,7 +68,7 @@ NSString* const WCTConfigNameGlobalPerformanceTrace = @WCDB_GLOBAL_PERFORMANCE_T
         return nsInvocation([[WCTHandle alloc] initWithDatabase:self andUnsafeHandle:handle]);
     };
     WCDB::CustomConfig::Invocation uninvocation = nullptr;
-    if (nsUninvocation) {
+    if (nsUninvocation != nil) {
         uninvocation = [nsUninvocation, self](WCDB::Handle* handle) -> bool {
             return nsUninvocation([[WCTHandle alloc] initWithDatabase:self andUnsafeHandle:handle]);
         };

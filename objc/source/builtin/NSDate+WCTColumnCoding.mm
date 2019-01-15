@@ -24,7 +24,7 @@
 
 + (instancetype)unarchiveWithWCTValue:(NSNumber *)value
 {
-    if (!value) {
+    if (value == nil) {
         return nil;
     }
     return [NSDate dateWithTimeIntervalSince1970:value.doubleValue];

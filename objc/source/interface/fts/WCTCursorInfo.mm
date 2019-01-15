@@ -31,7 +31,7 @@ WCTCursorInfo::WCTCursorInfo(const char *input,
 
 WCTCursorInfo::~WCTCursorInfo()
 {
-    if (m_symbolCharacterSet) {
+    if (m_symbolCharacterSet != nil) {
         CFRelease(m_symbolCharacterSet);
     }
 }

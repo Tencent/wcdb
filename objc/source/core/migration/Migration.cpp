@@ -412,7 +412,7 @@ void Migration::triggerMigratedNotification()
         WCTInnerAssert(m_referenceds.empty());
         callback = m_migratedNotification;
     }
-    if (callback) {
+    if (callback != nullptr) {
         callback(nullptr);
     }
 }
@@ -427,7 +427,7 @@ void Migration::triggerTableMigratedNotification(const MigrationInfo* info)
         WCTInnerAssert(m_dumpster.find(info) == m_dumpster.end());
         callback = m_migratedNotification;
     }
-    if (callback) {
+    if (callback != nullptr) {
         callback(info);
     }
 }

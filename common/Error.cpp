@@ -120,7 +120,7 @@ void Error::setSystemCode(int systemCode, Code codeIfUnresolved)
         break;
     }
     const char *errorMessage = strerror(systemCode);
-    if (errorMessage) {
+    if (errorMessage != nullptr) {
         message = errorMessage;
     }
     setCode(code, "System");

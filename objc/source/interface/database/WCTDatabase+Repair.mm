@@ -29,7 +29,7 @@
 {
     WCTDatabaseAssert(return;);
     WCDB::Database::RecoverNotification notification = nullptr;
-    if (onRecovering) {
+    if (onRecovering != nil) {
         notification = [onRecovering](WCDB::Database *database) -> bool {
             return onRecovering([[WCTDatabase alloc] initWithUnsafeDatabase:database]);
         };
@@ -41,7 +41,7 @@
 {
     WCTDatabaseAssert(return;);
     WCDB::Database::BackupFilter filter = nullptr;
-    if (tableShouldBeBackedUp) {
+    if (tableShouldBeBackedUp != nil) {
         filter = [tableShouldBeBackedUp](const WCDB::String &tableName) -> bool {
             return tableShouldBeBackedUp([NSString stringWithUTF8String:tableName.c_str()]);
         };
@@ -75,7 +75,7 @@
 {
     WCTDatabaseAssert(return 0;);
     WCDB::Database::RetrieveProgressCallback callback = nullptr;
-    if (onProgressUpdate) {
+    if (onProgressUpdate != nil) {
         callback = [onProgressUpdate](double percentage, double increment) {
             onProgressUpdate(percentage, increment);
         };

@@ -66,7 +66,7 @@ bool HandleStatement::step(bool &done)
     if (isPrepared()) {
         sql = sqlite3_sql(m_stmt);
     }
-    bool succeed = exitAPI(rc);
+    bool succeed = exitAPI(rc, sql);
     // There will be privacy issues if use sqlite3_expanded_sql
     if (succeed && m_event != nullptr) {
         m_event->statementDidStep(this);
@@ -82,7 +82,7 @@ bool HandleStatement::step()
 
 void HandleStatement::finalize()
 {
-    if (m_stmt) {
+    if (m_stmt != nullptr) {
         exitAPI(sqlite3_finalize(m_stmt));
         m_stmt = nullptr;
     }

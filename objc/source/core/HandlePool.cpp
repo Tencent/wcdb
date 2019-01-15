@@ -82,7 +82,7 @@ void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
     LockGuard concurrencyGuard(m_concurrency);
     LockGuard memoryGuard(m_memory);
     clearAllHandles();
-    if (onDrained) {
+    if (onDrained != nullptr) {
         onDrained();
         // double-clear since there might be some operation inside the drained block.
         clearAllHandles();

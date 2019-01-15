@@ -33,15 +33,13 @@
 - (WCTOptional<BOOL, NO>)tableExists:(NSString *)tableName
 {
     WCDB::Handle *handle = [self getOrGenerateHandle];
-    if (!handle) {
-        return nullptr;
+    if (handle != nullptr) {
+        std::pair<bool, bool> result = handle->tableExists(tableName);
+        if (result.first) {
+            return result.second;
+        }
     }
-    std::pair<bool, bool> result = handle->tableExists(tableName);
-    if (result.first) {
-        return result.second;
-    } else {
-        return nullptr;
-    }
+    return nullptr;
 }
 
 - (BOOL)createTableAndIndexes:(NSString *)tableName
@@ -85,7 +83,7 @@
     WCTInnerAssert(tableName && cls);
     WCDB::Handle *handle = [self getOrGenerateHandle];
     WCTInnerAssert(handle->isInTransaction());
-    if (!handle) {
+    if (handle == nullptr) {
         return NO;
     }
     bool succeed, exists;
