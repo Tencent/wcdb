@@ -22,7 +22,6 @@
 #define _WCDB_BACKUPCONFIG_HPP
 
 #include <WCDB/Config.hpp>
-#include <WCDB/Lock.hpp>
 #include <WCDB/TimedQueue.hpp>
 
 namespace WCDB {
