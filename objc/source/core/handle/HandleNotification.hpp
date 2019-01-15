@@ -37,8 +37,8 @@ public:
 
 #pragma mark - Trace
 private:
-    void dispatchTraceNotification(unsigned int flag, void *P, void *X);
-    void setupTraceNotification();
+    void dispatchTraceNotifications(unsigned int flag, void *P, void *X);
+    void setupTraceNotifications();
     static int traced(unsigned int T, void *C, void *P, void *X);
 
 #pragma mark - SQL
@@ -47,8 +47,8 @@ public:
     void setNotificationWhenSQLTraced(const String &name, const SQLNotification &onTraced);
 
 private:
-    bool isSQLTraceNotificationSet() const;
-    void dispatchSQLTraceNotification(const String &sql);
+    bool areSQLTraceNotificationsSet() const;
+    void dispatchSQLTraceNotifications(const String &sql);
     std::map<String, SQLNotification> m_sqlNotifications;
 
 #pragma mark - Performance
@@ -66,10 +66,10 @@ public:
                                               const PerformanceNotification &onTraced);
 
 private:
-    bool isPerformanceTraceNotificationSet() const;
-    void dispatchPerformanceTraceNotification(const String &sql,
-                                              const int64_t &cost,
-                                              bool isInTransaction);
+    bool arePerformanceTraceNotificationsSet() const;
+    void dispatchPerformanceTraceNotifications(const String &sql,
+                                               const int64_t &cost,
+                                               bool isInTransaction);
 
     Footprints m_footprints;
     int64_t m_cost = 0;
@@ -78,19 +78,19 @@ private:
 #pragma mark - Committed
 public:
     //committed dispatch will abort if any notification return false
-    typedef std::function<bool(const String & /* path */, int /* frame */)> CommittedNotification;
+    typedef std::function<bool(const String & /* path */, int /* number of frames */)> CommittedNotification;
     void setNotificationWhenCommitted(int order,
                                       const String &name,
                                       const CommittedNotification &onCommitted);
     void unsetNotificationWhenCommitted(const String &name);
 
 private:
-    static int committed(void *p, sqlite3 *, const char *, int frames);
+    static int committed(void *p, sqlite3 *, const char *, int numberOfFrames);
 
     bool isCommittedNotificationSet() const;
     void setupCommittedNotification();
 
-    void dispatchCommittedNotification(int frames);
+    void dispatchCommittedNotifications(int numberOfFrames);
     OrderedUniqueList<String, CommittedNotification> m_committedNotifications;
 
 #pragma mark - Checkpoint
@@ -102,10 +102,20 @@ public:
 private:
     static void checkpointed(void *p);
 
-    bool isCheckpointNotificationSet() const;
-    void setupCheckpointNotification();
-    void dispatchCheckpointNotification();
+    bool areCheckpointNotificationsSet() const;
+    void setupCheckpointNotifications();
+    void dispatchCheckpointNotifications();
     std::map<String, CheckpointedNotification> m_checkpointedNotifications;
+
+#pragma mark - Busy
+public:
+    typedef std::function<void(const String &path, int /* number of times */)> BusyNotification;
+    void setNotificationWhenBusy(const BusyNotification &busyNotification);
+
+private:
+    static int busy(void *p, int numberOfTimes);
+    void dispatchBusyNotification(int numberOfTimes);
+    BusyNotification m_busyNotification;
 };
 
 } //namespace WCDB
