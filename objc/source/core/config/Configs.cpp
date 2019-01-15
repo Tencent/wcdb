@@ -69,6 +69,7 @@ ConfigurableHandle::~ConfigurableHandle()
 
 bool ConfigurableHandle::reconfigure(const std::shared_ptr<Configs> &newConfigs)
 {
+#warning TODO - avoid redundant uninvoke/invoke
     if (m_configs == newConfigs) {
         return true;
     }
