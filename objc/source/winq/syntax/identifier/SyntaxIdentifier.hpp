@@ -113,7 +113,7 @@ public:
 
     // Iterable
 public:
-    typedef std::function<void(Identifier&, bool&)> Iterator;
+    typedef std::function<void(Identifier&, bool& /* stop */)> Iterator;
     void iterate(const Iterator& iterator);
 
 protected:

@@ -74,8 +74,7 @@ static constexpr const WCDB::ColumnType WCTColumnTypeNil = WCDB::ColumnType::Nul
 
 #pragma mark - Object
 typedef NSObject<WCTTableCoding> WCTObject;
-typedef NSDictionary<NSString *, WCTObject *>
-WCTMultiObject; //table name -> object
+typedef NSDictionary<NSString * /*table name */, WCTObject *> WCTMultiObject;
 
 typedef NSObject<WCTColumnCoding> WCTColumnCodingValue;
 typedef NSArray<NSObject<WCTColumnCoding> *> WCTColumnCodingRow;

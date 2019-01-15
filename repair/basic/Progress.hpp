@@ -32,7 +32,7 @@ public:
     Progress();
     virtual ~Progress();
 
-    typedef std::function<void(double, double)> ProgressUpdateCallback;
+    typedef std::function<void(double /* progress */, double /* increment */)> ProgressUpdateCallback;
     void setProgressCallback(const ProgressUpdateCallback &onProgressUpdated);
 
 protected:
