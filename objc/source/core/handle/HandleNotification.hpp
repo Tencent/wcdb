@@ -117,10 +117,24 @@ private:
     void dispatchBusyNotification(int numberOfTimes);
     BusyNotification m_busyNotification;
 
-#pragma mark - Statement
+#pragma mark - Statement Prepare
 public:
+    typedef std::function<void(HandleStatement *)> StatementPreparedNotification;
+    void setNotificationWhenStatementPrepared(const String &name,
+                                              const StatementPreparedNotification &notification);
+
 private:
+    std::map<String, StatementPreparedNotification> m_preparedNotifications;
     void statementDidPrepare(HandleStatement *) override final;
+
+#pragma mark - Statement Step
+public:
+    typedef std::function<void(HandleStatement *)> StatementSteppedNotification;
+    void setNotificationWhenStatementStepped(const String &name,
+                                             const StatementSteppedNotification &notification);
+
+private:
+    std::map<String, StatementSteppedNotification> m_steppedNotifications;
     void statementDidStep(HandleStatement *) override final;
 };
 

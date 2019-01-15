@@ -293,7 +293,7 @@ void HandleNotification::setNotificationWhenBusy(const BusyNotification &busyNot
         exitAPI(sqlite3_busy_handler(
         m_handle->getRawHandle(), HandleNotification::busy, this));
     } else {
-        sqlite3_busy_handler(m_handle->getRawHandle(), nullptr, nullptr);
+        exitAPI(sqlite3_busy_handler(m_handle->getRawHandle(), nullptr, nullptr));
     }
 }
 
@@ -305,13 +305,38 @@ void HandleNotification::dispatchBusyNotification(int numberOfTimes)
     }
 }
 
-#pragma mark - Handle Statement
+#pragma mark - Statement Prepare
+void HandleNotification::setNotificationWhenStatementPrepared(
+const String &name, const StatementPreparedNotification &notification)
+{
+    m_preparedNotifications.emplace(name, notification);
+}
+
 void HandleNotification::statementDidPrepare(HandleStatement *handleStatement)
 {
+    for (const auto &iter : m_preparedNotifications) {
+        WCTInnerAssert(iter.second != nullptr);
+        if (iter.second != nullptr) {
+            iter.second(handleStatement);
+        }
+    }
+}
+
+#pragma mark - Statement Step
+void HandleNotification::setNotificationWhenStatementStepped(const String &name,
+                                                             const StatementSteppedNotification &notification)
+{
+    m_steppedNotifications.emplace(name, notification);
 }
 
 void HandleNotification::statementDidStep(HandleStatement *handleStatement)
 {
+    for (const auto &iter : m_steppedNotifications) {
+        WCTInnerAssert(iter.second != nullptr);
+        if (iter.second != nullptr) {
+            iter.second(handleStatement);
+        }
+    }
 }
 
 } //namespace WCDB
