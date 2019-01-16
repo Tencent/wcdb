@@ -54,16 +54,16 @@ bool BusyRetryConfig::uninvoke(Handle* handle)
 
 void BusyRetryConfig::willStep(HandleStatement* handleStatement)
 {
-    std::lock_guard<decltype(m_mutex)> lockGuard(m_mutex);
     ++m_numberOfSteppingHandles;
 }
 
 void BusyRetryConfig::didStep(HandleStatement* handleStatement, bool result)
 {
-    std::lock_guard<decltype(m_mutex)> lockGuard(m_mutex);
     --m_numberOfSteppingHandles;
+
     AbstractHandle* handle = handleStatement->getHandle();
     if (!handle->isInTransaction()) {
+        std::lock_guard<decltype(m_mutex)> lockGuard(m_mutex);
         if (m_numberOfWaitingHandles > 0) {
             m_cond.notify_all();
         }
@@ -73,21 +73,21 @@ void BusyRetryConfig::didStep(HandleStatement* handleStatement, bool result)
 bool BusyRetryConfig::onBusy(const String& path, int numberOfTimes)
 {
     bool retry = false;
-    if (numberOfTimes < BusyRetryMaxAllowedNumberOfTimes) {
+    if (numberOfTimes <= BusyRetryMaxAllowedNumberOfTimes) {
         retry = true;
-        double interval;
+        double timeOut;
         if (pthread_main_np() != 0) {
-            interval = BusyRetryIntervalForMainThread;
+            timeOut = BusyRetryTimeOutForMainThread;
         } else {
-            interval = BusyRetryIntervalForOtherThread;
+            timeOut = BusyRetryTimeOutForOtherThread;
         }
         std::unique_lock<decltype(m_mutex)> lockGuard(m_mutex);
+        ++m_numberOfWaitingHandles;
         if (m_numberOfSteppingHandles > 0) {
-            ++m_numberOfWaitingHandles;
             m_cond.wait_for(
-            lockGuard, std::chrono::microseconds((long long) (interval * 1000000)));
-            --m_numberOfWaitingHandles;
+            lockGuard, std::chrono::microseconds((long long) (timeOut * 1000000)));
         }
+        --m_numberOfWaitingHandles;
     }
     return retry;
 }

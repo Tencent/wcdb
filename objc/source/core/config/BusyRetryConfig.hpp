@@ -40,11 +40,14 @@ protected:
     void willStep(HandleStatement* handleStatement);
     void didStep(HandleStatement* handleStatement, bool result);
     bool onBusy(const String& path, int numberOfTimes);
+
     const String m_identifier;
+
     std::condition_variable m_cond;
     std::mutex m_mutex;
     int m_numberOfWaitingHandles;
-    int m_numberOfSteppingHandles;
+
+    std::atomic<int> m_numberOfSteppingHandles;
 };
 
 } //namespace WCDB
