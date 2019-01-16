@@ -279,7 +279,7 @@ void HandleNotification::dispatchCheckpointNotifications()
 }
 
 #pragma mark - Busy
-int HandleNotification::busy(void *p, int numberOfTimes)
+int HandleNotification::busyRetry(void *p, int numberOfTimes)
 {
     HandleNotification *notification = reinterpret_cast<HandleNotification *>(p);
     int rc = SQLITE_OK;
@@ -295,7 +295,7 @@ void HandleNotification::setNotificationWhenBusy(const BusyNotification &busyNot
     m_busyNotification = busyNotification;
     if (m_busyNotification != nullptr) {
         exitAPI(sqlite3_busy_handler(
-        m_handle->getRawHandle(), HandleNotification::busy, this));
+        m_handle->getRawHandle(), HandleNotification::busyRetry, this));
     } else {
         exitAPI(sqlite3_busy_handler(m_handle->getRawHandle(), nullptr, nullptr));
     }
@@ -311,7 +311,7 @@ bool HandleNotification::dispatchBusyNotification(int numberOfTimes)
     return retry;
 }
 
-#pragma mark - Statement Prepare
+#pragma mark - Did Prepare
 void HandleNotification::setNotificationWhenStatementDidPrepare(
 const String &name, const StatementDidPrepareNotification &notification)
 {

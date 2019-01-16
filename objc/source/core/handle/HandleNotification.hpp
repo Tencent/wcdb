@@ -113,7 +113,7 @@ public:
     void setNotificationWhenBusy(const BusyNotification &busyNotification);
 
 private:
-    static int busy(void *p, int numberOfTimes);
+    static int busyRetry(void *p, int numberOfTimes);
     bool dispatchBusyNotification(int numberOfTimes);
     BusyNotification m_busyNotification;
 
