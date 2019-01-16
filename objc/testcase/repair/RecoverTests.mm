@@ -30,7 +30,7 @@
 {
     __block BOOL tested = NO;
     [self.database setNotificationWhenCorrupted:^BOOL(WCTDatabase* database) {
-        tested = ![NSThread isMainThread] && database.isBlockaded;
+        OSAtomicTestAndSet(![NSThread isMainThread] && database.isBlockaded, &tested);
         return [self.database removeFiles];
     }];
 
@@ -47,7 +47,7 @@
 {
     __block BOOL tested = NO;
     [self.database setNotificationWhenCorrupted:^BOOL(WCTDatabase* database) {
-        tested = YES;
+        OSAtomicTestAndSet(YES, &tested);
         return true;
     }];
 
@@ -57,12 +57,12 @@
     [NSThread sleepForTimeInterval:1.0];
     TestCaseAssertTrue(tested);
 
-    tested = NO;
+    OSAtomicTestAndSet(NO, &tested);
     TestCaseAssertTrue([self.table getObjects] == nil);
     [NSThread sleepForTimeInterval:1.0];
     TestCaseAssertFalse(tested);
 
-    tested = NO;
+    OSAtomicTestAndSet(NO, &tested);
     [NSThread sleepForTimeInterval:5.0];
     TestCaseAssertTrue([self.table getObjects] == nil);
     [NSThread sleepForTimeInterval:1.0];

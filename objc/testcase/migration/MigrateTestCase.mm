@@ -135,9 +135,9 @@
     NSString *expectedTableName = self.tableName;
     [self.database setNotificationWhenMigrated:^(WCTMigrationBaseInfo *info) {
         if (info == nil) {
-            migrated = YES;
+            OSAtomicTestAndSet(YES, &migrated);
         } else if ([info.table isEqualToString:expectedTableName]) {
-            tableMigrated = YES;
+            OSAtomicTestAndSet(YES, &tableMigrated);
         }
     }];
     self.database.autoMigrate = YES;
@@ -186,7 +186,7 @@
 
     __block BOOL tested = NO;
     [self.database traceSQL:^(NSString *sql) {
-        tested = YES;
+        OSAtomicTestAndSet(YES, &tested);
     }];
     [handle invalidate];
 
