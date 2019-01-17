@@ -5330,8 +5330,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -5339,8 +5337,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -5348,8 +5344,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Bitcode;
 		};
@@ -5441,8 +5435,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -5450,8 +5442,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -5459,8 +5449,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Bitcode;
 		};
@@ -5468,8 +5456,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -5477,8 +5463,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -5486,8 +5470,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Bitcode;
 		};
@@ -5495,8 +5477,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -5504,8 +5484,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -5513,8 +5491,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Bitcode;
 		};
@@ -5522,8 +5498,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -5531,8 +5505,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -5540,8 +5512,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Bitcode;
 		};
@@ -5549,8 +5519,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -5558,8 +5526,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -5567,8 +5533,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Bitcode;
 		};
@@ -5615,12 +5579,6 @@
 			baseConfigurationReference = 2387D64221DF03FF0028ADB9 /* Host_debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				MTL_FAST_MATH = YES;
-				PRINCIPAL_CLASS = "";
-				"PRINCIPAL_CLASS[sdk=iphoneos*]" = UIApplication;
-				"PRINCIPAL_CLASS[sdk=iphonesimulator*]" = UIApplication;
-				"PRINCIPAL_CLASS[sdk=macosx*]" = NSApplication;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -5629,12 +5587,6 @@
 			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				MTL_FAST_MATH = YES;
-				PRINCIPAL_CLASS = "";
-				"PRINCIPAL_CLASS[sdk=iphoneos*]" = UIApplication;
-				"PRINCIPAL_CLASS[sdk=iphonesimulator*]" = UIApplication;
-				"PRINCIPAL_CLASS[sdk=macosx*]" = NSApplication;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -5643,11 +5595,6 @@
 			baseConfigurationReference = 2387D63A21DF03FE0028ADB9 /* Host_release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				MTL_FAST_MATH = YES;
-				"PRINCIPAL_CLASS[sdk=iphoneos*]" = UIApplication;
-				"PRINCIPAL_CLASS[sdk=iphonesimulator*]" = UIApplication;
-				"PRINCIPAL_CLASS[sdk=macosx*]" = NSApplication;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Bitcode;
 		};
@@ -5655,8 +5602,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -5664,8 +5609,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -5673,8 +5616,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Bitcode;
 		};
@@ -5710,8 +5651,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -5719,8 +5658,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -5728,8 +5665,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
-				MTL_FAST_MATH = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Bitcode;
 		};
