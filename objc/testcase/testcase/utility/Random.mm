@@ -38,105 +38,131 @@
 
 - (void)setStable:(BOOL)stable
 {
-    _engine.reset(new std::default_random_engine(0));
-    _uniformUInt64 = nullptr;
-    _uniformUInt32 = nullptr;
-    _uniformUInt8 = nullptr;
-    _uniformInt64 = nullptr;
-    _uniformInt32 = nullptr;
-    _uniformBool = nullptr;
-    _uniformDouble = nullptr;
-    _uniformFloat = nullptr;
-    _uniformFloat_0_1 = nullptr;
-    _uniformUChar = nullptr;
-    _uniformLength.reset(new std::uniform_int_distribution<int>(100, 100));
+    @synchronized(self) {
+        _engine.reset(new std::default_random_engine(0));
+        _uniformUInt64 = nullptr;
+        _uniformUInt32 = nullptr;
+        _uniformUInt8 = nullptr;
+        _uniformInt64 = nullptr;
+        _uniformInt32 = nullptr;
+        _uniformBool = nullptr;
+        _uniformDouble = nullptr;
+        _uniformFloat = nullptr;
+        _uniformFloat_0_1 = nullptr;
+        _uniformUChar = nullptr;
+        _uniformLength.reset(new std::uniform_int_distribution<int>(100, 100));
+    }
 }
 
 - (std::shared_ptr<std::default_random_engine> &)engine
 {
-    if (!_engine) {
-        std::random_device rd;
-        _engine.reset(new std::default_random_engine(rd()));
+    @synchronized(self) {
+        if (_engine == nullptr) {
+            std::random_device rd;
+            _engine.reset(new std::default_random_engine(rd()));
+        }
+        return _engine;
     }
-    return _engine;
 }
 - (std::shared_ptr<std::uniform_int_distribution<uint64_t>> &)uniformUInt64
 {
-    if (!_uniformUInt64) {
-        _uniformUInt64.reset(new std::uniform_int_distribution<uint64_t>(std::numeric_limits<uint64_t>::min(), std::numeric_limits<uint64_t>::max()));
+    @synchronized(self) {
+        if (_uniformUInt64 == nullptr) {
+            _uniformUInt64.reset(new std::uniform_int_distribution<uint64_t>(std::numeric_limits<uint64_t>::min(), std::numeric_limits<uint64_t>::max()));
+        }
+        return _uniformUInt64;
     }
-    return _uniformUInt64;
 }
 - (std::shared_ptr<std::uniform_int_distribution<uint32_t>> &)uniformUInt32
 {
-    if (!_uniformUInt32) {
-        _uniformUInt32.reset(new std::uniform_int_distribution<uint32_t>(std::numeric_limits<uint32_t>::min(), std::numeric_limits<uint32_t>::max()));
+    @synchronized(self) {
+        if (_uniformUInt32 == nullptr) {
+            _uniformUInt32.reset(new std::uniform_int_distribution<uint32_t>(std::numeric_limits<uint32_t>::min(), std::numeric_limits<uint32_t>::max()));
+        }
+        return _uniformUInt32;
     }
-    return _uniformUInt32;
 }
 - (std::shared_ptr<std::uniform_int_distribution<uint8_t>> &)uniformUInt8
 {
-    if (!_uniformUInt8) {
-        _uniformUInt8.reset(new std::uniform_int_distribution<uint8_t>(std::numeric_limits<uint8_t>::min(), std::numeric_limits<uint8_t>::max()));
+    @synchronized(self) {
+        if (_uniformUInt8 == nullptr) {
+            _uniformUInt8.reset(new std::uniform_int_distribution<uint8_t>(std::numeric_limits<uint8_t>::min(), std::numeric_limits<uint8_t>::max()));
+        }
+        return _uniformUInt8;
     }
-    return _uniformUInt8;
 }
 - (std::shared_ptr<std::uniform_int_distribution<int64_t>> &)uniformInt64
 {
-    if (!_uniformInt64) {
-        _uniformInt64.reset(new std::uniform_int_distribution<int64_t>(std::numeric_limits<int64_t>::min(), std::numeric_limits<int64_t>::max()));
+    @synchronized(self) {
+        if (_uniformInt64 == nullptr) {
+            _uniformInt64.reset(new std::uniform_int_distribution<int64_t>(std::numeric_limits<int64_t>::min(), std::numeric_limits<int64_t>::max()));
+        }
+        return _uniformInt64;
     }
-    return _uniformInt64;
 }
 - (std::shared_ptr<std::uniform_int_distribution<int32_t>> &)uniformInt32
 {
-    if (!_uniformInt32) {
-        _uniformInt32.reset(new std::uniform_int_distribution<int32_t>(std::numeric_limits<int32_t>::min(), std::numeric_limits<int32_t>::max()));
+    @synchronized(self) {
+        if (_uniformInt32 == nullptr) {
+            _uniformInt32.reset(new std::uniform_int_distribution<int32_t>(std::numeric_limits<int32_t>::min(), std::numeric_limits<int32_t>::max()));
+        }
+        return _uniformInt32;
     }
-    return _uniformInt32;
 }
 - (std::shared_ptr<std::uniform_int_distribution<bool>> &)uniformBool
 {
-    if (!_uniformBool) {
-        _uniformBool.reset(new std::uniform_int_distribution<bool>(std::numeric_limits<bool>::min(), std::numeric_limits<bool>::max()));
+    @synchronized(self) {
+        if (_uniformBool == nullptr) {
+            _uniformBool.reset(new std::uniform_int_distribution<bool>(std::numeric_limits<bool>::min(), std::numeric_limits<bool>::max()));
+        }
+        return _uniformBool;
     }
-    return _uniformBool;
 }
 - (std::shared_ptr<std::uniform_real_distribution<double>> &)uniformDouble
 {
-    if (!_uniformDouble) {
-        _uniformDouble.reset(new std::uniform_real_distribution<double>(std::numeric_limits<double>::min(), std::numeric_limits<double>::max()));
+    @synchronized(self) {
+        if (_uniformDouble == nullptr) {
+            _uniformDouble.reset(new std::uniform_real_distribution<double>(std::numeric_limits<double>::min(), std::numeric_limits<double>::max()));
+        }
+        return _uniformDouble;
     }
-    return _uniformDouble;
 }
 - (std::shared_ptr<std::uniform_real_distribution<float>> &)uniformFloat
 {
-    if (!_uniformFloat) {
-        _uniformFloat.reset(new std::uniform_real_distribution<float>(std::numeric_limits<float>::min(), std::numeric_limits<float>::max()));
+    @synchronized(self) {
+        if (_uniformFloat == nullptr) {
+            _uniformFloat.reset(new std::uniform_real_distribution<float>(std::numeric_limits<float>::min(), std::numeric_limits<float>::max()));
+        }
+        return _uniformFloat;
     }
-    return _uniformFloat;
 }
 - (std::shared_ptr<std::uniform_real_distribution<float>> &)uniformFloat_0_1
 {
-    if (!_uniformFloat_0_1) {
-        _uniformFloat_0_1.reset(new std::uniform_real_distribution<float>(0, 1));
+    @synchronized(self) {
+        if (_uniformFloat_0_1 == nullptr) {
+            _uniformFloat_0_1.reset(new std::uniform_real_distribution<float>(0, 1));
+        }
+        return _uniformFloat_0_1;
     }
-    return _uniformFloat_0_1;
 }
 - (std::shared_ptr<std::uniform_int_distribution<unsigned char>> &)uniformUChar
 {
-    if (!_uniformUChar) {
-        _uniformUChar.reset(new std::uniform_int_distribution<unsigned char>(std::numeric_limits<unsigned char>::min(), std::numeric_limits<unsigned char>::max()));
+    @synchronized(self) {
+        if (_uniformUChar == nullptr) {
+            _uniformUChar.reset(new std::uniform_int_distribution<unsigned char>(std::numeric_limits<unsigned char>::min(), std::numeric_limits<unsigned char>::max()));
+        }
+        return _uniformUChar;
     }
-    return _uniformUChar;
 }
 
 - (std::shared_ptr<std::uniform_int_distribution<int>> &)uniformLength
 {
-    if (!_uniformLength) {
-        _uniformLength.reset(new std::uniform_int_distribution<int>(1, 100));
+    @synchronized(self) {
+        if (_uniformLength == nullptr) {
+            _uniformLength.reset(new std::uniform_int_distribution<int>(1, 100));
+        }
+        return _uniformLength;
     }
-    return _uniformLength;
 }
 
 - (uint64_t)uint64

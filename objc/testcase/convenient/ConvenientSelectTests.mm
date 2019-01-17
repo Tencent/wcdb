@@ -58,80 +58,98 @@
 
 - (TestCaseObject *)partialObject1
 {
-    if (!_partialObject1) {
-        TestCaseObject *object = [[TestCaseObject alloc] init];
-        object.identifier = 1;
-        object.content = nil;
-        _partialObject1 = object;
+    @synchronized(self) {
+        if (_partialObject1 == nil) {
+            TestCaseObject *object = [[TestCaseObject alloc] init];
+            object.identifier = 1;
+            object.content = nil;
+            _partialObject1 = object;
+        }
+        return _partialObject1;
     }
-    return _partialObject1;
 }
 
 - (TestCaseObject *)partialObject2
 {
-    if (!_partialObject2) {
-        TestCaseObject *object = [[TestCaseObject alloc] init];
-        object.identifier = 2;
-        object.content = nil;
-        _partialObject2 = object;
+    @synchronized(self) {
+        if (_partialObject2 == nil) {
+            TestCaseObject *object = [[TestCaseObject alloc] init];
+            object.identifier = 2;
+            object.content = nil;
+            _partialObject2 = object;
+        }
+        return _partialObject2;
     }
-    return _partialObject2;
 }
 
 - (NSArray<TestCaseObject *> *)partialObjects
 {
-    if (!_partialObjects) {
-        _partialObjects = @[ self.partialObject1, self.partialObject2 ];
+    @synchronized(self) {
+        if (_partialObjects == nil) {
+            _partialObjects = @[ self.partialObject1, self.partialObject2 ];
+        }
+        return _partialObjects;
     }
-    return _partialObjects;
 }
 
 - (WCTOneRow *)partialRow1
 {
-    if (!_partialRow1) {
-        _partialRow1 = @[ @(1) ];
+    @synchronized(self) {
+        if (_partialRow1 == nil) {
+            _partialRow1 = @[ @(1) ];
+        }
+        return _partialRow1;
     }
-    return _partialRow1;
 }
 
 - (WCTOneRow *)partialRow2
 {
-    if (!_partialRow2) {
-        _partialRow2 = @[ @(2) ];
+    @synchronized(self) {
+        if (_partialRow2 == nil) {
+            _partialRow2 = @[ @(2) ];
+        }
+        return _partialRow2;
     }
-    return _partialRow2;
 }
 
 - (WCTColumnsXRows *)partialRows
 {
-    if (!_partialRows) {
-        _partialRows = @[ self.partialRow1, self.partialRow2 ];
+    @synchronized(self) {
+        if (_partialRows == nil) {
+            _partialRows = @[ self.partialRow1, self.partialRow2 ];
+        }
+        return _partialRows;
     }
-    return _partialRows;
 }
 
 - (WCTValue *)value1
 {
-    if (!_value1) {
-        _value1 = @(1);
+    @synchronized(self) {
+        if (_value1 == nil) {
+            _value1 = @(1);
+        }
+        return _value1;
     }
-    return _value1;
 }
 
 - (WCTValue *)value2
 {
-    if (!_value2) {
-        _value2 = @(2);
+    @synchronized(self) {
+        if (_value2 == nil) {
+            _value2 = @(2);
+        }
+        return _value2;
     }
-    return _value2;
 }
 
 - (WCTOneColumn *)column
 {
-    if (!_column) {
-        _column = @[ self.value1, self.value2 ];
+    @synchronized(self) {
+        if (_column == nil) {
+            _column = @[ self.value1, self.value2 ];
+        }
+        return _column;
     }
-    return _column;
 }
 
 #pragma mark - Database - Get Object

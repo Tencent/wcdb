@@ -68,29 +68,35 @@
 
 - (Random *)random
 {
-    if (!_random) {
-        _random = [[Random alloc] init];
+    @synchronized(self) {
+        if (_random == nil) {
+            _random = [[Random alloc] init];
+        }
+        return _random;
     }
-    return _random;
 }
 
 - (Signpost *)signpost
 {
-    if (!_signpost) {
-        _signpost = [[Signpost alloc] initWithSystem:[NSBundle mainBundle].bundleIdentifier andCategory:self.className];
+    @synchronized(self) {
+        if (_signpost == nil) {
+            _signpost = [[Signpost alloc] initWithSystem:[NSBundle mainBundle].bundleIdentifier andCategory:self.className];
+        }
+        return _signpost;
     }
-    return _signpost;
 }
 
 - (NSString *)testName
 {
-    if (!_testName) {
-        NSString *name = self.name;
-        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\[\\w+ (\\w+).*\\]" options:NSRegularExpressionCaseInsensitive error:nil];
-        NSTextCheckingResult *match = [regex firstMatchInString:name options:0 range:NSMakeRange(0, [name length])];
-        _testName = [name substringWithRange:[match rangeAtIndex:1]];
+    @synchronized(self) {
+        if (_testName == nil) {
+            NSString *name = self.name;
+            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\[\\w+ (\\w+).*\\]" options:NSRegularExpressionCaseInsensitive error:nil];
+            NSTextCheckingResult *match = [regex firstMatchInString:name options:0 range:NSMakeRange(0, [name length])];
+            _testName = [name substringWithRange:[match rangeAtIndex:1]];
+        }
+        return _testName;
     }
-    return _testName;
 }
 
 - (void)refreshDirectory
@@ -111,10 +117,12 @@
 
 - (NSString *)className
 {
-    if (!_className) {
-        _className = NSStringFromClass(self.class);
+    @synchronized(self) {
+        if (_className == nil) {
+            _className = NSStringFromClass(self.class);
+        }
+        return _className;
     }
-    return _className;
 }
 
 + (NSString *)root
@@ -129,10 +137,12 @@
 
 - (NSString *)directory
 {
-    if (!_directory) {
-        _directory = [[self.class.root stringByAppendingPathComponent:self.className] stringByAppendingPathComponent:self.testName];
+    @synchronized(self) {
+        if (_directory == nil) {
+            _directory = [[self.class.root stringByAppendingPathComponent:self.className] stringByAppendingPathComponent:self.testName];
+        }
+        return _directory;
     }
-    return _directory;
 }
 
 - (NSFileManager *)fileManager
@@ -159,11 +169,11 @@
     [self measureMetrics:self.class.defaultPerformanceMetrics
     automaticallyStartMeasuring:false
                        forBlock:^{
-                           if (tearDownBlock) {
+                           if (tearDownBlock != nil) {
                                tearDownBlock();
                            }
 
-                           if (setUpBlock) {
+                           if (setUpBlock != nil) {
                                setUpBlock();
                            }
 
@@ -177,13 +187,13 @@
 
                            [self stopMeasuring];
 
-                           [self log:@"%d passed.", i];
-
                            TestCaseSignpostEnd("measure");
+
+                           [self log:@"%d passed.", i];
 
                            correctnessBlock();
 
-                           if (tearDownBlock) {
+                           if (tearDownBlock != nil) {
                                tearDownBlock();
                            }
 

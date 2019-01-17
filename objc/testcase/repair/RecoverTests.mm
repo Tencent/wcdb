@@ -28,7 +28,7 @@
 
 - (void)test_recover
 {
-    __block TestCaseResult* result = [TestCaseResult failure];
+    TestCaseResult* result = [TestCaseResult failure];
     [self.database setNotificationWhenCorrupted:^BOOL(WCTDatabase* database) {
         if (![NSThread isMainThread] && database.isBlockaded) {
             [result succeed];
@@ -47,7 +47,7 @@
 
 - (void)test_avoid_frequency
 {
-    __block TestCaseResult* result = [TestCaseResult failure];
+    TestCaseResult* result = [TestCaseResult failure];
     [self.database setNotificationWhenCorrupted:^BOOL(WCTDatabase* database) {
         [result succeed];
         return true;

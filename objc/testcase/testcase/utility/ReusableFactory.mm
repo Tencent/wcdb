@@ -62,23 +62,27 @@
 
 - (NSString*)prototype
 {
-    if (!_prototype) {
-        NSString* fileName = [NSString stringWithFormat:@"%@_%@", self.delegate.category, [NSNumber numberWithDouble:self.expectedQuality]];
-        _prototype = [self.directory stringByAppendingPathComponent:fileName];
+    @synchronized(self) {
+        if (_prototype == nil) {
+            NSString* fileName = [NSString stringWithFormat:@"%@_%@", self.delegate.category, [NSNumber numberWithDouble:self.expectedQuality]];
+            _prototype = [self.directory stringByAppendingPathComponent:fileName];
+        }
+        return _prototype;
     }
-    return _prototype;
 }
 
 - (NSArray<NSString*>*)prototypes
 {
-    if (!_prototypes) {
-        NSMutableArray* prototypes = [NSMutableArray arrayWithObject:_prototype];
-        if ([self.delegate respondsToSelector:@selector(additionalPrototypes:)]) {
-            [prototypes addObjectsFromArray:[self.delegate additionalPrototypes:_prototype]];
+    @synchronized(self) {
+        if (_prototypes == nil) {
+            NSMutableArray* prototypes = [NSMutableArray arrayWithObject:_prototype];
+            if ([self.delegate respondsToSelector:@selector(additionalPrototypes:)]) {
+                [prototypes addObjectsFromArray:[self.delegate additionalPrototypes:_prototype]];
+            }
+            _prototypes = [NSArray arrayWithArray:prototypes];
         }
-        _prototypes = [NSArray arrayWithArray:prototypes];
+        return _prototypes;
     }
-    return _prototypes;
 }
 
 - (BOOL)removePrototypes

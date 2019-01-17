@@ -30,32 +30,38 @@
 
 - (TestCaseObject*)object1
 {
-    if (!_object1) {
-        TestCaseObject* object = [[TestCaseObject alloc] init];
-        object.identifier = 1;
-        object.content = self.random.string;
-        _object1 = object;
+    @synchronized(self) {
+        if (_object1 == nil) {
+            TestCaseObject* object = [[TestCaseObject alloc] init];
+            object.identifier = 1;
+            object.content = self.random.string;
+            _object1 = object;
+        }
+        return _object1;
     }
-    return _object1;
 }
 
 - (TestCaseObject*)object2
 {
-    if (!_object2) {
-        TestCaseObject* object = [[TestCaseObject alloc] init];
-        object.identifier = 2;
-        object.content = self.random.string;
-        _object2 = object;
+    @synchronized(self) {
+        if (_object2 == nil) {
+            TestCaseObject* object = [[TestCaseObject alloc] init];
+            object.identifier = 2;
+            object.content = self.random.string;
+            _object2 = object;
+        }
+        return _object2;
     }
-    return _object2;
 }
 
 - (NSArray<TestCaseObject*>*)objects
 {
-    if (!_objects) {
-        _objects = @[ self.object1, self.object2 ];
+    @synchronized(self) {
+        if (_objects == nil) {
+            _objects = @[ self.object1, self.object2 ];
+        }
+        return _objects;
     }
-    return _objects;
 }
 
 - (void)insertPresetObjects

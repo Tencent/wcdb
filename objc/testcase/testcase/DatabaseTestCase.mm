@@ -24,6 +24,7 @@
 #import <TestCase/Random.h>
 #import <TestCase/TestCaseAssertion.h>
 #import <TestCase/TestCaseLog.h>
+#import <TestCase/TestCaseResult.h>
 
 @implementation DatabaseTestCase {
     int _headerSize;
@@ -73,68 +74,82 @@
 
 - (NSString*)path
 {
-    if (!_path) {
-        _path = [self.directory stringByAppendingPathComponent:@"testDatabase"];
+    @synchronized(self) {
+        if (_path == nil) {
+            _path = [self.directory stringByAppendingPathComponent:@"testDatabase"];
+        }
+        return _path;
     }
-    return _path;
 }
 
 - (NSString*)walPath
 {
-    if (!_walPath) {
-        _walPath = [self.path stringByAppendingString:@"-wal"];
+    @synchronized(self) {
+        if (_walPath == nil) {
+            _walPath = [self.path stringByAppendingString:@"-wal"];
+        }
+        return _walPath;
     }
-    return _walPath;
 }
 
 - (NSString*)firstMaterialPath
 {
-    if (!_firstMaterialPath) {
-        _firstMaterialPath = [self.path stringByAppendingString:@"-first.material"];
+    @synchronized(self) {
+        if (_firstMaterialPath == nil) {
+            _firstMaterialPath = [self.path stringByAppendingString:@"-first.material"];
+        }
+        return _firstMaterialPath;
     }
-    return _firstMaterialPath;
 }
 
 - (NSString*)lastMaterialPath
 {
-    if (!_lastMaterialPath) {
-        _lastMaterialPath = [self.path stringByAppendingString:@"-last.material"];
+    @synchronized(self) {
+        if (_lastMaterialPath == nil) {
+            _lastMaterialPath = [self.path stringByAppendingString:@"-last.material"];
+        }
+        return _lastMaterialPath;
     }
-    return _lastMaterialPath;
 }
 
 - (NSString*)factoryPath
 {
-    if (!_factoryPath) {
-        _factoryPath = [self.path stringByAppendingString:@".factory"];
+    @synchronized(self) {
+        if (_factoryPath == nil) {
+            _factoryPath = [self.path stringByAppendingString:@".factory"];
+        }
+        return _factoryPath;
     }
-    return _factoryPath;
 }
 
 - (NSArray<NSString*>*)paths
 {
-    if (!_paths) {
-        _paths = @[
-            self.path,
-            self.walPath,
-            self.firstMaterialPath,
-            self.lastMaterialPath,
-            self.factoryPath,
-            [self.path stringByAppendingString:@"-journal"],
-            [self.path stringByAppendingString:@"-shm"],
-        ];
+    @synchronized(self) {
+        if (_paths == nil) {
+            _paths = @[
+                self.path,
+                self.walPath,
+                self.firstMaterialPath,
+                self.lastMaterialPath,
+                self.factoryPath,
+                [self.path stringByAppendingString:@"-journal"],
+                [self.path stringByAppendingString:@"-shm"],
+            ];
+        }
+        return _paths;
     }
-    return _paths;
 }
 
 #pragma mark - Database
 - (WCTDatabase*)database
 {
-    if (!_database) {
-        _database = [[WCTDatabase alloc] initWithPath:self.path];
-        _database.tag = self.random.tag;
+    @synchronized(self) {
+        if (_database == nil) {
+            _database = [[WCTDatabase alloc] initWithPath:self.path];
+            _database.tag = self.random.tag;
+        }
+        return _database;
     }
-    return _database;
 }
 
 #pragma mark - File
@@ -175,12 +190,14 @@
 #pragma mark - Factory
 - (ReusableFactory*)factory
 {
-    if (!_factory) {
-        _factory = [[ReusableFactory alloc] initWithDirectory:self.class.cacheRoot];
-        _factory.delegate = self;
-        [self log:@"cache at %@", self.class.cacheRoot];
+    @synchronized(self) {
+        if (_factory == nil) {
+            _factory = [[ReusableFactory alloc] initWithDirectory:self.class.cacheRoot];
+            _factory.delegate = self;
+            [self log:@"cache at %@", self.class.cacheRoot];
+        }
+        return _factory;
     }
-    return _factory;
 }
 
 - (BOOL)stepPreparePrototype:(NSString*)path
@@ -241,7 +258,7 @@
     TestCaseAssertTrue(block != nil);
     TestCaseAssertTrue([testSQLs isKindOfClass:NSArray.class]);
     do {
-        __block BOOL trace = NO;
+        TestCaseResult* trace = [TestCaseResult failure];
         NSMutableArray<NSString*>* expectedSQLs = [NSMutableArray arrayWithArray:testSQLs];
         NSThread* tracedThread = [NSThread currentThread];
         [self.database traceSQL:^(NSString* sql) {
@@ -249,21 +266,23 @@
                 // skip other thread sqls due to the setting
                 return;
             }
-            if (!trace) {
+            if (trace.failed) {
                 return;
             }
-            NSString* expectedSQL = expectedSQLs.firstObject;
-            if ([expectedSQL isEqualToString:sql]) {
-                [expectedSQLs removeObjectAtIndex:0];
-            } else {
-                trace = NO;
-                if (expectedSQL == nil) {
-                    if (self.expectFirstFewSQLsOnly) {
-                        return;
+            @synchronized(expectedSQLs) {
+                NSString* expectedSQL = expectedSQLs.firstObject;
+                if ([expectedSQL isEqualToString:sql]) {
+                    [expectedSQLs removeObjectAtIndex:0];
+                } else {
+                    [trace fail];
+                    if (expectedSQL == nil) {
+                        if (self.expectFirstFewSQLsOnly) {
+                            return;
+                        }
+                        expectedSQL = @"";
                     }
-                    expectedSQL = @"";
+                    TestCaseAssertStringEqual(sql, expectedSQL);
                 }
-                TestCaseAssertStringEqual(sql, expectedSQL);
             }
         }];
         if (![self.database canOpen]) {
@@ -271,19 +290,21 @@
             break;
         }
 
-        trace = YES;
+        [trace succeed];
         @autoreleasepool {
             if (!block()) {
                 TestCaseFailure();
                 break;
             }
         }
-        if (expectedSQLs.count != 0) {
-            TestCaseLog(@"Reminding: %@", expectedSQLs);
-            TestCaseFailure();
-            break;
+        @synchronized(expectedSQLs) {
+            if (expectedSQLs.count != 0) {
+                TestCaseLog(@"Reminding: %@", expectedSQLs);
+                TestCaseFailure();
+                break;
+            }
         }
-        trace = NO;
+        [trace fail];
     } while (false);
     [self.database traceSQL:nil];
 }

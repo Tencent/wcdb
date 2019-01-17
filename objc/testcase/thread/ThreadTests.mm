@@ -252,11 +252,19 @@
 
     self.expectSQLsInAllThreads
     = YES;
+
     [self doTestSQLs:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')", @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
          inOperation:^BOOL {
+             [self.database blockade];
              [WCTDatabase disableSQLiteWrite];
+             [self.database unblockade];
+
              [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + self.delayForTolerance];
+
+             [self.database blockade];
              [WCTDatabase enableSQLiteWrite];
+             [self.database unblockade];
+
              [NSThread sleepForTimeInterval:self.checkpointDelayForRetryingAfterFailure + self.delayForTolerance];
              return YES;
          }];
@@ -343,5 +351,7 @@
     [condition broadcast];
     dispatch_group_wait(self.group, DISPATCH_TIME_FOREVER);
 }
+
+#warning TODO - add tests for busy retry
 
 @end

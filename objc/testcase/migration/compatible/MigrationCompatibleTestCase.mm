@@ -39,14 +39,16 @@
 
 - (NSString*)schemaName
 {
-    if (!_schemaName) {
-        if (self.isCrossDatabaseMigration) {
-            _schemaName = [NSString stringWithFormat:@"WCDBMigration_%u", WCDB::String(self.sourcePath).hash()];
-        } else {
-            _schemaName = @"main";
+    @synchronized(self) {
+        if (_schemaName == nil) {
+            if (self.isCrossDatabaseMigration) {
+                _schemaName = [NSString stringWithFormat:@"WCDBMigration_%u", WCDB::String(self.sourcePath).hash()];
+            } else {
+                _schemaName = @"main";
+            }
         }
+        return _schemaName;
     }
-    return _schemaName;
 }
 
 - (void)doTestInsertAutoIncrement

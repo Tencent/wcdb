@@ -59,7 +59,7 @@ protected:
 
 private:
     Printer m_printer;
-    bool m_debugable;
+    std::atomic<bool> m_debuggable;
 };
 
 } // namespace WCDB

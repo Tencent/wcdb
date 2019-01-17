@@ -130,8 +130,8 @@
     }
     int pages = int(fileSize / 4096);
 
-    __block TestCaseResult *tableMigrated = [TestCaseResult failure];
-    __block TestCaseResult *migrated = [TestCaseResult failure];
+    TestCaseResult *tableMigrated = [TestCaseResult failure];
+    TestCaseResult *migrated = [TestCaseResult failure];
     NSString *expectedTableName = self.tableName;
     [self.database setNotificationWhenMigrated:^(WCTMigrationBaseInfo *info) {
         if (info == nil) {
@@ -151,7 +151,7 @@
 
 - (void)doTestFeatureAutoMigrateWillStopDueToError
 {
-    __block TestCaseCounter *numberOfFailures = [TestCaseCounter value:0];
+    TestCaseCounter *numberOfFailures = [TestCaseCounter value:0];
     [WCTDatabase globalTraceError:^(WCTError *error) {
         if (error.code == WCTErrorCodeIOError) {
             [numberOfFailures increment];
@@ -166,7 +166,7 @@
         ;
     [WCTDatabase enableSQLiteWrite];
 
-    __block TestCaseResult *result = [TestCaseResult success];
+    TestCaseResult *result = [TestCaseResult success];
     [self.database traceSQL:^(NSString *sql) {
         [result fail];
     }];
@@ -184,7 +184,7 @@
 
     [NSThread sleepForTimeInterval:2 * WCDB::MigrationQueueTimeIntervalForMigrating];
 
-    __block TestCaseResult *result = [TestCaseResult failure];
+    TestCaseResult *result = [TestCaseResult failure];
     [self.database traceSQL:^(NSString *sql) {
         [result succeed];
     }];

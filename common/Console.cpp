@@ -33,7 +33,7 @@ Console* Console::shared()
     return s_shared;
 }
 
-Console::Console() : m_debugable(false)
+Console::Console() : m_debuggable(false)
 {
     setLogger(Console::logger);
     setPrinter(Console::printer);
@@ -41,7 +41,7 @@ Console::Console() : m_debugable(false)
 
 void Console::setDebuggable(bool debuggable)
 {
-    m_debugable = debuggable;
+    m_debuggable.store(debuggable);
 }
 
 bool Console::debuggable()
@@ -51,7 +51,7 @@ bool Console::debuggable()
 
 bool Console::isDebuggable()
 {
-    return m_debugable;
+    return m_debuggable.load();
 }
 
 void Console::setLogger(const Logger& logger)

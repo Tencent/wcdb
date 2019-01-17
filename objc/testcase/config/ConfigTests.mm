@@ -32,10 +32,12 @@
 
 - (NSString*)configName
 {
-    if (!_configName) {
-        _configName = self.random.string;
+    @synchronized(self) {
+        if (_configName == nil) {
+            _configName = self.random.string;
+        }
+        return _configName;
     }
-    return _configName;
 }
 
 - (void)tearDown

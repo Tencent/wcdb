@@ -52,45 +52,53 @@
 
 - (NSString*)sourcePath
 {
-    if (!_sourcePath) {
-        if (self.isCrossDatabaseMigration) {
-            _sourcePath = [self.path stringByAppendingString:@"_source"];
-        } else {
-            _sourcePath = self.path;
+    @synchronized(self) {
+        if (_sourcePath == nil) {
+            if (self.isCrossDatabaseMigration) {
+                _sourcePath = [self.path stringByAppendingString:@"_source"];
+            } else {
+                _sourcePath = self.path;
+            }
         }
+        return _sourcePath;
     }
-    return _sourcePath;
 }
 
 - (NSString*)sourceTable
 {
-    if (!_sourceTable) {
-        _sourceTable = @"testSourceTable";
+    @synchronized(self) {
+        if (_sourceTable == nil) {
+            _sourceTable = @"testSourceTable";
+        }
+        return _sourceTable;
     }
-    return _sourceTable;
 }
 
 - (WCTDatabase*)sourceDatabase
 {
-    if (!_sourceDatabase) {
-        _sourceDatabase = [[WCTDatabase alloc] initWithPath:self.sourcePath];
+    @synchronized(self) {
+        if (_sourceDatabase == nil) {
+            _sourceDatabase = [[WCTDatabase alloc] initWithPath:self.sourcePath];
+        }
+        return _sourceDatabase;
     }
-    return _sourceDatabase;
 }
 
 - (NSArray<TestCaseObject*>*)objects
 {
-    if (!_objects) {
-        NSMutableArray<TestCaseObject*>* objects = [NSMutableArray array];
-        for (int i = 0; i < 100; ++i) {
-            TestCaseObject* object = [[TestCaseObject alloc] init];
-            object.identifier = i + 1;
-            object.content = self.random.string;
-            [objects addObject:object];
+    @synchronized(self) {
+        if (_objects == nil) {
+            NSMutableArray<TestCaseObject*>* objects = [NSMutableArray array];
+            for (int i = 0; i < 100; ++i) {
+                TestCaseObject* object = [[TestCaseObject alloc] init];
+                object.identifier = i + 1;
+                object.content = self.random.string;
+                [objects addObject:object];
+            }
+            _objects = [NSArray arrayWithArray:objects];
         }
-        _objects = [NSArray arrayWithArray:objects];
+        return _objects;
     }
-    return _objects;
 }
 
 - (void)tearDown

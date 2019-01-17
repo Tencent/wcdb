@@ -191,7 +191,7 @@
         {
             // database
             NSFileHandle* fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.path];
-            if (!fileHandle) {
+            if (fileHandle == nil) {
                 TestCaseFailure();
                 return;
             }
@@ -216,7 +216,7 @@
         {
             // wal
             NSFileHandle* fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.walPath];
-            if (!fileHandle) {
+            if (fileHandle == nil) {
                 TestCaseFailure();
                 return;
             }

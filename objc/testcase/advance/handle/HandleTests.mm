@@ -54,10 +54,12 @@
 
 - (WCTHandle*)handle
 {
-    if (!_handle) {
-        _handle = [self.database getHandle];
+    @synchronized(self) {
+        if (_handle == nil) {
+            _handle = [self.database getHandle];
+        }
+        return _handle;
     }
-    return _handle;
 }
 
 - (void)tearDown

@@ -27,18 +27,22 @@
 
 - (NSString*)tableName
 {
-    if (!_tableName) {
-        _tableName = @"testTable";
+    @synchronized(self) {
+        if (_tableName == nil) {
+            _tableName = @"testTable";
+        }
+        return _tableName;
     }
-    return _tableName;
 }
 
 - (Class)tableClass
 {
-    if (!_tableClass) {
-        _tableClass = TestCaseObject.class;
+    @synchronized(self) {
+        if (_tableClass == nil) {
+            _tableClass = TestCaseObject.class;
+        }
+        return _tableClass;
     }
-    return _tableClass;
 }
 
 - (BOOL)createTable
@@ -67,11 +71,11 @@
 
 - (BOOL)dropTable
 {
-    if (_table == nil) {
-        return YES;
+    BOOL result = YES;
+    if (_table != nil) {
+        result = [self.database dropTable:self.tableName];
+        _table = nil;
     }
-    BOOL result = [self.database dropTable:self.tableName];
-    _table = nil;
     return result;
 }
 

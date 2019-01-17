@@ -68,7 +68,7 @@
     __block BOOL result = NO;
     [self.database close:^{
         NSFileHandle* fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.path];
-        if (!fileHandle) {
+        if (fileHandle == nil) {
             TestCaseFailure();
             return;
         }

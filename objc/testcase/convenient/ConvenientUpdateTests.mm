@@ -53,58 +53,70 @@
 
 - (NSString*)renewedContent
 {
-    if (!_renewedContent) {
-        _renewedContent = self.random.string;
+    @synchronized(self) {
+        if (_renewedContent == nil) {
+            _renewedContent = self.random.string;
+        }
+        return _renewedContent;
     }
-    return _renewedContent;
 }
 
 - (TestCaseObject*)renewObject
 {
-    if (!_renewObject) {
-        TestCaseObject* object = [[TestCaseObject alloc] init];
-        object.content = self.renewedContent;
-        _renewObject = object;
+    @synchronized(self) {
+        if (_renewObject == nil) {
+            TestCaseObject* object = [[TestCaseObject alloc] init];
+            object.content = self.renewedContent;
+            _renewObject = object;
+        }
+        return _renewObject;
     }
-    return _renewObject;
 }
 
 - (WCTColumnCodingRow*)renewRow
 {
-    if (!_renewRow) {
-        _renewRow = @[ self.renewedContent ];
+    @synchronized(self) {
+        if (_renewRow == nil) {
+            _renewRow = @[ self.renewedContent ];
+        }
+        return _renewRow;
     }
-    return _renewRow;
 }
 
 - (WCTColumnCodingValue*)renewValue
 {
-    if (!_renewValue) {
-        _renewValue = self.renewedContent;
+    @synchronized(self) {
+        if (_renewValue == nil) {
+            _renewValue = self.renewedContent;
+        }
+        return _renewValue;
     }
-    return _renewValue;
 }
 
 - (TestCaseObject*)renewedObject1
 {
-    if (!_renewedObject1) {
-        TestCaseObject* object = [[TestCaseObject alloc] init];
-        object.identifier = 1;
-        object.content = self.renewedContent;
-        _renewedObject1 = object;
+    @synchronized(self) {
+        if (_renewedObject1 == nil) {
+            TestCaseObject* object = [[TestCaseObject alloc] init];
+            object.identifier = 1;
+            object.content = self.renewedContent;
+            _renewedObject1 = object;
+        }
+        return _renewedObject1;
     }
-    return _renewedObject1;
 }
 
 - (TestCaseObject*)renewedObject2
 {
-    if (!_renewedObject2) {
-        TestCaseObject* object = [[TestCaseObject alloc] init];
-        object.identifier = 2;
-        object.content = self.renewedContent;
-        _renewedObject2 = object;
+    @synchronized(self) {
+        if (_renewedObject2 == nil) {
+            TestCaseObject* object = [[TestCaseObject alloc] init];
+            object.identifier = 2;
+            object.content = self.renewedContent;
+            _renewedObject2 = object;
+        }
+        return _renewedObject2;
     }
-    return _renewedObject2;
 }
 
 #pragma mark - Database - Update Properties To Object

@@ -59,10 +59,12 @@
 
 - (NSString*)tableName
 {
-    if (!_tableName) {
-        _tableName = @"benchmark";
+    @synchronized(self) {
+        if (_tableName == nil) {
+            _tableName = @"benchmark";
+        }
+        return _tableName;
     }
-    return _tableName;
 }
 
 - (void)doTestWrite

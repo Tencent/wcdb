@@ -58,90 +58,106 @@
 
 - (TestCaseObject*)renewedObject1
 {
-    if (!_renewedObject1) {
-        TestCaseObject* object = [[TestCaseObject alloc] init];
-        object.identifier = 1;
-        object.content = self.random.string;
-        _renewedObject1 = object;
+    @synchronized(self) {
+        if (_renewedObject1 == nil) {
+            TestCaseObject* object = [[TestCaseObject alloc] init];
+            object.identifier = 1;
+            object.content = self.random.string;
+            _renewedObject1 = object;
+        }
+        return _renewedObject1;
     }
-    return _renewedObject1;
 }
 
 - (TestCaseObject*)renewedObject2
 {
-    if (!_renewedObject2) {
-        TestCaseObject* object = [[TestCaseObject alloc] init];
-        object.identifier = 2;
-        object.content = self.random.string;
-        _renewedObject2 = object;
+    @synchronized(self) {
+        if (_renewedObject2 == nil) {
+            TestCaseObject* object = [[TestCaseObject alloc] init];
+            object.identifier = 2;
+            object.content = self.random.string;
+            _renewedObject2 = object;
+        }
+        return _renewedObject2;
     }
-    return _renewedObject2;
 }
 
 - (TestCaseObject*)renewedPartialObject1
 {
-    if (!_renewedPartialObject1) {
-        TestCaseObject* object = [[TestCaseObject alloc] init];
-        object.identifier = 1;
-        object.content = nil;
-        _renewedPartialObject1 = object;
+    @synchronized(self) {
+        if (_renewedPartialObject1 == nil) {
+            TestCaseObject* object = [[TestCaseObject alloc] init];
+            object.identifier = 1;
+            object.content = nil;
+            _renewedPartialObject1 = object;
+        }
+        return _renewedPartialObject1;
     }
-    return _renewedPartialObject1;
 }
 
 - (TestCaseObject*)renewedPartialObject2
 {
-    if (!_renewedPartialObject2) {
-        TestCaseObject* object = [[TestCaseObject alloc] init];
-        object.identifier = 2;
-        object.content = nil;
-        _renewedPartialObject2 = object;
+    @synchronized(self) {
+        if (_renewedPartialObject2 == nil) {
+            TestCaseObject* object = [[TestCaseObject alloc] init];
+            object.identifier = 2;
+            object.content = nil;
+            _renewedPartialObject2 = object;
+        }
+        return _renewedPartialObject2;
     }
-    return _renewedPartialObject2;
 }
 
 - (TestCaseObject*)object3
 {
-    if (!_object3) {
-        TestCaseObject* object = [[TestCaseObject alloc] init];
-        object.identifier = 3;
-        object.content = self.random.string;
-        _object3 = object;
+    @synchronized(self) {
+        if (_object3 == nil) {
+            TestCaseObject* object = [[TestCaseObject alloc] init];
+            object.identifier = 3;
+            object.content = self.random.string;
+            _object3 = object;
+        }
+        return _object3;
     }
-    return _object3;
 }
 
 - (TestCaseObject*)object4
 {
-    if (!_object4) {
-        TestCaseObject* object = [[TestCaseObject alloc] init];
-        object.identifier = 4;
-        object.content = self.random.string;
-        _object4 = object;
+    @synchronized(self) {
+        if (_object4 == nil) {
+            TestCaseObject* object = [[TestCaseObject alloc] init];
+            object.identifier = 4;
+            object.content = self.random.string;
+            _object4 = object;
+        }
+        return _object4;
     }
-    return _object4;
 }
 
 - (TestCaseObject*)partialObject3
 {
-    if (!_partialObject3) {
-        TestCaseObject* object = [[TestCaseObject alloc] init];
-        object.identifier = 3;
-        object.content = nil;
-        _partialObject3 = object;
+    @synchronized(self) {
+        if (_partialObject3 == nil) {
+            TestCaseObject* object = [[TestCaseObject alloc] init];
+            object.identifier = 3;
+            object.content = nil;
+            _partialObject3 = object;
+        }
+        return _partialObject3;
     }
-    return _partialObject3;
 }
 
 - (TestCaseObject*)partialObject4
 {
-    if (!_partialObject4) {
-        TestCaseObject* object = [[TestCaseObject alloc] init];
-        object.identifier = 4;
-        object.content = nil;
-        _partialObject4 = object;
+    @synchronized(self) {
+        if (_partialObject4 == nil) {
+            TestCaseObject* object = [[TestCaseObject alloc] init];
+            object.identifier = 4;
+            object.content = nil;
+            _partialObject4 = object;
+        }
+        return _partialObject4;
     }
-    return _partialObject4;
 }
 
 #pragma mark - Auto Increment

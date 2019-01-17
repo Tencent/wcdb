@@ -50,40 +50,48 @@
 
 - (NSString*)tableName2
 {
-    if (!_tableName2) {
-        _tableName2 = @"testTable2";
+    @synchronized(self) {
+        if (_tableName2 == nil) {
+            _tableName2 = @"testTable2";
+        }
+        return _tableName2;
     }
-    return _tableName2;
 }
 
 - (TestCaseObject*)object1InTable2
 {
-    if (!_object1InTable2) {
-        TestCaseObject* object = [[TestCaseObject alloc] init];
-        object.identifier = 1;
-        object.content = self.random.string;
-        _object1InTable2 = object;
+    @synchronized(self) {
+        if (_object1InTable2 == nil) {
+            TestCaseObject* object = [[TestCaseObject alloc] init];
+            object.identifier = 1;
+            object.content = self.random.string;
+            _object1InTable2 = object;
+        }
+        return _object1InTable2;
     }
-    return _object1InTable2;
 }
 
 - (TestCaseObject*)object2InTable2
 {
-    if (!_object2InTable2) {
-        TestCaseObject* object = [[TestCaseObject alloc] init];
-        object.identifier = 2;
-        object.content = self.random.string;
-        _object2InTable2 = object;
+    @synchronized(self) {
+        if (_object2InTable2 == nil) {
+            TestCaseObject* object = [[TestCaseObject alloc] init];
+            object.identifier = 2;
+            object.content = self.random.string;
+            _object2InTable2 = object;
+        }
+        return _object2InTable2;
     }
-    return _object2InTable2;
 }
 
 - (NSArray<TestCaseObject*>*)objectsInTable2
 {
-    if (!_objectsInTable2) {
-        _objectsInTable2 = @[ self.object1InTable2, self.object2InTable2 ];
+    @synchronized(self) {
+        if (_objectsInTable2 == nil) {
+            _objectsInTable2 = @[ self.object1InTable2, self.object2InTable2 ];
+        }
+        return _objectsInTable2;
     }
-    return _objectsInTable2;
 }
 
 - (void)tearDown

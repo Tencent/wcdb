@@ -20,6 +20,7 @@
 
 #import "ColumnCodingObject.h"
 #import "ColumnCodingObject+WCTTableCoding.h"
+#import <TestCase/TestCase.h>
 #import <WCDB/WCDB.h>
 
 @implementation ColumnCodingObject
@@ -38,57 +39,11 @@ WCDB_SYNTHESIZE(ColumnCodingObject, dataObject)
     }
     ColumnCodingObject* other = (ColumnCodingObject*) object;
 
-    if (self.int32Object != nil) {
-        if (![other.int32Object isEqual:other.int32Object]) {
-            return NO;
-        }
-    } else {
-        if (other.int32Object != nil) {
-            return NO;
-        }
-    }
-
-    if (self.int64Object != nil) {
-        if (![other.int64Object isEqual:other.int64Object]) {
-            return NO;
-        }
-    } else {
-        if (other.int64Object != nil) {
-            return NO;
-        }
-    }
-
-    if (self.doubleObject != nil) {
-        if (![other.doubleObject isEqual:other.doubleObject]) {
-            return NO;
-        }
-    } else {
-        if (other.doubleObject != nil) {
-            return NO;
-        }
-    }
-
-    if (self.stringObject != nil) {
-        if (![other.stringObject isEqual:other.stringObject]) {
-            return NO;
-        }
-    } else {
-        if (other.stringObject != nil) {
-            return NO;
-        }
-    }
-
-    if (self.dataObject != nil) {
-        if (![other.dataObject isEqual:other.dataObject]) {
-            return NO;
-        }
-    } else {
-        if (other.dataObject != nil) {
-            return NO;
-        }
-    }
-
-    return YES;
+    return [NSObject isObject:self.int32Object nilEqualToObject:other.int32Object]
+           && [NSObject isObject:self.int64Object nilEqualToObject:other.int64Object]
+           && [NSObject isObject:self.doubleObject nilEqualToObject:other.doubleObject]
+           && [NSObject isObject:self.stringObject nilEqualToObject:other.stringObject]
+           && [NSObject isObject:self.dataObject nilEqualToObject:other.dataObject];
 }
 
 @end

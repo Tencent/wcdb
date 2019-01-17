@@ -19,6 +19,7 @@
  */
 
 #import <TestCase/NSObject+TestCase.h>
+#import <TestCase/TestCaseAssertion.h>
 #import <TestCase/TestCaseLog.h>
 #import <WCDB/SQLite.h>
 
@@ -88,14 +89,7 @@
         return NO;
     }
     WCTPerformanceFootprint *other = (WCTPerformanceFootprint *) object;
-    if (self.frequency != other.frequency) {
-        return NO;
-    }
-    if (self.sql != nil) {
-        return [other.sql isEqualToString:self.sql];
-    } else {
-        return other.sql == nil;
-    }
+    return self.frequency == other.frequency && [NSObject isObject:self.sql nilEqualToObject:other.sql];
 }
 
 @end
@@ -179,7 +173,10 @@ ssize_t illPwrite(int, const void *, size_t, off_t)
 {
     NSLog(@"Will enable SQLite write");
     sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
+    sqlite3_mutex *mutex = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_MASTER);
+    sqlite3_mutex_enter(mutex);
     vfs->xSetSystemCall(vfs, "pwrite", (sqlite3_syscall_ptr) pwrite);
+    sqlite3_mutex_leave(mutex);
     NSLog(@"Did enable SQLite write");
 }
 
@@ -187,7 +184,10 @@ ssize_t illPwrite(int, const void *, size_t, off_t)
 {
     NSLog(@"Will disable SQLite write");
     sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
+    sqlite3_mutex *mutex = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_MASTER);
+    sqlite3_mutex_enter(mutex);
     vfs->xSetSystemCall(vfs, "pwrite", (sqlite3_syscall_ptr) illPwrite);
+    sqlite3_mutex_leave(mutex);
     NSLog(@"Did disable SQLite write");
 }
 
