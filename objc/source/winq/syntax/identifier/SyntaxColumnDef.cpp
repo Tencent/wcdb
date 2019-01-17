@@ -51,6 +51,18 @@ void ColumnDef::iterate(const Iterator& iterator, bool& stop)
     listIterate(constraints, iterator, stop);
 }
 
+#pragma mark - Utility
+bool ColumnDef::isAutoIncrement() const
+{
+    bool isAutoIncrement = false;
+    for (const auto& constraint : constraints) {
+        if (constraint.isAutoIncrement()) {
+            isAutoIncrement = true;
+        }
+    }
+    return isAutoIncrement;
+}
+
 } // namespace Syntax
 
 } // namespace WCDB

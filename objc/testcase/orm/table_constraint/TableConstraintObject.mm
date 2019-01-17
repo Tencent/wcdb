@@ -33,12 +33,12 @@ WCDB_SYNTHESIZE(TableConstraintObject, multiUnique)
 WCDB_SYNTHESIZE(TableConstraintObject, multiUniqueAsc)
 WCDB_SYNTHESIZE(TableConstraintObject, multiUniqueDesc)
 
-WCDB_MULTI_PRIMARY(TableConstraintObject, @"_multi_primary", multiPrimary)
-WCDB_MULTI_PRIMARY_ASC(TableConstraintObject, @"_multi_primary", multiPrimaryAsc)
-WCDB_MULTI_PRIMARY_DESC(TableConstraintObject, @"_multi_primary", multiPrimaryDesc)
+WCDB_MULTI_PRIMARY(TableConstraintObject, @"multi_primary", multiPrimary)
+WCDB_MULTI_PRIMARY_ASC(TableConstraintObject, @"multi_primary", multiPrimaryAsc)
+WCDB_MULTI_PRIMARY_DESC(TableConstraintObject, @"multi_primary", multiPrimaryDesc)
 
-WCDB_MULTI_UNIQUE(TableConstraintObject, @"_multi_unique", multiUnique)
-WCDB_MULTI_UNIQUE_ASC(TableConstraintObject, @"_multi_unique", multiUniqueAsc)
-WCDB_MULTI_UNIQUE_DESC(TableConstraintObject, @"_multi_unique", multiUniqueDesc)
+WCDB_MULTI_UNIQUE(TableConstraintObject, @"multi_unique", multiUnique)
+WCDB_MULTI_UNIQUE_ASC(TableConstraintObject, @"multi_unique", multiUniqueAsc)
+WCDB_MULTI_UNIQUE_DESC(TableConstraintObject, @"multi_unique", multiUniqueDesc)
 
 @end

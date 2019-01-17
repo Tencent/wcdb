@@ -25,38 +25,46 @@
 class WCTColumnBinding final {
 public:
     template<typename T>
+    static WCTColumnBinding generate(Class cls, const WCDB::String& propertyName)
+    {
+        return WCTColumnBinding(cls, propertyName, (T*) nullptr);
+    }
+
+    template<typename T>
     WCTColumnBinding(Class cls,
-                     const WCDB::String& pn,
-                     const WCDB::String& cn,
+                     const WCDB::String& propertyName,
                      T* = nullptr,
                      typename std::enable_if<!WCDB::IsObjCType<T>::value>::type* = nullptr)
-    : accessor(new WCTRuntimeCppAccessor<T>(cls, pn))
-    , propertyName(pn)
-    , m_class(cls)
-    , columnDef(WCDB::ColumnDef(WCDB::Column(cn), accessor->getColumnType()))
+    : WCTColumnBinding(
+      cls, std::shared_ptr<WCTBaseAccessor>(new WCTRuntimeCppAccessor<T>(cls, propertyName)), propertyName)
     {
     }
 
     template<typename T>
     WCTColumnBinding(Class cls,
-                     const WCDB::String& pn,
-                     const WCDB::String& cn,
+                     const WCDB::String& propertyName,
                      T* = nullptr,
                      typename std::enable_if<WCDB::IsObjCType<T>::value>::type* = nullptr)
-    : accessor(new WCTRuntimeObjCAccessor(cls, pn))
-    , propertyName(pn)
-    , m_class(cls)
-    , columnDef(WCDB::ColumnDef(WCDB::Column(cn), accessor->getColumnType()))
+    : WCTColumnBinding(
+      cls, std::shared_ptr<WCTBaseAccessor>(new WCTRuntimeObjCAccessor(cls, propertyName)), propertyName)
     {
     }
 
-    Class getClass() const;
-    const std::shared_ptr<WCTBaseAccessor> accessor;
+    WCTColumnBinding();
 
-    WCDB::ColumnDef columnDef;
-    const WCDB::String propertyName;
+    Class getClass() const;
+    const WCDB::String& getPropertyName() const;
+    const std::shared_ptr<WCTBaseAccessor>& getAccessor() const;
+
+    bool operator==(const WCTColumnBinding& other) const;
 
 protected:
+    WCTColumnBinding(Class cls,
+                     const std::shared_ptr<WCTBaseAccessor> accessor,
+                     const WCDB::String& propertyName);
+
+    std::shared_ptr<WCTBaseAccessor> m_accessor;
+    WCDB::String m_propertyName;
     Class m_class;
 };
 
@@ -64,12 +72,12 @@ class WCTColumnBindingHolder {
 public:
     WCTColumnBindingHolder();
     WCTColumnBindingHolder(const WCTColumnBinding& columnBinding);
-    virtual ~WCTColumnBindingHolder();
+    virtual ~WCTColumnBindingHolder() = 0;
 
     WCTResultColumn redirect(const WCDB::ResultColumn& resultColumn) const;
 
     const WCTColumnBinding& getColumnBinding() const;
 
 protected:
-    const WCTColumnBinding* m_columnBinding;
+    WCTColumnBinding m_columnBinding;
 };

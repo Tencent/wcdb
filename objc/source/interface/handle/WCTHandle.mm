@@ -252,8 +252,7 @@
              toIndex:(int)index
 {
     WCTHandleAssert(return;);
-    const WCTColumnBinding &columnBinding = property.getColumnBinding();
-    const std::shared_ptr<WCTBaseAccessor> &accessor = columnBinding.accessor;
+    const std::shared_ptr<WCTBaseAccessor> &accessor = property.getColumnBinding().getAccessor();
     switch (accessor->getAccessorType()) {
     case WCTAccessorCpp: {
         switch (accessor->getColumnType()) {
@@ -479,8 +478,7 @@
                    ofObject:(WCTObject *)object
 {
     WCTHandleAssert(return;);
-    const WCTColumnBinding &columnBinding = columnBindingHolder.getColumnBinding();
-    const std::shared_ptr<WCTBaseAccessor> &accessor = columnBinding.accessor;
+    const std::shared_ptr<WCTBaseAccessor> &accessor = columnBindingHolder.getColumnBinding().getAccessor();
     switch (accessor->getAccessorType()) {
     case WCTAccessorCpp: {
         switch (accessor->getColumnType()) {

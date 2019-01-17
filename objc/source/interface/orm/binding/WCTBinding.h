@@ -20,7 +20,6 @@
 
 #import <WCDB/String.hpp>
 #import <WCDB/WCTCoding.h>
-#import <WCDB/WCTColumnBinding.h>
 #import <WCDB/WCTCommon.h>
 #import <WCDB/WCTProperty.h>
 #import <map>
@@ -28,68 +27,52 @@
 class WCTBinding final {
 #pragma mark - Binding
 public:
-    static const WCTBinding &bindingWithClass(Class cls);
-
-    static void checkInheritance(Class left, Class right);
+    WCTBinding(Class cls);
+    static void assertNoInheritance(Class left, Class right);
 
 private:
-    WCTBinding(Class cls);
-    void initialize();
     Class m_cls;
 
 #pragma mark - Property
 public:
-    template<typename T>
-    void addProperty(const WCDB::String &propertyName, const WCDB::String &columnName)
-    {
-        WCTColumnBinding columnBinding(m_cls, propertyName, columnName, (T *) nullptr);
-        addProperty(columnName, std::move(columnBinding));
-    }
-
-    const WCTProperty &getProperty(const WCDB::String &propertyName) const;
-
-    const WCTProperties &getAllProperties() const;
-
-    const std::map<WCDB::String, WCTColumnBinding, WCDB::String::CaseInsensiveComparator> &
-    getColumnBindings() const;
-
-    WCDB::ColumnDef &getColumnDef(const WCTProperty &property);
+    const WCTProperties &getProperties() const;
 
 private:
-    void addProperty(const WCDB::String &columnName, const WCTColumnBinding &columnBinding);
-
-    //TODO refactor using OrderedUniqueList. Note that column order should be tested.
     WCTProperties m_properties;
-    // property name -> property iterator
-    std::map<WCDB::String, WCTProperties::iterator> m_mappedProperties;
 
-    // column name -> column binding
-    std::map<WCDB::String, WCTColumnBinding, WCDB::String::CaseInsensiveComparator> m_columnBindings;
+#pragma mark - Column Def
+public:
+    const std::map<WCDB::String, WCDB::ColumnDef, WCDB::String::CaseInsensiveComparator> &
+    getColumnDefs() const;
+    WCDB::ColumnDef &getOrCreateColumnDef(const WCTProperty &property);
+
+private:
+    std::map<WCDB::String /* column name */, WCDB::ColumnDef, WCDB::String::CaseInsensiveComparator> m_columnDefs;
 
 #pragma mark - Table
 public:
-    WCDB::StatementCreateVirtualTable statementVirtualTable;
-
     WCDB::StatementCreateTable
     generateCreateTableStatement(const WCDB::String &tableName) const;
 
     WCDB::StatementCreateVirtualTable
-    generateVirtualCreateTableStatement(const WCDB::String &tableName) const;
+    generateCreateVirtualTableStatement(const WCDB::String &tableName) const;
+
+    WCDB::StatementCreateVirtualTable statementVirtualTable;
 
 #pragma mark - Table Constraint
 public:
-    WCDB::TableConstraint &getOrCreateTableConstraint(const WCDB::String &subfix);
+    WCDB::TableConstraint &getOrCreateTableConstraint(const WCDB::String &name);
 
 private:
-    std::map<WCDB::String, WCDB::TableConstraint> m_constraints;
+    std::map<WCDB::String /* constraint name */, WCDB::TableConstraint> m_constraints;
 
 #pragma mark - Index
 public:
-    WCDB::StatementCreateIndex &getOrCreateIndex(const WCDB::String &subfix);
+    WCDB::StatementCreateIndex &getOrCreateIndexStatement(const WCDB::String &subfix);
 
     std::list<WCDB::StatementCreateIndex>
     generateCreateIndexStatements(const WCDB::String &tableName) const;
 
 private:
-    std::map<WCDB::String, WCDB::StatementCreateIndex> m_indexes;
+    std::map<WCDB::String /* index subfix */, WCDB::StatementCreateIndex> m_indexes;
 };

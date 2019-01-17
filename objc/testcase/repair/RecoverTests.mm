@@ -28,9 +28,11 @@
 
 - (void)test_recover
 {
-    __block BOOL tested = NO;
+    __block TestCaseResult* result = [TestCaseResult failure];
     [self.database setNotificationWhenCorrupted:^BOOL(WCTDatabase* database) {
-        OSAtomicTestAndSet(![NSThread isMainThread] && database.isBlockaded, &tested);
+        if (![NSThread isMainThread] && database.isBlockaded) {
+            [result succeed];
+        }
         return [self.database removeFiles];
     }];
 
@@ -40,14 +42,14 @@
 
     [NSThread sleepForTimeInterval:1.0];
 
-    TestCaseAssertTrue(tested);
+    TestCaseAssertResultSuccessful(result);
 }
 
 - (void)test_avoid_frequency
 {
-    __block BOOL tested = NO;
+    __block TestCaseResult* result = [TestCaseResult failure];
     [self.database setNotificationWhenCorrupted:^BOOL(WCTDatabase* database) {
-        OSAtomicTestAndSet(YES, &tested);
+        [result succeed];
         return true;
     }];
 
@@ -55,18 +57,18 @@
 
     TestCaseAssertTrue([self.table getObjects] == nil);
     [NSThread sleepForTimeInterval:1.0];
-    TestCaseAssertTrue(tested);
+    TestCaseAssertResultSuccessful(result);
 
-    OSAtomicTestAndSet(NO, &tested);
+    [result fail];
     TestCaseAssertTrue([self.table getObjects] == nil);
     [NSThread sleepForTimeInterval:1.0];
-    TestCaseAssertFalse(tested);
+    TestCaseAssertResultFailed(result);
 
-    OSAtomicTestAndSet(NO, &tested);
+    [result fail];
     [NSThread sleepForTimeInterval:5.0];
     TestCaseAssertTrue([self.table getObjects] == nil);
     [NSThread sleepForTimeInterval:1.0];
-    TestCaseAssertTrue(tested);
+    TestCaseAssertResultSuccessful(result);
 
     TestCaseAssertTrue([self.database removeFiles]);
 }

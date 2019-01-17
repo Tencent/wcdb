@@ -32,8 +32,6 @@ public:
     ColumnDef(const Column& column, const ColumnType& type);
 
     ColumnDef& constraint(const ColumnConstraint& constraint);
-
-    bool isPrimary() const;
 };
 
 } // namespace WCDB

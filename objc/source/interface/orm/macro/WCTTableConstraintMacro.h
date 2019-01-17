@@ -18,8 +18,10 @@
  * limitations under the License.
  */
 
+#define WCDB_ORM_TYPE_TABLE_CONSTRAINT table_constraint
+
 #define __WCDB_TABLE_CONSTRAINT_BEGIN(className, constraintName, propertyName) \
-    +(void) WCDB_ORM(className, table_constraint)                              \
+    +(void) WCDB_ORM_UNIQUE(className, WCDB_ORM_TYPE_TABLE_CONSTRAINT)         \
     {                                                                          \
         WCDB_STATIC_ASSERT_EXISTS(className.propertyName);                     \
         WCDB::TableConstraint& tableConstraint                                 \

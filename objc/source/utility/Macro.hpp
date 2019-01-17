@@ -55,8 +55,8 @@
 #define _WCDB_STRINGIFY(str) #str
 #define WCDB_STRINGIFY(str) _WCDB_STRINGIFY(str)
 
-#define WCDB_CONCAT_(a, b) a##b
-#define WCDB_CONCAT(a, b) WCDB_CONCAT_(a, b)
+#define _WCDB_CONCAT(a, b) a##b
+#define WCDB_CONCAT(a, b) _WCDB_CONCAT(a, b)
 
 #define WCDB_UNIQUE_ID __COUNTER__
 

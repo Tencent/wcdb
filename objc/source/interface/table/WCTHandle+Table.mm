@@ -64,7 +64,7 @@
                  withClass:(Class<WCTTableCoding>)cls
 {
     WCTRemedialAssert(tableName && cls, "Class or table name can't be null.", return NO;);
-    return [self execute:[cls objectRelationalMapping].generateVirtualCreateTableStatement(tableName)];
+    return [self execute:[cls objectRelationalMapping].generateCreateVirtualTableStatement(tableName)];
 }
 
 - (BOOL)dropTable:(NSString *)tableName
@@ -99,12 +99,12 @@
             return false;
         }
         //Check whether the column names exists
-        const auto &columnBindings = binding.getColumnBindings();
-        for (const auto &columnBinding : columnBindings) {
-            auto iter = columnNames.find(columnBinding.first);
+        const auto &columnDefs = binding.getColumnDefs();
+        for (const auto &columnDef : columnDefs) {
+            auto iter = columnNames.find(columnDef.first);
             if (iter == columnNames.end()) {
                 //Add new column
-                if (!handle->execute(WCDB::StatementAlterTable().alterTable(tableName).addColumn(columnBinding.second.columnDef))) {
+                if (!handle->execute(WCDB::StatementAlterTable().alterTable(tableName).addColumn(columnDef.second))) {
                     return false;
                 }
             } else {

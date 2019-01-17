@@ -70,3 +70,9 @@
         NSString* _right = (right);                                                               \
         TestCaseAssertTrue([_left isEqualToString:_right], @"%@", __TestCaseHint(_left, _right)); \
     }
+
+#define TestCaseAssertResultSuccessful(result) \
+    TestCaseAssertTrue(result.successful)
+
+#define TestCaseAssertResultFailed(result) \
+    TestCaseAssertTrue(result.failed)

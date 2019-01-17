@@ -18,26 +18,31 @@
  * limitations under the License.
  */
 
-#import <TestCase/TestCaseAssertion.h>
-#import <TestCase/TestCaseLog.h>
-
-#import <TestCase/BaseTestCase.h>
-#import <TestCase/CRUDTestCase.h>
-#import <TestCase/DatabaseTestCase.h>
-#import <TestCase/TableTestCase.h>
-
-#import <TestCase/Random.h>
-#import <TestCase/Signpost.h>
 #import <TestCase/TestCaseCounter.h>
-#import <TestCase/TestCaseResult.h>
 
-#import <TestCase/Random+TestCaseObject.h>
-#import <TestCase/Random+WCDB.h>
+@implementation TestCaseCounter
 
-#import <TestCase/TestCaseObject+WCTTableCoding.h>
-#import <TestCase/TestCaseObject.h>
++ (instancetype)value:(int)value
+{
+    return [[self alloc] initWithValue:value];
+}
 
-#import <TestCase/AllTypesObject+WCTTableCoding.h>
-#import <TestCase/AllTypesObject.h>
+- (instancetype)initWithValue:(int)value
+{
+    if (self = [super init]) {
+        self.value = value;
+    }
+    return self;
+}
 
-#import <TestCase/NSObject+TestCase.h>
+- (void)increment
+{
+    ++self.value;
+}
+
+- (void)decrement
+{
+    --self.value;
+}
+
+@end

@@ -18,26 +18,46 @@
  * limitations under the License.
  */
 
-#import <TestCase/TestCaseAssertion.h>
-#import <TestCase/TestCaseLog.h>
-
-#import <TestCase/BaseTestCase.h>
-#import <TestCase/CRUDTestCase.h>
-#import <TestCase/DatabaseTestCase.h>
-#import <TestCase/TableTestCase.h>
-
-#import <TestCase/Random.h>
-#import <TestCase/Signpost.h>
-#import <TestCase/TestCaseCounter.h>
 #import <TestCase/TestCaseResult.h>
 
-#import <TestCase/Random+TestCaseObject.h>
-#import <TestCase/Random+WCDB.h>
+@implementation TestCaseResult
 
-#import <TestCase/TestCaseObject+WCTTableCoding.h>
-#import <TestCase/TestCaseObject.h>
++ (instancetype)success
+{
+    return [[self alloc] initWithValue:YES];
+}
 
-#import <TestCase/AllTypesObject+WCTTableCoding.h>
-#import <TestCase/AllTypesObject.h>
++ (instancetype)failure
+{
+    return [[self alloc] initWithValue:NO];
+}
 
-#import <TestCase/NSObject+TestCase.h>
+- (instancetype)initWithValue:(BOOL)value
+{
+    if (self = [super init]) {
+        self.value = value;
+    }
+    return self;
+}
+
+- (void)succeed
+{
+    self.value = YES;
+}
+
+- (void)fail
+{
+    self.value = NO;
+}
+
+- (BOOL)successful
+{
+    return !self.failed;
+}
+
+- (BOOL)failed
+{
+    return self.value == NO;
+}
+
+@end

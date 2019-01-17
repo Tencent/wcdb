@@ -18,8 +18,10 @@
  * limitations under the License.
  */
 
+#define WCDB_ORM_TYPE_VIRTUAL_TABLE virtual_table
+
 #define __WCDB_VIRTUAL_TABLE_BEGIN(className)                                  \
-    +(void) WCDB_ORM(className, virtual_table)                                 \
+    +(void) WCDB_ORM_UNIQUE(className, WCDB_ORM_TYPE_VIRTUAL_TABLE)            \
     {                                                                          \
         WCDB::StatementCreateVirtualTable& statement = binding.statementVirtualTable;
 

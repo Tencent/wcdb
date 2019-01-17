@@ -18,26 +18,20 @@
  * limitations under the License.
  */
 
-#import <TestCase/TestCaseAssertion.h>
-#import <TestCase/TestCaseLog.h>
+#import <Foundation/Foundation.h>
 
-#import <TestCase/BaseTestCase.h>
-#import <TestCase/CRUDTestCase.h>
-#import <TestCase/DatabaseTestCase.h>
-#import <TestCase/TableTestCase.h>
+@interface TestCaseResult : NSObject
 
-#import <TestCase/Random.h>
-#import <TestCase/Signpost.h>
-#import <TestCase/TestCaseCounter.h>
-#import <TestCase/TestCaseResult.h>
++ (instancetype)success;
++ (instancetype)failure;
+- (instancetype)initWithValue:(BOOL)value;
 
-#import <TestCase/Random+TestCaseObject.h>
-#import <TestCase/Random+WCDB.h>
+// atmoic
+@property (atomic, assign) BOOL value;
+- (void)succeed;
+- (void)fail;
 
-#import <TestCase/TestCaseObject+WCTTableCoding.h>
-#import <TestCase/TestCaseObject.h>
+- (BOOL)successful;
+- (BOOL)failed;
 
-#import <TestCase/AllTypesObject+WCTTableCoding.h>
-#import <TestCase/AllTypesObject.h>
-
-#import <TestCase/NSObject+TestCase.h>
+@end

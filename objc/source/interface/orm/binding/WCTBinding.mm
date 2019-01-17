@@ -30,64 +30,46 @@
 #import <objc/runtime.h>
 
 #pragma - Binding
-const WCTBinding &WCTBinding::bindingWithClass(Class cls)
-{
-    static std::map<Class, WCTBinding> *s_bindings = new std::map<Class, WCTBinding>;
-    static std::recursive_mutex *s_mutex = new std::recursive_mutex;
-    std::lock_guard<std::recursive_mutex> lockGuard(*s_mutex);
-    auto iter = s_bindings->find(cls);
-    if (iter == s_bindings->end()) {
-        iter = s_bindings->insert({ cls, WCTBinding(cls) }).first;
-        iter->second.initialize();
-    }
-    return iter->second;
-}
-
 WCTBinding::WCTBinding(Class cls)
 : m_cls(cls)
 {
-}
-
-void WCTBinding::initialize()
-{
-    NSString *prefix = [NSString stringWithFormat:@"%s_%@_", WCDB_STRINGIFY(WCDB_ORM_PREFIX), NSStringFromClass(m_cls)];
-    NSString *synthesizePrefix = @WCDB_STRINGIFY(WCDB_SYNTHESIZE_PREFIX);
-    NSRange synthesizeRange = NSMakeRange(prefix.length, synthesizePrefix.length);
+    NSString *className = NSStringFromClass(m_cls);
+    // __wcdb_className_
+    NSString *prefix = [NSString stringWithFormat:@WCDB_STRINGIFY(WCDB_ORM_PREFIX) "_%@_", className];
+    // synthesize_
+    NSString *synthesize = @WCDB_STRINGIFY(WCDB_ORM_TYPE_SYNTHESIZE) "_";
+    NSRange synthesizeRange = NSMakeRange(prefix.length, synthesize.length);
 
     NSMutableArray<NSString *> *synthesizations = [NSMutableArray<NSString *> array];
     NSMutableArray<NSString *> *others = [NSMutableArray<NSString *> array];
 
     unsigned int numberOfMethods = 0;
     Method *methods = class_copyMethodList(object_getClass(m_cls), &numberOfMethods);
-
     for (unsigned int i = 0; i < numberOfMethods; i++) {
         Method method = methods[i];
         NSString *selName = NSStringFromSelector(method_getName(method));
-        if (![selName hasPrefix:prefix]) {
-            continue;
-        }
-        if ([selName compare:synthesizePrefix
-                     options:0
-                       range:synthesizeRange]
-            == NSOrderedSame) {
-            [synthesizations addObject:selName];
-        } else {
-            [others addObject:selName];
+        if ([selName hasPrefix:prefix]) {
+            if ([selName compare:synthesize options:0 range:synthesizeRange] == NSOrderedSame) {
+                [synthesizations addObject:selName];
+            } else {
+                [others addObject:selName];
+            }
         }
     }
-
     free(methods);
 
-    auto comparator = ^NSComparisonResult(NSString *str1, NSString *str2) {
+    static auto s_numbericComparator = ^NSComparisonResult(NSString *str1, NSString *str2) {
         return [str1 compare:str2 options:NSNumericSearch];
     };
-    [synthesizations sortUsingComparator:comparator];
-    [others sortUsingComparator:comparator];
+    [synthesizations sortUsingComparator:s_numbericComparator];
+    [others sortUsingComparator:s_numbericComparator];
 
     for (NSString *selName in synthesizations) {
         SEL selector = NSSelectorFromString(selName);
         IMP imp = [m_cls methodForSelector:selector];
-        ((void (*)(Class, SEL, WCTBinding &)) imp)(m_cls, selector, *this);
+        const WCTProperty &property = ((const WCTProperty &(*) (Class, SEL)) imp)(m_cls, selector);
+        m_properties.push_back(property);
+        getOrCreateColumnDef(m_properties.back()); // trigger column def creation
     }
     for (NSString *selName in others) {
         SEL selector = NSSelectorFromString(selName);
@@ -101,92 +83,76 @@ void WCTBinding::initialize()
     }
 }
 
-void WCTBinding::checkInheritance(Class left, Class right)
+void WCTBinding::assertNoInheritance(Class left, Class right)
 {
     WCTRemedialAssert(left == right, "Inheritance is not supported for ORM.", ;);
 }
 
-#pragma - Property
-WCDB::ColumnDef &WCTBinding::getColumnDef(const WCTProperty &property)
-{
-    auto iter = m_columnBindings.find(property.getColumnBinding().columnDef.syntax().column.name);
-    WCTInnerAssert(iter != m_columnBindings.end());
-    return iter->second.columnDef;
-}
-
-const std::map<WCDB::String, WCTColumnBinding, WCDB::String::CaseInsensiveComparator> &WCTBinding::getColumnBindings() const
-{
-    return m_columnBindings;
-}
-
-const WCTProperties &WCTBinding::getAllProperties() const
+#pragma mark - Property
+const WCTProperties &WCTBinding::getProperties() const
 {
     return m_properties;
 }
 
-const WCTProperty &WCTBinding::getProperty(const WCDB::String &propertyName) const
+#pragma mark - Column Def
+const std::map<WCDB::String, WCDB::ColumnDef, WCDB::String::CaseInsensiveComparator> &WCTBinding::getColumnDefs() const
 {
-    auto iter = m_mappedProperties.find(propertyName);
-    WCTInnerAssert(iter != m_mappedProperties.end());
-    return *iter->second;
+    return m_columnDefs;
 }
 
-void WCTBinding::addProperty(const WCDB::String &columnName,
-                             const WCTColumnBinding &columnBinding)
+WCDB::ColumnDef &WCTBinding::getOrCreateColumnDef(const WCTProperty &property)
 {
-    WCTInnerAssert(m_columnBindings.find(columnName) == m_columnBindings.end());
-    auto iter = m_columnBindings.emplace(columnName, columnBinding).first;
-    m_properties.push_back(iter->second);
-    auto listIter = m_properties.end();
-    std::advance(listIter, -1);
-    m_mappedProperties.emplace(iter->second.propertyName, listIter);
+    WCDB::String name = property.getDescription();
+    auto iter = m_columnDefs.find(name);
+    if (iter == m_columnDefs.end()) {
+        iter = m_columnDefs.emplace(name, WCDB::ColumnDef(property, property.getColumnBinding().getAccessor()->getColumnType())).first;
+    }
+    return iter->second;
 }
 
 #pragma mark - Table
 WCDB::StatementCreateTable WCTBinding::generateCreateTableStatement(const WCDB::String &tableName) const
 {
     WCDB::StatementCreateTable statement = WCDB::StatementCreateTable().createTable(tableName).ifNotExists();
-    for (const auto &columnBinding : m_columnBindings) {
-        statement.define(columnBinding.second.columnDef);
+    for (const auto &iter : m_columnDefs) {
+        statement.define(iter.second);
     }
     for (const auto &constraint : m_constraints) {
-        WCDB::TableConstraint c = constraint.second;
-        c.syntax().name = tableName + constraint.first;
-        statement.constraint(c);
+        statement.constraint(constraint.second);
     }
     return statement;
 }
 
 WCDB::StatementCreateVirtualTable
-WCTBinding::generateVirtualCreateTableStatement(const WCDB::String &tableName) const
+WCTBinding::generateCreateVirtualTableStatement(const WCDB::String &tableName) const
 {
     WCDB::StatementCreateVirtualTable statement = statementVirtualTable;
     statement.createVirtualTable(tableName).ifNotExists();
     std::list<WCDB::String> &arguments = statement.syntax().arguments;
     bool isFTS5 = statement.syntax().module.isCaseInsensiveEqual("fts5");
-    for (const auto &columnBinding : m_columnBindings) {
+    for (const auto &iter : m_columnDefs) {
         if (isFTS5) {
             // FTS5 does not need type
-            arguments.push_back(columnBinding.second.columnDef.syntax().column.getDescription());
+            arguments.push_back(iter.second.syntax().column.getDescription());
         } else {
-            arguments.push_back(columnBinding.second.columnDef.getDescription());
+            arguments.push_back(iter.second.getDescription());
         }
     }
     return statement;
 }
 
 #pragma mark - Table Constraint
-WCDB::TableConstraint &WCTBinding::getOrCreateTableConstraint(const WCDB::String &subfix)
+WCDB::TableConstraint &WCTBinding::getOrCreateTableConstraint(const WCDB::String &name)
 {
-    auto iter = m_constraints.find(subfix);
+    auto iter = m_constraints.find(name);
     if (iter == m_constraints.end()) {
-        iter = m_constraints.emplace(subfix, WCDB::TableConstraint()).first;
+        iter = m_constraints.emplace(name, WCDB::TableConstraint(name)).first;
     }
     return iter->second;
 }
 
 #pragma mark - Index
-WCDB::StatementCreateIndex &WCTBinding::getOrCreateIndex(const WCDB::String &subfix)
+WCDB::StatementCreateIndex &WCTBinding::getOrCreateIndexStatement(const WCDB::String &subfix)
 {
     auto iter = m_indexes.find(subfix);
     if (iter == m_indexes.end()) {

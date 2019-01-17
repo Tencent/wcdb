@@ -73,7 +73,8 @@
     WCTTryDisposeGuard tryDisposeGuard(self);
     BOOL succeed = YES;
     if (_values.count > 0) {
-        const WCTProperties &properties = _properties.empty() ? [_values.firstObject.class allProperties] : _properties;
+        Class cls = _values.firstObject.class;
+        const WCTProperties &properties = _properties.empty() ? [cls allProperties] : _properties;
 
         if (_statement.syntax().columns.empty()) {
             _statement
@@ -82,20 +83,16 @@
         }
 
         std::vector<bool> autoIncrements;
+        const auto &columnDefs = [cls objectRelationalMapping].getColumnDefs();
         for (const WCTProperty &property : properties) {
-            const WCTColumnBinding &columnBinding = property.getColumnBinding();
-
             // auto increment?
             bool isAutoIncrement = false;
             if (!_statement.syntax().useConflictAction
                 || _statement.syntax().conflictAction != WCDB::Syntax::ConflictAction::Replace // not replace
             ) {
-                for (const auto &constraint : columnBinding.columnDef.syntax().constraints) {
-                    if (constraint.switcher == WCDB::ColumnConstraint::SyntaxType::Switch::PrimaryKey) {
-                        isAutoIncrement = constraint.autoIncrement;
-                        break;
-                    }
-                }
+                auto iter = columnDefs.find(property.getDescription());
+                WCTRemedialAssert(iter != columnDefs.end(), "Unrelated property is found.", return NO;);
+                isAutoIncrement = iter->second.syntax().isAutoIncrement();
             }
             autoIncrements.push_back(isAutoIncrement);
         }

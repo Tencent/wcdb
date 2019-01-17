@@ -35,8 +35,8 @@
 - (void)setUp
 {
     [super setUp];
-    property1 = WCTProperty(WCTColumnBinding(WCTResultColumnTests.class, "testProperty1", "testProperty1", (int*) nullptr));
-    property2 = WCTProperty(WCTColumnBinding(WCTResultColumnTests.class, "testProperty2", "testProperty2", (double*) nullptr));
+    property1 = WCTProperty(WCTColumnBinding::generate<int>(WCTResultColumnTests.class, "testProperty1"));
+    property2 = WCTProperty(WCTColumnBinding::generate<double>(WCTResultColumnTests.class, "testProperty2"));
 }
 
 - (void)test_default_constructible
@@ -73,7 +73,7 @@
     WCTResultColumn redirected = resultColumn.redirect(1);
 
     TestCaseAssertSQLEqual(redirected, @"1");
-    TestCaseAssertEqual(&redirected.getColumnBinding(), &resultColumn.getColumnBinding());
+    TestCaseAssertEqual(redirected.getColumnBinding(), resultColumn.getColumnBinding());
 }
 
 - (void)test_results_by_adding

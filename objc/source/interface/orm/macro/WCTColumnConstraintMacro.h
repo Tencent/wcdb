@@ -18,14 +18,16 @@
  * limitations under the License.
  */
 
-#define __WCDB_COLUMN_CONSTRAINT_BEGIN(className, propertyName) \
-    +(void) WCDB_ORM(className, column_constraint)              \
-    {                                                           \
-        WCDB_STATIC_ASSERT_EXISTS(className.propertyName);      \
+#define WCDB_ORM_TYPE_COLUMN_CONSTRAINT column_constraint
+
+#define __WCDB_COLUMN_CONSTRAINT_BEGIN(className, propertyName)         \
+    +(void) WCDB_ORM_UNIQUE(className, WCDB_ORM_TYPE_COLUMN_CONSTRAINT) \
+    {                                                                   \
+        WCDB_STATIC_ASSERT_EXISTS(className.propertyName);              \
         WCDB::ColumnConstraint columnConstraint;
 
-#define __WCDB_COLUMN_CONSTRAINT_END(className, propertyName)                  \
-    binding.getColumnDef(className.propertyName).constraint(columnConstraint); \
+#define __WCDB_COLUMN_CONSTRAINT_END(className, propertyName)                          \
+    binding.getOrCreateColumnDef(className.propertyName).constraint(columnConstraint); \
     }
 
 // primary

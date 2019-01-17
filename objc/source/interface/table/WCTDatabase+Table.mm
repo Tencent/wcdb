@@ -62,7 +62,7 @@
 {
     WCTDatabaseAssert(return NO;);
     WCTRemedialAssert(tableName && cls, "Class or table name can't be null.", return NO;);
-    return _database->execute([cls objectRelationalMapping].generateVirtualCreateTableStatement(tableName));
+    return _database->execute([cls objectRelationalMapping].generateCreateVirtualTableStatement(tableName));
 }
 
 - (BOOL)dropTable:(NSString *)tableName

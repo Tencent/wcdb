@@ -130,14 +130,14 @@
     }
     int pages = int(fileSize / 4096);
 
-    __block BOOL tableMigrated = NO;
-    __block BOOL migrated = NO;
+    __block TestCaseResult *tableMigrated = [TestCaseResult failure];
+    __block TestCaseResult *migrated = [TestCaseResult failure];
     NSString *expectedTableName = self.tableName;
     [self.database setNotificationWhenMigrated:^(WCTMigrationBaseInfo *info) {
         if (info == nil) {
-            OSAtomicTestAndSet(YES, &migrated);
+            [migrated succeed];
         } else if ([info.table isEqualToString:expectedTableName]) {
-            OSAtomicTestAndSet(YES, &tableMigrated);
+            [tableMigrated succeed];
         }
     }];
     self.database.autoMigrate = YES;
@@ -145,16 +145,16 @@
     // wait until auto migrate done
     [NSThread sleepForTimeInterval:(pages + 2) * WCDB::MigrationQueueTimeIntervalForMigrating];
 
-    TestCaseAssertTrue(tableMigrated);
-    TestCaseAssertTrue(migrated);
+    TestCaseAssertResultSuccessful(tableMigrated);
+    TestCaseAssertResultSuccessful(migrated);
 }
 
 - (void)doTestFeatureAutoMigrateWillStopDueToError
 {
-    __block int failures = 0;
+    __block TestCaseCounter *numberOfFailures = [TestCaseCounter value:0];
     [WCTDatabase globalTraceError:^(WCTError *error) {
         if (error.code == WCTErrorCodeIOError) {
-            OSAtomicIncrement32(&failures);
+            [numberOfFailures increment];
         }
     }];
 
@@ -162,17 +162,17 @@
     self.database.autoMigrate = YES;
 
     // wait until auto migrate stopped
-    while (failures < WCDB::MigrationQueueTolerableFailures)
+    while (numberOfFailures.value < WCDB::MigrationQueueTolerableFailures)
         ;
     [WCTDatabase enableSQLiteWrite];
 
-    __block BOOL tested = YES;
+    __block TestCaseResult *result = [TestCaseResult success];
     [self.database traceSQL:^(NSString *sql) {
-        tested = NO;
+        [result fail];
     }];
     // wait to confirm migration is stopped.
     [NSThread sleepForTimeInterval:2 * WCDB::MigrationQueueTimeIntervalForMigrating];
-    TestCaseAssertTrue(tested);
+    TestCaseAssertResultSuccessful(result);
 }
 
 - (void)doTestFeatureAutoMigrateWillNotStopDueToInterrupt
@@ -184,15 +184,15 @@
 
     [NSThread sleepForTimeInterval:2 * WCDB::MigrationQueueTimeIntervalForMigrating];
 
-    __block BOOL tested = NO;
+    __block TestCaseResult *result = [TestCaseResult failure];
     [self.database traceSQL:^(NSString *sql) {
-        OSAtomicTestAndSet(YES, &tested);
+        [result succeed];
     }];
     [handle invalidate];
 
     // wait to confirm migration still running.
     [NSThread sleepForTimeInterval:2 * WCDB::MigrationQueueTimeIntervalForMigrating];
-    TestCaseAssertTrue(tested);
+    TestCaseAssertResultSuccessful(result);
 }
 
 - (int)getUnmigratedCount

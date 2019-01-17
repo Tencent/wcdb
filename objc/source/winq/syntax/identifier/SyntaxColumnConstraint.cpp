@@ -99,6 +99,12 @@ void ColumnConstraint::iterate(const Iterator& iterator, bool& stop)
     }
 }
 
+#pragma mark - Utility
+bool ColumnConstraint::isAutoIncrement() const
+{
+    return switcher == Switch::PrimaryKey && autoIncrement;
+}
+
 } // namespace Syntax
 
 } // namespace WCDB

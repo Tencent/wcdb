@@ -134,6 +134,10 @@
 		2349F7711EA0D6680021EFA7 /* WCTDatabase+Table.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F69B1EA0D6680021EFA7 /* WCTDatabase+Table.mm */; };
 		2349F7741EA0D6680021EFA7 /* WCTTable+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F69E1EA0D6680021EFA7 /* WCTTable+Private.h */; };
 		2349F78E1EA0D6680021EFA7 /* WCDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6BA1EA0D6680021EFA7 /* WCDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		234D141321F014D500BCF3DD /* TestCaseResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 234D141121F014D500BCF3DD /* TestCaseResult.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		234D141421F014D500BCF3DD /* TestCaseResult.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234D141221F014D500BCF3DD /* TestCaseResult.mm */; };
+		234D142221F01E6F00BCF3DD /* TestCaseCounter.h in Headers */ = {isa = PBXBuildFile; fileRef = 234D142021F01E6F00BCF3DD /* TestCaseCounter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		234D142321F01E6F00BCF3DD /* TestCaseCounter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234D142121F01E6F00BCF3DD /* TestCaseCounter.mm */; };
 		234DBCF32064DD0C000E31E8 /* WCTDatabase+Handle.h in Headers */ = {isa = PBXBuildFile; fileRef = 234DBCEC2064DD0B000E31E8 /* WCTDatabase+Handle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234DBCF42064DD0C000E31E8 /* WCTDatabase+Handle.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBCED2064DD0B000E31E8 /* WCTDatabase+Handle.mm */; };
 		234DBCF72064DD0C000E31E8 /* WCTHandle+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 234DBCF02064DD0B000E31E8 /* WCTHandle+Private.h */; };
@@ -1365,6 +1369,10 @@
 		2349F69B1EA0D6680021EFA7 /* WCTDatabase+Table.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Table.mm"; sourceTree = "<group>"; };
 		2349F69E1EA0D6680021EFA7 /* WCTTable+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTTable+Private.h"; sourceTree = "<group>"; };
 		2349F6BA1EA0D6680021EFA7 /* WCDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCDB.h; sourceTree = "<group>"; };
+		234D141121F014D500BCF3DD /* TestCaseResult.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestCaseResult.h; sourceTree = "<group>"; };
+		234D141221F014D500BCF3DD /* TestCaseResult.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCaseResult.mm; sourceTree = "<group>"; };
+		234D142021F01E6F00BCF3DD /* TestCaseCounter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestCaseCounter.h; sourceTree = "<group>"; };
+		234D142121F01E6F00BCF3DD /* TestCaseCounter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TestCaseCounter.mm; sourceTree = "<group>"; };
 		234DBCEC2064DD0B000E31E8 /* WCTDatabase+Handle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Handle.h"; sourceTree = "<group>"; };
 		234DBCED2064DD0B000E31E8 /* WCTDatabase+Handle.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Handle.mm"; sourceTree = "<group>"; };
 		234DBCF02064DD0B000E31E8 /* WCTHandle+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTHandle+Private.h"; sourceTree = "<group>"; };
@@ -3106,6 +3114,10 @@
 				23F903FC21E58941008701B7 /* Signpost.mm */,
 				23F9040321E5D453008701B7 /* ReusableFactory.h */,
 				23F9040421E5D453008701B7 /* ReusableFactory.mm */,
+				234D141121F014D500BCF3DD /* TestCaseResult.h */,
+				234D141221F014D500BCF3DD /* TestCaseResult.mm */,
+				234D142021F01E6F00BCF3DD /* TestCaseCounter.h */,
+				234D142121F01E6F00BCF3DD /* TestCaseCounter.mm */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -3711,11 +3723,13 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				234D142221F01E6F00BCF3DD /* TestCaseCounter.h in Headers */,
 				2387D90221DF0B880028ADB9 /* AllTypesObject.h in Headers */,
 				2387D90321DF0B880028ADB9 /* TestCaseObject+WCTTableCoding.h in Headers */,
 				2387D95021DF61C30028ADB9 /* TableTestCase.h in Headers */,
 				2387D8FB21DF0B880028ADB9 /* DatabaseTestCase.h in Headers */,
 				2387D95821DF635A0028ADB9 /* TestCase.h in Headers */,
+				234D141321F014D500BCF3DD /* TestCaseResult.h in Headers */,
 				2387D94821DF5C890028ADB9 /* Random+TestCaseObject.h in Headers */,
 				2387D95321DF61C30028ADB9 /* CRUDTestCase.h in Headers */,
 				23F903FD21E58941008701B7 /* Signpost.h in Headers */,
@@ -4735,9 +4749,11 @@
 				2387D90021DF0B880028ADB9 /* TestCaseObject.mm in Sources */,
 				2387D8F521DF0B880028ADB9 /* DatabaseTestCase.mm in Sources */,
 				2387D95221DF61C30028ADB9 /* CRUDTestCase.mm in Sources */,
+				234D142321F01E6F00BCF3DD /* TestCaseCounter.mm in Sources */,
 				2387D96321DF651D0028ADB9 /* NSObject+TestCase.mm in Sources */,
 				23F9040621E5D453008701B7 /* ReusableFactory.mm in Sources */,
 				2387D96221DF651D0028ADB9 /* TestCaseLog.mm in Sources */,
+				234D141421F014D500BCF3DD /* TestCaseResult.mm in Sources */,
 				23F903FE21E58941008701B7 /* Signpost.mm in Sources */,
 				23F9040221E5CE20008701B7 /* Random+WCDB.mm in Sources */,
 				2387D8FF21DF0B880028ADB9 /* AllTypesObject.mm in Sources */,

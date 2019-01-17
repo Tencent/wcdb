@@ -20,20 +20,19 @@
 
 #define WCDB_ORM_PREFIX __wcdb
 
-#define __WCDB_ORM_CONCAT(a, b) WCDB_CONCAT(a, WCDB_CONCAT(_, b))
+#define WCDB_ORM_CONCAT(a, b) WCDB_CONCAT(a, WCDB_CONCAT(_, b))
 
-#define __WCDB_ORM_MAKE_UNIQUE(expr) __WCDB_ORM_CONCAT(expr, WCDB_UNIQUE_ID)
+#define __WCDB_ORM_TYPE_PREFIX(className, ORMType)                             \
+    WCDB_ORM_CONCAT(WCDB_ORM_CONCAT(WCDB_ORM_PREFIX, className), ORMType)
 
-#define WCDB_ORM(className, ORMType)                                           \
-    __WCDB_ORM_MAKE_UNIQUE(                                                    \
-    __WCDB_ORM_CONCAT(__WCDB_ORM_CONCAT(WCDB_ORM_PREFIX, className), ORMType)) \
-    : (WCTBinding &) binding
+#define __WCDB_ORM(className, ORMType, subfix)                                 \
+    WCDB_ORM_CONCAT(__WCDB_ORM_TYPE_PREFIX(className, ORMType), subfix)
+
+#define WCDB_ORM_UNIQUE(className, ORMType)                                    \
+    __WCDB_ORM(className, ORMType, WCDB_UNIQUE_ID) : (WCTBinding &) binding
 
 #if defined(__cplusplus)
 #define WCDB_EXTERN extern "C"
 #else
 #define WCDB_EXTERN extern
 #endif
-
-#define WCDB_ORM_CHECK_INHERITANCE(className)                                  \
-    WCTBinding::checkInheritance(className.class, self)

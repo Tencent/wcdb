@@ -42,6 +42,10 @@ public:
     Type getType() const override final;
     String getDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
+
+#pragma mark - Utility
+public:
+    bool isAutoIncrement() const;
 };
 
 } // namespace Syntax

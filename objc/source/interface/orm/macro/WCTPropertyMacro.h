@@ -18,23 +18,24 @@
  * limitations under the License.
  */
 
+// Property
 #define __WCDB_PROPERTY_TYPE(className, propertyName) \
     decltype([className new].propertyName)
 
 #define __WCDB_PROPERTY_IMP(propertyName) +(const WCTProperty &) propertyName;
 
-#define WCDB_SYNTHESIZE_PREFIX synthesize
+// Synthesize
+#define WCDB_ORM_TYPE_SYNTHESIZE synthesize
 
-#define __WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)                                                                      \
-    +(void) WCDB_ORM(className, WCDB_SYNTHESIZE_PREFIX)                                                                                 \
-    {                                                                                                                                   \
-        binding                                                                                                                         \
-        .addProperty<__WCDB_PROPERTY_TYPE(className, propertyName)>(                                                                    \
-        WCDB_STRINGIFY(propertyName), columnName);                                                                                      \
-    }                                                                                                                                   \
-    +(const WCTProperty &) propertyName                                                                                                 \
-    {                                                                                                                                   \
-        static const WCTProperty &s_property = WCTBinding::bindingWithClass(className.class).getProperty(WCDB_STRINGIFY(propertyName)); \
-        WCDB_ORM_CHECK_INHERITANCE(className);                                                                                          \
-        return s_property;                                                                                                              \
+// __wcdb_className_synthesize_uniqueID
+#define __WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)                                                                                                                                    \
+    +(const WCTProperty &) propertyName                                                                                                                                                               \
+    {                                                                                                                                                                                                 \
+        static const WCTProperty *s_property = new WCTProperty(columnName, WCTColumnBinding::generate<__WCDB_PROPERTY_TYPE(className, propertyName)>(className.class, WCDB_STRINGIFY(propertyName))); \
+        WCTBinding::assertNoInheritance(className.class, self);                                                                                                                                       \
+        return *s_property;                                                                                                                                                                           \
+    }                                                                                                                                                                                                 \
+    +(const WCTProperty &) WCDB_ORM_UNIQUE(className, WCDB_ORM_TYPE_SYNTHESIZE)                                                                                                                       \
+    {                                                                                                                                                                                                 \
+        return className.propertyName;                                                                                                                                                                \
     }
