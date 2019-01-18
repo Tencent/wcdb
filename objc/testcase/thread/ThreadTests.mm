@@ -316,6 +316,7 @@
         TestCaseAssertTrue([handle isInTransaction]);
         return YES;
     }];
+    TestCaseAssertTrue(result);
 }
 
 - (void)test_feature_max_concurrency
