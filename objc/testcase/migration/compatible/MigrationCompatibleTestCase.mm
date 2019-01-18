@@ -53,17 +53,14 @@
 
 - (void)doTestInsertAutoIncrement
 {
-    TestCaseObject* newObject = [[TestCaseObject alloc] init];
-    newObject.isAutoIncrement = YES;
-    newObject.identifier = self.objects.lastObject.identifier + 1;
-    newObject.content = self.random.string;
+    TestCaseObject* newObject = [self.random autoIncrementTestCaseObjectWithIdentifier:self.objects.lastObject.identifier + 1];
     NSMutableArray<TestCaseObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
     [expectedObjects addObject:newObject];
 
     NSArray<NSString*>* sqls = @[
         @"BEGIN IMMEDIATE",
         [NSString stringWithFormat:@"INSERT INTO %@.testSourceTable(identifier, content) VALUES(?1, ?2)", self.schemaName],
-        [NSString stringWithFormat:@"INSERT INTO main.testTable(rowid, content, identifier) SELECT rowid, content, identifier FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName],
+        [NSString stringWithFormat:@"INSERT INTO main.testTable(content, identifier) SELECT content, identifier FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName],
         [NSString stringWithFormat:@"DELETE FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName],
         @"COMMIT"
     ];
@@ -77,9 +74,7 @@
 
 - (void)doTestInsertOrReplace
 {
-    TestCaseObject* newObject = [[TestCaseObject alloc] init];
-    newObject.identifier = self.objects.lastObject.identifier;
-    newObject.content = self.random.string;
+    TestCaseObject* newObject = [self.random testCaseObjectWithIdentifier:self.objects.lastObject.identifier];
     NSMutableArray<TestCaseObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
     [expectedObjects removeLastObject];
     [expectedObjects addObject:newObject];
@@ -87,7 +82,7 @@
     NSArray<NSString*>* sqls = @[
         @"BEGIN IMMEDIATE",
         [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@.testSourceTable(identifier, content) VALUES(?1, ?2)", self.schemaName],
-        [NSString stringWithFormat:@"INSERT OR REPLACE INTO main.testTable(rowid, content, identifier) SELECT rowid, content, identifier FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName],
+        [NSString stringWithFormat:@"INSERT OR REPLACE INTO main.testTable(content, identifier) SELECT content, identifier FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName],
         [NSString stringWithFormat:@"DELETE FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName],
         @"COMMIT"
     ];
@@ -101,9 +96,7 @@
 
 - (void)doTestInsertFailedWithConflict
 {
-    TestCaseObject* newObject = [[TestCaseObject alloc] init];
-    newObject.identifier = self.objects.lastObject.identifier;
-    newObject.content = self.random.string;
+    TestCaseObject* newObject = [self.random testCaseObjectWithIdentifier:self.objects.lastObject.identifier];
 
     TestCaseAssertFalse([self.table insertObject:newObject]);
 }
@@ -129,9 +122,7 @@
 {
     NSMutableArray<TestCaseObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
     TestCaseObject* secondObject = [expectedObjects objectAtIndex:2];
-    TestCaseObject* newSecondObject = [[TestCaseObject alloc] init];
-    newSecondObject.identifier = secondObject.identifier;
-    newSecondObject.content = self.random.string;
+    TestCaseObject* newSecondObject = [self.random testCaseObjectWithIdentifier:secondObject.identifier];
     [expectedObjects setObject:newSecondObject atIndexedSubscript:2];
 
     NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
@@ -190,9 +181,7 @@
 - (void)doTestSubqueryWithinUpdate
 {
     NSMutableArray<TestCaseObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
-    TestCaseObject* newObject = [[TestCaseObject alloc] init];
-    newObject.identifier = expectedObjects.lastObject.identifier;
-    newObject.content = self.random.string;
+    TestCaseObject* newObject = [self.random testCaseObjectWithIdentifier:expectedObjects.lastObject.identifier];
     [expectedObjects removeLastObject];
     [expectedObjects addObject:newObject];
 

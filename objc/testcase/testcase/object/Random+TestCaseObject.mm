@@ -19,7 +19,50 @@
  */
 
 #import <TestCase/Random+TestCaseObject.h>
+#import <TestCase/TestCaseObject+WCTTableCoding.h>
 
 @implementation Random (TestCaseObject)
+
+- (TestCaseObject*)testCaseObjectWithIdentifier:(int)identifier
+{
+    return [TestCaseObject objectWithIdentifier:identifier andContent:self.string];
+}
+
+- (TestCaseObject*)testCaseObjectWithAutoIncrement
+{
+    TestCaseObject* object = [TestCaseObject objectWithIdentifier:0 andContent:self.string];
+    object.isAutoIncrement = YES;
+    return object;
+}
+
+- (TestCaseObject*)autoIncrementTestCaseObject
+{
+    return [self autoIncrementTestCaseObjectWithIdentifier:0];
+}
+
+- (TestCaseObject*)autoIncrementTestCaseObjectWithIdentifier:(int)identifier
+{
+    TestCaseObject* object = [TestCaseObject objectWithIdentifier:identifier andContent:self.string];
+    object.isAutoIncrement = YES;
+    return object;
+}
+
+- (NSArray<TestCaseObject*>*)testCaseObjectsWithCount:(NSUInteger)count startingFromIdentifier:(int)identifier
+{
+    NSMutableArray<TestCaseObject*>* objects = [NSMutableArray arrayWithCapacity:count];
+    for (NSUInteger i = identifier; i < identifier + count; ++i) {
+        [objects addObject:[self testCaseObjectWithIdentifier:(int) i]];
+    }
+    return objects;
+}
+
+- (NSArray<TestCaseObject*>*)autoIncrementTestCaseObjectsWithCount:(NSUInteger)count
+{
+    NSMutableArray<TestCaseObject*>* objects = [NSMutableArray arrayWithCapacity:count];
+    for (NSUInteger i = 0; i < count; ++i) {
+        [objects addObject:[self autoIncrementTestCaseObject]];
+    }
+    return objects;
+}
 
 @end

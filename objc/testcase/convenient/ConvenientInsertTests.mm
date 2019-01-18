@@ -60,10 +60,7 @@
 {
     @synchronized(self) {
         if (_renewedObject1 == nil) {
-            TestCaseObject* object = [[TestCaseObject alloc] init];
-            object.identifier = 1;
-            object.content = self.random.string;
-            _renewedObject1 = object;
+            _renewedObject1 = [self.random testCaseObjectWithIdentifier:1];
         }
         return _renewedObject1;
     }
@@ -73,10 +70,7 @@
 {
     @synchronized(self) {
         if (_renewedObject2 == nil) {
-            TestCaseObject* object = [[TestCaseObject alloc] init];
-            object.identifier = 2;
-            object.content = self.random.string;
-            _renewedObject2 = object;
+            _renewedObject2 = [self.random testCaseObjectWithIdentifier:2];
         }
         return _renewedObject2;
     }
@@ -86,10 +80,7 @@
 {
     @synchronized(self) {
         if (_renewedPartialObject1 == nil) {
-            TestCaseObject* object = [[TestCaseObject alloc] init];
-            object.identifier = 1;
-            object.content = nil;
-            _renewedPartialObject1 = object;
+            _renewedPartialObject1 = [TestCaseObject partialObjectWithIdentifier:1];
         }
         return _renewedPartialObject1;
     }
@@ -99,10 +90,7 @@
 {
     @synchronized(self) {
         if (_renewedPartialObject2 == nil) {
-            TestCaseObject* object = [[TestCaseObject alloc] init];
-            object.identifier = 2;
-            object.content = nil;
-            _renewedPartialObject2 = object;
+            _renewedPartialObject2 = [TestCaseObject partialObjectWithIdentifier:2];
         }
         return _renewedPartialObject2;
     }
@@ -112,10 +100,7 @@
 {
     @synchronized(self) {
         if (_object3 == nil) {
-            TestCaseObject* object = [[TestCaseObject alloc] init];
-            object.identifier = 3;
-            object.content = self.random.string;
-            _object3 = object;
+            _object3 = [self.random testCaseObjectWithIdentifier:3];
         }
         return _object3;
     }
@@ -125,10 +110,7 @@
 {
     @synchronized(self) {
         if (_object4 == nil) {
-            TestCaseObject* object = [[TestCaseObject alloc] init];
-            object.identifier = 4;
-            object.content = self.random.string;
-            _object4 = object;
+            _object4 = [self.random testCaseObjectWithIdentifier:4];
         }
         return _object4;
     }
@@ -138,10 +120,7 @@
 {
     @synchronized(self) {
         if (_partialObject3 == nil) {
-            TestCaseObject* object = [[TestCaseObject alloc] init];
-            object.identifier = 3;
-            object.content = nil;
-            _partialObject3 = object;
+            _partialObject3 = [TestCaseObject partialObjectWithIdentifier:3];
         }
         return _partialObject3;
     }
@@ -151,10 +130,7 @@
 {
     @synchronized(self) {
         if (_partialObject4 == nil) {
-            TestCaseObject* object = [[TestCaseObject alloc] init];
-            object.identifier = 4;
-            object.content = nil;
-            _partialObject4 = object;
+            _partialObject4 = [TestCaseObject partialObjectWithIdentifier:4];
         }
         return _partialObject4;
     }
@@ -163,9 +139,7 @@
 #pragma mark - Auto Increment
 - (void)test_auto_increment
 {
-    TestCaseObject* autoIncrementObject = [[TestCaseObject alloc] init];
-    autoIncrementObject.isAutoIncrement = YES;
-    autoIncrementObject.content = self.object3.content;
+    TestCaseObject* autoIncrementObject = [TestCaseObject autoIncrementObjectWithContent:self.object3.content];
     [self doTestObjects:@[ self.object1, self.object2, self.object3 ]
               andNumber:1
            ofInsertSQLs:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"

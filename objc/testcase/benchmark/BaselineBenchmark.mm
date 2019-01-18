@@ -71,7 +71,7 @@
 {
     int numberOfObjects = 10000;
 
-    __block NSMutableArray* objects = nil;
+    __block NSArray* objects = nil;
     __block BOOL result;
     [self
     doMeasure:^{
@@ -87,13 +87,7 @@
         [self setUpDatabase];
 
         if (objects == nil) {
-            objects = [NSMutableArray arrayWithCapacity:numberOfObjects];
-            for (int i = self.factory.expectedQuality; i < self.factory.expectedQuality + numberOfObjects; ++i) {
-                BenchmarkObject* object = [[BenchmarkObject alloc] init];
-                object.identifier = i;
-                object.content = self.random.data;
-                [objects addObject:object];
-            }
+            objects = [self.random benchmarkObjectsWithCount:numberOfObjects startingFromIdentifier:self.factory.expectedQuality];
         }
     }
     tearDown:^{
@@ -128,7 +122,7 @@
 {
     int numberOfObjects = 1000000;
 
-    __block NSMutableArray* objects = nil;
+    __block NSArray* objects = nil;
     __block BOOL result;
     [self
     doMeasure:^{
@@ -138,13 +132,7 @@
         [self setUpDatabase];
 
         if (objects == nil) {
-            objects = [NSMutableArray arrayWithCapacity:numberOfObjects];
-            for (int i = self.factory.expectedQuality; i < self.factory.expectedQuality + numberOfObjects; ++i) {
-                BenchmarkObject* object = [[BenchmarkObject alloc] init];
-                object.identifier = i;
-                object.content = self.random.data;
-                [objects addObject:object];
-            }
+            objects = [self.random benchmarkObjectsWithCount:numberOfObjects startingFromIdentifier:self.factory.expectedQuality];
         }
     }
     tearDown:^{
@@ -214,13 +202,7 @@
     } else {
         create = YES;
     }
-    NSMutableArray* objects = [NSMutableArray arrayWithCapacity:step];
-    for (int i = start; i < start + step; ++i) {
-        BenchmarkObject* object = [[BenchmarkObject alloc] init];
-        object.identifier = i;
-        object.content = self.random.data;
-        [objects addObject:object];
-    }
+    NSArray* objects = [self.random benchmarkObjectsWithCount:step startingFromIdentifier:start];
 
     BOOL committed = [database runTransaction:^BOOL(WCTHandle* handle) {
         if (create) {

@@ -18,14 +18,19 @@
  * limitations under the License.
  */
 
-#import "BenchmarkObject.h"
-#import "BenchmarkObject+WCTTableCoding.h"
-#import <WCDB/WCDB.h>
+#import "Random+ColumnCodingObject.h"
 
-@implementation BenchmarkObject
+@implementation Random (ColumnCodingObject)
 
-WCDB_IMPLEMENTATION(BenchmarkObject)
-WCDB_SYNTHESIZE(BenchmarkObject, identifier)
-WCDB_SYNTHESIZE(BenchmarkObject, content)
+- (ColumnCodingObject*)columnCodingObject
+{
+    ColumnCodingObject* object = [[ColumnCodingObject alloc] init];
+    object.int32Object = [[Integer32CodingObject alloc] initWithValue:self.int32];
+    object.int64Object = [[Integer64CodingObject alloc] initWithValue:self.int64];
+    object.doubleObject = [[DoubleCodingObject alloc] initWithValue:self.double_];
+    object.stringObject = [[StringCodingObject alloc] initWithValue:self.string];
+    object.dataObject = [[DataCodingObject alloc] initWithValue:self.data];
+    return object;
+}
 
 @end

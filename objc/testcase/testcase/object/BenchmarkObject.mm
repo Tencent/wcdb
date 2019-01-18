@@ -18,12 +18,14 @@
  * limitations under the License.
  */
 
-#import "BenchmarkObject.h"
+#import <TestCase/BenchmarkObject+WCTTableCoding.h>
+#import <TestCase/BenchmarkObject.h>
 #import <WCDB/WCDB.h>
 
-@interface BenchmarkObject (WCTTableCoding) <WCTTableCoding>
+@implementation BenchmarkObject
 
-WCDB_PROPERTY(identifier)
-WCDB_PROPERTY(content)
+WCDB_IMPLEMENTATION(BenchmarkObject)
+WCDB_SYNTHESIZE(BenchmarkObject, identifier)
+WCDB_SYNTHESIZE(BenchmarkObject, content)
 
 @end

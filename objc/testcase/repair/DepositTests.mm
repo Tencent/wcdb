@@ -28,9 +28,7 @@
 
 - (void)test_deposit
 {
-    TestCaseObject* object = [[TestCaseObject alloc] init];
-    object.isAutoIncrement = YES;
-    object.content = self.random.string;
+    TestCaseObject* object = [self.random autoIncrementTestCaseObject];
     int rowId = (int) self.objects.count;
 
     {

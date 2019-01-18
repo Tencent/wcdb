@@ -23,4 +23,15 @@
 
 @interface Random (TestCaseObject)
 
+- (TestCaseObject*)testCaseObjectWithIdentifier:(int)identifier;
+
+- (TestCaseObject*)autoIncrementTestCaseObject;
+
+- (TestCaseObject*)autoIncrementTestCaseObjectWithIdentifier:(int)identifier;
+;
+
+- (NSArray<TestCaseObject*>*)testCaseObjectsWithCount:(NSUInteger)count startingFromIdentifier:(int)identifier;
+
+- (NSArray<TestCaseObject*>*)autoIncrementTestCaseObjectsWithCount:(NSUInteger)count;
+
 @end

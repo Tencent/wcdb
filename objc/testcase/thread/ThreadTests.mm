@@ -203,9 +203,7 @@
 {
     TestCaseAssertTrue([self createTable]);
 
-    TestCaseObject* object = [[TestCaseObject alloc] init];
-    object.isAutoIncrement = YES;
-    object.content = self.random.string;
+    TestCaseObject* object = [self.random autoIncrementTestCaseObject];
 
     while ([self getWalFrameCount] < self.checkpointFramesThresholdForCritical) {
         TestCaseAssertTrue([self.table insertObject:object]);
@@ -223,9 +221,7 @@
 {
     TestCaseAssertTrue([self createTable]);
 
-    TestCaseObject* object = [[TestCaseObject alloc] init];
-    object.isAutoIncrement = YES;
-    object.content = self.random.string;
+    TestCaseObject* object = [self.random autoIncrementTestCaseObject];
 
     while ([self getWalFrameCount] < self.checkpointFramesThresholdForTruncating) {
         TestCaseAssertTrue([self.table insertObject:object]);
@@ -243,9 +239,7 @@
 {
     TestCaseAssertTrue([self createTable]);
 
-    TestCaseObject* object = [[TestCaseObject alloc] init];
-    object.isAutoIncrement = YES;
-    object.content = self.random.string;
+    TestCaseObject* object = [self.random autoIncrementTestCaseObject];
 
     TestCaseAssertTrue([self.table insertObject:object]);
     TestCaseAssertTrue([self getWalFrameCount] < self.checkpointFramesThresholdForCritical)

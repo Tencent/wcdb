@@ -18,15 +18,13 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import <TestCase/BenchmarkObject.h>
+#import <TestCase/Random.h>
 
-@interface TestCaseObject : NSObject
+@interface Random (BenchmarkObject)
 
-@property (nonatomic, assign) int identifier;
-@property (nonatomic, retain) NSString *content;
+- (NSArray<BenchmarkObject*>*)benchmarkObjectsWithCount:(NSUInteger)count;
 
-+ (instancetype)objectWithIdentifier:(int)identifier andContent:(NSString *)content;
-+ (instancetype)partialObjectWithIdentifier:(int)identifier;
-+ (instancetype)autoIncrementObjectWithContent:(NSString *)content;
+- (NSArray<BenchmarkObject*>*)benchmarkObjectsWithCount:(NSUInteger)count startingFromIdentifier:(int)identifier;
 
 @end

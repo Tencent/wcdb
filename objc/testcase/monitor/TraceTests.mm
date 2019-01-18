@@ -49,13 +49,7 @@
 
     [self.database removeSQLRelatedConfigs];
 
-    NSMutableArray<TestCaseObject*>* objects = [[NSMutableArray<TestCaseObject*> alloc] init];
-    for (int i = 0; i < 10000; ++i) {
-        TestCaseObject* object = [[TestCaseObject alloc] init];
-        object.isAutoIncrement = YES;
-        object.content = self.random.string;
-        [objects addObject:object];
-    }
+    NSArray<TestCaseObject*>* objects = [self.random autoIncrementTestCaseObjectsWithCount:10000];
 
     NSArray<WCTPerformanceFootprint*>* expectedFootprints = @[
         [[WCTPerformanceFootprint alloc] initWithSQL:@"BEGIN IMMEDIATE"
@@ -128,13 +122,7 @@
 {
     [self.database removeSQLRelatedConfigs];
 
-    NSMutableArray<TestCaseObject*>* objects = [[NSMutableArray<TestCaseObject*> alloc] init];
-    for (int i = 0; i < 10000; ++i) {
-        TestCaseObject* object = [[TestCaseObject alloc] init];
-        object.isAutoIncrement = YES;
-        object.content = self.random.string;
-        [objects addObject:object];
-    }
+    NSArray<TestCaseObject*>* objects = [self.random autoIncrementTestCaseObjectsWithCount:10000];
 
     NSArray<WCTPerformanceFootprint*>* expectedFootprints = @[
         [[WCTPerformanceFootprint alloc] initWithSQL:@"BEGIN IMMEDIATE"

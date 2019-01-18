@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import "Benchmark.h"
+#import <TestCase/TestCase.h>
 
 @interface BaselineBenchmark : Benchmark
 

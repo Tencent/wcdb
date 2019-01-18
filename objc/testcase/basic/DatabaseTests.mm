@@ -119,9 +119,7 @@
 {
     NSString* tableName = @"testTable";
 
-    TestCaseObject* object = [[TestCaseObject alloc] init];
-    object.isAutoIncrement = YES;
-    object.content = self.random.string;
+    TestCaseObject* object = [self.random autoIncrementTestCaseObject];
 
     TestCaseAssertTrue([self.database createTableAndIndexes:tableName withClass:TestCaseObject.class]);
     TestCaseAssertTrue([self.database insertObject:object intoTable:tableName]);

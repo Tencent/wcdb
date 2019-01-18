@@ -88,14 +88,7 @@
 {
     @synchronized(self) {
         if (_objects == nil) {
-            NSMutableArray<TestCaseObject*>* objects = [NSMutableArray array];
-            for (int i = 0; i < 100; ++i) {
-                TestCaseObject* object = [[TestCaseObject alloc] init];
-                object.identifier = i + 1;
-                object.content = self.random.string;
-                [objects addObject:object];
-            }
-            _objects = [NSArray arrayWithArray:objects];
+            _objects = [self.random testCaseObjectsWithCount:100 startingFromIdentifier:1];
         }
         return _objects;
     }

@@ -25,4 +25,8 @@
 
 - (WCTTag)tag;
 
+- (NSString*)tableName;
+
+- (NSString*)tableNameWithPrefix:(NSString*)prefix;
+
 @end

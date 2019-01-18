@@ -48,4 +48,24 @@ WCDB_PRIMARY_ASC_AUTO_INCREMENT(TestCaseObject, identifier)
     return data.hash;
 }
 
++ (instancetype)objectWithIdentifier:(int)identifier andContent:(NSString*)content
+{
+    TestCaseObject* object = [[TestCaseObject alloc] init];
+    object.identifier = identifier;
+    object.content = content;
+    return object;
+}
+
++ (instancetype)partialObjectWithIdentifier:(int)identifier
+{
+    return [self objectWithIdentifier:identifier andContent:nil];
+}
+
++ (instancetype)autoIncrementObjectWithContent:(NSString*)content
+{
+    TestCaseObject* object = [self objectWithIdentifier:0 andContent:content];
+    object.isAutoIncrement = YES;
+    return object;
+}
+
 @end

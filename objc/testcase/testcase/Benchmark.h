@@ -18,15 +18,8 @@
  * limitations under the License.
  */
 
-#import "Benchmark.h"
+#import <TestCase/TestCase.h>
 
-@implementation Benchmark
-
-- (void)setUp
-{
-    [super setUp];
-    WCTDatabase.debuggable = NO;
-    self.random.stable = YES;
-}
+@interface Benchmark : DatabaseTestCase
 
 @end

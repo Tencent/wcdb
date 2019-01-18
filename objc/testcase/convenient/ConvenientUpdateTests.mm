@@ -65,8 +65,7 @@
 {
     @synchronized(self) {
         if (_renewObject == nil) {
-            TestCaseObject* object = [[TestCaseObject alloc] init];
-            object.content = self.renewedContent;
+            TestCaseObject* object = [TestCaseObject objectWithIdentifier:0 andContent:self.renewedContent];
             _renewObject = object;
         }
         return _renewObject;
@@ -97,9 +96,7 @@
 {
     @synchronized(self) {
         if (_renewedObject1 == nil) {
-            TestCaseObject* object = [[TestCaseObject alloc] init];
-            object.identifier = 1;
-            object.content = self.renewedContent;
+            TestCaseObject* object = [TestCaseObject objectWithIdentifier:1 andContent:self.renewedContent];
             _renewedObject1 = object;
         }
         return _renewedObject1;
@@ -110,9 +107,7 @@
 {
     @synchronized(self) {
         if (_renewedObject2 == nil) {
-            TestCaseObject* object = [[TestCaseObject alloc] init];
-            object.identifier = 2;
-            object.content = self.renewedContent;
+            TestCaseObject* object = [TestCaseObject objectWithIdentifier:2 andContent:self.renewedContent];
             _renewedObject2 = object;
         }
         return _renewedObject2;

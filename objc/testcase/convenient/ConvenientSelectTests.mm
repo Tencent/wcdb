@@ -60,10 +60,7 @@
 {
     @synchronized(self) {
         if (_partialObject1 == nil) {
-            TestCaseObject *object = [[TestCaseObject alloc] init];
-            object.identifier = 1;
-            object.content = nil;
-            _partialObject1 = object;
+            _partialObject1 = [TestCaseObject partialObjectWithIdentifier:1];
         }
         return _partialObject1;
     }
@@ -73,10 +70,7 @@
 {
     @synchronized(self) {
         if (_partialObject2 == nil) {
-            TestCaseObject *object = [[TestCaseObject alloc] init];
-            object.identifier = 2;
-            object.content = nil;
-            _partialObject2 = object;
+            _partialObject2 = [TestCaseObject partialObjectWithIdentifier:2];
         }
         return _partialObject2;
     }

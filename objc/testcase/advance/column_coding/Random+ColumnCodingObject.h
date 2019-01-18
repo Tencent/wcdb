@@ -18,36 +18,11 @@
  * limitations under the License.
  */
 
-#import "ColumnCodingObject+WCTTableCoding.h"
 #import "ColumnCodingObject.h"
-#import "Random+ColumnCodingObject.h"
 #import <TestCase/TestCase.h>
 
-@interface ColumnCodingTests : CRUDTestCase
+@interface Random (ColumnCodingObject)
 
-@end
-
-@implementation ColumnCodingTests
-
-- (void)setUp
-{
-    [super setUp];
-    self.tableClass = ColumnCodingObject.class;
-
-    TestCaseAssertTrue([self createTable]);
-    [self.database close];
-}
-
-- (void)test
-{
-    ColumnCodingObject* object = [self.random columnCodingObject];
-
-    [self doTestObjects:@[ object ]
-              andNumber:1
-           ofInsertSQLs:@"INSERT INTO main.testTable(int32Object, int64Object, doubleObject, stringObject, dataObject) VALUES(?1, ?2, ?3, ?4, ?5)"
-         afterInsertion:^BOOL {
-             return [self.database insertObject:object intoTable:self.tableName];
-         }];
-}
+- (ColumnCodingObject*)columnCodingObject;
 
 @end

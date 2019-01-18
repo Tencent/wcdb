@@ -123,9 +123,7 @@
 
 - (BOOL)checkAutoBackedup
 {
-    TestCaseObject *object = [[TestCaseObject alloc] init];
-    object.isAutoIncrement = YES;
-    object.content = self.random.string;
+    TestCaseObject *object = [self.random autoIncrementTestCaseObject];
     TestCaseAssertTrue([self.table insertObject:object]);
 
     TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
@@ -147,9 +145,7 @@
     [self.database removeConfigForName:WCTConfigNameCheckpoint];
     self.database.autoBackup = YES;
 
-    TestCaseObject *object = [[TestCaseObject alloc] init];
-    object.isAutoIncrement = YES;
-    object.content = self.random.string;
+    TestCaseObject *object = [self.random autoIncrementTestCaseObject];
 
     while ([self getWalFrameCount] < self.backupFramesIntervalForNonCritical - self.framesForTolerance) {
         TestCaseAssertTrue([self.table insertObject:object]);
@@ -169,9 +165,7 @@
     [self.database removeConfigForName:WCTConfigNameCheckpoint];
     self.database.autoBackup = YES;
 
-    TestCaseObject *object = [[TestCaseObject alloc] init];
-    object.isAutoIncrement = YES;
-    object.content = self.random.string;
+    TestCaseObject *object = [self.random autoIncrementTestCaseObject];
 
     while ([self getWalFrameCount] < self.backupFramesIntervalForCritical - self.framesForTolerance) {
         TestCaseAssertTrue([self.table insertObject:object]);

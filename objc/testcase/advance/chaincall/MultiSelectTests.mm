@@ -62,10 +62,7 @@
 {
     @synchronized(self) {
         if (_object1InTable2 == nil) {
-            TestCaseObject* object = [[TestCaseObject alloc] init];
-            object.identifier = 1;
-            object.content = self.random.string;
-            _object1InTable2 = object;
+            _object1InTable2 = [self.random testCaseObjectWithIdentifier:1];
         }
         return _object1InTable2;
     }
@@ -75,10 +72,7 @@
 {
     @synchronized(self) {
         if (_object2InTable2 == nil) {
-            TestCaseObject* object = [[TestCaseObject alloc] init];
-            object.identifier = 2;
-            object.content = self.random.string;
-            _object2InTable2 = object;
+            _object2InTable2 = [self.random testCaseObjectWithIdentifier:2];
         }
         return _object2InTable2;
     }

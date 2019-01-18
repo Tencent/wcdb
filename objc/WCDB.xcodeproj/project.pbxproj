@@ -154,7 +154,6 @@
 		234E6F6121996EB600D006F2 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		234EF46E2015CFDE00B81929 /* WCTConvertible.h in Headers */ = {isa = PBXBuildFile; fileRef = 234EF46C2015CFDE00B81929 /* WCTConvertible.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234EF46F2015CFDE00B81929 /* WCTConvertible.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234EF46D2015CFDE00B81929 /* WCTConvertible.mm */; };
-		2351450021D7564700FF639C /* BenchmarkObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 235144FE21D7564700FF639C /* BenchmarkObject.mm */; };
 		23567CFA20CA3889005F1C35 /* Frame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23567CF820CA3889005F1C35 /* Frame.cpp */; };
 		23567CFC20CA3889005F1C35 /* Frame.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567CF920CA3889005F1C35 /* Frame.hpp */; };
 		23567D4720CA7DBC005F1C35 /* ErrorProne.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567D4520CA7DBC005F1C35 /* ErrorProne.hpp */; };
@@ -233,6 +232,15 @@
 		23759463210081AA00DBB721 /* UnsafeData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23759460210081AA00DBB721 /* UnsafeData.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2376CB1B20DA5D3B00A68DB5 /* Scoreable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2376CB1920DA5D3B00A68DB5 /* Scoreable.cpp */; };
 		2376CB1D20DA5D3B00A68DB5 /* Scoreable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2376CB1A20DA5D3B00A68DB5 /* Scoreable.hpp */; };
+		2377535721F1738D00CA3FB7 /* BenchmarkObject+WCTTableCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2377535421F1738C00CA3FB7 /* BenchmarkObject+WCTTableCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2377535821F1738D00CA3FB7 /* BenchmarkObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 2377535521F1738D00CA3FB7 /* BenchmarkObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2377535921F1738D00CA3FB7 /* BenchmarkObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2377535621F1738D00CA3FB7 /* BenchmarkObject.mm */; };
+		2377535C21F1739300CA3FB7 /* Benchmark.h in Headers */ = {isa = PBXBuildFile; fileRef = 2377535A21F1739200CA3FB7 /* Benchmark.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2377535D21F1739300CA3FB7 /* Benchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2377535B21F1739200CA3FB7 /* Benchmark.mm */; };
+		2377536021F1742100CA3FB7 /* Random+BenchmarkObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 2377535E21F1742100CA3FB7 /* Random+BenchmarkObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2377536121F1742100CA3FB7 /* Random+BenchmarkObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2377535F21F1742100CA3FB7 /* Random+BenchmarkObject.mm */; };
+		2377536421F17CA900CA3FB7 /* Random+ColumnCodingObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 2377536221F17CA900CA3FB7 /* Random+ColumnCodingObject.h */; };
+		2377536621F17F7800CA3FB7 /* Random+ColumnCodingObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2377536321F17CA900CA3FB7 /* Random+ColumnCodingObject.mm */; };
 		23775B6020AD666900E21AB0 /* Assertion.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B2F20AD666900E21AB0 /* Assertion.hpp */; };
 		23775B6220AD666900E21AB0 /* Error.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B3020AD666900E21AB0 /* Error.cpp */; };
 		23775B6420AD666900E21AB0 /* Error.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3120AD666900E21AB0 /* Error.hpp */; };
@@ -820,7 +828,6 @@
 		23F9040221E5CE20008701B7 /* Random+WCDB.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23F9040021E5CE20008701B7 /* Random+WCDB.mm */; };
 		23F9040521E5D453008701B7 /* ReusableFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 23F9040321E5D453008701B7 /* ReusableFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23F9040621E5D453008701B7 /* ReusableFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23F9040421E5D453008701B7 /* ReusableFactory.mm */; };
-		23F9045C21E5FA95008701B7 /* Benchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23F9045B21E5FA95008701B7 /* Benchmark.mm */; };
 		23FC01DD21B8B716002C7F87 /* RepairBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23FC01DC21B8B716002C7F87 /* RepairBenchmark.mm */; };
 		23FC43D821B6631200FA1A0F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		23FC43D921B6631200FA1A0F /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
@@ -1387,9 +1394,6 @@
 		234E6F6621996EB600D006F2 /* Advance.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Advance.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		234EF46C2015CFDE00B81929 /* WCTConvertible.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTConvertible.h; sourceTree = "<group>"; };
 		234EF46D2015CFDE00B81929 /* WCTConvertible.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTConvertible.mm; sourceTree = "<group>"; };
-		235144FC21D7564700FF639C /* BenchmarkObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BenchmarkObject.h; sourceTree = "<group>"; };
-		235144FD21D7564700FF639C /* BenchmarkObject+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BenchmarkObject+WCTTableCoding.h"; sourceTree = "<group>"; };
-		235144FE21D7564700FF639C /* BenchmarkObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BenchmarkObject.mm; sourceTree = "<group>"; };
 		23567CF820CA3889005F1C35 /* Frame.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Frame.cpp; sourceTree = "<group>"; };
 		23567CF920CA3889005F1C35 /* Frame.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Frame.hpp; sourceTree = "<group>"; };
 		23567D4520CA7DBC005F1C35 /* ErrorProne.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ErrorProne.hpp; sourceTree = "<group>"; };
@@ -1483,6 +1487,15 @@
 		23759460210081AA00DBB721 /* UnsafeData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UnsafeData.hpp; sourceTree = "<group>"; };
 		2376CB1920DA5D3B00A68DB5 /* Scoreable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scoreable.cpp; sourceTree = "<group>"; };
 		2376CB1A20DA5D3B00A68DB5 /* Scoreable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Scoreable.hpp; sourceTree = "<group>"; };
+		2377535421F1738C00CA3FB7 /* BenchmarkObject+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BenchmarkObject+WCTTableCoding.h"; sourceTree = "<group>"; };
+		2377535521F1738D00CA3FB7 /* BenchmarkObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BenchmarkObject.h; sourceTree = "<group>"; };
+		2377535621F1738D00CA3FB7 /* BenchmarkObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BenchmarkObject.mm; sourceTree = "<group>"; };
+		2377535A21F1739200CA3FB7 /* Benchmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Benchmark.h; sourceTree = "<group>"; };
+		2377535B21F1739200CA3FB7 /* Benchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Benchmark.mm; sourceTree = "<group>"; };
+		2377535E21F1742100CA3FB7 /* Random+BenchmarkObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Random+BenchmarkObject.h"; sourceTree = "<group>"; };
+		2377535F21F1742100CA3FB7 /* Random+BenchmarkObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "Random+BenchmarkObject.mm"; sourceTree = "<group>"; };
+		2377536221F17CA900CA3FB7 /* Random+ColumnCodingObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Random+ColumnCodingObject.h"; sourceTree = "<group>"; };
+		2377536321F17CA900CA3FB7 /* Random+ColumnCodingObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "Random+ColumnCodingObject.mm"; sourceTree = "<group>"; };
 		23775B2F20AD666900E21AB0 /* Assertion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Assertion.hpp; sourceTree = "<group>"; };
 		23775B3020AD666900E21AB0 /* Error.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Error.cpp; sourceTree = "<group>"; };
 		23775B3120AD666900E21AB0 /* Error.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Error.hpp; sourceTree = "<group>"; };
@@ -2094,8 +2107,6 @@
 		23F9040021E5CE20008701B7 /* Random+WCDB.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "Random+WCDB.mm"; sourceTree = "<group>"; };
 		23F9040321E5D453008701B7 /* ReusableFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReusableFactory.h; sourceTree = "<group>"; };
 		23F9040421E5D453008701B7 /* ReusableFactory.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ReusableFactory.mm; sourceTree = "<group>"; };
-		23F9045A21E5FA95008701B7 /* Benchmark.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Benchmark.h; sourceTree = "<group>"; };
-		23F9045B21E5FA95008701B7 /* Benchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Benchmark.mm; sourceTree = "<group>"; };
 		23FC01DC21B8B716002C7F87 /* RepairBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RepairBenchmark.mm; sourceTree = "<group>"; };
 		23FC43E121B6631200FA1A0F /* Benchmark.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Benchmark.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		23FEC461206B3032001E7A3B /* WCTConvenient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTConvenient.h; sourceTree = "<group>"; };
@@ -2723,6 +2734,8 @@
 				23739D8D219AC6AB00A043BF /* ColumnCodingObject.mm */,
 				23739D8E219AC6AB00A043BF /* ColumnCodingObject+WCTTableCoding.h */,
 				23739D8F219AC6AB00A043BF /* ColumnCodingObject.h */,
+				2377536221F17CA900CA3FB7 /* Random+ColumnCodingObject.h */,
+				2377536321F17CA900CA3FB7 /* Random+ColumnCodingObject.mm */,
 				23739D96219AC8C300A043BF /* Integer32CodingObject.h */,
 				23739D97219AC8C300A043BF /* Integer32CodingObject.m */,
 				23739D93219AC8A000A043BF /* Integer32CodingObject+WCTColumnCoding.h */,
@@ -3068,6 +3081,8 @@
 		2387D8D921DF0B870028ADB9 /* testcase */ = {
 			isa = PBXGroup;
 			children = (
+				2377535A21F1739200CA3FB7 /* Benchmark.h */,
+				2377535B21F1739200CA3FB7 /* Benchmark.mm */,
 				2387D94D21DF61C20028ADB9 /* CRUDTestCase.h */,
 				2387D94C21DF61C20028ADB9 /* CRUDTestCase.mm */,
 				2387D94A21DF61C20028ADB9 /* TableTestCase.h */,
@@ -3086,6 +3101,9 @@
 		2387D8E621DF0B870028ADB9 /* object */ = {
 			isa = PBXGroup;
 			children = (
+				2377535521F1738D00CA3FB7 /* BenchmarkObject.h */,
+				2377535621F1738D00CA3FB7 /* BenchmarkObject.mm */,
+				2377535421F1738C00CA3FB7 /* BenchmarkObject+WCTTableCoding.h */,
 				2387D8EA21DF0B870028ADB9 /* AllTypesObject.h */,
 				2387D8E921DF0B870028ADB9 /* AllTypesObject+WCTTableCoding.h */,
 				2387D8E721DF0B870028ADB9 /* AllTypesObject.mm */,
@@ -3094,6 +3112,8 @@
 				2387D8E821DF0B870028ADB9 /* TestCaseObject.mm */,
 				2387D94621DF5C890028ADB9 /* Random+TestCaseObject.h */,
 				2387D94721DF5C890028ADB9 /* Random+TestCaseObject.mm */,
+				2377535E21F1742100CA3FB7 /* Random+BenchmarkObject.h */,
+				2377535F21F1742100CA3FB7 /* Random+BenchmarkObject.mm */,
 			);
 			path = object;
 			sourceTree = "<group>";
@@ -3700,12 +3720,7 @@
 		23FC43E521B6644B00FA1A0F /* benchmark */ = {
 			isa = PBXGroup;
 			children = (
-				235144FC21D7564700FF639C /* BenchmarkObject.h */,
-				235144FE21D7564700FF639C /* BenchmarkObject.mm */,
-				235144FD21D7564700FF639C /* BenchmarkObject+WCTTableCoding.h */,
 				23FC01DC21B8B716002C7F87 /* RepairBenchmark.mm */,
-				23F9045A21E5FA95008701B7 /* Benchmark.h */,
-				23F9045B21E5FA95008701B7 /* Benchmark.mm */,
 				23585B5521E6E72C00EE0334 /* BaselineBenchmark.h */,
 				23585B5621E6E72C00EE0334 /* BaselineBenchmark.mm */,
 				23585B6521E6F83A00EE0334 /* CipherBenchmark.mm */,
@@ -3725,6 +3740,7 @@
 			files = (
 				234D142221F01E6F00BCF3DD /* TestCaseCounter.h in Headers */,
 				2387D90221DF0B880028ADB9 /* AllTypesObject.h in Headers */,
+				2377536021F1742100CA3FB7 /* Random+BenchmarkObject.h in Headers */,
 				2387D90321DF0B880028ADB9 /* TestCaseObject+WCTTableCoding.h in Headers */,
 				2387D95021DF61C30028ADB9 /* TableTestCase.h in Headers */,
 				2387D8FB21DF0B880028ADB9 /* DatabaseTestCase.h in Headers */,
@@ -3736,11 +3752,15 @@
 				2387D90421DF0B880028ADB9 /* TestCaseObject.h in Headers */,
 				2387D8FE21DF0B880028ADB9 /* BaseTestCase.h in Headers */,
 				23F9040521E5D453008701B7 /* ReusableFactory.h in Headers */,
+				2377535821F1738D00CA3FB7 /* BenchmarkObject.h in Headers */,
 				2387D96521DF651D0028ADB9 /* TestCaseLog.h in Headers */,
 				2387D90121DF0B880028ADB9 /* AllTypesObject+WCTTableCoding.h in Headers */,
 				2387D96821DF651D0028ADB9 /* Random.h in Headers */,
 				2387D96621DF651D0028ADB9 /* TestCaseAssertion.h in Headers */,
 				2387D96421DF651D0028ADB9 /* NSObject+TestCase.h in Headers */,
+				2377535721F1738D00CA3FB7 /* BenchmarkObject+WCTTableCoding.h in Headers */,
+				2377535C21F1739300CA3FB7 /* Benchmark.h in Headers */,
+				2377536421F17CA900CA3FB7 /* Random+ColumnCodingObject.h in Headers */,
 				23F9040121E5CE20008701B7 /* Random+WCDB.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4695,6 +4715,7 @@
 				23739D81219A743800A043BF /* MultiSelectTests.mm in Sources */,
 				23739DA7219AC9DA00A043BF /* Integer64CodingObject+WCTColumnCoding.mm in Sources */,
 				23739DB9219ACD6000A043BF /* ColumnCodingTests.mm in Sources */,
+				2377536621F17F7800CA3FB7 /* Random+ColumnCodingObject.mm in Sources */,
 				23739DA1219AC9B500A043BF /* StringCodingObject.m in Sources */,
 				23739D90219AC6AB00A043BF /* ColumnCodingObject.mm in Sources */,
 				23739D9B219AC9A600A043BF /* Integer64CodingObject.m in Sources */,
@@ -4745,6 +4766,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2387D96721DF651D0028ADB9 /* Random.mm in Sources */,
+				2377536121F1742100CA3FB7 /* Random+BenchmarkObject.mm in Sources */,
 				2387D94921DF5C890028ADB9 /* Random+TestCaseObject.mm in Sources */,
 				2387D90021DF0B880028ADB9 /* TestCaseObject.mm in Sources */,
 				2387D8F521DF0B880028ADB9 /* DatabaseTestCase.mm in Sources */,
@@ -4753,9 +4775,11 @@
 				2387D96321DF651D0028ADB9 /* NSObject+TestCase.mm in Sources */,
 				23F9040621E5D453008701B7 /* ReusableFactory.mm in Sources */,
 				2387D96221DF651D0028ADB9 /* TestCaseLog.mm in Sources */,
+				2377535D21F1739300CA3FB7 /* Benchmark.mm in Sources */,
 				234D141421F014D500BCF3DD /* TestCaseResult.mm in Sources */,
 				23F903FE21E58941008701B7 /* Signpost.mm in Sources */,
 				23F9040221E5CE20008701B7 /* Random+WCDB.mm in Sources */,
+				2377535921F1738D00CA3FB7 /* BenchmarkObject.mm in Sources */,
 				2387D8FF21DF0B880028ADB9 /* AllTypesObject.mm in Sources */,
 				2387D90521DF0B880028ADB9 /* BaseTestCase.mm in Sources */,
 				2387D95521DF61C30028ADB9 /* TableTestCase.mm in Sources */,
@@ -5119,8 +5143,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23F9045C21E5FA95008701B7 /* Benchmark.mm in Sources */,
-				2351450021D7564700FF639C /* BenchmarkObject.mm in Sources */,
 				23585B6821E6F83B00EE0334 /* CipherBenchmark.mm in Sources */,
 				23585B5721E6E72C00EE0334 /* BaselineBenchmark.mm in Sources */,
 				23585B7721E7231400EE0334 /* TableMigrationBenchmark.mm in Sources */,

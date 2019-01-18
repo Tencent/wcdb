@@ -22,6 +22,7 @@
 #import <TestCase/TestCaseLog.h>
 
 #import <TestCase/BaseTestCase.h>
+#import <TestCase/Benchmark.h>
 #import <TestCase/CRUDTestCase.h>
 #import <TestCase/DatabaseTestCase.h>
 #import <TestCase/TableTestCase.h>
@@ -31,6 +32,7 @@
 #import <TestCase/TestCaseCounter.h>
 #import <TestCase/TestCaseResult.h>
 
+#import <TestCase/Random+BenchmarkObject.h>
 #import <TestCase/Random+TestCaseObject.h>
 #import <TestCase/Random+WCDB.h>
 
@@ -39,5 +41,8 @@
 
 #import <TestCase/AllTypesObject+WCTTableCoding.h>
 #import <TestCase/AllTypesObject.h>
+
+#import <TestCase/BenchmarkObject+WCTTableCoding.h>
+#import <TestCase/BenchmarkObject.h>
 
 #import <TestCase/NSObject+TestCase.h>

@@ -18,10 +18,14 @@
  * limitations under the License.
  */
 
-#import "BenchmarkObject+WCTTableCoding.h"
-#import "BenchmarkObject.h"
-#import <TestCase/TestCase.h>
+#import <TestCase/Benchmark.h>
 
-@interface Benchmark : DatabaseTestCase
+@implementation Benchmark
+
+- (void)setUp
+{
+    [super setUp];
+    self.random.stable = YES;
+}
 
 @end

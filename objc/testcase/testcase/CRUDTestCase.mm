@@ -19,6 +19,7 @@
  */
 
 #import <TestCase/CRUDTestCase.h>
+#import <TestCase/Random+TestCaseObject.h>
 #import <TestCase/Random.h>
 #import <TestCase/TestCaseAssertion.h>
 
@@ -32,10 +33,7 @@
 {
     @synchronized(self) {
         if (_object1 == nil) {
-            TestCaseObject* object = [[TestCaseObject alloc] init];
-            object.identifier = 1;
-            object.content = self.random.string;
-            _object1 = object;
+            _object1 = [self.random testCaseObjectWithIdentifier:1];
         }
         return _object1;
     }
@@ -45,10 +43,7 @@
 {
     @synchronized(self) {
         if (_object2 == nil) {
-            TestCaseObject* object = [[TestCaseObject alloc] init];
-            object.identifier = 2;
-            object.content = self.random.string;
-            _object2 = object;
+            _object2 = [self.random testCaseObjectWithIdentifier:2];
         }
         return _object2;
     }

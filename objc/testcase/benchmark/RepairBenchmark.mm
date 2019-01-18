@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import "Benchmark.h"
+#import <TestCase/TestCase.h>
 
 @interface RepairBenchmark : Benchmark
 @property (nonatomic, readonly) int step;
@@ -109,17 +109,11 @@
 #pragma mark - ReusableFactoryPreparation
 - (BOOL)stepPreparePrototype:(NSString*)path
 {
-    NSMutableArray* objects = [NSMutableArray arrayWithCapacity:self.step];
-    for (int i = 0; i < self.step; ++i) {
-        BenchmarkObject* object = [[BenchmarkObject alloc] init];
-        object.identifier = i;
-        object.content = self.random.data;
-        [objects addObject:object];
-    }
+    NSArray* objects = [self.random benchmarkObjectsWithCount:self.step];
 
     WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
     return [database runTransaction:^BOOL(WCTHandle* handle) {
-               NSString* tableName = [NSString stringWithFormat:@"t_%@", self.random.string];
+               NSString* tableName = self.random.tableName;
                return [database createTableAndIndexes:tableName withClass:BenchmarkObject.class]
                       && [handle insertObjects:objects intoTable:tableName];
            }]

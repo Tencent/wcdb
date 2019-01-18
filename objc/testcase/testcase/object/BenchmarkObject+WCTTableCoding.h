@@ -18,15 +18,12 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import <TestCase/BenchmarkObject.h>
+#import <WCDB/WCDB.h>
 
-@interface TestCaseObject : NSObject
+@interface BenchmarkObject (WCTTableCoding) <WCTTableCoding>
 
-@property (nonatomic, assign) int identifier;
-@property (nonatomic, retain) NSString *content;
-
-+ (instancetype)objectWithIdentifier:(int)identifier andContent:(NSString *)content;
-+ (instancetype)partialObjectWithIdentifier:(int)identifier;
-+ (instancetype)autoIncrementObjectWithContent:(NSString *)content;
+WCDB_PROPERTY(identifier)
+WCDB_PROPERTY(content)
 
 @end

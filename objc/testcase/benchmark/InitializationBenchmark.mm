@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import "Benchmark.h"
+#import <TestCase/TestCase.h>
 
 @interface InitializationBenchmark : Benchmark
 
@@ -82,7 +82,7 @@
     WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
     return [database runTransaction:^BOOL(WCTHandle* handle) {
                for (int i = 0; i < step; ++i) {
-                   if (![database createTableAndIndexes:[NSString stringWithFormat:@"t_%@", self.random.string] withClass:BenchmarkObject.class]) {
+                   if (![database createTableAndIndexes:self.random.tableName withClass:BenchmarkObject.class]) {
                        return NO;
                    }
                }

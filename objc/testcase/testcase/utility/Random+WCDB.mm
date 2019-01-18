@@ -31,4 +31,14 @@
     return tag;
 }
 
+- (NSString*)tableName
+{
+    return [self tableNameWithPrefix:@"t_"];
+}
+
+- (NSString*)tableNameWithPrefix:(NSString*)prefix
+{
+    return [NSString stringWithFormat:@"%@%@", prefix, self.string];
+}
+
 @end

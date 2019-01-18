@@ -120,24 +120,18 @@
     BOOL checkpointed = NO; // leave wal exists
     while (checkpointed || [self.database getFilesSize] < self.expectedDatabaseSize) {
         if (currentTable == nil || self.random.uint8 % 10 == 0) {
-            currentTable = [NSString stringWithFormat:@"%@%@", self.tablePrefix, self.random.string];
+            currentTable = [self.random tableNameWithPrefix:self.tablePrefix];
             if (![self.database createTableAndIndexes:currentTable withClass:TestCaseObject.class]) {
                 TestCaseFailure();
                 return NO;
             }
         }
 
-        NSMutableArray<TestCaseObject*>* objects = [NSMutableArray<TestCaseObject*> array];
         int count = 0;
         do {
             count = self.random.uint8;
         } while (count == 0);
-        for (int i = 0; i < count; ++i) {
-            TestCaseObject* object = [[TestCaseObject alloc] init];
-            object.isAutoIncrement = YES;
-            object.content = self.random.string;
-            [objects addObject:object];
-        }
+        NSArray<TestCaseObject*>* objects = [self.random autoIncrementTestCaseObjectsWithCount:count];
         if (![self.database insertObjects:objects intoTable:currentTable]) {
             TestCaseFailure();
             return NO;
