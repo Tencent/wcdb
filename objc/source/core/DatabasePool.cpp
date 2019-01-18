@@ -38,15 +38,15 @@ RecyclableDatabase DatabasePool::getOrCreate(const String &path)
     String normalized = Path::normalize(path);
     {
         SharedLockGuard lockGuard(m_lock);
-        RecyclableDatabase database = get(normalized);
-        if (database != nullptr) {
-            return database;
+        auto iter = m_databases.find(normalized);
+        if (iter != m_databases.end()) {
+            return get(iter);
         }
     }
     LockGuard lockGuard(m_lock);
-    RecyclableDatabase database = get(normalized);
-    if (database != nullptr) {
-        return database;
+    auto iter = m_databases.find(normalized);
+    if (iter != m_databases.end()) {
+        return get(iter);
     }
     ReferencedDatabase referencedDatabase(std::shared_ptr<Database>(new Database(normalized)));
     auto result = m_databases.emplace(normalized, std::move(referencedDatabase));
@@ -60,6 +60,7 @@ RecyclableDatabase DatabasePool::get(const String &path)
     String normalized = Path::normalize(path);
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_databases.find(normalized);
+    // get referenced database only
     if (iter != m_databases.end() && iter->second.reference != 0) {
         return get(iter);
     }
@@ -76,6 +77,7 @@ RecyclableDatabase DatabasePool::get(const Tag &tag)
             break;
         }
     }
+    // get referenced database only
     if (iter != m_databases.end() && iter->second.reference != 0) {
         return get(iter);
     }
