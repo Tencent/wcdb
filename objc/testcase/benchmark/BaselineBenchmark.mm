@@ -161,7 +161,8 @@
 
 - (void)test_create_index
 {
-    WCDB::StatementCreateIndex statement = WCDB::StatementCreateIndex().createIndex(@"testTable_index").table(@"testTable").indexed(BenchmarkObject.identifier);
+    NSString* indexName = [NSString stringWithFormat:@"%@_index", self.tableName];
+    WCDB::StatementCreateIndex statement = WCDB::StatementCreateIndex().createIndex(indexName).table(self.tableName).indexed(BenchmarkObject.identifier);
 
     __block BOOL result;
     [self
@@ -219,10 +220,15 @@
 - (double)getQuality:(NSString*)path
 {
     WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
-    if ([database tableExists:self.tableName]) {
-        return [database getValueFromStatement:WCDB::StatementSelect().select(BenchmarkObject.allProperties.count()).from(self.tableName)].numberValue.doubleValue;
+    auto exists = [database tableExists:self.tableName];
+    TestCaseAssertFalse(exists.failed());
+    double quality = 0;
+    if (exists) {
+        NSNumber* nsQuality = [database getValueFromStatement:WCDB::StatementSelect().select(BenchmarkObject.allProperties.count()).from(self.tableName)].numberValue;
+        TestCaseAssertTrue(nsQuality != nil);
+        quality = nsQuality.doubleValue;
     }
-    return 0;
+    return quality;
 }
 
 - (NSString*)category

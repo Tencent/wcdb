@@ -21,10 +21,27 @@
 #import "BaselineBenchmark.h"
 
 @interface CipherBenchmark : BaselineBenchmark
-
+@property (nonatomic, readonly) NSData *password;
 @end
 
-@implementation CipherBenchmark
+@implementation CipherBenchmark {
+    NSData *_password;
+}
+
+- (NSData *)password
+{
+    @synchronized(self) {
+        if (_password == nil) {
+            _password = self.random.data;
+        }
+        return _password;
+    }
+}
+
+- (void)doSetUpDatabase
+{
+    [self.database setCipherKey:self.password];
+}
 
 - (void)test_write
 {
@@ -44,13 +61,19 @@
 #pragma mark - ReusableFactoryPreparation
 - (BOOL)willStartPreparing:(NSString *)path
 {
-    [[[WCTDatabase alloc] initWithPath:path] setCipherKey:self.random.data];
+    [[[WCTDatabase alloc] initWithPath:path] setCipherKey:self.password];
     return YES;
 }
 
 - (NSString *)category
 {
     return @"Cipher";
+}
+
+- (double)getQuality:(NSString *)path
+{
+    [[[WCTDatabase alloc] initWithPath:path] setCipherKey:self.password];
+    return [super getQuality:path];
 }
 
 @end
