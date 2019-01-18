@@ -18,32 +18,21 @@
  * limitations under the License.
  */
 
-#import "ObjectsBasedBenchmark.h"
+#import <TestCase/TestCase.h>
 
-@interface BaselineBenchmark : ObjectsBasedBenchmark
+@interface ObjectsBasedBenchmark : Benchmark
 
-@end
+@property (nonatomic, retain) NSString* tableName;
 
-@implementation BaselineBenchmark
+- (void)doSetUpDatabase;
+- (void)doTearDownDatabase;
 
-- (void)test_write
-{
-    [self doTestWrite];
-}
+- (void)doTestWrite;
 
-- (void)test_read
-{
-    [self doTestRead];
-}
+- (void)doTestRead;
 
-- (void)test_batch_write
-{
-    [self doTestBatchWrite];
-}
+- (void)doTestBatchWrite;
 
-- (void)test_create_index
-{
-    [self doTestCreateIndex];
-}
+- (void)doTestCreateIndex;
 
 @end

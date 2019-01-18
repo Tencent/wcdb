@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "BaselineBenchmark.h"
+#import "ObjectsBasedBenchmark.h"
 
-@interface DatabaseMigrationBenchmark : BaselineBenchmark
+@interface DatabaseMigrationBenchmark : ObjectsBasedBenchmark
 @property (nonatomic, retain) NSString* sourceDatabase;
 @end
 

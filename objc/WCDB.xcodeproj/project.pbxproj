@@ -166,7 +166,7 @@
 		23567D7D20CA93C5005F1C35 /* Time.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567D7A20CA93C5005F1C35 /* Time.hpp */; };
 		23577F791F74F4E800D31C05 /* WCTCursorInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 23577F771F74F4E800D31C05 /* WCTCursorInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23577F7A1F74F4E800D31C05 /* WCTCursorInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23577F781F74F4E800D31C05 /* WCTCursorInfo.mm */; };
-		23585B5721E6E72C00EE0334 /* BaselineBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23585B5621E6E72C00EE0334 /* BaselineBenchmark.mm */; };
+		23585B5721E6E72C00EE0334 /* ObjectsBasedBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23585B5621E6E72C00EE0334 /* ObjectsBasedBenchmark.mm */; };
 		23585B6821E6F83B00EE0334 /* CipherBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23585B6521E6F83A00EE0334 /* CipherBenchmark.mm */; };
 		23585B7621E7231400EE0334 /* DatabaseMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23585B7421E7231300EE0334 /* DatabaseMigrationBenchmark.mm */; };
 		23585B7721E7231400EE0334 /* TableMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23585B7521E7231400EE0334 /* TableMigrationBenchmark.mm */; };
@@ -241,6 +241,7 @@
 		2377536121F1742100CA3FB7 /* Random+BenchmarkObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2377535F21F1742100CA3FB7 /* Random+BenchmarkObject.mm */; };
 		2377536421F17CA900CA3FB7 /* Random+ColumnCodingObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 2377536221F17CA900CA3FB7 /* Random+ColumnCodingObject.h */; };
 		2377536621F17F7800CA3FB7 /* Random+ColumnCodingObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2377536321F17CA900CA3FB7 /* Random+ColumnCodingObject.mm */; };
+		2377536821F1C60000CA3FB7 /* BaselineBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2377536721F1C60000CA3FB7 /* BaselineBenchmark.mm */; };
 		23775B6020AD666900E21AB0 /* Assertion.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B2F20AD666900E21AB0 /* Assertion.hpp */; };
 		23775B6220AD666900E21AB0 /* Error.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B3020AD666900E21AB0 /* Error.cpp */; };
 		23775B6420AD666900E21AB0 /* Error.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3120AD666900E21AB0 /* Error.hpp */; };
@@ -1406,8 +1407,8 @@
 		23567D7A20CA93C5005F1C35 /* Time.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Time.hpp; sourceTree = "<group>"; };
 		23577F771F74F4E800D31C05 /* WCTCursorInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTCursorInfo.h; sourceTree = "<group>"; };
 		23577F781F74F4E800D31C05 /* WCTCursorInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTCursorInfo.mm; sourceTree = "<group>"; };
-		23585B5521E6E72C00EE0334 /* BaselineBenchmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaselineBenchmark.h; sourceTree = "<group>"; };
-		23585B5621E6E72C00EE0334 /* BaselineBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BaselineBenchmark.mm; sourceTree = "<group>"; };
+		23585B5521E6E72C00EE0334 /* ObjectsBasedBenchmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectsBasedBenchmark.h; sourceTree = "<group>"; };
+		23585B5621E6E72C00EE0334 /* ObjectsBasedBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ObjectsBasedBenchmark.mm; sourceTree = "<group>"; };
 		23585B6521E6F83A00EE0334 /* CipherBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CipherBenchmark.mm; sourceTree = "<group>"; };
 		23585B7421E7231300EE0334 /* DatabaseMigrationBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DatabaseMigrationBenchmark.mm; sourceTree = "<group>"; };
 		23585B7521E7231400EE0334 /* TableMigrationBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableMigrationBenchmark.mm; sourceTree = "<group>"; };
@@ -1496,6 +1497,7 @@
 		2377535F21F1742100CA3FB7 /* Random+BenchmarkObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "Random+BenchmarkObject.mm"; sourceTree = "<group>"; };
 		2377536221F17CA900CA3FB7 /* Random+ColumnCodingObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Random+ColumnCodingObject.h"; sourceTree = "<group>"; };
 		2377536321F17CA900CA3FB7 /* Random+ColumnCodingObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "Random+ColumnCodingObject.mm"; sourceTree = "<group>"; };
+		2377536721F1C60000CA3FB7 /* BaselineBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = BaselineBenchmark.mm; sourceTree = "<group>"; };
 		23775B2F20AD666900E21AB0 /* Assertion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Assertion.hpp; sourceTree = "<group>"; };
 		23775B3020AD666900E21AB0 /* Error.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Error.cpp; sourceTree = "<group>"; };
 		23775B3120AD666900E21AB0 /* Error.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Error.hpp; sourceTree = "<group>"; };
@@ -3721,8 +3723,9 @@
 			isa = PBXGroup;
 			children = (
 				23FC01DC21B8B716002C7F87 /* RepairBenchmark.mm */,
-				23585B5521E6E72C00EE0334 /* BaselineBenchmark.h */,
-				23585B5621E6E72C00EE0334 /* BaselineBenchmark.mm */,
+				23585B5521E6E72C00EE0334 /* ObjectsBasedBenchmark.h */,
+				23585B5621E6E72C00EE0334 /* ObjectsBasedBenchmark.mm */,
+				2377536721F1C60000CA3FB7 /* BaselineBenchmark.mm */,
 				23585B6521E6F83A00EE0334 /* CipherBenchmark.mm */,
 				23585B7421E7231300EE0334 /* DatabaseMigrationBenchmark.mm */,
 				23585B7521E7231400EE0334 /* TableMigrationBenchmark.mm */,
@@ -5144,7 +5147,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				23585B6821E6F83B00EE0334 /* CipherBenchmark.mm in Sources */,
-				23585B5721E6E72C00EE0334 /* BaselineBenchmark.mm in Sources */,
+				2377536821F1C60000CA3FB7 /* BaselineBenchmark.mm in Sources */,
+				23585B5721E6E72C00EE0334 /* ObjectsBasedBenchmark.mm in Sources */,
 				23585B7721E7231400EE0334 /* TableMigrationBenchmark.mm in Sources */,
 				23FC01DD21B8B716002C7F87 /* RepairBenchmark.mm in Sources */,
 				23585B7F21E742A500EE0334 /* InitializationBenchmark.mm in Sources */,

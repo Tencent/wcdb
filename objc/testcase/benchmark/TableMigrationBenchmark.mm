@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "BaselineBenchmark.h"
+#import "ObjectsBasedBenchmark.h"
 
-@interface TableMigrationBenchmark : BaselineBenchmark
+@interface TableMigrationBenchmark : ObjectsBasedBenchmark
 
 @end
 

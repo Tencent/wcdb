@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import "BaselineBenchmark.h"
+#import "ObjectsBasedBenchmark.h"
 
-@interface CipherBenchmark : BaselineBenchmark
+@interface CipherBenchmark : ObjectsBasedBenchmark
 @property (nonatomic, readonly) NSData *password;
 @end
 
@@ -56,6 +56,11 @@
 - (void)test_batch_write
 {
     [self doTestBatchWrite];
+}
+
+- (void)test_create_index
+{
+    [self doTestCreateIndex];
 }
 
 #pragma mark - ReusableFactoryPreparation
