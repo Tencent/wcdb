@@ -203,16 +203,19 @@
 - (BOOL)stepPreparePrototype:(NSString*)path
 {
     TestCaseFailure();
+    return NO;
 }
 
 - (double)getQuality:(NSString*)path
 {
     TestCaseFailure();
+    return 0;
 }
 
 - (NSString*)category
 {
     TestCaseFailure();
+    return nil;
 }
 
 - (NSArray<NSString*>*)additionalPrototypes:(NSString*)prototype
