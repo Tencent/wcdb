@@ -107,7 +107,8 @@ void DatabasePool::flowBack(Database *database)
     WCTInnerAssert(iter != m_databases.end());
     WCTInnerAssert(iter->second.database.get() == database);
     if (--iter->second.reference == 0) {
-        m_databases.erase(iter);
+        // A created database will never be erased. Instead, it will be empty so that ther memory used will be very low.
+        iter->second.database->close(nullptr);
     }
 }
 
