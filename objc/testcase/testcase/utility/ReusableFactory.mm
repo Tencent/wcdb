@@ -96,6 +96,9 @@
     if (!expired) {
         double quality = [self.delegate getQuality:self.prototype];
         expired = quality > self.expectedQuality * (1.0f + self.tolerance) || quality < self.expectedQuality * (1.0f - self.tolerance);
+        if (expired) {
+            TestCaseLog(@"Prototype is expired: %f/%f", quality, self.expectedQuality);
+        }
     }
     return expired;
 }
