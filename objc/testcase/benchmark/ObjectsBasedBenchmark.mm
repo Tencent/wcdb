@@ -167,6 +167,11 @@
 }
 
 #pragma mark - ReusableFactoryPreparation
+- (BOOL)willEndPreparing:(NSString*)path
+{
+    return [[[WCTDatabase alloc] initWithPath:path] execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("TRUNCATE")];
+}
+
 - (BOOL)stepPreparePrototype:(NSString*)path
 {
     int numberOfObjects = [self getQuality:path];
