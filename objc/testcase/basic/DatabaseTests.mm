@@ -45,11 +45,22 @@
         WCTDatabase* existing = [[WCTDatabase alloc] initWithExistingDatabaseByPath:self.path];
         TestCaseAssertTrue(existing != nil);
         TestCaseAssertEqual(tag, existing.tag);
+        [existing invalidate];
     }
     {
         WCTDatabase* existing = [[WCTDatabase alloc] initWithExistingDatabaseByTag:self.database.tag];
         TestCaseAssertTrue(existing != nil);
-        TestCaseAssertTrue([self.database.path isEqualToString:existing.path]);
+        TestCaseAssertEqual(tag, existing.tag);
+        [existing invalidate];
+    }
+    [self.database invalidate];
+    {
+        WCTDatabase* existing = [[WCTDatabase alloc] initWithExistingDatabaseByPath:self.path];
+        TestCaseAssertTrue(existing == nil);
+    }
+    {
+        WCTDatabase* existing = [[WCTDatabase alloc] initWithExistingDatabaseByTag:tag];
+        TestCaseAssertTrue(existing == nil);
     }
 }
 

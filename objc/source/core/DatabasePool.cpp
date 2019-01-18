@@ -60,7 +60,10 @@ RecyclableDatabase DatabasePool::get(const String &path)
     String normalized = Path::normalize(path);
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_databases.find(normalized);
-    return get(iter);
+    if (iter != m_databases.end() && iter->second.reference != 0) {
+        return get(iter);
+    }
+    return nullptr;
 }
 
 RecyclableDatabase DatabasePool::get(const Tag &tag)
@@ -73,7 +76,10 @@ RecyclableDatabase DatabasePool::get(const Tag &tag)
             break;
         }
     }
-    return get(iter);
+    if (iter != m_databases.end() && iter->second.reference != 0) {
+        return get(iter);
+    }
+    return nullptr;
 }
 
 DatabasePool::ReferencedDatabase::ReferencedDatabase(std::shared_ptr<Database> &&database_)
@@ -91,9 +97,7 @@ RecyclableDatabase
 DatabasePool::get(const std::map<String, ReferencedDatabase>::iterator &iter)
 {
     WCTInnerAssert(m_lock.readSafety());
-    if (iter == m_databases.end()) {
-        return nullptr;
-    }
+    WCTInnerAssert(iter != m_databases.end());
     ++iter->second.reference;
     return RecyclableDatabase(
     iter->second.database.get(),
