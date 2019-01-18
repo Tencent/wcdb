@@ -43,6 +43,8 @@ public:
 
     bool shouldMigrate() const;
 
+    void purge();
+
 protected:
     class InfoInitializer {
         friend class Migration;

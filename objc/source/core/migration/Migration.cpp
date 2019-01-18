@@ -33,8 +33,18 @@ Migration::Migration()
 
 void Migration::filterTable(const Filter& filter)
 {
-    WCTInnerAssert(m_filted.empty());
     m_filter = filter;
+    WCTInnerAssert(m_filted.empty());
+}
+
+void Migration::purge()
+{
+    m_migratings.clear();
+    m_dumpster.clear();
+    m_referenceds.clear();
+    m_holder.clear();
+    m_filted.clear();
+    m_tableAcquired = false;
 }
 
 bool Migration::shouldMigrate() const
