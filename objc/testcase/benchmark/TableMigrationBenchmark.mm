@@ -21,19 +21,33 @@
 #import "ObjectsBasedBenchmark.h"
 
 @interface TableMigrationBenchmark : ObjectsBasedBenchmark
-
+@property (nonatomic, retain) NSString* sourceTableName;
+@property (nonatomic, readonly) NSString* migratedTableName;
 @end
 
-@implementation TableMigrationBenchmark
+@implementation TableMigrationBenchmark {
+    NSString* _migratedTableName;
+}
+
+- (NSString*)migratedTableName
+{
+    @synchronized(self) {
+        if (_migratedTableName == nil) {
+            _migratedTableName = [NSString stringWithFormat:@"%@_migrated", self.sourceTableName];
+        }
+        return _migratedTableName;
+    }
+}
 
 - (void)doSetUpDatabase
 {
-    NSString* sourceTable = self.tableName;
-    self.tableName = @"migrated";
+    self.sourceTableName = self.tableName;
+    self.tableName = self.migratedTableName;
 
+    NSString* sourceTableName = self.sourceTableName;
     [self.database filterMigration:^(WCTMigrationUserInfo* info) {
         if ([info.table isEqualToString:self.tableName]) {
-            info.sourceTable = sourceTable;
+            info.sourceTable = sourceTableName;
         }
     }];
 
@@ -42,6 +56,11 @@
     BOOL done;
     TestCaseAssertTrue([self.database stepMigration:YES done:done]);
     TestCaseAssertFalse(done);
+}
+
+- (void)doTearDownDatabase
+{
+    self.tableName = self.sourceTableName;
 }
 
 - (void)test_read

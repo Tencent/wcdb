@@ -21,22 +21,35 @@
 #import "ObjectsBasedBenchmark.h"
 
 @interface DatabaseMigrationBenchmark : ObjectsBasedBenchmark
-@property (nonatomic, retain) NSString* sourceDatabase;
+@property (nonatomic, retain) NSString* sourcePath;
+@property (nonatomic, readonly) NSString* migratedPath;
 @end
 
-@implementation DatabaseMigrationBenchmark
+@implementation DatabaseMigrationBenchmark {
+    NSString* _migratedPath;
+}
+
+- (NSString*)migratedPath
+{
+    @synchronized(self) {
+        if (_migratedPath == nil) {
+            _migratedPath = [NSString stringWithFormat:@"%@_migrated", self.sourcePath];
+        }
+        return _migratedPath;
+    }
+}
 
 - (void)doSetUpDatabase
 {
-    self.sourceDatabase = self.path;
-    self.path = [NSString stringWithFormat:@"%@_migrated", self.sourceDatabase];
+    self.sourcePath = self.path;
+    self.path = self.migratedPath;
 
     NSString* sourceTable = self.tableName;
-    NSString* sourceDatabase = self.sourceDatabase;
+    NSString* sourcePath = self.sourcePath;
     [self.database filterMigration:^(WCTMigrationUserInfo* info) {
         if ([info.table isEqualToString:sourceTable]) {
             info.sourceTable = sourceTable;
-            info.sourceDatabase = sourceDatabase;
+            info.sourceDatabase = sourcePath;
         }
     }];
 
@@ -49,10 +62,10 @@
 
 - (void)doTearDownDatabase
 {
-    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:self.sourceDatabase];
+    self.path = self.sourcePath;
+
+    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:self.migratedPath];
     TestCaseAssertTrue([database removeFiles]);
-    self.sourceDatabase = nil;
-    [super doTearDownDatabase];
 }
 
 - (void)test_read
