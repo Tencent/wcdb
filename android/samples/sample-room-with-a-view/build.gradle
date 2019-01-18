@@ -17,6 +17,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    defaultConfig {
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ['room.schemaLocation': "${project.buildDir}/outputs/schema.txt".toString()]
+            }
+        }
+    }
 }
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

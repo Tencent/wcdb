@@ -20,7 +20,10 @@
 
 package com.example.wcdb.sample.persistence;
 
+import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Room;
+import android.arch.persistence.room.RoomDatabase;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -28,6 +31,9 @@ import com.example.wcdb.sample.persistence.entity.AppDatabase;
 import com.example.wcdb.sample.persistence.entity.User;
 import com.example.wcdb.sample.persistence.entity.UserDao;
 import com.tencent.wcdb.database.SQLiteCipherSpec;
+import com.tencent.wcdb.database.SQLiteDatabase;
+import com.tencent.wcdb.extension.fts.MMFtsTokenizer;
+import com.tencent.wcdb.room.db.WCDBDatabase;
 import com.tencent.wcdb.room.db.WCDBOpenHelperFactory;
 
 import java.util.List;
@@ -54,6 +60,14 @@ public class MainActivity extends AppCompatActivity {
                     .writeAheadLoggingEnabled(true)
                     .asyncCheckpointEnabled(true)
                 )
+                .addCallback(new RoomDatabase.Callback() {
+                    @Override
+                    public void onOpen(@NonNull SupportSQLiteDatabase db) {
+                        SQLiteDatabase realDb = ((WCDBDatabase) db).getInnerDatabase();
+
+                        realDb.addExtension(MMFtsTokenizer.EXTENSION);
+                    }
+                })
                 .build();
 
         mUsers = mAppDB.userDao();
