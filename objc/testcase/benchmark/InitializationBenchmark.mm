@@ -94,7 +94,9 @@
 - (double)getQuality:(NSString*)path
 {
     WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
-    return [database getValueFromStatement:WCDB::StatementSelect().select(WCTMaster.allProperties.count()).from(WCTMaster.tableName).where(WCTMaster.type == @"table")].numberValue.doubleValue;
+    NSNumber* quality = [database getValueFromStatement:WCDB::StatementSelect().select(WCTMaster.allProperties.count()).from(WCTMaster.tableName).where(WCTMaster.type == @"table")].numberValue;
+    TestCaseAssertTrue(quality != nil);
+    return quality.doubleValue;
 }
 
 - (NSString*)category
