@@ -5606,7 +5606,7 @@
 		};
 		239E8A842160A5B200BCB308 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
+			baseConfigurationReference = 2387D63A21DF03FE0028ADB9 /* Host_release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 			};
