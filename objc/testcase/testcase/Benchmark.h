@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import <TestCase/TestCase.h>
+#import <TestCase/DatabaseTestCase.h>
 
 @interface Benchmark : DatabaseTestCase
 

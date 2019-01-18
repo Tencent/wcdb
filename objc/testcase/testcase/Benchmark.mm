@@ -19,6 +19,7 @@
  */
 
 #import <TestCase/Benchmark.h>
+#import <TestCase/Random.h>
 
 @implementation Benchmark
 
