@@ -18,9 +18,13 @@
  * limitations under the License.
  */
 
-#ifndef __cplusplus
-#error Since WCDB is an Objective-C++ framework, for those files in your project that includes WCDB, you should rename their extension `.m` to `.mm`.
+#ifdef __cplusplus
+#if __cplusplus < 201402L
+#error Since WCDB is based on C++14, for those projects including WCDB, you should use at least `CLANG_CXX_LANGUAGE_STANDARD = gnu++14` and `CLANG_CXX_LIBRARY = libc++` in the build setting.
 #endif
+#else // #ifdef __cplusplus
+#error Since WCDB is an Objective-C++ framework, for those files including WCDB, you should change their subfix from `.m` to `.mm`.
+#endif // #ifdef __cplusplus
 
 #import <WCDB/Interface.h>
 #import <WCDB/WCTBuiltin.h>
