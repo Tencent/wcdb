@@ -211,7 +211,7 @@ void Core::handleLog(void* unused, int code, const char* message)
     case SQLITE_WARNING:
         error.level = Error::Level::Warning;
         break;
-    case SQLITE_NOTICE:
+    case SQLITE_NOTICE_RECOVER_WAL:
         error.level = Error::Level::Ignore;
         break;
     default:
