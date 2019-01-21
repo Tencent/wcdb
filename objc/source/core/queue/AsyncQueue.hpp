@@ -28,10 +28,7 @@ namespace WCDB {
 
 class AsyncQueue {
 public:
-    class Event {
-    public:
-        virtual ~Event();
-    };
+    AsyncQueue(const String &name);
     virtual ~AsyncQueue();
 
     AsyncQueue() = delete;
@@ -43,10 +40,8 @@ public:
     const String name;
 
 protected:
-    AsyncQueue(const String &name, Event *event);
     void lazyRun();
     virtual void loop() = 0;
-    Event *m_event;
 
 private:
     std::mutex m_mutex;

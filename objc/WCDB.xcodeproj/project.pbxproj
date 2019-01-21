@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2304121821AB9EF700CB2318 /* DepositTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2304121721AB9EF700CB2318 /* DepositTests.mm */; };
-		2304121A21AB9F1600CB2318 /* RecoverTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2304121921AB9F1600CB2318 /* RecoverTests.mm */; };
+		2304121A21AB9F1600CB2318 /* CorruptedTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2304121921AB9F1600CB2318 /* CorruptedTests.mm */; };
 		2304121C21AB9F2000CB2318 /* RetrieveTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2304121B21AB9F2000CB2318 /* RetrieveTests.mm */; };
 		2304121F21ABA23C00CB2318 /* BackupTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2304121E21ABA23C00CB2318 /* BackupTestCase.mm */; };
 		2308F84F20E32A51001CD9C3 /* FileHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2308F84B20E32A51001CD9C3 /* FileHandle.cpp */; };
@@ -1261,7 +1261,7 @@
 
 /* Begin PBXFileReference section */
 		2304121721AB9EF700CB2318 /* DepositTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DepositTests.mm; sourceTree = "<group>"; };
-		2304121921AB9F1600CB2318 /* RecoverTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RecoverTests.mm; sourceTree = "<group>"; };
+		2304121921AB9F1600CB2318 /* CorruptedTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CorruptedTests.mm; sourceTree = "<group>"; };
 		2304121B21AB9F2000CB2318 /* RetrieveTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RetrieveTests.mm; sourceTree = "<group>"; };
 		2304121D21ABA23C00CB2318 /* BackupTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BackupTestCase.h; sourceTree = "<group>"; };
 		2304121E21ABA23C00CB2318 /* BackupTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = BackupTestCase.mm; sourceTree = "<group>"; };
@@ -2350,7 +2350,7 @@
 			children = (
 				23B4A78121A7FBB500BD6A32 /* BackupTests.mm */,
 				2304121721AB9EF700CB2318 /* DepositTests.mm */,
-				2304121921AB9F1600CB2318 /* RecoverTests.mm */,
+				2304121921AB9F1600CB2318 /* CorruptedTests.mm */,
 				2304121B21AB9F2000CB2318 /* RetrieveTests.mm */,
 				23846FCE21AF8427005B868F /* RetrieveRobustyTests.mm */,
 				2304121D21ABA23C00CB2318 /* BackupTestCase.h */,
@@ -4675,7 +4675,7 @@
 				2304121F21ABA23C00CB2318 /* BackupTestCase.mm in Sources */,
 				2304121821AB9EF700CB2318 /* DepositTests.mm in Sources */,
 				23846FCF21AF8427005B868F /* RetrieveRobustyTests.mm in Sources */,
-				2304121A21AB9F1600CB2318 /* RecoverTests.mm in Sources */,
+				2304121A21AB9F1600CB2318 /* CorruptedTests.mm in Sources */,
 				2304121C21AB9F2000CB2318 /* RetrieveTests.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

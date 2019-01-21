@@ -28,9 +28,9 @@
 
 namespace WCDB {
 
-class BackupEvent : public AsyncQueue::Event {
+class BackupEvent {
 public:
-    virtual ~BackupEvent();
+    virtual ~BackupEvent() = 0;
 
 protected:
     virtual bool databaseShouldBackup(const String& path) = 0;
@@ -50,6 +50,7 @@ protected:
     TimedQueue<String, int> m_timedQueue;
     SharedLock m_lock;
     std::map<String, int> m_backedUp;
+    BackupEvent* m_event;
 };
 
 } // namespace WCDB

@@ -21,6 +21,8 @@
 #ifndef _WCDB_CORECONST_H
 #define _WCDB_CORECONST_H
 
+// This file is public but only for testing
+
 #define WCDB_BASIC_CONFIG_NAME "com.Tencent.WCDB.Config.Basic"
 #define WCDB_BACKUP_CONFIG_NAME "com.Tencent.WCDB.Config.Backup"
 #define WCDB_CHECKPOINT_CONFIG_NAME "com.Tencent.WCDB.Config.Checkpoint"

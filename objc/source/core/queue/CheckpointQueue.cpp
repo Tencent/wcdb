@@ -29,10 +29,12 @@ CheckpointEvent::~CheckpointEvent()
 }
 
 CheckpointQueue::CheckpointQueue(const String& name, CheckpointEvent* event)
-: AsyncQueue(name, event)
+: AsyncQueue(name)
+, m_event(event)
 , m_checkpointPassive(StatementPragma().pragma(Pragma::walCheckpoint()).with("PASSIVE"))
 , m_checkpointTruncate(StatementPragma().pragma(Pragma::walCheckpoint()).with("TRUNCATE"))
 {
+    WCTInnerAssert(m_event != nullptr);
 }
 
 void CheckpointQueue::loop()
@@ -45,11 +47,9 @@ bool CheckpointQueue::onTimed(const String& path, const int& frames)
 {
     bool result;
     if (frames >= CheckpointQueueFramesThresholdForTruncating) {
-        result = static_cast<CheckpointEvent*>(m_event)->databaseShouldCheckpoint(
-        path, m_checkpointTruncate);
+        result = m_event->databaseShouldCheckpoint(path, m_checkpointTruncate);
     } else {
-        result = static_cast<CheckpointEvent*>(m_event)->databaseShouldCheckpoint(
-        path, m_checkpointPassive);
+        result = m_event->databaseShouldCheckpoint(path, m_checkpointPassive);
     }
     if (!result) {
         // delay retry if failed

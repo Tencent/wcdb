@@ -36,7 +36,7 @@ Core* Core::shared()
 Core::Core()
 : m_modules(new FTS::Modules)
 , m_databasePool(this)
-, m_corruptionQueue(new CorruptionQueue(CorruptionQueueName, this))
+, m_corruptionQueue(new CorruptionQueue(CorruptionQueueName))
 , m_checkpointQueue(new CheckpointQueue(CheckpointQueueName, this))
 , m_backupQueue(new BackupQueue(BackupQueueName, this))
 , m_migrationQueue(new MigrationQueue(MigrationQueueName, this))
@@ -82,7 +82,7 @@ RecyclableDatabase Core::getExistingDatabase(const Tag& tag)
     return m_databasePool.get(tag);
 }
 
-void Core::purge()
+void Core::purgeDatabasePool()
 {
     m_databasePool.purge();
 }
@@ -106,13 +106,50 @@ void Core::onDatabaseCreated(Database* database)
                         Configs::Priority::Highest);
 }
 
-void Core::databaseDidBecomeCorrupted(const String& path, uint32_t corruptedIdentifier)
+bool Core::isFileCorrupted(const String& path)
 {
-    RecyclableDatabase database = m_databasePool.get(path);
-    if (database == nullptr) {
-        return;
+    return m_corruptionQueue->isFileCorrupted(path);
+}
+
+void Core::setNotificationWhenDatabaseCorrupted(const String& path,
+                                                const CorruptedNotification& notification)
+{
+    CorruptionQueue::Notification underlyingNotification = nullptr;
+    if (notification != nullptr) {
+        underlyingNotification
+        = [this, notification](const String& path, uint32_t corruptedIdentifier) -> bool {
+            RecyclableDatabase database = m_databasePool.get(path);
+            if (database == nullptr) {
+                // delay it since the database is not referenced.
+                return false;
+            }
+            database->blockade();
+            bool succeed;
+            bool exists;
+            std::tie(succeed, exists) = FileManager::fileExists(path);
+            if (!succeed) {
+                // delay it due to the I/O error
+                return false;
+            }
+            if (!exists) {
+                // mark as resolved since it's alredy not existing
+                return true;
+            }
+            uint32_t identifier;
+            std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
+            if (!succeed) {
+                // delay it due to the I/O error
+            }
+            if (identifier != corruptedIdentifier) {
+                // mark as resolved since the file is changed.
+                return true;
+            }
+            succeed = notification(database.get());
+            database->unblockade();
+            return succeed;
+        };
     }
-    database->recover(corruptedIdentifier);
+    m_corruptionQueue->setNotificationWhenCorrupted(path, underlyingNotification);
 }
 
 bool Core::databaseShouldCheckpoint(const String& path, const StatementPragma& checkpointStatement)
@@ -152,12 +189,12 @@ void Core::addTokenizer(const String& name, unsigned char* address)
     m_modules->addAddress(name, address);
 }
 
-void Core::setNotificationForGlobalSQLTrace(const ShareableSQLTraceConfig::Notification& notification)
+void Core::setNotificationForSQLGLobalTraced(const ShareableSQLTraceConfig::Notification& notification)
 {
     static_cast<ShareableSQLTraceConfig*>(m_globalSQLTraceConfig.get())->setNotification(notification);
 }
 
-void Core::setNotificationForGlobalPerformanceTrace(const ShareablePerformanceTraceConfig::Notification& notification)
+void Core::setNotificationWhenPerformanceGlobalTraced(const ShareablePerformanceTraceConfig::Notification& notification)
 {
     static_cast<ShareablePerformanceTraceConfig*>(m_globalPerformanceTraceConfig.get())
     ->setNotification(notification);

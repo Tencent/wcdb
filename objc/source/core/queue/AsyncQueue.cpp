@@ -27,14 +27,9 @@
 
 namespace WCDB {
 
-AsyncQueue::Event::~Event()
+AsyncQueue::AsyncQueue(const String& name_)
+: name(name_), m_running(false), m_started(false)
 {
-}
-
-AsyncQueue::AsyncQueue(const String& name_, Event* event)
-: name(name_), m_running(false), m_started(false), m_event(event)
-{
-    WCTInnerAssert(event != nullptr);
 }
 
 AsyncQueue::~AsyncQueue()

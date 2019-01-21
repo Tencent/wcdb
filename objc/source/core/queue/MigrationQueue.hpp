@@ -26,9 +26,9 @@
 
 namespace WCDB {
 
-class MigrationEvent : public AsyncQueue::Event {
+class MigrationEvent {
 public:
-    virtual ~MigrationEvent();
+    virtual ~MigrationEvent() = 0;
 
 protected:
     virtual std::pair<bool, bool> databaseShouldMigrate(const String& path) = 0;
@@ -47,6 +47,7 @@ protected:
 
     bool onTimed(const String& path, const int& numberOfFailures);
     TimedQueue<String, int> m_timedQueue;
+    MigrationEvent* m_event;
 };
 
 } // namespace WCDB

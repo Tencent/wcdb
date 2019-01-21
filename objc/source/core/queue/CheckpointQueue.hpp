@@ -27,9 +27,9 @@
 
 namespace WCDB {
 
-class CheckpointEvent : public AsyncQueue::Event {
+class CheckpointEvent {
 public:
-    virtual ~CheckpointEvent();
+    virtual ~CheckpointEvent() = 0;
 
 protected:
     virtual bool
@@ -52,6 +52,7 @@ protected:
     TimedQueue<String, int> m_timedQueue;
     const StatementPragma m_checkpointPassive;
     const StatementPragma m_checkpointTruncate;
+    CheckpointEvent* m_event;
 };
 
 } // namespace WCDB

@@ -25,16 +25,21 @@
 
 @implementation WCTDatabase (Repair)
 
-- (void)setNotificationWhenCorrupted:(WCTRecoverNotificationBlock)onRecovering
+- (void)setNotificationWhenCorrupted:(WCTCorruptedNotificationBlock)onCorrupted
 {
     WCTDatabaseAssert(return;);
-    WCDB::Database::RecoverNotification notification = nullptr;
-    if (onRecovering != nil) {
-        notification = [onRecovering](WCDB::Database *database) -> bool {
-            return onRecovering([[WCTDatabase alloc] initWithUnsafeDatabase:database]);
+    WCDB::Core::CorruptedNotification notification = nullptr;
+    if (onCorrupted != nil) {
+        notification = [onCorrupted](WCDB::Database *database) -> bool {
+            return onCorrupted([[WCTDatabase alloc] initWithUnsafeDatabase:database]);
         };
     }
-    _database->setNotificationWhenCorrupted(notification);
+    WCDB::Core::shared()->setNotificationWhenDatabaseCorrupted(self.path, notification);
+}
+
+- (BOOL)isCorrupted
+{
+    return WCDB::Core::shared()->isFileCorrupted(self.path);
 }
 
 - (void)filterBackup:(WCTBackupFilterBlock)tableShouldBeBackedUp

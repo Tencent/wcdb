@@ -27,12 +27,7 @@
 
 namespace WCDB {
 
-CorruptionEvent::~CorruptionEvent()
-{
-}
-
-CorruptionQueue::CorruptionQueue(const String& name, CorruptionEvent* event)
-: AsyncQueue(name, event)
+CorruptionQueue::CorruptionQueue(const String& name) : AsyncQueue(name)
 {
     Notifier::shared()->setNotification(
     0, name, std::bind(&CorruptionQueue::handleError, this, std::placeholders::_1));
@@ -62,29 +57,74 @@ void CorruptionQueue::handleError(const Error& error)
     }
     {
         SharedLockGuard lockGuard(m_lock);
-        auto iter = m_refractories.find(identifier);
-        if (iter == m_refractories.end()
-            || SteadyClock::now() > iter->second
-                                    + std::chrono::microseconds((long long) (CorruptionQueueTimeIntervalForInvokingEvent
-                                                                             * 1000000))) {
-            m_timedQueue.reQueue(path, 0, identifier);
+        auto iter = m_corrupteds.find(identifier);
+        if (iter != m_corrupteds.end()) {
+            // already received
+            return;
         }
     }
-    lazyRun();
+    {
+        LockGuard lockGuard(m_lock);
+        auto result = m_corrupteds.emplace(identifier);
+        if (result.second) {
+            // mark as pending if and only if it's a new corrupted one.
+            m_pendings.reQueue(path, 0, identifier);
+            lazyRun();
+        }
+    }
 }
 
 void CorruptionQueue::loop()
 {
-    m_timedQueue.loop(std::bind(
+    m_pendings.loop(std::bind(
     &CorruptionQueue::onTimed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 bool CorruptionQueue::onTimed(const String& path, const uint32_t& identifier)
 {
-    static_cast<CorruptionEvent*>(m_event)->databaseDidBecomeCorrupted(path, identifier);
+    Notification notification = nullptr;
+    {
+        SharedLockGuard lockGuard(m_lock);
+        auto iter = m_notifications.find(path);
+        if (iter != m_notifications.end()) {
+            notification = iter->second;
+        }
+    }
+    bool resolved = true;
+    if (notification) {
+        resolved = notification(path, identifier);
+    }
+
+    if (!resolved) {
+        m_pendings.reQueue(path, CorruptionQueueTimeIntervalForInvokingEvent, identifier);
+    }
+    return resolved;
+}
+
+#pragma mark - Corrupt
+bool CorruptionQueue::isFileCorrupted(const String& path)
+{
+    bool corrupted = false;
+    bool succeed;
+    uint32_t identifier;
+    std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
+    if (succeed) {
+        SharedLockGuard lockGuard(m_lock);
+        corrupted = m_corrupteds.find(identifier) != m_corrupteds.end();
+    }
+    return corrupted;
+}
+
+#pragma mark - Notification
+void CorruptionQueue::setNotificationWhenCorrupted(const String& path,
+                                                   const Notification& notification)
+{
     LockGuard lockGuard(m_lock);
-    m_refractories.emplace(identifier, SteadyClock::now());
-    return true;
+    if (notification != nullptr) {
+        m_notifications[path] = notification;
+    } else {
+        m_notifications.erase(path);
+    }
 }
 
 } //namespace WCDB

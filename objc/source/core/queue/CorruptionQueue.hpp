@@ -25,35 +25,41 @@
 #include <WCDB/Lock.hpp>
 #include <WCDB/TimedQueue.hpp>
 #include <map>
+#include <set>
 
 namespace WCDB {
 
-class CorruptionEvent : public AsyncQueue::Event {
-public:
-    virtual ~CorruptionEvent();
-
-protected:
-    virtual void databaseDidBecomeCorrupted(const String& path, uint32_t identifier) = 0;
-    friend class CorruptionQueue;
-};
-
 class CorruptionQueue final : public AsyncQueue {
 public:
-    CorruptionQueue(const String& name, CorruptionEvent* event);
+    CorruptionQueue(const String& name);
     ~CorruptionQueue();
 
 protected:
     void handleError(const Error& error);
-
     void loop() override final;
-
-    bool onTimed(const String& path, const uint32_t& identifier);
-
-    TimedQueue<String, uint32_t> m_timedQueue;
-
-    // identifier -> notify time
     SharedLock m_lock;
-    std::map<uint32_t, SteadyClock> m_refractories;
+
+#pragma mark - Corrupt
+public:
+    bool isFileCorrupted(const String& path);
+
+protected:
+    // identifier of the corrupted database file
+    // it will be kept forever in memory since the identifier will be changed after removed/recovered
+    std::set<uint32_t> m_corrupteds;
+
+#pragma mark - Notification
+public:
+    // return true to mark as resolved
+    typedef std::function<bool(const String& path, uint32_t identifier)> Notification;
+    void setNotificationWhenCorrupted(const String& path, const Notification& notification);
+
+protected:
+    bool onTimed(const String& path, const uint32_t& identifier);
+    // path -> identifier of the corrupted database that is pending to be notified
+    TimedQueue<String, uint32_t> m_pendings;
+    // path -> user notification
+    std::map<String, Notification> m_notifications;
 };
 
 } //namespace WCDB

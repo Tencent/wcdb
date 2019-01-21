@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef BOOL (^WCTBackupFilterBlock)(NSString * /* table */);
 typedef void (^WCTRetrieveProgressUpdateBlock)(double /* percentage */, double /* increment */);
-typedef BOOL (^WCTRecoverNotificationBlock)(WCTDatabase *);
+typedef BOOL (^WCTCorruptedNotificationBlock)(WCTDatabase *);
 
 typedef NS_ENUM(NSInteger, WCTRecoveryMode) {
     WCTRecoveryModeCustom = 0,
@@ -34,7 +34,9 @@ typedef NS_ENUM(NSInteger, WCTRecoveryMode) {
 
 @interface WCTDatabase (Repair)
 
-- (void)setNotificationWhenCorrupted:(nullable WCDB_ESCAPE WCTRecoverNotificationBlock)onRecovering;
+- (void)setNotificationWhenCorrupted:(nullable WCDB_ESCAPE WCTCorruptedNotificationBlock)onCorrupted;
+
+- (BOOL)isCorrupted;
 
 - (void)setAutoBackup:(BOOL)flag;
 

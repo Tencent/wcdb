@@ -52,7 +52,6 @@
 namespace WCDB {
 
 class Core final : public DatabasePoolEvent,
-                   public CorruptionEvent,
                    public CheckpointEvent,
                    public BackupEvent,
                    public MigrationEvent {
@@ -64,15 +63,20 @@ public:
     RecyclableDatabase getExistingDatabase(const String& path);
     RecyclableDatabase getExistingDatabase(const Tag& tag);
 
+    typedef std::function<bool(Database*)> CorruptedNotification;
+    bool isFileCorrupted(const String& path);
+    void setNotificationWhenDatabaseCorrupted(const String& path,
+                                              const CorruptedNotification& notification);
+
     void setAutoMigration(const String& path, bool flag);
 
-    void purge();
+    void purgeDatabasePool();
 
     const std::shared_ptr<Configs>& configs();
 
     void addTokenizer(const String& name, unsigned char* address);
-    void setNotificationForGlobalSQLTrace(const ShareableSQLTraceConfig::Notification& notification);
-    void setNotificationForGlobalPerformanceTrace(
+    void setNotificationForSQLGLobalTraced(const ShareableSQLTraceConfig::Notification& notification);
+    void setNotificationWhenPerformanceGlobalTraced(
     const ShareablePerformanceTraceConfig::Notification& notification);
 
     const std::shared_ptr<Config>& backupConfig();
@@ -100,7 +104,6 @@ protected:
     static void handleLog(void* unused, int code, const char* message);
     void preprocessError(const Error& error, Error::Infos& infos);
     void onDatabaseCreated(Database* database) override final;
-    void databaseDidBecomeCorrupted(const String& path, uint32_t identifier) override final;
     bool databaseShouldCheckpoint(const String& path,
                                   const StatementPragma& checkpointStatement) override final;
     bool databaseShouldBackup(const String& path) override final;

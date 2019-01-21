@@ -19,14 +19,15 @@
  */
 
 #import "BackupTestCase.h"
+#import <WCDB/CoreConst.h>
 
-@interface RecoverTests : BackupTestCase
+@interface CorruptedTests : BackupTestCase
 
 @end
 
-@implementation RecoverTests
+@implementation CorruptedTests
 
-- (void)test_recover
+- (void)test_notification
 {
     TestCaseResult* result = [TestCaseResult failure];
     [self.database setNotificationWhenCorrupted:^BOOL(WCTDatabase* database) {
@@ -38,39 +39,50 @@
 
     TestCaseAssertTrue([self tryToMakeHeaderCorrupted]);
 
+    // trigger corruption
     TestCaseAssertTrue([self.table getObjects] == nil);
-
     [NSThread sleepForTimeInterval:1.0];
-
     TestCaseAssertResultSuccessful(result);
 }
 
-- (void)test_avoid_frequency
+- (void)test_feature_repeat_notify_when_failed
 {
     TestCaseResult* result = [TestCaseResult failure];
     [self.database setNotificationWhenCorrupted:^BOOL(WCTDatabase* database) {
         [result succeed];
-        return true;
+        return NO;
     }];
 
     TestCaseAssertTrue([self tryToMakeHeaderCorrupted]);
 
+    // trigger corruption
     TestCaseAssertTrue([self.table getObjects] == nil);
     [NSThread sleepForTimeInterval:1.0];
     TestCaseAssertResultSuccessful(result);
-
     [result fail];
+
+    // trigger corruption
     TestCaseAssertTrue([self.table getObjects] == nil);
     [NSThread sleepForTimeInterval:1.0];
     TestCaseAssertResultFailed(result);
-
-    [result fail];
-    [NSThread sleepForTimeInterval:5.0];
-    TestCaseAssertTrue([self.table getObjects] == nil);
-    [NSThread sleepForTimeInterval:1.0];
+    [NSThread sleepForTimeInterval:WCDB::CorruptionQueueTimeIntervalForInvokingEvent];
     TestCaseAssertResultSuccessful(result);
 
     TestCaseAssertTrue([self.database removeFiles]);
+}
+
+- (void)test_is_corrupted
+{
+    TestCaseAssertFalse([self.database isCorrupted]);
+    TestCaseAssertTrue([self tryToMakeHeaderCorrupted]);
+    TestCaseAssertFalse([self.database isCorrupted]);
+
+    // trigger corruption
+    TestCaseAssertTrue([self.table getObjects] == nil);
+    TestCaseAssertTrue([self.database isCorrupted]);
+
+    TestCaseAssertTrue([self.database removeFiles]);
+    TestCaseAssertFalse([self.database isCorrupted]);
 }
 
 @end

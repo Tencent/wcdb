@@ -32,7 +32,7 @@
 
 + (void)purgeAll
 {
-    WCDB::Core::shared()->purge();
+    WCDB::Core::shared()->purgeDatabasePool();
 }
 
 @end

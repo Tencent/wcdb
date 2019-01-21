@@ -68,7 +68,7 @@
             trace(array, (NSUInteger) cost);
         };
     }
-    WCDB::Core::shared()->setNotificationForGlobalPerformanceTrace(callback);
+    WCDB::Core::shared()->setNotificationWhenPerformanceGlobalTraced(callback);
 }
 
 + (void)globalTraceSQL:(WCTSQLTraceBlock)trace
@@ -79,7 +79,7 @@
             trace([NSString stringWithUTF8String:sql.c_str()]);
         };
     }
-    WCDB::Core::shared()->setNotificationForGlobalSQLTrace(callback);
+    WCDB::Core::shared()->setNotificationForSQLGLobalTraced(callback);
 }
 
 - (void)tracePerformance:(WCTPerformanceTraceBlock)trace

@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/CoreConst.h>
 #include <WCDB/Error.hpp>
 #include <WCDB/MigrationQueue.hpp>
@@ -30,8 +31,9 @@ MigrationEvent::~MigrationEvent()
 }
 
 MigrationQueue::MigrationQueue(const String& name, MigrationEvent* event)
-: AsyncQueue(name, event)
+: AsyncQueue(name), m_event(event)
 {
+    WCTInnerAssert(m_event != nullptr);
 }
 
 void MigrationQueue::put(const String& path)
@@ -54,8 +56,7 @@ void MigrationQueue::loop()
 bool MigrationQueue::onTimed(const String& path, const int& numberOfFailures)
 {
     bool succeed, done;
-    std::tie(succeed, done)
-    = static_cast<MigrationEvent*>(m_event)->databaseShouldMigrate(path);
+    std::tie(succeed, done) = m_event->databaseShouldMigrate(path);
     bool erase = true;
     if (succeed) {
         if (!done) {

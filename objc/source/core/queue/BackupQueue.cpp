@@ -29,8 +29,9 @@ BackupEvent::~BackupEvent()
 }
 
 BackupQueue::BackupQueue(const String& name, BackupEvent* event)
-: AsyncQueue(name, event)
+: AsyncQueue(name), m_event(event)
 {
+    WCTInnerAssert(m_event != nullptr);
 }
 
 void BackupQueue::loop()
@@ -60,7 +61,7 @@ void BackupQueue::put(const String& path, int frames)
 
 bool BackupQueue::onTimed(const String& path, const int& frames)
 {
-    bool result = static_cast<BackupEvent*>(m_event)->databaseShouldBackup(path);
+    bool result = m_event->databaseShouldBackup(path);
     if (!result) {
         // retry if failed
         m_timedQueue.reQueue(path, BackupQueueDelayForRetryingAfterFailure, frames);

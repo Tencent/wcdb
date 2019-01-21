@@ -36,12 +36,7 @@ namespace WCDB {
 
 #pragma mark - Initializer
 Database::Database(const String &path)
-: HandlePool(path)
-, m_factory(path)
-, m_tag(Tag::invalid())
-, m_recoverNotification(nullptr)
-, m_initialized(false)
-, m_configs(nullptr)
+: HandlePool(path), m_factory(path), m_tag(Tag::invalid()), m_initialized(false), m_configs(nullptr)
 {
 }
 
@@ -667,42 +662,6 @@ bool Database::retrieveRenewed()
     }
     setThreadedError(renewer.getError());
     return false;
-}
-
-#pragma mark - Recovery
-void Database::setNotificationWhenCorrupted(const RecoverNotification &notification)
-{
-    LockGuard memoryGuard(m_memory);
-    m_recoverNotification = notification;
-}
-
-bool Database::recover(uint32_t corruptedIdentifier)
-{
-    {
-        InitializedGuard initializedGuard = initialize();
-        if (!initializedGuard.valid()) {
-            return nullptr;
-        }
-        if (m_recoverNotification == nullptr) {
-            return true;
-        }
-    }
-    blockade();
-    LockGuard memoryGuard(m_memory);
-    bool succeed = true;
-    if (m_recoverNotification != nullptr) {
-        uint32_t identifier;
-        std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
-        if (!succeed) {
-            return false;
-        }
-        if (identifier != corruptedIdentifier) {
-            return true;
-        }
-        succeed = m_recoverNotification(this);
-    }
-    unblockade();
-    return succeed;
 }
 
 #pragma mark - Migration

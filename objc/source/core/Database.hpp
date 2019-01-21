@@ -159,16 +159,6 @@ private:
     bool retrieveRenewed();
     Repair::Factory m_factory;
 
-#pragma mark - Recovery
-public:
-    typedef std::function<bool(Database *)> RecoverNotification;
-    void setNotificationWhenCorrupted(const RecoverNotification &notification);
-
-    bool recover(uint32_t corruptedIdentifier);
-
-private:
-    RecoverNotification m_recoverNotification;
-
 #pragma mark - Migration
 public:
     typedef Migration::Filter MigrationFilter;
