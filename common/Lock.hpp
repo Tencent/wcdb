@@ -49,11 +49,6 @@ protected:
     std::atomic_flag m_locked = ATOMIC_FLAG_INIT;
 };
 
-#if __cplusplus > 201402L
-#warning TODO \
-std::shared_mutex is available since C++17, iOS 10.0, macOS 10.12\
-std::shared_timed_mutex is available since C++14, iOS 10.0, macOS 10.12
-#endif
 class SharedLock final : public Lockable {
 public:
     SharedLock();
