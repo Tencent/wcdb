@@ -241,14 +241,15 @@ int Core::vfsOpen(const char* path, int flags, int mode)
     return fd;
 }
 
-void Core::handleLog(void* unused, int code, const char* message)
+void Core::handleLog(void* unused, int fullCode, const char* message)
 {
+    int code = fullCode & 0xff;
     Error error;
     switch (code) {
     case SQLITE_WARNING:
         error.level = Error::Level::Warning;
         break;
-    case SQLITE_NOTICE_RECOVER_WAL:
+    case SQLITE_NOTICE:
         error.level = Error::Level::Ignore;
         break;
     default:
