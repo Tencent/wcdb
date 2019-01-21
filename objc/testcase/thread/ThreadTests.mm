@@ -54,12 +54,12 @@
 
 - (NSTimeInterval)checkpointDelayForCritical
 {
-    return WCDB::CheckpointConfigDelayForCritical;
+    return WCDB::CheckpointQueueDelayForCritical;
 }
 
 - (NSTimeInterval)checkpointDelayForNonCritical
 {
-    return WCDB::CheckpointConfigDelayForNonCritical;
+    return WCDB::CheckpointQueueDelayForNonCritical;
 }
 
 - (NSTimeInterval)checkpointDelayForRetryingAfterFailure
@@ -74,7 +74,7 @@
 
 - (int)checkpointFramesThresholdForCritical
 {
-    return WCDB::CheckpointConfigFramesThresholdForCritical;
+    return WCDB::CheckpointQueueFramesThresholdForCritical;
 }
 
 - (NSTimeInterval)delayForTolerance
@@ -345,6 +345,41 @@
     TestCaseAssertFalse([[self.database getHandle] validate]);
     [condition broadcast];
     dispatch_group_wait(self.group, DISPATCH_TIME_FOREVER);
+}
+
+- (void)test_feature_checkpoint_while_notice_recover_wal
+{
+    // avoid auto subthread checkpoint
+    [self.database removeConfigForName:WCTConfigNameCheckpoint];
+    TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
+
+    self.expectSQLsInAllThreads = YES;
+
+    // trigger subthread checkpoint
+    TestCaseAssertTrue([self createTable]);
+
+    [self.database close];
+
+    TestCaseResult* tested = [TestCaseResult failure];
+    [WCTDatabase globalTraceError:^(WCTError* error) {
+        if (error.level == WCTErrorLevelIgnore
+            && error.code == WCTErrorCodeNotice) {
+            // SQLITE_NOTICE_RECOVER_WAL
+            [tested succeed];
+        }
+    }];
+
+    // trigger notice recover wal
+    TestCaseAssertTrue([self.database canOpen]);
+    TestCaseAssertResultSuccessful(tested);
+
+    [WCTDatabase resetGlobalErrorTracer];
+
+    [self doTestSQLs:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
+         inOperation:^BOOL {
+             [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + self.delayForTolerance];
+             return YES;
+         }];
 }
 
 #warning TODO - add tests for busy retry

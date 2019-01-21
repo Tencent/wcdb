@@ -42,10 +42,11 @@ class CheckpointQueue final : public AsyncQueue {
 public:
     CheckpointQueue(const String& name, CheckpointEvent* event);
 
-    void put(const String& path, double delay, int frames);
+    void put(const String& path, int frames);
     void remove(const String& path);
 
 protected:
+    void put(const String& path, double delay, int frames);
     bool onTimed(const String& path, const int& frames);
     void loop() override final;
 

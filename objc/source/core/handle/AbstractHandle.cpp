@@ -72,12 +72,12 @@ void AbstractHandle::enableMemoryStatus(bool enable)
     WCTInnerAssert(rc == SQLITE_OK);
 }
 
-void AbstractHandle::setNotificationForLog(const Log &log)
+void AbstractHandle::setNotificationForGlobalLog(const GlobalLog &log, void *parameter)
 {
 #ifdef DEBUG
     int rc =
 #endif
-    sqlite3_config(SQLITE_CONFIG_LOG, log, nullptr);
+    sqlite3_config(SQLITE_CONFIG_LOG, log, parameter);
     WCTInnerAssert(rc == SQLITE_OK);
 }
 

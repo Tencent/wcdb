@@ -101,7 +101,7 @@ protected:
     Core();
 
     static int vfsOpen(const char* path, int flags, int mode);
-    static void handleLog(void* unused, int code, const char* message);
+    static void globalLog(void* core, int code, const char* message);
     void preprocessError(const Error& error, Error::Infos& infos);
     void onDatabaseCreated(Database* database) override final;
     bool databaseShouldCheckpoint(const String& path,

@@ -56,8 +56,9 @@ public:
     static void enableMemoryStatus(bool enable);
     static void setMemoryMapSize(int64_t defaultSizeLimit, int64_t maximumAllowedSizeLimit);
 
-    typedef void (*Log)(void *, int, const char *);
-    static void setNotificationForLog(const Log &log);
+    typedef void (*GlobalLog)(void *, int, const char *);
+    static void
+    setNotificationForGlobalLog(const GlobalLog &log, void *parameter = nullptr);
 
     typedef int (*VFSOpen)(const char *, int, int);
     static void setNotificationWhenVFSOpened(const VFSOpen &vfsOpen);

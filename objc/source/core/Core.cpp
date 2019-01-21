@@ -24,6 +24,7 @@
 #include <WCDB/Notifier.hpp>
 #include <WCDB/String.hpp>
 #include <fcntl.h>
+#include <regex>
 
 namespace WCDB {
 
@@ -54,7 +55,7 @@ Core::Core()
     Handle::enableMultithread();
     Handle::enableMemoryStatus(false);
     //        Handle::setMemoryMapSize(0x7fff0000, 0x7fff0000);
-    Handle::setNotificationForLog(Core::handleLog);
+    Handle::setNotificationForGlobalLog(Core::globalLog, this);
     Handle::setNotificationWhenVFSOpened(Core::vfsOpen);
 
     Notifier::shared()->setNotificationForPreprocessing(
@@ -235,13 +236,13 @@ std::shared_ptr<Config> Core::customConfig(const CustomConfig::Invocation& invoc
 int Core::vfsOpen(const char* path, int flags, int mode)
 {
     int fd = open(path, flags, mode);
-    if (fd != -1 && (flags & O_CREAT)) {
+    if (fd != -1 && ((flags & O_CREAT) != 0)) {
         FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
     }
     return fd;
 }
 
-void Core::handleLog(void* unused, int fullCode, const char* message)
+void Core::globalLog(void* parameter, int fullCode, const char* message)
 {
     int code = fullCode & 0xff;
     Error error;
@@ -249,9 +250,20 @@ void Core::handleLog(void* unused, int fullCode, const char* message)
     case SQLITE_WARNING:
         error.level = Error::Level::Warning;
         break;
-    case SQLITE_NOTICE:
+    case SQLITE_NOTICE: {
         error.level = Error::Level::Ignore;
+        if (fullCode == SQLITE_NOTICE_RECOVER_WAL) {
+            std::regex pattern("recovered (\\w+) frames from WAL file (.+)\\-wal");
+            const String source = message;
+            std::smatch match;
+            if (std::regex_search(source.begin(), source.end(), match, pattern)) {
+                WCTInnerAssert(match.size() == 3);
+                Core* core = static_cast<Core*>(parameter);
+                core->m_checkpointQueue->put(match[2].str(), atoi(match[1].str().c_str()));
+            }
+        }
         break;
+    }
     default:
         error.level = Error::Level::Debug;
         break;

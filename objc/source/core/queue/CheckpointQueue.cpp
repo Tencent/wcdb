@@ -53,9 +53,20 @@ bool CheckpointQueue::onTimed(const String& path, const int& frames)
     }
     if (!result) {
         // delay retry if failed
-        m_timedQueue.reQueue(path, CheckpointQueueDelayForRetryingAfterFailure, frames);
+        put(path, CheckpointQueueDelayForRetryingAfterFailure, frames);
     }
     return result;
+}
+
+void CheckpointQueue::put(const String& path, int frames)
+{
+    if (frames >= CheckpointQueueFramesThresholdForCritical) {
+        put(path, CheckpointQueueDelayForCritical, frames);
+    } else {
+        m_timedQueue.reQueue(path, CheckpointQueueDelayForNonCritical, frames);
+        put(path, CheckpointQueueDelayForNonCritical, frames);
+    }
+    lazyRun();
 }
 
 void CheckpointQueue::put(const String& path, double delay, int frames)

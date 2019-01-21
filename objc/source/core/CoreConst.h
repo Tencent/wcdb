@@ -52,6 +52,9 @@ static constexpr const double CorruptionQueueTimeIntervalForInvokingEvent = 5.0f
 static constexpr const char* CheckpointQueueName = "com.Tencent.WCDB.Queue.Checkpoint";
 static constexpr const int CheckpointQueueFramesThresholdForTruncating = 10 * 1024;
 static constexpr const double CheckpointQueueDelayForRetryingAfterFailure = 10.0;
+static constexpr const int CheckpointQueueFramesThresholdForCritical = 100;
+static constexpr const double CheckpointQueueDelayForCritical = 1.0;
+static constexpr const double CheckpointQueueDelayForNonCritical = 10.0;
 
 // Backup Queue
 static constexpr const char* BackupQueueName = "com.Tencent.WCDB.Queue.Backup";
@@ -59,9 +62,6 @@ static constexpr double BackupQueueDelayForRetryingAfterFailure = 15.0;
 
 // Checkpoint Config
 static constexpr const char* CheckpointConfigName = WCDB_CHECKPOINT_CONFIG_NAME;
-static constexpr const int CheckpointConfigFramesThresholdForCritical = 100;
-static constexpr const double CheckpointConfigDelayForCritical = 1.0;
-static constexpr const double CheckpointConfigDelayForNonCritical = 10.0;
 
 // Backup Config
 static constexpr const char* BackupConfigName = WCDB_BACKUP_CONFIG_NAME;
