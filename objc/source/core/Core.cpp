@@ -256,7 +256,7 @@ void Core::handleLog(void* unused, int fullCode, const char* message)
         error.level = Error::Level::Debug;
         break;
     }
-    error.setSQLiteCode(code);
+    error.setSQLiteCode(code, fullCode);
     error.message = message;
     Notifier::shared()->notify(error);
 }
