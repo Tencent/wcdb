@@ -47,6 +47,7 @@ public:
     WCDB::ColumnDef &getOrCreateColumnDef(const WCTProperty &property);
 
 private:
+#warning TODO - refactor to use order of definition
     std::map<WCDB::String /* column name */, WCDB::ColumnDef, WCDB::String::CaseInsensiveComparator> m_columnDefs;
 
 #pragma mark - Table
