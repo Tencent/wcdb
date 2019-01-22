@@ -176,6 +176,12 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo, const std::set<S
                   .order(descendingRowid)
                   .limit(1));
 
+        m_statementForDeletingMigratedOneRow
+        = StatementDelete()
+          .deleteFrom(QualifiedTable(m_sourceTable).schema(m_schemaForSourceDatabase))
+          .order(descendingRowid)
+          .limit(1);
+
         m_statementForMigratingSpecifiedRowTemplate
         = StatementInsert()
           .insertIntoTable(m_table)
@@ -260,6 +266,11 @@ StatementSelect MigrationInfo::getStatementForSelectingUnionedView()
 const StatementInsert& MigrationInfo::getStatementForMigratingOneRow() const
 {
     return m_statementForMigratingOneRow;
+}
+
+const StatementDelete& MigrationInfo::getStatementForDeletingMigratedOneRow() const
+{
+    return m_statementForDeletingMigratedOneRow;
 }
 
 const StatementDelete& MigrationInfo::getStatementForDeletingSpecifiedRow() const

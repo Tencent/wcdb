@@ -20,15 +20,16 @@
 
 #import "MigrateTestCase.h"
 
-@interface TableMigrateTests : MigrateTestCase
+@interface PrimaryKeyDatabaseMigrateTests : MigrateTestCase
 
 @end
 
-@implementation TableMigrateTests
+@implementation PrimaryKeyDatabaseMigrateTests
 
 - (void)setUp
 {
-    self.isCrossDatabaseMigration = NO;
+    self.mode = MigrationObjectORMModePrimaryKey;
+    self.isCrossDatabaseMigration = YES;
     [super setUp];
 }
 

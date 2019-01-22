@@ -33,8 +33,8 @@
             ++tested;
         }
     }];
-    TestCaseAssertTrue([filter getObjectOfClass:TestCaseObject.class fromTable:self.tableName] == nil);
-    TestCaseAssertTrue([filter getObjectOfClass:TestCaseObject.class fromTable:self.tableName] == nil);
+    TestCaseAssertTrue([filter getObjectOfClass:MigrationObject.class fromTable:self.tableName] == nil);
+    TestCaseAssertTrue([filter getObjectOfClass:MigrationObject.class fromTable:self.tableName] == nil);
     TestCaseAssertTrue(tested == 1);
 }
 
@@ -47,7 +47,7 @@
 
     // check source table migration is not started
     // It's not a good practice.
-    TestCaseAssertFalse([[self.sourceDatabase getObjectsOfClass:TestCaseObject.class fromTable:self.sourceTable] isEqualToArray:self.objects]);
+    TestCaseAssertFalse([[self.sourceDatabase getObjectsOfClass:MigrationObject.class fromTable:self.sourceTable orders:MigrationObject.identifier.asOrder(WCTOrderedAscending)] isEqualToArray:self.objects]);
 }
 
 - (void)doTestMigrate
@@ -60,7 +60,7 @@
     TestCaseAssertTrue(succeed);
     TestCaseAssertTrue(done);
 
-    TestCaseAssertTrue([[self.table getObjects] isEqualToArray:self.objects]);
+    TestCaseAssertTrue([[self.table getObjectsOrders:MigrationObject.identifier.asOrder(WCTOrderedAscending)] isEqualToArray:self.objects]);
 
     // check source table is already dropped.
     // It's not a good practice.
@@ -102,7 +102,7 @@
 
     // check source table migration is not started.
     // It's not a good practice.
-    TestCaseAssertTrue([[self.sourceDatabase getObjectsOfClass:TestCaseObject.class fromTable:self.sourceTable] isEqualToArray:self.objects]);
+    TestCaseAssertTrue([[self.sourceDatabase getObjectsOfClass:MigrationObject.class fromTable:self.sourceTable orders:MigrationObject.identifier.asOrder(WCTOrderedAscending)] isEqualToArray:self.objects]);
     [handle invalidate];
 }
 
@@ -117,7 +117,7 @@
 
     // check source table migration is started.
     // It's not a good practice.
-    TestCaseAssertFalse([[self.sourceDatabase getObjectsOfClass:TestCaseObject.class fromTable:self.sourceTable] isEqualToArray:self.objects]);
+    TestCaseAssertFalse([[self.sourceDatabase getObjectsOfClass:MigrationObject.class fromTable:self.sourceTable orders:MigrationObject.identifier.asOrder(WCTOrderedAscending)] isEqualToArray:self.objects]);
     [handle invalidate];
 }
 
@@ -199,7 +199,7 @@
 {
     // get count of unmigrated rows
     // It's not a good practice.
-    return [self.sourceDatabase getValueFromStatement:WCDB::StatementSelect().select(TestCaseObject.allProperties.count()).from(self.sourceTable)].numberValue.intValue;
+    return [self.sourceDatabase getValueFromStatement:WCDB::StatementSelect().select(MigrationObject.allProperties.count()).from(self.sourceTable)].numberValue.intValue;
 }
 
 - (void)doTestFeatureStepAsLeastAsPossibleButNotWaste

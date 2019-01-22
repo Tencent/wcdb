@@ -111,7 +111,8 @@
 - (void)cleanDirectory
 {
     if ([self.fileManager fileExistsAtPath:self.directory]) {
-        TestCaseAssertTrue([self.fileManager removeItemAtPath:self.directory error:nil]);
+        NSError *error;
+        TestCaseAssertTrue([self.fileManager removeItemAtPath:self.directory error:&error]);
     }
 }
 

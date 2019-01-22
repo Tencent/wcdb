@@ -20,35 +20,17 @@
 
 #import "MigrationCompatibleTestCase.h"
 
-@interface DatabaseMigratingCompatibleTests : MigrationCompatibleTestCase
+@interface TableMigrationCompatibleTests : MigrationCompatibleTestCase
 
 @end
 
-@implementation DatabaseMigratingCompatibleTests
+@implementation TableMigrationCompatibleTests
 
 - (void)setUp
 {
-    self.isCrossDatabaseMigration = YES;
+    self.mode = MigrationObjectORMModeNormal;
+    self.isCrossDatabaseMigration = NO;
     [super setUp];
-
-    BOOL done;
-    TestCaseAssertTrue([self.database stepMigration:true done:done]);
-    TestCaseAssertFalse(done);
-}
-
-- (void)test_insert_auto_increment
-{
-    [self doTestInsertAutoIncrement];
-}
-
-- (void)test_insert_or_replace
-{
-    [self doTestInsertOrReplace];
-}
-
-- (void)test_insert_failed_with_conflict
-{
-    [self doTestInsertFailedWithConflict];
 }
 
 - (void)test_limited_delete

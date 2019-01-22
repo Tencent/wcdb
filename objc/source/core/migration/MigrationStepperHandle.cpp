@@ -125,7 +125,7 @@ bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
 
     if (!m_removeMigratedStatement->isPrepared()
         && !m_removeMigratedStatement->prepare(
-           m_migratingInfo->getStatementForDeletingSpecifiedRow())) {
+           m_migratingInfo->getStatementForDeletingMigratedOneRow())) {
         return false;
     }
 
@@ -166,10 +166,9 @@ std::pair<bool, bool> MigrationStepperHandle::migrateRow()
     bool succeed = false;
     bool migrated = false;
     m_migrateStatement->reset();
+    m_removeMigratedStatement->reset();
     if (m_migrateStatement->step()) {
         if (getChanges() != 0) {
-            m_removeMigratedStatement->reset();
-            m_removeMigratedStatement->bindInteger64(getLastInsertedRowID(), 1);
             succeed = m_removeMigratedStatement->step();
         } else {
             succeed = true;

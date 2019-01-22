@@ -140,14 +140,21 @@ protected:
 #pragma mark - Migrate
 public:
     /*
-     INSERT rowid, [columns]
+     INSERT [columns]
      INTO main.[table]
-     SELECT rowid, [columns]
+     SELECT [columns]
      FROM [schemaForSourceDatabase].[sourceTable]
      ORDER BY rowid DESC
      LIMIT 1
      */
     const StatementInsert& getStatementForMigratingOneRow() const;
+
+    /*
+     DELETE FROM [schemaForSourceDatabase].[sourceTable]
+     ORDER BY rowid DESC
+     LIMIT 1
+     */
+    const StatementDelete& getStatementForDeletingMigratedOneRow() const;
 
     /*
      DELETE FROM [schemaForSourceDatabase].[sourceTable] WHERE rowid == ?1
@@ -192,6 +199,7 @@ public:
 
 protected:
     StatementInsert m_statementForMigratingOneRow;
+    StatementDelete m_statementForDeletingMigratedOneRow;
     StatementInsert m_statementForMigratingSpecifiedRowTemplate;
     StatementDelete m_statementForDeletingSpecifiedRow;
     StatementDropTable m_statementForDroppingSourceTable;

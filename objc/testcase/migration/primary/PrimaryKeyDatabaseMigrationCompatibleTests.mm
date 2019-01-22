@@ -20,21 +20,17 @@
 
 #import "MigrationCompatibleTestCase.h"
 
-@interface DatabaseMigrationCompatibleTests : MigrationCompatibleTestCase
+@interface PrimaryKeyDatabaseMigrationCompatibleTests : MigrationCompatibleTestCase
 
 @end
 
-@implementation DatabaseMigrationCompatibleTests
+@implementation PrimaryKeyDatabaseMigrationCompatibleTests
 
 - (void)setUp
 {
+    self.mode = MigrationObjectORMModePrimaryKey;
     self.isCrossDatabaseMigration = YES;
     [super setUp];
-}
-
-- (void)test_insert_auto_increment
-{
-    [self doTestInsertAutoIncrement];
 }
 
 - (void)test_insert_or_replace

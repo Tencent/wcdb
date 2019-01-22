@@ -24,14 +24,14 @@
     NSString* _sourcePath;
     NSString* _sourceTable;
     WCTDatabase* _sourceDatabase;
-    NSArray<TestCaseObject*>* _objects;
+    NSArray<MigrationObject*>* _objects;
 }
 
 - (void)setUp
 {
     [super setUp];
 
-    TestCaseAssertTrue([self.sourceDatabase createTableAndIndexes:self.sourceTable withClass:TestCaseObject.class]);
+    TestCaseAssertTrue([self.sourceDatabase execute:[MigrationObject statementForCreatingTable:self.sourceTable withMode:self.mode]]);
     TestCaseAssertTrue([self.sourceDatabase insertObjects:self.objects intoTable:self.sourceTable]);
 
     [self.sourceDatabase close];
@@ -46,6 +46,8 @@
             userInfo.sourceDatabase = sourcePath;
         }
     }];
+    self.tableClass = MigrationObject.class;
+    TestCaseAssertTrue([self.database execute:[MigrationObject statementForCreatingTable:self.tableName withMode:self.mode]]);
     TestCaseAssertTrue([self createTable]);
     [self.database close];
 }
@@ -84,11 +86,11 @@
     }
 }
 
-- (NSArray<TestCaseObject*>*)objects
+- (NSArray<MigrationObject*>*)objects
 {
     @synchronized(self) {
         if (_objects == nil) {
-            _objects = [self.random testCaseObjectsWithCount:100 startingFromIdentifier:1];
+            _objects = [self.random migrationObjectsWithCount:100 startingFromIdentifier:1];
         }
         return _objects;
     }
@@ -106,7 +108,7 @@
 
 - (BOOL)isMigrating
 {
-    int count = [self.database getValueFromStatement:WCDB::StatementSelect().select(TestCaseObject.allProperties.count()).from(self.tableName)].numberValue.intValue;
+    int count = [self.database getValueFromStatement:WCDB::StatementSelect().select(MigrationObject.allProperties.count()).from(self.tableName)].numberValue.intValue;
     return count > 0 && count < self.objects.count;
 }
 

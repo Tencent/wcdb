@@ -28,6 +28,7 @@
 
 - (void)setUp
 {
+    self.mode = MigrationObjectORMModeNormal;
     self.isCrossDatabaseMigration = YES;
     [super setUp];
 }

@@ -20,14 +20,15 @@
 
 #import "MigrationCompatibleTestCase.h"
 
-@interface TableMigrationCompatibleTests : MigrationCompatibleTestCase
+@interface AutoIncrementTableMigrationCompatibleTests : MigrationCompatibleTestCase
 
 @end
 
-@implementation TableMigrationCompatibleTests
+@implementation AutoIncrementTableMigrationCompatibleTests
 
 - (void)setUp
 {
+    self.mode = MigrationObjectORMModeAutoIncrement;
     self.isCrossDatabaseMigration = NO;
     [super setUp];
 }

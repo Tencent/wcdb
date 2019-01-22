@@ -18,20 +18,12 @@
  * limitations under the License.
  */
 
-#import <TestCase/TestCase.h>
+#import "MigrationObject.h"
+#import <WCDB/WCDB.h>
 
-@interface MigrationTestCase : CRUDTestCase
+@interface MigrationObject (WCTTableCoding) <WCTTableCoding>
 
-@property (assign, nonatomic) BOOL isCrossDatabaseMigration;
-
-@property (readonly, nonatomic) NSString* sourceTable;
-
-@property (readonly, nonatomic) NSString* sourcePath;
-
-@property (readonly, nonatomic) WCTDatabase* sourceDatabase;
-
-@property (readonly, nonatomic) NSArray<TestCaseObject*>* objects;
-
-- (BOOL)isMigrating;
+WCDB_PROPERTY(identifier)
+WCDB_PROPERTY(content)
 
 @end

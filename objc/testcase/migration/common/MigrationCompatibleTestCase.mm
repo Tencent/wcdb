@@ -34,7 +34,7 @@
 {
     [super setUp];
 
-    TestCaseAssertTrue([[self.table getObjects] isEqualToArray:self.objects]);
+    TestCaseAssertTrue([[self.table getObjectsOrders:MigrationObject.identifier.asOrder(WCTOrderedAscending)] isEqualToArray:self.objects]);
 }
 
 - (NSString*)schemaName
@@ -53,8 +53,8 @@
 
 - (void)doTestInsertAutoIncrement
 {
-    TestCaseObject* newObject = [self.random autoIncrementTestCaseObjectWithIdentifier:self.objects.lastObject.identifier + 1];
-    NSMutableArray<TestCaseObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
+    MigrationObject* newObject = [self.random autoIncrementMigrationObjectWithIdentifier:self.objects.lastObject.identifier + 1];
+    NSMutableArray<MigrationObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
     [expectedObjects addObject:newObject];
 
     NSArray<NSString*>* sqls = @[
@@ -74,8 +74,8 @@
 
 - (void)doTestInsertOrReplace
 {
-    TestCaseObject* newObject = [self.random testCaseObjectWithIdentifier:self.objects.lastObject.identifier];
-    NSMutableArray<TestCaseObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
+    MigrationObject* newObject = [self.random migrationObjectWithIdentifier:self.objects.lastObject.identifier];
+    NSMutableArray<MigrationObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
     [expectedObjects removeLastObject];
     [expectedObjects addObject:newObject];
 
@@ -96,14 +96,14 @@
 
 - (void)doTestInsertFailedWithConflict
 {
-    TestCaseObject* newObject = [self.random testCaseObjectWithIdentifier:self.objects.lastObject.identifier];
+    MigrationObject* newObject = [self.random migrationObjectWithIdentifier:self.objects.lastObject.identifier];
 
     TestCaseAssertFalse([self.table insertObject:newObject]);
 }
 
 - (void)doTestLimitedDelete
 {
-    NSMutableArray<TestCaseObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
+    NSMutableArray<MigrationObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
     [expectedObjects removeObjectAtIndex:2];
 
     NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
@@ -114,15 +114,15 @@
     [self doTestObjects:expectedObjects
                 andSQLs:sqls
       afterModification:^BOOL {
-          return [self.table deleteObjectsWhere:TestCaseObject.identifier > 1 orders:TestCaseObject.identifier.asOrder(WCTOrderedAscending) limit:1 offset:1];
+          return [self.table deleteObjectsWhere:MigrationObject.identifier > 1 orders:MigrationObject.identifier.asOrder(WCTOrderedAscending) limit:1 offset:1];
       }];
 }
 
 - (void)doTestLimitedUpdate
 {
-    NSMutableArray<TestCaseObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
-    TestCaseObject* secondObject = [expectedObjects objectAtIndex:2];
-    TestCaseObject* newSecondObject = [self.random testCaseObjectWithIdentifier:secondObject.identifier];
+    NSMutableArray<MigrationObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
+    MigrationObject* secondObject = [expectedObjects objectAtIndex:2];
+    MigrationObject* newSecondObject = [self.random migrationObjectWithIdentifier:secondObject.identifier];
     [expectedObjects setObject:newSecondObject atIndexedSubscript:2];
 
     NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
@@ -133,7 +133,7 @@
     [self doTestObjects:expectedObjects
                 andSQLs:sqls
       afterModification:^BOOL {
-          return [self.table updateProperties:TestCaseObject.content toObject:newSecondObject where:TestCaseObject.identifier > 1 orders:TestCaseObject.identifier.asOrder(WCTOrderedAscending) limit:1 offset:1];
+          return [self.table updateProperties:MigrationObject.content toObject:newSecondObject where:MigrationObject.identifier > 1 orders:MigrationObject.identifier.asOrder(WCTOrderedAscending) limit:1 offset:1];
       }];
 }
 
@@ -144,7 +144,7 @@
     [self doTestObjects:@[ self.objects.firstObject ]
                  andSQL:sql
             bySelecting:^NSArray<NSObject<WCTTableCoding>*>* {
-                return [self.table getObjectsWhere:TestCaseObject.identifier == 1];
+                return [self.table getObjectsWhere:MigrationObject.identifier == 1];
             }];
 }
 
@@ -163,7 +163,7 @@
 
 - (void)doTestSubqueryWithinDelete
 {
-    NSMutableArray<TestCaseObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
+    NSMutableArray<MigrationObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
     [expectedObjects removeLastObject];
 
     NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
@@ -174,14 +174,14 @@
     [self doTestObjects:expectedObjects
                 andSQLs:sqls
       afterModification:^BOOL {
-          return [self.table deleteObjectsWhere:TestCaseObject.identifier.table(self.tableName).schema(WCDB::Schema::main()).in(WCDB::StatementSelect().select(TestCaseObject.identifier.max()).from(self.tableName))];
+          return [self.table deleteObjectsWhere:MigrationObject.identifier.table(self.tableName).schema(WCDB::Schema::main()).in(WCDB::StatementSelect().select(MigrationObject.identifier.max()).from(self.tableName))];
       }];
 }
 
 - (void)doTestSubqueryWithinUpdate
 {
-    NSMutableArray<TestCaseObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
-    TestCaseObject* newObject = [self.random testCaseObjectWithIdentifier:expectedObjects.lastObject.identifier];
+    NSMutableArray<MigrationObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
+    MigrationObject* newObject = [self.random migrationObjectWithIdentifier:expectedObjects.lastObject.identifier];
     [expectedObjects removeLastObject];
     [expectedObjects addObject:newObject];
 
@@ -193,7 +193,7 @@
     [self doTestObjects:expectedObjects
                 andSQLs:sqls
       afterModification:^BOOL {
-          return [self.table updateProperties:TestCaseObject.content toObject:newObject where:TestCaseObject.identifier.table(self.tableName).schema(WCDB::Schema::main()).in(WCDB::StatementSelect().select(TestCaseObject.identifier.max()).from(self.tableName))];
+          return [self.table updateProperties:MigrationObject.content toObject:newObject where:MigrationObject.identifier.table(self.tableName).schema(WCDB::Schema::main()).in(WCDB::StatementSelect().select(MigrationObject.identifier.max()).from(self.tableName))];
       }];
 }
 
