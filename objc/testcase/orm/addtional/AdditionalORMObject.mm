@@ -29,19 +29,21 @@ WCDB_SYNTHESIZE(AdditionalORMObject, value)
 
 + (void)additionalObjectRelationalMapping:(WCTBinding &)binding
 {
-    // add new column constraint
-    binding.getOrCreateColumnDef(AdditionalORMObject.value)
-    .constraint(WCDB::ColumnConstraint().primaryKey().conflict(WCDB::Conflict::Abort));
+    if (self.class == AdditionalORMObject.class) {
+        // add new column constraint
+        binding.getOrCreateColumnDef(AdditionalORMObject.value)
+        .constraint(WCDB::ColumnConstraint().primaryKey().conflict(WCDB::Conflict::Abort));
 
-    // add new index
-    binding.getOrCreateIndexStatement(@"_index")
-    .indexed(AdditionalORMObject.value.asIndex().order(WCDB::Order::ASC));
+        // add new index
+        binding.getOrCreateIndexStatement(@"_index")
+        .indexed(AdditionalORMObject.value.asIndex().order(WCDB::Order::ASC));
 
-    // add new table constraint
-    binding.getOrCreateTableConstraint(@"table_constraint")
-    .check(AdditionalORMObject.value > 10);
-    // modify virtual table
-    // binding.statementVirtualTable
+        // add new table constraint
+        binding.getOrCreateTableConstraint(@"table_constraint")
+        .check(AdditionalORMObject.value > 10);
+        // modify virtual table
+        // binding.statementVirtualTable
+    }
 }
 
 @end
