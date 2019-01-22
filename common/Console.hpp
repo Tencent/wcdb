@@ -46,7 +46,11 @@ public:
     static void printer(const String& message);
 
     static bool debuggable();
+#ifdef DEBUG
     static void fatal(const String& message, const char* file, int line);
+#else  // DEBUG
+    static void fatal(const String& message);
+#endif // DEBUG
 
     Console(const Console&) = delete;
     Console& operator=(const Console&) = delete;

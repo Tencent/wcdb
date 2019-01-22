@@ -135,6 +135,7 @@ void Console::print(const String& message)
     }
 }
 
+#ifdef DEBUG
 void Console::fatal(const String& message, const char* file, int line)
 {
     Error error;
@@ -151,5 +152,19 @@ void Console::fatal(const String& message, const char* file, int line)
     error.infos.set("CommitHash", WCDB_COMMIT_HASH);
     Notifier::shared()->notify(error);
 }
+#else  // DEBUG
+void Console::fatal(const String& message)
+{
+    Error error;
+    error.setCode(Error::Code::Misuse, "Assertion");
+    error.level = Error::Level::Fatal;
+    error.message = message;
+    error.infos.set("Version", WCDB_VERSION);
+    error.infos.set("BuildTime", WCDB_BUILD_TIME);
+    error.infos.set("BuildTimestamp", WCDB_BUILD_TIMESTAMP);
+    error.infos.set("CommitHash", WCDB_COMMIT_HASH);
+    Notifier::shared()->notify(error);
+}
+#endif // DEBUG
 
 } // namespace WCDB
