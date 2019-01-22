@@ -67,10 +67,10 @@ bool HandleStatement::step(bool &done)
     done = rc == SQLITE_DONE;
     const char *sql = nullptr;
     if (isPrepared()) {
+        // There will be privacy issues if use sqlite3_expanded_sql
         sql = sqlite3_sql(m_stmt);
     }
     bool succeed = exitAPI(rc, sql);
-    // There will be privacy issues if use sqlite3_expanded_sql
     if (m_event != nullptr) {
         m_event->statementDidStep(this, succeed);
     }
