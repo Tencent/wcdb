@@ -169,18 +169,6 @@
 		23572E8E21F6F8A60088DDEC /* AutoIncrementTableMigrateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23572E8821F6F8A50088DDEC /* AutoIncrementTableMigrateTests.mm */; };
 		23572E8F21F6F8A60088DDEC /* AutoIncrementDatabaseMigrationCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23572E8921F6F8A50088DDEC /* AutoIncrementDatabaseMigrationCompatibleTests.mm */; };
 		23572E9021F6F8A60088DDEC /* AutoIncrementDatabaseMigratingCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23572E8A21F6F8A50088DDEC /* AutoIncrementDatabaseMigratingCompatibleTests.mm */; };
-		23572E9821F6F9560088DDEC /* PrimaryKeyTableMigrateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23572E9221F6F9560088DDEC /* PrimaryKeyTableMigrateTests.mm */; };
-		23572E9921F6F9560088DDEC /* PrimaryKeyTableMigratingCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23572E9321F6F9560088DDEC /* PrimaryKeyTableMigratingCompatibleTests.mm */; };
-		23572E9A21F6F9560088DDEC /* PrimaryKeyTableMigrationCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23572E9421F6F9560088DDEC /* PrimaryKeyTableMigrationCompatibleTests.mm */; };
-		23572E9B21F6F9560088DDEC /* PrimaryKeyDatabaseMigrateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23572E9521F6F9560088DDEC /* PrimaryKeyDatabaseMigrateTests.mm */; };
-		23572E9C21F6F9560088DDEC /* PrimaryKeyDatabaseMigrationCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23572E9621F6F9560088DDEC /* PrimaryKeyDatabaseMigrationCompatibleTests.mm */; };
-		23572E9D21F6F9560088DDEC /* PrimaryKeyDatabaseMigratingCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23572E9721F6F9560088DDEC /* PrimaryKeyDatabaseMigratingCompatibleTests.mm */; };
-		23572EB221F702420088DDEC /* TableMigrateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23572EAC21F702410088DDEC /* TableMigrateTests.mm */; };
-		23572EB321F702420088DDEC /* TableMigrationCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23572EAD21F702410088DDEC /* TableMigrationCompatibleTests.mm */; };
-		23572EB421F702420088DDEC /* TableMigratingCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23572EAE21F702410088DDEC /* TableMigratingCompatibleTests.mm */; };
-		23572EB521F702420088DDEC /* DatabaseMigrateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23572EAF21F702410088DDEC /* DatabaseMigrateTests.mm */; };
-		23572EB621F702420088DDEC /* DatabaseMigratingCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23572EB021F702410088DDEC /* DatabaseMigratingCompatibleTests.mm */; };
-		23572EB721F702420088DDEC /* DatabaseMigrationCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23572EB121F702410088DDEC /* DatabaseMigrationCompatibleTests.mm */; };
 		23577F791F74F4E800D31C05 /* WCTCursorInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 23577F771F74F4E800D31C05 /* WCTCursorInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23577F7A1F74F4E800D31C05 /* WCTCursorInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23577F781F74F4E800D31C05 /* WCTCursorInfo.mm */; };
 		23585B5721E6E72C00EE0334 /* ObjectsBasedBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23585B5621E6E72C00EE0334 /* ObjectsBasedBenchmark.mm */; };
@@ -1428,18 +1416,6 @@
 		23572E8821F6F8A50088DDEC /* AutoIncrementTableMigrateTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AutoIncrementTableMigrateTests.mm; sourceTree = "<group>"; };
 		23572E8921F6F8A50088DDEC /* AutoIncrementDatabaseMigrationCompatibleTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AutoIncrementDatabaseMigrationCompatibleTests.mm; sourceTree = "<group>"; };
 		23572E8A21F6F8A50088DDEC /* AutoIncrementDatabaseMigratingCompatibleTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AutoIncrementDatabaseMigratingCompatibleTests.mm; sourceTree = "<group>"; };
-		23572E9221F6F9560088DDEC /* PrimaryKeyTableMigrateTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PrimaryKeyTableMigrateTests.mm; sourceTree = "<group>"; };
-		23572E9321F6F9560088DDEC /* PrimaryKeyTableMigratingCompatibleTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PrimaryKeyTableMigratingCompatibleTests.mm; sourceTree = "<group>"; };
-		23572E9421F6F9560088DDEC /* PrimaryKeyTableMigrationCompatibleTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PrimaryKeyTableMigrationCompatibleTests.mm; sourceTree = "<group>"; };
-		23572E9521F6F9560088DDEC /* PrimaryKeyDatabaseMigrateTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PrimaryKeyDatabaseMigrateTests.mm; sourceTree = "<group>"; };
-		23572E9621F6F9560088DDEC /* PrimaryKeyDatabaseMigrationCompatibleTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PrimaryKeyDatabaseMigrationCompatibleTests.mm; sourceTree = "<group>"; };
-		23572E9721F6F9560088DDEC /* PrimaryKeyDatabaseMigratingCompatibleTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PrimaryKeyDatabaseMigratingCompatibleTests.mm; sourceTree = "<group>"; };
-		23572EAC21F702410088DDEC /* TableMigrateTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableMigrateTests.mm; sourceTree = "<group>"; };
-		23572EAD21F702410088DDEC /* TableMigrationCompatibleTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableMigrationCompatibleTests.mm; sourceTree = "<group>"; };
-		23572EAE21F702410088DDEC /* TableMigratingCompatibleTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableMigratingCompatibleTests.mm; sourceTree = "<group>"; };
-		23572EAF21F702410088DDEC /* DatabaseMigrateTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DatabaseMigrateTests.mm; sourceTree = "<group>"; };
-		23572EB021F702410088DDEC /* DatabaseMigratingCompatibleTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DatabaseMigratingCompatibleTests.mm; sourceTree = "<group>"; };
-		23572EB121F702410088DDEC /* DatabaseMigrationCompatibleTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DatabaseMigrationCompatibleTests.mm; sourceTree = "<group>"; };
 		23577F771F74F4E800D31C05 /* WCTCursorInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTCursorInfo.h; sourceTree = "<group>"; };
 		23577F781F74F4E800D31C05 /* WCTCursorInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTCursorInfo.mm; sourceTree = "<group>"; };
 		23585B5521E6E72C00EE0334 /* ObjectsBasedBenchmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectsBasedBenchmark.h; sourceTree = "<group>"; };
@@ -2365,8 +2341,6 @@
 		231FEADE2199A0FF00DC3706 /* migration */ = {
 			isa = PBXGroup;
 			children = (
-				23572EAB21F702410088DDEC /* normal */,
-				23572E9121F6F9560088DDEC /* primary */,
 				23572E8421F6F8A50088DDEC /* increment */,
 				23572E5321F6C00E0088DDEC /* common */,
 			);
@@ -2730,32 +2704,6 @@
 				23572E8A21F6F8A50088DDEC /* AutoIncrementDatabaseMigratingCompatibleTests.mm */,
 			);
 			path = increment;
-			sourceTree = "<group>";
-		};
-		23572E9121F6F9560088DDEC /* primary */ = {
-			isa = PBXGroup;
-			children = (
-				23572E9221F6F9560088DDEC /* PrimaryKeyTableMigrateTests.mm */,
-				23572E9321F6F9560088DDEC /* PrimaryKeyTableMigratingCompatibleTests.mm */,
-				23572E9421F6F9560088DDEC /* PrimaryKeyTableMigrationCompatibleTests.mm */,
-				23572E9521F6F9560088DDEC /* PrimaryKeyDatabaseMigrateTests.mm */,
-				23572E9621F6F9560088DDEC /* PrimaryKeyDatabaseMigrationCompatibleTests.mm */,
-				23572E9721F6F9560088DDEC /* PrimaryKeyDatabaseMigratingCompatibleTests.mm */,
-			);
-			path = primary;
-			sourceTree = "<group>";
-		};
-		23572EAB21F702410088DDEC /* normal */ = {
-			isa = PBXGroup;
-			children = (
-				23572EAC21F702410088DDEC /* TableMigrateTests.mm */,
-				23572EAD21F702410088DDEC /* TableMigrationCompatibleTests.mm */,
-				23572EAE21F702410088DDEC /* TableMigratingCompatibleTests.mm */,
-				23572EAF21F702410088DDEC /* DatabaseMigrateTests.mm */,
-				23572EB021F702410088DDEC /* DatabaseMigratingCompatibleTests.mm */,
-				23572EB121F702410088DDEC /* DatabaseMigrationCompatibleTests.mm */,
-			);
-			path = normal;
 			sourceTree = "<group>";
 		};
 		236BACDF21BF9F5900C8B4D9 /* migration */ = {
@@ -4769,25 +4717,13 @@
 				23572E6021F6C00E0088DDEC /* MigrationTestCase.mm in Sources */,
 				23572E8B21F6F8A60088DDEC /* AutoIncrementDatabaseMigrateTests.mm in Sources */,
 				23572E9021F6F8A60088DDEC /* AutoIncrementDatabaseMigratingCompatibleTests.mm in Sources */,
-				23572EB221F702420088DDEC /* TableMigrateTests.mm in Sources */,
-				23572E9C21F6F9560088DDEC /* PrimaryKeyDatabaseMigrationCompatibleTests.mm in Sources */,
 				23572E6B21F6C2AD0088DDEC /* Random+MigrationObject.mm in Sources */,
-				23572E9921F6F9560088DDEC /* PrimaryKeyTableMigratingCompatibleTests.mm in Sources */,
-				23572E9A21F6F9560088DDEC /* PrimaryKeyTableMigrationCompatibleTests.mm in Sources */,
 				23572E8F21F6F8A60088DDEC /* AutoIncrementDatabaseMigrationCompatibleTests.mm in Sources */,
 				23572E5E21F6C00E0088DDEC /* MigrationCompatibleTestCase.mm in Sources */,
 				23572E6821F6C0280088DDEC /* MigrationObject.mm in Sources */,
 				23572E8E21F6F8A60088DDEC /* AutoIncrementTableMigrateTests.mm in Sources */,
-				23572EB521F702420088DDEC /* DatabaseMigrateTests.mm in Sources */,
-				23572E9B21F6F9560088DDEC /* PrimaryKeyDatabaseMigrateTests.mm in Sources */,
-				23572EB621F702420088DDEC /* DatabaseMigratingCompatibleTests.mm in Sources */,
-				23572EB421F702420088DDEC /* TableMigratingCompatibleTests.mm in Sources */,
-				23572EB721F702420088DDEC /* DatabaseMigrationCompatibleTests.mm in Sources */,
 				23572E5F21F6C00E0088DDEC /* MigrateTestCase.mm in Sources */,
-				23572EB321F702420088DDEC /* TableMigrationCompatibleTests.mm in Sources */,
-				23572E9D21F6F9560088DDEC /* PrimaryKeyDatabaseMigratingCompatibleTests.mm in Sources */,
 				23572E8C21F6F8A60088DDEC /* AutoIncrementTableMigrationCompatibleTests.mm in Sources */,
-				23572E9821F6F9560088DDEC /* PrimaryKeyTableMigrateTests.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
