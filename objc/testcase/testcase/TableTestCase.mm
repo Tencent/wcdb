@@ -121,7 +121,7 @@
     afterModification:(BOOL (^)())block
 {
     [self doTestSQLs:expectedSQLs inOperation:block];
-    NSArray<NSObject<WCTTableCoding>*>* allObjects = [self.table getObjects];
+    NSArray<NSObject<WCTTableCoding>*>* allObjects = [self getAllObjects];
     TestCaseAssertTrue([allObjects isEqualToArray:expectedObjects]);
 }
 
@@ -236,6 +236,11 @@
          }];
     TestCaseAssertTrue([selected isKindOfClass:NSArray.class]);
     TestCaseAssertTrue([selected isEqualToArray:expectedRows]);
+}
+
+- (NSArray<NSObject<WCTTableCoding>*>*)getAllObjects
+{
+    return [self.table getObjects];
 }
 
 @end

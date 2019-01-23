@@ -54,7 +54,7 @@ WCDB_SYNTHESIZE(MigrationObject, content)
     for (auto& columnDef : statement.syntax().columnDefs) {
         if (columnDef.column.name == MigrationObject.identifier.getDescription()) {
             WCDB::ColumnConstraint constraint;
-            constraint.primaryKey();
+            constraint.primaryKey().order(WCDB::Order::ASC);
             columnDef.constraints.push_back(constraint.syntax());
             break;
         }
@@ -68,7 +68,7 @@ WCDB_SYNTHESIZE(MigrationObject, content)
     for (auto& columnDef : statement.syntax().columnDefs) {
         if (columnDef.column.name == MigrationObject.identifier.getDescription()) {
             WCDB::ColumnConstraint constraint;
-            constraint.primaryKey().autoIncrement();
+            constraint.primaryKey().order(WCDB::Order::ASC).autoIncrement();
             columnDef.constraints.push_back(constraint.syntax());
             break;
         }

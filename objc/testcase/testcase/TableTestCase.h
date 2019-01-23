@@ -79,4 +79,6 @@
            andSQLs:(NSArray<NSString*>*)sqls
        bySelecting:(WCTColumnsXRows* (^)())block;
 
+- (NSArray<NSObject<WCTTableCoding>*>*)getAllObjects;
+
 @end
