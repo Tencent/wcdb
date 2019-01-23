@@ -106,6 +106,12 @@ public:
     static Expression asExpression(const RaiseFunction& raiseFunction);
 };
 
+template<>
+class ExpressionConvertible<StatementSelect> : public std::true_type {
+public:
+    static Expression asExpression(const StatementSelect& statementSelect);
+};
+
 template<typename T>
 class IndexedColumnConvertible<T, typename std::enable_if<ExpressionConvertible<T>::value>::type>
 : public std::true_type {

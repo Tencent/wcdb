@@ -42,6 +42,11 @@ Expression ExpressionConvertible<RaiseFunction>::asExpression(const RaiseFunctio
     return raiseFunction;
 }
 
+Expression ExpressionConvertible<StatementSelect>::asExpression(const StatementSelect &statementSelect)
+{
+    return statementSelect;
+}
+
 IndexedColumn IndexedColumnConvertible<Column>::asIndexedColumn(const Column &column)
 {
     return column;

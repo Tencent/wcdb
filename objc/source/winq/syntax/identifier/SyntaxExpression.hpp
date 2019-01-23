@@ -54,6 +54,7 @@ public:
         Case,
         RaiseFunction,
         Window,
+        Select,
     } switcher;
     LiteralValue literalValue;
     BindParameter bindParameter;

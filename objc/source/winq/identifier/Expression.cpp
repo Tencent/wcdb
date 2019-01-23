@@ -40,6 +40,12 @@ Expression::Expression(const Column& column)
     syntax().column = column;
 }
 
+Expression::Expression(const StatementSelect& select)
+{
+    syntax().switcher = SyntaxType::Switch::Select;
+    syntax().select = select;
+}
+
 Expression& Expression::table(const String& table)
 {
     syntax().table = table;

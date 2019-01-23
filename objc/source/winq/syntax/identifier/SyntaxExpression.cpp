@@ -330,6 +330,10 @@ String Expression::getDescription() const
         }
         stream << "EXISTS(" << *select.get() << ")";
         break;
+    case Switch::Select:
+        SyntaxRemedialAssert(select != nullptr);
+        stream << "(" << *select.get() << ")";
+        break;
     case Switch::Case: {
         SyntaxRemedialAssert(expressions.size() >= hasCase + 2 + hasElse);
         SyntaxRemedialAssert((expressions.size() - hasCase - hasElse) % 2 == 0);
@@ -479,6 +483,10 @@ void Expression::iterate(const Iterator& iterator, bool& stop)
         break;
     }
     case Switch::Exists:
+        IterateRemedialAssert(select != nullptr);
+        select->iterate(iterator, stop);
+        break;
+    case Switch::Select:
         IterateRemedialAssert(select != nullptr);
         select->iterate(iterator, stop);
         break;

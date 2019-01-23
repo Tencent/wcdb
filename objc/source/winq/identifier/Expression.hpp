@@ -49,6 +49,7 @@ public:
     Expression(const LiteralValue& literalValue);
     Expression(const BindParameter& bindParameter);
     Expression(const Column& column);
+    Expression(const StatementSelect& select);
 
     Expression& table(const String& table);
     Expression& schema(const Schema& schema);

@@ -214,6 +214,15 @@
     TestCaseAssertSQLEqual(testingSQL, @"CAST(1 AS INTEGER)");
 }
 
+- (void)test_select
+{
+    auto testingSQL = WCDB::Expression(select);
+
+    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
+    TestCaseAssertSQLEqual(testingSQL, @"(SELECT 1)");
+}
+
 - (void)test_exists
 {
     auto testingSQL = WCDB::Expression::exists(select);
