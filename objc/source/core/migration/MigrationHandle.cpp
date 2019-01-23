@@ -50,21 +50,30 @@ std::pair<bool, std::set<String>>
 MigrationHandle::getColumnsForSourceTable(const MigrationUserInfo& userInfo)
 {
     Schema schema = userInfo.getSchemaForSourceDatabase();
-    if (!schema.syntax().isMain()) {
-        bool succeed;
-        std::set<String> attacheds;
-        std::tie(succeed, attacheds)
-        = getValues(MigrationInfo::getStatementForSelectingDatabaseList(), 1);
-        if (succeed) {
-            if (attacheds.find(schema.getDescription()) == attacheds.end()) {
-                succeed = executeStatement(userInfo.getStatementForAttachingSchema());
+    bool succeed = true;
+    std::set<String> columns;
+    do {
+        if (!schema.syntax().isMain()) {
+            std::set<String> attacheds;
+            std::tie(succeed, attacheds)
+            = getValues(MigrationInfo::getStatementForSelectingDatabaseList(), 1);
+            if (succeed) {
+                if (attacheds.find(schema.getDescription()) == attacheds.end()) {
+                    succeed
+                    = executeStatement(userInfo.getStatementForAttachingSchema());
+                }
+            }
+            if (!succeed) {
+                break;
             }
         }
-        if (!succeed) {
-            return { false, {} };
+        bool exists;
+        std::tie(succeed, exists) = tableExists(schema, userInfo.getSourceTable());
+        if (succeed && exists) {
+            std::tie(succeed, columns) = getColumns(schema, userInfo.getSourceTable());
         }
-    }
-    return getColumns(schema, userInfo.getSourceTable());
+    } while (false);
+    return { succeed, columns };
 }
 
 String MigrationHandle::getDatabasePath() const
