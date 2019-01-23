@@ -141,8 +141,8 @@ protected:
 public:
     /*
      INSERT [columns]
-     INTO main.[table]
-     SELECT [columns]
+     INTO rowid, main.[table]
+     SELECT rowid, [columns]
      FROM [schemaForSourceDatabase].[sourceTable]
      ORDER BY rowid DESC
      LIMIT 1

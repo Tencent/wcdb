@@ -157,6 +157,8 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo, const std::set<S
     {
         std::list<Column> specificColumns;
         std::list<ResultColumn> specificResultColumns;
+        specificColumns.push_back(Column::rowid());
+        specificResultColumns.push_back(Column::rowid());
         for (const auto& column : columns) {
             Column specificColumn(column);
             specificColumns.push_back(specificColumn);

@@ -60,7 +60,7 @@
     NSArray<NSString*>* sqls = @[
         @"BEGIN IMMEDIATE",
         [NSString stringWithFormat:@"INSERT INTO %@.testSourceTable(identifier, content) VALUES(?1, ?2)", self.schemaName],
-        [NSString stringWithFormat:@"INSERT INTO main.testTable(content, identifier) SELECT content, identifier FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName],
+        [NSString stringWithFormat:@"INSERT INTO main.testTable(rowid, content, identifier) SELECT rowid, content, identifier FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName],
         [NSString stringWithFormat:@"DELETE FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName],
         @"COMMIT"
     ];
@@ -82,7 +82,7 @@
     NSArray<NSString*>* sqls = @[
         @"BEGIN IMMEDIATE",
         [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@.testSourceTable(identifier, content) VALUES(?1, ?2)", self.schemaName],
-        [NSString stringWithFormat:@"INSERT OR REPLACE INTO main.testTable(content, identifier) SELECT content, identifier FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName],
+        [NSString stringWithFormat:@"INSERT OR REPLACE INTO main.testTable(rowid, content, identifier) SELECT rowid, content, identifier FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName],
         [NSString stringWithFormat:@"DELETE FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName],
         @"COMMIT"
     ];
