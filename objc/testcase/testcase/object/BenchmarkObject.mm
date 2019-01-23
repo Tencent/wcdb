@@ -28,4 +28,6 @@ WCDB_IMPLEMENTATION(BenchmarkObject)
 WCDB_SYNTHESIZE(BenchmarkObject, identifier)
 WCDB_SYNTHESIZE(BenchmarkObject, content)
 
+WCDB_PRIMARY_ASC(BenchmarkObject, identifier)
+
 @end
