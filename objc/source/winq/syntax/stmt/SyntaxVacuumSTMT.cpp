@@ -35,7 +35,7 @@ String VacuumSTMT::getDescription() const
 {
     std::ostringstream stream;
     stream << "VACUUM";
-    if (specifySchema) {
+    if (specifySchema && !schema.empty()) {
         stream << space << schema;
     }
     return stream.str();

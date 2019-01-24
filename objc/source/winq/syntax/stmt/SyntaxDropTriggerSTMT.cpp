@@ -38,7 +38,10 @@ String DropTriggerSTMT::getDescription() const
     if (ifExists) {
         stream << "IF EXISTS ";
     }
-    stream << schema << "." << trigger;
+    if (!schema.empty()) {
+        stream << schema << ".";
+    }
+    stream << trigger;
     return stream.str();
 }
 

@@ -41,6 +41,7 @@ public:
 
 #pragma mark - Utility
 public:
+    bool empty() const;
     bool isMain() const;
 };
 

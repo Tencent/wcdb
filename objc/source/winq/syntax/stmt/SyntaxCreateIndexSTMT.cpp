@@ -42,7 +42,10 @@ String CreateIndexSTMT::getDescription() const
     if (ifNotExists) {
         stream << "IF NOT EXISTS ";
     }
-    stream << schema << "." << index << " ON " << table << "(" << indexedColumns << ")";
+    if (!schema.empty()) {
+        stream << schema << ".";
+    }
+    stream << index << " ON " << table << "(" << indexedColumns << ")";
     if (useCondition) {
         stream << " WHERE " << condition;
     }

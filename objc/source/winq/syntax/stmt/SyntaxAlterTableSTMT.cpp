@@ -34,7 +34,11 @@ Identifier::Type AlterTableSTMT::getType() const
 String AlterTableSTMT::getDescription() const
 {
     std::ostringstream stream;
-    stream << "ALTER TABLE " << schema << "." << table;
+    stream << "ALTER TABLE ";
+    if (!schema.empty()) {
+        stream << schema << ".";
+    }
+    stream << table;
     switch (switcher) {
     case Switch::RenameTable:
         stream << " RENAME TO " << newTable;

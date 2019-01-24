@@ -38,7 +38,10 @@ String DropIndexSTMT::getDescription() const
     if (ifExists) {
         stream << "IF EXISTS ";
     }
-    stream << schema << "." << index;
+    if (!schema.empty()) {
+        stream << schema << ".";
+    }
+    stream << index;
     return stream.str();
 }
 

@@ -39,7 +39,7 @@ String QualifiedTableName::getDescription() const
 String QualifiedTableName::getDescription(bool skipSchema) const
 {
     std::ostringstream stream;
-    if (!skipSchema) {
+    if (!skipSchema && !schema.empty()) {
         stream << schema << ".";
     }
     stream << table;

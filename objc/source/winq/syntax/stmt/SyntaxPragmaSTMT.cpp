@@ -34,7 +34,11 @@ Identifier::Type PragmaSTMT::getType() const
 String PragmaSTMT::getDescription() const
 {
     std::ostringstream stream;
-    stream << "PRAGMA " << schema << "." << pragma;
+    stream << "PRAGMA ";
+    if (!schema.empty()) {
+        stream << schema << ".";
+    }
+    stream << pragma;
     switch (switcher) {
     case Switch::NotSet:
         break;

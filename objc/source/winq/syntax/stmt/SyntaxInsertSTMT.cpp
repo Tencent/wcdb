@@ -43,7 +43,7 @@ String InsertSTMT::getDescription(bool skipSchema) const
         stream << conflictAction << space;
     }
     stream << "INTO ";
-    if (!skipSchema) {
+    if (!skipSchema && !schema.empty()) {
         stream << schema << ".";
     }
     stream << table;

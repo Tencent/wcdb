@@ -38,7 +38,10 @@ String DropTableSTMT::getDescription() const
     if (ifExists) {
         stream << "IF EXISTS ";
     }
-    stream << schema << "." << table;
+    if (!schema.empty()) {
+        stream << schema << ".";
+    }
+    stream << table;
     return stream.str();
 }
 

@@ -150,7 +150,10 @@ String Expression::getDescription() const
         break;
     case Switch::Column:
         if (!table.empty()) {
-            stream << schema << "." << table << ".";
+            if (!schema.empty()) {
+                stream << schema << ".";
+            }
+            stream << table << ".";
         }
         stream << column;
         break;
@@ -304,10 +307,18 @@ String Expression::getDescription() const
             break;
         }
         case SwitchIn::Table:
-            stream << space << schema << "." << table;
+            stream << space;
+            if (!schema.empty()) {
+                stream << schema << ".";
+            }
+            stream << table;
             break;
         case SwitchIn::Function: {
-            stream << space << schema << "." << function << "(";
+            stream << space;
+            if (!schema.empty()) {
+                stream << schema << ".";
+            }
+            stream << function << "(";
             bool comma = false;
             while (++iter != expressions.end()) {
                 if (comma) {

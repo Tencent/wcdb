@@ -38,7 +38,10 @@ String CreateVirtualTableSTMT::getDescription() const
     if (ifNotExists) {
         stream << "IF NOT EXISTS ";
     }
-    stream << schema << "." << table << " USING " << module;
+    if (!schema.empty()) {
+        stream << schema << ".";
+    }
+    stream << table << " USING " << module;
     if (!arguments.empty()) {
         stream << "(";
         bool comma = false;

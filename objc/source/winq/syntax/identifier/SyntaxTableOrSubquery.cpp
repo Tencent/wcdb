@@ -36,7 +36,10 @@ String TableOrSubquery::getDescription() const
     std::ostringstream stream;
     switch (switcher) {
     case Switch::Table:
-        stream << schema << "." << tableOrFunction;
+        if (!schema.empty()) {
+            stream << schema << ".";
+        }
+        stream << tableOrFunction;
         if (!alias.empty()) {
             stream << " AS " << alias;
         }
@@ -52,7 +55,10 @@ String TableOrSubquery::getDescription() const
         }
         break;
     case Switch::Function:
-        stream << schema << "." << tableOrFunction << "(" << expressions << ")";
+        if (!schema.empty()) {
+            stream << schema << ".";
+        }
+        stream << tableOrFunction << "(" << expressions << ")";
         if (!alias.empty()) {
             stream << " AS " << alias;
         }

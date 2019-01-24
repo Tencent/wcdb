@@ -42,7 +42,11 @@ String ReindexSTMT::getDescription() const
         stream << space << collationOrTableOrIndex;
         break;
     case Switch::TableOrIndex:
-        stream << space << schema << "." << collationOrTableOrIndex;
+        stream << space;
+        if (!schema.empty()) {
+            stream << schema << ".";
+        }
+        stream << collationOrTableOrIndex;
         break;
     }
     return stream.str();

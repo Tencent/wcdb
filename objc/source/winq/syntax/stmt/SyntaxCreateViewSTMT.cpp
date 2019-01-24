@@ -42,7 +42,7 @@ String CreateViewSTMT::getDescription() const
     if (ifNotExists) {
         stream << "IF NOT EXISTS ";
     }
-    if (!temp) {
+    if (!temp && !schema.empty()) {
         stream << schema << ".";
     }
     stream << view;

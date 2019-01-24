@@ -36,7 +36,10 @@ String AnalyzeSTMT::getDescription() const
     std::ostringstream stream;
     stream << "ANALYZE";
     if (useSchema) {
-        stream << space << schema;
+        stream << space;
+        if (!schema.empty()) {
+            stream << schema;
+        }
         if (!tableOrIndex.empty()) {
             stream << "." << tableOrIndex;
         }

@@ -46,6 +46,11 @@ bool Schema::isMain() const
     return name.empty() || name == mainSchema;
 }
 
+bool Schema::empty() const
+{
+    return name.empty();
+}
+
 } // namespace Syntax
 
 } // namespace WCDB

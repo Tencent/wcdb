@@ -38,7 +38,10 @@ String DropViewSTMT::getDescription() const
     if (ifExists) {
         stream << "IF EXISTS ";
     }
-    stream << schema << "." << view;
+    if (!schema.empty()) {
+        stream << schema << ".";
+    }
+    stream << view;
     return stream.str();
 }
 
