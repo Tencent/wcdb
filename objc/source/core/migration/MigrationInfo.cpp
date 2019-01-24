@@ -225,8 +225,11 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
               .execute(WCDB::StatementUpdate()
                        .update(m_table)
                        .set(Column::rowid())
-                       .to(StatementSelect().select(Column::rowid().max() + 1).from(m_unionedView))
-                       .where(Column::rowid() == Column::rowid().inTable("NEW")));
+                       .to(StatementSelect()
+                           .select(Column::rowid().max() + 1)
+                           .from(TableOrSubquery(m_unionedView).schema(Schema::temp())))
+                       .where(Column::rowid()
+                              == Expression(Column::rowid()).table("NEW").schema("")));
         }
     }
 }
