@@ -113,6 +113,8 @@ public:
     std::pair<bool, bool> ft3TokenizerExists(const String &tokenizer);
     std::pair<bool, bool> tableExists(const String &table);
     std::pair<bool, std::set<String>> getColumns(const String &table);
+    std::pair<bool, bool>
+    isColumnIntegerPrimary(const String &table, const String &column);
 
 protected:
     std::pair<bool, bool> tableExists(const Schema &schema, const String &table);

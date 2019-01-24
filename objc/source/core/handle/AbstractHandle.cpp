@@ -247,6 +247,19 @@ void AbstractHandle::finalizeStatements()
 }
 
 #pragma mark - Meta
+std::pair<bool, bool>
+AbstractHandle::isColumnIntegerPrimary(const String &table, const String &column)
+{
+    int primary = 0;
+    const char *type;
+    bool result = false;
+    if (exitAPI(sqlite3_table_column_metadata(
+        m_handle, nullptr, table.c_str(), column.c_str(), &type, nullptr, nullptr, &primary, nullptr))) {
+        result = true;
+    }
+    return { result, primary && Syntax::isIntegerType(type) };
+}
+
 std::pair<bool, bool> AbstractHandle::ft3TokenizerExists(const String &tokenizer)
 {
     bool exists = false;

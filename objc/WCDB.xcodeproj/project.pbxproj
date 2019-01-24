@@ -507,6 +507,13 @@
 		23BBE2B22049576D00C4CBB6 /* WCTDatabase+Memory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23BBE2B02049576D00C4CBB6 /* WCTDatabase+Memory.mm */; };
 		23C40CF9208DBCDF007B1648 /* Dispatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C40CF4208DBCDD007B1648 /* Dispatch.cpp */; };
 		23C40CFF208DBCDF007B1648 /* Dispatch.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C40CF8208DBCDF007B1648 /* Dispatch.hpp */; };
+		23C56DF021F96754005EC861 /* TableMigrateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23C56DEA21F96753005EC861 /* TableMigrateTests.mm */; };
+		23C56DF121F96754005EC861 /* TableMigrationCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23C56DEB21F96753005EC861 /* TableMigrationCompatibleTests.mm */; };
+		23C56DF221F96754005EC861 /* TableMigratingCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23C56DEC21F96753005EC861 /* TableMigratingCompatibleTests.mm */; };
+		23C56DF321F96754005EC861 /* DatabaseMigrateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23C56DED21F96753005EC861 /* DatabaseMigrateTests.mm */; };
+		23C56DF421F96754005EC861 /* DatabaseMigratingCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23C56DEE21F96753005EC861 /* DatabaseMigratingCompatibleTests.mm */; };
+		23C56DF521F96754005EC861 /* DatabaseMigrationCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23C56DEF21F96753005EC861 /* DatabaseMigrationCompatibleTests.mm */; };
+		23C56DF721F9A0BD005EC861 /* SyntaxColumnType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C56DF621F9A0BD005EC861 /* SyntaxColumnType.cpp */; };
 		23C7558C20DCF8A700031A93 /* Locker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C7558920DCF8A700031A93 /* Locker.hpp */; };
 		23C7559120DCF90F00031A93 /* SQLiteLocker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C7558F20DCF90F00031A93 /* SQLiteLocker.cpp */; };
 		23C7559320DCF90F00031A93 /* SQLiteLocker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C7559020DCF90F00031A93 /* SQLiteLocker.hpp */; };
@@ -1800,6 +1807,13 @@
 		23C40CF4208DBCDD007B1648 /* Dispatch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Dispatch.cpp; sourceTree = "<group>"; };
 		23C40CF8208DBCDF007B1648 /* Dispatch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Dispatch.hpp; sourceTree = "<group>"; };
 		23C43BCC2087435800AB186D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		23C56DEA21F96753005EC861 /* TableMigrateTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableMigrateTests.mm; sourceTree = "<group>"; };
+		23C56DEB21F96753005EC861 /* TableMigrationCompatibleTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableMigrationCompatibleTests.mm; sourceTree = "<group>"; };
+		23C56DEC21F96753005EC861 /* TableMigratingCompatibleTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableMigratingCompatibleTests.mm; sourceTree = "<group>"; };
+		23C56DED21F96753005EC861 /* DatabaseMigrateTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DatabaseMigrateTests.mm; sourceTree = "<group>"; };
+		23C56DEE21F96753005EC861 /* DatabaseMigratingCompatibleTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DatabaseMigratingCompatibleTests.mm; sourceTree = "<group>"; };
+		23C56DEF21F96753005EC861 /* DatabaseMigrationCompatibleTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DatabaseMigrationCompatibleTests.mm; sourceTree = "<group>"; };
+		23C56DF621F9A0BD005EC861 /* SyntaxColumnType.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SyntaxColumnType.cpp; sourceTree = "<group>"; };
 		23C7558920DCF8A700031A93 /* Locker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Locker.hpp; sourceTree = "<group>"; };
 		23C7558F20DCF90F00031A93 /* SQLiteLocker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SQLiteLocker.cpp; sourceTree = "<group>"; };
 		23C7559020DCF90F00031A93 /* SQLiteLocker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SQLiteLocker.hpp; sourceTree = "<group>"; };
@@ -2353,6 +2367,7 @@
 		231FEADE2199A0FF00DC3706 /* migration */ = {
 			isa = PBXGroup;
 			children = (
+				23C56DE921F96753005EC861 /* normal */,
 				23572EC321F80F790088DDEC /* primary */,
 				23572E8421F6F8A50088DDEC /* increment */,
 				23572E5321F6C00E0088DDEC /* common */,
@@ -3372,6 +3387,19 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		23C56DE921F96753005EC861 /* normal */ = {
+			isa = PBXGroup;
+			children = (
+				23C56DEA21F96753005EC861 /* TableMigrateTests.mm */,
+				23C56DEB21F96753005EC861 /* TableMigrationCompatibleTests.mm */,
+				23C56DEC21F96753005EC861 /* TableMigratingCompatibleTests.mm */,
+				23C56DED21F96753005EC861 /* DatabaseMigrateTests.mm */,
+				23C56DEE21F96753005EC861 /* DatabaseMigratingCompatibleTests.mm */,
+				23C56DEF21F96753005EC861 /* DatabaseMigrationCompatibleTests.mm */,
+			);
+			path = normal;
+			sourceTree = "<group>";
+		};
 		23D0C30B20C125420001BFAE /* sqlite */ = {
 			isa = PBXGroup;
 			children = (
@@ -3579,6 +3607,7 @@
 			isa = PBXGroup;
 			children = (
 				23EEDBEE217DFADC006E9E73 /* SyntaxColumnType.hpp */,
+				23C56DF621F9A0BD005EC861 /* SyntaxColumnType.cpp */,
 				23EEDBEF217DFADC006E9E73 /* SyntaxCompoundOperator.hpp */,
 				23EEDBF0217DFADC006E9E73 /* SyntaxConflict.hpp */,
 				23EEDBF1217DFADC006E9E73 /* SyntaxJoinOperator.hpp */,
@@ -4743,6 +4772,7 @@
 				23572E6021F6C00E0088DDEC /* MigrationTestCase.mm in Sources */,
 				23572E8B21F6F8A60088DDEC /* AutoIncrementDatabaseMigrateTests.mm in Sources */,
 				23572E9021F6F8A60088DDEC /* AutoIncrementDatabaseMigratingCompatibleTests.mm in Sources */,
+				23C56DF021F96754005EC861 /* TableMigrateTests.mm in Sources */,
 				23572ECE21F80F7A0088DDEC /* PrimaryKeyDatabaseMigrationCompatibleTests.mm in Sources */,
 				23572E6B21F6C2AD0088DDEC /* Random+MigrationObject.mm in Sources */,
 				23572ECB21F80F7A0088DDEC /* PrimaryKeyTableMigratingCompatibleTests.mm in Sources */,
@@ -4751,8 +4781,13 @@
 				23572E5E21F6C00E0088DDEC /* MigrationCompatibleTestCase.mm in Sources */,
 				23572E6821F6C0280088DDEC /* MigrationObject.mm in Sources */,
 				23572E8E21F6F8A60088DDEC /* AutoIncrementTableMigrateTests.mm in Sources */,
+				23C56DF321F96754005EC861 /* DatabaseMigrateTests.mm in Sources */,
 				23572ECD21F80F7A0088DDEC /* PrimaryKeyDatabaseMigrateTests.mm in Sources */,
+				23C56DF421F96754005EC861 /* DatabaseMigratingCompatibleTests.mm in Sources */,
+				23C56DF221F96754005EC861 /* TableMigratingCompatibleTests.mm in Sources */,
+				23C56DF521F96754005EC861 /* DatabaseMigrationCompatibleTests.mm in Sources */,
 				23572E5F21F6C00E0088DDEC /* MigrateTestCase.mm in Sources */,
+				23C56DF121F96754005EC861 /* TableMigrationCompatibleTests.mm in Sources */,
 				23572ECF21F80F7A0088DDEC /* PrimaryKeyDatabaseMigratingCompatibleTests.mm in Sources */,
 				23572E8C21F6F8A60088DDEC /* AutoIncrementTableMigrationCompatibleTests.mm in Sources */,
 				23572ECA21F80F7A0088DDEC /* PrimaryKeyTableMigrateTests.mm in Sources */,
@@ -4938,6 +4973,7 @@
 				23EEDD17217DFADC006E9E73 /* SyntaxRecursiveCTE.cpp in Sources */,
 				23EEDC8D217DFADC006E9E73 /* IndexedColumn.cpp in Sources */,
 				23EEDC9D217DFADC006E9E73 /* RaiseFunction.cpp in Sources */,
+				23C56DF721F9A0BD005EC861 /* SyntaxColumnType.cpp in Sources */,
 				23EEDC7B217DFADC006E9E73 /* ColumnConstraint.cpp in Sources */,
 				2349F7591EA0D6680021EFA7 /* WCTRuntimeBaseAccessor+NoARC.mm in Sources */,
 				2314AE7121070A1700244D39 /* Range.cpp in Sources */,

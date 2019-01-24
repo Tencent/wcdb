@@ -25,6 +25,8 @@
 
 namespace WCDB {
 
+class String;
+
 namespace Syntax {
 
 enum class ColumnType {
@@ -36,7 +38,9 @@ enum class ColumnType {
     BLOB,
 };
 
-}
+bool isIntegerType(const String& type);
+
+} // namespace Syntax
 
 template<>
 constexpr const char* Enum::description(const Syntax::ColumnType& columnType)
