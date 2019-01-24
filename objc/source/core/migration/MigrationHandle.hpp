@@ -38,9 +38,14 @@ public:
 protected:
     bool bindInfos(const std::map<String, RecyclableMigrationInfo> &migratings) override final;
 
+private:
+    bool rebindViews(const std::map<String, RecyclableMigrationInfo> &migratings);
+    bool rebindSchemas(const std::map<String, RecyclableMigrationInfo> &migratings);
+    bool rebindTrigger(const std::map<String, RecyclableMigrationInfo> &migratings);
+
 #pragma mark - Info Initializer
 protected:
-    std::pair<bool, std::set<String>>
+    std::tuple<bool, bool, std::set<String>>
     getColumnsForSourceTable(const MigrationUserInfo &userInfo) override final;
     String getDatabasePath() const override final;
 

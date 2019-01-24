@@ -46,11 +46,12 @@ MigrationHandle::~MigrationHandle()
 }
 
 #pragma mark - Info Initializer
-std::pair<bool, std::set<String>>
+std::tuple<bool, bool, std::set<String>>
 MigrationHandle::getColumnsForSourceTable(const MigrationUserInfo& userInfo)
 {
     Schema schema = userInfo.getSchemaForSourceDatabase();
     bool succeed = true;
+    bool primaryKey = false;
     std::set<String> columns;
     do {
         if (!schema.syntax().isMain()) {
@@ -69,11 +70,27 @@ MigrationHandle::getColumnsForSourceTable(const MigrationUserInfo& userInfo)
         }
         bool exists;
         std::tie(succeed, exists) = tableExists(schema, userInfo.getSourceTable());
-        if (succeed && exists) {
+        if (!succeed) {
+            break;
+        }
+        if (exists) {
             std::tie(succeed, columns) = getColumns(schema, userInfo.getSourceTable());
+            if (succeed) {
+                for (const auto& column : columns) {
+                    std::tie(succeed, primaryKey)
+                    = isColumnIntegerPrimary(userInfo.getSourceTable(), column);
+                    if (!succeed || primaryKey) {
+                        break;
+                    }
+                }
+            }
         }
     } while (false);
-    return { succeed, columns };
+    if (!succeed) {
+        columns.clear();
+        primaryKey = false;
+    }
+    return { succeed, primaryKey, columns };
 }
 
 String MigrationHandle::getDatabasePath() const
@@ -82,94 +99,149 @@ String MigrationHandle::getDatabasePath() const
 }
 
 #pragma mark - Binder
-bool MigrationHandle::bindInfos(const std::map<String, RecyclableMigrationInfo>& infos)
+bool MigrationHandle::rebindViews(const std::map<String, RecyclableMigrationInfo>& migratings)
 {
-    bool succeed;
-
-    // views
-    std::map<String, const MigrationInfo*> infosToCreateView; // view -> info
-    for (const auto& iter : infos) {
-        const MigrationInfo* info = iter.second.get();
-        infosToCreateView.emplace(info->getUnionedView(), info);
+    std::map<String, const MigrationInfo*> views2MigratingInfos;
+    for (const auto& iter : migratings) {
+        const MigrationInfo* migrating = iter.second.get();
+        views2MigratingInfos.emplace(migrating->getUnionedView(), migrating);
     }
 
-    std::set<String> createdViews;
+    std::set<String> existingViews;
 
+    // get existing unioned views
+    bool succeed;
     bool exists;
     std::tie(succeed, exists) = tableExists(Schema::temp(), Syntax::masterTable);
     if (!succeed) {
         return false;
     }
     if (exists) {
-        std::tie(succeed, createdViews)
+        std::tie(succeed, existingViews)
         = getValues(MigrationInfo::getStatementForSelectingUnionedView(), 0);
         if (!succeed) {
             return false;
         }
     }
 
-    for (const auto& createdView : createdViews) {
-        WCTInnerAssert(createdView.hasPrefix(MigrationInfo::getUnionedViewPrefix()));
-        auto iter = infosToCreateView.find(createdView);
-        if (iter != infosToCreateView.end()) {
+    for (const auto& existingView : existingViews) {
+        WCTInnerAssert(existingView.hasPrefix(MigrationInfo::getUnionedViewPrefix()));
+        auto iter = views2MigratingInfos.find(existingView);
+        if (iter != views2MigratingInfos.end()) {
             // it is already created
-            infosToCreateView.erase(iter);
+            views2MigratingInfos.erase(iter);
         } else {
             // it is no longer needed
-            if (!executeStatement(MigrationInfo::getStatementForDroppingUnionedView(createdView))) {
+            if (!executeStatement(MigrationInfo::getStatementForDroppingUnionedView(existingView))) {
                 return false;
             }
         }
     }
     // create all needed views
-    for (const auto& iter : infosToCreateView) {
-        const MigrationInfo* infoToCreateView = iter.second;
-        if (!executeStatement(infoToCreateView->getStatementForCreatingUnionedView())) {
+    for (const auto& iter : views2MigratingInfos) {
+        if (!executeStatement(iter.second->getStatementForCreatingUnionedView())) {
             return false;
         }
     }
+    return true;
+}
 
-    // schemas
-    std::map<String, const MigrationInfo*> infosToAttachSchema; // schema -> info
-    for (const auto& iter : infos) {
+bool MigrationHandle::rebindSchemas(const std::map<String, RecyclableMigrationInfo>& migratings)
+{
+    std::map<String, const MigrationInfo*> schemas2MigratingInfos;
+    for (const auto& iter : migratings) {
         const MigrationInfo* info = iter.second.get();
         if (info->isCrossDatabase()) {
-            infosToAttachSchema.emplace(
+            schemas2MigratingInfos.emplace(
             info->getSchemaForSourceDatabase().getDescription(), info);
         }
     }
 
-    std::set<String> attachedSchemas;
-    std::tie(succeed, attachedSchemas)
+    bool succeed;
+    std::set<String> existingSchemas;
+    std::tie(succeed, existingSchemas)
     = getValues(MigrationInfo::getStatementForSelectingDatabaseList(), 1);
     if (!succeed) {
         return false;
     }
 
-    for (const auto& attachedSchema : attachedSchemas) {
-        if (attachedSchema.hasPrefix(MigrationInfo::getSchemaPrefix())) {
-            auto iter = infosToAttachSchema.find(attachedSchema);
-            if (iter != infosToAttachSchema.end()) {
+    for (const auto& existingSchema : existingSchemas) {
+        if (existingSchema.hasPrefix(MigrationInfo::getSchemaPrefix())) {
+            auto iter = schemas2MigratingInfos.find(existingSchema);
+            if (iter != schemas2MigratingInfos.end()) {
                 // it is already attached
-                infosToAttachSchema.erase(iter);
+                schemas2MigratingInfos.erase(iter);
             } else {
                 // it is not longer needed
                 if (!executeStatement(
-                    MigrationInfo::getStatementForDetachingSchema(attachedSchema))) {
+                    MigrationInfo::getStatementForDetachingSchema(existingSchema))) {
                     return false;
                 }
             }
         }
     }
     // attach all needed schemas
-    for (const auto& iter : infosToAttachSchema) {
-        const MigrationInfo* infoToAttachSchema = iter.second;
-        if (!executeStatement(infoToAttachSchema->getStatementForAttachingSchema())) {
+    for (const auto& iter : schemas2MigratingInfos) {
+        if (!executeStatement(iter.second->getStatementForAttachingSchema())) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool MigrationHandle::rebindTrigger(const std::map<String, RecyclableMigrationInfo>& migratings)
+{
+    std::map<String, const MigrationInfo*> triggers2MigratingInfos;
+    for (const auto& iter : migratings) {
+        const MigrationInfo* migrating = iter.second.get();
+        if (!migrating->containsIntegerPrimaryKey()) {
+            triggers2MigratingInfos.emplace(migrating->getTriggerName(), migrating);
+        }
+    }
+
+    std::set<String> existingTriggers;
+
+    // get existing unioned triggers
+    bool succeed;
+    bool exists;
+    std::tie(succeed, exists) = tableExists(Schema::temp(), Syntax::masterTable);
+    if (!succeed) {
+        return false;
+    }
+    if (exists) {
+        std::tie(succeed, existingTriggers)
+        = getValues(MigrationInfo::getStatementForSelectingTrigger(), 0);
+        if (!succeed) {
             return false;
         }
     }
 
+    for (const auto& existingTrigger : existingTriggers) {
+        WCTInnerAssert(existingTrigger.hasPrefix(MigrationInfo::getTriggerPrefix()));
+        auto iter = triggers2MigratingInfos.find(existingTrigger);
+        if (iter != triggers2MigratingInfos.end()) {
+            // it is already created
+            triggers2MigratingInfos.erase(iter);
+        } else {
+            // it is no longer needed
+            if (!executeStatement(MigrationInfo::getStatementForDroppingUpdateNonPrimaryRowIDTrigger(
+                existingTrigger))) {
+                return false;
+            }
+        }
+    }
+    // create all needed views
+    for (const auto& iter : triggers2MigratingInfos) {
+        if (!executeStatement(iter.second->getStatementForTriggeringUpdateNonPrimaryRowID())) {
+            return false;
+        }
+    }
     return true;
+}
+
+bool MigrationHandle::bindInfos(const std::map<String, RecyclableMigrationInfo>& migratings)
+{
+    return rebindViews(migratings) && rebindTrigger(migratings) && rebindSchemas(migratings);
 }
 
 #pragma mark - Migration

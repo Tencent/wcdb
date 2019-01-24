@@ -213,13 +213,54 @@ void MigrationStepperHandle::finalizeMigrationStatement()
 }
 
 #pragma mark - Info Initializer
-std::pair<bool, std::set<String>>
+std::tuple<bool, bool, std::set<String>>
 MigrationStepperHandle::getColumnsForSourceTable(const MigrationUserInfo& userInfo)
 {
     if (!reAttach(userInfo.getSourceDatabase(), userInfo.getSchemaForSourceDatabase())) {
-        return { false, {} };
+        return { false, false, {} };
     }
-    return getColumns(userInfo.getSchemaForSourceDatabase(), userInfo.getSourceTable());
+    Schema schema = userInfo.getSchemaForSourceDatabase();
+    bool succeed = true;
+    bool primaryKey = false;
+    std::set<String> columns;
+    do {
+        if (!schema.syntax().isMain()) {
+            std::set<String> attacheds;
+            std::tie(succeed, attacheds)
+            = getValues(MigrationInfo::getStatementForSelectingDatabaseList(), 1);
+            if (succeed) {
+                if (attacheds.find(schema.getDescription()) == attacheds.end()) {
+                    succeed
+                    = executeStatement(userInfo.getStatementForAttachingSchema());
+                }
+            }
+            if (!succeed) {
+                break;
+            }
+        }
+        bool exists;
+        std::tie(succeed, exists) = tableExists(schema, userInfo.getSourceTable());
+        if (!succeed) {
+            break;
+        }
+        if (exists) {
+            std::tie(succeed, columns) = getColumns(schema, userInfo.getSourceTable());
+            if (succeed) {
+                for (const auto& column : columns) {
+                    std::tie(succeed, primaryKey)
+                    = isColumnIntegerPrimary(userInfo.getSourceTable(), column);
+                    if (!succeed || primaryKey) {
+                        break;
+                    }
+                }
+            }
+        }
+    } while (false);
+    if (!succeed) {
+        columns.clear();
+        primaryKey = false;
+    }
+    return { succeed, primaryKey, columns };
 }
 
 String MigrationStepperHandle::getDatabasePath() const

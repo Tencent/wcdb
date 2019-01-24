@@ -108,10 +108,13 @@ Schema MigrationUserInfo::getSchemaForSourceDatabase() const
 }
 
 #pragma mark - MigrationInfo
-MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo, const std::set<String>& columns)
-: MigrationBaseInfo(userInfo)
+MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
+                             const std::set<String>& columns,
+                             bool integerPrimaryKey)
+: MigrationBaseInfo(userInfo), m_integerPrimaryKey(integerPrimaryKey)
 {
     WCTInnerAssert(shouldMigrate());
+    WCTInnerAssert(!columns.empty());
 
     // Schema
     if (isCrossDatabase()) {
@@ -204,6 +207,28 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo, const std::set<S
                                             .schema(m_schemaForSourceDatabase)
                                             .ifExists();
     }
+
+    // trigger
+    {
+        if (!m_integerPrimaryKey) {
+            m_trigger = getTriggerPrefix() + m_table;
+
+            m_statementForTriggerUpdateNonPrimaryRowID
+            = StatementCreateTrigger()
+              .createTrigger(m_trigger)
+              .temp()
+              .ifNotExists()
+              .after()
+              .insert()
+              .on(m_table)
+              .forEachRow()
+              .execute(WCDB::StatementUpdate()
+                       .update(m_table)
+                       .set(Column::rowid())
+                       .to(StatementSelect().select(Column::rowid().max() + 1).from(m_unionedView))
+                       .where(Column::rowid() == Column::rowid().inTable("NEW")));
+        }
+    }
 }
 
 #pragma mark - Schema
@@ -262,6 +287,49 @@ StatementSelect MigrationInfo::getStatementForSelectingUnionedView()
     .select(name)
     .from(TableOrSubquery::master().schema(Schema::temp()))
     .where(type == "view" && name.like(pattern));
+}
+
+#pragma mark - Trigger
+const StatementCreateTrigger&
+MigrationInfo::getStatementForTriggeringUpdateNonPrimaryRowID() const
+{
+    WCTInnerAssert(!m_integerPrimaryKey);
+    return m_statementForTriggerUpdateNonPrimaryRowID;
+}
+
+const String& MigrationInfo::getTriggerPrefix()
+{
+    static const String* s_triggerPrefix = new String("WCDBTrigger_");
+    return *s_triggerPrefix;
+}
+
+bool MigrationInfo::containsIntegerPrimaryKey() const
+{
+    return m_integerPrimaryKey;
+}
+
+const String& MigrationInfo::getTriggerName() const
+{
+    WCTInnerAssert(!m_integerPrimaryKey);
+    return m_trigger;
+}
+
+StatementDropTrigger
+MigrationInfo::getStatementForDroppingUpdateNonPrimaryRowIDTrigger(const String& trigger)
+{
+    WCTInnerAssert(trigger.hasPrefix(getTriggerPrefix()));
+    return StatementDropTrigger().dropTrigger(trigger).schema(Schema::temp()).ifExists();
+}
+
+StatementSelect MigrationInfo::getStatementForSelectingTrigger()
+{
+    Column name("name");
+    Column type("type");
+    String pattern = String::formatted("%s%%", getTriggerPrefix().c_str());
+    return StatementSelect()
+    .select(name)
+    .from(TableOrSubquery::master().schema(Schema::temp()))
+    .where(type == "trigger" && name.like(pattern));
 }
 
 #pragma mark - Migrate

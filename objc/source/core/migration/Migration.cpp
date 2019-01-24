@@ -66,13 +66,15 @@ bool Migration::initInfo(InfoInitializer& initializer, const String& table)
         MigrationUserInfo userInfo(initializer.getDatabasePath(), table);
         m_filter(userInfo);
         if (userInfo.shouldMigrate()) {
+            bool containsPrimaryKey = false;
             std::set<String> columns;
-            std::tie(succeed, columns) = initializer.getColumnsForSourceTable(userInfo);
+            std::tie(succeed, containsPrimaryKey, columns)
+            = initializer.getColumnsForSourceTable(userInfo);
             if (succeed) {
                 LockGuard lockGuard(m_lock);
                 if (m_filted.find(table) == m_filted.end()) {
                     if (!columns.empty()) {
-                        m_holder.push_back(MigrationInfo(userInfo, columns));
+                        m_holder.push_back(MigrationInfo(userInfo, columns, containsPrimaryKey));
                         const MigrationInfo* hold = &m_holder.back();
                         m_migratings.emplace(hold);
                         m_referenceds.emplace(hold, 0);

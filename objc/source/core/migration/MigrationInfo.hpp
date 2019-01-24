@@ -73,7 +73,9 @@ public:
 #pragma mark - MigrationInfo
 class MigrationInfo final : public MigrationBaseInfo {
 public:
-    MigrationInfo(const MigrationUserInfo& userInfo, const std::set<String>& columns);
+    MigrationInfo(const MigrationUserInfo& userInfo,
+                  const std::set<String>& columns,
+                  bool integerPrimaryKey);
 
 #pragma mark - Schema
 public:
@@ -109,7 +111,7 @@ public:
     const String& getUnionedView() const;
 
     /*
-     CREATE TEMP VIEW IF NOT EXISTS [unionedView]
+     CREATE TEMP VIEW IF NOT EXISTS [unionedView] AS
      SELECT rowid, [columns]
      FROM [schemaForSourceDatabase].[sourceTable]
      UNION/UNION ALL
@@ -137,6 +139,89 @@ protected:
     String m_unionedView;
     StatementCreateView m_statementForCreatingUnionedView;
 
+#pragma mark - Trigger
+public:
+    // WCDBTrigger_
+    static const String& getTriggerPrefix();
+
+    const String& getTriggerName() const;
+
+    /* 
+     CREATE TEMP TRIGGER [trigger] 
+     AFTER INSERT ON [table]
+     FOR EACH ROW 
+     BEGIN 
+     UPDATE [table] 
+     SET rowid = 
+     (SELECT max(rowid) + 1 
+     FROM temp.[unionedView]) 
+     WHERE rowid == NEW.rowid; 
+     END;
+     */
+    const StatementCreateTrigger& getStatementForTriggeringUpdateNonPrimaryRowID() const;
+
+    /*
+     DROP TRIGGER IF EXISTS temp.[trigger]
+     */
+    static StatementDropTrigger
+    getStatementForDroppingUpdateNonPrimaryRowIDTrigger(const String& trigger);
+
+    /*
+     SELECT name
+     FROM temp.sqlite_master
+     WHERE type == "trigger" AND name LIKE "WCDBTrigger_%"
+     */
+    static StatementSelect getStatementForSelectingTrigger();
+
+    bool containsIntegerPrimaryKey() const;
+
+protected:
+    // WCDBTrigger_ + [table]
+    String m_trigger;
+    StatementCreateTrigger m_statementForTriggerUpdateNonPrimaryRowID;
+    bool m_integerPrimaryKey;
+
+#pragma mark - Compatible
+public:
+    /*
+     DELETE FROM [schemaForSourceDatabase].[sourceTable] WHERE rowid == ?1
+     */
+    const StatementDelete& getStatementForDeletingSpecifiedRow() const;
+
+    /*
+     INSERT rowid, [columns]
+     INTO main.[table]
+     [OR ONCONFLICT ACTION]
+     SELECT rowid, [columns]
+     FROM [schemaForSourceDatabase].[sourceTable]
+     WHERE rowid == ?1
+     */
+    StatementInsert
+    getStatementForMigratingSpecifiedRow(bool useConflictAction,
+                                         Syntax::ConflictAction conflictAction) const;
+    /*
+     UPDATE ...
+     SET ...
+     WHERE rowid IN(
+     SELECT rowid FROM temp.[unionedView] WHERE ... ORDER BY ... LIMIT ... OFFSET ...
+     )
+     */
+    StatementUpdate
+    getStatementForLimitedUpdatingTable(const Statement& sourceStatement) const;
+
+    /*
+     DELETE FROM ...
+     WHERE rowid IN(
+     SELECT rowid FROM temp.[unionedView] WHERE ... ORDER BY ... LIMIT ... OFFSET ...
+     )
+     */
+    StatementDelete
+    getStatementForLimitedDeletingFromTable(const Statement& sourceStatement) const;
+
+protected:
+    StatementInsert m_statementForMigratingSpecifiedRowTemplate;
+    StatementDelete m_statementForDeletingSpecifiedRow;
+
 #pragma mark - Migrate
 public:
     /*
@@ -157,51 +242,13 @@ public:
     const StatementDelete& getStatementForDeletingMigratedOneRow() const;
 
     /*
-     DELETE FROM [schemaForSourceDatabase].[sourceTable] WHERE rowid == ?1
-     */
-    const StatementDelete& getStatementForDeletingSpecifiedRow() const;
-
-    /*
-     INSERT rowid, [columns]
-     INTO main.[table]
-     [OR ONCONFLICT ACTION]
-     SELECT rowid, [columns]
-     FROM [schemaForSourceDatabase].[sourceTable]
-     WHERE rowid == ?1
-     */
-    StatementInsert
-    getStatementForMigratingSpecifiedRow(bool useConflictAction,
-                                         Syntax::ConflictAction conflictAction) const;
-
-    /*
      DROP TABLE IF EXISTS [schemaForSourceDatabase].[sourceTable]
      */
     const StatementDropTable& getStatementForDroppingSourceTable() const;
 
-    /*
-     UPDATE ...
-     SET ...
-     WHERE rowid IN(
-        SELECT rowid FROM temp.[unionedView] WHERE ... ORDER BY ... LIMIT ... OFFSET ...
-     )
-     */
-    StatementUpdate
-    getStatementForLimitedUpdatingTable(const Statement& sourceStatement) const;
-
-    /*
-     DELETE FROM ...
-     WHERE rowid IN(
-        SELECT rowid FROM temp.[unionedView] WHERE ... ORDER BY ... LIMIT ... OFFSET ...
-     )
-     */
-    StatementDelete
-    getStatementForLimitedDeletingFromTable(const Statement& sourceStatement) const;
-
 protected:
     StatementInsert m_statementForMigratingOneRow;
     StatementDelete m_statementForDeletingMigratedOneRow;
-    StatementInsert m_statementForMigratingSpecifiedRowTemplate;
-    StatementDelete m_statementForDeletingSpecifiedRow;
     StatementDropTable m_statementForDroppingSourceTable;
 };
 

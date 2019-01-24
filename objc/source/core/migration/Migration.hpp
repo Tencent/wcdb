@@ -54,7 +54,8 @@ protected:
 
     protected:
         // When succeed, the empty column means that table does not exist.
-        virtual std::pair<bool, std::set<String>>
+        // succeed, contains integer primary key, columns
+        virtual std::tuple<bool, bool, std::set<String>>
         getColumnsForSourceTable(const MigrationUserInfo& userInfo) = 0;
         virtual String getDatabasePath() const = 0;
     };
