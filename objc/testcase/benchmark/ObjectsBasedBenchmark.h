@@ -24,6 +24,9 @@
 
 @property (nonatomic, retain) NSString* tableName;
 
+- (void)setUpDatabase;
+- (void)tearDownDatabase;
+
 - (void)doSetUpDatabase;
 - (void)doTearDownDatabase;
 

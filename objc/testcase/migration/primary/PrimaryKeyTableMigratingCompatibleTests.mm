@@ -37,6 +37,11 @@
     TestCaseAssertFalse(done);
 }
 
+- (void)test_insert
+{
+    [self doTestInsert];
+}
+
 - (void)test_insert_or_replace
 {
     [self doTestInsertOrReplace];

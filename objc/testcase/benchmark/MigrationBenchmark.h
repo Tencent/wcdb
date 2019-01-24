@@ -18,37 +18,12 @@
  * limitations under the License.
  */
 
-#import "MigrationBenchmark.h"
+#import "ObjectsBasedBenchmark.h"
 
-@interface DatabaseMigrationBenchmark : MigrationBenchmark
-@end
+@interface MigrationBenchmark : ObjectsBasedBenchmark
 
-@implementation DatabaseMigrationBenchmark
+- (void)doTestMigrate;
 
-- (void)setUp
-{
-    self.isCrossDatabase = YES;
-    [super setUp];
-}
-
-- (void)test_read
-{
-    [self doTestRead];
-}
-
-- (void)test_write
-{
-    [self doTestWrite];
-}
-
-- (void)test_batch_write
-{
-    [self doTestBatchWrite];
-}
-
-- (void)test_migrate
-{
-    [self doTestMigrate];
-}
+@property (nonatomic, assign) BOOL isCrossDatabase;
 
 @end

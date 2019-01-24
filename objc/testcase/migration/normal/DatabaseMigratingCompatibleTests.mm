@@ -37,6 +37,11 @@
     TestCaseAssertFalse(done);
 }
 
+- (void)test_insert
+{
+    [self doTestInsert];
+}
+
 - (void)test_limited_delete
 {
     [self doTestLimitedDelete];

@@ -22,6 +22,8 @@
 
 @interface MigrationCompatibleTestCase : MigrationTestCase
 
+- (void)doTestInsert;
+
 - (void)doTestInsertAutoIncrement;
 
 - (void)doTestInsertOrReplace;

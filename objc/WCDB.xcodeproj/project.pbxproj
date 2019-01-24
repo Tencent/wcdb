@@ -514,6 +514,7 @@
 		23C56DF421F96754005EC861 /* DatabaseMigratingCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23C56DEE21F96753005EC861 /* DatabaseMigratingCompatibleTests.mm */; };
 		23C56DF521F96754005EC861 /* DatabaseMigrationCompatibleTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23C56DEF21F96753005EC861 /* DatabaseMigrationCompatibleTests.mm */; };
 		23C56DF721F9A0BD005EC861 /* SyntaxColumnType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C56DF621F9A0BD005EC861 /* SyntaxColumnType.cpp */; };
+		23C56DFA21F9A4B5005EC861 /* MigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23C56DF921F9A4B5005EC861 /* MigrationBenchmark.mm */; };
 		23C7558C20DCF8A700031A93 /* Locker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C7558920DCF8A700031A93 /* Locker.hpp */; };
 		23C7559120DCF90F00031A93 /* SQLiteLocker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C7558F20DCF90F00031A93 /* SQLiteLocker.cpp */; };
 		23C7559320DCF90F00031A93 /* SQLiteLocker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C7559020DCF90F00031A93 /* SQLiteLocker.hpp */; };
@@ -1814,6 +1815,8 @@
 		23C56DEE21F96753005EC861 /* DatabaseMigratingCompatibleTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DatabaseMigratingCompatibleTests.mm; sourceTree = "<group>"; };
 		23C56DEF21F96753005EC861 /* DatabaseMigrationCompatibleTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DatabaseMigrationCompatibleTests.mm; sourceTree = "<group>"; };
 		23C56DF621F9A0BD005EC861 /* SyntaxColumnType.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SyntaxColumnType.cpp; sourceTree = "<group>"; };
+		23C56DF821F9A4B5005EC861 /* MigrationBenchmark.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MigrationBenchmark.h; sourceTree = "<group>"; };
+		23C56DF921F9A4B5005EC861 /* MigrationBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MigrationBenchmark.mm; sourceTree = "<group>"; };
 		23C7558920DCF8A700031A93 /* Locker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Locker.hpp; sourceTree = "<group>"; };
 		23C7558F20DCF90F00031A93 /* SQLiteLocker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SQLiteLocker.cpp; sourceTree = "<group>"; };
 		23C7559020DCF90F00031A93 /* SQLiteLocker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SQLiteLocker.hpp; sourceTree = "<group>"; };
@@ -3802,6 +3805,8 @@
 				23585B5621E6E72C00EE0334 /* ObjectsBasedBenchmark.mm */,
 				2377536721F1C60000CA3FB7 /* BaselineBenchmark.mm */,
 				23585B6521E6F83A00EE0334 /* CipherBenchmark.mm */,
+				23C56DF821F9A4B5005EC861 /* MigrationBenchmark.h */,
+				23C56DF921F9A4B5005EC861 /* MigrationBenchmark.mm */,
 				23585B7421E7231300EE0334 /* DatabaseMigrationBenchmark.mm */,
 				23585B7521E7231400EE0334 /* TableMigrationBenchmark.mm */,
 				23585B7D21E742A400EE0334 /* InitializationBenchmark.mm */,
@@ -5240,6 +5245,7 @@
 				2377536821F1C60000CA3FB7 /* BaselineBenchmark.mm in Sources */,
 				23585B5721E6E72C00EE0334 /* ObjectsBasedBenchmark.mm in Sources */,
 				23585B7721E7231400EE0334 /* TableMigrationBenchmark.mm in Sources */,
+				23C56DFA21F9A4B5005EC861 /* MigrationBenchmark.mm in Sources */,
 				23FC01DD21B8B716002C7F87 /* RepairBenchmark.mm in Sources */,
 				23585B7F21E742A500EE0334 /* InitializationBenchmark.mm in Sources */,
 				23585B7621E7231400EE0334 /* DatabaseMigrationBenchmark.mm in Sources */,

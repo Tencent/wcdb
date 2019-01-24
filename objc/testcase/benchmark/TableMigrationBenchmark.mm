@@ -18,49 +18,18 @@
  * limitations under the License.
  */
 
-#import "ObjectsBasedBenchmark.h"
+#import "MigrationBenchmark.h"
 
-@interface TableMigrationBenchmark : ObjectsBasedBenchmark
-@property (nonatomic, retain) NSString* sourceTableName;
-@property (nonatomic, readonly) NSString* migratedTableName;
+@interface TableMigrationBenchmark : MigrationBenchmark
+
 @end
 
-@implementation TableMigrationBenchmark {
-    NSString* _migratedTableName;
-}
+@implementation TableMigrationBenchmark
 
-- (NSString*)migratedTableName
+- (void)setUp
 {
-    @synchronized(self) {
-        if (_migratedTableName == nil) {
-            _migratedTableName = [NSString stringWithFormat:@"%@_migrated", self.sourceTableName];
-        }
-        return _migratedTableName;
-    }
-}
-
-- (void)doSetUpDatabase
-{
-    self.sourceTableName = self.tableName;
-    self.tableName = self.migratedTableName;
-
-    NSString* sourceTableName = self.sourceTableName;
-    [self.database filterMigration:^(WCTMigrationUserInfo* info) {
-        if ([info.table isEqualToString:self.tableName]) {
-            info.sourceTable = sourceTableName;
-        }
-    }];
-
-    TestCaseAssertTrue([self.database createTableAndIndexes:self.tableName withClass:BenchmarkObject.class]);
-
-    BOOL done;
-    TestCaseAssertTrue([self.database stepMigration:YES done:done]);
-    TestCaseAssertFalse(done);
-}
-
-- (void)doTearDownDatabase
-{
-    self.tableName = self.sourceTableName;
+    self.isCrossDatabase = NO;
+    [super setUp];
 }
 
 - (void)test_read
@@ -76,6 +45,11 @@
 - (void)test_batch_write
 {
     [self doTestBatchWrite];
+}
+
+- (void)test_migrate
+{
+    [self doTestMigrate];
 }
 
 @end

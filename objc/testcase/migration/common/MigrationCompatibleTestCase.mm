@@ -51,6 +51,32 @@
     }
 }
 
+- (void)doTestInsert
+{
+    MigrationObject* newObject = [self.random migrationObjectWithIdentifier:self.objects.lastObject.identifier + 1];
+    NSMutableArray<MigrationObject*>* expectedObjects = [NSMutableArray arrayWithArray:self.objects];
+    [expectedObjects addObject:newObject];
+
+    NSMutableArray<NSString*>* sqls = [NSMutableArray arrayWithArray:
+                                                      @[ @"BEGIN IMMEDIATE",
+                                                         [NSString stringWithFormat:@"INSERT INTO %@.testSourceTable(identifier, content) VALUES(?1, ?2)", self.schemaName],
+                                                         [NSString stringWithFormat:@"INSERT INTO main.testTable(rowid, content, identifier) SELECT rowid, content, identifier FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName] ]];
+
+    if (self.mode == MigrationObjectORMModeNormal) {
+        // add trigger
+#error TODO
+    }
+
+    [sqls addObjectsFromArray:@[ [NSString stringWithFormat:@"DELETE FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName],
+                                 @"COMMIT" ]];
+
+    [self doTestObjects:expectedObjects
+                andSQLs:sqls
+      afterModification:^BOOL {
+          return [self.table insertObject:newObject];
+      }];
+}
+
 - (void)doTestInsertAutoIncrement
 {
     MigrationObject* newObject = [self.random autoIncrementMigrationObjectWithIdentifier:self.objects.lastObject.identifier + 1];
