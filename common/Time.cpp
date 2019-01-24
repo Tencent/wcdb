@@ -106,10 +106,10 @@ double SteadyClock::seconds() const
     std::time_t seconds
     = (std::time_t) std::chrono::duration_cast<std::chrono::seconds>(time_since_epoch())
       .count();
-    std::time_t nanoseconds
-    = (std::time_t) std::chrono::duration_cast<std::chrono::nanoseconds>(time_since_epoch())
+    std::time_t microseconds
+    = (std::time_t) std::chrono::duration_cast<std::chrono::microseconds>(time_since_epoch())
       .count();
-    return (double) seconds + (double) nanoseconds / 1E9;
+    return (double) seconds + (double) microseconds / 1E9;
 }
 
 } //namespace WCDB
