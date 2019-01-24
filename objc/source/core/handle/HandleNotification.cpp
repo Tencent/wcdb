@@ -64,18 +64,18 @@ int HandleNotification::traced(unsigned int T, void *C, void *P, void *X)
 void HandleNotification::dispatchTraceNotifications(unsigned int flag, void *P, void *X)
 {
     sqlite3_stmt *stmt = (sqlite3_stmt *) P;
-    const char *sql = sqlite3_sql(stmt);
     switch (flag) {
     case SQLITE_TRACE_STMT: {
+        const char *sql = static_cast<const char *>(X);
         if (sql) {
             dispatchSQLTraceNotifications(sql);
         }
     } break;
     case SQLITE_TRACE_PROFILE: {
+        const char *sql = sqlite3_sql(stmt);
         sqlite3_int64 *cost = (sqlite3_int64 *) X;
         sqlite3 *db = sqlite3_db_handle(stmt);
-        dispatchPerformanceTraceNotifications(
-        sql ? sql : String::null(), *cost, !sqlite3_get_autocommit(db));
+        dispatchPerformanceTraceNotifications(sql, *cost, !sqlite3_get_autocommit(db));
     } break;
     default:
         break;
