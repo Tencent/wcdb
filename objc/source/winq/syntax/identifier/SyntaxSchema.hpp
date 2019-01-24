@@ -30,6 +30,7 @@ namespace Syntax {
 class Schema final : public Identifier {
 #pragma mark - Syntax
 public:
+    Schema();
     String name;
 
 #pragma mark - Identifier
