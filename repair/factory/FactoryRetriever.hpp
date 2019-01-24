@@ -71,6 +71,8 @@ protected:
     bool calculateSizes(const std::list<String> &workshopDirectories);
     bool calculateSize(const String &database);
     void increaseProgress(const String &database, bool useMaterial, double progress, double increment);
+    static size_t
+    iterateSize(const size_t previous, const std::pair<String, size_t> &element);
 
     Fraction getWeight(const String &database);
 

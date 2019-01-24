@@ -295,13 +295,14 @@ bool FactoryRetriever::calculateSizes(const std::list<String> &workshopDirectori
     }
 
     m_totalSize = std::accumulate(
-    m_sizes.begin(),
-    m_sizes.end(),
-    m_totalSize,
-    [](const size_t previous, const std::pair<String, size_t> &element) {
-        return previous + element.second;
-    });
+    m_sizes.begin(), m_sizes.end(), m_totalSize, FactoryRetriever::iterateSize);
     return true;
+}
+
+size_t FactoryRetriever::iterateSize(const size_t previous,
+                                     const std::pair<String, size_t> &element)
+{
+    return previous + element.second;
 }
 
 bool FactoryRetriever::calculateSize(const String &database)
