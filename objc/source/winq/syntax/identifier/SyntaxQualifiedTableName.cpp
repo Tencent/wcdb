@@ -33,8 +33,16 @@ Identifier::Type QualifiedTableName::getType() const
 
 String QualifiedTableName::getDescription() const
 {
+    return getDescription(false);
+}
+
+String QualifiedTableName::getDescription(bool skipSchema) const
+{
     std::ostringstream stream;
-    stream << schema << "." << table;
+    if (!skipSchema) {
+        stream << schema << ".";
+    }
+    stream << table;
     if (!alias.empty()) {
         stream << " AS " << alias;
     }

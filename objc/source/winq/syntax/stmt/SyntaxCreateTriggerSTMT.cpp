@@ -96,17 +96,17 @@ String CreateTriggerSTMT::getDescription() const
         switch (stmt) {
         case STMT::Insert:
             SyntaxRemedialAssert(insert != inserts.end());
-            stream << *insert << "; ";
+            stream << insert->getDescription(true) << "; ";
             ++insert;
             break;
         case STMT::Update:
             SyntaxRemedialAssert(update != updates.end());
-            stream << *update << "; ";
+            stream << update->getDescription(true) << "; ";
             ++update;
             break;
         case STMT::Delete:
             SyntaxRemedialAssert(delete_ != deletes.end());
-            stream << *delete_ << "; ";
+            stream << delete_->getDescription(true) << "; ";
             ++delete_;
             break;
         case STMT::Select:

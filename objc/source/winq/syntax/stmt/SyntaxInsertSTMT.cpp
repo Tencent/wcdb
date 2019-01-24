@@ -32,7 +32,7 @@ Identifier::Type InsertSTMT::getType() const
     return type;
 }
 
-String InsertSTMT::getDescription() const
+String InsertSTMT::getDescription(bool skipSchema) const
 {
     std::ostringstream stream;
     if (useWithClause) {
@@ -42,7 +42,11 @@ String InsertSTMT::getDescription() const
     if (useConflictAction) {
         stream << conflictAction << space;
     }
-    stream << "INTO " << schema << "." << table;
+    stream << "INTO ";
+    if (!skipSchema) {
+        stream << schema << ".";
+    }
+    stream << table;
     if (!alias.empty()) {
         stream << " AS " << alias;
     }
@@ -75,6 +79,11 @@ String InsertSTMT::getDescription() const
         stream << space << upsertClause;
     }
     return stream.str();
+}
+
+String InsertSTMT::getDescription() const
+{
+    return getDescription(false);
 }
 
 void InsertSTMT::iterate(const Iterator& iterator, bool& stop)

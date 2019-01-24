@@ -31,7 +31,7 @@ Identifier::Type UpdateSTMT::getType() const
     return type;
 }
 
-String UpdateSTMT::getDescription() const
+String UpdateSTMT::getDescription(bool skipSchema) const
 {
     std::ostringstream stream;
     if (useWithClause) {
@@ -41,7 +41,7 @@ String UpdateSTMT::getDescription() const
     if (useConflictAction) {
         stream << conflictAction << space;
     }
-    stream << table << " SET ";
+    stream << table.getDescription(skipSchema) << " SET ";
     if (!columnsList.empty()) {
         SyntaxRemedialAssert(columnsList.size() == expressions.size());
         auto columns = columnsList.begin();
@@ -83,6 +83,11 @@ String UpdateSTMT::getDescription() const
         }
     }
     return stream.str();
+}
+
+String UpdateSTMT::getDescription() const
+{
+    return getDescription(false);
 }
 
 void UpdateSTMT::iterate(const Iterator& iterator, bool& stop)

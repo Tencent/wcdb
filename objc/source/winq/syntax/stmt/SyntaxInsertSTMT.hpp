@@ -55,6 +55,7 @@ public:
     static constexpr const Type type = Type::InsertSTMT;
     Type getType() const override final;
     String getDescription() const override final;
+    String getDescription(bool skipSchema) const;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

@@ -33,11 +33,16 @@ Identifier::Type DeleteSTMT::getType() const
 
 String DeleteSTMT::getDescription() const
 {
+    return getDescription(false);
+}
+
+String DeleteSTMT::getDescription(bool skipSchema) const
+{
     std::ostringstream stream;
     if (useWithClause) {
         stream << withClause << space;
     }
-    stream << "DELETE FROM " << table;
+    stream << "DELETE FROM " << table.getDescription(skipSchema);
     if (useCondition) {
         stream << " WHERE " << condition;
     }
