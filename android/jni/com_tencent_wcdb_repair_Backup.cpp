@@ -128,14 +128,14 @@ static void JNICALL BackupKit_nativeCancel(JNIEnv *env,
 
 static void JNICALL BackupKit_nativeFinish(JNIEnv *env,
                                            jclass cls,
-                                           jint ctxHandle)
+                                           jlong ctxHandle)
 {
     mm_backup_ctx *ctx = (mm_backup_ctx *) (intptr_t) ctxHandle;
     mm_backup_finish(ctx);
 }
 
-static jint
-BackupKit_nativeStatementCount(JNIEnv *env, jclass cls, jint ctxHandle)
+static jint JNICALL
+BackupKit_nativeStatementCount(JNIEnv *env, jclass cls, jlong ctxHandle)
 {
     unsigned int stmt_count;
     mm_backup_ctx *ctx = (mm_backup_ctx *) (intptr_t) ctxHandle;
@@ -144,7 +144,7 @@ BackupKit_nativeStatementCount(JNIEnv *env, jclass cls, jint ctxHandle)
 }
 
 static jstring
-BackupKit_nativeLastError(JNIEnv *env, jclass cls, jint ctxHandle)
+BackupKit_nativeLastError(JNIEnv *env, jclass cls, jlong ctxHandle)
 {
     mm_backup_ctx *ctx = (mm_backup_ctx *) (intptr_t) ctxHandle;
     const char *errmsg = mm_backup_last_error(ctx);
@@ -222,7 +222,7 @@ static jint JNICALL RecoverKit_nativeFailureCount(JNIEnv *env,
 }
 
 static jstring
-RecoverKit_nativeLastError(JNIEnv *env, jclass cls, jint ctxHandle)
+RecoverKit_nativeLastError(JNIEnv *env, jclass cls, jlong ctxHandle)
 {
     mm_recover_ctx *ctx = (mm_recover_ctx *) (intptr_t) ctxHandle;
     const char *errmsg = mm_recover_last_error(ctx);
