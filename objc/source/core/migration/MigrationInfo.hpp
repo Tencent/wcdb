@@ -158,8 +158,8 @@ public:
      WHERE rowid == ?1
      
      Note that newRowid is
-     1. rowid in source table when it's a integer primary key table
-     2. SELECT max(rowid)+1 FROM temp.[unionedView]
+     1. rowid in source table when it's an integer primary key table
+     2. SELECT max(rowid)+1 FROM temp.[unionedView] when the table does not contain an integer primary key
      */
     StatementInsert
     getStatementForMigratingSpecifiedRow(bool useConflictAction,
