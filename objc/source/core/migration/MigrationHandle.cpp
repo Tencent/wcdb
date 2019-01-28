@@ -189,59 +189,9 @@ bool MigrationHandle::rebindSchemas(const std::map<String, RecyclableMigrationIn
     return true;
 }
 
-bool MigrationHandle::rebindTrigger(const std::map<String, RecyclableMigrationInfo>& migratings)
-{
-    std::map<String, const MigrationInfo*> triggers2MigratingInfos;
-    for (const auto& iter : migratings) {
-        const MigrationInfo* migrating = iter.second.get();
-        if (!migrating->containsIntegerPrimaryKey()) {
-            triggers2MigratingInfos.emplace(migrating->getTriggerName(), migrating);
-        }
-    }
-
-    std::set<String> existingTriggers;
-
-    // get existing unioned triggers
-    bool succeed;
-    bool exists;
-    std::tie(succeed, exists) = tableExists(Schema::temp(), Syntax::masterTable);
-    if (!succeed) {
-        return false;
-    }
-    if (exists) {
-        std::tie(succeed, existingTriggers)
-        = getValues(MigrationInfo::getStatementForSelectingTrigger(), 0);
-        if (!succeed) {
-            return false;
-        }
-    }
-
-    for (const auto& existingTrigger : existingTriggers) {
-        WCTInnerAssert(existingTrigger.hasPrefix(MigrationInfo::getTriggerPrefix()));
-        auto iter = triggers2MigratingInfos.find(existingTrigger);
-        if (iter != triggers2MigratingInfos.end()) {
-            // it is already created
-            triggers2MigratingInfos.erase(iter);
-        } else {
-            // it is no longer needed
-            if (!executeStatement(MigrationInfo::getStatementForDroppingUpdateNonPrimaryRowIDTrigger(
-                existingTrigger))) {
-                return false;
-            }
-        }
-    }
-    // create all needed views
-    for (const auto& iter : triggers2MigratingInfos) {
-        if (!executeStatement(iter.second->getStatementForTriggeringUpdateNonPrimaryRowID())) {
-            return false;
-        }
-    }
-    return true;
-}
-
 bool MigrationHandle::bindInfos(const std::map<String, RecyclableMigrationInfo>& migratings)
 {
-    return rebindViews(migratings) && rebindTrigger(migratings) && rebindSchemas(migratings);
+    return rebindViews(migratings) && rebindSchemas(migratings);
 }
 
 #pragma mark - Migration
@@ -256,7 +206,7 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
     do {
         startBinding();
 
-        // It's dangerous to use statement after tampering since all the tokens are not fit.
+        // It's dangerous to use origin statement after tampering since all the tokens are not fit.
         Statement falledBackStatement = originStatement;
         // fallback
         falledBackStatement.iterate(

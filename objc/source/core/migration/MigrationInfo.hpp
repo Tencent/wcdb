@@ -77,6 +77,9 @@ public:
                   const std::set<String>& columns,
                   bool integerPrimaryKey);
 
+protected:
+    bool m_integerPrimaryKey;
+
 #pragma mark - Schema
 public:
     // Schema
@@ -139,48 +142,6 @@ protected:
     String m_unionedView;
     StatementCreateView m_statementForCreatingUnionedView;
 
-#pragma mark - Trigger
-public:
-    // WCDBTrigger_
-    static const String& getTriggerPrefix();
-
-    const String& getTriggerName() const;
-
-    /* 
-     CREATE TEMP TRIGGER [trigger] 
-     AFTER INSERT ON [table]
-     FOR EACH ROW 
-     BEGIN 
-     UPDATE [table] 
-     SET rowid = 
-     (SELECT max(rowid) + 1 
-     FROM temp.[unionedView]) 
-     WHERE rowid == NEW.rowid; 
-     END;
-     */
-    const StatementCreateTrigger& getStatementForTriggeringUpdateNonPrimaryRowID() const;
-
-    /*
-     DROP TRIGGER IF EXISTS temp.[trigger]
-     */
-    static StatementDropTrigger
-    getStatementForDroppingUpdateNonPrimaryRowIDTrigger(const String& trigger);
-
-    /*
-     SELECT name
-     FROM temp.sqlite_master
-     WHERE type == "trigger" AND name LIKE "WCDBTrigger_%"
-     */
-    static StatementSelect getStatementForSelectingTrigger();
-
-    bool containsIntegerPrimaryKey() const;
-
-protected:
-    // WCDBTrigger_ + [table]
-    String m_trigger;
-    StatementCreateTrigger m_statementForTriggerUpdateNonPrimaryRowID;
-    bool m_integerPrimaryKey;
-
 #pragma mark - Compatible
 public:
     /*
@@ -192,9 +153,13 @@ public:
      INSERT rowid, [columns]
      INTO main.[table]
      [OR ONCONFLICT ACTION]
-     SELECT rowid, [columns]
+     SELECT newRowid, [columns]
      FROM [schemaForSourceDatabase].[sourceTable]
      WHERE rowid == ?1
+     
+     Note that newRowid is
+     1. rowid in source table when it's a integer primary key table
+     2. SELECT max(rowid)+1 FROM temp.[unionedView]
      */
     StatementInsert
     getStatementForMigratingSpecifiedRow(bool useConflictAction,

@@ -41,7 +41,6 @@ protected:
 private:
     bool rebindViews(const std::map<String, RecyclableMigrationInfo> &migratings);
     bool rebindSchemas(const std::map<String, RecyclableMigrationInfo> &migratings);
-    bool rebindTrigger(const std::map<String, RecyclableMigrationInfo> &migratings);
 
 #pragma mark - Info Initializer
 protected:

@@ -156,27 +156,27 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
         = StatementCreateView().createView(m_unionedView).temp().ifNotExists().as(select);
     }
 
+    std::list<Column> columnsContainRowID;
+    std::list<ResultColumn> resultColumnsContainRowID;
+    columnsContainRowID.push_back(Column::rowid());
+    resultColumnsContainRowID.push_back(Column::rowid());
+    for (const auto& columnString : columns) {
+        Column column(columnString);
+        columnsContainRowID.push_back(column);
+        resultColumnsContainRowID.push_back(column);
+    }
+
     // Migrate
     {
-        std::list<Column> specificColumns;
-        std::list<ResultColumn> specificResultColumns;
-        specificColumns.push_back(Column::rowid());
-        specificResultColumns.push_back(Column::rowid());
-        for (const auto& column : columns) {
-            Column specificColumn(column);
-            specificColumns.push_back(specificColumn);
-            specificResultColumns.push_back(specificColumn);
-        }
-
         OrderingTerm descendingRowid = OrderingTerm(Column::rowid()).order(Order::DESC);
 
         m_statementForMigratingOneRow
         = StatementInsert()
           .insertIntoTable(m_table)
           .schema(Schema::main())
-          .columns(specificColumns)
+          .columns(columnsContainRowID)
           .values(StatementSelect()
-                  .select(specificResultColumns)
+                  .select(resultColumnsContainRowID)
                   .from(TableOrSubquery(m_sourceTable).schema(m_schemaForSourceDatabase))
                   .order(descendingRowid)
                   .limit(1));
@@ -186,14 +186,24 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
           .deleteFrom(QualifiedTable(m_sourceTable).schema(m_schemaForSourceDatabase))
           .order(descendingRowid)
           .limit(1);
+    }
+
+    // Compatible
+    {
+        if (!m_integerPrimaryKey) {
+            resultColumnsContainRowID.front()
+            = StatementSelect()
+              .select(Column::rowid().max() + 1)
+              .from(TableOrSubquery(m_unionedView).schema(Schema::temp()));
+        }
 
         m_statementForMigratingSpecifiedRowTemplate
         = StatementInsert()
           .insertIntoTable(m_table)
           .schema(Schema::main())
-          .columns(specificColumns)
+          .columns(columnsContainRowID)
           .values(StatementSelect()
-                  .select(specificResultColumns)
+                  .select(resultColumnsContainRowID)
                   .from(TableOrSubquery(m_sourceTable).schema(m_schemaForSourceDatabase))
                   .where(Column::rowid() == BindParameter(1)));
 
@@ -206,31 +216,6 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
                                             .dropTable(m_sourceTable)
                                             .schema(m_schemaForSourceDatabase)
                                             .ifExists();
-    }
-
-    // trigger
-    {
-        if (!m_integerPrimaryKey) {
-            m_trigger = getTriggerPrefix() + m_table;
-
-            m_statementForTriggerUpdateNonPrimaryRowID
-            = StatementCreateTrigger()
-              .createTrigger(m_trigger)
-              .temp()
-              .ifNotExists()
-              .after()
-              .insert()
-              .on(m_table)
-              .forEachRow()
-              .execute(WCDB::StatementUpdate()
-                       .update(m_table)
-                       .set(Column::rowid())
-                       .to(StatementSelect()
-                           .select(Column::rowid().max() + 1)
-                           .from(TableOrSubquery(m_unionedView).schema(Schema::temp())))
-                       .where(Column::rowid()
-                              == Expression(Column::rowid()).table("NEW").schema("")));
-        }
     }
 }
 
@@ -290,49 +275,6 @@ StatementSelect MigrationInfo::getStatementForSelectingUnionedView()
     .select(name)
     .from(TableOrSubquery::master().schema(Schema::temp()))
     .where(type == "view" && name.like(pattern));
-}
-
-#pragma mark - Trigger
-const StatementCreateTrigger&
-MigrationInfo::getStatementForTriggeringUpdateNonPrimaryRowID() const
-{
-    WCTInnerAssert(!m_integerPrimaryKey);
-    return m_statementForTriggerUpdateNonPrimaryRowID;
-}
-
-const String& MigrationInfo::getTriggerPrefix()
-{
-    static const String* s_triggerPrefix = new String("WCDBTrigger_");
-    return *s_triggerPrefix;
-}
-
-bool MigrationInfo::containsIntegerPrimaryKey() const
-{
-    return m_integerPrimaryKey;
-}
-
-const String& MigrationInfo::getTriggerName() const
-{
-    WCTInnerAssert(!m_integerPrimaryKey);
-    return m_trigger;
-}
-
-StatementDropTrigger
-MigrationInfo::getStatementForDroppingUpdateNonPrimaryRowIDTrigger(const String& trigger)
-{
-    WCTInnerAssert(trigger.hasPrefix(getTriggerPrefix()));
-    return StatementDropTrigger().dropTrigger(trigger).schema(Schema::temp()).ifExists();
-}
-
-StatementSelect MigrationInfo::getStatementForSelectingTrigger()
-{
-    Column name("name");
-    Column type("type");
-    String pattern = String::formatted("%s%%", getTriggerPrefix().c_str());
-    return StatementSelect()
-    .select(name)
-    .from(TableOrSubquery::master().schema(Schema::temp()))
-    .where(type == "trigger" && name.like(pattern));
 }
 
 #pragma mark - Migrate

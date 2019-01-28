@@ -59,12 +59,12 @@
 
     NSMutableArray<NSString*>* sqls = [NSMutableArray arrayWithArray:
                                                       @[ @"BEGIN IMMEDIATE",
-                                                         [NSString stringWithFormat:@"INSERT INTO %@.testSourceTable(identifier, content) VALUES(?1, ?2)", self.schemaName],
-                                                         [NSString stringWithFormat:@"INSERT INTO main.testTable(rowid, content, identifier) SELECT rowid, content, identifier FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName] ]];
+                                                         [NSString stringWithFormat:@"INSERT INTO %@.testSourceTable(identifier, content) VALUES(?1, ?2)", self.schemaName] ]];
 
     if (self.mode == MigrationObjectORMModeNormal) {
-        // add trigger
-#error TODO
+        [sqls addObject:[NSString stringWithFormat:@"INSERT INTO main.testTable(rowid, content, identifier) SELECT (SELECT max(rowid) + 1 FROM temp.WCDBUnioned_testTable), content, identifier FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName]];
+    } else {
+        [sqls addObject:[NSString stringWithFormat:@"INSERT INTO main.testTable(rowid, content, identifier) SELECT rowid, content, identifier FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName]];
     }
 
     [sqls addObjectsFromArray:@[ [NSString stringWithFormat:@"DELETE FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName],
