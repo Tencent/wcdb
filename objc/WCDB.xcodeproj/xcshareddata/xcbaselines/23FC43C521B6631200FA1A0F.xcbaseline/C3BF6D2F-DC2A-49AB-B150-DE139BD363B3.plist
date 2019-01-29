@@ -90,6 +90,19 @@
 				</dict>
 			</dict>
 		</dict>
+		<key>DatabaseMigrationBenchmark</key>
+		<dict>
+			<key>test_migrate</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>6.43</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Jan 29, 2019 at 15:45:45</string>
+				</dict>
+			</dict>
+		</dict>
 		<key>InitializationBenchmark</key>
 		<dict>
 			<key>test_initialization</key>
@@ -133,6 +146,19 @@
 					<real>3.01</real>
 					<key>baselineIntegrationDisplayName</key>
 					<string>Jan 18, 2019 at 14:45:33</string>
+				</dict>
+			</dict>
+		</dict>
+		<key>TableMigrationBenchmark</key>
+		<dict>
+			<key>test_migrate</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>5.7</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Jan 29, 2019 at 15:45:29</string>
 				</dict>
 			</dict>
 		</dict>
