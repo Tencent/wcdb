@@ -21,7 +21,6 @@
 #import <XCTest/XCTest.h>
 
 @class Random;
-@class Signpost;
 
 @interface BaseTestCase : XCTestCase
 
@@ -36,25 +35,7 @@
 
 @property (nonatomic, readonly) NSFileManager* fileManager;
 @property (nonatomic, readonly) Random* random;
-@property (nonatomic, readonly) Signpost* signpost;
 
 - (void)log:(NSString*)format, ...;
 
-- (void)doMeasure:(void (^)(void))block
-            setUp:(void (^)(void))setUpBlock
-         tearDown:(void (^)(void))tearDownBlock
- checkCorrectness:(void (^)(void))correctnessBlock;
-
 @end
-
-#define TestCaseSignpostBegin(task) \
-    SignpostBegin(self.signpost, task)
-
-#define TestCaseSignpostEnd(task) \
-    SignpostEnd(self.signpost, task)
-
-#define TestCaseFunctionSignpostBegin() \
-    TestCaseSignpostBegin(__PRETTY_FUNCTION__)
-
-#define TestCaseFunctionSignpostEnd() \
-    TestCaseSignpostEnd(__PRETTY_FUNCTION__)

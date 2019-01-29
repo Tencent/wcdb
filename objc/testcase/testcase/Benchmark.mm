@@ -20,13 +20,76 @@
 
 #import <TestCase/Benchmark.h>
 #import <TestCase/Random.h>
+#import <TestCase/Signpost.h>
+#import <TestCase/TestCaseLog.h>
 
-@implementation Benchmark
+@implementation Benchmark {
+    Signpost *_signpost;
+}
 
 - (void)setUp
 {
     [super setUp];
     self.random.stable = YES;
+}
+
+- (void)doMeasure:(void (^)(void))block
+            setUp:(void (^)(void))setUpBlock
+         tearDown:(void (^)(void))tearDownBlock
+ checkCorrectness:(void (^)(void))correctnessBlock
+{
+    __block int i = 1;
+    [self measureMetrics:self.class.defaultPerformanceMetrics
+    automaticallyStartMeasuring:false
+                       forBlock:^{
+                           if (tearDownBlock != nil) {
+                               tearDownBlock();
+                           }
+
+                           if (setUpBlock != nil) {
+                               setUpBlock();
+                           }
+
+                           BenchmarkSignpostBegin("measure");
+
+                           [self log:@"%d started.", i];
+
+                           [self startMeasuring];
+
+                           block();
+
+                           [self stopMeasuring];
+
+                           BenchmarkSignpostEnd("measure");
+
+                           [self log:@"%d passed.", i];
+
+                           correctnessBlock();
+
+                           if (tearDownBlock != nil) {
+                               tearDownBlock();
+                           }
+
+                           ++i;
+                       }];
+
+    BOOL untrusted = WCTDatabase.debuggable;
+#if DEBUG || TARGET_IPHONE_SIMULATOR
+    untrusted = YES;
+#endif
+    if (untrusted) {
+        TestCaseLog(@"Benchmark is run in debug mode or simulator. The result may be untrusted.");
+    }
+}
+
+- (Signpost *)signpost
+{
+    @synchronized(self) {
+        if (_signpost == nil) {
+            _signpost = [[Signpost alloc] initWithSystem:[NSBundle mainBundle].bundleIdentifier andCategory:self.className];
+        }
+        return _signpost;
+    }
 }
 
 @end
