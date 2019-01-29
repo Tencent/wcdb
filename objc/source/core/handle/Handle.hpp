@@ -33,7 +33,7 @@ public:
 
 #pragma mark - Statement
 public:
-    virtual bool execute(const Statement &statement);
+    bool execute(const Statement &statement);
 
     virtual bool prepare(const Statement &statement);
     virtual bool isPrepared();

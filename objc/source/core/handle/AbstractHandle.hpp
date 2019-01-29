@@ -21,12 +21,14 @@
 #ifndef _WCDB_ABSTRACTHANDLE_HPP
 #define _WCDB_ABSTRACTHANDLE_HPP
 
+#include <WCDB/ColumnMeta.hpp>
 #include <WCDB/ErrorProne.hpp>
 #include <WCDB/HandleNotification.hpp>
 #include <WCDB/HandleStatement.hpp>
 #include <WCDB/String.hpp>
 #include <WCDB/WINQ.h>
 #include <set>
+#include <vector>
 
 namespace WCDB {
 
@@ -111,15 +113,18 @@ private:
 #pragma mark - Meta
 public:
     std::pair<bool, bool> ft3TokenizerExists(const String &tokenizer);
-    std::pair<bool, bool> tableExists(const String &table);
-    std::pair<bool, std::set<String>> getColumns(const String &table);
-    std::pair<bool, bool>
-    isColumnIntegerPrimary(const String &table, const String &column);
 
-protected:
+    std::pair<bool, bool> tableExists(const String &table);
     std::pair<bool, bool> tableExists(const Schema &schema, const String &table);
+
     std::pair<bool, std::set<String>>
     getColumns(const Schema &schema, const String &table);
+    std::pair<bool, std::set<String>> getColumns(const String &table);
+
+    std::pair<bool, std::vector<ColumnMeta>>
+    getTableMeta(const Schema &schema, const String &table);
+
+protected:
     std::pair<bool, std::set<String>> getValues(const Statement &statement, int index);
 
 #pragma mark - Transaction

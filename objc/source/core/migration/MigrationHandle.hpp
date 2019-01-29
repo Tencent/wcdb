@@ -50,8 +50,6 @@ protected:
 
 #pragma mark - Migration
 public:
-    bool execute(const Statement &statement) override final;
-
     bool prepare(const Statement &statement) override final;
     bool isPrepared() override final;
     void finalize() override final;

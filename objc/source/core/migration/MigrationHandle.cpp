@@ -51,7 +51,7 @@ MigrationHandle::getColumnsForSourceTable(const MigrationUserInfo& userInfo)
 {
     Schema schema = userInfo.getSchemaForSourceDatabase();
     bool succeed = true;
-    bool primaryKey = false;
+    bool integerPrimary = false;
     std::set<String> columns;
     do {
         if (!schema.syntax().isMain()) {
@@ -74,23 +74,18 @@ MigrationHandle::getColumnsForSourceTable(const MigrationUserInfo& userInfo)
             break;
         }
         if (exists) {
-            std::tie(succeed, columns) = getColumns(schema, userInfo.getSourceTable());
+            std::vector<ColumnMeta> columnMetas;
+            std::tie(succeed, columnMetas)
+            = getTableMeta(schema, userInfo.getSourceTable());
             if (succeed) {
-                for (const auto& column : columns) {
-                    std::tie(succeed, primaryKey)
-                    = isColumnIntegerPrimary(userInfo.getSourceTable(), column);
-                    if (!succeed || primaryKey) {
-                        break;
-                    }
+                integerPrimary = ColumnMeta::getIndexOfIntegerPrimary(columnMetas) >= 0;
+                for (const auto& columnMeta : columnMetas) {
+                    columns.emplace(columnMeta.name);
                 }
             }
         }
     } while (false);
-    if (!succeed) {
-        columns.clear();
-        primaryKey = false;
-    }
-    return { succeed, primaryKey, columns };
+    return { succeed, integerPrimary, columns };
 }
 
 String MigrationHandle::getDatabasePath() const
@@ -388,45 +383,6 @@ bool MigrationHandle::tryFallbackToSourceTable(Syntax::Schema& schema, String& t
 }
 
 #pragma mark - Override
-bool MigrationHandle::execute(const Statement& statement)
-{
-    WCTInnerAssert(!m_processing);
-    bool succeed;
-    std::list<Statement> statements;
-    std::tie(succeed, statements) = process(statement);
-    if (!succeed) {
-        return false;
-    }
-    if (statements.size() > 1 || isMigratedPrepared()) {
-        succeed = runNestedTransaction([this, &statements](Handle*) -> bool {
-            return realExecute(statements);
-        });
-    } else {
-        succeed = realExecute(statements);
-    }
-    if (!succeed && isMigratedPrepared()) {
-        finalizeMigrate();
-    }
-    return succeed;
-}
-
-bool MigrationHandle::realExecute(const std::list<Statement>& statements)
-{
-    WCTInnerAssert(!statements.empty());
-    for (const auto& statement : statements) {
-        if (!Handle::execute(statement)) {
-            return false;
-        }
-    }
-    bool succeed = true;
-    if (isMigratedPrepared()) {
-        WCTInnerAssert(statements.size() == 1);
-        succeed = stepMigration(getLastInsertedRowID());
-        finalizeMigrate();
-    }
-    return succeed;
-}
-
 bool MigrationHandle::prepare(const Statement& statement)
 {
     WCTInnerAssert(!m_processing);

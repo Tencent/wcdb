@@ -35,7 +35,12 @@ Handle::~Handle()
 #pragma mark - Statement
 bool Handle::execute(const Statement &statement)
 {
-    return executeStatement(statement);
+    bool succeed = false;
+    if (prepare(statement)) {
+        succeed = step();
+        finalize();
+    }
+    return succeed;
 }
 
 bool Handle::prepare(const Statement &statement)

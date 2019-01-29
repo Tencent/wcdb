@@ -221,7 +221,7 @@ MigrationStepperHandle::getColumnsForSourceTable(const MigrationUserInfo& userIn
     }
     Schema schema = userInfo.getSchemaForSourceDatabase();
     bool succeed = true;
-    bool primaryKey = false;
+    bool integerPrimary = false;
     std::set<String> columns;
     do {
         if (!schema.syntax().isMain()) {
@@ -244,23 +244,18 @@ MigrationStepperHandle::getColumnsForSourceTable(const MigrationUserInfo& userIn
             break;
         }
         if (exists) {
-            std::tie(succeed, columns) = getColumns(schema, userInfo.getSourceTable());
+            std::vector<ColumnMeta> columnMetas;
+            std::tie(succeed, columnMetas)
+            = getTableMeta(schema, userInfo.getSourceTable());
             if (succeed) {
-                for (const auto& column : columns) {
-                    std::tie(succeed, primaryKey)
-                    = isColumnIntegerPrimary(userInfo.getSourceTable(), column);
-                    if (!succeed || primaryKey) {
-                        break;
-                    }
+                integerPrimary = ColumnMeta::getIndexOfIntegerPrimary(columnMetas) >= 0;
+                for (const auto& columnMeta : columnMetas) {
+                    columns.emplace(columnMeta.name);
                 }
             }
         }
     } while (false);
-    if (!succeed) {
-        columns.clear();
-        primaryKey = false;
-    }
-    return { succeed, primaryKey, columns };
+    return { succeed, integerPrimary, columns };
 }
 
 String MigrationStepperHandle::getDatabasePath() const

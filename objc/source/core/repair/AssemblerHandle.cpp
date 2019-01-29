@@ -25,7 +25,7 @@ namespace WCDB {
 AssemblerHandle::AssemblerHandle()
 : Handle()
 , Repair::Assembler()
-, m_primary(-1)
+, m_integerPrimary(-1)
 , m_statementForDisableJounral(StatementPragma().pragma(Pragma::journalMode()).to("OFF"))
 , m_statementForEnableMMap(StatementPragma().pragma(Pragma::mmapSize()).to(2147418112))
 , m_statementForInsertSequence(StatementInsert()
@@ -149,7 +149,7 @@ bool AssemblerHandle::assembleCell(const Repair::Cell &cell)
             m_cellStatement->bindDouble(cell.doubleValue(i), bindIndex);
             break;
         case Repair::Cell::Null:
-            if (i == m_primary) {
+            if (i == m_integerPrimary) {
                 m_cellStatement->bindInteger64(cell.getRowID(), bindIndex);
             } else {
                 m_cellStatement->bindNull(bindIndex);
@@ -167,33 +167,17 @@ bool AssemblerHandle::lazyPrepareCell()
         return true;
     }
 
-    std::list<String> columnNames;
-    if (!prepare(StatementPragma().pragma(Pragma::tableInfo()).with(m_table))) {
+    bool succeed = false;
+    std::vector<ColumnMeta> columnMetas;
+    std::tie(succeed, columnMetas) = getTableMeta(Schema::main(), m_table);
+    if (!succeed) {
         return false;
     }
-    int primary = -1;
-    int maxpk = 0;
-    bool done = false;
-    while (step(done) && !done) {
-        columnNames.push_back(getText(1));
-        //check if and only if single column is primary key
-        int pk = getInteger32(5);
-        maxpk = std::max(pk, maxpk);
-        if (pk == 1) {
-            primary = (int) columnNames.size() - 1;
-        }
-    }
-    finalize();
-
-    if (!done) {
-        return false;
-    }
-
-    m_primary = maxpk == 1 ? primary : -1;
+    m_integerPrimary = ColumnMeta::getIndexOfIntegerPrimary(columnMetas);
 
     Columns columns = { Column::rowid() };
-    for (const auto &columnName : columnNames) {
-        columns.push_back(Column(columnName));
+    for (const auto &columnMeta : columnMetas) {
+        columns.push_back(Column(columnMeta.name));
     }
     StatementInsert statement = StatementInsert().insertIntoTable(m_table);
     if (isDuplicatedIgnorable()) {

@@ -247,19 +247,6 @@ void AbstractHandle::finalizeStatements()
 }
 
 #pragma mark - Meta
-std::pair<bool, bool>
-AbstractHandle::isColumnIntegerPrimary(const String &table, const String &column)
-{
-    int primary = 0;
-    const char *type;
-    bool result = false;
-    if (exitAPI(sqlite3_table_column_metadata(
-        m_handle, nullptr, table.c_str(), column.c_str(), &type, nullptr, nullptr, &primary, nullptr))) {
-        result = true;
-    }
-    return { result, primary && Syntax::isIntegerType(type) };
-}
-
 std::pair<bool, bool> AbstractHandle::ft3TokenizerExists(const String &tokenizer)
 {
     bool exists = false;
@@ -314,6 +301,33 @@ AbstractHandle::getColumns(const Schema &schema, const String &table)
     WCDB::StatementPragma statement
     = StatementPragma().pragma(Pragma::tableInfo()).schema(schema).with(table);
     return getValues(statement, 1);
+}
+
+std::pair<bool, std::vector<ColumnMeta>>
+AbstractHandle::getTableMeta(const Schema &schema, const String &table)
+{
+    std::vector<ColumnMeta> columnMetas;
+    HandleStatement *handleStatement = getStatement();
+    bool done = false;
+    do {
+        if (handleStatement->prepare(
+            StatementPragma().pragma(Pragma::tableInfo()).schema(schema).with(table))) {
+            while (handleStatement->step(done) && !done) {
+                columnMetas.push_back(ColumnMeta(handleStatement->getInteger32(0), // cid
+                                                 handleStatement->getText(1), // name
+                                                 handleStatement->getText(2), // type
+                                                 handleStatement->getInteger32(3), // notnull
+                                                 handleStatement->getInteger32(5)) // pk
+                );
+            }
+            handleStatement->finalize();
+        }
+    } while (false);
+    returnStatement(handleStatement);
+    if (!done) {
+        columnMetas.clear();
+    }
+    return { done, std::move(columnMetas) };
 }
 
 std::pair<bool, std::set<String>>

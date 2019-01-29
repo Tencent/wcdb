@@ -54,7 +54,7 @@ public:
 
 protected:
     bool lazyPrepareCell();
-    int m_primary;
+    int m_integerPrimary;
     String m_table;
     HandleStatement *m_cellStatement;
 
