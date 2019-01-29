@@ -75,6 +75,7 @@
 
 - (void)doTestMigrate
 {
+    self.factory.expectedQuality = 100000;
     __block BOOL done;
     [self
     doMeasure:^{
