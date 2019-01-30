@@ -20,6 +20,7 @@
 
 #import <WCDB/Assertion.hpp>
 #import <WCDB/WCTChainCall+Private.h>
+#import <WCDB/WCTHandle+Private.h>
 #import <WCDB/WCTHandle+Transaction.h>
 #import <WCDB/WCTHandle.h>
 #import <WCDB/WCTInsert.h>
@@ -100,7 +101,10 @@
         WCTInnerAssert(autoIncrements.size() == properties.size());
         if (_values.count > 1) {
             succeed = [_handle runNestedTransaction:^BOOL(WCTHandle *handle) {
-                return [self realExecute:handle properties:properties autoIncrements:autoIncrements];
+                [handle enableLazyNestedTransaction:YES];
+                BOOL succeed = [self realExecute:handle properties:properties autoIncrements:autoIncrements];
+                [handle enableLazyNestedTransaction:NO];
+                return succeed;
             }];
         } else {
             succeed = [self realExecute:_handle properties:properties autoIncrements:autoIncrements];

@@ -41,6 +41,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable WCDB::Handle *)getOrGenerateHandle;
 
+- (void)enableLazyNestedTransaction:(BOOL)enable;
+
 @end
 
 NS_ASSUME_NONNULL_END

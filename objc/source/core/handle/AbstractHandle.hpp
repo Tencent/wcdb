@@ -137,9 +137,12 @@ public:
     bool commitOrRollbackNestedTransaction();
     void rollbackNestedTransaction();
 
+    void enableLazyNestedTransaction(bool enable);
+
 private:
     static const String &savepointPrefix();
     int m_nestedLevel;
+    bool m_lazyNestedTransaction;
 
 #pragma mark - Cipher
 public:

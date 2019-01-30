@@ -97,6 +97,12 @@
     return _database;
 }
 
+- (void)enableLazyNestedTransaction:(BOOL)enable
+{
+    WCTInnerAssert([self isValidated]);
+    _handle->enableLazyNestedTransaction(enable);
+}
+
 #pragma mark - Execute
 - (BOOL)execute:(const WCDB::Statement &)statement
 {

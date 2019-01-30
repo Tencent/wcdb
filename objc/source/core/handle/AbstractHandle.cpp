@@ -28,7 +28,11 @@ namespace WCDB {
 
 #pragma mark - Initialize
 AbstractHandle::AbstractHandle()
-: m_handle(nullptr), m_notification(this), m_nestedLevel(0), m_codeToBeIgnored(SQLITE_OK)
+: m_handle(nullptr)
+, m_notification(this)
+, m_nestedLevel(0)
+, m_codeToBeIgnored(SQLITE_OK)
+, m_lazyNestedTransaction(false)
 {
 }
 
@@ -358,39 +362,59 @@ const String &AbstractHandle::savepointPrefix()
     return s_savepointPrefix;
 }
 
+void AbstractHandle::enableLazyNestedTransaction(bool enable)
+{
+    m_lazyNestedTransaction = enable;
+}
+
 bool AbstractHandle::beginNestedTransaction()
 {
-    if (!isInTransaction()) {
-        return beginTransaction();
+    bool succeed = true;
+    if (isInTransaction()) {
+        ++m_nestedLevel;
+        if (!m_lazyNestedTransaction) {
+            String savepointName = savepointPrefix() + std::to_string(m_nestedLevel);
+            succeed = executeStatement(StatementSavepoint().savepoint(savepointName));
+        }
+    } else {
+        succeed = beginTransaction();
     }
-    String savepointName = savepointPrefix() + std::to_string(++m_nestedLevel);
-    return executeStatement(StatementSavepoint().savepoint(savepointName));
+    return succeed;
 }
 
 bool AbstractHandle::commitOrRollbackNestedTransaction()
 {
+    bool succeed = true;
     if (m_nestedLevel == 0) {
-        return commitOrRollbackTransaction();
+        succeed = commitOrRollbackTransaction();
+    } else {
+        if (!m_lazyNestedTransaction) {
+            String savepointName = savepointPrefix() + std::to_string(m_nestedLevel);
+            if (!executeStatement(StatementRelease().release(savepointName))) {
+                markErrorAsIgnorable(-1);
+                executeStatement(StatementRollback().rollbackToSavepoint(savepointName));
+                markErrorAsUnignorable();
+                succeed = false;
+            }
+        }
+        --m_nestedLevel;
     }
-    String savepointName = savepointPrefix() + std::to_string(m_nestedLevel--);
-    if (!executeStatement(StatementRelease().release(savepointName))) {
-        markErrorAsIgnorable(-1);
-        executeStatement(StatementRollback().rollbackToSavepoint(savepointName));
-        markErrorAsUnignorable();
-        return false;
-    }
-    return true;
+    return succeed;
 }
 
 void AbstractHandle::rollbackNestedTransaction()
 {
     if (m_nestedLevel == 0) {
-        return rollbackTransaction();
+        rollbackTransaction();
+    } else {
+        if (!m_lazyNestedTransaction) {
+            String savepointName = savepointPrefix() + std::to_string(m_nestedLevel);
+            markErrorAsIgnorable(-1);
+            executeStatement(StatementRollback().rollbackToSavepoint(savepointName));
+            markErrorAsUnignorable();
+        }
+        --m_nestedLevel;
     }
-    String savepointName = savepointPrefix() + std::to_string(m_nestedLevel--);
-    markErrorAsIgnorable(-1);
-    executeStatement(StatementRollback().rollbackToSavepoint(savepointName));
-    markErrorAsUnignorable();
 }
 
 bool AbstractHandle::beginTransaction()
