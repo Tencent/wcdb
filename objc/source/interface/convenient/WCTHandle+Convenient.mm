@@ -30,7 +30,7 @@
 #import <WCDB/WCTSelectable+Private.h>
 #import <WCDB/WCTUpdate.h>
 
-@implementation WCTHandle (ConvenientSelect)
+@implementation WCTHandle (Convenient)
 #pragma mark - Get Object
 - (id /* WCTObject* */)getObjectOfClass:(Class)cls
                               fromTable:(NSString *)tableName
