@@ -18,9 +18,20 @@
  * limitations under the License.
  */
 
+#include <WCDB/Error.hpp>
 #include <WCDB/InterruptibleCheckpointHandle.hpp>
 
 namespace WCDB {
+
+InterruptibleCheckpointHandle::InterruptibleCheckpointHandle()
+{
+    markErrorAsIgnorable((int) Error::Code::Interrupt);
+}
+
+InterruptibleCheckpointHandle::~InterruptibleCheckpointHandle()
+{
+    markErrorAsUnignorable();
+}
 
 bool InterruptibleCheckpointHandle::checkpoint(Type type)
 {

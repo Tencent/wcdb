@@ -28,11 +28,7 @@ namespace WCDB {
 
 #pragma mark - Initialize
 AbstractHandle::AbstractHandle()
-: m_handle(nullptr)
-, m_notification(this)
-, m_nestedLevel(0)
-, m_codeToBeIgnored(SQLITE_OK)
-, m_lazyNestedTransaction(false)
+: m_handle(nullptr), m_notification(this), m_nestedLevel(0), m_lazyNestedTransaction(false)
 {
 }
 
@@ -439,11 +435,14 @@ bool AbstractHandle::commitOrRollbackTransaction()
 void AbstractHandle::rollbackTransaction()
 {
     m_nestedLevel = 0;
-    markErrorAsIgnorable(-1);
-    static const String *s_rollback
-    = new String(StatementRollback().rollback().getDescription());
-    executeSQL(*s_rollback);
-    markErrorAsUnignorable();
+    if (isInTransaction()) {
+        // Transaction can be removed automatically in some case. e.g. interrupt step
+        markErrorAsIgnorable(-1);
+        static const String *s_rollback
+        = new String(StatementRollback().rollback().getDescription());
+        executeSQL(*s_rollback);
+        markErrorAsUnignorable();
+    }
 }
 
 #pragma mark - Cipher
@@ -559,7 +558,8 @@ void AbstractHandle::notifyError(int rc, const char *sql)
         // extended error code/message will not be set in some case for misuse error
         m_error.setSQLiteCode(rc);
     }
-    if (m_codeToBeIgnored >= 0 && rc != m_codeToBeIgnored) {
+    if (std::find(m_ignorableCodes.begin(), m_ignorableCodes.end(), rc)
+        == m_ignorableCodes.end()) {
         m_error.level = Error::Level::Error;
     } else {
         m_error.level = Error::Level::Ignore;
@@ -570,14 +570,15 @@ void AbstractHandle::notifyError(int rc, const char *sql)
     Notifier::shared()->notify(m_error);
 }
 
-void AbstractHandle::markErrorAsIgnorable(int codeToBeIgnored)
+void AbstractHandle::markErrorAsIgnorable(int ignorableCode)
 {
-    m_codeToBeIgnored = codeToBeIgnored;
+    m_ignorableCodes.emplace_back(ignorableCode);
 }
 
 void AbstractHandle::markErrorAsUnignorable()
 {
-    m_codeToBeIgnored = SQLITE_OK;
+    WCTInnerAssert(!m_ignorableCodes.empty());
+    m_ignorableCodes.pop_back();
 }
 
 } //namespace WCDB

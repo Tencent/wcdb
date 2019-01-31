@@ -187,12 +187,13 @@ private:
 
 #pragma mark - Error
 public:
-    void markErrorAsIgnorable(int codeToBeIgnored);
+    // call it as push/pop in stack structure.
+    void markErrorAsIgnorable(int ignorableCode);
     void markErrorAsUnignorable();
 
 private:
-    // if code >= 0, then the level of error with the specified code will be marked as ignored
-    // if code < 0, then the level of all errors will be marked as ignored
+    // The level of error will be "Ignore" if it's marked as ignorable.
+    // But the return value will be still false.
     bool exitAPI(int rc);
     bool exitAPI(int rc, const String &sql);
     bool exitAPI(int rc, const char *sql);
@@ -200,7 +201,7 @@ private:
     static bool isError(int rc);
     void notifyError(int rc, const char *sql);
 
-    int m_codeToBeIgnored;
+    std::vector<int> m_ignorableCodes;
 };
 
 } //namespace WCDB

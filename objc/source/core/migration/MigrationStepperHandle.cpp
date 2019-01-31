@@ -28,6 +28,7 @@ MigrationStepperHandle::MigrationStepperHandle()
 , m_migrateStatement(getStatement())
 , m_removeMigratedStatement(getStatement())
 {
+    markErrorAsIgnorable((int) Error::Code::Interrupt);
 }
 
 MigrationStepperHandle::~MigrationStepperHandle()
@@ -35,6 +36,7 @@ MigrationStepperHandle::~MigrationStepperHandle()
     finalizeMigrationStatement();
     returnStatement(m_migrateStatement);
     returnStatement(m_removeMigratedStatement);
+    markErrorAsUnignorable();
 }
 
 bool MigrationStepperHandle::reAttach(const String& newPath, const Schema& newSchema)
