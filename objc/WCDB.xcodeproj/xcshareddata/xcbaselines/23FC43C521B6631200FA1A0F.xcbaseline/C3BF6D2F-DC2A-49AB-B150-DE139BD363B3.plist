@@ -105,6 +105,16 @@
 		</dict>
 		<key>InitializationBenchmark</key>
 		<dict>
+			<key>test_exists</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.176</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Jan 31, 2019 at 09:41:13</string>
+				</dict>
+			</dict>
 			<key>test_initialization</key>
 			<dict>
 				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>

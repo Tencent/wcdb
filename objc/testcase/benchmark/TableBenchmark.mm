@@ -66,6 +66,36 @@
     }];
 }
 
+- (void)test_exists
+{
+    int numberOfTests = 10000;
+    NSString* pattern = [NSString stringWithFormat:@"%s%%", WCDB::Syntax::builtinTablePrefix];
+
+    __block NSString* tableName;
+    __block BOOL result;
+    [self
+    doMeasure:^{
+        result = YES;
+        for (int i = 0; i < numberOfTests; ++i) {
+            if (![self.database tableExists:tableName]) {
+                result = NO;
+                break;
+            }
+        }
+    }
+    setUp:^{
+        [self setUpDatabase];
+        tableName = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCTMaster.name).from(WCTMaster.tableName).where(WCTMaster.name.notLike(pattern)).limit(1)].stringValue;
+    }
+    tearDown:^{
+        [self tearDownDatabase];
+        result = NO;
+    }
+    checkCorrectness:^{
+        TestCaseAssertTrue(result);
+    }];
+}
+
 #pragma mark - ReusableFactoryPreparation
 - (BOOL)stepPreparePrototype:(NSString*)path
 {

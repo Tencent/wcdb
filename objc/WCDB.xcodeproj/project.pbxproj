@@ -181,7 +181,7 @@
 		23585B6821E6F83B00EE0334 /* CipherBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23585B6521E6F83A00EE0334 /* CipherBenchmark.mm */; };
 		23585B7621E7231400EE0334 /* DatabaseMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23585B7421E7231300EE0334 /* DatabaseMigrationBenchmark.mm */; };
 		23585B7721E7231400EE0334 /* TableMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23585B7521E7231400EE0334 /* TableMigrationBenchmark.mm */; };
-		23585B7F21E742A500EE0334 /* InitializationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23585B7D21E742A400EE0334 /* InitializationBenchmark.mm */; };
+		23585B7F21E742A500EE0334 /* TableBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23585B7D21E742A400EE0334 /* TableBenchmark.mm */; };
 		23593B7D20D3ADF80058B416 /* WalRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23593B7B20D3ADF80058B416 /* WalRelated.cpp */; };
 		23593B7F20D3ADF80058B416 /* WalRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23593B7C20D3ADF80058B416 /* WalRelated.hpp */; };
 		2360A5F720D78F1B00E4A311 /* HandleRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2360A5F320D78F1B00E4A311 /* HandleRelated.cpp */; };
@@ -1445,7 +1445,7 @@
 		23585B6521E6F83A00EE0334 /* CipherBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CipherBenchmark.mm; sourceTree = "<group>"; };
 		23585B7421E7231300EE0334 /* DatabaseMigrationBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DatabaseMigrationBenchmark.mm; sourceTree = "<group>"; };
 		23585B7521E7231400EE0334 /* TableMigrationBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableMigrationBenchmark.mm; sourceTree = "<group>"; };
-		23585B7D21E742A400EE0334 /* InitializationBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = InitializationBenchmark.mm; sourceTree = "<group>"; };
+		23585B7D21E742A400EE0334 /* TableBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableBenchmark.mm; sourceTree = "<group>"; };
 		23593B7B20D3ADF80058B416 /* WalRelated.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WalRelated.cpp; sourceTree = "<group>"; };
 		23593B7C20D3ADF80058B416 /* WalRelated.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WalRelated.hpp; sourceTree = "<group>"; };
 		2360A5F320D78F1B00E4A311 /* HandleRelated.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HandleRelated.cpp; sourceTree = "<group>"; };
@@ -3815,7 +3815,7 @@
 				23C56DF921F9A4B5005EC861 /* MigrationBenchmark.mm */,
 				23585B7421E7231300EE0334 /* DatabaseMigrationBenchmark.mm */,
 				23585B7521E7231400EE0334 /* TableMigrationBenchmark.mm */,
-				23585B7D21E742A400EE0334 /* InitializationBenchmark.mm */,
+				23585B7D21E742A400EE0334 /* TableBenchmark.mm */,
 			);
 			path = benchmark;
 			sourceTree = "<group>";
@@ -5255,7 +5255,7 @@
 				23585B7721E7231400EE0334 /* TableMigrationBenchmark.mm in Sources */,
 				23C56DFA21F9A4B5005EC861 /* MigrationBenchmark.mm in Sources */,
 				23FC01DD21B8B716002C7F87 /* RepairBenchmark.mm in Sources */,
-				23585B7F21E742A500EE0334 /* InitializationBenchmark.mm in Sources */,
+				23585B7F21E742A500EE0334 /* TableBenchmark.mm in Sources */,
 				23585B7621E7231400EE0334 /* DatabaseMigrationBenchmark.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
