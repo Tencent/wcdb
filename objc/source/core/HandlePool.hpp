@@ -21,10 +21,12 @@
 #ifndef _WCDB_HANDLEPOOL_HPP
 #define _WCDB_HANDLEPOOL_HPP
 
+#include <WCDB/CoreConst.h>
 #include <WCDB/ErrorProne.hpp>
 #include <WCDB/Lock.hpp>
 #include <WCDB/RecyclableHandle.hpp>
 #include <WCDB/ThreadedErrors.hpp>
+#include <array>
 #include <list>
 
 namespace WCDB {
@@ -83,14 +85,13 @@ protected:
 
     mutable SharedLock m_memory;
 
-    bool handlesExist(Slot slot) const;
     const std::set<std::shared_ptr<Handle>> &getHandles(Slot slot) const;
 
 private:
     void flowBack(Slot slot, const std::shared_ptr<Handle> &handle);
 
-    std::map<Slot, std::set<std::shared_ptr<Handle>>> m_handles;
-    std::map<Slot, std::list<std::shared_ptr<Handle>>> m_frees;
+    std::array<std::set<std::shared_ptr<Handle>>, HandlePoolNumberOfSlots> m_handles;
+    std::array<std::list<std::shared_ptr<Handle>>, HandlePoolNumberOfSlots> m_frees;
 };
 
 } //namespace WCDB

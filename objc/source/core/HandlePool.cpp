@@ -46,7 +46,7 @@ HandlePool::~HandlePool()
 int HandlePool::maxAllowedNumberOfHandles()
 {
     static const int s_maxAllowedNumberOfHandles = std::max<int>(
-    HandlePooMaxAllowedNumberOfHandles, std::thread::hardware_concurrency());
+    HandlePoolMaxAllowedNumberOfHandles, std::thread::hardware_concurrency());
     return s_maxAllowedNumberOfHandles;
 }
 
@@ -93,13 +93,14 @@ void HandlePool::clearAllHandles()
 {
     WCTInnerAssert(m_concurrency.writeSafety());
     WCTInnerAssert(m_memory.writeSafety());
-    for (const auto &iter : m_handles) {
-        for (const auto &handle : iter.second) {
+    for (int i = 0; i < HandlePoolNumberOfSlots; ++i) {
+        m_frees[i].clear();
+        auto &handles = m_handles[i];
+        for (const auto &handle : handles) {
             handle->close();
         }
+        handles.clear();
     }
-    m_handles.clear();
-    m_frees.clear();
 }
 
 #pragma mark - Handle
@@ -107,14 +108,15 @@ void HandlePool::purge()
 {
     SharedLockGuard concurrencyGuard(m_concurrency);
     LockGuard memoryGuard(m_memory);
-    for (const auto &iter : m_frees) {
-        auto &handles = m_handles[iter.first];
-        for (const auto &handle : iter.second) {
+    for (int i = 0; i < HandlePoolNumberOfSlots; ++i) {
+        auto &handles = m_handles[i];
+        auto &frees = m_frees[i];
+        for (const auto &handle : frees) {
             handle->close();
             handles.erase(handle);
         }
+        frees.clear();
     }
-    m_frees.clear();
 }
 
 size_t HandlePool::numberOfAliveHandles() const
@@ -122,8 +124,8 @@ size_t HandlePool::numberOfAliveHandles() const
     SharedLockGuard concurrencyGuard(m_concurrency);
     SharedLockGuard memoryGuard(m_memory);
     int count = 0;
-    for (const auto &iter : m_handles) {
-        count += iter.second.size();
+    for (const auto &handles : m_handles) {
+        count += handles.size();
     }
     return count;
 }
@@ -132,22 +134,7 @@ size_t HandlePool::numberOfActiveHandles(Slot slot) const
 {
     SharedLockGuard concurrencyGuard(m_concurrency);
     SharedLockGuard memoryGuard(m_memory);
-    size_t numberOfHandles = 0;
-    size_t numberOfFreeHandles = 0;
-    {
-        auto iter = m_handles.find(slot);
-        if (iter != m_handles.end()) {
-            numberOfHandles = iter->second.size();
-        }
-    }
-    {
-        auto iter = m_frees.find(slot);
-        if (iter != m_frees.end()) {
-            numberOfFreeHandles = iter->second.size();
-        }
-    }
-    WCTInnerAssert(numberOfHandles >= numberOfFreeHandles);
-    return numberOfHandles - numberOfFreeHandles;
+    return m_handles[slot].size() - m_frees[slot].size();
 }
 
 bool HandlePool::isAliving() const
@@ -155,8 +142,8 @@ bool HandlePool::isAliving() const
     SharedLockGuard concurrencyGuard(m_concurrency);
     SharedLockGuard memoryGuard(m_memory);
     bool aliving = false;
-    for (const auto &iter : m_handles) {
-        if (iter.second.size() > 0) {
+    for (const auto &handles : m_handles) {
+        if (handles.size() > 0) {
             aliving = true;
             break;
         }
@@ -247,19 +234,11 @@ RecyclableHandle HandlePool::flowOut(Slot slot)
     handle, std::bind(&HandlePool::flowBack, this, slot, std::placeholders::_1));
 }
 
-bool HandlePool::handlesExist(Slot slot) const
-{
-    WCTInnerAssert(m_concurrency.readSafety());
-    WCTInnerAssert(m_memory.readSafety());
-    return m_handles.find(slot) != m_handles.end();
-}
-
 const std::set<std::shared_ptr<Handle>> &HandlePool::getHandles(Slot slot) const
 {
     WCTInnerAssert(m_concurrency.readSafety());
     WCTInnerAssert(m_memory.readSafety());
-    WCTInnerAssert(handlesExist(slot));
-    return m_handles.find(slot)->second;
+    return m_handles[slot];
 }
 
 void HandlePool::flowBack(Slot slot, const std::shared_ptr<Handle> &handle)

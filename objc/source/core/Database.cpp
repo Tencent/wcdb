@@ -153,12 +153,12 @@ RecyclableHandle Database::getHandle()
     }
     // interrupt migration to do the real operation
     interruptMigration();
-    return flowOut(m_migration.shouldMigrate() ? MigrationHandleSlot : ConfiguredHandleSlot);
+    return flowOut(m_migration.shouldMigrate() ? HandleSlot::Migration : HandleSlot::Normal);
 }
 
 RecyclableHandle Database::getSlotHandle(Slot slot)
 {
-    WCTInnerAssert(slot != MigrationHandleSlot && slot != ConfiguredHandleSlot);
+    WCTInnerAssert(slot != HandleSlot::Migration && slot != HandleSlot::Normal);
     InitializedGuard initializedGuard = initialize();
     if (!initializedGuard.valid()) {
         return nullptr;
@@ -198,26 +198,26 @@ std::shared_ptr<Handle> Database::generateHandle(Slot slot)
     std::shared_ptr<Handle> handle;
     bool open = false;
     switch (slot) {
-    case MigrationHandleSlot:
+    case HandleSlot::Migration:
         // It's safe since m_migration never change.
         handle.reset(new MigrationHandle(m_migration));
         open = true;
         break;
-    case MigrationStepperSlot:
+    case HandleSlot::MigrationStepper:
         handle.reset(new MigrationStepperHandle);
         open = true;
         break;
-    case BackupReadSlot:
+    case HandleSlot::BackupRead:
         handle.reset(new BackupReadHandle);
         break;
-    case BackupWriteSlot:
+    case HandleSlot::BackupWrite:
         handle.reset(new BackupWriteHandle);
         break;
-    case AssemblerSlot:
+    case HandleSlot::Assembler:
         handle.reset(new AssemblerHandle);
         break;
     default:
-        WCTInnerAssert(slot == ConfiguredHandleSlot);
+        WCTInnerAssert(slot == HandleSlot::Normal);
         handle.reset(new ConfiguredHandle);
         open = true;
         break;
@@ -240,9 +240,9 @@ bool Database::willConfigureHandle(Slot slot, Handle *handle)
 {
     bool succeed = true;
     switch (slot) {
-    case MigrationHandleSlot:
-    case ConfiguredHandleSlot:
-    case MigrationStepperSlot: {
+    case HandleSlot::Migration:
+    case HandleSlot::Normal:
+    case HandleSlot::MigrationStepper: {
         std::shared_ptr<Configs> configs;
         {
             SharedLockGuard memoryGuard(m_memory);
@@ -510,12 +510,12 @@ bool Database::backup()
 {
     WCTRemedialAssert(
     !isInTransaction(), "Backup can't be run in transaction.", return false;);
-    RecyclableHandle backupReadHandle = getSlotHandle(BackupReadSlot);
+    RecyclableHandle backupReadHandle = getSlotHandle(HandleSlot::BackupRead);
     if (backupReadHandle == nullptr) {
         return false;
     }
 
-    RecyclableHandle backupWriteHandle = getSlotHandle(BackupWriteSlot);
+    RecyclableHandle backupWriteHandle = getSlotHandle(HandleSlot::BackupWrite);
     if (backupWriteHandle == nullptr) {
         return false;
     }
@@ -542,15 +542,15 @@ bool Database::deposit()
     }
     bool result = false;
     close([&result, this]() {
-        RecyclableHandle backupReadHandle = getSlotHandle(BackupReadSlot);
+        RecyclableHandle backupReadHandle = getSlotHandle(HandleSlot::BackupRead);
         if (backupReadHandle == nullptr) {
             return;
         }
-        RecyclableHandle backupWriteHandle = getSlotHandle(BackupWriteSlot);
+        RecyclableHandle backupWriteHandle = getSlotHandle(HandleSlot::BackupWrite);
         if (backupWriteHandle == nullptr) {
             return;
         }
-        RecyclableHandle assemblerHandle = getSlotHandle(AssemblerSlot);
+        RecyclableHandle assemblerHandle = getSlotHandle(HandleSlot::Assembler);
         if (assemblerHandle == nullptr) {
             return;
         }
@@ -591,15 +591,15 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
     }
     double result = -1;
     close([&result, &onProgressUpdate, this]() {
-        RecyclableHandle backupReadHandle = getSlotHandle(BackupReadSlot);
+        RecyclableHandle backupReadHandle = getSlotHandle(HandleSlot::BackupRead);
         if (backupReadHandle == nullptr) {
             return;
         }
-        RecyclableHandle backupWriteHandle = getSlotHandle(BackupWriteSlot);
+        RecyclableHandle backupWriteHandle = getSlotHandle(HandleSlot::BackupWrite);
         if (backupWriteHandle == nullptr) {
             return;
         }
-        RecyclableHandle assemblerHandle = getSlotHandle(AssemblerSlot);
+        RecyclableHandle assemblerHandle = getSlotHandle(HandleSlot::Assembler);
         if (assemblerHandle == nullptr) {
             return;
         }
@@ -677,13 +677,13 @@ std::pair<bool, bool> Database::stepMigration(bool interruptible)
             break;
         }
         if (interruptible
-            && (numberOfActiveHandles(ConfiguredHandleSlot) > 0
-                || numberOfActiveHandles(MigrationHandleSlot) > 0)) {
+            && (numberOfActiveHandles(HandleSlot::Normal) > 0
+                || numberOfActiveHandles(HandleSlot::Migration) > 0)) {
             succeed = true;
             break;
         }
 
-        RecyclableHandle handle = getSlotHandle(MigrationStepperSlot);
+        RecyclableHandle handle = getSlotHandle(HandleSlot::MigrationStepper);
         if (handle == nullptr) {
             break;
         }
@@ -724,11 +724,9 @@ void Database::interruptMigration()
     if (!m_initialized) {
         return;
     }
-    if (handlesExist(MigrationStepperSlot)) {
-        for (const auto &handle : getHandles(MigrationStepperSlot)) {
-            WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()) != nullptr);
-            static_cast<MigrationStepperHandle *>(handle.get())->interrupt();
-        }
+    for (const auto &handle : getHandles(HandleSlot::MigrationStepper)) {
+        WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()) != nullptr);
+        static_cast<MigrationStepperHandle *>(handle.get())->interrupt();
     }
 }
 

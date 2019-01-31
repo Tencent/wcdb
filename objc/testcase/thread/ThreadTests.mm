@@ -84,7 +84,7 @@
 
 - (int)maxConcurrency
 {
-    return std::max<int>(WCDB::HandlePooMaxAllowedNumberOfHandles, std::thread::hardware_concurrency());
+    return std::max<int>(WCDB::HandlePoolMaxAllowedNumberOfHandles, std::thread::hardware_concurrency());
 }
 
 - (void)test_feature_read_concurrency

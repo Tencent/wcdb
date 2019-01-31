@@ -70,12 +70,17 @@ protected:
     RecyclableHandle getSlotHandle(Slot slot);
 
 protected:
-    static const Slot ConfiguredHandleSlot = 1;
-    static const Slot MigrationHandleSlot = 2;
-    static constexpr const Slot BackupReadSlot = 3;
-    static constexpr const Slot BackupWriteSlot = 4;
-    static constexpr const Slot AssemblerSlot = 5;
-    static constexpr const Slot MigrationStepperSlot = 6;
+    enum HandleSlot : int {
+        Normal = 0,
+        Migration,
+        BackupRead,
+        BackupWrite,
+        Assembler,
+        MigrationStepper,
+
+        Count,
+    };
+    static_assert(HandleSlot::Count == HandlePoolNumberOfSlots, "");
     std::shared_ptr<Handle> generateHandle(Slot slot) override final;
     bool willConfigureHandle(Slot slot, Handle *handle) override final;
 
@@ -172,7 +177,7 @@ public:
     void interruptMigration();
 
 protected:
-    Migration m_migration;
+    class Migration m_migration;
 
 #pragma mark - Memory
 public:
