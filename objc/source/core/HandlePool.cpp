@@ -132,6 +132,7 @@ size_t HandlePool::numberOfAliveHandles() const
 
 size_t HandlePool::numberOfActiveHandles(Slot slot) const
 {
+    WCTInnerAssert(slot < HandlePoolNumberOfSlots);
     SharedLockGuard concurrencyGuard(m_concurrency);
     SharedLockGuard memoryGuard(m_memory);
     return m_handles[slot].size() - m_frees[slot].size();
@@ -153,6 +154,7 @@ bool HandlePool::isAliving() const
 
 RecyclableHandle HandlePool::flowOut(Slot slot)
 {
+    WCTInnerAssert(slot < HandlePoolNumberOfSlots);
     SharedLockGuard concurrencyGuard(m_concurrency);
     std::shared_ptr<Handle> handle;
     {
@@ -236,6 +238,7 @@ RecyclableHandle HandlePool::flowOut(Slot slot)
 
 const std::set<std::shared_ptr<Handle>> &HandlePool::getHandles(Slot slot) const
 {
+    WCTInnerAssert(slot < HandlePoolNumberOfSlots);
     WCTInnerAssert(m_concurrency.readSafety());
     WCTInnerAssert(m_memory.readSafety());
     return m_handles[slot];
@@ -243,6 +246,7 @@ const std::set<std::shared_ptr<Handle>> &HandlePool::getHandles(Slot slot) const
 
 void HandlePool::flowBack(Slot slot, const std::shared_ptr<Handle> &handle)
 {
+    WCTInnerAssert(slot < HandlePoolNumberOfSlots);
     WCTInnerAssert(handle != nullptr);
     WCTInnerAssert(m_concurrency.readSafety());
     WCTRemedialAssert(

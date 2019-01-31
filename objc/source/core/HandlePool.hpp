@@ -72,7 +72,7 @@ private:
 
 #pragma mark - Handle
 public:
-    typedef int Slot;
+    typedef unsigned int Slot;
     RecyclableHandle flowOut(Slot slot);
     void purge();
     size_t numberOfAliveHandles() const;

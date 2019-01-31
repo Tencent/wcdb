@@ -70,7 +70,7 @@ protected:
     RecyclableHandle getSlotHandle(Slot slot);
 
 protected:
-    enum HandleSlot : int {
+    enum HandleSlot : unsigned int {
         Normal = 0,
         Migration,
         BackupRead,

@@ -107,7 +107,7 @@ constexpr const char* NotifierLoggerName = "com.Tencent.WCDB.Notifier.Log";
 
 // Handle Pool
 static constexpr const int HandlePoolMaxAllowedNumberOfHandles = 64;
-static constexpr const int HandlePoolNumberOfSlots = 6;
+static constexpr const unsigned int HandlePoolNumberOfSlots = 6;
 
 } // namespace WCDB
 
