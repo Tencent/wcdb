@@ -154,8 +154,8 @@ protected:
     std::pair<bool, bool> tryMigrateRows(Migration::Stepper& stepper);
     std::pair<bool, bool> tryAcquireTables(Migration::Stepper& stepper);
 
-    void triggerMigratedNotification();
-    void triggerTableMigratedNotification(const MigrationInfo* info);
+    void postMigratedNotification();
+    void postTableMigratedNotification(const MigrationInfo* info);
 
 private:
     bool m_tableAcquired;

@@ -327,7 +327,7 @@ std::pair<bool, bool> Migration::step(Migration::Stepper& stepper)
             retry = true;
         } else {
             done = true;
-            triggerMigratedNotification();
+            postMigratedNotification();
         }
     } while (retry);
     return { succeed, done };
@@ -349,7 +349,7 @@ std::pair<bool, bool> Migration::tryDropUnreferencedTable(Migration::Stepper& st
         succeed = stepper.dropSourceTable(info);
         worked = succeed;
         markAsDropped(info);
-        triggerTableMigratedNotification(info);
+        postTableMigratedNotification(info);
     }
     return { succeed, worked };
 }
@@ -413,7 +413,7 @@ void Migration::setNotificationWhenMigrated(const MigratedCallback& callback)
     m_migratedNotification = callback;
 }
 
-void Migration::triggerMigratedNotification()
+void Migration::postMigratedNotification()
 {
     MigratedCallback callback = nullptr;
     {
@@ -429,7 +429,7 @@ void Migration::triggerMigratedNotification()
     }
 }
 
-void Migration::triggerTableMigratedNotification(const MigrationInfo* info)
+void Migration::postTableMigratedNotification(const MigrationInfo* info)
 {
     MigratedCallback callback = nullptr;
     {
