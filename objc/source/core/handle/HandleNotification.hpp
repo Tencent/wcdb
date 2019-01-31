@@ -37,7 +37,7 @@ public:
 
 #pragma mark - Trace
 private:
-    void dispatchTraceNotifications(unsigned int flag, void *P, void *X);
+    void postTraceNotification(unsigned int flag, void *P, void *X);
     void setupTraceNotifications();
     static int traced(unsigned int T, void *C, void *P, void *X);
 
@@ -48,7 +48,7 @@ public:
 
 private:
     bool areSQLTraceNotificationsSet() const;
-    void dispatchSQLTraceNotifications(const String &sql);
+    void postSQLTraceNotification(const String &sql);
     std::map<String, SQLNotification> m_sqlNotifications;
 
 #pragma mark - Performance
@@ -67,9 +67,7 @@ public:
 
 private:
     bool arePerformanceTraceNotificationsSet() const;
-    void dispatchPerformanceTraceNotifications(const String &sql,
-                                               const int64_t &cost,
-                                               bool isInTransaction);
+    void postPerformanceTraceNotification(const String &sql, const int64_t &cost, bool isInTransaction);
 
     Footprints m_footprints;
     int64_t m_cost = 0;
@@ -90,7 +88,7 @@ private:
     bool isCommittedNotificationSet() const;
     void setupCommittedNotification();
 
-    void dispatchCommittedNotifications(int numberOfFrames);
+    void postCommittedNotification(int numberOfFrames);
     OrderedUniqueList<String, CommittedNotification> m_committedNotifications;
 
 #pragma mark - Checkpoint
@@ -104,7 +102,7 @@ private:
 
     bool areCheckpointNotificationsSet() const;
     void setupCheckpointNotifications();
-    void dispatchCheckpointNotifications();
+    void postCheckpointNotification();
     std::map<String, CheckpointedNotification> m_checkpointedNotifications;
 
 #pragma mark - Busy
@@ -114,7 +112,7 @@ public:
 
 private:
     static int busyRetry(void *p, int numberOfTimes);
-    bool dispatchBusyNotification(int numberOfTimes);
+    bool postBusyNotification(int numberOfTimes);
     BusyNotification m_busyNotification;
 
 #pragma mark - Did Prepare

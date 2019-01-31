@@ -57,25 +57,25 @@ void HandleNotification::purge()
 int HandleNotification::traced(unsigned int T, void *C, void *P, void *X)
 {
     HandleNotification *notification = reinterpret_cast<HandleNotification *>(C);
-    notification->dispatchTraceNotifications(T, P, X);
+    notification->postTraceNotification(T, P, X);
     return SQLITE_OK;
 }
 
-void HandleNotification::dispatchTraceNotifications(unsigned int flag, void *P, void *X)
+void HandleNotification::postTraceNotification(unsigned int flag, void *P, void *X)
 {
     sqlite3_stmt *stmt = (sqlite3_stmt *) P;
     switch (flag) {
     case SQLITE_TRACE_STMT: {
         const char *sql = static_cast<const char *>(X);
         if (sql) {
-            dispatchSQLTraceNotifications(sql);
+            postSQLTraceNotification(sql);
         }
     } break;
     case SQLITE_TRACE_PROFILE: {
         const char *sql = sqlite3_sql(stmt);
         sqlite3_int64 *cost = (sqlite3_int64 *) X;
         sqlite3 *db = sqlite3_db_handle(stmt);
-        dispatchPerformanceTraceNotifications(sql, *cost, !sqlite3_get_autocommit(db));
+        postPerformanceTraceNotification(sql, *cost, !sqlite3_get_autocommit(db));
     } break;
     default:
         break;
@@ -120,7 +120,7 @@ void HandleNotification::setNotificationWhenSQLTraced(const String &name,
     }
 }
 
-void HandleNotification::dispatchSQLTraceNotifications(const String &sql)
+void HandleNotification::postSQLTraceNotification(const String &sql)
 {
     WCTInnerAssert(!m_sqlNotifications.empty());
     for (const auto &element : m_sqlNotifications) {
@@ -154,9 +154,9 @@ void HandleNotification::setNotificationWhenPerformanceTraced(const String &name
     }
 }
 
-void HandleNotification::dispatchPerformanceTraceNotifications(const String &sql,
-                                                               const int64_t &cost,
-                                                               bool isInTransaction)
+void HandleNotification::postPerformanceTraceNotification(const String &sql,
+                                                          const int64_t &cost,
+                                                          bool isInTransaction)
 {
     if (!m_footprints.empty()) {
         auto &footprint = m_footprints.back();
@@ -182,7 +182,7 @@ void HandleNotification::dispatchPerformanceTraceNotifications(const String &sql
 int HandleNotification::committed(void *p, sqlite3 *, const char *, int numberOfFrames)
 {
     HandleNotification *notification = reinterpret_cast<HandleNotification *>(p);
-    notification->dispatchCommittedNotifications(numberOfFrames);
+    notification->postCommittedNotification(numberOfFrames);
     return SQLITE_OK;
 }
 
@@ -223,7 +223,7 @@ bool HandleNotification::isCommittedNotificationSet() const
     return !m_committedNotifications.elements().empty();
 }
 
-void HandleNotification::dispatchCommittedNotifications(int numberOfFrames)
+void HandleNotification::postCommittedNotification(int numberOfFrames)
 {
     WCTInnerAssert(!m_committedNotifications.elements().empty());
     for (const auto &element : m_committedNotifications.elements()) {
@@ -237,7 +237,7 @@ void HandleNotification::dispatchCommittedNotifications(int numberOfFrames)
 void HandleNotification::checkpointed(void *p)
 {
     HandleNotification *notification = reinterpret_cast<HandleNotification *>(p);
-    notification->dispatchCheckpointNotifications();
+    notification->postCheckpointNotification();
 }
 
 bool HandleNotification::areCheckpointNotificationsSet() const
@@ -270,7 +270,7 @@ void HandleNotification::setNotificationWhenCheckpointed(const String &name,
     }
 }
 
-void HandleNotification::dispatchCheckpointNotifications()
+void HandleNotification::postCheckpointNotification()
 {
     WCTInnerAssert(areCheckpointNotificationsSet());
     for (const auto &element : m_checkpointedNotifications) {
@@ -283,7 +283,7 @@ int HandleNotification::busyRetry(void *p, int numberOfTimes)
 {
     HandleNotification *notification = reinterpret_cast<HandleNotification *>(p);
     int rc = SQLITE_OK;
-    if (notification->dispatchBusyNotification(numberOfTimes)) {
+    if (notification->postBusyNotification(numberOfTimes)) {
         // return any non-zero value to retry
         rc = SQLITE_BUSY;
     }
@@ -301,7 +301,7 @@ void HandleNotification::setNotificationWhenBusy(const BusyNotification &busyNot
     }
 }
 
-bool HandleNotification::dispatchBusyNotification(int numberOfTimes)
+bool HandleNotification::postBusyNotification(int numberOfTimes)
 {
     WCTInnerAssert(m_busyNotification != nullptr);
     bool retry = false;
