@@ -73,19 +73,6 @@ bool MigrationStepperHandle::reAttach(const String& newPath, const Schema& newSc
     return succeed;
 }
 
-#pragma mark - Interrupt
-void MigrationStepperHandle::setInterruptible(bool interruptible)
-{
-    m_interruptible = interruptible;
-}
-
-void MigrationStepperHandle::interrupt()
-{
-    if (m_interruptible.load()) {
-        Handle::interrupt();
-    }
-}
-
 #pragma mark - Stepper
 std::pair<bool, std::set<String>> MigrationStepperHandle::getAllTables()
 {

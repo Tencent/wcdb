@@ -43,15 +43,6 @@ protected:
 private:
     Schema m_attached;
 
-#pragma mark - Interrupt
-public:
-    void setInterruptible(bool interruptible);
-    void interrupt();
-
-protected:
-    using Handle::interrupt;
-    std::atomic<bool> m_interruptible;
-
 #pragma mark - Stepper
 protected:
     std::pair<bool, std::set<String>> getAllTables() override final;

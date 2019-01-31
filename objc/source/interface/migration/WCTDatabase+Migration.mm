@@ -40,11 +40,11 @@
     _database->filterMigration(callback);
 }
 
-- (BOOL)stepMigration:(BOOL)interruptible done:(BOOL&)done
+- (BOOL)stepMigrationOrDone:(BOOL&)done
 {
     WCTDatabaseAssert(return NO;);
     bool succeed;
-    std::tie(succeed, done) = _database->stepMigration((bool) interruptible);
+    std::tie(succeed, done) = _database->stepMigration();
     return succeed;
 }
 

@@ -176,7 +176,7 @@ public:
     typedef Migration::MigratedCallback MigratedCallback;
     void setNotificationWhenMigrated(const MigratedCallback &callback);
 
-    std::pair<bool, bool> stepMigration(bool interruptible);
+    std::pair<bool, bool> stepMigration();
 
     void interruptMigration();
 

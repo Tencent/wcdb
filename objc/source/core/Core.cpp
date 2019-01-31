@@ -179,7 +179,7 @@ std::pair<bool, bool> Core::databaseShouldMigrate(const String& path)
     if (database == nullptr) {
         return { false, false };
     }
-    return database->stepMigration(true);
+    return database->stepMigration();
 }
 
 const std::shared_ptr<Configs>& Core::configs()

@@ -683,7 +683,7 @@ bool Database::retrieveRenewed()
 }
 
 #pragma mark - Migration
-std::pair<bool, bool> Database::stepMigration(bool interruptible)
+std::pair<bool, bool> Database::stepMigration()
 {
     InitializedGuard initializedGuard = initialize();
     bool succeed = false;
@@ -701,7 +701,6 @@ std::pair<bool, bool> Database::stepMigration(bool interruptible)
         }
 
         WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()) != nullptr);
-        static_cast<MigrationStepperHandle *>(handle.get())->setInterruptible(interruptible);
         std::tie(succeed, done)
         = m_migration.step(*(static_cast<MigrationStepperHandle *>(handle.get())));
         if (!succeed) {
