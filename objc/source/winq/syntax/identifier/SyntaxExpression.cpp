@@ -120,6 +120,7 @@ streamAutoParenthesesExpression(std::ostringstream& stream, const Expression& ex
     case Expression::Switch::RaiseFunction:
     case Expression::Switch::Window:
     case Expression::Switch::Expressions:
+    case Expression::Switch::Select:
         parentheses = false;
         break;
     case Expression::Switch::UnaryOperation:
