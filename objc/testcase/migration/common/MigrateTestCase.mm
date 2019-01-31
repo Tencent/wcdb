@@ -96,14 +96,31 @@
     WCTHandle *handle = [self.database getHandle];
     TestCaseAssertTrue([handle validate]);
 
-    BOOL done;
-    TestCaseAssertTrue([self.database stepMigrationOrDone:done]);
-    TestCaseAssertFalse(done);
+    TestCaseResult *write = [TestCaseResult yes];
 
-    // check source table migration is not started.
-    // It's not a good practice.
-    TestCaseAssertTrue([[self.sourceDatabase getObjectsOfClass:MigrationObject.class fromTable:self.sourceTable orders:MigrationObject.identifier.asOrder(WCTOrderedAscending)] isEqualToArray:self.objects]);
-    [handle invalidate];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        while (write.isYES) {
+            TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion()).to(1)]);
+        }
+    });
+
+    TestCaseResult *tested = [TestCaseResult no];
+    [WCTDatabase globalTraceError:^(WCTError *error) {
+        if (error.code == WCTErrorCodeInterrupt) {
+            [tested makeYES];
+        }
+    }];
+
+    BOOL done = NO;
+    do {
+        TestCaseAssertTrue([self.database stepMigrationOrDone:done]);
+    } while (!done && tested.isNO);
+
+    [WCTDatabase resetGlobalErrorTracer];
+    [write makeNO];
+
+    TestCaseAssertResultYES(tested);
+    TestCaseAssertFalse(done);
 }
 
 - (void)doTestAutoMigrate
