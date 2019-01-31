@@ -29,7 +29,6 @@ ColumnMeta::ColumnMeta(int id_, String name_, String type_, bool notnull_, int p
 
 int ColumnMeta::getIndexOfIntegerPrimary(const std::vector<ColumnMeta>& columnMetas)
 {
-    bool multiPrimary = false;
     int indexOfIntegerPrimary = -1;
     for (const ColumnMeta& columnMeta : columnMetas) {
         int pk = columnMeta.primary;
