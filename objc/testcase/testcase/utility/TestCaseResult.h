@@ -22,16 +22,16 @@
 
 @interface TestCaseResult : NSObject
 
-+ (instancetype)success;
-+ (instancetype)failure;
++ (instancetype)yes;
++ (instancetype)no;
 - (instancetype)initWithValue:(BOOL)value;
 
 // atmoic
 @property (atomic, assign) BOOL value;
-- (void)succeed;
-- (void)fail;
+- (void)makeYES;
+- (void)makeNO;
 
-- (BOOL)successful;
-- (BOOL)failed;
+- (BOOL)isYES;
+- (BOOL)isNO;
 
 @end

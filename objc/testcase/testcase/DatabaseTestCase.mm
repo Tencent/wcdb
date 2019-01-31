@@ -261,7 +261,7 @@
     TestCaseAssertTrue(block != nil);
     TestCaseAssertTrue([testSQLs isKindOfClass:NSArray.class]);
     do {
-        TestCaseResult* trace = [TestCaseResult failure];
+        TestCaseResult* trace = [TestCaseResult yes];
         NSMutableArray<NSString*>* expectedSQLs = [NSMutableArray arrayWithArray:testSQLs];
         NSThread* tracedThread = [NSThread currentThread];
         [self.database traceSQL:^(NSString* sql) {
@@ -269,7 +269,7 @@
                 // skip other thread sqls due to the setting
                 return;
             }
-            if (trace.failed) {
+            if (trace.isNO) {
                 return;
             }
             @synchronized(expectedSQLs) {
@@ -277,7 +277,7 @@
                 if ([expectedSQL isEqualToString:sql]) {
                     [expectedSQLs removeObjectAtIndex:0];
                 } else {
-                    [trace fail];
+                    [trace makeNO];
                     if (expectedSQL == nil) {
                         if (self.expectFirstFewSQLsOnly) {
                             return;
@@ -293,7 +293,7 @@
             break;
         }
 
-        [trace succeed];
+        [trace makeYES];
         @autoreleasepool {
             if (!block()) {
                 TestCaseFailure();
@@ -307,7 +307,7 @@
                 break;
             }
         }
-        [trace fail];
+        [trace makeNO];
     } while (false);
     [self.database traceSQL:nil];
 }

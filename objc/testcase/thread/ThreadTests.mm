@@ -360,18 +360,18 @@
 
     [self.database close];
 
-    TestCaseResult* tested = [TestCaseResult failure];
+    TestCaseResult* tested = [TestCaseResult no];
     [WCTDatabase globalTraceError:^(WCTError* error) {
         if (error.level == WCTErrorLevelIgnore
             && error.code == WCTErrorCodeNotice) {
             // SQLITE_NOTICE_RECOVER_WAL
-            [tested succeed];
+            [tested makeYES];
         }
     }];
 
     // trigger notice recover wal
     TestCaseAssertTrue([self.database canOpen]);
-    TestCaseAssertResultSuccessful(tested);
+    TestCaseAssertResultYES(tested);
 
     [WCTDatabase resetGlobalErrorTracer];
 

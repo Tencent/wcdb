@@ -22,12 +22,12 @@
 
 @implementation TestCaseResult
 
-+ (instancetype)success
++ (instancetype)yes
 {
     return [[self alloc] initWithValue:YES];
 }
 
-+ (instancetype)failure
++ (instancetype)no
 {
     return [[self alloc] initWithValue:NO];
 }
@@ -40,24 +40,24 @@
     return self;
 }
 
-- (void)succeed
+- (void)makeYES
 {
     self.value = YES;
 }
 
-- (void)fail
+- (void)makeNO
 {
     self.value = NO;
 }
 
-- (BOOL)successful
+- (BOOL)isYES
 {
-    return !self.failed;
+    return self.value;
 }
 
-- (BOOL)failed
+- (BOOL)isNO
 {
-    return self.value == NO;
+    return !self.isYES;
 }
 
 @end

@@ -29,10 +29,10 @@
 
 - (void)test_notification
 {
-    TestCaseResult* result = [TestCaseResult failure];
+    TestCaseResult* result = [TestCaseResult no];
     [self.database setNotificationWhenCorrupted:^BOOL(WCTDatabase* database) {
         if (![NSThread isMainThread] && database.isBlockaded) {
-            [result succeed];
+            [result makeYES];
         }
         return [self.database removeFiles];
     }];
@@ -42,14 +42,14 @@
     // trigger corruption
     TestCaseAssertTrue([self.table getObjects] == nil);
     [NSThread sleepForTimeInterval:1.0];
-    TestCaseAssertResultSuccessful(result);
+    TestCaseAssertResultYES(result);
 }
 
 - (void)test_feature_repeat_notify_when_failed
 {
-    TestCaseResult* result = [TestCaseResult failure];
+    TestCaseResult* result = [TestCaseResult no];
     [self.database setNotificationWhenCorrupted:^BOOL(WCTDatabase* database) {
-        [result succeed];
+        [result makeYES];
         return NO;
     }];
 
@@ -58,15 +58,15 @@
     // trigger corruption
     TestCaseAssertTrue([self.table getObjects] == nil);
     [NSThread sleepForTimeInterval:1.0];
-    TestCaseAssertResultSuccessful(result);
-    [result fail];
+    TestCaseAssertResultYES(result);
+    [result makeNO];
 
     // trigger corruption
     TestCaseAssertTrue([self.table getObjects] == nil);
     [NSThread sleepForTimeInterval:1.0];
-    TestCaseAssertResultFailed(result);
+    TestCaseAssertResultNO(result);
     [NSThread sleepForTimeInterval:WCDB::CorruptionQueueTimeIntervalForInvokingEvent];
-    TestCaseAssertResultSuccessful(result);
+    TestCaseAssertResultYES(result);
 
     TestCaseAssertTrue([self.database removeFiles]);
 }
