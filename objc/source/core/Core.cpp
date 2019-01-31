@@ -153,13 +153,15 @@ void Core::setNotificationWhenDatabaseCorrupted(const String& path,
     m_corruptionQueue->setNotificationWhenCorrupted(path, underlyingNotification);
 }
 
-bool Core::databaseShouldCheckpoint(const String& path, const StatementPragma& checkpointStatement)
+bool Core::databaseShouldCheckpoint(const String& path, int frames)
 {
     RecyclableDatabase database = m_databasePool.get(path);
     if (database == nullptr) {
         return true;
     }
-    return database->execute(checkpointStatement);
+    return database->interruptibleCheckpoint(frames >= CheckpointFramesThresholdForTruncating ?
+                                             Database::CheckpointType::Truncate :
+                                             Database::CheckpointType::Passive);
 }
 
 bool Core::databaseShouldBackup(const String& path)

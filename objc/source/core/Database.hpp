@@ -24,6 +24,7 @@
 #include <WCDB/Configs.hpp>
 #include <WCDB/Factory.hpp>
 #include <WCDB/HandlePool.hpp>
+#include <WCDB/InterruptibleCheckpointHandle.hpp>
 #include <WCDB/Migration.hpp>
 #include <WCDB/Tag.hpp>
 #include <WCDB/ThreadLocal.hpp>
@@ -78,6 +79,7 @@ protected:
         BackupWrite,
         Assembler,
         MigrationStepper,
+        InterruptibleCheckpoint,
 
         Count,
     };
@@ -180,6 +182,13 @@ public:
 
 protected:
     class Migration m_migration;
+
+#pragma mark - Checkpoint
+public:
+    typedef InterruptibleCheckpointHandle::Type CheckpointType;
+    bool interruptibleCheckpoint(CheckpointType type);
+
+    void interruptCheckpoint();
 
 #pragma mark - Memory
 public:

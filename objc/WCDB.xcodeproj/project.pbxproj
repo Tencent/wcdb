@@ -295,6 +295,8 @@
 		237A8D6021EDBB2E003AF5BB /* BusyRetryConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237A8D5E21EDBB2E003AF5BB /* BusyRetryConfig.hpp */; };
 		237B47B021FEEA200059227A /* ColumnMeta.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237B47AE21FEEA200059227A /* ColumnMeta.cpp */; };
 		237B47B121FEEA200059227A /* ColumnMeta.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237B47AF21FEEA200059227A /* ColumnMeta.hpp */; };
+		237BB6632202D1C7007F12F4 /* InterruptibleCheckpointHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237BB6612202D1C7007F12F4 /* InterruptibleCheckpointHandle.cpp */; };
+		237BB6642202D1C7007F12F4 /* InterruptibleCheckpointHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237BB6622202D1C7007F12F4 /* InterruptibleCheckpointHandle.hpp */; };
 		237C900721D45E6700EE6E44 /* CoreConst.h in Headers */ = {isa = PBXBuildFile; fileRef = 237C900621D45E6700EE6E44 /* CoreConst.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23846FCF21AF8427005B868F /* RetrieveRobustyTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23846FCE21AF8427005B868F /* RetrieveRobustyTests.mm */; };
 		2384F6A32193DC3400E8B10A /* TableConstraintObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F6A02193DC3400E8B10A /* TableConstraintObject.mm */; };
@@ -1573,6 +1575,8 @@
 		237A8D5E21EDBB2E003AF5BB /* BusyRetryConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BusyRetryConfig.hpp; sourceTree = "<group>"; };
 		237B47AE21FEEA200059227A /* ColumnMeta.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ColumnMeta.cpp; sourceTree = "<group>"; };
 		237B47AF21FEEA200059227A /* ColumnMeta.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ColumnMeta.hpp; sourceTree = "<group>"; };
+		237BB6612202D1C7007F12F4 /* InterruptibleCheckpointHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = InterruptibleCheckpointHandle.cpp; sourceTree = "<group>"; };
+		237BB6622202D1C7007F12F4 /* InterruptibleCheckpointHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = InterruptibleCheckpointHandle.hpp; sourceTree = "<group>"; };
 		237C900621D45E6700EE6E44 /* CoreConst.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreConst.h; sourceTree = "<group>"; };
 		23846FCE21AF8427005B868F /* RetrieveRobustyTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RetrieveRobustyTests.mm; sourceTree = "<group>"; };
 		2384F6A02193DC3400E8B10A /* TableConstraintObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TableConstraintObject.mm; sourceTree = "<group>"; };
@@ -2317,6 +2321,8 @@
 				2347378E21CBB3A800AD5E41 /* AbstractHandle.hpp */,
 				237B47AE21FEEA200059227A /* ColumnMeta.cpp */,
 				237B47AF21FEEA200059227A /* ColumnMeta.hpp */,
+				237BB6612202D1C7007F12F4 /* InterruptibleCheckpointHandle.cpp */,
+				237BB6622202D1C7007F12F4 /* InterruptibleCheckpointHandle.hpp */,
 			);
 			path = handle;
 			sourceTree = "<group>";
@@ -4056,6 +4062,7 @@
 				2349F7271EA0D6680021EFA7 /* WCTMultiSelect.h in Headers */,
 				23EEDD3E217DFADC006E9E73 /* SyntaxDeleteSTMT.hpp in Headers */,
 				2395582621C143BB000C85E1 /* WCTMigrationInfo+Private.h in Headers */,
+				237BB6642202D1C7007F12F4 /* InterruptibleCheckpointHandle.hpp in Headers */,
 				23DC307A202B0066000F7895 /* Tokenize.hpp in Headers */,
 				23EEDCE0217DFADC006E9E73 /* StatementSavepoint.hpp in Headers */,
 				23775B6C20AD666900E21AB0 /* FullCrawler.hpp in Headers */,
@@ -5148,6 +5155,7 @@
 				23EEDD55217DFADC006E9E73 /* SyntaxSelectSTMT.cpp in Sources */,
 				23EEDC8B217DFADC006E9E73 /* FunctionInvocation.cpp in Sources */,
 				23F340DF204D3482007DB8AB /* WCTDatabase+ChainCall.mm in Sources */,
+				237BB6632202D1C7007F12F4 /* InterruptibleCheckpointHandle.cpp in Sources */,
 				23F0FEB7215F5E9A008399FB /* Lock.cpp in Sources */,
 				23EEDD1D217DFADC006E9E73 /* SyntaxSelectCore.cpp in Sources */,
 				23EEDCDB217DFADC006E9E73 /* StatementRelease.cpp in Sources */,

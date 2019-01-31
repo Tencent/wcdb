@@ -104,8 +104,7 @@ protected:
     static void globalLog(void* core, int code, const char* message);
     void preprocessError(const Error& error, Error::Infos& infos);
     void onDatabaseCreated(Database* database) override final;
-    bool databaseShouldCheckpoint(const String& path,
-                                  const StatementPragma& checkpointStatement) override final;
+    bool databaseShouldCheckpoint(const String& path, int frames) override final;
     bool databaseShouldBackup(const String& path) override final;
     std::pair<bool, bool> databaseShouldMigrate(const String& path) override final;
 

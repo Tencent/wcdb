@@ -32,9 +32,7 @@ public:
     virtual ~CheckpointEvent() = 0;
 
 protected:
-    virtual bool
-    databaseShouldCheckpoint(const String& path, const StatementPragma& checkpointStatement)
-    = 0;
+    virtual bool databaseShouldCheckpoint(const String& path, int frames) = 0;
     friend class CheckpointQueue;
 };
 
@@ -51,8 +49,6 @@ protected:
     void loop() override final;
 
     TimedQueue<String, int> m_timedQueue;
-    const StatementPragma m_checkpointPassive;
-    const StatementPragma m_checkpointTruncate;
     CheckpointEvent* m_event;
 };
 

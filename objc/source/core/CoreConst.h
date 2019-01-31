@@ -50,7 +50,6 @@ static constexpr const double CorruptionQueueTimeIntervalForInvokingEvent = 5.0f
 
 // Checkpoint Queue
 static constexpr const char* CheckpointQueueName = "com.Tencent.WCDB.Queue.Checkpoint";
-static constexpr const int CheckpointQueueFramesThresholdForTruncating = 10 * 1024;
 static constexpr const double CheckpointQueueDelayForRetryingAfterFailure = 10.0;
 static constexpr const int CheckpointQueueFramesThresholdForCritical = 100;
 static constexpr const double CheckpointQueueDelayForCritical = 1.0;
@@ -107,7 +106,10 @@ constexpr const char* NotifierLoggerName = "com.Tencent.WCDB.Notifier.Log";
 
 // Handle Pool
 static constexpr const int HandlePoolMaxAllowedNumberOfHandles = 64;
-static constexpr const unsigned int HandlePoolNumberOfSlots = 6;
+static constexpr const unsigned int HandlePoolNumberOfSlots = 7;
+
+// Checkpoint
+static constexpr const int CheckpointFramesThresholdForTruncating = 10 * 1024;
 
 } // namespace WCDB
 

@@ -196,6 +196,10 @@ std::shared_ptr<Handle> Database::generateHandle(Slot slot)
     std::shared_ptr<Handle> handle;
     bool open = false;
     switch (slot) {
+    case HandleSlot::InterruptibleCheckpoint:
+        handle.reset(new InterruptibleCheckpointHandle);
+        open = true;
+        break;
     case HandleSlot::Migration:
         // It's safe since m_migration itself never change.
         handle.reset(new MigrationHandle(m_migration));
@@ -238,6 +242,7 @@ void Database::handleWillStep(HandleStatement *handleStatement)
 {
     if (!handleStatement->isReadonly()) {
         interruptMigration();
+        interruptCheckpoint();
     }
 }
 
@@ -249,10 +254,11 @@ bool Database::willConfigureHandle(Slot slot, Handle *handle, bool isNew)
     case HandleSlot::Migration:
         if (isNew) {
             handle->setNotificationWhenStatementWillStep(
-            String::formatted("Handle-%p", this),
+            String::formatted("Interrupt-%p", this),
             std::bind(&Database::handleWillStep, this, std::placeholders::_1));
         }
         // fallthrough
+    case HandleSlot::InterruptibleCheckpoint:
     case HandleSlot::MigrationStepper: {
         std::shared_ptr<Configs> configs;
         {
@@ -731,6 +737,38 @@ void Database::interruptMigration()
         for (const auto &handle : getHandles(HandleSlot::MigrationStepper)) {
             WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()) != nullptr);
             static_cast<MigrationStepperHandle *>(handle.get())->interrupt();
+        }
+    }
+}
+
+#pragma mark - Checkpoint
+bool Database::interruptibleCheckpoint(CheckpointType type)
+{
+    InitializedGuard initializedGuard = initialize();
+    bool succeed = false;
+    do {
+        if (!initializedGuard.valid()) {
+            break;
+        }
+        RecyclableHandle handle = getSlotHandle(HandleSlot::InterruptibleCheckpoint);
+        if (handle == nullptr) {
+            break;
+        }
+        WCTInnerAssert(dynamic_cast<InterruptibleCheckpointHandle *>(handle.get()) != nullptr);
+        succeed
+        = static_cast<InterruptibleCheckpointHandle *>(handle.get())->checkpoint(type);
+    } while (false);
+    return succeed;
+}
+
+void Database::interruptCheckpoint()
+{
+    SharedLockGuard concurrencyGuard(m_concurrency);
+    SharedLockGuard memoryGuard(m_memory);
+    if (m_initialized) {
+        for (const auto &handle : getHandles(HandleSlot::InterruptibleCheckpoint)) {
+            WCTInnerAssert(dynamic_cast<InterruptibleCheckpointHandle *>(handle.get()) != nullptr);
+            static_cast<InterruptibleCheckpointHandle *>(handle.get())->interrupt();
         }
     }
 }
