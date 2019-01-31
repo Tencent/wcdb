@@ -261,7 +261,7 @@
     TestCaseAssertTrue(block != nil);
     TestCaseAssertTrue([testSQLs isKindOfClass:NSArray.class]);
     do {
-        TestCaseResult* trace = [TestCaseResult yes];
+        TestCaseResult* trace = [TestCaseResult no];
         NSMutableArray<NSString*>* expectedSQLs = [NSMutableArray arrayWithArray:testSQLs];
         NSThread* tracedThread = [NSThread currentThread];
         [self.database traceSQL:^(NSString* sql) {
