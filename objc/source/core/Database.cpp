@@ -240,7 +240,9 @@ std::shared_ptr<Handle> Database::generateHandle(Slot slot)
 
 void Database::handleWillStep(HandleStatement *handleStatement)
 {
-    if (!handleStatement->isReadonly()) {
+    // Interrupt when a write operation will run
+    // If already in transaction, it's no need to interrupt since it's already blocked.
+    if (!handleStatement->isReadonly() && !handleStatement->getHandle()->isInTransaction()) {
         interruptMigration();
         interruptCheckpoint();
     }
