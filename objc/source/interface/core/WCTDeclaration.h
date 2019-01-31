@@ -29,7 +29,6 @@
 @class WCTUpdate;
 @class WCTSelectable;
 @class WCTSelect;
-@class WCTRowSelect;
 @class WCTMultiSelect;
 
 #pragma mark - Database

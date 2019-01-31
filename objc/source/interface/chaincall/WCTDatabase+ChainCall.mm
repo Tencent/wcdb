@@ -24,7 +24,6 @@
 #import <WCDB/WCTDelete.h>
 #import <WCDB/WCTInsert.h>
 #import <WCDB/WCTMultiSelect.h>
-#import <WCDB/WCTRowSelect.h>
 #import <WCDB/WCTSelect.h>
 #import <WCDB/WCTUpdate.h>
 
@@ -48,11 +47,6 @@
 - (WCTSelect *)prepareSelect
 {
     return [[WCTSelect alloc] initWithHandle:[self getHandle]];
-}
-
-- (WCTRowSelect *)prepareRowSelect
-{
-    return [[WCTRowSelect alloc] initWithHandle:[self getHandle]];
 }
 
 - (WCTMultiSelect *)prepareMultiSelect

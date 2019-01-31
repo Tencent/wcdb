@@ -120,28 +120,6 @@
     TestCaseAssertEqual(select.handle.database.tag, self.database.tag);
 }
 
-#pragma mark - Row Select
-- (void)test_database_row_select
-{
-    WCTRowSelect* select = [[[self.database prepareRowSelect] onResultColumns:TestCaseObject.allProperties] fromTable:self.tableName];
-    TestCaseAssertSQLEqual(select.statement, @"SELECT identifier, content FROM main.testTable");
-    TestCaseAssertEqual(select.handle.database.tag, self.database.tag);
-}
-
-- (void)test_table_row_select
-{
-    WCTRowSelect* select = [[self.table prepareRowSelect] onResultColumns:TestCaseObject.allProperties];
-    TestCaseAssertSQLEqual(select.statement, @"SELECT identifier, content FROM main.testTable");
-    TestCaseAssertEqual(select.handle.database.tag, self.database.tag);
-}
-
-- (void)test_handle_row_select
-{
-    WCTRowSelect* select = [[[[self.database getHandle] prepareRowSelect] onResultColumns:TestCaseObject.allProperties] fromTable:self.tableName];
-    TestCaseAssertSQLEqual(select.statement, @"SELECT identifier, content FROM main.testTable");
-    TestCaseAssertEqual(select.handle.database.tag, self.database.tag);
-}
-
 #pragma mark - Multi Select
 - (void)test_database_multi_select
 {

@@ -27,7 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (WCTInsert *)prepareInsert;
 - (WCTDelete *)prepareDelete;
 - (WCTSelect *)prepareSelect;
-- (WCTRowSelect *)prepareRowSelect;
 - (WCTUpdate *)prepareUpdate;
 @end
 
@@ -36,7 +35,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (WCTInsert *)prepareInsert;
 - (WCTDelete *)prepareDelete;
 - (WCTSelect *)prepareSelect;
-- (WCTRowSelect *)prepareRowSelect;
 - (WCTUpdate *)prepareUpdate;
 - (WCTMultiSelect *)prepareMultiSelect;
 @end

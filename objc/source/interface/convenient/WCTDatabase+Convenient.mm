@@ -28,7 +28,6 @@
 #import <WCDB/WCTInsert.h>
 #import <WCDB/WCTMultiSelect.h>
 #import <WCDB/WCTORM.h>
-#import <WCDB/WCTRowSelect.h>
 #import <WCDB/WCTSelect.h>
 #import <WCDB/WCTUpdate.h>
 

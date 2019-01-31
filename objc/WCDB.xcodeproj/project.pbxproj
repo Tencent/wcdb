@@ -86,8 +86,6 @@
 		2349F7241EA0D6680021EFA7 /* WCTInsert.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6441EA0D6680021EFA7 /* WCTInsert.mm */; };
 		2349F7271EA0D6680021EFA7 /* WCTMultiSelect.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6471EA0D6680021EFA7 /* WCTMultiSelect.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F7281EA0D6680021EFA7 /* WCTMultiSelect.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6481EA0D6680021EFA7 /* WCTMultiSelect.mm */; };
-		2349F7291EA0D6680021EFA7 /* WCTRowSelect.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6491EA0D6680021EFA7 /* WCTRowSelect.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2349F72A1EA0D6680021EFA7 /* WCTRowSelect.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F64A1EA0D6680021EFA7 /* WCTRowSelect.mm */; };
 		2349F72C1EA0D6680021EFA7 /* WCTSelect.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F64C1EA0D6680021EFA7 /* WCTSelect.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F72D1EA0D6680021EFA7 /* WCTSelect.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F64D1EA0D6680021EFA7 /* WCTSelect.mm */; };
 		2349F72E1EA0D6680021EFA7 /* WCTSelectable+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F64E1EA0D6680021EFA7 /* WCTSelectable+Private.h */; };
@@ -1345,8 +1343,6 @@
 		2349F6441EA0D6680021EFA7 /* WCTInsert.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTInsert.mm; sourceTree = "<group>"; };
 		2349F6471EA0D6680021EFA7 /* WCTMultiSelect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTMultiSelect.h; sourceTree = "<group>"; };
 		2349F6481EA0D6680021EFA7 /* WCTMultiSelect.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTMultiSelect.mm; sourceTree = "<group>"; };
-		2349F6491EA0D6680021EFA7 /* WCTRowSelect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTRowSelect.h; sourceTree = "<group>"; };
-		2349F64A1EA0D6680021EFA7 /* WCTRowSelect.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTRowSelect.mm; sourceTree = "<group>"; };
 		2349F64C1EA0D6680021EFA7 /* WCTSelect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTSelect.h; sourceTree = "<group>"; };
 		2349F64D1EA0D6680021EFA7 /* WCTSelect.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTSelect.mm; sourceTree = "<group>"; };
 		2349F64E1EA0D6680021EFA7 /* WCTSelectable+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTSelectable+Private.h"; sourceTree = "<group>"; };
@@ -2524,8 +2520,6 @@
 				2349F6501EA0D6680021EFA7 /* WCTSelectable.mm */,
 				2349F64C1EA0D6680021EFA7 /* WCTSelect.h */,
 				2349F64D1EA0D6680021EFA7 /* WCTSelect.mm */,
-				2349F6491EA0D6680021EFA7 /* WCTRowSelect.h */,
-				2349F64A1EA0D6680021EFA7 /* WCTRowSelect.mm */,
 				2349F6471EA0D6680021EFA7 /* WCTMultiSelect.h */,
 				2349F6481EA0D6680021EFA7 /* WCTMultiSelect.mm */,
 				233A05892062698E00F1A212 /* WCTHandle+ChainCall.h */,
@@ -4033,7 +4027,6 @@
 				2386B3C71ED442FE000B72F6 /* WCTError+Private.h in Headers */,
 				23EEDD4E217DFADC006E9E73 /* SyntaxReindexSTMT.hpp in Headers */,
 				23EEDCF6217DFADC006E9E73 /* SyntaxCommonTableExpression.hpp in Headers */,
-				2349F7291EA0D6680021EFA7 /* WCTRowSelect.h in Headers */,
 				23AD52F420DBAC4C00664B62 /* UpgradeableErrorProne.hpp in Headers */,
 				2349F7201EA0D6680021EFA7 /* WCTDelete.h in Headers */,
 				23567D5B20CA823C005F1C35 /* PagerRelated.hpp in Headers */,
@@ -4961,7 +4954,6 @@
 				233A058C2062698E00F1A212 /* WCTHandle+ChainCall.mm in Sources */,
 				23EEDD45217DFADC006E9E73 /* SyntaxDropTriggerSTMT.cpp in Sources */,
 				23B4DCE12112B03C00954D71 /* AsyncQueue.cpp in Sources */,
-				2349F72A1EA0D6680021EFA7 /* WCTRowSelect.mm in Sources */,
 				23EEDD23217DFADC006E9E73 /* SyntaxUpsertClause.cpp in Sources */,
 				23EEDC83217DFADC006E9E73 /* Expression.cpp in Sources */,
 				23EEDD4B217DFADC006E9E73 /* SyntaxPragmaSTMT.cpp in Sources */,
