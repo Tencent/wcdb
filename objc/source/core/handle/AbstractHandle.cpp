@@ -554,12 +554,7 @@ void AbstractHandle::notifyError(int rc, const char *sql)
     WCTInnerAssert(isError(rc));
     if (rc != SQLITE_MISUSE) {
         m_error.setSQLiteCode(rc, getExtendedErrorCode());
-        const char *message = getErrorMessage();
-        if (message != nullptr) {
-            m_error.message = message;
-        } else {
-            m_error.message = String::null();
-        }
+        m_error.message = getErrorMessage();
     } else {
         // extended error code/message will not be set in some case for misuse error
         m_error.setSQLiteCode(rc);
