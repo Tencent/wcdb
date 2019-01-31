@@ -672,7 +672,7 @@ std::pair<bool, bool> Database::stepMigration(bool interruptible)
     bool done = false;
     do {
         WCTRemedialAssert(
-        !isInTransaction(), "Step migration can't be run in transaction.", break;);
+        !isInTransaction(), "Migrating can't be run in transaction.", break;);
         if (!initializedGuard.valid()) {
             break;
         }
