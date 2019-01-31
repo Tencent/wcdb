@@ -71,7 +71,7 @@ void Database::close(const ClosedCallback &onClosed)
 
 bool Database::isOpened() const
 {
-    return numberOfAliveHandles() > 0;
+    return isAliving();
 }
 
 Database::InitializedGuard Database::initialize()

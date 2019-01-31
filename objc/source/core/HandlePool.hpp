@@ -75,6 +75,7 @@ public:
     void purge();
     size_t numberOfAliveHandles() const;
     size_t numberOfActiveHandles(Slot slot) const;
+    bool isAliving() const;
 
 protected:
     virtual std::shared_ptr<Handle> generateHandle(Slot slot) = 0;

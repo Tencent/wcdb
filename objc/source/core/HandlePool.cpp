@@ -150,6 +150,20 @@ size_t HandlePool::numberOfActiveHandles(Slot slot) const
     return numberOfHandles - numberOfFreeHandles;
 }
 
+bool HandlePool::isAliving() const
+{
+    SharedLockGuard concurrencyGuard(m_concurrency);
+    SharedLockGuard memoryGuard(m_memory);
+    bool aliving = false;
+    for (const auto &iter : m_handles) {
+        if (iter.second.size() > 0) {
+            aliving = true;
+            break;
+        }
+    }
+    return aliving;
+}
+
 RecyclableHandle HandlePool::flowOut(Slot slot)
 {
     SharedLockGuard concurrencyGuard(m_concurrency);
