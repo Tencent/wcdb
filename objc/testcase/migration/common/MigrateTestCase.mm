@@ -106,7 +106,8 @@
 
     TestCaseResult *tested = [TestCaseResult no];
     [WCTDatabase globalTraceError:^(WCTError *error) {
-        if (error.code == WCTErrorCodeInterrupt) {
+        if (error.code == WCTErrorCodeInterrupt
+            && error.level == WCTErrorLevelIgnore) {
             [tested makeYES];
         }
     }];
