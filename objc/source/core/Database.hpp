@@ -40,6 +40,7 @@ public:
     Database &operator=(const Database &) = delete;
 
 protected:
+    // All public interfaces that are related with concurrency should make sure the initialization.
     typedef SharedLockGuard InitializedGuard;
     InitializedGuard initialize();
     bool m_initialized;
@@ -82,7 +83,8 @@ protected:
     };
     static_assert(HandleSlot::Count == HandlePoolNumberOfSlots, "");
     std::shared_ptr<Handle> generateHandle(Slot slot) override final;
-    bool willConfigureHandle(Slot slot, Handle *handle) override final;
+    bool willConfigureHandle(Slot slot, Handle *handle, bool isNew) override final;
+    void handleWillStep(HandleStatement *handleStatement);
 
 #pragma mark - Config
 public:

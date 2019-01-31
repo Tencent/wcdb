@@ -140,7 +140,7 @@ void Database::removeConfig(const String &name)
 #pragma mark - Handle
 RecyclableHandle Database::getHandle()
 {
-    // additional shared lock is not needed since when it's blocked the threadedHandles is always empty and threaded handles is thread safe.
+    // Additional shared lock is not needed because the threadedHandles is always empty when it's blocked. So threaded handles is thread safe.
     ThreadedHandles *threadedHandle = Database::threadedHandles().getOrCreate();
     const auto iter = threadedHandle->find(this);
     if (iter != threadedHandle->end()) {
@@ -151,8 +151,6 @@ RecyclableHandle Database::getHandle()
     if (!initializedGuard.valid()) {
         return nullptr;
     }
-    // interrupt migration to do the real operation
-    interruptMigration();
     return flowOut(m_migration.shouldMigrate() ? HandleSlot::Migration : HandleSlot::Normal);
 }
 
@@ -199,7 +197,7 @@ std::shared_ptr<Handle> Database::generateHandle(Slot slot)
     bool open = false;
     switch (slot) {
     case HandleSlot::Migration:
-        // It's safe since m_migration never change.
+        // It's safe since m_migration itself never change.
         handle.reset(new MigrationHandle(m_migration));
         open = true;
         break;
@@ -236,18 +234,32 @@ std::shared_ptr<Handle> Database::generateHandle(Slot slot)
     return handle;
 }
 
-bool Database::willConfigureHandle(Slot slot, Handle *handle)
+void Database::handleWillStep(HandleStatement *handleStatement)
+{
+    if (!handleStatement->isReadonly()) {
+        interruptMigration();
+    }
+}
+
+bool Database::willConfigureHandle(Slot slot, Handle *handle, bool isNew)
 {
     bool succeed = true;
     switch (slot) {
-    case HandleSlot::Migration:
     case HandleSlot::Normal:
+    case HandleSlot::Migration:
+        if (isNew) {
+            handle->setNotificationWhenStatementWillStep(
+            String::formatted("Handle-%p", this),
+            std::bind(&Database::handleWillStep, this, std::placeholders::_1));
+        }
+        // fallthrough
     case HandleSlot::MigrationStepper: {
         std::shared_ptr<Configs> configs;
         {
             SharedLockGuard memoryGuard(m_memory);
             configs = m_configs;
         }
+
         WCTInnerAssert(dynamic_cast<ConfigurableHandle *>(handle) != nullptr);
         if (!static_cast<ConfigurableHandle *>(handle)->reconfigure(configs)) {
             succeed = false;
@@ -676,12 +688,6 @@ std::pair<bool, bool> Database::stepMigration(bool interruptible)
         if (!initializedGuard.valid()) {
             break;
         }
-        if (interruptible
-            && (numberOfActiveHandles(HandleSlot::Normal) > 0
-                || numberOfActiveHandles(HandleSlot::Migration) > 0)) {
-            succeed = true;
-            break;
-        }
 
         RecyclableHandle handle = getSlotHandle(HandleSlot::MigrationStepper);
         if (handle == nullptr) {
@@ -721,12 +727,11 @@ void Database::interruptMigration()
 {
     SharedLockGuard concurrencyGuard(m_concurrency);
     SharedLockGuard memoryGuard(m_memory);
-    if (!m_initialized) {
-        return;
-    }
-    for (const auto &handle : getHandles(HandleSlot::MigrationStepper)) {
-        WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()) != nullptr);
-        static_cast<MigrationStepperHandle *>(handle.get())->interrupt();
+    if (m_initialized) {
+        for (const auto &handle : getHandles(HandleSlot::MigrationStepper)) {
+            WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()) != nullptr);
+            static_cast<MigrationStepperHandle *>(handle.get())->interrupt();
+        }
     }
 }
 

@@ -195,7 +195,7 @@ RecyclableHandle HandlePool::flowOut(Slot slot)
     bool failed = false;
     do {
         // configuration
-        if (!willConfigureHandle(slot, handle.get())) {
+        if (!willConfigureHandle(slot, handle.get(), isGenerated)) {
             failed = true;
             break;
         }
