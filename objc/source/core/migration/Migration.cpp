@@ -33,12 +33,14 @@ Migration::Migration()
 
 void Migration::filterTable(const Filter& filter)
 {
+    LockGuard lockGuard(m_lock);
     m_filter = filter;
     WCTInnerAssert(m_filted.empty());
 }
 
 void Migration::purge()
 {
+    LockGuard lockGuard(m_lock);
     m_migratings.clear();
     m_dumpster.clear();
     m_referenceds.clear();
