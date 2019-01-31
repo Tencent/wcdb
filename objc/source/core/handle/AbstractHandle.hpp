@@ -190,18 +190,16 @@ public:
     void markErrorAsIgnorable(int codeToBeIgnored);
     void markErrorAsUnignorable();
 
-protected:
+private:
     // if code >= 0, then the level of error with the specified code will be marked as ignored
     // if code < 0, then the level of all errors will be marked as ignored
     bool exitAPI(int rc);
     bool exitAPI(int rc, const String &sql);
     bool exitAPI(int rc, const char *sql);
 
-private:
     static bool isError(int rc);
     void notifyError(int rc, const char *sql);
 
-private:
     int m_codeToBeIgnored;
 };
 
