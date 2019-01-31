@@ -69,7 +69,7 @@
 
 - (int)checkpointFramesThresholdForTruncating
 {
-    return WCDB::CheckpointQueueFramesThresholdForTruncating;
+    return WCDB::CheckpointFramesThresholdForTruncating;
 }
 
 - (int)checkpointFramesThresholdForCritical

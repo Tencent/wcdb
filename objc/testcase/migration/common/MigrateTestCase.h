@@ -32,8 +32,6 @@
 
 - (void)doTestFeatureInterruptMigrate;
 
-- (void)doTestFeatureForceMigrate;
-
 - (void)doTestAutoMigrate;
 
 - (void)doTestFeatureAutoMigrateWillStopDueToError;

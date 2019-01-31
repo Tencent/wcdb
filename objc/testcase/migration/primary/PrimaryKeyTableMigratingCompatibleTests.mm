@@ -33,7 +33,7 @@
     [super setUp];
 
     BOOL done;
-    TestCaseAssertTrue([self.database stepMigration:true done:done]);
+    TestCaseAssertTrue([self.database stepMigrationOrDone:done]);
     TestCaseAssertFalse(done);
 }
 

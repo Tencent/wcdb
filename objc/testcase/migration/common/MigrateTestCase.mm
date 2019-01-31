@@ -41,7 +41,7 @@
 - (void)doTestStepMigrate
 {
     BOOL done = NO;
-    BOOL succeed = [self.database stepMigration:YES done:done];
+    BOOL succeed = [self.database stepMigrationOrDone:done];
     TestCaseAssertTrue(succeed);
     TestCaseAssertFalse(done);
 
@@ -55,7 +55,7 @@
     BOOL done = NO;
     BOOL succeed;
     do {
-        succeed = [self.database stepMigration:YES done:done];
+        succeed = [self.database stepMigrationOrDone:done];
     } while (succeed && !done);
     TestCaseAssertTrue(succeed);
     TestCaseAssertTrue(done);
@@ -83,7 +83,7 @@
     BOOL done = NO;
     BOOL succeed;
     do {
-        succeed = [self.database stepMigration:YES done:done];
+        succeed = [self.database stepMigrationOrDone:done];
     } while (succeed && !done);
     TestCaseAssertTrue(succeed);
     TestCaseAssertTrue(done);
@@ -97,27 +97,12 @@
     TestCaseAssertTrue([handle validate]);
 
     BOOL done;
-    TestCaseAssertTrue([self.database stepMigration:YES done:done]);
+    TestCaseAssertTrue([self.database stepMigrationOrDone:done]);
     TestCaseAssertFalse(done);
 
     // check source table migration is not started.
     // It's not a good practice.
     TestCaseAssertTrue([[self.sourceDatabase getObjectsOfClass:MigrationObject.class fromTable:self.sourceTable orders:MigrationObject.identifier.asOrder(WCTOrderedAscending)] isEqualToArray:self.objects]);
-    [handle invalidate];
-}
-
-- (void)doTestFeatureForceMigrate
-{
-    WCTHandle *handle = [self.database getHandle];
-    TestCaseAssertTrue([handle validate]);
-
-    BOOL done;
-    TestCaseAssertTrue([self.database stepMigration:NO done:done]);
-    TestCaseAssertFalse(done);
-
-    // check source table migration is started.
-    // It's not a good practice.
-    TestCaseAssertFalse([[self.sourceDatabase getObjectsOfClass:MigrationObject.class fromTable:self.sourceTable orders:MigrationObject.identifier.asOrder(WCTOrderedAscending)] isEqualToArray:self.objects]);
     [handle invalidate];
 }
 
@@ -213,7 +198,7 @@
     //    int lastWalFrameCount = [self getWalFrameCount];
     //    TestCaseAssertEqual(lastWalFrameCount, 0);
     //    do {
-    //        succeed = [self.database stepMigration:YES done:done];
+    //        succeed = [self.database stepMigrationOrDone:done];
     //
     //        int walFrameCount = [self getWalFrameCount];
     //        // <=3: 1. sqlite_sequence 2. source table 3. table

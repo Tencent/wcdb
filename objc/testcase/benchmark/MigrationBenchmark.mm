@@ -59,7 +59,7 @@
     TestCaseAssertTrue([self.database createTableAndIndexes:self.tableName withClass:BenchmarkObject.class]);
 
     BOOL done;
-    TestCaseAssertTrue([self.database stepMigration:YES done:done]);
+    TestCaseAssertTrue([self.database stepMigrationOrDone:done]);
     TestCaseAssertFalse(done);
 }
 
@@ -79,7 +79,7 @@
     __block BOOL done;
     [self
     doMeasure:^{
-        while ([self.database stepMigration:NO done:done] && !done)
+        while ([self.database stepMigrationOrDone:done] && !done)
             ;
     }
     setUp:^{

@@ -58,11 +58,6 @@
     [self doTestFeatureInterruptMigrate];
 }
 
-- (void)test_feature_force_migrate
-{
-    [self doTestFeatureForceMigrate];
-}
-
 - (void)test_auto_migrate
 {
     [self doTestAutoMigrate];
