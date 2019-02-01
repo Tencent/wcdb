@@ -311,23 +311,6 @@ bool HandleNotification::postBusyNotification(int numberOfTimes)
     return retry;
 }
 
-#pragma mark - Did Prepare
-void HandleNotification::setNotificationWhenStatementDidPrepare(
-const String &name, const StatementDidPrepareNotification &notification)
-{
-    m_didPrepareNotifications.emplace(name, notification);
-}
-
-void HandleNotification::statementDidPrepare(HandleStatement *handleStatement)
-{
-    for (const auto &iter : m_didPrepareNotifications) {
-        WCTInnerAssert(iter.second != nullptr);
-        if (iter.second != nullptr) {
-            iter.second(handleStatement);
-        }
-    }
-}
-
 #pragma mark - Did Step
 void HandleNotification::setNotificationWhenStatementDidStep(const String &name,
                                                              const StatementDidStepNotification &notification)

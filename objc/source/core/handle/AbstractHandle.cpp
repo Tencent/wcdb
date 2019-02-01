@@ -494,13 +494,6 @@ void AbstractHandle::setNotificationWhenBusy(const BusyNotification &busyNotific
     m_notification.setNotificationWhenBusy(busyNotification);
 }
 
-void AbstractHandle::setNotificationWhenStatementDidPrepare(const String &name,
-                                                            const StatementDidPrepareNotification &notification)
-{
-    WCTInnerAssert(isOpened());
-    m_notification.setNotificationWhenStatementDidPrepare(name, notification);
-}
-
 void AbstractHandle::setNotificationWhenStatementDidStep(const String &name,
                                                          const StatementDidStepNotification &notification)
 {

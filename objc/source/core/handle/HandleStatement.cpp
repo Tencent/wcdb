@@ -43,12 +43,8 @@ bool HandleStatement::prepare(const Statement &statement)
 bool HandleStatement::prepare(const String &sql)
 {
     WCTRemedialAssert(!isPrepared(), "Last statement is not finalized.", finalize(););
-    bool succeed = exitAPI(
+    return exitAPI(
     sqlite3_prepare_v2(m_handle->getRawHandle(), sql.c_str(), -1, &m_stmt, nullptr), sql);
-    if (succeed && m_event != nullptr) {
-        m_event->statementDidPrepare(this);
-    }
-    return succeed;
 }
 
 void HandleStatement::reset()

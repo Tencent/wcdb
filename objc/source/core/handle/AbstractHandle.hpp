@@ -170,10 +170,6 @@ public:
     typedef HandleNotification::BusyNotification BusyNotification;
     void setNotificationWhenBusy(const BusyNotification &busyNotification);
 
-    typedef HandleNotification::StatementDidPrepareNotification StatementDidPrepareNotification;
-    void setNotificationWhenStatementDidPrepare(const String &name,
-                                                const StatementDidPrepareNotification &notification);
-
     typedef HandleNotification::StatementDidStepNotification StatementDidStepNotification;
     void setNotificationWhenStatementDidStep(const String &name,
                                              const StatementDidStepNotification &notification);

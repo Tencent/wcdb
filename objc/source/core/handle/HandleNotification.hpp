@@ -115,16 +115,6 @@ private:
     bool postBusyNotification(int numberOfTimes);
     BusyNotification m_busyNotification;
 
-#pragma mark - Did Prepare
-public:
-    typedef std::function<void(HandleStatement *)> StatementDidPrepareNotification;
-    void setNotificationWhenStatementDidPrepare(const String &name,
-                                                const StatementDidPrepareNotification &notification);
-
-private:
-    std::map<String, StatementDidPrepareNotification> m_didPrepareNotifications;
-    void statementDidPrepare(HandleStatement *) override final;
-
 #pragma mark - Did Step
 public:
     typedef std::function<void(HandleStatement *, bool result)> StatementDidStepNotification;

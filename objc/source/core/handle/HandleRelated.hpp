@@ -47,7 +47,6 @@ class HandleStatementEvent {
 public:
     virtual ~HandleStatementEvent();
 
-    virtual void statementDidPrepare(HandleStatement *) = 0;
     virtual void statementWillStep(HandleStatement *) = 0;
     virtual void statementDidStep(HandleStatement *, bool) = 0;
 };
