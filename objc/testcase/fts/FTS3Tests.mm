@@ -31,7 +31,7 @@
 - (void)setUp
 {
     [super setUp];
-    self.expectFirstFewSQLsOnly = YES;
+    self.expectMode = DatabaseTestCaseExpectFirstFewSQLs;
     self.tableClass = FTS3Object.class;
     self.isVirtualTable = YES;
     [self.database setTokenizer:WCTTokenizerWCDB];

@@ -22,6 +22,12 @@
 #import <TestCase/ReusableFactory.h>
 #import <WCDB/WCDB.h>
 
+typedef NS_ENUM(NSUInteger, DatabaseTestCaseExpect) {
+    DatabaseTestCaseExpectAllSQLs = 0,
+    DatabaseTestCaseExpectFirstFewSQLs,
+    DatabaseTestCaseExpectSomeSQLs,
+};
+
 @interface DatabaseTestCase : BaseTestCase <ReusableFactoryPreparation>
 
 #pragma mark - Path
@@ -52,7 +58,7 @@
 
 #pragma mark - Test
 @property (nonatomic, assign) BOOL expectSQLsInAllThreads;
-@property (nonatomic, assign) BOOL expectFirstFewSQLsOnly;
+@property (nonatomic, assign) DatabaseTestCaseExpect expectMode;
 
 - (void)doTestSQLs:(NSArray<NSString*>*)expectedSQLs
        inOperation:(BOOL (^)())block;

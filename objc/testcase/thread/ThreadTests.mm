@@ -192,6 +192,7 @@
     TestCaseAssertTrue([self createTable]);
 
     self.expectSQLsInAllThreads = YES;
+    self.expectMode = DatabaseTestCaseExpectSomeSQLs;
     [self doTestSQLs:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
          inOperation:^BOOL {
              [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + self.delayForTolerance];
@@ -210,6 +211,7 @@
     }
 
     self.expectSQLsInAllThreads = YES;
+    self.expectMode = DatabaseTestCaseExpectSomeSQLs;
     [self doTestSQLs:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
          inOperation:^BOOL {
              [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
@@ -228,6 +230,7 @@
     }
 
     self.expectSQLsInAllThreads = YES;
+    self.expectMode = DatabaseTestCaseExpectSomeSQLs;
     [self doTestSQLs:@[ @"PRAGMA main.wal_checkpoint('TRUNCATE')" ]
          inOperation:^BOOL {
              [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
@@ -246,6 +249,7 @@
 
     self.expectSQLsInAllThreads
     = YES;
+    self.expectMode = DatabaseTestCaseExpectSomeSQLs;
 
     [self doTestSQLs:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')", @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
          inOperation:^BOOL {
@@ -353,8 +357,6 @@
     [self.database removeConfigForName:WCTConfigNameCheckpoint];
     TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
 
-    self.expectSQLsInAllThreads = YES;
-
     // trigger subthread checkpoint
     TestCaseAssertTrue([self createTable]);
 
@@ -375,6 +377,8 @@
 
     [WCTDatabase resetGlobalErrorTracer];
 
+    self.expectSQLsInAllThreads = YES;
+    self.expectMode = DatabaseTestCaseExpectSomeSQLs;
     [self doTestSQLs:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
          inOperation:^BOOL {
              [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + self.delayForTolerance];

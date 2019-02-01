@@ -78,7 +78,7 @@
 - (void)doTestCreateVirtualTableSQLAsExpected:(NSString*)expected
 {
     TestCaseAssertTrue(expected != nil);
-    self.expectFirstFewSQLsOnly = YES;
+    self.expectMode = DatabaseTestCaseExpectFirstFewSQLs;
     self.isVirtualTable = YES;
     [self doTestSQLs:@[ expected ]
          inOperation:^BOOL {

@@ -47,7 +47,7 @@
     [super setUp];
 
     self.expectSQLsInAllThreads = NO;
-    self.expectFirstFewSQLsOnly = NO;
+    self.expectMode = DatabaseTestCaseExpectAllSQLs;
 }
 
 - (void)tearDown
@@ -273,19 +273,7 @@
                 return;
             }
             @synchronized(expectedSQLs) {
-                NSString* expectedSQL = expectedSQLs.firstObject;
-                if ([expectedSQL isEqualToString:sql]) {
-                    [expectedSQLs removeObjectAtIndex:0];
-                } else {
-                    [trace makeNO];
-                    if (expectedSQL == nil) {
-                        if (self.expectFirstFewSQLsOnly) {
-                            return;
-                        }
-                        expectedSQL = @"";
-                    }
-                    TestCaseAssertStringEqual(sql, expectedSQL);
-                }
+                [self doTestSQLAsExpected:expectedSQLs sql:sql];
             }
         }];
         if (![self.database canOpen]) {
@@ -310,6 +298,34 @@
         [trace makeNO];
     } while (false);
     [self.database traceSQL:nil];
+}
+
+- (void)doTestSQLAsExpected:(NSMutableArray<NSString*>*)expectedSQLs sql:(NSString*)sql
+{
+    switch (self.expectMode) {
+    case DatabaseTestCaseExpectAllSQLs:
+        if ([expectedSQLs.firstObject isEqualToString:sql]) {
+            [expectedSQLs removeObjectAtIndex:0];
+        } else {
+            TestCaseFailure();
+        }
+        break;
+    case DatabaseTestCaseExpectFirstFewSQLs:
+        if ([expectedSQLs.firstObject isEqualToString:sql]) {
+            [expectedSQLs removeObjectAtIndex:0];
+        } else if (expectedSQLs.count != 0) {
+            TestCaseFailure();
+        }
+        break;
+    case DatabaseTestCaseExpectSomeSQLs:
+        for (NSUInteger i = 0; i < expectedSQLs.count; ++i) {
+            if ([expectedSQLs[i] isEqualToString:sql]) {
+                [expectedSQLs removeObjectAtIndex:i];
+                break;
+            }
+        }
+        break;
+    }
 }
 
 @end
