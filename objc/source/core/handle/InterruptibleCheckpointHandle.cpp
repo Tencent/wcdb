@@ -46,14 +46,14 @@ bool InterruptibleCheckpointHandle::checkpoint(Type type)
 const StatementPragma& InterruptibleCheckpointHandle::getStatementForTruncateCheckpoint()
 {
     static StatementPragma* s_statementForTruncateCheckpoint = new StatementPragma(
-    StatementPragma().pragma(Pragma::walCheckpoint()).with("PASSIVE"));
+    StatementPragma().pragma(Pragma::walCheckpoint()).with("TRUNCATE"));
     return *s_statementForTruncateCheckpoint;
 }
 
 const StatementPragma& InterruptibleCheckpointHandle::getStatementForPassiveCheckpoint()
 {
     static StatementPragma* s_statementForPassiveCheckpoint = new StatementPragma(
-    StatementPragma().pragma(Pragma::walCheckpoint()).with("TRUNCATE"));
+    StatementPragma().pragma(Pragma::walCheckpoint()).with("PASSIVE"));
     return *s_statementForPassiveCheckpoint;
 }
 
