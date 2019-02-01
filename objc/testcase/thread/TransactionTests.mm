@@ -67,7 +67,7 @@
 - (void)test_database_auto_rollback
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT", @"ROLLBACK" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           __block BOOL unexpected = NO;
           [WCTDatabase disableSQLiteWrite];
@@ -80,6 +80,8 @@
               }]) {
               TestCaseFailure();
               unexpected = YES;
+          } else {
+              TestCaseAssertFalse([self.database isInTransaction]);
           }
           [WCTDatabase enableSQLiteWrite];
           return !unexpected;
@@ -101,7 +103,7 @@
 - (void)test_database_seperated_auto_rollback
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT", @"ROLLBACK" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           BOOL unexpected = NO;
           [WCTDatabase disableSQLiteWrite];
@@ -113,6 +115,8 @@
               if ([self.database commitOrRollbackTransaction]) { // commit failed
                   TestCaseFailure();
                   unexpected = YES;
+              } else {
+                  TestCaseAssertFalse([self.database isInTransaction]);
               }
           } else {
               TestCaseFailure();
@@ -173,7 +177,7 @@
 - (void)test_database_auto_rollback_nested
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT", @"ROLLBACK" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           __block BOOL unexpected = NO;
           [WCTDatabase disableSQLiteWrite];
@@ -186,6 +190,8 @@
               }]) {
               TestCaseFailure();
               unexpected = YES;
+          } else {
+              TestCaseAssertFalse([self.database isInTransaction]);
           }
           [WCTDatabase enableSQLiteWrite];
           return !unexpected;
@@ -207,7 +213,7 @@
 - (void)test_database_seperated_auto_rollback_nested
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT", @"ROLLBACK" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           BOOL unexpected = NO;
           [WCTDatabase disableSQLiteWrite];
@@ -219,6 +225,8 @@
               if ([self.database commitOrRollbackNestedTransaction]) { // commit failed
                   TestCaseFailure();
                   unexpected = YES;
+              } else {
+                  TestCaseAssertFalse([self.database isInTransaction]);
               }
           } else {
               TestCaseFailure();
@@ -300,7 +308,7 @@
 - (void)test_handle_auto_rollback
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT", @"ROLLBACK" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           WCTHandle* handle = [self.database getHandle];
           __block BOOL unexpected = NO;
@@ -314,6 +322,8 @@
               }]) {
               TestCaseFailure();
               unexpected = YES;
+          } else {
+              TestCaseAssertFalse([handle isInTransaction]);
           }
           [WCTDatabase enableSQLiteWrite];
           return !unexpected;
@@ -336,7 +346,7 @@
 - (void)test_handle_seperated_auto_rollback
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT", @"ROLLBACK" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           WCTHandle* handle = [self.database getHandle];
           BOOL unexpected = NO;
@@ -349,6 +359,8 @@
               if ([handle commitOrRollbackTransaction]) { // commit failed
                   TestCaseFailure();
                   unexpected = YES;
+              } else {
+                  TestCaseAssertFalse([handle isInTransaction]);
               }
           } else {
               TestCaseFailure();
@@ -412,7 +424,7 @@
 - (void)test_handle_auto_rollback_nested
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT", @"ROLLBACK" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           WCTHandle* handle = [self.database getHandle];
           __block BOOL unexpected = NO;
@@ -426,6 +438,8 @@
               }]) {
               TestCaseFailure();
               unexpected = YES;
+          } else {
+              TestCaseAssertFalse([handle isInTransaction]);
           }
           [WCTDatabase enableSQLiteWrite];
           return !unexpected;
@@ -448,7 +462,7 @@
 - (void)test_handle_seperated_auto_rollback_nested
 {
     [self doTestObjects:self.objects
-                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT", @"ROLLBACK" ]
+                andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           WCTHandle* handle = [self.database getHandle];
           BOOL unexpected = NO;
@@ -461,6 +475,8 @@
               if ([handle commitOrRollbackNestedTransaction]) { // commit failed
                   TestCaseFailure();
                   unexpected = YES;
+              } else {
+                  TestCaseAssertFalse([handle isInTransaction]);
               }
           } else {
               TestCaseFailure();
