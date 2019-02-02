@@ -84,7 +84,10 @@ void AbstractHandle::setGlobalLog(const GlobalLog &log, void *parameter)
 void AbstractHandle::setVFSOpen(const VFSOpen &vfsOpen)
 {
     sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
+    sqlite3_mutex *mutex = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_MASTER);
+    sqlite3_mutex_enter(mutex);
     vfs->xSetSystemCall(vfs, "open", (void (*)(void)) vfsOpen);
+    sqlite3_mutex_leave(mutex);
 }
 
 #pragma mark - Path
