@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_HANDLENOTIFICATION_HPP
-#define _WCDB_HANDLENOTIFICATION_HPP
+#ifndef __WCDB_HANDLE_NOTIFICATION_HPP
+#define __WCDB_HANDLE_NOTIFICATION_HPP
 
 #include <WCDB/HandleRelated.hpp>
 #include <WCDB/OrderedUniqueList.hpp>
@@ -138,4 +138,4 @@ private:
 
 } //namespace WCDB
 
-#endif /* _WCDB_HANDLENOTIFICATION_HPP */
+#endif /* __WCDB_HANDLE_NOTIFICATION_HPP */

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SYNTAX_H
-#define _WCDB_SYNTAX_H
+#ifndef __WCDB_SYNTAX_H
+#define __WCDB_SYNTAX_H
 
 // See also: https://sqlite.org/syntaxdiagrams.html
 
@@ -82,4 +82,4 @@
 #include <WCDB/SyntaxUpdateSTMT.hpp>
 #include <WCDB/SyntaxVacuumSTMT.hpp>
 
-#endif /* _WCDB_SYNTAX_H */
+#endif /* __WCDB_SYNTAX_H */

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_CONVERTIBLE_HPP
-#define _WCDB_CONVERTIBLE_HPP
+#ifndef __WCDB_CONVERTIBLE_HPP
+#define __WCDB_CONVERTIBLE_HPP
 
 #include <WCDB/ColumnType.hpp>
 #include <WCDB/SyntaxForwardDeclaration.h>
@@ -76,4 +76,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_CONVERTIBLE_HPP */
+#endif /* __WCDB_CONVERTIBLE_HPP */

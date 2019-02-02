@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_CORE_H
-#define _WCDB_CORE_H
+#ifndef __WCDB_CORE_H
+#define __WCDB_CORE_H
 
 #include <WCDB/AsyncQueue.hpp>
 #include <WCDB/BackupQueue.hpp>
@@ -126,4 +126,4 @@ protected:
 
 } // namespace WCDB
 
-#endif /* _WCDB_CORE_H */
+#endif /* __WCDB_CORE_H */

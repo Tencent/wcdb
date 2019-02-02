@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SYNTAXCONFLICT_HPP
-#define _WCDB_SYNTAXCONFLICT_HPP
+#ifndef __WCDB_SYNTAX_CONFLICT_HPP
+#define __WCDB_SYNTAX_CONFLICT_HPP
 
 #include <WCDB/Enum.hpp>
 
@@ -56,4 +56,4 @@ constexpr const char* Enum::description(const Syntax::Conflict& conflict)
 
 } // namespace WCDB
 
-#endif /* _WCDB_SYNTAXCONFLICT_HPP */
+#endif /* __WCDB_SYNTAX_CONFLICT_HPP */

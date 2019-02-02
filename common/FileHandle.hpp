@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_FILEHANDLE_HPP
-#define _WCDB_FILEHANDLE_HPP
+#ifndef __WCDB_FILE_HANDLE_HPP
+#define __WCDB_FILE_HANDLE_HPP
 
 #include <WCDB/Data.hpp>
 #include <WCDB/MappedData.hpp>
@@ -76,4 +76,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* _WCDB_FILEHANDLE_HPP */
+#endif /* __WCDB_FILE_HANDLE_HPP */

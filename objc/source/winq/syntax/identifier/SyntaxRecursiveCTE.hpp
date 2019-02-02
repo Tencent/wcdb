@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SYNTAXRECURSIVECTE_HPP
-#define _WCDB_SYNTAXRECURSIVECTE_HPP
+#ifndef __WCDB_SYNTAX_RECURSIVE_CTE_HPP
+#define __WCDB_SYNTAX_RECURSIVE_CTE_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 #include <WCDB/SyntaxSelectSTMT.hpp>
@@ -51,4 +51,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_SYNTAXRECURSIVECTE_HPP */
+#endif /* __WCDB_SYNTAX_RECURSIVE_CTE_HPP */

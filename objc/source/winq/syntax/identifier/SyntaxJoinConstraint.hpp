@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SYNTAXJOINCONSTRAINT_HPP
-#define _WCDB_SYNTAXJOINCONSTRAINT_HPP
+#ifndef __WCDB_SYNTAX_JOIN_CONSTRAINT_HPP
+#define __WCDB_SYNTAX_JOIN_CONSTRAINT_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -45,4 +45,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_SYNTAXJOINCONSTRAINT_HPP */
+#endif /* __WCDB_SYNTAX_JOIN_CONSTRAINT_HPP */

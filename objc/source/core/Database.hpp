@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_DATABASE_HPP
-#define _WCDB_DATABASE_HPP
+#ifndef __WCDB_DATABASE_HPP
+#define __WCDB_DATABASE_HPP
 
 #include <WCDB/Configs.hpp>
 #include <WCDB/Factory.hpp>

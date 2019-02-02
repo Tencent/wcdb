@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SYNTAXEXPRESSION_HPP
-#define _WCDB_SYNTAXEXPRESSION_HPP
+#ifndef __WCDB_SYNTAX_EXPRESSION_HPP
+#define __WCDB_SYNTAX_EXPRESSION_HPP
 
 #include <WCDB/SyntaxBindParameter.hpp>
 #include <WCDB/SyntaxFilter.hpp>
@@ -141,4 +141,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_SYNTAXEXPRESSION_HPP */
+#endif /* __WCDB_SYNTAX_EXPRESSION_HPP */

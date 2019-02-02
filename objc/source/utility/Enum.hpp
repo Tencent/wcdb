@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_ENUM_HPP
-#define _WCDB_ENUM_HPP
+#ifndef __WCDB_ENUM_HPP
+#define __WCDB_ENUM_HPP
 
 #include <type_traits>
 
@@ -33,4 +33,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_ENUM_HPP */
+#endif /* __WCDB_ENUM_HPP */

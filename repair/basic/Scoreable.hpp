@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SCOREABLE_HPP
-#define _WCDB_SCOREABLE_HPP
+#ifndef __WCDB_SCOREABLE_HPP
+#define __WCDB_SCOREABLE_HPP
 
 #include <WCDB/Fraction.hpp>
 
@@ -59,4 +59,4 @@ private:
 
 } //namespace WCDB
 
-#endif /* _WCDB_SCOREABLE_HPP */
+#endif /* __WCDB_SCOREABLE_HPP */

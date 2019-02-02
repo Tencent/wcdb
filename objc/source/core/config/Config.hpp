@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_CONFIG_HPP
-#define _WCDB_CONFIG_HPP
+#ifndef __WCDB_CONFIG_HPP
+#define __WCDB_CONFIG_HPP
 
 namespace WCDB {
 
@@ -34,4 +34,4 @@ public:
 
 } //namespace WCDB
 
-#endif /* _WCDB_CONFIG_HPP */
+#endif /* __WCDB_CONFIG_HPP */

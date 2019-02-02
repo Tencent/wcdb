@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_CORECONST_H
-#define _WCDB_CORECONST_H
+#ifndef __WCDB_CORE_CONST_H
+#define __WCDB_CORE_CONST_H
 
 // This file is public but only for testing
 
@@ -113,4 +113,4 @@ static constexpr const int CheckpointFramesThresholdForTruncating = 10 * 1024;
 
 } // namespace WCDB
 
-#endif /* _WCDB_CORECONST_H */
+#endif /* __WCDB_CORE_CONST_H */

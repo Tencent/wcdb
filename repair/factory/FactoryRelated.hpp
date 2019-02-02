@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_FACTORYRELATED_HPP
-#define _WCDB_FACTORYRELATED_HPP
+#ifndef __WCDB_FACTORY_RELATED_HPP
+#define __WCDB_FACTORY_RELATED_HPP
 
 #include <mutex>
 
@@ -42,4 +42,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* _WCDB_FACTORYRELATED_HPP */
+#endif /* __WCDB_FACTORY_RELATED_HPP */

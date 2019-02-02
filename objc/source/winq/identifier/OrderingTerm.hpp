@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_ORDERINGTERM_HPP
-#define _WCDB_ORDERINGTERM_HPP
+#ifndef __WCDB_ORDERING_TERM_HPP
+#define __WCDB_ORDERING_TERM_HPP
 
 #include <WCDB/SQL.hpp>
 
@@ -42,4 +42,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_ORDERINGTERM_HPP */
+#endif /* __WCDB_ORDERING_TERM_HPP */

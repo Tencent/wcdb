@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SYNTAXORDER_HPP
-#define _WCDB_SYNTAXORDER_HPP
+#ifndef __WCDB_SYNTAX_ORDER_HPP
+#define __WCDB_SYNTAX_ORDER_HPP
 
 #include <WCDB/Enum.hpp>
 
@@ -47,4 +47,4 @@ constexpr const char* Enum::description(const Syntax::Order& order)
 
 } // namespace WCDB
 
-#endif /* _WCDB_SYNTAXORDER_HPP */
+#endif /* __WCDB_SYNTAX_ORDER_HPP */

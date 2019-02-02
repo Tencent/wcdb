@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_RAISEFUNCTION_HPP
-#define _WCDB_RAISEFUNCTION_HPP
+#ifndef __WCDB_RAISE_FUNCTION_HPP
+#define __WCDB_RAISE_FUNCTION_HPP
 
 #include <WCDB/SQL.hpp>
 
@@ -35,4 +35,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_RAISEFUNCTION_HPP */
+#endif /* __WCDB_RAISE_FUNCTION_HPP */

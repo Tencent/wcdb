@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_PATH_HPP
-#define _WCDB_PATH_HPP
+#ifndef __WCDB_PATH_HPP
+#define __WCDB_PATH_HPP
 
 #include <WCDB/String.hpp>
 
@@ -42,4 +42,4 @@ String normalize(const String &path);
 
 } //namespace WCDB
 
-#endif /* _WCDB_PATH_HPP */
+#endif /* __WCDB_PATH_HPP */

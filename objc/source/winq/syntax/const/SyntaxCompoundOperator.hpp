@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SYNTAXCOMPOUNDOPERATOR_HPP
-#define _WCDB_SYNTAXCOMPOUNDOPERATOR_HPP
+#ifndef __WCDB_SYNTAX_COMPOUNDOPERATOR_HPP
+#define __WCDB_SYNTAX_COMPOUNDOPERATOR_HPP
 
 #include <WCDB/Enum.hpp>
 
@@ -53,4 +53,4 @@ constexpr const char* Enum::description(const Syntax::CompoundOperator& compound
 
 } // namespace WCDB
 
-#endif /* _WCDB_SYNTAXCOMPOUNDOPERATOR_HPP */
+#endif /* __WCDB_SYNTAX_COMPOUNDOPERATOR_HPP */

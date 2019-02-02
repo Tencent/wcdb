@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_COLUMNMETA_HPP
-#define _WCDB_COLUMNMETA_HPP
+#ifndef __WCDB_COLUMN_META_HPP
+#define __WCDB_COLUMN_META_HPP
 
 #include <WCDB/String.hpp>
 #include <WCDB/WINQ.h>
@@ -42,4 +42,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_COLUMNINFO_HPP */
+#endif /* __WCDB_COLUMN_META_HPP */

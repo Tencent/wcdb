@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_PAGERRELATED_HPP
-#define _WCDB_PAGERRELATED_HPP
+#ifndef __WCDB_PAGER_RELATED_HPP
+#define __WCDB_PAGER_RELATED_HPP
 
 #include <WCDB/Error.hpp>
 
@@ -50,4 +50,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* _WCDB_PAGERRELATED_HPP */
+#endif /* __WCDB_PAGER_RELATED_HPP */

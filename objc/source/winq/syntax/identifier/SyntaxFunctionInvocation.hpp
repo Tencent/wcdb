@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SYNTAXFUNCTIONINVOCATION_HPP
-#define _WCDB_SYNTAXFUNCTIONINVOCATION_HPP
+#ifndef __WCDB_SYNTAX_FUNCTION_INVOCATION_HPP
+#define __WCDB_SYNTAX_FUNCTION_INVOCATION_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -47,4 +47,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_SYNTAXFUNCTIONINVOCATION_HPP */
+#endif /* __WCDB_SYNTAX_FUNCTION_INVOCATION_HPP */

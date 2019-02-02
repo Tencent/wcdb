@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_TOKENIZE_HPP
-#define _WCDB_TOKENIZE_HPP
+#ifndef __WCDB_TOKENIZE_HPP
+#define __WCDB_TOKENIZE_HPP
 
 #warning Add a objc wrapper and make it private
 
@@ -204,4 +204,4 @@ public:
 
 } //namespace WCDB
 
-#endif /* _WCDB_TOKENIZE_HPP */
+#endif /* __WCDB_TOKENIZE_HPP */

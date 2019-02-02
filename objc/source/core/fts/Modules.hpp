@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_MODULES_HPP
-#define _WCDB_MODULES_HPP
+#ifndef __WCDB_MODULES_HPP
+#define __WCDB_MODULES_HPP
 
 #include <WCDB/Lock.hpp>
 #include <WCDB/UnsafeData.hpp>
@@ -43,4 +43,4 @@ protected:
 
 } // namespace WCDB
 
-#endif /* _WCDB_MODULES_HPP */
+#endif /* __WCDB_MODULES_HPP */

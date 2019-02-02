@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_BACKUPCONFIG_HPP
-#define _WCDB_BACKUPCONFIG_HPP
+#ifndef __WCDB_BACKUP_CONFIG_HPP
+#define __WCDB_BACKUP_CONFIG_HPP
 
 #include <WCDB/Config.hpp>
 #include <WCDB/TimedQueue.hpp>
@@ -45,4 +45,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* _WCDB_BACKUPCONFIG_HPP */
+#endif /* __WCDB_BACKUP_CONFIG_HPP */

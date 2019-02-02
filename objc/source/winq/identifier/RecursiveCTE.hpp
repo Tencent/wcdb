@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_RECURSIVECTE_HPP
-#define _WCDB_RECURSIVECTE_HPP
+#ifndef __WCDB_RECURSIVE_CTE_HPP
+#define __WCDB_RECURSIVE_CTE_HPP
 
 #include <WCDB/SQL.hpp>
 
@@ -36,4 +36,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_RECURSIVECTE_HPP */
+#endif /* __WCDB_RECURSIVE_CTE_HPP */

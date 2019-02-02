@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_FACTORYRETRIEVER_HPP
-#define _WCDB_FACTORYRETRIEVER_HPP
+#ifndef __WCDB_FACTORY_RETRIEVER_HPP
+#define __WCDB_FACTORY_RETRIEVER_HPP
 
 #include <WCDB/Assembler.hpp>
 #include <WCDB/FactoryBackup.hpp>
@@ -85,4 +85,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* _WCDB_FACTORYRETRIEVER_HPP */
+#endif /* __WCDB_FACTORY_RETRIEVER_HPP */

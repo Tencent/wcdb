@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_FRAME_HPP
-#define _WCDB_FRAME_HPP
+#ifndef __WCDB_FRAME_HPP
+#define __WCDB_FRAME_HPP
 
 #include <WCDB/Initializeable.hpp>
 #include <WCDB/Page.hpp>
@@ -61,4 +61,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* _WCDB_FRAME_HPP */
+#endif /* __WCDB_FRAME_HPP */

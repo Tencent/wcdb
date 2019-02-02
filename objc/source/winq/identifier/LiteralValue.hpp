@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_LITERALVALUE_HPP
-#define _WCDB_LITERALVALUE_HPP
+#ifndef __WCDB_LITERAL_VALUE_HPP
+#define __WCDB_LITERAL_VALUE_HPP
 
 #include <WCDB/SQL.hpp>
 
@@ -49,4 +49,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_LITERALVALUE_HPP */
+#endif /* __WCDB_LITERAL_VALUE_HPP */

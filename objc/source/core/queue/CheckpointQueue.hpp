@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_CHECKPOINTQUEUE_HPP
-#define _WCDB_CHECKPOINTQUEUE_HPP
+#ifndef __WCDB_CHECKPOINT_QUEUE_HPP
+#define __WCDB_CHECKPOINT_QUEUE_HPP
 
 #include <WCDB/AsyncQueue.hpp>
 #include <WCDB/TimedQueue.hpp>
@@ -54,4 +54,4 @@ protected:
 
 } // namespace WCDB
 
-#endif /* _WCDB_CHECKPOINTQUEUE_HPP */
+#endif /* __WCDB_CHECKPOINT_QUEUE_HPP */

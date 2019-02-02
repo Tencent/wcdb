@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SYNTAXFOREIGNKEYCLAUSE_HPP
-#define _WCDB_SYNTAXFOREIGNKEYCLAUSE_HPP
+#ifndef __WCDB_SYNTAX_FOREIGN_KEY_CLAUSE_HPP
+#define __WCDB_SYNTAX_FOREIGN_KEY_CLAUSE_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -70,4 +70,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_SYNTAXFOREIGNKEYCLAUSE_HPP */
+#endif /* __WCDB_SYNTAX_FOREIGN_KEY_CLAUSE_HPP */

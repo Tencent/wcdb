@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_STATEMENTSAVEPOINT_HPP
-#define _WCDB_STATEMENTSAVEPOINT_HPP
+#ifndef __WCDB_STATEMENT_SAVEPOINT_HPP
+#define __WCDB_STATEMENT_SAVEPOINT_HPP
 
 #include <WCDB/Statement.hpp>
 
@@ -34,4 +34,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_STATEMENTSAVEPOINT_HPP */
+#endif /* __WCDB_STATEMENT_SAVEPOINT_HPP */

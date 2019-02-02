@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SYNTAXCOLUMNTYPE_HPP
-#define _WCDB_SYNTAXCOLUMNTYPE_HPP
+#ifndef __WCDB_SYNTAX_COLUMN_TYPE_HPP
+#define __WCDB_SYNTAX_COLUMN_TYPE_HPP
 
 #include <WCDB/Enum.hpp>
 
@@ -62,4 +62,4 @@ constexpr const char* Enum::description(const Syntax::ColumnType& columnType)
 
 } // namespace WCDB
 
-#endif /* _WCDB_SYNTAXCOLUMNTYPE_HPP */
+#endif /* __WCDB_SYNTAX_COLUMN_TYPE_HPP */

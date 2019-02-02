@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_TOKENIZER_HPP
-#define _WCDB_TOKENIZER_HPP
+#ifndef __WCDB_TOKENIZER_HPP
+#define __WCDB_TOKENIZER_HPP
 
 #include <WCDB/Tokenize.hpp>
 #include <cstddef>
@@ -85,4 +85,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* _WCDB_TOKENIZER_HPP */
+#endif /* __WCDB_TOKENIZER_HPP */

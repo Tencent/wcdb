@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SQLITELOCKER_HPP
-#define _WCDB_SQLITELOCKER_HPP
+#ifndef __WCDB_SQLITE_LOCKER_HPP
+#define __WCDB_SQLITE_LOCKER_HPP
 
 #if WCDB_USE_BUILTIN_SQLITE_REPAIR
 
@@ -56,4 +56,4 @@ public:
 
 #endif /* WCDB_USE_BUILTIN_SQLITE_REPAIR */
 
-#endif /* _WCDB_SQLITELOCKER_HPP */
+#endif /* __WCDB_SQLITE_LOCKER_HPP */

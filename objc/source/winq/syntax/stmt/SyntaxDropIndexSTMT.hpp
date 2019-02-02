@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SYNTAXDROPINDEXSTMT_HPP
-#define _WCDB_SYNTAXDROPINDEXSTMT_HPP
+#ifndef __WCDB_SYNTAX_DROP_INDEX_STMT_HPP
+#define __WCDB_SYNTAX_DROP_INDEX_STMT_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -46,4 +46,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_SYNTAXDROPINDEXSTMT_HPP */
+#endif /* __WCDB_SYNTAX_DROP_INDEX_STMT_HPP */

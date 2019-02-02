@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_WINDOWDEF_HPP
-#define _WCDB_WINDOWDEF_HPP
+#ifndef __WCDB_WINDOW_DEF_HPP
+#define __WCDB_WINDOW_DEF_HPP
 
 #include <WCDB/SQL.hpp>
 
@@ -34,4 +34,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_WINDOWDEF_HPP */
+#endif /* __WCDB_WINDOW_DEF_HPP */

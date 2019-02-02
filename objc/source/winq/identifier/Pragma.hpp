@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_PRAGMA_HPP
-#define _WCDB_PRAGMA_HPP
+#ifndef __WCDB_PRAGMA_HPP
+#define __WCDB_PRAGMA_HPP
 
 #include <WCDB/SQL.hpp>
 
@@ -122,4 +122,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_PRAGMA_HPP */
+#endif /* __WCDB_PRAGMA_HPP */

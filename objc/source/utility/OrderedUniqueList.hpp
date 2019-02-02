@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_ORDEREDUNIQUELIST_HPP
-#define _WCDB_ORDEREDUNIQUELIST_HPP
+#ifndef __WCDB_ORDERED_UNIQUE_LIST_HPP
+#define __WCDB_ORDERED_UNIQUE_LIST_HPP
 
 #include <list>
 
@@ -112,4 +112,4 @@ protected:
 
 } // namespace WCDB
 
-#endif /* _WCDB_ORDEREDUNIQUELIST_HPP */
+#endif /* __WCDB_ORDERED_UNIQUE_LIST_HPP */

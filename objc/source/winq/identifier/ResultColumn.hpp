@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_RESULTCOLUMN_HPP
-#define _WCDB_RESULTCOLUMN_HPP
+#ifndef __WCDB_RESULT_COLUMN_HPP
+#define __WCDB_RESULT_COLUMN_HPP
 
 #include <WCDB/SQL.hpp>
 
@@ -53,4 +53,4 @@ protected:
 
 } // namespace WCDB
 
-#endif /* _WCDB_RESULTCOLUMN_HPP */
+#endif /* __WCDB_RESULT_COLUMN_HPP */

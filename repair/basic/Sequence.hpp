@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SEQUENCE_HPP
-#define _WCDB_SEQUENCE_HPP
+#ifndef __WCDB_SEQUENCE_HPP
+#define __WCDB_SEQUENCE_HPP
 
 #include <WCDB/String.hpp>
 
@@ -39,4 +39,4 @@ struct Sequence {
 
 } //namespace WCDB
 
-#endif /* _WCDB_SEQUENCE_HPP */
+#endif /* __WCDB_SEQUENCE_HPP */

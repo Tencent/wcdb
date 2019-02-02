@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SYNTAXFORWARDDECLARATION_H
-#define _WCDB_SYNTAXFORWARDDECLARATION_H
+#ifndef __WCDB_SYNTAX_FORWARD_DECLARATION_H
+#define __WCDB_SYNTAX_FORWARD_DECLARATION_H
 
 #include <WCDB/Syntax.h>
 
@@ -103,4 +103,4 @@ typedef SyntaxList<LiteralValue> LiteralValues;
 
 } // namespace WCDB
 
-#endif /* _WCDB_SYNTAXFORWARDDECLARATION_H */
+#endif /* __WCDB_SYNTAX_FORWARD_DECLARATION_H */

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SYNTAXTABLEORSUBQUERY_HPP
-#define _WCDB_SYNTAXTABLEORSUBQUERY_HPP
+#ifndef __WCDB_SYNTAX_TABLE_OR_SUBQUERY_HPP
+#define __WCDB_SYNTAX_TABLE_OR_SUBQUERY_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 #include <WCDB/SyntaxJoinClause.hpp>
@@ -66,4 +66,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_SYNTAXTABLEORSUBQUERY_HPP */
+#endif /* __WCDB_SYNTAX_TABLE_OR_SUBQUERY_HPP */

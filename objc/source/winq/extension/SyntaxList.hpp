@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SYNTAXLIST_HPP
-#define _WCDB_SYNTAXLIST_HPP
+#ifndef __WCDB_SYNTAX_LIST_HPP
+#define __WCDB_SYNTAX_LIST_HPP
 
 #include <list>
 #include <type_traits>
@@ -132,4 +132,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_SYNTAXLIST_HPP */
+#endif /* __WCDB_SYNTAX_LIST_HPP */

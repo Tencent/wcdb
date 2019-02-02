@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_STRING_HPP
-#define _WCDB_STRING_HPP
+#ifndef __WCDB_STRING_HPP
+#define __WCDB_STRING_HPP
 
 #include <WCDB/UnsafeString.hpp>
 #include <string>

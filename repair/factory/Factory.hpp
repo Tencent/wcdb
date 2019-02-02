@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_FACTORY_HPP
-#define _WCDB_FACTORY_HPP
+#ifndef __WCDB_FACTORY_HPP
+#define __WCDB_FACTORY_HPP
 
 #include <WCDB/FactoryBackup.hpp>
 #include <WCDB/FactoryDepositor.hpp>
@@ -91,4 +91,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* _WCDB_FACTORY_HPP */
+#endif /* __WCDB_FACTORY_HPP */

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_HANDLE_HPP
-#define _WCDB_HANDLE_HPP
+#ifndef __WCDB_HANDLE_HPP
+#define __WCDB_HANDLE_HPP
 
 #include <WCDB/AbstractHandle.hpp>
 
@@ -82,4 +82,4 @@ public:
 
 } //namespace WCDB
 
-#endif /* _WCDB_HANDLE_HPP */
+#endif /* __WCDB_HANDLE_HPP */

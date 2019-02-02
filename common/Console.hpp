@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_CONSOLE_HPP
-#define _WCDB_CONSOLE_HPP
+#ifndef __WCDB_CONSOLE_HPP
+#define __WCDB_CONSOLE_HPP
 
 #include <WCDB/Macro.hpp>
 #include <WCDB/String.hpp>
@@ -68,4 +68,4 @@ private:
 
 } // namespace WCDB
 
-#endif /* _WCDB_CONSOLE_HPP */
+#endif /* __WCDB_CONSOLE_HPP */

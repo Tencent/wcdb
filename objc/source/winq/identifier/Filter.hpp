@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_FILTER_HPP
-#define _WCDB_FILTER_HPP
+#ifndef __WCDB_FILTER_HPP
+#define __WCDB_FILTER_HPP
 
 #include <WCDB/SQL.hpp>
 
@@ -33,4 +33,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_FILTER_HPP */
+#endif /* __WCDB_FILTER_HPP */

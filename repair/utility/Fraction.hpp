@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_FRACTION_HPP
-#define _WCDB_FRACTION_HPP
+#ifndef __WCDB_FRACTION_HPP
+#define __WCDB_FRACTION_HPP
 
 #include <cstdint>
 
@@ -58,4 +58,4 @@ private:
 
 } //namespace WCDB
 
-#endif /* _WCDB_FRACTION_HPP */
+#endif /* __WCDB_FRACTION_HPP */

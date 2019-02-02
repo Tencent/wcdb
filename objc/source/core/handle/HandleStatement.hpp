@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_HANDLESTATEMENT_HPP
-#define _WCDB_HANDLESTATEMENT_HPP
+#ifndef __WCDB_HANDLE_STATEMENT_HPP
+#define __WCDB_HANDLE_STATEMENT_HPP
 
 #include <WCDB/HandleRelated.hpp>
 #include <WCDB/SQLiteDeclaration.h>
@@ -80,4 +80,4 @@ private:
 
 } //namespace WCDB
 
-#endif /* _WCDB_HANDLESTATEMENT_HPP */
+#endif /* __WCDB_HANDLE_STATEMENT_HPP */

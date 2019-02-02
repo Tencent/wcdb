@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_DEPRECATEDREPAIRKIT_HPP
-#define _WCDB_DEPRECATEDREPAIRKIT_HPP
+#ifndef __WCDB_DEPRECATED_REPAIRKIT_HPP
+#define __WCDB_DEPRECATED_REPAIRKIT_HPP
 
 #include <stdio.h>
 
-#endif /* _WCDB_DEPRECATEDREPAIRKIT_HPP */
+#endif /* __WCDB_DEPRECATED_REPAIRKIT_HPP */

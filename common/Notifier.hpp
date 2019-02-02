@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Reporter_hpp
-#define Reporter_hpp
+#ifndef __WCDB_NOTIFIER_HPP
+#define __WCDB_NOTIFIER_HPP
 
 #include <WCDB/Error.hpp>
 #include <WCDB/Lock.hpp>
@@ -54,4 +54,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* Reporter_hpp */
+#endif /* __WCDB_NOTIFIER_HPP */

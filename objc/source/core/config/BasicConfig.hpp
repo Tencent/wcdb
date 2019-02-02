@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_BASICCONFIG_HPP
-#define _WCDB_BASICCONFIG_HPP
+#ifndef __WCDB_BASIC_CONFIG_HPP
+#define __WCDB_BASIC_CONFIG_HPP
 
 #include <WCDB/Config.hpp>
 #include <WCDB/WINQ.h>
@@ -42,4 +42,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* _WCDB_BASICCONFIG_HPP */
+#endif /* __WCDB_BASIC_CONFIG_HPP */

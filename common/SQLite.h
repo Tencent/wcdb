@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SQLITE_H
-#define _WCDB_SQLITE_H
+#ifndef __WCDB_SQLITE_H
+#define __WCDB_SQLITE_H
 
 // This file is public, but not included by default.
 // Developer can include it for some specific needs.
@@ -30,4 +30,4 @@
 #include <sqlite3.h>
 #endif
 
-#endif /* _WCDB_SQLITE_H */
+#endif /* __WCDB_SQLITE_H */

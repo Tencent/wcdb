@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_ASSERTION_HPP
-#define _WCDB_ASSERTION_HPP
+#ifndef __WCDB_ASSERTION_HPP
+#define __WCDB_ASSERTION_HPP
 
 #include <WCDB/Console.hpp>
 
@@ -53,4 +53,4 @@
 #define WCTRemedialAssert(cond, message, remedial)                             \
     __WCTAssert(cond, message, if (WCDB::Console::debuggable()) { abort(); } else { remedial })
 
-#endif /* _WCDB_ASSERTION_HPP */
+#endif /* __WCDB_ASSERTION_HPP */

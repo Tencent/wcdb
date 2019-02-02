@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_FACTORYDEPOSITOR_HPP
-#define _WCDB_FACTORYDEPOSITOR_HPP
+#ifndef __WCDB_FACTORY_DEPOSITOR_HPP
+#define __WCDB_FACTORY_DEPOSITOR_HPP
 
 #include <WCDB/ErrorProne.hpp>
 #include <WCDB/FactoryRelated.hpp>
@@ -38,4 +38,4 @@ public:
 
 } //namespace WCDB
 
-#endif /* _WCDB_FACTORYDEPOSITOR_HPP */
+#endif /* __WCDB_FACTORY_DEPOSITOR_HPP */

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_EXITING_HPP
-#define _WCDB_EXITING_HPP
+#ifndef __WCDB_EXITING_HPP
+#define __WCDB_EXITING_HPP
 
 namespace WCDB {
 
@@ -27,4 +27,4 @@ bool exiting();
 
 }
 
-#endif /* _WCDB_EXITING_HPP */
+#endif /* __WCDB_EXITING_HPP */

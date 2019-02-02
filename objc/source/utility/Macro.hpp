@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_MACRO_HPP
-#define _WCDB_MACRO_HPP
+#ifndef __WCDB_MACRO_HPP
+#define __WCDB_MACRO_HPP
 
 #define WCDB_BOOL_1 1
 #define WCDB_BOOL_0 0
@@ -76,4 +76,4 @@
 #define WCDB_EXTERN extern
 #endif
 
-#endif /* _WCDB_MACRO_HPP */
+#endif /* __WCDB_MACRO_HPP */

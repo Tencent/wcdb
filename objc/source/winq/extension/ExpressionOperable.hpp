@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef Operable_hpp
-#define Operable_hpp
+#ifndef __WCDB_OPERABLE_HPP
+#define __WCDB_OPERABLE_HPP
 
 #include <WCDB/SQL.hpp>
 
@@ -121,4 +121,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* Operable_hpp */
+#endif /* __WCDB_OPERABLE_HPP */

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_CRAWLABLE_HPP
-#define _WCDB_CRAWLABLE_HPP
+#ifndef __WCDB_CRAWLABLE_HPP
+#define __WCDB_CRAWLABLE_HPP
 
 #include <WCDB/Pager.hpp>
 #include <set>
@@ -74,4 +74,4 @@ private:
 
 } //namespace WCDB
 
-#endif /* _WCDB_CRAWLABLE_HPP */
+#endif /* __WCDB_CRAWLABLE_HPP */

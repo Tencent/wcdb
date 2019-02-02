@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_WINQ_H
-#define _WCDB_WINQ_H
+#ifndef __WCDB_WINQ_H
+#define __WCDB_WINQ_H
 
 // See also: https://sqlite.org/syntaxdiagrams.html
 
@@ -90,4 +90,4 @@
 
 #include <WCDB/ConvertibleImplementation.hpp>
 
-#endif /* _WCDB_WINQ_H */
+#endif /* __WCDB_WINQ_H */

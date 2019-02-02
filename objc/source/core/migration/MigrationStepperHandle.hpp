@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_MIGRATIONSTEPPERHANDLE_HPP
-#define _WCDB_MIGRATIONSTEPPERHANDLE_HPP
+#ifndef __WCDB_MIGRATION_STEPPER_HANDLE_HPP
+#define __WCDB_MIGRATION_STEPPER_HANDLE_HPP
 
 #include <WCDB/Configs.hpp>
 #include <WCDB/Handle.hpp>
@@ -70,4 +70,4 @@ protected:
 
 } // namespace WCDB
 
-#endif /* _WCDB_MIGRATIONSTEPPERHANDLE_HPP */
+#endif /* __WCDB_MIGRATION_STEPPER_HANDLE_HPP */

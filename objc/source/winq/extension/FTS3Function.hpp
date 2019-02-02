@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_FTS3FUNCTION_HPP
-#define _WCDB_FTS3FUNCTION_HPP
+#ifndef __WCDB_FTS3_FUNCTION_HPP
+#define __WCDB_FTS3_FUNCTION_HPP
 
 #include <WCDB/ExpressionOperable.hpp>
 #include <WCDB/SQL.hpp>
@@ -56,4 +56,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_FTS3FUNCTION_HPP */
+#endif /* __WCDB_FTS3_FUNCTION_HPP */

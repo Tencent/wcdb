@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_INDEXEDCOLUMN_HPP
-#define _WCDB_INDEXEDCOLUMN_HPP
+#ifndef __WCDB_INDEXED_COLUMN_HPP
+#define __WCDB_INDEXED_COLUMN_HPP
 
 #include <WCDB/SQL.hpp>
 
@@ -44,4 +44,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_INDEXEDCOLUMN_HPP */
+#endif /* __WCDB_INDEXED_COLUMN_HPP */

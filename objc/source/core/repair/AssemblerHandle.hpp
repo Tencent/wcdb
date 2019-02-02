@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_ASSEMBLERHANDLE_HPP
-#define _WCDB_ASSEMBLERHANDLE_HPP
+#ifndef __WCDB_ASSEMBLER_HANDLE_HPP
+#define __WCDB_ASSEMBLER_HANDLE_HPP
 
 #include <WCDB/Handle.hpp>
 #include <WCDB/RepairKit.h>
@@ -75,4 +75,4 @@ protected:
 
 } // namespace WCDB
 
-#endif /* _WCDB_ASSEMBLERHANDLE_HPP */
+#endif /* __WCDB_ASSEMBLER_HANDLE_HPP */

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SYNTAXFRAMESPEC_HPP
-#define _WCDB_SYNTAXFRAMESPEC_HPP
+#ifndef __WCDB_SYNTAX_FRAME_SPEC_HPP
+#define __WCDB_SYNTAX_FRAME_SPEC_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -68,4 +68,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_SYNTAXFRAMESPEC_HPP */
+#endif /* __WCDB_SYNTAX_FRAME_SPEC_HPP */

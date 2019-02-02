@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_PAGEBASEDFILEHANDLE_HPP
-#define _WCDB_PAGEBASEDFILEHANDLE_HPP
+#ifndef __WCDB_PAGE_BASED_FILE_HANDLE_HPP
+#define __WCDB_PAGE_BASED_FILE_HANDLE_HPP
 
 #include <WCDB/FileHandle.hpp>
 #include <WCDB/LRUCache.hpp>
@@ -84,4 +84,4 @@ protected:
 
 } // namespace WCDB
 
-#endif /* _WCDB_PAGEBASEDFILEHANDLE_HPP */
+#endif /* __WCDB_PAGE_BASED_FILE_HANDLE_HPP */

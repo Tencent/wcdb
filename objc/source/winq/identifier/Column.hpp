@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_COLUMN_HPP
-#define _WCDB_COLUMN_HPP
+#ifndef __WCDB_COLUMN_HPP
+#define __WCDB_COLUMN_HPP
 
 #include <WCDB/AggregateFunction.hpp>
 #include <WCDB/CoreFunction.hpp>
@@ -49,4 +49,4 @@ protected:
 
 } // namespace WCDB
 
-#endif /* _WCDB_COLUMN_HPP */
+#endif /* __WCDB_COLUMN_HPP */

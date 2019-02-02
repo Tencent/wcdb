@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_MIGRATIONQUEUE_HPP
-#define _WCDB_MIGRATIONQUEUE_HPP
+#ifndef __WCDB_MIGRATION_QUEUE_HPP
+#define __WCDB_MIGRATION_QUEUE_HPP
 
 #include <WCDB/AsyncQueue.hpp>
 #include <WCDB/TimedQueue.hpp>
@@ -52,4 +52,4 @@ protected:
 
 } // namespace WCDB
 
-#endif /* _WCDB_MIGRATIONQUEUE_HPP */
+#endif /* __WCDB_MIGRATION_QUEUE_HPP */

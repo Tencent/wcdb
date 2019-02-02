@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_MASTERCRAWLER_HPP
-#define _WCDB_MASTERCRAWLER_HPP
+#ifndef __WCDB_MASTER_CRAWLER_HPP
+#define __WCDB_MASTER_CRAWLER_HPP
 
 #include <WCDB/Crawlable.hpp>
 
@@ -65,4 +65,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* _WCDB_MASTERCRAWLER_HPP */
+#endif /* __WCDB_MASTER_CRAWLER_HPP */

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SQLTRACECONFIG_HPP
-#define _WCDB_SQLTRACECONFIG_HPP
+#ifndef __WCDB_SQL_TRACE_CONFIG_HPP
+#define __WCDB_SQL_TRACE_CONFIG_HPP
 
 #include <WCDB/Config.hpp>
 #include <WCDB/Handle.hpp>
@@ -66,4 +66,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* _WCDB_SQLTRACECONFIG_HPP */
+#endif /* __WCDB_SQL_TRACE_CONFIG_HPP */

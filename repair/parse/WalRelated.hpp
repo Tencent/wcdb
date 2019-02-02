@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_WALRELATED_HPP
-#define _WCDB_WALRELATED_HPP
+#ifndef __WCDB_WAL_RELATED_HPP
+#define __WCDB_WAL_RELATED_HPP
 
 #include <WCDB/Error.hpp>
 
@@ -56,4 +56,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* _WCDB_WALRELATED_HPP */
+#endif /* __WCDB_WAL_RELATED_HPP */

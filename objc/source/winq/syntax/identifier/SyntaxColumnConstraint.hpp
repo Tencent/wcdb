@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SYNTAXCOLUMNCONSTRAINT_HPP
-#define _WCDB_SYNTAXCOLUMNCONSTRAINT_HPP
+#ifndef __WCDB_SYNTAX_COLUMN_CONSTRAINT_HPP
+#define __WCDB_SYNTAX_COLUMN_CONSTRAINT_HPP
 
 #include <WCDB/SyntaxExpression.hpp>
 #include <WCDB/SyntaxForeignKeyClause.hpp>
@@ -69,4 +69,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_SYNTAXCOLUMNCONSTRAINT_HPP */
+#endif /* __WCDB_SYNTAX_COLUMN_CONSTRAINT_HPP */

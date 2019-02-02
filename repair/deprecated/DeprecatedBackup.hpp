@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_DEPRECATEDBACKUP_HPP
-#define _WCDB_DEPRECATEDBACKUP_HPP
+#ifndef __WCDB_DEPRECATED_BACKUP_HPP
+#define __WCDB_DEPRECATED_BACKUP_HPP
 
 #include <stdio.h>
 
-#endif /* _WCDB_DEPRECATEDBACKUP_HPP */
+#endif /* __WCDB_DEPRECATED_BACKUP_HPP */

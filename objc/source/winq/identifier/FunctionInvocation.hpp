@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_FUNCTIONINVOCATION_HPP
-#define _WCDB_FUNCTIONINVOCATION_HPP
+#ifndef __WCDB_FUNCTION_INVOCATION_HPP
+#define __WCDB_FUNCTION_INVOCATION_HPP
 
 #include <WCDB/SQL.hpp>
 
@@ -42,4 +42,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_FUNCTIONINVOCATION_HPP */
+#endif /* __WCDB_FUNCTION_INVOCATION_HPP */

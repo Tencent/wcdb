@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_MATERIAL_HPP
-#define _WCDB_MATERIAL_HPP
+#ifndef __WCDB_MATERIAL_HPP
+#define __WCDB_MATERIAL_HPP
 
 #include <WCDB/Serialization.hpp>
 #include <WCDB/String.hpp>
@@ -105,4 +105,4 @@ public:
 
 } //namespace WCDB
 
-#endif /* _WCDB_MATERIAL_HPP */
+#endif /* __WCDB_MATERIAL_HPP */

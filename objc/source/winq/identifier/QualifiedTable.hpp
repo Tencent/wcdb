@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_QUALIFIEDTABLE_HPP
-#define _WCDB_QUALIFIEDTABLE_HPP
+#ifndef __WCDB_QUALIFIED_TABLE_HPP
+#define __WCDB_QUALIFIED_TABLE_HPP
 
 #include <WCDB/SQL.hpp>
 
@@ -46,4 +46,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_QUALIFIEDTABLE_HPP */
+#endif /* __WCDB_QUALIFIED_TABLE_HPP */

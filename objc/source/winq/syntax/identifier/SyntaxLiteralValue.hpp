@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SYNTAXLITERALVALUE_HPP
-#define _WCDB_SYNTAXLITERALVALUE_HPP
+#ifndef __WCDB_SYNTAX_LITERAL_VALUE_HPP
+#define __WCDB_SYNTAX_LITERAL_VALUE_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -56,4 +56,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_SYNTAXLITERALVALUE_HPP */
+#endif /* __WCDB_SYNTAX_LITERAL_VALUE_HPP */

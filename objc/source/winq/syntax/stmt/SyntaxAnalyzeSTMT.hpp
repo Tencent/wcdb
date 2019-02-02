@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SYNTAXANALYZESTMT_HPP
-#define _WCDB_SYNTAXANALYZESTMT_HPP
+#ifndef __WCDB_SYNTAX_ANALYZE_STMT_HPP
+#define __WCDB_SYNTAX_ANALYZE_STMT_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 #include <WCDB/SyntaxSchema.hpp>
@@ -47,4 +47,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_SYNTAXANALYZESTMT_HPP */
+#endif /* __WCDB_SYNTAX_ANALYZE_STMT_HPP */

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SYNTAXORDERINGTERM_HPP
-#define _WCDB_SYNTAXORDERINGTERM_HPP
+#ifndef __WCDB_SYNTAX_ORDERING_TERM_HPP
+#define __WCDB_SYNTAX_ORDERING_TERM_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -47,4 +47,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_SYNTAXORDERINGTERM_HPP */
+#endif /* __WCDB_SYNTAX_ORDERING_TERM_HPP */

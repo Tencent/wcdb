@@ -18,12 +18,12 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SQLITEDECLARATION_H
-#define _WCDB_SQLITEDECLARATION_H
+#ifndef __WCDB_SQLITE_DECLARATION_H
+#define __WCDB_SQLITE_DECLARATION_H
 
 extern "C" {
 typedef struct sqlite3 sqlite3;
 typedef struct sqlite3_stmt sqlite3_stmt;
 }
 
-#endif /* _WCDB_SQLITEDECLARATION_H */
+#endif /* __WCDB_SQLITE_DECLARATION_H */

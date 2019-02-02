@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_THREADLOCAL_HPP
-#define _WCDB_THREADLOCAL_HPP
+#ifndef __WCDB_THREAD_LOCAL_HPP
+#define __WCDB_THREAD_LOCAL_HPP
 
 /*
  * Thread-local storage
@@ -104,4 +104,4 @@ protected:
 
 } //namespace WCDB
 
-#endif /* _WCDB_THREADLOCAL_HPP */
+#endif /* __WCDB_THREAD_LOCAL_HPP */

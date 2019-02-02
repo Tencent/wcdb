@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_BACKUPHANDLE_HPP
-#define _WCDB_BACKUPHANDLE_HPP
+#ifndef __WCDB_BACKUP_HANDLE_HPP
+#define __WCDB_BACKUP_HANDLE_HPP
 
 #include <WCDB/Handle.hpp>
 #include <WCDB/RepairKit.h>
@@ -54,4 +54,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_BACKUPHANDLE_HPP */
+#endif /* __WCDB_BACKUP_HANDLE_HPP */

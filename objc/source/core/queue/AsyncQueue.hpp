@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_ASYNCQUEUE_HPP
-#define _WCDB_ASYNCQUEUE_HPP
+#ifndef __WCDB_ASYNC_QUEUE_HPP
+#define __WCDB_ASYNC_QUEUE_HPP
 
 #include <WCDB/String.hpp>
 #include <mutex>
@@ -55,4 +55,4 @@ private:
 
 } // namespace WCDB
 
-#endif /* _WCDB_ASYNCQUEUE_HPP */
+#endif /* __WCDB_ASYNC_QUEUE_HPP */

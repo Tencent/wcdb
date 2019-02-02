@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SYNTAXSCHEMA_HPP
-#define _WCDB_SYNTAXSCHEMA_HPP
+#ifndef __WCDB_SYNTAX_SCHEMA_HPP
+#define __WCDB_SYNTAX_SCHEMA_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -49,4 +49,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_SYNTAXSCHEMA_HPP */
+#endif /* __WCDB_SYNTAX_SCHEMA_HPP */

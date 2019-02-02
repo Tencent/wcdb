@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_UNSAFESTRING_HPP
-#define _WCDB_UNSAFESTRING_HPP
+#ifndef __WCDB_UNSAFE_STRING_HPP
+#define __WCDB_UNSAFE_STRING_HPP
 
 #include <string>
 
@@ -58,4 +58,4 @@ private:
 
 } //namespace WCDB
 
-#endif /* _WCDB_UNSAFESTRING_HPP */
+#endif /* __WCDB_UNSAFE_STRING_HPP */

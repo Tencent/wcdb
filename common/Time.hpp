@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_TIME_HPP
-#define _WCDB_TIME_HPP
+#ifndef __WCDB_TIME_HPP
+#define __WCDB_TIME_HPP
 
 #include <WCDB/SharedThreadedErrorProne.hpp>
 #include <WCDB/String.hpp>
@@ -63,4 +63,4 @@ public:
 
 } //namespace WCDB
 
-#endif /* _WCDB_TIME_HPP */
+#endif /* __WCDB_TIME_HPP */

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_SYNTAXRAISEFUNCTION_HPP
-#define _WCDB_SYNTAXRAISEFUNCTION_HPP
+#ifndef __WCDB_SYNTAX_RAISE_FUNCTION_HPP
+#define __WCDB_SYNTAX_RAISE_FUNCTION_HPP
 
 #include <WCDB/SyntaxIdentifier.hpp>
 
@@ -49,4 +49,4 @@ public:
 
 } // namespace WCDB
 
-#endif /* _WCDB_SYNTAXRAISEFUNCTION_HPP */
+#endif /* __WCDB_SYNTAX_RAISE_FUNCTION_HPP */
