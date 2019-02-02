@@ -55,8 +55,8 @@ Core::Core()
     Handle::enableMultithread();
     Handle::enableMemoryStatus(false);
     //        Handle::setMemoryMapSize(0x7fff0000, 0x7fff0000);
-    Handle::setNotificationForGlobalLog(Core::globalLog, this);
-    Handle::setNotificationWhenVFSOpened(Core::vfsOpen);
+    Handle::setGlobalLog(Core::globalLog, this);
+    Handle::setVFSOpen(Core::vfsOpen);
 
     Notifier::shared()->setNotificationForPreprocessing(
     NotifierTagPreprocessorName,
@@ -244,33 +244,31 @@ int Core::vfsOpen(const char* path, int flags, int mode)
     return fd;
 }
 
-void Core::globalLog(void* parameter, int fullCode, const char* message)
+void Core::globalLog(void* parameter, int rc, const char* message)
 {
-    int code = fullCode & 0xff;
     Error error;
-    switch (code) {
+    switch (rc) {
     case SQLITE_WARNING:
         error.level = Error::Level::Warning;
         break;
-    case SQLITE_NOTICE: {
+    case SQLITE_NOTICE_RECOVER_WAL: {
         error.level = Error::Level::Ignore;
-        if (fullCode == SQLITE_NOTICE_RECOVER_WAL) {
-            std::regex pattern("recovered (\\w+) frames from WAL file (.+)\\-wal");
-            const String source = message;
-            std::smatch match;
-            if (std::regex_search(source.begin(), source.end(), match, pattern)) {
-                WCTInnerAssert(match.size() == 3);
-                Core* core = static_cast<Core*>(parameter);
-                core->m_checkpointQueue->put(match[2].str(), atoi(match[1].str().c_str()));
-            }
+        std::regex pattern("recovered (\\w+) frames from WAL file (.+)\\-wal");
+        const String source = message;
+        std::smatch match;
+        if (std::regex_search(source.begin(), source.end(), match, pattern)) {
+            // hint checkpoint
+            Core* core = static_cast<Core*>(parameter);
+            core->m_checkpointQueue->put(match[2].str(), atoi(match[1].str().c_str()));
         }
+        WCTInnerAssert(match.size() == 3); // assert match and match 3.
         break;
     }
     default:
         error.level = Error::Level::Debug;
         break;
     }
-    error.setSQLiteCode(code, fullCode);
+    error.setSQLiteCode(rc);
     error.message = message;
     Notifier::shared()->notify(error);
 }

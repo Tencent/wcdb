@@ -59,11 +59,10 @@ public:
     static void setMemoryMapSize(int64_t defaultSizeLimit, int64_t maximumAllowedSizeLimit);
 
     typedef void (*GlobalLog)(void *, int, const char *);
-    static void
-    setNotificationForGlobalLog(const GlobalLog &log, void *parameter = nullptr);
+    static void setGlobalLog(const GlobalLog &log, void *parameter = nullptr);
 
     typedef int (*VFSOpen)(const char *, int, int);
-    static void setNotificationWhenVFSOpened(const VFSOpen &vfsOpen);
+    static void setVFSOpen(const VFSOpen &vfsOpen);
 
 #pragma mark - Path
 public:
@@ -86,7 +85,7 @@ public:
     long long getLastInsertedRowID();
     const char *getErrorMessage();
     int getExtendedErrorCode();
-    int getResultCode();
+    Error::Code getResultCode();
     int getChanges();
     bool isReadonly();
     bool isInTransaction();
@@ -184,7 +183,7 @@ private:
 #pragma mark - Error
 public:
     // call it as push/pop in stack structure.
-    void markErrorAsIgnorable(int ignorableCode);
+    void markErrorAsIgnorable(Error::Code ignorableCode);
     void markErrorAsUnignorable();
 
 private:

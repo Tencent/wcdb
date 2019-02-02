@@ -28,7 +28,7 @@ MigrationStepperHandle::MigrationStepperHandle()
 , m_migrateStatement(getStatement())
 , m_removeMigratedStatement(getStatement())
 {
-    markErrorAsIgnorable((int) Error::Code::Interrupt);
+    markErrorAsIgnorable(Error::Code::Interrupt);
 }
 
 MigrationStepperHandle::~MigrationStepperHandle()

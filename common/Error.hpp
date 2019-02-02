@@ -61,38 +61,39 @@ public:
 #pragma mark - Code
 public:
     enum class Code : int {
-        OK = 0,         /* Successful result */
-        Error = 1,      /* SQL error, missing database or other error */
-        Internal = 2,   /* Internal logic error */
-        Permission = 3, /* Access permission denied */
-        Abort = 4,      /* Callback routine requested an abort */
-        Busy = 5,       /* The database file is locked or system call busy */
-        Locked = 6,     /* A table in the database is locked */
-        NoMemory = 7,   /* Out of memory */
-        Readonly = 8,   /* Attempt to write a readonly file */
-        Interrupt = 9,  /* Operation terminated by sqlite3_interrupt()*/
-        IOError = 10,   /* Some kind of disk I/O error occurred */
-        Corrupt = 11, /* The data(database, memory or other files) acquired is malformed */
-        NotFound = 12, /* Unknown opcode in sqlite3_file_control() */
-        Full = 13,     /* Disk is full */
-        CantOpen = 14, /* Unable to open the database file */
-        Protocol = 15, /* Database lock protocol error */
-        Empty = 16,    /* Database is empty */
-        Schema = 17,   /* The database schema changed */
-        Exceed = 18,   /* String, BLOB, File, Concurrency exceeds size limit */
-        Conflict = 19, /* Abort due to constraint violation */
-        Mismatch = 20, /* Data type mismatch */
-        Misuse = 21,   /* WCDB or SQLite used incorrectly */
-        NoLargeFileSupport = 22, /* Uses OS features not supported on host */
-        Authorization = 23,      /* Authorization denied */
-        Format = 24,             /* Auxiliary database format error */
-        Range = 25, /* 2nd parameter to sqlite3_bind out of range or System call result too large */
-        NotADatabase = 26, /* File opened that is not a database file */
-        Notice = 27,       /* Notifications */
-        Warning = 28,      /* Warnings */
-        Row = 100,         /* another row ready */
-        Done = 101,        /* finished executing */
+        OK = 0,
+        Error = 1,
+        Internal = 2,
+        Permission = 3,
+        Abort = 4,
+        Busy = 5,
+        Locked = 6,
+        NoMemory = 7,
+        Readonly = 8,
+        Interrupt = 9,
+        IOError = 10,
+        Corrupt = 11,
+        NotFound = 12,
+        Full = 13,
+        CantOpen = 14,
+        Protocol = 15,
+        Empty = 16,
+        Schema = 17,
+        Exceed = 18,
+        Conflict = 19,
+        Mismatch = 20,
+        Misuse = 21,
+        NoLargeFileSupport = 22,
+        Authorization = 23,
+        Format = 24,
+        Range = 25,
+        NotADatabase = 26,
+        Notice = 27,
+        Warning = 28,
+        Row = 100,
+        Done = 101,
     };
+    static inline Error::Code rc(int rc);
     static constexpr const char *codeName(const Code &code)
     {
         switch (code) {

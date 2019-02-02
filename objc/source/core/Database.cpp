@@ -706,8 +706,8 @@ std::pair<bool, bool> Database::stepMigration()
         std::tie(succeed, done)
         = m_migration.step(*(static_cast<MigrationStepperHandle *>(handle.get())));
         if (!succeed) {
-            if (handle->getResultCode() == (int) Error::Code::Interrupt
-                || handle->getResultCode() == (int) Error::Code::Busy) {
+            if (handle->getResultCode() == Error::Code::Interrupt
+                || handle->getResultCode() == Error::Code::Busy) {
                 succeed = true;
             }
         }

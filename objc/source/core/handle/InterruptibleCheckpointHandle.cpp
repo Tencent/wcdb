@@ -25,7 +25,7 @@ namespace WCDB {
 
 InterruptibleCheckpointHandle::InterruptibleCheckpointHandle()
 {
-    markErrorAsIgnorable((int) Error::Code::Interrupt);
+    markErrorAsIgnorable(Error::Code::Interrupt);
 }
 
 InterruptibleCheckpointHandle::~InterruptibleCheckpointHandle()

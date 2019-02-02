@@ -91,9 +91,9 @@ bool AssemblerHandle::markAsMilestone()
 
 bool AssemblerHandle::assembleSQL(const String &sql)
 {
-    markErrorAsIgnorable((int) Error::Code::Error);
+    markErrorAsIgnorable(Error::Code::Error);
     bool succeed = executeSQL(sql);
-    if (!succeed && getResultCode() == (int) Error::Code::Error) {
+    if (!succeed && getResultCode() == Error::Code::Error) {
         succeed = true;
     }
     markErrorAsUnignorable();
@@ -110,9 +110,9 @@ bool AssemblerHandle::assembleTable(const String &tableName, const String &sql)
 {
     m_cellStatement->finalize();
     m_table.clear();
-    markErrorAsIgnorable((int) Error::Code::Error);
+    markErrorAsIgnorable(Error::Code::Error);
     bool succeed = executeSQL(sql);
-    if (!succeed && getResultCode() == (int) Error::Code::Error) {
+    if (!succeed && getResultCode() == Error::Code::Error) {
         succeed = true;
     }
     markErrorAsUnignorable();

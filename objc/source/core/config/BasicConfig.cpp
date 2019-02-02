@@ -75,7 +75,7 @@ bool BasicConfig::invoke(Handle* handle)
                     //Set Journal Mode WAL
                     succeed = true;
                 } else {
-                    if (handle->getResultCode() == (int) Error::Code::Busy) {
+                    if (handle->getResultCode() == Error::Code::Busy) {
                         --retry;
                     } else {
                         retry = 0;

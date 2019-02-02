@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/Error.hpp>
 #include <WCDB/SQLite.h>
 #include <WCDB/String.hpp>
@@ -79,6 +80,11 @@ void Error::clear()
 }
 
 #pragma mark - Code
+Error::Code Error::rc(int rc)
+{
+    return (Error::Code) rc;
+}
+
 void Error::setCode(Code code)
 {
     m_code = code;
@@ -127,14 +133,19 @@ void Error::setSystemCode(int systemCode, Code codeIfUnresolved)
     infos.set("ExtCode", systemCode);
 }
 
-void Error::setSQLiteCode(int code)
+void Error::setSQLiteCode(int fullCode)
 {
+    int code = fullCode & 0xff;
     setCode((Code) code, "SQLite");
+    if (fullCode != code) {
+        infos.set("ExtCode", fullCode);
+    }
 }
 
 void Error::setSQLiteCode(int code, int extendedCode)
 {
-    setSQLiteCode(code);
+    WCTInnerAssert(code == (extendedCode & 0xff));
+    setCode((Code)(code & 0xff), "SQLite");
     infos.set("ExtCode", extendedCode);
 }
 

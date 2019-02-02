@@ -72,7 +72,7 @@ void AbstractHandle::enableMemoryStatus(bool enable)
     WCTInnerAssert(rc == SQLITE_OK);
 }
 
-void AbstractHandle::setNotificationForGlobalLog(const GlobalLog &log, void *parameter)
+void AbstractHandle::setGlobalLog(const GlobalLog &log, void *parameter)
 {
 #ifdef DEBUG
     int rc =
@@ -81,7 +81,7 @@ void AbstractHandle::setNotificationForGlobalLog(const GlobalLog &log, void *par
     WCTInnerAssert(rc == SQLITE_OK);
 }
 
-void AbstractHandle::setNotificationWhenVFSOpened(const VFSOpen &vfsOpen)
+void AbstractHandle::setVFSOpen(const VFSOpen &vfsOpen)
 {
     sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
     vfs->xSetSystemCall(vfs, "open", (void (*)(void)) vfsOpen);
@@ -171,10 +171,10 @@ long long AbstractHandle::getLastInsertedRowID()
     return sqlite3_last_insert_rowid(m_handle);
 }
 
-int AbstractHandle::getResultCode()
+Error::Code AbstractHandle::getResultCode()
 {
     WCTInnerAssert(isOpened());
-    return sqlite3_errcode(m_handle);
+    return (Error::Code) sqlite3_errcode(m_handle);
 }
 
 const char *AbstractHandle::getErrorMessage()
@@ -250,14 +250,14 @@ void AbstractHandle::finalizeStatements()
 std::pair<bool, bool> AbstractHandle::ft3TokenizerExists(const String &tokenizer)
 {
     bool exists = false;
-    markErrorAsIgnorable(SQLITE_ERROR);
+    markErrorAsIgnorable(Error::Code::Error);
     bool succeed = executeStatement(StatementSelect().select(
     Expression::function("fts3_tokenizer").invoke().arguments(tokenizer)));
     markErrorAsUnignorable();
     if (succeed) {
         exists = true;
     } else {
-        if (getResultCode() == SQLITE_ERROR) {
+        if (getResultCode() == Error::Code::Error) {
             succeed = true;
         }
     }
@@ -274,14 +274,14 @@ std::pair<bool, bool> AbstractHandle::tableExists(const Schema &schema, const St
     HandleStatement *handleStatement = getStatement();
     StatementSelect statementSelect
     = StatementSelect().select(1).from(TableOrSubquery(table).schema(schema)).limit(0);
-    markErrorAsIgnorable(SQLITE_ERROR);
+    markErrorAsIgnorable(Error::Code::Error);
     bool exists = false;
     bool succeed = handleStatement->prepare(statementSelect);
     if (succeed) {
         exists = true;
         finalizeStatements();
     } else {
-        if (getResultCode() == SQLITE_ERROR) {
+        if (getResultCode() == Error::Code::Error) {
             succeed = true;
         }
     }
@@ -387,9 +387,7 @@ bool AbstractHandle::commitOrRollbackNestedTransaction()
         if (!m_lazyNestedTransaction) {
             String savepointName = savepointPrefix() + std::to_string(m_nestedLevel);
             if (!executeStatement(StatementRelease().release(savepointName))) {
-                markErrorAsIgnorable(-1);
                 executeStatement(StatementRollback().rollbackToSavepoint(savepointName));
-                markErrorAsUnignorable();
                 succeed = false;
             }
         }
@@ -405,9 +403,7 @@ void AbstractHandle::rollbackNestedTransaction()
     } else {
         if (!m_lazyNestedTransaction) {
             String savepointName = savepointPrefix() + std::to_string(m_nestedLevel);
-            markErrorAsIgnorable(-1);
             executeStatement(StatementRollback().rollbackToSavepoint(savepointName));
-            markErrorAsUnignorable();
         }
         --m_nestedLevel;
     }
@@ -437,11 +433,9 @@ void AbstractHandle::rollbackTransaction()
     m_nestedLevel = 0;
     if (isInTransaction()) {
         // Transaction can be removed automatically in some case. e.g. interrupt step
-        markErrorAsIgnorable(-1);
         static const String *s_rollback
         = new String(StatementRollback().rollback().getDescription());
         executeSQL(*s_rollback);
-        markErrorAsUnignorable();
     }
 }
 
@@ -563,9 +557,9 @@ void AbstractHandle::notifyError(int rc, const char *sql)
     Notifier::shared()->notify(m_error);
 }
 
-void AbstractHandle::markErrorAsIgnorable(int ignorableCode)
+void AbstractHandle::markErrorAsIgnorable(Error::Code ignorableCode)
 {
-    m_ignorableCodes.emplace_back(ignorableCode);
+    m_ignorableCodes.emplace_back((int) ignorableCode);
 }
 
 void AbstractHandle::markErrorAsUnignorable()
