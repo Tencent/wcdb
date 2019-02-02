@@ -109,35 +109,35 @@ typedef NS_ENUM(NSUInteger, WCTUpdateType) {
 - (BOOL)execute
 {
     WCTTryDisposeGuard tryDisposeGuard(self);
-    if (_value == nil) {
-        return YES;
-    }
-    if (![_handle prepare:_statement]) {
-        return NO;
-    }
-    switch (_type) {
-    case WCTUpdateTypeValue: {
-        WCTColumnCodingValue *value = (WCTColumnCodingValue *) _value;
-        [_handle bindValue:value toIndex:1];
-        break;
-    }
-    case WCTUpdateTypeObject: {
-        WCTObject *object = (WCTObject *) _value;
-        [_handle bindProperties:_properties ofObject:object];
-        break;
-    }
-    case WCTUpdateTypeRow: {
-        WCTColumnCodingRow *row = (WCTColumnCodingRow *) _value;
-        int index = 1;
-        for (WCTColumnCodingValue *value in row) {
-            [_handle bindValue:value toIndex:index];
-            ++index;
+    BOOL result = YES;
+    if (_value != nil) {
+        result = NO;
+        if ([_handle prepare:_statement]) {
+            switch (_type) {
+            case WCTUpdateTypeValue: {
+                WCTColumnCodingValue *value = (WCTColumnCodingValue *) _value;
+                [_handle bindValue:value toIndex:1];
+                break;
+            }
+            case WCTUpdateTypeObject: {
+                WCTObject *object = (WCTObject *) _value;
+                [_handle bindProperties:_properties ofObject:object];
+                break;
+            }
+            case WCTUpdateTypeRow: {
+                WCTColumnCodingRow *row = (WCTColumnCodingRow *) _value;
+                int index = 1;
+                for (WCTColumnCodingValue *value in row) {
+                    [_handle bindValue:value toIndex:index];
+                    ++index;
+                }
+                break;
+            }
+            }
+            result = [_handle step];
+            [_handle finalizeStatement];
         }
-        break;
     }
-    }
-    BOOL result = [_handle step];
-    [_handle finalizeStatement];
     return result;
 }
 

@@ -43,6 +43,13 @@ public:
 
     BOOL failed() const { return m_failed; }
 
+    WCTOptional& operator=(const Value& value)
+    {
+        m_failed = NO;
+        m_value = value;
+        return *this;
+    }
+
 private:
     const Value m_defaultValue = defaultValue;
     Value m_value;

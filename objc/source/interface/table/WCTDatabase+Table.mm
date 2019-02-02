@@ -31,12 +31,13 @@
 - (WCTOptional<BOOL, NO>)tableExists:(NSString *)tableName
 {
     WCTDatabaseAssert(return nullptr;);
-    auto result = _database->tableExists(tableName);
-    if (result.first) {
-        return result.second;
-    } else {
-        return nullptr;
+    WCTOptional<BOOL, NO> result = nullptr;
+    bool succeed, exists;
+    std::tie(succeed, exists) = _database->tableExists(tableName);
+    if (succeed) {
+        result = exists;
     }
+    return result;
 }
 
 - (BOOL)createTableAndIndexes:(NSString *)tableName
