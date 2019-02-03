@@ -25,6 +25,8 @@
 
 namespace WCDB {
 
+class ResultColumnAll;
+
 class ResultColumn : public TypedSyntax<Syntax::ResultColumn, SQL> {
 public:
     virtual ~ResultColumn();
@@ -38,6 +40,8 @@ public:
 
     ResultColumn(const Expression& expression);
     ResultColumn& as(const String& alias);
+
+    static ResultColumnAll all();
 };
 
 class ResultColumnAll final : public ResultColumn {

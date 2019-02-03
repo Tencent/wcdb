@@ -38,6 +38,11 @@ ResultColumn& ResultColumn::as(const String& alias)
     return *this;
 }
 
+ResultColumnAll ResultColumn::all()
+{
+    return ResultColumnAll();
+}
+
 ResultColumnAll::ResultColumnAll()
 {
     syntax().wildcard = true;
