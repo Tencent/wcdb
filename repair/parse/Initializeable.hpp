@@ -28,7 +28,7 @@ namespace Repair {
 class Initializeable {
 public:
     Initializeable();
-    virtual ~Initializeable();
+    virtual ~Initializeable() = 0;
     bool initialize();
     bool isInitialized() const;
     bool isInitializing() const;

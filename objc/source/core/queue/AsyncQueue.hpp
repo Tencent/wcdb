@@ -29,7 +29,7 @@ namespace WCDB {
 class AsyncQueue {
 public:
     AsyncQueue(const String &name);
-    virtual ~AsyncQueue();
+    virtual ~AsyncQueue() = 0;
 
     AsyncQueue() = delete;
     AsyncQueue(const AsyncQueue &) = delete;

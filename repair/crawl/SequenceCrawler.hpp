@@ -32,7 +32,7 @@ class SequenceCrawler;
 
 class SequenceCrawlerDelegate {
 public:
-    virtual ~SequenceCrawlerDelegate();
+    virtual ~SequenceCrawlerDelegate() = 0;
 
 protected:
     friend class SequenceCrawler;

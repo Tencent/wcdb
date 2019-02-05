@@ -23,7 +23,7 @@
 
 class WCTRuntimeBaseAccessor {
 public:
-    virtual ~WCTRuntimeBaseAccessor();
+    virtual ~WCTRuntimeBaseAccessor() = 0;
 
 protected:
     using InstanceType = id;

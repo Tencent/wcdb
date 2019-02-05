@@ -31,7 +31,7 @@ namespace Repair {
 
 class Locker {
 public:
-    virtual ~Locker();
+    virtual ~Locker() = 0;
     virtual void setPath(const String &path) = 0;
     virtual const String &getPath() const = 0;
     virtual const Error &getError() const = 0;
@@ -42,17 +42,17 @@ public:
 
 class ReadLocker : public Locker {
 public:
-    virtual ~ReadLocker();
+    virtual ~ReadLocker() = 0;
 };
 class WriteLocker : public Locker {
 public:
-    virtual ~WriteLocker();
+    virtual ~WriteLocker() = 0;
 };
 
 class LockerHolder {
 public:
     LockerHolder();
-    virtual ~LockerHolder();
+    virtual ~LockerHolder() = 0;
     void setReadLocker(ReadLocker *readLocker);
     void setWriteLocker(WriteLocker *writeLocker);
 

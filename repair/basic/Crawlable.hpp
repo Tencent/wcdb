@@ -36,7 +36,7 @@ class Crawlable {
 #pragma mark - Initialize
 public:
     Crawlable(Pager &pager);
-    virtual ~Crawlable();
+    virtual ~Crawlable() = 0;
 
 private:
     Pager &m_associatedPager;

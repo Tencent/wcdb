@@ -29,7 +29,7 @@ class SerializeIteration {
 #pragma mark - SerializeIteration
 public:
     SerializeIteration();
-    virtual ~SerializeIteration();
+    virtual ~SerializeIteration() = 0;
 
     void seek(off_t position);
     void advance(off_t offset);
@@ -127,7 +127,7 @@ public:
 #pragma mark - Serializable
 class Serializable : protected SharedThreadedErrorProne {
 public:
-    virtual ~Serializable();
+    virtual ~Serializable() = 0;
     Data serialize() const;
     bool serialize(const String &path) const;
     virtual bool serialize(Serialization &serialization) const = 0;
@@ -136,7 +136,7 @@ public:
 #pragma mark - Deserializable
 class Deserializable : protected SharedThreadedErrorProne {
 public:
-    virtual ~Deserializable();
+    virtual ~Deserializable() = 0;
     bool deserialize(const Data &data);
     bool deserialize(const String &path);
     virtual bool deserialize(Deserialization &deserialization) = 0;

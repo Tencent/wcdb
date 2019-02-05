@@ -29,7 +29,7 @@ namespace WCDB {
 class AbstractHighWater {
 public:
     AbstractHighWater(ssize_t init = 0);
-    virtual ~AbstractHighWater();
+    virtual ~AbstractHighWater() = 0;
 
     virtual void increase(size_t size);
     virtual void decrease(size_t size);

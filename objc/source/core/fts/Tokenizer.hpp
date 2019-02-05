@@ -42,7 +42,7 @@ public:
     };
 
     CursorInfo(const char *input, int inputLength, TokenizerInfoBase *tokenizerInfo);
-    virtual ~CursorInfo();
+    virtual ~CursorInfo() = 0;
 
     int step(const char **ppToken,
              int *pnBytes,

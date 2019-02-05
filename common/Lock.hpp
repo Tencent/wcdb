@@ -32,7 +32,7 @@ public:
     Lockable();
     Lockable(const Lockable &) = delete;
     Lockable &operator=(const Lockable &) = delete;
-    virtual ~Lockable();
+    virtual ~Lockable() = 0;
     virtual void lock() = 0;
     virtual void unlock() = 0;
 };

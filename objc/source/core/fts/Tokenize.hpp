@@ -37,13 +37,13 @@ namespace FTS {
 class TokenizerInfoBase {
 public:
     TokenizerInfoBase(int argc, const char *const *argv);
-    virtual ~TokenizerInfoBase();
+    virtual ~TokenizerInfoBase() = 0;
 };
 
 class CursorInfoBase {
 public:
     CursorInfoBase(const char *input, int inputLength, TokenizerInfoBase *tokenizerInfo);
-    virtual ~CursorInfoBase();
+    virtual ~CursorInfoBase() = 0;
 
     virtual int
     step(const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *piPosition)
@@ -55,7 +55,7 @@ protected:
 
 class ModuleBase {
 public:
-    virtual ~ModuleBase();
+    virtual ~ModuleBase() = 0;
 };
 
 template<typename TokenizerInfo /* = TokenizerInfoBase */, typename CursorInfo /* = CursorInfoBase */>

@@ -27,7 +27,7 @@ namespace WCDB {
 
 class ExpressionOperable {
 public:
-    virtual ~ExpressionOperable();
+    virtual ~ExpressionOperable() = 0;
 
 protected:
     virtual Expression asExpressionOperand() const = 0;
@@ -35,7 +35,7 @@ protected:
 
 class ExpressionUnaryOperable : virtual public ExpressionOperable {
 public:
-    virtual ~ExpressionUnaryOperable();
+    virtual ~ExpressionUnaryOperable() = 0;
     Expression operator-() const;
     Expression operator+() const;
     Expression operator!() const;
@@ -49,7 +49,7 @@ private:
 
 class ExpressionBinaryOperable : virtual public ExpressionOperable {
 public:
-    virtual ~ExpressionBinaryOperable();
+    virtual ~ExpressionBinaryOperable() = 0;
 
     Expression concat(const Expression &operand) const;
     Expression operator*(const Expression &operand) const;
@@ -88,7 +88,7 @@ private:
 
 class ExpressionBetweenOperable : virtual public ExpressionOperable {
 public:
-    virtual ~ExpressionBetweenOperable();
+    virtual ~ExpressionBetweenOperable() = 0;
     Expression between(const Expression &left, const Expression &right) const;
     Expression notBetween(const Expression &left, const Expression &right) const;
 
@@ -98,7 +98,7 @@ private:
 
 class ExpressionInOperable : virtual public ExpressionOperable {
 public:
-    virtual ~ExpressionInOperable();
+    virtual ~ExpressionInOperable() = 0;
 
     Expression in();
     Expression notIn();
@@ -115,7 +115,7 @@ public:
 
 class ExpressionCollateOperable : virtual public ExpressionOperable {
 public:
-    virtual ~ExpressionCollateOperable();
+    virtual ~ExpressionCollateOperable() = 0;
     Expression collate(const String &collation);
 };
 

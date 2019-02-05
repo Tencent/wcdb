@@ -41,7 +41,7 @@ class Repairman : public Crawlable,
 #pragma mark - Initialize
 public:
     Repairman(const String &path);
-    virtual ~Repairman();
+    virtual ~Repairman() = 0;
 
     const String &getPath() const;
 

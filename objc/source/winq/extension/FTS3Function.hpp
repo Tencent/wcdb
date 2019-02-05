@@ -44,7 +44,7 @@ public:
 
 class FTS3FunctionOperable : virtual public ExpressionOperable {
 public:
-    virtual ~FTS3FunctionOperable();
+    virtual ~FTS3FunctionOperable() = 0;
     Expression offsets() const;
     Expression snippet(const String &startMatchText = "<b>",
                        const String &endMatchText = "</b>",

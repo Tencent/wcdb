@@ -50,7 +50,7 @@ protected:
         friend class Migration;
 
     public:
-        virtual ~InfoInitializer();
+        virtual ~InfoInitializer() = 0;
 
     protected:
         // When succeed, the empty column means that table does not exist.
@@ -101,7 +101,7 @@ public:
 
     public:
         Binder(Migration& migration);
-        virtual ~Binder();
+        virtual ~Binder() = 0;
 
     protected:
         void startBinding();
@@ -133,7 +133,7 @@ public:
         friend class Migration;
 
     public:
-        virtual ~Stepper();
+        virtual ~Stepper() = 0;
 
     protected:
         virtual std::pair<bool, std::set<String>> getAllTables() = 0;

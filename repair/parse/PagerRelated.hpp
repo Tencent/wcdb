@@ -33,7 +33,7 @@ class PagerRelated {
 public:
     PagerRelated(Pager *pager);
     PagerRelated(PagerRelated &&);
-    virtual ~PagerRelated();
+    virtual ~PagerRelated() = 0;
     PagerRelated &operator=(PagerRelated &&);
 
     const String &getPagerPath() const;

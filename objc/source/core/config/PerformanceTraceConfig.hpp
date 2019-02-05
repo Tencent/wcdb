@@ -30,7 +30,7 @@ namespace WCDB {
 class PerformanceTracer {
 public:
     PerformanceTracer();
-    virtual ~PerformanceTracer();
+    virtual ~PerformanceTracer() = 0;
 
     using Notification = Handle::PerformanceNotification;
 

@@ -18,45 +18,17 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_SCOREABLE_HPP
-#define __WCDB_SCOREABLE_HPP
-
-#include <WCDB/Fraction.hpp>
+#include <WCDB/Config.hpp>
 
 namespace WCDB {
 
-namespace Repair {
+Config::~Config()
+{
+}
 
-class Scoreable {
-public:
-    virtual ~Scoreable() = 0;
-    const Fraction &getScore() const;
+bool Config::uninvoke(Handle *handle)
+{
+    return true;
+}
 
-protected:
-    void increaseScore(const Fraction &fraction);
-
-private:
-    Fraction m_score;
-};
-
-class SegmentedScoreable : public Scoreable {
-public:
-    virtual ~SegmentedScoreable() = 0;
-    const Fraction &getScore() const;
-
-protected:
-    void markSegmentedScoreCounted();
-    void markSegmentedScoreDropped();
-    void increaseScore(const Fraction &fraction);
-
-private:
-    using Scoreable::increaseScore;
-    using Scoreable::getScore;
-    Fraction m_segmentedScore;
-};
-
-} //namespace Repair
-
-} //namespace WCDB
-
-#endif /* __WCDB_SCOREABLE_HPP */
+} // namespace WCDB

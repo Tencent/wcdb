@@ -58,7 +58,7 @@ private:
 #pragma mark - UntypedThreadLocal
 public:
     UntypedThreadLocal();
-    virtual ~UntypedThreadLocal();
+    virtual ~UntypedThreadLocal() = 0;
     void *getOrCreate();
 
 protected:

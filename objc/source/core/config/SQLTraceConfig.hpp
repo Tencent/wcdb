@@ -30,7 +30,7 @@ namespace WCDB {
 class SQLTracer {
 public:
     SQLTracer();
-    virtual ~SQLTracer();
+    virtual ~SQLTracer() = 0;
     using Notification = Handle::SQLNotification;
 
 protected:

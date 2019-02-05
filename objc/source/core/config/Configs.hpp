@@ -54,7 +54,7 @@ protected:
 
 class ConfigurableHandle : public Handle {
 public:
-    virtual ~ConfigurableHandle();
+    virtual ~ConfigurableHandle() = 0;
 
     bool reconfigure(const std::shared_ptr<Configs> &newConfigs);
 

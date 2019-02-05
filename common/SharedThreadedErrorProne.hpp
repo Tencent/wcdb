@@ -27,7 +27,7 @@ class Error;
 
 class SharedThreadedErrorProne {
 public:
-    virtual ~SharedThreadedErrorProne();
+    virtual ~SharedThreadedErrorProne() = 0;
 
 protected:
     static void setThreadedError(const Error &error);

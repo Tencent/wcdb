@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-class InterruptibleCheckpointHandle : public ConfigurableHandle {
+class InterruptibleCheckpointHandle final : public ConfigurableHandle {
 public:
     InterruptibleCheckpointHandle();
     ~InterruptibleCheckpointHandle();

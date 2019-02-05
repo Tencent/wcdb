@@ -35,7 +35,7 @@ class Cell;
 class Assembler {
 public:
     Assembler();
-    virtual ~Assembler();
+    virtual ~Assembler() = 0;
 
     virtual void setPath(const String &path) = 0;
     virtual const String &getPath() const = 0;
@@ -63,7 +63,7 @@ private:
 class AssemblerHolder {
 public:
     AssemblerHolder();
-    virtual ~AssemblerHolder();
+    virtual ~AssemblerHolder() = 0;
     void setAssembler(Assembler *assembler);
 
 protected:

@@ -29,7 +29,7 @@ class Referenced {
 public:
     Referenced();
     Referenced(const std::nullptr_t &);
-    virtual ~Referenced();
+    virtual ~Referenced() = 0;
 
 protected:
     void reset(const Referenced &other);

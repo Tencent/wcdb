@@ -30,7 +30,7 @@ namespace Repair {
 class Progress {
 public:
     Progress();
-    virtual ~Progress();
+    virtual ~Progress() = 0;
 
     typedef std::function<void(double progress, double increment)> ProgressUpdateCallback;
     void setProgressCallback(const ProgressUpdateCallback &onProgressUpdated);

@@ -84,7 +84,7 @@ public:
 
 class CoreFunctionOperable : virtual public ExpressionOperable {
 public:
-    virtual ~CoreFunctionOperable();
+    virtual ~CoreFunctionOperable() = 0;
     Expression abs() const;
     Expression hex() const;
     Expression length() const;

@@ -31,7 +31,7 @@ typedef Recyclable<Database*> RecyclableDatabase;
 
 class DatabasePoolEvent {
 public:
-    virtual ~DatabasePoolEvent();
+    virtual ~DatabasePoolEvent() = 0;
 
 protected:
     virtual void onDatabaseCreated(Database* database) = 0;

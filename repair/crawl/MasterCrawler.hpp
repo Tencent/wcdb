@@ -32,7 +32,7 @@ class MasterCrawler;
 
 class MasterCrawlerDelegate {
 public:
-    virtual ~MasterCrawlerDelegate();
+    virtual ~MasterCrawlerDelegate() = 0;
 
 protected:
     friend class MasterCrawler;

@@ -55,6 +55,7 @@
 		23254FCB219D28BA00DE2435 /* ThreadTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23254FCA219D28BA00DE2435 /* ThreadTests.mm */; };
 		232741501F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		232741521F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */; };
+		2327BC22220944D80078A85B /* Config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2327BC21220944D80078A85B /* Config.cpp */; };
 		23298E5321E2F92300D18B16 /* WINQAssertion.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23298E5221E2F92300D18B16 /* WINQAssertion.mm */; };
 		233A058B2062698E00F1A212 /* WCTHandle+ChainCall.h in Headers */ = {isa = PBXBuildFile; fileRef = 233A05892062698E00F1A212 /* WCTHandle+ChainCall.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		233A058C2062698E00F1A212 /* WCTHandle+ChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233A058A2062698E00F1A212 /* WCTHandle+ChainCall.mm */; };
@@ -1313,6 +1314,7 @@
 		23254FCA219D28BA00DE2435 /* ThreadTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ThreadTests.mm; sourceTree = "<group>"; };
 		2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+FTS.h"; sourceTree = "<group>"; };
 		2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+FTS.mm"; sourceTree = "<group>"; };
+		2327BC21220944D80078A85B /* Config.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Config.cpp; sourceTree = "<group>"; };
 		23298E4F21E2F82600D18B16 /* WINQAssertion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WINQAssertion.h; sourceTree = "<group>"; };
 		23298E5221E2F92300D18B16 /* WINQAssertion.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WINQAssertion.mm; sourceTree = "<group>"; };
 		233A05892062698E00F1A212 /* WCTHandle+ChainCall.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTHandle+ChainCall.h"; sourceTree = "<group>"; };
@@ -3781,6 +3783,7 @@
 				23F70FC320A0618100CCE3CD /* Configs.hpp */,
 				23B0071B2047ED4800045245 /* ConfiguredHandle.hpp */,
 				23F70F9F20A055B400CCE3CD /* Config.hpp */,
+				2327BC21220944D80078A85B /* Config.cpp */,
 				23F70FA420A055BD00CCE3CD /* BasicConfig.cpp */,
 				23F70FA520A055BD00CCE3CD /* BasicConfig.hpp */,
 				23F70FAA20A055C300CCE3CD /* CipherConfig.cpp */,
@@ -4909,6 +4912,7 @@
 				23D0C38D20C17CAE0001BFAE /* FactoryBackup.cpp in Sources */,
 				23F70FD620A07CEC00CCE3CD /* CustomConfig.cpp in Sources */,
 				23EEDCD3217DFADC006E9E73 /* StatementDropView.cpp in Sources */,
+				2327BC22220944D80078A85B /* Config.cpp in Sources */,
 				23DF0A0A2190275B00F0B2B6 /* WCTDatabase.mm in Sources */,
 				23EEDD01217DFADC006E9E73 /* SyntaxFunctionInvocation.cpp in Sources */,
 				23B4DC7E2111B39200954D71 /* Tag.cpp in Sources */,

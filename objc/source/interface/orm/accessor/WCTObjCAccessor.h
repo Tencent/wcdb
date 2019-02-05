@@ -30,7 +30,7 @@ public:
     using Getter = OCType (^)(InstanceType);
 
     WCTObjCAccessor(Getter getter, Setter setter);
-    virtual ~WCTObjCAccessor();
+    virtual ~WCTObjCAccessor() = 0;
     WCTAccessorType getAccessorType() const override final;
 
     const Setter setObject;
