@@ -268,8 +268,8 @@ bool Database::willConfigureHandle(Slot slot, Handle *handle, bool isNew)
             configs = m_configs;
         }
 
-        WCTInnerAssert(dynamic_cast<ConfigurableHandle *>(handle) != nullptr);
-        if (!static_cast<ConfigurableHandle *>(handle)->reconfigure(configs)) {
+        WCTInnerAssert(dynamic_cast<Handle *>(handle) != nullptr);
+        if (!static_cast<Handle *>(handle)->reconfigure(configs)) {
             succeed = false;
             setThreadedError(handle->getError());
             break;

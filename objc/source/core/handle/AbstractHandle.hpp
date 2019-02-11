@@ -78,7 +78,7 @@ private:
 
 #pragma mark - Basic
 public:
-    bool open();
+    virtual bool open();
     void close();
     bool isOpened() const;
 

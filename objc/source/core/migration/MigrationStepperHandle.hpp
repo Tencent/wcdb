@@ -21,7 +21,6 @@
 #ifndef __WCDB_MIGRATION_STEPPER_HANDLE_HPP
 #define __WCDB_MIGRATION_STEPPER_HANDLE_HPP
 
-#include <WCDB/Configs.hpp>
 #include <WCDB/Handle.hpp>
 #include <WCDB/Migration.hpp>
 
@@ -31,7 +30,7 @@ namespace WCDB {
 // However, it's very wasteful for those resource(CPU, IO...) when the step is too tiny.
 // So stepper will try to migrate one by one until the count of dirty pages(to be written) is changed.
 // In addition, stepper can/will be interrupted when database is not idled.
-class MigrationStepperHandle final : public ConfigurableHandle, public Migration::Stepper {
+class MigrationStepperHandle final : public Handle, public Migration::Stepper {
 public:
     MigrationStepperHandle();
     ~MigrationStepperHandle();

@@ -22,6 +22,7 @@
 #define __WCDB_HANDLE_HPP
 
 #include <WCDB/AbstractHandle.hpp>
+#include <WCDB/Configs.hpp>
 
 namespace WCDB {
 
@@ -30,6 +31,14 @@ class Handle : public AbstractHandle {
 public:
     Handle();
     virtual ~Handle() = 0;
+
+#pragma mark - Config
+public:
+    bool open() override final;
+    bool reconfigure(const std::shared_ptr<Configs> &newConfigs);
+
+private:
+    std::shared_ptr<Configs> m_configs;
 
 #pragma mark - Statement
 public:

@@ -32,6 +32,39 @@ Handle::~Handle()
     returnStatement(m_mainStatement);
 }
 
+#pragma mark - Config
+bool Handle::open()
+{
+    if (!AbstractHandle::open()) {
+        return false;
+    }
+    if (m_configs != nullptr && !m_configs->invoke(this)) {
+        close();
+        return false;
+    }
+    return true;
+}
+
+bool Handle::reconfigure(const std::shared_ptr<Configs> &newConfigs)
+{
+    WCTInnerAssert(isOpened());
+    if (m_configs == newConfigs) {
+        return true;
+    }
+    if (m_configs != nullptr) {
+        if (!m_configs->uninvoke(this)) {
+            return false;
+        }
+    }
+    if (newConfigs != nullptr) {
+        if (!newConfigs->invoke(this)) {
+            return false;
+        }
+    }
+    m_configs = newConfigs;
+    return true;
+}
+
 #pragma mark - Statement
 bool Handle::execute(const Statement &statement)
 {

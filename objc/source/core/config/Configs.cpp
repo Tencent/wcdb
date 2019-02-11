@@ -19,11 +19,8 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/BasicConfig.hpp>
-#include <WCDB/CheckpointConfig.hpp>
 #include <WCDB/Configs.hpp>
-#include <WCDB/PerformanceTraceConfig.hpp>
-#include <WCDB/SQLTraceConfig.hpp>
+#include <WCDB/Handle.hpp>
 
 namespace WCDB {
 
@@ -61,30 +58,6 @@ bool Configs::uninvoke(Handle *handle)
 Configs::Configs(OrderedUniqueList<String, std::shared_ptr<Config>> &&list)
 : m_list(std::move(list))
 {
-}
-
-ConfigurableHandle::~ConfigurableHandle()
-{
-}
-
-bool ConfigurableHandle::reconfigure(const std::shared_ptr<Configs> &newConfigs)
-{
-#warning TODO - avoid redundant uninvoke/invoke
-    if (m_configs == newConfigs) {
-        return true;
-    }
-    if (m_configs != nullptr) {
-        if (!m_configs->uninvoke(this)) {
-            return false;
-        }
-    }
-    if (newConfigs != nullptr) {
-        if (!newConfigs->invoke(this)) {
-            return false;
-        }
-    }
-    m_configs = newConfigs;
-    return true;
 }
 
 } //namespace WCDB
