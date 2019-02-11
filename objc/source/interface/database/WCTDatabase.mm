@@ -78,7 +78,7 @@
 
 - (instancetype)init
 {
-    WCTRemedialAssert(false, "Init should not be called", ;);
+    WCTRemedialAssert(false, "Init should never be called.", ;);
     return nil;
 }
 
