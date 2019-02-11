@@ -38,6 +38,8 @@ public:
     operator int32_t() const;
     int32_t value() const;
 
+    bool isValid() const;
+
 private:
     Tag(const std::nullptr_t&);
     int32_t m_value;

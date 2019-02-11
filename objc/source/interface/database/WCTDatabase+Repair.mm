@@ -27,7 +27,6 @@
 
 - (void)setNotificationWhenCorrupted:(WCTCorruptedNotificationBlock)onCorrupted
 {
-    WCTDatabaseAssert(return;);
     WCDB::Core::CorruptedNotification notification = nullptr;
     if (onCorrupted != nil) {
         notification = [onCorrupted](WCDB::Database *database) -> bool {
@@ -44,7 +43,6 @@
 
 - (void)filterBackup:(WCTBackupFilterBlock)tableShouldBeBackedUp
 {
-    WCTDatabaseAssert(return;);
     WCDB::Database::BackupFilter filter = nullptr;
     if (tableShouldBeBackedUp != nil) {
         filter = [tableShouldBeBackedUp](const WCDB::String &tableName) -> bool {
@@ -56,13 +54,11 @@
 
 - (BOOL)deposit
 {
-    WCTDatabaseAssert(return NO;);
     return _database->deposit();
 }
 
 - (void)setAutoBackup:(BOOL)flag
 {
-    WCTDatabaseAssert(return;);
     if (flag) {
         _database->setConfig(WCDB::BackupConfigName, WCDB::Core::shared()->backupConfig(), WCDB::Configs::Priority::Low);
     } else {
@@ -72,13 +68,11 @@
 
 - (BOOL)backup
 {
-    WCTDatabaseAssert(return NO;);
     return _database->backup();
 }
 
 - (double)retrieve:(WCDB_NO_ESCAPE WCTRetrieveProgressUpdateBlock)onProgressUpdate
 {
-    WCTDatabaseAssert(return 0;);
     WCDB::Database::RetrieveProgressCallback callback = nullptr;
     if (onProgressUpdate != nil) {
         callback = [onProgressUpdate](double percentage, double increment) {
@@ -90,13 +84,11 @@
 
 - (BOOL)removeDeposited
 {
-    WCTDatabaseAssert(return NO;);
     return _database->removeDeposited();
 }
 
 - (BOOL)containsDeposited
 {
-    WCTDatabaseAssert(return NO;);
     return _database->containsDeposited();
 }
 

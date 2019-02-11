@@ -45,7 +45,6 @@ public:
 
     RecyclableDatabase getOrCreate(const String& path);
     RecyclableDatabase get(const String& path);
-    RecyclableDatabase get(const Tag& tag);
 
     void purge();
 

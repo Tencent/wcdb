@@ -78,11 +78,6 @@ RecyclableDatabase Core::getExistingDatabase(const String& path)
     return m_databasePool.get(path);
 }
 
-RecyclableDatabase Core::getExistingDatabase(const Tag& tag)
-{
-    return m_databasePool.get(tag);
-}
-
 void Core::purgeDatabasePool()
 {
     m_databasePool.purge();
@@ -285,7 +280,7 @@ void Core::preprocessError(const Error& error, Error::Infos& infos)
         return;
     }
     auto tag = database->getTag();
-    if (tag != Tag::invalid()) {
+    if (tag.isValid()) {
         infos.set("Tag", tag);
     }
 }

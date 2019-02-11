@@ -26,7 +26,6 @@
 
 - (void)filterMigration:(WCTMigrationFilterBlock)filter
 {
-    WCTDatabaseAssert(return;);
     WCDB::Database::MigrationFilter callback = nullptr;
     if (filter != nil) {
         callback = [filter](WCDB::MigrationUserInfo& userInfo) {
@@ -42,7 +41,6 @@
 
 - (BOOL)stepMigrationOrDone:(BOOL&)done
 {
-    WCTDatabaseAssert(return NO;);
     bool succeed;
     std::tie(succeed, done) = _database->stepMigration();
     return succeed;
@@ -50,13 +48,11 @@
 
 - (void)setAutoMigrate:(BOOL)flag
 {
-    WCTDatabaseAssert(return;);
     WCDB::Core::shared()->setAutoMigration(_database->getPath(), flag);
 }
 
 - (void)setNotificationWhenMigrated:(WCTMigratedNotificationBlock)onMigrated
 {
-    WCTDatabaseAssert(return;);
     WCDB::Database::MigratedCallback callback = nullptr;
     if (onMigrated != nil) {
         callback = [onMigrated](const WCDB::MigrationBaseInfo* info) {

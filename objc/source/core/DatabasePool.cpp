@@ -67,23 +67,6 @@ RecyclableDatabase DatabasePool::get(const String &path)
     return nullptr;
 }
 
-RecyclableDatabase DatabasePool::get(const Tag &tag)
-{
-    WCTRemedialAssert(tag != Tag::invalid(), "Tag invalid.", return nullptr;);
-    SharedLockGuard lockGuard(m_lock);
-    auto iter = m_databases.end();
-    for (iter = m_databases.begin(); iter != m_databases.end(); ++iter) {
-        if (iter->second.database->getTag() == tag) {
-            break;
-        }
-    }
-    // get referenced database only
-    if (iter != m_databases.end() && iter->second.reference != 0) {
-        return get(iter);
-    }
-    return nullptr;
-}
-
 DatabasePool::ReferencedDatabase::ReferencedDatabase(std::shared_ptr<Database> &&database_)
 : database(std::move(database_)), reference(0)
 {
@@ -113,7 +96,7 @@ void DatabasePool::flowBack(Database *database)
     WCTInnerAssert(iter != m_databases.end());
     WCTInnerAssert(iter->second.database.get() == database);
     if (--iter->second.reference == 0) {
-        // A created database will never be erased. Instead, it will be empty so that ther memory used will be very low.
+        // A created database will never be erased. Instead, it will be empty so that the memory used will be very low.
         iter->second.database->close(nullptr);
     }
 }

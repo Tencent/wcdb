@@ -26,31 +26,26 @@
 
 - (BOOL)isInTransaction
 {
-    WCTDatabaseAssert(return NO;);
     return _database->isInTransaction();
 }
 
 - (BOOL)beginTransaction
 {
-    WCTDatabaseAssert(return NO;);
     return _database->beginTransaction();
 }
 
 - (BOOL)commitOrRollbackTransaction
 {
-    WCTDatabaseAssert(return NO;);
     return _database->commitOrRollbackTransaction();
 }
 
 - (void)rollbackTransaction
 {
-    WCTDatabaseAssert(return;);
     return _database->rollbackTransaction();
 }
 
 - (BOOL)runTransaction:(WCDB_NO_ESCAPE WCTTransactionBlock)inTransaction
 {
-    WCTDatabaseAssert(return NO;);
     WCTRemedialAssert(inTransaction, "Transaction block can't be null.", return NO;);
     return _database->runTransaction([&inTransaction, self](WCDB::Handle *handle) -> bool {
         @autoreleasepool {
@@ -64,25 +59,21 @@
 
 - (BOOL)beginNestedTransaction
 {
-    WCTDatabaseAssert(return NO;);
     return _database->beginNestedTransaction();
 }
 
 - (BOOL)commitOrRollbackNestedTransaction
 {
-    WCTDatabaseAssert(return NO;);
     return _database->commitOrRollbackNestedTransaction();
 }
 
 - (void)rollbackNestedTransaction
 {
-    WCTDatabaseAssert(return;);
     return _database->rollbackNestedTransaction();
 }
 
 - (BOOL)runNestedTransaction:(WCDB_NO_ESCAPE WCTTransactionBlock)inTransaction
 {
-    WCTDatabaseAssert(return NO;);
     WCTRemedialAssert(inTransaction, "Transaction block can't be null.", return NO;);
     return _database->runNestedTransaction([&inTransaction, self](WCDB::Handle *handle) -> bool {
         @autoreleasepool {

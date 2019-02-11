@@ -42,7 +42,6 @@ NSString* const WCTConfigNameGlobalPerformanceTrace = @WCDB_GLOBAL_PERFORMANCE_T
 
 - (void)setCipherKey:(NSData*)cipherKey
 {
-    WCTDatabaseAssert(return;);
     _database->setConfig(WCDB::CipherConfigName,
                          WCDB::Core::shared()->cipherConfig(WCDB::UnsafeData::immutable((const unsigned char*) cipherKey.bytes, (size_t) cipherKey.length)),
                          WCDB::Configs::Priority::Highest);
@@ -51,7 +50,6 @@ NSString* const WCTConfigNameGlobalPerformanceTrace = @WCDB_GLOBAL_PERFORMANCE_T
 - (void)setCipherKey:(NSData*)cipherKey
    andCipherPageSize:(int)cipherPageSize
 {
-    WCTDatabaseAssert(return;);
     _database->setConfig(WCDB::CipherConfigName,
                          WCDB::Core::shared()->cipherConfig(WCDB::UnsafeData::immutable((const unsigned char*) cipherKey.bytes, (size_t) cipherKey.length), cipherPageSize),
                          WCDB::Configs::Priority::Highest);
@@ -62,7 +60,6 @@ NSString* const WCTConfigNameGlobalPerformanceTrace = @WCDB_GLOBAL_PERFORMANCE_T
           forName:(NSString*)name
      withPriority:(int)priority
 {
-    WCTDatabaseAssert(return;);
     WCTRemedialAssert(nsInvocation, "Use [removeConfigForName:] instead.", return;);
     WCDB::CustomConfig::Invocation invocation = [nsInvocation, self](WCDB::Handle* handle) -> bool {
         return nsInvocation([[WCTHandle alloc] initWithDatabase:self andUnsafeHandle:handle]);
@@ -85,7 +82,6 @@ NSString* const WCTConfigNameGlobalPerformanceTrace = @WCDB_GLOBAL_PERFORMANCE_T
 
 - (void)removeConfigForName:(NSString*)name
 {
-    WCTDatabaseAssert(return;);
     _database->removeConfig(name);
 }
 

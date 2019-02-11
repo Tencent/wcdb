@@ -84,7 +84,6 @@
 
 - (void)tracePerformance:(WCTPerformanceTraceBlock)trace
 {
-    WCTDatabaseAssert(return;);
     WCDB::Handle::PerformanceNotification callback = nullptr;
     if (trace != nullptr) {
         callback = [trace](const WCDB::HandleNotification::Footprints &footprints, const int64_t &cost) {
@@ -105,7 +104,6 @@
 
 - (void)traceSQL:(WCTSQLTraceBlock)trace
 {
-    WCTDatabaseAssert(return;);
     WCDB::Handle::SQLNotification callback = nullptr;
     if (trace != nullptr) {
         callback = [trace](const WCDB::String &sql) {

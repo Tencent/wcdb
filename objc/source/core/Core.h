@@ -61,7 +61,6 @@ public:
 
     RecyclableDatabase getOrCreateDatabase(const String& path);
     RecyclableDatabase getExistingDatabase(const String& path);
-    RecyclableDatabase getExistingDatabase(const Tag& tag);
 
     typedef std::function<bool(Database*)> CorruptedNotification;
     bool isFileCorrupted(const String& path);

@@ -98,10 +98,7 @@
 
 - (void)tearDown
 {
-    if (_sourceDatabase.isValidated) {
-        [_sourceDatabase close];
-        [_sourceDatabase invalidate];
-    }
+    [_sourceDatabase close];
     _sourceDatabase = nil;
     [super tearDown];
 }

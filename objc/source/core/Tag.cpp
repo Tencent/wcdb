@@ -58,4 +58,9 @@ int32_t Tag::value() const
     return m_value;
 }
 
+bool Tag::isValid() const
+{
+    return m_value != Tag::invalidValue;
+}
+
 } // namespace WCDB

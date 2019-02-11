@@ -26,7 +26,6 @@
 
 - (void)purge
 {
-    WCTDatabaseAssert(return;);
     _database->purge();
 }
 

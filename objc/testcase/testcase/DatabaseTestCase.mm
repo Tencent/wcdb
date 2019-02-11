@@ -52,10 +52,7 @@
 
 - (void)tearDown
 {
-    if (_database.isValidated) {
-        [_database close];
-        [_database invalidate];
-    }
+    [_database close];
     _database = nil;
     [super tearDown];
 }
