@@ -34,6 +34,11 @@
 #import <WCDB/WCTCursorInfo.h>
 #import <WCDB/WCTDatabase+FTS.h>
 
+namespace WCDB {
+static constexpr const char *NotifierPathPreprocessorName
+= "com.Tencent.WCDB.Notifier.PreprocessPath";
+}
+
 @implementation WCTDatabase
 
 + (void)initialize

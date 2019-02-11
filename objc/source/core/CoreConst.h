@@ -100,9 +100,7 @@ static constexpr const int BusyRetryMaxAllowedNumberOfTimes = 20;
 // Notifier
 static constexpr const char* NotifierTagPreprocessorName
 = "com.Tencent.WCDB.Notifier.PreprocessTag";
-static constexpr const char* NotifierPathPreprocessorName
-= "com.Tencent.WCDB.Notifier.PreprocessPath";
-constexpr const char* NotifierLoggerName = "com.Tencent.WCDB.Notifier.Log";
+static constexpr const char* NotifierLoggerName = "com.Tencent.WCDB.Notifier.Log";
 
 // Handle Pool
 static constexpr const int HandlePoolMaxAllowedNumberOfHandles = 64;
