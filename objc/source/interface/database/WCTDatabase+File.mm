@@ -44,12 +44,13 @@
 
 - (WCTOptional<NSUInteger, 0>)getFilesSize
 {
-    auto result = _database->getFilesSize();
-    if (result.first) {
-        return result.second;
-    } else {
-        return nullptr;
+    WCTOptional<NSUInteger, 0> result = nullptr;
+    bool succeed, exists;
+    std::tie(succeed, exists) = _database->getFilesSize();
+    if (succeed) {
+        result = exists;
     }
+    return result;
 }
 
 @end

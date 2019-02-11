@@ -58,9 +58,11 @@ bool FullCrawler::work()
     int numbersOfLeafTablePages = 0;
     for (int i = 1; i <= m_pager.getNumberOfPages(); ++i) {
         Page page(i, &m_pager);
-        auto pair = page.acquireType();
-        if (!pair.first // treat as leaf table
-            || pair.second == Page::Type::LeafTable) {
+        bool succeed;
+        Page::Type type;
+        std::tie(succeed, type) = page.acquireType();
+        if (!succeed // treat as leaf table
+            || type == Page::Type::LeafTable) {
             ++numbersOfLeafTablePages;
         }
     }

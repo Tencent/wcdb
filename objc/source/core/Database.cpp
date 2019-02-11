@@ -179,16 +179,17 @@ bool Database::execute(const Statement &statement)
 
 std::pair<bool, bool> Database::tableExists(const String &table)
 {
+    bool succeed = false;
+    bool exists = false;
     RecyclableHandle handle = getHandle();
     if (handle != nullptr) {
         ThreadedGuard threadedGuard(this, handle);
-        auto pair = handle->tableExists(table);
-        if (!pair.first) {
+        std::tie(succeed, exists) = handle->tableExists(table);
+        if (!succeed) {
             setThreadedError(handle->getError());
         }
-        return pair;
     }
-    return { false, false };
+    return { succeed, exists };
 }
 
 std::shared_ptr<Handle> Database::generateHandle(Slot slot)
