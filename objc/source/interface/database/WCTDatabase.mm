@@ -44,10 +44,6 @@ static constexpr const char *NotifierPathPreprocessorName
 + (void)initialize
 {
     if (self.class == WCTDatabase.class) {
-#if DEBUG
-        WCDB::Console::shared()->setDebuggable(true);
-#endif
-
         WCDB::Notifier::shared()->setNotificationForPreprocessing(WCDB::NotifierPathPreprocessorName, [](const WCDB::Error &error, WCDB::Error::Infos &infos) {
             const auto &strings = error.infos.getStrings();
             auto iter = strings.find(WCTErrorKeyPath);

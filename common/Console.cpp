@@ -33,7 +33,13 @@ Console* Console::shared()
     return s_shared;
 }
 
-Console::Console() : m_debuggable(false)
+Console::Console()
+:
+#ifdef DEBUG
+m_debuggable(false)
+#else  // DEBUG
+m_debuggable(true)
+#endif // DEBUG
 {
     setLogger(Console::logger);
     setPrinter(Console::printer);
