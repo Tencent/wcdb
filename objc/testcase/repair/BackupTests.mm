@@ -71,8 +71,6 @@
 {
     TestCaseAssertTrue([self.database removeFiles]);
     TestCaseAssertTrue([self.database backup]);
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.lastMaterialPath]);
 }
 
 - (void)test_wal
