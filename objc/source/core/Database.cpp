@@ -211,7 +211,7 @@ void Database::handleWillStep(HandleStatement *handleStatement)
 
 bool Database::willReuseSlotedHandle(Slot slot, Handle *handle)
 {
-    WCTInnerAssert(!handle->isOpened());
+    WCTInnerAssert(handle->isOpened());
     WCTInnerAssert(slot < HandleType::SlotCount);
     std::shared_ptr<Configs> configs;
     {
@@ -257,7 +257,12 @@ std::shared_ptr<Handle> Database::generateHandle(HandleType type)
         setThreadedError(Error(Error::Code::NoMemory));
         return nullptr;
     }
-    handle->reconfigure(m_configs);
+    std::shared_ptr<Configs> configs;
+    {
+        SharedLockGuard memoryGuard(m_memory);
+        configs = m_configs;
+    }
+    handle->reconfigure(configs);
     if (type < HandleType::SlotCount) {
         handle->setPath(path);
         if (!handle->open()) {

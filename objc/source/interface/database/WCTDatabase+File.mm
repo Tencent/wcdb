@@ -45,10 +45,11 @@
 - (WCTOptional<NSUInteger, 0>)getFilesSize
 {
     WCTOptional<NSUInteger, 0> result = nullptr;
-    bool succeed, exists;
-    std::tie(succeed, exists) = _database->getFilesSize();
+    bool succeed;
+    size_t size;
+    std::tie(succeed, size) = _database->getFilesSize();
     if (succeed) {
-        result = exists;
+        result = size;
     }
     return result;
 }
