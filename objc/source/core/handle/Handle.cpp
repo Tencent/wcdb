@@ -47,19 +47,22 @@ bool Handle::open()
 
 bool Handle::reconfigure(const std::shared_ptr<Configs> &newConfigs)
 {
-    WCTInnerAssert(isOpened());
-    if (m_configs == newConfigs) {
-        return true;
-    }
-    if (m_configs != nullptr) {
-        if (!m_configs->uninvoke(this)) {
-            return false;
+    if (isOpened()) {
+        if (m_configs == newConfigs) {
+            return true;
         }
-    }
-    if (newConfigs != nullptr) {
-        if (!newConfigs->invoke(this)) {
-            return false;
+        if (m_configs != nullptr) {
+            if (!m_configs->uninvoke(this)) {
+                return false;
+            }
         }
+        if (newConfigs != nullptr) {
+            if (!newConfigs->invoke(this)) {
+                return false;
+            }
+        }
+    } else {
+        WCTInnerAssert(m_configs == nullptr);
     }
     m_configs = newConfigs;
     return true;

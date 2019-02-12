@@ -180,56 +180,40 @@ RecyclableHandle HandlePool::flowOut(Slot slot)
         }
     }
 
-    bool isGenerated = false;
     if (handle == nullptr) {
-        // generate new handle
-        // lock free
-        handle = generateHandle(slot);
+        handle = generateSlotedHandle(slot);
         if (handle == nullptr) {
             return nullptr;
         }
-        isGenerated = true;
+
+        LockGuard memoryGuard(m_memory);
+        // re-check handle count limitation since all lock free code above
+        if (!isNumberOfHandlesAllowed()) {
+            purge();
+            if (!isNumberOfHandlesAllowed()) {
+                // the number fof handles reachs the limitation.
+                Error error;
+                error.setCode(Error::Code::Exceed);
+                error.message = "The operating count of database exceeds the maximum allowed.";
+                error.infos.set("Path", path);
+                Notifier::shared()->notify(error);
+                setThreadedError(std::move(error));
+                return nullptr;
+            }
+        }
+        WCTInnerAssert(m_handles[slot].find(handle) == m_handles[slot].end());
+        m_handles[slot].emplace(handle);
+    } else {
+        if (!willReuseSlotedHandle(slot, handle.get())) {
+            handle->close();
+            LockGuard memoryGuard(m_memory);
+            // remove if the exists handle fails in handles
+            m_handles[slot].erase(handle);
+            return nullptr;
+        }
     }
 
     WCTInnerAssert(handle != nullptr);
-    bool failed = false;
-    do {
-        // configuration
-        if (!willConfigureHandle(slot, handle.get(), isGenerated)) {
-            failed = true;
-            break;
-        }
-
-        if (isGenerated) {
-            LockGuard memoryGuard(m_memory);
-            // re-check handle count limitation since all lock free code above
-            if (!isNumberOfHandlesAllowed()) {
-                purge();
-                if (!isNumberOfHandlesAllowed()) {
-                    // handle count reachs the limitation.
-                    failed = true;
-                    Error error;
-                    error.setCode(Error::Code::Exceed);
-                    error.message = "The operating count of database exceeds the maximum allowed.";
-                    error.infos.set("Path", path);
-                    Notifier::shared()->notify(error);
-                    setThreadedError(std::move(error));
-                    break;
-                }
-            }
-            WCTInnerAssert(m_handles[slot].find(handle) == m_handles[slot].end());
-            m_handles[slot].emplace(handle);
-        }
-    } while (false);
-    if (failed) {
-        handle->close();
-        if (!isGenerated) {
-            LockGuard memoryGuard(m_memory);
-            // remove if it already exists in handles
-            m_handles[slot].erase(handle);
-        }
-        return nullptr;
-    }
 
     m_concurrency.lockShared();
     return RecyclableHandle(

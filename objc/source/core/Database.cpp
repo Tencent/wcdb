@@ -151,12 +151,13 @@ RecyclableHandle Database::getHandle()
     if (!initializedGuard.valid()) {
         return nullptr;
     }
-    return flowOut(m_migration.shouldMigrate() ? HandleSlot::Migration : HandleSlot::Normal);
+    return flowOut(m_migration.shouldMigrate() ? HandleType::Migration : HandleType::Normal);
 }
 
 RecyclableHandle Database::getSlotHandle(Slot slot)
 {
-    WCTInnerAssert(slot != HandleSlot::Migration && slot != HandleSlot::Normal);
+    WCTInnerAssert(slot != HandleType::Migration);
+    WCTInnerAssert(slot != HandleType::Normal) WCTInnerAssert(slot < HandleType::SlotCount);
     InitializedGuard initializedGuard = initialize();
     if (!initializedGuard.valid()) {
         return nullptr;
@@ -192,51 +193,10 @@ std::pair<bool, bool> Database::tableExists(const String &table)
     return { succeed, exists };
 }
 
-std::shared_ptr<Handle> Database::generateHandle(Slot slot)
+std::shared_ptr<Handle> Database::generateSlotedHandle(Slot slot)
 {
-    std::shared_ptr<Handle> handle;
-    bool open = false;
-    switch (slot) {
-    case HandleSlot::InterruptibleCheckpoint:
-        handle.reset(new InterruptibleCheckpointHandle);
-        open = true;
-        break;
-    case HandleSlot::Migration:
-        // It's safe since m_migration itself never change.
-        handle.reset(new MigrationHandle(m_migration));
-        open = true;
-        break;
-    case HandleSlot::MigrationStepper:
-        handle.reset(new MigrationStepperHandle);
-        open = true;
-        break;
-    case HandleSlot::BackupRead:
-        handle.reset(new BackupReadHandle);
-        break;
-    case HandleSlot::BackupWrite:
-        handle.reset(new BackupWriteHandle);
-        break;
-    case HandleSlot::Assembler:
-        handle.reset(new AssemblerHandle);
-        break;
-    default:
-        WCTInnerAssert(slot == HandleSlot::Normal);
-        handle.reset(new ConfiguredHandle);
-        open = true;
-        break;
-    }
-    if (handle == nullptr) {
-        setThreadedError(Error(Error::Code::NoMemory));
-        return nullptr;
-    }
-    if (open) {
-        handle->setPath(path);
-        if (!handle->open()) {
-            setThreadedError(handle->getError());
-            return nullptr;
-        }
-    }
-    return handle;
+    WCTInnerAssert(slot < HandleType::SlotCount);
+    return generateHandle((HandleType) slot);
 }
 
 void Database::handleWillStep(HandleStatement *handleStatement)
@@ -249,37 +209,73 @@ void Database::handleWillStep(HandleStatement *handleStatement)
     }
 }
 
-bool Database::willConfigureHandle(Slot slot, Handle *handle, bool isNew)
+bool Database::willReuseSlotedHandle(Slot slot, Handle *handle)
 {
-    bool succeed = true;
-    switch (slot) {
-    case HandleSlot::Normal:
-    case HandleSlot::Migration:
-        if (isNew) {
+    WCTInnerAssert(!handle->isOpened());
+    WCTInnerAssert(slot < HandleType::SlotCount);
+    std::shared_ptr<Configs> configs;
+    {
+        SharedLockGuard memoryGuard(m_memory);
+        configs = m_configs;
+    }
+    bool succeed = handle->reconfigure(configs);
+    if (!succeed) {
+        setThreadedError(handle->getError());
+    }
+    return succeed;
+}
+
+std::shared_ptr<Handle> Database::generateHandle(HandleType type)
+{
+    std::shared_ptr<Handle> handle;
+    bool open = false;
+    switch (type) {
+    case HandleType::InterruptibleCheckpoint:
+        handle.reset(new InterruptibleCheckpointHandle);
+        open = true;
+        break;
+    case HandleType::Migration:
+        // It's safe since m_migration itself never change.
+        handle.reset(new MigrationHandle(m_migration));
+        open = true;
+        break;
+    case HandleType::MigrationStepper:
+        handle.reset(new MigrationStepperHandle);
+        open = true;
+        break;
+    case HandleType::BackupRead:
+        handle.reset(new BackupReadHandle);
+        break;
+    case HandleType::BackupWrite:
+        handle.reset(new BackupWriteHandle);
+        break;
+    case HandleType::Assembler:
+        handle.reset(new AssemblerHandle);
+        break;
+    default:
+        WCTInnerAssert(type == HandleType::Normal);
+        handle.reset(new ConfiguredHandle);
+        open = true;
+        break;
+    }
+    if (handle == nullptr) {
+        setThreadedError(Error(Error::Code::NoMemory));
+        return nullptr;
+    }
+    if (open) {
+        handle->setPath(path);
+        handle->reconfigure(m_configs);
+        if (!handle->open()) {
+            setThreadedError(handle->getError());
+            return nullptr;
+        }
+        if (type == HandleType::Normal || type == HandleType::Migration) {
             handle->setNotificationWhenStatementWillStep(
             String::formatted("Interrupt-%p", this),
             std::bind(&Database::handleWillStep, this, std::placeholders::_1));
         }
-        // fallthrough
-    case HandleSlot::InterruptibleCheckpoint:
-    case HandleSlot::MigrationStepper: {
-        std::shared_ptr<Configs> configs;
-        {
-            SharedLockGuard memoryGuard(m_memory);
-            configs = m_configs;
-        }
-
-        WCTInnerAssert(dynamic_cast<Handle *>(handle) != nullptr);
-        if (!static_cast<Handle *>(handle)->reconfigure(configs)) {
-            succeed = false;
-            setThreadedError(handle->getError());
-            break;
-        }
-    } break;
-    default:
-        break;
     }
-    return succeed;
+    return handle;
 }
 
 #pragma mark - Threaded
@@ -531,12 +527,12 @@ bool Database::backup()
 {
     WCTRemedialAssert(
     !isInTransaction(), "Backup can't be run in transaction.", return false;);
-    RecyclableHandle backupReadHandle = getSlotHandle(HandleSlot::BackupRead);
+    std::shared_ptr<Handle> backupReadHandle = generateHandle(HandleType::BackupRead);
     if (backupReadHandle == nullptr) {
         return false;
     }
 
-    RecyclableHandle backupWriteHandle = getSlotHandle(HandleSlot::BackupWrite);
+    std::shared_ptr<Handle> backupWriteHandle = generateHandle(HandleType::BackupWrite);
     if (backupWriteHandle == nullptr) {
         return false;
     }
@@ -563,15 +559,15 @@ bool Database::deposit()
     }
     bool result = false;
     close([&result, this]() {
-        RecyclableHandle backupReadHandle = getSlotHandle(HandleSlot::BackupRead);
+        std::shared_ptr<Handle> backupReadHandle = generateHandle(HandleType::BackupRead);
         if (backupReadHandle == nullptr) {
             return;
         }
-        RecyclableHandle backupWriteHandle = getSlotHandle(HandleSlot::BackupWrite);
+        std::shared_ptr<Handle> backupWriteHandle = generateHandle(HandleType::BackupWrite);
         if (backupWriteHandle == nullptr) {
             return;
         }
-        RecyclableHandle assemblerHandle = getSlotHandle(HandleSlot::Assembler);
+        std::shared_ptr<Handle> assemblerHandle = generateHandle(HandleType::Assembler);
         if (assemblerHandle == nullptr) {
             return;
         }
@@ -612,15 +608,15 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
     }
     double result = -1;
     close([&result, &onProgressUpdate, this]() {
-        RecyclableHandle backupReadHandle = getSlotHandle(HandleSlot::BackupRead);
+        std::shared_ptr<Handle> backupReadHandle = generateHandle(HandleType::BackupRead);
         if (backupReadHandle == nullptr) {
             return;
         }
-        RecyclableHandle backupWriteHandle = getSlotHandle(HandleSlot::BackupWrite);
+        std::shared_ptr<Handle> backupWriteHandle = generateHandle(HandleType::BackupWrite);
         if (backupWriteHandle == nullptr) {
             return;
         }
-        RecyclableHandle assemblerHandle = getSlotHandle(HandleSlot::Assembler);
+        std::shared_ptr<Handle> assemblerHandle = generateHandle(HandleType::Assembler);
         if (assemblerHandle == nullptr) {
             return;
         }
@@ -698,7 +694,7 @@ std::pair<bool, bool> Database::stepMigration()
             break;
         }
 
-        RecyclableHandle handle = getSlotHandle(HandleSlot::MigrationStepper);
+        RecyclableHandle handle = getSlotHandle(HandleType::MigrationStepper);
         if (handle == nullptr) {
             break;
         }
@@ -736,7 +732,7 @@ void Database::interruptMigration()
     SharedLockGuard concurrencyGuard(m_concurrency);
     SharedLockGuard memoryGuard(m_memory);
     if (m_initialized) {
-        for (const auto &handle : getHandles(HandleSlot::MigrationStepper)) {
+        for (const auto &handle : getHandles(HandleType::MigrationStepper)) {
             WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()) != nullptr);
             static_cast<MigrationStepperHandle *>(handle.get())->interrupt();
         }
@@ -752,7 +748,7 @@ bool Database::interruptibleCheckpoint(CheckpointType type)
         if (!initializedGuard.valid()) {
             break;
         }
-        RecyclableHandle handle = getSlotHandle(HandleSlot::InterruptibleCheckpoint);
+        RecyclableHandle handle = getSlotHandle(HandleType::InterruptibleCheckpoint);
         if (handle == nullptr) {
             break;
         }
@@ -768,7 +764,7 @@ void Database::interruptCheckpoint()
     SharedLockGuard concurrencyGuard(m_concurrency);
     SharedLockGuard memoryGuard(m_memory);
     if (m_initialized) {
-        for (const auto &handle : getHandles(HandleSlot::InterruptibleCheckpoint)) {
+        for (const auto &handle : getHandles(HandleType::InterruptibleCheckpoint)) {
             WCTInnerAssert(dynamic_cast<InterruptibleCheckpointHandle *>(handle.get()) != nullptr);
             static_cast<InterruptibleCheckpointHandle *>(handle.get())->interrupt();
         }

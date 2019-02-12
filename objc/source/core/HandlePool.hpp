@@ -80,8 +80,8 @@ public:
     bool isAliving() const;
 
 protected:
-    virtual std::shared_ptr<Handle> generateHandle(Slot slot) = 0;
-    virtual bool willConfigureHandle(Slot slot, Handle *handle, bool isNew) = 0;
+    virtual std::shared_ptr<Handle> generateSlotedHandle(Slot slot) = 0;
+    virtual bool willReuseSlotedHandle(Slot slot, Handle *handle) = 0;
 
     mutable SharedLock m_memory;
 

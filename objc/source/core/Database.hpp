@@ -72,21 +72,25 @@ protected:
     RecyclableHandle getSlotHandle(Slot slot);
 
 protected:
-    enum HandleSlot : unsigned int {
+    enum HandleType : unsigned int {
         Normal = 0,
         Migration,
-        BackupRead,
-        BackupWrite,
-        Assembler,
         MigrationStepper,
         InterruptibleCheckpoint,
 
-        Count,
+        SlotCount, // the number of handles that should be sloted.
+
+        BackupRead = SlotCount,
+        BackupWrite,
+        Assembler,
     };
-    static_assert(HandleSlot::Count == HandlePoolNumberOfSlots, "");
-    std::shared_ptr<Handle> generateHandle(Slot slot) override final;
-    bool willConfigureHandle(Slot slot, Handle *handle, bool isNew) override final;
+    static_assert(HandleType::SlotCount == HandlePoolNumberOfSlots, "");
+    std::shared_ptr<Handle> generateSlotedHandle(Slot slot) override final;
+    bool willReuseSlotedHandle(Slot slot, Handle *handle) override final;
     void handleWillStep(HandleStatement *handleStatement);
+
+private:
+    std::shared_ptr<Handle> generateHandle(HandleType type);
 
 #pragma mark - Config
 public:
