@@ -228,20 +228,16 @@ bool Database::willReuseSlotedHandle(Slot slot, Handle *handle)
 std::shared_ptr<Handle> Database::generateHandle(HandleType type)
 {
     std::shared_ptr<Handle> handle;
-    bool open = false;
     switch (type) {
     case HandleType::InterruptibleCheckpoint:
         handle.reset(new InterruptibleCheckpointHandle);
-        open = true;
         break;
     case HandleType::Migration:
         // It's safe since m_migration itself never change.
         handle.reset(new MigrationHandle(m_migration));
-        open = true;
         break;
     case HandleType::MigrationStepper:
         handle.reset(new MigrationStepperHandle);
-        open = true;
         break;
     case HandleType::BackupRead:
         handle.reset(new BackupReadHandle);
@@ -255,25 +251,24 @@ std::shared_ptr<Handle> Database::generateHandle(HandleType type)
     default:
         WCTInnerAssert(type == HandleType::Normal);
         handle.reset(new ConfiguredHandle);
-        open = true;
         break;
     }
     if (handle == nullptr) {
         setThreadedError(Error(Error::Code::NoMemory));
         return nullptr;
     }
-    if (open) {
+    handle->reconfigure(m_configs);
+    if (type < HandleType::SlotCount) {
         handle->setPath(path);
-        handle->reconfigure(m_configs);
         if (!handle->open()) {
             setThreadedError(handle->getError());
             return nullptr;
         }
-        if (type == HandleType::Normal || type == HandleType::Migration) {
-            handle->setNotificationWhenStatementWillStep(
-            String::formatted("Interrupt-%p", this),
-            std::bind(&Database::handleWillStep, this, std::placeholders::_1));
-        }
+    }
+    if (type == HandleType::Normal || type == HandleType::Migration) {
+        handle->setNotificationWhenStatementWillStep(
+        String::formatted("Interrupt-%p", this),
+        std::bind(&Database::handleWillStep, this, std::placeholders::_1));
     }
     return handle;
 }
