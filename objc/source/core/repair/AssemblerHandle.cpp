@@ -58,10 +58,13 @@ const String &AssemblerHandle::getPath() const
 
 bool AssemblerHandle::markAsAssembling()
 {
-    bool succeed = false;
-    if (open()) {
-        succeed = execute(m_statementForDisableJounral)
-                  && execute(m_statementForEnableMMap) && markSequenceAsAssembling();
+    bool succeed = open();
+    if (succeed) {
+        if (!execute(m_statementForDisableJounral)
+            || !execute(m_statementForEnableMMap) || !markSequenceAsAssembling()) {
+            close();
+            succeed = false;
+        }
     }
     return succeed;
 }
