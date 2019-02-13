@@ -34,7 +34,7 @@ AbstractHandle::AbstractHandle()
 
 AbstractHandle::~AbstractHandle()
 {
-    WCTRemedialAssert(!isOpened(), "Database is not closed.", close(););
+    close();
 }
 
 sqlite3 *AbstractHandle::getRawHandle()
