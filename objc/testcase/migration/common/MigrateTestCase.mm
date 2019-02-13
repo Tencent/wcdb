@@ -105,9 +105,12 @@
     });
 
     TestCaseResult *tested = [TestCaseResult no];
+    __weak typeof(self) weakSelf = self;
     [WCTDatabase globalTraceError:^(WCTError *error) {
-        if (error.code == WCTErrorCodeInterrupt
-            && error.level == WCTErrorLevelIgnore) {
+        if (weakSelf != nil
+            && error.code == WCTErrorCodeInterrupt
+            && error.level == WCTErrorLevelIgnore
+            && error.tag == weakSelf.database.tag) {
             [tested makeYES];
         }
     }];
@@ -155,8 +158,12 @@
 - (void)doTestFeatureAutoMigrateWillStopDueToError
 {
     TestCaseCounter *numberOfFailures = [TestCaseCounter value:0];
+    __weak typeof(self) weakSelf = self;
     [WCTDatabase globalTraceError:^(WCTError *error) {
-        if (error.code == WCTErrorCodeIOError) {
+        if (weakSelf != nil
+            && error.code == WCTErrorCodeIOError
+            && error.level == WCTErrorLevelError
+            && error.tag == weakSelf.database.tag) {
             [numberOfFailures increment];
         }
     }];
@@ -168,6 +175,8 @@
     while (numberOfFailures.value < WCDB::MigrationQueueTolerableFailures)
         ;
     [WCTDatabase enableSQLiteWrite];
+
+    [WCTDatabase resetGlobalErrorTracer];
 
     TestCaseResult *result = [TestCaseResult yes];
     [self.database traceSQL:^(NSString *sql) {

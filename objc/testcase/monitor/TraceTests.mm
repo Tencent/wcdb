@@ -79,10 +79,12 @@
 
     __block BOOL tested = NO;
     __block BOOL start = NO;
+    __weak typeof(self) weakSelf = self;
     [WCTDatabase globalTraceError:^(WCTError* error) {
-        if (error.level == WCTErrorLevelError
+        if (weakSelf != nil
+            && error.level == WCTErrorLevelError
             && [error.path isEqualToString:self.path]
-            && error.tag == self.database.tag
+            && error.tag == weakSelf.database.tag
             && [error.source isEqualToString:@"SQLite"]
             && error.code == WCTErrorCodeIOError
             && [error.sql isEqualToString:@"BEGIN IMMEDIATE"]) {
