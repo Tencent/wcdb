@@ -21,9 +21,6 @@
 #ifndef __WCDB_SQLITE_H
 #define __WCDB_SQLITE_H
 
-// This file is public, but not included by default.
-// Developer can include it for some specific needs.
-
 #if WCDB_BUILTIN_SQLCIPHER
 #include <sqlcipher/sqlite3.h>
 #else
