@@ -617,7 +617,7 @@
 		2367BC632215004300380122 /* SyntaxList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB76217DFADC006E9E73 /* SyntaxList.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2367BC642215004300380122 /* WCTTableConstraintMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6951EA0D6680021EFA7 /* WCTTableConstraintMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2367BC652215004300380122 /* ColumnConstraint.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB7F217DFADC006E9E73 /* ColumnConstraint.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		2367BC662215004300380122 /* SQLiteDeclaration.h in Headers */ = {isa = PBXBuildFile; fileRef = 237A8D5721ED88DF003AF5BB /* SQLiteDeclaration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2367BC662215004300380122 /* SQLiteDeclaration.h in Headers */ = {isa = PBXBuildFile; fileRef = 237A8D5721ED88DF003AF5BB /* SQLiteDeclaration.h */; };
 		2367BC672215004300380122 /* StatementCreateView.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBCA217DFADC006E9E73 /* StatementCreateView.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2367BC682215004300380122 /* SyntaxCreateVirtualTableSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDC44217DFADC006E9E73 /* SyntaxCreateVirtualTableSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2367BC692215004300380122 /* Shadow.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDD5F217DFB17006E9E73 /* Shadow.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -879,7 +879,7 @@
 		23790A7F219315E50098797F /* WCTColumnConstraintMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 23790A7D219315D50098797F /* WCTColumnConstraintMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23790A80219315E50098797F /* WCTVirtualTableMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 23790A7E219315DE0098797F /* WCTVirtualTableMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		237A65F520F731DF008B4771 /* OrderedUniqueList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */; };
-		237A8D5821ED88DF003AF5BB /* SQLiteDeclaration.h in Headers */ = {isa = PBXBuildFile; fileRef = 237A8D5721ED88DF003AF5BB /* SQLiteDeclaration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		237A8D5821ED88DF003AF5BB /* SQLiteDeclaration.h in Headers */ = {isa = PBXBuildFile; fileRef = 237A8D5721ED88DF003AF5BB /* SQLiteDeclaration.h */; };
 		237A8D5F21EDBB2E003AF5BB /* BusyRetryConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237A8D5D21EDBB2E003AF5BB /* BusyRetryConfig.cpp */; };
 		237A8D6021EDBB2E003AF5BB /* BusyRetryConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237A8D5E21EDBB2E003AF5BB /* BusyRetryConfig.hpp */; };
 		237B47B021FEEA200059227A /* ColumnMeta.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237B47AE21FEEA200059227A /* ColumnMeta.cpp */; };
