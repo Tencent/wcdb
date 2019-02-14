@@ -28,7 +28,6 @@
 #import <WCDB/WCTTableConstraintMacro.h>
 #import <WCDB/WCTVirtualTableMacro.h>
 
-//TODO support Inheritance
 #define WCDB_IMPLEMENTATION(className)                                        \
     +(const WCTBinding &) objectRelationalMapping                             \
     {                                                                         \
