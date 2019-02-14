@@ -30,7 +30,6 @@
 #pragma mark - LifeCycle
 - (instancetype)init
 {
-    WCTRemedialAssert(false, "Init should not be called", ;);
     return nil;
 }
 
@@ -67,11 +66,6 @@
 }
 
 #pragma mark - Handle
-- (sqlite3 *)rawHandle
-{
-    return [self getOrGenerateHandle] -> getRawHandle();
-}
-
 - (BOOL)validate
 {
     return [self getOrGenerateHandle] != nullptr;

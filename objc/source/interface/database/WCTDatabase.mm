@@ -79,7 +79,6 @@ static constexpr const char *NotifierPathPreprocessorName
 
 - (instancetype)init
 {
-    WCTRemedialAssert(false, "Init should never be called.", ;);
     return nil;
 }
 

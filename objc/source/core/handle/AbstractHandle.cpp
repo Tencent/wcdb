@@ -39,6 +39,7 @@ AbstractHandle::~AbstractHandle()
 
 sqlite3 *AbstractHandle::getRawHandle()
 {
+    WCTInnerAssert(isOpened());
     return m_handle;
 }
 

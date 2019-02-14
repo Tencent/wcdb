@@ -77,13 +77,6 @@
     TestCaseAssertEqual(self.handle.database.tag, self.database.tag);
 }
 
-- (void)test_raw_handle
-{
-    sqlite3* rawHandle = self.handle.rawHandle;
-    const char* filename = sqlite3_db_filename(rawHandle, "main");
-    TestCaseAssertTrue([self.database.path isEqualToString:@(filename)]);
-}
-
 #pragma mark - Execute
 - (void)test_execute
 {

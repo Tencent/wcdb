@@ -92,10 +92,9 @@ void HandleNotification::setupTraceNotifications()
         flag |= SQLITE_TRACE_PROFILE;
     }
     if (flag != 0) {
-        exitAPI(sqlite3_trace_v2(
-        m_handle->getRawHandle(), flag, HandleNotification::traced, this));
+        exitAPI(sqlite3_trace_v2(getRawHandle(), flag, HandleNotification::traced, this));
     } else {
-        exitAPI(sqlite3_trace_v2(m_handle->getRawHandle(), 0, nullptr, nullptr));
+        exitAPI(sqlite3_trace_v2(getRawHandle(), 0, nullptr, nullptr));
     }
 }
 
@@ -212,9 +211,9 @@ void HandleNotification::unsetNotificationWhenCommitted(const String &name)
 void HandleNotification::setupCommittedNotification()
 {
     if (!m_committedNotifications.elements().empty()) {
-        sqlite3_wal_hook(m_handle->getRawHandle(), HandleNotification::committed, this);
+        sqlite3_wal_hook(getRawHandle(), HandleNotification::committed, this);
     } else {
-        sqlite3_wal_hook(m_handle->getRawHandle(), nullptr, nullptr);
+        sqlite3_wal_hook(getRawHandle(), nullptr, nullptr);
     }
 }
 
@@ -249,9 +248,9 @@ void HandleNotification::setupCheckpointNotifications()
 {
     if (!m_checkpointedNotifications.empty()) {
         exitAPI(sqlite3_wal_checkpoint_handler(
-        m_handle->getRawHandle(), HandleNotification::checkpointed, this));
+        getRawHandle(), HandleNotification::checkpointed, this));
     } else {
-        exitAPI(sqlite3_wal_checkpoint_handler(m_handle->getRawHandle(), nullptr, nullptr));
+        exitAPI(sqlite3_wal_checkpoint_handler(getRawHandle(), nullptr, nullptr));
     }
 }
 
@@ -294,10 +293,9 @@ void HandleNotification::setNotificationWhenBusy(const BusyNotification &busyNot
 {
     m_busyNotification = busyNotification;
     if (m_busyNotification != nullptr) {
-        exitAPI(sqlite3_busy_handler(
-        m_handle->getRawHandle(), HandleNotification::busyRetry, this));
+        exitAPI(sqlite3_busy_handler(getRawHandle(), HandleNotification::busyRetry, this));
     } else {
-        exitAPI(sqlite3_busy_handler(m_handle->getRawHandle(), nullptr, nullptr));
+        exitAPI(sqlite3_busy_handler(getRawHandle(), nullptr, nullptr));
     }
 }
 

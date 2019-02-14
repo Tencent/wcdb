@@ -37,6 +37,7 @@ public:
     AbstractHandle *getHandle() const;
 
 protected:
+    sqlite3 *getRawHandle();
     bool exitAPI(int rc);
     bool exitAPI(int rc, const String &sql);
     bool exitAPI(int rc, const char *sql);
