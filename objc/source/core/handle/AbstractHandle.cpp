@@ -122,9 +122,10 @@ String AbstractHandle::getJournalSubfix()
 #pragma mark - Basic
 bool AbstractHandle::open()
 {
-    bool result = true;
-    if (!isOpened()) {
-        result = exitAPI(sqlite3_open(m_path.c_str(), &m_handle));
+    WCTRemedialAssert(!isOpened(), "Handle is already opened.", close(););
+    bool result = exitAPI(sqlite3_open(m_path.c_str(), &m_handle));
+    if (!result) {
+        m_handle = nullptr;
     }
     return result;
 }
