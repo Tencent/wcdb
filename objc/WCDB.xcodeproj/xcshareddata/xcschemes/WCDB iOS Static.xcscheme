@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2367BAB52215004300380122"
-               BuildableName = "WCDB iOS Static.framework"
+               BuildableName = "WCDB.framework"
                BlueprintName = "WCDB iOS Static"
                ReferencedContainer = "container:WCDB.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2367BAB52215004300380122"
-            BuildableName = "WCDB iOS Static.framework"
+            BuildableName = "WCDB.framework"
             BlueprintName = "WCDB iOS Static"
             ReferencedContainer = "container:WCDB.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2367BAB52215004300380122"
-            BuildableName = "WCDB iOS Static.framework"
+            BuildableName = "WCDB.framework"
             BlueprintName = "WCDB iOS Static"
             ReferencedContainer = "container:WCDB.xcodeproj">
          </BuildableReference>
