@@ -72,6 +72,11 @@
 }
 
 #pragma mark - Handle
+- (void)test_init_nil
+{
+    TestCaseAssertTrue([[WCTHandle alloc] init] == nil);
+}
+
 - (void)test_tag
 {
     TestCaseAssertEqual(self.handle.database.tag, self.database.tag);
