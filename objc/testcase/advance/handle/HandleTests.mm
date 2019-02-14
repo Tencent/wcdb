@@ -18,7 +18,6 @@
  * limitations under the License.
  */
 
-#import "SQLite.h"
 #import <TestCase/TestCase.h>
 
 @interface HandleTests : CRUDTestCase
