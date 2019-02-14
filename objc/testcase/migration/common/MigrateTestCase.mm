@@ -19,7 +19,7 @@
  */
 
 #import "MigrateTestCase.h"
-#import <WCDB/CoreConst.h>
+#import "CoreConst.h"
 
 @implementation MigrateTestCase
 

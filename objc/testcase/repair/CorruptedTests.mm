@@ -19,7 +19,7 @@
  */
 
 #import "BackupTestCase.h"
-#import <WCDB/CoreConst.h>
+#import "CoreConst.h"
 
 @interface CorruptedTests : BackupTestCase
 

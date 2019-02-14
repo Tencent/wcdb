@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
+#import "CoreConst.h"
 #import <TestCase/TestCase.h>
-#import <WCDB/CoreConst.h>
 #import <thread>
 
 @interface ThreadTests : TableTestCase

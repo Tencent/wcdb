@@ -490,7 +490,7 @@
 		2367BBE32215004300380122 /* Initializeable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AF4E1D20CD04E20050033C /* Initializeable.hpp */; };
 		2367BBE42215004300380122 /* Recyclable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D92D21057CA700707AFC /* Recyclable.hpp */; };
 		2367BBE52215004300380122 /* SyntaxWithClause.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDC64217DFADC006E9E73 /* SyntaxWithClause.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		2367BBE62215004300380122 /* CoreConst.h in Headers */ = {isa = PBXBuildFile; fileRef = 237C900621D45E6700EE6E44 /* CoreConst.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2367BBE62215004300380122 /* CoreConst.h in Headers */ = {isa = PBXBuildFile; fileRef = 237C900621D45E6700EE6E44 /* CoreConst.h */; };
 		2367BBE72215004300380122 /* Cell.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B4620AD666900E21AB0 /* Cell.hpp */; };
 		2367BBE82215004300380122 /* Dispatch.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23C40CF8208DBCDF007B1648 /* Dispatch.hpp */; };
 		2367BBE92215004300380122 /* MigrationStepperHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A4703B21BE0940005B9C09 /* MigrationStepperHandle.hpp */; };
@@ -642,7 +642,7 @@
 		2367BC7C2215004300380122 /* PagerRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567D5820CA823C005F1C35 /* PagerRelated.hpp */; };
 		2367BC7D2215004300380122 /* WCTColumnBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6861EA0D6680021EFA7 /* WCTColumnBinding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2367BC7E2215004300380122 /* Tag.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DC7D2111B39200954D71 /* Tag.hpp */; };
-		2367BC7F2215004300380122 /* SQLite.h in Headers */ = {isa = PBXBuildFile; fileRef = 23AB898D215BA6DB00554DF1 /* SQLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2367BC7F2215004300380122 /* SQLite.h in Headers */ = {isa = PBXBuildFile; fileRef = 23AB898D215BA6DB00554DF1 /* SQLite.h */; };
 		2367BC802215004300380122 /* SyntaxPragma.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDC19217DFADC006E9E73 /* SyntaxPragma.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2367BC812215004300380122 /* WCTBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6841EA0D6680021EFA7 /* WCTBinding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2367BC822215004300380122 /* WCTDatabase+Migration.h in Headers */ = {isa = PBXBuildFile; fileRef = 236BACE021BF9F6400C8B4D9 /* WCTDatabase+Migration.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -886,7 +886,7 @@
 		237B47B121FEEA200059227A /* ColumnMeta.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237B47AF21FEEA200059227A /* ColumnMeta.hpp */; };
 		237BB6632202D1C7007F12F4 /* InterruptibleCheckpointHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237BB6612202D1C7007F12F4 /* InterruptibleCheckpointHandle.cpp */; };
 		237BB6642202D1C7007F12F4 /* InterruptibleCheckpointHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237BB6622202D1C7007F12F4 /* InterruptibleCheckpointHandle.hpp */; };
-		237C900721D45E6700EE6E44 /* CoreConst.h in Headers */ = {isa = PBXBuildFile; fileRef = 237C900621D45E6700EE6E44 /* CoreConst.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		237C900721D45E6700EE6E44 /* CoreConst.h in Headers */ = {isa = PBXBuildFile; fileRef = 237C900621D45E6700EE6E44 /* CoreConst.h */; };
 		23846FCF21AF8427005B868F /* RetrieveRobustyTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23846FCE21AF8427005B868F /* RetrieveRobustyTests.mm */; };
 		2384F6A32193DC3400E8B10A /* TableConstraintObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F6A02193DC3400E8B10A /* TableConstraintObject.mm */; };
 		2384F6B72193E06D00E8B10A /* ColumnConstraintPrimary.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F6B42193E06D00E8B10A /* ColumnConstraintPrimary.mm */; };
@@ -1054,7 +1054,7 @@
 		23A64D11214A4A7000ED28BB /* Migration.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A64D0E214A4A7000ED28BB /* Migration.hpp */; };
 		23A6D4BF20BFD7F9004F2DAA /* Progress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A6D4BD20BFD7F9004F2DAA /* Progress.cpp */; };
 		23A6D4C120BFD7F9004F2DAA /* Progress.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A6D4BE20BFD7F9004F2DAA /* Progress.hpp */; };
-		23AB898E215BA81300554DF1 /* SQLite.h in Headers */ = {isa = PBXBuildFile; fileRef = 23AB898D215BA6DB00554DF1 /* SQLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23AB898E215BA81300554DF1 /* SQLite.h in Headers */ = {isa = PBXBuildFile; fileRef = 23AB898D215BA6DB00554DF1 /* SQLite.h */; };
 		23AD52D620DB4A3C00664B62 /* Master.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52D420DB4A3C00664B62 /* Master.cpp */; };
 		23AD52D820DB4A3C00664B62 /* Master.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AD52D520DB4A3C00664B62 /* Master.hpp */; };
 		23AD52DD20DB56D200664B62 /* Sequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52DB20DB56D200664B62 /* Sequence.cpp */; };

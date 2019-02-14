@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
+#import "SQLite.h"
 #import <TestCase/NSObject+TestCase.h>
 #import <TestCase/TestCaseAssertion.h>
 #import <TestCase/TestCaseLog.h>
-#import <WCDB/SQLite.h>
 
 @implementation NSObject (TestCase)
 

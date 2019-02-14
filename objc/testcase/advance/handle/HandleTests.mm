@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
+#import "SQLite.h"
 #import <TestCase/TestCase.h>
-#import <WCDB/SQLite.h>
 
 @interface HandleTests : CRUDTestCase
 
