@@ -1068,6 +1068,9 @@
 		23B0071D2047ED4800045245 /* ConfiguredHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B0071B2047ED4800045245 /* ConfiguredHandle.hpp */; };
 		23B101E92090667E005D9DD3 /* WCTMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 23B101E82090667B005D9DD3 /* WCTMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23B1910A21D61848005480C7 /* TableTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23B1910921D61848005480C7 /* TableTests.mm */; };
+		23B20D5C22150D0A0074AABA /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F5BE0620887FD4000CCD37 /* sqlcipher.framework */; };
+		23B20D5D22150D420074AABA /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23C43BCC2087435800AB186D /* libz.tbd */; };
+		23B20D5E22150D480074AABA /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F0FD7C215F1C92008399FB /* Security.framework */; };
 		23B35C7620BFE39500425033 /* Path.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B35C7420BFE39400425033 /* Path.hpp */; };
 		23B35C7820BFE39500425033 /* Path.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B35C7520BFE39500425033 /* Path.cpp */; };
 		23B35CCB20C0261A00425033 /* String.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B35CC920C0261900425033 /* String.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -2870,6 +2873,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23B20D5E22150D480074AABA /* Security.framework in Frameworks */,
+				23B20D5D22150D420074AABA /* libz.tbd in Frameworks */,
+				23B20D5C22150D0A0074AABA /* sqlcipher.framework in Frameworks */,
 				2387D8A721DF0B190028ADB9 /* XCTest.framework in Frameworks */,
 				2387D8A521DF0B160028ADB9 /* WCDB.framework in Frameworks */,
 				2387D75521DF07790028ADB9 /* Foundation.framework in Frameworks */,
