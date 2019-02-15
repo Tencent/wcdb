@@ -23,6 +23,7 @@
 
 #include <memory>
 
+// TODO: support FTS5 tokenizer module
 namespace WCDB {
 
 class AbstractTokenizerInfo {

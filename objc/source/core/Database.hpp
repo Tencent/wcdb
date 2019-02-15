@@ -32,6 +32,8 @@
 
 namespace WCDB {
 
+// TODO: readonly manually - by removing basic config and adding query_only config?
+// TODO: support authorize
 class Database final : private HandlePool {
 #pragma mark - Initializer
 public:

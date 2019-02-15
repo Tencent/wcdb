@@ -311,6 +311,7 @@ AbstractHandle::getColumns(const Schema &schema, const String &table)
 std::pair<bool, std::vector<ColumnMeta>>
 AbstractHandle::getTableMeta(const Schema &schema, const String &table)
 {
+    // TODO: refactor by sqlite3_table_column_metadata?
     std::vector<ColumnMeta> columnMetas;
     HandleStatement *handleStatement = getStatement();
     bool done = false;

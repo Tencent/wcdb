@@ -22,9 +22,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/**
- Not Thread-safe
- */
+// TODO: implement insertOrUpdate through upsert feature
 @interface WCTInsert<ObjectType> : WCTChainCall
 
 - (WCDB::StatementInsert &)statement;

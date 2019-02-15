@@ -32,6 +32,7 @@ namespace WCDB {
 
 typedef Recyclable<const MigrationInfo*> RecyclableMigrationInfo;
 
+// TODO: deny if user visiting source table by using authorize feature.
 class Migration final {
 #pragma mark - Initialize
 public:
