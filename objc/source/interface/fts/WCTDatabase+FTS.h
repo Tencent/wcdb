@@ -30,7 +30,7 @@ WCDB_EXTERN NSString* const WCTTokenizerICU;
 WCDB_EXTERN NSString* const WCTTokenizerUnicode61;
 // WCDB implemented tokenizer
 WCDB_EXTERN NSString* const WCTTokenizerOneOrBinary;
-WCDB_EXTERN NSString* const WCTTokenizerLegacyOneOrBinary;
+WCDB_EXTERN NSString* const WCTTokenizerLegacyOneOrBinary; // compatible for WCTTokenizerNameWCDB before v1.1.0
 
 WCDB_EXTERN NSString* const WCTModuleFTS3;
 WCDB_EXTERN NSString* const WCTModuleFTS5;
