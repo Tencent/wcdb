@@ -22,7 +22,6 @@
 #define __WCDB_ONE_OR_BINARY_TOKENIZER_HPP
 
 #include <WCDB/TokenizerModuleTemplate.hpp>
-#include <cstddef>
 #include <vector>
 
 namespace WCDB {
