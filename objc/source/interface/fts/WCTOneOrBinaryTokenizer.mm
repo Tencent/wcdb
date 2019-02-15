@@ -22,22 +22,22 @@
 #import <WCDB/Error.hpp>
 #import <WCDB/WCTOneOrBinaryTokenizer.h>
 
-WCTOneOrBinaryCursorInfo::WCTOneOrBinaryCursorInfo(const char *input,
-                                                   int inputLength,
-                                                   WCDB::DefaultTokenizerInfo *tokenizerInfo)
-: WCDB::OneOrBinaryCursorInfo(input, inputLength, tokenizerInfo)
+WCTOneOrBinaryTokenizerCursorInfo::WCTOneOrBinaryTokenizerCursorInfo(const char *input,
+                                                                     int inputLength,
+                                                                     WCDB::AbstractTokenizerInfo *tokenizerInfo)
+: WCDB::OneOrBinaryTokenizerCursorInfo(input, inputLength, tokenizerInfo)
 , m_symbolCharacterSet(generateSymbolCharacterSet())
 {
 }
 
-WCTOneOrBinaryCursorInfo::~WCTOneOrBinaryCursorInfo()
+WCTOneOrBinaryTokenizerCursorInfo::~WCTOneOrBinaryTokenizerCursorInfo()
 {
     if (m_symbolCharacterSet != nil) {
         CFRelease(m_symbolCharacterSet);
     }
 }
 
-CFCharacterSetRef WCTOneOrBinaryCursorInfo::generateSymbolCharacterSet()
+CFCharacterSetRef WCTOneOrBinaryTokenizerCursorInfo::generateSymbolCharacterSet()
 {
     //Code: Cc, Cf, Z*, U000A ~ U000D, U0085, M*, P*, S* and illegal character set
     CFMutableCharacterSetRef characterSetRef = CFCharacterSetCreateMutable(CFAllocatorGetDefault());
@@ -50,7 +50,7 @@ CFCharacterSetRef WCTOneOrBinaryCursorInfo::generateSymbolCharacterSet()
     return characterSetRef;
 }
 
-std::pair<int, bool> WCTOneOrBinaryCursorInfo::isSymbol(UnicodeChar theChar)
+std::pair<int, bool> WCTOneOrBinaryTokenizerCursorInfo::isSymbol(UnicodeChar theChar)
 {
     bool symbol = false;
     WCDB::Error::Code code = WCDB::Error::Code::NoMemory;

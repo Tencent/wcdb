@@ -5,13 +5,13 @@
 	<key>Kind</key>
 	<string>Xcode.IDEFoundation.TextSubstitutionFileTemplateKind</string>
 	<key>Description</key>
-	<string>Table Codable Template.</string>
+	<string>Tokenizer Template.</string>
 	<key>Summary</key>
-	<string>Table Codable Template.</string>
+	<string>Tokenizer Template</string>
 	<key>SortOrder</key>
 	<string>1</string>
 	<key>DefaultCompletionName</key>
-	<string>MyClass</string>
+	<string>MyTokenizer</string>
 	<key>Platforms</key>
 	<array>
 		<string>com.apple.platform.macosx</string>
@@ -49,17 +49,12 @@
 			<key>Values</key>
 			<array>
 				<string>Objective-C</string>
-				<string>Swift</string>
 			</array>
 			<key>AllowedTypes</key>
 			<dict>
 				<key>Objective-C</key>
 				<array>
 					<string>public.objective-c-plus-plus-source</string>
-				</array>
-				<key>Swift</key>
-				<array>
-					<string>public.swift-source</string>
 				</array>
 			</dict>
 		</dict>

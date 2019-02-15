@@ -74,6 +74,10 @@
 		233B097E21BE50CA005AD534 /* BackupHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233B097C21BE50CA005AD534 /* BackupHandle.hpp */; };
 		233B098121BE50D2005AD534 /* AssemblerHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233B097F21BE50D2005AD534 /* AssemblerHandle.cpp */; };
 		233B098221BE50D2005AD534 /* AssemblerHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233B098021BE50D2005AD534 /* AssemblerHandle.hpp */; };
+		233E09B72216BD7B0006E608 /* OneOrBinaryTokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233E09B52216BD7B0006E608 /* OneOrBinaryTokenizer.cpp */; };
+		233E09B82216BD7B0006E608 /* OneOrBinaryTokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233E09B52216BD7B0006E608 /* OneOrBinaryTokenizer.cpp */; };
+		233E09B92216BD7B0006E608 /* OneOrBinaryTokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233E09B62216BD7B0006E608 /* OneOrBinaryTokenizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		233E09BA2216BD7B0006E608 /* OneOrBinaryTokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233E09B62216BD7B0006E608 /* OneOrBinaryTokenizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		233E12302195749C00BD488D /* ConvenientSelectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E122F2195749C00BD488D /* ConvenientSelectTests.mm */; };
 		233E123A2195755400BD488D /* ConvenientInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E12392195755400BD488D /* ConvenientInsertTests.mm */; };
 		233E123E2195756400BD488D /* ConvenientUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123D2195756400BD488D /* ConvenientUpdateTests.mm */; };
@@ -408,7 +412,6 @@
 		2367BB892215004300380122 /* BasicConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F70FA420A055BD00CCE3CD /* BasicConfig.cpp */; };
 		2367BB8A2215004300380122 /* StatementPragma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBDB217DFADC006E9E73 /* StatementPragma.cpp */; };
 		2367BB8B2215004300380122 /* SyntaxAnalyzeSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC33217DFADC006E9E73 /* SyntaxAnalyzeSTMT.cpp */; };
-		2367BB8C2215004300380122 /* OneOrBinaryTokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23E163CB20FDDD6900C3F910 /* OneOrBinaryTokenizer.cpp */; };
 		2367BB8D2215004300380122 /* SyntaxQualifiedTableName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC1A217DFADC006E9E73 /* SyntaxQualifiedTableName.cpp */; };
 		2367BB8E2215004300380122 /* SyntaxSchema.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC22217DFADC006E9E73 /* SyntaxSchema.cpp */; };
 		2367BB8F2215004300380122 /* WCTProperty.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6911EA0D6680021EFA7 /* WCTProperty.mm */; };
@@ -555,7 +558,6 @@
 		2367BC1F2215004300380122 /* StatementCreateIndex.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBC4217DFADC006E9E73 /* StatementCreateIndex.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2367BC202215004300380122 /* WCTMigrationInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 236BACE421BF9FC900C8B4D9 /* WCTMigrationInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2367BC212215004300380122 /* CorruptionQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DCE62112B17400954D71 /* CorruptionQueue.hpp */; };
-		2367BC222215004300380122 /* OneOrBinaryTokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23E163CC20FDDD6900C3F910 /* OneOrBinaryTokenizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2367BC232215004300380122 /* Interface.h in Headers */ = {isa = PBXBuildFile; fileRef = 23D4DA442085A3D300AE6D90 /* Interface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2367BC242215004300380122 /* RepairKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 23B9E66920AE6EE400CF1683 /* RepairKit.h */; };
 		2367BC252215004300380122 /* WCTTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 23F340D8204D32C2007DB8AB /* WCTTable.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1152,8 +1154,6 @@
 		23DF0A0E219029DB00F0B2B6 /* WCTDeclaration.h in Headers */ = {isa = PBXBuildFile; fileRef = 23DF0A0D219028E900F0B2B6 /* WCTDeclaration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23DF0A11219062D000F0B2B6 /* UnsafeString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23DF0A0F219062D000F0B2B6 /* UnsafeString.cpp */; };
 		23DF0A12219062D000F0B2B6 /* UnsafeString.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23DF0A10219062D000F0B2B6 /* UnsafeString.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		23E163CD20FDDD6900C3F910 /* OneOrBinaryTokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23E163CB20FDDD6900C3F910 /* OneOrBinaryTokenizer.cpp */; };
-		23E163CF20FDDD6900C3F910 /* OneOrBinaryTokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23E163CC20FDDD6900C3F910 /* OneOrBinaryTokenizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23E163D320FDDD8500C3F910 /* PorterStemming.c in Sources */ = {isa = PBXBuildFile; fileRef = 23E163D120FDDD8500C3F910 /* PorterStemming.c */; };
 		23E7EB1D2123D58D0056B5D8 /* HighWater.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23E7EB1B2123D58D0056B5D8 /* HighWater.cpp */; };
 		23E7EB1F2123D58D0056B5D8 /* HighWater.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23E7EB1C2123D58D0056B5D8 /* HighWater.hpp */; };
@@ -1931,6 +1931,8 @@
 		233B097C21BE50CA005AD534 /* BackupHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BackupHandle.hpp; sourceTree = "<group>"; };
 		233B097F21BE50D2005AD534 /* AssemblerHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AssemblerHandle.cpp; sourceTree = "<group>"; };
 		233B098021BE50D2005AD534 /* AssemblerHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AssemblerHandle.hpp; sourceTree = "<group>"; };
+		233E09B52216BD7B0006E608 /* OneOrBinaryTokenizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OneOrBinaryTokenizer.cpp; sourceTree = "<group>"; };
+		233E09B62216BD7B0006E608 /* OneOrBinaryTokenizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OneOrBinaryTokenizer.hpp; sourceTree = "<group>"; };
 		233E122F2195749C00BD488D /* ConvenientSelectTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ConvenientSelectTests.mm; sourceTree = "<group>"; };
 		233E12392195755400BD488D /* ConvenientInsertTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ConvenientInsertTests.mm; sourceTree = "<group>"; };
 		233E123D2195756400BD488D /* ConvenientUpdateTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ConvenientUpdateTests.mm; sourceTree = "<group>"; };
@@ -2467,8 +2469,6 @@
 		23DF0A0D219028E900F0B2B6 /* WCTDeclaration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTDeclaration.h; sourceTree = "<group>"; };
 		23DF0A0F219062D000F0B2B6 /* UnsafeString.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UnsafeString.cpp; sourceTree = "<group>"; };
 		23DF0A10219062D000F0B2B6 /* UnsafeString.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UnsafeString.hpp; sourceTree = "<group>"; };
-		23E163CB20FDDD6900C3F910 /* OneOrBinaryTokenizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OneOrBinaryTokenizer.cpp; sourceTree = "<group>"; };
-		23E163CC20FDDD6900C3F910 /* OneOrBinaryTokenizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = OneOrBinaryTokenizer.hpp; sourceTree = "<group>"; };
 		23E163D120FDDD8500C3F910 /* PorterStemming.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = PorterStemming.c; sourceTree = "<group>"; };
 		23E7EB1B2123D58D0056B5D8 /* HighWater.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HighWater.cpp; sourceTree = "<group>"; };
 		23E7EB1C2123D58D0056B5D8 /* HighWater.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HighWater.hpp; sourceTree = "<group>"; };
@@ -4067,14 +4067,14 @@
 		23E163CA20FDDD6900C3F910 /* tokenizer */ = {
 			isa = PBXGroup;
 			children = (
-				23E163CB20FDDD6900C3F910 /* OneOrBinaryTokenizer.cpp */,
-				23E163CC20FDDD6900C3F910 /* OneOrBinaryTokenizer.hpp */,
 				23E163D120FDDD8500C3F910 /* PorterStemming.c */,
 				23B4DCD92112AC5600954D71 /* TokenizerModuleTemplate.hpp */,
 				2304B42C22156E1500901953 /* TokenizerModules.cpp */,
 				2304B42D22156E1500901953 /* TokenizerModules.hpp */,
 				2304B42622156CD700901953 /* TokenizerModule.cpp */,
 				2304B42722156CD700901953 /* TokenizerModule.hpp */,
+				233E09B52216BD7B0006E608 /* OneOrBinaryTokenizer.cpp */,
+				233E09B62216BD7B0006E608 /* OneOrBinaryTokenizer.hpp */,
 			);
 			path = tokenizer;
 			sourceTree = "<group>";
@@ -4538,7 +4538,6 @@
 				2367BC1F2215004300380122 /* StatementCreateIndex.hpp in Headers */,
 				2367BC202215004300380122 /* WCTMigrationInfo.h in Headers */,
 				2367BC212215004300380122 /* CorruptionQueue.hpp in Headers */,
-				2367BC222215004300380122 /* OneOrBinaryTokenizer.hpp in Headers */,
 				2367BC232215004300380122 /* Interface.h in Headers */,
 				2367BC242215004300380122 /* RepairKit.h in Headers */,
 				2367BC252215004300380122 /* WCTTable.h in Headers */,
@@ -4554,6 +4553,7 @@
 				2367BC2F2215004300380122 /* ExpressionOperable.hpp in Headers */,
 				2367BC302215004300380122 /* HandleRelated.hpp in Headers */,
 				2367BC312215004300380122 /* SyntaxOrderingTerm.hpp in Headers */,
+				233E09BA2216BD7B0006E608 /* OneOrBinaryTokenizer.hpp in Headers */,
 				2367BC322215004300380122 /* WCTValue.h in Headers */,
 				2367BC332215004300380122 /* CheckpointConfig.hpp in Headers */,
 				2367BC342215004300380122 /* WCTDatabase+Private.h in Headers */,
@@ -4893,7 +4893,6 @@
 				23EEDCC0217DFADC006E9E73 /* StatementCreateIndex.hpp in Headers */,
 				236BACE621BF9FC900C8B4D9 /* WCTMigrationInfo.h in Headers */,
 				23B4DCE92112B17400954D71 /* CorruptionQueue.hpp in Headers */,
-				23E163CF20FDDD6900C3F910 /* OneOrBinaryTokenizer.hpp in Headers */,
 				23D4DA452085A40A00AE6D90 /* Interface.h in Headers */,
 				23B9E66B20AE6EEA00CF1683 /* RepairKit.h in Headers */,
 				23F340DA204D32C3007DB8AB /* WCTTable.h in Headers */,
@@ -4909,6 +4908,7 @@
 				23EEDC70217DFADC006E9E73 /* ExpressionOperable.hpp in Headers */,
 				2360A5FD20D78F1B00E4A311 /* HandleRelated.hpp in Headers */,
 				23EEDD10217DFADC006E9E73 /* SyntaxOrderingTerm.hpp in Headers */,
+				233E09B92216BD7B0006E608 /* OneOrBinaryTokenizer.hpp in Headers */,
 				23F70F7B209FF0EC00CCE3CD /* WCTValue.h in Headers */,
 				23F70FBA20A055CF00CCE3CD /* CheckpointConfig.hpp in Headers */,
 				23DF0A0C2190275B00F0B2B6 /* WCTDatabase+Private.h in Headers */,
@@ -5982,6 +5982,7 @@
 				2367BB612215004300380122 /* WCTDatabase+Convenient.mm in Sources */,
 				2367BB622215004300380122 /* FactoryRenewer.cpp in Sources */,
 				2304B42922156CD700901953 /* TokenizerModule.cpp in Sources */,
+				233E09B82216BD7B0006E608 /* OneOrBinaryTokenizer.cpp in Sources */,
 				2367BB632215004300380122 /* SyntaxFrameSpec.cpp in Sources */,
 				2367BB642215004300380122 /* WCTDatabase+Handle.mm in Sources */,
 				2367BB652215004300380122 /* SyntaxTableOrSubquery.cpp in Sources */,
@@ -6023,7 +6024,6 @@
 				2367BB892215004300380122 /* BasicConfig.cpp in Sources */,
 				2367BB8A2215004300380122 /* StatementPragma.cpp in Sources */,
 				2367BB8B2215004300380122 /* SyntaxAnalyzeSTMT.cpp in Sources */,
-				2367BB8C2215004300380122 /* OneOrBinaryTokenizer.cpp in Sources */,
 				2367BB8D2215004300380122 /* SyntaxQualifiedTableName.cpp in Sources */,
 				2367BB8E2215004300380122 /* SyntaxSchema.cpp in Sources */,
 				2367BB8F2215004300380122 /* WCTProperty.mm in Sources */,
@@ -6318,6 +6318,7 @@
 				2349F7371EA0D6680021EFA7 /* WCTDatabase+Convenient.mm in Sources */,
 				23DD76BD20CF78C800E9B451 /* FactoryRenewer.cpp in Sources */,
 				2304B42822156CD700901953 /* TokenizerModule.cpp in Sources */,
+				233E09B72216BD7B0006E608 /* OneOrBinaryTokenizer.cpp in Sources */,
 				23EEDCFF217DFADC006E9E73 /* SyntaxFrameSpec.cpp in Sources */,
 				234DBCF42064DD0C000E31E8 /* WCTDatabase+Handle.mm in Sources */,
 				23EEDD21217DFADC006E9E73 /* SyntaxTableOrSubquery.cpp in Sources */,
@@ -6359,7 +6360,6 @@
 				23F70FA620A055BE00CCE3CD /* BasicConfig.cpp in Sources */,
 				23EEDCD7217DFADC006E9E73 /* StatementPragma.cpp in Sources */,
 				23EEDD2B217DFADC006E9E73 /* SyntaxAnalyzeSTMT.cpp in Sources */,
-				23E163CD20FDDD6900C3F910 /* OneOrBinaryTokenizer.cpp in Sources */,
 				23EEDD13217DFADC006E9E73 /* SyntaxQualifiedTableName.cpp in Sources */,
 				23EEDD1B217DFADC006E9E73 /* SyntaxSchema.cpp in Sources */,
 				2349F7691EA0D6680021EFA7 /* WCTProperty.mm in Sources */,

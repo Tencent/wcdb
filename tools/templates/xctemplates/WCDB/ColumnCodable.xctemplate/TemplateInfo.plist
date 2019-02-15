@@ -5,9 +5,9 @@
 	<key>Kind</key>
 	<string>Xcode.IDEFoundation.TextSubstitutionFileTemplateKind</string>
 	<key>Description</key>
-	<string>A WCTColumnCoding class.</string>
+	<string>Column Codable</string>
 	<key>Summary</key>
-	<string>A WCTColumnCoding class</string>
+	<string>Column Codable</string>
 	<key>SortOrder</key>
 	<string>1</string>
 	<key>DefaultCompletionName</key>

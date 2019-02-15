@@ -27,9 +27,38 @@
 
 namespace WCDB {
 
-#pragma mark - Cursor
-class OneOrBinaryCursorInfo : public AbstractTokenizerCursorInfo {
+class OneOrBinaryTokenizerInfo final : public AbstractTokenizerInfo {
 public:
+    OneOrBinaryTokenizerInfo(int argc, const char *const *argv);
+    ~OneOrBinaryTokenizerInfo();
+};
+
+class OneOrBinaryTokenizerCursorInfo : public AbstractTokenizerCursorInfo {
+public:
+    OneOrBinaryTokenizerCursorInfo(const char *input,
+                                   int inputLength,
+                                   AbstractTokenizerInfo *tokenizerInfo);
+    virtual ~OneOrBinaryTokenizerCursorInfo() = 0;
+
+    int step(const char **ppToken,
+             int *pnBytes,
+             int *piStartOffset,
+             int *piEndOffset,
+             int *piPosition) override final;
+
+protected:
+    //You must figure out the unicode character set of [symbol] on current platform or implement it refer to http://www.fileformat.info/info/unicode/category/index.htm
+    typedef unsigned short UnicodeChar;
+    virtual std::pair<int, bool> isSymbol(UnicodeChar theChar) = 0;
+
+private:
+    const char *m_input;
+    int m_inputLength;
+
+    int m_position;
+    int m_startOffset;
+    int m_endOffset;
+
     enum class TokenType : unsigned int {
         None = 0,
         BasicMultilingualPlaneLetter = 0x00000001,
@@ -39,32 +68,11 @@ public:
         AuxiliaryPlaneOther = 0xFFFFFFFF,
     };
 
-    OneOrBinaryCursorInfo(const char *input, int inputLength, DefaultTokenizerInfo *tokenizerInfo);
-    virtual ~OneOrBinaryCursorInfo() = 0;
-
-    int step(const char **ppToken,
-             int *pnBytes,
-             int *piStartOffset,
-             int *piEndOffset,
-             int *piPosition) override final;
-
-protected:
-    const char *m_input;
-    int m_inputLength;
-
-    int m_position;
-    int m_startOffset;
-    int m_endOffset;
-
     int m_cursor;
     TokenType m_cursorTokenType;
     int m_cursorTokenLength;
     int cursorStep();
     int cursorSetup();
-
-    //You must figure out the unicode character set of [symbol] on current platform or implement it refer to http://www.fileformat.info/info/unicode/category/index.htm
-    typedef unsigned short UnicodeChar;
-    virtual std::pair<int, bool> isSymbol(UnicodeChar theChar) = 0;
 
     int lemmatization(const char *input, int inputLength);
     std::vector<char> m_lemmaBuffer;
@@ -77,8 +85,10 @@ protected:
 
     std::vector<char> m_buffer;
     int m_bufferLength;
+
+    OneOrBinaryTokenizerInfo *m_tokenizerInfo;
 };
 
-} //namespace WCDB
+} // namespace WCDB
 
 #endif /* __WCDB_ONE_OR_BINARY_TOKENIZER_HPP */

@@ -27,7 +27,7 @@ namespace WCDB {
 
 struct Tokenizer {
     sqlite3_tokenizer base;
-    DefaultTokenizerInfo *info;
+    AbstractTokenizerInfo *info;
 };
 
 struct TokenizerCursor {
@@ -35,19 +35,19 @@ struct TokenizerCursor {
     AbstractTokenizerCursorInfo *info;
 };
 
-#pragma mark - DefaultTokenizerInfo
-DefaultTokenizerInfo::DefaultTokenizerInfo(int argc, const char *const *argv)
+#pragma mark - AbstractTokenizerInfo
+AbstractTokenizerInfo::AbstractTokenizerInfo(int argc, const char *const *argv)
 {
 }
 
-DefaultTokenizerInfo::~DefaultTokenizerInfo()
+AbstractTokenizerInfo::~AbstractTokenizerInfo()
 {
 }
 
 #pragma mark - AbstractTokenizerCursorInfo
 AbstractTokenizerCursorInfo::AbstractTokenizerCursorInfo(const char *input,
                                                          int inputLength,
-                                                         DefaultTokenizerInfo *tokenizerInfo)
+                                                         AbstractTokenizerInfo *tokenizerInfo)
 {
 }
 
@@ -57,7 +57,7 @@ AbstractTokenizerCursorInfo::~AbstractTokenizerCursorInfo()
 
 #pragma mark - AbstractTokenizerModuleTemplate
 int AbstractTokenizerModuleTemplate::newTokenizer(Tokenizer **ppTokenizer,
-                                                  DefaultTokenizerInfo *info)
+                                                  AbstractTokenizerInfo *info)
 {
     WCTInnerAssert(ppTokenizer != nullptr);
     *ppTokenizer = nullptr;
@@ -74,7 +74,7 @@ int AbstractTokenizerModuleTemplate::newTokenizer(Tokenizer **ppTokenizer,
     return SQLITE_OK;
 }
 
-DefaultTokenizerInfo *AbstractTokenizerModuleTemplate::getTokenizerInfo(Tokenizer *pTokenizer)
+AbstractTokenizerInfo *AbstractTokenizerModuleTemplate::getTokenizerInfo(Tokenizer *pTokenizer)
 {
     WCTInnerAssert(pTokenizer != nullptr);
     return pTokenizer->info;

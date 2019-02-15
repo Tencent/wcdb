@@ -28,11 +28,22 @@ extern int porterStem(char *p, int i, int j);
 
 namespace WCDB {
 
-#pragma mark - Cursor
-OneOrBinaryCursorInfo::OneOrBinaryCursorInfo(const char *input,
-                                             int inputLength,
-                                             DefaultTokenizerInfo *tokenizerInfo)
+#pragma mark - Tokenizer Info
+OneOrBinaryTokenizerInfo::OneOrBinaryTokenizerInfo(int argc, const char *const *argv)
+: AbstractTokenizerInfo(argc, argv)
+{
+}
+
+OneOrBinaryTokenizerInfo::~OneOrBinaryTokenizerInfo()
+{
+}
+
+#pragma mark - Tokenizer Cursor Info
+OneOrBinaryTokenizerCursorInfo::OneOrBinaryTokenizerCursorInfo(const char *input,
+                                                               int inputLength,
+                                                               AbstractTokenizerInfo *tokenizerInfo)
 : AbstractTokenizerCursorInfo(input, inputLength, tokenizerInfo)
+, m_tokenizerInfo(static_cast<OneOrBinaryTokenizerInfo *>(tokenizerInfo))
 , m_input(input)
 , m_inputLength(inputLength)
 , m_position(0)
@@ -46,21 +57,22 @@ OneOrBinaryCursorInfo::OneOrBinaryCursorInfo(const char *input,
 , m_subTokensDoubleChar(true)
 , m_bufferLength(0)
 {
+    static_assert(sizeof(UnicodeChar) == 2, "UnicodeChar must be 2 byte length.");
+
     if (m_input == nullptr) {
         m_inputLength = 0;
     }
     if (m_inputLength < 0) {
         m_inputLength = (int) strlen(m_input);
     }
-    static_assert(sizeof(UnicodeChar) == 2, "UnicodeChar must be 2 byte length.");
 }
 
-OneOrBinaryCursorInfo::~OneOrBinaryCursorInfo()
+OneOrBinaryTokenizerCursorInfo::~OneOrBinaryTokenizerCursorInfo()
 {
 }
 
 //Inspired by zorrozhang
-int OneOrBinaryCursorInfo::step(
+int OneOrBinaryTokenizerCursorInfo::step(
 const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *piPosition)
 {
     Error::Code code = Error::Code::OK;
@@ -154,7 +166,7 @@ const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *p
     return Error::c2rc(Error::Code::OK);
 }
 
-int OneOrBinaryCursorInfo::cursorStep()
+int OneOrBinaryTokenizerCursorInfo::cursorStep()
 {
     if (m_cursor + m_cursorTokenLength < m_inputLength) {
         m_cursor += m_cursorTokenLength;
@@ -166,7 +178,7 @@ int OneOrBinaryCursorInfo::cursorStep()
     return Error::c2rc(Error::Code::OK);
 }
 
-int OneOrBinaryCursorInfo::cursorSetup()
+int OneOrBinaryTokenizerCursorInfo::cursorSetup()
 {
     Error::Code code;
     const unsigned char &first = m_input[m_cursor];
@@ -235,7 +247,7 @@ int OneOrBinaryCursorInfo::cursorSetup()
     return Error::c2rc(Error::Code::OK);
 }
 
-int OneOrBinaryCursorInfo::lemmatization(const char *input, int inputLength)
+int OneOrBinaryTokenizerCursorInfo::lemmatization(const char *input, int inputLength)
 {
     //tolower only. You can implement your own lemmatization.
     if (inputLength > m_buffer.capacity()) {
@@ -248,7 +260,7 @@ int OneOrBinaryCursorInfo::lemmatization(const char *input, int inputLength)
     return Error::c2rc(Error::Code::OK);
 }
 
-void OneOrBinaryCursorInfo::subTokensStep()
+void OneOrBinaryTokenizerCursorInfo::subTokensStep()
 {
     m_startOffset = m_subTokensCursor;
     m_bufferLength = m_subTokensLengthArray[0];
@@ -267,4 +279,4 @@ void OneOrBinaryCursorInfo::subTokensStep()
     m_endOffset = m_startOffset + m_bufferLength;
 }
 
-} //namespace WCDB
+} // namespace WCDB

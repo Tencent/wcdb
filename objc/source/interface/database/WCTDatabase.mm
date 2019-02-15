@@ -60,7 +60,7 @@ static constexpr const char *NotifierPathPreprocessorName
             NSLog(@"%s", message.c_str());
         });
 
-        WCDB::Core::shared()->addTokenizer(WCTTokenizerOneOrBinary, WCDB::TokenizerModuleTemplate<WCDB::DefaultTokenizerInfo, WCTOneOrBinaryCursorInfo>::specialize());
+        WCDB::Core::shared()->addTokenizer(WCTTokenizerOneOrBinary, WCDB::TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizerCursorInfo>::specialize());
 
 #if TARGET_OS_IPHONE && !TARGET_OS_WATCH
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];

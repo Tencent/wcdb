@@ -25,23 +25,20 @@
 
 namespace WCDB {
 
-class DefaultTokenizerInfo {
+class AbstractTokenizerInfo {
 public:
-    DefaultTokenizerInfo(int argc, const char *const *argv);
-    virtual ~DefaultTokenizerInfo();
+    AbstractTokenizerInfo(int argc, const char *const *argv);
+    virtual ~AbstractTokenizerInfo() = 0;
 };
 
 class AbstractTokenizerCursorInfo {
 public:
-    AbstractTokenizerCursorInfo(const char *input, int inputLength, DefaultTokenizerInfo *tokenizerInfo);
+    AbstractTokenizerCursorInfo(const char *input, int inputLength, AbstractTokenizerInfo *tokenizerInfo);
     virtual ~AbstractTokenizerCursorInfo() = 0;
 
     virtual int
     step(const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *piPosition)
     = 0;
-
-protected:
-    DefaultTokenizerInfo *m_tokenizerInfo;
 };
 
 typedef struct Tokenizer Tokenizer;
@@ -55,8 +52,8 @@ public:
     = delete;
 
 protected:
-    static int newTokenizer(Tokenizer **ppTokenizer, DefaultTokenizerInfo *info);
-    static DefaultTokenizerInfo *getTokenizerInfo(Tokenizer *pTokenizer);
+    static int newTokenizer(Tokenizer **ppTokenizer, AbstractTokenizerInfo *info);
+    static AbstractTokenizerInfo *getTokenizerInfo(Tokenizer *pTokenizer);
     static void deleteTokenizer(Tokenizer *pTokenizer);
 
     static int newCursor(TokenizerCursor **ppCursor, AbstractTokenizerCursorInfo *info);

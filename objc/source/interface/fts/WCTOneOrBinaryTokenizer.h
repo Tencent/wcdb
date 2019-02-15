@@ -22,16 +22,13 @@
 #import <WCDB/OneOrBinaryTokenizer.hpp>
 #import <WCDB/WCTCommon.h>
 
-class WCTOneOrBinaryCursorInfo final : public WCDB::OneOrBinaryCursorInfo {
+class WCTOneOrBinaryTokenizerCursorInfo final : public WCDB::OneOrBinaryTokenizerCursorInfo {
 public:
-    WCTOneOrBinaryCursorInfo(const char *input,
-                             int inputLength,
-                             WCDB::DefaultTokenizerInfo *tokenizerInfo);
+    WCTOneOrBinaryTokenizerCursorInfo(const char *input,
+                                      int inputLength,
+                                      WCDB::AbstractTokenizerInfo *tokenizerInfo);
 
-    WCTOneOrBinaryCursorInfo(const WCTOneOrBinaryCursorInfo &) = delete;
-    WCTOneOrBinaryCursorInfo &operator=(const WCTOneOrBinaryCursorInfo &) = delete;
-
-    ~WCTOneOrBinaryCursorInfo();
+    ~WCTOneOrBinaryTokenizerCursorInfo();
 
 protected:
     CFCharacterSetRef m_symbolCharacterSet;

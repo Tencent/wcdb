@@ -24,14 +24,12 @@
 #include <WCDB/TokenizerModule.hpp>
 #include <type_traits>
 
-#warning TODO - file template
-
 namespace WCDB {
 
 template<typename TokenizerInfo, typename TokenizerCursorInfo>
 class TokenizerModuleTemplate final : protected AbstractTokenizerModuleTemplate {
 public:
-    static_assert(std::is_base_of<DefaultTokenizerInfo, TokenizerInfo>::value, "");
+    static_assert(std::is_base_of<AbstractTokenizerInfo, TokenizerInfo>::value, "");
     static_assert(std::is_base_of<AbstractTokenizerCursorInfo, TokenizerCursorInfo>::value, "");
 
     static TokenizerModule specialize()
@@ -53,7 +51,7 @@ public:
     static int destroy(Tokenizer *pTokenizer)
     {
         if (pTokenizer != nullptr) {
-            DefaultTokenizerInfo *info = getTokenizerInfo(pTokenizer);
+            AbstractTokenizerInfo *info = getTokenizerInfo(pTokenizer);
             deleteTokenizerInfo(static_cast<TokenizerInfo *>(info));
             deleteTokenizer(pTokenizer);
         }
