@@ -35,11 +35,13 @@ void TokenizerModules::add(const String& name, const TokenizerModule& module)
 std::map<String, TokenizerModule> TokenizerModules::get(const std::list<String>& names) const
 {
     std::map<String, TokenizerModule> modules;
-    SharedLockGuard lockGuard(m_lock);
-    for (const auto& name : names) {
-        auto iter = m_modules.find(name);
-        if (iter != m_modules.end()) {
-            modules[iter->first] = iter->second;
+    {
+        SharedLockGuard lockGuard(m_lock);
+        for (const auto& name : names) {
+            auto iter = m_modules.find(name);
+            if (iter != m_modules.end()) {
+                modules[iter->first] = iter->second;
+            }
         }
     }
     return modules;
