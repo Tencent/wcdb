@@ -169,6 +169,7 @@ ssize_t illPwrite(int, const void *, size_t, off_t)
 
 @implementation WCTDatabase (TestCase)
 
+#warning TODO - fix disable sqlite write bug
 + (void)enableSQLiteWrite
 {
     NSLog(@"Will enable SQLite write");
