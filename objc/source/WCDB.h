@@ -22,9 +22,14 @@
 #if __cplusplus < 201402L
 #error Since WCDB is based on C++14, for those projects including WCDB, you should use at least `CLANG_CXX_LANGUAGE_STANDARD = gnu++14` and `CLANG_CXX_LIBRARY = libc++` in the build setting.
 #endif
-#else // #ifdef __cplusplus
+#else // __cplusplus
 #error Since WCDB is an Objective-C++ framework, for those files including WCDB, you should change their subfix from `.m` to `.mm`.
-#endif // #ifdef __cplusplus
+#endif // __cplusplus
+
+// WCDB may fail to compile since there are few frameworks that define `offset` as a macro.
+#ifdef offset
+#error Symbol `offset` should not be defined as a macro since it's a common used word.
+#endif
 
 #import <WCDB/Interface.h>
 #import <WCDB/WCTBuiltin.h>
