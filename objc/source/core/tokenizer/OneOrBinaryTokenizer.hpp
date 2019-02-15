@@ -18,19 +18,17 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_TOKENIZER_HPP
-#define __WCDB_TOKENIZER_HPP
+#ifndef __WCDB_ONE_OR_BINARY_TOKENIZER_HPP
+#define __WCDB_ONE_OR_BINARY_TOKENIZER_HPP
 
-#include <WCDB/Tokenize.hpp>
+#include <WCDB/TokenizerModuleTemplate.hpp>
 #include <cstddef>
 #include <vector>
 
 namespace WCDB {
 
-namespace FTS {
-
 #pragma mark - Cursor
-class CursorInfo : public CursorInfoBase {
+class OneOrBinaryCursorInfo : public AbstractTokenizerCursorInfo {
 public:
     enum class TokenType : unsigned int {
         None = 0,
@@ -41,8 +39,8 @@ public:
         AuxiliaryPlaneOther = 0xFFFFFFFF,
     };
 
-    CursorInfo(const char *input, int inputLength, TokenizerInfoBase *tokenizerInfo);
-    virtual ~CursorInfo() = 0;
+    OneOrBinaryCursorInfo(const char *input, int inputLength, DefaultTokenizerInfo *tokenizerInfo);
+    virtual ~OneOrBinaryCursorInfo() = 0;
 
     int step(const char **ppToken,
              int *pnBytes,
@@ -66,7 +64,7 @@ protected:
 
     //You must figure out the unicode character set of [symbol] on current platform or implement it refer to http://www.fileformat.info/info/unicode/category/index.htm
     typedef unsigned short UnicodeChar;
-    virtual int isSymbol(UnicodeChar theChar, bool *result) = 0;
+    virtual std::pair<int, bool> isSymbol(UnicodeChar theChar) = 0;
 
     int lemmatization(const char *input, int inputLength);
     std::vector<char> m_lemmaBuffer;
@@ -81,8 +79,6 @@ protected:
     int m_bufferLength;
 };
 
-} //namespace FTS
-
 } //namespace WCDB
 
-#endif /* __WCDB_TOKENIZER_HPP */
+#endif /* __WCDB_ONE_OR_BINARY_TOKENIZER_HPP */

@@ -80,9 +80,14 @@ void Error::clear()
 }
 
 #pragma mark - Code
-Error::Code Error::rc(int rc)
+Error::Code Error::rc2c(int rc)
 {
     return (Error::Code) rc;
+}
+
+int Error::c2rc(Error::Code code)
+{
+    return (int) code;
 }
 
 void Error::setCode(Code code)

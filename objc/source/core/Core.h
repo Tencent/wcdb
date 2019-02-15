@@ -36,14 +36,15 @@
 #include <WCDB/CustomConfig.hpp>
 #include <WCDB/PerformanceTraceConfig.hpp>
 #include <WCDB/SQLTraceConfig.hpp>
-#include <WCDB/TokenizeConfig.hpp>
+#include <WCDB/TokenizerConfig.hpp>
 
 #include <WCDB/Database.hpp>
 #include <WCDB/DatabasePool.hpp>
 #include <WCDB/RecyclableHandle.hpp>
 
-#include <WCDB/Modules.hpp>
-#include <WCDB/Tokenizer.hpp>
+#include <WCDB/OneOrBinaryTokenizer.hpp>
+#include <WCDB/TokenizerModule.hpp>
+#include <WCDB/TokenizerModules.hpp>
 
 #include <WCDB/MigrationInfo.hpp>
 
@@ -51,75 +52,103 @@
 
 namespace WCDB {
 
+// The order of member variables here is important.
 class Core final : public DatabasePoolEvent,
                    public CheckpointEvent,
                    public BackupEvent,
                    public MigrationEvent {
+#pragma mark - Core
 public:
     static Core* shared();
+    Core(const Core&) = delete;
+    Core& operator=(const Core&) = delete;
     ~Core();
 
+protected:
+    Core();
+    static int vfsOpen(const char* path, int flags, int mode);
+    static void globalLog(void* core, int code, const char* message);
+
+#pragma mark - Database
+public:
     RecyclableDatabase getOrCreateDatabase(const String& path);
     RecyclableDatabase getExistingDatabase(const String& path);
 
+    void purgeDatabasePool();
+
+protected:
+    void preprocessError(const Error& error, Error::Infos& infos);
+    void onDatabaseCreated(Database* database) override final;
+    DatabasePool m_databasePool;
+
+#pragma mark - Tokenizer
+public:
+    void addTokenizer(const String& name, const TokenizerModule& module);
+    std::shared_ptr<Config> tokenizerConfig(const std::list<String>& tokenizeNames);
+
+protected:
+    TokenizerModules m_modules;
+
+#pragma mark - Corruption
+public:
     typedef std::function<bool(Database*)> CorruptedNotification;
     bool isFileCorrupted(const String& path);
     void setNotificationWhenDatabaseCorrupted(const String& path,
                                               const CorruptedNotification& notification);
 
+protected:
+    std::shared_ptr<CorruptionQueue> m_corruptionQueue;
+
+#pragma mark - Checkpoint
+public:
+    bool databaseShouldCheckpoint(const String& path, int frames) override final;
+
+protected:
+    std::shared_ptr<CheckpointQueue> m_checkpointQueue;
+
+#pragma mark - Backup
+public:
+    const std::shared_ptr<Config>& backupConfig();
+    bool databaseShouldBackup(const String& path) override final;
+
+protected:
+    std::shared_ptr<BackupQueue> m_backupQueue;
+    std::shared_ptr<Config> m_backupConfig;
+
+#pragma mark - Migration
+public:
     void setAutoMigration(const String& path, bool flag);
+    std::pair<bool, bool> databaseShouldMigrate(const String& path) override final;
 
-    void purgeDatabasePool();
+protected:
+    std::shared_ptr<MigrationQueue> m_migrationQueue;
 
-    const std::shared_ptr<Configs>& configs();
-
-    void addTokenizer(const String& name, unsigned char* address);
+#pragma mark - Trace
+public:
     void setNotificationForSQLGLobalTraced(const ShareableSQLTraceConfig::Notification& notification);
     void setNotificationWhenPerformanceGlobalTraced(
     const ShareablePerformanceTraceConfig::Notification& notification);
-
-    const std::shared_ptr<Config>& backupConfig();
-
-    std::shared_ptr<Config> tokenizeConfig(const std::list<String>& tokenizeNames);
-
-    std::shared_ptr<Config> cipherConfig(const UnsafeData& cipher, int pageSize = 4096);
-
     std::shared_ptr<Config> sqlTraceConfig(const SQLTraceConfig::Notification& notification);
-
     std::shared_ptr<Config>
     performanceTraceConfig(const PerformanceTraceConfig::Notification& notification);
+
+protected:
+    std::shared_ptr<Config> m_globalSQLTraceConfig;
+    std::shared_ptr<Config> m_globalPerformanceTraceConfig;
+
+#pragma mark - Cipher
+public:
+    std::shared_ptr<Config> cipherConfig(const UnsafeData& cipher, int pageSize = 4096);
+
+#pragma mark - Config
+public:
+    const std::shared_ptr<Configs>& configs();
 
     std::shared_ptr<Config>
     customConfig(const CustomConfig::Invocation& invocation,
                  const CustomConfig::Invocation& uninvocation = nullptr);
 
-    Core(const Core&) = delete;
-    Core& operator=(const Core&) = delete;
-
 protected:
-    Core();
-
-    static int vfsOpen(const char* path, int flags, int mode);
-    static void globalLog(void* core, int code, const char* message);
-    void preprocessError(const Error& error, Error::Infos& infos);
-    void onDatabaseCreated(Database* database) override final;
-    bool databaseShouldCheckpoint(const String& path, int frames) override final;
-    bool databaseShouldBackup(const String& path) override final;
-    std::pair<bool, bool> databaseShouldMigrate(const String& path) override final;
-
-    // The order of member variables here is important.
-    DatabasePool m_databasePool;
-    std::shared_ptr<FTS::Modules> m_modules;
-
-    std::shared_ptr<CorruptionQueue> m_corruptionQueue;
-    std::shared_ptr<CheckpointQueue> m_checkpointQueue;
-    std::shared_ptr<BackupQueue> m_backupQueue;
-    std::shared_ptr<MigrationQueue> m_migrationQueue;
-
-    std::shared_ptr<Config> m_backupConfig;
-    std::shared_ptr<Config> m_checkpointConfig;
-    std::shared_ptr<Config> m_globalSQLTraceConfig;
-    std::shared_ptr<Config> m_globalPerformanceTraceConfig;
     std::shared_ptr<Configs> m_configs;
 };
 

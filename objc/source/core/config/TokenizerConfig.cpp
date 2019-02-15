@@ -19,35 +19,33 @@
  */
 
 #include <WCDB/Handle.hpp>
-#include <WCDB/Modules.hpp>
-#include <WCDB/TokenizeConfig.hpp>
+#include <WCDB/TokenizerConfig.hpp>
+#include <WCDB/TokenizerModules.hpp>
 
 namespace WCDB {
 
-TokenizeConfig::TokenizeConfig(const std::list<String> &tokenizeNames,
-                               const std::shared_ptr<FTS::Modules> &modules)
+TokenizerConfig::TokenizerConfig(const std::map<String, TokenizerModule>& modules)
 : Config()
-, m_tokenizeNames(tokenizeNames)
+, m_modules(modules)
 , m_fts3Tokenizer(StatementSelect().select(
   Expression::function("fts3_tokenizer").invoke().arguments(BindParameter::bindParameters(2))))
-, m_modules(modules)
 {
 }
 
-bool TokenizeConfig::invoke(Handle *handle)
+bool TokenizerConfig::invoke(Handle* handle)
 {
     bool succeed = true;
-    for (const String &name : m_tokenizeNames) {
-        const UnsafeData &address = m_modules->getAddress(name);
-        if (address.empty()) {
-            continue;
-        }
+    for (const auto& iter : m_modules) {
         succeed = false;
         bool exists;
-        std::tie(succeed, exists) = handle->ft3TokenizerExists(name);
+        std::tie(succeed, exists) = handle->ft3TokenizerExists(iter.first);
         if (succeed && !exists) {
             if (handle->prepare(m_fts3Tokenizer)) {
-                handle->bindText(name.c_str(), 1);
+                handle->bindText(iter.first.c_str(), 1);
+                sqlite3_tokenizer_module* module
+                = (sqlite3_tokenizer_module*) &iter.second;
+                UnsafeData address((unsigned char*) &module,
+                                   sizeof(sqlite3_tokenizer_module*));
                 handle->bindBLOB(address, 2);
                 succeed = handle->step();
                 handle->finalize();

@@ -31,8 +31,8 @@
 #endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
 
 // FTS
-#import <WCDB/WCTCursorInfo.h>
 #import <WCDB/WCTDatabase+FTS.h>
+#import <WCDB/WCTOneOrBinaryTokenizer.h>
 
 namespace WCDB {
 static constexpr const char *NotifierPathPreprocessorName
@@ -60,7 +60,7 @@ static constexpr const char *NotifierPathPreprocessorName
             NSLog(@"%s", message.c_str());
         });
 
-        WCDB::Core::shared()->addTokenizer(WCTTokenizerWCDB, WCDB::FTS::Module<void, WCTCursorInfo>::address());
+        WCDB::Core::shared()->addTokenizer(WCTTokenizerOneOrBinary, WCDB::TokenizerModuleTemplate<WCDB::DefaultTokenizerInfo, WCTOneOrBinaryCursorInfo>::specialize());
 
 #if TARGET_OS_IPHONE && !TARGET_OS_WATCH
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];

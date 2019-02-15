@@ -124,9 +124,12 @@
 #define WCDB_VIRTUAL_TABLE_ARGUMENT(className, argument) \
     __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(className, argument)
 
-#define WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE_WCDB(className) \
-    WCDB_VIRTUAL_TABLE_ARGUMENT(                             \
-    className, WCDB::StatementCreateVirtualTable::tokenize(WCTTokenizerWCDB))
+#define WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE_ONE_OR_BINARY(className) \
+    WCDB_VIRTUAL_TABLE_ARGUMENT(                                      \
+    className, WCDB::StatementCreateVirtualTable::tokenize(WCTTokenizerOneOrBinary))
+#define WCDB_VIRTUAL_TABLE_ARGUMENT_TOKENIZE_LEGACY_ONE_OR_BINARY(className) \
+    WCDB_VIRTUAL_TABLE_ARGUMENT(                                             \
+    className, WCDB::StatementCreateVirtualTable::tokenize(WCTTokenizerLegacyOneOrBinary))
 
 #define WCDB_VIRTUAL_TABLE_MODULE(className, moduleName) \
     __WCDB_VIRTUAL_TABLE_MODULE_IMP(className, moduleName)

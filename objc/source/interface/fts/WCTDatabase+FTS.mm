@@ -26,7 +26,8 @@ NSString* const WCTTokenizerSimple = @"simple";
 NSString* const WCTTokenizerPorter = @"porter";
 NSString* const WCTTokenizerICU = @"icu";
 NSString* const WCTTokenizerUnicode61 = @"unicode61";
-NSString* const WCTTokenizerWCDB = @"WCDB";
+NSString* const WCTTokenizerOneOrBinary = @"wcdb_one_or_binary";
+NSString* const WCTTokenizerLegacyOneOrBinary = @"WCDB";
 
 NSString* const WCTModuleFTS3 = @"fts3";
 NSString* const WCTModuleFTS5 = @"fts5";
@@ -36,7 +37,7 @@ NSString* const WCTModuleFTS5 = @"fts5";
 - (void)setTokenizer:(NSString*)tokenizerName
 {
     _database->setConfig(WCDB::TokenizeConfigName,
-                         WCDB::Core::shared()->tokenizeConfig({ tokenizerName }),
+                         WCDB::Core::shared()->tokenizerConfig({ tokenizerName }),
                          WCDB::Configs::Priority::Higher);
 }
 
@@ -48,14 +49,13 @@ NSString* const WCTModuleFTS5 = @"fts5";
         theTokenizeNames.push_back(tokenizerName);
     }
     _database->setConfig(WCDB::TokenizeConfigName,
-                         WCDB::Core::shared()->tokenizeConfig(theTokenizeNames),
+                         WCDB::Core::shared()->tokenizerConfig(theTokenizeNames),
                          WCDB::Configs::Priority::Higher);
 }
 
-+ (void)addTokenizer:(unsigned char*)address named:(NSString*)name
++ (void)addTokenizer:(const WCDB::TokenizerModule&)module named:(NSString*)name
 {
-    WCDB::Core::shared()
-    ->addTokenizer(name, address);
+    WCDB::Core::shared()->addTokenizer(name, module);
 }
 
 @end

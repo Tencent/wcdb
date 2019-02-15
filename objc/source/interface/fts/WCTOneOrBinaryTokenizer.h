@@ -18,29 +18,24 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_MODULES_HPP
-#define __WCDB_MODULES_HPP
+#import <CoreFoundation/CoreFoundation.h>
+#import <WCDB/OneOrBinaryTokenizer.hpp>
+#import <WCDB/WCTCommon.h>
 
-#include <WCDB/Lock.hpp>
-#include <WCDB/UnsafeData.hpp>
-
-namespace WCDB {
-
-namespace FTS {
-
-class Modules final {
+class WCTOneOrBinaryCursorInfo final : public WCDB::OneOrBinaryCursorInfo {
 public:
-    void addAddress(const String &name, unsigned char *address);
+    WCTOneOrBinaryCursorInfo(const char *input,
+                             int inputLength,
+                             WCDB::DefaultTokenizerInfo *tokenizerInfo);
 
-    const UnsafeData &getAddress(const String &name) const;
+    WCTOneOrBinaryCursorInfo(const WCTOneOrBinaryCursorInfo &) = delete;
+    WCTOneOrBinaryCursorInfo &operator=(const WCTOneOrBinaryCursorInfo &) = delete;
+
+    ~WCTOneOrBinaryCursorInfo();
 
 protected:
-    std::map<String, UnsafeData> m_addresses;
-    mutable SharedLock m_lock;
+    CFCharacterSetRef m_symbolCharacterSet;
+    static CFCharacterSetRef generateSymbolCharacterSet();
+
+    std::pair<int, bool> isSymbol(UnicodeChar theChar) override final;
 };
-
-} // namespace FTS
-
-} // namespace WCDB
-
-#endif /* __WCDB_MODULES_HPP */

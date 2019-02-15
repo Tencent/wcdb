@@ -20,6 +20,7 @@
 
 #import <WCDB/WCTCommon.h>
 #import <WCDB/WCTDatabase.h>
+#import <WCDB/WCTOneOrBinaryTokenizer.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -27,7 +28,9 @@ WCDB_EXTERN NSString* const WCTTokenizerSimple;
 WCDB_EXTERN NSString* const WCTTokenizerPorter;
 WCDB_EXTERN NSString* const WCTTokenizerICU;
 WCDB_EXTERN NSString* const WCTTokenizerUnicode61;
-WCDB_EXTERN NSString* const WCTTokenizerWCDB;
+// WCDB implemented tokenizer
+WCDB_EXTERN NSString* const WCTTokenizerOneOrBinary;
+WCDB_EXTERN NSString* const WCTTokenizerLegacyOneOrBinary;
 
 WCDB_EXTERN NSString* const WCTModuleFTS3;
 WCDB_EXTERN NSString* const WCTModuleFTS5;
@@ -38,7 +41,7 @@ WCDB_EXTERN NSString* const WCTModuleFTS5;
 
 - (void)setTokenizers:(NSArray<NSString*>*)tokenizerNames;
 
-+ (void)addTokenizer:(unsigned char*)address named:(NSString*)name;
++ (void)addTokenizer:(const WCDB::TokenizerModule&)module named:(NSString*)name;
 
 @end
 

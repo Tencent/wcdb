@@ -34,7 +34,7 @@
     self.expectMode = DatabaseTestCaseExpectFirstFewSQLs;
     self.tableClass = FTS3Object.class;
     self.isVirtualTable = YES;
-    [self.database setTokenizer:WCTTokenizerWCDB];
+    [self.database setTokenizer:WCTTokenizerOneOrBinary];
     TestCaseAssertTrue([self createTable]);
 
     FTS3Object *dummy = [[FTS3Object alloc] init];

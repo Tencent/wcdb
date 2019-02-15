@@ -19,7 +19,8 @@
  */
 
 #include <WCDB/Assertion.hpp>
-#include <WCDB/Tokenizer.hpp>
+#include <WCDB/Error.hpp>
+#include <WCDB/OneOrBinaryTokenizer.hpp>
 
 extern "C" {
 extern int porterStem(char *p, int i, int j);
@@ -27,11 +28,11 @@ extern int porterStem(char *p, int i, int j);
 
 namespace WCDB {
 
-namespace FTS {
-
 #pragma mark - Cursor
-CursorInfo::CursorInfo(const char *input, int inputLength, TokenizerInfoBase *tokenizerInfo)
-: CursorInfoBase(input, inputLength, tokenizerInfo)
+OneOrBinaryCursorInfo::OneOrBinaryCursorInfo(const char *input,
+                                             int inputLength,
+                                             DefaultTokenizerInfo *tokenizerInfo)
+: AbstractTokenizerCursorInfo(input, inputLength, tokenizerInfo)
 , m_input(input)
 , m_inputLength(inputLength)
 , m_position(0)
@@ -45,39 +46,46 @@ CursorInfo::CursorInfo(const char *input, int inputLength, TokenizerInfoBase *to
 , m_subTokensDoubleChar(true)
 , m_bufferLength(0)
 {
+    if (m_input == nullptr) {
+        m_inputLength = 0;
+    }
+    if (m_inputLength < 0) {
+        m_inputLength = (int) strlen(m_input);
+    }
     static_assert(sizeof(UnicodeChar) == 2, "UnicodeChar must be 2 byte length.");
 }
 
-CursorInfo::~CursorInfo()
+OneOrBinaryCursorInfo::~OneOrBinaryCursorInfo()
 {
 }
 
 //Inspired by zorrozhang
-int CursorInfo::step(const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *piPosition)
+int OneOrBinaryCursorInfo::step(
+const char **ppToken, int *pnBytes, int *piStartOffset, int *piEndOffset, int *piPosition)
 {
-    int rc = SQLITE_OK;
+    Error::Code code = Error::Code::OK;
     if (m_position == 0) {
-        rc = cursorSetup();
-        if (rc != SQLITE_OK) {
-            return rc;
+        code = Error::rc2c(cursorSetup());
+        if (code != Error::Code::OK) {
+            return Error::c2rc(code);
         }
     }
 
     if (m_subTokensLengthArray.empty()) {
         if (m_cursorTokenType == TokenType::None) {
-            return SQLITE_DONE;
+            return Error::c2rc(Error::Code::Done);
         }
 
         //Skip symbol
         while (m_cursorTokenType == TokenType::BasicMultilingualPlaneSymbol) {
-            rc = cursorStep();
-            if (rc != SQLITE_OK) {
-                return rc;
+            code = Error::rc2c(cursorStep());
+            if (code != Error::Code::OK) {
+                return Error::c2rc(code);
             }
         }
 
         if (m_cursorTokenType == TokenType::None) {
-            return SQLITE_DONE;
+            return Error::c2rc(Error::Code::Done);
         }
 
         TokenType type = m_cursorTokenType;
@@ -85,10 +93,11 @@ int CursorInfo::step(const char **ppToken, int *pnBytes, int *piStartOffset, int
         case TokenType::BasicMultilingualPlaneLetter:
         case TokenType::BasicMultilingualPlaneDigit:
             m_startOffset = m_cursor;
-            while (((rc = cursorStep()) == SQLITE_OK) && m_cursorTokenType == type)
+            while (((code = Error::rc2c(cursorStep())) == Error::Code::OK)
+                   && m_cursorTokenType == type)
                 ;
-            if (rc != SQLITE_OK) {
-                return rc;
+            if (code != Error::Code::OK) {
+                return Error::c2rc(code);
             }
             m_endOffset = m_cursor;
             m_bufferLength = m_endOffset - m_startOffset;
@@ -98,11 +107,12 @@ int CursorInfo::step(const char **ppToken, int *pnBytes, int *piStartOffset, int
             m_subTokensLengthArray.push_back(m_cursorTokenLength);
             m_subTokensCursor = m_cursor;
             m_subTokensDoubleChar = true;
-            while (((rc = cursorStep()) == SQLITE_OK) && m_cursorTokenType == type) {
+            while (((code = Error::rc2c(cursorStep())) == Error::Code::OK)
+                   && m_cursorTokenType == type) {
                 m_subTokensLengthArray.push_back(m_cursorTokenLength);
             }
-            if (rc != SQLITE_OK) {
-                return rc;
+            if (code != Error::Code::OK) {
+                return Error::c2rc(code);
             }
             subTokensStep();
             break;
@@ -110,9 +120,9 @@ int CursorInfo::step(const char **ppToken, int *pnBytes, int *piStartOffset, int
             break;
         }
         if (type == TokenType::BasicMultilingualPlaneLetter) {
-            rc = lemmatization(m_input + m_startOffset, m_bufferLength);
-            if (rc != SQLITE_OK) {
-                return rc;
+            code = Error::rc2c(lemmatization(m_input + m_startOffset, m_bufferLength));
+            if (code != Error::Code::OK) {
+                return Error::c2rc(code);
             }
         } else {
             if (m_bufferLength > m_buffer.capacity()) {
@@ -141,10 +151,10 @@ int CursorInfo::step(const char **ppToken, int *pnBytes, int *piStartOffset, int
     *piEndOffset = m_endOffset;
     *piPosition = m_position++;
 
-    return SQLITE_OK;
+    return Error::c2rc(Error::Code::OK);
 }
 
-int CursorInfo::cursorStep()
+int OneOrBinaryCursorInfo::cursorStep()
 {
     if (m_cursor + m_cursorTokenLength < m_inputLength) {
         m_cursor += m_cursorTokenLength;
@@ -153,12 +163,12 @@ int CursorInfo::cursorStep()
     m_cursor = m_inputLength;
     m_cursorTokenType = TokenType::None;
     m_cursorTokenLength = 0;
-    return SQLITE_OK;
+    return Error::c2rc(Error::Code::OK);
 }
 
-int CursorInfo::cursorSetup()
+int OneOrBinaryCursorInfo::cursorSetup()
 {
-    int rc;
+    Error::Code code;
     const unsigned char &first = m_input[m_cursor];
     if (first < 0xC0) {
         m_cursorTokenLength = 1;
@@ -167,16 +177,18 @@ int CursorInfo::cursorSetup()
         } else if ((first >= 0x41 && first <= 0x5a) || (first >= 0x61 && first <= 0x7a)) {
             m_cursorTokenType = TokenType::BasicMultilingualPlaneLetter;
         } else {
-            bool result = false;
-            rc = isSymbol(first, &result);
-            if (rc == SQLITE_OK) {
-                if (result) {
+            int rc;
+            bool symbol = false;
+            std::tie(rc, symbol) = isSymbol(first);
+            code = Error::rc2c(rc);
+            if (code == Error::Code::OK) {
+                if (symbol) {
                     m_cursorTokenType = TokenType::BasicMultilingualPlaneSymbol;
                 } else {
                     m_cursorTokenType = TokenType::BasicMultilingualPlaneOther;
                 }
             } else {
-                return rc;
+                return Error::c2rc(code);
             }
         }
     } else if (first < 0xF0) {
@@ -194,19 +206,21 @@ int CursorInfo::cursorSetup()
             } else {
                 m_cursorTokenType = TokenType::None;
                 m_cursorTokenLength = m_inputLength - i;
-                return SQLITE_OK;
+                return Error::c2rc(Error::Code::OK);
             }
         }
-        bool result = false;
-        rc = isSymbol(unicode, &result);
-        if (rc == SQLITE_OK) {
-            if (result) {
+        int rc;
+        bool symbol = false;
+        std::tie(rc, symbol) = isSymbol(unicode);
+        code = Error::rc2c(rc);
+        if (code == Error::Code::OK) {
+            if (symbol) {
                 m_cursorTokenType = TokenType::BasicMultilingualPlaneSymbol;
             } else {
                 m_cursorTokenType = TokenType::BasicMultilingualPlaneOther;
             }
         } else {
-            return rc;
+            return Error::c2rc(code);
         }
     } else {
         m_cursorTokenType = TokenType::AuxiliaryPlaneOther;
@@ -218,10 +232,10 @@ int CursorInfo::cursorSetup()
             m_cursorTokenLength = 6;
         }
     }
-    return SQLITE_OK;
+    return Error::c2rc(Error::Code::OK);
 }
 
-int CursorInfo::lemmatization(const char *input, int inputLength)
+int OneOrBinaryCursorInfo::lemmatization(const char *input, int inputLength)
 {
     //tolower only. You can implement your own lemmatization.
     if (inputLength > m_buffer.capacity()) {
@@ -231,10 +245,10 @@ int CursorInfo::lemmatization(const char *input, int inputLength)
         m_buffer.data()[i] = tolower(input[i]);
     }
     m_bufferLength = porterStem(m_buffer.data(), 0, m_bufferLength - 1) + 1;
-    return SQLITE_OK;
+    return Error::c2rc(Error::Code::OK);
 }
 
-void CursorInfo::subTokensStep()
+void OneOrBinaryCursorInfo::subTokensStep()
 {
     m_startOffset = m_subTokensCursor;
     m_bufferLength = m_subTokensLengthArray[0];
@@ -252,7 +266,5 @@ void CursorInfo::subTokensStep()
     }
     m_endOffset = m_startOffset + m_bufferLength;
 }
-
-} //namespace FTS
 
 } //namespace WCDB

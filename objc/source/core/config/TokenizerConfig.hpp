@@ -18,22 +18,28 @@
  * limitations under the License.
  */
 
-#import <CoreFoundation/CoreFoundation.h>
-#import <WCDB/Tokenizer.hpp>
-#import <WCDB/WCTCommon.h>
+#ifndef __WCDB_TOKENIZER_CONFIG_HPP
+#define __WCDB_TOKENIZER_CONFIG_HPP
 
-class WCTCursorInfo final : public WCDB::FTS::CursorInfo {
+#include <WCDB/Config.hpp>
+#include <WCDB/TokenizerModule.hpp>
+#include <WCDB/WINQ.h>
+
+namespace WCDB {
+
+class Modules;
+
+class TokenizerConfig final : public Config {
 public:
-    WCTCursorInfo(const char *input, int inputLength, WCDB::FTS::TokenizerInfoBase *tokenizerInfo);
-
-    WCTCursorInfo(const WCTCursorInfo &) = delete;
-    WCTCursorInfo &operator=(const WCTCursorInfo &) = delete;
-
-    virtual ~WCTCursorInfo();
+    TokenizerConfig(const std::map<String, TokenizerModule>& modules);
+    bool invoke(Handle* handle) override final;
+#warning TODO - uninvoke and bool reinvokable
 
 protected:
-    CFCharacterSetRef m_symbolCharacterSet;
-    static CFCharacterSetRef generateSymbolCharacterSet();
-
-    int isSymbol(UnicodeChar theChar, bool *result) override final;
+    const std::map<String, TokenizerModule> m_modules;
+    const StatementSelect m_fts3Tokenizer;
 };
+
+} //namespace WCDB
+
+#endif /* __WCDB_TOKENIZER_CONFIG_HPP */

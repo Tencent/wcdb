@@ -18,33 +18,31 @@
  * limitations under the License.
  */
 
-#include <WCDB/Tokenize.hpp>
+#include <WCDB/Assertion.hpp>
+#include <WCDB/Error.hpp>
+#include <WCDB/TokenizerModules.hpp>
+#include <sqlcipher/fts3_tokenizer.h>
 
 namespace WCDB {
 
-namespace FTS {
-
-TokenizerInfoBase::TokenizerInfoBase(int argc, const char *const *argv)
+void TokenizerModules::add(const String& name, const TokenizerModule& module)
 {
+    WCTRemedialAssert(!name.empty(), "Name of module can't be null.", return;);
+    LockGuard lockGuard(m_lock);
+    m_modules[name] = module;
 }
 
-TokenizerInfoBase::~TokenizerInfoBase()
+std::map<String, TokenizerModule> TokenizerModules::get(const std::list<String>& names) const
 {
+    std::map<String, TokenizerModule> modules;
+    SharedLockGuard lockGuard(m_lock);
+    for (const auto& name : names) {
+        auto iter = m_modules.find(name);
+        if (iter != m_modules.end()) {
+            modules[iter->first] = iter->second;
+        }
+    }
+    return modules;
 }
 
-CursorInfoBase::CursorInfoBase(const char *input, int inputLength, TokenizerInfoBase *tokenizerInfo)
-: m_tokenizerInfo(tokenizerInfo)
-{
-}
-
-CursorInfoBase::~CursorInfoBase()
-{
-}
-
-ModuleBase::~ModuleBase()
-{
-}
-
-} // namespace FTS
-
-} //namespace WCDB
+} // namespace WCDB

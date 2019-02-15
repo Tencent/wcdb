@@ -18,30 +18,28 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_TOKENIZE_CONFIG_HPP
-#define __WCDB_TOKENIZE_CONFIG_HPP
+#ifndef __WCDB_TOKENIZER_MODULES_HPP
+#define __WCDB_TOKENIZER_MODULES_HPP
 
-#include <WCDB/Config.hpp>
-#include <WCDB/WINQ.h>
+#include <WCDB/Lock.hpp>
+#include <WCDB/String.hpp>
+#include <WCDB/TokenizerModule.hpp>
+#include <WCDB/TokenizerModuleTemplate.hpp>
+#include <WCDB/UnsafeData.hpp>
+#include <list>
 
 namespace WCDB {
 
-namespace FTS {
-class Modules;
-}
-
-class TokenizeConfig final : public Config {
+class TokenizerModules final {
 public:
-    TokenizeConfig(const std::list<String>& tokenizeNames,
-                   const std::shared_ptr<FTS::Modules>& modules);
-    bool invoke(Handle* handle) override final;
+    void add(const String& name, const TokenizerModule& module);
+    std::map<String, TokenizerModule> get(const std::list<String>& names) const;
 
 protected:
-    const std::shared_ptr<FTS::Modules> m_modules;
-    const StatementSelect m_fts3Tokenizer;
-    const std::list<String> m_tokenizeNames;
+    std::map<String, TokenizerModule> m_modules;
+    mutable SharedLock m_lock;
 };
 
-} //namespace WCDB
+} // namespace WCDB
 
-#endif /* __WCDB_TOKENIZE_CONFIG_HPP */
+#endif /* __WCDB_TOKENIZER_MODULES_HPP */

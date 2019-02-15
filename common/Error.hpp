@@ -93,7 +93,8 @@ public:
         Row = 100,
         Done = 101,
     };
-    static inline Error::Code rc(int rc);
+    static Error::Code rc2c(int rc);
+    static int c2rc(Error::Code code);
     static constexpr const char *codeName(const Code &code)
     {
         switch (code) {

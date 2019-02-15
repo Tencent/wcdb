@@ -22,12 +22,14 @@
 #include <WCDB/Core.h>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Notifier.hpp>
+#include <WCDB/SQLite.h>
 #include <WCDB/String.hpp>
 #include <fcntl.h>
 #include <regex>
 
 namespace WCDB {
 
+#pragma mark - Core
 Core* Core::shared()
 {
     static Core* s_shared = new Core;
@@ -35,16 +37,21 @@ Core* Core::shared()
 }
 
 Core::Core()
-: m_modules(new FTS::Modules)
-, m_databasePool(this)
+// Database
+: m_databasePool(this)
+// Corruption
 , m_corruptionQueue(new CorruptionQueue(CorruptionQueueName))
+// Checkpoint
 , m_checkpointQueue(new CheckpointQueue(CheckpointQueueName, this))
+// Backup
 , m_backupQueue(new BackupQueue(BackupQueueName, this))
-, m_migrationQueue(new MigrationQueue(MigrationQueueName, this))
-// Configs
 , m_backupConfig(new BackupConfig(m_backupQueue))
+// Migration
+, m_migrationQueue(new MigrationQueue(MigrationQueueName, this))
+// Trace
 , m_globalSQLTraceConfig(new ShareableSQLTraceConfig)
 , m_globalPerformanceTraceConfig(new ShareablePerformanceTraceConfig)
+// Config
 , m_configs(new Configs(OrderedUniqueList<String, std::shared_ptr<Config>>({
   { Configs::Priority::Highest, GlobalSQLTraceConfigName, m_globalSQLTraceConfig },
   { Configs::Priority::Highest, GlobalPerformanceTraceConfigName, m_globalPerformanceTraceConfig },
@@ -68,6 +75,45 @@ Core::~Core()
     Notifier::shared()->setNotificationForPreprocessing(NotifierTagPreprocessorName, nullptr);
 }
 
+int Core::vfsOpen(const char* path, int flags, int mode)
+{
+    int fd = open(path, flags, mode);
+    if (fd != -1 && ((flags & O_CREAT) != 0)) {
+        FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
+    }
+    return fd;
+}
+
+void Core::globalLog(void* parameter, int rc, const char* message)
+{
+    Error error;
+    switch (rc) {
+    case SQLITE_WARNING:
+        error.level = Error::Level::Warning;
+        break;
+    case SQLITE_NOTICE_RECOVER_WAL: {
+        error.level = Error::Level::Ignore;
+        std::regex pattern("recovered (\\w+) frames from WAL file (.+)\\-wal");
+        const String source = message;
+        std::smatch match;
+        if (std::regex_search(source.begin(), source.end(), match, pattern)) {
+            // hint checkpoint
+            Core* core = static_cast<Core*>(parameter);
+            core->m_checkpointQueue->put(match[2].str(), atoi(match[1].str().c_str()));
+        }
+        WCTInnerAssert(match.size() == 3); // assert match and match 3.
+        break;
+    }
+    default:
+        error.level = Error::Level::Debug;
+        break;
+    }
+    error.setSQLiteCode(rc);
+    error.message = message;
+    Notifier::shared()->notify(error);
+}
+
+#pragma mark - Database
 RecyclableDatabase Core::getOrCreateDatabase(const String& path)
 {
     return m_databasePool.getOrCreate(path);
@@ -83,15 +129,6 @@ void Core::purgeDatabasePool()
     m_databasePool.purge();
 }
 
-void Core::setAutoMigration(const String& path, bool flag)
-{
-    if (flag) {
-        m_migrationQueue->put(path);
-    } else {
-        m_migrationQueue->remove(path);
-    }
-}
-
 void Core::onDatabaseCreated(Database* database)
 {
     WCTInnerAssert(database != nullptr);
@@ -102,6 +139,35 @@ void Core::onDatabaseCreated(Database* database)
                         Configs::Priority::Highest);
 }
 
+void Core::preprocessError(const Error& error, Error::Infos& infos)
+{
+    const auto& strings = error.infos.getStrings();
+    auto iter = strings.find("Path");
+    if (iter == strings.end()) {
+        return;
+    }
+    auto database = m_databasePool.get(iter->second);
+    if (database == nullptr) {
+        return;
+    }
+    auto tag = database->getTag();
+    if (tag.isValid()) {
+        infos.set("Tag", tag);
+    }
+}
+
+#pragma mark - Tokenizer
+void Core::addTokenizer(const String& name, const TokenizerModule& module)
+{
+    m_modules.add(name, module);
+}
+
+std::shared_ptr<Config> Core::tokenizerConfig(const std::list<String>& tokenizeNames)
+{
+    return std::shared_ptr<Config>(new TokenizerConfig(m_modules.get(tokenizeNames)));
+}
+
+#pragma mark - Corruption
 bool Core::isFileCorrupted(const String& path)
 {
     return m_corruptionQueue->isFileCorrupted(path);
@@ -148,6 +214,7 @@ void Core::setNotificationWhenDatabaseCorrupted(const String& path,
     m_corruptionQueue->setNotificationWhenCorrupted(path, underlyingNotification);
 }
 
+#pragma mark - Checkpoint
 bool Core::databaseShouldCheckpoint(const String& path, int frames)
 {
     RecyclableDatabase database = m_databasePool.get(path);
@@ -159,6 +226,7 @@ bool Core::databaseShouldCheckpoint(const String& path, int frames)
                                              Database::CheckpointType::Passive);
 }
 
+#pragma mark - Backup
 bool Core::databaseShouldBackup(const String& path)
 {
     RecyclableDatabase database = m_databasePool.get(path);
@@ -168,6 +236,12 @@ bool Core::databaseShouldBackup(const String& path)
     return database->backup();
 }
 
+const std::shared_ptr<Config>& Core::backupConfig()
+{
+    return m_backupConfig;
+}
+
+#pragma mark - Migration
 std::pair<bool, bool> Core::databaseShouldMigrate(const String& path)
 {
     RecyclableDatabase database = m_databasePool.get(path);
@@ -177,16 +251,16 @@ std::pair<bool, bool> Core::databaseShouldMigrate(const String& path)
     return database->stepMigration();
 }
 
-const std::shared_ptr<Configs>& Core::configs()
+void Core::setAutoMigration(const String& path, bool flag)
 {
-    return m_configs;
+    if (flag) {
+        m_migrationQueue->put(path);
+    } else {
+        m_migrationQueue->remove(path);
+    }
 }
 
-void Core::addTokenizer(const String& name, unsigned char* address)
-{
-    m_modules->addAddress(name, address);
-}
-
+#pragma mark - Trace
 void Core::setNotificationForSQLGLobalTraced(const ShareableSQLTraceConfig::Notification& notification)
 {
     static_cast<ShareableSQLTraceConfig*>(m_globalSQLTraceConfig.get())->setNotification(notification);
@@ -196,21 +270,6 @@ void Core::setNotificationWhenPerformanceGlobalTraced(const ShareablePerformance
 {
     static_cast<ShareablePerformanceTraceConfig*>(m_globalPerformanceTraceConfig.get())
     ->setNotification(notification);
-}
-
-const std::shared_ptr<Config>& Core::backupConfig()
-{
-    return m_backupConfig;
-}
-
-std::shared_ptr<Config> Core::tokenizeConfig(const std::list<String>& tokenizeNames)
-{
-    return std::shared_ptr<Config>(new TokenizeConfig(tokenizeNames, m_modules));
-}
-
-std::shared_ptr<Config> Core::cipherConfig(const UnsafeData& cipher, int pageSize)
-{
-    return std::shared_ptr<Config>(new CipherConfig(cipher, pageSize));
 }
 
 std::shared_ptr<Config> Core::sqlTraceConfig(const SQLTraceConfig::Notification& notification)
@@ -224,65 +283,22 @@ Core::performanceTraceConfig(const PerformanceTraceConfig::Notification& notific
     return std::shared_ptr<Config>(new PerformanceTraceConfig(notification));
 }
 
+#pragma mark - Cipher
+std::shared_ptr<Config> Core::cipherConfig(const UnsafeData& cipher, int pageSize)
+{
+    return std::shared_ptr<Config>(new CipherConfig(cipher, pageSize));
+}
+
+#pragma mark - Config
+const std::shared_ptr<Configs>& Core::configs()
+{
+    return m_configs;
+}
+
 std::shared_ptr<Config> Core::customConfig(const CustomConfig::Invocation& invocation,
                                            const CustomConfig::Invocation& uninvocation)
 {
     return std::shared_ptr<Config>(new CustomConfig(invocation, uninvocation));
-}
-
-int Core::vfsOpen(const char* path, int flags, int mode)
-{
-    int fd = open(path, flags, mode);
-    if (fd != -1 && ((flags & O_CREAT) != 0)) {
-        FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
-    }
-    return fd;
-}
-
-void Core::globalLog(void* parameter, int rc, const char* message)
-{
-    Error error;
-    switch (rc) {
-    case SQLITE_WARNING:
-        error.level = Error::Level::Warning;
-        break;
-    case SQLITE_NOTICE_RECOVER_WAL: {
-        error.level = Error::Level::Ignore;
-        std::regex pattern("recovered (\\w+) frames from WAL file (.+)\\-wal");
-        const String source = message;
-        std::smatch match;
-        if (std::regex_search(source.begin(), source.end(), match, pattern)) {
-            // hint checkpoint
-            Core* core = static_cast<Core*>(parameter);
-            core->m_checkpointQueue->put(match[2].str(), atoi(match[1].str().c_str()));
-        }
-        WCTInnerAssert(match.size() == 3); // assert match and match 3.
-        break;
-    }
-    default:
-        error.level = Error::Level::Debug;
-        break;
-    }
-    error.setSQLiteCode(rc);
-    error.message = message;
-    Notifier::shared()->notify(error);
-}
-
-void Core::preprocessError(const Error& error, Error::Infos& infos)
-{
-    const auto& strings = error.infos.getStrings();
-    auto iter = strings.find("Path");
-    if (iter == strings.end()) {
-        return;
-    }
-    auto database = m_databasePool.get(iter->second);
-    if (database == nullptr) {
-        return;
-    }
-    auto tag = database->getTag();
-    if (tag.isValid()) {
-        infos.set("Tag", tag);
-    }
 }
 
 } // namespace WCDB
