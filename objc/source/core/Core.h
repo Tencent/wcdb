@@ -72,7 +72,7 @@ protected:
 #pragma mark - Database
 public:
     RecyclableDatabase getOrCreateDatabase(const String& path);
-    RecyclableDatabase getExistingDatabase(const String& path);
+    RecyclableDatabase getAlivingDatabase(const String& path);
 
     void purgeDatabasePool();
 

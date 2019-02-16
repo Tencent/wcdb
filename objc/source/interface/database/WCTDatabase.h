@@ -43,7 +43,7 @@ typedef void (^WCTCloseBlock)(void);
  */
 - (instancetype)initWithPath:(NSString *)path NS_DESIGNATED_INITIALIZER;
 
-- (nullable instancetype)initWithExistingDatabaseByPath:(NSString *)path NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithPathOfAlivingDatabase:(NSString *)path NS_DESIGNATED_INITIALIZER;
 
 /**
  @brief Since WCDB is using lazy initialization, [initWithPath:] never return nil even the database can't open. So you can call this to check whether the database can be opened. 

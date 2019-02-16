@@ -51,7 +51,7 @@
     @autoreleasepool {
         // non-exists
         {
-            WCTDatabase* existing = [[WCTDatabase alloc] initWithExistingDatabaseByPath:path];
+            WCTDatabase* existing = [[WCTDatabase alloc] initWithPathOfAlivingDatabase:path];
             TestCaseAssertTrue(existing == nil);
         }
 
@@ -61,7 +61,7 @@
 
         // exists
         {
-            WCTDatabase* existing = [[WCTDatabase alloc] initWithExistingDatabaseByPath:path];
+            WCTDatabase* existing = [[WCTDatabase alloc] initWithPathOfAlivingDatabase:path];
             TestCaseAssertTrue(existing != nil);
             TestCaseAssertEqual(tag, existing.tag);
         }
@@ -69,7 +69,7 @@
 
     // non-exists
     {
-        WCTDatabase* existing = [[WCTDatabase alloc] initWithExistingDatabaseByPath:path];
+        WCTDatabase* existing = [[WCTDatabase alloc] initWithPathOfAlivingDatabase:path];
         TestCaseAssertTrue(existing == nil);
     }
 }

@@ -119,7 +119,7 @@ RecyclableDatabase Core::getOrCreateDatabase(const String& path)
     return m_databasePool.getOrCreate(path);
 }
 
-RecyclableDatabase Core::getExistingDatabase(const String& path)
+RecyclableDatabase Core::getAlivingDatabase(const String& path)
 {
     return m_databasePool.get(path);
 }

@@ -103,10 +103,10 @@ static constexpr const char *NotifierPathPreprocessorName
     return self;
 }
 
-- (instancetype)initWithExistingDatabaseByPath:(NSString *)path
+- (instancetype)initWithPathOfAlivingDatabase:(NSString *)path
 {
     if (self = [super init]) {
-        _databaseHolder = WCDB::Core::shared()->getExistingDatabase(path);
+        _databaseHolder = WCDB::Core::shared()->getAlivingDatabase(path);
         if (_databaseHolder == nullptr) {
             return nil;
         }
