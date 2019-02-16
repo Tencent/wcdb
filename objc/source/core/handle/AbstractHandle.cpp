@@ -550,6 +550,7 @@ void AbstractHandle::notifyError(int rc, const char *sql)
     } else {
         // extended error code/message will not be set in some case for misuse error
         m_error.setSQLiteCode(rc);
+        m_error.message = nullptr;
     }
     if (std::find(m_ignorableCodes.begin(), m_ignorableCodes.end(), rc)
         == m_ignorableCodes.end()) {
@@ -557,9 +558,7 @@ void AbstractHandle::notifyError(int rc, const char *sql)
     } else {
         m_error.level = Error::Level::Ignore;
     }
-    if (sql != nullptr) {
-        m_error.infos.set("SQL", sql);
-    }
+    m_error.infos.set("SQL", sql);
     Notifier::shared()->notify(m_error);
 }
 

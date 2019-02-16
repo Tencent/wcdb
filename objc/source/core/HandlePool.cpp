@@ -121,11 +121,13 @@ void HandlePool::purge()
 
 size_t HandlePool::numberOfAliveHandles() const
 {
-    SharedLockGuard concurrencyGuard(m_concurrency);
-    SharedLockGuard memoryGuard(m_memory);
-    int count = 0;
-    for (const auto &handles : m_handles) {
-        count += handles.size();
+    size_t count = 0;
+    {
+        SharedLockGuard concurrencyGuard(m_concurrency);
+        SharedLockGuard memoryGuard(m_memory);
+        for (const auto &handles : m_handles) {
+            count += handles.size();
+        }
     }
     return count;
 }
@@ -140,13 +142,15 @@ size_t HandlePool::numberOfActiveHandles(Slot slot) const
 
 bool HandlePool::isAliving() const
 {
-    SharedLockGuard concurrencyGuard(m_concurrency);
-    SharedLockGuard memoryGuard(m_memory);
     bool aliving = false;
-    for (const auto &handles : m_handles) {
-        if (handles.size() > 0) {
-            aliving = true;
-            break;
+    {
+        SharedLockGuard concurrencyGuard(m_concurrency);
+        SharedLockGuard memoryGuard(m_memory);
+        for (const auto &handles : m_handles) {
+            if (handles.size() > 0) {
+                aliving = true;
+                break;
+            }
         }
     }
     return aliving;
