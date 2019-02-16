@@ -22,7 +22,6 @@
 #include <WCDB/Core.h>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Notifier.hpp>
-#include <WCDB/SQLite.h>
 #include <WCDB/String.hpp>
 #include <fcntl.h>
 #include <regex>
@@ -88,11 +87,11 @@ void Core::globalLog(void* parameter, int rc, const char* message)
 {
     Error error;
     switch (rc) {
-    case SQLITE_WARNING:
+    case (int) Error::Code::Warning:
+    case (int) Error::ExtCode::WarningAutoIndex:
         error.level = Error::Level::Warning;
         break;
-    case SQLITE_NOTICE_RECOVER_WAL: {
-        error.level = Error::Level::Ignore;
+    case (int) Error::ExtCode::NoticeRecoverWal: {
         std::regex pattern("recovered (\\w+) frames from WAL file (.+)\\-wal");
         const String source = message;
         std::smatch match;
@@ -102,13 +101,17 @@ void Core::globalLog(void* parameter, int rc, const char* message)
             core->m_checkpointQueue->put(match[2].str(), atoi(match[1].str().c_str()));
         }
         WCTInnerAssert(match.size() == 3); // assert match and match 3.
-        break;
     }
+        // fallthrough
+    case (int) Error::Code::Notice:
+    case (int) Error::ExtCode::NoticeRecoverRollback:
+        error.level = Error::Level::Ignore;
+        break;
     default:
         error.level = Error::Level::Debug;
         break;
     }
-    error.setSQLiteCode(rc);
+    error.setSQLiteCode(rc, rc);
     error.message = message;
     Notifier::shared()->notify(error);
 }

@@ -38,14 +38,6 @@ NSErrorUserInfoKey const WCTErrorKeySource = @"Source";
     return @"WCDB";
 }
 
-+ (instancetype)errorWithCode:(WCTErrorCode)code
-                        level:(WCTErrorLevel)level
-                      message:(NSString *)message
-                     userInfo:(NSDictionary<NSErrorUserInfoKey, id> *)userInfo
-{
-    return [[self alloc] initWithCode:code level:level message:message userInfo:userInfo];
-}
-
 - (instancetype)initWithCode:(WCTErrorCode)code
                        level:(WCTErrorLevel)level
                      message:(NSString *)message
@@ -159,9 +151,9 @@ NSErrorUserInfoKey const WCTErrorKeySource = @"Source";
 
 @implementation WCTError (ExtendedCode)
 
-- (int)extendedCode
+- (WCTErrorExtendedCode)extendedCode
 {
-    return (int) [self numberForKey:WCTErrorKeyExtendedCode].intValue;
+    return (WCTErrorExtendedCode) [self numberForKey:WCTErrorKeyExtendedCode].intValue;
 }
 
 @end

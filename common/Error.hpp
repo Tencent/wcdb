@@ -80,7 +80,7 @@ public:
         Empty = 16,
         Schema = 17,
         Exceed = 18,
-        Conflict = 19,
+        Constraint = 19,
         Mismatch = 20,
         Misuse = 21,
         NoLargeFileSupport = 22,
@@ -136,8 +136,8 @@ public:
             return "Schema";
         case Code::Exceed:
             return "Exceed";
-        case Code::Conflict:
-            return "Conflict";
+        case Code::Constraint:
+            return "Constraint";
         case Code::Mismatch:
             return "Mismatch";
         case Code::Misuse:
@@ -168,13 +168,86 @@ public:
     bool isCorruption() const;
 
     void setSystemCode(int systemCode, Code codeIfUnresolved);
-    void setSQLiteCode(int code);
     void setSQLiteCode(int code, int extendedCode);
     void setCode(Code code);
     void setCode(Code code, const String &source);
 
 protected:
     Code m_code;
+
+#pragma mark - ExtCode
+public:
+    enum class ExtCode : int {
+        ErrorMissingCollseq = ((int) Code::Error | (1 << 8)),
+        ErrorRetry = ((int) Code::Error | (2 << 8)),
+        ErrorSnapshot = ((int) Code::Error | (3 << 8)),
+        IOErrorRead = ((int) Code::IOError | (1 << 8)),
+        IOErrorShortRead = ((int) Code::IOError | (2 << 8)),
+        IOErrorWrite = ((int) Code::IOError | (3 << 8)),
+        IOErrorFsync = ((int) Code::IOError | (4 << 8)),
+        IOErrorDirFsync = ((int) Code::IOError | (5 << 8)),
+        IOErrorTruncate = ((int) Code::IOError | (6 << 8)),
+        IOErrorFstat = ((int) Code::IOError | (7 << 8)),
+        IOErrorUnlock = ((int) Code::IOError | (8 << 8)),
+        IOErrorRdlock = ((int) Code::IOError | (9 << 8)),
+        IOErrorDelete = ((int) Code::IOError | (10 << 8)),
+        IOErrorBlocked = ((int) Code::IOError | (11 << 8)),
+        IOErrorNoMemory = ((int) Code::IOError | (12 << 8)),
+        IOErrorAccess = ((int) Code::IOError | (13 << 8)),
+        IOErrorCheckReservedLock = ((int) Code::IOError | (14 << 8)),
+        IOErrorLock = ((int) Code::IOError | (15 << 8)),
+        IOErrorClose = ((int) Code::IOError | (16 << 8)),
+        IOErrorDirClose = ((int) Code::IOError | (17 << 8)),
+        IOErrorShmOpen = ((int) Code::IOError | (18 << 8)),
+        IOErrorShmSize = ((int) Code::IOError | (19 << 8)),
+        IOErrorShmLock = ((int) Code::IOError | (20 << 8)),
+        IOErrorShmMap = ((int) Code::IOError | (21 << 8)),
+        IOErrorSeek = ((int) Code::IOError | (22 << 8)),
+        IOErrorDeleteNoEntry = ((int) Code::IOError | (23 << 8)),
+        IOErrorMmap = ((int) Code::IOError | (24 << 8)),
+        IOErrorGetTempPath = ((int) Code::IOError | (25 << 8)),
+        IOErrorConvPath = ((int) Code::IOError | (26 << 8)),
+        IOErrorVnode = ((int) Code::IOError | (27 << 8)),
+        IOErrorAuthorization = ((int) Code::IOError | (28 << 8)),
+        IOErrorBeginAtomic = ((int) Code::IOError | (29 << 8)),
+        IOErrorCommitAtomic = ((int) Code::IOError | (30 << 8)),
+        IOErrorRollbackAtomic = ((int) Code::IOError | (31 << 8)),
+        LockedSharedCache = ((int) Code::Locked | (1 << 8)),
+        LockedVirtualTable = ((int) Code::Locked | (2 << 8)),
+        BusyRecovery = ((int) Code::Busy | (1 << 8)),
+        BusySnapshot = ((int) Code::Busy | (2 << 8)),
+        CantOpenNoTempDir = ((int) Code::CantOpen | (1 << 8)),
+        CantOpenIsDir = ((int) Code::CantOpen | (2 << 8)),
+        CantOpenFullPath = ((int) Code::CantOpen | (3 << 8)),
+        CantOpenConvPath = ((int) Code::CantOpen | (4 << 8)),
+        CantOpenDirtyWal = ((int) Code::CantOpen | (5 << 8)),
+        CorruptVirtualTable = ((int) Code::Corrupt | (1 << 8)),
+        CorruptSequence = ((int) Code::Corrupt | (2 << 8)),
+        ReadonlyRecovery = ((int) Code::Readonly | (1 << 8)),
+        ReadonlyCantLock = ((int) Code::Readonly | (2 << 8)),
+        ReadonlyRollback = ((int) Code::Readonly | (3 << 8)),
+        ReadonlyDatabaseMoved = ((int) Code::Readonly | (4 << 8)),
+        ReadonlyCantInit = ((int) Code::Readonly | (5 << 8)),
+        ReadonlyDirectory = ((int) Code::Readonly | (6 << 8)),
+        AbortRollback = ((int) Code::Abort | (2 << 8)),
+        ConstraintCheck = ((int) Code::Constraint | (1 << 8)),
+        ConstraintCommitHook = ((int) Code::Constraint | (2 << 8)),
+        ConstraintForeignKey = ((int) Code::Constraint | (3 << 8)),
+        ConstraintFunction = ((int) Code::Constraint | (4 << 8)),
+        ConstraintNotNull = ((int) Code::Constraint | (5 << 8)),
+        ConstraintPrimaryKey = ((int) Code::Constraint | (6 << 8)),
+        ConstraintTrigger = ((int) Code::Constraint | (7 << 8)),
+        ConstraintUnique = ((int) Code::Constraint | (8 << 8)),
+        ConstraintVirtualTable = ((int) Code::Constraint | (9 << 8)),
+        ConstraintRowID = ((int) Code::Constraint | (10 << 8)),
+        NoticeRecoverWal = ((int) Code::Notice | (1 << 8)),
+        NoticeRecoverRollback = ((int) Code::Notice | (2 << 8)),
+        WarningAutoIndex = ((int) Code::Warning | (1 << 8)),
+        AuthorizationUser = ((int) Code::Authorization | (1 << 8)),
+        OKLoadPermanently = ((int) Code::OK | (1 << 8)),
+    };
+
+    static ExtCode rc2ec(int rc);
 
 #pragma mark - Initialize
 public:

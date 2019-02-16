@@ -549,7 +549,7 @@ void AbstractHandle::notifyError(int rc, const char *sql)
         m_error.message = getErrorMessage();
     } else {
         // extended error code/message will not be set in some case for misuse error
-        m_error.setSQLiteCode(rc);
+        m_error.setSQLiteCode(rc, rc);
         m_error.message = nullptr;
     }
     if (std::find(m_ignorableCodes.begin(), m_ignorableCodes.end(), rc)
