@@ -2360,7 +2360,6 @@
 		2398975B217EC9E20014BF33 /* WindowFunctionInvocationTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WindowFunctionInvocationTests.mm; sourceTree = "<group>"; };
 		2398975E217EC9E20014BF33 /* WithTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WithTests.mm; sourceTree = "<group>"; };
 		239E8A702160A5B100BCB308 /* Host.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Host.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		239E8A8E2160A62F00BCB308 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		239E8A8F2160A62F00BCB308 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		239E8A922160A81600BCB308 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		239E8A9D2160B37600BCB308 /* WINQ.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WINQ.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3935,7 +3934,6 @@
 		239E8A8D2160A62F00BCB308 /* host */ = {
 			isa = PBXGroup;
 			children = (
-				239E8A8E2160A62F00BCB308 /* Info.plist */,
 				239E8A8F2160A62F00BCB308 /* main.m */,
 			);
 			path = host;
