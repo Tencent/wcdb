@@ -2063,6 +2063,15 @@
 		2360A60020D78F2B00E4A311 /* SQLTraceConfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SQLTraceConfig.hpp; sourceTree = "<group>"; };
 		2360A60120D78F2B00E4A311 /* PerformanceTraceConfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PerformanceTraceConfig.cpp; sourceTree = "<group>"; };
 		2360A60220D78F2B00E4A311 /* PerformanceTraceConfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PerformanceTraceConfig.hpp; sourceTree = "<group>"; };
+		2366BB18221BA1FA000ED712 /* base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = base.xcconfig; sourceTree = "<group>"; };
+		2366BB19221BA25D000ED712 /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = debug.xcconfig; sourceTree = "<group>"; };
+		2366BB1A221BA25D000ED712 /* release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = release.xcconfig; sourceTree = "<group>"; };
+		2366BB1B221BA431000ED712 /* bitcode.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = bitcode.xcconfig; sourceTree = "<group>"; };
+		2366BB1C221BA793000ED712 /* wcdb.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = wcdb.xcconfig; sourceTree = "<group>"; };
+		2366BB1D221BB035000ED712 /* testcase.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = testcase.xcconfig; sourceTree = "<group>"; };
+		2366BB1E221BB0F1000ED712 /* tests.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = tests.xcconfig; sourceTree = "<group>"; };
+		2366BB1F221BB0F1000ED712 /* host.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = host.xcconfig; sourceTree = "<group>"; };
+		2366BB20221BB97B000ED712 /* wcdb_ios_static.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = wcdb_ios_static.xcconfig; sourceTree = "<group>"; };
 		2367BD0C2215004300380122 /* WCDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		236996B121D5C4FF00E72E81 /* Recyclable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Recyclable.cpp; sourceTree = "<group>"; };
 		236BACBE21BF6C8500C8B4D9 /* MigrationQueue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationQueue.cpp; sourceTree = "<group>"; };
@@ -2242,22 +2251,11 @@
 		2386B3C31ED442FE000B72F6 /* WCTError.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTError.mm; sourceTree = "<group>"; };
 		2386B3C41ED442FE000B72F6 /* WCTError+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTError+Private.h"; sourceTree = "<group>"; };
 		2387D63921DF03FE0028ADB9 /* WCDB_Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = WCDB_Info.plist; sourceTree = "<group>"; };
-		2387D63A21DF03FE0028ADB9 /* Host_release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Host_release.xcconfig; sourceTree = "<group>"; };
-		2387D63C21DF03FE0028ADB9 /* WCDB_release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = WCDB_release.xcconfig; sourceTree = "<group>"; };
 		2387D63F21DF03FF0028ADB9 /* Host_Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Host_Info.plist; sourceTree = "<group>"; };
-		2387D64021DF03FF0028ADB9 /* Project_debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Project_debug.xcconfig; sourceTree = "<group>"; };
-		2387D64121DF03FF0028ADB9 /* WCDB_debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = WCDB_debug.xcconfig; sourceTree = "<group>"; };
-		2387D64221DF03FF0028ADB9 /* Host_debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Host_debug.xcconfig; sourceTree = "<group>"; };
 		2387D64321DF03FF0028ADB9 /* WCDB.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = WCDB.modulemap; sourceTree = "<group>"; };
-		2387D64421DF03FF0028ADB9 /* Project_bitcode.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Project_bitcode.xcconfig; sourceTree = "<group>"; };
-		2387D64521DF03FF0028ADB9 /* Project_release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Project_release.xcconfig; sourceTree = "<group>"; };
 		2387D89821DF07790028ADB9 /* TestCase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TestCase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2387D89A21DF087C0028ADB9 /* Tests_Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Tests_Info.plist; sourceTree = "<group>"; };
-		2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Tests_debug.xcconfig; sourceTree = "<group>"; };
-		2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Tests_release.xcconfig; sourceTree = "<group>"; };
 		2387D8A021DF09E60028ADB9 /* TestCase_Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = TestCase_Info.plist; sourceTree = "<group>"; };
-		2387D8A121DF09E60028ADB9 /* TestCase_debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TestCase_debug.xcconfig; sourceTree = "<group>"; };
-		2387D8A221DF09E60028ADB9 /* TestCase_release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TestCase_release.xcconfig; sourceTree = "<group>"; };
 		2387D8A621DF0B190028ADB9 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/MacOSX.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		2387D8DC21DF0B870028ADB9 /* DatabaseTestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DatabaseTestCase.mm; sourceTree = "<group>"; };
 		2387D8E221DF0B870028ADB9 /* DatabaseTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseTestCase.h; sourceTree = "<group>"; };
@@ -2269,7 +2267,6 @@
 		2387D8EB21DF0B870028ADB9 /* TestCaseObject+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestCaseObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		2387D8EC21DF0B870028ADB9 /* TestCaseObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCaseObject.h; sourceTree = "<group>"; };
 		2387D8ED21DF0B870028ADB9 /* BaseTestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BaseTestCase.mm; sourceTree = "<group>"; };
-		2387D90B21DF0BBA0028ADB9 /* TestCase.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = TestCase.modulemap; sourceTree = "<group>"; };
 		2387D94621DF5C890028ADB9 /* Random+TestCaseObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Random+TestCaseObject.h"; sourceTree = "<group>"; };
 		2387D94721DF5C890028ADB9 /* Random+TestCaseObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "Random+TestCaseObject.mm"; sourceTree = "<group>"; };
 		2387D94A21DF61C20028ADB9 /* TableTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableTestCase.h; sourceTree = "<group>"; };
@@ -4375,23 +4372,20 @@
 		23F0FDEE215F266C008399FB /* support */ = {
 			isa = PBXGroup;
 			children = (
-				2387D64421DF03FF0028ADB9 /* Project_bitcode.xcconfig */,
-				2387D64021DF03FF0028ADB9 /* Project_debug.xcconfig */,
-				2387D64521DF03FF0028ADB9 /* Project_release.xcconfig */,
+				2366BB18221BA1FA000ED712 /* base.xcconfig */,
+				2366BB19221BA25D000ED712 /* debug.xcconfig */,
+				2366BB1A221BA25D000ED712 /* release.xcconfig */,
+				2366BB1B221BA431000ED712 /* bitcode.xcconfig */,
+				2366BB1C221BA793000ED712 /* wcdb.xcconfig */,
+				2366BB20221BB97B000ED712 /* wcdb_ios_static.xcconfig */,
+				2366BB1D221BB035000ED712 /* testcase.xcconfig */,
+				2366BB1F221BB0F1000ED712 /* host.xcconfig */,
+				2366BB1E221BB0F1000ED712 /* tests.xcconfig */,
 				2387D64321DF03FF0028ADB9 /* WCDB.modulemap */,
 				2387D63921DF03FE0028ADB9 /* WCDB_Info.plist */,
-				2387D64121DF03FF0028ADB9 /* WCDB_debug.xcconfig */,
-				2387D63C21DF03FE0028ADB9 /* WCDB_release.xcconfig */,
-				2387D90B21DF0BBA0028ADB9 /* TestCase.modulemap */,
 				2387D8A021DF09E60028ADB9 /* TestCase_Info.plist */,
-				2387D8A121DF09E60028ADB9 /* TestCase_debug.xcconfig */,
-				2387D8A221DF09E60028ADB9 /* TestCase_release.xcconfig */,
 				2387D63F21DF03FF0028ADB9 /* Host_Info.plist */,
-				2387D64221DF03FF0028ADB9 /* Host_debug.xcconfig */,
-				2387D63A21DF03FE0028ADB9 /* Host_release.xcconfig */,
 				2387D89A21DF087C0028ADB9 /* Tests_Info.plist */,
-				2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */,
-				2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */,
 			);
 			path = support;
 			sourceTree = "<group>";
@@ -6717,366 +6711,345 @@
 /* Begin XCBuildConfiguration section */
 		231FEA2C21999E7D00DC3706 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		231FEA2D21999E7D00DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
 		231FEA2E21999E7D00DC3706 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Bitcode;
 		};
 		231FEA4821999ECE00DC3706 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		231FEA4921999ECE00DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
 		231FEA4A21999ECE00DC3706 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Bitcode;
 		};
 		231FEA6421999F0D00DC3706 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		231FEA6521999F0D00DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
 		231FEA6621999F0D00DC3706 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Bitcode;
 		};
 		231FEA8021999F2A00DC3706 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		231FEA8121999F2A00DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
 		231FEA8221999F2A00DC3706 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Bitcode;
 		};
 		231FEA9C21999F7800DC3706 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		231FEA9D21999F7800DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
 		231FEA9E21999F7800DC3706 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Bitcode;
 		};
 		231FEAB821999F8100DC3706 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		231FEAB921999F8100DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
 		231FEABA21999F8100DC3706 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Bitcode;
 		};
 		231FEAD421999F8D00DC3706 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		231FEAD521999F8D00DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
 		231FEAD621999F8D00DC3706 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Bitcode;
 		};
 		234E6F6321996EB600D006F2 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		234E6F6421996EB600D006F2 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
 		234E6F6521996EB600D006F2 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Bitcode;
 		};
 		2367BD092215004300380122 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64121DF03FF0028ADB9 /* WCDB_debug.xcconfig */;
+			baseConfigurationReference = 2366BB20221BB97B000ED712 /* wcdb_ios_static.xcconfig */;
 			buildSettings = {
-				MACH_O_TYPE = staticlib;
 			};
 			name = Debug;
 		};
 		2367BD0A2215004300380122 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D63C21DF03FE0028ADB9 /* WCDB_release.xcconfig */;
+			baseConfigurationReference = 2366BB20221BB97B000ED712 /* wcdb_ios_static.xcconfig */;
 			buildSettings = {
-				MACH_O_TYPE = staticlib;
 			};
 			name = Release;
 		};
 		2367BD0B2215004300380122 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D63C21DF03FE0028ADB9 /* WCDB_release.xcconfig */;
+			baseConfigurationReference = 2366BB20221BB97B000ED712 /* wcdb_ios_static.xcconfig */;
 			buildSettings = {
-				MACH_O_TYPE = staticlib;
 			};
 			name = Bitcode;
 		};
 		2379094A219295370098797F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		2379094B219295370098797F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
 		2379094C219295370098797F /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Bitcode;
 		};
 		2384F7252194249200E8B10A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		2384F7262194249200E8B10A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
 		2384F7272194249200E8B10A /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Bitcode;
 		};
 		2387D89521DF07790028ADB9 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D8A121DF09E60028ADB9 /* TestCase_debug.xcconfig */;
+			baseConfigurationReference = 2366BB1D221BB035000ED712 /* testcase.xcconfig */;
 			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
 		};
 		2387D89621DF07790028ADB9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D8A221DF09E60028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2366BB1D221BB035000ED712 /* testcase.xcconfig */;
 			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
 		2387D89721DF07790028ADB9 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D8A221DF09E60028ADB9 /* TestCase_release.xcconfig */;
+			baseConfigurationReference = 2366BB1D221BB035000ED712 /* testcase.xcconfig */;
 			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Bitcode;
 		};
 		239326671E836D7300D677CC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64121DF03FF0028ADB9 /* WCDB_debug.xcconfig */;
+			baseConfigurationReference = 2366BB1C221BA793000ED712 /* wcdb.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		239326681E836D7300D677CC /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D63C21DF03FE0028ADB9 /* WCDB_release.xcconfig */;
+			baseConfigurationReference = 2366BB1C221BA793000ED712 /* wcdb.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
 		239E8A832160A5B200BCB308 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64221DF03FF0028ADB9 /* Host_debug.xcconfig */;
+			baseConfigurationReference = 2366BB1F221BB0F1000ED712 /* host.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 			};
 			name = Debug;
 		};
 		239E8A842160A5B200BCB308 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D63A21DF03FE0028ADB9 /* Host_release.xcconfig */;
+			baseConfigurationReference = 2366BB1F221BB0F1000ED712 /* host.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 			};
 			name = Release;
 		};
 		239E8A852160A5B200BCB308 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D63A21DF03FE0028ADB9 /* Host_release.xcconfig */;
+			baseConfigurationReference = 2366BB1F221BB0F1000ED712 /* host.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 			};
 			name = Bitcode;
 		};
 		239E8AA32160B37600BCB308 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		239E8AA42160B37600BCB308 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
 		239E8AA52160B37600BCB308 /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Bitcode;
 		};
 		23A2C8BF208CDC1500C6BB6B /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64421DF03FF0028ADB9 /* Project_bitcode.xcconfig */;
+			baseConfigurationReference = 2366BB1B221BA431000ED712 /* bitcode.xcconfig */;
 			buildSettings = {
 			};
 			name = Bitcode;
 		};
 		23A2C8C0208CDC1500C6BB6B /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D63C21DF03FE0028ADB9 /* WCDB_release.xcconfig */;
+			baseConfigurationReference = 2366BB1C221BA793000ED712 /* wcdb.xcconfig */;
 			buildSettings = {
 			};
 			name = Bitcode;
 		};
 		23B5F7681E1111C100E58396 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64021DF03FF0028ADB9 /* Project_debug.xcconfig */;
+			baseConfigurationReference = 2366BB19221BA25D000ED712 /* debug.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		23B5F7691E1111C100E58396 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D64521DF03FF0028ADB9 /* Project_release.xcconfig */;
+			baseConfigurationReference = 2366BB1A221BA25D000ED712 /* release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
 		23FC43DE21B6631200FA1A0F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89B21DF087C0028ADB9 /* Tests_debug.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		23FC43DF21B6631200FA1A0F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
 		23FC43E021B6631200FA1A0F /* Bitcode */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2387D89C21DF087C0028ADB9 /* Tests_release.xcconfig */;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Bitcode;

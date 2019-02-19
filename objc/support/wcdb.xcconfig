@@ -1,0 +1,6 @@
+// Linking
+MACH_O_TYPE = mh_dylib
+PRODUCT_NAME = WCDB
+
+// Packaging
+MODULEMAP_FILE = $(SRCROOT)/support/WCDB.modulemap

@@ -1,0 +1,4 @@
+#include "wcdb.xcconfig"
+
+// Linking
+MACH_O_TYPE = staticlib

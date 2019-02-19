@@ -1,0 +1,8 @@
+// Deployment
+MACOSX_DEPLOYMENT_TARGET = 10.14
+
+// Linking
+MACH_O_TYPE = mh_dylib
+
+// Packaging
+MODULEMAP_FILE = $(SRCROOT)/support/WCDB.modulemap

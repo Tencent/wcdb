@@ -1,0 +1,18 @@
+#include "base.xcconfig"
+
+// Architectures
+ONLY_ACTIVE_ARCH = NO
+
+// Build Options
+DEBUG_INFORMATION_FORMAT = dwarf-with-dsym
+
+// Deployment
+COPY_PHASE_STRIP = YES
+STRIP_STYLE = non-global
+
+// Code Generation
+CLANG_ENABLE_CODE_COVERAGE = NO
+GCC_OPTIMIZATION_LEVEL = s
+
+// Preprocessing
+GCC_PREPROCESSOR_DEFINITIONS = $(BASE_GCC_PREPROCESSOR_DEFINITIONS)

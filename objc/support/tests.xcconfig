@@ -1,0 +1,13 @@
+
+// Packaging
+INFOPLIST_FILE = $(SRCROOT)/support/Tests_Info.plist
+
+// Signing
+CODE_SIGN_IDENTITY[sdk=iphoneos*] = iPhone Developer
+DEVELOPMENT_TEAM = TCFDHFMX6R
+CODE_SIGN_STYLE = Automatic
+
+// Testing
+TEST_HOST[sdk=iphonesimulator*] = $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host
+TEST_HOST[sdk=iphoneos*] = $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host
+TEST_HOST[sdk=macosx*] = $(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host
