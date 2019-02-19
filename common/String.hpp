@@ -29,6 +29,7 @@ namespace WCDB {
 class String final : public std::string {
 public:
     using std::string::string;
+    String(const char *str);
     String(std::string &&str);
     String(const std::string &str);
     String(const UnsafeString &str);

@@ -23,6 +23,10 @@
 
 namespace WCDB {
 
+String::String(const char *str) : std::string(str != nullptr ? str : "")
+{
+}
+
 String::String(std::string &&str) : std::string(std::move(str))
 {
 }
