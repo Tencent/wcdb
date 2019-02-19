@@ -276,6 +276,7 @@ std::pair<bool, bool> AbstractHandle::tableExists(const String &table)
 
 std::pair<bool, bool> AbstractHandle::tableExists(const Schema &schema, const String &table)
 {
+    // TODO: use sqlite3_table_column_metadata to check if table exists? 1. performance 2. table created by other handles?
     HandleStatement *handleStatement = getStatement();
     StatementSelect statementSelect
     = StatementSelect().select(1).from(TableOrSubquery(table).schema(schema)).limit(0);
@@ -311,7 +312,6 @@ AbstractHandle::getColumns(const Schema &schema, const String &table)
 std::pair<bool, std::vector<ColumnMeta>>
 AbstractHandle::getTableMeta(const Schema &schema, const String &table)
 {
-    // TODO: refactor by sqlite3_table_column_metadata?
     std::vector<ColumnMeta> columnMetas;
     HandleStatement *handleStatement = getStatement();
     bool done = false;
