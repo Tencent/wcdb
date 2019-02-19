@@ -358,9 +358,9 @@ AbstractHandle::getValues(const Statement &statement, int index)
 }
 
 #pragma mark - Transaction
-const String &AbstractHandle::savepointPrefix()
+const char *AbstractHandle::savepointPrefix()
 {
-    static const String s_savepointPrefix("WCDBSavepoint_");
+    static const char *s_savepointPrefix = "WCDBSavepoint_";
     return s_savepointPrefix;
 }
 

@@ -133,7 +133,7 @@ public:
     void enableLazyNestedTransaction(bool enable);
 
 private:
-    static const String &savepointPrefix();
+    static const char *savepointPrefix();
     int m_nestedLevel;
     bool m_lazyNestedTransaction;
 

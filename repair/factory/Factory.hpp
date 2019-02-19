@@ -55,7 +55,7 @@ public:
     std::pair<bool, String> getUniqueWorkshopDiectory() const;
     bool containsDeposited() const;
 
-#pragma - Factory Related
+#pragma mark - Factory Related
 public:
     friend class FactoryRelated;
     FactoryDepositor depositor() const;

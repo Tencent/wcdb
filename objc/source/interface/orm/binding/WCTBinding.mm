@@ -29,7 +29,7 @@
 #import <WCDB/WCTPropertyMacro.h>
 #import <objc/runtime.h>
 
-#pragma - Binding
+#pragma mark - Binding
 WCTBinding::WCTBinding(Class cls)
 : m_cls(cls)
 {

@@ -236,7 +236,7 @@
         _handle->bindInteger64(((NSNumber *) archivedValue).longLongValue, index);
         break;
     case WCTColumnTypeDouble:
-        _handle->bindInteger32(((NSNumber *) archivedValue).doubleValue, index);
+        _handle->bindDouble(((NSNumber *) archivedValue).doubleValue, index);
         break;
     case WCTColumnTypeString:
         _handle->bindText(archivedValue ? ((NSString *) archivedValue).UTF8String : WCDB::String::null().c_str(), index);
