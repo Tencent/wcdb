@@ -12,4 +12,5 @@ GENERATE_MASTER_OBJECT_FILE = YES
 PRELINK_LIBS = $(TARGET_BUILD_DIR)/sqlcipher.framework/sqlcipher
 
 // Code Generation
+LLVM_LTO = NO
 CLANG_ENABLE_CODE_COVERAGE = NO
