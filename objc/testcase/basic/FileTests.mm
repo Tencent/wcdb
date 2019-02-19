@@ -188,7 +188,7 @@
     TestCaseAssertTrue([database.path isEqualToString:normalizedPath]);
 }
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE && !TARGET_IPHONE_SIMULATOR
 - (void)test_feature_auto_set_file_protection
 {
     TestCaseAssertTrue([self.database canOpen]);
