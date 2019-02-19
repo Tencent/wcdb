@@ -87,7 +87,7 @@
         [self setUpDatabase];
 
         if (objects == nil) {
-            objects = [self.random benchmarkObjectsWithCount:numberOfObjects startingFromIdentifier:self.factory.expectedQuality];
+            objects = [self.random benchmarkObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.expectedQuality];
         }
     }
     tearDown:^{
@@ -132,7 +132,7 @@
         [self setUpDatabase];
 
         if (objects == nil) {
-            objects = [self.random benchmarkObjectsWithCount:numberOfObjects startingFromIdentifier:self.factory.expectedQuality];
+            objects = [self.random benchmarkObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.expectedQuality];
         }
     }
     tearDown:^{
@@ -174,8 +174,8 @@
 
 - (BOOL)stepPreparePrototype:(NSString*)path
 {
-    int numberOfObjects = [self getQuality:path];
-    int maxNumberOfObjects = self.factory.expectedQuality;
+    int numberOfObjects = (int) [self getQuality:path];
+    int maxNumberOfObjects = (int) self.factory.expectedQuality;
     int step = maxNumberOfObjects / 100;
     if (step > maxNumberOfObjects - numberOfObjects) {
         step = maxNumberOfObjects - numberOfObjects;

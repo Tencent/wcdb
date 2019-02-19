@@ -99,8 +99,8 @@
 #pragma mark - ReusableFactoryPreparation
 - (BOOL)stepPreparePrototype:(NSString*)path
 {
-    int numberOfTables = [self getQuality:path];
-    int maxNumberOfTables = self.factory.expectedQuality;
+    int numberOfTables = (int) [self getQuality:path];
+    int maxNumberOfTables = (int) self.factory.expectedQuality;
     int step = maxNumberOfTables / 100;
     if (step > maxNumberOfTables - numberOfTables) {
         step = maxNumberOfTables - numberOfTables;

@@ -2,11 +2,8 @@
 SUPPORTED_PLATFORMS = macosx iphonesimulator iphoneos watchos watchsimulator appletvos appletvsimulator
 VALID_ARCHS = $(ARCHS_STANDARD)
 
-// Build Options
-ENABLE_TESTABILITY = YES
-
 // Deployment
-DEPLOYMENT_POSTPROCESSING = YES
+STRIP_INSTALLED_PRODUCT = YES
 SKIP_INSTALL = YES
 IPHONEOS_DEPLOYMENT_TARGET = 8.0
 MACOSX_DEPLOYMENT_TARGET = 10.9
@@ -16,11 +13,11 @@ WATCHOS_DEPLOYMENT_TARGET = 2.0
 // Linking
 DYLIB_COMPATIBILITY_VERSION = 1
 DYLIB_CURRENT_VERSION = 1
-DEAD_CODE_STRIPPING = YES
 OTHER_LDFLAGS[sdk=iphonesimulator*] = -framework UIKit
 OTHER_LDFLAGS[sdk=iphoneos*] = -framework UIKit
 OTHER_LDFLAGS[sdk=macosx*] = -framework Cocoa
 LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/../Frameworks @loader_path/Frameworks
+DYLIB_INSTALL_NAME_BASE = @rpath
 
 // Packaging
 DEFINES_MODULE = YES
@@ -30,7 +27,6 @@ PRODUCT_MODULE_NAME = $(PRODUCT_NAME)
 PRODUCT_NAME = $(TARGET_NAME)
 
 // Search Paths
-FRAMEWORK_SEARCH_PATHS = $(PLATFORM_DIR)/Developer/Library/Frameworks
 LIBRARY_SEARCH_PATHS[sdk=macosx*] = $(inherited) $(SDKROOT)/usr/lib/system
 
 // Signing
@@ -38,6 +34,7 @@ CODE_SIGN_IDENTITY[sdk=iphoneos*] = iPhone Developer
 CODE_SIGN_STYLE = Automatic
 
 // Versioning
+CURRENT_PROJECT_VERSION = 1
 VERSIONING_SYSTEM = apple-generic
 
 // Code Generation

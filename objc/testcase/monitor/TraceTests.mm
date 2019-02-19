@@ -81,6 +81,9 @@
     __block BOOL start = NO;
     __weak typeof(self) weakSelf = self;
     [WCTDatabase globalTraceError:^(WCTError* error) {
+        if (weakSelf == nil) {
+            return;
+        }
         if (weakSelf != nil
             && error.level == WCTErrorLevelError
             && [error.path isEqualToString:self.path]

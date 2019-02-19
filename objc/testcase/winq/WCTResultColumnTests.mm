@@ -22,9 +22,6 @@
 
 @interface WCTResultColumnTests : BaseTestCase
 
-@property int testProperty1;
-@property double testProperty2;
-
 @end
 
 @implementation WCTResultColumnTests {

@@ -20,6 +20,7 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
+#import <WCDB/WCTDatabase+TestCase.h>
 
 @interface NSObject (TestCase)
 
@@ -60,14 +61,5 @@
 - (BOOL)removeItemsIfExistsAtPaths:(NSArray<NSString*>*)paths error:(NSError**)error;
 - (BOOL)setFileImmutable:(BOOL)immutable ofItemsIfExistsAtPaths:(NSArray<NSString*>*)paths error:(NSError**)error;
 - (BOOL)isFileImmutableOfItemAtPath:(NSString*)path error:(NSError**)error;
-
-@end
-
-@interface WCTDatabase (TestCase)
-
-+ (void)enableSQLiteWrite;
-+ (void)disableSQLiteWrite;
-
-- (void)removeSQLRelatedConfigs;
 
 @end

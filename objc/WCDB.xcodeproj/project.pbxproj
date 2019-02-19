@@ -205,6 +205,8 @@
 		2360A60920D78F2C00E4A311 /* PerformanceTraceConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2360A60220D78F2B00E4A311 /* PerformanceTraceConfig.hpp */; };
 		2366BB21221BC0D2000ED712 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		2366BB22221BC0E6000ED712 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F0FD7C215F1C92008399FB /* Security.framework */; };
+		2366BBB6221BEAA6000ED712 /* WCTDatabase+TestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2366BBB4221BEAA6000ED712 /* WCTDatabase+TestCase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2366BBB7221BEAA6000ED712 /* WCTDatabase+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2366BBB5221BEAA6000ED712 /* WCTDatabase+TestCase.mm */; };
 		2367BAB92215004300380122 /* SQL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBA8217DFADC006E9E73 /* SQL.cpp */; };
 		2367BABA2215004300380122 /* HighWater.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23E7EB1B2123D58D0056B5D8 /* HighWater.cpp */; };
 		2367BABB2215004300380122 /* ConvertibleImplementation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB6D217DFADC006E9E73 /* ConvertibleImplementation.cpp */; };
@@ -2068,6 +2070,8 @@
 		2366BB1E221BB0F1000ED712 /* tests.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = tests.xcconfig; sourceTree = "<group>"; };
 		2366BB1F221BB0F1000ED712 /* host.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = host.xcconfig; sourceTree = "<group>"; };
 		2366BB20221BB97B000ED712 /* wcdb_ios_static.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = wcdb_ios_static.xcconfig; sourceTree = "<group>"; };
+		2366BBB4221BEAA6000ED712 /* WCTDatabase+TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+TestCase.h"; sourceTree = "<group>"; };
+		2366BBB5221BEAA6000ED712 /* WCTDatabase+TestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+TestCase.mm"; sourceTree = "<group>"; };
 		2367BD0C2215004300380122 /* WCDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		236996B121D5C4FF00E72E81 /* Recyclable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Recyclable.cpp; sourceTree = "<group>"; };
 		236BACBE21BF6C8500C8B4D9 /* MigrationQueue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationQueue.cpp; sourceTree = "<group>"; };
@@ -3803,6 +3807,8 @@
 		2387D95A21DF651C0028ADB9 /* utility */ = {
 			isa = PBXGroup;
 			children = (
+				2366BBB4221BEAA6000ED712 /* WCTDatabase+TestCase.h */,
+				2366BBB5221BEAA6000ED712 /* WCTDatabase+TestCase.mm */,
 				2387D95B21DF651C0028ADB9 /* TestCaseLog.mm */,
 				2387D95C21DF651C0028ADB9 /* NSObject+TestCase.mm */,
 				2387D95D21DF651C0028ADB9 /* NSObject+TestCase.h */,
@@ -4868,6 +4874,7 @@
 				23EEDD28217DFADC006E9E73 /* SyntaxWindowFunctionInvocation.hpp in Headers */,
 				23EEDD48217DFADC006E9E73 /* SyntaxDropViewSTMT.hpp in Headers */,
 				2376CB1D20DA5D3B00A68DB5 /* Scoreable.hpp in Headers */,
+				2366BBB6221BEAA6000ED712 /* WCTDatabase+TestCase.h in Headers */,
 				23EEDC73217DFADC006E9E73 /* SyntaxForwardDeclaration.h in Headers */,
 				23EEDCB2217DFADC006E9E73 /* With.hpp in Headers */,
 				23EEDCEC217DFADC006E9E73 /* SyntaxOrder.hpp in Headers */,
@@ -6234,6 +6241,7 @@
 				237908F721928C9F0098797F /* WCTObjCAccessor.mm in Sources */,
 				23EEDCC3217DFADC006E9E73 /* StatementCreateTrigger.cpp in Sources */,
 				23D96B922050DED700DB5E93 /* DatabasePool.cpp in Sources */,
+				2366BBB7221BEAA6000ED712 /* WCTDatabase+TestCase.mm in Sources */,
 				236BACE721BF9FC900C8B4D9 /* WCTMigrationInfo.mm in Sources */,
 				2304B42E22156E1500901953 /* TokenizerModules.cpp in Sources */,
 				23EEDCB1217DFADC006E9E73 /* With.cpp in Sources */,

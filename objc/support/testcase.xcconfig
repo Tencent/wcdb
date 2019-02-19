@@ -3,3 +3,6 @@ MACOSX_DEPLOYMENT_TARGET = 10.14
 
 // Linking
 MACH_O_TYPE = mh_dylib
+
+// Search Paths
+FRAMEWORK_SEARCH_PATHS = $(PLATFORM_DIR)/Developer/Library/Frameworks
