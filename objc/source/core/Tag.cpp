@@ -31,7 +31,7 @@ const Tag& Tag::invalid()
 
 Tag::Tag(int32_t tag) : m_value(tag)
 {
-    WCTRemedialAssert(m_value != 0, "Tag can't be 0.", return;);
+    WCTRemedialAssert(m_value != invalidValue, "Tag can't be 0.", return;);
 }
 
 Tag::Tag(const std::nullptr_t&) : m_value(invalidValue)
