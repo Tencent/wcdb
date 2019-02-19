@@ -1,6 +1,6 @@
 // Architectures
 SUPPORTED_PLATFORMS = macosx iphonesimulator iphoneos watchos watchsimulator appletvos appletvsimulator
-VALID_ARCHS = x86_64 arm64 armv7
+VALID_ARCHS = $(ARCHS_STANDARD)
 
 // Build Options
 ENABLE_TESTABILITY = YES
@@ -33,6 +33,10 @@ PRODUCT_NAME = $(TARGET_NAME)
 FRAMEWORK_SEARCH_PATHS = $(PLATFORM_DIR)/Developer/Library/Frameworks
 LIBRARY_SEARCH_PATHS[sdk=macosx*] = $(inherited) $(SDKROOT)/usr/lib/system
 
+// Signing
+CODE_SIGN_IDENTITY[sdk=iphoneos*] = iPhone Developer
+CODE_SIGN_STYLE = Automatic
+
 // Versioning
 VERSIONING_SYSTEM = apple-generic
 
@@ -62,7 +66,6 @@ CLANG_ENABLE_OBJC_WEAK = YES
 
 // Preprocessing
 ENABLE_STRICT_OBJC_MSGSEND = YES
-BASE_GCC_PREPROCESSOR_DEFINITIONS = $(inherited) SQLITE_HAS_CODEC ZLIB_CONST SQLITE_WCDB_CHECKPOINT_HANDLER WCDB_BUILTIN_SQLCIPHER SQLITE_WCDB_DIRTY_PAGE_COUNT
 
 // Warnings - All languages
 CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES

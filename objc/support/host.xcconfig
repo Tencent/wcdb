@@ -1,7 +1,3 @@
-// Signing
-CODE_SIGN_IDENTITY[sdk=iphoneos*] = iPhone Developer
-CODE_SIGN_STYLE = Automatic
-
 // User-Defined
 PRINCIPAL_CLASS[sdk=iphonesimulator*] = UIApplication
 PRINCIPAL_CLASS[sdk=iphoneos*] = UIApplication

@@ -1,4 +1,15 @@
 #include "wcdb.xcconfig"
 
+// Architectures
+SUPPORTED_PLATFORMS = iphonesimulator iphoneos
+
+// Build Options
+ENABLE_TESTABILITY = NO
+
 // Linking
 MACH_O_TYPE = staticlib
+GENERATE_MASTER_OBJECT_FILE = YES
+PRELINK_LIBS = $(TARGET_BUILD_DIR)/sqlcipher.framework/sqlcipher
+
+// Code Generation
+CLANG_ENABLE_CODE_COVERAGE = NO

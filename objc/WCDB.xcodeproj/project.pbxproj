@@ -203,6 +203,8 @@
 		2360A60520D78F2C00E4A311 /* SQLTraceConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2360A60020D78F2B00E4A311 /* SQLTraceConfig.hpp */; };
 		2360A60720D78F2C00E4A311 /* PerformanceTraceConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2360A60120D78F2B00E4A311 /* PerformanceTraceConfig.cpp */; };
 		2360A60920D78F2C00E4A311 /* PerformanceTraceConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2360A60220D78F2B00E4A311 /* PerformanceTraceConfig.hpp */; };
+		2366BB21221BC0D2000ED712 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
+		2366BB22221BC0E6000ED712 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F0FD7C215F1C92008399FB /* Security.framework */; };
 		2367BAB92215004300380122 /* SQL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBA8217DFADC006E9E73 /* SQL.cpp */; };
 		2367BABA2215004300380122 /* HighWater.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23E7EB1B2123D58D0056B5D8 /* HighWater.cpp */; };
 		2367BABB2215004300380122 /* ConvertibleImplementation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB6D217DFADC006E9E73 /* ConvertibleImplementation.cpp */; };
@@ -468,10 +470,6 @@
 		2367BBC22215004300380122 /* SyntaxSelectCore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC24217DFADC006E9E73 /* SyntaxSelectCore.cpp */; };
 		2367BBC32215004300380122 /* StatementRelease.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBDF217DFADC006E9E73 /* StatementRelease.cpp */; };
 		2367BBC42215004300380122 /* MigrationStepperHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A4703A21BE0940005B9C09 /* MigrationStepperHandle.cpp */; };
-		2367BBC62215004300380122 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
-		2367BBC72215004300380122 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F0FD7C215F1C92008399FB /* Security.framework */; };
-		2367BBC82215004300380122 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23C43BCC2087435800AB186D /* libz.tbd */; };
-		2367BBC92215004300380122 /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F5BE0620887FD4000CCD37 /* sqlcipher.framework */; };
 		2367BBCB2215004300380122 /* Handle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23DC306E202AFF8B000F7895 /* Handle.hpp */; };
 		2367BBCC2215004300380122 /* AsyncQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DCE02112B03C00954D71 /* AsyncQueue.hpp */; };
 		2367BBCD2215004300380122 /* WINQ.h in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBEB217DFADC006E9E73 /* WINQ.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1047,7 +1045,6 @@
 		239E8A912160A62F00BCB308 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 239E8A8F2160A62F00BCB308 /* main.m */; };
 		239E8AAE2160B70000BCB308 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		239E8AB02160B71200BCB308 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		239E8AB32160B7BE00BCB308 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		239E8AB42160B7D200BCB308 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		23A09D7D2146204400F62EE8 /* MigrationHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A09D692146204300F62EE8 /* MigrationHandle.cpp */; };
 		23A09D7F2146204400F62EE8 /* MigrationHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A09D6A2146204300F62EE8 /* MigrationHandle.hpp */; };
@@ -1407,7 +1404,6 @@
 		23EEDD5D217DFADC006E9E73 /* Syntax.h in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDC65217DFADC006E9E73 /* Syntax.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23EEDD60217DFB17006E9E73 /* Enum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDD5E217DFB16006E9E73 /* Enum.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23EEDD61217DFB17006E9E73 /* Shadow.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDD5F217DFB17006E9E73 /* Shadow.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		23F0FD7D215F1C92008399FB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F0FD7C215F1C92008399FB /* Security.framework */; };
 		23F0FEB4215F5E9A008399FB /* ThreadLocal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F0FEB0215F5E99008399FB /* ThreadLocal.cpp */; };
 		23F0FEB5215F5E9A008399FB /* Lock.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F0FEB1215F5E9A008399FB /* Lock.hpp */; };
 		23F0FEB6215F5E9A008399FB /* ThreadLocal.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F0FEB2215F5E9A008399FB /* ThreadLocal.hpp */; };
@@ -2841,10 +2837,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2367BBC62215004300380122 /* Foundation.framework in Frameworks */,
-				2367BBC72215004300380122 /* Security.framework in Frameworks */,
-				2367BBC82215004300380122 /* libz.tbd in Frameworks */,
-				2367BBC92215004300380122 /* sqlcipher.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2885,8 +2877,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				239E8AB32160B7BE00BCB308 /* Foundation.framework in Frameworks */,
-				23F0FD7D215F1C92008399FB /* Security.framework in Frameworks */,
+				2366BB22221BC0E6000ED712 /* Security.framework in Frameworks */,
+				2366BB21221BC0D2000ED712 /* Foundation.framework in Frameworks */,
 				23F5BE132088800C000CCD37 /* libz.tbd in Frameworks */,
 				23F5BE1120888008000CCD37 /* sqlcipher.framework in Frameworks */,
 			);
@@ -5490,6 +5482,7 @@
 					};
 					2367BAB52215004300380122 = {
 						DevelopmentTeam = TCFDHFMX6R;
+						ProvisioningStyle = Automatic;
 					};
 					237908FA219295370098797F = {
 						DevelopmentTeam = TCFDHFMX6R;
@@ -5501,6 +5494,7 @@
 					};
 					2387D64921DF07790028ADB9 = {
 						DevelopmentTeam = TCFDHFMX6R;
+						ProvisioningStyle = Automatic;
 					};
 					239326601E836D7300D677CC = {
 						CreatedOnToolsVersion = 8.2;
