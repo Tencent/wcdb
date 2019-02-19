@@ -62,4 +62,7 @@
 - (BOOL)setFileImmutable:(BOOL)immutable ofItemsIfExistsAtPaths:(NSArray<NSString*>*)paths error:(NSError**)error;
 - (BOOL)isFileImmutableOfItemAtPath:(NSString*)path error:(NSError**)error;
 
+- (BOOL)setFileProtectionOfPath:(NSString*)path to:(NSFileProtectionType)type error:(NSError**)error;
+- (NSFileProtectionType)getFileProtection:(NSString*)path error:(NSError**)error;
+
 @end

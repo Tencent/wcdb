@@ -160,4 +160,14 @@
     return NO;
 }
 
+- (BOOL)setFileProtectionOfPath:(NSString *)path to:(NSFileProtectionType)type error:(NSError **)error
+{
+    return [self setAttributes:@{ NSFileProtectionKey : type } ofItemAtPath:path error:error];
+}
+
+- (NSFileProtectionType)getFileProtection:(NSString *)path error:(NSError **)error
+{
+    return [self attributesOfItemAtPath:path error:error][NSFileProtectionKey];
+}
+
 @end

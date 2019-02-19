@@ -188,7 +188,31 @@
     TestCaseAssertTrue([database.path isEqualToString:normalizedPath]);
 }
 
-#warning TODO
-//- (void)test_feature_auto_set_file_protection
+#if TARGET_OS_IPHONE
+- (void)test_feature_auto_set_file_protection
+{
+    TestCaseAssertTrue([self.database canOpen]);
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.path]);
+
+    [self.database close];
+
+    NSError* error;
+    NSFileProtectionType fileProtectionTypeBefore = [self.fileManager getFileProtection:self.database.path error:&error];
+    TestCaseAssertTrue(fileProtectionTypeBefore == nil
+                       || [fileProtectionTypeBefore isEqualToString:NSFileProtectionNone]
+                       || [fileProtectionTypeBefore isEqualToString:NSFileProtectionCompleteUntilFirstUserAuthentication]);
+    TestCaseAssertTrue(error == nil);
+
+    TestCaseAssertTrue([self.fileManager setFileProtectionOfPath:self.database.path to:NSFileProtectionComplete error:&error]);
+    TestCaseAssertTrue(error == nil);
+
+    // trigger
+    TestCaseAssertTrue([self.database canOpen]);
+
+    NSFileProtectionType fileProtectionTypeAfter = [self.fileManager getFileProtection:self.database.path error:&error];
+    TestCaseAssertTrue([fileProtectionTypeAfter isEqualToString:NSFileProtectionCompleteUntilFirstUserAuthentication]);
+    TestCaseAssertTrue(error == nil);
+}
+#endif
 
 @end
