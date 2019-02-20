@@ -48,14 +48,14 @@
         [self log:@"debuggable."];
     }
 
-    [self refreshDirectory];
-
     NSString *directory = self.directory;
     NSString *abbreviatedPath = directory.stringByAbbreviatingWithTildeInPath;
     if (abbreviatedPath.length > 0) {
         directory = abbreviatedPath;
     }
     [self log:@"run at %@", directory];
+    
+    [self refreshDirectory];
 }
 
 - (void)tearDown
