@@ -158,7 +158,7 @@ bool FactoryRenewer::prepare()
 
     // 6. move the assembled database to renew directory and wait for renew.
     std::list<String> toRemove = Factory::associatedPathsForDatabase(database);
-    toRemove.reverse();
+    toRemove.reverse(); // move from end to start, which can avoid issues that unexpected crash happens before all files moved.
     if (!FileManager::removeItems(toRemove)) {
         assignWithSharedThreadedError();
         return false;
