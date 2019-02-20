@@ -69,6 +69,7 @@ static constexpr const double BackupQueueDelayForNonCritical = 5.0;
 
 // Basic Config
 static constexpr const char* BasicConfigName = WCDB_BASIC_CONFIG_NAME;
+    static constexpr const int BasicConfigBusyRetryMaxAllowedNumberOfTimes = 3;
 
 // Tokenize Config
 static constexpr const char* TokenizeConfigName = WCDB_TOKENIZE_CONFIG_NAME;
@@ -93,7 +94,7 @@ static constexpr const char* GlobalPerformanceTraceConfigName
 static constexpr const char* BusyRetryConfigName = WCDB_BUSY_RETRY_CONFIG_NAME;
 static constexpr const double BusyRetryTimeOutForMainThread = 2.0;
 static constexpr const double BusyRetryTimeOutForOtherThread = 10.0;
-static constexpr const int BusyRetryMaxAllowedNumberOfTimes = 20;
+static constexpr const int BusyRetryMaxAllowedNumberOfTimes = 10;
 
 // Notifier
 static constexpr const char* NotifierTagPreprocessorName

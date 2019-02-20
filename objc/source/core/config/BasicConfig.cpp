@@ -22,6 +22,7 @@
 #include <WCDB/BasicConfig.hpp>
 #include <WCDB/Handle.hpp>
 #include <WCDB/Macro.hpp>
+#include <WCDB/CoreConst.h>
 
 namespace WCDB {
 
@@ -74,7 +75,7 @@ bool BasicConfig::invoke(Handle* handle)
         return false;
     }
     
-    int retry = 3;
+    int retry = BasicConfigBusyRetryMaxAllowedNumberOfTimes;
     do {
         if (getOrSetPragmaBegin(handle, m_getJournalMode) && getOrSetPragmaEnd(handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("WAL"))) {
             break;
