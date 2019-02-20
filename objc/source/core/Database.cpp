@@ -514,7 +514,6 @@ String Database::getLastMaterialPath() const
 
 const String &Database::getFactoryDirectory() const
 {
-    SharedLockGuard memoryGuard(m_memory);
     return m_factory.directory;
 }
 
@@ -542,7 +541,6 @@ bool Database::backup()
         return false;
     }
 
-    SharedLockGuard memoryGuard(m_memory);
     // TODO: get backed up frame, update backup queue
     Repair::FactoryBackup backup = m_factory.backup();
     backup.setReadLocker(static_cast<BackupReadHandle *>(backupReadHandle.get()));
@@ -641,7 +639,6 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
 bool Database::containsDeposited() const
 {
     SharedLockGuard concurrencyGuard(m_concurrency);
-    SharedLockGuard memoryGuard(m_memory);
     return m_factory.containsDeposited();
 }
 
@@ -675,7 +672,6 @@ bool Database::retrieveRenewed()
     WCTInnerAssert(isBlockaded());
     WCTInnerAssert(!m_initialized);
 
-    SharedLockGuard memoryGuard(m_memory);
     Repair::FactoryRenewer renewer = m_factory.renewer();
     if (renewer.work()) {
         return true;
