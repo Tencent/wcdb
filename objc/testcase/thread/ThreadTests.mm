@@ -367,8 +367,8 @@
     TestCaseResult* tested = [TestCaseResult no];
     [WCTDatabase globalTraceError:^(WCTError* error) {
         if (error.level == WCTErrorLevelIgnore
-            && error.code == WCTErrorCodeNotice) {
-            // SQLITE_NOTICE_RECOVER_WAL
+            && error.code == WCTErrorCodeNotice
+            && error.extendedCode == WCTErrorExtendedCodeNoticeRecoverWal) {
             [tested makeYES];
         }
     }];
