@@ -50,7 +50,9 @@
                                setUpBlock();
                            }
 
-                           BenchmarkSignpostBegin("measure");
+                           if (@available(iOS 12.0, macOS 10.14, *)) {
+                               BenchmarkSignpostBegin("measure");
+                           }
 
                            [self log:@"%d started.", i];
 
@@ -60,7 +62,9 @@
 
                            [self stopMeasuring];
 
-                           BenchmarkSignpostEnd("measure");
+                           if (@available(iOS 12.0, macOS 10.14, *)) {
+                               BenchmarkSignpostEnd("measure");
+                           }
 
                            [self log:@"%d passed.", i];
 

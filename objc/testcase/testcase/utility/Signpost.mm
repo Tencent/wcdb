@@ -28,7 +28,9 @@
         _system = system;
         _category = category;
         _log = os_log_create(system.UTF8String, category.UTF8String);
-        _identifier = os_signpost_id_generate(_log);
+        if (@available(iOS 12.0, macOS 10.14, *)) {
+            _identifier = os_signpost_id_generate(_log);
+        }
     }
     return self;
 }
