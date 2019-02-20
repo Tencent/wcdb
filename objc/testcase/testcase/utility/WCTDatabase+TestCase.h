@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDB.h>
-
 #ifdef DEBUG
+
+#import <WCDB/WCDB.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

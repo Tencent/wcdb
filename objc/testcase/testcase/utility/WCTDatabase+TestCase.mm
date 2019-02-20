@@ -18,6 +18,8 @@
  * limitations under the License.
  */
 
+#ifdef DEBUG
+
 #import <WCDB/SQLite.h>
 #import <WCDB/WCTDatabase+TestCase.h>
 
@@ -59,3 +61,5 @@ ssize_t illPwrite(int, const void *, size_t, off_t)
 }
 
 @end
+
+#endif

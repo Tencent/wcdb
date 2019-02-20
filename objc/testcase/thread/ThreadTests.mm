@@ -238,6 +238,7 @@
          }];
 }
 
+#ifdef DEBUG
 - (void)test_feature_retry_subthread_checkpoint_when_failed
 {
     TestCaseAssertTrue([self createTable]);
@@ -267,6 +268,7 @@
              return YES;
          }];
 }
+#endif
 
 - (void)test_feature_stop_subthread_checkpoint_when_manual_checkpoint
 {

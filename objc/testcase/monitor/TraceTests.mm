@@ -81,16 +81,16 @@
     __block BOOL start = NO;
     __weak typeof(self) weakSelf = self;
     [WCTDatabase globalTraceError:^(WCTError* error) {
-        if (weakSelf == nil) {
+        typeof(self) strongSelf = weakSelf; 
+        if (strongSelf == nil) {
             return;
         }
-        if (weakSelf != nil
-            && error.level == WCTErrorLevelError
+        if (error.level == WCTErrorLevelError
             && [error.path isEqualToString:self.path]
-            && error.tag == weakSelf.database.tag
+            && error.tag == strongSelf.database.tag
             && [error.source isEqualToString:@"SQLite"]
-            && error.code == WCTErrorCodeIOError
-            && [error.sql isEqualToString:@"BEGIN IMMEDIATE"]) {
+            && error.code == WCTErrorCodeError
+            && [error.sql isEqualToString:@"SELECT 1 FROM main.dummy"]) {
             tested = YES;
         }
     }];
@@ -98,9 +98,7 @@
     TestCaseAssertTrue([self.database canOpen]);
 
     start = YES;
-    [WCTDatabase disableSQLiteWrite];
-    TestCaseAssertFalse([self createTable]);
-    [WCTDatabase enableSQLiteWrite];
+    TestCaseAssertFalse([self.database execute:WCDB::StatementSelect().select(1).from(@"dummy")]);
 
     TestCaseAssertTrue(tested);
     [WCTDatabase resetGlobalErrorTracer];

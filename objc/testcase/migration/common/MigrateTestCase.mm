@@ -107,10 +107,13 @@
     TestCaseResult *tested = [TestCaseResult no];
     __weak typeof(self) weakSelf = self;
     [WCTDatabase globalTraceError:^(WCTError *error) {
-        if (weakSelf != nil
-            && error.code == WCTErrorCodeInterrupt
+        typeof(self) strongSelf = weakSelf;
+        if (strongSelf == nil) {
+            return;
+        }
+        if (error.code == WCTErrorCodeInterrupt
             && error.level == WCTErrorLevelIgnore
-            && error.tag == weakSelf.database.tag) {
+            && error.tag == strongSelf.database.tag) {
             [tested makeYES];
         }
     }];
@@ -155,15 +158,19 @@
     TestCaseAssertResultYES(migrated);
 }
 
+#ifdef DEBUG
 - (void)doTestFeatureAutoMigrateWillStopDueToError
 {
     TestCaseCounter *numberOfFailures = [TestCaseCounter value:0];
     __weak typeof(self) weakSelf = self;
     [WCTDatabase globalTraceError:^(WCTError *error) {
-        if (weakSelf != nil
-            && error.code == WCTErrorCodeIOError
+        typeof(self) strongSelf = weakSelf;
+        if (strongSelf == nil) {
+            return;
+        }
+        if (error.code == WCTErrorCodeIOError
             && error.level == WCTErrorLevelError
-            && error.tag == weakSelf.database.tag) {
+            && error.tag == strongSelf.database.tag) {
             [numberOfFailures increment];
         }
     }];
@@ -186,6 +193,7 @@
     [NSThread sleepForTimeInterval:2 * WCDB::MigrationQueueTimeIntervalForMigrating];
     TestCaseAssertResultYES(result);
 }
+#endif
 
 - (void)doTestFeatureAutoMigrateWillNotStopDueToInterrupt
 {
