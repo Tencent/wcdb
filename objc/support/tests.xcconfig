@@ -1,3 +1,6 @@
+// Architectures
+SUPPORTED_PLATFORMS = macosx iphonesimulator iphoneos appletvos appletvsimulator
+
 // Packaging
 INFOPLIST_FILE = $(SRCROOT)/support/Tests_Info.plist
 
