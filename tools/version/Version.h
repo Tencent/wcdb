@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _WCDB_VERSION_H
-#define _WCDB_VERSION_H
+#ifndef __WCDB_VERSION_H
+#define __WCDB_VERSION_H
 
 /* This file is generated automatically by `WCDB_VERSION_TOOL_PLACEHOLDER`. */
 
@@ -29,4 +29,4 @@
 #define WCDB_BUILD_TIMESTAMP WCDB_BUILD_TIMESTAMP_PLACEHOLDER
 #define WCDB_BUILD_TIME "WCDB_BUILD_TIME_PLACEHOLDER"
 
-#endif /* _WCDB_VERSION_H */
+#endif /* __WCDB_VERSION_H */

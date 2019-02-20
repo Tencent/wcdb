@@ -21,12 +21,12 @@
 #ifndef __WCDB_VERSION_H
 #define __WCDB_VERSION_H
 
-/* This file is generated automatically by `tools/version/objc.sh`. */
+/* This file is generated automatically by `tools/version/bump.sh`. */
 
 #define WCDB_IDENTIFIER "bfd56a1a2d98b0b21babd84fcf6db4ac"
 #define WCDB_VERSION "1.1.0"
-#define WCDB_COMMIT_HASH "9bb1cdf559e13a7be32af2281682d22328f720dd"
-#define WCDB_BUILD_TIMESTAMP 1546586816
-#define WCDB_BUILD_TIME "2019-01-04 15:26:56 UTC+0800"
+#define WCDB_COMMIT_HASH "b8bd6e32524bdd72667c11a726eb2dc37be07f5c"
+#define WCDB_BUILD_TIMESTAMP 1550631911
+#define WCDB_BUILD_TIME "2019-02-20 11:05:11 UTC+0800"
 
 #endif /* __WCDB_VERSION_H */
