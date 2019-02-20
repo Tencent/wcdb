@@ -32,24 +32,20 @@ ssize_t illPwrite(int, const void *, size_t, off_t)
 
 + (void)enableSQLiteWrite
 {
-    NSLog(@"Will enable SQLite write");
     sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
     sqlite3_mutex *mutex = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_MASTER);
     sqlite3_mutex_enter(mutex);
     vfs->xSetSystemCall(vfs, "pwrite", (sqlite3_syscall_ptr) pwrite);
     sqlite3_mutex_leave(mutex);
-    NSLog(@"Did enable SQLite write");
 }
 
 + (void)disableSQLiteWrite
 {
-    NSLog(@"Will disable SQLite write");
     sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
     sqlite3_mutex *mutex = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_MASTER);
     sqlite3_mutex_enter(mutex);
     vfs->xSetSystemCall(vfs, "pwrite", (sqlite3_syscall_ptr) illPwrite);
     sqlite3_mutex_leave(mutex);
-    NSLog(@"Did disable SQLite write");
 }
 
 - (void)removeSQLRelatedConfigs

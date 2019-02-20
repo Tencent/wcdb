@@ -33,7 +33,6 @@ class TokenizerConfig final : public Config {
 public:
     TokenizerConfig(const std::map<String, TokenizerModule>& modules);
     bool invoke(Handle* handle) override final;
-#warning TODO - uninvoke and bool reinvokable
 
 protected:
     const std::map<String, TokenizerModule> m_modules;

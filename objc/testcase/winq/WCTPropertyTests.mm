@@ -22,9 +22,6 @@
 
 @interface WCTPropertyTests : BaseTestCase
 
-@property int testProperty1;
-@property double testProperty2;
-
 @end
 
 @implementation WCTPropertyTests {

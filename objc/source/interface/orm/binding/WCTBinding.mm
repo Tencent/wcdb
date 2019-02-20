@@ -102,6 +102,7 @@ const std::map<WCDB::String, WCDB::ColumnDef, WCDB::String::CaseInsensiveCompara
 
 WCDB::ColumnDef &WCTBinding::getOrCreateColumnDef(const WCTProperty &property)
 {
+#warning TODO - refactor to use order of definition
     WCDB::String name = property.getDescription();
     auto iter = m_columnDefs.find(name);
     if (iter == m_columnDefs.end()) {
