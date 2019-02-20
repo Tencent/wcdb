@@ -160,6 +160,7 @@
     return NO;
 }
 
+#if TARGET_OS_IPHONE && !TARGET_IPHONE_SIMULATOR
 - (BOOL)setFileProtectionOfPath:(NSString *)path to:(NSFileProtectionType)type error:(NSError **)error
 {
     return [self setAttributes:@{ NSFileProtectionKey : type } ofItemAtPath:path error:error];
@@ -169,5 +170,6 @@
 {
     return [self attributesOfItemAtPath:path error:error][NSFileProtectionKey];
 }
+#endif
 
 @end
