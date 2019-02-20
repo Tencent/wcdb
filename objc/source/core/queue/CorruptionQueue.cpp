@@ -40,10 +40,11 @@ CorruptionQueue::~CorruptionQueue()
 
 void CorruptionQueue::handleError(const Error& error)
 {
-    if (!error.isCorruption() || exiting()) {
+    if (!error.isCorruption() || error.level < Error::Level::Error || exiting()) {
         return;
     }
     const auto& infos = error.infos.getStrings();
+
     auto iter = infos.find("Path");
     if (iter == infos.end()) {
         return;
