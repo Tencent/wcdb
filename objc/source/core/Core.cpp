@@ -66,7 +66,8 @@ Core::Core()
 
     Notifier::shared()->setNotificationForPreprocessing(
     NotifierTagPreprocessorName,
-    std::bind(&Core::preprocessError, this, std::placeholders::_1, std::placeholders::_2));
+    std::bind(
+    &Core::preprocessError, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 }
 
 Core::~Core()
@@ -142,20 +143,27 @@ void Core::onDatabaseCreated(Database* database)
                         Configs::Priority::Highest);
 }
 
-void Core::preprocessError(const Error& error, Error::Infos& infos)
+void Core::preprocessError(const Error& error, Error::Infos& infos, Error::Level& newLevel)
 {
     const auto& strings = error.infos.getStrings();
+
+    // TODO: ignore corruption from RepairKit since there is some known issues during backup.
+    if (error.isCorruption()) {
+        auto iter = strings.find("Source");
+        if (iter != strings.end() && iter->second == "Repair") {
+            newLevel = Error::Level::Ignore;
+        }
+    }
+
     auto iter = strings.find("Path");
-    if (iter == strings.end()) {
-        return;
-    }
-    auto database = m_databasePool.get(iter->second);
-    if (database == nullptr) {
-        return;
-    }
-    auto tag = database->getTag();
-    if (tag.isValid()) {
-        infos.set("Tag", tag);
+    if (iter != strings.end()) {
+        auto database = m_databasePool.get(iter->second);
+        if (database != nullptr) {
+            auto tag = database->getTag();
+            if (tag.isValid()) {
+                infos.set("Tag", tag);
+            }
+        }
     }
 }
 

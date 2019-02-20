@@ -77,7 +77,7 @@ public:
     void purgeDatabasePool();
 
 protected:
-    void preprocessError(const Error& error, Error::Infos& infos);
+    void preprocessError(const Error& error, Error::Infos& infos, Error::Level& newLevel);
     void onDatabaseCreated(Database* database) override final;
     DatabasePool m_databasePool;
 

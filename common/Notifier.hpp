@@ -39,7 +39,7 @@ public:
     void setNotification(int order, const String &key, const Callback &callback);
     void unsetNotification(const String &key);
 
-    typedef std::function<void(const Error &, Error::Infos &)> PreprocessCallback;
+    typedef std::function<void(const Error &error, Error::Infos &infosToBeUpdated, Error::Level &newLevel)> PreprocessCallback;
     void setNotificationForPreprocessing(const String &key, const PreprocessCallback &callback);
 
 protected:

@@ -44,7 +44,7 @@ static constexpr const char *NotifierPathPreprocessorName
 + (void)initialize
 {
     if (self.class == WCTDatabase.class) {
-        WCDB::Notifier::shared()->setNotificationForPreprocessing(WCDB::NotifierPathPreprocessorName, [](const WCDB::Error &error, WCDB::Error::Infos &infos) {
+        WCDB::Notifier::shared()->setNotificationForPreprocessing(WCDB::NotifierPathPreprocessorName, [](const WCDB::Error &error, WCDB::Error::Infos &infos, WCDB::Error::Level &newLevel) {
             const auto &strings = error.infos.getStrings();
             auto iter = strings.find(WCTErrorKeyPath);
             if (iter == strings.end()) {
