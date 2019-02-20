@@ -27,75 +27,73 @@ namespace WCDB {
 
 BasicConfig::BasicConfig()
 : Config()
+// Journal Mode
 , m_getJournalMode(StatementPragma().pragma(Pragma::journalMode()))
-, m_getLockingMode(StatementPragma().pragma(Pragma::lockingMode()))
-, m_setFullFSync(StatementPragma().pragma(Pragma::fullfsync()).to(true))
-, m_setLockingModeNormal(StatementPragma().pragma(Pragma::lockingMode()).to("NORMAL"))
-, m_setSynchronousNormal(StatementPragma().pragma(Pragma::synchronous()).to("NORMAL"))
 , m_setJournalModeWAL(StatementPragma().pragma(Pragma::journalMode()).to("WAL"))
+// Locking Mode
+, m_getLockingMode(StatementPragma().pragma(Pragma::lockingMode()))
+, m_setLockingModeNormal(StatementPragma().pragma(Pragma::lockingMode()).to("NORMAL"))
+// Synchronous
+, m_setSynchronousNormal(StatementPragma().pragma(Pragma::synchronous()).to("NORMAL"))
+, m_getSynchronous(StatementPragma().pragma(Pragma::synchronous()))
+// Fullfsync
+, m_enableFullfsync(StatementPragma().pragma(Pragma::fullfsync()).to(true))
+, m_isFullfsync(StatementPragma().pragma(Pragma::fullfsync()))
 {
+}
+    
+bool BasicConfig::getOrSetPragmaBegin(Handle* handle, const StatementPragma& get)
+{
+    return handle->prepare(get) && handle->step();
+}
+    
+bool BasicConfig::getOrSetPragmaEnd(Handle* handle, const StatementPragma& set, bool conditionToSet)
+{
+    handle->finalize();
+    bool succeed = true;
+    if (conditionToSet) {
+        succeed = handle->execute(set);
+    }
+    return succeed;
 }
 
 bool BasicConfig::invoke(Handle* handle)
 {
-    do {
-        if (handle->isReadonly()) {
-            return true;
-        }
-
-        handle->disableCheckpointWhenClosing(true);
-
-        //Get Locking Mode
-        if (!handle->prepare(m_getLockingMode) || !handle->step()) {
-            break;
-        }
-        String lockingMode = handle->getText(0);
-        handle->finalize();
-        if (strcasecmp(lockingMode.c_str(), "NORMAL") != 0) {
-            //Set Locking Mode Normal
-            if (!handle->execute(m_setLockingModeNormal)) {
-                break;
-            }
-        }
-
-        //Set Synchronous Normal
-        if (!handle->execute(m_setSynchronousNormal)) {
-            break;
-        }
-
-        //Get Journal Mode
-        int retry = 3;
-        bool succeed = false;
-        do {
-            if (handle->prepare(m_getJournalMode) && handle->step()) {
-                String journalMode = handle->getText(0);
-                handle->finalize();
-                if (journalMode.isCaseInsensiveEqual("WAL")
-                    || handle->execute(m_setJournalModeWAL)) {
-                    //Set Journal Mode WAL
-                    succeed = true;
-                } else {
-                    if (handle->getResultCode() == Error::Code::Busy) {
-                        --retry;
-                    } else {
-                        retry = 0;
-                    }
-                }
-            }
-        } while (!succeed && retry > 0);
-        if (!succeed) {
-            break;
-        }
-
-        //Enable Fullfsync
-        if (!handle->execute(m_setFullFSync)) {
-            break;
-        }
-
+    if (handle->isReadonly()) {
         return true;
-    } while (false);
-    handle->finalize();
-    return false;
+    }
+
+    handle->disableCheckpointWhenClosing(true);
+    
+    if (!getOrSetPragmaBegin(handle, m_getLockingMode) || !getOrSetPragmaEnd(handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("NORMAL"))) {
+        return false;
+    }
+
+    // 1 for Normal: https://sqlite.org/pragma.html#pragma_synchronous
+    if (!getOrSetPragmaBegin(handle, m_getSynchronous) || !getOrSetPragmaEnd(handle, m_setSynchronousNormal, handle->getInteger32(0) != 1)) {
+        return false;
+    }
+    
+    int retry = 3;
+    do {
+        if (getOrSetPragmaBegin(handle, m_getJournalMode) && getOrSetPragmaEnd(handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("WAL"))) {
+            break;
+        }
+        if (handle->getResultCode() == Error::Code::Busy) {
+            --retry;
+        } else {
+            retry = 0;
+        }
+    } while (retry > 0);
+    if (retry == 0) {
+        return false;
+    }
+
+    if (!getOrSetPragmaBegin(handle, m_isFullfsync) || !getOrSetPragmaEnd(handle, m_enableFullfsync, handle->getInteger32(0) != 1)) {
+        return false;
+    }
+
+    return true;
 }
 
 } //namespace WCDB
