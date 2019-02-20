@@ -227,6 +227,7 @@ bool Database::willReuseSlotedHandle(Slot slot, Handle *handle)
 
 std::shared_ptr<Handle> Database::generateHandle(HandleType type)
 {
+    WCTInnerAssert(m_concurrency.readSafety());
     std::shared_ptr<Handle> handle;
     switch (type) {
     case HandleType::InterruptibleCheckpoint:
@@ -526,7 +527,11 @@ void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
 bool Database::backup()
 {
     WCTRemedialAssert(
-    !isInTransaction(), "Backup can't be run in transaction.", return false;);
+    !isInTransaction(), "Backup can't be run in transaction.", return false;);    
+    InitializedGuard initializedGuard = initialize();
+    if (!initializedGuard.valid()) {
+        return false;
+    }
     std::shared_ptr<Handle> backupReadHandle = generateHandle(HandleType::BackupRead);
     if (backupReadHandle == nullptr) {
         return false;
@@ -551,14 +556,13 @@ bool Database::backup()
 
 bool Database::deposit()
 {
-    {
-        InitializedGuard initializedGuard = initialize();
-        if (!initializedGuard.valid()) {
-            return false;
-        }
-    }
     bool result = false;
     close([&result, this]() {
+        InitializedGuard initializedGuard = initialize();
+        if (!initializedGuard.valid()) {
+            return ;
+        }
+
         std::shared_ptr<Handle> backupReadHandle = generateHandle(HandleType::BackupRead);
         if (backupReadHandle == nullptr) {
             return;
@@ -600,14 +604,13 @@ bool Database::deposit()
 
 double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
 {
-    {
-        InitializedGuard initializedGuard = initialize();
-        if (!initializedGuard.valid()) {
-            return 0;
-        }
-    }
     double result = -1;
     close([&result, &onProgressUpdate, this]() {
+        InitializedGuard initializedGuard = initialize();
+        if (!initializedGuard.valid()) {
+            return ;
+        }
+
         std::shared_ptr<Handle> backupReadHandle = generateHandle(HandleType::BackupRead);
         if (backupReadHandle == nullptr) {
             return;
