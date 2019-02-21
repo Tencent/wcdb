@@ -66,25 +66,21 @@ bool Time::empty() const
 
 String Time::stringify() const
 {
-    std::time_t seconds
-    = (std::time_t) std::chrono::duration_cast<std::chrono::seconds>(time_since_epoch())
-      .count();
+    std::time_t nanoseconds
+    = (std::time_t) std::chrono::duration_cast<std::chrono::nanoseconds>(time_since_epoch())
+    .count();
+    std::time_t secondsPart = nanoseconds/(int)1E9;
     struct tm tm;
-    if (localtime_r(&seconds, &tm) == nullptr) {
+    if (localtime_r(&secondsPart, &tm) == nullptr) {
         Error error;
         error.setSystemCode(errno, Error::Code::Error);
         Notifier::shared()->notify(error);
         setThreadedError(std::move(error));
         return String::null();
     }
-    std::time_t nanoseconds
-    = (std::time_t) std::chrono::duration_cast<std::chrono::nanoseconds>(time_since_epoch())
-      .count();
-    while (nanoseconds != 0 && nanoseconds % 10 == 0) {
-        nanoseconds /= 10;
-    }
+    std::time_t nanosecondsPart = nanoseconds % (int)1E9;
     std::ostringstream stream;
-    stream << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S") << "." << nanoseconds;
+    stream << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S") << "." << nanosecondsPart;
     return stream.str();
 }
 
@@ -103,13 +99,8 @@ SteadyClock SteadyClock::now()
 
 double SteadyClock::seconds() const
 {
-    std::time_t seconds
-    = (std::time_t) std::chrono::duration_cast<std::chrono::seconds>(time_since_epoch())
-      .count();
-    std::time_t microseconds
-    = (std::time_t) std::chrono::duration_cast<std::chrono::microseconds>(time_since_epoch())
-      .count();
-    return (double) seconds + (double) microseconds / 1E9;
+    return (double) std::chrono::duration_cast<std::chrono::nanoseconds>(time_since_epoch())
+    .count() / 1E9;
 }
-
+    
 } //namespace WCDB
