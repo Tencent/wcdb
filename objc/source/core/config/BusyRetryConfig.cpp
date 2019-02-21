@@ -74,7 +74,7 @@ void BusyRetryConfig::didStep(HandleStatement* handleStatement, bool result)
 
 bool BusyRetryConfig::onBusy(const String& path, int numberOfTimes)
 {
-    double remainingTime = pthread_main_np() != 0 ? BusyRetryTimeOutForMainThread : BusyRetryTimeOutForOtherThread;
+    double remainingTime = pthread_main_np() != 0 ? BusyRetryTimeOutForMainThread : BusyRetryTimeOutForSubThread;
     std::map<String, double>& waitedTimes = *m_waitedTimes.getOrCreate();
     if (numberOfTimes == 0) {
         waitedTimes[path] = 0; // first retry, reset waited times

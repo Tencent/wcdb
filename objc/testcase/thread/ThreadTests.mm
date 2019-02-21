@@ -52,6 +52,12 @@
     _queue = dispatch_queue_create([[NSBundle mainBundle].bundleIdentifier stringByAppendingFormat:@".%@.%@", self.className, self.testName].UTF8String, DISPATCH_QUEUE_CONCURRENT);
 }
 
+- (void)tearDown
+{
+    dispatch_group_wait(self.group, DISPATCH_TIME_FOREVER);
+    [super tearDown];
+}
+
 - (NSTimeInterval)checkpointDelayForCritical
 {
     return WCDB::CheckpointQueueDelayForCritical;
@@ -388,6 +394,111 @@
          }];
 }
 
-#warning TODO - add tests for busy retry
+- (void)test_feature_busy_retry
+{
+    TestCaseResult* began = [TestCaseResult no];
+    TestCaseResult* rollbacked = [TestCaseResult no];
+    TestCaseResult* tested = [TestCaseResult no];
+    dispatch_group_async(self.group, self.queue, ^{
+        TestCaseAssertTrue([self.database beginTransaction]);
+        [began makeYES];
+        
+        [NSThread sleepForTimeInterval:1];
+        TestCaseAssertResultNO(tested);
+        [rollbacked makeYES];
+        [self.database rollbackTransaction];
+    });
+    
+    while ([began isNO]) {}
+    
+    TestCaseAssertTrue([self.database beginTransaction]);
+    TestCaseAssertResultYES(rollbacked);
+    [tested makeYES];
+    [self.database rollbackTransaction];    
+}
+
+- (void)test_feature_busy_retry_main_thread_timeout
+{
+    TestCaseResult* began = [TestCaseResult no];
+    TestCaseResult* rollbacked = [TestCaseResult no];
+    TestCaseResult* tested = [TestCaseResult no];
+    dispatch_group_async(self.group, self.queue, ^{
+        TestCaseAssertTrue([self.database beginTransaction]);
+        [began makeYES];
+        
+        [NSThread sleepForTimeInterval:WCDB::BusyRetryTimeOutForMainThread - self.delayForTolerance];
+        TestCaseAssertResultNO(tested);
+        
+        [NSThread sleepForTimeInterval:2 * self.delayForTolerance];
+        TestCaseAssertResultYES(tested);
+        
+        [rollbacked makeYES];
+        [self.database rollbackTransaction];
+    });
+    
+    while ([began isNO]) {}
+    
+    __weak typeof(self) weakSelf = self;
+    [WCTDatabase globalTraceError:^(WCTError * error) {
+        typeof(self) strongSelf = weakSelf;
+        if (strongSelf == nil) {
+            return ;
+        }
+        if (error.code == WCTErrorCodeBusy
+            && error.level == WCTErrorLevelError
+            && [error.path isEqualToString:strongSelf.database.path]
+            && error.tag == strongSelf.database.tag
+            && [error.sql isEqualToString:@"BEGIN IMMEDIATE"]) {
+            [tested makeYES];
+        }
+    }];
+    
+    TestCaseAssertFalse([self.database beginTransaction]);
+    TestCaseAssertResultNO(rollbacked);
+    [self.database rollbackTransaction];    
+}
+
+- (void)test_feature_busy_retry_sub_thread_timeout
+{
+    TestCaseResult* began = [TestCaseResult no];
+    TestCaseResult* rollbacked = [TestCaseResult no];
+    TestCaseResult* tested = [TestCaseResult no];
+    dispatch_group_async(self.group, self.queue, ^{
+        TestCaseAssertTrue([self.database beginTransaction]);
+        [began makeYES];
+        
+        [NSThread sleepForTimeInterval:WCDB::BusyRetryTimeOutForSubThread - self.delayForTolerance];
+        TestCaseAssertResultNO(tested);
+        
+        [NSThread sleepForTimeInterval:2 * self.delayForTolerance];
+        TestCaseAssertResultYES(tested);
+        
+        [rollbacked makeYES];
+        [self.database rollbackTransaction];
+    });
+    
+    dispatch_group_async(self.group, self.queue, ^{
+        while ([began isNO]) {}
+        
+        __weak typeof(self) weakSelf = self;
+        [WCTDatabase globalTraceError:^(WCTError * error) {
+            typeof(self) strongSelf = weakSelf;
+            if (strongSelf == nil) {
+                return ;
+            }
+            if (error.code == WCTErrorCodeBusy
+                && error.level == WCTErrorLevelError
+                && [error.path isEqualToString:strongSelf.database.path]
+                && error.tag == strongSelf.database.tag
+                && [error.sql isEqualToString:@"BEGIN IMMEDIATE"]) {
+                [tested makeYES];
+            }
+        }];
+        
+        TestCaseAssertFalse([self.database beginTransaction]);
+        TestCaseAssertResultNO(rollbacked);
+        [self.database rollbackTransaction];    
+    });    
+}
 
 @end
