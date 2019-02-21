@@ -29,6 +29,12 @@ WCDB_IMPLEMENTATION(AllTypesObject)
 
 WCDB_SYNTHESIZE(AllTypesObject, type)
 
+WCDB_SYNTHESIZE(AllTypesObject, enumNSValue)
+WCDB_SYNTHESIZE(AllTypesObject, optionNSValue)
+WCDB_SYNTHESIZE(AllTypesObject, enumValue)
+WCDB_SYNTHESIZE(AllTypesObject, enumClassValue)
+WCDB_SYNTHESIZE(AllTypesObject, literalEnumValue)
+
 WCDB_SYNTHESIZE(AllTypesObject, intValue)
 WCDB_SYNTHESIZE(AllTypesObject, unsignedIntValue)
 WCDB_SYNTHESIZE(AllTypesObject, int32Value)

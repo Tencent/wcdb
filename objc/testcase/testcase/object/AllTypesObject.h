@@ -21,9 +21,46 @@
 #import <Foundation/Foundation.h>
 #import <string>
 
+typedef NS_ENUM(NSInteger, EnumNSType) {
+    EnumNSTypeMin = std::numeric_limits<NSInteger>::min(),
+    EnumNSTypeZero = 0,
+    EnumNSTypeMax = std::numeric_limits<NSInteger>::max(),
+};
+
+typedef NS_OPTIONS(NSInteger, OptionNSType) {
+    OptionNSTypeMin = std::numeric_limits<NSInteger>::min(),
+    OptionNSTypeZero = 0,
+    OptionNSTypeMax = std::numeric_limits<NSInteger>::max(),
+};
+
+enum EnumType {
+    Min = std::numeric_limits<int>::min(),
+    Zero = 0,
+    Max = std::numeric_limits<int>::max(),
+};
+
+enum class EnumClassType {
+    Min = std::numeric_limits<int>::min(),
+    Zero = 0,
+    Max = std::numeric_limits<int>::max(),
+};
+
+typedef enum {
+    EnumMin = std::numeric_limits<int>::min(),
+    EnumZero = 0,
+    EnumMax = std::numeric_limits<int>::max(),
+} LiteralEnum;
+
 @interface AllTypesObject : NSObject
 
 @property (nonatomic, assign) NSString* type;
+
+// Enum
+@property (nonatomic, assign) EnumNSType enumNSValue;
+@property (nonatomic, assign) OptionNSType optionNSValue;
+@property (nonatomic, assign) EnumType enumValue;
+@property (nonatomic, assign) EnumClassType enumClassValue;
+@property (nonatomic, assign) LiteralEnum literalEnumValue;
 
 // Integer
 @property (nonatomic, assign) int intValue;
