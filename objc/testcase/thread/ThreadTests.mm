@@ -27,13 +27,6 @@
 @property (nonatomic, readonly) dispatch_group_t group;
 @property (nonatomic, readonly) dispatch_queue_t queue;
 
-@property (nonatomic, readonly) NSTimeInterval checkpointDelayForCritical;
-@property (nonatomic, readonly) NSTimeInterval checkpointDelayForNonCritical;
-@property (nonatomic, readonly) NSTimeInterval checkpointDelayForRetryingAfterFailure;
-
-@property (nonatomic, readonly) int checkpointFramesThresholdForTruncating;
-@property (nonatomic, readonly) int checkpointFramesThresholdForCritical;
-
 @property (nonatomic, readonly) NSTimeInterval delayForTolerance;
 
 @property (nonatomic, readonly) int maxConcurrency;
@@ -56,31 +49,6 @@
 {
     dispatch_group_wait(self.group, DISPATCH_TIME_FOREVER);
     [super tearDown];
-}
-
-- (NSTimeInterval)checkpointDelayForCritical
-{
-    return WCDB::CheckpointQueueDelayForCritical;
-}
-
-- (NSTimeInterval)checkpointDelayForNonCritical
-{
-    return WCDB::CheckpointQueueDelayForNonCritical;
-}
-
-- (NSTimeInterval)checkpointDelayForRetryingAfterFailure
-{
-    return WCDB::CheckpointQueueDelayForRetryingAfterFailure;
-}
-
-- (int)checkpointFramesThresholdForTruncating
-{
-    return WCDB::CheckpointFramesThresholdForTruncating;
-}
-
-- (int)checkpointFramesThresholdForCritical
-{
-    return WCDB::CheckpointQueueFramesThresholdForCritical;
 }
 
 - (NSTimeInterval)delayForTolerance
@@ -201,7 +169,7 @@
     self.expectMode = DatabaseTestCaseExpectSomeSQLs;
     [self doTestSQLs:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
          inOperation:^BOOL {
-             [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + self.delayForTolerance];
+             [NSThread sleepForTimeInterval:WCDB::CheckpointQueueDelayForNonCritical + self.delayForTolerance];
              return YES;
          }];
 }
@@ -212,7 +180,7 @@
 
     TestCaseObject* object = [self.random autoIncrementTestCaseObject];
 
-    while ([self getWalFrameCount] < self.checkpointFramesThresholdForCritical) {
+    while ([self getWalFrameCount] < WCDB::CheckpointQueueFramesThresholdForCritical) {
         TestCaseAssertTrue([self.table insertObject:object]);
     }
 
@@ -220,7 +188,7 @@
     self.expectMode = DatabaseTestCaseExpectSomeSQLs;
     [self doTestSQLs:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
          inOperation:^BOOL {
-             [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
+             [NSThread sleepForTimeInterval:WCDB::CheckpointQueueDelayForCritical + self.delayForTolerance];
              return YES;
          }];
 }
@@ -231,7 +199,7 @@
 
     TestCaseObject* object = [self.random autoIncrementTestCaseObject];
 
-    while ([self getWalFrameCount] < self.checkpointFramesThresholdForTruncating) {
+    while ([self getWalFrameCount] < WCDB::CheckpointFramesThresholdForTruncating) {
         TestCaseAssertTrue([self.table insertObject:object]);
     }
 
@@ -239,7 +207,7 @@
     self.expectMode = DatabaseTestCaseExpectSomeSQLs;
     [self doTestSQLs:@[ @"PRAGMA main.wal_checkpoint('TRUNCATE')" ]
          inOperation:^BOOL {
-             [NSThread sleepForTimeInterval:self.checkpointDelayForCritical + self.delayForTolerance];
+             [NSThread sleepForTimeInterval:WCDB::CheckpointQueueDelayForCritical + self.delayForTolerance];
              return YES;
          }];
 }
@@ -252,7 +220,7 @@
     TestCaseObject* object = [self.random autoIncrementTestCaseObject];
 
     TestCaseAssertTrue([self.table insertObject:object]);
-    TestCaseAssertTrue([self getWalFrameCount] < self.checkpointFramesThresholdForCritical)
+    TestCaseAssertTrue([self getWalFrameCount] < WCDB::CheckpointQueueFramesThresholdForCritical)
 
     self.expectSQLsInAllThreads
     = YES;
@@ -264,13 +232,13 @@
              [WCTDatabase disableSQLiteWrite];
              [self.database unblockade];
 
-             [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + self.delayForTolerance];
+             [NSThread sleepForTimeInterval:WCDB::CheckpointQueueDelayForNonCritical + self.delayForTolerance];
 
              [self.database blockade];
              [WCTDatabase enableSQLiteWrite];
              [self.database unblockade];
 
-             [NSThread sleepForTimeInterval:self.checkpointDelayForRetryingAfterFailure + self.delayForTolerance];
+             [NSThread sleepForTimeInterval:WCDB::CheckpointQueueDelayForRetryingAfterFailure + self.delayForTolerance];
              return YES;
          }];
 }
@@ -287,7 +255,7 @@
              if (![self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with(@"PASSIVE")]) {
                  return NO;
              }
-             [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + self.delayForTolerance];
+             [NSThread sleepForTimeInterval:WCDB::CheckpointQueueDelayForNonCritical + self.delayForTolerance];
              return YES;
          }];
 }
@@ -389,7 +357,7 @@
     self.expectMode = DatabaseTestCaseExpectSomeSQLs;
     [self doTestSQLs:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
          inOperation:^BOOL {
-             [NSThread sleepForTimeInterval:self.checkpointDelayForNonCritical + self.delayForTolerance];
+             [NSThread sleepForTimeInterval:WCDB::CheckpointQueueDelayForNonCritical + self.delayForTolerance];
              return YES;
          }];
 }
