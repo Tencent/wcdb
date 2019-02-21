@@ -23,6 +23,7 @@
 
 #include <WCDB/Config.hpp>
 #include <WCDB/String.hpp>
+#include <WCDB/ThreadLocal.hpp>
 #include <mutex>
 
 namespace WCDB {
@@ -48,6 +49,7 @@ protected:
     int m_numberOfWaitingHandles;
 
     std::atomic<int> m_numberOfSteppingHandles;
+    ThreadLocal<std::map<String, double>> m_waitedTimes;
 };
 
 } //namespace WCDB

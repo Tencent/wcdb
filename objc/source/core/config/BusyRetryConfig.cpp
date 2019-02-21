@@ -21,6 +21,8 @@
 #include <WCDB/BusyRetryConfig.hpp>
 #include <WCDB/CoreConst.h>
 #include <WCDB/Handle.hpp>
+#include <WCDB/Assertion.hpp>
+#include <WCDB/Time.hpp>
 
 namespace WCDB {
 
@@ -72,24 +74,35 @@ void BusyRetryConfig::didStep(HandleStatement* handleStatement, bool result)
 
 bool BusyRetryConfig::onBusy(const String& path, int numberOfTimes)
 {
-    bool retry = false;
-    if (numberOfTimes <= BusyRetryMaxAllowedNumberOfTimes) {
-        retry = true;
-        double timeOut;
-        if (pthread_main_np() != 0) {
-            timeOut = BusyRetryTimeOutForMainThread;
-        } else {
-            timeOut = BusyRetryTimeOutForOtherThread;
-        }
+    double remainingTime = pthread_main_np() != 0 ? BusyRetryTimeOutForMainThread : BusyRetryTimeOutForOtherThread;
+    std::map<String, double>& waitedTimes = *m_waitedTimes.getOrCreate();
+    if (numberOfTimes == 0) {
+        waitedTimes[path] = 0; // first retry, reset waited times
+    }else {
+        WCTInnerAssert(waitedTimes.find(path) != waitedTimes.end());
+        remainingTime -= waitedTimes[path];
+    }
+    WCTInnerAssert(remainingTime > 0); // remaining time always >0 
+
+    std::cv_status status = std::cv_status::timeout;
+    
+    SteadyClock before = SteadyClock::now();
+    {
         std::unique_lock<decltype(m_mutex)> lockGuard(m_mutex);
         ++m_numberOfWaitingHandles;
         if (m_numberOfSteppingHandles > 0) {
-            m_cond.wait_for(
-            lockGuard, std::chrono::microseconds((long long) (timeOut * 1000000)));
+            status = m_cond.wait_for(
+                            lockGuard, std::chrono::nanoseconds((long long) (remainingTime * 1E9)));
         }
         --m_numberOfWaitingHandles;
     }
-    return retry;
+    if (status == std::cv_status::no_timeout) {
+        std::time_t waitedTime = (std::time_t) std::chrono::duration_cast<std::chrono::nanoseconds>(SteadyClock::now()-before).count();
+        WCTInnerAssert(waitedTimes.find(path) != waitedTimes.end());
+        waitedTimes[path] += ((double)waitedTime / 1E9);
+    }
+    // waited times has no need to be reset since it will not retry.
+    return status == std::cv_status::no_timeout;
 }
 
 } // namespace WCDB

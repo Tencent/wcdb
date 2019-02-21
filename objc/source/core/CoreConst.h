@@ -97,7 +97,6 @@ static constexpr const char* GlobalPerformanceTraceConfigName
 static constexpr const char* BusyRetryConfigName = WCDB_BUSY_RETRY_CONFIG_NAME;
 static constexpr const double BusyRetryTimeOutForMainThread = 2.0;
 static constexpr const double BusyRetryTimeOutForOtherThread = 10.0;
-static constexpr const int BusyRetryMaxAllowedNumberOfTimes = 10;
 
 // Notifier
 static constexpr const char* NotifierTagPreprocessorName
