@@ -22,7 +22,7 @@
 #import "ColumnConstraintCheck+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
-@implementation ColumnConstraintCheckhuijiale
+@implementation ColumnConstraintCheck
 
 WCDB_IMPLEMENTATION(ColumnConstraintCheck)
 WCDB_SYNTHESIZE(value)
