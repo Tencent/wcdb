@@ -58,21 +58,31 @@ WCDB_PRIMARY(AllTypesObject, type)
 
 + (AllTypesObject *)maxObject
 {
-#define ASSIGN_WITH_MAX_VALUE(object, property) object.property = std::numeric_limits<decltype(object.property)>::max()
-
     AllTypesObject *object = [[AllTypesObject alloc] init];
     object.type = @"max";
-    ASSIGN_WITH_MAX_VALUE(object, intValue);
-    ASSIGN_WITH_MAX_VALUE(object, unsignedIntValue);
-    ASSIGN_WITH_MAX_VALUE(object, int32Value);
-    ASSIGN_WITH_MAX_VALUE(object, int64Value);
-    ASSIGN_WITH_MAX_VALUE(object, uint32Value);
-    ASSIGN_WITH_MAX_VALUE(object, uint64Value);
-    ASSIGN_WITH_MAX_VALUE(object, integerValue);
-    ASSIGN_WITH_MAX_VALUE(object, uintegerValue);
+    
+#define ASSIGN_WITH_TYPED_MAX_VALUE(property, type) \
+    object.property = std::numeric_limits<type>::max()
+#define ASSIGN_WITH_MAX_VALUE(property) \
+    ASSIGN_WITH_TYPED_MAX_VALUE(property, decltype(object.property))
 
-    ASSIGN_WITH_MAX_VALUE(object, floatValue);
-    ASSIGN_WITH_MAX_VALUE(object, doubleValue);
+    ASSIGN_WITH_MAX_VALUE(enumNSValue);
+    ASSIGN_WITH_MAX_VALUE(optionNSValue);
+    ASSIGN_WITH_MAX_VALUE(enumValue);
+    ASSIGN_WITH_MAX_VALUE(enumClassValue);
+    ASSIGN_WITH_MAX_VALUE(literalEnumValue);
+
+    ASSIGN_WITH_MAX_VALUE(intValue);
+    ASSIGN_WITH_MAX_VALUE(unsignedIntValue);
+    ASSIGN_WITH_MAX_VALUE(int32Value);
+    ASSIGN_WITH_MAX_VALUE(int64Value);
+    ASSIGN_WITH_MAX_VALUE(uint32Value);
+    ASSIGN_WITH_MAX_VALUE(uint64Value);
+    ASSIGN_WITH_MAX_VALUE(integerValue);
+    ASSIGN_WITH_MAX_VALUE(uintegerValue);
+
+    ASSIGN_WITH_MAX_VALUE(floatValue);
+    ASSIGN_WITH_MAX_VALUE(doubleValue);
     object.numberValue = [NSNumber numberWithDouble:std::numeric_limits<double>::max()];
     object.dateValue = [NSDate dateWithTimeIntervalSince1970:std::numeric_limits<double>::max()];
 
@@ -86,21 +96,30 @@ WCDB_PRIMARY(AllTypesObject, type)
 
 + (AllTypesObject *)minObject
 {
-#define ASSIGN_WITH_MIN_VALUE(object, property) object.property = std::numeric_limits<decltype(object.property)>::min()
-
     AllTypesObject *object = [[AllTypesObject alloc] init];
     object.type = @"min";
-    ASSIGN_WITH_MIN_VALUE(object, intValue);
-    ASSIGN_WITH_MIN_VALUE(object, unsignedIntValue);
-    ASSIGN_WITH_MIN_VALUE(object, int32Value);
-    ASSIGN_WITH_MIN_VALUE(object, int64Value);
-    ASSIGN_WITH_MIN_VALUE(object, uint32Value);
-    ASSIGN_WITH_MIN_VALUE(object, uint64Value);
-    ASSIGN_WITH_MIN_VALUE(object, integerValue);
-    ASSIGN_WITH_MIN_VALUE(object, uintegerValue);
+    
+#define ASSIGN_WITH_TYPED_MIN_VALUE(property, type) \
+    object.property = std::numeric_limits<type>::min()
+#define ASSIGN_WITH_MIN_VALUE(property) ASSIGN_WITH_TYPED_MIN_VALUE(property, decltype(object.property))
+    
+    ASSIGN_WITH_MIN_VALUE(enumNSValue);
+    ASSIGN_WITH_MIN_VALUE(optionNSValue);
+    ASSIGN_WITH_MIN_VALUE(enumValue);
+    ASSIGN_WITH_MIN_VALUE(enumClassValue);
+    ASSIGN_WITH_MIN_VALUE(literalEnumValue);
 
-    ASSIGN_WITH_MIN_VALUE(object, floatValue);
-    ASSIGN_WITH_MIN_VALUE(object, doubleValue);
+    ASSIGN_WITH_MIN_VALUE(intValue);
+    ASSIGN_WITH_MIN_VALUE(unsignedIntValue);
+    ASSIGN_WITH_MIN_VALUE(int32Value);
+    ASSIGN_WITH_MIN_VALUE(int64Value);
+    ASSIGN_WITH_MIN_VALUE(uint32Value);
+    ASSIGN_WITH_MIN_VALUE(uint64Value);
+    ASSIGN_WITH_MIN_VALUE(integerValue);
+    ASSIGN_WITH_MIN_VALUE(uintegerValue);
+
+    ASSIGN_WITH_MIN_VALUE(floatValue);
+    ASSIGN_WITH_MIN_VALUE(doubleValue);
     object.numberValue = [NSNumber numberWithDouble:std::numeric_limits<double>::min()];
     object.dateValue = [NSDate dateWithTimeIntervalSince1970:std::numeric_limits<double>::min()];
 
@@ -116,6 +135,13 @@ WCDB_PRIMARY(AllTypesObject, type)
 {
     AllTypesObject *object = [[AllTypesObject alloc] init];
     object.type = @"nil";
+    
+    object.enumNSValue = EnumNSTypeZero;
+    object.optionNSValue = OptionNSTypeZero;
+    object.enumValue = EnumType::Zero;
+    object.enumClassValue = EnumClassType::Zero;
+    object.literalEnumValue = EnumZero;
+    
     object.intValue = 0;
     object.unsignedIntValue = 0;
     object.int32Value = 0;
@@ -142,6 +168,13 @@ WCDB_PRIMARY(AllTypesObject, type)
 {
     AllTypesObject *object = [[AllTypesObject alloc] init];
     object.type = @"empty";
+    
+    object.enumNSValue = EnumNSTypeZero;
+    object.optionNSValue = OptionNSTypeZero;
+    object.enumValue = EnumType::Zero;
+    object.enumClassValue = EnumClassType::Zero;
+    object.literalEnumValue = EnumZero;
+
     object.intValue = 0;
     object.unsignedIntValue = 0;
     object.int32Value = 0;
@@ -170,7 +203,12 @@ WCDB_PRIMARY(AllTypesObject, type)
         return NO;
     }
     AllTypesObject *other = (AllTypesObject *) object;
-    return self.intValue == other.intValue
+    return      self.enumNSValue == other.enumNSValue
+            && self.optionNSValue == other.optionNSValue
+            && self.enumValue == other.enumValue
+            && self.enumClassValue == other.enumClassValue
+            && self.literalEnumValue == other.literalEnumValue
+            && self.intValue == other.intValue
            && self.unsignedIntValue == other.unsignedIntValue
            && self.int32Value == other.int32Value
            && self.int64Value == other.int64Value

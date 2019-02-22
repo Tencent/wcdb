@@ -304,14 +304,14 @@
         if ([expectedSQLs.firstObject isEqualToString:sql]) {
             [expectedSQLs removeObjectAtIndex:0];
         } else {
-            TestCaseFailure();
+            TestCaseAssertStringEqual(expectedSQLs.firstObject, sql);
         }
         break;
     case DatabaseTestCaseExpectFirstFewSQLs:
         if ([expectedSQLs.firstObject isEqualToString:sql]) {
             [expectedSQLs removeObjectAtIndex:0];
         } else if (expectedSQLs.count != 0) {
-            TestCaseFailure();
+            TestCaseAssertStringEqual(expectedSQLs.firstObject, sql);
         }
         break;
     case DatabaseTestCaseExpectSomeSQLs:
