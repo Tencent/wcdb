@@ -25,8 +25,8 @@
 @implementation ColumnConstraintPrimaryDesc
 
 WCDB_IMPLEMENTATION(ColumnConstraintPrimaryDesc)
-WCDB_SYNTHESIZE(ColumnConstraintPrimaryDesc, value)
+WCDB_SYNTHESIZE(value)
 
-WCDB_PRIMARY_DESC(ColumnConstraintPrimaryDesc, value)
+WCDB_PRIMARY_DESC(value)
 
 @end

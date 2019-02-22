@@ -24,11 +24,11 @@
 @implementation WCTMaster
 
 WCDB_IMPLEMENTATION(WCTMaster)
-WCDB_SYNTHESIZE(WCTMaster, type)
-WCDB_SYNTHESIZE(WCTMaster, name)
-WCDB_SYNTHESIZE_COLUMN(WCTMaster, tblName, "tbl_name")
-WCDB_SYNTHESIZE(WCTMaster, rootpage)
-WCDB_SYNTHESIZE(WCTMaster, sql)
+WCDB_SYNTHESIZE(type)
+WCDB_SYNTHESIZE(name)
+WCDB_SYNTHESIZE_COLUMN(tblName, "tbl_name")
+WCDB_SYNTHESIZE(rootpage)
+WCDB_SYNTHESIZE(sql)
 
 + (NSString *)tableName
 {

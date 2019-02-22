@@ -20,53 +20,53 @@
 
 #define WCDB_ORM_TYPE_COLUMN_CONSTRAINT column_constraint
 
-#define __WCDB_COLUMN_CONSTRAINT_BEGIN(className, propertyName)         \
-    +(void) WCDB_ORM_UNIQUE(className, WCDB_ORM_TYPE_COLUMN_CONSTRAINT) \
+#define __WCDB_COLUMN_CONSTRAINT_BEGIN(propertyName)         \
+    +(void) WCDB_ORM_UNIQUE(WCDB_ORM_TYPE_COLUMN_CONSTRAINT) \
     {                                                                   \
-        WCDB_STATIC_ASSERT_EXISTS(className.propertyName);              \
+        WCDB_STATIC_ASSERT_EXISTS(self.propertyName);              \
         WCDB::ColumnConstraint columnConstraint;
 
-#define __WCDB_COLUMN_CONSTRAINT_END(className, propertyName)                          \
-    binding.getOrCreateColumnDef(className.propertyName).constraint(columnConstraint); \
+#define __WCDB_COLUMN_CONSTRAINT_END(propertyName)                          \
+    binding.getOrCreateColumnDef(self.propertyName).constraint(columnConstraint); \
     }
 
 // primary
-#define __WCDB_ORDERED_PRIMARY_IMP(className, propertyName, order_, autoIncrement_) \
+#define __WCDB_ORDERED_PRIMARY_IMP(propertyName, order_, autoIncrement_) \
     WCDB_IF(autoIncrement_, @synthesize isAutoIncrement;)                           \
     WCDB_IF(autoIncrement_, @synthesize lastInsertedRowID;)                         \
-    __WCDB_COLUMN_CONSTRAINT_BEGIN(className, propertyName)                         \
+    __WCDB_COLUMN_CONSTRAINT_BEGIN(propertyName)                         \
     columnConstraint.primaryKey().order(order_);                                    \
     WCDB_IF(autoIncrement_, columnConstraint.autoIncrement());                      \
-    __WCDB_COLUMN_CONSTRAINT_END(className, propertyName)
+    __WCDB_COLUMN_CONSTRAINT_END(propertyName)
 
-#define __WCDB_PRIMARY_IMP(className, propertyName, autoIncrement_) \
+#define __WCDB_PRIMARY_IMP(propertyName, autoIncrement_) \
     WCDB_IF(autoIncrement_, @synthesize isAutoIncrement;)           \
     WCDB_IF(autoIncrement_, @synthesize lastInsertedRowID;)         \
-    __WCDB_COLUMN_CONSTRAINT_BEGIN(className, propertyName)         \
+    __WCDB_COLUMN_CONSTRAINT_BEGIN(propertyName)         \
     columnConstraint.primaryKey();                                  \
     WCDB_IF(autoIncrement_, columnConstraint.autoIncrement());      \
-    __WCDB_COLUMN_CONSTRAINT_END(className, propertyName)
+    __WCDB_COLUMN_CONSTRAINT_END(propertyName)
 
 // not null
-#define __WCDB_NOT_NULL_IMP(className, propertyName)        \
-    __WCDB_COLUMN_CONSTRAINT_BEGIN(className, propertyName) \
+#define __WCDB_NOT_NULL_IMP(propertyName)        \
+    __WCDB_COLUMN_CONSTRAINT_BEGIN(propertyName) \
     columnConstraint.notNull();                             \
-    __WCDB_COLUMN_CONSTRAINT_END(className, propertyName)
+    __WCDB_COLUMN_CONSTRAINT_END(propertyName)
 
 // unique
-#define __WCDB_UNIQUE_IMP(className, propertyName)          \
-    __WCDB_COLUMN_CONSTRAINT_BEGIN(className, propertyName) \
+#define __WCDB_UNIQUE_IMP(propertyName)          \
+    __WCDB_COLUMN_CONSTRAINT_BEGIN(propertyName) \
     columnConstraint.unique();                              \
-    __WCDB_COLUMN_CONSTRAINT_END(className, propertyName)
+    __WCDB_COLUMN_CONSTRAINT_END(propertyName)
 
 // default
-#define __WCDB_DEFAULT_IMP(className, propertyName, defaultValue) \
-    __WCDB_COLUMN_CONSTRAINT_BEGIN(className, propertyName)       \
+#define __WCDB_DEFAULT_IMP(propertyName, defaultValue) \
+    __WCDB_COLUMN_CONSTRAINT_BEGIN(propertyName)       \
     columnConstraint.default_(defaultValue);                      \
-    __WCDB_COLUMN_CONSTRAINT_END(className, propertyName)
+    __WCDB_COLUMN_CONSTRAINT_END(propertyName)
 
 // check
-#define __WCDB_CHECK_IMP(className, propertyName, condition) \
-    __WCDB_COLUMN_CONSTRAINT_BEGIN(className, propertyName)  \
+#define __WCDB_CHECK_IMP(propertyName, condition) \
+    __WCDB_COLUMN_CONSTRAINT_BEGIN(propertyName)  \
     columnConstraint.check(condition);                       \
-    __WCDB_COLUMN_CONSTRAINT_END(className, propertyName)
+    __WCDB_COLUMN_CONSTRAINT_END(propertyName)

@@ -25,8 +25,8 @@
 @implementation MigrationObject
 
 WCDB_IMPLEMENTATION(MigrationObject)
-WCDB_SYNTHESIZE(MigrationObject, identifier)
-WCDB_SYNTHESIZE(MigrationObject, content)
+WCDB_SYNTHESIZE(identifier)
+WCDB_SYNTHESIZE(content)
 
 @synthesize isAutoIncrement;
 @synthesize lastInsertedRowID;

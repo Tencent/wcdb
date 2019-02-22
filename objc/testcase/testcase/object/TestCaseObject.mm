@@ -26,10 +26,10 @@
 @implementation TestCaseObject
 
 WCDB_IMPLEMENTATION(TestCaseObject)
-WCDB_SYNTHESIZE(TestCaseObject, identifier)
-WCDB_SYNTHESIZE(TestCaseObject, content)
+WCDB_SYNTHESIZE(identifier)
+WCDB_SYNTHESIZE(content)
 
-WCDB_PRIMARY_ASC_AUTO_INCREMENT(TestCaseObject, identifier)
+WCDB_PRIMARY_ASC_AUTO_INCREMENT(identifier)
 
 - (BOOL)isEqual:(NSObject*)object
 {

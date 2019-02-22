@@ -25,7 +25,7 @@
 @implementation PropertyObject
 
 WCDB_IMPLEMENTATION(PropertyObject)
-WCDB_SYNTHESIZE(PropertyObject, property)
-WCDB_SYNTHESIZE_COLUMN(PropertyObject, propertyWithDifferentName, @"differentName")
+WCDB_SYNTHESIZE(property)
+WCDB_SYNTHESIZE_COLUMN(propertyWithDifferentName, @"differentName")
 
 @end

@@ -25,8 +25,8 @@
 @implementation ColumnConstraintDefault
 
 WCDB_IMPLEMENTATION(ColumnConstraintDefault)
-WCDB_SYNTHESIZE(ColumnConstraintDefault, value)
+WCDB_SYNTHESIZE(value)
 
-WCDB_DEFAULT(ColumnConstraintDefault, value, 1.0)
+WCDB_DEFAULT(value, 1.0)
 
 @end

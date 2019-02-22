@@ -25,20 +25,20 @@
 @implementation TableConstraintObject
 
 WCDB_IMPLEMENTATION(TableConstraintObject)
-WCDB_SYNTHESIZE(TableConstraintObject, multiPrimary)
-WCDB_SYNTHESIZE(TableConstraintObject, multiPrimaryAsc)
-WCDB_SYNTHESIZE(TableConstraintObject, multiPrimaryDesc)
+WCDB_SYNTHESIZE(multiPrimary)
+WCDB_SYNTHESIZE(multiPrimaryAsc)
+WCDB_SYNTHESIZE(multiPrimaryDesc)
 
-WCDB_SYNTHESIZE(TableConstraintObject, multiUnique)
-WCDB_SYNTHESIZE(TableConstraintObject, multiUniqueAsc)
-WCDB_SYNTHESIZE(TableConstraintObject, multiUniqueDesc)
+WCDB_SYNTHESIZE(multiUnique)
+WCDB_SYNTHESIZE(multiUniqueAsc)
+WCDB_SYNTHESIZE(multiUniqueDesc)
 
-WCDB_MULTI_PRIMARY(TableConstraintObject, @"multi_primary", multiPrimary)
-WCDB_MULTI_PRIMARY_ASC(TableConstraintObject, @"multi_primary", multiPrimaryAsc)
-WCDB_MULTI_PRIMARY_DESC(TableConstraintObject, @"multi_primary", multiPrimaryDesc)
+WCDB_MULTI_PRIMARY(@"multi_primary", multiPrimary)
+WCDB_MULTI_PRIMARY_ASC(@"multi_primary", multiPrimaryAsc)
+WCDB_MULTI_PRIMARY_DESC(@"multi_primary", multiPrimaryDesc)
 
-WCDB_MULTI_UNIQUE(TableConstraintObject, @"multi_unique", multiUnique)
-WCDB_MULTI_UNIQUE_ASC(TableConstraintObject, @"multi_unique", multiUniqueAsc)
-WCDB_MULTI_UNIQUE_DESC(TableConstraintObject, @"multi_unique", multiUniqueDesc)
+WCDB_MULTI_UNIQUE(@"multi_unique", multiUnique)
+WCDB_MULTI_UNIQUE_ASC(@"multi_unique", multiUniqueAsc)
+WCDB_MULTI_UNIQUE_DESC(@"multi_unique", multiUniqueDesc)
 
 @end

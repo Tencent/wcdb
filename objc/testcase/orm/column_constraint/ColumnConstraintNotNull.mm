@@ -25,8 +25,8 @@
 @implementation ColumnConstraintNotNull
 
 WCDB_IMPLEMENTATION(ColumnConstraintNotNull)
-WCDB_SYNTHESIZE(ColumnConstraintNotNull, value)
+WCDB_SYNTHESIZE(value)
 
-WCDB_NOT_NULL(ColumnConstraintNotNull, value)
+WCDB_NOT_NULL(value)
 
 @end

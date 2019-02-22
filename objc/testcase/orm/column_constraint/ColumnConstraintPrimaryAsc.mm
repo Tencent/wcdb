@@ -25,8 +25,8 @@
 @implementation ColumnConstraintPrimaryAsc
 
 WCDB_IMPLEMENTATION(ColumnConstraintPrimaryAsc)
-WCDB_SYNTHESIZE(ColumnConstraintPrimaryAsc, value)
+WCDB_SYNTHESIZE(value)
 
-WCDB_PRIMARY_ASC(ColumnConstraintPrimaryAsc, value)
+WCDB_PRIMARY_ASC(value)
 
 @end

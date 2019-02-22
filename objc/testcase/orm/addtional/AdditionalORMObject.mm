@@ -25,7 +25,7 @@
 @implementation AdditionalORMObject
 
 WCDB_IMPLEMENTATION(AdditionalORMObject)
-WCDB_SYNTHESIZE(AdditionalORMObject, value)
+WCDB_SYNTHESIZE(value)
 
 + (void)additionalObjectRelationalMapping:(WCTBinding &)binding
 {

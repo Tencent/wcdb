@@ -27,34 +27,34 @@
 
 WCDB_IMPLEMENTATION(AllTypesObject)
 
-WCDB_SYNTHESIZE(AllTypesObject, type)
+WCDB_SYNTHESIZE(type)
 
-WCDB_SYNTHESIZE(AllTypesObject, enumNSValue)
-WCDB_SYNTHESIZE(AllTypesObject, optionNSValue)
-WCDB_SYNTHESIZE(AllTypesObject, enumValue)
-WCDB_SYNTHESIZE(AllTypesObject, enumClassValue)
-WCDB_SYNTHESIZE(AllTypesObject, literalEnumValue)
+WCDB_SYNTHESIZE(enumNSValue)
+WCDB_SYNTHESIZE(optionNSValue)
+WCDB_SYNTHESIZE(enumValue)
+WCDB_SYNTHESIZE(enumClassValue)
+WCDB_SYNTHESIZE(literalEnumValue)
 
-WCDB_SYNTHESIZE(AllTypesObject, intValue)
-WCDB_SYNTHESIZE(AllTypesObject, unsignedIntValue)
-WCDB_SYNTHESIZE(AllTypesObject, int32Value)
-WCDB_SYNTHESIZE(AllTypesObject, int64Value)
-WCDB_SYNTHESIZE(AllTypesObject, uint32Value)
-WCDB_SYNTHESIZE(AllTypesObject, uint64Value)
-WCDB_SYNTHESIZE(AllTypesObject, integerValue)
-WCDB_SYNTHESIZE(AllTypesObject, uintegerValue)
+WCDB_SYNTHESIZE(intValue)
+WCDB_SYNTHESIZE(unsignedIntValue)
+WCDB_SYNTHESIZE(int32Value)
+WCDB_SYNTHESIZE(int64Value)
+WCDB_SYNTHESIZE(uint32Value)
+WCDB_SYNTHESIZE(uint64Value)
+WCDB_SYNTHESIZE(integerValue)
+WCDB_SYNTHESIZE(uintegerValue)
 
-WCDB_SYNTHESIZE(AllTypesObject, floatValue)
-WCDB_SYNTHESIZE(AllTypesObject, doubleValue)
-WCDB_SYNTHESIZE(AllTypesObject, numberValue)
-WCDB_SYNTHESIZE(AllTypesObject, dateValue)
+WCDB_SYNTHESIZE(floatValue)
+WCDB_SYNTHESIZE(doubleValue)
+WCDB_SYNTHESIZE(numberValue)
+WCDB_SYNTHESIZE(dateValue)
 
-WCDB_SYNTHESIZE(AllTypesObject, stringValue)
+WCDB_SYNTHESIZE(stringValue)
 
-WCDB_SYNTHESIZE(AllTypesObject, dataValue)
-WCDB_SYNTHESIZE(AllTypesObject, codingValue)
+WCDB_SYNTHESIZE(dataValue)
+WCDB_SYNTHESIZE(codingValue)
 
-WCDB_PRIMARY(AllTypesObject, type)
+WCDB_PRIMARY(type)
 
 + (AllTypesObject *)maxObject
 {

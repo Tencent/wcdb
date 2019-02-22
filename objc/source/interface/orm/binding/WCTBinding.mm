@@ -31,9 +31,8 @@
 WCTBinding::WCTBinding(Class cls)
 : m_cls(cls)
 {
-    NSString *className = NSStringFromClass(m_cls);
-    // __wcdb_className_
-    NSString *prefix = [NSString stringWithFormat:@WCDB_STRINGIFY(WCDB_ORM_PREFIX) "_%@_", className];
+    // __wcdb_
+    NSString *prefix = @WCDB_STRINGIFY(WCDB_ORM_PREFIX) "_";
     // synthesize_
     NSString *synthesize = @WCDB_STRINGIFY(WCDB_ORM_TYPE_SYNTHESIZE) "_";
     NSRange synthesizeRange = NSMakeRange(prefix.length, synthesize.length);

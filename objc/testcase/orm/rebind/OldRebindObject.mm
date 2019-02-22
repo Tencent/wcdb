@@ -25,6 +25,6 @@
 @implementation OldRebindObject
 
 WCDB_IMPLEMENTATION(OldRebindObject)
-WCDB_SYNTHESIZE(OldRebindObject, value)
+WCDB_SYNTHESIZE(value)
 
 @end

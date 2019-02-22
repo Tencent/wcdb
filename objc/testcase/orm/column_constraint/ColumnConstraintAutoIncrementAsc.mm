@@ -25,8 +25,8 @@
 @implementation ColumnConstraintAutoIncrementAsc
 
 WCDB_IMPLEMENTATION(ColumnConstraintAutoIncrementAsc)
-WCDB_SYNTHESIZE(ColumnConstraintAutoIncrementAsc, value)
+WCDB_SYNTHESIZE(value)
 
-WCDB_PRIMARY_ASC_AUTO_INCREMENT(ColumnConstraintAutoIncrementAsc, value)
+WCDB_PRIMARY_ASC_AUTO_INCREMENT(value)
 
 @end

@@ -25,8 +25,8 @@
 @implementation ColumnConstraintPrimary
 
 WCDB_IMPLEMENTATION(ColumnConstraintPrimary)
-WCDB_SYNTHESIZE(ColumnConstraintPrimary, value)
+WCDB_SYNTHESIZE(value)
 
-WCDB_PRIMARY(ColumnConstraintPrimary, value)
+WCDB_PRIMARY(value)
 
 @end

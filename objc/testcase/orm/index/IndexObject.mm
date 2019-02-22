@@ -25,28 +25,28 @@
 @implementation IndexObject
 
 WCDB_IMPLEMENTATION(IndexObject)
-WCDB_SYNTHESIZE(IndexObject, index_)
-WCDB_SYNTHESIZE(IndexObject, indexAsc)
-WCDB_SYNTHESIZE(IndexObject, indexDesc)
+WCDB_SYNTHESIZE(index_)
+WCDB_SYNTHESIZE(indexAsc)
+WCDB_SYNTHESIZE(indexDesc)
 
-WCDB_SYNTHESIZE(IndexObject, uniqueIndex)
-WCDB_SYNTHESIZE(IndexObject, uniqueIndexAsc)
-WCDB_SYNTHESIZE(IndexObject, uniqueIndexDesc)
+WCDB_SYNTHESIZE(uniqueIndex)
+WCDB_SYNTHESIZE(uniqueIndexAsc)
+WCDB_SYNTHESIZE(uniqueIndexDesc)
 
-WCDB_SYNTHESIZE(IndexObject, multiIndex)
-WCDB_SYNTHESIZE(IndexObject, multiIndexAsc)
-WCDB_SYNTHESIZE(IndexObject, multiIndexDesc)
+WCDB_SYNTHESIZE(multiIndex)
+WCDB_SYNTHESIZE(multiIndexAsc)
+WCDB_SYNTHESIZE(multiIndexDesc)
 
-WCDB_INDEX(IndexObject, @"_index", index_);
-WCDB_INDEX(IndexObject, @"_index_asc", indexAsc);
-WCDB_INDEX(IndexObject, @"_index_desc", indexDesc);
+WCDB_INDEX(@"_index", index_);
+WCDB_INDEX(@"_index_asc", indexAsc);
+WCDB_INDEX(@"_index_desc", indexDesc);
 
-WCDB_UNIQUE_INDEX(IndexObject, @"_unique_index", uniqueIndex);
-WCDB_UNIQUE_INDEX(IndexObject, @"_unique_index_asc", uniqueIndexAsc);
-WCDB_UNIQUE_INDEX(IndexObject, @"_unique_index_desc", uniqueIndexDesc);
+WCDB_UNIQUE_INDEX(@"_unique_index", uniqueIndex);
+WCDB_UNIQUE_INDEX(@"_unique_index_asc", uniqueIndexAsc);
+WCDB_UNIQUE_INDEX(@"_unique_index_desc", uniqueIndexDesc);
 
-WCDB_INDEX(IndexObject, @"_multi_index", multiIndex);
-WCDB_INDEX(IndexObject, @"_multi_index", multiIndexAsc);
-WCDB_INDEX(IndexObject, @"_multi_index", multiIndexDesc);
+WCDB_INDEX(@"_multi_index", multiIndex);
+WCDB_INDEX(@"_multi_index", multiIndexAsc);
+WCDB_INDEX(@"_multi_index", multiIndexDesc);
 
 @end

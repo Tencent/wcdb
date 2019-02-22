@@ -19,8 +19,10 @@
  */
 
 // Property
+#define WCDB_ORM_TYPER __wcdbtyper
+
 #define __WCDB_PROPERTY_TYPE(className, propertyName) \
-    decltype([className new].propertyName)
+    decltype([className WCDB_ORM_TYPER].propertyName)
 
 #define __WCDB_PROPERTY_IMP(propertyName) +(const WCTProperty &) propertyName;
 
@@ -28,14 +30,13 @@
 #define WCDB_ORM_TYPE_SYNTHESIZE synthesize
 
 // __wcdb_className_synthesize_uniqueID
-#define __WCDB_SYNTHESIZE_IMP(className, propertyName, columnName)                                                                                                                                    \
+#define __WCDB_SYNTHESIZE_IMP(propertyName, columnName)                                                                                                                                    \
     +(const WCTProperty &) propertyName                                                                                                                                                               \
     {                                                                                                                                                                                                 \
-        static const WCTProperty *s_property = new WCTProperty(columnName, WCTColumnBinding::generate<__WCDB_PROPERTY_TYPE(className, propertyName)>(className.class, WCDB_STRINGIFY(propertyName))); \
-        WCTBinding::assertNoInheritance(className.class, self);                                                                                                                                       \
+        static const WCTProperty *s_property = new WCTProperty(columnName, WCTColumnBinding::generate<__WCDB_PROPERTY_TYPE(self, propertyName)>(self, WCDB_STRINGIFY(propertyName))); \
         return *s_property;                                                                                                                                                                           \
     }                                                                                                                                                                                                 \
-    +(const WCTProperty &) WCDB_ORM_UNIQUE(className, WCDB_ORM_TYPE_SYNTHESIZE)                                                                                                                       \
+    +(const WCTProperty &) WCDB_ORM_UNIQUE(WCDB_ORM_TYPE_SYNTHESIZE)                                                                                                                       \
     {                                                                                                                                                                                                 \
-        return className.propertyName;                                                                                                                                                                \
+        return self.propertyName;                                                                                                                                                                \
     }

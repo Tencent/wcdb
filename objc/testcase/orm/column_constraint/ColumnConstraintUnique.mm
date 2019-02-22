@@ -25,8 +25,8 @@
 @implementation ColumnConstraintUnique
 
 WCDB_IMPLEMENTATION(ColumnConstraintUnique)
-WCDB_SYNTHESIZE(ColumnConstraintUnique, value)
+WCDB_SYNTHESIZE(value)
 
-WCDB_UNIQUE(ColumnConstraintUnique, value)
+WCDB_UNIQUE(value)
 
 @end

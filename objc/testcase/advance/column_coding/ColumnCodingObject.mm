@@ -26,11 +26,11 @@
 @implementation ColumnCodingObject
 
 WCDB_IMPLEMENTATION(ColumnCodingObject)
-WCDB_SYNTHESIZE(ColumnCodingObject, int32Object)
-WCDB_SYNTHESIZE(ColumnCodingObject, int64Object)
-WCDB_SYNTHESIZE(ColumnCodingObject, doubleObject)
-WCDB_SYNTHESIZE(ColumnCodingObject, stringObject)
-WCDB_SYNTHESIZE(ColumnCodingObject, dataObject)
+WCDB_SYNTHESIZE(int32Object)
+WCDB_SYNTHESIZE(int64Object)
+WCDB_SYNTHESIZE(doubleObject)
+WCDB_SYNTHESIZE(stringObject)
+WCDB_SYNTHESIZE(dataObject)
 
 - (BOOL)isEqual:(NSObject*)object
 {

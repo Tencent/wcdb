@@ -20,23 +20,23 @@
 
 #define WCDB_ORM_TYPE_INDEX index
 
-#define __WCDB_INDEX_BEGIN(className, indexSubfixName, propertyName)           \
-    +(void) WCDB_ORM_UNIQUE(className, WCDB_ORM_TYPE_INDEX)                    \
+#define __WCDB_INDEX_BEGIN(indexSubfixName, propertyName)           \
+    +(void) WCDB_ORM_UNIQUE(WCDB_ORM_TYPE_INDEX)                    \
     {                                                                          \
-        WCDB_STATIC_ASSERT_EXISTS(className.propertyName);                     \
+        WCDB_STATIC_ASSERT_EXISTS(self.propertyName);                     \
         WCDB::StatementCreateIndex &index                                      \
         = binding.getOrCreateIndexStatement(indexSubfixName);
 
-#define __WCDB_INDEX_END(className, indexSubfixName, propertyName) }
+#define __WCDB_INDEX_END(indexSubfixName, propertyName) }
 
-#define __WCDB_ORDERED_INDEX_IMP(className, indexSubfixName, propertyName, order_, isUnique) \
-    __WCDB_INDEX_BEGIN(className, indexSubfixName, propertyName)                             \
+#define __WCDB_ORDERED_INDEX_IMP(indexSubfixName, propertyName, order_, isUnique) \
+    __WCDB_INDEX_BEGIN(indexSubfixName, propertyName)                             \
     WCDB_IF(isUnique, index.unique();)                                                       \
-    index.indexed(className.propertyName.asIndex().order(order_));                           \
-    __WCDB_INDEX_END(className, indexSubfixName, propertyName)
+    index.indexed(self.propertyName.asIndex().order(order_));                           \
+    __WCDB_INDEX_END(indexSubfixName, propertyName)
 
-#define __WCDB_INDEX_IMP(className, indexSubfixName, propertyName, isUnique)   \
-    __WCDB_INDEX_BEGIN(className, indexSubfixName, propertyName)               \
+#define __WCDB_INDEX_IMP(indexSubfixName, propertyName, isUnique)   \
+    __WCDB_INDEX_BEGIN(indexSubfixName, propertyName)               \
     WCDB_IF(isUnique, index.unique();)                                         \
-    index.indexed(className.propertyName.asIndex());                           \
-    __WCDB_INDEX_END(className, indexSubfixName, propertyName)
+    index.indexed(self.propertyName.asIndex());                           \
+    __WCDB_INDEX_END(indexSubfixName, propertyName)

@@ -27,10 +27,10 @@
 WCDB_IMPLEMENTATION(NewRebindObject)
 
 // bind renamedValue to the old column "value"
-WCDB_SYNTHESIZE_COLUMN(NewRebindObject, renamedValue, "value")
-WCDB_SYNTHESIZE(NewRebindObject, newValue)
+WCDB_SYNTHESIZE_COLUMN(renamedValue, "value")
+WCDB_SYNTHESIZE(newValue)
 
 // add index after rebind
-WCDB_INDEX(NewRebindObject, @"_index", renamedValue)
+WCDB_INDEX(@"_index", renamedValue)
 
 @end
