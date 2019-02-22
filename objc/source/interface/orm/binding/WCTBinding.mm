@@ -20,13 +20,11 @@
 
 #import <WCDB/Assertion.hpp>
 #import <WCDB/Error.hpp>
-#import <WCDB/Macro.hpp>
 #import <WCDB/WCTBinding.h>
 #import <WCDB/WCTCoding.h>
 #import <WCDB/WCTColumnBinding.h>
 #import <WCDB/WCTMacro.h>
 #import <WCDB/WCTProperty.h>
-#import <WCDB/WCTPropertyMacro.h>
 #import <objc/runtime.h>
 
 #pragma mark - Binding

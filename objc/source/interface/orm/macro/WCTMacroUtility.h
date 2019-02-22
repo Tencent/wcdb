@@ -18,15 +18,21 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTRuntimeCppAccessor.h>
-#import <WCDB/WCTRuntimeObjCAccessor.h>
+#define WCDB_ORM_PREFIX __wcdb
 
-#import <WCDB/WCTBinding.h>
-#import <WCDB/WCTColumnBinding.h>
+#define WCDB_ORM_CONCAT(a, b) WCDB_CONCAT(a, WCDB_CONCAT(_, b))
 
-#import <WCDB/WCTCoding.h>
+#define __WCDB_ORM_TYPE_PREFIX(className, ORMType)                             \
+    WCDB_ORM_CONCAT(WCDB_ORM_CONCAT(WCDB_ORM_PREFIX, className), ORMType)
 
-#import <WCDB/WCTProperty.h>
-#import <WCDB/WCTResultColumn.h>
+#define __WCDB_ORM(className, ORMType, subfix)                                 \
+    WCDB_ORM_CONCAT(__WCDB_ORM_TYPE_PREFIX(className, ORMType), subfix)
 
-#import <WCDB/WCTMacro.h>
+#define WCDB_ORM_UNIQUE(className, ORMType)                                    \
+    __WCDB_ORM(className, ORMType, WCDB_UNIQUE_ID) : (WCTBinding &) binding
+
+#if defined(__cplusplus)
+#define WCDB_EXTERN extern "C"
+#else
+#define WCDB_EXTERN extern
+#endif
