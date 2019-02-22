@@ -121,7 +121,7 @@
     while (checkpointed || [self.database getFilesSize] < self.expectedDatabaseSize) {
         if (currentTable == nil || self.random.uint8 % 10 == 0) {
             currentTable = [self.random tableNameWithPrefix:self.tablePrefix];
-            if (![self.database createTableAndIndexes:currentTable withClass:TestCaseObject.class]) {
+            if (![self.database createTable:currentTable withClass:TestCaseObject.class]) {
                 TestCaseFailure();
                 return NO;
             }

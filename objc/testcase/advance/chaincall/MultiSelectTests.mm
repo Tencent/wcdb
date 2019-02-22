@@ -43,7 +43,7 @@
     [super setUp];
 
     [self insertPresetObjects];
-    TestCaseAssertTrue([self.database createTableAndIndexes:self.tableName2 withClass:self.tableClass]);
+    TestCaseAssertTrue([self.database createTable:self.tableName2 withClass:self.tableClass]);
     TestCaseAssertTrue([self.database insertObjects:self.objectsInTable2 intoTable:self.tableName2]);
     [self.database close];
 }

@@ -56,7 +56,7 @@
         }
     }];
 
-    TestCaseAssertTrue([self.database createTableAndIndexes:self.tableName withClass:BenchmarkObject.class]);
+    TestCaseAssertTrue([self.database createTable:self.tableName withClass:BenchmarkObject.class]);
 
     BOOL done;
     TestCaseAssertTrue([self.database stepMigrationOrDone:done]);

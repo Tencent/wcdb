@@ -52,7 +52,7 @@
             return NO;
         }
     } else {
-        if (![self.database createTableAndIndexes:self.tableName withClass:self.tableClass]) {
+        if (![self.database createTable:self.tableName withClass:self.tableClass]) {
             return NO;
         }
     }

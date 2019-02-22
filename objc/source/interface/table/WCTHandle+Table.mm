@@ -42,7 +42,7 @@
     return nullptr;
 }
 
-- (BOOL)createTableAndIndexes:(NSString *)tableName
+- (BOOL)createTable:(NSString *)tableName
                     withClass:(Class<WCTTableCoding>)cls
 {
     WCTRemedialAssert(tableName && cls, "Class or table name can't be null.", return NO;);

@@ -114,7 +114,7 @@
     WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
     return [database runTransaction:^BOOL(WCTHandle* handle) {
                NSString* tableName = self.random.tableName;
-               return [database createTableAndIndexes:tableName withClass:BenchmarkObject.class]
+               return [database createTable:tableName withClass:BenchmarkObject.class]
                       && [handle insertObjects:objects intoTable:tableName];
            }]
            && [database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("TRUNCATE")];

@@ -112,7 +112,7 @@
     WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
     return [database runTransaction:^BOOL(WCTHandle* handle) {
                for (int i = 0; i < step; ++i) {
-                   if (![database createTableAndIndexes:self.random.tableName withClass:BenchmarkObject.class]) {
+                   if (![database createTable:self.random.tableName withClass:BenchmarkObject.class]) {
                        return NO;
                    }
                }

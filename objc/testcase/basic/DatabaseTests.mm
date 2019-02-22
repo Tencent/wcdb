@@ -126,7 +126,7 @@
 
     TestCaseObject* object = [self.random autoIncrementTestCaseObject];
 
-    TestCaseAssertTrue([self.database createTableAndIndexes:tableName withClass:TestCaseObject.class]);
+    TestCaseAssertTrue([self.database createTable:tableName withClass:TestCaseObject.class]);
     TestCaseAssertTrue([self.database insertObject:object intoTable:tableName]);
 
     [self.database close:^{

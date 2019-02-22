@@ -194,7 +194,7 @@
 
     BOOL committed = [database runTransaction:^BOOL(WCTHandle* handle) {
         if (create) {
-            TestCaseAssertTrue([database createTableAndIndexes:self.tableName withClass:BenchmarkObject.class]);
+            TestCaseAssertTrue([database createTable:self.tableName withClass:BenchmarkObject.class]);
         }
         TestCaseAssertTrue([handle insertObjects:objects intoTable:self.tableName]);
         return YES;
