@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WCTMigrationBaseInfo : NSObject
 
+- (instancetype)init UNAVAILABLE_ATTRIBUTE;
+
 @property (nonatomic, readonly) NSString* table;
 @property (nonatomic, readonly) NSString* database;
 @property (nonatomic, readonly) NSString* sourceTable;

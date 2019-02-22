@@ -28,11 +28,6 @@
 @implementation WCTHandle
 
 #pragma mark - LifeCycle
-- (instancetype)init
-{
-    return nil;
-}
-
 - (instancetype)initWithDatabase:(WCTDatabase *)database andUnsafeHandle:(WCDB::Handle *)handle
 {
     WCTInnerAssert(database != nil);

@@ -34,6 +34,7 @@ typedef void (^WCTCloseBlock)(void);
 
 @property (nonatomic, readonly) NSString *path;
 
+- (instancetype)init UNAVAILABLE_ATTRIBUTE; 
 /**
  @brief Init a database from path.
  Note that all database objects with same path share the same core. So you can create multiple database objects. WCDB will manage them automatically.

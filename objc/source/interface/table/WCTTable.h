@@ -44,6 +44,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WCTTable<ObjectType> : NSObject
 
+- (instancetype)init UNAVAILABLE_ATTRIBUTE;
+
 /**
  The name of the table.
  */

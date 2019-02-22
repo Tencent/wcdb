@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WCTHandle : NSObject
 
+- (instancetype)init UNAVAILABLE_ATTRIBUTE;
+
 #pragma mark - Handle
 @property (nonatomic, readonly) WCTDatabase *database;
 

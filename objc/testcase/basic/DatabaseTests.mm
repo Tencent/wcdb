@@ -26,11 +26,6 @@
 
 @implementation DatabaseTests
 
-- (void)test_init_nil
-{
-    TestCaseAssertTrue([[WCTDatabase alloc] init] == nil);
-}
-
 - (void)test_tag
 {
     TestCaseAssertNotEqual(self.database.tag, WCTInvalidTag);

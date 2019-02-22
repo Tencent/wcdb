@@ -77,11 +77,6 @@ static constexpr const char *NotifierPathPreprocessorName
     }
 }
 
-- (instancetype)init
-{
-    return nil;
-}
-
 - (instancetype)initWithUnsafeDatabase:(WCDB::Database *)database
 {
     WCTInnerAssert(database != nullptr);

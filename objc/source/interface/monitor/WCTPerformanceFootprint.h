@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WCTPerformanceFootprint : NSObject
 
+- (instancetype)init UNAVAILABLE_ATTRIBUTE;
+
 - (instancetype)initWithSQL:(NSString *)sql
                andFrequency:(unsigned int)frequency;
 

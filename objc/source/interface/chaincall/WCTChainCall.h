@@ -41,6 +41,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WCTChainCall : NSObject
 
+- (instancetype)init UNAVAILABLE_ATTRIBUTE;
+
 - (WCTHandle *)handle;
 
 - (WCTError *)error;

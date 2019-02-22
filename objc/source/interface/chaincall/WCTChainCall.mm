@@ -25,12 +25,6 @@
 
 @implementation WCTChainCall
 
-- (instancetype)init
-{
-    WCTRemedialAssert(false, "Init should not be called", ;);
-    return nil;
-}
-
 - (instancetype)initWithHandle:(WCTHandle*)handle
 {
     WCTInnerAssert(handle != nil);

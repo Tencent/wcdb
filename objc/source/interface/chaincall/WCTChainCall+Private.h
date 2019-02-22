@@ -35,8 +35,6 @@ typedef NS_ENUM(NSUInteger, WCTChainCallDisposeAction) {
     WCTChainCallDisposeAction _disposeAction;
 }
 
-- (instancetype)init NS_DESIGNATED_INITIALIZER;
-
 - (instancetype)initWithHandle:(WCTHandle*)handle NS_DESIGNATED_INITIALIZER;
 
 - (instancetype)invalidateWhenDispose;
