@@ -20,7 +20,7 @@
 
 #include <WCDB/Config.hpp>
 
-#warning TODO - uninvoke and bool reinvokable
+// TODO: uninvoke and bool reinvokable
 
 namespace WCDB {
 
