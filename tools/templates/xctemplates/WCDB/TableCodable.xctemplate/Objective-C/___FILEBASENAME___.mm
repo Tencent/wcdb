@@ -14,9 +14,9 @@ WCDB_SYNTHESIZE(<#property3#>)
 WCDB_SYNTHESIZE(<#property4#>)
 WCDB_SYNTHESIZE_COLUMN(<#property5#>, "<#column name#>")   // Custom column name
 
-WCDB_PRIMARY_ASC_AUTO_INCREMENT(<#property#>)
+WCDB_PRIMARY_AUTO_INCREMENT(<#property#>)
 
-WCDB_INDEX(<#property#>, <#_index_subfix#>)
+WCDB_INDEX(<#_index_subfix#>, <#property#>)
  */
 
 @end
