@@ -37,15 +37,13 @@ public:
                            const WCDB::String &propertyName);
 
 protected:
-    ValueGetter generateValueGetter(Class instanceClass,
-                                    const WCDB::String &propertyName);
-    ValueSetter generateValueSetter(Class instanceClass,
-                                    const WCDB::String &propertyName);
+    WCTRuntimeObjCAccessor(Class instanceClass, Class propertyClass, const WCDB::String &propertyName);
+
+    ValueGetter generateValueGetter(Class propertyClass);
+    ValueSetter generateValueSetter(Class propertyClass);
+    WCDB::ColumnType GetColumnType(Class propertyClass);
 
     WCDB::ColumnType getColumnType() const override final;
-
-    WCDB::ColumnType GetColumnType(Class instanceClass,
-                                   const WCDB::String &propertyName);
 
     const WCDB::ColumnType m_columnType;
 };

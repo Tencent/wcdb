@@ -29,22 +29,25 @@
 #error This file should be compiled without ARC to get better performance. Please use -fno-objc-arc flag on this file.
 #endif
 
-WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const WCDB::String &propertyName)
+WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, Class propertyClass, const WCDB::String &propertyName)
 : WCTRuntimeAccessor<id>(instanceClass, propertyName)
-, WCTObjCAccessor(generateValueGetter(instanceClass, propertyName), generateValueSetter(instanceClass, propertyName))
-, m_columnType(GetColumnType(instanceClass, propertyName))
+, WCTObjCAccessor(generateValueGetter(propertyClass), generateValueSetter(propertyClass))
+, m_columnType(GetColumnType(propertyClass))
 {
-    Class propertyClass = getPropertyClass(instanceClass, propertyName);
     if (WCDB::Console::debuggable()) {
-        WCTAssert(propertyClass, WCDB::String::formatted("Unable to find out the class of %s.%s.", NSStringFromClass(instanceClass), propertyName.c_str()));
-        WCTAssert([propertyClass conformsToProtocol:@protocol(WCTColumnCoding)], WCDB::String::formatted("Class %s should conforms to protocol WCTColumnCoding.", propertyName.c_str()));
+        WCTAssert(propertyClass, WCDB::String::formatted("Unable to find out the %s.%s.", NSStringFromClass(instanceClass), propertyName.c_str()));
+        WCTAssert([propertyClass conformsToProtocol:@protocol(WCTColumnCoding)], WCDB::String::formatted("%s should conform to protocol WCTColumnCoding.", propertyName.c_str()));
     }
 }
 
-WCTRuntimeObjCAccessor::ValueGetter WCTRuntimeObjCAccessor::generateValueGetter(Class instanceClass, const WCDB::String &propertyName)
+WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const WCDB::String &propertyName)
+: WCTRuntimeObjCAccessor(instanceClass, getPropertyClass(instanceClass, propertyName), propertyName)
+{
+}
+
+WCTRuntimeObjCAccessor::ValueGetter WCTRuntimeObjCAccessor::generateValueGetter(Class propertyClass)
 {
     static const SEL archiveSelector = NSSelectorFromString(@"archivedWCTValue");
-    Class propertyClass = getPropertyClass(instanceClass, propertyName);
     IMP implementation = getInstanceMethodImplementation(propertyClass, archiveSelector);
     auto block = ^(InstanceType instance) {
         using Archiver = OCType (*)(InstanceType, SEL);
@@ -55,10 +58,9 @@ WCTRuntimeObjCAccessor::ValueGetter WCTRuntimeObjCAccessor::generateValueGetter(
     return [block copy];
 }
 
-WCTRuntimeObjCAccessor::ValueSetter WCTRuntimeObjCAccessor::generateValueSetter(Class instanceClass, const WCDB::String &propertyName)
+WCTRuntimeObjCAccessor::ValueSetter WCTRuntimeObjCAccessor::generateValueSetter(Class propertyClass)
 {
     static const SEL unarchiveSelector = NSSelectorFromString(@"unarchiveWithWCTValue:");
-    Class propertyClass = getPropertyClass(instanceClass, propertyName);
     IMP implementation = getClassMethodImplementation(propertyClass, unarchiveSelector);
     auto block = ^(InstanceType instance, OCType value) {
         using Unarchiver = PropertyType (*)(Class, SEL, OCType);
@@ -70,13 +72,9 @@ WCTRuntimeObjCAccessor::ValueSetter WCTRuntimeObjCAccessor::generateValueSetter(
     return [block copy];
 }
 
-WCDB::ColumnType WCTRuntimeObjCAccessor::GetColumnType(Class instanceClass, const WCDB::String &propertyName)
+WCDB::ColumnType WCTRuntimeObjCAccessor::GetColumnType(Class propertyClass)
 {
     static const SEL columnTypeSelector = NSSelectorFromString(@"columnType");
-    Class propertyClass = getPropertyClass(instanceClass, propertyName);
-    if (WCDB::Console::debuggable()) {
-        WCTRemedialAssert([propertyClass conformsToProtocol:@protocol(WCTColumnCoding)], WCDB::String::formatted("[%s] should conform to WCTColumnCoding protocol, which is the class of [%s %s]", NSStringFromClass(propertyClass).UTF8String, NSStringFromClass(instanceClass).UTF8String, propertyName.c_str()), return WCDB::ColumnType::Null;);
-    }
     IMP implementation = getClassMethodImplementation(propertyClass, columnTypeSelector);
     using GetColumnTyper = WCDB::ColumnType (*)(Class, SEL);
     return ((GetColumnTyper) implementation)(propertyClass, columnTypeSelector);
