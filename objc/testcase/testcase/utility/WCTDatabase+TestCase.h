@@ -18,8 +18,6 @@
  * limitations under the License.
  */
 
-#ifdef DEBUG
-
 #import <WCDB/WCDB.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -31,8 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)removeSQLRelatedConfigs;
 
++ (void)resetGlobalErrorTracer;
+
 @end
 
 NS_ASSUME_NONNULL_END
-
-#endif

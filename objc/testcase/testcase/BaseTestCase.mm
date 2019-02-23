@@ -24,6 +24,7 @@
 #import <TestCase/TestCaseAssertion.h>
 #import <TestCase/TestCaseLog.h>
 #import <WCDB/WCDB.h>
+#import <WCDB/WCTDatabase+TestCase.h>
 
 @implementation BaseTestCase {
     Random *_random;
@@ -54,12 +55,15 @@
         directory = abbreviatedPath;
     }
     [self log:@"run at %@", directory];
-    
+
     [self refreshDirectory];
 }
 
 - (void)tearDown
 {
+    [WCTDatabase resetGlobalErrorTracer];
+    [WCTDatabase globalTraceSQL:nil];
+    [WCTDatabase globalTracePerformance:nil];
     [self cleanDirectory];
     [super tearDown];
 }

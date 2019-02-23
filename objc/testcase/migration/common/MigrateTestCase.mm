@@ -158,7 +158,6 @@
     TestCaseAssertResultYES(migrated);
 }
 
-#ifdef DEBUG
 - (void)doTestFeatureAutoMigrateWillStopDueToError
 {
     TestCaseCounter *numberOfFailures = [TestCaseCounter value:0];
@@ -193,7 +192,6 @@
     [NSThread sleepForTimeInterval:2 * WCDB::MigrationQueueTimeIntervalForMigrating];
     TestCaseAssertResultYES(result);
 }
-#endif
 
 - (void)doTestFeatureAutoMigrateWillNotStopDueToInterrupt
 {

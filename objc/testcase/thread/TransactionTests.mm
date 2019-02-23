@@ -52,7 +52,7 @@
           __block BOOL tested = NO;
           __block BOOL unexpected = NO;
           if ([self.database runTransaction:^BOOL(WCTHandle* handle) {
-                    tested = YES;
+                  tested = YES;
                   if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
                       TestCaseFailure();
                       unexpected = YES;
@@ -66,7 +66,6 @@
       }];
 }
 
-#ifdef DEBUG
 - (void)test_database_auto_rollback
 {
     [self doTestObjects:self.objects
@@ -76,7 +75,7 @@
           __block BOOL tested = NO;
           [WCTDatabase disableSQLiteWrite];
           if ([self.database runTransaction:^BOOL(WCTHandle* handle) {
-              tested = YES;
+                  tested = YES;
                   if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
                       TestCaseFailure();
                       unexpected = YES;
@@ -92,7 +91,6 @@
           return !unexpected && tested;
       }];
 }
-#endif
 
 #pragma mark - Database - Seperated Transaction
 - (void)test_database_seperated_commit
@@ -106,7 +104,6 @@
       }];
 }
 
-#ifdef DEBUG
 - (void)test_database_seperated_auto_rollback
 {
     [self doTestObjects:self.objects
@@ -133,7 +130,6 @@
           return !unexpected;
       }];
 }
-#endif
 
 - (void)test_database_seperated_rollback
 {
@@ -182,7 +178,6 @@
       }];
 }
 
-#ifdef DEBUG
 - (void)test_database_auto_rollback_nested
 {
     [self doTestObjects:self.objects
@@ -206,7 +201,6 @@
           return !unexpected;
       }];
 }
-#endif
 
 #pragma mark - Database - Seperated Nested Transaction
 - (void)test_database_seperated_commit_nested
@@ -220,7 +214,6 @@
       }];
 }
 
-#ifdef DEBUG
 - (void)test_database_seperated_auto_rollback_nested
 {
     [self doTestObjects:self.objects
@@ -247,7 +240,6 @@
           return !unexpected;
       }];
 }
-#endif
 
 - (void)test_database_seperated_rollback_nested
 {
@@ -305,7 +297,7 @@
           __block BOOL unexpected = NO;
           __block BOOL tested = NO;
           if ([handle runTransaction:^BOOL(WCTHandle* handle) {
-              tested = YES;
+                  tested = YES;
                   if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
                       TestCaseFailure();
                       unexpected = YES;
@@ -319,7 +311,6 @@
       }];
 }
 
-#ifdef DEBUG
 - (void)test_handle_auto_rollback
 {
     [self doTestObjects:self.objects
@@ -330,7 +321,7 @@
           __block BOOL tested = NO;
           [WCTDatabase disableSQLiteWrite];
           if ([handle runTransaction:^BOOL(WCTHandle* handle) {
-              tested = YES;
+                  tested = YES;
                   if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
                       TestCaseFailure();
                       unexpected = YES;
@@ -346,7 +337,6 @@
           return !unexpected && tested;
       }];
 }
-#endif
 
 #pragma mark - Handle - Seperated Transaction
 - (void)test_handle_seperated_commit
@@ -361,7 +351,6 @@
       }];
 }
 
-#ifdef DEBUG
 - (void)test_handle_seperated_auto_rollback
 {
     [self doTestObjects:self.objects
@@ -389,7 +378,6 @@
           return !unexpected;
       }];
 }
-#endif
 
 - (void)test_handle_seperated_rollback
 {
@@ -441,7 +429,6 @@
       }];
 }
 
-#ifdef DEBUG
 - (void)test_handle_auto_rollback_nested
 {
     [self doTestObjects:self.objects
@@ -466,7 +453,6 @@
           return !unexpected;
       }];
 }
-#endif
 
 #pragma mark - Handle - Seperated Nested Transaction
 - (void)test_handle_seperated_commit_nested
@@ -481,7 +467,6 @@
       }];
 }
 
-#ifdef DEBUG
 - (void)test_handle_seperated_auto_rollback_nested
 {
     [self doTestObjects:self.objects
@@ -509,7 +494,6 @@
           return !unexpected;
       }];
 }
-#endif
 
 - (void)test_handle_seperated_rollback_nested
 {
@@ -574,7 +558,7 @@
                       unexpected = YES;
                   }
                   if ([handle runNestedTransaction:^BOOL(WCTHandle* handle) {
-                      tested = YES;
+                          tested = YES;
                           if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 2]) {
                               TestCaseFailure();
                               unexpected = YES;
@@ -606,7 +590,7 @@
                       unexpected = YES;
                   }
                   if (![handle runNestedTransaction:^BOOL(WCTHandle* handle) {
-                      tested = YES;
+                          tested = YES;
                           return [handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 2]; // commit nested
                       }]) {
                       TestCaseFailure();
@@ -634,7 +618,7 @@
                       unexpected = YES;
                   }
                   if ([handle runNestedTransaction:^BOOL(WCTHandle* handle) {
-                      tested = YES;
+                          tested = YES;
                           if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 2]) {
                               TestCaseFailure();
                               unexpected = YES;

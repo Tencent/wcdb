@@ -18,17 +18,21 @@
  * limitations under the License.
  */
 
-#ifdef DEBUG
-
+#import <WCDB/Console.hpp>
 #import <WCDB/SQLite.h>
 #import <WCDB/WCTDatabase+TestCase.h>
 
-ssize_t illPwrite(int, const void *, size_t, off_t)
+static ssize_t illPwrite(int, const void *, size_t, off_t)
 {
     return -1;
 }
 
 @implementation WCTDatabase (TestCase)
+
++ (void)resetGlobalErrorTracer
+{
+    WCDB::Console::shared()->setLogger(WCDB::Console::logger);
+}
 
 + (void)enableSQLiteWrite
 {
@@ -57,5 +61,3 @@ ssize_t illPwrite(int, const void *, size_t, off_t)
 }
 
 @end
-
-#endif

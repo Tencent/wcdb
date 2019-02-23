@@ -50,11 +50,6 @@
     WCDB::Console::shared()->setLogger(callback);
 }
 
-+ (void)resetGlobalErrorTracer
-{
-    WCDB::Console::shared()->setLogger(WCDB::Console::logger);
-}
-
 + (void)globalTracePerformance:(WCTPerformanceTraceBlock)trace
 {
     WCDB::Handle::PerformanceNotification callback = nullptr;
