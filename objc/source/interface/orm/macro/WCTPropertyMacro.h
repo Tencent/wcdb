@@ -30,13 +30,14 @@
 #define WCDB_ORM_TYPE_SYNTHESIZE synthesize
 
 // __wcdb_className_synthesize_uniqueID
-#define __WCDB_SYNTHESIZE_IMP(propertyName, columnName)                                                                                                                                    \
-    +(const WCTProperty &) propertyName                                                                                                                                                               \
-    {                                                                                                                                                                                                 \
+#define __WCDB_SYNTHESIZE_IMP(propertyName, columnName)                                                                                                                               \
+    +(const WCTProperty &) propertyName                                                                                                                                               \
+    {                                                                                                                                                                                 \
         static const WCTProperty *s_property = new WCTProperty(columnName, WCTColumnBinding::generate<__WCDB_PROPERTY_TYPE(self, propertyName)>(self, WCDB_STRINGIFY(propertyName))); \
-        return *s_property;                                                                                                                                                                           \
-    }                                                                                                                                                                                                 \
-    +(const WCTProperty &) WCDB_ORM_UNIQUE(WCDB_ORM_TYPE_SYNTHESIZE)                                                                                                                       \
-    {                                                                                                                                                                                                 \
-        return self.propertyName;                                                                                                                                                                \
+        WCTBinding::assertNoInheritance(*s_property, self);                                                                                                                           \
+        return *s_property;                                                                                                                                                           \
+    }                                                                                                                                                                                 \
+    +(const WCTProperty &) WCDB_ORM_UNIQUE(WCDB_ORM_TYPE_SYNTHESIZE)                                                                                                                  \
+    {                                                                                                                                                                                 \
+        return self.propertyName;                                                                                                                                                     \
     }
