@@ -36,8 +36,8 @@ WCTRuntimeObjCAccessor::WCTRuntimeObjCAccessor(Class instanceClass, const WCDB::
 {
     Class propertyClass = getPropertyClass(instanceClass, propertyName);
     if (WCDB::Console::debuggable()) {
-        WCTRemedialAssert(propertyClass, WCDB::String::formatted("Unable to find out the class of %s.%s.", NSStringFromClass(instanceClass), propertyName.c_str()), ;);
-        WCTRemedialAssert([propertyClass conformsToProtocol:@protocol(WCTColumnCoding)], WCDB::String::formatted("Class %s should conforms to protocol WCTColumnCoding.", propertyName.c_str()), ;);
+        WCTAssert(propertyClass, WCDB::String::formatted("Unable to find out the class of %s.%s.", NSStringFromClass(instanceClass), propertyName.c_str()));
+        WCTAssert([propertyClass conformsToProtocol:@protocol(WCTColumnCoding)], WCDB::String::formatted("Class %s should conforms to protocol WCTColumnCoding.", propertyName.c_str()));
     }
 }
 

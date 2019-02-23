@@ -80,9 +80,9 @@ WCTBinding::WCTBinding(Class cls)
     }
 }
 
-void WCTBinding::assertNoInheritance(Class left, Class right)
+void WCTBinding::assertNoInheritance(const WCTProperty &property, Class cls)
 {
-    WCTRemedialAssert(left == right, "Inheritance is not supported for ORM.", ;);
+    WCTAssert(property.getColumnBinding().getClass() == cls, "Inheritance is not supported for ORM.");
 }
 
 #pragma mark - Property

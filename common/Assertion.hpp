@@ -53,4 +53,7 @@
 #define WCTRemedialAssert(cond, message, remedial)                             \
     __WCTAssert(cond, message, if (WCDB::Console::debuggable()) { abort(); } else { remedial })
 
+#define WCTAssert(cond, message)                                               \
+    __WCTAssert(cond, message, if (WCDB::Console::debuggable()) { abort(); })
+
 #endif /* __WCDB_ASSERTION_HPP */

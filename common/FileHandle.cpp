@@ -43,9 +43,7 @@ FileHandle::FileHandle(FileHandle &&other)
 
 FileHandle::~FileHandle()
 {
-    WCTRemedialAssert(!isOpened() || m_mode != Mode::OverWrite,
-                      "Close should be called manually to sync file.",
-                      ;);
+    WCTInnerAssert(!isOpened() || m_mode != Mode::OverWrite);
     close();
 }
 
@@ -61,10 +59,7 @@ FileHandle &FileHandle::operator=(FileHandle &&other)
 #pragma mark - Basic
 bool FileHandle::open(Mode mode)
 {
-    WCTRemedialAssert(mode != Mode::None, "Invalid argument", markAsMisuse("Invalid argument.");
-                      return false;);
-    WCTRemedialAssert(!isOpened(), "File already is opened", markAsMisuse("Duplicate open.");
-                      return true;);
+    WCTInnerAssert(!isOpened());
     switch (mode) {
     case Mode::OverWrite: {
         constexpr const int mask = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
@@ -72,12 +67,10 @@ bool FileHandle::open(Mode mode)
         m_fd = ::open(path.c_str(), O_CREAT | O_WRONLY | O_TRUNC, mask);
         break;
     }
-    case Mode::ReadOnly:
+    default:
+        WCTInnerAssert(mode == Mode::ReadOnly);
         m_fd = ::open(path.c_str(), O_RDONLY);
         break;
-    default:
-        markAsMisuse("Invalid open mode.");
-        return false;
     }
     if (m_fd == -1) {
         setThreadedError();
