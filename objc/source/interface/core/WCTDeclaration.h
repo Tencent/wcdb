@@ -57,12 +57,6 @@ using WCTOrder = WCDB::Order;
 static constexpr const WCDB::Order WCTOrderedAscending = WCDB::Order::ASC;
 static constexpr const WCDB::Order WCTOrderedDescending = WCDB::Order::DESC;
 
-static constexpr const WCDB::Conflict WCTConflictRollback = WCDB::Conflict::Rollback;
-static constexpr const WCDB::Conflict WCTConflictAbort = WCDB::Conflict::Abort;
-static constexpr const WCDB::Conflict WCTConflictFail = WCDB::Conflict::Fail;
-static constexpr const WCDB::Conflict WCTConflictIgnore = WCDB::Conflict::Ignore;
-static constexpr const WCDB::Conflict WCTConflictReplace = WCDB::Conflict::Replace;
-
 using WCTColumnType = WCDB::ColumnType;
 static constexpr const WCDB::ColumnType WCTColumnTypeInteger32 = WCDB::ColumnType::Integer32;
 static constexpr const WCDB::ColumnType WCTColumnTypeInteger64 = WCDB::ColumnType::Integer64;
