@@ -100,23 +100,23 @@ class ExpressionInOperable : virtual public ExpressionOperable {
 public:
     virtual ~ExpressionInOperable() = 0;
 
-    Expression in();
-    Expression notIn();
-    Expression inTable(const String &table);
-    Expression notInTable(const String &table);
-    Expression in(const StatementSelect &select);
-    Expression notIn(const StatementSelect &select);
+    Expression in() const;
+    Expression notIn() const;
+    Expression inTable(const String &table) const;
+    Expression notInTable(const String &table) const;
+    Expression in(const StatementSelect &select) const;
+    Expression notIn(const StatementSelect &select) const;
     // in(arguments) usually accept multiple arguments, so the seperated method is not provided.
-    Expression in(const Expressions &expressions);
-    Expression notIn(const Expressions &expressions);
-    Expression inFunction(const String &tableFunction);
-    Expression notInFunction(const String &tableFunction);
+    Expression in(const Expressions &expressions) const;
+    Expression notIn(const Expressions &expressions) const;
+    Expression inFunction(const String &tableFunction) const;
+    Expression notInFunction(const String &tableFunction) const;
 };
 
 class ExpressionCollateOperable : virtual public ExpressionOperable {
 public:
     virtual ~ExpressionCollateOperable() = 0;
-    Expression collate(const String &collation);
+    Expression collate(const String &collation) const;
 };
 
 } // namespace WCDB

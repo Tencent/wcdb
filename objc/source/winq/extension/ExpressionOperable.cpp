@@ -299,7 +299,7 @@ ExpressionInOperable::~ExpressionInOperable()
 {
 }
 
-Expression ExpressionInOperable::in()
+Expression ExpressionInOperable::in() const
 {
     Expression expression;
     expression.syntax().switcher = Expression::SyntaxType::Switch::In;
@@ -309,14 +309,14 @@ Expression ExpressionInOperable::in()
     return expression;
 }
 
-Expression ExpressionInOperable::notIn()
+Expression ExpressionInOperable::notIn() const
 {
     Expression expression = in();
     expression.syntax().isNot = true;
     return expression;
 }
 
-Expression ExpressionInOperable::inTable(const String &table)
+Expression ExpressionInOperable::inTable(const String &table) const
 {
     Expression expression;
     expression.syntax().switcher = Expression::SyntaxType::Switch::In;
@@ -327,14 +327,14 @@ Expression ExpressionInOperable::inTable(const String &table)
     return expression;
 }
 
-Expression ExpressionInOperable::notInTable(const String &table)
+Expression ExpressionInOperable::notInTable(const String &table) const
 {
     Expression expression = inTable(table);
     expression.syntax().isNot = true;
     return expression;
 }
 
-Expression ExpressionInOperable::in(const StatementSelect &select)
+Expression ExpressionInOperable::in(const StatementSelect &select) const
 {
     Expression expression;
     expression.syntax().switcher = Expression::SyntaxType::Switch::In;
@@ -345,14 +345,14 @@ Expression ExpressionInOperable::in(const StatementSelect &select)
     return expression;
 }
 
-Expression ExpressionInOperable::notIn(const StatementSelect &select)
+Expression ExpressionInOperable::notIn(const StatementSelect &select) const
 {
     Expression expression = in(select);
     expression.syntax().isNot = true;
     return expression;
 }
 
-Expression ExpressionInOperable::in(const Expressions &expressions)
+Expression ExpressionInOperable::in(const Expressions &expressions) const
 {
     Expression expression;
     expression.syntax().switcher = Expression::SyntaxType::Switch::In;
@@ -364,14 +364,14 @@ Expression ExpressionInOperable::in(const Expressions &expressions)
     return expression;
 }
 
-Expression ExpressionInOperable::notIn(const Expressions &expressions)
+Expression ExpressionInOperable::notIn(const Expressions &expressions) const
 {
     Expression expression = in(expressions);
     expression.syntax().isNot = true;
     return expression;
 }
 
-Expression ExpressionInOperable::inFunction(const String &tableFunction)
+Expression ExpressionInOperable::inFunction(const String &tableFunction) const
 {
     Expression expression;
     expression.syntax().switcher = Expression::SyntaxType::Switch::In;
@@ -382,7 +382,7 @@ Expression ExpressionInOperable::inFunction(const String &tableFunction)
     return expression;
 }
 
-Expression ExpressionInOperable::notInFunction(const String &tableFunction)
+Expression ExpressionInOperable::notInFunction(const String &tableFunction) const
 {
     Expression expression = inFunction(tableFunction);
     expression.syntax().isNot = true;
@@ -394,7 +394,7 @@ ExpressionCollateOperable::~ExpressionCollateOperable()
 {
 }
 
-Expression ExpressionCollateOperable::collate(const String &collation)
+Expression ExpressionCollateOperable::collate(const String &collation) const
 {
     Expression expression;
     expression.syntax().switcher = Expression::SyntaxType::Switch::Collate;
