@@ -29,6 +29,7 @@
 #import <WCDB/WCTTable+Convenient.h>
 #import <WCDB/WCTTable+Private.h>
 #import <WCDB/WCTUpdate.h>
+#import <WCDB/WCTDatabase+Convenient.h>
 
 @implementation WCTTable (Convenient)
 
@@ -654,5 +655,51 @@
 {
     return [[[[[[[self prepareDelete] where:condition] orders:orders] limit:limit] offset:offset] invalidateWhenDispose] execute];
 }
+
+#pragma mark - Get Value
+- (WCTValue *)getValueOnResultColumn:(const WCDB::ResultColumn&)resultColumn{
+    return [self.database getValueFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).limit(1)];
+}
+
+- (WCTValue *)getValueOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                 where:(const WCDB::Expression &)condition{
+    return [self.database getValueFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).where(condition).limit(1)];
+}
+
+- (WCTValue *)getValueOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                orders:(const WCDB::OrderingTerms &)orders{
+    return [self.database getValueFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).orders(orders).limit(1)];
+}
+
+- (WCTValue *)getValueOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                offset:(const WCDB::Expression &)offset{
+    return [self.database getValueFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).limit(1).offset(offset)];
+}
+
+- (WCTValue *)getValueOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                 where:(const WCDB::Expression &)condition
+                                orders:(const WCDB::OrderingTerms &)orders{
+    return [self.database getValueFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).where(condition).orders(orders).limit(1)];
+}
+
+- (WCTValue *)getValueOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                 where:(const WCDB::Expression &)condition
+                                offset:(const WCDB::Expression &)offset{
+    return [self.database getValueFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).where(condition).limit(1).offset(offset)];
+}
+
+- (WCTValue *)getValueOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                orders:(const WCDB::OrderingTerms &)orders
+                                offset:(const WCDB::Expression &)offset{
+    return [self.database getValueFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).orders(orders).limit(1).offset(offset)];
+}
+
+- (WCTValue *)getValueOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                 where:(const WCDB::Expression &)condition
+                                orders:(const WCDB::OrderingTerms &)orders
+                                offset:(const WCDB::Expression &)offset{
+    return [self.database getValueFromStatement:WCDB::StatementSelect().select(resultColumn).from(self.name).where(condition).orders(orders).limit(1).offset(offset)];
+}
+
 
 @end

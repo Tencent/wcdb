@@ -510,6 +510,79 @@
             }];
 }
 
+#pragma mark - Database - Get Value
+- (void)test_database_get_value
+{
+    [self doTestValue:@(self.object1.identifier)
+               andSQL:@"SELECT identifier FROM main.testTable LIMIT 1"
+          bySelecting:^WCTValue * {
+              return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName];
+          }];
+}
+
+- (void)test_database_get_value_where
+{
+    [self doTestValue:@(self.object2.identifier)
+               andSQL:@"SELECT identifier FROM main.testTable WHERE identifier == 2 LIMIT 1"
+          bySelecting:^WCTValue * {
+              return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier == 2];
+          }];
+}
+
+- (void)test_database_get_value_orders
+{
+    [self doTestValue:@(self.object2.identifier)
+               andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC LIMIT 1"
+          bySelecting:^WCTValue * {
+              return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
+          }];
+}
+
+- (void)test_database_get_value_offset
+{
+    [self doTestValue:@(self.object2.identifier)
+               andSQL:@"SELECT identifier FROM main.testTable LIMIT 1 OFFSET 1"
+          bySelecting:^WCTValue * {
+              return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName offset:1];
+          }];
+}
+
+- (void)test_database_get_value_where_orders
+{
+    [self doTestValue:@(self.object2.identifier)
+               andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
+          bySelecting:^WCTValue * {
+              return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
+          }];
+}
+
+- (void)test_database_get_value_where_offset
+{
+    [self doTestValue:@(self.object2.identifier)
+               andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 LIMIT 1 OFFSET 1"
+          bySelecting:^WCTValue * {
+              return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 offset:1];
+          }];
+}
+
+- (void)test_database_get_value_orders_offset
+{
+    [self doTestValue:@(self.object1.identifier)
+               andSQL:@"SELECT identifier FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+          bySelecting:^WCTValue * {
+              return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
+          }];
+}
+
+- (void)test_database_get_value_where_orders_offset
+{
+    [self doTestValue:@(self.object1.identifier)
+               andSQL:@"SELECT identifier FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+          bySelecting:^WCTValue * {
+              return [self.database getValueOnResultColumn:TestCaseObject.identifier fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
+          }];
+}
+
 #pragma mark - Database - Get From Statement
 - (void)test_database_get_row_from_statement
 {

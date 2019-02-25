@@ -479,6 +479,43 @@ NS_ASSUME_NONNULL_BEGIN
                   limit:(const WCDB::Expression &)limit
                  offset:(const WCDB::Expression &)offset;
 
+#pragma mark - Get Value
+- (nullable WCTValue *)getValueOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                             fromTable:(NSString *)tableName;
+
+- (nullable WCTValue *)getValueOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                             fromTable:(NSString *)tableName
+                                 where:(const WCDB::Expression &)condition;
+
+- (nullable WCTValue *)getValueOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                             fromTable:(NSString *)tableName
+                                orders:(const WCDB::OrderingTerms &)orders;
+
+- (nullable WCTValue *)getValueOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                             fromTable:(NSString *)tableName
+                                offset:(const WCDB::Expression &)offset;
+
+- (nullable WCTValue *)getValueOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                             fromTable:(NSString *)tableName
+                                 where:(const WCDB::Expression &)condition
+                                orders:(const WCDB::OrderingTerms &)orders;
+
+- (nullable WCTValue *)getValueOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                             fromTable:(NSString *)tableName
+                                 where:(const WCDB::Expression &)condition
+                                offset:(const WCDB::Expression &)offset;
+
+- (nullable WCTValue *)getValueOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                             fromTable:(NSString *)tableName
+                                orders:(const WCDB::OrderingTerms &)orders
+                                offset:(const WCDB::Expression &)offset;
+
+- (nullable WCTValue *)getValueOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                             fromTable:(NSString *)tableName
+                                 where:(const WCDB::Expression &)condition
+                                orders:(const WCDB::OrderingTerms &)orders
+                                offset:(const WCDB::Expression &)offset;
+
 #pragma mark - Get From Statement
 - (nullable WCTValue *)getValueFromStatement:(const WCDB::Statement &)statement;
 
