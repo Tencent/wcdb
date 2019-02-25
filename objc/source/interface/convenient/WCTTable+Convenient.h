@@ -430,6 +430,55 @@ NS_ASSUME_NONNULL_BEGIN
                                        orders:(const WCDB::OrderingTerms &)orders
                                        offset:(const WCDB::Expression &)offset;
 
+#pragma mark - Get Column
+- (nullable WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn;
+
+- (nullable WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                             where:(const WCDB::Expression &)condition;
+
+- (nullable WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                            orders:(const WCDB::OrderingTerms &)orders;
+
+- (nullable WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                             limit:(const WCDB::Expression &)limit;
+
+- (nullable WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                             where:(const WCDB::Expression &)condition
+                                            orders:(const WCDB::OrderingTerms &)orders;
+
+- (nullable WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                             where:(const WCDB::Expression &)condition
+                                             limit:(const WCDB::Expression &)limit;
+
+- (nullable WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                            orders:(const WCDB::OrderingTerms &)orders
+                                             limit:(const WCDB::Expression &)limit;
+
+- (nullable WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                             limit:(const WCDB::Expression &)limit
+                                            offset:(const WCDB::Expression &)offset;
+
+- (nullable WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                             where:(const WCDB::Expression &)condition
+                                            orders:(const WCDB::OrderingTerms &)orders
+                                             limit:(const WCDB::Expression &)limit;
+
+- (nullable WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                             where:(const WCDB::Expression &)condition
+                                             limit:(const WCDB::Expression &)limit
+                                            offset:(const WCDB::Expression &)offset;
+
+- (nullable WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                            orders:(const WCDB::OrderingTerms &)orders
+                                             limit:(const WCDB::Expression &)limit
+                                            offset:(const WCDB::Expression &)offset;
+
+- (nullable WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                             where:(const WCDB::Expression &)condition
+                                            orders:(const WCDB::OrderingTerms &)orders
+                                             limit:(const WCDB::Expression &)limit
+                                            offset:(const WCDB::Expression &)offset;
+
 @end
 
 NS_ASSUME_NONNULL_END

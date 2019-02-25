@@ -852,6 +852,103 @@
     return [self getRowFromStatement:WCDB::StatementSelect().select(resultColumns).from(tableName).where(condition).orders(orders).limit(1).offset(offset)];
 }
 
+#pragma mark - Get Column
+- (WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                fromTable:(NSString *)tableName
+{
+    return [self getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(tableName)];
+}
+
+- (WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                fromTable:(NSString *)tableName
+                                    where:(const WCDB::Expression &)condition
+{
+    return [self getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(tableName).where(condition)];
+}
+
+- (WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                fromTable:(NSString *)tableName
+                                   orders:(const WCDB::OrderingTerms &)orders
+{
+    return [self getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(tableName).orders(orders)];
+}
+
+- (WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                fromTable:(NSString *)tableName
+                                    limit:(const WCDB::Expression &)limit
+{
+    return [self getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(tableName).limit(limit)];
+}
+
+- (WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                fromTable:(NSString *)tableName
+                                    where:(const WCDB::Expression &)condition
+                                   orders:(const WCDB::OrderingTerms &)orders
+{
+    return [self getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(tableName).where(condition).orders(orders)];
+}
+
+- (WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                fromTable:(NSString *)tableName
+                                    where:(const WCDB::Expression &)condition
+                                    limit:(const WCDB::Expression &)limit
+{
+    return [self getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(tableName).where(condition).limit(limit)];
+}
+
+- (WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                fromTable:(NSString *)tableName
+                                   orders:(const WCDB::OrderingTerms &)orders
+                                    limit:(const WCDB::Expression &)limit
+{
+    return [self getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(tableName).orders(orders).limit(limit)];
+}
+
+- (WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                fromTable:(NSString *)tableName
+                                    limit:(const WCDB::Expression &)limit
+                                   offset:(const WCDB::Expression &)offset
+{
+    return [self getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(tableName).limit(limit).offset(offset)];
+}
+
+- (WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                fromTable:(NSString *)tableName
+                                    where:(const WCDB::Expression &)condition
+                                   orders:(const WCDB::OrderingTerms &)orders
+                                    limit:(const WCDB::Expression &)limit
+{
+    return [self getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(tableName).where(condition).orders(orders).limit(limit)];
+}
+
+- (WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                fromTable:(NSString *)tableName
+                                   orders:(const WCDB::OrderingTerms &)orders
+                                    limit:(const WCDB::Expression &)limit
+                                   offset:(const WCDB::Expression &)offset
+{
+    return [self getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(tableName).orders(orders).limit(limit).offset(offset)];
+}
+
+- (WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                fromTable:(NSString *)tableName
+                                    where:(const WCDB::Expression &)condition
+                                    limit:(const WCDB::Expression &)limit
+                                   offset:(const WCDB::Expression &)offset
+{
+    return [self getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(tableName).where(condition).limit(limit).offset(offset)];
+}
+
+- (WCTOneColumn *)getColumnOnResultColumn:(const WCDB::ResultColumn&)resultColumn
+                                fromTable:(NSString *)tableName
+                                    where:(const WCDB::Expression &)condition
+                                   orders:(const WCDB::OrderingTerms &)orders
+                                    limit:(const WCDB::Expression &)limit
+                                   offset:(const WCDB::Expression &)offset
+{
+    return [self getColumnFromStatement:WCDB::StatementSelect().select(resultColumn).from(tableName).where(condition).orders(orders).limit(limit).offset(offset)];
+}
+
 #pragma mark - Get From Statement
 - (WCTValue *)getValueFromStatement:(const WCDB::Statement &)statement
 {
