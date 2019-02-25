@@ -541,7 +541,7 @@
 		2367BC0D2215004300380122 /* SequenceCrawler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D07CE920BE873E0043F4D4 /* SequenceCrawler.hpp */; };
 		2367BC0E2215004300380122 /* PageBasedFileHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D9422105D19500707AFC /* PageBasedFileHandle.hpp */; };
 		2367BC0F2215004300380122 /* SQLTraceConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2360A60020D78F2B00E4A311 /* SQLTraceConfig.hpp */; };
-		2367BC102215004300380122 /* Data.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775BCC20AD72BC00E21AB0 /* Data.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		2367BC102215004300380122 /* Data.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775BCC20AD72BC00E21AB0 /* Data.hpp */; };
 		2367BC112215004300380122 /* SyntaxCompoundOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBEF217DFADC006E9E73 /* SyntaxCompoundOperator.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2367BC122215004300380122 /* WCTDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 23DF0A082190275B00F0B2B6 /* WCTDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2367BC142215004300380122 /* WCTDatabase+Monitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 23906AB7215E500100C2B717 /* WCTDatabase+Monitor.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -873,7 +873,7 @@
 		23775B9620AD666900E21AB0 /* Crawlable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B5020AD666900E21AB0 /* Crawlable.cpp */; };
 		23775B9820AD666900E21AB0 /* Crawlable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B5120AD666900E21AB0 /* Crawlable.hpp */; };
 		23775BCD20AD72BC00E21AB0 /* Data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775BCB20AD72BC00E21AB0 /* Data.cpp */; };
-		23775BCF20AD72BC00E21AB0 /* Data.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775BCC20AD72BC00E21AB0 /* Data.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		23775BCF20AD72BC00E21AB0 /* Data.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775BCC20AD72BC00E21AB0 /* Data.hpp */; };
 		23776CA4218C41DD00E985DC /* WCTChainCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23776CA3218C41DD00E985DC /* WCTChainCall.mm */; };
 		23776CA7218C41E600E985DC /* WCTChainCall+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 23776CA5218C41E600E985DC /* WCTChainCall+Private.h */; };
 		237908F721928C9F0098797F /* WCTObjCAccessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 237908F621928C9F0098797F /* WCTObjCAccessor.mm */; };
