@@ -401,6 +401,35 @@ NS_ASSUME_NONNULL_BEGIN
                                 orders:(const WCDB::OrderingTerms &)orders
                                 offset:(const WCDB::Expression &)offset;
 
+#pragma mark - Get Row
+- (nullable WCTOneRow *)getRowOnResultColumns:(const WCDB::ResultColumns&)resultColumns;
+
+- (nullable WCTOneRow *)getRowOnResultColumns:(const WCDB::ResultColumns&)resultColumns
+                                        where:(const WCDB::Expression &)condition;
+
+- (nullable WCTOneRow *)getRowOnResultColumns:(const WCDB::ResultColumns&)resultColumns
+                                       orders:(const WCDB::OrderingTerms &)orders;
+
+- (nullable WCTOneRow *)getRowOnResultColumns:(const WCDB::ResultColumns&)resultColumns
+                                       offset:(const WCDB::Expression &)offset;
+
+- (nullable WCTOneRow *)getRowOnResultColumns:(const WCDB::ResultColumns&)resultColumns
+                                        where:(const WCDB::Expression &)condition
+                                       orders:(const WCDB::OrderingTerms &)orders;
+
+- (nullable WCTOneRow *)getRowOnResultColumns:(const WCDB::ResultColumns&)resultColumns
+                                        where:(const WCDB::Expression &)condition
+                                       offset:(const WCDB::Expression &)offset;
+
+- (nullable WCTOneRow *)getRowOnResultColumns:(const WCDB::ResultColumns&)resultColumns
+                                       orders:(const WCDB::OrderingTerms &)orders
+                                       offset:(const WCDB::Expression &)offset;
+
+- (nullable WCTOneRow *)getRowOnResultColumns:(const WCDB::ResultColumns&)resultColumns
+                                        where:(const WCDB::Expression &)condition
+                                       orders:(const WCDB::OrderingTerms &)orders
+                                       offset:(const WCDB::Expression &)offset;
+
 @end
 
 NS_ASSUME_NONNULL_END
