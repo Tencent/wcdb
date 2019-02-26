@@ -159,6 +159,8 @@
 		234E6F6121996EB600D006F2 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		234EF46E2015CFDE00B81929 /* WCTConvertible.h in Headers */ = {isa = PBXBuildFile; fileRef = 234EF46C2015CFDE00B81929 /* WCTConvertible.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234EF46F2015CFDE00B81929 /* WCTConvertible.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234EF46D2015CFDE00B81929 /* WCTConvertible.mm */; };
+		23545B992224E8270091C981 /* SyntaxAssertion.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23545B962224E8270091C981 /* SyntaxAssertion.hpp */; };
+		23545B9A2224E8270091C981 /* SyntaxAssertion.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23545B962224E8270091C981 /* SyntaxAssertion.hpp */; };
 		23567CFA20CA3889005F1C35 /* Frame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23567CF820CA3889005F1C35 /* Frame.cpp */; };
 		23567CFC20CA3889005F1C35 /* Frame.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567CF920CA3889005F1C35 /* Frame.hpp */; };
 		23567D4720CA7DBC005F1C35 /* ErrorProne.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567D4520CA7DBC005F1C35 /* ErrorProne.hpp */; };
@@ -2009,6 +2011,7 @@
 		234E6F6621996EB600D006F2 /* Advance.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Advance.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		234EF46C2015CFDE00B81929 /* WCTConvertible.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTConvertible.h; sourceTree = "<group>"; };
 		234EF46D2015CFDE00B81929 /* WCTConvertible.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTConvertible.mm; sourceTree = "<group>"; };
+		23545B962224E8270091C981 /* SyntaxAssertion.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SyntaxAssertion.hpp; sourceTree = "<group>"; };
 		23567CF820CA3889005F1C35 /* Frame.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Frame.cpp; sourceTree = "<group>"; };
 		23567CF920CA3889005F1C35 /* Frame.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Frame.hpp; sourceTree = "<group>"; };
 		23567D4520CA7DBC005F1C35 /* ErrorProne.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ErrorProne.hpp; sourceTree = "<group>"; };
@@ -4219,6 +4222,7 @@
 		23EEDBEC217DFADC006E9E73 /* syntax */ = {
 			isa = PBXGroup;
 			children = (
+				23545B962224E8270091C981 /* SyntaxAssertion.hpp */,
 				23EEDBED217DFADC006E9E73 /* const */,
 				23EEDBF3217DFADC006E9E73 /* identifier */,
 				23EEDC30217DFADC006E9E73 /* stmt */,
@@ -4605,6 +4609,7 @@
 				2367BC6C2215004300380122 /* Locker.hpp in Headers */,
 				2367BC6D2215004300380122 /* JoinConstraint.hpp in Headers */,
 				2367BC6E2215004300380122 /* SyntaxReleaseSTMT.hpp in Headers */,
+				23545B9A2224E8270091C981 /* SyntaxAssertion.hpp in Headers */,
 				2367BC6F2215004300380122 /* Serialization.hpp in Headers */,
 				2367BC702215004300380122 /* WCTIndexMacro.h in Headers */,
 				2367BC712215004300380122 /* SyntaxColumn.hpp in Headers */,
@@ -4854,6 +4859,7 @@
 				237A8D6021EDBB2E003AF5BB /* BusyRetryConfig.hpp in Headers */,
 				23A6D4C120BFD7F9004F2DAA /* Progress.hpp in Headers */,
 				23EEDCFE217DFADC006E9E73 /* SyntaxForeignKeyClause.hpp in Headers */,
+				23545B992224E8270091C981 /* SyntaxAssertion.hpp in Headers */,
 				23EEDD1E217DFADC006E9E73 /* SyntaxSelectCore.hpp in Headers */,
 				23EEDD20217DFADC006E9E73 /* SyntaxTableConstraint.hpp in Headers */,
 				23F1698A20B6638F009B5C47 /* ThreadedErrors.hpp in Headers */,

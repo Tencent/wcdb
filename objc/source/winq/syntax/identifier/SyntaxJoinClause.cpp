@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
+#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
 
 namespace WCDB {
@@ -39,7 +39,7 @@ String JoinClause::getDescription() const
     if (++tableOrSubquery != tableOrSubqueries.end()) {
         auto joinOperator = joinOperators.begin();
         auto joinConstraint = joinConstraints.begin();
-        SyntaxRemedialAssert(std::distance(tableOrSubquery, tableOrSubqueries.end())
+        WCTSyntaxRemedialAssert(std::distance(tableOrSubquery, tableOrSubqueries.end())
                              == std::distance(joinOperator, joinOperators.end()));
         while (joinOperator != joinOperators.end()
                && tableOrSubquery != tableOrSubqueries.end()
@@ -67,7 +67,7 @@ void JoinClause::iterate(const Iterator& iterator, bool& stop)
     if (++tableOrSubquery != tableOrSubqueries.end()) {
         auto joinOperator = joinOperators.begin();
         auto joinConstraint = joinConstraints.begin();
-        IterateRemedialAssert(std::distance(tableOrSubquery, tableOrSubqueries.end())
+        WCTIterateRemedialAssert(std::distance(tableOrSubquery, tableOrSubqueries.end())
                               == std::distance(joinOperator, joinOperators.end()));
         while (joinOperator != joinOperators.end()
                && tableOrSubquery != tableOrSubqueries.end()

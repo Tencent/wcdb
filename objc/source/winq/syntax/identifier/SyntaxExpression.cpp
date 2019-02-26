@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
+#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Enum.hpp>
 #include <WCDB/Syntax.h>
 
@@ -159,7 +159,7 @@ String Expression::getDescription() const
         stream << column;
         break;
     case Switch::UnaryOperation: {
-        SyntaxRemedialAssert(expressions.size() == 1);
+        WCTSyntaxRemedialAssert(expressions.size() == 1);
         switch (unaryOperator) {
         case UnaryOperator::Null:
             streamAutoParenthesesExpression(stream, *expressions.begin());
@@ -204,13 +204,13 @@ String Expression::getDescription() const
         case Syntax::Expression::BinaryOperator::NotEqual:
         case Syntax::Expression::BinaryOperator::And:
         case Syntax::Expression::BinaryOperator::Or:
-            SyntaxRemedialAssert(expressions.size() == 2);
+            WCTSyntaxRemedialAssert(expressions.size() == 2);
             streamAutoParenthesesExpression(stream, *expressions.begin());
             stream << space << binaryOperator << space;
             streamAutoParenthesesExpression(stream, *(++expressions.begin()));
             break;
         case Syntax::Expression::BinaryOperator::Is:
-            SyntaxRemedialAssert(expressions.size() == 2);
+            WCTSyntaxRemedialAssert(expressions.size() == 2);
             // Extra parentheses to ensure the correctness of operator precedence
             streamAutoParenthesesExpression(stream, *expressions.begin());
             stream << space << binaryOperator;
@@ -224,7 +224,7 @@ String Expression::getDescription() const
         case Syntax::Expression::BinaryOperator::GLOB:
         case Syntax::Expression::BinaryOperator::RegExp:
         case Syntax::Expression::BinaryOperator::Match: {
-            SyntaxRemedialAssert(expressions.size() == 2 + escape);
+            WCTSyntaxRemedialAssert(expressions.size() == 2 + escape);
             auto iter = expressions.begin();
             streamAutoParenthesesExpression(stream, *iter);
             if (isNot) {
@@ -256,16 +256,16 @@ String Expression::getDescription() const
         stream << "(" << expressions << ")";
         break;
     case Switch::Cast:
-        SyntaxRemedialAssert(expressions.size() == 1);
+        WCTSyntaxRemedialAssert(expressions.size() == 1);
         stream << "CAST(" << *expressions.begin() << " AS " << castType << ")";
         break;
     case Switch::Collate:
-        SyntaxRemedialAssert(expressions.size() == 1);
+        WCTSyntaxRemedialAssert(expressions.size() == 1);
         streamAutoParenthesesExpression(stream, *expressions.begin());
         stream << " COLLATE " << collation;
         break;
     case Switch::Between: {
-        SyntaxRemedialAssert(expressions.size() == 3);
+        WCTSyntaxRemedialAssert(expressions.size() == 3);
         auto iter = expressions.begin();
         streamAutoParenthesesExpression(stream, *iter);
         if (isNot) {
@@ -278,7 +278,7 @@ String Expression::getDescription() const
         break;
     }
     case Switch::In: {
-        SyntaxRemedialAssert(expressions.size() >= 1);
+        WCTSyntaxRemedialAssert(expressions.size() >= 1);
         auto iter = expressions.begin();
         stream << *iter;
         if (isNot) {
@@ -290,7 +290,7 @@ String Expression::getDescription() const
             stream << "()";
             break;
         case SwitchIn::Select:
-            SyntaxRemedialAssert(select != nullptr);
+            WCTSyntaxRemedialAssert(select != nullptr);
             stream << "(" << *select.get() << ")";
             break;
         case SwitchIn::Expressions: {
@@ -336,19 +336,19 @@ String Expression::getDescription() const
         break;
     }
     case Switch::Exists:
-        SyntaxRemedialAssert(select != nullptr);
+        WCTSyntaxRemedialAssert(select != nullptr);
         if (isNot) {
             stream << "NOT ";
         }
         stream << "EXISTS(" << *select.get() << ")";
         break;
     case Switch::Select:
-        SyntaxRemedialAssert(select != nullptr);
+        WCTSyntaxRemedialAssert(select != nullptr);
         stream << "(" << *select.get() << ")";
         break;
     case Switch::Case: {
-        SyntaxRemedialAssert(expressions.size() >= hasCase + 2 + hasElse);
-        SyntaxRemedialAssert((expressions.size() - hasCase - hasElse) % 2 == 0);
+        WCTSyntaxRemedialAssert(expressions.size() >= hasCase + 2 + hasElse);
+        WCTSyntaxRemedialAssert((expressions.size() - hasCase - hasElse) % 2 == 0);
         auto iter = expressions.begin();
         stream << "CASE ";
         if (hasCase) {
@@ -399,7 +399,7 @@ void Expression::iterate(const Iterator& iterator, bool& stop)
     // one expression
     case Switch::UnaryOperation:
     case Switch::Collate:
-        IterateRemedialAssert(expressions.size() == 1);
+        WCTIterateRemedialAssert(expressions.size() == 1);
         expressions.begin()->iterate(iterator, stop);
         break;
 
@@ -425,14 +425,14 @@ void Expression::iterate(const Iterator& iterator, bool& stop)
         case Syntax::Expression::BinaryOperator::Is:
         case Syntax::Expression::BinaryOperator::And:
         case Syntax::Expression::BinaryOperator::Or:
-            IterateRemedialAssert(expressions.size() == 2);
+            WCTIterateRemedialAssert(expressions.size() == 2);
             listIterate(expressions, iterator, stop);
             break;
         case Syntax::Expression::BinaryOperator::Like:
         case Syntax::Expression::BinaryOperator::GLOB:
         case Syntax::Expression::BinaryOperator::RegExp:
         case Syntax::Expression::BinaryOperator::Match: {
-            IterateRemedialAssert(expressions.size() == 2 + escape);
+            WCTIterateRemedialAssert(expressions.size() == 2 + escape);
             listIterate(expressions, iterator, stop);
             break;
         }
@@ -440,7 +440,7 @@ void Expression::iterate(const Iterator& iterator, bool& stop)
         break;
     // three expressions
     case Switch::Between: {
-        IterateRemedialAssert(expressions.size() == 3);
+        WCTIterateRemedialAssert(expressions.size() == 3);
         listIterate(expressions, iterator, stop);
         break;
     }
@@ -465,14 +465,14 @@ void Expression::iterate(const Iterator& iterator, bool& stop)
         recursiveIterate(column, iterator, stop);
         break;
     case Switch::In: {
-        IterateRemedialAssert(expressions.size() >= 1);
+        WCTIterateRemedialAssert(expressions.size() >= 1);
         auto iter = expressions.begin();
         iter->iterate(iterator, stop);
         switch (inSwitcher) {
         case SwitchIn::Empty:
             break;
         case SwitchIn::Select:
-            IterateRemedialAssert(select != nullptr);
+            WCTIterateRemedialAssert(select != nullptr);
             select->iterate(iterator, stop);
             break;
         case SwitchIn::Expressions: {
@@ -495,11 +495,11 @@ void Expression::iterate(const Iterator& iterator, bool& stop)
         break;
     }
     case Switch::Exists:
-        IterateRemedialAssert(select != nullptr);
+        WCTIterateRemedialAssert(select != nullptr);
         select->iterate(iterator, stop);
         break;
     case Switch::Select:
-        IterateRemedialAssert(select != nullptr);
+        WCTIterateRemedialAssert(select != nullptr);
         select->iterate(iterator, stop);
         break;
     case Switch::RaiseFunction:

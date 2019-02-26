@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
+#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
 
 namespace WCDB {
@@ -43,7 +43,7 @@ String UpdateSTMT::getDescription(bool skipSchema) const
     }
     stream << table.getDescription(skipSchema) << " SET ";
     if (!columnsList.empty()) {
-        SyntaxRemedialAssert(columnsList.size() == expressions.size());
+        WCTSyntaxRemedialAssert(columnsList.size() == expressions.size());
         auto columns = columnsList.begin();
         auto expression = expressions.begin();
         bool comma = false;
@@ -98,7 +98,7 @@ void UpdateSTMT::iterate(const Iterator& iterator, bool& stop)
     }
     recursiveIterate(table, iterator, stop);
     if (!columnsList.empty()) {
-        IterateRemedialAssert(columnsList.size() == expressions.size());
+        WCTIterateRemedialAssert(columnsList.size() == expressions.size());
         auto columns = columnsList.begin();
         auto expression = expressions.begin();
         while (columns != columnsList.end() && expression != expressions.end()) {

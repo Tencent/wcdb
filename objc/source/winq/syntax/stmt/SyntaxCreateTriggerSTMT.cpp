@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
+#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Enum.hpp>
 #include <WCDB/Syntax.h>
 
@@ -95,22 +95,22 @@ String CreateTriggerSTMT::getDescription() const
     for (const auto& stmt : stmts) {
         switch (stmt) {
         case STMT::Insert:
-            SyntaxRemedialAssert(insert != inserts.end());
+            WCTSyntaxRemedialAssert(insert != inserts.end());
             stream << insert->getDescription(true) << "; ";
             ++insert;
             break;
         case STMT::Update:
-            SyntaxRemedialAssert(update != updates.end());
+            WCTSyntaxRemedialAssert(update != updates.end());
             stream << update->getDescription(true) << "; ";
             ++update;
             break;
         case STMT::Delete:
-            SyntaxRemedialAssert(delete_ != deletes.end());
+            WCTSyntaxRemedialAssert(delete_ != deletes.end());
             stream << delete_->getDescription(true) << "; ";
             ++delete_;
             break;
         case STMT::Select:
-            SyntaxRemedialAssert(select != selects.end());
+            WCTSyntaxRemedialAssert(select != selects.end());
             stream << *select << "; ";
             ++select;
             break;
@@ -137,22 +137,22 @@ void CreateTriggerSTMT::iterate(const Iterator& iterator, bool& stop)
     for (const auto& stmt : stmts) {
         switch (stmt) {
         case STMT::Insert:
-            IterateRemedialAssert(insert != inserts.end());
+            WCTIterateRemedialAssert(insert != inserts.end());
             insert->iterate(iterator, stop);
             ++insert;
             break;
         case STMT::Update:
-            IterateRemedialAssert(update != updates.end());
+            WCTIterateRemedialAssert(update != updates.end());
             update->iterate(iterator, stop);
             ++update;
             break;
         case STMT::Delete:
-            IterateRemedialAssert(delete_ != deletes.end());
+            WCTIterateRemedialAssert(delete_ != deletes.end());
             delete_->iterate(iterator, stop);
             ++delete_;
             break;
         case STMT::Select:
-            IterateRemedialAssert(select != selects.end());
+            WCTIterateRemedialAssert(select != selects.end());
             select->iterate(iterator, stop);
             ++select;
             break;

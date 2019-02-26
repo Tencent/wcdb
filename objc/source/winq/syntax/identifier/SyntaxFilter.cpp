@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
+#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
 
 namespace WCDB {
@@ -34,7 +34,7 @@ Identifier::Type Filter::getType() const
 String Filter::getDescription() const
 {
     std::ostringstream stream;
-    SyntaxRemedialAssert(expression != nullptr);
+    WCTSyntaxRemedialAssert(expression != nullptr);
     stream << "FILTER(WHERE " << *expression << ")";
     return stream.str();
 }
@@ -42,7 +42,7 @@ String Filter::getDescription() const
 void Filter::iterate(const Iterator& iterator, bool& stop)
 {
     Identifier::iterate(iterator, stop);
-    IterateRemedialAssert(expression != nullptr);
+    WCTIterateRemedialAssert(expression != nullptr);
     expression->iterate(iterator, stop);
 }
 

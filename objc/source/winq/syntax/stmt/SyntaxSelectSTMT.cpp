@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
+#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
 
 namespace WCDB {
@@ -43,7 +43,7 @@ String SelectSTMT::getDescription() const
     }
     stream << select;
     if (!cores.empty()) {
-        SyntaxRemedialAssert(cores.size() == compoundOperators.size());
+        WCTSyntaxRemedialAssert(cores.size() == compoundOperators.size());
         auto core = cores.begin();
         auto compoundOperator = compoundOperators.begin();
         while (core != cores.end() && compoundOperator != compoundOperators.end()) {

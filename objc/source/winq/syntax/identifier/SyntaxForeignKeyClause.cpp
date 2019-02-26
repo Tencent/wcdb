@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
+#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Enum.hpp>
 #include <WCDB/Syntax.h>
 
@@ -92,7 +92,7 @@ String ForeignKeyClause::getDescription() const
     for (const auto& switcher : switchers) {
         stream << space << switcher;
         if (switcher == Switch::Match) {
-            SyntaxRemedialAssert(iter != matchings.end());
+            WCTSyntaxRemedialAssert(iter != matchings.end());
             stream << space << *iter;
             ++iter;
         }

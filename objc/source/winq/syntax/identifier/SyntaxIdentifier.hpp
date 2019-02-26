@@ -34,12 +34,6 @@
 #include <WCDB/SyntaxJoinOperator.hpp>
 #include <WCDB/SyntaxOrder.hpp>
 
-#define SyntaxRemedialAssert(cond)                                             \
-    WCTRemedialAssert(cond, "Invalid syntax detected.", return stream.str();)
-
-#define IterateRemedialAssert(cond)                                            \
-    WCTRemedialAssert(cond, "Invalid types detected.", return;)
-
 namespace WCDB {
 
 namespace Syntax {

@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
+#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Enum.hpp>
 #include <WCDB/Syntax.h>
 
@@ -54,7 +54,7 @@ String BindParameter::getDescription() const
     switch (switcher) {
     case Switch::QuestionSign:
         if (name.empty()) {
-            SyntaxRemedialAssert(n > 0);
+            WCTSyntaxRemedialAssert(n > 0);
             stream << n;
             break;
         }

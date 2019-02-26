@@ -18,39 +18,15 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
-#include <WCDB/Syntax.h>
+#ifndef __WCDB_SYNTAX_ASSERTION_HPP
+#define __WCDB_SYNTAX_ASSERTION_HPP
 
-namespace WCDB {
+#include <WCDB/Assertion.hpp>
 
-namespace Syntax {
+#define WCTSyntaxRemedialAssert(cond)                                             \
+WCTRemedialAssert(cond, "Invalid syntax detected.", return stream.str();)
 
-#pragma mark - Identifier
-Identifier::Type DropTriggerSTMT::getType() const
-{
-    return type;
-}
+#define WCTIterateRemedialAssert(cond)                                            \
+WCTRemedialAssert(cond, "Invalid types detected.", return;)
 
-String DropTriggerSTMT::getDescription() const
-{
-    std::ostringstream stream;
-    stream << "DROP TRIGGER ";
-    if (ifExists) {
-        stream << "IF EXISTS ";
-    }
-    if (!schema.empty()) {
-        stream << schema << ".";
-    }
-    stream << trigger;
-    return stream.str();
-}
-
-void DropTriggerSTMT::iterate(const Iterator& iterator, bool& stop)
-{
-    Identifier::iterate(iterator, stop);
-    recursiveIterate(schema, iterator, stop);
-}
-
-} // namespace Syntax
-
-} // namespace WCDB
+#endif /* __WCDB_SYNTAX_ASSERTION_HPP */

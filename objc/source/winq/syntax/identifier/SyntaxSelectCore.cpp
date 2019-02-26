@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
+#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
 
 namespace WCDB {
@@ -59,7 +59,7 @@ String SelectCore::getDescription() const
             }
         }
         if (!windows.empty()) {
-            SyntaxRemedialAssert(windows.size() == windowDefs.size());
+            WCTSyntaxRemedialAssert(windows.size() == windowDefs.size());
             stream << " WINDOW ";
             auto window = windows.begin();
             auto windowDef = windowDefs.begin();
@@ -115,7 +115,7 @@ void SelectCore::iterate(const Iterator& iterator, bool& stop)
             }
         }
         if (!windows.empty()) {
-            IterateRemedialAssert(windows.size() == windowDefs.size());
+            WCTIterateRemedialAssert(windows.size() == windowDefs.size());
             listIterate(windowDefs, iterator, stop);
         }
         break;

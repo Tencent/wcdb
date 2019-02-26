@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/Assertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 
 namespace WCDB {
 
@@ -34,7 +34,7 @@ Identifier::Type WithClause::getType() const
 String WithClause::getDescription() const
 {
     std::ostringstream stream;
-    SyntaxRemedialAssert(tables.size() == selects.size());
+    WCTSyntaxRemedialAssert(tables.size() == selects.size());
     stream << "WITH ";
     if (recursive) {
         stream << "RECURSIVE ";
