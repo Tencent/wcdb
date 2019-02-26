@@ -44,7 +44,8 @@
 
 - (void)test_default_constructible
 {
-    WCDB::StatementCreateVirtualTable constructible __attribute((unused));
+    WCDB::StatementCreateVirtualTable constructible;
+    TestCaseAssertTrue(constructible.getDescription().empty());
 }
 
 - (void)test_get_type

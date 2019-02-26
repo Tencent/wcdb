@@ -48,7 +48,8 @@
 
 - (void)test_default_constructible
 {
-    WCDB::StatementCreateTable constructible __attribute((unused));
+    WCDB::StatementCreateTable constructible;
+    TestCaseAssertTrue(constructible.getDescription().empty());
 }
 
 - (void)test_get_type

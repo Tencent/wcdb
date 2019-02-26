@@ -44,7 +44,8 @@
 
 - (void)test_default_constructible
 {
-    WCDB::Join constructible __attribute((unused));
+    WCDB::Join constructible;
+    TestCaseAssertTrue(constructible.getDescription().empty());
 }
 
 - (void)test_get_type

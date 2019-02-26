@@ -46,7 +46,8 @@
 
 - (void)test_default_constructible
 {
-    WCDB::WindowDef constructible __attribute((unused));
+    WCDB::WindowDef constructible;
+    TestCaseAssertTrue(constructible.getDescription().empty());
 }
 
 - (void)test_get_type

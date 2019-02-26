@@ -38,7 +38,8 @@
 
 - (void)test_default_constructible
 {
-    WCDB::StatementDropTrigger constructible __attribute((unused));
+    WCDB::StatementDropTrigger constructible;
+    TestCaseAssertTrue(constructible.getDescription().empty());
 }
 
 - (void)test_get_type

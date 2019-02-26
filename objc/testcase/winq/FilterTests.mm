@@ -36,7 +36,8 @@
 
 - (void)test_default_constructible
 {
-    WCDB::Filter constructible __attribute((unused));
+    WCDB::Filter constructible;
+    TestCaseAssertTrue(constructible.getDescription().empty());
 }
 
 - (void)test_get_type

@@ -40,7 +40,8 @@
 
 - (void)test_default_constructible
 {
-    WCDB::CTETable constructible __attribute((unused));
+    WCDB::CTETable constructible;
+    TestCaseAssertTrue(constructible.getDescription().empty());
 }
 
 - (void)test_get_type

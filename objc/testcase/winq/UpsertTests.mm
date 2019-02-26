@@ -53,7 +53,8 @@
 
 - (void)test_default_constructible
 {
-    WCDB::Upsert constructible __attribute((unused));
+    WCDB::Upsert constructible;
+    TestCaseAssertTrue(constructible.getDescription().empty());
 }
 
 - (void)test_get_type

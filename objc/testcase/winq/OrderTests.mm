@@ -34,7 +34,7 @@
 
 - (void)test_default_constructible
 {
-    WCDB::Order constructible __attribute((unused));
+    WCDB::Order constructible __attribute__((unused));
 }
 
 - (void)test

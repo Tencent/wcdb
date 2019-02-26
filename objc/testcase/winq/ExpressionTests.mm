@@ -77,7 +77,8 @@
 
 - (void)test_default_constructible
 {
-    WCDB::Expression constructible __attribute((unused));
+    WCDB::Expression constructible;
+    TestCaseAssertTrue(constructible.getDescription().empty());
 }
 
 - (void)test_get_type

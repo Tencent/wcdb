@@ -38,7 +38,8 @@
 
 - (void)test_default_constructible
 {
-    WCDB::FrameSpec constructible __attribute((unused));
+    WCDB::FrameSpec constructible;
+    TestCaseAssertTrue(constructible.getDescription().empty());
 }
 
 - (void)test_get_type

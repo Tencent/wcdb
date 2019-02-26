@@ -36,7 +36,8 @@
 
 - (void)test_default_constructible
 {
-    WCDB::BindParameter constructible __attribute((unused));
+    WCDB::BindParameter constructible;
+    TestCaseAssertTrue(constructible.getDescription().empty());
 }
 
 - (void)test_get_type

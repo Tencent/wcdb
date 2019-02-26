@@ -36,7 +36,8 @@
 
 - (void)test_default_constructible
 {
-    WCDB::StatementRollback constructible __attribute((unused));
+    WCDB::StatementRollback constructible;
+    TestCaseAssertTrue(constructible.getDescription().empty());
 }
 
 - (void)test_get_type

@@ -34,7 +34,8 @@
 
 - (void)test_default_constructible
 {
-    WCDB::Column constructible __attribute((unused));
+    WCDB::Column constructible;
+    TestCaseAssertTrue(constructible.getDescription().empty());
 }
 
 - (void)test_get_type

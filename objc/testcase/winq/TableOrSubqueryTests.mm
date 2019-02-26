@@ -62,7 +62,8 @@
 
 - (void)test_default_constructible
 {
-    WCDB::TableOrSubquery constructible __attribute((unused));
+    WCDB::TableOrSubquery constructible;
+    TestCaseAssertTrue(constructible.getDescription().empty());
 }
 
 - (void)test_get_type

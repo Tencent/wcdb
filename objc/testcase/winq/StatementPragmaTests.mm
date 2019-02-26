@@ -40,7 +40,8 @@
 
 - (void)test_default_constructible
 {
-    WCDB::StatementPragma constructible __attribute((unused));
+    WCDB::StatementPragma constructible;
+    TestCaseAssertTrue(constructible.getDescription().empty());
 }
 
 - (void)test_get_type

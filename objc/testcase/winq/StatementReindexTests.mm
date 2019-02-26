@@ -42,7 +42,8 @@
 
 - (void)test_default_constructible
 {
-    WCDB::StatementReindex constructible __attribute((unused));
+    WCDB::StatementReindex constructible;
+    TestCaseAssertTrue(constructible.getDescription().empty());
 }
 
 - (void)test_get_type

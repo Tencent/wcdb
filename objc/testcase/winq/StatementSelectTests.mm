@@ -94,7 +94,8 @@
 
 - (void)test_default_constructible
 {
-    WCDB::StatementSelect constructible __attribute((unused));
+    WCDB::StatementSelect constructible;
+    TestCaseAssertTrue(constructible.getDescription().empty());
 }
 
 - (void)test_get_type

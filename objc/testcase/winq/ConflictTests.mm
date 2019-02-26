@@ -34,7 +34,7 @@
 
 - (void)test_default_constructible
 {
-    WCDB::Conflict constructible __attribute((unused));
+    WCDB::Conflict constructible __attribute__((unused));
 }
 
 - (void)test_conflict

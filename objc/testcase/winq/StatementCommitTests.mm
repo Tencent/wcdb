@@ -34,7 +34,8 @@
 
 - (void)test_default_constructible
 {
-    WCDB::StatementCommit constructible __attribute((unused));
+    WCDB::StatementCommit constructible;
+    TestCaseAssertTrue(constructible.getDescription().empty());
 }
 
 - (void)test_get_type

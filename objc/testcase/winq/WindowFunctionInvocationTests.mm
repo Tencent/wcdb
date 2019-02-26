@@ -51,7 +51,8 @@
 
 - (void)test_default_constructible
 {
-    WCDB::WindowFunctionInvocation constructible __attribute((unused));
+    WCDB::WindowFunctionInvocation constructible;
+    TestCaseAssertTrue(constructible.getDescription().empty());
 }
 
 - (void)test_get_type

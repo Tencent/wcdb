@@ -36,7 +36,8 @@
 
 - (void)test_default_constructible
 {
-    WCDB::StatementSavepoint constructible __attribute((unused));
+    WCDB::StatementSavepoint constructible;
+    TestCaseAssertTrue(constructible.getDescription().empty());
 }
 
 - (void)test_get_type

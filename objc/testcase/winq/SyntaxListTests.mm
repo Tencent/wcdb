@@ -34,7 +34,8 @@
 
 - (void)test_default_constructible
 {
-    WCDB::SyntaxList<WCDB::Expression> constructible __attribute((unused));
+    WCDB::SyntaxList<WCDB::Expression> constructible;
+    TestCaseAssertTrue(constructible.getDescription().empty());
 }
 
 WCDB::SyntaxList<WCDB::Expression> acceptable(const WCDB::SyntaxList<WCDB::Expression>& expressions)
