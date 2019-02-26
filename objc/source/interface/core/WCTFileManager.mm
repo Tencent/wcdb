@@ -22,6 +22,7 @@
 #import <WCDB/Notifier.hpp>
 #import <WCDB/ThreadedErrors.hpp>
 #import <WCDB/WCTCommon.h>
+#import <WCDB/Enum.hpp>
 
 namespace WCDB {
 
