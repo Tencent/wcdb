@@ -80,5 +80,4 @@ typedef int32_t WCTTag;
 static constexpr WCTTag const WCTInvalidTag = 0;
 
 #pragma mark - Migration
-@class WCTMigrationDatabase;
 @class WCTMigrationInfo;
