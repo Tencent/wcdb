@@ -26,13 +26,18 @@ namespace WCDB {
 
 namespace Syntax {
 
+    bool UpdateSTMT::isValid() const 
+    {
+        return table.isValid();
+    }
+
 #pragma mark - Identifier
 Identifier::Type UpdateSTMT::getType() const
 {
     return type;
 }
 
-String UpdateSTMT::getDescription(bool skipSchema) const
+String UpdateSTMT::getValidDescription(bool skipSchema) const
 {
     std::ostringstream stream;
     if (useWithClause) {
@@ -42,7 +47,7 @@ String UpdateSTMT::getDescription(bool skipSchema) const
     if (useConflictAction) {
         stream << conflictAction << space;
     }
-    stream << table.getDescription(skipSchema) << " SET ";
+    stream << table.getValidDescription(skipSchema) << " SET ";
     if (!columnsList.empty()) {
         WCTSyntaxRemedialAssert(columnsList.size() == expressions.size());
         auto columns = columnsList.begin();
@@ -86,9 +91,9 @@ String UpdateSTMT::getDescription(bool skipSchema) const
     return stream.str();
 }
 
-String UpdateSTMT::getDescription() const
+String UpdateSTMT::getValidDescription() const
 {
-    return getDescription(false);
+    return getValidDescription(false);
 }
 
 void UpdateSTMT::iterate(const Iterator& iterator, bool& stop)

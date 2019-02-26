@@ -37,6 +37,11 @@ Enum::description(const Syntax::RecursiveCTE::Combination& combination)
 }
 
 namespace Syntax {
+    
+    bool RecursiveCTE::isValid() const 
+    {
+        return table.isValid();
+    }
 
 #pragma mark - Identifier
 Identifier::Type RecursiveCTE::getType() const
@@ -44,7 +49,7 @@ Identifier::Type RecursiveCTE::getType() const
     return type;
 }
 
-String RecursiveCTE::getDescription() const
+String RecursiveCTE::getValidDescription() const
 {
     std::ostringstream stream;
     stream << table << " AS(" << initialSelect << space << combination << space

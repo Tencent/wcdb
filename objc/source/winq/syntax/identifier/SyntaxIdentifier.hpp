@@ -21,13 +21,30 @@
 #ifndef __WCDB_SYNTAX_IDENTIFIER_HPP
 #define __WCDB_SYNTAX_IDENTIFIER_HPP
 
+#include <WCDB/Macro.hpp>
 #include <WCDB/Shadow.hpp>
 #include <WCDB/String.hpp>
 #include <functional>
 #include <list>
 #include <sstream>
-
 #include <WCDB/SyntaxCommonConst.hpp>
+
+#define __WCDB_SYNTAX_UNION(Type, name)\
+static_assert(sizeof(Type) == sizeof(int), "");\
+union {\
+    Type name;\
+    int valid = -1;\
+};\
+bool isValid() const override final { return valid >= 0; }
+
+#define WCDB_SYNTAX_ENUM(Type, name, ...)\
+enum class Type {\
+    WCDB_FIRST_ARG(__VA_ARGS__) = 1,\
+    WCDB_NON_FIRST_ARGS(__VA_ARGS__)\
+};\
+__WCDB_SYNTAX_UNION(Type, name)
+
+#define WCDB_DEFAULT_SYNTAX_ENUM(...) WCDB_SYNTAX_ENUM(Switch, switcher, __VA_ARGS__)
 
 namespace WCDB {
 
@@ -96,11 +113,15 @@ public:
     };
     virtual Type getType() const = 0;
 
-    virtual String getDescription() const = 0;
+    String getDescription() const;
 
     Identifier* clone() const override final;
+    
+    virtual bool isValid() const = 0;
+protected:
+    virtual String getValidDescription() const = 0;
 
-    // Iterable
+#pragma mark - Iterable
 public:
     typedef std::function<void(Identifier&, bool& stop)> Iterator;
     void iterate(const Iterator& iterator);

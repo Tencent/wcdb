@@ -30,14 +30,14 @@ namespace Syntax {
 class VacuumSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    bool specifySchema = false;
+    WCDB_DEFAULT_SYNTAX_ENUM(All, Schema);
     Schema schema;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::VacuumSTMT;
     Type getType() const override final;
-    String getDescription() const override final;
+    String getValidDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

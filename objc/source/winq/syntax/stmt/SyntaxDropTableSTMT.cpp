@@ -24,6 +24,11 @@
 namespace WCDB {
 
 namespace Syntax {
+    
+    bool DropTableSTMT::isValid() const 
+    {
+        return !table.empty();
+    }
 
 #pragma mark - Identifier
 Identifier::Type DropTableSTMT::getType() const
@@ -31,7 +36,7 @@ Identifier::Type DropTableSTMT::getType() const
     return type;
 }
 
-String DropTableSTMT::getDescription() const
+String DropTableSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "DROP TABLE ";

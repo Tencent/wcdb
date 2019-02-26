@@ -30,20 +30,20 @@ namespace Syntax {
 class BindParameter final : public Identifier {
 #pragma mark - Lang
 public:
-    enum class Switch {
+    WCDB_DEFAULT_SYNTAX_ENUM(
         QuestionSign,
         ColonSign,
         DollarSign,
         AtSign,
-    } switcher;
+    );
     int n;
-    String name;
+    String name;    
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::BindParameter;
     Type getType() const override final;
-    String getDescription() const override final;
+    String getValidDescription() const override final;
 };
 
 } // namespace Syntax

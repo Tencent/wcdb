@@ -32,7 +32,7 @@ Identifier::Type InsertSTMT::getType() const
     return type;
 }
 
-String InsertSTMT::getDescription(bool skipSchema) const
+String InsertSTMT::getValidDescription(bool skipSchema) const
 {
     std::ostringstream stream;
     if (useWithClause) {
@@ -54,8 +54,8 @@ String InsertSTMT::getDescription(bool skipSchema) const
         stream << "(" << columns << ")";
     }
     stream << space;
-    switch (valueSwitcher) {
-    case SwitchValue::Values: {
+    switch (switcher) {
+    case Switch::Values: {
         stream << "VALUES";
         bool comma = false;
         for (const auto& expressionsValue : expressionsValues) {
@@ -68,10 +68,10 @@ String InsertSTMT::getDescription(bool skipSchema) const
         }
         break;
     }
-    case SwitchValue::Select:
+    case Switch::Select:
         stream << select;
         break;
-    case SwitchValue::Default:
+    case Switch::Default:
         stream << "DEFAULT VALUES";
         break;
     }
@@ -81,9 +81,9 @@ String InsertSTMT::getDescription(bool skipSchema) const
     return stream.str();
 }
 
-String InsertSTMT::getDescription() const
+String InsertSTMT::getValidDescription() const
 {
-    return getDescription(false);
+    return getValidDescription(false);
 }
 
 void InsertSTMT::iterate(const Iterator& iterator, bool& stop)
@@ -94,17 +94,17 @@ void InsertSTMT::iterate(const Iterator& iterator, bool& stop)
     }
     recursiveIterate(schema, iterator, stop);
     listIterate(columns, iterator, stop);
-    switch (valueSwitcher) {
-    case SwitchValue::Values: {
+    switch (switcher) {
+    case Switch::Values: {
         for (auto& expressionsValue : expressionsValues) {
             listIterate(expressionsValue, iterator, stop);
         }
         break;
     }
-    case SwitchValue::Select:
+    case Switch::Select:
         recursiveIterate(select, iterator, stop);
         break;
-    case SwitchValue::Default:
+    case Switch::Default:
         break;
     }
     if (useUpsertClause) {

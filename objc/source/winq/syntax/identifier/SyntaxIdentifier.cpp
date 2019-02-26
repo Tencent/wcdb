@@ -28,11 +28,21 @@ namespace Syntax {
 Identifier::~Identifier()
 {
 }
+    
+String Identifier::getDescription() const
+{
+    if (isValid()) {
+        return getValidDescription();
+    }
+    return String::null();
+}
 
 void Identifier::iterate(const Iterator &iterator)
 {
-    bool stop = false;
-    iterate(iterator, stop);
+    if (isValid()) {
+        bool stop = false;
+        iterate(iterator, stop);
+    }
 }
 
 void Identifier::recursiveIterate(Identifier &identifier, const Iterator &iterator, bool &stop)

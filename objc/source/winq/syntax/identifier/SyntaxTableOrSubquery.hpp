@@ -31,13 +31,13 @@ namespace Syntax {
 class TableOrSubquery final : public Identifier {
 #pragma mark - Lang
 public:
-    enum class Switch {
+    WCDB_DEFAULT_SYNTAX_ENUM(
         Table,
         Function,
         TableOrSubqueries,
         JoinClause,
         Select,
-    } switcher;
+    );
 
     Schema schema;
     String tableOrFunction;
@@ -58,7 +58,7 @@ public:
 public:
     static constexpr const Type type = Type::TableOrSubquery;
     Type getType() const override final;
-    String getDescription() const override final;
+    String getValidDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

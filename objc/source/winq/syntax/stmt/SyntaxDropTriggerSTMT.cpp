@@ -24,6 +24,11 @@
 namespace WCDB {
 
 namespace Syntax {
+    
+    bool DropTriggerSTMT::isValid() const 
+    {
+        return !trigger.empty();
+    }
 
 #pragma mark - Identifier
 Identifier::Type DropTriggerSTMT::getType() const
@@ -31,7 +36,7 @@ Identifier::Type DropTriggerSTMT::getType() const
     return type;
 }
 
-String DropTriggerSTMT::getDescription() const
+String DropTriggerSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "DROP TRIGGER ";

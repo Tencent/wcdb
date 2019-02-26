@@ -24,12 +24,14 @@ namespace WCDB {
 
 StatementRollback& StatementRollback::rollback()
 {
+    syntax().switcher = Syntax::RollbackSTMT::Switch::Transaction;
     syntax().savepoint.clear();
     return *this;
 }
 
 StatementRollback& StatementRollback::rollbackToSavepoint(const String& savepoint)
 {
+    syntax().switcher = Syntax::RollbackSTMT::Switch::Savepoint;
     syntax().savepoint = savepoint;
     return *this;
 }

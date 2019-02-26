@@ -31,7 +31,7 @@ Identifier::Type UpsertClause::getType() const
     return type;
 }
 
-String UpsertClause::getDescription() const
+String UpsertClause::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "ON CONFLICT";
@@ -42,32 +42,36 @@ String UpsertClause::getDescription() const
         }
     }
     stream << " DO ";
-    if (!columnsList.empty()) {
-        WCTSyntaxRemedialAssert(columnsList.size() == expressions.size());
-        stream << "UPDATE SET ";
-        auto columns = columnsList.begin();
-        auto expression = expressions.begin();
-        bool comma = false;
-        while (columns != columnsList.end() && expression != expressions.end()) {
-            if (comma) {
-                stream << ", ";
-            } else {
-                comma = true;
+    switch (switcher) {
+        case Switch::Nothing:
+            stream << "NOTHING";
+            break;
+        case Switch::Update: {
+            WCTSyntaxRemedialAssert(columnsList.size() == expressions.size());
+            stream << "UPDATE SET ";
+            auto columns = columnsList.begin();
+            auto expression = expressions.begin();
+            bool comma = false;
+            while (columns != columnsList.end() && expression != expressions.end()) {
+                if (comma) {
+                    stream << ", ";
+                } else {
+                    comma = true;
+                }
+                if (columns->size() > 1) {
+                    stream << "(" << *columns << ")";
+                } else {
+                    stream << *columns;
+                }
+                stream << " = " << *expression;
+                ++columns;
+                ++expression;
             }
-            if (columns->size() > 1) {
-                stream << "(" << *columns << ")";
-            } else {
-                stream << *columns;
+            if (useUpdateCondition) {
+                stream << " WHERE " << updateCondition;
             }
-            stream << " = " << *expression;
-            ++columns;
-            ++expression;
         }
-        if (useUpdateCondition) {
-            stream << " WHERE " << updateCondition;
-        }
-    } else {
-        stream << "NOTHING";
+            break;
     }
     return stream.str();
 }

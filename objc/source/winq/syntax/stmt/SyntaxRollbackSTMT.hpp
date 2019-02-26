@@ -30,13 +30,14 @@ namespace Syntax {
 class RollbackSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    WCDB_DEFAULT_SYNTAX_ENUM(Transaction, Savepoint);
     String savepoint;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::RollbackSTMT;
     Type getType() const override final;
-    String getDescription() const override final;
+    String getValidDescription() const override final;
 };
 
 } // namespace Syntax

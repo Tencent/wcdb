@@ -24,6 +24,11 @@
 namespace WCDB {
 
 namespace Syntax {
+    
+    bool Pragma::isValid() const 
+    {
+        return !name.empty();
+    }
 
 #pragma mark - Identifier
 Identifier::Type Pragma::getType() const
@@ -31,7 +36,7 @@ Identifier::Type Pragma::getType() const
     return type;
 }
 
-String Pragma::getDescription() const
+String Pragma::getValidDescription() const
 {
     return name;
 }

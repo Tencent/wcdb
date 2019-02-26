@@ -47,6 +47,7 @@ Upsert& Upsert::where(const Expression& condition)
 
 Upsert& Upsert::doNothing()
 {
+    syntax().switcher = Syntax::UpsertClause::Switch::Nothing;
     syntax().columnsList.clear();
     syntax().expressions.clear();
     return *this;
@@ -54,6 +55,7 @@ Upsert& Upsert::doNothing()
 
 Upsert& Upsert::doUpdate()
 {
+    syntax().switcher = Syntax::UpsertClause::Switch::Update;
     syntax().columnsList.clear();
     syntax().expressions.clear();
     return *this;

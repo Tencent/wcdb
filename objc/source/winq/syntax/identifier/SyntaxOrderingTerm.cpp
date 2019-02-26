@@ -25,6 +25,11 @@
 namespace WCDB {
 
 namespace Syntax {
+    
+    bool OrderingTerm::isValid() const 
+    {
+        return expression.isValid();
+    }
 
 #pragma mark - Identifier
 Identifier::Type OrderingTerm::getType() const
@@ -32,7 +37,7 @@ Identifier::Type OrderingTerm::getType() const
     return type;
 }
 
-String OrderingTerm::getDescription() const
+String OrderingTerm::getValidDescription() const
 {
     std::ostringstream stream;
     stream << expression;

@@ -73,7 +73,7 @@ Identifier::Type FrameSpec::getType() const
     return type;
 }
 
-String FrameSpec::getDescription() const
+String FrameSpec::getValidDescription() const
 {
     std::ostringstream stream;
     stream << switcher << space;

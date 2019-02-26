@@ -25,14 +25,14 @@
 namespace WCDB {
 
 template<>
-constexpr const char* Enum::description(const Syntax::BeginSTMT::Transaction& transaction)
+constexpr const char* Enum::description(const Syntax::BeginSTMT::Switch& switcher)
 {
-    switch (transaction) {
-    case Syntax::BeginSTMT::Transaction::Deferred:
+    switch (switcher) {
+    case Syntax::BeginSTMT::Switch::Deferred:
         return "DEFERRED";
-    case Syntax::BeginSTMT::Transaction::Immediate:
+    case Syntax::BeginSTMT::Switch::Immediate:
         return "IMMEDIATE";
-    case Syntax::BeginSTMT::Transaction::Exclusive:
+    case Syntax::BeginSTMT::Switch::Exclusive:
         return "EXCLUSIVE";
     }
 }
@@ -45,10 +45,10 @@ Identifier::Type BeginSTMT::getType() const
     return type;
 }
 
-String BeginSTMT::getDescription() const
+String BeginSTMT::getValidDescription() const
 {
     std::ostringstream stream;
-    stream << "BEGIN " << transaction;
+    stream << "BEGIN " << switcher;
     return stream.str();
 }
 

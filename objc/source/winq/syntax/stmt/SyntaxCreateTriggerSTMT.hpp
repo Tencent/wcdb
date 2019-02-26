@@ -67,12 +67,14 @@ public:
     std::list<SelectSTMT> selects;
     std::list<UpdateSTMT> updates;
     std::list<DeleteSTMT> deletes;
+    
+    bool isValid() const override final;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::CreateTriggerSTMT;
     Type getType() const override final;
-    String getDescription() const override final;
+    String getValidDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

@@ -24,6 +24,11 @@
 namespace WCDB {
 
 namespace Syntax {
+    
+    bool PragmaSTMT::isValid() const 
+    {
+        return pragma.isValid();
+    }
 
 #pragma mark - Identifier
 Identifier::Type PragmaSTMT::getType() const
@@ -31,7 +36,7 @@ Identifier::Type PragmaSTMT::getType() const
     return type;
 }
 
-String PragmaSTMT::getDescription() const
+String PragmaSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "PRAGMA ";

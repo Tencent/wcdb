@@ -24,6 +24,11 @@
 namespace WCDB {
 
 namespace Syntax {
+    
+    bool DetachSTMT::isValid() const 
+    {
+        return schema.isValid() && !schema.isMain();
+    }
 
 #pragma mark - Identifier
 Identifier::Type DetachSTMT::getType() const
@@ -31,7 +36,7 @@ Identifier::Type DetachSTMT::getType() const
     return type;
 }
 
-String DetachSTMT::getDescription() const
+String DetachSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "DETACH " << schema;

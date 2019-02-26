@@ -30,19 +30,19 @@ namespace Syntax {
 class RaiseFunction final : public Identifier {
 #pragma mark - Lang
 public:
-    enum class Switch {
+    WCDB_DEFAULT_SYNTAX_ENUM(
         Ignore,
         Rollback,
         Abort,
         Fail,
-    } switcher;
+    );
     String errorMessage;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::RaiseFunction;
     Type getType() const override final;
-    String getDescription() const override final;
+    String getValidDescription() const override final;
 };
 
 } // namespace Syntax

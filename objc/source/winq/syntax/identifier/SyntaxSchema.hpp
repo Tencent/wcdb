@@ -32,12 +32,14 @@ class Schema final : public Identifier {
 public:
     Schema();
     String name;
+    
+    bool isValid() const override final;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::Schema;
     Type getType() const override final;
-    String getDescription() const override final;
+    String getValidDescription() const override final;
 
 #pragma mark - Utility
 public:

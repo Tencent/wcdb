@@ -30,11 +30,14 @@ namespace Syntax {
 class CommitSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    bool inited = false;
+    bool isValid() const override final;
+
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::CommitSTMT;
     Type getType() const override final;
-    String getDescription() const override final;
+    String getValidDescription() const override final;
 };
 
 } // namespace Syntax

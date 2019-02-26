@@ -39,11 +39,11 @@ public:
     String alias;
     std::list<Column> columns;
 
-    enum class SwitchValue {
+    WCDB_DEFAULT_SYNTAX_ENUM(
         Values,
         Select,
         Default,
-    } valueSwitcher;
+    );
     std::list<std::list<Expression>> expressionsValues;
     SelectSTMT select;
 
@@ -54,8 +54,8 @@ public:
 public:
     static constexpr const Type type = Type::InsertSTMT;
     Type getType() const override final;
-    String getDescription() const override final;
-    String getDescription(bool skipSchema) const;
+    String getValidDescription() const override final;
+    String getValidDescription(bool skipSchema) const;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

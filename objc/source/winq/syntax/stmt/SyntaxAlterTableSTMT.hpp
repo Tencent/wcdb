@@ -33,11 +33,11 @@ public:
     Schema schema;
     String table;
 
-    enum class Switch {
+    WCDB_DEFAULT_SYNTAX_ENUM(
         RenameTable,
         RenameColumn,
         AddColumn,
-    } switcher;
+    );
     String newTable;
     Column column;
     Column newColumn;
@@ -47,7 +47,7 @@ public:
 public:
     static constexpr const Type type = Type::AlterTableSTMT;
     Type getType() const override final;
-    String getDescription() const override final;
+    String getValidDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

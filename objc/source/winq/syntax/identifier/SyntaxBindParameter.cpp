@@ -40,14 +40,14 @@ constexpr const char* Enum::description(const Syntax::BindParameter::Switch& swi
 }
 
 namespace Syntax {
-
+    
 #pragma mark - Identifier
 Identifier::Type BindParameter::getType() const
 {
     return type;
 }
 
-String BindParameter::getDescription() const
+String BindParameter::getValidDescription() const
 {
     std::ostringstream stream;
     stream << switcher;

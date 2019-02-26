@@ -38,10 +38,10 @@ public:
     bool ifNotExists = false;
     Schema schema;
     String table;
-    enum class Switch {
+    WCDB_DEFAULT_SYNTAX_ENUM(
         ColumnDefs,
         Select,
-    } switcher;
+    );
     std::list<ColumnDef> columnDefs;
     std::list<TableConstraint> tableConstraints;
     bool withoutRowid = false;
@@ -52,7 +52,7 @@ public:
 public:
     static constexpr const Type type = Type::CreateTableSTMT;
     Type getType() const override final;
-    String getDescription() const override final;
+    String getValidDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

@@ -34,7 +34,7 @@ class ColumnConstraint final : public Identifier {
 #pragma mark - Lang
 public:
     String name;
-    enum class Switch {
+    WCDB_DEFAULT_SYNTAX_ENUM(
         PrimaryKey,
         NotNull,
         Unique,
@@ -42,7 +42,7 @@ public:
         Default,
         Collate,
         ForeignKey,
-    } switcher;
+    );
 
     bool useOrder = false;
     Order order;
@@ -57,7 +57,7 @@ public:
 public:
     static constexpr const Type type = Type::ColumnConstraint;
     Type getType() const override final;
-    String getDescription() const override final;
+    String getValidDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 
 #pragma mark - Utility

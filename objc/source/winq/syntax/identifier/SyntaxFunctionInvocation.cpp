@@ -24,6 +24,11 @@
 namespace WCDB {
 
 namespace Syntax {
+    
+    bool FunctionInvocation::isValid() const 
+    {
+        return !name.empty();
+    }
 
 #pragma mark - Identifier
 Identifier::Type FunctionInvocation::getType() const
@@ -31,7 +36,7 @@ Identifier::Type FunctionInvocation::getType() const
     return type;
 }
 
-String FunctionInvocation::getDescription() const
+String FunctionInvocation::getValidDescription() const
 {
     std::ostringstream stream;
     stream << name << "(";

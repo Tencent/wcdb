@@ -32,7 +32,8 @@ namespace Syntax {
 class IndexedColumn final : public Identifier {
 #pragma mark - Lang
 public:
-    enum class Switch { Column, Expression } switcher;
+    WCDB_DEFAULT_SYNTAX_ENUM(Column, Expression);
+
     Column column;
     Expression expression;
     String collation;
@@ -44,7 +45,7 @@ public:
 public:
     static constexpr const Type type = Type::IndexedColumn;
     Type getType() const override final;
-    String getDescription() const override final;
+    String getValidDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

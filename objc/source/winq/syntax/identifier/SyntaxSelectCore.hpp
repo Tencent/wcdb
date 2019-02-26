@@ -34,10 +34,10 @@ class TableOrSubquery;
 class SelectCore final : public Identifier {
 #pragma mark - Lang
 public:
-    enum class Switch {
+    WCDB_DEFAULT_SYNTAX_ENUM(
         Select,
         Values,
-    } switcher;
+    );
     bool distinct = false;
     std::list<ResultColumn> resultColumns;
     bool useFrom = false;
@@ -57,7 +57,7 @@ public:
 public:
     static constexpr const Type type = Type::SelectCore;
     Type getType() const override final;
-    String getDescription() const override final;
+    String getValidDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

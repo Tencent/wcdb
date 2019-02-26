@@ -24,6 +24,11 @@
 namespace WCDB {
 
 namespace Syntax {
+    
+    bool CommonTableExpression::isValid() const
+    {
+        return !table.empty();
+    }
 
 #pragma mark - Identifier
 Identifier::Type CommonTableExpression::getType() const
@@ -31,7 +36,7 @@ Identifier::Type CommonTableExpression::getType() const
     return type;
 }
 
-String CommonTableExpression::getDescription() const
+String CommonTableExpression::getValidDescription() const
 {
     std::ostringstream stream;
     stream << table;

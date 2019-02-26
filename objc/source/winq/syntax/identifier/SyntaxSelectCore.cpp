@@ -31,7 +31,7 @@ Identifier::Type SelectCore::getType() const
     return type;
 }
 
-String SelectCore::getDescription() const
+String SelectCore::getValidDescription() const
 {
     std::ostringstream stream;
     switch (switcher) {

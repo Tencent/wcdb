@@ -30,17 +30,17 @@ namespace Syntax {
 class BeginSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    enum class Transaction {
+    WCDB_DEFAULT_SYNTAX_ENUM(
         Deferred,
         Immediate,
         Exclusive,
-    } transaction;
+    );
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::BeginSTMT;
     Type getType() const override final;
-    String getDescription() const override final;
+    String getValidDescription() const override final;
 };
 
 } // namespace Syntax

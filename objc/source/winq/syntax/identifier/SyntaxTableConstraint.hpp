@@ -35,12 +35,12 @@ class TableConstraint final : public Identifier {
 #pragma mark - Lang
 public:
     String name;
-    enum class Switch {
+    WCDB_DEFAULT_SYNTAX_ENUM(
         PrimaryKey,
         Unique,
         Check,
         ForeignKey,
-    } switcher;
+    );
 
     std::list<IndexedColumn> indexedColumns;
     bool useConflict = false;
@@ -55,7 +55,7 @@ public:
 public:
     static constexpr const Type type = Type::TableConstraint;
     Type getType() const override final;
-    String getDescription() const override final;
+    String getValidDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

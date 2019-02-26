@@ -25,13 +25,18 @@ namespace WCDB {
 
 namespace Syntax {
 
+    bool CreateIndexSTMT::isValid() const 
+    {
+        return !index.empty();
+    }
+
 #pragma mark - Identifier
 Identifier::Type CreateIndexSTMT::getType() const
 {
     return type;
 }
 
-String CreateIndexSTMT::getDescription() const
+String CreateIndexSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "CREATE ";

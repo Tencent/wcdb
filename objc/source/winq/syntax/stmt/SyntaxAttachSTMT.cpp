@@ -25,13 +25,18 @@ namespace WCDB {
 
 namespace Syntax {
 
+    bool AttachSTMT::isValid() const 
+    {
+        return expression.isValid();
+    }
+
 #pragma mark - Identifier
 Identifier::Type AttachSTMT::getType() const
 {
     return type;
 }
 
-String AttachSTMT::getDescription() const
+String AttachSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "ATTACH " << expression << " AS " << schema;

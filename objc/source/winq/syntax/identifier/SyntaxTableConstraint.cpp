@@ -32,7 +32,7 @@ Identifier::Type TableConstraint::getType() const
     return type;
 }
 
-String TableConstraint::getDescription() const
+String TableConstraint::getValidDescription() const
 {
     std::ostringstream stream;
     if (!name.empty()) {

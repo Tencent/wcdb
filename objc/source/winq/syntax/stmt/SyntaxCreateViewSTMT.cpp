@@ -25,13 +25,18 @@ namespace WCDB {
 
 namespace Syntax {
 
+    bool CreateViewSTMT::isValid() const 
+    {
+        return !view.empty();
+    }
+
 #pragma mark - Identifier
 Identifier::Type CreateViewSTMT::getType() const
 {
     return type;
 }
 
-String CreateViewSTMT::getDescription() const
+String CreateViewSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "CREATE ";

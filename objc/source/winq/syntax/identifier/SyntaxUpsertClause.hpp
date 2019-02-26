@@ -33,6 +33,7 @@ public:
     std::list<IndexedColumn> indexedColumns;
     bool useCondition = false;
     Expression condition;
+    WCDB_DEFAULT_SYNTAX_ENUM(Nothing, Update);
     std::list<std::list<Column>> columnsList;
     std::list<Expression> expressions;
     bool useUpdateCondition = false;
@@ -42,7 +43,7 @@ public:
 public:
     static constexpr const Type type = Type::UpsertClause;
     Type getType() const override final;
-    String getDescription() const override final;
+    String getValidDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

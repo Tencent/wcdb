@@ -31,6 +31,7 @@ namespace Syntax {
 class AnalyzeSTMT final : public Identifier {
 #pragma mark - Lang
 public:
+    WCDB_DEFAULT_SYNTAX_ENUM(All, SchemaOrTableOrIndex);
     bool useSchema = false;
     Schema schema;
     String tableOrIndex;
@@ -39,7 +40,7 @@ public:
 public:
     static constexpr const Type type = Type::AnalyzeSTMT;
     Type getType() const override final;
-    String getDescription() const override final;
+    String getValidDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

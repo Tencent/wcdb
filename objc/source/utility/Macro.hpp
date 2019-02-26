@@ -76,4 +76,7 @@
 #define WCDB_EXTERN extern
 #endif
 
+#define WCDB_FIRST_ARG(N, ...) N
+#define WCDB_NON_FIRST_ARGS(N, ...) __VA_ARGS__
+
 #endif /* __WCDB_MACRO_HPP */

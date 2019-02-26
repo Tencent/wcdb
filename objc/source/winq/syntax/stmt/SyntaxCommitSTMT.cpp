@@ -24,6 +24,11 @@
 namespace WCDB {
 
 namespace Syntax {
+    
+    bool CommitSTMT::isValid() const 
+    {
+        return inited;
+    }
 
 #pragma mark - Identifier
 Identifier::Type CommitSTMT::getType() const
@@ -31,7 +36,7 @@ Identifier::Type CommitSTMT::getType() const
     return type;
 }
 
-String CommitSTMT::getDescription() const
+String CommitSTMT::getValidDescription() const
 {
     return "COMMIT";
 }

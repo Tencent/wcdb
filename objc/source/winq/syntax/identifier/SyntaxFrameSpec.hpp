@@ -32,10 +32,11 @@ class Expression;
 class FrameSpec final : public Identifier {
 #pragma mark - Lang
 public:
-    enum class Switch {
+    WCDB_DEFAULT_SYNTAX_ENUM(
         Range,
         Rows,
-    } switcher;
+    );
+
     enum class Event {
         Single,
         Between,
@@ -60,7 +61,7 @@ public:
 public:
     static constexpr const Type type = Type::FrameSpec;
     Type getType() const override final;
-    String getDescription() const override final;
+    String getValidDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

@@ -31,7 +31,7 @@ Identifier::Type TableOrSubquery::getType() const
     return type;
 }
 
-String TableOrSubquery::getDescription() const
+String TableOrSubquery::getValidDescription() const
 {
     std::ostringstream stream;
     switch (switcher) {

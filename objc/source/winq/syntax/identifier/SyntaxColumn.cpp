@@ -24,6 +24,11 @@
 namespace WCDB {
 
 namespace Syntax {
+    
+    bool Column::isValid() const 
+    {
+        return !name.empty();
+    }
 
 #pragma mark - Identifier
 Identifier::Type Column::getType() const
@@ -31,7 +36,7 @@ Identifier::Type Column::getType() const
     return type;
 }
 
-String Column::getDescription() const
+String Column::getValidDescription() const
 {
     return name;
 }

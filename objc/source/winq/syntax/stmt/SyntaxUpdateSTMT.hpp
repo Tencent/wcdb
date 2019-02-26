@@ -44,13 +44,15 @@ public:
     Expression limit;
     LimitParameterType limitParameterType = LimitParameterType::NotSet;
     Expression limitParameter;
+    
+    bool isValid() const override final;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::UpdateSTMT;
     Type getType() const override final;
-    String getDescription() const override final;
-    String getDescription(bool skipSchema) const;
+    String getValidDescription() const override final;
+    String getValidDescription(bool skipSchema) const;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

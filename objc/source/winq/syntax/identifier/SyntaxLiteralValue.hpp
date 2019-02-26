@@ -31,7 +31,7 @@ namespace Syntax {
 class LiteralValue final : public Identifier {
 #pragma mark - Lang
 public:
-    enum class Switch {
+    WCDB_DEFAULT_SYNTAX_ENUM(
         String,
         Null,
         Float,
@@ -39,7 +39,7 @@ public:
         CurrentTime,
         CurrentDate,
         CurrentTimestamp,
-    } switcher;
+    );
 
     String stringValue;
     double floatValue;
@@ -49,7 +49,7 @@ public:
 public:
     static constexpr const Type type = Type::LiteralValue;
     Type getType() const override final;
-    String getDescription() const override final;
+    String getValidDescription() const override final;
 };
 
 } // namespace Syntax

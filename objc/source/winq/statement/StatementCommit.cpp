@@ -24,6 +24,7 @@ namespace WCDB {
 
 StatementCommit& StatementCommit::commit()
 {
+    syntax().inited = true;
     return *this;
 }
 

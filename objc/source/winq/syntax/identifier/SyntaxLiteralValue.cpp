@@ -31,7 +31,7 @@ Identifier::Type LiteralValue::getType() const
     return type;
 }
 
-String LiteralValue::getDescription() const
+String LiteralValue::getValidDescription() const
 {
     switch (switcher) {
     case Switch::String:

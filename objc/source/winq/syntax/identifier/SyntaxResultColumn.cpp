@@ -24,6 +24,11 @@
 namespace WCDB {
 
 namespace Syntax {
+    
+    bool ResultColumn::isValid() const 
+    {
+        return wildcard || expression.isValid();
+    }
 
 #pragma mark - Identifier
 Identifier::Type ResultColumn::getType() const
@@ -31,7 +36,7 @@ Identifier::Type ResultColumn::getType() const
     return type;
 }
 
-String ResultColumn::getDescription() const
+String ResultColumn::getValidDescription() const
 {
     std::ostringstream stream;
     if (wildcard) {

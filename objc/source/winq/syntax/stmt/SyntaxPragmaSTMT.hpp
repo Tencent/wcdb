@@ -39,12 +39,14 @@ public:
     } switcher
     = Switch::NotSet;
     LiteralValue value;
+    
+    bool isValid() const override final;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::PragmaSTMT;
     Type getType() const override final;
-    String getDescription() const override final;
+    String getValidDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

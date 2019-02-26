@@ -139,7 +139,7 @@ streamAutoParenthesesExpression(std::ostringstream& stream, const Expression& ex
     }
 }
 
-String Expression::getDescription() const
+String Expression::getValidDescription() const
 {
     std::ostringstream stream;
     switch (switcher) {

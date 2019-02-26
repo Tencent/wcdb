@@ -38,12 +38,14 @@ public:
     std::list<OrderingTerm> orderingTerms;
     bool useFrameSpec = false;
     FrameSpec frameSpec;
+    
+    bool isValid() const override final;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::WindowDef;
     Type getType() const override final;
-    String getDescription() const override final;
+    String getValidDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

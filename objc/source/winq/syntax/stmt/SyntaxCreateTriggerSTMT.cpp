@@ -52,13 +52,18 @@ constexpr const char* Enum::description(const Syntax::CreateTriggerSTMT::Event& 
 
 namespace Syntax {
 
+    bool CreateTriggerSTMT::isValid() const 
+    {
+        return !trigger.empty();
+    }
+
 #pragma mark - Identifier
 Identifier::Type CreateTriggerSTMT::getType() const
 {
     return type;
 }
 
-String CreateTriggerSTMT::getDescription() const
+String CreateTriggerSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "CREATE ";
@@ -96,17 +101,17 @@ String CreateTriggerSTMT::getDescription() const
         switch (stmt) {
         case STMT::Insert:
             WCTSyntaxRemedialAssert(insert != inserts.end());
-            stream << insert->getDescription(true) << "; ";
+            stream << insert->getValidDescription(true) << "; ";
             ++insert;
             break;
         case STMT::Update:
             WCTSyntaxRemedialAssert(update != updates.end());
-            stream << update->getDescription(true) << "; ";
+            stream << update->getValidDescription(true) << "; ";
             ++update;
             break;
         case STMT::Delete:
             WCTSyntaxRemedialAssert(delete_ != deletes.end());
-            stream << delete_->getDescription(true) << "; ";
+            stream << delete_->getValidDescription(true) << "; ";
             ++delete_;
             break;
         case STMT::Select:

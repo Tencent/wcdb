@@ -24,6 +24,11 @@
 namespace WCDB {
 
 namespace Syntax {
+    
+    bool DropViewSTMT::isValid() const 
+    {
+        return !view.empty();
+    }
 
 #pragma mark - Identifier
 Identifier::Type DropViewSTMT::getType() const
@@ -31,7 +36,7 @@ Identifier::Type DropViewSTMT::getType() const
     return type;
 }
 
-String DropViewSTMT::getDescription() const
+String DropViewSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "DROP VIEW ";

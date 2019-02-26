@@ -24,6 +24,11 @@
 namespace WCDB {
 
 namespace Syntax {
+    
+    bool QualifiedTableName::isValid() const 
+    {
+        return !table.empty();
+    }
 
 #pragma mark - Identifier
 Identifier::Type QualifiedTableName::getType() const
@@ -31,12 +36,12 @@ Identifier::Type QualifiedTableName::getType() const
     return type;
 }
 
-String QualifiedTableName::getDescription() const
+String QualifiedTableName::getValidDescription() const
 {
-    return getDescription(false);
+    return getValidDescription(false);
 }
 
-String QualifiedTableName::getDescription(bool skipSchema) const
+String QualifiedTableName::getValidDescription(bool skipSchema) const
 {
     std::ostringstream stream;
     if (!skipSchema && !schema.empty()) {

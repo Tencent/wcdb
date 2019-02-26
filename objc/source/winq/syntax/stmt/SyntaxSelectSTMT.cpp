@@ -25,6 +25,11 @@
 namespace WCDB {
 
 namespace Syntax {
+    
+    bool SelectSTMT::isValid() const 
+    {
+        return select.isValid();
+    }
 
 #pragma mark - Identifier
 Identifier::Type SelectSTMT::getType() const
@@ -32,7 +37,7 @@ Identifier::Type SelectSTMT::getType() const
     return type;
 }
 
-String SelectSTMT::getDescription() const
+String SelectSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     if (!commonTableExpressions.empty()) {

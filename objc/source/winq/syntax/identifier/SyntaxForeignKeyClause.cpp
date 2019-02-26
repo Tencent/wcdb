@@ -74,6 +74,11 @@ Enum::description(const Syntax::ForeignKeyClause::Deferrable& deferrable)
 }
 
 namespace Syntax {
+    
+    bool ForeignKeyClause::isValid() const 
+    {
+        return !foreignTable.empty();
+    }
 
 #pragma mark - Identifier
 Identifier::Type ForeignKeyClause::getType() const
@@ -81,7 +86,7 @@ Identifier::Type ForeignKeyClause::getType() const
     return type;
 }
 
-String ForeignKeyClause::getDescription() const
+String ForeignKeyClause::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "REFERENCES " << foreignTable;

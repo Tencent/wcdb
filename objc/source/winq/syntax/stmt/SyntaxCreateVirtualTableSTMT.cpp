@@ -25,13 +25,18 @@ namespace WCDB {
 
 namespace Syntax {
 
+    bool CreateVirtualTableSTMT::isValid() const 
+    {
+        return !table.empty();
+    }
+
 #pragma mark - Identifier
 Identifier::Type CreateVirtualTableSTMT::getType() const
 {
     return type;
 }
 
-String CreateVirtualTableSTMT::getDescription() const
+String CreateVirtualTableSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "CREATE VIRTUAL TABLE ";

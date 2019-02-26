@@ -34,12 +34,14 @@ class AttachSTMT final : public Identifier {
 public:
     Expression expression;
     Schema schema;
+    
+    bool isValid() const override final;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::AttachSTMT;
     Type getType() const override final;
-    String getDescription() const override final;
+    String getValidDescription() const override final;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

@@ -24,6 +24,11 @@
 namespace WCDB {
 
 namespace Syntax {
+    
+    bool Schema::isValid() const 
+    {
+        return true;
+    }
 
 // Typically, empty schema is not allowed in WCDB. If you really need a empty schema, you should specify it explicitly.
 Schema::Schema() : name(mainSchema)
@@ -36,7 +41,7 @@ Identifier::Type Schema::getType() const
     return type;
 }
 
-String Schema::getDescription() const
+String Schema::getValidDescription() const
 {
     return name;
 }

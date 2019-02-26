@@ -51,6 +51,8 @@
 - (void)test_default_constructible
 {
     WCDB::ColumnConstraint constructible;
+TestCaseAssertFalse(constructible.syntax().isValid());
+    TestCaseAssertIterateEqual(constructible, std::list<WCDB::Syntax::Identifier::Type>());
     TestCaseAssertTrue(constructible.getDescription().empty());
 }
 

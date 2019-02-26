@@ -31,12 +31,16 @@ Identifier::Type RollbackSTMT::getType() const
     return type;
 }
 
-String RollbackSTMT::getDescription() const
+String RollbackSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "ROLLBACK";
-    if (!savepoint.empty()) {
-        stream << " TO " << savepoint;
+    switch (switcher) {
+        case Switch::Transaction:
+            break;            
+        case Switch::Savepoint:
+            stream << " TO " << savepoint;
+            break;
     }
     return stream.str();
 }

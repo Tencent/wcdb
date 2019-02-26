@@ -25,13 +25,18 @@ namespace WCDB {
 
 namespace Syntax {
 
+    bool WindowDef::isValid() const 
+    {
+        return !expressions.empty() || !orderingTerms.empty() || frameSpec.isValid();
+    }
+
 #pragma mark - Identifier
 Identifier::Type WindowDef::getType() const
 {
     return type;
 }
 
-String WindowDef::getDescription() const
+String WindowDef::getValidDescription() const
 {
     std::ostringstream stream;
     bool extraSpace = false;

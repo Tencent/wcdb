@@ -25,14 +25,14 @@
 namespace WCDB {
 
 namespace Syntax {
-
+    
 #pragma mark - Identifier
 Identifier::Type ColumnConstraint::getType() const
 {
     return type;
 }
 
-String ColumnConstraint::getDescription() const
+String ColumnConstraint::getValidDescription() const
 {
     std::ostringstream stream;
     if (!name.empty()) {

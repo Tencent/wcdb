@@ -24,6 +24,11 @@
 namespace WCDB {
 
 namespace Syntax {
+    
+    bool Filter::isValid() const 
+    {
+        return expression != nullptr;
+    }
 
 #pragma mark - Identifier
 Identifier::Type Filter::getType() const
@@ -31,10 +36,9 @@ Identifier::Type Filter::getType() const
     return type;
 }
 
-String Filter::getDescription() const
+String Filter::getValidDescription() const
 {
     std::ostringstream stream;
-    WCTSyntaxRemedialAssert(expression != nullptr);
     stream << "FILTER(WHERE " << *expression << ")";
     return stream.str();
 }
@@ -42,7 +46,6 @@ String Filter::getDescription() const
 void Filter::iterate(const Iterator& iterator, bool& stop)
 {
     Identifier::iterate(iterator, stop);
-    WCTIterateRemedialAssert(expression != nullptr);
     expression->iterate(iterator, stop);
 }
 

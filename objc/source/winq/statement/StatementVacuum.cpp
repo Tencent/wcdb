@@ -24,12 +24,13 @@ namespace WCDB {
 
 StatementVacuum& StatementVacuum::vacuum()
 {
+    syntax().switcher = Syntax::VacuumSTMT::Switch::All;
     return *this;
 }
 
 StatementVacuum& StatementVacuum::vacuum(const Schema& schema)
 {
-    syntax().specifySchema = true;
+    syntax().switcher = Syntax::VacuumSTMT::Switch::Schema;
     syntax().schema = schema;
     return *this;
 }

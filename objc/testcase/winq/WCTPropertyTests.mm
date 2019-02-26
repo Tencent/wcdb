@@ -39,6 +39,9 @@
 - (void)test_default_constructible
 {
     WCTProperty constructible;
+TestCaseAssertFalse(constructible.syntax().isValid());
+    TestCaseAssertIterateEqual(constructible, std::list<WCDB::Syntax::Identifier::Type>());
+    TestCaseAssertTrue(constructible.getDescription().empty());
 }
 
 - (void)test_property_convertible

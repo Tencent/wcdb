@@ -24,6 +24,11 @@
 namespace WCDB {
 
 namespace Syntax {
+    
+    bool ReleaseSTMT::isValid() const 
+    {
+        return !savepoint.empty();
+    }
 
 #pragma mark - Identifier
 Identifier::Type ReleaseSTMT::getType() const
@@ -31,7 +36,7 @@ Identifier::Type ReleaseSTMT::getType() const
     return type;
 }
 
-String ReleaseSTMT::getDescription() const
+String ReleaseSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "RELEASE " << savepoint;

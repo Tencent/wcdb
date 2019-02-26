@@ -24,6 +24,11 @@
 namespace WCDB {
 
 namespace Syntax {
+    
+    bool CTETableName::isValid() const
+    {
+        return !name.empty();
+    }
 
 #pragma mark - Identifier
 Identifier::Type CTETableName::getType() const
@@ -31,7 +36,7 @@ Identifier::Type CTETableName::getType() const
     return type;
 }
 
-String CTETableName::getDescription() const
+String CTETableName::getValidDescription() const
 {
     std::ostringstream stream;
     stream << name;

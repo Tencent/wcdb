@@ -24,6 +24,11 @@
 namespace WCDB {
 
 namespace Syntax {
+    
+    bool JoinConstraint::isValid() const 
+    {
+        return !columns.empty() || expression.isValid(); 
+    }
 
 #pragma mark - Identifier
 Identifier::Type JoinConstraint::getType() const
@@ -31,7 +36,7 @@ Identifier::Type JoinConstraint::getType() const
     return type;
 }
 
-String JoinConstraint::getDescription() const
+String JoinConstraint::getValidDescription() const
 {
     std::ostringstream stream;
     if (!columns.empty()) {

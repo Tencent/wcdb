@@ -31,7 +31,7 @@ Identifier::Type AlterTableSTMT::getType() const
     return type;
 }
 
-String AlterTableSTMT::getDescription() const
+String AlterTableSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "ALTER TABLE ";

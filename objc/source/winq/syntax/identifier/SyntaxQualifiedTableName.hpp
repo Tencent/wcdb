@@ -40,13 +40,15 @@ public:
     } switcher
     = Switch::NotSet;
     String index;
+    
+    bool isValid() const override final;
 
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::QualifiedTableName;
     Type getType() const override final;
-    String getDescription() const override final;
-    String getDescription(bool skipSchema) const;
+    String getValidDescription() const override final;
+    String getValidDescription(bool skipSchema) const;
     void iterate(const Iterator& iterator, bool& stop) override final;
 };
 

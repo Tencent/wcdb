@@ -96,7 +96,7 @@ StatementInsert& StatementInsert::columns(const Columns& columns)
 
 StatementInsert& StatementInsert::value(const Expression& expression)
 {
-    syntax().valueSwitcher = SyntaxType::SwitchValue::Values;
+    syntax().switcher = SyntaxType::Switch::Values;
     if (syntax().expressionsValues.empty()) {
         syntax().expressionsValues.push_back({});
     }
@@ -106,21 +106,21 @@ StatementInsert& StatementInsert::value(const Expression& expression)
 
 StatementInsert& StatementInsert::values(const Expressions& expressions)
 {
-    syntax().valueSwitcher = SyntaxType::SwitchValue::Values;
+    syntax().switcher = SyntaxType::Switch::Values;
     syntax().expressionsValues.push_back(expressions);
     return *this;
 }
 
 StatementInsert& StatementInsert::values(const StatementSelect& select)
 {
-    syntax().valueSwitcher = SyntaxType::SwitchValue::Select;
+    syntax().switcher = SyntaxType::Switch::Select;
     syntax().select = select;
     return *this;
 }
 
 StatementInsert& StatementInsert::defaultValues()
 {
-    syntax().valueSwitcher = SyntaxType::SwitchValue::Default;
+    syntax().switcher = SyntaxType::Switch::Default;
     return *this;
 }
 

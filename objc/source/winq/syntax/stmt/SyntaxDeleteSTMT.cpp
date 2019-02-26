@@ -25,24 +25,29 @@ namespace WCDB {
 
 namespace Syntax {
 
+    bool DeleteSTMT::isValid() const 
+    {
+        return table.isValid();
+    }
+
 #pragma mark - Identifier
 Identifier::Type DeleteSTMT::getType() const
 {
     return type;
 }
 
-String DeleteSTMT::getDescription() const
+String DeleteSTMT::getValidDescription() const
 {
-    return getDescription(false);
+    return getValidDescription(false);
 }
 
-String DeleteSTMT::getDescription(bool skipSchema) const
+String DeleteSTMT::getValidDescription(bool skipSchema) const
 {
     std::ostringstream stream;
     if (useWithClause) {
         stream << withClause << space;
     }
-    stream << "DELETE FROM " << table.getDescription(skipSchema);
+    stream << "DELETE FROM " << table.getValidDescription(skipSchema);
     if (useCondition) {
         stream << " WHERE " << condition;
     }

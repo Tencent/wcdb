@@ -24,6 +24,11 @@
 namespace WCDB {
 
 namespace Syntax {
+    
+    bool WithClause::isValid() const 
+    {
+        return !tables.empty() && tables.begin()->isValid();
+    }
 
 #pragma mark - Identifier
 Identifier::Type WithClause::getType() const
@@ -31,7 +36,7 @@ Identifier::Type WithClause::getType() const
     return type;
 }
 
-String WithClause::getDescription() const
+String WithClause::getValidDescription() const
 {
     std::ostringstream stream;
     WCTSyntaxRemedialAssert(tables.size() == selects.size());

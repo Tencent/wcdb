@@ -24,6 +24,11 @@
 namespace WCDB {
 
 namespace Syntax {
+    
+    bool DropIndexSTMT::isValid() const 
+    {
+        return !index.empty();
+    }
 
 #pragma mark - Identifier
 Identifier::Type DropIndexSTMT::getType() const
@@ -31,7 +36,7 @@ Identifier::Type DropIndexSTMT::getType() const
     return type;
 }
 
-String DropIndexSTMT::getDescription() const
+String DropIndexSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "DROP INDEX ";

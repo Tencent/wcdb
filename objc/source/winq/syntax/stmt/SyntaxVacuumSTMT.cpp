@@ -24,19 +24,23 @@
 namespace WCDB {
 
 namespace Syntax {
-
+    
 #pragma mark - Identifier
 Identifier::Type VacuumSTMT::getType() const
 {
     return type;
 }
 
-String VacuumSTMT::getDescription() const
+String VacuumSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "VACUUM";
-    if (specifySchema && !schema.empty()) {
-        stream << space << schema;
+    switch (switcher) {
+        case Switch::All:
+            break;
+        case Switch::Schema:
+            stream << space << schema;
+            break;
     }
     return stream.str();
 }
@@ -44,8 +48,12 @@ String VacuumSTMT::getDescription() const
 void VacuumSTMT::iterate(const Iterator& iterator, bool& stop)
 {
     Identifier::iterate(iterator, stop);
-    if (specifySchema) {
-        recursiveIterate(schema, iterator, stop);
+    switch (switcher) {
+        case Switch::All:
+            break;
+        case Switch::Schema:
+            recursiveIterate(schema, iterator, stop);
+            break;
     }
 }
 

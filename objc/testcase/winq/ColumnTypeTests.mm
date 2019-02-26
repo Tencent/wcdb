@@ -65,7 +65,7 @@
 
 - (void)test_type_float
 {
-    auto testingSQL = WCDB::ColumnDef(column, WCDB::ColumnType::Text);
+    auto testingSQL = WCDB::ColumnDef(column, WCDB::ColumnType::Float);
     TestCaseAssertSQLEqual(testingSQL, @"testColumn REAL");
 }
 

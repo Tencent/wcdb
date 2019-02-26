@@ -25,6 +25,11 @@
 namespace WCDB {
 
 namespace Syntax {
+    
+    bool ColumnDef::isValid() const 
+    {
+        return column.isValid();
+    }
 
 #pragma mark - Identifier
 Identifier::Type ColumnDef::getType() const
@@ -32,7 +37,7 @@ Identifier::Type ColumnDef::getType() const
     return type;
 }
 
-String ColumnDef::getDescription() const
+String ColumnDef::getValidDescription() const
 {
     std::ostringstream stream;
     stream << column;

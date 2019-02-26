@@ -25,6 +25,11 @@
 namespace WCDB {
 
 namespace Syntax {
+    
+    bool JoinClause::isValid() const 
+    {
+        return !tableOrSubqueries.empty();
+    }
 
 #pragma mark - Identifier
 Identifier::Type JoinClause::getType() const
@@ -32,7 +37,7 @@ Identifier::Type JoinClause::getType() const
     return type;
 }
 
-String JoinClause::getDescription() const
+String JoinClause::getValidDescription() const
 {
     std::ostringstream stream;
     auto tableOrSubquery = tableOrSubqueries.begin();
