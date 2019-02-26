@@ -25,11 +25,13 @@
 @end
 
 @implementation ColumnTypeTests {
+    WCDB::Column column;
 }
 
 - (void)setUp
 {
     [super setUp];
+    column = WCDB::Column(@"testColumn");
 }
 
 - (void)test_default_constructible
@@ -37,14 +39,40 @@
     WCDB::ColumnType constructible __attribute__((unused));
 }
 
-- (void)test_type
+- (void)test_type_integer32
 {
-    TestCaseAssertWINQEnumEqual(WCDB::ColumnType::Integer32, @"INTEGER");
-    TestCaseAssertWINQEnumEqual(WCDB::ColumnType::Integer64, @"INTEGER");
-    TestCaseAssertWINQEnumEqual(WCDB::ColumnType::Text, @"TEXT");
-    TestCaseAssertWINQEnumEqual(WCDB::ColumnType::BLOB, @"BLOB");
-    TestCaseAssertWINQEnumEqual(WCDB::ColumnType::Float, @"REAL");
-    TestCaseAssertWINQEnumEqual(WCDB::ColumnType::Null, @"NULL");
+    auto testingSQL = WCDB::ColumnDef(column, WCDB::ColumnType::Integer32);
+    TestCaseAssertSQLEqual(testingSQL, @"testColumn INTEGER");
+}
+
+- (void)test_type_integer64
+{
+    auto testingSQL = WCDB::ColumnDef(column, WCDB::ColumnType::Integer64);
+    TestCaseAssertSQLEqual(testingSQL, @"testColumn INTEGER");
+}
+
+- (void)test_type_text
+{
+    auto testingSQL = WCDB::ColumnDef(column, WCDB::ColumnType::Text);
+    TestCaseAssertSQLEqual(testingSQL, @"testColumn TEXT");
+}
+
+- (void)test_type_blob
+{
+    auto testingSQL = WCDB::ColumnDef(column, WCDB::ColumnType::BLOB);
+    TestCaseAssertSQLEqual(testingSQL, @"testColumn BLOB");
+}
+
+- (void)test_type_float
+{
+    auto testingSQL = WCDB::ColumnDef(column, WCDB::ColumnType::Text);
+    TestCaseAssertSQLEqual(testingSQL, @"testColumn REAL");
+}
+
+- (void)test_type_null
+{
+    auto testingSQL = WCDB::ColumnDef(column, WCDB::ColumnType::Null);
+    TestCaseAssertSQLEqual(testingSQL, @"testColumn NULL");
 }
 
 @end

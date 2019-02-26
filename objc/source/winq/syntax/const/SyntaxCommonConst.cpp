@@ -18,42 +18,22 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_SYNTAX_CONFLICT_HPP
-#define __WCDB_SYNTAX_CONFLICT_HPP
-
-#include <WCDB/Enum.hpp>
+#include <WCDB/String.hpp>
+#include <WCDB/SyntaxCommonConst.hpp>
 
 namespace WCDB {
-
-namespace Syntax {
-
-enum class Conflict {
-    Rollback,
-    Abort,
-    Fail,
-    Ignore,
-    Replace,
-};
-
-}
-
-template<>
-constexpr const char* Enum::description(const Syntax::Conflict& conflict)
-{
-    switch (conflict) {
-    case Syntax::Conflict::Rollback:
-        return "ON CONFLICT ROLLBACK";
-    case Syntax::Conflict::Abort:
-        return "ON CONFLICT ABORT";
-    case Syntax::Conflict::Fail:
-        return "ON CONFLICT FAIL";
-    case Syntax::Conflict::Ignore:
-        return "ON CONFLICT IGNORE";
-    case Syntax::Conflict::Replace:
-        return "ON CONFLICT REPLACE";
-    }
-}
-
+    
+    namespace Syntax {
+        
+        bool isIntegerColumnType(const String& type)
+        {
+            return type.isCaseInsensiveEqual("INTEGER") || type.isCaseInsensiveEqual("INT")
+            || type.isCaseInsensiveEqual("TINYINT") || type.isCaseInsensiveEqual("SMALLINT")
+            || type.isCaseInsensiveEqual("MEDIUMINT") || type.isCaseInsensiveEqual("BIGINT")
+            || type.isCaseInsensiveEqual("UNSIGNED BIG INT")
+            || type.isCaseInsensiveEqual("INT2") || type.isCaseInsensiveEqual("INT8");
+        }
+        
+    } // namespace Syntax
+    
 } // namespace WCDB
-
-#endif /* __WCDB_SYNTAX_CONFLICT_HPP */

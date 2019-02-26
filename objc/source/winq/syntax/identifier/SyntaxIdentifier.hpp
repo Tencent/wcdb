@@ -27,12 +27,7 @@
 #include <list>
 #include <sstream>
 
-#include <WCDB/SyntaxColumnType.hpp>
 #include <WCDB/SyntaxCommonConst.hpp>
-#include <WCDB/SyntaxCompoundOperator.hpp>
-#include <WCDB/SyntaxConflict.hpp>
-#include <WCDB/SyntaxJoinOperator.hpp>
-#include <WCDB/SyntaxOrder.hpp>
 
 namespace WCDB {
 
@@ -146,13 +141,6 @@ std::ostream& operator<<(std::ostream& stream, const std::list<T>& identifiers)
         }
         stream << identifier;
     }
-    return stream;
-}
-
-template<typename T, typename Enable = typename std::enable_if<std::is_enum<T>::value>::type>
-std::ostream& operator<<(std::ostream& stream, const T& value)
-{
-    stream << WCDB::Enum::description(value);
     return stream;
 }
 

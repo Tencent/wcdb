@@ -25,11 +25,13 @@
 @end
 
 @implementation OrderTests {
+    WCDB::Column column;
 }
 
 - (void)setUp
 {
     [super setUp];
+    column = WCDB::Column(@"testColumn");
 }
 
 - (void)test_default_constructible
@@ -37,10 +39,16 @@
     WCDB::Order constructible __attribute__((unused));
 }
 
-- (void)test
+- (void)test_asc
 {
-    TestCaseAssertWINQEnumEqual(WCDB::Order::ASC, @"ASC");
-    TestCaseAssertWINQEnumEqual(WCDB::Order::DESC, @"DESC");
+    auto testingSQL = WCDB::IndexedColumn(column).order(WCDB::Order::ASC);
+    TestCaseAssertSQLEqual(testingSQL, @"testColumn ASC");
+}
+
+- (void)test_desc
+{
+    auto testingSQL = WCDB::IndexedColumn(column).order(WCDB::Order::DESC);
+    TestCaseAssertSQLEqual(testingSQL, @"testColumn DESC");
 }
 
 @end

@@ -19,7 +19,7 @@
  */
 
 #include <WCDB/SyntaxAssertion.hpp>
-#include <WCDB/Enum.hpp>
+#include <WCDB/SyntaxEnum.hpp>
 #include <WCDB/Syntax.h>
 
 namespace WCDB {

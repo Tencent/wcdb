@@ -35,7 +35,7 @@ int ColumnMeta::getIndexOfIntegerPrimary(const std::vector<ColumnMeta>& columnMe
         if (pk > 0) {
             if (pk > 1) {
                 return -1;
-            } else if (Syntax::isIntegerType(columnMeta.type)) {
+            } else if (Syntax::isIntegerColumnType(columnMeta.type)) {
                 indexOfIntegerPrimary = (int) columnMetas.size() - 1;
             }
         }

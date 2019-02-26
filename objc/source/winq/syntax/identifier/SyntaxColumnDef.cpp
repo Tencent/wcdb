@@ -20,6 +20,7 @@
 
 #include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxEnum.hpp>
 
 namespace WCDB {
 

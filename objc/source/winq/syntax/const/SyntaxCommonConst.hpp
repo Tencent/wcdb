@@ -21,11 +21,56 @@
 #ifndef __WCDB_SYNTAX_COMMON_CONST_HPP
 #define __WCDB_SYNTAX_COMMON_CONST_HPP
 
-#include <WCDB/Enum.hpp>
-
 namespace WCDB {
+    
+    class String;
 
 namespace Syntax {
+    
+    enum class ColumnType {
+        Null = 0,
+        Integer32,
+        Integer64,
+        Float,
+        Text,
+        BLOB,
+    };
+    
+    bool isIntegerColumnType(const String& type);
+    
+    enum class CompoundOperator : int {
+        Union,
+        UnionAll,
+        Intersect,
+        Except,
+    };
+    
+    enum class Conflict {
+        Rollback,
+        Abort,
+        Fail,
+        Ignore,
+        Replace,
+    };
+    
+    enum class JoinOperator : int {
+        With,
+        Join,
+        LeftOuterJoin,
+        LeftJoin,
+        InnerJoin,
+        CrossJoin,
+        NaturalJoin,
+        NaturalLeftOuterJoin,
+        NaturalLeftJoin,
+        NaturalInnerJoin,
+        NaturalCrossJoin,
+    };
+
+    enum class Order : int {
+        ASC,
+        DESC,
+    };
 
 enum class LimitParameterType {
     NotSet,
@@ -47,23 +92,6 @@ static const char* tempSchema = "temp";
 static const char* builtinTablePrefix = "sqlite_";
 
 } // namespace Syntax
-
-template<>
-constexpr const char* Enum::description(const Syntax::ConflictAction& action)
-{
-    switch (action) {
-    case Syntax::ConflictAction::Replace:
-        return "OR REPLACE";
-    case Syntax::ConflictAction::Rollback:
-        return "OR ROLLBACK";
-    case Syntax::ConflictAction::Abort:
-        return "OR ABORT";
-    case Syntax::ConflictAction::Fail:
-        return "OR FAIL";
-    case Syntax::ConflictAction::Ignore:
-        return "OR IGNORE";
-    }
-}
 
 } // namespace WCDB
 

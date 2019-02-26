@@ -25,11 +25,13 @@
 @end
 
 @implementation ConflictTests {
+    NSString* name;
 }
 
 - (void)setUp
 {
     [super setUp];
+    name = @"testColumnConstraint";
 }
 
 - (void)test_default_constructible
@@ -37,13 +39,39 @@
     WCDB::Conflict constructible __attribute__((unused));
 }
 
-- (void)test_conflict
+- (void)test_conflict_abort
 {
-    TestCaseAssertWINQEnumEqual(WCDB::Conflict::Abort, @"ON CONFLICT ABORT");
-    TestCaseAssertWINQEnumEqual(WCDB::Conflict::Fail, @"ON CONFLICT FAIL");
-    TestCaseAssertWINQEnumEqual(WCDB::Conflict::Rollback, @"ON CONFLICT ROLLBACK");
-    TestCaseAssertWINQEnumEqual(WCDB::Conflict::Ignore, @"ON CONFLICT IGNORE");
-    TestCaseAssertWINQEnumEqual(WCDB::Conflict::Replace, @"ON CONFLICT REPLACE");
+    auto testingSQL = WCDB::ColumnConstraint(name).primaryKey().conflict(WCDB::Conflict::Abort);
+    
+    TestCaseAssertSQLEqual(testingSQL, @"CONSTRAINT testColumnConstraint PRIMARY KEY ON CONFLICT ABORT");
+}
+
+- (void)test_conflict_fail
+{
+    auto testingSQL = WCDB::ColumnConstraint(name).primaryKey().conflict(WCDB::Conflict::Fail);
+    
+    TestCaseAssertSQLEqual(testingSQL, @"CONSTRAINT testColumnConstraint PRIMARY KEY ON CONFLICT FAIL");
+}
+
+- (void)test_conflict_rollback
+{
+    auto testingSQL = WCDB::ColumnConstraint(name).primaryKey().conflict(WCDB::Conflict::Rollback);
+    
+    TestCaseAssertSQLEqual(testingSQL, @"CONSTRAINT testColumnConstraint PRIMARY KEY ON CONFLICT ROLLBACK");
+}
+
+- (void)test_conflict_ignore
+{
+    auto testingSQL = WCDB::ColumnConstraint(name).primaryKey().conflict(WCDB::Conflict::Ignore);
+    
+    TestCaseAssertSQLEqual(testingSQL, @"CONSTRAINT testColumnConstraint PRIMARY KEY ON CONFLICT IGNORE");
+}
+
+- (void)test_conflict_replace
+{
+    auto testingSQL = WCDB::ColumnConstraint(name).primaryKey().conflict(WCDB::Conflict::Replace);
+    
+    TestCaseAssertSQLEqual(testingSQL, @"CONSTRAINT testColumnConstraint PRIMARY KEY ON CONFLICT REPLACE");
 }
 
 @end

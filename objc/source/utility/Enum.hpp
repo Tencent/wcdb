@@ -33,4 +33,11 @@ public:
 
 } // namespace WCDB
 
+template<typename T, typename Enable = typename std::enable_if<std::is_enum<T>::value>::type>
+std::ostream& operator<<(std::ostream& stream, const T& value)
+{
+    stream << WCDB::Enum::description(value);
+    return stream;
+}
+
 #endif /* __WCDB_ENUM_HPP */

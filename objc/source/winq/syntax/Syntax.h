@@ -25,11 +25,7 @@
 
 // TODO: use double-quotes for all identifiers to accept SQLite keyword. https://sqlite.org/c3ref/keyword_check.html
 
-#include <WCDB/SyntaxColumnType.hpp>
-#include <WCDB/SyntaxCompoundOperator.hpp>
-#include <WCDB/SyntaxConflict.hpp>
-#include <WCDB/SyntaxJoinOperator.hpp>
-#include <WCDB/SyntaxOrder.hpp>
+#include <WCDB/SyntaxCommonConst.hpp>
 
 #include <WCDB/SyntaxCTETableName.hpp>
 #include <WCDB/SyntaxColumn.hpp>
