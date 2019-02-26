@@ -87,8 +87,9 @@ WCTResultColumns WCTProperties::redirect(const WCDB::ResultColumns& resultColumn
     return result;
 }
 
-WCTResultColumns WCTProperties::redirect(const WCTRedirectBlock& block) const
+WCTResultColumns WCTProperties::redirect(WCTRedirectBlock block) const
 {
+    WCTRemedialAssert(block != nil, "Redirect block can't be null.", return *this;);
     WCTResultColumns results;
     for (const auto& property : *this) {
         results.push_back(WCTResultColumn(block(property), property.getColumnBinding()));
