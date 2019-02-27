@@ -107,6 +107,7 @@
     TestCaseResult *tested = [TestCaseResult no];
     __weak typeof(self) weakSelf = self;
     [WCTDatabase globalTraceError:^(WCTError *error) {
+        TestCaseLog(@"%@", error);
         typeof(self) strongSelf = weakSelf;
         if (strongSelf == nil) {
             return;
@@ -163,6 +164,7 @@
     TestCaseCounter *numberOfFailures = [TestCaseCounter value:0];
     __weak typeof(self) weakSelf = self;
     [WCTDatabase globalTraceError:^(WCTError *error) {
+        TestCaseLog(@"%@", error);
         typeof(self) strongSelf = weakSelf;
         if (strongSelf == nil) {
             return;

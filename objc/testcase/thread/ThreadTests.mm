@@ -338,6 +338,7 @@
 
     TestCaseResult* tested = [TestCaseResult no];
     [WCTDatabase globalTraceError:^(WCTError* error) {
+        TestCaseLog(@"%@", error);
         if (error.level == WCTErrorLevelIgnore
             && error.code == WCTErrorCodeNotice
             && error.extendedCode == WCTErrorExtendedCodeNoticeRecoverWal) {
@@ -408,6 +409,7 @@
 
     __weak typeof(self) weakSelf = self;
     [WCTDatabase globalTraceError:^(WCTError* error) {
+        TestCaseLog(@"%@", error);
         typeof(self) strongSelf = weakSelf;
         if (strongSelf == nil) {
             return;
@@ -451,6 +453,7 @@
 
         __weak typeof(self) weakSelf = self;
         [WCTDatabase globalTraceError:^(WCTError* error) {
+            TestCaseLog(@"%@", error);
             typeof(self) strongSelf = weakSelf;
             if (strongSelf == nil) {
                 return;

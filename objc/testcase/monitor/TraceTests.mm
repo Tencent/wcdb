@@ -81,6 +81,7 @@
     __block BOOL start = NO;
     __weak typeof(self) weakSelf = self;
     [WCTDatabase globalTraceError:^(WCTError* error) {
+        TestCaseLog(@"%@", error);
         typeof(self) strongSelf = weakSelf; 
         if (strongSelf == nil) {
             return;
