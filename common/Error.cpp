@@ -128,7 +128,7 @@ static_assert((int) Error::ExtCode::AuthorizationUser == SQLITE_AUTH_USER, "");
 static_assert((int) Error::ExtCode::OKLoadPermanently == SQLITE_OK_LOAD_PERMANENTLY, "");
 
 #pragma mark - Initialize
-Error::Error() : level(Level::Error), m_code(Code::OK)
+Error::Error() : level(Level::Ignore), m_code(Code::OK)
 {
 }
 
