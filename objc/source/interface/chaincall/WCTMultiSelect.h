@@ -43,13 +43,13 @@ NS_ASSUME_NONNULL_BEGIN
 
  @return See the example above
  */
-- (nullable WCTMultiObject *)nextMultiObject;
+- (WCTOptionalMultiObject /* WCTMultiObject * */)nextMultiObject;
 
 /**
  @brief Get all selected objects. 
  @return Array with all selected objects.
  */
-- (nullable NSArray<WCTMultiObject *> *)allMultiObjects;
+- (WCTOptionalMultiObjects /* NSArray<WCTMultiObject *> * */)allMultiObjects;
 
 @end
 

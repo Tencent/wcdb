@@ -40,14 +40,9 @@ NS_ASSUME_NONNULL_BEGIN
  
  @return The real type of WCTObject depends on your selection and ORM.
  */
-- (nullable ObjectType)nextObject;
+- (WCTOptionalObject /* ObjectType */)nextObject;
 
-/**
- @brief Get all selected objects.
- @return The NSArray collection of WCTObject.
-         The real type of WCTObject depends on your selection and ORM.
- */
-- (nullable NSArray<ObjectType> *)allObjects;
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)allObjects;
 
 @end
 

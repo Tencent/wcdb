@@ -28,9 +28,9 @@
 
 @implementation WCTDatabase (Table)
 
-- (WCTOptional<BOOL, NO>)tableExists:(NSString *)tableName
+- (WCTOptionalBool)tableExists:(NSString *)tableName
 {
-    WCTOptional<BOOL, NO> result = nullptr;
+    WCTOptionalBool result = nullptr;
     bool succeed, exists;
     std::tie(succeed, exists) = _database->tableExists(tableName);
     if (succeed) {
