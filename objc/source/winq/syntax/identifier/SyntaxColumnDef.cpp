@@ -41,7 +41,7 @@ String ColumnDef::getValidDescription() const
 {
     std::ostringstream stream;
     stream << column;
-    if (typed) {
+    if (columnTypeValid()) {
         stream << space << columnType;
     };
     for (const auto& constraint : constraints) {

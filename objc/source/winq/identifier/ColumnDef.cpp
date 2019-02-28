@@ -30,7 +30,6 @@ ColumnDef::ColumnDef(const Column& column)
 ColumnDef::ColumnDef(const Column& column, const ColumnType& type)
 {
     syntax().column = column;
-    syntax().typed = true;
     syntax().columnType = type;
 }
 

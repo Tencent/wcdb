@@ -32,8 +32,7 @@ class ColumnDef final : public Identifier {
 #pragma mark - Syntax
 public:
     Column column;
-    bool typed = false;
-    ColumnType columnType;
+    WCDB_SYNTAX_ENUM_UNION(ColumnType, columnType);
     std::list<ColumnConstraint> constraints;
 
     bool isValid() const override final;

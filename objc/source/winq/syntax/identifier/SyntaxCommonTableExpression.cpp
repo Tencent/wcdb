@@ -43,7 +43,9 @@ String CommonTableExpression::getValidDescription() const
     if (!columns.empty()) {
         stream << "(" << columns << ")";
     }
-    stream << " AS(" << *select.get() << ")";
+    if (select != nullptr) {
+        stream << " AS(" << *select.get() << ")";
+    }
     return stream.str();
 }
 
@@ -51,7 +53,9 @@ void CommonTableExpression::iterate(const Iterator& iterator, bool& stop)
 {
     Identifier::iterate(iterator, stop);
     listIterate(columns, iterator, stop);
-    select->iterate(iterator, stop);
+    if (select != nullptr) {
+        recursiveIterate(*select.get(), iterator, stop);
+    }
 }
 
 } // namespace Syntax
