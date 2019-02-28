@@ -21,6 +21,7 @@
 #ifndef __WCDB_ENUM_HPP
 #define __WCDB_ENUM_HPP
 
+#include <sstream>
 #include <type_traits>
 
 namespace WCDB {
