@@ -27,7 +27,7 @@ namespace Syntax {
 
 bool WindowDef::isValid() const
 {
-    return !expressions.empty() || !orderingTerms.empty() || frameSpec.isValid();
+    return true;
 }
 
 #pragma mark - Identifier
@@ -39,6 +39,7 @@ Identifier::Type WindowDef::getType() const
 String WindowDef::getValidDescription() const
 {
     std::ostringstream stream;
+    stream << "(";
     bool extraSpace = false;
     if (!expressions.empty()) {
         extraSpace = true;
@@ -56,6 +57,7 @@ String WindowDef::getValidDescription() const
         }
         stream << frameSpec;
     }
+    stream << ")";
     return stream.str();
 }
 

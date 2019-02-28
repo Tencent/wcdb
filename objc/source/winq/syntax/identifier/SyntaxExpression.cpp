@@ -383,7 +383,7 @@ String Expression::getValidDescription() const
         }
         stream << " OVER";
         if (windowName.empty()) {
-            stream << "(" << windowDef << ")";
+            stream << windowDef;
         } else {
             stream << space << windowName;
         }

@@ -47,9 +47,10 @@
 - (void)test_default_constructible
 {
     WCDB::WindowDef constructible;
-    TestCaseAssertFalse(constructible.syntax().isValid());
-    TestCaseAssertIterateEqual(constructible, std::list<WCDB::Syntax::Identifier::Type>());
-    TestCaseAssertTrue(constructible.getDescription().empty());
+    TestCaseAssertTrue(constructible.syntax().isValid());
+    auto testingTypes = { WCDB::WindowDef::type };
+    TestCaseAssertIterateEqual(constructible, testingTypes);
+    TestCaseAssertSQLEqual(constructible, @"()");
 }
 
 - (void)test_get_type
@@ -64,7 +65,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"PARTITION BY 1, 2");
+    TestCaseAssertSQLEqual(testingSQL, @"(PARTITION BY 1, 2)");
 }
 
 - (void)test_order
@@ -73,7 +74,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"ORDER BY 1, 2");
+    TestCaseAssertSQLEqual(testingSQL, @"(ORDER BY 1, 2)");
 }
 
 - (void)test_framespec
@@ -82,7 +83,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::FrameSpec };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"RANGE UNBOUNDED PRECEDING");
+    TestCaseAssertSQLEqual(testingSQL, @"(RANGE UNBOUNDED PRECEDING)");
 }
 
 - (void)test_long
@@ -91,7 +92,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::FrameSpec };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"PARTITION BY 1, 2 ORDER BY 1, 2 RANGE UNBOUNDED PRECEDING");
+    TestCaseAssertSQLEqual(testingSQL, @"(PARTITION BY 1, 2 ORDER BY 1, 2 RANGE UNBOUNDED PRECEDING)");
 }
 
 @end

@@ -53,7 +53,7 @@ String WindowFunctionInvocation::getValidDescription() const
     if (!window.empty()) {
         stream << space << window;
     } else {
-        stream << "(" << windowDef << ")";
+        stream << windowDef;
     }
     return stream.str();
 }

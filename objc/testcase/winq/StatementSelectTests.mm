@@ -211,7 +211,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"SELECT 1, 2 WINDOW testWindow1 AS ORDER BY 1");
+    TestCaseAssertSQLEqual(testingSQL, @"SELECT 1, 2 WINDOW testWindow1 AS (ORDER BY 1)");
 }
 
 - (void)test_select_with_windows
@@ -220,7 +220,7 @@
 
     auto testingTypes = { WCDB::SQL::Type::SelectSTMT, WCDB::SQL::Type::SelectCore, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue, WCDB::SQL::Type::WindowDef, WCDB::SQL::Type::OrderingTerm, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"SELECT 1, 2 WINDOW testWindow1 AS ORDER BY 1, testWindow2 AS ORDER BY 2");
+    TestCaseAssertSQLEqual(testingSQL, @"SELECT 1, 2 WINDOW testWindow1 AS (ORDER BY 1), testWindow2 AS (ORDER BY 2)");
 }
 
 - (void)test_values
