@@ -38,10 +38,7 @@ public:
     bool ifNotExists = false;
     Schema schema;
     String table;
-    WCDB_SYNTAX_MAIN_UNION_ENUM(
-        ColumnDefs,
-        Select,
-    );
+    WCDB_SYNTAX_MAIN_UNION_ENUM(ColumnDefs, Select, );
     std::list<ColumnDef> columnDefs;
     std::list<TableConstraint> tableConstraints;
     bool withoutRowid = false;

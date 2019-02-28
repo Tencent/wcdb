@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
-    
-    bool Pragma::isValid() const 
-    {
-        return !name.empty();
-    }
+
+bool Pragma::isValid() const
+{
+    return !name.empty();
+}
 
 #pragma mark - Identifier
 Identifier::Type Pragma::getType() const

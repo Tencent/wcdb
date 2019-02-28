@@ -22,18 +22,18 @@
 #include <WCDB/SyntaxCommonConst.hpp>
 
 namespace WCDB {
-    
-    namespace Syntax {
-        
-        bool isIntegerColumnType(const String& type)
-        {
-            return type.isCaseInsensiveEqual("INTEGER") || type.isCaseInsensiveEqual("INT")
-            || type.isCaseInsensiveEqual("TINYINT") || type.isCaseInsensiveEqual("SMALLINT")
-            || type.isCaseInsensiveEqual("MEDIUMINT") || type.isCaseInsensiveEqual("BIGINT")
-            || type.isCaseInsensiveEqual("UNSIGNED BIG INT")
-            || type.isCaseInsensiveEqual("INT2") || type.isCaseInsensiveEqual("INT8");
-        }
-        
-    } // namespace Syntax
-    
+
+namespace Syntax {
+
+bool isIntegerColumnType(const String& type)
+{
+    return type.isCaseInsensiveEqual("INTEGER") || type.isCaseInsensiveEqual("INT")
+           || type.isCaseInsensiveEqual("TINYINT") || type.isCaseInsensiveEqual("SMALLINT")
+           || type.isCaseInsensiveEqual("MEDIUMINT") || type.isCaseInsensiveEqual("BIGINT")
+           || type.isCaseInsensiveEqual("UNSIGNED BIG INT")
+           || type.isCaseInsensiveEqual("INT2") || type.isCaseInsensiveEqual("INT8");
+}
+
+} // namespace Syntax
+
 } // namespace WCDB

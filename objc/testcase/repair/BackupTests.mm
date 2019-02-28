@@ -195,22 +195,22 @@
 //- (void)test_error_prone
 //{
 //    TestCaseAssertTrue([self.database canOpen]);
-//    
+//
 //    dispatch_group_t group = dispatch_group_create();
-//    
+//
 //    NSString* shm = [self.database.path stringByAppendingString:@"-shm"];
 //    NSString* wal = [self.database.path stringByAppendingString:@"-wal"];
-//    
+//
 //    dispatch_queue_t backupQueue = dispatch_queue_create("com.Tencent.WCDB.Backup.Error.Prone", DISPATCH_QUEUE_CONCURRENT);
 //    TestCaseResult* willBackup = [TestCaseResult no];
 //    TestCaseResult* didBackup = [TestCaseResult no];
-//    
+//
 //    TestCaseResult* willCheckpoint = [TestCaseResult no];
 //    TestCaseResult* didCheckpoint = [TestCaseResult no];
-//    
+//
 //    TestCaseResult* sleep = [TestCaseResult no];
 //    [WCTDatabase globalTraceSQL:^(NSString * sql) {
-//        // it will be trigger once by write locker inside Backup 
+//        // it will be trigger once by write locker inside Backup
 //        if ([sleep isNO] && [sql isEqualToString:@"ROLLBACK"]) {
 //            [sleep makeYES];
 //            TestCaseAssertResultYES(willBackup);
@@ -220,7 +220,7 @@
 //            while ([didCheckpoint isNO]) {}
 //        }
 //    }];
-//    
+//
 //    dispatch_group_async(group, backupQueue, ^{
 //        TestCaseLog(@"Will backup");
 //        [willBackup makeYES];
@@ -229,10 +229,10 @@
 //        [didBackup makeYES];
 //        TestCaseLog(@"Did backup");
 //    });
-//    
+//
 //    // wait until backup start
 //    while ([willBackup isNO]) {}
-//               
+//
 //    // Corrupt shm
 //    TestCaseAssertTrue([self.fileManager fileExistsAtPath:shm]);
 //    int fd = open(shm.UTF8String, O_RDWR);
@@ -244,7 +244,7 @@
 //
 //    TestCaseLog(@"Will checkpoint");
 //    [willCheckpoint makeYES];
-//    
+//
 //    TestCaseAssertTrue([self.database isOpened]);
 //    TestCaseAssertTrue([self.table updateProperty:TestCaseObject.content toValue:self.random.string]);
 //    for (int i = 0; i < 100; ++i) {
@@ -257,12 +257,12 @@
 //    BOOL result = [self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")];
 //    TestCaseAssertTrue([self.fileManager getFileSizeIfExists:wal] == 0);
 //    TestCaseAssertTrue(result);
-//    
+//
 //    TestCaseAssertResultNO(didBackup);
 //    [didCheckpoint makeYES];
 //    TestCaseLog(@"Did checkpoint");
-//    
-//    dispatch_group_wait(group, DISPATCH_TIME_FOREVER);    
+//
+//    dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
 //}
 
 @end

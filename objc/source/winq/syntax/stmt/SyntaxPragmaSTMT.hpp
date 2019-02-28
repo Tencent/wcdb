@@ -39,7 +39,7 @@ public:
     } switcher
     = Switch::NotSet;
     LiteralValue value;
-    
+
     bool isValid() const override final;
 
 #pragma mark - Identifier

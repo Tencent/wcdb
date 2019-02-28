@@ -35,12 +35,7 @@ class TableConstraint final : public Identifier {
 #pragma mark - Lang
 public:
     String name;
-    WCDB_SYNTAX_MAIN_UNION_ENUM(
-        PrimaryKey,
-        Unique,
-        Check,
-        ForeignKey,
-    );
+    WCDB_SYNTAX_MAIN_UNION_ENUM(PrimaryKey, Unique, Check, ForeignKey, );
 
     std::list<IndexedColumn> indexedColumns;
     WCDB_SYNTAX_ENUM_UNION(Conflict, conflict);

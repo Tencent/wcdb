@@ -587,73 +587,73 @@
 - (void)test_database_get_row
 {
     [self doTestRow:@[ @(self.object1.identifier), self.object1.content ]
-              andSQL:@"SELECT identifier, content FROM main.testTable LIMIT 1"
-         bySelecting:^WCTOneRow * {
-             return [self.database getRowOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName];
-         }];
+             andSQL:@"SELECT identifier, content FROM main.testTable LIMIT 1"
+        bySelecting:^WCTOneRow * {
+            return [self.database getRowOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName];
+        }];
 }
 
 - (void)test_database_get_row_where
 {
     [self doTestRow:@[ @(self.object2.identifier), self.object2.content ]
-              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier == 2 LIMIT 1"
-         bySelecting:^WCTOneRow * {
-             return [self.database getRowOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName where:TestCaseObject.identifier == 2];
-         }];
+             andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier == 2 LIMIT 1"
+        bySelecting:^WCTOneRow * {
+            return [self.database getRowOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName where:TestCaseObject.identifier == 2];
+        }];
 }
 
 - (void)test_database_get_row_orders
 {
     [self doTestRow:@[ @(self.object2.identifier), self.object2.content ]
-              andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC LIMIT 1"
-         bySelecting:^WCTOneRow * {
-             return [self.database getRowOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
-         }];
+             andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC LIMIT 1"
+        bySelecting:^WCTOneRow * {
+            return [self.database getRowOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
+        }];
 }
 
 - (void)test_database_get_row_offset
 {
     [self doTestRow:@[ @(self.object2.identifier), self.object2.content ]
-              andSQL:@"SELECT identifier, content FROM main.testTable LIMIT 1 OFFSET 1"
-         bySelecting:^WCTOneRow * {
-             return [self.database getRowOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName offset:1];
-         }];
+             andSQL:@"SELECT identifier, content FROM main.testTable LIMIT 1 OFFSET 1"
+        bySelecting:^WCTOneRow * {
+            return [self.database getRowOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName offset:1];
+        }];
 }
 
 - (void)test_database_get_row_where_orders
 {
     [self doTestRow:@[ @(self.object2.identifier), self.object2.content ]
-              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-         bySelecting:^WCTOneRow * {
-             return [self.database getRowOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
-         }];
+             andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
+        bySelecting:^WCTOneRow * {
+            return [self.database getRowOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending)];
+        }];
 }
 
 - (void)test_database_get_row_where_offset
 {
     [self doTestRow:@[ @(self.object2.identifier), self.object2.content ]
-              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 LIMIT 1 OFFSET 1"
-         bySelecting:^WCTOneRow * {
-             return [self.database getRowOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName where:TestCaseObject.identifier > 0 offset:1];
-         }];
+             andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 LIMIT 1 OFFSET 1"
+        bySelecting:^WCTOneRow * {
+            return [self.database getRowOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName where:TestCaseObject.identifier > 0 offset:1];
+        }];
 }
 
 - (void)test_database_get_row_orders_offset
 {
     [self doTestRow:@[ @(self.object1.identifier), self.object1.content ]
-              andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-         bySelecting:^WCTOneRow * {
-             return [self.database getRowOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
-         }];
+             andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+        bySelecting:^WCTOneRow * {
+            return [self.database getRowOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
+        }];
 }
 
 - (void)test_database_get_row_where_orders_offset
 {
     [self doTestRow:@[ @(self.object1.identifier), self.object1.content ]
-              andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-         bySelecting:^WCTOneRow * {
-             return [self.database getRowOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
-         }];
+             andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+        bySelecting:^WCTOneRow * {
+            return [self.database getRowOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) offset:1];
+        }];
 }
 
 #pragma mark - Database - Get Column
@@ -816,7 +816,7 @@
 
 - (void)test_database_get_rows_where_limit
 {
-    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ]]
+    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ] ]
               andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 1 LIMIT 1"
          bySelecting:^WCTColumnsXRows * {
              return [self.database getRowsOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName where:TestCaseObject.identifier > 1 limit:1];
@@ -825,7 +825,7 @@
 
 - (void)test_database_get_rows_orders_limit
 {
-    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ]]
+    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ] ]
               andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC LIMIT 1"
          bySelecting:^WCTColumnsXRows * {
              return [self.database getRowsOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
@@ -834,7 +834,7 @@
 
 - (void)test_database_get_rows_limit_offset
 {
-    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ]]
+    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ] ]
               andSQL:@"SELECT identifier, content FROM main.testTable LIMIT 1 OFFSET 1"
          bySelecting:^WCTColumnsXRows * {
              return [self.database getRowsOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName limit:1 offset:1];
@@ -843,7 +843,7 @@
 
 - (void)test_database_get_rows_where_orders_limit
 {
-    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ]]
+    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ] ]
               andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
          bySelecting:^WCTColumnsXRows * {
              return [self.database getRowsOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
@@ -852,7 +852,7 @@
 
 - (void)test_database_get_rows_where_limit_offset
 {
-    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ]]
+    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ] ]
               andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 LIMIT 1 OFFSET 1"
          bySelecting:^WCTColumnsXRows * {
              return [self.database getRowsOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName where:TestCaseObject.identifier > 0 limit:1 offset:1];
@@ -861,7 +861,7 @@
 
 - (void)test_database_get_rows_orders_limit_offset
 {
-    [self doTestRows:@[ @[ @(self.object1.identifier), self.object1.content ]]
+    [self doTestRows:@[ @[ @(self.object1.identifier), self.object1.content ] ]
               andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          bySelecting:^WCTColumnsXRows * {
              return [self.database getRowsOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
@@ -870,7 +870,7 @@
 
 - (void)test_database_get_rows_where_orders_limit_offset
 {
-    [self doTestRows:@[ @[ @(self.object1.identifier), self.object1.content ]]
+    [self doTestRows:@[ @[ @(self.object1.identifier), self.object1.content ] ]
               andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          bySelecting:^WCTColumnsXRows * {
              return [self.database getRowsOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
@@ -1584,7 +1584,7 @@
 
 - (void)test_table_get_rows_where_limit
 {
-    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ]]
+    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ] ]
               andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 1 LIMIT 1"
          bySelecting:^WCTColumnsXRows * {
              return [self.table getRowsOnResultColumns:TestCaseObject.allProperties where:TestCaseObject.identifier > 1 limit:1];
@@ -1593,7 +1593,7 @@
 
 - (void)test_table_get_rows_orders_limit
 {
-    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ]]
+    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ] ]
               andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC LIMIT 1"
          bySelecting:^WCTColumnsXRows * {
              return [self.table getRowsOnResultColumns:TestCaseObject.allProperties orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
@@ -1602,7 +1602,7 @@
 
 - (void)test_table_get_rows_limit_offset
 {
-    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ]]
+    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ] ]
               andSQL:@"SELECT identifier, content FROM main.testTable LIMIT 1 OFFSET 1"
          bySelecting:^WCTColumnsXRows * {
              return [self.table getRowsOnResultColumns:TestCaseObject.allProperties limit:1 offset:1];
@@ -1611,7 +1611,7 @@
 
 - (void)test_table_get_rows_where_orders_limit
 {
-    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ]]
+    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ] ]
               andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
          bySelecting:^WCTColumnsXRows * {
              return [self.table getRowsOnResultColumns:TestCaseObject.allProperties where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
@@ -1620,7 +1620,7 @@
 
 - (void)test_table_get_rows_where_limit_offset
 {
-    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ]]
+    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ] ]
               andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 LIMIT 1 OFFSET 1"
          bySelecting:^WCTColumnsXRows * {
              return [self.table getRowsOnResultColumns:TestCaseObject.allProperties where:TestCaseObject.identifier > 0 limit:1 offset:1];
@@ -1629,7 +1629,7 @@
 
 - (void)test_table_get_rows_orders_limit_offset
 {
-    [self doTestRows:@[ @[ @(self.object1.identifier), self.object1.content ]]
+    [self doTestRows:@[ @[ @(self.object1.identifier), self.object1.content ] ]
               andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          bySelecting:^WCTColumnsXRows * {
              return [self.table getRowsOnResultColumns:TestCaseObject.allProperties orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
@@ -1638,7 +1638,7 @@
 
 - (void)test_table_get_rows_where_orders_limit_offset
 {
-    [self doTestRows:@[ @[ @(self.object1.identifier), self.object1.content ]]
+    [self doTestRows:@[ @[ @(self.object1.identifier), self.object1.content ] ]
               andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          bySelecting:^WCTColumnsXRows * {
              return [self.table getRowsOnResultColumns:TestCaseObject.allProperties where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
@@ -2315,7 +2315,7 @@
 
 - (void)test_handle_get_rows_where_limit
 {
-    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ]]
+    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ] ]
               andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 1 LIMIT 1"
          bySelecting:^WCTColumnsXRows * {
              return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName where:TestCaseObject.identifier > 1 limit:1];
@@ -2324,7 +2324,7 @@
 
 - (void)test_handle_get_rows_orders_limit
 {
-    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ]]
+    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ] ]
               andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC LIMIT 1"
          bySelecting:^WCTColumnsXRows * {
              return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
@@ -2333,7 +2333,7 @@
 
 - (void)test_handle_get_rows_limit_offset
 {
-    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ]]
+    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ] ]
               andSQL:@"SELECT identifier, content FROM main.testTable LIMIT 1 OFFSET 1"
          bySelecting:^WCTColumnsXRows * {
              return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName limit:1 offset:1];
@@ -2342,7 +2342,7 @@
 
 - (void)test_handle_get_rows_where_orders_limit
 {
-    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ]]
+    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ] ]
               andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
          bySelecting:^WCTColumnsXRows * {
              return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1];
@@ -2351,7 +2351,7 @@
 
 - (void)test_handle_get_rows_where_limit_offset
 {
-    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ]]
+    [self doTestRows:@[ @[ @(self.object2.identifier), self.object2.content ] ]
               andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 LIMIT 1 OFFSET 1"
          bySelecting:^WCTColumnsXRows * {
              return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName where:TestCaseObject.identifier > 0 limit:1 offset:1];
@@ -2360,7 +2360,7 @@
 
 - (void)test_handle_get_rows_orders_limit_offset
 {
-    [self doTestRows:@[ @[ @(self.object1.identifier), self.object1.content ]]
+    [self doTestRows:@[ @[ @(self.object1.identifier), self.object1.content ] ]
               andSQL:@"SELECT identifier, content FROM main.testTable ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          bySelecting:^WCTColumnsXRows * {
              return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];
@@ -2369,7 +2369,7 @@
 
 - (void)test_handle_get_rows_where_orders_limit_offset
 {
-    [self doTestRows:@[ @[ @(self.object1.identifier), self.object1.content ]]
+    [self doTestRows:@[ @[ @(self.object1.identifier), self.object1.content ] ]
               andSQL:@"SELECT identifier, content FROM main.testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
          bySelecting:^WCTColumnsXRows * {
              return [[self.database getHandle] getRowsOnResultColumns:TestCaseObject.allProperties fromTable:self.tableName where:TestCaseObject.identifier > 0 orders:TestCaseObject.identifier.asOrder(WCTOrderedDescending) limit:1 offset:1];

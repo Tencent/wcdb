@@ -36,7 +36,7 @@ public:
     std::list<JoinOperator> joinOperators;
     std::list<TableOrSubquery> tableOrSubqueries;
     std::list<Shadow<JoinConstraint>> joinConstraints; // nullable
-    
+
     bool isValid() const override final;
 
 #pragma mark - Identifier

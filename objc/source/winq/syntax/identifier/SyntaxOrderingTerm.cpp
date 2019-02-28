@@ -18,18 +18,18 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/SyntaxEnum.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
-    
-    bool OrderingTerm::isValid() const 
-    {
-        return expression.isValid();
-    }
+
+bool OrderingTerm::isValid() const
+{
+    return expression.isValid();
+}
 
 #pragma mark - Identifier
 Identifier::Type OrderingTerm::getType() const

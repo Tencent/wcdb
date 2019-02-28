@@ -35,7 +35,7 @@
 - (void)test_default_constructible
 {
     WCDB::Schema constructible;
-TestCaseAssertTrue(constructible.syntax().isValid());
+    TestCaseAssertTrue(constructible.syntax().isValid());
     auto testingTypes = { WCDB::SQL::Type::Schema };
     TestCaseAssertIterateEqual(constructible, testingTypes);
     TestCaseAssertSQLEqual(constructible, @"main");

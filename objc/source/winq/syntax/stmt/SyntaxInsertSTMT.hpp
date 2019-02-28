@@ -37,11 +37,7 @@ public:
     String alias;
     std::list<Column> columns;
 
-    WCDB_SYNTAX_MAIN_UNION_ENUM(
-        Values,
-        Select,
-        Default,
-    );
+    WCDB_SYNTAX_MAIN_UNION_ENUM(Values, Select, Default, );
     std::list<std::list<Expression>> expressionsValues;
     SelectSTMT select;
 

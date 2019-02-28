@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
+#include <WCDB/Syntax.h>
 #include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/SyntaxEnum.hpp>
-#include <WCDB/Syntax.h>
 
 namespace WCDB {
 
@@ -40,7 +40,7 @@ constexpr const char* Enum::description(const Syntax::BindParameter::Switch& swi
 }
 
 namespace Syntax {
-    
+
 #pragma mark - Identifier
 Identifier::Type BindParameter::getType() const
 {

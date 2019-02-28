@@ -34,7 +34,7 @@ class AttachSTMT final : public Identifier {
 public:
     Expression expression;
     Schema schema;
-    
+
     bool isValid() const override final;
 
 #pragma mark - Identifier

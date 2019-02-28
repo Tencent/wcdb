@@ -18,11 +18,11 @@
  * limitations under the License.
  */
 
+#import <WCDB/Enum.hpp>
 #import <WCDB/FileManager.hpp>
 #import <WCDB/Notifier.hpp>
 #import <WCDB/ThreadedErrors.hpp>
 #import <WCDB/WCTCommon.h>
-#import <WCDB/Enum.hpp>
 
 namespace WCDB {
 

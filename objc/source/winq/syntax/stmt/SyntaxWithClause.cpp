@@ -24,11 +24,11 @@
 namespace WCDB {
 
 namespace Syntax {
-    
-    bool WithClause::isValid() const 
-    {
-        return !tables.empty() && tables.begin()->isValid();
-    }
+
+bool WithClause::isValid() const
+{
+    return !tables.empty() && tables.begin()->isValid();
+}
 
 #pragma mark - Identifier
 Identifier::Type WithClause::getType() const

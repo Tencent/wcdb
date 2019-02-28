@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
-    
-    bool Schema::isValid() const 
-    {
-        return !name.empty();
-    }
+
+bool Schema::isValid() const
+{
+    return !name.empty();
+}
 
 // Typically, empty schema is not allowed in WCDB. If you really need a empty schema, you should specify it explicitly.
 Schema::Schema() : name(mainSchema)

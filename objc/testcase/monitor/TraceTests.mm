@@ -82,7 +82,7 @@
     __weak typeof(self) weakSelf = self;
     [WCTDatabase globalTraceError:^(WCTError* error) {
         TestCaseLog(@"%@", error);
-        typeof(self) strongSelf = weakSelf; 
+        typeof(self) strongSelf = weakSelf;
         if (strongSelf == nil) {
             return;
         }

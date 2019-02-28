@@ -23,10 +23,10 @@
 
 #include <WCDB/Assertion.hpp>
 
-#define WCTSyntaxRemedialAssert(cond)                                             \
-WCTRemedialAssert(cond, "Invalid syntax detected.", return stream.str();)
+#define WCTSyntaxRemedialAssert(cond)                                          \
+    WCTRemedialAssert(cond, "Invalid syntax detected.", return stream.str();)
 
-#define WCTIterateRemedialAssert(cond)                                            \
-WCTRemedialAssert(cond, "Invalid types detected.", return;)
+#define WCTIterateRemedialAssert(cond)                                         \
+    WCTRemedialAssert(cond, "Invalid types detected.", return;)
 
 #endif /* __WCDB_SYNTAX_ASSERTION_HPP */

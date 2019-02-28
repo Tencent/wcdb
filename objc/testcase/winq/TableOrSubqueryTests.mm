@@ -63,7 +63,7 @@
 - (void)test_default_constructible
 {
     WCDB::TableOrSubquery constructible;
-TestCaseAssertFalse(constructible.syntax().isValid());
+    TestCaseAssertFalse(constructible.syntax().isValid());
     TestCaseAssertIterateEqual(constructible, std::list<WCDB::Syntax::Identifier::Type>());
     TestCaseAssertTrue(constructible.getDescription().empty());
 }

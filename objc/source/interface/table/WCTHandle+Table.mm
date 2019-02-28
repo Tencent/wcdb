@@ -43,7 +43,7 @@
 }
 
 - (BOOL)createTable:(NSString *)tableName
-                    withClass:(Class<WCTTableCoding>)cls
+          withClass:(Class<WCTTableCoding>)cls
 {
     WCTRemedialAssert(tableName && cls, "Class or table name can't be null.", return NO;);
     return [self runNestedTransaction:^BOOL(WCTHandle *handle) {

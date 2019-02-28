@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 
 namespace WCDB {
 
@@ -98,11 +98,11 @@ void SelectCore::iterate(const Iterator& iterator, bool& stop)
     switch (switcher) {
     case Switch::Select:
         listIterate(resultColumns, iterator, stop);
-            if (!tableOrSubqueries.empty()) {
-                listIterate(tableOrSubqueries, iterator, stop);
-            } else if (joinClause.isValid()) {
-                recursiveIterate(joinClause, iterator, stop);
-            }
+        if (!tableOrSubqueries.empty()) {
+            listIterate(tableOrSubqueries, iterator, stop);
+        } else if (joinClause.isValid()) {
+            recursiveIterate(joinClause, iterator, stop);
+        }
         if (condition.isValid()) {
             recursiveIterate(condition, iterator, stop);
         }

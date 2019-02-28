@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
-    
-    bool ResultColumn::isValid() const 
-    {
-        return wildcard || expression.isValid();
-    }
+
+bool ResultColumn::isValid() const
+{
+    return wildcard || expression.isValid();
+}
 
 #pragma mark - Identifier
 Identifier::Type ResultColumn::getType() const

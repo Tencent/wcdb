@@ -19,8 +19,8 @@
  */
 
 #include <WCDB/UnsafeString.hpp>
-#include <zlib.h>
 #include <string>
+#include <zlib.h>
 
 namespace WCDB {
 
@@ -50,11 +50,11 @@ size_t UnsafeString::length() const
     }
     return strlen(m_cstring);
 }
-    
-    bool UnsafeString::isCaseInsensiveEqual(const UnsafeString &target) const
-    {
-        return strncasecmp(cstring(), target.cstring(), std::min(length(), target.length())) == 0;
-    }
+
+bool UnsafeString::isCaseInsensiveEqual(const UnsafeString& target) const
+{
+    return strncasecmp(cstring(), target.cstring(), std::min(length(), target.length())) == 0;
+}
 
 const UnsafeString& UnsafeString::null()
 {

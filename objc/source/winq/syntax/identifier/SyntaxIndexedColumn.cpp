@@ -18,14 +18,14 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/SyntaxEnum.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
-    
+
 #pragma mark - Identifier
 Identifier::Type IndexedColumn::getType() const
 {

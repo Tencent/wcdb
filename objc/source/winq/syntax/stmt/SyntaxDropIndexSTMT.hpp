@@ -33,7 +33,7 @@ public:
     bool ifExists = false;
     Schema schema;
     String index;
-    
+
     bool isValid() const override final;
 
 #pragma mark - Identifier

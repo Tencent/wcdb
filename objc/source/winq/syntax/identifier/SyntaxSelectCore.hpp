@@ -34,10 +34,7 @@ class TableOrSubquery;
 class SelectCore final : public Identifier {
 #pragma mark - Lang
 public:
-    WCDB_SYNTAX_MAIN_UNION_ENUM(
-        Select,
-        Values,
-    );
+    WCDB_SYNTAX_MAIN_UNION_ENUM(Select, Values, );
     bool distinct = false;
     std::list<ResultColumn> resultColumns;
     std::list<TableOrSubquery> tableOrSubqueries;

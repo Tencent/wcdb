@@ -585,8 +585,7 @@ void MigrationHandle::resetMigrate()
     m_removeMigratedStatement->reset();
 }
 
-bool MigrationHandle::prepareMigrate(const String& table,
-                                     Syntax::ConflictAction conflictAction)
+bool MigrationHandle::prepareMigrate(const String& table, Syntax::ConflictAction conflictAction)
 {
     WCTInnerAssert(!isMigratedPrepared());
     const MigrationInfo* info = getBoundInfo(table);

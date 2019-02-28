@@ -34,7 +34,7 @@ public:
     String alias;
     bool wildcard = false;
     String table;
-    
+
     bool isValid() const override final;
 
 #pragma mark - Identifier

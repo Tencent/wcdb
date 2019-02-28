@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
-    
-    bool QualifiedTableName::isValid() const 
-    {
-        return !table.empty();
-    }
+
+bool QualifiedTableName::isValid() const
+{
+    return !table.empty();
+}
 
 #pragma mark - Identifier
 Identifier::Type QualifiedTableName::getType() const

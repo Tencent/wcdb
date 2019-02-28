@@ -40,7 +40,7 @@ public:
     } switcher
     = Switch::NotSet;
     String index;
-    
+
     bool isValid() const override final;
 
 #pragma mark - Identifier

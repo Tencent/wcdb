@@ -31,13 +31,7 @@ namespace Syntax {
 class TableOrSubquery final : public Identifier {
 #pragma mark - Lang
 public:
-    WCDB_SYNTAX_MAIN_UNION_ENUM(
-        Table,
-        Function,
-        TableOrSubqueries,
-        JoinClause,
-        Select,
-    );
+    WCDB_SYNTAX_MAIN_UNION_ENUM(Table, Function, TableOrSubqueries, JoinClause, Select, );
 
     Schema schema;
     String tableOrFunction;

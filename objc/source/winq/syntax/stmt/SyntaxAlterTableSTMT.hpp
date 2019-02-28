@@ -33,11 +33,7 @@ public:
     Schema schema;
     String table;
 
-    WCDB_SYNTAX_MAIN_UNION_ENUM(
-        RenameTable,
-        RenameColumn,
-        AddColumn,
-    );
+    WCDB_SYNTAX_MAIN_UNION_ENUM(RenameTable, RenameColumn, AddColumn, );
     String newTable;
     Column column;
     Column newColumn;

@@ -20,11 +20,11 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/AsyncQueue.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/Dispatch.hpp>
 #include <WCDB/Exiting.hpp>
 #include <WCDB/String.hpp>
 #include <atomic>
-#include <WCDB/CoreConst.h>
 
 namespace WCDB {
 
@@ -38,7 +38,9 @@ AsyncQueue::~AsyncQueue()
     std::unique_lock<std::mutex> lockGuard(m_mutex);
     while (m_running) {
         // wait until done
-        m_cond.wait_for(lockGuard, std::chrono::nanoseconds((long long) (AsyncQueueTimeOutForExiting * 1E9)));
+        m_cond.wait_for(
+        lockGuard,
+        std::chrono::nanoseconds((long long) (AsyncQueueTimeOutForExiting * 1E9)));
     }
     WCTRemedialAssert(
     !m_running, String::formatted("Queue: %s does not exit on time.", name.c_str()), ;);

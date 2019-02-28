@@ -32,7 +32,7 @@ class Schema final : public Identifier {
 public:
     Schema();
     String name;
-    
+
     bool isValid() const override final;
 
 #pragma mark - Identifier

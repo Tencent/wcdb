@@ -36,7 +36,7 @@ public:
     Filter filter;
     String window;
     WindowDef windowDef;
-    
+
     bool isValid() const override final;
 
 #pragma mark - Identifier

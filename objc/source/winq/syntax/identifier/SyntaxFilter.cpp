@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
-    
-    bool Filter::isValid() const 
-    {
-        return expression != nullptr;
-    }
+
+bool Filter::isValid() const
+{
+    return expression != nullptr;
+}
 
 #pragma mark - Identifier
 Identifier::Type Filter::getType() const

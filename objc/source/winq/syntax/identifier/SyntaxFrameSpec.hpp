@@ -32,10 +32,7 @@ class Expression;
 class FrameSpec final : public Identifier {
 #pragma mark - Lang
 public:
-    WCDB_SYNTAX_MAIN_UNION_ENUM(
-        Range,
-        Rows,
-    );
+    WCDB_SYNTAX_MAIN_UNION_ENUM(Range, Rows, );
 
     enum class Event {
         Single = 1,

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 
 namespace WCDB {
 
@@ -43,35 +43,34 @@ String UpsertClause::getValidDescription() const
     }
     stream << " DO ";
     switch (switcher) {
-        case Switch::Nothing:
-            stream << "NOTHING";
-            break;
-        case Switch::Update: {
-            WCTSyntaxRemedialAssert(columnsList.size() == expressions.size());
-            stream << "UPDATE SET ";
-            auto columns = columnsList.begin();
-            auto expression = expressions.begin();
-            bool comma = false;
-            while (columns != columnsList.end() && expression != expressions.end()) {
-                if (comma) {
-                    stream << ", ";
-                } else {
-                    comma = true;
-                }
-                if (columns->size() > 1) {
-                    stream << "(" << *columns << ")";
-                } else {
-                    stream << *columns;
-                }
-                stream << " = " << *expression;
-                ++columns;
-                ++expression;
+    case Switch::Nothing:
+        stream << "NOTHING";
+        break;
+    case Switch::Update: {
+        WCTSyntaxRemedialAssert(columnsList.size() == expressions.size());
+        stream << "UPDATE SET ";
+        auto columns = columnsList.begin();
+        auto expression = expressions.begin();
+        bool comma = false;
+        while (columns != columnsList.end() && expression != expressions.end()) {
+            if (comma) {
+                stream << ", ";
+            } else {
+                comma = true;
             }
-            if (updateCondition.isValid()) {
-                stream << " WHERE " << updateCondition;
+            if (columns->size() > 1) {
+                stream << "(" << *columns << ")";
+            } else {
+                stream << *columns;
             }
+            stream << " = " << *expression;
+            ++columns;
+            ++expression;
         }
-            break;
+        if (updateCondition.isValid()) {
+            stream << " WHERE " << updateCondition;
+        }
+    } break;
     }
     return stream.str();
 }

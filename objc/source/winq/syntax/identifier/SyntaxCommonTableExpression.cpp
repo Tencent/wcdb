@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
-    
-    bool CommonTableExpression::isValid() const
-    {
-        return !table.empty();
-    }
+
+bool CommonTableExpression::isValid() const
+{
+    return !table.empty();
+}
 
 #pragma mark - Identifier
 Identifier::Type CommonTableExpression::getType() const

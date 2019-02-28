@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
-    
+
 #pragma mark - Identifier
 Identifier::Type AnalyzeSTMT::getType() const
 {
@@ -36,18 +36,18 @@ String AnalyzeSTMT::getValidDescription() const
     std::ostringstream stream;
     stream << "ANALYZE";
     switch (switcher) {
-        case Switch::SchemaOrTableOrIndex:
-            stream << space << schema;
-            if (!tableOrIndex.empty()) {
-                if (schema.isValid()) {
-                    stream << ".";
-                }
-                stream << tableOrIndex;
+    case Switch::SchemaOrTableOrIndex:
+        stream << space << schema;
+        if (!tableOrIndex.empty()) {
+            if (schema.isValid()) {
+                stream << ".";
             }
-            break;
-        default:
-            WCTInnerAssert(switcher == Switch::All);
-            break;
+            stream << tableOrIndex;
+        }
+        break;
+    default:
+        WCTInnerAssert(switcher == Switch::All);
+        break;
     }
     return stream.str();
 }
@@ -56,12 +56,12 @@ void AnalyzeSTMT::iterate(const Iterator& iterator, bool& stop)
 {
     Identifier::iterate(iterator, stop);
     switch (switcher) {
-        case Switch::SchemaOrTableOrIndex:
-            recursiveIterate(schema, iterator, stop);
-            break;
-        default:
-            WCTInnerAssert(switcher == Switch::All);
-            break;
+    case Switch::SchemaOrTableOrIndex:
+        recursiveIterate(schema, iterator, stop);
+        break;
+    default:
+        WCTInnerAssert(switcher == Switch::All);
+        break;
     }
 }
 

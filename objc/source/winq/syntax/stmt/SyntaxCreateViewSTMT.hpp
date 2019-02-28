@@ -36,7 +36,7 @@ public:
     String view;
     std::list<Column> columns;
     SelectSTMT select;
-    
+
     bool isValid() const override final;
 
 #pragma mark - Identifier

@@ -40,7 +40,7 @@ public:
     Expression limit;
     LimitParameterType limitParameterType = LimitParameterType::NotSet;
     Expression limitParameter;
-    
+
     bool isValid() const override final;
 
 #pragma mark - Identifier

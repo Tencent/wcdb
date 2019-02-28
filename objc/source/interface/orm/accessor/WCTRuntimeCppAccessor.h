@@ -32,7 +32,7 @@ typename std::enable_if<WCDB::ColumnInfo<PropertyType>::isBaseType>::type>
 : public WCTRuntimeAccessor<PropertyType>,
   public WCTCppAccessor<(
   WCDB::ColumnType) WCDB::ColumnInfo<PropertyType>::type> {
-  static_assert(std::is_fundamental<PropertyType>::value || std::is_enum<PropertyType>::value, "Only fundamental C/Cpp types supported, for others, use ObjC types.");
+    static_assert(std::is_fundamental<PropertyType>::value || std::is_enum<PropertyType>::value, "Only fundamental C/Cpp types supported, for others, use ObjC types.");
 
 protected:
     using CppAccessor = WCTCppAccessor<WCDB::ColumnInfo<PropertyType>::type>;

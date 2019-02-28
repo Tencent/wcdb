@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 
 namespace WCDB {
 
@@ -36,11 +36,11 @@ String RollbackSTMT::getValidDescription() const
     std::ostringstream stream;
     stream << "ROLLBACK";
     switch (switcher) {
-        case Switch::Transaction:
-            break;            
-        case Switch::Savepoint:
-            stream << " TO " << savepoint;
-            break;
+    case Switch::Transaction:
+        break;
+    case Switch::Savepoint:
+        stream << " TO " << savepoint;
+        break;
     }
     return stream.str();
 }

@@ -38,7 +38,7 @@ public:
     String table;
     std::list<IndexedColumn> indexedColumns;
     Expression condition;
-    
+
     bool isValid() const override final;
 
 #pragma mark - Identifier

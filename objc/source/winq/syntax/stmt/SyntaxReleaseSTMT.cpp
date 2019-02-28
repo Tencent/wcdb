@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
-    
-    bool ReleaseSTMT::isValid() const 
-    {
-        return !savepoint.empty();
-    }
+
+bool ReleaseSTMT::isValid() const
+{
+    return !savepoint.empty();
+}
 
 #pragma mark - Identifier
 Identifier::Type ReleaseSTMT::getType() const

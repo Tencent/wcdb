@@ -42,35 +42,35 @@
 - (void)test_conflict_abort
 {
     auto testingSQL = WCDB::ColumnConstraint(name).primaryKey().conflict(WCDB::Conflict::Abort);
-    
+
     TestCaseAssertSQLEqual(testingSQL, @"CONSTRAINT testColumnConstraint PRIMARY KEY ON CONFLICT ABORT");
 }
 
 - (void)test_conflict_fail
 {
     auto testingSQL = WCDB::ColumnConstraint(name).primaryKey().conflict(WCDB::Conflict::Fail);
-    
+
     TestCaseAssertSQLEqual(testingSQL, @"CONSTRAINT testColumnConstraint PRIMARY KEY ON CONFLICT FAIL");
 }
 
 - (void)test_conflict_rollback
 {
     auto testingSQL = WCDB::ColumnConstraint(name).primaryKey().conflict(WCDB::Conflict::Rollback);
-    
+
     TestCaseAssertSQLEqual(testingSQL, @"CONSTRAINT testColumnConstraint PRIMARY KEY ON CONFLICT ROLLBACK");
 }
 
 - (void)test_conflict_ignore
 {
     auto testingSQL = WCDB::ColumnConstraint(name).primaryKey().conflict(WCDB::Conflict::Ignore);
-    
+
     TestCaseAssertSQLEqual(testingSQL, @"CONSTRAINT testColumnConstraint PRIMARY KEY ON CONFLICT IGNORE");
 }
 
 - (void)test_conflict_replace
 {
     auto testingSQL = WCDB::ColumnConstraint(name).primaryKey().conflict(WCDB::Conflict::Replace);
-    
+
     TestCaseAssertSQLEqual(testingSQL, @"CONSTRAINT testColumnConstraint PRIMARY KEY ON CONFLICT REPLACE");
 }
 

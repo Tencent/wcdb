@@ -36,9 +36,9 @@
 #define WCDB_BUSY_RETRY_CONFIG_NAME "com.Tencent.WCDB.Config.BusyRetry"
 
 namespace WCDB {
-    
-    // Async Queue
-    static constexpr const double AsyncQueueTimeOutForExiting = 10.0f;
+
+// Async Queue
+static constexpr const double AsyncQueueTimeOutForExiting = 10.0f;
 
 // Migration Queue
 static constexpr const char* MigrationQueueName = "com.Tencent.WCDB.Queue.Migration";
@@ -72,7 +72,7 @@ static constexpr const double BackupQueueDelayForNonCritical = 5.0;
 
 // Basic Config
 static constexpr const char* BasicConfigName = WCDB_BASIC_CONFIG_NAME;
-    static constexpr const int BasicConfigBusyRetryMaxAllowedNumberOfTimes = 3;
+static constexpr const int BasicConfigBusyRetryMaxAllowedNumberOfTimes = 3;
 
 // Tokenize Config
 static constexpr const char* TokenizeConfigName = WCDB_TOKENIZE_CONFIG_NAME;

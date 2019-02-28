@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
 
-    bool CreateIndexSTMT::isValid() const 
-    {
-        return !index.empty();
-    }
+bool CreateIndexSTMT::isValid() const
+{
+    return !index.empty();
+}
 
 #pragma mark - Identifier
 Identifier::Type CreateIndexSTMT::getType() const

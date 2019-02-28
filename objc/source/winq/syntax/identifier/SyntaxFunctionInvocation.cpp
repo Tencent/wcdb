@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
-    
-    bool FunctionInvocation::isValid() const 
-    {
-        return !name.empty();
-    }
+
+bool FunctionInvocation::isValid() const
+{
+    return !name.empty();
+}
 
 #pragma mark - Identifier
 Identifier::Type FunctionInvocation::getType() const

@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
 
-    bool CreateViewSTMT::isValid() const 
-    {
-        return !view.empty();
-    }
+bool CreateViewSTMT::isValid() const
+{
+    return !view.empty();
+}
 
 #pragma mark - Identifier
 Identifier::Type CreateViewSTMT::getType() const

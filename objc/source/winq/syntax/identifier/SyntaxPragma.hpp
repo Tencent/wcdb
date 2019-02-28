@@ -31,7 +31,7 @@ class Pragma final : public Identifier {
 #pragma mark - Lang
 public:
     String name;
-    
+
     bool isValid() const override final;
 
 #pragma mark - Identifier

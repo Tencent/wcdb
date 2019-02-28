@@ -25,7 +25,7 @@
 
 namespace WCDB {
 
-    // TODO: refactor to readonly string
+// TODO: refactor to readonly string
 class UnsafeString final {
 public:
     UnsafeString();
@@ -44,7 +44,7 @@ public:
 
     static const UnsafeString& null();
 
-    bool isCaseInsensiveEqual(const UnsafeString &target) const;
+    bool isCaseInsensiveEqual(const UnsafeString& target) const;
     const char* cstring() const;
     size_t length() const;
 

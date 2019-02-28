@@ -38,7 +38,7 @@ public:
         UnionAll,
     } combination;
     SelectSTMT recursiveSelect;
-    
+
     bool isValid() const override final;
 
 #pragma mark - Identifier

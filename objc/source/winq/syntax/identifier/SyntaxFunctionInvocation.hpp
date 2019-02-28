@@ -34,7 +34,7 @@ public:
     bool distinct = false;
     bool wildcard = false;
     std::list<Expression> expressions;
-    
+
     bool isValid() const override final;
 
 #pragma mark - Identifier

@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
-    
+
 #pragma mark - Identifier
 Identifier::Type VacuumSTMT::getType() const
 {
@@ -36,11 +36,11 @@ String VacuumSTMT::getValidDescription() const
     std::ostringstream stream;
     stream << "VACUUM";
     switch (switcher) {
-        case Switch::All:
-            break;
-        case Switch::Schema:
-            stream << space << schema;
-            break;
+    case Switch::All:
+        break;
+    case Switch::Schema:
+        stream << space << schema;
+        break;
     }
     return stream.str();
 }
@@ -49,11 +49,11 @@ void VacuumSTMT::iterate(const Iterator& iterator, bool& stop)
 {
     Identifier::iterate(iterator, stop);
     switch (switcher) {
-        case Switch::All:
-            break;
-        case Switch::Schema:
-            recursiveIterate(schema, iterator, stop);
-            break;
+    case Switch::All:
+        break;
+    case Switch::Schema:
+        recursiveIterate(schema, iterator, stop);
+        break;
     }
 }
 

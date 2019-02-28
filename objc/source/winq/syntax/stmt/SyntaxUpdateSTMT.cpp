@@ -18,18 +18,18 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/SyntaxEnum.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
 
-    bool UpdateSTMT::isValid() const 
-    {
-        return table.isValid();
-    }
+bool UpdateSTMT::isValid() const
+{
+    return table.isValid();
+}
 
 #pragma mark - Identifier
 Identifier::Type UpdateSTMT::getType() const

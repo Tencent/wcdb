@@ -20,19 +20,19 @@
 
 #define WCDB_ORM_TYPE_VIRTUAL_TABLE virtual_table
 
-#define __WCDB_VIRTUAL_TABLE_BEGIN()                                  \
-    +(void) WCDB_ORM_UNIQUE(WCDB_ORM_TYPE_VIRTUAL_TABLE)            \
+#define __WCDB_VIRTUAL_TABLE_BEGIN()                                           \
+    +(void) WCDB_ORM_UNIQUE(WCDB_ORM_TYPE_VIRTUAL_TABLE)                       \
     {                                                                          \
         WCDB::StatementCreateVirtualTable& statement = binding.statementVirtualTable;
 
 #define __WCDB_VIRTUAL_TABLE_END() }
 
-#define __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(argument_)                \
-    __WCDB_VIRTUAL_TABLE_BEGIN()                                      \
+#define __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(argument_)                           \
+    __WCDB_VIRTUAL_TABLE_BEGIN()                                               \
     statement.argument(argument_);                                             \
     __WCDB_VIRTUAL_TABLE_END()
 
-#define __WCDB_VIRTUAL_TABLE_MODULE_IMP(moduleName)                 \
-    __WCDB_VIRTUAL_TABLE_BEGIN()                                      \
+#define __WCDB_VIRTUAL_TABLE_MODULE_IMP(moduleName)                            \
+    __WCDB_VIRTUAL_TABLE_BEGIN()                                               \
     statement.usingModule(moduleName);                                         \
     __WCDB_VIRTUAL_TABLE_END()

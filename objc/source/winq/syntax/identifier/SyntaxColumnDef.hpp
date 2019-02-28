@@ -35,9 +35,9 @@ public:
     bool typed = false;
     ColumnType columnType;
     std::list<ColumnConstraint> constraints;
-    
+
     bool isValid() const override final;
-    
+
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::ColumnDef;

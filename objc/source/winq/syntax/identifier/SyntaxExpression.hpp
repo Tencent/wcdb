@@ -38,24 +38,22 @@ class SelectSTMT;
 class Expression final : public Identifier {
 #pragma mark - Lang
 public:
-    WCDB_SYNTAX_MAIN_UNION_ENUM(
-        LiteralValue,
-        BindParameter,
-        Column,
-        UnaryOperation,
-        BinaryOperation,
-        Function,
-        Expressions,
-        Cast,
-        Collate,
-        Between,
-        In,
-        Exists,
-        Case,
-        RaiseFunction,
-        Window,
-        Select,
-    );
+    WCDB_SYNTAX_MAIN_UNION_ENUM(LiteralValue,
+                                BindParameter,
+                                Column,
+                                UnaryOperation,
+                                BinaryOperation,
+                                Function,
+                                Expressions,
+                                Cast,
+                                Collate,
+                                Between,
+                                In,
+                                Exists,
+                                Case,
+                                RaiseFunction,
+                                Window,
+                                Select, );
 
     LiteralValue literalValue;
     BindParameter bindParameter;

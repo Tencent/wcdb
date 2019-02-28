@@ -31,7 +31,7 @@ class ReleaseSTMT final : public Identifier {
 #pragma mark - Lang
 public:
     String savepoint;
-    
+
     bool isValid() const override final;
 
 #pragma mark - Identifier

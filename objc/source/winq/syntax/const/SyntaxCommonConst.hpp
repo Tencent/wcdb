@@ -22,55 +22,55 @@
 #define __WCDB_SYNTAX_COMMON_CONST_HPP
 
 namespace WCDB {
-    
-    class String;
+
+class String;
 
 namespace Syntax {
-    
-    enum class ColumnType {
-        Null = 0,
-        Integer32,
-        Integer64,
-        Float,
-        Text,
-        BLOB,
-    };
-    
-    bool isIntegerColumnType(const String& type);
-    
-    enum class CompoundOperator : int {
-        Union = 1,
-        UnionAll,
-        Intersect,
-        Except,
-    };
-    
-    enum class Conflict {
-        Rollback = 1,
-        Abort,
-        Fail,
-        Ignore,
-        Replace,
-    };
-    
-    enum class JoinOperator : int {
-        With = 1,
-        Join,
-        LeftOuterJoin,
-        LeftJoin,
-        InnerJoin,
-        CrossJoin,
-        NaturalJoin,
-        NaturalLeftOuterJoin,
-        NaturalLeftJoin,
-        NaturalInnerJoin,
-        NaturalCrossJoin,
-    };
 
-    enum class Order : int {
-        ASC = 0,
-        DESC,
-    };
+enum class ColumnType {
+    Null = 0,
+    Integer32,
+    Integer64,
+    Float,
+    Text,
+    BLOB,
+};
+
+bool isIntegerColumnType(const String& type);
+
+enum class CompoundOperator : int {
+    Union = 1,
+    UnionAll,
+    Intersect,
+    Except,
+};
+
+enum class Conflict {
+    Rollback = 1,
+    Abort,
+    Fail,
+    Ignore,
+    Replace,
+};
+
+enum class JoinOperator : int {
+    With = 1,
+    Join,
+    LeftOuterJoin,
+    LeftJoin,
+    InnerJoin,
+    CrossJoin,
+    NaturalJoin,
+    NaturalLeftOuterJoin,
+    NaturalLeftJoin,
+    NaturalInnerJoin,
+    NaturalCrossJoin,
+};
+
+enum class Order : int {
+    ASC = 0,
+    DESC,
+};
 
 enum class LimitParameterType {
     NotSet = 0,

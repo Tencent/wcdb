@@ -18,18 +18,18 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/SyntaxEnum.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
-    
-    bool ColumnDef::isValid() const 
-    {
-        return column.isValid();
-    }
+
+bool ColumnDef::isValid() const
+{
+    return column.isValid();
+}
 
 #pragma mark - Identifier
 Identifier::Type ColumnDef::getType() const

@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
+#include <WCDB/Syntax.h>
 #include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/SyntaxEnum.hpp>
-#include <WCDB/Syntax.h>
 
 namespace WCDB {
 
@@ -37,11 +37,11 @@ Enum::description(const Syntax::RecursiveCTE::Combination& combination)
 }
 
 namespace Syntax {
-    
-    bool RecursiveCTE::isValid() const 
-    {
-        return table.isValid();
-    }
+
+bool RecursiveCTE::isValid() const
+{
+    return table.isValid();
+}
 
 #pragma mark - Identifier
 Identifier::Type RecursiveCTE::getType() const

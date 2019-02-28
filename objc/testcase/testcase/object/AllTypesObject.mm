@@ -60,7 +60,7 @@ WCDB_PRIMARY(type)
 {
     AllTypesObject *object = [[AllTypesObject alloc] init];
     object.type = @"max";
-    
+
 #define ASSIGN_WITH_TYPED_MAX_VALUE(property, type) \
     object.property = std::numeric_limits<type>::max()
 #define ASSIGN_WITH_MAX_VALUE(property) \
@@ -98,11 +98,11 @@ WCDB_PRIMARY(type)
 {
     AllTypesObject *object = [[AllTypesObject alloc] init];
     object.type = @"min";
-    
+
 #define ASSIGN_WITH_TYPED_MIN_VALUE(property, type) \
     object.property = std::numeric_limits<type>::min()
 #define ASSIGN_WITH_MIN_VALUE(property) ASSIGN_WITH_TYPED_MIN_VALUE(property, decltype(object.property))
-    
+
     ASSIGN_WITH_MIN_VALUE(enumNSValue);
     ASSIGN_WITH_MIN_VALUE(optionNSValue);
     ASSIGN_WITH_MIN_VALUE(enumValue);
@@ -135,13 +135,13 @@ WCDB_PRIMARY(type)
 {
     AllTypesObject *object = [[AllTypesObject alloc] init];
     object.type = @"nil";
-    
+
     object.enumNSValue = EnumNSTypeZero;
     object.optionNSValue = OptionNSTypeZero;
     object.enumValue = EnumType::Zero;
     object.enumClassValue = EnumClassType::Zero;
     object.literalEnumValue = EnumZero;
-    
+
     object.intValue = 0;
     object.unsignedIntValue = 0;
     object.int32Value = 0;
@@ -168,7 +168,7 @@ WCDB_PRIMARY(type)
 {
     AllTypesObject *object = [[AllTypesObject alloc] init];
     object.type = @"empty";
-    
+
     object.enumNSValue = EnumNSTypeZero;
     object.optionNSValue = OptionNSTypeZero;
     object.enumValue = EnumType::Zero;
@@ -203,12 +203,12 @@ WCDB_PRIMARY(type)
         return NO;
     }
     AllTypesObject *other = (AllTypesObject *) object;
-    return      self.enumNSValue == other.enumNSValue
-            && self.optionNSValue == other.optionNSValue
-            && self.enumValue == other.enumValue
-            && self.enumClassValue == other.enumClassValue
-            && self.literalEnumValue == other.literalEnumValue
-            && self.intValue == other.intValue
+    return self.enumNSValue == other.enumNSValue
+           && self.optionNSValue == other.optionNSValue
+           && self.enumValue == other.enumValue
+           && self.enumClassValue == other.enumClassValue
+           && self.literalEnumValue == other.literalEnumValue
+           && self.intValue == other.intValue
            && self.unsignedIntValue == other.unsignedIntValue
            && self.int32Value == other.int32Value
            && self.int64Value == other.int64Value

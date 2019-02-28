@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
 
-    bool WindowDef::isValid() const 
-    {
-        return !expressions.empty() || !orderingTerms.empty() || frameSpec.isValid();
-    }
+bool WindowDef::isValid() const
+{
+    return !expressions.empty() || !orderingTerms.empty() || frameSpec.isValid();
+}
 
 #pragma mark - Identifier
 Identifier::Type WindowDef::getType() const

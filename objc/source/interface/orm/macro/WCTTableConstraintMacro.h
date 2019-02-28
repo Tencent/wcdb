@@ -20,33 +20,33 @@
 
 #define WCDB_ORM_TYPE_TABLE_CONSTRAINT table_constraint
 
-#define __WCDB_TABLE_CONSTRAINT_BEGIN(constraintName, propertyName) \
-    +(void) WCDB_ORM_UNIQUE(WCDB_ORM_TYPE_TABLE_CONSTRAINT)         \
+#define __WCDB_TABLE_CONSTRAINT_BEGIN(constraintName, propertyName)            \
+    +(void) WCDB_ORM_UNIQUE(WCDB_ORM_TYPE_TABLE_CONSTRAINT)                    \
     {                                                                          \
-        WCDB_STATIC_ASSERT_EXISTS(self.propertyName);                     \
+        WCDB_STATIC_ASSERT_EXISTS(self.propertyName);                          \
         WCDB::TableConstraint& tableConstraint                                 \
         = binding.getOrCreateTableConstraint(constraintName);
 
 #define __WCDB_TABLE_CONSTRAINT_END(constraintName, propertyName) }
 
 // multi-primary
-#define __WCDB_MULTI_PRIMARY_IMP(constraintName, propertyName)      \
-    __WCDB_TABLE_CONSTRAINT_BEGIN(constraintName, propertyName)     \
-    tableConstraint.primaryKey().indexed(self.propertyName.asIndex());    \
+#define __WCDB_MULTI_PRIMARY_IMP(constraintName, propertyName)                 \
+    __WCDB_TABLE_CONSTRAINT_BEGIN(constraintName, propertyName)                \
+    tableConstraint.primaryKey().indexed(self.propertyName.asIndex());         \
     __WCDB_TABLE_CONSTRAINT_END(constraintName, propertyName)
 
-#define __WCDB_ORDERED_MULTI_PRIMARY_IMP(constraintName, propertyName, order_) \
-    __WCDB_TABLE_CONSTRAINT_BEGIN(constraintName, propertyName)                \
+#define __WCDB_ORDERED_MULTI_PRIMARY_IMP(constraintName, propertyName, order_)       \
+    __WCDB_TABLE_CONSTRAINT_BEGIN(constraintName, propertyName)                      \
     tableConstraint.primaryKey().indexed(self.propertyName.asIndex().order(order_)); \
     __WCDB_TABLE_CONSTRAINT_END(constraintName, propertyName)
 
 // multi-unique
-#define __WCDB_MULTI_UNIQUE_IMP(constraintName, propertyName)       \
-    __WCDB_TABLE_CONSTRAINT_BEGIN(constraintName, propertyName)     \
-    tableConstraint.unique().indexed(self.propertyName.asIndex());        \
+#define __WCDB_MULTI_UNIQUE_IMP(constraintName, propertyName)                  \
+    __WCDB_TABLE_CONSTRAINT_BEGIN(constraintName, propertyName)                \
+    tableConstraint.unique().indexed(self.propertyName.asIndex());             \
     __WCDB_TABLE_CONSTRAINT_END(constraintName, propertyName)
 
-#define __WCDB_ORDERED_MULTI_UNIQUE_IMP(constraintName, propertyName, order_) \
-    __WCDB_TABLE_CONSTRAINT_BEGIN(constraintName, propertyName)               \
-    tableConstraint.unique().indexed(self.propertyName.asIndex().order(order_));    \
+#define __WCDB_ORDERED_MULTI_UNIQUE_IMP(constraintName, propertyName, order_)    \
+    __WCDB_TABLE_CONSTRAINT_BEGIN(constraintName, propertyName)                  \
+    tableConstraint.unique().indexed(self.propertyName.asIndex().order(order_)); \
     __WCDB_TABLE_CONSTRAINT_END(constraintName, propertyName)

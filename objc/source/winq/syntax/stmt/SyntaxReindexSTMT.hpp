@@ -30,11 +30,7 @@ namespace Syntax {
 class ReindexSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    WCDB_SYNTAX_MAIN_UNION_ENUM(
-        NotSet,
-        Collation,
-        TableOrIndex,
-    );
+    WCDB_SYNTAX_MAIN_UNION_ENUM(NotSet, Collation, TableOrIndex, );
     String collationOrTableOrIndex;
     Schema schema;
 

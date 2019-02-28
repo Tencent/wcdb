@@ -30,12 +30,7 @@ namespace Syntax {
 class RaiseFunction final : public Identifier {
 #pragma mark - Lang
 public:
-    WCDB_SYNTAX_MAIN_UNION_ENUM(
-        Ignore,
-        Rollback,
-        Abort,
-        Fail,
-    );
+    WCDB_SYNTAX_MAIN_UNION_ENUM(Ignore, Rollback, Abort, Fail, );
     String errorMessage;
 
 #pragma mark - Identifier

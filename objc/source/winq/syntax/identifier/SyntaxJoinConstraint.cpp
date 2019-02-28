@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
-    
-    bool JoinConstraint::isValid() const 
-    {
-        return !columns.empty() || expression.isValid(); 
-    }
+
+bool JoinConstraint::isValid() const
+{
+    return !columns.empty() || expression.isValid();
+}
 
 #pragma mark - Identifier
 Identifier::Type JoinConstraint::getType() const

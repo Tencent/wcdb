@@ -28,7 +28,6 @@
 #import <WCDB/WCTTableConstraintMacro.h>
 #import <WCDB/WCTVirtualTableMacro.h>
 
-
 #define WCDB_IMPLEMENTATION(className)                                        \
     +(const WCTBinding &) objectRelationalMapping                             \
     {                                                                         \
@@ -38,11 +37,11 @@
     +(const WCTProperties &) allProperties                                    \
     {                                                                         \
         return [className objectRelationalMapping].getProperties();           \
-    }\
-    + (className*) WCDB_ORM_TYPER\
-    {\
-        return nil;\
-    }\
+    }                                                                         \
+    +(className *) WCDB_ORM_TYPER                                             \
+    {                                                                         \
+        return nil;                                                           \
+    }
 
 //Property - declare column
 #define WCDB_PROPERTY(propertyName) __WCDB_PROPERTY_IMP(propertyName)
@@ -106,22 +105,22 @@
     __WCDB_INDEX_IMP(indexSubfixName, propertyName, false)
 
 #define WCDB_INDEX_ASC(indexSubfixName, propertyName) \
-    __WCDB_ORDERED_INDEX_IMP(                                    \
+    __WCDB_ORDERED_INDEX_IMP(                         \
     indexSubfixName, propertyName, WCTOrderedAscending, false)
 
 #define WCDB_INDEX_DESC(indexSubfixName, propertyName) \
-    __WCDB_ORDERED_INDEX_IMP(                                     \
+    __WCDB_ORDERED_INDEX_IMP(                          \
     indexSubfixName, propertyName, WCTOrderedDescending, false)
 
 #define WCDB_UNIQUE_INDEX(indexSubfixName, propertyName) \
     __WCDB_INDEX_IMP(indexSubfixName, propertyName, true)
 
 #define WCDB_UNIQUE_INDEX_ASC(indexSubfixName, propertyName) \
-    __WCDB_ORDERED_INDEX_IMP(                                           \
+    __WCDB_ORDERED_INDEX_IMP(                                \
     indexSubfixName, propertyName, WCTOrderedAscending, true)
 
 #define WCDB_UNIQUE_INDEX_DESC(indexSubfixName, propertyName) \
-    __WCDB_ORDERED_INDEX_IMP(                                            \
+    __WCDB_ORDERED_INDEX_IMP(                                 \
     indexSubfixName, propertyName, WCTOrderedDescending, true)
 
 //Virtual Table Argument
@@ -129,7 +128,7 @@
     __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(argument)
 
 #define WCDB_VIRTUAL_TABLE_TOKENIZE(tokenizeName) \
-__WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(WCDB::StatementCreateVirtualTable::tokenize(tokenizeName))
+    __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(WCDB::StatementCreateVirtualTable::tokenize(tokenizeName))
 
 #define WCDB_VIRTUAL_TABLE_MODULE(moduleName) \
     __WCDB_VIRTUAL_TABLE_MODULE_IMP(moduleName)

@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
-    
-    bool CommitSTMT::isValid() const 
-    {
-        return inited;
-    }
+
+bool CommitSTMT::isValid() const
+{
+    return inited;
+}
 
 #pragma mark - Identifier
 Identifier::Type CommitSTMT::getType() const

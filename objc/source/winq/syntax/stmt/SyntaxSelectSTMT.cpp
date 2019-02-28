@@ -18,18 +18,18 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/SyntaxEnum.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
-    
-    bool SelectSTMT::isValid() const 
-    {
-        return select.isValid();
-    }
+
+bool SelectSTMT::isValid() const
+{
+    return select.isValid();
+}
 
 #pragma mark - Identifier
 Identifier::Type SelectSTMT::getType() const

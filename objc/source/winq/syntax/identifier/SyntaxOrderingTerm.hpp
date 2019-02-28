@@ -33,7 +33,7 @@ public:
     Expression expression;
     String collation;
     WCDB_SYNTAX_ENUM_UNION(Order, order);
-    
+
     bool isValid() const override final;
 
 #pragma mark - Identifier

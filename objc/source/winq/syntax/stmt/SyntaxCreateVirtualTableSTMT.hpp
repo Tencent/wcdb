@@ -35,7 +35,7 @@ public:
     String table;
     String module;
     std::list<String> arguments;
-    
+
     bool isValid() const override final;
 
 #pragma mark - Identifier

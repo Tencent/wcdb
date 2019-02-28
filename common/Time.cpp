@@ -68,8 +68,8 @@ String Time::stringify() const
 {
     std::time_t nanoseconds
     = (std::time_t) std::chrono::duration_cast<std::chrono::nanoseconds>(time_since_epoch())
-    .count();
-    std::time_t secondsPart = nanoseconds/(int)1E9;
+      .count();
+    std::time_t secondsPart = nanoseconds / (int) 1E9;
     struct tm tm;
     if (localtime_r(&secondsPart, &tm) == nullptr) {
         Error error;
@@ -78,7 +78,7 @@ String Time::stringify() const
         setThreadedError(std::move(error));
         return String::null();
     }
-    std::time_t nanosecondsPart = nanoseconds % (int)1E9;
+    std::time_t nanosecondsPart = nanoseconds % (int) 1E9;
     std::ostringstream stream;
     stream << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S") << "." << nanosecondsPart;
     return stream.str();
@@ -100,7 +100,8 @@ SteadyClock SteadyClock::now()
 double SteadyClock::seconds() const
 {
     return (double) std::chrono::duration_cast<std::chrono::nanoseconds>(time_since_epoch())
-    .count() / 1E9;
+           .count()
+           / 1E9;
 }
-    
+
 } //namespace WCDB

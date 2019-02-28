@@ -22,13 +22,13 @@
 
 #define WCDB_ORM_CONCAT(a, b) WCDB_CONCAT(a, WCDB_CONCAT(_, b))
 
-#define __WCDB_ORM_TYPE_PREFIX(ORMType)                             \
+#define __WCDB_ORM_TYPE_PREFIX(ORMType)                                        \
     WCDB_ORM_CONCAT(WCDB_ORM_PREFIX, ORMType)
 
-#define __WCDB_ORM(ORMType, subfix)                                 \
+#define __WCDB_ORM(ORMType, subfix)                                            \
     WCDB_ORM_CONCAT(__WCDB_ORM_TYPE_PREFIX(ORMType), subfix)
 
-#define WCDB_ORM_UNIQUE(ORMType)                                    \
+#define WCDB_ORM_UNIQUE(ORMType)                                               \
     __WCDB_ORM(ORMType, WCDB_UNIQUE_ID) : (WCTBinding &) binding
 
 #if defined(__cplusplus)

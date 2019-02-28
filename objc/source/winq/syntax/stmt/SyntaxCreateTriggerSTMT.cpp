@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
+#include <WCDB/Syntax.h>
 #include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/SyntaxEnum.hpp>
-#include <WCDB/Syntax.h>
 
 namespace WCDB {
 
@@ -52,10 +52,10 @@ constexpr const char* Enum::description(const Syntax::CreateTriggerSTMT::Event& 
 
 namespace Syntax {
 
-    bool CreateTriggerSTMT::isValid() const 
-    {
-        return !trigger.empty();
-    }
+bool CreateTriggerSTMT::isValid() const
+{
+    return !trigger.empty();
+}
 
 #pragma mark - Identifier
 Identifier::Type CreateTriggerSTMT::getType() const

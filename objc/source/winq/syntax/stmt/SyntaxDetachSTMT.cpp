@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
-    
-    bool DetachSTMT::isValid() const 
-    {
-        return schema.isValid() && !schema.isMain();
-    }
+
+bool DetachSTMT::isValid() const
+{
+    return schema.isValid() && !schema.isMain();
+}
 
 #pragma mark - Identifier
 Identifier::Type DetachSTMT::getType() const

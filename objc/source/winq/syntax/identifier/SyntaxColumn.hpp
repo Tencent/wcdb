@@ -31,7 +31,7 @@ class Column final : public Identifier {
 #pragma mark - Syntax
 public:
     String name;
-    
+
     bool isValid() const override final;
 
 #pragma mark - Identifier

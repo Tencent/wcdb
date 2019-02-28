@@ -23,7 +23,7 @@
 
 namespace WCDB {
 
-    NSString* getDescriptionOfType(WCDB::Syntax::Identifier::Type type);
+NSString *getDescriptionOfType(WCDB::Syntax::Identifier::Type type);
 NSString *getDescriptionOfTypes(const std::list<WCDB::Syntax::Identifier::Type> &);
 std::list<WCDB::Syntax::Identifier::Type> getTypesOfSQL(WCDB::SQL &sql);
 

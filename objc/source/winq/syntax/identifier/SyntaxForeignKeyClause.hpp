@@ -48,15 +48,15 @@ public:
     std::list<Switch> switchers;
     std::list<String> matchings;
 
-    WCDB_SYNTAX_UNION_ENUM(Deferrable, deferrable,
-        DeferrableInitiallyDeferred,
-        DeferrableInitiallyImmediate,
-        Deferrable,
-        NotDeferrableInitiallyDeferred,
-        NotDeferrableInitiallyImmediate,
-        NotDeferrable,
-    );
-    
+    WCDB_SYNTAX_UNION_ENUM(Deferrable,
+                           deferrable,
+                           DeferrableInitiallyDeferred,
+                           DeferrableInitiallyImmediate,
+                           Deferrable,
+                           NotDeferrableInitiallyDeferred,
+                           NotDeferrableInitiallyImmediate,
+                           NotDeferrable, );
+
     bool isValid() const override final;
 
 #pragma mark - Identifier

@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
+#include <WCDB/Syntax.h>
 #include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/SyntaxEnum.hpp>
-#include <WCDB/Syntax.h>
 
 namespace WCDB {
 
@@ -74,11 +74,11 @@ Enum::description(const Syntax::ForeignKeyClause::Deferrable& deferrable)
 }
 
 namespace Syntax {
-    
-    bool ForeignKeyClause::isValid() const 
-    {
-        return !foreignTable.empty();
-    }
+
+bool ForeignKeyClause::isValid() const
+{
+    return !foreignTable.empty();
+}
 
 #pragma mark - Identifier
 Identifier::Type ForeignKeyClause::getType() const

@@ -18,18 +18,18 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/SyntaxEnum.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
-    
-    bool JoinClause::isValid() const 
-    {
-        return !tableOrSubqueries.empty();
-    }
+
+bool JoinClause::isValid() const
+{
+    return !tableOrSubqueries.empty();
+}
 
 #pragma mark - Identifier
 Identifier::Type JoinClause::getType() const
@@ -46,7 +46,7 @@ String JoinClause::getValidDescription() const
         auto joinOperator = joinOperators.begin();
         auto joinConstraint = joinConstraints.begin();
         WCTSyntaxRemedialAssert(std::distance(tableOrSubquery, tableOrSubqueries.end())
-                             == std::distance(joinOperator, joinOperators.end()));
+                                == std::distance(joinOperator, joinOperators.end()));
         while (joinOperator != joinOperators.end()
                && tableOrSubquery != tableOrSubqueries.end()
                && joinConstraint != joinConstraints.end()) {
@@ -73,8 +73,9 @@ void JoinClause::iterate(const Iterator& iterator, bool& stop)
     if (++tableOrSubquery != tableOrSubqueries.end()) {
         auto joinOperator = joinOperators.begin();
         auto joinConstraint = joinConstraints.begin();
-        WCTIterateRemedialAssert(std::distance(tableOrSubquery, tableOrSubqueries.end())
-                              == std::distance(joinOperator, joinOperators.end()));
+        WCTIterateRemedialAssert(
+        std::distance(tableOrSubquery, tableOrSubqueries.end())
+        == std::distance(joinOperator, joinOperators.end()));
         while (joinOperator != joinOperators.end()
                && tableOrSubquery != tableOrSubqueries.end()
                && joinConstraint != joinConstraints.end()) {

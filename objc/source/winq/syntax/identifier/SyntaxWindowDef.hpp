@@ -37,7 +37,7 @@ public:
     std::list<Expression> expressions;
     std::list<OrderingTerm> orderingTerms;
     FrameSpec frameSpec;
-    
+
     bool isValid() const override final;
 
 #pragma mark - Identifier

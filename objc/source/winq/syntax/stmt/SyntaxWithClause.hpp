@@ -33,9 +33,9 @@ public:
     bool recursive = false;
     std::list<CTETableName> tables;
     std::list<SelectSTMT> selects;
-    
+
     bool isValid() const override final;
-    
+
 #pragma mark - Identifier
 public:
     static constexpr const Type type = Type::WithClause;

@@ -18,17 +18,17 @@
  * limitations under the License.
  */
 
-#include <WCDB/SyntaxAssertion.hpp>
 #include <WCDB/Syntax.h>
+#include <WCDB/SyntaxAssertion.hpp>
 
 namespace WCDB {
 
 namespace Syntax {
 
-    bool DeleteSTMT::isValid() const 
-    {
-        return table.isValid();
-    }
+bool DeleteSTMT::isValid() const
+{
+    return table.isValid();
+}
 
 #pragma mark - Identifier
 Identifier::Type DeleteSTMT::getType() const

@@ -66,7 +66,7 @@ public:
     std::list<SelectSTMT> selects;
     std::list<UpdateSTMT> updates;
     std::list<DeleteSTMT> deletes;
-    
+
     bool isValid() const override final;
 
 #pragma mark - Identifier

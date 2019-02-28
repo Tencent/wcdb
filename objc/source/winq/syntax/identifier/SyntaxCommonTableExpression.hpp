@@ -33,7 +33,7 @@ public:
     String table;
     std::list<Column> columns;
     Shadow<SelectSTMT> select;
-    
+
     bool isValid() const override final;
 
 #pragma mark - Identifier

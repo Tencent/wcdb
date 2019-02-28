@@ -526,7 +526,7 @@ void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
 bool Database::backup()
 {
     WCTRemedialAssert(
-    !isInTransaction(), "Backup can't be run in transaction.", return false;);    
+    !isInTransaction(), "Backup can't be run in transaction.", return false;);
     InitializedGuard initializedGuard = initialize();
     if (!initializedGuard.valid()) {
         return false;
@@ -558,7 +558,7 @@ bool Database::deposit()
     close([&result, this]() {
         InitializedGuard initializedGuard = initialize();
         if (!initializedGuard.valid()) {
-            return ;
+            return;
         }
 
         std::shared_ptr<Handle> backupReadHandle = generateHandle(HandleType::BackupRead);
@@ -606,7 +606,7 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
     close([&result, &onProgressUpdate, this]() {
         InitializedGuard initializedGuard = initialize();
         if (!initializedGuard.valid()) {
-            return ;
+            return;
         }
 
         std::shared_ptr<Handle> backupReadHandle = generateHandle(HandleType::BackupRead);

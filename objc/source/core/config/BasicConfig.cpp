@@ -20,9 +20,9 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/BasicConfig.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/Handle.hpp>
 #include <WCDB/Macro.hpp>
-#include <WCDB/CoreConst.h>
 
 namespace WCDB {
 
@@ -42,12 +42,12 @@ BasicConfig::BasicConfig()
 , m_isFullfsync(StatementPragma().pragma(Pragma::fullfsync()))
 {
 }
-    
+
 bool BasicConfig::getOrSetPragmaBegin(Handle* handle, const StatementPragma& get)
 {
     return handle->prepare(get) && handle->step();
 }
-    
+
 bool BasicConfig::getOrSetPragmaEnd(Handle* handle, const StatementPragma& set, bool conditionToSet)
 {
     handle->finalize();
@@ -65,19 +65,25 @@ bool BasicConfig::invoke(Handle* handle)
     }
 
     handle->disableCheckpointWhenClosing(true);
-    
-    if (!getOrSetPragmaBegin(handle, m_getLockingMode) || !getOrSetPragmaEnd(handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("NORMAL"))) {
+
+    if (!getOrSetPragmaBegin(handle, m_getLockingMode)
+        || !getOrSetPragmaEnd(
+           handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("NORMAL"))) {
         return false;
     }
 
     // 1 for Normal: https://sqlite.org/pragma.html#pragma_synchronous
-    if (!getOrSetPragmaBegin(handle, m_getSynchronous) || !getOrSetPragmaEnd(handle, m_setSynchronousNormal, handle->getInteger32(0) != 1)) {
+    if (!getOrSetPragmaBegin(handle, m_getSynchronous)
+        || !getOrSetPragmaEnd(handle, m_setSynchronousNormal, handle->getInteger32(0) != 1)) {
         return false;
     }
-    
+
     int retry = BasicConfigBusyRetryMaxAllowedNumberOfTimes;
     do {
-        if (getOrSetPragmaBegin(handle, m_getJournalMode) && getOrSetPragmaEnd(handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("WAL"))) {
+        if (getOrSetPragmaBegin(handle, m_getJournalMode)
+            && getOrSetPragmaEnd(handle,
+                                 m_setJournalModeWAL,
+                                 !handle->getText(0).isCaseInsensiveEqual("WAL"))) {
             break;
         }
         if (handle->getResultCode() == Error::Code::Busy) {
@@ -90,7 +96,8 @@ bool BasicConfig::invoke(Handle* handle)
         return false;
     }
 
-    if (!getOrSetPragmaBegin(handle, m_isFullfsync) || !getOrSetPragmaEnd(handle, m_enableFullfsync, handle->getInteger32(0) != 1)) {
+    if (!getOrSetPragmaBegin(handle, m_isFullfsync)
+        || !getOrSetPragmaEnd(handle, m_enableFullfsync, handle->getInteger32(0) != 1)) {
         return false;
     }
 

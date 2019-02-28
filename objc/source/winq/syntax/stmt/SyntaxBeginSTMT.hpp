@@ -30,11 +30,7 @@ namespace Syntax {
 class BeginSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    WCDB_SYNTAX_MAIN_UNION_ENUM(
-        Deferred,
-        Immediate,
-        Exclusive,
-    );
+    WCDB_SYNTAX_MAIN_UNION_ENUM(Deferred, Immediate, Exclusive, );
 
 #pragma mark - Identifier
 public:
