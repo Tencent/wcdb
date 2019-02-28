@@ -52,7 +52,7 @@ void Identifier::recursiveIterate(Identifier &identifier, const Iterator &iterat
 
 void Identifier::iterate(const Iterator &iterator, bool &stop)
 {
-    if (!stop) {
+    if (!stop && isValid()) {
         iterator(*this, stop);
     }
 }
