@@ -39,6 +39,11 @@ static constexpr const char *NotifierPathPreprocessorName
 = "com.Tencent.WCDB.Notifier.PreprocessPath";
 }
 
+static void printer(const WCDB::String &message)
+{
+    NSLog(@"%s", message.c_str());
+}
+
 @implementation WCTDatabase
 
 + (void)initialize
@@ -56,9 +61,7 @@ static constexpr const char *NotifierPathPreprocessorName
             }
         });
 
-        WCDB::Console::shared()->setPrinter([](const WCDB::String &message) {
-            NSLog(@"%s", message.c_str());
-        });
+        WCDB::Console::shared()->setPrinter(printer);
 
         WCDB::Core::shared()->addTokenizer(WCTTokenizerOneOrBinary, WCDB::TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizerCursorInfo>::specialize());
 
