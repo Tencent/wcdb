@@ -103,42 +103,36 @@ ForeignKey& ForeignKey::match(const String& name)
 
 ForeignKey& ForeignKey::deferrable()
 {
-    syntax().useDeferrable = true;
     syntax().deferrable = SyntaxType::Deferrable::Deferrable;
     return *this;
 }
 
 ForeignKey& ForeignKey::deferrableInitiallyDeferred()
 {
-    syntax().useDeferrable = true;
     syntax().deferrable = SyntaxType::Deferrable::DeferrableInitiallyDeferred;
     return *this;
 }
 
 ForeignKey& ForeignKey::deferrableInitiallyImmediate()
 {
-    syntax().useDeferrable = true;
     syntax().deferrable = SyntaxType::Deferrable::DeferrableInitiallyImmediate;
     return *this;
 }
 
 ForeignKey& ForeignKey::notDeferrable()
 {
-    syntax().useDeferrable = true;
     syntax().deferrable = SyntaxType::Deferrable::NotDeferrable;
     return *this;
 }
 
 ForeignKey& ForeignKey::notDeferrableInitiallyDeferred()
 {
-    syntax().useDeferrable = true;
     syntax().deferrable = SyntaxType::Deferrable::NotDeferrableInitiallyDeferred;
     return *this;
 }
 
 ForeignKey& ForeignKey::notDeferrableInitiallyImmediate()
 {
-    syntax().useDeferrable = true;
     syntax().deferrable = SyntaxType::Deferrable::NotDeferrableInitiallyImmediate;
     return *this;
 }

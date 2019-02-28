@@ -29,23 +29,6 @@
 #include <sstream>
 #include <WCDB/SyntaxCommonConst.hpp>
 
-#define __WCDB_SYNTAX_UNION(Type, name)\
-static_assert(sizeof(Type) == sizeof(int), "");\
-union {\
-    Type name;\
-    int valid = -1;\
-};\
-bool isValid() const override final { return valid >= 0; }
-
-#define WCDB_SYNTAX_ENUM(Type, name, ...)\
-enum class Type {\
-    WCDB_FIRST_ARG(__VA_ARGS__) = 1,\
-    WCDB_NON_FIRST_ARGS(__VA_ARGS__)\
-};\
-__WCDB_SYNTAX_UNION(Type, name)
-
-#define WCDB_DEFAULT_SYNTAX_ENUM(...) WCDB_SYNTAX_ENUM(Switch, switcher, __VA_ARGS__)
-
 namespace WCDB {
 
 namespace Syntax {
@@ -117,6 +100,9 @@ public:
 
     Identifier* clone() const override final;
     
+    typedef int Valid;
+    static constexpr const Valid invalid = -1;
+    
     virtual bool isValid() const = 0;
 protected:
     virtual String getValidDescription() const = 0;
@@ -164,5 +150,34 @@ std::ostream& operator<<(std::ostream& stream, const std::list<T>& identifiers)
     }
     return stream;
 }
+
+#define __WCDB_SYNTAX_ENUM(Type, ...)\
+enum class Type {\
+    WCDB_FIRST_ARG(__VA_ARGS__) = 1,\
+    WCDB_NON_FIRST_ARGS(__VA_ARGS__)\
+};\
+
+// The value of Type should always be positive.
+#define __WCDB_SYNTAX_UNION_ENUM(Type, nameOfType, nameOfValid)\
+static_assert(sizeof(Type) == sizeof(Valid), "");\
+union {\
+Type nameOfType;\
+Valid nameOfValid = Identifier::invalid;\
+};\
+
+#define WCDB_SYNTAX_ENUM_UNION(Type, nameOfType) \
+__WCDB_SYNTAX_UNION_ENUM(Type, nameOfType, __ ## nameOfType ## Valid);\
+bool nameOfType ## Valid() const { return __ ## nameOfType ## Valid >= 0; }
+
+#define WCDB_SYNTAX_UNION_ENUM(Type, nameOfType, ...) \
+__WCDB_SYNTAX_ENUM(Type, __VA_ARGS__); \
+__WCDB_SYNTAX_UNION_ENUM(Type, nameOfType, __ ## nameOfType ## Valid); \
+bool nameOfType ## Valid() const { return __ ## nameOfType ## Valid >= 0; }
+
+#define WCDB_SYNTAX_MAIN_UNION_ENUM(...) \
+__WCDB_SYNTAX_ENUM(Switch, __VA_ARGS__); \
+__WCDB_SYNTAX_UNION_ENUM(Switch, switcher, __valid); \
+bool isValid() const override final { return __valid >= 0; }
+
 
 #endif /* __WCDB_SYNTAX_IDENTIFIER_HPP */

@@ -30,13 +30,10 @@ namespace Syntax {
 class DeleteSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    bool useWithClause = false;
     WithClause withClause;
     QualifiedTableName table;
-    bool useCondition = false;
     Expression condition;
     std::list<OrderingTerm> orderingTerms;
-    bool useLimit = false;
     Expression limit;
     LimitParameterType limitParameterType = LimitParameterType::NotSet;
     Expression limitParameter;

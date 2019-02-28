@@ -40,13 +40,13 @@ public:
     Schema schema;
     String trigger;
     enum class Timing {
-        Before,
+        Before = 1,
         After,
         InsteadOf,
     } timing;
     bool specifiedTiming = false;
     enum class Event {
-        Delete,
+        Delete = 1,
         Insert,
         Update,
     } event;
@@ -54,10 +54,9 @@ public:
     String table;
     bool forEachFow = false;
     Expression condition;
-    bool useCondition = false;
 
     enum class STMT {
-        Insert,
+        Insert = 1,
         Update,
         Delete,
         Select,

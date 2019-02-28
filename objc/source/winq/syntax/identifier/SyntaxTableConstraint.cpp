@@ -41,13 +41,13 @@ String TableConstraint::getValidDescription() const
     switch (switcher) {
     case Switch::PrimaryKey:
         stream << "PRIMARY KEY(" << indexedColumns << ")";
-        if (useConflict) {
+        if (conflictValid()) {
             stream << space << conflict;
         }
         break;
     case Switch::Unique:
         stream << "UNIQUE(" << indexedColumns << ")";
-        if (useConflict) {
+        if (conflictValid()) {
             stream << space << conflict;
         }
         break;

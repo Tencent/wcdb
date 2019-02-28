@@ -61,7 +61,7 @@ String SelectSTMT::getValidDescription() const
     if (!orderingTerms.empty()) {
         stream << " ORDER BY " << orderingTerms;
     }
-    if (useLimit) {
+    if (limit.isValid()) {
         stream << " LIMIT " << limit;
         switch (limitParameterType) {
         case LimitParameterType::NotSet:
@@ -84,7 +84,7 @@ void SelectSTMT::iterate(const Iterator& iterator, bool& stop)
     recursiveIterate(select, iterator, stop);
     listIterate(cores, iterator, stop);
     listIterate(orderingTerms, iterator, stop);
-    if (useLimit) {
+    if (limit.isValid()) {
         recursiveIterate(limit, iterator, stop);
         switch (limitParameterType) {
         case LimitParameterType::NotSet:

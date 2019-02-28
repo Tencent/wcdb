@@ -44,17 +44,17 @@ String DeleteSTMT::getValidDescription() const
 String DeleteSTMT::getValidDescription(bool skipSchema) const
 {
     std::ostringstream stream;
-    if (useWithClause) {
+    if (withClause.isValid()) {
         stream << withClause << space;
     }
     stream << "DELETE FROM " << table.getValidDescription(skipSchema);
-    if (useCondition) {
+    if (condition.isValid()) {
         stream << " WHERE " << condition;
     }
     if (!orderingTerms.empty()) {
         stream << " ORDER BY " << orderingTerms;
     }
-    if (useLimit) {
+    if (limit.isValid()) {
         stream << " LIMIT " << limit;
         switch (limitParameterType) {
         case LimitParameterType::NotSet:
@@ -73,15 +73,15 @@ String DeleteSTMT::getValidDescription(bool skipSchema) const
 void DeleteSTMT::iterate(const Iterator& iterator, bool& stop)
 {
     Identifier::iterate(iterator, stop);
-    if (useWithClause) {
+    if (withClause.isValid()) {
         recursiveIterate(withClause, iterator, stop);
     }
     recursiveIterate(table, iterator, stop);
-    if (useCondition) {
+    if (condition.isValid()) {
         recursiveIterate(condition, iterator, stop);
     }
     listIterate(orderingTerms, iterator, stop);
-    if (useLimit) {
+    if (limit.isValid()) {
         recursiveIterate(limit, iterator, stop);
         switch (limitParameterType) {
         case LimitParameterType::NotSet:

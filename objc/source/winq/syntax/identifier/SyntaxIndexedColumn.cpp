@@ -46,7 +46,7 @@ String IndexedColumn::getValidDescription() const
     if (!collation.empty()) {
         stream << " COLLATE " << collation;
     }
-    if (useOrder) {
+    if (orderValid()) {
         stream << space << order;
     }
     return stream.str();

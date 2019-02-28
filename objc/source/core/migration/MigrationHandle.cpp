@@ -274,7 +274,6 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
             if (migratedInsertSTMT->table != falledBackTableName) {
                 // it's safe to use origin statement since Conflict Action will not be changed during tampering.
                 succeed = prepareMigrate(migratedInsertSTMT->table,
-                                         migratedInsertSTMT->useConflictAction,
                                          migratedInsertSTMT->conflictAction);
             }
         } break;
@@ -587,14 +586,12 @@ void MigrationHandle::resetMigrate()
 }
 
 bool MigrationHandle::prepareMigrate(const String& table,
-                                     bool useConflictAction,
                                      Syntax::ConflictAction conflictAction)
 {
     WCTInnerAssert(!isMigratedPrepared());
     const MigrationInfo* info = getBoundInfo(table);
     WCTInnerAssert(info != nullptr);
-    return m_migrateStatement->prepare(info->getStatementForMigratingSpecifiedRow(
-           useConflictAction, conflictAction))
+    return m_migrateStatement->prepare(info->getStatementForMigratingSpecifiedRow(conflictAction))
            && m_removeMigratedStatement->prepare(info->getStatementForDeletingSpecifiedRow());
 }
 

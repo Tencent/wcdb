@@ -105,7 +105,6 @@ StatementCreateTrigger& StatementCreateTrigger::forEachRow()
 
 StatementCreateTrigger& StatementCreateTrigger::when(const Expression& condition)
 {
-    syntax().useCondition = true;
     syntax().condition = condition;
     return *this;
 }

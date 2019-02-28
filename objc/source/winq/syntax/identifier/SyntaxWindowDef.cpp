@@ -50,7 +50,7 @@ String WindowDef::getValidDescription() const
         }
         stream << "ORDER BY " << orderingTerms;
     }
-    if (useFrameSpec) {
+    if (frameSpec.isValid()) {
         if (extraSpace) {
             stream << space;
         }
@@ -64,7 +64,7 @@ void WindowDef::iterate(const Iterator& iterator, bool& stop)
     Identifier::iterate(iterator, stop);
     listIterate(expressions, iterator, stop);
     listIterate(orderingTerms, iterator, stop);
-    if (useFrameSpec) {
+    if (frameSpec.isValid()) {
         recursiveIterate(frameSpec, iterator, stop);
     }
 }

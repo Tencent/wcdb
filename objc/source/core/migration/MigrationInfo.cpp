@@ -294,11 +294,9 @@ const StatementDelete& MigrationInfo::getStatementForDeletingSpecifiedRow() cons
 }
 
 StatementInsert
-MigrationInfo::getStatementForMigratingSpecifiedRow(bool useConflictAction,
-                                                    Syntax::ConflictAction conflictAction) const
+MigrationInfo::getStatementForMigratingSpecifiedRow(Syntax::ConflictAction conflictAction) const
 {
     StatementInsert statement = m_statementForMigratingSpecifiedRowTemplate;
-    statement.syntax().useConflictAction = useConflictAction;
     statement.syntax().conflictAction = conflictAction;
     return statement;
 }
@@ -318,18 +316,16 @@ MigrationInfo::getStatementForLimitedUpdatingTable(const Statement& sourceStatem
     Syntax::SelectSTMT& selectSyntax = select.syntax();
     Syntax::SelectCore& coreSyntax = selectSyntax.select;
 
-    coreSyntax.useCondition = updateSyntax.useCondition;
     coreSyntax.condition = updateSyntax.condition;
-    updateSyntax.useCondition = false;
+    updateSyntax.condition.__valid = Syntax::Identifier::invalid;
 
     selectSyntax.orderingTerms = updateSyntax.orderingTerms;
     updateSyntax.orderingTerms.clear();
 
-    selectSyntax.useLimit = updateSyntax.useLimit;
     selectSyntax.limit = updateSyntax.limit;
     selectSyntax.limitParameterType = updateSyntax.limitParameterType;
     selectSyntax.limitParameter = updateSyntax.limitParameter;
-    updateSyntax.useLimit = false;
+    updateSyntax.limit.__valid = Syntax::Identifier::invalid;
 
     statementUpdate.where(Column::rowid().in(select));
 
@@ -351,18 +347,16 @@ MigrationInfo::getStatementForLimitedDeletingFromTable(const Statement& sourceSt
     Syntax::SelectSTMT& selectSyntax = select.syntax();
     Syntax::SelectCore& coreSyntax = selectSyntax.select;
 
-    coreSyntax.useCondition = deleteSyntax.useCondition;
     coreSyntax.condition = deleteSyntax.condition;
-    deleteSyntax.useCondition = false;
+    deleteSyntax.condition.__valid = Syntax::Identifier::invalid;
 
     selectSyntax.orderingTerms = deleteSyntax.orderingTerms;
     deleteSyntax.orderingTerms.clear();
 
-    selectSyntax.useLimit = deleteSyntax.useLimit;
     selectSyntax.limit = deleteSyntax.limit;
     selectSyntax.limitParameterType = deleteSyntax.limitParameterType;
     selectSyntax.limitParameter = deleteSyntax.limitParameter;
-    deleteSyntax.useLimit = false;
+    deleteSyntax.limit.__valid = Syntax::Identifier::invalid;
 
     statementDelete.where(Column::rowid().in(select));
 

@@ -40,11 +40,11 @@ Identifier::Type UpdateSTMT::getType() const
 String UpdateSTMT::getValidDescription(bool skipSchema) const
 {
     std::ostringstream stream;
-    if (useWithClause) {
+    if (withClause.isValid()) {
         stream << withClause << space;
     }
     stream << "UPDATE ";
-    if (useConflictAction) {
+    if (conflictActionValid()) {
         stream << conflictAction << space;
     }
     stream << table.getValidDescription(skipSchema) << " SET ";
@@ -68,13 +68,13 @@ String UpdateSTMT::getValidDescription(bool skipSchema) const
             ++columns;
             ++expression;
         }
-        if (useCondition) {
+        if (condition.isValid()) {
             stream << " WHERE " << condition;
         }
         if (!orderingTerms.empty()) {
             stream << " ORDER BY " << orderingTerms;
         }
-        if (useLimit) {
+        if (limit.isValid()) {
             stream << " LIMIT " << limit;
             switch (limitParameterType) {
             case LimitParameterType::NotSet:
@@ -99,7 +99,7 @@ String UpdateSTMT::getValidDescription() const
 void UpdateSTMT::iterate(const Iterator& iterator, bool& stop)
 {
     Identifier::iterate(iterator, stop);
-    if (useWithClause) {
+    if (withClause.isValid()) {
         recursiveIterate(withClause, iterator, stop);
     }
     recursiveIterate(table, iterator, stop);
@@ -113,13 +113,13 @@ void UpdateSTMT::iterate(const Iterator& iterator, bool& stop)
             ++columns;
             ++expression;
         }
-        if (useCondition) {
+        if (condition.isValid()) {
             recursiveIterate(condition, iterator, stop);
         }
         if (!orderingTerms.empty()) {
             listIterate(orderingTerms, iterator, stop);
         }
-        if (useLimit) {
+        if (limit.isValid()) {
             recursiveIterate(limit, iterator, stop);
             switch (limitParameterType) {
             case LimitParameterType::NotSet:

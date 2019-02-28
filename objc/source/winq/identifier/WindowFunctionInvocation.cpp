@@ -56,7 +56,6 @@ WindowFunctionInvocation& WindowFunctionInvocation::invokeAll()
 
 WindowFunctionInvocation& WindowFunctionInvocation::filter(const Filter& filter)
 {
-    syntax().useFilter = true;
     syntax().filter = filter;
     return *this;
 }

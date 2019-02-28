@@ -37,7 +37,7 @@ String UpsertClause::getValidDescription() const
     stream << "ON CONFLICT";
     if (!indexedColumns.empty()) {
         stream << "(" << indexedColumns << ")";
-        if (useCondition) {
+        if (condition.isValid()) {
             stream << " WHERE " << condition;
         }
     }
@@ -67,7 +67,7 @@ String UpsertClause::getValidDescription() const
                 ++columns;
                 ++expression;
             }
-            if (useUpdateCondition) {
+            if (updateCondition.isValid()) {
                 stream << " WHERE " << updateCondition;
             }
         }
@@ -81,7 +81,7 @@ void UpsertClause::iterate(const Iterator& iterator, bool& stop)
     Identifier::iterate(iterator, stop);
     if (!indexedColumns.empty()) {
         listIterate(indexedColumns, iterator, stop);
-        if (useCondition) {
+        if (condition.isValid()) {
             recursiveIterate(condition, iterator, stop);
         }
     }
@@ -95,7 +95,7 @@ void UpsertClause::iterate(const Iterator& iterator, bool& stop)
             ++columns;
             ++expression;
         }
-        if (useUpdateCondition) {
+        if (updateCondition.isValid()) {
             recursiveIterate(updateCondition, iterator, stop);
         }
     }

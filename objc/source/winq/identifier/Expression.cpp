@@ -198,7 +198,6 @@ Expression Expression::windowFunction(const String& function)
 
 Expression& Expression::filter(const Filter& filter)
 {
-    syntax().useFilter = true;
     syntax().filter = filter;
     return *this;
 }

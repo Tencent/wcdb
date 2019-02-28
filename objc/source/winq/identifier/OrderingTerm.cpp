@@ -35,7 +35,6 @@ OrderingTerm& OrderingTerm::collate(const String& collation)
 
 OrderingTerm& OrderingTerm::order(const Order& order)
 {
-    syntax().useOrder = true;
     syntax().order = order;
     return *this;
 }

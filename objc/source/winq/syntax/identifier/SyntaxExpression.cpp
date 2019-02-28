@@ -378,7 +378,7 @@ String Expression::getValidDescription() const
             stream << "*";
         }
         stream << ")";
-        if (useFilter) {
+        if (filter.isValid()) {
             stream << space << filter;
         }
         stream << " OVER";
@@ -507,7 +507,7 @@ void Expression::iterate(const Iterator& iterator, bool& stop)
         break;
     case Switch::Window:
         listIterate(expressions, iterator, stop);
-        if (useFilter) {
+        if (filter.isValid()) {
             recursiveIterate(filter, iterator, stop);
         }
         if (windowName.empty()) {

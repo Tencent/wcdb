@@ -24,7 +24,6 @@ namespace WCDB {
 
 StatementDelete& StatementDelete::with(const With& with)
 {
-    syntax().useWithClause = true;
     syntax().withClause = with;
     return *this;
 }
@@ -37,7 +36,6 @@ StatementDelete& StatementDelete::deleteFrom(const QualifiedTable& table)
 
 StatementDelete& StatementDelete::where(const Expression& condition)
 {
-    syntax().useCondition = true;
     syntax().condition = condition;
     return *this;
 }
@@ -50,7 +48,6 @@ StatementDelete& StatementDelete::order(const OrderingTerms& orderingTerms)
 
 StatementDelete& StatementDelete::limit(const Expression& from, const Expression& to)
 {
-    syntax().useLimit = true;
     syntax().limitParameterType = Syntax::LimitParameterType::End;
     syntax().limit = from;
     syntax().limitParameter = to;
@@ -59,7 +56,6 @@ StatementDelete& StatementDelete::limit(const Expression& from, const Expression
 
 StatementDelete& StatementDelete::limit(const Expression& limit)
 {
-    syntax().useLimit = true;
     syntax().limitParameterType = Syntax::LimitParameterType::NotSet;
     syntax().limit = limit;
     return *this;

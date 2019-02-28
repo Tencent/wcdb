@@ -32,14 +32,13 @@ namespace Syntax {
 class IndexedColumn final : public Identifier {
 #pragma mark - Lang
 public:
-    WCDB_DEFAULT_SYNTAX_ENUM(Column, Expression);
+    WCDB_SYNTAX_MAIN_UNION_ENUM(Column, Expression);
 
     Column column;
     Expression expression;
     String collation;
 
-    bool useOrder = false;
-    Order order;
+    WCDB_SYNTAX_ENUM_UNION(Order, order);
 
 #pragma mark - Identifier
 public:

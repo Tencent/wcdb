@@ -30,7 +30,7 @@ namespace Syntax {
 class RollbackSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    WCDB_DEFAULT_SYNTAX_ENUM(Transaction, Savepoint);
+    WCDB_SYNTAX_MAIN_UNION_ENUM(Transaction, Savepoint);
     String savepoint;
 
 #pragma mark - Identifier

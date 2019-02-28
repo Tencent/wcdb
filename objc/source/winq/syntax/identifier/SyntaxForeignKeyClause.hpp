@@ -33,7 +33,7 @@ public:
     String foreignTable;
     std::list<Column> columns;
     enum class Switch {
-        OnDeleteSetNull,
+        OnDeleteSetNull = 1,
         OnDeleteSetDefault,
         OnDeleteCascade,
         OnDeleteRestrict,
@@ -48,15 +48,14 @@ public:
     std::list<Switch> switchers;
     std::list<String> matchings;
 
-    enum class Deferrable {
+    WCDB_SYNTAX_UNION_ENUM(Deferrable, deferrable,
         DeferrableInitiallyDeferred,
         DeferrableInitiallyImmediate,
         Deferrable,
         NotDeferrableInitiallyDeferred,
         NotDeferrableInitiallyImmediate,
         NotDeferrable,
-    } deferrable;
-    bool useDeferrable = false;
+    );
     
     bool isValid() const override final;
 

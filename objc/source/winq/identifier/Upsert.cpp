@@ -36,10 +36,8 @@ Upsert& Upsert::indexed(const IndexedColumn& indexedColumn)
 Upsert& Upsert::where(const Expression& condition)
 {
     if (syntax().columnsList.empty()) {
-        syntax().useCondition = true;
         syntax().condition = condition;
     } else {
-        syntax().useUpdateCondition = true;
         syntax().updateCondition = condition;
     }
     return *this;

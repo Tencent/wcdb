@@ -88,8 +88,7 @@
         for (const WCTProperty &property : properties) {
             // auto increment?
             bool isAutoIncrement = false;
-            if (!_statement.syntax().useConflictAction
-                || _statement.syntax().conflictAction != WCDB::Syntax::ConflictAction::Replace // not replace
+            if (_statement.syntax().conflictAction != WCDB::Syntax::ConflictAction::Replace // not replace
             ) {
                 auto iter = columnDefs.find(property.getDescription());
                 WCTRemedialAssert(iter != columnDefs.end(), "Unrelated property is found.", return NO;);

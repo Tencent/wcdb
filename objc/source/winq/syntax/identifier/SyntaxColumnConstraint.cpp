@@ -41,10 +41,10 @@ String ColumnConstraint::getValidDescription() const
     switch (switcher) {
     case Switch::PrimaryKey:
         stream << "PRIMARY KEY";
-        if (useOrder) {
+        if (orderValid()) {
             stream << space << order;
         }
-        if (useConflict) {
+        if (conflictValid()) {
             stream << space << conflict;
         }
         if (autoIncrement) {
@@ -53,13 +53,13 @@ String ColumnConstraint::getValidDescription() const
         break;
     case Switch::NotNull:
         stream << "NOT NULL";
-        if (useConflict) {
+        if (conflictValid()) {
             stream << space << conflict;
         }
         break;
     case Switch::Unique:
         stream << "UNIQUE";
-        if (useConflict) {
+        if (conflictValid()) {
             stream << space << conflict;
         }
         break;

@@ -51,7 +51,6 @@ StatementSelect& StatementSelect::distinct()
 StatementSelect& StatementSelect::from(const TablesOrSubqueries& tablesOrSubqueries)
 {
     Syntax::SelectCore& core = currentCore();
-    core.useFrom = true;
     core.tableOrSubqueries = tablesOrSubqueries;
     return *this;
 }
@@ -59,7 +58,6 @@ StatementSelect& StatementSelect::from(const TablesOrSubqueries& tablesOrSubquer
 StatementSelect& StatementSelect::from(const Join& join)
 {
     Syntax::SelectCore& core = currentCore();
-    core.useFrom = true;
     core.tableOrSubqueries.clear();
     core.joinClause = join;
     return *this;
@@ -68,7 +66,6 @@ StatementSelect& StatementSelect::from(const Join& join)
 StatementSelect& StatementSelect::where(const Expression& condition)
 {
     Syntax::SelectCore& core = currentCore();
-    core.useCondition = true;
     core.condition = condition;
     return *this;
 }
@@ -88,7 +85,6 @@ StatementSelect& StatementSelect::group(const Expression& group)
 StatementSelect& StatementSelect::having(const Expression& having)
 {
     Syntax::SelectCore& core = currentCore();
-    core.useHaving = true;
     core.having = having;
     return *this;
 }
@@ -166,7 +162,6 @@ StatementSelect& StatementSelect::orders(const OrderingTerms& orders)
 
 StatementSelect& StatementSelect::limit(const Expression& from, const Expression& to)
 {
-    syntax().useLimit = true;
     syntax().limitParameterType = Syntax::LimitParameterType::End;
     syntax().limit = from;
     syntax().limitParameter = to;
@@ -175,7 +170,6 @@ StatementSelect& StatementSelect::limit(const Expression& from, const Expression
 
 StatementSelect& StatementSelect::limit(const Expression& limit)
 {
-    syntax().useLimit = true;
     syntax().limitParameterType = Syntax::LimitParameterType::NotSet;
     syntax().limit = limit;
     return *this;

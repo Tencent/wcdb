@@ -33,7 +33,7 @@ public:
     Schema schema;
     Pragma pragma;
     enum class Switch {
-        NotSet,
+        NotSet = 0,
         To,
         With,
     } switcher

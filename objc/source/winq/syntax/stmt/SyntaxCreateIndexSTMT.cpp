@@ -51,7 +51,7 @@ String CreateIndexSTMT::getValidDescription() const
         stream << schema << ".";
     }
     stream << index << " ON " << table << "(" << indexedColumns << ")";
-    if (useCondition) {
+    if (condition.isValid()) {
         stream << " WHERE " << condition;
     }
     return stream.str();
@@ -62,7 +62,7 @@ void CreateIndexSTMT::iterate(const Iterator& iterator, bool& stop)
     Identifier::iterate(iterator, stop);
     recursiveIterate(schema, iterator, stop);
     listIterate(indexedColumns, iterator, stop);
-    if (useCondition) {
+    if (condition.isValid()) {
         recursiveIterate(condition, iterator, stop);
     }
 }

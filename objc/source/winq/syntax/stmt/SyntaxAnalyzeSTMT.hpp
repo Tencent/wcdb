@@ -31,8 +31,7 @@ namespace Syntax {
 class AnalyzeSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    WCDB_DEFAULT_SYNTAX_ENUM(All, SchemaOrTableOrIndex);
-    bool useSchema = false;
+    WCDB_SYNTAX_MAIN_UNION_ENUM(All, SchemaOrTableOrIndex);
     Schema schema;
     String tableOrIndex;
 

@@ -30,7 +30,7 @@ namespace Syntax {
 class VacuumSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    WCDB_DEFAULT_SYNTAX_ENUM(All, Schema);
+    WCDB_SYNTAX_MAIN_UNION_ENUM(All, Schema);
     Schema schema;
 
 #pragma mark - Identifier

@@ -46,7 +46,7 @@ String WindowFunctionInvocation::getValidDescription() const
         stream << "*";
     }
     stream << ") ";
-    if (useFilter) {
+    if (filter.isValid()) {
         stream << filter << " ";
     }
     stream << "OVER";
@@ -64,7 +64,7 @@ void WindowFunctionInvocation::iterate(const Iterator& iterator, bool& stop)
     if (!expressions.empty()) {
         listIterate(expressions, iterator, stop);
     }
-    if (useFilter) {
+    if (filter.isValid()) {
         recursiveIterate(filter, iterator, stop);
     }
     if (window.empty()) {

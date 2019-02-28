@@ -35,11 +35,11 @@ Identifier::Type InsertSTMT::getType() const
 String InsertSTMT::getValidDescription(bool skipSchema) const
 {
     std::ostringstream stream;
-    if (useWithClause) {
+    if (withClause.isValid()) {
         stream << withClause << space;
     }
     stream << "INSERT ";
-    if (useConflictAction) {
+    if (conflictActionValid()) {
         stream << conflictAction << space;
     }
     stream << "INTO ";
@@ -75,7 +75,7 @@ String InsertSTMT::getValidDescription(bool skipSchema) const
         stream << "DEFAULT VALUES";
         break;
     }
-    if (useUpsertClause) {
+    if (upsertClause.isValid()) {
         stream << space << upsertClause;
     }
     return stream.str();
@@ -89,7 +89,7 @@ String InsertSTMT::getValidDescription() const
 void InsertSTMT::iterate(const Iterator& iterator, bool& stop)
 {
     Identifier::iterate(iterator, stop);
-    if (useWithClause) {
+    if (withClause.isValid()) {
         recursiveIterate(withClause, iterator, stop);
     }
     recursiveIterate(schema, iterator, stop);
@@ -107,7 +107,7 @@ void InsertSTMT::iterate(const Iterator& iterator, bool& stop)
     case Switch::Default:
         break;
     }
-    if (useUpsertClause) {
+    if (upsertClause.isValid()) {
         recursiveIterate(upsertClause, iterator, stop);
     }
 }

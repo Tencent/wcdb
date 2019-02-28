@@ -39,14 +39,12 @@ ColumnConstraint& ColumnConstraint::primaryKey()
 
 ColumnConstraint& ColumnConstraint::order(const Order& order)
 {
-    syntax().useOrder = true;
     syntax().order = order;
     return *this;
 }
 
 ColumnConstraint& ColumnConstraint::conflict(const Conflict& conflict)
 {
-    syntax().useConflict = true;
     syntax().conflict = conflict;
     return *this;
 }

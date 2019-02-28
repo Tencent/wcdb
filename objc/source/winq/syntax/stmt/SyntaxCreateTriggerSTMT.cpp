@@ -89,7 +89,7 @@ String CreateTriggerSTMT::getValidDescription() const
     if (forEachFow) {
         stream << "FOR EACH ROW ";
     }
-    if (useCondition) {
+    if (condition.isValid()) {
         stream << "WHEN " << condition << space;
     }
     stream << "BEGIN ";
@@ -132,7 +132,7 @@ void CreateTriggerSTMT::iterate(const Iterator& iterator, bool& stop)
     if (event == Event::Update) {
         listIterate(columns, iterator, stop);
     }
-    if (useCondition) {
+    if (condition.isValid()) {
         recursiveIterate(condition, iterator, stop);
     }
     auto insert = inserts.begin();

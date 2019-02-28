@@ -41,7 +41,7 @@ String SelectCore::getValidDescription() const
             stream << "DISTINCT ";
         }
         stream << resultColumns;
-        if (useFrom) {
+        if (!tableOrSubqueries.empty() || joinClause.isValid()) {
             stream << " FROM ";
             if (!tableOrSubqueries.empty()) {
                 stream << tableOrSubqueries;
@@ -49,12 +49,12 @@ String SelectCore::getValidDescription() const
                 stream << joinClause;
             }
         }
-        if (useCondition) {
+        if (condition.isValid()) {
             stream << " WHERE " << condition;
         }
         if (!groups.empty()) {
             stream << " GROUP BY " << groups;
-            if (useHaving) {
+            if (having.isValid()) {
                 stream << " HAVING " << having;
             }
         }
@@ -98,19 +98,17 @@ void SelectCore::iterate(const Iterator& iterator, bool& stop)
     switch (switcher) {
     case Switch::Select:
         listIterate(resultColumns, iterator, stop);
-        if (useFrom) {
             if (!tableOrSubqueries.empty()) {
                 listIterate(tableOrSubqueries, iterator, stop);
-            } else {
+            } else if (joinClause.isValid()) {
                 recursiveIterate(joinClause, iterator, stop);
             }
-        }
-        if (useCondition) {
+        if (condition.isValid()) {
             recursiveIterate(condition, iterator, stop);
         }
         if (!groups.empty()) {
             listIterate(groups, iterator, stop);
-            if (useHaving) {
+            if (having.isValid()) {
                 recursiveIterate(having, iterator, stop);
             }
         }

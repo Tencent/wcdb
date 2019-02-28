@@ -43,7 +43,6 @@ public:
     std::list<CompoundOperator> compoundOperators;
 
     std::list<OrderingTerm> orderingTerms;
-    bool useLimit = false;
     Expression limit;
     LimitParameterType limitParameterType = LimitParameterType::NotSet;
     Expression limitParameter;

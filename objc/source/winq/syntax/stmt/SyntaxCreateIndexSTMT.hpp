@@ -38,7 +38,6 @@ public:
     String table;
     std::list<IndexedColumn> indexedColumns;
     Expression condition;
-    bool useCondition = false;
     
     bool isValid() const override final;
 

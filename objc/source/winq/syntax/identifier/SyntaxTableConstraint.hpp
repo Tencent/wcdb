@@ -35,7 +35,7 @@ class TableConstraint final : public Identifier {
 #pragma mark - Lang
 public:
     String name;
-    WCDB_DEFAULT_SYNTAX_ENUM(
+    WCDB_SYNTAX_MAIN_UNION_ENUM(
         PrimaryKey,
         Unique,
         Check,
@@ -43,8 +43,7 @@ public:
     );
 
     std::list<IndexedColumn> indexedColumns;
-    bool useConflict = false;
-    Conflict conflict;
+    WCDB_SYNTAX_ENUM_UNION(Conflict, conflict);
 
     Expression expression;
 

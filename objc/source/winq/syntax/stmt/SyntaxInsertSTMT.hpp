@@ -30,16 +30,14 @@ namespace Syntax {
 class InsertSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    bool useWithClause = false;
     WithClause withClause;
-    bool useConflictAction = false;
-    ConflictAction conflictAction;
+    WCDB_SYNTAX_ENUM_UNION(ConflictAction, conflictAction);
     Schema schema;
     String table;
     String alias;
     std::list<Column> columns;
 
-    WCDB_DEFAULT_SYNTAX_ENUM(
+    WCDB_SYNTAX_MAIN_UNION_ENUM(
         Values,
         Select,
         Default,
@@ -47,7 +45,6 @@ public:
     std::list<std::list<Expression>> expressionsValues;
     SelectSTMT select;
 
-    bool useUpsertClause = false;
     UpsertClause upsertClause;
 
 #pragma mark - Identifier

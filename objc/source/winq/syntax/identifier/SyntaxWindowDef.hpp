@@ -36,7 +36,6 @@ class WindowDef final : public Identifier {
 public:
     std::list<Expression> expressions;
     std::list<OrderingTerm> orderingTerms;
-    bool useFrameSpec = false;
     FrameSpec frameSpec;
     
     bool isValid() const override final;

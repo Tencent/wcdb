@@ -34,7 +34,7 @@ class ColumnConstraint final : public Identifier {
 #pragma mark - Lang
 public:
     String name;
-    WCDB_DEFAULT_SYNTAX_ENUM(
+    WCDB_SYNTAX_MAIN_UNION_ENUM(
         PrimaryKey,
         NotNull,
         Unique,
@@ -44,10 +44,8 @@ public:
         ForeignKey,
     );
 
-    bool useOrder = false;
-    Order order;
-    bool useConflict = false;
-    Conflict conflict;
+    WCDB_SYNTAX_ENUM_UNION(Order, order);
+    WCDB_SYNTAX_ENUM_UNION(Conflict, conflict);
     bool autoIncrement = false;
     Expression expression;
     String collation;

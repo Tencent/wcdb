@@ -24,7 +24,6 @@ namespace WCDB {
 
 StatementUpdate& StatementUpdate::with(const With& with)
 {
-    syntax().useWithClause = true;
     syntax().withClause = with;
     return *this;
 }
@@ -37,35 +36,30 @@ StatementUpdate& StatementUpdate::update(const QualifiedTable& table)
 
 StatementUpdate& StatementUpdate::orRollback()
 {
-    syntax().useConflictAction = true;
     syntax().conflictAction = Syntax::ConflictAction::Rollback;
     return *this;
 }
 
 StatementUpdate& StatementUpdate::orAbort()
 {
-    syntax().useConflictAction = true;
     syntax().conflictAction = Syntax::ConflictAction::Abort;
     return *this;
 }
 
 StatementUpdate& StatementUpdate::orReplace()
 {
-    syntax().useConflictAction = true;
     syntax().conflictAction = Syntax::ConflictAction::Replace;
     return *this;
 }
 
 StatementUpdate& StatementUpdate::orFail()
 {
-    syntax().useConflictAction = true;
     syntax().conflictAction = Syntax::ConflictAction::Fail;
     return *this;
 }
 
 StatementUpdate& StatementUpdate::orIgnore()
 {
-    syntax().useConflictAction = true;
     syntax().conflictAction = Syntax::ConflictAction::Ignore;
     return *this;
 }
@@ -84,7 +78,6 @@ StatementUpdate& StatementUpdate::to(const Expression& value)
 
 StatementUpdate& StatementUpdate::where(const Expression& condition)
 {
-    syntax().useCondition = true;
     syntax().condition = condition;
     return *this;
 }
@@ -103,7 +96,6 @@ StatementUpdate& StatementUpdate::orders(const OrderingTerms& orders)
 
 StatementUpdate& StatementUpdate::limit(const Expression& from, const Expression& to)
 {
-    syntax().useLimit = true;
     syntax().limitParameterType = Syntax::LimitParameterType::End;
     syntax().limit = from;
     syntax().limitParameter = to;
@@ -112,7 +104,6 @@ StatementUpdate& StatementUpdate::limit(const Expression& from, const Expression
 
 StatementUpdate& StatementUpdate::limit(const Expression& limit)
 {
-    syntax().useLimit = true;
     syntax().limitParameterType = Syntax::LimitParameterType::NotSet;
     syntax().limit = limit;
     return *this;
@@ -120,7 +111,6 @@ StatementUpdate& StatementUpdate::limit(const Expression& limit)
 
 StatementUpdate& StatementUpdate::offset(const Expression& offset)
 {
-    syntax().useLimit = true;
     syntax().limitParameterType = Syntax::LimitParameterType::Offset;
     syntax().limitParameter = offset;
     return *this;

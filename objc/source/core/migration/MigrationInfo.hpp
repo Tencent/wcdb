@@ -162,8 +162,7 @@ public:
      2. SELECT max(rowid)+1 FROM temp.[unionedView] when the table does not contain an integer primary key
      */
     StatementInsert
-    getStatementForMigratingSpecifiedRow(bool useConflictAction,
-                                         Syntax::ConflictAction conflictAction) const;
+    getStatementForMigratingSpecifiedRow(Syntax::ConflictAction conflictAction) const;
     /*
      UPDATE ...
      SET ...

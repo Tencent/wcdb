@@ -102,7 +102,7 @@ String ForeignKeyClause::getValidDescription() const
             ++iter;
         }
     }
-    if (useDeferrable) {
+    if (deferrableValid()) {
         stream << space << deferrable;
     }
     return stream.str();

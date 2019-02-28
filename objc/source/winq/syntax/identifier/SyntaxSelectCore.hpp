@@ -34,19 +34,16 @@ class TableOrSubquery;
 class SelectCore final : public Identifier {
 #pragma mark - Lang
 public:
-    WCDB_DEFAULT_SYNTAX_ENUM(
+    WCDB_SYNTAX_MAIN_UNION_ENUM(
         Select,
         Values,
     );
     bool distinct = false;
     std::list<ResultColumn> resultColumns;
-    bool useFrom = false;
     std::list<TableOrSubquery> tableOrSubqueries;
     JoinClause joinClause;
-    bool useCondition = false;
     Expression condition;
     std::list<Expression> groups;
-    bool useHaving = false;
     Expression having;
     std::list<String> windows;
     std::list<WindowDef> windowDefs;

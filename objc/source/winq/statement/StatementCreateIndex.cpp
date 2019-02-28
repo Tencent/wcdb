@@ -60,7 +60,6 @@ StatementCreateIndex& StatementCreateIndex::indexed(const IndexedColumn& indexed
 
 StatementCreateIndex& StatementCreateIndex::where(const Expression& condition)
 {
-    syntax().useCondition = true;
     syntax().condition = condition;
     return *this;
 }

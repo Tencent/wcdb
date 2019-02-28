@@ -34,7 +34,7 @@ public:
     CTETableName table;
     SelectSTMT initialSelect;
     enum class Combination {
-        Union,
+        Union = 1,
         UnionAll,
     } combination;
     SelectSTMT recursiveSelect;

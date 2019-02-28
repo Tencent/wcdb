@@ -24,7 +24,7 @@
 namespace WCDB {
 
 namespace Syntax {
-
+    
 #pragma mark - Identifier
 Identifier::Type AnalyzeSTMT::getType() const
 {
@@ -35,14 +35,19 @@ String AnalyzeSTMT::getValidDescription() const
 {
     std::ostringstream stream;
     stream << "ANALYZE";
-    if (useSchema) {
-        stream << space;
-        if (!schema.empty()) {
-            stream << schema;
-        }
-        if (!tableOrIndex.empty()) {
-            stream << "." << tableOrIndex;
-        }
+    switch (switcher) {
+        case Switch::SchemaOrTableOrIndex:
+            stream << space << schema;
+            if (!tableOrIndex.empty()) {
+                if (schema.isValid()) {
+                    stream << ".";
+                }
+                stream << tableOrIndex;
+            }
+            break;
+        default:
+            WCTInnerAssert(switcher == Switch::All);
+            break;
     }
     return stream.str();
 }
@@ -50,8 +55,13 @@ String AnalyzeSTMT::getValidDescription() const
 void AnalyzeSTMT::iterate(const Iterator& iterator, bool& stop)
 {
     Identifier::iterate(iterator, stop);
-    if (useSchema) {
-        recursiveIterate(schema, iterator, stop);
+    switch (switcher) {
+        case Switch::SchemaOrTableOrIndex:
+            recursiveIterate(schema, iterator, stop);
+            break;
+        default:
+            WCTInnerAssert(switcher == Switch::All);
+            break;
     }
 }
 

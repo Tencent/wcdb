@@ -36,7 +36,6 @@ WindowDef& WindowDef::order(const OrderingTerms& orders)
 
 WindowDef& WindowDef::framespec(const FrameSpec& framespec)
 {
-    syntax().useFrameSpec = true;
     syntax().frameSpec = framespec;
     return *this;
 }

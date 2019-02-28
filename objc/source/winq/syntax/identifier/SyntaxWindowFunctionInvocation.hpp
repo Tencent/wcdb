@@ -33,7 +33,6 @@ public:
     String name;
     std::list<Expression> expressions;
     bool wildcard = false;
-    bool useFilter = false;
     Filter filter;
     String window;
     WindowDef windowDef;

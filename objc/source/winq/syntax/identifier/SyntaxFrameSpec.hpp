@@ -32,23 +32,23 @@ class Expression;
 class FrameSpec final : public Identifier {
 #pragma mark - Lang
 public:
-    WCDB_DEFAULT_SYNTAX_ENUM(
+    WCDB_SYNTAX_MAIN_UNION_ENUM(
         Range,
         Rows,
     );
 
     enum class Event {
-        Single,
+        Single = 1,
         Between,
     } event;
     enum class FirstEvent {
-        UnboundedPreceding,
+        UnboundedPreceding = 1,
         Preceding,
         Following,
         CurrentRow,
     } firstEvent;
     enum class SecondEvent {
-        UnboundedFollowing,
+        UnboundedFollowing = 1,
         Preceding,
         Following,
         CurrentRow,

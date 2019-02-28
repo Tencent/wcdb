@@ -39,14 +39,14 @@ namespace Syntax {
     bool isIntegerColumnType(const String& type);
     
     enum class CompoundOperator : int {
-        Union,
+        Union = 1,
         UnionAll,
         Intersect,
         Except,
     };
     
     enum class Conflict {
-        Rollback,
+        Rollback = 1,
         Abort,
         Fail,
         Ignore,
@@ -54,7 +54,7 @@ namespace Syntax {
     };
     
     enum class JoinOperator : int {
-        With,
+        With = 1,
         Join,
         LeftOuterJoin,
         LeftJoin,
@@ -68,18 +68,18 @@ namespace Syntax {
     };
 
     enum class Order : int {
-        ASC,
+        ASC = 0,
         DESC,
     };
 
 enum class LimitParameterType {
-    NotSet,
+    NotSet = 0,
     Offset,
     End,
 };
 
 enum class ConflictAction {
-    Replace,
+    Replace = 1,
     Rollback,
     Abort,
     Fail,

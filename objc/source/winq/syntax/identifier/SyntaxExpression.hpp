@@ -38,7 +38,7 @@ class SelectSTMT;
 class Expression final : public Identifier {
 #pragma mark - Lang
 public:
-    WCDB_DEFAULT_SYNTAX_ENUM(
+    WCDB_SYNTAX_MAIN_UNION_ENUM(
         LiteralValue,
         BindParameter,
         Column,
@@ -65,7 +65,7 @@ public:
     Column column;
 
     enum class UnaryOperator {
-        Negative,
+        Negative = 1,
         Positive,
         Tilde,
         Not,
@@ -73,7 +73,7 @@ public:
     } unaryOperator;
 
     enum class BinaryOperator {
-        Concatenate,
+        Concatenate = 1,
         Multiply,
         Divide,
         Modulo,
@@ -112,7 +112,7 @@ public:
     bool escape = false;
 
     enum class SwitchIn {
-        Empty,
+        Empty = 1,
         Select,
         Expressions,
         Table,
@@ -127,7 +127,6 @@ public:
 
     WindowDef windowDef;
     String windowName;
-    bool useFilter = false;
     Filter filter;
 
 #pragma mark - Identifier

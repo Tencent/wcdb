@@ -51,7 +51,6 @@ TableConstraint& TableConstraint::indexed(const IndexedColumn& indexedColumn)
 
 TableConstraint& TableConstraint::conflict(const Conflict& conflict)
 {
-    syntax().useConflict = true;
     syntax().conflict = conflict;
     return *this;
 }

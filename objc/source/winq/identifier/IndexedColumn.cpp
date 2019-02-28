@@ -42,7 +42,6 @@ IndexedColumn& IndexedColumn::collate(const String& collation)
 
 IndexedColumn& IndexedColumn::order(const Order& order)
 {
-    syntax().useOrder = true;
     syntax().order = order;
     return *this;
 }

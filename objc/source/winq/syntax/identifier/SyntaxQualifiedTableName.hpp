@@ -34,7 +34,7 @@ public:
     String table;
     String alias;
     enum class Switch {
-        NotSet,
+        NotSet = 0,
         Indexed,
         NotIndexed,
     } switcher

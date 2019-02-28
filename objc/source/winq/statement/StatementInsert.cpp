@@ -24,7 +24,6 @@ namespace WCDB {
 
 StatementInsert& StatementInsert::with(const With& with)
 {
-    syntax().useWithClause = true;
     syntax().withClause = with;
     return *this;
 }
@@ -43,35 +42,30 @@ StatementInsert& StatementInsert::schema(const Schema& schema)
 
 StatementInsert& StatementInsert::orReplace()
 {
-    syntax().useConflictAction = true;
     syntax().conflictAction = Syntax::ConflictAction::Replace;
     return *this;
 }
 
 StatementInsert& StatementInsert::orRollback()
 {
-    syntax().useConflictAction = true;
     syntax().conflictAction = Syntax::ConflictAction::Rollback;
     return *this;
 }
 
 StatementInsert& StatementInsert::orAbort()
 {
-    syntax().useConflictAction = true;
     syntax().conflictAction = Syntax::ConflictAction::Abort;
     return *this;
 }
 
 StatementInsert& StatementInsert::orFail()
 {
-    syntax().useConflictAction = true;
     syntax().conflictAction = Syntax::ConflictAction::Fail;
     return *this;
 }
 
 StatementInsert& StatementInsert::orIgnore()
 {
-    syntax().useConflictAction = true;
     syntax().conflictAction = Syntax::ConflictAction::Ignore;
     return *this;
 }
@@ -126,7 +120,6 @@ StatementInsert& StatementInsert::defaultValues()
 
 StatementInsert& StatementInsert::upsert(const Upsert& upsert)
 {
-    syntax().useUpsertClause = true;
     syntax().upsertClause = upsert;
     return *this;
 }

@@ -31,12 +31,10 @@ class UpsertClause final : public Identifier {
 #pragma mark - Lang
 public:
     std::list<IndexedColumn> indexedColumns;
-    bool useCondition = false;
     Expression condition;
-    WCDB_DEFAULT_SYNTAX_ENUM(Nothing, Update);
+    WCDB_SYNTAX_MAIN_UNION_ENUM(Nothing, Update);
     std::list<std::list<Column>> columnsList;
     std::list<Expression> expressions;
-    bool useUpdateCondition = false;
     Expression updateCondition;
 
 #pragma mark - Identifier

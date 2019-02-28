@@ -30,17 +30,13 @@ namespace Syntax {
 class UpdateSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    bool useWithClause = false;
     WithClause withClause;
-    bool useConflictAction = false;
-    ConflictAction conflictAction;
+    WCDB_SYNTAX_ENUM_UNION(ConflictAction, conflictAction);
     QualifiedTableName table;
     std::list<std::list<Column>> columnsList;
     std::list<Expression> expressions;
-    bool useCondition = false;
     Expression condition;
     std::list<OrderingTerm> orderingTerms;
-    bool useLimit = false;
     Expression limit;
     LimitParameterType limitParameterType = LimitParameterType::NotSet;
     Expression limitParameter;

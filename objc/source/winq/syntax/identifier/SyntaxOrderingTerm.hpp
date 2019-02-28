@@ -32,8 +32,7 @@ class OrderingTerm final : public Identifier {
 public:
     Expression expression;
     String collation;
-    bool useOrder = false;
-    Order order;
+    WCDB_SYNTAX_ENUM_UNION(Order, order);
     
     bool isValid() const override final;
 
