@@ -23,10 +23,33 @@
 
 namespace WCDB {
 
+RecyclableHandle::RecyclableHandle() : Super(), m_handle(nullptr)
+{
+}
+
+RecyclableHandle::RecyclableHandle(const std::nullptr_t &)
+: Super(nullptr), m_handle(nullptr)
+{
+}
+
 RecyclableHandle::RecyclableHandle(const std::shared_ptr<Handle> &value,
                                    const Super::OnRecycled &onRecycled)
 : Super(value, onRecycled), m_handle(value.get())
 {
+}
+
+RecyclableHandle &RecyclableHandle::operator=(const std::nullptr_t &)
+{
+    Super::operator=(nullptr);
+    m_handle = nullptr;
+    return *this;
+}
+
+RecyclableHandle &RecyclableHandle::operator=(const RecyclableHandle &other)
+{
+    Super::operator=(other);
+    m_handle = other.m_handle;
+    return *this;
 }
 
 Handle *RecyclableHandle::get() const

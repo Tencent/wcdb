@@ -30,8 +30,12 @@ class RecyclableHandle final : public Recyclable<std::shared_ptr<Handle>> {
 public:
     using Super = Recyclable<std::shared_ptr<Handle>>;
 
-    using Super::Recyclable;
+    RecyclableHandle();
+    RecyclableHandle(const std::nullptr_t &);
     RecyclableHandle(const std::shared_ptr<Handle> &value, const Super::OnRecycled &onRecycled);
+
+    RecyclableHandle &operator=(const std::nullptr_t &);
+    RecyclableHandle &operator=(const RecyclableHandle &other);
 
     constexpr Handle *operator->() const { return m_handle; }
     Handle *get() const;
