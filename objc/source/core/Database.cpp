@@ -141,11 +141,10 @@ void Database::removeConfig(const String &name)
 RecyclableHandle Database::getHandle()
 {
     // Additional shared lock is not needed because the threadedHandles is always empty when it's blocked. So threaded handles is thread safe.
-    ThreadedHandles *threadedHandle = Database::threadedHandles().getOrCreate();
-    const auto iter = threadedHandle->find(this);
-    if (iter != threadedHandle->end()) {
+    auto handle = m_transactionedHandles.getOrCreate();
+    if (handle->get() != nullptr) {
         WCTInnerAssert(m_concurrency.readSafety());
-        return iter->second;
+        return *handle;
     }
     InitializedGuard initializedGuard = initialize();
     if (!initializedGuard.valid()) {
@@ -169,7 +168,7 @@ bool Database::execute(const Statement &statement)
 {
     RecyclableHandle handle = getHandle();
     if (handle != nullptr) {
-        ThreadedGuard threadedGuard(this, handle);
+        TransactionGuard transactionedGuard(this, handle);
         if (handle->execute(statement)) {
             return true;
         }
@@ -184,7 +183,7 @@ std::pair<bool, bool> Database::tableExists(const String &table)
     bool exists = false;
     RecyclableHandle handle = getHandle();
     if (handle != nullptr) {
-        ThreadedGuard threadedGuard(this, handle);
+        TransactionGuard transactionedGuard(this, handle);
         std::tie(succeed, exists) = handle->tableExists(table);
         if (!succeed) {
             setThreadedError(handle->getError());
@@ -280,49 +279,43 @@ std::shared_ptr<Handle> Database::generateHandle(HandleType type)
 }
 
 #pragma mark - Threaded
-ThreadLocal<Database::ThreadedHandles> &Database::threadedHandles()
+void Database::markHandleAsTransactioned(const RecyclableHandle &handle)
 {
-    static ThreadLocal<ThreadedHandles> *s_threadedHandles
-    = new ThreadLocal<ThreadedHandles>;
-    return *s_threadedHandles;
+    WCTInnerAssert(m_transactionedHandles.getOrCreate()->get() == nullptr);
+    *m_transactionedHandles.getOrCreate() = handle;
+    WCTInnerAssert(m_transactionedHandles.getOrCreate()->get() != nullptr);
 }
 
-void Database::markHandleAsThreaded(const Database *database, const RecyclableHandle &handle)
+void Database::markHandleAsUntransactioned()
 {
-    ThreadedHandles *threadedHandles = Database::threadedHandles().getOrCreate();
-    WCTInnerAssert(threadedHandles->find(database) == threadedHandles->end());
-    threadedHandles->emplace(database, handle);
+    WCTInnerAssert(m_transactionedHandles.getOrCreate()->get() != nullptr);
+    *m_transactionedHandles.getOrCreate() = nullptr;
+    WCTInnerAssert(m_transactionedHandles.getOrCreate()->get() == nullptr);
 }
 
-void Database::markHandleAsUnthreaded(const Database *database)
-{
-    ThreadedHandles *threadedHandles = Database::threadedHandles().getOrCreate();
-    WCTInnerAssert(threadedHandles->find(database) != threadedHandles->end());
-    threadedHandles->erase(database);
-}
-
-Database::ThreadedGuard::ThreadedGuard(const Database *database, const RecyclableHandle &handle)
+Database::TransactionGuard::TransactionGuard(Database *database, const RecyclableHandle &handle)
 : m_database(database), m_handle(handle), m_isInTransactionBefore(handle->isInTransaction())
 {
     WCTInnerAssert(m_database != nullptr);
     WCTInnerAssert(m_handle != nullptr);
 }
 
-Database::ThreadedGuard::~ThreadedGuard()
+Database::TransactionGuard::~TransactionGuard()
 {
     bool isInTransactionAfter = m_handle->isInTransaction();
     if (!m_isInTransactionBefore && isInTransactionAfter) {
-        markHandleAsThreaded(m_database, m_handle);
+        m_database->markHandleAsTransactioned(m_handle);
     } else if (m_isInTransactionBefore && !isInTransactionAfter) {
-        markHandleAsUnthreaded(m_database);
+        m_database->markHandleAsUntransactioned();
     }
 }
 
 #pragma mark - Transaction
 bool Database::isInTransaction()
 {
-    ThreadedHandles *threadedHandles = Database::threadedHandles().getOrCreate();
-    return threadedHandles->find(this) != threadedHandles->end();
+    WCTInnerAssert(m_transactionedHandles.getOrCreate()->get() == nullptr
+                   || m_transactionedHandles.getOrCreate()->get()->isInTransaction());
+    return m_transactionedHandles.getOrCreate()->get() != nullptr;
 }
 
 bool Database::beginTransaction()
@@ -331,7 +324,7 @@ bool Database::beginTransaction()
     if (handle == nullptr) {
         return false;
     }
-    ThreadedGuard threadedGuard(this, handle);
+    TransactionGuard transactionedGuard(this, handle);
     if (handle->beginTransaction()) {
         return true;
     }
@@ -345,7 +338,7 @@ bool Database::commitOrRollbackTransaction()
     WCTRemedialAssert(handle != nullptr,
                       "Commit or rollback transaction should not be called without begin.",
                       return false;);
-    ThreadedGuard threadedGuard(this, handle);
+    TransactionGuard transactionedGuard(this, handle);
     if (handle->commitOrRollbackTransaction()) {
         return true;
     }
@@ -359,7 +352,7 @@ void Database::rollbackTransaction()
     WCTRemedialAssert(handle != nullptr,
                       "Rollback transaction should not be called without begin.",
                       return;);
-    ThreadedGuard threadedGuard(this, handle);
+    TransactionGuard transactionedGuard(this, handle);
     handle->rollbackTransaction();
 }
 
@@ -382,7 +375,7 @@ bool Database::beginNestedTransaction()
 {
     RecyclableHandle handle = getHandle();
     if (handle != nullptr) {
-        ThreadedGuard threadedGuard(this, handle);
+        TransactionGuard transactionedGuard(this, handle);
         if (handle->beginNestedTransaction()) {
             return true;
         }
@@ -397,7 +390,7 @@ bool Database::commitOrRollbackNestedTransaction()
     WCTRemedialAssert(handle != nullptr,
                       "Commit or rollback nested transaction should not be called without begin.",
                       return false;);
-    ThreadedGuard threadedGuard(this, handle);
+    TransactionGuard transactionedGuard(this, handle);
     if (handle->commitOrRollbackNestedTransaction()) {
         return true;
     }
@@ -411,7 +404,7 @@ void Database::rollbackNestedTransaction()
     WCTRemedialAssert(handle != nullptr,
                       "Rollback nested transaction should not be called without begin.",
                       return;);
-    ThreadedGuard threadedGuard(this, handle);
+    TransactionGuard transactionedGuard(this, handle);
     handle->rollbackNestedTransaction();
 }
 
@@ -422,8 +415,8 @@ bool Database::runNestedTransaction(const TransactionCallback &transaction)
     }
     // get threaded handle
     RecyclableHandle handle = getHandle();
-    WCTInnerAssert(handle != nullptr) if (transaction(handle.get()))
-    {
+    WCTInnerAssert(handle != nullptr);
+    if (transaction(handle.get())) {
         return commitOrRollbackNestedTransaction();
     }
     rollbackNestedTransaction();

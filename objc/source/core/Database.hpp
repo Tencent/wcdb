@@ -107,22 +107,21 @@ private:
 
 #pragma mark - Threaded
 private:
-    using ThreadedHandles = std::map<const Database *, RecyclableHandle>;
-    static ThreadLocal<ThreadedHandles> &threadedHandles();
-    static void
-    markHandleAsThreaded(const Database *database, const RecyclableHandle &handle);
-    static void markHandleAsUnthreaded(const Database *database);
+    void markHandleAsTransactioned(const RecyclableHandle &handle);
+    void markHandleAsUntransactioned();
 
-    class ThreadedGuard final {
+    class TransactionGuard final {
     public:
-        ThreadedGuard(const Database *database, const RecyclableHandle &handle);
-        ~ThreadedGuard();
+        TransactionGuard(Database *database, const RecyclableHandle &handle);
+        ~TransactionGuard();
 
     private:
+        Database *m_database;
         bool m_isInTransactionBefore;
-        const Database *m_database;
         RecyclableHandle m_handle;
     };
+
+    ThreadLocal<RecyclableHandle> m_transactionedHandles;
 
 #pragma mark - Transaction
 public:
