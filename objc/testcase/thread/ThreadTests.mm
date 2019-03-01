@@ -280,8 +280,11 @@
         [handle2 invalidate];
         [handle3 invalidate];
     }
-    TestCaseAssertEqual(handleCount, 3);
+    TestCaseAssertEqual(handleCount, 1);
+}
 
+- (void)test_feature_transactioned_handle
+{
     BOOL result = [self.database runTransaction:^BOOL(WCTHandle* _Nonnull) {
         TestCaseAssertTrue([self.database isInTransaction]);
         WCTHandle* handle = [self.database getHandle];
@@ -289,6 +292,32 @@
         return YES;
     }];
     TestCaseAssertTrue(result);
+}
+
+- (void)test_feature_threaded_transactioned_handle
+{
+    TestCaseAssertTrue([self.database beginTransaction]);
+
+    TestCaseResult* began = [TestCaseResult no];
+    TestCaseResult* tested = [TestCaseResult no];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        WCTHandle* handle = [self.database getHandle];
+        TestCaseAssertFalse([handle isInTransaction]);
+        // it will not reuse transactioned handle.
+        TestCaseAssertTrue([handle validate]);
+        [began makeYES];
+        while ([tested isNO])
+            ;
+        [handle invalidate];
+    });
+
+    while ([began isNO])
+        ;
+
+    // it will reuse transactioned handle.
+    TestCaseAssertTrue([self.database isInTransaction]);
+    [tested makeYES];
+    [self.database rollbackTransaction];
 }
 
 - (void)test_feature_max_concurrency

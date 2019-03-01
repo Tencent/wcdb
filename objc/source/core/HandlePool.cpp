@@ -159,6 +159,20 @@ bool HandlePool::isAliving() const
 RecyclableHandle HandlePool::flowOut(Slot slot)
 {
     WCTInnerAssert(slot < HandlePoolNumberOfSlots);
+
+    ReferencedHandle &referencedHandle = m_threadedHandles.getOrCreate()->at(slot);
+    {
+        // threaded handles is thread safe.
+        if (referencedHandle.handle != nullptr) {
+            WCTInnerAssert(m_concurrency.readSafety());
+            WCTInnerAssert(referencedHandle.reference > 0);
+            ++referencedHandle.reference;
+            return RecyclableHandle(
+            referencedHandle.handle,
+            std::bind(&HandlePool::flowBack, this, slot, std::placeholders::_1));
+        }
+    }
+
     SharedLockGuard concurrencyGuard(m_concurrency);
     std::shared_ptr<Handle> handle;
     {
@@ -220,6 +234,9 @@ RecyclableHandle HandlePool::flowOut(Slot slot)
     WCTInnerAssert(handle != nullptr);
 
     m_concurrency.lockShared();
+    WCTInnerAssert(referencedHandle.handle == nullptr && referencedHandle.reference == 0);
+    referencedHandle.handle = handle;
+    referencedHandle.reference = 1;
     return RecyclableHandle(
     handle, std::bind(&HandlePool::flowBack, this, slot, std::placeholders::_1));
 }
@@ -237,13 +254,23 @@ void HandlePool::flowBack(Slot slot, const std::shared_ptr<Handle> &handle)
     WCTInnerAssert(slot < HandlePoolNumberOfSlots);
     WCTInnerAssert(handle != nullptr);
     WCTInnerAssert(m_concurrency.readSafety());
-    WCTRemedialAssert(
-    !handle->isPrepared(), "Statement is not finalized.", handle->finalize(););
-    {
-        LockGuard memoryGuard(m_memory);
-        m_frees[slot].push_back(handle);
+    ReferencedHandle &referencedHandle = m_threadedHandles.getOrCreate()->at(slot);
+    WCTInnerAssert(referencedHandle.handle == handle);
+    WCTInnerAssert(referencedHandle.reference > 0);
+    if (--referencedHandle.reference == 0) {
+        referencedHandle.handle = nullptr;
+        WCTRemedialAssert(
+        !handle->isPrepared(), "Statement is not finalized.", handle->finalize(););
+        {
+            LockGuard memoryGuard(m_memory);
+            m_frees[slot].push_back(handle);
+        }
+        m_concurrency.unlockShared();
     }
-    m_concurrency.unlockShared();
+}
+
+HandlePool::ReferencedHandle::ReferencedHandle() : handle(nullptr), reference(0)
+{
 }
 
 } //namespace WCDB

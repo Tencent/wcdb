@@ -92,6 +92,18 @@ private:
 
     std::array<std::set<std::shared_ptr<Handle>>, HandlePoolNumberOfSlots> m_handles;
     std::array<std::list<std::shared_ptr<Handle>>, HandlePoolNumberOfSlots> m_frees;
+
+#pragma mark - Threaded
+private:
+    struct ReferencedHandle {
+        ReferencedHandle();
+
+        std::shared_ptr<Handle> handle;
+        int reference;
+    };
+    typedef struct ReferencedHandle ReferencedHandle;
+
+    ThreadLocal<std::array<ReferencedHandle, HandlePoolNumberOfSlots>> m_threadedHandles;
 };
 
 } //namespace WCDB
