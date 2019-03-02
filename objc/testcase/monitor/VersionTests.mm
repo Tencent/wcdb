@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import "Version.h"
 #import <TestCase/TestCase.h>
 
 @interface VersionTests : BaseTestCase
@@ -28,12 +29,12 @@
 
 - (void)test
 {
-    TestCaseAssertTrue([WCTDatabase.version isEqualToString:@"1.1.0"]);
-    TestCaseAssertTrue(WCTDatabase.commitHash.length > 0);
-    TestCaseAssertTrue(WCTDatabase.buildTimestamp > 0);
-    TestCaseAssertEqual(WCTDatabase.buildTime.timeIntervalSince1970, WCTDatabase.buildTimestamp);
+    TestCaseAssertTrue([WCTDatabase.version isEqualToString:@WCDB_VERSION]);
+    TestCaseAssertTrue([WCTDatabase.commitHash isEqualToString:@WCDB_COMMIT_HASH]);
+    TestCaseAssertEqual(WCTDatabase.buildTimestamp, WCDB_BUILD_TIMESTAMP);
+    TestCaseAssertTrue([WCTDatabase.buildTime isEqualToDate:[NSDate dateWithTimeIntervalSince1970:WCDB_BUILD_TIMESTAMP]]);
 
-    NSString *identifier = [NSString stringWithFormat:@"%@_%@_%lu", @"bfd56a1a2d98b0b21babd84fcf6db4ac", WCTDatabase.version, (unsigned long) WCTDatabase.buildTimestamp];
+    NSString *identifier = [NSString stringWithFormat:@"%@_%@_%d", @WCDB_IDENTIFIER, @WCDB_VERSION, WCDB_BUILD_TIMESTAMP];
     TestCaseAssertTrue([WCTDatabase.identifier isEqualToString:identifier]);
 }
 
