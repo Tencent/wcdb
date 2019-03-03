@@ -787,6 +787,7 @@
 		2367BD062215004300380122 /* MigrationHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A09D6A2146204300F62EE8 /* MigrationHandle.hpp */; };
 		2367BD0E221500BD00380122 /* Assertion.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B2F20AD666900E21AB0 /* Assertion.hpp */; };
 		236996B221D5C4FF00E72E81 /* Recyclable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 236996B121D5C4FF00E72E81 /* Recyclable.cpp */; };
+		236B9332222AA8B2008AE62D /* ErrorTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 236B9331222AA8B2008AE62D /* ErrorTests.mm */; };
 		236BACC021BF6C8500C8B4D9 /* MigrationQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 236BACBE21BF6C8500C8B4D9 /* MigrationQueue.cpp */; };
 		236BACC121BF6C8500C8B4D9 /* MigrationQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 236BACBF21BF6C8500C8B4D9 /* MigrationQueue.hpp */; };
 		236BACE221BF9F6400C8B4D9 /* WCTDatabase+Migration.h in Headers */ = {isa = PBXBuildFile; fileRef = 236BACE021BF9F6400C8B4D9 /* WCTDatabase+Migration.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -2070,6 +2071,7 @@
 		2366BBB5221BEAA6000ED712 /* WCTDatabase+TestCase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+TestCase.mm"; sourceTree = "<group>"; };
 		2367BD0C2215004300380122 /* WCDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WCDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		236996B121D5C4FF00E72E81 /* Recyclable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Recyclable.cpp; sourceTree = "<group>"; };
+		236B9331222AA8B2008AE62D /* ErrorTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ErrorTests.mm; sourceTree = "<group>"; };
 		236BACBE21BF6C8500C8B4D9 /* MigrationQueue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationQueue.cpp; sourceTree = "<group>"; };
 		236BACBF21BF6C8500C8B4D9 /* MigrationQueue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrationQueue.hpp; sourceTree = "<group>"; };
 		236BACE021BF9F6400C8B4D9 /* WCTDatabase+Migration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Migration.h"; sourceTree = "<group>"; };
@@ -2935,6 +2937,7 @@
 			children = (
 				23B4A77D21A7DFDA00BD6A32 /* TraceTests.mm */,
 				23B4A77F21A7F2A900BD6A32 /* VersionTests.mm */,
+				236B9331222AA8B2008AE62D /* ErrorTests.mm */,
 			);
 			path = monitor;
 			sourceTree = "<group>";
@@ -5695,6 +5698,7 @@
 			files = (
 				23B4A77E21A7DFDA00BD6A32 /* TraceTests.mm in Sources */,
 				23B4A78021A7F2A900BD6A32 /* VersionTests.mm in Sources */,
+				236B9332222AA8B2008AE62D /* ErrorTests.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
