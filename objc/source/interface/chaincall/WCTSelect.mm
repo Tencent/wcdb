@@ -43,6 +43,11 @@
     return self;
 }
 
+- (instancetype)ofClass:(Class)cls
+{
+    return [self ofClass:cls];
+}
+
 - (WCTOptionalObject /* ObjectType */)nextObject
 {
     WCTTryDisposeGuard tryDisposeGuard(self);
