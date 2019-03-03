@@ -80,8 +80,8 @@ typedef NSArray<NSObject<WCTColumnCoding> *> WCTColumnCodingRow;
 #pragma mark - Optional
 typedef WCTFundamentalOptional<BOOL, NO> WCTOptionalBool;
 typedef WCTFundamentalOptional<NSUInteger, 0> WCTOptionalSize;
-typedef WCTObjCOptional<WCTObject *> WCTOptionalObject;
-typedef WCTObjCOptional<NSArray<WCTObject *> *> WCTOptionalObjects;
+typedef WCTObjCOptional<id> WCTOptionalObject;
+typedef WCTObjCOptional<NSArray *> WCTOptionalObjects;
 typedef WCTObjCOptional<WCTMultiObject *> WCTOptionalMultiObject;
 typedef WCTObjCOptional<NSArray<WCTMultiObject *> *> WCTOptionalMultiObjects;
 

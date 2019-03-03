@@ -31,317 +31,317 @@
 
 @implementation WCTHandle (Convenient)
 #pragma mark - Get Object
-- (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                              fromTable:(NSString *)tableName
+- (WCTOptionalObject /* ObjectType* */)getObjectOfClass:(Class)cls
+                                              fromTable:(NSString *)tableName
 {
     return [[[[[[self prepareSelect] ofClass:cls] fromTable:tableName] limit:1] finalizeStatementWhenDispose] nextObject];
 }
 
-- (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                              fromTable:(NSString *)tableName
-                                  where:(const WCDB::Expression &)condition
+- (WCTOptionalObject /* ObjectType* */)getObjectOfClass:(Class)cls
+                                              fromTable:(NSString *)tableName
+                                                  where:(const WCDB::Expression &)condition
 {
     return [[[[[[[self prepareSelect] ofClass:cls] fromTable:tableName] where:condition] limit:1] finalizeStatementWhenDispose] nextObject];
 }
 
-- (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                              fromTable:(NSString *)tableName
-                                 orders:(const WCDB::OrderingTerms &)orders
+- (WCTOptionalObject /* ObjectType* */)getObjectOfClass:(Class)cls
+                                              fromTable:(NSString *)tableName
+                                                 orders:(const WCDB::OrderingTerms &)orders
 {
     return [[[[[[[self prepareSelect] ofClass:cls] fromTable:tableName] orders:orders] limit:1] finalizeStatementWhenDispose] nextObject];
 }
 
-- (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                              fromTable:(NSString *)tableName
-                                 offset:(const WCDB::Expression &)offset
+- (WCTOptionalObject /* ObjectType* */)getObjectOfClass:(Class)cls
+                                              fromTable:(NSString *)tableName
+                                                 offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[self prepareSelect] ofClass:cls] fromTable:tableName] limit:1] offset:offset] finalizeStatementWhenDispose] nextObject];
 }
 
-- (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                              fromTable:(NSString *)tableName
-                                  where:(const WCDB::Expression &)condition
-                                 orders:(const WCDB::OrderingTerms &)orders
+- (WCTOptionalObject /* ObjectType* */)getObjectOfClass:(Class)cls
+                                              fromTable:(NSString *)tableName
+                                                  where:(const WCDB::Expression &)condition
+                                                 orders:(const WCDB::OrderingTerms &)orders
 {
     return [[[[[[[[self prepareSelect] ofClass:cls] fromTable:tableName] where:condition] orders:orders] limit:1] finalizeStatementWhenDispose] nextObject];
 }
 
-- (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                              fromTable:(NSString *)tableName
-                                  where:(const WCDB::Expression &)condition
-                                 offset:(const WCDB::Expression &)offset
+- (WCTOptionalObject /* ObjectType* */)getObjectOfClass:(Class)cls
+                                              fromTable:(NSString *)tableName
+                                                  where:(const WCDB::Expression &)condition
+                                                 offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[self prepareSelect] ofClass:cls] fromTable:tableName] where:condition] limit:1] offset:offset] finalizeStatementWhenDispose] nextObject];
 }
 
-- (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                              fromTable:(NSString *)tableName
-                                 orders:(const WCDB::OrderingTerms &)orders
-                                 offset:(const WCDB::Expression &)offset
+- (WCTOptionalObject /* ObjectType* */)getObjectOfClass:(Class)cls
+                                              fromTable:(NSString *)tableName
+                                                 orders:(const WCDB::OrderingTerms &)orders
+                                                 offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[self prepareSelect] ofClass:cls] fromTable:tableName] orders:orders] limit:1] offset:offset] finalizeStatementWhenDispose] nextObject];
 }
 
-- (id /* WCTObject* */)getObjectOfClass:(Class)cls
-                              fromTable:(NSString *)tableName
-                                  where:(const WCDB::Expression &)condition
-                                 orders:(const WCDB::OrderingTerms &)orders
-                                 offset:(const WCDB::Expression &)offset
+- (WCTOptionalObject /* ObjectType* */)getObjectOfClass:(Class)cls
+                                              fromTable:(NSString *)tableName
+                                                  where:(const WCDB::Expression &)condition
+                                                 orders:(const WCDB::OrderingTerms &)orders
+                                                 offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[[self prepareSelect] ofClass:cls] fromTable:tableName] where:condition] orders:orders] limit:1] offset:offset] finalizeStatementWhenDispose] nextObject];
 }
 
 #pragma mark - Get Objects
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOfClass:(Class)cls
+                                                          fromTable:(NSString *)tableName
 {
     return [[[[[self prepareSelect] ofClass:cls] fromTable:tableName] finalizeStatementWhenDispose] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName
-                                            where:(const WCDB::Expression &)condition
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOfClass:(Class)cls
+                                                          fromTable:(NSString *)tableName
+                                                              where:(const WCDB::Expression &)condition
 {
     return [[[[[[self prepareSelect] ofClass:cls] fromTable:tableName] where:condition] finalizeStatementWhenDispose] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName
-                                           orders:(const WCDB::OrderingTerms &)orders
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOfClass:(Class)cls
+                                                          fromTable:(NSString *)tableName
+                                                             orders:(const WCDB::OrderingTerms &)orders
 {
     return [[[[[[self prepareSelect] ofClass:cls] fromTable:tableName] orders:orders] finalizeStatementWhenDispose] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName
-                                            limit:(const WCDB::Expression &)limit
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOfClass:(Class)cls
+                                                          fromTable:(NSString *)tableName
+                                                              limit:(const WCDB::Expression &)limit
 {
     return [[[[[[self prepareSelect] ofClass:cls] fromTable:tableName] limit:limit] finalizeStatementWhenDispose] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName
-                                            where:(const WCDB::Expression &)condition
-                                           orders:(const WCDB::OrderingTerms &)orders
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOfClass:(Class)cls
+                                                          fromTable:(NSString *)tableName
+                                                              where:(const WCDB::Expression &)condition
+                                                             orders:(const WCDB::OrderingTerms &)orders
 {
     return [[[[[[[self prepareSelect] ofClass:cls] fromTable:tableName] where:condition] orders:orders] finalizeStatementWhenDispose] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName
-                                            where:(const WCDB::Expression &)condition
-                                            limit:(const WCDB::Expression &)limit
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOfClass:(Class)cls
+                                                          fromTable:(NSString *)tableName
+                                                              where:(const WCDB::Expression &)condition
+                                                              limit:(const WCDB::Expression &)limit
 {
     return [[[[[[[self prepareSelect] ofClass:cls] fromTable:tableName] where:condition] limit:limit] finalizeStatementWhenDispose] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName
-                                           orders:(const WCDB::OrderingTerms &)orders
-                                            limit:(const WCDB::Expression &)limit
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOfClass:(Class)cls
+                                                          fromTable:(NSString *)tableName
+                                                             orders:(const WCDB::OrderingTerms &)orders
+                                                              limit:(const WCDB::Expression &)limit
 {
     return [[[[[[[self prepareSelect] ofClass:cls] fromTable:tableName] orders:orders] limit:limit] finalizeStatementWhenDispose] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName
-                                            limit:(const WCDB::Expression &)limit
-                                           offset:(const WCDB::Expression &)offset
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOfClass:(Class)cls
+                                                          fromTable:(NSString *)tableName
+                                                              limit:(const WCDB::Expression &)limit
+                                                             offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[self prepareSelect] ofClass:cls] fromTable:tableName] limit:limit] offset:offset] finalizeStatementWhenDispose] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName
-                                            where:(const WCDB::Expression &)condition
-                                           orders:(const WCDB::OrderingTerms &)orders
-                                            limit:(const WCDB::Expression &)limit
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOfClass:(Class)cls
+                                                          fromTable:(NSString *)tableName
+                                                              where:(const WCDB::Expression &)condition
+                                                             orders:(const WCDB::OrderingTerms &)orders
+                                                              limit:(const WCDB::Expression &)limit
 {
     return [[[[[[[[self prepareSelect] ofClass:cls] fromTable:tableName] where:condition] orders:orders] limit:limit] finalizeStatementWhenDispose] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName
-                                           orders:(const WCDB::OrderingTerms &)orders
-                                            limit:(const WCDB::Expression &)limit
-                                           offset:(const WCDB::Expression &)offset
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOfClass:(Class)cls
+                                                          fromTable:(NSString *)tableName
+                                                             orders:(const WCDB::OrderingTerms &)orders
+                                                              limit:(const WCDB::Expression &)limit
+                                                             offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[self prepareSelect] ofClass:cls] fromTable:tableName] orders:orders] limit:limit] offset:offset] finalizeStatementWhenDispose] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName
-                                            where:(const WCDB::Expression &)condition
-                                            limit:(const WCDB::Expression &)limit
-                                           offset:(const WCDB::Expression &)offset
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOfClass:(Class)cls
+                                                          fromTable:(NSString *)tableName
+                                                              where:(const WCDB::Expression &)condition
+                                                              limit:(const WCDB::Expression &)limit
+                                                             offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[self prepareSelect] ofClass:cls] fromTable:tableName] where:condition] limit:limit] offset:offset] finalizeStatementWhenDispose] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
-                                        fromTable:(NSString *)tableName
-                                            where:(const WCDB::Expression &)condition
-                                           orders:(const WCDB::OrderingTerms &)orders
-                                            limit:(const WCDB::Expression &)limit
-                                           offset:(const WCDB::Expression &)offset
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOfClass:(Class)cls
+                                                          fromTable:(NSString *)tableName
+                                                              where:(const WCDB::Expression &)condition
+                                                             orders:(const WCDB::OrderingTerms &)orders
+                                                              limit:(const WCDB::Expression &)limit
+                                                             offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[[self prepareSelect] ofClass:cls] fromTable:tableName] where:condition] orders:orders] limit:limit] offset:offset] finalizeStatementWhenDispose] allObjects];
 }
 
 #pragma mark - Get Part Of Object
-- (id /* WCTObject* */)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
-                                      fromTable:(NSString *)tableName
+- (WCTOptionalObject /* ObjectType* */)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
+                                                      fromTable:(NSString *)tableName
 {
     return [[[[[[self prepareSelect] onResultColumns:resultColumns] fromTable:tableName] limit:1] finalizeStatementWhenDispose] nextObject];
 }
 
-- (id /* WCTObject* */)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
-                                      fromTable:(NSString *)tableName
-                                          where:(const WCDB::Expression &)condition
+- (WCTOptionalObject /* ObjectType* */)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
+                                                      fromTable:(NSString *)tableName
+                                                          where:(const WCDB::Expression &)condition
 {
     return [[[[[[[self prepareSelect] onResultColumns:resultColumns] fromTable:tableName] where:condition] limit:1] finalizeStatementWhenDispose] nextObject];
 }
 
-- (id /* WCTObject* */)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
-                                      fromTable:(NSString *)tableName
-                                         orders:(const WCDB::OrderingTerms &)orders
+- (WCTOptionalObject /* ObjectType* */)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
+                                                      fromTable:(NSString *)tableName
+                                                         orders:(const WCDB::OrderingTerms &)orders
 {
     return [[[[[[[self prepareSelect] onResultColumns:resultColumns] fromTable:tableName] orders:orders] limit:1] finalizeStatementWhenDispose] nextObject];
 }
 
-- (id /* WCTObject* */)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
-                                      fromTable:(NSString *)tableName
-                                         offset:(const WCDB::Expression &)offset
+- (WCTOptionalObject /* ObjectType* */)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
+                                                      fromTable:(NSString *)tableName
+                                                         offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[self prepareSelect] onResultColumns:resultColumns] fromTable:tableName] limit:1] offset:offset] finalizeStatementWhenDispose] nextObject];
 }
 
-- (id /* WCTObject* */)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
-                                      fromTable:(NSString *)tableName
-                                          where:(const WCDB::Expression &)condition
-                                         orders:(const WCDB::OrderingTerms &)orders
+- (WCTOptionalObject /* ObjectType* */)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
+                                                      fromTable:(NSString *)tableName
+                                                          where:(const WCDB::Expression &)condition
+                                                         orders:(const WCDB::OrderingTerms &)orders
 {
     return [[[[[[[[self prepareSelect] onResultColumns:resultColumns] fromTable:tableName] where:condition] orders:orders] limit:1] finalizeStatementWhenDispose] nextObject];
 }
 
-- (id /* WCTObject* */)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
-                                      fromTable:(NSString *)tableName
-                                          where:(const WCDB::Expression &)condition
-                                         offset:(const WCDB::Expression &)offset
+- (WCTOptionalObject /* ObjectType* */)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
+                                                      fromTable:(NSString *)tableName
+                                                          where:(const WCDB::Expression &)condition
+                                                         offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[self prepareSelect] onResultColumns:resultColumns] fromTable:tableName] where:condition] limit:1] offset:offset] finalizeStatementWhenDispose] nextObject];
 }
 
-- (id /* WCTObject* */)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
-                                      fromTable:(NSString *)tableName
-                                         orders:(const WCDB::OrderingTerms &)orders
-                                         offset:(const WCDB::Expression &)offset
+- (WCTOptionalObject /* ObjectType* */)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
+                                                      fromTable:(NSString *)tableName
+                                                         orders:(const WCDB::OrderingTerms &)orders
+                                                         offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[self prepareSelect] onResultColumns:resultColumns] fromTable:tableName] orders:orders] limit:1] offset:offset] finalizeStatementWhenDispose] nextObject];
 }
 
-- (id /* WCTObject* */)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
-                                      fromTable:(NSString *)tableName
-                                          where:(const WCDB::Expression &)condition
-                                         orders:(const WCDB::OrderingTerms &)orders
-                                         offset:(const WCDB::Expression &)offset
+- (WCTOptionalObject /* ObjectType* */)getObjectOnResultColumns:(const WCTResultColumns &)resultColumns
+                                                      fromTable:(NSString *)tableName
+                                                          where:(const WCDB::Expression &)condition
+                                                         orders:(const WCDB::OrderingTerms &)orders
+                                                         offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[[self prepareSelect] onResultColumns:resultColumns] fromTable:tableName] where:condition] orders:orders] limit:1] offset:offset] finalizeStatementWhenDispose] nextObject];
 }
 
 #pragma mark - Get Part Of Objects
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                                fromTable:(NSString *)tableName
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+                                                                  fromTable:(NSString *)tableName
 {
     return [[[[[self prepareSelect] onResultColumns:resultColumns] fromTable:tableName] finalizeStatementWhenDispose] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                                fromTable:(NSString *)tableName
-                                                    where:(const WCDB::Expression &)condition
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+                                                                  fromTable:(NSString *)tableName
+                                                                      where:(const WCDB::Expression &)condition
 {
     return [[[[[[self prepareSelect] onResultColumns:resultColumns] fromTable:tableName] where:condition] finalizeStatementWhenDispose] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                                fromTable:(NSString *)tableName
-                                                   orders:(const WCDB::OrderingTerms &)orders
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+                                                                  fromTable:(NSString *)tableName
+                                                                     orders:(const WCDB::OrderingTerms &)orders
 {
     return [[[[[[self prepareSelect] onResultColumns:resultColumns] fromTable:tableName] orders:orders] finalizeStatementWhenDispose] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                                fromTable:(NSString *)tableName
-                                                    limit:(const WCDB::Expression &)limit
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+                                                                  fromTable:(NSString *)tableName
+                                                                      limit:(const WCDB::Expression &)limit
 {
     return [[[[[[self prepareSelect] onResultColumns:resultColumns] fromTable:tableName] limit:limit] finalizeStatementWhenDispose] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                                fromTable:(NSString *)tableName
-                                                    where:(const WCDB::Expression &)condition
-                                                   orders:(const WCDB::OrderingTerms &)orders
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+                                                                  fromTable:(NSString *)tableName
+                                                                      where:(const WCDB::Expression &)condition
+                                                                     orders:(const WCDB::OrderingTerms &)orders
 {
     return [[[[[[[self prepareSelect] onResultColumns:resultColumns] fromTable:tableName] where:condition] orders:orders] finalizeStatementWhenDispose] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                                fromTable:(NSString *)tableName
-                                                    where:(const WCDB::Expression &)condition
-                                                    limit:(const WCDB::Expression &)limit
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+                                                                  fromTable:(NSString *)tableName
+                                                                      where:(const WCDB::Expression &)condition
+                                                                      limit:(const WCDB::Expression &)limit
 {
     return [[[[[[[self prepareSelect] onResultColumns:resultColumns] fromTable:tableName] where:condition] limit:limit] finalizeStatementWhenDispose] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                                fromTable:(NSString *)tableName
-                                                   orders:(const WCDB::OrderingTerms &)orders
-                                                    limit:(const WCDB::Expression &)limit
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+                                                                  fromTable:(NSString *)tableName
+                                                                     orders:(const WCDB::OrderingTerms &)orders
+                                                                      limit:(const WCDB::Expression &)limit
 {
     return [[[[[[[self prepareSelect] onResultColumns:resultColumns] fromTable:tableName] orders:orders] limit:limit] finalizeStatementWhenDispose] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                                fromTable:(NSString *)tableName
-                                                    limit:(const WCDB::Expression &)limit
-                                                   offset:(const WCDB::Expression &)offset
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+                                                                  fromTable:(NSString *)tableName
+                                                                      limit:(const WCDB::Expression &)limit
+                                                                     offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[self prepareSelect] onResultColumns:resultColumns] fromTable:tableName] limit:limit] offset:offset] finalizeStatementWhenDispose] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                                fromTable:(NSString *)tableName
-                                                    where:(const WCDB::Expression &)condition
-                                                   orders:(const WCDB::OrderingTerms &)orders
-                                                    limit:(const WCDB::Expression &)limit
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+                                                                  fromTable:(NSString *)tableName
+                                                                      where:(const WCDB::Expression &)condition
+                                                                     orders:(const WCDB::OrderingTerms &)orders
+                                                                      limit:(const WCDB::Expression &)limit
 {
     return [[[[[[[[self prepareSelect] onResultColumns:resultColumns] fromTable:tableName] where:condition] orders:orders] limit:limit] finalizeStatementWhenDispose] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                                fromTable:(NSString *)tableName
-                                                    where:(const WCDB::Expression &)condition
-                                                    limit:(const WCDB::Expression &)limit
-                                                   offset:(const WCDB::Expression &)offset
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+                                                                  fromTable:(NSString *)tableName
+                                                                      where:(const WCDB::Expression &)condition
+                                                                      limit:(const WCDB::Expression &)limit
+                                                                     offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[self prepareSelect] onResultColumns:resultColumns] fromTable:tableName] where:condition] limit:limit] offset:offset] finalizeStatementWhenDispose] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                                fromTable:(NSString *)tableName
-                                                   orders:(const WCDB::OrderingTerms &)orders
-                                                    limit:(const WCDB::Expression &)limit
-                                                   offset:(const WCDB::Expression &)offset
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+                                                                  fromTable:(NSString *)tableName
+                                                                     orders:(const WCDB::OrderingTerms &)orders
+                                                                      limit:(const WCDB::Expression &)limit
+                                                                     offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[self prepareSelect] onResultColumns:resultColumns] fromTable:tableName] orders:orders] limit:limit] offset:offset] finalizeStatementWhenDispose] allObjects];
 }
 
-- (NSArray /* <WCTObject*> */ *)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
-                                                fromTable:(NSString *)tableName
-                                                    where:(const WCDB::Expression &)condition
-                                                   orders:(const WCDB::OrderingTerms &)orders
-                                                    limit:(const WCDB::Expression &)limit
-                                                   offset:(const WCDB::Expression &)offset
+- (WCTOptionalObjects /* NSArray<ObjectType> * */)getObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+                                                                  fromTable:(NSString *)tableName
+                                                                      where:(const WCDB::Expression &)condition
+                                                                     orders:(const WCDB::OrderingTerms &)orders
+                                                                      limit:(const WCDB::Expression &)limit
+                                                                     offset:(const WCDB::Expression &)offset
 {
     return [[[[[[[[[self prepareSelect] onResultColumns:resultColumns] fromTable:tableName] where:condition] orders:orders] limit:limit] offset:offset] finalizeStatementWhenDispose] allObjects];
 }
