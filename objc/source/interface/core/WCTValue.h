@@ -58,4 +58,9 @@ typedef NSArray<WCTValue *> WCTOneRow;
 typedef NSArray<WCTValue *> WCTOneColumn;
 typedef NSArray<NSArray<WCTValue *> *> WCTColumnsXRows;
 
+typedef WCTObjCOptional<WCTValue *> WCTOptionalValue;
+typedef WCTObjCOptional<WCTOneRow *> WCTOptionalRow;
+typedef WCTObjCOptional<WCTOneColumn *> WCTOptionalColumn;
+typedef WCTObjCOptional<WCTColumnsXRows *> WCTOptionalColumnsXRows;
+
 NS_ASSUME_NONNULL_END

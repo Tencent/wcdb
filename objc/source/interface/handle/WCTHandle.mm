@@ -535,13 +535,13 @@
 }
 
 #pragma mark - Get All
-- (WCTOneColumn *)allValues
+- (WCTOptionalColumn)allValues
 {
     WCTHandleAssert(return nil;);
     return [self allValuesAtIndex:0];
 }
 
-- (WCTOneColumn *)allValuesAtIndex:(int)index
+- (WCTOptionalColumn)allValuesAtIndex:(int)index
 {
     WCTHandleAssert(return nil;);
     NSMutableArray *column = [NSMutableArray array];
@@ -553,7 +553,7 @@
     return done ? column : nil;
 }
 
-- (WCTColumnsXRows *)allRows
+- (WCTOptionalColumnsXRows)allRows
 {
     WCTHandleAssert(return nil;);
     NSMutableArray *rows = [NSMutableArray array];
