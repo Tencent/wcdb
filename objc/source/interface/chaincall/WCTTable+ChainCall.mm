@@ -48,7 +48,7 @@
 
 - (WCTSelect *)prepareSelect
 {
-    return [[[[WCTSelect alloc] initWithHandle:[self.database getHandle]] fromTable:_name] onResultColumns:[_class allProperties]];
+    return [[[[WCTSelect alloc] initWithHandle:[self.database getHandle]] fromTable:_name] ofClass:_class];
 }
 
 @end
