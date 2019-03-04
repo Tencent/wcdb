@@ -45,7 +45,7 @@
 
 - (instancetype)ofClass:(Class)cls
 {
-    return [self ofClass:cls];
+    return [self onResultColumns:[cls allProperties]];
 }
 
 - (NSArray /* <WCTObject*> */ *)allObjects
