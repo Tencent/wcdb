@@ -400,7 +400,7 @@ class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
                 nativeSymbolZipTask = project.task("nativeSymbolZip${cVariantName}", type: Zip) {
                     classifier = "${variantOnlyName}Symbols"
                     from externalNativeBuildTask.objFolder
-                    include '**/*.so'
+                    include '*/*.so'
                     dependsOn externalNativeBuildTask
                 }
             }
