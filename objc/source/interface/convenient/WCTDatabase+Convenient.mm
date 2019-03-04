@@ -1067,14 +1067,12 @@
 {
     WCTValue *result = nil;
     WCTHandle *handle = [self getHandle];
-    do {
-        if (![handle prepare:statement]
-            || ![handle step]) {
-            break;
+    if ([handle prepare:statement]) {
+        if ([handle step]) {
+            result = [handle extractValueAtIndex:0];
         }
-        result = [handle extractValueAtIndex:0];
-    } while (false);
-    [handle finalizeStatement];
+        [handle finalizeStatement];
+    }
     [handle invalidate];
     return result;
 }
@@ -1083,14 +1081,12 @@
 {
     WCTOneRow *result = nil;
     WCTHandle *handle = [self getHandle];
-    do {
-        if (![handle prepare:statement]
-            || ![handle step]) {
-            break;
+    if ([handle prepare:statement]) {
+        if ([handle step]) {
+            result = [handle extractRow];
         }
-        result = [handle extractRow];
-    } while (false);
-    [handle finalizeStatement];
+        [handle finalizeStatement];
+    };
     [handle invalidate];
     return result;
 }
@@ -1099,13 +1095,10 @@
 {
     WCTOneColumn *result = nil;
     WCTHandle *handle = [self getHandle];
-    do {
-        if (![handle prepare:statement]) {
-            break;
-        }
+    if ([handle prepare:statement]) {
         result = [handle allValues];
-    } while (false);
-    [handle finalizeStatement];
+        [handle finalizeStatement];
+    }
     [handle invalidate];
     return result;
 }
@@ -1114,13 +1107,10 @@
 {
     WCTColumnsXRows *result = nil;
     WCTHandle *handle = [self getHandle];
-    do {
-        if (![handle prepare:statement]) {
-            break;
-        }
+    if ([handle prepare:statement]) {
         result = [handle allRows];
-    } while (false);
-    [handle finalizeStatement];
+        [handle finalizeStatement];
+    }
     [handle invalidate];
     return result;
 }

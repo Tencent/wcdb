@@ -1064,54 +1064,44 @@
 - (WCTValue *)getValueFromStatement:(const WCDB::Statement &)statement
 {
     WCTValue *result = nil;
-    do {
-        if (![self prepare:statement]
-            || ![self step]) {
-            break;
+    if ([self prepare:statement]) {
+        if ([self step]) {
+            result = [self extractValueAtIndex:0];
         }
-        result = [self extractValueAtIndex:0];
-    } while (false);
-    [self finalizeStatement];
+        [self finalizeStatement];
+    }
     return result;
 }
 
 - (WCTOneRow *)getRowFromStatement:(const WCDB::Statement &)statement
 {
     WCTOneRow *result = nil;
-    do {
-        if (![self prepare:statement]
-            || ![self step]) {
-            break;
+    if ([self prepare:statement]) {
+        if ([self step]) {
+            result = [self extractRow];
         }
-        result = [self extractRow];
-    } while (false);
-    [self finalizeStatement];
+        [self finalizeStatement];
+    }
     return result;
 }
 
 - (WCTOneColumn *)getColumnFromStatement:(const WCDB::Statement &)statement
 {
     WCTOneColumn *result = nil;
-    do {
-        if (![self prepare:statement]) {
-            break;
-        }
+    if ([self prepare:statement]) {
         result = [self allValues];
-    } while (false);
-    [self finalizeStatement];
+        [self finalizeStatement];
+    }
     return result;
 }
 
 - (WCTColumnsXRows *)getRowsFromStatement:(const WCDB::Statement &)statement
 {
     WCTColumnsXRows *result = nil;
-    do {
-        if (![self prepare:statement]) {
-            break;
-        }
+    if ([self prepare:statement]) {
         result = [self allRows];
-    } while (false);
-    [self finalizeStatement];
+        [self finalizeStatement];
+    }
     return result;
 }
 
