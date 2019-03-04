@@ -49,7 +49,7 @@
     return self;
 }
 
-- (WCTOptionalMultiObject /* WCTMultiObject * */)nextMultiObject
+- (WCTMultiObject *)nextMultiObject
 {
     WCTTryDisposeGuard tryDisposeGuard(self);
     if (![self lazyPrepare]) {
@@ -64,7 +64,7 @@
     return [_handle extractMultiObjectOnResultColumns:_resultColumns];
 }
 
-- (WCTOptionalMultiObjects /* NSArray<WCTMultiObject *> * */)allMultiObjects
+- (NSArray<WCTMultiObject *> *)allMultiObjects
 {
     WCTTryDisposeGuard tryDisposeGuard(self);
     if (![self lazyPrepare]) {

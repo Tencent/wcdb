@@ -30,7 +30,7 @@
 
 @implementation WCTHandle (Table)
 
-- (WCTOptionalBool)tableExists:(NSString *)tableName
+- (WCTOptional<BOOL, NO>)tableExists:(NSString *)tableName
 {
     WCDB::Handle *handle = [self getOrGenerateHandle];
     if (handle != nullptr) {

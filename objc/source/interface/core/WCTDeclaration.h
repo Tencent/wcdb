@@ -20,7 +20,6 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/Macro.hpp>
-#import <WCDB/WCTOptional.h>
 #import <WCDB/WINQ.h>
 
 #pragma mark - Chain Call
@@ -73,17 +72,9 @@ typedef NSDictionary<NSString * /*table name */, WCTObject *> WCTMultiObject;
 typedef NSObject<WCTColumnCoding> WCTColumnCodingValue;
 typedef NSArray<NSObject<WCTColumnCoding> *> WCTColumnCodingRow;
 
-#pragma mark - Trace
+#pragma mark - Error
 @class WCTError;
 @class WCTPerformanceFootprint;
-
-#pragma mark - Optional
-typedef WCTFundamentalOptional<BOOL, NO> WCTOptionalBool;
-typedef WCTFundamentalOptional<NSUInteger, 0> WCTOptionalSize;
-typedef WCTObjCOptional<WCTObject *> WCTOptionalObject;
-typedef WCTObjCOptional<NSArray<WCTObject *> *> WCTOptionalObjects;
-typedef WCTObjCOptional<WCTMultiObject *> WCTOptionalMultiObject;
-typedef WCTObjCOptional<NSArray<WCTMultiObject *> *> WCTOptionalMultiObjects;
 
 typedef int32_t WCTTag;
 static constexpr WCTTag const WCTInvalidTag = 0;

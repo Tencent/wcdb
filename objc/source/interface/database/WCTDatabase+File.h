@@ -50,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
  @warning You should call it on a closed database. Otherwise you will get a warning.
  @return The sum of files size in bytes.
  */
-- (WCTOptionalSize)getFilesSize;
+- (WCTOptional<NSUInteger, 0>)getFilesSize;
 
 @end
 

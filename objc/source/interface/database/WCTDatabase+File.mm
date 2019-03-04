@@ -42,9 +42,9 @@
     return paths;
 }
 
-- (WCTOptionalSize)getFilesSize
+- (WCTOptional<NSUInteger, 0>)getFilesSize
 {
-    WCTOptionalSize result = nullptr;
+    WCTOptional<NSUInteger, 0> result = nullptr;
     bool succeed;
     size_t size;
     std::tie(succeed, size) = _database->getFilesSize();

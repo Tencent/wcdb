@@ -48,7 +48,18 @@
     return [self ofClass:cls];
 }
 
-- (WCTOptionalObject /* ObjectType */)nextObject
+- (NSArray /* <WCTObject*> */ *)allObjects
+{
+    WCTTryDisposeGuard tryDisposeGuard(self);
+    if (![self lazyPrepare]) {
+        return nil;
+    }
+    NSArray *objects = [_handle allObjectsOnResultColumns:_resultColumns];
+    [_handle finalizeStatement];
+    return objects;
+}
+
+- (id /* WCTObject* */)nextObject
 {
     WCTTryDisposeGuard tryDisposeGuard(self);
     if (![self lazyPrepare]) {
@@ -60,17 +71,6 @@
         return nil;
     }
     return [_handle extractObjectOnResultColumns:_resultColumns];
-}
-
-- (WCTOptionalObjects /* NSArray<ObjectType> * */)allObjects
-{
-    WCTTryDisposeGuard tryDisposeGuard(self);
-    if (![self lazyPrepare]) {
-        return nil;
-    }
-    NSArray *objects = [_handle allObjectsOnResultColumns:_resultColumns];
-    [_handle finalizeStatement];
-    return objects;
 }
 
 @end
