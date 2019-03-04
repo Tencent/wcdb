@@ -19,39 +19,65 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <WCDB/WCTConvertible.h>
 #import <type_traits>
 
-template<typename Value, Value defaultValue>
-class WCTOptional final {
+template<typename T>
+class WCTIncompleteOptional {
 public:
-    static_assert(std::is_default_constructible<Value>::value, "");
-    static_assert(std::is_convertible<BOOL, Value>::value, "");
-
-    WCTOptional(const Value& value) : m_value(value), m_failed(NO) {}
-
-    WCTOptional(const std::nullptr_t& = nullptr) : m_failed(YES) {}
-
-    operator const Value&() const { return value(); }
-
-    const Value& value() const
+    WCTIncompleteOptional(const T& value, BOOL isOK)
+    : m_value(value), m_isOK(isOK)
     {
-        if (m_failed) {
-            return m_defaultValue;
-        }
-        return m_value;
     }
 
-    BOOL failed() const { return m_failed; }
+    virtual ~WCTIncompleteOptional() {}
 
-    WCTOptional& operator=(const Value& value)
+    operator const T&() const { return m_value; }
+
+    const T& value() const { return m_value; }
+
+    BOOL failed() const { return !m_isOK; }
+
+    WCTIncompleteOptional& operator=(const T& value)
     {
-        m_failed = NO;
+        m_isOK = YES;
         m_value = value;
         return *this;
     }
 
 private:
-    const Value m_defaultValue = defaultValue;
-    Value m_value;
-    BOOL m_failed;
+    T m_value;
+    BOOL m_isOK;
 };
+
+template<typename T, T defaultValue>
+class WCTFundamentalOptional final : public WCTIncompleteOptional<T> {
+    static_assert(std::is_fundamental<T>::value || std::is_enum<T>::value, "");
+    static_assert(!std::is_same<std::nullptr_t, T>::value, "");
+
+public:
+    WCTFundamentalOptional() : WCTIncompleteOptional<T>(defaultValue, YES) {}
+
+    WCTFundamentalOptional(const T& value)
+    : WCTIncompleteOptional<T>(value, YES)
+    {
+    }
+
+    WCTFundamentalOptional(const std::nullptr_t&)
+    : WCTIncompleteOptional<T>(defaultValue, NO)
+    {
+    }
+};
+
+//template<typename T>
+//class WCTObjCOptional : public WCTIncompleteOptional<T> {
+//    static_assert(WCDB::IsObjCType<T>::value, "");
+//public:
+//    WCTObjCOptional() : WCTIncompleteOptional<T>(nil, YES) {}
+//
+//    WCTObjCOptional(T value) : WCTIncompleteOptional<T>(value, YES) {}
+//
+//    WCTObjCOptional(const std::nullptr_t&) : WCTIncompleteOptional<T>(nil, NO)
+//    {
+//    }
+//};

@@ -20,6 +20,7 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/Macro.hpp>
+#import <WCDB/WCTOptional.h>
 #import <WCDB/WINQ.h>
 
 #pragma mark - Chain Call
@@ -75,6 +76,8 @@ typedef NSArray<NSObject<WCTColumnCoding> *> WCTColumnCodingRow;
 #pragma mark - Error
 @class WCTError;
 @class WCTPerformanceFootprint;
+typedef WCTFundamentalOptional<BOOL, NO> WCTOptionalBool;
+typedef WCTFundamentalOptional<NSUInteger, 0> WCTOptionalSize;
 
 typedef int32_t WCTTag;
 static constexpr WCTTag const WCTInvalidTag = 0;
