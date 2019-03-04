@@ -45,7 +45,7 @@
 
 - (instancetype)ofClass:(Class)cls
 {
-    return [self onResultColumns:[cls allProperties]];
+    return [self ofClass:cls];
 }
 
 - (WCTOptionalObject /* ObjectType */)nextObject

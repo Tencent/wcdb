@@ -126,9 +126,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (WCTOptionalColumnsXRows)allRows;
 
-- (WCTOptionalObjects /* NSArray<ObjectType> * */)allObjectsOnResultColumns:(const WCTResultColumns &)resultColumns;
+- (nullable NSArray /* <WCTObject*> */ *)allObjectsOnResultColumns:(const WCTResultColumns &)resultColumns;
 
-- (WCTOptionalMultiObjects /* NSArray<WCTMultiObject *> * */)allMultiObjectsOnResultColumns:(const WCTResultColumns &)resultColumns;
+- (nullable NSArray<WCTMultiObject *> *)allMultiObjectsOnResultColumns:(const WCTResultColumns &)resultColumns;
 
 #pragma mark - Error
 - (WCTError *)error;

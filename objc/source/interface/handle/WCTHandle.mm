@@ -564,7 +564,7 @@
     return done ? rows : nil;
 }
 
-- (WCTOptionalObjects /* NSArray<ObjectType> * */)allObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+- (NSArray /* <WCTObject*> */ *)allObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
 {
     WCTHandleAssert(return nil;);
     NSMutableArray *objects = [NSMutableArray array];
@@ -575,7 +575,7 @@
     return done ? objects : nil;
 }
 
-- (WCTOptionalMultiObjects /* NSArray<WCTMultiObject *> * */)allMultiObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
+- (NSArray<WCTMultiObject *> *)allMultiObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
 {
     WCTHandleAssert(return nil;);
     NSMutableArray *multiObjects = [NSMutableArray array];
