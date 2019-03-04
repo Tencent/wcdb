@@ -68,7 +68,7 @@
     if (![self lazyPrepare]) {
         return nil;
     }
-    WCTOptionalObjects objects = [_handle allObjectsOnResultColumns:_resultColumns];
+    NSArray *objects = [_handle allObjectsOnResultColumns:_resultColumns];
     [_handle finalizeStatement];
     return objects;
 }

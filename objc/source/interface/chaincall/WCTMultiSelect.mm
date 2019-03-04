@@ -70,7 +70,7 @@
     if (![self lazyPrepare]) {
         return nil;
     }
-    WCTOptionalMultiObjects results = [_handle allMultiObjectsOnResultColumns:_resultColumns];
+    NSArray<WCTMultiObject *> *results = [_handle allMultiObjectsOnResultColumns:_resultColumns];
     [_handle finalizeStatement];
     return results;
 }
