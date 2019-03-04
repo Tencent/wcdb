@@ -258,10 +258,10 @@ public abstract class SQLiteProgram extends SQLiteClosable {
             throw new IllegalStateException("SQLiteProgram has bound to another thread.");
         }
 
-        mBoundSession = session;
         mPreparedStatement = session.acquirePreparedStatement(mSql,
                 mDatabase.getThreadDefaultConnectionFlags(mReadOnly));
         mPreparedStatement.bindArguments(mBindArgs);
+        mBoundSession = session;
         return true;
     }
 
