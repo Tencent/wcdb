@@ -34,8 +34,6 @@ public:
 
     operator const T&() const { return m_value; }
 
-    operator T&() { return m_value; }
-
     const T& value() const { return m_value; }
 
     BOOL failed() const { return !m_isOK; }

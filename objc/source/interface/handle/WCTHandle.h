@@ -120,11 +120,11 @@ NS_ASSUME_NONNULL_BEGIN
                    ofObject:(WCTObject *)object;
 
 #pragma mark - Step And Extract All Data
-- (WCTOptionalColumn)allValues;
+- (nullable WCTOneColumn *)allValues;
 
-- (WCTOptionalColumn)allValuesAtIndex:(int)index;
+- (nullable WCTOneColumn *)allValuesAtIndex:(int)index;
 
-- (WCTOptionalColumnsXRows)allRows;
+- (nullable WCTColumnsXRows *)allRows;
 
 - (nullable NSArray /* <WCTObject*> */ *)allObjectsOnResultColumns:(const WCTResultColumns &)resultColumns;
 
