@@ -61,7 +61,7 @@
     auto testingSQL = WCDB::BindParameter(name);
     auto testingTypes = { WCDB::SQL::Type::BindParameter };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"?testName");
+    TestCaseAssertSQLEqual(testingSQL, @":testName");
 }
 
 - (void)test_colon

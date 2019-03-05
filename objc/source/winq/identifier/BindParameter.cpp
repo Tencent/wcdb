@@ -30,7 +30,7 @@ BindParameter::BindParameter(int n)
 
 BindParameter::BindParameter(const String& name)
 {
-    syntax().switcher = SyntaxType::Switch::QuestionSign;
+    syntax().switcher = SyntaxType::Switch::ColonSign;
     syntax().name = name;
 }
 

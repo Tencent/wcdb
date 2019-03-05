@@ -53,12 +53,8 @@ String BindParameter::getValidDescription() const
     stream << switcher;
     switch (switcher) {
     case Switch::QuestionSign:
-        if (name.empty()) {
-            WCTSyntaxRemedialAssert(n > 0);
-            stream << n;
-            break;
-        }
-        // fallthrough
+        stream << n;
+        break;
     case Switch::ColonSign:
     case Switch::AtSign:
     case Switch::DollarSign:
