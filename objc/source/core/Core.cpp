@@ -212,6 +212,7 @@ void Core::setNotificationWhenDatabaseCorrupted(const String& path,
             std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
             if (!succeed) {
                 // delay it due to the I/O error
+                return false;
             }
             if (identifier != corruptedIdentifier) {
                 // mark as resolved since the file is changed.
