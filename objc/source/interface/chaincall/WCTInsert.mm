@@ -31,6 +31,8 @@
     WCTProperties _properties;
     WCDB::StatementInsert _statement;
     NSArray<WCTObject *> *_values;
+    std::vector<bool> _autoIncrements;
+    WCTOptionalBool _canFillLastInsertedRowID;
 }
 
 - (WCDB::StatementInsert &)statement
@@ -75,73 +77,93 @@
     BOOL succeed = YES;
     if (_values.count > 0) {
         Class cls = _values.firstObject.class;
-        const WCTProperties &properties = _properties.empty() ? [cls allProperties] : _properties;
+        if (_properties.empty()) {
+            _properties = [cls allProperties];
+        }
 
         if (_statement.syntax().columns.empty()) {
             _statement
-            .columns(properties)
-            .values(WCDB::BindParameter::bindParameters(properties.size()));
+            .columns(_properties)
+            .values(WCDB::BindParameter::bindParameters(_properties.size()));
         }
 
-        std::vector<bool> autoIncrements;
-        const auto &columnDefs = [cls objectRelationalMapping].getColumnDefs();
-        for (const WCTProperty &property : properties) {
-            // auto increment?
-            bool isAutoIncrement = false;
-            if (_statement.syntax().conflictAction != WCDB::Syntax::ConflictAction::Replace // not replace
-            ) {
+        _autoIncrements.clear();
+        if (_statement.syntax().conflictAction != WCDB::Syntax::ConflictAction::Replace) {
+            const auto &columnDefs = [cls objectRelationalMapping].getColumnDefs();
+            for (const WCTProperty &property : _properties) {
+                // auto increment?
                 auto iter = columnDefs.find(property.getDescription());
                 WCTRemedialAssert(iter != columnDefs.end(), "Unrelated property is found.", return NO;);
-                isAutoIncrement = iter->second.syntax().isAutoIncrement();
+                _autoIncrements.push_back(iter->second.syntax().isAutoIncrement());
             }
-            autoIncrements.push_back(isAutoIncrement);
         }
 
-        WCTInnerAssert(autoIncrements.size() == properties.size());
+        _canFillLastInsertedRowID = nullptr;
         if (_values.count > 1) {
             succeed = [_handle runNestedTransaction:^BOOL(WCTHandle *handle) {
                 [handle enableLazyNestedTransaction:YES];
-                BOOL succeed = [self realExecute:handle properties:properties autoIncrements:autoIncrements];
+                BOOL succeed = [self realExecute];
                 [handle enableLazyNestedTransaction:NO];
                 return succeed;
             }];
         } else {
-            succeed = [self realExecute:_handle properties:properties autoIncrements:autoIncrements];
+            succeed = [self realExecute];
         }
     }
     return succeed;
 }
 
-- (BOOL)realExecute:(WCTHandle *)handle properties:(const WCTProperties &)properties autoIncrements:(const std::vector<bool> &)autoIncrements
+- (BOOL)realExecute
 {
     BOOL succeed = NO;
-    if ([handle prepare:_statement]) {
-        BOOL canFillLastInsertedRowID = [_values.firstObject respondsToSelector:@selector(lastInsertedRowID)];
+    if ([_handle prepare:_statement]) {
+        WCTOptionalBool isAutoIncrement = nullptr;
         succeed = YES;
         for (WCTObject *value in _values) {
             int index = 1;
-            BOOL isAutoIncrement = NO;
-            for (const WCTProperty &property : properties) {
-                if (!autoIncrements[index - 1] || !value.isAutoIncrement) {
-                    [handle bindProperty:property
-                                ofObject:value
-                                 toIndex:index];
+            for (const WCTProperty &property : _properties) {
+                WCTInnerAssert(_autoIncrements.empty() || _autoIncrements.size() == _properties.size());
+                if (_autoIncrements.empty() || !_autoIncrements[index - 1]) {
+                    [_handle bindProperty:property
+                                 ofObject:value
+                                  toIndex:index];
                 } else {
-                    [handle bindNullToIndex:index];
-                    isAutoIncrement = YES;
+                    if (isAutoIncrement.failed()) {
+                        isAutoIncrement = value.isAutoIncrement;
+                    }
+                    WCTInnerAssert(!isAutoIncrement.failed());
+                    if (isAutoIncrement) {
+                        [_handle bindNullToIndex:index];
+                    } else {
+                        [_handle bindProperty:property
+                                     ofObject:value
+                                      toIndex:index];
+                    }
                 }
                 ++index;
             }
-            if (![handle step]) {
+            if (![_handle step]) {
                 succeed = NO;
                 break;
             }
-            if (isAutoIncrement && canFillLastInsertedRowID) {
-                value.lastInsertedRowID = [handle getLastInsertedRowID];
+            if (!_autoIncrements.empty()) {
+                if (_canFillLastInsertedRowID.failed()) {
+                    _canFillLastInsertedRowID = [_values.firstObject respondsToSelector:@selector(lastInsertedRowID)];
+                }
+                WCTInnerAssert(!_canFillLastInsertedRowID.failed());
+                if (_canFillLastInsertedRowID) {
+                    if (isAutoIncrement.failed()) {
+                        isAutoIncrement = value.isAutoIncrement;
+                    }
+                    WCTInnerAssert(!isAutoIncrement.failed());
+                    if (isAutoIncrement) {
+                        value.lastInsertedRowID = [_handle getLastInsertedRowID];
+                    }
+                }
             }
-            [handle reset];
+            [_handle reset];
         }
-        [handle finalizeStatement];
+        [_handle finalizeStatement];
     }
     return succeed;
 }

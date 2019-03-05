@@ -56,7 +56,7 @@ class WCTFundamentalOptional final : public WCTIncompleteOptional<T> {
     static_assert(!std::is_same<std::nullptr_t, T>::value, "");
 
 public:
-    WCTFundamentalOptional() : WCTIncompleteOptional<T>(defaultValue, YES) {}
+    WCTFundamentalOptional() : WCTIncompleteOptional<T>(defaultValue, NO) {}
 
     WCTFundamentalOptional(const T& value)
     : WCTIncompleteOptional<T>(value, YES)

@@ -153,6 +153,22 @@
     TestCaseAssertTrue([autoIncrementObject isEqual:self.object3]);
 }
 
+- (void)test_auto_increment_with_partial_insert
+{
+    TestCaseObject* autoIncrementObject = [TestCaseObject autoIncrementObjectWithContent:self.object3.content];
+    [self doTestObjects:@[ self.object1, self.object2, self.object3 ]
+              andNumber:1
+           ofInsertSQLs:@"INSERT INTO main.testTable(content) VALUES(?1)"
+         afterInsertion:^BOOL {
+             BOOL result = [self.database insertObject:autoIncrementObject onProperties:TestCaseObject.content intoTable:self.tableName];
+             if (result) {
+                 autoIncrementObject.identifier = (int) autoIncrementObject.lastInsertedRowID;
+             }
+             return result;
+         }];
+    TestCaseAssertTrue([autoIncrementObject isEqual:self.object3]);
+}
+
 #pragma mark - Database - Insert
 - (void)test_database_insert_object
 {
