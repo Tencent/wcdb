@@ -108,7 +108,8 @@ static constexpr const int HandlePoolMaxAllowedNumberOfHandles = 64;
 static constexpr const unsigned int HandlePoolNumberOfSlots = 4;
 
 // Checkpoint
-static constexpr const int CheckpointFramesThresholdForTruncating = 10 * 1024;
+static constexpr const int CheckpointFramesThresholdForTruncating
+= 10 * 1024 * 1024 / 4096; // 10 MB / Default Page Size = 2560
 
 } // namespace WCDB
 
