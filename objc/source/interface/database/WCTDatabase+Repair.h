@@ -26,12 +26,6 @@ typedef BOOL (^WCTBackupFilterBlock)(NSString * /* table */);
 typedef void (^WCTRetrieveProgressUpdateBlock)(double /* percentage */, double /* increment */);
 typedef BOOL (^WCTCorruptedNotificationBlock)(WCTDatabase *);
 
-typedef NS_ENUM(NSInteger, WCTRecoveryMode) {
-    WCTRecoveryModeCustom = 0,
-    WCTRecoveryModeRemove = 1,
-    WCTRecoveryModeDeposit = 2,
-};
-
 @interface WCTDatabase (Repair)
 
 - (void)setNotificationWhenCorrupted:(nullable WCDB_ESCAPE WCTCorruptedNotificationBlock)onCorrupted;
