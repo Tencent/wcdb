@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^WCTMigrationFilterBlock)(WCTMigrationUserInfo*);
 
-typedef void (^WCTMigratedNotificationBlock)(WCTMigrationBaseInfo*);
+typedef void (^WCTMigratedNotificationBlock)(nullable WCTMigrationBaseInfo*);
 
 @interface WCTDatabase (Migration)
 
