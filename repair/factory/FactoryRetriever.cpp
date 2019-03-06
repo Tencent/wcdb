@@ -191,7 +191,7 @@ bool FactoryRetriever::restore(const String &database)
         warning.setCode(Error::Code::NotFound, "Repair");
         warning.infos.set("Path", database);
         warning.message = "Material is not found";
-        Notifier::shared()->notify(std::move(warning));
+        Notifier::shared()->notify(warning);
     }
 
     FullCrawler fullCrawler(database);

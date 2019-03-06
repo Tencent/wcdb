@@ -40,9 +40,9 @@ m_debuggable(false)
 #else  // DEBUG
 m_debuggable(true)
 #endif // DEBUG
+, m_printer(nullptr)
 {
     setLogger(Console::logger);
-    setPrinter(Console::printer);
 }
 
 void Console::setDebuggable(bool debuggable)
@@ -75,11 +75,6 @@ void Console::setPrinter(const Printer& printer)
     m_printer = printer;
 }
 
-void Console::printer(const String& message)
-{
-    std::cout << message;
-}
-
 void Console::logger(const Error& error)
 {
     if (error.level == Error::Level::Ignore) {
@@ -91,39 +86,7 @@ void Console::logger(const Error& error)
         return;
     }
 
-    std::ostringstream stream;
-    stream << "[" << Error::levelName(error.level) << ": ";
-    stream << (int) error.code();
-    stream << ", ";
-    if (!error.message.empty()) {
-        stream << error.message;
-    } else {
-        stream << error.codeName(error.code());
-    }
-    stream << "]";
-
-    for (const auto& info : error.infos.getIntegers()) {
-        stream << ", " << info.first << ": " << info.second;
-    }
-    for (const auto& info : error.infos.getStrings()) {
-        if (!info.second.empty()) {
-            stream << ", " << info.first << ": " << info.second;
-        }
-    }
-    for (const auto& info : error.infos.getDoubles()) {
-        stream << ", " << info.first << ": " << info.second;
-    }
-    stream << std::endl;
-
-    if (!isDebuggable && error.level == Error::Level::Fatal) {
-        stream << "Enable [debuggable] to debug." << std::endl;
-    }
-    // Is this hint important?
-    //    else if (isDebuggable && error.level >= Error::Level::Error) {
-    //        stream << "Set breakpoint at Console::breakpoint to debug." << std::endl;
-    //    }
-
-    Console::shared()->print(stream.str());
+    Console::shared()->print(error.getDescription());
 
     if (isDebuggable && error.level >= Error::Level::Error) {
         breakpoint();

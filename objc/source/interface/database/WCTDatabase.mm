@@ -34,33 +34,19 @@
 #import <WCDB/WCTDatabase+FTS.h>
 #import <WCDB/WCTOneOrBinaryTokenizer.h>
 
-namespace WCDB {
-static constexpr const char *NotifierPathPreprocessorName
-= "com.Tencent.WCDB.Notifier.PreprocessPath";
-}
+// Monitor
+#import <WCDB/WCTDatabase+Monitor.h>
+
+@implementation WCTDatabase
 
 static void printer(const WCDB::String &message)
 {
     NSLog(@"%s", message.c_str());
 }
 
-@implementation WCTDatabase
-
 + (void)initialize
 {
     if (self.class == WCTDatabase.class) {
-        WCDB::Notifier::shared()->setNotificationForPreprocessing(WCDB::NotifierPathPreprocessorName, [](const WCDB::Error &error, WCDB::Error::Infos &infos, WCDB::Error::Level &newLevel) {
-            const auto &strings = error.infos.getStrings();
-            auto iter = strings.find(WCTErrorKeyPath);
-            if (iter == strings.end()) {
-                return;
-            }
-            NSString *path = [NSString stringWithUTF8String:iter->second.c_str()].stringByAbbreviatingWithTildeInPath;
-            if (path.length > 0) {
-                infos.set(WCTErrorKeyPath, path.UTF8String);
-            }
-        });
-
         WCDB::Console::shared()->setPrinter(printer);
 
         WCDB::Core::shared()->addTokenizer(WCTTokenizerOneOrBinary, WCDB::TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizerCursorInfo>::specialize());

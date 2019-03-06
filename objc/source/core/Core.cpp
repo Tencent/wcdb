@@ -65,14 +65,13 @@ Core::Core()
     Handle::setVFSOpen(Core::vfsOpen);
 
     Notifier::shared()->setNotificationForPreprocessing(
-    NotifierTagPreprocessorName,
-    std::bind(
-    &Core::preprocessError, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+    NotifierPreprocessorName,
+    std::bind(&Core::preprocessError, this, std::placeholders::_1));
 }
 
 Core::~Core()
 {
-    Notifier::shared()->setNotificationForPreprocessing(NotifierTagPreprocessorName, nullptr);
+    Notifier::shared()->setNotificationForPreprocessing(NotifierPreprocessorName, nullptr);
 }
 
 int Core::vfsOpen(const char* path, int flags, int mode)
@@ -143,7 +142,7 @@ void Core::onDatabaseCreated(Database* database)
                         Configs::Priority::Highest);
 }
 
-void Core::preprocessError(const Error& error, Error::Infos& infos, Error::Level& newLevel)
+void Core::preprocessError(Error& error)
 {
     const auto& strings = error.infos.getStrings();
 
@@ -151,7 +150,7 @@ void Core::preprocessError(const Error& error, Error::Infos& infos, Error::Level
     if (error.isCorruption()) {
         auto iter = strings.find("Source");
         if (iter != strings.end() && iter->second == "Repair") {
-            newLevel = Error::Level::Ignore;
+            error.level = Error::Level::Ignore;
         }
     }
 
@@ -161,7 +160,7 @@ void Core::preprocessError(const Error& error, Error::Infos& infos, Error::Level
         if (database != nullptr) {
             auto tag = database->getTag();
             if (tag.isValid()) {
-                infos.set("Tag", tag);
+                error.infos.set("Tag", tag);
             }
         }
     }

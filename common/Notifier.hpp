@@ -33,13 +33,13 @@ public:
     Notifier(const Notifier &) = delete;
     Notifier &operator=(const Notifier &) = delete;
 
-    void notify(const Error &error) const;
+    void notify(Error &error) const;
 
     typedef std::function<void(const Error &)> Callback;
     void setNotification(int order, const String &key, const Callback &callback);
     void unsetNotification(const String &key);
 
-    typedef std::function<void(const Error &error, Error::Infos &infosToBeUpdated, Error::Level &newLevel)> PreprocessCallback;
+    typedef std::function<void(Error &error)> PreprocessCallback;
     void setNotificationForPreprocessing(const String &key, const PreprocessCallback &callback);
 
 protected:
@@ -47,7 +47,6 @@ protected:
 
     mutable SharedLock m_lock;
 
-    void doNotify(const Error &error) const;
     OrderedUniqueList<String, Callback> m_notifications;
     std::map<String, PreprocessCallback> m_preprocessNotifications;
 };

@@ -280,4 +280,30 @@ bool Error::Infos::empty() const
     return m_integers.empty() && m_doubles.empty() && m_strings.empty();
 }
 
+#pragma mark - Description
+String Error::getDescription() const
+{
+    std::ostringstream stream;
+    stream << "[" << levelName(level) << ": " << (int) code() << ", ";
+    if (!message.empty()) {
+        stream << message;
+    } else {
+        stream << codeName(code());
+    }
+    stream << "]";
+
+    for (const auto &info : infos.getIntegers()) {
+        stream << ", " << info.first << ": " << info.second;
+    }
+    for (const auto &info : infos.getStrings()) {
+        if (!info.second.empty()) {
+            stream << ", " << info.first << ": " << info.second;
+        }
+    }
+    for (const auto &info : infos.getDoubles()) {
+        stream << ", " << info.first << ": " << info.second;
+    }
+    return stream.str();
+}
+
 } //namespace WCDB

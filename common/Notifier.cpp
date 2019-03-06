@@ -57,34 +57,13 @@ void Notifier::setNotificationForPreprocessing(const String &key,
     }
 }
 
-void Notifier::notify(const Error &error) const
+void Notifier::notify(Error &error) const
 {
     Error::Infos infosToBeUpdated;
     SharedLockGuard lockGuard(m_lock);
-    Error::Level newLevel = error.level;
     for (const auto &element : m_preprocessNotifications) {
-        element.second(error, infosToBeUpdated, newLevel);
+        element.second(error);
     }
-    if (infosToBeUpdated.empty() && newLevel == error.level) {
-        doNotify(error);
-    } else {
-        Error preprocessedError = error;
-        preprocessedError.level = newLevel;
-        for (const auto &info : infosToBeUpdated.getDoubles()) {
-            preprocessedError.infos.set(info.first, info.second);
-        }
-        for (const auto &info : infosToBeUpdated.getStrings()) {
-            preprocessedError.infos.set(info.first, info.second);
-        }
-        for (const auto &info : infosToBeUpdated.getIntegers()) {
-            preprocessedError.infos.set(info.first, info.second);
-        }
-        doNotify(preprocessedError);
-    }
-}
-
-void Notifier::doNotify(const Error &error) const
-{
     for (const auto &element : m_notifications.elements()) {
         element.value(error);
     }

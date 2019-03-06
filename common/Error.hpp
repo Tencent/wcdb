@@ -295,6 +295,10 @@ std::any is available since C++17.
         std::map<String, String> m_strings;
     };
     Infos infos;
+
+#pragma mark - Descritpion
+public:
+    String getDescription() const;
 };
 
 } //namespace WCDB
