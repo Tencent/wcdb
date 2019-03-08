@@ -44,26 +44,24 @@ static void printer(const WCDB::String &message)
     NSLog(@"%s", message.c_str());
 }
 
-+ (void)initialize
+static id initialize()
 {
-    if (self.class == WCTDatabase.class) {
-        WCDB::Console::shared()->setPrinter(printer);
+    WCDB::Console::shared()->setPrinter(printer);
 
-        WCDB::Core::shared()->addTokenizer(WCTTokenizerOneOrBinary, WCDB::TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizerCursorInfo>::specialize());
+    WCDB::Core::shared()->addTokenizer(WCTTokenizerOneOrBinary, WCDB::TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizerCursorInfo>::specialize());
 
 #if TARGET_OS_IPHONE && !TARGET_OS_WATCH
-        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-        //keep it the entire life cycle
-        static id s_observer_memory_warning __attribute__((unused)) =
-        [notificationCenter addObserverForName:
-                            UIApplicationDidReceiveMemoryWarningNotification
-                                        object:nil
-                                         queue:nil
-                                    usingBlock:^(NSNotification *) {
-                                        [WCTDatabase purgeAll];
-                                    }];
+    //keep it the entire life cycle
+    return [[NSNotificationCenter defaultCenter]
+    addObserverForName:UIApplicationDidReceiveMemoryWarningNotification
+                object:nil
+                 queue:nil
+            usingBlock:^(NSNotification *) {
+                [WCTDatabase purgeAll];
+            }];
+#else
+    return nil;
 #endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
-    }
 }
 
 - (instancetype)initWithUnsafeDatabase:(WCDB::Database *)database
@@ -78,6 +76,10 @@ static void printer(const WCDB::String &message)
 
 - (instancetype)initWithPath:(NSString *)path
 {
+#pragma clang diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
+    static id s_once = initialize();
+#pragma clang diagnostic pop
     if (self = [super init]) {
         _databaseHolder = WCDB::Core::shared()->getOrCreateDatabase(path);
         WCTInnerAssert(_databaseHolder != nullptr);
