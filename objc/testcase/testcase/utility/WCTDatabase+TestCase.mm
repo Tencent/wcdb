@@ -31,32 +31,40 @@ static ssize_t illPwrite(int, const void *, size_t, off_t)
 
 + (void)resetGlobalErrorTracer
 {
-    WCDB::Console::shared()->setLogger(WCDB::Console::logger);
+    if (WCDB::Console::debuggable()) {
+        WCDB::Console::shared()->setLogger(WCDB::Console::logger);
+    }
 }
 
 + (void)enableSQLiteWrite
 {
-    sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
-    sqlite3_mutex *mutex = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_MASTER);
-    sqlite3_mutex_enter(mutex);
-    vfs->xSetSystemCall(vfs, "pwrite", (sqlite3_syscall_ptr) pwrite);
-    sqlite3_mutex_leave(mutex);
+    if (WCDB::Console::debuggable()) {
+        sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
+        sqlite3_mutex *mutex = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_MASTER);
+        sqlite3_mutex_enter(mutex);
+        vfs->xSetSystemCall(vfs, "pwrite", (sqlite3_syscall_ptr) pwrite);
+        sqlite3_mutex_leave(mutex);
+    }
 }
 
 + (void)disableSQLiteWrite
 {
-    sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
-    sqlite3_mutex *mutex = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_MASTER);
-    sqlite3_mutex_enter(mutex);
-    vfs->xSetSystemCall(vfs, "pwrite", (sqlite3_syscall_ptr) illPwrite);
-    sqlite3_mutex_leave(mutex);
+    if (WCDB::Console::debuggable()) {
+        sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
+        sqlite3_mutex *mutex = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_MASTER);
+        sqlite3_mutex_enter(mutex);
+        vfs->xSetSystemCall(vfs, "pwrite", (sqlite3_syscall_ptr) illPwrite);
+        sqlite3_mutex_leave(mutex);
+    }
 }
 
 - (void)removeSQLRelatedConfigs
 {
-    NSArray<NSString *> *configNames = @[ WCTConfigNameBasic, WCTConfigNameBackup, WCTConfigNameCheckpoint, WCTConfigNameTokenize, WCTConfigNameCipher ];
-    for (NSString *configName in configNames) {
-        [self removeConfigForName:configName];
+    if (WCDB::Console::debuggable()) {
+        NSArray<NSString *> *configNames = @[ WCTConfigNameBasic, WCTConfigNameBackup, WCTConfigNameCheckpoint, WCTConfigNameTokenize, WCTConfigNameCipher ];
+        for (NSString *configName in configNames) {
+            [self removeConfigForName:configName];
+        }
     }
 }
 
