@@ -57,25 +57,25 @@ public:
 };
 
 template<>
-class ExpressionConvertible<WCTProperty> : public std::true_type {
+class ExpressionConvertible<WCTProperty> final : public std::true_type {
 public:
     static Expression asExpression(const WCTProperty &property);
 };
 
 template<>
-class IndexedColumnConvertible<WCTProperty> : public std::true_type {
+class IndexedColumnConvertible<WCTProperty> final : public std::true_type {
 public:
     static IndexedColumn asIndexedColumn(const WCTProperty &property);
 };
 
 template<>
-class LiteralValueConvertible<NSNumber *> : public std::true_type {
+class LiteralValueConvertible<NSNumber *> final : public std::true_type {
 public:
     static LiteralValue asLiteralValue(NSNumber *number);
 };
 
 template<>
-class LiteralValueConvertible<BOOL> : public std::true_type {
+class LiteralValueConvertible<BOOL> final : public std::true_type {
 public:
     static LiteralValue asLiteralValue(BOOL value);
 };

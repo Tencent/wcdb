@@ -26,20 +26,20 @@
 namespace WCDB {
 
 template<>
-class LiteralValueConvertible<bool> : public std::true_type {
+class LiteralValueConvertible<bool> final : public std::true_type {
 public:
     static LiteralValue asLiteralValue(const bool& t);
 };
 
 template<typename T>
-class LiteralValueConvertible<T, typename std::enable_if<ColumnIsNullType<T>::value>::type>
+class LiteralValueConvertible<T, typename std::enable_if<ColumnIsNullType<T>::value>::type> final
 : public std::true_type {
 public:
     static LiteralValue asLiteralValue(const T& t) { return nullptr; }
 };
 
 template<typename T>
-class LiteralValueConvertible<T, typename std::enable_if<ColumnIsFloatType<T>::value>::type>
+class LiteralValueConvertible<T, typename std::enable_if<ColumnIsFloatType<T>::value>::type> final
 : public std::true_type {
 public:
     static LiteralValue asLiteralValue(const T& t)
@@ -49,7 +49,7 @@ public:
 };
 
 template<typename T>
-class LiteralValueConvertible<T, typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>
+class LiteralValueConvertible<T, typename std::enable_if<ColumnIsInteger64Type<T>::value>::type> final
 : public std::true_type {
 public:
     static LiteralValue asLiteralValue(const T& t)
@@ -59,7 +59,7 @@ public:
 };
 
 template<typename T>
-class LiteralValueConvertible<T, typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>
+class LiteralValueConvertible<T, typename std::enable_if<ColumnIsInteger32Type<T>::value>::type> final
 : public std::true_type {
 public:
     static LiteralValue asLiteralValue(const T& t)
@@ -69,7 +69,7 @@ public:
 };
 
 template<typename T>
-class LiteralValueConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>
+class LiteralValueConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type> final
 : public std::true_type {
 public:
     static LiteralValue asLiteralValue(const T& t)
@@ -79,7 +79,7 @@ public:
 };
 
 template<typename T>
-class ExpressionConvertible<T, typename std::enable_if<LiteralValueConvertible<T>::value>::type>
+class ExpressionConvertible<T, typename std::enable_if<LiteralValueConvertible<T>::value>::type> final
 : public std::true_type {
 public:
     static Expression asExpression(const T& t)
@@ -89,37 +89,37 @@ public:
 };
 
 template<>
-class ExpressionConvertible<Column> : public std::true_type {
+class ExpressionConvertible<Column> final : public std::true_type {
 public:
     static Expression asExpression(const Column& column);
 };
 
 template<>
-class ExpressionConvertible<BindParameter> : public std::true_type {
+class ExpressionConvertible<BindParameter> final : public std::true_type {
 public:
     static Expression asExpression(const BindParameter& bindParameter);
 };
 
 template<>
-class ExpressionConvertible<LiteralValue> : public std::true_type {
+class ExpressionConvertible<LiteralValue> final : public std::true_type {
 public:
     static Expression asExpression(const LiteralValue& literalValue);
 };
 
 template<>
-class ExpressionConvertible<RaiseFunction> : public std::true_type {
+class ExpressionConvertible<RaiseFunction> final : public std::true_type {
 public:
     static Expression asExpression(const RaiseFunction& raiseFunction);
 };
 
 template<>
-class ExpressionConvertible<StatementSelect> : public std::true_type {
+class ExpressionConvertible<StatementSelect> final : public std::true_type {
 public:
     static Expression asExpression(const StatementSelect& statementSelect);
 };
 
 template<typename T>
-class IndexedColumnConvertible<T, typename std::enable_if<ExpressionConvertible<T>::value>::type>
+class IndexedColumnConvertible<T, typename std::enable_if<ExpressionConvertible<T>::value>::type> final
 : public std::true_type {
 public:
     static IndexedColumn asIndexedColumn(const T& t)
@@ -129,19 +129,19 @@ public:
 };
 
 template<>
-class IndexedColumnConvertible<Column> : public std::true_type {
+class IndexedColumnConvertible<Column> final : public std::true_type {
 public:
     static IndexedColumn asIndexedColumn(const Column& column);
 };
 
 template<>
-class IndexedColumnConvertible<Expression> : public std::true_type {
+class IndexedColumnConvertible<Expression> final : public std::true_type {
 public:
     static IndexedColumn asIndexedColumn(const Expression& expression);
 };
 
 template<typename T>
-class ResultColumnConvertible<T, typename std::enable_if<ExpressionConvertible<T>::value>::type>
+class ResultColumnConvertible<T, typename std::enable_if<ExpressionConvertible<T>::value>::type> final
 : public std::true_type {
 public:
     static ResultColumn asResultColumn(const T& t)
@@ -151,13 +151,13 @@ public:
 };
 
 template<>
-class ResultColumnConvertible<Expression> : public std::true_type {
+class ResultColumnConvertible<Expression> final : public std::true_type {
 public:
     static ResultColumn asResultColumn(const Expression& expression);
 };
 
 template<typename T>
-class QualifiedTableConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>
+class QualifiedTableConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type> final
 : public std::true_type {
 public:
     static QualifiedTable asQualifiedTable(const T& t)
@@ -167,7 +167,7 @@ public:
 };
 
 template<typename T>
-class CTETableConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>
+class CTETableConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type> final
 : public std::true_type {
 public:
     static CTETable asCTETable(const T& t)
@@ -177,7 +177,7 @@ public:
 };
 
 template<typename T>
-class OrderingTermConvertible<T, typename std::enable_if<ExpressionConvertible<T>::value>::type>
+class OrderingTermConvertible<T, typename std::enable_if<ExpressionConvertible<T>::value>::type> final
 : public std::true_type {
 public:
     static OrderingTerm asOrderingTerm(const T& t)
@@ -187,13 +187,13 @@ public:
 };
 
 template<>
-class OrderingTermConvertible<Expression> : public std::true_type {
+class OrderingTermConvertible<Expression> final : public std::true_type {
 public:
     static OrderingTerm asOrderingTerm(const Expression& expression);
 };
 
 template<typename T>
-class TableOrSubqueryConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>
+class TableOrSubqueryConvertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type> final
 : public std::true_type {
 public:
     static TableOrSubquery asTableOrSubquery(const T& t)
@@ -203,13 +203,13 @@ public:
 };
 
 template<>
-class TableOrSubqueryConvertible<Join> : public std::true_type {
+class TableOrSubqueryConvertible<Join> final : public std::true_type {
 public:
     static TableOrSubquery asTableOrSubquery(const Join& join);
 };
 
 template<>
-class TableOrSubqueryConvertible<StatementSelect> : public std::true_type {
+class TableOrSubqueryConvertible<StatementSelect> final : public std::true_type {
 public:
     static TableOrSubquery asTableOrSubquery(const StatementSelect& select);
 };
