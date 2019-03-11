@@ -21,10 +21,10 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/AsyncQueue.hpp>
 #include <WCDB/CoreConst.h>
-#include <WCDB/Dispatch.hpp>
 #include <WCDB/Exiting.hpp>
 #include <WCDB/String.hpp>
 #include <atomic>
+#include <thread>
 
 namespace WCDB {
 
@@ -51,12 +51,13 @@ void AsyncQueue::run()
     std::lock_guard<std::mutex> lockGuard(m_mutex);
     if (!m_started && !exiting()) {
         m_started = true;
-        Dispatch::async(name, std::bind(&AsyncQueue::willRun, this));
+        std::thread(std::bind(&AsyncQueue::willRun, this)).detach();
     }
 }
 
 void AsyncQueue::willRun()
 {
+    pthread_setname_np(name.c_str());
     if (!exiting()) {
         m_running.store(true);
         loop();
