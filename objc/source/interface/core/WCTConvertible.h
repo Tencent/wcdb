@@ -74,10 +74,12 @@ public:
     static LiteralValue asLiteralValue(NSNumber *number);
 };
 
+#if OBJC_BOOL_IS_CHAR
 template<>
 class LiteralValueConvertible<BOOL> final : public std::true_type {
 public:
     static LiteralValue asLiteralValue(BOOL value);
 };
+#endif // OBJC_BOOL_IS_CHAR
 
 } //namespace WCDB

@@ -54,9 +54,11 @@ LiteralValue LiteralValueConvertible<NSNumber*>::asLiteralValue(NSNumber* number
     return LiteralValue(number.doubleValue);
 }
 
+#if OBJC_BOOL_IS_CHAR
 LiteralValue LiteralValueConvertible<BOOL>::asLiteralValue(BOOL value)
 {
     return LiteralValue((bool) value);
 }
+#endif // OBJC_BOOL_IS_CHAR
 
 }
