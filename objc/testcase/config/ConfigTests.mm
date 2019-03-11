@@ -67,7 +67,7 @@
         }
         forName:self.configName];
 
-        [self doTestSQLs:@[ @"PRAGMA main.secure_delete = 1" ]
+        [self doTestSQLs:@[ @"PRAGMA main.secure_delete = TRUE" ]
              inOperation:^BOOL {
                  [self.database close];
                  return [self.database canOpen];
