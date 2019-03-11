@@ -31,11 +31,16 @@ namespace Syntax {
 class LiteralValue final : public Identifier {
 #pragma mark - Lang
 public:
-    WCDB_SYNTAX_MAIN_UNION_ENUM(String, Null, Float, Integer, CurrentTime, CurrentDate, CurrentTimestamp, );
+    WCDB_SYNTAX_MAIN_UNION_ENUM(
+    String, Null, Float, Integer, UnsignedInteger, Bool, CurrentTime, CurrentDate, CurrentTimestamp);
 
     String stringValue;
-    double floatValue;
-    int64_t integerValue;
+    union {
+        double floatValue;
+        int64_t integerValue;
+        uint64_t unsignedIntegerValue;
+        bool boolValue;
+    };
 
 #pragma mark - Identifier
 public:

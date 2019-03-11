@@ -36,10 +36,11 @@ public:
     {
     }
 
-    LiteralValue(int32_t value);
     LiteralValue(int64_t value);
+    LiteralValue(uint64_t value);
     LiteralValue(double value);
     LiteralValue(std::nullptr_t);
+    LiteralValue(bool value);
     LiteralValue(const UnsafeString& value);
 
     static LiteralValue currentTime();

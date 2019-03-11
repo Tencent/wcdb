@@ -54,4 +54,9 @@ LiteralValue LiteralValueConvertible<NSNumber*>::asLiteralValue(NSNumber* number
     return LiteralValue(number.doubleValue);
 }
 
+LiteralValue LiteralValueConvertible<BOOL>::asLiteralValue(BOOL value)
+{
+    return LiteralValue((bool) value);
+}
+
 }

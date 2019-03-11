@@ -74,4 +74,10 @@ public:
     static LiteralValue asLiteralValue(NSNumber *number);
 };
 
+template<>
+class LiteralValueConvertible<BOOL> : public std::true_type {
+public:
+    static LiteralValue asLiteralValue(BOOL value);
+};
+
 } //namespace WCDB

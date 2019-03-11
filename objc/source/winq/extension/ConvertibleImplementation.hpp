@@ -25,6 +25,12 @@
 
 namespace WCDB {
 
+template<>
+class LiteralValueConvertible<bool> : public std::true_type {
+public:
+    static LiteralValue asLiteralValue(const bool& t);
+};
+
 template<typename T>
 class LiteralValueConvertible<T, typename std::enable_if<ColumnIsNullType<T>::value>::type>
 : public std::true_type {
@@ -43,22 +49,22 @@ public:
 };
 
 template<typename T>
-class LiteralValueConvertible<T, typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>
-: public std::true_type {
-public:
-    static LiteralValue asLiteralValue(const T& t)
-    {
-        return ColumnIsInteger32Type<T>::asUnderlyingType(t);
-    }
-};
-
-template<typename T>
 class LiteralValueConvertible<T, typename std::enable_if<ColumnIsInteger64Type<T>::value>::type>
 : public std::true_type {
 public:
     static LiteralValue asLiteralValue(const T& t)
     {
         return ColumnIsInteger64Type<T>::asUnderlyingType(t);
+    }
+};
+
+template<typename T>
+class LiteralValueConvertible<T, typename std::enable_if<ColumnIsInteger32Type<T>::value>::type>
+: public std::true_type {
+public:
+    static LiteralValue asLiteralValue(const T& t)
+    {
+        return (int64_t) ColumnIsInteger32Type<T>::asUnderlyingType(t);
     }
 };
 

@@ -24,8 +24,7 @@
 
 @end
 
-@implementation LiteralValueTests {
-}
+@implementation LiteralValueTests
 
 - (void)setUp
 {
@@ -70,12 +69,44 @@
     TestCaseAssertSQLEqual(testingSQL, @"1");
 }
 
+- (void)test_enum_ns
+{
+    auto testingSQL = WCDB::LiteralValue(EnumNSTypeZero);
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
+    TestCaseAssertSQLEqual(testingSQL, @"0");
+}
+
+- (void)test_option_ns
+{
+    auto testingSQL = WCDB::LiteralValue(OptionNSTypeZero);
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
+    TestCaseAssertSQLEqual(testingSQL, @"0");
+}
+
+- (void)test_enum
+{
+    auto testingSQL = WCDB::LiteralValue(EnumZero);
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
+    TestCaseAssertSQLEqual(testingSQL, @"0");
+}
+
+- (void)test_enum_class
+{
+    auto testingSQL = WCDB::LiteralValue(EnumClassType::Zero);
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
+    TestCaseAssertSQLEqual(testingSQL, @"0");
+}
+
 - (void)test_true
 {
     auto testingSQL = WCDB::LiteralValue(true);
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"1");
+    TestCaseAssertSQLEqual(testingSQL, @"TRUE");
 }
 
 - (void)test_false
@@ -83,7 +114,7 @@
     auto testingSQL = WCDB::LiteralValue(false);
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"0");
+    TestCaseAssertSQLEqual(testingSQL, @"FALSE");
 }
 
 - (void)test_yes
@@ -91,7 +122,7 @@
     auto testingSQL = WCDB::LiteralValue(YES);
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"1");
+    TestCaseAssertSQLEqual(testingSQL, @"TRUE");
 }
 
 - (void)test_no
@@ -99,39 +130,7 @@
     auto testingSQL = WCDB::LiteralValue(NO);
     auto testingTypes = { WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"0");
-}
-
-- (void)test_int32_max
-{
-    auto testingSQL = WCDB::LiteralValue(std::numeric_limits<int32_t>::max());
-    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
-    TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"2147483647");
-}
-
-- (void)test_int32_min
-{
-    auto testingSQL = WCDB::LiteralValue(std::numeric_limits<int32_t>::min());
-    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
-    TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"-2147483648");
-}
-
-- (void)test_int64_max
-{
-    auto testingSQL = WCDB::LiteralValue(std::numeric_limits<int64_t>::max());
-    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
-    TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"9223372036854775807");
-}
-
-- (void)test_int64_min
-{
-    auto testingSQL = WCDB::LiteralValue(std::numeric_limits<int64_t>::min());
-    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
-    TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"-9223372036854775808");
+    TestCaseAssertSQLEqual(testingSQL, @"FALSE");
 }
 
 - (void)test_float
@@ -286,7 +285,61 @@
 
 - (void)test_int64s_convertible
 {
-    std::list<int32_t> sqls = { 1, 2 };
+    std::list<int64_t> sqls = { 1, 2 };
+    NSString* expected = @"1, 2";
+    TestCaseAssertWINQConvertible(WCDB::LiteralValues, sqls, expected);
+    TestCaseAssertWINQConvertible(WCDB::Expressions, sqls, expected);
+    TestCaseAssertWINQConvertible(WCDB::IndexedColumns, sqls, expected);
+    TestCaseAssertWINQConvertible(WCDB::ResultColumns, sqls, expected);
+    TestCaseAssertWINQConvertible(WCDB::OrderingTerms, sqls, expected);
+}
+
+- (void)test_uint32_convertible
+{
+    uint32_t sql = 1;
+    NSString* expected = @"1";
+    TestCaseAssertWINQConvertible(WCDB::LiteralValue, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::LiteralValues, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::Expression, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::Expressions, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::IndexedColumn, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::IndexedColumns, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::ResultColumn, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::ResultColumns, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::OrderingTerm, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::OrderingTerms, sql, expected);
+}
+
+- (void)test_uint32s_convertible
+{
+    std::list<uint32_t> sqls = { 1, 2 };
+    NSString* expected = @"1, 2";
+    TestCaseAssertWINQConvertible(WCDB::LiteralValues, sqls, expected);
+    TestCaseAssertWINQConvertible(WCDB::Expressions, sqls, expected);
+    TestCaseAssertWINQConvertible(WCDB::IndexedColumns, sqls, expected);
+    TestCaseAssertWINQConvertible(WCDB::ResultColumns, sqls, expected);
+    TestCaseAssertWINQConvertible(WCDB::OrderingTerms, sqls, expected);
+}
+
+- (void)test_uint64_convertible
+{
+    uint64_t sql = 1;
+    NSString* expected = @"1";
+    TestCaseAssertWINQConvertible(WCDB::LiteralValue, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::LiteralValues, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::Expression, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::Expressions, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::IndexedColumn, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::IndexedColumns, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::ResultColumn, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::ResultColumns, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::OrderingTerm, sql, expected);
+    TestCaseAssertWINQConvertible(WCDB::OrderingTerms, sql, expected);
+}
+
+- (void)test_uint64s_convertible
+{
+    std::list<uint64_t> sqls = { 1, 2 };
     NSString* expected = @"1, 2";
     TestCaseAssertWINQConvertible(WCDB::LiteralValues, sqls, expected);
     TestCaseAssertWINQConvertible(WCDB::Expressions, sqls, expected);
@@ -352,7 +405,7 @@
 - (void)test_bool_convertible
 {
     bool sql = true;
-    NSString* expected = @"1";
+    NSString* expected = @"TRUE";
     TestCaseAssertWINQConvertible(WCDB::LiteralValue, sql, expected);
     TestCaseAssertWINQConvertible(WCDB::LiteralValues, sql, expected);
     TestCaseAssertWINQConvertible(WCDB::Expression, sql, expected);
@@ -368,7 +421,7 @@
 - (void)test_bools_convertible
 {
     std::list<bool> sqls = { true, false };
-    NSString* expected = @"1, 0";
+    NSString* expected = @"TRUE, FALSE";
     TestCaseAssertWINQConvertible(WCDB::LiteralValues, sqls, expected);
     TestCaseAssertWINQConvertible(WCDB::Expressions, sqls, expected);
     TestCaseAssertWINQConvertible(WCDB::IndexedColumns, sqls, expected);
@@ -551,7 +604,7 @@
         (std::string) "t2",
         (NSString*) @"t3",
     };
-    NSString* expected = @"1, 1, NULL, 2, 3, 1.1, 2.2, 't1', 't2', 't3'";
+    NSString* expected = @"TRUE, 1, NULL, 2, 3, 1.1, 2.2, 't1', 't2', 't3'";
     TestCaseAssertWINQConvertible(WCDB::LiteralValues, sqls, expected);
     TestCaseAssertWINQConvertible(WCDB::Expressions, sqls, expected);
     TestCaseAssertWINQConvertible(WCDB::IndexedColumns, sqls, expected);
@@ -563,6 +616,39 @@
 {
     NSString* injection = @";'DROP TABLE testInjection;--";
     TestCaseAssertSQLEqual(WCDB::StatementSelect().select(injection).where(1), @"SELECT ';''DROP TABLE testInjection;--' WHERE 1");
+}
+
+- (void)test_boundary
+{
+    WCDB::LiteralValue int64Min = std::numeric_limits<int64_t>::min();
+    TestCaseAssertSQLEqual(int64Min, @"-9223372036854775808");
+    WCDB::LiteralValue int64Max = std::numeric_limits<int64_t>::max();
+    TestCaseAssertSQLEqual(int64Max, @"9223372036854775807");
+
+    WCDB::LiteralValue uint64Min = std::numeric_limits<uint64_t>::min();
+    TestCaseAssertSQLEqual(uint64Min, @"0");
+    WCDB::LiteralValue uint64Max = std::numeric_limits<uint64_t>::max();
+    TestCaseAssertSQLEqual(uint64Max, @"18446744073709551615");
+
+    WCDB::LiteralValue enumNSMin = EnumNSTypeMin;
+    TestCaseAssertSQLEqual(enumNSMin, @"-9223372036854775808");
+    WCDB::LiteralValue enumNSMax = EnumNSTypeMax;
+    TestCaseAssertSQLEqual(enumNSMax, @"9223372036854775807");
+
+    WCDB::LiteralValue optionNSMin = OptionNSTypeMin;
+    TestCaseAssertSQLEqual(optionNSMin, @"-9223372036854775808");
+    WCDB::LiteralValue optionNSMax = OptionNSTypeMax;
+    TestCaseAssertSQLEqual(optionNSMax, @"9223372036854775807");
+
+    WCDB::LiteralValue enumMin = EnumMin;
+    TestCaseAssertSQLEqual(enumMin, @"-2147483648");
+    WCDB::LiteralValue enumMax = EnumMax;
+    TestCaseAssertSQLEqual(enumMax, @"2147483647");
+
+    WCDB::LiteralValue enumClassMin = EnumClassType::Min;
+    TestCaseAssertSQLEqual(enumClassMin, @"-2147483648");
+    WCDB::LiteralValue enumClassMax = EnumClassType::Max;
+    TestCaseAssertSQLEqual(enumClassMax, @"2147483647");
 }
 
 @end

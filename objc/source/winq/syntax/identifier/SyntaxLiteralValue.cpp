@@ -45,6 +45,10 @@ String LiteralValue::getValidDescription() const
     }
     case Switch::Integer:
         return std::to_string(integerValue);
+    case Switch::UnsignedInteger:
+        return std::to_string(unsignedIntegerValue);
+    case Switch::Bool:
+        return boolValue ? "TRUE" : "FALSE";
     case Switch::CurrentTime:
         return "CURRENT_TIME";
     case Switch::CurrentDate:

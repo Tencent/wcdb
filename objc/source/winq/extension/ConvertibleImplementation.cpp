@@ -22,6 +22,11 @@
 
 namespace WCDB {
 
+LiteralValue LiteralValueConvertible<bool>::asLiteralValue(const bool &t)
+{
+    return t;
+}
+
 Expression ExpressionConvertible<Column>::asExpression(const Column &column)
 {
     return column;

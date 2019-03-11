@@ -22,16 +22,22 @@
 
 namespace WCDB {
 
-LiteralValue::LiteralValue(int32_t value)
+LiteralValue::LiteralValue(int64_t value)
 {
     syntax().switcher = SyntaxType::Switch::Integer;
     syntax().integerValue = value;
 }
 
-LiteralValue::LiteralValue(int64_t value)
+LiteralValue::LiteralValue(uint64_t value)
 {
-    syntax().switcher = SyntaxType::Switch::Integer;
-    syntax().integerValue = value;
+    syntax().switcher = SyntaxType::Switch::UnsignedInteger;
+    syntax().unsignedIntegerValue = value;
+}
+
+LiteralValue::LiteralValue(bool value)
+{
+    syntax().switcher = SyntaxType::Switch::Bool;
+    syntax().boolValue = value;
 }
 
 LiteralValue::LiteralValue(double value)
