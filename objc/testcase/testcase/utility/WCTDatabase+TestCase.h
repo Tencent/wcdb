@@ -27,8 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)enableSQLiteWrite;
 + (void)disableSQLiteWrite;
 
-- (void)removeSQLRelatedConfigs;
-
 + (void)resetGlobalErrorTracer;
 
 @end

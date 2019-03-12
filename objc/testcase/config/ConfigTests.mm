@@ -48,7 +48,6 @@
 
 - (void)test_config
 {
-    [self.database removeSQLRelatedConfigs];
     WCDB::StatementPragma setSecureDelete = WCDB::StatementPragma().pragma(WCDB::Pragma::secureDelete()).to(YES);
     WCDB::StatementPragma unsetSecureDelete = WCDB::StatementPragma().pragma(WCDB::Pragma::secureDelete()).to(NO);
     WCDB::StatementPragma getSecureDelete = WCDB::StatementPragma().pragma(WCDB::Pragma::secureDelete());
@@ -67,6 +66,7 @@
         }
         forName:self.configName];
 
+        self.expectMode = DatabaseTestCaseExpectSomeSQLs;
         [self doTestSQLs:@[ @"PRAGMA main.secure_delete = TRUE" ]
              inOperation:^BOOL {
                  [self.database close];

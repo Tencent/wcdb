@@ -28,7 +28,6 @@
 
 - (void)test_trace_sql
 {
-    [self.database removeSQLRelatedConfigs];
     WCDB::StatementPragma statement = WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion());
 
     __block BOOL tested = NO;
@@ -46,8 +45,6 @@
 - (void)test_trace_performance
 {
     TestCaseAssertTrue([self createTable]);
-
-    [self.database removeSQLRelatedConfigs];
 
     NSArray<TestCaseObject*>* objects = [self.random autoIncrementTestCaseObjectsWithCount:10000];
 
@@ -107,7 +104,6 @@
 
 - (void)test_global_trace_sql
 {
-    [self.database removeSQLRelatedConfigs];
     WCDB::StatementPragma statement = WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion());
 
     __block BOOL tested = NO;
@@ -124,8 +120,6 @@
 
 - (void)test_global_trace_performance
 {
-    [self.database removeSQLRelatedConfigs];
-
     NSArray<TestCaseObject*>* objects = [self.random autoIncrementTestCaseObjectsWithCount:10000];
 
     NSArray<WCTPerformanceFootprint*>* expectedFootprints = @[

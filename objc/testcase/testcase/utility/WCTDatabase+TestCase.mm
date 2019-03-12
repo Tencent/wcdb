@@ -58,14 +58,4 @@ static ssize_t illPwrite(int, const void *, size_t, off_t)
     }
 }
 
-- (void)removeSQLRelatedConfigs
-{
-    if (WCDB::Console::debuggable()) {
-        NSArray<NSString *> *configNames = @[ WCTConfigNameBasic, WCTConfigNameBackup, WCTConfigNameCheckpoint, WCTConfigNameTokenize, WCTConfigNameCipher ];
-        for (NSString *configName in configNames) {
-            [self removeConfigForName:configName];
-        }
-    }
-}
-
 @end

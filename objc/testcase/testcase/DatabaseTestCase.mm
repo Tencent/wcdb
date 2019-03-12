@@ -273,9 +273,11 @@
                 [self doTestSQLAsExpected:expectedSQLs sql:sql];
             }
         }];
-        if (![self.database canOpen]) {
-            TestCaseFailure();
-            break;
+        if (self.expectMode != DatabaseTestCaseExpectSomeSQLs) {
+            if (![self.database canOpen]) {
+                TestCaseFailure();
+                break;
+            }
         }
 
         [trace makeYES];
