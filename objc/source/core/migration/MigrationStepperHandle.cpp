@@ -114,7 +114,7 @@ bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
 
     if (!m_removeMigratedStatement->isPrepared()
         && !m_removeMigratedStatement->prepare(
-           m_migratingInfo->getStatementForDeletingMigratedOneRow())) {
+        m_migratingInfo->getStatementForDeletingMigratedOneRow())) {
         return false;
     }
 

@@ -32,7 +32,8 @@
 
 - (instancetype)initWithDatabase:(WCTDatabase *)database
                             name:(NSString *)name
-                           class:(Class<WCTTableCoding>)cls {
+                           class:(Class<WCTTableCoding>)cls
+{
     WCTInnerAssert(database != nil && cls != nil && name != nil);
     if (self = [super init]) {
         _database = database;
@@ -42,7 +43,7 @@
     return self;
 }
 
-- (BOOL) dropIndexWithSubfix : (NSString *) indexSubfix
+- (BOOL)dropIndexWithSubfix:(NSString *)indexSubfix
 {
     WCTRemedialAssert(indexSubfix, "Index subfix can't be null.", return NO;);
     return [_database dropIndex:[_name stringByAppendingString:indexSubfix]];

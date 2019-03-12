@@ -36,7 +36,7 @@ public:
     LiteralValue(std::nullptr_t);
     LiteralValue(bool value);
     LiteralValue(const UnsafeString& value);
-    
+
     template<typename T, typename Enable = typename std::enable_if<LiteralValueConvertible<T>::value>::type>
     LiteralValue(const T& t)
     : LiteralValue(LiteralValueConvertible<T>::asLiteralValue(t))

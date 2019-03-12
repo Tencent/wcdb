@@ -68,7 +68,7 @@ bool BasicConfig::invoke(Handle* handle)
 
     if (!getOrSetPragmaBegin(handle, m_getLockingMode)
         || !getOrSetPragmaEnd(
-           handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("NORMAL"))) {
+        handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("NORMAL"))) {
         return false;
     }
 
@@ -81,9 +81,8 @@ bool BasicConfig::invoke(Handle* handle)
     int retry = BasicConfigBusyRetryMaxAllowedNumberOfTimes;
     do {
         if (getOrSetPragmaBegin(handle, m_getJournalMode)
-            && getOrSetPragmaEnd(handle,
-                                 m_setJournalModeWAL,
-                                 !handle->getText(0).isCaseInsensiveEqual("WAL"))) {
+            && getOrSetPragmaEnd(
+            handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("WAL"))) {
             break;
         }
         if (handle->getResultCode() == Error::Code::Busy) {

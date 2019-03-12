@@ -144,7 +144,7 @@
 {
     for (NSString *path in paths.reversedArray) {
         if ([self fileExistsAtPath:path]) {
-            if (![self setAttributes:@{NSFileImmutable : @(immutable)} ofItemAtPath:path error:error]) {
+            if (![self setAttributes:@{ NSFileImmutable : @(immutable) } ofItemAtPath:path error:error]) {
                 return NO;
             }
         }
