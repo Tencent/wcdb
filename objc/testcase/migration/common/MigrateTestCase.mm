@@ -70,11 +70,11 @@
 - (void)doTestNotification
 {
     __block BOOL tableMigrated = NO;
-    __block BOOL migrated = NO;
+    __block int migrated = 0;
     NSString *expectedTableName = self.tableName;
     [self.database setNotificationWhenMigrated:^(WCTMigrationBaseInfo *info) {
         if (info == nil) {
-            migrated = YES;
+            ++migrated;
         } else if ([info.table isEqualToString:expectedTableName]) {
             tableMigrated = YES;
         }
@@ -88,7 +88,13 @@
     TestCaseAssertTrue(succeed);
     TestCaseAssertTrue(done);
     TestCaseAssertTrue(tableMigrated);
-    TestCaseAssertTrue(migrated);
+    TestCaseAssertEqual(migrated, 1);
+
+    // Notification will receive multiple times.
+    succeed = [self.database stepMigrationOrDone:done];
+    TestCaseAssertTrue(succeed);
+    TestCaseAssertTrue(done);
+    TestCaseAssertEqual(migrated, 2);
 }
 
 - (void)doTestFeatureInterruptMigrate
