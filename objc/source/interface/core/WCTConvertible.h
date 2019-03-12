@@ -35,20 +35,33 @@ struct IsObjCType<
 T,
 typename std::enable_if<std::is_convertible<NSObject *, T>::value && std::is_pointer<T>::value>::type> : std::true_type {
 };
-
-template<>
-struct ColumnIsTextType<NSString *> : public std::true_type {
-public:
-    static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
-    asUnderlyingType(NSString *text);
-};
-
-template<>
-struct ColumnIsFloatType<NSNumber *> : public std::true_type {
-public:
-    static ColumnTypeInfo<ColumnType::Float>::UnderlyingType
-    asUnderlyingType(NSNumber *number);
-};
+    
+    template<>
+    struct ColumnIsTextType<NSString *> : public std::true_type {
+    public:
+        static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
+        asUnderlyingType(NSString *text);
+    };
+    
+    template<>
+    class LiteralValueConvertible<NSString *> final : public std::true_type {
+    public:
+        static LiteralValue asLiteralValue(NSString *string);
+    };
+    
+    template<>
+    class LiteralValueConvertible<NSNumber *> final : public std::true_type {
+    public:
+        static LiteralValue asLiteralValue(NSNumber *number);
+    };
+    
+#if OBJC_BOOL_IS_CHAR
+    template<>
+    class LiteralValueConvertible<BOOL> final : public std::true_type {
+    public:
+        static LiteralValue asLiteralValue(BOOL value);
+    };
+#endif // OBJC_BOOL_IS_CHAR
 
 template<>
 struct UnsafeData::Convertible<NSData *> : public std::true_type {
@@ -67,19 +80,5 @@ class IndexedColumnConvertible<WCTProperty> final : public std::true_type {
 public:
     static IndexedColumn asIndexedColumn(const WCTProperty &property);
 };
-
-template<>
-class LiteralValueConvertible<NSNumber *> final : public std::true_type {
-public:
-    static LiteralValue asLiteralValue(NSNumber *number);
-};
-
-#if OBJC_BOOL_IS_CHAR
-template<>
-class LiteralValueConvertible<BOOL> final : public std::true_type {
-public:
-    static LiteralValue asLiteralValue(BOOL value);
-};
-#endif // OBJC_BOOL_IS_CHAR
-
+    
 } //namespace WCDB

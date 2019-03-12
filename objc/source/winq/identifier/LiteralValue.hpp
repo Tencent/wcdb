@@ -30,18 +30,18 @@ class LiteralValue final : public TypedSyntax<Syntax::LiteralValue, SQL> {
 public:
     using TypedSyntax<Syntax::LiteralValue, SQL>::TypedSyntax;
 
-    template<typename T, typename Enable = typename std::enable_if<LiteralValueConvertible<T>::value>::type>
-    LiteralValue(const T& t)
-    : LiteralValue(LiteralValueConvertible<T>::asLiteralValue(t))
-    {
-    }
-
     LiteralValue(int64_t value);
     LiteralValue(uint64_t value);
     LiteralValue(double value);
     LiteralValue(std::nullptr_t);
     LiteralValue(bool value);
     LiteralValue(const UnsafeString& value);
+    
+    template<typename T, typename Enable = typename std::enable_if<LiteralValueConvertible<T>::value>::type>
+    LiteralValue(const T& t)
+    : LiteralValue(LiteralValueConvertible<T>::asLiteralValue(t))
+    {
+    }
 
     static LiteralValue currentTime();
     static LiteralValue currentDate();

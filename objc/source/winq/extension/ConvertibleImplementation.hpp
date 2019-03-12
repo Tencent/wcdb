@@ -47,24 +47,46 @@ public:
         return ColumnIsFloatType<T>::asUnderlyingType(t);
     }
 };
+    
+    template<class T, bool = std::is_enum<T>::value>
+    struct SafeUnderlyingType : std::underlying_type<T> {};
+    template<class T>
+    struct SafeUnderlyingType<T, false> {};
+    
+template<typename T, typename Enable = void>
+struct Is64BitUnsignedInteger : public std::false_type {};
+template<typename T>
+struct Is64BitUnsignedInteger<T, typename std::enable_if<std::is_integral<T>::value && (sizeof(T) > 4) && std::is_unsigned<T>::value>::type> : public std::true_type {};
+
+template<typename T, typename Enable = void>
+struct Is64BitUnsignedEnum : public std::false_type {};
+template<typename T>
+struct Is64BitUnsignedEnum<T, typename std::enable_if<std::is_enum<T>::value && (sizeof(T) > 4) && std::is_unsigned<typename SafeUnderlyingType<T>::type>::value>::type> : public std::true_type {};
 
 template<typename T>
-class LiteralValueConvertible<T, typename std::enable_if<ColumnIsInteger64Type<T>::value>::type> final
+class LiteralValueConvertible<
+T, // 32-bit-integer/enum or 64-bit-signed-integer/enum
+typename std::enable_if<(std::is_integral<T>::value || std::is_enum<T>::value)
+                        && !Is64BitUnsignedInteger<T>::value
+                        && !Is64BitUnsignedEnum<T>::value>::type> final
 : public std::true_type {
 public:
     static LiteralValue asLiteralValue(const T& t)
     {
-        return ColumnIsInteger64Type<T>::asUnderlyingType(t);
+        return (int64_t)t;
     }
 };
 
 template<typename T>
-class LiteralValueConvertible<T, typename std::enable_if<ColumnIsInteger32Type<T>::value>::type> final
+class LiteralValueConvertible<
+T, // 64-bit-unsigned-integer
+typename std::enable_if<Is64BitUnsignedInteger<T>::value
+                        || Is64BitUnsignedEnum<T>::value>::type> final
 : public std::true_type {
 public:
     static LiteralValue asLiteralValue(const T& t)
     {
-        return (int64_t) ColumnIsInteger32Type<T>::asUnderlyingType(t);
+        return (uint64_t)t;
     }
 };
 

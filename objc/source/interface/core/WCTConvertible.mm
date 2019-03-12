@@ -21,19 +21,13 @@
 #import <WCDB/WCTConvertible.h>
 
 namespace WCDB {
-
-ColumnTypeInfo<ColumnType::Text>::UnderlyingType
-ColumnIsTextType<NSString*>::asUnderlyingType(NSString* text)
-{
-    return WCDB::UnsafeString(text.UTF8String, [text lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
-}
-
-ColumnTypeInfo<ColumnType::Float>::UnderlyingType
-ColumnIsFloatType<NSNumber*>::asUnderlyingType(NSNumber* number)
-{
-    return number.doubleValue;
-}
-
+    
+    ColumnTypeInfo<ColumnType::Text>::UnderlyingType
+    ColumnIsTextType<NSString*>::asUnderlyingType(NSString* text)
+    {
+        return WCDB::UnsafeString(text.UTF8String, [text lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+    }
+    
 const UnsafeData UnsafeData::Convertible<NSData*>::asUnsafeData(NSData* data)
 {
     return UnsafeData((unsigned char*) data.bytes, (size_t) data.length);
@@ -48,10 +42,21 @@ IndexedColumn IndexedColumnConvertible<WCTProperty>::asIndexedColumn(const WCTPr
 {
     return Expression((const WCDB::Column&) property);
 }
+    
+LiteralValue LiteralValueConvertible<NSString*>::asLiteralValue(NSString* string)
+{
+    return WCDB::UnsafeString(string.UTF8String, [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+}
 
 LiteralValue LiteralValueConvertible<NSNumber*>::asLiteralValue(NSNumber* number)
 {
-    return LiteralValue(number.doubleValue);
+    if (number == nil || CFNumberIsFloatType((CFNumberRef) number)) {
+        return (double)number.doubleValue;
+    } else if (strcmp(number.objCType, "Q")==0) {
+        // unsigned long long
+        return (uint64_t)number.unsignedLongLongValue;
+    }
+    return (int64_t)number.integerValue;
 }
 
 #if OBJC_BOOL_IS_CHAR
