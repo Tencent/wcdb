@@ -375,4 +375,40 @@
     TestCaseAssertSQLEqual((!(((column && 1) > 2) - 3)).collate(@"testCollation"), @"(NOT (((testColumn AND 1) > 2) - 3)) COLLATE testCollation");
 }
 
+- (void)test_boundary
+{
+    WCDB::Expression int64Min = std::numeric_limits<int64_t>::min();
+    TestCaseAssertSQLEqual(int64Min, @"-9223372036854775808");
+    WCDB::Expression int64Max = std::numeric_limits<int64_t>::max();
+    TestCaseAssertSQLEqual(int64Max, @"9223372036854775807");
+    
+    WCDB::Expression uint64Min = std::numeric_limits<uint64_t>::min();
+    TestCaseAssertSQLEqual(uint64Min, @"0");
+    WCDB::Expression uint64Max = std::numeric_limits<uint64_t>::max();
+    TestCaseAssertSQLEqual(uint64Max, @"18446744073709551615");
+    
+    WCDB::Expression enumNSMin = EnumNSTypeMin;
+    TestCaseAssertSQLEqual(enumNSMin, @"-9223372036854775808");
+    WCDB::Expression enumNSMax = EnumNSTypeMax;
+    TestCaseAssertSQLEqual(enumNSMax, @"9223372036854775807");
+    
+    WCDB::Expression optionNSMin = OptionNSTypeMin;
+    TestCaseAssertSQLEqual(optionNSMin, @"-9223372036854775808");
+    WCDB::Expression optionNSMax = OptionNSTypeMax;
+    TestCaseAssertSQLEqual(optionNSMax, @"9223372036854775807");
+    
+    WCDB::Expression enumMin = EnumMin;
+    TestCaseAssertSQLEqual(enumMin, @"-2147483648");
+    WCDB::Expression enumMax = EnumMax;
+    TestCaseAssertSQLEqual(enumMax, @"2147483647");
+    
+    WCDB::Expression enumClassMin = EnumClassType::Min;
+    TestCaseAssertSQLEqual(enumClassMin, @"-2147483648");
+    WCDB::Expression enumClassMax = EnumClassType::Max;
+    TestCaseAssertSQLEqual(enumClassMax, @"2147483647");
+        
+    WCDB::LiteralValue numberMax = [NSNumber numberWithUnsignedLongLong:std::numeric_limits<uint64_t>::max()];
+    TestCaseAssertSQLEqual(numberMax, @"18446744073709551615");
+}
+
 @end

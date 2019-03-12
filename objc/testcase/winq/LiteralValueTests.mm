@@ -649,6 +649,9 @@
     TestCaseAssertSQLEqual(enumClassMin, @"-2147483648");
     WCDB::LiteralValue enumClassMax = EnumClassType::Max;
     TestCaseAssertSQLEqual(enumClassMax, @"2147483647");
+    
+    WCDB::LiteralValue numberMax = [NSNumber numberWithUnsignedLongLong:std::numeric_limits<uint64_t>::max()];
+    TestCaseAssertSQLEqual(numberMax, @"18446744073709551615");
 }
 
 @end
