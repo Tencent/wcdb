@@ -55,7 +55,6 @@ bool HandleStatement::prepare(const String &sql)
 void HandleStatement::reset()
 {
     WCTInnerAssert(isPrepared());
-    m_done = false;
     exitAPI(sqlite3_reset(m_stmt));
 }
 
@@ -89,7 +88,6 @@ void HandleStatement::finalize()
     if (m_stmt != nullptr) {
         exitAPI(sqlite3_finalize(m_stmt));
         m_stmt = nullptr;
-        m_done = false;
     }
 }
 
