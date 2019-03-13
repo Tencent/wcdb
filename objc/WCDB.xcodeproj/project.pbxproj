@@ -6729,6 +6729,7 @@
 		};
 		231FEA2D21999E7D00DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
@@ -6749,6 +6750,7 @@
 		};
 		231FEA4921999ECE00DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
@@ -6769,6 +6771,7 @@
 		};
 		231FEA6521999F0D00DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
@@ -6789,6 +6792,7 @@
 		};
 		231FEA8121999F2A00DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
@@ -6809,6 +6813,7 @@
 		};
 		231FEA9D21999F7800DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
@@ -6829,6 +6834,7 @@
 		};
 		231FEAB921999F8100DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
@@ -6849,6 +6855,7 @@
 		};
 		231FEAD521999F8D00DC3706 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
@@ -6869,6 +6876,7 @@
 		};
 		234E6F6421996EB600D006F2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
@@ -6910,6 +6918,7 @@
 		};
 		2379094B219295370098797F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
@@ -6930,6 +6939,7 @@
 		};
 		2384F7262194249200E8B10A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
@@ -7006,6 +7016,7 @@
 		};
 		239E8AA42160B37600BCB308 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
@@ -7054,6 +7065,7 @@
 		};
 		23FC43DF21B6631200FA1A0F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2366BB1E221BB0F1000ED712 /* tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
