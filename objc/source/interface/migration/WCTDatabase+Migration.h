@@ -29,7 +29,7 @@ typedef void (^WCTMigratedNotificationBlock)(WCTMigrationBaseInfo* _Nullable);
 
 @interface WCTDatabase (Migration)
 
-- (void)filterMigration:(WCDB_ESCAPE WCTMigrationFilterBlock)filter;
+- (void)filterMigration:(nullable WCDB_ESCAPE WCTMigrationFilterBlock)filter;
 
 - (BOOL)stepMigrationOrDone:(BOOL&)done;
 
