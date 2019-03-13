@@ -40,12 +40,14 @@
     NSString* sourcePath = self.sourcePath;
     NSString* table = self.tableName;
     [self.database removeConfigForName:WCTConfigNameCheckpoint];
+    TestCaseAssertTrue(self.database.isMigrated);
     [self.database filterMigration:^(WCTMigrationUserInfo* userInfo) {
         if ([userInfo.table isEqualToString:table]) {
             userInfo.sourceTable = sourceTable;
             userInfo.sourceDatabase = sourcePath;
         }
     }];
+    TestCaseAssertFalse(self.database.isMigrated);
     self.tableClass = MigrationObject.class;
     TestCaseAssertTrue([self.database execute:[MigrationObject statementForCreatingTable:self.tableName withMode:self.mode]]);
     TestCaseAssertTrue([self createTable]);
@@ -105,8 +107,7 @@
 
 - (BOOL)isMigrating
 {
-    int count = [self.database getValueFromStatement:WCDB::StatementSelect().select(MigrationObject.allProperties.count()).from(self.tableName)].numberValue.intValue;
-    return count > 0 && count < self.objects.count;
+    return !self.database.isMigrated;
 }
 
 @end

@@ -185,6 +185,8 @@ public:
 
     void interruptMigration();
 
+    bool isMigrated() const;
+
 protected:
     class Migration m_migration;
 

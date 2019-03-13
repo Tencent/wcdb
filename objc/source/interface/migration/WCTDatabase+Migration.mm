@@ -66,4 +66,9 @@
     _database->setNotificationWhenMigrated(callback);
 }
 
+- (BOOL)isMigrated
+{
+    return _database->isMigrated();
+}
+
 @end

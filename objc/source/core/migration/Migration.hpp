@@ -149,6 +149,8 @@ public:
     typedef std::function<void(const MigrationBaseInfo*)> MigratedCallback;
     void setNotificationWhenMigrated(const MigratedCallback& callback);
 
+    bool isMigrated() const;
+
 protected:
     // succeed, worked
     std::pair<bool, bool> tryDropUnreferencedTable(Migration::Stepper& stepper);
@@ -161,6 +163,7 @@ protected:
 private:
     bool m_tableAcquired;
     MigratedCallback m_migratedNotification;
+    bool m_migrated;
 };
 
 } // namespace WCDB

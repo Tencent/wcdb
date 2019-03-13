@@ -731,6 +731,16 @@ void Database::interruptMigration()
     }
 }
 
+bool Database::isMigrated() const
+{
+    SharedLockGuard lockGuard(m_memory);
+    bool migrated = true;
+    if (m_migration.shouldMigrate()) {
+        migrated = m_migration.isMigrated();
+    }
+    return migrated;
+}
+
 #pragma mark - Checkpoint
 bool Database::interruptibleCheckpoint(CheckpointType type)
 {

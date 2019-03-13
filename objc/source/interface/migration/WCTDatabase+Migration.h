@@ -37,6 +37,8 @@ typedef void (^WCTMigratedNotificationBlock)(WCTMigrationBaseInfo* _Nullable);
 
 - (void)setNotificationWhenMigrated:(nullable WCDB_ESCAPE WCTMigratedNotificationBlock)onMigrated;
 
+- (BOOL)isMigrated;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -44,6 +44,7 @@
     BOOL succeed = [self.database stepMigrationOrDone:done];
     TestCaseAssertTrue(succeed);
     TestCaseAssertFalse(done);
+    TestCaseAssertFalse(self.database.isMigrated);
 
     // check source table migration is not started
     // It's not a good practice.
@@ -52,6 +53,7 @@
 
 - (void)doTestMigrate
 {
+    TestCaseAssertFalse(self.database.isMigrated);
     BOOL done = NO;
     BOOL succeed;
     do {
@@ -59,6 +61,7 @@
     } while (succeed && !done);
     TestCaseAssertTrue(succeed);
     TestCaseAssertTrue(done);
+    TestCaseAssertTrue(self.database.isMigrated);
 
     TestCaseAssertTrue([[self.table getObjectsOrders:MigrationObject.identifier.asOrder(WCTOrderedAscending)] isEqualToArray:self.objects]);
 

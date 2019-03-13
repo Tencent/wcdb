@@ -27,7 +27,7 @@ namespace WCDB {
 
 #pragma mark - Initialize
 Migration::Migration()
-: m_filter(nullptr), m_migratedNotification(nullptr), m_tableAcquired(false)
+: m_filter(nullptr), m_migratedNotification(nullptr), m_tableAcquired(false), m_migrated(false)
 {
 }
 
@@ -47,6 +47,7 @@ void Migration::purge()
     m_holder.clear();
     m_filted.clear();
     m_tableAcquired = false;
+    m_migrated = false;
 }
 
 bool Migration::shouldMigrate() const
@@ -415,16 +416,23 @@ void Migration::setNotificationWhenMigrated(const MigratedCallback& callback)
     m_migratedNotification = callback;
 }
 
+bool Migration::isMigrated() const
+{
+    SharedLockGuard lockGuard(m_lock);
+    return m_migrated;
+}
+
 void Migration::postMigratedNotification()
 {
     MigratedCallback callback = nullptr;
     {
-        SharedLockGuard lockGuard(m_lock);
+        LockGuard lockGuard(m_lock);
         WCTInnerAssert(m_tableAcquired);
         WCTInnerAssert(m_dumpster.empty());
         WCTInnerAssert(m_migratings.empty());
         WCTInnerAssert(m_referenceds.empty());
         callback = m_migratedNotification;
+        m_migrated = true;
     }
     if (callback != nullptr) {
         callback(nullptr);
