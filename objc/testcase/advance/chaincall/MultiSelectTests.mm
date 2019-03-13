@@ -132,7 +132,8 @@
                                                           return property.table(self.tableName2);
                                                       }));
 
-                     WCTMultiSelect* select = [[[[self.database prepareMultiSelect] onResultColumns:resultColumns] fromTables:@[ self.tableName, self.tableName2 ]] where:TestCaseObject.identifier.table(self.tableName) == TestCaseObject.identifier.table(self.tableName2)];
+                     WCTMultiSelect* select =
+                     [[[[self.database prepareMultiSelect] onResultColumns:resultColumns] fromTables:@[ self.tableName, self.tableName2 ]] where:TestCaseObject.identifier.table(self.tableName) == TestCaseObject.identifier.table(self.tableName2)];
 
                      NSMutableArray<WCTMultiObject*>* objects = [NSMutableArray<WCTMultiObject*> array];
                      WCTMultiObject* object;
