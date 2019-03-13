@@ -73,7 +73,7 @@
       afterModification:^BOOL {
           __block BOOL unexpected = NO;
           __block BOOL tested = NO;
-          [WCTDatabase disableSQLiteWrite];
+          [WCTDatabase simulateIOError:YES];
           if ([self.database runTransaction:^BOOL(WCTHandle* handle) {
                   tested = YES;
                   if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
@@ -87,7 +87,7 @@
           } else {
               TestCaseAssertFalse([self.database isInTransaction]);
           }
-          [WCTDatabase enableSQLiteWrite];
+          [WCTDatabase simulateIOError:NO];
           return !unexpected && tested;
       }];
 }
@@ -110,7 +110,7 @@
                 andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           BOOL unexpected = NO;
-          [WCTDatabase disableSQLiteWrite];
+          [WCTDatabase simulateIOError:YES];
           if ([self.database beginTransaction]) {
               if (![self.database deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
                   TestCaseFailure();
@@ -126,7 +126,7 @@
               TestCaseFailure();
               unexpected = YES;
           }
-          [WCTDatabase enableSQLiteWrite];
+          [WCTDatabase simulateIOError:NO];
           return !unexpected;
       }];
 }
@@ -184,7 +184,7 @@
                 andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           __block BOOL unexpected = NO;
-          [WCTDatabase disableSQLiteWrite];
+          [WCTDatabase simulateIOError:YES];
           if ([self.database runNestedTransaction:^BOOL(WCTHandle* handle) {
                   if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
                       TestCaseFailure();
@@ -197,7 +197,7 @@
           } else {
               TestCaseAssertFalse([self.database isInTransaction]);
           }
-          [WCTDatabase enableSQLiteWrite];
+          [WCTDatabase simulateIOError:NO];
           return !unexpected;
       }];
 }
@@ -220,7 +220,7 @@
                 andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
           BOOL unexpected = NO;
-          [WCTDatabase disableSQLiteWrite];
+          [WCTDatabase simulateIOError:YES];
           if ([self.database beginNestedTransaction]) {
               if (![self.database deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
                   TestCaseFailure();
@@ -236,7 +236,7 @@
               TestCaseFailure();
               unexpected = YES;
           }
-          [WCTDatabase enableSQLiteWrite];
+          [WCTDatabase simulateIOError:NO];
           return !unexpected;
       }];
 }
@@ -319,7 +319,7 @@
           WCTHandle* handle = [self.database getHandle];
           __block BOOL unexpected = NO;
           __block BOOL tested = NO;
-          [WCTDatabase disableSQLiteWrite];
+          [WCTDatabase simulateIOError:YES];
           if ([handle runTransaction:^BOOL(WCTHandle* handle) {
                   tested = YES;
                   if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
@@ -333,7 +333,7 @@
           } else {
               TestCaseAssertFalse([handle isInTransaction]);
           }
-          [WCTDatabase enableSQLiteWrite];
+          [WCTDatabase simulateIOError:NO];
           return !unexpected && tested;
       }];
 }
@@ -358,7 +358,7 @@
       afterModification:^BOOL {
           WCTHandle* handle = [self.database getHandle];
           BOOL unexpected = NO;
-          [WCTDatabase disableSQLiteWrite];
+          [WCTDatabase simulateIOError:YES];
           if ([handle beginTransaction]) {
               if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
                   TestCaseFailure();
@@ -374,7 +374,7 @@
               TestCaseFailure();
               unexpected = YES;
           }
-          [WCTDatabase enableSQLiteWrite];
+          [WCTDatabase simulateIOError:NO];
           return !unexpected;
       }];
 }
@@ -436,7 +436,7 @@
       afterModification:^BOOL {
           WCTHandle* handle = [self.database getHandle];
           __block BOOL unexpected = NO;
-          [WCTDatabase disableSQLiteWrite];
+          [WCTDatabase simulateIOError:YES];
           if ([handle runNestedTransaction:^BOOL(WCTHandle* handle) {
                   if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
                       TestCaseFailure();
@@ -449,7 +449,7 @@
           } else {
               TestCaseAssertFalse([handle isInTransaction]);
           }
-          [WCTDatabase enableSQLiteWrite];
+          [WCTDatabase simulateIOError:NO];
           return !unexpected;
       }];
 }
@@ -474,7 +474,7 @@
       afterModification:^BOOL {
           WCTHandle* handle = [self.database getHandle];
           BOOL unexpected = NO;
-          [WCTDatabase disableSQLiteWrite];
+          [WCTDatabase simulateIOError:YES];
           if ([handle beginNestedTransaction]) {
               if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
                   TestCaseFailure();
@@ -490,7 +490,7 @@
               TestCaseFailure();
               unexpected = YES;
           }
-          [WCTDatabase enableSQLiteWrite];
+          [WCTDatabase simulateIOError:NO];
           return !unexpected;
       }];
 }

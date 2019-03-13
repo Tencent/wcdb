@@ -125,12 +125,12 @@
     WCTSelect* select = [[[[self.database prepareSelect] onResultColumns:TestCaseObject.allProperties] fromTable:self.tableName] limit:1];
     TestCaseAssertTrue([select.handle validate]);
 
-    [WCTDatabase disableSQLiteWrite];
+    [WCTDatabase simulateIOError:YES];
     // nextObject is nil due to IOError, so done is false.
     TestCaseAssertTrue([select nextObject] == nil);
     TestCaseAssertFalse([select.handle done]);
 
-    [WCTDatabase enableSQLiteWrite];
+    [WCTDatabase simulateIOError:NO];
     // nextObject is not nil, so done is false.
     TestCaseAssertTrue([select nextObject] != nil);
     TestCaseAssertFalse([select.handle done]);

@@ -36,33 +36,26 @@ static ssize_t illPread(int, void *, size_t, off_t)
 
 + (void)resetGlobalErrorTracer
 {
-    if (WCDB::Console::debuggable()) {
-        WCDB::Console::shared()->setLogger(WCDB::Console::logger);
-    }
+    WCDB::Console::shared()->setLogger(WCDB::Console::logger);
 }
 
-+ (void)enableSQLiteWrite
++ (void)simulateIOError:(BOOL)enable
 {
-    if (WCDB::Console::debuggable()) {
-        sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
-        sqlite3_mutex *mutex = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_MASTER);
-        sqlite3_mutex_enter(mutex);
-        vfs->xSetSystemCall(vfs, "pwrite", (sqlite3_syscall_ptr) pwrite);
-        vfs->xSetSystemCall(vfs, "pread", (sqlite3_syscall_ptr) pread);
-        sqlite3_mutex_leave(mutex);
+    sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
+    sqlite3_mutex *mutex = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_MASTER);
+    sqlite3_mutex_enter(mutex);
+    sqlite3_syscall_ptr newPwrite;
+    sqlite3_syscall_ptr newPread;
+    if (enable) {
+        newPwrite = (sqlite3_syscall_ptr) illPwrite;
+        newPread = (sqlite3_syscall_ptr) illPread;
+    } else {
+        newPwrite = (sqlite3_syscall_ptr) pwrite;
+        newPread = (sqlite3_syscall_ptr) pread;
     }
-}
-
-+ (void)disableSQLiteWrite
-{
-    if (WCDB::Console::debuggable()) {
-        sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
-        sqlite3_mutex *mutex = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_MASTER);
-        sqlite3_mutex_enter(mutex);
-        vfs->xSetSystemCall(vfs, "pwrite", (sqlite3_syscall_ptr) illPwrite);
-        vfs->xSetSystemCall(vfs, "pread", (sqlite3_syscall_ptr) illPread);
-        sqlite3_mutex_leave(mutex);
-    }
+    vfs->xSetSystemCall(vfs, "pwrite", (sqlite3_syscall_ptr) newPwrite);
+    vfs->xSetSystemCall(vfs, "pread", (sqlite3_syscall_ptr) newPread);
+    sqlite3_mutex_leave(mutex);
 }
 
 @end
