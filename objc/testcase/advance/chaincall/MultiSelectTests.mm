@@ -125,12 +125,14 @@
     [self doTestMultiObjects:objects
                       andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
                  bySelecting:^NSArray<WCTMultiObject*>* {
-                     WCTResultColumns resultColumns = TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
-                                                                                      return property.table(self.tableName);
-                                                                                  })
-                                                      .addingNewResultColumns(TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
-                                                          return property.table(self.tableName2);
-                                                      }));
+                     WCTResultColumns resultColumns
+                     = TestCaseObject.allProperties
+                       .redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
+                           return property.table(self.tableName);
+                       })
+                       .addingNewResultColumns(TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
+                           return property.table(self.tableName2);
+                       }));
 
                      WCTMultiSelect* select =
                      [[[[self.database prepareMultiSelect] onResultColumns:resultColumns] fromTables:@[ self.tableName, self.tableName2 ]] where:TestCaseObject.identifier.table(self.tableName) == TestCaseObject.identifier.table(self.tableName2)];
@@ -159,9 +161,10 @@
     [self doTestMultiObjects:objects
                       andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
                  bySelecting:^NSArray<WCTMultiObject*>* {
-                     WCTResultColumns resultColumns = TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
-                                                                                      return property.table(self.tableName);
-                                                                                  })
+                     WCTResultColumns resultColumns = TestCaseObject.allProperties
+                                                      .redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
+                                                          return property.table(self.tableName);
+                                                      })
                                                       .addingNewResultColumns(TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
                                                           return property.table(self.tableName2);
                                                       }));
@@ -188,9 +191,10 @@
     [self doTestMultiObjects:objects
                       andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
                  bySelecting:^NSArray<WCTMultiObject*>* {
-                     WCTResultColumns resultColumns = TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
-                                                                                      return property.table(self.tableName);
-                                                                                  })
+                     WCTResultColumns resultColumns = TestCaseObject.allProperties
+                                                      .redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
+                                                          return property.table(self.tableName);
+                                                      })
                                                       .addingNewResultColumns(TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
                                                           return property.table(self.tableName2);
                                                       }));
@@ -221,9 +225,10 @@
     [self doTestMultiObjects:objects
                       andSQL:@"SELECT main.testTable.identifier, main.testTable.content, main.testTable2.identifier, main.testTable2.content FROM main.testTable, main.testTable2 WHERE main.testTable.identifier == main.testTable2.identifier"
                  bySelecting:^NSArray<WCTMultiObject*>* {
-                     WCTResultColumns resultColumns = TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
-                                                                                      return property.table(self.tableName);
-                                                                                  })
+                     WCTResultColumns resultColumns = TestCaseObject.allProperties
+                                                      .redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
+                                                          return property.table(self.tableName);
+                                                      })
                                                       .addingNewResultColumns(TestCaseObject.allProperties.redirect([self](const WCTProperty& property) -> WCDB::ResultColumn {
                                                           return property.table(self.tableName2);
                                                       }));
