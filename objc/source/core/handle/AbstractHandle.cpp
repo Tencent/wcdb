@@ -314,11 +314,11 @@ AbstractHandle::getTableMeta(const Schema &schema, const String &table)
 {
     std::vector<ColumnMeta> columnMetas;
     HandleStatement *handleStatement = getStatement();
-    bool done = false;
+    bool succeed = false;
     do {
         if (handleStatement->prepare(
             StatementPragma().pragma(Pragma::tableInfo()).schema(schema).with(table))) {
-            while (handleStatement->step(done) && !done) {
+            while ((succeed = handleStatement->step()) && !handleStatement->done()) {
                 columnMetas.push_back(ColumnMeta(handleStatement->getInteger32(0), // cid
                                                  handleStatement->getText(1), // name
                                                  handleStatement->getText(2), // type
@@ -330,31 +330,29 @@ AbstractHandle::getTableMeta(const Schema &schema, const String &table)
         }
     } while (false);
     returnStatement(handleStatement);
-    if (!done) {
+    if (!succeed) {
         columnMetas.clear();
     }
-    return { done, std::move(columnMetas) };
+    return { succeed, std::move(columnMetas) };
 }
 
 std::pair<bool, std::set<String>>
 AbstractHandle::getValues(const Statement &statement, int index)
 {
     HandleStatement *handleStatement = getStatement();
-    bool done = false;
+    bool succeed = false;
     std::set<String> values;
-    do {
-        if (handleStatement->prepare(statement)) {
-            while (handleStatement->step(done) && !done) {
-                values.emplace(handleStatement->getText(index));
-            }
-            handleStatement->finalize();
+    if (handleStatement->prepare(statement)) {
+        while ((succeed = handleStatement->step()) && !handleStatement->done()) {
+            values.emplace(handleStatement->getText(index));
         }
-    } while (false);
+        handleStatement->finalize();
+    }
     returnStatement(handleStatement);
-    if (!done) {
+    if (!succeed) {
         values.clear();
     }
-    return { done, std::move(values) };
+    return { succeed, std::move(values) };
 }
 
 #pragma mark - Transaction

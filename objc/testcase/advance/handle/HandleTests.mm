@@ -115,10 +115,9 @@
              [self.handle reset];
              [self.handle bindInteger32:4 toIndex:1];
              [self.handle bindString:self.random.string toIndex:2];
-             BOOL done;
-             BOOL result = [self.handle step:done];
+             BOOL succeed = [self.handle step] && [self.handle done];
              [self.handle finalizeStatement];
-             return result && done;
+             return succeed;
          }];
 }
 

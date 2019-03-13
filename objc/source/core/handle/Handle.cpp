@@ -91,115 +91,96 @@ bool Handle::isPrepared()
 
 void Handle::reset()
 {
-    WCTInnerAssert(isPrepared());
     m_mainStatement->reset();
 }
 
-bool Handle::step(bool &done)
+bool Handle::done()
 {
-    WCTInnerAssert(isPrepared());
-    return m_mainStatement->step(done);
+    return m_mainStatement->done();
 }
 
 bool Handle::step()
 {
-    bool unused;
-    return step(unused);
+    return m_mainStatement->step();
 }
 
 int Handle::getNumberOfColumns()
 {
-    WCTInnerAssert(isPrepared());
     return m_mainStatement->getNumberOfColumns();
 }
 
 const UnsafeString Handle::getOriginColumnName(int index)
 {
-    WCTInnerAssert(isPrepared());
     return m_mainStatement->getOriginColumnName(index);
 }
 
 const UnsafeString Handle::getColumnName(int index)
 {
-    WCTInnerAssert(isPrepared());
     return m_mainStatement->getColumnName(index);
 }
 
 const UnsafeString Handle::getColumnTableName(int index)
 {
-    WCTInnerAssert(isPrepared());
     return m_mainStatement->getColumnTableName(index);
 }
 
 ColumnType Handle::getType(int index)
 {
-    WCTInnerAssert(isPrepared());
     return m_mainStatement->getType(index);
 }
 
 void Handle::bindInteger32(const Integer32 &value, int index)
 {
-    WCTInnerAssert(isPrepared());
     m_mainStatement->bindInteger32(value, index);
 }
 
 void Handle::bindInteger64(const Integer64 &value, int index)
 {
-    WCTInnerAssert(isPrepared());
     m_mainStatement->bindInteger64(value, index);
 }
 
 void Handle::bindDouble(const Float &value, int index)
 {
-    WCTInnerAssert(isPrepared());
     m_mainStatement->bindDouble(value, index);
 }
 
 void Handle::bindText(const Text &value, int index)
 {
-    WCTInnerAssert(isPrepared());
     m_mainStatement->bindText(value, index);
 }
 
 void Handle::bindBLOB(const BLOB &value, int index)
 {
-    WCTInnerAssert(isPrepared());
     m_mainStatement->bindBLOB(value, index);
 }
 
 void Handle::bindNull(int index)
 {
-    WCTInnerAssert(isPrepared());
     m_mainStatement->bindNull(index);
 }
 
 Handle::Integer32 Handle::getInteger32(int index)
 {
-    WCTInnerAssert(isPrepared());
     return m_mainStatement->getInteger32(index);
 }
 
 Handle::Integer64 Handle::getInteger64(int index)
 {
-    WCTInnerAssert(isPrepared());
     return m_mainStatement->getInteger64(index);
 }
 
 Handle::Float Handle::getDouble(int index)
 {
-    WCTInnerAssert(isPrepared());
     return m_mainStatement->getDouble(index);
 }
 
 Handle::Text Handle::getText(int index)
 {
-    WCTInnerAssert(isPrepared());
     return m_mainStatement->getText(index);
 }
 
 Handle::BLOB Handle::getBLOB(int index)
 {
-    WCTInnerAssert(isPrepared());
     return m_mainStatement->getBLOB(index);
 }
 
@@ -210,7 +191,6 @@ void Handle::finalize()
 
 bool Handle::isStatementReadonly()
 {
-    WCTInnerAssert(isPrepared());
     return m_mainStatement->isReadonly();
 }
 

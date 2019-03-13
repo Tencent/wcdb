@@ -26,7 +26,7 @@
 namespace WCDB {
 
 HandleStatement::HandleStatement(AbstractHandle *handle, HandleStatementEvent *event)
-: HandleRelated(handle), m_stmt(nullptr), m_event(event)
+: HandleRelated(handle), m_stmt(nullptr), m_event(event), m_done(false)
 {
 }
 
@@ -45,6 +45,7 @@ bool HandleStatement::prepare(const String &sql)
     WCTRemedialAssert(!isPrepared(), "Last statement is not finalized.", finalize(););
     bool result = exitAPI(
     sqlite3_prepare_v2(getRawHandle(), sql.c_str(), -1, &m_stmt, nullptr), sql);
+    m_done = false;
     if (!result) {
         m_stmt = nullptr;
     }
@@ -54,17 +55,23 @@ bool HandleStatement::prepare(const String &sql)
 void HandleStatement::reset()
 {
     WCTInnerAssert(isPrepared());
+    m_done = false;
     exitAPI(sqlite3_reset(m_stmt));
 }
 
-bool HandleStatement::step(bool &done)
+bool HandleStatement::done()
+{
+    return m_done;
+}
+
+bool HandleStatement::step()
 {
     WCTInnerAssert(isPrepared());
     if (m_event != nullptr) {
         m_event->statementWillStep(this);
     }
     int rc = sqlite3_step(m_stmt);
-    done = rc == SQLITE_DONE;
+    m_done = rc == SQLITE_DONE;
     const char *sql = nullptr;
     if (isPrepared()) {
         // There will be privacy issues if use sqlite3_expanded_sql
@@ -77,17 +84,12 @@ bool HandleStatement::step(bool &done)
     return succeed;
 }
 
-bool HandleStatement::step()
-{
-    bool unused;
-    return step(unused);
-}
-
 void HandleStatement::finalize()
 {
     if (m_stmt != nullptr) {
         exitAPI(sqlite3_finalize(m_stmt));
         m_stmt = nullptr;
+        m_done = false;
     }
 }
 

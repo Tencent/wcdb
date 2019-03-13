@@ -27,6 +27,11 @@ static ssize_t illPwrite(int, const void *, size_t, off_t)
     return -1;
 }
 
+static ssize_t illPread(int, void *, size_t, off_t)
+{
+    return -1;
+}
+
 @implementation WCTDatabase (TestCase)
 
 + (void)resetGlobalErrorTracer
@@ -43,6 +48,7 @@ static ssize_t illPwrite(int, const void *, size_t, off_t)
         sqlite3_mutex *mutex = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_MASTER);
         sqlite3_mutex_enter(mutex);
         vfs->xSetSystemCall(vfs, "pwrite", (sqlite3_syscall_ptr) pwrite);
+        vfs->xSetSystemCall(vfs, "pread", (sqlite3_syscall_ptr) pread);
         sqlite3_mutex_leave(mutex);
     }
 }
@@ -54,6 +60,7 @@ static ssize_t illPwrite(int, const void *, size_t, off_t)
         sqlite3_mutex *mutex = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_MASTER);
         sqlite3_mutex_enter(mutex);
         vfs->xSetSystemCall(vfs, "pwrite", (sqlite3_syscall_ptr) illPwrite);
+        vfs->xSetSystemCall(vfs, "pread", (sqlite3_syscall_ptr) illPread);
         sqlite3_mutex_leave(mutex);
     }
 }

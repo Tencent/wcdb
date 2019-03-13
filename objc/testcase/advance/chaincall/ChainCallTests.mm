@@ -120,6 +120,26 @@
     TestCaseAssertEqual(select.handle.database.tag, self.database.tag);
 }
 
+- (void)test_check_next_object_failed_using_done
+{
+    WCTSelect* select = [[[[self.database prepareSelect] onResultColumns:TestCaseObject.allProperties] fromTable:self.tableName] limit:1];
+    TestCaseAssertTrue([select.handle validate]);
+
+    [WCTDatabase disableSQLiteWrite];
+    // nextObject is nil due to IOError, so done is false.
+    TestCaseAssertTrue([select nextObject] == nil);
+    TestCaseAssertFalse([select.handle done]);
+
+    [WCTDatabase enableSQLiteWrite];
+    // nextObject is not nil, so done is false.
+    TestCaseAssertTrue([select nextObject] != nil);
+    TestCaseAssertFalse([select.handle done]);
+
+    // nextObject is nil since it' ended, so done is true.
+    TestCaseAssertTrue([select nextObject] == nil);
+    TestCaseAssertTrue([select.handle done]);
+}
+
 #pragma mark - Multi Select
 - (void)test_database_multi_select
 {

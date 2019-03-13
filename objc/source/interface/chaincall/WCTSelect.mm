@@ -65,8 +65,7 @@
     if (![self lazyPrepare]) {
         return nil;
     }
-    BOOL done = NO;
-    if (![_handle step:done] || done) {
+    if (![_handle step] || [_handle done]) {
         [_handle finalizeStatement];
         return nil;
     }

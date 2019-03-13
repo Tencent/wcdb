@@ -413,21 +413,26 @@ void MigrationHandle::finalize()
     finalizeMigrate();
 }
 
-bool MigrationHandle::step(bool& done)
+bool MigrationHandle::step()
 {
     if (m_additionalStatement->isPrepared() || isMigratedPrepared()) {
         return runNestedTransaction(
-        [this, &done](Handle*) -> bool { return realStep(done); });
+        [this](Handle*) -> bool { return realStep(); });
     }
-    return realStep(done);
+    return realStep();
 }
 
-bool MigrationHandle::realStep(bool& done)
+bool MigrationHandle::realStep()
 {
     WCTInnerAssert(!(m_additionalStatement->isPrepared() && isMigratedPrepared()));
-    return m_mainStatement->step(done)
+    return m_mainStatement->step()
            && (!m_additionalStatement->isPrepared() || m_additionalStatement->step())
            && (!isMigratedPrepared() || stepMigration(getLastInsertedRowID()));
+}
+
+bool MigrationHandle::done()
+{
+    return m_mainStatement->done();
 }
 
 void MigrationHandle::reset()

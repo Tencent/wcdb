@@ -35,10 +35,10 @@ public:
 
     bool prepare(const Statement &statement);
     bool isPrepared();
-
-    bool step(bool &done);
-    bool step();
     void finalize();
+
+    bool step();
+    bool done();
     void reset();
 
     using Integer32 = ColumnTypeInfo<ColumnType::Integer32>::UnderlyingType;
@@ -76,6 +76,7 @@ private:
     bool prepare(const String &sql);
     sqlite3_stmt *m_stmt;
     HandleStatementEvent *m_event;
+    bool m_done;
 };
 
 } //namespace WCDB

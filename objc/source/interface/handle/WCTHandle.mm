@@ -127,16 +127,16 @@
 }
 
 #pragma mark - Step
-- (BOOL)step:(BOOL &)done
-{
-    WCTHandleAssert(return NO;);
-    return _handle->step((bool &) done);
-}
-
 - (BOOL)step
 {
     WCTHandleAssert(return NO;);
     return _handle->step();
+}
+
+- (BOOL)done
+{
+    WCTHandleAssert(return NO;);
+    return _handle->done();
 }
 
 - (void)reset
@@ -545,45 +545,45 @@
 {
     WCTHandleAssert(return nil;);
     NSMutableArray *column = [NSMutableArray array];
-    BOOL done = NO;
-    while ([self step:done] && !done) {
+    BOOL succeed = NO;
+    while ((succeed = [self step]) && ![self done]) {
         WCTValue *value = [self extractValueAtIndex:index];
         [column addObject:value ? value : [NSNull null]];
     }
-    return done ? column : nil;
+    return succeed ? column : nil;
 }
 
 - (WCTColumnsXRows *)allRows
 {
     WCTHandleAssert(return nil;);
     NSMutableArray *rows = [NSMutableArray array];
-    BOOL done = NO;
-    while ([self step:done] && !done) {
+    BOOL succeed = NO;
+    while ((succeed = [self step]) && ![self done]) {
         [rows addObject:[self extractRow]];
     }
-    return done ? rows : nil;
+    return succeed ? rows : nil;
 }
 
 - (NSArray /* <WCTObject*> */ *)allObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
 {
     WCTHandleAssert(return nil;);
     NSMutableArray *objects = [NSMutableArray array];
-    BOOL done = NO;
-    while ([self step:done] && !done) {
+    BOOL succeed = NO;
+    while ((succeed = [self step]) && ![self done]) {
         [objects addObject:[self extractObjectOnResultColumns:resultColumns]];
     }
-    return done ? objects : nil;
+    return succeed ? objects : nil;
 }
 
 - (NSArray<WCTMultiObject *> *)allMultiObjectsOnResultColumns:(const WCTResultColumns &)resultColumns
 {
     WCTHandleAssert(return nil;);
     NSMutableArray *multiObjects = [NSMutableArray array];
-    BOOL done = NO;
-    while ([self step:done] && !done) {
+    BOOL succeed = NO;
+    while ((succeed = [self step]) && ![self done]) {
         [multiObjects addObject:[self extractMultiObjectOnResultColumns:resultColumns]];
     }
-    return done ? multiObjects : nil;
+    return succeed ? multiObjects : nil;
 }
 
 #pragma mark - Error

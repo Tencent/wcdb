@@ -46,11 +46,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)finalizeStatement;
 
 #pragma mark - Step
-- (BOOL)step:(BOOL &)done;
-
 - (BOOL)step;
 
 - (void)reset;
+
+- (BOOL)done;
 
 #pragma mark - State
 - (long long)getLastInsertedRowID;

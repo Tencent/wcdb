@@ -54,7 +54,8 @@ public:
     bool isPrepared() override final;
     void finalize() override final;
 
-    bool step(bool &done) override final;
+    bool done() override final;
+    bool step() override final;
     void reset() override final;
 
     void bindInteger32(const Integer32 &value, int index) override final;
@@ -80,7 +81,7 @@ public:
 
 protected:
     bool realExecute(const std::list<Statement> &statements);
-    bool realStep(bool &done);
+    bool realStep();
     std::pair<bool, std::list<Statement>> process(const Statement &statement);
     bool tryFallbackToUnionedView(Syntax::Schema &schema, String &table);
     bool tryFallbackToSourceTable(Syntax::Schema &schema, String &table);

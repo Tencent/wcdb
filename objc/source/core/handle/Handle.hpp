@@ -48,8 +48,8 @@ public:
     virtual bool isPrepared();
     virtual void finalize();
 
-    virtual bool step(bool &done);
-    bool step();
+    virtual bool step();
+    virtual bool done();
     virtual void reset();
 
     using Integer32 = HandleStatement::Integer32;
