@@ -24,7 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WCTDatabase (TestCase)
 
-+ (void)simulateIOError:(BOOL)enable;
++ (void)simulateWriteIOError:(BOOL)enable;
+
++ (void)simulateReadIOError:(BOOL)enable;
 
 + (void)resetGlobalErrorTracer;
 
