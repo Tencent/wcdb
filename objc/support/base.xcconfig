@@ -29,9 +29,6 @@ PRODUCT_NAME = $(TARGET_NAME)
 // Search Paths
 LIBRARY_SEARCH_PATHS[sdk=macosx*] = $(inherited) $(SDKROOT)/usr/lib/system
 
-// Signing
-CODE_SIGN_STYLE = Automatic
-
 // Versioning
 CURRENT_PROJECT_VERSION = 1
 VERSIONING_SYSTEM = apple-generic
