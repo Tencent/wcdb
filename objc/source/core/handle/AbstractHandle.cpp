@@ -141,7 +141,6 @@ void AbstractHandle::close()
         finalizeStatements();
         WCTRemedialAssert(m_nestedLevel == 0 && !isInTransaction(),
                           "Unpaired transaction.",
-                          m_nestedLevel = 0;
                           rollbackTransaction(););
         m_notification.purge();
         exitAPI(sqlite3_close_v2(m_handle));
@@ -356,10 +355,9 @@ AbstractHandle::getValues(const Statement &statement, int index)
 }
 
 #pragma mark - Transaction
-const char *AbstractHandle::savepointPrefix()
+String AbstractHandle::getSavepointName(int nestedLevel)
 {
-    static const char *s_savepointPrefix = "WCDBSavepoint_";
-    return s_savepointPrefix;
+    return "WCDBSavepoint_" + std::to_string(nestedLevel);
 }
 
 void AbstractHandle::enableLazyNestedTransaction(bool enable)
@@ -371,10 +369,10 @@ bool AbstractHandle::beginNestedTransaction()
 {
     bool succeed = true;
     if (isInTransaction()) {
-        ++m_nestedLevel;
         if (!m_lazyNestedTransaction) {
-            String savepointName = savepointPrefix() + std::to_string(m_nestedLevel);
-            succeed = executeStatement(StatementSavepoint().savepoint(savepointName));
+            ++m_nestedLevel;
+            succeed = executeStatement(
+            StatementSavepoint().savepoint(getSavepointName(m_nestedLevel)));
         }
     } else {
         succeed = beginTransaction();
@@ -389,13 +387,13 @@ bool AbstractHandle::commitOrRollbackNestedTransaction()
         succeed = commitOrRollbackTransaction();
     } else {
         if (!m_lazyNestedTransaction) {
-            String savepointName = savepointPrefix() + std::to_string(m_nestedLevel);
+            String savepointName = getSavepointName(m_nestedLevel);
             if (!executeStatement(StatementRelease().release(savepointName))) {
                 executeStatement(StatementRollback().rollbackToSavepoint(savepointName));
                 succeed = false;
             }
+            --m_nestedLevel;
         }
-        --m_nestedLevel;
     }
     return succeed;
 }
@@ -406,10 +404,10 @@ void AbstractHandle::rollbackNestedTransaction()
         rollbackTransaction();
     } else {
         if (!m_lazyNestedTransaction) {
-            String savepointName = savepointPrefix() + std::to_string(m_nestedLevel);
+            String savepointName = getSavepointName(m_nestedLevel);
             executeStatement(StatementRollback().rollbackToSavepoint(savepointName));
+            --m_nestedLevel;
         }
-        --m_nestedLevel;
     }
 }
 
