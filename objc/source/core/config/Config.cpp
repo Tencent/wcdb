@@ -20,8 +20,6 @@
 
 #include <WCDB/Config.hpp>
 
-// TODO: uninvoke and bool reinvokable
-
 namespace WCDB {
 
 Config::~Config()
