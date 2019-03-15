@@ -60,7 +60,7 @@ NSString* const WCTConfigNameGlobalPerformanceTrace = @WCDB_GLOBAL_PERFORMANCE_T
           forName:(NSString*)name
      withPriority:(int)priority
 {
-    WCTRemedialAssert(nsInvocation, "Use [removeConfigForName:] instead.", return;);
+    WCTRemedialAssert(nsInvocation != nil, "Use [removeConfigForName:] instead.", return;);
     WCDB::CustomConfig::Invocation invocation = [nsInvocation, self](WCDB::Handle* handle) -> bool {
         return nsInvocation([[WCTHandle alloc] initWithDatabase:self andUnsafeHandle:handle]);
     };
