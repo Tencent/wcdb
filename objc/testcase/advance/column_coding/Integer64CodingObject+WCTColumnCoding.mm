@@ -29,7 +29,7 @@
 
 - (NSNumber *)archivedWCTValue
 {
-    return [NSNumber numberWithInteger:self.value];
+    return [NSNumber numberWithLongLong:self.value];
 }
 
 + (WCTColumnType)columnType

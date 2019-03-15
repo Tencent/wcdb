@@ -110,7 +110,7 @@
             }
             unsigned long long fileSize = [fileHandle seekToEndOfFile];
             [fileHandle seekToFileOffset:0];
-            [fileHandle writeData:[self.random dataWithLength:fileSize]];
+            [fileHandle writeData:[self.random dataWithLength:(NSInteger) fileSize]];
             [fileHandle closeFile];
             [corrupted makeYES];
         }

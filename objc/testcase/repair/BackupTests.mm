@@ -103,8 +103,8 @@
     TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
     TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.lastMaterialPath]);
 
-    NSInteger firstMaterialSize = [self.fileManager getFileSizeIfExists:self.firstMaterialPath];
-    NSInteger lastMaterialSize = [self.fileManager getFileSizeIfExists:self.lastMaterialPath];
+    NSInteger firstMaterialSize = (NSInteger) [self.fileManager getFileSizeIfExists:self.firstMaterialPath];
+    NSInteger lastMaterialSize = (NSInteger) [self.fileManager getFileSizeIfExists:self.lastMaterialPath];
     TestCaseAssertTrue(firstMaterialSize > lastMaterialSize);
 }
 

@@ -189,7 +189,7 @@
                 TestCaseFailure();
                 return;
             }
-            NSInteger fileSize = [fileHandle seekToEndOfFile];
+            NSInteger fileSize = (NSInteger)[fileHandle seekToEndOfFile];
             if (fileSize == 0) {
                 TestCaseFailure();
                 return;
@@ -214,7 +214,7 @@
                 TestCaseFailure();
                 return;
             }
-            NSInteger fileSize = [fileHandle seekToEndOfFile];
+            NSInteger fileSize = (NSInteger)[fileHandle seekToEndOfFile];
             if (fileSize == 0) {
                 TestCaseFailure();
                 return;

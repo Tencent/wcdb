@@ -177,7 +177,7 @@
 
 - (int)getWalFrameCount
 {
-    NSInteger walSize = [[NSFileManager defaultManager] getFileSizeIfExists:self.walPath];
+    NSInteger walSize = (NSInteger) [[NSFileManager defaultManager] getFileSizeIfExists:self.walPath];
     if (walSize < self.walHeaderSize) {
         return 0;
     }
