@@ -78,20 +78,27 @@ bool BasicConfig::invoke(Handle* handle)
         return false;
     }
 
-    int retry = BasicConfigBusyRetryMaxAllowedNumberOfTimes;
+    int numberOfRemainingAttempts = BasicConfigBusyRetryMaxAllowedNumberOfTimes;
+    bool succeed = false;
     do {
-        if (getOrSetPragmaBegin(handle, m_getJournalMode)
-            && getOrSetPragmaEnd(
-            handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("WAL"))) {
-            break;
+        --numberOfRemainingAttempts;
+        bool markBusyAsIgnored = numberOfRemainingAttempts > 0;
+        if (markBusyAsIgnored) {
+            handle->markErrorAsIgnorable(Error::Code::Busy);
         }
-        if (handle->getResultCode() == Error::Code::Busy) {
-            --retry;
-        } else {
-            retry = 0;
+        succeed
+        = getOrSetPragmaBegin(handle, m_getJournalMode)
+          && getOrSetPragmaEnd(
+          handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("WAL"));
+        if (markBusyAsIgnored) {
+            handle->markErrorAsUnignorable();
         }
-    } while (retry > 0);
-    if (retry == 0) {
+        if (!succeed && handle->getResultCode() != Error::Code::Busy) {
+            // failed
+            numberOfRemainingAttempts = -1;
+        }
+    } while (!succeed && numberOfRemainingAttempts > 0);
+    if (!succeed) {
         return false;
     }
 
