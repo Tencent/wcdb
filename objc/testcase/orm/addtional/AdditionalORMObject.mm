@@ -35,8 +35,7 @@ WCDB_SYNTHESIZE(value)
         .constraint(WCDB::ColumnConstraint().primaryKey().conflict(WCDB::Conflict::Abort));
 
         // add new index
-        binding.getOrCreateIndexStatement(@"_index")
-        .indexed(AdditionalORMObject.value.asIndex().order(WCDB::Order::ASC));
+        binding.getOrCreateIndex(@"_index").statement.indexed(AdditionalORMObject.value.asIndex().order(WCDB::Order::ASC));
 
         // add new table constraint
         binding.getOrCreateTableConstraint(@"table_constraint")

@@ -18,12 +18,20 @@
  * limitations under the License.
  */
 
-#import "NewRebindObject.h"
+#import "NewlyCreatedTableIndexObject.h"
+#import "NewlyCreatedTableIndexObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
-@interface NewRebindObject (WCTTableCoding) <WCTTableCoding>
+@implementation NewlyCreatedTableIndexObject
 
-WCDB_PROPERTY(renamedValue)
-WCDB_PROPERTY(newValue)
+WCDB_IMPLEMENTATION(NewlyCreatedTableIndexObject)
+
+// bind renamedValue to the old column "value"
+WCDB_SYNTHESIZE_COLUMN(renamedValue, "value")
+WCDB_SYNTHESIZE(newValue)
+
+// index will not be created for non-newly-created-table
+WCDB_INDEX_FOR_NEWLY_CREATED_TABLE_ONLY("_index")
+WCDB_INDEX(@"_index", renamedValue)
 
 @end

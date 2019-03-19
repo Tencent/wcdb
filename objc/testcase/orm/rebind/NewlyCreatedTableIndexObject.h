@@ -18,13 +18,11 @@
  * limitations under the License.
  */
 
-#import "OldRebindObject.h"
-#import "OldRebindObject+WCTTableCoding.h"
-#import <WCDB/WCDB.h>
+#import <Foundation/Foundation.h>
 
-@implementation OldRebindObject
+@interface NewlyCreatedTableIndexObject : NSObject
 
-WCDB_IMPLEMENTATION(OldRebindObject)
-WCDB_SYNTHESIZE(value)
+@property (nonatomic, assign) int renamedValue;
+@property (nonatomic, assign) int newValue;
 
 @end

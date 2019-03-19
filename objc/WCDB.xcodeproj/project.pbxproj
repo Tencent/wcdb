@@ -906,8 +906,8 @@
 		2384F6E9219412FA00E8B10A /* FTS3Object.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F6E6219412FA00E8B10A /* FTS3Object.mm */; };
 		2384F6ED219412FF00E8B10A /* FTS5Object.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F6EA219412FF00E8B10A /* FTS5Object.mm */; };
 		2384F6F82194185500E8B10A /* AdditionalORMObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F6F52194185500E8B10A /* AdditionalORMObject.mm */; };
-		2384F6FD21941BEA00E8B10A /* OldRebindObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F6FA21941BEA00E8B10A /* OldRebindObject.mm */; };
-		2384F70121941BF000E8B10A /* NewRebindObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F6FE21941BF000E8B10A /* NewRebindObject.mm */; };
+		2384F6FD21941BEA00E8B10A /* OldRemapObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F6FA21941BEA00E8B10A /* OldRemapObject.mm */; };
+		2384F70121941BF000E8B10A /* NewRemapObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2384F6FE21941BF000E8B10A /* NewRemapObject.mm */; };
 		2384F71F2194249200E8B10A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		2384F7202194249200E8B10A /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		2384F7232194249200E8B10A /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -1434,6 +1434,7 @@
 		23FC43D921B6631200FA1A0F /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		23FC43DC21B6631200FA1A0F /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		23FEC463206B3032001E7A3B /* WCTConvenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 23FEC461206B3032001E7A3B /* WCTConvenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		39485B562240765C00A65DA4 /* NewlyCreatedTableIndexObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39485B502240751600A65DA4 /* NewlyCreatedTableIndexObject.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2229,12 +2230,12 @@
 		2384F6F52194185500E8B10A /* AdditionalORMObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AdditionalORMObject.mm; sourceTree = "<group>"; };
 		2384F6F62194185500E8B10A /* AdditionalORMObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AdditionalORMObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		2384F6F72194185500E8B10A /* AdditionalORMObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdditionalORMObject.h; sourceTree = "<group>"; };
-		2384F6FA21941BEA00E8B10A /* OldRebindObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OldRebindObject.mm; sourceTree = "<group>"; };
-		2384F6FB21941BEA00E8B10A /* OldRebindObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OldRebindObject+WCTTableCoding.h"; sourceTree = "<group>"; };
-		2384F6FC21941BEA00E8B10A /* OldRebindObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OldRebindObject.h; sourceTree = "<group>"; };
-		2384F6FE21941BF000E8B10A /* NewRebindObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NewRebindObject.mm; sourceTree = "<group>"; };
-		2384F6FF21941BF000E8B10A /* NewRebindObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NewRebindObject+WCTTableCoding.h"; sourceTree = "<group>"; };
-		2384F70021941BF000E8B10A /* NewRebindObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewRebindObject.h; sourceTree = "<group>"; };
+		2384F6FA21941BEA00E8B10A /* OldRemapObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OldRemapObject.mm; sourceTree = "<group>"; };
+		2384F6FB21941BEA00E8B10A /* OldRemapObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OldRemapObject+WCTTableCoding.h"; sourceTree = "<group>"; };
+		2384F6FC21941BEA00E8B10A /* OldRemapObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OldRemapObject.h; sourceTree = "<group>"; };
+		2384F6FE21941BF000E8B10A /* NewRemapObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NewRemapObject.mm; sourceTree = "<group>"; };
+		2384F6FF21941BF000E8B10A /* NewRemapObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NewRemapObject+WCTTableCoding.h"; sourceTree = "<group>"; };
+		2384F70021941BF000E8B10A /* NewRemapObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewRemapObject.h; sourceTree = "<group>"; };
 		2384F7282194249200E8B10A /* Convenient.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Convenient.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2386563C219C009E00F7F6D2 /* FileTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FileTests.mm; sourceTree = "<group>"; };
 		2386563E219C00A500F7F6D2 /* MemoryTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MemoryTests.mm; sourceTree = "<group>"; };
@@ -2738,6 +2739,9 @@
 		23FC01DC21B8B716002C7F87 /* RepairBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RepairBenchmark.mm; sourceTree = "<group>"; };
 		23FC43E121B6631200FA1A0F /* Benchmark.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Benchmark.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		23FEC461206B3032001E7A3B /* WCTConvenient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTConvenient.h; sourceTree = "<group>"; };
+		39485B502240751600A65DA4 /* NewlyCreatedTableIndexObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NewlyCreatedTableIndexObject.mm; sourceTree = "<group>"; };
+		39485B512240751600A65DA4 /* NewlyCreatedTableIndexObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NewlyCreatedTableIndexObject+WCTTableCoding.h"; sourceTree = "<group>"; };
+		39485B522240751600A65DA4 /* NewlyCreatedTableIndexObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewlyCreatedTableIndexObject.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3710,12 +3714,15 @@
 		2384F6F921941BDC00E8B10A /* rebind */ = {
 			isa = PBXGroup;
 			children = (
-				2384F6FA21941BEA00E8B10A /* OldRebindObject.mm */,
-				2384F6FB21941BEA00E8B10A /* OldRebindObject+WCTTableCoding.h */,
-				2384F6FC21941BEA00E8B10A /* OldRebindObject.h */,
-				2384F6FE21941BF000E8B10A /* NewRebindObject.mm */,
-				2384F6FF21941BF000E8B10A /* NewRebindObject+WCTTableCoding.h */,
-				2384F70021941BF000E8B10A /* NewRebindObject.h */,
+				2384F6FA21941BEA00E8B10A /* OldRemapObject.mm */,
+				2384F6FB21941BEA00E8B10A /* OldRemapObject+WCTTableCoding.h */,
+				2384F6FC21941BEA00E8B10A /* OldRemapObject.h */,
+				2384F6FE21941BF000E8B10A /* NewRemapObject.mm */,
+				2384F6FF21941BF000E8B10A /* NewRemapObject+WCTTableCoding.h */,
+				2384F70021941BF000E8B10A /* NewRemapObject.h */,
+				39485B502240751600A65DA4 /* NewlyCreatedTableIndexObject.mm */,
+				39485B512240751600A65DA4 /* NewlyCreatedTableIndexObject+WCTTableCoding.h */,
+				39485B522240751600A65DA4 /* NewlyCreatedTableIndexObject.h */,
 			);
 			path = rebind;
 			sourceTree = "<group>";
@@ -6103,11 +6110,12 @@
 				2384F6E9219412FA00E8B10A /* FTS3Object.mm in Sources */,
 				2384F6DB2193E2C200E8B10A /* ColumnConstraintCheck.mm in Sources */,
 				2384F6BF2193E08100E8B10A /* ColumnConstraintPrimaryDesc.mm in Sources */,
-				2384F70121941BF000E8B10A /* NewRebindObject.mm in Sources */,
+				2384F70121941BF000E8B10A /* NewRemapObject.mm in Sources */,
 				2384F6CB2193E09A00E8B10A /* ColumnConstraintUnique.mm in Sources */,
 				2384F6A32193DC3400E8B10A /* TableConstraintObject.mm in Sources */,
 				23790A6F2192BF140098797F /* PropertyObject.mm in Sources */,
-				2384F6FD21941BEA00E8B10A /* OldRebindObject.mm in Sources */,
+				2384F6FD21941BEA00E8B10A /* OldRemapObject.mm in Sources */,
+				39485B562240765C00A65DA4 /* NewlyCreatedTableIndexObject.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

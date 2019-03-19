@@ -46,10 +46,12 @@
 #import "FTS5Object.h"
 #import "IndexObject+WCTTableCoding.h"
 #import "IndexObject.h"
-#import "NewRebindObject+WCTTableCoding.h"
-#import "NewRebindObject.h"
-#import "OldRebindObject+WCTTableCoding.h"
-#import "OldRebindObject.h"
+#import "NewRemapObject+WCTTableCoding.h"
+#import "NewRemapObject.h"
+#import "NewlyCreatedTableIndexObject+WCTTableCoding.h"
+#import "NewlyCreatedTableIndexObject.h"
+#import "OldRemapObject+WCTTableCoding.h"
+#import "OldRemapObject.h"
 #import "PropertyObject+WCTTableCoding.h"
 #import "PropertyObject.h"
 #import "TableConstraintObject+WCTTableCoding.h"
@@ -253,18 +255,39 @@
     [self doTestCreateTableAndIndexSQLsAsExpected:expected];
 }
 
-#pragma mark - rebind
-- (void)test_rebind
+#pragma mark - remap
+- (void)test_remap
 {
     {
-        self.tableClass = OldRebindObject.class;
+        self.tableClass = OldRemapObject.class;
         NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER)" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected];
     }
-    // rebind
+    // remap
     {
-        self.tableClass = NewRebindObject.class;
+        self.tableClass = NewRemapObject.class;
         NSArray<NSString*>* expected = @[ @"PRAGMA main.table_info('testTable')", @"ALTER TABLE main.testTable ADD COLUMN newValue INTEGER", @"CREATE INDEX IF NOT EXISTS main.testTable_index ON testTable(value)" ];
+        [self doTestCreateTableAndIndexSQLsAsExpected:expected];
+    }
+}
+
+- (void)test_remap_will_not_affect_index_for_newly_created_table_only
+{
+    {
+        self.tableClass = OldRemapObject.class;
+        NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER)" ];
+        [self doTestCreateTableAndIndexSQLsAsExpected:expected];
+    }
+    // remap
+    {
+        self.tableClass = NewlyCreatedTableIndexObject.class;
+        NSArray<NSString*>* expected = @[ @"PRAGMA main.table_info('testTable')", @"ALTER TABLE main.testTable ADD COLUMN newValue INTEGER" ];
+        [self doTestCreateTableAndIndexSQLsAsExpected:expected];
+    }
+    TestCaseAssertTrue([self dropTable]);
+    // newly create
+    {
+        NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(newValue INTEGER, value INTEGER)", @"CREATE INDEX IF NOT EXISTS main.testTable_index ON testTable(value)" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected];
     }
 }

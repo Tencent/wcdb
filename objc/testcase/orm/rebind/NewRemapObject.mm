@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#import "NewRebindObject.h"
-#import "NewRebindObject+WCTTableCoding.h"
+#import "NewRemapObject.h"
+#import "NewRemapObject+WCTTableCoding.h"
 #import <WCDB/WCDB.h>
 
-@implementation NewRebindObject
+@implementation NewRemapObject
 
-WCDB_IMPLEMENTATION(NewRebindObject)
+WCDB_IMPLEMENTATION(NewRemapObject)
 
 // bind renamedValue to the old column "value"
 WCDB_SYNTHESIZE_COLUMN(renamedValue, "value")

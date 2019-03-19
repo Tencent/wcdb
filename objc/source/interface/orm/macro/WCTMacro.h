@@ -123,6 +123,9 @@
     __WCDB_ORDERED_INDEX_IMP(                                 \
     indexSubfixName, propertyName, WCTOrderedDescending, true)
 
+#define WCDB_INDEX_FOR_NEWLY_CREATED_TABLE_ONLY(indexSubfixName) \
+    __WCDB_INDEX_FOR_NEWLY_CREATED_TABLE_ONLY_IMP(indexSubfixName, true)
+
 //Virtual Table Argument
 #define WCDB_VIRTUAL_TABLE_ARGUMENT(argument) \
     __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(argument)

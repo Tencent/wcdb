@@ -150,23 +150,29 @@ WCDB::TableConstraint &WCTBinding::getOrCreateTableConstraint(const WCDB::String
 }
 
 #pragma mark - Index
-WCDB::StatementCreateIndex &WCTBinding::getOrCreateIndexStatement(const WCDB::String &subfix)
+
+WCTBinding::Index::Index()
+: forNewlyCreatedTableOnly(false)
+{
+}
+
+WCTBinding::Index &WCTBinding::getOrCreateIndex(const WCDB::String &subfix)
 {
     auto iter = m_indexes.find(subfix);
     if (iter == m_indexes.end()) {
-        iter = m_indexes.emplace(subfix, WCDB::StatementCreateIndex()).first;
+        iter = m_indexes.emplace(subfix, Index()).first;
     }
     return iter->second;
 }
 
-std::list<WCDB::StatementCreateIndex>
-WCTBinding::generateCreateIndexStatements(const WCDB::String &tableName) const
+std::list<WCTBinding::Index>
+WCTBinding::generateIndexes(const WCDB::String &tableName) const
 {
-    std::list<WCDB::StatementCreateIndex> statementCreateIndexs;
+    std::list<Index> indexes;
     for (const auto &iter : m_indexes) {
-        WCDB::StatementCreateIndex statementCreateIndex = iter.second;
-        statementCreateIndex.createIndex(tableName + iter.first).ifNotExists().table(tableName);
-        statementCreateIndexs.push_back(statementCreateIndex);
+        Index index = iter.second;
+        index.statement.createIndex(tableName + iter.first).ifNotExists().table(tableName);
+        indexes.push_back(index);
     }
-    return statementCreateIndexs;
+    return indexes;
 }

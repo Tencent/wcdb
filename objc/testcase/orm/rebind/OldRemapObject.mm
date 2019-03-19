@@ -18,10 +18,13 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "OldRemapObject.h"
+#import "OldRemapObject+WCTTableCoding.h"
+#import <WCDB/WCDB.h>
 
-@interface OldRebindObject : NSObject
+@implementation OldRemapObject
 
-@property (nonatomic, assign) int value;
+WCDB_IMPLEMENTATION(OldRemapObject)
+WCDB_SYNTHESIZE(value)
 
 @end

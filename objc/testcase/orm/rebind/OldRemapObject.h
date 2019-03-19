@@ -20,9 +20,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NewRebindObject : NSObject
+@interface OldRemapObject : NSObject
 
-@property (nonatomic, assign) int renamedValue;
-@property (nonatomic, assign) int newValue;
+@property (nonatomic, assign) int value;
 
 @end

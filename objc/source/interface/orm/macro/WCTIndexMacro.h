@@ -20,23 +20,28 @@
 
 #define WCDB_ORM_TYPE_INDEX index
 
-#define __WCDB_INDEX_BEGIN(indexSubfixName, propertyName)                      \
+#define __WCDB_INDEX_BEGIN(indexSubfixName)                                    \
     +(void) WCDB_ORM_UNIQUE(WCDB_ORM_TYPE_INDEX)                               \
     {                                                                          \
-        WCDB_STATIC_ASSERT_EXISTS(self.propertyName);                          \
-        WCDB::StatementCreateIndex &index                                      \
-        = binding.getOrCreateIndexStatement(indexSubfixName);
+        WCTBinding::Index &index = binding.getOrCreateIndex(indexSubfixName);
 
-#define __WCDB_INDEX_END(indexSubfixName, propertyName) }
+#define __WCDB_INDEX_END(indexSubfixName) }
 
 #define __WCDB_ORDERED_INDEX_IMP(indexSubfixName, propertyName, order_, isUnique) \
-    __WCDB_INDEX_BEGIN(indexSubfixName, propertyName)                             \
-    WCDB_IF(isUnique, index.unique();)                                            \
-    index.indexed(self.propertyName.asIndex().order(order_));                     \
-    __WCDB_INDEX_END(indexSubfixName, propertyName)
+    __WCDB_INDEX_BEGIN(indexSubfixName)                                           \
+    WCDB_STATIC_ASSERT_EXISTS(self.propertyName);                                 \
+    WCDB_IF(isUnique, index.statement.unique();)                                  \
+    index.statement.indexed(self.propertyName.asIndex().order(order_));           \
+    __WCDB_INDEX_END(indexSubfixName)
 
 #define __WCDB_INDEX_IMP(indexSubfixName, propertyName, isUnique)              \
-    __WCDB_INDEX_BEGIN(indexSubfixName, propertyName)                          \
-    WCDB_IF(isUnique, index.unique();)                                         \
-    index.indexed(self.propertyName.asIndex());                                \
-    __WCDB_INDEX_END(indexSubfixName, propertyName)
+    __WCDB_INDEX_BEGIN(indexSubfixName)                                        \
+    WCDB_STATIC_ASSERT_EXISTS(self.propertyName);                              \
+    WCDB_IF(isUnique, index.statement.unique();)                               \
+    index.statement.indexed(self.propertyName.asIndex());                      \
+    __WCDB_INDEX_END(indexSubfixName)
+
+#define __WCDB_INDEX_FOR_NEWLY_CREATED_TABLE_ONLY_IMP(indexSubfixName, enable) \
+    __WCDB_INDEX_BEGIN(indexSubfixName)                                        \
+    index.forNewlyCreatedTableOnly = enable;                                   \
+    __WCDB_INDEX_END(indexSubfixName)

@@ -126,9 +126,11 @@
             return false;
         }
     }
-    for (const WCDB::StatementCreateIndex &statementCreateIndex : binding.generateCreateIndexStatements(tableName)) {
-        if (!handle->execute(statementCreateIndex)) {
-            return false;
+    for (const WCTBinding::Index &index : binding.generateIndexes(tableName)) {
+        if (!index.forNewlyCreatedTableOnly || !exists) {
+            if (!handle->execute(index.statement)) {
+                return false;
+            }
         }
     }
     return true;

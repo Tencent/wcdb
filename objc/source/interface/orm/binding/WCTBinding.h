@@ -68,11 +68,16 @@ private:
 
 #pragma mark - Index
 public:
-    WCDB::StatementCreateIndex &getOrCreateIndexStatement(const WCDB::String &subfix);
+    struct Index {
+        Index();
+        WCDB::StatementCreateIndex statement;
+        bool forNewlyCreatedTableOnly; // create if and only if the table is newly created by createTable:withClass:
+    };
+    typedef struct Index Index;
+    Index &getOrCreateIndex(const WCDB::String &subfix);
 
-    std::list<WCDB::StatementCreateIndex>
-    generateCreateIndexStatements(const WCDB::String &tableName) const;
+    std::list<Index> generateIndexes(const WCDB::String &tableName) const;
 
 private:
-    std::map<WCDB::String /* index subfix */, WCDB::StatementCreateIndex> m_indexes;
+    std::map<WCDB::String /* index subfix */, Index> m_indexes;
 };
