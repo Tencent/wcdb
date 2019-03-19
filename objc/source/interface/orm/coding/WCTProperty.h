@@ -55,6 +55,12 @@ public:
 
     WCTProperties propertiesByAddingNewProperties(const WCTProperties& properties) const;
     WCTProperties& addingNewProperties(const WCTProperties& properties);
+
+    WCTProperties propertiesByRemovingProperties(const WCTProperties& properties) const;
+    WCTProperties& removingProperties(const WCTProperties& properties);
+
+private:
+    static bool isEqual(const WCTProperty& left, const WCTProperty& right);
 };
 
 }

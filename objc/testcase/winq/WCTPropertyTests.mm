@@ -218,4 +218,26 @@
     TestCaseAssertEqual(newProperties.size(), 4);
 }
 
+- (void)test_properties_by_removing
+{
+    WCTProperties properties = {
+        WCTProperty(columnBinding1),
+        WCTProperty(columnBinding2),
+    };
+    WCTProperties newProperties = properties.removingProperties(WCTProperty(columnBinding1));
+    TestCaseAssertEqual(properties.size(), 1);
+    TestCaseAssertEqual(newProperties.size(), 1);
+}
+
+- (void)test_properties_removing
+{
+    WCTProperties properties = {
+        WCTProperty(columnBinding1),
+        WCTProperty(columnBinding2),
+    };
+    WCTProperties newProperties = properties.propertiesByRemovingProperties(WCTProperty(columnBinding1));
+    TestCaseAssertEqual(properties.size(), 2);
+    TestCaseAssertEqual(newProperties.size(), 1);
+}
+
 @end

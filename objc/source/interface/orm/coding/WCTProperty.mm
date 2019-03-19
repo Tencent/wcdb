@@ -118,3 +118,30 @@ WCTProperties& WCTProperties::addingNewProperties(const WCTProperties& propertie
     insert(end(), properties.begin(), properties.end());
     return *this;
 }
+
+bool WCTProperties::isEqual(const WCTProperty& left, const WCTProperty& right)
+{
+    return left.getColumnBinding() == right.getColumnBinding() && left.getDescription() == right.getDescription();
+}
+
+WCTProperties WCTProperties::propertiesByRemovingProperties(const WCTProperties& properties) const
+{
+    WCTProperties newProperties;
+    for (const auto& property : *this) {
+        if (std::find_if(properties.begin(), properties.end(), std::bind(&WCTProperties::isEqual, property, std::placeholders::_1)) == properties.end()) {
+            newProperties.push_back(property);
+        }
+    }
+    return newProperties;
+}
+
+WCTProperties& WCTProperties::removingProperties(const WCTProperties& properties)
+{
+    for (const auto& property : properties) {
+        auto iter = std::find_if(begin(), end(), std::bind(&WCTProperties::isEqual, property, std::placeholders::_1));
+        if (iter != end()) {
+            erase(iter);
+        }
+    }
+    return *this;
+}

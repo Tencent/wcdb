@@ -39,6 +39,13 @@ public:
     WCTResultColumns
     resultColumnsByAddingNewResultColumns(const WCTResultColumns& resultColumns) const;
     WCTResultColumns& addingNewResultColumns(const WCTResultColumns& resultColumns);
+
+    WCTResultColumns
+    resultColumnsByRemovingResultColumns(const WCTResultColumns& resultColumns) const;
+    WCTResultColumns& removingResultColumns(const WCTResultColumns& resultColumns);
+
+private:
+    static bool isEqual(const WCTResultColumn& left, const WCTResultColumn& right);
 };
 
 } // namespace WCDB

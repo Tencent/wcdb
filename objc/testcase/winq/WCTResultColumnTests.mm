@@ -98,4 +98,26 @@
     TestCaseAssertEqual(newResultColumns.size(), 4);
 }
 
+- (void)test_results_by_removing
+{
+    WCTResultColumns resultColumns = {
+        property1,
+        property2,
+    };
+    WCTResultColumns newResultColumns = resultColumns.removingResultColumns(property1);
+    TestCaseAssertEqual(resultColumns.size(), 1);
+    TestCaseAssertEqual(newResultColumns.size(), 1);
+}
+
+- (void)test_results_removing
+{
+    WCTResultColumns resultColumns = {
+        property1,
+        property2,
+    };
+    WCTResultColumns newResultColumns = resultColumns.resultColumnsByRemovingResultColumns(property1);
+    TestCaseAssertEqual(resultColumns.size(), 2);
+    TestCaseAssertEqual(newResultColumns.size(), 1);
+}
+
 @end

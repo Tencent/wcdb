@@ -53,3 +53,30 @@ WCTResultColumns& WCTResultColumns::addingNewResultColumns(const WCTResultColumn
     insert(end(), resultColumns.begin(), resultColumns.end());
     return *this;
 }
+
+bool WCTResultColumns::isEqual(const WCTResultColumn& left, const WCTResultColumn& right)
+{
+    return left.getColumnBinding() == right.getColumnBinding() && left.getDescription() == right.getDescription();
+}
+
+WCTResultColumns WCTResultColumns::resultColumnsByRemovingResultColumns(const WCTResultColumns& resultColumns) const
+{
+    WCTResultColumns newResultColumns;
+    for (const auto& resultColumn : *this) {
+        if (std::find_if(resultColumns.begin(), resultColumns.end(), std::bind(&WCTResultColumns::isEqual, resultColumn, std::placeholders::_1)) == resultColumns.end()) {
+            newResultColumns.push_back(resultColumn);
+        }
+    }
+    return newResultColumns;
+}
+
+WCTResultColumns& WCTResultColumns::removingResultColumns(const WCTResultColumns& resultColumns)
+{
+    for (const auto& resultColumn : resultColumns) {
+        auto iter = std::find_if(begin(), end(), std::bind(&WCTResultColumns::isEqual, resultColumn, std::placeholders::_1));
+        if (iter != end()) {
+            erase(iter);
+        }
+    }
+    return *this;
+}
