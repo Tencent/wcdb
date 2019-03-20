@@ -23,6 +23,7 @@
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTHandle+Private.h>
+#import <WCDB/WCTHandle+Transaction.h>
 #import <WCDB/WCTORM.h>
 
 @implementation WCTHandle
@@ -84,12 +85,6 @@
 - (WCTDatabase *)database
 {
     return _database;
-}
-
-- (void)enableLazyNestedTransaction:(BOOL)enable
-{
-    WCTInnerAssert([self isValidated]);
-    _handle->enableLazyNestedTransaction(enable);
 }
 
 #pragma mark - Execute
@@ -593,6 +588,20 @@
         return [[WCTError alloc] initWithError:_handle->getError()];
     } else {
         return _database.error;
+    }
+}
+
+#pragma mark - Helper
+- (BOOL)lazyRunTransaction:(WCTTransactionBlock)transaction
+{
+    WCDB::Handle *handle = [self getOrGenerateHandle];
+    if (handle == nullptr) {
+        return NO;
+    }
+    if (handle->isInTransaction()) {
+        return transaction(self);
+    } else {
+        return [self runTransaction:transaction];
     }
 }
 

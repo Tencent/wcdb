@@ -28,7 +28,7 @@ namespace WCDB {
 
 #pragma mark - Initialize
 AbstractHandle::AbstractHandle()
-: m_handle(nullptr), m_notification(this), m_nestedLevel(0), m_lazyNestedTransaction(false)
+: m_handle(nullptr), m_notification(this), m_nestedLevel(0)
 {
 }
 
@@ -360,20 +360,13 @@ String AbstractHandle::getSavepointName(int nestedLevel)
     return "WCDBSavepoint_" + std::to_string(nestedLevel);
 }
 
-void AbstractHandle::enableLazyNestedTransaction(bool enable)
-{
-    m_lazyNestedTransaction = enable;
-}
-
 bool AbstractHandle::beginNestedTransaction()
 {
     bool succeed = true;
     if (isInTransaction()) {
-        if (!m_lazyNestedTransaction) {
-            ++m_nestedLevel;
-            succeed = executeStatement(
-            StatementSavepoint().savepoint(getSavepointName(m_nestedLevel)));
-        }
+        ++m_nestedLevel;
+        succeed = executeStatement(
+        StatementSavepoint().savepoint(getSavepointName(m_nestedLevel)));
     } else {
         succeed = beginTransaction();
     }
@@ -386,14 +379,12 @@ bool AbstractHandle::commitOrRollbackNestedTransaction()
     if (m_nestedLevel == 0) {
         succeed = commitOrRollbackTransaction();
     } else {
-        if (!m_lazyNestedTransaction) {
-            String savepointName = getSavepointName(m_nestedLevel);
-            if (!executeStatement(StatementRelease().release(savepointName))) {
-                executeStatement(StatementRollback().rollbackToSavepoint(savepointName));
-                succeed = false;
-            }
-            --m_nestedLevel;
+        String savepointName = getSavepointName(m_nestedLevel);
+        if (!executeStatement(StatementRelease().release(savepointName))) {
+            executeStatement(StatementRollback().rollbackToSavepoint(savepointName));
+            succeed = false;
         }
+        --m_nestedLevel;
     }
     return succeed;
 }
@@ -403,11 +394,9 @@ void AbstractHandle::rollbackNestedTransaction()
     if (m_nestedLevel == 0) {
         rollbackTransaction();
     } else {
-        if (!m_lazyNestedTransaction) {
-            String savepointName = getSavepointName(m_nestedLevel);
-            executeStatement(StatementRollback().rollbackToSavepoint(savepointName));
-            --m_nestedLevel;
-        }
+        String savepointName = getSavepointName(m_nestedLevel);
+        executeStatement(StatementRollback().rollbackToSavepoint(savepointName));
+        --m_nestedLevel;
     }
 }
 

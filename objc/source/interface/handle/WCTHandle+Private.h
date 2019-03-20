@@ -20,6 +20,7 @@
 
 #import <WCDB/Core.h>
 #import <WCDB/WCTHandle.h>
+#import <WCDB/WCTTransaction.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -41,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable WCDB::Handle *)getOrGenerateHandle;
 
-- (void)enableLazyNestedTransaction:(BOOL)enable;
+- (BOOL)lazyRunTransaction:(WCTTransactionBlock)transaction;
 
 @end
 

@@ -100,11 +100,8 @@
 
         _canFillLastInsertedRowID = nullptr;
         if (_values.count > 1) {
-            succeed = [_handle runNestedTransaction:^BOOL(WCTHandle *handle) {
-                [handle enableLazyNestedTransaction:YES];
-                BOOL succeed = [self realExecute];
-                [handle enableLazyNestedTransaction:NO];
-                return succeed;
+            succeed = [_handle lazyRunTransaction:^BOOL(WCTHandle *handle) {
+                return [self realExecute];
             }];
         } else {
             succeed = [self realExecute];

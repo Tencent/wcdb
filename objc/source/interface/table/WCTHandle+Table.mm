@@ -46,9 +46,7 @@
           withClass:(Class<WCTTableCoding>)cls
 {
     WCTRemedialAssert(tableName != nil && cls != nil, "Class or table name can't be null.", return NO;);
-    return [self runNestedTransaction:^BOOL(WCTHandle *handle) {
-        return [handle remapTable:tableName toClass:cls];
-    }];
+    return [self remapTable:tableName toClass:cls];
 }
 
 - (WCTTable *)getTable:(NSString *)tableName
@@ -79,61 +77,60 @@
 
 - (BOOL)remapTable:(NSString *)tableName toClass:(Class<WCTTableCoding>)cls
 {
-    // TODO: check the constraints are as expected here.
     WCTInnerAssert(tableName && cls);
-    WCDB::Handle *handle = [self getOrGenerateHandle];
-    WCTInnerAssert(handle->isInTransaction());
-    if (handle == nullptr) {
-        return NO;
-    }
-    bool succeed, exists;
-    std::tie(succeed, exists) = handle->tableExists(tableName);
-    if (!succeed) {
-        return false;
-    }
-    const WCTBinding &binding = [cls objectRelationalMapping];
-    if (exists) {
-        std::set<WCDB::String> columnNames;
-        std::tie(succeed, columnNames) = handle->getColumns(tableName);
+    // TODO: check the constraints are as expected here.
+    return [self lazyRunTransaction:^BOOL(WCTHandle *nsHandle) {
+        WCDB::Handle *handle = [nsHandle getOrGenerateHandle];
+        WCTInnerAssert(handle != nullptr);
+        bool succeed, exists;
+        std::tie(succeed, exists) = handle->tableExists(tableName);
         if (!succeed) {
-            return false;
+            return NO;
         }
-        //Check whether the column names exists
-        const auto &columnDefs = binding.getColumnDefs();
-        for (const auto &columnDef : columnDefs) {
-            auto iter = columnNames.find(columnDef.first);
-            if (iter == columnNames.end()) {
-                //Add new column
-                if (!handle->execute(WCDB::StatementAlterTable().alterTable(tableName).addColumn(columnDef.second))) {
-                    return false;
+        const WCTBinding &binding = [cls objectRelationalMapping];
+        if (exists) {
+            std::set<WCDB::String> columnNames;
+            std::tie(succeed, columnNames) = handle->getColumns(tableName);
+            if (!succeed) {
+                return NO;
+            }
+            //Check whether the column names exists
+            const auto &columnDefs = binding.getColumnDefs();
+            for (const auto &columnDef : columnDefs) {
+                auto iter = columnNames.find(columnDef.first);
+                if (iter == columnNames.end()) {
+                    //Add new column
+                    if (!handle->execute(WCDB::StatementAlterTable().alterTable(tableName).addColumn(columnDef.second))) {
+                        return NO;
+                    }
+                } else {
+                    columnNames.erase(iter);
                 }
-            } else {
-                columnNames.erase(iter);
+            }
+            for (const auto &columnName : columnNames) {
+                WCDB::Error error;
+                error.setCode(WCDB::Error::Code::Mismatch);
+                error.level = WCDB::Error::Level::Notice;
+                error.message = "Skip column";
+                error.infos.set("Table", tableName);
+                error.infos.set("Column", columnName);
+                error.infos.set("Path", handle->getPath());
+                WCDB::Notifier::shared()->notify(error);
+            }
+        } else {
+            if (!handle->execute(binding.generateCreateTableStatement(tableName))) {
+                return NO;
             }
         }
-        for (const auto &columnName : columnNames) {
-            WCDB::Error error;
-            error.setCode(WCDB::Error::Code::Mismatch);
-            error.level = WCDB::Error::Level::Notice;
-            error.message = "Skip column";
-            error.infos.set("Table", tableName);
-            error.infos.set("Column", columnName);
-            error.infos.set("Path", handle->getPath());
-            WCDB::Notifier::shared()->notify(error);
-        }
-    } else {
-        if (!handle->execute(binding.generateCreateTableStatement(tableName))) {
-            return false;
-        }
-    }
-    for (const WCTBinding::Index &index : binding.generateIndexes(tableName)) {
-        if (!index.forNewlyCreatedTableOnly || !exists) {
-            if (!handle->execute(index.statement)) {
-                return false;
+        for (const WCTBinding::Index &index : binding.generateIndexes(tableName)) {
+            if (!index.forNewlyCreatedTableOnly || !exists) {
+                if (!handle->execute(index.statement)) {
+                    return NO;
+                }
             }
         }
-    }
-    return true;
+        return YES;
+    }];
 }
 
 @end

@@ -19,6 +19,7 @@
  */
 
 #import <WCDB/Assertion.hpp>
+#import <WCDB/WCTDatabase+Handle.h>
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTDatabase+Transaction.h>
 #import <WCDB/WCTError+Private.h>
@@ -43,9 +44,7 @@
           withClass:(Class<WCTTableCoding>)cls
 {
     WCTRemedialAssert(tableName != nil && cls != nil, "Class or table name can't be null.", return NO;);
-    return [self runNestedTransaction:^BOOL(WCTHandle *handle) {
-        return [handle remapTable:tableName toClass:cls];
-    }];
+    return [[self getHandle] remapTable:tableName toClass:cls];
 }
 
 - (WCTTable *)getTable:(NSString *)tableName

@@ -130,12 +130,9 @@ public:
     bool commitOrRollbackNestedTransaction();
     void rollbackNestedTransaction();
 
-    void enableLazyNestedTransaction(bool enable);
-
 private:
     String getSavepointName(int nestedLevel);
     int m_nestedLevel;
-    bool m_lazyNestedTransaction;
 
 #pragma mark - Cipher
 public:
