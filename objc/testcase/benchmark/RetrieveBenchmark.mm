@@ -20,11 +20,11 @@
 
 #import <TestCase/TestCase.h>
 
-@interface RepairBenchmark : Benchmark
+@interface RetrieveBenchmark : Benchmark
 @property (nonatomic, readonly) int step;
 @end
 
-@implementation RepairBenchmark
+@implementation RetrieveBenchmark
 
 - (void)setUp
 {
@@ -67,7 +67,7 @@
     }];
 }
 
-- (void)test_repair
+- (void)test_retrieve
 {
     __block double score;
     [self
@@ -87,7 +87,7 @@
     }];
 }
 
-- (void)test_repair_without_backup
+- (void)test_retrieve_without_backup
 {
     __block double score;
     [self
