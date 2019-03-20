@@ -77,7 +77,7 @@
 
 - (BOOL)remapTable:(NSString *)tableName toClass:(Class<WCTTableCoding>)cls
 {
-    WCTInnerAssert(tableName && cls);
+    WCTInnerAssert(tableName != nil && cls != nil);
     // TODO: check the constraints are as expected here.
     return [self lazyRunTransaction:^BOOL(WCTHandle *nsHandle) {
         WCDB::Handle *handle = [nsHandle getOrGenerateHandle];
