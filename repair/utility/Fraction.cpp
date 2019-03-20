@@ -42,7 +42,10 @@ Fraction::Fraction(int64_t numerator, int64_t denominator)
 
 int64_t Fraction::euclidean(int64_t a, int64_t b)
 {
-    return b == 0 ? a : euclidean(b, a % b);
+    while (b != 0) {
+        std::tie(a, b) = std::make_pair(b, a % b);
+    }
+    return a;
 }
 
 void Fraction::reduce()
