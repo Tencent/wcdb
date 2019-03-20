@@ -28,6 +28,12 @@
 
 @implementation RetrieveTests
 
+- (void)test_empty
+{
+    self.path = [self.directory stringByAppendingPathComponent:@"empty"];
+    TestCaseAssertEqual([self.database retrieve:nil], 0);
+}
+
 - (void)doTestObjectsRetrieved
 {
     [self doTestObjects:self.objects

@@ -322,7 +322,7 @@ bool FactoryRetriever::calculateSize(const String &database)
 Fraction FactoryRetriever::getWeight(const String &database)
 {
     assert(m_sizes.find(database) != m_sizes.end());
-    return Fraction(m_sizes[database], m_totalSize);
+    return Fraction(m_sizes[database], m_totalSize > 0 ? m_totalSize : 1);
 }
 
 void FactoryRetriever::increaseProgress(const String &database,
