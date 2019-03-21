@@ -140,6 +140,7 @@ std::list<WCDB::Syntax::Identifier::Type> getTypesOfSQL(WCDB::SQL& sql)
 {
     std::list<WCDB::Syntax::Identifier::Type> types;
     sql.iterate([&types](WCDB::Syntax::Identifier& identifier, bool& stop) {
+        WCDB_UNUSED(stop)
         types.push_back(identifier.getType());
     });
     return types;

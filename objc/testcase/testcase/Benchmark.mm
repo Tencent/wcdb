@@ -30,7 +30,7 @@
 - (void)setUp
 {
     [super setUp];
-    self.random.stable = YES;
+    [self.random enableStable];
 }
 
 - (void)doMeasure:(void (^)(void))block

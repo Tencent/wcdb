@@ -199,12 +199,14 @@
 
 - (BOOL)stepPreparePrototype:(NSString*)path
 {
+    WCDB_UNUSED(path)
     TestCaseFailure();
     return NO;
 }
 
 - (double)getQuality:(NSString*)path
 {
+    WCDB_UNUSED(path)
     TestCaseFailure();
     return 0;
 }

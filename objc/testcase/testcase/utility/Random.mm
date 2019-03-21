@@ -36,7 +36,7 @@
     std::shared_ptr<std::uniform_int_distribution<int>> _uniformLength;
 }
 
-- (void)setStable:(BOOL)stable
+- (void)enableStable
 {
     @synchronized(self) {
         _engine.reset(new std::default_random_engine(0));

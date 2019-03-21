@@ -197,6 +197,7 @@
 
     TestCaseResult *result = [TestCaseResult yes];
     [self.database traceSQL:^(NSString *sql) {
+        WCDB_UNUSED(sql)
         [result makeNO];
     }];
     // wait to confirm migration is stopped.
@@ -215,6 +216,7 @@
 
     TestCaseResult *result = [TestCaseResult no];
     [self.database traceSQL:^(NSString *sql) {
+        WCDB_UNUSED(sql)
         [result makeYES];
     }];
     [handle invalidate];

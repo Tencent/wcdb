@@ -111,6 +111,7 @@
 
     WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
     return [database runTransaction:^BOOL(WCTHandle* handle) {
+               WCDB_UNUSED(handle)
                for (int i = 0; i < step; ++i) {
                    if (![database createTable:self.random.tableName withClass:BenchmarkObject.class]) {
                        return NO;

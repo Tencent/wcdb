@@ -96,6 +96,7 @@
     TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.lastMaterialPath]);
 
     [self.database filterBackup:^BOOL(NSString *tableName) {
+        WCDB_UNUSED(tableName)
         return NO;
     }];
     [NSThread sleepForTimeInterval:1];

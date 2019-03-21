@@ -22,7 +22,7 @@
 
 @interface Random : NSObject
 
-- (void)setStable:(BOOL)stable;
+- (void)enableStable;
 
 - (uint64_t)uint64;
 - (uint32_t)uint32;

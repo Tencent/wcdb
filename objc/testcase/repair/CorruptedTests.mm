@@ -49,6 +49,7 @@
 {
     TestCaseResult* result = [TestCaseResult no];
     [self.database setNotificationWhenCorrupted:^BOOL(WCTDatabase* database) {
+        WCDB_UNUSED(database)
         [result makeYES];
         return NO;
     }];
