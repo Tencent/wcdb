@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import <WCDB/CaseInsensiveList.hpp>
 #import <WCDB/String.hpp>
 #import <WCDB/WCTCoding.h>
 #import <WCDB/WCTCommon.h>
@@ -42,12 +43,11 @@ private:
 
 #pragma mark - Column Def
 public:
-    const std::map<WCDB::String, WCDB::ColumnDef, WCDB::String::CaseInsensiveComparator> &
-    getColumnDefs() const;
+    const WCDB::CaseInsensiveList<WCDB::ColumnDef> &getColumnDefs() const;
     WCDB::ColumnDef &getOrCreateColumnDef(const WCTProperty &property);
 
 private:
-    std::map<WCDB::String /* column name */, WCDB::ColumnDef, WCDB::String::CaseInsensiveComparator> m_columnDefs;
+    WCDB::CaseInsensiveList<WCDB::ColumnDef> m_columnDefs;
 
 #pragma mark - Table
 public:

@@ -1434,6 +1434,8 @@
 		23FC43D921B6631200FA1A0F /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		23FC43DC21B6631200FA1A0F /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		23FEC463206B3032001E7A3B /* WCTConvenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 23FEC461206B3032001E7A3B /* WCTConvenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		39411A4122437E7B00A388F5 /* CaseInsensiveList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		39411A4222437E7B00A388F5 /* CaseInsensiveList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		39485B562240765C00A65DA4 /* NewlyCreatedTableIndexObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39485B502240751600A65DA4 /* NewlyCreatedTableIndexObject.mm */; };
 /* End PBXBuildFile section */
 
@@ -2739,6 +2741,7 @@
 		23FC01DC21B8B716002C7F87 /* RetrieveBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RetrieveBenchmark.mm; sourceTree = "<group>"; };
 		23FC43E121B6631200FA1A0F /* Benchmark.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Benchmark.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		23FEC461206B3032001E7A3B /* WCTConvenient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTConvenient.h; sourceTree = "<group>"; };
+		39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CaseInsensiveList.hpp; sourceTree = "<group>"; };
 		39485B502240751600A65DA4 /* NewlyCreatedTableIndexObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NewlyCreatedTableIndexObject.mm; sourceTree = "<group>"; };
 		39485B512240751600A65DA4 /* NewlyCreatedTableIndexObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NewlyCreatedTableIndexObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		39485B522240751600A65DA4 /* NewlyCreatedTableIndexObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewlyCreatedTableIndexObject.h; sourceTree = "<group>"; };
@@ -3281,6 +3284,7 @@
 				239776D0202AF2E2000A681C /* Macro.hpp */,
 				239776CE202AF2E2000A681C /* TimedQueue.hpp */,
 				237A65F220F731DF008B4771 /* OrderedUniqueList.hpp */,
+				39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */,
 				231C35EA21DE090500B5D3D2 /* Exiting.hpp */,
 				231C35EC21DE09E400B5D3D2 /* Exiting.cpp */,
 			);
@@ -4615,6 +4619,7 @@
 				2367BC862215004300380122 /* WCTUpdate.h in Headers */,
 				2367BC872215004300380122 /* HandlePool.hpp in Headers */,
 				2367BC882215004300380122 /* StatementInsert.hpp in Headers */,
+				39411A4222437E7B00A388F5 /* CaseInsensiveList.hpp in Headers */,
 				2367BC892215004300380122 /* BackupQueue.hpp in Headers */,
 				2367BC8A2215004300380122 /* FactoryDepositor.hpp in Headers */,
 				2367BC8B2215004300380122 /* FrameSpec.hpp in Headers */,
@@ -4855,6 +4860,7 @@
 				23EEDD48217DFADC006E9E73 /* SyntaxDropViewSTMT.hpp in Headers */,
 				2376CB1D20DA5D3B00A68DB5 /* Scoreable.hpp in Headers */,
 				2366BBB6221BEAA6000ED712 /* WCTDatabase+TestCase.h in Headers */,
+				39411A4122437E7B00A388F5 /* CaseInsensiveList.hpp in Headers */,
 				23EEDC73217DFADC006E9E73 /* SyntaxForwardDeclaration.h in Headers */,
 				23EEDCB2217DFADC006E9E73 /* With.hpp in Headers */,
 				23BBE2AD2049565600C4CBB6 /* WCTDatabase+Config.h in Headers */,

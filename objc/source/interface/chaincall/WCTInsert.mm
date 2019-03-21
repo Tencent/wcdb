@@ -19,6 +19,7 @@
  */
 
 #import <WCDB/Assertion.hpp>
+#import <WCDB/CaseInsensiveList.hpp>
 #import <WCDB/WCTChainCall+Private.h>
 #import <WCDB/WCTHandle+Private.h>
 #import <WCDB/WCTHandle+Transaction.h>
@@ -92,7 +93,7 @@
             const auto &columnDefs = [cls objectRelationalMapping].getColumnDefs();
             for (const WCTProperty &property : _properties) {
                 // auto increment?
-                auto iter = columnDefs.find(property.getDescription());
+                auto iter = columnDefs.caseInsensiveFind(property.getDescription());
                 WCTRemedialAssert(iter != columnDefs.end(), "Unrelated property is found.", return NO;);
                 _autoIncrements.push_back(iter->second.syntax().isAutoIncrement());
             }

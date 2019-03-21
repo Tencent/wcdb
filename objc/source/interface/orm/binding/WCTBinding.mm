@@ -66,7 +66,7 @@ WCTBinding::WCTBinding(Class cls)
         IMP imp = [m_cls methodForSelector:selector];
         const WCTProperty &property = ((const WCTProperty &(*) (Class, SEL)) imp)(m_cls, selector);
         m_properties.push_back(property);
-        getOrCreateColumnDef(m_properties.back()); // trigger column def creation
+        getOrCreateColumnDef(property); // trigger column def creation
     }
     for (NSString *selName in others) {
         SEL selector = NSSelectorFromString(selName);
@@ -92,20 +92,21 @@ const WCTProperties &WCTBinding::getProperties() const
 }
 
 #pragma mark - Column Def
-const std::map<WCDB::String, WCDB::ColumnDef, WCDB::String::CaseInsensiveComparator> &WCTBinding::getColumnDefs() const
+const WCDB::CaseInsensiveList<WCDB::ColumnDef> &WCTBinding::getColumnDefs() const
 {
     return m_columnDefs;
 }
 
 WCDB::ColumnDef &WCTBinding::getOrCreateColumnDef(const WCTProperty &property)
 {
-#warning TODO - refactor to use order of definition
     WCDB::String name = property.getDescription();
-    auto iter = m_columnDefs.find(name);
-    if (iter == m_columnDefs.end()) {
-        iter = m_columnDefs.emplace(name, WCDB::ColumnDef(property, property.getColumnBinding().getAccessor()->getColumnType())).first;
+    auto iter = m_columnDefs.caseInsensiveFind(name);
+    if (iter != m_columnDefs.end()) {
+        return iter->second;
+    } else {
+        m_columnDefs.push_back({ name, WCDB::ColumnDef(property, property.getColumnBinding().getAccessor()->getColumnType()) });
+        return m_columnDefs.back().second;
     }
-    return iter->second;
 }
 
 #pragma mark - Table
