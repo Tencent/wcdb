@@ -29,10 +29,16 @@ namespace WCDB {
 template<typename Key, typename Value, typename Order = int>
 class OrderedUniqueList final {
 public:
-    struct Element {
-        Order order;
-        Key key;
+    class Element {
+    public:
+        Element(const Order& order_, const Key& key_, const Value& value_)
+        : order(order_), key(key_), value(value_)
+        {
+        }
+
         Value value;
+        const Order order;
+        const Key key;
     };
 
     OrderedUniqueList() {}
@@ -46,20 +52,12 @@ public:
 
     void insert(const Order& order, const Key& key, const Value& value)
     {
-        Element element;
-        element.order = order;
-        element.key = key;
-        element.value = value;
-        insert(order, key, std::move(element));
+        insert(order, key, std::move(Element(order, key, value)));
     }
 
     void insert(const Order& order, const Key& key, Value&& value)
     {
-        Element element;
-        element.order = order;
-        element.key = key;
-        element.value = std::move(value);
-        insert(order, key, std::move(element));
+        insert(order, key, std::move(Element(order, key, std::move(value))));
     }
 
     void erase(const Key& key)
@@ -72,10 +70,23 @@ public:
         }
     }
 
+    // TODO: return an iterator that can be erased.
     const Element* find(const Key& key) const
     {
         for (const auto& element : m_elements) {
-            return &element;
+            if (key == element.key) {
+                return &element;
+            }
+        }
+        return nullptr;
+    }
+
+    Element* find(const Key& key)
+    {
+        for (auto& element : m_elements) {
+            if (key == element.key) {
+                return &element;
+            }
         }
         return nullptr;
     }
