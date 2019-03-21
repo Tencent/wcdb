@@ -56,6 +56,7 @@ public:
     typedef struct CaseInsensiveComparator CaseInsensiveComparator;
 
     bool isCaseInsensiveEqual(const String &target) const;
+    bool caseInsensiveCompare(const String &target) const;
     bool hasCaseInsensivePrefix(const String &target) const;
     bool hasPrefix(const String &target) const;
 

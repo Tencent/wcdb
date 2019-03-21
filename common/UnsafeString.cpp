@@ -56,6 +56,11 @@ bool UnsafeString::isCaseInsensiveEqual(const UnsafeString& target) const
     return strncasecmp(cstring(), target.cstring(), std::min(length(), target.length())) == 0;
 }
 
+int UnsafeString::caseInsensiveCompare(const UnsafeString& target) const
+{
+    return strncasecmp(cstring(), target.cstring(), std::min(length(), target.length()));
+}
+
 const UnsafeString& UnsafeString::null()
 {
     static const UnsafeString s_null;

@@ -45,6 +45,7 @@ public:
     static const UnsafeString& null();
 
     bool isCaseInsensiveEqual(const UnsafeString& target) const;
+    int caseInsensiveCompare(const UnsafeString& target) const;
     const char* cstring() const;
     size_t length() const;
 

@@ -60,6 +60,11 @@ bool String::isCaseInsensiveEqual(const String &target) const
     return strcasecmp(c_str(), target.c_str()) == 0;
 }
 
+bool String::caseInsensiveCompare(const String &target) const
+{
+    return strcasecmp(c_str(), target.c_str()) == 0;
+}
+
 bool String::hasCaseInsensivePrefix(const String &target) const
 {
     if (size() < target.size()) {
