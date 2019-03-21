@@ -44,7 +44,10 @@
           withClass:(Class<WCTTableCoding>)cls
 {
     WCTRemedialAssert(tableName != nil && cls != nil, "Class or table name can't be null.", return NO;);
-    return [[self getHandle] remapTable:tableName toClass:cls];
+    WCTHandle *handle = [self getHandle];
+    BOOL result = [handle remapTable:tableName toClass:cls];
+    [handle invalidate];
+    return result;
 }
 
 - (WCTTable *)getTable:(NSString *)tableName
