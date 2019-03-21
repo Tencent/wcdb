@@ -48,6 +48,7 @@
 {
     WCTRemedialAssert(inTransaction, "Transaction block can't be null.", return NO;);
     return _database->runTransaction([&inTransaction, self](WCDB::Handle *handle) -> bool {
+        WCDB_UNUSED(handle)
         @autoreleasepool {
             WCTHandle *transactionHandle = [[WCTHandle alloc] initWithDatabase:self];
             BOOL result = inTransaction(transactionHandle);
@@ -76,6 +77,7 @@
 {
     WCTRemedialAssert(inTransaction, "Transaction block can't be null.", return NO;);
     return _database->runNestedTransaction([&inTransaction, self](WCDB::Handle *handle) -> bool {
+        WCDB_UNUSED(handle)
         @autoreleasepool {
             WCTHandle *transactionHandle = [[WCTHandle alloc] initWithDatabase:self];
             BOOL result = inTransaction(transactionHandle);

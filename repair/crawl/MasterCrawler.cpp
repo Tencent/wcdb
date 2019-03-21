@@ -33,9 +33,7 @@ MasterCrawlerDelegate::~MasterCrawlerDelegate()
 {
 }
 
-void MasterCrawlerDelegate::onMasterPageCrawled(const Page &page)
-{
-}
+void MasterCrawlerDelegate::onMasterPageCrawled(const Page &page){ WCDB_UNUSED(page) }
 
 MasterCrawler::MasterCrawler(Pager &pager)
 : Crawlable(pager), m_delegate(nullptr)

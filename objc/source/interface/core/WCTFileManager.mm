@@ -43,9 +43,9 @@ constexpr const char *Enum::description(const WCDB::FileProtection &fileProtecti
 }
 #endif
 
+#if TARGET_OS_IPHONE
 bool FileManager::setFileProtection(const WCDB::String &path, WCDB::FileProtection fileProtection)
 {
-#if TARGET_OS_IPHONE
     NSError *nsError = nil;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *nsPath = [NSString stringWithUTF8String:path.c_str()];
@@ -66,14 +66,10 @@ bool FileManager::setFileProtection(const WCDB::String &path, WCDB::FileProtecti
     WCDB::Notifier::shared()->notify(error);
     WCDB::ThreadedErrors::shared()->setThreadedError(std::move(error));
     return false;
-#else
-    return true;
-#endif
 }
 
 std::pair<bool, WCDB::FileProtection> FileManager::getFileProtection(const WCDB::String &path)
 {
-#if TARGET_OS_IPHONE
     NSError *nsError = nil;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *nsPath = [NSString stringWithUTF8String:path.c_str()];
@@ -102,9 +98,20 @@ std::pair<bool, WCDB::FileProtection> FileManager::getFileProtection(const WCDB:
     WCDB::Notifier::shared()->notify(error);
     WCDB::ThreadedErrors::shared()->setThreadedError(std::move(error));
     return { false, WCDB::FileProtection::None };
-#else
-    return { true, std::numeric_limits<WCDB::FileProtection>::min() };
-#endif
 }
+#else
+bool FileManager::setFileProtection(const WCDB::String &path, WCDB::FileProtection fileProtection)
+{
+    WCDB_UNUSED(path)
+    WCDB_UNUSED(fileProtection)
+    return true;
+}
+
+std::pair<bool, WCDB::FileProtection> FileManager::getFileProtection(const WCDB::String &path)
+{
+    WCDB_UNUSED(path)
+    return { true, std::numeric_limits<WCDB::FileProtection>::min() };
+}
+#endif
 
 }

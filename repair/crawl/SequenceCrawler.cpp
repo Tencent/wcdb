@@ -35,6 +35,7 @@ SequenceCrawlerDelegate::~SequenceCrawlerDelegate()
 
 void SequenceCrawlerDelegate::onSequencePageCrawled(const Page &page)
 {
+    WCDB_UNUSED(page)
 }
 
 #pragma mark - Initialize
@@ -88,6 +89,7 @@ void SequenceCrawler::onCrawlerError()
 
 bool SequenceCrawler::willCrawlPage(const Page &page, int height)
 {
+    WCDB_UNUSED(height)
     m_delegate->onSequencePageCrawled(page);
     return true;
 }

@@ -79,4 +79,6 @@
 #define WCDB_FIRST_ARG(N, ...) N
 #define WCDB_NON_FIRST_ARGS(N, ...) __VA_ARGS__
 
+#define WCDB_UNUSED(variable) _Pragma(WCDB_STRINGIFY(unused(variable)))
+
 #endif /* __WCDB_MACRO_HPP */

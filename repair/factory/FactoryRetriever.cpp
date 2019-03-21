@@ -330,6 +330,7 @@ void FactoryRetriever::increaseProgress(const String &database,
                                         double progress,
                                         double increment)
 {
+    WCDB_UNUSED(progress)
     if (useMaterial) {
         increment *= 0.5;
     }

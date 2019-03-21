@@ -208,6 +208,7 @@ bool AssemblerHandle::assembleSequence(const String &tableName, int64_t sequence
 std::pair<bool, bool>
 AssemblerHandle::updateSequence(const String &tableName, int64_t sequence)
 {
+    WCDB_UNUSED(tableName)
     if (!prepare(m_statementForUpdateSequence)) {
         return { false, false };
     }

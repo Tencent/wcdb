@@ -86,7 +86,11 @@ protected:
     }
 
     virtual bool shouldPurge() const = 0;
-    virtual void willPurge(const Key& key, const Value& value) {}
+    virtual void willPurge(const Key& key, const Value& value)
+    {
+        WCDB_UNUSED(key);
+        WCDB_UNUSED(value);
+    }
 
     List m_list;
     Map m_map;

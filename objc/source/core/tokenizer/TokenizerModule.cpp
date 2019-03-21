@@ -36,8 +36,8 @@ struct TokenizerCursor {
 };
 
 #pragma mark - AbstractTokenizerInfo
-AbstractTokenizerInfo::AbstractTokenizerInfo(int argc, const char *const *argv)
-{
+AbstractTokenizerInfo::AbstractTokenizerInfo(int argc, const char *const *argv){
+    WCDB_UNUSED(argc) WCDB_UNUSED(argv)
 }
 
 AbstractTokenizerInfo::~AbstractTokenizerInfo()
@@ -47,8 +47,8 @@ AbstractTokenizerInfo::~AbstractTokenizerInfo()
 #pragma mark - AbstractTokenizerCursorInfo
 AbstractTokenizerCursorInfo::AbstractTokenizerCursorInfo(const char *input,
                                                          int inputLength,
-                                                         AbstractTokenizerInfo *tokenizerInfo)
-{
+                                                         AbstractTokenizerInfo *tokenizerInfo){
+    WCDB_UNUSED(input) WCDB_UNUSED(inputLength) WCDB_UNUSED(tokenizerInfo)
 }
 
 AbstractTokenizerCursorInfo::~AbstractTokenizerCursorInfo()

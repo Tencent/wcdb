@@ -135,11 +135,13 @@ bool Backup::filter(const String &tableName)
 #pragma mark - Crawlable
 void Backup::onCellCrawled(const Cell &cell)
 {
+    WCDB_UNUSED(cell)
     WCTInnerAssert(false);
 }
 
 bool Backup::willCrawlPage(const Page &page, int height)
 {
+    WCDB_UNUSED(height)
     switch (page.getType()) {
     case Page::Type::LeafTable: {
         auto result = m_verifiedPagenos.emplace(page.number, page.getData().hash());
@@ -164,6 +166,7 @@ void Backup::onCrawlerError()
 #pragma mark - MasterCrawlerDelegate
 void Backup::onMasterCellCrawled(const Cell &cell, const Master &master)
 {
+    WCDB_UNUSED(cell)
     if (master.name == Sequence::tableName()) {
         SequenceCrawler(m_pager).work(master.rootpage, this);
     } else if (filter(master.tableName) && !Master::isReservedTableName(master.tableName)
@@ -192,6 +195,7 @@ void Backup::onMasterCrawlerError()
 #pragma mark - SequenceCrawlerDelegate
 void Backup::onSequenceCellCrawled(const Cell &cell, const Sequence &sequence)
 {
+    WCDB_UNUSED(cell)
     if (!Master::isReservedTableName(sequence.name) && filter(sequence.name)) {
         Material::Content &content = getOrCreateContent(sequence.name);
         //the columns in sqlite_sequence are not unique.

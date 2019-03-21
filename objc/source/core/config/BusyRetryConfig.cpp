@@ -56,11 +56,13 @@ bool BusyRetryConfig::uninvoke(Handle* handle)
 
 void BusyRetryConfig::willStep(HandleStatement* handleStatement)
 {
+    WCDB_UNUSED(handleStatement)
     ++m_numberOfSteppingHandles;
 }
 
 void BusyRetryConfig::didStep(HandleStatement* handleStatement, bool result)
 {
+    WCDB_UNUSED(result)
     --m_numberOfSteppingHandles;
 
     AbstractHandle* handle = handleStatement->getHandle();

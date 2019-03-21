@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Config.hpp>
+#include <WCDB/Macro.hpp>
 
 namespace WCDB {
 
@@ -28,6 +29,7 @@ Config::~Config()
 
 bool Config::uninvoke(Handle *handle)
 {
+    WCDB_UNUSED(handle)
     return true;
 }
 

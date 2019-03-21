@@ -243,6 +243,7 @@ bool PageBasedFileHandle::Cache::shouldPurge() const
 
 void PageBasedFileHandle::Cache::willPurge(const Range& range, const MappedData& data)
 {
+    WCDB_UNUSED(range)
     m_currentUsedMemery -= data.size();
 }
 

@@ -35,7 +35,11 @@ template<typename T>
 class LiteralValueConvertible<T, typename std::enable_if<ColumnIsNullType<T>::value>::type> final
 : public std::true_type {
 public:
-    static LiteralValue asLiteralValue(const T& t) { return nullptr; }
+    static LiteralValue asLiteralValue(const T& t)
+    {
+        WCDB_UNUSED(t)
+        return nullptr;
+    }
 };
 
 template<typename T>

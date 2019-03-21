@@ -153,6 +153,7 @@ bool Factory::removeDirectoryIfEmpty() const
     bool canRemove = true;
     bool succeed = FileManager::enumerateDirectory(
     directory, [&canRemove](const String &directory, const String &subpath, bool isDirectory) -> bool {
+        WCDB_UNUSED(directory)
         if (subpath == restoreDirectoryName || !isDirectory) {
             return true;
         }
