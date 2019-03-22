@@ -35,6 +35,9 @@ WCDB_SYNTHESIZE(enumValue)
 WCDB_SYNTHESIZE(enumClassValue)
 WCDB_SYNTHESIZE(literalEnumValue)
 
+WCDB_SYNTHESIZE(trueOrFalseValue)
+WCDB_SYNTHESIZE(yesOrNoValue)
+
 WCDB_SYNTHESIZE(intValue)
 WCDB_SYNTHESIZE(unsignedIntValue)
 WCDB_SYNTHESIZE(int32Value)
@@ -71,6 +74,9 @@ WCDB_PRIMARY(type)
     ASSIGN_WITH_MAX_VALUE(enumValue);
     ASSIGN_WITH_MAX_VALUE(enumClassValue);
     ASSIGN_WITH_MAX_VALUE(literalEnumValue);
+
+    ASSIGN_WITH_MAX_VALUE(trueOrFalseValue);
+    ASSIGN_WITH_MAX_VALUE(yesOrNoValue);
 
     ASSIGN_WITH_MAX_VALUE(intValue);
     ASSIGN_WITH_MAX_VALUE(unsignedIntValue);
@@ -109,6 +115,9 @@ WCDB_PRIMARY(type)
     ASSIGN_WITH_MIN_VALUE(enumClassValue);
     ASSIGN_WITH_MIN_VALUE(literalEnumValue);
 
+    ASSIGN_WITH_MIN_VALUE(trueOrFalseValue);
+    ASSIGN_WITH_MIN_VALUE(yesOrNoValue);
+
     ASSIGN_WITH_MIN_VALUE(intValue);
     ASSIGN_WITH_MIN_VALUE(unsignedIntValue);
     ASSIGN_WITH_MIN_VALUE(int32Value);
@@ -141,6 +150,9 @@ WCDB_PRIMARY(type)
     object.enumValue = EnumType::Zero;
     object.enumClassValue = EnumClassType::Zero;
     object.literalEnumValue = EnumZero;
+
+    object.trueOrFalseValue = false;
+    object.yesOrNoValue = NO;
 
     object.intValue = 0;
     object.unsignedIntValue = 0;
@@ -175,6 +187,9 @@ WCDB_PRIMARY(type)
     object.enumClassValue = EnumClassType::Zero;
     object.literalEnumValue = EnumZero;
 
+    object.trueOrFalseValue = false;
+    object.yesOrNoValue = NO;
+
     object.intValue = 0;
     object.unsignedIntValue = 0;
     object.int32Value = 0;
@@ -208,6 +223,8 @@ WCDB_PRIMARY(type)
            && self.enumValue == other.enumValue
            && self.enumClassValue == other.enumClassValue
            && self.literalEnumValue == other.literalEnumValue
+           && self.trueOrFalseValue == other.trueOrFalseValue
+           && self.yesOrNoValue == other.yesOrNoValue
            && self.intValue == other.intValue
            && self.unsignedIntValue == other.unsignedIntValue
            && self.int32Value == other.int32Value

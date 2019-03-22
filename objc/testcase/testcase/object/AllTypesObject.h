@@ -62,6 +62,10 @@ typedef enum {
 @property (nonatomic, assign) EnumClassType enumClassValue;
 @property (nonatomic, assign) LiteralEnum literalEnumValue;
 
+// Bool
+@property (nonatomic, assign) bool trueOrFalseValue;
+@property (nonatomic, assign) BOOL yesOrNoValue;
+
 // Integer
 @property (nonatomic, assign) int intValue;
 @property (nonatomic, assign) unsigned int unsignedIntValue;
