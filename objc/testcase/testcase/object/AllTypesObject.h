@@ -76,7 +76,7 @@ typedef enum {
 @property (nonatomic, assign) float floatValue;
 @property (nonatomic, assign) double doubleValue;
 @property (nonatomic, retain) NSNumber* numberValue;
-@property (nonatomic, assign) NSDate* dateValue;
+@property (nonatomic, retain) NSDate* dateValue;
 
 // String
 @property (nonatomic, retain) NSString* stringValue;
