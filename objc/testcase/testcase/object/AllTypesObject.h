@@ -89,6 +89,9 @@ typedef enum {
 @property (nonatomic, retain) NSData* dataValue;
 @property (nonatomic, retain) NSURL* codingValue; // all other class based NSCoding
 
+// getter && setter
+@property (nonatomic, assign, getter=renamedGet, setter=renamedSet:) int renamedGSValue;
+
 + (AllTypesObject*)maxObject;
 + (AllTypesObject*)minObject;
 + (AllTypesObject*)nilObject;

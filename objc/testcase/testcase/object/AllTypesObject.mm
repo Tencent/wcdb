@@ -57,6 +57,8 @@ WCDB_SYNTHESIZE(stringValue)
 WCDB_SYNTHESIZE(dataValue)
 WCDB_SYNTHESIZE(codingValue)
 
+WCDB_SYNTHESIZE(renamedGSValue)
+
 WCDB_PRIMARY(type)
 
 + (AllTypesObject *)maxObject
@@ -96,6 +98,8 @@ WCDB_PRIMARY(type)
 
     object.dataValue = [NSData data];
     object.codingValue = [NSURL URLWithString:NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0]];
+
+    ASSIGN_WITH_MAX_VALUE(renamedGSValue);
 
     return object;
 }
@@ -137,6 +141,8 @@ WCDB_PRIMARY(type)
     object.dataValue = [NSData data];
     object.codingValue = [NSURL URLWithString:NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0]];
 
+    ASSIGN_WITH_MIN_VALUE(renamedGSValue);
+
     return object;
 }
 
@@ -172,6 +178,8 @@ WCDB_PRIMARY(type)
 
     object.dataValue = nil;
     object.codingValue = nil;
+
+    object.renamedGSValue = 0;
 
     return object;
 }
@@ -209,6 +217,8 @@ WCDB_PRIMARY(type)
     object.dataValue = [NSData data];
     object.codingValue = [NSURL URLWithString:@""];
 
+    object.renamedGSValue = 0;
+
     return object;
 }
 
@@ -239,7 +249,8 @@ WCDB_PRIMARY(type)
            && [NSObject isObject:self.dateValue nilEqualToObject:other.dateValue]
            && [NSObject isObject:self.stringValue nilEqualToObject:other.stringValue]
            && [NSObject isObject:self.dataValue nilEqualToObject:other.dataValue]
-           && [NSObject isObject:self.codingValue nilEqualToObject:other.codingValue];
+           && [NSObject isObject:self.codingValue nilEqualToObject:other.codingValue]
+           && self.renamedGSValue == other.renamedGSValue;
 }
 
 @end
