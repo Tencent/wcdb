@@ -30,13 +30,15 @@ ColumnMeta::ColumnMeta(int id_, String name_, String type_, bool notnull_, int p
 int ColumnMeta::getIndexOfIntegerPrimary(const std::vector<ColumnMeta>& columnMetas)
 {
     int indexOfIntegerPrimary = -1;
-    for (const ColumnMeta& columnMeta : columnMetas) {
-        int pk = columnMeta.primary;
+    int size = (int) columnMetas.size();
+    for (int i = 0; i < size; ++i) {
+        int pk = columnMetas[i].primary;
         if (pk > 0) {
             if (pk > 1) {
+                // multi-primary is existsing
                 return -1;
-            } else if (Syntax::isIntegerColumnType(columnMeta.type)) {
-                indexOfIntegerPrimary = (int) columnMetas.size() - 1;
+            } else if (Syntax::isIntegerColumnType(columnMetas[i].type)) {
+                indexOfIntegerPrimary = i;
             }
         }
     }
