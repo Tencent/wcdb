@@ -20,57 +20,49 @@
 
 #import <WCDB/WCTCommon.h>
 #import <functional>
+#import <objc/runtime.h>
 
 class WCTRuntimeBaseAccessor {
 public:
-    virtual ~WCTRuntimeBaseAccessor() = 0;
+    WCTRuntimeBaseAccessor(Class cls, const WCDB::String &propertyName);
+
+    virtual ~WCTRuntimeBaseAccessor();
 
 protected:
+    SEL m_selForGetter;
+    SEL m_selForSetter;
+    IMP m_impForGetter;
+    IMP m_impForSetter;
+
     using InstanceType = id;
-    static SEL getGetterSelector(Class cls, const WCDB::String &propertyName);
-    static SEL getSetterSelector(Class cls, const WCDB::String &propertyName);
+
+    static Class getPropertyClass(Class cls, const WCDB::String &propertyName);
+
+    static SEL getGetterSelector(objc_property_t property, const WCDB::String &propertyName);
+    static SEL getSetterSelector(objc_property_t property, const WCDB::String &propertyName);
     static IMP getClassMethodImplementation(Class cls, SEL selector);
     static IMP getInstanceMethodImplementation(Class cls, SEL selector);
-    static Class getPropertyClass(Class cls, const WCDB::String &propertyName);
+
+private:
+    WCTRuntimeBaseAccessor(Class cls, const WCDB::String &propertyName, objc_property_t property);
 };
 
 template<typename PropertyType>
 class WCTRuntimeAccessor : public WCTRuntimeBaseAccessor {
 public:
-    using Setter = void (^)(InstanceType, PropertyType);
-    using Getter = PropertyType (^)(InstanceType);
+    using WCTRuntimeBaseAccessor::WCTRuntimeBaseAccessor;
 
-    WCTRuntimeAccessor(Class cls, const WCDB::String &propertyName)
-    : getProperty(GenerateGetter(cls, propertyName))
-    , setProperty(GenerateSetter(cls, propertyName))
+    virtual ~WCTRuntimeAccessor(){};
+
+    void setProperty(InstanceType instance, PropertyType value)
     {
+        using IMPSetter = void (*)(InstanceType, SEL, PropertyType);
+        return ((IMPSetter) m_impForSetter)(instance, m_selForSetter, value);
     }
 
-    virtual ~WCTRuntimeAccessor() {}
-
-    const Setter setProperty;
-    const Getter getProperty;
-
-protected:
-    Getter GenerateGetter(Class cls, const WCDB::String &propertyName)
+    PropertyType getProperty(InstanceType instance)
     {
-        SEL selector = getGetterSelector(cls, propertyName);
-        IMP imp = getInstanceMethodImplementation(cls, selector);
-        auto block = ^(InstanceType instance) {
-            using IMPGetter = PropertyType (*)(id, SEL);
-            return ((IMPGetter) imp)(instance, selector);
-        };
-        return [block copy];
-    }
-
-    Setter GenerateSetter(Class cls, const WCDB::String &propertyName)
-    {
-        SEL selector = getSetterSelector(cls, propertyName);
-        IMP imp = getInstanceMethodImplementation(cls, selector);
-        auto block = ^(InstanceType instance, PropertyType value) {
-            using IMPSetter = void (*)(InstanceType, SEL, PropertyType);
-            return ((IMPSetter) imp)(instance, selector, value);
-        };
-        return [block copy];
+        using IMPGetter = PropertyType (*)(id, SEL);
+        return ((IMPGetter) m_impForGetter)(instance, m_selForGetter);
     }
 };

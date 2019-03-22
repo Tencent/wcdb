@@ -27,23 +27,25 @@ class WCTRuntimeObjCAccessor final : public WCTRuntimeAccessor<id>,
 protected:
     using InstanceType = WCTObjCAccessor::InstanceType;
     using PropertyType = NSObject *; //NSObject<WCTColumnCoding>*
-    using PropertyGetter = WCTRuntimeAccessor<id>::Getter;
-    using PropertySetter = WCTRuntimeAccessor<id>::Setter;
-    using ValueGetter = WCTObjCAccessor::Getter;
-    using ValueSetter = WCTObjCAccessor::Setter;
 
 public:
     WCTRuntimeObjCAccessor(Class instanceClass,
                            const WCDB::String &propertyName);
 
+    ~WCTRuntimeObjCAccessor();
+
+    void setObject(InstanceType instance, OCType value) override final;
+    OCType getObject(InstanceType instance) override final;
+
 protected:
-    WCTRuntimeObjCAccessor(Class instanceClass, Class propertyClass, const WCDB::String &propertyName);
-
-    ValueGetter generateValueGetter(Class propertyClass);
-    ValueSetter generateValueSetter(Class propertyClass);
-    WCDB::ColumnType GetColumnType(Class propertyClass);
-
     WCDB::ColumnType getColumnType() const override final;
 
+    Class m_propertyClass;
+    IMP m_impForArchiveSelector;
+    IMP m_impForUnarchiveSelector;
     const WCDB::ColumnType m_columnType;
+
+    static WCDB::ColumnType GetColumnType(Class propertyClass);
+    static SEL archiveSelector();
+    static SEL unarchiveSelector();
 };

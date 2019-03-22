@@ -24,19 +24,15 @@ template<WCDB::ColumnType t>
 class WCTCppAccessor : public WCTBaseAccessor {
 public:
     using UnderlyingType = typename WCDB::ColumnTypeInfo<t>::UnderlyingType;
-    using Setter = void (^)(InstanceType, UnderlyingType);
-    using Getter = UnderlyingType (^)(InstanceType);
 
-    WCTCppAccessor(Getter getter, Setter setter)
-    : getValue(getter), setValue(setter)
-    {
-    }
-
-    virtual ~WCTCppAccessor() {}
+    virtual ~WCTCppAccessor(){};
 
     WCDB::ColumnType getColumnType() const override final { return t; };
-    WCTAccessorType getAccessorType() const override final { return WCTAccessorCpp; }
+    WCTAccessorType getAccessorType() const override final
+    {
+        return WCTAccessorCpp;
+    }
 
-    const Setter setValue;
-    const Getter getValue;
+    virtual void setValue(InstanceType instance, UnderlyingType value) = 0;
+    virtual UnderlyingType getValue(InstanceType instance) = 0;
 };

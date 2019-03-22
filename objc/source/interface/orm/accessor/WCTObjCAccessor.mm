@@ -20,11 +20,6 @@
 
 #import <WCDB/WCTObjCAccessor.h>
 
-WCTObjCAccessor::WCTObjCAccessor(Getter getter, Setter setter)
-: getObject(getter), setObject(setter)
-{
-}
-
 WCTObjCAccessor::~WCTObjCAccessor()
 {
 }

@@ -119,10 +119,10 @@
 		2349F7561EA0D6680021EFA7 /* WCTCppAccessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F67C1EA0D6680021EFA7 /* WCTCppAccessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F7571EA0D6680021EFA7 /* WCTObjCAccessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F67D1EA0D6680021EFA7 /* WCTObjCAccessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F7581EA0D6680021EFA7 /* WCTRuntimeBaseAccessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F67E1EA0D6680021EFA7 /* WCTRuntimeBaseAccessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2349F7591EA0D6680021EFA7 /* WCTRuntimeBaseAccessor+NoARC.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F67F1EA0D6680021EFA7 /* WCTRuntimeBaseAccessor+NoARC.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		2349F7591EA0D6680021EFA7 /* WCTRuntimeBaseAccessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F67F1EA0D6680021EFA7 /* WCTRuntimeBaseAccessor.mm */; };
 		2349F75A1EA0D6680021EFA7 /* WCTRuntimeCppAccessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6801EA0D6680021EFA7 /* WCTRuntimeCppAccessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F75B1EA0D6680021EFA7 /* WCTRuntimeObjCAccessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6811EA0D6680021EFA7 /* WCTRuntimeObjCAccessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2349F75C1EA0D6680021EFA7 /* WCTRuntimeObjCAccessor+NoARC.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6821EA0D6680021EFA7 /* WCTRuntimeObjCAccessor+NoARC.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		2349F75C1EA0D6680021EFA7 /* WCTRuntimeObjCAccessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6821EA0D6680021EFA7 /* WCTRuntimeObjCAccessor.mm */; };
 		2349F75D1EA0D6680021EFA7 /* WCTBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6841EA0D6680021EFA7 /* WCTBinding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2349F75E1EA0D6680021EFA7 /* WCTBinding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6851EA0D6680021EFA7 /* WCTBinding.mm */; };
 		2349F75F1EA0D6680021EFA7 /* WCTColumnBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6861EA0D6680021EFA7 /* WCTColumnBinding.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -285,7 +285,7 @@
 		2367BAFF2215004300380122 /* Expression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB86217DFADC006E9E73 /* Expression.cpp */; };
 		2367BB002215004300380122 /* SyntaxPragmaSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC53217DFADC006E9E73 /* SyntaxPragmaSTMT.cpp */; };
 		2367BB012215004300380122 /* JoinConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB94217DFADC006E9E73 /* JoinConstraint.cpp */; };
-		2367BB022215004300380122 /* WCTRuntimeObjCAccessor+NoARC.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6821EA0D6680021EFA7 /* WCTRuntimeObjCAccessor+NoARC.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		2367BB022215004300380122 /* WCTRuntimeObjCAccessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6821EA0D6680021EFA7 /* WCTRuntimeObjCAccessor.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		2367BB032215004300380122 /* BackupHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233B097B21BE50CA005AD534 /* BackupHandle.cpp */; };
 		2367BB042215004300380122 /* TableOrSubquery.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBAC217DFADC006E9E73 /* TableOrSubquery.cpp */; };
 		2367BB052215004300380122 /* AssemblerHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233B097F21BE50D2005AD534 /* AssemblerHandle.cpp */; };
@@ -305,7 +305,7 @@
 		2367BB132215004300380122 /* IndexedColumn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB90217DFADC006E9E73 /* IndexedColumn.cpp */; };
 		2367BB142215004300380122 /* RaiseFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBA0217DFADC006E9E73 /* RaiseFunction.cpp */; };
 		2367BB162215004300380122 /* ColumnConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB7E217DFADC006E9E73 /* ColumnConstraint.cpp */; };
-		2367BB172215004300380122 /* WCTRuntimeBaseAccessor+NoARC.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F67F1EA0D6680021EFA7 /* WCTRuntimeBaseAccessor+NoARC.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		2367BB172215004300380122 /* WCTRuntimeBaseAccessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F67F1EA0D6680021EFA7 /* WCTRuntimeBaseAccessor.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		2367BB182215004300380122 /* Range.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2314AE6F21070A1700244D39 /* Range.cpp */; };
 		2367BB192215004300380122 /* WCTHandle.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234DBCF22064DD0B000E31E8 /* WCTHandle.mm */; };
 		2367BB1A2215004300380122 /* ThreadedErrors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F1698920B6638F009B5C47 /* ThreadedErrors.cpp */; };
@@ -1964,10 +1964,10 @@
 		2349F67C1EA0D6680021EFA7 /* WCTCppAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTCppAccessor.h; sourceTree = "<group>"; };
 		2349F67D1EA0D6680021EFA7 /* WCTObjCAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTObjCAccessor.h; sourceTree = "<group>"; };
 		2349F67E1EA0D6680021EFA7 /* WCTRuntimeBaseAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTRuntimeBaseAccessor.h; sourceTree = "<group>"; };
-		2349F67F1EA0D6680021EFA7 /* WCTRuntimeBaseAccessor+NoARC.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTRuntimeBaseAccessor+NoARC.mm"; sourceTree = "<group>"; };
+		2349F67F1EA0D6680021EFA7 /* WCTRuntimeBaseAccessor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTRuntimeBaseAccessor.mm; sourceTree = "<group>"; };
 		2349F6801EA0D6680021EFA7 /* WCTRuntimeCppAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTRuntimeCppAccessor.h; sourceTree = "<group>"; };
 		2349F6811EA0D6680021EFA7 /* WCTRuntimeObjCAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTRuntimeObjCAccessor.h; sourceTree = "<group>"; };
-		2349F6821EA0D6680021EFA7 /* WCTRuntimeObjCAccessor+NoARC.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTRuntimeObjCAccessor+NoARC.mm"; sourceTree = "<group>"; };
+		2349F6821EA0D6680021EFA7 /* WCTRuntimeObjCAccessor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTRuntimeObjCAccessor.mm; sourceTree = "<group>"; };
 		2349F6841EA0D6680021EFA7 /* WCTBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTBinding.h; sourceTree = "<group>"; };
 		2349F6851EA0D6680021EFA7 /* WCTBinding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTBinding.mm; sourceTree = "<group>"; };
 		2349F6861EA0D6680021EFA7 /* WCTColumnBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTColumnBinding.h; sourceTree = "<group>"; };
@@ -3216,10 +3216,10 @@
 				2349F67D1EA0D6680021EFA7 /* WCTObjCAccessor.h */,
 				237908F621928C9F0098797F /* WCTObjCAccessor.mm */,
 				2349F67E1EA0D6680021EFA7 /* WCTRuntimeBaseAccessor.h */,
-				2349F67F1EA0D6680021EFA7 /* WCTRuntimeBaseAccessor+NoARC.mm */,
+				2349F67F1EA0D6680021EFA7 /* WCTRuntimeBaseAccessor.mm */,
 				2349F6801EA0D6680021EFA7 /* WCTRuntimeCppAccessor.h */,
 				2349F6811EA0D6680021EFA7 /* WCTRuntimeObjCAccessor.h */,
-				2349F6821EA0D6680021EFA7 /* WCTRuntimeObjCAccessor+NoARC.mm */,
+				2349F6821EA0D6680021EFA7 /* WCTRuntimeObjCAccessor.mm */,
 			);
 			path = accessor;
 			sourceTree = "<group>";
@@ -5901,7 +5901,7 @@
 				2367BAFF2215004300380122 /* Expression.cpp in Sources */,
 				2367BB002215004300380122 /* SyntaxPragmaSTMT.cpp in Sources */,
 				2367BB012215004300380122 /* JoinConstraint.cpp in Sources */,
-				2367BB022215004300380122 /* WCTRuntimeObjCAccessor+NoARC.mm in Sources */,
+				2367BB022215004300380122 /* WCTRuntimeObjCAccessor.mm in Sources */,
 				2367BB032215004300380122 /* BackupHandle.cpp in Sources */,
 				2367BB042215004300380122 /* TableOrSubquery.cpp in Sources */,
 				2367BB052215004300380122 /* AssemblerHandle.cpp in Sources */,
@@ -5921,7 +5921,7 @@
 				2367BB132215004300380122 /* IndexedColumn.cpp in Sources */,
 				2367BB142215004300380122 /* RaiseFunction.cpp in Sources */,
 				2367BB162215004300380122 /* ColumnConstraint.cpp in Sources */,
-				2367BB172215004300380122 /* WCTRuntimeBaseAccessor+NoARC.mm in Sources */,
+				2367BB172215004300380122 /* WCTRuntimeBaseAccessor.mm in Sources */,
 				2367BB182215004300380122 /* Range.cpp in Sources */,
 				2367BB192215004300380122 /* WCTHandle.mm in Sources */,
 				2367BB1A2215004300380122 /* ThreadedErrors.cpp in Sources */,
@@ -6237,7 +6237,7 @@
 				23EEDC83217DFADC006E9E73 /* Expression.cpp in Sources */,
 				23EEDD4B217DFADC006E9E73 /* SyntaxPragmaSTMT.cpp in Sources */,
 				23EEDC91217DFADC006E9E73 /* JoinConstraint.cpp in Sources */,
-				2349F75C1EA0D6680021EFA7 /* WCTRuntimeObjCAccessor+NoARC.mm in Sources */,
+				2349F75C1EA0D6680021EFA7 /* WCTRuntimeObjCAccessor.mm in Sources */,
 				233B097D21BE50CA005AD534 /* BackupHandle.cpp in Sources */,
 				23EEDCA9217DFADC006E9E73 /* TableOrSubquery.cpp in Sources */,
 				233B098121BE50D2005AD534 /* AssemblerHandle.cpp in Sources */,
@@ -6258,7 +6258,7 @@
 				23EEDC8D217DFADC006E9E73 /* IndexedColumn.cpp in Sources */,
 				23EEDC9D217DFADC006E9E73 /* RaiseFunction.cpp in Sources */,
 				23EEDC7B217DFADC006E9E73 /* ColumnConstraint.cpp in Sources */,
-				2349F7591EA0D6680021EFA7 /* WCTRuntimeBaseAccessor+NoARC.mm in Sources */,
+				2349F7591EA0D6680021EFA7 /* WCTRuntimeBaseAccessor.mm in Sources */,
 				2314AE7121070A1700244D39 /* Range.cpp in Sources */,
 				234DBCF92064DD0C000E31E8 /* WCTHandle.mm in Sources */,
 				23F1698C20B6638F009B5C47 /* ThreadedErrors.cpp in Sources */,

@@ -25,33 +25,40 @@
 #import <WCDB/WCTRuntimeBaseAccessor.h>
 #import <objc/runtime.h>
 
-#if __has_feature(objc_arc)
-#error This file should be compiled without ARC to get better performance. Please use -fno-objc-arc flag on this file.
-#endif
+WCTRuntimeBaseAccessor::WCTRuntimeBaseAccessor(Class cls, const WCDB::String &propertyName)
+: WCTRuntimeBaseAccessor(cls, propertyName, class_getProperty(cls, propertyName.c_str()))
+{
+}
+
+WCTRuntimeBaseAccessor::WCTRuntimeBaseAccessor(Class cls, const WCDB::String &propertyName, objc_property_t property)
+: m_selForGetter(getGetterSelector(property, propertyName))
+, m_selForSetter(getSetterSelector(property, propertyName))
+, m_impForGetter(getInstanceMethodImplementation(cls, m_selForGetter))
+, m_impForSetter(getInstanceMethodImplementation(cls, m_selForSetter))
+{
+}
 
 WCTRuntimeBaseAccessor::~WCTRuntimeBaseAccessor()
 {
 }
 
-SEL WCTRuntimeBaseAccessor::getGetterSelector(Class cls, const WCDB::String &propertyName)
+SEL WCTRuntimeBaseAccessor::getGetterSelector(objc_property_t property, const WCDB::String &propertyName)
 {
-    objc_property_t objcProperty = class_getProperty(cls, propertyName.c_str());
-    const char *getter = property_copyAttributeValue(objcProperty, "G");
+    const char *getter = property_copyAttributeValue(property, "G");
     if (getter == nullptr) {
         getter = propertyName.c_str();
     }
     return sel_registerName(getter);
 }
 
-SEL WCTRuntimeBaseAccessor::getSetterSelector(Class cls, const WCDB::String &propertyName)
+SEL WCTRuntimeBaseAccessor::getSetterSelector(objc_property_t property, const WCDB::String &propertyName)
 {
-    objc_property_t objcProperty = class_getProperty(cls, propertyName.c_str());
-    const char *setter = property_copyAttributeValue(objcProperty, "S");
+    const char *setter = property_copyAttributeValue(property, "S");
     if (setter != nullptr) {
         return sel_registerName(setter);
     }
     WCDB::String defaultSetter = "set" + propertyName + ":";
-    defaultSetter[3] = std::toupper(propertyName[0]);
+    defaultSetter[3] = std::toupper(defaultSetter[3]);
     return sel_registerName(defaultSetter.c_str());
 }
 

@@ -26,53 +26,33 @@ class WCTRuntimeCppAccessor final {
 };
 
 template<typename PropertyType>
-class WCTRuntimeCppAccessor<
-PropertyType,
-typename std::enable_if<WCDB::ColumnInfo<PropertyType>::isBaseType>::type>
+class WCTRuntimeCppAccessor<PropertyType, typename std::enable_if<WCDB::ColumnInfo<PropertyType>::isBaseType>::type> final
 : public WCTRuntimeAccessor<PropertyType>,
-  public WCTCppAccessor<(
-  WCDB::ColumnType) WCDB::ColumnInfo<PropertyType>::type> {
-    static_assert(std::is_fundamental<PropertyType>::value || std::is_enum<PropertyType>::value, "Only fundamental C/Cpp types supported, for others, use ObjC types.");
+  public WCTCppAccessor<(WCDB::ColumnType) WCDB::ColumnInfo<PropertyType>::type> {
+    static_assert(std::is_fundamental<PropertyType>::value || std::is_enum<PropertyType>::value,
+                  "Only fundamental C/Cpp types is allowed. For other types, use ObjC types.");
 
 protected:
     using CppAccessor = WCTCppAccessor<WCDB::ColumnInfo<PropertyType>::type>;
     using RuntimeAccessor = WCTRuntimeAccessor<PropertyType>;
     using InstanceType = typename RuntimeAccessor::InstanceType;
     using UnderlyingType = typename CppAccessor::UnderlyingType;
-    using PropertyGetter = typename RuntimeAccessor::Getter;
-    using PropertySetter = typename RuntimeAccessor::Setter;
-    using ValueGetter = typename CppAccessor::Getter;
-    using ValueSetter = typename CppAccessor::Setter;
 
 public:
     WCTRuntimeCppAccessor(Class cls, const WCDB::String &propertyName)
-    : RuntimeAccessor(cls, propertyName)
-    , CppAccessor(generateValueGetter(), generateValueSetter())
+    : RuntimeAccessor(cls, propertyName), CppAccessor()
     {
     }
 
-protected:
-    UnderlyingType convertPropertyTypeToCType(const PropertyType &property)
+    ~WCTRuntimeCppAccessor() {}
+
+    void setValue(InstanceType instance, UnderlyingType value) override final
     {
-        return (UnderlyingType) property;
+        this->setProperty(instance, (PropertyType) value);
     }
 
-    PropertyType convertCTypeToPropertyType(UnderlyingType value)
+    UnderlyingType getValue(InstanceType instance) override final
     {
-        return (PropertyType) value;
-    }
-
-    ValueGetter generateValueGetter()
-    {
-        return ^UnderlyingType(InstanceType instance) {
-            return convertPropertyTypeToCType(this->getProperty(instance));
-        };
-    }
-
-    ValueSetter generateValueSetter()
-    {
-        return ^(InstanceType instance, UnderlyingType value) {
-            this->setProperty(instance, convertCTypeToPropertyType(value));
-        };
+        return (UnderlyingType) this->getProperty(instance);
     }
 };
