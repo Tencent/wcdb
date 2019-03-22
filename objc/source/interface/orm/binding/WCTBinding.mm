@@ -65,8 +65,11 @@ WCTBinding::WCTBinding(Class cls)
         SEL selector = NSSelectorFromString(selName);
         IMP imp = [m_cls methodForSelector:selector];
         const WCTProperty &property = ((const WCTProperty &(*) (Class, SEL)) imp)(m_cls, selector);
+        if (WCDB::Console::debuggable()) {
+            WCTRemedialAssert(getColumnDef(property) == nullptr, WCDB::String::formatted("Duplicated property [%s] found", property.getDescription().c_str()), continue;);
+        }
         m_properties.push_back(property);
-        getOrCreateColumnDef(property); // trigger column def creation
+        m_columnDefs.push_back({ property.getDescription(), WCDB::ColumnDef(property, property.getColumnBinding().getAccessor()->getColumnType()) });
     }
     for (NSString *selName in others) {
         SEL selector = NSSelectorFromString(selName);
@@ -97,16 +100,15 @@ const WCDB::CaseInsensiveList<WCDB::ColumnDef> &WCTBinding::getColumnDefs() cons
     return m_columnDefs;
 }
 
-WCDB::ColumnDef &WCTBinding::getOrCreateColumnDef(const WCTProperty &property)
+WCDB::ColumnDef *WCTBinding::getColumnDef(const WCTProperty &property)
 {
     WCDB::String name = property.getDescription();
+    WCDB::ColumnDef *columnDef = nullptr;
     auto iter = m_columnDefs.caseInsensiveFind(name);
     if (iter != m_columnDefs.end()) {
-        return iter->second;
-    } else {
-        m_columnDefs.push_back({ name, WCDB::ColumnDef(property, property.getColumnBinding().getAccessor()->getColumnType()) });
-        return m_columnDefs.back().second;
+        columnDef = &iter->second;
     }
+    return columnDef;
 }
 
 #pragma mark - Table

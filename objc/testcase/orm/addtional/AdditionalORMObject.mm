@@ -31,8 +31,8 @@ WCDB_SYNTHESIZE(value)
 {
     if (self.class == AdditionalORMObject.class) {
         // add new column constraint
-        binding.getOrCreateColumnDef(AdditionalORMObject.value)
-        .constraint(WCDB::ColumnConstraint().primaryKey().conflict(WCDB::Conflict::Abort));
+        binding.getColumnDef(AdditionalORMObject.value)
+        ->constraint(WCDB::ColumnConstraint().primaryKey().conflict(WCDB::Conflict::Abort));
 
         // add new index
         binding.getOrCreateIndex(@"_index").statement.indexed(AdditionalORMObject.value.asIndex().order(WCDB::Order::ASC));

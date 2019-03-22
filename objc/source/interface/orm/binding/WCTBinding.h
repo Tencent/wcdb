@@ -44,7 +44,7 @@ private:
 #pragma mark - Column Def
 public:
     const WCDB::CaseInsensiveList<WCDB::ColumnDef> &getColumnDefs() const;
-    WCDB::ColumnDef &getOrCreateColumnDef(const WCTProperty &property);
+    WCDB::ColumnDef *getColumnDef(const WCTProperty &property);
 
 private:
     WCDB::CaseInsensiveList<WCDB::ColumnDef> m_columnDefs;

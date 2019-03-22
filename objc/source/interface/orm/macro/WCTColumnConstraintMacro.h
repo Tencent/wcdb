@@ -26,8 +26,8 @@
         WCDB_STATIC_ASSERT_EXISTS(self.propertyName);        \
         WCDB::ColumnConstraint columnConstraint;
 
-#define __WCDB_COLUMN_CONSTRAINT_END(propertyName)                                \
-    binding.getOrCreateColumnDef(self.propertyName).constraint(columnConstraint); \
+#define __WCDB_COLUMN_CONSTRAINT_END(propertyName)                         \
+    binding.getColumnDef(self.propertyName)->constraint(columnConstraint); \
     }
 
 // primary
