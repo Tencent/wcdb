@@ -213,6 +213,7 @@ AssemblerHandle::updateSequence(const String &tableName, int64_t sequence)
         return { false, false };
     }
     bindInteger64(sequence, 1);
+    bindText(tableName, 2);
     bool succeed = step();
     finalize();
     if (succeed) {
