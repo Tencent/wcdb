@@ -212,6 +212,7 @@ bool Database::willReuseSlotedHandle(Slot slot, Handle *handle)
 {
     WCTInnerAssert(handle->isOpened());
     WCTInnerAssert(slot < HandleType::SlotCount);
+    WCDB_UNUSED(slot)
     std::shared_ptr<Configs> configs;
     {
         SharedLockGuard memoryGuard(m_memory);
