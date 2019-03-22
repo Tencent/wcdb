@@ -53,7 +53,7 @@ size_t UnsafeString::length() const
 
 bool UnsafeString::isCaseInsensiveEqual(const UnsafeString& target) const
 {
-    return strncasecmp(cstring(), target.cstring(), std::min(length(), target.length())) == 0;
+    return caseInsensiveCompare(target) == 0;
 }
 
 int UnsafeString::caseInsensiveCompare(const UnsafeString& target) const

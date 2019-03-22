@@ -46,7 +46,7 @@ public:
         std::bind(&CaseInsensiveList::caseInsensiveEqual, key, std::placeholders::_1));
     }
 
-    void alphabeticallyCaseInsensiveSort() { this->sort(caseInsensiveCompare); }
+    void alphabeticallyCaseInsensiveSort() { this->sort(caseInsensiveLess); }
 
 protected:
     static bool caseInsensiveEqual(const String& key, const std::pair<String, T>& element)
@@ -54,10 +54,10 @@ protected:
         return key.isCaseInsensiveEqual(element.first);
     }
 
-    static bool caseInsensiveCompare(const std::pair<String, T>& left,
-                                     const std::pair<String, T>& right)
+    static bool caseInsensiveLess(const std::pair<String, T>& left,
+                                  const std::pair<String, T>& right)
     {
-        return left.first.caseInsensiveCompare(right.first);
+        return left.first.caseInsensiveCompare(right.first) < 0;
     }
 };
 

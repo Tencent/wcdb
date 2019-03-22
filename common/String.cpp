@@ -57,12 +57,12 @@ bool String::CaseInsensiveComparator::operator()(const String &lhs, const String
 
 bool String::isCaseInsensiveEqual(const String &target) const
 {
-    return strcasecmp(c_str(), target.c_str()) == 0;
+    return caseInsensiveCompare(target) == 0;
 }
 
-bool String::caseInsensiveCompare(const String &target) const
+int String::caseInsensiveCompare(const String &target) const
 {
-    return strcasecmp(c_str(), target.c_str()) == 0;
+    return strcasecmp(c_str(), target.c_str());
 }
 
 bool String::hasCaseInsensivePrefix(const String &target) const
