@@ -20,15 +20,15 @@
 
 #import <Foundation/Foundation.h>
 
-#define __TestCaseHint(left, right)                \
-    [NSString stringWithFormat:                    \
-              @"\n_left [%@]"                      \
-               "\nright [%@]"                      \
-               "\n_comm [%@]",                     \
-              left,                                \
-              right,                               \
-              [_left commonPrefixWithString:_right \
-                                    options:NSCaseInsensitiveSearch]]
+#define __TestCaseHint(expect, but)              \
+    [NSString stringWithFormat:                  \
+              @"\nexpect: [%@]"                  \
+               "\n___but: [%@]"                  \
+               "\ncommon: [%@]",                 \
+              expect,                            \
+              but,                               \
+              [expect commonPrefixWithString:but \
+                                     options:0]]
 
 #ifdef DEBUG
 #define TestCaseFailure() abort()

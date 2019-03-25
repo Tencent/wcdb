@@ -99,7 +99,7 @@
 - (void)test_all_types
 {
     self.tableClass = AllTypesObject.class;
-    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(type TEXT PRIMARY KEY, enumNSValue INTEGER, optionNSValue INTEGER, enumValue INTEGER, enumClassValue INTEGER, literalEnumValue INTEGER, trueOrFalseValue INTEGER, yesOrNoValue INTEGER, intValue INTEGER, unsignedIntValue INTEGER, int32Value INTEGER, int64Value INTEGER, uint32Value INTEGER, uint64Value INTEGER, integerValue INTEGER, uintegerValue INTEGER, floatValue REAL, doubleValue REAL, numberValue REAL, dateValue REAL, stringValue TEXT, dataValue BLOB, codingValue BLOB, renamedGSValue INTEGER)" ];
+    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(type TEXT PRIMARY KEY, enumNSValue INTEGER, optionNSValue INTEGER, enumValue INTEGER, enumClassValue INTEGER, literalEnumValue INTEGER, trueOrFalseValue INTEGER, yesOrNOValue INTEGER, intValue INTEGER, unsignedIntValue INTEGER, int32Value INTEGER, int64Value INTEGER, uint32Value INTEGER, uint64Value INTEGER, integerValue INTEGER, uintegerValue INTEGER, floatValue REAL, doubleValue REAL, numberValue REAL, dateValue REAL, stringValue TEXT, dataValue BLOB, codingValue BLOB, renamedGSValue INTEGER)" ];
     [self doTestCreateTableAndIndexSQLsAsExpected:expected];
 
     AllTypesObject* maxObject = [AllTypesObject maxObject];
