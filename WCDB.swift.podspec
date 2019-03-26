@@ -33,7 +33,7 @@ Pod::Spec.new do |wcdb|
     "OTHER_SWIFT_FLAGS[config=Debug][sdk=iphonesimulator*]" => "-D WCDB_IOS -D DEBUG",
     "OTHER_SWIFT_FLAGS[config=Debug][sdk=iphoneos*]" => "-D WCDB_IOS -D DEBUG",
   }
-  wcdb.swift_version = '4.2'
+  wcdb.swift_version = '5.0'
   wcdb.dependency 'WCDBOptimizedSQLCipher', '~> 1.2.0'
   wcdb.dependency 'SQLiteRepairKit', '~> 1.2.0'
 end
