@@ -196,35 +196,40 @@ extension Handle {
         let kdfSalt = UnsafeMutablePointer<UInt8>.allocate(capacity: 16)
         memset(kdfSalt, 0, 16)
 
-        let backupBytes: UnsafeRawPointer? = optionalBackupKey?.withUnsafeBytes({ (bytes) -> UnsafeRawPointer in
-            return UnsafeRawPointer(bytes)
-        })
-        let backupSize: Int32 = Int32(optionalBackupKey?.count ?? 0)
-
         var info: OpaquePointer? = nil
+        let backupSize: Int32 = Int32(optionalBackupKey?.count ?? 0)
+        if let backupKey = optionalBackupKey {
+            backupKey.withUnsafeBytes({ (bytes: UnsafePointer<Int8>) -> Void in
+                rc = sqliterk_load_master(backupPath, bytes, backupSize, nil, 0, &info, kdfSalt)
+            })
+        }else {
+            rc = sqliterk_load_master(backupPath, nil, backupSize, nil, 0, &info, kdfSalt)
+        }
 
-        rc = sqliterk_load_master(backupPath, backupBytes, backupSize, nil, 0, &info, kdfSalt)
         guard rc == SQLITERK_OK else {
             throw Error.reportRepair(path: backupPath,
                                      operation: .repair,
                                      code: Int(rc))
         }
 
-        let databaseBytes: UnsafeRawPointer? = optionalDatabaseKey?.withUnsafeBytes({ (bytes) -> UnsafeRawPointer in
-            return UnsafeRawPointer(bytes)
-        })
-        let databaseSize: Int32 = Int32(optionalDatabaseKey?.count ?? 0)
-
         var conf = sqliterk_cipher_conf()
-        conf.key = databaseBytes
-        conf.key_len = databaseSize
         conf.page_size = pageSize
         conf.kdf_salt = UnsafePointer(kdfSalt)
         conf.use_hmac = 1
 
         typealias RepairKit = OpaquePointer
         var rk: RepairKit? = nil
-        rc = sqliterk_open(source, &conf, &rk)
+        
+        let databaseSize: Int32 = Int32(optionalDatabaseKey?.count ?? 0)
+        if let databaseKey = optionalDatabaseKey {
+            databaseKey.withUnsafeBytes({ (bytes: UnsafePointer<Int8>) -> Void in
+                sqliterk_cipher_conf_set_key(&conf, bytes, databaseSize)
+                rc = sqliterk_open(source, &conf, &rk)
+            })
+        }else {
+            sqliterk_cipher_conf_set_key(&conf, nil, 0)
+            rc = sqliterk_open(source, &conf, &rk)
+        }
         guard rc == SQLITERK_OK else {
             throw Error.reportRepair(path: source,
                                      operation: .repair,
