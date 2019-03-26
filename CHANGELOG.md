@@ -1,3 +1,8 @@
+## v1.0.8.2
+
+#### iOS/macOS
+* Support Swift 4.2 for Xcode 10.2
+
 ## v1.0.8.1
 
 #### iOS/macOS
