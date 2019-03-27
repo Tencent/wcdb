@@ -122,7 +122,6 @@
     }
     setUp:^{
         [self setUpDatabase];
-        [self.database removeConfigForName:WCTConfigNameCheckpoint];
 
         tableNames = (NSArray<NSString*>*) [self.database getColumnFromStatement:WCDB::StatementSelect().select(WCTMaster.name).from(WCTMaster.tableName).where(WCTMaster.name.notLike(pattern)).limit(numberOfTables)];
         TestCaseAssertEqual(tableNames.count, numberOfTables);
@@ -161,7 +160,6 @@
     }
     setUp:^{
         [self setUpDatabase];
-        [self.database removeConfigForName:WCTConfigNameCheckpoint];
 
         tableNames = (NSArray<NSString*>*) [self.database getColumnFromStatement:WCDB::StatementSelect().select(WCTMaster.name).from(WCTMaster.tableName).where(WCTMaster.name.notLike(pattern)).limit(numberOfTables)];
         TestCaseAssertEqual(tableNames.count, numberOfTables);

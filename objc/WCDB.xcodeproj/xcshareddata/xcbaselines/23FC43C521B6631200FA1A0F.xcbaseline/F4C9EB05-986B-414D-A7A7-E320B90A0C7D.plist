@@ -189,6 +189,29 @@
 				</dict>
 			</dict>
 		</dict>
+		<key>TableBenchmark</key>
+		<dict>
+			<key>test_insert_into_multiple_tables_within_one_transaction</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.866</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 4:43:13 PM</string>
+				</dict>
+			</dict>
+			<key>test_insert_into_multiple_tables_within_seperated_transaction</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.82</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Mar 27, 2019 at 4:43:10 PM</string>
+				</dict>
+			</dict>
+		</dict>
 		<key>TableMigrationBenchmark</key>
 		<dict>
 			<key>test_batch_write</key>
