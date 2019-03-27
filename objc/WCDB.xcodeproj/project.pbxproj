@@ -3756,7 +3756,7 @@
 			path = monitor;
 			sourceTree = "<group>";
 		};
-		2387D8D921DF0B870028ADB9 /* testcase */ = {
+		2387D8D921DF0B870028ADB9 /* framework */ = {
 			isa = PBXGroup;
 			children = (
 				2377535A21F1739200CA3FB7 /* Benchmark.h */,
@@ -3773,7 +3773,7 @@
 				2387D95A21DF651C0028ADB9 /* utility */,
 				2387D95621DF635A0028ADB9 /* TestCase.h */,
 			);
-			path = testcase;
+			path = framework;
 			sourceTree = "<group>";
 		};
 		2387D8E621DF0B870028ADB9 /* object */ = {
@@ -3900,7 +3900,7 @@
 		239E8A8C2160A62F00BCB308 /* testcase */ = {
 			isa = PBXGroup;
 			children = (
-				2387D8D921DF0B870028ADB9 /* testcase */,
+				2387D8D921DF0B870028ADB9 /* framework */,
 				23FC43E521B6644B00FA1A0F /* benchmark */,
 				231FEAE02199A10000DC3706 /* advance */,
 				231FEADB2199A0FE00DC3706 /* basic */,
@@ -5514,6 +5514,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
