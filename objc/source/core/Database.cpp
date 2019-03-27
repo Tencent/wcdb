@@ -681,11 +681,11 @@ std::pair<bool, bool> Database::stepMigration()
     bool succeed = false;
     bool done = false;
     do {
-        WCTRemedialAssert(
-        !isInTransaction(), "Migrating can't be run in transaction.", break;);
         if (!initializedGuard.valid()) {
             break;
         }
+        WCTRemedialAssert(
+        !isInTransaction(), "Migrating can't be run in transaction.", break;);
 
         RecyclableHandle handle = getSlotHandle(HandleType::MigrationStepper);
         if (handle == nullptr) {
