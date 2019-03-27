@@ -134,14 +134,14 @@
 
 - (void)test_auto_backup_when_checkpointed
 {
-    [self.database removeConfigForName:WCTConfigNameCheckpoint];
+    [self.database removeCheckpointConfig];
     self.database.autoBackup = YES;
     TestCaseAssertTrue([self checkAutoBackedup]);
 }
 
 - (void)test_auto_backup_when_meet_non_critical_frames_interval
 {
-    [self.database removeConfigForName:WCTConfigNameCheckpoint];
+    [self.database removeCheckpointConfig];
     self.database.autoBackup = YES;
 
     TestCaseObject *object = [self.random autoIncrementTestCaseObject];
@@ -161,7 +161,7 @@
 
 - (void)test_auto_backup_when_meet_critical_frames_interval
 {
-    [self.database removeConfigForName:WCTConfigNameCheckpoint];
+    [self.database removeCheckpointConfig];
     self.database.autoBackup = YES;
 
     TestCaseObject *object = [self.random autoIncrementTestCaseObject];
@@ -182,7 +182,7 @@
 
 - (void)test_cancel_auto_backup
 {
-    [self.database removeConfigForName:WCTConfigNameCheckpoint];
+    [self.database removeCheckpointConfig];
 
     self.database.autoBackup = YES;
     TestCaseAssertTrue([self checkAutoBackedup]);

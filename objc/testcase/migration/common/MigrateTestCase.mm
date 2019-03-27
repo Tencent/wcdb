@@ -261,7 +261,7 @@
 - (void)doTestFeatureStepAsLeastAsPossibleButNotWaste
 {
 #warning TODO - wait for the answer of SQLite staff about the dirty page of ROLLBACK TO stmt.
-    //    [self.database removeConfigForName:WCTConfigNameCheckpoint];
+    //    [self.database removeCheckpointConfig];
     //    TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
     //
     //    BOOL done = NO;

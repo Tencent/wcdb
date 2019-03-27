@@ -40,7 +40,7 @@
 
     TestCaseAssertTrue(self.step >= self.shuffle);
 
-    [self.database removeConfigForName:WCTConfigNameCheckpoint];
+    [self.database removeCheckpointConfig];
 }
 
 - (double)expectedAttackRadio

@@ -338,7 +338,7 @@
 - (void)test_feature_checkpoint_while_notice_recover_wal
 {
     // avoid auto subthread checkpoint
-    [self.database removeConfigForName:WCTConfigNameCheckpoint];
+    [self.database removeCheckpointConfig];
     TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
 
     // trigger subthread checkpoint

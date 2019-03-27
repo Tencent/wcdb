@@ -28,16 +28,6 @@ static_assert((int) WCTConfigPriorityHigh == (int) WCDB::Configs::Priority::High
 static_assert((int) WCTConfigPriorityDefault == (int) WCDB::Configs::Priority::Default, "");
 static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, "");
 
-NSString* const WCTConfigNameBasic = @WCDB_BASIC_CONFIG_NAME;
-NSString* const WCTConfigNameBackup = @WCDB_BACKUP_CONFIG_NAME;
-NSString* const WCTConfigNameCheckpoint = @WCDB_CHECKPOINT_CONFIG_NAME;
-NSString* const WCTConfigNameTokenize = @WCDB_TOKENIZE_CONFIG_NAME;
-NSString* const WCTConfigNameCipher = @WCDB_CIPHER_CONFIG_NAME;
-NSString* const WCTConfigNameSQLTrace = @WCDB_SQL_TRACE_CONFIG_NAME;
-NSString* const WCTConfigNamePerformanceTrace = @WCDB_PERFORMANCE_TRACE_CONFIG_NAME;
-NSString* const WCTConfigNameGlobalSQLTrace = @WCDB_GLOBAL_SQL_TRACE_CONFIG_NAME;
-NSString* const WCTConfigNameGlobalPerformanceTrace = @WCDB_GLOBAL_PERFORMANCE_TRACE_CONFIG_NAME;
-
 @implementation WCTDatabase (Config)
 
 - (void)setCipherKey:(NSData*)cipherKey

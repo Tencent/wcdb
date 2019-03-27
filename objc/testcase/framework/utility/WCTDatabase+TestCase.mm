@@ -19,6 +19,7 @@
  */
 
 #import <WCDB/Console.hpp>
+#import <WCDB/CoreConst.h>
 #import <WCDB/SQLite.h>
 #import <WCDB/WCTDatabase+TestCase.h>
 
@@ -57,6 +58,11 @@ static ssize_t illPread(int, void *, size_t, off_t)
     static sqlite3_syscall_ptr s_originRead = vfs->xGetSystemCall(vfs, "pread");
     vfs->xSetSystemCall(vfs, "pread", enable ? (sqlite3_syscall_ptr) illPread : s_originRead);
     sqlite3_mutex_leave(mutex);
+}
+
+- (void)removeCheckpointConfig
+{
+    [self removeConfigForName:@(WCDB::CheckpointConfigName)];
 }
 
 @end

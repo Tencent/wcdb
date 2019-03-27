@@ -21,20 +21,6 @@
 #ifndef __WCDB_CORE_CONST_H
 #define __WCDB_CORE_CONST_H
 
-#define WCDB_BASIC_CONFIG_NAME "com.Tencent.WCDB.Config.Basic"
-#define WCDB_BACKUP_CONFIG_NAME "com.Tencent.WCDB.Config.Backup"
-#define WCDB_CHECKPOINT_CONFIG_NAME "com.Tencent.WCDB.Config.Checkpoint"
-#define WCDB_TOKENIZE_CONFIG_NAME "com.Tencent.WCDB.Config.Tokenize"
-#define WCDB_CIPHER_CONFIG_NAME "com.Tencent.WCDB.Config.Cipher"
-#define WCDB_SQL_TRACE_CONFIG_NAME "com.Tencent.WCDB.Config.SQLTrace"
-#define WCDB_PERFORMANCE_TRACE_CONFIG_NAME                                     \
-    "com.Tencent.WCDB.Config.PerformanceTrace"
-#define WCDB_GLOBAL_SQL_TRACE_CONFIG_NAME                                      \
-    "com.Tencent.WCDB.Config.GlobalSQLTrace"
-#define WCDB_GLOBAL_PERFORMANCE_TRACE_CONFIG_NAME                              \
-    "com.Tencent.WCDB.Config.GlobalPerformanceTrace"
-#define WCDB_BUSY_RETRY_CONFIG_NAME "com.Tencent.WCDB.Config.BusyRetry"
-
 namespace WCDB {
 
 // Async Queue
@@ -61,40 +47,41 @@ static constexpr const char* BackupQueueName = "com.Tencent.WCDB.Queue.Backup";
 static constexpr double BackupQueueDelayForRetryingAfterFailure = 15.0;
 
 // Checkpoint Config
-static constexpr const char* CheckpointConfigName = WCDB_CHECKPOINT_CONFIG_NAME;
+static constexpr const char* CheckpointConfigName = "com.Tencent.WCDB.Config.Checkpoint";
 
 // Backup Config
-static constexpr const char* BackupConfigName = WCDB_BACKUP_CONFIG_NAME;
+static constexpr const char* BackupConfigName = "com.Tencent.WCDB.Config.Backup";
 static constexpr const int BackupConfigFramesIntervalForNonCritical = 100;
 static constexpr const int BackupConfigFramesIntervalForCritical = 300;
 static constexpr const double BackupQueueDelayForCritical = 0;
 static constexpr const double BackupQueueDelayForNonCritical = 5.0;
 
 // Basic Config
-static constexpr const char* BasicConfigName = WCDB_BASIC_CONFIG_NAME;
+static constexpr const char* BasicConfigName = "com.Tencent.WCDB.Config.Basic";
 static constexpr const int BasicConfigBusyRetryMaxAllowedNumberOfTimes = 3;
 
 // Tokenize Config
-static constexpr const char* TokenizeConfigName = WCDB_TOKENIZE_CONFIG_NAME;
+static constexpr const char* TokenizeConfigName = "com.Tencent.WCDB.Config.Tokenize";
 
 // Cipher Config
-static constexpr const char* CipherConfigName = WCDB_CIPHER_CONFIG_NAME;
+static constexpr const char* CipherConfigName = "com.Tencent.WCDB.Config.Cipher";
 
 // SQL Trace Config
-static constexpr const char* SQLTraceConfigName = WCDB_SQL_TRACE_CONFIG_NAME;
+static constexpr const char* SQLTraceConfigName = "com.Tencent.WCDB.Config.SQLTrace";
 
 // Performance Trace Config
-static constexpr const char* PerformanceTraceConfigName = WCDB_PERFORMANCE_TRACE_CONFIG_NAME;
+static constexpr const char* PerformanceTraceConfigName
+= "com.Tencent.WCDB.Config.PerformanceTrace";
 
 // Global SQL Trace Config
-static constexpr const char* GlobalSQLTraceConfigName = WCDB_GLOBAL_SQL_TRACE_CONFIG_NAME;
+static constexpr const char* GlobalSQLTraceConfigName = "com.Tencent.WCDB.Config.GlobalSQLTrace";
 
 // Global Performance Trace Config
 static constexpr const char* GlobalPerformanceTraceConfigName
-= WCDB_GLOBAL_PERFORMANCE_TRACE_CONFIG_NAME;
+= "com.Tencent.WCDB.Config.GlobalPerformanceTrace";
 
 // Busy Retry Config
-static constexpr const char* BusyRetryConfigName = WCDB_BUSY_RETRY_CONFIG_NAME;
+static constexpr const char* BusyRetryConfigName = "com.Tencent.WCDB.Config.BusyRetry";
 static constexpr const double BusyRetryTimeOutForMainThread = 2.0;
 static constexpr const double BusyRetryTimeOutForSubThread = 10.0;
 

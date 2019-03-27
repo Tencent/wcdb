@@ -30,6 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)resetGlobalErrorTracer;
 
+- (void)removeCheckpointConfig;
+
 @end
 
 NS_ASSUME_NONNULL_END

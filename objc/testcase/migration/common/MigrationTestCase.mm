@@ -38,7 +38,6 @@
 
     [self.sourceDatabase close];
 
-    [self.database removeConfigForName:WCTConfigNameCheckpoint];
     TestCaseAssertTrue(self.database.isMigrated);
 
     // It's not a good practice to retain self in this escapable block.

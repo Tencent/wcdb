@@ -28,16 +28,6 @@ typedef NS_ENUM(NSInteger, WCTConfigPriority) {
     WCTConfigPriorityLow = 100,
 };
 
-WCDB_EXTERN NSString* const WCTConfigNameBasic;
-WCDB_EXTERN NSString* const WCTConfigNameBackup;
-WCDB_EXTERN NSString* const WCTConfigNameTokenize;
-WCDB_EXTERN NSString* const WCTConfigNameCheckpoint;
-WCDB_EXTERN NSString* const WCTConfigNameCipher;
-WCDB_EXTERN NSString* const WCTConfigNameSQLTrace;
-WCDB_EXTERN NSString* const WCTConfigNamePerformanceTrace;
-WCDB_EXTERN NSString* const WCTConfigNameGlobalSQLTrace;
-WCDB_EXTERN NSString* const WCTConfigNameGlobalPerformanceTrace;
-
 /**
  Configuration
  */
