@@ -488,29 +488,22 @@ void AbstractHandle::setNotificationWhenStatementWillStep(const String &name,
 #pragma mark - Error
 bool AbstractHandle::exitAPI(int rc)
 {
-    if (!Error::isError(rc)) {
-        return true;
-    }
-    notifyError(rc, nullptr);
-    return false;
+    return exitAPI(rc, nullptr);
 }
 
 bool AbstractHandle::exitAPI(int rc, const String &sql)
 {
-    if (!Error::isError(rc)) {
-        return true;
-    }
-    notifyError(rc, sql.c_str());
-    return false;
+    return exitAPI(rc, sql.c_str());
 }
 
 bool AbstractHandle::exitAPI(int rc, const char *sql)
 {
-    if (!Error::isError(rc)) {
-        return true;
+    bool result = true;
+    if (Error::isError(rc)) {
+        notifyError(rc, sql);
+        result = false;
     }
-    notifyError(rc, sql);
-    return false;
+    return result;
 }
 
 void AbstractHandle::notifyError(int rc, const char *sql)
