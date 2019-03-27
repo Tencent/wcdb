@@ -20,11 +20,11 @@
 
 #import <TestCase/TestCase.h>
 
-@interface InitializationBenchmark : Benchmark
+@interface TableBenchmark : Benchmark
 
 @end
 
-@implementation InitializationBenchmark
+@implementation TableBenchmark
 
 - (void)setUp
 {
