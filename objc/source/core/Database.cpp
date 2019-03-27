@@ -469,17 +469,17 @@ const String &Database::getPath() const
 
 String Database::getSHMPath() const
 {
-    return Path::addExtention(getPath(), Handle::getSHMSubfix());
+    return Path::addExtention(getPath(), Handle::getSHMSuffix());
 }
 
 String Database::getWALPath() const
 {
-    return Path::addExtention(getPath(), Handle::getWALSubfix());
+    return Path::addExtention(getPath(), Handle::getWALSuffix());
 }
 
 String Database::getJournalPath() const
 {
-    return Path::addExtention(getPath(), Handle::getJournalSubfix());
+    return Path::addExtention(getPath(), Handle::getJournalSuffix());
 }
 
 std::list<String> Database::getPaths() const

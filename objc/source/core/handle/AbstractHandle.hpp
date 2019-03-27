@@ -63,9 +63,9 @@ public:
     void setPath(const String &path);
     const String &getPath() const;
 
-    static String getSHMSubfix();
-    static String getWALSubfix();
-    static String getJournalSubfix();
+    static String getSHMSuffix();
+    static String getWALSuffix();
+    static String getJournalSuffix();
 
 private:
     String m_path;

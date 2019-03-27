@@ -96,17 +96,17 @@ const String &AbstractHandle::getPath() const
     return m_path;
 }
 
-String AbstractHandle::getSHMSubfix()
+String AbstractHandle::getSHMSuffix()
 {
     return "-shm";
 }
 
-String AbstractHandle::getWALSubfix()
+String AbstractHandle::getWALSuffix()
 {
     return "-wal";
 }
 
-String AbstractHandle::getJournalSubfix()
+String AbstractHandle::getJournalSuffix()
 {
     return "-journal";
 }

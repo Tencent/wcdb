@@ -101,30 +101,30 @@
     __WCDB_ORDERED_MULTI_UNIQUE_IMP(constraintName, propertyName, WCTOrderedDescending)
 
 //Index
-#define WCDB_INDEX(indexSubfixName, propertyName) \
-    __WCDB_INDEX_IMP(indexSubfixName, propertyName, false)
+#define WCDB_INDEX(indexSuffixName, propertyName) \
+    __WCDB_INDEX_IMP(indexSuffixName, propertyName, false)
 
-#define WCDB_INDEX_ASC(indexSubfixName, propertyName) \
+#define WCDB_INDEX_ASC(indexSuffixName, propertyName) \
     __WCDB_ORDERED_INDEX_IMP(                         \
-    indexSubfixName, propertyName, WCTOrderedAscending, false)
+    indexSuffixName, propertyName, WCTOrderedAscending, false)
 
-#define WCDB_INDEX_DESC(indexSubfixName, propertyName) \
+#define WCDB_INDEX_DESC(indexSuffixName, propertyName) \
     __WCDB_ORDERED_INDEX_IMP(                          \
-    indexSubfixName, propertyName, WCTOrderedDescending, false)
+    indexSuffixName, propertyName, WCTOrderedDescending, false)
 
-#define WCDB_UNIQUE_INDEX(indexSubfixName, propertyName) \
-    __WCDB_INDEX_IMP(indexSubfixName, propertyName, true)
+#define WCDB_UNIQUE_INDEX(indexSuffixName, propertyName) \
+    __WCDB_INDEX_IMP(indexSuffixName, propertyName, true)
 
-#define WCDB_UNIQUE_INDEX_ASC(indexSubfixName, propertyName) \
+#define WCDB_UNIQUE_INDEX_ASC(indexSuffixName, propertyName) \
     __WCDB_ORDERED_INDEX_IMP(                                \
-    indexSubfixName, propertyName, WCTOrderedAscending, true)
+    indexSuffixName, propertyName, WCTOrderedAscending, true)
 
-#define WCDB_UNIQUE_INDEX_DESC(indexSubfixName, propertyName) \
+#define WCDB_UNIQUE_INDEX_DESC(indexSuffixName, propertyName) \
     __WCDB_ORDERED_INDEX_IMP(                                 \
-    indexSubfixName, propertyName, WCTOrderedDescending, true)
+    indexSuffixName, propertyName, WCTOrderedDescending, true)
 
-#define WCDB_INDEX_FOR_NEWLY_CREATED_TABLE_ONLY(indexSubfixName) \
-    __WCDB_INDEX_FOR_NEWLY_CREATED_TABLE_ONLY_IMP(indexSubfixName, true)
+#define WCDB_INDEX_FOR_NEWLY_CREATED_TABLE_ONLY(indexSuffixName) \
+    __WCDB_INDEX_FOR_NEWLY_CREATED_TABLE_ONLY_IMP(indexSuffixName, true)
 
 //Virtual Table Argument
 #define WCDB_VIRTUAL_TABLE_ARGUMENT(argument) \

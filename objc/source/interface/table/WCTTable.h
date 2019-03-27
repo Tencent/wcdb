@@ -58,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) WCTDatabase *database;
 
-- (BOOL)dropIndexWithSubfix:(NSString *)indexSubfix;
+- (BOOL)dropIndexWithSuffix:(NSString *)indexSuffix;
 
 - (WCTError *)error;
 

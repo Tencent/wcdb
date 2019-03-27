@@ -43,10 +43,10 @@
     return self;
 }
 
-- (BOOL)dropIndexWithSubfix:(NSString *)indexSubfix
+- (BOOL)dropIndexWithSuffix:(NSString *)indexSuffix
 {
-    WCTRemedialAssert(indexSubfix != nil, "Index subfix can't be null.", return NO;);
-    return [_database dropIndex:[_name stringByAppendingString:indexSubfix]];
+    WCTRemedialAssert(indexSuffix != nil, "Index subfix can't be null.", return NO;);
+    return [_database dropIndex:[_name stringByAppendingString:indexSuffix]];
 }
 
 - (WCTDatabase *)database

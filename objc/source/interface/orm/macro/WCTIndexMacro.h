@@ -20,28 +20,28 @@
 
 #define WCDB_ORM_TYPE_INDEX index
 
-#define __WCDB_INDEX_BEGIN(indexSubfixName)                                    \
+#define __WCDB_INDEX_BEGIN(indexSuffixName)                                    \
     +(void) WCDB_ORM_UNIQUE(WCDB_ORM_TYPE_INDEX)                               \
     {                                                                          \
-        WCTBinding::Index &index = binding.getOrCreateIndex(indexSubfixName);
+        WCTBinding::Index &index = binding.getOrCreateIndex(indexSuffixName);
 
-#define __WCDB_INDEX_END(indexSubfixName) }
+#define __WCDB_INDEX_END(indexSuffixName) }
 
-#define __WCDB_ORDERED_INDEX_IMP(indexSubfixName, propertyName, order_, isUnique) \
-    __WCDB_INDEX_BEGIN(indexSubfixName)                                           \
+#define __WCDB_ORDERED_INDEX_IMP(indexSuffixName, propertyName, order_, isUnique) \
+    __WCDB_INDEX_BEGIN(indexSuffixName)                                           \
     WCDB_STATIC_ASSERT_EXISTS(self.propertyName);                                 \
     WCDB_IF(isUnique, index.statement.unique();)                                  \
     index.statement.indexed(self.propertyName.asIndex().order(order_));           \
-    __WCDB_INDEX_END(indexSubfixName)
+    __WCDB_INDEX_END(indexSuffixName)
 
-#define __WCDB_INDEX_IMP(indexSubfixName, propertyName, isUnique)              \
-    __WCDB_INDEX_BEGIN(indexSubfixName)                                        \
+#define __WCDB_INDEX_IMP(indexSuffixName, propertyName, isUnique)              \
+    __WCDB_INDEX_BEGIN(indexSuffixName)                                        \
     WCDB_STATIC_ASSERT_EXISTS(self.propertyName);                              \
     WCDB_IF(isUnique, index.statement.unique();)                               \
     index.statement.indexed(self.propertyName.asIndex());                      \
-    __WCDB_INDEX_END(indexSubfixName)
+    __WCDB_INDEX_END(indexSuffixName)
 
-#define __WCDB_INDEX_FOR_NEWLY_CREATED_TABLE_ONLY_IMP(indexSubfixName, enable) \
-    __WCDB_INDEX_BEGIN(indexSubfixName)                                        \
+#define __WCDB_INDEX_FOR_NEWLY_CREATED_TABLE_ONLY_IMP(indexSuffixName, enable) \
+    __WCDB_INDEX_BEGIN(indexSuffixName)                                        \
     index.forNewlyCreatedTableOnly = enable;                                   \
-    __WCDB_INDEX_END(indexSubfixName)
+    __WCDB_INDEX_END(indexSuffixName)
