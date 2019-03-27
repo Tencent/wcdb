@@ -130,8 +130,16 @@
 
     BOOL done = NO;
     do {
+        if (done) {
+            // add more table to trigger migration
+            NSString *table = [NSString stringWithFormat:@"t_%@", self.random.string];
+            NSString *sourceTable = [NSString stringWithFormat:@"t_source_%@", self.random.string];
+            [self.toMigrate setObject:sourceTable forKey:table];
+            TestCaseAssertTrue([self.sourceDatabase createTable:sourceTable withClass:TestCaseObject.class]);
+            TestCaseAssertTrue([self.database createTable:table withClass:TestCaseObject.class]);
+        }
         TestCaseAssertTrue([self.database stepMigrationOrDone:done]);
-    } while (!done && tested.isNO);
+    } while (tested.isNO);
 
     [WCTDatabase resetGlobalErrorTracer];
     [write makeNO];
