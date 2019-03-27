@@ -259,6 +259,7 @@
 //    TestCaseAssertResultNO(didBackup);
 //    [didCheckpoint makeYES];
 //    TestCaseLog(@"Did checkpoint");
+//    [self.dispatch waitUntilDone];
 //}
 
 @end

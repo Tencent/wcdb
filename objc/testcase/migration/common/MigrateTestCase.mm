@@ -138,6 +138,7 @@
 
     TestCaseAssertResultYES(tested);
     TestCaseAssertFalse(done);
+    [self.dispatch waitUntilDone];
 }
 
 - (void)doTestAutoMigrate

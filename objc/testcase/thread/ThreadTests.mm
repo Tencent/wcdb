@@ -332,6 +332,7 @@
 
     TestCaseAssertFalse([[self.database getHandle] validate]);
     [condition broadcast];
+    [self.dispatch waitUntilDone];
 }
 
 - (void)test_feature_checkpoint_while_notice_recover_wal
@@ -392,6 +393,7 @@
     TestCaseAssertResultYES(rollbacked);
     [tested makeYES];
     [self.database rollbackTransaction];
+    [self.dispatch waitUntilDone];
 }
 
 - (void)test_feature_busy_retry_main_thread_timeout
@@ -435,6 +437,7 @@
     TestCaseAssertFalse([self.database beginTransaction]);
     TestCaseAssertResultNO(rollbacked);
     [self.database rollbackTransaction];
+    [self.dispatch waitUntilDone];
 }
 
 - (void)test_feature_busy_retry_sub_thread_timeout
@@ -480,6 +483,7 @@
         TestCaseAssertResultNO(rollbacked);
         [self.database rollbackTransaction];
     }];
+    [self.dispatch waitUntilDone];
 }
 
 @end

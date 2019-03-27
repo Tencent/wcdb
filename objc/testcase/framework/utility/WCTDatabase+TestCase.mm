@@ -44,13 +44,8 @@ static ssize_t illPread(int, void *, size_t, off_t)
     sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
     sqlite3_mutex *mutex = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_MASTER);
     sqlite3_mutex_enter(mutex);
-    sqlite3_syscall_ptr newPwrite;
-    if (enable) {
-        newPwrite = (sqlite3_syscall_ptr) illPwrite;
-    } else {
-        newPwrite = (sqlite3_syscall_ptr) pwrite;
-    }
-    vfs->xSetSystemCall(vfs, "pwrite", (sqlite3_syscall_ptr) newPwrite);
+    static sqlite3_syscall_ptr s_originWrite = vfs->xGetSystemCall(vfs, "pwrite");
+    vfs->xSetSystemCall(vfs, "pwrite", enable ? (sqlite3_syscall_ptr) illPwrite : s_originWrite);
     sqlite3_mutex_leave(mutex);
 }
 
@@ -59,13 +54,8 @@ static ssize_t illPread(int, void *, size_t, off_t)
     sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
     sqlite3_mutex *mutex = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_MASTER);
     sqlite3_mutex_enter(mutex);
-    sqlite3_syscall_ptr newPread;
-    if (enable) {
-        newPread = (sqlite3_syscall_ptr) illPread;
-    } else {
-        newPread = (sqlite3_syscall_ptr) pread;
-    }
-    vfs->xSetSystemCall(vfs, "pread", (sqlite3_syscall_ptr) newPread);
+    static sqlite3_syscall_ptr s_originRead = vfs->xGetSystemCall(vfs, "pread");
+    vfs->xSetSystemCall(vfs, "pread", enable ? (sqlite3_syscall_ptr) illPread : s_originRead);
     sqlite3_mutex_leave(mutex);
 }
 

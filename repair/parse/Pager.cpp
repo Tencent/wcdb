@@ -26,6 +26,7 @@
 #include <WCDB/String.hpp>
 #include <WCDB/ThreadedErrors.hpp>
 
+#warning TODO - support cipher database
 namespace WCDB {
 
 namespace Repair {
