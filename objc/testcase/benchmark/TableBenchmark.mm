@@ -35,7 +35,11 @@
 
 - (void)setUpDatabase
 {
-    NSString* path = [self.factory production:self.directory];
+    __block NSString* path;
+    [self.database close:^{
+        TestCaseAssertTrue([self.database removeFiles]);
+        path = [self.factory production:self.directory];
+    }];
     TestCaseAssertTrue(path != nil);
     self.path = path;
 
@@ -86,6 +90,85 @@
     setUp:^{
         [self setUpDatabase];
         tableName = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCTMaster.name).from(WCTMaster.tableName).where(WCTMaster.name.notLike(pattern)).limit(1)].stringValue;
+    }
+    tearDown:^{
+        [self tearDownDatabase];
+        result = NO;
+    }
+    checkCorrectness:^{
+        TestCaseAssertTrue(result);
+    }];
+}
+
+- (void)test_insert_into_multiple_tables_within_one_transaction
+{
+    int numberOfObjects = 10000;
+    int numberOfTables = 100;
+    NSString* pattern = [NSString stringWithFormat:@"%s%%", WCDB::Syntax::builtinTablePrefix];
+    __block NSArray<NSString*>* tableNames = nil;
+
+    __block NSArray* objects = nil;
+    __block BOOL result;
+    [self
+    doMeasure:^{
+        result = [self.database runTransaction:^BOOL(WCTHandle* handle) {
+            for (NSString* tableName in tableNames) {
+                if (![handle insertObjects:objects intoTable:tableName]) {
+                    return NO;
+                }
+            }
+            return YES;
+        }];
+    }
+    setUp:^{
+        [self setUpDatabase];
+        [self.database removeConfigForName:WCTConfigNameCheckpoint];
+
+        tableNames = (NSArray<NSString*>*) [self.database getColumnFromStatement:WCDB::StatementSelect().select(WCTMaster.name).from(WCTMaster.tableName).where(WCTMaster.name.notLike(pattern)).limit(numberOfTables)];
+        TestCaseAssertEqual(tableNames.count, numberOfTables);
+
+        if (objects == nil) {
+            objects = [self.random benchmarkObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.expectedQuality];
+        }
+    }
+    tearDown:^{
+        [self tearDownDatabase];
+        result = NO;
+    }
+    checkCorrectness:^{
+        TestCaseAssertTrue(result);
+    }];
+}
+
+- (void)test_insert_into_multiple_tables_within_seperated_transaction
+{
+    int numberOfObjects = 10000;
+    int numberOfTables = 100;
+    NSString* pattern = [NSString stringWithFormat:@"%s%%", WCDB::Syntax::builtinTablePrefix];
+    __block NSArray<NSString*>* tableNames = nil;
+
+    __block NSArray* objects = nil;
+    __block BOOL result;
+    [self
+    doMeasure:^{
+        for (NSString* tableName in tableNames) {
+            if (![self.database insertObjects:objects intoTable:tableName]) {
+                result = NO;
+                return;
+            }
+        }
+        result = YES;
+    }
+    setUp:^{
+        [self setUpDatabase];
+        [self.database removeConfigForName:WCTConfigNameCheckpoint];
+
+        tableNames = (NSArray<NSString*>*) [self.database getColumnFromStatement:WCDB::StatementSelect().select(WCTMaster.name).from(WCTMaster.tableName).where(WCTMaster.name.notLike(pattern)).limit(numberOfTables)];
+        TestCaseAssertEqual(tableNames.count, numberOfTables);
+
+        if (objects == nil) {
+            objects = [self.random benchmarkObjectsWithCount:numberOfObjects startingFromIdentifier:(int) self.factory.expectedQuality];
+        }
     }
     tearDown:^{
         [self tearDownDatabase];
