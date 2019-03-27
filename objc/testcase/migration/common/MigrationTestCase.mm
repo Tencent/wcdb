@@ -31,22 +31,31 @@
 {
     [super setUp];
 
+    _toMigrate = [NSMutableDictionary<NSString*, NSString*> dictionaryWithObject:self.sourceTable forKey:self.tableName];
+
     TestCaseAssertTrue([self.sourceDatabase execute:[MigrationObject statementForCreatingTable:self.sourceTable withMode:self.mode]]);
     TestCaseAssertTrue([self.sourceDatabase insertObjects:self.objects intoTable:self.sourceTable]);
 
     [self.sourceDatabase close];
 
-    NSString* sourceTable = self.sourceTable;
-    NSString* sourcePath = self.sourcePath;
-    NSString* table = self.tableName;
     [self.database removeConfigForName:WCTConfigNameCheckpoint];
     TestCaseAssertTrue(self.database.isMigrated);
+
+    // It's not a good practice to retain self in this escapable block.
+    __weak typeof(self) weakSelf = self;
+    NSString* sourcePath = self.sourcePath;
     [self.database filterMigration:^(WCTMigrationUserInfo* userInfo) {
-        if ([userInfo.table isEqualToString:table]) {
+        typeof(self) strongSelf = weakSelf;
+        if (strongSelf == nil) {
+            return;
+        }
+        NSString* sourceTable = [strongSelf.toMigrate objectForKey:userInfo.table];
+        if (sourceTable != nil) {
             userInfo.sourceTable = sourceTable;
             userInfo.sourceDatabase = sourcePath;
         }
     }];
+
     TestCaseAssertFalse(self.database.isMigrated);
     self.tableClass = MigrationObject.class;
     TestCaseAssertTrue([self.database execute:[MigrationObject statementForCreatingTable:self.tableName withMode:self.mode]]);

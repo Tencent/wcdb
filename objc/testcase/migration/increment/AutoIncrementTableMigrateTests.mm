@@ -78,4 +78,9 @@
     [self doTestFeatureStepAsLeastAsPossibleButNotWaste];
 }
 
+- (void)test_feature_migrate_newly_created_table_after_migrated
+{
+    [self doTestFeatureMigrateNewlyCreatedTableAfterMigrated];
+}
+
 @end

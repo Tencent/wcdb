@@ -40,4 +40,6 @@
 
 - (void)doTestFeatureStepAsLeastAsPossibleButNotWaste;
 
+- (void)doTestFeatureMigrateNewlyCreatedTableAfterMigrated;
+
 @end

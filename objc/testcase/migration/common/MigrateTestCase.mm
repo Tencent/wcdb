@@ -227,11 +227,27 @@
     TestCaseAssertResultYES(result);
 }
 
-- (int)getUnmigratedCount
+- (void)doTestFeatureMigrateNewlyCreatedTableAfterMigrated
 {
-    // get count of unmigrated rows
-    // It's not a good practice.
-    return [self.sourceDatabase getValueFromStatement:WCDB::StatementSelect().select(MigrationObject.allProperties.count()).from(self.sourceTable)].numberValue.intValue;
+    NSString *anotherSourceTable = @"testAnotherSourceTable";
+    NSString *anotherTable = @"testAnotherTable";
+    [self.toMigrate setObject:anotherSourceTable forKey:anotherTable];
+    TestCaseAssertTrue([self.sourceDatabase createTable:anotherSourceTable withClass:TestCaseObject.class]);
+    BOOL done = NO;
+    do {
+        TestCaseAssertTrue([self.database stepMigrationOrDone:done]);
+    } while (!done);
+    TestCaseAssertTrue(self.database.isMigrated);
+
+    TestCaseAssertTrue([self.database createTable:anotherTable withClass:TestCaseObject.class]);
+
+    // migrated status is reset.
+    TestCaseAssertFalse(self.database.isMigrated);
+
+    do {
+        TestCaseAssertTrue([self.database stepMigrationOrDone:done]);
+    } while (!done);
+    TestCaseAssertTrue(self.database.isMigrated);
 }
 
 - (void)doTestFeatureStepAsLeastAsPossibleButNotWaste

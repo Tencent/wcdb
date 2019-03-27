@@ -42,7 +42,6 @@ MigrationStepperHandle::~MigrationStepperHandle()
 bool MigrationStepperHandle::reAttach(const String& newPath, const Schema& newSchema)
 {
     bool succeed = true;
-    bool schemaChanged = false;
     do {
         if (m_attached.getDescription() != newSchema.getDescription()) {
             if (!m_attached.syntax().isMain()) {
@@ -50,28 +49,19 @@ bool MigrationStepperHandle::reAttach(const String& newPath, const Schema& newSc
                     succeed = false;
                     break;
                 }
-                m_attached = Schema::main();
-                schemaChanged = true;
             }
             if (!newSchema.syntax().isMain()) {
                 if (!execute(WCDB::StatementAttach().attach(newPath).as(newSchema))) {
+                    m_attached = Schema::main();
                     succeed = false;
                     break;
                 }
                 m_attached = newSchema;
-                schemaChanged = true;
             }
         }
     } while (false);
-    if (schemaChanged) {
-        if (m_migratingInfo != nullptr
-            && m_attached.getDescription()
-               != m_migratingInfo->getSchemaForSourceDatabase().getDescription()) {
-            // migrating info out of date
-            m_migratingInfo = nullptr;
-            finalizeMigrationStatement();
-        }
-    }
+    m_migratingInfo = nullptr;
+    finalizeMigrationStatement();
     return succeed;
 }
 
@@ -91,8 +81,12 @@ std::pair<bool, std::set<String>> MigrationStepperHandle::getAllTables()
 bool MigrationStepperHandle::dropSourceTable(const MigrationInfo* info)
 {
     WCTInnerAssert(info != nullptr);
-    return reAttach(info->getSourceDatabase(), info->getSchemaForSourceDatabase())
-           && execute(m_migratingInfo->getStatementForDroppingSourceTable());
+    bool succeed = false;
+    if (reAttach(info->getSourceDatabase(), info->getSchemaForSourceDatabase())) {
+        m_migratingInfo = info;
+        succeed = execute(m_migratingInfo->getStatementForDroppingSourceTable());
+    }
+    return succeed;
 }
 
 bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)

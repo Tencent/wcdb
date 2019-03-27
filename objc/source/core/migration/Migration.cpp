@@ -82,6 +82,7 @@ bool Migration::initInfo(InfoInitializer& initializer, const String& table)
                         m_migratings.emplace(hold);
                         m_referenceds.emplace(hold, 0);
                         m_filted.emplace(table, hold);
+                        m_migrated = false;
                         skip = false;
                     }
                 }
@@ -369,6 +370,7 @@ std::pair<bool, bool> Migration::tryMigrateRows(Migration::Stepper& stepper)
             if (migrating->isCrossDatabase()) {
                 // cross database migration first to reduce additional database lock.
                 info = migrating;
+                break;
             }
         }
         if (info == nullptr) {

@@ -27,6 +27,8 @@
 
 @property (assign, nonatomic) BOOL isCrossDatabaseMigration;
 
+@property (readonly, nonatomic) NSMutableDictionary<NSString*, NSString*>* toMigrate;
+
 @property (readonly, nonatomic) NSString* sourceTable;
 
 @property (readonly, nonatomic) NSString* sourcePath;
