@@ -95,6 +95,7 @@ public:
     };
     static Error::Code rc2c(int rc);
     static int c2rc(Error::Code code);
+    static bool isError(int rc);
     static constexpr const char *codeName(const Code &code)
     {
         switch (code) {

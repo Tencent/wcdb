@@ -61,8 +61,8 @@ Core::Core()
     Handle::enableMultithread();
     Handle::enableMemoryStatus(false);
     //        Handle::setMemoryMapSize(0x7fff0000, 0x7fff0000);
-    Handle::setGlobalLog(Core::globalLog, this);
-    Handle::setVFSOpen(Core::vfsOpen);
+    Handle::traceGlobalLog(Core::globalLog, this);
+    Handle::hookFileOpen(Core::fileOpen);
 
     Notifier::shared()->setNotificationForPreprocessing(
     NotifierPreprocessorName,
@@ -74,7 +74,7 @@ Core::~Core()
     Notifier::shared()->setNotificationForPreprocessing(NotifierPreprocessorName, nullptr);
 }
 
-int Core::vfsOpen(const char* path, int flags, int mode)
+int Core::fileOpen(const char* path, int flags, int mode)
 {
     int fd = open(path, flags, mode);
     if (fd != -1 && ((flags & O_CREAT) != 0)) {

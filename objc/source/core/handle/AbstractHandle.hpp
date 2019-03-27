@@ -50,13 +50,13 @@ protected:
 public:
     static void enableMultithread();
     static void enableMemoryStatus(bool enable);
-    static void setMemoryMapSize(int64_t defaultSizeLimit, int64_t maximumAllowedSizeLimit);
+    //    static void setMemoryMapSize(int64_t defaultSizeLimit, int64_t maximumAllowedSizeLimit);
 
     typedef void (*GlobalLog)(void *, int, const char *);
-    static void setGlobalLog(const GlobalLog &log, void *parameter = nullptr);
+    static void traceGlobalLog(const GlobalLog &log, void *parameter = nullptr);
 
-    typedef int (*VFSOpen)(const char *, int, int);
-    static void setVFSOpen(const VFSOpen &vfsOpen);
+    typedef int (*FileOpen)(const char *, int, int);
+    static void hookFileOpen(const FileOpen &open);
 
 #pragma mark - Path
 public:
@@ -178,13 +178,14 @@ public:
     void markErrorAsUnignorable();
 
 private:
+    static void tryNotifyError(int rc);
+
     // The level of error will be "Ignore" if it's marked as ignorable.
     // But the return value will be still false.
     bool exitAPI(int rc);
     bool exitAPI(int rc, const String &sql);
     bool exitAPI(int rc, const char *sql);
 
-    static bool isError(int rc);
     void notifyError(int rc, const char *sql);
 
     std::vector<int> m_ignorableCodes;

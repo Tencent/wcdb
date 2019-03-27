@@ -150,6 +150,11 @@ void Error::clear()
 }
 
 #pragma mark - Code
+bool Error::isError(int rc)
+{
+    return rc != SQLITE_OK && rc != SQLITE_ROW && rc != SQLITE_DONE;
+}
+
 Error::Code Error::rc2c(int rc)
 {
     return (Error::Code)(rc & 0xff);

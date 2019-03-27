@@ -66,7 +66,7 @@ public:
 
 protected:
     Core();
-    static int vfsOpen(const char* path, int flags, int mode);
+    static int fileOpen(const char* path, int flags, int mode);
     static void globalLog(void* core, int code, const char* message);
 
 #pragma mark - Database

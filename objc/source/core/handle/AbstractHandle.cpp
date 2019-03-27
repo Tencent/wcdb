@@ -46,48 +46,40 @@ sqlite3 *AbstractHandle::getRawHandle()
 #pragma mark - Global
 void AbstractHandle::enableMultithread()
 {
-#ifdef DEBUG
-    int rc =
-#endif
-    sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
+    int rc = sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
     WCTInnerAssert(rc == SQLITE_OK);
+    tryNotifyError(rc);
 }
 
-void AbstractHandle::setMemoryMapSize(int64_t defaultSizeLimit, int64_t maximumAllowedSizeLimit)
-{
-#ifdef DEBUG
-    int rc =
-#endif
-    sqlite3_config(SQLITE_CONFIG_MMAP_SIZE,
-                   (sqlite3_int64) defaultSizeLimit,
-                   (sqlite3_int64) maximumAllowedSizeLimit);
-    WCTInnerAssert(rc == SQLITE_OK);
-}
+//void AbstractHandle::setMemoryMapSize(int64_t defaultSizeLimit, int64_t maximumAllowedSizeLimit)
+//{
+//    int rc = sqlite3_config(SQLITE_CONFIG_MMAP_SIZE,
+//                   (sqlite3_int64) defaultSizeLimit,
+//                   (sqlite3_int64) maximumAllowedSizeLimit);
+//    WCTInnerAssert(rc == SQLITE_OK);
+//    tryNotifyError(rc);
+//}
 
 void AbstractHandle::enableMemoryStatus(bool enable)
 {
-#ifdef DEBUG
-    int rc =
-#endif
-    sqlite3_config(SQLITE_CONFIG_MEMSTATUS, (int) enable);
+    int rc = sqlite3_config(SQLITE_CONFIG_MEMSTATUS, (int) enable);
     WCTInnerAssert(rc == SQLITE_OK);
+    tryNotifyError(rc);
 }
 
-void AbstractHandle::setGlobalLog(const GlobalLog &log, void *parameter)
+void AbstractHandle::traceGlobalLog(const GlobalLog &log, void *parameter)
 {
-#ifdef DEBUG
-    int rc =
-#endif
-    sqlite3_config(SQLITE_CONFIG_LOG, log, parameter);
+    int rc = sqlite3_config(SQLITE_CONFIG_LOG, log, parameter);
     WCTInnerAssert(rc == SQLITE_OK);
+    tryNotifyError(rc);
 }
 
-void AbstractHandle::setVFSOpen(const VFSOpen &vfsOpen)
+void AbstractHandle::hookFileOpen(const FileOpen &open)
 {
     sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
     sqlite3_mutex *mutex = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_MASTER);
     sqlite3_mutex_enter(mutex);
-    vfs->xSetSystemCall(vfs, "open", (void (*)(void)) vfsOpen);
+    vfs->xSetSystemCall(vfs, "open", (sqlite3_syscall_ptr) open);
     sqlite3_mutex_leave(mutex);
 }
 
@@ -494,14 +486,9 @@ void AbstractHandle::setNotificationWhenStatementWillStep(const String &name,
 }
 
 #pragma mark - Error
-bool AbstractHandle::isError(int rc)
-{
-    return rc != SQLITE_OK && rc != SQLITE_ROW && rc != SQLITE_DONE;
-}
-
 bool AbstractHandle::exitAPI(int rc)
 {
-    if (!isError(rc)) {
+    if (!Error::isError(rc)) {
         return true;
     }
     notifyError(rc, nullptr);
@@ -510,7 +497,7 @@ bool AbstractHandle::exitAPI(int rc)
 
 bool AbstractHandle::exitAPI(int rc, const String &sql)
 {
-    if (!isError(rc)) {
+    if (!Error::isError(rc)) {
         return true;
     }
     notifyError(rc, sql.c_str());
@@ -519,7 +506,7 @@ bool AbstractHandle::exitAPI(int rc, const String &sql)
 
 bool AbstractHandle::exitAPI(int rc, const char *sql)
 {
-    if (!isError(rc)) {
+    if (!Error::isError(rc)) {
         return true;
     }
     notifyError(rc, sql);
@@ -528,14 +515,14 @@ bool AbstractHandle::exitAPI(int rc, const char *sql)
 
 void AbstractHandle::notifyError(int rc, const char *sql)
 {
-    WCTInnerAssert(isError(rc));
+    WCTInnerAssert(Error::isError(rc));
     if (rc != SQLITE_MISUSE) {
         m_error.setSQLiteCode(rc, getExtendedErrorCode());
         m_error.message = getErrorMessage();
     } else {
         // extended error code/message will not be set in some case for misuse error
         m_error.setSQLiteCode(rc, rc);
-        m_error.message = nullptr;
+        m_error.message = sqlite3_errstr(rc);
     }
     if (std::find(m_ignorableCodes.begin(), m_ignorableCodes.end(), rc)
         == m_ignorableCodes.end()) {
@@ -556,6 +543,17 @@ void AbstractHandle::markErrorAsUnignorable()
 {
     WCTInnerAssert(!m_ignorableCodes.empty());
     m_ignorableCodes.pop_back();
+}
+
+void AbstractHandle::tryNotifyError(int rc)
+{
+    if (Error::isError(rc)) {
+        Error error;
+        error.level = Error::Level::Fatal;
+        error.message = nullptr;
+        error.setSQLiteCode(rc, rc);
+        Notifier::shared()->notify(error);
+    }
 }
 
 } //namespace WCDB
