@@ -48,14 +48,14 @@ public:
 
 protected:
     template<typename T, typename Enable = typename std::enable_if<std::is_base_of<Syntax::Identifier, T>::value>::type>
-    SQL(T* dummy) : m_syntax(new T)
+    SQL(T* _) : m_syntax(new T)
     {
-        WCDB_UNUSED(dummy)
+        WCDB_UNUSED(_)
     }
 
     template<typename T, typename Enable = typename std::enable_if<std::is_base_of<Syntax::Identifier, T>::value>::type>
-    SQL(T* dummy, const SQL& sql)
-    : SQL(T::type, sql){ WCDB_UNUSED(dummy) }
+    SQL(T* _, const SQL& sql)
+    : SQL(T::type, sql){ WCDB_UNUSED(_) }
 
     Shadow<Syntax::Identifier> m_syntax;
 

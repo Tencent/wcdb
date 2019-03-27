@@ -28,7 +28,7 @@ namespace WCDB {
 bool exiting()
 {
     static std::atomic<bool>* s_exit = new std::atomic<bool>(false);
-    static auto s_dummy WCDB_USED = []() -> std::nullptr_t {
+    static auto _ WCDB_USED = []() -> std::nullptr_t {
         atexit([]() { s_exit->store(true); });
         return nullptr;
     }();
