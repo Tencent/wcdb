@@ -33,6 +33,7 @@ class Data;
 
 namespace Repair {
 
+#warning TODO - support cipher database
 class Pager final : public ErrorProne, public Initializeable {
 #pragma mark - Initialize
 public:
