@@ -24,32 +24,13 @@
 
 @interface ThreadTests : TableTestCase
 
-@property (nonatomic, readonly) dispatch_group_t group;
-@property (nonatomic, readonly) dispatch_queue_t queue;
-
 @property (nonatomic, readonly) NSTimeInterval delayForTolerance;
 
 @property (nonatomic, readonly) int maxConcurrency;
 
 @end
 
-@implementation ThreadTests {
-    dispatch_group_t _group;
-    dispatch_queue_t _queue;
-}
-
-- (void)setUp
-{
-    [super setUp];
-    _group = dispatch_group_create();
-    _queue = dispatch_queue_create([[NSBundle mainBundle].bundleIdentifier stringByAppendingFormat:@".%@.%@", self.className, self.testName].UTF8String, DISPATCH_QUEUE_CONCURRENT);
-}
-
-- (void)tearDown
-{
-    dispatch_group_wait(self.group, DISPATCH_TIME_FOREVER);
-    [super tearDown];
-}
+@implementation ThreadTests
 
 - (NSTimeInterval)delayForTolerance
 {
@@ -70,7 +51,7 @@
     __block NSDate* read2Begin;
     __block NSDate* read1End;
     __block NSDate* read2End;
-    dispatch_group_async(self.group, self.queue, ^{
+    [self.dispatch async:^{
         // Acquire read transaction. Note that it's not recommended in production environment.
         TestCaseAssertTrue([self.database execute:WCDB::StatementBegin().beginDeferred()]);
         TestCaseAssertTrue([self.database execute:WCDB::StatementSelect().select(1)]);
@@ -78,8 +59,8 @@
         [NSThread sleepForTimeInterval:self.delayForTolerance];
         read1End = [NSDate date];
         TestCaseAssertTrue([self.database execute:WCDB::StatementRollback().rollback()]);
-    });
-    dispatch_group_async(self.group, self.queue, ^{
+    }];
+    [self.dispatch async:^{
         // Acquire read transaction. Note that it's not recommended in production environment.
         TestCaseAssertTrue([self.database execute:WCDB::StatementBegin().beginDeferred()]);
         TestCaseAssertTrue([self.database execute:WCDB::StatementSelect().select(1)]);
@@ -87,8 +68,8 @@
         [NSThread sleepForTimeInterval:self.delayForTolerance];
         read2End = [NSDate date];
         TestCaseAssertTrue([self.database execute:WCDB::StatementRollback().rollback()]);
-    });
-    dispatch_group_wait(self.group, DISPATCH_TIME_FOREVER);
+    }];
+    [self.dispatch waitUntilDone];
 
     // Contains intersection
     TestCaseAssertTrue([read1End compare:read2Begin] == NSOrderedDescending
@@ -104,7 +85,7 @@
     __block NSDate* writeBegin;
     __block NSDate* readEnd;
     __block NSDate* writeEnd;
-    dispatch_group_async(self.group, self.queue, ^{
+    [self.dispatch async:^{
         // Acquire read transaction. Note that it's not recommended in production environment.
         TestCaseAssertTrue([self.database execute:WCDB::StatementBegin().beginDeferred()]);
         TestCaseAssertTrue([self.database execute:WCDB::StatementSelect().select(1)]);
@@ -112,16 +93,16 @@
         [NSThread sleepForTimeInterval:self.delayForTolerance];
         readEnd = [NSDate date];
         TestCaseAssertTrue([self.database execute:WCDB::StatementRollback().rollback()]);
-    });
-    dispatch_group_async(self.group, self.queue, ^{
+    }];
+    [self.dispatch async:^{
         // Acquire write transaction.
         TestCaseAssertTrue([self.database execute:WCDB::StatementBegin().beginImmediate()]);
         writeBegin = [NSDate date];
         [NSThread sleepForTimeInterval:self.delayForTolerance];
         writeEnd = [NSDate date];
         TestCaseAssertTrue([self.database execute:WCDB::StatementRollback().rollback()]);
-    });
-    dispatch_group_wait(self.group, DISPATCH_TIME_FOREVER);
+    }];
+    [self.dispatch waitUntilDone];
 
     // Contains intersection
     TestCaseAssertTrue([readEnd compare:writeBegin] == NSOrderedDescending
@@ -137,23 +118,23 @@
     __block NSDate* write2Begin;
     __block NSDate* write1End;
     __block NSDate* write2End;
-    dispatch_group_async(self.group, self.queue, ^{
+    [self.dispatch async:^{
         // Acquire write transaction.
         TestCaseAssertTrue([self.database execute:WCDB::StatementBegin().beginImmediate()]);
         write1Begin = [NSDate date];
         [NSThread sleepForTimeInterval:self.delayForTolerance];
         write1End = [NSDate date];
         TestCaseAssertTrue([self.database execute:WCDB::StatementRollback().rollback()]);
-    });
-    dispatch_group_async(self.group, self.queue, ^{
+    }];
+    [self.dispatch async:^{
         // Acquire write transaction.
         TestCaseAssertTrue([self.database execute:WCDB::StatementBegin().beginImmediate()]);
         write2Begin = [NSDate date];
         [NSThread sleepForTimeInterval:self.delayForTolerance];
         write2End = [NSDate date];
         TestCaseAssertTrue([self.database execute:WCDB::StatementRollback().rollback()]);
-    });
-    dispatch_group_wait(self.group, DISPATCH_TIME_FOREVER);
+    }];
+    [self.dispatch waitUntilDone];
 
     // No intersection
     TestCaseAssertTrue([write1Begin compare:write2End] == NSOrderedDescending
@@ -300,7 +281,7 @@
 
     TestCaseResult* began = [TestCaseResult no];
     TestCaseResult* tested = [TestCaseResult no];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    [self.dispatch async:^{
         WCTHandle* handle = [self.database getHandle];
         TestCaseAssertFalse([handle isInTransaction]);
         // it will not reuse transactioned handle.
@@ -309,7 +290,7 @@
         while ([tested isNO])
             ;
         [handle invalidate];
-    });
+    }];
 
     while ([began isNO])
         ;
@@ -325,7 +306,7 @@
     NSCondition* condition = [[NSCondition alloc] init];
     __block int currentConcurrency = 0;
     for (int i = 0; i < self.maxConcurrency; ++i) {
-        dispatch_group_async(self.group, self.queue, ^{
+        [self.dispatch async:^{
             WCTHandle* handle = nil;
             @synchronized(self) {
                 handle = [self.database getHandle];
@@ -336,7 +317,7 @@
             [condition wait];
             [condition unlock];
             [handle invalidate];
-        });
+        }];
     }
 
     do {
@@ -351,7 +332,6 @@
 
     TestCaseAssertFalse([[self.database getHandle] validate]);
     [condition broadcast];
-    dispatch_group_wait(self.group, DISPATCH_TIME_FOREVER);
 }
 
 - (void)test_feature_checkpoint_while_notice_recover_wal
@@ -395,7 +375,7 @@
     TestCaseResult* began = [TestCaseResult no];
     TestCaseResult* rollbacked = [TestCaseResult no];
     TestCaseResult* tested = [TestCaseResult no];
-    dispatch_group_async(self.group, self.queue, ^{
+    [self.dispatch async:^{
         TestCaseAssertTrue([self.database beginTransaction]);
         [began makeYES];
 
@@ -403,7 +383,7 @@
         TestCaseAssertResultNO(tested);
         [rollbacked makeYES];
         [self.database rollbackTransaction];
-    });
+    }];
 
     while ([began isNO]) {
     }
@@ -419,7 +399,7 @@
     TestCaseResult* began = [TestCaseResult no];
     TestCaseResult* rollbacked = [TestCaseResult no];
     TestCaseResult* tested = [TestCaseResult no];
-    dispatch_group_async(self.group, self.queue, ^{
+    [self.dispatch async:^{
         TestCaseAssertTrue([self.database beginTransaction]);
         [began makeYES];
 
@@ -431,7 +411,7 @@
 
         [rollbacked makeYES];
         [self.database rollbackTransaction];
-    });
+    }];
 
     while ([began isNO]) {
     }
@@ -462,7 +442,7 @@
     TestCaseResult* began = [TestCaseResult no];
     TestCaseResult* rollbacked = [TestCaseResult no];
     TestCaseResult* tested = [TestCaseResult no];
-    dispatch_group_async(self.group, self.queue, ^{
+    [self.dispatch async:^{
         TestCaseAssertTrue([self.database beginTransaction]);
         [began makeYES];
 
@@ -474,9 +454,9 @@
 
         [rollbacked makeYES];
         [self.database rollbackTransaction];
-    });
+    }];
 
-    dispatch_group_async(self.group, self.queue, ^{
+    [self.dispatch async:^{
         while ([began isNO]) {
         }
 
@@ -499,7 +479,7 @@
         TestCaseAssertFalse([self.database beginTransaction]);
         TestCaseAssertResultNO(rollbacked);
         [self.database rollbackTransaction];
-    });
+    }];
 }
 
 @end

@@ -230,16 +230,11 @@
 }
 
 #pragma mark - SQL
+// For debugging only
 + (void)enableSQLTrace
 {
     [WCTDatabase globalTraceSQL:^(NSString* sql) {
         NSThread* currentThread = [NSThread currentThread];
-        if (currentThread.isMainThread) {
-            static dispatch_once_t onceToken;
-            dispatch_once(&onceToken, ^{
-                pthread_setname_np("com.Tencent.WCDB.Queue.Main");
-            });
-        }
         NSString* threadName = currentThread.name;
         if (threadName.length == 0) {
             threadName = [NSString stringWithFormat:@"%p", currentThread];

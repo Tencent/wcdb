@@ -19,6 +19,7 @@
  */
 
 #import <TestCase/BaseTestCase.h>
+#import <TestCase/Dispatch.h>
 #import <TestCase/Random.h>
 #import <TestCase/ReusableFactory.h>
 #import <TestCase/TestCaseAssertion.h>
@@ -31,6 +32,7 @@
     NSString *_className;
     NSString *_testName;
     NSString *_directory;
+    Dispatch *_dispatch;
 }
 
 - (void)setUp
@@ -61,6 +63,11 @@
 
 - (void)tearDown
 {
+    @synchronized(self) {
+        if (_dispatch != nil) {
+            [_dispatch waitUntilDone];
+        }
+    }
     [WCTDatabase resetGlobalErrorTracer];
     [WCTDatabase globalTraceSQL:nil];
     [WCTDatabase globalTracePerformance:nil];
@@ -141,6 +148,16 @@
 - (NSFileManager *)fileManager
 {
     return [NSFileManager defaultManager];
+}
+
+- (Dispatch *)dispatch
+{
+    @synchronized(self) {
+        if (_dispatch == nil) {
+            _dispatch = [[Dispatch alloc] init];
+        }
+    }
+    return _dispatch;
 }
 
 - (void)log:(NSString *)format, ...

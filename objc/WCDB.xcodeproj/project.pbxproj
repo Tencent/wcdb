@@ -1437,6 +1437,8 @@
 		39411A4122437E7B00A388F5 /* CaseInsensiveList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		39411A4222437E7B00A388F5 /* CaseInsensiveList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		39485B562240765C00A65DA4 /* NewlyCreatedTableIndexObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39485B502240751600A65DA4 /* NewlyCreatedTableIndexObject.mm */; };
+		39D25E59224B045A0003AF25 /* Dispatch.h in Headers */ = {isa = PBXBuildFile; fileRef = 39D25E57224B045A0003AF25 /* Dispatch.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		39D25E5A224B045A0003AF25 /* Dispatch.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39D25E58224B045A0003AF25 /* Dispatch.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2745,6 +2747,8 @@
 		39485B502240751600A65DA4 /* NewlyCreatedTableIndexObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NewlyCreatedTableIndexObject.mm; sourceTree = "<group>"; };
 		39485B512240751600A65DA4 /* NewlyCreatedTableIndexObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NewlyCreatedTableIndexObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		39485B522240751600A65DA4 /* NewlyCreatedTableIndexObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewlyCreatedTableIndexObject.h; sourceTree = "<group>"; };
+		39D25E57224B045A0003AF25 /* Dispatch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Dispatch.h; sourceTree = "<group>"; };
+		39D25E58224B045A0003AF25 /* Dispatch.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Dispatch.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3818,6 +3822,8 @@
 				234D141221F014D500BCF3DD /* TestCaseResult.mm */,
 				234D142021F01E6F00BCF3DD /* TestCaseCounter.h */,
 				234D142121F01E6F00BCF3DD /* TestCaseCounter.mm */,
+				39D25E57224B045A0003AF25 /* Dispatch.h */,
+				39D25E58224B045A0003AF25 /* Dispatch.mm */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -4752,6 +4758,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				234D142221F01E6F00BCF3DD /* TestCaseCounter.h in Headers */,
+				39D25E59224B045A0003AF25 /* Dispatch.h in Headers */,
 				2387D90221DF0B880028ADB9 /* AllTypesObject.h in Headers */,
 				2377536021F1742100CA3FB7 /* Random+BenchmarkObject.h in Headers */,
 				2387D90321DF0B880028ADB9 /* TestCaseObject+WCTTableCoding.h in Headers */,
@@ -6158,6 +6165,7 @@
 				2377535921F1738D00CA3FB7 /* BenchmarkObject.mm in Sources */,
 				2387D8FF21DF0B880028ADB9 /* AllTypesObject.mm in Sources */,
 				2387D90521DF0B880028ADB9 /* BaseTestCase.mm in Sources */,
+				39D25E5A224B045A0003AF25 /* Dispatch.mm in Sources */,
 				2387D95521DF61C30028ADB9 /* TableTestCase.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

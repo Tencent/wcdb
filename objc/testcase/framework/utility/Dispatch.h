@@ -18,27 +18,14 @@
  * limitations under the License.
  */
 
-#import <XCTest/XCTest.h>
+#import <Foundation/Foundation.h>
 
-@class Dispatch;
-@class Random;
+typedef void (^DispatchBlock)(void);
 
-@interface BaseTestCase : XCTestCase
+@interface Dispatch : NSObject
 
-@property (class, nonatomic, readonly) NSString* root;
-@property (class, nonatomic, readonly) NSString* cacheRoot;
+- (void)async:(DispatchBlock)block;
 
-@property (nonatomic, readonly) NSString* cacheDirectory;
-@property (nonatomic, readonly) NSString* directory;
-
-@property (nonatomic, readonly) NSString* className;
-@property (nonatomic, readonly) NSString* testName;
-
-@property (nonatomic, readonly) NSFileManager* fileManager;
-@property (nonatomic, readonly) Random* random;
-
-@property (nonatomic, readonly) Dispatch* dispatch;
-
-- (void)log:(NSString*)format, ...;
+- (void)waitUntilDone;
 
 @end

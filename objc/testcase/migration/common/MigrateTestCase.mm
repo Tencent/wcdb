@@ -107,11 +107,11 @@
 
     TestCaseResult *write = [TestCaseResult yes];
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    [self.dispatch async:^{
         while (write.isYES) {
             TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion()).to(1)]);
         }
-    });
+    }];
 
     TestCaseResult *tested = [TestCaseResult no];
     __weak typeof(self) weakSelf = self;

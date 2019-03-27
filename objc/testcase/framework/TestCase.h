@@ -27,6 +27,7 @@
 #import <TestCase/DatabaseTestCase.h>
 #import <TestCase/TableTestCase.h>
 
+#import <TestCase/Dispatch.h>
 #import <TestCase/Random.h>
 #import <TestCase/Signpost.h>
 #import <TestCase/TestCaseCounter.h>

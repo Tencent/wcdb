@@ -18,27 +18,30 @@
  * limitations under the License.
  */
 
-#import <XCTest/XCTest.h>
+#import <TestCase/Dispatch.h>
 
-@class Dispatch;
-@class Random;
+@implementation Dispatch {
+    dispatch_queue_t _queue;
+    dispatch_group_t _group;
+}
 
-@interface BaseTestCase : XCTestCase
+- (instancetype)init
+{
+    if (self = [super init]) {
+        _queue = dispatch_queue_create("com.Tencent.TestCase", DISPATCH_QUEUE_CONCURRENT);
+        _group = dispatch_group_create();
+    }
+    return self;
+}
 
-@property (class, nonatomic, readonly) NSString* root;
-@property (class, nonatomic, readonly) NSString* cacheRoot;
+- (void)async:(DispatchBlock)block
+{
+    dispatch_group_async(_group, _queue, block);
+}
 
-@property (nonatomic, readonly) NSString* cacheDirectory;
-@property (nonatomic, readonly) NSString* directory;
-
-@property (nonatomic, readonly) NSString* className;
-@property (nonatomic, readonly) NSString* testName;
-
-@property (nonatomic, readonly) NSFileManager* fileManager;
-@property (nonatomic, readonly) Random* random;
-
-@property (nonatomic, readonly) Dispatch* dispatch;
-
-- (void)log:(NSString*)format, ...;
+- (void)waitUntilDone
+{
+    dispatch_group_wait(_group, DISPATCH_TIME_FOREVER);
+}
 
 @end

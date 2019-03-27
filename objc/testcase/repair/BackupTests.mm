@@ -197,12 +197,9 @@
 //{
 //    TestCaseAssertTrue([self.database canOpen]);
 //
-//    dispatch_group_t group = dispatch_group_create();
-//
 //    NSString* shm = [self.database.path stringByAppendingString:@"-shm"];
 //    NSString* wal = [self.database.path stringByAppendingString:@"-wal"];
 //
-//    dispatch_queue_t backupQueue = dispatch_queue_create("com.Tencent.WCDB.Backup.Error.Prone", DISPATCH_QUEUE_CONCURRENT);
 //    TestCaseResult* willBackup = [TestCaseResult no];
 //    TestCaseResult* didBackup = [TestCaseResult no];
 //
@@ -222,14 +219,14 @@
 //        }
 //    }];
 //
-//    dispatch_group_async(group, backupQueue, ^{
+//    [self.dispatch async:^{
 //        TestCaseLog(@"Will backup");
 //        [willBackup makeYES];
 //        TestCaseAssertTrue([self.database backup]);
 //        TestCaseAssertResultYES(didCheckpoint);
 //        [didBackup makeYES];
 //        TestCaseLog(@"Did backup");
-//    });
+//    }];
 //
 //    // wait until backup start
 //    while ([willBackup isNO]) {}
@@ -262,8 +259,6 @@
 //    TestCaseAssertResultNO(didBackup);
 //    [didCheckpoint makeYES];
 //    TestCaseLog(@"Did checkpoint");
-//
-//    dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
 //}
 
 @end
