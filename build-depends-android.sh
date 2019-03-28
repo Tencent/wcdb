@@ -140,14 +140,7 @@ if [ $? != 0 ]; then
   cat patch/openssl/*.patch | patch -p1 -N -dopenssl || exit 1
 fi
 
-# Generate sqlite3.c/.h
-cd sqlcipher
-if [ 'Makefile' -ot 'Makefile.in' ] || [ 'Makefile' -ot 'configure' ]; then
-  ./configure $SQLCIPHER_CONFIG || exit 1
-fi
-make sqlite3.h sqlite3.c || exit 1
-cp sqlite3.h sqlite3.c sqlite3ext.h sqlite3session.h src/sqlcipher.h ../android/sqlcipher/ || exit 1
-cd ..
+sqlite3_headers_generated=0
 
 for android_arch in $BUILD_ARCHS; do
   echo "###########################################"
@@ -238,14 +231,25 @@ for android_arch in $BUILD_ARCHS; do
   fi
 
   # Build and install sqlcipher
-  if [ "$BUILD_SQLCIPHER" == 1 ]; then
+  if [ "$BUILD_SQLCIPHER" == 1 -o "$sqlite3_headers_generated" == 0 ]; then
     cd sqlcipher
     [ -f 'Makefile' ] && make distclean
     CC="$android_cc" \
     CFLAGS="-I$android_prefix/include $android_cflags $SQLCIPHER_CFLAGS" \
     LDFLAGS="-L$android_prefix/lib $SQLCIPHER_LDFLAGS $android_pie" \
     ./configure --host="$gcc_prefix" --prefix="$android_prefix" $SQLCIPHER_CONFIG || exit 1
-    make all install || exit 1
+    
+    # Generate sqlite3.c/.h
+    if [ "$sqlite3_headers_generated" == 0 ]; then
+      make sqlite3.h sqlite3.c || exit 1
+      cp sqlite3.h sqlite3.c sqlite3ext.h sqlite3session.h src/sqlcipher.h ../android/sqlcipher/ || exit 1
+      sqlite3_headers_generated=1
+    fi
+
+    if [ "$BUILD_SQLCIPHER" == 1 ]; then
+      make all install || exit 1
+    fi
+
     make distclean || exit 1
     cd ..
   fi
