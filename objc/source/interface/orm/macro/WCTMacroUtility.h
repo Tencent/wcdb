@@ -25,8 +25,8 @@
 #define __WCDB_ORM_TYPE_PREFIX(ORMType)                                        \
     WCDB_ORM_CONCAT(WCDB_ORM_PREFIX, ORMType)
 
-#define __WCDB_ORM(ORMType, subfix)                                            \
-    WCDB_ORM_CONCAT(__WCDB_ORM_TYPE_PREFIX(ORMType), subfix)
+#define __WCDB_ORM(ORMType, suffix)                                            \
+    WCDB_ORM_CONCAT(__WCDB_ORM_TYPE_PREFIX(ORMType), suffix)
 
 #define WCDB_ORM_UNIQUE(ORMType)                                               \
     __WCDB_ORM(ORMType, WCDB_UNIQUE_ID) : (WCTBinding &) binding

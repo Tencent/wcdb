@@ -74,10 +74,10 @@ public:
         bool forNewlyCreatedTableOnly; // create if and only if the table is newly created by createTable:withClass:
     };
     typedef struct Index Index;
-    Index &getOrCreateIndex(const WCDB::String &subfix);
+    Index &getOrCreateIndex(const WCDB::String &suffix);
 
     std::list<Index> generateIndexes(const WCDB::String &tableName) const;
 
 private:
-    std::map<WCDB::String /* index subfix */, Index> m_indexes;
+    std::map<WCDB::String /* index suffix */, Index> m_indexes;
 };

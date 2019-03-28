@@ -45,7 +45,7 @@
 
 - (BOOL)dropIndexWithSuffix:(NSString *)indexSuffix
 {
-    WCTRemedialAssert(indexSuffix != nil, "Index subfix can't be null.", return NO;);
+    WCTRemedialAssert(indexSuffix != nil, "Index suffix can't be null.", return NO;);
     return [_database dropIndex:[_name stringByAppendingString:indexSuffix]];
 }
 

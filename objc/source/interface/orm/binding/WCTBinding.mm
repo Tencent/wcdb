@@ -159,11 +159,11 @@ WCTBinding::Index::Index()
 {
 }
 
-WCTBinding::Index &WCTBinding::getOrCreateIndex(const WCDB::String &subfix)
+WCTBinding::Index &WCTBinding::getOrCreateIndex(const WCDB::String &suffix)
 {
-    auto iter = m_indexes.find(subfix);
+    auto iter = m_indexes.find(suffix);
     if (iter == m_indexes.end()) {
-        iter = m_indexes.emplace(subfix, Index()).first;
+        iter = m_indexes.emplace(suffix, Index()).first;
     }
     return iter->second;
 }
