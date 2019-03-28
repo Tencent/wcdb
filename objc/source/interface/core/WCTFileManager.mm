@@ -41,6 +41,18 @@ constexpr const char *Enum::description(const WCDB::FileProtection &fileProtecti
         return NSFileProtectionCompleteUntilFirstUserAuthentication.UTF8String;
     }
 }
+
+static WCDB::FileProtection fileProtectionForAttribute(NSString *fileAttributeProtection)
+{
+    if ([fileAttributeProtection isEqualToString:NSFileProtectionComplete]) {
+        return WCDB::FileProtection::Complete;
+    } else if ([fileAttributeProtection isEqualToString:NSFileProtectionCompleteUnlessOpen]) {
+        return WCDB::FileProtection::CompleteUnlessOpen;
+    } else if ([fileAttributeProtection isEqualToString:NSFileProtectionCompleteUntilFirstUserAuthentication]) {
+        return WCDB::FileProtection::CompleteUntilFirstUserAuthentication;
+    }
+    return WCDB::FileProtection::None;
+}
 #endif
 
 #if TARGET_OS_IPHONE
@@ -75,16 +87,7 @@ std::pair<bool, WCDB::FileProtection> FileManager::getFileProtection(const WCDB:
     NSString *nsPath = [NSString stringWithUTF8String:path.c_str()];
     NSDictionary *attributes = [fileManager attributesOfItemAtPath:nsPath error:&nsError];
     if (attributes != nil) {
-        WCDB::FileProtection fileProtection = WCDB::FileProtection::None;
-        NSString *nsFileProtection = [attributes objectForKey:NSFileProtectionKey];
-        if ([nsFileProtection isEqualToString:NSFileProtectionComplete]) {
-            fileProtection = WCDB::FileProtection::Complete;
-        } else if ([nsFileProtection isEqualToString:NSFileProtectionCompleteUnlessOpen]) {
-            fileProtection = WCDB::FileProtection::CompleteUnlessOpen;
-        } else if ([nsFileProtection isEqualToString:NSFileProtectionCompleteUntilFirstUserAuthentication]) {
-            fileProtection = WCDB::FileProtection::CompleteUntilFirstUserAuthentication;
-        }
-        return { true, fileProtection };
+        return { true, fileProtectionForAttribute(attributes[NSFileProtectionKey]) };
     }
     WCDB::Error error;
     error.setCode(WCDB::Error::Code::IOError, "Native");
@@ -110,7 +113,7 @@ bool FileManager::setFileProtection(const WCDB::String &path, WCDB::FileProtecti
 std::pair<bool, WCDB::FileProtection> FileManager::getFileProtection(const WCDB::String &path)
 {
     WCDB_UNUSED(path)
-    return { true, std::numeric_limits<WCDB::FileProtection>::min() };
+    return { true, WCDB::FileProtection::None };
 }
 #endif
 

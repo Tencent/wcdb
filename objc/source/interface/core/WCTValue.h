@@ -27,8 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol WCTValueProtocol
 
-- (WCTColumnType)valueType;
-
 - (nullable NSString *)stringValue;
 
 - (nullable NSNumber *)numberValue;

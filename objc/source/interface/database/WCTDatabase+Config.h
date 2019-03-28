@@ -62,7 +62,7 @@ typedef BOOL (^WCTConfigBlock)(WCTHandle* _Nonnull);
 - (void)setConfig:(WCDB_ESCAPE WCTConfigBlock)invocation
  withUninvocation:(nullable WCDB_ESCAPE WCTConfigBlock)uninvocation
           forName:(NSString*)name
-     withPriority:(int)priority;
+     withPriority:(WCTConfigPriority)priority;
 
 /**
  @brief This interface is equivalent to [database setConfig:config forName:name withPriority:INT_MAX];

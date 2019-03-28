@@ -88,19 +88,6 @@
 
 @implementation NSNumber (WCTValue)
 
-- (WCTColumnType)valueType
-{
-    if (CFNumberIsFloatType((CFNumberRef) self)) {
-        return WCTColumnTypeDouble;
-    } else {
-        if (CFNumberGetByteSize((CFNumberRef) self) <= 4) {
-            return WCTColumnTypeInteger32;
-        } else {
-            return WCTColumnTypeInteger64;
-        }
-    }
-}
-
 - (NSData *)dataValue
 {
     return [self.stringValue dataUsingEncoding:NSASCIIStringEncoding];
@@ -114,11 +101,6 @@
 @end
 
 @implementation NSData (WCTValue)
-
-- (WCTColumnType)valueType
-{
-    return WCTColumnTypeData;
-}
 
 - (NSData *)dataValue
 {
@@ -140,11 +122,6 @@
 
 @implementation NSString (WCTValue)
 
-- (WCTColumnType)valueType
-{
-    return WCTColumnTypeString;
-}
-
 - (NSData *)dataValue
 {
     return [self dataUsingEncoding:NSUTF8StringEncoding];
@@ -164,11 +141,6 @@
 @end
 
 @implementation NSNull (WCTValue)
-
-- (WCTColumnType)valueType
-{
-    return WCTColumnTypeNil;
-}
 
 - (NSData *)dataValue
 {

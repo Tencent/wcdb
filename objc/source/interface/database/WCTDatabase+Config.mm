@@ -48,7 +48,7 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
 - (void)setConfig:(WCTConfigBlock)nsInvocation
  withUninvocation:(WCTConfigBlock)nsUninvocation
           forName:(NSString*)name
-     withPriority:(int)priority
+     withPriority:(WCTConfigPriority)priority
 {
     WCTRemedialAssert(nsInvocation != nil, "Use [removeConfigForName:] instead.", return;);
     WCDB::CustomConfig::Invocation invocation = [nsInvocation, self](WCDB::Handle* handle) -> bool {
