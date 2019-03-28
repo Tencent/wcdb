@@ -44,7 +44,7 @@ static void printer(const WCDB::String &message)
     NSLog(@"%s", message.c_str());
 }
 
-static id initialize()
+static std::nullptr_t initialize()
 {
     WCDB::Console::shared()->setPrinter(printer);
 
@@ -52,16 +52,16 @@ static id initialize()
 
 #if TARGET_OS_IPHONE && !TARGET_OS_WATCH
     //keep it the entire life cycle
-    return [[NSNotificationCenter defaultCenter]
+    id _ = [[NSNotificationCenter defaultCenter]
     addObserverForName:UIApplicationDidReceiveMemoryWarningNotification
                 object:nil
                  queue:nil
             usingBlock:^(NSNotification *) {
                 [WCTDatabase purgeAll];
             }];
-#else
-    return nil;
+    WCDB_UNUSED(_)
 #endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
+    return nullptr;
 }
 
 - (instancetype)initWithUnsafeDatabase:(WCDB::Database *)database
@@ -76,10 +76,9 @@ static id initialize()
 
 - (instancetype)initWithPath:(NSString *)path
 {
-#pragma clang diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-variable"
-    static id s_once = initialize();
-#pragma clang diagnostic pop
+    // call initialize here to avoid + (void)initialize overriding by developers.
+    static std::nullptr_t _ = initialize();
+    WCDB_UNUSED(_)
     if (self = [super init]) {
         _databaseHolder = WCDB::Core::shared()->getOrCreateDatabase(path);
         WCTInnerAssert(_databaseHolder != nullptr);

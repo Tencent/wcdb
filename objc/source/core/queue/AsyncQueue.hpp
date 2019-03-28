@@ -50,7 +50,7 @@ private:
     bool m_started;
     std::atomic<bool> m_running;
 
-    void willRun();
+    void doRun();
 };
 
 } // namespace WCDB

@@ -51,11 +51,11 @@ void AsyncQueue::run()
     std::lock_guard<std::mutex> lockGuard(m_mutex);
     if (!m_started && !exiting()) {
         m_started = true;
-        std::thread(std::bind(&AsyncQueue::willRun, this)).detach();
+        std::thread(std::bind(&AsyncQueue::doRun, this)).detach();
     }
 }
 
-void AsyncQueue::willRun()
+void AsyncQueue::doRun()
 {
     pthread_setname_np(name.c_str());
     if (!exiting()) {

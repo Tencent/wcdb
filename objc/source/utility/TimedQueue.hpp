@@ -42,6 +42,7 @@ public:
         waitUntilDone();
     }
 
+    // return true to erase the element
     typedef std::function<bool(const Key &, const Info &)> ExpiredCallback;
 
     void reQueue(const Key &key, double delay, const Info &info)

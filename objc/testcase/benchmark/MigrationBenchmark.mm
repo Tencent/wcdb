@@ -58,9 +58,8 @@
 
     TestCaseAssertTrue([self.database createTable:self.tableName withClass:BenchmarkObject.class]);
 
-    BOOL done;
-    TestCaseAssertTrue([self.database stepMigrationOrDone:done]);
-    TestCaseAssertFalse(done);
+    TestCaseAssertTrue([self.database stepMigration]);
+    TestCaseAssertFalse([self.database isMigrated]);
 }
 
 - (void)doTearDownDatabase
@@ -76,10 +75,9 @@
 - (void)doTestMigrate
 {
     self.factory.expectedQuality = 100000;
-    __block BOOL done;
     [self
     doMeasure:^{
-        while ([self.database stepMigrationOrDone:done] && !done)
+        while ([self.database stepMigration] && ![self.database isMigrated])
             ;
     }
     setUp:^{
@@ -87,10 +85,9 @@
     }
     tearDown:^{
         [self tearDownDatabase];
-        done = NO;
     }
     checkCorrectness:^{
-        TestCaseAssertTrue(done);
+        TestCaseAssertTrue([self.database isMigrated]);
     }];
 }
 

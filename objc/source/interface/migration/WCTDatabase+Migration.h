@@ -31,7 +31,7 @@ typedef void (^WCTMigratedNotificationBlock)(WCTMigrationBaseInfo* _Nullable);
 
 - (void)filterMigration:(nullable WCDB_ESCAPE WCTMigrationFilterBlock)filter;
 
-- (BOOL)stepMigrationOrDone:(BOOL&)done;
+- (BOOL)stepMigration;
 
 - (void)setAutoMigrate:(BOOL)flag;
 

@@ -32,9 +32,8 @@
     self.isCrossDatabaseMigration = NO;
     [super setUp];
 
-    BOOL done;
-    TestCaseAssertTrue([self.database stepMigrationOrDone:done]);
-    TestCaseAssertFalse(done);
+    TestCaseAssertTrue([self.database stepMigration]);
+    TestCaseAssertFalse([self.database isMigrated]);
 }
 
 - (void)test_insert

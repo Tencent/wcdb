@@ -44,17 +44,13 @@ void BackupQueue::put(const String& path, int frames)
 {
     SharedLockGuard lockGuard(m_lock);
     int backedUpFrames = m_backedUp[path];
-    bool reQueue = false;
     if (frames >= backedUpFrames + BackupConfigFramesIntervalForCritical // expired too much
         || frames < backedUpFrames // restarted
     ) {
         m_timedQueue.reQueue(path, BackupQueueDelayForCritical, frames);
-        reQueue = true;
+        lazyRun();
     } else if (frames >= backedUpFrames + BackupConfigFramesIntervalForNonCritical) {
         m_timedQueue.reQueue(path, BackupQueueDelayForNonCritical, frames);
-        reQueue = true;
-    }
-    if (reQueue) {
         lazyRun();
     }
 }

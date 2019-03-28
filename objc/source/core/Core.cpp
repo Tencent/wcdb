@@ -96,9 +96,12 @@ void Core::globalLog(void* parameter, int rc, const char* message)
         const String source = message;
         std::smatch match;
         if (std::regex_search(source.begin(), source.end(), match, pattern)) {
-            // hint checkpoint
-            Core* core = static_cast<Core*>(parameter);
-            core->m_checkpointQueue->put(match[2].str(), atoi(match[1].str().c_str()));
+            int frames = atoi(match[1].str().c_str());
+            if (frames > 0) {
+                // hint checkpoint
+                Core* core = static_cast<Core*>(parameter);
+                core->m_checkpointQueue->put(match[2].str(), frames);
+            }
         }
         WCTInnerAssert(match.size() == 3); // assert match and match 3.
     }

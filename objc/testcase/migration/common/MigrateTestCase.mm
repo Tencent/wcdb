@@ -40,11 +40,9 @@
 
 - (void)doTestStepMigrate
 {
-    BOOL done = NO;
-    BOOL succeed = [self.database stepMigrationOrDone:done];
+    BOOL succeed = [self.database stepMigration];
     TestCaseAssertTrue(succeed);
-    TestCaseAssertFalse(done);
-    TestCaseAssertFalse(self.database.isMigrated);
+    TestCaseAssertFalse([self.database isMigrated]);
 
     // check source table migration is not started
     // It's not a good practice.
@@ -54,13 +52,11 @@
 - (void)doTestMigrate
 {
     TestCaseAssertFalse(self.database.isMigrated);
-    BOOL done = NO;
     BOOL succeed;
     do {
-        succeed = [self.database stepMigrationOrDone:done];
-    } while (succeed && !done);
+        succeed = [self.database stepMigration];
+    } while (succeed && ![self.database isMigrated]);
     TestCaseAssertTrue(succeed);
-    TestCaseAssertTrue(done);
     TestCaseAssertTrue(self.database.isMigrated);
 
     TestCaseAssertTrue([[self.table getObjectsOrders:MigrationObject.identifier.asOrder(WCTOrderedAscending)] isEqualToArray:self.objects]);
@@ -83,20 +79,19 @@
         }
     }];
 
-    BOOL done = NO;
     BOOL succeed;
     do {
-        succeed = [self.database stepMigrationOrDone:done];
-    } while (succeed && !done);
+        succeed = [self.database stepMigration];
+    } while (succeed && ![self.database isMigrated]);
     TestCaseAssertTrue(succeed);
-    TestCaseAssertTrue(done);
+    TestCaseAssertTrue([self.database isMigrated]);
     TestCaseAssertTrue(tableMigrated);
     TestCaseAssertEqual(migrated, 1);
 
     // Notification will receive multiple times.
-    succeed = [self.database stepMigrationOrDone:done];
+    succeed = [self.database stepMigration];
     TestCaseAssertTrue(succeed);
-    TestCaseAssertTrue(done);
+    TestCaseAssertTrue([self.database isMigrated]);
     TestCaseAssertEqual(migrated, 2);
 }
 
@@ -128,9 +123,8 @@
         }
     }];
 
-    BOOL done = NO;
     do {
-        if (done) {
+        if ([self.database isMigrated]) {
             // add more table to trigger migration
             NSString *table = [NSString stringWithFormat:@"t_%@", self.random.string];
             NSString *sourceTable = [NSString stringWithFormat:@"t_source_%@", self.random.string];
@@ -138,14 +132,14 @@
             TestCaseAssertTrue([self.sourceDatabase createTable:sourceTable withClass:TestCaseObject.class]);
             TestCaseAssertTrue([self.database createTable:table withClass:TestCaseObject.class]);
         }
-        TestCaseAssertTrue([self.database stepMigrationOrDone:done]);
+        TestCaseAssertTrue([self.database stepMigration]);
     } while (tested.isNO);
 
     [WCTDatabase resetGlobalErrorTracer];
     [write makeNO];
 
     TestCaseAssertResultYES(tested);
-    TestCaseAssertFalse(done);
+    TestCaseAssertFalse([self.database isMigrated]);
     [self.dispatch waitUntilDone];
 }
 
@@ -241,10 +235,9 @@
     NSString *anotherTable = @"testAnotherTable";
     [self.toMigrate setObject:anotherSourceTable forKey:anotherTable];
     TestCaseAssertTrue([self.sourceDatabase createTable:anotherSourceTable withClass:TestCaseObject.class]);
-    BOOL done = NO;
     do {
-        TestCaseAssertTrue([self.database stepMigrationOrDone:done]);
-    } while (!done);
+        TestCaseAssertTrue([self.database stepMigration]);
+    } while (![self.database isMigrated]);
     TestCaseAssertTrue(self.database.isMigrated);
 
     TestCaseAssertTrue([self.database createTable:anotherTable withClass:TestCaseObject.class]);
@@ -253,8 +246,8 @@
     TestCaseAssertFalse(self.database.isMigrated);
 
     do {
-        TestCaseAssertTrue([self.database stepMigrationOrDone:done]);
-    } while (!done);
+        TestCaseAssertTrue([self.database stepMigration]);
+    } while (![self.database isMigrated]);
     TestCaseAssertTrue(self.database.isMigrated);
 }
 
@@ -264,18 +257,17 @@
     //    [self.database removeCheckpointConfig];
     //    TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
     //
-    //    BOOL done = NO;
     //    BOOL succeed;
     //    int lastWalFrameCount = [self getWalFrameCount];
     //    TestCaseAssertEqual(lastWalFrameCount, 0);
     //    do {
-    //        succeed = [self.database stepMigrationOrDone:done];
+    //        succeed = [self.database stepMigration];
     //
     //        int walFrameCount = [self getWalFrameCount];
     //        // <=3: 1. sqlite_sequence 2. source table 3. table
     //        TestCaseAssertTrue(walFrameCount - lastWalFrameCount <= 3);
     //        lastWalFrameCount = walFrameCount;
-    //    } while (succeed && !done);
+    //    } while (succeed && ![self.database isMigrated]);
     //    TestCaseAssertTrue(succeed);
     //    TestCaseAssertTrue(done);
 }

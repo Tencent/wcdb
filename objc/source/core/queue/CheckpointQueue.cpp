@@ -58,7 +58,6 @@ void CheckpointQueue::put(const String& path, int frames)
         m_timedQueue.reQueue(path, CheckpointQueueDelayForNonCritical, frames);
         put(path, CheckpointQueueDelayForNonCritical, frames);
     }
-    lazyRun();
 }
 
 void CheckpointQueue::put(const String& path, double delay, int frames)

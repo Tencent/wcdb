@@ -39,10 +39,11 @@
     _database->filterMigration(callback);
 }
 
-- (BOOL)stepMigrationOrDone:(BOOL&)done
+- (BOOL)stepMigration
 {
+    bool _;
     bool succeed;
-    std::tie(succeed, done) = _database->stepMigration();
+    std::tie(succeed, _) = _database->stepMigration();
     return succeed;
 }
 
