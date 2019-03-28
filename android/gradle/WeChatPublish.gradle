@@ -488,7 +488,6 @@ class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
                                         'compile':          'compile',
                                         'api':              'compile',
                                         'implementation':   'runtime',
-                                        'compileOnly':      'compile',
                                         'runtimeOnly':      'runtime'
                                 ].each { conf, scope ->
                                     project.configurations[conf].allDependencies.each { addDep(it, scope) }

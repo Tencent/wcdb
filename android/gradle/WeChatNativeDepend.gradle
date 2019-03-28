@@ -71,16 +71,25 @@ if (project.pluginManager.hasPlugin(ANDROID_APP_PLUGIN_ID)) {
 
 def handleAndroidApplication() {
     injectNativeDependenciesPath()
-    //generateAndInjectBuildInfoModule()
+    generateAndInjectBuildInfoModule()
+    
+    cleanExtractNativeDepsDir()
+    generateBuildInfoHeader(true)
+    
     project.afterEvaluate {
         extractNativeDependencies(project.android.applicationVariants)
+        generateBuildInfoHeader(false)
     }
 }
 
 def handleAndroidLibrary() {
     mountExtension()
     injectNativeDependenciesPath()
-    //generateAndInjectBuildInfoModule()
+    generateAndInjectBuildInfoModule()
+    
+    cleanExtractNativeDepsDir()
+    generateBuildInfoHeader(true)
+    
     project.afterEvaluate {
         def libVariants = project.android.libraryVariants
         libVariants.each { variant ->
@@ -89,6 +98,7 @@ def handleAndroidLibrary() {
             propergateNativeArtifacts(variant)
         }
         extractNativeDependencies(libVariants)
+        generateBuildInfoHeader(false)
     }
 }
 
@@ -224,16 +234,66 @@ def injectNativeDependenciesPath() {
     cmakeOpt.getArguments().add('-DEXT_DEP=' + extractedNativeDepsDir.absolutePath)
 }
 
-def extractNativeDependencies(targetVariants) {
+def generateBuildInfoHeader(boolean stubOnly) {
+    def hasBuildRevision = project.hasProperty('WX_BUILD_REVISION')
+    def hasBuildBranch = project.hasProperty('WX_BUILD_BRANCH')
+    def hasBuildTime = project.hasProperty('WX_BUILD_TIME')
+    def hasBuildJob = project.hasProperty('WX_BUILD_JOB')
+    def hasBuildVersion = project.extensions.findByName('wechatPublish') != null
+    
+    def extractedNativeDepsDir = getExtractedNativeDependenciesDir()
+    def exportedHeadersDir = new File(extractedNativeDepsDir, HEADERS_DIR_NAME)
+    def buildInfoHeaderDir = new File(exportedHeadersDir, 'build-info')
+    if (!buildInfoHeaderDir.exists()) {
+        buildInfoHeaderDir.mkdirs()
+    }
+    def buildInfoHeaderFile = new File(buildInfoHeaderDir, 'build-info.h')
+    buildInfoHeaderFile.withPrintWriter { pw ->
+        pw.println('#ifndef __MM_AUTOGENARATED_BUILD_INFO_H__')
+        pw.println('#define __MM_AUTOGENARATED_BUILD_INFO_H__')
+        if (!stubOnly && hasBuildVersion) {
+            pw.println("#define WX_BUILD_VERSION \"${wechatPublish.fullVersion}\"")
+        } else {
+            pw.println("#define WX_BUILD_VERSION \"\"")
+        }
+        if (!stubOnly && hasBuildRevision) {
+            pw.println("#define WX_BUILD_REVISION \"${WX_BUILD_REVISION.replace('\"', '')}\"")
+        } else {
+            pw.println("#define WX_BUILD_REVISION \"\"")
+        }
+        if (!stubOnly && hasBuildBranch) {
+            pw.println("#define WX_BUILD_BRANCH \"${WX_BUILD_BRANCH.replace('\"', '')}\"")
+        } else {
+            pw.println("#define WX_BUILD_BRANCH \"\"")
+        }
+        if (!stubOnly && hasBuildTime) {
+            pw.println("#define WX_BUILD_TIME \"${WX_BUILD_TIME.replace('\"', '')}\"")
+        } else {
+            pw.println("#define WX_BUILD_TIME \"\"")
+        }
+        if (!stubOnly && hasBuildJob) {
+            pw.println("#define WX_BUILD_JOB \"${WX_BUILD_JOB.replace('\"', '')}\"")
+        } else {
+            pw.println("#define WX_BUILD_JOB \"\"")
+        }
+        pw.println('#endif //__MM_AUTOGENARATED_BUILD_INFO_H__')
+    }
+}
+
+def cleanExtractNativeDepsDir() {
     def extractedNativeDepsDir = getExtractedNativeDependenciesDir()
     if (extractedNativeDepsDir.exists()) {
         GFileUtils.cleanDirectory(extractedNativeDepsDir)
     }
+}
+
+def extractNativeDependencies(targetVariants) {
+    def extractedNativeDepsDir = getExtractedNativeDependenciesDir()
 
     def attrSchema = project.dependencies.attributesSchema
     def attrMatchingStrategy = attrSchema.attribute(Usage.USAGE_ATTRIBUTE)
     attrMatchingStrategy.compatibilityRules.add(NativeRuntimeAttrCompatibilityRules, { config -> config.setParams(project) })
-
+    
     targetVariants.all { variant ->
         def compileClasspath = variant.variantData.getVariantDependency().compileClasspath
         def compileClasspathAttrs = compileClasspath.attributes
@@ -309,7 +369,8 @@ def generateAndInjectBuildInfoModule() {
     def hasBuildBranch = project.hasProperty('WX_BUILD_BRANCH')
     def hasBuildTime = project.hasProperty('WX_BUILD_TIME')
     def hasBuildJob = project.hasProperty('WX_BUILD_JOB')
-    
+    def hasBuildVersion = project.extensions.findByName('wechatPublish') != null
+
     if (!hasBuildRevision && !hasBuildBranch && !hasBuildTime && !hasBuildJob) {
         System.err.println("[!] There's no any build-info values, skip generating build-info module.")
         return
@@ -332,14 +393,23 @@ def generateAndInjectBuildInfoModule() {
     cmakeBuildOpts.arguments "-DCMAKE_USER_MAKE_RULES_OVERRIDE=${cmakeInitFilePath.absolutePath}"
 
     def assemblyFilePath = new File(buildInfoModuleDir, 'build-info.S')
-    assemblyFilePath.withPrintWriter { pw ->
-        pw.println('.section .comment')
-        pw.println('.global WX_BUILD_INFO')
-        pw.println('WX_BUILD_INFO:')
-        pw.println(".string \"WX_BUILD_REVISION: ${hasBuildRevision ? WX_BUILD_REVISION : '(Unknown)'}\"")
-        pw.println(".string \"WX_BUILD_BRANCH: ${hasBuildBranch ? WX_BUILD_BRANCH : '(Unknown)'}\"")
-        pw.println(".string \"WX_BUILD_TIME: ${hasBuildTime ? WX_BUILD_TIME : '(Unknown)'}\"")
-        pw.println(".string \"WX_BUILD_JOB: ${hasBuildJob ? WX_BUILD_JOB : '(Unknown)'}\"")
+    assemblyFilePath.createNewFile()
+    project.afterEvaluate {
+        assemblyFilePath.withPrintWriter { pw ->
+            pw.println('.section .comment')
+            pw.println('.global WX_BUILD_INFO')
+            pw.println('WX_BUILD_INFO:')
+            if (hasBuildVersion)
+                pw.println(".string \"WX_BUILD_VERSION: ${wechatPublish.fullVersion}\"")
+            if (hasBuildRevision)
+                pw.println(".string \"WX_BUILD_REVISION: ${WX_BUILD_REVISION.replace('\"', '')}\"")
+            if (hasBuildBranch)
+                pw.println(".string \"WX_BUILD_BRANCH: ${WX_BUILD_BRANCH.replace('\"', '')}\"")
+            if (hasBuildTime)
+                pw.println(".string \"WX_BUILD_TIME: ${WX_BUILD_TIME.replace('\"', '')}\"")
+            if (hasBuildJob)
+                pw.println(".string \"WX_BUILD_JOB: ${WX_BUILD_JOB.replace('\"', '')}\"")
+        }
     }
 
     makeFilePath.withPrintWriter { pw ->
