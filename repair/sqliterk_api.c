@@ -174,3 +174,11 @@ unsigned int sqliterk_integrity(sqliterk *rk)
 {
     return sqliterkGetIntegrity(rk);
 }
+
+void sqliterk_cipher_conf_set_key(sqliterk_cipher_conf *conf, const void* key, int key_len)
+{
+    if (conf != NULL) {
+        conf->key = key;
+        conf->key_len = key_len;
+    }
+}

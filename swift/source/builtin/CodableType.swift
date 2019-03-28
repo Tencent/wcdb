@@ -241,7 +241,7 @@ extension URL: ColumnCodable, LiteralValueConvertible, ExpressionCanBeOperated {
     }
 }
 
-extension Array: ColumnCodable, ColumnCodableBase where Element: Codable {
+extension Array: ColumnCodable where Element: Codable {
     public static var columnType: ColumnType {
         return .BLOB
     }
@@ -259,7 +259,7 @@ extension Array: ColumnCodable, ColumnCodableBase where Element: Codable {
     }
 }
 
-extension Dictionary: ColumnCodable, ColumnCodableBase where Key: Codable, Value: Codable {
+extension Dictionary: ColumnCodable where Key: Codable, Value: Codable {
     public static var columnType: ColumnType {
         return .BLOB
     }
@@ -277,7 +277,7 @@ extension Dictionary: ColumnCodable, ColumnCodableBase where Key: Codable, Value
     }
 }
 
-extension Set: ColumnCodable, ColumnCodableBase where Element: Codable {
+extension Set: ColumnCodable where Element: Codable {
     public static var columnType: ColumnType {
         return .BLOB
     }

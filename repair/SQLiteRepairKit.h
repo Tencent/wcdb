@@ -54,6 +54,8 @@ typedef struct sqliterk_cipher_conf {
     int use_hmac;
     const unsigned char *kdf_salt;
 } sqliterk_cipher_conf;
+    
+void sqliterk_cipher_conf_set_key(sqliterk_cipher_conf *conf, const void* key, int key_len);
 
 typedef struct sqlite3 sqlite3;
 typedef struct sqliterk_master_info sqliterk_master_info;
