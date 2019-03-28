@@ -1439,6 +1439,7 @@
 		39485B562240765C00A65DA4 /* NewlyCreatedTableIndexObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39485B502240751600A65DA4 /* NewlyCreatedTableIndexObject.mm */; };
 		39D25E59224B045A0003AF25 /* Dispatch.h in Headers */ = {isa = PBXBuildFile; fileRef = 39D25E57224B045A0003AF25 /* Dispatch.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		39D25E5A224B045A0003AF25 /* Dispatch.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39D25E58224B045A0003AF25 /* Dispatch.mm */; };
+		39D25F38224CB9A30003AF25 /* WCTDatabase+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2366BBB5221BEAA6000ED712 /* WCTDatabase+TestCase.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -5994,6 +5995,7 @@
 				23545BA32224EAA40091C981 /* SyntaxCommonConst.cpp in Sources */,
 				2367BB552215004300380122 /* SyntaxCreateVirtualTableSTMT.cpp in Sources */,
 				2367BB562215004300380122 /* SyntaxAttachSTMT.cpp in Sources */,
+				39D25F38224CB9A30003AF25 /* WCTDatabase+TestCase.mm in Sources */,
 				2367BB572215004300380122 /* MigrationHandle.cpp in Sources */,
 				2367BB582215004300380122 /* SyntaxJoinClause.cpp in Sources */,
 				2367BB592215004300380122 /* WCTDatabase+FTS.mm in Sources */,
