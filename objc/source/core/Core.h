@@ -56,7 +56,8 @@ namespace WCDB {
 class Core final : public DatabasePoolEvent,
                    public CheckpointEvent,
                    public BackupEvent,
-                   public MigrationEvent {
+                   public MigrationEvent,
+                   public ObservationEvent {
 #pragma mark - Core
 public:
     static Core* shared();
@@ -89,7 +90,7 @@ public:
 protected:
     TokenizerModules m_modules;
 
-#pragma mark - Corruption
+#pragma mark - Observartion
 public:
     typedef std::function<bool(Database*)> CorruptedNotification;
     bool isFileObservedCorrupted(const String& path);
@@ -97,6 +98,7 @@ public:
                                               const CorruptedNotification& notification);
 
 protected:
+    void observatedThatNeedPurged() override final;
     std::shared_ptr<ObservationQueue> m_observationQueue;
 
 #pragma mark - Checkpoint

@@ -1436,6 +1436,8 @@
 		39411A4122437E7B00A388F5 /* CaseInsensiveList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		39411A4222437E7B00A388F5 /* CaseInsensiveList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		39485B562240765C00A65DA4 /* NewlyCreatedTableIndexObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39485B502240751600A65DA4 /* NewlyCreatedTableIndexObject.mm */; };
+		3959F8CA224E1E8700E24568 /* WCTObservationQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3959F8C7224E1E8700E24568 /* WCTObservationQueue.mm */; };
+		3959F8CB224E1E8700E24568 /* WCTObservationQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3959F8C7224E1E8700E24568 /* WCTObservationQueue.mm */; };
 		39D25E59224B045A0003AF25 /* Dispatch.h in Headers */ = {isa = PBXBuildFile; fileRef = 39D25E57224B045A0003AF25 /* Dispatch.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		39D25E5A224B045A0003AF25 /* Dispatch.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39D25E58224B045A0003AF25 /* Dispatch.mm */; };
 		39D25F38224CB9A30003AF25 /* WCTDatabase+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2366BBB5221BEAA6000ED712 /* WCTDatabase+TestCase.mm */; };
@@ -2748,6 +2750,7 @@
 		39485B502240751600A65DA4 /* NewlyCreatedTableIndexObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NewlyCreatedTableIndexObject.mm; sourceTree = "<group>"; };
 		39485B512240751600A65DA4 /* NewlyCreatedTableIndexObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NewlyCreatedTableIndexObject+WCTTableCoding.h"; sourceTree = "<group>"; };
 		39485B522240751600A65DA4 /* NewlyCreatedTableIndexObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewlyCreatedTableIndexObject.h; sourceTree = "<group>"; };
+		3959F8C7224E1E8700E24568 /* WCTObservationQueue.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTObservationQueue.mm; sourceTree = "<group>"; };
 		39D25E57224B045A0003AF25 /* Dispatch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Dispatch.h; sourceTree = "<group>"; };
 		39D25E58224B045A0003AF25 /* Dispatch.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Dispatch.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -3174,6 +3177,7 @@
 				23BBE2A5204955CD00C4CBB6 /* WCTCommon.h */,
 				23DF0A0D219028E900F0B2B6 /* WCTDeclaration.h */,
 				2316D93521058B5500707AFC /* WCTFileManager.mm */,
+				3959F8C7224E1E8700E24568 /* WCTObservationQueue.mm */,
 				2370B1302191533C00D3227C /* WCTOptional.h */,
 				23F70F79209FF0EC00CCE3CD /* WCTValue.h */,
 				23F70F7A209FF0EC00CCE3CD /* WCTValue.mm */,
@@ -5925,6 +5929,7 @@
 				2367BB0E2215004300380122 /* Configs.cpp in Sources */,
 				2367BB0F2215004300380122 /* Recyclable.cpp in Sources */,
 				2367BB102215004300380122 /* Data.cpp in Sources */,
+				3959F8CB224E1E8700E24568 /* WCTObservationQueue.mm in Sources */,
 				2367BB112215004300380122 /* SyntaxForeignKeyClause.cpp in Sources */,
 				2367BB122215004300380122 /* SyntaxRecursiveCTE.cpp in Sources */,
 				2367BB132215004300380122 /* IndexedColumn.cpp in Sources */,
@@ -6263,6 +6268,7 @@
 				23EEDCDF217DFADC006E9E73 /* StatementSavepoint.cpp in Sources */,
 				23F70FC420A0618100CCE3CD /* Configs.cpp in Sources */,
 				236996B221D5C4FF00E72E81 /* Recyclable.cpp in Sources */,
+				3959F8CA224E1E8700E24568 /* WCTObservationQueue.mm in Sources */,
 				23775BCD20AD72BC00E21AB0 /* Data.cpp in Sources */,
 				23EEDCFD217DFADC006E9E73 /* SyntaxForeignKeyClause.cpp in Sources */,
 				23EEDD17217DFADC006E9E73 /* SyntaxRecursiveCTE.cpp in Sources */,

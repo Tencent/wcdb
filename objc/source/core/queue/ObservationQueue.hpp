@@ -29,18 +29,38 @@
 
 namespace WCDB {
 
+class ObservationEvent {
+public:
+    virtual ~ObservationEvent() = 0;
+
+protected:
+    virtual void observatedThatNeedPurged() = 0;
+    friend class ObservationQueue;
+};
+
 class ObservationQueue final : public AsyncQueue {
 public:
-    ObservationQueue(const String& name);
+    ObservationQueue(const String& name, ObservationEvent* event);
     ~ObservationQueue();
 
 protected:
     // path -> identifier of the corrupted database that is pending to be notified
+    // when the path is empty, it
     TimedQueue<String, uint32_t> m_pendings;
 
     bool onTimed(const String& path, const uint32_t& identifier);
     void loop() override final;
     SharedLock m_lock;
+    ObservationEvent* m_event;
+
+#pragma mark - Purge
+protected:
+    void markThatNeedPurged();
+    void observatedThatNeedPurged();
+
+    SteadyClock m_lastPurgeTime;
+
+    void setNotificationWhenMemoryWarning();
 
 #pragma mark - Corruption
 public:

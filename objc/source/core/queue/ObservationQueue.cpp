@@ -27,10 +27,16 @@
 
 namespace WCDB {
 
-ObservationQueue::ObservationQueue(const String& name) : AsyncQueue(name)
+ObservationEvent::~ObservationEvent()
+{
+}
+
+ObservationQueue::ObservationQueue(const String& name, ObservationEvent* event)
+: AsyncQueue(name), m_event(event)
 {
     Notifier::shared()->setNotification(
     0, name, std::bind(&ObservationQueue::handleError, this, std::placeholders::_1));
+    registerMemoryWarningNotification();
 }
 
 ObservationQueue::~ObservationQueue()
@@ -46,7 +52,38 @@ void ObservationQueue::loop()
 
 bool ObservationQueue::onTimed(const String& path, const uint32_t& identifier)
 {
-    return notifyCorruptedEvent(path, identifier);
+    if (path.empty()) {
+        WCTInnerAssert(m_event != nullptr);
+        observatedThatNeedPurged();
+        return true;
+    } else {
+        return notifyCorruptedEvent(path, identifier);
+    }
+}
+
+#pragma mark - Purge
+void ObservationQueue::markThatNeedPurged()
+{
+    if (m_event != nullptr) {
+        SteadyClock lastPurgeTime;
+        {
+            SharedLockGuard lockGuard(m_lock);
+            lastPurgeTime = m_lastPurgeTime;
+        }
+        if (SteadyClock::now() > lastPurgeTime
+                                 + std::chrono::nanoseconds((long long) (ObservationQueueTimeIntervalForPurging
+                                                                         * 1E9))) {
+            m_pendings.reQueue(nullptr, 0, 0);
+        }
+    }
+}
+
+void ObservationQueue::observatedThatNeedPurged()
+{
+    WCTInnerAssert(m_event != nullptr);
+    m_event->observatedThatNeedPurged();
+    LockGuard lockGuard(m_lock);
+    m_lastPurgeTime = SteadyClock::now();
 }
 
 #pragma mark - Corrupt
@@ -80,13 +117,14 @@ void ObservationQueue::handleError(const Error& error)
     const auto& infos = error.infos.getStrings();
 
     auto iter = infos.find("Path");
-    if (iter == infos.end()) {
+    if (iter == infos.end() || iter->second.empty()) {
+        // make sure no empty path will be added into queue
         return;
     }
     const String& path = iter->second;
     bool succeed;
     uint32_t identifier;
-    std::tie(succeed, identifier) = FileManager::getFileIdentifier(iter->second);
+    std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
     if (!succeed) {
         return;
     }

@@ -39,7 +39,7 @@ Core::Core()
 // Database
 : m_databasePool(this)
 // Corruption
-, m_observationQueue(new ObservationQueue(ObservationQueueName))
+, m_observationQueue(new ObservationQueue(ObservationQueueName, this))
 // Checkpoint
 , m_checkpointQueue(new CheckpointQueue(CheckpointQueueName, this))
 // Backup
@@ -180,7 +180,12 @@ std::shared_ptr<Config> Core::tokenizerConfig(const std::list<String>& tokenizeN
     return std::shared_ptr<Config>(new TokenizerConfig(m_modules.get(tokenizeNames)));
 }
 
-#pragma mark - Corruption
+#pragma mark - Observation
+void Core::observatedThatNeedPurged()
+{
+    purgeDatabasePool();
+}
+
 bool Core::isFileObservedCorrupted(const String& path)
 {
     return m_observationQueue->isFileObservedCorrupted(path);

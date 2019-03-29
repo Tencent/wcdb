@@ -34,6 +34,7 @@ static constexpr const int MigrationQueueTolerableFailures = 3;
 // Observation Queue
 static constexpr const char* ObservationQueueName = "com.Tencent.WCDB.Queue.Observation";
 static constexpr const double ObservationQueueTimeIntervalForReinvokingCorruptedEvent = 5.0f;
+static constexpr const double ObservationQueueTimeIntervalForPurging = 10.0f;
 
 // Checkpoint Queue
 static constexpr const char* CheckpointQueueName = "com.Tencent.WCDB.Queue.Checkpoint";
