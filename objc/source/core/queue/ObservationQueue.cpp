@@ -38,6 +38,40 @@ ObservationQueue::~ObservationQueue()
     Notifier::shared()->unsetNotification(name);
 }
 
+void ObservationQueue::loop()
+{
+    m_pendings.loop(std::bind(
+    &ObservationQueue::onTimed, this, std::placeholders::_1, std::placeholders::_2));
+}
+
+bool ObservationQueue::onTimed(const String& path, const uint32_t& identifier)
+{
+    return notifyCorruptedEvent(path, identifier);
+}
+
+#pragma mark - Corrupt
+bool ObservationQueue::notifyCorruptedEvent(const String& path, uint32_t identifier)
+{
+    Notification notification = nullptr;
+    {
+        SharedLockGuard lockGuard(m_lock);
+        auto iter = m_notifications.find(path);
+        if (iter != m_notifications.end()) {
+            notification = iter->second;
+        }
+    }
+    bool resolved = true;
+    if (notification) {
+        resolved = notification(path, identifier);
+    }
+
+    if (!resolved) {
+        m_pendings.reQueue(
+        path, ObservationQueueTimeIntervalForInvokingCorruptedEvent, identifier);
+    }
+    return resolved;
+}
+
 void ObservationQueue::handleError(const Error& error)
 {
     if (!error.isCorruption() || error.level < Error::Level::Error || exiting()) {
@@ -75,35 +109,6 @@ void ObservationQueue::handleError(const Error& error)
     }
 }
 
-void ObservationQueue::loop()
-{
-    m_pendings.loop(std::bind(
-    &ObservationQueue::onTimed, this, std::placeholders::_1, std::placeholders::_2));
-}
-
-bool ObservationQueue::onTimed(const String& path, const uint32_t& identifier)
-{
-    Notification notification = nullptr;
-    {
-        SharedLockGuard lockGuard(m_lock);
-        auto iter = m_notifications.find(path);
-        if (iter != m_notifications.end()) {
-            notification = iter->second;
-        }
-    }
-    bool resolved = true;
-    if (notification) {
-        resolved = notification(path, identifier);
-    }
-
-    if (!resolved) {
-        m_pendings.reQueue(
-        path, ObservationQueueTimeIntervalForInvokingCorruptedEvent, identifier);
-    }
-    return resolved;
-}
-
-#pragma mark - Corrupt
 bool ObservationQueue::isFileObservedCorrupted(const String& path)
 {
     bool corrupted = false;

@@ -35,31 +35,32 @@ public:
     ~ObservationQueue();
 
 protected:
-    void handleError(const Error& error);
+    // path -> identifier of the corrupted database that is pending to be notified
+    TimedQueue<String, uint32_t> m_pendings;
+
+    bool onTimed(const String& path, const uint32_t& identifier);
     void loop() override final;
     SharedLock m_lock;
 
-#pragma mark - Corrupt
-public:
-    bool isFileObservedCorrupted(const String& path);
-
-protected:
-    // identifier of the corrupted database file
-    // it will be kept forever in memory since the identifier will be changed after removed/recovered
-    std::set<uint32_t> m_corrupteds;
-
-#pragma mark - Notification
+#pragma mark - Corruption
 public:
     // return true to mark as resolved
     typedef std::function<bool(const String& path, uint32_t identifier)> Notification;
     void setNotificationWhenCorrupted(const String& path, const Notification& notification);
 
+    bool isFileObservedCorrupted(const String& path);
+
 protected:
-    bool onTimed(const String& path, const uint32_t& identifier);
-    // path -> identifier of the corrupted database that is pending to be notified
-    TimedQueue<String, uint32_t> m_pendings;
+    // return true to mark as resolved
+    bool notifyCorruptedEvent(const String& path, uint32_t identifier);
+    void handleError(const Error& error);
+
     // path -> user notification
     std::map<String, Notification> m_notifications;
+
+    // identifier of the corrupted database file
+    // it will be kept forever in memory since the identifier will be changed after removed/recovered
+    std::set<uint32_t> m_corrupteds;
 };
 
 } //namespace WCDB
