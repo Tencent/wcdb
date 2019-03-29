@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_CORRUPTION_QUEUE_HPP
-#define __WCDB_CORRUPTION_QUEUE_HPP
+#ifndef __WCDB_OBSERVATION_QUEUE_HPP
+#define __WCDB_OBSERVATION_QUEUE_HPP
 
 #include <WCDB/AsyncQueue.hpp>
 #include <WCDB/Lock.hpp>
@@ -29,10 +29,10 @@
 
 namespace WCDB {
 
-class CorruptionQueue final : public AsyncQueue {
+class ObservationQueue final : public AsyncQueue {
 public:
-    CorruptionQueue(const String& name);
-    ~CorruptionQueue();
+    ObservationQueue(const String& name);
+    ~ObservationQueue();
 
 protected:
     void handleError(const Error& error);
@@ -41,7 +41,7 @@ protected:
 
 #pragma mark - Corrupt
 public:
-    bool isFileCorrupted(const String& path);
+    bool isFileObservedCorrupted(const String& path);
 
 protected:
     // identifier of the corrupted database file

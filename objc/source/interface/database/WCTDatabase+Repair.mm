@@ -38,7 +38,7 @@
 
 - (BOOL)isCorrupted
 {
-    return WCDB::Core::shared()->isFileCorrupted(self.path);
+    return WCDB::Core::shared()->isFileObservedCorrupted(self.path);
 }
 
 - (void)filterBackup:(WCTBackupFilterBlock)tableShouldBeBackedUp

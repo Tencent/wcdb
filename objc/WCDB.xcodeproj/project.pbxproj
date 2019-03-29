@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		2304121821AB9EF700CB2318 /* DepositTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2304121721AB9EF700CB2318 /* DepositTests.mm */; };
-		2304121A21AB9F1600CB2318 /* CorruptedTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2304121921AB9F1600CB2318 /* CorruptedTests.mm */; };
 		2304121C21AB9F2000CB2318 /* RetrieveTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2304121B21AB9F2000CB2318 /* RetrieveTests.mm */; };
 		2304121F21ABA23C00CB2318 /* BackupTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2304121E21ABA23C00CB2318 /* BackupTestCase.mm */; };
 		2304B42822156CD700901953 /* TokenizerModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2304B42622156CD700901953 /* TokenizerModule.cpp */; };
@@ -254,7 +253,7 @@
 		2367BAE02215004300380122 /* Initializeable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AF4E1C20CD04E20050033C /* Initializeable.cpp */; };
 		2367BAE12215004300380122 /* PageBasedFileHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2316D9412105D19500707AFC /* PageBasedFileHandle.cpp */; };
 		2367BAE22215004300380122 /* Progress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A6D4BD20BFD7F9004F2DAA /* Progress.cpp */; };
-		2367BAE32215004300380122 /* CorruptionQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4DCE52112B17400954D71 /* CorruptionQueue.cpp */; };
+		2367BAE32215004300380122 /* ObservationQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4DCE52112B17400954D71 /* ObservationQueue.cpp */; };
 		2367BAE42215004300380122 /* Mechanic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B4220AD666900E21AB0 /* Mechanic.cpp */; };
 		2367BAE52215004300380122 /* WCTDatabase+Table.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F69B1EA0D6680021EFA7 /* WCTDatabase+Table.mm */; };
 		2367BAE62215004300380122 /* SyntaxUpdateSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC5F217DFADC006E9E73 /* SyntaxUpdateSTMT.cpp */; };
@@ -558,7 +557,7 @@
 		2367BC1E2215004300380122 /* MigrationInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A64D08214A458A00ED28BB /* MigrationInfo.hpp */; };
 		2367BC1F2215004300380122 /* StatementCreateIndex.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBC4217DFADC006E9E73 /* StatementCreateIndex.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2367BC202215004300380122 /* WCTMigrationInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 236BACE421BF9FC900C8B4D9 /* WCTMigrationInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2367BC212215004300380122 /* CorruptionQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DCE62112B17400954D71 /* CorruptionQueue.hpp */; };
+		2367BC212215004300380122 /* ObservationQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DCE62112B17400954D71 /* ObservationQueue.hpp */; };
 		2367BC232215004300380122 /* Interface.h in Headers */ = {isa = PBXBuildFile; fileRef = 23D4DA442085A3D300AE6D90 /* Interface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2367BC242215004300380122 /* RepairKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 23B9E66920AE6EE400CF1683 /* RepairKit.h */; };
 		2367BC252215004300380122 /* WCTTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 23F340D8204D32C2007DB8AB /* WCTTable.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1087,8 +1086,8 @@
 		23B4DCDC2112AC5600954D71 /* TokenizerModuleTemplate.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DCD92112AC5600954D71 /* TokenizerModuleTemplate.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		23B4DCE12112B03C00954D71 /* AsyncQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4DCDF2112B03C00954D71 /* AsyncQueue.cpp */; };
 		23B4DCE32112B03C00954D71 /* AsyncQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DCE02112B03C00954D71 /* AsyncQueue.hpp */; };
-		23B4DCE72112B17400954D71 /* CorruptionQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4DCE52112B17400954D71 /* CorruptionQueue.cpp */; };
-		23B4DCE92112B17400954D71 /* CorruptionQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DCE62112B17400954D71 /* CorruptionQueue.hpp */; };
+		23B4DCE72112B17400954D71 /* ObservationQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4DCE52112B17400954D71 /* ObservationQueue.cpp */; };
+		23B4DCE92112B17400954D71 /* ObservationQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DCE62112B17400954D71 /* ObservationQueue.hpp */; };
 		23B4DCED2112B32400954D71 /* CheckpointQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4DCEB2112B32400954D71 /* CheckpointQueue.cpp */; };
 		23B4DCEF2112B32400954D71 /* CheckpointQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23B4DCEC2112B32400954D71 /* CheckpointQueue.hpp */; };
 		23B4DCF32112B32D00954D71 /* BackupQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4DCF12112B32D00954D71 /* BackupQueue.cpp */; };
@@ -1440,6 +1439,7 @@
 		39D25E59224B045A0003AF25 /* Dispatch.h in Headers */ = {isa = PBXBuildFile; fileRef = 39D25E57224B045A0003AF25 /* Dispatch.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		39D25E5A224B045A0003AF25 /* Dispatch.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39D25E58224B045A0003AF25 /* Dispatch.mm */; };
 		39D25F38224CB9A30003AF25 /* WCTDatabase+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2366BBB5221BEAA6000ED712 /* WCTDatabase+TestCase.mm */; };
+		39D25F41224E02120003AF25 /* ObservationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2304121921AB9F1600CB2318 /* ObservationTests.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1874,7 +1874,7 @@
 
 /* Begin PBXFileReference section */
 		2304121721AB9EF700CB2318 /* DepositTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DepositTests.mm; sourceTree = "<group>"; };
-		2304121921AB9F1600CB2318 /* CorruptedTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CorruptedTests.mm; sourceTree = "<group>"; };
+		2304121921AB9F1600CB2318 /* ObservationTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ObservationTests.mm; sourceTree = "<group>"; };
 		2304121B21AB9F2000CB2318 /* RetrieveTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RetrieveTests.mm; sourceTree = "<group>"; };
 		2304121D21ABA23C00CB2318 /* BackupTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BackupTestCase.h; sourceTree = "<group>"; };
 		2304121E21ABA23C00CB2318 /* BackupTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = BackupTestCase.mm; sourceTree = "<group>"; };
@@ -2398,8 +2398,8 @@
 		23B4DCD92112AC5600954D71 /* TokenizerModuleTemplate.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TokenizerModuleTemplate.hpp; sourceTree = "<group>"; };
 		23B4DCDF2112B03C00954D71 /* AsyncQueue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AsyncQueue.cpp; sourceTree = "<group>"; };
 		23B4DCE02112B03C00954D71 /* AsyncQueue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AsyncQueue.hpp; sourceTree = "<group>"; };
-		23B4DCE52112B17400954D71 /* CorruptionQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CorruptionQueue.cpp; sourceTree = "<group>"; };
-		23B4DCE62112B17400954D71 /* CorruptionQueue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CorruptionQueue.hpp; sourceTree = "<group>"; };
+		23B4DCE52112B17400954D71 /* ObservationQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ObservationQueue.cpp; sourceTree = "<group>"; };
+		23B4DCE62112B17400954D71 /* ObservationQueue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ObservationQueue.hpp; sourceTree = "<group>"; };
 		23B4DCEB2112B32400954D71 /* CheckpointQueue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CheckpointQueue.cpp; sourceTree = "<group>"; };
 		23B4DCEC2112B32400954D71 /* CheckpointQueue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CheckpointQueue.hpp; sourceTree = "<group>"; };
 		23B4DCF12112B32D00954D71 /* BackupQueue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BackupQueue.cpp; sourceTree = "<group>"; };
@@ -2956,6 +2956,7 @@
 		231FEADB2199A0FE00DC3706 /* basic */ = {
 			isa = PBXGroup;
 			children = (
+				2304121921AB9F1600CB2318 /* ObservationTests.mm */,
 				23739DC7219AEDE700A043BF /* DatabaseTests.mm */,
 				2386563C219C009E00F7F6D2 /* FileTests.mm */,
 				2386563E219C00A500F7F6D2 /* MemoryTests.mm */,
@@ -3000,7 +3001,6 @@
 			children = (
 				23B4A78121A7FBB500BD6A32 /* BackupTests.mm */,
 				2304121721AB9EF700CB2318 /* DepositTests.mm */,
-				2304121921AB9F1600CB2318 /* CorruptedTests.mm */,
 				2304121B21AB9F2000CB2318 /* RetrieveTests.mm */,
 				23846FCE21AF8427005B868F /* RetrieveRobustyTests.mm */,
 				2304121D21ABA23C00CB2318 /* BackupTestCase.h */,
@@ -3953,8 +3953,8 @@
 			children = (
 				23B4DCDF2112B03C00954D71 /* AsyncQueue.cpp */,
 				23B4DCE02112B03C00954D71 /* AsyncQueue.hpp */,
-				23B4DCE52112B17400954D71 /* CorruptionQueue.cpp */,
-				23B4DCE62112B17400954D71 /* CorruptionQueue.hpp */,
+				23B4DCE52112B17400954D71 /* ObservationQueue.cpp */,
+				23B4DCE62112B17400954D71 /* ObservationQueue.hpp */,
 				23B4DCEB2112B32400954D71 /* CheckpointQueue.cpp */,
 				23B4DCEC2112B32400954D71 /* CheckpointQueue.hpp */,
 				23B4DCF12112B32D00954D71 /* BackupQueue.cpp */,
@@ -4520,7 +4520,7 @@
 				2367BC1E2215004300380122 /* MigrationInfo.hpp in Headers */,
 				2367BC1F2215004300380122 /* StatementCreateIndex.hpp in Headers */,
 				2367BC202215004300380122 /* WCTMigrationInfo.h in Headers */,
-				2367BC212215004300380122 /* CorruptionQueue.hpp in Headers */,
+				2367BC212215004300380122 /* ObservationQueue.hpp in Headers */,
 				2367BC232215004300380122 /* Interface.h in Headers */,
 				2367BC242215004300380122 /* RepairKit.h in Headers */,
 				2367BC252215004300380122 /* WCTTable.h in Headers */,
@@ -4876,7 +4876,7 @@
 				23A64D0B214A458A00ED28BB /* MigrationInfo.hpp in Headers */,
 				23EEDCC0217DFADC006E9E73 /* StatementCreateIndex.hpp in Headers */,
 				236BACE621BF9FC900C8B4D9 /* WCTMigrationInfo.h in Headers */,
-				23B4DCE92112B17400954D71 /* CorruptionQueue.hpp in Headers */,
+				23B4DCE92112B17400954D71 /* ObservationQueue.hpp in Headers */,
 				23D4DA452085A40A00AE6D90 /* Interface.h in Headers */,
 				23B9E66B20AE6EEA00CF1683 /* RepairKit.h in Headers */,
 				23F340DA204D32C3007DB8AB /* WCTTable.h in Headers */,
@@ -5726,6 +5726,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				39D25F41224E02120003AF25 /* ObservationTests.mm in Sources */,
 				2386563D219C009E00F7F6D2 /* FileTests.mm in Sources */,
 				2386563F219C00A500F7F6D2 /* MemoryTests.mm in Sources */,
 				23739DC8219AEDE700A043BF /* DatabaseTests.mm in Sources */,
@@ -5767,7 +5768,6 @@
 				2304121F21ABA23C00CB2318 /* BackupTestCase.mm in Sources */,
 				2304121821AB9EF700CB2318 /* DepositTests.mm in Sources */,
 				23846FCF21AF8427005B868F /* RetrieveRobustyTests.mm in Sources */,
-				2304121A21AB9F1600CB2318 /* CorruptedTests.mm in Sources */,
 				2304121C21AB9F2000CB2318 /* RetrieveTests.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5879,7 +5879,7 @@
 				2367BAE02215004300380122 /* Initializeable.cpp in Sources */,
 				2367BAE12215004300380122 /* PageBasedFileHandle.cpp in Sources */,
 				2367BAE22215004300380122 /* Progress.cpp in Sources */,
-				2367BAE32215004300380122 /* CorruptionQueue.cpp in Sources */,
+				2367BAE32215004300380122 /* ObservationQueue.cpp in Sources */,
 				2367BAE42215004300380122 /* Mechanic.cpp in Sources */,
 				2367BAE52215004300380122 /* WCTDatabase+Table.mm in Sources */,
 				2367BAE62215004300380122 /* SyntaxUpdateSTMT.cpp in Sources */,
@@ -6217,7 +6217,7 @@
 				23AF4E1E20CD04E20050033C /* Initializeable.cpp in Sources */,
 				2316D9432105D19500707AFC /* PageBasedFileHandle.cpp in Sources */,
 				23A6D4BF20BFD7F9004F2DAA /* Progress.cpp in Sources */,
-				23B4DCE72112B17400954D71 /* CorruptionQueue.cpp in Sources */,
+				23B4DCE72112B17400954D71 /* ObservationQueue.cpp in Sources */,
 				23775B7E20AD666900E21AB0 /* Mechanic.cpp in Sources */,
 				2349F7711EA0D6680021EFA7 /* WCTDatabase+Table.mm in Sources */,
 				23EEDD57217DFADC006E9E73 /* SyntaxUpdateSTMT.cpp in Sources */,

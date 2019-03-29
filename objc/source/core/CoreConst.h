@@ -31,9 +31,9 @@ static constexpr const char* MigrationQueueName = "com.Tencent.WCDB.Queue.Migrat
 static constexpr const double MigrationQueueTimeIntervalForMigrating = 1.0f;
 static constexpr const int MigrationQueueTolerableFailures = 3;
 
-// Corrupt Queue
-static constexpr const char* CorruptionQueueName = "com.Tencent.WCDB.Queue.Corruption";
-static constexpr const double CorruptionQueueTimeIntervalForInvokingEvent = 5.0f;
+// Observation Queue
+static constexpr const char* ObservationQueueName = "com.Tencent.WCDB.Queue.Observation";
+static constexpr const double ObservationQueueTimeIntervalForInvokingCorruptedEvent = 5.0f;
 
 // Checkpoint Queue
 static constexpr const char* CheckpointQueueName = "com.Tencent.WCDB.Queue.Checkpoint";

@@ -324,4 +324,26 @@
     }
 }
 
+- (BOOL)tryToMakeHeaderCorrupted
+{
+    if (![self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("TRUNCATE")]) {
+        TestCaseFailure();
+        return NO;
+    }
+    __block BOOL result = NO;
+    [self.database close:^{
+        NSFileHandle* fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.path];
+        if (fileHandle == nil) {
+            TestCaseFailure();
+            return;
+        }
+        NSMutableData* blank = [NSMutableData dataWithLength:self.headerSize];
+        memset(blank.mutableBytes, 0, self.headerSize);
+        [fileHandle writeData:blank];
+        [fileHandle closeFile];
+        result = YES;
+    }];
+    return result;
+}
+
 @end

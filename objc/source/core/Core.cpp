@@ -39,7 +39,7 @@ Core::Core()
 // Database
 : m_databasePool(this)
 // Corruption
-, m_corruptionQueue(new CorruptionQueue(CorruptionQueueName))
+, m_observationQueue(new ObservationQueue(ObservationQueueName))
 // Checkpoint
 , m_checkpointQueue(new CheckpointQueue(CheckpointQueueName, this))
 // Backup
@@ -181,15 +181,15 @@ std::shared_ptr<Config> Core::tokenizerConfig(const std::list<String>& tokenizeN
 }
 
 #pragma mark - Corruption
-bool Core::isFileCorrupted(const String& path)
+bool Core::isFileObservedCorrupted(const String& path)
 {
-    return m_corruptionQueue->isFileCorrupted(path);
+    return m_observationQueue->isFileObservedCorrupted(path);
 }
 
 void Core::setNotificationWhenDatabaseCorrupted(const String& path,
                                                 const CorruptedNotification& notification)
 {
-    CorruptionQueue::Notification underlyingNotification = nullptr;
+    ObservationQueue::Notification underlyingNotification = nullptr;
     if (notification != nullptr) {
         underlyingNotification
         = [this, notification](const String& path, uint32_t corruptedIdentifier) -> bool {
@@ -225,7 +225,7 @@ void Core::setNotificationWhenDatabaseCorrupted(const String& path,
             return succeed;
         };
     }
-    m_corruptionQueue->setNotificationWhenCorrupted(path, underlyingNotification);
+    m_observationQueue->setNotificationWhenCorrupted(path, underlyingNotification);
 }
 
 #pragma mark - Checkpoint

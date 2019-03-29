@@ -18,16 +18,23 @@
  * limitations under the License.
  */
 
-#import "BackupTestCase.h"
 #import "CoreConst.h"
+#import <TestCase/TestCase.h>
 
-@interface CorruptedTests : BackupTestCase
+@interface ObservationTests : CRUDTestCase
 
 @end
 
-@implementation CorruptedTests
+@implementation ObservationTests
 
-- (void)test_notification
+- (void)setUp
+{
+    [super setUp];
+
+    [self insertPresetObjects];
+}
+
+- (void)test_corrupted_notification
 {
     TestCaseResult* result = [TestCaseResult no];
     [self.database setNotificationWhenCorrupted:^BOOL(WCTDatabase* database) {
@@ -45,7 +52,7 @@
     TestCaseAssertResultYES(result);
 }
 
-- (void)test_feature_repeat_notify_when_failed
+- (void)test_feature_repeat_corrupted_notify_when_failed
 {
     TestCaseResult* result = [TestCaseResult no];
     [self.database setNotificationWhenCorrupted:^BOOL(WCTDatabase* database) {
@@ -66,7 +73,7 @@
     TestCaseAssertTrue([self.table getObjects] == nil);
     [NSThread sleepForTimeInterval:1.0];
     TestCaseAssertResultNO(result);
-    [NSThread sleepForTimeInterval:WCDB::CorruptionQueueTimeIntervalForInvokingEvent];
+    [NSThread sleepForTimeInterval:WCDB::ObservationQueueTimeIntervalForInvokingCorruptedEvent];
     TestCaseAssertResultYES(result);
 
     TestCaseAssertTrue([self.database removeFiles]);
@@ -84,60 +91,6 @@
 
     TestCaseAssertTrue([self.database removeFiles]);
     TestCaseAssertFalse([self.database isCorrupted]);
-}
-
-- (void)test_compatible_backup_will_not_trigger_corruption
-{
-#warning TODO - ignore corruption from RepairKit since there is some known issues during backup.
-
-    TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
-
-    TestCaseAssertFalse([self.database isCorrupted]);
-
-    TestCaseResult* corrupted = [TestCaseResult no];
-    __weak typeof(self) weakSelf = self;
-    [WCTDatabase globalTraceSQL:^(NSString* sql) {
-        typeof(self) strongSelf = weakSelf;
-        if (strongSelf == nil) {
-            return;
-        }
-
-        if ([corrupted isNO] && [sql isEqualToString:@"ROLLBACK"]) {
-            // Backup Write Handle Rollback, which means that it's already inited.
-            NSFileHandle* fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:strongSelf.path];
-            if (fileHandle == nil) {
-                TestCaseFailure();
-                return;
-            }
-            unsigned long long fileSize = [fileHandle seekToEndOfFile];
-            [fileHandle seekToFileOffset:0];
-            [fileHandle writeData:[self.random dataWithLength:(NSInteger) fileSize]];
-            [fileHandle closeFile];
-            [corrupted makeYES];
-        }
-    }];
-
-    TestCaseResult* tested = [TestCaseResult no];
-    [WCTDatabase globalTraceError:^(WCTError* error) {
-        NSLog(@"%@", error);
-        typeof(self) strongSelf = weakSelf;
-        if (strongSelf == nil) {
-            return;
-        }
-        if (error.code == WCTErrorCodeCorrupt
-            && error.level == WCTErrorLevelIgnore
-            && [error.source isEqualToString:@"Repair"]
-            && [error.path isEqualToString:strongSelf.database.path]
-            && error.tag == strongSelf.database.tag) {
-            TestCaseAssertResultYES(corrupted);
-            [tested makeYES];
-        }
-    }];
-
-    TestCaseAssertFalse([self.database backup]);
-    TestCaseAssertResultYES(tested);
-    TestCaseAssertFalse([self.database isCorrupted]);
-    [WCTDatabase resetGlobalErrorTracer];
 }
 
 @end

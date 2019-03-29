@@ -24,8 +24,8 @@
 #include <WCDB/AsyncQueue.hpp>
 #include <WCDB/BackupQueue.hpp>
 #include <WCDB/CheckpointQueue.hpp>
-#include <WCDB/CorruptionQueue.hpp>
 #include <WCDB/MigrationQueue.hpp>
+#include <WCDB/ObservationQueue.hpp>
 
 #include <WCDB/BackupConfig.hpp>
 #include <WCDB/BasicConfig.hpp>
@@ -92,12 +92,12 @@ protected:
 #pragma mark - Corruption
 public:
     typedef std::function<bool(Database*)> CorruptedNotification;
-    bool isFileCorrupted(const String& path);
+    bool isFileObservedCorrupted(const String& path);
     void setNotificationWhenDatabaseCorrupted(const String& path,
                                               const CorruptedNotification& notification);
 
 protected:
-    std::shared_ptr<CorruptionQueue> m_corruptionQueue;
+    std::shared_ptr<ObservationQueue> m_observationQueue;
 
 #pragma mark - Checkpoint
 public:

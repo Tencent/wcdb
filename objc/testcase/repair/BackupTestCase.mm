@@ -59,24 +59,4 @@
     return 10;
 }
 
-- (BOOL)tryToMakeHeaderCorrupted
-{
-    if (![self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("TRUNCATE")]) {
-        TestCaseFailure();
-        return NO;
-    }
-    __block BOOL result = NO;
-    [self.database close:^{
-        NSFileHandle* fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.path];
-        if (fileHandle == nil) {
-            TestCaseFailure();
-            return;
-        }
-        [fileHandle writeData:[self.random dataWithLength:self.headerSize]];
-        [fileHandle closeFile];
-        result = YES;
-    }];
-    return result;
-}
-
 @end

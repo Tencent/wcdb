@@ -31,6 +31,4 @@
 @property (nonatomic, readonly) NSTimeInterval delayForTolerance;
 @property (nonatomic, readonly) int framesForTolerance;
 
-- (BOOL)tryToMakeHeaderCorrupted;
-
 @end

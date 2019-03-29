@@ -20,25 +20,25 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/CoreConst.h>
-#include <WCDB/CorruptionQueue.hpp>
 #include <WCDB/Exiting.hpp>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Notifier.hpp>
+#include <WCDB/ObservationQueue.hpp>
 
 namespace WCDB {
 
-CorruptionQueue::CorruptionQueue(const String& name) : AsyncQueue(name)
+ObservationQueue::ObservationQueue(const String& name) : AsyncQueue(name)
 {
     Notifier::shared()->setNotification(
-    0, name, std::bind(&CorruptionQueue::handleError, this, std::placeholders::_1));
+    0, name, std::bind(&ObservationQueue::handleError, this, std::placeholders::_1));
 }
 
-CorruptionQueue::~CorruptionQueue()
+ObservationQueue::~ObservationQueue()
 {
     Notifier::shared()->unsetNotification(name);
 }
 
-void CorruptionQueue::handleError(const Error& error)
+void ObservationQueue::handleError(const Error& error)
 {
     if (!error.isCorruption() || error.level < Error::Level::Error || exiting()) {
         return;
@@ -75,13 +75,13 @@ void CorruptionQueue::handleError(const Error& error)
     }
 }
 
-void CorruptionQueue::loop()
+void ObservationQueue::loop()
 {
     m_pendings.loop(std::bind(
-    &CorruptionQueue::onTimed, this, std::placeholders::_1, std::placeholders::_2));
+    &ObservationQueue::onTimed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
-bool CorruptionQueue::onTimed(const String& path, const uint32_t& identifier)
+bool ObservationQueue::onTimed(const String& path, const uint32_t& identifier)
 {
     Notification notification = nullptr;
     {
@@ -97,13 +97,14 @@ bool CorruptionQueue::onTimed(const String& path, const uint32_t& identifier)
     }
 
     if (!resolved) {
-        m_pendings.reQueue(path, CorruptionQueueTimeIntervalForInvokingEvent, identifier);
+        m_pendings.reQueue(
+        path, ObservationQueueTimeIntervalForInvokingCorruptedEvent, identifier);
     }
     return resolved;
 }
 
 #pragma mark - Corrupt
-bool CorruptionQueue::isFileCorrupted(const String& path)
+bool ObservationQueue::isFileObservedCorrupted(const String& path)
 {
     bool corrupted = false;
     bool succeed;
@@ -117,8 +118,8 @@ bool CorruptionQueue::isFileCorrupted(const String& path)
 }
 
 #pragma mark - Notification
-void CorruptionQueue::setNotificationWhenCorrupted(const String& path,
-                                                   const Notification& notification)
+void ObservationQueue::setNotificationWhenCorrupted(const String& path,
+                                                    const Notification& notification)
 {
     LockGuard lockGuard(m_lock);
     if (notification != nullptr) {
