@@ -73,7 +73,7 @@
     TestCaseAssertTrue([self.table getObjects] == nil);
     [NSThread sleepForTimeInterval:1.0];
     TestCaseAssertResultNO(result);
-    [NSThread sleepForTimeInterval:WCDB::ObservationQueueTimeIntervalForInvokingCorruptedEvent];
+    [NSThread sleepForTimeInterval:WCDB::ObservationQueueTimeIntervalForReinvokingCorruptedEvent];
     TestCaseAssertResultYES(result);
 
     TestCaseAssertTrue([self.database removeFiles]);

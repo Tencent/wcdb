@@ -67,7 +67,7 @@ bool ObservationQueue::notifyCorruptedEvent(const String& path, uint32_t identif
 
     if (!resolved) {
         m_pendings.reQueue(
-        path, ObservationQueueTimeIntervalForInvokingCorruptedEvent, identifier);
+        path, ObservationQueueTimeIntervalForReinvokingCorruptedEvent, identifier);
     }
     return resolved;
 }
