@@ -32,16 +32,18 @@ ObservationEvent::~ObservationEvent()
 }
 
 ObservationQueue::ObservationQueue(const String& name, ObservationEvent* event)
-: AsyncQueue(name), m_event(event)
+: AsyncQueue(name)
+, m_event(event)
+, m_observerForMemoryWarning(registerNotificationWhenMemoryWarning())
 {
     Notifier::shared()->setNotification(
     0, name, std::bind(&ObservationQueue::handleError, this, std::placeholders::_1));
-    registerMemoryWarningNotification();
 }
 
 ObservationQueue::~ObservationQueue()
 {
     Notifier::shared()->unsetNotification(name);
+    unregisterNotificationWhenMemoryWarning(m_observerForMemoryWarning);
 }
 
 void ObservationQueue::loop()
@@ -54,7 +56,10 @@ bool ObservationQueue::onTimed(const String& path, const uint32_t& identifier)
 {
     if (path.empty()) {
         WCTInnerAssert(m_event != nullptr);
-        observatedThatNeedPurged();
+        // do purge
+        m_event->observatedThatNeedPurged();
+        LockGuard lockGuard(m_lock);
+        m_lastPurgeTime = SteadyClock::now();
         return true;
     } else {
         return notifyCorruptedEvent(path, identifier);
@@ -62,7 +67,7 @@ bool ObservationQueue::onTimed(const String& path, const uint32_t& identifier)
 }
 
 #pragma mark - Purge
-void ObservationQueue::markThatNeedPurged()
+void ObservationQueue::observatedThatNeedPurged()
 {
     if (m_event != nullptr) {
         SteadyClock lastPurgeTime;
@@ -74,16 +79,9 @@ void ObservationQueue::markThatNeedPurged()
                                  + std::chrono::nanoseconds((long long) (ObservationQueueTimeIntervalForPurging
                                                                          * 1E9))) {
             m_pendings.reQueue(nullptr, 0, 0);
+            lazyRun();
         }
     }
-}
-
-void ObservationQueue::observatedThatNeedPurged()
-{
-    WCTInnerAssert(m_event != nullptr);
-    m_event->observatedThatNeedPurged();
-    LockGuard lockGuard(m_lock);
-    m_lastPurgeTime = SteadyClock::now();
 }
 
 #pragma mark - Corrupt

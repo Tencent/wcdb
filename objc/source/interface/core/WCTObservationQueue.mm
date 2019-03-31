@@ -20,21 +20,43 @@
 
 #import <Foundation/Foundation.h>
 #import <WCDB/ObservationQueue.hpp>
+#if TARGET_OS_IPHONE && !TARGET_OS_WATCH
+#import <UIKit/UIKit.h>
 
 namespace WCDB {
 
-void ObservationQueue::setNotificationWhenMemoryWarning()
+void *ObservationQueue::registerNotificationWhenMemoryWarning()
 {
-#if TARGET_OS_IPHONE && !TARGET_OS_WATCH
-    //keep it the entire life cycle
-    id _ = [[NSNotificationCenter defaultCenter]
+    id observer = [[NSNotificationCenter defaultCenter]
     addObserverForName:UIApplicationDidReceiveMemoryWarningNotification
                 object:nil
                  queue:nil
-            usingBlock:^(NSNotification *){
-            m_pendings.}];
-    WCDB_UNUSED(_)
-#endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
+            usingBlock:^(NSNotification *) {
+                this->observatedThatNeedPurged();
+            }];
+    return (void *) CFBridgingRetain(observer);
+}
+
+void ObservationQueue::unregisterNotificationWhenMemoryWarning(void *observer)
+{
+    NSObject *nsObserver = (__bridge NSObject *) observer;
+    [[NSNotificationCenter defaultCenter] removeObserver:nsObserver name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+    CFBridgingRelease(observer);
 }
 
 }
+#else // TARGET_OS_IPHONE && !TARGET_OS_WATCH
+namespace WCDB {
+
+void* ObservationQueue::registerNotificationWhenMemoryWarning()
+{
+    return nullptr;
+}
+
+void ObservationQueue::unregisterNotificationWhenMemoryWarning(void* observer)
+{
+}
+
+}
+
+#endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH

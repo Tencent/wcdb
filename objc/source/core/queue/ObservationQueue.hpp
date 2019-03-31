@@ -44,8 +44,8 @@ public:
     ~ObservationQueue();
 
 protected:
-    // path -> identifier of the corrupted database that is pending to be notified
-    // when the path is empty, it
+    // When the path is empty, it indicate a `purge` work.
+    // Or it a path -> identifier pair that indicate the corrupted database that is pending to be notified
     TimedQueue<String, uint32_t> m_pendings;
 
     bool onTimed(const String& path, const uint32_t& identifier);
@@ -55,12 +55,13 @@ protected:
 
 #pragma mark - Purge
 protected:
-    void markThatNeedPurged();
     void observatedThatNeedPurged();
 
     SteadyClock m_lastPurgeTime;
 
-    void setNotificationWhenMemoryWarning();
+    void* registerNotificationWhenMemoryWarning();
+    void unregisterNotificationWhenMemoryWarning(void* observer);
+    void* m_observerForMemoryWarning;
 
 #pragma mark - Corruption
 public:

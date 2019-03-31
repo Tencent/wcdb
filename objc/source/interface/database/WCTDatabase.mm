@@ -25,11 +25,6 @@
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTHandle+Private.h>
 
-// Memory
-#if TARGET_OS_IPHONE && !TARGET_OS_WATCH
-#import <UIKit/UIKit.h>
-#endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
-
 // FTS
 #import <WCDB/WCTDatabase+FTS.h>
 #import <WCDB/WCTOneOrBinaryTokenizer.h>
@@ -50,17 +45,6 @@ static std::nullptr_t initialize()
 
     WCDB::Core::shared()->addTokenizer(WCTTokenizerOneOrBinary, WCDB::TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizerCursorInfo>::specialize());
 
-#if TARGET_OS_IPHONE && !TARGET_OS_WATCH
-    //keep it the entire life cycle
-    id _ = [[NSNotificationCenter defaultCenter]
-    addObserverForName:UIApplicationDidReceiveMemoryWarningNotification
-                object:nil
-                 queue:nil
-            usingBlock:^(NSNotification *) {
-                [WCTDatabase purgeAll];
-            }];
-    WCDB_UNUSED(_)
-#endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
     return nullptr;
 }
 

@@ -68,7 +68,10 @@
 
     TestCaseAssertTrue([self.database isOpened]);
     [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidReceiveMemoryWarningNotification object:nil];
-    TestCaseAssertFalse([self.database isOpened]);
+
+    // purge will be done after a few moment.
+    while ([self.database isOpened]) {
+    }
 }
 #endif
 
