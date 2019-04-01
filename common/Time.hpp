@@ -56,9 +56,11 @@ public:
     {
     }
 
-    static SteadyClock now();
+    SteadyClock steadyClockByAddingTimeInterval(double seconds) const;
 
-    double seconds() const;
+    double timeIntervalSinceSteadyClock(const SteadyClock &other) const;
+
+    static SteadyClock now();
 };
 
 } //namespace WCDB

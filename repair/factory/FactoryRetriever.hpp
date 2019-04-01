@@ -57,14 +57,11 @@ protected:
 
 #pragma mark - Report
 protected:
-    void reportMechanic(const Fraction &score,
-                        const String &path,
-                        const SteadyClock &cost,
-                        const Time &material);
-    void reportFullCrawler(const Fraction &score, const String &path, const SteadyClock &cost);
-    void reportSummary(const SteadyClock &cost);
+    void reportMechanic(const Fraction &score, const String &path, double cost, const Time &material);
+    void reportFullCrawler(const Fraction &score, const String &path, double cost);
+    void reportSummary(double cost);
 
-    void finishReportOfPerformance(Error &error, const String &database, const SteadyClock &cost);
+    void finishReportOfPerformance(Error &error, const String &database, double cost);
 
 #pragma mark - Evaluation and Progress
 protected:

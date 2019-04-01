@@ -88,7 +88,7 @@ bool FactoryRetriever::work()
     }
 
     SteadyClock after = SteadyClock::now();
-    reportSummary(after - before);
+    reportSummary(after.timeIntervalSinceSteadyClock(before));
 
     //4. Do a backup on restore db.
     FactoryBackup backup(factory);
@@ -183,7 +183,8 @@ bool FactoryRetriever::restore(const String &database)
                 tryUpgradeError(mechanic.getError());
             }
             score = mechanic.getScore();
-            reportMechanic(mechanic.getScore(), database, after - before, materialTime);
+            reportMechanic(
+            mechanic.getScore(), database, after.timeIntervalSinceSteadyClock(before), materialTime);
         }
     } else {
         Error warning;
@@ -206,7 +207,8 @@ bool FactoryRetriever::restore(const String &database)
     SteadyClock before = SteadyClock::now();
     if (fullCrawler.work()) {
         SteadyClock after = SteadyClock::now();
-        reportFullCrawler(fullCrawler.getScore(), database, after - before);
+        reportFullCrawler(
+        fullCrawler.getScore(), database, after.timeIntervalSinceSteadyClock(before));
         score = std::max(score, fullCrawler.getScore());
     } else if (!useMaterial) {
         WCTInnerAssert(isErrorCritial());
@@ -222,7 +224,7 @@ bool FactoryRetriever::restore(const String &database)
 #pragma mark - Report
 void FactoryRetriever::reportMechanic(const Fraction &score,
                                       const String &path,
-                                      const SteadyClock &cost,
+                                      double cost,
                                       const Time &material)
 {
     Error error;
@@ -237,9 +239,7 @@ void FactoryRetriever::reportMechanic(const Fraction &score,
     Notifier::shared()->notify(error);
 }
 
-void FactoryRetriever::reportFullCrawler(const Fraction &score,
-                                         const String &path,
-                                         const SteadyClock &cost)
+void FactoryRetriever::reportFullCrawler(const Fraction &score, const String &path, double cost)
 {
     Error error;
     error.setCode(Error::Code::Notice, "Repair");
@@ -252,28 +252,25 @@ void FactoryRetriever::reportFullCrawler(const Fraction &score,
     Notifier::shared()->notify(error);
 }
 
-void FactoryRetriever::reportSummary(const SteadyClock &cost)
+void FactoryRetriever::reportSummary(double cost)
 {
     Error error;
     error.setCode(Error::Code::Notice, "Repair");
     error.level = Error::Level::Notice;
     error.message = "Retrieve Report Summary.";
     error.infos.set("Path", database);
-    error.infos.set("Cost", cost.seconds());
+    error.infos.set("Cost", cost);
     error.infos.set("Score", getScore().value());
     Notifier::shared()->notify(error);
 }
 
-void FactoryRetriever::finishReportOfPerformance(Error &error,
-                                                 const String &database,
-                                                 const SteadyClock &cost)
+void FactoryRetriever::finishReportOfPerformance(Error &error, const String &database, double cost)
 {
-    double seconds = cost.seconds();
     assert(m_sizes.find(database) != m_sizes.end());
     size_t size = m_sizes[database];
     double sizeInMB = (double) size / 1024 / 1024;
-    double speed = sizeInMB > 0 ? sizeInMB / seconds : 0;
-    error.infos.set("Cost", seconds);
+    double speed = cost > 0 ? sizeInMB / cost : 0;
+    error.infos.set("Cost", cost);
     error.infos.set("Size", sizeInMB);
     error.infos.set("Speed", speed);
 }

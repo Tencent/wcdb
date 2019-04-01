@@ -97,11 +97,14 @@ SteadyClock SteadyClock::now()
     return std::chrono::steady_clock::now();
 }
 
-double SteadyClock::seconds() const
+double SteadyClock::timeIntervalSinceSteadyClock(const SteadyClock &other) const
 {
-    return (double) std::chrono::duration_cast<std::chrono::nanoseconds>(time_since_epoch())
-           .count()
-           / 1E9;
+    return (double) (*this - other).count() / 1E9;
+}
+
+SteadyClock SteadyClock::steadyClockByAddingTimeInterval(double seconds) const
+{
+    return SteadyClock(*this + std::chrono::nanoseconds((long long) (seconds * 1E9)));
 }
 
 } //namespace WCDB
