@@ -235,7 +235,7 @@ void FactoryRetriever::reportMechanic(const Fraction &score,
     error.infos.set("Score", score.value());
     error.infos.set("Material", material.stringify());
     finishReportOfPerformance(error, path, cost);
-    error.infos.set("Weight", getWeight(path).value());
+    error.infos.set("Weight", String::formatted("%.2f%%", getWeight(path).value() * 100.0f));
     Notifier::shared()->notify(error);
 }
 
@@ -248,7 +248,7 @@ void FactoryRetriever::reportFullCrawler(const Fraction &score, const String &pa
     error.infos.set("Path", path);
     error.infos.set("Score", score.value());
     finishReportOfPerformance(error, path, cost);
-    error.infos.set("Weight", getWeight(path).value());
+    error.infos.set("Weight", String::formatted("%.2f%%", getWeight(path).value() * 100.0f));
     Notifier::shared()->notify(error);
 }
 
@@ -259,7 +259,7 @@ void FactoryRetriever::reportSummary(double cost)
     error.level = Error::Level::Notice;
     error.message = "Retrieve Report Summary.";
     error.infos.set("Path", database);
-    error.infos.set("Cost", cost);
+    error.infos.set("Cost", String::formatted("%.2f%%", cost));
     error.infos.set("Score", getScore().value());
     Notifier::shared()->notify(error);
 }
@@ -270,9 +270,9 @@ void FactoryRetriever::finishReportOfPerformance(Error &error, const String &dat
     size_t size = m_sizes[database];
     double sizeInMB = (double) size / 1024 / 1024;
     double speed = cost > 0 ? sizeInMB / cost : 0;
-    error.infos.set("Cost", cost);
-    error.infos.set("Size", sizeInMB);
-    error.infos.set("Speed", speed);
+    error.infos.set("Cost", String::formatted("%.2f s", cost));
+    error.infos.set("Size", String::formatted("%.2f MB", sizeInMB));
+    error.infos.set("Speed", String::formatted("%.2f MB/s", speed));
 }
 
 #pragma mark - Score and Progress
