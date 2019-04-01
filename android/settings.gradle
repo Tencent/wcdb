@@ -1,3 +1,4 @@
+rootProject.name = 'wcdb-android'
 include ':wcdb', ':room'
 
 file('samples').eachDir { dir ->

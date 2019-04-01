@@ -35,6 +35,10 @@ import com.tencent.wcdb.support.CancellationSignal;
 import com.tencent.wcdb.support.Log;
 import com.tencent.wcdb.support.OperationCanceledException;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.lang.reflect.Field;
@@ -2425,6 +2429,14 @@ public final class SQLiteDatabase extends SQLiteClosable {
         }
     }
 
+    public static JSONArray dumpAllJSON(boolean verbose) throws JSONException {
+        JSONArray arr = new JSONArray();
+        for (SQLiteDatabase db : getActiveDatabases()) {
+            arr.put(db.dumpJSON(verbose));
+        }
+        return arr;
+    }
+
     /**
      * Dump detailed information about this database.
      *
@@ -2435,6 +2447,16 @@ public final class SQLiteDatabase extends SQLiteClosable {
         synchronized (mLock) {
             if (mConnectionPoolLocked != null) {
                 mConnectionPoolLocked.dump(printer, verbose);
+            }
+        }
+    }
+
+    public JSONObject dumpJSON(boolean verbose) throws JSONException {
+        synchronized (mLock) {
+            if (mConnectionPoolLocked != null) {
+                return mConnectionPoolLocked.dumpJSON(verbose);
+            } else {
+                return new JSONObject();
             }
         }
     }

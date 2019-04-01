@@ -33,6 +33,10 @@ import com.tencent.wcdb.support.Log;
 import com.tencent.wcdb.support.LruCache;
 import com.tencent.wcdb.support.OperationCanceledException;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -1148,16 +1152,6 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
     }
 
     /**
-     * Dumps debugging information about this connection.
-     *
-     * @param printer The printer to receive the dump, not null.
-     * @param verbose True to dump more verbose information.
-     */
-    public void dump(Printer printer, boolean verbose) {
-        dumpUnsafe(printer, verbose);
-    }
-
-    /**
      * Dumps debugging information about this connection, in the case where the
      * caller might not actually own the connection.
      * <p/>
@@ -1171,7 +1165,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
      * @param printer The printer to receive the dump, not null.
      * @param verbose True to dump more verbose information.
      */
-    void dumpUnsafe(Printer printer, boolean verbose) {
+     void dump(Printer printer, boolean verbose) {
         printer.println("Connection #" + mConnectionId + ":");
         if (verbose) {
             printer.println("  connectionPtr: 0x" + Long.toHexString(mConnectionPtr));
@@ -1187,6 +1181,20 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         if (verbose) {
             mPreparedStatementCache.dump(printer);
         }
+    }
+
+    JSONObject dumpJSON(boolean verbose) throws JSONException {
+         JSONObject o = new JSONObject()
+                 .put("id", mConnectionId)
+                 .put("ptr", Long.toHexString(mConnectionPtr))
+                 .put("primary", mIsPrimaryConnection)
+                 .put("readOnly", mOnlyAllowReadOnlyOperations)
+                 .putOpt("thread", mAcquiredThread.toString())
+                 .putOpt("tid", (mAcquiredTid > 0) ? mAcquiredTid : null)
+                 .put("operations", mRecentOperations.dumpJSON(verbose));
+
+         // TODO: verbose?
+         return o;
     }
 
     /**
@@ -1490,7 +1498,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         private int mIndex;
         private int mGeneration;
 
-        public Operation beginOperation(String kind, String sql, Object[] bindArgs) {
+        Operation beginOperation(String kind, String sql, Object[] bindArgs) {
             synchronized (mOperations) {
                 final int index = (mIndex + 1) % MAX_RECENT_OPERATIONS;
                 Operation operation = mOperations[index];
@@ -1531,7 +1539,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         }
 
 
-        public void failOperation(int cookie, Exception ex) {
+        void failOperation(int cookie, Exception ex) {
             synchronized (mOperations) {
                 final Operation operation = getOperationLocked(cookie);
                 if (operation != null) {
@@ -1540,7 +1548,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
             }
         }
 
-        public void endOperation(int cookie) {
+        void endOperation(int cookie) {
             final String sql;
             final String kind;
             final int type;
@@ -1562,7 +1570,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
                 mPool.traceExecute(sql, type, elapsedTimeMillis);
         }
 
-        public boolean endOperationDeferLog(int cookie) {
+        boolean endOperationDeferLog(int cookie) {
             final String sql;
             final String kind;
             final int type;
@@ -1586,7 +1594,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
             return result;
         }
 
-        public void logOperation(int cookie, String detail) {
+        void logOperation(int cookie, String detail) {
             synchronized (mOperations) {
                 final Operation operation = getOperationLocked(cookie);
                 if (operation != null)
@@ -1629,7 +1637,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
             return operation.mCookie == cookie ? operation : null;
         }
 
-        public String describeCurrentOperation() {
+        String describeCurrentOperation() {
             synchronized (mOperations) {
                 final Operation operation = mOperations[mIndex];
                 if (operation != null && !operation.mFinished) {
@@ -1652,7 +1660,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
             }
         }
 
-        public void dump(Printer printer, boolean verbose) {
+        void dump(Printer printer, boolean verbose) {
             synchronized (mOperations) {
                 printer.println("  Most recently executed operations:");
                 int index = mIndex;
@@ -1679,6 +1687,20 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
                     printer.println("    <none>");
                 }
             }
+        }
+
+        JSONArray dumpJSON(boolean verbose) throws JSONException {
+            JSONArray arr = new JSONArray();
+            synchronized (mOperations) {
+                int index = mIndex;
+                int n = 0;
+                Operation operation;
+                while ((operation = mOperations[index]) != null && n++ < MAX_RECENT_OPERATIONS) {
+                    arr.put(operation.dumpJSON(verbose));
+                    index = (index > 0) ? index - 1 : MAX_RECENT_OPERATIONS - 1;
+                }
+            }
+            return arr;
         }
     }
 
@@ -1736,6 +1758,20 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
             if (mException != null && mException.getMessage() != null) {
                 msg.append(", exception=\"").append(mException.getMessage()).append("\"");
             }
+        }
+
+        JSONObject dumpJSON(boolean verbose) throws JSONException {
+            return new JSONObject()
+                    .put("start", getFormattedStartTime())
+                    .put("kind", mKind)
+                    .put("duration", (mFinished ? mEndTime : System.currentTimeMillis())
+                            - mStartTime)
+                    .put("status", getStatus())
+                    .putOpt("sql", mSql)
+                    .putOpt("tid", (mTid > 0) ? mTid : null)
+                    .putOpt("exception", mException);
+
+            // TODO: verbose?
         }
 
         private String getStatus() {

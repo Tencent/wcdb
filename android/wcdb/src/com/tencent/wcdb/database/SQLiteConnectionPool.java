@@ -27,6 +27,10 @@ import com.tencent.wcdb.support.Log;
 import com.tencent.wcdb.support.OperationCanceledException;
 import com.tencent.wcdb.support.PrefixPrinter;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Closeable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -1165,7 +1169,7 @@ public final class SQLiteConnectionPool implements Closeable {
      * @param printer The printer to receive the dump, not null.
      * @param verbose True to dump more verbose information.
      */
-    public void dump(Printer printer, boolean verbose) {
+    void dump(Printer printer, boolean verbose) {
         Printer indentedPrinter = PrefixPrinter.create(printer, "    ");
         synchronized (mLock) {
             printer.println("Connection pool for " + mConfiguration.path + ":");
@@ -1194,7 +1198,7 @@ public final class SQLiteConnectionPool implements Closeable {
                 for (Map.Entry<SQLiteConnection, AcquiredConnectionStatus> entry :
                         mAcquiredConnections.entrySet()) {
                     final SQLiteConnection connection = entry.getKey();
-                    connection.dumpUnsafe(indentedPrinter, verbose);
+                    connection.dump(indentedPrinter, verbose);
                     indentedPrinter.println("  Status: " + entry.getValue());
                 }
             } else {
@@ -1216,6 +1220,45 @@ public final class SQLiteConnectionPool implements Closeable {
             } else {
                 indentedPrinter.println("<none>");
             }
+        }
+    }
+
+    JSONObject dumpJSON(boolean verbose) throws JSONException {
+        synchronized (mLock) {
+            JSONArray nonPrimaryList = new JSONArray();
+            JSONArray acquiredList = new JSONArray();
+            JSONArray waiters = new JSONArray();
+            JSONObject o = new JSONObject()
+                    .put("path", mConfiguration.path)
+                    .put("open", mIsOpen)
+                    .put("maxConn", mMaxConnectionPoolSize)
+                    .put("availablePrimary", mAvailablePrimaryConnection == null ?
+                            null : null/*FIXME*/)
+                    .put("availableNonPrimary", nonPrimaryList)
+                    .put("acquired", acquiredList)
+                    .put("waiters", waiters);
+
+            for (SQLiteConnection conn : mAvailableNonPrimaryConnections) {
+                nonPrimaryList.put(conn.dumpJSON(verbose));
+            }
+
+            for (Map.Entry<SQLiteConnection, AcquiredConnectionStatus> entry :
+                    mAcquiredConnections.entrySet()) {
+                acquiredList.put(entry.getKey().dumpJSON(verbose)
+                        .put("status", entry.getValue().toString()));
+            }
+
+            for (ConnectionWaiter w = mConnectionWaiterQueue; w != null; w = w.mNext) {
+                final long now = SystemClock.uptimeMillis();
+                waiters.put(new JSONObject()
+                        .put("duration", now - w.mStartTime)
+                        .put("thread", w.mThread.toString())
+                        .put("priority", w.mPriority)
+                        .put("sql", w.mSql)
+                );
+            }
+
+            return o;
         }
     }
 
