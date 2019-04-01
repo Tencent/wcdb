@@ -225,7 +225,7 @@
 
     TestCaseResult *tested = [TestCaseResult no];
     [WCTDatabase globalTraceError:^(WCTError *error) {
-        NSLog(@"%@", error);
+        TestCaseLog(@"%@", error);
         typeof(self) strongSelf = weakSelf;
         if (strongSelf == nil) {
             return;

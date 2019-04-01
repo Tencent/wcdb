@@ -57,7 +57,8 @@ class Core final : public DatabasePoolEvent,
                    public CheckpointEvent,
                    public BackupEvent,
                    public MigrationEvent,
-                   public ObservationEvent {
+                   public ObservationEvent,
+                   public ObservationDelegate {
 #pragma mark - Core
 public:
     static Core* shared();
@@ -98,6 +99,8 @@ public:
                                               const CorruptedNotification& notification);
 
 protected:
+    ObservationQueue* observationQueue() override final;
+
     void observatedThatNeedPurged() override final;
     std::shared_ptr<ObservationQueue> m_observationQueue;
 

@@ -38,30 +38,45 @@ protected:
     friend class ObservationQueue;
 };
 
+class ObservationQueue;
+class ObservationDelegate {
+public:
+    virtual ~ObservationDelegate() = 0;
+
+protected:
+    void observatedThatFileOpened(int fd);
+    virtual ObservationQueue* observationQueue() = 0;
+};
+
 class ObservationQueue final : public AsyncQueue {
 public:
     ObservationQueue(const String& name, ObservationEvent* event);
     ~ObservationQueue();
 
 protected:
-    // When the path is empty, it indicate a `purge` work.
-    // Or it a path -> identifier pair that indicate the corrupted database that is pending to be notified
+    // When the parameter1 is empty, it indicates a `purge` work. Parameters would be the reason to purge. In this case, if parameter2 is greater than 0, then it triggered by too much file descriptor, while the value would be the number of file descriptor. Or if parameter2 equals to 0, then it triggered by memory warning.
+    // Otherwise it's a path -> identifier pair that indicates the corrupted database that is pending to be notified
     TimedQueue<String, uint32_t> m_pendings;
+    bool onTimed(const String& parameter1, const uint32_t& parameter2);
 
-    bool onTimed(const String& path, const uint32_t& identifier);
     void loop() override final;
     SharedLock m_lock;
     ObservationEvent* m_event;
 
 #pragma mark - Purge
 protected:
-    void observatedThatNeedPurged();
+    void observatedThatNeedPurged(uint32_t parameter);
 
-    SteadyClock m_lastPurgeTime;
-
+private:
     void* registerNotificationWhenMemoryWarning();
     void unregisterNotificationWhenMemoryWarning(void* observer);
     void* m_observerForMemoryWarning;
+
+    void observatedThatFileOpened(int fd);
+    friend class ObservationDelegate;
+
+    SteadyClock m_lastPurgeTime;
+    bool m_pendingToPurge;
 
 #pragma mark - Corruption
 public:
@@ -73,7 +88,7 @@ public:
 
 protected:
     // return true to mark as resolved
-    bool notifyCorruptedEvent(const String& path, uint32_t identifier);
+    bool doNotifyCorruptedEvent(const String& path, uint32_t identifier);
     void handleError(const Error& error);
 
     // path -> user notification

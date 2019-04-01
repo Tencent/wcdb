@@ -157,4 +157,24 @@
     TestCaseAssertFalse([self.database isOpened]);
 }
 
+- (void)test_purge
+{
+    // acquire handle
+    TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion())]);
+
+    TestCaseAssertTrue([self.database isOpened]);
+    [self.database purge];
+    TestCaseAssertFalse([self.database isOpened]);
+}
+
+- (void)test_purge_all
+{
+    // acquire handle
+    TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion())]);
+
+    TestCaseAssertTrue([self.database isOpened]);
+    [WCTDatabase purgeAll];
+    TestCaseAssertFalse([self.database isOpened]);
+}
+
 @end

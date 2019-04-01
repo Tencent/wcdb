@@ -20,6 +20,8 @@
 
 #import "CoreConst.h"
 #import <TestCase/TestCase.h>
+#import <set>
+#import <sys/stat.h>
 #if TARGET_OS_IPHONE && !TARGET_OS_WATCH
 #import <UIKit/UIKit.h>
 #endif
@@ -95,16 +97,6 @@
     TestCaseAssertFalse([self.database isCorrupted]);
 }
 
-- (void)test_purge
-{
-    // acquire handle
-    TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion())]);
-
-    TestCaseAssertTrue([self.database isOpened]);
-    [self.database purge];
-    TestCaseAssertFalse([self.database isOpened]);
-}
-
 - (void)test_feature_purge_will_not_clear_active_handle
 {
     // acquire handle and keep it
@@ -116,40 +108,144 @@
     TestCaseAssertTrue([self.database isOpened]);
 }
 
-- (void)test_purge_all
+#if TARGET_OS_IPHONE && !TARGET_OS_WATCH
+- (void)test_feature_auto_purge_due_to_memory_warning
 {
-    // acquire handle
-    TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion())]);
+    __block TestCaseResult* tested = [TestCaseResult no];
+    [WCTDatabase globalTraceError:^(WCTError* error) {
+        TestCaseLog(@"%@", error);
+        if (error.level == WCTErrorLevelWarning
+            && error.code == WCTErrorCodeWarning) {
+            [tested makeYES];
+        }
+    }];
 
-    TestCaseAssertTrue([self.database isOpened]);
-    [WCTDatabase purgeAll];
-    TestCaseAssertFalse([self.database isOpened]);
+    TestCaseAssertTrue([self.database canOpen]);
+    [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+
+    while (tested.isNO) {
+    }
+
+    // sleep for other tests
+    [NSThread sleepForTimeInterval:WCDB::ObservationQueueTimeIntervalForPurgingAgain];
 }
 
-#if TARGET_OS_IPHONE && !TARGET_OS_WATCH
-- (void)test_feature_auto_purge_when_memory_warning
+- (void)test_feature_auto_purge_will_not_be_too_frequent
 {
-    // acquire handle
-    TestCaseAssertTrue([self.database canOpen]);
-    [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidReceiveMemoryWarningNotification object:nil];
-    // purge will be done after a few moment.
-    [NSThread sleepForTimeInterval:2.0];
-    TestCaseAssertFalse([self.database isOpened]);
+    __block TestCaseResult* tested = [TestCaseResult no];
+    [WCTDatabase globalTraceError:^(WCTError* error) {
+        TestCaseLog(@"%@", error);
+        if (error.level == WCTErrorLevelWarning
+            && error.code == WCTErrorCodeWarning) {
+            [tested makeYES];
+        }
+    }];
 
     TestCaseAssertTrue([self.database canOpen]);
     [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidReceiveMemoryWarningNotification object:nil];
-    // purge will not be done too frequent.
-    [NSThread sleepForTimeInterval:WCDB::ObservationQueueTimeIntervalForPurging / 2];
-    TestCaseAssertTrue([self.database isOpened]);
+    while (tested.isNO) {
+    }
+    [tested makeNO];
 
-    TestCaseAssertTrue([self.database canOpen]);
-    // purge can be done after a few rest.
-    [NSThread sleepForTimeInterval:WCDB::ObservationQueueTimeIntervalForPurging / 2];
     [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidReceiveMemoryWarningNotification object:nil];
-    // purge will be done after a few moment.
-    [NSThread sleepForTimeInterval:2.0];
-    TestCaseAssertFalse([self.database isOpened]);
+    [NSThread sleepForTimeInterval:2];
+    TestCaseAssertResultNO(tested);
+
+    [NSThread sleepForTimeInterval:WCDB::ObservationQueueTimeIntervalForPurgingAgain];
+    [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+    while (tested.isNO) {
+    }
+
+    // sleep for other tests
+    [NSThread sleepForTimeInterval:WCDB::ObservationQueueTimeIntervalForPurgingAgain];
 }
 #endif
+
+- (void)test_feature_auto_purge_due_to_file_descriptors_warning
+{
+    int maxAllowedNumberOfFileDescriptors = getdtablesize();
+    int numberOfFileDescriptorsForTooManyFileDescriptors = int(maxAllowedNumberOfFileDescriptors * WCDB::ObservationQueueRateForTooManyFileDescriptors);
+
+    NSString* dummy = [self.directory stringByAppendingPathComponent:@"dummy"];
+    TestCaseAssertTrue([self.fileManager createFileAtPath:dummy contents:nil attributes:nil]);
+
+    // open files until it meet the threshold
+    int numberOfAlreadyOpenedFileDescriptors = 0;
+    struct stat stats;
+    for (int i = 0; i <= maxAllowedNumberOfFileDescriptors; ++i) {
+        int rc = fstat(i, &stats);
+        if (rc == 0 || errno != EBADF) {
+            ++numberOfAlreadyOpenedFileDescriptors;
+        }
+    }
+
+    std::set<int> openedFileDescriptor;
+    do {
+        int fd = open(dummy.UTF8String, O_RDONLY);
+        TestCaseAssertTrue(fd >= 0);
+        openedFileDescriptor.emplace(fd);
+    } while (openedFileDescriptor.size() + numberOfAlreadyOpenedFileDescriptors < numberOfFileDescriptorsForTooManyFileDescriptors);
+
+    // purge will be done after a few moment.
+    __block TestCaseResult* tested = [TestCaseResult no];
+    [WCTDatabase globalTraceError:^(WCTError* error) {
+        TestCaseLog(@"%@", error);
+        if (error.level == WCTErrorLevelWarning
+            && error.code == WCTErrorCodeWarning) {
+            [tested makeYES];
+        }
+    }];
+    TestCaseAssertTrue([self.database canOpen]);
+    while (tested.isNO) {
+    }
+
+    for (const auto& fd : openedFileDescriptor) {
+        TestCaseAssertTrue(close(fd) == 0);
+    }
+
+    // sleep for other tests
+    [NSThread sleepForTimeInterval:WCDB::ObservationQueueTimeIntervalForPurgingAgain];
+}
+
+- (void)test_feature_auto_purge_due_to_too_many_file_descriptors
+{
+    TestCaseAssertTrue([self.database canOpen]);
+    [self.database close];
+
+    NSString* dummy = [self.directory stringByAppendingPathComponent:@"dummy"];
+    TestCaseAssertTrue([self.fileManager createFileAtPath:dummy contents:nil attributes:nil]);
+
+    // open files until it failed
+    std::set<int> openedFileDescriptor;
+    do {
+        int fd = open(dummy.UTF8String, O_RDONLY);
+        if (fd > 0) {
+            openedFileDescriptor.emplace(fd);
+        } else {
+            TestCaseAssertTrue(errno == EMFILE);
+            break;
+        }
+    } while (YES);
+
+    // purge will be done after a few moment.
+    __block TestCaseResult* tested = [TestCaseResult no];
+    [WCTDatabase globalTraceError:^(WCTError* error) {
+        TestCaseLog(@"%@", error);
+        if (error.level == WCTErrorLevelWarning
+            && error.code == WCTErrorCodeWarning) {
+            [tested makeYES];
+        }
+    }];
+    TestCaseAssertFalse([self.database canOpen]);
+    while (tested.isNO) {
+    }
+
+    for (const auto& fd : openedFileDescriptor) {
+        TestCaseAssertTrue(close(fd) == 0);
+    }
+
+    // sleep for other tests
+    [NSThread sleepForTimeInterval:WCDB::ObservationQueueTimeIntervalForPurgingAgain];
+}
 
 @end

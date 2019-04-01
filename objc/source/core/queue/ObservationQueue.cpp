@@ -24,17 +24,32 @@
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/ObservationQueue.hpp>
+#include <unistd.h>
 
 namespace WCDB {
 
+#pragma mark - Event
 ObservationEvent::~ObservationEvent()
 {
 }
 
+#pragma mark - Delegate
+ObservationDelegate::~ObservationDelegate()
+{
+}
+
+void ObservationDelegate::observatedThatFileOpened(int fd)
+{
+    WCTInnerAssert(observationQueue() != nullptr);
+    observationQueue()->observatedThatFileOpened(fd);
+}
+
+#pragma mark - Queue
 ObservationQueue::ObservationQueue(const String& name, ObservationEvent* event)
 : AsyncQueue(name)
 , m_event(event)
 , m_observerForMemoryWarning(registerNotificationWhenMemoryWarning())
+, m_pendingToPurge(false)
 {
     Notifier::shared()->setNotification(
     0, name, std::bind(&ObservationQueue::handleError, this, std::placeholders::_1));
@@ -52,40 +67,80 @@ void ObservationQueue::loop()
     &ObservationQueue::onTimed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
-bool ObservationQueue::onTimed(const String& path, const uint32_t& identifier)
+bool ObservationQueue::onTimed(const String& parameter1, const uint32_t& parameter2)
 {
-    if (path.empty()) {
+    if (parameter1.empty()) {
         WCTInnerAssert(m_event != nullptr);
+
         // do purge
         m_event->observatedThatNeedPurged();
+
+        Error error;
+        error.level = Error::Level::Warning;
+        error.setCode(Error::Code::Warning);
+        if (parameter2 > 0) {
+            error.message = String::formatted(
+            "Purge due to too many file descriptors with %u.", parameter2);
+        } else {
+            error.message = "Purge due to memory warning.";
+        }
+        Notifier::shared()->notify(error);
+
         LockGuard lockGuard(m_lock);
         m_lastPurgeTime = SteadyClock::now();
+        m_pendingToPurge = false;
         return true;
     } else {
-        return notifyCorruptedEvent(path, identifier);
+        return doNotifyCorruptedEvent(parameter1, parameter2);
     }
 }
 
 #pragma mark - Purge
-void ObservationQueue::observatedThatNeedPurged()
+void ObservationQueue::observatedThatNeedPurged(uint32_t parameter)
 {
     if (m_event != nullptr) {
-        SteadyClock lastPurgeTime;
+        bool pending = false;
         {
             SharedLockGuard lockGuard(m_lock);
-            lastPurgeTime = m_lastPurgeTime;
+            if (!m_pendingToPurge
+                && SteadyClock::now().timeIntervalSinceSteadyClock(m_lastPurgeTime)
+                   > ObservationQueueTimeIntervalForPurgingAgain) {
+                pending = true;
+            }
         }
-        if (SteadyClock::now() > lastPurgeTime
-                                 + std::chrono::nanoseconds((long long) (ObservationQueueTimeIntervalForPurging
-                                                                         * 1E9))) {
-            m_pendings.reQueue(nullptr, 0, 0); // reQueue nullptr means a purge event
+        {
+            if (pending) {
+                LockGuard lockGuard(m_lock);
+                if (m_pendingToPurge) {
+                    pending = false;
+                } else {
+                    m_pendingToPurge = true;
+                }
+            }
+        }
+        if (pending) {
+            m_pendings.reQueue(nullptr, 0, parameter); // reQueue nullptr means a purge event
             lazyRun();
         }
     }
 }
 
+void ObservationQueue::observatedThatFileOpened(int fd)
+{
+    static int s_maxAllowedNumberOfFileDescriptors = std::max(getdtablesize(), 1024);
+    if (fd >= 0) {
+        int possibleNumberOfActiveFileDescriptors = fd + 1;
+        if (possibleNumberOfActiveFileDescriptors
+            > s_maxAllowedNumberOfFileDescriptors * ObservationQueueRateForTooManyFileDescriptors) {
+            observatedThatNeedPurged(possibleNumberOfActiveFileDescriptors);
+        }
+    } else if (errno == EMFILE) {
+        observatedThatNeedPurged(s_maxAllowedNumberOfFileDescriptors);
+    }
+}
+
 #pragma mark - Corrupt
-bool ObservationQueue::notifyCorruptedEvent(const String& path, uint32_t identifier)
+bool ObservationQueue::doNotifyCorruptedEvent(const String& path, uint32_t identifier)
 {
     Notification notification = nullptr;
     {

@@ -71,12 +71,16 @@ Core::Core()
 
 Core::~Core()
 {
+    Handle::traceGlobalLog(nullptr, nullptr);
+    Handle::hookFileOpen((AbstractHandle::FileOpen) open);
     Notifier::shared()->setNotificationForPreprocessing(NotifierPreprocessorName, nullptr);
 }
 
 int Core::fileOpen(const char* path, int flags, int mode)
 {
     int fd = open(path, flags, mode);
+Core:
+    shared()->observatedThatFileOpened(fd);
     if (fd != -1 && ((flags & O_CREAT) != 0)) {
         FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
     }
@@ -184,6 +188,11 @@ std::shared_ptr<Config> Core::tokenizerConfig(const std::list<String>& tokenizeN
 void Core::observatedThatNeedPurged()
 {
     purgeDatabasePool();
+}
+
+ObservationQueue* Core::observationQueue()
+{
+    return m_observationQueue.get();
 }
 
 bool Core::isFileObservedCorrupted(const String& path)
