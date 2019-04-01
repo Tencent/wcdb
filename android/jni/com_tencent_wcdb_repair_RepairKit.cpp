@@ -22,7 +22,7 @@
 #include "Logger.h"
 #include "ModuleLoader.h"
 #include <jni.h>
-#include <repair/SQLiteRepairKit.h>
+#include <SQLiteRepairKit.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

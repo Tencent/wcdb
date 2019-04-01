@@ -18,7 +18,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := wcdb
 LOCAL_CFLAGS := $(common_cflags)
 LOCAL_CPPFLAGS := $(commom_cppflags)
-LOCAL_C_INCLUDES := $(common_c_includes) $(root_path)
+LOCAL_C_INCLUDES := $(common_c_includes)
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*.c)) \
 	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*.cpp))
@@ -44,6 +44,7 @@ LOCAL_MODULE := wcdb-repair
 LOCAL_CFLAGS := $(common_cflags)
 LOCAL_CPPFLAGS := $(commom_cppflags)
 LOCAL_C_INCLUDES := $(common_c_includes)
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*.c)) \
 	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*.cpp))
@@ -56,6 +57,7 @@ LOCAL_MODULE := wcdb-backup
 LOCAL_CFLAGS := $(common_cflags)
 LOCAL_CPPFLAGS := $(commom_cppflags)
 LOCAL_C_INCLUDES := $(common_c_includes)
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*.c)) \
 	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*.cpp))
@@ -68,6 +70,7 @@ LOCAL_MODULE := wcdb-icucompat
 LOCAL_CFLAGS := $(common_cflags)
 LOCAL_CPPFLAGS := $(commom_cppflags)
 LOCAL_C_INCLUDES := $(common_c_includes)
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*.c)) \
 	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*.cpp))
@@ -80,6 +83,7 @@ LOCAL_MODULE := wcdb-fts
 LOCAL_CFLAGS := $(common_cflags)
 LOCAL_CPPFLAGS := $(commom_cppflags)
 LOCAL_C_INCLUDES := $(common_c_includes)
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*.c)) \
 	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*.cpp))
@@ -92,6 +96,7 @@ LOCAL_MODULE := wcdb-vfslog
 LOCAL_CFLAGS := $(common_cflags)
 LOCAL_CPPFLAGS := $(commom_cppflags)
 LOCAL_C_INCLUDES := $(common_c_includes)
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*.c)) \
 	$(subst $(LOCAL_PATH)/,,$(wildcard $(LOCAL_PATH)/*.cpp))

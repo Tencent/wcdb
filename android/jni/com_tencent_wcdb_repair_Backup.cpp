@@ -21,7 +21,7 @@
 #include "JNIHelp.h"
 #include "Logger.h"
 #include "ModuleLoader.h"
-#include <backup/mm_backup.h>
+#include <mm_backup.h>
 #include <jni.h>
 #include <stdlib.h>
 #include <sys/time.h>

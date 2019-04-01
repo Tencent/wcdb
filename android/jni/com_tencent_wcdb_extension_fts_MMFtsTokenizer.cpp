@@ -21,7 +21,7 @@
 #include <jni.h>
 #include "JNIHelp.h"
 #include "SQLiteCommon.h"
-#include "fts/mm_fts.h"
+#include <mm_fts.h>
 #include "ModuleLoader.h"
 
 SQLITE_EXTENSION_INIT3

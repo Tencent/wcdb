@@ -27,7 +27,7 @@
 #include "Logger.h"
 #include "ModuleLoader.h"
 #include "SQLiteCommon.h"
-#include <vfslog/vfslog.h>
+#include <vfslog.h>
 
 namespace wcdb {
 
