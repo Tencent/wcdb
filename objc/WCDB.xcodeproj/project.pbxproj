@@ -911,7 +911,6 @@
 		2384F7202194249200E8B10A /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		2384F7232194249200E8B10A /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2386563D219C009E00F7F6D2 /* FileTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386563C219C009E00F7F6D2 /* FileTests.mm */; };
-		2386563F219C00A500F7F6D2 /* MemoryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386563E219C00A500F7F6D2 /* MemoryTests.mm */; };
 		23865641219C213200F7F6D2 /* TransactionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23865640219C213200F7F6D2 /* TransactionTests.mm */; };
 		2386B3C51ED442FE000B72F6 /* WCTError.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C21ED442FE000B72F6 /* WCTError.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2386B3C61ED442FE000B72F6 /* WCTError.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2386B3C31ED442FE000B72F6 /* WCTError.mm */; };
@@ -2245,7 +2244,6 @@
 		2384F70021941BF000E8B10A /* NewRemapObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewRemapObject.h; sourceTree = "<group>"; };
 		2384F7282194249200E8B10A /* Convenient.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Convenient.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2386563C219C009E00F7F6D2 /* FileTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FileTests.mm; sourceTree = "<group>"; };
-		2386563E219C00A500F7F6D2 /* MemoryTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MemoryTests.mm; sourceTree = "<group>"; };
 		23865640219C213200F7F6D2 /* TransactionTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TransactionTests.mm; sourceTree = "<group>"; };
 		2386B3C21ED442FE000B72F6 /* WCTError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTError.h; sourceTree = "<group>"; };
 		2386B3C31ED442FE000B72F6 /* WCTError.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTError.mm; sourceTree = "<group>"; };
@@ -2962,7 +2960,6 @@
 				2304121921AB9F1600CB2318 /* ObservationTests.mm */,
 				23739DC7219AEDE700A043BF /* DatabaseTests.mm */,
 				2386563C219C009E00F7F6D2 /* FileTests.mm */,
-				2386563E219C00A500F7F6D2 /* MemoryTests.mm */,
 				23B1910921D61848005480C7 /* TableTests.mm */,
 			);
 			path = basic;
@@ -5732,7 +5729,6 @@
 			files = (
 				39D25F41224E02120003AF25 /* ObservationTests.mm in Sources */,
 				2386563D219C009E00F7F6D2 /* FileTests.mm in Sources */,
-				2386563F219C00A500F7F6D2 /* MemoryTests.mm in Sources */,
 				23739DC8219AEDE700A043BF /* DatabaseTests.mm in Sources */,
 				23B1910A21D61848005480C7 /* TableTests.mm in Sources */,
 			);

@@ -19,7 +19,9 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <WCDB/Macro.hpp>
 #import <WCDB/ObservationQueue.hpp>
+
 #if TARGET_OS_IPHONE && !TARGET_OS_WATCH
 #import <UIKit/UIKit.h>
 
@@ -46,6 +48,7 @@ void ObservationQueue::unregisterNotificationWhenMemoryWarning(void *observer)
 
 }
 #else // TARGET_OS_IPHONE && !TARGET_OS_WATCH
+
 namespace WCDB {
 
 void* ObservationQueue::registerNotificationWhenMemoryWarning()
@@ -55,6 +58,7 @@ void* ObservationQueue::registerNotificationWhenMemoryWarning()
 
 void ObservationQueue::unregisterNotificationWhenMemoryWarning(void* observer)
 {
+    WCDB_UNUSED(observer)
 }
 
 }

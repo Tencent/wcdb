@@ -78,7 +78,7 @@ void ObservationQueue::observatedThatNeedPurged()
         if (SteadyClock::now() > lastPurgeTime
                                  + std::chrono::nanoseconds((long long) (ObservationQueueTimeIntervalForPurging
                                                                          * 1E9))) {
-            m_pendings.reQueue(nullptr, 0, 0);
+            m_pendings.reQueue(nullptr, 0, 0); // reQueue nullptr means a purge event
             lazyRun();
         }
     }
