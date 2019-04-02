@@ -98,10 +98,78 @@
 
 - (void)test_retrieve_with_backup_and_without_deposit
 {
+    __block double mechanicScore = 0;
+    __block double crawlerScore = 0;
+    __block double summaryScore = 0;
+
+    __block double mechanicCost = 0;
+    __block double crawlerCost = 0;
+    __block double summaryCost = 0;
+
+    __block double mechanicSpeed = 0;
+    __block double crawlerSpeed = 0;
+
+    __block double mechanicSize = 0;
+    __block double crawlerSize = 0;
+
+    __block double mechanicWeight = 0;
+    __block double crawlerWeight = 0;
+
+    [WCTDatabase globalTraceError:^(WCTError* error) {
+        TestCaseLog(@"%@", error);
+        if (error.level == WCTErrorLevelNotice
+            && error.code == WCTErrorCodeNotice) {
+            NSDictionary* userInfo = error.userInfo;
+            if ([error.message isEqualToString:@"Mechanic Retrieve Report."]) {
+                TestCaseAssertEqual(mechanicCost, 0);
+                TestCaseAssertEqual(mechanicSize, 0);
+                TestCaseAssertEqual(mechanicSpeed, 0);
+                TestCaseAssertEqual(mechanicWeight, 0);
+                TestCaseAssertEqual(mechanicScore, 0);
+                mechanicCost = ((NSString*) [userInfo objectForKey:@"Cost"]).doubleValue;
+                mechanicSize = ((NSString*) [userInfo objectForKey:@"Size"]).doubleValue;
+                mechanicSpeed = ((NSString*) [userInfo objectForKey:@"Speed"]).doubleValue;
+                mechanicWeight = ((NSString*) [userInfo objectForKey:@"Weight"]).doubleValue;
+                mechanicScore = ((NSString*) [userInfo objectForKey:@"Score"]).doubleValue;
+            } else if ([error.message isEqualToString:@"Crawler Retrieve Report."]) {
+                TestCaseAssertEqual(crawlerCost, 0);
+                TestCaseAssertEqual(crawlerSize, 0);
+                TestCaseAssertEqual(crawlerSpeed, 0);
+                TestCaseAssertEqual(crawlerWeight, 0);
+                TestCaseAssertEqual(crawlerScore, 0);
+                crawlerCost = ((NSString*) [userInfo objectForKey:@"Cost"]).doubleValue;
+                crawlerSize = ((NSString*) [userInfo objectForKey:@"Size"]).doubleValue;
+                crawlerSpeed = ((NSString*) [userInfo objectForKey:@"Speed"]).doubleValue;
+                crawlerWeight = ((NSString*) [userInfo objectForKey:@"Weight"]).doubleValue;
+                crawlerScore = ((NSString*) [userInfo objectForKey:@"Score"]).doubleValue;
+            } else if ([error.message isEqualToString:@"Summary Retrieve Report."]) {
+                TestCaseAssertEqual(summaryCost, 0);
+                TestCaseAssertEqual(summaryScore, 0);
+                summaryCost = ((NSString*) [userInfo objectForKey:@"Cost"]).doubleValue;
+                summaryScore = ((NSString*) [userInfo objectForKey:@"Score"]).doubleValue;
+            }
+        }
+    }];
+
     TestCaseAssertTrue([self.database backup]);
 
     [self doTestRetrieve];
     [self doTestObjectsRetrieved];
+
+    TestCaseAssertTrue(mechanicCost > 0);
+    TestCaseAssertTrue(mechanicSize > 0);
+    TestCaseAssertEqual(mechanicScore, 1);
+    TestCaseAssertTrue(mechanicSpeed > 0);
+    TestCaseAssertEqual(mechanicWeight, 100); // for 100 percent
+
+    TestCaseAssertTrue(crawlerCost > 0);
+    TestCaseAssertTrue(crawlerSize > 0);
+    TestCaseAssertEqual(crawlerScore, 1);
+    TestCaseAssertTrue(crawlerSpeed > 0);
+    TestCaseAssertEqual(crawlerWeight, 100); // for 100 percent
+
+    TestCaseAssertTrue(summaryCost > 0);
+    TestCaseAssertEqual(summaryScore, 1);
 }
 
 - (void)test_retrieve_without_backup_and_with_deposit

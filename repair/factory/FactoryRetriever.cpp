@@ -257,7 +257,7 @@ void FactoryRetriever::reportSummary(double cost)
     Error error;
     error.setCode(Error::Code::Notice, "Repair");
     error.level = Error::Level::Notice;
-    error.message = "Retrieve Report Summary.";
+    error.message = "Summary Retrieve Report.";
     error.infos.set("Path", database);
     error.infos.set("Cost", String::formatted("%.2f%%", cost));
     error.infos.set("Score", getScore().value());
