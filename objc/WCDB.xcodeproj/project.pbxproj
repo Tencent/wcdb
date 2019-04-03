@@ -1441,6 +1441,7 @@
 		39D25E5A224B045A0003AF25 /* Dispatch.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39D25E58224B045A0003AF25 /* Dispatch.mm */; };
 		39D25F38224CB9A30003AF25 /* WCTDatabase+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2366BBB5221BEAA6000ED712 /* WCTDatabase+TestCase.mm */; };
 		39D25F41224E02120003AF25 /* ObservationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2304121921AB9F1600CB2318 /* ObservationTests.mm */; };
+		39E5DA5722544C6E00473F70 /* WCTDatabase+TestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2366BBB4221BEAA6000ED712 /* WCTDatabase+TestCase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -4702,6 +4703,7 @@
 				2367BCD22215004300380122 /* WCTBuiltin.h in Headers */,
 				2367BCD32215004300380122 /* WCTDatabase+Memory.h in Headers */,
 				2367BCD42215004300380122 /* SharedThreadedErrorProne.hpp in Headers */,
+				39E5DA5722544C6E00473F70 /* WCTDatabase+TestCase.h in Headers */,
 				2367BCD52215004300380122 /* Range.hpp in Headers */,
 				2367BCD62215004300380122 /* SyntaxResultColumn.hpp in Headers */,
 				2367BCD72215004300380122 /* Mechanic.hpp in Headers */,
