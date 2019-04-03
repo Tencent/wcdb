@@ -90,12 +90,45 @@
 
 - (NSData *)dataValue
 {
-    return [self.stringValue dataUsingEncoding:NSASCIIStringEncoding];
+    return [self.stringValue dataUsingEncoding:NSUTF8StringEncoding];
 }
 
 - (NSNumber *)numberValue
 {
     return self;
+}
+
+- (void)forwardInvocation:(NSInvocation *)invocation
+{
+    SEL aSelector = invocation.selector;
+    NSObject *responser = self.stringValue;
+    if (![responser respondsToSelector:aSelector]) {
+        responser = self.dataValue;
+        if (![responser respondsToSelector:aSelector]) {
+            responser = nil;
+        }
+    }
+    if (responser != nil) {
+        [invocation invokeWithTarget:responser];
+    } else {
+        [super forwardInvocation:invocation];
+    }
+}
+
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector
+{
+    NSObject *forwarder = self.stringValue;
+    if (![forwarder respondsToSelector:aSelector]) {
+        forwarder = self.dataValue;
+        if (![forwarder respondsToSelector:aSelector]) {
+            forwarder = nil;
+        }
+    }
+    if (forwarder != nil) {
+        return [forwarder methodSignatureForSelector:aSelector];
+    } else {
+        return [super methodSignatureForSelector:aSelector];
+    }
 }
 
 @end
@@ -114,8 +147,40 @@
 
 - (NSNumber *)numberValue
 {
-    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-    return [formatter numberFromString:self.stringValue];
+    return self.stringValue.numberValue;
+}
+
+- (void)forwardInvocation:(NSInvocation *)invocation
+{
+    SEL aSelector = invocation.selector;
+    NSObject *responser = self.stringValue;
+    if (![responser respondsToSelector:aSelector]) {
+        responser = self.numberValue;
+        if (![responser respondsToSelector:aSelector]) {
+            responser = nil;
+        }
+    }
+    if (responser != nil) {
+        [invocation invokeWithTarget:responser];
+    } else {
+        [super forwardInvocation:invocation];
+    }
+}
+
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector
+{
+    NSObject *forwarder = self.stringValue;
+    if (![forwarder respondsToSelector:aSelector]) {
+        forwarder = self.numberValue;
+        if (![forwarder respondsToSelector:aSelector]) {
+            forwarder = nil;
+        }
+    }
+    if (forwarder != nil) {
+        return [forwarder methodSignatureForSelector:aSelector];
+    } else {
+        return [super methodSignatureForSelector:aSelector];
+    }
 }
 
 @end
@@ -136,6 +201,39 @@
 {
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     return [formatter numberFromString:self];
+}
+
+- (void)forwardInvocation:(NSInvocation *)invocation
+{
+    SEL aSelector = invocation.selector;
+    NSObject *responser = self.numberValue;
+    if (![responser respondsToSelector:aSelector]) {
+        responser = self.dataValue;
+        if (![responser respondsToSelector:aSelector]) {
+            responser = nil;
+        }
+    }
+    if (responser != nil) {
+        [invocation invokeWithTarget:responser];
+    } else {
+        [super forwardInvocation:invocation];
+    }
+}
+
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector
+{
+    NSObject *forwarder = self.numberValue;
+    if (![forwarder respondsToSelector:aSelector]) {
+        forwarder = self.dataValue;
+        if (![forwarder respondsToSelector:aSelector]) {
+            forwarder = nil;
+        }
+    }
+    if (forwarder != nil) {
+        return [forwarder methodSignatureForSelector:aSelector];
+    } else {
+        return [super methodSignatureForSelector:aSelector];
+    }
 }
 
 @end
@@ -160,9 +258,9 @@
 - (void)forwardInvocation:(NSInvocation *)invocation
 {
     SEL aSelector = invocation.selector;
-    WCTValueForwarder *forwareder = [WCTValueForwarder forwarder];
-    if ([forwareder respondsToForwardSelector:aSelector]) {
-        [invocation invokeWithTarget:forwareder];
+    WCTValueForwarder *forwarder = [WCTValueForwarder forwarder];
+    if ([forwarder respondsToForwardSelector:aSelector]) {
+        [invocation invokeWithTarget:forwarder];
     } else {
         [super forwardInvocation:invocation];
     }
@@ -170,9 +268,9 @@
 
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector
 {
-    WCTValueForwarder *forwareder = [WCTValueForwarder forwarder];
-    if ([forwareder respondsToForwardSelector:aSelector]) {
-        return [forwareder methodSignatureForSelector:aSelector];
+    WCTValueForwarder *forwarder = [WCTValueForwarder forwarder];
+    if ([forwarder respondsToForwardSelector:aSelector]) {
+        return [forwarder methodSignatureForSelector:aSelector];
     } else {
         return [super methodSignatureForSelector:aSelector];
     }

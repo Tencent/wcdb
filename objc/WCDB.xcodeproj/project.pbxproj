@@ -1442,6 +1442,7 @@
 		39D25F38224CB9A30003AF25 /* WCTDatabase+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2366BBB5221BEAA6000ED712 /* WCTDatabase+TestCase.mm */; };
 		39D25F41224E02120003AF25 /* ObservationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2304121921AB9F1600CB2318 /* ObservationTests.mm */; };
 		39E5DA5722544C6E00473F70 /* WCTDatabase+TestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2366BBB4221BEAA6000ED712 /* WCTDatabase+TestCase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		39E5DAC52254666B00473F70 /* ValueTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39E5DAC42254666B00473F70 /* ValueTests.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2752,6 +2753,7 @@
 		3959F8C7224E1E8700E24568 /* WCTObservationQueue.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTObservationQueue.mm; sourceTree = "<group>"; };
 		39D25E57224B045A0003AF25 /* Dispatch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Dispatch.h; sourceTree = "<group>"; };
 		39D25E58224B045A0003AF25 /* Dispatch.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Dispatch.mm; sourceTree = "<group>"; };
+		39E5DAC42254666B00473F70 /* ValueTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ValueTests.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2962,6 +2964,7 @@
 				23739DC7219AEDE700A043BF /* DatabaseTests.mm */,
 				2386563C219C009E00F7F6D2 /* FileTests.mm */,
 				23B1910921D61848005480C7 /* TableTests.mm */,
+				39E5DAC42254666B00473F70 /* ValueTests.mm */,
 			);
 			path = basic;
 			sourceTree = "<group>";
@@ -5730,6 +5733,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				39D25F41224E02120003AF25 /* ObservationTests.mm in Sources */,
+				39E5DAC52254666B00473F70 /* ValueTests.mm in Sources */,
 				2386563D219C009E00F7F6D2 /* FileTests.mm in Sources */,
 				23739DC8219AEDE700A043BF /* DatabaseTests.mm in Sources */,
 				23B1910A21D61848005480C7 /* TableTests.mm in Sources */,
