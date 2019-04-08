@@ -76,13 +76,10 @@
 
     __block BOOL tested = NO;
     __block BOOL start = NO;
-    weakify(self)
+    weakify(self);
     [WCTDatabase globalTraceError:^(WCTError* error) {
         TestCaseLog(@"%@", error);
-        strongify(self) if (self == nil)
-        {
-            return;
-        }
+        strongify_or_return(self);
         if (error.level == WCTErrorLevelError
             && [error.path isEqualToString:self.path]
             && error.tag == self.database.tag

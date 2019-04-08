@@ -28,3 +28,6 @@
     __attribute__((objc_ownership(strong))) __typeof__(variable) self                 \
     = WCDB_CONCAT(weak_, variable);                                                   \
     _Pragma("clang diagnostic pop")
+
+#define strongify_or_return(variable)                                          \
+    strongify(variable) if (variable == nil) { return; }

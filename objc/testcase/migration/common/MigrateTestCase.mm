@@ -71,12 +71,9 @@
     __block BOOL tableMigrated = NO;
     __block int migrated = 0;
     NSString *expectedTableName = self.tableName;
-    weakify(self)
+    weakify(self);
     [self.database setNotificationWhenMigrated:^(WCTMigrationBaseInfo *info) {
-        strongify(self) if (self == nil)
-        {
-            return;
-        }
+        strongify_or_return(self);
         if (info == nil) {
             ++migrated;
             TestCaseAssertTrue(self.database.isMigrated);
@@ -115,13 +112,10 @@
     }];
 
     TestCaseResult *tested = [TestCaseResult no];
-    weakify(self)
+    weakify(self);
     [WCTDatabase globalTraceError:^(WCTError *error) {
         TestCaseLog(@"%@", error);
-        strongify(self) if (self == nil)
-        {
-            return;
-        }
+        strongify_or_return(self);
         if (error.code == WCTErrorCodeInterrupt
             && error.level == WCTErrorLevelIgnore
             && error.tag == self.database.tag) {
@@ -180,13 +174,10 @@
 - (void)doTestFeatureAutoMigrateWillStopDueToError
 {
     TestCaseCounter *numberOfFailures = [TestCaseCounter value:0];
-    weakify(self)
+    weakify(self);
     [WCTDatabase globalTraceError:^(WCTError *error) {
         TestCaseLog(@"%@", error);
-        strongify(self) if (self == nil)
-        {
-            return;
-        }
+        strongify_or_return(self);
         if (error.code == WCTErrorCodeIOError
             && error.level == WCTErrorLevelError
             && error.tag == self.database.tag) {

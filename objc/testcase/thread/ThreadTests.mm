@@ -418,13 +418,10 @@
     while ([began isNO]) {
     }
 
-    weakify(self)
+    weakify(self);
     [WCTDatabase globalTraceError:^(WCTError* error) {
         TestCaseLog(@"%@", error);
-        strongify(self) if (self == nil)
-        {
-            return;
-        }
+        strongify_or_return(self);
         if (error.code == WCTErrorCodeBusy
             && error.level == WCTErrorLevelError
             && [error.path isEqualToString:self.database.path]
@@ -463,13 +460,10 @@
         while ([began isNO]) {
         }
 
-        weakify(self)
+        weakify(self);
         [WCTDatabase globalTraceError:^(WCTError* error) {
             TestCaseLog(@"%@", error);
-            strongify(self) if (self == nil)
-            {
-                return;
-            }
+            strongify_or_return(self);
             if (error.code == WCTErrorCodeBusy
                 && error.level == WCTErrorLevelError
                 && [error.path isEqualToString:self.database.path]

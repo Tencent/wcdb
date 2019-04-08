@@ -202,12 +202,9 @@
 
     TestCaseResult *corrupted = [TestCaseResult no];
     {
-        weakify(self)
+        weakify(self);
         [WCTDatabase globalTraceSQL:^(NSString *sql) {
-            strongify(self) if (self == nil)
-            {
-                return;
-            }
+            strongify_or_return(self);
 
             if ([corrupted isNO] && [sql isEqualToString:@"ROLLBACK"]) {
                 // Backup Write Handle Rollback, which means that it's already inited.
@@ -227,13 +224,10 @@
 
     TestCaseResult *tested = [TestCaseResult no];
     {
-        weakify(self)
+        weakify(self);
         [WCTDatabase globalTraceError:^(WCTError *error) {
             TestCaseLog(@"%@", error);
-            strongify(self) if (self == nil)
-            {
-                return;
-            }
+            strongify_or_return(self);
             if (error.code == WCTErrorCodeCorrupt
                 && error.level == WCTErrorLevelIgnore
                 && [error.source isEqualToString:@"Repair"]
