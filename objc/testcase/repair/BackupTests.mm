@@ -201,44 +201,49 @@
     TestCaseAssertFalse([self.database isCorrupted]);
 
     TestCaseResult *corrupted = [TestCaseResult no];
-    __weak typeof(self) weakSelf = self;
-    [WCTDatabase globalTraceSQL:^(NSString *sql) {
-        typeof(self) strongSelf = weakSelf;
-        if (strongSelf == nil) {
-            return;
-        }
-
-        if ([corrupted isNO] && [sql isEqualToString:@"ROLLBACK"]) {
-            // Backup Write Handle Rollback, which means that it's already inited.
-            NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:strongSelf.path];
-            if (fileHandle == nil) {
-                TestCaseFailure();
+    {
+        weakify(self)
+        [WCTDatabase globalTraceSQL:^(NSString *sql) {
+            strongify(self) if (self == nil)
+            {
                 return;
             }
-            unsigned long long fileSize = [fileHandle seekToEndOfFile];
-            [fileHandle seekToFileOffset:0];
-            [fileHandle writeData:[self.random dataWithLength:(NSInteger) fileSize]];
-            [fileHandle closeFile];
-            [corrupted makeYES];
-        }
-    }];
+
+            if ([corrupted isNO] && [sql isEqualToString:@"ROLLBACK"]) {
+                // Backup Write Handle Rollback, which means that it's already inited.
+                NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.path];
+                if (fileHandle == nil) {
+                    TestCaseFailure();
+                    return;
+                }
+                unsigned long long fileSize = [fileHandle seekToEndOfFile];
+                [fileHandle seekToFileOffset:0];
+                [fileHandle writeData:[self.random dataWithLength:(NSInteger) fileSize]];
+                [fileHandle closeFile];
+                [corrupted makeYES];
+            }
+        }];
+    }
 
     TestCaseResult *tested = [TestCaseResult no];
-    [WCTDatabase globalTraceError:^(WCTError *error) {
-        TestCaseLog(@"%@", error);
-        typeof(self) strongSelf = weakSelf;
-        if (strongSelf == nil) {
-            return;
-        }
-        if (error.code == WCTErrorCodeCorrupt
-            && error.level == WCTErrorLevelIgnore
-            && [error.source isEqualToString:@"Repair"]
-            && [error.path isEqualToString:strongSelf.database.path]
-            && error.tag == strongSelf.database.tag) {
-            TestCaseAssertResultYES(corrupted);
-            [tested makeYES];
-        }
-    }];
+    {
+        weakify(self)
+        [WCTDatabase globalTraceError:^(WCTError *error) {
+            TestCaseLog(@"%@", error);
+            strongify(self) if (self == nil)
+            {
+                return;
+            }
+            if (error.code == WCTErrorCodeCorrupt
+                && error.level == WCTErrorLevelIgnore
+                && [error.source isEqualToString:@"Repair"]
+                && [error.path isEqualToString:self.database.path]
+                && error.tag == self.database.tag) {
+                TestCaseAssertResultYES(corrupted);
+                [tested makeYES];
+            }
+        }];
+    }
 
     TestCaseAssertFalse([self.database backup]);
     TestCaseAssertResultYES(tested);

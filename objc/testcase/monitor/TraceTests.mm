@@ -76,16 +76,16 @@
 
     __block BOOL tested = NO;
     __block BOOL start = NO;
-    __weak typeof(self) weakSelf = self;
+    weakify(self)
     [WCTDatabase globalTraceError:^(WCTError* error) {
         TestCaseLog(@"%@", error);
-        typeof(self) strongSelf = weakSelf;
-        if (strongSelf == nil) {
+        strongify(self) if (self == nil)
+        {
             return;
         }
         if (error.level == WCTErrorLevelError
             && [error.path isEqualToString:self.path]
-            && error.tag == strongSelf.database.tag
+            && error.tag == self.database.tag
             && [error.source isEqualToString:@"SQLite"]
             && error.code == WCTErrorCodeError
             && [error.sql isEqualToString:@"SELECT 1 FROM main.dummy"]) {

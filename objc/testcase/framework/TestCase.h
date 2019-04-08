@@ -20,6 +20,7 @@
 
 #import <TestCase/TestCaseAssertion.h>
 #import <TestCase/TestCaseLog.h>
+#import <TestCase/TestCaseMacro.h>
 
 #import <TestCase/BaseTestCase.h>
 #import <TestCase/Benchmark.h>

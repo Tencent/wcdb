@@ -71,9 +71,15 @@
     __block BOOL tableMigrated = NO;
     __block int migrated = 0;
     NSString *expectedTableName = self.tableName;
+    weakify(self)
     [self.database setNotificationWhenMigrated:^(WCTMigrationBaseInfo *info) {
+        strongify(self) if (self == nil)
+        {
+            return;
+        }
         if (info == nil) {
             ++migrated;
+            TestCaseAssertTrue(self.database.isMigrated);
         } else if ([info.table isEqualToString:expectedTableName]) {
             tableMigrated = YES;
         }
@@ -109,16 +115,16 @@
     }];
 
     TestCaseResult *tested = [TestCaseResult no];
-    __weak typeof(self) weakSelf = self;
+    weakify(self)
     [WCTDatabase globalTraceError:^(WCTError *error) {
         TestCaseLog(@"%@", error);
-        typeof(self) strongSelf = weakSelf;
-        if (strongSelf == nil) {
+        strongify(self) if (self == nil)
+        {
             return;
         }
         if (error.code == WCTErrorCodeInterrupt
             && error.level == WCTErrorLevelIgnore
-            && error.tag == strongSelf.database.tag) {
+            && error.tag == self.database.tag) {
             [tested makeYES];
         }
     }];
@@ -174,16 +180,16 @@
 - (void)doTestFeatureAutoMigrateWillStopDueToError
 {
     TestCaseCounter *numberOfFailures = [TestCaseCounter value:0];
-    __weak typeof(self) weakSelf = self;
+    weakify(self)
     [WCTDatabase globalTraceError:^(WCTError *error) {
         TestCaseLog(@"%@", error);
-        typeof(self) strongSelf = weakSelf;
-        if (strongSelf == nil) {
+        strongify(self) if (self == nil)
+        {
             return;
         }
         if (error.code == WCTErrorCodeIOError
             && error.level == WCTErrorLevelError
-            && error.tag == strongSelf.database.tag) {
+            && error.tag == self.database.tag) {
             [numberOfFailures increment];
         }
     }];

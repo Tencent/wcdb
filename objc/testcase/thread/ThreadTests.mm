@@ -418,17 +418,17 @@
     while ([began isNO]) {
     }
 
-    __weak typeof(self) weakSelf = self;
+    weakify(self)
     [WCTDatabase globalTraceError:^(WCTError* error) {
         TestCaseLog(@"%@", error);
-        typeof(self) strongSelf = weakSelf;
-        if (strongSelf == nil) {
+        strongify(self) if (self == nil)
+        {
             return;
         }
         if (error.code == WCTErrorCodeBusy
             && error.level == WCTErrorLevelError
-            && [error.path isEqualToString:strongSelf.database.path]
-            && error.tag == strongSelf.database.tag
+            && [error.path isEqualToString:self.database.path]
+            && error.tag == self.database.tag
             && [error.sql isEqualToString:@"BEGIN IMMEDIATE"]) {
             [tested makeYES];
         }
@@ -463,17 +463,17 @@
         while ([began isNO]) {
         }
 
-        __weak typeof(self) weakSelf = self;
+        weakify(self)
         [WCTDatabase globalTraceError:^(WCTError* error) {
             TestCaseLog(@"%@", error);
-            typeof(self) strongSelf = weakSelf;
-            if (strongSelf == nil) {
+            strongify(self) if (self == nil)
+            {
                 return;
             }
             if (error.code == WCTErrorCodeBusy
                 && error.level == WCTErrorLevelError
-                && [error.path isEqualToString:strongSelf.database.path]
-                && error.tag == strongSelf.database.tag
+                && [error.path isEqualToString:self.database.path]
+                && error.tag == self.database.tag
                 && [error.sql isEqualToString:@"BEGIN IMMEDIATE"]) {
                 [tested makeYES];
             }
