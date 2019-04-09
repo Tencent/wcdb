@@ -24,11 +24,11 @@
 
 namespace WCDB {
 
-BackupEvent::~BackupEvent()
+BackupQueueEvent::~BackupQueueEvent()
 {
 }
 
-BackupQueue::BackupQueue(const String& name, BackupEvent* event)
+BackupQueue::BackupQueue(const String& name, BackupQueueEvent* event)
 : AsyncQueue(name), m_event(event)
 {
     WCTInnerAssert(m_event != nullptr);

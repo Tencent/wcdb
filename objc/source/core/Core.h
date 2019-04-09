@@ -54,10 +54,10 @@ namespace WCDB {
 
 // The order of member variables here is important.
 class Core final : public DatabasePoolEvent,
-                   public CheckpointEvent,
-                   public BackupEvent,
+                   public CheckpointQueueEvent,
+                   public BackupQueueEvent,
                    public MigrationQueueEvent,
-                   public ObservationEvent,
+                   public ObservationQueueEvent,
                    public ObservationDelegate {
 #pragma mark - Core
 public:

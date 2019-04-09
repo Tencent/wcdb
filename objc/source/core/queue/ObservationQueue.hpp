@@ -29,9 +29,9 @@
 
 namespace WCDB {
 
-class ObservationEvent {
+class ObservationQueueEvent {
 public:
-    virtual ~ObservationEvent() = 0;
+    virtual ~ObservationQueueEvent() = 0;
 
 protected:
     virtual void observatedThatNeedPurged() = 0;
@@ -50,7 +50,7 @@ protected:
 
 class ObservationQueue final : public AsyncQueue {
 public:
-    ObservationQueue(const String& name, ObservationEvent* event);
+    ObservationQueue(const String& name, ObservationQueueEvent* event);
     ~ObservationQueue();
 
 protected:
@@ -61,7 +61,7 @@ protected:
 
     void loop() override final;
     SharedLock m_lock;
-    ObservationEvent* m_event;
+    ObservationQueueEvent* m_event;
 
 #pragma mark - Purge
 protected:

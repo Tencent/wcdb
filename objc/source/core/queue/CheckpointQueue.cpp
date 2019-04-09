@@ -24,11 +24,11 @@
 
 namespace WCDB {
 
-CheckpointEvent::~CheckpointEvent()
+CheckpointQueueEvent::~CheckpointQueueEvent()
 {
 }
 
-CheckpointQueue::CheckpointQueue(const String& name, CheckpointEvent* event)
+CheckpointQueue::CheckpointQueue(const String& name, CheckpointQueueEvent* event)
 : AsyncQueue(name), m_event(event)
 {
     WCTInnerAssert(m_event != nullptr);

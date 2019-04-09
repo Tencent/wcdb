@@ -29,7 +29,7 @@
 namespace WCDB {
 
 #pragma mark - Event
-ObservationEvent::~ObservationEvent()
+ObservationQueueEvent::~ObservationQueueEvent()
 {
 }
 
@@ -45,7 +45,7 @@ void ObservationDelegate::observatedThatFileOpened(int fd)
 }
 
 #pragma mark - Queue
-ObservationQueue::ObservationQueue(const String& name, ObservationEvent* event)
+ObservationQueue::ObservationQueue(const String& name, ObservationQueueEvent* event)
 : AsyncQueue(name)
 , m_event(event)
 , m_observerForMemoryWarning(registerNotificationWhenMemoryWarning())

@@ -27,9 +27,9 @@
 
 namespace WCDB {
 
-class CheckpointEvent {
+class CheckpointQueueEvent {
 public:
-    virtual ~CheckpointEvent() = 0;
+    virtual ~CheckpointQueueEvent() = 0;
 
 protected:
     virtual bool databaseShouldCheckpoint(const String& path, int frames) = 0;
@@ -38,7 +38,7 @@ protected:
 
 class CheckpointQueue final : public AsyncQueue {
 public:
-    CheckpointQueue(const String& name, CheckpointEvent* event);
+    CheckpointQueue(const String& name, CheckpointQueueEvent* event);
 
     void put(const String& path, int frames);
     void remove(const String& path);
@@ -49,7 +49,7 @@ protected:
     void loop() override final;
 
     TimedQueue<String, int> m_timedQueue;
-    CheckpointEvent* m_event;
+    CheckpointQueueEvent* m_event;
 };
 
 } // namespace WCDB
