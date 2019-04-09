@@ -71,12 +71,12 @@
     __block BOOL tableMigrated = NO;
     __block int migrated = 0;
     NSString *expectedTableName = self.tableName;
-    weakify(self);
-    [self.database setNotificationWhenMigrated:^(WCTMigrationBaseInfo *info) {
-        strongify_or_return(self);
+    WCTTag tag = self.database.tag;
+    [self.database setNotificationWhenMigrated:^(WCTDatabase *database, WCTMigrationBaseInfo *info) {
+        TestCaseAssertEqual(tag, database.tag);
         if (info == nil) {
             ++migrated;
-            TestCaseAssertTrue(self.database.isMigrated);
+            TestCaseAssertTrue(database.isMigrated);
         } else if ([info.table isEqualToString:expectedTableName]) {
             tableMigrated = YES;
         }
@@ -155,7 +155,7 @@
     TestCaseResult *tableMigrated = [TestCaseResult no];
     TestCaseResult *migrated = [TestCaseResult no];
     NSString *expectedTableName = self.tableName;
-    [self.database setNotificationWhenMigrated:^(WCTMigrationBaseInfo *info) {
+    [self.database setNotificationWhenMigrated:^(WCTDatabase *database, WCTMigrationBaseInfo *info) {
         if (info == nil) {
             [migrated makeYES];
         } else if ([info.table isEqualToString:expectedTableName]) {

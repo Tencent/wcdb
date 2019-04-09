@@ -56,12 +56,13 @@
 {
     WCDB::Database::MigratedCallback callback = nullptr;
     if (onMigrated != nil) {
-        callback = [onMigrated](const WCDB::MigrationBaseInfo* info) {
+        callback = [onMigrated](WCDB::Database* database, const WCDB::MigrationBaseInfo* info) {
             WCTMigrationBaseInfo* nsInfo = nil;
             if (info != nil) {
                 nsInfo = [[WCTMigrationBaseInfo alloc] initWithBaseInfo:*info];
             }
-            onMigrated(nsInfo);
+            WCTDatabase* nsDatabase = [[WCTDatabase alloc] initWithUnsafeDatabase:database];
+            onMigrated(nsDatabase, nsInfo);
         };
     }
     _database->setNotificationWhenMigrated(callback);

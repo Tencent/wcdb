@@ -25,9 +25,13 @@
 
 namespace WCDB {
 
+MigrationEvent::~MigrationEvent()
+{
+}
+
 #pragma mark - Initialize
 Migration::Migration()
-: m_filter(nullptr), m_migratedNotification(nullptr), m_tableAcquired(false), m_migrated(false)
+: m_filter(nullptr), m_event(nullptr), m_tableAcquired(false), m_migrated(false)
 {
 }
 
@@ -412,48 +416,41 @@ std::pair<bool, bool> Migration::tryAcquireTables(Migration::Stepper& stepper)
     return { succeed, succeed };
 }
 
-void Migration::setNotificationWhenMigrated(const MigratedCallback& callback)
+void Migration::postMigratedNotification()
 {
     LockGuard lockGuard(m_lock);
-    m_migratedNotification = callback;
+    WCTInnerAssert(m_tableAcquired);
+    WCTInnerAssert(m_dumpster.empty());
+    WCTInnerAssert(m_migratings.empty());
+    WCTInnerAssert(m_referenceds.empty());
+    m_migrated = true;
+    if (m_event != nullptr) {
+        m_event->didMigrate(nullptr);
+    }
 }
 
+void Migration::postTableMigratedNotification(const MigrationInfo* info)
+{
+    SharedLockGuard lockGuard(m_lock);
+    WCTInnerAssert(m_migratings.find(info) == m_migratings.end());
+    WCTInnerAssert(m_referenceds.find(info) == m_referenceds.end());
+    WCTInnerAssert(m_dumpster.find(info) == m_dumpster.end());
+    if (m_event != nullptr) {
+        m_event->didMigrate(info);
+    }
+}
+
+#pragma mark - Event
 bool Migration::isMigrated() const
 {
     SharedLockGuard lockGuard(m_lock);
     return m_migrated;
 }
 
-void Migration::postMigratedNotification()
+void Migration::setEvent(MigrationEvent* event)
 {
-    MigratedCallback callback = nullptr;
-    {
-        LockGuard lockGuard(m_lock);
-        WCTInnerAssert(m_tableAcquired);
-        WCTInnerAssert(m_dumpster.empty());
-        WCTInnerAssert(m_migratings.empty());
-        WCTInnerAssert(m_referenceds.empty());
-        callback = m_migratedNotification;
-        m_migrated = true;
-    }
-    if (callback != nullptr) {
-        callback(nullptr);
-    }
-}
-
-void Migration::postTableMigratedNotification(const MigrationInfo* info)
-{
-    MigratedCallback callback = nullptr;
-    {
-        SharedLockGuard lockGuard(m_lock);
-        WCTInnerAssert(m_migratings.find(info) == m_migratings.end());
-        WCTInnerAssert(m_referenceds.find(info) == m_referenceds.end());
-        WCTInnerAssert(m_dumpster.find(info) == m_dumpster.end());
-        callback = m_migratedNotification;
-    }
-    if (callback != nullptr) {
-        callback(info);
-    }
+    LockGuard lockGuard(m_lock);
+    m_event = event;
 }
 
 } // namespace WCDB

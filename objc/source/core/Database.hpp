@@ -34,7 +34,7 @@ namespace WCDB {
 
 // TODO: readonly manually - by removing basic config and adding query_only config?
 // TODO: support authorize
-class Database final : private HandlePool {
+class Database final : private HandlePool, public MigrationEvent {
 #pragma mark - Initializer
 public:
     Database(const String &path);
@@ -178,7 +178,7 @@ public:
     typedef Migration::Filter MigrationFilter;
     void filterMigration(const MigrationFilter &filter);
 
-    typedef Migration::MigratedCallback MigratedCallback;
+    typedef std::function<void(Database *, const MigrationBaseInfo *)> MigratedCallback;
     void setNotificationWhenMigrated(const MigratedCallback &callback);
 
     std::pair<bool, bool> stepMigration();
@@ -188,6 +188,8 @@ public:
     bool isMigrated() const;
 
 protected:
+    void didMigrate(const MigrationBaseInfo *info) override final;
+    MigratedCallback m_migratedCallback;
     class Migration m_migration;
 
 #pragma mark - Checkpoint

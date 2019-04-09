@@ -26,11 +26,11 @@
 
 namespace WCDB {
 
-MigrationEvent::~MigrationEvent()
+MigrationQueueEvent::~MigrationQueueEvent()
 {
 }
 
-MigrationQueue::MigrationQueue(const String& name, MigrationEvent* event)
+MigrationQueue::MigrationQueue(const String& name, MigrationQueueEvent* event)
 : AsyncQueue(name), m_event(event)
 {
     WCTInnerAssert(m_event != nullptr);

@@ -56,7 +56,7 @@ namespace WCDB {
 class Core final : public DatabasePoolEvent,
                    public CheckpointEvent,
                    public BackupEvent,
-                   public MigrationEvent,
+                   public MigrationQueueEvent,
                    public ObservationEvent,
                    public ObservationDelegate {
 #pragma mark - Core

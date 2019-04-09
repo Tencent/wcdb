@@ -32,6 +32,16 @@ namespace WCDB {
 
 typedef Recyclable<const MigrationInfo*> RecyclableMigrationInfo;
 
+class MigrationEvent {
+public:
+    virtual ~MigrationEvent() = 0;
+
+protected:
+    friend class Migration;
+    // parameter will be nullptr when all tables migrated.
+    virtual void didMigrate(const MigrationBaseInfo* info) = 0;
+};
+
 // TODO: deny if user visiting source table by using authorize feature.
 class Migration final {
 #pragma mark - Initialize
@@ -145,12 +155,6 @@ public:
     // succeed, done
     std::pair<bool, bool> step(Migration::Stepper& stepper);
 
-    // parameter will be nullptr when all tables migrated.
-    typedef std::function<void(const MigrationBaseInfo*)> MigratedCallback;
-    void setNotificationWhenMigrated(const MigratedCallback& callback);
-
-    bool isMigrated() const;
-
 protected:
     // succeed, worked
     std::pair<bool, bool> tryDropUnreferencedTable(Migration::Stepper& stepper);
@@ -162,8 +166,15 @@ protected:
 
 private:
     bool m_tableAcquired;
-    MigratedCallback m_migratedNotification;
     bool m_migrated;
+
+#pragma mark - Event
+public:
+    bool isMigrated() const;
+    void setEvent(MigrationEvent* event);
+
+protected:
+    MigrationEvent* m_event;
 };
 
 } // namespace WCDB

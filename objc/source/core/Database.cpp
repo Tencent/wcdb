@@ -36,7 +36,12 @@ namespace WCDB {
 
 #pragma mark - Initializer
 Database::Database(const String &path)
-: HandlePool(path), m_factory(path), m_tag(Tag::invalid()), m_initialized(false), m_configs(nullptr)
+: HandlePool(path)
+, m_factory(path)
+, m_tag(Tag::invalid())
+, m_initialized(false)
+, m_configs(nullptr)
+, m_migratedCallback(nullptr)
 {
 }
 
@@ -705,10 +710,18 @@ std::pair<bool, bool> Database::stepMigration()
     return { succeed, done };
 }
 
+void Database::didMigrate(const MigrationBaseInfo *info)
+{
+    SharedLockGuard lockGuard(m_memory);
+    if (m_migratedCallback != nullptr) {
+        m_migratedCallback(this, info);
+    }
+}
+
 void Database::setNotificationWhenMigrated(const MigratedCallback &callback)
 {
     LockGuard lockGuard(m_memory);
-    m_migration.setNotificationWhenMigrated(callback);
+    m_migratedCallback = callback;
 }
 
 void Database::filterMigration(const MigrationFilter &filter)
