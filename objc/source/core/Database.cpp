@@ -42,6 +42,7 @@ Database::Database(const String &path)
 , m_initialized(false)
 , m_configs(nullptr)
 , m_migratedCallback(nullptr)
+, m_migration(this)
 {
 }
 
@@ -155,13 +156,14 @@ RecyclableHandle Database::getHandle()
     if (!initializedGuard.valid()) {
         return nullptr;
     }
-    return flowOut(m_migration.shouldMigrate() ? HandleType::Migration : HandleType::Normal);
+    return flowOut(m_migration.shouldMigrate() ? HandleType::Migrate : HandleType::Normal);
 }
 
 RecyclableHandle Database::getSlotHandle(Slot slot)
 {
-    WCTInnerAssert(slot != HandleType::Migration);
-    WCTInnerAssert(slot != HandleType::Normal) WCTInnerAssert(slot < HandleType::SlotCount);
+    WCTInnerAssert(slot != HandleType::Migrate);
+    WCTInnerAssert(slot != HandleType::Normal);
+    WCTInnerAssert(slot < HandlePoolNumberOfSlots);
     InitializedGuard initializedGuard = initialize();
     if (!initializedGuard.valid()) {
         return nullptr;
@@ -199,7 +201,7 @@ std::pair<bool, bool> Database::tableExists(const String &table)
 
 std::shared_ptr<Handle> Database::generateSlotedHandle(Slot slot)
 {
-    WCTInnerAssert(slot < HandleType::SlotCount);
+    WCTInnerAssert(slot < HandlePoolNumberOfSlots);
     return generateHandle((HandleType) slot);
 }
 
@@ -216,7 +218,7 @@ void Database::handleWillStep(HandleStatement *handleStatement)
 bool Database::willReuseSlotedHandle(Slot slot, Handle *handle)
 {
     WCTInnerAssert(handle->isOpened());
-    WCTInnerAssert(slot < HandleType::SlotCount);
+    WCTInnerAssert(slot < HandlePoolNumberOfSlots);
     WCDB_UNUSED(slot)
     std::shared_ptr<Configs> configs;
     {
@@ -238,11 +240,11 @@ std::shared_ptr<Handle> Database::generateHandle(HandleType type)
     case HandleType::InterruptibleCheckpoint:
         handle.reset(new InterruptibleCheckpointHandle);
         break;
-    case HandleType::Migration:
+    case HandleType::Migrate:
         // It's safe since m_migration itself never change.
         handle.reset(new MigrationHandle(m_migration));
         break;
-    case HandleType::MigrationStepper:
+    case HandleType::MigrationStep:
         handle.reset(new MigrationStepperHandle);
         break;
     case HandleType::BackupRead:
@@ -251,7 +253,7 @@ std::shared_ptr<Handle> Database::generateHandle(HandleType type)
     case HandleType::BackupWrite:
         handle.reset(new BackupWriteHandle);
         break;
-    case HandleType::Assembler:
+    case HandleType::Assemble:
         handle.reset(new AssemblerHandle);
         break;
     default:
@@ -269,14 +271,14 @@ std::shared_ptr<Handle> Database::generateHandle(HandleType type)
         configs = m_configs;
     }
     handle->reconfigure(configs);
-    if (type < HandleType::SlotCount) {
+    if (type < HandlePoolNumberOfSlots) {
         handle->setPath(path);
         if (!handle->open()) {
             setThreadedError(handle->getError());
             return nullptr;
         }
     }
-    if (type == HandleType::Normal || type == HandleType::Migration) {
+    if (type == HandleType::Normal || type == HandleType::Migrate) {
         handle->setNotificationWhenStatementWillStep(
         String::formatted("Interrupt-%p", this),
         std::bind(&Database::handleWillStep, this, std::placeholders::_1));
@@ -568,7 +570,7 @@ bool Database::deposit()
         if (backupWriteHandle == nullptr) {
             return;
         }
-        std::shared_ptr<Handle> assemblerHandle = generateHandle(HandleType::Assembler);
+        std::shared_ptr<Handle> assemblerHandle = generateHandle(HandleType::Assemble);
         if (assemblerHandle == nullptr) {
             return;
         }
@@ -616,7 +618,7 @@ double Database::retrieve(const RetrieveProgressCallback &onProgressUpdate)
         if (backupWriteHandle == nullptr) {
             return;
         }
-        std::shared_ptr<Handle> assemblerHandle = generateHandle(HandleType::Assembler);
+        std::shared_ptr<Handle> assemblerHandle = generateHandle(HandleType::Assemble);
         if (assemblerHandle == nullptr) {
             return;
         }
@@ -692,7 +694,7 @@ std::pair<bool, bool> Database::stepMigration()
         WCTRemedialAssert(
         !isInTransaction(), "Migrating can't be run in transaction.", break;);
 
-        RecyclableHandle handle = getSlotHandle(HandleType::MigrationStepper);
+        RecyclableHandle handle = getSlotHandle(HandleType::MigrationStep);
         if (handle == nullptr) {
             break;
         }
@@ -738,7 +740,7 @@ void Database::interruptMigration()
     SharedLockGuard concurrencyGuard(m_concurrency);
     SharedLockGuard memoryGuard(m_memory);
     if (m_initialized) {
-        for (const auto &handle : getHandles(HandleType::MigrationStepper)) {
+        for (const auto &handle : getHandles(HandleType::MigrationStep)) {
             WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()) != nullptr);
             static_cast<MigrationStepperHandle *>(handle.get())->interrupt();
         }

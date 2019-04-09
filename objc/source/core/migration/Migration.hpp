@@ -46,7 +46,7 @@ protected:
 class Migration final {
 #pragma mark - Initialize
 public:
-    Migration();
+    Migration(MigrationEvent* event);
 
     typedef std::function<void(MigrationUserInfo&)> Filter;
     // filter should be called at the very beginning.
@@ -171,7 +171,6 @@ private:
 #pragma mark - Event
 public:
     bool isMigrated() const;
-    void setEvent(MigrationEvent* event);
 
 protected:
     MigrationEvent* m_event;

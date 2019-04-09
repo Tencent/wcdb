@@ -30,8 +30,8 @@ MigrationEvent::~MigrationEvent()
 }
 
 #pragma mark - Initialize
-Migration::Migration()
-: m_filter(nullptr), m_event(nullptr), m_tableAcquired(false), m_migrated(false)
+Migration::Migration(MigrationEvent* event)
+: m_filter(nullptr), m_event(event), m_tableAcquired(false), m_migrated(false)
 {
 }
 
@@ -445,12 +445,6 @@ bool Migration::isMigrated() const
 {
     SharedLockGuard lockGuard(m_lock);
     return m_migrated;
-}
-
-void Migration::setEvent(MigrationEvent* event)
-{
-    LockGuard lockGuard(m_lock);
-    m_event = event;
 }
 
 } // namespace WCDB

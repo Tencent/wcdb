@@ -76,17 +76,15 @@ protected:
 protected:
     enum HandleType : unsigned int {
         Normal = 0,
-        Migration,
-        MigrationStepper,
+        Migrate,
+        MigrationStep,
         InterruptibleCheckpoint,
 
-        SlotCount, // the number of handles that should be sloted.
-
-        BackupRead = SlotCount,
+        // The handles below are not in HandlePool
+        BackupRead = HandlePoolNumberOfSlots,
         BackupWrite,
-        Assembler,
+        Assemble,
     };
-    static_assert(HandleType::SlotCount == HandlePoolNumberOfSlots, "");
     std::shared_ptr<Handle> generateSlotedHandle(Slot slot) override final;
     bool willReuseSlotedHandle(Slot slot, Handle *handle) override final;
     void handleWillStep(HandleStatement *handleStatement);
@@ -190,7 +188,7 @@ public:
 protected:
     void didMigrate(const MigrationBaseInfo *info) override final;
     MigratedCallback m_migratedCallback;
-    class Migration m_migration;
+    Migration m_migration;
 
 #pragma mark - Checkpoint
 public:
