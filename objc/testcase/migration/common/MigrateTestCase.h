@@ -34,6 +34,8 @@
 
 - (void)doTestAutoMigrate;
 
+- (void)doTestFeatureClosedDatabaseWillNotPerformAutoMigrate;
+
 - (void)doTestFeatureAutoMigrateWillStopDueToError;
 
 - (void)doTestFeatureAutoMigrateWillNotStopDueToInterrupt;

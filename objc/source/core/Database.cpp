@@ -121,6 +121,16 @@ Database::InitializedGuard Database::initialize()
     return nullptr;
 }
 
+Database::InitializedGuard Database::isInitialized()
+{
+    SharedLockGuard concurrencyGuard(m_concurrency);
+    SharedLockGuard memoryGuard(m_memory);
+    if (m_initialized) {
+        return concurrencyGuard;
+    }
+    return nullptr;
+}
+
 #pragma mark - Config
 void Database::setConfigs(const std::shared_ptr<Configs> &configs)
 {
@@ -527,12 +537,30 @@ void Database::filterBackup(const BackupFilter &tableShouldBeBackedup)
 
 bool Database::backup()
 {
+    InitializedGuard initializedGuard = initialize();
+    bool result = false;
+    if (initializedGuard.valid()) {
+        result = doBackup();
+    }
+    return result;
+}
+
+bool Database::backupIfAlreadyInitialized()
+{
+    InitializedGuard initializedGuard = isInitialized();
+    bool succeed = false;
+    if (initializedGuard.valid()) {
+        succeed = doBackup();
+    }
+    return succeed;
+}
+
+bool Database::doBackup()
+{
     WCTRemedialAssert(
     !isInTransaction(), "Backup can't be run in transaction.", return false;);
-    InitializedGuard initializedGuard = initialize();
-    if (!initializedGuard.valid()) {
-        return false;
-    }
+    WCTInnerAssert(m_concurrency.readSafety());
+    WCTInnerAssert(m_initialized);
     std::shared_ptr<Handle> backupReadHandle = generateHandle(HandleType::BackupRead);
     if (backupReadHandle == nullptr) {
         return false;
@@ -686,20 +714,35 @@ bool Database::retrieveRenewed()
 std::pair<bool, bool> Database::stepMigration()
 {
     InitializedGuard initializedGuard = initialize();
+    std::pair<bool, bool> result = { false, false };
+    if (initializedGuard.valid()) {
+        result = doStepMigration();
+    }
+    return result;
+}
+
+std::pair<bool, bool> Database::stepMigrationIfAlreadyInitialized()
+{
+    InitializedGuard initializedGuard = isInitialized();
     bool succeed = false;
     bool done = false;
-    do {
-        if (!initializedGuard.valid()) {
-            break;
-        }
-        WCTRemedialAssert(
-        !isInTransaction(), "Migrating can't be run in transaction.", break;);
+    if (initializedGuard.valid()) {
+        std::tie(succeed, done) = doStepMigration();
+    }
+    return { succeed, done };
+}
 
-        RecyclableHandle handle = getSlotHandle(HandleType::MigrationStep);
-        if (handle == nullptr) {
-            break;
-        }
-
+std::pair<bool, bool> Database::doStepMigration()
+{
+    WCTRemedialAssert(!isInTransaction(),
+                      "Migrating can't be run in transaction.",
+                      std::make_pair(false, false););
+    WCTInnerAssert(m_concurrency.readSafety());
+    WCTInnerAssert(m_initialized);
+    bool succeed = false;
+    bool done = false;
+    RecyclableHandle handle = getSlotHandle(HandleType::MigrationStep);
+    if (handle != nullptr) {
         WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()) != nullptr);
         std::tie(succeed, done)
         = m_migration.step(*(static_cast<MigrationStepperHandle *>(handle.get())));
@@ -709,7 +752,7 @@ std::pair<bool, bool> Database::stepMigration()
                 succeed = true;
             }
         }
-    } while (false);
+    }
     return { succeed, done };
 }
 
@@ -759,22 +802,18 @@ bool Database::isMigrated() const
 }
 
 #pragma mark - Checkpoint
-bool Database::interruptibleCheckpoint(CheckpointType type)
+bool Database::interruptibleCheckpointIfAlreadyInitialized(CheckpointType type)
 {
-    InitializedGuard initializedGuard = initialize();
+    InitializedGuard initializedGuard = isInitialized();
     bool succeed = false;
-    do {
-        if (!initializedGuard.valid()) {
-            break;
-        }
+    if (initializedGuard.valid()) {
         RecyclableHandle handle = getSlotHandle(HandleType::InterruptibleCheckpoint);
-        if (handle == nullptr) {
-            break;
+        if (handle != nullptr) {
+            WCTInnerAssert(dynamic_cast<InterruptibleCheckpointHandle *>(handle.get()) != nullptr);
+            succeed
+            = static_cast<InterruptibleCheckpointHandle *>(handle.get())->checkpoint(type);
         }
-        WCTInnerAssert(dynamic_cast<InterruptibleCheckpointHandle *>(handle.get()) != nullptr);
-        succeed
-        = static_cast<InterruptibleCheckpointHandle *>(handle.get())->checkpoint(type);
-    } while (false);
+    }
     return succeed;
 }
 

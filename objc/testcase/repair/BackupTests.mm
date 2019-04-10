@@ -315,4 +315,21 @@
 //    [self.dispatch waitUntilDone];
 //}
 
+- (void)test_feature_closed_database_will_not_perform_auto_backup
+{
+    [self.database removeCheckpointConfig];
+    self.database.autoBackup = YES;
+
+    TestCaseObject *object = [self.random autoIncrementTestCaseObject];
+    while ([self getWalFrameCount] < self.backupFramesIntervalForNonCritical) {
+        TestCaseAssertTrue([self.table insertObject:object]);
+    }
+
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
+    [self.database close];
+
+    [NSThread sleepForTimeInterval:self.backupDelayForNonCritical + self.delayForTolerance];
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
+}
+
 @end

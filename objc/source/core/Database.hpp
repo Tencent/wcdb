@@ -46,6 +46,7 @@ protected:
     // All public interfaces that are related with concurrency should make sure the initialization.
     typedef SharedLockGuard InitializedGuard;
     InitializedGuard initialize();
+    InitializedGuard isInitialized();
     bool m_initialized;
 
 #pragma mark - Basic
@@ -158,6 +159,7 @@ public:
     typedef Repair::Factory::Filter BackupFilter;
     void filterBackup(const BackupFilter &tableShouldBeBackedup);
     bool backup();
+    bool backupIfAlreadyInitialized();
     bool removeMaterials();
 
     bool deposit();
@@ -168,6 +170,7 @@ public:
     bool containsDeposited() const;
 
 private:
+    bool doBackup();
     bool retrieveRenewed();
     Repair::Factory m_factory;
 
@@ -180,12 +183,14 @@ public:
     void setNotificationWhenMigrated(const MigratedCallback &callback);
 
     std::pair<bool, bool> stepMigration();
+    std::pair<bool, bool> stepMigrationIfAlreadyInitialized();
 
     void interruptMigration();
 
     bool isMigrated() const;
 
 protected:
+    std::pair<bool, bool> doStepMigration();
     void didMigrate(const MigrationBaseInfo *info) override final;
     MigratedCallback m_migratedCallback;
     Migration m_migration;
@@ -193,7 +198,7 @@ protected:
 #pragma mark - Checkpoint
 public:
     typedef InterruptibleCheckpointHandle::Type CheckpointType;
-    bool interruptibleCheckpoint(CheckpointType type);
+    bool interruptibleCheckpointIfAlreadyInitialized(CheckpointType type);
 
     void interruptCheckpoint();
 

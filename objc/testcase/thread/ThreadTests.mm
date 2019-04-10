@@ -239,6 +239,26 @@
          }];
 }
 
+- (void)test_feature_closed_database_will_not_perform_subthread_checkpoint
+{
+    // trigger subthread checkpoint
+    TestCaseAssertTrue([self createTable]);
+
+    TestCaseObject* object = [self.random autoIncrementTestCaseObject];
+
+    while ([self getWalFrameCount] < WCDB::CheckpointFramesThresholdForTruncating) {
+        TestCaseAssertTrue([self.table insertObject:object]);
+    }
+
+    auto fileSizeBefore = [self.fileManager attributesOfItemAtPath:self.walPath error:nil].fileSize;
+    TestCaseAssertTrue(fileSizeBefore > 0);
+
+    [self.database close];
+    [NSThread sleepForTimeInterval:WCDB::CheckpointQueueDelayForCritical + self.delayForTolerance];
+    auto fileSizeAfter = [self.fileManager attributesOfItemAtPath:self.walPath error:nil].fileSize;
+    TestCaseAssertTrue(fileSizeAfter > 0);
+}
+
 - (void)test_feature_threaded_handle
 {
     __block int handleCount = 0;

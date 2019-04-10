@@ -246,22 +246,25 @@ void Core::setNotificationWhenDatabaseCorrupted(const String& path,
 bool Core::databaseShouldCheckpoint(const String& path, int frames)
 {
     RecyclableDatabase database = m_databasePool.get(path);
-    if (database == nullptr) {
-        return true;
+    bool succeed = true; // mark as no error if database is not referenced.
+    if (database != nullptr) {
+        succeed = database->interruptibleCheckpointIfAlreadyInitialized(
+        frames >= CheckpointFramesThresholdForTruncating ?
+        Database::CheckpointType::Truncate :
+        Database::CheckpointType::Passive);
     }
-    return database->interruptibleCheckpoint(frames >= CheckpointFramesThresholdForTruncating ?
-                                             Database::CheckpointType::Truncate :
-                                             Database::CheckpointType::Passive);
+    return succeed;
 }
 
 #pragma mark - Backup
 bool Core::databaseShouldBackup(const String& path)
 {
     RecyclableDatabase database = m_databasePool.get(path);
-    if (database == nullptr) {
-        return true;
+    bool succeed = true; // mark as no error if database is not referenced.
+    if (database != nullptr) {
+        succeed = database->backupIfAlreadyInitialized();
     }
-    return database->backup();
+    return succeed;
 }
 
 const std::shared_ptr<Config>& Core::backupConfig()
@@ -273,10 +276,12 @@ const std::shared_ptr<Config>& Core::backupConfig()
 std::pair<bool, bool> Core::databaseShouldMigrate(const String& path)
 {
     RecyclableDatabase database = m_databasePool.get(path);
-    if (database == nullptr) {
-        return { false, false };
+    bool succeed = true; // mark as no error if database is not referenced.
+    bool done = false;
+    if (database != nullptr) {
+        std::tie(succeed, done) = database->stepMigrationIfAlreadyInitialized();
     }
-    return database->stepMigration();
+    return { succeed, done };
 }
 
 void Core::setAutoMigration(const String& path, bool flag)
