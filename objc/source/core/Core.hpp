@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_CORE_H
-#define __WCDB_CORE_H
+#ifndef __WCDB_CORE_HPP
+#define __WCDB_CORE_HPP
 
-#include <WCDB/AsyncQueue.hpp>
 #include <WCDB/BackupQueue.hpp>
 #include <WCDB/CheckpointQueue.hpp>
 #include <WCDB/MigrationQueue.hpp>
@@ -45,10 +44,6 @@
 #include <WCDB/OneOrBinaryTokenizer.hpp>
 #include <WCDB/TokenizerModule.hpp>
 #include <WCDB/TokenizerModules.hpp>
-
-#include <WCDB/MigrationInfo.hpp>
-
-#include <WCDB/CoreConst.h>
 
 namespace WCDB {
 
@@ -159,4 +154,4 @@ protected:
 
 } // namespace WCDB
 
-#endif /* __WCDB_CORE_H */
+#endif /* __WCDB_CORE_HPP */

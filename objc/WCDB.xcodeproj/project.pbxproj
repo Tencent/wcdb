@@ -83,7 +83,7 @@
 		233E12402195756B00BD488D /* ConvenientDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233E123F2195756B00BD488D /* ConvenientDeleteTests.mm */; };
 		23408F0F211897AA0071E5A7 /* Shm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23408F0D211897AA0071E5A7 /* Shm.cpp */; };
 		23408F11211897AA0071E5A7 /* Shm.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23408F0E211897AA0071E5A7 /* Shm.hpp */; };
-		234591F6204433E200DC7D34 /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 234591F5204432E400DC7D34 /* Core.h */; };
+		234591F6204433E200DC7D34 /* Core.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 234591F5204432E400DC7D34 /* Core.hpp */; };
 		2347378F21CBB3A800AD5E41 /* AbstractHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2347378D21CBB3A800AD5E41 /* AbstractHandle.cpp */; };
 		2347379021CBB3A800AD5E41 /* AbstractHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2347378E21CBB3A800AD5E41 /* AbstractHandle.hpp */; };
 		2349F6FE1EA0D6680021EFA7 /* Database.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F61B1EA0D6680021EFA7 /* Database.cpp */; };
@@ -480,7 +480,7 @@
 		2367BBCD2215004300380122 /* WINQ.h in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBEB217DFADC006E9E73 /* WINQ.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2367BBCE2215004300380122 /* UnsafeData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23759460210081AA00DBB721 /* UnsafeData.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		2367BBCF2215004300380122 /* WCTDeclaration.h in Headers */ = {isa = PBXBuildFile; fileRef = 23DF0A0D219028E900F0B2B6 /* WCTDeclaration.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2367BBD02215004300380122 /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 234591F5204432E400DC7D34 /* Core.h */; };
+		2367BBD02215004300380122 /* Core.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 234591F5204432E400DC7D34 /* Core.hpp */; };
 		2367BBD12215004300380122 /* DeprecatedRepairKit.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3C20AD666900E21AB0 /* DeprecatedRepairKit.hpp */; };
 		2367BBD22215004300380122 /* WCTHandle+ChainCall.h in Headers */ = {isa = PBXBuildFile; fileRef = 233A05892062698E00F1A212 /* WCTHandle+ChainCall.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2367BBD32215004300380122 /* Pragma.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB9D217DFADC006E9E73 /* Pragma.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1936,7 +1936,7 @@
 		233E123F2195756B00BD488D /* ConvenientDeleteTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ConvenientDeleteTests.mm; sourceTree = "<group>"; };
 		23408F0D211897AA0071E5A7 /* Shm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Shm.cpp; sourceTree = "<group>"; };
 		23408F0E211897AA0071E5A7 /* Shm.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Shm.hpp; sourceTree = "<group>"; };
-		234591F5204432E400DC7D34 /* Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
+		234591F5204432E400DC7D34 /* Core.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Core.hpp; sourceTree = "<group>"; };
 		2347378D21CBB3A800AD5E41 /* AbstractHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AbstractHandle.cpp; sourceTree = "<group>"; };
 		2347378E21CBB3A800AD5E41 /* AbstractHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AbstractHandle.hpp; sourceTree = "<group>"; };
 		2349F61B1EA0D6680021EFA7 /* Database.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Database.cpp; sourceTree = "<group>"; };
@@ -3101,7 +3101,7 @@
 				2349F6251EA0D6680021EFA7 /* RecyclableHandle.hpp */,
 				23B4DC7C2111B39100954D71 /* Tag.cpp */,
 				23B4DC7D2111B39200954D71 /* Tag.hpp */,
-				234591F5204432E400DC7D34 /* Core.h */,
+				234591F5204432E400DC7D34 /* Core.hpp */,
 				23B4DCBB2112A9C800954D71 /* Core.cpp */,
 				237C900621D45E6700EE6E44 /* CoreConst.h */,
 			);
@@ -4450,7 +4450,7 @@
 				2367BBCD2215004300380122 /* WINQ.h in Headers */,
 				2367BBCE2215004300380122 /* UnsafeData.hpp in Headers */,
 				2367BBCF2215004300380122 /* WCTDeclaration.h in Headers */,
-				2367BBD02215004300380122 /* Core.h in Headers */,
+				2367BBD02215004300380122 /* Core.hpp in Headers */,
 				2367BBD12215004300380122 /* DeprecatedRepairKit.hpp in Headers */,
 				2367BBD22215004300380122 /* WCTHandle+ChainCall.h in Headers */,
 				2367BBD32215004300380122 /* Pragma.hpp in Headers */,
@@ -4805,7 +4805,7 @@
 				23EEDCE7217DFADC006E9E73 /* WINQ.h in Headers */,
 				23759463210081AA00DBB721 /* UnsafeData.hpp in Headers */,
 				23DF0A0E219029DB00F0B2B6 /* WCTDeclaration.h in Headers */,
-				234591F6204433E200DC7D34 /* Core.h in Headers */,
+				234591F6204433E200DC7D34 /* Core.hpp in Headers */,
 				23775B7420AD666900E21AB0 /* DeprecatedRepairKit.hpp in Headers */,
 				233A058B2062698E00F1A212 /* WCTHandle+ChainCall.h in Headers */,
 				23EEDC9A217DFADC006E9E73 /* Pragma.hpp in Headers */,
