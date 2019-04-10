@@ -156,6 +156,7 @@
     TestCaseResult *migrated = [TestCaseResult no];
     NSString *expectedTableName = self.tableName;
     [self.database setNotificationWhenMigrated:^(WCTDatabase *database, WCTMigrationBaseInfo *info) {
+        WCDB_UNUSED(database);
         if (info == nil) {
             [migrated makeYES];
         } else if ([info.table isEqualToString:expectedTableName]) {
@@ -184,6 +185,7 @@
     TestCaseResult *migrated = [TestCaseResult no];
     NSString *expectedTableName = self.tableName;
     [self.database setNotificationWhenMigrated:^(WCTDatabase *database, WCTMigrationBaseInfo *info) {
+        WCDB_UNUSED(database);
         if (info == nil) {
             [migrated makeYES];
         } else if ([info.table isEqualToString:expectedTableName]) {
