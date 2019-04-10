@@ -85,6 +85,7 @@ Database::InitializedGuard Database::initialize()
     do {
         {
             SharedLockGuard concurrencyGuard(m_concurrency);
+            SharedLockGuard memoryGuard(m_memory);
             if (m_initialized) {
                 return concurrencyGuard;
             }
