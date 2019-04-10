@@ -305,33 +305,10 @@ void Core::setNotificationWhenPerformanceGlobalTraced(const ShareablePerformance
     ->setNotification(notification);
 }
 
-std::shared_ptr<Config> Core::sqlTraceConfig(const SQLTraceConfig::Notification& notification)
-{
-    return std::shared_ptr<Config>(new SQLTraceConfig(notification));
-}
-
-std::shared_ptr<Config>
-Core::performanceTraceConfig(const PerformanceTraceConfig::Notification& notification)
-{
-    return std::shared_ptr<Config>(new PerformanceTraceConfig(notification));
-}
-
-#pragma mark - Cipher
-std::shared_ptr<Config> Core::cipherConfig(const UnsafeData& cipher, int pageSize)
-{
-    return std::shared_ptr<Config>(new CipherConfig(cipher, pageSize));
-}
-
 #pragma mark - Config
 const std::shared_ptr<Configs>& Core::configs()
 {
     return m_configs;
-}
-
-std::shared_ptr<Config> Core::customConfig(const CustomConfig::Invocation& invocation,
-                                           const CustomConfig::Invocation& uninvocation)
-{
-    return std::shared_ptr<Config>(new CustomConfig(invocation, uninvocation));
 }
 
 } // namespace WCDB

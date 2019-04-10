@@ -26,23 +26,13 @@
 #include <WCDB/MigrationQueue.hpp>
 #include <WCDB/ObservationQueue.hpp>
 
-#include <WCDB/BackupConfig.hpp>
-#include <WCDB/BasicConfig.hpp>
-#include <WCDB/CheckpointConfig.hpp>
-#include <WCDB/CipherConfig.hpp>
 #include <WCDB/Config.hpp>
 #include <WCDB/Configs.hpp>
-#include <WCDB/CustomConfig.hpp>
 #include <WCDB/PerformanceTraceConfig.hpp>
 #include <WCDB/SQLTraceConfig.hpp>
-#include <WCDB/TokenizerConfig.hpp>
 
-#include <WCDB/Database.hpp>
 #include <WCDB/DatabasePool.hpp>
-#include <WCDB/RecyclableHandle.hpp>
 
-#include <WCDB/OneOrBinaryTokenizer.hpp>
-#include <WCDB/TokenizerModule.hpp>
 #include <WCDB/TokenizerModules.hpp>
 
 namespace WCDB {
@@ -128,25 +118,14 @@ public:
     void setNotificationForSQLGLobalTraced(const ShareableSQLTraceConfig::Notification& notification);
     void setNotificationWhenPerformanceGlobalTraced(
     const ShareablePerformanceTraceConfig::Notification& notification);
-    std::shared_ptr<Config> sqlTraceConfig(const SQLTraceConfig::Notification& notification);
-    std::shared_ptr<Config>
-    performanceTraceConfig(const PerformanceTraceConfig::Notification& notification);
 
 protected:
     std::shared_ptr<Config> m_globalSQLTraceConfig;
     std::shared_ptr<Config> m_globalPerformanceTraceConfig;
 
-#pragma mark - Cipher
-public:
-    std::shared_ptr<Config> cipherConfig(const UnsafeData& cipher, int pageSize = 4096);
-
 #pragma mark - Config
 public:
     const std::shared_ptr<Configs>& configs();
-
-    std::shared_ptr<Config>
-    customConfig(const CustomConfig::Invocation& invocation,
-                 const CustomConfig::Invocation& uninvocation = nullptr);
 
 protected:
     std::shared_ptr<Configs> m_configs;

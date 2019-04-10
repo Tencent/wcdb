@@ -20,6 +20,7 @@
 
 #import <WCDB/Assertion.hpp>
 #import <WCDB/Core.h>
+#import <WCDB/SQLite.h>
 #import <WCDB/WCTDatabase+Config.h>
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTHandle+Private.h>
@@ -33,7 +34,7 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
 - (void)setCipherKey:(NSData*)cipherKey
 {
     _database->setConfig(WCDB::CipherConfigName,
-                         WCDB::Core::shared()->cipherConfig(WCDB::UnsafeData::immutable((const unsigned char*) cipherKey.bytes, (size_t) cipherKey.length)),
+                         std::shared_ptr<WCDB::Config>(new WCDB::CipherConfig(WCDB::UnsafeData::immutable((const unsigned char*) cipherKey.bytes, (size_t) cipherKey.length), WCDB::CipherConfigDefaultPageSize)),
                          WCDB::Configs::Priority::Highest);
 }
 
@@ -41,7 +42,7 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
    andCipherPageSize:(int)cipherPageSize
 {
     _database->setConfig(WCDB::CipherConfigName,
-                         WCDB::Core::shared()->cipherConfig(WCDB::UnsafeData::immutable((const unsigned char*) cipherKey.bytes, (size_t) cipherKey.length), cipherPageSize),
+                         std::shared_ptr<WCDB::Config>(new WCDB::CipherConfig(WCDB::UnsafeData::immutable((const unsigned char*) cipherKey.bytes, (size_t) cipherKey.length), cipherPageSize)),
                          WCDB::Configs::Priority::Highest);
 }
 
@@ -60,7 +61,7 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
             return nsUninvocation([[WCTHandle alloc] initWithDatabase:self andUnsafeHandle:handle]);
         };
     }
-    _database->setConfig(name, WCDB::Core::shared()->customConfig(invocation, uninvocation), priority);
+    _database->setConfig(name, std::shared_ptr<WCDB::Config>(new WCDB::CustomConfig(invocation, uninvocation)), priority);
 }
 
 - (void)setConfig:(WCTConfigBlock)nsInvocation

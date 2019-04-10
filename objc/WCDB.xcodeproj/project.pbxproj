@@ -1432,6 +1432,8 @@
 		23FC43D921B6631200FA1A0F /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		23FC43DC21B6631200FA1A0F /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		23FEC463206B3032001E7A3B /* WCTConvenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 23FEC461206B3032001E7A3B /* WCTConvenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		391F7C84225DE8FD0095E82D /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 391F7C83225DE8FD0095E82D /* Core.h */; };
+		391F7C85225DE8FD0095E82D /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 391F7C83225DE8FD0095E82D /* Core.h */; };
 		39411A4122437E7B00A388F5 /* CaseInsensiveList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		39411A4222437E7B00A388F5 /* CaseInsensiveList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		39485B562240765C00A65DA4 /* NewlyCreatedTableIndexObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39485B502240751600A65DA4 /* NewlyCreatedTableIndexObject.mm */; };
@@ -2747,6 +2749,7 @@
 		23FC01DC21B8B716002C7F87 /* RetrieveBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RetrieveBenchmark.mm; sourceTree = "<group>"; };
 		23FC43E121B6631200FA1A0F /* Benchmark.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Benchmark.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		23FEC461206B3032001E7A3B /* WCTConvenient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTConvenient.h; sourceTree = "<group>"; };
+		391F7C83225DE8FD0095E82D /* Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
 		39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CaseInsensiveList.hpp; sourceTree = "<group>"; };
 		39485B502240751600A65DA4 /* NewlyCreatedTableIndexObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NewlyCreatedTableIndexObject.mm; sourceTree = "<group>"; };
 		39485B512240751600A65DA4 /* NewlyCreatedTableIndexObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NewlyCreatedTableIndexObject+WCTTableCoding.h"; sourceTree = "<group>"; };
@@ -3104,6 +3107,7 @@
 				234591F5204432E400DC7D34 /* Core.hpp */,
 				23B4DCBB2112A9C800954D71 /* Core.cpp */,
 				237C900621D45E6700EE6E44 /* CoreConst.h */,
+				391F7C83225DE8FD0095E82D /* Core.h */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -4462,6 +4466,7 @@
 				2367BBD92215004300380122 /* CommonTableExpression.hpp in Headers */,
 				2367BBDA2215004300380122 /* Console.hpp in Headers */,
 				2367BBDB2215004300380122 /* NSObject+WCTColumnCoding.h in Headers */,
+				391F7C85225DE8FD0095E82D /* Core.h in Headers */,
 				2367BBDC2215004300380122 /* HandleNotification.hpp in Headers */,
 				2367BBDD2215004300380122 /* SyntaxCreateTableSTMT.hpp in Headers */,
 				2367BBDE2215004300380122 /* SyntaxDropTriggerSTMT.hpp in Headers */,
@@ -4817,6 +4822,7 @@
 				23EEDC80217DFADC006E9E73 /* CommonTableExpression.hpp in Headers */,
 				233A8534215E7CFE00BB8D4F /* Console.hpp in Headers */,
 				2370B11F21914ED500D3227C /* NSObject+WCTColumnCoding.h in Headers */,
+				391F7C84225DE8FD0095E82D /* Core.h in Headers */,
 				2360A5FB20D78F1B00E4A311 /* HandleNotification.hpp in Headers */,
 				23EEDD36217DFADC006E9E73 /* SyntaxCreateTableSTMT.hpp in Headers */,
 				23EEDD46217DFADC006E9E73 /* SyntaxDropTriggerSTMT.hpp in Headers */,

@@ -67,6 +67,7 @@ static constexpr const char* TokenizeConfigName = "com.Tencent.WCDB.Config.Token
 
 // Cipher Config
 static constexpr const char* CipherConfigName = "com.Tencent.WCDB.Config.Cipher";
+static constexpr const int CipherConfigDefaultPageSize = 4096;
 
 // SQL Trace Config
 static constexpr const char* SQLTraceConfigName = "com.Tencent.WCDB.Config.SQLTrace";
