@@ -503,12 +503,6 @@ class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
         project.afterEvaluate {
             if (!hasReleaseVariant)
                 throw new GradleException('Publishing Android library require "release" variant')
-
-            project.tasks.withType(AbstractPublishToMaven) {
-                if (publication.name == publicationName) {
-                    dependsOn publishDepends
-                }
-            }
         }
     }
 }

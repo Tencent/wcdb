@@ -1189,7 +1189,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
                  .put("ptr", Long.toHexString(mConnectionPtr))
                  .put("primary", mIsPrimaryConnection)
                  .put("readOnly", mOnlyAllowReadOnlyOperations)
-                 .putOpt("thread", mAcquiredThread.toString())
+                 .putOpt("thread", (mAcquiredThread != null) ? mAcquiredThread.toString() : null)
                  .putOpt("tid", (mAcquiredTid > 0) ? mAcquiredTid : null)
                  .put("operations", mRecentOperations.dumpJSON(verbose));
 
