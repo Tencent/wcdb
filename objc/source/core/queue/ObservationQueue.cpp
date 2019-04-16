@@ -183,16 +183,15 @@ void ObservationQueue::handleError(const Error& error)
     }
     {
         SharedLockGuard lockGuard(m_lock);
-        auto iter = m_corrupteds.find(identifier);
-        if (iter != m_corrupteds.end()) {
+        if (m_corrupteds.find(identifier) != m_corrupteds.end()) {
             // already received
             return;
         }
     }
     {
         LockGuard lockGuard(m_lock);
-        auto result = m_corrupteds.emplace(identifier);
-        if (result.second) {
+        bool emplaced = m_corrupteds.emplace(identifier).second;
+        if (emplaced) {
             // mark as pending if and only if it's a new corrupted one.
             m_pendings.reQueue(path, 0, identifier);
             lazyRun();
