@@ -145,8 +145,11 @@ bool AbstractHandle::executeSQL(const String &sql)
     // use seperated sqlite3_exec to get more information
     WCTInnerAssert(isOpened());
     HandleStatement handleStatement(this, &m_notification);
-    bool succeed = handleStatement.prepare(sql) && handleStatement.step();
-    handleStatement.finalize();
+    bool succeed = handleStatement.prepare(sql);
+    if (succeed) {
+        succeed = handleStatement.step();
+        handleStatement.finalize();
+    }
     return succeed;
 }
 

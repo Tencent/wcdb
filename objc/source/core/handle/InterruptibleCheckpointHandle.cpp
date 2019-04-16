@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/Assertion.hpp>
 #include <WCDB/Error.hpp>
 #include <WCDB/InterruptibleCheckpointHandle.hpp>
 
@@ -36,25 +37,26 @@ InterruptibleCheckpointHandle::~InterruptibleCheckpointHandle()
 bool InterruptibleCheckpointHandle::checkpoint(Type type)
 {
     switch (type) {
-    case Type::Passive:
-        return execute(getStatementForPassiveCheckpoint());
     case Type::Truncate:
-        return execute(getStatementForTruncateCheckpoint());
+        return executeSQL(getSQLForTruncateCheckpoint());
+    default:
+        WCTInnerAssert(type == Type::Passive);
+        return executeSQL(getSQLForPassiveCheckpoint());
     }
 }
 
-const StatementPragma& InterruptibleCheckpointHandle::getStatementForTruncateCheckpoint()
+const String& InterruptibleCheckpointHandle::getSQLForTruncateCheckpoint()
 {
-    static StatementPragma* s_statementForTruncateCheckpoint = new StatementPragma(
-    StatementPragma().pragma(Pragma::walCheckpoint()).with("TRUNCATE"));
-    return *s_statementForTruncateCheckpoint;
+    static const String* s_SQLForTruncateCheckpoint = new String(
+    StatementPragma().pragma(Pragma::walCheckpoint()).with("TRUNCATE").getDescription());
+    return *s_SQLForTruncateCheckpoint;
 }
 
-const StatementPragma& InterruptibleCheckpointHandle::getStatementForPassiveCheckpoint()
+const String& InterruptibleCheckpointHandle::getSQLForPassiveCheckpoint()
 {
-    static StatementPragma* s_statementForPassiveCheckpoint = new StatementPragma(
-    StatementPragma().pragma(Pragma::walCheckpoint()).with("PASSIVE"));
-    return *s_statementForPassiveCheckpoint;
+    static const String* s_SQLForPassiveCheckpoint = new String(
+    StatementPragma().pragma(Pragma::walCheckpoint()).with("PASSIVE").getDescription());
+    return *s_SQLForPassiveCheckpoint;
 }
 
 } // namespace WCDB

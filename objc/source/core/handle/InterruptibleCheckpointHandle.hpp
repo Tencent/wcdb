@@ -38,8 +38,8 @@ public:
     bool checkpoint(Type type);
 
 protected:
-    static const StatementPragma& getStatementForTruncateCheckpoint();
-    static const StatementPragma& getStatementForPassiveCheckpoint();
+    static const String& getSQLForTruncateCheckpoint();
+    static const String& getSQLForPassiveCheckpoint();
 };
 
 } // namespace WCDB
