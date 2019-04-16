@@ -218,13 +218,13 @@
         }
     }];
 
-    [WCTDatabase simulateWriteIOError:YES];
+    [WCTDatabase simulateIOError:WCTSimulateWriteIOError];
     self.database.autoMigrate = YES;
 
     // wait until auto migrate stopped
     while (numberOfFailures.value < WCDB::MigrationQueueTolerableFailures)
         ;
-    [WCTDatabase simulateWriteIOError:NO];
+    [WCTDatabase simulateIOError:WCTSimulateNoneIOError];
 
     [WCTDatabase resetGlobalErrorTracer];
 

@@ -20,13 +20,17 @@
 
 #import <WCDB/WCDB.h>
 
+typedef NS_OPTIONS(NSUInteger, WCTSimulateIOErrorOptions) {
+    WCTSimulateNoneIOError = 0,
+    WCTSimulateReadIOError = 1 << 0,
+    WCTSimulateWriteIOError = 1 << 1,
+};
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WCTDatabase (TestCase)
 
-+ (void)simulateWriteIOError:(BOOL)enable;
-
-+ (void)simulateReadIOError:(BOOL)enable;
++ (void)simulateIOError:(WCTSimulateIOErrorOptions)options;
 
 + (void)resetGlobalErrorTracer;
 

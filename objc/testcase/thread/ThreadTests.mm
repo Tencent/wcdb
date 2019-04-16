@@ -209,13 +209,13 @@
     [self doTestSQLs:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')", @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
          inOperation:^BOOL {
              [self.database blockade];
-             [WCTDatabase simulateWriteIOError:YES];
+             [WCTDatabase simulateIOError:WCTSimulateWriteIOError];
              [self.database unblockade];
 
              [NSThread sleepForTimeInterval:WCDB::CheckpointQueueDelayForNonCritical + self.delayForTolerance];
 
              [self.database blockade];
-             [WCTDatabase simulateWriteIOError:NO];
+             [WCTDatabase simulateIOError:WCTSimulateNoneIOError];
              [self.database unblockade];
 
              [NSThread sleepForTimeInterval:WCDB::CheckpointQueueDelayForRetryingAfterFailure + self.delayForTolerance];

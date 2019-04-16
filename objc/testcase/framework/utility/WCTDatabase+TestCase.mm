@@ -23,14 +23,34 @@
 #import <WCDB/SQLite.h>
 #import <WCDB/WCTDatabase+TestCase.h>
 
-static ssize_t illPwrite(int, const void *, size_t, off_t)
+static std::atomic<WCTSimulateIOErrorOptions> &simulateIOErrorOptions()
 {
-    return -1;
+    static std::atomic<WCTSimulateIOErrorOptions> *s_simulateIOErrorOptions = new std::atomic<WCTSimulateIOErrorOptions>(WCTSimulateNoneIOError);
+    return *s_simulateIOErrorOptions;
 }
 
-static ssize_t illPread(int, void *, size_t, off_t)
+static ssize_t controllableWrite(int fd, const void *buf, size_t byte, off_t offset)
 {
-    return -1;
+    if ((simulateIOErrorOptions().load() & WCTSimulateWriteIOError) != 0) {
+        return -1;
+    }
+    return pwrite(fd, buf, byte, offset);
+}
+
+static ssize_t controllableRead(int fd, void *buf, size_t byte, off_t offset)
+{
+    if ((simulateIOErrorOptions().load() & WCTSimulateReadIOError) != 0) {
+        return -1;
+    }
+    return pread(fd, buf, byte, offset);
+}
+
+static std::nullptr_t initialize()
+{
+    sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
+    vfs->xSetSystemCall(vfs, "pwrite", (sqlite3_syscall_ptr) controllableWrite);
+    vfs->xSetSystemCall(vfs, "pread", (sqlite3_syscall_ptr) controllableRead);
+    return nullptr;
 }
 
 @implementation WCTDatabase (TestCase)
@@ -40,24 +60,12 @@ static ssize_t illPread(int, void *, size_t, off_t)
     WCDB::Console::shared()->setLogger(WCDB::Console::logger);
 }
 
-+ (void)simulateWriteIOError:(BOOL)enable
++ (void)simulateIOError:(WCTSimulateIOErrorOptions)options
 {
-    sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
-    sqlite3_mutex *mutex = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_MASTER);
-    sqlite3_mutex_enter(mutex);
-    static sqlite3_syscall_ptr s_originWrite = vfs->xGetSystemCall(vfs, "pwrite");
-    vfs->xSetSystemCall(vfs, "pwrite", enable ? (sqlite3_syscall_ptr) illPwrite : s_originWrite);
-    sqlite3_mutex_leave(mutex);
-}
+    static std::nullptr_t _ = initialize();
+    WCDB_UNUSED(_)
 
-+ (void)simulateReadIOError:(BOOL)enable
-{
-    sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
-    sqlite3_mutex *mutex = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_MASTER);
-    sqlite3_mutex_enter(mutex);
-    static sqlite3_syscall_ptr s_originRead = vfs->xGetSystemCall(vfs, "pread");
-    vfs->xSetSystemCall(vfs, "pread", enable ? (sqlite3_syscall_ptr) illPread : s_originRead);
-    sqlite3_mutex_leave(mutex);
+    simulateIOErrorOptions().store(options);
 }
 
 - (void)removeCheckpointConfig
