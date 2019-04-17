@@ -1762,7 +1762,7 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
 
         JSONObject dumpJSON(boolean verbose) throws JSONException {
             return new JSONObject()
-                    .put("start", getFormattedStartTime())
+                    .put("start", mStartTime)
                     .put("kind", mKind)
                     .put("duration", (mFinished ? mEndTime : System.currentTimeMillis())
                             - mStartTime)
