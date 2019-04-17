@@ -70,7 +70,7 @@ public:
 
 #pragma mark - Error
 protected:
-    void markAsMisuse(const char *message);
+    //    void markAsMisuse(const char *message);
     void setThreadedError();
 };
 
