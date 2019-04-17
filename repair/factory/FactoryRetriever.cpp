@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/Data.hpp>
 #include <WCDB/Factory.hpp>
 #include <WCDB/FactoryBackup.hpp>
@@ -187,10 +188,9 @@ bool FactoryRetriever::restore(const String &database)
             mechanic.getScore(), database, after.timeIntervalSinceSteadyClock(before), materialTime);
         }
     } else {
-        Error warning;
-        warning.level = Error::Level::Warning;
-        warning.setCode(Error::Code::NotFound, "Repair");
-        warning.infos.set("Path", database);
+        Error warning(Error::Code::NotFound, Error::Level::Warning);
+        warning.infos.set(ErrorStringKeySource, ErrorSourceRepair);
+        warning.infos.set(ErrorStringKeyPath, database);
         warning.message = "Material is not found";
         Notifier::shared()->notify(warning);
     }
@@ -227,11 +227,10 @@ void FactoryRetriever::reportMechanic(const Fraction &score,
                                       double cost,
                                       const Time &material)
 {
-    Error error;
-    error.setCode(Error::Code::Notice, "Repair");
-    error.level = Error::Level::Notice;
+    Error error(Error::Code::Notice, Error::Level::Notice);
     error.message = "Mechanic Retrieve Report.";
-    error.infos.set("Path", path);
+    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.set(ErrorStringKeyPath, path);
     error.infos.set("Score", score.value());
     error.infos.set("Material", material.stringify());
     finishReportOfPerformance(error, path, cost);
@@ -241,11 +240,10 @@ void FactoryRetriever::reportMechanic(const Fraction &score,
 
 void FactoryRetriever::reportFullCrawler(const Fraction &score, const String &path, double cost)
 {
-    Error error;
-    error.setCode(Error::Code::Notice, "Repair");
-    error.level = Error::Level::Notice;
+    Error error(Error::Code::Notice, Error::Level::Notice);
     error.message = "Crawler Retrieve Report.";
-    error.infos.set("Path", path);
+    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.set(ErrorStringKeyPath, path);
     error.infos.set("Score", score.value());
     finishReportOfPerformance(error, path, cost);
     error.infos.set("Weight", String::formatted("%.2f%%", getWeight(path).value() * 100.0f));
@@ -254,11 +252,10 @@ void FactoryRetriever::reportFullCrawler(const Fraction &score, const String &pa
 
 void FactoryRetriever::reportSummary(double cost)
 {
-    Error error;
-    error.setCode(Error::Code::Notice, "Repair");
-    error.level = Error::Level::Notice;
+    Error error(Error::Code::Notice, Error::Level::Notice);
     error.message = "Summary Retrieve Report.";
-    error.infos.set("Path", database);
+    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.set(ErrorStringKeyPath, database);
     error.infos.set("Cost", String::formatted("%.2f%%", cost));
     error.infos.set("Score", getScore().value());
     Notifier::shared()->notify(error);

@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Pager.hpp>
@@ -175,10 +176,10 @@ int Pager::getNumberOfWalFrames() const
 #pragma mark - Error
 void Pager::markAsCorrupted(int page, const String &message)
 {
-    Error error;
-    error.setCode(Error::Code::Corrupt, "Repair");
+    Error error(Error::Code::Corrupt, Error::Level::Ignore);
     error.message = message;
-    error.infos.set("Path", getPath());
+    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.set(ErrorStringKeyPath, getPath());
     error.infos.set("Page", page);
     Notifier::shared()->notify(error);
     setError(std::move(error));
@@ -186,9 +187,9 @@ void Pager::markAsCorrupted(int page, const String &message)
 
 void Pager::markAsError(Error::Code code)
 {
-    Error error;
-    error.setCode(code, "Repair");
-    error.infos.set("Path", getPath());
+    Error error(code, Error::Level::Ignore);
+    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.set(ErrorStringKeyPath, getPath());
     Notifier::shared()->notify(error);
     setError(std::move(error));
 }
@@ -266,10 +267,9 @@ void Pager::hint() const
     if (!isInitialized()) {
         return;
     }
-    Error error;
-    error.level = Error::Level::Notice;
-    error.setCode(Error::Code::Notice, "Repair");
+    Error error(Error::Code::Notice, Error::Level::Notice);
     error.message = "Pager hint.";
+    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.set("NumberOfPages", m_numberOfPages);
     error.infos.set("OriginFileSize", m_fileSize);
     bool succeed;

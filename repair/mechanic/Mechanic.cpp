@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/Mechanic.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Page.hpp>
@@ -67,11 +68,10 @@ bool Mechanic::work()
     if (m_pager.getNumberOfWalFrames() > 0) {
         if (m_pager.getWalSalt() != m_material->info.walSalt) {
             m_pager.disposeWal();
-            Error error;
-            error.level = Error::Level::Notice;
-            error.setCode(Error::Code::Notice, "Repair");
+            Error error(Error::Code::Notice, Error::Level::Notice);
             error.message = "Dispose WAL of non-match salt.";
-            error.infos.set("Path", m_pager.getPath());
+            error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
+            error.infos.set(ErrorStringKeyPath, m_pager.getPath());
             error.infos.set("WalSalt1", m_pager.getWalSalt().first);
             error.infos.set("WalSalt2", m_pager.getWalSalt().second);
             error.infos.set("MaterialSalt1", m_material->info.walSalt.first);

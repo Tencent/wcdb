@@ -86,17 +86,21 @@ public:
 
     bool isFileObservedCorrupted(const String& path);
 
+    void markAsObservedNotCorrupted(const String& path);
+
 protected:
     // return true to mark as resolved
     bool doNotifyCorruptedEvent(const String& path, uint32_t identifier);
     void handleError(const Error& error);
+    void preprocessError(Error& error);
 
     // path -> user notification
     std::map<String, Notification> m_notifications;
 
-    // identifier of the corrupted database file
+    // identifier of the corrupted database file -> the times of ignored corruption
     // it will be kept forever in memory since the identifier will be changed after removed/recovered
     std::set<uint32_t> m_corrupteds;
+    std::map<uint32_t, int> m_numberOfIgnoredCorruptions;
 };
 
 } //namespace WCDB

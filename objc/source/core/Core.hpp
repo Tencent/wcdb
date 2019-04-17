@@ -31,6 +31,7 @@
 #include <WCDB/PerformanceTraceConfig.hpp>
 #include <WCDB/SQLTraceConfig.hpp>
 
+#include <WCDB/Database.hpp>
 #include <WCDB/DatabasePool.hpp>
 
 #include <WCDB/TokenizerModules.hpp>
@@ -43,7 +44,8 @@ class Core final : public DatabasePoolEvent,
                    public BackupQueueEvent,
                    public MigrationQueueEvent,
                    public ObservationQueueEvent,
-                   public ObservationDelegate {
+                   public ObservationDelegate,
+                   public DatabaseEvent {
 #pragma mark - Core
 public:
     static Core* shared();
@@ -102,6 +104,7 @@ public:
     bool databaseShouldBackup(const String& path) override final;
 
 protected:
+    void databaseDidBackup(const String& path) override final;
     std::shared_ptr<BackupQueue> m_backupQueue;
     std::shared_ptr<Config> m_backupConfig;
 

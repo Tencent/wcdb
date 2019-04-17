@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <WCDB/CoreConst.h>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Path.hpp>
@@ -403,9 +404,10 @@ bool FileManager::createDirectoryHardLink(const String &from, const String &to)
 void FileManager::setThreadedError(const String &path)
 {
     Error error;
+    error.level = Error::Level::Error;
     error.setSystemCode(errno, Error::Code::IOError);
     error.message = strerror(errno);
-    error.infos.set("Path", path);
+    error.infos.set(ErrorStringKeyPath, path);
     Notifier::shared()->notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
 }
@@ -413,6 +415,7 @@ void FileManager::setThreadedError(const String &path)
 void FileManager::setThreadedError(Error::Code codeIfUnresolved)
 {
     Error error;
+    error.level = Error::Level::Error;
     error.setSystemCode(errno, codeIfUnresolved);
     error.message = strerror(errno);
     Notifier::shared()->notify(error);

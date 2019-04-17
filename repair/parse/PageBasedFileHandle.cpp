@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/Error.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/PageBasedFileHandle.hpp>
@@ -94,11 +95,10 @@ MappedData PageBasedFileHandle::mapPage(int pageno, off_t offsetWithinPage, size
             ssize_t highWater = MappedData::getMappedHighWater();
             static constexpr const ssize_t s_allowedHighWater = maxAllowedCacheMemory * 2;
             if (highWater > s_allowedHighWater) {
-                Error error;
-                error.level = Error::Level::Warning;
-                error.setCode(Error::Code::Warning, "Repair");
+                Error error(Error::Code::Warning, Error::Level::Warning);
                 error.message = "Mapped memory exceeds.";
-                error.infos.set("Path", path);
+                error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
+                error.infos.set(ErrorStringKeyPath, path);
                 error.infos.set("HighWater", highWater);
                 error.infos.set("AllowedHighWater", s_allowedHighWater);
                 Notifier::shared()->notify(error);

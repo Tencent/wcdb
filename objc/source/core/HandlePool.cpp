@@ -187,10 +187,9 @@ RecyclableHandle HandlePool::flowOut(Slot slot)
             purge();
             if (!isNumberOfHandlesAllowed()) {
                 // handle count reachs the limitation.
-                Error error;
-                error.setCode(Error::Code::Exceed);
+                Error error(Error::Code::Exceed, Error::Level::Error);
                 error.message = "The operating count of database exceeds the maximum allowed.";
-                error.infos.set("Path", path);
+                error.infos.set(ErrorStringKeyPath, path);
                 Notifier::shared()->notify(error);
                 setThreadedError(std::move(error));
                 return nullptr;
@@ -213,7 +212,7 @@ RecyclableHandle HandlePool::flowOut(Slot slot)
                 Error error;
                 error.setCode(Error::Code::Exceed);
                 error.message = "The operating count of database exceeds the maximum allowed.";
-                error.infos.set("Path", path);
+                error.infos.set(ErrorStringKeyPath, path);
                 Notifier::shared()->notify(error);
                 setThreadedError(std::move(error));
                 return nullptr;

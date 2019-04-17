@@ -19,6 +19,7 @@
  */
 
 #import <WCDB/Assertion.hpp>
+#import <WCDB/CoreConst.h>
 #import <WCDB/Notifier.hpp>
 #import <WCDB/WCTDatabase.h>
 #import <WCDB/WCTError+Private.h>
@@ -108,13 +109,11 @@
                 }
             }
             for (const auto &columnName : columnNames) {
-                WCDB::Error error;
-                error.setCode(WCDB::Error::Code::Mismatch);
-                error.level = WCDB::Error::Level::Notice;
+                WCDB::Error error(WCDB::Error::Code::Mismatch, WCDB::Error::Level::Notice);
                 error.message = "Skip column";
                 error.infos.set("Table", tableName);
                 error.infos.set("Column", columnName);
-                error.infos.set("Path", handle->getPath());
+                error.infos.set(WCDB::ErrorStringKeyPath, handle->getPath());
                 WCDB::Notifier::shared()->notify(error);
             }
         } else {

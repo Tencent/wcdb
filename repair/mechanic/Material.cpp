@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/Data.hpp>
 #include <WCDB/Error.hpp>
 #include <WCDB/Material.hpp>
@@ -67,9 +68,9 @@ bool Material::serializeData(Serialization &serialization, const Data &data)
 
 void Material::markAsEmpty(const String &element)
 {
-    Error error;
-    error.setCode(Error::Code::Empty, "Repair");
+    Error error(Error::Code::Empty, Error::Level::Ignore);
     error.message = "Element of material is empty.";
+    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.set("Element", element);
     Notifier::shared()->notify(error);
     setThreadedError(std::move(error));
@@ -157,9 +158,9 @@ std::pair<bool, Data> Material::deserializeData(Deserialization &deserialization
 
 void Material::markAsCorrupt(const String &element)
 {
-    Error error;
-    error.setCode(Error::Code::Corrupt, "Repair");
+    Error error(Error::Code::Corrupt, Error::Level::Ignore);
     error.message = "Material is corrupted";
+    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.set("Element", element);
     Notifier::shared()->notify(error);
     setThreadedError(std::move(error));

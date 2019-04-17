@@ -89,11 +89,11 @@ Core:
 
 void Core::globalLog(void* parameter, int rc, const char* message)
 {
-    Error error;
+    Error::Level level = Error::Level::Error;
     switch (rc) {
     case (int) Error::Code::Warning:
     case (int) Error::ExtCode::WarningAutoIndex:
-        error.level = Error::Level::Warning;
+        level = Error::Level::Warning;
         break;
     case (int) Error::ExtCode::NoticeRecoverWal: {
         std::regex pattern("recovered (\\w+) frames from WAL file (.+)\\-wal");
@@ -112,12 +112,14 @@ void Core::globalLog(void* parameter, int rc, const char* message)
         // fallthrough
     case (int) Error::Code::Notice:
     case (int) Error::ExtCode::NoticeRecoverRollback:
-        error.level = Error::Level::Ignore;
+        level = Error::Level::Ignore;
         break;
     default:
-        error.level = Error::Level::Debug;
+        level = Error::Level::Debug;
         break;
     }
+    Error error;
+    error.level = level;
     error.setSQLiteCode(rc, rc);
     error.message = message;
     Notifier::shared()->notify(error);
@@ -142,6 +144,8 @@ void Core::purgeDatabasePool()
 void Core::onDatabaseCreated(Database* database)
 {
     WCTInnerAssert(database != nullptr);
+    database->setEvent(this);
+
     database->setConfigs(m_configs);
 
     database->setConfig(BusyRetryConfigName,
@@ -153,21 +157,13 @@ void Core::preprocessError(Error& error)
 {
     const auto& strings = error.infos.getStrings();
 
-    // TODO: ignore corruption from RepairKit since there is some known issues during backup.
-    if (error.isCorruption()) {
-        auto iter = strings.find("Source");
-        if (iter != strings.end() && iter->second == "Repair") {
-            error.level = Error::Level::Ignore;
-        }
-    }
-
-    auto iter = strings.find("Path");
+    auto iter = strings.find(ErrorStringKeyPath);
     if (iter != strings.end()) {
         auto database = m_databasePool.get(iter->second);
         if (database != nullptr) {
             auto tag = database->getTag();
             if (tag.isValid()) {
-                error.infos.set("Tag", tag);
+                error.infos.set(ErrorIntKeyTag, tag);
             }
         }
     }
@@ -270,6 +266,11 @@ bool Core::databaseShouldBackup(const String& path)
 const std::shared_ptr<Config>& Core::backupConfig()
 {
     return m_backupConfig;
+}
+
+void Core::databaseDidBackup(const String& path)
+{
+    m_observationQueue->markAsObservedNotCorrupted(path);
 }
 
 #pragma mark - Migration

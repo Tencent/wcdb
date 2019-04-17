@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/FileHandle.hpp>
 #include <WCDB/Notifier.hpp>
 #include <errno.h>
@@ -133,9 +134,10 @@ Data FileHandle::read(off_t offset, size_t size)
         return data;
     }
     Error error;
+    error.level = m_errorIgnorable ? Error::Level::Warning : Error::Level::Error;
     error.setSystemCode(EIO, Error::Code::IOError);
     error.message = "Short read.";
-    error.infos.set("Path", path);
+    error.infos.set(ErrorStringKeyPath, path);
     Notifier::shared()->notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
     return data.subdata(got + prior);
@@ -171,9 +173,10 @@ bool FileHandle::write(off_t offset, const UnsafeData &unsafeData)
         return true;
     }
     Error error;
+    error.level = m_errorIgnorable ? Error::Level::Warning : Error::Level::Error;
     error.setSystemCode(EIO, Error::Code::IOError);
     error.message = "Short write.";
-    error.infos.set("Path", path);
+    error.infos.set(ErrorStringKeyPath, path);
     Notifier::shared()->notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
     return false;
@@ -194,12 +197,10 @@ MappedData FileHandle::map(off_t offset, size_t size)
     nullptr, roundedSize, PROT_READ, MAP_SHARED | MAP_NOEXTEND | MAP_NORESERVE, m_fd, roundedOffset);
     if (mapped == MAP_FAILED) {
         Error error;
-        if (m_errorIgnorable) {
-            error.level = Error::Level::Warning;
-        }
+        error.level = m_errorIgnorable ? Error::Level::Warning : Error::Level::Error;
         error.setSystemCode(errno, Error::Code::IOError);
         error.message = strerror(errno);
-        error.infos.set("Path", path);
+        error.infos.set(ErrorStringKeyPath, path);
         error.infos.set("MmapSize", roundedSize);
         Notifier::shared()->notify(error);
         SharedThreadedErrorProne::setThreadedError(std::move(error));
@@ -217,25 +218,20 @@ void FileHandle::markErrorAsIgnorable(bool flag)
 void FileHandle::setThreadedError()
 {
     Error error;
-    if (m_errorIgnorable) {
-        error.level = Error::Level::Warning;
-    }
+    error.level = m_errorIgnorable ? Error::Level::Warning : Error::Level::Error;
     error.setSystemCode(errno, Error::Code::IOError);
     error.message = strerror(errno);
-    error.infos.set("Path", path);
+    error.infos.set(ErrorStringKeyPath, path);
     Notifier::shared()->notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
 }
 
 void FileHandle::markAsMisuse(const char *message)
 {
-    Error error;
-    if (m_errorIgnorable) {
-        error.level = Error::Level::Warning;
-    }
-    error.setCode(Error::Code::Misuse);
+    Error error(Error::Code::Misuse,
+                m_errorIgnorable ? Error::Level::Warning : Error::Level::Error);
     error.message = message;
-    error.infos.set("Path", path);
+    error.infos.set(ErrorStringKeyPath, path);
     Notifier::shared()->notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
 }

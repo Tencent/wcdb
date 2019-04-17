@@ -19,6 +19,7 @@
  */
 
 #import "BackupTestCase.h"
+#import "CoreConst.h"
 
 @interface BackupTests : BackupTestCase
 
@@ -192,56 +193,71 @@
     TestCaseAssertFalse([self checkAutoBackedup]);
 }
 
-- (void)test_compatible_backup_will_not_trigger_corruption
+- (int)getInteriorTablePage
 {
-#warning TODO - ignore corruption from RepairKit since there is some known issues during backup.
+    WCDB::Column pagetype("pagetype");
+    WCDB::Column pageno("pageno");
+    WCTValue *value = [self.database getValueOnResultColumn:pageno fromTable:@"dbStat" where:pagetype == "internal"];
+    return value.numberValue.intValue;
+}
 
+- (void)test_compatible_backup_will_not_trigger_corruption_unless_it_is_too_frequent
+{
     TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
+    TestCaseObject *object = [self.random autoIncrementTestCaseObject];
+    int interiorTablePage = 0;
+    while ((interiorTablePage = [self getInteriorTablePage]) == 0) {
+        TestCaseAssertTrue([self.table insertObject:object]);
+        TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
+    }
+    [self.database close];
 
     TestCaseAssertFalse([self.database isCorrupted]);
 
-    TestCaseResult *corrupted = [TestCaseResult no];
-    {
-        weakify(self);
-        [WCTDatabase globalTraceSQL:^(NSString *sql) {
-            strongify_or_return(self);
+    NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.path];
+    TestCaseAssertTrue(fileHandle != nil);
+    [fileHandle seekToFileOffset:(interiorTablePage - 1) * self.pageSize];
+    NSMutableData *emptyData = [NSMutableData data];
+    [emptyData increaseLengthBy:self.pageSize];
+    [fileHandle writeData:emptyData];
+    [fileHandle closeFile];
 
-            if ([corrupted isNO] && [sql isEqualToString:@"ROLLBACK"]) {
-                // Backup Write Handle Rollback, which means that it's already inited.
-                NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.path];
-                if (fileHandle == nil) {
-                    TestCaseFailure();
-                    return;
-                }
-                unsigned long long fileSize = [fileHandle seekToEndOfFile];
-                [fileHandle seekToFileOffset:0];
-                [fileHandle writeData:[self.random dataWithLength:(NSInteger) fileSize]];
-                [fileHandle closeFile];
-                [corrupted makeYES];
-            }
-        }];
-    }
-
-    TestCaseResult *tested = [TestCaseResult no];
+    TestCaseCounter *numberOfIgnorableCorruptions = [TestCaseCounter value:0];
+    TestCaseResult *realCorruption = [TestCaseResult no];
     {
         weakify(self);
         [WCTDatabase globalTraceError:^(WCTError *error) {
             TestCaseLog(@"%@", error);
             strongify_or_return(self);
-            if (error.code == WCTErrorCodeCorrupt
-                && error.level == WCTErrorLevelIgnore
+            if (error.isCorruption
                 && [error.source isEqualToString:@"Repair"]
                 && [error.path isEqualToString:self.database.path]
                 && error.tag == self.database.tag) {
-                TestCaseAssertResultYES(corrupted);
-                [tested makeYES];
+                switch (error.level) {
+                case WCTErrorLevelIgnore:
+                    [numberOfIgnorableCorruptions increment];
+                    break;
+                case WCTErrorLevelError:
+                    [realCorruption makeYES];
+                    break;
+                default:
+                    break;
+                }
             }
         }];
     }
 
+    for (int i = 0; i < WCDB::ObservationQueueTimesOfIgnoringBackupCorruption; ++i) {
+        TestCaseAssertFalse([self.database backup]);
+        TestCaseAssertEqual(numberOfIgnorableCorruptions.value, i + 1);
+        TestCaseAssertResultNO(realCorruption);
+        TestCaseAssertFalse([self.database isCorrupted]);
+    }
+
     TestCaseAssertFalse([self.database backup]);
-    TestCaseAssertResultYES(tested);
-    TestCaseAssertFalse([self.database isCorrupted]);
+    TestCaseAssertResultYES(realCorruption);
+    TestCaseAssertTrue([self.database isCorrupted]);
+
     [WCTDatabase resetGlobalErrorTracer];
 }
 

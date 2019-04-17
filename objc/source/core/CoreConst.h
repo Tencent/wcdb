@@ -36,6 +36,7 @@ static constexpr const char* ObservationQueueName = "com.Tencent.WCDB.Queue.Obse
 static constexpr const double ObservationQueueTimeIntervalForReinvokingCorruptedEvent = 5.0f;
 static constexpr const double ObservationQueueTimeIntervalForPurgingAgain = 10.0f;
 static constexpr const double ObservationQueueRateForTooManyFileDescriptors = 0.5f;
+static constexpr const int ObservationQueueTimesOfIgnoringBackupCorruption = 3;
 
 // Checkpoint Queue
 static constexpr const char* CheckpointQueueName = "com.Tencent.WCDB.Queue.Checkpoint";
@@ -99,6 +100,28 @@ static constexpr const unsigned int HandlePoolNumberOfSlots = 4;
 // Checkpoint
 static constexpr const int CheckpointFramesThresholdForTruncating
 = 10 * 1024 * 1024 / 4096; // 10 MB / Default Page Size = 2560
+
+// Error Key
+#define WCDB_ERROR_STRING_KEY_SOURCE "Source";
+static constexpr const char* ErrorStringKeySource = WCDB_ERROR_STRING_KEY_SOURCE;
+
+#define WCDB_ERROR_STRING_KEY_PATH "Path"
+static constexpr const char* ErrorStringKeyPath = WCDB_ERROR_STRING_KEY_PATH;
+
+#define WCDB_ERROR_STRING_KEY_SQL "SQL"
+static constexpr const char* ErrorStringKeySQL = WCDB_ERROR_STRING_KEY_SQL;
+
+#define WCDB_ERROR_INT_KEY_TAG "Tag"
+static constexpr const char* ErrorIntKeyTag = WCDB_ERROR_INT_KEY_TAG;
+
+#define WCDB_ERROR_INT_KEY_EXTCODE "ExtCode"
+static constexpr const char* ErrorIntKeyExtCode = WCDB_ERROR_INT_KEY_EXTCODE;
+
+static constexpr const char* ErrorSourceSQLite = "SQLite";
+static constexpr const char* ErrorSourceRepair = "Repair";
+static constexpr const char* ErrorSourceSystem = "System";
+static constexpr const char* ErrorSourceAssertion = "Assertion";
+static constexpr const char* ErrorSourceNative = "Native";
 
 } // namespace WCDB
 

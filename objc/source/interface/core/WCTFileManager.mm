@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#import <WCDB/CoreConst.h>
 #import <WCDB/Enum.hpp>
 #import <WCDB/FileManager.hpp>
 #import <WCDB/Notifier.hpp>
@@ -66,15 +67,15 @@ bool FileManager::setFileProtection(const WCDB::String &path, WCDB::FileProtecti
                              error:&nsError]) {
         return true;
     }
-    WCDB::Error error;
-    error.setCode(WCDB::Error::Code::IOError, "Native");
+    WCDB::Error error(WCDB::Error::Code::IOError, WCDB::Error::Level::Error);
+    error.infos.set(WCDB::ErrorStringKeySource, WCDB::ErrorSourceNative);
     if (nsError.description.length > 0) {
         error.message = nsError.description;
     } else {
         error.message = WCDB::Error::codeName(WCDB::Error::Code::IOError);
     }
-    error.infos.set("Path", path);
-    error.infos.set("ExtCode", nsError.code);
+    error.infos.set(WCDB::ErrorStringKeyPath, path);
+    error.infos.set(WCDB::ErrorIntKeyExtCode, nsError.code);
     WCDB::Notifier::shared()->notify(error);
     WCDB::ThreadedErrors::shared()->setThreadedError(std::move(error));
     return false;
@@ -89,15 +90,15 @@ std::pair<bool, WCDB::FileProtection> FileManager::getFileProtection(const WCDB:
     if (attributes != nil) {
         return { true, fileProtectionForAttribute(attributes[NSFileProtectionKey]) };
     }
-    WCDB::Error error;
-    error.setCode(WCDB::Error::Code::IOError, "Native");
+    WCDB::Error error(WCDB::Error::Code::IOError, WCDB::Error::Level::Error);
+    error.infos.set(WCDB::ErrorStringKeySource, WCDB::ErrorSourceNative);
     if (nsError.description.length > 0) {
         error.message = nsError.description;
     } else {
         error.message = WCDB::Error::codeName(WCDB::Error::Code::IOError);
     }
-    error.infos.set("Path", path);
-    error.infos.set("ExtCode", nsError.code);
+    error.infos.set(WCDB::ErrorStringKeyPath, path);
+    error.infos.set(WCDB::ErrorIntKeyExtCode, nsError.code);
     WCDB::Notifier::shared()->notify(error);
     WCDB::ThreadedErrors::shared()->setThreadedError(std::move(error));
     return { false, WCDB::FileProtection::None };

@@ -53,11 +53,14 @@ ObservationQueue::ObservationQueue(const String& name, ObservationQueueEvent* ev
 {
     Notifier::shared()->setNotification(
     0, name, std::bind(&ObservationQueue::handleError, this, std::placeholders::_1));
+    Notifier::shared()->setNotificationForPreprocessing(
+    name, std::bind(&ObservationQueue::preprocessError, this, std::placeholders::_1));
 }
 
 ObservationQueue::~ObservationQueue()
 {
     Notifier::shared()->unsetNotification(name);
+    Notifier::shared()->setNotificationForPreprocessing(name, nullptr);
     unregisterNotificationWhenMemoryWarning(m_observerForMemoryWarning);
 }
 
@@ -75,9 +78,7 @@ bool ObservationQueue::onTimed(const String& parameter1, const uint32_t& paramet
         // do purge
         m_event->observatedThatNeedPurged();
 
-        Error error;
-        error.level = Error::Level::Warning;
-        error.setCode(Error::Code::Warning);
+        Error error(Error::Code::Warning, Error::Level::Warning);
         if (parameter2 > 0) {
             error.message = String::formatted(
             "Purge due to too many file descriptors with %u.", parameter2);
@@ -167,13 +168,15 @@ void ObservationQueue::handleError(const Error& error)
     if (!error.isCorruption() || error.level < Error::Level::Error || exiting()) {
         return;
     }
+
     const auto& infos = error.infos.getStrings();
 
-    auto iter = infos.find("Path");
+    auto iter = infos.find(ErrorStringKeyPath);
     if (iter == infos.end() || iter->second.empty()) {
         // make sure no empty path will be added into queue
         return;
     }
+
     const String& path = iter->second;
     bool succeed;
     uint32_t identifier;
@@ -181,6 +184,7 @@ void ObservationQueue::handleError(const Error& error)
     if (!succeed) {
         return;
     }
+
     {
         SharedLockGuard lockGuard(m_lock);
         if (m_corrupteds.find(identifier) != m_corrupteds.end()) {
@@ -199,6 +203,46 @@ void ObservationQueue::handleError(const Error& error)
     }
 }
 
+void ObservationQueue::preprocessError(Error& error)
+{
+    // ignore corruption from RepairKit for a tolerable times
+    if (!error.isCorruption() || exiting()) {
+        return;
+    }
+    const auto& strings = error.infos.getStrings();
+    auto sourceIter = strings.find(ErrorStringKeySource);
+    if (sourceIter == strings.end() || sourceIter->second != ErrorSourceRepair) {
+        return;
+    }
+    auto pathIter = strings.find(ErrorStringKeyPath);
+    WCTInnerAssert(pathIter != strings.end() && !pathIter->second.empty());
+    if (pathIter == strings.end() || pathIter->second.empty()) {
+        return;
+    }
+
+    const String& path = pathIter->second;
+
+    bool succeed;
+    uint32_t identifier;
+    std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
+    if (!succeed) {
+        return;
+    }
+
+    LockGuard lockGuard(m_lock);
+    auto iter = m_numberOfIgnoredCorruptions.find(identifier);
+    if (iter == m_numberOfIgnoredCorruptions.end()) {
+        iter = m_numberOfIgnoredCorruptions.emplace(identifier, 0).first;
+    }
+    WCTInnerAssert(iter != m_numberOfIgnoredCorruptions.end());
+    ++iter->second;
+    if (iter->second <= ObservationQueueTimesOfIgnoringBackupCorruption) {
+        error.level = Error::Level::Ignore;
+    } else {
+        error.level = Error::Level::Error;
+    }
+}
+
 bool ObservationQueue::isFileObservedCorrupted(const String& path)
 {
     bool corrupted = false;
@@ -210,6 +254,17 @@ bool ObservationQueue::isFileObservedCorrupted(const String& path)
         corrupted = m_corrupteds.find(identifier) != m_corrupteds.end();
     }
     return corrupted;
+}
+
+void ObservationQueue::markAsObservedNotCorrupted(const String& path)
+{
+    bool succeed;
+    uint32_t identifier;
+    std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
+    if (succeed) {
+        SharedLockGuard lockGuard(m_lock);
+        m_corrupteds.erase(identifier);
+    }
 }
 
 #pragma mark - Notification

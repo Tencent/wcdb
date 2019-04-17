@@ -18,18 +18,18 @@
  * limitations under the License.
  */
 
+#import <WCDB/CoreConst.h>
 #import <WCDB/FileManager.hpp>
 #import <WCDB/Notifier.hpp>
 #import <WCDB/WCTConvertible.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTError.h>
 
-NSErrorUserInfoKey const WCTErrorKeyPath = @"Path";
-NSErrorUserInfoKey const WCTErrorKeySQL = @"SQL";
-NSErrorUserInfoKey const WCTErrorKeyOperation = @"Op";
-NSErrorUserInfoKey const WCTErrorKeyTag = @"Tag";
-NSErrorUserInfoKey const WCTErrorKeyExtendedCode = @"ExtCode";
-NSErrorUserInfoKey const WCTErrorKeySource = @"Source";
+NSErrorUserInfoKey const WCTErrorKeyPath = @WCDB_ERROR_STRING_KEY_PATH;
+NSErrorUserInfoKey const WCTErrorKeySQL = @WCDB_ERROR_STRING_KEY_SQL;
+NSErrorUserInfoKey const WCTErrorKeyTag = @WCDB_ERROR_INT_KEY_TAG;
+NSErrorUserInfoKey const WCTErrorKeyExtendedCode = @WCDB_ERROR_INT_KEY_EXTCODE;
+NSErrorUserInfoKey const WCTErrorKeySource = @WCDB_ERROR_STRING_KEY_SOURCE;
 
 @implementation WCTError
 

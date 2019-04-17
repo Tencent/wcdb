@@ -73,6 +73,7 @@ String Time::stringify() const
     struct tm tm;
     if (localtime_r(&secondsPart, &tm) == nullptr) {
         Error error;
+        error.level = Error::Level::Error;
         error.setSystemCode(errno, Error::Code::Error);
         Notifier::shared()->notify(error);
         setThreadedError(std::move(error));

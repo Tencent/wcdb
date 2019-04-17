@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Frame.hpp>
 #include <WCDB/Notifier.hpp>
@@ -298,10 +299,9 @@ void Wal::hint() const
     if (!isInitialized()) {
         return;
     }
-    Error error;
-    error.level = Error::Level::Notice;
-    error.setCode(Error::Code::Notice, "Repair");
+    Error error(Error::Code::Notice, Error::Level::Notice);
     error.message = "Wal hint.";
+    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.set("Truncate", m_truncate);
     error.infos.set("MaxFrame", m_maxFrame);
     error.infos.set("OriginFileSize", m_fileSize);
@@ -315,9 +315,8 @@ void Wal::hint() const
 
     //Pages to frames
     if (!m_pages2Frames.empty()) {
-        Error error;
-        error.level = Error::Level::Notice;
-        error.setCode(Error::Code::Notice, "Repair");
+        Error error(Error::Code::Notice, Error::Level::Notice);
+        error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
         std::ostringstream stream;
         int i = 0;
         auto iter = m_pages2Frames.begin();
@@ -341,9 +340,8 @@ void Wal::hint() const
 
     //Disposed
     if (!m_disposedPages.empty()) {
-        Error error;
-        error.level = Error::Level::Notice;
-        error.setCode(Error::Code::Notice, "Repair");
+        Error error(Error::Code::Notice, Error::Level::Notice);
+        error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
         std::ostringstream stream;
         int i = 0;
         auto iter = m_disposedPages.begin();
@@ -370,10 +368,10 @@ void Wal::hint() const
 
 void Wal::markAsCorrupted(int frame, const String &message)
 {
-    Error error;
-    error.setCode(Error::Code::Corrupt, "Repair");
+    Error error(Error::Code::Corrupt, Error::Level::Ignore);
     error.message = message;
-    error.infos.set("Path", getPath());
+    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.set(ErrorStringKeyPath, getPath());
     error.infos.set("Frame", frame);
     Notifier::shared()->notify(error);
     setError(std::move(error));
@@ -381,9 +379,9 @@ void Wal::markAsCorrupted(int frame, const String &message)
 
 void Wal::markAsError(Error::Code code)
 {
-    Error error;
-    error.setCode(code, "Repair");
-    error.infos.set("Path", getPath());
+    Error error(code, Error::Level::Ignore);
+    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
+    error.infos.set(ErrorStringKeyPath, getPath());
     Notifier::shared()->notify(error);
     setError(std::move(error));
 }

@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/Error.hpp>
 #include <WCDB/SQLite.h>
 #include <WCDB/String.hpp>
@@ -132,22 +133,17 @@ Error::Error() : level(Level::Ignore), m_code(Code::OK)
 {
 }
 
-Error::Error(Code code) : level(Level::Error), m_code(code)
+Error::Error(Code code, Level level_) : m_code(code), level(level_)
 {
 }
 
-Error::Error(Code code, const String &message_)
-: level(Level::Error), m_code(code), message(message_)
-{
-}
-
-void Error::clear()
-{
-    m_code = Code::OK;
-    level = Level::Error;
-    message.clear();
-    infos.clear();
-}
+//void Error::clear()
+//{
+//    m_code = Code::OK;
+//    level = Level::Ignore;
+//    message.clear();
+//    infos.clear();
+//}
 
 #pragma mark - Code
 bool Error::isError(int rc)
@@ -168,12 +164,6 @@ int Error::c2rc(Error::Code code)
 void Error::setCode(Code code)
 {
     m_code = code;
-}
-
-void Error::setCode(Code code, const String &source)
-{
-    setCode(code);
-    infos.set("Source", source);
 }
 
 void Error::setSystemCode(int systemCode, Code codeIfUnresolved)
@@ -209,19 +199,21 @@ void Error::setSystemCode(int systemCode, Code codeIfUnresolved)
     if (errorMessage != nullptr) {
         message = errorMessage;
     }
-    setCode(code, "System");
-    infos.set("ExtCode", systemCode);
+    setCode(code);
+    infos.set(ErrorStringKeySource, ErrorSourceSystem);
+    infos.set(ErrorIntKeyExtCode, systemCode);
 }
 
 void Error::setSQLiteCode(int code, int extendedCode)
 {
-    code = code & 0xff;
-    setCode((Code) code, "SQLite");
-    if (code == extendedCode) {
-        infos.unset("ExtCode");
+    int realCode = code & 0xff;
+    setCode((Code) realCode);
+    if (realCode == extendedCode) {
+        infos.unset(ErrorIntKeyExtCode);
     } else {
-        infos.set("ExtCode", extendedCode);
+        infos.set(ErrorIntKeyExtCode, extendedCode);
     }
+    infos.set(ErrorStringKeySource, ErrorSourceSQLite);
 }
 
 Error::Code Error::code() const

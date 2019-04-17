@@ -32,6 +32,15 @@
 
 namespace WCDB {
 
+class DatabaseEvent {
+public:
+    virtual ~DatabaseEvent() = 0;
+
+protected:
+    friend class Database;
+    virtual void databaseDidBackup(const String &path) = 0;
+};
+
 // TODO: readonly manually - by removing basic config and adding query_only config?
 // TODO: support authorize
 class Database final : private HandlePool, public MigrationEvent {
@@ -48,6 +57,13 @@ protected:
     InitializedGuard initialize();
     InitializedGuard isInitialized();
     bool m_initialized;
+
+#pragma mark - Event
+public:
+    void setEvent(DatabaseEvent *event);
+
+protected:
+    DatabaseEvent *m_event;
 
 #pragma mark - Basic
 public:

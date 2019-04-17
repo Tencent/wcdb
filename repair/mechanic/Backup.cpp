@@ -21,8 +21,10 @@
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Backup.hpp>
 #include <WCDB/Cell.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Master.hpp>
+#include <WCDB/Notifier.hpp>
 #include <WCDB/Page.hpp>
 #include <WCDB/Sequence.hpp>
 #include <WCDB/String.hpp>
@@ -83,6 +85,10 @@ bool Backup::work()
         succeed = m_masterCrawler.work(this);
     } while (false);
     if (!succeed) {
+        Error error(Error::Code::Notice, Error::Level::Notice);
+        error.message = "Backup failed hint.";
+        error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
+        Notifier::shared()->notify(error);
         if (Console::debuggable()) {
             m_pager.hint();
         }
@@ -143,19 +149,21 @@ bool Backup::willCrawlPage(const Page &page, int height)
 {
     WCDB_UNUSED(height)
     switch (page.getType()) {
+    case Page::Type::InteriorTable:
+        return true;
     case Page::Type::LeafTable: {
-        auto result = m_verifiedPagenos.emplace(page.number, page.getData().hash());
-        if (!result.second) {
+        bool emplaced
+        = m_verifiedPagenos.emplace(page.number, page.getData().hash()).second;
+        if (!emplaced) {
             markAsCorrupted(page.number, "Page is already crawled.");
         }
         return false;
     }
-    case Page::Type::InteriorTable:
-        return true;
     default:
-        break;
+        markAsCorrupted(
+        page.number, String::formatted("Unexpected page type: %d", page.getType()));
+        return false;
     }
-    return false;
 }
 
 void Backup::onCrawlerError()

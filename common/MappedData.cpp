@@ -56,6 +56,7 @@ void MappedData::unmapBuffer(unsigned char* buffer, size_t size)
         sharedHighWater().decrease(size);
     } else {
         Error error;
+        error.level = Error::Level::Error;
         error.setSystemCode(errno, Error::Code::IOError);
         error.message = strerror(errno);
         error.infos.set("MunmapSize", size);

@@ -171,7 +171,6 @@ public:
     void setSystemCode(int systemCode, Code codeIfUnresolved);
     void setSQLiteCode(int code, int extendedCode);
     void setCode(Code code);
-    void setCode(Code code, const String &source);
 
 protected:
     Code m_code;
@@ -253,10 +252,9 @@ public:
 #pragma mark - Initialize
 public:
     Error();
-    Error(Code code);
-    Error(Code code, const String &message);
+    Error(Code code, Level level);
 
-    void clear();
+    //    void clear();
 
 #pragma mark - Info
 public:

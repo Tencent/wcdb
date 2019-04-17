@@ -20,6 +20,7 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Cell.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/FileManager.hpp>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/Page.hpp>
@@ -64,11 +65,10 @@ bool Repairman::isEmptyDatabase()
     std::tie(succeed, fileSize) = FileManager::getFileSize(getPath());
     if (fileSize == 0) {
         if (succeed) {
-            Error error;
-            error.level = Error::Level::Warning;
-            error.setCode(Error::Code::Empty, "Repair");
+            Error error(Error::Code::Empty, Error::Level::Warning);
             error.message = "Database is not found or empty.";
-            error.infos.set("Path", getPath());
+            error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
+            error.infos.set(ErrorStringKeyPath, getPath());
             Notifier::shared()->notify(error);
         } else {
             setCriticalErrorWithSharedThreadedError();

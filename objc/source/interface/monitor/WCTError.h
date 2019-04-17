@@ -24,7 +24,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 WCDB_EXTERN NSErrorUserInfoKey const WCTErrorKeyPath;
 WCDB_EXTERN NSErrorUserInfoKey const WCTErrorKeySQL;
-WCDB_EXTERN NSErrorUserInfoKey const WCTErrorKeyOperation;
 WCDB_EXTERN NSErrorUserInfoKey const WCTErrorKeyTag;
 WCDB_EXTERN NSErrorUserInfoKey const WCTErrorKeyExtendedCode;
 WCDB_EXTERN NSErrorUserInfoKey const WCTErrorKeySource;

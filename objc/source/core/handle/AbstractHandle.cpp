@@ -20,6 +20,7 @@
 
 #include <WCDB/AbstractHandle.hpp>
 #include <WCDB/Assertion.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/Notifier.hpp>
 #include <WCDB/SQLite.h>
 #include <WCDB/String.hpp>
@@ -88,7 +89,7 @@ void AbstractHandle::setPath(const String &path)
 {
     WCTRemedialAssert(!isOpened(), "Path can't be changed after opened.", return;);
     m_path = path;
-    m_error.infos.set("Path", path);
+    m_error.infos.set(ErrorStringKeyPath, path);
 }
 
 const String &AbstractHandle::getPath() const
@@ -526,7 +527,7 @@ void AbstractHandle::notifyError(int rc, const char *sql)
     } else {
         m_error.level = Error::Level::Ignore;
     }
-    m_error.infos.set("SQL", sql);
+    m_error.infos.set(ErrorStringKeySQL, sql);
     Notifier::shared()->notify(m_error);
 }
 

@@ -34,6 +34,10 @@
 
 namespace WCDB {
 
+DatabaseEvent::~DatabaseEvent()
+{
+}
+
 #pragma mark - Initializer
 Database::Database(const String &path)
 : HandlePool(path)
@@ -43,7 +47,15 @@ Database::Database(const String &path)
 , m_configs(nullptr)
 , m_migratedCallback(nullptr)
 , m_migration(this)
+, m_event(nullptr)
 {
+}
+
+#pragma mark - Event
+void Database::setEvent(DatabaseEvent *event)
+{
+    LockGuard lockGuard(m_memory);
+    m_event = event;
 }
 
 #pragma mark - Basic
@@ -273,7 +285,7 @@ std::shared_ptr<Handle> Database::generateHandle(HandleType type)
         break;
     }
     if (handle == nullptr) {
-        setThreadedError(Error(Error::Code::NoMemory));
+        setThreadedError(Error(Error::Code::NoMemory, Error::Level::Error));
         return nullptr;
     }
     std::shared_ptr<Configs> configs;
@@ -575,11 +587,16 @@ bool Database::doBackup()
     Repair::FactoryBackup backup = m_factory.backup();
     backup.setReadLocker(static_cast<BackupReadHandle *>(backupReadHandle.get()));
     backup.setWriteLocker(static_cast<BackupWriteHandle *>(backupWriteHandle.get()));
-    if (backup.work(getPath())) {
-        return true;
+    if (!backup.work(getPath())) {
+        setThreadedError(backup.getError());
+        return false;
     }
-    setThreadedError(backup.getError());
-    return false;
+
+    SharedLockGuard lockGuard(m_memory);
+    if (m_event != nullptr) {
+        m_event->databaseDidBackup(path);
+    }
+    return true;
 }
 
 bool Database::deposit()
