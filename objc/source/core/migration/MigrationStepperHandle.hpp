@@ -26,8 +26,8 @@
 
 namespace WCDB {
 
-// Migration step should as least as possible to avoid blocking user operations.
-// However, it's very wasteful for those resource(CPU, IO...) when the step is too tiny.
+// Each step of migration should be as small as possible to avoid blocking user operations.
+// However, it's very wasteful for those resources(CPU, IO...) when the step is too small.
 // So stepper will try to migrate one by one until the count of dirty pages(to be written) is changed.
 // In addition, stepper can/will be interrupted when database is not idled.
 class MigrationStepperHandle final : public Handle, public Migration::Stepper {

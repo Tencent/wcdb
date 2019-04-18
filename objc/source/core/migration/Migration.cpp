@@ -71,6 +71,7 @@ bool Migration::initInfo(InfoInitializer& initializer, const String& table)
     // do not migrate sqlite builtin table
     if (!table.hasPrefix(Syntax::builtinTablePrefix)) {
         MigrationUserInfo userInfo(initializer.getDatabasePath(), table);
+        WCTInnerAssert(m_filter != nullptr);
         m_filter(userInfo);
         if (userInfo.shouldMigrate()) {
             bool containsPrimaryKey = false;
