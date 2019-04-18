@@ -89,37 +89,31 @@ Core:
 
 void Core::globalLog(void* parameter, int rc, const char* message)
 {
-    Error::Level level = Error::Level::Error;
-    switch (rc) {
-    case (int) Error::Code::Warning:
-    case (int) Error::ExtCode::WarningAutoIndex:
-        level = Error::Level::Warning;
-        break;
-    case (int) Error::ExtCode::NoticeRecoverWal: {
-        std::regex pattern("recovered (\\w+) frames from WAL file (.+)\\-wal");
-        const String source = message;
-        std::smatch match;
-        if (std::regex_search(source.begin(), source.end(), match, pattern)) {
-            int frames = atoi(match[1].str().c_str());
-            if (frames > 0) {
-                // hint checkpoint
-                Core* core = static_cast<Core*>(parameter);
-                core->m_checkpointQueue->put(match[2].str(), frames);
-            }
-        }
-        WCTInnerAssert(match.size() == 3); // assert match and match 3.
-    }
-        // fallthrough
-    case (int) Error::Code::Notice:
-    case (int) Error::ExtCode::NoticeRecoverRollback:
-        level = Error::Level::Ignore;
-        break;
-    default:
-        level = Error::Level::Debug;
-        break;
-    }
     Error error;
-    error.level = level;
+
+    Error::Code c = Error::rc2c(rc);
+    if (c == Error::Code::Warning) {
+        error.level = Error::Level::Warning;
+    } else if (c == Error::Code::Notice) {
+        error.level = Error::Level::Ignore;
+        if (Error::rc2ec(rc) == Error::ExtCode::NoticeRecoverWal) {
+            std::regex pattern("recovered (\\w+) frames from WAL file (.+)\\-wal");
+            const String source = message;
+            std::smatch match;
+            if (std::regex_search(source.begin(), source.end(), match, pattern)) {
+                int frames = atoi(match[1].str().c_str());
+                if (frames > 0) {
+                    // hint checkpoint
+                    Core* core = static_cast<Core*>(parameter);
+                    core->m_checkpointQueue->put(match[2].str(), frames);
+                }
+            }
+            WCTInnerAssert(match.size() == 3); // assert match and match 3.
+        }
+    } else {
+        error.level = Error::Level::Debug;
+    }
+
     error.setSQLiteCode(rc, rc);
     error.message = message;
     Notifier::shared()->notify(error);
