@@ -40,11 +40,11 @@
 /* Extensions defined in crypto_impl.c */
 typedef struct codec_ctx codec_ctx;
 
-/* Activation and initialization */
+/* activation and initialization */
 void sqlcipher_activate(void);
 void sqlcipher_deactivate(void);
-int sqlcipher_codec_ctx_init(
-    codec_ctx **, void *, void *, void *, const void *, int);
+
+int sqlcipher_codec_ctx_init(codec_ctx **, void *, void *, const void *, int);
 void sqlcipher_codec_ctx_free(codec_ctx **);
 int sqlcipher_codec_key_derive(codec_ctx *);
 int sqlcipher_codec_key_copy(codec_ctx *, int);
@@ -53,9 +53,10 @@ int sqlcipher_codec_key_copy(codec_ctx *, int);
 int sqlcipher_page_cipher(
     codec_ctx *, int, int, int, int, unsigned char *, unsigned char *);
 
-/* Context setters & getters */
+/* context setters & getters */
 //void sqlcipher_codec_ctx_set_error(codec_ctx *, int);
 
+void sqlcipher_codec_get_pass(codec_ctx *, void **, int *);
 int sqlcipher_codec_ctx_set_pass(codec_ctx *, const void *, int, int);
 void sqlcipher_codec_get_keyspec(codec_ctx *, void **zKey, int *nKey);
 
@@ -68,19 +69,18 @@ int sqlcipher_get_default_pagesize(void);
 
 void sqlcipher_set_default_kdf_iter(int iter);
 int sqlcipher_get_default_kdf_iter(void);
+int sqlcipher_codec_ctx_set_kdf_iter(codec_ctx *, int);
+int sqlcipher_codec_ctx_get_kdf_iter(codec_ctx *ctx);
 
-int sqlcipher_codec_ctx_set_kdf_iter(codec_ctx *, int, int);
-int sqlcipher_codec_ctx_get_kdf_iter(codec_ctx *ctx, int);
+int sqlcipher_codec_ctx_set_kdf_salt(codec_ctx *ctx, unsigned char *salt, int sz);
+int sqlcipher_codec_ctx_get_kdf_salt(codec_ctx *ctx, void **salt);
 
-void *sqlcipher_codec_ctx_get_kdf_salt(codec_ctx *ctx);
+int sqlcipher_codec_ctx_set_fast_kdf_iter(codec_ctx *, int);
+int sqlcipher_codec_ctx_get_fast_kdf_iter(codec_ctx *);
 
-int sqlcipher_codec_ctx_set_fast_kdf_iter(codec_ctx *, int, int);
-int sqlcipher_codec_ctx_get_fast_kdf_iter(codec_ctx *, int);
+const char* sqlcipher_codec_ctx_get_cipher(codec_ctx *ctx);
 
-int sqlcipher_codec_ctx_set_cipher(codec_ctx *, const char *, int);
-const char *sqlcipher_codec_ctx_get_cipher(codec_ctx *ctx, int for_ctx);
-
-void *sqlcipher_codec_ctx_get_data(codec_ctx *);
+void* sqlcipher_codec_ctx_get_data(codec_ctx *);
 
 //void sqlcipher_exportFunc(sqlite3_context *, int, sqlite3_value **);
 
@@ -110,25 +110,6 @@ int sqlcipher_cipher_profile(sqlite3 *db, const char *destination);
 int sqlcipher_codec_fips_status(codec_ctx *ctx);
 const char *sqlcipher_codec_get_provider_version(codec_ctx *ctx);
 
-// sqlite3_file redirector
-typedef struct {
-    const struct sqlite3_io_methods *pMethods;
-    sqliterk_file *fd;
-    const unsigned char *kdf_salt;
-} sqlite3_file_rkredir;
-
-int sqliterkRead(sqlite3_file *fd, void *data, int iAmt, sqlite3_int64 iOfst)
-{
-    sqlite3_file_rkredir *rkos = (sqlite3_file_rkredir *) fd;
-    if (rkos->kdf_salt) {
-        memcpy(data, rkos->kdf_salt, (iAmt > 16) ? 16 : iAmt);
-        return SQLITE_OK;
-    } else {
-        sqliterk_file *f = rkos->fd;
-        size_t size = iAmt;
-        return sqliterkOSRead(f, (off_t) iOfst, data, &size);
-    }
-}
 
 int sqliterkCryptoSetCipher(sqliterk_pager *pager,
                             sqliterk_file *fd,
@@ -151,18 +132,26 @@ int sqliterkCryptoSetCipher(sqliterk_pager *pager,
         // Member of such structure is assigned but never used by repair kit.
         int fake_db[8];
 
-        sqlite3_file_rkredir file;
-        struct sqlite3_io_methods methods = {0};
-        methods.xRead = sqliterkRead;
-        file.pMethods = &methods;
-        file.fd = fd;
-        file.kdf_salt = conf->kdf_salt;
-
         // Initialize codec context.
-        rc = sqlcipher_codec_ctx_init(&codec, fake_db, NULL, &file, conf->key,
-                                      conf->key_len);
+        rc = sqlcipher_codec_ctx_init(&codec, fake_db, NULL, conf->key, conf->key_len);
         if (rc != SQLITE_OK)
             goto bail_sqlite_errstr;
+
+        // Read and set KDF salt.
+        unsigned char *salt;
+        unsigned char salt_buf[16];
+        if (conf->kdf_salt) {
+            salt = (unsigned char *) conf->kdf_salt;
+        } else {
+            size_t salt_size = 16;
+            rc = sqliterkOSRead(fd, 0, salt_buf, &salt_size);
+            if (rc != SQLITERK_OK) {
+                sqliterkOSError(rc, "Failed to load KDF salt from file.");
+                goto bail;
+            }
+            salt = salt_buf;
+        }
+        sqlcipher_codec_ctx_set_kdf_salt(codec, salt, 16);
 
         // Set page size.
         if (conf->page_size > 0) {
@@ -180,8 +169,7 @@ int sqliterkCryptoSetCipher(sqliterk_pager *pager,
 
         // Set KDF Iteration.
         if (conf->kdf_iter > 0) {
-            rc = sqlcipher_codec_ctx_set_kdf_iter(codec, conf->kdf_iter,
-                                                  CIPHER_READWRITE_CTX);
+            rc = sqlcipher_codec_ctx_set_kdf_iter(codec, conf->kdf_iter);
             if (rc != SQLITE_OK)
                 goto bail;
         }
