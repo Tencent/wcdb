@@ -45,9 +45,9 @@
 - (instancetype)init
 {
     if (self = [super init]) {
-        _string = [[NSString alloc] init];
+        _string = [NSString string];
         _number = @(0);
-        _data = [[NSData alloc] init];
+        _data = [NSData data];
     }
     return self;
 }
