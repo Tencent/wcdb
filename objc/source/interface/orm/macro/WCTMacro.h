@@ -124,7 +124,10 @@
     indexSuffixName, propertyName, WCTOrderedDescending, true)
 
 #define WCDB_INDEX_FOR_NEWLY_CREATED_TABLE_ONLY(indexSuffixName) \
-    __WCDB_INDEX_FOR_NEWLY_CREATED_TABLE_ONLY_IMP(indexSuffixName, true)
+    __WCDB_INDEX_FOR_NEWLY_CREATED_TABLE_ONLY_IMP(indexSuffixName)
+
+#define WCDB_INDEX_TO_BE_DROPPED(indexSuffixName) \
+    __WCDB_INDEX_TO_BE_DROPPED(indexSuffixName)
 
 //Virtual Table Argument
 #define WCDB_VIRTUAL_TABLE_ARGUMENT(argument) \

@@ -154,8 +154,9 @@ WCDB::TableConstraint &WCTBinding::getOrCreateTableConstraint(const WCDB::String
 
 #pragma mark - Index
 
-WCTBinding::Index::Index()
-: forNewlyCreatedTableOnly(false)
+WCTBinding::Index::Index(const WCDB::String &suffix_)
+: suffix(suffix_)
+, action(Action::Create)
 {
 }
 
@@ -163,19 +164,36 @@ WCTBinding::Index &WCTBinding::getOrCreateIndex(const WCDB::String &suffix)
 {
     auto iter = m_indexes.find(suffix);
     if (iter == m_indexes.end()) {
-        iter = m_indexes.emplace(suffix, Index()).first;
+        iter = m_indexes.emplace(suffix, Index(suffix)).first;
     }
+    WCTInnerAssert(iter->first == iter->second.suffix);
     return iter->second;
 }
 
-std::list<WCTBinding::Index>
-WCTBinding::generateIndexes(const WCDB::String &tableName) const
+std::pair<std::list<WCDB::StatementCreateIndex>, std::list<WCDB::StatementDropIndex>>
+WCTBinding::generateIndexStatements(const WCDB::String &tableName, bool newlyCreated) const
 {
-    std::list<Index> indexes;
+    std::pair<std::list<WCDB::StatementCreateIndex>, std::list<WCDB::StatementDropIndex>> pairs;
     for (const auto &iter : m_indexes) {
+        WCTInnerAssert(iter.first == iter.second.suffix);
         Index index = iter.second;
-        index.statement.createIndex(tableName + iter.first).ifNotExists().table(tableName);
-        indexes.push_back(index);
+        switch (index.action) {
+        case Index::Action::CreateForNewlyCreatedTableOnly:
+            if (!newlyCreated) {
+                break;
+            }
+            // fallthrough
+        case Index::Action::Create: {
+            WCDB::StatementCreateIndex statement = index.statement;
+            statement.createIndex(tableName + index.suffix).ifNotExists().table(tableName);
+            pairs.first.push_back(statement);
+        } break;
+        default:
+            WCTInnerAssert(index.action == Index::Action::Drop);
+            WCDB::StatementDropIndex statement = WCDB::StatementDropIndex().dropIndex(tableName + index.suffix).ifExists();
+            pairs.second.push_back(statement);
+            break;
+        }
     }
-    return indexes;
+    return pairs;
 }

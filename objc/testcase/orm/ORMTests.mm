@@ -40,6 +40,8 @@
 #import "ColumnConstraintPrimaryDesc.h"
 #import "ColumnConstraintUnique+WCTTableCoding.h"
 #import "ColumnConstraintUnique.h"
+#import "DropIndexObject+WCTTableCoding.h"
+#import "DropIndexObject.h"
 #import "FTS3Object+WCTTableCoding.h"
 #import "FTS3Object.h"
 #import "FTS5Object+WCTTableCoding.h"
@@ -272,7 +274,7 @@
     }
 }
 
-- (void)test_remap_will_not_affect_index_for_newly_created_table_only
+- (void)test_remap_with_extra_actions
 {
     {
         self.tableClass = OldRemapObject.class;
@@ -289,6 +291,12 @@
     // newly create
     {
         NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS main.testTable(value INTEGER, newValue INTEGER)", @"CREATE INDEX IF NOT EXISTS main.testTable_index ON testTable(value)" ];
+        [self doTestCreateTableAndIndexSQLsAsExpected:expected];
+    }
+    // drop index
+    {
+        self.tableClass = DropIndexObject.class;
+        NSArray<NSString*>* expected = @[ @"PRAGMA main.table_info('testTable')", @"DROP INDEX IF EXISTS main.testTable_index" ];
         [self doTestCreateTableAndIndexSQLsAsExpected:expected];
     }
 }

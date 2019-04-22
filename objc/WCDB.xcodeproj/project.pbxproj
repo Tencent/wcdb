@@ -1440,6 +1440,12 @@
 		3951E230225AD8920019039C /* TestCaseMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 3951E22F225AD8920019039C /* TestCaseMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3959F8CA224E1E8700E24568 /* WCTObservationQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3959F8C7224E1E8700E24568 /* WCTObservationQueue.mm */; };
 		3959F8CB224E1E8700E24568 /* WCTObservationQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3959F8C7224E1E8700E24568 /* WCTObservationQueue.mm */; };
+		39A01F85226DAB900041C35C /* DropIndexObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39A01F82226DAB900041C35C /* DropIndexObject.mm */; };
+		39A01F86226DAB900041C35C /* DropIndexObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39A01F82226DAB900041C35C /* DropIndexObject.mm */; };
+		39A01F87226DAB900041C35C /* DropIndexObject+WCTTableCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 39A01F83226DAB900041C35C /* DropIndexObject+WCTTableCoding.h */; };
+		39A01F88226DAB900041C35C /* DropIndexObject+WCTTableCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 39A01F83226DAB900041C35C /* DropIndexObject+WCTTableCoding.h */; };
+		39A01F89226DAB900041C35C /* DropIndexObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 39A01F84226DAB900041C35C /* DropIndexObject.h */; };
+		39A01F8A226DAB900041C35C /* DropIndexObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 39A01F84226DAB900041C35C /* DropIndexObject.h */; };
 		39D25E59224B045A0003AF25 /* Dispatch.h in Headers */ = {isa = PBXBuildFile; fileRef = 39D25E57224B045A0003AF25 /* Dispatch.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		39D25E5A224B045A0003AF25 /* Dispatch.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39D25E58224B045A0003AF25 /* Dispatch.mm */; };
 		39D25F38224CB9A30003AF25 /* WCTDatabase+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2366BBB5221BEAA6000ED712 /* WCTDatabase+TestCase.mm */; };
@@ -2756,6 +2762,9 @@
 		39485B522240751600A65DA4 /* NewlyCreatedTableIndexObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewlyCreatedTableIndexObject.h; sourceTree = "<group>"; };
 		3951E22F225AD8920019039C /* TestCaseMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestCaseMacro.h; sourceTree = "<group>"; };
 		3959F8C7224E1E8700E24568 /* WCTObservationQueue.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTObservationQueue.mm; sourceTree = "<group>"; };
+		39A01F82226DAB900041C35C /* DropIndexObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DropIndexObject.mm; sourceTree = "<group>"; };
+		39A01F83226DAB900041C35C /* DropIndexObject+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DropIndexObject+WCTTableCoding.h"; sourceTree = "<group>"; };
+		39A01F84226DAB900041C35C /* DropIndexObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DropIndexObject.h; sourceTree = "<group>"; };
 		39D25E57224B045A0003AF25 /* Dispatch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Dispatch.h; sourceTree = "<group>"; };
 		39D25E58224B045A0003AF25 /* Dispatch.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Dispatch.mm; sourceTree = "<group>"; };
 		39E5DAC42254666B00473F70 /* ValueTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ValueTests.mm; sourceTree = "<group>"; };
@@ -3743,6 +3752,9 @@
 				39485B502240751600A65DA4 /* NewlyCreatedTableIndexObject.mm */,
 				39485B512240751600A65DA4 /* NewlyCreatedTableIndexObject+WCTTableCoding.h */,
 				39485B522240751600A65DA4 /* NewlyCreatedTableIndexObject.h */,
+				39A01F82226DAB900041C35C /* DropIndexObject.mm */,
+				39A01F83226DAB900041C35C /* DropIndexObject+WCTTableCoding.h */,
+				39A01F84226DAB900041C35C /* DropIndexObject.h */,
 			);
 			path = rebind;
 			sourceTree = "<group>";
@@ -4460,6 +4472,7 @@
 				2367BBD32215004300380122 /* Pragma.hpp in Headers */,
 				2367BBD42215004300380122 /* Sequence.hpp in Headers */,
 				2367BBD52215004300380122 /* MappedData.hpp in Headers */,
+				39A01F8A226DAB900041C35C /* DropIndexObject.h in Headers */,
 				2367BBD62215004300380122 /* SyntaxCommitSTMT.hpp in Headers */,
 				2367BBD72215004300380122 /* Syntax.h in Headers */,
 				2367BBD82215004300380122 /* SyntaxAttachSTMT.hpp in Headers */,
@@ -4509,6 +4522,7 @@
 				2367BC042215004300380122 /* BusyRetryConfig.hpp in Headers */,
 				2367BC052215004300380122 /* Progress.hpp in Headers */,
 				2367BC062215004300380122 /* SyntaxForeignKeyClause.hpp in Headers */,
+				39A01F88226DAB900041C35C /* DropIndexObject+WCTTableCoding.h in Headers */,
 				2367BC072215004300380122 /* SyntaxSelectCore.hpp in Headers */,
 				2367BC082215004300380122 /* SyntaxTableConstraint.hpp in Headers */,
 				2367BC092215004300380122 /* ThreadedErrors.hpp in Headers */,
@@ -4816,6 +4830,7 @@
 				23EEDC9A217DFADC006E9E73 /* Pragma.hpp in Headers */,
 				23AD52DF20DB56D200664B62 /* Sequence.hpp in Headers */,
 				2316D92F21057CA700707AFC /* MappedData.hpp in Headers */,
+				39A01F89226DAB900041C35C /* DropIndexObject.h in Headers */,
 				23EEDD32217DFADC006E9E73 /* SyntaxCommitSTMT.hpp in Headers */,
 				23EEDD5D217DFADC006E9E73 /* Syntax.h in Headers */,
 				23EEDD2E217DFADC006E9E73 /* SyntaxAttachSTMT.hpp in Headers */,
@@ -4865,6 +4880,7 @@
 				237A8D6021EDBB2E003AF5BB /* BusyRetryConfig.hpp in Headers */,
 				23A6D4C120BFD7F9004F2DAA /* Progress.hpp in Headers */,
 				23EEDCFE217DFADC006E9E73 /* SyntaxForeignKeyClause.hpp in Headers */,
+				39A01F87226DAB900041C35C /* DropIndexObject+WCTTableCoding.h in Headers */,
 				23545B992224E8270091C981 /* SyntaxAssertion.hpp in Headers */,
 				23EEDD1E217DFADC006E9E73 /* SyntaxSelectCore.hpp in Headers */,
 				23EEDD20217DFADC006E9E73 /* SyntaxTableConstraint.hpp in Headers */,
@@ -6068,6 +6084,7 @@
 				2367BB892215004300380122 /* BasicConfig.cpp in Sources */,
 				2367BB8A2215004300380122 /* StatementPragma.cpp in Sources */,
 				2367BB8B2215004300380122 /* SyntaxAnalyzeSTMT.cpp in Sources */,
+				39A01F86226DAB900041C35C /* DropIndexObject.mm in Sources */,
 				2367BB8D2215004300380122 /* SyntaxQualifiedTableName.cpp in Sources */,
 				2367BB8E2215004300380122 /* SyntaxSchema.cpp in Sources */,
 				2367BB8F2215004300380122 /* WCTProperty.mm in Sources */,
@@ -6407,6 +6424,7 @@
 				23F70FA620A055BE00CCE3CD /* BasicConfig.cpp in Sources */,
 				23EEDCD7217DFADC006E9E73 /* StatementPragma.cpp in Sources */,
 				23EEDD2B217DFADC006E9E73 /* SyntaxAnalyzeSTMT.cpp in Sources */,
+				39A01F85226DAB900041C35C /* DropIndexObject.mm in Sources */,
 				23EEDD13217DFADC006E9E73 /* SyntaxQualifiedTableName.cpp in Sources */,
 				23EEDD1B217DFADC006E9E73 /* SyntaxSchema.cpp in Sources */,
 				2349F7691EA0D6680021EFA7 /* WCTProperty.mm in Sources */,

@@ -121,11 +121,17 @@
                 return NO;
             }
         }
-        for (const WCTBinding::Index &index : binding.generateIndexes(tableName)) {
-            if (!index.forNewlyCreatedTableOnly || !exists) {
-                if (!handle->execute(index.statement)) {
-                    return NO;
-                }
+        std::list<WCDB::StatementCreateIndex> createIndexStatements;
+        std::list<WCDB::StatementDropIndex> dropIndexStatements;
+        std::tie(createIndexStatements, dropIndexStatements) = binding.generateIndexStatements(tableName, !exists);
+        for (const WCDB::StatementCreateIndex &statement : createIndexStatements) {
+            if (!handle->execute(statement)) {
+                return NO;
+            }
+        }
+        for (const WCDB::StatementDropIndex &statement : dropIndexStatements) {
+            if (!handle->execute(statement)) {
+                return NO;
             }
         }
         return YES;

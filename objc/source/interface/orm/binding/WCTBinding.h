@@ -69,14 +69,20 @@ private:
 #pragma mark - Index
 public:
     struct Index {
-        Index();
+        Index(const WCDB::String &suffix);
+        const WCDB::String suffix;
+        enum class Action {
+            Create,
+            CreateForNewlyCreatedTableOnly, // create if and only if the table is newly created by createTable:withClass:
+            Drop,
+        } action;
         WCDB::StatementCreateIndex statement;
-        bool forNewlyCreatedTableOnly; // create if and only if the table is newly created by createTable:withClass:
     };
     typedef struct Index Index;
     Index &getOrCreateIndex(const WCDB::String &suffix);
 
-    std::list<Index> generateIndexes(const WCDB::String &tableName) const;
+    std::pair<std::list<WCDB::StatementCreateIndex>, std::list<WCDB::StatementDropIndex>>
+    generateIndexStatements(const WCDB::String &tableName, bool newlyCreated) const;
 
 private:
     std::map<WCDB::String /* index suffix */, Index> m_indexes;

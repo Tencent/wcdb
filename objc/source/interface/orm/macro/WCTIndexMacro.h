@@ -41,7 +41,12 @@
     index.statement.indexed(self.propertyName.asIndex());                      \
     __WCDB_INDEX_END(indexSuffixName)
 
-#define __WCDB_INDEX_FOR_NEWLY_CREATED_TABLE_ONLY_IMP(indexSuffixName, enable) \
+#define __WCDB_INDEX_FOR_NEWLY_CREATED_TABLE_ONLY_IMP(indexSuffixName)         \
     __WCDB_INDEX_BEGIN(indexSuffixName)                                        \
-    index.forNewlyCreatedTableOnly = enable;                                   \
+    index.action = WCTBinding::Index::Action::CreateForNewlyCreatedTableOnly;  \
+    __WCDB_INDEX_END(indexSuffixName)
+
+#define __WCDB_INDEX_TO_BE_DROPPED(indexSuffixName)                            \
+    __WCDB_INDEX_BEGIN(indexSuffixName)                                        \
+    index.action = WCTBinding::Index::Action::Drop;                            \
     __WCDB_INDEX_END(indexSuffixName)
