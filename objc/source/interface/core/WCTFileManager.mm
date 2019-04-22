@@ -54,9 +54,7 @@ static WCDB::FileProtection fileProtectionForAttribute(NSString *fileAttributePr
     }
     return WCDB::FileProtection::None;
 }
-#endif
 
-#if TARGET_OS_IPHONE
 bool FileManager::setFileProtection(const WCDB::String &path, WCDB::FileProtection fileProtection)
 {
     NSError *nsError = nil;

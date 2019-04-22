@@ -46,7 +46,7 @@
 {
     if (self = [super init]) {
         _string = [[NSString alloc] init];
-        _number = @0;
+        _number = @(0);
         _data = [[NSData alloc] init];
     }
     return self;
