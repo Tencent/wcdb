@@ -165,7 +165,7 @@ bool ObservationQueue::doNotifyCorruptedEvent(const String& path, uint32_t ident
 
 void ObservationQueue::handleError(const Error& error)
 {
-    if (!error.isCorruption() || error.level < Error::Level::Error || exiting()) {
+    if (!error.isCorruption() || error.level < Error::Level::Error || isExiting()) {
         return;
     }
 
@@ -206,7 +206,7 @@ void ObservationQueue::handleError(const Error& error)
 void ObservationQueue::preprocessError(Error& error)
 {
     // ignore corruption from RepairKit for a tolerable times
-    if (!error.isCorruption() || exiting()) {
+    if (!error.isCorruption() || isExiting()) {
         return;
     }
     const auto& strings = error.infos.getStrings();

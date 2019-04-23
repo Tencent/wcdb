@@ -25,14 +25,23 @@
 
 namespace WCDB {
 
-bool exiting()
+static void exiting();
+
+static std::atomic<bool>& exitingValue()
 {
-    static std::atomic<bool>* s_exit = new std::atomic<bool>(false);
-    static auto _ WCDB_USED = []() -> std::nullptr_t {
-        atexit([]() { s_exit->store(true); });
-        return nullptr;
-    }();
-    return s_exit->load();
+    static std::atomic<bool>* s_exitingValue = new std::atomic<bool>(false);
+    static auto _ WCDB_USED = atexit(exiting);
+    return *s_exitingValue;
+}
+
+static void exiting()
+{
+    exitingValue().store(true);
+}
+
+bool isExiting()
+{
+    return exitingValue().load();
 }
 
 } // namespace WCDB

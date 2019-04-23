@@ -47,7 +47,7 @@ public:
 
     void reQueue(const Key &key, double delay, const Info &info)
     {
-        if (exiting()) {
+        if (isExiting()) {
             stop();
             return;
         }
@@ -86,7 +86,7 @@ public:
             }
             m_list.erase(key);
         }
-        if (exiting()) {
+        if (isExiting()) {
             stop();
             return;
         }
@@ -111,18 +111,18 @@ public:
     void loop(const ExpiredCallback &onElementExpired)
     {
         m_running.store(true);
-        while (!exiting()) {
+        while (!isExiting()) {
             std::unique_lock<std::mutex> lockGuard(m_mutex);
             if (m_stop) {
                 break;
             }
-            if (m_list.elements().empty() && !exiting()) {
+            if (m_list.elements().empty() && !isExiting()) {
                 m_cond.wait(lockGuard);
                 continue;
             }
             SteadyClock now = SteadyClock::now();
             const auto &shortest = m_list.elements().begin();
-            if (now < shortest->order && !exiting()) {
+            if (now < shortest->order && !isExiting()) {
                 m_cond.wait_for(lockGuard, shortest->order - now);
                 continue;
             }
@@ -130,7 +130,7 @@ public:
             Info info = shortest->value;
             lockGuard.unlock();
             bool erase = false;
-            if (!exiting()) {
+            if (!isExiting()) {
                 erase = onElementExpired(key, info);
             }
             lockGuard.lock();

@@ -23,7 +23,7 @@
 
 namespace WCDB {
 
-bool exiting();
+bool isExiting();
 
 }
 
