@@ -38,8 +38,8 @@ Migration::Migration(MigrationEvent* event)
 void Migration::filterTable(const Filter& filter)
 {
     LockGuard lockGuard(m_lock);
+    purge();
     m_filter = filter;
-    WCTInnerAssert(m_filted.empty());
 }
 
 void Migration::purge()
