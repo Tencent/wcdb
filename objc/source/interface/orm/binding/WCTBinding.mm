@@ -171,7 +171,7 @@ WCTBinding::Index &WCTBinding::getOrCreateIndex(const WCDB::String &suffix)
 }
 
 std::pair<std::list<WCDB::StatementCreateIndex>, std::list<WCDB::StatementDropIndex>>
-WCTBinding::generateIndexStatements(const WCDB::String &tableName, bool newlyCreated) const
+WCTBinding::generateIndexStatements(const WCDB::String &tableName, bool isTableNewlyCreated) const
 {
     std::pair<std::list<WCDB::StatementCreateIndex>, std::list<WCDB::StatementDropIndex>> pairs;
     for (const auto &iter : m_indexes) {
@@ -179,7 +179,7 @@ WCTBinding::generateIndexStatements(const WCDB::String &tableName, bool newlyCre
         Index index = iter.second;
         switch (index.action) {
         case Index::Action::CreateForNewlyCreatedTableOnly:
-            if (!newlyCreated) {
+            if (!isTableNewlyCreated) {
                 break;
             }
             // fallthrough

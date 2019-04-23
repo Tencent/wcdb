@@ -82,7 +82,7 @@ public:
     Index &getOrCreateIndex(const WCDB::String &suffix);
 
     std::pair<std::list<WCDB::StatementCreateIndex>, std::list<WCDB::StatementDropIndex>>
-    generateIndexStatements(const WCDB::String &tableName, bool newlyCreated) const;
+    generateIndexStatements(const WCDB::String &tableName, bool isTableNewlyCreated) const;
 
 private:
     std::map<WCDB::String /* index suffix */, Index> m_indexes;
