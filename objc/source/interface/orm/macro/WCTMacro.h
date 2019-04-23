@@ -43,17 +43,17 @@
         return nil;                                                           \
     }
 
-//Property - declare column
+// Property - declare column
 #define WCDB_PROPERTY(propertyName) __WCDB_PROPERTY_IMP(propertyName)
 
-//Synthesize - implement column
+// Synthesize - implement column
 #define WCDB_SYNTHESIZE(propertyName) \
     __WCDB_SYNTHESIZE_IMP(propertyName, WCDB_STRINGIFY(propertyName))
 
 #define WCDB_SYNTHESIZE_COLUMN(propertyName, columnName) \
     __WCDB_SYNTHESIZE_IMP(propertyName, columnName)
 
-//Column Constraint
+// Column Constraint
 #define WCDB_PRIMARY(propertyName) \
     __WCDB_PRIMARY_IMP(propertyName, false)
 
@@ -81,7 +81,7 @@
 #define WCDB_CHECK(propertyName, condition) \
     __WCDB_CHECK_IMP(propertyName, condition)
 
-//Table Constraint
+// Table Constraint
 #define WCDB_MULTI_PRIMARY(constraintName, propertyName) \
     __WCDB_MULTI_PRIMARY_IMP(constraintName, propertyName)
 
@@ -100,7 +100,7 @@
 #define WCDB_MULTI_UNIQUE_DESC(constraintName, propertyName) \
     __WCDB_ORDERED_MULTI_UNIQUE_IMP(constraintName, propertyName, WCTOrderedDescending)
 
-//Index
+// Index
 #define WCDB_INDEX(indexSuffixName, propertyName) \
     __WCDB_INDEX_IMP(indexSuffixName, propertyName, false)
 
@@ -123,13 +123,14 @@
     __WCDB_ORDERED_INDEX_IMP(                                 \
     indexSuffixName, propertyName, WCTOrderedDescending, true)
 
+// Index Operation
 #define WCDB_INDEX_FOR_NEWLY_CREATED_TABLE_ONLY(indexSuffixName) \
     __WCDB_INDEX_FOR_NEWLY_CREATED_TABLE_ONLY_IMP(indexSuffixName)
 
 #define WCDB_INDEX_TO_BE_DROPPED(indexSuffixName) \
     __WCDB_INDEX_TO_BE_DROPPED(indexSuffixName)
 
-//Virtual Table Argument
+// Virtual Table Argument
 #define WCDB_VIRTUAL_TABLE_ARGUMENT(argument) \
     __WCDB_VIRTUAL_TABLE_ARGUMENT_IMP(argument)
 
