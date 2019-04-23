@@ -133,7 +133,7 @@ Database::InitializedGuard Database::initialize()
     return nullptr;
 }
 
-Database::InitializedGuard Database::isInitialized()
+Database::InitializedGuard Database::isInitialized() const
 {
     SharedLockGuard concurrencyGuard(m_concurrency);
     SharedLockGuard memoryGuard(m_memory);

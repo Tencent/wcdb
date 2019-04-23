@@ -34,6 +34,7 @@ WCTOneOrBinaryTokenizerCursorInfo::~WCTOneOrBinaryTokenizerCursorInfo()
 {
     if (m_symbolCharacterSet != nil) {
         CFRelease(m_symbolCharacterSet);
+        m_symbolCharacterSet = nil;
     }
 }
 
@@ -50,11 +51,11 @@ CFCharacterSetRef WCTOneOrBinaryTokenizerCursorInfo::generateSymbolCharacterSet(
     return characterSetRef;
 }
 
-std::pair<int, bool> WCTOneOrBinaryTokenizerCursorInfo::isSymbol(UnicodeChar theChar)
+std::pair<int, bool> WCTOneOrBinaryTokenizerCursorInfo::isSymbol(UnicodeChar theChar) const
 {
     bool symbol = false;
     WCDB::Error::Code code = WCDB::Error::Code::NoMemory;
-    if (m_symbolCharacterSet) {
+    if (m_symbolCharacterSet != nil) {
         symbol = CFCharacterSetIsCharacterMember(m_symbolCharacterSet, theChar);
         code = WCDB::Error::Code::OK;
     }

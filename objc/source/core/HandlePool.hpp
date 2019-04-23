@@ -67,7 +67,7 @@ protected:
 
 private:
     static int maxAllowedNumberOfHandles();
-    bool isNumberOfHandlesAllowed();
+    bool isNumberOfHandlesAllowed() const;
     void clearAllHandles();
 
 #pragma mark - Handle

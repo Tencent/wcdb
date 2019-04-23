@@ -60,7 +60,7 @@ protected:
     bool onTimed(const String& parameter1, const uint32_t& parameter2);
 
     void loop() override final;
-    SharedLock m_lock;
+    mutable SharedLock m_lock;
     ObservationQueueEvent* m_event;
 
 #pragma mark - Purge
@@ -84,7 +84,7 @@ public:
     typedef std::function<bool(const String& path, uint32_t identifier)> Notification;
     void setNotificationWhenCorrupted(const String& path, const Notification& notification);
 
-    bool isFileObservedCorrupted(const String& path);
+    bool isFileObservedCorrupted(const String& path) const;
 
     void markAsObservedNotCorrupted(const String& path);
 

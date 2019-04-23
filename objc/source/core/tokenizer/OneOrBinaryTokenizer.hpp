@@ -48,7 +48,7 @@ public:
 protected:
     //You must figure out the unicode character set of [symbol] on current platform or implement it refer to http://www.fileformat.info/info/unicode/category/index.htm
     typedef unsigned short UnicodeChar;
-    virtual std::pair<int, bool> isSymbol(UnicodeChar theChar) = 0;
+    virtual std::pair<int, bool> isSymbol(UnicodeChar theChar) const = 0;
 
 private:
     const char *m_input;

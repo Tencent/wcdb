@@ -34,5 +34,5 @@ protected:
     CFCharacterSetRef m_symbolCharacterSet;
     static CFCharacterSetRef generateSymbolCharacterSet();
 
-    std::pair<int, bool> isSymbol(UnicodeChar theChar) override final;
+    std::pair<int, bool> isSymbol(UnicodeChar theChar) const override final;
 };

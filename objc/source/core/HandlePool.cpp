@@ -50,7 +50,7 @@ int HandlePool::maxAllowedNumberOfHandles()
     return s_maxAllowedNumberOfHandles;
 }
 
-bool HandlePool::isNumberOfHandlesAllowed()
+bool HandlePool::isNumberOfHandlesAllowed() const
 {
     WCTInnerAssert(m_concurrency.readSafety());
     WCTInnerAssert(m_memory.readSafety());

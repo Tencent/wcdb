@@ -55,7 +55,7 @@ protected:
     // All public interfaces that are related with concurrency should make sure the initialization.
     typedef SharedLockGuard InitializedGuard;
     InitializedGuard initialize();
-    InitializedGuard isInitialized();
+    InitializedGuard isInitialized() const;
     bool m_initialized;
 
 #pragma mark - Event

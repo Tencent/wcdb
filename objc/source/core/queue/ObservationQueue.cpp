@@ -243,7 +243,7 @@ void ObservationQueue::preprocessError(Error& error)
     }
 }
 
-bool ObservationQueue::isFileObservedCorrupted(const String& path)
+bool ObservationQueue::isFileObservedCorrupted(const String& path) const
 {
     bool corrupted = false;
     bool succeed;
