@@ -123,6 +123,9 @@ static constexpr const char* ErrorSourceSystem = "System";
 static constexpr const char* ErrorSourceAssertion = "Assertion";
 static constexpr const char* ErrorSourceNative = "Native";
 
+// Tag
+static constexpr const int TagInvalidValue = 0;
+
 } // namespace WCDB
 
 #endif /* __WCDB_CORE_CONST_H */

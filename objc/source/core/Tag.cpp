@@ -19,6 +19,7 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/CoreConst.h>
 #include <WCDB/Tag.hpp>
 
 namespace WCDB {
@@ -31,10 +32,10 @@ const Tag& Tag::invalid()
 
 Tag::Tag(int32_t tag) : m_value(tag)
 {
-    WCTRemedialAssert(m_value != invalidValue, "Tag can't be 0.", return;);
+    WCTRemedialAssert(m_value != TagInvalidValue, "Tag can't be 0.", return;);
 }
 
-Tag::Tag(const std::nullptr_t&) : m_value(invalidValue)
+Tag::Tag(const std::nullptr_t&) : m_value(TagInvalidValue)
 {
 }
 
@@ -60,7 +61,7 @@ int32_t Tag::value() const
 
 bool Tag::isValid() const
 {
-    return m_value != Tag::invalidValue;
+    return m_value != TagInvalidValue;
 }
 
 } // namespace WCDB

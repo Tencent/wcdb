@@ -19,6 +19,7 @@
  */
 
 #import <WCDB/Core.h>
+#import <WCDB/CoreConst.h>
 #import <WCDB/WCTError.h>
 
 @interface WCTError ()
@@ -134,5 +135,5 @@ static_assert((NSUInteger) WCTErrorExtendedCodeWarningAutoIndex == (NSUInteger) 
 static_assert((NSUInteger) WCTErrorExtendedCodeAuthorizationUser == (NSUInteger) WCDB::Error::ExtCode::AuthorizationUser, "");
 static_assert((NSUInteger) WCTErrorExtendedCodeOKLoadPermanently == (NSUInteger) WCDB::Error::ExtCode::OKLoadPermanently, "");
 
-static_assert((int) WCTInvalidTag == (int) WCDB::Tag::invalidValue, "");
+static_assert((int) WCTInvalidTag == (int) WCDB::TagInvalidValue, "");
 static_assert(sizeof(WCTTag) == sizeof(WCDB::Tag), "");

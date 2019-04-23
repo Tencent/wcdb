@@ -29,7 +29,6 @@ namespace WCDB {
 class Tag final {
 public:
     static const Tag& invalid();
-    static constexpr const int32_t invalidValue = 0;
 
     Tag(int32_t tag);
 
