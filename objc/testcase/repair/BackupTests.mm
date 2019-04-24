@@ -348,7 +348,7 @@
     TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
 }
 
-- (void)test_feature_trigger_auto_backup_for_attached
+- (void)test_feature_auto_backup_for_attached
 {
     NSString *attachedPath = [self.path stringByAppendingString:@"_attached"];
     NSString *attachedName = @"test_attached";
