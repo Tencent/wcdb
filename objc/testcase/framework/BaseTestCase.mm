@@ -35,6 +35,14 @@
     Dispatch *_dispatch;
 }
 
++ (void)initialize
+{
+    if (self.class == BaseTestCase.class) {
+        TestCaseAssertTrue([NSThread isMainThread]);
+        pthread_setname_np("com.Tencent.WCDB.Main");
+    }
+}
+
 - (void)setUp
 {
     [super setUp];
