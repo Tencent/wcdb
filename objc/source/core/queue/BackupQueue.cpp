@@ -49,7 +49,7 @@ void BackupQueue::put(const String& path, int frames)
         if (iter == m_records.end()) {
             return;
         }
-        int recordedFrames = iter->second;
+        recordedFrames = iter->second;
     }
     if (frames >= recordedFrames + BackupConfigFramesIntervalForCritical // expired too much
         || frames < recordedFrames // restarted
