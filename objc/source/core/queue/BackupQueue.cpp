@@ -42,28 +42,53 @@ void BackupQueue::loop()
 
 void BackupQueue::put(const String& path, int frames)
 {
-    SharedLockGuard lockGuard(m_lock);
-    int backedUpFrames = m_backedUp[path];
-    if (frames >= backedUpFrames + BackupConfigFramesIntervalForCritical // expired too much
-        || frames < backedUpFrames // restarted
+    int recordedFrames = 0;
+    {
+        SharedLockGuard lockGuard(m_lock);
+        auto iter = m_records.find(path);
+        if (iter == m_records.end()) {
+            return;
+        }
+        int recordedFrames = iter->second;
+    }
+    if (frames >= recordedFrames + BackupConfigFramesIntervalForCritical // expired too much
+        || frames < recordedFrames // restarted
     ) {
         m_timedQueue.reQueue(path, BackupQueueDelayForCritical, frames);
         lazyRun();
-    } else if (frames >= backedUpFrames + BackupConfigFramesIntervalForNonCritical) {
+    } else if (frames >= recordedFrames + BackupConfigFramesIntervalForNonCritical) {
         m_timedQueue.reQueue(path, BackupQueueDelayForNonCritical, frames);
         lazyRun();
     }
 }
 
+void BackupQueue::register_(const String& path)
+{
+    LockGuard lockGuard(m_lock);
+    m_records.emplace(path, 0);
+}
+
+void BackupQueue::unregister(const String& path)
+{
+    LockGuard lockGuard(m_lock);
+    m_records.erase(path);
+}
+
 bool BackupQueue::onTimed(const String& path, const int& frames)
 {
     bool result = m_event->databaseShouldBackup(path);
+    LockGuard lockGuard(m_lock);
+    auto iter = m_records.find(path);
+    if (iter == m_records.end()) {
+        // already unregistered
+        return true;
+    }
     if (!result) {
         // retry if failed
         m_timedQueue.reQueue(path, BackupQueueDelayForRetryingAfterFailure, frames);
+    } else {
+        iter->second = frames;
     }
-    LockGuard lockGuard(m_lock);
-    m_backedUp[path] = frames;
     return result;
 }
 

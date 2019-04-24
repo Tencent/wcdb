@@ -88,7 +88,7 @@ private:
     bool isCommittedNotificationSet() const;
     void setupCommittedNotification();
 
-    void postCommittedNotification(int numberOfFrames);
+    void postCommittedNotification(const String &path, int numberOfFrames);
     OrderedUniqueList<String, CommittedNotification> m_committedNotifications;
 
 #pragma mark - Checkpoint

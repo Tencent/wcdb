@@ -42,6 +42,8 @@ public:
     BackupQueue(const String& name, BackupQueueEvent* event);
 
     void put(const String& path, int frames);
+    void register_(const String& path);
+    void unregister(const String& path);
 
 protected:
     bool onTimed(const String& path, const int& frames);
@@ -49,7 +51,9 @@ protected:
 
     TimedQueue<String, int> m_timedQueue;
     SharedLock m_lock;
-    std::map<String, int> m_backedUp;
+
+    // path -> frame
+    std::map<String, int> m_records;
     BackupQueueEvent* m_event;
 };
 

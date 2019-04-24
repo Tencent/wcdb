@@ -178,11 +178,12 @@ void HandleNotification::postPerformanceTraceNotification(const String &sql,
 }
 
 #pragma mark - Committed
-int HandleNotification::committed(void *p, sqlite3 *, const char *name, int numberOfFrames)
+int HandleNotification::committed(void *p, sqlite3 *handle, const char *name, int numberOfFrames)
 {
-    if (name == nullptr || strcmp(name, "main") == 0) {
+    if (name != nullptr) {
         HandleNotification *notification = reinterpret_cast<HandleNotification *>(p);
-        notification->postCommittedNotification(numberOfFrames);
+        notification->postCommittedNotification(
+        sqlite3_db_filename(handle, name), numberOfFrames);
     }
     return SQLITE_OK;
 }
@@ -224,11 +225,11 @@ bool HandleNotification::isCommittedNotificationSet() const
     return !m_committedNotifications.elements().empty();
 }
 
-void HandleNotification::postCommittedNotification(int numberOfFrames)
+void HandleNotification::postCommittedNotification(const String &path, int numberOfFrames)
 {
     WCTInnerAssert(!m_committedNotifications.elements().empty());
     for (const auto &element : m_committedNotifications.elements()) {
-        if (!element.value(m_handle->getPath(), numberOfFrames)) {
+        if (!element.value(path, numberOfFrames)) {
             break;
         }
     }

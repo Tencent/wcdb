@@ -247,6 +247,19 @@ bool Core::databaseShouldCheckpoint(const String& path, int frames)
 }
 
 #pragma mark - Backup
+void Core::setAutoBackup(Database* database, bool enable)
+{
+    WCTInnerAssert(database != nullptr);
+    if (enable) {
+        database->setConfig(
+        WCDB::BackupConfigName, m_backupConfig, WCDB::Configs::Priority::Low);
+        m_backupQueue->register_(database->getPath());
+    } else {
+        database->removeConfig(WCDB::BackupConfigName);
+        m_backupQueue->unregister(database->getPath());
+    }
+}
+
 bool Core::databaseShouldBackup(const String& path)
 {
     RecyclableDatabase database = m_databasePool.get(path);
@@ -255,11 +268,6 @@ bool Core::databaseShouldBackup(const String& path)
         succeed = database->backupIfAlreadyInitialized();
     }
     return succeed;
-}
-
-const std::shared_ptr<Config>& Core::backupConfig()
-{
-    return m_backupConfig;
 }
 
 void Core::databaseDidBackup(const String& path)

@@ -92,18 +92,17 @@ protected:
     std::shared_ptr<ObservationQueue> m_observationQueue;
 
 #pragma mark - Checkpoint
-public:
+protected:
     bool databaseShouldCheckpoint(const String& path, int frames) override final;
 
-protected:
     std::shared_ptr<CheckpointQueue> m_checkpointQueue;
 
 #pragma mark - Backup
 public:
-    const std::shared_ptr<Config>& backupConfig();
-    bool databaseShouldBackup(const String& path) override final;
+    void setAutoBackup(Database* database, bool enable);
 
 protected:
+    bool databaseShouldBackup(const String& path) override final;
     void databaseDidBackup(const String& path) override final;
     std::shared_ptr<BackupQueue> m_backupQueue;
     std::shared_ptr<Config> m_backupConfig;
@@ -111,9 +110,9 @@ protected:
 #pragma mark - Migration
 public:
     void setAutoMigration(const String& path, bool flag);
-    std::pair<bool, bool> databaseShouldMigrate(const String& path) override final;
 
 protected:
+    std::pair<bool, bool> databaseShouldMigrate(const String& path) override final;
     std::shared_ptr<MigrationQueue> m_migrationQueue;
 
 #pragma mark - Trace
