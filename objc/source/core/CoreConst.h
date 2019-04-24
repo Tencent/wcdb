@@ -41,7 +41,7 @@ static constexpr const int ObservationQueueTimesOfIgnoringBackupCorruption = 3;
 // Checkpoint Queue
 static constexpr const char* CheckpointQueueName = "com.Tencent.WCDB.Queue.Checkpoint";
 static constexpr const double CheckpointQueueDelayForRetryingAfterFailure = 10.0;
-static constexpr const int CheckpointQueueFramesThresholdForCritical = 100;
+static constexpr const int CheckpointQueueFramesThresholdForCritical = 200;
 static constexpr const double CheckpointQueueDelayForCritical = 1.0;
 static constexpr const double CheckpointQueueDelayForNonCritical = 10.0;
 
@@ -58,6 +58,9 @@ static constexpr const int BackupConfigFramesIntervalForNonCritical = 100;
 static constexpr const int BackupConfigFramesIntervalForCritical = 300;
 static constexpr const double BackupQueueDelayForCritical = 0;
 static constexpr const double BackupQueueDelayForNonCritical = 5.0;
+
+static_assert(BackupConfigFramesIntervalForCritical > CheckpointQueueFramesThresholdForCritical,
+              "BackupConfigFramesIntervalForCritical should be greater than CheckpointQueueFramesThresholdForCritical since a checkpoint will trigger critical checkpoint too.");
 
 // Basic Config
 static constexpr const char* BasicConfigName = "com.Tencent.WCDB.Config.Basic";
@@ -95,7 +98,7 @@ static constexpr const char* NotifierLoggerName = "com.Tencent.WCDB.Notifier.Log
 
 // Handle Pool
 static constexpr const int HandlePoolMaxAllowedNumberOfHandles = 64;
-static constexpr const unsigned int HandlePoolNumberOfSlots = 4;
+static constexpr const unsigned int HandlePoolNumberOfSlots = 6;
 
 // Checkpoint
 static constexpr const int CheckpointFramesThresholdForTruncating

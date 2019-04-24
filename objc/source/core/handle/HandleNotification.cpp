@@ -178,10 +178,12 @@ void HandleNotification::postPerformanceTraceNotification(const String &sql,
 }
 
 #pragma mark - Committed
-int HandleNotification::committed(void *p, sqlite3 *, const char *, int numberOfFrames)
+int HandleNotification::committed(void *p, sqlite3 *, const char *name, int numberOfFrames)
 {
-    HandleNotification *notification = reinterpret_cast<HandleNotification *>(p);
-    notification->postCommittedNotification(numberOfFrames);
+    if (name == nullptr || strcmp(name, "main") == 0) {
+        HandleNotification *notification = reinterpret_cast<HandleNotification *>(p);
+        notification->postCommittedNotification(numberOfFrames);
+    }
     return SQLITE_OK;
 }
 

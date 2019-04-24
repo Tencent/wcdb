@@ -47,14 +47,15 @@ const Error &BackupReadHandle::getError() const
 
 bool BackupReadHandle::acquireLock()
 {
-    return open() && execute(m_statementForReadTransaction)
-           && execute(m_statementForAcquireReadLock);
+    if (!isOpened() && !open()) {
+        return false;
+    }
+    return execute(m_statementForReadTransaction) && execute(m_statementForAcquireReadLock);
 }
 
 bool BackupReadHandle::releaseLock()
 {
     rollbackTransaction();
-    close();
     return true;
 }
 
@@ -75,13 +76,15 @@ const Error &BackupWriteHandle::getError() const
 
 bool BackupWriteHandle::acquireLock()
 {
-    return open() && beginTransaction();
+    if (!isOpened() && !open()) {
+        return false;
+    }
+    return beginTransaction();
 }
 
 bool BackupWriteHandle::releaseLock()
 {
     rollbackTransaction();
-    close();
     return true;
 }
 } // namespace WCDB

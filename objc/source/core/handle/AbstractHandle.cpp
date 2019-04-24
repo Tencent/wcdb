@@ -87,9 +87,11 @@ void AbstractHandle::hookFileOpen(const FileOpen &open)
 #pragma mark - Path
 void AbstractHandle::setPath(const String &path)
 {
-    WCTRemedialAssert(!isOpened(), "Path can't be changed after opened.", return;);
-    m_path = path;
-    m_error.infos.set(ErrorStringKeyPath, path);
+    if (m_path != path) {
+        close();
+        m_path = path;
+        m_error.infos.set(ErrorStringKeyPath, path);
+    }
 }
 
 const String &AbstractHandle::getPath() const
@@ -115,7 +117,7 @@ String AbstractHandle::getJournalSuffix()
 #pragma mark - Basic
 bool AbstractHandle::open()
 {
-    WCTRemedialAssert(!isOpened(), "Handle is already opened.", close(););
+    WCTInnerAssert(!isOpened());
     bool result = exitAPI(sqlite3_open(m_path.c_str(), &m_handle));
     if (!result) {
         m_handle = nullptr;
@@ -527,7 +529,11 @@ void AbstractHandle::notifyError(int rc, const char *sql)
     } else {
         m_error.level = Error::Level::Ignore;
     }
-    m_error.infos.set(ErrorStringKeySQL, sql);
+    if (sql != nullptr) {
+        m_error.infos.set(ErrorStringKeySQL, sql);
+    } else {
+        m_error.infos.unset(ErrorStringKeySQL);
+    }
     Notifier::shared()->notify(m_error);
 }
 

@@ -293,19 +293,27 @@ std::shared_ptr<Handle> Database::generateHandle(HandleType type)
         SharedLockGuard memoryGuard(m_memory);
         configs = m_configs;
     }
+
+    // reconfigure
     handle->reconfigure(configs);
-    if (type < HandlePoolNumberOfSlots) {
+
+    // open
+    if (type == HandleType::Normal || type == HandleType::Migrate
+        || type == HandleType::MigrationStep || type == HandleType::InterruptibleCheckpoint) {
         handle->setPath(path);
         if (!handle->open()) {
             setThreadedError(handle->getError());
             return nullptr;
         }
     }
+
+    // set stepped notification
     if (type == HandleType::Normal || type == HandleType::Migrate) {
         handle->setNotificationWhenStatementWillStep(
         String::formatted("Interrupt-%p", this),
         std::bind(&Database::handleWillStep, this, std::placeholders::_1));
     }
+
     return handle;
 }
 
@@ -573,12 +581,12 @@ bool Database::doBackup()
     !isInTransaction(), "Backup can't be run in transaction.", return false;);
     WCTInnerAssert(m_concurrency.readSafety());
     WCTInnerAssert(m_initialized);
-    std::shared_ptr<Handle> backupReadHandle = generateHandle(HandleType::BackupRead);
+    RecyclableHandle backupReadHandle = flowOut(HandleType::BackupRead);
     if (backupReadHandle == nullptr) {
         return false;
     }
 
-    std::shared_ptr<Handle> backupWriteHandle = generateHandle(HandleType::BackupWrite);
+    RecyclableHandle backupWriteHandle = flowOut(HandleType::BackupWrite);
     if (backupWriteHandle == nullptr) {
         return false;
     }

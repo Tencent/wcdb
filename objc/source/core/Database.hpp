@@ -97,10 +97,10 @@ protected:
         MigrationStep,
         InterruptibleCheckpoint,
 
-        // The handles below are not in HandlePool
-        BackupRead = HandlePoolNumberOfSlots,
+        BackupRead,
         BackupWrite,
-        Assemble,
+        // The handles below are not in HandlePool
+        Assemble = HandlePoolNumberOfSlots,
     };
     std::shared_ptr<Handle> generateSlotedHandle(Slot slot) override final;
     bool willReuseSlotedHandle(Slot slot, Handle *handle) override final;
