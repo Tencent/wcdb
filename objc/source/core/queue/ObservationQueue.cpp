@@ -177,6 +177,8 @@ void ObservationQueue::handleError(const Error& error)
         return;
     }
 
+    // those errors that are preprocessed(to error level) will be handled here.
+
     const String& path = iter->second;
     bool succeed;
     uint32_t identifier;
@@ -229,17 +231,27 @@ void ObservationQueue::preprocessError(Error& error)
         return;
     }
 
-    LockGuard lockGuard(m_lock);
-    auto iter = m_numberOfIgnoredCorruptions.find(identifier);
-    if (iter == m_numberOfIgnoredCorruptions.end()) {
-        iter = m_numberOfIgnoredCorruptions.emplace(identifier, 0).first;
+    {
+        SharedLockGuard lockGuard(m_lock);
+        auto iter = m_numberOfIgnoredCorruptions.find(identifier);
+        if (iter != m_numberOfIgnoredCorruptions.end()) {
+            if (iter->second > ObservationQueueTimesOfIgnoringBackupCorruption) {
+                error.level = Error::Level::Error;
+                return; // quick return to avoid acquiring write lock too frequent.
+            }
+        }
     }
-    WCTInnerAssert(iter != m_numberOfIgnoredCorruptions.end());
-    ++iter->second;
-    if (iter->second <= ObservationQueueTimesOfIgnoringBackupCorruption) {
-        error.level = Error::Level::Ignore;
-    } else {
-        error.level = Error::Level::Error;
+    {
+        LockGuard lockGuard(m_lock);
+        auto iter = m_numberOfIgnoredCorruptions.find(identifier);
+        if (iter == m_numberOfIgnoredCorruptions.end()) {
+            iter = m_numberOfIgnoredCorruptions.emplace(identifier, 0).first;
+        }
+        WCTInnerAssert(iter != m_numberOfIgnoredCorruptions.end());
+        ++iter->second;
+        if (iter->second > ObservationQueueTimesOfIgnoringBackupCorruption) {
+            error.level = Error::Level::Error;
+        }
     }
 }
 
