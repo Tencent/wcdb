@@ -348,46 +348,46 @@
     TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
 }
 
-- (void)test_feature_auto_backup_for_attached
-{
-    NSString *attachedPath = [self.path stringByAppendingString:@"_attached"];
-    NSString *attachedName = @"test_attached";
-    WCTDatabase *attachedDatabase = [[WCTDatabase alloc] initWithPath:attachedPath];
-    TestCaseAssertTrue([attachedDatabase createTable:self.tableName withClass:TestCaseObject.class]);
-
-    self.database.autoBackup = YES;
-    TestCaseAssertTrue([self.database execute:WCDB::StatementAttach().attach(attachedPath).as(attachedName)]);
-
-    TestCaseObject *object = [self.random autoIncrementTestCaseObject];
-
-    {
-        // auto backup for main schema will not be triggered if operating other schemas
-        // auto backup for other schema will not be triggered if it's not set up
-        WCTInsert *insert = [[self.table prepareInsert] value:object];
-        insert.statement.schema(attachedName);
-        TestCaseAssertTrue([insert execute]);
-
-        TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).schema(attachedName).to("TRUNCATE")]);
-
-        [NSThread sleepForTimeInterval:self.delayForTolerance];
-        TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
-        TestCaseAssertFalse([self.fileManager fileExistsAtPath:[attachedPath stringByAppendingString:@"-first.material"]]);
-    }
-
-    {
-        // auto backup for other schema will be triggered if it's set up
-        attachedDatabase.autoBackup = YES;
-
-        WCTInsert *insert = [[self.table prepareInsert] value:object];
-        insert.statement.schema(attachedName);
-        TestCaseAssertTrue([insert execute]);
-
-        TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).schema(attachedName).to("TRUNCATE")]);
-
-        [NSThread sleepForTimeInterval:self.delayForTolerance];
-        TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
-        TestCaseAssertTrue([self.fileManager fileExistsAtPath:[attachedPath stringByAppendingString:@"-first.material"]]);
-    }
-}
+//- (void)test_feature_auto_backup_for_attached
+//{
+//    NSString *attachedPath = [self.path stringByAppendingString:@"_attached"];
+//    NSString *attachedName = @"test_attached";
+//    WCTDatabase *attachedDatabase = [[WCTDatabase alloc] initWithPath:attachedPath];
+//    TestCaseAssertTrue([attachedDatabase createTable:self.tableName withClass:TestCaseObject.class]);
+//
+//    self.database.autoBackup = YES;
+//    TestCaseAssertTrue([self.database execute:WCDB::StatementAttach().attach(attachedPath).as(attachedName)]);
+//
+//    TestCaseObject *object = [self.random autoIncrementTestCaseObject];
+//
+//    {
+//        // auto backup for main schema will not be triggered if operating other schemas
+//        // auto backup for other schema will not be triggered if it's not set up
+//        WCTInsert *insert = [[self.table prepareInsert] value:object];
+//        insert.statement.schema(attachedName);
+//        TestCaseAssertTrue([insert execute]);
+//
+//        TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).schema(attachedName).to("TRUNCATE")]);
+//
+//        [NSThread sleepForTimeInterval:self.delayForTolerance];
+//        TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
+//        TestCaseAssertFalse([self.fileManager fileExistsAtPath:[attachedPath stringByAppendingString:@"-first.material"]]);
+//    }
+//
+//    {
+//        // auto backup for other schema will be triggered if it's set up
+//        attachedDatabase.autoBackup = YES;
+//
+//        WCTInsert *insert = [[self.table prepareInsert] value:object];
+//        insert.statement.schema(attachedName);
+//        TestCaseAssertTrue([insert execute]);
+//
+//        TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).schema(attachedName).to("TRUNCATE")]);
+//
+//        [NSThread sleepForTimeInterval:self.delayForTolerance];
+//        TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
+//        TestCaseAssertTrue([self.fileManager fileExistsAtPath:[attachedPath stringByAppendingString:@"-first.material"]]);
+//    }
+//}
 
 @end
