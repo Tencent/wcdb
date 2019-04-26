@@ -70,6 +70,12 @@ void QualifiedTableName::iterate(const Iterator& iterator, bool& stop)
     recursiveIterate(schema, iterator, stop);
 }
 
+#pragma mark - Utility
+bool QualifiedTableName::isTargetingToSameTable(const QualifiedTableName& other) const
+{
+    return table == other.table && schema.isTargetingSameSchema(other.schema);
+}
+
 } // namespace Syntax
 
 } // namespace WCDB

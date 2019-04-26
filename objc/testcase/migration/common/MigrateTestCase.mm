@@ -63,7 +63,7 @@
 
     // check source table is already dropped.
     // It's not a good practice.
-    TestCaseAssertFalse([self.database tableExists:self.sourceTable]);
+    TestCaseAssertFalse([self.sourceDatabase tableExists:self.sourceTable]);
 }
 
 - (void)doTestNotification

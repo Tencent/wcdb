@@ -50,6 +50,10 @@ public:
     String getValidDescription() const override final;
     String getValidDescription(bool skipSchema) const;
     void iterate(const Iterator& iterator, bool& stop) override final;
+
+#pragma mark - Utility
+public:
+    bool isTargetingToSameTable(const QualifiedTableName& other) const;
 };
 
 } // namespace Syntax

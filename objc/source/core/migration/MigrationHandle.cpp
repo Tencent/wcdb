@@ -268,25 +268,25 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
             statements.push_back(falledBackStatement);
             const Syntax::InsertSTMT* migratedInsertSTMT
             = static_cast<const Syntax::InsertSTMT*>(originStatement.getSyntaxIdentifier());
-            const String& falledBackTableName
-            = static_cast<const Syntax::InsertSTMT*>(falledBackStatement.getSyntaxIdentifier())
-              ->table;
-            if (migratedInsertSTMT->table != falledBackTableName) {
+            const Syntax::InsertSTMT* falledBackSTMT
+            = static_cast<const Syntax::InsertSTMT*>(falledBackStatement.getSyntaxIdentifier());
+            if (!migratedInsertSTMT->isTargetingSameTable(*falledBackSTMT)) {
                 // it's safe to use origin statement since Conflict Action will not be changed during tampering.
                 succeed = prepareMigrate(migratedInsertSTMT->table,
                                          migratedInsertSTMT->conflictAction);
             }
         } break;
         case Syntax::Identifier::Type::UpdateSTMT: {
-            const String& migratedTableName
+            const Syntax::QualifiedTableName& migratedTable
             = static_cast<const Syntax::UpdateSTMT*>(originStatement.getSyntaxIdentifier())
-              ->table.table;
-            const String& falledBackTableName
+              ->table;
+            const Syntax::QualifiedTableName& falledBackTable
             = static_cast<const Syntax::UpdateSTMT*>(falledBackStatement.getSyntaxIdentifier())
-              ->table.table;
-            if (migratedTableName == falledBackTableName) {
+              ->table;
+            if (migratedTable.isTargetingToSameTable(falledBackTable)) {
                 statements.push_back(falledBackStatement);
             } else {
+                const String& migratedTableName = migratedTable.table;
                 const MigrationInfo* info = getBoundInfo(migratedTableName);
                 WCTInnerAssert(info != nullptr);
                 // statement for source table
@@ -301,15 +301,16 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
             }
         } break;
         case Syntax::Identifier::Type::DeleteSTMT: {
-            const String& migratedTableName
+            const Syntax::QualifiedTableName& migratedTable
             = static_cast<const Syntax::DeleteSTMT*>(originStatement.getSyntaxIdentifier())
-              ->table.table;
-            const String& falledBackTableName
+              ->table;
+            const Syntax::QualifiedTableName& falledBackTable
             = static_cast<const Syntax::DeleteSTMT*>(falledBackStatement.getSyntaxIdentifier())
-              ->table.table;
-            if (migratedTableName == falledBackTableName) {
+              ->table;
+            if (migratedTable.isTargetingToSameTable(falledBackTable)) {
                 statements.push_back(falledBackStatement);
             } else {
+                const String& migratedTableName = migratedTable.table;
                 const MigrationInfo* info = getBoundInfo(migratedTableName);
                 WCTInnerAssert(info != nullptr);
                 // statement for source table
@@ -324,18 +325,17 @@ std::pair<bool, std::list<Statement>> MigrationHandle::process(const Statement& 
             }
         } break;
         case Syntax::Identifier::Type::DropTableSTMT: {
-            const String& migratedTableName
-            = static_cast<const Syntax::DropTableSTMT*>(originStatement.getSyntaxIdentifier())
-              ->table;
-            const String& falledBackTableName
-            = static_cast<const Syntax::DropTableSTMT*>(falledBackStatement.getSyntaxIdentifier())
-              ->table;
+            const Syntax::DropTableSTMT* migratedSTMT
+            = static_cast<const Syntax::DropTableSTMT*>(originStatement.getSyntaxIdentifier());
+            const Syntax::DropTableSTMT* falledBackSTMT
+            = static_cast<const Syntax::DropTableSTMT*>(
+            falledBackStatement.getSyntaxIdentifier());
             statements.push_back(falledBackStatement);
-            if (migratedTableName != falledBackTableName) {
+            if (!migratedSTMT->isTargetingSameTable(*falledBackSTMT)) {
                 statements.push_back(statements.back());
                 Syntax::DropTableSTMT* stmt = static_cast<Syntax::DropTableSTMT*>(
                 statements.back().getSyntaxIdentifier());
-                stmt->table = migratedTableName;
+                stmt->table = migratedSTMT->table;
                 stmt->schema = Schema::main();
             }
         } break;

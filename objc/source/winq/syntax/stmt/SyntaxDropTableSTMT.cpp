@@ -56,6 +56,12 @@ void DropTableSTMT::iterate(const Iterator& iterator, bool& stop)
     recursiveIterate(schema, iterator, stop);
 }
 
+#pragma mark - Utility
+bool DropTableSTMT::isTargetingSameTable(const DropTableSTMT& other) const
+{
+    return table == other.table && schema.isTargetingSameSchema(other.schema);
+}
+
 } // namespace Syntax
 
 } // namespace WCDB

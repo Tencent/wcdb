@@ -45,6 +45,7 @@ public:
 public:
     bool empty() const;
     bool isMain() const;
+    bool isTargetingSameSchema(const Schema& other) const;
 };
 
 } // namespace Syntax

@@ -56,6 +56,11 @@ bool Schema::empty() const
     return name.empty();
 }
 
+bool Schema::isTargetingSameSchema(const Schema& other) const
+{
+    return getDescription() == other.getDescription();
+}
+
 } // namespace Syntax
 
 } // namespace WCDB

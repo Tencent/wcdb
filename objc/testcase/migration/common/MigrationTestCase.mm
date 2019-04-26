@@ -77,7 +77,11 @@
 {
     @synchronized(self) {
         if (_sourceTable == nil) {
-            _sourceTable = @"testSourceTable";
+            if (self.isCrossDatabaseMigration) {
+                _sourceTable = self.tableName;
+            } else {
+                _sourceTable = @"testSourceTable";
+            }
         }
         return _sourceTable;
     }

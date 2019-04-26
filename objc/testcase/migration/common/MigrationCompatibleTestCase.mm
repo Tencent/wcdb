@@ -59,15 +59,15 @@
 
     NSMutableArray<NSString*>* sqls = [NSMutableArray arrayWithArray:
                                                       @[ @"BEGIN IMMEDIATE",
-                                                         [NSString stringWithFormat:@"INSERT INTO %@.testSourceTable(identifier, content) VALUES(?1, ?2)", self.schemaName] ]];
+                                                         [NSString stringWithFormat:@"INSERT INTO %@.%@(identifier, content) VALUES(?1, ?2)", self.schemaName, self.sourceTable] ]];
 
     if (self.mode == MigrationObjectORMModeNormal) {
-        [sqls addObject:[NSString stringWithFormat:@"INSERT INTO main.testTable(rowid, content, identifier) SELECT (SELECT max(rowid) + 1 FROM temp.WCDBUnioned_testTable), content, identifier FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName]];
+        [sqls addObject:[NSString stringWithFormat:@"INSERT INTO main.testTable(rowid, content, identifier) SELECT (SELECT max(rowid) + 1 FROM temp.WCDBUnioned_testTable), content, identifier FROM %@.%@ WHERE rowid == ?1", self.schemaName, self.sourceTable]];
     } else {
-        [sqls addObject:[NSString stringWithFormat:@"INSERT INTO main.testTable(rowid, content, identifier) SELECT rowid, content, identifier FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName]];
+        [sqls addObject:[NSString stringWithFormat:@"INSERT INTO main.testTable(rowid, content, identifier) SELECT rowid, content, identifier FROM %@.%@ WHERE rowid == ?1", self.schemaName, self.sourceTable]];
     }
 
-    [sqls addObjectsFromArray:@[ [NSString stringWithFormat:@"DELETE FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName],
+    [sqls addObjectsFromArray:@[ [NSString stringWithFormat:@"DELETE FROM %@.%@ WHERE rowid == ?1", self.schemaName, self.sourceTable],
                                  @"COMMIT" ]];
 
     [self doTestObjects:expectedObjects
@@ -85,9 +85,9 @@
 
     NSArray<NSString*>* sqls = @[
         @"BEGIN IMMEDIATE",
-        [NSString stringWithFormat:@"INSERT INTO %@.testSourceTable(identifier, content) VALUES(?1, ?2)", self.schemaName],
-        [NSString stringWithFormat:@"INSERT INTO main.testTable(rowid, content, identifier) SELECT rowid, content, identifier FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName],
-        [NSString stringWithFormat:@"DELETE FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName],
+        [NSString stringWithFormat:@"INSERT INTO %@.%@(identifier, content) VALUES(?1, ?2)", self.schemaName, self.sourceTable],
+        [NSString stringWithFormat:@"INSERT INTO main.testTable(rowid, content, identifier) SELECT rowid, content, identifier FROM %@.%@ WHERE rowid == ?1", self.schemaName, self.sourceTable],
+        [NSString stringWithFormat:@"DELETE FROM %@.%@ WHERE rowid == ?1", self.schemaName, self.sourceTable],
         @"COMMIT"
     ];
 
@@ -107,9 +107,9 @@
 
     NSArray<NSString*>* sqls = @[
         @"BEGIN IMMEDIATE",
-        [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@.testSourceTable(identifier, content) VALUES(?1, ?2)", self.schemaName],
-        [NSString stringWithFormat:@"INSERT OR REPLACE INTO main.testTable(rowid, content, identifier) SELECT rowid, content, identifier FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName],
-        [NSString stringWithFormat:@"DELETE FROM %@.testSourceTable WHERE rowid == ?1", self.schemaName],
+        [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@.%@(identifier, content) VALUES(?1, ?2)", self.schemaName, self.sourceTable],
+        [NSString stringWithFormat:@"INSERT OR REPLACE INTO main.testTable(rowid, content, identifier) SELECT rowid, content, identifier FROM %@.%@ WHERE rowid == ?1", self.schemaName, self.sourceTable],
+        [NSString stringWithFormat:@"DELETE FROM %@.%@ WHERE rowid == ?1", self.schemaName, self.sourceTable],
         @"COMMIT"
     ];
 
@@ -133,7 +133,7 @@
     [expectedObjects removeObjectAtIndex:2];
 
     NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
-                                  [NSString stringWithFormat:@"DELETE FROM %@.testSourceTable WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE identifier > 1 ORDER BY identifier ASC LIMIT 1 OFFSET 1)", self.schemaName],
+                                  [NSString stringWithFormat:@"DELETE FROM %@.%@ WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE identifier > 1 ORDER BY identifier ASC LIMIT 1 OFFSET 1)", self.schemaName, self.sourceTable],
                                   @"DELETE FROM main.testTable WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE identifier > 1 ORDER BY identifier ASC LIMIT 1 OFFSET 1)",
                                   @"COMMIT" ];
 
@@ -152,7 +152,7 @@
     [expectedObjects setObject:newSecondObject atIndexedSubscript:2];
 
     NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
-                                  [NSString stringWithFormat:@"UPDATE %@.testSourceTable SET content = ?1 WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE identifier > 1 ORDER BY identifier ASC LIMIT 1 OFFSET 1)", self.schemaName],
+                                  [NSString stringWithFormat:@"UPDATE %@.%@ SET content = ?1 WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE identifier > 1 ORDER BY identifier ASC LIMIT 1 OFFSET 1)", self.schemaName, self.sourceTable],
                                   @"UPDATE main.testTable SET content = ?1 WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE identifier > 1 ORDER BY identifier ASC LIMIT 1 OFFSET 1)",
                                   @"COMMIT" ];
 
@@ -177,7 +177,7 @@
 - (void)doTestDropTable
 {
     NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
-                                  [NSString stringWithFormat:@"DROP TABLE IF EXISTS %@.testSourceTable", self.schemaName],
+                                  [NSString stringWithFormat:@"DROP TABLE IF EXISTS %@.%@", self.schemaName, self.sourceTable],
                                   @"DROP TABLE IF EXISTS main.testTable",
                                   @"COMMIT" ];
 
@@ -193,7 +193,7 @@
     [expectedObjects removeLastObject];
 
     NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
-                                  [NSString stringWithFormat:@"DELETE FROM %@.testSourceTable WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE temp.WCDBUnioned_testTable.identifier IN(SELECT max(identifier) FROM temp.WCDBUnioned_testTable))", self.schemaName],
+                                  [NSString stringWithFormat:@"DELETE FROM %@.%@ WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE temp.WCDBUnioned_testTable.identifier IN(SELECT max(identifier) FROM temp.WCDBUnioned_testTable))", self.schemaName, self.sourceTable],
                                   @"DELETE FROM main.testTable WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE temp.WCDBUnioned_testTable.identifier IN(SELECT max(identifier) FROM temp.WCDBUnioned_testTable))",
                                   @"COMMIT" ];
 
@@ -212,7 +212,7 @@
     [expectedObjects addObject:newObject];
 
     NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
-                                  [NSString stringWithFormat:@"UPDATE %@.testSourceTable SET content = ?1 WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE temp.WCDBUnioned_testTable.identifier IN(SELECT max(identifier) FROM temp.WCDBUnioned_testTable))", self.schemaName],
+                                  [NSString stringWithFormat:@"UPDATE %@.%@ SET content = ?1 WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE temp.WCDBUnioned_testTable.identifier IN(SELECT max(identifier) FROM temp.WCDBUnioned_testTable))", self.schemaName, self.sourceTable],
                                   @"UPDATE main.testTable SET content = ?1 WHERE rowid IN(SELECT rowid FROM temp.WCDBUnioned_testTable WHERE temp.WCDBUnioned_testTable.identifier IN(SELECT max(identifier) FROM temp.WCDBUnioned_testTable))",
                                   @"COMMIT" ];
 
