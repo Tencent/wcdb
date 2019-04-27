@@ -98,11 +98,11 @@ public:
                                          const CheckpointedNotification &checkpointed);
 
 private:
-    static void checkpointed(void *p);
+    static void checkpointed(void *p, sqlite3 *handle, const char *name);
 
     bool areCheckpointNotificationsSet() const;
     void setupCheckpointNotifications();
-    void postCheckpointNotification();
+    void postCheckpointNotification(const String &path);
     std::map<String, CheckpointedNotification> m_checkpointedNotifications;
 
 #pragma mark - Busy

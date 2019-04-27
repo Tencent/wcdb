@@ -180,11 +180,9 @@ void HandleNotification::postPerformanceTraceNotification(const String &sql,
 #pragma mark - Committed
 int HandleNotification::committed(void *p, sqlite3 *handle, const char *name, int numberOfFrames)
 {
-    if (name != nullptr) {
-        HandleNotification *notification = reinterpret_cast<HandleNotification *>(p);
-        notification->postCommittedNotification(
-        sqlite3_db_filename(handle, name), numberOfFrames);
-    }
+    WCTInnerAssert(p != nullptr);
+    HandleNotification *notification = reinterpret_cast<HandleNotification *>(p);
+    notification->postCommittedNotification(sqlite3_db_filename(handle, name), numberOfFrames);
     return SQLITE_OK;
 }
 
@@ -236,10 +234,11 @@ void HandleNotification::postCommittedNotification(const String &path, int numbe
 }
 
 #pragma mark - Checkpoint
-void HandleNotification::checkpointed(void *p)
+void HandleNotification::checkpointed(void *p, sqlite3 *handle, const char *name)
 {
+    WCTInnerAssert(p != nullptr);
     HandleNotification *notification = reinterpret_cast<HandleNotification *>(p);
-    notification->postCheckpointNotification();
+    notification->postCheckpointNotification(sqlite3_db_filename(handle, name));
 }
 
 bool HandleNotification::areCheckpointNotificationsSet() const
@@ -250,10 +249,10 @@ bool HandleNotification::areCheckpointNotificationsSet() const
 void HandleNotification::setupCheckpointNotifications()
 {
     if (!m_checkpointedNotifications.empty()) {
-        exitAPI(sqlite3_wal_checkpoint_handler(
-        getRawHandle(), HandleNotification::checkpointed, this));
+        sqlite3_wal_checkpoint_handler(
+        getRawHandle(), HandleNotification::checkpointed, this);
     } else {
-        exitAPI(sqlite3_wal_checkpoint_handler(getRawHandle(), nullptr, nullptr));
+        sqlite3_wal_checkpoint_handler(getRawHandle(), nullptr, nullptr);
     }
 }
 
@@ -272,11 +271,11 @@ void HandleNotification::setNotificationWhenCheckpointed(const String &name,
     }
 }
 
-void HandleNotification::postCheckpointNotification()
+void HandleNotification::postCheckpointNotification(const String &path)
 {
     WCTInnerAssert(areCheckpointNotificationsSet());
     for (const auto &element : m_checkpointedNotifications) {
-        element.second(m_handle->getPath());
+        element.second(path);
     }
 }
 
