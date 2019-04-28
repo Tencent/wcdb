@@ -43,6 +43,11 @@
     return self;
 }
 
+- (NSString *)indexWithSuffix:(NSString *)indexSuffix
+{
+    return [self.name stringByAppendingString:indexSuffix];
+}
+
 - (BOOL)dropIndexWithSuffix:(NSString *)indexSuffix
 {
     WCTRemedialAssert(indexSuffix != nil, "Index suffix can't be null.", return NO;);

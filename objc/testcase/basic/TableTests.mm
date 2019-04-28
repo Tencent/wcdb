@@ -26,6 +26,24 @@
 
 @implementation TableTests
 
+#pragma mark - Basic
+- (void)test_drop_index_with_suffix
+{
+    TestCaseAssertTrue([self createTable]);
+
+    [self doTestSQLs:@[ @"DROP INDEX IF EXISTS main.testTable_index" ]
+         inOperation:^BOOL {
+             return [self.table dropIndexWithSuffix:@"_index"];
+         }];
+}
+
+- (void)test_index_with_suffix
+{
+    TestCaseAssertTrue([self createTable]);
+
+    TestCaseAssertTrue([[self.table indexWithSuffix:@"_index"] isEqualToString:[self.table.name stringByAppendingString:@"_index"]]);
+}
+
 #pragma mark - Database
 - (void)test_database_table_exists
 {
