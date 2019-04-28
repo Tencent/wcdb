@@ -27,7 +27,7 @@ then
 fi
 
 # build device
-if ! xcrun xcodebuild -project ${project} -scheme "${scheme}" -configuration ${configuration} -derivedDataPath ${pathToDerivedData} -sdk ${iphoneosSDK} ${parameters} build; then
+if ! xcrun xcodebuild -arch arm64 -project ${project} -scheme "${scheme}" -configuration ${configuration} -derivedDataPath ${pathToDerivedData} -sdk ${iphoneosSDK} ${parameters} build; then
     echo "Build Failed for Device."
     exit 1
 fi
