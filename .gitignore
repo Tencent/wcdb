@@ -18,3 +18,5 @@ xcuserdata/*
 *.xcworkspace/*
 *.xcworkspace
 DerivedData
+
+WeChat/conan/*
