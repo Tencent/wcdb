@@ -21,12 +21,12 @@
 #ifndef __WCDB_VERSION_H
 #define __WCDB_VERSION_H
 
-/* This file is generated automatically by `tools/version/bump.sh`. */
+/* This file is generated automatically by `WeChat//Users/ringo_d/Developer/gitcode/wcdb/tools/version/bump.sh`. */
 
 #define WCDB_IDENTIFIER "bfd56a1a2d98b0b21babd84fcf6db4ac"
 #define WCDB_VERSION "1.1.0"
-#define WCDB_COMMIT_HASH "b8bd6e32524bdd72667c11a726eb2dc37be07f5c"
-#define WCDB_BUILD_TIMESTAMP 1550631911
-#define WCDB_BUILD_TIME "2019-02-20 11:05:11 UTC+0800"
+#define WCDB_COMMIT_HASH "feeb13f72454b91a573c62276477ac9ea26d0408"
+#define WCDB_BUILD_TIMESTAMP 1556419486
+#define WCDB_BUILD_TIME "2019-04-28 10:44:46 UTC+0800"
 
 #endif /* __WCDB_VERSION_H */
