@@ -50,7 +50,7 @@ fi
 # push to conan
 pathToConan=${pathToWeChat}/conan
 pathToCommitID=${pathToConan}/WCDB_COMMIT_ID
-pathToPublishConanScript=${pathToWeChat}/publish_conan.sh
+pathToPublishConanScript=${pathToWeChat}/publish_to_conan.sh
 pathToFrameworkForConan=${pathToConan}/${framework}
 
 # remove cache
