@@ -500,4 +500,34 @@
     [self.dispatch waitUntilDone];
 }
 
+- (void)test_feature_sub_thread_checkpoint_for_attached
+{
+    TestCaseAssertTrue([self createTable]);
+    self.expectSQLsInAllThreads = YES;
+    self.expectMode = DatabaseTestCaseExpectSomeSQLs;
+    [self doTestSQLs:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
+         inOperation:^BOOL {
+             [NSThread sleepForTimeInterval:WCDB::CheckpointQueueDelayForNonCritical + self.delayForTolerance];
+             return YES;
+         }];
+
+    NSString* toAttachPath = [self.path stringByAppendingString:@"_to_attach"];
+    NSString* attachedName = @"test_attached";
+    WCTDatabase* toAttachDatabase = [[WCTDatabase alloc] initWithPath:toAttachPath];
+    TestCaseAssertTrue([toAttachDatabase execute:WCDB::StatementAttach().attach(self.path).as(attachedName)]);
+
+    // trigger subthread checkpoint for attached
+    TestCaseObject* object = [self.random autoIncrementTestCaseObject];
+
+    WCTInsert* insert = [[[toAttachDatabase prepareInsert] intoTable:self.tableName] value:object];
+    insert.statement.schema(attachedName);
+    TestCaseAssertTrue([insert execute]);
+
+    [self doTestSQLs:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
+         inOperation:^BOOL {
+             [NSThread sleepForTimeInterval:WCDB::CheckpointQueueDelayForNonCritical + self.delayForTolerance];
+             return YES;
+         }];
+}
+
 @end
