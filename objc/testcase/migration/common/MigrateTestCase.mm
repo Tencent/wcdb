@@ -288,12 +288,12 @@
     //    TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
     //
     //    BOOL succeed;
-    //    int lastWalFrameCount = [self getWalFrameCount];
+    //    int lastWalFrameCount = [self getNumberOfWalFrames];
     //    TestCaseAssertEqual(lastWalFrameCount, 0);
     //    do {
     //        succeed = [self.database stepMigration];
     //
-    //        int walFrameCount = [self getWalFrameCount];
+    //        int walFrameCount = [self getNumberOfWalFrames];
     //        // <=3: 1. sqlite_sequence 2. source table 3. table
     //        TestCaseAssertTrue(walFrameCount - lastWalFrameCount <= 3);
     //        lastWalFrameCount = walFrameCount;

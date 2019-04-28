@@ -30,11 +30,27 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WCTDatabase (TestCase)
 
+@property (nonatomic, readonly) NSString* walPath;
+@property (nonatomic, readonly) NSString* factoryPath;
+@property (nonatomic, readonly) NSString* firstMaterialPath;
+@property (nonatomic, readonly) NSString* lastMaterialPath;
+@property (nonatomic, readonly) NSString* journalPath;
+@property (nonatomic, readonly) NSString* shmPath;
+@property (nonatomic, readonly) NSString* factoryRestorePath;
+
+@property (nonatomic, readonly) int headerSize;
+@property (nonatomic, readonly) int pageSize;
+@property (nonatomic, readonly) int walHeaderSize;
+@property (nonatomic, readonly) int walFrameHeaderSize;
+@property (nonatomic, readonly) int walFrameSize;
+
 + (void)simulateIOError:(WCTSimulateIOErrorOptions)options;
 
 + (void)resetGlobalErrorTracer;
 
 - (void)removeCheckpointConfig;
+
+- (WCTOptionalSize)getNumberOfWalFrames;
 
 @end
 

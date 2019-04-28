@@ -161,7 +161,7 @@
 
     TestCaseObject* object = [self.random autoIncrementTestCaseObject];
 
-    while ([self getWalFrameCount] < WCDB::CheckpointQueueFramesThresholdForCritical) {
+    while ([self.database getNumberOfWalFrames] < WCDB::CheckpointQueueFramesThresholdForCritical) {
         TestCaseAssertTrue([self.table insertObject:object]);
     }
 
@@ -180,7 +180,7 @@
 
     TestCaseObject* object = [self.random autoIncrementTestCaseObject];
 
-    while ([self getWalFrameCount] < WCDB::CheckpointFramesThresholdForTruncating) {
+    while ([self.database getNumberOfWalFrames] < WCDB::CheckpointFramesThresholdForTruncating) {
         TestCaseAssertTrue([self.table insertObject:object]);
     }
 
@@ -200,7 +200,7 @@
     TestCaseObject* object = [self.random autoIncrementTestCaseObject];
 
     TestCaseAssertTrue([self.table insertObject:object]);
-    TestCaseAssertTrue([self getWalFrameCount] < WCDB::CheckpointQueueFramesThresholdForCritical)
+    TestCaseAssertTrue([self.database getNumberOfWalFrames] < WCDB::CheckpointQueueFramesThresholdForCritical)
 
     self.expectSQLsInAllThreads
     = YES;
@@ -246,16 +246,16 @@
 
     TestCaseObject* object = [self.random autoIncrementTestCaseObject];
 
-    while ([self getWalFrameCount] < WCDB::CheckpointFramesThresholdForTruncating) {
+    while ([self.database getNumberOfWalFrames] < WCDB::CheckpointFramesThresholdForTruncating) {
         TestCaseAssertTrue([self.table insertObject:object]);
     }
 
-    auto fileSizeBefore = [self.fileManager attributesOfItemAtPath:self.walPath error:nil].fileSize;
+    auto fileSizeBefore = [self.fileManager attributesOfItemAtPath:self.database.walPath error:nil].fileSize;
     TestCaseAssertTrue(fileSizeBefore > 0);
 
     [self.database close];
     [NSThread sleepForTimeInterval:WCDB::CheckpointQueueDelayForCritical + self.delayForTolerance];
-    auto fileSizeAfter = [self.fileManager attributesOfItemAtPath:self.walPath error:nil].fileSize;
+    auto fileSizeAfter = [self.fileManager attributesOfItemAtPath:self.database.walPath error:nil].fileSize;
     TestCaseAssertTrue(fileSizeAfter > 0);
 }
 

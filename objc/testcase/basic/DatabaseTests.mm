@@ -82,9 +82,9 @@
 {
     TestCaseAssertTrue([self.database canOpen]);
     TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion()).to(1)]);
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.walPath]);
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.walPath]);
     [self.database close];
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.walPath]);
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.walPath]);
 }
 
 - (void)test_blockade

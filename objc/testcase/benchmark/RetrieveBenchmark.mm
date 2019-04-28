@@ -67,7 +67,7 @@
     }
     checkCorrectness:^{
         TestCaseAssertTrue(result);
-        TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.firstMaterialPath]);
+        TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
     }];
 }
 

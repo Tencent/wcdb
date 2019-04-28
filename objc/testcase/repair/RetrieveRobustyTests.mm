@@ -146,7 +146,7 @@
             checkpointed = NO;
         }
     }
-    if (![self.fileManager fileExistsAtPath:self.walPath]) {
+    if (![self.fileManager fileExistsAtPath:self.database.walPath]) {
         TestCaseFailure();
         return NO;
     }
@@ -194,13 +194,13 @@
                 TestCaseFailure();
                 return;
             }
-            int pageCount = (int) (fileSize / self.pageSize);
+            int pageCount = (int) (fileSize / self.database.pageSize);
             totalPageCount += pageCount;
-            TestCaseAssertTrue(fileSize % self.pageSize == 0) for (int i = 0; i < pageCount; ++i)
+            TestCaseAssertTrue(fileSize % self.database.pageSize == 0) for (int i = 0; i < pageCount; ++i)
             {
                 if ([self shouldAttack]) {
-                    [fileHandle seekToFileOffset:i * self.pageSize];
-                    [fileHandle writeData:[self.random dataWithLength:self.pageSize]];
+                    [fileHandle seekToFileOffset:i * self.database.pageSize];
+                    [fileHandle writeData:[self.random dataWithLength:self.database.pageSize]];
                     ++totalAttackedCount;
                 }
             }
@@ -209,7 +209,7 @@
 
         {
             // wal
-            NSFileHandle* fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.walPath];
+            NSFileHandle* fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.database.walPath];
             if (fileHandle == nil) {
                 TestCaseFailure();
                 return;
@@ -219,13 +219,14 @@
                 TestCaseFailure();
                 return;
             }
-            int frameCount = (int) ((fileSize - self.walHeaderSize) / self.walFrameSize);
-            totalPageCount += frameCount;
-            TestCaseAssertTrue((fileSize - self.walHeaderSize) % self.walFrameSize == 0) for (int i = 0; i < frameCount; ++i)
-            {
+            WCTOptionalSize numberOfFrames = [self.database getNumberOfWalFrames];
+            TestCaseAssertFalse(numberOfFrames.failed());
+            totalPageCount += numberOfFrames.value();
+            TestCaseAssertTrue((fileSize - self.database.walHeaderSize) % self.database.walFrameSize == 0);
+            for (int i = 0; i < numberOfFrames; ++i) {
                 if ([self shouldAttack]) {
-                    [fileHandle seekToFileOffset:i * self.walFrameSize + self.walHeaderSize];
-                    [fileHandle writeData:[self.random dataWithLength:self.walFrameSize]];
+                    [fileHandle seekToFileOffset:i * self.database.walFrameSize + self.database.walHeaderSize];
+                    [fileHandle writeData:[self.random dataWithLength:self.database.walFrameSize]];
                     ++totalAttackedCount;
                 }
             }

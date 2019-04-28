@@ -34,16 +34,17 @@
     _dummyPaths = [self allDummyPaths:self.path];
 }
 
-- (NSArray<NSString*>*)allDummyPaths:(NSString*)database
+- (NSArray<NSString*>*)allDummyPaths:(NSString*)path
 {
+    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:path];
     return @[
-        database,
-        [database stringByAppendingString:@"-wal"],
-        [database stringByAppendingString:@"-first.material"],
-        [database stringByAppendingString:@"-last.material"],
-        [[[database stringByAppendingString:@".factory"] stringByAppendingPathComponent:@"restore"] stringByAppendingPathComponent:database.lastPathComponent],
-        [database stringByAppendingString:@"-journal"],
-        [database stringByAppendingString:@"-shm"],
+        path,
+        database.walPath,
+        database.firstMaterialPath,
+        database.lastMaterialPath,
+        [database.factoryRestorePath stringByAppendingPathComponent:path.lastPathComponent],
+        database.journalPath,
+        database.shmPath,
     ];
 }
 
@@ -76,7 +77,7 @@
 
 - (BOOL)allFilesExists
 {
-    return [self allFilesExists:self.paths];
+    return [self allFilesExists:self.database.paths];
 }
 
 - (BOOL)allFilesExists:(NSArray<NSString*>*)paths
@@ -92,7 +93,7 @@
 
 - (BOOL)noneFilesExists
 {
-    return [self noneFilesExists:self.paths];
+    return [self noneFilesExists:self.database.paths];
 }
 
 - (BOOL)noneFilesExists:(NSArray<NSString*>*)paths
@@ -104,11 +105,6 @@
         }
     }
     return YES;
-}
-
-- (void)test_paths
-{
-    TestCaseAssertTrue([self.paths isEqualToArray:self.database.paths]);
 }
 
 - (void)test_remove_files

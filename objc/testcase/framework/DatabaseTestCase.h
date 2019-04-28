@@ -32,22 +32,9 @@ typedef NS_ENUM(NSUInteger, DatabaseTestCaseExpect) {
 
 #pragma mark - Path
 @property (nonatomic, retain) NSString* path;
-@property (nonatomic, readonly) NSString* walPath;
-@property (nonatomic, readonly) NSString* factoryPath;
-@property (nonatomic, readonly) NSString* firstMaterialPath;
-@property (nonatomic, readonly) NSString* lastMaterialPath;
-@property (nonatomic, readonly) NSArray<NSString*>* paths;
 
 #pragma mark - Database
 @property (readonly, nonatomic) WCTDatabase* database;
-
-#pragma mark - File
-@property (nonatomic, readonly) int headerSize;
-@property (nonatomic, readonly) int pageSize;
-@property (nonatomic, readonly) int walHeaderSize;
-@property (nonatomic, readonly) int walFrameHeaderSize;
-@property (nonatomic, readonly) int walFrameSize;
-- (int)getWalFrameCount;
 
 #pragma mark - Factory
 @property (nonatomic, readonly) ReusableFactory* factory;

@@ -55,6 +55,66 @@ static std::nullptr_t initialize()
 
 @implementation WCTDatabase (TestCase)
 
+- (NSString *)walPath
+{
+    return [self.path stringByAppendingString:@"-wal"];
+}
+
+- (NSString *)firstMaterialPath
+{
+    return [self.path stringByAppendingString:@"-first.material"];
+}
+
+- (NSString *)lastMaterialPath
+{
+    return [self.path stringByAppendingString:@"-last.material"];
+}
+
+- (NSString *)factoryPath
+{
+    return [self.path stringByAppendingString:@".factory"];
+}
+
+- (NSString *)journalPath
+{
+    return [self.path stringByAppendingString:@"-journal"];
+}
+
+- (NSString *)shmPath
+{
+    return [self.path stringByAppendingString:@"-shm"];
+}
+
+- (NSString *)factoryRestorePath
+{
+    return [self.factoryPath stringByAppendingPathComponent:@"restore"];
+}
+
+- (int)headerSize
+{
+    return 100;
+}
+
+- (int)pageSize
+{
+    return 4096;
+}
+
+- (int)walHeaderSize
+{
+    return 32;
+}
+
+- (int)walFrameHeaderSize
+{
+    return 24;
+}
+
+- (int)walFrameSize
+{
+    return self.walFrameHeaderSize + self.pageSize;
+}
+
 + (void)resetGlobalErrorTracer
 {
     WCDB::Console::shared()->setLogger(WCDB::Console::logger);
@@ -71,6 +131,18 @@ static std::nullptr_t initialize()
 - (void)removeCheckpointConfig
 {
     [self removeConfigForName:@(WCDB::CheckpointConfigName)];
+}
+
+- (WCTOptionalSize)getNumberOfWalFrames
+{
+    WCTOptionalSize size = nullptr;
+    NSError *error;
+    NSNumber *nsSize = [[NSFileManager defaultManager] attributesOfItemAtPath:self.walPath error:&error][NSFileSize];
+    if (nsSize != nil && error == nil) {
+        int numberOfFrames = (int) ((nsSize.integerValue - self.walHeaderSize) / (self.walFrameHeaderSize + self.pageSize));
+        size = numberOfFrames > 0 ? numberOfFrames : 0;
+    }
+    return size;
 }
 
 @end

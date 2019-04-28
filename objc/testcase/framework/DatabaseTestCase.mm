@@ -27,18 +27,8 @@
 #import <TestCase/TestCaseResult.h>
 
 @implementation DatabaseTestCase {
-    int _headerSize;
-    int _walHeaderSize;
-    int _walFrameHeaderSize;
-    int _pageSize;
-    int _walFrameSize;
     WCTDatabase* _database;
     NSString* _path;
-    NSString* _walPath;
-    NSString* _factoryPath;
-    NSString* _firstMaterialPath;
-    NSString* _lastMaterialPath;
-    NSArray<NSString*>* _paths;
     ReusableFactory* _factory;
 }
 
@@ -61,11 +51,6 @@
 - (void)setPath:(NSString*)path
 {
     _path = path;
-    _walPath = nil;
-    _factoryPath = nil;
-    _firstMaterialPath = nil;
-    _lastMaterialPath = nil;
-    _paths = nil;
     _database = nil;
 }
 
@@ -79,64 +64,6 @@
     }
 }
 
-- (NSString*)walPath
-{
-    @synchronized(self) {
-        if (_walPath == nil) {
-            _walPath = [self.path stringByAppendingString:@"-wal"];
-        }
-        return _walPath;
-    }
-}
-
-- (NSString*)firstMaterialPath
-{
-    @synchronized(self) {
-        if (_firstMaterialPath == nil) {
-            _firstMaterialPath = [self.path stringByAppendingString:@"-first.material"];
-        }
-        return _firstMaterialPath;
-    }
-}
-
-- (NSString*)lastMaterialPath
-{
-    @synchronized(self) {
-        if (_lastMaterialPath == nil) {
-            _lastMaterialPath = [self.path stringByAppendingString:@"-last.material"];
-        }
-        return _lastMaterialPath;
-    }
-}
-
-- (NSString*)factoryPath
-{
-    @synchronized(self) {
-        if (_factoryPath == nil) {
-            _factoryPath = [self.path stringByAppendingString:@".factory"];
-        }
-        return _factoryPath;
-    }
-}
-
-- (NSArray<NSString*>*)paths
-{
-    @synchronized(self) {
-        if (_paths == nil) {
-            _paths = @[
-                self.path,
-                self.walPath,
-                self.firstMaterialPath,
-                self.lastMaterialPath,
-                self.factoryPath,
-                [self.path stringByAppendingString:@"-journal"],
-                [self.path stringByAppendingString:@"-shm"],
-            ];
-        }
-        return _paths;
-    }
-}
-
 #pragma mark - Database
 - (WCTDatabase*)database
 {
@@ -147,41 +74,6 @@
         }
         return _database;
     }
-}
-
-#pragma mark - File
-- (int)headerSize
-{
-    return 100;
-}
-
-- (int)pageSize
-{
-    return 4096;
-}
-
-- (int)walHeaderSize
-{
-    return 32;
-}
-
-- (int)walFrameHeaderSize
-{
-    return 24;
-}
-
-- (int)walFrameSize
-{
-    return self.walFrameHeaderSize + self.pageSize;
-}
-
-- (int)getWalFrameCount
-{
-    NSInteger walSize = (NSInteger) [[NSFileManager defaultManager] getFileSizeIfExists:self.walPath];
-    if (walSize < self.walHeaderSize) {
-        return 0;
-    }
-    return (int) ((walSize - self.walHeaderSize) / (self.walFrameHeaderSize + self.pageSize));
 }
 
 #pragma mark - Factory
@@ -219,13 +111,14 @@
 
 - (NSArray<NSString*>*)additionalPrototypes:(NSString*)prototype
 {
+    WCTDatabase* database = [[WCTDatabase alloc] initWithPath:prototype];
     return @[
-        [prototype stringByAppendingString:@"-wal"],
-        [prototype stringByAppendingString:@"-first.material"],
-        [prototype stringByAppendingString:@"-last.material"],
-        [prototype stringByAppendingString:@"-factory"],
-        [prototype stringByAppendingString:@"-journal"],
-        [prototype stringByAppendingString:@"-shm"],
+        database.walPath,
+        database.firstMaterialPath,
+        database.lastMaterialPath,
+        database.factoryPath,
+        database.journalPath,
+        database.shmPath,
     ];
 }
 
@@ -337,8 +230,8 @@
             TestCaseFailure();
             return;
         }
-        NSMutableData* blank = [NSMutableData dataWithLength:self.headerSize];
-        memset(blank.mutableBytes, 0, self.headerSize);
+        NSMutableData* blank = [NSMutableData dataWithLength:self.database.headerSize];
+        memset(blank.mutableBytes, 0, self.database.headerSize);
         [fileHandle writeData:blank];
         [fileHandle closeFile];
         result = YES;
