@@ -3,8 +3,9 @@ root=`git rev-parse --show-toplevel`
 
 branch="WeChat/iOS"
 githubBranch="pre_v1.1.0"
-git checkout ${branch}
+git checkout ${githubBranch}
 git pull --rebase github ${githubBranch}:${githubBranch}
+git checkout ${branch}
 git merge ${githubBranch}
 
 sh ${root}/tools/version/bump.sh
