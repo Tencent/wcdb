@@ -126,6 +126,8 @@
     while (tested.isNO) {
     }
 
+    TestCaseAssertFalse([self.database isOpened]);
+
     // sleep for other tests
     [NSThread sleepForTimeInterval:WCDB::ObservationQueueTimeIntervalForPurgingAgain];
 }
@@ -146,15 +148,19 @@
     while (tested.isNO) {
     }
     [tested makeNO];
+    TestCaseAssertFalse([self.database isOpened]);
 
+    TestCaseAssertTrue([self.database canOpen]);
     [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidReceiveMemoryWarningNotification object:nil];
     [NSThread sleepForTimeInterval:2];
     TestCaseAssertResultNO(tested);
+    TestCaseAssertTrue([self.database isOpened]);
 
     [NSThread sleepForTimeInterval:WCDB::ObservationQueueTimeIntervalForPurgingAgain];
     [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidReceiveMemoryWarningNotification object:nil];
     while (tested.isNO) {
     }
+    TestCaseAssertFalse([self.database isOpened]);
 
     // sleep for other tests
     [NSThread sleepForTimeInterval:WCDB::ObservationQueueTimeIntervalForPurgingAgain];
