@@ -91,7 +91,8 @@ DatabasePool::get(const std::map<String, ReferencedDatabase>::iterator &iter)
 
 void DatabasePool::flowBack(Database *database)
 {
-    LockGuard lockGuard(m_lock);
+    // shared lock is enough.
+    SharedLockGuard lockGuard(m_lock);
     const auto &iter = m_databases.find(database->getPath());
     WCTInnerAssert(iter != m_databases.end());
     WCTInnerAssert(iter->second.database.get() == database);
