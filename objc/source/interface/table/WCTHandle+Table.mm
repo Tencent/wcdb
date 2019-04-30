@@ -109,8 +109,7 @@
                 }
             }
             for (const auto &columnName : columnNames) {
-                WCDB::Error error(WCDB::Error::Code::Mismatch, WCDB::Error::Level::Notice);
-                error.message = "Skip column";
+                WCDB::Error error(WCDB::Error::Code::Mismatch, WCDB::Error::Level::Notice, "Skip column");
                 error.infos.set("Table", tableName);
                 error.infos.set("Column", columnName);
                 error.infos.set(WCDB::ErrorStringKeyPath, handle->getPath());

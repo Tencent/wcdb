@@ -107,8 +107,7 @@ void Console::print(const String& message)
 #ifdef DEBUG
 void Console::fatal(const String& message, const char* file, int line)
 {
-    Error error(Error::Code::Misuse, Error::Level::Fatal);
-    error.message = message;
+    Error error(Error::Code::Misuse, Error::Level::Fatal, message);
     error.infos.set(ErrorStringKeySource, ErrorSourceAssertion);
     if (file) {
         error.infos.set("File", file);

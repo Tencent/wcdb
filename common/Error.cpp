@@ -26,6 +26,7 @@
 
 namespace WCDB {
 
+// Code
 static_assert((int) Error::Code::OK == SQLITE_OK, "");
 static_assert((int) Error::Code::Error == SQLITE_ERROR, "");
 static_assert((int) Error::Code::Internal == SQLITE_INTERNAL, "");
@@ -133,8 +134,9 @@ Error::Error() : level(Level::Ignore), m_code(Code::OK)
 {
 }
 
-Error::Error(Code code, Level level_) : m_code(code), level(level_)
+Error::Error(Code code, Level level_, const String &message) : level(level_)
 {
+    setCode(code, message);
 }
 
 //void Error::clear()
@@ -161,12 +163,17 @@ int Error::c2rc(Error::Code code)
     return (int) code;
 }
 
-void Error::setCode(Code code)
+void Error::setCode(Code code, const String &message)
 {
     m_code = code;
+    if (message.empty()) {
+        m_message = codeName(code);
+    } else {
+        m_message = message;
+    }
 }
 
-void Error::setSystemCode(int systemCode, Code codeIfUnresolved)
+void Error::setSystemCode(int systemCode, Code codeIfUnresolved, const String &message)
 {
     Code code;
     switch (systemCode) {
@@ -195,23 +202,19 @@ void Error::setSystemCode(int systemCode, Code codeIfUnresolved)
         code = codeIfUnresolved;
         break;
     }
-    const char *errorMessage = strerror(systemCode);
-    if (errorMessage != nullptr) {
-        message = errorMessage;
-    }
-    setCode(code);
+    setCode(code, message.empty() ? strerror(systemCode) : message);
     infos.set(ErrorStringKeySource, ErrorSourceSystem);
     infos.set(ErrorIntKeyExtCode, systemCode);
 }
 
-void Error::setSQLiteCode(int code, int extendedCode)
+void Error::setSQLiteCode(int rc, const String &message)
 {
-    int realCode = code & 0xff;
-    setCode((Code) realCode);
-    if (realCode == extendedCode) {
+    Code code = rc2c(rc);
+    setCode(code, message.empty() ? sqlite3_errstr(rc) : message);
+    if (c2rc(code) == rc) {
         infos.unset(ErrorIntKeyExtCode);
     } else {
-        infos.set(ErrorIntKeyExtCode, extendedCode);
+        infos.set(ErrorIntKeyExtCode, rc);
     }
     infos.set(ErrorStringKeySource, ErrorSourceSQLite);
 }
@@ -237,10 +240,20 @@ Error::ExtCode Error::rc2ec(int rc)
     return (Error::ExtCode) rc;
 }
 
+const String &Error::getMessage() const
+{
+    WCTInnerAssert(!m_message.empty());
+    return m_message;
+}
+
 #pragma mark - Info
 void Error::Infos::set(const String &key, const String &value)
 {
-    m_strings[key] = value;
+    if (value.empty()) {
+        m_strings.erase(key);
+    } else {
+        m_strings[key] = value;
+    }
 }
 
 void Error::Infos::unset(const String &key)
@@ -280,14 +293,9 @@ bool Error::Infos::empty() const
 #pragma mark - Description
 String Error::getDescription() const
 {
-    std::ostringstream stream;
-    stream << "[" << levelName(level) << ": " << (int) code() << ", ";
-    if (!message.empty()) {
-        stream << message;
-    } else {
-        stream << codeName(code());
-    }
-    stream << "]";
+    WCTInnerAssert(isError((int) code()));
+    WCTInnerAssert(!m_message.empty()) std::ostringstream stream;
+    stream << "[" << levelName(level) << ": " << (int) code() << ", " << m_message << "]";
 
     for (const auto &info : infos.getIntegers()) {
         stream << ", " << info.first << ": " << info.second;

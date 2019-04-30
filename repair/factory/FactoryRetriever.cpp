@@ -188,10 +188,9 @@ bool FactoryRetriever::restore(const String &database)
             mechanic.getScore(), database, after.timeIntervalSinceSteadyClock(before), materialTime);
         }
     } else {
-        Error warning(Error::Code::NotFound, Error::Level::Warning);
+        Error warning(Error::Code::NotFound, Error::Level::Warning, "Material is not found");
         warning.infos.set(ErrorStringKeySource, ErrorSourceRepair);
         warning.infos.set(ErrorStringKeyPath, database);
-        warning.message = "Material is not found";
         Notifier::shared()->notify(warning);
     }
 
@@ -227,8 +226,7 @@ void FactoryRetriever::reportMechanic(const Fraction &score,
                                       double cost,
                                       const Time &material)
 {
-    Error error(Error::Code::Notice, Error::Level::Notice);
-    error.message = "Mechanic Retrieve Report.";
+    Error error(Error::Code::Notice, Error::Level::Notice, "Mechanic Retrieve Report.");
     error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.set(ErrorStringKeyPath, path);
     error.infos.set("Score", score.value());
@@ -240,8 +238,7 @@ void FactoryRetriever::reportMechanic(const Fraction &score,
 
 void FactoryRetriever::reportFullCrawler(const Fraction &score, const String &path, double cost)
 {
-    Error error(Error::Code::Notice, Error::Level::Notice);
-    error.message = "Crawler Retrieve Report.";
+    Error error(Error::Code::Notice, Error::Level::Notice, "Crawler Retrieve Report.");
     error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.set(ErrorStringKeyPath, path);
     error.infos.set("Score", score.value());
@@ -252,8 +249,7 @@ void FactoryRetriever::reportFullCrawler(const Fraction &score, const String &pa
 
 void FactoryRetriever::reportSummary(double cost)
 {
-    Error error(Error::Code::Notice, Error::Level::Notice);
-    error.message = "Summary Retrieve Report.";
+    Error error(Error::Code::Notice, Error::Level::Notice, "Summary Retrieve Report.");
     error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.set(ErrorStringKeyPath, database);
     error.infos.set("Cost", String::formatted("%.2f%%", cost));

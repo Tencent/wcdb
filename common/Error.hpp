@@ -29,6 +29,15 @@
 namespace WCDB {
 
 class Error final {
+#pragma mark - Initialize
+public:
+    enum class Level;
+    enum class Code;
+    Error();
+    Error(Code code, Level level, const String &message = String::null());
+
+    //    void clear();
+
 #pragma mark - Level
 public:
     enum class Level : int {
@@ -168,9 +177,11 @@ public:
     bool isOK() const;
     bool isCorruption() const;
 
-    void setSystemCode(int systemCode, Code codeIfUnresolved);
-    void setSQLiteCode(int code, int extendedCode);
-    void setCode(Code code);
+    void setSystemCode(int systemCode,
+                       Code codeIfUnresolved,
+                       const String &message = String::null());
+    void setSQLiteCode(int code, const String &message = String::null());
+    void setCode(Code code, const String &message = String::null());
 
 protected:
     Code m_code;
@@ -249,17 +260,15 @@ public:
 
     static ExtCode rc2ec(int rc);
 
-#pragma mark - Initialize
+#pragma mark - Message
 public:
-    Error();
-    Error(Code code, Level level);
+    const String &getMessage() const;
 
-    //    void clear();
+protected:
+    String m_message;
 
 #pragma mark - Info
 public:
-    String message;
-
     class Infos final {
     public:
 #if __cplusplus > 201402L

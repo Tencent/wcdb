@@ -85,8 +85,7 @@ bool Backup::work()
         succeed = m_masterCrawler.work(this);
     } while (false);
     if (!succeed) {
-        Error error(Error::Code::Notice, Error::Level::Notice);
-        error.message = "Backup failed hint.";
+        Error error(Error::Code::Notice, Error::Level::Notice, "Backup failed hint.");
         error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
         Notifier::shared()->notify(error);
         if (Console::debuggable()) {

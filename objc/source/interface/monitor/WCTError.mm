@@ -65,9 +65,7 @@ NSErrorUserInfoKey const WCTErrorKeySource = @WCDB_ERROR_STRING_KEY_SOURCE;
     for (const auto &info : error.infos.getDoubles()) {
         [userInfo setObject:[NSNumber numberWithDouble:info.second] forKey:[NSString stringWithUTF8String:info.first.c_str()]];
     }
-
-    NSString *message = [NSString stringWithUTF8String:error.message.c_str()];
-    return [self initWithCode:(WCTErrorCode) error.code() level:(WCTErrorLevel) error.level message:message userInfo:userInfo];
+    return [self initWithCode:(WCTErrorCode) error.code() level:(WCTErrorLevel) error.level message:[NSString stringWithUTF8String:error.getMessage().c_str()] userInfo:userInfo];
 }
 
 - (BOOL)isOK
@@ -100,22 +98,15 @@ NSErrorUserInfoKey const WCTErrorKeySource = @WCDB_ERROR_STRING_KEY_SOURCE;
 
 - (NSString *)description
 {
-    if (self.code == WCTErrorCodeOK) {
-        return nil;
-    }
-    NSMutableString *description = [[NSMutableString alloc] initWithFormat:@"[%s: %ld, ", WCDB::Error::levelName((WCDB::Error::Level) self.level), (long) self.code];
-    if (self.message.length > 0) {
-        [description appendFormat:@"%@", self.message];
-    } else {
-        [description appendFormat:@"%s", WCDB::Error::codeName((WCDB::Error::Code) self.code)];
-    }
-    [description appendString:@"]"];
-    [self.userInfo enumerateKeysAndObjectsUsingBlock:^(NSErrorUserInfoKey key, id obj, BOOL *) {
-        if (![obj isKindOfClass:NSString.class]
-            || ((NSString *) obj).length > 0) {
+    NSMutableString *description = nil;
+    if (self.code != WCTErrorCodeOK
+        && self.code != WCTErrorCodeRow
+        && self.code != WCTErrorCodeDone) {
+        description = [[NSMutableString alloc] initWithFormat:@"[%s: %ld, %@]", WCDB::Error::levelName((WCDB::Error::Level) self.level), (long) self.code, self.message];
+        [self.userInfo enumerateKeysAndObjectsUsingBlock:^(NSErrorUserInfoKey key, id obj, BOOL *) {
             [description appendFormat:@", %@: %@", key, obj];
-        }
-    }];
+        }];
+    }
     return description;
 }
 

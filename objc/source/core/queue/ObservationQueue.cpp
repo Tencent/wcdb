@@ -78,13 +78,14 @@ bool ObservationQueue::onTimed(const String& parameter1, const uint32_t& paramet
         // do purge
         m_event->observatedThatNeedPurged();
 
-        Error error(Error::Code::Warning, Error::Level::Warning);
+        String message;
         if (parameter2 > 0) {
-            error.message = String::formatted(
+            message = String::formatted(
             "Purge due to too many file descriptors with %u.", parameter2);
         } else {
-            error.message = "Purge due to memory warning.";
+            message = "Purge due to memory warning.";
         }
+        Error error(Error::Code::Warning, Error::Level::Warning, message);
         Notifier::shared()->notify(error);
 
         LockGuard lockGuard(m_lock);

@@ -94,7 +94,7 @@ public:
 
 protected:
     void markAsCorrupted(int frame, const String &message);
-    void markAsError(Error::Code code);
+    //    void markAsError(Error::Code code);
 
 #pragma mark - Dispose
 public:

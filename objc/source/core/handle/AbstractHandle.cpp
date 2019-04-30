@@ -118,11 +118,15 @@ String AbstractHandle::getJournalSuffix()
 bool AbstractHandle::open()
 {
     WCTInnerAssert(!isOpened());
-    bool result = exitAPI(sqlite3_open(m_path.c_str(), &m_handle));
-    if (!result) {
+    if (exitAPI(sqlite3_open(m_path.c_str(), &m_handle))) {
+        if (exitAPI(sqlite3_extended_result_codes(m_handle, 1))) {
+            return true;
+        }
+        close();
+    } else {
         m_handle = nullptr;
     }
-    return result;
+    return false;
 }
 
 bool AbstractHandle::isOpened() const
@@ -515,13 +519,11 @@ bool AbstractHandle::exitAPI(int rc, const char *sql)
 void AbstractHandle::notifyError(int rc, const char *sql)
 {
     WCTInnerAssert(Error::isError(rc));
-    if (rc != SQLITE_MISUSE) {
-        m_error.setSQLiteCode(rc, getExtendedErrorCode());
-        m_error.message = getErrorMessage();
+    if (Error::rc2c(rc) != Error::Code::Misuse) {
+        m_error.setSQLiteCode(rc, getErrorMessage());
     } else {
         // extended error code/message will not be set in some case for misuse error
-        m_error.setSQLiteCode(rc, rc);
-        m_error.message = sqlite3_errstr(rc);
+        m_error.setSQLiteCode(rc);
     }
     if (std::find(m_ignorableCodes.begin(), m_ignorableCodes.end(), rc)
         == m_ignorableCodes.end()) {
@@ -529,11 +531,7 @@ void AbstractHandle::notifyError(int rc, const char *sql)
     } else {
         m_error.level = Error::Level::Ignore;
     }
-    if (sql != nullptr) {
-        m_error.infos.set(ErrorStringKeySQL, sql);
-    } else {
-        m_error.infos.unset(ErrorStringKeySQL);
-    }
+    m_error.infos.set(ErrorStringKeySQL, sql);
     Notifier::shared()->notify(m_error);
 }
 
@@ -553,8 +551,7 @@ void AbstractHandle::tryNotifyError(int rc)
     if (Error::isError(rc)) {
         Error error;
         error.level = Error::Level::Fatal;
-        error.message = nullptr;
-        error.setSQLiteCode(rc, rc);
+        error.setSQLiteCode(rc);
         Notifier::shared()->notify(error);
     }
 }

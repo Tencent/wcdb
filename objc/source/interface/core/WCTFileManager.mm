@@ -65,13 +65,8 @@ bool FileManager::setFileProtection(const WCDB::String &path, WCDB::FileProtecti
                              error:&nsError]) {
         return true;
     }
-    WCDB::Error error(WCDB::Error::Code::IOError, WCDB::Error::Level::Error);
+    WCDB::Error error(WCDB::Error::Code::IOError, WCDB::Error::Level::Error, nsError.description);
     error.infos.set(WCDB::ErrorStringKeySource, WCDB::ErrorSourceNative);
-    if (nsError.description.length > 0) {
-        error.message = nsError.description;
-    } else {
-        error.message = WCDB::Error::codeName(WCDB::Error::Code::IOError);
-    }
     error.infos.set(WCDB::ErrorStringKeyPath, path);
     error.infos.set(WCDB::ErrorIntKeyExtCode, nsError.code);
     WCDB::Notifier::shared()->notify(error);
@@ -88,13 +83,8 @@ std::pair<bool, WCDB::FileProtection> FileManager::getFileProtection(const WCDB:
     if (attributes != nil) {
         return { true, fileProtectionForAttribute(attributes[NSFileProtectionKey]) };
     }
-    WCDB::Error error(WCDB::Error::Code::IOError, WCDB::Error::Level::Error);
+    WCDB::Error error(WCDB::Error::Code::IOError, WCDB::Error::Level::Error, nsError.description);
     error.infos.set(WCDB::ErrorStringKeySource, WCDB::ErrorSourceNative);
-    if (nsError.description.length > 0) {
-        error.message = nsError.description;
-    } else {
-        error.message = WCDB::Error::codeName(WCDB::Error::Code::IOError);
-    }
     error.infos.set(WCDB::ErrorStringKeyPath, path);
     error.infos.set(WCDB::ErrorIntKeyExtCode, nsError.code);
     WCDB::Notifier::shared()->notify(error);

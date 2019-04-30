@@ -56,8 +56,7 @@ bool FactoryRenewer::work()
         return false;
     }
     if (exists) {
-        Error error(Error::Code::Misuse, Error::Level::Warning);
-        error.message = "Database already exists when renewing.";
+        Error error(Error::Code::Misuse, Error::Level::Warning, "Database already exists when renewing.");
         error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
         error.infos.set(ErrorStringKeyPath, database);
         Notifier::shared()->notify(error);
@@ -185,8 +184,7 @@ bool FactoryRenewer::resolveInfosForDatabase(std::map<String, Info> &infos,
         return false;
     }
     if (materialPaths.empty()) {
-        Error error(Error::Code::NotFound, Error::Level::Warning);
-        error.message = "Material is not found when renewing.";
+        Error error(Error::Code::NotFound, Error::Level::Warning, "Material is not found when renewing.");
         error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
         error.infos.set(ErrorStringKeyPath, databaseForAcquisition);
         Notifier::shared()->notify(error);
@@ -208,8 +206,9 @@ bool FactoryRenewer::resolveInfosForDatabase(std::map<String, Info> &infos,
                 iter->second.sql = std::move(element.second.sql);
             } else {
                 if (iter->second.sql != element.second.sql) {
-                    Error error(Error::Code::Mismatch, Error::Level::Notice);
-                    error.message = "Different sqls is found in materials.";
+                    Error error(Error::Code::Mismatch,
+                                Error::Level::Notice,
+                                "Different sqls is found in materials.");
                     error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
                     error.infos.set(ErrorStringKeyPath, materialPath);
                     error.infos.set("SQL1", element.second.sql);
@@ -223,8 +222,7 @@ bool FactoryRenewer::resolveInfosForDatabase(std::map<String, Info> &infos,
         }
         return true;
     }
-    Error error(Error::Code::Notice, Error::Level::Notice);
-    error.message = "All materials are corrupted when renewing.";
+    Error error(Error::Code::Notice, Error::Level::Notice, "All materials are corrupted when renewing.");
     error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.set(ErrorStringKeyPath, databaseForAcquisition);
     Notifier::shared()->notify(error);

@@ -114,8 +114,7 @@ void Core::globalLog(void* parameter, int rc, const char* message)
         error.level = Error::Level::Debug;
     }
 
-    error.setSQLiteCode(rc, rc);
-    error.message = message;
+    error.setSQLiteCode(rc, message);
     Notifier::shared()->notify(error);
 }
 

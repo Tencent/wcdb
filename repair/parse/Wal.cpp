@@ -299,8 +299,7 @@ void Wal::hint() const
     if (!isInitialized()) {
         return;
     }
-    Error error(Error::Code::Notice, Error::Level::Notice);
-    error.message = "Wal hint.";
+    Error error(Error::Code::Notice, Error::Level::Notice, "Wal hint.");
     error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.set("Truncate", m_truncate);
     error.infos.set("MaxFrame", m_maxFrame);
@@ -315,8 +314,6 @@ void Wal::hint() const
 
     //Pages to frames
     if (!m_pages2Frames.empty()) {
-        Error error(Error::Code::Notice, Error::Level::Notice);
-        error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
         std::ostringstream stream;
         int i = 0;
         auto iter = m_pages2Frames.begin();
@@ -329,7 +326,10 @@ void Wal::hint() const
                 ++i;
                 ++iter;
             }
-            error.message = "Wal pages hint " + std::to_string(i / 20);
+            Error error(Error::Code::Notice,
+                        Error::Level::Notice,
+                        "Wal pages hint " + std::to_string(i / 20));
+            error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
             error.infos.set("Pages2Frames", stream.str());
             Notifier::shared()->notify(error);
             stream.str("");
@@ -340,8 +340,6 @@ void Wal::hint() const
 
     //Disposed
     if (!m_disposedPages.empty()) {
-        Error error(Error::Code::Notice, Error::Level::Notice);
-        error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
         std::ostringstream stream;
         int i = 0;
         auto iter = m_disposedPages.begin();
@@ -354,7 +352,10 @@ void Wal::hint() const
                 ++i;
                 ++iter;
             }
-            error.message = "Wal disposed hint " + std::to_string(i / 20);
+            Error error(Error::Code::Notice,
+                        Error::Level::Notice,
+                        "Wal disposed hint " + std::to_string(i / 20));
+            error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
             error.infos.set("Disposed", stream.str());
             Notifier::shared()->notify(error);
             stream.str("");
@@ -368,8 +369,7 @@ void Wal::hint() const
 
 void Wal::markAsCorrupted(int frame, const String &message)
 {
-    Error error(Error::Code::Corrupt, Error::Level::Ignore);
-    error.message = message;
+    Error error(Error::Code::Corrupt, Error::Level::Ignore, message);
     error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.set(ErrorStringKeyPath, getPath());
     error.infos.set("Frame", frame);
@@ -377,14 +377,14 @@ void Wal::markAsCorrupted(int frame, const String &message)
     setError(std::move(error));
 }
 
-void Wal::markAsError(Error::Code code)
-{
-    Error error(code, Error::Level::Ignore);
-    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.set(ErrorStringKeyPath, getPath());
-    Notifier::shared()->notify(error);
-    setError(std::move(error));
-}
+//void Wal::markAsError(Error::Code code)
+//{
+//    Error error(code, Error::Level::Ignore);
+//    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
+//    error.infos.set(ErrorStringKeyPath, getPath());
+//    Notifier::shared()->notify(error);
+//    setError(std::move(error));
+//}
 
 #pragma mark - Dispose
 int Wal::getDisposedPages() const

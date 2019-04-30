@@ -59,8 +59,7 @@ uint32_t Shm::getBackfill() const
 
 void Shm::markAsCorrupted(const String &message)
 {
-    Error error(Error::Code::Corrupt, Error::Level::Ignore);
-    error.message = message;
+    Error error(Error::Code::Corrupt, Error::Level::Ignore, message);
     error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.set(ErrorStringKeyPath, getPath());
     Notifier::shared()->notify(error);
@@ -120,8 +119,7 @@ void Shm::hint() const
     if (!isInitialized()) {
         return;
     }
-    Error error(Error::Code::Notice, Error::Level::Notice);
-    error.message = "Shm hint.";
+    Error error(Error::Code::Notice, Error::Level::Notice, "Shm hint.");
     error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.set("Backfill", m_checkpointInfo.backfill);
     error.infos.set("MaxFrame", m_header.maxFrame);

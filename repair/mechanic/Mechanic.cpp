@@ -68,8 +68,7 @@ bool Mechanic::work()
     if (m_pager.getNumberOfWalFrames() > 0) {
         if (m_pager.getWalSalt() != m_material->info.walSalt) {
             m_pager.disposeWal();
-            Error error(Error::Code::Notice, Error::Level::Notice);
-            error.message = "Dispose WAL of non-match salt.";
+            Error error(Error::Code::Notice, Error::Level::Notice, "Dispose WAL of non-match salt.");
             error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
             error.infos.set(ErrorStringKeyPath, m_pager.getPath());
             error.infos.set("WalSalt1", m_pager.getWalSalt().first);
