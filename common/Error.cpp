@@ -294,7 +294,8 @@ bool Error::Infos::empty() const
 String Error::getDescription() const
 {
     WCTInnerAssert(isError((int) code()));
-    WCTInnerAssert(!m_message.empty()) std::ostringstream stream;
+    WCTInnerAssert(!m_message.empty());
+    std::ostringstream stream;
     stream << "[" << levelName(level) << ": " << (int) code() << ", " << m_message << "]";
 
     for (const auto &info : infos.getIntegers()) {
