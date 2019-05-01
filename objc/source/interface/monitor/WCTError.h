@@ -22,6 +22,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+WCDB_EXTERN NSErrorDomain const WCTErrorDomain;
+
 WCDB_EXTERN NSErrorUserInfoKey const WCTErrorKeyPath;
 WCDB_EXTERN NSErrorUserInfoKey const WCTErrorKeySQL;
 WCDB_EXTERN NSErrorUserInfoKey const WCTErrorKeyTag;
@@ -146,11 +148,15 @@ typedef NS_ENUM(NSUInteger, WCTErrorExtendedCode) {
 - (instancetype)initWithCode:(WCTErrorCode)code
                        level:(WCTErrorLevel)level
                      message:(nonnull NSString *)message
-                    userInfo:(nullable NSDictionary<NSErrorUserInfoKey, id> *)userInfo;
+                    userInfo:(nullable NSDictionary<NSErrorUserInfoKey, id> *)userInfo NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)initWithDomain:(NSErrorDomain)domain code:(NSInteger)code userInfo:(nullable NSDictionary<NSErrorUserInfoKey, id> *)dict UNAVAILABLE_ATTRIBUTE;
+
++ (instancetype)errorWithDomain:(NSErrorDomain)domain code:(NSInteger)code userInfo:(nullable NSDictionary<NSErrorUserInfoKey, id> *)dict UNAVAILABLE_ATTRIBUTE;
 
 @property (nonatomic, readonly) WCTErrorLevel level;
 
-@property (nonatomic, readonly, nullable) NSString *message;
+@property (nonatomic, readonly) NSString *message;
 
 - (BOOL)isOK;
 

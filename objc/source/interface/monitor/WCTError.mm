@@ -25,6 +25,8 @@
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTError.h>
 
+NSErrorDomain const WCTErrorDomain = @"WCDB";
+
 NSErrorUserInfoKey const WCTErrorKeyPath = @WCDB_ERROR_STRING_KEY_PATH;
 NSErrorUserInfoKey const WCTErrorKeySQL = @WCDB_ERROR_STRING_KEY_SQL;
 NSErrorUserInfoKey const WCTErrorKeyTag = @WCDB_ERROR_INT_KEY_TAG;
@@ -33,19 +35,15 @@ NSErrorUserInfoKey const WCTErrorKeySource = @WCDB_ERROR_STRING_KEY_SOURCE;
 
 @implementation WCTError
 
-+ (NSErrorDomain)domain
-{
-    return @"WCDB";
-}
-
 - (instancetype)initWithCode:(WCTErrorCode)code
                        level:(WCTErrorLevel)level
                      message:(NSString *)message
                     userInfo:(NSDictionary<NSErrorUserInfoKey, id> *)userInfo
 {
-    if (self = [super initWithDomain:self.class.domain
+    if (self = [super initWithDomain:WCTErrorDomain
                                 code:(NSInteger) code
                             userInfo:userInfo]) {
+        WCTInnerAssert(message.length > 0);
         _message = message;
         _level = (WCTErrorLevel) level;
     }
