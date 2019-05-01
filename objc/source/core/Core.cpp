@@ -79,8 +79,7 @@ Core::~Core()
 int Core::fileOpen(const char* path, int flags, int mode)
 {
     int fd = open(path, flags, mode);
-Core:
-    shared()->observatedThatFileOpened(fd);
+    Core::shared()->observatedThatFileOpened(fd);
     if (fd != -1 && ((flags & O_CREAT) != 0)) {
         FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(path);
     }
