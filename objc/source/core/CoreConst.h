@@ -67,7 +67,7 @@ static constexpr const char* BasicConfigName = "com.Tencent.WCDB.Config.Basic";
 static constexpr const int BasicConfigBusyRetryMaxAllowedNumberOfTimes = 3;
 
 // Tokenize Config
-static constexpr const char* TokenizeConfigName = "com.Tencent.WCDB.Config.Tokenize";
+static constexpr const char* TokenizeConfigPrefix = "com.Tencent.WCDB.Config.Tokenize.";
 
 // Cipher Config
 static constexpr const char* CipherConfigName = "com.Tencent.WCDB.Config.Cipher";

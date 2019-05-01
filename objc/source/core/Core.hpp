@@ -72,8 +72,8 @@ protected:
 
 #pragma mark - Tokenizer
 public:
-    void addTokenizer(const String& name, const TokenizerModule& module);
-    std::shared_ptr<Config> tokenizerConfig(const std::list<String>& tokenizeNames);
+    void registerTokenizer(const String& name, const TokenizerModule& module);
+    std::shared_ptr<Config> tokenizerConfig(const String& tokenizeName);
 
 protected:
     TokenizerModules m_modules;

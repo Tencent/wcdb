@@ -24,35 +24,26 @@
 
 namespace WCDB {
 
-TokenizerConfig::TokenizerConfig(const std::map<String, TokenizerModule>& modules)
-: Config()
-, m_modules(modules)
-, m_fts3Tokenizer(StatementSelect().select(
-  Expression::function("fts3_tokenizer").invoke().arguments(BindParameter::bindParameters(2))))
+TokenizerConfig::TokenizerConfig(const String& name_, const TokenizerModule& module)
+: Config(), name(name_), m_module(module)
 {
 }
 
 bool TokenizerConfig::invoke(Handle* handle)
 {
-    bool succeed = true;
-    for (const auto& iter : m_modules) {
-        succeed = false;
-        bool exists;
-        std::tie(succeed, exists) = handle->ft3TokenizerExists(iter.first);
-        if (succeed && !exists) {
-            if (handle->prepare(m_fts3Tokenizer)) {
-                handle->bindText(iter.first.c_str(), 1);
-                sqlite3_tokenizer_module* module
-                = (sqlite3_tokenizer_module*) &iter.second;
-                UnsafeData address((unsigned char*) &module,
-                                   sizeof(sqlite3_tokenizer_module*));
-                handle->bindBLOB(address, 2);
-                succeed = handle->step();
-                handle->finalize();
-            }
-        }
-        if (!succeed) {
-            break;
+    bool succeed;
+    bool exists;
+    std::tie(succeed, exists) = handle->ft3TokenizerExists(name);
+    if (succeed && !exists) {
+        StatementSelect statement = StatementSelect().select(
+        Expression::function("fts3_tokenizer").invoke().arguments(BindParameter::bindParameters(2)));
+        if (handle->prepare(statement)) {
+            handle->bindText(name.c_str(), 1);
+            sqlite3_tokenizer_module* module = (sqlite3_tokenizer_module*) &m_module;
+            UnsafeData address((unsigned char*) &module, sizeof(sqlite3_tokenizer_module*));
+            handle->bindBLOB(address, 2);
+            succeed = handle->step();
+            handle->finalize();
         }
     }
     return succeed;

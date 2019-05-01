@@ -33,7 +33,7 @@ namespace WCDB {
 class TokenizerModules final {
 public:
     void add(const String& name, const TokenizerModule& module);
-    std::map<String, TokenizerModule> get(const std::list<String>& names) const;
+    std::pair<bool, TokenizerModule> get(const String& name) const;
 
 protected:
     std::map<String, TokenizerModule> m_modules;

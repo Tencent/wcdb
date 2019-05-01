@@ -163,14 +163,21 @@ void Core::preprocessError(Error& error)
 }
 
 #pragma mark - Tokenizer
-void Core::addTokenizer(const String& name, const TokenizerModule& module)
+void Core::registerTokenizer(const String& name, const TokenizerModule& module)
 {
     m_modules.add(name, module);
 }
 
-std::shared_ptr<Config> Core::tokenizerConfig(const std::list<String>& tokenizeNames)
+std::shared_ptr<Config> Core::tokenizerConfig(const String& tokenizeName)
 {
-    return std::shared_ptr<Config>(new TokenizerConfig(m_modules.get(tokenizeNames)));
+    std::shared_ptr<Config> config;
+    bool exists;
+    TokenizerModule module;
+    std::tie(exists, module) = m_modules.get(tokenizeName);
+    if (exists) {
+        config.reset(new TokenizerConfig(tokenizeName, module));
+    }
+    return config;
 }
 
 #pragma mark - Observation

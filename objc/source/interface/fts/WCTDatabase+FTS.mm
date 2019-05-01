@@ -34,28 +34,19 @@ NSString* const WCTModuleFTS5 = @"fts5";
 
 @implementation WCTDatabase (FTS)
 
-- (void)setTokenizer:(NSString*)tokenizerName
+- (void)addTokenizer:(NSString*)tokenizerName
 {
-    _database->setConfig(WCDB::TokenizeConfigName,
-                         WCDB::Core::shared()->tokenizerConfig({ tokenizerName }),
-                         WCDB::Configs::Priority::Higher);
+    WCTRemedialAssert(tokenizerName.length > 0, "Tokenizer name can't be nil.", return;);
+    std::shared_ptr<WCDB::Config> config = WCDB::Core::shared()->tokenizerConfig({ tokenizerName });
+    WCTRemedialAssert(config != nullptr, "Config doesn't exist.", return;);
+    WCDB::String configName = WCDB::String(WCDB::TokenizeConfigPrefix) + tokenizerName.UTF8String;
+    _database->setConfig(configName, config, WCDB::Configs::Priority::Higher);
 }
 
-- (void)setTokenizers:(NSArray<NSString*>*)tokenizerNames
++ (void)registerTokenizer:(const WCDB::TokenizerModule&)module named:(NSString*)name
 {
-    std::list<WCDB::String>
-    theTokenizeNames;
-    for (NSString* tokenizerName in tokenizerNames) {
-        theTokenizeNames.push_back(tokenizerName);
-    }
-    _database->setConfig(WCDB::TokenizeConfigName,
-                         WCDB::Core::shared()->tokenizerConfig(theTokenizeNames),
-                         WCDB::Configs::Priority::Higher);
-}
-
-+ (void)addTokenizer:(const WCDB::TokenizerModule&)module named:(NSString*)name
-{
-    WCDB::Core::shared()->addTokenizer(name, module);
+    WCTRemedialAssert(name.length > 0, "Module name can't be nil.", return;);
+    WCDB::Core::shared()->registerTokenizer(name, module);
 }
 
 @end

@@ -24,6 +24,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+WCDB_EXTERN NSString* const WCTModuleFTS3;
+WCDB_EXTERN NSString* const WCTModuleFTS5;
+
 WCDB_EXTERN NSString* const WCTTokenizerSimple;
 WCDB_EXTERN NSString* const WCTTokenizerPorter;
 WCDB_EXTERN NSString* const WCTTokenizerICU;
@@ -32,16 +35,11 @@ WCDB_EXTERN NSString* const WCTTokenizerUnicode61;
 WCDB_EXTERN NSString* const WCTTokenizerOneOrBinary;
 WCDB_EXTERN NSString* const WCTTokenizerLegacyOneOrBinary; // compatible for WCTTokenizerNameWCDB before v1.1.0
 
-WCDB_EXTERN NSString* const WCTModuleFTS3;
-WCDB_EXTERN NSString* const WCTModuleFTS5;
-
 @interface WCTDatabase (FTS)
 
-- (void)setTokenizer:(NSString*)tokenizerName;
+- (void)addTokenizer:(NSString*)tokenizerName;
 
-- (void)setTokenizers:(NSArray<NSString*>*)tokenizerNames;
-
-+ (void)addTokenizer:(const WCDB::TokenizerModule&)module named:(NSString*)name;
++ (void)registerTokenizer:(const WCDB::TokenizerModule&)module named:(NSString*)name;
 
 @end
 

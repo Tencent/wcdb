@@ -43,7 +43,8 @@ static std::nullptr_t initialize()
 {
     WCDB::Console::shared()->setPrinter(printer);
 
-    WCDB::Core::shared()->addTokenizer(WCTTokenizerOneOrBinary, WCDB::TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizerCursorInfo>::specialize());
+    WCDB::Core::shared()->registerTokenizer(WCTTokenizerOneOrBinary, WCDB::TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizerCursorInfo>::specialize());
+    WCDB::Core::shared()->registerTokenizer(WCTTokenizerLegacyOneOrBinary, WCDB::TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizerCursorInfo>::specialize());
 
     return nullptr;
 }

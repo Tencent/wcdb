@@ -32,19 +32,17 @@ void TokenizerModules::add(const String& name, const TokenizerModule& module)
     m_modules[name] = module;
 }
 
-std::map<String, TokenizerModule> TokenizerModules::get(const std::list<String>& names) const
+std::pair<bool, TokenizerModule> TokenizerModules::get(const String& name) const
 {
-    std::map<String, TokenizerModule> modules;
-    {
-        SharedLockGuard lockGuard(m_lock);
-        for (const auto& name : names) {
-            auto iter = m_modules.find(name);
-            if (iter != m_modules.end()) {
-                modules[iter->first] = iter->second;
-            }
-        }
+    SharedLockGuard lockGuard(m_lock);
+    bool exists = false;
+    TokenizerModule module;
+    auto iter = m_modules.find(name);
+    if (iter != m_modules.end()) {
+        exists = true;
+        module = iter->second;
     }
-    return modules;
+    return { exists, module };
 }
 
 } // namespace WCDB

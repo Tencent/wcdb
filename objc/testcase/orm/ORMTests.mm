@@ -237,7 +237,7 @@
 - (void)test_fts3
 {
     self.tableClass = FTS3Object.class;
-    [self.database setTokenizer:WCTTokenizerOneOrBinary];
+    [self.database addTokenizer:WCTTokenizerOneOrBinary];
     NSString* expected = @"CREATE VIRTUAL TABLE IF NOT EXISTS main.testTable USING fts3(tokenize = wcdb_one_or_binary, value INTEGER)";
     [self doTestCreateVirtualTableSQLAsExpected:expected];
 }

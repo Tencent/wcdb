@@ -31,12 +31,14 @@ class Modules;
 
 class TokenizerConfig final : public Config {
 public:
-    TokenizerConfig(const std::map<String, TokenizerModule>& modules);
+    TokenizerConfig(const String& name, const TokenizerModule& module);
+
+    const String name;
+
     bool invoke(Handle* handle) override final;
 
 protected:
-    const std::map<String, TokenizerModule> m_modules;
-    const StatementSelect m_fts3Tokenizer;
+    const TokenizerModule m_module;
 };
 
 } //namespace WCDB
