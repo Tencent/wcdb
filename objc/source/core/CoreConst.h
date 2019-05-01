@@ -59,8 +59,9 @@ static constexpr const int BackupConfigFramesIntervalForCritical = 300;
 static constexpr const double BackupQueueDelayForCritical = 0;
 static constexpr const double BackupQueueDelayForNonCritical = 5.0;
 
+// BackupConfigFramesIntervalForCritical should be greater than CheckpointQueueFramesThresholdForCritical since a checkpoint will trigger critical checkpoint too.
 static_assert(BackupConfigFramesIntervalForCritical > CheckpointQueueFramesThresholdForCritical,
-              "BackupConfigFramesIntervalForCritical should be greater than CheckpointQueueFramesThresholdForCritical since a checkpoint will trigger critical checkpoint too.");
+              "");
 
 // Basic Config
 static constexpr const char* BasicConfigName = "com.Tencent.WCDB.Config.Basic";
