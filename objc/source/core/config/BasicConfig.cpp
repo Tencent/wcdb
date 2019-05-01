@@ -64,11 +64,12 @@ bool BasicConfig::invoke(Handle* handle)
         return true;
     }
 
+    handle->enableExtendedResultCodes(true);
     handle->disableCheckpointWhenClosing(true);
 
     if (!getOrSetPragmaBegin(handle, m_getLockingMode)
         || !getOrSetPragmaEnd(
-        handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("NORMAL"))) {
+           handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("NORMAL"))) {
         return false;
     }
 
@@ -86,10 +87,10 @@ bool BasicConfig::invoke(Handle* handle)
         if (markBusyAsIgnored) {
             handle->markErrorAsIgnorable(Error::Code::Busy);
         }
-        succeed
-        = getOrSetPragmaBegin(handle, m_getJournalMode)
-          && getOrSetPragmaEnd(
-          handle, m_setJournalModeWAL, !handle->getText(0).isCaseInsensiveEqual("WAL"));
+        succeed = getOrSetPragmaBegin(handle, m_getJournalMode)
+                  && getOrSetPragmaEnd(handle,
+                                       m_setJournalModeWAL,
+                                       !handle->getText(0).isCaseInsensiveEqual("WAL"));
         if (markBusyAsIgnored) {
             handle->markErrorAsUnignorable();
         }

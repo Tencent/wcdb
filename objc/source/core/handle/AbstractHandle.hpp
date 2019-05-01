@@ -89,6 +89,7 @@ public:
     void interrupt(); // It's thread safe.
 
     void disableCheckpointWhenClosing(bool disable);
+    void enableExtendedResultCodes(bool enable);
 
 protected:
     bool executeSQL(const String &sql);

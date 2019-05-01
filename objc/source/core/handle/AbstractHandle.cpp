@@ -118,15 +118,11 @@ String AbstractHandle::getJournalSuffix()
 bool AbstractHandle::open()
 {
     WCTInnerAssert(!isOpened());
-    if (exitAPI(sqlite3_open(m_path.c_str(), &m_handle))) {
-        if (exitAPI(sqlite3_extended_result_codes(m_handle, 1))) {
-            return true;
-        }
-        close();
-    } else {
+    bool succeed = exitAPI(sqlite3_open(m_path.c_str(), &m_handle));
+    if (!succeed) {
         m_handle = nullptr;
     }
-    return false;
+    return succeed;
 }
 
 bool AbstractHandle::isOpened() const
@@ -217,6 +213,12 @@ int AbstractHandle::getNumberOfDirtyPages()
 {
     WCTInnerAssert(isOpened());
     return sqlite3_dirty_page_count(m_handle);
+}
+
+void AbstractHandle::enableExtendedResultCodes(bool enable)
+{
+    WCTInnerAssert(isOpened());
+    exitAPI(sqlite3_extended_result_codes(m_handle, (int) enable));
 }
 
 void AbstractHandle::disableCheckpointWhenClosing(bool disable)
