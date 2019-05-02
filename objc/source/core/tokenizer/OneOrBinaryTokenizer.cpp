@@ -214,7 +214,8 @@ int OneOrBinaryTokenizerCursorInfo::cursorSetup()
         }
         for (int i = m_cursor + 1; i < m_cursor + m_cursorTokenLength; ++i) {
             if (i < m_inputLength) {
-                unicode = (unicode << 6) | (m_input[i] & 0x3F);
+                WCTInnerAssert(((unicode << 6) >> 6) == unicode);
+                unicode = (UnicodeChar)(((int) unicode << 6) | (m_input[i] & 0x3F));
             } else {
                 m_cursorTokenType = TokenType::None;
                 m_cursorTokenLength = m_inputLength - i;
@@ -254,7 +255,7 @@ int OneOrBinaryTokenizerCursorInfo::lemmatization(const char *input, int inputLe
         m_buffer.resize(inputLength);
     }
     for (int i = 0; i < inputLength; ++i) {
-        m_buffer.data()[i] = tolower(input[i]);
+        m_buffer.data()[i] = (char) tolower(input[i]);
     }
     m_bufferLength = porterStem(m_buffer.data(), 0, m_bufferLength - 1) + 1;
     return Error::c2rc(Error::Code::OK);

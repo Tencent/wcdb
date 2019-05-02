@@ -281,8 +281,7 @@
     [self doTestObjects:@[ self.object2 ]
                 andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
-          WCTHandle* handle = [self.database getHandle];
-          return [handle runTransaction:^BOOL(WCTHandle* handle) {
+          return [[self.database getHandle] runTransaction:^BOOL(WCTHandle* handle) {
               return [handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1];
           }];
       }];
@@ -293,10 +292,9 @@
     [self doTestObjects:self.objects
                 andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"ROLLBACK" ]
       afterModification:^BOOL {
-          WCTHandle* handle = [self.database getHandle];
           __block BOOL unexpected = NO;
           __block BOOL tested = NO;
-          if ([handle runTransaction:^BOOL(WCTHandle* handle) {
+          if ([[self.database getHandle] runTransaction:^BOOL(WCTHandle* handle) {
                   tested = YES;
                   if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
                       TestCaseFailure();
@@ -316,13 +314,13 @@
     [self doTestObjects:self.objects
                 andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
-          WCTHandle* handle = [self.database getHandle];
           __block BOOL unexpected = NO;
           __block BOOL tested = NO;
           [WCTDatabase simulateIOError:WCTSimulateWriteIOError];
-          if ([handle runTransaction:^BOOL(WCTHandle* handle) {
+          WCTHandle* handle = [self.database getHandle];
+          if ([handle runTransaction:^BOOL(WCTHandle* transactionedHandle) {
                   tested = YES;
-                  if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
+                  if (![transactionedHandle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
                       TestCaseFailure();
                       unexpected = YES;
                   }
@@ -401,8 +399,7 @@
     [self doTestObjects:@[ self.object2 ]
                 andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
-          WCTHandle* handle = [self.database getHandle];
-          return [handle runNestedTransaction:^BOOL(WCTHandle* handle) {
+          return [[self.database getHandle] runNestedTransaction:^BOOL(WCTHandle* handle) {
               return [handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1];
           }];
       }];
@@ -413,9 +410,8 @@
     [self doTestObjects:self.objects
                 andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"ROLLBACK" ]
       afterModification:^BOOL {
-          WCTHandle* handle = [self.database getHandle];
           __block BOOL unexpected = NO;
-          if ([handle runNestedTransaction:^BOOL(WCTHandle* handle) {
+          if ([[self.database getHandle] runNestedTransaction:^BOOL(WCTHandle* handle) {
                   if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
                       TestCaseFailure();
                       unexpected = YES;
@@ -434,11 +430,11 @@
     [self doTestObjects:self.objects
                 andSQLs:@[ @"BEGIN IMMEDIATE", @"DELETE FROM main.testTable WHERE identifier == 1", @"COMMIT" ]
       afterModification:^BOOL {
-          WCTHandle* handle = [self.database getHandle];
           __block BOOL unexpected = NO;
           [WCTDatabase simulateIOError:WCTSimulateWriteIOError];
-          if ([handle runNestedTransaction:^BOOL(WCTHandle* handle) {
-                  if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
+          WCTHandle* handle = [self.database getHandle];
+          if ([handle runNestedTransaction:^BOOL(WCTHandle* transactionedHandle) {
+                  if (![transactionedHandle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
                       TestCaseFailure();
                       unexpected = YES;
                   }
@@ -539,8 +535,8 @@
       afterModification:^BOOL {
           return [self.database runTransaction:^BOOL(WCTHandle* handle) {
               return [handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]
-                     && [handle runNestedTransaction:^BOOL(WCTHandle* handle) {
-                            return [handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 2];
+                     && [handle runNestedTransaction:^BOOL(WCTHandle* nestedHandle) {
+                            return [nestedHandle deleteFromTable:self.tableName where:TestCaseObject.identifier == 2];
                         }]; // commit, commit nested
           }];
       }];
@@ -557,9 +553,9 @@
                   if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 1]) {
                       unexpected = YES;
                   }
-                  if ([handle runNestedTransaction:^BOOL(WCTHandle* handle) {
+                  if ([handle runNestedTransaction:^BOOL(WCTHandle* nestedHandle) {
                           tested = YES;
-                          if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 2]) {
+                          if (![nestedHandle deleteFromTable:self.tableName where:TestCaseObject.identifier == 2]) {
                               TestCaseFailure();
                               unexpected = YES;
                           }
@@ -589,9 +585,9 @@
                       TestCaseFailure();
                       unexpected = YES;
                   }
-                  if (![handle runNestedTransaction:^BOOL(WCTHandle* handle) {
+                  if (![handle runNestedTransaction:^BOOL(WCTHandle* nestedHandle) {
                           tested = YES;
-                          return [handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 2]; // commit nested
+                          return [nestedHandle deleteFromTable:self.tableName where:TestCaseObject.identifier == 2]; // commit nested
                       }]) {
                       TestCaseFailure();
                       unexpected = YES;
@@ -617,9 +613,9 @@
                       TestCaseFailure();
                       unexpected = YES;
                   }
-                  if ([handle runNestedTransaction:^BOOL(WCTHandle* handle) {
+                  if ([handle runNestedTransaction:^BOOL(WCTHandle* nestedHandle) {
                           tested = YES;
-                          if (![handle deleteFromTable:self.tableName where:TestCaseObject.identifier == 2]) {
+                          if (![nestedHandle deleteFromTable:self.tableName where:TestCaseObject.identifier == 2]) {
                               TestCaseFailure();
                               unexpected = YES;
                           }

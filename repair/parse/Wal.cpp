@@ -299,18 +299,20 @@ void Wal::hint() const
     if (!isInitialized()) {
         return;
     }
-    Error error(Error::Code::Notice, Error::Level::Notice, "Wal hint.");
-    error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-    error.infos.set("Truncate", m_truncate);
-    error.infos.set("MaxFrame", m_maxFrame);
-    error.infos.set("OriginFileSize", m_fileSize);
-    bool succeed;
-    size_t fileSize;
-    std::tie(succeed, fileSize) = FileManager::getFileSize(getPath());
-    if (succeed) {
-        error.infos.set("CurrentFileSize", fileSize);
+    {
+        Error error(Error::Code::Notice, Error::Level::Notice, "Wal hint.");
+        error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
+        error.infos.set("Truncate", m_truncate);
+        error.infos.set("MaxFrame", m_maxFrame);
+        error.infos.set("OriginFileSize", m_fileSize);
+        bool succeed;
+        size_t fileSize;
+        std::tie(succeed, fileSize) = FileManager::getFileSize(getPath());
+        if (succeed) {
+            error.infos.set("CurrentFileSize", fileSize);
+        }
+        Notifier::shared()->notify(error);
     }
-    Notifier::shared()->notify(error);
 
     //Pages to frames
     if (!m_pages2Frames.empty()) {

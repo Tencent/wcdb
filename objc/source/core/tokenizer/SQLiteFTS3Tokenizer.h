@@ -18,21 +18,20 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_SQLITE_H
-#define __WCDB_SQLITE_H
+#ifndef __WCDB_SQLITE_FTS3_TOKENIZER_H
+#define __WCDB_SQLITE_FTS3_TOKENIZER_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#if WCDB_BUILTIN_SQLCIPHER
-#include <sqlcipher/sqlite3.h>
-#else
-#include <sqlite3.h>
-#endif
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wquoted-include-in-framework-header"
+#include <sqlcipher/fts3_tokenizer.h>
+#pragma GCC diagnostic pop
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __WCDB_SQLITE_H */
+#endif /* __WCDB_SQLITE_FTS3_TOKENIZER_H */

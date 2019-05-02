@@ -129,12 +129,12 @@ bool FactoryRetriever::exit(bool result)
     return result;
 }
 
-bool FactoryRetriever::restore(const String &database)
+bool FactoryRetriever::restore(const String &databasePath)
 {
     std::list<String> materialPaths;
     bool succeed;
     std::tie(succeed, materialPaths)
-    = Factory::materialsForDeserializingForDatabase(database);
+    = Factory::materialsForDeserializingForDatabase(databasePath);
     if (!succeed) {
         setCriticalErrorWithSharedThreadedError();
         return false;
@@ -163,13 +163,13 @@ bool FactoryRetriever::restore(const String &database)
             }
         }
         if (useMaterial) {
-            Mechanic mechanic(database);
+            Mechanic mechanic(databasePath);
             m_assembler->markDuplicatedAsIgnorable(false);
             mechanic.setAssembler(m_assembler);
             mechanic.setMaterial(&material);
             mechanic.setProgressCallback(std::bind(&FactoryRetriever::increaseProgress,
                                                    this,
-                                                   database,
+                                                   databasePath,
                                                    true,
                                                    std::placeholders::_1,
                                                    std::placeholders::_2));
@@ -184,22 +184,24 @@ bool FactoryRetriever::restore(const String &database)
                 tryUpgradeError(mechanic.getError());
             }
             score = mechanic.getScore();
-            reportMechanic(
-            mechanic.getScore(), database, after.timeIntervalSinceSteadyClock(before), materialTime);
+            reportMechanic(mechanic.getScore(),
+                           databasePath,
+                           after.timeIntervalSinceSteadyClock(before),
+                           materialTime);
         }
     } else {
         Error warning(Error::Code::NotFound, Error::Level::Warning, "Material is not found");
         warning.infos.set(ErrorStringKeySource, ErrorSourceRepair);
-        warning.infos.set(ErrorStringKeyPath, database);
+        warning.infos.set(ErrorStringKeyPath, databasePath);
         Notifier::shared()->notify(warning);
     }
 
-    FullCrawler fullCrawler(database);
+    FullCrawler fullCrawler(databasePath);
     m_assembler->markDuplicatedAsIgnorable(useMaterial);
     fullCrawler.setAssembler(m_assembler);
     fullCrawler.setProgressCallback(std::bind(&FactoryRetriever::increaseProgress,
                                               this,
-                                              database,
+                                              databasePath,
                                               useMaterial,
                                               std::placeholders::_1,
                                               std::placeholders::_2));
@@ -207,7 +209,7 @@ bool FactoryRetriever::restore(const String &database)
     if (fullCrawler.work()) {
         SteadyClock after = SteadyClock::now();
         reportFullCrawler(
-        fullCrawler.getScore(), database, after.timeIntervalSinceSteadyClock(before));
+        fullCrawler.getScore(), databasePath, after.timeIntervalSinceSteadyClock(before));
         score = std::max(score, fullCrawler.getScore());
     } else if (!useMaterial) {
         WCTInnerAssert(isErrorCritial());
@@ -216,7 +218,7 @@ bool FactoryRetriever::restore(const String &database)
     }
     tryUpgradeError(fullCrawler.getError());
 
-    increaseScore(database, score);
+    increaseScore(databasePath, score);
     return true;
 }
 
@@ -257,10 +259,10 @@ void FactoryRetriever::reportSummary(double cost)
     Notifier::shared()->notify(error);
 }
 
-void FactoryRetriever::finishReportOfPerformance(Error &error, const String &database, double cost)
+void FactoryRetriever::finishReportOfPerformance(Error &error, const String &databasePath, double cost)
 {
-    assert(m_sizes.find(database) != m_sizes.end());
-    size_t size = m_sizes[database];
+    assert(m_sizes.find(databasePath) != m_sizes.end());
+    size_t size = m_sizes[databasePath];
     double sizeInMB = (double) size / 1024 / 1024;
     double speed = cost > 0 ? sizeInMB / cost : 0;
     error.infos.set("Cost", String::formatted("%.2f s", cost));
@@ -278,8 +280,8 @@ bool FactoryRetriever::calculateSizes(const std::list<String> &workshopDirectori
 
     //Materials
     for (const auto &workshopDirectory : workshopDirectories) {
-        String database = Path::addComponent(workshopDirectory, databaseFileName);
-        if (!calculateSize(database)) {
+        String databasePath = Path::addComponent(workshopDirectory, databaseFileName);
+        if (!calculateSize(databasePath)) {
             return false;
         }
     }
@@ -295,27 +297,27 @@ size_t FactoryRetriever::iterateSize(const size_t previous,
     return previous + element.second;
 }
 
-bool FactoryRetriever::calculateSize(const String &database)
+bool FactoryRetriever::calculateSize(const String &databasePath)
 {
     bool succeed;
     size_t fileSize;
     std::tie(succeed, fileSize)
-    = FileManager::getItemsSize(Factory::databasePathsForDatabase(database));
+    = FileManager::getItemsSize(Factory::databasePathsForDatabase(databasePath));
     if (!succeed) {
         setCriticalErrorWithSharedThreadedError();
         return false;
     }
-    m_sizes[database] = fileSize;
+    m_sizes[databasePath] = fileSize;
     return true;
 }
 
-Fraction FactoryRetriever::getWeight(const String &database)
+Fraction FactoryRetriever::getWeight(const String &databasePath)
 {
-    assert(m_sizes.find(database) != m_sizes.end());
-    return Fraction(m_sizes[database], m_totalSize > 0 ? m_totalSize : 1);
+    assert(m_sizes.find(databasePath) != m_sizes.end());
+    return Fraction(m_sizes[databasePath], m_totalSize > 0 ? m_totalSize : 1);
 }
 
-void FactoryRetriever::increaseProgress(const String &database,
+void FactoryRetriever::increaseProgress(const String &databasePath,
                                         bool useMaterial,
                                         double progress,
                                         double increment)
@@ -324,12 +326,12 @@ void FactoryRetriever::increaseProgress(const String &database,
     if (useMaterial) {
         increment *= 0.5;
     }
-    Progress::increaseProgress(getWeight(database).value() * increment);
+    Progress::increaseProgress(getWeight(databasePath).value() * increment);
 }
 
-void FactoryRetriever::increaseScore(const String &database, const Fraction &increment)
+void FactoryRetriever::increaseScore(const String &databasePath, const Fraction &increment)
 {
-    Scoreable::increaseScore(getWeight(database) * increment);
+    Scoreable::increaseScore(getWeight(databasePath) * increment);
 }
 
 } //namespace Repair

@@ -58,7 +58,7 @@ SEL WCTRuntimeBaseAccessor::getSetterSelector(objc_property_t property, const WC
         return sel_registerName(setter);
     }
     WCDB::String defaultSetter = "set" + propertyName + ":";
-    defaultSetter[3] = std::toupper(defaultSetter[3]);
+    defaultSetter[3] = (char) std::toupper(defaultSetter[3]);
     return sel_registerName(defaultSetter.c_str());
 }
 

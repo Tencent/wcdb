@@ -350,7 +350,7 @@
 
 - (void)test_float_convertible
 {
-    float sql = 1.1;
+    float sql = 1.1f;
     NSString* expected = @"1.1";
     TestCaseAssertWINQConvertible(WCDB::LiteralValue, sql, expected);
     TestCaseAssertWINQConvertible(WCDB::LiteralValues, sql, expected);
@@ -366,7 +366,7 @@
 
 - (void)test_floats_convertible
 {
-    std::list<float> sqls = { 1.1, 2.2 };
+    std::list<float> sqls = { 1.1f, 2.2f };
     NSString* expected = @"1.1, 2.2";
     TestCaseAssertWINQConvertible(WCDB::LiteralValues, sqls, expected);
     TestCaseAssertWINQConvertible(WCDB::Expressions, sqls, expected);

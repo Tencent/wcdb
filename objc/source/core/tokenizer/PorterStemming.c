@@ -53,14 +53,14 @@
  should be done before stem(...) is called.
  */
 
-static char* b;      /* buffer for word to be stemmed */
-static int k, k0, j; /* j is a general offset into the string */
+static char* s_b;          /* buffer for word to be stemmed */
+static int s_k, s_k0, s_j; /* j is a general offset into the string */
 
 /* cons(i) is TRUE <=> b[i] is a consonant. */
 
 static int cons(int i)
 {
-    switch (b[i]) {
+    switch (s_b[i]) {
     case 'a':
     case 'e':
     case 'i':
@@ -68,7 +68,7 @@ static int cons(int i)
     case 'u':
         return FALSE;
     case 'y':
-        return (i == k0) ? TRUE : !cons(i - 1);
+        return (i == s_k0) ? TRUE : !cons(i - 1);
     default:
         return TRUE;
     }
@@ -88,23 +88,23 @@ static int cons(int i)
 static int m()
 {
     int n = 0;
-    int i = k0;
+    int i = s_k0;
     while (TRUE) {
-        if (i > j) return n;
+        if (i > s_j) return n;
         if (!cons(i)) break;
         i++;
     }
     i++;
     while (TRUE) {
         while (TRUE) {
-            if (i > j) return n;
+            if (i > s_j) return n;
             if (cons(i)) break;
             i++;
         }
         i++;
         n++;
         while (TRUE) {
-            if (i > j) return n;
+            if (i > s_j) return n;
             if (!cons(i)) break;
             i++;
         }
@@ -117,7 +117,7 @@ static int m()
 static int vowelinstem()
 {
     int i;
-    for (i = k0; i <= j; i++)
+    for (i = s_k0; i <= s_j; i++)
         if (!cons(i)) return TRUE;
     return FALSE;
 }
@@ -126,8 +126,8 @@ static int vowelinstem()
 
 static int doublec(int j)
 {
-    if (j < k0 + 1) return FALSE;
-    if (b[j] != b[j - 1]) return FALSE;
+    if (j < s_k0 + 1) return FALSE;
+    if (s_b[j] != s_b[j - 1]) return FALSE;
     return cons(j);
 }
 
@@ -142,9 +142,9 @@ static int doublec(int j)
 
 static int cvc(int i)
 {
-    if (i < k0 + 2 || !cons(i) || cons(i - 1) || !cons(i - 2)) return FALSE;
+    if (i < s_k0 + 2 || !cons(i) || cons(i - 1) || !cons(i - 2)) return FALSE;
     {
-        int ch = b[i];
+        int ch = s_b[i];
         if (ch == 'w' || ch == 'x' || ch == 'y') return FALSE;
     }
     return TRUE;
@@ -155,10 +155,11 @@ static int cvc(int i)
 static int ends(char* s)
 {
     int length = s[0];
-    if (s[length] != b[k]) return FALSE; /* tiny speed-up */
-    if (length > k - k0 + 1) return FALSE;
-    if (memcmp(b + k - length + 1, s + 1, length) != 0) return FALSE;
-    j = k - length;
+    if (s[length] != s_b[s_k]) return FALSE; /* tiny speed-up */
+    if (length > s_k - s_k0 + 1) return FALSE;
+    if (memcmp(s_b + s_k - length + 1, s + 1, (size_t) length) != 0)
+        return FALSE;
+    s_j = s_k - length;
     return TRUE;
 }
 
@@ -168,8 +169,8 @@ static int ends(char* s)
 static void setto(char* s)
 {
     int length = s[0];
-    memmove(b + j + 1, s + 1, length);
-    k = j + length;
+    memmove(s_b + s_j + 1, s + 1, length);
+    s_k = s_j + length;
 }
 
 /* r(s) is used further down. */
@@ -203,27 +204,27 @@ static void r(char* s)
 
 static void step1ab()
 {
-    if (b[k] == 's') {
+    if (s_b[s_k] == 's') {
         if (ends("\04"
                  "sses"))
-            k -= 2;
+            s_k -= 2;
         else if (ends("\03"
                       "ies"))
             setto(
             "\01"
             "i");
-        else if (b[k - 1] != 's')
-            k--;
+        else if (s_b[s_k - 1] != 's')
+            s_k--;
     }
     if (ends("\03"
              "eed")) {
-        if (m() > 0) k--;
+        if (m() > 0) s_k--;
     } else if ((ends("\02"
                      "ed")
                 || ends("\03"
                         "ing"))
                && vowelinstem()) {
-        k = j;
+        s_k = s_j;
         if (ends("\02"
                  "at"))
             setto(
@@ -239,13 +240,13 @@ static void step1ab()
             setto(
             "\03"
             "ize");
-        else if (doublec(k)) {
-            k--;
+        else if (doublec(s_k)) {
+            s_k--;
             {
-                int ch = b[k];
-                if (ch == 'l' || ch == 's' || ch == 'z') k++;
+                int ch = s_b[s_k];
+                if (ch == 'l' || ch == 's' || ch == 'z') s_k++;
             }
-        } else if (m() == 1 && cvc(k))
+        } else if (m() == 1 && cvc(s_k))
             setto(
             "\01"
             "e");
@@ -259,7 +260,7 @@ static void step1c()
     if (ends("\01"
              "y")
         && vowelinstem())
-        b[k] = 'i';
+        s_b[s_k] = 'i';
 }
 
 /* step2() maps double suffices to single ones. so -ization ( = -ize plus
@@ -268,7 +269,7 @@ static void step1c()
 
 static void step2()
 {
-    switch (b[k - 1]) {
+    switch (s_b[s_k - 1]) {
     case 'a':
         if (ends("\07"
                  "ational")) {
@@ -444,7 +445,7 @@ static void step2()
 
 static void step3()
 {
-    switch (b[k]) {
+    switch (s_b[s_k]) {
     case 'e':
         if (ends("\05"
                  "icate")) {
@@ -509,7 +510,7 @@ static void step3()
 
 static void step4()
 {
-    switch (b[k - 1]) {
+    switch (s_b[s_k - 1]) {
     case 'a':
         if (ends("\02"
                  "al"))
@@ -558,7 +559,7 @@ static void step4()
     case 'o':
         if (ends("\03"
                  "ion")
-            && j >= k0 && (b[j] == 's' || b[j] == 't'))
+            && s_j >= s_k0 && (s_b[s_j] == 's' || s_b[s_j] == 't'))
             break;
         if (ends("\02"
                  "ou"))
@@ -596,7 +597,7 @@ static void step4()
     default:
         return;
     }
-    if (m() > 1) k = j;
+    if (m() > 1) s_k = s_j;
 }
 
 /* step5() removes a final -e if m() > 1, and changes -ll to -l if
@@ -604,12 +605,12 @@ static void step4()
 
 static void step5()
 {
-    j = k;
-    if (b[k] == 'e') {
+    s_j = s_k;
+    if (s_b[s_k] == 'e') {
         int a = m();
-        if (a > 1 || (a == 1 && !cvc(k - 1))) k--;
+        if (a > 1 || (a == 1 && !cvc(s_k - 1))) s_k--;
     }
-    if (b[k] == 'l' && doublec(k) && m() > 1) k--;
+    if (s_b[s_k] == 'l' && doublec(s_k) && m() > 1) s_k--;
 }
 
 /* In stem(p,i,j), p is a char pointer, and the string to be stemmed is from
@@ -623,10 +624,10 @@ static void step5()
 
 int porterStem(char* p, int i, int j)
 {
-    b = p;
-    k = j;
-    k0 = i;                    /* copy the parameters into statics */
-    if (k <= k0 + 1) return k; /*-DEPARTURE-*/
+    s_b = p;
+    s_k = j;
+    s_k0 = i;                        /* copy the parameters into statics */
+    if (s_k <= s_k0 + 1) return s_k; /*-DEPARTURE-*/
 
     /* With this line, strings of length 1 or 2 don't go through the
      stemming process, although no mention is made of this in the
@@ -634,14 +635,14 @@ int porterStem(char* p, int i, int j)
      algorithm. */
 
     step1ab();
-    if (k > k0) {
+    if (s_k > s_k0) {
         step1c();
         step2();
         step3();
         step4();
         step5();
     }
-    return k;
+    return s_k;
 }
 
 /*--------------------stemmer definition ends here------------------------*/

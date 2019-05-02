@@ -89,25 +89,25 @@ bool Mechanic::work()
     setPageWeight(Fraction(1, numberOfPages + m_pager.getDisposedWalPages()));
 
     if (markAsAssembling()) {
-        for (const auto &element : m_material->contents) {
+        for (const auto &contentElement : m_material->contents) {
             if (isErrorCritial()) {
                 break;
             }
-            if (!assembleTable(element.first, element.second.sql)
-                || !assembleSequence(element.first, element.second.sequence)) {
+            if (!assembleTable(contentElement.first, contentElement.second.sql)
+                || !assembleSequence(contentElement.first, contentElement.second.sequence)) {
                 continue;
             }
 
-            for (const auto &element : element.second.verifiedPagenos) {
+            for (const auto &verifiedPagenosElement : contentElement.second.verifiedPagenos) {
                 if (isErrorCritial()) {
                     break;
                 }
-                m_checksum = element.second;
-                if (!crawl(element.first)) {
+                m_checksum = verifiedPagenosElement.second;
+                if (!crawl(verifiedPagenosElement.first)) {
                     tryUpgradeCrawlerError();
                 }
             }
-            assembleAssociatedSQLs(element.second.associatedSQLs);
+            assembleAssociatedSQLs(contentElement.second.associatedSQLs);
         }
         markAsAssembled();
     }

@@ -83,13 +83,13 @@ bool Material::deserialize(Deserialization &deserialization)
         markAsCorrupt("Header");
         return false;
     }
-    uint32_t magic = deserialization.advance4BytesUInt();
-    uint32_t version = deserialization.advance4BytesUInt();
-    if (magic != Material::magic) {
+    uint32_t magicValue = deserialization.advance4BytesUInt();
+    uint32_t versionValue = deserialization.advance4BytesUInt();
+    if (magicValue != Material::magic) {
         markAsCorrupt("Magic");
         return false;
     }
-    if (version != 0x01000000) {
+    if (versionValue != 0x01000000) {
         markAsCorrupt("Version");
         return false;
     }
@@ -259,14 +259,14 @@ bool Material::Content::deserialize(Deserialization &deserialization)
     }
     int numberOfAssociatedSQLs = (int) varint;
     associatedSQLs.clear();
+    String buffer;
     for (int i = 0; i < numberOfAssociatedSQLs; ++i) {
-        String sql;
-        std::tie(lengthOfSizedString, sql) = deserialization.advanceSizedString();
-        if (lengthOfSizedString == 0 || sql.empty()) {
+        std::tie(lengthOfSizedString, buffer) = deserialization.advanceSizedString();
+        if (lengthOfSizedString == 0 || buffer.empty()) {
             markAsCorrupt("SQLs");
             return false;
         }
-        associatedSQLs.push_back(std::move(sql));
+        associatedSQLs.push_back(std::move(buffer));
     }
 
     std::tie(lengthOfVarint, varint) = deserialization.advanceVarint();

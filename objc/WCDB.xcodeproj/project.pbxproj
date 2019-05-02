@@ -158,6 +158,8 @@
 		234E6F6121996EB600D006F2 /* WCDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		234EF46E2015CFDE00B81929 /* WCTConvertible.h in Headers */ = {isa = PBXBuildFile; fileRef = 234EF46C2015CFDE00B81929 /* WCTConvertible.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234EF46F2015CFDE00B81929 /* WCTConvertible.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234EF46D2015CFDE00B81929 /* WCTConvertible.mm */; };
+		234F0338227A950900DD65A2 /* SQLiteFTS3Tokenizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 234F0337227A950900DD65A2 /* SQLiteFTS3Tokenizer.h */; };
+		234F0339227A950900DD65A2 /* SQLiteFTS3Tokenizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 234F0337227A950900DD65A2 /* SQLiteFTS3Tokenizer.h */; };
 		23545B992224E8270091C981 /* SyntaxAssertion.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23545B962224E8270091C981 /* SyntaxAssertion.hpp */; };
 		23545B9A2224E8270091C981 /* SyntaxAssertion.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23545B962224E8270091C981 /* SyntaxAssertion.hpp */; };
 		23545B9F2224E9C80091C981 /* SyntaxEnum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23545B9C2224E9C80091C981 /* SyntaxEnum.hpp */; };
@@ -2017,6 +2019,7 @@
 		234E6F6621996EB600D006F2 /* Advance.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Advance.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		234EF46C2015CFDE00B81929 /* WCTConvertible.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTConvertible.h; sourceTree = "<group>"; };
 		234EF46D2015CFDE00B81929 /* WCTConvertible.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTConvertible.mm; sourceTree = "<group>"; };
+		234F0337227A950900DD65A2 /* SQLiteFTS3Tokenizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SQLiteFTS3Tokenizer.h; sourceTree = "<group>"; };
 		23545B962224E8270091C981 /* SyntaxAssertion.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SyntaxAssertion.hpp; sourceTree = "<group>"; };
 		23545B9C2224E9C80091C981 /* SyntaxEnum.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SyntaxEnum.hpp; sourceTree = "<group>"; };
 		23545BA12224EAA40091C981 /* SyntaxCommonConst.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SyntaxCommonConst.cpp; sourceTree = "<group>"; };
@@ -4091,6 +4094,7 @@
 				2304B42722156CD700901953 /* TokenizerModule.hpp */,
 				233E09B52216BD7B0006E608 /* OneOrBinaryTokenizer.cpp */,
 				233E09B62216BD7B0006E608 /* OneOrBinaryTokenizer.hpp */,
+				234F0337227A950900DD65A2 /* SQLiteFTS3Tokenizer.h */,
 			);
 			path = tokenizer;
 			sourceTree = "<group>";
@@ -4653,6 +4657,7 @@
 				2367BC862215004300380122 /* WCTUpdate.h in Headers */,
 				2367BC872215004300380122 /* HandlePool.hpp in Headers */,
 				2367BC882215004300380122 /* StatementInsert.hpp in Headers */,
+				234F0339227A950900DD65A2 /* SQLiteFTS3Tokenizer.h in Headers */,
 				39411A4222437E7B00A388F5 /* CaseInsensiveList.hpp in Headers */,
 				2367BC892215004300380122 /* BackupQueue.hpp in Headers */,
 				2367BC8A2215004300380122 /* FactoryDepositor.hpp in Headers */,
@@ -5011,6 +5016,7 @@
 				2349F7361EA0D6680021EFA7 /* WCTDatabase+Convenient.h in Headers */,
 				2349F72C1EA0D6680021EFA7 /* WCTSelect.h in Headers */,
 				23EEDCC8217DFADC006E9E73 /* StatementCreateVirtualTable.hpp in Headers */,
+				234F0338227A950900DD65A2 /* SQLiteFTS3Tokenizer.h in Headers */,
 				2349F7341EA0D6680021EFA7 /* WCTUpdate.h in Headers */,
 				2349F7061EA0D6680021EFA7 /* HandlePool.hpp in Headers */,
 				23EEDCD6217DFADC006E9E73 /* StatementInsert.hpp in Headers */,

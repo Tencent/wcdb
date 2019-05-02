@@ -20,8 +20,8 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/SQLite.h>
+#include <WCDB/SQLiteFTS3Tokenizer.h>
 #include <WCDB/TokenizerModule.hpp>
-#include <sqlcipher/fts3_tokenizer.h>
 
 namespace WCDB {
 

@@ -18,7 +18,6 @@
  * limitations under the License.
  */
 
-#import "SQLite.h"
 #import <TestCase/NSObject+TestCase.h>
 #import <TestCase/TestCaseAssertion.h>
 #import <TestCase/TestCaseLog.h>
@@ -144,7 +143,7 @@
 {
     for (NSString *path in paths.reversedArray) {
         if ([self fileExistsAtPath:path]) {
-            if (![self setAttributes:@{ NSFileImmutable : @(immutable) } ofItemAtPath:path error:error]) {
+            if (![self setAttributes:@{NSFileImmutable : @(immutable)} ofItemAtPath:path error:error]) {
                 return NO;
             }
         }
