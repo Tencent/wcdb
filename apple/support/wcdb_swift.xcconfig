@@ -2,3 +2,6 @@
 
 // Linking
 PRODUCT_NAME = WCDBSwift
+
+// Packaging
+MODULEMAP_FILE = 

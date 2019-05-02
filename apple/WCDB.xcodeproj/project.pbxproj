@@ -323,6 +323,9 @@
 		234F073C227AA5DB00DD65A2 /* WCTDatabase+TestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 234F0681227AA54400DD65A2 /* WCTDatabase+TestCase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234F073D227AA5DB00DD65A2 /* WCTDatabase+TestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 234F0681227AA54400DD65A2 /* WCTDatabase+TestCase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234F0760227AB3AE00DD65A2 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
+		234F8AB4227AF5A900791E45 /* Column.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F8AB3227AF5A900791E45 /* Column.swift */; };
+		234F8AB8227AF78C00791E45 /* SQL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F8AB7227AF78C00791E45 /* SQL.swift */; };
+		234F8ABA227AF9D000791E45 /* BindParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F8AB9227AF9D000791E45 /* BindParameter.swift */; };
 		23545B992224E8270091C981 /* SyntaxAssertion.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23545B962224E8270091C981 /* SyntaxAssertion.hpp */; };
 		23545B9A2224E8270091C981 /* SyntaxAssertion.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23545B962224E8270091C981 /* SyntaxAssertion.hpp */; };
 		23545B9F2224E9C80091C981 /* SyntaxEnum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23545B9C2224E9C80091C981 /* SyntaxEnum.hpp */; };
@@ -1825,6 +1828,9 @@
 		234F074F227AAEA200DD65A2 /* wcdb_swift.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = wcdb_swift.xcconfig; sourceTree = "<group>"; };
 		234F0753227AB18B00DD65A2 /* host.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = host.xcconfig; sourceTree = "<group>"; };
 		234F075B227AB3AE00DD65A2 /* TestsSwift.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestsSwift.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		234F8AB3227AF5A900791E45 /* Column.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Column.swift; sourceTree = "<group>"; };
+		234F8AB7227AF78C00791E45 /* SQL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQL.swift; sourceTree = "<group>"; };
+		234F8AB9227AF9D000791E45 /* BindParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindParameter.swift; sourceTree = "<group>"; };
 		23545B962224E8270091C981 /* SyntaxAssertion.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SyntaxAssertion.hpp; sourceTree = "<group>"; };
 		23545B9C2224E9C80091C981 /* SyntaxEnum.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SyntaxEnum.hpp; sourceTree = "<group>"; };
 		23545BA12224EAA40091C981 /* SyntaxCommonConst.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SyntaxCommonConst.cpp; sourceTree = "<group>"; };
@@ -3225,8 +3231,19 @@
 		234F074E227AAE7100DD65A2 /* swift */ = {
 			isa = PBXGroup;
 			children = (
+				234F8AB2227AF59C00791E45 /* winq */,
 			);
 			path = swift;
+			sourceTree = "<group>";
+		};
+		234F8AB2227AF59C00791E45 /* winq */ = {
+			isa = PBXGroup;
+			children = (
+				234F8AB9227AF9D000791E45 /* BindParameter.swift */,
+				234F8AB3227AF5A900791E45 /* Column.swift */,
+				234F8AB7227AF78C00791E45 /* SQL.swift */,
+			);
+			path = winq;
 			sourceTree = "<group>";
 		};
 		236BACDF21BF9F5900C8B4D9 /* migration */ = {
@@ -4710,6 +4727,7 @@
 					};
 					234F0744227AAE4B00DD65A2 = {
 						CreatedOnToolsVersion = 10.2.1;
+						LastSwiftMigration = 1020;
 					};
 					234F075A227AB3AE00DD65A2 = {
 						CreatedOnToolsVersion = 10.2.1;
@@ -5075,6 +5093,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				234F8AB8227AF78C00791E45 /* SQL.swift in Sources */,
+				234F8ABA227AF9D000791E45 /* BindParameter.swift in Sources */,
+				234F8AB4227AF5A900791E45 /* Column.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5727,6 +5748,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 234F074F227AAEA200DD65A2 /* wcdb_swift.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -5734,6 +5760,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 234F074F227AAEA200DD65A2 /* wcdb_swift.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -5741,6 +5771,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 234F074F227AAEA200DD65A2 /* wcdb_swift.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Bitcode;
 		};
