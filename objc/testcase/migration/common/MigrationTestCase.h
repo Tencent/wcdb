@@ -21,7 +21,7 @@
 #import "MigrationObject+WCTTableCoding.h"
 #import "MigrationObject.h"
 #import "Random+MigrationObject.h"
-#import <TestCase/TestCase.h>
+#import "TestCase.h"
 
 @interface MigrationTestCase : TableTestCase
 

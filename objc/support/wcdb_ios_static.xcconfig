@@ -17,6 +17,9 @@ MACH_O_TYPE = staticlib
 GENERATE_MASTER_OBJECT_FILE = YES
 PRELINK_LIBS = $(TARGET_BUILD_DIR)/sqlcipher.framework/sqlcipher
 
+// Packaging
+INFOPLIST_FILE = $(SRCROOT)/support/Info.plist
+
 // Code Generation
 LLVM_LTO = NO
 CLANG_ENABLE_CODE_COVERAGE = NO

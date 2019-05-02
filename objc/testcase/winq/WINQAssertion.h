@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
+#import "TestCase.h"
 #import <Foundation/Foundation.h>
-#import <TestCase/TestCase.h>
 
 namespace WCDB {
 

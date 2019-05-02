@@ -1,0 +1,8 @@
+
+// Packaging
+INFOPLIST_FILE = $(SRCROOT)/testcase/host/Info.plist
+
+// User-Defined
+PRINCIPAL_CLASS[sdk=iphonesimulator*] = UIApplication
+PRINCIPAL_CLASS[sdk=iphoneos*] = UIApplication
+PRINCIPAL_CLASS[sdk=macosx*] = NSApplication

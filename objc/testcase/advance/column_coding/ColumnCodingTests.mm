@@ -21,7 +21,7 @@
 #import "ColumnCodingObject+WCTTableCoding.h"
 #import "ColumnCodingObject.h"
 #import "Random+ColumnCodingObject.h"
-#import <TestCase/TestCase.h>
+#import "TestCase.h"
 
 @interface ColumnCodingTests : CRUDTestCase
 

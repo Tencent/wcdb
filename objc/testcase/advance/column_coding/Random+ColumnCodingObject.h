@@ -19,7 +19,7 @@
  */
 
 #import "ColumnCodingObject.h"
-#import <TestCase/TestCase.h>
+#import "TestCase.h"
 
 @interface Random (ColumnCodingObject)
 

@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import <TestCase/TestCase.h>
+#import "TestCase.h"
 
 @interface DatabaseTests : DatabaseTestCase
 
@@ -142,7 +142,7 @@
     // reset attribute
     for (NSString* path in self.database.paths) {
         if ([self.fileManager fileExistsAtPath:path]) {
-            TestCaseAssertTrue([self.fileManager setAttributes:@{ NSFileImmutable : @(NO) } ofItemAtPath:path error:nil]);
+            TestCaseAssertTrue([self.fileManager setAttributes:@{NSFileImmutable : @(NO)} ofItemAtPath:path error:nil]);
         }
     }
 }

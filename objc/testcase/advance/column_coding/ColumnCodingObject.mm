@@ -20,7 +20,7 @@
 
 #import "ColumnCodingObject.h"
 #import "ColumnCodingObject+WCTTableCoding.h"
-#import <TestCase/TestCase.h>
+#import "TestCase.h"
 #import <WCDB/WCDB.h>
 
 @implementation ColumnCodingObject

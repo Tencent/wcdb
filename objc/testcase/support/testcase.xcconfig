@@ -1,0 +1,10 @@
+// Architectures
+SUPPORTED_PLATFORMS = macosx iphonesimulator iphoneos appletvos appletvsimulator
+
+// Packaging
+INFOPLIST_FILE = $(SRCROOT)/testcase/support/Info.plist
+
+// Testing
+TEST_HOST[sdk=iphonesimulator*] = $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host
+TEST_HOST[sdk=iphoneos*] = $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host
+TEST_HOST[sdk=macosx*] = $(BUILT_PRODUCTS_DIR)/Host.app/Contents/MacOS/Host

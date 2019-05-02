@@ -20,7 +20,7 @@
 
 #import "FTS3Object.h"
 #import "FTS3Object+WCTTableCoding.h"
-#import <TestCase/TestCase.h>
+#import "TestCase.h"
 #import <WCDB/WCDB.h>
 
 @implementation FTS3Object

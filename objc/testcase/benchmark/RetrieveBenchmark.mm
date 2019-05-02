@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import <TestCase/TestCase.h>
+#import "TestCase.h"
 
 @interface RetrieveBenchmark : Benchmark
 @property (nonatomic, readonly) int step;

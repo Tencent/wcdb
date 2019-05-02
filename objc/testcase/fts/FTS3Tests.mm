@@ -20,7 +20,7 @@
 
 #import "FTS3Object+WCTTableCoding.h"
 #import "FTS3Object.h"
-#import <TestCase/TestCase.h>
+#import "TestCase.h"
 
 @interface FTS3Tests : TableTestCase
 

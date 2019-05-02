@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import <TestCase/TestCase.h>
+#import "TestCase.h"
 
 typedef NS_ENUM(NSUInteger, MigrationObjectORMMode) {
     MigrationObjectORMModeNormal = 0,

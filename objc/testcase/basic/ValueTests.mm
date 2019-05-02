@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import <TestCase/TestCase.h>
+#import "TestCase.h"
 
 #define AUTO_CATEGORY_NS(name)                    \
     @interface WCDB_CONCAT (NS, name)             \

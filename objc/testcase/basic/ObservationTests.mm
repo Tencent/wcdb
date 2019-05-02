@@ -19,7 +19,7 @@
  */
 
 #import "CoreConst.h"
-#import <TestCase/TestCase.h>
+#import "TestCase.h"
 #import <set>
 #import <sys/stat.h>
 #if TARGET_OS_IPHONE && !TARGET_OS_WATCH

@@ -42,10 +42,6 @@
 #import "ColumnConstraintUnique.h"
 #import "DropIndexObject+WCTTableCoding.h"
 #import "DropIndexObject.h"
-#import "FTS3Object+WCTTableCoding.h"
-#import "FTS3Object.h"
-#import "FTS5Object+WCTTableCoding.h"
-#import "FTS5Object.h"
 #import "IndexObject+WCTTableCoding.h"
 #import "IndexObject.h"
 #import "NewRemapObject+WCTTableCoding.h"
@@ -58,7 +54,11 @@
 #import "PropertyObject.h"
 #import "TableConstraintObject+WCTTableCoding.h"
 #import "TableConstraintObject.h"
-#import <TestCase/TestCase.h>
+#import "TestCase.h"
+#import "VirtualTableFTS3Object+WCTTableCoding.h"
+#import "VirtualTableFTS3Object.h"
+#import "VirtualTableFTS5Object+WCTTableCoding.h"
+#import "VirtualTableFTS5Object.h"
 
 @interface ORMTests : TableTestCase
 
@@ -234,17 +234,17 @@
 }
 
 #pragma mark - virtual table
-- (void)test_fts3
+- (void)test_virtual_table_fts3
 {
-    self.tableClass = FTS3Object.class;
+    self.tableClass = VirtualTableFTS3Object.class;
     [self.database addTokenizer:WCTTokenizerOneOrBinary];
     NSString* expected = @"CREATE VIRTUAL TABLE IF NOT EXISTS main.testTable USING fts3(tokenize = wcdb_one_or_binary, value INTEGER)";
     [self doTestCreateVirtualTableSQLAsExpected:expected];
 }
 
-- (void)test_fts5
+- (void)test_virtual_table_fts5
 {
-    self.tableClass = FTS5Object.class;
+    self.tableClass = VirtualTableFTS5Object.class;
     NSString* expected = @"CREATE VIRTUAL TABLE IF NOT EXISTS main.testTable USING fts5(tokenize = porter, value)";
     [self doTestCreateVirtualTableSQLAsExpected:expected];
 }
