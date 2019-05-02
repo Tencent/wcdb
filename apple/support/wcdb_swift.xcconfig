@@ -1,0 +1,4 @@
+#include "wcdb.xcconfig"
+
+// Linking
+PRODUCT_NAME = WCDBSwift

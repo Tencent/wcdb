@@ -160,7 +160,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 23A1FF691FB084570023527D /* sqlcipher.preprocessed.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 239325C71E836A7700D677CC;
+			remoteGlobalIDString = 23F5BBCF20887FAB000CCD37;
 			remoteInfo = sqlcipher;
 		};
 		2349FC271FDF871F005230E8 /* PBXContainerItemProxy */ = {
@@ -991,6 +991,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.swift;
 				PRODUCT_NAME = WCDBSwift;
 				SKIP_INSTALL = YES;
+				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/source/util/WCDB-Bridging.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
@@ -1016,6 +1017,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.WCDB.swift;
 				PRODUCT_NAME = WCDBSwift;
 				SKIP_INSTALL = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/source/util/WCDB-Bridging.h";
 				SWIFT_VERSION = 4.0;
 			};
