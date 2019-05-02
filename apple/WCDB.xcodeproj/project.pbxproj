@@ -2398,9 +2398,10 @@
 			path = repair;
 			sourceTree = "<group>";
 		};
-		2349F5D51EA0D6680021EFA7 /* source */ = {
+		2349F5D51EA0D6680021EFA7 /* objc */ = {
 			isa = PBXGroup;
 			children = (
+				234F0376227A9EFA00DD65A2 /* testcase */,
 				2370B0E321914EC200D3227C /* builtin */,
 				23775B2E20AD666900E21AB0 /* common */,
 				23775B3420AD666900E21AB0 /* repair */,
@@ -2410,7 +2411,7 @@
 				2349F6A71EA0D6680021EFA7 /* utility */,
 				2349F6BA1EA0D6680021EFA7 /* WCDB.h */,
 			);
-			path = source;
+			path = objc;
 			sourceTree = "<group>";
 		};
 		2349F5D61EA0D6680021EFA7 /* winq */ = {
@@ -3449,9 +3450,8 @@
 			isa = PBXGroup;
 			children = (
 				23A747BE20039675003CECFA /* sqlcipher.preprocessed.xcodeproj */,
-				2349F5D51EA0D6680021EFA7 /* source */,
+				2349F5D51EA0D6680021EFA7 /* objc */,
 				23F0FDEE215F266C008399FB /* support */,
-				234F0376227A9EFA00DD65A2 /* testcase */,
 				23B5F93E1E111CB100E58396 /* Frameworks */,
 				23B5F7641E1111C100E58396 /* Products */,
 			);
