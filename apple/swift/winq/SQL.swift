@@ -99,15 +99,11 @@ public enum SyntaxType: Int {
 public protocol SQL {
     typealias `Type` = SyntaxType
     associatedtype Idenitifer: SyntaxIdentifier
-    var type: Type { get }
     var syntax: Idenitifer { get }
     var description: String {get}
 }
 
 extension SQL {
-    public var type: Type {
-        return syntax.type
-    }
     public var description: String {
         return syntax.description
     }

@@ -34,7 +34,7 @@
             testExecutionOrdering = "random">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "234F075A227AB3AE00DD65A2"
+               BlueprintIdentifier = "234F8AD3227B0B5400791E45"
                BuildableName = "TestsSwift.xctest"
                BlueprintName = "TestsSwift"
                ReferencedContainer = "container:WCDB.xcodeproj">
