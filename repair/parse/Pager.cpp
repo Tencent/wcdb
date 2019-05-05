@@ -176,8 +176,7 @@ int Pager::getNumberOfWalFrames() const
 #pragma mark - Error
 void Pager::markAsCorrupted(int page, const String &message)
 {
-    Error error(Error::Code::Corrupt, Error::Level::Ignore);
-    error.message = message;
+    Error error(Error::Code::Corrupt, Error::Level::Ignore, message);
     error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.set(ErrorStringKeyPath, getPath());
     error.infos.set("Page", page);
@@ -267,8 +266,7 @@ void Pager::hint() const
     if (!isInitialized()) {
         return;
     }
-    Error error(Error::Code::Notice, Error::Level::Notice);
-    error.message = "Pager hint.";
+    Error error(Error::Code::Notice, Error::Level::Notice, "Pager hint.");
     error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.set("NumberOfPages", m_numberOfPages);
     error.infos.set("OriginFileSize", m_fileSize);

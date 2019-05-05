@@ -65,8 +65,7 @@ bool Repairman::isEmptyDatabase()
     std::tie(succeed, fileSize) = FileManager::getFileSize(getPath());
     if (fileSize == 0) {
         if (succeed) {
-            Error error(Error::Code::Empty, Error::Level::Warning);
-            error.message = "Database is not found or empty.";
+            Error error(Error::Code::Empty, Error::Level::Warning, "Database is not found or empty.");
             error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
             error.infos.set(ErrorStringKeyPath, getPath());
             Notifier::shared()->notify(error);

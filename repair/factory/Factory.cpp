@@ -41,11 +41,9 @@ std::pair<bool, std::list<String>> Factory::getWorkshopDirectories() const
 {
     std::list<String> workshopDirectories;
     if (FileManager::enumerateDirectory(
-        directory,
-        [&workshopDirectories](
-        const String &directory, const String &subpath, bool isDirectory) -> bool {
+        directory, [&workshopDirectories](const String &root, const String &subpath, bool isDirectory) -> bool {
             if (isDirectory && subpath != restoreDirectoryName && subpath != renewDirectoryName) {
-                workshopDirectories.push_back(Path::addComponent(directory, subpath));
+                workshopDirectories.push_back(Path::addComponent(root, subpath));
             }
             return true;
         })) {
@@ -81,13 +79,12 @@ bool Factory::containsDeposited() const
     String databaseName = getDatabaseName();
     FileManager::enumerateDirectory(
     directory,
-    [&result, &databaseName](
-    const String &directory, const String &subpath, bool isDirectory) -> bool {
+    [&result, &databaseName](const String &root, const String &subpath, bool isDirectory) -> bool {
         if (isDirectory && subpath != restoreDirectoryName && subpath != renewDirectoryName) {
-            String database
-            = Path::addComponent(Path::addComponent(directory, subpath), databaseName);
+            String databasePath
+            = Path::addComponent(Path::addComponent(root, subpath), databaseName);
             bool succeed, exists;
-            std::tie(succeed, exists) = FileManager::fileExists(database);
+            std::tie(succeed, exists) = FileManager::fileExists(databasePath);
             if (exists) {
                 result = true;
                 return false;
@@ -134,10 +131,9 @@ bool Factory::removeDeposited() const
 {
     std::list<String> depositedPath;
     FileManager::enumerateDirectory(
-    directory,
-    [&depositedPath](const String &directory, const String &subpath, bool isDirectory) -> bool {
+    directory, [&depositedPath](const String &root, const String &subpath, bool isDirectory) -> bool {
         if (isDirectory && subpath != renewDirectoryName && subpath != restoreDirectoryName) {
-            depositedPath.push_back(Path::addComponent(directory, subpath));
+            depositedPath.push_back(Path::addComponent(root, subpath));
         }
         return true;
     });
@@ -152,8 +148,8 @@ bool Factory::removeDirectoryIfEmpty() const
 {
     bool canRemove = true;
     bool succeed = FileManager::enumerateDirectory(
-    directory, [&canRemove](const String &directory, const String &subpath, bool isDirectory) -> bool {
-        WCDB_UNUSED(directory)
+    directory, [&canRemove](const String &root, const String &subpath, bool isDirectory) -> bool {
+        WCDB_UNUSED(root)
         if (subpath == restoreDirectoryName || !isDirectory) {
             return true;
         }

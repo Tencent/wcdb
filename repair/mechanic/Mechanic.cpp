@@ -68,8 +68,7 @@ bool Mechanic::work()
     if (m_pager.getNumberOfWalFrames() > 0) {
         if (m_pager.getWalSalt() != m_material->info.walSalt) {
             m_pager.disposeWal();
-            Error error(Error::Code::Notice, Error::Level::Notice);
-            error.message = "Dispose WAL of non-match salt.";
+            Error error(Error::Code::Notice, Error::Level::Notice, "Dispose WAL of non-match salt.");
             error.infos.set(ErrorStringKeySource, ErrorSourceRepair);
             error.infos.set(ErrorStringKeyPath, m_pager.getPath());
             error.infos.set("WalSalt1", m_pager.getWalSalt().first);
@@ -90,25 +89,25 @@ bool Mechanic::work()
     setPageWeight(Fraction(1, numberOfPages + m_pager.getDisposedWalPages()));
 
     if (markAsAssembling()) {
-        for (const auto &element : m_material->contents) {
+        for (const auto &contentElement : m_material->contents) {
             if (isErrorCritial()) {
                 break;
             }
-            if (!assembleTable(element.first, element.second.sql)
-                || !assembleSequence(element.first, element.second.sequence)) {
+            if (!assembleTable(contentElement.first, contentElement.second.sql)
+                || !assembleSequence(contentElement.first, contentElement.second.sequence)) {
                 continue;
             }
 
-            for (const auto &element : element.second.verifiedPagenos) {
+            for (const auto &verifiedPagenosElement : contentElement.second.verifiedPagenos) {
                 if (isErrorCritial()) {
                     break;
                 }
-                m_checksum = element.second;
-                if (!crawl(element.first)) {
+                m_checksum = verifiedPagenosElement.second;
+                if (!crawl(verifiedPagenosElement.first)) {
                     tryUpgradeCrawlerError();
                 }
             }
-            assembleAssociatedSQLs(element.second.associatedSQLs);
+            assembleAssociatedSQLs(contentElement.second.associatedSQLs);
         }
         markAsAssembled();
     }

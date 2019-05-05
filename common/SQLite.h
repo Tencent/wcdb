@@ -21,10 +21,18 @@
 #ifndef __WCDB_SQLITE_H
 #define __WCDB_SQLITE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #if WCDB_BUILTIN_SQLCIPHER
 #include <sqlcipher/sqlite3.h>
 #else
 #include <sqlite3.h>
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif /* __WCDB_SQLITE_H */

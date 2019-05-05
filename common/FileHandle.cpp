@@ -135,8 +135,7 @@ Data FileHandle::read(off_t offset, size_t size)
     }
     Error error;
     error.level = m_errorIgnorable ? Error::Level::Warning : Error::Level::Error;
-    error.setSystemCode(EIO, Error::Code::IOError);
-    error.message = "Short read.";
+    error.setSystemCode(EIO, Error::Code::IOError, "Short read.");
     error.infos.set(ErrorStringKeyPath, path);
     Notifier::shared()->notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
@@ -174,8 +173,7 @@ bool FileHandle::write(off_t offset, const UnsafeData &unsafeData)
     }
     Error error;
     error.level = m_errorIgnorable ? Error::Level::Warning : Error::Level::Error;
-    error.setSystemCode(EIO, Error::Code::IOError);
-    error.message = "Short write.";
+    error.setSystemCode(EIO, Error::Code::IOError, "Short write.");
     error.infos.set(ErrorStringKeyPath, path);
     Notifier::shared()->notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
@@ -199,7 +197,6 @@ MappedData FileHandle::map(off_t offset, size_t size)
         Error error;
         error.level = m_errorIgnorable ? Error::Level::Warning : Error::Level::Error;
         error.setSystemCode(errno, Error::Code::IOError);
-        error.message = strerror(errno);
         error.infos.set(ErrorStringKeyPath, path);
         error.infos.set("MmapSize", roundedSize);
         Notifier::shared()->notify(error);
@@ -220,7 +217,6 @@ void FileHandle::setThreadedError()
     Error error;
     error.level = m_errorIgnorable ? Error::Level::Warning : Error::Level::Error;
     error.setSystemCode(errno, Error::Code::IOError);
-    error.message = strerror(errno);
     error.infos.set(ErrorStringKeyPath, path);
     Notifier::shared()->notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));
