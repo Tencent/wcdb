@@ -11,7 +11,7 @@ echo "Hash" $commitHash
 echo "Timestamp" $buildTimestamp
 echo "Time" $buildTime
 
-plists=(${root}/objc/support/WCDB_Info.plist)
+plists=(${root}/apple/support/Info.plist)
 for plist in ${plists[@]}; do
     echo "Bumping plist" $plist
     defaults write ${plist} CFBundleShortVersionString ${version}
@@ -24,7 +24,7 @@ identifier=`md5 -q -s com.Tencent.WCDB`
 # ObjC Version
 echo "Bumping ObjC Version.h" 
 source=${root}/tools/version/Version.h
-target=${root}/objc/source/utility/Version.h
+target=${root}/apple/objc/utility/Version.h
 
 sed -e "s/WCDB_IDENTIFIER_PLACEHOLDER/${identifier}/g" \
     -e "s/WCDB_VERSION_PLACEHOLDER/${version}/g" \
