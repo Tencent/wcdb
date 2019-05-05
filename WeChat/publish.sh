@@ -2,7 +2,7 @@
 
 root=`git rev-parse --show-toplevel`
 project=${root}/apple/WCDB.xcodeproj
-scheme=WCDB\ iOS\ Static
+scheme=WCDB\ iOS\ static
 configuration=Release
 iphoneosSDK=iphoneos
 iphonesimulatorSDK=iphonesimulator
