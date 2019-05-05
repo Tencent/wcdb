@@ -1,7 +1,7 @@
 #!/bin/bash
 
 root=`git rev-parse --show-toplevel`
-project=${root}/objc/WCDB.xcodeproj
+project=${root}/apple/WCDB.xcodeproj
 scheme=WCDB\ iOS\ Static
 configuration=Release
 iphoneosSDK=iphoneos
