@@ -109,7 +109,7 @@ void Console::fatal(const String& message, const char* file, int line)
 {
     Error error(Error::Code::Misuse, Error::Level::Fatal, message);
     error.infos.set(ErrorStringKeySource, ErrorSourceAssertion);
-    if (file) {
+    if (file != nullptr) {
         error.infos.set("File", file);
     }
     error.infos.set("Line", line);
@@ -122,9 +122,8 @@ void Console::fatal(const String& message, const char* file, int line)
 #else  // DEBUG
 void Console::fatal(const String& message)
 {
-    Error error(Error::Code::Misuse, Error::Level::Fatal);
+    Error error(Error::Code::Misuse, Error::Level::Fatal, message);
     error.infos.set(ErrorStringKeySource, ErrorSourceAssertion);
-    error.message = message;
     error.infos.set("Version", WCDB_VERSION);
     error.infos.set("BuildTime", WCDB_BUILD_TIME);
     error.infos.set("BuildTimestamp", WCDB_BUILD_TIMESTAMP);
