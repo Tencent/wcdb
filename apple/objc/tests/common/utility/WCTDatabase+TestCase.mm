@@ -88,6 +88,18 @@
     [self removeConfigForName:@(WCDB::CheckpointConfigName)];
 }
 
+- (WCTOptionalSize)getNumberOfPages
+{
+    WCTOptionalSize size = nullptr;
+    NSError *error;
+    NSNumber *nsSize = [[NSFileManager defaultManager] attributesOfItemAtPath:self.path error:&error][NSFileSize];
+    if (nsSize != nil && error == nil) {
+        int numberOfPages = (int) (nsSize.integerValue / self.pageSize);
+        size = numberOfPages > 0 ? numberOfPages : 0;
+    }
+    return size;
+}
+
 - (WCTOptionalSize)getNumberOfWalFrames
 {
     WCTOptionalSize size = nullptr;

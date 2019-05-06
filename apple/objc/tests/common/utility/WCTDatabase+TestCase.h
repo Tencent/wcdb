@@ -40,6 +40,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)removeCheckpointConfig;
 
+- (WCTOptionalSize)getNumberOfPages;
+
 - (WCTOptionalSize)getNumberOfWalFrames;
 
 @end
