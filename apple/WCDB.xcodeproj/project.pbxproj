@@ -1385,6 +1385,9 @@
 		39579859227FBC8A0069F985 /* WCTDatabase+Debug.h in Headers */ = {isa = PBXBuildFile; fileRef = 39579856227FBC8A0069F985 /* WCTDatabase+Debug.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3957985A227FBC8A0069F985 /* WCTDatabase+Debug.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39579857227FBC8A0069F985 /* WCTDatabase+Debug.mm */; };
 		3957985B227FBC8A0069F985 /* WCTDatabase+Debug.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39579857227FBC8A0069F985 /* WCTDatabase+Debug.mm */; };
+		3957985D227FD2370069F985 /* Syntax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3957985C227FD2370069F985 /* Syntax.swift */; };
+		3957985F227FD4F20069F985 /* Expression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3957985E227FD4F20069F985 /* Expression.swift */; };
+		39579861227FD5770069F985 /* ForeignKeyClause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39579860227FD5770069F985 /* ForeignKeyClause.swift */; };
 		3959F8CA224E1E8700E24568 /* WCTObservationQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3959F8C7224E1E8700E24568 /* WCTObservationQueue.mm */; };
 		3959F8CB224E1E8700E24568 /* WCTObservationQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3959F8C7224E1E8700E24568 /* WCTObservationQueue.mm */; };
 		39D81662227EC1D9009EC067 /* ColumnDef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D81661227EC1D9009EC067 /* ColumnDef.swift */; };
@@ -2325,6 +2328,9 @@
 		39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CaseInsensiveList.hpp; sourceTree = "<group>"; };
 		39579856227FBC8A0069F985 /* WCTDatabase+Debug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Debug.h"; sourceTree = "<group>"; };
 		39579857227FBC8A0069F985 /* WCTDatabase+Debug.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Debug.mm"; sourceTree = "<group>"; };
+		3957985C227FD2370069F985 /* Syntax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Syntax.swift; sourceTree = "<group>"; };
+		3957985E227FD4F20069F985 /* Expression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expression.swift; sourceTree = "<group>"; };
+		39579860227FD5770069F985 /* ForeignKeyClause.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForeignKeyClause.swift; sourceTree = "<group>"; };
 		3959F8C7224E1E8700E24568 /* WCTObservationQueue.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTObservationQueue.mm; sourceTree = "<group>"; };
 		39D81661227EC1D9009EC067 /* ColumnDef.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnDef.swift; sourceTree = "<group>"; };
 		39D81663227EC1F7009EC067 /* ColumnType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnType.swift; sourceTree = "<group>"; };
@@ -3258,10 +3264,13 @@
 			children = (
 				234F8AB9227AF9D000791E45 /* BindParameter.swift */,
 				234F8AB3227AF5A900791E45 /* Column.swift */,
+				3957985C227FD2370069F985 /* Syntax.swift */,
 				234F8AB7227AF78C00791E45 /* SQL.swift */,
 				39D81661227EC1D9009EC067 /* ColumnDef.swift */,
 				39D81663227EC1F7009EC067 /* ColumnType.swift */,
 				39D81665227EC25E009EC067 /* ColumnConstraint.swift */,
+				3957985E227FD4F20069F985 /* Expression.swift */,
+				39579860227FD5770069F985 /* ForeignKeyClause.swift */,
 			);
 			path = winq;
 			sourceTree = "<group>";
@@ -5134,10 +5143,13 @@
 			files = (
 				234F8AB8227AF78C00791E45 /* SQL.swift in Sources */,
 				234F8ABA227AF9D000791E45 /* BindParameter.swift in Sources */,
+				39579861227FD5770069F985 /* ForeignKeyClause.swift in Sources */,
 				234F8AB4227AF5A900791E45 /* Column.swift in Sources */,
+				3957985F227FD4F20069F985 /* Expression.swift in Sources */,
 				39D81662227EC1D9009EC067 /* ColumnDef.swift in Sources */,
 				39D81666227EC25E009EC067 /* ColumnConstraint.swift in Sources */,
 				39D81664227EC1F7009EC067 /* ColumnType.swift in Sources */,
+				3957985D227FD2370069F985 /* Syntax.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

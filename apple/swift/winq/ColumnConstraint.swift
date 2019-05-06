@@ -20,14 +20,67 @@
 
 import Foundation
 
-// MARK: Syntax
+// MARK: - Syntax
 public class ColumnConstraint: SQL {
     public struct Identifier: SyntaxIdentifier {
-        public var type: SyntaxType {
+        public var type: Syntax.IdentifierType {
             return .ColumnConstraint
         }
 
+        public var name: String
+        public enum Switcher {
+            case PrimaryKey
+            case NotNull
+            case Unique
+            case Check
+            case Default
+            case Collate
+            case ForeignKey
+        }
+        public var switcher: Switcher
+        public var order: Syntax.Order?
+        public var conflict: Syntax.Conflict?
+        public var autoIncrement: Bool
+        public var expression: Expression.Identifier
+        public var collation: String
+        public var foreignKeyClause: ForeignKeyClause
+
         public var description: String {
+            var description: String = ""
+            if !name.isEmpty {
+                description.append("CONSTRAINT \(name) ")
+            }
+            switch switcher {
+            case .PrimaryKey:
+                description.append("PRIMARY KEY")
+                if let order = self.order {
+                    description.append(Syntax.space + order.description)
+                }
+                if let conflict = self.conflict {
+                    description.append(Syntax.space + conflict.description)
+                }
+                if autoIncrement {
+                    description.append(" AUTOINCREMENT")
+                }
+            case .NotNull:
+                description.append("NOT NULL")
+                if let conflict = self.conflict {
+                    description.append(Syntax.space + conflict.description)
+                }
+            case .Unique:
+                description.append("UNIQUE")
+                if let conflict = self.conflict {
+                    description.append(Syntax.space + conflict.description)
+                }
+            case .Check:
+                description.append("CHECK(\(expression.description))")
+            case .Default:
+                description.append("DEFAULT \(expression.description)")
+            case .Collate:
+                description.append("COLLATE \(collation)")
+            case .ForeignKey:
+                description.append(foreignKeyClause.description)
+            }
             return ""
         }
     }
@@ -39,4 +92,4 @@ public class ColumnConstraint: SQL {
     }
 }
 
-// MARK: SQL
+// MARK: - SQL

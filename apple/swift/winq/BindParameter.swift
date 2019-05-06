@@ -20,7 +20,7 @@
 
 import Foundation
 
-// MARK: Syntax
+// MARK: - Syntax
 public class BindParameter: SQL {
     public enum Identifier: SyntaxIdentifier {
         case QuestionSign(n: Int)
@@ -28,7 +28,7 @@ public class BindParameter: SQL {
         case AtSign(name: String)
         case DollarSign(name: String)
 
-        public var type: SyntaxType {
+        public var type: Syntax.IdentifierType {
             return .BindParameter
         }
         public var description: String {
@@ -52,7 +52,7 @@ public class BindParameter: SQL {
     }
 }
 
-// MARK: SQL
+// MARK: - SQL
 public extension BindParameter {
     convenience init(_ n: Int) {
         self.init(syntax: .QuestionSign(n: n))

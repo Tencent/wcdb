@@ -20,10 +20,10 @@
 
 import Foundation
 
-// MARK: Syntax
+// MARK: - Syntax
 public class ColumnDef: SQL {
     public struct Identifier: SyntaxIdentifier {
-        public var type: SyntaxType {
+        public var type: Syntax.IdentifierType {
             return .ColumnDef
         }
 
@@ -33,15 +33,16 @@ public class ColumnDef: SQL {
         public var description: String {
             var description = column.description
             if let columnType = self.columnType {
-                description.append(String.space + columnType.description)
+                description.append(Syntax.space + columnType.description)
             }
             for constraint in self.constraints {
-                description.append(String.space + constraint.description)
+                description.append(Syntax.space + constraint.description)
             }
             return description
         }
-        func iterate(iterator: (SyntaxIdentifier, inout Bool) -> Void, stop: inout Bool) {
 
+        private override func iterate(iterator: (SyntaxIdentifier, inout Bool) -> Void, stop: inout Bool) {
+            #warning("TODO")
 //            void ColumnDef::iterate(const Iterator& iterator, bool& stop)
 //            {
 //                Identifier::iterate(iterator, stop);
@@ -59,7 +60,7 @@ public class ColumnDef: SQL {
     }
 }
 
-// MARK: SQL
+// MARK: - SQL
 public extension ColumnDef {
     convenience init(column: Column) {
         self.init(syntax: Identifier(column: column.syntax, columnType: nil, constraints: []))

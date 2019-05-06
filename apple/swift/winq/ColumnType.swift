@@ -20,29 +20,4 @@
 
 import Foundation
 
-public enum ColumnType: Int {
-    case Null = 0
-    case Integer32
-    case Integer64
-    case Float
-    case Text
-    case BLOB
-
-    public var description: String {
-        switch self {
-        case .Integer32:
-            fallthrough
-        case .Integer64:
-            return "INTEGER"
-        case .Float:
-            return "FLOAT"
-        case .Text:
-            return "TEXT"
-        case .BLOB:
-            return "BLOB"
-        default:
-            assert(self == .Null)
-            return "NULL"
-        }
-    }
-}
+public typealias ColumnType = Syntax.ColumnType

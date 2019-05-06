@@ -20,12 +20,12 @@
 
 import Foundation
 
-// MARK: Syntax
+// MARK: - Syntax
 public class Column: SQL {
     public struct Identifier: SyntaxIdentifier {
         public var name: String
 
-        public var type: SyntaxType {
+        public var type: Syntax.IdentifierType {
             return .Column
         }
         public var description: String {
@@ -40,7 +40,7 @@ public class Column: SQL {
     }
 }
 
-// MARK: SQL
+// MARK: - SQL
 public extension Column {
     static let rowid: Column = Column("rowid")
 
