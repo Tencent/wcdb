@@ -1385,6 +1385,9 @@
 		39411A4222437E7B00A388F5 /* CaseInsensiveList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		3959F8CA224E1E8700E24568 /* WCTObservationQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3959F8C7224E1E8700E24568 /* WCTObservationQueue.mm */; };
 		3959F8CB224E1E8700E24568 /* WCTObservationQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3959F8C7224E1E8700E24568 /* WCTObservationQueue.mm */; };
+		39D81662227EC1D9009EC067 /* ColumnDef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D81661227EC1D9009EC067 /* ColumnDef.swift */; };
+		39D81664227EC1F7009EC067 /* ColumnType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D81663227EC1F7009EC067 /* ColumnType.swift */; };
+		39D81666227EC25E009EC067 /* ColumnConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D81665227EC25E009EC067 /* ColumnConstraint.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2319,6 +2322,9 @@
 		391F7C83225DE8FD0095E82D /* Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
 		39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CaseInsensiveList.hpp; sourceTree = "<group>"; };
 		3959F8C7224E1E8700E24568 /* WCTObservationQueue.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTObservationQueue.mm; sourceTree = "<group>"; };
+		39D81661227EC1D9009EC067 /* ColumnDef.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnDef.swift; sourceTree = "<group>"; };
+		39D81663227EC1F7009EC067 /* ColumnType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnType.swift; sourceTree = "<group>"; };
+		39D81665227EC25E009EC067 /* ColumnConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnConstraint.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3247,6 +3253,9 @@
 				234F8AB9227AF9D000791E45 /* BindParameter.swift */,
 				234F8AB3227AF5A900791E45 /* Column.swift */,
 				234F8AB7227AF78C00791E45 /* SQL.swift */,
+				39D81661227EC1D9009EC067 /* ColumnDef.swift */,
+				39D81663227EC1F7009EC067 /* ColumnType.swift */,
+				39D81665227EC25E009EC067 /* ColumnConstraint.swift */,
 			);
 			path = winq;
 			sourceTree = "<group>";
@@ -5118,6 +5127,9 @@
 				234F8AB8227AF78C00791E45 /* SQL.swift in Sources */,
 				234F8ABA227AF9D000791E45 /* BindParameter.swift in Sources */,
 				234F8AB4227AF5A900791E45 /* Column.swift in Sources */,
+				39D81662227EC1D9009EC067 /* ColumnDef.swift in Sources */,
+				39D81666227EC25E009EC067 /* ColumnConstraint.swift in Sources */,
+				39D81664227EC1F7009EC067 /* ColumnType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

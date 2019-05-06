@@ -21,15 +21,14 @@
 import Foundation
 
 // MARK: Syntax
-public class Column: SQL {
+public class ColumnConstraint: SQL {
     public struct Identifier: SyntaxIdentifier {
-        public var name: String
-
         public var type: SyntaxType {
-            return .Column
+            return .ColumnConstraint
         }
+
         public var description: String {
-            return name
+            return ""
         }
     }
 
@@ -41,10 +40,3 @@ public class Column: SQL {
 }
 
 // MARK: SQL
-public extension Column {
-    static let rowid: Column = Column("rowid")
-
-    convenience init(_ name: String) {
-        self.init(syntax: Identifier(name: name))
-    }
-}

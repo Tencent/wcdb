@@ -20,31 +20,29 @@
 
 import Foundation
 
-// MARK: Syntax
-public class Column: SQL {
-    public struct Identifier: SyntaxIdentifier {
-        public var name: String
+public enum ColumnType: Int {
+    case Null = 0
+    case Integer32
+    case Integer64
+    case Float
+    case Text
+    case BLOB
 
-        public var type: SyntaxType {
-            return .Column
+    public var description: String {
+        switch self {
+        case .Integer32:
+            fallthrough
+        case .Integer64:
+            return "INTEGER"
+        case .Float:
+            return "FLOAT"
+        case .Text:
+            return "TEXT"
+        case .BLOB:
+            return "BLOB"
+        default:
+            assert(self == .Null)
+            return "NULL"
         }
-        public var description: String {
-            return name
-        }
-    }
-
-    public var syntax: Identifier
-
-    required init(syntax: Identifier) {
-        self.syntax = syntax
-    }
-}
-
-// MARK: SQL
-public extension Column {
-    static let rowid: Column = Column("rowid")
-
-    convenience init(_ name: String) {
-        self.init(syntax: Identifier(name: name))
     }
 }

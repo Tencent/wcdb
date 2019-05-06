@@ -20,12 +20,12 @@
 
 import Foundation
 
-public protocol SyntaxIdentifier {
+protocol SyntaxIdentifier {
     var type: SyntaxType {get}
     var description: String {get}
     typealias Iterator = (SyntaxIdentifier, inout Bool) -> Void
     func iterate(_ iterator: Iterator)
-    /* internal */ func iterate(iterator: Iterator, stop: inout Bool)
+    func iterate(iterator: Iterator, stop: inout Bool)
 }
 
 extension SyntaxIdentifier {
@@ -33,7 +33,7 @@ extension SyntaxIdentifier {
         var stop = false
         iterate(iterator: iterator, stop: &stop)
     }
-    public func iterate(iterator: Iterator, stop: inout Bool) {
+    func iterate(iterator: Iterator, stop: inout Bool) {
         iterator(self, &stop)
     }
 }
@@ -96,10 +96,11 @@ public enum SyntaxType: Int {
     case VacuumSTMT
 }
 
-public protocol SQL {
-    typealias `Type` = SyntaxType
-    associatedtype Idenitifer: SyntaxIdentifier
-    var syntax: Idenitifer { get }
+protocol SQL {
+    associatedtype Identifier: SyntaxIdentifier
+    init(syntax: Identifier)
+    var syntax: Identifier { get set }
+
     var description: String {get}
 }
 
@@ -107,4 +108,8 @@ extension SQL {
     public var description: String {
         return syntax.description
     }
+}
+
+extension String {
+    static let space = " "
 }

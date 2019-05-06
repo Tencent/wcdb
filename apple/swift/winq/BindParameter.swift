@@ -22,10 +22,6 @@ import Foundation
 
 // MARK: Syntax
 public class BindParameter: SQL {
-    private init(syntax: Identifier) {
-        self.syntax = syntax
-    }
-
     public enum Identifier: SyntaxIdentifier {
         case QuestionSign(n: Int)
         case ColonSign(name: String)
@@ -48,7 +44,12 @@ public class BindParameter: SQL {
             }
         }
     }
+
     public var syntax: Identifier
+
+    required init(syntax: Identifier) {
+        self.syntax = syntax
+    }
 }
 
 // MARK: SQL
