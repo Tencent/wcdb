@@ -368,7 +368,6 @@
 
     TestCaseResult* tested = [TestCaseResult no];
     [WCTDatabase globalTraceError:^(WCTError* error) {
-        TestCaseLog(@"%@", error);
         if (error.level == WCTErrorLevelIgnore
             && error.code == WCTErrorCodeNotice
             && error.extendedCode == WCTErrorExtendedCodeNoticeRecoverWal) {
@@ -380,7 +379,7 @@
     TestCaseAssertTrue([self.database canOpen]);
     TestCaseAssertResultYES(tested);
 
-    [WCTDatabase resetGlobalErrorTracer];
+    [WCTDatabase globalTraceError:nil];
 
     self.expectSQLsInAllThreads = YES;
     self.expectMode = DatabaseTestCaseExpectSomeSQLs;
@@ -440,7 +439,6 @@
 
     weakify(self);
     [WCTDatabase globalTraceError:^(WCTError* error) {
-        TestCaseLog(@"%@", error);
         strongify_or_return(self);
         if (error.code == WCTErrorCodeBusy
             && error.level == WCTErrorLevelError
@@ -482,7 +480,6 @@
 
         weakify(self);
         [WCTDatabase globalTraceError:^(WCTError* error) {
-            TestCaseLog(@"%@", error);
             strongify_or_return(self);
             if (error.code == WCTErrorCodeBusy
                 && error.level == WCTErrorLevelError

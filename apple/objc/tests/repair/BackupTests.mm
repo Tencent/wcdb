@@ -225,7 +225,6 @@
     {
         weakify(self);
         [WCTDatabase globalTraceError:^(WCTError *error) {
-            TestCaseLog(@"%@", error);
             strongify_or_return(self);
             if (error.isCorruption
                 && [error.source isEqualToString:@"Repair"]
@@ -256,7 +255,7 @@
     TestCaseAssertResultYES(realCorruption);
     TestCaseAssertTrue([self.database isCorrupted]);
 
-    [WCTDatabase resetGlobalErrorTracer];
+    [WCTDatabase globalTraceError:nil];
 }
 
 #warning TODO - find the way to reproduce errors

@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTDatabase.h>
+#import <WCDB/WCDB.h>
 
 typedef NS_OPTIONS(NSUInteger, WCTSimulateIOErrorOptions) {
     WCTSimulateNoneIOError = 0,
@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)simulateIOError:(WCTSimulateIOErrorOptions)options;
 
-+ (void)resetGlobalErrorTracer;
++ (void)additionalGlobalTraceError:(WCTErrorTraceBlock)block;
 
 @end
 

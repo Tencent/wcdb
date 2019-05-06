@@ -18,10 +18,11 @@
  * limitations under the License.
  */
 
-#import <WCDB/Console.hpp>
 #import <WCDB/CoreConst.h>
+#import <WCDB/Notifier.hpp>
 #import <WCDB/SQLite.h>
 #import <WCDB/WCTDatabase+Debug.h>
+#import <WCDB/WCTError+Private.h>
 
 static std::atomic<WCTSimulateIOErrorOptions> &simulateIOErrorOptions()
 {
@@ -55,9 +56,16 @@ static std::nullptr_t initialize()
 
 @implementation WCTDatabase (Debug)
 
-+ (void)resetGlobalErrorTracer
++ (void)additionalGlobalTraceError:(WCTErrorTraceBlock)block
 {
-    WCDB::Console::shared()->setLogger(WCDB::Console::logger);
+    WCDB::Notifier::Callback callback = nullptr;
+    if (block != nullptr) {
+        callback = [block](const WCDB::Error &error) {
+            WCTError *nsError = [[WCTError alloc] initWithError:error];
+            block(nsError);
+        };
+    }
+    WCDB::Notifier::shared()->setNotification(std::numeric_limits<int>::min(), "com.Tencent.WCDB.Notifier.AdditionalLog", callback);
 }
 
 + (void)simulateIOError:(WCTSimulateIOErrorOptions)options

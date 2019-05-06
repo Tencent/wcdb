@@ -114,7 +114,6 @@
     TestCaseResult *tested = [TestCaseResult no];
     weakify(self);
     [WCTDatabase globalTraceError:^(WCTError *error) {
-        TestCaseLog(@"%@", error);
         strongify_or_return(self);
         if (error.code == WCTErrorCodeInterrupt
             && error.level == WCTErrorLevelIgnore
@@ -135,7 +134,7 @@
         TestCaseAssertTrue([self.database stepMigration]);
     } while (tested.isNO);
 
-    [WCTDatabase resetGlobalErrorTracer];
+    [WCTDatabase globalTraceError:nil];
     [write makeNO];
 
     TestCaseAssertResultYES(tested);
@@ -209,7 +208,6 @@
     TestCaseCounter *numberOfFailures = [TestCaseCounter value:0];
     weakify(self);
     [WCTDatabase globalTraceError:^(WCTError *error) {
-        TestCaseLog(@"%@", error);
         strongify_or_return(self);
         if (error.code == WCTErrorCodeIOError
             && error.level == WCTErrorLevelError
@@ -226,7 +224,7 @@
         ;
     [WCTDatabase simulateIOError:WCTSimulateNoneIOError];
 
-    [WCTDatabase resetGlobalErrorTracer];
+    [WCTDatabase globalTraceError:nil];
 
     TestCaseResult *result = [TestCaseResult yes];
     [self.database traceSQL:^(NSString *sql) {

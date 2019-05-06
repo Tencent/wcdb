@@ -116,7 +116,6 @@
     __block double crawlerWeight = 0;
 
     [WCTDatabase globalTraceError:^(WCTError* error) {
-        TestCaseLog(@"%@", error);
         if (error.level == WCTErrorLevelNotice
             && error.code == WCTErrorCodeNotice) {
             NSDictionary* userInfo = error.userInfo;
