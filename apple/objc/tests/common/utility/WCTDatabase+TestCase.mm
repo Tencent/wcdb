@@ -18,40 +18,8 @@
  * limitations under the License.
  */
 
-#import <WCDB/Console.hpp>
-#import <WCDB/CoreConst.h>
-#import <WCDB/SQLite.h>
-#import <WCDB/WCTDatabase+TestCase.h>
-
-static std::atomic<WCTSimulateIOErrorOptions> &simulateIOErrorOptions()
-{
-    static std::atomic<WCTSimulateIOErrorOptions> *s_simulateIOErrorOptions = new std::atomic<WCTSimulateIOErrorOptions>(WCTSimulateNoneIOError);
-    return *s_simulateIOErrorOptions;
-}
-
-static ssize_t controllableWrite(int fd, const void *buf, size_t byte, off_t offset)
-{
-    if ((simulateIOErrorOptions().load() & WCTSimulateWriteIOError) != 0) {
-        return -1;
-    }
-    return pwrite(fd, buf, byte, offset);
-}
-
-static ssize_t controllableRead(int fd, void *buf, size_t byte, off_t offset)
-{
-    if ((simulateIOErrorOptions().load() & WCTSimulateReadIOError) != 0) {
-        return -1;
-    }
-    return pread(fd, buf, byte, offset);
-}
-
-static std::nullptr_t initialize()
-{
-    sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
-    vfs->xSetSystemCall(vfs, "pwrite", (sqlite3_syscall_ptr) controllableWrite);
-    vfs->xSetSystemCall(vfs, "pread", (sqlite3_syscall_ptr) controllableRead);
-    return nullptr;
-}
+#import "CoreConst.h"
+#import "WCTDatabase+TestCase.h"
 
 @implementation WCTDatabase (TestCase)
 
@@ -113,19 +81,6 @@ static std::nullptr_t initialize()
 - (int)walFrameSize
 {
     return self.walFrameHeaderSize + self.pageSize;
-}
-
-+ (void)resetGlobalErrorTracer
-{
-    WCDB::Console::shared()->setLogger(WCDB::Console::logger);
-}
-
-+ (void)simulateIOError:(WCTSimulateIOErrorOptions)options
-{
-    static std::nullptr_t _ = initialize();
-    WCDB_UNUSED(_)
-
-    simulateIOErrorOptions().store(options);
 }
 
 - (void)removeCheckpointConfig

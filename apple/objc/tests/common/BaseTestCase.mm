@@ -24,8 +24,9 @@
 #import "ReusableFactory.h"
 #import "TestCaseAssertion.h"
 #import "TestCaseLog.h"
+#import "WCTDatabase+TestCase.h"
 #import <WCDB/WCDB.h>
-#import <WCDB/WCTDatabase+TestCase.h>
+#import <WCDB/WCTDatabase+Debug.h>
 
 @implementation BaseTestCase {
     Random *_random;

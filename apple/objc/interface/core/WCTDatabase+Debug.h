@@ -18,35 +18,22 @@
  * limitations under the License.
  */
 
-#import "TestCaseAssertion.h"
-#import "TestCaseLog.h"
-#import "TestCaseMacro.h"
+#import <WCDB/WCTDatabase.h>
 
-#import "BaseTestCase.h"
-#import "Benchmark.h"
-#import "CRUDTestCase.h"
-#import "DatabaseTestCase.h"
-#import "TableTestCase.h"
+typedef NS_OPTIONS(NSUInteger, WCTSimulateIOErrorOptions) {
+    WCTSimulateNoneIOError = 0,
+    WCTSimulateReadIOError = 1 << 0,
+    WCTSimulateWriteIOError = 1 << 1,
+};
 
-#import "Dispatch.h"
-#import "Random.h"
-#import "Signpost.h"
-#import "TestCaseCounter.h"
-#import "TestCaseResult.h"
+NS_ASSUME_NONNULL_BEGIN
 
-#import "Random+BenchmarkObject.h"
-#import "Random+TestCaseObject.h"
-#import "Random+WCDB.h"
+@interface WCTDatabase (Debug)
 
-#import "TestCaseObject+WCTTableCoding.h"
-#import "TestCaseObject.h"
++ (void)simulateIOError:(WCTSimulateIOErrorOptions)options;
 
-#import "AllTypesObject+WCTTableCoding.h"
-#import "AllTypesObject.h"
++ (void)resetGlobalErrorTracer;
 
-#import "BenchmarkObject+WCTTableCoding.h"
-#import "BenchmarkObject.h"
+@end
 
-#import "NSObject+TestCase.h"
-
-#import <WCDB/WCTDatabase+Debug.h>
+NS_ASSUME_NONNULL_END
