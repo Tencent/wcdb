@@ -1,70 +1,26 @@
 #!/bin/bash
 
 root=`git rev-parse --show-toplevel`
-project=${root}/apple/WCDB.xcodeproj
-scheme=WCDB\ iOS\ static
-configuration=Release
-iphoneosSDK=iphoneos
-iphonesimulatorSDK=iphonesimulator
-parameters=ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= SKIP_INSTALL=YES GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=NO CLANG_ENABLE_CODE_COVERAGE=NO STRIP_INSTALLED_PRODUCT=NO
-framework=WCDB.framework
-binary=WCDB
-
-pathToWeChat=${root}/WeChat
-pathToDerivedData=${pathToWeChat}/DerivedData
-pathToProducts=${pathToDerivedData}/Build/Products
-pathToDeviceFramework=${pathToProducts}/${configuration}-${iphoneosSDK}/${framework}
-pathToDeviceBinary=${pathToDeviceFramework}/${binary}
-pathToSimulatorBinary=${pathToProducts}/${configuration}-${iphonesimulatorSDK}/${framework}/${binary}
-
-pathToFinalFramework=${pathToDerivedData}/${framework}
-pathToFinalBinary=${pathToFinalFramework}/${binary}
+wechat="$root"/WeChat
+conan="$wechat"/conan
+build_tool="$root"/tools/version/build.sh
 
 # remove cache
-if [ -d ${pathToDerivedData} ]
+if [ -d "$conan" ]
 then
-    rm -r ${pathToDerivedData}
+    rm -r "$conan"
 fi
+mkdir "$conan"
 
-# build device
-if ! xcrun xcodebuild -arch arm64 -project ${project} -scheme "${scheme}" -configuration ${configuration} -derivedDataPath ${pathToDerivedData} -sdk ${iphoneosSDK} ${parameters} build; then
-    echo "Build Failed for Device."
-    exit 1
-fi
-
-# build simulator
-if ! xcrun xcodebuild -project ${project} -scheme "${scheme}" -configuration ${configuration} -derivedDataPath ${pathToDerivedData} -sdk ${iphonesimulatorSDK} ${parameters} build -destination platform=iOS\ Simulator,name="iPhone X"; then
-    echo "Build Failed for Simulator."
-    exit 1
-fi
-
-# copy a template(headers) to the target path
-cp -R ${pathToDeviceFramework} ${pathToFinalFramework}
-
-# combine both two binaries
-if ! xcrun lipo -create ${pathToDeviceBinary} ${pathToSimulatorBinary} -output ${pathToFinalBinary}; then
-    echo "Lipo Failed for Simulator."
+# build
+if ! sh "$build_tool" --target WCDB\ iOS\ static --destination "$conan" --configuration Release; then
     exit 1
 fi
 
 # push to conan
-pathToConan=${pathToWeChat}/conan
-pathToCommitID=${pathToConan}/WCDB_COMMIT_ID
-pathToPublishConanScript=${pathToWeChat}/publish_to_conan.sh
-pathToFrameworkForConan=${pathToConan}/${framework}
-
-# remove cache
-if [ -d ${pathToConan} ]
-then
-    rm -r ${pathToConan}
-fi
-mkdir ${pathToConan}
-
-# copy universal framework to conan
-cp -R ${pathToFinalFramework} ${pathToFrameworkForConan}
 
 # generate WCDB_COMMIT_ID file for recording the commit hash
-git rev-parse HEAD > ${pathToCommitID}
+git rev-parse HEAD > "$conan"/WCDB_COMMIT_ID
 
 # check max subversion
 max_subversion=0
@@ -80,4 +36,6 @@ done < <(conan remote list_ref | grep WCDB-ios/1.0.)
 version=1.0.$((${max_subversion} + 1))
 
 # publish to conan
-sh ${pathToPublishConanScript} -p ios -d conan -n "WCDB" -v ${version}
+sh "$wechat"/publish_to_conan.sh -p ios -d conan -n "WCDB" -v "$version"
+
+echo "WCDB is up to ${version}"
