@@ -18,18 +18,22 @@
  * limitations under the License.
  */
 
-import Foundation
+#import <WCDB/WCDB.h>
 
-protocol SQL {
-    associatedtype Identifier: SyntaxIdentifier
-    init(syntax: Identifier)
-    var syntax: Identifier { get set }
+typedef NS_OPTIONS(NSUInteger, WCTSimulateIOErrorOptions) {
+    WCTSimulateNoneIOError = 0,
+    WCTSimulateReadIOError = 1 << 0,
+    WCTSimulateWriteIOError = 1 << 1,
+};
 
-    var description: String {get}
-}
+NS_ASSUME_NONNULL_BEGIN
 
-extension SQL {
-    public var description: String {
-        return syntax.description
-    }
-}
+@interface WCTDatabase (Debug)
+
++ (void)simulateIOError:(WCTSimulateIOErrorOptions)options;
+
++ (void)additionalGlobalTraceError:(WCTErrorTraceBlock)block;
+
+@end
+
+NS_ASSUME_NONNULL_END

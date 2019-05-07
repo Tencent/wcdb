@@ -78,7 +78,6 @@
     __block BOOL start = NO;
     weakify(self);
     [WCTDatabase globalTraceError:^(WCTError* error) {
-        TestCaseLog(@"%@", error);
         strongify_or_return(self);
         if (error.level == WCTErrorLevelError
             && [error.path isEqualToString:self.path]
@@ -96,7 +95,7 @@
     TestCaseAssertFalse([self.database execute:WCDB::StatementSelect().select(1).from(@"dummy")]);
 
     TestCaseAssertTrue(tested);
-    [WCTDatabase resetGlobalErrorTracer];
+    [WCTDatabase globalTraceError:nil];
 }
 
 - (void)test_global_trace_sql

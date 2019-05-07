@@ -83,7 +83,6 @@ void Database::close(const ClosedCallback &onClosed)
             onClosed();
         }
         m_initialized = false;
-        m_migration.purge();
     });
 }
 

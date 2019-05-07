@@ -20,19 +20,15 @@
 
 import Foundation
 
-// MARK: Syntax
+// MARK: - Syntax
 public class BindParameter: SQL {
-    private init(syntax: Identifier) {
-        self.syntax = syntax
-    }
-
     public enum Identifier: SyntaxIdentifier {
         case QuestionSign(n: Int)
         case ColonSign(name: String)
         case AtSign(name: String)
         case DollarSign(name: String)
 
-        public var type: SyntaxType {
+        public var type: Syntax.IdentifierType {
             return .BindParameter
         }
         public var description: String {
@@ -48,10 +44,15 @@ public class BindParameter: SQL {
             }
         }
     }
+
     public var syntax: Identifier
+
+    required init(syntax: Identifier) {
+        self.syntax = syntax
+    }
 }
 
-// MARK: SQL
+// MARK: - SQL
 public extension BindParameter {
     convenience init(_ n: Int) {
         self.init(syntax: .QuestionSign(n: n))

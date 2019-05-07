@@ -20,12 +20,6 @@
 
 #import <WCDB/WCDB.h>
 
-typedef NS_OPTIONS(NSUInteger, WCTSimulateIOErrorOptions) {
-    WCTSimulateNoneIOError = 0,
-    WCTSimulateReadIOError = 1 << 0,
-    WCTSimulateWriteIOError = 1 << 1,
-};
-
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WCTDatabase (TestCase)
@@ -44,11 +38,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) int walFrameHeaderSize;
 @property (nonatomic, readonly) int walFrameSize;
 
-+ (void)simulateIOError:(WCTSimulateIOErrorOptions)options;
-
-+ (void)resetGlobalErrorTracer;
-
 - (void)removeCheckpointConfig;
+
+- (WCTOptionalSize)getNumberOfPages;
 
 - (WCTOptionalSize)getNumberOfWalFrames;
 

@@ -24,8 +24,9 @@
 #import "ReusableFactory.h"
 #import "TestCaseAssertion.h"
 #import "TestCaseLog.h"
+#import "WCTDatabase+TestCase.h"
 #import <WCDB/WCDB.h>
-#import <WCDB/WCTDatabase+TestCase.h>
+#import <WCDB/WCTDatabase+Debug.h>
 
 @implementation BaseTestCase {
     Random *_random;
@@ -55,6 +56,10 @@
     WCTDatabase.debuggable = NO;
 #endif
 
+    [WCTDatabase additionalGlobalTraceError:^(WCTError *error) {
+        TestCaseLog(@"%@", error);
+    }];
+
     if (WCTDatabase.debuggable) {
         [self log:@"debuggable."];
     }
@@ -76,7 +81,7 @@
             [_dispatch waitUntilDone];
         }
     }
-    [WCTDatabase resetGlobalErrorTracer];
+    [WCTDatabase globalTraceError:nil];
     [WCTDatabase globalTraceSQL:nil];
     [WCTDatabase globalTracePerformance:nil];
     [self cleanDirectory];

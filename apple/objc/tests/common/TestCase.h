@@ -48,3 +48,5 @@
 #import "BenchmarkObject.h"
 
 #import "NSObject+TestCase.h"
+
+#import <WCDB/WCTDatabase+Debug.h>

@@ -20,16 +20,4 @@
 
 import Foundation
 
-protocol SQL {
-    associatedtype Identifier: SyntaxIdentifier
-    init(syntax: Identifier)
-    var syntax: Identifier { get set }
-
-    var description: String {get}
-}
-
-extension SQL {
-    public var description: String {
-        return syntax.description
-    }
-}
+public typealias ColumnType = Syntax.ColumnType

@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
+#import "WCTDatabase+TestCase.h"
 #import <Foundation/Foundation.h>
 #import <WCDB/WCDB.h>
-#import <WCDB/WCTDatabase+TestCase.h>
 
 @interface NSObject (TestCase)
 

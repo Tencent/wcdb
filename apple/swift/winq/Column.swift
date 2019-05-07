@@ -20,26 +20,27 @@
 
 import Foundation
 
-// MARK: Syntax
+// MARK: - Syntax
 public class Column: SQL {
-    private init(syntax: Identifier) {
-        self.syntax = syntax
-    }
-
     public struct Identifier: SyntaxIdentifier {
         public var name: String
 
-        public var type: SyntaxType {
+        public var type: Syntax.IdentifierType {
             return .Column
         }
         public var description: String {
             return name
         }
     }
+
     public var syntax: Identifier
+
+    required init(syntax: Identifier) {
+        self.syntax = syntax
+    }
 }
 
-// MARK: SQL
+// MARK: - SQL
 public extension Column {
     static let rowid: Column = Column("rowid")
 

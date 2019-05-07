@@ -113,7 +113,6 @@
 {
     __block TestCaseResult* tested = [TestCaseResult no];
     [WCTDatabase globalTraceError:^(WCTError* error) {
-        TestCaseLog(@"%@", error);
         if (error.level == WCTErrorLevelWarning
             && error.code == WCTErrorCodeWarning) {
             [tested makeYES];
@@ -136,7 +135,6 @@
 {
     __block TestCaseResult* tested = [TestCaseResult no];
     [WCTDatabase globalTraceError:^(WCTError* error) {
-        TestCaseLog(@"%@", error);
         if (error.level == WCTErrorLevelWarning
             && error.code == WCTErrorCodeWarning) {
             [tested makeYES];
@@ -195,7 +193,6 @@
     // purge will be done after a few moment.
     __block TestCaseResult* tested = [TestCaseResult no];
     [WCTDatabase globalTraceError:^(WCTError* error) {
-        TestCaseLog(@"%@", error);
         if (error.level == WCTErrorLevelWarning
             && error.code == WCTErrorCodeWarning) {
             [tested makeYES];
@@ -236,7 +233,6 @@
     // purge will be done after a few moment.
     __block TestCaseResult* tested = [TestCaseResult no];
     [WCTDatabase globalTraceError:^(WCTError* error) {
-        TestCaseLog(@"%@", error);
         if (error.level == WCTErrorLevelWarning
             && error.code == WCTErrorCodeWarning) {
             [tested makeYES];

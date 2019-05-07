@@ -20,16 +20,24 @@
 
 import Foundation
 
-protocol SQL {
-    associatedtype Identifier: SyntaxIdentifier
-    init(syntax: Identifier)
-    var syntax: Identifier { get set }
+// MARK: - Syntax
+public class ForeignKeyClause: SQL {
+    public struct Identifier: SyntaxIdentifier {
+        public var type: Syntax.IdentifierType {
+            return .ForeignKeyClause
+        }
 
-    var description: String {get}
-}
+        public var description: String {
+            #warning("TODO")
+            return ""
+        }
+    }
 
-extension SQL {
-    public var description: String {
-        return syntax.description
+    public var syntax: Identifier
+
+    required init(syntax: Identifier) {
+        self.syntax = syntax
     }
 }
+
+// MARK: - SQL
