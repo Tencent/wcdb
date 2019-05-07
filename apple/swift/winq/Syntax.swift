@@ -20,7 +20,6 @@
 
 import Foundation
 
-#error("Combine class/conditional protocol to fit this.")
 protocol SyntaxIdentifier {
     var type: Syntax.IdentifierType {get}
     var description: String {get}

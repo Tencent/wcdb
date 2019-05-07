@@ -41,9 +41,9 @@ public class ColumnConstraint: SQL {
         public var order: Syntax.Order?
         public var conflict: Syntax.Conflict?
         public var autoIncrement: Bool
-        public var expression: Expression.Identifier
-        public var collation: String
-        public var foreignKeyClause: ForeignKeyClause
+        public var expression: Expression.Identifier?
+        public var collation: String?
+        public var foreignKeyClause: ForeignKeyClause?
 
         public var description: String {
             var description: String = ""
@@ -73,13 +73,13 @@ public class ColumnConstraint: SQL {
                     description.append(Syntax.space + conflict.description)
                 }
             case .Check:
-                description.append("CHECK(\(expression.description))")
+                description.append("CHECK(\(expression?.description ?? ""))")
             case .Default:
-                description.append("DEFAULT \(expression.description)")
+                description.append("DEFAULT \(expression?.description ?? "")")
             case .Collate:
-                description.append("COLLATE \(collation)")
+                description.append("COLLATE \(collation ?? "")")
             case .ForeignKey:
-                description.append(foreignKeyClause.description)
+                description.append(foreignKeyClause?.description ?? "")
             }
             return ""
         }

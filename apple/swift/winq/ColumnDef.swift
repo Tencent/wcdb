@@ -41,7 +41,7 @@ public class ColumnDef: SQL {
             return description
         }
 
-        private override func iterate(iterator: (SyntaxIdentifier, inout Bool) -> Void, stop: inout Bool) {
+        private func iterate(iterator: (SyntaxIdentifier, inout Bool) -> Void, stop: inout Bool) {
             #warning("TODO")
 //            void ColumnDef::iterate(const Iterator& iterator, bool& stop)
 //            {
