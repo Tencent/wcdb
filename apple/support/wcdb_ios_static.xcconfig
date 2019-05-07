@@ -14,8 +14,8 @@ STRIP_STYLE = debugging
 
 // Linking
 MACH_O_TYPE = staticlib
-GENERATE_MASTER_OBJECT_FILE = YES
-PRELINK_LIBS = $(TARGET_BUILD_DIR)/sqlcipher.framework/sqlcipher
+//GENERATE_MASTER_OBJECT_FILE = YES
+//PRELINK_LIBS = $(TARGET_BUILD_DIR)/sqlcipher.framework/sqlcipher
 
 // Packaging
 INFOPLIST_FILE = $(SRCROOT)/support/Info.plist

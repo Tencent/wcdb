@@ -1377,6 +1377,7 @@
 		23FEC463206B3032001E7A3B /* WCTConvenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 23FEC461206B3032001E7A3B /* WCTConvenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		391F7C84225DE8FD0095E82D /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 391F7C83225DE8FD0095E82D /* Core.h */; };
 		391F7C85225DE8FD0095E82D /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 391F7C83225DE8FD0095E82D /* Core.h */; };
+		3934938022818B5900E43964 /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F5BE0620887FD4000CCD37 /* sqlcipher.framework */; };
 		39411A4122437E7B00A388F5 /* CaseInsensiveList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		39411A4222437E7B00A388F5 /* CaseInsensiveList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		39579854227FBC6E0069F985 /* WCTDatabase+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0682227AA54400DD65A2 /* WCTDatabase+TestCase.mm */; };
@@ -2373,6 +2374,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3934938022818B5900E43964 /* sqlcipher.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
