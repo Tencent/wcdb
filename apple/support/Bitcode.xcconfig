@@ -1,4 +1,4 @@
-#include "release.xcconfig"
+#include "Release.xcconfig"
 
 // User-Defined
 ENABLE_BITCODE[sdk=iphoneos*] = YES

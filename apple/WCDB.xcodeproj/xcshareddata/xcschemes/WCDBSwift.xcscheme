@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2367BAB52215004300380122"
-               BuildableName = "WCDB.framework"
-               BlueprintName = "WCDB iOS static"
+               BlueprintIdentifier = "234F0744227AAE4B00DD65A2"
+               BuildableName = "WCDBSwift.framework"
+               BlueprintName = "WCDBSwift"
                ReferencedContainer = "container:WCDB.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -34,19 +34,9 @@
             testExecutionOrdering = "random">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "39349576228265C900E43964"
-               BuildableName = "Tests iOS static.xctest"
-               BlueprintName = "Tests iOS static"
-               ReferencedContainer = "container:WCDB.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "393496372282733700E43964"
-               BuildableName = "Benchmark iOS static.xctest"
-               BlueprintName = "Benchmark iOS static"
+               BlueprintIdentifier = "234F8AD3227B0B5400791E45"
+               BuildableName = "TestsSwift.xctest"
+               BlueprintName = "TestsSwift"
                ReferencedContainer = "container:WCDB.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -54,9 +44,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2367BAB52215004300380122"
-            BuildableName = "WCDB.framework"
-            BlueprintName = "WCDB iOS static"
+            BlueprintIdentifier = "234F0744227AAE4B00DD65A2"
+            BuildableName = "WCDBSwift.framework"
+            BlueprintName = "WCDBSwift"
             ReferencedContainer = "container:WCDB.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -76,9 +66,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2367BAB52215004300380122"
-            BuildableName = "WCDB.framework"
-            BlueprintName = "WCDB iOS static"
+            BlueprintIdentifier = "234F0744227AAE4B00DD65A2"
+            BuildableName = "WCDBSwift.framework"
+            BlueprintName = "WCDBSwift"
             ReferencedContainer = "container:WCDB.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -94,9 +84,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2367BAB52215004300380122"
-            BuildableName = "WCDB.framework"
-            BlueprintName = "WCDB iOS static"
+            BlueprintIdentifier = "234F0744227AAE4B00DD65A2"
+            BuildableName = "WCDBSwift.framework"
+            BlueprintName = "WCDBSwift"
             ReferencedContainer = "container:WCDB.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

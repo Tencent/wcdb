@@ -4,6 +4,9 @@ SUPPORTED_PLATFORMS = macosx iphonesimulator iphoneos appletvos appletvsimulator
 // Packaging
 INFOPLIST_FILE = $(SRCROOT)/objc/tests/support/Info.plist
 
+// Apple Clang - Language - Objective-C
+GCC_ENABLE_OBJC_EXCEPTIONS = YES
+
 // Testing
 TEST_HOST[sdk=iphonesimulator*] = $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host
 TEST_HOST[sdk=iphoneos*] = $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Host.app/Host

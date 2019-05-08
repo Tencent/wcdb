@@ -57,7 +57,12 @@
 #endif
 
     [WCTDatabase additionalGlobalTraceError:^(WCTError *error) {
-        TestCaseLog(@"%@", error);
+        NSThread *currentThread = [NSThread currentThread];
+        NSString *threadName = currentThread.name;
+        if (threadName.length == 0) {
+            threadName = [NSString stringWithFormat:@"%p", currentThread];
+        }
+        TestCaseLog(@"%@ Thread %@: %@", currentThread.isMainThread ? @"*" : @"-", threadName, error);
     }];
 
     if (WCTDatabase.debuggable) {

@@ -1,4 +1,4 @@
-#include "base.xcconfig"
+#include "Base.xcconfig"
 
 // Architectures
 ONLY_ACTIVE_ARCH = NO
@@ -23,9 +23,6 @@ GCC_OPTIMIZATION_LEVEL = s
 // Preprocessing
 ENABLE_NS_ASSERTIONS = NO
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) NDEBUG=1
-
-// Apple Clang - Language - Objective-C
-GCC_ENABLE_OBJC_EXCEPTIONS = NO
 
 // Swift Compiler - Code Generation
 SWIFT_COMPILATION_MODE = wholemodule
