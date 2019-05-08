@@ -1,6 +1,0 @@
-#include "Release.xcconfig"
-
-// User-Defined
-ENABLE_BITCODE[sdk=iphoneos*] = YES
-ENABLE_BITCODE[sdk=watch*] = YES;
-ENABLE_BITCODE[sdk=appletv*] = YES;

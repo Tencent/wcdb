@@ -1796,7 +1796,6 @@
 		234F035C227A9CFE00DD65A2 /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		234F0369227A9E3C00DD65A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = Info.plist; sourceTree = "<group>"; };
 		234F036A227A9E3C00DD65A2 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
-		234F036B227A9E3D00DD65A2 /* Bitcode.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Bitcode.xcconfig; sourceTree = "<group>"; };
 		234F036C227A9E3D00DD65A2 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		234F036D227A9E3D00DD65A2 /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
 		234F036E227A9E3D00DD65A2 /* WCDB.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = WCDB.modulemap; sourceTree = "<group>"; };
@@ -4189,7 +4188,6 @@
 				234F036D227A9E3D00DD65A2 /* Base.xcconfig */,
 				234F036A227A9E3C00DD65A2 /* Debug.xcconfig */,
 				234F036C227A9E3D00DD65A2 /* Release.xcconfig */,
-				234F036B227A9E3D00DD65A2 /* Bitcode.xcconfig */,
 				234F0369227A9E3C00DD65A2 /* Info.plist */,
 				234F036E227A9E3D00DD65A2 /* WCDB.modulemap */,
 				234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */,
@@ -6325,13 +6323,6 @@
 			};
 			name = Release;
 		};
-		234F0367227A9CFE00DD65A2 /* Bitcode */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 234F042F227A9EFA00DD65A2 /* Tests.xcconfig */;
-			buildSettings = {
-			};
-			name = Bitcode;
-		};
 		234F056E227AA42500DD65A2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 234F042F227A9EFA00DD65A2 /* Tests.xcconfig */;
@@ -6345,13 +6336,6 @@
 			buildSettings = {
 			};
 			name = Release;
-		};
-		234F0570227AA42500DD65A2 /* Bitcode */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 234F042F227A9EFA00DD65A2 /* Tests.xcconfig */;
-			buildSettings = {
-			};
-			name = Bitcode;
 		};
 		234F074B227AAE4B00DD65A2 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -6376,17 +6360,6 @@
 			};
 			name = Release;
 		};
-		234F074D227AAE4B00DD65A2 /* Bitcode */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 234F074F227AAEA200DD65A2 /* WCDBSwift.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				DEFINES_MODULE = YES;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				SWIFT_VERSION = 5.0;
-			};
-			name = Bitcode;
-		};
 		234F8ADD227B0B5400791E45 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 234F042F227A9EFA00DD65A2 /* Tests.xcconfig */;
@@ -6408,16 +6381,6 @@
 			};
 			name = Release;
 		};
-		234F8ADF227B0B5400791E45 /* Bitcode */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 234F042F227A9EFA00DD65A2 /* Tests.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				SWIFT_VERSION = 5.0;
-			};
-			name = Bitcode;
-		};
 		2367BD092215004300380122 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 234F036F227A9E3D00DD65A2 /* WCDB iOS Static.xcconfig */;
@@ -6431,13 +6394,6 @@
 			buildSettings = {
 			};
 			name = Release;
-		};
-		2367BD0B2215004300380122 /* Bitcode */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 234F036F227A9E3D00DD65A2 /* WCDB iOS Static.xcconfig */;
-			buildSettings = {
-			};
-			name = Bitcode;
 		};
 		239326671E836D7300D677CC /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -6467,27 +6423,6 @@
 			};
 			name = Release;
 		};
-		239E8A852160A5B200BCB308 /* Bitcode */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 234F0753227AB18B00DD65A2 /* host.xcconfig */;
-			buildSettings = {
-			};
-			name = Bitcode;
-		};
-		23A2C8BF208CDC1500C6BB6B /* Bitcode */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 234F036B227A9E3D00DD65A2 /* Bitcode.xcconfig */;
-			buildSettings = {
-			};
-			name = Bitcode;
-		};
-		23A2C8C0208CDC1500C6BB6B /* Bitcode */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */;
-			buildSettings = {
-			};
-			name = Bitcode;
-		};
 		23B5F7681E1111C100E58396 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 234F036A227A9E3C00DD65A2 /* Debug.xcconfig */;
@@ -6516,13 +6451,6 @@
 			};
 			name = Release;
 		};
-		39349629228265C900E43964 /* Bitcode */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 393496312282667100E43964 /* Tests iOS static.xcconfig */;
-			buildSettings = {
-			};
-			name = Bitcode;
-		};
 		3934965B2282733700E43964 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 393496312282667100E43964 /* Tests iOS static.xcconfig */;
@@ -6537,13 +6465,6 @@
 			};
 			name = Release;
 		};
-		3934965D2282733700E43964 /* Bitcode */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 393496312282667100E43964 /* Tests iOS static.xcconfig */;
-			buildSettings = {
-			};
-			name = Bitcode;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -6552,7 +6473,6 @@
 			buildConfigurations = (
 				234F0365227A9CFE00DD65A2 /* Debug */,
 				234F0366227A9CFE00DD65A2 /* Release */,
-				234F0367227A9CFE00DD65A2 /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -6562,7 +6482,6 @@
 			buildConfigurations = (
 				234F056E227AA42500DD65A2 /* Debug */,
 				234F056F227AA42500DD65A2 /* Release */,
-				234F0570227AA42500DD65A2 /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -6572,7 +6491,6 @@
 			buildConfigurations = (
 				234F074B227AAE4B00DD65A2 /* Debug */,
 				234F074C227AAE4B00DD65A2 /* Release */,
-				234F074D227AAE4B00DD65A2 /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -6582,7 +6500,6 @@
 			buildConfigurations = (
 				234F8ADD227B0B5400791E45 /* Debug */,
 				234F8ADE227B0B5400791E45 /* Release */,
-				234F8ADF227B0B5400791E45 /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -6592,7 +6509,6 @@
 			buildConfigurations = (
 				2367BD092215004300380122 /* Debug */,
 				2367BD0A2215004300380122 /* Release */,
-				2367BD0B2215004300380122 /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -6602,7 +6518,6 @@
 			buildConfigurations = (
 				239326671E836D7300D677CC /* Debug */,
 				239326681E836D7300D677CC /* Release */,
-				23A2C8C0208CDC1500C6BB6B /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -6612,7 +6527,6 @@
 			buildConfigurations = (
 				239E8A832160A5B200BCB308 /* Debug */,
 				239E8A842160A5B200BCB308 /* Release */,
-				239E8A852160A5B200BCB308 /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -6622,7 +6536,6 @@
 			buildConfigurations = (
 				23B5F7681E1111C100E58396 /* Debug */,
 				23B5F7691E1111C100E58396 /* Release */,
-				23A2C8BF208CDC1500C6BB6B /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -6632,7 +6545,6 @@
 			buildConfigurations = (
 				39349627228265C900E43964 /* Debug */,
 				39349628228265C900E43964 /* Release */,
-				39349629228265C900E43964 /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -6642,7 +6554,6 @@
 			buildConfigurations = (
 				3934965B2282733700E43964 /* Debug */,
 				3934965C2282733700E43964 /* Release */,
-				3934965D2282733700E43964 /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
