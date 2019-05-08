@@ -76,14 +76,23 @@ bool Database::canOpen()
     return getHandle() != nullptr;
 }
 
+void Database::didDrain()
+{
+    WCTInnerAssert(m_memory.writeSafety());
+    WCTInnerAssert(!isOpened());
+    m_initialized = false;
+}
+
+void Database::didSecondaryDrain()
+{
+    WCTInnerAssert(m_memory.writeSafety());
+    WCTInnerAssert(!isOpened());
+    m_initialized = false;
+}
+
 void Database::close(const ClosedCallback &onClosed)
 {
-    drain([&onClosed, this]() {
-        if (onClosed != nullptr) {
-            onClosed();
-        }
-        m_initialized = false;
-    });
+    drain(onClosed);
 }
 
 bool Database::isOpened() const

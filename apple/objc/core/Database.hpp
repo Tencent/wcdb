@@ -81,6 +81,9 @@ public:
 protected:
     Tag m_tag;
 
+    void didDrain() override final;
+    void didSecondaryDrain() override final;
+
 #pragma mark - Handle
 public:
     RecyclableHandle getHandle();
