@@ -1,4 +1,4 @@
-#include "wcdb.xcconfig"
+#include "WCDB.xcconfig"
 
 // Architectures
 SUPPORTED_PLATFORMS = iphonesimulator iphoneos
@@ -7,6 +7,7 @@ SUPPORTED_PLATFORMS = iphonesimulator iphoneos
 ENABLE_TESTABILITY = NO
 
 // Deployment
+TARGETED_DEVICE_FAMILY = 1,2;
 STRIP_INSTALLED_PRODUCT = NO
 DEPLOYMENT_POSTPROCESSING = NO
 COPY_PHASE_STRIP = NO
@@ -14,8 +15,8 @@ STRIP_STYLE = debugging
 
 // Linking
 MACH_O_TYPE = staticlib
-GENERATE_MASTER_OBJECT_FILE = YES
-PRELINK_LIBS = $(TARGET_BUILD_DIR)/sqlcipher.framework/sqlcipher
+// GENERATE_MASTER_OBJECT_FILE = YES
+// PRELINK_LIBS = $(TARGET_BUILD_DIR)/sqlcipher.framework/sqlcipher
 
 // Packaging
 INFOPLIST_FILE = $(SRCROOT)/support/Info.plist

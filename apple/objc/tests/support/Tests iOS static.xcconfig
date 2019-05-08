@@ -1,0 +1,10 @@
+#include "Tests.xcconfig"
+
+// Architectures
+SUPPORTED_PLATFORMS = iphonesimulator iphoneos
+
+// Deployment
+TARGETED_DEVICE_FAMILY = 1,2;
+
+// Linking
+OTHER_LDFLAGS = $(inherited) -ObjC

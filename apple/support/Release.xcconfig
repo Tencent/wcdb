@@ -1,4 +1,4 @@
-#include "base.xcconfig"
+#include "Base.xcconfig"
 
 // Architectures
 ONLY_ACTIVE_ARCH = NO

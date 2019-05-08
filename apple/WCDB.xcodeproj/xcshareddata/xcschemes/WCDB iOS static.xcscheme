@@ -28,7 +28,28 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES"
+            testExecutionOrdering = "random">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "39349576228265C900E43964"
+               BuildableName = "Tests iOS static.xctest"
+               BlueprintName = "Tests iOS static"
+               ReferencedContainer = "container:WCDB.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "2367BAB52215004300380122"
+            BuildableName = "WCDB.framework"
+            BlueprintName = "WCDB iOS static"
+            ReferencedContainer = "container:WCDB.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
