@@ -64,7 +64,7 @@ protected:
         virtual ~InfoInitializer() = 0;
 
     protected:
-        // When succeed, the empty column means that table does not exist.
+        // When succeed, empty column indicates that table does not exist.
         // succeed, contains integer primary key, columns
         virtual std::tuple<bool, bool, std::set<String>>
         getColumnsForSourceTable(const MigrationUserInfo& userInfo) = 0;
@@ -73,6 +73,8 @@ protected:
 
     bool initInfo(InfoInitializer& initializer, const String& table);
     bool lazyInitInfo(InfoInitializer& initializer, const String& table);
+    void markAsNoNeedToMigrate(const String& table);
+
     void markAsUnreferenced(const MigrationInfo* info);
     void markAsDropped(const MigrationInfo* info);
     void markAsMigrated(const MigrationInfo* info);
@@ -160,9 +162,6 @@ protected:
     std::pair<bool, bool> tryDropUnreferencedTable(Migration::Stepper& stepper);
     std::pair<bool, bool> tryMigrateRows(Migration::Stepper& stepper);
     std::pair<bool, bool> tryAcquireTables(Migration::Stepper& stepper);
-
-    void postMigratedNotification();
-    void postTableMigratedNotification(const MigrationInfo* info);
 
 private:
     bool m_tableAcquired;
