@@ -1548,6 +1548,37 @@
 		3934962F2282665700E43964 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F0FD7C215F1C92008399FB /* Security.framework */; };
 		393496302282665B00E43964 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23C43BCC2087435800AB186D /* libz.tbd */; };
 		3934963422826D6600E43964 /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F5BE0620887FD4000CCD37 /* sqlcipher.framework */; };
+		3934963B2282733700E43964 /* AllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0667227AA53800DD65A2 /* AllTypesObject.mm */; };
+		3934963C2282733700E43964 /* BaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0651227AA52D00DD65A2 /* BaseTestCase.mm */; };
+		3934963D2282733700E43964 /* Random+WCDB.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F068E227AA54600DD65A2 /* Random+WCDB.mm */; };
+		3934963E2282733700E43964 /* BaselineBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F057A227AA4CB00DD65A2 /* BaselineBenchmark.mm */; };
+		3934963F2282733700E43964 /* Random+BenchmarkObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F066C227AA53800DD65A2 /* Random+BenchmarkObject.mm */; };
+		393496402282733700E43964 /* RetrieveBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F057C227AA4CB00DD65A2 /* RetrieveBenchmark.mm */; };
+		393496412282733700E43964 /* CipherBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0580227AA4CC00DD65A2 /* CipherBenchmark.mm */; };
+		393496422282733700E43964 /* Random+TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F066D227AA53900DD65A2 /* Random+TestCaseObject.mm */; };
+		393496432282733700E43964 /* MigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0579227AA4CB00DD65A2 /* MigrationBenchmark.mm */; };
+		393496442282733700E43964 /* Signpost.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0683227AA54400DD65A2 /* Signpost.mm */; };
+		393496452282733700E43964 /* DatabaseTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0652227AA52D00DD65A2 /* DatabaseTestCase.mm */; };
+		393496462282733700E43964 /* CRUDTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0650227AA52C00DD65A2 /* CRUDTestCase.mm */; };
+		393496472282733700E43964 /* TableBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0582227AA4CC00DD65A2 /* TableBenchmark.mm */; };
+		393496482282733700E43964 /* WCTDatabase+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0682227AA54400DD65A2 /* WCTDatabase+TestCase.mm */; };
+		393496492282733700E43964 /* TestCaseCounter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0684227AA54400DD65A2 /* TestCaseCounter.mm */; };
+		3934964A2282733700E43964 /* TestCaseLog.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F067F227AA54300DD65A2 /* TestCaseLog.mm */; };
+		3934964B2282733700E43964 /* Benchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F064F227AA52C00DD65A2 /* Benchmark.mm */; };
+		3934964C2282733700E43964 /* Random.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0689227AA54500DD65A2 /* Random.mm */; };
+		3934964D2282733700E43964 /* ObjectsBasedBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F057F227AA4CC00DD65A2 /* ObjectsBasedBenchmark.mm */; };
+		3934964E2282733700E43964 /* DatabaseMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F057D227AA4CB00DD65A2 /* DatabaseMigrationBenchmark.mm */; };
+		3934964F2282733700E43964 /* TestCaseObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0663227AA53700DD65A2 /* TestCaseObject.mm */; };
+		393496502282733700E43964 /* TableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F064D227AA52C00DD65A2 /* TableTestCase.mm */; };
+		393496512282733700E43964 /* BenchmarkObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0662227AA53700DD65A2 /* BenchmarkObject.mm */; };
+		393496522282733700E43964 /* TableMigrationBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0581227AA4CC00DD65A2 /* TableMigrationBenchmark.mm */; };
+		393496532282733700E43964 /* TestCaseResult.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0687227AA54400DD65A2 /* TestCaseResult.mm */; };
+		393496542282733700E43964 /* NSObject+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F067A227AA54300DD65A2 /* NSObject+TestCase.mm */; };
+		393496552282733700E43964 /* ReusableFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0688227AA54500DD65A2 /* ReusableFactory.mm */; };
+		393496562282733700E43964 /* Dispatch.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F068D227AA54600DD65A2 /* Dispatch.mm */; };
+		39349662228274C300E43964 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2367BD0C2215004300380122 /* WCDB.framework */; };
+		39349663228274C700E43964 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23C43BCC2087435800AB186D /* libz.tbd */; };
+		39349664228274CD00E43964 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F0FD7C215F1C92008399FB /* Security.framework */; };
 		39411A4122437E7B00A388F5 /* CaseInsensiveList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		39411A4222437E7B00A388F5 /* CaseInsensiveList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		39579854227FBC6E0069F985 /* WCTDatabase+TestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 234F0682227AA54400DD65A2 /* WCTDatabase+TestCase.mm */; };
@@ -1629,6 +1660,27 @@
 			proxyType = 1;
 			remoteGlobalIDString = 2367BAB52215004300380122;
 			remoteInfo = "WCDB iOS static";
+		};
+		39349660228274B900E43964 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2367BAB52215004300380122;
+			remoteInfo = "WCDB iOS static";
+		};
+		39349665228274E800E43964 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239E8A6F2160A5B100BCB308;
+			remoteInfo = Host;
+		};
+		39349667228274EC00E43964 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23B5F75B1E1111C100E58396 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 239E8A6F2160A5B100BCB308;
+			remoteInfo = Host;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -2512,6 +2564,7 @@
 		391F7C83225DE8FD0095E82D /* Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
 		3934962A228265C900E43964 /* Tests iOS static.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests iOS static.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		393496312282667100E43964 /* Tests iOS static.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Tests iOS static.xcconfig"; sourceTree = "<group>"; };
+		3934965E2282733700E43964 /* Benchmark iOS static.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Benchmark iOS static.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		39411A3E22437E7B00A388F5 /* CaseInsensiveList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CaseInsensiveList.hpp; sourceTree = "<group>"; };
 		39579856227FBC8A0069F985 /* WCTDatabase+Debug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Debug.h"; sourceTree = "<group>"; };
 		39579857227FBC8A0069F985 /* WCTDatabase+Debug.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Debug.mm"; sourceTree = "<group>"; };
@@ -2589,6 +2642,16 @@
 				393496302282665B00E43964 /* libz.tbd in Frameworks */,
 				3934962F2282665700E43964 /* Security.framework in Frameworks */,
 				3934962E2282663000E43964 /* WCDB.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		393496572282733700E43964 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				39349664228274CD00E43964 /* Security.framework in Frameworks */,
+				39349663228274C700E43964 /* libz.tbd in Frameworks */,
+				39349662228274C300E43964 /* WCDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3764,6 +3827,7 @@
 				234F0745227AAE4B00DD65A2 /* WCDBSwift.framework */,
 				234F8AD4227B0B5400791E45 /* TestsSwift.xctest */,
 				3934962A228265C900E43964 /* Tests iOS static.xctest */,
+				3934965E2282733700E43964 /* Benchmark iOS static.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -4855,6 +4919,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				39349666228274E800E43964 /* PBXTargetDependency */,
 				234F056C227AA42500DD65A2 /* PBXTargetDependency */,
 			);
 			name = Benchmark;
@@ -4974,6 +5039,25 @@
 			productReference = 3934962A228265C900E43964 /* Tests iOS static.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		393496372282733700E43964 /* Benchmark iOS static */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3934965A2282733700E43964 /* Build configuration list for PBXNativeTarget "Benchmark iOS static" */;
+			buildPhases = (
+				3934963A2282733700E43964 /* Sources */,
+				393496572282733700E43964 /* Frameworks */,
+				393496592282733700E43964 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				39349668228274EC00E43964 /* PBXTargetDependency */,
+				39349661228274B900E43964 /* PBXTargetDependency */,
+			);
+			name = "Benchmark iOS static";
+			productName = Benchmark;
+			productReference = 3934965E2282733700E43964 /* Benchmark iOS static.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -5039,6 +5123,7 @@
 				234F0564227AA42500DD65A2 /* Benchmark */,
 				2367BAB52215004300380122 /* WCDB iOS static */,
 				39349576228265C900E43964 /* Tests iOS static */,
+				393496372282733700E43964 /* Benchmark iOS static */,
 				234F0744227AAE4B00DD65A2 /* WCDBSwift */,
 				234F8AD3227B0B5400791E45 /* TestsSwift */,
 				239E8A6F2160A5B100BCB308 /* Host */,
@@ -5107,6 +5192,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		39349625228265C900E43964 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		393496592282733700E43964 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -6123,6 +6215,41 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3934963A2282733700E43964 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3934963B2282733700E43964 /* AllTypesObject.mm in Sources */,
+				3934963C2282733700E43964 /* BaseTestCase.mm in Sources */,
+				3934963D2282733700E43964 /* Random+WCDB.mm in Sources */,
+				3934963E2282733700E43964 /* BaselineBenchmark.mm in Sources */,
+				3934963F2282733700E43964 /* Random+BenchmarkObject.mm in Sources */,
+				393496402282733700E43964 /* RetrieveBenchmark.mm in Sources */,
+				393496412282733700E43964 /* CipherBenchmark.mm in Sources */,
+				393496422282733700E43964 /* Random+TestCaseObject.mm in Sources */,
+				393496432282733700E43964 /* MigrationBenchmark.mm in Sources */,
+				393496442282733700E43964 /* Signpost.mm in Sources */,
+				393496452282733700E43964 /* DatabaseTestCase.mm in Sources */,
+				393496462282733700E43964 /* CRUDTestCase.mm in Sources */,
+				393496472282733700E43964 /* TableBenchmark.mm in Sources */,
+				393496482282733700E43964 /* WCTDatabase+TestCase.mm in Sources */,
+				393496492282733700E43964 /* TestCaseCounter.mm in Sources */,
+				3934964A2282733700E43964 /* TestCaseLog.mm in Sources */,
+				3934964B2282733700E43964 /* Benchmark.mm in Sources */,
+				3934964C2282733700E43964 /* Random.mm in Sources */,
+				3934964D2282733700E43964 /* ObjectsBasedBenchmark.mm in Sources */,
+				3934964E2282733700E43964 /* DatabaseMigrationBenchmark.mm in Sources */,
+				3934964F2282733700E43964 /* TestCaseObject.mm in Sources */,
+				393496502282733700E43964 /* TableTestCase.mm in Sources */,
+				393496512282733700E43964 /* BenchmarkObject.mm in Sources */,
+				393496522282733700E43964 /* TableMigrationBenchmark.mm in Sources */,
+				393496532282733700E43964 /* TestCaseResult.mm in Sources */,
+				393496542282733700E43964 /* NSObject+TestCase.mm in Sources */,
+				393496552282733700E43964 /* ReusableFactory.mm in Sources */,
+				393496562282733700E43964 /* Dispatch.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -6165,6 +6292,21 @@
 			isa = PBXTargetDependency;
 			target = 2367BAB52215004300380122 /* WCDB iOS static */;
 			targetProxy = 3934962C2282661A00E43964 /* PBXContainerItemProxy */;
+		};
+		39349661228274B900E43964 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2367BAB52215004300380122 /* WCDB iOS static */;
+			targetProxy = 39349660228274B900E43964 /* PBXContainerItemProxy */;
+		};
+		39349666228274E800E43964 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239E8A6F2160A5B100BCB308 /* Host */;
+			targetProxy = 39349665228274E800E43964 /* PBXContainerItemProxy */;
+		};
+		39349668228274EC00E43964 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 239E8A6F2160A5B100BCB308 /* Host */;
+			targetProxy = 39349667228274EC00E43964 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -6381,6 +6523,27 @@
 			};
 			name = Bitcode;
 		};
+		3934965B2282733700E43964 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 393496312282667100E43964 /* Tests iOS static.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		3934965C2282733700E43964 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 393496312282667100E43964 /* Tests iOS static.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		3934965D2282733700E43964 /* Bitcode */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 393496312282667100E43964 /* Tests iOS static.xcconfig */;
+			buildSettings = {
+			};
+			name = Bitcode;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -6470,6 +6633,16 @@
 				39349627228265C900E43964 /* Debug */,
 				39349628228265C900E43964 /* Release */,
 				39349629228265C900E43964 /* Bitcode */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3934965A2282733700E43964 /* Build configuration list for PBXNativeTarget "Benchmark iOS static" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3934965B2282733700E43964 /* Debug */,
+				3934965C2282733700E43964 /* Release */,
+				3934965D2282733700E43964 /* Bitcode */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
