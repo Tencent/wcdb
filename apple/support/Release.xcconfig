@@ -6,6 +6,7 @@ ONLY_ACTIVE_ARCH = NO
 // Build Options
 DEBUG_INFORMATION_FORMAT = dwarf-with-dsym
 ENABLE_TESTABILITY = NO
+VALIDATE_PRODUCT = YES
 
 // Deployment
 DEPLOYMENT_POSTPROCESSING = YES
@@ -27,3 +28,7 @@ GCC_PREPROCESSOR_DEFINITIONS = $(inherited) NDEBUG=1
 // Swift Compiler - Code Generation
 SWIFT_COMPILATION_MODE = wholemodule
 SWIFT_OPTIMIZATION_LEVEL = -Owholemodule;
+
+// User-Defined
+BITCODE_GENERATION_MODE = bitcode;
+
