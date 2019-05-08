@@ -1,3 +1,6 @@
+// Apple Clang - Language - Objective-C
+GCC_ENABLE_OBJC_EXCEPTIONS = YES
+
 // Architectures
 SUPPORTED_PLATFORMS = macosx iphonesimulator iphoneos appletvos appletvsimulator
 
