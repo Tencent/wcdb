@@ -32,38 +32,18 @@ class Error;
 
 class Console final {
 public:
-    static Console* shared();
-
-    void setDebuggable(bool debuggable);
-    bool isDebuggable();
-
-    typedef std::function<void(const Error&)> Logger;
-    void setLogger(const Logger& logger);
-    static void logger(const Error& error);
-
-    typedef std::function<void(const String&)> Printer;
-    void setPrinter(const Printer& printer);
-    static void printer(const String& message);
-
+    static void debug();
+    static void release();
     static bool debuggable();
+
 #ifdef DEBUG
     static void fatal(const String& message, const char* file, int line);
 #else  // DEBUG
     static void fatal(const String& message);
 #endif // DEBUG
 
-    Console(const Console&) = delete;
-    Console& operator=(const Console&) = delete;
-
-protected:
-    Console();
-
-    static void breakpoint() WCDB_USED WCDB_NO_INLINE;
-    void print(const String& message);
-
 private:
-    Printer m_printer;
-    std::atomic<bool> m_debuggable;
+    static std::atomic<bool> s_debuggable;
 };
 
 } // namespace WCDB

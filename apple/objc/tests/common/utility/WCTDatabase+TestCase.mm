@@ -21,6 +21,13 @@
 #import "CoreConst.h"
 #import "WCTDatabase+TestCase.h"
 
+@interface WCTDatabase (TestCase1)
+
++ (void)globalTraceError:(WCTErrorTraceBlock)block
+          withIdentifier:(const WCDB::String &)identifier;
+
+@end
+
 @implementation WCTDatabase (TestCase)
 
 - (NSString *)walPath
@@ -110,6 +117,11 @@
         size = numberOfFrames > 0 ? numberOfFrames : 0;
     }
     return size;
+}
+
++ (void)additionalGlobalTraceError:(WCTErrorTraceBlock)block
+{
+    [self globalTraceError:block withIdentifier:"com.Tencent.WCDB.Notifier.AdditionalLog"];
 }
 
 @end

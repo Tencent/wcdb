@@ -28,26 +28,22 @@
 
 @implementation WCTDatabase (Monitor)
 
-+ (BOOL)debuggable
++ (void)globalTraceError:(WCTErrorTraceBlock)block
 {
-    return WCDB::Console::debuggable();
-}
-
-+ (void)setDebuggable:(BOOL)debuggable
-{
-    WCDB::Console::shared()->setDebuggable(debuggable);
+    [self globalTraceError:block withIdentifier:WCDB::NotifierLoggerName];
 }
 
 + (void)globalTraceError:(WCTErrorTraceBlock)block
+          withIdentifier:(const WCDB::String &)identifier
 {
-    WCDB::Notifier::Callback callback = nullptr;
     if (block != nullptr) {
-        callback = [block](const WCDB::Error &error) {
+        WCDB::Notifier::shared()->setNotification(std::numeric_limits<int>::min(), identifier, [block](const WCDB::Error &error) {
             WCTError *nsError = [[WCTError alloc] initWithError:error];
             block(nsError);
-        };
+        });
+    } else {
+        WCDB::Notifier::shared()->unsetNotification(identifier);
     }
-    WCDB::Console::shared()->setLogger(callback);
 }
 
 + (void)globalTracePerformance:(WCTPerformanceTraceBlock)trace

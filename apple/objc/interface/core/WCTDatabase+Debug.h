@@ -30,9 +30,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WCTDatabase (Debug)
 
-+ (void)simulateIOError:(WCTSimulateIOErrorOptions)options;
+@property (class, readwrite, nonatomic, assign) BOOL debug;
 
-+ (void)additionalGlobalTraceError:(WCTErrorTraceBlock)block;
++ (void)simulateIOError:(WCTSimulateIOErrorOptions)options;
 
 @end
 

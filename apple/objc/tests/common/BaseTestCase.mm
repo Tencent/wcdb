@@ -51,9 +51,9 @@
     self.continueAfterFailure = YES;
 
 #ifdef DEBUG
-    WCTDatabase.debuggable = YES;
+    WCTDatabase.debug = YES;
 #else
-    WCTDatabase.debuggable = NO;
+    WCTDatabase.debug = NO;
 #endif
 
     [WCTDatabase additionalGlobalTraceError:^(WCTError *error) {
@@ -65,7 +65,7 @@
         TestCaseLog(@"%@ Thread %@: %@", currentThread.isMainThread ? @"*" : @"-", threadName, error);
     }];
 
-    if (WCTDatabase.debuggable) {
+    if (WCTDatabase.debug) {
         [self log:@"debuggable."];
     }
 

@@ -44,6 +44,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (WCTOptionalSize)getNumberOfWalFrames;
 
++ (void)additionalGlobalTraceError:(WCTErrorTraceBlock)block;
+
 @end
 
 NS_ASSUME_NONNULL_END

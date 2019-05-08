@@ -34,21 +34,6 @@
 
 @implementation WCTDatabase
 
-static void printer(const WCDB::String &message)
-{
-    NSLog(@"%s", message.c_str());
-}
-
-static std::nullptr_t initialize()
-{
-    WCDB::Console::shared()->setPrinter(printer);
-
-    WCDB::Core::shared()->registerTokenizer(WCTTokenizerOneOrBinary, WCDB::TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizerCursorInfo>::specialize());
-    WCDB::Core::shared()->registerTokenizer(WCTTokenizerLegacyOneOrBinary, WCDB::TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizerCursorInfo>::specialize());
-
-    return nullptr;
-}
-
 - (instancetype)initWithUnsafeDatabase:(WCDB::Database *)database
 {
     WCTInnerAssert(database != nullptr);
@@ -61,9 +46,6 @@ static std::nullptr_t initialize()
 
 - (instancetype)initWithPath:(NSString *)path
 {
-    // call initialize here to avoid + (void)initialize overriding by developers.
-    static std::nullptr_t _ = initialize();
-    WCDB_UNUSED(_)
     if (self = [super init]) {
         path = [path stringByStandardizingPath];
         _databaseHolder = WCDB::Core::shared()->getOrCreateDatabase(path);

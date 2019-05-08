@@ -27,84 +27,25 @@
 
 namespace WCDB {
 
-Console* Console::shared()
+void Console::debug()
 {
-    static Console* s_shared = new Console;
-    return s_shared;
+    s_debuggable.store(true);
 }
 
-Console::Console()
-:
-#ifdef DEBUG
-m_debuggable(false)
-#else  // DEBUG
-m_debuggable(true)
-#endif // DEBUG
-, m_printer(nullptr)
+void Console::release()
 {
-    setLogger(Console::logger);
-}
-
-void Console::setDebuggable(bool debuggable)
-{
-    m_debuggable.store(debuggable);
+    s_debuggable.store(false);
 }
 
 bool Console::debuggable()
 {
-    return Console::shared()->isDebuggable();
-}
-
-bool Console::isDebuggable()
-{
-    return m_debuggable.load();
-}
-
-void Console::setLogger(const Logger& logger)
-{
-    if (logger != nullptr) {
-        Notifier::shared()->setNotification(
-        std::numeric_limits<int>::min(), NotifierLoggerName, logger);
-    } else {
-        Notifier::shared()->unsetNotification(NotifierLoggerName);
-    }
-}
-
-void Console::setPrinter(const Printer& printer)
-{
-    m_printer = printer;
-}
-
-void Console::logger(const Error& error)
-{
-    if (error.level == Error::Level::Ignore) {
-        return;
-    }
-
-    bool isDebuggable = debuggable();
-    if (error.level == Error::Level::Debug && !isDebuggable) {
-        return;
-    }
-
-    Console::shared()->print(error.getDescription());
-
-    if (isDebuggable && error.level >= Error::Level::Error) {
-        breakpoint();
-    }
-}
-
-void Console::breakpoint()
-{
-}
-
-void Console::print(const String& message)
-{
-    if (m_printer != nullptr) {
-        m_printer(message);
-    }
+    return s_debuggable.load();
 }
 
 #ifdef DEBUG
+
+std::atomic<bool> Console::s_debuggable(true);
+
 void Console::fatal(const String& message, const char* file, int line)
 {
     Error error(Error::Code::Misuse, Error::Level::Fatal, message);
@@ -119,7 +60,11 @@ void Console::fatal(const String& message, const char* file, int line)
     error.infos.set("CommitHash", WCDB_COMMIT_HASH);
     Notifier::shared()->notify(error);
 }
-#else  // DEBUG
+
+#else // DEBUG
+
+std::atomic<bool> Console::s_debuggable(false);
+
 void Console::fatal(const String& message)
 {
     Error error(Error::Code::Misuse, Error::Level::Fatal, message);
@@ -130,6 +75,7 @@ void Console::fatal(const String& message)
     error.infos.set("CommitHash", WCDB_COMMIT_HASH);
     Notifier::shared()->notify(error);
 }
+
 #endif // DEBUG
 
 } // namespace WCDB

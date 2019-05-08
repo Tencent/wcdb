@@ -56,16 +56,18 @@ static std::nullptr_t initialize()
 
 @implementation WCTDatabase (Debug)
 
-+ (void)additionalGlobalTraceError:(WCTErrorTraceBlock)block
++ (BOOL)debug
 {
-    WCDB::Notifier::Callback callback = nullptr;
-    if (block != nullptr) {
-        callback = [block](const WCDB::Error &error) {
-            WCTError *nsError = [[WCTError alloc] initWithError:error];
-            block(nsError);
-        };
+    return WCDB::Console::debuggable();
+}
+
++ (void)setDebug:(BOOL)debug
+{
+    if (debug) {
+        WCDB::Console::debug();
+    } else {
+        WCDB::Console::release();
     }
-    WCDB::Notifier::shared()->setNotification(std::numeric_limits<int>::min(), "com.Tencent.WCDB.Notifier.AdditionalLog", callback);
 }
 
 + (void)simulateIOError:(WCTSimulateIOErrorOptions)options
