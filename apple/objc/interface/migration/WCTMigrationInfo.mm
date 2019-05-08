@@ -45,7 +45,7 @@
 
 - (void)setSourceDatabase:(NSString *)database
 {
-    _sourceDatabase = database;
+    _sourceDatabase = [database stringByStandardizingPath];
 }
 
 @end

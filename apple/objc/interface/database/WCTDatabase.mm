@@ -65,6 +65,7 @@ static std::nullptr_t initialize()
     static std::nullptr_t _ = initialize();
     WCDB_UNUSED(_)
     if (self = [super init]) {
+        path = [path stringByStandardizingPath];
         _databaseHolder = WCDB::Core::shared()->getOrCreateDatabase(path);
         WCTInnerAssert(_databaseHolder != nullptr);
         _database = _databaseHolder.get();
@@ -76,6 +77,7 @@ static std::nullptr_t initialize()
 - (instancetype)initWithPathOfAlivingDatabase:(NSString *)path
 {
     if (self = [super init]) {
+        path = [path stringByStandardizingPath];
         _databaseHolder = WCDB::Core::shared()->getAlivingDatabase(path);
         if (_databaseHolder == nullptr) {
             return nil;
