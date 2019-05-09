@@ -31,7 +31,7 @@ MigrationEvent::~MigrationEvent()
 
 #pragma mark - Initialize
 Migration::Migration(MigrationEvent* event)
-: m_filter(nullptr), m_event(event), m_tableAcquired(false), m_migrated(false)
+: m_filter(nullptr), m_event(event), m_tableAcquired(false), m_migrated(true)
 {
 }
 
@@ -58,6 +58,20 @@ bool Migration::shouldMigrate() const
 {
     SharedLockGuard lockGuard(m_lock);
     return m_filter != nullptr;
+}
+
+std::set<String> Migration::getPathsOfSourceDatabases() const
+{
+    std::set<String> paths;
+    {
+        SharedLockGuard lockGuard(m_lock);
+        for (const auto& info : m_holder) {
+            if (info.isCrossDatabase()) {
+                paths.emplace(info.getSourceDatabase());
+            }
+        }
+    }
+    return paths;
 }
 
 Migration::InfoInitializer::~InfoInitializer()

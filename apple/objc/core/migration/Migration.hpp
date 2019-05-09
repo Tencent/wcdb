@@ -56,6 +56,8 @@ public:
 
     void purge();
 
+    std::set<String> getPathsOfSourceDatabases() const;
+
 protected:
     class InfoInitializer {
         friend class Migration;

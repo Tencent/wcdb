@@ -30,9 +30,9 @@ typedef BOOL (^WCTCorruptedNotificationBlock)(WCTDatabase *);
 
 - (void)setNotificationWhenCorrupted:(nullable WCDB_ESCAPE WCTCorruptedNotificationBlock)onCorrupted;
 
-- (BOOL)isAlreadyCorrupted;
-
 - (BOOL)checkIfCorrupted;
+
+- (BOOL)isAlreadyCorrupted;
 
 - (void)setAutoBackup:(BOOL)flag;
 

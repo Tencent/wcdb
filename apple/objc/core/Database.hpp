@@ -207,11 +207,13 @@ public:
 
     bool isMigrated() const;
 
+    std::set<String> getPathsOfSourceDatabases() const;
+
 protected:
     std::pair<bool, bool> doStepMigration();
     void didMigrate(const MigrationBaseInfo *info) override final;
     MigratedCallback m_migratedCallback;
-    Migration m_migration;
+    Migration m_migration; // thread-safe
 
 #pragma mark - Checkpoint
 public:

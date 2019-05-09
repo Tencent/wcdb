@@ -36,14 +36,15 @@
     WCDB::Core::shared()->setNotificationWhenDatabaseCorrupted(self.path, notification);
 }
 
+- (BOOL)checkIfCorrupted
+{
+    _database->execute(WCDB::StatementPragma().pragma(WCDB::Pragma::integrityCheck()));
+    return self.isAlreadyCorrupted;
+}
+
 - (BOOL)isAlreadyCorrupted
 {
     return WCDB::Core::shared()->isFileObservedCorrupted(self.path);
-}
-
-- (BOOL)checkIfCorrupted
-{
-    return NO;
 }
 
 - (void)filterBackup:(WCTBackupFilterBlock)tableShouldBeBackedUp

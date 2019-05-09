@@ -265,7 +265,6 @@ std::shared_ptr<Handle> Database::generateHandle(HandleType type)
         handle.reset(new InterruptibleCheckpointHandle);
         break;
     case HandleType::Migrate:
-        // It's safe since m_migration itself never change.
         handle.reset(new MigrationHandle(m_migration));
         break;
     case HandleType::MigrationStep:
@@ -798,10 +797,12 @@ void Database::setNotificationWhenMigrated(const MigratedCallback &callback)
 
 void Database::filterMigration(const MigrationFilter &filter)
 {
-    LockGuard lockGuard(m_memory);
-    WCTRemedialAssert(!m_initialized,
-                      "Migration user info must be set before the very first operation.",
-                      return;);
+    {
+        SharedLockGuard lockGuard(m_memory);
+        WCTRemedialAssert(!m_initialized,
+                          "Migration user info must be set before the very first operation.",
+                          return;);
+    }
     m_migration.filterTable(filter);
 }
 
@@ -819,12 +820,12 @@ void Database::interruptMigration()
 
 bool Database::isMigrated() const
 {
-    SharedLockGuard lockGuard(m_memory);
-    bool migrated = true;
-    if (m_migration.shouldMigrate()) {
-        migrated = m_migration.isMigrated();
-    }
-    return migrated;
+    return m_migration.isMigrated();
+}
+
+std::set<String> Database::getPathsOfSourceDatabases() const
+{
+    return m_migration.getPathsOfSourceDatabases();
 }
 
 #pragma mark - Checkpoint
