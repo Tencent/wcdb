@@ -22,6 +22,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NSData* _Nonnull (^WCTCorruptDataBlock)(int size);
+
 @interface WCTDatabase (TestCase)
 
 @property (nonatomic, readonly) NSString* walPath;
@@ -49,6 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)corruptHeaderWithinCloseAfterTruncatedCheckpoint;
 
 - (void)corruptPage:(int)i;
+- (void)corruptPage:(int)i withData:(WCTCorruptDataBlock)block;
 
 - (void)corruptWalFrame:(int)i;
 

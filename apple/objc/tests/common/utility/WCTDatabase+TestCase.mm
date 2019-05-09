@@ -161,11 +161,17 @@
 
 - (void)corruptPage:(int)i
 {
+    [self corruptPage:i
+             withData:^NSData *(int size) {
+                 return [NSMutableData dataWithLength:size];
+             }];
+}
+
+- (void)corruptPage:(int)i withData:(WCTCorruptDataBlock)block
+{
     NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.path];
     [fileHandle seekToFileOffset:(i - 1) * self.pageSize];
-    NSMutableData *emptyData = [NSMutableData data];
-    [emptyData increaseLengthBy:self.pageSize];
-    [fileHandle writeData:emptyData];
+    [fileHandle writeData:block(self.pageSize)];
     [fileHandle closeFile];
 }
 
