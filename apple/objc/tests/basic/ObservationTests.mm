@@ -44,7 +44,7 @@
         return [self.database removeFiles];
     }];
 
-    TestCaseAssertTrue([self tryToMakeHeaderCorrupted]);
+    TestCaseAssertTrue([self.database corruptHeaderWithinCloseAfterTruncatedCheckpoint]);
 
     // trigger corruption
     TestCaseAssertTrue([self.table getObjects] == nil);
@@ -63,7 +63,7 @@
         return NO;
     }];
 
-    TestCaseAssertTrue([self tryToMakeHeaderCorrupted]);
+    TestCaseAssertTrue([self.database corruptHeaderWithinCloseAfterTruncatedCheckpoint]);
 
     // trigger corruption
     TestCaseAssertTrue([self.table getObjects] == nil);
@@ -86,7 +86,7 @@
     [self insertPresetObjects];
 
     TestCaseAssertFalse([self.database isAlreadyCorrupted]);
-    TestCaseAssertTrue([self tryToMakeHeaderCorrupted]);
+    TestCaseAssertTrue([self.database corruptHeaderWithinCloseAfterTruncatedCheckpoint]);
     TestCaseAssertFalse([self.database isAlreadyCorrupted]);
 
     // trigger corruption

@@ -50,6 +50,4 @@ typedef NS_ENUM(NSUInteger, DatabaseTestCaseExpect) {
 - (void)doTestSQLs:(NSArray<NSString*>*)expectedSQLs
        inOperation:(BOOL (^)())block;
 
-- (BOOL)tryToMakeHeaderCorrupted;
-
 @end

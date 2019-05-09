@@ -200,7 +200,7 @@
                }
                return YES;
            }]
-           && [database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("TRUNCATE")];
+           && [database truncateCheckpoint];
 }
 
 - (double)getQuality:(NSString*)path

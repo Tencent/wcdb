@@ -190,7 +190,7 @@
 {
     TestCaseAssertTrue([self.database backup]);
 
-    TestCaseAssertTrue([self tryToMakeHeaderCorrupted]);
+    TestCaseAssertTrue([self.database corruptHeaderWithinCloseAfterTruncatedCheckpoint]);
 
     TestCaseAssertTrue([self.database deposit]);
 
@@ -203,7 +203,7 @@
 {
     TestCaseAssertTrue([self.database backup]);
 
-    TestCaseAssertTrue([self tryToMakeHeaderCorrupted]);
+    TestCaseAssertTrue([self.database corruptHeaderWithinCloseAfterTruncatedCheckpoint]);
 
     [self doTestRetrieve];
 
@@ -212,7 +212,7 @@
 
 - (void)test_retrieve_corrupted_without_backup_and_with_deposit
 {
-    TestCaseAssertTrue([self tryToMakeHeaderCorrupted]);
+    TestCaseAssertTrue([self.database corruptHeaderWithinCloseAfterTruncatedCheckpoint]);
 
     TestCaseAssertTrue([self.database deposit]);
 
@@ -223,7 +223,7 @@
 
 - (void)test_retrieve_corrupted_without_backup_and_deposite
 {
-    TestCaseAssertTrue([self tryToMakeHeaderCorrupted]);
+    TestCaseAssertTrue([self.database corruptHeaderWithinCloseAfterTruncatedCheckpoint]);
 
     [self doTestRetrieveFailed];
 

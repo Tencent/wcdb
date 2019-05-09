@@ -137,7 +137,7 @@
             return NO;
         }
         if (self.random.uint8 % 10 == 0) {
-            if (![self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("TRUNCATE")]) {
+            if (![self.database truncateCheckpoint]) {
                 TestCaseFailure();
                 return NO;
             }
@@ -180,59 +180,36 @@
 
     // make database corrupted
     [self.database close:^{
-        int totalPageCount = 0;
-        int totalAttackedCount = 0;
+        int totalNumberOfPages = 0;
+        int totalNumberOfAttackedPages = 0;
         {
             // database
-            NSFileHandle* fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.path];
-            if (fileHandle == nil) {
-                TestCaseFailure();
-                return;
-            }
-            NSInteger fileSize = (NSInteger)[fileHandle seekToEndOfFile];
-            if (fileSize == 0) {
-                TestCaseFailure();
-                return;
-            }
-            int pageCount = (int) (fileSize / self.database.pageSize);
-            totalPageCount += pageCount;
-            TestCaseAssertTrue(fileSize % self.database.pageSize == 0) for (int i = 0; i < pageCount; ++i)
-            {
+            auto optionalNumberOfPages = [self.database getNumberOfPages];
+            TestCaseAssertFalse(optionalNumberOfPages.failed());
+            int numberOfPages = (int) optionalNumberOfPages.value();
+            totalNumberOfPages += numberOfPages;
+            for (int i = 0; i < numberOfPages; ++i) {
                 if ([self shouldAttack]) {
-                    [fileHandle seekToFileOffset:i * self.database.pageSize];
-                    [fileHandle writeData:[self.random dataWithLength:self.database.pageSize]];
-                    ++totalAttackedCount;
+                    [self.database corruptPage:i + 1];
+                    ++totalNumberOfAttackedPages;
                 }
             }
-            [fileHandle closeFile];
         }
 
         {
             // wal
-            NSFileHandle* fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.database.walPath];
-            if (fileHandle == nil) {
-                TestCaseFailure();
-                return;
-            }
-            NSInteger fileSize = (NSInteger)[fileHandle seekToEndOfFile];
-            if (fileSize == 0) {
-                TestCaseFailure();
-                return;
-            }
-            WCTOptionalSize numberOfFrames = [self.database getNumberOfWalFrames];
-            TestCaseAssertFalse(numberOfFrames.failed());
-            totalPageCount += numberOfFrames.value();
-            TestCaseAssertTrue((fileSize - self.database.walHeaderSize) % self.database.walFrameSize == 0);
+            WCTOptionalSize optionalNumberOfFrames = [self.database getNumberOfWalFrames];
+            TestCaseAssertFalse(optionalNumberOfFrames.failed());
+            int numberOfFrames = (int) optionalNumberOfFrames.value();
+            totalNumberOfPages += numberOfFrames;
             for (int i = 0; i < numberOfFrames; ++i) {
                 if ([self shouldAttack]) {
-                    [fileHandle seekToFileOffset:i * self.database.walFrameSize + self.database.walHeaderSize];
-                    [fileHandle writeData:[self.random dataWithLength:self.database.walFrameSize]];
-                    ++totalAttackedCount;
+                    [self.database corruptWalFrame:i + 1];
+                    ++totalNumberOfAttackedPages;
                 }
             }
-            [fileHandle closeFile];
         }
-        attackedRatio = (float) totalAttackedCount / totalPageCount;
+        attackedRatio = (float) totalNumberOfAttackedPages / totalNumberOfPages;
     }];
     return attackedRatio;
 }

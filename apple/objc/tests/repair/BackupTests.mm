@@ -85,7 +85,7 @@
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     TestCaseAssertTrue([[fileManager attributesOfItemAtPath:self.database.walPath error:nil] fileSize] > 0);
-    TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("TRUNCATE")]);
+    TestCaseAssertTrue([self.database truncateCheckpoint]);
     TestCaseAssertTrue([[fileManager attributesOfItemAtPath:self.database.walPath error:nil] fileSize] == 0);
     TestCaseAssertTrue([self.database backup]);
 }
@@ -125,7 +125,7 @@
     TestCaseAssertTrue([self.table insertObject:object]);
 
     TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
-    TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint())]);
+    TestCaseAssertTrue([self.database passiveCheckpoint]);
 
     [NSThread sleepForTimeInterval:self.delayForTolerance];
     return [self.fileManager fileExistsAtPath:self.database.firstMaterialPath];
@@ -201,24 +201,18 @@
 
 - (void)test_compatible_backup_will_not_trigger_corruption_unless_it_is_too_frequent
 {
-    TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
+    TestCaseAssertTrue([self.database truncateCheckpoint]);
     TestCaseObject *object = [self.random autoIncrementTestCaseObject];
     int interiorTablePage = 0;
     while ((interiorTablePage = [self getInteriorTablePage]) == 0) {
         TestCaseAssertTrue([self.table insertObject:object]);
-        TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
+        TestCaseAssertTrue([self.database truncateCheckpoint]);
     }
     [self.database close];
 
     TestCaseAssertFalse([self.database isAlreadyCorrupted]);
 
-    NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.path];
-    TestCaseAssertTrue(fileHandle != nil);
-    [fileHandle seekToFileOffset:(interiorTablePage - 1) * self.database.pageSize];
-    NSMutableData *emptyData = [NSMutableData data];
-    [emptyData increaseLengthBy:self.database.pageSize];
-    [fileHandle writeData:emptyData];
-    [fileHandle closeFile];
+    [self.database corruptPage:interiorTablePage];
 
     TestCaseCounter *numberOfIgnorableCorruptions = [TestCaseCounter value:0];
     TestCaseResult *realCorruption = [TestCaseResult no];
@@ -318,7 +312,7 @@
 //        TestCaseAssertTrue([self.table insertObject:object]);
 //    }
 //    while ([sleep isNO]) {}
-//    BOOL result = [self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")];
+//    BOOL result = [self.database truncateCheckpoint];
 //    TestCaseAssertTrue([self.fileManager getFileSizeIfExists:wal] == 0);
 //    TestCaseAssertTrue(result);
 //
@@ -364,7 +358,7 @@
         insert.statement.schema(attachedName);
         TestCaseAssertTrue([insert execute]);
 
-        TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).schema(attachedName).to("TRUNCATE")]);
+        TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).schema(attachedName).with("TRUNCATE")]);
 
         [NSThread sleepForTimeInterval:self.delayForTolerance];
         TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
@@ -379,7 +373,7 @@
         insert.statement.schema(attachedName);
         TestCaseAssertTrue([insert execute]);
 
-        TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).schema(attachedName).to("TRUNCATE")]);
+        TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).schema(attachedName).with("TRUNCATE")]);
 
         [NSThread sleepForTimeInterval:self.delayForTolerance];
         TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);

@@ -144,7 +144,7 @@
 
 - (void)doTestAutoMigrate
 {
-    TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
+    TestCaseAssertTrue([self.database truncateCheckpoint]);
     NSUInteger fileSize = [self.database getFilesSize];
     if (self.isCrossDatabaseMigration) {
         fileSize += [self.sourceDatabase getFilesSize];
@@ -173,7 +173,7 @@
 
 - (void)doTestFeatureClosedDatabaseWillNotPerformAutoMigrate
 {
-    TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
+    TestCaseAssertTrue([self.database truncateCheckpoint]);
     NSUInteger fileSize = [self.database getFilesSize];
     if (self.isCrossDatabaseMigration) {
         fileSize += [self.sourceDatabase getFilesSize];
@@ -283,7 +283,7 @@
 {
 #warning TODO - wait for the answer of SQLite staff about the dirty page of ROLLBACK TO stmt.
     //    [self.database removeCheckpointConfig];
-    //    TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
+    //    TestCaseAssertTrue([self.database truncateCheckpoint]);
     //
     //    BOOL succeed;
     //    int lastWalFrameCount = [self getNumberOfWalFrames];

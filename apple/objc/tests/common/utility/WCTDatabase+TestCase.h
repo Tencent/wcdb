@@ -46,6 +46,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)additionalGlobalTraceError:(WCTErrorTraceBlock)block;
 
+- (BOOL)corruptHeaderWithinCloseAfterTruncatedCheckpoint;
+
+- (void)corruptPage:(int)i;
+
+- (void)corruptWalFrame:(int)i;
+
+- (BOOL)corruptCompletely;
+
+- (BOOL)truncateCheckpoint;
+
+- (BOOL)passiveCheckpoint;
+
 @end
 
 NS_ASSUME_NONNULL_END
