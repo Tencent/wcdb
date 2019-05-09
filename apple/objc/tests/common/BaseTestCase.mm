@@ -56,6 +56,7 @@
     WCTDatabase.debug = NO;
 #endif
 
+    [WCTDatabase globalTraceError:nil];
     [WCTDatabase additionalGlobalTraceError:^(WCTError *error) {
         NSThread *currentThread = [NSThread currentThread];
         NSString *threadName = currentThread.name;
