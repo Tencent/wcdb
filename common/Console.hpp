@@ -22,6 +22,7 @@
 #define __WCDB_CONSOLE_HPP
 
 #include <WCDB/Macro.hpp>
+#include <WCDB/Notifier.hpp>
 #include <WCDB/String.hpp>
 #include <atomic>
 #include <functional>
@@ -32,17 +33,25 @@ class Error;
 
 class Console final {
 public:
+    static std::nullptr_t initialize();
+
     static void debug();
     static void release();
     static bool debuggable();
 
+    static void errored(const Notifier::Callback& callback);
+
 #ifdef DEBUG
-    static void fatal(const String& message, const char* file, int line);
+    static void
+    fatal(const String& message, const char* file, int line, const char* function);
 #else  // DEBUG
     static void fatal(const String& message);
 #endif // DEBUG
 
 private:
+    static void report(const Error& error);
+    static void print(const String& message);
+    static void breakpoint() WCDB_USED WCDB_NO_INLINE;
     static std::atomic<bool> s_debuggable;
 };
 

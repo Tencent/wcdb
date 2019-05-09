@@ -19,7 +19,6 @@
  */
 
 #import <WCDB/Assertion.hpp>
-#import <WCDB/Console.hpp>
 #import <WCDB/Notifier.hpp>
 #import <WCDB/WCTDatabase+Monitor.h>
 #import <WCDB/WCTDatabase+Private.h>
@@ -36,7 +35,7 @@
 + (void)globalTraceError:(WCTErrorTraceBlock)block
           withIdentifier:(const WCDB::String &)identifier
 {
-    if (block != nullptr) {
+    if (block != nil) {
         WCDB::Notifier::shared()->setNotification(std::numeric_limits<int>::min(), identifier, [block](const WCDB::Error &error) {
             WCTError *nsError = [[WCTError alloc] initWithError:error];
             block(nsError);
@@ -49,7 +48,7 @@
 + (void)globalTracePerformance:(WCTPerformanceTraceBlock)trace
 {
     WCDB::Handle::PerformanceNotification callback = nullptr;
-    if (trace != nullptr) {
+    if (trace != nil) {
         callback = [trace](const WCDB::HandleNotification::Footprints &footprints, const int64_t &cost) {
             NSMutableArray<WCTPerformanceFootprint *> *array = [[NSMutableArray<WCTPerformanceFootprint *> alloc] init];
             for (const auto &footprint : footprints) {
@@ -65,7 +64,7 @@
 + (void)globalTraceSQL:(WCTSQLTraceBlock)trace
 {
     WCDB::Handle::SQLNotification callback = nullptr;
-    if (trace != nullptr) {
+    if (trace != nil) {
         callback = [trace](const WCDB::String &sql) {
             trace([NSString stringWithUTF8String:sql.c_str()]);
         };
@@ -76,7 +75,7 @@
 - (void)tracePerformance:(WCTPerformanceTraceBlock)trace
 {
     WCDB::Handle::PerformanceNotification callback = nullptr;
-    if (trace != nullptr) {
+    if (trace != nil) {
         callback = [trace](const WCDB::HandleNotification::Footprints &footprints, const int64_t &cost) {
             NSMutableArray<WCTPerformanceFootprint *> *array = [[NSMutableArray<WCTPerformanceFootprint *> alloc] init];
             for (const auto &footprint : footprints) {
@@ -96,7 +95,7 @@
 - (void)traceSQL:(WCTSQLTraceBlock)trace
 {
     WCDB::Handle::SQLNotification callback = nullptr;
-    if (trace != nullptr) {
+    if (trace != nil) {
         callback = [trace](const WCDB::String &sql) {
             trace([NSString stringWithUTF8String:sql.c_str()]);
         };

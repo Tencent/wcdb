@@ -18,19 +18,23 @@
  * limitations under the License.
  */
 
-#import <WCDB/Notifier.hpp>
+#import <WCDB/Console.hpp>
 #import <WCDB/ThreadedErrors.hpp>
+#import <WCDB/WCTDatabase+FTS.h>
 #import <WCDB/WCTDatabase+Memory.h>
 #import <WCDB/WCTDatabase+Private.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTHandle+Private.h>
-
-// FTS
-#import <WCDB/WCTDatabase+FTS.h>
 #import <WCDB/WCTOneOrBinaryTokenizer.h>
 
-// Monitor
-#import <WCDB/WCTDatabase+Monitor.h>
+namespace WCDB {
+
+void Console::print(const String &message)
+{
+    NSLog(@"%s", message.c_str());
+}
+
+}
 
 @implementation WCTDatabase
 
@@ -46,6 +50,9 @@
 
 - (instancetype)initWithPath:(NSString *)path
 {
+    static auto _ = WCDB::Console::initialize();
+    WCDB_UNUSED(_);
+
     if (self = [super init]) {
         path = [path stringByStandardizingPath];
         _databaseHolder = WCDB::Core::shared()->getOrCreateDatabase(path);
