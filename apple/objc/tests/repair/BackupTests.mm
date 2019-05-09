@@ -210,7 +210,7 @@
     }
     [self.database close];
 
-    TestCaseAssertFalse([self.database isCorrupted]);
+    TestCaseAssertFalse([self.database isAlreadyCorrupted]);
 
     NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.path];
     TestCaseAssertTrue(fileHandle != nil);
@@ -248,12 +248,12 @@
         TestCaseAssertFalse([self.database backup]);
         TestCaseAssertEqual(numberOfIgnorableCorruptions.value, i + 1);
         TestCaseAssertResultNO(realCorruption);
-        TestCaseAssertFalse([self.database isCorrupted]);
+        TestCaseAssertFalse([self.database isAlreadyCorrupted]);
     }
 
     TestCaseAssertFalse([self.database backup]);
     TestCaseAssertResultYES(realCorruption);
-    TestCaseAssertTrue([self.database isCorrupted]);
+    TestCaseAssertTrue([self.database isAlreadyCorrupted]);
 
     [WCTDatabase globalTraceError:nil];
 }

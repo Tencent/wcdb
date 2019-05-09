@@ -85,16 +85,16 @@
 {
     [self insertPresetObjects];
 
-    TestCaseAssertFalse([self.database isCorrupted]);
+    TestCaseAssertFalse([self.database isAlreadyCorrupted]);
     TestCaseAssertTrue([self tryToMakeHeaderCorrupted]);
-    TestCaseAssertFalse([self.database isCorrupted]);
+    TestCaseAssertFalse([self.database isAlreadyCorrupted]);
 
     // trigger corruption
     TestCaseAssertTrue([self.table getObjects] == nil);
-    TestCaseAssertTrue([self.database isCorrupted]);
+    TestCaseAssertTrue([self.database isAlreadyCorrupted]);
 
     TestCaseAssertTrue([self.database removeFiles]);
-    TestCaseAssertFalse([self.database isCorrupted]);
+    TestCaseAssertFalse([self.database isAlreadyCorrupted]);
 }
 
 - (void)test_feature_purge_will_not_clear_active_handle
