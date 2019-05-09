@@ -64,7 +64,6 @@ public:
 
 protected:
     virtual void didDrain();
-    virtual void didSecondaryDrain();
     mutable SharedLock m_concurrency;
 
 private:

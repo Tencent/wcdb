@@ -78,10 +78,6 @@ void HandlePool::didDrain()
 {
 }
 
-void HandlePool::didSecondaryDrain()
-{
-}
-
 void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
 {
     WCTRemedialAssert(m_concurrency.level() != SharedLock::Level::Read,
@@ -95,7 +91,7 @@ void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
         onDrained();
         // double-clear since there might be some operations inside the drained block.
         clearAllHandles();
-        didSecondaryDrain();
+        didDrain();
     }
 }
 

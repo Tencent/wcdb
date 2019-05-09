@@ -83,13 +83,6 @@ void Database::didDrain()
     m_initialized = false;
 }
 
-void Database::didSecondaryDrain()
-{
-    WCTInnerAssert(m_memory.writeSafety());
-    WCTInnerAssert(!isOpened());
-    m_initialized = false;
-}
-
 void Database::close(const ClosedCallback &onClosed)
 {
     drain(onClosed);
