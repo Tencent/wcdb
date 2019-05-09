@@ -67,7 +67,12 @@ std::set<String> Migration::getPathsOfSourceDatabases() const
         SharedLockGuard lockGuard(m_lock);
         for (const auto& info : m_holder) {
             if (info.isCrossDatabase()) {
-                paths.emplace(info.getSourceDatabase());
+                if (m_migratings.find(&info) != m_migratings.end()
+                    || m_dumpster.find(&info) != m_dumpster.end()
+                    || m_referenceds.find(&info) != m_referenceds.end()) {
+                    // it's an active info
+                    paths.emplace(info.getSourceDatabase());
+                }
             }
         }
     }
