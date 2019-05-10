@@ -108,7 +108,7 @@ bool MigrationStepperHandle::migrateRows(const MigrationInfo* info, bool& done)
 
     if (!m_removeMigratedStatement->isPrepared()
         && !m_removeMigratedStatement->prepare(
-           m_migratingInfo->getStatementForDeletingMigratedOneRow())) {
+        m_migratingInfo->getStatementForDeletingMigratedOneRow())) {
         return false;
     }
 
@@ -196,40 +196,37 @@ void MigrationStepperHandle::finalizeMigrationStatement()
 }
 
 #pragma mark - Info Initializer
-std::tuple<bool, bool, std::set<String>>
-MigrationStepperHandle::getColumnsForSourceTable(const MigrationUserInfo& userInfo)
+std::pair<bool, bool>
+MigrationStepperHandle::sourceTableExists(const MigrationUserInfo& userInfo)
 {
-    if (!reAttach(userInfo.getSourceDatabase(), userInfo.getSchemaForSourceDatabase())) {
-        return { false, false, {} };
-    }
-    Schema schema = userInfo.getSchemaForSourceDatabase();
+    bool succeed = false;
+    bool exists = false;
+    do {
+        Schema schema = userInfo.getSchemaForSourceDatabase();
+        if (!reAttach(userInfo.getSourceDatabase(), schema)) {
+            break;
+        }
+        std::tie(succeed, exists) = tableExists(schema, userInfo.getSourceTable());
+    } while (false);
+    return { succeed, exists };
+}
+
+std::tuple<bool, bool, std::set<String>>
+MigrationStepperHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
+{
     bool succeed = true;
     bool integerPrimary = false;
     std::set<String> columns;
     do {
-        if (!schema.syntax().isMain()) {
-            std::set<String> attacheds;
-            std::tie(succeed, attacheds)
-            = getValues(MigrationInfo::getStatementForSelectingDatabaseList(), 1);
-            if (succeed) {
-                if (attacheds.find(schema.getDescription()) == attacheds.end()) {
-                    succeed
-                    = executeStatement(userInfo.getStatementForAttachingSchema());
-                }
-            }
-            if (!succeed) {
-                break;
-            }
-        }
         bool exists;
-        std::tie(succeed, exists) = tableExists(schema, userInfo.getSourceTable());
+        std::tie(succeed, exists) = tableExists(Schema::main(), userInfo.getTable());
         if (!succeed) {
             break;
         }
         if (exists) {
             std::vector<ColumnMeta> columnMetas;
             std::tie(succeed, columnMetas)
-            = getTableMeta(schema, userInfo.getSourceTable());
+            = getTableMeta(Schema::main(), userInfo.getTable());
             if (succeed) {
                 integerPrimary = ColumnMeta::getIndexOfIntegerPrimary(columnMetas) >= 0;
                 for (const auto& columnMeta : columnMetas) {

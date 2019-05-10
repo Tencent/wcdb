@@ -50,6 +50,7 @@ void Migration::purge()
     m_referenceds.clear();
     m_holder.clear();
     m_filted.clear();
+    m_hints.clear();
     m_tableAcquired = false;
     m_migrated = false;
 }
@@ -103,39 +104,40 @@ bool Migration::initInfo(InfoInitializer& initializer, const String& table)
     }
 
     bool succeed = false;
+    bool exists = false;
+    std::tie(succeed, exists) = initializer.sourceTableExists(userInfo);
+    if (!succeed) {
+        return false;
+    }
+    if (!exists) {
+        markAsNoNeedToMigrate(table);
+        return true;
+    }
+
     bool containsPrimaryKey = false;
     std::set<String> columns;
     std::tie(succeed, containsPrimaryKey, columns)
-    = initializer.getColumnsForSourceTable(userInfo);
+    = initializer.getColumnsOfUserInfo(userInfo);
     if (!succeed) {
         return false;
     }
     LockGuard lockGuard(m_lock);
     if (m_filted.find(table) == m_filted.end()) {
+        m_migrated = false;
         if (columns.empty()) {
-            // source table already does not exist
-            markAsNoNeedToMigrate(table);
+            // it's not created
+            m_hints.emplace(table);
+            m_tableAcquired = false;
         } else {
-            m_migrated = false;
             m_holder.push_back(MigrationInfo(userInfo, columns, containsPrimaryKey));
             const MigrationInfo* hold = &m_holder.back();
             m_migratings.emplace(hold);
             m_referenceds.emplace(hold, 0);
             m_filted.emplace(table, hold);
+            m_hints.erase(table);
         }
     }
     return true;
-}
-
-bool Migration::lazyInitInfo(InfoInitializer& initializer, const String& table)
-{
-    {
-        SharedLockGuard lockGuard(m_lock);
-        if (m_filted.find(table) != m_filted.end()) {
-            return true;
-        }
-    }
-    return initInfo(initializer, table);
 }
 
 void Migration::markAsNoNeedToMigrate(const String& table)
@@ -144,6 +146,12 @@ void Migration::markAsNoNeedToMigrate(const String& table)
     if (m_filted.find(table) == m_filted.end()) {
         m_filted.emplace(table, nullptr);
     }
+    m_hints.erase(table);
+}
+
+bool Migration::hintTable(InfoInitializer& initializer, const String& table)
+{
+    return initInfo(initializer, table);
 }
 
 void Migration::markAsUnreferenced(const MigrationInfo* info)
@@ -151,6 +159,7 @@ void Migration::markAsUnreferenced(const MigrationInfo* info)
     LockGuard lockGuard(m_lock);
     WCTInnerAssert(info != nullptr);
     WCTInnerAssert(m_filted.find(info->getTable()) != m_filted.end());
+    WCTInnerAssert(m_hints.find(info->getTable()) == m_hints.end());
     WCTInnerAssert(m_migratings.find(info) == m_migratings.end());
     WCTInnerAssert(m_referenceds.find(info) != m_referenceds.end());
     WCTInnerAssert(m_referenceds.find(info)->second == 0);
@@ -164,6 +173,7 @@ void Migration::markAsDropped(const MigrationInfo* info)
     LockGuard lockGuard(m_lock);
     WCTInnerAssert(info != nullptr);
     WCTInnerAssert(m_filted.find(info->getTable()) != m_filted.end());
+    WCTInnerAssert(m_hints.find(info->getTable()) == m_hints.end());
     WCTInnerAssert(m_migratings.find(info) == m_migratings.end());
     WCTInnerAssert(m_referenceds.find(info) == m_referenceds.end());
     WCTInnerAssert(m_dumpster.find(info) != m_dumpster.end());
@@ -175,6 +185,7 @@ void Migration::markAsMigrated(const MigrationInfo* info)
     LockGuard lockGuard(m_lock);
     WCTInnerAssert(info != nullptr);
     WCTInnerAssert(m_filted.find(info->getTable()) != m_filted.end());
+    WCTInnerAssert(m_hints.find(info->getTable()) == m_hints.end());
     WCTInnerAssert(m_migratings.find(info) != m_migratings.end());
     m_migratings.erase(info);
     auto iter = m_referenceds.find(info);
@@ -189,6 +200,7 @@ void Migration::retainInfo(const MigrationInfo* info)
     WCTInnerAssert(info != nullptr);
     LockGuard lockGuard(m_lock);
     WCTInnerAssert(m_filted.find(info->getTable()) != m_filted.end());
+    WCTInnerAssert(m_hints.find(info->getTable()) == m_hints.end());
     WCTInnerAssert(m_migratings.find(info) != m_migratings.end());
     WCTInnerAssert(m_dumpster.find(info) == m_dumpster.end());
     auto iter = m_referenceds.find(info);
@@ -201,6 +213,7 @@ void Migration::releaseInfo(const MigrationInfo* info)
     WCTInnerAssert(info != nullptr);
     LockGuard lockGuard(m_lock);
     WCTInnerAssert(m_filted.find(info->getTable()) != m_filted.end());
+    WCTInnerAssert(m_hints.find(info->getTable()) == m_hints.end());
     WCTInnerAssert(m_dumpster.find(info) == m_dumpster.end());
     auto iter = m_referenceds.find(info);
     WCTInnerAssert(iter != m_referenceds.end());
@@ -288,7 +301,7 @@ std::pair<bool, const MigrationInfo*> Migration::Binder::bindTable(const String&
 
 bool Migration::Binder::hintTable(const String& table)
 {
-    return m_migration.lazyInitInfo(*this, table);
+    return m_migration.hintTable(*this, table);
 }
 
 const MigrationInfo* Migration::Binder::getBoundInfo(const String& table)
@@ -348,18 +361,27 @@ std::pair<bool, bool> Migration::step(Migration::Stepper& stepper)
 {
     bool succeed = true;
     bool worked = false;
-    std::tie(succeed, worked) = tryDropUnreferencedTable(stepper);
-    if (!succeed || worked) {
-        return { succeed, false };
-    }
-    std::tie(succeed, worked) = tryMigrateRows(stepper);
-    if (!succeed || worked) {
-        return { succeed, false };
-    }
-    std::tie(succeed, worked) = tryAcquireTables(stepper);
-    if (!succeed || worked) {
-        return { succeed, false };
-    }
+    bool retry = false;
+    do {
+        retry = false;
+        std::tie(succeed, worked) = tryDropUnreferencedTable(stepper);
+        if (!succeed || worked) {
+            return { succeed, false };
+        }
+        std::tie(succeed, worked) = tryMigrateRows(stepper);
+        if (!succeed || worked) {
+            return { succeed, false };
+        }
+        // acquire table is a readonly operation.
+        // retry if and only if it works.
+        std::tie(succeed, retry) = tryAcquireTables(stepper);
+        if (!succeed) {
+            return { succeed, false };
+        }
+    } while (retry);
+    WCTInnerAssert(succeed);
+    WCTInnerAssert(!worked);
+
     {
         SharedLockGuard lockGuard(m_lock);
         WCTInnerAssert(m_tableAcquired);
@@ -373,6 +395,7 @@ std::pair<bool, bool> Migration::step(Migration::Stepper& stepper)
     WCTInnerAssert(m_dumpster.empty());
     WCTInnerAssert(m_migratings.empty());
     WCTInnerAssert(m_referenceds.empty());
+    WCTInnerAssert(m_hints.empty());
     m_migrated = true;
     if (m_event != nullptr) {
         m_event->didMigrate(nullptr);
@@ -451,6 +474,7 @@ std::pair<bool, bool> Migration::tryAcquireTables(Migration::Stepper& stepper)
     std::set<String> tables;
     std::tie(succeed, tables) = stepper.getAllTables();
     if (succeed) {
+        tables.insert(m_hints.begin(), m_hints.end());
         for (const auto& table : tables) {
             WCTInnerAssert(!table.hasPrefix(Syntax::builtinTablePrefix));
             if (!initInfo(stepper, table)) {
