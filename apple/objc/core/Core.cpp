@@ -136,7 +136,6 @@ void Core::purgeDatabasePool()
 void Core::onDatabaseCreated(Database* database)
 {
     WCTInnerAssert(database != nullptr);
-    database->setEvent(this);
 
     database->setConfigs(m_configs);
 
@@ -180,9 +179,25 @@ std::shared_ptr<Config> Core::tokenizerConfig(const String& tokenizeName)
 }
 
 #pragma mark - Observation
-void Core::observatedThatNeedPurged()
+void Core::observatedThatNeedPurge()
 {
     purgeDatabasePool();
+}
+
+void Core::observatedThatMayBeCorrupted(const String& path)
+{
+    RecyclableDatabase database = m_databasePool.get(path);
+    if (database != nullptr) {
+        database->checkIntegrityIfAlreadyInitialized();
+
+        std::set<String> sourcePaths = database->getPathsOfSourceDatabases();
+        for (const String& sourcePath : sourcePaths) {
+            RecyclableDatabase sourceDatabase = m_databasePool.get(sourcePath);
+            if (sourceDatabase != nullptr) {
+                sourceDatabase->checkIntegrityIfAlreadyInitialized();
+            }
+        }
+    }
 }
 
 ObservationQueue* Core::observationQueue()
@@ -273,11 +288,6 @@ bool Core::databaseShouldBackup(const String& path)
         succeed = database->backupIfAlreadyInitialized();
     }
     return succeed;
-}
-
-void Core::databaseDidBackup(const String& path)
-{
-    m_observationQueue->markAsObservedNotCorrupted(path);
 }
 
 #pragma mark - Migration

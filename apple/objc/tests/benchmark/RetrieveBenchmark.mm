@@ -121,7 +121,7 @@
                return [database createTable:tableName withClass:BenchmarkObject.class]
                       && [handle insertObjects:objects intoTable:tableName];
            }]
-           && [database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("TRUNCATE")];
+           && [database truncateCheckpoint];
 }
 
 - (double)getQuality:(NSString*)path

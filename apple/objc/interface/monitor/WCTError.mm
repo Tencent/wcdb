@@ -19,9 +19,9 @@
  */
 
 #import <WCDB/CoreConst.h>
-#import <WCDB/FileManager.hpp>
-#import <WCDB/Notifier.hpp>
 #import <WCDB/WCTConvertible.h>
+#import <WCDB/WCTDatabase+Debug.h>
+#import <WCDB/WCTDatabase+Monitor.h>
 #import <WCDB/WCTError+Private.h>
 #import <WCDB/WCTError.h>
 

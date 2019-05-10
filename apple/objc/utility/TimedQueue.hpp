@@ -34,6 +34,14 @@ namespace WCDB {
 
 template<typename Key, typename Info>
 class TimedQueue final {
+private:
+    typedef OrderedUniqueList<Key, Info, SteadyClock> List;
+    List m_list;
+    std::condition_variable m_cond;
+    std::mutex m_mutex;
+    bool m_stop;
+    std::atomic<bool> m_running;
+
 public:
     TimedQueue() : m_stop(false), m_running(false){};
     ~TimedQueue()
@@ -45,7 +53,7 @@ public:
     // return true to erase the element
     typedef std::function<bool(const Key &, const Info &)> ExpiredCallback;
 
-    void reQueue(const Key &key, double delay, const Info &info)
+    void queue(const Key &key, double delay, const Info &info, bool reQueue = true)
     {
         if (isExiting()) {
             stop();
@@ -55,6 +63,11 @@ public:
         {
             std::lock_guard<std::mutex> lockGuard(m_mutex);
             if (m_stop) {
+                return;
+            }
+
+            if (!reQueue && m_list.find(key) != nullptr) {
+                // no need to queue
                 return;
             }
 
@@ -140,13 +153,6 @@ public:
         }
         m_running.store(false);
     }
-
-protected:
-    OrderedUniqueList<Key, Info, SteadyClock> m_list;
-    std::condition_variable m_cond;
-    std::mutex m_mutex;
-    bool m_stop;
-    std::atomic<bool> m_running;
 };
 
 } //namespace WCDB

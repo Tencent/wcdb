@@ -56,6 +56,8 @@ public:
 
     void purge();
 
+    std::set<String> getPathsOfSourceDatabases() const;
+
 protected:
     class InfoInitializer {
         friend class Migration;
@@ -64,15 +66,17 @@ protected:
         virtual ~InfoInitializer() = 0;
 
     protected:
+        virtual std::pair<bool, bool>
+        sourceTableExists(const MigrationUserInfo& userInfo) = 0;
         // When succeed, empty column indicates that table does not exist.
         // succeed, contains integer primary key, columns
         virtual std::tuple<bool, bool, std::set<String>>
-        getColumnsForSourceTable(const MigrationUserInfo& userInfo) = 0;
+        getColumnsOfUserInfo(const MigrationUserInfo& userInfo) = 0;
         virtual String getDatabasePath() const = 0;
     };
 
     bool initInfo(InfoInitializer& initializer, const String& table);
-    bool lazyInitInfo(InfoInitializer& initializer, const String& table);
+    bool hintTable(InfoInitializer& initializer, const String& table);
     void markAsNoNeedToMigrate(const String& table);
 
     void markAsUnreferenced(const MigrationInfo* info);
@@ -99,6 +103,7 @@ private:
     std::map<const MigrationInfo*, int> m_referenceds;
     std::list<MigrationInfo> m_holder;
     std::map<String, const MigrationInfo*> m_filted;
+    std::set<String> m_hints;
 
     void retainInfo(const MigrationInfo* info);
     void releaseInfo(const MigrationInfo* info);

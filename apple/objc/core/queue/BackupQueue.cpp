@@ -54,10 +54,10 @@ void BackupQueue::put(const String& path, int frames)
     if (frames >= recordedFrames + BackupConfigFramesIntervalForCritical // expired too much
         || frames < recordedFrames // restarted
     ) {
-        m_timedQueue.reQueue(path, BackupQueueDelayForCritical, frames);
+        m_timedQueue.queue(path, BackupQueueDelayForCritical, frames);
         lazyRun();
     } else if (frames >= recordedFrames + BackupConfigFramesIntervalForNonCritical) {
-        m_timedQueue.reQueue(path, BackupQueueDelayForNonCritical, frames);
+        m_timedQueue.queue(path, BackupQueueDelayForNonCritical, frames);
         lazyRun();
     }
 }
@@ -85,7 +85,7 @@ bool BackupQueue::onTimed(const String& path, const int& frames)
     }
     if (!result) {
         // retry if failed
-        m_timedQueue.reQueue(path, BackupQueueDelayForRetryingAfterFailure, frames);
+        m_timedQueue.queue(path, BackupQueueDelayForRetryingAfterFailure, frames);
     } else {
         iter->second = frames;
     }

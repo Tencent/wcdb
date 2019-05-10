@@ -32,15 +32,6 @@
 
 namespace WCDB {
 
-class DatabaseEvent {
-public:
-    virtual ~DatabaseEvent() = 0;
-
-protected:
-    friend class Database;
-    virtual void databaseDidBackup(const String &path) = 0;
-};
-
 // TODO: readonly manually - by removing basic config and adding query_only config?
 // TODO: support authorize
 class Database final : private HandlePool, public MigrationEvent {
@@ -58,13 +49,6 @@ protected:
     InitializedGuard isInitialized() const;
     bool m_initialized;
 
-#pragma mark - Event
-public:
-    void setEvent(DatabaseEvent *event);
-
-protected:
-    DatabaseEvent *m_event;
-
 #pragma mark - Basic
 public:
     void setTag(const Tag &tag);
@@ -80,6 +64,8 @@ public:
 
 protected:
     Tag m_tag;
+
+    void didDrain() override final;
 
 #pragma mark - Handle
 public:
@@ -101,6 +87,7 @@ protected:
         BackupWrite,
         // The handles below are not in HandlePool
         Assemble = HandlePoolNumberOfSlots,
+        Integrity,
     };
     std::shared_ptr<Handle> generateSlotedHandle(Slot slot) override final;
     bool willReuseSlotedHandle(Slot slot, Handle *handle) override final;
@@ -185,6 +172,9 @@ public:
     double retrieve(const RetrieveProgressCallback &onProgressUpdate);
     bool containsDeposited() const;
 
+    void checkIntegrity();
+    void checkIntegrityIfAlreadyInitialized();
+
 private:
     bool doBackup();
     bool retrieveRenewed();
@@ -205,11 +195,13 @@ public:
 
     bool isMigrated() const;
 
+    std::set<String> getPathsOfSourceDatabases() const;
+
 protected:
     std::pair<bool, bool> doStepMigration();
     void didMigrate(const MigrationBaseInfo *info) override final;
     MigratedCallback m_migratedCallback;
-    Migration m_migration;
+    Migration m_migration; // thread-safe
 
 #pragma mark - Checkpoint
 public:

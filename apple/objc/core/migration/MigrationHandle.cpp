@@ -47,13 +47,38 @@ MigrationHandle::~MigrationHandle()
 
 #pragma mark - Info Initializer
 std::tuple<bool, bool, std::set<String>>
-MigrationHandle::getColumnsForSourceTable(const MigrationUserInfo& userInfo)
+MigrationHandle::getColumnsOfUserInfo(const MigrationUserInfo& userInfo)
 {
-    Schema schema = userInfo.getSchemaForSourceDatabase();
     bool succeed = true;
     bool integerPrimary = false;
     std::set<String> columns;
     do {
+        bool exists;
+        std::tie(succeed, exists) = tableExists(Schema::main(), userInfo.getTable());
+        if (!succeed) {
+            break;
+        }
+        if (exists) {
+            std::vector<ColumnMeta> columnMetas;
+            std::tie(succeed, columnMetas)
+            = getTableMeta(Schema::main(), userInfo.getTable());
+            if (succeed) {
+                integerPrimary = ColumnMeta::getIndexOfIntegerPrimary(columnMetas) >= 0;
+                for (const auto& columnMeta : columnMetas) {
+                    columns.emplace(columnMeta.name);
+                }
+            }
+        }
+    } while (false);
+    return { succeed, integerPrimary, columns };
+}
+
+std::pair<bool, bool> MigrationHandle::sourceTableExists(const MigrationUserInfo& userInfo)
+{
+    bool succeed = true;
+    bool exists = false;
+    do {
+        Schema schema = userInfo.getSchemaForSourceDatabase();
         if (!schema.syntax().isMain()) {
             std::set<String> attacheds;
             std::tie(succeed, attacheds)
@@ -68,24 +93,9 @@ MigrationHandle::getColumnsForSourceTable(const MigrationUserInfo& userInfo)
                 break;
             }
         }
-        bool exists;
         std::tie(succeed, exists) = tableExists(schema, userInfo.getSourceTable());
-        if (!succeed) {
-            break;
-        }
-        if (exists) {
-            std::vector<ColumnMeta> columnMetas;
-            std::tie(succeed, columnMetas)
-            = getTableMeta(schema, userInfo.getSourceTable());
-            if (succeed) {
-                integerPrimary = ColumnMeta::getIndexOfIntegerPrimary(columnMetas) >= 0;
-                for (const auto& columnMeta : columnMetas) {
-                    columns.emplace(columnMeta.name);
-                }
-            }
-        }
     } while (false);
-    return { succeed, integerPrimary, columns };
+    return { succeed, exists };
 }
 
 String MigrationHandle::getDatabasePath() const

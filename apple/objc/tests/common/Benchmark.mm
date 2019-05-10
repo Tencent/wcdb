@@ -22,6 +22,7 @@
 #import "Random.h"
 #import "Signpost.h"
 #import "TestCaseLog.h"
+#import <WCDB/WCTDatabase+Debug.h>
 
 @implementation Benchmark {
     Signpost *_signpost;
@@ -77,7 +78,7 @@
                            ++i;
                        }];
 
-    BOOL untrusted = WCTDatabase.debuggable;
+    BOOL untrusted = WCTDatabase.debug;
 #if DEBUG || TARGET_IPHONE_SIMULATOR
     untrusted = YES;
 #endif

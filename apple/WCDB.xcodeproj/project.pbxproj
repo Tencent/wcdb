@@ -1592,6 +1592,10 @@
 		39579861227FD5770069F985 /* ForeignKeyClause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39579860227FD5770069F985 /* ForeignKeyClause.swift */; };
 		3959F8CA224E1E8700E24568 /* WCTObservationQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3959F8C7224E1E8700E24568 /* WCTObservationQueue.mm */; };
 		3959F8CB224E1E8700E24568 /* WCTObservationQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3959F8C7224E1E8700E24568 /* WCTObservationQueue.mm */; };
+		396C2C6E228439390005A33D /* IntegrityHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 396C2C6C228439390005A33D /* IntegrityHandle.cpp */; };
+		396C2C6F228439390005A33D /* IntegrityHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 396C2C6C228439390005A33D /* IntegrityHandle.cpp */; };
+		396C2C70228439390005A33D /* IntegrityHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 396C2C6D228439390005A33D /* IntegrityHandle.hpp */; };
+		396C2C71228439390005A33D /* IntegrityHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 396C2C6D228439390005A33D /* IntegrityHandle.hpp */; };
 		39D81662227EC1D9009EC067 /* ColumnDef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D81661227EC1D9009EC067 /* ColumnDef.swift */; };
 		39D81664227EC1F7009EC067 /* ColumnType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D81663227EC1F7009EC067 /* ColumnType.swift */; };
 		39D81666227EC25E009EC067 /* ColumnConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D81665227EC25E009EC067 /* ColumnConstraint.swift */; };
@@ -2571,6 +2575,8 @@
 		3957985E227FD4F20069F985 /* Expression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expression.swift; sourceTree = "<group>"; };
 		39579860227FD5770069F985 /* ForeignKeyClause.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForeignKeyClause.swift; sourceTree = "<group>"; };
 		3959F8C7224E1E8700E24568 /* WCTObservationQueue.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTObservationQueue.mm; sourceTree = "<group>"; };
+		396C2C6C228439390005A33D /* IntegrityHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IntegrityHandle.cpp; sourceTree = "<group>"; };
+		396C2C6D228439390005A33D /* IntegrityHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IntegrityHandle.hpp; sourceTree = "<group>"; };
 		39D81661227EC1D9009EC067 /* ColumnDef.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnDef.swift; sourceTree = "<group>"; };
 		39D81663227EC1F7009EC067 /* ColumnType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnType.swift; sourceTree = "<group>"; };
 		39D81665227EC25E009EC067 /* ColumnConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnConstraint.swift; sourceTree = "<group>"; };
@@ -2674,6 +2680,8 @@
 				237B47AF21FEEA200059227A /* ColumnMeta.hpp */,
 				237BB6612202D1C7007F12F4 /* InterruptibleCheckpointHandle.cpp */,
 				237BB6622202D1C7007F12F4 /* InterruptibleCheckpointHandle.hpp */,
+				396C2C6C228439390005A33D /* IntegrityHandle.cpp */,
+				396C2C6D228439390005A33D /* IntegrityHandle.hpp */,
 				23B0071B2047ED4800045245 /* ConfiguredHandle.hpp */,
 				23F26BC92211A8D500BD2C57 /* ConfiguredHandle.cpp */,
 			);
@@ -4457,6 +4465,7 @@
 				2367BC9F2215004300380122 /* StatementAttach.hpp in Headers */,
 				2367BCA02215004300380122 /* ColumnDef.hpp in Headers */,
 				2367BCA12215004300380122 /* WCTRuntimeCppAccessor.h in Headers */,
+				396C2C71228439390005A33D /* IntegrityHandle.hpp in Headers */,
 				2367BCA22215004300380122 /* Wal.hpp in Headers */,
 				2367BCA32215004300380122 /* SyntaxSavepointSTMT.hpp in Headers */,
 				2367BCA42215004300380122 /* OrderedUniqueList.hpp in Headers */,
@@ -4781,6 +4790,7 @@
 				2349F75B1EA0D6680021EFA7 /* WCTRuntimeObjCAccessor.h in Headers */,
 				23EEDCBA217DFADC006E9E73 /* StatementAttach.hpp in Headers */,
 				23EEDC7E217DFADC006E9E73 /* ColumnDef.hpp in Headers */,
+				396C2C70228439390005A33D /* IntegrityHandle.hpp in Headers */,
 				2349F75A1EA0D6680021EFA7 /* WCTRuntimeCppAccessor.h in Headers */,
 				23EB91E020CA1EBE00ECF668 /* Wal.hpp in Headers */,
 				23EEDD54217DFADC006E9E73 /* SyntaxSavepointSTMT.hpp in Headers */,
@@ -5699,6 +5709,7 @@
 				2367BB8B2215004300380122 /* SyntaxAnalyzeSTMT.cpp in Sources */,
 				2367BB8D2215004300380122 /* SyntaxQualifiedTableName.cpp in Sources */,
 				2367BB8E2215004300380122 /* SyntaxSchema.cpp in Sources */,
+				396C2C6F228439390005A33D /* IntegrityHandle.cpp in Sources */,
 				2367BB8F2215004300380122 /* WCTProperty.mm in Sources */,
 				2367BB902215004300380122 /* WCTError.mm in Sources */,
 				2367BB912215004300380122 /* ColumnMeta.cpp in Sources */,
@@ -5975,6 +5986,7 @@
 				23EEDD2B217DFADC006E9E73 /* SyntaxAnalyzeSTMT.cpp in Sources */,
 				23EEDD13217DFADC006E9E73 /* SyntaxQualifiedTableName.cpp in Sources */,
 				23EEDD1B217DFADC006E9E73 /* SyntaxSchema.cpp in Sources */,
+				396C2C6E228439390005A33D /* IntegrityHandle.cpp in Sources */,
 				2349F7691EA0D6680021EFA7 /* WCTProperty.mm in Sources */,
 				2386B3C61ED442FE000B72F6 /* WCTError.mm in Sources */,
 				237B47B021FEEA200059227A /* ColumnMeta.cpp in Sources */,

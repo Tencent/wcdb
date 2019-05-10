@@ -21,6 +21,13 @@
 #import "CoreConst.h"
 #import "WCTDatabase+TestCase.h"
 
+@interface WCTDatabase (TestCase1)
+
++ (void)globalTraceError:(WCTErrorTraceBlock)block
+          withIdentifier:(const WCDB::String &)identifier;
+
+@end
+
 @implementation WCTDatabase (TestCase)
 
 - (NSString *)walPath
@@ -110,6 +117,81 @@
         size = numberOfFrames > 0 ? numberOfFrames : 0;
     }
     return size;
+}
+
++ (void)additionalGlobalTraceError:(WCTErrorTraceBlock)block
+{
+    [self globalTraceError:block withIdentifier:"com.Tencent.WCDB.Notifier.AdditionalLog"];
+}
+
+- (BOOL)passiveCheckpoint
+{
+    return [self execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("PASSIVE")];
+}
+
+- (BOOL)truncateCheckpoint
+{
+    return [self execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with("TRUNCATE")];
+}
+
+- (BOOL)corruptHeaderWithinCloseAfterTruncatedCheckpoint
+{
+    __block BOOL result = NO;
+    [self close:^{
+        result = [self truncateCheckpoint];
+
+        NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.path];
+        NSMutableData *emptyData = [NSMutableData data];
+        [emptyData increaseLengthBy:self.headerSize];
+        [fileHandle writeData:emptyData];
+        [fileHandle closeFile];
+    }];
+    return result;
+}
+
+- (void)corruptWalFrame:(int)i
+{
+    NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.walPath];
+    [fileHandle seekToFileOffset:self.walHeaderSize + (i - 1) * self.walFrameSize];
+    NSMutableData *emptyData = [NSMutableData data];
+    [emptyData increaseLengthBy:self.walFrameSize];
+    [fileHandle writeData:emptyData];
+    [fileHandle closeFile];
+}
+
+- (void)corruptPage:(int)i
+{
+    [self corruptPage:i
+             withData:^NSData *(int size) {
+                 return [NSMutableData dataWithLength:size];
+             }];
+}
+
+- (void)corruptPage:(int)i withData:(WCTCorruptDataBlock)block
+{
+    NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.path];
+    [fileHandle seekToFileOffset:(i - 1) * self.pageSize];
+    [fileHandle writeData:block(self.pageSize)];
+    [fileHandle closeFile];
+}
+
+- (BOOL)corruptCompletely
+{
+    auto numberOfPages = [self getNumberOfPages];
+    if (numberOfPages.failed()) {
+        return NO;
+    }
+    for (int i = 0; i < numberOfPages.value(); ++i) {
+        [self corruptPage:i + 1];
+    }
+    auto numberOfWalFrames = [self getNumberOfWalFrames];
+    if (numberOfWalFrames.failed()) {
+        return NO;
+    }
+    for (int i = 0; i < numberOfWalFrames.value(); ++i) {
+        [self corruptWalFrame:i + 1];
+    }
+    return YES;
 }
 
 @end

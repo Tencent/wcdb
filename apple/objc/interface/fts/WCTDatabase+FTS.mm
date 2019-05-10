@@ -32,10 +32,20 @@ NSString* const WCTTokenizerLegacyOneOrBinary = @"WCDB";
 NSString* const WCTModuleFTS3 = @"fts3";
 NSString* const WCTModuleFTS5 = @"fts5";
 
+static std::nullptr_t initialize()
+{
+    WCDB::Core::shared()->registerTokenizer(WCTTokenizerOneOrBinary, WCDB::TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizerCursorInfo>::specialize());
+    WCDB::Core::shared()->registerTokenizer(WCTTokenizerLegacyOneOrBinary, WCDB::TokenizerModuleTemplate<WCDB::OneOrBinaryTokenizerInfo, WCTOneOrBinaryTokenizerCursorInfo>::specialize());
+    return nullptr;
+}
+
 @implementation WCTDatabase (FTS)
 
 - (void)addTokenizer:(NSString*)tokenizerName
 {
+    static auto _ = initialize();
+    WCDB_UNUSED(_);
+
     WCTRemedialAssert(tokenizerName.length > 0, "Tokenizer name can't be nil.", return;);
     std::shared_ptr<WCDB::Config> config = WCDB::Core::shared()->tokenizerConfig({ tokenizerName });
     WCTRemedialAssert(config != nullptr, "Config doesn't exist.", return;);

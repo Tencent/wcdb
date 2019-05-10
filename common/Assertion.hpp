@@ -32,10 +32,10 @@
     __WCTAssert(                                                               \
     cond, "If you think it's a bug caused by WCDB, please report to us.", abort();)
 
-#define __WCTAssert(cond, message, action)                                     \
-    if (!(cond)) {                                                             \
-        WCDB::Console::fatal(message, __FILE__, __LINE__);                     \
-        action                                                                 \
+#define __WCTAssert(cond, message, action)                                      \
+    if (!(cond)) {                                                              \
+        WCDB::Console::fatal(message, __FILE__, __LINE__, __PRETTY_FUNCTION__); \
+        action                                                                  \
     }
 
 #else // DEBUG

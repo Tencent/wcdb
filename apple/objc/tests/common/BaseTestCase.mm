@@ -51,11 +51,12 @@
     self.continueAfterFailure = YES;
 
 #ifdef DEBUG
-    WCTDatabase.debuggable = YES;
+    WCTDatabase.debug = YES;
 #else
-    WCTDatabase.debuggable = NO;
+    WCTDatabase.debug = NO;
 #endif
 
+    [WCTDatabase globalTraceError:nil];
     [WCTDatabase additionalGlobalTraceError:^(WCTError *error) {
         NSThread *currentThread = [NSThread currentThread];
         NSString *threadName = currentThread.name;
@@ -64,8 +65,16 @@
         }
         TestCaseLog(@"%@ Thread %@: %@", currentThread.isMainThread ? @"*" : @"-", threadName, error);
     }];
+    //    [WCTDatabase globalTraceSQL:^(NSString *sql) {
+    //        NSThread *currentThread = [NSThread currentThread];
+    //        NSString *threadName = currentThread.name;
+    //        if (threadName.length == 0) {
+    //            threadName = [NSString stringWithFormat:@"%p", currentThread];
+    //        }
+    //        TestCaseLog(@"%@ Thread %@: %@", currentThread.isMainThread ? @"*" : @"-", threadName, sql);
+    //    }];
 
-    if (WCTDatabase.debuggable) {
+    if (WCTDatabase.debug) {
         [self log:@"debuggable."];
     }
 

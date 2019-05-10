@@ -45,22 +45,23 @@ void ObservationDelegate::observatedThatFileOpened(int fd)
 }
 
 #pragma mark - Queue
+ObservationQueue::Parameter::Parameter(Source source_)
+: source(source_), identifier(0), numberOfFileDescriptors(0)
+{
+}
+
 ObservationQueue::ObservationQueue(const String& name, ObservationQueueEvent* event)
 : AsyncQueue(name)
 , m_event(event)
 , m_observerForMemoryWarning(registerNotificationWhenMemoryWarning())
-, m_pendingToPurge(false)
 {
     Notifier::shared()->setNotification(
     0, name, std::bind(&ObservationQueue::handleError, this, std::placeholders::_1));
-    Notifier::shared()->setNotificationForPreprocessing(
-    name, std::bind(&ObservationQueue::preprocessError, this, std::placeholders::_1));
 }
 
 ObservationQueue::~ObservationQueue()
 {
     Notifier::shared()->unsetNotification(name);
-    Notifier::shared()->setNotificationForPreprocessing(name, nullptr);
     unregisterNotificationWhenMemoryWarning(m_observerForMemoryWarning);
 }
 
@@ -70,58 +71,93 @@ void ObservationQueue::loop()
     &ObservationQueue::onTimed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
-bool ObservationQueue::onTimed(const String& parameter1, const uint32_t& parameter2)
+bool ObservationQueue::onTimed(const String& key, const Parameter& parameter)
 {
-    if (parameter1.empty()) {
-        WCTInnerAssert(m_event != nullptr);
+    WCTInnerAssert(m_event != nullptr);
+
+    if (parameter.source == Parameter::Source::MemoryWarning
+        || parameter.source == Parameter::Source::FileDescriptorsWarning
+        || parameter.source == Parameter::Source::OutOfMaxAllowedFileDescriptors) {
+        WCTInnerAssert(key == s_purgeKey);
+
+        if (parameter.source == Parameter::Source::MemoryWarning) {
+            Error error(Error::Code::Warning, Error::Level::Warning, "Purge due to memory warning.");
+            Notifier::shared()->notify(error);
+        } else if (parameter.source == Parameter::Source::FileDescriptorsWarning) {
+            Error error(Error::Code::Warning, Error::Level::Warning, "Purge due to file descriptors warning.");
+            error.infos.set("MaxAllowedFileDescriptors",
+                            maxAllowedNumberOfFileDescriptors());
+            error.infos.set("FileDescriptor", parameter.numberOfFileDescriptors);
+            Notifier::shared()->notify(error);
+        } else if (parameter.source == Parameter::Source::OutOfMaxAllowedFileDescriptors) {
+            Error error(Error::Code::Warning,
+                        Error::Level::Warning,
+                        "Purge due to out of max allowed file descriptors.");
+            error.infos.set("MaxAllowedFileDescriptors",
+                            maxAllowedNumberOfFileDescriptors());
+            Notifier::shared()->notify(error);
+        }
 
         // do purge
-        m_event->observatedThatNeedPurged();
-
-        String message;
-        if (parameter2 > 0) {
-            message = String::formatted(
-            "Purge due to too many file descriptors with %u.", parameter2);
-        } else {
-            message = "Purge due to memory warning.";
-        }
-        Error error(Error::Code::Warning, Error::Level::Warning, message);
-        Notifier::shared()->notify(error);
+        m_event->observatedThatNeedPurge();
 
         LockGuard lockGuard(m_lock);
         m_lastPurgeTime = SteadyClock::now();
-        m_pendingToPurge = false;
-        return true;
-    } else {
-        return doNotifyCorruptedEvent(parameter1, parameter2);
-    }
-}
-
-#pragma mark - Purge
-void ObservationQueue::observatedThatNeedPurged(uint32_t parameter)
-{
-    if (m_event != nullptr) {
-        bool pending = false;
+    } else if (parameter.source == Parameter::Source::Integrity) {
+        WCTInnerAssert(key != s_purgeKey && key != s_notifyKey);
+        m_event->observatedThatMayBeCorrupted(key);
+    } else if (parameter.source == Parameter::Source::Notify) {
+        WCTInnerAssert(key == s_notifyKey);
+        std::map<uint32_t, std::pair<String, Notification>> notifys;
         {
             SharedLockGuard lockGuard(m_lock);
-            if (!m_pendingToPurge
-                && SteadyClock::now().timeIntervalSinceSteadyClock(m_lastPurgeTime)
-                   > ObservationQueueTimeIntervalForPurgingAgain) {
-                pending = true;
-            }
+            notifys = m_notifys;
         }
-        {
-            if (pending) {
-                LockGuard lockGuard(m_lock);
-                if (m_pendingToPurge) {
-                    pending = false;
-                } else {
-                    m_pendingToPurge = true;
+        std::set<uint32_t> resolveds;
+        for (const auto& iter : notifys) {
+            if (iter.second.second != nullptr) {
+                if (iter.second.second(iter.second.first, iter.first)) {
+                    resolveds.emplace(iter.first);
                 }
             }
         }
-        if (pending) {
-            m_pendings.reQueue(nullptr, 0, parameter); // reQueue nullptr means a purge event
+        {
+            LockGuard lockGuard(m_lock);
+            for (const auto& resolved : resolveds) {
+                m_notifys.erase(resolved);
+            }
+        }
+        if (resolveds.size() != notifys.size()) {
+            // some are not resolved
+            m_pendings.queue(s_notifyKey,
+                             ObservationQueueTimeIntervalForReinvokingCorruptedEvent,
+                             Parameter(Parameter::Source::Notify));
+            return false;
+        }
+    }
+    return true;
+}
+
+#pragma mark - Purge
+int ObservationQueue::maxAllowedNumberOfFileDescriptors()
+{
+    const int s_maxAllowedNumberOfFileDescriptors = std::max(getdtablesize(), 1024);
+    return s_maxAllowedNumberOfFileDescriptors;
+}
+
+void ObservationQueue::observatedThatNeedPurge(const Parameter& parameter)
+{
+    if (m_event != nullptr) {
+        bool queue = false;
+        {
+            SharedLockGuard lockGuard(m_lock);
+            if (SteadyClock::now().timeIntervalSinceSteadyClock(m_lastPurgeTime)
+                > ObservationQueueTimeIntervalForPurgingAgain) {
+                queue = true;
+            }
+        }
+        if (queue) {
+            m_pendings.queue(s_purgeKey, 0, parameter, false);
             lazyRun();
         }
     }
@@ -129,44 +165,24 @@ void ObservationQueue::observatedThatNeedPurged(uint32_t parameter)
 
 void ObservationQueue::observatedThatFileOpened(int fd)
 {
-    static int s_maxAllowedNumberOfFileDescriptors = std::max(getdtablesize(), 1024);
     if (fd >= 0) {
         int possibleNumberOfActiveFileDescriptors = fd + 1;
         if (possibleNumberOfActiveFileDescriptors
-            > s_maxAllowedNumberOfFileDescriptors * ObservationQueueRateForTooManyFileDescriptors) {
-            observatedThatNeedPurged(possibleNumberOfActiveFileDescriptors);
+            > maxAllowedNumberOfFileDescriptors() * ObservationQueueRateForTooManyFileDescriptors) {
+            Parameter parameter(Parameter::Source::FileDescriptorsWarning);
+            parameter.numberOfFileDescriptors = possibleNumberOfActiveFileDescriptors;
+            observatedThatNeedPurge(parameter);
         }
     } else if (errno == EMFILE) {
-        observatedThatNeedPurged(s_maxAllowedNumberOfFileDescriptors);
+        Parameter parameter(Parameter::Source::OutOfMaxAllowedFileDescriptors);
+        observatedThatNeedPurge(parameter);
     }
 }
 
 #pragma mark - Corrupt
-bool ObservationQueue::doNotifyCorruptedEvent(const String& path, uint32_t identifier)
-{
-    Notification notification = nullptr;
-    {
-        SharedLockGuard lockGuard(m_lock);
-        auto iter = m_notifications.find(path);
-        if (iter != m_notifications.end()) {
-            notification = iter->second;
-        }
-    }
-    bool resolved = true;
-    if (notification) {
-        resolved = notification(path, identifier);
-    }
-
-    if (!resolved) {
-        m_pendings.reQueue(
-        path, ObservationQueueTimeIntervalForReinvokingCorruptedEvent, identifier);
-    }
-    return resolved;
-}
-
 void ObservationQueue::handleError(const Error& error)
 {
-    if (!error.isCorruption() || error.level < Error::Level::Error || isExiting()) {
+    if (!error.isCorruption() || isExiting()) {
         return;
     }
 
@@ -177,82 +193,50 @@ void ObservationQueue::handleError(const Error& error)
         // make sure no empty path will be added into queue
         return;
     }
-
-    // those errors that are preprocessed(to error level) will be handled here.
-
     const String& path = iter->second;
-    bool succeed;
-    uint32_t identifier;
-    std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
-    if (!succeed) {
-        return;
+
+    bool fromIntegrity = false;
+    {
+        const auto& integerInfos = error.infos.getIntegers();
+        auto integrityIter = integerInfos.find("Integrity");
+        if (integrityIter != integerInfos.end() && integrityIter->second != 0) {
+            fromIntegrity = true;
+        }
     }
 
-    {
-        SharedLockGuard lockGuard(m_lock);
-        if (m_corrupteds.find(identifier) != m_corrupteds.end()) {
-            // already received
+    if (fromIntegrity) {
+        // it's already corrupted
+        bool succeed;
+        uint32_t identifier;
+        std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
+        if (!succeed) {
             return;
         }
-    }
-    {
-        LockGuard lockGuard(m_lock);
-        bool emplaced = m_corrupteds.emplace(identifier).second;
-        if (emplaced) {
-            // mark as pending if and only if it's a new corrupted one.
-            m_pendings.reQueue(path, 0, identifier);
-            lazyRun();
-        }
-    }
-}
 
-void ObservationQueue::preprocessError(Error& error)
-{
-    // ignore corruption from RepairKit for a tolerable times
-    if (!error.isCorruption() || isExiting()) {
-        return;
-    }
-    const auto& strings = error.infos.getStrings();
-    auto sourceIter = strings.find(ErrorStringKeySource);
-    if (sourceIter == strings.end() || sourceIter->second != ErrorSourceRepair) {
-        return;
-    }
-    auto pathIter = strings.find(ErrorStringKeyPath);
-    WCTInnerAssert(pathIter != strings.end() && !pathIter->second.empty());
-    if (pathIter == strings.end() || pathIter->second.empty()) {
-        return;
-    }
-
-    const String& path = pathIter->second;
-
-    bool succeed;
-    uint32_t identifier;
-    std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
-    if (!succeed) {
-        return;
-    }
-
-    {
-        SharedLockGuard lockGuard(m_lock);
-        auto iter = m_numberOfIgnoredCorruptions.find(identifier);
-        if (iter != m_numberOfIgnoredCorruptions.end()) {
-            if (iter->second > ObservationQueueTimesOfIgnoringBackupCorruption) {
-                error.level = Error::Level::Error;
-                return; // quick return to avoid acquiring write lock too frequent.
+        {
+            SharedLockGuard lockGuard(m_lock);
+            if (m_corrupteds.find(identifier) != m_corrupteds.end()) {
+                // already received
+                return;
             }
         }
-    }
-    {
-        LockGuard lockGuard(m_lock);
-        auto iter = m_numberOfIgnoredCorruptions.find(identifier);
-        if (iter == m_numberOfIgnoredCorruptions.end()) {
-            iter = m_numberOfIgnoredCorruptions.emplace(identifier, 0).first;
+        {
+            LockGuard lockGuard(m_lock);
+            if (m_corrupteds.emplace(identifier).second) {
+                Notification notification = nullptr;
+                auto notificationIter = m_notifications.find(path);
+                if (notificationIter != m_notifications.end()) {
+                    notification = notificationIter->second;
+                }
+                m_notifys[identifier] = { path, notification };
+            }
         }
-        WCTInnerAssert(iter != m_numberOfIgnoredCorruptions.end());
-        ++iter->second;
-        if (iter->second > ObservationQueueTimesOfIgnoringBackupCorruption) {
-            error.level = Error::Level::Error;
-        }
+        m_pendings.queue(s_notifyKey, 0, Parameter(Parameter::Source::Notify));
+    } else {
+        // dispatch to check integrity
+        Parameter parameter(Parameter::Source::Integrity);
+        m_pendings.queue(path, 0, parameter, false);
+        lazyRun();
     }
 }
 
@@ -267,17 +251,6 @@ bool ObservationQueue::isFileObservedCorrupted(const String& path) const
         corrupted = m_corrupteds.find(identifier) != m_corrupteds.end();
     }
     return corrupted;
-}
-
-void ObservationQueue::markAsObservedNotCorrupted(const String& path)
-{
-    bool succeed;
-    uint32_t identifier;
-    std::tie(succeed, identifier) = FileManager::getFileIdentifier(path);
-    if (succeed) {
-        SharedLockGuard lockGuard(m_lock);
-        m_corrupteds.erase(identifier);
-    }
 }
 
 #pragma mark - Notification

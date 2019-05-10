@@ -74,6 +74,10 @@ bool HandlePool::isBlockaded() const
     return m_concurrency.level() == SharedLock::Level::Write;
 }
 
+void HandlePool::didDrain()
+{
+}
+
 void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
 {
     WCTRemedialAssert(m_concurrency.level() != SharedLock::Level::Read,
@@ -82,10 +86,12 @@ void HandlePool::drain(const HandlePool::DrainedCallback &onDrained)
     LockGuard concurrencyGuard(m_concurrency);
     LockGuard memoryGuard(m_memory);
     clearAllHandles();
+    didDrain();
     if (onDrained != nullptr) {
         onDrained();
-        // double-clear since there might be some operation inside the drained block.
+        // double-clear since there might be some operations inside the drained block.
         clearAllHandles();
+        didDrain();
     }
 }
 

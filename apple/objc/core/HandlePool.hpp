@@ -63,6 +63,7 @@ public:
     void drain(const HandlePool::DrainedCallback &onDrained);
 
 protected:
+    virtual void didDrain();
     mutable SharedLock m_concurrency;
 
 private:

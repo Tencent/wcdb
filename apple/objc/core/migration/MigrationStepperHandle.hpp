@@ -62,8 +62,9 @@ private:
 
 #pragma mark - Info Initializer
 protected:
+    std::pair<bool, bool> sourceTableExists(const MigrationUserInfo& userInfo) override final;
     std::tuple<bool, bool, std::set<String>>
-    getColumnsForSourceTable(const MigrationUserInfo& userInfo) override final;
+    getColumnsOfUserInfo(const MigrationUserInfo& userInfo) override final;
     String getDatabasePath() const override final;
 };
 

@@ -39,15 +39,6 @@ typedef void (^WCTSQLTraceBlock)(NSString * /* sql */);
 
 @interface WCTDatabase (Monitor)
 
-/* It's recommended to add the following code at the beginning of your project
- * ```
- * #ifdef DEBUG
- * WCTDatabase.debuggable = YES
- * #endif
- * ```
- */
-@property (class, readwrite, nonatomic, assign) BOOL debuggable;
-
 /**
  @brief You can register a reporter to monitor all errors.
  

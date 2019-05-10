@@ -29,14 +29,11 @@
 #include <WCDB/AssemblerHandle.hpp>
 #include <WCDB/BackupHandle.hpp>
 #include <WCDB/ConfiguredHandle.hpp>
+#include <WCDB/IntegrityHandle.hpp>
 #include <WCDB/MigrationHandle.hpp>
 #include <WCDB/MigrationStepperHandle.hpp>
 
 namespace WCDB {
-
-DatabaseEvent::~DatabaseEvent()
-{
-}
 
 #pragma mark - Initializer
 Database::Database(const String &path)
@@ -47,15 +44,7 @@ Database::Database(const String &path)
 , m_configs(nullptr)
 , m_migratedCallback(nullptr)
 , m_migration(this)
-, m_event(nullptr)
 {
-}
-
-#pragma mark - Event
-void Database::setEvent(DatabaseEvent *event)
-{
-    LockGuard lockGuard(m_memory);
-    m_event = event;
 }
 
 #pragma mark - Basic
@@ -76,14 +65,16 @@ bool Database::canOpen()
     return getHandle() != nullptr;
 }
 
+void Database::didDrain()
+{
+    WCTInnerAssert(m_memory.writeSafety());
+    WCTInnerAssert(!isOpened());
+    m_initialized = false;
+}
+
 void Database::close(const ClosedCallback &onClosed)
 {
-    drain([&onClosed, this]() {
-        if (onClosed != nullptr) {
-            onClosed();
-        }
-        m_initialized = false;
-    });
+    drain(onClosed);
 }
 
 bool Database::isOpened() const
@@ -263,7 +254,6 @@ std::shared_ptr<Handle> Database::generateHandle(HandleType type)
         handle.reset(new InterruptibleCheckpointHandle);
         break;
     case HandleType::Migrate:
-        // It's safe since m_migration itself never change.
         handle.reset(new MigrationHandle(m_migration));
         break;
     case HandleType::MigrationStep:
@@ -278,6 +268,9 @@ std::shared_ptr<Handle> Database::generateHandle(HandleType type)
     case HandleType::Assemble:
         handle.reset(new AssemblerHandle);
         break;
+    case HandleType::Integrity:
+        handle.reset(new IntegrityHandle);
+        break;
     default:
         WCTInnerAssert(type == HandleType::Normal);
         handle.reset(new ConfiguredHandle);
@@ -287,18 +280,22 @@ std::shared_ptr<Handle> Database::generateHandle(HandleType type)
         setThreadedError(Error(Error::Code::NoMemory, Error::Level::Error));
         return nullptr;
     }
-    std::shared_ptr<Configs> configs;
-    {
-        SharedLockGuard memoryGuard(m_memory);
-        configs = m_configs;
-    }
 
-    // reconfigure
-    handle->reconfigure(configs);
+    if (type != HandleType::Integrity) {
+        std::shared_ptr<Configs> configs;
+        {
+            SharedLockGuard memoryGuard(m_memory);
+            configs = m_configs;
+        }
+
+        // reconfigure
+        handle->reconfigure(configs);
+    }
 
     // open
     if (type == HandleType::Normal || type == HandleType::Migrate
-        || type == HandleType::MigrationStep || type == HandleType::InterruptibleCheckpoint) {
+        || type == HandleType::MigrationStep || type == HandleType::InterruptibleCheckpoint
+        || type == HandleType::Integrity) {
         handle->setPath(path);
         if (!handle->open()) {
             setThreadedError(handle->getError());
@@ -598,11 +595,6 @@ bool Database::doBackup()
         setThreadedError(backup.getError());
         return false;
     }
-
-    SharedLockGuard lockGuard(m_memory);
-    if (m_event != nullptr) {
-        m_event->databaseDidBackup(path);
-    }
     return true;
 }
 
@@ -734,6 +726,26 @@ bool Database::retrieveRenewed()
     return false;
 }
 
+void Database::checkIntegrity()
+{
+    InitializedGuard initializedGuard = initialize();
+    if (initializedGuard.valid()) {
+        std::shared_ptr<Handle> handle = generateHandle(HandleType::Integrity);
+        WCTInnerAssert(dynamic_cast<IntegrityHandle *>(handle.get()) != nullptr);
+        static_cast<IntegrityHandle *>(handle.get())->check();
+    }
+}
+
+void Database::checkIntegrityIfAlreadyInitialized()
+{
+    InitializedGuard initializedGuard = isInitialized();
+    if (initializedGuard.valid()) {
+        std::shared_ptr<Handle> handle = generateHandle(HandleType::Integrity);
+        WCTInnerAssert(dynamic_cast<IntegrityHandle *>(handle.get()) != nullptr);
+        static_cast<IntegrityHandle *>(handle.get())->check();
+    }
+}
+
 #pragma mark - Migration
 std::pair<bool, bool> Database::stepMigration()
 {
@@ -796,10 +808,12 @@ void Database::setNotificationWhenMigrated(const MigratedCallback &callback)
 
 void Database::filterMigration(const MigrationFilter &filter)
 {
-    LockGuard lockGuard(m_memory);
-    WCTRemedialAssert(!m_initialized,
-                      "Migration user info must be set before the very first operation.",
-                      return;);
+    {
+        SharedLockGuard lockGuard(m_memory);
+        WCTRemedialAssert(!m_initialized,
+                          "Migration user info must be set before the very first operation.",
+                          return;);
+    }
     m_migration.filterTable(filter);
 }
 
@@ -817,12 +831,12 @@ void Database::interruptMigration()
 
 bool Database::isMigrated() const
 {
-    SharedLockGuard lockGuard(m_memory);
-    bool migrated = true;
-    if (m_migration.shouldMigrate()) {
-        migrated = m_migration.isMigrated();
-    }
-    return migrated;
+    return m_migration.isMigrated();
+}
+
+std::set<String> Database::getPathsOfSourceDatabases() const
+{
+    return m_migration.getPathsOfSourceDatabases();
 }
 
 #pragma mark - Checkpoint

@@ -38,7 +38,7 @@ MigrationQueue::MigrationQueue(const String& name, MigrationQueueEvent* event)
 
 void MigrationQueue::put(const String& path)
 {
-    m_timedQueue.reQueue(path, MigrationQueueTimeIntervalForMigrating, 0);
+    m_timedQueue.queue(path, MigrationQueueTimeIntervalForMigrating, 0);
     lazyRun();
 }
 
@@ -60,13 +60,12 @@ bool MigrationQueue::onTimed(const String& path, const int& numberOfFailures)
     bool erase = true;
     if (succeed) {
         if (!done) {
-            m_timedQueue.reQueue(path, MigrationQueueTimeIntervalForMigrating, numberOfFailures);
+            m_timedQueue.queue(path, MigrationQueueTimeIntervalForMigrating, numberOfFailures);
             erase = false;
         }
     } else {
         if (numberOfFailures < MigrationQueueTolerableFailures) {
-            m_timedQueue.reQueue(
-            path, MigrationQueueTolerableFailures, numberOfFailures + 1);
+            m_timedQueue.queue(path, MigrationQueueTolerableFailures, numberOfFailures + 1);
             erase = false;
         } else {
             Error error(Error::Code::Notice, Error::Level::Notice, "Async migration stopped due to the error.");

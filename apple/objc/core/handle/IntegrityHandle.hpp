@@ -18,22 +18,20 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCDB.h>
+#ifndef __WCDB_INTEGRITY_HANDLE_HPP
+#define __WCDB_INTEGRITY_HANDLE_HPP
 
-typedef NS_OPTIONS(NSUInteger, WCTSimulateIOErrorOptions) {
-    WCTSimulateNoneIOError = 0,
-    WCTSimulateReadIOError = 1 << 0,
-    WCTSimulateWriteIOError = 1 << 1,
+#include <WCDB/Handle.hpp>
+
+namespace WCDB {
+
+class IntegrityHandle final : public Handle {
+public:
+    IntegrityHandle();
+
+    void check();
 };
 
-NS_ASSUME_NONNULL_BEGIN
+} // namespace WCDB
 
-@interface WCTDatabase (Debug)
-
-@property (class, readwrite, nonatomic, assign) BOOL debug;
-
-+ (void)simulateIOError:(WCTSimulateIOErrorOptions)options;
-
-@end
-
-NS_ASSUME_NONNULL_END
+#endif /* __WCDB_INTEGRITY_HANDLE_HPP */

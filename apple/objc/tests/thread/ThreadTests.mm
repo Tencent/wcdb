@@ -231,7 +231,7 @@
     self.expectSQLsInAllThreads = YES;
     [self doTestSQLs:@[ @"PRAGMA main.wal_checkpoint('PASSIVE')" ]
          inOperation:^BOOL {
-             if (![self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).with(@"PASSIVE")]) {
+             if (![self.database passiveCheckpoint]) {
                  return NO;
              }
              [NSThread sleepForTimeInterval:WCDB::CheckpointQueueDelayForNonCritical + self.delayForTolerance];
@@ -359,7 +359,7 @@
 {
     // avoid auto subthread checkpoint
     [self.database removeCheckpointConfig];
-    TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::walCheckpoint()).to("TRUNCATE")]);
+    TestCaseAssertTrue([self.database truncateCheckpoint]);
 
     // trigger subthread checkpoint
     TestCaseAssertTrue([self createTable]);

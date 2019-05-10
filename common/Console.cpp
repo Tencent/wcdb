@@ -27,68 +27,66 @@
 
 namespace WCDB {
 
-Console* Console::shared()
+#warning TODO - refactor
+void Console::initialize()
 {
-    static Console* s_shared = new Console;
-    return s_shared;
+    static std::nullptr_t s_inited = []() -> std::nullptr_t {
+        Console::errored(Console::report);
+        return nullptr;
+    }();
+    WCDB_UNUSED(s_inited);
 }
 
-Console::Console()
-:
+std::atomic<bool>& Console::debuggableValue()
+{
 #ifdef DEBUG
-m_debuggable(false)
+    std::atomic<bool>* s_debuggable = new std::atomic<bool>(true);
 #else  // DEBUG
-m_debuggable(true)
+    std::atomic<bool>* s_debuggable = new std::atomic<bool>(false);
 #endif // DEBUG
-, m_printer(nullptr)
-{
-    setLogger(Console::logger);
+    return *s_debuggable;
 }
 
-void Console::setDebuggable(bool debuggable)
+void Console::debug()
 {
-    m_debuggable.store(debuggable);
+    debuggableValue().store(true);
+}
+
+void Console::release()
+{
+    debuggableValue().store(false);
 }
 
 bool Console::debuggable()
 {
-    return Console::shared()->isDebuggable();
+    return debuggableValue().load();
 }
 
-bool Console::isDebuggable()
+void Console::errored(const Notifier::Callback& callback)
 {
-    return m_debuggable.load();
-}
-
-void Console::setLogger(const Logger& logger)
-{
-    if (logger != nullptr) {
+    if (callback != nullptr) {
         Notifier::shared()->setNotification(
-        std::numeric_limits<int>::min(), NotifierLoggerName, logger);
+        std::numeric_limits<int>::min(), NotifierLoggerName, callback);
     } else {
         Notifier::shared()->unsetNotification(NotifierLoggerName);
     }
 }
 
-void Console::setPrinter(const Printer& printer)
+void Console::report(const Error& error)
 {
-    m_printer = printer;
-}
-
-void Console::logger(const Error& error)
-{
-    if (error.level == Error::Level::Ignore) {
-        return;
+    switch (error.level) {
+    case Error::Level::Ignore:
+        break;
+    case Error::Level::Debug:
+        if (!WCDB::Console::debuggable()) {
+            break;
+        }
+        // fallthrough
+    default:
+        print(error.getDescription());
+        break;
     }
-
-    bool isDebuggable = debuggable();
-    if (error.level == Error::Level::Debug && !isDebuggable) {
-        return;
-    }
-
-    Console::shared()->print(error.getDescription());
-
-    if (isDebuggable && error.level >= Error::Level::Error) {
+    if (error.level == Error::Level::Fatal) {
         breakpoint();
     }
 }
@@ -97,29 +95,23 @@ void Console::breakpoint()
 {
 }
 
-void Console::print(const String& message)
-{
-    if (m_printer != nullptr) {
-        m_printer(message);
-    }
-}
-
 #ifdef DEBUG
-void Console::fatal(const String& message, const char* file, int line)
+void Console::fatal(const String& message, const char* file, int line, const char* function)
 {
     Error error(Error::Code::Misuse, Error::Level::Fatal, message);
     error.infos.set(ErrorStringKeySource, ErrorSourceAssertion);
-    if (file != nullptr) {
-        error.infos.set("File", file);
-    }
+    error.infos.set("File", file);
     error.infos.set("Line", line);
+    error.infos.set("Func", function);
     error.infos.set("Version", WCDB_VERSION);
     error.infos.set("BuildTime", WCDB_BUILD_TIME);
     error.infos.set("BuildTimestamp", WCDB_BUILD_TIMESTAMP);
     error.infos.set("CommitHash", WCDB_COMMIT_HASH);
     Notifier::shared()->notify(error);
 }
-#else  // DEBUG
+
+#else // DEBUG
+
 void Console::fatal(const String& message)
 {
     Error error(Error::Code::Misuse, Error::Level::Fatal, message);
@@ -130,6 +122,7 @@ void Console::fatal(const String& message)
     error.infos.set("CommitHash", WCDB_COMMIT_HASH);
     Notifier::shared()->notify(error);
 }
+
 #endif // DEBUG
 
 } // namespace WCDB
