@@ -49,7 +49,10 @@
     // trigger corruption
     TestCaseAssertTrue([self.table getObjects] == nil);
     [NSThread sleepForTimeInterval:1.0];
+    while (result.isNO) {
+    }
     TestCaseAssertResultYES(result);
+    TestCaseAssertFalse(self.database.isAlreadyCorrupted);
 }
 
 - (void)test_feature_repeat_corrupted_notify_when_failed
@@ -79,22 +82,6 @@
     TestCaseAssertResultYES(result);
 
     TestCaseAssertTrue([self.database removeFiles]);
-}
-
-- (void)test_is_corrupted
-{
-    [self insertPresetObjects];
-
-    TestCaseAssertFalse([self.database isAlreadyCorrupted]);
-    TestCaseAssertTrue([self.database corruptHeaderWithinCloseAfterTruncatedCheckpoint]);
-    TestCaseAssertFalse([self.database isAlreadyCorrupted]);
-
-    // trigger corruption
-    TestCaseAssertTrue([self.table getObjects] == nil);
-    TestCaseAssertTrue([self.database isAlreadyCorrupted]);
-
-    TestCaseAssertTrue([self.database removeFiles]);
-    TestCaseAssertFalse([self.database isAlreadyCorrupted]);
 }
 
 - (void)test_feature_purge_will_not_clear_active_handle
@@ -248,6 +235,16 @@
 
     // sleep for other tests
     [NSThread sleepForTimeInterval:WCDB::ObservationQueueTimeIntervalForPurgingAgain];
+}
+
+- (void)test_check_if_corrupted
+{
+    [self insertPresetObjects];
+
+    TestCaseAssertTrue([self.database corruptHeaderWithinCloseAfterTruncatedCheckpoint]);
+
+    TestCaseAssertTrue([self.database checkIfCorrupted]);
+    TestCaseAssertTrue(self.database.isAlreadyCorrupted);
 }
 
 @end

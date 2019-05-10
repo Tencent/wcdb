@@ -199,59 +199,6 @@
     return value.numberValue.intValue;
 }
 
-- (void)test_compatible_backup_will_not_trigger_corruption_unless_it_is_too_frequent
-{
-    TestCaseAssertTrue([self.database truncateCheckpoint]);
-    TestCaseObject *object = [self.random autoIncrementTestCaseObject];
-    int interiorTablePage = 0;
-    while ((interiorTablePage = [self getInteriorTablePage]) == 0) {
-        TestCaseAssertTrue([self.table insertObject:object]);
-        TestCaseAssertTrue([self.database truncateCheckpoint]);
-    }
-    [self.database close];
-
-    TestCaseAssertFalse([self.database isAlreadyCorrupted]);
-
-    [self.database corruptPage:interiorTablePage];
-
-    TestCaseCounter *numberOfIgnorableCorruptions = [TestCaseCounter value:0];
-    TestCaseResult *realCorruption = [TestCaseResult no];
-    {
-        weakify(self);
-        [WCTDatabase globalTraceError:^(WCTError *error) {
-            strongify_or_return(self);
-            if (error.isCorruption
-                && [error.source isEqualToString:@"Repair"]
-                && [error.path isEqualToString:self.database.path]
-                && error.tag == self.database.tag) {
-                switch (error.level) {
-                case WCTErrorLevelIgnore:
-                    [numberOfIgnorableCorruptions increment];
-                    break;
-                case WCTErrorLevelError:
-                    [realCorruption makeYES];
-                    break;
-                default:
-                    break;
-                }
-            }
-        }];
-    }
-
-    for (int i = 0; i < WCDB::ObservationQueueTimesOfIgnoringBackupCorruption; ++i) {
-        TestCaseAssertFalse([self.database backup]);
-        TestCaseAssertEqual(numberOfIgnorableCorruptions.value, i + 1);
-        TestCaseAssertResultNO(realCorruption);
-        TestCaseAssertFalse([self.database isAlreadyCorrupted]);
-    }
-
-    TestCaseAssertFalse([self.database backup]);
-    TestCaseAssertResultYES(realCorruption);
-    TestCaseAssertTrue([self.database isAlreadyCorrupted]);
-
-    [WCTDatabase globalTraceError:nil];
-}
-
 #warning TODO - find the way to reproduce errors
 //- (void)test_error_prone
 //{

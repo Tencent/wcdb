@@ -34,7 +34,8 @@ void *ObservationQueue::registerNotificationWhenMemoryWarning()
                 object:nil
                  queue:nil
             usingBlock:^(NSNotification *) {
-                this->observatedThatNeedPurged(0);
+                Parameter parameter(Parameter::Source::MemoryWarning);
+                this->observatedThatNeedPurge(parameter);
             }];
     return (void *) CFBridgingRetain(observer);
 }

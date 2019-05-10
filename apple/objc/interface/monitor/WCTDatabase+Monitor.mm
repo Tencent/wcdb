@@ -35,6 +35,8 @@
 + (void)globalTraceError:(WCTErrorTraceBlock)block
           withIdentifier:(const WCDB::String &)identifier
 {
+    WCDB::Console::initialize();
+
     if (block != nil) {
         WCDB::Notifier::shared()->setNotification(std::numeric_limits<int>::min(), identifier, [block](const WCDB::Error &error) {
             WCTError *nsError = [[WCTError alloc] initWithError:error];

@@ -55,14 +55,14 @@ void CheckpointQueue::put(const String& path, int frames)
     if (frames >= CheckpointQueueFramesThresholdForCritical) {
         put(path, CheckpointQueueDelayForCritical, frames);
     } else {
-        m_timedQueue.reQueue(path, CheckpointQueueDelayForNonCritical, frames);
+        m_timedQueue.queue(path, CheckpointQueueDelayForNonCritical, frames);
         put(path, CheckpointQueueDelayForNonCritical, frames);
     }
 }
 
 void CheckpointQueue::put(const String& path, double delay, int frames)
 {
-    m_timedQueue.reQueue(path, delay, frames);
+    m_timedQueue.queue(path, delay, frames);
     lazyRun();
 }
 

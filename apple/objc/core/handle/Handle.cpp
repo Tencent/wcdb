@@ -45,6 +45,11 @@ bool Handle::open()
     return true;
 }
 
+bool Handle::isConfigured() const
+{
+    return m_configs != nullptr;
+}
+
 bool Handle::reconfigure(const std::shared_ptr<Configs> &newConfigs)
 {
     if (m_configs == newConfigs) {

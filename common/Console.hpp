@@ -33,7 +33,7 @@ class Error;
 
 class Console final {
 public:
-    static std::nullptr_t initialize();
+    static void initialize();
 
     static void debug();
     static void release();
@@ -52,7 +52,7 @@ private:
     static void report(const Error& error);
     static void print(const String& message);
     static void breakpoint() WCDB_USED WCDB_NO_INLINE;
-    static std::atomic<bool> s_debuggable;
+    static std::atomic<bool>& debuggableValue();
 };
 
 } // namespace WCDB

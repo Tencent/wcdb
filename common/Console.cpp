@@ -27,25 +27,39 @@
 
 namespace WCDB {
 
-std::nullptr_t Console::initialize()
+#warning TODO - refactor
+void Console::initialize()
 {
-    Console::errored(Console::report);
-    return nullptr;
+    static std::nullptr_t s_inited = []() -> std::nullptr_t {
+        Console::errored(Console::report);
+        return nullptr;
+    }();
+    WCDB_UNUSED(s_inited);
+}
+
+std::atomic<bool>& Console::debuggableValue()
+{
+#ifdef DEBUG
+    std::atomic<bool>* s_debuggable = new std::atomic<bool>(true);
+#else  // DEBUG
+    std::atomic<bool>* s_debuggable = new std::atomic<bool>(false);
+#endif // DEBUG
+    return *s_debuggable;
 }
 
 void Console::debug()
 {
-    s_debuggable.store(true);
+    debuggableValue().store(true);
 }
 
 void Console::release()
 {
-    s_debuggable.store(false);
+    debuggableValue().store(false);
 }
 
 bool Console::debuggable()
 {
-    return s_debuggable.load();
+    return debuggableValue().load();
 }
 
 void Console::errored(const Notifier::Callback& callback)
@@ -82,9 +96,6 @@ void Console::breakpoint()
 }
 
 #ifdef DEBUG
-
-std::atomic<bool> Console::s_debuggable(true);
-
 void Console::fatal(const String& message, const char* file, int line, const char* function)
 {
     Error error(Error::Code::Misuse, Error::Level::Fatal, message);
@@ -100,8 +111,6 @@ void Console::fatal(const String& message, const char* file, int line, const cha
 }
 
 #else // DEBUG
-
-std::atomic<bool> Console::s_debuggable(false);
 
 void Console::fatal(const String& message)
 {

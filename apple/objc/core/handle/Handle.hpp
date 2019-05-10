@@ -37,6 +37,9 @@ public:
     bool open() override final;
     bool reconfigure(const std::shared_ptr<Configs> &newConfigs);
 
+protected:
+    bool isConfigured() const;
+
 private:
     std::shared_ptr<Configs> m_configs;
 

@@ -50,8 +50,7 @@ void Console::print(const String &message)
 
 - (instancetype)initWithPath:(NSString *)path
 {
-    static auto _ = WCDB::Console::initialize();
-    WCDB_UNUSED(_);
+    WCDB::Console::initialize();
 
     if (self = [super init]) {
         path = [path stringByStandardizingPath];

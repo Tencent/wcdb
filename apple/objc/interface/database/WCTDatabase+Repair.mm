@@ -38,7 +38,7 @@
 
 - (BOOL)checkIfCorrupted
 {
-    _database->execute(WCDB::StatementPragma().pragma(WCDB::Pragma::integrityCheck()));
+    _database->checkIntegrity();
     return self.isAlreadyCorrupted;
 }
 

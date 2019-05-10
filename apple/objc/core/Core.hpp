@@ -44,8 +44,7 @@ class Core final : public DatabasePoolEvent,
                    public BackupQueueEvent,
                    public MigrationQueueEvent,
                    public ObservationQueueEvent,
-                   public ObservationDelegate,
-                   public DatabaseEvent {
+                   public ObservationDelegate {
 #pragma mark - Core
 public:
     static Core* shared();
@@ -88,7 +87,9 @@ public:
 protected:
     ObservationQueue* observationQueue() override final;
 
-    void observatedThatNeedPurged() override final;
+    void observatedThatNeedPurge() override final;
+    void observatedThatMayBeCorrupted(const String& path) override final;
+
     std::shared_ptr<ObservationQueue> m_observationQueue;
 
 #pragma mark - Checkpoint
@@ -103,7 +104,6 @@ public:
 
 protected:
     bool databaseShouldBackup(const String& path) override final;
-    void databaseDidBackup(const String& path) override final;
     std::shared_ptr<BackupQueue> m_backupQueue;
     std::shared_ptr<Config> m_backupConfig;
 
