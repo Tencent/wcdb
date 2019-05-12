@@ -34,29 +34,4 @@ InterruptibleCheckpointHandle::~InterruptibleCheckpointHandle()
     markErrorAsUnignorable();
 }
 
-bool InterruptibleCheckpointHandle::checkpoint(Type type)
-{
-    switch (type) {
-    case Type::Truncate:
-        return executeSQL(getSQLForTruncateCheckpoint());
-    default:
-        WCTInnerAssert(type == Type::Passive);
-        return executeSQL(getSQLForPassiveCheckpoint());
-    }
-}
-
-const String& InterruptibleCheckpointHandle::getSQLForTruncateCheckpoint()
-{
-    static const String* s_SQLForTruncateCheckpoint = new String(
-    StatementPragma().pragma(Pragma::walCheckpoint()).with("TRUNCATE").getDescription());
-    return *s_SQLForTruncateCheckpoint;
-}
-
-const String& InterruptibleCheckpointHandle::getSQLForPassiveCheckpoint()
-{
-    static const String* s_SQLForPassiveCheckpoint = new String(
-    StatementPragma().pragma(Pragma::walCheckpoint()).with("PASSIVE").getDescription());
-    return *s_SQLForPassiveCheckpoint;
-}
-
 } // namespace WCDB

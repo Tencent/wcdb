@@ -205,8 +205,8 @@ protected:
 
 #pragma mark - Checkpoint
 public:
-    typedef InterruptibleCheckpointHandle::Type CheckpointType;
-    bool interruptibleCheckpointIfAlreadyInitialized(CheckpointType type);
+    typedef InterruptibleCheckpointHandle::CheckpointMode CheckpointMode;
+    bool interruptibleCheckpointIfAlreadyInitialized(CheckpointMode mode);
 
     void interruptCheckpoint();
 

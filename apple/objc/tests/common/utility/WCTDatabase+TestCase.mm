@@ -131,34 +131,6 @@
     return result;
 }
 
-- (WCTOptionalSize)getNumberOfNonCheckpointedWalFrames
-{
-    WCTOptionalSize numberOfFrames = [self getNumberOfWalFrames];
-    if (numberOfFrames.failed()) {
-        return nullptr;
-    }
-
-    NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:self.walPath];
-
-    WCTOptionalSize result = (size_t) 0;
-    for (int i = 0; i < (int) numberOfFrames.value(); ++i) {
-        [fileHandle seekToFileOffset:self.walHeaderSize + self.walFrameSize * i + 4];
-        NSData *data = [fileHandle readDataOfLength:4];
-        const unsigned char *bytes = reinterpret_cast<const unsigned char *>(data.bytes);
-        int value = (16777216 * (int8_t)(bytes[0]) | (bytes[1] << 16) | (bytes[2] << 8) | bytes[3]);
-        if (value != 0) {
-            if (value <= result.value()) {
-                result.unset();
-                break;
-            }
-            result.reset(value);
-        }
-    }
-    [fileHandle closeFile];
-
-    return result;
-}
-
 + (void)additionalGlobalTraceError:(WCTErrorTraceBlock)block
 {
     [self globalTraceError:block withIdentifier:"com.Tencent.WCDB.Notifier.AdditionalLog"];
@@ -236,11 +208,38 @@
 
 - (WCTOptionalBool)isAlreadyCheckpointed
 {
-    WCTOptionalSize frames = [self getNumberOfNonCheckpointedWalFrames];
+    WCTOptionalSize frames = [self getNumberOfWalFrames];
     if (frames.failed()) {
         return nullptr;
     }
-    return frames.value() == 0;
+    if (frames.value() == 0) {
+        return YES;
+    }
+
+    BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:self.shmPath];
+    if (!exists) {
+        return nullptr;
+    }
+
+    NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:self.shmPath];
+
+    [fileHandle seekToFileOffset:16];
+    NSData *data = [fileHandle readDataOfLength:4];
+    if (data == nil) {
+        return nullptr;
+    }
+    uint32_t maxFrame = *(uint32_t *) data.bytes;
+
+    [fileHandle seekToFileOffset:96];
+    data = [fileHandle readDataOfLength:4];
+    if (data == nil) {
+        return nullptr;
+    }
+    uint32_t backfill = *(uint32_t *) data.bytes;
+
+    [fileHandle closeFile];
+
+    return backfill >= maxFrame;
 }
 
 - (WCTOptionalBool)isAlreadyTruncateCheckpointed

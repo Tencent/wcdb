@@ -289,7 +289,10 @@ std::shared_ptr<Handle> Database::generateHandle(HandleType type)
         }
 
         // reconfigure
-        handle->reconfigure(configs);
+        if (!handle->reconfigure(configs)) {
+            setThreadedError(handle->getError());
+            return nullptr;
+        }
     }
 
     // open
@@ -840,7 +843,7 @@ std::set<String> Database::getPathsOfSourceDatabases() const
 }
 
 #pragma mark - Checkpoint
-bool Database::interruptibleCheckpointIfAlreadyInitialized(CheckpointType type)
+bool Database::interruptibleCheckpointIfAlreadyInitialized(CheckpointMode mode)
 {
     InitializedGuard initializedGuard = isInitialized();
     bool succeed = false;
@@ -849,7 +852,7 @@ bool Database::interruptibleCheckpointIfAlreadyInitialized(CheckpointType type)
         if (handle != nullptr) {
             WCTInnerAssert(dynamic_cast<InterruptibleCheckpointHandle *>(handle.get()) != nullptr);
             succeed
-            = static_cast<InterruptibleCheckpointHandle *>(handle.get())->checkpoint(type);
+            = static_cast<InterruptibleCheckpointHandle *>(handle.get())->checkpoint(mode);
         }
     }
     return succeed;

@@ -91,6 +91,14 @@ public:
     void disableCheckpointWhenClosing(bool disable);
     void enableExtendedResultCodes(bool enable);
 
+    enum class CheckpointMode {
+        Passive = 0,
+        Full,
+        Restart,
+        Truncate,
+    };
+    bool checkpoint(CheckpointMode mode);
+
 protected:
     bool executeSQL(const String &sql);
     bool executeStatement(const Statement &statement);

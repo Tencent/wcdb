@@ -221,6 +221,17 @@ void AbstractHandle::enableExtendedResultCodes(bool enable)
     exitAPI(sqlite3_extended_result_codes(m_handle, (int) enable));
 }
 
+bool AbstractHandle::checkpoint(CheckpointMode mode)
+{
+    static_assert((int) CheckpointMode::Passive == SQLITE_CHECKPOINT_PASSIVE, "");
+    static_assert((int) CheckpointMode::Full == SQLITE_CHECKPOINT_FULL, "");
+    static_assert((int) CheckpointMode::Restart == SQLITE_CHECKPOINT_RESTART, "");
+    static_assert((int) CheckpointMode::Truncate == SQLITE_CHECKPOINT_TRUNCATE, "");
+    WCTInnerAssert(isOpened());
+    return exitAPI(sqlite3_wal_checkpoint_v2(
+    m_handle, Syntax::mainSchema, (int) mode, nullptr, nullptr));
+}
+
 void AbstractHandle::disableCheckpointWhenClosing(bool disable)
 {
     WCTInnerAssert(isOpened());

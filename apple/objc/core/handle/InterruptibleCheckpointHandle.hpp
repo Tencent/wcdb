@@ -29,17 +29,6 @@ class InterruptibleCheckpointHandle final : public Handle {
 public:
     InterruptibleCheckpointHandle();
     ~InterruptibleCheckpointHandle();
-
-    enum class Type {
-        Passive,
-        Truncate,
-    };
-
-    bool checkpoint(Type type);
-
-protected:
-    static const String& getSQLForTruncateCheckpoint();
-    static const String& getSQLForPassiveCheckpoint();
 };
 
 } // namespace WCDB

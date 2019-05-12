@@ -260,8 +260,8 @@ bool Core::databaseShouldCheckpoint(const String& path, int frames)
     if (database != nullptr) {
         succeed = database->interruptibleCheckpointIfAlreadyInitialized(
         frames >= CheckpointFramesThresholdForTruncating ?
-        Database::CheckpointType::Truncate :
-        Database::CheckpointType::Passive);
+        Database::CheckpointMode::Truncate :
+        Database::CheckpointMode::Passive);
     }
     return succeed;
 }
