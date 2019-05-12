@@ -32,17 +32,29 @@ public:
 
     virtual ~WCTIncompleteOptional() {}
 
+    void reset(const T& value)
+    {
+        m_isOK = YES;
+        m_value = value;
+    }
+
     operator const T&() const { return m_value; }
 
     const T& value() const { return m_value; }
 
     BOOL failed() const { return !m_isOK; }
 
-    WCTIncompleteOptional& operator=(const T& value)
+    //    WCTIncompleteOptional& operator=(const T& value)
+    //    {
+    //        reset(value);
+    //        return *this;
+    //    }
+
+protected:
+    void unset(const T& value)
     {
-        m_isOK = YES;
+        m_isOK = NO;
         m_value = value;
-        return *this;
     }
 
 private:
@@ -67,6 +79,14 @@ public:
     : WCTIncompleteOptional<T>(defaultValue, NO)
     {
     }
+
+    //    WCTFundamentalOptional& operator=(const T& value)
+    //    {
+    //        WCTIncompleteOptional<T>::operator=(value);
+    //        return *this;
+    //    }
+
+    void unset() { WCTIncompleteOptional<T>::unset(defaultValue); }
 };
 
 //template<typename T>

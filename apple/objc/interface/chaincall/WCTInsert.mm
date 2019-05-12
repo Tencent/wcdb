@@ -99,7 +99,7 @@
             }
         }
 
-        _canFillLastInsertedRowID = nullptr;
+        _canFillLastInsertedRowID.unset();
         if (_values.count > 1) {
             succeed = [_handle lazyRunTransaction:^BOOL(WCTHandle *handle) {
                 WCDB_UNUSED(handle)
@@ -128,7 +128,7 @@
                                   toIndex:index];
                 } else {
                     if (isAutoIncrement.failed()) {
-                        isAutoIncrement = value.isAutoIncrement;
+                        isAutoIncrement.reset(value.isAutoIncrement);
                     }
                     WCTInnerAssert(!isAutoIncrement.failed());
                     if (isAutoIncrement) {
@@ -147,12 +147,12 @@
             }
             if (!_autoIncrements.empty()) {
                 if (_canFillLastInsertedRowID.failed()) {
-                    _canFillLastInsertedRowID = [_values.firstObject respondsToSelector:@selector(lastInsertedRowID)];
+                    _canFillLastInsertedRowID.reset([_values.firstObject respondsToSelector:@selector(lastInsertedRowID)]);
                 }
                 WCTInnerAssert(!_canFillLastInsertedRowID.failed());
                 if (_canFillLastInsertedRowID) {
                     if (isAutoIncrement.failed()) {
-                        isAutoIncrement = value.isAutoIncrement;
+                        isAutoIncrement.reset(value.isAutoIncrement);
                     }
                     WCTInnerAssert(!isAutoIncrement.failed());
                     if (isAutoIncrement) {

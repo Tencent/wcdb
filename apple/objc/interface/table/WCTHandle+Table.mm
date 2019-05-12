@@ -33,14 +33,16 @@
 
 - (WCTOptionalBool)tableExists:(NSString *)tableName
 {
+    WCTOptionalBool result = nullptr;
     WCDB::Handle *handle = [self getOrGenerateHandle];
     if (handle != nullptr) {
-        std::pair<bool, bool> result = handle->tableExists(tableName);
-        if (result.first) {
-            return result.second;
+        bool succeed, exists;
+        std::tie(succeed, exists) = handle->tableExists(tableName);
+        if (succeed) {
+            result.reset(exists);
         }
     }
-    return nullptr;
+    return result;
 }
 
 - (BOOL)createTable:(NSString *)tableName
