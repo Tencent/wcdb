@@ -176,15 +176,37 @@
 
 - (void)doTestDropTable
 {
-    NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
-                                  [NSString stringWithFormat:@"DROP TABLE IF EXISTS %@.%@", self.schemaName, self.sourceTable],
-                                  @"DROP TABLE IF EXISTS main.testTable",
-                                  @"COMMIT" ];
+    {
+        NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE",
+                                      [NSString stringWithFormat:@"DROP TABLE IF EXISTS %@.%@", self.schemaName, self.sourceTable],
+                                      @"DROP TABLE IF EXISTS main.testTable",
+                                      @"COMMIT" ];
 
-    [self doTestSQLs:sqls
-         inOperation:^BOOL {
-             return [self.database dropTable:self.tableName];
-         }];
+        [self doTestSQLs:sqls
+             inOperation:^BOOL {
+                 return [self.database dropTable:self.tableName];
+             }];
+    }
+
+    TestCaseAssertTrue([self.database createTable:self.tableName withClass:MigrationObject.class]);
+
+    {
+        NSArray<NSString*>* sqls = @[ @"BEGIN IMMEDIATE", @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)", @"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)", @"COMMIT" ];
+
+        [self doTestSQLs:sqls
+             inOperation:^BOOL {
+                 return [self.database insertObjects:self.objects intoTable:self.tableName];
+             }];
+    }
+
+    {
+        NSArray<NSString*>* sqls = @[ @"DROP TABLE IF EXISTS main.testTable" ];
+
+        [self doTestSQLs:sqls
+             inOperation:^BOOL {
+                 return [self.database dropTable:self.tableName];
+             }];
+    }
 }
 
 - (void)doTestSubqueryWithinDelete
