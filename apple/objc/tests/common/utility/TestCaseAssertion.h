@@ -76,3 +76,16 @@
 
 #define TestCaseAssertResultNO(result) \
     TestCaseAssertTrue(result.isNO)
+
+#define TestCaseAssertionOptionalEqual(optional, expected) \
+    {                                                      \
+        WCTOptionalBool _optional = optional;              \
+        TestCaseAssertFalse(_optional.failed());           \
+        TestCaseAssertEqual(_optional.value(), expected);  \
+    }
+
+#define TestCaseAssertionOptionalTrue(optional) \
+    TestCaseAssertionOptionalEqual(optional, YES)
+
+#define TestCaseAssertionOptionalFalse(optional) \
+    TestCaseAssertionOptionalEqual(optional, NO)

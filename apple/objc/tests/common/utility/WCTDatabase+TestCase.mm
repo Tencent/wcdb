@@ -19,6 +19,7 @@
  */
 
 #import "CoreConst.h"
+#import "TestCaseLog.h"
 #import "WCTDatabase+TestCase.h"
 
 @interface WCTDatabase (TestCase1)
@@ -97,26 +98,65 @@
 
 - (WCTOptionalSize)getNumberOfPages
 {
-    WCTOptionalSize size = nullptr;
+    WCTOptionalSize result = nullptr;
     NSError *error;
-    NSNumber *nsSize = [[NSFileManager defaultManager] attributesOfItemAtPath:self.path error:&error][NSFileSize];
-    if (nsSize != nil && error == nil) {
-        int numberOfPages = (int) (nsSize.integerValue / self.pageSize);
-        size = numberOfPages > 0 ? numberOfPages : 0;
+    size_t size = ((NSNumber *) [[NSFileManager defaultManager] attributesOfItemAtPath:self.path error:&error][NSFileSize]).unsignedLongLongValue;
+    if (error == nil) {
+        int numberOfPages = (int) (size / self.pageSize);
+        result.reset(numberOfPages > 0 ? numberOfPages : 0);
+    } else {
+        TestCaseLog(@"%@", error);
     }
-    return size;
+    return result;
 }
 
 - (WCTOptionalSize)getNumberOfWalFrames
 {
-    WCTOptionalSize size = nullptr;
+    WCTOptionalSize result = nullptr;
     NSError *error;
-    NSNumber *nsSize = [[NSFileManager defaultManager] attributesOfItemAtPath:self.walPath error:&error][NSFileSize];
-    if (nsSize != nil && error == nil) {
-        int numberOfFrames = (int) ((nsSize.integerValue - self.walHeaderSize) / (self.walFrameHeaderSize + self.pageSize));
-        size = numberOfFrames > 0 ? numberOfFrames : 0;
+    size_t size = ((NSNumber *) [[NSFileManager defaultManager] attributesOfItemAtPath:self.walPath error:&error][NSFileSize]).unsignedLongLongValue;
+    if (error == nil) {
+        if (size == 0) {
+            result.reset(0);
+        } else if (size > self.walHeaderSize) {
+            if ((size - self.walHeaderSize) % self.walFrameSize != 0) {
+                result.unset();
+            } else {
+                result.reset((size - self.walHeaderSize) / self.walFrameSize);
+            }
+        }
+    } else {
+        TestCaseLog(@"%@", error);
     }
-    return size;
+    return result;
+}
+
+- (WCTOptionalSize)getNumberOfNonCheckpointedWalFrames
+{
+    WCTOptionalSize numberOfFrames = [self getNumberOfWalFrames];
+    if (numberOfFrames.failed()) {
+        return nullptr;
+    }
+
+    NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:self.walPath];
+
+    WCTOptionalSize result = (size_t) 0;
+    for (int i = 0; i < (int) numberOfFrames.value(); ++i) {
+        [fileHandle seekToFileOffset:self.walHeaderSize + self.walFrameSize * i + 4];
+        NSData *data = [fileHandle readDataOfLength:4];
+        const unsigned char *bytes = reinterpret_cast<const unsigned char *>(data.bytes);
+        int value = (16777216 * (int8_t)(bytes[0]) | (bytes[1] << 16) | (bytes[2] << 8) | bytes[3]);
+        if (value != 0) {
+            if (value <= result.value()) {
+                result.unset();
+                break;
+            }
+            result.reset(value);
+        }
+    }
+    [fileHandle closeFile];
+
+    return result;
 }
 
 + (void)additionalGlobalTraceError:(WCTErrorTraceBlock)block
@@ -192,6 +232,24 @@
         [self corruptWalFrame:i + 1];
     }
     return YES;
+}
+
+- (WCTOptionalBool)isAlreadyCheckpointed
+{
+    WCTOptionalSize frames = [self getNumberOfNonCheckpointedWalFrames];
+    if (frames.failed()) {
+        return nullptr;
+    }
+    return frames.value() == 0;
+}
+
+- (WCTOptionalBool)isAlreadyTruncateCheckpointed
+{
+    WCTOptionalSize frames = [self getNumberOfWalFrames];
+    if (frames.failed()) {
+        return nullptr;
+    }
+    return frames.value() == 0;
 }
 
 @end
