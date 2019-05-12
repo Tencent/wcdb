@@ -76,7 +76,7 @@ protected:
     };
 
     bool initInfo(InfoInitializer& initializer, const String& table);
-    bool hintTable(InfoInitializer& initializer, const String& table);
+    bool hintThatTableWillBeCreated(InfoInitializer& initializer, const String& table);
     void markAsNoNeedToMigrate(const String& table);
 
     void markAsUnreferenced(const MigrationInfo* info);
@@ -126,7 +126,7 @@ public:
         bool stopBinding(bool succeed);
 
         std::pair<bool, const MigrationInfo*> bindTable(const String& table);
-        bool hintTable(const String& table);
+        bool hintThatTableWillBeCreated(const String& table);
         const MigrationInfo* getBoundInfo(const String& table);
 
         virtual bool bindInfos(const std::map<String, RecyclableMigrationInfo>& infos) = 0;
