@@ -24,6 +24,7 @@
 #include <WCDB/Notifier.hpp>
 #include <WCDB/SQLite.h>
 #include <WCDB/String.hpp>
+#include <unistd.h>
 
 namespace WCDB {
 
@@ -150,6 +151,9 @@ bool AbstractHandle::executeSQL(const String &sql)
     HandleStatement handleStatement(this, &m_notification);
     bool succeed = handleStatement.prepare(sql);
     if (succeed) {
+        if (sql.hasCaseInsensivePrefix("RELEASE")) {
+            sleep(1);
+        }
         succeed = handleStatement.step();
         handleStatement.finalize();
     }

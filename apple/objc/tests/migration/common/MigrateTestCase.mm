@@ -107,18 +107,22 @@
 
     [self.dispatch async:^{
         while (write.isYES) {
+            [NSThread sleepForTimeInterval:0.5];
             TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion()).to(1)]);
         }
     }];
 
-    TestCaseResult *tested = [TestCaseResult no];
+    TestCaseCounter *tested = [TestCaseCounter value:0];
     weakify(self);
     [WCTDatabase globalTraceError:^(WCTError *error) {
         strongify_or_return(self);
         if (error.code == WCTErrorCodeInterrupt
             && error.level == WCTErrorLevelIgnore
             && error.tag == self.database.tag) {
-            [tested makeYES];
+            [tested increment];
+        }
+        if (error.level == WCTErrorLevelError) {
+            TestCaseLog(@"hit");
         }
     }];
 
@@ -132,12 +136,12 @@
             TestCaseAssertTrue([self.database createTable:table withClass:TestCaseObject.class]);
         }
         TestCaseAssertTrue([self.database stepMigration]);
-    } while (tested.isNO);
+    } while (YES);
 
     [WCTDatabase globalTraceError:nil];
     [write makeNO];
 
-    TestCaseAssertResultYES(tested);
+    //    TestCaseAssertResultYES(tested);
     TestCaseAssertFalse([self.database isMigrated]);
     [self.dispatch waitUntilDone];
 }
