@@ -369,6 +369,7 @@ bool AbstractHandle::commitOrRollbackNestedTransaction()
 
 void AbstractHandle::rollbackNestedTransaction()
 {
+    unimpeded(true);
     if (m_nestedLevel == 0) {
         rollbackTransaction();
     } else {
@@ -377,6 +378,7 @@ void AbstractHandle::rollbackNestedTransaction()
             --m_nestedLevel;
         }
     }
+    unimpeded(false);
 }
 
 bool AbstractHandle::beginTransaction()
@@ -411,9 +413,11 @@ void AbstractHandle::rollbackTransaction()
     // Transaction can be removed automatically in some case. e.g. interrupt step
     static const String *s_rollback
     = new String(StatementRollback().rollback().getDescription());
+    unimpeded(true);
     if (executeSQL(*s_rollback)) {
         m_nestedLevel = 0;
     }
+    unimpeded(false);
 }
 
 #pragma mark - Interface
@@ -421,6 +425,12 @@ void AbstractHandle::suspend(bool suspend)
 {
     WCTInnerAssert(isOpened());
     sqlite3_suspend(m_handle, (int) suspend);
+}
+
+void AbstractHandle::unimpeded(bool unimpeded)
+{
+    WCTInnerAssert(isOpened());
+    sqlite3_unimpeded(m_handle, (int) unimpeded);
 }
 
 void AbstractHandle::setCipherKey(const UnsafeData &data)

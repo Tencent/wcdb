@@ -145,6 +145,8 @@ public:
     int getNumberOfDirtyPages();
 
     void suspend(bool suspend); // It's thread safe.
+private:
+    void unimpeded(bool unimpeded);
 
 #pragma mark - Notification
 public:
