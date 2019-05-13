@@ -360,7 +360,9 @@ bool AbstractHandle::commitOrRollbackNestedTransaction()
     } else {
         String savepointName = getSavepointName(m_nestedLevel);
         succeed = executeStatement(StatementRelease().release(savepointName));
-        --m_nestedLevel;
+        if (succeed) {
+            --m_nestedLevel;
+        }
     }
     return succeed;
 }
@@ -371,8 +373,9 @@ void AbstractHandle::rollbackNestedTransaction()
         rollbackTransaction();
     } else {
         String savepointName = getSavepointName(m_nestedLevel);
-        executeStatement(StatementRollback().rollbackToSavepoint(savepointName));
-        --m_nestedLevel;
+        if (executeStatement(StatementRollback().rollbackToSavepoint(savepointName))) {
+            --m_nestedLevel;
+        }
     }
 }
 
@@ -392,8 +395,14 @@ bool AbstractHandle::commitOrRollbackTransaction()
     static const String *s_commit
     = new String(StatementCommit().commit().getDescription());
     bool succeed = executeSQL(*s_commit);
-    m_nestedLevel = 0;
-    WCTInnerAssert(!isInTransaction());
+    if (succeed) {
+        m_nestedLevel = 0;
+    } else {
+        if (isInTransaction()) {
+            // If certain kinds of errors occur within a transaction, the transaction may or may not be rolled back automatically: https://sqlite.org/lang_transaction.html
+            rollbackTransaction();
+        }
+    }
     return succeed;
 }
 
@@ -402,8 +411,9 @@ void AbstractHandle::rollbackTransaction()
     // Transaction can be removed automatically in some case. e.g. interrupt step
     static const String *s_rollback
     = new String(StatementRollback().rollback().getDescription());
-    executeSQL(*s_rollback);
-    m_nestedLevel = 0;
+    if (executeSQL(*s_rollback)) {
+        m_nestedLevel = 0;
+    }
 }
 
 #pragma mark - Interface
