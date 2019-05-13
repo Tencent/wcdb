@@ -24,7 +24,6 @@
 #include <WCDB/Notifier.hpp>
 #include <WCDB/SQLite.h>
 #include <WCDB/String.hpp>
-#include <unistd.h>
 
 namespace WCDB {
 
