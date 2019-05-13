@@ -218,26 +218,24 @@ std::shared_ptr<Handle> Database::generateSlotedHandle(Slot slot)
     return generateHandle((HandleType) slot);
 }
 
-void Database::handleWillStep(HandleStatement *handleStatement)
+bool Database::handleWillStep(HandleStatement *handleStatement)
 {
     // Interrupt when a write operation will run
     // If already in transaction, it's no need to interrupt since it already block others.
     if (!handleStatement->isReadonly() && !handleStatement->getHandle()->isInTransaction()) {
         suspendMigration(true);
         suspendCheckpoint(true);
+        return true;
     }
+    return false;
 }
 
 void Database::handleDidStep(HandleStatement *handleStatement, bool succeed)
 {
     WCDB_UNUSED(succeed);
-#warning TODO
-    //        // Interrupt when a write operation will run
-    //        // If already in transaction, it's no need to interrupt since it already block others.
-    //        if (!handleStatement->isReadonly() && !handleStatement->getHandle()->isInTransaction()) {
-    //            suspendMigration(false);
-    //            suspendCheckpoint(false);
-    //        }
+    WCDB_UNUSED(handleStatement);
+    suspendMigration(false);
+    suspendCheckpoint(false);
 }
 
 bool Database::willReuseSlotedHandle(Slot slot, Handle *handle)
@@ -320,11 +318,9 @@ std::shared_ptr<Handle> Database::generateHandle(HandleType type)
 
     // set stepped notification
     if (type == HandleType::Normal || type == HandleType::Migrate) {
-        handle->setNotificationWhenStatementWillStep(
+        handle->setNotificationWhenStatementStepping(
         String::formatted("Interrupt-%p", this),
-        std::bind(&Database::handleWillStep, this, std::placeholders::_1));
-        handle->setNotificationWhenStatementDidStep(
-        String::formatted("Interrupt-%p", this),
+        std::bind(&Database::handleWillStep, this, std::placeholders::_1),
         std::bind(&Database::handleDidStep, this, std::placeholders::_1, std::placeholders::_2));
     }
 

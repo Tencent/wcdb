@@ -169,12 +169,10 @@ public:
     void setNotificationWhenBusy(const BusyNotification &busyNotification);
 
     typedef HandleNotification::StatementDidStepNotification StatementDidStepNotification;
-    void setNotificationWhenStatementDidStep(const String &name,
-                                             const StatementDidStepNotification &notification);
-
     typedef HandleNotification::StatementWillStepNotification StatementWillStepNotification;
-    void setNotificationWhenStatementWillStep(const String &name,
-                                              const StatementWillStepNotification &notification);
+    void setNotificationWhenStatementStepping(const String &name,
+                                              const StatementWillStepNotification &willStep,
+                                              const StatementDidStepNotification &didStep);
 
 private:
     HandleNotification m_notification;

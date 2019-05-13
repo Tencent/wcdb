@@ -404,13 +404,11 @@ void AbstractHandle::rollbackTransaction()
     = new String(StatementRollback().rollback().getDescription());
     executeSQL(*s_rollback);
     m_nestedLevel = 0;
-    WCTInnerAssert(!isInTransaction());
 }
 
 #pragma mark - Interface
 void AbstractHandle::suspend(bool suspend)
 {
-#warning TODO
     WCTInnerAssert(isOpened());
     sqlite3_suspend(m_handle, (int) suspend);
 }
@@ -494,18 +492,12 @@ void AbstractHandle::setNotificationWhenBusy(const BusyNotification &busyNotific
     m_notification.setNotificationWhenBusy(busyNotification);
 }
 
-void AbstractHandle::setNotificationWhenStatementDidStep(const String &name,
-                                                         const StatementDidStepNotification &notification)
+void AbstractHandle::setNotificationWhenStatementStepping(const String &name,
+                                                          const StatementWillStepNotification &willStep,
+                                                          const StatementDidStepNotification &didStep)
 {
     WCTInnerAssert(isOpened());
-    m_notification.setNotificationWhenStatementDidStep(name, notification);
-}
-
-void AbstractHandle::setNotificationWhenStatementWillStep(const String &name,
-                                                          const StatementWillStepNotification &notification)
-{
-    WCTInnerAssert(isOpened());
-    m_notification.setNotificationWhenStatementWillStep(name, notification);
+    m_notification.setNotificationWhenStatementStepping(name, willStep, didStep);
 }
 
 #pragma mark - Error

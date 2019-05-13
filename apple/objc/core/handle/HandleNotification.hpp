@@ -115,24 +115,24 @@ private:
     bool postBusyNotification(int numberOfTimes);
     BusyNotification m_busyNotification;
 
-#pragma mark - Did Step
+#pragma mark - Step
 public:
-    typedef std::function<void(HandleStatement *, bool result)> StatementDidStepNotification;
-    void setNotificationWhenStatementDidStep(const String &name,
-                                             const StatementDidStepNotification &notification);
+    typedef std::function<bool(HandleStatement *)> StatementWillStepNotification;
+    typedef std::function<void(HandleStatement *, bool succeed)> StatementDidStepNotification;
+    void setNotificationWhenStatementStepping(const String &name,
+                                              const StatementWillStepNotification &willStep,
+                                              const StatementDidStepNotification &didStep);
 
 private:
-    std::map<String, StatementDidStepNotification> m_didStepNotifications;
+    struct StepNotification {
+        StatementWillStepNotification willStep;
+        bool shouldInvokeDidStep;
+        StatementDidStepNotification didStep;
+    };
+    typedef struct StepNotification StepNotification;
+
+    std::map<String, StepNotification> m_stepNotifications;
     void statementDidStep(HandleStatement *, bool result) override final;
-
-#pragma mark - Will Step
-public:
-    typedef std::function<void(HandleStatement *)> StatementWillStepNotification;
-    void setNotificationWhenStatementWillStep(const String &name,
-                                              const StatementWillStepNotification &notification);
-
-private:
-    std::map<String, StatementWillStepNotification> m_willStepNotifications;
     void statementWillStep(HandleStatement *) override final;
 };
 
