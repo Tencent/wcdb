@@ -411,6 +411,8 @@ void AbstractHandle::rollbackTransaction()
 void AbstractHandle::suspend(bool suspend)
 {
 #warning TODO
+    WCTInnerAssert(isOpened());
+    sqlite3_suspend(m_handle, (int) suspend);
 }
 
 void AbstractHandle::setCipherKey(const UnsafeData &data)
