@@ -18,19 +18,24 @@
  * limitations under the License.
  */
 
-#ifndef __WCDB_INTERRUPTIBLE_CHECKPOINT_HANDLE_HPP
-#define __WCDB_INTERRUPTIBLE_CHECKPOINT_HANDLE_HPP
+#ifndef __WCDB_CHECKPOINT_HANDLE_HPP
+#define __WCDB_CHECKPOINT_HANDLE_HPP
 
 #include <WCDB/Handle.hpp>
 
 namespace WCDB {
 
-class InterruptibleCheckpointHandle final : public Handle {
+class CheckpointHandle final : public Handle {
 public:
-    InterruptibleCheckpointHandle();
-    ~InterruptibleCheckpointHandle();
+    CheckpointHandle();
+    ~CheckpointHandle();
+
+    bool checkpoint(CheckpointMode mode);
+
+protected:
+    using Handle::checkpoint;
 };
 
 } // namespace WCDB
 
-#endif /* __WCDB_INTERRUPTIBLE_CHECKPOINT_HANDLE_HPP */
+#endif /* __WCDB_CHECKPOINT_HANDLE_HPP */

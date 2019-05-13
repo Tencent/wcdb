@@ -221,11 +221,23 @@ std::shared_ptr<Handle> Database::generateSlotedHandle(Slot slot)
 void Database::handleWillStep(HandleStatement *handleStatement)
 {
     // Interrupt when a write operation will run
-    // If already in transaction, it's no need to interrupt since it's already blocked.
+    // If already in transaction, it's no need to interrupt since it already block others.
     if (!handleStatement->isReadonly() && !handleStatement->getHandle()->isInTransaction()) {
-        interruptMigration();
-        interruptCheckpoint();
+        suspendMigration(true);
+        suspendCheckpoint(true);
     }
+}
+
+void Database::handleDidStep(HandleStatement *handleStatement, bool succeed)
+{
+    WCDB_UNUSED(succeed);
+#warning TODO
+    //        // Interrupt when a write operation will run
+    //        // If already in transaction, it's no need to interrupt since it already block others.
+    //        if (!handleStatement->isReadonly() && !handleStatement->getHandle()->isInTransaction()) {
+    //            suspendMigration(false);
+    //            suspendCheckpoint(false);
+    //        }
 }
 
 bool Database::willReuseSlotedHandle(Slot slot, Handle *handle)
@@ -251,7 +263,7 @@ std::shared_ptr<Handle> Database::generateHandle(HandleType type)
     std::shared_ptr<Handle> handle;
     switch (type) {
     case HandleType::InterruptibleCheckpoint:
-        handle.reset(new InterruptibleCheckpointHandle);
+        handle.reset(new CheckpointHandle);
         break;
     case HandleType::Migrate:
         handle.reset(new MigrationHandle(m_migration));
@@ -311,6 +323,9 @@ std::shared_ptr<Handle> Database::generateHandle(HandleType type)
         handle->setNotificationWhenStatementWillStep(
         String::formatted("Interrupt-%p", this),
         std::bind(&Database::handleWillStep, this, std::placeholders::_1));
+        handle->setNotificationWhenStatementDidStep(
+        String::formatted("Interrupt-%p", this),
+        std::bind(&Database::handleDidStep, this, std::placeholders::_1, std::placeholders::_2));
     }
 
     return handle;
@@ -820,15 +835,14 @@ void Database::filterMigration(const MigrationFilter &filter)
     m_migration.filterTable(filter);
 }
 
-void Database::interruptMigration()
+void Database::suspendMigration(bool suspend)
 {
     SharedLockGuard concurrencyGuard(m_concurrency);
     SharedLockGuard memoryGuard(m_memory);
-    if (m_initialized) {
-        for (const auto &handle : getHandles(HandleType::MigrationStep)) {
-            WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()) != nullptr);
-            static_cast<MigrationStepperHandle *>(handle.get())->interrupt();
-        }
+    WCTInnerAssert(m_initialized);
+    for (const auto &handle : getHandles(HandleType::MigrationStep)) {
+        WCTInnerAssert(dynamic_cast<MigrationStepperHandle *>(handle.get()) != nullptr);
+        static_cast<MigrationStepperHandle *>(handle.get())->suspend(suspend);
     }
 }
 
@@ -850,23 +864,21 @@ bool Database::interruptibleCheckpointIfAlreadyInitialized(CheckpointMode mode)
     if (initializedGuard.valid()) {
         RecyclableHandle handle = getSlotHandle(HandleType::InterruptibleCheckpoint);
         if (handle != nullptr) {
-            WCTInnerAssert(dynamic_cast<InterruptibleCheckpointHandle *>(handle.get()) != nullptr);
-            succeed
-            = static_cast<InterruptibleCheckpointHandle *>(handle.get())->checkpoint(mode);
+            WCTInnerAssert(dynamic_cast<CheckpointHandle *>(handle.get()) != nullptr);
+            succeed = static_cast<CheckpointHandle *>(handle.get())->checkpoint(mode);
         }
     }
     return succeed;
 }
 
-void Database::interruptCheckpoint()
+void Database::suspendCheckpoint(bool suspend)
 {
     SharedLockGuard concurrencyGuard(m_concurrency);
     SharedLockGuard memoryGuard(m_memory);
-    if (m_initialized) {
-        for (const auto &handle : getHandles(HandleType::InterruptibleCheckpoint)) {
-            WCTInnerAssert(dynamic_cast<InterruptibleCheckpointHandle *>(handle.get()) != nullptr);
-            static_cast<InterruptibleCheckpointHandle *>(handle.get())->interrupt();
-        }
+    WCTInnerAssert(m_initialized);
+    for (const auto &handle : getHandles(HandleType::InterruptibleCheckpoint)) {
+        WCTInnerAssert(dynamic_cast<CheckpointHandle *>(handle.get()) != nullptr);
+        static_cast<CheckpointHandle *>(handle.get())->suspend(suspend);
     }
 }
 

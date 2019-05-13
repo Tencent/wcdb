@@ -21,10 +21,10 @@
 #ifndef __WCDB_DATABASE_HPP
 #define __WCDB_DATABASE_HPP
 
+#include <WCDB/CheckpointHandle.hpp>
 #include <WCDB/Configs.hpp>
 #include <WCDB/Factory.hpp>
 #include <WCDB/HandlePool.hpp>
-#include <WCDB/InterruptibleCheckpointHandle.hpp>
 #include <WCDB/Migration.hpp>
 #include <WCDB/Tag.hpp>
 #include <WCDB/ThreadLocal.hpp>
@@ -92,6 +92,7 @@ protected:
     std::shared_ptr<Handle> generateSlotedHandle(Slot slot) override final;
     bool willReuseSlotedHandle(Slot slot, Handle *handle) override final;
     void handleWillStep(HandleStatement *handleStatement);
+    void handleDidStep(HandleStatement *handleStatement, bool succeed);
 
 private:
     std::shared_ptr<Handle> generateHandle(HandleType type);
@@ -191,7 +192,7 @@ public:
     std::pair<bool, bool> stepMigration();
     std::pair<bool, bool> stepMigrationIfAlreadyInitialized();
 
-    void interruptMigration();
+    void suspendMigration(bool suspend);
 
     bool isMigrated() const;
 
@@ -205,10 +206,10 @@ protected:
 
 #pragma mark - Checkpoint
 public:
-    typedef InterruptibleCheckpointHandle::CheckpointMode CheckpointMode;
+    typedef CheckpointHandle::CheckpointMode CheckpointMode;
     bool interruptibleCheckpointIfAlreadyInitialized(CheckpointMode mode);
 
-    void interruptCheckpoint();
+    void suspendCheckpoint(bool suspend);
 
 #pragma mark - Memory
 public:

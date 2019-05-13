@@ -19,19 +19,24 @@
  */
 
 #include <WCDB/Assertion.hpp>
+#include <WCDB/CheckpointHandle.hpp>
 #include <WCDB/Error.hpp>
-#include <WCDB/InterruptibleCheckpointHandle.hpp>
 
 namespace WCDB {
 
-InterruptibleCheckpointHandle::InterruptibleCheckpointHandle()
+CheckpointHandle::CheckpointHandle()
 {
     markErrorAsIgnorable(Error::Code::Interrupt);
 }
 
-InterruptibleCheckpointHandle::~InterruptibleCheckpointHandle()
+CheckpointHandle::~CheckpointHandle()
 {
     markErrorAsUnignorable();
+}
+
+bool CheckpointHandle::checkpoint(CheckpointMode mode)
+{
+    return Handle::checkpoint(mode);
 }
 
 } // namespace WCDB
