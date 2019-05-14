@@ -98,7 +98,7 @@ static constexpr const char* NotifierPreprocessorName = "com.Tencent.WCDB.Notifi
 static constexpr const char* NotifierLoggerName = "com.Tencent.WCDB.Notifier.Log";
 
 // Handle Pool
-static constexpr const int HandlePoolMaxAllowedNumberOfHandles = 128;
+static constexpr const int HandlePoolMaxAllowedNumberOfHandles = 32;
 static constexpr const unsigned int HandlePoolNumberOfSlots = 8;
 
 // Checkpoint
