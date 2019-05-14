@@ -317,6 +317,8 @@
 
 - (void)test_feature_max_concurrency
 {
+    [self.database removeCheckpointConfig];
+
     NSCondition* condition = [[NSCondition alloc] init];
     __block int currentConcurrency = 0;
     for (int i = 0; i < self.maxConcurrency; ++i) {
@@ -403,6 +405,7 @@
     TestCaseAssertTrue([self.database beginTransaction]);
     TestCaseAssertResultYES(rollbacked);
     [tested makeYES];
+    [self.database rollbackTransaction];
     [self.dispatch waitUntilDone];
 }
 

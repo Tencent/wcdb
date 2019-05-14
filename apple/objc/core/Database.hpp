@@ -74,9 +74,6 @@ public:
     std::pair<bool, bool> tableExists(const String &table);
 
 protected:
-    RecyclableHandle getSlotHandle(Slot slot);
-
-protected:
     enum HandleType : unsigned int {
         Normal = 0,
         Migrate,
@@ -98,7 +95,6 @@ protected:
     void handleDidStep(HandleStatement *handleStatement, bool succeed);
 
 private:
-    std::shared_ptr<Handle> generateHandle(HandleType type);
     bool reconfigureHandle(Handle *handle);
 
 #pragma mark - Config
