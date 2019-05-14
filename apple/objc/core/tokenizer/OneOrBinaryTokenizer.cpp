@@ -251,7 +251,7 @@ int OneOrBinaryTokenizerCursorInfo::cursorSetup()
 int OneOrBinaryTokenizerCursorInfo::lemmatization(const char *input, int inputLength)
 {
     //tolower only. You can implement your own lemmatization.
-    if (inputLength > m_buffer.capacity()) {
+    if (inputLength > m_buffer.size()) {
         m_buffer.resize(inputLength);
     }
     for (int i = 0; i < inputLength; ++i) {
