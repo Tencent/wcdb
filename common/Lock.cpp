@@ -20,18 +20,6 @@
 
 #include <WCDB/Assertion.hpp>
 #include <WCDB/Lock.hpp>
-#include <WCDB/Trace.hpp>
-
-#if WCDB_TRACE
-// change it to 1 to enable lock tracing.
-#define WCDB_LOCK_TRACE 0
-#endif
-
-#if WCDB_LOCK_TRACE
-#define WCTLockTrace(message) WCTTrace(message)
-#else
-#define WCTLockTrace(message)
-#endif
 
 namespace WCDB {
 
@@ -70,8 +58,6 @@ SharedLock::SharedLock()
 
 void SharedLock::lockShared()
 {
-    WCTLockTrace("Will");
-
     std::unique_lock<std::mutex> lockGuard(m_mutex);
     if (m_writers > 0 ? m_locking != std::this_thread::get_id() :
                         (m_pendingWriters > 0 && *m_threadedReaders.getOrCreate() == 0)) {
@@ -79,9 +65,7 @@ void SharedLock::lockShared()
         // If it is not locked but there is someone pending to lock and current thread is not already shared locked, it should wait for the pending lock to avoid the pending lock starve.
         ++m_pendingReaders;
         do {
-            WCTLockTrace("Will wait");
             m_readersCond.wait(lockGuard);
-            WCTLockTrace("Did wait");
         } while (m_writers > 0 || m_pendingWriters > 0);
         --m_pendingReaders;
     }
@@ -92,14 +76,10 @@ void SharedLock::lockShared()
                    || *m_threadedReaders.getOrCreate() > 0 || m_writers == 0);
     ++m_readers;
     ++*m_threadedReaders.getOrCreate();
-
-    WCTLockTrace("Did");
 }
 
 void SharedLock::unlockShared()
 {
-    WCTLockTrace("Will");
-
     int *threadedReader = m_threadedReaders.getOrCreate();
     WCTRemedialAssert(*threadedReader > 0, "Unpaired unlock shared.", return;);
     WCTInnerAssert(*threadedReader > 0);
@@ -111,18 +91,13 @@ void SharedLock::unlockShared()
     if (m_readers == 0) {
         WCTInnerAssert(*m_threadedReaders.getOrCreate() == 0);
         if (m_writers == 0 && m_pendingWriters > 0) {
-            WCTLockTrace("Notify");
             m_writersCond.notify_one();
         }
     }
-
-    WCTLockTrace("Did");
 }
 
 void SharedLock::lock()
 {
-    WCTLockTrace("Will");
-
     WCTRemedialAssert(
     *m_threadedReaders.getOrCreate() == 0, "Upgrade lock is not supported.", return;);
 
@@ -133,9 +108,7 @@ void SharedLock::lock()
         // Note that it can't be called when it is shared locked by current thread, no matter the write lock is hold or not.
         ++m_pendingWriters;
         do {
-            WCTLockTrace("Will wait");
             m_writersCond.wait(lockGuard);
-            WCTLockTrace("Did wait");
         } while (m_readers > 0 || m_writers > 0);
         --m_pendingWriters;
     }
@@ -145,13 +118,10 @@ void SharedLock::lock()
                    || (m_writers == 0 && m_readers == 0));
     ++m_writers;
     m_locking = std::this_thread::get_id();
-    WCTLockTrace("Did");
 }
 
 void SharedLock::unlock()
 {
-    WCTLockTrace("Will");
-
     WCTRemedialAssert(
     *m_threadedReaders.getOrCreate() == 0, "Downgrade lock is not supported.", return;);
 
@@ -163,14 +133,11 @@ void SharedLock::unlock()
         m_locking = std::thread::id();
         // write lock first
         if (m_pendingWriters > 0) {
-            WCTLockTrace("Notify one");
             m_writersCond.notify_one();
         } else if (m_pendingReaders > 0) {
-            WCTLockTrace("Notify all");
             m_readersCond.notify_all();
         }
     }
-    WCTLockTrace("Did");
 }
 
 SharedLock::Level SharedLock::level() const
